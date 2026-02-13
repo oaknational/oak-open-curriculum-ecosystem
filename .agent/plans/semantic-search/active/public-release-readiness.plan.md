@@ -1,6 +1,6 @@
 # Public Release Readiness
 
-**Status**: Ready -- execute all workstreams
+**Status**: In progress -- execute all workstreams
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
 **Last Updated**: 2026-02-13
 
@@ -49,7 +49,7 @@ The plan can be resumed in a staged fashion. If this is a secrets-only session:
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | Pending |
+| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | In progress (history scrubbed; docs/CI policy pending) |
 | WS2 | [Licence and legal](#workstream-2-licence-and-legal) | Pending |
 | WS3 | [Package.json standardisation](#workstream-3-packagejson-standardisation) | Pending |
 | WS4 | [Documentation overhaul](#workstream-4-documentation-overhaul) | Pending |
@@ -71,9 +71,10 @@ independent of each other.
 
 **Priority**: CRITICAL -- must complete before any public visibility
 
-**Problem**: real credentials and credential-like values exist in
-tracked files outside `.env*`, which violates the public-release
-policy and risks exposure the moment the repository is public.
+**Problem**: secrets previously existed in tracked files and git
+history. Before public visibility, we must enforce the credential
+location policy and keep a secret scanning gate in place so real
+credentials cannot re-enter the repository.
 
 ### 1a: Enforce credential location policy
 
@@ -83,39 +84,30 @@ policy and risks exposure the moment the repository is public.
 - `.env.example` files must contain placeholders only.
 - All other tracked files must contain placeholders/redacted values.
 
-**Action**:
+**Status (2026-02-13)**: Partially complete.
 
-- Add this policy explicitly to `README.md`, `CONTRIBUTING.md`, and
-  the security guidance docs.
-- Add a CI check that fails when key-like values appear in tracked
-  non-`.env*` files.
-- Keep a small allowlist for known docs examples that are not secrets
-  (see 1e).
+**Implemented**:
+
+- `.gitleaks.toml` added with a targeted allowlist for `.agent/reference-docs/**` only (third-party examples).
+- `pnpm secrets:scan:all` and `pnpm secrets:scan:all-refs` added (history scans).
+- `pnpm check` now runs `pnpm secrets:scan:all` as a quality gate.
+
+**Remaining**:
+
+- Add this policy explicitly to `README.md`, `CONTRIBUTING.md`, and the security guidance docs.
+- Add a CI check that fails when key-like values appear in tracked non-`.env*` files.
 
 ### 1b: API keys in experience document
 
 **File**: `.agent/experience/the-api-key-revelation.md`
 
-Lines 11-13 contain real, functional API keys:
-
-- `NOTION_API_KEY=ntn_42785167710...`
-- `OAK_API_KEY=fbf5ab4c-f31d-...`
+**Status (2026-02-13)**: Completed. This file contains placeholders only.
 
 **Remediation**:
 
-- Replace the actual keys with redacted placeholders:
-  `NOTION_API_KEY=ntn_REDACTED` and `OAK_API_KEY=REDACTED-UUID`.
-  The document's narrative value is in the lesson learned, not
-  the specific key values.
-- The document itself is a valuable reflection on trust and
-  secrets handling. It should remain, with redacted keys.
+- Keep the document (it is a valuable reflection) but ensure it never contains real credentials.
 
-**User action required**: Rotate both keys after redaction. The
-keys have been in git history and cannot be un-committed. Even
-after the file is cleaned, the old values persist in git history.
-Consider using `git filter-repo` or BFG Repo-Cleaner to scrub
-history before making the repo public, or accept that the keys
-will be rotated and the old values are dead.
+**User action required**: Rotate any keys that were ever live, even though the repository history has been scrubbed.
 
 ### 1c: Clerk publishable key and tenant URL across tracked files
 
@@ -144,14 +136,20 @@ is still active. If so, rotate or decommission it.
 
 ### 1d: Secret scanning gates (CI and optional pre-commit)
 
-**Remediation**:
+**Status (2026-02-13)**: Partially complete.
 
-- Add a `gitleaks` or `secretlint` configuration that scans git
-  history and tracked files.
-- Configure rules/allowlists so docs examples remain valid while
-  real credentials fail the build.
+**Implemented**:
+
+- Local gitleaks gate configured via `.gitleaks.toml` (extends defaults; targeted allowlist for `.agent/reference-docs/**` only).
+- Root scripts added:
+  - `pnpm secrets:scan:all` (branches + tags)
+  - `pnpm secrets:scan:all-refs` (forensics: all refs)
+- `pnpm check` runs `pnpm secrets:scan:all` first.
+
+**Remaining**:
+
 - Add a required CI step in `.github/workflows/ci.yml` on every PR.
-- Optionally add a husky pre-commit/pre-push hook for earlier feedback.
+- Decide whether to run gitleaks in a pre-commit/pre-push hook for earlier feedback.
 
 ### 1e: Known docs examples (no remediation needed)
 
@@ -168,26 +166,27 @@ documentation policy requires sanitising all token-like examples.
 
 ### 1f: Git history scrubbing decision
 
-**Decision required**: Before making the repo public, decide
-whether to scrub git history of the exposed secrets using
-`git filter-repo` or BFG Repo-Cleaner. This is destructive and
-rewrites all commit hashes. The alternative is to rotate all
-exposed credentials (making the historical values harmless) and
-accept the history as-is.
+**Status (2026-02-13)**: Completed.
 
-**Recommendation**: Rotate credentials and accept history as-is.
-History rewriting is disruptive to all contributors and the
-secrets are low-sensitivity (dev API keys, test Clerk instance).
+**Decision**: Scrub git history.
+
+**Execution summary**:
+
+- Repository history was rewritten (all branches + tags) to remove secret values.
+- Verified clean with `pnpm secrets:scan:all-refs` (`--all --full-history`) reporting zero leaks.
+
+**Operational note**: All collaborators must re-clone (or hard reset) to the new history. Keep the pre-scrub backup (bundle/mirror) for rollback only.
 
 ### Completion checklist
 
 - [ ] Credential location policy documented (real keys only in local untracked `.env*`; never in `.env.example` or other tracked files)
-- [ ] CI secret scan added with sensible allowlist handling
-- [ ] API keys redacted in `.agent/experience/the-api-key-revelation.md`
-- [ ] Clerk tenant/publishable values redacted across tracked non-`.env*` files
+- [x] Local secret scanning configured (`.gitleaks.toml`) and wired into `pnpm check` (`pnpm secrets:scan:all`)
+- [ ] CI secret scan added with targeted allowlist handling
+- [x] API keys redacted in `.agent/experience/the-api-key-revelation.md`
+- [x] Clerk tenant/publishable values redacted across tracked non-`.env*` files
 - [ ] Exposed keys rotated (user action)
 - [ ] Pre-commit/pre-push secret scan hook evaluated and decision documented
-- [ ] Git history scrubbing decision made and documented
+- [x] Git history scrubbing decision made and documented
 
 ---
 
