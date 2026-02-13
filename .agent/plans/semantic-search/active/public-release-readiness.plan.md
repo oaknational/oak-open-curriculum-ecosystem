@@ -29,8 +29,19 @@ publish only `@oaknational/oak-curriculum-sdk`. All other workspaces
 remain private (`private: true`) for now.
 
 **Credential policy (2026-02-12)**: real credentials are allowed only
-in local `.env*` files that are not committed. `.env.example` files
-and all other tracked files must contain placeholders/redacted values.
+ in local `.env*` files that are not committed. `.env.example` files
+ and all other tracked files must contain placeholders/redacted values.
+
+---
+
+## Session Cut-Point (Next Session)
+
+The plan can be resumed in a staged fashion. If this is a secrets-only session:
+
+- Execute only `WS1` end-to-end.
+- Mark `WS1` complete and stop.
+- Leave `WS2` onward, including `QG`, as pending.
+- Resume with `WS2` at the start of the next session.
 
 ---
 
