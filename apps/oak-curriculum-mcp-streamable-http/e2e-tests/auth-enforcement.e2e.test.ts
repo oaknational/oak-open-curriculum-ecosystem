@@ -33,6 +33,23 @@ import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
+// Mock Clerk metadata generator to avoid depending on Clerk key formats/encoding.
+// These tests prove our server's OAuth discovery behaviour and RFC 9728 shape,
+// not Clerk's internal metadata derivation logic.
+vi.mock('@clerk/mcp-tools/server', () => ({
+  generateClerkProtectedResourceMetadata: ({
+    resourceUrl,
+    properties,
+  }: {
+    resourceUrl: string;
+    properties?: { scopes_supported?: string[] };
+  }) => ({
+    resource: resourceUrl,
+    authorization_servers: ['https://example.clerk.accounts.dev'],
+    scopes_supported: properties?.scopes_supported ?? [],
+  }),
+}));
+
 // Mock Clerk middleware to avoid network IO and requirement for valid keys
 vi.mock('@clerk/express', () => ({
   clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
