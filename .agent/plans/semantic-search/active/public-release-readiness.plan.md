@@ -12,6 +12,20 @@ This plan prepares the repository for public visibility on GitHub
 and selected SDKs/libraries for publication as public npm packages
 under the `@oaknational` scope.
 
+This repository has **multiple co-existing legal constraints** that must be
+reflected clearly and consistently across `LICENSE`, `README.md`, workspace
+READMEs, and publication artefacts:
+
+- **Code** in this repository is released under the **MIT licence**.
+- **Curriculum content** accessed via the Oak Open Curriculum API is made
+  available under the **Open Government Licence (OGL) v3.0**, except where
+  otherwise stated, and requires **attribution** when reused.
+- **Oak branding and trademarks** (including Oak name/logo/brand imagery) are
+  **not** granted under MIT. They must not be reused without permission and
+  must not be used to promote similar products or imply endorsement.
+- **No endorsement / no association**: third parties must not represent
+  themselves as being associated with or endorsed by Oak National Academy.
+
 It contains six workstreams and a final quality gate.
 **Execute all of them.** Each workstream is self-contained with
 a problem statement, concrete file-level instructions, and a
@@ -203,7 +217,7 @@ corresponding licence file. `CONTRIBUTING.md` has a "Code of
 Conduct" section (lines 7-9) but no `CODE_OF_CONDUCT.md` file
 exists.
 
-### 2a: Create MIT licence file
+### 2a: Create MIT licence file (code)
 
 **File to create**: `LICENSE` (root)
 
@@ -218,6 +232,13 @@ This must be a plain-text file, not markdown. Note: a
 `LICENSE.md`. The MIT licence is already declared in the root
 `package.json` and in most workspace `package.json` files.
 
+**Acceptance criteria**:
+
+- GitHub detects the repository licence as MIT on the default branch.
+- `README.md` licence link resolves.
+- The published npm package for `@oaknational/oak-curriculum-sdk` includes the
+  MIT licence (either via workspace inclusion or by inheriting from root).
+
 ### 2b: Create Code of Conduct
 
 **File to create**: `CODE_OF_CONDUCT.md` (root)
@@ -231,7 +252,41 @@ Set the enforcement contact to the same security contact used
 in `SECURITY.md` (or a dedicated email if Oak has one for
 community conduct).
 
-### 2c: Curriculum data licence clarification
+### 2c: OGL v3 obligations for Oak Open Curriculum API content (data)
+
+**Context**: this repository is open-source code, but it is built to access
+lesson content from the Oak Open Curriculum API. Oak’s API terms state that
+lesson content provided via the API is made available under OGL v3.0 (except
+where otherwise stated) and requires attribution when reused.
+
+**Authoritative sources** (link for readers; do not copy/paste the full text):
+
+- Oak Curriculum API terms: `https://www.thenational.academy/legal/terms-and-conditions-api-version`
+- Oak Curriculum API docs terms: `https://open-api.thenational.academy/docs/about-oaks-api/terms`
+- OGL v3: `https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/`
+
+**Requirement**: we must document (in-repo) the difference between:
+
+- the MIT licence for this repo’s code, and
+- OGL v3 obligations for curriculum content retrieved via the API, including
+  the required attribution statement and the OGL link.
+
+**File to create (recommended)**: `LICENCE-DATA.md` (root)
+
+Include:
+
+- A clear statement that curriculum lesson content accessed via the Oak Open
+  Curriculum API is licensed under OGL v3.0 (except where otherwise stated).
+- The required attribution statement format (verbatim), plus a link to OGL v3.
+- A warning that some content may include third-party rights/trademarks that
+  are not covered by OGL and must be respected.
+
+**Acceptance criteria**:
+
+- `README.md` points to `LICENCE-DATA.md` (or an equivalent section) so a
+  public user cannot miss it.
+- There is no suggestion anywhere in the docs that “MIT covers the data”.
+  It does not.
 
 The root `README.md` already notes that curriculum data uses the
 [Open Government Licence v3](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
@@ -243,11 +298,47 @@ licensing:
 - Curriculum data: OGL v3
 - Oak branding: All rights reserved
 
+### 2d: Oak branding, trademarks, and no-endorsement/no-association
+
+**Context**: Oak’s terms and copyright notice make clear that Oak’s branding
+and trademarks are owned by (or licensed to) Oak and must not be reused to
+promote similar products. Oak’s terms for linking also prohibit claiming
+association or endorsement.
+
+**Authoritative sources**:
+
+- Oak site terms: `https://www.thenational.academy/legal/terms-and-conditions`
+- Oak copyright notice: `https://www.thenational.academy/legal/copyright-notice`
+- Oak legal pages (for readers): `https://www.thenational.academy/legal/terms-and-conditions` and related pages
+
+**Requirement**: the public-facing docs must be explicit that:
+
+- Oak name/logo/brand assets are not licensed under MIT;
+- third parties must not represent themselves as being associated with or
+  endorsed by Oak National Academy; and
+- the code may be forked/modified under MIT, but the fork must not imply
+  affiliation or endorsement.
+
+**File to create (recommended)**: `BRANDING.md` (root)
+
+Include:
+
+- “Oak branding and trademarks are not licensed under MIT.”
+- “Do not use Oak branding to suggest endorsement or association.”
+- A pointer to Oak’s official legal pages for the definitive guidance.
+
+**Acceptance criteria**:
+
+- `README.md` has a short “Branding and no endorsement” note and links to
+  `BRANDING.md`.
+- Workspace READMEs that mention Oak brand assets do not contradict this.
+
 ### Completion checklist
 
 - [ ] `LICENSE` file created at root with correct MIT text
 - [ ] `CODE_OF_CONDUCT.md` created with Contributor Covenant v2.1
 - [ ] Dual licensing (code vs data) clearly documented
+- [ ] Oak branding/trademark rules and no-endorsement/no-association clearly documented
 - [ ] `README.md` licence link verified working
 
 ---
