@@ -73,6 +73,5 @@ pnpm vitest run -c vitest.experiment.config.ts
 
 ## Related Documentation
 
-- [DIAGNOSTIC-QUERIES.md](../docs/DIAGNOSTIC-QUERIES.md) - Documentation for the diagnostic query suite
 - [hard-query-baseline.md](../../../.agent/evaluations/baselines/hard-query-baseline.md) - Baseline performance data
 - [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md) - Historical experiment results

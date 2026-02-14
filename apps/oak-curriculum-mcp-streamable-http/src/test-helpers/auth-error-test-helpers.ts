@@ -44,8 +44,8 @@ interface Params {
  * the MCP SDK's signature while capturing handlers for test assertions.
  *
  * Type Safety Note:
- * - The MCP SDK's registerTool has complex generics: <InputArgs extends ZodRawShape, OutputArgs extends ZodRawShape>
- * - Our mock needs to capture handlers as (params: Params) => Promise<unknown> for test assertions
+ * - The MCP SDK's registerTool has complex generics: `<InputArgs extends ZodRawShape, OutputArgs extends ZodRawShape>`
+ * - Our mock needs to capture handlers as `(params: Params) => Promise<unknown>` for test assertions
  * - We bridge this gap by:
  *   1. Creating a generic implementation that accepts any handler signature
  *   2. Internally wrapping to our test Params type

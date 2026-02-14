@@ -79,7 +79,7 @@ require further action.
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| WS0 | [Full documentation audit](#workstream-0-full-documentation-audit) | Pending |
+| WS0 | [Full documentation audit](#workstream-0-full-documentation-audit) | Complete |
 | WS1 | [Canonical onboarding journey](#workstream-1-canonical-onboarding-journey) | Pending (reopened for clean break) |
 | WS2 | [Command truth and drift removal](#workstream-2-command-truth-and-drift-removal) | Pending |
 | WS3 | [Link integrity and navigation](#workstream-3-link-integrity-and-navigation) | Pending |
@@ -88,14 +88,25 @@ require further action.
 | WS6 | [First-day rehearsal and sign-off](#workstream-6-first-day-rehearsal-and-sign-off) | Pending |
 | QG | [Quality gates](#quality-gates) | Pending |
 
-**Recommended order**: WS0 -> WS1 -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
+**Recommended order**: WS0 -> Pre-onboarding fixes -> WS1 -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
 
 WS0 is a hard prerequisite — it produces the full landscape that
 every subsequent workstream consumes. Without it, onboarding changes
-are blind edits. WS1 defines the structure. WS2/WS3 remove mechanical
-friction. WS4 aligns policy and secret handling. WS5 handles
-release-specific onboarding. WS6 validates with a real first-day
-rehearsal.
+are blind edits. **Expect WS0 to fill an entire session.** The repo
+has 150+ non-archived markdown files; auditing them all is substantial
+work. WS0 produces a report and does not fix anything — the fixes
+come in the pre-onboarding plan and WS1-WS6.
+
+**Pre-onboarding prerequisite**: Before starting WS1, execute the
+[Pre-Onboarding Documentation Fixes](pre-onboarding-doc-fixes.plan.md)
+plan. It resolves all non-onboarding documentation issues discovered
+by WS0 (archival, broken links, wrong-location content, stale
+references). Completing it first ensures WS1-WS6 can focus
+exclusively on the onboarding journey.
+
+WS1 defines the structure. WS2/WS3 remove mechanical friction. WS4
+aligns policy and secret handling. WS5 handles release-specific
+onboarding. WS6 validates with a real first-day rehearsal.
 
 ---
 
@@ -157,11 +168,11 @@ execute with full situational awareness.
 
 ### Completion checklist
 
-- [ ] Every non-archived markdown file listed and categorised
-- [ ] Issues grouped by area with specific file references
-- [ ] Cross-cutting themes identified and quantified
-- [ ] Triage report written to `.agent/research/documentation-audit-report.md`
-- [ ] WS1-WS6 actions reviewed against audit findings (update if needed)
+- [x] Every non-archived markdown file listed and categorised
+- [x] Issues grouped by area with specific file references
+- [x] Cross-cutting themes identified and quantified
+- [x] Triage report written to `.agent/research/documentation-audit-report.md`
+- [x] WS1-WS6 actions reviewed against audit findings (WS1, WS2, WS3 updated)
 
 ---
 
@@ -173,6 +184,13 @@ points, compatibility pages, and stale routing).
 **Problem**: The onboarding story still includes a compatibility layer.
 The final state must be a clean break with one canonical path only.
 
+**WS0 audit findings**: `docs/development/onboarding.md` requires a
+full rewrite — it references "Oak Notion MCP", removed packages
+(`mcp-storage`, `mcp-transport`), wrong commands, and has 5+ broken
+links. GO.md is referenced in 15 non-archive files but the grounding
+pattern is superseded by AGENT.md + directives. `docs/usage/` and
+`docs/research/` contain entirely stale Notion-era content.
+
 ### Actions
 
 1. Review the WS0 audit to identify every file that functions as an
@@ -181,12 +199,21 @@ The final state must be a clean break with one canonical path only.
    `docs/development/onboarding.md`.
 3. Delete `docs/onboarding.md` and any other compatibility pointer
    pages identified in WS0. Clean break — no redirect pages.
-4. Ensure all top-level entry points (`README.md`, `docs/README.md`,
+4. **Rewrite** `docs/development/onboarding.md` from scratch — the
+   current content is entirely Notion-era and cannot be patched.
+5. Decide the fate of `GO.md`: delete and remove all 15 references
+   (clean break), or formalise its complementary role alongside
+   AGENT.md. Update AGENT.md accordingly.
+6. Delete or rewrite `docs/usage/README.md` and
+   `docs/usage/api-reference.md` (entirely Notion MCP content).
+   Delete or rewrite `docs/research/README.md` (references
+   non-existent research targets).
+7. Ensure all top-level entry points (`README.md`, `docs/README.md`,
    `CONTRIBUTING.md`) route to the canonical onboarding path.
-5. Add a concise "choose your path" section in onboarding:
+8. Add a concise "choose your path" section in onboarding:
    SDK/docs work (no secrets), service work (minimal secrets), search
-   + release work (full credentials).
-6. Run a repository-wide link sweep to remove references to any
+   and release work (full credentials).
+9. Run a repository-wide link sweep to remove references to any
    deleted pages.
 
 ### Completion checklist
@@ -209,6 +236,11 @@ public release readiness. The remaining drift is in secondary docs,
 especially `docs/agent-guidance/ai-agent-guide.md` which still uses
 `pnpm format` (should be `pnpm format:root`) and other legacy patterns.
 
+**WS0 audit findings**: 9 non-archive files contain stale `pnpm format`
+commands. Drift also exists in `.cursor/commands/` (`jc-gates.md`,
+`jc-start-right-thorough.md`) and `.claude/commands/jc-quality-gates.md`.
+Two `.cursor/skills/` files reference deleted `test-query-*.ts` scripts.
+
 ### Actions
 
 1. Treat root `package.json` scripts as command source of truth.
@@ -220,7 +252,12 @@ especially `docs/agent-guidance/ai-agent-guide.md` which still uses
 3. `docs/agent-guidance/ai-agent-guide.md` needs substantial
    rework — it references "Oak Notion MCP", the GO.md grounding
    pattern, and stale command names. Decide: rewrite or delete.
-4. Add a lightweight drift check (manual checklist or scripted check)
+4. Sweep `.cursor/commands/` and `.claude/commands/` for stale
+   commands (`test:e2e:built`, `pnpm format`, `pnpm check-types`).
+5. Update `.cursor/skills/ground-truth-design/SKILL.md` and
+   `.cursor/skills/ground-truth-evaluation/SKILL.md` — replace
+   deleted `test-query-*.ts` script references with CLI commands.
+6. Add a lightweight drift check (manual checklist or scripted check)
    so future command renames do not silently desynchronise docs.
 
 ### Completion checklist
@@ -242,12 +279,26 @@ onboarding-adjacent docs. The worst offender is
 files, 1 wrong-path link). `docs/development/environment-variables.md`
 also has a wrong-path link to `vercel-environment-config.md`.
 
-### Known broken links
+### Known broken links (from WS0 audit — 20+ instances)
+
+Previously known:
 
 - `docs/agent-guidance/ai-agent-guide.md` -> `../development/onboarding-journey.md` (missing)
 - `docs/agent-guidance/ai-agent-guide.md` -> `../quick-reference.md` (missing)
 - `docs/agent-guidance/ai-agent-guide.md` -> `docs/troubleshooting.md` (wrong path; file is at `docs/development/troubleshooting.md`)
 - `docs/development/environment-variables.md` -> `docs/vercel-environment-config.md` (wrong path; file is at `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`)
+
+Discovered by WS0 audit:
+
+- `GROUND-TRUTH-PROCESS.md` referenced in 7+ places in oak-search-cli (does not exist; should be `GROUND-TRUTH-GUIDE.md` or `ground-truth-protocol.md`)
+- `DIAGNOSTIC-QUERIES.md` referenced in 2 places in oak-search-cli (does not exist)
+- `oak-components-theming.md` referenced in `apps/oak-search-cli/docs/README.md` (does not exist)
+- `experimental-architecture-quick-reference.md` referenced in `docs/agent-guidance/README.md` (does not exist)
+- ADR index links 020, 021, 023 point to main directory instead of `docs/archive/architecture/architectural-decisions/`
+- ADR name mismatches in `docs/architecture/openapi-pipeline.md`: 029, 030, 031, 048
+- 6 `apps/oak-search-cli/operations/` READMEs contain wrong-workspace content (streamable-http content in search CLI)
+- `apps/oak-search-cli/evaluation/experiments/README.md` contains Clerk OAuth content (wrong workspace)
+- `apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/README.md` contains MCP testing strategy (wrong workspace)
 
 ### Actions
 

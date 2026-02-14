@@ -22,25 +22,26 @@
  * To add a new agent support tool:
  *
  * 1. Add metadata to {@link AGENT_SUPPORT_TOOL_METADATA}:
- *    ```typescript
- *    'get-glossary': {
- *      name: 'get-glossary',
- *      shortDescription: 'Curriculum terminology',
- *      provides: ['definitions', 'synonyms', 'related terms'],
- *      purpose: 'understand terminology and jargon',
- *      callOrder: 4, // Next available number
- *      complementsTools: ['get-ontology', 'get-help'],
- *      seeAlso: 'get-ontology for domain structure',
- *      callAtStart: true,
- *    }
- *    ```
+ *
+ * ```typescript
+ * 'get-glossary': {
+ *   name: 'get-glossary',
+ *   shortDescription: 'Curriculum terminology',
+ *   provides: ['definitions', 'synonyms', 'related terms'],
+ *   purpose: 'understand terminology and jargon',
+ *   callOrder: 4, // Next available number
+ *   complementsTools: ['get-ontology', 'get-help'],
+ *   seeAlso: 'get-ontology for domain structure',
+ *   callAtStart: true,
+ * }
+ * ```
  *
  * 2. Add the tool to `toolCategories.agentSupport.tools` in `tool-guidance-data.ts`
  *
  * 3. Run tests to verify consistency:
- *    ```bash
- *    pnpm test agent-support-tool-metadata
- *    ```
+ * ```bash
+ * pnpm test agent-support-tool-metadata
+ * ```
  *
  * The tests verify that metadata entries match the tools array, ensuring
  * the single source of truth is maintained.
@@ -72,7 +73,7 @@
  * // ['get-ontology', 'get-knowledge-graph', 'get-help']
  * ```
  *
- * @see {@link ../../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md | ADR-060}
+ * @see ADR-060 (`docs/architecture/architectural-decisions/060-agent-support-metadata-system.md`)
  */
 
 import { typeSafeValues } from '../types/helpers/type-helpers.js';

@@ -5,7 +5,7 @@
  * multiple units and years. This module fetches thread data from the /threads
  * API and creates Elasticsearch bulk index operations.
  *
- * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @see createThreadDocument - Document creation function
  * @see ADR-088 Result Pattern for Explicit Error Handling

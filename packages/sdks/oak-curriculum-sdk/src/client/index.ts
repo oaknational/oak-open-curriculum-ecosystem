@@ -14,16 +14,20 @@ import type { OakApiClient, OakApiPathBasedClient, OakClientConfig } from './oak
  * @returns The method-based `OakApiClient` instance
  *
  * @example
+ * ```typescript
  * // Legacy usage (backwards compatible)
  * const client = createOakClient('my-api-key');
+ * ```
  *
  * @example
+ * ```typescript
  * // New usage with rate limiting and retry configuration
  * const client = createOakClient({
  *   apiKey: 'my-api-key',
  *   rateLimit: { minRequestInterval: 200 },
  *   retry: { maxRetries: 5 }
  * });
+ * ```
  */
 export function createOakClient(config: OakClientConfig | string): OakApiClient {
   const _client = new BaseApiClient(config);
@@ -44,16 +48,20 @@ export function createOakClient(config: OakClientConfig | string): OakApiClient 
  * @returns The path-based `OakApiPathBasedClient` instance
  *
  * @example
+ * ```typescript
  * // Legacy usage (backwards compatible)
  * const client = createOakPathBasedClient('my-api-key');
+ * ```
  *
  * @example
+ * ```typescript
  * // New usage with rate limiting and retry configuration
  * const client = createOakPathBasedClient({
  *   apiKey: 'my-api-key',
  *   rateLimit: { minRequestInterval: 200 },
  *   retry: { maxRetries: 5 }
  * });
+ * ```
  */
 export function createOakPathBasedClient(config: OakClientConfig | string): OakApiPathBasedClient {
   const _client = new BaseApiClient(config);
@@ -73,6 +81,7 @@ export function createOakPathBasedClient(config: OakClientConfig | string): OakA
  * @returns The full BaseApiClient instance
  *
  * @example
+ * ```typescript
  * const baseClient = createOakBaseClient({
  *   apiKey: 'my-api-key',
  *   rateLimit: { minRequestInterval: 200 },
@@ -85,6 +94,7 @@ export function createOakPathBasedClient(config: OakClientConfig | string): OakA
  * // Check rate limit status
  * const status = baseClient.rateLimitTracker.getStatus();
  * console.log('Remaining requests:', status.remaining);
+ * ```
  */
 export function createOakBaseClient(config: OakClientConfig | string): BaseApiClient {
   return new BaseApiClient(config);

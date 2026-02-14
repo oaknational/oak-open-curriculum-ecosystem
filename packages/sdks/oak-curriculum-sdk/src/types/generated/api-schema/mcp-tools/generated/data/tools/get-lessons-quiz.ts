@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-lessons-quiz
- * Path: /lessons/{lesson}/quiz
+ * Path: /lessons/\{lesson\}/quiz
  * Method: GET
  */
 

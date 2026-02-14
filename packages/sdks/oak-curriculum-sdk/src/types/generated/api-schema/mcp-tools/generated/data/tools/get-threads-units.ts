@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-threads-units
- * Path: /threads/{threadSlug}/units
+ * Path: /threads/\{threadSlug\}/units
  * Method: GET
  */
 

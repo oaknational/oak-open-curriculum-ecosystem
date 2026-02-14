@@ -3,7 +3,11 @@ import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { createFileMap, generatePathParametersContent } from './typegen-core';
+import {
+  createFileMap,
+  generatePathParametersContent,
+  postProcessTypesSource,
+} from './typegen-core';
 import { writeMcpToolsDirectory } from './typegen-core-file-operations.js';
 import type { GeneratedMcpToolFiles } from './typegen/mcp-tools/mcp-tool-generator.js';
 
@@ -112,6 +116,44 @@ describe('typegen-core', () => {
       // Should have multiple sections separated by newlines
       const sections = result.split('\n\n');
       expect(sections.length).toBeGreaterThan(1);
+    });
+  });
+
+  describe('postProcessTypesSource', () => {
+    it('should escape braces inside doc comments', () => {
+      const input = ['/** @example { "transcript": "Hello" } */', 'export type Foo = string;'].join(
+        '\n',
+      );
+
+      const result = postProcessTypesSource(input);
+      expect(result).toContain('\\{ "transcript": "Hello" \\}');
+    });
+
+    it('should preserve valid TSDoc inline tags like {@link} and {@inheritDoc}', () => {
+      const input = [
+        '/** See {@link SomeType} and {@inheritDoc OtherType} */',
+        'export type Bar = number;',
+      ].join('\n');
+
+      const result = postProcessTypesSource(input);
+      expect(result).toContain('{@link SomeType}');
+      expect(result).toContain('{@inheritDoc OtherType}');
+    });
+
+    it('should escape angle brackets in doc comments', () => {
+      const input = ['/** Returns Record<string, unknown> */', 'export type Baz = object;'].join(
+        '\n',
+      );
+
+      const result = postProcessTypesSource(input);
+      expect(result).toContain('\\<');
+      expect(result).toContain('\\>');
+    });
+
+    it('should not escape braces outside doc comments', () => {
+      const input = 'const x = { a: 1 };';
+      const result = postProcessTypesSource(input);
+      expect(result).toBe(input);
     });
   });
 

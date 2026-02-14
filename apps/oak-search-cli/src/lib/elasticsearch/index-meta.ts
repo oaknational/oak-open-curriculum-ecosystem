@@ -4,7 +4,7 @@
  * Provides functions to read and write index version metadata using
  * generated types from the SDK to ensure schema-first consistency.
  *
- * All functions use Result<T, E> pattern for explicit error handling.
+ * All functions use `Result<T, E>` pattern for explicit error handling.
  */
 
 import type { Client } from '@elastic/elasticsearch';
@@ -28,7 +28,7 @@ export type IndexMetaError =
 
 /**
  * Generates a version string from current timestamp.
- * Format: v{YYYY-MM-DD}-{HHmmss}
+ * Format: `v\{YYYY-MM-DD\}-\{HHmmss\}`
  */
 export function generateVersionFromTimestamp(): string {
   const now = new Date();

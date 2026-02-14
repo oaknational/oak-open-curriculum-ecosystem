@@ -2,7 +2,7 @@
  * Unit processing for bulk indexing operations.
  *
  * Handles fetching unit summaries and creating ES bulk operations.
- * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  * @see ADR-088 Result Pattern for Explicit Error Handling

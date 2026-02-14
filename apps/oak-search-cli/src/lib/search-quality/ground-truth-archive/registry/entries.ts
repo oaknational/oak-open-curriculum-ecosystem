@@ -8,7 +8,7 @@
  * not in these entries. This separates test data from results.
  *
  * @see ADR-098 Ground Truth Registry as Single Source of Truth
- * @see GROUND-TRUTH-PROCESS.md for how to create valid entries
+ * @see GROUND-TRUTH-GUIDE.md for how to create valid entries
  */
 import type { GroundTruthEntry } from './types';
 import { ART_PRIMARY_ALL_QUERIES } from '../art/primary';

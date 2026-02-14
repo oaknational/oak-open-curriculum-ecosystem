@@ -10,7 +10,7 @@
  * JavaScript function to render transcript data in the widget.
  *
  * Handles the following data shape:
- * - { transcript: string, vtt?: string }
+ * - `\{ transcript: string, vtt?: string \}`
  */
 export const TRANSCRIPT_RENDERER = `
 function renderTranscript(data) {

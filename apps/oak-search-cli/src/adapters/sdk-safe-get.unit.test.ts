@@ -6,8 +6,8 @@
  *
  * NO network IO, pure function tests with simple fakes.
  *
- * @see {@link ./sdk-safe-get.ts}
- * @see {@link ../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
+ * @see `./sdk-safe-get.ts`
+ * @see `../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
  */
 
 import { describe, it, expect } from 'vitest';

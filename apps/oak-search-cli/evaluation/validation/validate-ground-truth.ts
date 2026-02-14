@@ -32,7 +32,7 @@
  * Run with: pnpm ground-truth:validate
  * Generate types first: pnpm bulk:typegen
  *
- * @see GROUND-TRUTH-PROCESS.md
+ * @see GROUND-TRUTH-GUIDE.md
  * @see ADR-085 Ground Truth Validation Discipline
  */
 
@@ -429,7 +429,7 @@ function checkScoreDistribution(
  * Check 15: At least one highly relevant (score=3) result.
  *
  * Queries should have at least one highly relevant result, otherwise
- * MRR@k will be artificially low.
+ * `MRR@k` will be artificially low.
  */
 function checkHasHighlyRelevant(
   entry: string,
@@ -715,7 +715,7 @@ function main(): void {
   printSummary(summary);
 
   console.log('\n❌ Validation failed. Fix all errors before running benchmarks.\n');
-  console.log('See GROUND-TRUTH-PROCESS.md for how to find valid slugs.\n');
+  console.log('See GROUND-TRUTH-GUIDE.md for how to find valid slugs.\n');
   process.exit(1);
 }
 

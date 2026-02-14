@@ -1,7 +1,7 @@
 /**
  * ESLint Configuration for result library
  *
- * Result<T, E> type for explicit error handling
+ * `Result\<T, E\>` type for explicit error handling
  */
 
 import { defineConfig } from 'eslint/config';

@@ -30,19 +30,11 @@ This directory contains authored documentation for the semantic search workspace
 
 ### Search Quality
 
-| Document                                         | Purpose                                     |
-| ------------------------------------------------ | ------------------------------------------- |
-| [IR-METRICS.md](./IR-METRICS.md)                 | MRR, NDCG@10, zero-hit rate definitions     |
-| [DIAGNOSTIC-QUERIES.md](./DIAGNOSTIC-QUERIES.md) | Diagnostic query suite for failure analysis |
-| [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md)   | Workflow for onboarding new subjects        |
-| [DATA-COMPLETENESS.md](./DATA-COMPLETENESS.md)   | Which fields are indexed completely         |
-
-### Deprecated
-
-| Document                                                 | Purpose                                   |
-| -------------------------------------------------------- | ----------------------------------------- |
-| [SDK-ENDPOINTS.md](./SDK-ENDPOINTS.md)                   | SDK parity routes (deprecated)            |
-| [oak-components-theming.md](./oak-components-theming.md) | UI theming guide (UI layer being retired) |
+| Document                                       | Purpose                                 |
+| ---------------------------------------------- | --------------------------------------- |
+| [IR-METRICS.md](./IR-METRICS.md)               | MRR, NDCG@10, zero-hit rate definitions |
+| [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md) | Workflow for onboarding new subjects    |
+| [DATA-COMPLETENESS.md](./DATA-COMPLETENESS.md) | Which fields are indexed completely     |
 
 ---
 
@@ -84,9 +76,10 @@ Architectural decisions relevant to this workspace:
 After documentation changes:
 
 ```bash
-pnpm lint                                                    # Markdown linting
+pnpm format:root                                             # Code and doc formatting
+pnpm markdownlint:root                                       # Markdown linting
 pnpm test                                                    # Ensure doc-related tests pass
-pnpm -C apps/oak-search-cli doc-gen     # TypeDoc + OpenAPI regeneration
+pnpm -C apps/oak-search-cli doc-gen                          # TypeDoc + OpenAPI regeneration
 ```
 
 Keep this README updated if new guides are added or responsibilities change.

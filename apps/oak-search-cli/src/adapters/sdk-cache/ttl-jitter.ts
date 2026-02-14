@@ -26,7 +26,7 @@
  * - [Redis: Cache Stampede Prevention](https://redis.io/docs/manual/client-side-caching/)
  * - [ADR-079: SDK Cache TTL Jitter](../../../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)
  *
- * @see {@link ../../../docs/SDK-CACHING.md} for SDK caching overview
+ * @see `../../../docs/SDK-CACHING.md` for SDK caching overview
  */
 
 /** Seconds per hour constant for readability. */
@@ -64,7 +64,7 @@ const HOURS_PER_DAY = 24;
  * - When random = 0.5: TTL = base (no jitter)
  * - When random = 1: TTL = base + jitter (maximum)
  *
- * @see {@link ../../../docs/SDK-CACHING.md#cache-stampede-prevention}
+ * @see `../../../docs/SDK-CACHING.md` (cache stampede prevention section)
  */
 export function calculateTtlWithJitter(
   baseTtlDays: number,

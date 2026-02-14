@@ -4,8 +4,8 @@
  * This module provides standard IR metrics used to evaluate search quality:
  * - **MRR** (Mean Reciprocal Rank): How quickly users find the first relevant result
  * - **NDCG** (Normalized Discounted Cumulative Gain): Overall ranking quality with graded relevance
- * - **Precision@k**: Proportion of top k results that are relevant
- * - **Recall@k**: Proportion of all relevant results found in top k
+ * - **`Precision@k`**: Proportion of top k results that are relevant
+ * - **`Recall@k`**: Proportion of all relevant results found in top k
  *
  * @see `docs/IR-METRICS.md` for detailed explanations and interpretation guides
  *
@@ -35,7 +35,7 @@ function typeSafeValues<T extends Readonly<Record<string, number>>>(obj: T): num
 /**
  * Relevance threshold for MRR calculation.
  *
- * Only results with relevance >= this threshold count as "relevant" for MRR.
+ * Only results with relevance `>=` this threshold count as "relevant" for MRR.
  * A score of 2 means "Relevant" (related and useful), excluding marginal matches.
  */
 const MRR_RELEVANCE_THRESHOLD = 2;
@@ -82,7 +82,7 @@ export function calculateMRR(
 }
 
 /**
- * Calculate NDCG@k (Normalized Discounted Cumulative Gain).
+ * Calculate `NDCG@k` (Normalized Discounted Cumulative Gain).
  *
  * NDCG measures overall ranking quality, considering both relevance and position.
  * Higher relevance results should appear earlier in the ranking.
@@ -145,13 +145,13 @@ export function calculateNDCG(
 /**
  * Relevance threshold for Precision and Recall.
  *
- * Results with relevance >= this threshold count as "relevant".
+ * Results with relevance `>=` this threshold count as "relevant".
  * A score of 2 means "Relevant" (related and useful), excluding marginal matches.
  */
 const PRECISION_RECALL_RELEVANCE_THRESHOLD = 2;
 
 /**
- * Calculate Precision@k.
+ * Calculate `Precision@k`.
  *
  * Precision measures what proportion of the top k results are relevant.
  * Higher precision means less noise in the results.
@@ -192,7 +192,7 @@ export function calculatePrecisionAtK(
 }
 
 /**
- * Calculate Recall@k.
+ * Calculate `Recall@k`.
  *
  * Recall measures what proportion of all relevant results are found in the top k.
  * Higher recall means we're finding more of the relevant content.

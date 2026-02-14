@@ -6,7 +6,7 @@
  * module, we ensure Zod schemas and ES mappings never diverge, eliminating
  * "mapper_parsing_exception" errors during bulk indexing.
  *
- * @see {@link ../field-definitions/observability.ts} for observability index definitions
+ * @see `./observability.ts` for observability index definitions
  */
 
 import type { IndexFieldDefinitions } from './types.js';

@@ -52,6 +52,14 @@ function typeFor(meta: ParamMetadata): string {
   return literalUnion(meta) ?? primitiveType(meta);
 }
 
+/**
+ * Escape characters that break the TSDoc parser when they appear in
+ * single-line doc comments generated from OpenAPI descriptions.
+ */
+function escapeTsDocChars(text: string): string {
+  return text.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
+}
+
 function describeParam(meta: ParamMetadata): string | undefined {
   const fragments: string[] = [];
   if (meta.description) {
@@ -66,7 +74,7 @@ function describeParam(meta: ParamMetadata): string | undefined {
   if (fragments.length === 0) {
     return undefined;
   }
-  return fragments.join(' ');
+  return escapeTsDocChars(fragments.join(' '));
 }
 
 function buildInterface(

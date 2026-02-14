@@ -5,7 +5,7 @@
  * as specified in RFC 9470. The URL is always at the well-known path
  * `/.well-known/oauth-protected-resource` and never varies based on the request path.
  *
- * This is a fix for the bug in @clerk/mcp-tools where getPRMUrl incorrectly
+ * This is a fix for the bug in `@clerk/mcp-tools` where getPRMUrl incorrectly
  * appends req.originalUrl to the metadata path, resulting in broken URLs like:
  * `/.well-known/oauth-protected-resource/mcp`
  *
@@ -20,7 +20,7 @@
  * Returns the canonical RFC 9470 compliant URL: `{protocol}://{host}/.well-known/oauth-protected-resource`
  *
  * This function is a pure function that only uses the protocol and host from the request,
- * specifically NOT including req.originalUrl (which was the bug in @clerk/mcp-tools).
+ * specifically NOT including req.originalUrl (which was the bug in `@clerk/mcp-tools`).
  *
  * @param req - Minimal request object with protocol and get method
  * @returns The canonical OAuth Protected Resource Metadata URL

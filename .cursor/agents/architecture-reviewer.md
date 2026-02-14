@@ -104,7 +104,7 @@ import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 import { logger } from '@oaknational/mcp-logger'; // VIOLATION
 
 // ❌ INVALID: Cross-app import
-// In apps/oak-notion-mcp/src/something.ts:
+// In apps/oak-curriculum-mcp-streamable-http/src/something.ts:
 import { helper } from '../../oak-curriculum-mcp-stdio/src/helper'; // VIOLATION
 ```
 

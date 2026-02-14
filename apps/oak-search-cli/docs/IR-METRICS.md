@@ -8,15 +8,15 @@
 
 ---
 
-## Current Scope: Educator Lesson Search
+## Current Scope: Educator Curriculum Search
 
 | Dimension         | Current Scope                       | Future (Not Today)         |
 | ----------------- | ----------------------------------- | -------------------------- |
-| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **Content Type**  | Lessons, units, sequences, threads  | Additional content types   |
 | **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
 | **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
 
-**All current ground truths and metrics assume the user is a professional teacher searching for lessons.**
+**All current ground truths and metrics assume the user is a professional teacher searching for curriculum content.**
 
 A future learner-focused search may require different metrics, thresholds, or evaluation approaches.
 
@@ -294,14 +294,14 @@ All experiment results should be recorded in:
 
 ## Related Documentation
 
-| Document                                                                                                | Purpose                       |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)               | Ground truth creation process |
-| [EXPERIMENTAL-PROTOCOL.md](../../../.agent/evaluations/EXPERIMENTAL-PROTOCOL.md)                        | How to run experiments        |
-| [search-acceptance-criteria.md](../../../.agent/plans/semantic-search/search-acceptance-criteria.md)    | Per-category MRR thresholds   |
-| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation       |
-| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)              | Ground truth registry         |
-| [M3 Plan](../../../.agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)      | Current search quality work   |
+| Document                                                                                                | Purpose                                  |
+| ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [GROUND-TRUTH-GUIDE.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md)                   | Ground truth design and evaluation guide |
+| [EXPERIMENTAL-PROTOCOL.md](../../../.agent/evaluations/EXPERIMENTAL-PROTOCOL.md)                        | How to run experiments                   |
+| [search-acceptance-criteria.md](../../../.agent/plans/semantic-search/search-acceptance-criteria.md)    | Per-category MRR thresholds              |
+| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation                  |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)              | Ground truth registry                    |
+| [M3 Plan](../../../.agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)      | Current search quality work              |
 
 ---
 

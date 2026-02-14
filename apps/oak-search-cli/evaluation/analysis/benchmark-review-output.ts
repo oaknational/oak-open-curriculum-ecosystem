@@ -5,7 +5,7 @@
  * - Expected slugs with relevance scores
  * - Actual search results (top 10)
  * - Which expected slugs were found and at what position
- * - ALL 4 metrics (MRR, NDCG@10, P@3, R@10) per query
+ * - ALL 4 metrics (MRR, `NDCG@10`, `P@3`, `R@10`) per query
  *
  * Usage: `pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review`
  */

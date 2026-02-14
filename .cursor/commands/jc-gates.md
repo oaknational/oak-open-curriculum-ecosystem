@@ -9,9 +9,12 @@ After each fix, **restart the quality gate sequence from the beginning**. This p
 Run each gate in order. If a gate fails, fix the issues before proceeding.
 
 ```bash
-pnpm format:root
-pnpm lint:fix
+pnpm type-gen
+pnpm build
 pnpm type-check
+pnpm format:root
+pnpm markdownlint:root
+pnpm lint:fix
 pnpm test
 pnpm test:e2e
 ```

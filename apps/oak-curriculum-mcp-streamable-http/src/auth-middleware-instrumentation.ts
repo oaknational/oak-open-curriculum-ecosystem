@@ -154,7 +154,7 @@ export function executeMiddleware(
  * Adds:
  * - Start/completion logging
  * - Duration tracking
- * - Pending operation warnings (if > 5s)
+ * - Pending operation warnings (if \> 5s)
  * - Early response close detection
  * - Error logging with context
  *

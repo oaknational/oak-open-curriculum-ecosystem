@@ -1,7 +1,7 @@
 /**
  * Sandbox fixture client for testing without live API.
  *
- * All methods return Result<T, SdkFetchError> per ADR-088.
+ * All methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */

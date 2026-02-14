@@ -11,10 +11,10 @@
  * JavaScript function to render help content in the widget.
  *
  * Handles the following data shape:
- * - serverOverview: { aboutOak, oakWebsite, description, ... }
- * - toolCategories: { [name]: { description, tools, ... } }
- * - workflows: { [name]: { title, description, ... } }
- * - tips: string[]
+ * - serverOverview: `\{ aboutOak, oakWebsite, description, ... \}`
+ * - toolCategories: `\{ [name]: \{ description, tools, ... \} \}`
+ * - workflows: `\{ [name]: \{ title, description, ... \} \}`
+ * - tips: `string[]`
  */
 export const HELP_RENDERER = `
 function renderHelp(o) {

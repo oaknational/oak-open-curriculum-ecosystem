@@ -10,7 +10,7 @@
  * - unit-processing.ts: Unit summary fetching and document creation
  * - lesson-materials.ts: Lesson transcript and summary fetching
  *
- * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
  * KS4 metadata denormalisation is handled via UnitContextMap per ADR-080.
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy

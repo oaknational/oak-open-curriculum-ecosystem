@@ -12,7 +12,7 @@ import { generateZodSchemasFromOpenAPI } from './adapter/index.js';
  *
  * @param openApiDoc - The OpenAPI document to generate from
  * @param outDir - The output directory for generated files
- * @throws {TypeError} If the OpenAPI document is invalid
+ * @throws TypeError - If the OpenAPI document is invalid
  */
 export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: string): Promise<void> {
   if (!existsSync(outDir)) {

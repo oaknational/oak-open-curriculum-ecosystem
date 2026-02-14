@@ -7,7 +7,7 @@
  * GENERATED FILE - DO NOT EDIT MANUALLY
  * Generated at type-gen time from schema error responses.
  *
- * @see {@link ../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
+ * @see ADR-088 (docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)
  */
 
 /**

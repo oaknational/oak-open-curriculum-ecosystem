@@ -16,7 +16,7 @@ import { verifyClerkToken } from './verify-clerk-token.js';
  * Creates Express middleware that enforces Clerk OAuth authentication for MCP requests.
  *
  * This middleware:
- * 1. Uses @clerk/express to get authentication context
+ * 1. Uses `@clerk/express` to get authentication context
  * 2. Verifies the OAuth token using Clerk
  * 3. Attaches AuthInfo to req.auth if valid
  * 4. Returns 401 with proper WWW-Authenticate header if invalid

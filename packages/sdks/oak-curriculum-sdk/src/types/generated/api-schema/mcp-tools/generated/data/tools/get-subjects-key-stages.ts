@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-subjects-key-stages
- * Path: /subjects/{subject}/key-stages
+ * Path: /subjects/\{subject\}/key-stages
  * Method: GET
  */
 

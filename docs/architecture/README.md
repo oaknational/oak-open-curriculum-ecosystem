@@ -12,8 +12,7 @@
 
 - Standard structure (Option A):
   - `apps/` – applications (MCP servers)
-  - `packages/libs/` – lib interfaces/utilities (logger, storage, transport, env)
-  - `packages/libs/` – reusable libraries (`@oaknational/mcp-*`)
+  - `packages/libs/` – reusable libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
   - `packages/runtime-adapters/` – runtime adapters (e.g., Node, Workers)
   - `packages/sdks/` – public SDKs (future growth)
 - Boundaries enforced by ESLint rules under `eslint-rules/`

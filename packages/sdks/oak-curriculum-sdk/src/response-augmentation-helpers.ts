@@ -48,7 +48,7 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
 /**
  * Checks if path is a single entity endpoint.
  *
- * Note: Order matters for paths like `/subjects/{subject}/sequences` which
+ * Note: Order matters for paths like `/subjects/\{subject\}/sequences` which
  * contains both `/subjects/` and ends with `/sequences`. We prioritise based
  * on what the endpoint actually returns.
  */
@@ -62,7 +62,7 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (path.includes('/sequences/')) {
     return 'sequence';
   }
-  // /subjects/{subject}/sequences returns sequences, not subjects
+  // /subjects/\{subject\}/sequences returns sequences, not subjects
   // Check for sequences endpoint before subjects
   if (path.endsWith('/sequences')) {
     return 'sequence';
@@ -80,9 +80,9 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
  * Determines content type from API path
  *
  * Recognises paths for:
- * - Single entity endpoints (e.g., /lessons/{lesson}/summary)
+ * - Single entity endpoints (e.g., /lessons/\{lesson\}/summary)
  * - Search endpoints (e.g., /search/lessons, /search/transcripts)
- * - Key-stage scoped endpoints (e.g., /key-stages/{ks}/subjects/{subj}/lessons)
+ * - Key-stage scoped endpoints (e.g., /key-stages/\{ks\}/subjects/\{subj\}/lessons)
  */
 export function getContentTypeFromPath(path: string): ContentType | undefined {
   return isSearchEndpoint(path) ?? isKeyStageScopedEndpoint(path) ?? isSingleEntityEndpoint(path);

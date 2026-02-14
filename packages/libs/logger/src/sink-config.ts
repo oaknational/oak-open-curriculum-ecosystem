@@ -26,12 +26,15 @@ export interface FileSinkConfig {
  * Complete sink configuration for logger output destinations
  *
  * @example
+ * ```typescript
  * // HTTP server (stdout only, default for Vercel)
  * const httpConfig: LoggerSinkConfig = {
  *   stdout: true,
  * };
+ * ```
  *
  * @example
+ * ```typescript
  * // stdio server (file only, stdout reserved for MCP protocol)
  * const stdioConfig: LoggerSinkConfig = {
  *   stdout: false,
@@ -40,8 +43,10 @@ export interface FileSinkConfig {
  *     append: true,
  *   },
  * };
+ * ```
  *
  * @example
+ * ```typescript
  * // Local development (both stdout and file)
  * const devConfig: LoggerSinkConfig = {
  *   stdout: true,
@@ -50,6 +55,7 @@ export interface FileSinkConfig {
  *     append: true,
  *   },
  * };
+ * ```
  */
 export interface LoggerSinkConfig {
   /**

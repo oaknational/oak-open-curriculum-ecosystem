@@ -4,7 +4,7 @@
  * These tests verify that the OAuth Protected Resource Metadata URL is generated
  * correctly WITHOUT appending the request's originalUrl path.
  *
- * This is a fix for the bug in @clerk/mcp-tools where getPRMUrl incorrectly
+ * This is a fix for the bug in `@clerk/mcp-tools` where getPRMUrl incorrectly
  * appends req.originalUrl, resulting in broken URLs like:
  * /.well-known/oauth-protected-resource/mcp
  *

@@ -8,6 +8,31 @@
     }
   ],
   "supportForTags": {
-    "@generated": true
+    "@alpha": true,
+    "@beta": true,
+    "@decorator": true,
+    "@defaultValue": true,
+    "@deprecated": true,
+    "@eventProperty": true,
+    "@example": true,
+    "@experimental": true,
+    "@generated": true,
+    "@inheritDoc": true,
+    "@internal": true,
+    "@label": true,
+    "@link": true,
+    "@override": true,
+    "@packageDocumentation": true,
+    "@param": true,
+    "@privateRemarks": true,
+    "@public": true,
+    "@readonly": true,
+    "@remarks": true,
+    "@returns": true,
+    "@sealed": true,
+    "@see": true,
+    "@throws": true,
+    "@typeParam": true,
+    "@virtual": true
   }
 }

@@ -9,7 +9,7 @@
  * - Network IO allowed (Clerk)
  *
  * USAGE:
- *   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http inspect:oauth
+ *   pnpm -F `@oaknational/oak-curriculum-mcp-streamable-http` inspect:oauth
  */
 
 import { spawn } from 'node:child_process';

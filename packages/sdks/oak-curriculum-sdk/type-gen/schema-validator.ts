@@ -19,7 +19,7 @@ export interface OpenCurriculumSchema {
 
 /**
  * Validate raw input and ensure it matches the minimal OpenAPI 3 structure required by generators.
- * @param raw Input value to validate.
+ * @param raw - Input value to validate.
  * @returns The validated OpenAPIObject structure with guaranteed paths object.
  * @throws TypeError when validation fails.
  */

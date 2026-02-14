@@ -1,7 +1,7 @@
 /**
  * Zod v3 to v4 Adapter
  *
- * This adapter re-exports from @oaknational/openapi-zod-client-adapter,
+ * This adapter re-exports from `@oaknational/openapi-zod-client-adapter`,
  * which is the ONLY code in the codebase that may:
  * 1. Call openapi-zod-client
  * 2. Import from 'zod' (v3)

@@ -1,6 +1,6 @@
 /**
  * Unit tests for index metadata management.
- * Tests Result<T, E> error handling and schema validation.
+ * Tests `Result<T, E>` error handling and schema validation.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';

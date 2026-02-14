@@ -3,7 +3,7 @@
  * Download Oak curriculum bulk data files.
  *
  * Source: https://open-api.thenational.academy/bulk-download
- * API: POST /api/bulk with { subjects: [...] } returns ZIP
+ * API: POST /api/bulk with `{ subjects: [...] }` returns ZIP
  *
  * Usage:
  *   pnpm bulk:download

@@ -10,12 +10,12 @@
  * JavaScript function to render quiz data in the widget.
  *
  * Handles the following data shape:
- * - { starterQuiz?: QuizQuestion[], exitQuiz?: QuizQuestion[] }
+ * - `\{ starterQuiz?: QuizQuestion[], exitQuiz?: QuizQuestion[] \}`
  *
  * Each question has:
  * - question: string
  * - questionType: string
- * - answers: { content: string, distractor: boolean, type: string }[]
+ * - answers: `\{ content: string, distractor: boolean, type: string \}[]`
  */
 export const QUIZ_RENDERER = `
 function renderQuiz(data) {

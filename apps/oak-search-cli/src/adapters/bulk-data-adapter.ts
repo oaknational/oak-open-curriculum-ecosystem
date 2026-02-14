@@ -6,7 +6,7 @@
  * them into Elasticsearch document format. It serves as the primary data source
  * for bulk-first ingestion.
  *
- * @see @oaknational/curriculum-sdk/public/bulk for source types
+ * @see `@oaknational/curriculum-sdk/public/bulk` for source types
  * @see src/types/oak for ES document types
  */
 

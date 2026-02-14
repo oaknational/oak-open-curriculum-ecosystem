@@ -2,8 +2,11 @@ please run the quality gates one by one in the repo root. Fix any and all issues
 
 The sequence is:
 
-pnpm format
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm format:root
+pnpm markdownlint:root
 pnpm lint:fix
-pnpm check-types
 pnpm test
 pnpm test:e2e

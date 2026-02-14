@@ -27,8 +27,8 @@ extraction, and multi-spec validation.
 ## Core References
 
 - [ADR-108: SDK Workspace Decomposition][adr-108]
-- [.agent/directives/rules.md](../directives/rules.md)
-- [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
+- [.agent/directives/rules.md](../../directives/rules.md)
+- [.agent/directives/testing-strategy.md](../../directives/testing-strategy.md)
 
 ## Prerequisites
 

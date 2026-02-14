@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-01-03
 
-This guide documents the steps required to provision and configure Elasticsearch Serverless for the Oak Open Curriculum Semantic Search application.
+This guide documents the steps required to provision and configure Elasticsearch Serverless for the Oak Search CLI.
 
 ## Prerequisites
 

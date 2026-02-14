@@ -14,7 +14,7 @@
  * @remarks All content is static and added at SDK compile time,
  * complying with schema-first principles.
  *
- * @see {@link ./tool-guidance-types.ts} for type definitions
+ * @see `./tool-guidance-types.ts` for type definitions
  */
 
 import { threadProgressionGraph } from './thread-progression-data.js';

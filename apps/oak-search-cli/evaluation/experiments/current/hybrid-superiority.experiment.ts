@@ -13,7 +13,7 @@
  *
  * **Findings (2025-12-12, Maths KS4 dataset)**:
  *
- * LESSONS (40 queries): Hybrid MRR 0.908 > BM25 0.892 > ELSER 0.830
+ * LESSONS (40 queries): Hybrid MRR `0.908 > BM25 0.892 > ELSER 0.830`
  *
  * **Conclusions**:
  * - For lessons: Hybrid search clearly outperforms both single methods

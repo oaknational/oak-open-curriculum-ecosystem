@@ -17,7 +17,7 @@ type QueryContainer = estypes.QueryDslQueryContainer;
 
 /**
  * Filter options for lesson and unit queries. Array fields use OR logic within;
- * different fields use AND logic between them. Key stage filter precedence: phases > keyStages > keyStage
+ * different fields use AND logic between them. Key stage filter precedence: `phases > keyStages > keyStage`
  */
 export interface SearchFilterOptions {
   /** Subject filter - uses AllSubjectSlug to support KS4 science variants. @see ADR-101 */
@@ -239,7 +239,7 @@ export function createPhraseBoosters(
 }
 
 /**
- * BM25 for lessons: min_should_match 2<65% (conditional: ≤2 terms all required, >2 terms 65%), default fuzziness.
+ * BM25 for lessons: min_should_match `2<65%` (conditional: ≤2 terms all required, \>2 terms 65%), default fuzziness.
  * Optionally includes phrase boosters for multi-word curriculum terms.
  */
 function createLessonBm25Retriever(

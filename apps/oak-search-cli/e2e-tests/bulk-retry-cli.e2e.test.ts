@@ -26,7 +26,7 @@ const appRoot = resolve(currentDir, '..');
  * Spawn a CLI process and capture output.
  *
  * @param args - CLI arguments
- * @returns Promise resolving to { stdout, stderr, exitCode }
+ * @returns Promise resolving to `{ stdout, stderr, exitCode }`
  */
 function runCli(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise((resolve) => {

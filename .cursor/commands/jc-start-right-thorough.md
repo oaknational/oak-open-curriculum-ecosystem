@@ -80,7 +80,6 @@ pnpm format:root        # Makes changes
 pnpm markdownlint:root  # Makes changes
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm test:ui
 pnpm smoke:dev:stub
 ```

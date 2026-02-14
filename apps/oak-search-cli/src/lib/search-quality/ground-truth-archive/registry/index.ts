@@ -17,7 +17,7 @@
  *
  * ## Adding New Ground Truths
  *
- * See `GROUND-TRUTH-PROCESS.md` for the full step-by-step process:
+ * See `GROUND-TRUTH-GUIDE.md` for the full step-by-step process:
  *
  * 1. Download bulk data for your subject/phase
  * 2. Create ground truth files with validated slugs
@@ -43,7 +43,7 @@
  * ```
  *
  * @see ADR-098 Ground Truth Registry as Single Source of Truth
- * @see GROUND-TRUTH-PROCESS.md for creating new ground truths
+ * @see GROUND-TRUTH-GUIDE.md for creating new ground truths
  */
 
 import type { Subject } from '@oaknational/curriculum-sdk';

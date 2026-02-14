@@ -2,10 +2,10 @@
  * MCP OAuth authentication with Clerk - fixed version.
  *
  * This module provides a fixed implementation of MCP OAuth authentication
- * that resolves the bug in @clerk/mcp-tools where getPRMUrl incorrectly
+ * that resolves the bug in `@clerk/mcp-tools` where getPRMUrl incorrectly
  * appends req.originalUrl to the OAuth metadata path.
  *
- * Bug: @clerk/mcp-tools generates URLs like:
+ * Bug: `@clerk/mcp-tools` generates URLs like:
  *   /.well-known/oauth-protected-resource/mcp
  *
  * Fix: We generate the correct RFC 9470 compliant URL:

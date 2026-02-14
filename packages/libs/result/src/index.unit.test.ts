@@ -1,5 +1,5 @@
 /**
- * Unit tests for Result<T, E> type and helper functions.
+ * Unit tests for `Result\<T, E\>` type and helper functions.
  */
 
 import { describe, it, expect } from 'vitest';

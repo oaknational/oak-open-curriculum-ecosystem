@@ -1,10 +1,10 @@
 /**
- * Elasticsearch type definitions re-exported from @elastic/elasticsearch.
+ * Elasticsearch type definitions re-exported from `@elastic/elasticsearch`.
  *
  * This module provides type-safe Elasticsearch structures by re-exporting
- * official types from the @elastic/elasticsearch package. This ensures:
+ * official types from the `@elastic/elasticsearch` package. This ensures:
  * - Full type safety with the official ES client
- * - No ad-hoc Record<string, unknown> types
+ * - No ad-hoc `Record<string, unknown>` types
  * - Single source of truth for ES API types
  * - Compatibility with official ES client
  *

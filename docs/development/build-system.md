@@ -93,10 +93,10 @@ pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check l
 
 ### `pnpm check` - Full clean build and verify
 
-Complete clean rebuild and verification:
+Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm clean && pnpm lint:clean && pnpm make && pnpm qg
+pnpm secrets:scan:all && pnpm clean && turbo run type-gen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites

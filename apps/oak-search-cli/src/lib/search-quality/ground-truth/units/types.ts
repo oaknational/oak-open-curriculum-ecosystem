@@ -24,6 +24,7 @@ export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';
  * 4. Capture top 3 results with relevance scores
  *
  * @example
+ * ```typescript
  * const mathsPrimary: UnitGroundTruth = {
  *   subject: 'maths',
  *   phase: 'primary',
@@ -36,6 +37,7 @@ export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';
  *   },
  *   description: 'Unit covers adding and subtracting fractions with different denominators.',
  * };
+ * ```
  */
 export interface UnitGroundTruth {
   /**

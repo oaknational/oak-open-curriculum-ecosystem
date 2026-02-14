@@ -489,7 +489,7 @@ echo $CLERK_SECRET_KEY
 
 - [deployment-architecture.md](./deployment-architecture.md) - High-level architecture overview
 - [clerk-oauth-trace-instructions.md](./clerk-oauth-trace-instructions.md) - Tracing OAuth flows
-- [headless-oauth-automation.md](./headless-oauth-automation.md) - Automated OAuth testing
+- [headless-oauth-automation.md](./archive/headless-oauth-automation.md) - Automated OAuth testing (archived)
 - [vercel-environment-config.md](./vercel-environment-config.md) - Vercel deployment configuration
 
 ## Last Updated

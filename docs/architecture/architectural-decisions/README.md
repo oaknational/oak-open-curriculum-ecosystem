@@ -20,15 +20,15 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-012: Use pnpm as Package Manager](012-pnpm-package-manager.md)
 - [ADR-013: Git Hooks with Husky and lint-staged](013-husky-and-lint-staged.md)
 - [ADR-014: Conventional Commits Standard](014-conventional-commits.md)
-- [ADR-015: Node.js 22+ Requirement](015-node-22-minimum.md)
+- [ADR-015: Node.js 24.x Requirement](015-node-24-minimum.md)
 - [ADR-016: Use dotenv for Environment Configuration](016-dotenv-for-configuration.md)
 - [ADR-017: Use Consola for Logging](017-consola-for-logging.md)
 - [ADR-018: Complete Biological Architecture](018-complete-biological-architecture.md)
 - [ADR-019: Domain-Driven File Splitting](019-domain-driven-file-splitting.md)
-- [ADR-020: Biological Architecture Pattern](020-biological-architecture.md)
-- [ADR-021: Genotype/Phenotype/Chorai](021-genotype-phenotype-chorai.md)
+- [ADR-020: Biological Architecture Pattern](../../archive/architecture/architectural-decisions/020-biological-architecture.md) ← **Archived** (Greek ecosystem deprecated)
+- [ADR-021: Genotype/Phenotype/Chorai](../../archive/architecture/architectural-decisions/021-genotype-phenotype-chorai.md) ← **Archived** (Greek ecosystem deprecated)
 - [ADR-022: Conditional Dependencies in Genotype](022-conditional-dependencies-genotype.md)
-- [ADR-023: Moria/Histoi/Psycha Architecture](023-moria-histoi-psycha-architecture.md)
+- [ADR-023: Moria/Histoi/Psycha Architecture](../../archive/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) ← **Archived** (Greek ecosystem deprecated)
 - [ADR-024: Dependency Injection Pattern](024-dependency-injection-pattern.md)
 - [ADR-025: Erasable Syntax Only](025-erasable-syntax-only.md)
 - [ADR-026: OpenAPI Type Generation Strategy](026-openapi-type-generation-strategy.md)
@@ -76,6 +76,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
+- [ADR-074: Elastic-Native-First Philosophy](074-elastic-native-first-philosophy.md)
 - [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-071, 072, 073**
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)
 - [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
@@ -110,6 +111,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-107: Deterministic SDK / NL-in-MCP Boundary](107-deterministic-sdk-nl-in-mcp-boundary.md)
 - [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md)
 - [ADR-109: HTTP 451 as Distinct Error Classification](109-http-451-distinct-classification.md)
+- [ADR-110: Thread Search Architecture](110-thread-search-architecture.md)
+- [ADR-111: Secret Scanning Quality Gate](111-secret-scanning-quality-gate.md)
 
 ## Key Architectural Decisions
 
@@ -169,7 +172,7 @@ For historical context on dense vector evaluation (superseded):
 
 For understanding the now deprecated and removed biological architecture:
 
-- **[ADR-020](020-biological-architecture.md)** - Current biological architecture with Greek nomenclature
+- **[ADR-020](../../archive/architecture/architectural-decisions/020-biological-architecture.md)** - Current biological architecture with Greek nomenclature
 - **[ADR-018](018-complete-biological-architecture.md)** - Evolution to complete biological model
 - **[ADR-009](009-mathematical-foundation-for-architecture.md)** - Mathematical grounding from complex systems theory
 - **[ADR-006](006-cellular-architecture-pattern.md)** - Original cellular architecture inspiration

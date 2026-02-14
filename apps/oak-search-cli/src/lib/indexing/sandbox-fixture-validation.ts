@@ -18,7 +18,7 @@ const stringKeyedObjectSchema = z.record(z.string(), z.unknown());
 
 /**
  * Type for string-keyed objects from fixture JSON parsing.
- * Internal type - not exported to avoid exposing Record<string, unknown>.
+ * Internal type - not exported to avoid exposing `Record<string, unknown>`.
  */
 type StringKeyedObject = z.infer<typeof stringKeyedObjectSchema>;
 

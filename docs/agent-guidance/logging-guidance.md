@@ -209,24 +209,31 @@ logger.debug('Input validation completed', {
 **Example:**
 
 ```typescript
-import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+  startTimer,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({
-  name: 'http-server',
-  level: 'INFO',
-  sinks: {
-    stdout: true, // Required for Vercel
-    file: false, // Not available in browser
-  },
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'http-server', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
 });
 ```
 
 **Constraints:**
 
-- NO Node.js `fs` imports allowed
-- Console logging only (stdout)
-- Must be tree-shakeable
-- No file sink support
+- NO Node.js `fs` imports in the main entry point
+- Use `createNodeStdoutSink()` from `@oaknational/mcp-logger/node` for stdout
+- Dependencies injected explicitly via constructor
+- No file sink support on serverless platforms
 
 ### Node Entry Point: `@oaknational/mcp-logger/node`
 
@@ -240,18 +247,25 @@ const logger = createAdaptiveLogger({
 **Example:**
 
 ```typescript
-import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger/node';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+  startTimer,
+} from '@oaknational/mcp-logger';
+import { createNodeFileSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({
-  name: 'stdio-server',
-  level: 'DEBUG',
-  sinks: {
-    stdout: false, // MUST be false for stdio MCP
-    file: {
-      path: '.logs/oak-curriculum-mcp/server.log',
-      append: true,
-    },
-  },
+const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'stdio-server', '1.0.0'),
+  context: {},
+  stdoutSink: null, // MUST be null for stdio MCP
+  fileSink: createNodeFileSink({
+    path: '.logs/oak-curriculum-mcp/server.log',
+    append: true,
+  }),
 });
 ```
 
@@ -728,26 +742,27 @@ try {
 
 ```typescript
 // ❌ Importing Node entry in browser code
-import { createAdaptiveLogger } from '@oaknational/mcp-logger/node'; // ❌ Breaks in browser!
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node'; // ❌ Breaks in browser!
 
 // ✅ Use main entry for browser-compatible code
-import { createAdaptiveLogger } from '@oaknational/mcp-logger'; // ✅ Works everywhere
+import { UnifiedLogger } from '@oaknational/mcp-logger'; // ✅ Works everywhere
 ```
 
 ### Pitfall 4: Logging to Stdout in Stdio Server
 
 ```typescript
 // ❌ Logging to stdout corrupts MCP protocol
-const logger = createAdaptiveLogger({
-  sinks: { stdout: true, file: false }, // ❌ Corrupts protocol!
+const logger = new UnifiedLogger({
+  // ...
+  stdoutSink: createNodeStdoutSink(), // ❌ Corrupts protocol!
+  fileSink: null,
 });
 
 // ✅ File-only logging for stdio
-const logger = createAdaptiveLogger({
-  sinks: {
-    stdout: false, // ✅ MUST be false
-    file: { path: '.logs/server.log' },
-  },
+const logger = new UnifiedLogger({
+  // ...
+  stdoutSink: null, // ✅ MUST be null
+  fileSink: createNodeFileSink({ path: '.logs/server.log', append: true }),
 });
 ```
 
@@ -781,9 +796,11 @@ try {
 ### Pitfall 6: Creating New Loggers Instead of Using Injected
 
 ```typescript
-// ❌ Creating new logger instance
+// ❌ Creating new logger instance per request
 function handler(req: Request) {
-  const logger = createAdaptiveLogger({ level: 'INFO' }); // ❌ New instance!
+  const logger = new UnifiedLogger({
+    /* ... */
+  }); // ❌ New instance per request!
   logger.info('Handling request');
 }
 
@@ -798,9 +815,12 @@ function handler(req: Request, logger: Logger) {
 ### Import Cheat Sheet
 
 ```typescript
-// Browser-safe (HTTP server, Next.js)
+// Core logger (browser-safe)
 import {
-  createAdaptiveLogger,
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
   startTimer,
   enrichError,
   type Logger,
@@ -809,16 +829,8 @@ import {
   type Timer,
 } from '@oaknational/mcp-logger';
 
-// Node.js (Stdio server, CLI tools)
-import {
-  createAdaptiveLogger,
-  startTimer,
-  enrichError,
-  type Logger,
-  type ErrorContext,
-  type Duration,
-  type Timer,
-} from '@oaknational/mcp-logger/node';
+// Node.js sinks (Stdio server, CLI tools)
+import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/mcp-logger/node';
 ```
 
 ### Log Level Guidelines

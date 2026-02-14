@@ -10,9 +10,9 @@
  * JavaScript function to render assets data in the widget.
  *
  * Handles the following data shapes:
- * - { assets: Asset[] }
- * - Asset[] directly
- * - { lessonSlug: string, assets: Asset[] }[]
+ * - `\{ assets: Asset[] \}`
+ * - `Asset[]` directly
+ * - `\{ lessonSlug: string, assets: Asset[] \}[]`
  */
 export const ASSETS_RENDERER = `
 function renderAssets(data) {

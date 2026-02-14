@@ -1,6 +1,6 @@
 /**
  * Type definitions for ingestion error collection and reporting.
- * @see {@link ./ingestion-error-collector.ts} for the collector implementation
+ * @see `./ingestion-error-collector.ts` for the collector implementation
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-sequences-questions
- * Path: /sequences/{sequence}/questions
+ * Path: /sequences/\{sequence\}/questions
  * Method: GET
  */
 

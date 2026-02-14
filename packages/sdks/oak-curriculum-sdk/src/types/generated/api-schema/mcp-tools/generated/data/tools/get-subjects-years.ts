@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-subjects-years
- * Path: /subjects/{subject}/years
+ * Path: /subjects/\{subject\}/years
  * Method: GET
  */
 

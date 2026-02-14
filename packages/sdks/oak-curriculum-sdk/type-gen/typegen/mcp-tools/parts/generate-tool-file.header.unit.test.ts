@@ -6,6 +6,23 @@ function op(): OperationObject {
   return { responses: {} } as OperationObject;
 }
 
+describe('emitHeader TSDoc safety', () => {
+  it('escapes braces in path template parameters', () => {
+    const toolName = 'oak-get-lessons-transcript';
+    const path = '/lessons/{lesson}/transcript';
+    const method = 'GET';
+    const pathMeta: Record<string, ParamMetadata> = {
+      lesson: { typePrimitive: 'string', valueConstraint: false, required: true },
+    };
+    const code = generateToolFile(toolName, path, method, 'op-id', op(), pathMeta, {});
+
+    // The doc comment Path line should have escaped braces
+    expect(code).toContain('Path: /lessons/\\{lesson\\}/transcript');
+    // The const assignment should still have unescaped braces
+    expect(code).toContain("const path = '/lessons/{lesson}/transcript'");
+  });
+});
+
 describe('generateToolFile header shapes and invoke wrapper', () => {
   it('emits required path only for transcript tool and includes invoke wrapper', () => {
     const toolName = 'oak-get-lessons-transcript';

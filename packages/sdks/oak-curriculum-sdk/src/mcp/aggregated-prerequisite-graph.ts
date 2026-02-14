@@ -12,7 +12,7 @@
  *
  * @see prerequisite-graph-data.ts for the graph data structure
  * @see aggregated-thread-progressions.ts for the companion thread graph
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

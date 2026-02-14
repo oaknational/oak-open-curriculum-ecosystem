@@ -5,7 +5,7 @@
  * Extracts `nationalCurriculumContent` from unit records,
  * enabling NC coverage mapping.
  *
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 import type { Unit } from '../../types/generated/bulk/index.js';
 

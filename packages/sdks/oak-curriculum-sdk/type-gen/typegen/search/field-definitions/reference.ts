@@ -11,7 +11,7 @@
  * By defining fields ONCE in this module, we ensure that Zod schemas and ES mappings
  * can never diverge.
  *
- * @see {@link ./curriculum.ts} for curriculum content index definitions
+ * @see `./curriculum.ts` for curriculum content index definitions
  */
 
 import type { IndexFieldDefinitions } from './types.js';

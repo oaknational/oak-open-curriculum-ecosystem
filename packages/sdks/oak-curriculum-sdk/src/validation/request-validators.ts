@@ -69,7 +69,7 @@ function makeUnknownOperation(key: string): ValidationResult<unknown> {
  * Validates request parameters against the schema for the given path and method
  * Uses generated schemas from the endpoints file
  *
- * @param path - The API path (e.g., "/lessons/{lesson}/transcript")
+ * @param path - The API path (e.g., "/lessons/\{lesson\}/transcript")
  * @param method - The HTTP method
  * @param args - The request parameters to validate
  * @returns Validation result with success/failure status

@@ -1,8 +1,8 @@
 /**
  * Thread-related API client functions.
  *
- * Separated from '../../adapters/oak-adapter.ts to keep file size manageable per rules.md.
- * All methods return Result<T, SdkFetchError> per ADR-088.
+ * Separated from `../../adapters/oak-adapter.ts` to keep file size manageable per rules.md.
+ * All methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @remarks
  * See `docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
@@ -25,7 +25,7 @@ export interface ThreadEntry {
 }
 
 /**
- * Thread unit data from the /threads/{threadSlug}/units API endpoint.
+ * Thread unit data from the /threads/\{threadSlug\}/units API endpoint.
  * Note: canonicalUrl is always null for thread units since they are data concepts
  * without corresponding pages on the website.
  */

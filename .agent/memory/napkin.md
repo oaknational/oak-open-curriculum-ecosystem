@@ -1,5 +1,57 @@
 # Napkin
 
+## Session: 2026-02-14 — Resolve All TSDoc Lint Warnings
+
+### What Was Done
+
+- Executed the full 6-phase plan to eliminate all TSDoc lint warnings across the monorepo
+- **Phase 0**: Created workspace `tsdoc.json` files with `extends` pointing to root config for SDK and search-cli. `extends` works correctly with current package versions (`@microsoft/tsdoc-config` 0.18.0). The napkin had a note from a previous session that `extends` didn't work — that was an older version incompatibility, now resolved.
+- **Phase 1**: Fixed 13 trivial hand-written warnings (param hyphen, code fence indent, `@`-escaping in package names)
+- **Phase 2**: Replaced `{@link path/to/file}` with backtick code spans in 33 hand-written files (34 warnings). One generated file deferred to Phase 4.
+- **Phase 3**: Fixed ~63 hand-written brace/escape/greater-than issues across client, MCP, validation, and type-gen files
+- **Phase 4 (TDD)**: Fixed code generators:
+  - `postProcessTypesSource()` in `typegen-core.ts`: Added `escapeTsDocUnsafeChars()` function that escapes `{`, `}`, `<`, `>`, and literal `\n` in doc comments while preserving valid `{@link}` and `{@inheritDoc}` inline tags using a placeholder approach
+  - `emitHeader()` in `emit-header.ts`: Escape braces in OpenAPI path templates before interpolation into doc comments
+  - `emitSchema()` in `emit-schema.ts`: Added `escapeTsDocChars()` for parameter descriptions from OpenAPI spec
+  - `generatePathUtilsFile()` in `generate-path-utils.ts`: Escape braces in doc comment
+  - `stub-modules.ts`: Rephrased doc comment to avoid `Record<string, unknown>` literal
+  - `generate-error-types.ts`: Fixed `@see` references in template literal (plain text, no backticks inside template)
+  - Tests: RED then GREEN for `postProcessTypesSource` (brace escaping, `{@link}` preservation, angle bracket escaping) and `emitHeader` (path template escaping)
+- **Phase 5**: Regenerated with `pnpm type-gen`, fixed remaining edge cases (emit-schema descriptions, path-utils), also fixed search-cli (97 warnings), streamable-http (69 warnings), mcp-logger (12 warnings), result (4 warnings), and openapi-zod-client-adapter (1 warning)
+- **Final**: 0 warnings, 0 errors across entire monorepo. All quality gates pass: format:root, markdownlint:root, type-check, lint:fix, test, test:e2e
+
+### Warning count progression
+
+- Initial: 1,693 (all `tsdoc-unsupported-tag` due to incomplete `supportForTags`)
+- After root `tsdoc.json` fix: 492 (all in SDK)
+- After Phase 0: 491 (`tsdoc-undefined-tag` for `@generated` gone)
+- After Phase 1: 478
+- After Phase 2: 444
+- After Phase 3: 381
+- After Phase 4+5 (first regen): 14
+- After fixing emit-schema and path-utils (second regen): 0 in SDK
+- After search-cli fixes: 0 across entire monorepo
+
+### Mistakes Made
+
+- **Control character in regex**: Used `\x00` as placeholder in `escapeTsDocUnsafeChars()` which triggered `no-control-regex` lint rule. Fixed by using string-based placeholders (`___TSDOC_SAFE_N___`).
+- **Backticks in template literal**: Subagent placed backtick code spans inside a template literal string in `generate-error-types.ts`, which broke the template. Fixed by using plain text (no backticks) in the generated `@see` line.
+- **Code fence indentation added a line**: Fixing `tsdoc-code-fence-opening-indent` by adding blank lines before code fences pushed `agent-support-tool-metadata.ts` over the 250-line `max-lines` limit. Removed one unnecessary blank line.
+- **Missed emit-schema.ts**: The plan identified `emit-header.ts` as the source of brace issues in MCP tool files, but missed `emit-schema.ts` which emits parameter descriptions from OpenAPI spec. Those descriptions contain path templates too.
+- **Missed path-utils.ts**: The plan didn't identify `generate-path-utils.ts` as containing braces in doc comments (`"{name}"`).
+- **Scope creep (good kind)**: The plan targeted only the SDK (492 warnings) but the root cause fix (tsdoc.json extends) surfaced pre-existing warnings in search-cli, streamable-http, logger, result, and adapter workspaces. Fixed all of them for true zero-warnings.
+
+### Patterns to Remember
+
+- `tsdoc.json` `extends` works with `@microsoft/tsdoc-config` 0.18.0 — the old napkin note about version incompatibility is stale
+- `TSDocConfigFile.findConfigPathForFolder` stops at `package.json`/`tsconfig.json` boundaries — each workspace needs its own `tsdoc.json` with `extends`
+- Generated doc comments need escaping at the GENERATOR level, not in the output
+- `postProcessTypesSource` doc comment regex: match `/** ... */` blocks, apply escaping only inside them, preserve valid inline tags with placeholders
+- For inline descriptions from OpenAPI spec, escape at the point where the description is interpolated into the doc comment (e.g., `emit-schema.ts` `describeParam()`)
+- Never use `\x00` in regex — use string-based placeholders instead
+
+---
+
 ## Session: 2026-02-12 — Thread Search SDK Integration Complete
 
 ### What Was Done

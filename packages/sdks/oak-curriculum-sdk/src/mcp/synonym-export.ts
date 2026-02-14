@@ -27,7 +27,7 @@ export interface ElasticsearchSynonymSet {
 }
 
 /**
- * Type for synonym group objects (canonical -> alternatives mapping).
+ * Type for synonym group objects (`canonical -> alternatives` mapping).
  */
 type SynonymGroup = Readonly<Record<string, readonly string[]>>;
 
@@ -35,7 +35,7 @@ type SynonymGroup = Readonly<Record<string, readonly string[]>>;
  * Extracts entries from a synonym group in a type-safe manner.
  * Uses typeSafeEntries and ensures correct return typing.
  *
- * @param group - The synonym mapping (canonical term -> alternatives)
+ * @param group - The synonym mapping (`canonical term -> alternatives`)
  * @returns Array of [canonical, alternatives] tuples
  */
 function synonymGroupEntries(group: SynonymGroup): [string, readonly string[]][] {
@@ -47,7 +47,7 @@ function synonymGroupEntries(group: SynonymGroup): [string, readonly string[]][]
  * Processes a synonym group into Elasticsearch entries.
  *
  * @param categoryName - The category identifier for the ES entry ID
- * @param group - The synonym mapping (canonical term -> alternatives)
+ * @param group - The synonym mapping (`canonical term -> alternatives`)
  * @returns Array of Elasticsearch synonym entries
  */
 function processGroup(categoryName: string, group: SynonymGroup): ElasticsearchSynonymEntry[] {
@@ -60,7 +60,7 @@ function processGroup(categoryName: string, group: SynonymGroup): ElasticsearchS
 /**
  * Builds a lookup map from a synonym group.
  *
- * @param group - The synonym mapping (canonical term -> alternatives)
+ * @param group - The synonym mapping (`canonical term -> alternatives`)
  * @param lookup - The map to populate
  */
 function populateLookup(group: SynonymGroup, lookup: Map<string, string>): void {
@@ -136,7 +136,7 @@ export function serialiseElasticsearchSynonyms(): string {
 /**
  * Extracts multi-word terms from a synonym group into a set.
  *
- * @param group - The synonym mapping (canonical term -> alternatives)
+ * @param group - The synonym mapping (`canonical term -> alternatives`)
  * @param phrases - The set to populate with multi-word terms
  */
 function collectPhrases(group: SynonymGroup, phrases: Set<string>): void {
@@ -163,7 +163,7 @@ function collectPhrases(group: SynonymGroup, phrases: Set<string>): void {
  * for phrase detection during query preprocessing.
  *
  * ES synonym filters apply after tokenization, so phrase synonyms like
- * "straight line => linear" cannot expand via the synonym filter. This vocabulary
+ * `straight line => linear` cannot expand via the synonym filter. This vocabulary
  * enables phrase detection, a complementary mechanism that adds `match_phrase`
  * boosting to the RRF retriever for exact phrase matches.
  *

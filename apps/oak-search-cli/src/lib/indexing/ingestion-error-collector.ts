@@ -1,8 +1,8 @@
 /**
  * Collects and reports errors/warnings during curriculum data ingestion.
  *
- * @see {@link ./ingestion-error-types.ts} for type definitions
- * @see {@link ./ingestion-error-helpers.ts} for pure helper functions
+ * @see `./ingestion-error-types.ts` for type definitions
+ * @see `./ingestion-error-helpers.ts` for pure helper functions
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

@@ -28,6 +28,7 @@ export type { RelevanceScore, ExpectedRelevance } from '../types';
  * 4. Capture top 3 results with relevance scores
  *
  * @example
+ * ```typescript
  * const mathsAlgebra: ThreadGroundTruth = {
  *   subject: 'maths',
  *   query: 'algebra equations progression',
@@ -38,6 +39,7 @@ export type { RelevanceScore, ExpectedRelevance } from '../types';
  *   },
  *   description: 'Thread covering algebraic equations progression across years.',
  * };
+ * ```
  */
 export interface ThreadGroundTruth {
   /**

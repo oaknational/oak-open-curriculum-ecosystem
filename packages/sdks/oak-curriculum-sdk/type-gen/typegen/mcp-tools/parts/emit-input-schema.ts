@@ -36,7 +36,7 @@ import type { JsonSchemaObject, JsonSchemaProperty } from './json-schema-types.j
  * - Parameters appear at top level (no params/path/query nesting)
  * - Path parameters listed before query parameters for consistency
  * - Mirrors buildFlatMcpZodObject() structure for JSON Schema
- * - MCP protocol expects flat arguments: { lesson: 'x' } not { params: { path: { lesson: 'x' } } }
+ * - MCP protocol expects flat arguments: `{ lesson: 'x' }` not `{ params: { path: { lesson: 'x' } } }`
  *
  * @see buildFlatMcpZodObject - Generates equivalent flat Zod schema
  * @see .agent/plans/fix-e2e-test-isolation.md (Phase 3B)

@@ -51,7 +51,7 @@ Use the right tool for the job:
 - **ESLint** for syntax correctness, code-style adherence, **architectural boundary adherence**
 - **Prettier** for code-style adherence
 - **Typedoc** for documentation generation
-- **Sentry** for observability, see [docs/agent-guidance/sentry-guidance.md](../../docs/agent-guidance/sentry-guidance.md)
+- **Sentry** for observability (guidance archived to `docs/agent-guidance/archive/sentry-guidance.md`)
 
 ### Code Quality
 

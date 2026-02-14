@@ -1,7 +1,7 @@
 /**
  * Output formatting and metadata writing for live data ingestion.
  * Handles header, summary, and metadata persistence to Elasticsearch.
- * Uses Result<T, E> pattern for explicit error handling.
+ * Uses `Result<T, E>` pattern for explicit error handling.
  */
 
 import type { Result } from '@oaknational/result';
@@ -63,7 +63,7 @@ export function printCacheStats(client: OakClient): void {
 
 /**
  * Write index metadata to Elasticsearch.
- * Returns Result<void, IndexMetaError> for explicit error handling.
+ * Returns `Result<void, IndexMetaError>` for explicit error handling.
  */
 export async function writeMetadata(
   args: CliArgs,

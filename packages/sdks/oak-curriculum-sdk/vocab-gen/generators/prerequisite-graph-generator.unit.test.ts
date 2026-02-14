@@ -5,7 +5,7 @@
  * TDD: These tests specify the behaviour of the prerequisite graph generator.
  * Written FIRST before implementation (RED phase).
  *
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for requirements
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for requirements
  */
 import { describe, expect, it } from 'vitest';
 

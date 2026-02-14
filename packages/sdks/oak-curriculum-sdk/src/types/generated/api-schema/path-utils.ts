@@ -1,7 +1,7 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  *
- * Path style utilities for colon ":name" and curly "{name}" parameter placeholders.
+ * Path style utilities for colon ":name" and curly "\{name\}" parameter placeholders.
  */
 
 /** Convert OpenAPI-style curly params to colon params. */

@@ -12,10 +12,10 @@
  * JavaScript function to render ontology content in the widget.
  *
  * Handles the ontologyData shape from get-ontology tool:
- * - curriculumStructure: { keyStages, phases, subjects }
- * - entityHierarchy: { description, levels }
- * - threads: { definition, examples }
- * - workflows: { findLessons, lessonPlanning, ... }
+ * - curriculumStructure: `\{ keyStages, phases, subjects \}`
+ * - entityHierarchy: `\{ description, levels \}`
+ * - threads: `\{ definition, examples \}`
+ * - workflows: `\{ findLessons, lessonPlanning, ... \}`
  */
 export const ONTOLOGY_RENDERER = `
 function renderOntology(o) {

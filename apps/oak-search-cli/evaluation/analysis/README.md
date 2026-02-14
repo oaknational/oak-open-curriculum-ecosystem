@@ -111,7 +111,7 @@ Before running benchmarks, validate that all slugs exist in the bulk data:
 pnpm ground-truth:validate
 ```
 
-See `GROUND-TRUTH-PROCESS.md` for the full process of creating valid ground truths.
+See `GROUND-TRUTH-GUIDE.md` for the full process of creating valid ground truths.
 
 ## Phase Definitions
 
@@ -130,7 +130,7 @@ KS4 ground truths are stored in `subject/secondary/ks4/` directories.
 
 ## Adding Ground Truths
 
-Follow the step-by-step process in `GROUND-TRUTH-PROCESS.md`:
+Follow the step-by-step process in `GROUND-TRUTH-GUIDE.md`:
 
 1. Download bulk data for your subject/phase
 2. Explore available lessons using jq queries
@@ -142,5 +142,5 @@ Follow the step-by-step process in `GROUND-TRUTH-PROCESS.md`:
 ## Related Documentation
 
 - [IR-METRICS.md](../../docs/IR-METRICS.md) - Metric definitions and interpretation
-- [GROUND-TRUTH-PROCESS.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) - Creation process
+- [GROUND-TRUTH-GUIDE.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) - Design and evaluation guide
 - [ADR-098](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) - Registry architecture

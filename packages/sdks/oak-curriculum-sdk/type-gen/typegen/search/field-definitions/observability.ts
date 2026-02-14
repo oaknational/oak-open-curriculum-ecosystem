@@ -18,7 +18,7 @@
  * By defining fields ONCE in this module, we ensure that Zod schemas and ES mappings
  * can never diverge, eliminating "strict_dynamic_mapping_exception" errors.
  *
- * @see {@link ../field-definitions/curriculum.ts} for curriculum index definitions
+ * @see `./curriculum.ts` for curriculum index definitions
  */
 
 import type { IndexFieldDefinitions } from './types.js';
@@ -59,7 +59,7 @@ export const META_INDEX_FIELDS: IndexFieldDefinitions = [
  * - Trending topics not yet covered in curriculum
  *
  * Contains 9 fields (5 required, 4 optional):
- * - @timestamp: When the zero-hit search occurred (ES date field)
+ * - `@timestamp`: When the zero-hit search occurred (ES date field)
  * - search_scope: Which index was searched (lessons, units, sequences, etc.)
  * - query: The search text that returned no results
  * - filters: Applied filters (key stages, subjects, years) as flattened object

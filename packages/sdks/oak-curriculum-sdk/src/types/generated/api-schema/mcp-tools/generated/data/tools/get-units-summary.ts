@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-units-summary
- * Path: /units/{unit}/summary
+ * Path: /units/\{unit\}/summary
  * Method: GET
  */
 

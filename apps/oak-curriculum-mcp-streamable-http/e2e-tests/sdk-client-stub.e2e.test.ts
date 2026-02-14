@@ -164,8 +164,8 @@ interface NormalisedError {
  * Extracts error information from MCP response.
  *
  * MCP SDK returns errors in two formats:
- * 1. JSON-RPC error envelope: { error: { message, data: { content } } }
- * 2. Result with isError: { result: { isError: true, content } }
+ * 1. JSON-RPC error envelope: `\{ error: \{ message, data: \{ content \} \} \}`
+ * 2. Result with isError: `\{ result: \{ isError: true, content \} \}`
  */
 function expectError(envelope: JsonRpcEnvelope): NormalisedError {
   // Check for JSON-RPC error first

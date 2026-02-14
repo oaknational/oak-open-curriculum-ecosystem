@@ -212,10 +212,10 @@ packages/sdks/your-api-sdk/
 
 This pattern is formalized in several ADRs:
 
-- **[ADR-029](./architectural-decisions/029-no-manual-api-data-structures.md)**: No manual API data structures - everything from OpenAPI
-- **[ADR-030](./architectural-decisions/030-sdk-as-single-source-of-truth.md)**: SDK as the single source of truth for API contracts
-- **[ADR-031](./architectural-decisions/031-generation-at-build-time.md)**: All transformations happen at build/generation time
-- **[ADR-048](./architectural-decisions/048-shared-parsing-helpers.md)**: Shared parsing helpers pattern for validation
+- **[ADR-029](./architectural-decisions/029-no-manual-api-data.md)**: No manual API data structures - everything from OpenAPI
+- **[ADR-030](./architectural-decisions/030-sdk-single-source-truth.md)**: SDK as the single source of truth for API contracts
+- **[ADR-031](./architectural-decisions/031-generation-time-extraction.md)**: All transformations happen at build/generation time
+- **[ADR-048](./architectural-decisions/048-shared-parse-schema-helper.md)**: Shared parsing helpers pattern for validation
 
 ## Related Documentation
 

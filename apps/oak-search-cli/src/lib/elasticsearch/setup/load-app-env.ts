@@ -1,7 +1,7 @@
 /**
  * Load environment variables from the app's .env.local file.
  *
- * This module extends the loadRootEnv pattern from @oaknational/mcp-env
+ * This module extends the loadRootEnv pattern from `@oaknational/mcp-env`
  * to find the app root (package.json) rather than the monorepo root.
  */
 

@@ -5,7 +5,7 @@
  * These tests verify the BEHAVIOUR of the tool definition and execution function.
  * They do NOT test the generated data itself (that's validated at generation time).
  *
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
 import { describe, it, expect } from 'vitest';

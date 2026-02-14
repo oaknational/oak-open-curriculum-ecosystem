@@ -98,7 +98,7 @@ pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 
 # All in one command
-pnpm check          # Clean all build products, then run all of the above
+pnpm check          # secrets:scan:all, clean, type-gen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

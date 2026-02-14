@@ -4,12 +4,14 @@ export function emitHeader(
   method: string,
   operationId: string,
 ): string {
+  // Escape braces in the doc comment so path templates like {keyStage} are TSDoc-safe
+  const escapedPath = path.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
   const lines: string[] = [];
   lines.push(`/**
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: ${toolName}
- * Path: ${path}
+ * Path: ${escapedPath}
  * Method: ${method.toUpperCase()}
  */
 

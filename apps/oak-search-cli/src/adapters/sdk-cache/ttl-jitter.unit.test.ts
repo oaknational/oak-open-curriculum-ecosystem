@@ -4,8 +4,8 @@
  * These tests verify the `calculateTtlWithJitter` function correctly applies
  * jitter to cache TTL values to prevent cache stampede.
  *
- * @see {@link ./ttl-jitter.ts} for implementation
- * @see {@link ../../../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md} for ADR
+ * @see `./ttl-jitter.ts` for implementation
+ * @see `../../../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md` for ADR
  */
 
 import { describe, it, expect } from 'vitest';

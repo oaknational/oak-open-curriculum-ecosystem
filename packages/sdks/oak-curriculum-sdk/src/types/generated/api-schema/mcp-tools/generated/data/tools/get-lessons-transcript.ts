@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-lessons-transcript
- * Path: /lessons/{lesson}/transcript
+ * Path: /lessons/\{lesson\}/transcript
  * Method: GET
  */
 

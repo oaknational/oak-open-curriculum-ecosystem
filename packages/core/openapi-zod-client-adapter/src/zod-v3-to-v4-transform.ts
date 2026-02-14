@@ -9,7 +9,7 @@
  * - Type in imports: `ZodSchema` → `ZodType`
  * - Standalone type usage: `ZodSchema` → `ZodType`
  * - `.passthrough()` removed: enforces strict validation (unknown keys rejected)
- * - Zodios import removal: completely removed @zodios/core dependency
+ * - Zodios import removal: completely removed `@zodios/core` dependency
  * - Zodios dead code removal: `export const api`, `createApiClient`
  *
  * Strict schema enforcement:

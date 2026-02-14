@@ -850,7 +850,7 @@ The harness mirrors Vercel's invocation pattern:
 | Aspect           | Vercel Serverless                    | Local Harness                   |
 | ---------------- | ------------------------------------ | ------------------------------- |
 | Entry point      | `dist/src/index.js` default export   | Same (imported via `createApp`) |
-| Node version     | Configurable (Node 22+ recommended)  | Uses local Node version         |
+| Node version     | Configurable (Node 24.x recommended) | Uses local Node version         |
 | Environment      | Vercel env vars                      | Local `.env.harness.*` files    |
 | Logging          | stdout captured by Vercel            | stdout to terminal              |
 | Request handling | Per-request invocation (cold starts) | Long-running server (warm)      |

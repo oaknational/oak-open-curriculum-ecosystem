@@ -7,7 +7,7 @@
  *
  * NO network IO, simple mock client injected as argument.
  *
- * @see {@link ../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
+ * @see `../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
  */
 
 import { describe, it, expect, vi } from 'vitest';

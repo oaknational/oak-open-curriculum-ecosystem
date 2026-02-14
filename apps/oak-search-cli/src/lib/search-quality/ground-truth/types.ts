@@ -59,6 +59,7 @@ export type ExpectedRelevance = Readonly<Record<string, RelevanceScore>>;
  * The goal is to prove baseline search quality across the curriculum.
  *
  * @example
+ * ```typescript
  * const mathsSecondary: LessonGroundTruth = {
  *   subject: 'maths',
  *   phase: 'secondary',
@@ -71,6 +72,7 @@ export type ExpectedRelevance = Readonly<Record<string, RelevanceScore>>;
  *   },
  *   description: 'Lesson teaches that equations with unknowns on both sides can be manipulated by collecting like terms onto one side.',
  * };
+ * ```
  */
 export interface LessonGroundTruth {
   /**

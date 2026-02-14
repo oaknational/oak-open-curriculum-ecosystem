@@ -12,7 +12,7 @@
  *
  * @see knowledge-graph-data.ts for the canonical pattern
  * @see thread-progression-generator.ts for the sister implementation
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
 
  */
 import type { ExtractedPriorKnowledge, ExtractedThread } from '../extractors/index.js';

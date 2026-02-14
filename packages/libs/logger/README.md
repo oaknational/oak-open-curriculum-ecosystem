@@ -599,9 +599,9 @@ MCP_LOGGER_FILE_APPEND=true
 
 If you have custom logger implementations in your application:
 
-1. Replace custom logger creation with `createAdaptiveLogger()`
-2. Update imports to use `@oaknational/mcp-logger`
-3. Use `parseSinkConfigFromEnv()` to configure sinks from environment
+1. Replace custom logger creation with `new UnifiedLogger({ ... })` using explicit DI
+2. Update imports to use `@oaknational/mcp-logger` and `@oaknational/mcp-logger/node`
+3. Configure sinks explicitly (`createNodeStdoutSink()`, `createNodeFileSink()`)
 4. Remove custom logging utilities (they're now in the shared package)
 
 ## Troubleshooting

@@ -99,10 +99,11 @@ Create a query a teacher would realistically type:
 | Topic-focused | Topics, not advice | Not: "how to teach fractions" |
 | No redundant subject | Don't repeat filter context | Not: "French negation" when filtered to French |
 
-### Step 3: Test Via test-query-lessons.ts
+### Step 3: Test Via CLI Search Command
 
 ```bash
-pnpm tsx src/lib/search-quality/test-query-lessons.ts "your query" subject keyStage
+cd apps/oak-search-cli
+pnpm oaksearch search lessons "your query" --subject subject --key-stage keyStage
 ```
 
 ### Step 4: Capture Top 3 with Relevance Scores
@@ -176,7 +177,7 @@ pnpm test                    # Unit tests
 
 1. Mine bulk data for candidates
 2. Design query based on curriculum content
-3. Run query via test-query-lessons.ts
+3. Run query via CLI search command
 4. Capture top 3 results with relevance scores
 
 ### Query/Slug Term Mismatch

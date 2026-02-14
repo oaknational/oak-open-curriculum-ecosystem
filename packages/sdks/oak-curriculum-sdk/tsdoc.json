@@ -1,13 +1,4 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
-  "tagDefinitions": [
-    {
-      "tagName": "@generated",
-      "syntaxKind": "modifier",
-      "allowMultiple": false
-    }
-  ],
-  "supportForTags": {
-    "@generated": true
-  }
+  "extends": ["../../../tsdoc.json"]
 }

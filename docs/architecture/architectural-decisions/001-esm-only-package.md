@@ -18,7 +18,7 @@ Build and distribute as ESM-only, with no CommonJS support.
 - **Better Tree-shaking**: ESM enables better dead code elimination
 - **Simpler Build Process**: No need to maintain dual build outputs
 - **Future-proof**: Aligns with the direction of the JavaScript ecosystem
-- **Node.js Support**: Node.js 22+ has excellent ESM support
+- **Node.js Support**: Node.js 24.x has excellent ESM support
 
 ## Consequences
 
@@ -31,7 +31,7 @@ Build and distribute as ESM-only, with no CommonJS support.
 
 ### Negative
 
-- Requires Node.js 22+ (not a concern for our use case)
+- Requires Node.js 24.x (not a concern for our use case)
 - May need migration guides for CJS users
 - Some older tools might have compatibility issues
 

@@ -38,7 +38,7 @@ After a successful download, you should have files for all 17 subjects:
 Re-download every few weeks to get fresh curriculum data.
 
 ```bash
-# From apps/oak-open-curriculum-semantic-search
+# From apps/oak-search-cli
 # (Reads OAK_API_KEY from .env.local)
 pnpm bulk:download
 ```

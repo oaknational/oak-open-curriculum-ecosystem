@@ -14,13 +14,13 @@ This document contains:
 
 ---
 
-## Scope: Educator Lesson Search
+## Scope: Educator Curriculum Search
 
 ### Current Ground Truths Are For:
 
 | Dimension         | Current Scope                       | Future (Not Today)         |
 | ----------------- | ----------------------------------- | -------------------------- |
-| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **Content Type**  | Lessons, units, sequences, threads  | Additional content types   |
 | **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
 | **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
 

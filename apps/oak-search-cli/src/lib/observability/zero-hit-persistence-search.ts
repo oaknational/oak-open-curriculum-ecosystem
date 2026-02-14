@@ -127,7 +127,7 @@ function normaliseFilters(value: ZeroHitDoc['filters']): Record<string, string> 
   return result;
 }
 
-/** Normalise ES total hits (can be number or { value, relation }). */
+/** Normalise ES total hits (can be number or `{ value, relation }`). */
 function normaliseTotal(total: estypes.SearchTotalHits | number | undefined): number {
   if (typeof total === 'number') {
     return total;

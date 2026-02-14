@@ -10,9 +10,9 @@
  * JavaScript function to render search results in the widget.
  *
  * Handles the following data shapes:
- * - { lessons: [...], transcripts: [...] } (aggregated search tool)
- * - { lessons: { results: [...] }, transcripts: { results: [...] } } (nested results)
- * - [...] (flat array from get-search-lessons or get-search-transcripts)
+ * - `\{ lessons: [...], transcripts: [...] \}` (aggregated search tool)
+ * - `\{ lessons: \{ results: [...] \}, transcripts: \{ results: [...] \} \}` (nested results)
+ * - `[...]` (flat array from get-search-lessons or get-search-transcripts)
  */
 export const SEARCH_RENDERER = `
 function renderSearch(d) {

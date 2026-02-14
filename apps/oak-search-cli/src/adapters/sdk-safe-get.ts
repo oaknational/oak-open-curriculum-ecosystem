@@ -4,7 +4,7 @@
  * Catches network exceptions and converts them to Result.Err(SdkNetworkError)
  * per ADR-088.
  *
- * @see {@link ../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
+ * @see `../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
  */
 
 import type { SdkFetchError, ResourceType } from '@oaknational/curriculum-sdk';

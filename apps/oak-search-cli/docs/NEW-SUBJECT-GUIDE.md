@@ -109,7 +109,7 @@ Record the baseline metrics:
 | Unit Hard MRR   | [value] |
 | Standard MRR    | [value] |
 
-**Important**: If no ground truth queries exist for this subject, create them first. See [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) for the complete step-by-step process.
+**Important**: If no ground truth queries exist for this subject, create them first. See [GROUND-TRUTH-GUIDE.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) for the complete step-by-step process.
 
 ---
 
@@ -324,11 +324,11 @@ See [SYNONYMS.md](./SYNONYMS.md) for detailed troubleshooting.
 
 ## Related Documents
 
-| Document                                                                                                 | Purpose                       |
-| -------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)                | Ground truth creation process |
-| [INGESTION-GUIDE.md](./INGESTION-GUIDE.md)                                                               | Ingestion commands reference  |
-| [SYNONYMS.md](./SYNONYMS.md)                                                                             | Synonym system details        |
-| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | Synonym architecture          |
-| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)               | Ground truth registry         |
-| [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md)                                       | Experiment history            |
+| Document                                                                                                 | Purpose                                  |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [GROUND-TRUTH-GUIDE.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md)                    | Ground truth design and evaluation guide |
+| [INGESTION-GUIDE.md](./INGESTION-GUIDE.md)                                                               | Ingestion commands reference             |
+| [SYNONYMS.md](./SYNONYMS.md)                                                                             | Synonym system details                   |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | Synonym architecture                     |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)               | Ground truth registry                    |
+| [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md)                                       | Experiment history                       |

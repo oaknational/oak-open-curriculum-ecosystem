@@ -10,8 +10,8 @@
  * JavaScript function to render changelog data in the widget.
  *
  * Handles the following data shapes:
- * - { version: string, date: string, changes: string[] } (single entry)
- * - [ { version, date, changes }, ... ] (array of entries)
+ * - `\{ version: string, date: string, changes: string[] \}` (single entry)
+ * - `[ \{ version, date, changes \}, ... ]` (array of entries)
  */
 export const CHANGELOG_RENDERER = `
 function renderChangelog(data) {

@@ -10,7 +10,7 @@
  * JavaScript function to render fetch results in the widget.
  *
  * Handles the following data shape:
- * - { type: string, data: object, canonicalUrl?: string, id?: string }
+ * - `\{ type: string, data: object, canonicalUrl?: string, id?: string \}`
  */
 export const FETCH_RENDERER = `
 function renderFetch(data) {

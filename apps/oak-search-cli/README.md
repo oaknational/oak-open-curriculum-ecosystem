@@ -31,7 +31,7 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 | Command Group       | Subcommands                                                         | SDK Service            |
 | ------------------- | ------------------------------------------------------------------- | ---------------------- |
-| `oaksearch search`  | lessons, units, sequences, suggest, facets                          | `RetrievalService`     |
+| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                 | `RetrievalService`     |
 | `oaksearch admin`   | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService`         |
 | `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, typegen  | Pass-through           |
 | `oaksearch observe` | telemetry, summary, purge                                           | `ObservabilityService` |

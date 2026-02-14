@@ -119,7 +119,7 @@ quality gate chain passes; adapter removal planned.
 
 ---
 
-### 4. Notion MCP Workspace Removal — Status: 📋 PLANNED (Priority 4)
+### 4. Notion MCP Workspace Removal — Status: ✅ COMPLETE (Priority 4)
 
 The `oak-notion-mcp` workspace was originally included to
 force generalisation of code that needed to support multiple

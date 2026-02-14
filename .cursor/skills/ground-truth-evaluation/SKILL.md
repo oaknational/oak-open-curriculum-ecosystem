@@ -152,11 +152,11 @@ Of all relevant results, what proportion found in top 10?
 
 ## Quick Review Process
 
-### Step 1: Test Query via test-query-lessons.ts
+### Step 1: Test Query via CLI Search Command
 
 ```bash
 cd apps/oak-search-cli
-pnpm tsx src/lib/search-quality/test-query-lessons.ts "query" subject keyStage
+pnpm oaksearch search lessons "query" --subject subject --key-stage keyStage
 ```
 
 ### Step 2: Explore Curriculum Data

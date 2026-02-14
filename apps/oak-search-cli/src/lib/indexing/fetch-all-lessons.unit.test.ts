@@ -4,7 +4,7 @@
  * Tests that the function correctly exhausts paginated API responses
  * and aggregates lessons by slug.
  *
- * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @see ADR-083 Complete Lesson Enumeration Strategy
  * @see ADR-088 Result Pattern for Explicit Error Handling

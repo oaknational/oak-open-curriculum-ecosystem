@@ -110,7 +110,7 @@ export const RATE_LIMIT_OUTPUT_FIXTURE = {
 
 /**
  * Search lessons output fixture - get-search-lessons tool.
- * Note: This tool returns a flat ARRAY, not { lessons: [...] }.
+ * Note: This tool returns a flat ARRAY, not `\{ lessons: [...] \}`.
  * This is the real API response structure that the widget must handle.
  */
 export const SEARCH_LESSONS_ARRAY_FIXTURE = [

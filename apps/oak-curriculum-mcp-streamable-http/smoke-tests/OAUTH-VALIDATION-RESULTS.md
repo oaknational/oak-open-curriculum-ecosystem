@@ -128,7 +128,7 @@ The OAuth discovery chain works correctly without the Authorization Server Metad
 
 ## Related Documentation
 
-- Implementation Plan: `.agent/plans/remove-oauth-proxy-endpoint.md`
+- Implementation Plan: `.agent/plans/archive/completed/remove-oauth-proxy-endpoint.md`
 - E2E Tests: `e2e-tests/auth-enforcement.e2e.test.ts`
 - MCP Spec: <https://modelcontextprotocol.io/specification/2025-03-26/basic/authorization>
 - RFC 9728 (Protected Resource Metadata): <https://datatracker.ietf.org/doc/html/rfc9728>

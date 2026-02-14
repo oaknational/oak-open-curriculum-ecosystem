@@ -138,7 +138,40 @@ export function generatePathParametersContent(
   return sections.join('\n');
 }
 
-function postProcessTypesSource(source: string): string {
+/**
+ * Escape TSDoc-unsafe characters inside a doc comment body.
+ *
+ * Braces, angle brackets, and literal backslash-n sequences that appear in
+ * generated OpenAPI descriptions/examples break the TSDoc parser. This
+ * function escapes them while preserving valid inline tags.
+ */
+const PLACEHOLDER_PREFIX = '___TSDOC_SAFE_';
+const PLACEHOLDER_SUFFIX = '___';
+
+function escapeTsDocUnsafeChars(docBody: string): string {
+  // Protect complete valid TSDoc inline tags with placeholders before escaping
+  const placeholders: string[] = [];
+  let withPlaceholders = docBody.replace(/\{@(?:link|inheritDoc)\s[^}]*\}/g, (match) => {
+    placeholders.push(match);
+    return `${PLACEHOLDER_PREFIX}${String(placeholders.length - 1)}${PLACEHOLDER_SUFFIX}`;
+  });
+
+  withPlaceholders = withPlaceholders
+    // Escape remaining braces
+    .replace(/\{/g, '\\{')
+    .replace(/\}/g, '\\}')
+    // Escape angle brackets (HTML-like syntax)
+    .replace(/</g, '\\<')
+    .replace(/>/g, '\\>')
+    // Escape literal \n sequences (not real newlines) that appear in VTT examples
+    .replace(/\\n/g, '\\\\n');
+
+  // Restore valid inline tags
+  const pattern = new RegExp(`${PLACEHOLDER_PREFIX}(\\d+)${PLACEHOLDER_SUFFIX}`, 'g');
+  return withPlaceholders.replace(pattern, (_, idx) => placeholders[Number(idx)] ?? '');
+}
+
+export function postProcessTypesSource(source: string): string {
   return (
     source
       .replace(/\u00A0/g, ' ')
@@ -150,6 +183,8 @@ function postProcessTypesSource(source: string): string {
       .replace(/^\s*\/\*\*\s*@constant\s*\*\/\s*$/gm, '')
       .replace(/^(\s*\*)\s*@enum\s+\{[^}]*\}\s*$/gm, '')
       .replace(/^\s*\/\*\*\s*@enum\s+\{[^}]*\}\s*\*\/\s*$/gm, '')
+      // Escape TSDoc-unsafe characters within doc comments only
+      .replace(/\/\*\*[\s\S]*?\*\//g, (match) => escapeTsDocUnsafeChars(match))
   );
 }
 

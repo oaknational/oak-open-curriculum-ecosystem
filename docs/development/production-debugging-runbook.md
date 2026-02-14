@@ -1039,7 +1039,6 @@ For detailed harness documentation, see the HTTP server README:
 
 For tracking diagnostic improvements, see:
 
-- Implementation plan: `.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`
 - Phase 1 instrumentation: Bootstrap and auth timing (complete)
 - Phase 2 harness: Built-server testing (complete)
 

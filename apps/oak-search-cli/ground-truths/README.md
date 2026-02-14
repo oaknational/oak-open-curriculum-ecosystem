@@ -133,7 +133,7 @@ Generated files are marked with `@generated - DO NOT EDIT`:
 
 ## Related Documentation
 
-- [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) - Manual process for creating ground truths
+- [GROUND-TRUTH-GUIDE.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) - Guide for designing and evaluating ground truths
 - [IR-METRICS.md](../docs/IR-METRICS.md) - Information retrieval metrics explanation
 - [ADR-XXX](../docs/architecture/architectural-decisions/) - Architectural decision record (TODO)
 

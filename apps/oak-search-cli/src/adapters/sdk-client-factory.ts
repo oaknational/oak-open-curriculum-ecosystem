@@ -3,7 +3,7 @@
  *
  * Pure functions for creating cached and uncached client instances.
  *
- * @see {@link ../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md}
+ * @see `../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md`
  */
 
 import type Redis from 'ioredis';

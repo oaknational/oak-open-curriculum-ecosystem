@@ -1,7 +1,7 @@
 # Programmatic Tool Generation Architecture
 
-**Status**: Proposed  
-**Last Updated**: 2025-08-12  
+**Status**: Accepted
+**Last Updated**: 2026-02-14
 **Context**: MCP Tool Generation from SDK
 
 ## Overview

@@ -3,7 +3,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { stubbedToolResponses } from './tools/index.js';
 import type { StubbedToolName } from './tools/index.js';
 
-/** Type alias for structuredContent to avoid Record<string, unknown> in code */
+/** Type alias for structuredContent to avoid broad generic object types in code */
 type StructuredContent = NonNullable<CallToolResult["structuredContent"]>;
 
 /**

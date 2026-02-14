@@ -10,7 +10,7 @@
  * JavaScript function to render rate limit data in the widget.
  *
  * Handles the following data shape:
- * - { remaining: number, limit: number, reset?: string | number }
+ * - `\{ remaining: number, limit: number, reset?: string | number \}`
  */
 export const RATE_LIMIT_RENDERER = `
 function renderRateLimit(data) {

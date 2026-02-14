@@ -27,6 +27,7 @@ export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';
  * 4. Capture top 3 results with relevance scores
  *
  * @example
+ * ```typescript
  * const mathsSecondary: SequenceGroundTruth = {
  *   subject: 'maths',
  *   phase: 'secondary',
@@ -36,6 +37,7 @@ export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';
  *   },
  *   description: 'The complete secondary mathematics programme.',
  * };
+ * ```
  */
 export interface SequenceGroundTruth {
   /**

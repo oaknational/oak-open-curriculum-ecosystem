@@ -1,6 +1,6 @@
 /**
  * Pure helper functions for ingestion error processing.
- * @see {@link ./ingestion-error-collector.ts} for the collector implementation
+ * @see `./ingestion-error-collector.ts` for the collector implementation
  */
 
 import type { IngestionContext, IngestionIssue, IssueSummary } from './ingestion-error-types';

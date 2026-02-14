@@ -76,7 +76,7 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
 
 /**
  * Validates response data for an API operation
- * @param path - The API path template (e.g., '/lessons/{lesson}/transcript')
+ * @param path - The API path template (e.g., '/lessons/\{lesson\}/transcript')
  * @param method - The HTTP method
  * @param statusCode - The HTTP response status code
  * @param response - The response data to validate

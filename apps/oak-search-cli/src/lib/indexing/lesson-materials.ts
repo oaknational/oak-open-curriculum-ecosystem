@@ -17,7 +17,7 @@
  * | `undefined` | Fetch transcript (backwards compatible) |
  * | `false` | Skip transcript fetch, return empty string |
  *
- * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @see ADR-088 Result Pattern for Explicit Error Handling
  * @see ADR-091 Video Availability Detection Strategy

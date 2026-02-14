@@ -52,7 +52,7 @@ Use the Task tool with `readonly: true`:
 
 ```yaml
 Task tool:
-  subagent_type: "code-reviewer-general-gemini-flash"
+  subagent_type: "code-reviewer-general-gemini-pro"
   readonly: true
   prompt: "Review the recent changes for quality, security, and maintainability."
 ```

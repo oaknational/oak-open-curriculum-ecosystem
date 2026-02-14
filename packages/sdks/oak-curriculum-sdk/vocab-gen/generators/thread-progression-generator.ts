@@ -11,7 +11,7 @@
  * - TSDoc documentation for agent understanding
  *
  * @see knowledge-graph-data.ts for the canonical pattern
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
 
  */
 import type { ExtractedThread } from '../extractors/index.js';

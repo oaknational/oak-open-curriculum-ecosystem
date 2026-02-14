@@ -18,7 +18,7 @@
  * pnpm vocab-gen --dry-run
  * ```
  *
- * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for the pipeline specification
+ * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for the pipeline specification
  */
 import { readFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';

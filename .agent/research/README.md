@@ -61,8 +61,7 @@ Research on AI integration, MCP tools, and agent patterns.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
-| **[aila-modular-extraction/](aila-modular-extraction/)** | AILA prompt engineering | Lesson generation, quiz design, safety patterns |
-| ├─ [README.md](aila-modular-extraction/README.md) | AILA research index | |
+| **[aila-modular-extraction/](aila-modular-extraction/)** | AILA prompt engineering | Lesson generation, quiz design, safety patterns (partially archived) |
 | ├─ [prompt-architecture.md](aila-modular-extraction/prompt-architecture.md) | Prompt design patterns | |
 | ├─ [quiz-design-principles.md](aila-modular-extraction/quiz-design-principles.md) | Quiz generation rules | |
 | └─ [safety-patterns.md](aila-modular-extraction/safety-patterns.md) | Content safety | |
@@ -231,7 +230,7 @@ When you discover something valuable:
 
 Some subdirectories have their own README files:
 
-- [aila-modular-extraction/README.md](aila-modular-extraction/README.md)
+- [aila-modular-extraction/](aila-modular-extraction/) (4 stale files archived to `archive/aila-modular-extraction/`)
 - [elasticsearch/README.md](elasticsearch/README.md)
 - [eslint-enhancements/index.md](eslint-enhancements/index.md)
 - [ooc/README.md](ooc/README.md) (if exists)

@@ -7,13 +7,13 @@
  *
  * ## Transcript Cache Categorization
  *
- * For transcript caching, use the structured {@link TranscriptCacheEntry} format
+ * For transcript caching, use the structured `TranscriptCacheEntry` format
  * which provides observability into WHY transcripts are unavailable.
  *
- * @see {@link ./ttl-jitter} for cache stampede prevention via TTL jitter
- * @see {@link ./redis-connection} for Redis connection management
- * @see {@link ./cache-wrapper} for Result-aware caching with negative cache support
- * @see {@link ./transcript-cache-types} for structured transcript cache entries
+ * @see `./ttl-jitter` for cache stampede prevention via TTL jitter
+ * @see `./redis-connection` for Redis connection management
+ * @see `./cache-wrapper` for Result-aware caching with negative cache support
+ * @see `./transcript-cache-types` for structured transcript cache entries
  * @see ADR-066 SDK Response Caching
  * @see ADR-092 Transcript Cache Categorization Strategy
  */

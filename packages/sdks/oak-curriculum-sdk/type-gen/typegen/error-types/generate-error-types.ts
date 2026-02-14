@@ -13,8 +13,8 @@
  * - 404: resource does not exist in the API
  * - 451: resource exists but is legally restricted (different cache, messaging, and audit implications)
  *
- * @see {@link ../../../../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
- * @see {@link ../../../../../../../docs/architecture/architectural-decisions/109-http-451-distinct-classification.md}
+ * @see ADR-088 (`docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`)
+ * @see ADR-109 (`docs/architecture/architectural-decisions/109-http-451-distinct-classification.md`)
  */
 
 /**
@@ -30,7 +30,7 @@ export function generateSdkErrorTypes(): string {
  * GENERATED FILE - DO NOT EDIT MANUALLY
  * Generated at type-gen time from schema error responses.
  *
- * @see {@link ../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
+ * @see ADR-088 (docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)
  */
 
 /**

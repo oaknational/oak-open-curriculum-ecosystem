@@ -50,7 +50,7 @@ export interface KeyStageFilterOptions {
   readonly keyStages?: readonly KeyStage[];
 }
 
-/** Builds key stage filter. Priority: phases > phase > keyStages > keyStage */
+/** Builds key stage filter. Priority: `phases > phase > keyStages > keyStage` */
 export function buildKeyStageFilter(options: KeyStageFilterOptions): QueryContainer | undefined {
   if (options.phases?.length) {
     return { terms: { key_stage: expandPhasesToKeyStages(options.phases) } };
@@ -81,7 +81,7 @@ export interface MetadataFilterOptions {
   readonly category?: string;
 }
 
-/** Builds year filter. Priority: years > year */
+/** Builds year filter. Priority: `years > year` */
 export function buildYearFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.years?.length) {
     return { terms: { years: [...options.years] } };
@@ -92,7 +92,7 @@ export function buildYearFilter(options: MetadataFilterOptions): QueryContainer 
   return undefined;
 }
 
-/** Builds tier filter. Priority: tiers > tier */
+/** Builds tier filter. Priority: `tiers > tier` */
 export function buildTierFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.tiers?.length) {
     return { terms: { tiers: [...options.tiers] } };
@@ -109,7 +109,7 @@ export function buildTierFilter(options: MetadataFilterOptions): QueryContainer 
   return undefined;
 }
 
-/** Builds exam board filter. Priority: examBoards > examBoard */
+/** Builds exam board filter. Priority: `examBoards > examBoard` */
 export function buildExamBoardFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.examBoards?.length) {
     return { terms: { exam_boards: [...options.examBoards] } };

@@ -15,7 +15,7 @@
  * - Tools (get-ontology): For ChatGPT and agents that request context on-demand
  * - Resources (curriculum://ontology): For clients that pre-inject context
  *
- * @see {@link ./ontology-data.ts} for the source ontology data
+ * @see `./ontology-data.ts` for the source ontology data
  * @see ADR-058 for the context grounding strategy
  */
 

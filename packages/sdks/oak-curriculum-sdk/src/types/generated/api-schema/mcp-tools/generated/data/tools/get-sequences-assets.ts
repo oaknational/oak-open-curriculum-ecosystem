@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-sequences-assets
- * Path: /sequences/{sequence}/assets
+ * Path: /sequences/\{sequence\}/assets
  * Method: GET
  */
 

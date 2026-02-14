@@ -7,7 +7,7 @@ import type { OakApiPathBasedClient } from '../../../../../../../client/index.js
  * GENERATED FILE - DO NOT EDIT
  * 
  * Tool: get-sequences-units
- * Path: /sequences/{sequence}/units
+ * Path: /sequences/\{sequence\}/units
  * Method: GET
  */
 
