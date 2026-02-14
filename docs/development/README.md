@@ -10,6 +10,9 @@ This directory contains documentation for developers working on the Oak MCP ecos
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
 - [CI Policy](./ci-policy.md) - What runs in CI (type-gen policy, build behavior)
 - [Testing Patterns](./testing-patterns.md) - Reusable test recipes (E2E DI pattern, subprocess tests)
+- [Release and Publishing](./release-and-publishing.md) - npm publishing, versioning, and release automation
+- [Environment Variables](./environment-variables.md) - Configuration and environment variable management
+- [Production Debugging Runbook](./production-debugging-runbook.md) - Debugging production issues
 
 ## Purpose
 

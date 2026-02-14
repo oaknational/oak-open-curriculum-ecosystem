@@ -531,7 +531,7 @@ Run after each task completion:
 # From repo root
 pnpm lint
 pnpm type-check
-pnpm test:unit --filter=@oaknational/oak-curriculum-sdk
+pnpm test:unit --filter=@oaknational/curriculum-sdk
 pnpm test:unit --filter=@oaknational/oak-curriculum-mcp-streamable-http
 
 # After all tasks

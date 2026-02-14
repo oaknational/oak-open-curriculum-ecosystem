@@ -7,7 +7,7 @@
  * @see ADR-066 (caching), ADR-088 (Result pattern)
  */
 
-import { createOakBaseClient } from '@oaknational/oak-curriculum-sdk';
+import { createOakBaseClient } from '@oaknational/curriculum-sdk';
 import { env, optionalEnv } from '../lib/env';
 import { createRedisClient, withRedisConnection } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';

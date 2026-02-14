@@ -102,7 +102,7 @@ The `synonym-export.ts` module provides utilities to transform synonyms into
 Elasticsearch format:
 
 ```typescript
-import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 const synonymSet = buildElasticsearchSynonyms();
 // Returns: { synonyms_set: [{ id: 'subjects_maths', synonyms: 'maths, mathematics, math' }, ...] }
@@ -120,7 +120,7 @@ pnpm es:setup   # Creates indexes and deploys oak-syns synonym set
 The SDK also exports phrase vocabulary for query preprocessing:
 
 ```typescript
-import { buildPhraseVocabulary } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { buildPhraseVocabulary } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 const phrases = buildPhraseVocabulary();
 // Returns Set<string> of multi-word curriculum terms

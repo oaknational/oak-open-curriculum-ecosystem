@@ -7,8 +7,8 @@
  * @see {@link ../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
  */
 
-import type { SdkFetchError, ResourceType } from '@oaknational/oak-curriculum-sdk';
-import { classifyException } from '@oaknational/oak-curriculum-sdk';
+import type { SdkFetchError, ResourceType } from '@oaknational/curriculum-sdk';
+import { classifyException } from '@oaknational/curriculum-sdk';
 import { ok, err, type Result } from '@oaknational/result';
 
 /**

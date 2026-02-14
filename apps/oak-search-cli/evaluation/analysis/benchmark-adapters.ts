@@ -8,7 +8,7 @@
  * Uses a generic grouping function to eliminate per-scope duplication.
  */
 
-import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/curriculum-sdk';
 import {
   LESSON_GROUND_TRUTHS,
   type LessonGroundTruth,

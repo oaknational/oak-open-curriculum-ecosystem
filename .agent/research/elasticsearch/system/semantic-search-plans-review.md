@@ -34,7 +34,7 @@ The original plans documented ~2,000 LOC of runtime schema definitions that need
 
 **CLI/SDK Integration**:
 
-- `src/types/oak.ts` now **re-exports everything from SDK** (`@oaknational/oak-curriculum-sdk/public/search.js`)
+- `src/types/oak.ts` now **re-exports everything from SDK** (`@oaknational/curriculum-sdk/public/search.js`)
 - Zero local Zod schema definitions for search functionality
 - CLI ingestion/setup imports SDK mappings and synonyms (no hosted API routes)
 

@@ -12,7 +12,7 @@ import type {
   SearchThreadIndexDoc,
   SearchFacets,
   SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 // ---------------------------------------------------------------------------
 // Retrieval error type

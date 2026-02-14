@@ -14,7 +14,7 @@ This plan captures immediate UX improvements and coordinates research activities
 ### Goals
 
 1. **Quick Wins**: Immediate terminology fixes and landing page improvements
-2. **Research**: Deep exploration of Oak AI Lesson Assistant patterns and codebase review → **See [Plan 07](./07-oak-ai-domain-extraction-research-plan.md)**
+2. **Research**: Deep exploration of Oak AI Lesson Assistant patterns and codebase review → ✅ COMPLETE (see [research output](../../research/aila-modular-extraction/README.md))
 3. **Foundation**: Prepare architectural patterns for `keyStageOrYear` and advanced prompts
 4. **Integration**: Document findings for incorporation into Plans 04 and future work
 
@@ -71,8 +71,8 @@ Before beginning any task, re-read and recommit to:
 
 ```typescript
 // SDK imports for dynamic generation
-import { MCP_TOOL_DESCRIPTORS } from '@oaknational/oak-curriculum-sdk';
-import { MCP_PROMPTS } from '@oaknational/oak-curriculum-sdk';
+import { MCP_TOOL_DESCRIPTORS } from '@oaknational/curriculum-sdk';
+import { MCP_PROMPTS } from '@oaknational/curriculum-sdk';
 
 // Helper functions generate HTML at render time
 function renderToolsList(): string { ... }

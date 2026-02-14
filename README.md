@@ -94,7 +94,7 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    >
    > - Running dev servers (`pnpm dev`)
    > - Integration/E2E tests (`pnpm test:e2e`)
-   > - Smoke tests (`pnpm dev:smoke`)
+   > - Smoke tests (`pnpm smoke:dev:stub`)
 
 4. **Regenerate types & run quality gates**
 
@@ -131,7 +131,7 @@ pnpm lint -- --fix  # Lint and auto-fix where possible
 pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests
-pnpm dev:smoke      # Local smoke harness for MCP servers
+pnpm smoke:dev:stub # Local smoke harness for MCP servers
 pnpm make           # Full pipeline (install -> type-gen -> build -> docs -> lint -> format)
 pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdownlint -> tests -> smoke)
 ```
@@ -150,24 +150,27 @@ pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdo
 
 ## Contributing
 
-We welcome contributions from Oak team members and the wider community. Before starting work:
+This repository is open-source under the MIT licence. You are free to read,
+fork, and learn from the code.
 
-1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, commit conventions, and quality expectations.
-2. Review [GO.md](GO.md) for the grounding cadence (ACTION → REVIEW, regular GROUNDING checkpoints).
-3. Keep documentation close to your changes — onboarding, workspace READMEs, and ADRs should stay current.
+At this time, we are not accepting external contributions (pull requests,
+issues, or feature requests). This may change in the future; watch the
+repository for updates.
 
-Quality gate checklist:
+If you find a security issue, please follow our
+[security policy](SECURITY.md).
 
-```bash
-pnpm make
-pnpm qg
-```
+Oak team members: see [CONTRIBUTING.md](CONTRIBUTING.md) for workflow,
+commit conventions, and quality expectations.
 
 ## Support & Licensing
 
-- 📖 Documentation – [docs/README.md](docs/README.md)
-- 🐛 Issues – <https://github.com/oaknational/oak-mcp-ecosystem/issues>
-- 💬 Discussions – <https://github.com/oaknational/oak-mcp-ecosystem/discussions>
-- 📄 Licence – MIT (see [LICENSE](LICENSE)) – Oak branding remains protected; curriculum data uses the [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+- Documentation – [docs/README.md](docs/README.md)
+- Issues – <https://github.com/oaknational/oak-mcp-ecosystem/issues>
+- Discussions – <https://github.com/oaknational/oak-mcp-ecosystem/discussions>
+- Licence (code) – MIT (see [LICENSE](LICENSE))
+- Licence (curriculum data) – see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
+- Branding – see [BRANDING.md](BRANDING.md)
+- Security – see [SECURITY.md](SECURITY.md)
 
-Built with ❤️ by [Oak National Academy](https://www.thenational.academy/).
+Built by [Oak National Academy](https://www.thenational.academy/).

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { unitSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { unitSummarySchema } from '@oaknational/curriculum-sdk/public/search.js';
 import type { SearchUnitSummary } from '../../types/oak';
 import {
   extractThreadInfo,

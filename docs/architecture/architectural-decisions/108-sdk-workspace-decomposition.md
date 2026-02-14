@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-The current `@oaknational/oak-curriculum-sdk` workspace is a
+The current `@oaknational/curriculum-sdk` workspace is a
 monolith containing approximately 180 files in `type-gen/`
 and 80+ files in `src/`. It conflates four genuinely
 independent concerns:
@@ -58,7 +58,7 @@ SDK, including Oak-specific domain logic.
 
 ## Decision
 
-Decompose `@oaknational/oak-curriculum-sdk` along two
+Decompose `@oaknational/curriculum-sdk` along two
 orthogonal axes into four workspaces:
 
 |                  | Generation-time       | Runtime              |

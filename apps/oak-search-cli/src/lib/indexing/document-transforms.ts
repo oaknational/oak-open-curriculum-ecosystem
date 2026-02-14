@@ -11,7 +11,7 @@
  */
 /* eslint-disable max-lines -- Document transforms require comprehensive field mappings */
 
-import { SUBJECT_TO_PARENT } from '@oaknational/oak-curriculum-sdk';
+import { SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,

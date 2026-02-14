@@ -702,3 +702,87 @@ Completed systematic removal of actionable `oak-notion-mcp` references from:
 - **4 ADRs**: ADR-004 deprecated; ADR-005, 006, 018 examples updated
 - **1 architecture doc**: `openapi-pipeline.md` generalised
 - Archive files left untouched (historical records)
+
+### Public Release Readiness — Full Execution (2026-02-14)
+
+Completed all workstreams (WS2c-WS6) and quality gates for the
+`public-release-readiness.plan.md`.
+
+#### Completed Work
+
+- **WS2c**: Created `LICENCE-DATA.md` (notice pointing to upstream API licence terms, NOT a licence declaration by Oak)
+- **WS2d**: Created `BRANDING.md` (trademarks, no-endorsement)
+- **WS3**: Standardised all 11 workspace `package.json` files:
+  - Added `private: true` to 7 non-published workspaces
+  - Object-form `author` field everywhere
+  - `license`, `repository`, `bugs`, `homepage` on all workspaces
+  - Fixed `repository.directory` for SDK and openapi-zod-client-adapter
+  - Added `publishConfig.access: "public"` to SDK
+  - Set SDK version to `0.1.0`
+  - Root keywords updated from notion to curriculum/oak
+- **WS4**: Documentation overhaul:
+  - README: stale commands fixed, emojis removed, licence/branding links added, external-contributions-closed messaging
+  - CONTRIBUTING.md: rewritten from scratch — Node 24.x, Result type, correct commands, closed to external contributions
+  - CHANGELOG.md: replaced stale oak-notion-mcp entries
+  - Created workspace READMEs for oak-eslint, expanded openapi-zod-client-adapter and env
+- **WS5**: GitHub config:
+  - Issue template (blank issues disabled, security + enquiries links)
+  - PR template
+  - Dependabot (weekly npm + github-actions)
+  - Deleted stale `.yml.bak` workflow
+  - CI workflow: removed emoji from Docker fallback echo
+- **WS6**: Publication:
+  - SDK tarball: `prepublishOnly` copies LICENSE from monorepo root; `.gitignore` prevents committing copy
+  - `.releaserc.mjs`: rewritten for SDK-only publication with `pkgRoot`
+  - `release.yml`: SDK build step, npm auth, `NPM_TOKEN` secret reference
+- **QG**: Full quality gate chain passed: type-gen, build, type-check, lint:fix, format:root, markdownlint:root, test, test:e2e, test:ui, smoke:dev:stub, publish:dry
+
+#### Mistakes Made
+
+- `prepublishOnly` script path initially used `../../LICENSE` (resolves to `packages/` not repo root from `packages/sdks/oak-curriculum-sdk`). Corrected to `../../../LICENSE`.
+- Parent plan WS2c section had incorrect framing (Oak declaring OGL licence vs pointing to upstream). Corrected.
+
+#### Patterns to Remember
+
+- From `packages/sdks/oak-curriculum-sdk/`, repo root is `../../../` not `../../`
+- Unicode right single quotation mark (U+2019) in plan file blocks StrReplace matching — match on surrounding text instead
+- `pnpm publish --dry-run` with uncommitted changes needs `--no-git-checks` flag
+
+### Session 2026-02-14b: consolidate-docs
+
+#### What Happened
+
+- **SDK rename docs sweep**: bulk-updated 50 non-archive Markdown files to replace `@oaknational/oak-curriculum-sdk` with `@oaknational/curriculum-sdk`. Archive files left as historical records. Directory path `packages/sdks/oak-curriculum-sdk/` remains unchanged (only npm package name changed).
+- **ADR-015 updated**: Node.js 22+ -> 24.x with rationale (type stripping, V8 improvements, ESM maturity).
+- **Parent plan fully updated**: all completion checkboxes ticked, status changed to "Complete (npm publish deferred)", SDK rename and npm publish status notes added with dates.
+- **Test install from tarball**: full npm install fails because workspace dependencies (`@oaknational/mcp-logger`, `@oaknational/openapi-zod-client-adapter`) are not published. Manual extraction and verification confirmed correct package name, version, exports, types, LICENSE, and README. This is the expected limitation until all public-facing packages are published.
+- **QG re-run**: all gates pass after the docs consolidation (build, type-check, lint:fix, format:root, markdownlint:root, test, test:e2e, smoke:dev:stub, publish:dry).
+
+#### Patterns to Remember
+
+- Smart quotes (U+201C/U+201D) in plan file also block StrReplace — use Python for bulk edits on files with non-ASCII content
+- `@oaknational` is confirmed correct npm org scope. No token yet; user will create when ready
+- Test-installing a tarball with unpublished workspace deps requires manual extraction rather than `npm install`
+- Archive docs intentionally excluded from rename sweeps — they are historical records
+
+### Session 2026-02-14c: consolidate-docs (plan archival)
+
+#### What Happened
+
+- **Plan/prompt audit**: inventoried ~55 active plan files and 6 prompt files. Found 3 broken cross-references, 0 stale SDK name references (previous session caught them all).
+- **Broken references fixed**:
+  - `gt-review.md`: checklist path updated to `archive/completed/`
+  - `matchmedia-di-refactoring-plan.md`: blocking link path corrected to `quality-and-maintainability/`
+  - `06-ux-improvements-and-research-plan.md`: dead Plan 07 link replaced with completed research output link
+- **Roadmap updated**: Phase 2f marked complete, status line updated, next phase is 2g (developer onboarding)
+- **Created `docs/development/release-and-publishing.md`**: permanent documentation of the settled publishing strategy (packages, versioning, release automation, npm token setup). Added to `docs/development/README.md` index. This replaces the need to read the archived plan for publishing info.
+- **Plan archived**: `public-release-readiness.plan.md` moved from `active/` to `archive/completed/`. All 4 inbound references (roadmap, README, developer-onboarding plan x2) updated to new path.
+- **QG**: all gates pass after changes.
+
+#### Documentation Migration Candidates (noted, not acted on)
+
+These are lower-priority candidates that may be worth migrating in future sessions:
+- `.agent/research/elasticsearch/system/semantic-search-sdk-and-cli-extraction.md` → ADR (CLI/SDK-only decision)
+- `.agent/reference-docs/internal/agent-support-tools-specification.md` → `docs/architecture/` (operational guide)
+- `.agent/research/mcp-sdk-type-reuse-investigation.md` → ADR (type reuse strategy)
+- `.agent/research/elasticsearch/methods/hybrid-retrieval.md` → search CLI docs (retrieval patterns)

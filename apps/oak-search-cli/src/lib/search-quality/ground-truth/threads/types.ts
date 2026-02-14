@@ -13,7 +13,7 @@
  * Target: 8 ground truths across 5 subjects
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { ExpectedRelevance } from '../types';
 
 export type { RelevanceScore, ExpectedRelevance } from '../types';

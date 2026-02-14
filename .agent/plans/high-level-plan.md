@@ -61,7 +61,7 @@ hold.
 **ADR**: [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)  
 **Plan**: [pipeline-enhancements/sdk-workspace-separation-plan.md](pipeline-enhancements/sdk-workspace-separation-plan.md)
 
-Decompose `@oaknational/oak-curriculum-sdk` along two
+Decompose `@oaknational/curriculum-sdk` along two
 orthogonal axes (generic/Oak x type-gen/runtime) into
 four workspaces:
 

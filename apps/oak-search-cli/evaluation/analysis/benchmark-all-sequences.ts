@@ -7,7 +7,7 @@
 
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
 import { env } from '../../src/lib/env.js';
-import { isSubject } from '@oaknational/oak-curriculum-sdk';
+import { isSubject } from '@oaknational/curriculum-sdk';
 import { runSequenceQuery } from './benchmark-query-runner-sequences.js';
 import { getSequenceGroundTruthEntries } from './benchmark-adapters.js';
 import type { IndexResult, BenchmarkMetrics } from './benchmark-all-types.js';

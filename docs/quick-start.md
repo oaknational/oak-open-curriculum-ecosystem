@@ -155,7 +155,7 @@ Instead, types are imported from the generated SDK:
 
 ```typescript
 // ✅ CORRECT - imported from generated SDK
-import type { LessonSummary } from '@oaknational/oak-curriculum-sdk';
+import type { LessonSummary } from '@oaknational/curriculum-sdk';
 ```
 
 This ensures types always match the API schema exactly.
@@ -242,7 +242,7 @@ pnpm qg      # Run all quality checks
 ### Test a Specific Workspace
 
 ```bash
-pnpm --filter @oaknational/oak-curriculum-sdk test
+pnpm --filter @oaknational/curriculum-sdk test
 pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
 ```
 

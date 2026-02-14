@@ -3,8 +3,8 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
-import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/oak-curriculum-sdk';
-import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
+import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { SearchLessonsParams, SearchUnitsParams } from '../types/retrieval-params.js';
 import type { EsHit } from '../internal/types.js';

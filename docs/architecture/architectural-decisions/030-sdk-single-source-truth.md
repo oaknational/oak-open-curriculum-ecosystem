@@ -110,7 +110,7 @@ export {
 
 ```typescript
 // MCP server example
-import { KEY_STAGES, validation, toolGeneration } from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES, validation, toolGeneration } from '@oaknational/curriculum-sdk';
 
 // ONLY import from SDK, never define locally
 const tools = toolGeneration.PATH_OPERATIONS.map((op) => ({
@@ -159,7 +159,7 @@ This decision is successful when:
 ### ✅ Correct: Import from SDK
 
 ```typescript
-import { KEY_STAGES } from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES } from '@oaknational/curriculum-sdk';
 
 function validateKeyStage(value: string) {
   return KEY_STAGES.includes(value);
@@ -180,7 +180,7 @@ function validateKeyStage(value: string) {
 ### ✅ Correct: Use SDK Validation
 
 ```typescript
-import { validation } from '@oaknational/oak-curriculum-sdk';
+import { validation } from '@oaknational/curriculum-sdk';
 
 async function handleRequest(path: string, method: string, args: unknown) {
   const result = validation.validateRequest(path, method, args);

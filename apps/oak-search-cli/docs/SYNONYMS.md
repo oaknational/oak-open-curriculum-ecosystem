@@ -9,7 +9,7 @@ This document explains the synonym system used for search query expansion.
 All synonyms are defined in the SDK at:
 
 ```text
-@oaknational/oak-curriculum-sdk → synonymsData
+@oaknational/curriculum-sdk → synonymsData
 ```
 
 Location: `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`

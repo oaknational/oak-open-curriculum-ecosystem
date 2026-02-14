@@ -14,7 +14,7 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
 

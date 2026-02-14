@@ -2,7 +2,7 @@ import type { Express } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
-import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';

@@ -25,7 +25,7 @@ import type {
   SdkFetchError,
   SdkNotFoundError,
   SdkLegallyRestrictedError,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk';
 import { cacheLogger } from '../../lib/logger';
 import {
   deserializeTranscriptCacheEntry,

@@ -5,7 +5,7 @@
  * at build/startup time, catching configuration errors early.
  */
 
-import { typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeEntries } from '@oaknational/curriculum-sdk';
 import {
   CURRICULUM_PATTERN_CONFIG,
   type PatternConfig,

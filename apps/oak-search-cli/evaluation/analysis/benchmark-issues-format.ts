@@ -2,7 +2,7 @@
  * Markdown formatting for issues report.
  */
 
-import { typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeEntries } from '@oaknational/curriculum-sdk';
 
 /** Good thresholds for each metric. */
 export interface GoodThresholds {

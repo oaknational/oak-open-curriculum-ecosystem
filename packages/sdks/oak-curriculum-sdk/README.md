@@ -103,7 +103,7 @@ import {
   type McpToolName,
   type ToolParameters,
   validateToolResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk';
 
 // All tool names are literal types
 const toolName: McpToolName = 'oak-get-sequences-units';
@@ -172,13 +172,13 @@ oak-curriculum-sdk/
 ## Installation
 
 ```bash
-npm install @oaknational/oak-curriculum-sdk
+npm install @oaknational/curriculum-sdk
 ```
 
 ## Usage
 
 ```typescript
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 const client = new OakCurriculumClient({
   apiKey: process.env.OAK_API_KEY,
@@ -215,7 +215,7 @@ const units = await client.listUnits('programme-id');
 The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
 
 ```typescript
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 import {
   UnifiedLogger,
   startTimer,

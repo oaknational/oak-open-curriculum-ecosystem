@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { SUBJECTS } from '@oaknational/oak-curriculum-sdk';
+import { SUBJECTS } from '@oaknational/curriculum-sdk';
 import { parseArgs } from './ingest-cli-args.js';
 import {
   validateSubject,

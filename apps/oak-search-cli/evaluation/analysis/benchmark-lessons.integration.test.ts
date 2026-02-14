@@ -16,7 +16,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { ok } from '@oaknational/result';
 import { runQuery, type SearchFunction } from './benchmark-query-runner-lessons';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
-import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 
 /** Create a minimal lesson index doc stub. */
 function stubLessonDoc(slug: string): SearchLessonsIndexDoc {

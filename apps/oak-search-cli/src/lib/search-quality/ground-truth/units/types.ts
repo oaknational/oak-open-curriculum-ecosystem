@@ -9,7 +9,7 @@
  * Target: 2 ground truths (1 primary, 1 secondary)
  */
 
-import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/curriculum-sdk';
 import type { Phase, ExpectedRelevance } from '../types';
 
 export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';

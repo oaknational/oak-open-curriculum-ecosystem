@@ -12,7 +12,7 @@ import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';
-import { SERVER_INSTRUCTIONS } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { SERVER_INSTRUCTIONS } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';

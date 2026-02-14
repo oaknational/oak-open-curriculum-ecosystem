@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 

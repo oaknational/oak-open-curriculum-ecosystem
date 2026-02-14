@@ -46,7 +46,7 @@
  * @see GROUND-TRUTH-PROCESS.md for creating new ground truths
  */
 
-import type { Subject } from '@oaknational/oak-curriculum-sdk';
+import type { Subject } from '@oaknational/curriculum-sdk';
 
 import { GROUND_TRUTH_ENTRIES } from './entries';
 import type { GroundTruthEntry, Phase } from './types';

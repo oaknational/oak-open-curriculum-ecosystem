@@ -2,8 +2,8 @@
  * Asset-related API method factories.
  */
 
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
-import { classifyHttpError, validationError } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient } from '@oaknational/curriculum-sdk';
+import { classifyHttpError, validationError } from '@oaknational/curriculum-sdk';
 import { ok, err } from '@oaknational/result';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { isSubjectAssets } from '../sdk-guards';

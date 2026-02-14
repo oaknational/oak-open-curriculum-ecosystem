@@ -109,7 +109,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 - `apps/` – runnable apps that provide services to users
 - `packages/libs/` – libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
-- `packages/sdks/` – SDKs (e.g., `@oaknational/oak-curriculum-sdk`)
+- `packages/sdks/` – SDKs (e.g., `@oaknational/curriculum-sdk`)
 - `packages/core/` – Shared, low-level code
 
 ## Remember

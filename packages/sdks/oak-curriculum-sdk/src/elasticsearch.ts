@@ -12,7 +12,7 @@
  *   EsIndexBody,
  *   EsSearchBody,
  *   OAK_ZERO_HIT_MAPPING
- * } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+ * } from '@oaknational/curriculum-sdk/elasticsearch.js';
  * ```
  *
  * ## Architecture

@@ -1,6 +1,8 @@
 {
   "name": "@oaknational/eslint-plugin-standards",
   "version": "1.0.0",
+  "private": true,
+  "description": "Custom ESLint rules for architectural boundary enforcement and code standards",
   "type": "module",
   "main": "./dist/index.js",
   "files": [
@@ -44,5 +46,34 @@
     "lint": "eslint .",
     "test": "vitest run",
     "type-check": "tsc --noEmit"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/core/oak-eslint"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/core/oak-eslint#readme",
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "oak",
+    "architecture",
+    "boundaries"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
 }

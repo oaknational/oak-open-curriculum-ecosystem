@@ -133,7 +133,7 @@ All changes pass the complete quality gate sequence:
 3. `pnpm build` - Build successful
 4. `pnpm type-check` - Type checking passed
 5. `pnpm lint -- --fix` - Linting passed
-6. `pnpm -F @oaknational/oak-curriculum-sdk docs:all` - Documentation generated
+6. `pnpm -F @oaknational/curriculum-sdk docs:all` - Documentation generated
 7. `pnpm format` - Code formatting applied
 8. `pnpm markdownlint` - Markdown linting passed
 9. `pnpm test` - All tests passing (173/173)

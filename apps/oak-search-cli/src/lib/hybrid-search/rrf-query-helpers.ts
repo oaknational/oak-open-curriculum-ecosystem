@@ -7,7 +7,7 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
-import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/oak-curriculum-sdk';
+import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
 import type { KeyStage, AllSubjectSlug } from '../../types/oak';
 import { type Phase, buildKeyStageFilter, collectMetadataFilters } from './phase-filter-utils';
 

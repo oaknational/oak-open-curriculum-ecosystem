@@ -7,7 +7,7 @@
  *
  */
 import { describe, it, expect } from 'vitest';
-import type { Unit, Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';
+import type { Unit, Lesson } from '@oaknational/curriculum-sdk/public/bulk';
 import { transformBulkUnitToSummary, collectLessonSnippets } from './bulk-rollup-builder';
 
 /**

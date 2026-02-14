@@ -4,7 +4,7 @@
  * @see ADR-080 KS4 Metadata Denormalisation, @see ADR-083 Lesson Enumeration
  */
 
-import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
+import { generateCanonicalUrl } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';

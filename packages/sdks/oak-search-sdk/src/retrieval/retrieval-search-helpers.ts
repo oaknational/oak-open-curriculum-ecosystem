@@ -13,7 +13,7 @@ import type { estypes } from '@elastic/elasticsearch';
 import type {
   SearchUnitRollupDoc,
   SearchUnitsIndexDoc,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { EsHit } from '../internal/types.js';
 

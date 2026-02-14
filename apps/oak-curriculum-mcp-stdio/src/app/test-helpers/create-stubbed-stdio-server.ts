@@ -7,7 +7,7 @@ import {
   McpToolError,
   createOakPathBasedClient,
   type ToolName,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { registerMcpTools } from '../server.js';
 import type { UniversalToolExecutors } from '../../tools/index.js';

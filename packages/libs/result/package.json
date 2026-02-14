@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/result",
   "version": "0.0.0-development",
+  "private": true,
   "description": "Result<T, E> type for explicit error handling without exceptions",
   "type": "module",
   "exports": {
@@ -36,5 +37,33 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/libs/result"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/libs/result#readme",
+  "keywords": [
+    "result",
+    "error-handling",
+    "functional",
+    "typescript"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
 }

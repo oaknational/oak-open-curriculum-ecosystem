@@ -156,7 +156,7 @@ Lessons without transcripts can only appear in the two Structure retrievers (not
 
 ## Dependencies & Tooling
 
-- **SDK**: All curriculum data comes from `@oaknational/oak-curriculum-sdk`; types generated via `pnpm type-gen` uphold the Cardinal Rule.
+- **SDK**: All curriculum data comes from `@oaknational/curriculum-sdk`; types generated via `pnpm type-gen` uphold the Cardinal Rule.
 - **Testing**: Unit tests cover transforms and query builders; integration suites (Vitest + fixtures/ES test doubles) validate mappings and ingestion behaviour.
 
 ---

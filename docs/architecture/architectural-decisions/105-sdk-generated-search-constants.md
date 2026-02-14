@@ -69,7 +69,7 @@ export function isKs4ScienceVariant(s: string): s is Ks4ScienceVariant {
 
 ### SDK Public API
 
-Exported from `@oaknational/oak-curriculum-sdk`:
+Exported from `@oaknational/curriculum-sdk`:
 
 - `SUBJECT_TO_PARENT`, `ALL_SUBJECTS`, `KS4_SCIENCE_VARIANTS`, `PARENT_TO_SUBJECTS`
 - `isKs4ScienceVariant()`, `getSubjectParent()`, `isAllSubject()`

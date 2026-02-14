@@ -11,7 +11,7 @@
  * @see slug-derivation.ts - Shared slug derivation (single source of truth)
  */
 
-import type { Lesson, Unit } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { Lesson, Unit } from '@oaknational/curriculum-sdk/public/bulk.js';
 import type { KeyStage } from '../types/oak';
 
 // ============================================================================

@@ -9,7 +9,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
-import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 

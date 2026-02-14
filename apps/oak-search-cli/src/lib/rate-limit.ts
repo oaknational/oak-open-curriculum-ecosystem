@@ -1,4 +1,4 @@
-import { createOakClient } from '@oaknational/oak-curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 import { env } from './env';
 
 /** Lightweight wrapper around the free `/rate-limit` endpoint. */

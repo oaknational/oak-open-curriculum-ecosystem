@@ -4,7 +4,7 @@
 
 import type { Client, estypes } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
-import type { SearchSuggestionItem } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchSuggestionItem } from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { SuggestParams } from '../types/retrieval-params.js';
 import type { SuggestionResponse, RetrievalError } from '../types/retrieval-results.js';

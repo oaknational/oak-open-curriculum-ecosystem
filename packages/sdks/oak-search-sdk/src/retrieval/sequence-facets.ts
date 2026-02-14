@@ -7,8 +7,8 @@ import { ok, err, type Result } from '@oaknational/result';
 import type {
   SearchSequenceFacetsIndexDoc,
   SearchFacets,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { isKeyStage } from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk/public/search.js';
+import { isKeyStage } from '@oaknational/curriculum-sdk';
 
 import type { FacetParams } from '../types/retrieval-params.js';
 import type { RetrievalError } from '../types/retrieval-results.js';

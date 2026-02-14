@@ -518,7 +518,7 @@ Import schemas from SDK and use with registerPrompt():
  * @remarks Prompt schemas are generated in the SDK using Zod v4 (via 'zod/v4').
  * This app uses Zod v4, so schemas are directly compatible.
  *
- * @see @oaknational/oak-curriculum-sdk - Generated prompt schemas
+ * @see @oaknational/curriculum-sdk - Generated prompt schemas
  * @packageDocumentation register-prompts
  */
 
@@ -529,7 +529,7 @@ import {
   findLessonsArgsSchema,
   lessonPlanningArgsSchema,
   progressionMapArgsSchema,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Map of prompt names to their Zod v4 argument schemas.

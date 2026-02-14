@@ -14,7 +14,7 @@ import { OAK_LOGO_SVG } from './oak-logo-svg.js';
 import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Returns the widget URI from the SDK.

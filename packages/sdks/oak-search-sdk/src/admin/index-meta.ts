@@ -4,8 +4,8 @@
 
 import type { Client } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
-import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { IndexMetaDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import { IndexMetaDocSchema } from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { AdminError } from '../types/admin-types.js';
 import { INDEX_META_INDEX, INDEX_VERSION_DOC_ID } from '../internal/index-resolver.js';

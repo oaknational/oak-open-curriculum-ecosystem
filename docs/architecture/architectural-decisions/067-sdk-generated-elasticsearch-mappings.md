@@ -81,7 +81,7 @@ packages/sdks/oak-curriculum-sdk/
    import {
      OAK_LESSONS_MAPPING,
      OAK_UNITS_MAPPING,
-   } from '@oaknational/oak-curriculum-sdk/types/generated/search/index';
+   } from '@oaknational/curriculum-sdk/types/generated/search/index';
    ```
 
 ### Hybrid Approach: Zod Types + ES Overrides

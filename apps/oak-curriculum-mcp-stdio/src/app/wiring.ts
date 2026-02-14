@@ -5,7 +5,7 @@
 
 import { createMcpToolsModule } from '../tools/index.js';
 import type { McpToolsModule } from '../tools/index.js';
-import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { createOakPathBasedClient } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Creates a simple clock provider for runtime timing needs.

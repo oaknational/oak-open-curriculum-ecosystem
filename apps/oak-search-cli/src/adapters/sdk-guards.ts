@@ -7,13 +7,13 @@ import {
   isSubject as sdkIsSubject,
   KEY_STAGES as SDK_KEY_STAGES,
   SUBJECTS as SDK_SUBJECTS,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk';
 import {
   isUnitsGrouped as sdkIsUnitsGrouped,
   isTranscriptResponse as sdkIsTranscriptResponse,
   isLessonGroups as sdkIsLessonGroups,
   isSubjectAssets as sdkIsSubjectAssets,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 export const isKeyStage = sdkIsKeyStage;
 export const isSubject = sdkIsSubject;

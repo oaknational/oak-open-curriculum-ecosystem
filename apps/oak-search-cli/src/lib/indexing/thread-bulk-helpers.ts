@@ -13,11 +13,11 @@
 
 import type { OakClient, ThreadEntry } from '../../adapters/oak-adapter';
 import type { SearchThreadIndexDoc } from '../../types/oak';
-import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkFetchError } from '@oaknational/curriculum-sdk';
 import { createThreadDocument } from './thread-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ingestLogger } from '../logger';
-import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-sdk';
+import { formatSdkError, isRecoverableError } from '@oaknational/curriculum-sdk';
 import type { BulkIndexAction, BulkCreateAction } from './bulk-operation-types';
 import { createBulkAction } from './bulk-action-factory';
 

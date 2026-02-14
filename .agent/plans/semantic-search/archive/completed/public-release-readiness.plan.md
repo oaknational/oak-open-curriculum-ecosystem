@@ -1,8 +1,8 @@
 # Public Release Readiness
 
-**Status**: In progress -- execute all workstreams
+**Status**: Complete (npm publish deferred until token is created)
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
-**Last Updated**: 2026-02-14
+**Last Updated**: 14 Feb 2026
 
 ---
 
@@ -39,8 +39,17 @@ Detailed onboarding refinement is tracked in
 plan focused on release blockers.
 
 **Scope decision (2026-02-12)**: for the first public npm release,
-publish only `@oaknational/oak-curriculum-sdk`. All other workspaces
+publish only `@oaknational/curriculum-sdk`. All other workspaces
 remain private (`private: true`) for now.
+
+**SDK rename (2026-02-14)**: package renamed from
+`@oaknational/oak-curriculum-sdk` to `@oaknational/curriculum-sdk`.
+The workspace directory remains `packages/sdks/oak-curriculum-sdk`.
+
+**npm publish status (2026-02-14)**: `npmPublish` is set to `false`
+in `.releaserc.mjs` until an `NPM_TOKEN` is created and added to
+GitHub Secrets. The `@oaknational` npm organisation scope is confirmed
+correct. All other release automation is in place.
 
 **Credential policy (2026-02-12)**: real credentials are allowed only
  in local `.env*` files that are not committed. `.env.example` files
@@ -48,14 +57,36 @@ remain private (`private: true`) for now.
 
 ---
 
+## Alignment With Repository Directives
+
+This plan is a public-release checklist, but it must still follow the repo’s
+directives:
+
+- Before making changes, apply the First Question: could it be simpler without
+  compromising quality?
+- Use British English and British spelling in docs and user-facing text (for
+  example: “licence”, “behaviour”).
+- Avoid emojis in repository-authored documentation (unless explicitly requested).
+- Do not work around quality gates. Fix root causes.
+- Respect schema-first generation: do not introduce hand-authored static types or
+  validators that should flow from `pnpm type-gen`.
+
+If any instruction in this plan conflicts with `.agent/directives/*`, update the
+plan first, then proceed.
+
+---
+
 ## Session Cut-Point (Next Session)
 
-The plan can be resumed in a staged fashion. If this is a secrets-only session:
+The plan can be resumed in a staged fashion. If a future session is secrets-only:
 
 - Execute only `WS1` end-to-end.
 - Mark `WS1` complete and stop.
 - Leave `WS2` onward, including `QG`, as pending.
 - Resume with `WS2` at the start of the next session.
+
+Otherwise (normal progression), resume at the first non-complete workstream in
+the status table below.
 
 ---
 
@@ -64,12 +95,12 @@ The plan can be resumed in a staged fashion. If this is a secrets-only session:
 | ID | Workstream | Status |
 | --- | --- | --- |
 | WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | Complete (including key rotation) |
-| WS2 | [Licence and legal](#workstream-2-licence-and-legal) | Pending |
-| WS3 | [Package.json standardisation](#workstream-3-packagejson-standardisation) | Pending |
-| WS4 | [Documentation overhaul](#workstream-4-documentation-overhaul) | Pending |
-| WS5 | [GitHub repository configuration](#workstream-5-github-repository-configuration) | Pending |
-| WS6 | [Publication dry run](#workstream-6-publication-dry-run) | Pending |
-| QG | [Quality gates](#quality-gates) | Pending |
+| WS2 | [Licence and legal](#workstream-2-licence-and-legal) | Complete |
+| WS3 | [Package.json standardisation](#workstream-3-packagejson-standardisation) | Complete |
+| WS4 | [Documentation overhaul](#workstream-4-documentation-overhaul) | Complete |
+| WS5 | [GitHub repository configuration](#workstream-5-github-repository-configuration) | Complete |
+| WS6 | [Publication dry run](#workstream-6-publication-dry-run) | Complete |
+| QG | [Quality gates](#quality-gates) | Complete |
 
 **Recommended order**: WS1 (blocking) -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
 
@@ -111,9 +142,7 @@ credentials cannot re-enter the repository.
 - Pre-push gate added in `.husky/pre-push`.
 - Docs/ADR updates added for local env policy and line-level exception strategy.
 
-**Remaining**:
-
-- **User action**: rotate any keys that were ever live (assume compromise if ever committed historically).
+**Status note**: Key rotation was completed as a separate user action on 14 Feb 2026.
 
 ### 1b: API keys in experience document
 
@@ -153,7 +182,7 @@ Representative files (not exhaustive):
 **User action required**: Verify whether the Clerk dev instance
 is still active. If so, rotate or decommission it.
 
-### 1d: Secret scanning gates (CI and optional pre-commit)
+### 1d: Secret scanning gates (CI and local)
 
 **Status (2026-02-14)**: Completed.
 
@@ -166,6 +195,9 @@ is still active. If so, rotate or decommission it.
 - `pnpm check` runs `pnpm secrets:scan:all` first.
 - Pre-push hook runs `pnpm secrets:scan:all` and blocks pushes when scans fail.
 - CI runs full-history secret scan and fails on findings in each run.
+
+**Non-goal (to avoid ambiguity)**: Do not add a pre-commit secret scan hook in
+this release plan. Enforced gates are CI and pre-push.
 
 ### 1e: Known docs examples (no remediation needed)
 
@@ -200,7 +232,6 @@ documentation policy requires sanitising all token-like examples.
 - [x] CI secret scan added with targeted allowlist handling
 - [x] API keys redacted in `.agent/experience/the-api-key-revelation.md`
 - [x] Clerk tenant/publishable values redacted across tracked non-`.env*` files
-- [ ] Exposed keys rotated (user action)
 - [x] Exposed keys rotated (user action; user-confirmed)
 - [x] Pre-commit/pre-push secret scan hook evaluated and decision documented
 - [x] Git history scrubbing decision made and documented
@@ -209,48 +240,53 @@ documentation policy requires sanitising all token-like examples.
 
 ## Workstream 2: Licence and legal
 
-**Problem**: The root `README.md` (line 161) references
-`[LICENSE](LICENSE)` but only `LICENSE.md` exists (not plain
-`LICENSE`), so the link is broken. Multiple workspace
+**Problem**: Public repos need a canonical MIT `LICENSE` file, a Code of Conduct,
+and explicit documentation of the dual-licensing boundary:
+
+- Code: MIT (this repo)
+- Curriculum content retrieved via the Oak Open Curriculum API: OGL v3 (with attribution)
+- Oak branding/trademarks: not granted under MIT; no endorsement / no association
+
+Additionally, multiple workspace
 `package.json` files declare `"license": "MIT"` without a
 corresponding licence file. `CONTRIBUTING.md` has a "Code of
-Conduct" section (lines 7-9) but no `CODE_OF_CONDUCT.md` file
-exists.
+Conduct" section but (previously) no `CODE_OF_CONDUCT.md` file
+existed.
+
+**Status (2026-02-14)**:
+
+- `LICENSE` created at root and `LICENSE.md` removed (README licence link now resolves).
+- `CODE_OF_CONDUCT.md` created at root with enforcement contact `help@thenational.academy`.
 
 ### 2a: Create MIT licence file (code)
 
-**File to create**: `LICENSE` (root)
+**File**: `LICENSE` (root, plain text)
 
 Use the standard MIT licence text with:
 
 - Year: 2024-present (the repo's first commit year to present)
 - Copyright holder: Oak National Academy
 
-This must be a plain-text file, not markdown. Note: a
-`LICENSE.md` already exists at root — either rename it to
-`LICENSE` (plain text) or update the README link to point to
-`LICENSE.md`. The MIT licence is already declared in the root
-`package.json` and in most workspace `package.json` files.
+This must be a plain-text file, not markdown.
 
 **Acceptance criteria**:
 
 - GitHub detects the repository licence as MIT on the default branch.
 - `README.md` licence link resolves.
-- The published npm package for `@oaknational/oak-curriculum-sdk` includes the
+- The published npm package for `@oaknational/curriculum-sdk` includes the
   MIT licence (either via workspace inclusion or by inheriting from root).
 
 ### 2b: Create Code of Conduct
 
-**File to create**: `CODE_OF_CONDUCT.md` (root)
+**File**: `CODE_OF_CONDUCT.md` (root)
 
-Adopt the [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
-This is the industry standard for open source projects.
-`CONTRIBUTING.md` has a "Code of Conduct" section (lines 7-9)
-that should link to this file once created.
+Use Contributor Covenant language (current repo choice: v1.4 wording, based on
+`universal-user-agent`'s `CODE_OF_CONDUCT.md`) and set the enforcement contact
+to `help@thenational.academy`.
 
-Set the enforcement contact to the same security contact used
-in `SECURITY.md` (or a dedicated email if Oak has one for
-community conduct).
+**Acceptance criteria**:
+
+- `CONTRIBUTING.md` links to `CODE_OF_CONDUCT.md` (no broken references).
 
 ### 2c: OGL v3 obligations for Oak Open Curriculum API content (data)
 
@@ -265,21 +301,33 @@ where otherwise stated) and requires attribution when reused.
 - Oak Curriculum API docs terms: `https://open-api.thenational.academy/docs/about-oaks-api/terms`
 - OGL v3: `https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/`
 
-**Requirement**: we must document (in-repo) the difference between:
+**Requirement**: we must document (in-repo) for public users the difference between:
 
 - the MIT licence for this repo’s code, and
-- OGL v3 obligations for curriculum content retrieved via the API, including
-  the required attribution statement and the OGL link.
+- the upstream licence terms for curriculum content retrieved via the API
+  (currently OGL v3, set by the API provider, not by us).
 
-**File to create (recommended)**: `LICENCE-DATA.md` (root)
+**Important**: we do not set or declare the licence for curriculum data — the
+upstream API provider does. `LICENCE-DATA.md` is a **notice pointing users to
+the upstream licence information**, not a licence declaration by Oak.
+
+**File to create (required)**: `LICENCE-DATA.md` (root)
 
 Include:
 
-- A clear statement that curriculum lesson content accessed via the Oak Open
-  Curriculum API is licensed under OGL v3.0 (except where otherwise stated).
-- The required attribution statement format (verbatim), plus a link to OGL v3.
-- A warning that some content may include third-party rights/trademarks that
-  are not covered by OGL and must be respected.
+- A clear statement that this repository's MIT licence covers the code only,
+  not curriculum content.
+- A statement that curriculum content accessed via the Oak Open Curriculum API
+  is subject to licence terms set by the API provider, which currently makes
+  content available under OGL v3.0 (except where otherwise stated).
+- Direct the reader to the upstream authoritative sources for the definitive
+  terms (Oak API terms, Oak API docs terms, OGL v3).
+- Note the upstream attribution requirement and quote the default OGL
+  attribution statement for convenience:
+
+  `Contains public sector information licensed under the Open Government Licence v3.0.`
+- A warning that some upstream content may include third-party
+  rights/trademarks not covered by OGL — consult the upstream terms.
 
 **Acceptance criteria**:
 
@@ -290,13 +338,8 @@ Include:
 
 The root `README.md` already notes that curriculum data uses the
 [Open Government Licence v3](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
-Verify this is correct and consider adding a `LICENCE-DATA.md`
-or a section in the root `LICENSE` file clarifying the dual
-licensing:
-
-- Code: MIT
-- Curriculum data: OGL v3
-- Oak branding: All rights reserved
+Verify the README’s OGL mention is correct and add `LICENCE-DATA.md` so that the
+dual-licensing boundary cannot be missed.
 
 ### 2d: Oak branding, trademarks, and no-endorsement/no-association
 
@@ -319,7 +362,7 @@ association or endorsement.
 - the code may be forked/modified under MIT, but the fork must not imply
   affiliation or endorsement.
 
-**File to create (recommended)**: `BRANDING.md` (root)
+**File to create (required)**: `BRANDING.md` (root)
 
 Include:
 
@@ -335,11 +378,11 @@ Include:
 
 ### Completion checklist
 
-- [ ] `LICENSE` file created at root with correct MIT text
-- [ ] `CODE_OF_CONDUCT.md` created with Contributor Covenant v2.1
-- [ ] Dual licensing (code vs data) clearly documented
-- [ ] Oak branding/trademark rules and no-endorsement/no-association clearly documented
-- [ ] `README.md` licence link verified working
+- [x] `LICENSE` file created at root with correct MIT text (`LICENSE.md` removed)
+- [x] `CODE_OF_CONDUCT.md` created (Contributor Covenant language) with enforcement contact
+- [x] Dual licensing (code vs data) clearly documented (`LICENCE-DATA.md` points to upstream terms)
+- [x] Oak branding/trademark rules and no-endorsement/no-association clearly documented (`BRANDING.md`)
+- [x] `README.md` licence link verified working (links to `LICENSE`, `LICENCE-DATA.md`, `BRANDING.md`)
 
 ---
 
@@ -350,14 +393,35 @@ metadata fields are missing or inconsistent. Before public
 release, every package must have correct metadata for both npm
 registry presentation and GitHub repository display.
 
+**Workspaces in scope (explicit)**:
+
+- Root: `package.json`
+- `apps/oak-curriculum-mcp-stdio/package.json`
+- `apps/oak-curriculum-mcp-streamable-http/package.json`
+- `apps/oak-search-cli/package.json`
+- `packages/core/oak-eslint/package.json`
+- `packages/core/openapi-zod-client-adapter/package.json`
+- `packages/libs/env/package.json`
+- `packages/libs/logger/package.json`
+- `packages/libs/result/package.json`
+- `packages/sdks/oak-curriculum-sdk/package.json`
+- `packages/sdks/oak-search-sdk/package.json`
+
+**Audit command (source of truth)**:
+
+```bash
+rg --files -g 'package.json' apps packages | sort
+cat package.json
+```
+
 ### 3a: Classify packages as public or private
 
 **Decision (recorded)**: initial public npm scope is a single package:
-`@oaknational/oak-curriculum-sdk`. All other workspaces remain private.
+`@oaknational/curriculum-sdk`. All other workspaces remain private.
 
-Current state and recommendation:
+Current state and required target:
 
-| Workspace | Current `private` | Recommendation | Rationale |
+| Workspace | Current `private` | Required `private` | Rationale |
 | --- | --- | --- | --- |
 | Root (`@oaknational/mcp-ecosystem`) | `true` | `true` | Monorepo root, never published |
 | `apps/oak-curriculum-mcp-stdio` | missing | `true` | Hold for later release cycle |
@@ -412,18 +476,9 @@ present and correct:
 }
 ```
 
-**Current gaps** (from audit):
-
-| Field | Missing from |
-| --- | --- |
-| `author` | 8 of 11 workspaces |
-| `license` | 4 of 11 (`streamable-http`, `search-cli`, `eslint`, `result`) |
-| `repository` | 3 of 11 (`search-cli`, `eslint`, `result`) |
-| `homepage` | all 11 |
-| `bugs` | all 11 |
-| `keywords` | 4 of 11 |
-| `description` | 3 of 11 (`streamable-http`, `search-cli`, `eslint`) |
-| `publishConfig` | all 11 |
+**Important**: Do not rely on historic “missing counts” in this plan. Always
+audit the current `package.json` state and then apply the standard template
+consistently across all workspaces.
 
 ### 3c: Version strategy
 
@@ -431,10 +486,11 @@ Current state: Most packages use `0.0.0-development`. This is
 fine for pre-release, but public packages need a real versioning
 strategy before first publish.
 
-**Recommendation**: Use `0.1.0` as the first published version
-for all public packages (signalling pre-1.0, breaking changes
-expected). Let semantic-release handle subsequent versions from
-commit messages.
+**Required for this release cycle**:
+
+- Set `packages/sdks/oak-curriculum-sdk/package.json` version to `0.1.0` before the first publish.
+- Leave all other workspace versions unchanged (they remain private and are not published).
+- Configure semantic-release so subsequent SDK publishes update the version deterministically from conventional commits.
 
 ### 3d: Root package.json cleanup
 
@@ -452,19 +508,19 @@ The root `package.json` has:
 
 ### Completion checklist
 
-- [ ] Public/private classification decided for all workspaces
-- [ ] `private: true` added to all non-published packages
-- [ ] `author` added to all 11 workspaces
-- [ ] `license` added to 4 workspaces missing it
-- [ ] `repository` (with `directory`) added to 3 missing workspaces, verified on 8 existing
-- [ ] `homepage` added to all 11 workspaces
-- [ ] `bugs` added to all 11 workspaces
-- [ ] `description` added to 3 workspaces missing it
-- [ ] `keywords` reviewed and updated across all workspaces
-- [ ] `publishConfig` added to `packages/sdks/oak-curriculum-sdk`
-- [ ] Version strategy documented and applied
-- [ ] Root keywords updated
-- [ ] Node.js version consistent everywhere
+- [x] Public/private classification decided for all workspaces
+- [x] `private: true` added to all non-published packages
+- [x] `author` and `contributors` added to all 11 workspaces (Jim Cresswell as author, Oak National Academy as contributor)
+- [x] `license` present and correct in every workspace `package.json`
+- [x] `repository` (with `directory`) present and correct in every workspace `package.json`
+- [x] `homepage` added to all 11 workspaces
+- [x] `bugs` added to all 11 workspaces
+- [x] `description` present and correct in every workspace `package.json`
+- [x] `keywords` present and reviewed across all workspaces (meaningful, not misleading)
+- [x] `publishConfig` added to `packages/sdks/oak-curriculum-sdk`
+- [x] Version strategy documented and applied (SDK at `0.1.0`)
+- [x] Root keywords updated (removed `notion`, added `curriculum`, `oak`, `education`, `model-context-protocol`)
+- [x] Node.js version consistent everywhere (`24.x`); ADR-015 updated
 
 ---
 
@@ -480,21 +536,33 @@ critical documentation updates and cross-links only.
 
 The root README is generally strong. Specific issues to fix:
 
-1. **Stale command references**: Line 91 (and possibly others)
-   says `pnpm dev:smoke` but the actual command is
-   `pnpm smoke:dev:stub`. Fix all smoke test command references
-   in the root README.
-2. **Contributing section** (lines 148-161): Currently says
-   "We welcome contributions from Oak team members and the
-   wider community." This must change to reflect that external
-   contributions are not currently accepted. See 4c below.
-3. **ADR count**: Lines 47 and 58 reference "107 ADRs" but the
-   actual count is 105 (including ADR-109 added during 451
-   remediation). Update both references to the correct count.
-4. **Support section** (line 165-168): Contains emoji. Remove
-   them (repo convention is no emoji unless user requests).
-5. **Node.js version**: `.env.example` and `CONTRIBUTING.md`
-   and README must all agree on Node.js 24.x.
+1. **Stale command references**: The README currently references `pnpm dev:smoke`
+   but the actual root scripts are `pnpm smoke:dev:stub`, `pnpm smoke:dev:live`,
+   and `pnpm smoke:dev:live:auth`. Fix all smoke command references.
+
+   Audit command:
+
+   ```bash
+   rg -n "dev:smoke|pnpm dev:smoke|smoke:dev" README.md
+   ```
+
+2. **Contributing section**: Update the README to state that external
+   contributions are not accepted at this time (see 4c) and to route security
+   reports to `SECURITY.md`.
+
+3. **ADR count**: Verify the ADR count and update the README consistently.
+
+   Audit command (counts ADRs, excluding the ADR index README):
+
+   ```bash
+   ls -1 docs/architecture/architectural-decisions/[0-9][0-9][0-9]-*.md | wc -l
+   ```
+
+4. **Support & Licensing section**: Remove emojis and ensure it links to:
+   `LICENSE`, `LICENCE-DATA.md`, `BRANDING.md`, and `SECURITY.md` as appropriate.
+
+5. **Node.js version**: `.env.example`, `README.md`, and `CONTRIBUTING.md` must all
+   agree on Node.js `24.x`.
 
 ### 4b: CONTRIBUTING.md overhaul
 
@@ -508,20 +576,20 @@ This file needs significant updates for public readiness:
    but external contributions (PRs, issues) are not accepted at
    this time. The code is available for reading, forking, and
    learning. Oak team members contribute via internal process.
-2. **Node.js version**: Line 15 says "Node.js 22+" -- update
+2. **Node.js version**: CONTRIBUTING currently says "Node.js 22+" -- update
    to `24.x` to match `engines` in root `package.json`.
-3. **Error handling section**: Line 219 references "ErrorHandler
+3. **Error handling section**: CONTRIBUTING references an "ErrorHandler"
    class" which does not exist in the codebase. Replace with
    the actual pattern (Result type from `@oaknational/result`,
    fail-fast with helpful errors).
-4. **CONTRIBUTORS.md reference**: Line 326 promises
+4. **CONTRIBUTORS.md reference**: CONTRIBUTING promises
    "Listed in CONTRIBUTORS.md" but no such file exists. Either
    create it or remove the reference. Given no external
    contributions are accepted, remove the reference.
-5. **Quality gate commands**: Lines 128-136 show `pnpm format`,
+5. **Quality gate commands**: CONTRIBUTING shows `pnpm format`,
    `pnpm lint`, etc. The actual commands are `pnpm format:root`,
    `pnpm lint:fix`. Align with the root `package.json` scripts.
-6. **E2E test note**: Line 344 says E2E tests "Requires valid
+6. **E2E test note**: CONTRIBUTING claims E2E tests "Require valid
    OAK_API_KEY" -- this is false. E2E tests use mocks and DI
    (per testing strategy). Only smoke tests require real
    credentials.
@@ -529,19 +597,25 @@ This file needs significant updates for public readiness:
    External viewers will want to understand the schema-first
    principle before diving into code standards.
 
+**Audit command**:
+
+```bash
+rg -n "Node\\.js 22\\+|Node\\.js 24|dev:smoke|format\\b|lint\\b|CONTRIBUTORS\\.md|ErrorHandler" CONTRIBUTING.md
+```
+
 ### 4c: External contributor messaging
 
 Create a clear, polite boundary in both `README.md` and
 `CONTRIBUTING.md`:
 
-**Recommended wording** (adapt as needed):
+**Required wording** (use exactly in both `README.md` and `CONTRIBUTING.md`):
 
-> This repository is open-source under the MIT licence. You are
-> free to read, fork, and learn from the code.
+> This repository is open-source under the MIT licence. You are free to read,
+> fork, and learn from the code.
 >
-> At this time, we are not accepting external contributions
-> (pull requests, issues, or feature requests). This may change
-> in the future -- watch the repository for updates.
+> At this time, we are not accepting external contributions (pull requests,
+> issues, or feature requests). This may change in the future; watch the
+> repository for updates.
 >
 > If you find a security issue, please follow our
 > [security policy](SECURITY.md).
@@ -562,18 +636,12 @@ The current file contains entries from the old `oak-notion-mcp`
 repository, not from `oak-mcp-ecosystem`. This is confusing and
 incorrect.
 
-**Remediation options** (choose one):
+**Required remediation (no choice)**:
 
-1. **Delete it**: If semantic-release will generate a fresh
-   changelog from commit history at first release, delete the
-   stale file. The release workflow will create a correct one.
-2. **Replace it**: Create a new `CHANGELOG.md` with a single
-   "Unreleased" section noting this is the first public release.
-3. **Regenerate it**: Use `conventional-changelog` to generate
-   from actual git history.
-
-**Recommendation**: Option 2 -- a clean "Unreleased" section.
-Semantic-release will manage it from the first tagged release.
+- Replace `CHANGELOG.md` with a single “Unreleased” section noting this is the
+  first public release of `oak-mcp-ecosystem`.
+- Leave future changelog management to semantic-release once the release workflow
+  is corrected for SDK-only publication.
 
 ### 4f: Workspace READMEs
 
@@ -592,23 +660,23 @@ workspace READMEs are substantive and public-ready.
 
 ### Completion checklist
 
-- [ ] Root README stale commands fixed
-- [ ] Root README contributing section updated
-- [ ] Root README ADR count verified
-- [ ] Root README emoji removed from Support section
-- [ ] CONTRIBUTING.md: external contributions closed politely
-- [ ] CONTRIBUTING.md: Node.js version fixed
-- [ ] CONTRIBUTING.md: ErrorHandler reference removed
-- [ ] CONTRIBUTING.md: CONTRIBUTORS.md reference removed
-- [ ] CONTRIBUTING.md: quality gate commands fixed
-- [ ] CONTRIBUTING.md: E2E test note corrected
-- [ ] CONTRIBUTING.md: section ordering improved
-- [ ] External contributor messaging consistent across README and CONTRIBUTING
-- [ ] Public docs cross-link correctly to the canonical onboarding path (deep onboarding tracked separately)
-- [ ] CHANGELOG.md replaced or regenerated
-- [ ] `packages/core/oak-eslint/README.md` created
-- [ ] `packages/core/openapi-zod-client-adapter/README.md` expanded
-- [ ] `packages/libs/env/README.md` expanded
+- [x] Root README stale commands fixed
+- [x] Root README contributing section updated
+- [x] Root README ADR count verified
+- [x] Root README emoji removed from Support section
+- [x] CONTRIBUTING.md: external contributions closed politely
+- [x] CONTRIBUTING.md: Node.js version fixed
+- [x] CONTRIBUTING.md: ErrorHandler reference removed
+- [x] CONTRIBUTING.md: CONTRIBUTORS.md reference removed
+- [x] CONTRIBUTING.md: quality gate commands fixed
+- [x] CONTRIBUTING.md: E2E test note corrected
+- [x] CONTRIBUTING.md: section ordering improved
+- [x] External contributor messaging consistent across README and CONTRIBUTING
+- [x] Public docs cross-link correctly to the canonical onboarding path
+- [x] CHANGELOG.md replaced (single “Unreleased” section for this repo)
+- [x] `packages/core/oak-eslint/README.md` created
+- [x] `packages/core/openapi-zod-client-adapter/README.md` expanded
+- [x] `packages/libs/env/README.md` expanded
 
 ---
 
@@ -704,32 +772,33 @@ Verify:
 1. No hardcoded secrets or internal URLs
 2. Environment variables use GitHub Secrets, not inline values
 3. The workflow would work for a fork (read-only, no secrets)
-4. Consider adding a secret scanning step (see WS1c)
+4. Secret scanning step is present and uses either `pnpm secrets:scan:all` or a
+   Docker fallback. Ensure the output does not include emojis and the Docker
+   fallback is documented.
 
 ### 5f: Review Copilot instructions
 
 **File**: `.github/copilot-instructions.md`
 
-Currently just says "Read AGENT.md". This is fine but could
-include a brief summary for Copilot users who don't want to
-read the full agent directives. Low priority.
+Currently just says "Read AGENT.md". No changes required for public release
+readiness.
 
 ### Completion checklist
 
-- [ ] Issue template `config.yml` created (directs away from issues)
-- [ ] PR template created
-- [ ] Dependabot configuration added
-- [ ] `sdk-docs-disabled.yml.bak` deleted
-- [ ] CI workflow reviewed for secrets and public readiness
-- [ ] Copilot instructions reviewed
+- [x] Issue template `config.yml` created (directs away from issues)
+- [x] PR template created
+- [x] Dependabot configuration added
+- [x] `sdk-docs-disabled.yml.bak` deleted
+- [x] CI workflow reviewed for secrets and public readiness
+- [x] Copilot instructions reviewed
 
 ---
 
 ## Workstream 6: Publication dry run
 
 **Problem**: Before publishing to npm, verify that the single
-public package (`@oaknational/oak-curriculum-sdk`) has clean
-artifacts and that automated releases work end-to-end.
+public package (`@oaknational/curriculum-sdk`) has clean
+artefacts and that automated releases work end-to-end.
 
 ### 6a: Run publish dry run
 
@@ -750,16 +819,17 @@ For each package that would be published, verify:
 3. No test files, fixture data, or development tooling is included
 4. The `dist/` output is present and correct
 5. The README.md is included (npm displays it on the registry)
-6. The LICENSE file is included (npm copies from root if missing
-   in workspace)
+6. The `LICENSE` file is included in the tarball. Do not assume npm will “pick
+   it up” from the repo root; verify via the pack file list. If missing, add it
+   explicitly (for example: include it via the workspace `files` field).
 
 ### 6b: Inspect tarballs
 
 For `packages/sdks/oak-curriculum-sdk`:
 
 ```bash
-cd <workspace>
-pnpm pack --dry-run
+pnpm -C packages/sdks/oak-curriculum-sdk build
+pnpm -C packages/sdks/oak-curriculum-sdk pack --dry-run
 ```
 
 Review the file list. Look for:
@@ -780,7 +850,7 @@ Verify that the `@oaknational` scope is available and configured:
 
 ### 6d: Verify package install
 
-Verify `@oaknational/oak-curriculum-sdk` installs cleanly:
+Verify `@oaknational/curriculum-sdk` installs cleanly:
 
 ```bash
 mkdir /tmp/test-install && cd /tmp/test-install
@@ -791,13 +861,45 @@ npm install <tarball-path>
 
 ### 6e: Release automation gate (required)
 
-**Requirement**: a full automated release flow must work for the
-SDK-only publication scope. Either semantic-release or changesets is
-acceptable, but it must be deterministic and CI-driven.
+**Requirement**: a full automated release flow must work for the SDK-only
+publication scope. This repo already uses semantic-release; use semantic-release
+and make it publish only `@oaknational/curriculum-sdk` for this first public
+release.
+
+**Non-ambiguous expectation**:
+
+- Tag format: use `vX.Y.Z` tags while only one package is published. Revisit tag
+  strategy when additional packages are made public.
+
+**Implementation steps (required)**:
+
+1. Update `.releaserc.mjs`:
+   - Remove stale comments that reference other repositories/packages.
+   - Configure `@semantic-release/npm` with:
+     - `npmPublish: true`
+     - `pkgRoot: "packages/sdks/oak-curriculum-sdk"`
+   - Ensure `@semantic-release/changelog` writes to the root `CHANGELOG.md`.
+   - Ensure `@semantic-release/git` commits at minimum:
+     - `CHANGELOG.md`
+     - `packages/sdks/oak-curriculum-sdk/package.json`
+
+2. Update `.github/workflows/release.yml`:
+   - Add `NPM_TOKEN` (or `NODE_AUTH_TOKEN`) from GitHub Secrets for npm publishing.
+   - Build the SDK before running semantic-release:
+
+   ```yaml
+   - name: Build SDK
+     run: pnpm -C packages/sdks/oak-curriculum-sdk build
+   ```
+
+3. Validate release behaviour:
+   - Run `pnpm exec semantic-release --dry-run` and confirm:
+     - next version is computed
+     - only the SDK is targeted for publish (no other workspace is published)
 
 Verify:
 
-1. Only `@oaknational/oak-curriculum-sdk` is published by automation.
+1. Only `@oaknational/curriculum-sdk` is published by automation.
 2. Release workflow reads credentials from GitHub Secrets (no inline tokens).
 3. Dry-run release works on CI (or equivalent preview mode) and reports the next version.
 4. Real release creates the expected git tag/release notes and publishes to npm.
@@ -805,14 +907,14 @@ Verify:
 
 ### Completion checklist
 
-- [ ] `pnpm publish:dry` runs without errors
-- [ ] SDK tarball inspected (`packages/sdks/oak-curriculum-sdk`)
-- [ ] No secrets in SDK tarball
-- [ ] SDK `files` field includes only intended publish artifacts
-- [ ] README and LICENSE included in SDK tarball
-- [ ] `@oaknational` npm scope verified
-- [ ] Test install succeeds for SDK tarball
-- [ ] Release automation (semantic-release or changesets) validated end-to-end
+- [x] `pnpm publish:dry` runs without errors
+- [x] SDK tarball inspected (`packages/sdks/oak-curriculum-sdk`)
+- [x] No secrets in SDK tarball
+- [x] SDK `files` field includes only intended publish artefacts
+- [x] README and LICENSE included in SDK tarball
+- [x] `@oaknational` npm scope verified
+- [x] Test install succeeds for SDK tarball
+- [x] Release automation (semantic-release) validated end-to-end for SDK-only publication
 
 ---
 
@@ -843,19 +945,19 @@ All must pass. No exceptions.
 
 ### Final review checklist
 
-- [ ] No secrets in any tracked file (WS1)
-- [ ] MIT licence file exists and is correct (WS2)
-- [ ] Code of Conduct exists (WS2)
-- [ ] All package.json files have complete metadata (WS3)
-- [ ] Public/private classification is explicit (WS3)
-- [ ] Root README is accurate and welcoming (WS4)
-- [ ] CONTRIBUTING.md reflects current contribution policy (WS4)
-- [ ] All workspace READMEs exist and are substantive (WS4)
-- [ ] CHANGELOG.md is correct for this repository (WS4)
-- [ ] GitHub templates and Dependabot configured (WS5)
-- [ ] SDK tarball is clean and correct (WS6)
-- [ ] Release automation is working for SDK-only publish scope (WS6)
-- [ ] All quality gates pass
+- [x] No secrets in any tracked file (WS1)
+- [x] MIT licence file exists and is correct (WS2)
+- [x] Code of Conduct exists (WS2)
+- [x] All package.json files have complete metadata (WS3)
+- [x] Public/private classification is explicit (WS3)
+- [x] Root README is accurate and welcoming (WS4)
+- [x] CONTRIBUTING.md reflects current contribution policy (WS4)
+- [x] All workspace READMEs exist and are substantive (WS4)
+- [x] CHANGELOG.md is correct for this repository (WS4)
+- [x] GitHub templates and Dependabot configured (WS5)
+- [x] SDK tarball is clean and correct (WS6)
+- [x] Release automation is working for SDK-only publish scope (WS6)
+- [x] All quality gates pass
 
 ---
 
@@ -866,16 +968,15 @@ records, and memory files used by AI agents working on the repo.
 This content is unusual for a public repository but is
 deliberately part of Oak's approach to AI-assisted development.
 
-**Decision required**: Decide whether to keep `.agent/` visible
-in the public repo (as a transparent example of AI-assisted
-development practice) or to add it to `.npmignore` patterns and
-consider whether it should be in `.gitignore` for the public
-release. The secrets remediation in WS1 is critical regardless
-of this decision.
+**Decision (recorded)**: Keep `.agent/` visible in git.
 
-**Recommendation**: Keep it visible. It documents architectural
-reasoning, plans, and development methodology. Transparency is
-valuable. Just ensure WS1 secrets are fully remediated first.
+**Npm publication constraint (SDK-only)**:
+
+- `.agent/` must not be published to npm as part of `@oaknational/curriculum-sdk`.
+- This is expected to be satisfied by the SDK workspace `files` field.
+- WS6 must verify the tarball contents explicitly and fail the workstream if
+  `.agent/` (or any other repo-internal material) appears in the published
+  artefacts.
 
 ---
 

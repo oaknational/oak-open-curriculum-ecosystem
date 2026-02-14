@@ -14,7 +14,7 @@ import {
   isSubject as isValidSubject,
   KEY_STAGES,
   SUBJECTS,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk';
 
 /** Available key stages from schema. */
 export const ALL_KEY_STAGES = KEY_STAGES;

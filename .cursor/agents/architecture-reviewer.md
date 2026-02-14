@@ -97,7 +97,7 @@ Analyse import statements for violations:
 import { logger } from '@oaknational/mcp-logger';
 
 // ✅ VALID: App importing from SDK
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 // ❌ INVALID: Core importing from lib
 // In packages/core/src/something.ts:

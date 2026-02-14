@@ -23,7 +23,7 @@ import type {
   ThreadsSearchResult,
   SuggestionResponse,
 } from '@oaknational/oak-search-sdk';
-import type { SearchFacets } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchFacets } from '@oaknational/curriculum-sdk/public/search.js';
 
 /**
  * Search lessons via the SDK retrieval service.

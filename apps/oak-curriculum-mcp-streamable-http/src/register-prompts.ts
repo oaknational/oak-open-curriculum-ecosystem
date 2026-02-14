@@ -19,7 +19,7 @@
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { getPromptMessages } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { getPromptMessages } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   findLessonsArgsSchema,
   lessonPlanningArgsSchema,

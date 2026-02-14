@@ -17,13 +17,13 @@ import {
   calculatePrecisionAtK,
   calculateRecallAtK,
 } from '../../src/lib/search-quality/metrics.js';
-import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 import type {
   SearchSequencesParams,
   SequencesSearchResult,
   RetrievalError,
 } from '@oaknational/oak-search-sdk';
-import type { SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
 
 /**
  * Sequence search function type for dependency injection.

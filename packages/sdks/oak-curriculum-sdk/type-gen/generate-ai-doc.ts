@@ -71,7 +71,7 @@ function makeQuickstartSection(): string {
     '## Quickstart\n\n' +
     '### Create clients\n\n' +
     '```ts\n' +
-    "import { createOakClient, createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';\n\n" +
+    "import { createOakClient, createOakPathBasedClient } from '@oaknational/curriculum-sdk';\n\n" +
     "const apiKey = 'REDACTED';\n" +
     'const client = createOakClient(apiKey);\n' +
     'const pathClient = createOakPathBasedClient(apiKey);\n' +
@@ -93,7 +93,7 @@ function makeQuickstartSection(): string {
     '```\n\n' +
     '### Programmatic tool generation\n\n' +
     '```ts\n' +
-    "import { toolGeneration, schema } from '@oaknational/oak-curriculum-sdk';\n\n" +
+    "import { toolGeneration, schema } from '@oaknational/curriculum-sdk';\n\n" +
     'for (const op of toolGeneration.PATH_OPERATIONS) {\n' +
     '  const { pathParams, toMcpToolName } = toolGeneration.parsePathTemplate(op.path, op.method);\n' +
     '  console.log(op.operationId, toMcpToolName(), pathParams);\n' +
@@ -121,7 +121,7 @@ async function readTypedocProject(typedocJsonPath: string): Promise<TDProject> {
     throw new Error(
       'TypeDoc JSON not found at ' +
         typedocJsonPath +
-        '. Run: pnpm -F @oaknational/oak-curriculum-sdk docs:api:json:ai',
+        '. Run: pnpm -F @oaknational/curriculum-sdk docs:api:json:ai',
     );
   }
   let json: unknown;

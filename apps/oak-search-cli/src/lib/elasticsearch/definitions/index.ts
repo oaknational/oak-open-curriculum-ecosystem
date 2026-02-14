@@ -2,7 +2,7 @@
  * Elasticsearch index definitions for Oak Curriculum Search.
  *
  * Index mappings are now generated at SDK type-gen time and imported from:
- * `@oaknational/oak-curriculum-sdk/types/generated/search/es-mappings/`
+ * `@oaknational/curriculum-sdk/types/generated/search/es-mappings/`
  *
  * ## Index Inventory
  *
@@ -19,9 +19,9 @@
  * ## Synonyms
  *
  * Synonyms are NOT stored here. The single source of truth is:
- * `@oaknational/oak-curriculum-sdk/mcp/ontology-data.ts` → `ontologyData.synonyms`
+ * `@oaknational/curriculum-sdk/mcp/ontology-data.ts` → `ontologyData.synonyms`
  *
- * Use `buildElasticsearchSynonyms()` from `@oaknational/oak-curriculum-sdk` to
+ * Use `buildElasticsearchSynonyms()` from `@oaknational/curriculum-sdk` to
  * generate ES-compatible synonym sets.
  *
  * ## Future Indexes (planned)

@@ -15,7 +15,7 @@ import type {
   ZeroHitEvent,
   ZeroHitSummary,
   ZeroHitTelemetry,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 // ---------------------------------------------------------------------------
 // Observability error type

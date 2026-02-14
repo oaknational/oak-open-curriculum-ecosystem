@@ -8,7 +8,7 @@
 
 The monorepo uses Turborepo to orchestrate tasks across workspaces. Several issues were identified:
 
-1. **Intermittent test failures**: Tests importing from `@oaknational/oak-curriculum-sdk` occasionally failed with `Cannot find module '/@fs/...'` errors - a Vite module resolution issue caused by the SDK being rebuilt while tests were running.
+1. **Intermittent test failures**: Tests importing from `@oaknational/curriculum-sdk` occasionally failed with `Cannot find module '/@fs/...'` errors - a Vite module resolution issue caused by the SDK being rebuilt while tests were running.
 
 2. **Slow repeated runs**: The `build` task had `cache: false`, meaning every task depending on `^build` would trigger full rebuilds even when nothing changed.
 
@@ -48,7 +48,7 @@ The monorepo uses Turborepo to orchestrate tasks across workspaces. Several issu
 }
 ```
 
-**Rationale**: Tests, type-checking, and linting all import from workspace dependencies. They need the built `.d.ts` declaration files from dependencies like `@oaknational/mcp-logger` and `@oaknational/oak-curriculum-sdk`. By declaring these dependencies explicitly, turbo ensures all workspace dependencies are fully built before any verification task starts.
+**Rationale**: Tests, type-checking, and linting all import from workspace dependencies. They need the built `.d.ts` declaration files from dependencies like `@oaknational/mcp-logger` and `@oaknational/curriculum-sdk`. By declaring these dependencies explicitly, turbo ensures all workspace dependencies are fully built before any verification task starts.
 
 Without this dependency, ESLint's `import-x/no-unresolved` rule fails with "Unable to resolve path to module" errors because the SDK hasn't been built yet.
 

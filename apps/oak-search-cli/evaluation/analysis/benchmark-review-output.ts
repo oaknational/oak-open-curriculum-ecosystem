@@ -10,7 +10,7 @@
  * Usage: `pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review`
  */
 
-import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 import type { ReviewQueryResult } from './benchmark-entry-runner.js';
 import { loadReferenceValues, formatWithStatus, type ReferenceValues } from './benchmark-output.js';
 import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';

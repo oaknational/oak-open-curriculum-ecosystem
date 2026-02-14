@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/openapi-zod-client-adapter",
   "version": "0.0.0-development",
+  "private": true,
   "description": "Adapter for openapi-zod-client that enforces Zod v3/v4 boundary",
   "type": "module",
   "main": "./dist/index.js",
@@ -43,14 +44,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/libs/openapi-zod-client-adapter"
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/core/openapi-zod-client-adapter"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/core/openapi-zod-client-adapter#readme",
   "keywords": [
     "openapi",
     "zod",
     "adapter",
     "code-generation"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
   ],
   "license": "MIT"
 }

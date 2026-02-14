@@ -61,9 +61,9 @@ This matches the repo’s own description in `apps/oak-search-cli/README.md` (�
 
 ### Key “SDK-ish” signals already present
 
-- **Search and index types flow from the SDK** via `@oaknational/oak-curriculum-sdk/public/search.js` and are re-exported in `apps/oak-search-cli/src/types/oak.ts`.
+- **Search and index types flow from the SDK** via `@oaknational/curriculum-sdk/public/search.js` and are re-exported in `apps/oak-search-cli/src/types/oak.ts`.
 - **Indexing and retrieval are already modularised** in `src/lib/indexing/**` and `src/lib/hybrid-search/**`.
-- **Setup and mappings are SDK-led**: `src/lib/elasticsearch/setup/index.ts` uses `@oaknational/oak-curriculum-sdk/elasticsearch.js` for mappings and `@oaknational/oak-curriculum-sdk/public/mcp-tools` for synonyms.
+- **Setup and mappings are SDK-led**: `src/lib/elasticsearch/setup/index.ts` uses `@oaknational/curriculum-sdk/elasticsearch.js` for mappings and `@oaknational/curriculum-sdk/public/mcp-tools` for synonyms.
 - **CLI ingestion is first-class**: `src/lib/elasticsearch/setup/ingest-live.ts` and `src/lib/elasticsearch/setup/ingest-bulk.ts` wrap `src/lib/indexing/ingest-harness.ts` and `src/lib/indexing/bulk-ingestion.ts`.
 
 ### Key “app-shaped” coupling that blocks a clean SDK boundary (to address during extraction)

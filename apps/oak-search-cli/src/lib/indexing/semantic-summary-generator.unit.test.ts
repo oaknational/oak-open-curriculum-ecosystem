@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
-import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { lessonSummarySchema } from '@oaknational/curriculum-sdk/public/search.js';
 import {
   generateLessonSemanticSummary,
   generateUnitSemanticSummary,

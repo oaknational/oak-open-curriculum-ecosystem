@@ -4,7 +4,7 @@
 **Priority**: Highest - Blocks test isolation fix  
 **Estimated Effort**: 3-4 hours  
 **Created**: 2025-12-21  
-**Blocking**: [test-isolation-architecture-fix.md](../semantic-search/test-isolation-architecture-fix.md)
+**Blocking**: [test-isolation-architecture-fix.md](../quality-and-maintainability/test-isolation-architecture-fix.md)
 
 ---
 

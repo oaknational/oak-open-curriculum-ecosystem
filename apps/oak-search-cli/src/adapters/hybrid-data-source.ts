@@ -11,11 +11,7 @@
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
 
-import type {
-  BulkDownloadFile,
-  Lesson,
-  Unit,
-} from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/curriculum-sdk/public/bulk.js';
 import type {
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,

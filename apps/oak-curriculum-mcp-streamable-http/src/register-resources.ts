@@ -15,7 +15,7 @@ import {
   getOntologyJson,
   KNOWLEDGE_GRAPH_RESOURCE,
   getKnowledgeGraphJson,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   getToolWidgetUri,
   AGGREGATED_TOOL_WIDGET_MIME_TYPE,

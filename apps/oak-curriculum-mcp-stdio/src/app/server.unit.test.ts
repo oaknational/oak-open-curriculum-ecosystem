@@ -9,7 +9,7 @@ import {
   getToolFromToolName,
   type ToolDescriptorForName,
   type OakApiPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({

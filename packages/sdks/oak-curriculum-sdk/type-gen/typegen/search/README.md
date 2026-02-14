@@ -106,9 +106,9 @@ This generates:
 ### 7. Use in App
 
 ```typescript
-import type { SearchMyNewIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { SearchMyNewIndexDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { OAK_MY_NEW_INDEX_MAPPING } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+import type { SearchMyNewIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import { SearchMyNewIndexDocSchema } from '@oaknational/curriculum-sdk/public/search.js';
+import { OAK_MY_NEW_INDEX_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.js';
 
 // Create document
 const doc: SearchMyNewIndexDoc = {
@@ -171,7 +171,7 @@ await esClient.indices.create({
 export interface MyDoc { ... }
 
 // ✅ Do this
-import type { SearchMyIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchMyIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 ```
 
 ## Migration Checklist

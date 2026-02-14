@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeEntries } from '@oaknational/curriculum-sdk';
 import {
   validatePatternConfig,
   assertPatternConfigValid,

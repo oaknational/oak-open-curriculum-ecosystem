@@ -82,7 +82,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
-| [Public Release Readiness](active/public-release-readiness.plan.md) | Secrets, licence, package.json, docs, GitHub config, npm publish |
+| [Public Release Readiness](archive/completed/public-release-readiness.plan.md) | ✅ Secrets, licence, package.json, docs, GitHub config, npm publish |
 | [Developer Onboarding Experience](active/developer-onboarding-experience.plan.md) | Refine onboarding journey, command/link integrity, release runbook |
 | [Thread Search SDK Integration](archive/completed/thread-search-sdk-integration.plan.md) | ✅ SDK method, CLI command, benchmarks, 8 GTs across 5 subjects |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |

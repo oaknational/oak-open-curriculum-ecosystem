@@ -15,7 +15,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ok, err } from '@oaknational/result';
 import { fetchLessonMaterials, type FetchContext } from './lesson-materials';
 import type { OakClient } from '../../adapters/oak-adapter';
-import type { SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
 
 // =============================================================================
 // Test Helpers

@@ -16,7 +16,7 @@ import type {
   SearchUnitSummary,
 } from '../types/oak';
 import type { Result } from '@oaknational/result';
-import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkFetchError } from '@oaknational/curriculum-sdk';
 
 // ============================================================================
 // Data Types

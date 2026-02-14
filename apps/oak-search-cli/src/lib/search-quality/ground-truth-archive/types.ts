@@ -4,7 +4,7 @@
  * These types support the archived 120-query ground truth system.
  * For new ground truths, use the LessonGroundTruth type from ../ground-truth/types.ts
  */
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { KeyStage } from '@oaknational/curriculum-sdk';
 
 /**
  * Outcome-oriented query categories for ground truth classification.

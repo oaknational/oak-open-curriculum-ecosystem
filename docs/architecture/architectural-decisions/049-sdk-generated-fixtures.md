@@ -26,7 +26,7 @@ fixtures were the last remaining place that broke this principle.
 
 ## Decision
 
-1. Generate fixture builders inside `@oaknational/oak-curriculum-sdk` during `pnpm type-gen`.
+1. Generate fixture builders inside `@oaknational/curriculum-sdk` during `pnpm type-gen`.
    - Zero-hit telemetry fixtures already follow this pattern; admin stream fixtures now do the same.
    - Builders live under `src/types/generated/**/stream-fixtures.ts` and export strongly typed
      factories that re-use the SDK’s Zod schemas.

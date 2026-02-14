@@ -10,8 +10,8 @@
 import type { Client } from '@elastic/elasticsearch';
 import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
-import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { IndexMetaDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import { IndexMetaDocSchema } from '@oaknational/curriculum-sdk/public/search.js';
 
 export const INDEX_META_INDEX = 'oak_meta';
 export const INDEX_VERSION_DOC_ID = 'index_version';

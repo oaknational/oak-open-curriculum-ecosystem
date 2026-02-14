@@ -28,7 +28,7 @@ import type { KeyStage, SearchLessonSummary, SearchSubjectSlug } from '../../typ
 import { isLessonSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { IngestionContext } from './ingestion-error-types';
-import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-sdk';
+import { formatSdkError, isRecoverableError } from '@oaknational/curriculum-sdk';
 import { getIngestionErrorCollector } from './ingestion-error-collector';
 import { ingestLogger } from '../logger';
 

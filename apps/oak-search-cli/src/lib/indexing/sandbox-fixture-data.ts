@@ -9,7 +9,7 @@ import {
   type SearchUnitSummary,
   type SearchLessonSummary,
   type SequenceUnitsResponse,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import {
   ensureKeyStage,

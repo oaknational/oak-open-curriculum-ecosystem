@@ -13,7 +13,7 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter';
 import type { Result } from '@oaknational/result';
-import { type SdkFetchError, formatSdkError } from '@oaknational/oak-curriculum-sdk';
+import { type SdkFetchError, formatSdkError } from '@oaknational/curriculum-sdk';
 import {
   aggregateLessonsBySlug,
   type AggregatedLesson,

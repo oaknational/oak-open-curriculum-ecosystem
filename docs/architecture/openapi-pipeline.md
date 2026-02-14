@@ -110,7 +110,7 @@ Our approach:
 
 ```typescript
 // Generated from schema - always correct
-import type { User } from '@oaknational/oak-curriculum-sdk';
+import type { User } from '@oaknational/curriculum-sdk';
 // TypeScript enforces what the API actually returns
 ```
 
@@ -128,7 +128,7 @@ This pattern works for **any** OpenAPI-compliant API:
 The primary implementation uses the Oak National Academy Curriculum API:
 
 - **OpenAPI Schema**: `https://open-api.thenational.academy/api/v0/openapi.json`
-- **Generated SDK**: `@oaknational/oak-curriculum-sdk`
+- **Generated SDK**: `@oaknational/curriculum-sdk`
 - **MCP Servers**:
   - `apps/oak-curriculum-mcp-stdio` (for Claude Desktop, Cursor)
   - `apps/oak-curriculum-mcp-streamable-http` (for web clients, Vercel)
@@ -160,7 +160,7 @@ Oak-specific configuration.
 MCP servers import generated tools:
 
 ```typescript
-import { MCP_TOOLS, executeToolCall } from '@oaknational/oak-curriculum-sdk';
+import { MCP_TOOLS, executeToolCall } from '@oaknational/curriculum-sdk';
 
 // Tools are already defined - no manual work
 for (const tool of MCP_TOOLS) {
@@ -173,8 +173,8 @@ for (const tool of MCP_TOOLS) {
 Applications import generated types:
 
 ```typescript
-import type { LessonSummary } from '@oaknational/oak-curriculum-sdk';
-import { parseWithCurriculumSchema } from '@oaknational/oak-curriculum-sdk';
+import type { LessonSummary } from '@oaknational/curriculum-sdk';
+import { parseWithCurriculumSchema } from '@oaknational/curriculum-sdk';
 
 // Types and validators already exist
 const result = await parseWithCurriculumSchema(response, 'LessonSummary');

@@ -10,7 +10,7 @@ import type { Result } from '@oaknational/result';
 import type {
   ZeroHitTelemetry,
   ZeroHitSummary,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 import type {
   ObservabilityService,
   ObservabilityError,

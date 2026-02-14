@@ -3,7 +3,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {

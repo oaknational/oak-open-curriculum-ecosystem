@@ -6,7 +6,7 @@
  * used by the batch generator.
  */
 
-import { isKeyStage, isSubject, formatSdkError } from '@oaknational/oak-curriculum-sdk';
+import { isKeyStage, isSubject, formatSdkError } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';

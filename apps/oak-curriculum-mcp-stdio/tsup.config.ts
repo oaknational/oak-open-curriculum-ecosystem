@@ -41,7 +41,7 @@ export default defineConfig({
     // Workspace packages (these are already built)
     '@oaknational/mcp-logger',
     '@oaknational/mcp-env',
-    '@oaknational/oak-curriculum-sdk',
+    '@oaknational/curriculum-sdk',
   ],
   // Mark the package as having no side effects for better tree-shaking
   treeshake: true,

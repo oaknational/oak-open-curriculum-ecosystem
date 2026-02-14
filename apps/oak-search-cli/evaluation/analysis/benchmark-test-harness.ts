@@ -12,7 +12,7 @@
 import { ok } from '@oaknational/result';
 import type { SearchFunction } from './benchmark-query-runner-lessons.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
-import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import { runBenchmark } from './benchmark-main.js';
 
 /** Create a minimal lesson index doc stub. */

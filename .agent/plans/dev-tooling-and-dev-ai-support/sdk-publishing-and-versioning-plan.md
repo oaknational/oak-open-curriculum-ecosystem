@@ -9,7 +9,7 @@
 
 Establish a production-ready publishing and versioning workflow so that:
 
-1. **Developers** can `pnpm install @oaknational/oak-curriculum-sdk` and use the SDK in their projects
+1. **Developers** can `pnpm install @oaknational/curriculum-sdk` and use the SDK in their projects
 2. **Users** can `pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --http` to start the HTTP MCP server locally
 3. **Versioning** is consistent across all packages, reflected in server metadata and documentation
 4. **Release pipeline** propagates versions consistently and automatically
@@ -47,7 +47,7 @@ Establish a production-ready publishing and versioning workflow so that:
 
 **Public Packages** (published to npm):
 
-- `@oaknational/oak-curriculum-sdk` - Core SDK
+- `@oaknational/curriculum-sdk` - Core SDK
 - `@oaknational/oak-curriculum-mcp-streamable-http` - HTTP MCP server
 - `@oaknational/oak-curriculum-mcp-stdio` - STDIO MCP server
 - `@oaknational/mcp-logger` - Logger library
@@ -109,7 +109,7 @@ const serverInfo = {
 
 ```json
 {
-  "name": "@oaknational/oak-curriculum-sdk",
+  "name": "@oaknational/curriculum-sdk",
   "version": "0.5.0",
   "description": "Type-safe SDK for Oak National Academy's Curriculum API",
   "keywords": ["oak", "education", "curriculum", "sdk", "mcp"]
@@ -257,7 +257,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
 - ✅ GitHub Actions workflow configured and tested
 - ✅ Release process documented
 - ✅ Initial versions published to npm
-- ✅ Installation works: `pnpm add @oaknational/oak-curriculum-sdk`
+- ✅ Installation works: `pnpm add @oaknational/curriculum-sdk`
 - ✅ CLI works: `pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http`
 
 ### Phase 4: Post-Release Validation (2 days)
@@ -322,7 +322,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
 
 ```json
 {
-  "name": "@oaknational/oak-curriculum-sdk",
+  "name": "@oaknational/curriculum-sdk",
   "version": "0.5.0",
   "description": "Type-safe SDK for Oak National Academy's Curriculum API with MCP tool generation",
   "keywords": ["oak", "education", "curriculum", "sdk", "mcp", "openapi", "typescript"],
@@ -476,7 +476,7 @@ git push --follow-tags
    pnpm link --global
 
    cd ~/test-project
-   pnpm link --global @oaknational/oak-curriculum-sdk
+   pnpm link --global @oaknational/curriculum-sdk
    ```
 
 2. **Dry-Run Publish**:
@@ -499,7 +499,7 @@ git push --follow-tags
    ```bash
    mkdir test-sdk && cd test-sdk
    pnpm init
-   pnpm add @oaknational/oak-curriculum-sdk
+   pnpm add @oaknational/curriculum-sdk
    ```
 
 2. **CLI Execution**:
@@ -516,7 +516,7 @@ git push --follow-tags
 
 ## Success Criteria
 
-1. ✅ SDK installable: `pnpm add @oaknational/oak-curriculum-sdk`
+1. ✅ SDK installable: `pnpm add @oaknational/curriculum-sdk`
 2. ✅ HTTP server runnable: `pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http`
 3. ✅ STDIO server runnable: `pnpm dlx @oaknational/oak-curriculum-mcp-stdio`
 4. ✅ Versions exposed in server metadata

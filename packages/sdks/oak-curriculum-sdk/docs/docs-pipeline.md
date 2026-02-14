@@ -35,22 +35,22 @@ From the repo root:
 
 ```bash
 # Generate HTML docs (TypeDoc UI)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:html
+pnpm -F @oaknational/curriculum-sdk -s docs:api:html
 
 # Generate TypeDoc JSON only
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:json
+pnpm -F @oaknational/curriculum-sdk -s docs:api:json
 
 # Generate AI-focused single-file reference from JSON + generated artifacts
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:ai
+pnpm -F @oaknational/curriculum-sdk -s docs:ai
 
 # Generate Markdown API docs (multi-file) from JSON
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:md
+pnpm -F @oaknational/curriculum-sdk -s docs:api:md
 
 # Verify outputs (HTML index, JSON, AI doc, and Markdown files)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:verify
+pnpm -F @oaknational/curriculum-sdk -s docs:verify
 
 # Run the full pipeline (HTML + AI + MD + verify)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:all
+pnpm -F @oaknational/curriculum-sdk -s docs:all
 ```
 
 ## Output Map

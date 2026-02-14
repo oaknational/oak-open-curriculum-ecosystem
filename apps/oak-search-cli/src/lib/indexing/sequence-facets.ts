@@ -1,5 +1,5 @@
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchSequenceFacetsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 
 /** Input-agnostic parameters for creating a sequence facet document (DRY). */

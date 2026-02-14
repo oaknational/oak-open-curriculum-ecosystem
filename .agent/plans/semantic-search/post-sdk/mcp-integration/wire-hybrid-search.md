@@ -84,7 +84,7 @@ MCP Tool Layer
 ```
 
 The existing `search` aggregated tool in
-`@oaknational/oak-curriculum-sdk` calls the upstream
+`@oaknational/curriculum-sdk` calls the upstream
 Oak REST API for lesson and transcript search.
 
 ### Target state (phase 1: add alongside)

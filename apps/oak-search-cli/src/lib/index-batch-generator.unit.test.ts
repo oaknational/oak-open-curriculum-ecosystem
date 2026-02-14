@@ -11,7 +11,7 @@ import {
 } from './index-batch-generator';
 import type { OakClient } from '../adapters/oak-adapter';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { RateLimitTracker } from '@oaknational/oak-curriculum-sdk';
+import type { RateLimitTracker } from '@oaknational/curriculum-sdk';
 import { ok } from '@oaknational/result';
 
 /**

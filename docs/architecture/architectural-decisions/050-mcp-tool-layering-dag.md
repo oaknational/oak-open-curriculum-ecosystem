@@ -37,7 +37,7 @@ Previous iterations allowed the generic contract to import helper types, creatin
 
 4. **Testing**
    - Regenerate artefacts via `pnpm type-gen`.
-   - Ensure `pnpm build --filter @oaknational/oak-curriculum-sdk` succeeds after restructuring.
+   - Ensure `pnpm build --filter @oaknational/curriculum-sdk` succeeds after restructuring.
    - Update generator tests to load the output modules and assert behaviour instead of string snapshots.
 
 ## Consequences

@@ -3,7 +3,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { ToolResult, ToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import type { ToolResult, ToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { type Logger, enrichError, type ErrorContext } from '@oaknational/mcp-logger/node';
 import type { ToolExecutionSuccessEnvelope } from './validation.js';
 

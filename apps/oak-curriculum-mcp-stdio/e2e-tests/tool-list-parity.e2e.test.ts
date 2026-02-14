@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 describe('Tool list parity with SDK', () => {
   let client: Client;
@@ -30,7 +30,7 @@ describe('Tool list parity with SDK', () => {
     await transport.close();
   });
 
-  it('lists exactly the tools available in @oaknational/oak-curriculum-sdk', async () => {
+  it('lists exactly the tools available in @oaknational/curriculum-sdk', async () => {
     const toolsResponse = await client.listTools();
     const listedNames = toolsResponse.tools.map((t) => t.name).sort();
     const sdkNames = [...toolNames].sort();

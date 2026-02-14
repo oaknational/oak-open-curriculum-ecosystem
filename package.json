@@ -3,10 +3,22 @@
   "version": "0.5.0",
   "private": true,
   "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "type": "module",
   "scripts": {
     "type-gen": "turbo run --continue type-gen",
-    "vocab-gen": "pnpm --filter @oaknational/oak-curriculum-sdk vocab-gen",
+    "vocab-gen": "pnpm --filter @oaknational/curriculum-sdk vocab-gen",
     "doc-gen": "turbo run --continue doc-gen",
     "build": "turbo run --continue build",
     "clean": "turbo run clean && rm -rf .turbo",
@@ -47,15 +59,21 @@
   },
   "keywords": [
     "mcp",
-    "notion",
+    "curriculum",
+    "oak",
+    "sdk",
+    "education",
     "ai",
-    "llm",
-    "claude"
+    "model-context-protocol"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git"
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem#readme",
   "engines": {
     "node": "24.x"
   },

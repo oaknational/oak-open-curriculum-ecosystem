@@ -8,7 +8,7 @@ import type {
   ZeroHitEvent,
   ZeroHitScope,
   ZeroHitTelemetry,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { TelemetryFetchOptions, ObservabilityError } from '../types/observability.js';
 

@@ -5,7 +5,7 @@
  * Processes multiple bulk download files into ES bulk operations.
  */
 
-import type { BulkDownloadFile } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { BulkDownloadFile } from '@oaknational/curriculum-sdk/public/bulk.js';
 import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchUnitRollupDoc } from '../types/oak';
 import type { OakClient } from './oak-adapter';
 import type { BulkIndexAction } from './bulk-data-adapter';

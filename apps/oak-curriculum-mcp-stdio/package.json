@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/oak-curriculum-mcp-stdio",
   "version": "0.0.0-development",
+  "private": true,
   "description": "MCP server for the Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/src/index.js",
@@ -40,7 +41,7 @@
     "@modelcontextprotocol/sdk": "^1.24.3",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "dotenv": "^17.2.3",
     "zod": "^4.1.13"
   },
@@ -53,9 +54,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-stdio"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-curriculum-mcp-stdio#readme",
   "keywords": [
     "mcp",
     "ai",
@@ -63,6 +68,17 @@
     "curriculum",
     "education"
   ],
-  "author": "Oak National Academy",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "license": "MIT"
 }

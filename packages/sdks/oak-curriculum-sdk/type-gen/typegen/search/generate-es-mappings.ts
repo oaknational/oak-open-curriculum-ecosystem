@@ -46,7 +46,7 @@ function createEsMappingsIndexModule(): string {
  *
  * @example
  * \`\`\`typescript
- * import { OAK_LESSONS_MAPPING } from '@oaknational/oak-curriculum-sdk/search/es-mappings';
+ * import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/search/es-mappings';
  *
  * await esClient.indices.create({
  *   index: 'oak_lessons',

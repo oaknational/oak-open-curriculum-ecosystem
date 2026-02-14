@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
 

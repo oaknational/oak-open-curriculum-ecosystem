@@ -137,7 +137,7 @@ export const scienceParaphrases = {
 ```typescript
 // apps/.../src/lib/hybrid-search/paraphrase-detection.ts
 
-import { scienceParaphrases } from '@oaknational/oak-curriculum-sdk';
+import { scienceParaphrases } from '@oaknational/curriculum-sdk';
 
 /**
  * Detects natural language phrases and returns curriculum terms to boost.

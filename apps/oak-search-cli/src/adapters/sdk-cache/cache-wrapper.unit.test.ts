@@ -13,7 +13,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { ok, err } from '@oaknational/result';
-import type { SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
 import {
   withCache,
   withCacheAndNegative,

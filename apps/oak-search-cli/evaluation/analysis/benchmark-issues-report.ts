@@ -8,7 +8,7 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 import type { ReviewQueryResult } from './benchmark-entry-runner.js';
 import { loadReferenceValues, type ReferenceValues } from './benchmark-output.js';
 import {

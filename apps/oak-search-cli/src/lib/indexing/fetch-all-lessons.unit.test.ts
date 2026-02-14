@@ -18,7 +18,7 @@ import {
 import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { ok, type Result } from '@oaknational/result';
-import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkFetchError } from '@oaknational/curriculum-sdk';
 
 /**
  * Helper to create a mock GetLessonsFn from a simple data-returning function.

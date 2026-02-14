@@ -10,7 +10,7 @@
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
-import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
+import { isKeyStage, isSubject } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';

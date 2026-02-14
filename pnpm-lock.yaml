@@ -116,15 +116,15 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.24.3
         version: 1.24.3(zod@4.1.13)
+      '@oaknational/curriculum-sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/oak-curriculum-sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-curriculum-sdk
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -159,15 +159,15 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.25.2
         version: 1.25.2(hono@4.11.3)(zod@4.1.13)
+      '@oaknational/curriculum-sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/oak-curriculum-sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-curriculum-sdk
       commander:
         specifier: ^14.0.2
         version: 14.0.2
@@ -233,45 +233,20 @@ importers:
         specifier: ^4.0.15
         version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@24.10.3)(@vitest/ui@4.0.15)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(tsx@4.21.0)(yaml@2.8.2)
 
-  apps/oak-notion-mcp:
-    dependencies:
-      '@modelcontextprotocol/sdk':
-        specifier: ^1.24.3
-        version: 1.24.3(zod@4.1.13)
-      '@notionhq/client':
-        specifier: ^5.4.0
-        version: 5.4.0
-      '@oaknational/mcp-logger':
-        specifier: workspace:*
-        version: link:../../packages/libs/logger
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
-      zod:
-        specifier: ^4.1.13
-        version: 4.1.13
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../packages/core/oak-eslint
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
   apps/oak-search-cli:
     dependencies:
       '@elastic/elasticsearch':
         specifier: ^9.2.0
         version: 9.2.0
+      '@oaknational/curriculum-sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/oak-curriculum-sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
@@ -552,12 +527,12 @@ importers:
       '@elastic/elasticsearch':
         specifier: ^9.2.0
         version: 9.2.0
+      '@oaknational/curriculum-sdk':
+        specifier: workspace:*
+        version: link:../oak-curriculum-sdk
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../core/oak-eslint
-      '@oaknational/oak-curriculum-sdk':
-        specifier: workspace:*
-        version: link:../oak-curriculum-sdk
       '@types/node':
         specifier: ^24
         version: 24.10.3
@@ -1541,10 +1516,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@notionhq/client@5.4.0':
-    resolution: {integrity: sha512-SJsprS26S0Wi9CoTQp4vC8/nPpAIo1gMB4H7aJ2E/k0fWnNGIEAg984KwtzK6h9ZGaPcEaryVRSz1VVClJcVUw==}
-    engines: {node: '>=18'}
 
   '@octokit/auth-token@6.0.0':
     resolution: {integrity: sha512-P4YJBPdPSpWTQ1NU4XYdvHvXJJDxM6YwpS0FZHRgP7YFkdVxsWcpWGy/NVqlAA7PcPCnMacXlRm1y2PFZRWL/w==}
@@ -6813,8 +6784,6 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
-
-  '@notionhq/client@5.4.0': {}
 
   '@octokit/auth-token@6.0.0': {}
 

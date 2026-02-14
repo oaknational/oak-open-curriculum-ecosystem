@@ -2,7 +2,7 @@ import type {
   ToolDescriptorForName,
   ToolName,
   ToolResult,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 type DescriptorValidationFailure<TName extends ToolName> = Extract<
   ReturnType<ToolDescriptorForName<TName>['validateOutput']>,

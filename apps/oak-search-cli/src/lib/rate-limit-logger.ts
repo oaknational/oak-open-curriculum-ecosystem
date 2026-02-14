@@ -2,7 +2,7 @@
  * Utilities for logging rate limit status and warnings.
  */
 
-import type { RateLimitTracker, RateLimitInfo } from '@oaknational/oak-curriculum-sdk';
+import type { RateLimitTracker, RateLimitInfo } from '@oaknational/curriculum-sdk';
 import { ingestLogger } from './logger';
 
 /** Structured rate limit info for logging */

@@ -1,4 +1,4 @@
-import { createOakClient, generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
+import { createOakClient, generateCanonicalUrl } from '@oaknational/curriculum-sdk';
 
 async function main(): Promise<void> {
   const apiKey = process.env.OAK_API_KEY;

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issues
+    url: https://www.thenational.academy/.well-known/security.txt
+    about: Report security vulnerabilities via our security policy
+  - name: General enquiries
+    url: https://www.thenational.academy/contact-us
+    about: For questions about Oak National Academy

@@ -3,7 +3,7 @@ import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
 import {
   lessonSummarySchema,
   unitSummarySchema,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 import {
   extractLessonPlanningFields,
   extractLessonDocumentFields,

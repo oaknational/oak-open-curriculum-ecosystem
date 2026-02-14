@@ -12,7 +12,7 @@
  */
 
 import type { Result } from '@oaknational/result';
-import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import type {
   AdminError,
   SetupResult,

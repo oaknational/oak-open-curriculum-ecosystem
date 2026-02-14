@@ -43,7 +43,7 @@ import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getAllGroundTruthEntries } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
-import { typeSafeKeys, typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys, typeSafeEntries } from '@oaknational/curriculum-sdk';
 import {
   ALL_LESSON_SLUGS,
   TOTAL_LESSON_SLUG_COUNT,

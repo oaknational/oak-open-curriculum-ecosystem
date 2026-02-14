@@ -129,7 +129,7 @@ export {
 
 ```typescript
 // Build-time generation script
-import { toolGeneration } from '@oaknational/oak-curriculum-sdk';
+import { toolGeneration } from '@oaknational/curriculum-sdk';
 
 function generateAllTools() {
   const tools = [];
@@ -283,7 +283,7 @@ function validateLesson(lesson: string) {
 
 ```typescript
 // ALWAYS DO THIS
-import { KEY_STAGES, SUBJECTS, validation, toolGeneration } from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES, SUBJECTS, validation, toolGeneration } from '@oaknational/curriculum-sdk';
 ```
 
 ### ✅ Generate from SDK Data

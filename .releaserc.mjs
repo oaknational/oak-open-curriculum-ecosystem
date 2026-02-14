@@ -1,15 +1,8 @@
 /**
  * Semantic Release Configuration
  *
- * Pre-release
- *
- * Currently configured to:
- * - Only release from main branch
- * - NPM publishing is disabled
- *
- * When ready to publish to NPM:
- * - Set npmPublish: true
- * - Install with: npm install @oaknational/oak-notion-mcp
+ * Publishes @oaknational/curriculum-sdk to npm on merge to main.
+ * Only the SDK is published; all other workspaces remain private.
  */
 
 /**
@@ -24,17 +17,26 @@ export default {
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    '@semantic-release/changelog',
+    [
+      '@semantic-release/changelog',
+      {
+        changelogFile: 'CHANGELOG.md',
+      },
+    ],
     [
       '@semantic-release/npm',
       {
         npmPublish: false,
-        // NPM release needs configuring for each released package, not the whole monorepo
-        pkgRoot: '.',
-        tarballDir: 'dist',
+        pkgRoot: 'packages/sdks/oak-curriculum-sdk',
       },
     ],
-    '@semantic-release/git',
+    [
+      '@semantic-release/git',
+      {
+        assets: ['CHANGELOG.md', 'packages/sdks/oak-curriculum-sdk/package.json'],
+        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+      },
+    ],
     '@semantic-release/github',
   ],
 };

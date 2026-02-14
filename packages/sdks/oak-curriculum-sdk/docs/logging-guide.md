@@ -26,13 +26,13 @@ The Oak Curriculum SDK integrates seamlessly with the `@oaknational/mcp-logger` 
 
 ```bash
 # Install both SDK and logger
-pnpm add @oaknational/oak-curriculum-sdk @oaknational/mcp-logger
+pnpm add @oaknational/curriculum-sdk @oaknational/mcp-logger
 ```
 
 ### Basic Integration
 
 ```typescript
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 
 // Create logger
@@ -121,7 +121,7 @@ const logger = createAdaptiveLogger({
 
 ```typescript
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({ level: 'DEBUG' });
 const client = new OakCurriculumClient({ apiKey: process.env.OAK_API_KEY });
@@ -456,7 +456,7 @@ if (errors.length > 0) {
 
 ```typescript
 // app/lib/curriculum-client.ts
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 
 // Browser-safe logger (no file sink)
@@ -513,7 +513,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 ```typescript
 // server.ts
 import { createAdaptiveLogger } from '@oaknational/mcp-logger/node';
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 import { startTimer } from '@oaknational/mcp-logger';
 
 // File-only logger (stdout reserved for MCP protocol)
@@ -567,7 +567,7 @@ async function executeTool(toolName: string, args: unknown) {
 #!/usr/bin/env node
 // cli.ts
 import { createAdaptiveLogger } from '@oaknational/mcp-logger/node';
-import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({
   name: 'curriculum-cli',

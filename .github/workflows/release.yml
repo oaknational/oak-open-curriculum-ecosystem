@@ -25,13 +25,19 @@ jobs:
         with:
           node-version: '24'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Build SDK
+        run: pnpm -C packages/sdks/oak-curriculum-sdk build
 
       - name: Create Release
         run: pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # We don't want to run husky hooks in the release workflow
           HUSKY: 0

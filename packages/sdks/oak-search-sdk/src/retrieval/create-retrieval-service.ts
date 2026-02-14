@@ -9,7 +9,7 @@ import type {
   SearchLessonsIndexDoc,
   SearchSequenceIndexDoc,
   SearchUnitRollupDoc,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+} from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { RetrievalService } from '../types/retrieval.js';
 import type {

@@ -148,7 +148,7 @@ const canonicalUrl = `https://www.thenational.academy/teachers/programmes/${sequ
 
 **Solution**: Use SDK constants:
 ```typescript
-import { SUBJECTS, KEY_STAGES } from '@oaknational/oak-curriculum-sdk';
+import { SUBJECTS, KEY_STAGES } from '@oaknational/curriculum-sdk';
 // SUBJECTS = ["art", "citizenship", "computing", ...]
 // KEY_STAGES = ["ks1", "ks2", "ks3", "ks4"]
 ```

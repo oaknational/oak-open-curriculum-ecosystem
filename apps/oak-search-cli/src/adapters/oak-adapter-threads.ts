@@ -9,8 +9,8 @@
  * for the full architectural decision record.
  */
 
-import type { OakApiClient, SdkFetchError } from '@oaknational/oak-curriculum-sdk';
-import { classifyHttpError } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient, SdkFetchError } from '@oaknational/curriculum-sdk';
+import { classifyHttpError } from '@oaknational/curriculum-sdk';
 import { ok, err, type Result } from '@oaknational/result';
 
 /**

@@ -9,7 +9,7 @@
  *
  */
 import { describe, it, expect } from 'vitest';
-import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';
+import type { Lesson } from '@oaknational/curriculum-sdk/public/bulk';
 import {
   transformBulkLessonToESDoc,
   extractLessonParamsFromBulk,

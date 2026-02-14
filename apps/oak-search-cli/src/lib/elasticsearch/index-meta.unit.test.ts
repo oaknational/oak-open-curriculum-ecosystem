@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Client } from '@elastic/elasticsearch';
 import { isOk, isErr } from '@oaknational/result';
-import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import {
   readIndexMeta,
   writeIndexMeta,

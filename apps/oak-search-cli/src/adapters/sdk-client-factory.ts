@@ -11,7 +11,7 @@ import type {
   OakApiClient,
   OakClientConfig,
   createOakBaseClient,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/curriculum-sdk';
 import { isLessonSummary, isUnitSummary } from '../types/oak';
 import { isTranscriptResponse } from './sdk-guards';
 import {

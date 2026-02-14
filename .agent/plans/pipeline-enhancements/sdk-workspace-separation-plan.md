@@ -9,7 +9,7 @@
 
 ## 1. Intent
 
-Separate the monolithic `@oaknational/oak-curriculum-sdk`
+Separate the monolithic `@oaknational/curriculum-sdk`
 into distinct workspaces with explicit, enforceable
 boundaries.
 
@@ -18,12 +18,12 @@ decomposition defined in [ADR-108][adr-108]. Step 1
 splits the SDK into two workspaces along the
 generation-time / runtime axis:
 
-1. `@oaknational/oak-curriculum-sdk-generation` — owns
+1. `@oaknational/curriculum-sdk-generation` — owns
    schema ingestion, type generation, validators,
    constants, MCP descriptors, search/ES mappings, and
    all code that runs at `pnpm type-gen` time.
 
-2. `@oaknational/oak-curriculum-sdk` — consumes the
+2. `@oaknational/curriculum-sdk` — consumes the
    generated artifacts to provide runtime clients,
    validation, MCP facades, and domain features.
 
@@ -93,7 +93,7 @@ packages/sdks/oak-curriculum-sdk/
     mcp/             (tool execution, aggregated tools)
     validation/      (response/request validators)
     ...
-  (depends on @oaknational/oak-curriculum-sdk-generation)
+  (depends on @oaknational/curriculum-sdk-generation)
 ```
 
 ### Target state (Step 2 — after Castr, see ADR-108)

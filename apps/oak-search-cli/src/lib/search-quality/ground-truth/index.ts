@@ -27,7 +27,7 @@
  * ```
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 
 import type { Phase, LessonGroundTruth } from './types';
 

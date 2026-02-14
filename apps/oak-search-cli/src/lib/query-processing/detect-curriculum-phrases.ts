@@ -9,7 +9,7 @@
  * @see `.agent/plans/semantic-search/part-1-search-excellence.md` Phase B.5
  */
 
-import { buildPhraseVocabulary } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { buildPhraseVocabulary } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Precompiled phrase vocabulary for efficient detection.

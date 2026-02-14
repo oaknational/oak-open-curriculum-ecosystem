@@ -1,12 +1,13 @@
 {
-  "name": "@oaknational/oak-curriculum-sdk",
-  "version": "0.0.0-development",
+  "name": "@oaknational/curriculum-sdk",
+  "version": "0.1.0",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": "24.x"
@@ -91,6 +92,7 @@
     }
   },
   "scripts": {
+    "prepublishOnly": "cp ../../../LICENSE ./LICENSE",
     "type-gen": "pnpm generate:types",
     "posttype-gen": "pnpm -w format:root",
     "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts",
@@ -140,11 +142,18 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/oak-curriculum-sdk"
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/sdks/oak-curriculum-sdk"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/sdks/oak-curriculum-sdk#readme",
   "keywords": [
     "oak",
     "curriculum",
@@ -153,6 +162,17 @@
     "education",
     "typescript"
   ],
-  "author": "Oak National Academy",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "license": "MIT"
 }

@@ -1,25 +1,77 @@
-# @oaknational/env
+# @oaknational/mcp-env
 
-Runtime environment helpers for JavaScript runtimes.
+Runtime-adaptive environment library for MCP applications.
 
-## TODO: Package Naming and Scope
+## Purpose
 
-**Current State**: This package is named `@oaknational/env`, which suggests it provides shared configuration logic for applications. However, its actual purpose is:
+Provides helpers for environment variable access and `.env` file loading across
+different JavaScript runtimes (Node.js, Edge, Deno). This package provides
+**tools**, not **policy** — each application manages its own configuration
+validation and composition.
 
-1. **Runtime Adapter**: Provides helpers for environment-dependent behaviors (finding repo root, loading .env files across different JS runtimes)
-2. **Configuration Helpers**: Utilities that applications use to build their own config layers
-3. **NOT Application Config**: Does NOT provide shared configuration logic or manage app-specific env vars
+## API
 
-**Proposed Actions**:
+### `createAdaptiveEnvironment(globalObj)`
 
-- Consider renaming to better reflect purpose: `@oaknational/runtime-helpers` or `@oaknational/env-helpers`
-- Add documentation on recommended config management patterns for applications
-- Clarify that each app manages its own configuration (validation, composition, DI)
+Builds an `EnvironmentProvider` by detecting environment variables on the given
+global object. Supports `globalThis.process.env` (Node.js) and
+`globalThis.env` (Edge/Deno).
 
-**Note**: Each application MUST manage its own configuration using patterns like:
+```typescript
+import { createAdaptiveEnvironment } from '@oaknational/mcp-env';
 
-- Zod schema validation in app-level `env.ts`
-- Config composition in app-level `runtime-config.ts`
-- Dependency injection throughout the app
+const env = createAdaptiveEnvironment(globalThis);
+const apiKey = env.get('OAK_API_KEY');
+```
 
-This package provides **tools**, not **policy**.
+### `findRepoRoot(startDir)`
+
+Walks up from a start directory until it finds a directory containing
+`pnpm-workspace.yaml` or `.git`, then returns that path.
+
+```typescript
+import { findRepoRoot } from '@oaknational/mcp-env';
+
+const root = findRepoRoot(process.cwd());
+```
+
+### `loadRootEnv(options)`
+
+Loads environment variables from `.env` files at the repository root when
+required keys are missing. Returns `{ repoRoot, loaded, path? }`.
+
+```typescript
+import { loadRootEnv } from '@oaknational/mcp-env';
+
+const result = loadRootEnv({
+  requiredKeys: ['OAK_API_KEY'],
+  envFiles: ['.env.local', '.env'],
+});
+```
+
+### `EnvironmentProvider` (type)
+
+Interface for consistent environment variable access:
+
+- `get(key: string): string | undefined`
+- `getAll(): Record<string, string | undefined>`
+- `has(key: string): boolean`
+
+## Configuration Pattern
+
+Each application should manage its own configuration using:
+
+1. **Zod schema validation** in an app-level `env.ts`
+2. **Config composition** in an app-level `runtime-config.ts`
+3. **Dependency injection** throughout the app
+
+This package provides the runtime primitives; applications define their own
+validation and composition logic.
+
+## Development
+
+```bash
+pnpm test        # Run tests
+pnpm build       # Build the library
+pnpm type-check  # Type-check
+```

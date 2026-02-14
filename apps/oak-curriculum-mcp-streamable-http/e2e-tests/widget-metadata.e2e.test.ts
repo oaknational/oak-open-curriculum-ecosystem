@@ -19,7 +19,7 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 const ACCEPT = 'application/json, text/event-stream';
 

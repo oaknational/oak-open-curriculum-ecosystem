@@ -40,7 +40,7 @@ jobs:
           if command -v gitleaks >/dev/null 2>&1; then
             pnpm secrets:scan:all
           else
-            echo "⚠️  gitleaks not on PATH, using docker fallback."
+            echo "Warning: gitleaks not on PATH, using docker fallback."
             docker run --rm \
               -v "${{ github.workspace }}:/src" \
               -w /src \

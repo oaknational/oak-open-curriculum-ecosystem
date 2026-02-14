@@ -2,7 +2,7 @@
  * Creates synonyms set and search indexes from SDK.
  * Mappings are generated at SDK type-gen time and imported here.
  */
-import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import { CreateIndexErrorSchema, ClusterInfoSchema, CatIndicesSchema } from './schemas';
 import {
   OAK_LESSONS_MAPPING,
@@ -12,7 +12,7 @@ import {
   OAK_SEQUENCE_FACETS_MAPPING,
   OAK_THREADS_MAPPING,
   OAK_META_MAPPING,
-} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+} from '@oaknational/curriculum-sdk/elasticsearch.js';
 import { ingestLogger } from '../../logger';
 
 /** Index names and their corresponding SDK-generated mappings. */

@@ -104,7 +104,7 @@ These tools are read-only and idempotent. Call them first to reduce errors when 
 **App Integration:** `apps/oak-curriculum-mcp-streamable-http/src/application.ts`
 
 ```typescript
-import { SERVER_INSTRUCTIONS } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { SERVER_INSTRUCTIONS } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const server = new McpServer(
   { name: 'oak-curriculum-http', version: '0.1.0' },
@@ -334,7 +334,7 @@ export function getYourNewResourceJson(): string {
 import {
   YOUR_NEW_RESOURCE,
   getYourNewResourceJson,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 export function registerYourNewResource(server: McpServer): void {
   server.registerResource(

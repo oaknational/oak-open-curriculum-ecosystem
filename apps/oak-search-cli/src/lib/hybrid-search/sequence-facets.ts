@@ -1,7 +1,7 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
-import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { isKeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { SearchSequenceFacetsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import { isKeyStage } from '@oaknational/curriculum-sdk';
 import { esSearch, type EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SequenceFacet, SearchFacets } from './types';

@@ -82,7 +82,7 @@ function populateLookup(group: SynonymGroup, lookup: Map<string, string>): void 
  *
  * @example
  * ```typescript
- * import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk';
+ * import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk';
  *
  * const synonymSet = buildElasticsearchSynonyms();
  * // Write to file or POST to ES /_synonyms/oak-syns

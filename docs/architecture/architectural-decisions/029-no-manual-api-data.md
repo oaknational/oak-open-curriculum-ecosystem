@@ -88,7 +88,7 @@ All API-related information must be imported from the SDK, which is automaticall
 
    ```typescript
    // ALLOWED
-   import { KEY_STAGES, SUBJECTS, validation } from '@oaknational/oak-curriculum-sdk';
+   import { KEY_STAGES, SUBJECTS, validation } from '@oaknational/curriculum-sdk';
    ```
 
 3. **Generate from SDK data**

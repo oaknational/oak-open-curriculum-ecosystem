@@ -10,7 +10,7 @@ import type { OakClient } from '../../adapters/oak-adapter';
 import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
 import { ok, err } from '@oaknational/result';
-import type { SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
+import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
 
 /**
  * Package of a parsed fixture dataset together with an Oak-compatible client.

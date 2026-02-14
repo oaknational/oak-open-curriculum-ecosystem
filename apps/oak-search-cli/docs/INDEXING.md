@@ -6,7 +6,7 @@ Use this guide when populating Elasticsearch Serverless with Oak Curriculum data
 
 ## Data sources
 
-- All content flows through `@oaknational/oak-curriculum-sdk`; never perform raw HTTP requests.
+- All content flows through `@oaknational/curriculum-sdk`; never perform raw HTTP requests.
 - SDK adapters must expose lesson-planning data, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm type-gen` when SDK schema changes, then rerun `pnpm make` to regenerate search validators and fixtures.
 
 ## Canonical URLs
@@ -25,8 +25,8 @@ All Elasticsearch index mappings, Zod schemas, and TypeScript types are defined 
 **NEVER** define mappings or document interfaces in this app. Import from SDK:
 
 ```typescript
-import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { OAK_LESSONS_MAPPING } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.js';
 ```
 
 **Documentation**:

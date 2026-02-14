@@ -9,9 +9,9 @@
  * @see ADR-078 Dependency Injection for Testability
  */
 
-import { isSubject, type AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import { isSubject, type AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { Result } from '@oaknational/result';
-import type { SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import {
   calculateMRR,
@@ -19,7 +19,7 @@ import {
   calculatePrecisionAtK,
   calculateRecallAtK,
 } from '../../src/lib/search-quality/metrics.js';
-import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 import type {
   SearchParamsBase,
   ThreadsSearchResult,

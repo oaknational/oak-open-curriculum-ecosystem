@@ -10,7 +10,7 @@
 import type { RequestHandler } from 'express';
 import { isDiscoveryMethod } from './mcp-method-classifier.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
-import { isUniversalToolName, type UniversalToolName } from '@oaknational/oak-curriculum-sdk';
+import { isUniversalToolName, type UniversalToolName } from '@oaknational/curriculum-sdk';
 
 /**
  * Configuration options for MCP router.

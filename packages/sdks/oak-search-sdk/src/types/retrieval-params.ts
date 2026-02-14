@@ -5,11 +5,8 @@
  * `KeyStage`, `SearchScope`) are imported, not redefined.
  */
 
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
-import type {
-  SearchScope,
-  SearchSubjectSlug,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { KeyStage } from '@oaknational/curriculum-sdk';
+import type { SearchScope, SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
 
 /**
  * Common search parameters shared across all scopes.

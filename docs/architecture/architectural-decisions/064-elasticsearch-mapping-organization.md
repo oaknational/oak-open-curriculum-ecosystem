@@ -26,7 +26,7 @@ import {
   OAK_LESSONS_MAPPING,
   OAK_UNITS_MAPPING,
   // ...
-} from '@oaknational/oak-curriculum-sdk/types/generated/search/index';
+} from '@oaknational/curriculum-sdk/types/generated/search/index';
 ```
 
 See [ADR-067](067-sdk-generated-elasticsearch-mappings.md) for the current approach.

@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/mcp-logger",
   "version": "0.0.0-development",
+  "private": true,
   "description": "Adaptive logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -43,14 +44,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
     "directory": "packages/libs/logger"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/libs/logger#readme",
   "keywords": [
     "mcp",
     "logging",
     "adaptive",
     "multi-runtime"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
   ],
   "license": "MIT"
 }

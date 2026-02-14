@@ -87,7 +87,7 @@ Keep it simple:
  * ```
  */
 
-import { someFunction } from '@oaknational/oak-curriculum-sdk';
+import { someFunction } from '@oaknational/curriculum-sdk';
 
 // Simple, focused logic
 const result = someFunction();

@@ -40,7 +40,7 @@
     "@modelcontextprotocol/sdk": "^1.25.2",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "commander": "^14.0.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",
@@ -68,9 +68,35 @@
   "engines": {
     "node": "24.x"
   },
+  "description": "OAuth-enabled MCP server over HTTP for the Oak National Academy Curriculum API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-streamable-http"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
+  "keywords": [
+    "mcp",
+    "oauth",
+    "http",
+    "oak",
+    "curriculum",
+    "education"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
 }

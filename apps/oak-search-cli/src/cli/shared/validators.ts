@@ -6,13 +6,10 @@
  * type-safe values are passed to the Search SDK.
  */
 
-import { isSubject, isKeyStage, SUBJECTS, KEY_STAGES } from '@oaknational/oak-curriculum-sdk';
-import { isSearchScope, SEARCH_SCOPES } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import type {
-  SearchSubjectSlug,
-  SearchScope,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
+import { isSubject, isKeyStage, SUBJECTS, KEY_STAGES } from '@oaknational/curriculum-sdk';
+import { isSearchScope, SEARCH_SCOPES } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchSubjectSlug, SearchScope } from '@oaknational/curriculum-sdk/public/search.js';
+import type { KeyStage } from '@oaknational/curriculum-sdk';
 
 /**
  * Validate an optional subject string against the schema-derived subject slugs.

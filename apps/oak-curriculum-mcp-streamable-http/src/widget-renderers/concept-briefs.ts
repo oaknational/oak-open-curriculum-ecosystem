@@ -6,7 +6,7 @@
  *
  */
 
-import { conceptGraph } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { conceptGraph } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Map of node ID to brief description.

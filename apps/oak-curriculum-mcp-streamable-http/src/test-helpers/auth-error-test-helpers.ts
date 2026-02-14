@@ -11,7 +11,7 @@ import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handler
 import {
   McpToolError,
   type ToolExecutionResult,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Notification, ServerRequest } from '@modelcontextprotocol/sdk/types.js';
 
 /**

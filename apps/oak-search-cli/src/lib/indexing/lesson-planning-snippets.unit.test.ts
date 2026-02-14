@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { SearchLessonSummary } from '../../types/oak';
-import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { lessonSummarySchema } from '@oaknational/curriculum-sdk/public/search.js';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 
 /**

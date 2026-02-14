@@ -8,7 +8,7 @@
 
 The Oak MCP ecosystem involves three layers that use Zod for runtime validation:
 
-1. **Oak Curriculum SDK** (`@oaknational/oak-curriculum-sdk`) - Generates types from the upstream OpenAPI schema
+1. **Oak Curriculum SDK** (`@oaknational/curriculum-sdk`) - Generates types from the upstream OpenAPI schema
 2. **MCP SDK** (`@modelcontextprotocol/sdk`) - Provides MCP protocol implementation
 3. **Apps** (e.g., `oak-curriculum-mcp-streamable-http`) - Consume both SDKs
 
@@ -133,7 +133,7 @@ Apps import Zod v4 schemas directly from the SDK:
 
 ```typescript
 // app/src/handlers.ts
-import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { listUniversalTools } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 for (const tool of listUniversalTools()) {
   // tool.flatZodSchema is a Zod v4 ZodRawShape

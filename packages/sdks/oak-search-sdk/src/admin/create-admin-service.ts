@@ -5,7 +5,7 @@
 import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import { ok, err, type Result } from '@oaknational/result';
-import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import type { AdminService } from '../types/admin.js';
 import type {

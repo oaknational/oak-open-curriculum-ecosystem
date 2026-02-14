@@ -17,7 +17,7 @@ import type { Express } from 'express';
 import {
   createStubToolExecutionAdapter,
   type ToolName,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const JSON_RPC_VERSION = '2.0';
 const TOOL_CALL_METHOD = 'tools/call';

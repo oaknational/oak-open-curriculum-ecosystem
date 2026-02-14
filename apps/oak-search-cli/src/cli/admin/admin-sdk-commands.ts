@@ -7,7 +7,7 @@
  */
 
 import type { Command } from 'commander';
-import { isIndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { isIndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import { createCliSdk, printJson, printError, printSuccess, printHeader } from '../shared/index.js';
 import { env } from '../../lib/env.js';
 import {

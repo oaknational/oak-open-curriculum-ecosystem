@@ -173,7 +173,7 @@ All types flow from two sources:
 Wraps the SDK's bulk file parsing:
 
 ```typescript
-import { parseBulkFile, readAllBulkFiles } from '@oaknational/oak-curriculum-sdk/public/bulk';
+import { parseBulkFile, readAllBulkFiles } from '@oaknational/curriculum-sdk/public/bulk';
 
 const adapter = new BulkDataAdapter();
 await adapter.initialize(bulkDir);

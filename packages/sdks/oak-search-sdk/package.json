@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/oak-search-sdk",
   "version": "0.0.0-development",
+  "private": true,
   "description": "TypeScript SDK for Oak semantic search — retrieval, admin, and observability services",
   "type": "module",
   "main": "dist/index.js",
@@ -33,12 +34,12 @@
   },
   "peerDependencies": {
     "@elastic/elasticsearch": "^9.2.0",
-    "@oaknational/oak-curriculum-sdk": "workspace:*"
+    "@oaknational/curriculum-sdk": "workspace:*"
   },
   "devDependencies": {
     "@elastic/elasticsearch": "^9.2.0",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "@types/node": "^24",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
@@ -46,9 +47,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
     "directory": "packages/sdks/oak-search-sdk"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/sdks/oak-search-sdk#readme",
   "keywords": [
     "oak",
     "search",
@@ -58,6 +63,17 @@
     "education",
     "typescript"
   ],
-  "author": "Oak National Academy",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "license": "MIT"
 }

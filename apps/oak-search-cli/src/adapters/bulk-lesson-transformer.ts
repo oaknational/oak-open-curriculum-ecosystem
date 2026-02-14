@@ -13,8 +13,8 @@
  * @see buildLessonDocument - Shared document builder
  */
 
-import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/oak-curriculum-sdk';
+import type { Lesson } from '@oaknational/curriculum-sdk/public/bulk.js';
+import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/curriculum-sdk';
 import type { SearchLessonsIndexDoc, AllSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {

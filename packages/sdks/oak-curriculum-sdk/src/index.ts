@@ -8,10 +8,10 @@
  *
  * For specialised functionality, import from dedicated entry points:
  *
- * - **MCP Tools**: `@oaknational/oak-curriculum-sdk/public/mcp-tools`
+ * - **MCP Tools**: `@oaknational/curriculum-sdk/public/mcp-tools`
  *   Model Context Protocol tooling for AI integrations
  *
- * - **Search**: `@oaknational/oak-curriculum-sdk/public/search`
+ * - **Search**: `@oaknational/curriculum-sdk/public/search`
  *   Semantic search schemas, validators, and types
  *
  * This separation improves tree-shaking and makes dependencies explicit.

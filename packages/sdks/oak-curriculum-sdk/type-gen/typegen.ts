@@ -77,7 +77,7 @@ async function readCachedSchemaOrThrow(): Promise<OpenAPIObject> {
   if (!existsSync(schemaCacheFilePath)) {
     throw new Error(
       `CI/offline type-gen requires a cached SDK schema at ${schemaCacheFilePath}. ` +
-        `Run "pnpm -F @oaknational/oak-curriculum-sdk type-gen" locally to refresh ` +
+        `Run "pnpm -F @oaknational/curriculum-sdk type-gen" locally to refresh ` +
         `the cache and commit the result.`,
     );
   }

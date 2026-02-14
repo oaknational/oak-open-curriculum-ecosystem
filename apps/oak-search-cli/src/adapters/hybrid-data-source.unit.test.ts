@@ -5,11 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createHybridDataSource } from './hybrid-data-source.js';
 import { processBulkFileBatch } from './hybrid-batch-processor.js';
-import type {
-  BulkDownloadFile,
-  Lesson,
-  Unit,
-} from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/curriculum-sdk/public/bulk.js';
 import type { OakClient } from './oak-adapter';
 
 // ============================================================================

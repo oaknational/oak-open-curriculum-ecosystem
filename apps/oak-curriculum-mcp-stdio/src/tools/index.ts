@@ -13,7 +13,7 @@ import {
   type ToolExecutionResult,
   type ToolName,
   type OakApiPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 export interface McpToolsModule {
   handleTool: (name: string, args: unknown) => Promise<CallToolResult>;

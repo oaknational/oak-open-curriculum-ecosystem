@@ -5,7 +5,7 @@
  * from the Oak Curriculum SDK.
  */
 
-import { listAllToolDescriptors } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { listAllToolDescriptors } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { escapeHtml } from './escape-html.js';
 

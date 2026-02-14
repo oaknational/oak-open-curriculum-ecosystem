@@ -5,7 +5,7 @@
  * response structures (tiers, exam subjects, etc.) for pattern-aware ingestion.
  */
 
-import type { SequenceUnitsResponse } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SequenceUnitsResponse } from '@oaknational/curriculum-sdk/public/search.js';
 import type { KeyStage } from '../../types/oak';
 
 /**

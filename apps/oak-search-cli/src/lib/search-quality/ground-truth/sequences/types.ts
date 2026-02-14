@@ -12,7 +12,7 @@
  * Target: 1 ground truth (validates search mechanism works)
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { Phase, ExpectedRelevance } from '../types';
 
 export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';

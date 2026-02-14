@@ -22,7 +22,7 @@
  * @see semantic-search.prompt.md for the full protocol
  * @see ground-truth-redesign-plan.md for the strategy
  */
-import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/curriculum-sdk';
 
 /**
  * Valid phase values for ground truth organisation.

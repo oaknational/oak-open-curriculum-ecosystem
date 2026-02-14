@@ -4,7 +4,7 @@
  * @see ADR-098 Ground Truth Registry as Single Source of Truth
  */
 
-import type { Subject } from '@oaknational/oak-curriculum-sdk';
+import type { Subject } from '@oaknational/curriculum-sdk';
 
 import type { GroundTruthQuery } from '../types';
 

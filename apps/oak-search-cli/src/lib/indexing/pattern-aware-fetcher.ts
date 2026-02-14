@@ -10,8 +10,8 @@
  */
 
 import type { Logger } from '@oaknational/mcp-logger';
-import { formatSdkError, type SdkFetchError } from '@oaknational/oak-curriculum-sdk';
-import { isSequenceUnitsResponse } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { formatSdkError, type SdkFetchError } from '@oaknational/curriculum-sdk';
+import { isSequenceUnitsResponse } from '@oaknational/curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter';
 import {

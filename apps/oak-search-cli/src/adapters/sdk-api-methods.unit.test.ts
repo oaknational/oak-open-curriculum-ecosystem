@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient } from '@oaknational/curriculum-sdk';
 import {
   makeGetLessonTranscript,
   makeGetLessonSummary,

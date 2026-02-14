@@ -35,7 +35,7 @@ import {
   buildElasticsearchSynonyms, // Returns ES synonym set object
   buildSynonymLookup, // Returns term → canonical Map
   serialiseElasticsearchSynonyms, // Returns JSON string for ES API
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+} from '@oaknational/curriculum-sdk/public/mcp-tools';
 ```
 
 ## Architecture
@@ -96,7 +96,7 @@ The search app consumes synonyms via a TypeScript CLI that directly calls the SD
 
 ```typescript
 // src/lib/elasticsearch/setup/index.ts
-import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 async function createSynonymSet(client: Client): Promise<void> {
   const synonymSet = buildElasticsearchSynonyms();

@@ -20,7 +20,7 @@
  *   readAllBulkFiles,
  *   processBulkData,
  *   type BulkDownloadFile,
- * } from '@oaknational/oak-curriculum-sdk/public/bulk';
+ * } from '@oaknational/curriculum-sdk/public/bulk';
  *
  * // Parse and process bulk files
  * const allFiles = await readAllBulkFiles('bulk-downloads/');

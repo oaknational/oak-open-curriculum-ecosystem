@@ -20,7 +20,7 @@ import { toolRequiresAuth } from './tool-auth-checker.js';
 import {
   isUniversalToolName,
   type UniversalToolName,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
 import { isPublicResourceUri } from './auth/public-resources.js';
 

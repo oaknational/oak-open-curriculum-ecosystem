@@ -17,7 +17,7 @@
  * @see category-supplementation.ts - Category map for enrichment
  */
 
-import type { Unit } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { Unit } from '@oaknational/curriculum-sdk/public/bulk.js';
 import type { SearchUnitsIndexDoc, AllSubjectSlug, ParentSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {

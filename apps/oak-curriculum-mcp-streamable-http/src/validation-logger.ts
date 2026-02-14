@@ -8,7 +8,7 @@ import type { Logger } from '@oaknational/mcp-logger';
 import {
   McpToolError,
   type ToolExecutionResult,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Logs validation failure if present in tool execution result.

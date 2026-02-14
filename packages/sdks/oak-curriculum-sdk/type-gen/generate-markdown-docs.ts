@@ -38,7 +38,7 @@ async function readProject(jsonPath: string): Promise<TDProject> {
     throw new Error(
       'TypeDoc JSON not found at ' +
         jsonPath +
-        '. Run: pnpm -F @oaknational/oak-curriculum-sdk docs:api:json:ai',
+        '. Run: pnpm -F @oaknational/curriculum-sdk docs:api:json:ai',
     );
   }
   let json: unknown;
@@ -74,7 +74,7 @@ function quickstart(): string {
   return (
     '## Quickstart\n\n' +
     '```ts\n' +
-    "import { createOakClient } from '@oaknational/oak-curriculum-sdk';\n" +
+    "import { createOakClient } from '@oaknational/curriculum-sdk';\n" +
     "const client = createOakClient('REDACTED');\n" +
     "const res = await client.GET('/lessons/{lesson}/transcript', { params: { path: { lesson: 'lesson-slug' } } });\n" +
     'if (res.error) throw res.error;\n' +

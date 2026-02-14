@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **Public release readiness next** — SDK extraction and thread search complete  
-**Last Updated**: 2026-02-13  
+**Status**: 🔄 **Developer onboarding next** — public release readiness complete  
+**Last Updated**: 2026-02-14  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -15,8 +15,9 @@ SDK extraction is complete. All three services (retrieval,
 admin, observability) return `Result<T, E>` with per-service
 error types and comprehensive TSDoc. Thread search is fully
 integrated (8 GTs, baselines validated against live ES).
-The repo must be prepared for public visibility before
-wiring the SDK into its first consumer (MCP).
+Public release readiness is complete (npm publish deferred
+until token is created). Next: developer onboarding
+experience, then wire the SDK into its first consumer (MCP).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -44,8 +45,9 @@ Phase 2: SDK Extraction + CLI Wiring                ✅ COMPLETE
 Phase 2e: SDK Validation against Real ES             ✅ COMPLETE
   Thread benchmarks validated against live ES
          ↓
-Phase 2f: Public Release Readiness                   ← NEXT
+Phase 2f: Public Release Readiness                   ✅ COMPLETE
   Secrets audit, licence, package.json, docs, GitHub config
+  npm publish deferred until token is created
          ↓
 Phase 2g: Developer Onboarding Experience
   Canonical journey, command truth, link integrity
@@ -128,26 +130,25 @@ endpoint investigation (2026-02-12). Four workstreams:
 
 ---
 
-## Phase 2f: Public Release Readiness ← NEXT
+## Phase 2f: Public Release Readiness ✅ COMPLETE
 
-**Status**: 🔄 Next
-**Plan**: [active/public-release-readiness.plan.md](active/public-release-readiness.plan.md)
+**Status**: ✅ Complete (npm publish deferred until token is created)
+**Plan**: [archive/completed/public-release-readiness.plan.md](archive/completed/public-release-readiness.plan.md)
 
-Prepares the repository for public visibility on GitHub and
-the SDKs/libraries for publication as public npm packages
-under the `@oaknational` scope. Six workstreams:
+All six workstreams completed. SDK renamed to
+`@oaknational/curriculum-sdk`. npm publishing disabled
+pending token creation.
 
 | WS | Scope | Status |
 | --- | --- | --- |
-| WS1 | Secrets audit and remediation (CRITICAL) | 📋 Pending |
-| WS2 | Licence and legal (MIT file, Code of Conduct) | 📋 Pending |
-| WS3 | Package.json standardisation (all 12 workspaces) | 📋 Pending |
-| WS4 | Documentation overhaul (README, CONTRIBUTING, CHANGELOG, workspace READMEs) | 📋 Pending |
-| WS5 | GitHub repository configuration (templates, Dependabot) | 📋 Pending |
-| WS6 | Publication dry run (tarball inspection, test install) | 📋 Pending |
+| WS1 | Secrets audit and remediation | ✅ Complete |
+| WS2 | Licence and legal (MIT, OGL notice, branding, CoC) | ✅ Complete |
+| WS3 | Package.json standardisation (all workspaces) | ✅ Complete |
+| WS4 | Documentation overhaul (README, CONTRIBUTING, CHANGELOG, workspace READMEs) | ✅ Complete |
+| WS5 | GitHub repository configuration (templates, Dependabot) | ✅ Complete |
+| WS6 | Publication dry run (tarball inspection, test install) | ✅ Complete |
 
-Can be executed in parallel with other work. WS1 is a hard
-blocker for making the repo public.
+Permanent documentation: [Release and Publishing](../../../docs/development/release-and-publishing.md).
 
 ---
 

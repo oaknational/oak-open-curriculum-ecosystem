@@ -13,11 +13,7 @@ import {
   type BulkToESLessonParams,
 } from './bulk-lesson-transformer.js';
 import { transformBulkUnitToESDoc, type BulkToESUnitParams } from './bulk-unit-transformer.js';
-import type {
-  Lesson,
-  Unit,
-  BulkDownloadFile,
-} from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { Lesson, Unit, BulkDownloadFile } from '@oaknational/curriculum-sdk/public/bulk.js';
 
 // ============================================================================
 // Test Fixtures

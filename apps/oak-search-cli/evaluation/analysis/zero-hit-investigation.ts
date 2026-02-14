@@ -22,7 +22,7 @@ import {
 } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import { buildLessonRrfRequest } from '../../src/lib/hybrid-search/rrf-query-builders.js';
 import { buildBenchmarkRequestParams } from './benchmark-request-builder.js';
-import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 

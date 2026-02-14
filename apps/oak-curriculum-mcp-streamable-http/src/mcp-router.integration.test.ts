@@ -10,7 +10,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;

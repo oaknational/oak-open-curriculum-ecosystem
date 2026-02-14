@@ -6,7 +6,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { isPublicResourceUri } from './public-resources.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {

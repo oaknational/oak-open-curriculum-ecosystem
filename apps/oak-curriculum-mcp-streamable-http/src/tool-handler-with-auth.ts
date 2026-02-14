@@ -10,7 +10,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type {
   UniversalToolName,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';

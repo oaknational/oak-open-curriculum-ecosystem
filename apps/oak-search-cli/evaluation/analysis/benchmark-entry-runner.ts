@@ -8,7 +8,7 @@
  * @see ADR-078 Dependency Injection for Testability
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type {
   QueryCategory,

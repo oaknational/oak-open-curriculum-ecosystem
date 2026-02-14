@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { Logger } from '@oaknational/mcp-logger';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Integration tests for conditional Clerk middleware.

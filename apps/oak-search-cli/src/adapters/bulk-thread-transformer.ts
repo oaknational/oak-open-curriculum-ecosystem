@@ -20,7 +20,7 @@
  * @see ADR-093 Bulk-First Ingestion Strategy
  * @see createThreadDocument - Shared document builder
  */
-import type { BulkDownloadFile } from '@oaknational/oak-curriculum-sdk/public/bulk';
+import type { BulkDownloadFile } from '@oaknational/curriculum-sdk/public/bulk';
 import type { SearchThreadIndexDoc } from '../types/oak';
 import type { BulkIndexAction, BulkOperationEntry } from '../lib/indexing/bulk-operation-types';
 import { createThreadDocument } from '../lib/indexing/thread-document-builder';

@@ -143,7 +143,7 @@ describe('isPublicResourceUri', () => {
  */
 
 import { AGGREGATED_TOOL_WIDGET_URI } from '../aggregated-tool-widget.js';
-import { DOCUMENTATION_RESOURCES } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Resource URIs that are publicly accessible without authentication.

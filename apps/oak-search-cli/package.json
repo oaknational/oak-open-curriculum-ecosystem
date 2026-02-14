@@ -52,7 +52,7 @@
     "@elastic/elasticsearch": "^9.2.0",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",
     "chalk": "^5.6.2",
@@ -61,6 +61,7 @@
     "ioredis": "^5.8.2",
     "zod": "^4.1.13"
   },
+  "description": "Semantic search CLI for Oak curriculum — ingestion, hybrid search, ground truth evaluation",
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.2.0",
     "@oaknational/eslint-plugin-standards": "workspace:*",
@@ -77,5 +78,35 @@
     "unzipper": "^0.12.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "apps/oak-search-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-search-cli#readme",
+  "keywords": [
+    "oak",
+    "search",
+    "semantic",
+    "elasticsearch",
+    "cli",
+    "education"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
 }

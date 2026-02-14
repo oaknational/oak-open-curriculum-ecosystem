@@ -6,16 +6,12 @@
  * them into Elasticsearch document format. It serves as the primary data source
  * for bulk-first ingestion.
  *
- * @see @oaknational/oak-curriculum-sdk/public/bulk for source types
+ * @see @oaknational/curriculum-sdk/public/bulk for source types
  * @see src/types/oak for ES document types
  */
 
-import type {
-  Lesson,
-  Unit,
-  BulkDownloadFile,
-} from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/oak-curriculum-sdk';
+import type { Lesson, Unit, BulkDownloadFile } from '@oaknational/curriculum-sdk/public/bulk.js';
+import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/curriculum-sdk';
 import type {
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,

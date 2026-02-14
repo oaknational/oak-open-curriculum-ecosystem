@@ -15,7 +15,7 @@ import {
 import {
   McpToolError,
   type ToolExecutionResult,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 

@@ -4,7 +4,7 @@
  * @remarks
  * Re-exports bulk parsing schemas, extractors, generators, and processing
  * utilities for use by consuming applications.
- * Import from `@oaknational/oak-curriculum-sdk/public/bulk`.
+ * Import from `@oaknational/curriculum-sdk/public/bulk`.
  *
  * @example
  * ```ts
@@ -17,7 +17,7 @@
  *   type BulkDownloadFile,
  *   type Lesson,
  *   type ExtractedKeyword,
- * } from '@oaknational/oak-curriculum-sdk/public/bulk';
+ * } from '@oaknational/curriculum-sdk/public/bulk';
  *
  * // Parse and process bulk files
  * const allFiles = await readAllBulkFiles('bulk-downloads/');

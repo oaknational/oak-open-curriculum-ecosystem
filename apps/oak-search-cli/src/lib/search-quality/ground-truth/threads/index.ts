@@ -22,7 +22,7 @@
  * ```
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 
 import type { ThreadGroundTruth } from './types';
 
