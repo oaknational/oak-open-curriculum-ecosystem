@@ -57,8 +57,8 @@ function createAuthEnabledApp(): Express {
       // DANGEROUSLY_DISABLE_AUTH is false by default in createMockRuntimeConfig
       env: {
         OAK_API_KEY: 'test-api-key',
-        CLERK_PUBLISHABLE_KEY: 'REDACTED',
-        CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+        CLERK_SECRET_KEY: 'sk_test_123',
         NODE_ENV: 'test',
       },
     }),

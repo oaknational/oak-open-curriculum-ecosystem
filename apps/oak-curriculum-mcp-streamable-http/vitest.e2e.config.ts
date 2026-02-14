@@ -11,6 +11,6 @@ export default mergeConfig(baseE2EConfig, {
         singleFork: true,
       },
     },
-    // Do NOT include src/test.setup.ts here: e2e tests may allow network IO
+    // Network IO is forbidden in E2E tests; blocking is configured in vitest.e2e.config.base.ts.
   },
 });

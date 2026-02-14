@@ -20,6 +20,25 @@ The Oak MCP Servers are designed with security and privacy as core principles. T
 - **Never in Code**: Keys are never hardcoded or committed to version control
 - **Validation on Startup**: Keys are validated using Zod schemas before use
 - **No Logging**: API keys are never logged, even at debug level
+- **Local Env Files**: Use `.env` and `.env.local` for local credentials. Keep these files untracked.
+
+### Line-Specific Exceptions
+
+The repo is scanned with `gitleaks` in CI and pre-push. Broad allowlisting is not
+permitted. If a token-like placeholder must remain in tracked docs, use a
+line-specific allowlist comment:
+
+```text
+NOTION_API_KEY=notion_example_token # gitleaks:allow
+```
+
+Use path-level allowlisting only for `.agent/reference-docs/**`, which contains
+third-party examples.
+
+Escalation path:
+
+- `pnpm secrets:scan:all` for local commit/branch checks
+- `pnpm secrets:scan:all-refs` for repository forensics
 
 ### Configuration Examples
 

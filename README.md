@@ -77,6 +77,10 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    # populate OAK_API_KEY, ELASTICSEARCH_*, SEARCH_API_KEY, etc.
    ```
 
+   `.env` and `.env.local` are local-only and are ignored by git.
+   Keep `*.env` and `*.env.local` out of version control and use
+   placeholders in `.env.example`.
+
    Each workspace README provides its own `.env.local` hints.
 
    > **Note**: Many development tasks work without environment variables:
@@ -122,6 +126,7 @@ pnpm type-gen       # Regenerate SDK + MCP artefacts from OpenAPI
 pnpm build          # Build all workspaces
 pnpm type-check     # Type-check apps and packages
 pnpm doc-gen        # Generate TypeDoc/OpenAPI/markdown/AI docs
+pnpm secrets:scan:all # Run secret scan (branches + tags + full history)
 pnpm lint -- --fix  # Lint and auto-fix where possible
 pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites

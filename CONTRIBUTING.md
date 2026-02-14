@@ -41,6 +41,10 @@ By participating in this project, you agree to maintain a respectful and inclusi
    # Populate OAK_API_KEY, SEARCH_API_KEY, ELASTICSEARCH_* etc. as needed
    ```
 
+   `.env` and `.env.local` are local-only, untracked files.
+   Real credentials should never be added to source control.
+   Keep `.env.example` as placeholders only; do not copy secrets into it.
+
 4. Run tests to verify setup:
 
    ```bash
@@ -131,12 +135,15 @@ git checkout -b fix/bug-description
 Before committing, run all quality checks:
 
 ```bash
+pnpm secrets:scan:all # Secret scan (branches + tags + full history)
 pnpm format        # Format code
 pnpm type-check    # Check types
 pnpm lint          # Lint code
 pnpm test          # Run tests
 pnpm build         # Verify build
 ```
+
+Pre-push hook also runs this scan; pushes are blocked if secrets are detected.
 
 ### 4. Commit Your Changes
 
@@ -164,6 +171,11 @@ Commit types:
 ```bash
 git push origin feat/your-feature-name
 ```
+
+If you hit a push failure due missing `gitleaks`, install it first:
+
+- `brew install gitleaks` (macOS)
+- `go install github.com/gitleaks/gitleaks/v8@latest` (Go)
 
 Then create a Pull Request on GitHub.
 

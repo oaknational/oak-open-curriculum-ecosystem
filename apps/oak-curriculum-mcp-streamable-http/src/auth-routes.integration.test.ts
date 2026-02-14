@@ -1,21 +1,24 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { createApp } from './application.js';
+import { loadRuntimeConfig } from './runtime-config.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
-  beforeEach(() => {
-    // Set minimum required environment variables for createApp
-    process.env.OAK_API_KEY = 'test-api-key';
-    process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
-    delete process.env.BASE_URL;
-    delete process.env.MCP_CANONICAL_URI;
-  });
+  const createTestApp = () => {
+    const runtimeConfig = loadRuntimeConfig({
+      NODE_ENV: 'test',
+      OAK_API_KEY: 'test-api-key',
+      // Must be a syntactically valid Clerk publishable key for Clerk's metadata generator.
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+    });
+    return createApp({ runtimeConfig });
+  };
 
   describe('resource URL generation', () => {
     it('returns resource URL identifying the /mcp endpoint as the protected resource', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       // Make request to the OAuth metadata endpoint
       const res = await request(app)
@@ -36,7 +39,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
 
     it('resource URL uses http protocol for local development', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
@@ -52,7 +55,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
 
     it('resource URL matches request host header and includes /mcp path', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       const testCases = [
         { host: 'example.com', expected: 'https://example.com/mcp' },
@@ -77,7 +80,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
 
     it('resource URL identifies the /mcp endpoint, not auxiliary routes', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
@@ -99,7 +102,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
   describe('scopes_supported field', () => {
     it('returns scopes_supported from generated SCOPES_SUPPORTED constant', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
@@ -120,7 +123,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
 
     it('scopes_supported includes openid and email from security policy', async () => {
-      const app = createApp();
+      const app = createTestApp();
 
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')

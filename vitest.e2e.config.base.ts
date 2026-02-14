@@ -13,8 +13,8 @@ export const baseE2EConfig = defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    // Ensure repo-root .env loading happens before any tests run
-    setupFiles: [resolve(dirname(fileURLToPath(import.meta.url)), 'test.setup.env.ts')],
+    // E2E tests must be network-free; use DI and local fakes instead of real services.
+    setupFiles: [resolve(dirname(fileURLToPath(import.meta.url)), 'test.setup.no-network.ts')],
     passWithNoTests: true,
     include: ['e2e-tests/**/*.e2e.test.ts', 'e2e/**/*.e2e.test.ts'],
     exclude: ['node_modules', 'dist', 'coverage'],

@@ -5,12 +5,15 @@ import { describeExistingListeners } from './process-info.js';
 
 const LOOPBACK_HOST = '127.0.0.1';
 const PORT_CHECK_TIMEOUT_MS = 250;
+const EPHEMERAL_PORT = 0;
 
 /**
  * Starts the streamable HTTP app on the requested port for smoke tests.
  */
 export async function startSmokeServer(port: number): Promise<Server> {
-  await assertPortAvailable(port);
+  if (port !== EPHEMERAL_PORT) {
+    await assertPortAvailable(port);
+  }
   console.log(`[TRACE] startSmokeServer: importing createApp`);
   const { createApp } = await import('../src/application.js');
   console.log(`[TRACE] startSmokeServer: calling createApp()`);
@@ -42,6 +45,17 @@ export async function startSmokeServer(port: number): Promise<Server> {
       reject(error);
     });
   });
+}
+
+export function getServerPort(server: Server): number {
+  const address = server.address();
+  if (!isAddressInfo(address)) {
+    if (!address) {
+      throw new Error('Smoke server is listening but has no address information');
+    }
+    throw new Error(`Smoke server returned an unexpected string address: ${address}`);
+  }
+  return address.port;
 }
 
 /**
@@ -123,16 +137,36 @@ function isValidAddress(
   address: string | AddressInfo | null,
   expectedPort: number,
 ): address is AddressInfo {
-  return Boolean(
-    address &&
-    typeof address !== 'string' &&
-    typeof address.address === 'string' &&
-    address.port === expectedPort,
-  );
+  if (!isAddressInfo(address)) {
+    return false;
+  }
+  if (expectedPort === EPHEMERAL_PORT) {
+    return address.port > 0;
+  }
+  return address.port === expectedPort;
+}
+
+function isAddressInfo(address: string | AddressInfo | null): address is AddressInfo {
+  if (!address) {
+    return false;
+  }
+  if (typeof address === 'string') {
+    return false;
+  }
+  if (typeof address.address !== 'string') {
+    return false;
+  }
+  if (typeof address.port !== 'number') {
+    return false;
+  }
+  return true;
 }
 
 function buildInvalidAddressMessage(port: number, address: string | AddressInfo | null): string {
   const serialised = typeof address === 'string' ? address : JSON.stringify(address);
+  if (port === EPHEMERAL_PORT) {
+    return `Smoke server failed to confirm binding to an ephemeral port. Reported address: ${serialised}.`;
+  }
   return `Smoke server failed to confirm binding to port ${String(
     port,
   )}. Reported address: ${serialised}.`;

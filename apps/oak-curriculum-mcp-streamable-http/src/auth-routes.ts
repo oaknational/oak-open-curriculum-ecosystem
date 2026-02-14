@@ -155,7 +155,12 @@ export function setupGlobalAuthContext(
   authLog.info('🔒 OAuth enforcement enabled via Clerk');
   authLog.debug('Creating and installing global clerkMiddleware');
   const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
-    clerkMiddleware(),
+    clerkMiddleware({
+      // Avoid hidden coupling to process.env so apps/tests can inject RuntimeConfig deterministically.
+      // Clerk options are still the source-of-truth for request authentication behaviour.
+      publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
+      secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
+    }),
   );
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 

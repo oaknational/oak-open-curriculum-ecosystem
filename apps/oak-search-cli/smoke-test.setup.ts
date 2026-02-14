@@ -11,6 +11,18 @@
  *
  */
 
+type Fetch = typeof fetch;
+type GlobalWithFetch = typeof globalThis & {
+  __ORIGINAL_FETCH__?: Fetch;
+  __WITH_FETCH_BLOCKING__?: true;
+};
+
+// Smoke tests allow real network IO; undo the E2E fetch guard if present.
+const g: GlobalWithFetch = globalThis;
+if (g.__WITH_FETCH_BLOCKING__ && typeof g.__ORIGINAL_FETCH__ === 'function') {
+  globalThis.fetch = g.__ORIGINAL_FETCH__;
+}
+
 import { config as dotenvConfig } from 'dotenv';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

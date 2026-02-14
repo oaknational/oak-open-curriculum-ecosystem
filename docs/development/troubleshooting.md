@@ -20,6 +20,12 @@ pnpm test                # Run unit and integration tests
 
 ## Common Issues
 
+### Credential policy
+
+Real credentials must be kept in local `.env` / `.env.local` files only.
+Those files are gitignored and should never be committed.
+Use `.env.example` and other docs as placeholders.
+
 ### Type Generation Fails
 
 **Symptoms**: `pnpm type-gen` fails or produces unexpected output.

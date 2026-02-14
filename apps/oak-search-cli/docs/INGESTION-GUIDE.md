@@ -99,6 +99,9 @@ cat .env.local | grep -E 'ELASTICSEARCH|OAK_API'
 cd ../.. && pnpm build && cd apps/oak-search-cli
 ```
 
+`.env.local` is local-only and ignored by git. Keep real credentials local only and
+keep tracked files placeholder-only.
+
 ### Step 2: Setup Elasticsearch
 
 This creates indexes (if missing) and syncs synonym sets:
@@ -325,6 +328,8 @@ pnpm es:ingest-live -- --subject maths --key-stage ks4
 cp .env.example .env.local
 # Edit .env.local with your credentials
 ```
+
+Never commit `.env.local`, and never add real credentials to `.env.example`.
 
 ---
 

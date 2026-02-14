@@ -1,8 +1,9 @@
 /**
  * Vitest E2E Configuration for Oak Open Curriculum Semantic Search
  *
- * Extends the base E2E config for running search quality benchmarks
- * and other E2E tests against live Elasticsearch.
+ * Extends the base E2E config for running network-free E2E suites.
+ *
+ * Live Elasticsearch validation belongs in smoke tests and experiments.
  */
 
 import { mergeConfig } from 'vitest/config';
@@ -18,7 +19,7 @@ export default mergeConfig(baseE2EConfig, {
         singleFork: true,
       },
     },
-    // E2E tests hit the live search API, so longer timeout
+    // E2E tests spawn real processes; allow a bit more headroom.
     testTimeout: 60000,
     hookTimeout: 60000,
   },

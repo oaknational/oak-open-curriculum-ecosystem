@@ -1,4 +1,5 @@
 title = "oak-mcp-ecosystem gitleaks config"
+minVersion = "8.30.0"
 
 [extend]
 useDefault = true
@@ -11,3 +12,12 @@ paths = [
   '''^\.agent/reference-docs/''',
 ]
 
+[[rules]]
+id = "oak-api-key-uuid"
+description = "Detect UUID-style OAK_API_KEY assignments"
+regex = '''OAK_API_KEY=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'''
+
+[[rules]]
+id = "notion-api-key-ntn-format"
+description = "Detect Notion API keys with ntn_ prefix"
+regex = '''NOTION_API_KEY=ntn_[A-Za-z0-9_-]{20,}'''

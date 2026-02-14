@@ -33,8 +33,8 @@ const ACCEPT = 'application/json, text/event-stream';
 const testEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'REDACTED',
-  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+  CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
 };

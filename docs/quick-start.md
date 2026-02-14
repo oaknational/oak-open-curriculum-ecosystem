@@ -68,6 +68,9 @@ To run dev servers and integration tests, you need the Oak API key:
 cp .env.example .env
 # Edit .env and set: OAK_API_KEY=your_key_here
 
+# Local `.env` and `.env.local` files are ignored by git.
+# Keep secrets in local files only, and keep `.env.example` placeholder-only.
+
 # 2. Run full quality gates
 pnpm make    # install → type-gen → build → docs → lint → format
 pnpm qg      # All quality gates

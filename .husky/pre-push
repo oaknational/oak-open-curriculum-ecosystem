@@ -8,6 +8,23 @@ export TURBO_CONCURRENCY=4
 
 echo "🚀 Running pre-push checks..."
 
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "❌ gitleaks is not installed."
+  echo "Install it before running pre-push:"
+  echo "  - macOS: brew install gitleaks"
+  echo "  - Go: go install github.com/gitleaks/gitleaks/v8@latest"
+  echo "Then retry your push."
+  exit 1
+fi
+
+echo "🛡️ Running secret scan..."
+if ! pnpm secrets:scan:all; then
+  echo "❌ Secret scan failed."
+  echo "Remove or scrub secret-like values before pushing."
+  echo "Use local placeholders for .env.example and real credentials only in .env files."
+  exit 1
+fi
+
 echo "📝 Checking formatting..."
 if ! pnpm format-check:root; then
   echo "❌ Formatting issues found!"
@@ -25,4 +42,3 @@ echo "🧪 Running E2E tests..."
 pnpm turbo run test:e2e --only
 
 echo "✅ Pre-push checks completed!"
-

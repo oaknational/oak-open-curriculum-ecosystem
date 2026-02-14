@@ -107,10 +107,11 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     app = createApp({
       runtimeConfig: createMockRuntimeConfig({
         // Auth enabled by default in mock config
+        useStubTools: true,
         env: {
           OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'REDACTED',
-          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+          CLERK_SECRET_KEY: 'sk_test_123',
           NODE_ENV: 'test',
           LOG_LEVEL: 'debug',
         },
@@ -332,10 +333,11 @@ describe('Auth Enforcement - RFC Compliance', () => {
   beforeAll(() => {
     app = createApp({
       runtimeConfig: createMockRuntimeConfig({
+        useStubTools: true,
         env: {
           OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'REDACTED',
-          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+          CLERK_SECRET_KEY: 'sk_test_123',
           NODE_ENV: 'test',
         },
       }),
@@ -447,10 +449,11 @@ describe('Public Tools (noauth)', () => {
   beforeAll(() => {
     app = createApp({
       runtimeConfig: createMockRuntimeConfig({
+        useStubTools: true,
         env: {
           OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'REDACTED',
-          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+          CLERK_SECRET_KEY: 'sk_test_123',
           NODE_ENV: 'test',
         },
       }),

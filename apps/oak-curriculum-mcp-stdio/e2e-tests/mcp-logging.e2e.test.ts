@@ -5,8 +5,6 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { findRepoRoot } from '@oaknational/mcp-env';
 
-process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
-
 function readStartupLog(repoRoot: string): string {
   const p = join(repoRoot, '.logs', 'oak-curriculum-mcp-startup', 'startup.log');
   if (!existsSync(p)) {
@@ -24,16 +22,14 @@ describe('MCP Startup logging', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    const apiKey = process.env.OAK_API_KEY;
-    if (!apiKey) {
-      throw new Error('OAK_API_KEY is not set');
-    }
+    const apiKey = 'test-api-key';
 
     transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
+        OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'debug',
       },

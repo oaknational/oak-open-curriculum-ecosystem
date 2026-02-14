@@ -83,21 +83,17 @@ curl -I http://localhost:3333/.well-known/oauth-protected-resource
 
 ---
 
-## Inspector CLI Test Result
+## MCP Inspector (UI) Validation
 
 ```bash
-pnpm smoke:oauth-inspector
+# Terminal 1 (auth enabled, stub tools)
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev:auth:stub
+
+# Terminal 2 (launch Inspector UI)
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http inspect:oauth
 ```
 
-**Result**: `HTTP/1.1 401 Unauthorized`
-
-```text
-Failed to connect to MCP server: Error POSTing to endpoint (HTTP 401): {"error":"Unauthorized"}
-```
-
-✅ **This is CORRECT behavior** - The server properly challenges clients with OAuth.
-
-**Note**: The MCP Inspector CLI does not automatically complete the OAuth flow (which requires browser interaction). The 401 response with `WWW-Authenticate` header proves OAuth enforcement is working. The curl tests above already prove the OAuth discovery chain works.
+✅ **Expected behaviour**: the Inspector can complete OAuth (browser interaction) and then call a protected tool successfully (for example `get-key-stages`), without requiring live Oak API calls.
 
 ---
 

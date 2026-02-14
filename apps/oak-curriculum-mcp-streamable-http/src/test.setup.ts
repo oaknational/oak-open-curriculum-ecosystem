@@ -7,11 +7,11 @@
 
 type OriginalGlobalThis = typeof globalThis;
 type Fetch = typeof fetch;
-interface GlobalWithFetch extends OriginalGlobalThis {
+type GlobalWithFetch = OriginalGlobalThis & {
   __ORIGINAL_FETCH__?: Fetch;
   __WITH_FETCH_BLOCKING__?: true;
   __IS_TEST_SETUP__?: true;
-}
+};
 
 const g: GlobalWithFetch = globalThis;
 

@@ -52,8 +52,8 @@ describe('Application-Level Method-Aware Auth', () => {
         // Auth enabled by default in mock config
         env: {
           OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'REDACTED',
-          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+          CLERK_SECRET_KEY: 'sk_test_123',
           NODE_ENV: 'test',
         },
       }),
@@ -265,8 +265,8 @@ describe('Application-Level Method-Aware Auth', () => {
           dangerouslyDisableAuth: true,
           env: {
             OAK_API_KEY: 'test-api-key',
-            CLERK_PUBLISHABLE_KEY: 'REDACTED',
-            CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+            CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+            CLERK_SECRET_KEY: 'sk_test_123',
             NODE_ENV: 'development',
           },
         }),

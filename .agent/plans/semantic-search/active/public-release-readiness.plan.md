@@ -2,7 +2,7 @@
 
 **Status**: In progress -- execute all workstreams
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
-**Last Updated**: 2026-02-13
+**Last Updated**: 2026-02-14
 
 ---
 
@@ -49,7 +49,7 @@ The plan can be resumed in a staged fashion. If this is a secrets-only session:
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | In progress (history scrubbed; docs/CI policy pending) |
+| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | In progress (policy/docs/CI complete; key rotation still pending) |
 | WS2 | [Licence and legal](#workstream-2-licence-and-legal) | Pending |
 | WS3 | [Package.json standardisation](#workstream-3-packagejson-standardisation) | Pending |
 | WS4 | [Documentation overhaul](#workstream-4-documentation-overhaul) | Pending |
@@ -84,7 +84,7 @@ credentials cannot re-enter the repository.
 - `.env.example` files must contain placeholders only.
 - All other tracked files must contain placeholders/redacted values.
 
-**Status (2026-02-13)**: Partially complete.
+**Status (2026-02-14)**: Completed.
 
 **Implemented**:
 
@@ -92,16 +92,20 @@ credentials cannot re-enter the repository.
 - `pnpm secrets:scan:all` and `pnpm secrets:scan:all-refs` added (history scans).
 - `pnpm check` now runs `pnpm secrets:scan:all` as a quality gate.
 
+- Credential policy added to `README.md`, `CONTRIBUTING.md`, and environment/security guidance docs.
+- CI secret scan added with full-history checkout in `.github/workflows/ci.yml`.
+- Pre-push gate added in `.husky/pre-push`.
+- Docs/ADR updates added for local env policy and line-level exception strategy.
+
 **Remaining**:
 
-- Add this policy explicitly to `README.md`, `CONTRIBUTING.md`, and the security guidance docs.
-- Add a CI check that fails when key-like values appear in tracked non-`.env*` files.
+- **User action**: rotate any keys that were ever live (assume compromise if ever committed historically).
 
 ### 1b: API keys in experience document
 
 **File**: `.agent/experience/the-api-key-revelation.md`
 
-**Status (2026-02-13)**: Completed. This file contains placeholders only.
+**Status (2026-02-14)**: Completed. This file contains placeholders only.
 
 **Remediation**:
 
@@ -136,7 +140,7 @@ is still active. If so, rotate or decommission it.
 
 ### 1d: Secret scanning gates (CI and optional pre-commit)
 
-**Status (2026-02-13)**: Partially complete.
+**Status (2026-02-14)**: Completed.
 
 **Implemented**:
 
@@ -145,11 +149,8 @@ is still active. If so, rotate or decommission it.
   - `pnpm secrets:scan:all` (branches + tags)
   - `pnpm secrets:scan:all-refs` (forensics: all refs)
 - `pnpm check` runs `pnpm secrets:scan:all` first.
-
-**Remaining**:
-
-- Add a required CI step in `.github/workflows/ci.yml` on every PR.
-- Decide whether to run gitleaks in a pre-commit/pre-push hook for earlier feedback.
+- Pre-push hook runs `pnpm secrets:scan:all` and blocks pushes when scans fail.
+- CI runs full-history secret scan and fails on findings in each run.
 
 ### 1e: Known docs examples (no remediation needed)
 
@@ -179,13 +180,13 @@ documentation policy requires sanitising all token-like examples.
 
 ### Completion checklist
 
-- [ ] Credential location policy documented (real keys only in local untracked `.env*`; never in `.env.example` or other tracked files)
+- [x] Credential location policy documented (real keys only in local untracked `.env*`; never in `.env.example` or other tracked files)
 - [x] Local secret scanning configured (`.gitleaks.toml`) and wired into `pnpm check` (`pnpm secrets:scan:all`)
-- [ ] CI secret scan added with targeted allowlist handling
+- [x] CI secret scan added with targeted allowlist handling
 - [x] API keys redacted in `.agent/experience/the-api-key-revelation.md`
 - [x] Clerk tenant/publishable values redacted across tracked non-`.env*` files
 - [ ] Exposed keys rotated (user action)
-- [ ] Pre-commit/pre-push secret scan hook evaluated and decision documented
+- [x] Pre-commit/pre-push secret scan hook evaluated and decision documented
 - [x] Git history scrubbing decision made and documented
 
 ---

@@ -2,23 +2,19 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
-
 describe('MCP dev runner (tsx src/index.ts)', () => {
   let client: Client;
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    const apiKey = process.env.OAK_API_KEY;
-    if (!apiKey) {
-      throw new Error('OAK_API_KEY is not set');
-    }
+    const apiKey = 'test-api-key';
 
     transport = new StdioClientTransport({
       command: 'tsx',
       args: ['src/index.ts'],
       env: {
         ...process.env,
+        OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
       },

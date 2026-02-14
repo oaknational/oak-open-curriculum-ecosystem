@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
@@ -12,6 +12,32 @@ import { loadRuntimeConfig } from '../src/runtime-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
+// E2E tests MUST be network-free and must not depend on Clerk key validity.
+// Manual OAuth validation is covered by `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`.
+vi.mock('@clerk/mcp-tools/server', () => ({
+  generateClerkProtectedResourceMetadata: ({
+    resourceUrl,
+    properties,
+  }: {
+    resourceUrl: string;
+    properties?: { scopes_supported?: string[] };
+  }) => ({
+    resource: resourceUrl,
+    authorization_servers: ['https://example.clerk.accounts.dev'],
+    scopes_supported: properties?.scopes_supported ?? [],
+  }),
+}));
+
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
+
 /**
  * Isolated test environment with auth bypassed.
  * No global `process.env` mutation — see ADR-078.
@@ -19,8 +45,8 @@ const ACCEPT = 'application/json, text/event-stream';
 const authBypassedEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'REDACTED',
-  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+  CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
 };
@@ -30,8 +56,8 @@ const authBypassedEnv: NodeJS.ProcessEnv = {
  */
 const authEnforcedEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
-  CLERK_PUBLISHABLE_KEY: 'REDACTED',
-  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+  CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
 };

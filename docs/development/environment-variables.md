@@ -2,6 +2,25 @@
 
 Complete reference for all environment variables used across the Oak MCP Ecosystem.
 
+## Credential Policy
+
+The repository policy is:
+
+- Real credentials are only in local `.env` and `.env.local` files.
+- `.env` and `.env.local` are ignored by git and must never be committed.
+- `.env.example` files are placeholders only and must not contain live credentials.
+- Other tracked files should contain placeholders, fixtures, or comments instead of secrets.
+
+A useful guardrail is to run:
+
+```bash
+pnpm secrets:scan:all
+```
+
+Reference-document examples under `.agent/reference-docs/` are intentionally
+allowed to contain token-like examples; other files must use targeted line-level
+exceptions only if required.
+
 ## Quick Reference by Contribution Level
 
 | Contribution Level                                         | Required Variables                          | Optional Variables                 | Setup Time    |

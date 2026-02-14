@@ -51,6 +51,9 @@ cd apps/oak-search-cli
 cp .env.example .env.local
 ```
 
+`.env.local` is local-only and ignored by git.
+Fill it with real values locally only; placeholders stay in `.env.example`.
+
 Update the following variables:
 
 ```env

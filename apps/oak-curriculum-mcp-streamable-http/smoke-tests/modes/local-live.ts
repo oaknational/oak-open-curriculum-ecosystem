@@ -1,5 +1,5 @@
 import type { PrepareEnvironmentOptions, PreparedEnvironment, LoadedEnvResult } from '../types.js';
-import { startSmokeServer } from '../local-server.js';
+import { getServerPort, startSmokeServer } from '../local-server.js';
 
 export async function prepareLocalLiveEnvironment(
   options: PrepareEnvironmentOptions,
@@ -20,11 +20,15 @@ export async function prepareLocalLiveEnvironment(
   // Disable auth – live mode here checks Oak API plumbing only.
   // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+
+  const server = await startSmokeServer(options.port);
+  const port = getServerPort(server);
+
   return {
-    baseUrl: `http://localhost:${String(options.port)}`,
+    baseUrl: `http://localhost:${String(port)}`,
     devToken: undefined, // No dev token - auth is disabled
     envLoad,
-    server: await startSmokeServer(options.port),
+    server,
     devTokenSource: 'not-applicable-auth-disabled',
   };
 }

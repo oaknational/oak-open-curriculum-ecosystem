@@ -13,7 +13,7 @@
  */
 
 import type { PrepareEnvironmentOptions, PreparedEnvironment, LoadedEnvResult } from '../types.js';
-import { startSmokeServer } from '../local-server.js';
+import { getServerPort, startSmokeServer } from '../local-server.js';
 
 export const STUB_API_KEY = 'stub-smoke-key';
 const STUB_CLERK_PUBLISHABLE_KEY = 'REDACTED';
@@ -41,11 +41,14 @@ export async function prepareLocalStubAuthEnvironment(
   // Auth is ENABLED - no DANGEROUSLY_DISABLE_AUTH
   delete process.env.DANGEROUSLY_DISABLE_AUTH;
 
+  const server = await startSmokeServer(options.port);
+  const port = getServerPort(server);
+
   return {
-    baseUrl: `http://localhost:${String(options.port)}`,
+    baseUrl: `http://localhost:${String(port)}`,
     devToken: undefined, // No dev token - auth requires real OAuth token
     envLoad,
-    server: await startSmokeServer(options.port),
+    server,
     devTokenSource: 'not-required', // Auth will be enforced via Clerk
   };
 }
