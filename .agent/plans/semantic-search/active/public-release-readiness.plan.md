@@ -49,7 +49,7 @@ The plan can be resumed in a staged fashion. If this is a secrets-only session:
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | In progress (policy/docs/CI complete; key rotation still pending) |
+| WS1 | [Secrets audit and remediation](#workstream-1-secrets-audit-and-remediation) | Complete (including key rotation) |
 | WS2 | [Licence and legal](#workstream-2-licence-and-legal) | Pending |
 | WS3 | [Package.json standardisation](#workstream-3-packagejson-standardisation) | Pending |
 | WS4 | [Documentation overhaul](#workstream-4-documentation-overhaul) | Pending |
@@ -112,6 +112,7 @@ credentials cannot re-enter the repository.
 - Keep the document (it is a valuable reflection) but ensure it never contains real credentials.
 
 **User action required**: Rotate any keys that were ever live, even though the repository history has been scrubbed.
+**Status (2026-02-14)**: Completed (user-confirmed rotation).
 
 ### 1c: Clerk publishable key and tenant URL across tracked files
 
@@ -186,6 +187,7 @@ documentation policy requires sanitising all token-like examples.
 - [x] API keys redacted in `.agent/experience/the-api-key-revelation.md`
 - [x] Clerk tenant/publishable values redacted across tracked non-`.env*` files
 - [ ] Exposed keys rotated (user action)
+- [x] Exposed keys rotated (user action; user-confirmed)
 - [x] Pre-commit/pre-push secret scan hook evaluated and decision documented
 - [x] Git history scrubbing decision made and documented
 
