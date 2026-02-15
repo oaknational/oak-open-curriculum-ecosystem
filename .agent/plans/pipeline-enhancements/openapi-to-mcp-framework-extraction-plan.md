@@ -128,37 +128,37 @@ Deliver an extensible framework that transforms any OpenAPI specification, plus 
 3. ACTION: Define target abstraction layers for SDK generation, MCP runtime, and search service, capturing interfaces, dependency boundaries, and DI requirements in `docs/architecture/openapi-framework-layers.md`.
 4. REVIEW: Self-review the abstraction draft ensuring it reflects the Prime Directive and enforces single sources of truth.
 5. QUALITY-GATE: Cross-check that audit and abstraction documents reference the latest code paths (`packages/sdks/oak-curriculum-sdk/`, `apps/oak-curriculum-mcp-stdio/`, `apps/oak-curriculum-mcp-streamable-http/`, `apps/oak-search-cli/`).
-6. GROUNDING: Read GO.md and follow all instructions; update approach if plan or context has shifted.
+6. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; update approach if plan or context has shifted.
 7. ACTION: Design the framework configuration schema (fields for schema source, transport targets, auth strategies, search entity descriptors, optional modules) and validate it with Zod guards plus illustrative examples under `packages/openapi-mcp-framework/config/`.
 8. REVIEW: Self-review the configuration schema and examples to ensure alignment with `.agent/directives/rules.md` type-safety mandates.
-9. QUALITY-GATE: Execute `pnpm type-check` and `pnpm lint` focused on the new config package to guarantee rule compliance before proceeding.
+9. QUALITY-GATE: Execute `pnpm type-check` and `pnpm lint:fix` focused on the new config package to guarantee rule compliance before proceeding.
 10. ACTION: Document the onboarding dry-run procedure and acceptance checklist in `docs/openapi-mcp-framework/onboarding-checklist.md` to measure adoption readiness.
 11. REVIEW: Self-review the onboarding checklist, verifying it covers SDK, MCP server, and search scaffolding expectations.
-12. GROUNDING: Read GO.md and follow all instructions; reassess remaining tasks against updated understanding.
+12. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; reassess remaining tasks against updated understanding.
 13. ACTION: Extract reusable runtime utilities (logging, transport wiring, auth middleware, tool registration) into a new shared package `packages/libs/mcp-server-framework/`, exposing factory functions for STDIO and streamable HTTP servers.
 14. REVIEW: Self-review the shared runtime package to confirm behaviours remain covered by tests and no Oak-only assumptions leak into general abstractions.
 15. QUALITY-GATE: Run targeted unit/integration tests for the shared runtime package plus lint/type-check/build to validate stability.
 16. ACTION: Implement SDK generator CLI (`pnpm exec openapi-mcp gen-sdk`) that consumes the config schema, reuses existing scripts, emits namespaced outputs under `packages/generated/${target}`, and ships example configs for the Oak spec and at least two non-Oak reference specs in `packages/openapi-mcp-framework/examples/`.
 17. REVIEW: Self-review the CLI ensuring generated code mirrors the current curriculum SDK structure and honours the testing strategy (tests first, unit scope).
-18. GROUNDING: Read GO.md and follow all instructions; adjust subsequent tasks if new insights arise.
+18. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; adjust subsequent tasks if new insights arise.
 19. QUALITY-GATE: Run targeted unit/integration tests for generated SDK samples plus lint/type-check/build, exercising the CLI against all example configs to validate production readiness.
 20. ACTION: Scaffold MCP server templates (STDIO and HTTP) using the shared runtime package, driven entirely by the config, and include baseline tests under `apps/generated-example-mcp/`.
 21. REVIEW: Self-review the generated MCP servers to guarantee environment handling, tool registration, and validation match repository standards.
 22. QUALITY-GATE: Execute end-to-end transport tests for the generated MCP servers (STDIO + HTTP) and capture logs for audit.
 23. ACTION: Create search service scaffolding that maps config-defined entities—via descriptor definitions in the config—to ingestion scripts, index definitions, and API routes, with optional strategy hooks (e.g., lexical-only vs hybrid).
-24. GROUNDING: Read GO.md and follow all instructions; capture reflections and plan adjustments before continuing.
+24. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; capture reflections and plan adjustments before continuing.
 25. REVIEW: Self-review the search scaffolding to confirm deterministic outputs, canonical URL handling, and adherence to the testing taxonomy (unit vs integration vs e2e).
 26. QUALITY-GATE: Execute end-to-end smoke tests against the generated search service and its MCP wrapper to ensure contract fidelity across sample configs.
 27. ACTION: Instrument success metrics (latency, coverage, CI duration, onboarding dry-run) and populate the quality dashboard in `docs/openapi-mcp-framework/metrics.md`.
 28. REVIEW: Self-review metric instrumentation ensuring each success metric is observable and documented.
 29. QUALITY-GATE: Validate telemetry pipelines by running the CLI and verifying metrics ingestion for Oak + non-Oak samples.
-30. GROUNDING: Read GO.md and follow all instructions; confirm governance checkpoints remain relevant.
+30. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; confirm governance checkpoints remain relevant.
 31. ACTION: Document framework usage, extension points, and testing expectations in `docs/openapi-mcp-framework/usage-guide.md`, including walkthroughs for generating higher-level tools.
 32. REVIEW: Self-review documentation for clarity, British spelling, and strict alignment with rules and testing strategy references.
 33. QUALITY-GATE: Run `pnpm docs:verify` and Lighthouse checks for documentation accessibility, recording results.
 34. ACTION: Compile final rollout checklist covering release versioning, CI integration (including automated quality-gate runs), and migration guidance for existing Oak curriculum servers in `docs/openapi-mcp-framework/rollout.md`.
 35. REVIEW: Self-review the rollout checklist to ensure every required quality gate, documentation update, and migration step is tracked.
-36. GROUNDING: Read GO.md and follow all instructions; prepare for final validation and governance sign-off.
+36. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; prepare for final validation and governance sign-off.
 37. ACTION: Conduct governance sign-off meeting (self-review log) summarising milestone completion, success metrics, and outstanding risks, storing minutes in `docs/openapi-mcp-framework/governance-log.md`.
 38. REVIEW: Publish the sign-off summary and update plan status to reflect completion and next-phase recommendations.
 39. QUALITY-GATE: Perform full quality gate sequence (format, type-check, lint, test, build, docs) on framework packages and generated artefacts, and verify the CI pipeline executes the same gates, recording outcomes in project logs.

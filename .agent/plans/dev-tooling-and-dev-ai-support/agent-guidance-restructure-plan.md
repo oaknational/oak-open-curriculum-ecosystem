@@ -11,7 +11,7 @@ The current `rules.md` file (109 lines) is too long for some agents to read in a
 - **Scannability**: Ensure all core files are readable in a single agent action (~60-70 lines maximum)
 - **TDD Resonance**: Maintain the pedagogical reinforcement through varied repetition and checkpoints
 - **Testing Criticality**: Preserve testing-strategy.md as a mandatory rules document, not optional guidance
-- **Kairos Recursion**: Enhance the AGENT.md → GO.md → rules negative feedback loop for long-session stability
+- **Kairos Recursion**: Enhance the AGENT.md → GO.md (`.agent/prompts/GO.md`) → rules negative feedback loop for long-session stability
 - **Cohesive System**: Create clear hierarchy between mandatory rules, mandatory practices, and reference guidance
 
 ## Core Architecture: Four-File Grounding System

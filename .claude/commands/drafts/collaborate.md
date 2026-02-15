@@ -8,8 +8,8 @@ The repo rules are here .agent/directives/rules.md read them, reflect on them, e
 
 There are a number of specialist sub-agents you can use to help you .claude/commands, when you do, always make sure you have done your own analysis first, and instruct the sub-agents to report findings, rather than make changes.\
 
-Run the quality gates to understand the state of the repo, analyse the results, make a long and atomic todo list, decorate it with regular instructions to read and update the collaboration document, then read GO.md and follow all instructions, then carry on.\
+Run the quality gates to understand the state of the repo, analyse the results, make a long and atomic todo list, decorate it with regular instructions to read and update the collaboration document, then read `.agent/prompts/GO.md` and follow all instructions, then carry on.\
 
 ===
 
-please read and understand .agent/plans/snagging-collaboration.md, add a section at the end stating what you are working on, append updates to the end of the file regularly. You can also use the file to ask questions and hand-off work. Read GO.md and follow all instructions.
+please read and understand .agent/plans/snagging-collaboration.md, add a section at the end stating what you are working on, append updates to the end of the file regularly. You can also use the file to ask questions and hand-off work. Read `.agent/prompts/GO.md` and follow all instructions.

@@ -166,7 +166,7 @@ Errors are classified and handled appropriately:
 
 ### Runtime Security
 
-- **Node.js 22+**: Latest security patches
+- **Node.js 24.x**: Latest security patches
 - **ESM Only**: Modern module system
 - **No Eval**: No dynamic code execution
 - **Strict Mode**: JavaScript strict mode enabled

@@ -7,14 +7,16 @@ NEVER disable checks of any kind, ever.
 The quality gates must be run after all major changes, and before each commit:
 
 - `pnpm type-gen` - Type generation
-- `pnpm format` - Code formatting (Prettier)
+- `pnpm build` - Build
 - `pnpm type-check` - Type checking (TypeScript strict mode)
-- `pnpm lint` - Linting (ESLint)
+- `pnpm lint:fix` - Linting with auto-fix (ESLint)
+- `pnpm format:root` - Code formatting (Prettier)
+- `pnpm markdownlint:root` - Markdown lint
 - `pnpm test` - Testing (Vitest)
 
 Locally we can also run
 
-- pnpm test:e2e - E2E tests (requires approrpiate API keys set in the root .env)
+- `pnpm test:e2e` - E2E tests (requires appropriate API keys set in the root `.env`)
 
 Where the quality gates reveal an issue, the issue must be fixed, regardless of the location or cause. There is no such thing as an acceptable failure, ever.
 

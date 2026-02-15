@@ -831,6 +831,22 @@ Completed all workstreams (WS2c-WS6) and quality gates for the
 - **Plan archived**: `public-release-readiness.plan.md` moved from `active/` to `archive/completed/`. All 4 inbound references (roadmap, README, developer-onboarding plan x2) updated to new path.
 - **QG**: all gates pass after changes.
 
+### Session: Developer Onboarding Experience (WS1-WS6), 15 Feb 2026
+
+Executed the full developer-onboarding-experience plan. Key changes:
+
+- **GO.md**: Moved from root to `.agent/prompts/GO.md`, rewritten as complement to AGENT.md. AGENT.md updated to reference the new location. Removed self-referential "every 6th task" pattern, replaced with "invoke start-right.prompt.md".
+- **Deletions**: `docs/onboarding.md` (compatibility pointer), `docs/usage/README.md`, `docs/usage/api-reference.md` (Notion-era), `docs/research/README.md` (stale targets).
+- **Rewrites**: `docs/development/onboarding.md` (fixed GO.md refs, stale commands like `pnpm make`/`pnpm qg`/`pnpm format`/`pnpm lint`), `docs/agent-guidance/ai-agent-guide.md` (lighter companion to AGENT.md), `docs/agent-guidance/understanding-agent-references.md` (updated to `.agent/reference-docs/` structure).
+- **Command drift fixes**: Corrected `pnpm format` -> `format:root`, `pnpm lint` -> `lint:fix`, `pnpm markdownlint` -> `markdownlint:root` across onboarding-path docs. Added Command Naming source-of-truth section to `docs/development/build-system.md`.
+- **Link integrity**: Fixed broken `docs/vercel-environment-config.md` link in `environment-variables.md`. Updated GO.md references in 4 plan files and 2 claude command files. Updated `docs/README.md`, `docs/development/README.md`, `docs/agent-guidance/README.md`, `docs/quick-start.md`, `README.md`.
+- **Consistency**: Fixed Node.js 22 -> 24.x in `safety-and-security.md`. Verified credential/contribution messaging is consistent.
+- **Release operator runbook**: Expanded `release-and-publishing.md` with step-by-step procedures, dry-run walkthrough, rollback guidance, troubleshooting table.
+- **start-right prompts**: Removed stale `pnpm test:e2e:built` from both `start-right.prompt.md` and `start-right-thorough.prompt.md`.
+- **QG**: All gates pass (format:root, markdownlint:root, type-check, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, build).
+
+#### Lesson: Many archive files contain stale commands (`pnpm format`, `pnpm lint`), but these are historical records and should not be updated. Focus command drift fixes on onboarding-path and active documentation.
+
 #### Documentation Migration Candidates (noted, not acted on)
 
 These are lower-priority candidates that may be worth migrating in future sessions:

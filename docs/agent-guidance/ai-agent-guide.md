@@ -1,32 +1,31 @@
 # AI Agent Development Guide
 
-This guide helps AI agents work effectively with the Oak Notion MCP codebase using GO.md and established practices.
+This guide helps AI agents and human developers work effectively with the Oak MCP ecosystem. It complements [AGENT.md](../../.agent/directives/AGENT.md), which is the canonical entry point for agent directives, rules, and architectural context.
 
-## 🎯 The GO.md Pattern
+## Getting Started
 
-When given a task, always include "Read GO.md and follow all instructions" in your prompt. This ensures:
+1. Read [AGENT.md](../../.agent/directives/AGENT.md) and follow all instructions
+2. Read [rules.md](../../.agent/directives/rules.md) — the authoritative rules
+3. Read [testing-strategy.md](../../.agent/directives/testing-strategy.md) — TDD at all levels
+4. Create your todo list (see [Task Management](#task-management) below)
+5. Mark the first task as in-progress and begin
 
-1. **Intent Clarity**: You identify and state the current plan
-2. **Regular Grounding**: You re-read GO.md every third task
-3. **Quality Maintenance**: You follow all rules and best practices
+## Standard Architecture
 
-## 🧱 Standard Architecture (Current)
+Active code and documentation use a conventional, intent-revealing structure:
 
-Active code and documentation use a conventional, intent‑revealing structure:
-
-- `apps/` – runnable MCP servers (application wiring, startup)
-- `packages/libs/` – shared interfaces, types, and utilities (logger, storage, transport, env)
-- `packages/libs/` – runtime‑adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
-
-Historical material describing the legacy Greek model is preserved for context only. See the single pointer document: [Greek ecosystem deprecation](../architecture/greek-ecosystem-deprecation.md).
+- `apps/` — runnable MCP servers and the search CLI (application wiring, startup)
+- `packages/sdks/` — SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
+- `packages/libs/` — runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
+- `packages/core/` — shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/openapi-zod-client-adapter`)
 
 Key implementation principles:
 
 - Small modules with clear interfaces
 - Dependency injection instead of direct imports for runtime concerns
-- Strict lint boundaries for safe cross‑package interactions
+- Strict lint boundaries for safe cross-package interactions
 
-## 📋 Task Management
+## Task Management
 
 ### TodoWrite Tool Usage
 
@@ -41,13 +40,11 @@ Always use the TodoWrite tool to:
 ```text
 1. Research existing implementation
 2. Write tests for new feature
-3. GROUNDING: read GO.md and follow all instructions
-4. Implement feature to pass tests
-5. Run quality gates
-6. GROUNDING: read GO.md and follow all instructions
-7. Refactor for clarity
-8. Update documentation
-9. GROUNDING: read GO.md and follow all instructions
+3. Implement feature to pass tests
+4. Run quality gates
+5. Refactor for clarity
+6. GROUNDING: re-read AGENT.md and rules.md
+7. Update documentation
 ```
 
 ### Planning with Kairos Time
@@ -68,131 +65,100 @@ Examples of semantic milestones:
 
 This approach acknowledges that development time is highly variable and depends on discoveries made during implementation.
 
-## 🔄 Development Workflow
+## Development Workflow
 
-### 1. Before Starting Any Task
+### Before Starting Any Task
 
 ```text
-1. Read GO.md
-2. Read AGENT.md
-3. Create todo list with TodoWrite
-4. Mark first task as in_progress
+1. Read AGENT.md and the relevant plan
+2. Create todo list with TodoWrite
+3. Mark first task as in_progress
 ```
 
-### 2. During Development
+### During Development
 
 ```text
-1. Follow TDD: Write test → Make it pass → Refactor
+1. Follow TDD: Write test -> Make it pass -> Refactor
 2. Run quality gates after each significant change:
-   - pnpm format
+   - pnpm format:root
+   - pnpm markdownlint:root
    - pnpm type-check
-   - pnpm lint
+   - pnpm lint:fix
    - pnpm test
-   - pnpm build
 3. Keep only ONE task in_progress at a time
 4. Mark tasks completed immediately when done
 ```
 
-### 3. Every Third Task
+### Periodic Grounding
 
-Re-read GO.md to:
+Periodically re-read AGENT.md and the current plan to:
 
-- Verify you're still aligned with the plan
+- Verify you are still aligned with the plan
 - Check if anything has changed
-- Ensure todo list is still relevant
+- Ensure the todo list is still relevant
 - Remove completed or irrelevant tasks
 
-## 🚫 Common Pitfalls to Avoid
+See [GO.md](../../.agent/prompts/GO.md) for a structured grounding prompt with ACTION/REVIEW cadence.
 
-### 1. Task Drift
+## Common Pitfalls to Avoid
 
-**Problem**: Starting to implement features not in the original plan
-**Solution**: Regular GO.md grounding keeps you focused
+### Task Drift
 
-### 2. Incomplete Quality Gates
+**Problem**: Starting to implement features not in the original plan.
+**Solution**: Regular grounding keeps you focused.
 
-**Problem**: Forgetting to run tests or linting
-**Solution**: Include quality gates in your todo list
+### Incomplete Quality Gates
 
-### 3. Non-Atomic Tasks
+**Problem**: Forgetting to run tests or linting.
+**Solution**: Include quality gates in your todo list.
 
-**Problem**: Tasks like "Implement entire feature"
-**Solution**: Break down into specific, measurable subtasks
+### Non-Atomic Tasks
 
-### 4. Forgetting PII Scrubbing
+**Problem**: Tasks like "Implement entire feature".
+**Solution**: Break down into specific, measurable subtasks.
 
-**Problem**: Exposing emails or sensitive data
-**Solution**: Always use the data scrubbing utilities
+### Forgetting PII Scrubbing
 
-## 📝 Example: Adding a New Tool
+**Problem**: Exposing emails or sensitive data.
+**Solution**: Always use the data scrubbing utilities. See [Safety and Security](./safety-and-security.md).
 
-```markdown
-Task: Add a new tool to archive Notion pages. Read GO.md and follow all instructions.
+## Key Files to Remember
 
-TodoWrite:
+### Application Layout (example: streamable HTTP MCP server)
 
-1. Read GO.md and follow all instructions ✓
-2. Research Notion API archive capabilities
-3. Write unit tests for archive logic
-4. GROUNDING: read GO.md and follow all instructions
-5. Write integration tests for MCP handler
-6. Implement pure archive function
-7. GROUNDING: read GO.md and follow all instructions
-8. Implement MCP tool handler
-9. Run all quality gates
-10. GROUNDING: read GO.md and follow all instructions
-11. Update API documentation
-12. Add example to quick reference
-```
-
-## 🔍 Key Files to Remember
-
-### Application Layout (example)
-
-- `src/app/` - Composition root (wiring, startup, server bootstrap)
-- `src/tools/` - MCP tools and handlers
-- `src/integrations/` - External integrations (e.g. Notion)
-- `src/types/` - Local types and contracts
-- `src/logging/` - App‑specific logging utilities
+- `src/app/` — Composition root (wiring, startup, server bootstrap)
+- `src/mcp/` — MCP tool registration and handling
+- `src/auth/` — Authentication middleware
+- `src/types/` — Local types and contracts
 
 ### Configuration
 
-- `GO.md` - Grounding document (read every 3rd task)
-- `AGENT.md` - Agent-specific directives
-- `.agent/plans/` - Project plans and phases
+- `.agent/directives/AGENT.md` — Canonical agent directives
+- `.agent/directives/rules.md` — Authoritative rules
+- `.agent/prompts/GO.md` — Grounding prompt with ACTION/REVIEW cadence
+- `.agent/plans/` — Project plans and phases
 
 ### Documentation
 
-- `docs/usage/api-reference.md` - All tools and resources
-- `docs/agent-guidance/development-practice.md` - Code standards
-- `docs/troubleshooting.md` - Common issues
+- [Development Practice](./development-practice.md) — Code standards
+- [Troubleshooting](../development/troubleshooting.md) — Common issues
+- [Architecture](../architecture/README.md) — Architecture overview and ADRs
 
-## ✅ Success Checklist
+## Success Checklist
 
 Before considering any task complete:
 
 - [ ] All tests pass (unit, integration)
-- [ ] Quality gates pass (format, lint, type-check, build)
+- [ ] Quality gates pass (`format:root`, `markdownlint:root`, `type-check`, `lint:fix`, `build`)
 - [ ] Documentation updated if needed
 - [ ] No hardcoded values or credentials
 - [ ] PII properly scrubbed
 - [ ] Todo list updated and current
-- [ ] GO.md grounding completed as scheduled
 
-## 🎓 Learning Resources
-
-1. **Start Here**: [Developer Onboarding Journey](../development/onboarding-journey.md)
-2. **Quick Tasks**: [Quick Reference](../quick-reference.md)
-3. **Deep Dive**: [Understanding Agent References](./understanding-agent-references.md)
-4. **Architecture (current)**: [Architecture README](../architecture/README.md)
-5. **Historical context**: [Greek ecosystem deprecation](../architecture/greek-ecosystem-deprecation.md)
-
-## 💡 Pro Tips
+## Pro Tips
 
 1. **Batch Tool Calls**: When reading multiple files, do it in one message
 2. **Use Glob/Grep**: Better than Task tool for specific file searches
 3. **Test First**: Always write tests before implementation
 4. **Small Commits**: Make atomic commits with clear messages
-5. **Regular Grounding**: Don't skip GO.md readings - they prevent costly mistakes
-
-Remember: GO.md is not just a document - it's a practice that ensures consistent, high-quality development aligned with project goals.
+5. **Regular Grounding**: Periodic re-reading of AGENT.md prevents costly mistakes

@@ -5,7 +5,6 @@ Welcome to the Oak MCP ecosystem — infrastructure for AI agents and teacher se
 > **Note**: This repo works with the [Oak Open Curriculum API](https://open-api.thenational.academy/) — Oak's openly-licensed curriculum data, organised to support reuse. See the root README for context on how this relates to Oak's main site.
 >
 > **Canonical path**: this is the single onboarding source of truth.
-> `docs/onboarding.md` is a compatibility pointer only.
 
 ## 0. Choose Your Path
 
@@ -40,8 +39,8 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 
 ## 2. Read the Grounding Docs
 
-1. `GO.md` – follow the cadence (ACTION → REVIEW, every sixth task is GROUNDING).
-2. `.agent/directives/AGENT.md` and `.agent/directives/rules.md` – British spelling, TDD, no disabled quality gates.
+1. [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md) – the canonical agent entry point. Links to rules, testing strategy, schema-first execution, and essential reading.
+2. [`.agent/directives/rules.md`](../../.agent/directives/rules.md) – British spelling, TDD, no disabled quality gates, type safety, and all other mandatory rules.
 3. Relevant plans and context documents for the area you're working on (e.g., `.agent/plans/semantic-search/*` for search features).
 
 ## 3. Understand the Repository Layout
@@ -55,8 +54,8 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 
 ```bash
 pnpm install
-pnpm make   # install → type-gen → build → doc-gen → lint → format
-pnpm qg     # format-check → type-check → lint → markdownlint → tests → smoke
+pnpm make   # install → build → type-check → doc-gen → lint:fix → markdownlint → format
+pnpm qg     # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
 ```
 
 `pnpm type-gen` rebuilds the SDK and the shared `parseSchema` helper so every workspace stays aligned with the OpenAPI schema.
@@ -66,9 +65,9 @@ pnpm qg     # format-check → type-check → lint → markdownlint → tests �
 Before configuring environment variables, verify your basic setup works:
 
 ```bash
-pnpm test          # Run unit tests - should all pass
+pnpm test          # Run unit tests — should all pass
 pnpm type-check    # Verify types compile
-pnpm lint          # Check code style
+pnpm lint:fix      # Check and auto-fix code style
 ```
 
 If these pass, you have a working development environment! Environment variables are only needed for running servers and E2E tests.
@@ -92,18 +91,20 @@ See [Environment Variables Guide](./environment-variables.md) for complete setup
 - Update the relevant README whenever behaviour or setup changes.
 - Add or update ADRs when a new architectural rule emerges (e.g. shared parsing, ingestion flow).
 - Document architectural patterns and generation improvements.
+- When renaming commands in `package.json`, search all markdown files for the old name and update them. See the [Command Naming](./build-system.md#command-naming-source-of-truth) section in the Build System docs.
 
 ## 9. Quality Gate Checklist
 
 ```bash
-pnpm format
-pnpm type-check
-pnpm lint
-pnpm test
-pnpm doc-gen
+pnpm format:root        # Format code
+pnpm markdownlint:root  # Lint markdown
+pnpm type-check         # Verify types compile
+pnpm lint:fix           # Check and auto-fix code style
+pnpm test               # Unit and integration tests
+pnpm doc-gen            # Generate API documentation
 ```
 
-Keep CI green locally; no `--no-verify` or disabled lint rules.
+Keep CI green locally; no `--no-verify` or disabled lint rules. See [Build System](./build-system.md) for details on caching and gate ordering.
 
 ## 10. Understand Curriculum Data Variances
 
@@ -122,5 +123,8 @@ The Oak curriculum data has significant variances across subjects and key stages
 - [docs/agent-guidance/development-practice.md](../agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
+- [Release and Publishing](./release-and-publishing.md) - SDK publishing, operator runbook, rollback procedures
+
+If you run into problems, check the [Troubleshooting Guide](./troubleshooting.md) first.
 
 Welcome aboard! Keep the documentation close to the code and prefer the shared helpers over bespoke validation.

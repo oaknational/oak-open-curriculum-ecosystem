@@ -232,13 +232,13 @@ can audit coverage quickly.
 3. ACTION: Design working tree state management system following Prerequisites §2, implementing clean-state validation, restoration mechanism, and results preservation strategy in `.contract-tests/lib/state-manager.ts`.
 4. REVIEW: Self-review state manager design for edge case handling (detached HEAD, merge state, stash conflicts) and fail-safe behaviour (always restore or abort).
 5. QUALITY-GATE: Implement state manager and verify with manual tests: run on clean repo, dirty repo, detached HEAD, mid-merge; confirm restoration works in all cases.
-6. GROUNDING: Read GO.md and follow all instructions; assess whether current approach aligns with First Question (could it be simpler?).
+6. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; assess whether current approach aligns with First Question (could it be simpler?).
 7. ACTION: Design synthetic schema repository structure following Prerequisites §3, creating directory layout, scenario template, baseline schema snapshot in `.contract-tests/schemas/`, and a sync utility (`.contract-tests/bin/refresh-scenarios.ts`) that: pulls the latest official OpenAPI schema from `schema-cache/`, compares against the baseline snapshot in `.contract-tests/schemas/baseline/`, computes a checksum, and writes a guidance report to `.contract-test-results/schema-sync-report-YYYY-MM-DD.md` (untracked) listing detected changes and suggested scenario updates without modifying any tracked files.
 8. REVIEW: Self-review schema repository design ensuring scenarios are realistic, self-documenting, maintainable by future contributors, and that the sync utility records provenance (schema version, date) without mutating tracked files unexpectedly.
 9. ACTION: Document violation detection strategy following Prerequisites §4, defining prohibited patterns, detection algorithms, and reporting format in `.contract-tests/docs/violation-detection.md`.
 10. REVIEW: Self-review violation strategy confirming alignment with ADR-029 and Cardinal Rule; verify detection approach is automatable via static analysis.
 11. QUALITY-GATE: Validate synthetic schema structure by manually copying baseline schema, applying one simple modification (add optional field), and confirming schema parses correctly.
-12. GROUNDING: Read GO.md and follow all instructions; update Foundation phase approach if insights suggest simplification.
+12. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; update Foundation phase approach if insights suggest simplification.
 
 **Exit Criteria**: Audit document merged; state manager tested; schema repository scaffolded with baseline + 1 example scenario; violation detection strategy documented and approved.
 
@@ -251,13 +251,13 @@ can audit coverage quickly.
 15. ACTION: Implement schema injection mechanism in `.contract-tests/lib/schema-injector.ts` that: backs up original schema-cache, copies synthetic schema to schema-cache, triggers decoration process, verifies decorated schema written to `src/types/generated/api-schema/api-schema-sdk.json`.
 16. REVIEW: Self-review schema injector ensuring decoration logic mirrors production behaviour and injection is reversible.
 17. QUALITY-GATE: Execute test runner against baseline schema (no changes); verify: clean tree validated, state captured, schema injected, type-gen runs, build succeeds, state restored, results written to `.contract-test-results/`.
-18. GROUNDING: Read GO.md and follow all instructions; confirm test runner adheres to TDD principles and testing strategy guidance.
+18. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; confirm test runner adheres to TDD principles and testing strategy guidance.
 19. ACTION: Implement violation detector in `.contract-tests/lib/violation-detector.ts` using ts-morph to parse generated and non-generated files, applying detection patterns from Prerequisites §4, emitting structured violation reports.
 20. REVIEW: Self-review violation detector for correctness of AST traversal, false positive minimisation, and clear error messages.
 21. QUALITY-GATE: Test violation detector with intentionally broken code (hardcoded path, manual enum) in a temporary branch; confirm violations detected and reported accurately.
 22. ACTION: Implement downstream validator in `.contract-tests/lib/downstream-validator.ts` that: runs `pnpm build` in SDK/MCP/Search workspaces, executes smoke tests, runs type-check, collects outcomes, reports success/failure per workspace.
 23. REVIEW: Self-review downstream validator ensuring workspace isolation (failures in one don't block others), parallel execution where safe, and comprehensive error capture.
-24. GROUNDING: Read GO.md and follow all instructions; reassess harness complexity and consider simplification opportunities.
+24. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; reassess harness complexity and consider simplification opportunities.
 
 **Exit Criteria**: Test harness functional end-to-end with baseline schema; state management verified; schema injection working; violation detection operational; downstream validation covering SDK + one MCP server.
 
@@ -270,25 +270,25 @@ can audit coverage quickly.
 27. QUALITY-GATE: Execute Scenario 01 via test harness; verify: SDK types updated, Zod schema includes new field, MCP tools unchanged, build succeeds, type-check passes, violation detector reports zero issues.
 28. ACTION: Create Scenario 02 "Add Required Parameter" – add required query parameter to endpoint (e.g., `GET /lessons/{lesson}/transcript?format=string` where `format` is required), document expected changes (parameter types updated, MCP tool inputSchema includes new required field, consumer type-check fails if parameter omitted), implement assertions validating fail-fast behaviour per validation matrix.
 29. REVIEW: Self-review scenario confirming breaking change is correctly modelled and downstream impact (compilation failures) is expected and acceptable.
-30. GROUNDING: Read GO.md and follow all instructions; validate that scenario design aligns with real API evolution patterns observed in Oak API history.
+30. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; validate that scenario design aligns with real API evolution patterns observed in Oak API history.
 31. QUALITY-GATE: Execute Scenario 02; verify: SDK parameter types updated, MCP tool definitions include new parameter, consumers lacking parameter fail type-check (expected), manual updates NOT required in SDK or MCP layers.
 32. ACTION: Create Scenario 03 "Remove Deprecated Endpoint" – remove deprecated endpoint from schema (e.g., legacy `GET /search/transcripts`), document expected changes (operation types removed from SDK, MCP tool absent from catalogue, no orphaned imports), implement assertions confirming clean removal without manual edits per validation matrix.
 33. REVIEW: Self-review scenario ensuring removed types/tools leave no orphaned references in generated code.
 34. QUALITY-GATE: Execute Scenario 03; verify: endpoint types gone from SDK, MCP tool absent from catalogue, dependent tests updated or removed automatically (if designed to be schema-driven), build succeeds.
 35. ACTION: Create Scenario 04 "Enum Value Addition" – add value to existing enum (e.g., `KeyStage` union adds `'eyfs'`), document expected changes (TypeScript union type extended, Zod enum validator accepts new value, existing values remain valid), validate backward compatibility per validation matrix.
-36. GROUNDING: Read GO.md and follow all instructions; ensure scenario suite remains balanced between breaking and non-breaking changes.
+36. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; ensure scenario suite remains balanced between breaking and non-breaking changes.
 37. REVIEW: Self-review scenario confirming enum extension is non-breaking (existing values still valid) and downstream code handles new value gracefully.
 38. QUALITY-GATE: Execute Scenario 04; verify: enum types extended, Zod validators accept new value, MCP tool schemas updated, existing valid values still work.
 39. ACTION: Create Scenario 05 "Response Shape Change" – modify nested object structure in response (e.g., flatten `Lesson.metadata.subject` to `Lesson.subjectSlug`), document expected changes (interface reshaping, Zod schema updates, Search enrichment adapts if schema-driven or flagged for manual review), validate propagation per validation matrix.
 40. REVIEW: Self-review scenario ensuring shape change is realistic (e.g., flattening nested objects, renaming fields) and tests confirm all consumers adapt.
 41. QUALITY-GATE: Execute Scenario 05; verify: SDK types reflect new shape, Zod validation enforces new structure, Search enrichment logic adapts if schema-driven (or is flagged as requiring manual update if not), type-check passes.
-42. GROUNDING: Read GO.md and follow all instructions; assess whether scenario coverage is sufficient to validate Cardinal Rule across diverse change types.
+42. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; assess whether scenario coverage is sufficient to validate Cardinal Rule across diverse change types.
 43. ACTION: Create Scenario 06 "New Endpoint Addition" – add entirely new endpoint (e.g., `GET /sequences/{sequence}/questions`), document expected changes (new operation types generated, new MCP tool appears in catalogue with correct inputSchema/outputSchema, smoke test can invoke tool), validate automatic integration per validation matrix.
 44. REVIEW: Self-review scenario confirming new endpoint is fully integrated without manual configuration, including tool catalogue registration.
 45. QUALITY-GATE: Execute Scenario 06; verify: new types generated, new MCP tool appears in catalogue, tool metadata includes correct inputSchema/outputSchema, smoke test invokes new tool successfully.
 46. ACTION: Create Scenario 07 "Breaking Type Change" – change existing field type (e.g., `Lesson.order: string` → `Lesson.order: number`), document expected changes (SDK types updated, Zod validators enforce new type, downstream consumers using old type fail type-check with clear error messages), validate fail-fast behaviour per validation matrix and testing-strategy.md expectations.
 47. REVIEW: Self-review scenario confirming breaking change is correctly identified, compilation errors are intentional and expected, and SDK/MCP layers adapt without manual edits.
-48. GROUNDING: Read GO.md and follow all instructions; finalize scenario suite and prepare for integration phase.
+48. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; finalize scenario suite and prepare for integration phase.
 49. QUALITY-GATE: Execute Scenario 07; verify: SDK types changed, Zod validators enforce new type, consumers using old type fail type-check (expected), SDK and MCP layers compile successfully.
 
 **Exit Criteria**: 7 scenarios implemented and passing; each scenario validated across SDK + at least one MCP server; violation detector confirms zero prohibited patterns; test results documented in `.contract-test-results/`.
@@ -303,11 +303,11 @@ can audit coverage quickly.
 53. ACTION: Implement structured reporting in `.contract-tests/lib/reporter.ts` generating JSON report (machine-readable) and markdown summary (human-readable) with: scenario outcomes, violated patterns, downstream validation results, timing metrics, recommendations.
 54. REVIEW: Self-review reporter ensuring outputs are actionable, violations are clearly explained with remediation guidance, and reports link to relevant ADRs and documentation.
 55. QUALITY-GATE: Generate reports for all scenarios; verify: JSON is valid and parseable, markdown is well-formatted, metrics match success criteria, zero false positives/negatives.
-56. GROUNDING: Read GO.md and follow all instructions; confirm integration aligns with repo quality gate philosophy and contributor workflow.
+56. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; confirm integration aligns with repo quality gate philosophy and contributor workflow.
 57. ACTION: Write scenario contribution guide in `.contract-tests/docs/contributing-scenarios.md` explaining: how to design realistic evolution (with examples from Scenarios 01-07), synthetic schema authoring workflow (baseline snapshot → modify → document → validate), expected changes documentation template, test assertion creation referencing validation matrix, validation criteria aligned with testing-strategy.md, when to run `refresh-scenarios.ts` to detect drift.
 58. REVIEW: Self-review contribution guide for clarity, completeness, and accessibility to developers and AI agents; ensure alignment with British spelling and documentation conventions.
 59. QUALITY-GATE: Ask external reviewer (or simulate with self-review) to follow guide and create one new scenario; validate guide is sufficient without additional context.
-60. GROUNDING: Read GO.md and follow all instructions; finalize integration phase deliverables.
+60. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; finalize integration phase deliverables.
 
 **Exit Criteria**: Contract tests invokable via `pnpm test:contract`; reports generated automatically; contribution guide merged and tested; integration documented in testing-strategy.md.
 
@@ -321,12 +321,12 @@ can audit coverage quickly.
 64. ACTION: Update root README.md and `docs/development/onboarding.md` with contract testing section: purpose, when to run (`pnpm test:contract`), interpreting results, adding scenarios, troubleshooting.
 65. REVIEW: Self-review documentation updates for consistency with existing structure, clarity for new contributors, and appropriate level of detail.
 66. QUALITY-GATE: Run `pnpm doc-gen` and verify generated docs include contract testing references; check for broken links via `pnpm markdownlint-check:root`.
-67. GROUNDING: Read GO.md and follow all instructions; prepare final deliverables and close-out review.
+67. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; prepare final deliverables and close-out review.
 68. ACTION: Update `.agent/plans/high-level-plan.md` adding milestone entry: "M5: Contract Testing – Schema evolution validation automated via synthetic scenarios, fail-fast local execution, future CI integration planned."
 69. REVIEW: Self-review high-level plan update ensuring contract testing milestone is correctly positioned and linked to relevant documentation.
 70. ACTION: Update `.agent/plans/backlog.md` removing general "contract testing" item and replacing with link to this plan; mark as "COMPLETED – see contract-testing-schema-evolution-plan.md".
 71. QUALITY-GATE: Run full quality gate suite (`pnpm qg`) excluding contract tests (to avoid dirty tree issues); verify all gates pass; confirm contract tests remain invokable separately via `pnpm test:contract`.
-72. GROUNDING: Read GO.md and follow all instructions; conduct final self-review of entire deliverable against Intent and Success Criteria.
+72. GROUNDING: Read `.agent/prompts/GO.md` and follow all instructions; conduct final self-review of entire deliverable against Intent and Success Criteria.
 73. ACTION: Write CI integration preparation guide in `.contract-tests/docs/ci-integration.md` documenting: requirements for CI environment (clean checkout, restoration reliability, result artifact upload), recommended cadence (nightly builds, post-merge to main), failure notification strategy.
 74. REVIEW: Self-review CI guide ensuring it provides clear path for future CI integration without requiring immediate implementation; document trade-offs and considerations.
 75. QUALITY-GATE: Final acceptance test – run `pnpm test:contract` on clean repo, verify all scenarios pass, confirm results in `.contract-test-results/`, validate repo restored, review markdown report for completeness.
@@ -336,7 +336,7 @@ can audit coverage quickly.
 ## Governance & Reporting
 
 - **Weekly self-review cadence**: Summarize progress against milestones, identify blockers, update risk register (working tree edge cases, schema decoration complexity, downstream validation scope creep).
-- **Quality gate discipline**: Run `pnpm format`, `pnpm type-check`, `pnpm lint`, `pnpm test` after each action cluster (every 3-5 tasks) to ensure incremental deliverables remain in green state.
+- **Quality gate discipline**: Run `pnpm format:root`, `pnpm type-check`, `pnpm lint:fix`, `pnpm test` after each action cluster (every 3-5 tasks) to ensure incremental deliverables remain in green state.
 - **Documentation currency**: Update `.contract-tests/docs/progress.md` after each phase with: completed tasks, lessons learned, design decisions, deferred items.
 - **Scenario validation checkpoints**: After implementing each scenario (Phase 2), run full test harness and validate outcomes match expected changes documentation before proceeding.
 - **Change control**: Any modifications to synthetic schema structure or test harness API require: update to contribution guide, validation via one test scenario, approval via self-review or plan amendment.
@@ -388,7 +388,7 @@ Before marking this plan as COMPLETE, verify:
 - [ ] Full quality gate suite (`pnpm qg`) passes (excluding contract tests to avoid dirty tree)
 - [ ] CI integration preparation guide documented for future implementation
 - [ ] Zero open questions or unresolved design decisions
-- [ ] All deliverables reviewed per GO.md cadence (self-review + grounding steps)
+- [ ] All deliverables reviewed per `.agent/prompts/GO.md` cadence (self-review + grounding steps)
 
 ---
 

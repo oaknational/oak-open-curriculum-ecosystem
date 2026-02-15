@@ -25,6 +25,6 @@ These documents help developers:
 
 ## Getting Started
 
-New developers should start with the [Onboarding guide](./onboarding.md), which links the root README, shared parsing helpers, GO.md cadence, and workspace walkthroughs.
+New developers should start with the [Onboarding guide](./onboarding.md), which links the root README, shared parsing helpers, AGENT.md directives, and workspace walkthroughs.
 
 For quick solutions to common problems, check the [Troubleshooting](./troubleshooting.md) guide.

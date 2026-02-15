@@ -236,6 +236,77 @@ turbo run build --dry=json | jq '.tasks[0].inputs'
 turbo run build --dry=json | jq '.tasks[] | {task: .taskId, hash: .hash}'
 ```
 
+## Command Naming: Source of Truth
+
+The root `package.json` `scripts` field is the single source of truth for
+all command names. When documenting commands in markdown files, always
+use the exact names from `package.json`. Key commands that are commonly
+mis-referenced:
+
+| Correct                  | Incorrect            |
+| ------------------------ | -------------------- |
+| `pnpm format:root`       | `pnpm format`        |
+| `pnpm lint:fix`          | `pnpm lint -- --fix` |
+| `pnpm markdownlint:root` | `pnpm markdownlint`  |
+| `pnpm type-check`        | `pnpm check-types`   |
+
+When renaming a command in `package.json`, search all markdown files for
+the old name and update them in the same change.
+
+### Drift Prevention Checklist
+
+After renaming or adding commands in `package.json`:
+
+1. Search all `.md` files for the old command name:
+   `rg 'pnpm old-name' --glob '*.md'`
+2. Update every non-archive match to the new name
+3. Run `pnpm markdownlint:root` to verify markdown integrity
+4. Verify onboarding-path docs specifically:
+   - `docs/development/onboarding.md`
+   - `docs/quick-start.md`
+   - `docs/agent-guidance/ai-agent-guide.md`
+   - `docs/agent-guidance/development-practice.md`
+   - `.agent/directives/AGENT.md`
+   - `.claude/commands/jc-quality-gates.md`
+
+## Documentation Link Integrity
+
+Broken links in documentation silently erode the onboarding experience.
+
+### When to Check
+
+- After deleting or moving any markdown file
+- After restructuring directories
+- Before merging documentation PRs
+- Periodically as part of documentation maintenance
+
+### How to Check
+
+Search for references to the deleted or moved file:
+
+```bash
+rg 'old-filename\.md' --glob '*.md'
+```
+
+For a broader sweep of all markdown links, check that link targets exist:
+
+```bash
+# Find all markdown links and verify targets
+rg '\[.*?\]\(((?!http)[^)]+)\)' --glob '*.md' -o
+```
+
+### Progressive Disclosure Chain
+
+The documentation follows a progressive disclosure pattern. Verify this
+chain is intact after structural changes:
+
+```text
+README.md
+  → docs/development/onboarding.md
+    → workspace READMEs (packages/*, apps/*)
+      → deep docs, ADRs, architecture docs
+```
+
 ## Related Documentation
 
 - [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md)

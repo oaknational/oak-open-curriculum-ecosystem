@@ -2,7 +2,7 @@
 
 ## Core References
 
-- [GO.md](../../GO.md)
+- [GO.md](../../.agent/prompts/GO.md)
 - [.agent/directives/AGENT.md](../../.agent/directives/AGENT.md)
 - [.agent/directives/rules.md](../../.agent/directives/rules.md)
 - [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
@@ -150,26 +150,26 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ## GO Cadence Todo List
 
-1. ACTION: Reconfirm GO.md, AGENT.md, rules, and testing strategy directives prior to each planning review. REMINDER: Use british spelling.
+1. ACTION: Reconfirm `.agent/prompts/GO.md`, AGENT.md, rules, and testing strategy directives prior to each planning review. REMINDER: Use british spelling.
 2. REVIEW: Self-review grounding notes and adjust planning assumptions as needed.
 3. ACTION: Catalogue vitest, Turbo, and TypeScript config inheritance across all workspaces.
 4. REVIEW: Validate the catalogue captures every workspace declared in `pnpm-workspace.yaml`.
 5. QUALITY-GATE: Cross-check catalogue findings against repository rules without executing commands.
-6. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
+6. GROUNDING: read `.agent/prompts/GO.md` and follow all instructions. REMINDER: Use british spelling.
 7. ACTION: Draft Stryker base configuration and dev dependency policy proposal.
 8. REVIEW: Self-review proposal for alignment with testing strategy and dependency governance.
 9. ACTION: Produce Phase 0 remediation backlog covering all prerequisite gaps.
 10. REVIEW: Ensure backlog items map cleanly to workspaces and reference supporting evidence.
 11. QUALITY-GATE: Present backlog and dependency policy to maintainers for sign-off.
-12. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
+12. GROUNDING: read `.agent/prompts/GO.md` and follow all instructions. REMINDER: Use british spelling.
 13. ACTION: Execute pilot workspace implementation (config, scripts, Turbo tasks, CI wiring).
 14. REVIEW: Assess pilot results, capturing runtime metrics and mutant reports.
 15. QUALITY-GATE: Confirm pilot workspaces pass full quality gates including mutation runs.
-16. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
+16. GROUNDING: read `.agent/prompts/GO.md` and follow all instructions. REMINDER: Use british spelling.
 17. ACTION: Roll out Stryker configuration to remaining workspaces in batches, incorporating lessons from pilots.
 18. REVIEW: Evaluate batch roll-outs, recording issues and resolutions per workspace.
 19. QUALITY-GATE: Verify monorepo-wide mutation command succeeds and integrates with CI.
-20. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
+20. GROUNDING: read `.agent/prompts/GO.md` and follow all instructions. REMINDER: Use british spelling.
 21. ACTION: Document optimisation tactics, automation hooks, and contributor guidance.
 22. REVIEW: Finalise documentation, ensuring alignment with repository standards.
 

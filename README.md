@@ -68,7 +68,7 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    pnpm install
    ```
 
-2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) links the key READMEs, GO cadence, and validation tooling.
+2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) links the key READMEs, AGENT.md directives, and validation tooling.
 
 3. **Configure environment variables**
 

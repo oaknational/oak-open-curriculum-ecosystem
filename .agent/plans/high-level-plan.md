@@ -136,14 +136,13 @@ documentation files across `.agent/plans/`, `docs/`, and
 - Remove `oak-notion-mcp` from all active plans (config,
   DI, testing, stryker, publishing, ESLint)
 - Remove Notion tools, resources, and API references from
-  `docs/usage/`, `docs/development/`, `docs/agent-guidance/`
+  `docs/development/`, `docs/agent-guidance/`
 - Remove Notion SDK from `docs/development/tooling.md`
 - Remove `NOTION_API_KEY` from env vars documentation
 - Retain a single historical note (in the Completed section
   or an ADR) explaining why the workspace once existed and
   why it was removed
-- Archive (do not delete) `docs/usage/api-reference.md` if
-  it is entirely Notion-specific
+- `docs/usage/` deleted (entirely Notion-specific content)
 - Archive `.agent/reference-docs/notion-sdk-readme.md` and
   `notion-api-overview.md`
 
@@ -289,7 +288,6 @@ pnpm lint:fix
 pnpm test
 pnpm test:ui
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm smoke:dev:stub
 ```
 

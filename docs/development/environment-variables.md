@@ -114,7 +114,7 @@ OAK_API_KEY=your_oak_api_key_here
 DANGEROUSLY_DISABLE_AUTH=true  # NEVER use in production!
 ```
 
-**Complete reference**: See `apps/oak-curriculum-mcp-streamable-http/README.md` and `docs/vercel-environment-config.md`.
+**Complete reference**: See `apps/oak-curriculum-mcp-streamable-http/README.md` and [`apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`](../../apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md).
 
 ### Stdio MCP Server (via root `.env`)
 

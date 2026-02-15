@@ -152,24 +152,24 @@ Permanent documentation: [Release and Publishing](../../../docs/development/rele
 
 ---
 
-## Phase 2g: Developer Onboarding Experience
+## Phase 2g: Developer Onboarding Experience ✅ Complete
 
-**Status**: 📋 After public release readiness
-**Plan**: [active/developer-onboarding-experience.plan.md](active/developer-onboarding-experience.plan.md)
+**Status**: ✅ Complete
+**Plan**: [archive/completed/developer-onboarding-experience.plan.md](archive/completed/developer-onboarding-experience.plan.md)
 
 Dedicated stream for internal developer onboarding quality and
-consistency. Follows public release readiness — some onboarding
-work depends on the documentation and packaging established
+consistency. Followed public release readiness — onboarding
+work depended on the documentation and packaging established
 in Phase 2f.
 
 | WS | Scope | Status |
 | --- | --- | --- |
-| WS1 | Canonical onboarding journey | 📋 Pending |
-| WS2 | Command truth and drift removal | 📋 Pending |
-| WS3 | Link integrity and navigation | 📋 Pending |
-| WS4 | Credential/access/contribution messaging | 📋 Pending |
-| WS5 | Release operator onboarding (SDK-only) | 📋 Pending |
-| WS6 | First-day rehearsal and sign-off | 📋 Pending |
+| WS1 | Canonical onboarding journey | ✅ Complete |
+| WS2 | Command truth and drift removal | ✅ Complete |
+| WS3 | Link integrity and navigation | ✅ Complete |
+| WS4 | Credential/access/contribution messaging | ✅ Complete |
+| WS5 | Release operator onboarding (SDK-only) | ✅ Complete |
+| WS6 | First-day rehearsal and sign-off | ✅ Complete |
 
 ---
 

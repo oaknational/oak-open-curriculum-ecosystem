@@ -1,6 +1,6 @@
 # Documentation for Oak MCP Ecosystem
 
-## 🚀 Getting Started
+## Getting Started
 
 - **New to the repo?** → [Developer Onboarding](development/onboarding.md) – canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
 - **Quick start?** → [Quick Start Guide](quick-start.md) - Zero-setup path to productive changes
@@ -27,10 +27,6 @@
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 - [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) - Entity relationships
 
-### Usage
-
-- [API Reference](usage/api-reference.md) - Resources, tools, and prompts reference
-
 ## AI Agent Guidance
 
 Comprehensive documentation for AI agents working with this codebase:
@@ -52,5 +48,5 @@ For semantic search specific documentation:
 
 ## Additional Resources
 
-- [GO.md](../GO.md) - Grounding document for maintaining focus and quality
+- [GO.md](../.agent/prompts/GO.md) - Grounding prompt for structured task execution (ACTION/REVIEW cadence)
 - [SDK README](../packages/sdks/oak-curriculum-sdk/README.md) - SDK generation and exports

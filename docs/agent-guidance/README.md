@@ -1,11 +1,10 @@
 # Agent Guidance Documentation
 
-This directory contains documentation specifically designed for AI agents working with the Oak Notion MCP codebase. These documents provide essential guidance on coding standards, safety practices, and development strategies that AI agents should follow.
+This directory contains documentation for AI agents and human developers working with the Oak MCP ecosystem. The canonical agent entry point is [AGENT.md](../../.agent/directives/AGENT.md); these documents provide supplementary guidance.
 
 ## Contents
 
-- [AI Agent Guide](./ai-agent-guide.md) - Primary guide for AI agents navigating and modifying the codebase
-- [Experimental Architecture Quick Reference](./experimental-architecture-quick-reference.md) - Concrete examples of the experimental approach
+- [AI Agent Guide](./ai-agent-guide.md) - Lighter companion to AGENT.md: task management, workflow patterns, success checklist
 - [Development Practice](./development-practice.md) - Best practices for development in this project
 - [Safety and Security](./safety-and-security.md) - Critical safety guidelines and security considerations
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - **MOVED**: Comprehensive TDD approach at all levels (now in directives)
@@ -14,7 +13,7 @@ This directory contains documentation specifically designed for AI agents workin
 
 ## Purpose
 
-These documents are crafted to help AI agents:
+These documents help AI agents and developers:
 
 - Understand the project's architectural principles
 - Follow established coding standards
@@ -22,14 +21,14 @@ These documents are crafted to help AI agents:
 - Make informed decisions about implementation approaches
 - Navigate the codebase effectively
 
-## Key Principles for Agents
+## Key Principles
 
-1. **Safety First** - Always prioritize security and data privacy
-2. **Pure Functions** - Maximize pure, testable functions
+1. **Safety First** - Always prioritise security and data privacy
+2. **Pure Functions** - Maximise pure, testable functions
 3. **Clear Boundaries** - Respect architectural layers and interfaces
 4. **Type Safety** - Use TypeScript's type system effectively
 5. **Test Coverage** - Write comprehensive tests for all changes
 
 ## Starting Point
 
-New AI agents should begin with the [AI Agent Guide](./ai-agent-guide.md) for a comprehensive introduction to working with this codebase.
+New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first, then consult the [AI Agent Guide](./ai-agent-guide.md) for workflow patterns.

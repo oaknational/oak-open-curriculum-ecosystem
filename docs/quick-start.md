@@ -4,15 +4,11 @@ Fast-track guide for developers who want to understand and contribute to infrast
 
 > **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](architecture/openapi-pipeline.md) and [onboarding guide](development/onboarding.md).
 
-## 🤖 Working with AI Agents
+## Working with AI Agents
 
-When assigning tasks to AI agents, always include:
+AI agents working with this codebase should read [AGENT.md](../.agent/directives/AGENT.md) as their canonical entry point. It links to rules, testing strategy, and schema-first directives.
 
-```text
-"[Task description]. Read GO.md and follow all instructions"
-```
-
-This ensures the agent maintains focus, quality, and regular grounding. See [AI Agent Guide](agent-guidance/ai-agent-guide.md) for details.
+See the [AI Agent Guide](agent-guidance/ai-agent-guide.md) for workflow patterns and task management advice.
 
 ## Architecture TL;DR
 
@@ -47,7 +43,7 @@ pnpm install
 # Run tests and quality checks (no env vars required)
 pnpm test           # All unit tests
 pnpm type-check     # Type checking
-pnpm lint           # Linting
+pnpm lint:fix       # Linting (with auto-fix)
 pnpm build          # Build SDK and libraries
 ```
 
@@ -72,8 +68,8 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # install → type-gen → build → docs → lint → format
-pnpm qg      # All quality gates
+pnpm make    # install → build → type-check → doc-gen → lint:fix → markdownlint → format
+pnpm qg      # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
 
 # 3. Start a dev server (choose one)
 pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
@@ -189,7 +185,7 @@ pnpm type-gen
 # 4. Run quality gates
 pnpm test          # Does it pass?
 pnpm type-check    # Any type errors?
-pnpm lint          # Follows code style?
+pnpm lint:fix      # Follows code style?
 
 # 5. Commit with conventional format
 git commit -m "feat: add amazing feature"
@@ -235,8 +231,8 @@ pnpm test
 ### Run All Quality Gates
 
 ```bash
-pnpm make    # Build everything from scratch
-pnpm qg      # Run all quality checks
+pnpm make    # Build everything from scratch (install → build → type-check → doc-gen → lint:fix → markdownlint → format)
+pnpm qg      # Run all quality checks (format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke)
 ```
 
 ### Test a Specific Workspace
@@ -327,7 +323,7 @@ test('MCP server lists all generated tools', async () => {
 - **Build fails**: Run `pnpm type-gen` to ensure types are current
 - **Type errors**: Generated types changed? Update your imports
 - **Tests fail**: Check if integration tests need `OAK_API_KEY`
-- **Linting errors**: Run `pnpm lint -- --fix` to auto-fix
+- **Linting errors**: Run `pnpm lint:fix` to auto-fix
 
 ### Community
 
@@ -342,4 +338,4 @@ test('MCP server lists all generated tools', async () => {
 4. **Pick an issue**: Browse [good first issues](https://github.com/oaknational/oak-mcp-ecosystem/labels/good%20first%20issue)
 5. **Start coding**: Follow the TDD workflow above
 
-Ready? Let's build type-safe, schema-driven APIs! 🚀
+Ready? Let's build type-safe, schema-driven APIs.

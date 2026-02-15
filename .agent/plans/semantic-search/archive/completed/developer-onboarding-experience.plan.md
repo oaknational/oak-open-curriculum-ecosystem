@@ -1,7 +1,7 @@
 # Developer Onboarding Experience
 
-**Status**: In progress -- execute WS1 through WS6
-**Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
+**Status**: Complete
+**Parent**: [../../README.md](../../README.md) | [../../roadmap.md](../../roadmap.md)
 **Last Updated**: 2026-02-15
 
 ---
@@ -58,20 +58,20 @@ should be rare exceptions, not the norm.
 
 ---
 
-## Reality Snapshot (2026-02-14)
+## Reality Snapshot (2026-02-15)
 
-Items marked ✅ were resolved during public release readiness and do not
-require further action.
+All items resolved. Items marked ✅ were resolved during public release
+readiness or WS1-WS6 execution.
 
 | Area | Reality in repository | Status |
 | --- | --- | --- |
-| Legacy onboarding compatibility layer | `docs/onboarding.md` exists as a compatibility pointer. Must be deleted (clean break). | Remaining |
+| Legacy onboarding compatibility layer | `docs/onboarding.md` deleted (clean break). | ✅ Fixed |
 | Stale command names in top-level docs | `README.md` and `CONTRIBUTING.md` commands corrected during public release readiness. | ✅ Fixed |
 | Contribution policy | `CONTRIBUTING.md` rewritten: external contributions closed, Node.js 24.x, Result pattern. | ✅ Fixed |
 | Version/runtime drift | `CONTRIBUTING.md` and all package.json files now say Node.js 24.x. | ✅ Fixed |
-| `ai-agent-guide.md` deeply stale | References "Oak Notion MCP", GO.md pattern, `pnpm format` (should be `format:root`). Two dead links: `../development/onboarding-journey.md` and `../quick-reference.md` (both missing). `docs/troubleshooting.md` link wrong (file is at `docs/development/troubleshooting.md`). Needs substantial rewrite or deletion. | Remaining |
-| Environment-variables broken link | `docs/development/environment-variables.md` references `docs/vercel-environment-config.md`; actual path is `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`. | Remaining |
-| Release onboarding | `docs/development/release-and-publishing.md` now documents the publishing strategy. WS5 adds the operator runbook (dry-run, rollback, prerequisites). | Partially addressed |
+| `ai-agent-guide.md` deeply stale | Rewritten as lighter companion to AGENT.md. All Notion refs, GO.md pattern, dead links, and stale commands removed. | ✅ Fixed |
+| Environment-variables broken link | Fixed to correct path `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`. | ✅ Fixed |
+| Release onboarding | Expanded to full operator runbook with dry-run, rollback, prerequisites, troubleshooting. Cross-linked from onboarding. | ✅ Fixed |
 
 ---
 
@@ -80,29 +80,23 @@ require further action.
 | ID | Workstream | Status |
 | --- | --- | --- |
 | WS0 | [Full documentation audit](#workstream-0-full-documentation-audit) | Complete |
-| WS1 | [Canonical onboarding journey](#workstream-1-canonical-onboarding-journey) | Pending (reopened for clean break) |
-| WS2 | [Command truth and drift removal](#workstream-2-command-truth-and-drift-removal) | Pending |
-| WS3 | [Link integrity and navigation](#workstream-3-link-integrity-and-navigation) | Pending |
-| WS4 | [Credential, access, and contribution messaging](#workstream-4-credential-access-and-contribution-messaging) | Pending |
-| WS5 | [Release operator onboarding (SDK-only)](#workstream-5-release-operator-onboarding-sdk-only) | Pending |
-| WS6 | [First-day rehearsal and sign-off](#workstream-6-first-day-rehearsal-and-sign-off) | Pending |
-| QG | [Quality gates](#quality-gates) | Pending |
+| WS1 | [Canonical onboarding journey](#workstream-1-canonical-onboarding-journey) | Complete |
+| WS2 | [Command truth and drift removal](#workstream-2-command-truth-and-drift-removal) | Complete |
+| WS3 | [Link integrity and navigation](#workstream-3-link-integrity-and-navigation) | Complete |
+| WS4 | [Credential, access, and contribution messaging](#workstream-4-credential-access-and-contribution-messaging) | Complete |
+| WS5 | [Release operator onboarding (SDK-only)](#workstream-5-release-operator-onboarding-sdk-only) | Complete |
+| WS6 | [First-day rehearsal and sign-off](#workstream-6-first-day-rehearsal-and-sign-off) | Complete |
+| QG | [Quality gates](#quality-gates) | Complete |
 
-**Recommended order**: ~~WS0~~ -> ~~Pre-onboarding fixes~~ -> **WS1** -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
-
-WS0 and the pre-onboarding fixes are both complete. **WS1 is the
-next workstream to execute.**
+All workstreams complete. Executed in order: ~~WS0~~ -> ~~Pre-onboarding fixes~~ -> ~~WS1~~ -> ~~WS2~~ -> ~~WS3~~ -> ~~WS4~~ -> ~~WS5~~ -> ~~WS6~~ -> ~~QG~~.
 
 - WS0 produced a full documentation audit report at
   `.agent/research/documentation-audit-report.md`.
-- The [Pre-Onboarding Documentation Fixes](../archive/pre-onboarding-doc-fixes.plan.md)
+- The [Pre-Onboarding Documentation Fixes](./pre-onboarding-doc-fixes.plan.md)
   plan resolved all non-onboarding issues from WS0 (archival, broken
   links, wrong-location content, stale references, quality gate
-  alignment). WS1-WS6 can focus exclusively on the onboarding journey.
-
-WS1 defines the structure. WS2/WS3 remove mechanical friction. WS4
-aligns policy and secret handling. WS5 handles release-specific
-onboarding. WS6 validates with a real first-day rehearsal.
+  alignment).
+- WS1-WS6 executed on 2026-02-15. All quality gates pass.
 
 ---
 
@@ -214,11 +208,11 @@ pattern is superseded by AGENT.md + directives. `docs/usage/` and
 
 ### Completion checklist
 
-- [ ] One canonical onboarding document defined and referenced everywhere
-- [ ] Legacy onboarding page removed (clean break, no pointer page)
-- [ ] Root README and docs index point to the same onboarding path
-- [ ] Persona-based onboarding paths documented
-- [ ] Repository-wide references to deleted onboarding path removed
+- [x] One canonical onboarding document defined and referenced everywhere
+- [x] Legacy onboarding page removed (clean break, no pointer page)
+- [x] Root README and docs index point to the same onboarding path
+- [x] Persona-based onboarding paths documented
+- [x] Repository-wide references to deleted onboarding path removed
 
 ---
 
@@ -258,10 +252,10 @@ in pre-onboarding P6: both GT skills already use CLI commands.
 
 ### Completion checklist
 
-- [ ] All onboarding-facing docs use real root command names
-- [ ] Obsolete command references removed from onboarding path
-- [ ] Command source-of-truth rule documented
-- [ ] Drift prevention step added to documentation maintenance process
+- [x] All onboarding-facing docs use real root command names
+- [x] Obsolete command references removed from onboarding path
+- [x] Command source-of-truth rule documented
+- [x] Drift prevention step added to documentation maintenance process
 
 ---
 
@@ -312,10 +306,10 @@ Still remaining (onboarding-path):
 
 ### Completion checklist
 
-- [ ] Broken onboarding-path links fixed or removed
-- [ ] No references to missing onboarding docs remain
-- [ ] Progressive disclosure path is explicit and navigable
-- [ ] Link-check step documented for ongoing maintenance
+- [x] Broken onboarding-path links fixed or removed
+- [x] No references to missing onboarding docs remain
+- [x] Progressive disclosure path is explicit and navigable
+- [x] Link-check step documented for ongoing maintenance
 
 ---
 
@@ -341,10 +335,10 @@ consistency in secondary onboarding docs (e.g. `docs/development/onboarding.md`,
 
 ### Completion checklist
 
-- [ ] Credential policy is consistent across onboarding docs
-- [ ] Contribution policy is consistent across onboarding docs
-- [ ] Node.js version references aligned to `24.x`
-- [ ] Credential requirement matrix is accurate and explicit
+- [x] Credential policy is consistent across onboarding docs
+- [x] Contribution policy is consistent across onboarding docs
+- [x] Node.js version references aligned to `24.x`
+- [x] Credential requirement matrix is accurate and explicit
 
 ---
 
@@ -368,11 +362,11 @@ dry-run, rollback, and troubleshooting guidance.
 
 ### Completion checklist
 
-- [ ] SDK-only publication scope is explicit in onboarding docs
-- [ ] Release automation approach documented with operator steps
-- [ ] Prerequisites and required secrets documented
-- [ ] Dry-run and rollback procedure documented
-- [ ] Runbook linked from onboarding and release planning docs
+- [x] SDK-only publication scope is explicit in onboarding docs
+- [x] Release automation approach documented with operator steps
+- [x] Prerequisites and required secrets documented
+- [x] Dry-run and rollback procedure documented
+- [x] Runbook linked from onboarding and release planning docs
 
 ---
 
@@ -391,11 +385,11 @@ developer can actually follow it.
 
 ### Completion checklist
 
-- [ ] Fresh-clone rehearsal completed from documented steps only
-- [ ] No-secrets path validated end-to-end
-- [ ] Credentials path validated end-to-end
-- [ ] Issues discovered during rehearsal fixed and documented
-- [ ] Onboarding acceptance checklist completed
+- [x] Fresh-clone rehearsal completed from documented steps only
+- [x] No-secrets path validated end-to-end
+- [x] Credentials path validated end-to-end (stub mode; real-credential path requires live API keys)
+- [x] Issues discovered during rehearsal fixed and documented
+- [x] Onboarding acceptance checklist completed
 
 ---
 
@@ -416,10 +410,10 @@ If release/onboarding scripts are changed, also run `pnpm build`,
 
 ### Completion checklist
 
-- [ ] Documentation formatting/linting passes
-- [ ] Updated onboarding paths validated manually
-- [ ] Link integrity checks pass
-- [ ] Release runbook reviewed against current workflow/config
+- [x] Documentation formatting/linting passes
+- [x] Updated onboarding paths validated manually
+- [x] Link integrity checks pass
+- [x] Release runbook reviewed against current workflow/config
 
 ---
 
@@ -433,6 +427,6 @@ If release/onboarding scripts are changed, also run `pnpm build`,
 | `docs/development/onboarding.md` | Canonical onboarding path |
 | `docs/development/release-and-publishing.md` | SDK publishing strategy and automation |
 | `docs/development/environment-variables.md` | Credential setup and safety |
-| `docs/agent-guidance/ai-agent-guide.md` | Stale agent guide — needs rewrite or deletion (WS2/WS3) |
+| `docs/agent-guidance/ai-agent-guide.md` | ✅ Rewritten as lighter companion to AGENT.md |
 | `.releaserc.mjs` | Release automation configuration |
 | `.github/workflows/release.yml` | CI release workflow |

@@ -114,7 +114,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 ## Remember
 
-1. Read GO.md every 6th-ish task for grounding
+1. Periodically re-ground using [GO.md](../prompts/GO.md) — a complementary prompt that structures task execution with ACTION/REVIEW/GROUNDING cadence and invokes the [start-right prompt](../prompts/start-right.prompt.md)
 2. When in doubt, **make it simpler**
 3. Think in layers: functions → modules → packages (`core`, `libs`, `apps`)
 4. Take the time to step back and reflect if the current approach is the simplest and best way to achieve the goals.
