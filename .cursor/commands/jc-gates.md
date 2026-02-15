@@ -9,14 +9,19 @@ After each fix, **restart the quality gate sequence from the beginning**. This p
 Run each gate in order. If a gate fails, fix the issues before proceeding.
 
 ```bash
+pnpm secrets:scan:all
+pnpm clean
 pnpm type-gen
 pnpm build
 pnpm type-check
+pnpm doc-gen
 pnpm format:root
 pnpm markdownlint:root
 pnpm lint:fix
 pnpm test
 pnpm test:e2e
+pnpm test:ui
+pnpm smoke:dev:stub
 ```
 
 ## Rules
@@ -28,29 +33,13 @@ pnpm test:e2e
 
 ## Process
 
-1. Run `pnpm format:root`
-   - If changes were made, commit them separately
-   - Proceed to next gate
+For each gate in the sequence above:
 
-2. Run `pnpm lint:fix`
-   - If issues remain after auto-fix, fix them manually
-   - After manual fixes, restart from step 1
-   - If clean, proceed to next gate
+- If the gate fails, fix the issue
+- After fixing, restart from `pnpm format:root`
+- If the gate passes, proceed to the next one
 
-3. Run `pnpm type-check`
-   - If type errors, fix them
-   - After fixes, restart from step 1
-   - If clean, proceed to next gate
-
-4. Run `pnpm test`
-   - If test failures, fix them (product code or tests as appropriate)
-   - After fixes, restart from step 1
-   - If clean, proceed to next gate
-
-5. Run `pnpm test:e2e`
-   - If E2E failures, fix them
-   - After fixes, restart from step 1
-   - If clean, all gates pass
+The full sequence mirrors `pnpm check` in `package.json`.
 
 ## Success Criteria
 

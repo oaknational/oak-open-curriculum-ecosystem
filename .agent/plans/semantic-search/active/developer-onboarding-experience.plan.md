@@ -1,8 +1,8 @@
 # Developer Onboarding Experience
 
-**Status**: Ready -- execute all workstreams
+**Status**: In progress -- execute WS1 through WS6
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
-**Last Updated**: 2026-02-14
+**Last Updated**: 2026-02-15
 
 ---
 
@@ -88,21 +88,17 @@ require further action.
 | WS6 | [First-day rehearsal and sign-off](#workstream-6-first-day-rehearsal-and-sign-off) | Pending |
 | QG | [Quality gates](#quality-gates) | Pending |
 
-**Recommended order**: WS0 -> Pre-onboarding fixes -> WS1 -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
+**Recommended order**: ~~WS0~~ -> ~~Pre-onboarding fixes~~ -> **WS1** -> WS2 -> WS3 -> WS4 -> WS5 -> WS6 -> QG.
 
-WS0 is a hard prerequisite — it produces the full landscape that
-every subsequent workstream consumes. Without it, onboarding changes
-are blind edits. **Expect WS0 to fill an entire session.** The repo
-has 150+ non-archived markdown files; auditing them all is substantial
-work. WS0 produces a report and does not fix anything — the fixes
-come in the pre-onboarding plan and WS1-WS6.
+WS0 and the pre-onboarding fixes are both complete. **WS1 is the
+next workstream to execute.**
 
-**Pre-onboarding prerequisite**: Before starting WS1, execute the
-[Pre-Onboarding Documentation Fixes](pre-onboarding-doc-fixes.plan.md)
-plan. It resolves all non-onboarding documentation issues discovered
-by WS0 (archival, broken links, wrong-location content, stale
-references). Completing it first ensures WS1-WS6 can focus
-exclusively on the onboarding journey.
+- WS0 produced a full documentation audit report at
+  `.agent/research/documentation-audit-report.md`.
+- The [Pre-Onboarding Documentation Fixes](../archive/pre-onboarding-doc-fixes.plan.md)
+  plan resolved all non-onboarding issues from WS0 (archival, broken
+  links, wrong-location content, stale references, quality gate
+  alignment). WS1-WS6 can focus exclusively on the onboarding journey.
 
 WS1 defines the structure. WS2/WS3 remove mechanical friction. WS4
 aligns policy and secret handling. WS5 handles release-specific
@@ -237,9 +233,11 @@ especially `docs/agent-guidance/ai-agent-guide.md` which still uses
 `pnpm format` (should be `pnpm format:root`) and other legacy patterns.
 
 **WS0 audit findings**: 9 non-archive files contain stale `pnpm format`
-commands. Drift also exists in `.cursor/commands/` (`jc-gates.md`,
-`jc-start-right-thorough.md`) and `.claude/commands/jc-quality-gates.md`.
-Two `.cursor/skills/` files reference deleted `test-query-*.ts` scripts.
+commands. ~~Drift also exists in `.cursor/commands/` and
+`.claude/commands/`.~~ Resolved in pre-onboarding P6: `jc-gates.md`,
+`jc-start-right-thorough.md`, `jc-quality-gates.md` are now aligned.
+~~Two `.cursor/skills/` files reference deleted scripts.~~ Resolved
+in pre-onboarding P6: both GT skills already use CLI commands.
 
 ### Actions
 
@@ -252,11 +250,9 @@ Two `.cursor/skills/` files reference deleted `test-query-*.ts` scripts.
 3. `docs/agent-guidance/ai-agent-guide.md` needs substantial
    rework — it references "Oak Notion MCP", the GO.md grounding
    pattern, and stale command names. Decide: rewrite or delete.
-4. Sweep `.cursor/commands/` and `.claude/commands/` for stale
-   commands (`test:e2e:built`, `pnpm format`, `pnpm check-types`).
-5. Update `.cursor/skills/ground-truth-design/SKILL.md` and
-   `.cursor/skills/ground-truth-evaluation/SKILL.md` — replace
-   deleted `test-query-*.ts` script references with CLI commands.
+4. ~~Sweep `.cursor/commands/` and `.claude/commands/` for stale
+   commands.~~ Done in pre-onboarding P6.
+5. ~~Update `.cursor/skills/` GT files.~~ Done in pre-onboarding P6.
 6. Add a lightweight drift check (manual checklist or scripted check)
    so future command renames do not silently desynchronise docs.
 
@@ -288,17 +284,18 @@ Previously known:
 - `docs/agent-guidance/ai-agent-guide.md` -> `docs/troubleshooting.md` (wrong path; file is at `docs/development/troubleshooting.md`)
 - `docs/development/environment-variables.md` -> `docs/vercel-environment-config.md` (wrong path; file is at `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`)
 
-Discovered by WS0 audit:
+Discovered by WS0 audit (all resolved in pre-onboarding P2/P3):
 
-- `GROUND-TRUTH-PROCESS.md` referenced in 7+ places in oak-search-cli (does not exist; should be `GROUND-TRUTH-GUIDE.md` or `ground-truth-protocol.md`)
-- `DIAGNOSTIC-QUERIES.md` referenced in 2 places in oak-search-cli (does not exist)
-- `oak-components-theming.md` referenced in `apps/oak-search-cli/docs/README.md` (does not exist)
+- ~~`GROUND-TRUTH-PROCESS.md` referenced in 7+ places~~ Fixed
+- ~~`DIAGNOSTIC-QUERIES.md` referenced in 2 places~~ Fixed
+- ~~`oak-components-theming.md` reference~~ Fixed
+- ~~ADR index links 020/021/023~~ Fixed
+- ~~ADR name mismatches 029/030/031/048~~ Fixed
+- ~~Wrong-workspace content in operations/evaluation READMEs~~ Fixed
+
+Still remaining (onboarding-path):
+
 - `experimental-architecture-quick-reference.md` referenced in `docs/agent-guidance/README.md` (does not exist)
-- ADR index links 020, 021, 023 point to main directory instead of `docs/archive/architecture/architectural-decisions/`
-- ADR name mismatches in `docs/architecture/openapi-pipeline.md`: 029, 030, 031, 048
-- 6 `apps/oak-search-cli/operations/` READMEs contain wrong-workspace content (streamable-http content in search CLI)
-- `apps/oak-search-cli/evaluation/experiments/README.md` contains Clerk OAuth content (wrong workspace)
-- `apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/README.md` contains MCP testing strategy (wrong workspace)
 
 ### Actions
 

@@ -156,6 +156,6 @@ pnpm dev
 
 ## Related Documentation
 
-- [OAuth Testing Strategy](../TESTING.md#oauth-testing)
+- [Authentication Testing Strategy](../TESTING.md#two-tier-authentication-testing)
 - [OAuth Validation Results](../smoke-tests/OAUTH-VALIDATION-RESULTS.md)
 - [Testing Strategy](../../../../.agent/directives/testing-strategy.md)

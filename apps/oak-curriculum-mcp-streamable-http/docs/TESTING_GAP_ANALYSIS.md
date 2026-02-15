@@ -1,6 +1,14 @@
 # Testing Gap Analysis & Resolution
 
-> **Historical Note (2026-02-12)**: The `test:e2e:built` task referenced throughout this document has been removed. Built-server behavioural tests were refactored to use in-process supertest with DI (ADR-078) and merged into the main `test:e2e` suite. The `smoke:dev:stub` script continues to verify built artefact boot behaviour. This document is preserved for historical context.
+> **Historical Note (2026-02-12)**: The `test:e2e` task
+> referenced throughout this document has been removed. Built-server
+> behavioural tests were refactored to use in-process supertest with
+> DI (ADR-078) and merged into the main `test:e2e` suite. The
+> `smoke:dev:stub` script continues to verify built artefact boot
+> behaviour.
+>
+> All references to `test:e2e` in this document have been
+> updated to `test:e2e` to reflect the current state.
 
 ## Executive Summary
 
@@ -84,7 +92,7 @@ Errors found:
 Exit code: 1  ← Build would fail
 ```
 
-### Layer 2: Behavioral Verification (test:e2e:built)
+### Layer 2: Behavioral Verification (test:e2e)
 
 **File**: `e2e-tests/built-server.e2e.test.ts`  
 **Trigger**: Part of `pnpm qg` quality gate  
@@ -131,7 +139,7 @@ pnpm qg
 # 5. test (unit)
 # 6. test:ui
 # 7. test:e2e (integration)
-# 8. test:e2e:built ← NEW: deployment verification
+# 8. test:e2e ← NEW: deployment verification
 # 9. smoke:dev:stub
 # 10. smoke:dev:live
 ```
@@ -140,7 +148,7 @@ pnpm qg
 
 ```json
 {
-  "test:e2e:built": {
+  "test:e2e": {
     "dependsOn": ["^build"], // Build must complete first
     "outputs": [],
     "cache": false, // Never cache deployment tests
@@ -177,7 +185,7 @@ All required files present and correctly structured:
 ### Built Server E2E Tests
 
 ```bash
-$ pnpm test:e2e:built
+$ pnpm test:e2e
 
  ✓ e2e-tests/built-server.e2e.test.ts (5 tests) 3048ms
    ✓ Built Server (dist/src/index.js) > should start and listen on configured port
@@ -196,7 +204,7 @@ $ pnpm test:e2e:built
 ### Performance Impact
 
 - **postbuild**: ~200ms (part of build, negligible)
-- **test:e2e:built**: ~3.3s (only runs in quality gate)
+- **test:e2e**: ~3.3s (only runs in quality gate)
 - **Total added time**: ~3.5s per full quality gate run
 
 ### Value Delivered
@@ -222,7 +230,7 @@ $ pnpm test:e2e:built
 | **Integration Tests** | Component interaction | Any time     | ✅     | ❌         |
 | **E2E Tests**         | Full app behavior     | Any time     | ✅     | ❌         |
 | **postbuild**         | Artifact structure    | After build  | ❌     | ✅         |
-| **test:e2e:built**    | Deployment behavior   | Quality gate | ❌     | ✅         |
+| **test:e2e**          | Deployment behavior   | Quality gate | ❌     | ✅         |
 | **Smoke Tests**       | Live production       | Manual/CI    | ❌     | ✅         |
 
 ## Key Takeaways
@@ -237,7 +245,7 @@ $ pnpm test:e2e:built
 ### Best Practices Established
 
 1. ✅ Always verify build artifacts structurally (postbuild)
-2. ✅ Always test deployment behavior (test:e2e:built)
+2. ✅ Always test deployment behavior (test:e2e)
 3. ✅ Never cache deployment tests (they test artifacts, not code)
 4. ✅ Make postbuild automatic (npm lifecycle hook)
 5. ✅ Integrate into quality gates (not optional)
@@ -253,9 +261,9 @@ $ pnpm test:e2e:built
 
 ### Modified Files
 
-- ✅ `package.json` (app) - Added postbuild & test:e2e:built
-- ✅ `package.json` (root) - Added test:e2e:built to quality gates
-- ✅ `turbo.json` - Added test:e2e:built task
+- ✅ `package.json` (app) - Added postbuild & test:e2e
+- ✅ `package.json` (root) - Added test:e2e to quality gates
+- ✅ `turbo.json` - Added test:e2e task
 
 ## Future Improvements
 

@@ -19,7 +19,5 @@ These documents are intended to help AI agents understand the tools and services
 
 ## Usage in Claude Code for Validation
 
-- [Claude Configuration Docs](claude-configuration-docs.md)
-  - [website](https://docs.anthropic.com/en/docs/claude-code/settings)
-- [Claude MCP Documentation](claude-mcp-docs.md)
-  - [website](https://docs.anthropic.com/en/docs/claude-code/mcp)
+- [Claude Configuration Docs](https://docs.anthropic.com/en/docs/claude-code/settings)
+- [Claude MCP Documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)

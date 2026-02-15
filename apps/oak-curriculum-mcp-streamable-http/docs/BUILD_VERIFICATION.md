@@ -1,8 +1,16 @@
 # Build Artifact Verification System
 
-> **Historical Note (2026-02-12)**: The `test:e2e:built` task and `vitest.e2e.built.config.ts` have been removed. The built-server behavioural tests were refactored to use in-process supertest (DI pattern, ADR-078) and merged into the main `test:e2e` suite. The `smoke:dev:stub` script continues to verify that the built artefact boots and responds correctly. This document is preserved for historical context.
+> **Historical Note (2026-02-12)**: The `test:e2e` task and
+> `vitest.e2e.built.config.ts` have been removed. Built-server
+> behavioural tests were refactored to use in-process supertest
+> (DI pattern, ADR-078) and merged into the main `test:e2e` suite.
+> The `smoke:dev:stub` script continues to verify that the built
+> artefact boots and responds correctly.
 >
-> **Last Updated**: 2025-01-14
+> All references to `test:e2e` in this document have been
+> updated to `test:e2e` to reflect the current state.
+>
+> **Last Updated**: 2026-02-14
 > **Status**: Historical / Archived
 
 ## Overview
@@ -47,7 +55,7 @@ All required files present and correctly structured:
   • Package main: dist/src/index.js
 ```
 
-### Layer 2: Behavioral Verification (test:e2e:built)
+### Layer 2: Behavioral Verification (test:e2e)
 
 **Purpose**: Verify built artifacts actually work  
 **When**: Run as part of quality gate (`pnpm qg`)  
@@ -70,7 +78,7 @@ All required files present and correctly structured:
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "postbuild": "node scripts/verify-build-artifacts.js", // ← Automatic
-    "test:e2e:built": "vitest run --config vitest.e2e.config.ts e2e-tests/built-server.e2e.test.ts"
+    "test:e2e": "vitest run --config vitest.e2e.config.ts e2e-tests/built-server.e2e.test.ts"
   }
 }
 ```
@@ -80,7 +88,7 @@ All required files present and correctly structured:
 Updated `pnpm qg` to include built server verification:
 
 ```bash
-pnpm qg  # Now includes test:e2e:built
+pnpm qg  # Now includes test:e2e
 ```
 
 Full sequence:
@@ -92,17 +100,17 @@ Full sequence:
 5. `pnpm test` (unit tests)
 6. `pnpm test:ui`
 7. `pnpm test:e2e` (integration tests)
-8. **`pnpm test:e2e:built`** ← NEW
+8. **`pnpm test:e2e`** ← NEW
 9. `pnpm smoke:dev:stub`
 10. `pnpm smoke:dev:live`
 
 ### Turbo Configuration
 
-Added `test:e2e:built` task to `turbo.json`:
+Added `test:e2e` task to `turbo.json`:
 
 ```json
 {
-  "test:e2e:built": {
+  "test:e2e": {
     "dependsOn": ["^build"], // Ensures build completes first
     "outputs": [],
     "cache": false, // Never cache (tests deployment artifacts)
@@ -115,13 +123,13 @@ Added `test:e2e:built` task to `turbo.json`:
 
 The system maintains clear separation of concerns:
 
-| Layer              | Purpose              | When        | What                         | Caches              |
-| ------------------ | -------------------- | ----------- | ---------------------------- | ------------------- |
-| **postbuild**      | Structural integrity | After build | Files exist, exports correct | N/A (part of build) |
-| **test**           | Unit behavior        | Any time    | Code logic works             | Yes                 |
-| **test:e2e**       | Integration behavior | Any time    | App works via source         | Yes                 |
-| **test:e2e:built** | Deployment behavior  | After build | Built artifacts work         | No                  |
-| **smoke:\***       | Live system          | Manual/CI   | Production works             | No                  |
+| Layer         | Purpose              | When        | What                         | Caches              |
+| ------------- | -------------------- | ----------- | ---------------------------- | ------------------- |
+| **postbuild** | Structural integrity | After build | Files exist, exports correct | N/A (part of build) |
+| **test**      | Unit behavior        | Any time    | Code logic works             | Yes                 |
+| **test:e2e**  | Integration behavior | Any time    | App works via source         | Yes                 |
+| **test:e2e**  | Deployment behavior  | After build | Built artifacts work         | No                  |
+| **smoke:\***  | Live system          | Manual/CI   | Production works             | No                  |
 
 ## Validation
 
@@ -161,7 +169,7 @@ pnpm build
 **Built server e2e tests**:
 
 ```bash
-pnpm test:e2e:built
+pnpm test:e2e
 # Output:
 #  ✓ Built Server (dist/src/index.js) (5 tests)
 #    ✓ should start and listen on configured port
@@ -181,9 +189,9 @@ pnpm test:e2e:built
 
 ### Modified Files
 
-- ✅ `apps/oak-curriculum-mcp-streamable-http/package.json` - Added postbuild & test:e2e:built scripts
-- ✅ `package.json` (root) - Added test:e2e:built to quality gates
-- ✅ `turbo.json` - Added test:e2e:built task configuration
+- ✅ `apps/oak-curriculum-mcp-streamable-http/package.json` - Added postbuild & test:e2e scripts
+- ✅ `package.json` (root) - Added test:e2e to quality gates
+- ✅ `turbo.json` - Added test:e2e task configuration
 
 ## Benefits
 
@@ -229,10 +237,10 @@ pnpm check  # Full quality gate including build verification
 pnpm build
 
 # Test just the built server
-pnpm test:e2e:built
+pnpm test:e2e
 
 # Test both
-pnpm build && pnpm test:e2e:built
+pnpm build && pnpm test:e2e
 ```
 
 ## Cost/Benefit Analysis

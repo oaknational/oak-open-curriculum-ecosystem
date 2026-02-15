@@ -22,7 +22,7 @@ This guide documents the steps required to provision and configure Elasticsearch
 3. Choose **Search** as the solution type
 4. Select your preferred cloud provider (AWS recommended)
 5. Select your preferred region (e.g., eu-west-2 for UK)
-6. Name the project (e.g., "oak-open-curriculum-search")
+6. Name the project (e.g., "oak-search-cli")
 7. Click "Create project"
 
 ## Step 3: Generate API Key

@@ -1,9 +1,10 @@
 # Pre-Onboarding Documentation Fixes
 
-**Status**: Ready -- execute all workstreams
-**Parent**: [developer-onboarding-experience.plan.md](developer-onboarding-experience.plan.md)
+**Status**: Complete
+**Parent**: [developer-onboarding-experience.plan.md](../active/developer-onboarding-experience.plan.md)
 **Audit report**: [../../research/documentation-audit-report.md](../../research/documentation-audit-report.md)
-**Last Updated**: 2026-02-14
+**Last Updated**: 2026-02-15
+**Completed**: 2026-02-15
 
 ---
 
@@ -34,13 +35,13 @@ places. The assignment table is in the
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| P1 | [Archival and deletion](#p1-archival-and-deletion) | Pending |
-| P2 | [ADR and architecture fixes](#p2-adr-and-architecture-fixes) | Pending |
-| P3 | [oak-search-cli fixes](#p3-oak-search-cli-fixes) | Pending |
-| P4 | [App and package doc fixes](#p4-app-and-package-doc-fixes) | Pending |
-| P5 | [Agent internal doc fixes](#p5-agent-internal-doc-fixes) | Pending |
-| P6 | [Cursor, Claude, and tooling config fixes](#p6-cursor-claude-and-tooling-config-fixes) | Pending |
-| P7 | [Non-onboarding content accuracy](#p7-non-onboarding-content-accuracy) | Pending |
+| P1 | [Archival and deletion](#p1-archival-and-deletion) | Complete |
+| P2 | [ADR and architecture fixes](#p2-adr-and-architecture-fixes) | Complete |
+| P3 | [oak-search-cli fixes](#p3-oak-search-cli-fixes) | Complete |
+| P4 | [App and package doc fixes](#p4-app-and-package-doc-fixes) | Complete |
+| P5 | [Agent internal doc fixes](#p5-agent-internal-doc-fixes) | Complete |
+| P6 | [Cursor, Claude, and tooling config fixes](#p6-cursor-claude-and-tooling-config-fixes) | Complete |
+| P7 | [Non-onboarding content accuracy](#p7-non-onboarding-content-accuracy) | Complete |
 
 **Recommended order**: P1 first (reduces file count), then P2-P6
 in parallel or any order, P7 last (content changes benefit from
