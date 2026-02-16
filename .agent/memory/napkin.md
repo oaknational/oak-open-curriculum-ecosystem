@@ -27,8 +27,35 @@
 - Updated 8 files with path references to new location
 - Updated roadmap status to 🔄 In Progress
 
+### What Was Done (continued)
+
+- Fixed 5 pre-existing TSDoc warnings in
+  `sdk-api-methods.unit.test.ts` and `elastic-http.ts`
+  (angle brackets in code spans)
+- Investigated MCP Result pattern gap:
+  - MCP layer uses `ToolExecutionResult` (custom union),
+    NOT `Result<T, E>` from `@oaknational/result`
+  - Zero files in MCP layer import `@oaknational/result`
+  - `extractExecutionData` converts to Result-like shape
+    but not the canonical type
+  - ~25-30 files across 3 workspaces would need changes
+    to unify
+- Decision: **Option B** — semantic-search tool uses
+  `Result<T, E>` directly, maps to `CallToolResult`,
+  bypasses `ToolExecutionResult` entirely. Broader MCP
+  unification is a separate future workstream after Phase 3.
+- Updated plan with error handling architecture decision
+  and future work section
+- Updated prompt with coexistence pattern
+
 ### Patterns to Remember
 
+- Aggregated tools return `Promise<CallToolResult>`
+  directly — they do NOT go through `ToolExecutionResult`
+  unless they call `executeMcpTool` internally
+- The semantic-search tool calls the Search SDK directly,
+  so it never touches `ToolExecutionResult` or
+  `extractExecutionData` — clean integration path
 - The `AggregatedToolName` type is derived from
   `keyof typeof AGGREGATED_TOOL_DEFS` — adding to the
   map automatically extends the type union

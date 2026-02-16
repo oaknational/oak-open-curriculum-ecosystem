@@ -293,8 +293,15 @@ MCP Client → server.registerTool() handler
 - **Single tool with scope**: One `semantic-search` tool
   with a `scope` parameter (`lessons`, `units`,
   `sequences`) — simpler for agents.
-- **Error mapping**: `Result<T, RetrievalError>` → MCP
-  error responses. Never swallow errors.
+- **Error mapping**: `Result<T, RetrievalError>` maps
+  directly to `CallToolResult`, bypassing
+  `ToolExecutionResult` / `extractExecutionData`.
+  Never swallow errors.
+- **Two error patterns coexist**: Existing tools use
+  `ToolExecutionResult` (custom union); semantic-search
+  uses `Result<T, E>` directly. Clean boundary — MCP
+  layer unification onto `Result<T, E>` is a separate
+  future workstream (~25-30 files).
 
 #### TDD Execution Sequence
 

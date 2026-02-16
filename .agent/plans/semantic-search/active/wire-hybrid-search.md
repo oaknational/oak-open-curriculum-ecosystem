@@ -215,10 +215,34 @@ Both MCP servers need new environment variables:
 vars — URL and credentials must be passed as constructor
 arguments. This protects the Oak-specific ES deployment.
 
-### Error handling
+### Error handling: `Result<T, E>` → `CallToolResult` directly
 
-SDK methods return `Result<T, RetrievalError>`.
-`RetrievalError` is a discriminated union:
+**Architecture decision**: The semantic-search tool uses
+`Result<T, E>` from the Search SDK and maps directly to
+`CallToolResult` (MCP SDK type). It **bypasses** the
+existing `ToolExecutionResult` / `extractExecutionData`
+pattern entirely.
+
+**Why this works**: Aggregated tools return
+`Promise<CallToolResult>` directly from their execution
+functions. The `ToolExecutionResult` pattern is only
+involved when aggregated tools call `executeMcpTool`
+internally (e.g., the existing `search` tool calls
+`get-search-lessons` via REST API). The semantic-search
+tool calls the Search SDK directly — it never touches
+`executeMcpTool`.
+
+**The existing MCP layer** uses a custom discriminated
+union (`ToolExecutionResult`) and helper
+(`extractExecutionData`) that are structurally similar
+to `Result<T, E>` but are not the canonical type.
+Zero files in the MCP layer import `@oaknational/result`.
+Unifying the entire MCP layer onto `Result<T, E>` is
+valuable but is a separate workstream (~25-30 files) to
+be addressed after Phase 3, not as a prerequisite.
+
+**`RetrievalError`** is a discriminated union from the
+Search SDK:
 
 ```text
 RetrievalError =
@@ -228,12 +252,21 @@ RetrievalError =
   | { type: 'unknown',           message }
 ```
 
-The MCP tool handler maps:
+**Mapping pattern** in `runSemanticSearchTool()`:
 
-- `result.ok` → MCP content response (formatted results)
-- `!result.ok` → MCP error response:
-  `{ isError: true, content: [{ type: 'text', text: result.error.message }] }`
+```typescript
+const result = await deps.searchSdk.retrieval.searchLessons(params);
 
+if (!result.ok) {
+  // Result<T, E>.error → CallToolResult with isError
+  return formatError(result.error.message);
+}
+
+// Result<T, E>.value → CallToolResult with content
+return formatSemanticSearchResults(result.value);
+```
+
+No `ToolExecutionResult`. No `extractExecutionData`.
 No silent error swallowing. Every error is surfaced.
 
 ### `@elastic/elasticsearch` as a dependency
@@ -432,6 +465,38 @@ internally based on scope.
 | `@elastic/elasticsearch` bundle size on Vercel | Verify serverless function size stays within limits |
 | Tool coexistence confusion | Clear, differentiated tool descriptions during phase 1 |
 | ES cluster availability | Search SDK returns `Result` errors — MCP surfaces them cleanly |
+| Two error patterns coexist | Semantic-search uses `Result<T, E>` directly; existing tools use `ToolExecutionResult`. Clean boundary — no cross-contamination |
+
+---
+
+## Future Work: MCP Result Pattern Unification
+
+The MCP layer currently uses a custom discriminated union
+(`ToolExecutionResult`) instead of `Result<T, E>` from
+`@oaknational/result`. This creates an inconsistency with
+the Search SDK and Search CLI, which use `Result<T, E>`
+throughout.
+
+**Scope**: ~25-30 files across 3 workspaces (Curriculum
+SDK MCP code, STDIO server, HTTP server). ~15-20 functions
+and 3 major type definitions.
+
+**When**: After Phase 3 is complete. If the "compare and
+replace" step (WS5) removes the old `search` tool,
+several of those files become simpler, reducing the
+migration surface.
+
+**What changes**:
+
+- `ToolExecutionResult` → `Result<ToolExecutionSuccess, McpToolError | McpParameterError>`
+- `extractExecutionData` → removed (direct `Result` usage)
+- Validation functions → return `Result<T, string>`
+- Auth interception → inspect `Result.error` instead of `ToolExecutionResult.error`
+
+This is **not a prerequisite** for Phase 3. The semantic-search
+tool's integration path bypasses `ToolExecutionResult`
+entirely because it calls the Search SDK directly rather
+than going through `executeMcpTool`.
 
 ---
 
