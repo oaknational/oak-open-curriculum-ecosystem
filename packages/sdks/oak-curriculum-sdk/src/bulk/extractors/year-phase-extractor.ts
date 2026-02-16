@@ -5,10 +5,20 @@
  * Extracts year group and phase information from units. This enables
  * filtering and faceted navigation by year and educational phase
  * (primary/secondary).
-
  */
 
+import { isKeyStage, type KeyStage } from '../../types/generated/api-schema/path-parameters.js';
 import type { Unit } from '../../types/generated/bulk/index.js';
+
+/** Phase slug derived from year (primary, secondary, or unknown). */
+export type PhaseSlug = 'primary' | 'secondary' | 'unknown';
+
+/** Key stage slug or 'unknown' when year cannot be mapped. */
+export type KeyStageOrUnknown = KeyStage | 'unknown';
+
+function isPhaseSlug(value: string): value is PhaseSlug {
+  return value === 'primary' || value === 'secondary' || value === 'unknown';
+}
 
 /**
  * Year group information with derived metadata.
@@ -135,10 +145,10 @@ export interface YearPhaseSummary {
   readonly totalYears: number;
   /** Total number of units */
   readonly totalUnits: number;
-  /** Count of units by phase */
-  readonly unitsByPhase: Readonly<Record<string, number>>;
-  /** Count of units by key stage */
-  readonly unitsByKeyStage: Readonly<Record<string, number>>;
+  /** Count of units by phase (primary, secondary, unknown). */
+  readonly unitsByPhase: Partial<Record<PhaseSlug, number>>;
+  /** Count of units by key stage (ks1–ks4, unknown). */
+  readonly unitsByKeyStage: Partial<Record<KeyStageOrUnknown, number>>;
 }
 
 /**
@@ -148,15 +158,16 @@ export interface YearPhaseSummary {
  * @returns Summary statistics
  */
 export function summarizeYearPhaseInfo(yearInfo: readonly ExtractedYearInfo[]): YearPhaseSummary {
-  const unitsByPhase: Record<string, number> = {};
-  const unitsByKeyStage: Record<string, number> = {};
+  const unitsByPhase: Partial<Record<PhaseSlug, number>> = {};
+  const unitsByKeyStage: Partial<Record<KeyStageOrUnknown, number>> = {};
   let totalUnits = 0;
 
   for (const year of yearInfo) {
     totalUnits += year.unitCount;
-
-    unitsByPhase[year.phase] = (unitsByPhase[year.phase] ?? 0) + year.unitCount;
-    unitsByKeyStage[year.keyStage] = (unitsByKeyStage[year.keyStage] ?? 0) + year.unitCount;
+    const phase: PhaseSlug = isPhaseSlug(year.phase) ? year.phase : 'unknown';
+    const ks: KeyStageOrUnknown = isKeyStage(year.keyStage) ? year.keyStage : 'unknown';
+    unitsByPhase[phase] = (unitsByPhase[phase] ?? 0) + year.unitCount;
+    unitsByKeyStage[ks] = (unitsByKeyStage[ks] ?? 0) + year.unitCount;
   }
 
   return {

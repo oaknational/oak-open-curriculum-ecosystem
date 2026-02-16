@@ -15,8 +15,8 @@ export const SearchParsedQuerySchema = z
   .object({
     intent: z.enum(PARSED_INTENT_ENUM),
     text: z.string().default(''),
-    subject: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]).optional(),
-    keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),
+    subject: z.enum(SUBJECTS).optional(),
+    keyStage: z.enum(KEY_STAGES).optional(),
     minLessons: z.number().int().min(0).optional(),
   })
   .strict();

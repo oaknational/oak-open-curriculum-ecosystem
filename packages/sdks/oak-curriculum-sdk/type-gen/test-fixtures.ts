@@ -263,25 +263,25 @@ export const schemaWithNestedResponses: OpenAPIObject = {
   },
 };
 
+function isOpenAPIObject(value: unknown): value is OpenAPIObject {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  return 'openapi' in value && 'info' in value && 'paths' in value;
+}
+
 /**
  * Type-safe JSON parsing helper
  * Validates that parsed JSON matches expected OpenAPI structure
  */
 export function parseAsOpenAPIObject(json: string): OpenAPIObject {
-  const parsed = JSON.parse(json) as unknown;
+  const parsed: unknown = JSON.parse(json);
 
-  // Basic validation - in real code, use a proper validator
-  if (
-    typeof parsed !== 'object' ||
-    parsed === null ||
-    !('openapi' in parsed) ||
-    !('info' in parsed) ||
-    !('paths' in parsed)
-  ) {
+  if (!isOpenAPIObject(parsed)) {
     throw new TypeError('Invalid OpenAPI schema');
   }
 
-  return parsed as OpenAPIObject;
+  return parsed;
 }
 
 export function buildSchemaWithEnumParam(): OpenAPIObject {

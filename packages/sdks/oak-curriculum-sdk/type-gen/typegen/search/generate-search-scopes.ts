@@ -20,11 +20,13 @@ function createScopesModule(): string {
     `export type SearchScopeWithAll = (typeof SEARCH_SCOPES_WITH_ALL)[number];\n\n` +
     `/** Guard for narrow search scopes. */\n` +
     `export function isSearchScope(value: unknown): value is SearchScope {\n` +
-    `  return typeof value === 'string' && (SEARCH_SCOPES as readonly string[]).includes(value);\n` +
+    `  const scopesAsStrings: readonly string[] = SEARCH_SCOPES;\n` +
+    `  return typeof value === 'string' && scopesAsStrings.includes(value);\n` +
     `}\n\n` +
     `/** Guard for search scopes including multi-scope. */\n` +
     `export function isSearchScopeWithAll(value: unknown): value is SearchScopeWithAll {\n` +
-    `  return typeof value === 'string' && (SEARCH_SCOPES_WITH_ALL as readonly string[]).includes(value);\n` +
+    `  const scopesAsStrings: readonly string[] = SEARCH_SCOPES_WITH_ALL;\n` +
+    `  return typeof value === 'string' && scopesAsStrings.includes(value);\n` +
     `}\n`
   );
 }

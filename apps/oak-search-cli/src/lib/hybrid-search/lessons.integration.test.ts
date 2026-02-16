@@ -12,16 +12,19 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runLessonsSearch } from './lessons';
-import type { EsSearchFn, EsSearchResponse } from '../elastic-http';
+import type { EsSearchFnForDoc, EsSearchResponse, EsSearchRequest } from '../elastic-http';
 import type { SearchLessonsIndexDoc } from '../../types/oak';
 
 /**
  * Creates a fake ES search function that returns the provided response.
- * This is a simple fake per testing strategy — no complex mocking.
+ * Typed as EsSearchFnForDoc<SearchLessonsIndexDoc> so no type assertion is needed.
  */
-function createFakeSearch(response: EsSearchResponse<SearchLessonsIndexDoc>): EsSearchFn {
-  return async function fakeSearch<T>(): Promise<EsSearchResponse<T>> {
-    return response as unknown as EsSearchResponse<T>;
+function createFakeSearch(
+  response: EsSearchResponse<SearchLessonsIndexDoc>,
+): EsSearchFnForDoc<SearchLessonsIndexDoc> {
+  return async (body: EsSearchRequest): Promise<EsSearchResponse<SearchLessonsIndexDoc>> => {
+    void body;
+    return response;
   };
 }
 

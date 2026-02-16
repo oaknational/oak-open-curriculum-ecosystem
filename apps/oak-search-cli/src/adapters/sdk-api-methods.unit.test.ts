@@ -23,25 +23,28 @@ import {
   makeGetSubjectAssets,
 } from './sdk-api-methods';
 
+/** Minimal client type for tests; adapters accept Pick<OakApiClient, 'GET'>. */
+type MinimalOakApiClient = Pick<OakApiClient, 'GET'>;
+
 /**
- * Create a mock OakApiClient that throws a network error on GET.
+ * Create a minimal Oak API client that throws a network error on GET.
  */
-function createThrowingClient(error: Error): OakApiClient {
+function createThrowingClient(error: Error): MinimalOakApiClient {
   return {
     GET: vi.fn().mockRejectedValue(error),
-  } as unknown as OakApiClient;
+  };
 }
 
 /**
- * Create a mock OakApiClient that returns a successful response.
+ * Create a minimal Oak API client that returns a successful response.
  */
-function createSuccessClient(data: unknown): OakApiClient {
+function createSuccessClient(data: unknown): MinimalOakApiClient {
   return {
     GET: vi.fn().mockResolvedValue({
       response: { ok: true, status: 200, statusText: 'OK' },
       data,
     }),
-  } as unknown as OakApiClient;
+  };
 }
 
 // ============================================================================

@@ -11,7 +11,7 @@ import type { GetUnitsFn, GetUnitSummaryFn } from '../oak-adapter-types';
 import { safeGet } from '../sdk-safe-get';
 
 /** Create getUnitsByKeyStageAndSubject method. */
-export function makeGetUnitsByKeyStageAndSubject(client: OakApiClient): GetUnitsFn {
+export function makeGetUnitsByKeyStageAndSubject(client: Pick<OakApiClient, 'GET'>): GetUnitsFn {
   return async (keyStage, subject) => {
     const resource = `${keyStage}/${subject}`;
     const getResult = await safeGet(
@@ -42,7 +42,7 @@ export function makeGetUnitsByKeyStageAndSubject(client: OakApiClient): GetUnits
 }
 
 /** Create getUnitSummary method. */
-export function makeGetUnitSummary(client: OakApiClient): GetUnitSummaryFn {
+export function makeGetUnitSummary(client: Pick<OakApiClient, 'GET'>): GetUnitSummaryFn {
   return async (unitSlug) => {
     const getResult = await safeGet(
       () =>

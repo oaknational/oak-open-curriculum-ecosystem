@@ -14,10 +14,10 @@ export const DEFAULT_INCLUDE_FACETS = true;
 /** Zod schema describing the structured hybrid search body used by the semantic search app. */
 export const SearchStructuredRequestSchema = z
   .object({
-    scope: z.enum(SEARCH_SCOPES_WITH_ALL as unknown as [SearchScopeWithAll, ...SearchScopeWithAll[]]),
+    scope: z.enum(SEARCH_SCOPES_WITH_ALL),
     text: z.string().min(1),
-    subject: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]).optional(),
-    keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),
+    subject: z.enum(SUBJECTS).optional(),
+    keyStage: z.enum(KEY_STAGES).optional(),
     minLessons: z.number().int().min(0).optional(),
     size: z.number().int().min(1).max(100).optional(),
     includeFacets: z.boolean().optional().default(DEFAULT_INCLUDE_FACETS),

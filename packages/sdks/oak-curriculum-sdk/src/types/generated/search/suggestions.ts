@@ -6,7 +6,7 @@
 
 import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';
-import { SEARCH_SCOPES, type SearchScope } from './scopes.js';
+import { SEARCH_SCOPES } from './scopes.js';
 
 /** Shared default cache metadata for suggestion responses. */
 export const DEFAULT_SUGGESTION_CACHE = Object.freeze({ version: 'v1', ttlSeconds: 300 });
@@ -28,10 +28,10 @@ export const SearchSuggestionContextSchema = z
 export const SearchSuggestionItemSchema = z
   .object({
     label: z.string().min(1),
-    scope: z.enum(SEARCH_SCOPES as unknown as [SearchScope, ...SearchScope[]]),
+    scope: z.enum(SEARCH_SCOPES),
     url: z.string().min(1),
-    subject: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]).optional(),
-    keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),
+    subject: z.enum(SUBJECTS).optional(),
+    keyStage: z.enum(KEY_STAGES).optional(),
     contexts: SearchSuggestionContextSchema,
   })
   .strict();
@@ -60,9 +60,9 @@ export type SearchSuggestionResponse = z.infer<typeof SearchSuggestionResponseSc
 export const SearchSuggestionRequestSchema = z
   .object({
     prefix: z.string().min(1),
-    scope: z.enum(SEARCH_SCOPES as unknown as [SearchScope, ...SearchScope[]]),
-    subject: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]).optional(),
-    keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),
+    scope: z.enum(SEARCH_SCOPES),
+    subject: z.enum(SUBJECTS).optional(),
+    keyStage: z.enum(KEY_STAGES).optional(),
     phaseSlug: z.string().min(1).optional(),
     limit: z.number().int().min(1).max(20).optional(),
   })

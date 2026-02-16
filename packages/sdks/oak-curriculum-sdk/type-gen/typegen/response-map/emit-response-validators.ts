@@ -58,7 +58,8 @@ ${allowedIds}
 export type AllowedId = (typeof ALLOWED_IDS)[number];
 
 export function isAllowedId(value: string): value is AllowedId {
-  return ALLOWED_IDS.includes(value as AllowedId);
+  const allowedIdsAsStrings: readonly string[] = ALLOWED_IDS;
+  return allowedIdsAsStrings.includes(value);
 }
 `;
 
@@ -113,7 +114,11 @@ export function getResponseSchemaByPathAndMethodAndStatus(path: ValidPath, metho
 }
 
 export function getResponseSchemaForEndpoint(method: AllowedMethods, path: ValidPath): CurriculumSchemaDefinition {
-  return getResponseSchemaByPathAndMethodAndStatus(path, method as AllowedMethodsForPath<ValidPath>, 200);
+  const operationId = getOperationIdByPathAndMethod(path, method);
+  if (!operationId) {
+    throw new TypeError('Method not allowed for path: ' + String(method) + ' ' + String(path));
+  }
+  return getResponseSchemaByOperationIdAndStatus(operationId, 200);
 }
 `;
 
@@ -134,7 +139,7 @@ export function getResponseDescriptorSchema(operationId: OperationId, statusCode
 
 export function getDescriptorSchemaForEndpoint(method: AllowedMethods, path: ValidPath): { readonly zod: CurriculumSchemaDefinition; readonly json: unknown } {
   const zod = getResponseSchemaForEndpoint(method, path);
-  const operationId = getOperationIdByPathAndMethod(path, method as AllowedMethodsForPath<ValidPath>);
+  const operationId = getOperationIdByPathAndMethod(path, method);
   if (typeof operationId !== 'string') {
     return { zod, json: undefined };
   }

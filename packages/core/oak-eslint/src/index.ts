@@ -27,7 +27,8 @@ import { strict } from './configs/strict.js';
 import { react } from './configs/react.js';
 import { next } from './configs/next.js';
 
-import type { Linter, ESLint } from 'eslint';
+import type { Linter } from 'eslint';
+import type { TSESLint } from '@typescript-eslint/utils';
 
 export const configs: Record<string, Linter.Config[]> = {
   recommended: Array.isArray(recommended) ? recommended : [recommended],
@@ -39,13 +40,13 @@ export const configs: Record<string, Linter.Config[]> = {
 /**
  * ESLint plugin for Oak National Academy standards.
  *
- * Note: ESLint's Plugin.rules type uses Rule.RuleModule which is incompatible
- * with typescript-eslint's RuleModule. The type assertion is necessary because
- * these types don't align at the boundary between ESLint and typescript-eslint.
+ * Typed as `FlatConfig.Plugin` from typescript-eslint rather than core
+ * `ESLint.Plugin` because the latter's `rules` expects `Rule.RuleModule`
+ * which is structurally incompatible with typescript-eslint's `RuleModule`.
+ * `FlatConfig.Plugin` uses `LooseRuleDefinition` which bridges this gap.
  */
-const plugin: ESLint.Plugin = {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- typescript-eslint RuleModule incompatible with ESLint Rule.RuleModule
-  rules: rules as unknown as ESLint.Plugin['rules'],
+const plugin: TSESLint.FlatConfig.Plugin = {
+  rules: rules,
   configs: configs,
 };
 

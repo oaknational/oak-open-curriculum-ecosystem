@@ -16,7 +16,7 @@ import type {
 import { safeGet } from '../sdk-safe-get';
 
 /** Create getLessonTranscript method. */
-export function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
+export function makeGetLessonTranscript(client: Pick<OakApiClient, 'GET'>): GetTranscriptFn {
   return async (lessonSlug) => {
     const getResult = await safeGet(
       () =>
@@ -43,7 +43,7 @@ export function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
 }
 
 /** Create getLessonSummary method. */
-export function makeGetLessonSummary(client: OakApiClient): GetLessonSummaryFn {
+export function makeGetLessonSummary(client: Pick<OakApiClient, 'GET'>): GetLessonSummaryFn {
   return async (lessonSlug) => {
     const getResult = await safeGet(
       () =>
@@ -71,7 +71,7 @@ export function makeGetLessonSummary(client: OakApiClient): GetLessonSummaryFn {
 
 /** Create getLessonsByKeyStageAndSubject method. */
 export function makeGetLessonsByKeyStageAndSubject(
-  client: OakApiClient,
+  client: Pick<OakApiClient, 'GET'>,
 ): GetLessonsByKeyStageAndSubjectFn {
   return async (keyStage: KeyStage, subject: SearchSubjectSlug, options = {}) => {
     const { limit = 100, offset = 0, unit } = options;

@@ -58,17 +58,11 @@ describe('Auth Bypass for Development (E2E)', () => {
   // Note: GET endpoint test removed - SSE connections stay open causing timeouts
   // POST test above already proves auth bypass works
 
-  it('does not expose OAuth discovery endpoints when auth disabled', () => {
-    const router = (
-      app as unknown as {
-        _router?: { stack?: { route?: { path?: string } }[] };
-      }
-    )._router;
+  it('does not expose OAuth discovery endpoints when auth disabled', async () => {
+    const authServer = await request(app).get('/.well-known/oauth-authorization-server');
+    expect(authServer.status).toBe(404);
 
-    const stack = router?.stack ?? [];
-    const hasRoute = (path: string) => stack.some((layer) => (layer.route?.path ?? null) === path);
-
-    expect(hasRoute('/.well-known/oauth-authorization-server')).toBe(false);
-    expect(hasRoute('/.well-known/oauth-protected-resource')).toBe(false);
+    const protectedResource = await request(app).get('/.well-known/oauth-protected-resource');
+    expect(protectedResource.status).toBe(404);
   });
 });

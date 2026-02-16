@@ -6,6 +6,13 @@ export function extractSchemaVersion(schema: OpenAPIObject): string {
   return schema.info.version;
 }
 
+function isOpenAPIObject(value: unknown): value is OpenAPIObject {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  return 'openapi' in value && 'info' in value && 'paths' in value;
+}
+
 export async function readSchemaCacheOrNull(cachePath: string): Promise<OpenAPIObject | null> {
   if (!existsSync(cachePath)) {
     return null;
@@ -13,15 +20,10 @@ export async function readSchemaCacheOrNull(cachePath: string): Promise<OpenAPIO
   try {
     const raw = await readFile(cachePath, 'utf8');
     const parsed: unknown = JSON.parse(raw);
-    const info =
-      typeof parsed === 'object' && parsed !== null && 'info' in parsed ? parsed.info : null;
-    const version =
-      typeof info === 'object' && info !== null && 'version' in info ? info.version : null;
-    if (version === null) {
+    if (!isOpenAPIObject(parsed)) {
       return null;
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: allowing at incoming external boundary
-    return parsed as OpenAPIObject;
+    return parsed;
   } catch {
     return null;
   }

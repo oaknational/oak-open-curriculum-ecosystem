@@ -6,18 +6,18 @@
 
 import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';
-import { SEARCH_SCOPES_WITH_ALL, type SearchScopeWithAll } from './scopes.js';
+import { SEARCH_SCOPES_WITH_ALL } from './scopes.js';
 
 /** Zod schema describing the natural language search body. */
 export const SearchNaturalLanguageRequestSchema = z
   .object({
     q: z.string().min(1),
-    scope: z.enum(SEARCH_SCOPES_WITH_ALL as unknown as [SearchScopeWithAll, ...SearchScopeWithAll[]]).optional(),
+    scope: z.enum(SEARCH_SCOPES_WITH_ALL).optional(),
     size: z.number().int().min(1).max(100).optional(),
     includeFacets: z.boolean().optional(),
     phaseSlug: z.string().min(1).optional(),
-    subject: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]).optional(),
-    keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),
+    subject: z.enum(SUBJECTS).optional(),
+    keyStage: z.enum(KEY_STAGES).optional(),
     minLessons: z.number().int().min(0).optional(),
   })
   .strict();

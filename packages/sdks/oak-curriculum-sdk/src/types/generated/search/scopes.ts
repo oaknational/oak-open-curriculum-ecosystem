@@ -16,10 +16,12 @@ export type SearchScopeWithAll = (typeof SEARCH_SCOPES_WITH_ALL)[number];
 
 /** Guard for narrow search scopes. */
 export function isSearchScope(value: unknown): value is SearchScope {
-  return typeof value === 'string' && (SEARCH_SCOPES as readonly string[]).includes(value);
+  const scopesAsStrings: readonly string[] = SEARCH_SCOPES;
+  return typeof value === 'string' && scopesAsStrings.includes(value);
 }
 
 /** Guard for search scopes including multi-scope. */
 export function isSearchScopeWithAll(value: unknown): value is SearchScopeWithAll {
-  return typeof value === 'string' && (SEARCH_SCOPES_WITH_ALL as readonly string[]).includes(value);
+  const scopesAsStrings: readonly string[] = SEARCH_SCOPES_WITH_ALL;
+  return typeof value === 'string' && scopesAsStrings.includes(value);
 }

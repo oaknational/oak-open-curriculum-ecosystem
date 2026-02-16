@@ -56,7 +56,7 @@ function isEsHit<TDoc>(v: unknown): v is EsHit<TDoc> {
     typeof v._id === 'string'
   );
 }
-function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
+export function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
   if (!(typeof v === 'object' && v !== null && hasKey(v, 'hits'))) {
     return false;
   }
@@ -76,6 +76,13 @@ function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
  * @see ADR-078 Dependency Injection for Testability
  */
 export type EsSearchFn = <T>(body: EsSearchRequest) => Promise<EsSearchResponse<T>>;
+
+/**
+ * Lessons-specific search function type. Accepts both EsSearchFn and
+ * (body) => Promise<EsSearchResponse<SearchLessonsIndexDoc>> so tests can pass
+ * a fixed response without type assertions.
+ */
+export type EsSearchFnForDoc<TDoc> = (body: EsSearchRequest) => Promise<EsSearchResponse<TDoc>>;
 
 export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchResponse<T>> {
   const client = esClient();

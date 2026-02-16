@@ -3,6 +3,7 @@
  * @see `./ingestion-error-collector.ts` for the collector implementation
  */
 
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { IngestionContext, IngestionIssue, IssueSummary } from './ingestion-error-types';
 
 /** HTTP status codes that indicate retryable errors. */
@@ -44,12 +45,17 @@ interface SummaryCounters {
   totalWarnings: number;
   byHttpStatus: Record<number, number>;
   byOperation: Record<string, number>;
-  byKeyStage: Record<string, number>;
-  bySubject: Record<string, number>;
+  byKeyStage: Partial<Record<KeyStage, number>>;
+  bySubject: Partial<Record<SearchSubjectSlug, number>>;
 }
 
-/** Increment a counter in a record. */
-function incrementCounter(record: Record<string | number, number>, key: string | number): void {
+/** Increment a counter in a record keyed by string. */
+function incrementStringKeyCounter(record: Record<string, number>, key: string): void {
+  record[key] = (record[key] ?? 0) + 1;
+}
+
+/** Increment a counter in a record keyed by number. */
+function incrementNumberKeyCounter(record: Record<number, number>, key: number): void {
   record[key] = (record[key] ?? 0) + 1;
 }
 
@@ -62,16 +68,18 @@ function updateCounters(counters: SummaryCounters, issue: IngestionIssue): void 
   }
 
   if (issue.httpStatus !== undefined) {
-    incrementCounter(counters.byHttpStatus, issue.httpStatus);
+    incrementNumberKeyCounter(counters.byHttpStatus, issue.httpStatus);
   }
   if (issue.context.operation) {
-    incrementCounter(counters.byOperation, issue.context.operation);
+    incrementStringKeyCounter(counters.byOperation, issue.context.operation);
   }
   if (issue.context.keyStage) {
-    incrementCounter(counters.byKeyStage, issue.context.keyStage);
+    const ks = issue.context.keyStage;
+    counters.byKeyStage[ks] = (counters.byKeyStage[ks] ?? 0) + 1;
   }
   if (issue.context.subject) {
-    incrementCounter(counters.bySubject, issue.context.subject);
+    const subj = issue.context.subject;
+    counters.bySubject[subj] = (counters.bySubject[subj] ?? 0) + 1;
   }
 }
 

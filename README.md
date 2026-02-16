@@ -54,7 +54,7 @@ Everything flows from the OpenAPI schema:
 | `packages/sdks/` | Generated SDKs (Curriculum SDK with type-gen, Zod schemas, MCP metadata) |
 | `packages/libs/` | Shared libraries for logging, configuration, storage, transport          |
 | `packages/core/` | Core infrastructure (ESLint configs, Zod adapters)                       |
-| `docs/`          | Developer documentation, onboarding guides, 107 ADRs                     |
+| `docs/`          | Developer documentation, onboarding guides, 111 ADRs                     |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 

@@ -10,7 +10,7 @@ import type { GetSubjectSequencesFn, GetSequenceUnitsFn } from '../oak-adapter-t
 import { safeGet } from '../sdk-safe-get';
 
 /** Create getSubjectSequences method. */
-export function makeGetSubjectSequences(client: OakApiClient): GetSubjectSequencesFn {
+export function makeGetSubjectSequences(client: Pick<OakApiClient, 'GET'>): GetSubjectSequencesFn {
   return async (subject) => {
     const getResult = await safeGet(
       () =>
@@ -36,7 +36,7 @@ export function makeGetSubjectSequences(client: OakApiClient): GetSubjectSequenc
 }
 
 /** Create getSequenceUnits method. */
-export function makeGetSequenceUnits(client: OakApiClient): GetSequenceUnitsFn {
+export function makeGetSequenceUnits(client: Pick<OakApiClient, 'GET'>): GetSequenceUnitsFn {
   return async (sequenceSlug) => {
     const getResult = await safeGet(
       () =>

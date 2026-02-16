@@ -1,23 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { extractAuthContext } from './tool-auth-context.js';
-import type { Request } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import { createFakeLogger, createFakeRequest } from '../test-helpers/fakes.js';
 
 describe('extractAuthContext', () => {
-  const createMockLogger = (): Logger =>
-    ({
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    }) as unknown as Logger;
-
   it('should extract auth context when present', () => {
-    const req = {
+    const req = createFakeRequest({
       headers: { authorization: 'Bearer test-token' },
       auth: { userId: 'user_123' },
-    } as unknown as Request;
-    const logger = createMockLogger();
+    });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 
@@ -29,11 +20,8 @@ describe('extractAuthContext', () => {
   });
 
   it('should return undefined when no Authorization header', () => {
-    const req = {
-      headers: {},
-      auth: { userId: 'user_123' },
-    } as unknown as Request;
-    const logger = createMockLogger();
+    const req = createFakeRequest({ headers: {}, auth: { userId: 'user_123' } });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 
@@ -41,11 +29,11 @@ describe('extractAuthContext', () => {
   });
 
   it('should return undefined when req.auth missing', () => {
-    const req = {
+    const req = createFakeRequest({
       headers: { authorization: 'Bearer test-token' },
       auth: undefined,
-    } as unknown as Request;
-    const logger = createMockLogger();
+    });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 
@@ -53,11 +41,11 @@ describe('extractAuthContext', () => {
   });
 
   it('should return undefined when Authorization header is malformed', () => {
-    const req = {
+    const req = createFakeRequest({
       headers: { authorization: 'InvalidFormat' },
       auth: { userId: 'user_123' },
-    } as unknown as Request;
-    const logger = createMockLogger();
+    });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 
@@ -65,11 +53,11 @@ describe('extractAuthContext', () => {
   });
 
   it('should return undefined when Authorization header is not Bearer', () => {
-    const req = {
+    const req = createFakeRequest({
       headers: { authorization: 'Basic dXNlcjpwYXNz' },
       auth: { userId: 'user_123' },
-    } as unknown as Request;
-    const logger = createMockLogger();
+    });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 
@@ -77,11 +65,11 @@ describe('extractAuthContext', () => {
   });
 
   it('should return undefined when req.auth has no userId', () => {
-    const req = {
+    const req = createFakeRequest({
       headers: { authorization: 'Bearer test-token' },
       auth: { userId: null },
-    } as unknown as Request;
-    const logger = createMockLogger();
+    });
+    const logger = createFakeLogger();
 
     const result = extractAuthContext(req, logger);
 

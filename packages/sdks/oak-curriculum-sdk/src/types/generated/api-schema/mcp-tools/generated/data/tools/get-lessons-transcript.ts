@@ -63,21 +63,21 @@ if (!primaryResponseDescriptor) {
 }
 const resolveDescriptorForStatus = (status: number) => {
   const directKey = String(status);
-  const direct = responseDescriptors[directKey as keyof typeof responseDescriptors];
+  const direct = responseDescriptors[directKey];
   if (direct) {
     return direct;
   }
-  const rangeKey = `${String(Math.trunc(status / 100))}XX` as keyof typeof responseDescriptors;
+  const rangeKey = `${String(Math.trunc(status / 100))}XX`;
   const range = responseDescriptors[rangeKey];
   if (range) {
     return range;
   }
-  return responseDescriptors["default" as keyof typeof responseDescriptors];
+  return responseDescriptors["default"];
 };
-const toStatusDiscriminant = (status: string) => {
+function toStatusDiscriminant<T extends string>(status: T): StatusDiscriminant<T> {
   const numeric = Number(status);
-  return Number.isNaN(numeric) ? status : numeric;
-};
+  return (Number.isNaN(numeric) ? status : numeric) as StatusDiscriminant<T>;
+}
 /**
  * Tool descriptor consumed by MCP_TOOLS.
  *
@@ -102,6 +102,9 @@ export const getLessonsTranscript = {
       throw new TypeError(`Undocumented response status ${String(status)} for getLessonTranscript-getLessonTranscript. Documented statuses: 200, 404`);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
+    // Structural limitation: descriptor is dynamically resolved at runtime, so
+    // TypeScript cannot statically infer the output type. This single cast
+    // bridges the gap between the runtime-selected schema and the static type.
     return payload as z.infer<typeof descriptorForStatus.zod>;
   },
   toolZodSchema,
@@ -136,17 +139,17 @@ export const getLessonsTranscript = {
     securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
-    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
+    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];
     for (const statusKey of documentedStatuses) {
-      const descriptor = responseDescriptors[statusKey as keyof typeof responseDescriptors];
+      const descriptor = responseDescriptors[statusKey];
       if (!descriptor) {
         continue;
       }
       const result = descriptor.zod.safeParse(data);
       if (result.success) {
-        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant };
+        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };
       }
-      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues });
+      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });
     }
     return {
       ok: false, message: 'Response does not match any documented schema for statuses: 200, 404' ,

@@ -76,6 +76,11 @@ for (const path in schema.paths) {
   const methods = Object.keys(schema.paths[path]);
   for (const method of methods) {
     if (method === 'get' || method === 'post' || method === 'put' || method === 'delete' || method === 'patch' || method === 'head' || method === 'options') {
+      // AllowedMethods is keyof (RawPaths[keyof RawPaths]) — a schema-derived type that
+      // reduces to a subset of HTTP method literals at compile time. The guard above narrows
+      // method to the same literal union, but TypeScript treats the two as structurally
+      // separate because one is computed from the schema and the other is an inline literal
+      // union. This single cast bridges that gap inside the validated branch.
       allowedMethodsSet.add(method as AllowedMethods);
     }
   }

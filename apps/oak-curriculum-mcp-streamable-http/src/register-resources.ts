@@ -8,6 +8,12 @@
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+
+/**
+ * Minimal interface for resource registration. Used by tests with fakes.
+ * McpServer satisfies this.
+ */
+export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
 import {
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
@@ -78,7 +84,7 @@ const WIDGET_DESCRIPTION =
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting guidance)
  */
-export function registerWidgetResource(server: McpServer): void {
+export function registerWidgetResource(server: ResourceRegistrar): void {
   const widgetUri = getToolWidgetUri();
   server.registerResource(
     'oak-json-viewer',
@@ -115,7 +121,7 @@ export function registerWidgetResource(server: McpServer): void {
  *
  * @param server - MCP server instance
  */
-export function registerDocumentationResources(server: McpServer): void {
+export function registerDocumentationResources(server: ResourceRegistrar): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
     server.registerResource(
       resource.name,
@@ -151,7 +157,7 @@ export function registerDocumentationResources(server: McpServer): void {
  * @param server - MCP server instance
  * @see ADR-058 for the dual exposure pattern
  */
-export function registerOntologyResource(server: McpServer): void {
+export function registerOntologyResource(server: ResourceRegistrar): void {
   server.registerResource(
     ONTOLOGY_RESOURCE.name,
     ONTOLOGY_RESOURCE.uri,
@@ -182,7 +188,7 @@ export function registerOntologyResource(server: McpServer): void {
  * @param server - MCP server instance
  * @see ADR-058 for the dual exposure pattern
  */
-export function registerKnowledgeGraphResource(server: McpServer): void {
+export function registerKnowledgeGraphResource(server: ResourceRegistrar): void {
   server.registerResource(
     KNOWLEDGE_GRAPH_RESOURCE.name,
     KNOWLEDGE_GRAPH_RESOURCE.uri,
@@ -210,7 +216,7 @@ export function registerKnowledgeGraphResource(server: McpServer): void {
  *
  * @param server - MCP server instance
  */
-export function registerAllResources(server: McpServer): void {
+export function registerAllResources(server: ResourceRegistrar): void {
   registerWidgetResource(server);
   registerDocumentationResources(server);
   registerOntologyResource(server);

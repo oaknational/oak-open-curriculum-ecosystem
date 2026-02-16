@@ -11,16 +11,16 @@
 import { describe, it, expect } from 'vitest';
 import type { MachineAuthObject } from '@clerk/backend';
 import { verifyClerkToken } from './verify-clerk-token.js';
+import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
 
 describe('verifyClerkToken', () => {
   it('should return undefined when auth is not authenticated', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: false,
-      tokenType: 'oauth_token',
+      userId: null,
       clientId: null,
       scopes: null,
-      userId: null,
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -28,13 +28,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when token is missing', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: 'user-456',
       clientId: 'client-123',
       scopes: ['mcp:invoke', 'mcp:read'],
-      userId: 'user-456',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const result = verifyClerkToken(auth, undefined);
 
@@ -42,13 +41,15 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when tokenType is not oauth_token', () => {
-    // Note: TypeScript prevents this at compile time, but we test runtime behavior
+    // Deliberately wrong tokenType at runtime; TypeScript would reject at compile time.
     const auth = {
-      isAuthenticated: true,
-      tokenType: 'session_token', // Wrong type
-      clientId: 'client-123',
-      scopes: ['mcp:invoke', 'mcp:read'],
-      userId: 'user-456',
+      ...createFakeMachineAuthObject({
+        isAuthenticated: true,
+        userId: 'user-456',
+        clientId: 'client-123',
+        scopes: ['mcp:invoke', 'mcp:read'],
+      }),
+      tokenType: 'session_token',
     } as unknown as MachineAuthObject<'oauth_token'>;
 
     expect(() => {
@@ -57,13 +58,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when clientId is missing', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: 'user-456',
       clientId: null,
       scopes: ['mcp:invoke', 'mcp:read'],
-      userId: 'user-456',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -71,13 +71,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when scopes is missing', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: 'user-456',
       clientId: 'client-123',
       scopes: null,
-      userId: 'user-456',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -85,13 +84,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when userId is missing', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: null,
       clientId: 'client-123',
       scopes: ['mcp:invoke', 'mcp:read'],
-      userId: null,
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -99,13 +97,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return AuthInfo when all required fields are present and valid', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: 'user-456',
       clientId: 'client-123',
       scopes: ['mcp:invoke', 'mcp:read'],
-      userId: 'user-456',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const token = 'valid-oauth-token-xyz';
     const result = verifyClerkToken(auth, token);
@@ -120,13 +117,12 @@ describe('verifyClerkToken', () => {
   });
 
   it('should preserve exact token and scope values', () => {
-    const auth = {
+    const auth = createFakeMachineAuthObject({
       isAuthenticated: true,
-      tokenType: 'oauth_token',
+      userId: 'test-user',
       clientId: 'test-client',
       scopes: ['custom:scope', 'another:scope'],
-      userId: 'test-user',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     const token = 'specific-token-value';
     const result = verifyClerkToken(auth, token);

@@ -10,9 +10,50 @@ import {
   type BatchGeneratorOptions,
 } from './index-batch-generator';
 import type { OakClient } from '../adapters/oak-adapter';
-import type { KeyStage, SearchSubjectSlug } from '../types/oak';
+import type {
+  KeyStage,
+  SearchLessonSummary,
+  SearchSubjectSlug,
+  SearchUnitSummary,
+} from '../types/oak';
 import type { RateLimitTracker } from '@oaknational/curriculum-sdk';
 import { ok } from '@oaknational/result';
+
+/** Minimal valid SearchLessonSummary for mock client (tests do not inspect fields). */
+function minimalLessonSummary(): SearchLessonSummary {
+  return {
+    lessonTitle: '',
+    unitSlug: '',
+    unitTitle: '',
+    subjectSlug: 'maths',
+    subjectTitle: '',
+    keyStageSlug: 'ks1',
+    keyStageTitle: '',
+    lessonKeywords: [],
+    keyLearningPoints: [],
+    misconceptionsAndCommonMistakes: [],
+    teacherTips: [],
+    contentGuidance: [],
+    supervisionLevel: null,
+    downloadsAvailable: false,
+  };
+}
+
+/** Minimal valid SearchUnitSummary for mock client (tests do not inspect fields). */
+function minimalUnitSummary(): SearchUnitSummary {
+  return {
+    unitSlug: '',
+    unitTitle: '',
+    yearSlug: 'year-1',
+    year: 1,
+    phaseSlug: 'primary',
+    subjectSlug: 'maths',
+    keyStageSlug: 'ks1',
+    priorKnowledgeRequirements: [],
+    nationalCurriculumContent: [],
+    unitLessons: [],
+  };
+}
 
 /**
  * Creates a minimal mock OakClient that returns empty results for all methods.
@@ -38,8 +79,8 @@ function createMinimalMockClient(): OakClient {
   return {
     getUnitsByKeyStageAndSubject: async () => ok([]),
     getLessonTranscript: async () => ok({ transcript: '', vtt: '' }),
-    getLessonSummary: async () => ok({}) as never,
-    getUnitSummary: async () => ok({}) as never,
+    getLessonSummary: async () => ok(minimalLessonSummary()),
+    getUnitSummary: async () => ok(minimalUnitSummary()),
     getSubjectSequences: async () => ok([]),
     getSequenceUnits: async () => ok([]),
     getAllThreads: async () => ok([]),

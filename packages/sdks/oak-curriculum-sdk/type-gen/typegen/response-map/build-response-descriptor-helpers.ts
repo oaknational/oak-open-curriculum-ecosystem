@@ -70,7 +70,7 @@ interface ResponseDescriptorRecord { readonly zod: CurriculumSchemaDefinition; r
 
 const RESPONSE_DESCRIPTORS_BY_OPERATION_ID = Object.freeze({
 ${descriptorBlocks}
-}) as Readonly<Record<OperationId, Readonly<Record<string, ResponseDescriptorRecord>>>>;
+}) satisfies Readonly<Record<OperationId, Readonly<Record<string, ResponseDescriptorRecord>>>>;
 
 export function getResponseDescriptorsByOperationId(operationId: OperationId): Readonly<Record<string, ResponseDescriptorRecord>> {
   const record = RESPONSE_DESCRIPTORS_BY_OPERATION_ID[operationId];

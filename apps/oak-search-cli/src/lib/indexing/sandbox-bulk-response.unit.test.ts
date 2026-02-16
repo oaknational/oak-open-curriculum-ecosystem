@@ -18,15 +18,18 @@ import {
   type BulkResponse,
 } from './sandbox-bulk-response';
 
-/** Create a mock logger for testing. */
+/** Create a minimal fake logger for testing. Implements Logger so no type assertion is needed. */
 function createMockLogger(): Logger {
-  return {
+  const logger: Logger = {
+    trace: vi.fn(),
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
-    child: vi.fn(),
-  } as unknown as Logger;
+    fatal: vi.fn(),
+    child: () => logger,
+  };
+  return logger;
 }
 
 describe('sandbox-bulk-response', () => {

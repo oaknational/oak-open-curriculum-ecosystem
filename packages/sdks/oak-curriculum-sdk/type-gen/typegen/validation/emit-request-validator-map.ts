@@ -95,12 +95,19 @@ export const REQUEST_PARAMETER_SCHEMAS = {
 export type RequestParameterSchemas = typeof REQUEST_PARAMETER_SCHEMAS;
 export type RequestParameterKey = keyof RequestParameterSchemas;
 
+function isRequestParameterKey(key: string): key is RequestParameterKey {
+  return key in REQUEST_PARAMETER_SCHEMAS;
+}
+
 export function getRequestParameterSchema(
   method: AllowedMethods,
   path: ValidPath,
 ): RequestParameterSchemas[RequestParameterKey] | undefined {
   const key = method.toUpperCase() + ':' + path;
-  return REQUEST_PARAMETER_SCHEMAS[key as RequestParameterKey];
+  if (!isRequestParameterKey(key)) {
+    return undefined;
+  }
+  return REQUEST_PARAMETER_SCHEMAS[key];
 }
 `;
 

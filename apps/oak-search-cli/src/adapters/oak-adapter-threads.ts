@@ -52,7 +52,7 @@ export type GetThreadUnitsFn = (
  * Creates a function to fetch all curriculum threads.
  * Returns Result per ADR-088.
  */
-export function makeGetAllThreads(client: OakApiClient): GetAllThreadsFn {
+export function makeGetAllThreads(client: Pick<OakApiClient, 'GET'>): GetAllThreadsFn {
   return async () => {
     const res = await client.GET('/threads', {});
     if (!res.response.ok) {
@@ -75,7 +75,7 @@ export function makeGetAllThreads(client: OakApiClient): GetAllThreadsFn {
  * Creates a function to fetch units for a specific thread.
  * Returns Result per ADR-088.
  */
-export function makeGetThreadUnits(client: OakApiClient): GetThreadUnitsFn {
+export function makeGetThreadUnits(client: Pick<OakApiClient, 'GET'>): GetThreadUnitsFn {
   return async (threadSlug) => {
     const res = await client.GET('/threads/{threadSlug}/units', {
       params: { path: { threadSlug } },

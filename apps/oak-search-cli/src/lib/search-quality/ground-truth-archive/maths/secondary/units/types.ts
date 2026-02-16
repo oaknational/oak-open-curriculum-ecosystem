@@ -13,7 +13,7 @@ import type { QueryCategory } from '../../../types';
 export interface UnitGroundTruthQuery {
   /** The search query text (3-10 words, realistic teacher phrasing) */
   readonly query: string;
-  /** Map of unit_slug → relevance score (3/2/1, unlisted = 0) */
+  /** Map of unit_slug → relevance score (3/2/1, unlisted = 0). Keys are document slugs (runtime-defined per query). */
   readonly expectedRelevance: Readonly<Record<string, number>>;
   /**
    * Category of user scenario this query represents. REQUIRED.

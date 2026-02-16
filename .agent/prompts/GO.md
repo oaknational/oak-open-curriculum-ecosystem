@@ -53,6 +53,7 @@ strategy, schema-first execution).
   multiple sub-agents to assess overall coherence.
 - Remove any items from your todo list that don't make sense, or are
   no longer relevant.
+- Every 6th item must be to re-read @.agent/prompts/GO.md and re-follow ALL instructions in that file, including this one.
 
 ## Action
 

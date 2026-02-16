@@ -99,7 +99,7 @@ function analyzePositions(
   return { early, middle, late };
 }
 
-/** Print error distribution. */
+/** Print error distribution. Keys are ELSER error type strings (runtime-defined). */
 function printErrorDist(errorDist: Record<string, number>): void {
   console.log('\nError Distribution:');
   for (const [type, count] of typeSafeEntries(errorDist)) {
@@ -112,6 +112,7 @@ interface AnalysisResult {
   sourceReport: string;
   analysisTime: string;
   summary: { failuresAnalyzed: number; matchedWithChars: number };
+  /** Keys are ELSER error type strings (runtime-defined). */
   errorDistribution: Record<string, number>;
   positionDistribution: { early: number; middle: number; late: number };
 }

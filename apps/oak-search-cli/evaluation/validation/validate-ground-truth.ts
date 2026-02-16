@@ -206,7 +206,13 @@ export const REQUIRED_CATEGORIES = [
  * @see M3 plan: .agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md
  * @see Audit: .agent/evaluations/audits/ground-truth-audit-2026-01.md
  */
-export const CATEGORY_MINIMUMS: Readonly<Record<string, number>> = {
+export type GroundTruthCategorySlug =
+  | 'precise-topic'
+  | 'natural-expression'
+  | 'imprecise-input'
+  | 'cross-topic';
+
+export const CATEGORY_MINIMUMS: Readonly<Record<GroundTruthCategorySlug, number>> = {
   'precise-topic': 1,
   'natural-expression': 1,
   'imprecise-input': 1,

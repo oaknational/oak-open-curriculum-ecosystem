@@ -1,15 +1,12 @@
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { Client } from '@elastic/elasticsearch';
 import { createIngestHarness } from './ingest-harness';
 import { resolveSearchIndexName } from '../search-index-target';
+import type { EsTransport } from './ingest-harness-ops';
 
 const FIXTURE_ROOT = path.join(process.cwd(), 'fixtures/sandbox');
 
-type TransportClient = Pick<Client, 'transport'>;
-type Transport = TransportClient['transport'];
-
-interface MockEsTransport extends TransportClient {
+interface MockEsTransport extends EsTransport {
   requestMock: ReturnType<typeof vi.fn>;
   requests: unknown[];
 }
@@ -25,7 +22,6 @@ describe('ingest harness', () => {
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,
-      esClient: mock.esClient as never,
     });
 
     const { operations, summary, metrics } = await harness.prepareBulkOperations();
@@ -57,7 +53,6 @@ describe('ingest harness', () => {
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,
-      esClient: mock.esClient as never,
     });
 
     const result = await harness.ingest({ dryRun: false, verbose: true });
@@ -83,7 +78,6 @@ describe('ingest harness', () => {
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,
-      esClient: mock.esClient as never,
     });
 
     const result = await harness.ingest({ dryRun: true, verbose: true });
@@ -114,31 +108,18 @@ function collectActionIndexes(operations: readonly unknown[]): string[] {
   return indexes;
 }
 
-interface MockEsClient {
-  inference: {
-    inference: ReturnType<typeof vi.fn>;
-  };
-}
-
-function createMockEsTransport(): MockEsTransport & { esClient: MockEsClient } {
+function createMockEsTransport(): MockEsTransport {
   const requests: unknown[] = [];
-  const requestMock = vi.fn(async (...args: unknown[]) => {
-    requests.push(args[0]);
-    // Return a valid bulk response structure
+  const requestMock = vi.fn(async (params: { method: string; path: string; body: string }) => {
+    requests.push(params);
     return { errors: false, items: [] };
   });
-  const transport = {
-    request: requestMock as unknown as Transport['request'],
-  } as unknown as Transport;
-  // Mock ES client for inference calls (dense vector generation)
-  const esClient: MockEsClient = {
-    inference: {
-      inference: vi.fn(async () => ({
-        text_embedding: [{ embedding: Array(384).fill(0.1) }],
-      })),
+  const transport: EsTransport = {
+    transport: {
+      request: requestMock,
     },
   };
-  return { transport, requestMock, requests, esClient };
+  return { ...transport, requestMock, requests };
 }
 
 function isUnknownObject(value: unknown): value is { [key: string]: unknown } {

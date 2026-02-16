@@ -13,8 +13,7 @@ function isCallToolResult(value: unknown): value is CallToolResult {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const candidate = value as { readonly content?: unknown };
-  return Array.isArray(candidate.content);
+  return 'content' in value && Array.isArray(value.content);
 }
 
 function expectCallToolResult(value: unknown): CallToolResult {
@@ -29,7 +28,12 @@ function parseJsonContent(result: CallToolResult): unknown {
   if (!textEntry || typeof textEntry.text !== 'string') {
     throw new Error('Expected textual content in CallToolResult');
   }
-  return JSON.parse(textEntry.text) as unknown;
+  const parsed: unknown = JSON.parse(textEntry.text);
+  return parsed;
+}
+
+function createFakeClient(): OakApiPathBasedClient {
+  return {} as OakApiPathBasedClient;
 }
 
 describe('createMcpToolsModule', () => {
@@ -59,17 +63,17 @@ describe('createMcpToolsModule', () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockImplementation(async (name) => {
-        if (name === ('get-search-lessons' as ToolName)) {
+        if (name === 'get-search-lessons') {
           return Promise.resolve({ status: 200, data: mockLessonsFromApi });
         }
-        if (name === ('get-search-transcripts' as ToolName)) {
+        if (name === 'get-search-transcripts') {
           return Promise.resolve({ status: 200, data: mockTranscriptsFromApi });
         }
         return Promise.resolve({ status: 200, data: null });
       });
 
     const module = createMcpToolsModule({
-      client: {} as OakApiPathBasedClient,
+      client: createFakeClient(),
       executeMcpTool,
     });
 
@@ -94,14 +98,9 @@ describe('createMcpToolsModule', () => {
     // structuredContent has FULL data for model reasoning per OpenAI Apps SDK
     expect(output.structuredContent).toHaveProperty('summary');
     expect(output.structuredContent).toHaveProperty('status', 'success');
-    const structured = output.structuredContent as {
-      q?: string;
-      lessons?: unknown[];
-      transcripts?: unknown[];
-    };
-    expect(structured.q).toBe('photosynthesis');
-    expect(structured.lessons).toEqual(mockLessonsWithCanonicalUrl);
-    expect(structured.transcripts).toEqual(mockTranscriptsWithCanonicalUrl);
+    expect(output.structuredContent).toHaveProperty('q', 'photosynthesis');
+    expect(output.structuredContent).toHaveProperty('lessons', mockLessonsWithCanonicalUrl);
+    expect(output.structuredContent).toHaveProperty('transcripts', mockTranscriptsWithCanonicalUrl);
   });
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {
@@ -110,7 +109,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue({ status: 200, data: { status: 'ok' } });
 
     const module = createMcpToolsModule({
-      client: {} as OakApiPathBasedClient,
+      client: createFakeClient(),
       executeMcpTool,
     });
 
@@ -136,7 +135,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue({ error: new Error('boom') });
 
     const module = createMcpToolsModule({
-      client: {} as OakApiPathBasedClient,
+      client: createFakeClient(),
       executeMcpTool,
     });
 

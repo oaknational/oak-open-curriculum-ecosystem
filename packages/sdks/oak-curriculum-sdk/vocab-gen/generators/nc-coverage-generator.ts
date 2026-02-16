@@ -38,8 +38,9 @@ export interface NCCoverageGraphStats {
   /** Number of unique units covering statements */
   readonly uniqueUnits: number;
   /** Count of statements by subject */
+  /** Keys are curriculum subject slugs (runtime-defined). */
   readonly bySubject: Readonly<Record<string, number>>;
-  /** Count of statements by key stage */
+  /** Count of statements by key stage. Keys are key stage slugs (runtime-defined). */
   readonly byKeyStage: Readonly<Record<string, number>>;
   /** List of subjects covered */
   readonly subjectsCovered: readonly string[];

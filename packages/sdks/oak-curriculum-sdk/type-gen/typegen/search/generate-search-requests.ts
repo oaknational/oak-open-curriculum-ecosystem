@@ -7,12 +7,10 @@ const HEADER = `/**
  * Search request modules derived from the Open Curriculum schema.
  */\n\n`;
 
-const KEY_STAGE_TUPLE =
-  'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]';
-const SUBJECT_TUPLE =
-  'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]';
-const SCOPE_WITH_ALL_TUPLE =
-  'SEARCH_SCOPES_WITH_ALL as unknown as [SearchScopeWithAll, ...SearchScopeWithAll[]]';
+/** Zod v4 accepts as const arrays directly. */
+const KEY_STAGE_TUPLE = 'KEY_STAGES';
+const SUBJECT_TUPLE = 'SUBJECTS';
+const SCOPE_WITH_ALL_TUPLE = 'SEARCH_SCOPES_WITH_ALL';
 
 function createStructuredRequestModule(): string {
   return (
@@ -62,7 +60,7 @@ function createNaturalRequestModule(): string {
     HEADER +
     `import { z } from 'zod';\n` +
     `import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';\n` +
-    `import { SEARCH_SCOPES_WITH_ALL, type SearchScopeWithAll } from './scopes.js';\n\n` +
+    `import { SEARCH_SCOPES_WITH_ALL } from './scopes.js';\n\n` +
     `/** Zod schema describing the natural language search body. */\n` +
     `export const SearchNaturalLanguageRequestSchema = z\n` +
     `  .object({\n` +

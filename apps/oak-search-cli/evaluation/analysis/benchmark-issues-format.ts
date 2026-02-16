@@ -24,7 +24,9 @@ export interface IssuesSummary {
     readonly precision3: number;
     readonly recall10: number;
   };
+  /** Keys are query category names (runtime-defined). */
   readonly byCategory: Readonly<Record<string, number>>;
+  /** Keys are subject slugs (runtime-defined). */
   readonly bySubject: Readonly<Record<string, number>>;
 }
 

@@ -35,11 +35,12 @@ function isPlainObject(value: unknown): value is SampleObject {
     return false;
   }
 
-  for (const key of Reflect.ownKeys(value)) {
-    if (typeof key !== 'string') {
+  for (const key in value) {
+    if (!Object.prototype.hasOwnProperty.call(value, key)) {
       continue;
     }
-    if (!isSampleValue(Reflect.get(value, key))) {
+    const propValue: unknown = Object.getOwnPropertyDescriptor(value, key)?.value;
+    if (!isSampleValue(propValue)) {
       return false;
     }
   }
@@ -244,7 +245,6 @@ function buildSampleObject(entries: [string, SampleValue][]): SampleObject {
   }
   return result;
 }
-
 function normaliseEnumValues(values: SchemaObject['enum']): readonly unknown[] {
   return Array.isArray(values) ? values : [];
 }

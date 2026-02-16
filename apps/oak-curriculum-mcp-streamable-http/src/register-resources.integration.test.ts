@@ -9,15 +9,23 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { registerWidgetResource, registerDocumentationResources } from './register-resources.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import {
+  registerWidgetResource,
+  registerDocumentationResources,
+  type ResourceRegistrar,
+} from './register-resources.js';
 
 /**
- * Creates a mock MCP server for testing resource registration.
+ * Creates a fake server and map to capture registered resources for assertions.
+ * Uses ResourceRegistrar so only registerResource is required.
  */
-function createMockServer(): { server: McpServer; registeredResources: Map<string, unknown> } {
+function createMockServer(): {
+  server: ResourceRegistrar;
+  registeredResources: Map<string, unknown>;
+} {
   const registeredResources = new Map<string, unknown>();
-
+  // MCP SDK registerResource has overloaded signature (ReadResourceCallback with URL param);
+  // we only need to capture (name, uri, metadata, handler) and call handler(). Cast required.
   const server = {
     registerResource: vi.fn(
       (
@@ -35,9 +43,8 @@ function createMockServer(): { server: McpServer; registeredResources: Map<strin
         });
       },
     ),
-  } as unknown as McpServer;
-
-  return { server, registeredResources };
+  };
+  return { server: server as unknown as ResourceRegistrar, registeredResources };
 }
 
 /**
@@ -54,7 +61,7 @@ function getWidgetUri(registeredResources: Map<string, unknown>): string {
 }
 
 describe('registerWidgetResource', () => {
-  let server: McpServer;
+  let server: ResourceRegistrar;
   let registeredResources: Map<string, unknown>;
 
   beforeEach(() => {
@@ -179,7 +186,7 @@ describe('registerWidgetResource', () => {
 });
 
 describe('registerDocumentationResources', () => {
-  let server: McpServer;
+  let server: ResourceRegistrar;
   let registeredResources: Map<string, unknown>;
 
   beforeEach(() => {

@@ -26,6 +26,7 @@
 /**
  * Type-safe Object.values that preserves value types.
  * Avoids the no-restricted-properties lint rule for Object.values.
+ * @remarks Generic over Record with string keys (e.g. document slugs or arbitrary labels).
  */
 function typeSafeValues<T extends Readonly<Record<string, number>>>(obj: T): number[] {
   // eslint-disable-next-line no-restricted-properties -- Encapsulated in type-safe helper
@@ -52,7 +53,7 @@ const MRR_RELEVANCE_THRESHOLD = 2;
  * - If no relevant result found → 0
  *
  * @param results - Array of result identifiers (e.g., lesson slugs) in ranked order
- * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none)
+ * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none). Keys are document/result slugs (runtime-defined per query).
  * @returns MRR score between 0 and 1, higher is better
  *
  * @example
@@ -94,7 +95,7 @@ export function calculateMRR(
  * Score is normalized against the ideal ranking (all relevant results at top).
  *
  * @param results - Array of result identifiers in ranked order
- * @param relevance - Map of identifier → relevance score
+ * @param relevance - Map of identifier → relevance score. Keys are document slugs (runtime-defined per query).
  * @param k - Number of results to consider (default 10)
  * @returns NDCG score between 0 and 1, higher is better
  *
@@ -159,7 +160,7 @@ const PRECISION_RECALL_RELEVANCE_THRESHOLD = 2;
  * Formula: (relevant results in top k) / k
  *
  * @param results - Array of result identifiers in ranked order
- * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none)
+ * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none). Keys are document slugs (runtime-defined per query).
  * @param k - Number of results to consider (default 10)
  * @returns Precision score between 0 and 1, higher is better
  *
@@ -200,7 +201,7 @@ export function calculatePrecisionAtK(
  * Formula: (relevant results in top k) / (total relevant in ground truth)
  *
  * @param results - Array of result identifiers in ranked order
- * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none)
+ * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none). Keys are document slugs (runtime-defined per query).
  * @param k - Number of results to consider (default 10)
  * @returns Recall score between 0 and 1, higher is better
  *

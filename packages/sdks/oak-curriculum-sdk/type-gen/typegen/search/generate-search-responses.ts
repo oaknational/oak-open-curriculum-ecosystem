@@ -3,8 +3,8 @@ import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search response modules derived from the Open Curriculum schema.\n */\n\n`;
 
-const KEY_STAGE_TUPLE =
-  'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]';
+/** Zod v4 accepts as const arrays directly. */
+const KEY_STAGE_TUPLE = 'KEY_STAGES';
 
 function createLessonsModule(): string {
   return (
@@ -21,7 +21,7 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 const LessonDocumentSchema = z
   .object({
     lesson_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    subject_slug: z.enum(SUBJECTS),
     key_stage: z.enum(${KEY_STAGE_TUPLE}),
     year_group: z.string().optional(),
   })
@@ -77,7 +77,7 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 const UnitDocumentSchema = z
   .object({
     unit_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    subject_slug: z.enum(SUBJECTS),
     key_stage: z.enum(${KEY_STAGE_TUPLE}).optional(),
   })
   .strict();
@@ -179,7 +179,7 @@ import type { SearchUnitsResponse } from './responses.units.js';
 import type { SearchSequencesResponse } from './responses.sequences.js';
 import { SearchSuggestionItemSchema, SearchSuggestionResponseSchema, DEFAULT_SUGGESTION_CACHE } from './suggestions.js';
 
-const NarrowScopeSchema = z.enum(SEARCH_SCOPES as unknown as ['lessons', 'units', 'sequences']);
+const NarrowScopeSchema = z.enum(SEARCH_SCOPES);
 const ResultUnionSchema = z.union([
   SearchLessonsResponseSchema,
   SearchUnitsResponseSchema,

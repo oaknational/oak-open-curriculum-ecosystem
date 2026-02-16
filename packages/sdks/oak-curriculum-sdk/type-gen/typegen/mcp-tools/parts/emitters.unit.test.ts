@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import type { OperationObject, ParameterObject } from 'openapi3-ts/oas31';
+import { createFakeOperationObject, createFakeParameterObject } from '../../../test-fakes.js';
 import { emitHeader, emitSchema, emitIndex } from './emitters.js';
 
 function makeOp(params: ParameterObject[]): OperationObject {
-  return {
+  return createFakeOperationObject({
     operationId: 'get-pets-id',
     parameters: params,
     responses: { '200': { description: 'ok' } },
-  } as unknown as OperationObject;
+  });
 }
 
 describe('emitters', () => {
@@ -22,12 +23,12 @@ describe('emitters', () => {
 
   it('emits schema block with tool parameter types and helpers', () => {
     const params: ParameterObject[] = [
-      {
+      createFakeParameterObject({
         name: 'q',
         in: 'query',
         required: false,
         schema: { type: 'string' },
-      } as unknown as ParameterObject,
+      }),
     ];
     const op = makeOp(params);
     const out = emitSchema(

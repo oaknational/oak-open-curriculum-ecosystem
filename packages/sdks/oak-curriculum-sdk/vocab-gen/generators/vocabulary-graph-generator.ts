@@ -51,7 +51,10 @@ export interface VocabularyNode {
 export interface VocabularyGraphStats {
   /** Total number of unique terms */
   readonly totalTerms: number;
-  /** Count of terms by subject */
+  /**
+   * Count of terms by subject.
+   * @remarks Keys are curriculum subject slugs from the bulk data (runtime-defined).
+   */
   readonly bySubject: Readonly<Record<string, number>>;
   /** Count of terms appearing in 2+ subjects */
   readonly crossSubjectTermCount: number;

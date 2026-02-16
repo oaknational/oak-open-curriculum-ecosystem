@@ -5,7 +5,6 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateCurriculumResponse } from './curriculum-response-validators.js';
-import type { ValidPath } from '../types/generated/api-schema/path-parameters.js';
 
 describe('validateCurriculumResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
@@ -171,10 +170,11 @@ describe('validateCurriculumResponse', () => {
 
   describe('for unknown operations', () => {
     it('should throw for invalid path (fail-fast)', () => {
+      // Use string overload to test runtime fail-fast when path is invalid
+      const invalidPath = '/unknown/path';
+      const method = 'get';
       expect(() => {
-        // simulate pre-validation: product code would call isValidPath and throw earlier
-        // we explicitly call the validator with an invalid path to assert fail-fast
-        validateCurriculumResponse('/unknown/path' as ValidPath, 'get' as never, 200, {});
+        validateCurriculumResponse(invalidPath, method, 200, {});
       }).toThrow();
     });
 

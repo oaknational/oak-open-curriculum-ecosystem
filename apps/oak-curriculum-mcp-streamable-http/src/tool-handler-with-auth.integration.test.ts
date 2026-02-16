@@ -13,17 +13,13 @@ import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-t
 import type { RuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
+import { createFakeLogger } from './test-helpers/fakes.js';
 
 /**
- * Test logger that captures log calls
+ * Test logger that captures log calls. Uses shared fake so no type assertion is needed.
  */
 function createTestLogger(): Logger {
-  return {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  } as unknown as Logger;
+  return createFakeLogger();
 }
 
 /**

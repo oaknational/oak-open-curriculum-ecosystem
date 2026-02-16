@@ -247,12 +247,8 @@ function isCompletionOption(value: unknown): value is CompletionOptionBase {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const id: unknown = Reflect.get(value, '_id');
-  if (typeof id !== 'string') {
+  if (!('_id' in value) || typeof value._id !== 'string') {
     return false;
   }
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const source: unknown = Reflect.get(value, '_source');
-  return source !== undefined;
+  return '_source' in value;
 }

@@ -1,9 +1,13 @@
 /* eslint-disable no-restricted-properties, @typescript-eslint/no-restricted-types */
 
 /**
- * Type safe object helpers
- *
- * These are last resort helpers, wherever possible refactor the code to use the more specific types, type-guards, or type-helpers.
+ * Typed Object.* wrappers — the ONE place where Object method type-widening
+ * is centralised. TypeScript deliberately returns broad types from Object.keys
+ * (string[]), Object.values (any[]), Object.entries ([string, any][]) etc.
+ * These wrappers restore the specific key and value types via a single, audited
+ * assertion per method. The rest of the codebase MUST use these helpers instead
+ * of calling Object.keys/values/entries/fromEntries/getOwnPropertyNames/
+ * getOwnPropertySymbols directly.
  */
 
 export function typeSafeKeys<T extends object>(obj: T): Extract<keyof T, string>[] {

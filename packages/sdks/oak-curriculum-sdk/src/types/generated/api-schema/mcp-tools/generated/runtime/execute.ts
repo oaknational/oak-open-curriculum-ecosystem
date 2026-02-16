@@ -38,7 +38,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-changelog-latest': {
       const entry = getToolEntryFromToolName('get-changelog-latest');
@@ -56,7 +56,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-key-stages': {
       const entry = getToolEntryFromToolName('get-key-stages');
@@ -74,7 +74,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-key-stages-subject-assets': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-assets');
@@ -92,7 +92,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-key-stages-subject-lessons': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-lessons');
@@ -110,7 +110,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-key-stages-subject-questions': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-questions');
@@ -128,7 +128,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-key-stages-subject-units': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-units');
@@ -146,7 +146,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-lessons-assets': {
       const entry = getToolEntryFromToolName('get-lessons-assets');
@@ -164,7 +164,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-lessons-assets-by-type': {
       const entry = getToolEntryFromToolName('get-lessons-assets-by-type');
@@ -182,7 +182,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-lessons-quiz': {
       const entry = getToolEntryFromToolName('get-lessons-quiz');
@@ -200,7 +200,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-lessons-summary': {
       const entry = getToolEntryFromToolName('get-lessons-summary');
@@ -218,7 +218,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-lessons-transcript': {
       const entry = getToolEntryFromToolName('get-lessons-transcript');
@@ -236,7 +236,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-rate-limit': {
       const entry = getToolEntryFromToolName('get-rate-limit');
@@ -254,7 +254,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-search-lessons': {
       const entry = getToolEntryFromToolName('get-search-lessons');
@@ -272,7 +272,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-search-transcripts': {
       const entry = getToolEntryFromToolName('get-search-transcripts');
@@ -290,7 +290,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-sequences-assets': {
       const entry = getToolEntryFromToolName('get-sequences-assets');
@@ -308,7 +308,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-sequences-questions': {
       const entry = getToolEntryFromToolName('get-sequences-questions');
@@ -326,7 +326,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-sequences-units': {
       const entry = getToolEntryFromToolName('get-sequences-units');
@@ -344,7 +344,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-subject-detail': {
       const entry = getToolEntryFromToolName('get-subject-detail');
@@ -362,7 +362,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-subjects': {
       const entry = getToolEntryFromToolName('get-subjects');
@@ -380,7 +380,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-subjects-key-stages': {
       const entry = getToolEntryFromToolName('get-subjects-key-stages');
@@ -398,7 +398,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-subjects-sequences': {
       const entry = getToolEntryFromToolName('get-subjects-sequences');
@@ -416,7 +416,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-subjects-years': {
       const entry = getToolEntryFromToolName('get-subjects-years');
@@ -434,7 +434,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-threads': {
       const entry = getToolEntryFromToolName('get-threads');
@@ -452,7 +452,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-threads-units': {
       const entry = getToolEntryFromToolName('get-threads-units');
@@ -470,7 +470,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     case 'get-units-summary': {
       const entry = getToolEntryFromToolName('get-units-summary');
@@ -488,7 +488,7 @@ async function invokeToolByName<TName extends ToolName>(
           cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
-      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;
+      return { status: validation.status, data: validation.data };
     }
     default:
       throw new TypeError('Unknown tool: ' + String(name));

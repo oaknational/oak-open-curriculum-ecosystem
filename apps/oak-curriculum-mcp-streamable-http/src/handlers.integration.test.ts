@@ -10,32 +10,20 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { Request, Response } from 'express';
-import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import type { Request } from 'express';
 import { createMcpHandler } from './handlers.js';
 import { getRequestContext } from './request-context.js';
+import {
+  createFakeResponse,
+  createFakeStreamableTransport,
+  createFakeExpressRequest,
+} from './test-helpers/fakes.js';
 
 /**
  * Create a minimal mock Express request for testing.
  */
 function createMockRequest(body: unknown): Request {
-  return {
-    body,
-    method: 'POST',
-    path: '/mcp',
-  } as Request;
-}
-
-/**
- * Create a minimal mock Express response for testing.
- */
-function createMockResponse(): Response {
-  return {
-    statusCode: 200,
-    locals: {},
-    getHeader: vi.fn(),
-    setHeader: vi.fn(),
-  } as unknown as Response;
+  return createFakeExpressRequest({ body: body as object });
 }
 
 describe('createMcpHandler (Integration)', () => {
@@ -43,16 +31,15 @@ describe('createMcpHandler (Integration)', () => {
     it('wraps transport.handleRequest with setRequestContext', async () => {
       let capturedContext: Request | undefined;
 
-      // Mock transport that captures the context when handleRequest is called
-      const mockTransport = {
-        handleRequest: vi.fn(async () => {
+      const mockTransport = createFakeStreamableTransport(
+        vi.fn(async () => {
           capturedContext = getRequestContext();
         }),
-      } as unknown as StreamableHTTPServerTransport;
+      );
 
       const handler = createMcpHandler(mockTransport);
       const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createMockResponse();
+      const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
@@ -64,15 +51,15 @@ describe('createMcpHandler (Integration)', () => {
     });
 
     it('context is unavailable outside handler execution', async () => {
-      const mockTransport = {
-        handleRequest: vi.fn(async (something: unknown) => {
+      const mockTransport = createFakeStreamableTransport(
+        vi.fn(async (something: unknown) => {
           console.log(`something in a test: ${something}`);
         }),
-      } as unknown as StreamableHTTPServerTransport;
+      );
 
       const handler = createMcpHandler(mockTransport);
       const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createMockResponse();
+      const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
@@ -86,15 +73,15 @@ describe('createMcpHandler (Integration)', () => {
       const testBody = { jsonrpc: '2.0', method: 'tools/list', id: '123' };
       let receivedBody: unknown;
 
-      const mockTransport = {
-        handleRequest: vi.fn(async (_req: unknown, _res: unknown, body: unknown) => {
+      const mockTransport = createFakeStreamableTransport(
+        vi.fn(async (_req: unknown, _res: unknown, body: unknown) => {
           receivedBody = body;
         }),
-      } as unknown as StreamableHTTPServerTransport;
+      );
 
       const handler = createMcpHandler(mockTransport);
       const mockReq = createMockRequest(testBody);
-      const mockRes = createMockResponse();
+      const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
@@ -104,19 +91,19 @@ describe('createMcpHandler (Integration)', () => {
     it('omits auth property from adapted request', async () => {
       let receivedRequest: unknown;
 
-      const mockTransport = {
-        handleRequest: vi.fn(async (req: unknown) => {
+      const mockTransport = createFakeStreamableTransport(
+        vi.fn(async (req: unknown) => {
           receivedRequest = req;
         }),
-      } as unknown as StreamableHTTPServerTransport;
+      );
 
       const handler = createMcpHandler(mockTransport);
-      // Create request with auth property (as Clerk middleware would add)
-      const mockReq = {
-        ...createMockRequest({ method: 'tools/list' }),
-        auth: { userId: 'test-user' },
-      } as Request;
-      const mockRes = createMockResponse();
+      const mockReq = createFakeExpressRequest({
+        body: { method: 'tools/list' },
+        headers: {},
+      });
+      Object.assign(mockReq, { auth: { userId: 'test-user' } });
+      const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 

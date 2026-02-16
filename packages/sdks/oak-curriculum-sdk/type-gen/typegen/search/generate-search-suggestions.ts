@@ -3,18 +3,17 @@ import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search suggestion modules derived from the Open Curriculum schema.\n */\n\n`;
 
-const KEY_STAGE_TUPLE =
-  'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]';
-const SUBJECT_TUPLE =
-  'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]';
-const SCOPE_TUPLE = 'SEARCH_SCOPES as unknown as [SearchScope, ...SearchScope[]]';
+/** Zod v4 accepts as const arrays directly. */
+const KEY_STAGE_TUPLE = 'KEY_STAGES';
+const SUBJECT_TUPLE = 'SUBJECTS';
+const SCOPE_TUPLE = 'SEARCH_SCOPES';
 
 function createSuggestionsModule(): string {
   return (
     HEADER +
     `import { z } from 'zod';\n` +
     `import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';\n` +
-    `import { SEARCH_SCOPES, type SearchScope } from './scopes.js';\n\n` +
+    `import { SEARCH_SCOPES } from './scopes.js';\n\n` +
     `/** Shared default cache metadata for suggestion responses. */\n` +
     `export const DEFAULT_SUGGESTION_CACHE = Object.freeze({ version: 'v1', ttlSeconds: 300 });\n\n` +
     `/** Zod schema describing additional metadata returned with suggestions. */\n` +

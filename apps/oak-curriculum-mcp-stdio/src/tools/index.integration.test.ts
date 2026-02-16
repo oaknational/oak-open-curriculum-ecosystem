@@ -7,6 +7,7 @@ import {
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 
 import { createMcpToolsModule, type UniversalToolExecutors } from './index.js';
+import { createFakeOakPathBasedClient } from '../test-helpers/fakes.js';
 
 const lessonArgs = { params: { path: { lesson: 'english-lesson' } } } as const;
 
@@ -53,7 +54,10 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     > = () => Promise.resolve(transcript404);
     const executeMcpTool = vi.fn(executeMcpToolImplementation);
 
-    const module = createMcpToolsModule({ client: {} as never, executeMcpTool });
+    const module = createMcpToolsModule({
+      client: createFakeOakPathBasedClient(),
+      executeMcpTool,
+    });
 
     const output = expectCallToolResult(
       await module.handleTool('get-lessons-transcript', lessonArgs),
@@ -72,7 +76,10 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     > = () => Promise.resolve({ error } satisfies ToolExecutionResult);
     const executeMcpTool = vi.fn(executeMcpToolImplementation);
 
-    const module = createMcpToolsModule({ client: {} as never, executeMcpTool });
+    const module = createMcpToolsModule({
+      client: createFakeOakPathBasedClient(),
+      executeMcpTool,
+    });
 
     const result = expectCallToolResult(
       await module.handleTool('get-lessons-transcript', lessonArgs),
@@ -89,7 +96,10 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
       Promise.resolve({ status: 200, data: {} } satisfies ToolExecutionResult & { status: number });
     const executeMcpTool = vi.fn(executeMcpToolImplementation);
 
-    const module = createMcpToolsModule({ client: {} as never, executeMcpTool });
+    const module = createMcpToolsModule({
+      client: createFakeOakPathBasedClient(),
+      executeMcpTool,
+    });
 
     const result = expectCallToolResult(await module.handleTool('not-a-real-tool', {}));
 

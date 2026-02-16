@@ -45,7 +45,7 @@ export function generateExecuteFile(toolNames: string[]): string {
         '          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },',
         '        });',
         '      }',
-        `      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;`,
+        `      return { status: validation.status, data: validation.data };`,
         '    }',
       ].join('\n'),
     )

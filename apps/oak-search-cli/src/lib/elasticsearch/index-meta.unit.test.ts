@@ -4,7 +4,6 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Client } from '@elastic/elasticsearch';
 import { isOk, isErr } from '@oaknational/result';
 import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
 import {
@@ -15,6 +14,7 @@ import {
   INDEX_META_INDEX,
   INDEX_VERSION_DOC_ID,
 } from './index-meta.js';
+import { createFakeEsClient } from './test-helpers.js';
 
 describe('generateVersionFromTimestamp', () => {
   it('generates version string in correct format', () => {
@@ -81,16 +81,14 @@ describe('createErrorFromException', () => {
 });
 
 describe('readIndexMeta', () => {
-  let mockClient: Client;
+  let mockClient: ReturnType<typeof createFakeEsClient>;
 
   beforeEach(() => {
-    mockClient = {
-      get: vi.fn(),
-    } as unknown as Client;
+    mockClient = createFakeEsClient();
   });
 
   it('returns Ok(null) when document not found', async () => {
-    vi.mocked(mockClient.get).mockRejectedValue({
+    vi.spyOn(mockClient, 'get').mockRejectedValue({
       meta: { statusCode: 404 },
     });
 
@@ -112,9 +110,12 @@ describe('readIndexMeta', () => {
       doc_counts: { lessons: 100, units: 10 },
     };
 
-    vi.mocked(mockClient.get).mockResolvedValue({
+    vi.spyOn(mockClient, 'get').mockResolvedValue({
+      _index: INDEX_META_INDEX,
+      _id: INDEX_VERSION_DOC_ID,
+      found: true,
       _source: validDoc,
-    } as never);
+    });
 
     const result = await readIndexMeta(mockClient);
 
@@ -130,9 +131,12 @@ describe('readIndexMeta', () => {
       // Missing required fields
     };
 
-    vi.mocked(mockClient.get).mockResolvedValue({
+    vi.spyOn(mockClient, 'get').mockResolvedValue({
+      _index: INDEX_META_INDEX,
+      _id: INDEX_VERSION_DOC_ID,
+      found: true,
       _source: invalidDoc,
-    } as never);
+    });
 
     const result = await readIndexMeta(mockClient);
 
@@ -143,7 +147,7 @@ describe('readIndexMeta', () => {
   });
 
   it('returns error for network failures', async () => {
-    vi.mocked(mockClient.get).mockRejectedValue({
+    vi.spyOn(mockClient, 'get').mockRejectedValue({
       message: 'Connection timeout',
       meta: { statusCode: 503 },
     });
@@ -157,7 +161,7 @@ describe('readIndexMeta', () => {
   });
 
   it('calls ES with correct parameters', async () => {
-    vi.mocked(mockClient.get).mockRejectedValue({
+    vi.spyOn(mockClient, 'get').mockRejectedValue({
       meta: { statusCode: 404 },
     });
 
@@ -171,12 +175,10 @@ describe('readIndexMeta', () => {
 });
 
 describe('writeIndexMeta', () => {
-  let mockClient: Client;
+  let mockClient: ReturnType<typeof createFakeEsClient>;
 
   beforeEach(() => {
-    mockClient = {
-      index: vi.fn(),
-    } as unknown as Client;
+    mockClient = createFakeEsClient();
   });
 
   it('returns Ok(void) for valid metadata doc', async () => {
@@ -189,7 +191,13 @@ describe('writeIndexMeta', () => {
       doc_counts: { lessons: 100, units: 10 },
     };
 
-    vi.mocked(mockClient.index).mockResolvedValue({} as never);
+    vi.spyOn(mockClient, 'index').mockResolvedValue({
+      _id: INDEX_VERSION_DOC_ID,
+      _index: INDEX_META_INDEX,
+      result: 'created',
+      _shards: { total: 1, successful: 1, failed: 0 },
+      _version: 1,
+    });
 
     const result = await writeIndexMeta(mockClient, validDoc);
 
@@ -220,7 +228,7 @@ describe('writeIndexMeta', () => {
       doc_counts: { lessons: 100, units: 10 },
     };
 
-    vi.mocked(mockClient.index).mockRejectedValue({
+    vi.spyOn(mockClient, 'index').mockRejectedValue({
       message: 'strict_dynamic_mapping_exception: introduction of [bad_field] is not allowed',
     });
 
@@ -242,7 +250,13 @@ describe('writeIndexMeta', () => {
       doc_counts: { lessons: 100, units: 10 },
     };
 
-    vi.mocked(mockClient.index).mockResolvedValue({} as never);
+    vi.spyOn(mockClient, 'index').mockResolvedValue({
+      _id: INDEX_VERSION_DOC_ID,
+      _index: INDEX_META_INDEX,
+      result: 'created',
+      _shards: { total: 1, successful: 1, failed: 0 },
+      _version: 1,
+    });
 
     await writeIndexMeta(mockClient, validDoc);
 

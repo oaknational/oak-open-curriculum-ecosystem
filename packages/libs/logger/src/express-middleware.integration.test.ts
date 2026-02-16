@@ -1,15 +1,19 @@
-import { describe, it, expect, vi } from 'vitest';
-import type { Request, Response, NextFunction } from 'express';
+import { describe, it, expect } from 'vitest';
 import {
   createRequestLogger,
   createErrorLogger,
   extractRequestMetadata,
 } from './express-middleware';
 import type { Logger } from './types';
+import {
+  createFakeRequest,
+  createFakeResponse,
+  createFakeNextFunction,
+} from './test-helpers/fakes.js';
 
 describe('extractRequestMetadata', () => {
   it('should extract and sanitise basic request metadata', () => {
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'GET',
       url: '/api/test',
       path: '/api/test',
@@ -17,7 +21,7 @@ describe('extractRequestMetadata', () => {
       query: { foo: 'bar' },
       params: { id: '123' },
       ip: '127.0.0.1',
-    } as unknown as Request;
+    });
 
     const metadata = extractRequestMetadata(mockReq);
 
@@ -28,7 +32,7 @@ describe('extractRequestMetadata', () => {
   });
 
   it('should handle undefined and ParsedQs types safely', () => {
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'GET',
       url: '/test',
       path: '/test',
@@ -36,7 +40,7 @@ describe('extractRequestMetadata', () => {
       params: {},
       headers: {},
       ip: '127.0.0.1',
-    } as unknown as Request;
+    });
 
     const metadata = extractRequestMetadata(mockReq);
     // undefined should be converted to null or stripped
@@ -45,14 +49,14 @@ describe('extractRequestMetadata', () => {
   });
 
   it('should handle missing optional fields', () => {
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'POST',
       url: '/test',
       path: '/test',
       headers: {},
       query: {},
       params: {},
-    } as unknown as Request;
+    });
 
     const metadata = extractRequestMetadata(mockReq);
     expect(metadata.method).toBe('POST');
@@ -81,7 +85,7 @@ describe('createRequestLogger', () => {
     };
 
     const middleware = createRequestLogger(mockLogger);
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'GET',
       url: '/test',
       path: '/test',
@@ -89,9 +93,9 @@ describe('createRequestLogger', () => {
       query: {},
       params: {},
       ip: '127.0.0.1',
-    } as unknown as Request;
-    const mockRes = {} as Response;
-    const mockNext = vi.fn() as NextFunction;
+    });
+    const mockRes = createFakeResponse();
+    const mockNext = createFakeNextFunction();
 
     middleware(mockReq, mockRes, mockNext);
 
@@ -122,16 +126,16 @@ describe('createRequestLogger', () => {
     };
 
     const middleware = createRequestLogger(mockLogger, { level: 'info' });
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'GET',
       url: '/test',
       path: '/test',
       headers: {},
       query: {},
       params: {},
-    } as unknown as Request;
-    const mockRes = {} as Response;
-    const mockNext = vi.fn() as NextFunction;
+    });
+    const mockRes = createFakeResponse();
+    const mockNext = createFakeNextFunction();
 
     middleware(mockReq, mockRes, mockNext);
 
@@ -161,7 +165,7 @@ describe('createRequestLogger', () => {
     };
 
     const middleware = createRequestLogger(mockLogger, { includeBody: true });
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'POST',
       url: '/test',
       path: '/test',
@@ -169,9 +173,9 @@ describe('createRequestLogger', () => {
       query: {},
       params: {},
       body: { userId: '123' },
-    } as unknown as Request;
-    const mockRes = {} as Response;
-    const mockNext = vi.fn() as NextFunction;
+    });
+    const mockRes = createFakeResponse();
+    const mockNext = createFakeNextFunction();
 
     middleware(mockReq, mockRes, mockNext);
 
@@ -206,7 +210,7 @@ describe('createErrorLogger', () => {
 
     const middleware = createErrorLogger(mockLogger);
     const error = new Error('Test error');
-    const mockReq = {
+    const mockReq = createFakeRequest({
       method: 'POST',
       url: '/test',
       path: '/test',
@@ -214,9 +218,9 @@ describe('createErrorLogger', () => {
       query: {},
       params: {},
       ip: '127.0.0.1',
-    } as unknown as Request;
-    const mockRes = {} as Response;
-    const mockNext = vi.fn() as NextFunction;
+    });
+    const mockRes = createFakeResponse();
+    const mockNext = createFakeNextFunction();
 
     middleware(error, mockReq, mockRes, mockNext);
 

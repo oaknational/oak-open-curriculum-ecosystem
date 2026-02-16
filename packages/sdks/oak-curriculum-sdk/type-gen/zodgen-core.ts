@@ -1,8 +1,9 @@
 /* eslint-disable max-lines -- This is a generator script that produces code, not production code */
 import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
-import type { OpenAPIObject, PathsObject } from 'openapi3-ts/oas31';
+import type { OpenAPIObject, ResponsesObject } from 'openapi3-ts/oas31';
 import { generateZodSchemasFromOpenAPI } from './adapter/index.js';
+import { ensurePathsOnSchema } from './typegen-core-helpers.js';
 
 /**
  * Generates Zod endpoint definitions with parameter schemas from an OpenAPI document.
@@ -21,10 +22,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
 
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
-  // openapi-zod-client uses an outdated PathsObject definition
-  const openApiDocWithPaths =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition
-    openApiDoc as OpenAPIObject & { paths: PathsObject };
+  const openApiDocWithPaths = ensurePathsOnSchema(openApiDoc);
 
   const methodAndPathToOperationId = new Map<string, string>();
   const primaryStatusByOperationId = new Map<string, string>();
@@ -34,7 +32,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
   interface OperationLike {
     operationId?: unknown;
 
-    responses?: Record<string, unknown>;
+    responses?: ResponsesObject;
   }
   function isOperationLike(value: unknown): value is OperationLike {
     return (
@@ -97,13 +95,27 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     '} as const;',
   ].join('\n');
   const operationLookupHelpers = [
+    'function isOperationKey(key: string): key is keyof typeof OPERATION_ID_BY_METHOD_AND_PATH {',
+    '  return key in OPERATION_ID_BY_METHOD_AND_PATH;',
+    '}',
+    '',
+    'function isPrimaryStatusKey(key: string): key is keyof typeof PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID {',
+    '  return key in PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID;',
+    '}',
+    '',
     'function getOperationIdForEndpoint(method: string, path: string): string | undefined {',
-    '  const key = `${method.toLowerCase()} ${path}` as keyof typeof OPERATION_ID_BY_METHOD_AND_PATH;',
+    '  const key = `${method.toLowerCase()} ${path}`;',
+    '  if (!isOperationKey(key)) {',
+    '    return undefined;',
+    '  }',
     '  return OPERATION_ID_BY_METHOD_AND_PATH[key];',
     '}',
     '',
     'function getPrimaryStatusForOperation(operationId: string): string | undefined {',
-    '  return PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID[operationId as keyof typeof PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID];',
+    '  if (!isPrimaryStatusKey(operationId)) {',
+    '    return undefined;',
+    '  }',
+    '  return PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID[operationId];',
     '}',
   ].join('\n');
   const sanitizeFunctionCode = [

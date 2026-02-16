@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { McpParameterError, McpToolError, executeToolCall } from './execute-tool-call';
+import { createFakeOakApiPathBasedClient } from '../test-helpers/fakes.js';
 import type { OakApiPathBasedClient } from '../client/index.js';
 
 interface RateLimitArgs {
@@ -20,17 +21,15 @@ function createRateLimitClient(impl: RateLimitCall): {
   readonly handler: ReturnType<typeof vi.fn>;
 } {
   const handler = vi.fn(impl);
-  const client = {
-    '/rate-limit': {
-      GET: handler,
-    },
-  } as unknown as OakApiPathBasedClient;
+  const client = createFakeOakApiPathBasedClient({
+    '/rate-limit': { GET: handler },
+  });
   return { client, handler };
 }
 
 describe('executeToolCall', () => {
   it('returns an error when the tool name is unknown', async () => {
-    const result = await executeToolCall('not-a-tool', {}, {} as OakApiPathBasedClient);
+    const result = await executeToolCall('not-a-tool', {}, createFakeOakApiPathBasedClient({}));
 
     expect(result.error).toBeInstanceOf(McpToolError);
     expect(result.error).toMatchObject({

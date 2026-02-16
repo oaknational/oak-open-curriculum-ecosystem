@@ -121,9 +121,7 @@ describe('generateZodFieldCode', () => {
       { enumExpressions: ZOD_ENUM_EXPRESSIONS },
     );
 
-    expect(code).toBe(
-      'subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),',
-    );
+    expect(code).toBe('subject_slug: z.enum(SUBJECTS),');
   });
 
   it('generates optional enum field with .optional()', () => {
@@ -137,9 +135,7 @@ describe('generateZodFieldCode', () => {
       { enumExpressions: ZOD_ENUM_EXPRESSIONS },
     );
 
-    expect(code).toBe(
-      'optional_key_stage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]).optional(),',
-    );
+    expect(code).toBe('optional_key_stage: z.enum(KEY_STAGES).optional(),');
   });
 
   it('generates object field referencing SearchCompletionSuggestPayloadSchema', () => {
@@ -199,8 +195,8 @@ describe('generateZodSchemaFromFields', () => {
 
     const code = generateZodSchemaFromFields('FilterSchema', fields, ZOD_ENUM_EXPRESSIONS);
 
-    expect(code).toContain('subject_slug: z.enum(SUBJECTS as unknown as');
-    expect(code).toContain('key_stage: z.enum(KEY_STAGES as unknown as');
+    expect(code).toContain('subject_slug: z.enum(SUBJECTS),');
+    expect(code).toContain('key_stage: z.enum(KEY_STAGES),');
   });
 
   it('generates units schema matching expected structure', () => {
@@ -236,8 +232,8 @@ describe('generateZodSchemaFromFields', () => {
 
     // Verify key fields
     expect(code).toContain('unit_id: z.string().min(1),');
-    expect(code).toContain('subject_slug: z.enum(SUBJECTS as unknown as');
-    expect(code).toContain('key_stage: z.enum(KEY_STAGES as unknown as');
+    expect(code).toContain('subject_slug: z.enum(SUBJECTS),');
+    expect(code).toContain('key_stage: z.enum(KEY_STAGES),');
     expect(code).toContain('lesson_count: z.number().int().nonnegative(),');
     expect(code).toContain('title_suggest: SearchCompletionSuggestPayloadSchema.optional(),');
   });

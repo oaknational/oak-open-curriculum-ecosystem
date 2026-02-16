@@ -8,7 +8,6 @@ import {
   toolNames,
   getToolFromToolName,
   type ToolDescriptorForName,
-  type OakApiPathBasedClient,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
@@ -23,7 +22,12 @@ import {
   validateOutput,
   type ToolExecutionSuccessEnvelope,
 } from './validation.js';
-import { type Logger } from '@oaknational/mcp-logger/node';
+import {
+  createFakeToolExecutionSuccessEnvelope,
+  createFakeMcpServer,
+  createFakeLogger,
+  createFakeOakPathBasedClient,
+} from '../test-helpers/fakes.js';
 
 type ToolLogger = Parameters<typeof createToolResponseHandlers>[0];
 type ToolContext = Parameters<typeof createToolResponseHandlers>[1];
@@ -150,10 +154,7 @@ describe('validation helpers', () => {
 
   it('fails fast when the response references an undocumented status', () => {
     const descriptor = getToolFromToolName('get-key-stages');
-    const undocumented = {
-      status: 599,
-      data: {},
-    } as unknown as ToolExecutionSuccessEnvelope<'get-key-stages'>;
+    const undocumented = createFakeToolExecutionSuccessEnvelope<'get-key-stages'>(599, {});
     const result = validateOutput(descriptor, undocumented);
     expect(result.ok).toBe(false);
     if (result.ok) {
@@ -180,31 +181,28 @@ describe('registerMcpTools registration metadata', () => {
       string,
       { readonly title: string; readonly description?: string; readonly inputSchema: unknown }
     >();
-    const fakeServer = {
-      registerTool: vi.fn(
-        (
-          name: string,
-          definition: {
-            readonly title: string;
-            readonly description?: string;
-            readonly inputSchema: unknown;
-          },
-          ...handler: unknown[]
-        ) => {
-          void handler;
-          registered.set(name, {
-            title: definition.title,
-            description: definition.description,
-            inputSchema: definition.inputSchema,
-          });
+    const fakeServer = createFakeMcpServer();
+    vi.mocked(fakeServer.registerTool).mockImplementation(
+      (
+        name: string,
+        definition: {
+          readonly title: string;
+          readonly description?: string;
+          readonly inputSchema: unknown;
         },
-      ),
-    } as unknown as McpServer;
-    const fakeClient = {} as OakApiPathBasedClient;
-    const fakeLogger = {
-      info: vi.fn(),
-      error: vi.fn(),
-    } as unknown as Logger;
+        ...handler: unknown[]
+      ) => {
+        void handler;
+        registered.set(name, {
+          title: definition.title,
+          description: definition.description,
+          inputSchema: definition.inputSchema,
+        });
+        return undefined as unknown as ReturnType<McpServer['registerTool']>;
+      },
+    );
+    const fakeClient = createFakeOakPathBasedClient();
+    const fakeLogger = createFakeLogger();
 
     registerMcpTools(fakeServer, fakeClient, fakeLogger);
 

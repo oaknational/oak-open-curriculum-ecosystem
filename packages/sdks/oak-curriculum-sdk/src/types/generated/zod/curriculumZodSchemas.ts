@@ -68,13 +68,27 @@ const PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID = {
   "getRateLimit-getRateLimit": "200",
 } as const;
 
+function isOperationKey(key: string): key is keyof typeof OPERATION_ID_BY_METHOD_AND_PATH {
+  return key in OPERATION_ID_BY_METHOD_AND_PATH;
+}
+
+function isPrimaryStatusKey(key: string): key is keyof typeof PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID {
+  return key in PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID;
+}
+
 function getOperationIdForEndpoint(method: string, path: string): string | undefined {
-  const key = `${method.toLowerCase()} ${path}` as keyof typeof OPERATION_ID_BY_METHOD_AND_PATH;
+  const key = `${method.toLowerCase()} ${path}`;
+  if (!isOperationKey(key)) {
+    return undefined;
+  }
   return OPERATION_ID_BY_METHOD_AND_PATH[key];
 }
 
 function getPrimaryStatusForOperation(operationId: string): string | undefined {
-  return PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID[operationId as keyof typeof PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID];
+  if (!isPrimaryStatusKey(operationId)) {
+    return undefined;
+  }
+  return PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID[operationId];
 }
 
 function sanitizeSchemaKeys(

@@ -61,7 +61,10 @@ function getActionResult(item: BulkResponseItem): z.infer<typeof ActionResultSch
   return item.index ?? item.create;
 }
 
-/** Count errors by type from failed bulk items. */
+/**
+ * Count errors by type from failed bulk items.
+ * @returns Map of error type string → count. Keys are ES bulk error types (runtime-defined).
+ */
 function countErrorsByType(items: readonly BulkResponseItem[]): Record<string, number> {
   const counts = new Map<string, number>();
   for (const item of items) {

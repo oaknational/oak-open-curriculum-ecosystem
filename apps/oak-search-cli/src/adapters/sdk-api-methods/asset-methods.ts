@@ -15,7 +15,7 @@ import { safeGet } from '../sdk-safe-get';
  * Fetches all assets for a subject/keystage in a single bulk call.
  * Used to determine video availability before fetching transcripts.
  */
-export function makeGetSubjectAssets(client: OakApiClient): GetSubjectAssetsFn {
+export function makeGetSubjectAssets(client: Pick<OakApiClient, 'GET'>): GetSubjectAssetsFn {
   return async (keyStage: KeyStage, subject: SearchSubjectSlug) => {
     const resource = `${keyStage}/${subject}/assets`;
     const getResult = await safeGet(

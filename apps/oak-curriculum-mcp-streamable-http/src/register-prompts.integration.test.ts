@@ -53,9 +53,7 @@ function createMcpTestRequest(req: express.Request): IncomingMessage {
     },
   });
 
-  // Type assertion: Proxy<Request> → IncomingMessage
-  // Safe at runtime because Express Request extends IncomingMessage
-  // and we only omit the conflicting auth property
+  // Type assertion: Proxy<Request> → IncomingMessage (architectural bridge; mirrors handlers.ts createMcpRequest)
 
   return proxy as unknown as IncomingMessage;
 }

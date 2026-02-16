@@ -22,18 +22,15 @@ import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions
 import type { CompletionContextName } from './completion-contexts.js';
 
 /**
- * Maps enum reference names to their full Zod enum expressions.
+ * Maps enum reference names to the constant name used in z.enum().
  *
- * These expressions are used in generated schemas to provide proper type inference
- * from the KEY_STAGES and SUBJECTS constants.
+ * Zod v4 accepts readonly arrays (as const) directly; no tuple cast needed.
  */
 export const ZOD_ENUM_EXPRESSIONS: Readonly<Record<string, string>> = {
-  KEY_STAGE_TUPLE:
-    'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]',
-  SUBJECT_TUPLE: 'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]',
+  KEY_STAGE_TUPLE: 'KEY_STAGES',
+  SUBJECT_TUPLE: 'SUBJECTS',
   /** All 21 subjects including KS4 science variants (physics, chemistry, biology, combined-science) */
-  ALL_SUBJECT_TUPLE:
-    'ALL_SUBJECTS as unknown as [typeof ALL_SUBJECTS[number], ...typeof ALL_SUBJECTS[number][]]',
+  ALL_SUBJECT_TUPLE: 'ALL_SUBJECTS',
 } as const;
 
 /**
@@ -71,7 +68,7 @@ export interface ZodFieldCodeOptions {
  *   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
  *   { enumExpressions: ZOD_ENUM_EXPRESSIONS }
  * );
- * // Returns: 'subject_slug: z.enum(SUBJECTS as unknown as [...]),'
+ * // Returns: 'subject_slug: z.enum(SUBJECTS),'
  * ```
  */
 export function generateZodFieldCode(

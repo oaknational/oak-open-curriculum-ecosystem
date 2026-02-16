@@ -15,7 +15,7 @@
 export interface SequenceGroundTruthQuery {
   /** The search query text */
   readonly query: string;
-  /** Map of sequence_slug → relevance score (3/2/1, unlisted = 0) */
+  /** Map of sequence_slug → relevance score (3/2/1, unlisted = 0). Keys are document slugs (runtime-defined per query). */
   readonly expectedRelevance: Readonly<Record<string, number>>;
   /** What this test scenario validates about the search system */
   readonly description?: string;

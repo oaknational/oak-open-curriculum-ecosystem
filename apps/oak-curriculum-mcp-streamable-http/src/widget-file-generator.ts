@@ -31,14 +31,19 @@ export async function generateWidgetFile(outputPath: string): Promise<void> {
  * Generates widget HTML with injected mock data for preview/testing.
  * This creates a self-contained HTML file for manual inspection.
  *
- * @param toolOutput - Mock tool output data
- * @param metadata - Mock metadata
+ * `toolOutput` and `metadata` use `Record<string, unknown>` because this
+ * function sits at a preview boundary: it accepts arbitrary JSON from any
+ * MCP tool descriptor and serialises it into a `window.openai` script tag.
+ * The actual shape varies per tool and is validated at the tool level, not here.
+ *
+ * @param toolOutput - Arbitrary tool output JSON to inject into the preview
+ * @param metadata - Arbitrary metadata JSON to inject into the preview
  * @param outputPath - Where to write the file
  */
 export async function generatePreviewWidgetFile(
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- Preview script accepts any tool output
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- External preview boundary: accepts any tool output JSON
   toolOutput: Record<string, unknown>,
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- Preview script accepts any metadata
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- External preview boundary: accepts any metadata JSON
   metadata: Record<string, unknown>,
   outputPath: string,
 ): Promise<void> {

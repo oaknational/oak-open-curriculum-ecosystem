@@ -47,9 +47,11 @@ function getCustomToString(value: object): (() => string) | null {
     return null;
   }
 
-  // Reflect.get is required here to safely access inherited properties on prototype chain
-  // eslint-disable-next-line no-restricted-properties -- Required: accessing inherited toString via prototype
-  const inherited: unknown = Reflect.get(prototype, 'toString');
+  const protoDescriptor = Object.getOwnPropertyDescriptor(prototype, 'toString');
+  if (!protoDescriptor) {
+    return null;
+  }
+  const inherited: unknown = protoDescriptor.value;
   if (isToStringFunction(inherited)) {
     return () => inherited.call(value);
   }

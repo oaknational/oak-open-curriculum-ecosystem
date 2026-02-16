@@ -60,25 +60,21 @@ function buildExports({
   lines.push('}');
   lines.push('const resolveDescriptorForStatus = (status: number) => {');
   lines.push('  const directKey = String(status);');
-  lines.push(
-    '  const direct = responseDescriptors[directKey as keyof typeof responseDescriptors];',
-  );
+  lines.push('  const direct = responseDescriptors[directKey];');
   lines.push('  if (direct) {');
   lines.push('    return direct;');
   lines.push('  }');
-  lines.push(
-    '  const rangeKey = `${String(Math.trunc(status / 100))}XX` as keyof typeof responseDescriptors;',
-  );
+  lines.push('  const rangeKey = `${String(Math.trunc(status / 100))}XX`;');
   lines.push('  const range = responseDescriptors[rangeKey];');
   lines.push('  if (range) {');
   lines.push('    return range;');
   lines.push('  }');
-  lines.push('  return responseDescriptors["default" as keyof typeof responseDescriptors];');
+  lines.push('  return responseDescriptors["default"];');
   lines.push('};');
-  lines.push('const toStatusDiscriminant = (status: string) => {');
+  lines.push('function toStatusDiscriminant<T extends string>(status: T): StatusDiscriminant<T> {');
   lines.push('  const numeric = Number(status);');
-  lines.push('  return Number.isNaN(numeric) ? status : numeric;');
-  lines.push('};');
+  lines.push('  return (Number.isNaN(numeric) ? status : numeric) as StatusDiscriminant<T>;');
+  lines.push('}');
   lines.push('/**');
   lines.push(' * Tool descriptor consumed by MCP_TOOLS.');
   lines.push(' *');
@@ -109,6 +105,9 @@ function buildExports({
   );
   lines.push('    }');
   lines.push('    const payload = status >= 200 && status < 300 ? response.data : response.error;');
+  lines.push('    // Structural limitation: descriptor is dynamically resolved at runtime, so');
+  lines.push('    // TypeScript cannot statically infer the output type. This single cast');
+  lines.push('    // bridges the gap between the runtime-selected schema and the static type.');
   lines.push('    return payload as z.infer<typeof descriptorForStatus.zod>;');
   lines.push('  },');
   lines.push('  toolZodSchema,');
@@ -155,23 +154,21 @@ function buildExports({
   lines.push('  },');
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
-    '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',
+    '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];',
   );
   lines.push('    for (const statusKey of documentedStatuses) {');
-  lines.push(
-    '      const descriptor = responseDescriptors[statusKey as keyof typeof responseDescriptors];',
-  );
+  lines.push('      const descriptor = responseDescriptors[statusKey];');
   lines.push('      if (!descriptor) {');
   lines.push('        continue;');
   lines.push('      }');
   lines.push('      const result = descriptor.zod.safeParse(data);');
   lines.push('      if (result.success) {');
   lines.push(
-    '        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant };',
+    '        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };',
   );
   lines.push('      }');
   lines.push(
-    '      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues });',
+    '      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });',
   );
   lines.push('    }');
   lines.push('    return {');

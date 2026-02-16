@@ -284,19 +284,31 @@ function createMockClient(): OakClient {
     getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getUnitsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getLessonTranscript: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getLessonsForSubjectKeyStage: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    searchLessons: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    searchLessonTranscripts: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getUnitsWithLessonsForSubjectKeyStage: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getLessonsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getLessonSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getLessonAssets: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getThreads: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getUnitSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
+    getAllThreads: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     getThreadUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getSubjectAssets: vi.fn().mockResolvedValue({ ok: true, value: [] }),
     rateLimitTracker: {
-      updateFromHeaders: vi.fn(),
-      getUsage: () => ({ remaining: 1000, limit: 1000, reset: Date.now() }),
+      getStatus: () => ({
+        limit: 1000,
+        remaining: 1000,
+        reset: Date.now(),
+        resetDate: new Date(),
+        lastChecked: new Date(),
+      }),
+      getRequestCount: () => 0,
+      getRequestRate: () => 0,
+      reset: vi.fn(),
     },
-  } as unknown as OakClient;
+    getCacheStats: vi.fn().mockReturnValue({
+      hits: 0,
+      misses: 0,
+      connected: false,
+    }),
+    disconnect: vi.fn().mockResolvedValue(undefined),
+  };
 }
 
 // ============================================================================

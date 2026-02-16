@@ -33,9 +33,12 @@ export interface IssueSummary {
   readonly totalErrors: number;
   readonly totalWarnings: number;
   readonly byHttpStatus: Record<number, number>;
+  /** Keys are endpoint/operation names from the ingestion pipeline (runtime-defined). */
   readonly byOperation: Record<string, number>;
-  readonly byKeyStage: Record<string, number>;
-  readonly bySubject: Record<string, number>;
+  /** Counts per key stage; keys are from the curriculum key stage set. */
+  readonly byKeyStage: Partial<Record<KeyStage, number>>;
+  /** Counts per subject; keys are from the curriculum subject set. */
+  readonly bySubject: Partial<Record<SearchSubjectSlug, number>>;
   readonly issues: readonly IngestionIssue[];
 }
 

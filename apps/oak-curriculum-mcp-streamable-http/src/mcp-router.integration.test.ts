@@ -11,6 +11,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { createFakeExpressRequest, createFakeResponse } from './test-helpers/fakes.js';
 
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;
@@ -24,11 +25,11 @@ describe('createMcpRouter (Integration)', () => {
       next();
     });
     mockNext = vi.fn();
-    mockRes = {} as Response;
+    mockRes = createFakeResponse();
   });
 
   function createMockRequest(body: unknown): Request {
-    return { body } as Request;
+    return createFakeExpressRequest({ body });
   }
 
   describe('discovery methods (no auth required)', () => {

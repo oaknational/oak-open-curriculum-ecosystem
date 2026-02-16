@@ -15,9 +15,9 @@ export const SequenceFacetUnitSchema = z.object({
 
 /** Sequence facet enriched for hybrid search presentation. */
 export const SequenceFacetSchema = z.object({
-  subjectSlug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+  subjectSlug: z.enum(SUBJECTS),
   sequenceSlug: z.string().min(1),
-  keyStage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]),
+  keyStage: z.enum(KEY_STAGES),
   keyStageTitle: z.string().min(1).optional(),
   phaseSlug: z.string().min(1),
   phaseTitle: z.string().min(1),

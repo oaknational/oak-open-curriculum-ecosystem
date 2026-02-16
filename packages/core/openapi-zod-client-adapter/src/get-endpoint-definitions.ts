@@ -6,8 +6,9 @@
  */
 
 import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
-import type { OpenAPIObject, PathsObject } from 'openapi3-ts/oas31';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { EndpointDefinitionOptions, EndpointDefinitionResult } from './endpoint-types.js';
+import { ensurePathsPresent } from './ensure-paths-present.js';
 import { DEFAULT_ENDPOINT_OPTIONS } from './endpoint-types.js';
 import { isRawEndpoint, transformEndpoint } from './endpoint-transformers.js';
 
@@ -48,10 +49,7 @@ export function getEndpointDefinitions(
 ): EndpointDefinitionResult {
   const mergedOptions = { ...DEFAULT_ENDPOINT_OPTIONS, ...options };
 
-  // openapi-zod-client expects paths to be present
-  const openApiDocWithPaths =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition
-    openApiDoc as OpenAPIObject & { paths: PathsObject };
+  const openApiDocWithPaths = ensurePathsPresent(openApiDoc);
 
   const result = getZodiosEndpointDefinitionList(openApiDocWithPaths, mergedOptions);
 

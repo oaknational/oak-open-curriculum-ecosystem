@@ -16,8 +16,8 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 const LessonDocumentSchema = z
   .object({
     lesson_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
-    key_stage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]),
+    subject_slug: z.enum(SUBJECTS),
+    key_stage: z.enum(KEY_STAGES),
     year_group: z.string().optional(),
   })
   .strict();

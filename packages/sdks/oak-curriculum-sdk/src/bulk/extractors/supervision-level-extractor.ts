@@ -38,7 +38,10 @@ export interface SupervisionLevelSummary {
   readonly lessonsWithSupervision: number;
   /** Lessons without supervision requirements */
   readonly lessonsWithoutSupervision: number;
-  /** Count by supervision level */
+  /**
+   * Count by supervision level.
+   * @remarks Keys are supervision level strings from lesson data (runtime-defined).
+   */
   readonly countByLevel: Readonly<Record<string, number>>;
   /** Percentage requiring supervision */
   readonly supervisionPercentage: number;

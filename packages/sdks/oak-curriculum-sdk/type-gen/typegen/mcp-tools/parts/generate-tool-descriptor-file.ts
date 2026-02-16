@@ -12,7 +12,7 @@ export function generateToolDescriptorFile(): string {
  * for the schema-first execution directive that governs this file.
  */
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import type { ZodType } from 'zod';
+import type { ZodType, core } from 'zod';
 
 /**
  * MCP security scheme types.
@@ -83,6 +83,7 @@ export interface ToolDescriptor<
     readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
+  /** JSON Schema object describing the tool's output shape; varies by tool so typed broadly. */
   readonly toolOutputJsonSchema: unknown;
   readonly zodOutputSchema: ZodType<TResult>;
   readonly describeToolArgs: () => string;
@@ -150,10 +151,10 @@ export interface ToolDescriptor<
     | {
         readonly ok: false;
         readonly message: string;
-        readonly issues: readonly unknown[];
+        readonly issues: readonly core.$ZodIssue[];
         readonly attemptedStatuses: readonly {
           readonly status: TStatus;
-          readonly issues: readonly unknown[];
+          readonly issues: readonly core.$ZodIssue[];
         }[];
       };
   readonly invoke: (client: TClient, args: TArgs) => TResult | Promise<TResult>;

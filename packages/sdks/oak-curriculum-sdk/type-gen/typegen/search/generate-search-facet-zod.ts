@@ -6,10 +6,9 @@ const HEADER = `/**
  * Zod schemas for hybrid search facets derived from the Open Curriculum schema.
  */\n\n`;
 
-const KEY_STAGE_TUPLE =
-  'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]';
-const SUBJECT_TUPLE =
-  'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]';
+/** Zod v4 accepts as const arrays directly. */
+const KEY_STAGE_TUPLE = 'KEY_STAGES';
+const SUBJECT_TUPLE = 'SUBJECTS';
 
 function generateOutputModule(): string {
   return (

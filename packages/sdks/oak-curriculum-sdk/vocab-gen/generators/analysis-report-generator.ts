@@ -76,6 +76,7 @@ export interface SynonymPatterns {
  */
 export interface MisconceptionDensity {
   readonly total: number;
+  /** Keys are curriculum subject slugs (runtime-defined). */
   readonly bySubject: Readonly<Record<string, number>>;
   readonly topSubjects: readonly SubjectRankEntry[];
 }
@@ -85,6 +86,7 @@ export interface MisconceptionDensity {
  */
 export interface NCCoverage {
   readonly total: number;
+  /** Keys are curriculum subject slugs (runtime-defined). */
   readonly bySubject: Readonly<Record<string, number>>;
   readonly mostStatements: readonly SubjectRankEntry[];
   readonly fewestStatements: readonly SubjectRankEntry[];

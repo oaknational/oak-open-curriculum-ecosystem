@@ -40,6 +40,7 @@ export interface ExtractedKeyword {
 
 /**
  * Maps key stage slugs to their starting year.
+ * Fixed key set: ks1, ks2, ks3, ks4.
  */
 const keyStageToFirstYear: Readonly<Record<string, number>> = {
   ks1: 1,

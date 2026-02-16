@@ -348,7 +348,8 @@ const ALLOWED_IDS = [
 export type AllowedId = (typeof ALLOWED_IDS)[number];
 
 export function isAllowedId(value: string): value is AllowedId {
-  return ALLOWED_IDS.includes(value as AllowedId);
+  const allowedIdsAsStrings: readonly string[] = ALLOWED_IDS;
+  return allowedIdsAsStrings.includes(value);
 }
 export type ResponseSchemaByOperationIdAndStatus = typeof RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS;
 
@@ -401,7 +402,11 @@ export function getResponseSchemaByPathAndMethodAndStatus(path: ValidPath, metho
 }
 
 export function getResponseSchemaForEndpoint(method: AllowedMethods, path: ValidPath): CurriculumSchemaDefinition {
-  return getResponseSchemaByPathAndMethodAndStatus(path, method as AllowedMethodsForPath<ValidPath>, 200);
+  const operationId = getOperationIdByPathAndMethod(path, method);
+  if (!operationId) {
+    throw new TypeError('Method not allowed for path: ' + String(method) + ' ' + String(path));
+  }
+  return getResponseSchemaByOperationIdAndStatus(operationId, 200);
 }
 const RESPONSE_DESCRIPTOR_JSON: Record<string, unknown | undefined> = Object.fromEntries(
   Object.entries(RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS).map(([key, record]) => [
@@ -420,7 +425,7 @@ export function getResponseDescriptorSchema(operationId: OperationId, statusCode
 
 export function getDescriptorSchemaForEndpoint(method: AllowedMethods, path: ValidPath): { readonly zod: CurriculumSchemaDefinition; readonly json: unknown } {
   const zod = getResponseSchemaForEndpoint(method, path);
-  const operationId = getOperationIdByPathAndMethod(path, method as AllowedMethodsForPath<ValidPath>);
+  const operationId = getOperationIdByPathAndMethod(path, method);
   if (typeof operationId !== 'string') {
     return { zod, json: undefined };
   }
@@ -592,7 +597,7 @@ const RESPONSE_DESCRIPTORS_BY_OPERATION_ID = Object.freeze({
       json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['searchTranscripts-searchTranscripts:200'].jsonSchema,
     }),
   }),
-}) as Readonly<Record<OperationId, Readonly<Record<string, ResponseDescriptorRecord>>>>;
+}) satisfies Readonly<Record<OperationId, Readonly<Record<string, ResponseDescriptorRecord>>>>;
 
 export function getResponseDescriptorsByOperationId(operationId: OperationId): Readonly<Record<string, ResponseDescriptorRecord>> {
   const record = RESPONSE_DESCRIPTORS_BY_OPERATION_ID[operationId];

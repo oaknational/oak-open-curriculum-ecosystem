@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { getToolFromToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { validateOutput, type ToolExecutionSuccessEnvelope } from './validation.js';
+import { validateOutput } from './validation.js';
+import { createFakeToolExecutionSuccessEnvelope } from '../test-helpers/fakes.js';
 
 const descriptor = getToolFromToolName('get-lessons-transcript');
 
@@ -59,10 +60,9 @@ describe('validateOutput (integration)', () => {
   });
 
   it('fails fast for undocumented statuses with informative messaging', () => {
-    const undocumented = {
-      status: 418,
-      data: { message: 'short and stout' },
-    } as unknown as ToolExecutionSuccessEnvelope<'get-lessons-transcript'>;
+    const undocumented = createFakeToolExecutionSuccessEnvelope<'get-lessons-transcript'>(418, {
+      message: 'short and stout',
+    });
 
     const result = validateOutput(descriptor, undocumented);
 

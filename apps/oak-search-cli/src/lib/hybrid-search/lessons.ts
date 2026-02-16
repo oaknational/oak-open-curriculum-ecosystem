@@ -1,4 +1,11 @@
-import { esSearch, type EsHit, type EsSearchFn } from '../elastic-http';
+import {
+  esSearch,
+  isEsSearchResponse,
+  type EsHit,
+  type EsSearchFnForDoc,
+  type EsSearchRequest,
+  type EsSearchResponse,
+} from '../elastic-http';
 import type { SearchLessonsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, LessonResult } from './types';
 import { buildLessonRrfRequest } from './rrf-query-builders';
@@ -10,7 +17,7 @@ import { normaliseRrfScores } from './rrf-score-normaliser';
  */
 export interface RunLessonsSearchOptions {
   /** Injected search function for testing. Defaults to esSearch. */
-  readonly search?: EsSearchFn;
+  readonly search?: EsSearchFnForDoc<SearchLessonsIndexDoc>;
 }
 
 /**
@@ -35,7 +42,15 @@ export async function runLessonsSearch(
   doHighlight: boolean,
   options: RunLessonsSearchOptions = {},
 ): Promise<HybridSearchResult> {
-  const search = options.search ?? esSearch;
+  const search =
+    options.search ??
+    (async (body: EsSearchRequest): Promise<EsSearchResponse<SearchLessonsIndexDoc>> => {
+      const raw = await esSearch(body);
+      if (!isEsSearchResponse<SearchLessonsIndexDoc>(raw)) {
+        throw new Error('Unexpected ES search response shape');
+      }
+      return raw;
+    });
   const request = buildLessonRrfRequest({
     text: q.text,
     size,
@@ -56,7 +71,7 @@ export async function runLessonsSearch(
     request.from = from;
   }
 
-  const res = await search<SearchLessonsIndexDoc>(request);
+  const res = await search(request);
   const normalisedHits = normaliseHits(res.hits.hits);
   const results = makeLessonResults(normalisedHits);
 

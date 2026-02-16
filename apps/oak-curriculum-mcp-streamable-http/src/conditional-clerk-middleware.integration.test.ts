@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import {
+  createFakeLogger,
+  createFakeExpressRequest,
+  createFakeResponse,
+} from './test-helpers/fakes.js';
+import type { Logger } from '@oaknational/mcp-logger';
 
 /**
  * Integration tests for conditional Clerk middleware.
@@ -27,15 +32,10 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       next();
     });
 
-    mockLogger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    } as unknown as Logger;
+    mockLogger = createFakeLogger();
 
     mockNext = vi.fn();
-    mockRes = {} as Response;
+    mockRes = createFakeResponse();
   });
 
   describe('when clerkMiddleware is applied', () => {
@@ -232,9 +232,5 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
  * Creates a mock Express Request for testing.
  */
 function createMockRequest(path: string, body: unknown): Request {
-  return {
-    path,
-    body,
-    method: 'POST',
-  } as Request;
+  return createFakeExpressRequest({ path, body, method: 'POST' });
 }

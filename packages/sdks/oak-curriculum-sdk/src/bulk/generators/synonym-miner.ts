@@ -40,6 +40,7 @@ export interface MinedSynonym {
 export interface MinedSynonymsStats {
   readonly totalKeywordsProcessed: number;
   readonly synonymsExtracted: number;
+  /** Keys are pattern names from the extraction pipeline (runtime-defined). */
   readonly patternCounts: Readonly<Record<string, number>>;
 }
 

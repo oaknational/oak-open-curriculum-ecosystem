@@ -1,33 +1,13 @@
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { typeSafeEntries, typeSafeFromEntries } from '../types/helpers/type-helpers.js';
+import {
+  typeSafeEntries,
+  typeSafeFromEntries,
+  typeSafeKeys,
+} from '../types/helpers/type-helpers.js';
 import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
 import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
-
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- JC: Sometimes we really do need to deal with unknown records at incoming system boundaries
-type UnknownRecord = Record<string, unknown>;
-
-/**
- * Type guard to check if a value is a non-null object (UnknownRecord).
- *
- * @param value - The value to check
- * @returns True if the value is a non-null, non-array object with at least one key-value pair where the key is a string and the value is not undefined
- */
-function isUnknownRecord(value: unknown): value is UnknownRecord {
-  const isProbablyObject = typeof value === 'object' && value !== null && !Array.isArray(value);
-  if (!isProbablyObject) {
-    return false;
-  }
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const hasKeys = Object.keys(value).length > 0;
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const hasValues = Object.values(value).length > 0;
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const firstKey = Object.keys(value)[0];
-  const hasStringKey = typeof firstKey === 'string' && firstKey !== '';
-  return hasKeys && hasValues && hasStringKey;
-}
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
@@ -35,14 +15,19 @@ function isUnknownRecord(value: unknown): value is UnknownRecord {
  */
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
 
-/**
- * Type guard to check if a value is a valid structured content object.
- * StructuredContent must be a non-null, non-array object with string keys.
- */
+/** Type for _meta field, derived from the MCP SDK's CallToolResult. Widget-only data. */
+type WidgetMeta = NonNullable<CallToolResult['_meta']>;
 
+/**
+ * Type guard: checks if a value is a non-null, non-array object with at least
+ * one string key — the minimal shape for StructuredContent.
+ */
 function isStructuredContent(value: unknown): value is StructuredContent {
-  // StructuredContent must be a non-null, non-array object with string keys.
-  return isUnknownRecord(value);
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  const keys = typeSafeKeys(value);
+  return keys.length > 0 && typeof keys[0] === 'string' && keys[0] !== '';
 }
 
 export interface UniversalToolExecutorDependencies {
@@ -141,22 +126,14 @@ export interface OptimizedResultOptions {
  */
 
 /** Builds _meta object for widget-only data. Model never sees _meta. */
-function buildMeta(options: OptimizedResultOptions): UnknownRecord {
+function buildMeta(options: OptimizedResultOptions): WidgetMeta {
   const { toolName, annotationsTitle, query, timestamp } = options;
-  const meta: UnknownRecord = {};
-  if (toolName !== undefined) {
-    meta.toolName = toolName;
-  }
-  if (annotationsTitle !== undefined) {
-    meta['annotations/title'] = annotationsTitle;
-  }
-  if (query !== undefined) {
-    meta.query = query;
-  }
-  if (timestamp !== undefined) {
-    meta.timestamp = timestamp;
-  }
-  return meta;
+  return {
+    ...(toolName !== undefined ? { toolName } : {}),
+    ...(annotationsTitle !== undefined ? { 'annotations/title': annotationsTitle } : {}),
+    ...(query !== undefined ? { query } : {}),
+    ...(timestamp !== undefined ? { timestamp } : {}),
+  };
 }
 
 /**
@@ -168,21 +145,17 @@ function buildMeta(options: OptimizedResultOptions): UnknownRecord {
 function buildStructuredContent(
   options: OptimizedResultOptions,
   serialisedFullData: unknown,
-): UnknownRecord {
+): StructuredContent {
   const { summary, status } = options;
-  // Full data goes here - model needs this for reasoning
-  const base = isUnknownRecord(serialisedFullData)
+  const base = isStructuredContent(serialisedFullData)
     ? serialisedFullData
     : { data: serialisedFullData };
-  const structuredContent: UnknownRecord = {
+  return {
     ...base,
     summary,
     oakContextHint: OAK_CONTEXT_HINT,
+    ...(status !== undefined ? { status } : {}),
   };
-  if (status !== undefined) {
-    structuredContent.status = status;
-  }
-  return structuredContent;
 }
 
 export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {

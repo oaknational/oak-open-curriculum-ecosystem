@@ -37,6 +37,7 @@ export interface GroundTruthQueryDefinition {
 
 /**
  * Expected relevance judgments — lives in *.expected.ts files.
+ * @remarks Keys are document slugs (runtime-defined per ground truth query).
  */
 export type ExpectedRelevance = Readonly<Record<string, number>>;
 

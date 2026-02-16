@@ -97,17 +97,19 @@ function makeUnitSummary(slug: string, title: string, lessonIds: string[]): Sear
   return {
     unitSlug: slug,
     unitTitle: title,
+    yearSlug: 'year-1',
+    year: 1,
+    phaseSlug: 'primary',
     subjectSlug: 'maths',
     keyStageSlug: 'ks1',
-    phaseSlug: 'primary',
-    year: 1,
+    priorKnowledgeRequirements: [],
+    nationalCurriculumContent: [],
     unitLessons: lessonIds.map((lessonSlug) => ({
       lessonSlug,
       lessonTitle: `${lessonSlug}-title`,
+      state: 'published' as const,
     })),
-    categories: [],
-    threads: [],
-  } as unknown as SearchUnitSummary;
+  };
 }
 
 describe('createSequenceFacetDocuments', () => {

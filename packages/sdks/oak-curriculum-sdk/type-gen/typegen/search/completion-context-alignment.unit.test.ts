@@ -196,6 +196,7 @@ describe('Completion Context Alignment: Regression guard for original bug', () =
     // Lessons should NOT have sequence context - it's a unit-level concept
     const lessonsContexts = new Set(LESSONS_COMPLETION_CONTEXTS);
 
+    // Set.has() expects the set's value type; we assert that 'sequence' (not in that union) is not present
     expect(lessonsContexts.has('sequence' as never)).toBe(false);
 
     // Verify the ES override also lacks sequence

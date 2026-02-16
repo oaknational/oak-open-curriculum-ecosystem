@@ -14,7 +14,7 @@ import type { SearchUnitsResponse } from './responses.units.js';
 import type { SearchSequencesResponse } from './responses.sequences.js';
 import { SearchSuggestionItemSchema, SearchSuggestionResponseSchema, DEFAULT_SUGGESTION_CACHE } from './suggestions.js';
 
-const NarrowScopeSchema = z.enum(SEARCH_SCOPES as unknown as ['lessons', 'units', 'sequences']);
+const NarrowScopeSchema = z.enum(SEARCH_SCOPES);
 const ResultUnionSchema = z.union([
   SearchLessonsResponseSchema,
   SearchUnitsResponseSchema,

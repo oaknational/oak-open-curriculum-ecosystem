@@ -13,7 +13,7 @@
  */
 import { describe, it, expect, vi } from 'vitest';
 import { uploadAllChunks, type EsTransport, type BulkUploadConfig } from './bulk-chunk-uploader';
-import type { BulkOperations } from './bulk-operation-types';
+import { isBulkIndexAction, type BulkOperations } from './bulk-operation-types';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { BulkResponse } from './sandbox-bulk-response';
 
@@ -47,16 +47,20 @@ function createMockLogger(): Logger & { calls: { method: string; args: unknown[]
 
 /**
  * Creates test bulk operations (action + document pairs).
+ *
+ * @param count - Number of document pairs to create
+ * @param startIndex - Starting index for document IDs (default 0)
  */
-function createTestOperations(count: number): BulkOperations {
+function createTestOperations(count: number, startIndex = 0): BulkOperations {
   const ops: BulkOperations = [];
   for (let i = 0; i < count; i++) {
+    const id = startIndex + i;
     ops.push(
-      { index: { _index: 'oak_lessons', _id: `doc-${i}` } },
+      { index: { _index: 'oak_lessons', _id: `doc-${id}` } },
       {
-        lesson_id: `doc-${i}`,
-        lesson_slug: `lesson-${i}`,
-        lesson_title: `Test Lesson ${i}`,
+        lesson_id: `doc-${id}`,
+        lesson_slug: `lesson-${id}`,
+        lesson_title: `Test Lesson ${id}`,
         subject_slug: 'maths',
         subject_parent: 'maths',
         key_stage: 'ks4',
@@ -64,8 +68,8 @@ function createTestOperations(count: number): BulkOperations {
         unit_titles: ['Test Unit'],
         unit_urls: ['https://example.com/units/test-unit'],
         has_transcript: true,
-        lesson_content: `Content for ${i}`,
-        lesson_url: `https://example.com/lessons/${i}`,
+        lesson_content: `Content for ${id}`,
+        lesson_url: `https://example.com/lessons/${id}`,
         doc_type: 'lesson',
       },
     );
@@ -135,10 +139,7 @@ describe('uploadAllChunks document-level retry', () => {
 
     const logger = createMockLogger();
     const chunk1 = createTestOperations(2);
-    const chunk2 = createTestOperations(2);
-    // Adjust IDs for chunk2 to be doc-2, doc-3
-    (chunk2[0] as { index: { _id: string } }).index._id = 'doc-2';
-    (chunk2[2] as { index: { _id: string } }).index._id = 'doc-3';
+    const chunk2 = createTestOperations(2, 2);
 
     const config: BulkUploadConfig = {
       chunkDelayMs: 0, // No delay for tests
@@ -454,8 +455,7 @@ describe('uploadAllChunks document-level retry', () => {
 
     const logger = createMockLogger();
     const chunk1 = createTestOperations(1);
-    const chunk2 = createTestOperations(1);
-    (chunk2[0] as { index: { _id: string } }).index._id = 'doc-1';
+    const chunk2 = createTestOperations(1, 1);
 
     const config: BulkUploadConfig = {
       chunkDelayMs: 100, // Base delay
@@ -531,7 +531,10 @@ describe('uploadAllChunks document-level retry', () => {
     expect(result.permanentlyFailed).toHaveLength(2);
 
     // Verify the failed operation contains doc-1's action
-    const failedAction = result.permanentlyFailed[0] as { index?: { _id?: string } };
-    expect(failedAction.index?._id).toBe('doc-1');
+    const failedEntry = result.permanentlyFailed[0];
+    if (!isBulkIndexAction(failedEntry)) {
+      throw new Error('Expected first permanently failed entry to be a BulkIndexAction');
+    }
+    expect(failedEntry.index._id).toBe('doc-1');
   });
 });

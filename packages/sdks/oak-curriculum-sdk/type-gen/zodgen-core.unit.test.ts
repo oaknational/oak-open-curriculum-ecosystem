@@ -57,13 +57,13 @@ describe('generateZodSchemas', () => {
     vi.mocked(existsSync).mockReturnValue(true);
   });
 
-  it('passes the provided OpenAPIObject directly to openapi-zod-client', async () => {
+  it('passes the schema (with paths guaranteed) to openapi-zod-client', async () => {
     await generateZodSchemas(minimalSchema, outDir);
 
     const calls = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
     expect(calls).toHaveLength(1);
     const [{ openApiDoc }] = calls[0];
-    expect(openApiDoc).toBe(minimalSchema);
+    expect(openApiDoc).toStrictEqual(minimalSchema);
   });
 
   it('creates the output directory when it does not exist', async () => {
