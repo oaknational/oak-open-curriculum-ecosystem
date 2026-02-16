@@ -57,7 +57,10 @@ Phase 2h: Code Quality Remediation                     ✅ COMPLETE
   Remove type shortcuts, TSDoc warnings
          ↓
 Phase 3: MCP Search Integration                     🔄 IN PROGRESS
-  Wire SDK retrieval into MCP tools
+  ├── Search tool wiring (blocking path)
+  │     Wire SDK retrieval into MCP tools
+  └── Result pattern unification (parallel, non-blocking)
+        Migrate MCP layer to Result<T, E>
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
   ├── GT Expansion (30 → 80-100 queries)
@@ -232,6 +235,13 @@ onboarding. Two workstreams:
 ## Phase 3: MCP Search Integration
 
 **Status**: 🔄 In Progress — all prerequisites complete
+
+Two parallel workstreams. The search tool wiring is the
+blocking path; the Result pattern unification runs in
+parallel and does not block search integration.
+
+### 3a. Search Tool Wiring (blocking path)
+
 **Plan**: [active/wire-hybrid-search.md](active/wire-hybrid-search.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
@@ -248,6 +258,32 @@ search and likely replace it.
 | All quality gates pass | 📋 Pending |
 | Compare semantic search with existing `search` tool (REST API) | 📋 Pending |
 | If superior, replace REST API composite search with SDK-backed search | 📋 Pending |
+
+### 3b. MCP Result Pattern Unification (parallel, non-blocking)
+
+**Plan**: [active/mcp-result-pattern-unification.md](active/mcp-result-pattern-unification.md)
+
+**Goal**: Migrate the MCP tool execution layer from the
+custom `ToolExecutionResult` discriminated union to the
+canonical `Result<T, E>` from `@oaknational/result`,
+aligning with the Search SDK and Search CLI.
+
+| Task | Status |
+|------|--------|
+| `ToolExecutionResult` → `Result<ToolExecutionSuccess, McpToolError>` | 📋 Pending |
+| Remove `extractExecutionData` (direct `Result` usage) | 📋 Pending |
+| Validation functions → `Result<T, string>` | 📋 Pending |
+| Update auth interception to inspect `Result.error` | 📋 Pending |
+| Update stub executor | 📋 Pending |
+| Update all tests (~10 files) | 📋 Pending |
+| All quality gates pass | 📋 Pending |
+
+**Scope**: ~25-30 files across Curriculum SDK MCP code,
+STDIO server, HTTP server. Does not block 3a — the
+semantic-search tool bypasses `ToolExecutionResult`
+entirely. Best started after 3a WS2 (GREEN) is complete,
+so the search tool exists and can validate that the
+unification does not break it.
 
 ---
 

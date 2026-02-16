@@ -469,34 +469,21 @@ internally based on scope.
 
 ---
 
-## Future Work: MCP Result Pattern Unification
+## Parallel Workstream: MCP Result Pattern Unification
 
 The MCP layer currently uses a custom discriminated union
 (`ToolExecutionResult`) instead of `Result<T, E>` from
-`@oaknational/result`. This creates an inconsistency with
-the Search SDK and Search CLI, which use `Result<T, E>`
-throughout.
+`@oaknational/result`. A parallel workstream migrates
+the entire MCP layer to `Result<T, E>` for architectural
+consistency.
 
-**Scope**: ~25-30 files across 3 workspaces (Curriculum
-SDK MCP code, STDIO server, HTTP server). ~15-20 functions
-and 3 major type definitions.
+**Plan**: [mcp-result-pattern-unification.md](mcp-result-pattern-unification.md)
 
-**When**: After Phase 3 is complete. If the "compare and
-replace" step (WS5) removes the old `search` tool,
-several of those files become simpler, reducing the
-migration surface.
-
-**What changes**:
-
-- `ToolExecutionResult` → `Result<ToolExecutionSuccess, McpToolError | McpParameterError>`
-- `extractExecutionData` → removed (direct `Result` usage)
-- Validation functions → return `Result<T, string>`
-- Auth interception → inspect `Result.error` instead of `ToolExecutionResult.error`
-
-This is **not a prerequisite** for Phase 3. The semantic-search
-tool's integration path bypasses `ToolExecutionResult`
-entirely because it calls the Search SDK directly rather
-than going through `executeMcpTool`.
+**Relationship to this plan**: Non-blocking. The
+semantic-search tool bypasses `ToolExecutionResult`
+entirely. The unification runs in parallel, best started
+after WS2 (GREEN) is complete so the search tool exists
+as a validation consumer.
 
 ---
 

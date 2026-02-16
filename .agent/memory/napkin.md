@@ -45,7 +45,11 @@
   bypasses `ToolExecutionResult` entirely. Broader MCP
   unification is a separate future workstream after Phase 3.
 - Updated plan with error handling architecture decision
-  and future work section
+- Created concrete parallel plan:
+  `active/mcp-result-pattern-unification.md` (~25-30
+  files, 6 workstreams, best started after WS2 GREEN)
+- Updated roadmap Phase 3 to show two parallel
+  workstreams (3a search wiring, 3b Result unification)
 - Updated prompt with coexistence pattern
 
 ### Patterns to Remember
