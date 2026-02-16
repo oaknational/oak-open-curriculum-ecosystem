@@ -73,6 +73,17 @@ changing behaviour.
 
 ## Testing
 
+- **Tests MUST be independent and idempotent.** A test that
+  depends on shared mutable state (e.g. a `beforeAll` app
+  instance consumed by a prior test) passes or fails based
+  on execution order. That is not a test — it is a
+  coincidence. Each test must own its own state.
+- MCP `StreamableHTTPServerTransport` serves exactly one
+  client per instance. Every E2E test expecting HTTP 200
+  from the transport must create its own fresh `createApp()`.
+  Tests checking for HTTP 401 bypass the transport (auth
+  middleware rejects first) but should still use fresh apps
+  for consistency.
 - Replace Express `_router` access in tests with HTTP
   assertions via supertest — more resilient, tests actual
   behaviour
@@ -91,6 +102,8 @@ changing behaviour.
   `process.env`
 - `max-lines-per-function` (50 lines) — extract per-command
   registration functions
+- `server.e2e.test.ts` has a hardcoded aggregated tools
+  list — must be updated when adding new aggregated tools
 
 ## TSDoc
 
@@ -135,6 +148,19 @@ changing behaviour.
 - When a pre-existing eslint override exists in a file you
   touch, fix the root cause (DRY/split) rather than
   leaving the override
+- Aggregated tools return `Promise<CallToolResult>` directly
+  — they do NOT go through `ToolExecutionResult` unless they
+  call `executeMcpTool` internally
+- `AggregatedToolName` type derives from
+  `keyof typeof AGGREGATED_TOOL_DEFS` — adding to the map
+  automatically extends the type union
+- Circular turbo dependency between curriculum-sdk and
+  search-sdk: solved via dependency inversion. Define a
+  local interface (`SearchRetrievalService`) structurally
+  compatible with the concrete type. MCP servers inject the
+  concrete implementation.
+- Prefer `git worktree` over `git stash` for baseline
+  comparisons — stash risks lost work
 
 ## Domain Knowledge
 

@@ -6,6 +6,9 @@
 import { createMcpToolsModule } from '../tools/index.js';
 import type { McpToolsModule } from '../tools/index.js';
 import { createOakPathBasedClient } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { Client } from '@elastic/elasticsearch';
+import { createSearchSdk } from '@oaknational/oak-search-sdk';
 
 /**
  * Creates a simple clock provider for runtime timing needs.
@@ -33,6 +36,7 @@ function createInMemoryStorage() {
   };
 }
 import { resolveToolExecutors } from './stub-executors.js';
+import type { StdioEnv } from '../runtime-config.js';
 import { type Logger } from '@oaknational/mcp-logger/node';
 import { createStdioLogger } from '../logging/index.js';
 import { loadRuntimeConfig } from '../runtime-config.js';
@@ -92,14 +96,37 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
 }
 
 /**
+ * Creates a SearchRetrievalService when Elasticsearch credentials are present.
+ */
+function createSearchRetrieval(
+  env: StdioEnv,
+  logger: { info: (msg: string) => void },
+): SearchRetrievalService | undefined {
+  const esUrl = env.ELASTICSEARCH_URL;
+  const esApiKey = env.ELASTICSEARCH_API_KEY;
+
+  if (!esUrl || !esApiKey) {
+    logger.info(
+      'Search retrieval service not configured — ELASTICSEARCH_URL or ELASTICSEARCH_API_KEY missing. Search tools will return "not configured" errors.',
+    );
+    return undefined;
+  }
+
+  const esClient = new Client({ node: esUrl, auth: { apiKey: esApiKey } });
+  const searchSdk = createSearchSdk({
+    deps: { esClient },
+    config: { indexTarget: 'primary' },
+  });
+  logger.info('Search retrieval service configured (Elasticsearch connected)');
+  return searchSdk.retrieval;
+}
+
+/**
  * Wire all dependencies together
  */
-export function wireDependencies(config?: ServerConfig): WiredDependencies {
-  const serverConfig = buildServerConfig(config);
-  const runtimeConfig = loadRuntimeConfig();
-  const logger = createStdioLogger(runtimeConfig);
-  // Compose CoreRuntime
-  const coreLogger = {
+/** Adapts the STDIO logger into the CoreRuntime logger shape. */
+function createCoreLogger(logger: Logger) {
+  return {
     trace: (message: string, context?: unknown) => {
       logger.debug(message, context);
     },
@@ -119,8 +146,14 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
       logger.error(message, context);
     },
   };
+}
+
+export function wireDependencies(config?: ServerConfig): WiredDependencies {
+  const serverConfig = buildServerConfig(config);
+  const runtimeConfig = loadRuntimeConfig();
+  const logger = createStdioLogger(runtimeConfig);
   const runtime = {
-    logger: coreLogger,
+    logger: createCoreLogger(logger),
     clock: createNodeClock(),
     storage: createInMemoryStorage(),
   };
@@ -132,9 +165,10 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   const client = createOakPathBasedClient(serverConfig.apiKey);
 
   const toolExecutors = resolveToolExecutors();
+  const searchRetrieval = createSearchRetrieval(runtimeConfig.env, logger);
 
-  // Create MCP tools module with injected client
-  const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors });
+  // Create MCP tools module with injected client and optional search retrieval
+  const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors, searchRetrieval });
 
   return {
     logger,

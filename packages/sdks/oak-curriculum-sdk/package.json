@@ -123,13 +123,14 @@
   "dependencies": {
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
+    "@oaknational/result": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
     "zod": "^4.1.13"
   },
   "devDependencies": {
     "@elastic/elasticsearch": "^9.2.0",
-    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "@next/eslint-plugin-next": "^16.0.10",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^24",

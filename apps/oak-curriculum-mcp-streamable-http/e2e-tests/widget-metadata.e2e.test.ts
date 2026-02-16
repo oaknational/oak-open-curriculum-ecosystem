@@ -125,16 +125,16 @@ describe('ChatGPT Widget Metadata E2E', () => {
     );
 
     it('outputTemplate URI matches a registered resource', async () => {
-      const app = createTestApp();
-
       // Get the outputTemplate URI from tools/list
-      const { tools } = await callToolsList(app);
+      const toolsApp = createTestApp();
+      const { tools } = await callToolsList(toolsApp);
       const searchTool = findToolByName(tools, 'search');
       const templateUri = searchTool?._meta?.['openai/outputTemplate'];
       expect(templateUri).toBeDefined();
 
-      // Verify this URI exists in resources/list
-      const resourcesRes = await request(app)
+      // Verify this URI exists in resources/list (fresh app — transport is one-client)
+      const resourcesApp = createTestApp();
+      const resourcesRes = await request(resourcesApp)
         .post('/mcp')
         .set('Accept', ACCEPT)
         .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });

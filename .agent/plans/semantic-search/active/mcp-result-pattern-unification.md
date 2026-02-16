@@ -161,7 +161,7 @@ entirely because it calls the Search SDK directly.
 
 | Document | Purpose |
 |----------|---------|
-| [wire-hybrid-search.md](wire-hybrid-search.md) | Search tool wiring (Phase 3a) |
+| [phase-3a-mcp-search-integration.md](phase-3a-mcp-search-integration.md) | Search tool wiring (Phase 3a) |
 | [../roadmap.md](../roadmap.md) | Master roadmap |
 | [@oaknational/result](/packages/libs/result/) | Canonical Result type |
 | [execute-tool-call.ts](/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts) | Current `ToolExecutionResult` definition |

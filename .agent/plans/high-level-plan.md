@@ -25,7 +25,7 @@ resource, and further MCP improvements.
 
 ## Active / Planned (Priority Order)
 
-### 1. Semantic Search — Status: 📋 MCP INTEGRATION NEXT (Priority 1)
+### 1. Semantic Search — Status: 🔄 MCP INTEGRATION IN PROGRESS (Priority 1)
 
 **Roadmap**: [semantic-search/roadmap.md](semantic-search/roadmap.md)
 
@@ -45,12 +45,13 @@ CLI has 935 tests. All quality gates pass.
 | Public release readiness | Secrets, licence, package.json, docs, GitHub config | ✅ Complete |
 | Developer onboarding | Canonical journey, command truth, link integrity | ✅ Complete |
 | Code quality remediation | TSDoc warnings (0), type shortcuts removed (137 files) | ✅ Complete |
-| **MCP search integration** | Wire SDK into MCP tools | 📋 **NEXT** |
+| **MCP search integration** | Wire SDK into MCP tools — WS1-WS2 done, WS3 (NL guidance) and WS5 (compare/replace) remain | 🔄 **IN PROGRESS** |
 | Compare and replace | Evaluate vs REST API search, likely replace | 📋 Planned |
 | Search enhancements | GT expansion, Levels 2–4, bulk data analysis | 📋 Future |
 
-**Immediate work**: Wire the Search SDK into the MCP
-curriculum servers. See [wire-hybrid-search.md](semantic-search/active/wire-hybrid-search.md).
+**Immediate work**: WS3 (NL guidance, docs, TSDoc) then
+WS5 (compare SDK search vs REST API; replace if superior).
+See [phase-3a-mcp-search-integration.md](semantic-search/active/phase-3a-mcp-search-integration.md).
 
 ---
 
@@ -273,7 +274,7 @@ working artefacts.
 | M7b | Public Release Readiness | ✅ DONE |
 | M7c | Developer Onboarding Experience | ✅ DONE |
 | M7d | Code Quality Remediation (TSDoc warnings, type shortcuts) | ✅ DONE |
-| **M8** | **MCP Search Integration** | 📋 **NEXT** |
+| **M8** | **MCP Search Integration** | 🔄 **IN PROGRESS** (WS1-WS2 complete, WS3+WS5 remain) |
 | M9 | SDK Workspace Decomposition (ADR-108, Step 1: 2-way split) | 📋 Planned |
 | M10 | Castr Integration | 📋 Planned |
 | M11 | Search Quality Enhancements | 📋 Future |

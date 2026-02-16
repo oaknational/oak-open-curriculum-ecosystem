@@ -23,6 +23,9 @@ import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
 import { runKnowledgeGraphTool } from '../aggregated-knowledge-graph.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
+import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search-sdk/index.js';
+import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
+import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
 import {
@@ -118,32 +121,73 @@ async function handleFetchTool(
   return runFetchTool(validation.value, deps);
 }
 
+/**
+ * Handles search-sdk tool validation and execution.
+ */
+async function handleSearchSdkTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateSearchSdkArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runSearchSdkTool(validation.value, deps);
+}
+
+/**
+ * Handles browse-curriculum tool validation and execution.
+ */
+async function handleBrowseTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateBrowseArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runBrowseTool(validation.value, deps);
+}
+
+/**
+ * Handles explore-topic tool validation and execution.
+ */
+async function handleExploreTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateExploreArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runExploreTool(validation.value, deps);
+}
+
+type AggregatedHandler = (
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+) => Promise<CallToolResult>;
+
+const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
+  search: handleSearchTool,
+  'get-ontology': () => Promise.resolve(runOntologyTool()),
+  'get-help': (input) => Promise.resolve(handleHelpTool(input)),
+  'get-knowledge-graph': () => Promise.resolve(runKnowledgeGraphTool()),
+  'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
+  'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
+  fetch: handleFetchTool,
+  'search-sdk': handleSearchSdkTool,
+  'browse-curriculum': handleBrowseTool,
+  'explore-topic': handleExploreTool,
+};
+
 function executeAggregatedTool(
   name: AggregatedToolName,
   input: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  switch (name) {
-    case 'search':
-      return handleSearchTool(input, deps);
-    case 'get-ontology':
-      return Promise.resolve(runOntologyTool());
-    case 'get-help':
-      return Promise.resolve(handleHelpTool(input));
-    case 'get-knowledge-graph':
-      return Promise.resolve(runKnowledgeGraphTool());
-    case 'get-thread-progressions':
-      return Promise.resolve(runThreadProgressionsTool());
-    case 'get-prerequisite-graph':
-      return Promise.resolve(runPrerequisiteGraphTool());
-    case 'fetch':
-      return handleFetchTool(input, deps);
-    default: {
-      // Exhaustive check - TypeScript ensures all cases are handled
-      const exhaustiveCheck: never = name;
-      return Promise.reject(new Error(`Unknown aggregated tool: ${exhaustiveCheck}`));
-    }
-  }
+  const handler = AGGREGATED_HANDLERS[name];
+  return handler(input, deps);
 }
 
 /**

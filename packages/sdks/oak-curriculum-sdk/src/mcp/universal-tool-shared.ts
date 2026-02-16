@@ -8,6 +8,7 @@ import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js'
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
 import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
+import type { SearchRetrievalService } from './search-retrieval-types.js';
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
@@ -32,6 +33,19 @@ function isStructuredContent(value: unknown): value is StructuredContent {
 
 export interface UniversalToolExecutorDependencies {
   readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
+
+  /**
+   * Optional search retrieval service for SDK-backed search tools.
+   *
+   * When present, search/browse-curriculum/explore-topic tools use this
+   * to query Elasticsearch directly via the Search SDK. When absent,
+   * those tools return a "not configured" error. All other tools work
+   * normally regardless.
+   *
+   * Provided by the MCP server wiring when ES credentials are available.
+   * The type is structurally compatible with Search SDK's RetrievalService.
+   */
+  readonly searchRetrieval?: SearchRetrievalService;
 }
 
 export function formatError(message: string): CallToolResult {

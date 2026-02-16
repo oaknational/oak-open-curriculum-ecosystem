@@ -13,10 +13,10 @@ path, 8 ground truths span 5 subjects (MRR=0.938, NDCG@10=0.902),
 and legacy `test-query-*.ts` scripts have been deleted. All SDK
 retrieval methods have been validated against live Elasticsearch.
 
-**Active plan**: [wire-hybrid-search.md](../../plans/semantic-search/active/wire-hybrid-search.md)
+**Active plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
 
-**Next action**: Wire the Search SDK into the MCP curriculum servers
-to provide semantic search as an MCP tool.
+**Next action**: WS3 (NL guidance, documentation, TSDoc) then WS5
+(compare SDK search vs REST API search; replace if superior).
 
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
@@ -239,77 +239,81 @@ Two cross-cutting code quality workstreams completed
 
 ---
 
-## What Needs Doing Next
+## Phase 3a — MCP Search Tools (WS1-WS2 Complete)
 
-### MCP Search Integration (Phase 3) — Active Plan
+Three new MCP tools expose the Search SDK's Elasticsearch-backed
+semantic search to agents and teachers. WS1 (RED) and WS2 (GREEN)
+are complete. WS3 (REFACTOR: NL guidance, docs) and WS5 (compare
+and replace old search) are next.
 
-**Plan**: [wire-hybrid-search.md](../../plans/semantic-search/active/wire-hybrid-search.md)
+**Execution plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
 
-Wire the Search SDK into the MCP curriculum servers
-(`apps/oak-curriculum-mcp-stdio/`,
-`apps/oak-curriculum-mcp-streamable-http/`), then compare
-with existing REST API search and likely replace it.
+### Search Tool Architecture
 
-#### How MCP Tools Work
+| Tool | Scopes/Purpose | SDK Methods |
+|------|---------------|-------------|
+| `search-sdk` | 5 scopes: lessons, units, threads, sequences, suggest | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
+| `browse-curriculum` | Faceted navigation (no free-text query) | `fetchSequenceFacets` |
+| `explore-topic` | Compound parallel cross-scope discovery | `searchLessons` + `searchUnits` + `searchThreads` in parallel |
 
-Two categories of tools exist:
+The old `search` tool (REST API) coexists during transition.
+WS5 will compare and likely replace it.
 
-1. **Generated tools** — auto-created from the OpenAPI
-   schema during `pnpm type-gen`. Call the upstream Oak
-   REST API via `OakApiPathBasedClient`.
-2. **Aggregated tools** — hand-written, combine multiple
-   operations. Defined in
-   `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-*/`.
-   Examples: `search`, `fetch`, `get-ontology`.
+### Key Implementation Details
 
-The `semantic-search` tool will be a new **aggregated
-tool** following the established pattern. The existing
-`search` tool (`aggregated-search/`) is the template.
+- **Dependency inversion**: `SearchRetrievalService` interface
+  in curriculum-sdk (`search-retrieval-types.ts`) breaks the
+  circular dependency with search-sdk. Structurally compatible
+  with `oak-search-sdk`'s `RetrievalService`.
+- **Optional `searchRetrieval`** on
+  `UniversalToolExecutorDependencies`. When absent, search
+  tools return "not configured" errors. All other tools
+  work normally.
+- **MCP servers inject the concrete implementation**: Both
+  STDIO and HTTP servers create `createSearchSdk().retrieval`
+  when `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are set.
+- **Error mapping**: `Result<T, RetrievalError>` maps directly
+  to `CallToolResult`. Two error patterns coexist (existing
+  `ToolExecutionResult` and new `Result<T, E>`).
+- **Dispatch maps**: `executor.ts` uses a const object map
+  for tool dispatch; `execution.ts` uses a scope dispatcher
+  map. Both avoid `switch` statements for ESLint complexity.
 
-#### Execution Flow
+### Module Locations
 
 ```text
-MCP Client → server.registerTool() handler
-  → createUniversalToolExecutor(deps)
-    → isAggregatedToolName(name)?
-      YES → executeAggregatedTool() → switch dispatch
-      NO  → deps.executeMcpTool() → generated tool → REST API
+packages/sdks/oak-curriculum-sdk/src/mcp/
+  search-retrieval-types.ts    — SearchRetrievalService interface (DI)
+  aggregated-search-sdk/       — search-sdk tool (5 scopes)
+  aggregated-browse/           — browse-curriculum tool
+  aggregated-explore/          — explore-topic tool
+
+apps/oak-curriculum-mcp-stdio/src/app/wiring.ts       — STDIO ES wiring
+apps/oak-curriculum-mcp-streamable-http/src/
+  search-retrieval-factory.ts  — HTTP ES factory
+  handlers.ts                  — HTTP search injection
 ```
 
-#### Key Architectural Decisions
+### What Needs Doing Next
 
-- **DI for Search SDK**: The current
-  `UniversalToolExecutorDependencies` centres on
-  `executeMcpTool` (REST API). The semantic search tool
-  needs a Search SDK instance. Extend deps or create a
-  dedicated dependency type.
-- **ES credentials**: Both MCP servers need
-  `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` env
-  vars. SDK instance created in the wiring layer, never
-  in the SDK itself.
-- **NL stays in MCP**: Per ADR-107, the SDK is
-  deterministic. NL interpretation expressed through tool
-  examples.
-- **Single tool with scope**: One `semantic-search` tool
-  with a `scope` parameter (`lessons`, `units`,
-  `sequences`) — simpler for agents.
-- **Error mapping**: `Result<T, RetrievalError>` maps
-  directly to `CallToolResult`, bypassing
-  `ToolExecutionResult` / `extractExecutionData`.
-  Never swallow errors.
-- **Two error patterns coexist**: Existing tools use
-  `ToolExecutionResult` (custom union); semantic-search
-  uses `Result<T, E>` directly. Clean boundary — MCP
-  layer unification onto `Result<T, E>` is a separate
-  future workstream (~25-30 files).
+**WS3 (REFACTOR)** — NL guidance, documentation, TSDoc:
+- Review and extend tool descriptions with NL-to-structured
+  examples per scope
+- Update `tool-guidance-data.ts` with search tool workflows
+- Update `prerequisite-guidance.ts` with search tool guidance
+- Add/update MCP prompts for search workflows
+- Comprehensive TSDoc on all new public APIs
 
-#### TDD Execution Sequence
+**WS5 (COMPARE AND REPLACE)** — old vs new search:
+- Run representative teacher queries through both old `search`
+  (REST) and new `search-sdk` (ES/SDK)
+- Compare relevance, coverage, latency
+- If superior, remove old `aggregated-search/` module
+- Full quality gate chain after replacement
 
-1. **WS1 (RED)**: Tool definition, input schema, tests — tests fail
-2. **WS2 (GREEN)**: Dependencies, env config, SDK instance, handler, registration — tests pass
-3. **WS3 (REFACTOR)**: Tool examples, documentation, TSDoc
-4. **WS4**: Quality gates, verify existing tools
-5. **WS5**: Compare with REST API search, replace if superior
+**Follow-up workstreams**:
+- Unit tests for `search-retrieval-factory.ts`
+- Browse tool formatting tests
 
 ### Phase 4 — Search Quality + Ecosystem
 
@@ -334,16 +338,20 @@ See [apps/oak-search-cli/README.md](../../apps/oak-search-cli/README.md#cli-comm
 
 ---
 
-## Three Workspaces
+## Five Workspaces
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen, MCP tool definitions |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (36 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (935 tests) |
+| **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
+| **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
 
 The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
+Both MCP servers consume the Oak API SDK (tool definitions)
+and optionally the Search SDK (search retrieval).
 
 ---
 
@@ -381,6 +389,7 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
-| [Active plan](../../plans/semantic-search/active/wire-hybrid-search.md) | MCP integration plan (with implementation guide) |
+| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS2 done, WS3+WS5 next) |
+| [Background: wire-hybrid-search](../../plans/semantic-search/archive/completed/wire-hybrid-search-background.md) | Original architectural design (reference only) |
 | [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |
 | [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

@@ -27,7 +27,7 @@
  * @see https://platform.openai.com/docs/guides/apps-authentication
  */
 
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
@@ -99,29 +99,31 @@ async function validateOAuthMetadataStep(app: Express): Promise<string> {
   return asUrl;
 }
 
-describe('Auth Enforcement (E2E - Production Equivalent)', () => {
-  let app: Express;
-
-  beforeAll(() => {
-    // Create isolated env with auth ENABLED (production equivalent)
-    app = createApp({
-      runtimeConfig: createMockRuntimeConfig({
-        // Auth enabled by default in mock config
-        useStubTools: true,
-        env: {
-          OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-          CLERK_SECRET_KEY: 'sk_test_123',
-          NODE_ENV: 'test',
-          LOG_LEVEL: 'debug',
-        },
-      }),
-    });
+/**
+ * Creates a fresh auth-enabled app instance.
+ *
+ * MCP StreamableHTTPServerTransport serves one client per instance.
+ * Each test expecting a 200 from the transport needs its own app.
+ */
+function createAuthApp(): Express {
+  return createApp({
+    runtimeConfig: createMockRuntimeConfig({
+      useStubTools: true,
+      env: {
+        OAK_API_KEY: 'test-api-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+        CLERK_SECRET_KEY: 'sk_test_123',
+        NODE_ENV: 'test',
+        LOG_LEVEL: 'debug',
+      },
+    }),
   });
+}
 
+describe('Auth Enforcement (E2E - Production Equivalent)', () => {
   describe('Discovery Methods (No Auth Required)', () => {
     it('allows initialize without Authorization header', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -144,7 +146,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
 
     it('allows tools/list via POST without Authorization header', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -164,9 +166,11 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
      * Per OpenAI Apps: "If verification fails, respond with 401 Unauthorized"
      *
      * HTTP 401 triggers OAuth discovery flow in the client.
+     * Auth rejects before MCP transport, so 401 tests could share an app,
+     * but fresh apps keep tests fully independent.
      */
     it('returns HTTP 401 with WWW-Authenticate for protected tools without auth', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -178,9 +182,6 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         });
 
       // HTTP 401 per MCP spec and OpenAI Apps docs
-      if (res.status === 500) {
-        console.error('Server returned 500:', res.text);
-      }
       expect(res.status).toBe(401);
 
       // WWW-Authenticate header per RFC 6750
@@ -191,7 +192,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
 
     it('returns HTTP 401 for invalid Bearer token', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -214,7 +215,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
 
     it('returns HTTP 401 for malformed Authorization header', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -238,8 +239,11 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
   describe('OAuth Discovery Flow', () => {
     it('supports OAuth discovery via protected resource metadata', async () => {
+      // 401 and GET requests don't consume the MCP transport, so one app works here.
+      const oauthApp = createAuthApp();
+
       // Step 1: Client calls protected tool without auth → HTTP 401 + WWW-Authenticate
-      const step1 = await request(app)
+      const step1 = await request(oauthApp)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -258,7 +262,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(wwwAuth).toContain('resource_metadata=');
 
       // Step 2: Client fetches OAuth metadata and extracts AS URL
-      const asUrl = await validateOAuthMetadataStep(app);
+      const asUrl = await validateOAuthMetadataStep(oauthApp);
 
       // Step 3: MCP clients fetch AS metadata directly from Clerk (not tested here)
       // Per test boundaries: we do NOT make external network calls to Clerk
@@ -269,7 +273,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     it('does not proxy authorization server metadata', async () => {
       // Per MCP spec 2025-06-18: clients fetch AS metadata directly from
       // authorization server, not from resource server proxy
-      const res = await request(app).get('/.well-known/oauth-authorization-server');
+      const res = await request(createAuthApp()).get('/.well-known/oauth-authorization-server');
 
       // Expect 404 - we should NOT have this endpoint
       expect(res.status).toBe(404);
@@ -278,7 +282,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
   describe('OAuth Metadata Endpoints', () => {
     it('protected resource metadata contains valid authorization_servers array', async () => {
-      const prRes = await request(app).get('/.well-known/oauth-protected-resource');
+      const prRes = await request(createAuthApp()).get('/.well-known/oauth-protected-resource');
       expect(prRes.status).toBe(200);
 
       const metadata: unknown = prRes.body;
@@ -305,7 +309,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
 
     it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
-      const res = await request(app).get('/.well-known/oauth-protected-resource');
+      const res = await request(createAuthApp()).get('/.well-known/oauth-protected-resource');
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('resource');
@@ -328,25 +332,9 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
 // Test #5: RFC Compliance Validation
 describe('Auth Enforcement - RFC Compliance', () => {
-  let app: Express;
-
-  beforeAll(() => {
-    app = createApp({
-      runtimeConfig: createMockRuntimeConfig({
-        useStubTools: true,
-        env: {
-          OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-          CLERK_SECRET_KEY: 'sk_test_123',
-          NODE_ENV: 'test',
-        },
-      }),
-    });
-  });
-
   describe('RFC Compliance', () => {
     it('oauth-protected-resource conforms to RFC 9728', async () => {
-      const res = await request(app).get('/.well-known/oauth-protected-resource');
+      const res = await request(createAuthApp()).get('/.well-known/oauth-protected-resource');
 
       expect(res.status).toBe(200);
 
@@ -378,7 +366,7 @@ describe('Auth Enforcement - RFC Compliance', () => {
     });
 
     it('resource URL identifies the /mcp endpoint as the protected resource', async () => {
-      const res = await request(app).get('/.well-known/oauth-protected-resource');
+      const res = await request(createAuthApp()).get('/.well-known/oauth-protected-resource');
 
       expect(res.status).toBe(200);
 
@@ -405,7 +393,7 @@ describe('Auth Enforcement - RFC Compliance', () => {
     });
 
     it('WWW-Authenticate header conforms to RFC 6750 Bearer scheme', async () => {
-      const res = await request(app)
+      const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
@@ -444,24 +432,8 @@ describe('Auth Enforcement - RFC Compliance', () => {
 });
 
 describe('Public Tools (noauth)', () => {
-  let app: Express;
-
-  beforeAll(() => {
-    app = createApp({
-      runtimeConfig: createMockRuntimeConfig({
-        useStubTools: true,
-        env: {
-          OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-          CLERK_SECRET_KEY: 'sk_test_123',
-          NODE_ENV: 'test',
-        },
-      }),
-    });
-  });
-
   it('allows get-changelog without auth (noauth tool)', async () => {
-    const res = await request(app)
+    const res = await request(createAuthApp())
       .post('/mcp')
       .set('Host', 'localhost')
       .set('Accept', 'application/json, text/event-stream')
@@ -495,7 +467,7 @@ describe('Public Tools (noauth)', () => {
   });
 
   it('allows get-rate-limit without auth (noauth tool)', async () => {
-    const res = await request(app)
+    const res = await request(createAuthApp())
       .post('/mcp')
       .set('Host', 'localhost')
       .set('Accept', 'application/json, text/event-stream')

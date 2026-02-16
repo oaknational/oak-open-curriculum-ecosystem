@@ -437,7 +437,7 @@ Make sure you have `"type": "module"` in your `package.json` file:
 {
   "type": "module",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.20.2",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "zod": "^3.25.76"
   }
 }

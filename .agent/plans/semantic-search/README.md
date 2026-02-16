@@ -81,7 +81,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [Active: Search tool wiring](active/wire-hybrid-search.md) | 🔄 Wire SDK search into MCP tools |
+| [Active: Phase 3a MCP Search Integration](active/phase-3a-mcp-search-integration.md) | 🔄 MCP search tools (WS1-WS2 done, WS3+WS5 next) |
 | [Active: Result pattern unification](active/mcp-result-pattern-unification.md) | 📋 Migrate MCP layer to `Result<T, E>` (parallel) |
 | [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
 | [Public Release Readiness](archive/completed/public-release-readiness.plan.md) | ✅ Secrets, licence, package.json, docs, GitHub config, npm publish |

@@ -35,12 +35,14 @@
     "test:ui": "playwright test"
   },
   "dependencies": {
-    "@clerk/express": "^1.7.62",
+    "@clerk/express": "^1.7.7",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.25.2",
+    "@elastic/elasticsearch": "^9.2.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/curriculum-sdk": "workspace:*",
+    "@oaknational/oak-search-sdk": "workspace:*",
     "commander": "^14.0.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",

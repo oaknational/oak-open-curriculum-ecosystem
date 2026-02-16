@@ -18,7 +18,13 @@ integrated (8 GTs, baselines validated against live ES).
 Public release readiness is complete (npm publish deferred
 until token is created). Developer onboarding experience
 is complete. Type shortcuts have been removed across the
-monorepo. Next: wire the SDK into its first consumer (MCP).
+monorepo.
+
+**MCP search integration is in progress.** Three new tools
+(`search-sdk`, `browse-curriculum`, `explore-topic`) are
+wired and passing all quality gates (WS1-WS2 complete).
+Next: WS3 (NL guidance, docs, TSDoc) then WS5 (compare
+SDK search vs REST API; replace if superior).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -242,7 +248,8 @@ parallel and does not block search integration.
 
 ### 3a. Search Tool Wiring (blocking path)
 
-**Plan**: [active/wire-hybrid-search.md](active/wire-hybrid-search.md)
+**Active plan**: [phase-3a-mcp-search-integration.md](active/phase-3a-mcp-search-integration.md)
+**Background**: [wire-hybrid-search (archived)](archive/completed/wire-hybrid-search-background.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
 consumer of the SDK. Then compare with existing REST API
@@ -250,14 +257,14 @@ search and likely replace it.
 
 | Task | Status |
 |------|--------|
-| `semantic-search` MCP tool wired to SDK retrieval | 📋 Pending |
-| Filter parameters passed through correctly | 📋 Pending |
-| `Result<T, E>` errors surfaced as MCP errors | 📋 Pending |
-| Tool examples mapping user intent to SDK calls | 📋 Pending |
-| Existing MCP tools unaffected | 📋 Pending |
-| All quality gates pass | 📋 Pending |
-| Compare semantic search with existing `search` tool (REST API) | 📋 Pending |
-| If superior, replace REST API composite search with SDK-backed search | 📋 Pending |
+| Three MCP search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) wired to SDK retrieval | ✅ Complete (WS1-WS2) |
+| Filter parameters passed through correctly | ✅ Complete |
+| `Result<T, E>` errors surfaced as MCP errors | ✅ Complete |
+| Tool examples mapping user intent to SDK calls | 📋 Pending (WS3) |
+| Existing MCP tools unaffected | ✅ Complete |
+| All quality gates pass (191/191 E2E, 1241 SDK, 611 HTTP unit/integration) | ✅ Complete (WS4) |
+| Compare semantic search with existing `search` tool (REST API) | 📋 Pending (WS5) |
+| If superior, replace REST API composite search with SDK-backed search | 📋 Pending (WS5) |
 
 ### 3b. MCP Result Pattern Unification (parallel, non-blocking)
 

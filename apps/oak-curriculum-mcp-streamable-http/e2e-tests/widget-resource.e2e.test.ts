@@ -49,12 +49,27 @@ const ResourcesReadResultSchema = z.object({
 });
 
 /**
- * Helper to retrieve widget HTML from the running MCP server.
- * Extracts common setup logic used across multiple tests.
+ * Retrieves the widget URI from a fresh stubbed app's resources/list.
  */
-async function getWidgetHtml(app: ReturnType<typeof createStubbedHttpApp>['app']): Promise<string> {
+function getWidgetUri(listEnvelope: ReturnType<typeof parseSseEnvelope>): string {
+  const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
+  const resources = listParsed.data?.resources ?? [];
+  // Match both local dev builds (local) and production builds (8-char hex)
+  return (
+    resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/))
+      ?.uri ?? ''
+  );
+}
+
+/**
+ * Helper to retrieve widget HTML from the MCP server.
+ * Uses two fresh app instances because StreamableHTTPServerTransport
+ * serves one client per instance.
+ */
+async function getWidgetHtml(): Promise<string> {
   // Get widget URI from resources/list
-  const listResponse = await request(app)
+  const { app: listApp } = createStubbedHttpApp();
+  const listResponse = await request(listApp)
     .post('/mcp')
     .set('Host', 'localhost')
     .set('Accept', STUB_ACCEPT_HEADER)
@@ -64,15 +79,11 @@ async function getWidgetHtml(app: ReturnType<typeof createStubbedHttpApp>['app']
       method: 'resources/list',
     });
   const listEnvelope = parseSseEnvelope(listResponse.text);
-  const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
-  const resources = listParsed.data?.resources ?? [];
-  // Match both local dev builds (local) and production builds (8-char hex)
-  const widgetUri =
-    resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/))
-      ?.uri ?? '';
+  const widgetUri = getWidgetUri(listEnvelope);
 
-  // Read widget HTML from resources/read
-  const response = await request(app)
+  // Read widget HTML from resources/read (fresh app)
+  const { app: readApp } = createStubbedHttpApp();
+  const response = await request(readApp)
     .post('/mcp')
     .set('Host', 'localhost')
     .set('Accept', STUB_ACCEPT_HEADER)
@@ -124,10 +135,9 @@ describe('oak-json-viewer widget resource E2E', () => {
   describe('resources/read', () => {
     // eslint-disable-next-line complexity
     it('returns HTML content with text/html+skybridge MIME type', async () => {
-      const { app } = createStubbedHttpApp();
-
-      // First get the widget URI from resources/list
-      const listResponse = await request(app)
+      // Get widget URI from resources/list
+      const { app: listApp } = createStubbedHttpApp();
+      const listResponse = await request(listApp)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)
@@ -137,15 +147,11 @@ describe('oak-json-viewer widget resource E2E', () => {
           method: 'resources/list',
         });
       const listEnvelope = parseSseEnvelope(listResponse.text);
-      const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
-      const resources = listParsed.data?.resources ?? [];
-      // Match both local dev builds (local) and production builds (8-char hex)
-      const widgetUri =
-        resources.find((r) =>
-          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
-        )?.uri ?? '';
+      const widgetUri = getWidgetUri(listEnvelope);
 
-      const response = await request(app)
+      // Read the widget resource (fresh app — transport is one-client)
+      const { app: readApp } = createStubbedHttpApp();
+      const response = await request(readApp)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)
@@ -173,16 +179,14 @@ describe('oak-json-viewer widget resource E2E', () => {
     });
 
     it('widget HTML includes Lexend font', async () => {
-      const { app } = createStubbedHttpApp();
-      const html = await getWidgetHtml(app);
+      const html = await getWidgetHtml();
 
       expect(html).toContain('Lexend');
       expect(html).toContain('fonts.googleapis.com');
     });
 
     it('widget HTML includes Oak brand colors', async () => {
-      const { app } = createStubbedHttpApp();
-      const html = await getWidgetHtml(app);
+      const html = await getWidgetHtml();
 
       // Light mode: soft green background
       expect(html).toContain('#bef2bd');
@@ -193,8 +197,7 @@ describe('oak-json-viewer widget resource E2E', () => {
     });
 
     it('widget HTML includes window.openai integration', async () => {
-      const { app } = createStubbedHttpApp();
-      const html = await getWidgetHtml(app);
+      const html = await getWidgetHtml();
 
       // Widget reads tool output from ChatGPT's window.openai API
       expect(html).toContain('window.openai');
@@ -202,8 +205,7 @@ describe('oak-json-viewer widget resource E2E', () => {
     });
 
     it('widget HTML includes Oak National Academy logo', async () => {
-      const { app } = createStubbedHttpApp();
-      const html = await getWidgetHtml(app);
+      const html = await getWidgetHtml();
 
       // Test behavior: Logo branding is present
       expect(html).toContain('Oak National Academy');

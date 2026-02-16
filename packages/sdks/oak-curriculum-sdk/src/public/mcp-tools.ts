@@ -117,6 +117,9 @@ export type {
   ConceptEdge,
 } from '../mcp/knowledge-graph-data.js';
 
+// Search retrieval service interface (dependency inversion for search SDK)
+export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';
+
 // Synonym utilities (ES export, lookup, phrase detection)
 export {
   buildElasticsearchSynonyms,

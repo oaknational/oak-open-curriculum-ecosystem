@@ -38,10 +38,12 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@elastic/elasticsearch": "^9.2.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/curriculum-sdk": "workspace:*",
+    "@oaknational/oak-search-sdk": "workspace:*",
     "dotenv": "^17.2.3",
     "zod": "^4.1.13"
   },

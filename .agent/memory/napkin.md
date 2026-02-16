@@ -1,5 +1,121 @@
 # Napkin
 
+## Session: 2026-02-16 (d) — Fix 17 E2E Failures
+
+### What Was Done
+
+- Diagnosed all 17 "pre-existing" E2E failures across 6 files
+- Root cause: MCP `StreamableHTTPServerTransport` serves exactly
+  one client per instance. Tests sharing an `app` via `beforeAll`
+  succeeded only on the first MCP request; subsequent requests
+  returned HTTP 500, which SSE parsers reported as "missing data"
+- Both the "HTTP 500" and "SSE parsing" failure categories had
+  the SAME root cause — not two different issues
+- Fix: each test expecting HTTP 200 from MCP now creates its own
+  fresh `createApp()` instance. Tests checking for 401 (auth
+  rejects before transport) were safe but updated for consistency
+- Fixed 6 files: `application-routing`, `auth-enforcement`,
+  `public-resource-auth-bypass`, `get-knowledge-graph`,
+  `widget-metadata`, `widget-resource`
+- Result: 25 E2E files, 191 tests, 0 failures
+- Type-check: pass. Lint: pass (0 errors). E2E: all green.
+
+### Mistakes and Corrections
+
+- Initial diagnosis categorised these as two separate root causes
+  ("HTTP 500" and "SSE parsing"). They were actually one root cause
+  (transport single-client) manifesting in two ways. Lesson: always
+  reproduce before theorising.
+- Missed the `type Express` import when removing `beforeAll` from
+  `public-resource-auth-bypass`. Caught by type-check.
+
+### Patterns to Remember
+
+- **Tests MUST be independent and idempotent.** A test that depends
+  on shared mutable state (like a shared `app` instance consumed by
+  a previous test) is not independent. It will pass or fail depending
+  on execution order, which means it is not idempotent. Shared
+  `beforeAll` setup for stateful resources (transport connections,
+  database sessions, etc.) is a code smell — each test must own its
+  own state. This is a fundamental testing principle, not specific
+  to MCP.
+- MCP `StreamableHTTPServerTransport({ sessionIdGenerator: undefined })`
+  still only handles one client connection. The `sessionIdGenerator`
+  disables session ID validation, not client isolation.
+- E2E tests must always create a fresh `createApp()` per MCP request
+  that expects a response through the transport (200). HTTP 401
+  responses bypass the transport (auth middleware rejects first).
+- `getWidgetHtml()` helper in `widget-resource.e2e.test.ts` needed
+  to create TWO fresh apps (one for `resources/list`, one for
+  `resources/read`) — caught by understanding the single-client rule.
+
+---
+
+## Session: 2026-02-16 (c) — Phase 3a Review, E2E Analysis, Plan/Prompt Update
+
+### What Was Done
+
+- Orchestrated sub-agent review of Phase 3a implementation
+  via subagent-architect. Existing code, architecture, and
+  test reviews confirmed sufficient. No critical issues.
+- Ran full E2E suite on HTTP server: 18 failures found
+- Verified pre-existing vs Phase 3a failures by running
+  E2E on baseline commit (git stash/pop): 17 pre-existing,
+  1 Phase 3a regression
+- Fixed Phase 3a regression: `server.e2e.test.ts` tool list
+  parity test needed 3 new aggregated tools added
+  (`browse-curriculum`, `explore-topic`, `search-sdk`)
+- Fully categorised 17 pre-existing E2E failures across
+  6 test files: 10 are HTTP 500 from `createMockRuntimeConfig`
+  tests, 7 are SSE parsing failures on second requests
+- Updated Phase 3a execution plan: all WS2 todos marked
+  completed, implementation notes added, E2E analysis
+  documented, follow-up tasks added for pre-existing
+  failures and test gaps
+- Updated semantic search session prompt: replaced
+  speculative "What Needs Doing Next" with factual
+  "Phase 3a Complete" section documenting the three
+  tools, architecture, module locations, and remaining
+  WS3/WS5 work
+
+### Mistakes and Corrections
+
+- **Used git stash to compare baseline** — user corrected:
+  stash can lead to lost work. All changes were recovered
+  (stash pop succeeded, stash list empty). In future, use
+  a separate worktree or just check git log to verify
+  baseline rather than stashing.
+- **Previous session reported "2 pre-existing E2E failures"**
+  — actually 17. The earlier session likely had turbo cache
+  hiding failures. Always run with `--force` or check
+  carefully when counting failures.
+
+### Patterns to Remember
+
+- When checking if failures are pre-existing vs regression:
+  use `git worktree` (not `git stash`) to run tests on the
+  baseline commit in a separate directory
+- E2E tests using `createMockRuntimeConfig()` fail with 500
+  errors. Tests using `loadRuntimeConfig(testEnv)` or
+  `createStubbedHttpApp()` pass. The mock config is missing
+  some required env properties or bootstrap steps.
+- SSE transport in E2E tests: second MCP requests to the
+  same app instance may fail with "SSE payload missing
+  data line" — likely a transport reconnection issue
+- `server.e2e.test.ts` has a hardcoded aggregated tools
+  list — must be updated when adding new aggregated tools.
+  The STDIO parity test (`tool-list-parity.e2e.test.ts`)
+  derives from the SDK's `toolNames` automatically.
+
+### Files Modified This Session
+
+- `.cursor/plans/phase_3a_mcp_search_integration_ce4db4af.plan.md` — full update
+- `.agent/prompts/semantic-search/semantic-search.prompt.md` — full update
+- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts` — tool list fix
+- `.agent/memory/napkin.md` — this update
+
+---
+
 ## Session: 2026-02-16 (b) — Phase 3 Plan Activation and Codebase Analysis
 
 ### What Was Done

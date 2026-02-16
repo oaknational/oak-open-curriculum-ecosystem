@@ -16,6 +16,8 @@ export interface StdioEnv {
   readonly MCP_LOGGER_FILE_APPEND?: string;
   readonly OAK_API_KEY?: string;
   readonly OAK_CURRICULUM_MCP_USE_STUB_TOOLS?: string;
+  readonly ELASTICSEARCH_URL?: string;
+  readonly ELASTICSEARCH_API_KEY?: string;
 }
 
 /**
@@ -60,6 +62,8 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
     MCP_LOGGER_FILE_APPEND: source.MCP_LOGGER_FILE_APPEND,
     OAK_API_KEY: source.OAK_API_KEY,
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
+    ELASTICSEARCH_URL: source.ELASTICSEARCH_URL,
+    ELASTICSEARCH_API_KEY: source.ELASTICSEARCH_API_KEY,
   };
 
   return {

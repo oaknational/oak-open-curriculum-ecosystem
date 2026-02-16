@@ -13,6 +13,7 @@ import {
   type ToolExecutionResult,
   type ToolName,
   type OakApiPathBasedClient,
+  type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 export interface McpToolsModule {
@@ -21,6 +22,7 @@ export interface McpToolsModule {
 
 export interface UniversalToolExecutors {
   readonly executeMcpTool?: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
+  readonly searchRetrieval?: SearchRetrievalService;
 }
 
 function formatError(message: string): CallToolResult {
@@ -37,6 +39,7 @@ export function createMcpToolsModule(
 
   const executor = createUniversalToolExecutor({
     executeMcpTool,
+    searchRetrieval: deps.searchRetrieval,
   });
 
   return {

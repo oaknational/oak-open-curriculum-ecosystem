@@ -26,7 +26,7 @@ correct results across all indexes.
 
 | Plan | Description | Status |
 |------|-------------|--------|
-| [wire-hybrid-search.md](../../active/wire-hybrid-search.md) | Connect SDK search to MCP tools | 🔄 Active (moved to `active/`) |
+| [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) | MCP search tools (WS1-WS2 done, WS3+WS5 next) | 🔄 Active |
 
 ---
 
@@ -43,7 +43,10 @@ correct results across all indexes.
 
 ## Success Criteria
 
-- [ ] MCP `semantic-search` tool calls SDK retrieval methods
-- [ ] Suggestions tool calls SDK `suggest`
-- [ ] All existing MCP curriculum tools continue to work
-- [ ] Quality gates pass
+- [x] Three MCP tools (`search-sdk`, `browse-curriculum`, `explore-topic`) wired to SDK retrieval (WS1-WS2)
+- [x] Filter parameters passed through correctly
+- [x] `Result<T, E>` errors surfaced as MCP errors
+- [x] All existing MCP tools unaffected
+- [x] All quality gates pass (191/191 E2E, 1241 SDK, 611 HTTP)
+- [ ] NL guidance, documentation, TSDoc (WS3)
+- [ ] Compare SDK search vs REST API search; replace if superior (WS5)

@@ -72,7 +72,7 @@ cd ecosystem/psycha/oak-curriculum-mcp
 ```json
 {
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "@oaknational/mcp-moria": "workspace:*",
     "@oaknational/mcp-histos-logger": "workspace:*",

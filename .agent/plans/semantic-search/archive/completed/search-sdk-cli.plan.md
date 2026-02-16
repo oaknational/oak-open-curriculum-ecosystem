@@ -7,7 +7,7 @@
 **Last Updated**: 2026-02-11
 
 > **MCP integration** is a separate concern — consuming the SDK, not
-> extracting it. See [wire-hybrid-search.md](../../active/wire-hybrid-search.md).
+> extracting it. See [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md).
 
 ---
 

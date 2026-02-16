@@ -14,7 +14,9 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
+  type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { createSearchRetrieval } from './search-retrieval-factory.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
 
@@ -23,6 +25,7 @@ export interface ToolHandlerDependencies {
   readonly executeMcpTool: typeof executeToolCall;
   readonly createExecutor: typeof createUniversalToolExecutor;
   readonly getResourceUrl: () => string;
+  readonly searchRetrieval?: SearchRetrievalService;
 }
 
 export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;
@@ -50,12 +53,14 @@ export type ToolRegistrationServer = McpServer;
 function buildToolHandlerDependencies(
   resourceUrl: string,
   overrides: ToolHandlerOverrides | undefined,
+  searchRetrieval: SearchRetrievalService | undefined,
 ): ToolHandlerDependencies {
   const defaultDependencies: ToolHandlerDependencies = {
     createClient: createOakPathBasedClient,
     executeMcpTool: executeToolCall,
     createExecutor: createUniversalToolExecutor,
     getResourceUrl: () => resourceUrl,
+    searchRetrieval,
   };
 
   return {
@@ -75,7 +80,8 @@ function buildToolHandlerDependencies(
  */
 export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
-  const deps = buildToolHandlerDependencies(resourceUrl, options.overrides);
+  const searchRetrieval = createSearchRetrieval(options.runtimeConfig.env, options.logger);
+  const deps = buildToolHandlerDependencies(resourceUrl, options.overrides, searchRetrieval);
   const stubExecutor = options.runtimeConfig.useStubTools
     ? createStubToolExecutionAdapter()
     : undefined;

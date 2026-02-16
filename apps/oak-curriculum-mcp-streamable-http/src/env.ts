@@ -74,6 +74,9 @@ const EnvSchema = z.object({
   ALLOWED_HOSTS: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   CORS_MODE: CorsModeSchema.optional(),
+  // Elasticsearch (optional — search tools disabled when absent)
+  ELASTICSEARCH_URL: z.string().optional(),
+  ELASTICSEARCH_API_KEY: z.string().optional(),
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
   ENVIRONMENT_OVERRIDE: z.string().optional(),

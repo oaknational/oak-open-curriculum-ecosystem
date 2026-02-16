@@ -80,6 +80,7 @@ export async function handleToolWithAuthInterception(
       logValidationFailureIfPresent(name, execution, logger);
       return execution;
     },
+    searchRetrieval: deps.searchRetrieval,
   });
 
   const result = await executor(tool.name, params ?? {});

@@ -20,6 +20,9 @@ import { GET_HELP_TOOL_DEF } from '../aggregated-help/index.js';
 import { GET_KNOWLEDGE_GRAPH_TOOL_DEF } from '../aggregated-knowledge-graph.js';
 import { GET_THREAD_PROGRESSIONS_TOOL_DEF } from '../aggregated-thread-progressions.js';
 import { GET_PREREQUISITE_GRAPH_TOOL_DEF } from '../aggregated-prerequisite-graph.js';
+import { SEARCH_SDK_TOOL_DEF, SEARCH_SDK_INPUT_SCHEMA } from '../aggregated-search-sdk/index.js';
+import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
+import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
 
 /**
  * Map of aggregated tool definitions with full MCP metadata.
@@ -44,4 +47,7 @@ export const AGGREGATED_TOOL_DEFS = {
   'get-knowledge-graph': GET_KNOWLEDGE_GRAPH_TOOL_DEF,
   'get-thread-progressions': GET_THREAD_PROGRESSIONS_TOOL_DEF,
   'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
+  'search-sdk': { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },
+  'browse-curriculum': { ...BROWSE_TOOL_DEF, inputSchema: BROWSE_INPUT_SCHEMA },
+  'explore-topic': { ...EXPLORE_TOOL_DEF, inputSchema: EXPLORE_INPUT_SCHEMA },
 } as const;
