@@ -23,7 +23,7 @@ import {
   makeGetSubjectAssets,
 } from './sdk-api-methods';
 
-/** Minimal client type for tests; adapters accept Pick<OakApiClient, 'GET'>. */
+/** Minimal client type for tests; adapters accept `Pick\<OakApiClient, 'GET'\>`. */
 type MinimalOakApiClient = Pick<OakApiClient, 'GET'>;
 
 /**

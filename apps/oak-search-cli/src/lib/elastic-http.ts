@@ -79,7 +79,7 @@ export type EsSearchFn = <T>(body: EsSearchRequest) => Promise<EsSearchResponse<
 
 /**
  * Lessons-specific search function type. Accepts both EsSearchFn and
- * (body) => Promise<EsSearchResponse<SearchLessonsIndexDoc>> so tests can pass
+ * `(body) =\> Promise\<EsSearchResponse\<SearchLessonsIndexDoc\>\>` so tests can pass
  * a fixed response without type assertions.
  */
 export type EsSearchFnForDoc<TDoc> = (body: EsSearchRequest) => Promise<EsSearchResponse<TDoc>>;
