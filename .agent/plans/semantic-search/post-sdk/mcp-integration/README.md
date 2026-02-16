@@ -3,7 +3,7 @@
 **Domain**: Wiring the Search SDK into MCP tools  
 **Intent**: Enable AI agents to use semantic search capabilities  
 **Impact**: Agents can search Oak curriculum with full hybrid search power  
-**Status**: ⏸️ Blocked by SDK validation (Phase 2e)
+**Status**: 🔄 In Progress — plan moved to `active/`
 
 ---
 
@@ -16,9 +16,9 @@ Search SDK. Wiring it up:
 2. Provides immediate value to agent workflows
 3. Exposes any SDK API issues early
 
-**However**, the SDK must first be validated against real
-Elasticsearch (Phase 2e) — it was completely rewritten
-during extraction.
+The SDK has been validated against real Elasticsearch
+(Phase 2e complete) — thread search benchmarks confirmed
+correct results across all indexes.
 
 ---
 
@@ -26,7 +26,7 @@ during extraction.
 
 | Plan | Description | Status |
 |------|-------------|--------|
-| [wire-hybrid-search.md](wire-hybrid-search.md) | Connect SDK search to MCP tools | ⏸️ Blocked by Phase 2e |
+| [wire-hybrid-search.md](../../active/wire-hybrid-search.md) | Connect SDK search to MCP tools | 🔄 Active (moved to `active/`) |
 
 ---
 
@@ -37,7 +37,7 @@ during extraction.
 | SDK extraction complete | ✅ |
 | All services return `Result<T, E>` | ✅ |
 | Comprehensive TSDoc | ✅ |
-| SDK validated against real ES (Phase 2e) | 📋 Pending |
+| SDK validated against real ES (Phase 2e) | ✅ Complete |
 
 ---
 

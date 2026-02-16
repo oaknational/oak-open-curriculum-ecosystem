@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-12
+**Last Updated**: 2026-02-16
 
 ---
 
@@ -13,9 +13,10 @@ path, 8 ground truths span 5 subjects (MRR=0.938, NDCG@10=0.902),
 and legacy `test-query-*.ts` scripts have been deleted. All SDK
 retrieval methods have been validated against live Elasticsearch.
 
+**Active plan**: [wire-hybrid-search.md](../../plans/semantic-search/active/wire-hybrid-search.md)
+
 **Next action**: Wire the Search SDK into the MCP curriculum servers
-to provide semantic search as an MCP tool. See
-[wire-hybrid-search.md](../../plans/semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md).
+to provide semantic search as an MCP tool.
 
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
@@ -221,26 +222,87 @@ Completed 2026-02-12. Six workstreams:
 
 **Plan**: [thread-search-sdk-integration.plan.md](../../plans/semantic-search/archive/completed/thread-search-sdk-integration.plan.md)
 
+### Code Quality Remediation ✅
+
+Two cross-cutting code quality workstreams completed
+2026-02-16, after developer onboarding:
+
+1. **TSDoc lint warnings**: Resolved all 1,693 TSDoc lint
+   warnings to 0 across the entire monorepo. Escaping
+   fixed at generator level. `eslint-plugin-tsdoc` enforces
+   regression prevention.
+2. **Remove type shortcuts**: Eliminated type assertions
+   (`as`, `as unknown`, `any`, `!`), `Reflect` API usage,
+   and `Record<string, unknown>` patterns across generators,
+   product code, and tests (137 files changed). Type guards,
+   `satisfies`, and widen-by-assignment patterns used instead.
+
 ---
 
 ## What Needs Doing Next
 
-### MCP Search Integration (Phase 3)
+### MCP Search Integration (Phase 3) — Active Plan
+
+**Plan**: [wire-hybrid-search.md](../../plans/semantic-search/active/wire-hybrid-search.md)
 
 Wire the Search SDK into the MCP curriculum servers
 (`apps/oak-curriculum-mcp-stdio/`,
 `apps/oak-curriculum-mcp-streamable-http/`), then compare
-with existing REST API search and likely replace it:
+with existing REST API search and likely replace it.
 
-- Add `semantic-search` MCP tool calling SDK retrieval
-- Pass filter parameters (subject, key stage, tier, etc.)
-- Handle `Result<T, E>` errors as MCP error responses
-- Ship tool examples mapping user intent to SDK calls
-- NL stays in MCP layer (ADR-107), SDK is deterministic
-- Compare semantic search with existing `search` tool (REST API)
-- If superior, replace REST API composite search with SDK-backed search
+#### How MCP Tools Work
 
-**Plan**: [wire-hybrid-search.md](../../plans/semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md)
+Two categories of tools exist:
+
+1. **Generated tools** — auto-created from the OpenAPI
+   schema during `pnpm type-gen`. Call the upstream Oak
+   REST API via `OakApiPathBasedClient`.
+2. **Aggregated tools** — hand-written, combine multiple
+   operations. Defined in
+   `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-*/`.
+   Examples: `search`, `fetch`, `get-ontology`.
+
+The `semantic-search` tool will be a new **aggregated
+tool** following the established pattern. The existing
+`search` tool (`aggregated-search/`) is the template.
+
+#### Execution Flow
+
+```text
+MCP Client → server.registerTool() handler
+  → createUniversalToolExecutor(deps)
+    → isAggregatedToolName(name)?
+      YES → executeAggregatedTool() → switch dispatch
+      NO  → deps.executeMcpTool() → generated tool → REST API
+```
+
+#### Key Architectural Decisions
+
+- **DI for Search SDK**: The current
+  `UniversalToolExecutorDependencies` centres on
+  `executeMcpTool` (REST API). The semantic search tool
+  needs a Search SDK instance. Extend deps or create a
+  dedicated dependency type.
+- **ES credentials**: Both MCP servers need
+  `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` env
+  vars. SDK instance created in the wiring layer, never
+  in the SDK itself.
+- **NL stays in MCP**: Per ADR-107, the SDK is
+  deterministic. NL interpretation expressed through tool
+  examples.
+- **Single tool with scope**: One `semantic-search` tool
+  with a `scope` parameter (`lessons`, `units`,
+  `sequences`) — simpler for agents.
+- **Error mapping**: `Result<T, RetrievalError>` → MCP
+  error responses. Never swallow errors.
+
+#### TDD Execution Sequence
+
+1. **WS1 (RED)**: Tool definition, input schema, tests — tests fail
+2. **WS2 (GREEN)**: Dependencies, env config, SDK instance, handler, registration — tests pass
+3. **WS3 (REFACTOR)**: Tool examples, documentation, TSDoc
+4. **WS4**: Quality gates, verify existing tools
+5. **WS5**: Compare with REST API search, replace if superior
 
 ### Phase 4 — Search Quality + Ecosystem
 
@@ -312,5 +374,6 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
+| [Active plan](../../plans/semantic-search/active/wire-hybrid-search.md) | MCP integration plan (with implementation guide) |
 | [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |
 | [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

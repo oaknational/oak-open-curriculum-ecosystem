@@ -1,0 +1,197 @@
+# Distilled Learnings
+
+Hard-won rules extracted from napkin sessions. Read this
+before every session. Every entry earned its place by
+changing behaviour.
+
+**Source**: Distilled from `archive/napkin-2026-02-16.md`
+(sessions 2026-02-10 to 2026-02-16).
+
+---
+
+## User Preferences
+
+- British spelling, grammar, and date formats
+- Plans must be **discoverable** (linked from README,
+  roadmap, AND session prompt)
+- Plans must be **actionable** (status tracking tables,
+  completion checklists, resolved open questions)
+- Archive docs are historical records — never update them
+- Listen to user priorities, not document structure
+- Try it before assuming it will not work
+
+## Repo-Specific Rules
+
+- `pnpm-workspace.yaml` must list only existing package
+  directories — a missing directory causes confusing turbo
+  scope
+- ADR index is the source of truth for ADR count; keep
+  README in sync
+- Generator templates in `type-gen/typegen/` are the
+  source of truth for anything in `src/types/generated/`
+- Generated doc comments need escaping at the GENERATOR
+  level, not in the output
+- `tsdoc.json` `extends` works with `@microsoft/tsdoc-config`
+  0.18.0; `TSDocConfigFile.findConfigPathForFolder` stops
+  at `package.json`/`tsconfig.json` boundaries — each
+  workspace needs its own `tsdoc.json` with `extends`
+- From `packages/sdks/oak-curriculum-sdk/`, repo root is
+  `../../../` not `../../`
+- `@oaknational` is confirmed npm org scope (no token yet)
+- `src/bulk/generators/` duplicates `vocab-gen/generators/`
+  files — both must be updated in parallel until resolved
+
+## TypeScript and Type Safety
+
+- `TSESLint.FlatConfig.Plugin` from `@typescript-eslint/utils`
+  bridges the `Rule.RuleModule` vs `TSESLint.RuleModule`
+  gap — eliminates `as unknown as ESLint.Plugin['rules']`
+- Zod v4 deprecated `ZodIssue` — use `core.$ZodIssue`
+  via `import type { core } from 'zod'`
+- `Object.getOwnPropertyDescriptor(obj, key)?.value`
+  returns `any` — assign to `const v: unknown = ...`
+- `const parsed: unknown = JSON.parse(json)` avoids
+  `no-unsafe-assignment`
+- `for...in` + `Object.prototype.hasOwnProperty.call()`
+  for iterating unknown objects
+- `isSubject()` then fallback for `AllSubjectSlug` to
+  `SearchSubjectSlug` mapping (KS4 variants)
+- Commander `this.args` in `function action(this: Command)`
+  avoids unused parameter lint errors
+
+## Elasticsearch
+
+- ES client v9: `document` not `body` for `client.index()`
+- ES client v9: spread readonly arrays before passing to
+  mutable params (`[...synonymSet.synonyms_set]`)
+- Thread subject filter uses `subject_slugs` (plural array
+  field); sequences use `subject_slug` (singular)
+- `extractStatusCode` centralises ES error code extraction
+  without assertions
+- `isPlainObject` type guard satisfies both
+  `IndicesIndexSettings` and `MappingTypeMapping`
+
+## Testing
+
+- Replace Express `_router` access in tests with HTTP
+  assertions via supertest — more resilient, tests actual
+  behaviour
+- Bulk operation factories should accept `startIndex`
+  rather than mutating readonly `_id` after creation
+- `ensurePathsOnSchema` creates a new object (spread) —
+  use `toStrictEqual` not `toBe` for structural equality
+- NEVER reclassify a test to a weaker category to permit
+  IO — refactor with DI instead
+- E2E: STDIO IO allowed, network IO forbidden. Smoke: all
+  IO allowed, NO mocks
+- Naming: `test:*` for vitest tests, `smoke:*` for
+  standalone tsx scripts
+- Compliant `process.env` pattern:
+  `loadRuntimeConfig(testEnv)` — never mutate global
+  `process.env`
+- `max-lines-per-function` (50 lines) — extract per-command
+  registration functions
+
+## TSDoc
+
+- `{@link ./path}` is NOT valid TSDoc — use backtick
+  references for module paths
+- Braces `{ }` in TSDoc trigger malformed inline tag
+- `>` in TSDoc examples needs backslash escape
+- Never use `\x00` in regex — use string-based placeholders
+  (e.g. `___TSDOC_SAFE_N___`)
+- `openapiTS` emits `@constant` as both single-line
+  (`/** @constant */`) and multi-line — regex must handle
+  both forms
+- ESLint plugins using dynamic file resolution
+  (`@microsoft/tsdoc-config`) must be marked `external`
+  in tsup bundles
+
+## Documentation and Markdown
+
+- Session prompts in `.agent/prompts/` should be updated
+  at end of each session, not just napkin
+- Fenced code blocks without language specifier fail
+  markdownlint MD040
+- `process.env.X = value` with trailing space in backticks
+  triggers MD038
+- Blank line between two blockquotes triggers MD028
+- NEVER compress docs to meet line limits — split files by
+  responsibility instead
+- When removing a workspace, also search TSDoc `@see`
+  links for old GitHub repo URLs
+
+## Architecture
+
+- NEVER collapse distinct HTTP semantics into a single
+  error kind — 404 and 451 have different meanings
+- Per-service error types are cleaner than a unified error
+  type — each service has different failure modes
+- After any major rewrite/re-architecture, validation
+  against the real system is non-negotiable before wiring
+  into consumers
+- When a directive review reveals significant work, update
+  the plan BEFORE coding
+- When a pre-existing eslint override exists in a file you
+  touch, fix the root cause (DRY/split) rather than
+  leaving the override
+
+## Domain Knowledge
+
+Three distinct curriculum concepts — NEVER conflate:
+
+1. **Thread** = Conceptual progression strand.
+   Programme-agnostic. Cross-cutting. Shows how ideas
+   build over time. The pedagogical backbone.
+2. **Sequence** = API organisational structure for data
+   storage and retrieval. A grouping by subject+phase.
+3. **Programme** = User-facing curriculum pathway.
+   Contextualised by key stage, tier, exam board.
+
+- MFL threads span french, german, and spanish
+  simultaneously — 164 threads across 16 subjects
+- Sequences are the closest search architecture analogue
+  to threads (both 2-way RRF, similar index size)
+
+## ESM Module System
+
+The monorepo is ESM-only (`"type": "module"`).
+
+- File extensions mandatory: `import { x } from './helper.js'`
+  (`.js` even for `.ts` files — TypeScript does not rewrite
+  imports)
+- No `__dirname` or `__filename` — use `import.meta.dirname`
+- No `require()` or `module.exports` — ESM only
+- JSON imports: `import data from './data.json' with { type: 'json' }`
+- Vitest mock paths need `.js`: `vi.mock('./module.js')`
+- tsup ESM config: `format: ['esm']`, `platform: 'node'`,
+  `target: 'node22'`
+- Common error "Cannot find module" → check missing `.js`
+  extension
+- Common error `__dirname is not defined` → use
+  `import.meta.dirname`
+
+## Workspace and Turbo
+
+- `workspace:^` not `workspace:*` — the caret preserves
+  semver intent and is replaced with actual version on publish
+- Turbo stops at first failure by default — use `--continue`
+  to see all errors across workspaces
+- E2E tests need explicit env in `turbo.json`:
+  `"env": ["OAK_API_KEY"]`
+- Semantic-release managed packages use
+  `"version": "0.0.0-development"`
+- Never commit `.turbo/` cache files
+- Quality gates always run in order: format → type-check →
+  lint → test → build
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
+| Test upstream API status codes | `curl -s -w "\n%{http_code}"` |
+| StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching — match on surrounding text or use Python |
+| `pnpm publish --dry-run` fails | Add `--no-git-checks` with uncommitted changes |
+| E2E `tool-examples-metadata` flaky | SSE payload timing — retry once before investigating |
+| `pnpm benchmark` not found | The command is `pnpm benchmark` not `pnpm eval:benchmark` |

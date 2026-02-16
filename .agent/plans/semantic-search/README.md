@@ -51,7 +51,7 @@ curriculum servers.
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Active plans (SDK extraction reference + remediation) | 🔄 Active |
+| `active/` | Active plans (MCP search integration) | 🔄 Active |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |
 | `post-sdk/` | Streams of post-extraction work | 📋 Ready |
 | `archive/` | Historical work | ✅ Reference only |
@@ -81,6 +81,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
+| [Active plan: MCP integration](active/wire-hybrid-search.md) | 🔄 Wire SDK search into MCP tools |
 | [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
 | [Public Release Readiness](archive/completed/public-release-readiness.plan.md) | ✅ Secrets, licence, package.json, docs, GitHub config, npm publish |
 | [Developer Onboarding Experience](archive/completed/developer-onboarding-experience.plan.md) | ✅ Onboarding journey, command/link integrity, release runbook |

@@ -26,4 +26,4 @@ The full extraction plan (Checkpoints A–E2) is complete:
 
 ## Next
 
-MCP integration: [../post-sdk/mcp-integration/wire-hybrid-search.md](../post-sdk/mcp-integration/wire-hybrid-search.md)
+MCP integration: [../active/wire-hybrid-search.md](../active/wire-hybrid-search.md)

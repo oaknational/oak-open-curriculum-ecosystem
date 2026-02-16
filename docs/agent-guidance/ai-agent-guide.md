@@ -6,9 +6,10 @@ This guide helps AI agents and human developers work effectively with the Oak MC
 
 1. Read [AGENT.md](../../.agent/directives/AGENT.md) and follow all instructions
 2. Read [rules.md](../../.agent/directives/rules.md) — the authoritative rules
-3. Read [testing-strategy.md](../../.agent/directives/testing-strategy.md) — TDD at all levels
-4. Create your todo list (see [Task Management](#task-management) below)
-5. Mark the first task as in-progress and begin
+3. Read [distilled.md](../../.agent/memory/distilled.md) — curated rules and patterns from prior sessions
+4. Read [testing-strategy.md](../../.agent/directives/testing-strategy.md) — TDD at all levels
+5. Create your todo list (see [Task Management](#task-management) below)
+6. Mark the first task as in-progress and begin
 
 ## Standard Architecture
 
@@ -100,6 +101,31 @@ Periodically re-read AGENT.md and the current plan to:
 
 See [GO.md](../../.agent/prompts/GO.md) for a structured grounding prompt with ACTION/REVIEW cadence.
 
+## Memory and Learning
+
+Agent sessions produce learnings — repo quirks, type patterns, build issues, user preferences — that are worth preserving across sessions. The persistence system has four layers, each with a distinct purpose:
+
+| Layer            | Location                | Lifespan        | Content                            |
+| ---------------- | ----------------------- | --------------- | ---------------------------------- |
+| Working memory   | `napkin.md`             | ~10-15 sessions | Chronological session journal      |
+| Distilled memory | `distilled.md`          | Long-lived      | Curated, high-signal rules         |
+| Experience       | `.agent/experience/`    | Indefinite      | Reflection and insight             |
+| Permanent docs   | ADRs, `/docs/`, READMEs | Indefinite      | Settled decisions and architecture |
+
+### Operational memory (napkin and distilled)
+
+1. **Every session**: read `distilled.md` first (compact, actionable), then the napkin. Log findings to the napkin as you work.
+2. **When the napkin exceeds ~1,200 lines**: follow the [distillation skill](../../.cursor/skills/distillation/SKILL.md) — extract patterns into `distilled.md`, archive the old napkin, and start fresh.
+3. **When consolidating docs**: check whether `distilled.md` entries have graduated to permanent documentation. If so, remove them from `distilled.md` — it should only hold what is not already captured permanently.
+
+The [napkin skill](../../.cursor/skills/napkin/SKILL.md) governs day-to-day usage; the [distillation skill](../../.cursor/skills/distillation/SKILL.md) governs rotation and curation.
+
+### Experience
+
+The `.agent/experience/` directory records first-person accounts of working sessions — what shifted, what emerged, what the work was like. It is deliberately not technical documentation, though some entries contain applied patterns alongside the reflection. See its [README](../../.agent/experience/README.md) for the continuity protocol and template.
+
+When consolidating docs, check whether experience files contain applied technical patterns that have matured into settled practice. If so, extract the technical content into permanent documentation while leaving the reflection in place.
+
 ## Common Pitfalls to Avoid
 
 ### Task Drift
@@ -137,6 +163,15 @@ See [GO.md](../../.agent/prompts/GO.md) for a structured grounding prompt with A
 - `.agent/directives/rules.md` — Authoritative rules
 - `.agent/prompts/GO.md` — Grounding prompt with ACTION/REVIEW cadence
 - `.agent/plans/` — Project plans and phases
+
+### Memory, Experience, and Learning
+
+- `.agent/memory/distilled.md` — Curated rules, patterns, and troubleshooting from prior sessions
+- `.agent/memory/napkin.md` — Current session journal (chronological log of work and findings)
+- `.agent/memory/archive/` — Rotated napkins preserved for reference
+- `.agent/experience/` — Subjective reflections and insights (see its README for the continuity protocol)
+- `.cursor/skills/napkin/SKILL.md` — Governs napkin usage (read at session start)
+- `.cursor/skills/distillation/SKILL.md` — Governs distillation and rotation protocol
 
 ### Documentation
 

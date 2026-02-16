@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **Developer onboarding next** — public release readiness complete  
-**Last Updated**: 2026-02-14  
+**Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
+**Last Updated**: 2026-02-16  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -16,8 +16,9 @@ admin, observability) return `Result<T, E>` with per-service
 error types and comprehensive TSDoc. Thread search is fully
 integrated (8 GTs, baselines validated against live ES).
 Public release readiness is complete (npm publish deferred
-until token is created). Next: developer onboarding
-experience, then wire the SDK into its first consumer (MCP).
+until token is created). Developer onboarding experience
+is complete. Type shortcuts have been removed across the
+monorepo. Next: wire the SDK into its first consumer (MCP).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -49,10 +50,13 @@ Phase 2f: Public Release Readiness                   ✅ COMPLETE
   Secrets audit, licence, package.json, docs, GitHub config
   npm publish deferred until token is created
          ↓
-Phase 2g: Developer Onboarding Experience
+Phase 2g: Developer Onboarding Experience             ✅ COMPLETE
   Canonical journey, command truth, link integrity
          ↓
-Phase 3: MCP Search Integration
+Phase 2h: Code Quality Remediation                     ✅ COMPLETE
+  Remove type shortcuts, TSDoc warnings
+         ↓
+Phase 3: MCP Search Integration                     🔄 IN PROGRESS
   Wire SDK retrieval into MCP tools
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
@@ -211,10 +215,24 @@ environment variable access inside the SDK.
 
 ---
 
+## Phase 2h: Code Quality Remediation ✅ Complete
+
+**Status**: ✅ Complete
+
+Cross-cutting code quality work completed after developer
+onboarding. Two workstreams:
+
+| WS | Scope | Status |
+| --- | --- | --- |
+| TSDoc lint warnings | Resolve all 1,693 TSDoc lint warnings to 0 | ✅ Complete |
+| Remove type shortcuts | Eliminate type assertions, Reflect API, Record patterns across generators, product code, and tests (137 files) | ✅ Complete |
+
+---
+
 ## Phase 3: MCP Search Integration
 
-**Status**: ⏸️ After public release + onboarding (Phases 2f, 2g)  
-**Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
+**Status**: 🔄 In Progress — all prerequisites complete
+**Plan**: [active/wire-hybrid-search.md](active/wire-hybrid-search.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
 consumer of the SDK. Then compare with existing REST API

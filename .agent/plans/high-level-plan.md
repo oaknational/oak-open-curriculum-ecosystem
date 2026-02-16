@@ -1,6 +1,6 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-12  
+**Last Updated**: 2026-02-16  
 **Scope**: Strategic overview for the Oak MCP Ecosystem. Details are in individual plan documents.
 
 ---
@@ -9,15 +9,12 @@
 
 The immediate sequence is:
 
-1. **Search SDK validation** — the SDK was completely
-   rewritten during extraction; validate against real
-   Elasticsearch before wiring into any consumer
-2. **MCP search integration** — wire the validated SDK
+1. **MCP search integration** — wire the validated SDK
    into MCP tools, compare with existing REST API search,
    likely replace it
-3. **SDK workspace separation** — split the Curriculum SDK
+2. **SDK workspace separation** — split the Curriculum SDK
    type-gen code from the runtime code
-4. **Castr integration** — replace `openapi-zod-client`
+3. **Castr integration** — replace `openapi-zod-client`
    and `openapi3-ts` with Castr for direct Zod v4
    generation
 
@@ -28,31 +25,32 @@ resource, and further MCP improvements.
 
 ## Active / Planned (Priority Order)
 
-### 1. Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
+### 1. Semantic Search — Status: 📋 MCP INTEGRATION NEXT (Priority 1)
 
 **Roadmap**: [semantic-search/roadmap.md](semantic-search/roadmap.md)
 
 SDK extraction is complete. All three services (retrieval,
 admin, observability) return `Result<T, E>` with per-service
-error types and comprehensive TSDoc. The SDK has 34 tests;
-the CLI has 934 tests. All quality gates pass.
+error types and comprehensive TSDoc. Thread search is fully
+integrated (8 GTs, MRR=0.938). The SDK has 36 tests; the
+CLI has 935 tests. All quality gates pass.
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
 | ES ingestion | 16,414 docs across 4 indexes | ✅ Complete |
 | Level 1 fundamentals | Synonyms, phrase boosting, noise filtering | ✅ Complete |
-| Ground truth foundation | 30 lessons, 2 units, 1 thread, 1 sequence | ✅ Complete |
+| Ground truth foundation | 30 lessons, 2 units, 8 threads, 1 sequence | ✅ Complete |
 | SDK + CLI extraction | Result pattern, TSDoc, Checkpoints A–E2 | ✅ Complete |
-| **SDK validation** | Validate against real ES after rewrite | 📋 **NEXT** |
-| MCP search integration | Wire SDK into MCP tools | 📋 Planned |
+| SDK validation | Validated against real ES (Phase 2e) | ✅ Complete |
+| Public release readiness | Secrets, licence, package.json, docs, GitHub config | ✅ Complete |
+| Developer onboarding | Canonical journey, command truth, link integrity | ✅ Complete |
+| Code quality remediation | TSDoc warnings (0), type shortcuts removed (137 files) | ✅ Complete |
+| **MCP search integration** | Wire SDK into MCP tools | 📋 **NEXT** |
 | Compare and replace | Evaluate vs REST API search, likely replace | 📋 Planned |
 | Search enhancements | GT expansion, Levels 2–4, bulk data analysis | 📋 Future |
 
-**Immediate work**: The SDK was completely rewritten and
-re-architected during extraction. Before wiring into MCP,
-validate it against real Elasticsearch — run the full
-evaluation suite via the CLI and confirm MRR/NDCG baselines
-hold.
+**Immediate work**: Wire the Search SDK into the MCP
+curriculum servers. See [wire-hybrid-search.md](semantic-search/active/wire-hybrid-search.md).
 
 ---
 
@@ -235,8 +233,14 @@ working artefacts.
 | OAuth 2.1 / Clerk Integration | [archive/completed/mcp-oauth-implementation-plan.md](archive/completed/mcp-oauth-implementation-plan.md) | Clerk AS live with Google SSO |
 | Remote Streaming HTTP | [archive/completed/remote-mcp-enablement-plan.md](archive/completed/remote-mcp-enablement-plan.md) | Vercel deploy available |
 | MCP Hardening | [archive/completed/mcp-hardening-plan.md](archive/completed/mcp-hardening-plan.md) | Spec-aligned transport |
-| Search SDK + CLI Extraction | [semantic-search/archive/completed/search-sdk-cli.plan.md](semantic-search/archive/completed/search-sdk-cli.plan.md) | 34 SDK tests, 934 CLI tests |
+| Search SDK + CLI Extraction | [semantic-search/archive/completed/search-sdk-cli.plan.md](semantic-search/archive/completed/search-sdk-cli.plan.md) | 36 SDK tests, 935 CLI tests |
 | TSDoc Compliance Fix | [archive/tsdoc-canonical-tag-migration.md](archive/tsdoc-canonical-tag-migration.md) | 462 files, eslint-plugin-tsdoc |
+| HTTP 451 Remediation | [semantic-search/archive/completed/transcript-451-test-doc-remediation.plan.md](semantic-search/archive/completed/transcript-451-test-doc-remediation.plan.md) | ADR-109, E2E test compliance |
+| Thread Search SDK Integration | [semantic-search/archive/completed/thread-search-sdk-integration.plan.md](semantic-search/archive/completed/thread-search-sdk-integration.plan.md) | 8 GTs, MRR=0.938 |
+| Public Release Readiness | [semantic-search/archive/completed/public-release-readiness.plan.md](semantic-search/archive/completed/public-release-readiness.plan.md) | npm publish deferred |
+| Developer Onboarding Experience | [semantic-search/archive/completed/developer-onboarding-experience.plan.md](semantic-search/archive/completed/developer-onboarding-experience.plan.md) | Canonical journey, command truth |
+| TSDoc Lint Warnings | — | 1,693 → 0 warnings, escaping at generator level |
+| Remove Type Shortcuts | — | 137 files, type guards replace assertions |
 | Type Discipline Restoration | [archive/type-discipline-restoration-plan.md](archive/type-discipline-restoration-plan.md) | Quality gates passing |
 | Strict Zod Schema Generation | [archive/strict-zod-schema-generation.md](archive/strict-zod-schema-generation.md) | .strict() on all schemas |
 | Widget Playwright Tests | [sdk-and-mcp-enhancements/archive/07-widget-playwright-tests-plan.md](sdk-and-mcp-enhancements/archive/07-widget-playwright-tests-plan.md) | E2E coverage |
@@ -265,6 +269,10 @@ working artefacts.
 | M5 | Search Level 1: Fundamentals | ✅ DONE |
 | M6 | Ground Truth Foundation | ✅ DONE |
 | M7 | Search SDK + CLI + Result + TSDoc | ✅ DONE |
+| M7a | SDK Validation against Real ES | ✅ DONE |
+| M7b | Public Release Readiness | ✅ DONE |
+| M7c | Developer Onboarding Experience | ✅ DONE |
+| M7d | Code Quality Remediation (TSDoc warnings, type shortcuts) | ✅ DONE |
 | **M8** | **MCP Search Integration** | 📋 **NEXT** |
 | M9 | SDK Workspace Decomposition (ADR-108, Step 1: 2-way split) | 📋 Planned |
 | M10 | Castr Integration | 📋 Planned |
