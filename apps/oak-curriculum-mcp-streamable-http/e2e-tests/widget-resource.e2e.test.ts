@@ -133,7 +133,6 @@ describe('oak-json-viewer widget resource E2E', () => {
   });
 
   describe('resources/read', () => {
-    // eslint-disable-next-line complexity
     it('returns HTML content with text/html+skybridge MIME type', async () => {
       // Get widget URI from resources/list
       const { app: listApp } = createStubbedHttpApp();

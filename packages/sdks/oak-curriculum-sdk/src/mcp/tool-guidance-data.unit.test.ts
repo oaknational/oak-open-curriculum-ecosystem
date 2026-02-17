@@ -18,8 +18,10 @@ describe('toolGuidanceData content quality', () => {
     expect(toolGuidanceData.toolCategories.agentSupport.isAgentSupport).toBe(true);
   });
 
-  it('discovery category includes search tool', () => {
-    expect(toolGuidanceData.toolCategories.discovery.tools).toContain('search');
+  it('discovery category includes semantic search tools', () => {
+    expect(toolGuidanceData.toolCategories.discovery.tools).toContain('search-sdk');
+    expect(toolGuidanceData.toolCategories.discovery.tools).toContain('explore-topic');
+    expect(toolGuidanceData.toolCategories.discovery.tools).toContain('browse-curriculum');
   });
 
   it('fetching category includes fetch tool', () => {
@@ -30,9 +32,9 @@ describe('toolGuidanceData content quality', () => {
     expect(toolGuidanceData.toolCategories.progression.tools).toContain('get-threads');
   });
 
-  it('findLessons workflow starts with search', () => {
+  it('findLessons workflow starts with search-sdk', () => {
     const firstStep = toolGuidanceData.workflows.findLessons.steps[0];
-    expect(firstStep.tool).toBe('search');
+    expect(firstStep.tool).toBe('search-sdk');
   });
 
   it('tips include guidance about fetch tool ID formats', () => {

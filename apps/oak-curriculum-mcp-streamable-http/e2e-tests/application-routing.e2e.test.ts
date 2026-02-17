@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /**
  * Application-Level E2E Tests for Method-Aware Auth Routing
  *

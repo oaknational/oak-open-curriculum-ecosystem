@@ -196,6 +196,35 @@ function buildPortCheckTimeoutError(port: number): Error {
   );
 }
 
+/**
+ * Creates a fresh application instance, starts it on an ephemeral port,
+ * runs a callback with the base URL, and tears down the server.
+ *
+ * `StreamableHTTPServerTransport` in stateless mode (`sessionIdGenerator: undefined`)
+ * handles exactly one MCP request per transport instance. The smoke suite
+ * therefore needs a fresh server for each MCP assertion. Non-MCP assertions
+ * (health checks, Accept header enforcement) can share the original server
+ * because Express middleware handles them before the transport is reached.
+ */
+export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>): Promise<T> {
+  const { createApp } = await import('../src/application.js');
+  const app = createApp();
+
+  const server = await new Promise<Server>((resolve, reject) => {
+    const instance = app.listen(EPHEMERAL_PORT, LOOPBACK_HOST, () => {
+      resolve(instance);
+    });
+    instance.on('error', reject);
+  });
+
+  try {
+    const port = getServerPort(server);
+    return await fn(`http://${LOOPBACK_HOST}:${String(port)}`);
+  } finally {
+    await closeSmokeServer(server);
+  }
+}
+
 function isServerNotRunningError(error: unknown): error is NodeJS.ErrnoException {
   return Boolean(
     error &&

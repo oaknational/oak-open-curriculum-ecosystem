@@ -1,15 +1,21 @@
 /**
- * Runtime-adaptive environment utilities for MCP applications.
+ * Environment utilities for MCP applications.
  *
- * This library provides adaptive environment variable access that works across
- * different runtime environments (Node.js, Edge, Browser) using feature detection.
+ * Provides `.env` file loading and shared Zod schemas for
+ * common environment variable contracts.
+ *
+ * Schemas are opt-in: apps import only what they need.
  */
 
-// Export adaptive environment (default)
-export { createAdaptiveEnvironment } from './adaptive';
 export { findRepoRoot, loadRootEnv } from './repo-root';
+export type { LoadRootEnvOptions } from './repo-root';
 
-/**
- * Environment provider interface for consistent environment variable access
- */
-export type { EnvironmentProvider } from './adaptive';
+// Shared env contract schemas — import only the ones you need
+export {
+  OakApiKeyEnvSchema,
+  ElasticsearchEnvSchema,
+  LoggingEnvSchema,
+  LOG_LEVELS,
+  NODE_ENVS,
+} from './schemas/index';
+export type { OakApiKeyEnv, ElasticsearchEnv, LoggingEnv } from './schemas/index';

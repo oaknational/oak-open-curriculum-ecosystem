@@ -19,4 +19,5 @@
 export { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from './tool-definition.js';
 export type { BrowseArgs } from './types.js';
 export { validateBrowseArgs } from './validation.js';
+export { buildBrowseSummary } from './formatting.js';
 export { runBrowseTool } from './execution.js';

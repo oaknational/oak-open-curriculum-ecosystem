@@ -82,29 +82,6 @@ function normaliseSubject(
 }
 
 /**
- * Validates and normalises raw MCP input to strongly-typed SearchSdkArgs.
- *
- * Accepts an object with `text`, `scope`, and optional filter fields.
- * Validates structural shape with Zod, then narrows enums using generated
- * type guards.
- *
- * @param input - Raw input from MCP tool call (unknown type)
- * @returns Result with validated SearchSdkArgs or error message
- *
- * @example
- * ```typescript
- * const result = validateSearchSdkArgs({
- *   text: 'photosynthesis',
- *   scope: 'lessons',
- *   keyStage: 'ks3',
- *   subject: 'science',
- * });
- * if (result.ok) {
- *   // result.value is SearchSdkArgs with narrowed types
- * }
- * ```
- */
-/**
  * Structurally validates and narrows scope, keyStage, and subject from parsed data.
  */
 function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
@@ -135,6 +112,29 @@ function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
   };
 }
 
+/**
+ * Validates and normalises raw MCP input to strongly-typed SearchSdkArgs.
+ *
+ * Accepts an object with `text`, `scope`, and optional filter fields.
+ * Validates structural shape with Zod, then narrows enums using generated
+ * type guards.
+ *
+ * @param input - Raw input from MCP tool call (unknown type)
+ * @returns Result with validated SearchSdkArgs or error message
+ *
+ * @example
+ * ```typescript
+ * const result = validateSearchSdkArgs({
+ *   text: 'photosynthesis',
+ *   scope: 'lessons',
+ *   keyStage: 'ks3',
+ *   subject: 'science',
+ * });
+ * if (result.ok) {
+ *   // result.value is SearchSdkArgs with narrowed types
+ * }
+ * ```
+ */
 export function validateSearchSdkArgs(
   input: unknown,
 ): { ok: true; value: SearchSdkArgs } | { ok: false; message: string } {

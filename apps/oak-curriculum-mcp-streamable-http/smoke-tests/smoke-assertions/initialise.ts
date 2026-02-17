@@ -3,15 +3,28 @@ import assert from 'node:assert/strict';
 import {
   ensureBoolean,
   ensureRecord,
-  ensureString,
   fetchJson,
   parseFirstSsePayload,
   createAuthHeaders,
 } from './common.js';
 import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
 import { createAssertionLogger, logAssertionSuccess } from './logging.js';
-import type { Logger } from '@oaknational/mcp-logger';
 
+/**
+ * Proves the server can complete an MCP initialize handshake.
+ *
+ * This is the most fundamental MCP assertion: can a client send
+ * `initialize` and receive a valid capabilities response?
+ *
+ * In local modes each MCP assertion runs against a fresh server
+ * instance because `StreamableHTTPServerTransport` in stateless mode
+ * handles exactly one MCP request per transport instance.
+ *
+ * Validation edge cases (e.g. missing clientInfo) are proven in E2E
+ * tests which create a fresh app instance per test.
+ *
+ * @see e2e-tests/server.e2e.test.ts — "rejects initialize without clientInfo"
+ */
 export async function assertInitialiseHandshake(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'initialise');
   const headers = {
@@ -20,57 +33,6 @@ export async function assertInitialiseHandshake(context: SmokeContext): Promise<
     Accept: REQUIRED_ACCEPT,
   };
 
-  await assertInitialiseWithoutClientInfo(context, headers, logger);
-  await assertInitialiseWithClientInfo(context, headers, logger);
-}
-
-async function assertInitialiseWithoutClientInfo(
-  context: SmokeContext,
-  headers: Record<string, string>,
-  logger: Logger,
-): Promise<void> {
-  const response = await fetchJson(new URL('/mcp', context.baseUrl), {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 'init-no-client',
-      method: 'initialize',
-      params: {
-        protocolVersion: '2025-06-18',
-        capabilities: {},
-      },
-    }),
-  });
-  logger.debug('Initialise without clientInfo response', {
-    status: response.res.status,
-    body: response.text,
-  });
-  if (context.mode === 'remote' && response.res.status !== 200) {
-    logger.warn('Remote initialise without clientInfo failed', {
-      status: response.res.status,
-      body: response.text,
-    });
-    return;
-  }
-  assert.equal(response.res.status, 200, 'Initialise without clientInfo should return 200');
-  const envelope = parseFirstSsePayload(response.text);
-  const initialiseError = ensureRecord(envelope.error, 'initialise error');
-  const initialiseMessage = ensureString(initialiseError.message, 'initialise error message');
-  assert.notEqual(initialiseMessage.length, 0, 'Initialise error message should be present');
-  assert.match(
-    initialiseMessage.toLowerCase(),
-    /clientinfo/,
-    'Initialise error should mention clientInfo',
-  );
-  logAssertionSuccess(logger, 'Initialise without clientInfo rejected with explanatory error');
-}
-
-async function assertInitialiseWithClientInfo(
-  context: SmokeContext,
-  headers: Record<string, string>,
-  logger: Logger,
-): Promise<void> {
   const response = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
@@ -85,18 +47,19 @@ async function assertInitialiseWithClientInfo(
       },
     }),
   });
-  logger.debug('Initialise with clientInfo response', {
+  logger.debug('Initialise response', {
     status: response.res.status,
     body: response.text,
   });
   if (context.mode === 'remote' && response.res.status !== 200) {
-    logger.warn('Remote initialise with clientInfo failed', {
+    logger.warn('Remote initialise failed', {
       status: response.res.status,
       body: response.text,
     });
     return;
   }
-  assert.equal(response.res.status, 200, 'Initialise with clientInfo should return 200');
+  assert.equal(response.res.status, 200, 'Initialise should return 200');
+
   const envelope = parseFirstSsePayload(response.text);
   const result = ensureRecord(envelope.result, 'initialise result');
   const capabilities = ensureRecord(result.capabilities, 'initialise capabilities');
@@ -106,5 +69,5 @@ async function assertInitialiseWithClientInfo(
     true,
     'Initialise should advertise listChanged capability',
   );
-  logAssertionSuccess(logger, 'Initialise with clientInfo succeeded and advertised listChanged');
+  logAssertionSuccess(logger, 'Initialise handshake succeeded and advertised listChanged');
 }

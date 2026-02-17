@@ -27,6 +27,18 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('progression');
   });
 
+  it('has explore-curriculum prompt', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'explore-curriculum');
+    expect(prompt).toBeDefined();
+    expect(prompt?.description).toContain('Explore');
+  });
+
+  it('has learning-progression prompt', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'learning-progression');
+    expect(prompt).toBeDefined();
+    expect(prompt?.description).toContain('progression');
+  });
+
   it('all prompts have required fields', () => {
     for (const prompt of MCP_PROMPTS) {
       expect(prompt.name).toBeDefined();
@@ -122,6 +134,67 @@ describe('getPromptMessages', () => {
       });
       const content = messages.map((m) => m.content.text).join(' ');
       expect(content).toMatch(/get-help|get-ontology/);
+    });
+  });
+
+  describe('explore-curriculum prompt', () => {
+    it('returns messages with topic in content', () => {
+      const messages = getPromptMessages('explore-curriculum', { topic: 'volcanos' });
+      expect(messages).toBeDefined();
+      expect(messages.length).toBeGreaterThan(0);
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('volcanos');
+    });
+
+    it('includes subject when provided', () => {
+      const messages = getPromptMessages('explore-curriculum', {
+        topic: 'volcanos',
+        subject: 'geography',
+      });
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('geography');
+    });
+
+    it('references explore-topic tool', () => {
+      const messages = getPromptMessages('explore-curriculum', { topic: 'volcanos' });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('explore-topic');
+    });
+  });
+
+  describe('learning-progression prompt', () => {
+    it('returns messages with concept and subject', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
+        subject: 'maths',
+      });
+      expect(messages).toBeDefined();
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('algebra');
+      expect(content).toContain('maths');
+    });
+
+    it('references search-sdk with threads scope', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
+        subject: 'maths',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('search-sdk');
+      expect(content).toContain('threads');
+    });
+
+    it('references get-thread-progressions and get-prerequisite-graph', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
+        subject: 'maths',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('get-thread-progressions');
+      expect(content).toContain('get-prerequisite-graph');
     });
   });
 

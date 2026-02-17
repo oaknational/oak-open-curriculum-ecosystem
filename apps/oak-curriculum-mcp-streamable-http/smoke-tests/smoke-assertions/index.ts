@@ -10,6 +10,7 @@ import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import { assertAuthenticatedToolCall } from './authenticated.js';
+import { withEphemeralServer } from '../local-server.js';
 import type { SmokeContext } from './types.js';
 
 export { type SmokeContext } from './types.js';
@@ -30,36 +31,62 @@ export async function runSmokeAssertions(context: SmokeContext): Promise<void> {
   context.logger.info('Finished smoke assertions', { mode: context.mode });
 }
 
+/**
+ * Runs a single assertion against a freshly created server instance.
+ *
+ * `StreamableHTTPServerTransport` in stateless mode (`sessionIdGenerator: undefined`)
+ * handles exactly one MCP request per transport instance. Each MCP-level
+ * assertion therefore needs its own server. Non-MCP assertions (health,
+ * Accept header enforcement) share the original server because Express
+ * middleware handles them before the transport is reached.
+ */
+async function withFreshServer(
+  baseContext: SmokeContext,
+  assertion: (context: SmokeContext) => Promise<void>,
+): Promise<void> {
+  await withEphemeralServer(async (baseUrl) => {
+    await assertion({ ...baseContext, baseUrl });
+  });
+}
+
 async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
-  // local-stub and local-live modes have auth bypass enabled
-  // so we skip auth enforcement assertions
+  // ── HTTP-level assertions ─────────────────────────────────────────
+  // These are handled by Express middleware before the MCP transport
+  // is reached, so they can share the original server instance.
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  // Auth bypass enabled - skip assertAuthRequired
-  await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context, { expectedMinimum: 6 }); // Stub mode has limited tools
-  await assertValidationFailures(context);
-  await assertSuccessfulToolCall(context);
-  await assertSynonymCanonicalisation(context);
+
+  // ── MCP protocol assertions ───────────────────────────────────────
+  // Each assertion gets a fresh server instance because the stateless
+  // transport handles exactly one MCP request per transport instance.
+  // Auth bypass is enabled — skip assertAuthRequired.
+  await withFreshServer(context, assertInitialiseHandshake);
+  await withFreshServer(context, (ctx) => assertToolCatalogue(ctx, { expectedMinimum: 6 }));
+  await withFreshServer(context, assertValidationFailures);
+  await withFreshServer(context, assertSuccessfulToolCall);
+  await withFreshServer(context, assertSynonymCanonicalisation);
 }
 
 async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<void> {
-  // For auth enforcement mode, we only test auth and discovery
-  // MCP protocol tests would fail without a real Clerk token
+  // For auth enforcement mode, we only test auth and discovery.
+  // MCP protocol tests would fail without a real Clerk token.
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
   await assertAuthRequired(context);
   await assertAuthenticatedToolCall(context);
   // TODO: Add OAuth discovery assertions
-  // Skip MCP protocol tests - they require real Clerk token
 }
 
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
+  // Remote assertions run against a deployed server where each request
+  // may hit a different Vercel function instance. Non-200 responses are
+  // treated as warnings (not hard failures) because warm instances with
+  // a consumed stateless transport may legitimately return 500.
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  await assertClerkJwksAccessible(context); // Verify Clerk JWKS is reachable (if OAuth configured)
+  await assertClerkJwksAccessible(context);
   await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context, { expectedMinimum: 28 }); // Remote has all 28 tools
+  await assertToolCatalogue(context, { expectedMinimum: 28 });
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);

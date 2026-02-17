@@ -55,8 +55,11 @@ This plan prioritises:
 | ----------------------------- | -------------------- | ---------------------- |
 | `loadRootEnv()`               | 5+ files across apps | ✅ Actively used       |
 | `findRepoRoot()`              | `loadRootEnv()`      | ✅ Internal dependency |
-| `createAdaptiveEnvironment()` | Only its own tests   | ❌ **DEAD CODE**       |
-| `EnvironmentProvider` type    | None                 | ❌ **DEAD CODE**       |
+| `createAdaptiveEnvironment()` | ~~Only its own tests~~ | ✅ **REMOVED** (dead code deleted) |
+| `EnvironmentProvider` type    | ~~None~~             | ✅ **REMOVED** (dead code deleted) |
+| `OakApiKeyEnvSchema`          | HTTP server          | ✅ Shared contract     |
+| `ElasticsearchEnvSchema`      | HTTP server          | ✅ Shared contract     |
+| `LoggingEnvSchema`            | HTTP server          | ✅ Shared contract     |
 
 ### Common Patterns Across Apps
 
@@ -100,11 +103,12 @@ Each app implements its own:
 
 **Impact**: Inconsistency, duplication, maintenance burden, cognitive overhead for developers switching between apps.
 
-### Problem 2: Dead Code in `@oaknational/mcp-env`
+### ~~Problem 2: Dead Code in `@oaknational/mcp-env`~~ (Resolved)
 
-`createAdaptiveEnvironment()` (177 lines) is unused by any product code. It was designed for Edge/Browser/Node runtime detection but never adopted.
-
-**Impact**: Maintenance burden, confusion about what the package provides, misleading documentation.
+~~`createAdaptiveEnvironment()` (177 lines) was unused by any product code.~~
+Dead code (`createAdaptiveEnvironment`, `EnvironmentProvider`, all supporting
+type guards) has been removed. Shared Zod schemas (`OakApiKeyEnvSchema`,
+`ElasticsearchEnvSchema`, `LoggingEnvSchema`) added as opt-in contracts.
 
 ### Problem 3: Inconsistent DI Patterns
 

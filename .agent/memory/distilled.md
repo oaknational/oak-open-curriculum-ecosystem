@@ -48,6 +48,13 @@ changing behaviour.
   gap — eliminates `as unknown as ESLint.Plugin['rules']`
 - Zod v4 deprecated `ZodIssue` — use `core.$ZodIssue`
   via `import type { core } from 'zod'`
+- Zod v4 deprecated `.merge()` — use `A.extend(B.shape)`
+  to compose Zod object schemas. Caught by
+  `@typescript-eslint/no-deprecated` lint rule.
+- Shared Zod schemas are opt-in contracts: define fields
+  as required in the schema, consumers use `.partial()` for
+  optionality. This preserves the contract semantics: "if
+  you use this capability, you must satisfy these fields."
 - `Object.getOwnPropertyDescriptor(obj, key)?.value`
   returns `any` — assign to `const v: unknown = ...`
 - `const parsed: unknown = JSON.parse(json)` avoids

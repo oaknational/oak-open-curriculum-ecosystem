@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-24T17:11:53.822Z
+ * Generated at: 2026-02-17T10:42:25.994Z
  */
 
 /* eslint-disable no-restricted-properties */
@@ -101,7 +101,7 @@ export type GroundTruthQuery = z.infer<typeof GroundTruthQuerySchema>;
 /**
  * Zod schema for validating lesson slugs against bulk data.
  *
- * Validates against 12360 known slugs from 30 subject/phase combinations.
+ * Validates against 12391 known slugs from 30 subject/phase combinations.
  * Uses runtime Set lookup (not union type) for efficiency.
  *
  * @generated

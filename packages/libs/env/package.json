@@ -2,7 +2,7 @@
   "name": "@oaknational/mcp-env",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Runtime-adaptive environment library for MCP applications",
+  "description": "Environment utilities and shared Zod schemas for MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -30,7 +30,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
@@ -42,9 +43,10 @@
   "keywords": [
     "mcp",
     "environment",
-    "adaptive",
     "env",
-    "config"
+    "config",
+    "zod",
+    "schemas"
   ],
   "author": {
     "name": "Jim Cresswell",

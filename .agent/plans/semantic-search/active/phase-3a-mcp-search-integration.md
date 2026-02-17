@@ -30,14 +30,14 @@ todos:
     content: "WS2 (GREEN): All SDK tests pass (1241 across 113 files). Both server unit/integration tests pass."
     status: completed
   - id: ws3-nl-guidance
-    content: "WS3 (REFACTOR): NL guidance layer -- review and extend tool descriptions with NL-to-structured examples per scope, teacher-oriented result summaries, cross-tool workflow guidance, prerequisite guidance integration."
-    status: pending
+    content: "WS3 (REFACTOR): NL guidance layer -- tool-guidance-data.ts updated with search-sdk, explore-topic, browse-curriculum in discovery category, workflow references, new workflows (exploreTopic, discoverCurriculum), tips. Extracted workflows to tool-guidance-workflows.ts."
+    status: completed
   - id: ws3-help-prompts
-    content: "WS3 (REFACTOR): Extend get-help tool-guidance-data.ts for new tools. Add/update MCP prompts for search workflows. Update prerequisite-guidance.ts with search tool workflows."
-    status: pending
+    content: "WS3 (REFACTOR): tool-guidance-data.ts extended for new tools. mcp-prompts.ts updated: find-lessons, lesson-planning, progression-map reference search-sdk; added explore-curriculum and learning-progression prompts (5 total). Message generators extracted to mcp-prompt-messages.ts."
+    status: completed
   - id: ws3-docs-tsdoc
-    content: "WS3 (REFACTOR): Comprehensive TSDoc on search-retrieval-types.ts and all aggregated-* module public APIs. Update READMEs for curriculum-sdk, stdio server, http server."
-    status: pending
+    content: "WS3 (REFACTOR): TSDoc audit (detached block in validation.ts fixed). READMEs updated for curriculum-sdk (search tools section), STDIO server (search tools optional section), HTTP server (search tools + ES factory docs)."
+    status: completed
   - id: ws4-gates
     content: "WS4: Full quality gate chain (type-gen through smoke:dev:stub). Phase 3a regression in server.e2e.test.ts fixed (tool list parity). 17 pre-existing E2E failures documented."
     status: completed
@@ -48,8 +48,8 @@ todos:
     content: "WS4 follow-up: Fix 17 E2E failures — root cause was StreamableHTTPServerTransport single-client-per-instance. Fixed by creating fresh createApp() per test."
     status: completed
   - id: ws4-test-gaps
-    content: "WS4 follow-up: Add unit tests for search-retrieval-factory.ts. Add formatting unit tests for browse tool. Verify mock shapes track generated types."
-    status: pending
+    content: "WS4 follow-up: search-retrieval-factory.ts has 9 integration tests (DI with FakeClient brand type). browse formatting.unit.test.ts has 7 unit tests (createFacet/createFacets helpers for generated SequenceFacet type). Mock shapes verified against generated types."
+    status: completed
   - id: ws5-compare
     content: "WS5: Compare new search tools vs old REST API search on representative queries."
     status: pending

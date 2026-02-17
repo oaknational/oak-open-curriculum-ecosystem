@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/mcp-env';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
@@ -58,36 +59,37 @@ function deriveMcpCanonicalUri(
 
 const CorsModeSchema = z.enum(['allow_all', 'explicit', 'automatic']).default('automatic');
 
-const EnvSchema = z.object({
-  OAK_API_KEY: z.string().min(1, 'OAK_API_KEY is required'),
-  // Clerk Authentication
-  CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
-  CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
-  // MCP Server Configuration
-  BASE_URL: z.url().optional(),
-  MCP_CANONICAL_URI: z.url().optional(),
-  PORT: z.string().optional(),
-  // Transport Mode
-  REMOTE_MCP_MODE: ModeSchema.optional(),
-  // Security & Development
-  DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
-  ALLOWED_HOSTS: z.string().optional(),
-  ALLOWED_ORIGINS: z.string().optional(),
-  CORS_MODE: CorsModeSchema.optional(),
-  // Elasticsearch (optional — search tools disabled when absent)
-  ELASTICSEARCH_URL: z.string().optional(),
-  ELASTICSEARCH_API_KEY: z.string().optional(),
-  // Logging
-  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
-  ENVIRONMENT_OVERRIDE: z.string().optional(),
-  NODE_ENV: z.string().optional(),
-  // Vercel System Environment Variables (read-only, for derivation logic)
-  VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
-  VERCEL_URL: z.string().optional(),
-  VERCEL_BRANCH_URL: z.string().optional(),
-  VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
-  VERCEL_GIT_COMMIT_SHA: z.string().optional(),
-});
+/**
+ * HTTP server environment schema.
+ *
+ * Composes shared contracts from `@oaknational/mcp-env` with
+ * HTTP-server-specific fields. Elasticsearch is `.partial()` because
+ * search tools are simply disabled when credentials are absent.
+ */
+const EnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.partial().shape)
+  .extend(LoggingEnvSchema.shape)
+  .extend({
+    // Clerk Authentication
+    CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
+    CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
+    // MCP Server Configuration
+    BASE_URL: z.url().optional(),
+    MCP_CANONICAL_URI: z.url().optional(),
+    PORT: z.string().optional(),
+    // Transport Mode
+    REMOTE_MCP_MODE: ModeSchema.optional(),
+    // Security & Development
+    DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
+    ALLOWED_HOSTS: z.string().optional(),
+    ALLOWED_ORIGINS: z.string().optional(),
+    CORS_MODE: CorsModeSchema.optional(),
+    // Vercel System Environment Variables (read-only, for derivation logic)
+    VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
+    VERCEL_URL: z.string().optional(),
+    VERCEL_BRANCH_URL: z.string().optional(),
+    VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
+    VERCEL_GIT_COMMIT_SHA: z.string().optional(),
+  });
 
 export type Env = z.infer<typeof EnvSchema>;
 

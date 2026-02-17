@@ -45,12 +45,12 @@ CLI has 935 tests. All quality gates pass.
 | Public release readiness | Secrets, licence, package.json, docs, GitHub config | ✅ Complete |
 | Developer onboarding | Canonical journey, command truth, link integrity | ✅ Complete |
 | Code quality remediation | TSDoc warnings (0), type shortcuts removed (137 files) | ✅ Complete |
-| **MCP search integration** | Wire SDK into MCP tools — WS1-WS2 done, WS3 (NL guidance) and WS5 (compare/replace) remain | 🔄 **IN PROGRESS** |
-| Compare and replace | Evaluate vs REST API search, likely replace | 📋 Planned |
+| **MCP search integration** | Wire SDK into MCP tools — WS1-WS4 done, only WS5 (compare/replace) remains | 🔄 **IN PROGRESS** |
+| Compare and replace | Evaluate SDK search vs REST API search, likely replace | 📋 Planned (WS5) |
 | Search enhancements | GT expansion, Levels 2–4, bulk data analysis | 📋 Future |
 
-**Immediate work**: WS3 (NL guidance, docs, TSDoc) then
-WS5 (compare SDK search vs REST API; replace if superior).
+**Immediate work**: WS5 (compare SDK search vs REST API on
+representative queries; replace if superior). WS1-WS4 complete.
 See [phase-3a-mcp-search-integration.md](semantic-search/active/phase-3a-mcp-search-integration.md).
 
 ---
@@ -150,6 +150,20 @@ except the single historical note. Quality gates pass.
 
 ---
 
+### 4b. Streamable HTTP Transport Bug — Status: 🐛 ACTIVE (Priority: HIGH)
+
+**Plan**: [semantic-search/active/streamable-http-transport-stateless-bug.md](semantic-search/active/streamable-http-transport-stateless-bug.md)
+
+The streamable-http server creates one `StreamableHTTPServerTransport` in
+stateless mode at startup and reuses it. The MCP SDK (v1.26.0) forbids
+this — stateless transports throw after the first request. No real MCP
+client can complete a session against the local dev server.
+
+Needs architectural decision: stateful mode (session tracking) vs
+per-request transport (serverless) vs dual mode (config-selected).
+
+---
+
 ### 5. Search Quality Enhancements — Status: 📋 PLANNED (Priority 5)
 
 **Plan**: [semantic-search/roadmap.md](semantic-search/roadmap.md) (Phase 4)  
@@ -164,6 +178,7 @@ Multiple parallel streams after MCP integration:
 | Level 3: Modern ES features | [modern-es-features.md](semantic-search/post-sdk/search-quality/modern-es-features.md) | 📋 Pending |
 | Level 4: AI enhancement (destination) | [ai-enhancement.md](semantic-search/post-sdk/search-quality/ai-enhancement.md) | ⏸️ Blocked |
 | Bulk data / vocabulary mining | [vocabulary-mining.md](semantic-search/post-sdk/bulk-data-analysis/vocabulary-mining.md) | 📋 Pending |
+| Bulk schema-driven type-gen | [bulk-schema-driven-type-gen.md](semantic-search/post-sdk/bulk-schema-driven-type-gen.md) | 📋 Pending |
 | SDK API / filter testing | [filter-testing.md](semantic-search/post-sdk/sdk-api/filter-testing.md) | 📋 Pending |
 | Subject domain model | [move-search-domain-knowledge-to-typegen-time.md](semantic-search/post-sdk/move-search-domain-knowledge-to-typegen-time.md) | 📋 Pending |
 
@@ -220,6 +235,7 @@ working artefacts.
 | Generic Pipeline Extraction (WS1 per ADR-108) | [pipeline-enhancements/openapi-to-tooling-integration-plan.md](pipeline-enhancements/openapi-to-tooling-integration-plan.md) | ⏸️ Blocked by #2 + #3 |
 | Generic Runtime Extraction (WS3 per ADR-108) | [pipeline-enhancements/openapi-to-mcp-framework-extraction-plan.md](pipeline-enhancements/openapi-to-mcp-framework-extraction-plan.md) | ⏸️ Blocked by #2 |
 | Widget Universal Renderers | [sdk-and-mcp-enhancements/11-widget-universal-renderers-plan.md](sdk-and-mcp-enhancements/11-widget-universal-renderers-plan.md) | 📋 Planned |
+| STDIO–HTTP Server Alignment | [architecture/stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md) | 📋 Backlog |
 | Config Architecture Standardisation | [architecture/config-architecture-standardisation-plan.md](architecture/config-architecture-standardisation-plan.md) | 📋 Planned |
 | Logger / Sentry / OTEL | [architecture/logger-sentry-otel-integration-plan.md](architecture/logger-sentry-otel-integration-plan.md) | 📋 Planned |
 | SDK Publishing and Versioning | [dev-tooling-and-dev-ai-support/sdk-publishing-and-versioning-plan.md](dev-tooling-and-dev-ai-support/sdk-publishing-and-versioning-plan.md) | 📋 Planned |
@@ -274,7 +290,7 @@ working artefacts.
 | M7b | Public Release Readiness | ✅ DONE |
 | M7c | Developer Onboarding Experience | ✅ DONE |
 | M7d | Code Quality Remediation (TSDoc warnings, type shortcuts) | ✅ DONE |
-| **M8** | **MCP Search Integration** | 🔄 **IN PROGRESS** (WS1-WS2 complete, WS3+WS5 remain) |
+| **M8** | **MCP Search Integration** | 🔄 **IN PROGRESS** (WS1-WS4 complete, WS5 remains) |
 | M9 | SDK Workspace Decomposition (ADR-108, Step 1: 2-way split) | 📋 Planned |
 | M10 | Castr Integration | 📋 Planned |
 | M11 | Search Quality Enhancements | 📋 Future |

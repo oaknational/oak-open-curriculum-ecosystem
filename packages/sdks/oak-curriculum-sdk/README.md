@@ -87,6 +87,20 @@ console.log(subject.canonicalUrl); // "https://www.thenational.academy/teachers/
 - **Type Safety**: All URL generation is fully typed based on the OpenAPI schema
 - **Consistent Patterns**: All consuming applications generate identical canonical URLs
 
+### Search Tools (Aggregated)
+
+Three aggregated MCP tools expose the Search SDK's Elasticsearch-backed semantic search to agents and teachers:
+
+| Tool                | Purpose                                                               | SDK Methods                                                                   |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `search-sdk`        | 5-scope semantic search (lessons, units, threads, sequences, suggest) | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
+| `browse-curriculum` | Faceted navigation without a search query                             | `fetchSequenceFacets`                                                         |
+| `explore-topic`     | Compound parallel cross-scope discovery                               | `searchLessons` + `searchUnits` + `searchThreads` in parallel                 |
+
+These tools consume a `SearchRetrievalService` interface defined in `src/mcp/search-retrieval-types.ts`. This interface is structurally compatible with the Search SDK's `RetrievalService` but does not import from it, avoiding a circular dependency between curriculum-sdk and search-sdk. The MCP servers inject the concrete implementation when Elasticsearch credentials are available.
+
+When `searchRetrieval` is not provided, the tools return a "not configured" error. All other tools continue to work normally.
+
 ### MCP Tool Generation
 
 This SDK now generates all MCP (Model Context Protocol) tool types at build time, making the entire SDK+MCP system a pure function of the OpenAPI schema. The generation happens in three phases:

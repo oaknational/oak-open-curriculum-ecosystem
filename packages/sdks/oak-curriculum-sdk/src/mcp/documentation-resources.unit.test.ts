@@ -142,6 +142,6 @@ describe('getWorkflowsMarkdown', () => {
   it('includes returns field for workflow steps', () => {
     const markdown = getWorkflowsMarkdown();
     expect(markdown).toContain('Returns:');
-    expect(markdown).toContain('List of matching lessons');
+    expect(markdown).toContain('Ranked list of matching lessons');
   });
 });

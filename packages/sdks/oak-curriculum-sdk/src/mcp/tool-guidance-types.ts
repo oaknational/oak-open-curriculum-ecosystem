@@ -20,6 +20,9 @@ import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js'
  */
 export type AggregatedToolName =
   | 'search'
+  | 'search-sdk'
+  | 'browse-curriculum'
+  | 'explore-topic'
   | 'fetch'
   | 'get-ontology'
   | 'get-help'

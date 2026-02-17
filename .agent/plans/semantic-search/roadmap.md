@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-02-17  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -20,11 +20,13 @@ until token is created). Developer onboarding experience
 is complete. Type shortcuts have been removed across the
 monorepo.
 
-**MCP search integration is in progress.** Three new tools
+**MCP search integration is nearly complete.** Three new tools
 (`search-sdk`, `browse-curriculum`, `explore-topic`) are
-wired and passing all quality gates (WS1-WS2 complete).
-Next: WS3 (NL guidance, docs, TSDoc) then WS5 (compare
-SDK search vs REST API; replace if superior).
+wired, documented, and passing all quality gates (WS1-WS4
+complete). Only WS5 remains: compare SDK search vs REST API
+search on representative queries, then replace if superior.
+Shared Zod env schemas added to `@oaknational/mcp-env`.
+STDIO–HTTP alignment plan on the backlog.
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -242,9 +244,10 @@ onboarding. Two workstreams:
 
 **Status**: 🔄 In Progress — all prerequisites complete
 
-Two parallel workstreams. The search tool wiring is the
-blocking path; the Result pattern unification runs in
-parallel and does not block search integration.
+Three workstreams. Search tool wiring (3a) is nearly complete
+— only WS5 (compare and replace) remains. STDIO–HTTP
+alignment (3c) is on the backlog. Result pattern unification
+(3b) runs in parallel and does not block search integration.
 
 ### 3a. Search Tool Wiring (blocking path)
 
@@ -260,11 +263,46 @@ search and likely replace it.
 | Three MCP search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) wired to SDK retrieval | ✅ Complete (WS1-WS2) |
 | Filter parameters passed through correctly | ✅ Complete |
 | `Result<T, E>` errors surfaced as MCP errors | ✅ Complete |
-| Tool examples mapping user intent to SDK calls | 📋 Pending (WS3) |
+| NL guidance, tool descriptions, workflow guidance, MCP prompts | ✅ Complete (WS3) |
+| TSDoc, READMEs for curriculum-sdk, STDIO, HTTP servers | ✅ Complete (WS3) |
 | Existing MCP tools unaffected | ✅ Complete |
-| All quality gates pass (191/191 E2E, 1241 SDK, 611 HTTP unit/integration) | ✅ Complete (WS4) |
+| All quality gates pass (191/191 E2E, 1241 SDK, 620 HTTP unit/integration) | ✅ Complete (WS4) |
 | Compare semantic search with existing `search` tool (REST API) | 📋 Pending (WS5) |
 | If superior, replace REST API composite search with SDK-backed search | 📋 Pending (WS5) |
+
+### 3c. STDIO–HTTP Server Alignment (backlog)
+
+**Plan**: [../../architecture/stdio-http-server-alignment.md](../../architecture/stdio-http-server-alignment.md)
+
+**Goal**: Eliminate all non-transport differences between the
+STDIO and HTTP servers. Both should share env validation, tool
+registration, search retrieval, resources, prompts, and error
+handling. Only transport-specific code (auth, logging sink,
+Express middleware, Vercel config, widgets) should differ.
+
+| Task | Status |
+|------|--------|
+| STDIO uses shared Zod schemas from `@oaknational/mcp-env` | 📋 Pending |
+| Shared tool registration pattern | 📋 Pending |
+| Shared search retrieval factory | 📋 Pending |
+| STDIO registers resources and prompts | 📋 Pending |
+| E2E feature parity verification | 📋 Pending |
+
+### 3b-bug. Streamable HTTP Transport — Stateless Mode Bug (BLOCKING)
+
+**Plan**: [active/streamable-http-transport-stateless-bug.md](active/streamable-http-transport-stateless-bug.md)
+
+**Goal**: Fix the stateless transport reuse bug that prevents any
+MCP client from completing a multi-request session against the local
+dev server. The application creates one transport at startup but the
+SDK enforces one request per stateless transport instance.
+
+| Task | Status |
+|------|--------|
+| Confirm impact on local dev + Vercel warm instances | 📋 Pending |
+| Choose architecture (stateful / per-request / dual) | 📋 Pending |
+| Implement fix with TDD | 📋 Pending |
+| Full quality gates + Vercel preview verification | 📋 Pending |
 
 ### 3b. MCP Result Pattern Unification (parallel, non-blocking)
 
@@ -317,6 +355,7 @@ independently.
 | Stream | Plan | Notes | Status |
 |--------|------|-------|--------|
 | **Bulk Data Analysis** | [vocabulary-mining.md](post-sdk/bulk-data-analysis/vocabulary-mining.md) | Feeds vocabulary into search quality work | 📋 Pending |
+| **Bulk Schema-Driven Type-Gen** | [bulk-schema-driven-type-gen.md](post-sdk/bulk-schema-driven-type-gen.md) | Replace template-based bulk Zod generation with schema-driven generation from `bulk-downloads/schema.json`; extract authoritative domain enums | 📋 Pending |
 | **SDK API** | [filter-testing.md](post-sdk/sdk-api/filter-testing.md) | 17 subjects × 4 key stages filter matrix | 📋 Pending |
 | **Subject Domain Model** | [move-search-domain-knowledge-to-typegen-time.md](post-sdk/move-search-domain-knowledge-to-typegen-time.md) | Oak API SDK type-gen enhancement | 📋 Pending |
 | **MFL Fix** | [mfl-multilingual-embeddings.md](post-sdk/search-quality/mfl-multilingual-embeddings.md) | MFL MRR 0.19-0.29, specific fix | 📋 Pending |

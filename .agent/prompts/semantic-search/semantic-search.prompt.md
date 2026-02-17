@@ -1,6 +1,27 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-16
+**Last Updated**: 2026-02-17
+
+---
+
+## Active: Streamable HTTP Transport Bug (Priority: HIGH)
+
+A production bug in the streamable-http server prevents any real MCP
+client from completing a multi-request session. The application creates
+**one** `StreamableHTTPServerTransport` in stateless mode at startup.
+The MCP SDK (v1.26.0) forbids reusing a stateless transport — it throws
+after the first request. Local dev is broken; Vercel warm instances may
+also be affected.
+
+The smoke test (`smoke:dev:stub`) works around this with
+`withFreshServer` (fresh server per MCP assertion), but the underlying
+system bug remains. Needs an architectural decision: stateful mode,
+per-request transport, or dual mode.
+
+**Active plan**: [streamable-http-transport-stateless-bug.md](../../plans/semantic-search/active/streamable-http-transport-stateless-bug.md)
+
+**Next action**: Investigate (Phase 1 of the plan) — confirm impact
+on local dev and Vercel warm instances, then choose architecture.
 
 ---
 
@@ -15,8 +36,8 @@ retrieval methods have been validated against live Elasticsearch.
 
 **Active plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
 
-**Next action**: WS3 (NL guidance, documentation, TSDoc) then WS5
-(compare SDK search vs REST API search; replace if superior).
+**Next action**: WS5 (compare SDK search vs REST API search on
+representative queries; replace if superior). WS1-WS4 complete.
 
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
@@ -242,9 +263,10 @@ Two cross-cutting code quality workstreams completed
 ## Phase 3a — MCP Search Tools (WS1-WS2 Complete)
 
 Three new MCP tools expose the Search SDK's Elasticsearch-backed
-semantic search to agents and teachers. WS1 (RED) and WS2 (GREEN)
-are complete. WS3 (REFACTOR: NL guidance, docs) and WS5 (compare
-and replace old search) are next.
+semantic search to agents and teachers. WS1 (RED), WS2 (GREEN),
+WS3 (REFACTOR), and WS4 (quality gates + test gap fill) are
+complete. Only WS5 (compare SDK search vs REST API; replace if
+superior) remains.
 
 **Execution plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
 
@@ -296,24 +318,36 @@ apps/oak-curriculum-mcp-streamable-http/src/
 
 ### What Needs Doing Next
 
-**WS3 (REFACTOR)** — NL guidance, documentation, TSDoc:
-- Review and extend tool descriptions with NL-to-structured
-  examples per scope
-- Update `tool-guidance-data.ts` with search tool workflows
-- Update `prerequisite-guidance.ts` with search tool guidance
-- Add/update MCP prompts for search workflows
-- Comprehensive TSDoc on all new public APIs
+**WS5 (COMPARE AND REPLACE)** — only remaining workstream:
 
-**WS5 (COMPARE AND REPLACE)** — old vs new search:
 - Run representative teacher queries through both old `search`
   (REST) and new `search-sdk` (ES/SDK)
 - Compare relevance, coverage, latency
 - If superior, remove old `aggregated-search/` module
 - Full quality gate chain after replacement
+- Requires live Elasticsearch credentials in the environment
 
-**Follow-up workstreams**:
-- Unit tests for `search-retrieval-factory.ts`
-- Browse tool formatting tests
+**Completed in WS3**: NL guidance (`tool-guidance-data.ts`,
+`tool-guidance-workflows.ts`), MCP prompts (`mcp-prompts.ts`,
+`mcp-prompt-messages.ts` — 5 prompts total), TSDoc audit,
+READMEs for curriculum-sdk, STDIO, HTTP servers.
+
+**Completed in WS4 follow-up**: `search-retrieval-factory.ts`
+integration tests (9 tests, DI with `FakeClient`), browse
+`formatting.unit.test.ts` (7 tests, `createFacet`/`createFacets`
+helpers for generated types).
+
+### Environment and Config (2026-02-17)
+
+- Dead code removed from `@oaknational/mcp-env`:
+  `createAdaptiveEnvironment()`, `EnvironmentProvider`, all
+  supporting type guards
+- Shared Zod schemas added as opt-in contracts:
+  `OakApiKeyEnvSchema`, `ElasticsearchEnvSchema`, `LoggingEnvSchema`
+- HTTP server's `env.ts` now composes from shared schemas
+  via `.extend(B.shape)` (Zod 4 deprecates `.merge()`)
+- STDIO–HTTP server alignment plan created as backlog
+  (`.agent/plans/architecture/stdio-http-server-alignment.md`)
 
 ### Phase 4 — Search Quality + Ecosystem
 
@@ -389,7 +423,8 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
-| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS2 done, WS3+WS5 next) |
+| [Active plan: Transport Bug](../../plans/semantic-search/active/streamable-http-transport-stateless-bug.md) | Stateless transport reuse bug (HIGH priority) |
+| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS4 done, WS5 next) |
 | [Background: wire-hybrid-search](../../plans/semantic-search/archive/completed/wire-hybrid-search-background.md) | Original architectural design (reference only) |
 | [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |
 | [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

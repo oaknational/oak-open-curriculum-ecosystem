@@ -2,7 +2,7 @@
  * Bulk data manifest with generation metadata.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-24T17:11:53.822Z
+ * Generated at: 2026-02-17T10:42:25.994Z
  */
 
 /**
@@ -23,13 +23,13 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'art',
     phase: 'primary',
     sequenceSlug: 'art-primary',
-    lessonCount: 214,
+    lessonCount: 238,
   },
   {
     subject: 'art',
     phase: 'secondary',
     sequenceSlug: 'art-secondary',
-    lessonCount: 197,
+    lessonCount: 200,
   },
   {
     subject: 'citizenship',
@@ -77,13 +77,13 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'english',
     phase: 'primary',
     sequenceSlug: 'english-primary',
-    lessonCount: 1517,
+    lessonCount: 1518,
   },
   {
     subject: 'english',
     phase: 'secondary',
     sequenceSlug: 'english-secondary',
-    lessonCount: 1045,
+    lessonCount: 1041,
   },
   {
     subject: 'french',
@@ -101,13 +101,13 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'geography',
     phase: 'primary',
     sequenceSlug: 'geography-primary',
-    lessonCount: 223,
+    lessonCount: 234,
   },
   {
     subject: 'geography',
     phase: 'secondary',
     sequenceSlug: 'geography-secondary',
-    lessonCount: 460,
+    lessonCount: 459,
   },
   {
     subject: 'german',
@@ -125,7 +125,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'history',
     phase: 'secondary',
     sequenceSlug: 'history-secondary',
-    lessonCount: 465,
+    lessonCount: 463,
   },
   {
     subject: 'maths',
@@ -173,7 +173,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'religious-education',
     phase: 'secondary',
     sequenceSlug: 'religious-education-secondary',
-    lessonCount: 396,
+    lessonCount: 395,
   },
   {
     subject: 'science',
@@ -202,10 +202,10 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
 ] as const;
 
 /** Total number of lessons across all subjects */
-export const TOTAL_LESSON_COUNT = 12360 as const;
+export const TOTAL_LESSON_COUNT = 12391 as const;
 
 /** Number of subject/phase combinations */
 export const SUBJECT_PHASE_COUNT = 30 as const;
 
 /** Generation timestamp */
-export const GENERATED_AT = '2026-01-24T17:11:53.822Z' as const;
+export const GENERATED_AT = '2026-02-17T10:42:25.994Z' as const;

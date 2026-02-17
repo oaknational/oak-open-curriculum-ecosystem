@@ -966,6 +966,10 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - Host blocked: add host to `ALLOWED_HOSTS`
 - Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
 
+## Search tools (optional)
+
+Three additional search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide Elasticsearch-backed semantic search. Set `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` in the environment to enable them. The factory in `src/search-retrieval-factory.ts` creates the Search SDK instance when credentials are present. Without credentials, the search tools return "not configured" errors; all other tools work normally.
+
 ## How it works
 
 - MCP handlers are attached via `@oaknational/mcp-server-kit` `attachMcpHandlers`, using a registry of tools generated in the SDK.

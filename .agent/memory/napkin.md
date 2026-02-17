@@ -1,5 +1,46 @@
 # Napkin
 
+## Session: 2026-02-17 (a) — WS3-WS5 Execution (Steps 1-3)
+
+### What Was Done
+
+- **Step 1a**: Extracted `buildBrowseSummary()` from `aggregated-browse/execution.ts` to
+  `formatting.ts` with 7 unit tests. TDD RED/GREEN cycle confirmed.
+- **Step 1b**: DI-refactored `search-retrieval-factory.ts` with generic `SearchRetrievalFactories<TClient>`
+  interface plus function overloads. 9 integration tests pass with `FakeClient` brand type.
+- **Step 2a**: Updated `tool-guidance-data.ts`:
+  - Added `search-sdk`, `explore-topic`, `browse-curriculum` to discovery category
+  - Updated all workflow tool references from `search` to `search-sdk`
+  - Added `exploreTopic`, `discoverCurriculum` workflows
+  - Updated tips for new search tools
+  - Removed `eslint-disable max-lines` by extracting workflows to `tool-guidance-workflows.ts`
+- **Step 2b**: Updated `mcp-prompts.ts`:
+  - Updated prompt messages to reference `search-sdk` with scope
+  - Added `explore-curriculum` and `learning-progression` prompts (5 total)
+  - Split message generators to `mcp-prompt-messages.ts` (max-lines fix)
+- **Step 2c**: TSDoc audit — moved detached TSDoc block in `validation.ts` to correct position
+- **Step 2d**: Added search tool docs to READMEs for curriculum-sdk, STDIO, HTTP servers
+- **Step 3**: Full quality gate chain:
+  - type-gen, build, type-check, lint:fix, format:root, markdownlint:root, test, test:e2e, test:ui: all PASS
+  - smoke:dev:stub: FAILS (pre-existing `StreamableHTTPServerTransport` single-client issue, not caused by changes)
+
+### Lessons Learned
+
+- Generic `SearchRetrievalFactories<TClient>` with function overloads cleanly avoids
+  both `as` assertions and `unknown` type widening in DI factory patterns
+- `SequenceFacet` is a generated type with many required fields — test fixtures need
+  a `createFacet()` helper with all required fields and `Partial` overrides
+- `AggregatedToolName` exists in TWO places: `tool-guidance-types.ts` (manual union) and
+  `universal-tools/types.ts` (derived from `keyof typeof AGGREGATED_TOOL_DEFS`). Both
+  must be updated when adding new aggregated tools. Future refactor should unify.
+- Splitting files at ~250 lines to avoid `eslint-disable max-lines`: extract by
+  responsibility (workflows, message generators) into sibling modules
+
+### WS5 Status
+
+- BLOCKED: Elasticsearch and REST API credentials not available in environment
+- Must be done in a separate session with live credentials
+
 ## Session: 2026-02-16 (d) — Fix 17 E2E Failures
 
 ### What Was Done
@@ -271,7 +312,114 @@
   docs (settled). Content flows upward; once captured
   permanently, remove from lower layers.
 
-### Files Modified This Session
+### Session: 2026-02-17 — Env Cleanup and Schema Contracts
+
+**What happened:**
+- Deleted `createAdaptiveEnvironment()`, `EnvironmentProvider`, and all
+  supporting type guards from `@oaknational/mcp-env` — dead code, no consumers
+- Deleted `adaptive.integration.test.ts` — tests for the removed code
+- Created shared Zod schemas as opt-in contracts:
+  `OakApiKeyEnvSchema`, `ElasticsearchEnvSchema`, `LoggingEnvSchema`
+- Updated HTTP server's `env.ts` to compose shared schemas via `.extend()`
+- Zod 4 deprecation: `.merge()` is deprecated, use `.extend(B.shape)` instead
+- Added STDIO–HTTP server alignment backlog plan
+- Updated config architecture plan to reflect dead code removal
+
+**Lessons learned:**
+- Zod 4 deprecated `.merge()` — caught by `@typescript-eslint/no-deprecated`
+  lint rule. Always use `A.extend(B.shape)` to compose Zod object schemas.
+- When creating shared schemas, make them strict contracts (required fields).
+  Consumers choose optionality via `.partial()` — this preserves the contract
+  semantics: "if you use this capability, you must satisfy these fields".
+- The env package had no zod dependency; needed to `pnpm add zod` first.
+
+### Session: 2026-02-17b — Bulk Schema Analysis and Plan
+
+**What happened:**
+- Deep comparison of `api-schema-original.json` (OpenAPI) vs `bulk-downloads/schema.json`
+- Created plan: `bulk-schema-driven-type-gen.md` in `post-sdk/`
+- Linked plan from roadmap and high-level plan
+
+**Key findings from schema comparison:**
+- The bulk schema has strict enums on 10 domain fields (subjects, key stages,
+  years, exam boards, KS4 options, unit lesson state) — the API schema has
+  **zero enums** on these fields, all plain `string`
+- The bulk schema is the **authoritative source of domain vocabulary**
+- Bulk adds 3 fields not in API: `lessonSlug`, `transcript_sentences`, `transcript_vtt`
+- Bulk omits 5 API unit fields (derivable from filename or not needed for search)
+- Naming inconsistency: `downloadsAvailable` (API) vs `downloadsavailable` (bulk, lowercase)
+- Bulk schema uses `null` for nullables; code still handles "NULL" string sentinel —
+  need to confirm with API team whether data has been cleaned up
+- Bulk schema has `"migration"` state value not in API (3 vs 2 states)
+- Several API optional fields are required in bulk (pupilLessonOutcome, description,
+  whyThisWhyNow, threads, lessonOrder)
+
+**Action item:**
+- Request API team to expose `/api/bulk/schema` endpoint for type-gen consumption
+- Existing `Subject Domain Model` plan and new `Bulk Schema-Driven Type-Gen` plan
+  are related but distinct: one enhances API type-gen, the other replaces bulk templates
+
+---
+
+## 2026-02-17c — smoke:dev:stub Fix: Test the System, Don't Alter It
+
+### Critical Mistake: Wrong Direction
+
+**What happened:** `smoke:dev:stub` failed because the second MCP request to a
+stateless `StreamableHTTPServerTransport` returned 500. My first instinct was to
+ALTER THE SYSTEM — add session ID tracking, switch to stateful mode. This is
+exactly backwards.
+
+**The correction (from user):** "DO NOT alter the system behaviour to suit the test!
+Rewrite the test structure, ask what behaviour the test is trying to validate."
+
+### Root Cause: SDK Enforces One Request Per Stateless Transport
+
+`webStandardStreamableHttp.js` line 139:
+```javascript
+if (!this.sessionIdGenerator && this._hasHandledRequest) {
+  throw new Error('Stateless transport cannot be reused across requests.');
+}
+```
+
+With `sessionIdGenerator: undefined` (our config), the SDK allows exactly ONE
+`handleRequest()` call. The smoke test was sending 5+ sequential MCP requests
+to one server instance → first succeeds, rest throw.
+
+### The Fix: Fresh Server Per MCP Assertion
+
+Instead of fighting the transport's single-request constraint, give each MCP
+assertion its own fresh server instance via `withEphemeralServer()`. Non-MCP
+assertions (health, Accept header enforcement) share the original server because
+Express middleware handles them before the transport is reached.
+
+### Key Lesson
+
+> When a test fails, the FIRST question is "what is the test trying to prove?"
+> The SECOND question is "does the test structure match the system's actual
+> behaviour?" NEVER alter the system to make a test pass. The system is the
+> truth. The test must prove the system works as designed.
+
+### Pattern: withEphemeralServer / withFreshServer
+
+- `withEphemeralServer<T>(fn: (baseUrl) => Promise<T>)` in `local-server.ts`:
+  creates app, listens on port 0, runs callback, tears down
+- `withFreshServer(context, assertion)` in `smoke-assertions/index.ts`:
+  wraps assertion with ephemeral server, overrides baseUrl in context
+- E2E tests already follow this pattern: "each test expecting a 200 from the
+  transport needs its own app" (comments in e2e test files)
+
+### Files Modified This Session (d)
+
+- `smoke-assertions/types.ts` — removed wrong-direction `mcpSessionId` field
+- `smoke-assertions/common.ts` — removed session ID injection from `createToolHeaders`
+- `smoke-assertions/initialise.ts` — removed session capture, simplified JSDoc
+- `smoke-assertions/index.ts` — added `withFreshServer`, restructured local assertions
+- `local-server.ts` — added `withEphemeralServer` utility
+
+---
+
+### Files Modified This Session (c)
 
 - `.cursor/commands/consolidate-docs.md` — expanded to 6 steps
 - `.cursor/skills/napkin/SKILL.md` — v6, references distilled
