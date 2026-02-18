@@ -6,9 +6,29 @@
 import { vi } from 'vitest';
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/mcp-logger';
+import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RequestWithAuthContext } from '../auth/tool-auth-context.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { MachineAuthObject } from '@clerk/backend';
+import type { McpServerFactory, McpRequestContext } from '../mcp-request-context.js';
+
+/**
+ * Creates a properly typed fake SearchRetrievalService for tests.
+ *
+ * Uses `vi.fn()` for assertion support (e.g. `toHaveBeenCalledWith`).
+ * For production stub mode, use `createStubSearchRetrieval` from the SDK instead.
+ */
+export function createFakeSearchRetrieval(): SearchRetrievalService {
+  return {
+    searchLessons: vi.fn<SearchRetrievalService['searchLessons']>(),
+    searchUnits: vi.fn<SearchRetrievalService['searchUnits']>(),
+    searchSequences: vi.fn<SearchRetrievalService['searchSequences']>(),
+    searchThreads: vi.fn<SearchRetrievalService['searchThreads']>(),
+    suggest: vi.fn<SearchRetrievalService['suggest']>(),
+    fetchSequenceFacets: vi.fn<SearchRetrievalService['fetchSequenceFacets']>(),
+  };
+}
 
 /**
  * Creates a full Logger fake (all required methods + child returning self).
@@ -72,6 +92,9 @@ export function createFakeResponse(
       return this;
     }),
     get: vi.fn(),
+    on: vi.fn(function (this: typeof res) {
+      return this;
+    }),
   };
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Response has 80+ required members; minimal fake for handler tests
   return res as unknown as Response;
@@ -86,9 +109,39 @@ export function createFakeStreamableTransport(
 ): StreamableHTTPServerTransport {
   const transport = {
     handleRequest: handleRequestImpl ?? vi.fn(),
+    close: vi.fn(),
   };
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK transport type; minimal fake for handler tests
   return transport as unknown as StreamableHTTPServerTransport;
+}
+
+/**
+ * Minimal McpServer fake for handler integration tests.
+ * Only connect() and close() are used by createMcpHandler.
+ */
+export function createFakeMcpServer(): McpServer {
+  const server = {
+    connect: vi.fn(() => Promise.resolve()),
+    close: vi.fn(),
+  };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK server type; minimal fake for handler tests
+  return server as unknown as McpServer;
+}
+
+/**
+ * Creates a factory that returns a pre-configured fake server + transport.
+ *
+ * Returns the factory and the underlying fakes so tests can inspect
+ * what was called on them (e.g. transport.handleRequest args).
+ */
+export function createFakeMcpServerFactory(
+  handleRequestImpl?: StreamableHTTPServerTransport['handleRequest'],
+): { factory: McpServerFactory; server: McpServer; transport: StreamableHTTPServerTransport } {
+  const server = createFakeMcpServer();
+  const transport = createFakeStreamableTransport(handleRequestImpl);
+  const context: McpRequestContext = { server, transport };
+  const factory: McpServerFactory = () => context;
+  return { factory, server, transport };
 }
 
 /**

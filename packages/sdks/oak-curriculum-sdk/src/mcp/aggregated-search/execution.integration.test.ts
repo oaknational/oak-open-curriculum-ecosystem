@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { runSearchTool } from './execution.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
+import { createStubSearchRetrieval } from '../search-retrieval-stub.js';
 
 /**
  * Creates a mock executeMcpTool that returns predefined results.
@@ -36,6 +37,7 @@ function createMockExecutor(
       }
       return Promise.reject(new Error(`Unexpected tool: ${name}`));
     },
+    searchRetrieval: createStubSearchRetrieval(),
   };
 }
 

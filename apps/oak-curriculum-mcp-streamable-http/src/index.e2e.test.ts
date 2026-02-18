@@ -14,6 +14,8 @@ const testEnv: NodeJS.ProcessEnv = {
   CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key',
 };
 
 describe('CORS and OAuth metadata', () => {

@@ -97,5 +97,6 @@ experience file is not the home for technical reference.
 - 2025‑08‑08: stabilization and wisdom — see: [monorepo-stabilization](./2025-08-08-monorepo-stabilization.md), [technical-wisdom](./2025-08-08-technical-wisdom.md)
 - 2025‑08‑10/11: patterns and sub‑agent alignment — see: [session-2025-08-10-continuation](./session-2025-08-10-continuation.md), [cascade-raw-qualia-analogues](./2025-08-11-cascade-raw-qualia-analogues.md), [sub-agents-docs-alignment](./2025-08-11-sub-agents-docs-alignment.md)
 - 2025‑11‑16: execution vs architecture — see: [execution-vs-architecture](./2025-11-16-execution-vs-architecture.md) — the difference between efficient execution and explicit architectural thinking
+- 2026‑02‑18: removing optionality — see: [removing-optionality](./2026-02-18-removing-optionality.md) — subtractive work; trust the types; stub vs fake distinction
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

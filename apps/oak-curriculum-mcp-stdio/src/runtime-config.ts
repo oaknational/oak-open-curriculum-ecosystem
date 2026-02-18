@@ -6,7 +6,11 @@
  */
 
 /**
- * Environment variables used by the stdio server
+ * Environment variables used by the stdio server.
+ *
+ * Elasticsearch credentials are required — the server fails at startup
+ * if they are absent. In stub mode, dummy credentials satisfy validation
+ * but are never used (stub service replaces real ES).
  */
 export interface StdioEnv {
   readonly LOG_LEVEL?: string;
@@ -16,8 +20,8 @@ export interface StdioEnv {
   readonly MCP_LOGGER_FILE_APPEND?: string;
   readonly OAK_API_KEY?: string;
   readonly OAK_CURRICULUM_MCP_USE_STUB_TOOLS?: string;
-  readonly ELASTICSEARCH_URL?: string;
-  readonly ELASTICSEARCH_API_KEY?: string;
+  readonly ELASTICSEARCH_URL: string;
+  readonly ELASTICSEARCH_API_KEY: string;
 }
 
 /**
@@ -54,6 +58,21 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
   const rawLogLevel = source.LOG_LEVEL?.toLowerCase();
   const logLevel = isValidLogLevel(rawLogLevel) ? rawLogLevel : 'info';
 
+  const esUrl = source.ELASTICSEARCH_URL;
+  const esApiKey = source.ELASTICSEARCH_API_KEY;
+  if (!esUrl) {
+    throw new Error(
+      'ELASTICSEARCH_URL is required. ' +
+        'Set this environment variable to the Elasticsearch cluster URL.',
+    );
+  }
+  if (!esApiKey) {
+    throw new Error(
+      'ELASTICSEARCH_API_KEY is required. ' +
+        'Set this environment variable to the Elasticsearch API key.',
+    );
+  }
+
   const env: StdioEnv = {
     LOG_LEVEL: source.LOG_LEVEL,
     ENVIRONMENT_OVERRIDE: source.ENVIRONMENT_OVERRIDE,
@@ -62,8 +81,8 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
     MCP_LOGGER_FILE_APPEND: source.MCP_LOGGER_FILE_APPEND,
     OAK_API_KEY: source.OAK_API_KEY,
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
-    ELASTICSEARCH_URL: source.ELASTICSEARCH_URL,
-    ELASTICSEARCH_API_KEY: source.ELASTICSEARCH_API_KEY,
+    ELASTICSEARCH_URL: esUrl,
+    ELASTICSEARCH_API_KEY: esApiKey,
   };
 
   return {

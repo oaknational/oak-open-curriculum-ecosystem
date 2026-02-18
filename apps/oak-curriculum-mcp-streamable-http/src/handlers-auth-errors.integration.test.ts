@@ -19,6 +19,7 @@ import {
   createNonAuthErrorResult,
   getHandler,
 } from './test-helpers/auth-error-test-helpers.js';
+import { createFakeSearchRetrieval } from './test-helpers/fakes.js';
 
 /**
  * Helper: Assert authentication error response structure
@@ -85,15 +86,22 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
     runtimeConfig = createMockRuntimeConfig();
   });
 
+  function registerWithOverrides(overrides: ReturnType<typeof createMockDeps>): void {
+    registerHandlers(mockServer, {
+      runtimeConfig,
+      logger: mockLogger,
+      overrides,
+      searchRetrieval: createFakeSearchRetrieval(),
+    });
+  }
+
   describe('Upstream Auth Errors', () => {
     it('should emit _meta on Oak API 401 error', async () => {
       const overrides = createMockDeps(() =>
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
+      registerWithOverrides(overrides);
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
-
-      // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
@@ -105,8 +113,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const overrides = createMockDeps(() =>
         Promise.resolve(createAuthErrorResult(403, 'Forbidden')),
       );
-
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
       const handler = getHandler(capturedHandlers, 'get-changelog');
@@ -129,10 +136,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const overrides = createMockDeps(() =>
         Promise.resolve(createClerkErrorResult('Clerk: token verification failed')),
       );
-
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
-
-      // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
+      registerWithOverrides(overrides);
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
@@ -149,8 +153,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const overrides = createMockDeps(() =>
         Promise.resolve(createAuthErrorResult(401, 'Token has expired')),
       );
-
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
@@ -165,7 +168,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
@@ -183,7 +186,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
@@ -196,7 +199,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
@@ -221,7 +224,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
@@ -241,7 +244,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
@@ -254,7 +257,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createAuthErrorResult(401, 'Custom auth error')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
@@ -277,7 +280,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createNonAuthErrorResult('Validation failed: missing required field')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
@@ -294,7 +297,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         Promise.resolve(createNonAuthErrorResult('ECONNREFUSED')),
       );
 
-      registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
+      registerWithOverrides(overrides);
 
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});

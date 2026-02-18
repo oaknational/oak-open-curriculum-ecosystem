@@ -34,6 +34,8 @@ const testEnv: NodeJS.ProcessEnv = {
   CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
 interface JsonRpcEnvelope {
@@ -132,9 +134,8 @@ describe('ChatGPT Widget Metadata E2E', () => {
       const templateUri = searchTool?._meta?.['openai/outputTemplate'];
       expect(templateUri).toBeDefined();
 
-      // Verify this URI exists in resources/list (fresh app — transport is one-client)
-      const resourcesApp = createTestApp();
-      const resourcesRes = await request(resourcesApp)
+      // Verify this URI exists in resources/list (same app, per-request transport)
+      const resourcesRes = await request(toolsApp)
         .post('/mcp')
         .set('Accept', ACCEPT)
         .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });

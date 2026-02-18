@@ -10,6 +10,8 @@ function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeCon
     OAK_API_KEY: 'test-key',
     CLERK_PUBLISHABLE_KEY: 'pk_test_value',
     CLERK_SECRET_KEY: 'sk_test_value',
+    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_API_KEY: 'fake-api-key',
   };
   return loadRuntimeConfig({ ...baseEnv, ...overrides });
 }

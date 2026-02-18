@@ -22,6 +22,8 @@ describe('Security Headers (Integration)', () => {
       // Required Clerk keys (not used when auth is disabled, but validated by env schema)
       CLERK_PUBLISHABLE_KEY: 'REDACTED',
       CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key',
     };
     const runtimeConfig = loadRuntimeConfig(testEnv);
     app = createApp({ runtimeConfig });

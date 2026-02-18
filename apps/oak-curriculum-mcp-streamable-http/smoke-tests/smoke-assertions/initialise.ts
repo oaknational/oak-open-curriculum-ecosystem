@@ -16,9 +16,8 @@ import { createAssertionLogger, logAssertionSuccess } from './logging.js';
  * This is the most fundamental MCP assertion: can a client send
  * `initialize` and receive a valid capabilities response?
  *
- * In local modes each MCP assertion runs against a fresh server
- * instance because `StreamableHTTPServerTransport` in stateless mode
- * handles exactly one MCP request per transport instance.
+ * In local modes all MCP assertions share the same server instance.
+ * Per-request transport creates a fresh McpServer + transport per request.
  *
  * Validation edge cases (e.g. missing clientInfo) are proven in E2E
  * tests which create a fresh app instance per test.

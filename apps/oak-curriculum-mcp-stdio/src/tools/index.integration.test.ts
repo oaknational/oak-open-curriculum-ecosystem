@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   McpToolError,
+  createStubSearchRetrieval,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
@@ -57,6 +58,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     const module = createMcpToolsModule({
       client: createFakeOakPathBasedClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const output = expectCallToolResult(
@@ -79,6 +81,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     const module = createMcpToolsModule({
       client: createFakeOakPathBasedClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const result = expectCallToolResult(
@@ -99,6 +102,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     const module = createMcpToolsModule({
       client: createFakeOakPathBasedClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const result = expectCallToolResult(await module.handleTool('not-a-real-tool', {}));

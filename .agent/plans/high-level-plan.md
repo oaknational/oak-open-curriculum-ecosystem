@@ -1,6 +1,6 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-02-17  
 **Scope**: Strategic overview for the Oak MCP Ecosystem. Details are in individual plan documents.
 
 ---
@@ -150,18 +150,6 @@ except the single historical note. Quality gates pass.
 
 ---
 
-### 4b. Streamable HTTP Transport Bug — Status: 🐛 ACTIVE (Priority: HIGH)
-
-**Plan**: [semantic-search/active/streamable-http-transport-stateless-bug.md](semantic-search/active/streamable-http-transport-stateless-bug.md)
-
-The streamable-http server creates one `StreamableHTTPServerTransport` in
-stateless mode at startup and reuses it. The MCP SDK (v1.26.0) forbids
-this — stateless transports throw after the first request. No real MCP
-client can complete a session against the local dev server.
-
-Needs architectural decision: stateful mode (session tracking) vs
-per-request transport (serverless) vs dual mode (config-selected).
-
 ---
 
 ### 5. Search Quality Enhancements — Status: 📋 PLANNED (Priority 5)
@@ -256,6 +244,7 @@ working artefacts.
 | Thread Search SDK Integration | [semantic-search/archive/completed/thread-search-sdk-integration.plan.md](semantic-search/archive/completed/thread-search-sdk-integration.plan.md) | 8 GTs, MRR=0.938 |
 | Public Release Readiness | [semantic-search/archive/completed/public-release-readiness.plan.md](semantic-search/archive/completed/public-release-readiness.plan.md) | npm publish deferred |
 | Developer Onboarding Experience | [semantic-search/archive/completed/developer-onboarding-experience.plan.md](semantic-search/archive/completed/developer-onboarding-experience.plan.md) | Canonical journey, command truth |
+| Streamable HTTP Transport Bug Fix | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request transport pattern; E2E simplified |
 | TSDoc Lint Warnings | — | 1,693 → 0 warnings, escaping at generator level |
 | Remove Type Shortcuts | — | 137 files, type guards replace assertions |
 | Type Discipline Restoration | [archive/type-discipline-restoration-plan.md](archive/type-discipline-restoration-plan.md) | Quality gates passing |

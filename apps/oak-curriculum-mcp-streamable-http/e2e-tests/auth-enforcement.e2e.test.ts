@@ -102,8 +102,7 @@ async function validateOAuthMetadataStep(app: Express): Promise<string> {
 /**
  * Creates a fresh auth-enabled app instance.
  *
- * MCP StreamableHTTPServerTransport serves one client per instance.
- * Each test expecting a 200 from the transport needs its own app.
+ * Each test creates its own app for isolation.
  */
 function createAuthApp(): Express {
   return createApp({
@@ -115,6 +114,8 @@ function createAuthApp(): Express {
         CLERK_SECRET_KEY: 'sk_test_123',
         NODE_ENV: 'test',
         LOG_LEVEL: 'debug',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     }),
   });

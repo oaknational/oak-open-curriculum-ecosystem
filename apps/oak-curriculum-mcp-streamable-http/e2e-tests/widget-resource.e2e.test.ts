@@ -63,13 +63,15 @@ function getWidgetUri(listEnvelope: ReturnType<typeof parseSseEnvelope>): string
 
 /**
  * Helper to retrieve widget HTML from the MCP server.
- * Uses two fresh app instances because StreamableHTTPServerTransport
- * serves one client per instance.
+ *
+ * Sends resources/list then resources/read to the same app instance.
+ * Per-request transport creates a fresh McpServer + transport per request.
  */
 async function getWidgetHtml(): Promise<string> {
+  const { app } = createStubbedHttpApp();
+
   // Get widget URI from resources/list
-  const { app: listApp } = createStubbedHttpApp();
-  const listResponse = await request(listApp)
+  const listResponse = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
     .set('Accept', STUB_ACCEPT_HEADER)
@@ -81,9 +83,8 @@ async function getWidgetHtml(): Promise<string> {
   const listEnvelope = parseSseEnvelope(listResponse.text);
   const widgetUri = getWidgetUri(listEnvelope);
 
-  // Read widget HTML from resources/read (fresh app)
-  const { app: readApp } = createStubbedHttpApp();
-  const response = await request(readApp)
+  // Read widget HTML from resources/read (same app, per-request transport)
+  const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
     .set('Accept', STUB_ACCEPT_HEADER)
@@ -134,9 +135,10 @@ describe('oak-json-viewer widget resource E2E', () => {
 
   describe('resources/read', () => {
     it('returns HTML content with text/html+skybridge MIME type', async () => {
+      const { app } = createStubbedHttpApp();
+
       // Get widget URI from resources/list
-      const { app: listApp } = createStubbedHttpApp();
-      const listResponse = await request(listApp)
+      const listResponse = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)
@@ -148,9 +150,8 @@ describe('oak-json-viewer widget resource E2E', () => {
       const listEnvelope = parseSseEnvelope(listResponse.text);
       const widgetUri = getWidgetUri(listEnvelope);
 
-      // Read the widget resource (fresh app — transport is one-client)
-      const { app: readApp } = createStubbedHttpApp();
-      const response = await request(readApp)
+      // Read the widget resource (same app, per-request transport)
+      const response = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)

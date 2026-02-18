@@ -205,9 +205,10 @@ describe('get-knowledge-graph Tool E2E', () => {
     });
 
     it('seeOntology reference points to callable get-ontology tool', async () => {
+      const { app } = createStubbedHttpApp();
+
       // First call get-knowledge-graph
-      const { app: kgApp } = createStubbedHttpApp();
-      const kgResponse = await request(kgApp)
+      const kgResponse = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)
@@ -222,12 +223,10 @@ describe('get-knowledge-graph Tool E2E', () => {
       const kgResult = parseJsonRpcResult(kgEnvelope);
       const graphData = getStructuredContentData(kgResult) as { readonly seeOntology: string };
 
-      // Verify seeOntology mentions get-ontology
       expect(graphData.seeOntology).toContain('get-ontology');
 
-      // Verify get-ontology is actually callable (fresh app — transport is one-client)
-      const { app: ontologyApp } = createStubbedHttpApp();
-      const ontologyResponse = await request(ontologyApp)
+      // Verify get-ontology is actually callable (same app, per-request transport)
+      const ontologyResponse = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)

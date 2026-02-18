@@ -27,7 +27,9 @@ describe('Auth Bypass for Development (E2E)', () => {
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
       OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1', // Allow localhost for DNS rebinding protection
+      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     };
 
     const runtimeConfig = loadRuntimeConfig(testEnv);

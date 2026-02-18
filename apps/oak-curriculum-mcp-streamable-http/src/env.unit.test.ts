@@ -20,18 +20,42 @@ describe('Environment Schema', () => {
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
-      ENABLE_LOCAL_AS: 'true', // Should be removed
+      ELASTICSEARCH_URL: 'http://localhost:9200',
+      ELASTICSEARCH_API_KEY: 'test-api-key',
+      ENABLE_LOCAL_AS: 'true',
     };
     // Should either throw or ignore (depending on schema strictness)
     const result = readEnv(invalidEnv);
     expect('ENABLE_LOCAL_AS' in result).toBe(false);
   });
 
-  it('accepts valid Clerk configuration', () => {
+  it('requires ELASTICSEARCH_URL', () => {
+    const envWithoutEsUrl = {
+      OAK_API_KEY: 'test-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+      ELASTICSEARCH_API_KEY: 'test-key',
+    };
+    expect(() => readEnv(envWithoutEsUrl)).toThrow(/Invalid environment/);
+  });
+
+  it('requires ELASTICSEARCH_API_KEY', () => {
+    const envWithoutEsApiKey = {
+      OAK_API_KEY: 'test-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+      ELASTICSEARCH_URL: 'http://localhost:9200',
+    };
+    expect(() => readEnv(envWithoutEsApiKey)).toThrow(/Invalid environment/);
+  });
+
+  it('accepts valid configuration', () => {
     const validEnv = {
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
+      ELASTICSEARCH_URL: 'http://localhost:9200',
+      ELASTICSEARCH_API_KEY: 'test-api-key',
       BASE_URL: 'http://localhost:3333',
       MCP_CANONICAL_URI: 'http://localhost:3333/mcp',
     };

@@ -11,25 +11,25 @@ overview: >
 todos:
   - id: investigate-production
     content: "Verify whether the bug manifests on deployed Vercel instances (warm function reuse)."
-    status: pending
+    status: completed
   - id: investigate-local
     content: "Confirm that a real MCP client (Cursor, MCP Inspector) fails on the second request to local dev server."
-    status: pending
+    status: completed
   - id: choose-architecture
     content: "Decide between stateful mode (single long-lived server) vs per-request transport (serverless) — or both, selected by config."
-    status: pending
+    status: completed
   - id: implement-fix
     content: "Implement the chosen architecture with TDD (E2E test first, then implementation)."
-    status: pending
+    status: completed
   - id: verify-smoke
     content: "Verify smoke:dev:stub still passes after the fix, and revert withFreshServer workaround if no longer needed."
-    status: pending
+    status: completed
   - id: verify-e2e
     content: "Verify E2E tests pass. Update any tests that relied on single-request-per-app assumption."
-    status: pending
+    status: completed
   - id: verify-remote
     content: "Deploy to Vercel preview and run smoke:remote to verify production behaviour."
-    status: pending
+    status: cancelled
 isProject: false
 ---
 

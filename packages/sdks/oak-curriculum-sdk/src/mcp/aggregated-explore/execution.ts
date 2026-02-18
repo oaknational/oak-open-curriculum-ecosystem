@@ -17,11 +17,6 @@ import type {
 import type { ExploreArgs } from './types.js';
 import { formatTopicMap } from './formatting.js';
 
-/** Error message when search retrieval service is not configured. */
-const NOT_CONFIGURED_MESSAGE =
-  'Topic exploration is not configured. Elasticsearch credentials are required. ' +
-  'All other tools remain available.';
-
 /** Small page size for explore results (overview, not exhaustive). */
 const EXPLORE_PAGE_SIZE = 5;
 
@@ -146,10 +141,6 @@ export async function runExploreTool(
   args: ExploreArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  if (deps.searchRetrieval === undefined) {
-    return formatError(NOT_CONFIGURED_MESSAGE);
-  }
-
   const outcomes = await parallelSearch(args, deps.searchRetrieval);
   const allFailed = !outcomes.lessons.ok && !outcomes.units.ok && !outcomes.threads.ok;
 

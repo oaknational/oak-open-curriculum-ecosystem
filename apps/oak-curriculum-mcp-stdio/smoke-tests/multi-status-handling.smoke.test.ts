@@ -92,6 +92,8 @@ describe('Multi-status transcript handling (Smoke)', () => {
         ...process.env,
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
+        ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL ?? 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY ?? 'fake-api-key-for-smoke',
       },
     });
 

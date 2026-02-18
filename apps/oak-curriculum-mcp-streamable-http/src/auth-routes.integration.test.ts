@@ -9,9 +9,10 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     const runtimeConfig = loadRuntimeConfig({
       NODE_ENV: 'test',
       OAK_API_KEY: 'test-api-key',
-      // Must be a syntactically valid Clerk publishable key for Clerk's metadata generator.
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key',
     });
     return createApp({ runtimeConfig });
   };

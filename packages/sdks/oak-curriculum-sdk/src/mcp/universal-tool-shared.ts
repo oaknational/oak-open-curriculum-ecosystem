@@ -35,17 +35,16 @@ export interface UniversalToolExecutorDependencies {
   readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
 
   /**
-   * Optional search retrieval service for SDK-backed search tools.
+   * Search retrieval service for SDK-backed search tools.
    *
-   * When present, search/browse-curriculum/explore-topic tools use this
-   * to query Elasticsearch directly via the Search SDK. When absent,
-   * those tools return a "not configured" error. All other tools work
-   * normally regardless.
+   * Used by search-sdk, browse-curriculum, and explore-topic tools
+   * to query Elasticsearch directly via the Search SDK. The type is
+   * structurally compatible with Search SDK's RetrievalService.
    *
-   * Provided by the MCP server wiring when ES credentials are available.
-   * The type is structurally compatible with Search SDK's RetrievalService.
+   * Provided by the MCP server wiring: real ES service in production,
+   * stub service (`createStubSearchRetrieval`) in stub mode.
    */
-  readonly searchRetrieval?: SearchRetrievalService;
+  readonly searchRetrieval: SearchRetrievalService;
 }
 
 export function formatError(message: string): CallToolResult {

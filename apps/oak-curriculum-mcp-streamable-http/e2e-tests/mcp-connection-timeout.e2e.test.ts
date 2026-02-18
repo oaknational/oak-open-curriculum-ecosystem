@@ -17,6 +17,8 @@ import { describe, it, expect, beforeAll, vi } from 'vitest';
 import request from 'supertest';
 import type { Express } from 'express';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import type { McpServerFactory } from '../src/mcp-request-context.js';
+import { createFakeSearchRetrieval } from '../src/test-helpers/fakes.js';
 
 // Mock Clerk middleware to avoid network IO and requirement for valid keys
 vi.mock('@clerk/express', () => ({
@@ -103,12 +105,16 @@ async function createAppWithHangingConnection(): Promise<Express> {
 }
 
 /**
- * Setup MCP middleware with timeout
+ * Setup MCP middleware with timeout and per-request factory.
+ *
+ * The readiness middleware ensures MCP routes return 503 until shared
+ * dependencies (e.g. Elasticsearch client) are ready. Once ready,
+ * each request gets a fresh McpServer + transport via the factory.
  */
 function setupMcpMiddlewareWithTimeout(
   app: Express,
   connectionReady: Promise<void>,
-  transport: unknown,
+  mcpFactory: McpServerFactory,
   log: unknown,
 ): void {
   const ensureMcpReady = async (_req: unknown, res: unknown, next: () => void) => {
@@ -135,19 +141,19 @@ function setupMcpMiddlewareWithTimeout(
     }
   };
 
-  // Setup MCP handler
+  // Setup MCP handler with per-request factory
   void import('../src/handlers.js').then(({ createMcpHandler }) => {
-    app.post(
-      '/mcp',
-      ensureMcpReady as never,
-      createMcpHandler(transport as never, log as never) as never,
-    );
+    app.post('/mcp', ensureMcpReady as never, createMcpHandler(mcpFactory, log as never) as never);
   });
 }
 
 /**
- * Create an app with a delayed but eventually successful MCP connection
- * This simulates realistic network latency scenarios
+ * Create an app with a delayed factory readiness signal.
+ *
+ * Simulates a scenario where shared dependencies (e.g. Elasticsearch client)
+ * take time to initialise. The factory itself creates a fresh McpServer +
+ * transport per request, but the readiness middleware gates requests until
+ * shared setup completes.
  */
 async function createAppWithDelayedConnection(delayMs: number): Promise<{
   app: Express;
@@ -161,7 +167,6 @@ async function createAppWithDelayedConnection(delayMs: number): Promise<{
     await import('@modelcontextprotocol/sdk/server/streamableHttp.js');
   const { registerHandlers } = await import('../src/handlers.js');
 
-  // Use mock config instead of loading from env
   const runtimeConfig = createMockRuntimeConfig();
   const log = createHttpLogger(runtimeConfig, { name: 'e2e-test-delayed' });
 
@@ -170,20 +175,24 @@ async function createAppWithDelayedConnection(delayMs: number): Promise<{
 
   app.use(express.json({ limit: '1mb' }));
 
-  // Create real MCP server and transport
-  const server = new McpServer({ name: 'test-server', version: '1.0.0' });
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  // Per-request factory: creates a fresh McpServer + transport per request
+  const mcpFactory: McpServerFactory = () => {
+    const server = new McpServer({ name: 'test-server', version: '1.0.0' });
+    registerHandlers(server, {
+      runtimeConfig,
+      logger: log,
+      searchRetrieval: createFakeSearchRetrieval(),
+    });
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    return { server, transport };
+  };
 
-  registerHandlers(server, { runtimeConfig, logger: log });
-
-  // Start connection with delay
+  // Simulate delayed readiness (e.g. slow ES client creation)
   let completed = false;
   const connectionReady = new Promise<void>((resolve) => {
     setTimeout(() => {
-      void server.connect(transport).then(() => {
-        completed = true;
-        resolve();
-      });
+      completed = true;
+      resolve();
     }, delayMs);
   });
 
@@ -198,8 +207,8 @@ async function createAppWithDelayedConnection(delayMs: number): Promise<{
     res.type('text/html').send('<html><body>Oak Curriculum MCP Server</body></html>');
   });
 
-  // Setup MCP route with timeout middleware
-  setupMcpMiddlewareWithTimeout(app, connectionReady, transport, log);
+  // Setup MCP route with timeout middleware and per-request factory
+  setupMcpMiddlewareWithTimeout(app, connectionReady, mcpFactory, log);
 
   return {
     app,

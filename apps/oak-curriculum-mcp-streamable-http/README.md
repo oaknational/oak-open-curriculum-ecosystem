@@ -966,9 +966,9 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - Host blocked: add host to `ALLOWED_HOSTS`
 - Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
 
-## Search tools (optional)
+## Search tools
 
-Three additional search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide Elasticsearch-backed semantic search. Set `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` in the environment to enable them. The factory in `src/search-retrieval-factory.ts` creates the Search SDK instance when credentials are present. Without credentials, the search tools return "not configured" errors; all other tools work normally.
+Three search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide Elasticsearch-backed semantic search. `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are **required** environment variables — the server fails at startup if either is absent. In stub mode (`OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`), `createStubSearchRetrieval()` is used instead of a real Elasticsearch client, so credentials are still required by the env schema but no real ES connection is made.
 
 ## How it works
 

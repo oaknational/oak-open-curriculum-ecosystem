@@ -1,8 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import type {
-  ToolName,
-  ToolExecutionResult,
-  OakApiPathBasedClient,
+import {
+  createStubSearchRetrieval,
+  type ToolName,
+  type ToolExecutionResult,
+  type OakApiPathBasedClient,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import { createMcpToolsModule } from './index.js';
@@ -75,6 +76,7 @@ describe('createMcpToolsModule', () => {
     const module = createMcpToolsModule({
       client: createFakeClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const output = expectCallToolResult(
@@ -111,6 +113,7 @@ describe('createMcpToolsModule', () => {
     const module = createMcpToolsModule({
       client: createFakeClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const args = {
@@ -137,6 +140,7 @@ describe('createMcpToolsModule', () => {
     const module = createMcpToolsModule({
       client: createFakeClient(),
       executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
     });
 
     const args = {

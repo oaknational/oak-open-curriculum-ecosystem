@@ -4,15 +4,16 @@ import { z } from 'zod';
  * Contract schema for Elasticsearch connectivity.
  *
  * Import and merge this schema when your app requires Elasticsearch.
- * Use `.partial()` when Elasticsearch is optional (e.g. search tools
- * are disabled when credentials are absent).
+ * MCP servers use the full schema — credentials are required at
+ * startup (fail-fast). Applications that do not require Elasticsearch
+ * may use `.partial()` if needed.
  *
- * @example Required
+ * @example MCP servers (required — server fails at startup if absent)
  * ```typescript
- * const AppEnv = ElasticsearchEnvSchema.extend(OakApiKeyEnvSchema.shape);
+ * const AppEnv = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape);
  * ```
  *
- * @example Optional (search features disabled when absent)
+ * @example Other applications (optional)
  * ```typescript
  * const AppEnv = OakApiKeyEnvSchema
  *   .extend(ElasticsearchEnvSchema.partial().shape);

@@ -35,17 +35,42 @@ export interface LoadRootEnvOptions {
   env?: Record<string, string | undefined>;
 }
 
+export interface EnvKeyStatus {
+  readonly key: string;
+  readonly present: boolean;
+}
+
+export interface LoadRootEnvResult {
+  readonly repoRoot: string;
+  readonly loaded: boolean;
+  readonly path?: string;
+  readonly keyStatus: readonly EnvKeyStatus[];
+  readonly missingKeys: readonly string[];
+}
+
+function buildKeyStatus(
+  envObj: Record<string, string | undefined>,
+  keys: readonly string[],
+): { keyStatus: readonly EnvKeyStatus[]; missingKeys: readonly string[] } {
+  const keyStatus = keys.map((key) => {
+    const value = envObj[key];
+    return { key, present: typeof value === 'string' && value.length > 0 };
+  });
+  const missingKeys = keyStatus.filter((s) => !s.present).map((s) => s.key);
+  return { keyStatus, missingKeys };
+}
+
 /** Load environment variables from repo-root .env files if required keys are missing */
-export function loadRootEnv(options: LoadRootEnvOptions): {
-  repoRoot: string;
-  loaded: boolean;
-  path?: string;
-} {
+export function loadRootEnv(options: LoadRootEnvOptions): LoadRootEnvResult {
   const envObj = options.env ?? {};
   const required = options.requiredKeys ?? [];
   const missing = required.filter((k) => !envObj[k]);
   if (missing.length === 0 && required.length > 0) {
-    return { repoRoot: 'Required keys present, skipping dotenv load', loaded: false };
+    return {
+      repoRoot: 'Required keys present, skipping dotenv load',
+      loaded: false,
+      ...buildKeyStatus(envObj, required),
+    };
   }
 
   const repoRoot = findRepoRoot(options.startDir);
@@ -55,8 +80,8 @@ export function loadRootEnv(options: LoadRootEnvOptions): {
     const path = join(repoRoot, file);
     if (existsSync(path)) {
       dotenvConfig({ path });
-      return { repoRoot, loaded: true, path };
+      return { repoRoot, loaded: true, path, ...buildKeyStatus(envObj, required) };
     }
   }
-  return { repoRoot, loaded: false };
+  return { repoRoot, loaded: false, ...buildKeyStatus(envObj, required) };
 }

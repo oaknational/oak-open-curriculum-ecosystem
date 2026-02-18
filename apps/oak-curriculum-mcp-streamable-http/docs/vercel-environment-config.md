@@ -121,16 +121,22 @@ Exposed Headers: Mcp-Session-Id, WWW-Authenticate
 
 ### Current Implementation
 
-The HTTP server is **always initialized in stateless mode** regardless of the `REMOTE_MCP_MODE` setting:
+The HTTP server uses the **per-request transport pattern**: each incoming request creates a fresh `McpServer` and `StreamableHTTPServerTransport`. This matches the MCP SDK's canonical stateless example and works correctly on Vercel (both cold starts and warm instances).
 
 ```typescript
-// From src/index.ts
-const transport = new StreamableHTTPServerTransport({
-  sessionIdGenerator: undefined, // Always stateless
-});
+// Per-request factory (from src/application.ts)
+const mcpFactory: McpServerFactory = () => {
+  const server = new McpServer(
+    { name: 'oak-curriculum-http', version: '0.1.0' },
+    { instructions: SERVER_INSTRUCTIONS },
+  );
+  registerHandlers(server, handlerOptions);
+  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  return { server, transport };
+};
 ```
 
-The `REMOTE_MCP_MODE` environment variable currently **only affects CORS headers**, not the actual transport behavior. This allows for future session support if needed, but the transport itself remains stateless.
+Shared dependencies (Elasticsearch client, runtime configuration) are created once at startup. The `REMOTE_MCP_MODE` environment variable currently **only affects CORS headers**, not the actual transport behaviour.
 
 ### Recommendation
 

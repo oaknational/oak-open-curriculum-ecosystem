@@ -49,6 +49,8 @@ const authBypassedEnv: NodeJS.ProcessEnv = {
   CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
 /**
@@ -60,6 +62,8 @@ const authEnforcedEnv: NodeJS.ProcessEnv = {
   CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
 function createBypassedApp(): ReturnType<typeof createApp> {

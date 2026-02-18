@@ -200,11 +200,10 @@ function buildPortCheckTimeoutError(port: number): Error {
  * Creates a fresh application instance, starts it on an ephemeral port,
  * runs a callback with the base URL, and tears down the server.
  *
- * `StreamableHTTPServerTransport` in stateless mode (`sessionIdGenerator: undefined`)
- * handles exactly one MCP request per transport instance. The smoke suite
- * therefore needs a fresh server for each MCP assertion. Non-MCP assertions
- * (health checks, Accept header enforcement) can share the original server
- * because Express middleware handles them before the transport is reached.
+ * Useful for testing scenarios that need an isolated server (e.g. auth
+ * enforcement tests, custom configurations). For standard smoke assertions,
+ * all MCP requests can share the main server since per-request transport
+ * creates a fresh McpServer + transport per request.
  */
 export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>): Promise<T> {
   const { createApp } = await import('../src/application.js');

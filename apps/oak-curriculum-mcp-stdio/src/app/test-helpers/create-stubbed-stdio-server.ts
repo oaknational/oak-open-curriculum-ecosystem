@@ -4,6 +4,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 import {
   createStubToolExecutionAdapter,
+  createStubSearchRetrieval,
   McpToolError,
   createOakPathBasedClient,
   type ToolName,
@@ -134,6 +135,7 @@ function createNoopLogger(): NoopLogger {
 function buildToolExecutors(missingTools: ReadonlySet<ToolName>): UniversalToolExecutors {
   const stubExecutor = createStubToolExecutionAdapter();
   return {
+    searchRetrieval: createStubSearchRetrieval(),
     executeMcpTool: (name, args) => {
       if (missingTools.has(name)) {
         return Promise.resolve({

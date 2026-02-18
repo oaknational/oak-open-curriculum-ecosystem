@@ -5,6 +5,9 @@
  * 1. Wraps transport.handleRequest in setRequestContext
  * 2. Extracts correlation ID for logging
  * 3. Adapts Express request for MCP SDK
+ * 4. Creates server+transport per request via factory
+ * 5. Connects server to transport before handling
+ * 6. Cleans up server+transport on response close
  *
  * Uses simple fakes injected as arguments - NO network IO.
  */
@@ -15,7 +18,7 @@ import { createMcpHandler } from './handlers.js';
 import { getRequestContext } from './request-context.js';
 import {
   createFakeResponse,
-  createFakeStreamableTransport,
+  createFakeMcpServerFactory,
   createFakeExpressRequest,
 } from './test-helpers/fakes.js';
 
@@ -31,33 +34,33 @@ describe('createMcpHandler (Integration)', () => {
     it('wraps transport.handleRequest with setRequestContext', async () => {
       let capturedContext: Request | undefined;
 
-      const mockTransport = createFakeStreamableTransport(
+      const { factory, transport } = createFakeMcpServerFactory(
         vi.fn(async () => {
           capturedContext = getRequestContext();
         }),
       );
 
-      const handler = createMcpHandler(mockTransport);
+      const handler = createMcpHandler(factory);
       const mockReq = createMockRequest({ method: 'tools/list' });
       const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
       // Verify transport was called
-      expect(mockTransport.handleRequest).toHaveBeenCalled();
+      expect(transport.handleRequest).toHaveBeenCalled();
 
       // Verify context was available inside handleRequest
       expect(capturedContext).toBe(mockReq);
     });
 
     it('context is unavailable outside handler execution', async () => {
-      const mockTransport = createFakeStreamableTransport(
+      const { factory } = createFakeMcpServerFactory(
         vi.fn(async (something: unknown) => {
           console.log(`something in a test: ${something}`);
         }),
       );
 
-      const handler = createMcpHandler(mockTransport);
+      const handler = createMcpHandler(factory);
       const mockReq = createMockRequest({ method: 'tools/list' });
       const mockRes = createFakeResponse();
 
@@ -73,13 +76,13 @@ describe('createMcpHandler (Integration)', () => {
       const testBody = { jsonrpc: '2.0', method: 'tools/list', id: '123' };
       let receivedBody: unknown;
 
-      const mockTransport = createFakeStreamableTransport(
+      const { factory } = createFakeMcpServerFactory(
         vi.fn(async (_req: unknown, _res: unknown, body: unknown) => {
           receivedBody = body;
         }),
       );
 
-      const handler = createMcpHandler(mockTransport);
+      const handler = createMcpHandler(factory);
       const mockReq = createMockRequest(testBody);
       const mockRes = createFakeResponse();
 
@@ -91,13 +94,13 @@ describe('createMcpHandler (Integration)', () => {
     it('omits auth property from adapted request', async () => {
       let receivedRequest: unknown;
 
-      const mockTransport = createFakeStreamableTransport(
+      const { factory } = createFakeMcpServerFactory(
         vi.fn(async (req: unknown) => {
           receivedRequest = req;
         }),
       );
 
-      const handler = createMcpHandler(mockTransport);
+      const handler = createMcpHandler(factory);
       const mockReq = createFakeExpressRequest({
         body: { method: 'tools/list' },
         headers: {},
@@ -112,6 +115,20 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedRequest).toBeDefined();
       const adapted = receivedRequest as { auth?: unknown };
       expect(adapted.auth).toBeUndefined();
+    });
+  });
+
+  describe('per-request lifecycle', () => {
+    it('connects server to transport before handling request', async () => {
+      const { factory, server } = createFakeMcpServerFactory(vi.fn(async () => undefined));
+
+      const handler = createMcpHandler(factory);
+      const mockReq = createMockRequest({ method: 'tools/list' });
+      const mockRes = createFakeResponse();
+
+      await handler(mockReq, mockRes);
+
+      expect(server.connect).toHaveBeenCalledOnce();
     });
   });
 });

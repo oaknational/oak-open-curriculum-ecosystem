@@ -20,6 +20,8 @@ export function createMockRuntimeConfig(overrides?: Partial<RuntimeConfig>): Run
       OAK_API_KEY: 'mock-oak-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_mock',
       CLERK_SECRET_KEY: 'sk_test_mock',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
       LOG_LEVEL: 'error',
       NODE_ENV: 'test',
       ...envOverrides,

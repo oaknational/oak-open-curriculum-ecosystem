@@ -34,7 +34,7 @@ log(`[START-MCP] Root directory: ${rootDir}`);
 
 // Load environment variables from repo root (.env.local then .env) if needed
 const loaded = loadRootEnv({
-  requiredKeys: ['OAK_API_KEY'],
+  requiredKeys: ['OAK_API_KEY', 'ELASTICSEARCH_URL', 'ELASTICSEARCH_API_KEY'],
   startDir: rootDir,
   env: { ...process.env },
 });

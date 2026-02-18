@@ -44,8 +44,7 @@ vi.mock('@clerk/express', () => ({
 /**
  * Creates a fresh app instance for auth-enabled tests.
  *
- * MCP StreamableHTTPServerTransport serves one client per instance.
- * Each test expecting a 200 from the transport needs its own app.
+ * Each test creates its own app for isolation.
  */
 function createAuthEnabledApp(): Express {
   return createApp({
@@ -55,6 +54,8 @@ function createAuthEnabledApp(): Express {
         CLERK_PUBLISHABLE_KEY: 'pk_test_123',
         CLERK_SECRET_KEY: 'sk_test_123',
         NODE_ENV: 'test',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     }),
   });
@@ -264,8 +265,7 @@ describe('Application-Level Method-Aware Auth', () => {
   describe('DANGEROUSLY_DISABLE_AUTH compatibility', () => {
     /**
      * Creates a fresh app with auth disabled.
-     * Each test needs its own app because StreamableHTTPServerTransport
-     * serves one client per instance.
+     * Each test creates its own app for isolation.
      */
     function createBypassApp(): Express {
       return createApp({
@@ -276,6 +276,8 @@ describe('Application-Level Method-Aware Auth', () => {
             CLERK_PUBLISHABLE_KEY: 'pk_test_123',
             CLERK_SECRET_KEY: 'sk_test_123',
             NODE_ENV: 'development',
+            ELASTICSEARCH_URL: 'http://fake-es:9200',
+            ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
           },
         }),
       });

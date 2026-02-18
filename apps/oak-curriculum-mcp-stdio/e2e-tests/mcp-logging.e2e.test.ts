@@ -32,6 +32,8 @@ describe('MCP Startup logging', () => {
         OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'debug',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     });
     client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });

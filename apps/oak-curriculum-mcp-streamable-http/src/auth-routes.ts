@@ -1,5 +1,4 @@
 import type { Express } from 'express';
-import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -12,20 +11,21 @@ import { createMcpRouter } from './mcp-router.js';
 import { createMcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
+import type { McpServerFactory } from './mcp-request-context.js';
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
  */
 function registerUnauthenticatedRoutes(
   app: Express,
-  coreTransport: StreamableHTTPServerTransport,
+  mcpFactory: McpServerFactory,
   log: Logger,
 ): void {
   log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
   log.debug('Registering POST /mcp route (auth disabled)');
-  app.post('/mcp', createMcpHandler(coreTransport, log));
+  app.post('/mcp', createMcpHandler(mcpFactory, log));
   log.debug('Registering GET /mcp route (auth disabled)');
-  app.get('/mcp', createMcpHandler(coreTransport, log));
+  app.get('/mcp', createMcpHandler(mcpFactory, log));
 }
 
 /**
@@ -101,7 +101,7 @@ export function registerPublicOAuthMetadataEndpoints(
  */
 function registerAuthenticatedRoutes(
   app: Express,
-  coreTransport: StreamableHTTPServerTransport,
+  mcpFactory: McpServerFactory,
   log: Logger,
 ): void {
   // Create method-aware router with HTTP-level auth
@@ -112,11 +112,11 @@ function registerAuthenticatedRoutes(
   // POST /mcp - main MCP endpoint
   // Router runs BEFORE SDK handler to enable HTTP 401 responses
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
-  app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+  app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, log));
 
   // GET /mcp - for SSE connections and initial requests
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
-  app.get('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+  app.get('/mcp', mcpRouter, createMcpHandler(mcpFactory, log));
 }
 
 /**
@@ -196,16 +196,16 @@ export function setupGlobalAuthContext(
  * registerPublicOAuthMetadataEndpoints() to ensure they are publicly accessible.
  *
  * @param app - Express application instance
- * @param coreTransport - MCP StreamableHTTP transport for request handling
+ * @param mcpFactory - Factory creating fresh McpServer + transport per request
  * @param runtimeConfig - Runtime configuration including auth settings
  * @param log - Logger instance for auth-related events
  *
  * @see {@link setupGlobalAuthContext} for global auth middleware (called earlier)
- * @see {@link registerPublicOAuthMetadataEndpoints} for OAuth metadata endpoints (called before auth middleware)
+ * @see {@link registerPublicOAuthMetadataEndpoints} for OAuth metadata endpoints
  */
 export function setupAuthRoutes(
   app: Express,
-  coreTransport: StreamableHTTPServerTransport,
+  mcpFactory: McpServerFactory,
   runtimeConfig: RuntimeConfig,
   log: Logger,
 ): void {
@@ -213,7 +213,7 @@ export function setupAuthRoutes(
 
   if (runtimeConfig.dangerouslyDisableAuth) {
     measureAuthSetupStep(authLog, 'auth.disabled.register', () => {
-      registerUnauthenticatedRoutes(app, coreTransport, authLog);
+      registerUnauthenticatedRoutes(app, mcpFactory, authLog);
     });
     return;
   }
@@ -223,6 +223,6 @@ export function setupAuthRoutes(
   // Auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs
   authLog.debug('Registering MCP routes (HTTP-level auth enforcement)');
   measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
-    registerAuthenticatedRoutes(app, coreTransport, authLog);
+    registerAuthenticatedRoutes(app, mcpFactory, authLog);
   });
 }

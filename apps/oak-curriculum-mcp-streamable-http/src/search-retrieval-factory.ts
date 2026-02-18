@@ -1,8 +1,8 @@
 /**
- * Factory for creating the SearchRetrievalService when ES credentials are present.
+ * Factory for creating the SearchRetrievalService from validated ES credentials.
  *
  * Extracted from handlers.ts to keep that file within the max-lines limit.
- * Accepts optional factory dependencies for testability per ADR-078.
+ * Accepts injectable factory dependencies for testability per ADR-078.
  *
  * The factory uses a generic type parameter `TClient` so that tests can
  * inject simple fakes without needing to construct a real ES Client.
@@ -41,43 +41,36 @@ const defaultFactories: SearchRetrievalFactories<Client> = {
 };
 
 /**
- * Creates a SearchRetrievalService when Elasticsearch credentials are present.
+ * Creates a SearchRetrievalService from validated environment credentials.
  *
- * @param env - Environment variables containing optional ES credentials
+ * @param env - Environment variables with ES credentials (validated by env schema)
  * @param logger - Logger for startup messages
- * @returns SearchRetrievalService if credentials present, undefined otherwise
+ * @returns SearchRetrievalService connected to Elasticsearch
  */
 export function createSearchRetrieval(
-  env: { ELASTICSEARCH_URL?: string; ELASTICSEARCH_API_KEY?: string },
+  env: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string },
   logger: { info: (msg: string) => void },
-): SearchRetrievalService | undefined;
+): SearchRetrievalService;
 
 /**
- * Creates a SearchRetrievalService when Elasticsearch credentials are present.
+ * Creates a SearchRetrievalService with injectable factory dependencies.
  *
- * @param env - Environment variables containing optional ES credentials
+ * @param env - Environment variables with ES credentials (validated by env schema)
  * @param logger - Logger for startup messages
  * @param factories - Injectable factory dependencies for testability
- * @returns SearchRetrievalService if credentials present, undefined otherwise
+ * @returns SearchRetrievalService connected to Elasticsearch
  */
 export function createSearchRetrieval<TClient>(
-  env: { ELASTICSEARCH_URL?: string; ELASTICSEARCH_API_KEY?: string },
+  env: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string },
   logger: { info: (msg: string) => void },
   factories: SearchRetrievalFactories<TClient>,
-): SearchRetrievalService | undefined;
+): SearchRetrievalService;
 
 export function createSearchRetrieval(
-  env: { ELASTICSEARCH_URL?: string; ELASTICSEARCH_API_KEY?: string },
+  env: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string },
   logger: { info: (msg: string) => void },
   factories: SearchRetrievalFactories = defaultFactories,
-): SearchRetrievalService | undefined {
-  if (!env.ELASTICSEARCH_URL || !env.ELASTICSEARCH_API_KEY) {
-    logger.info(
-      'Search retrieval service not configured — ELASTICSEARCH_URL or ELASTICSEARCH_API_KEY missing. Search tools will return "not configured" errors.',
-    );
-    return undefined;
-  }
-
+): SearchRetrievalService {
   const esClient = factories.createEsClient({
     node: env.ELASTICSEARCH_URL,
     auth: { apiKey: env.ELASTICSEARCH_API_KEY },

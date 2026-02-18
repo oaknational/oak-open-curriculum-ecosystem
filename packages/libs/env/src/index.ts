@@ -9,6 +9,7 @@
 
 export { findRepoRoot, loadRootEnv } from './repo-root';
 export type { LoadRootEnvOptions } from './repo-root';
+export type { EnvKeyStatus, LoadRootEnvResult } from './repo-root';
 
 // Shared env contract schemas — import only the ones you need
 export {

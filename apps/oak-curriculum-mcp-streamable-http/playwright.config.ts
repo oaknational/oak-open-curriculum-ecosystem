@@ -17,6 +17,8 @@ export default defineConfig({
       CLERK_PUBLISHABLE_KEY: 'pk_test_dummy',
       CLERK_SECRET_KEY: 'sk_test_dummy',
       DANGEROUSLY_DISABLE_AUTH: 'true',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-playwright',
     },
   },
   use: {

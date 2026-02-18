@@ -21,11 +21,6 @@ import type {
 import type { SearchSdkArgs, SearchSdkScope } from './types.js';
 import { formatSearchResults } from './formatting.js';
 
-/** Error message when search retrieval service is not configured. */
-const NOT_CONFIGURED_MESSAGE =
-  'Search is not configured. Elasticsearch credentials are required. ' +
-  'All other tools remain available.';
-
 /**
  * Builds SearchLessonsParams from validated SearchSdkArgs.
  */
@@ -163,10 +158,6 @@ export async function runSearchSdkTool(
   args: SearchSdkArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  if (deps.searchRetrieval === undefined) {
-    return formatError(NOT_CONFIGURED_MESSAGE);
-  }
-
   const outcome = await dispatchByScope(args.scope, args, deps.searchRetrieval);
 
   if (!outcome.ok) {

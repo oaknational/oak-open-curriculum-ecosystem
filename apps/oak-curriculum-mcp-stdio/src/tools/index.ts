@@ -22,8 +22,16 @@ export interface McpToolsModule {
 
 export interface UniversalToolExecutors {
   readonly executeMcpTool?: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
-  readonly searchRetrieval?: SearchRetrievalService;
+  readonly searchRetrieval: SearchRetrievalService;
 }
+
+/**
+ * Subset of UniversalToolExecutors for executor overrides only.
+ *
+ * Used by `resolveToolExecutors` which only provides `executeMcpTool`
+ * overrides — `searchRetrieval` is constructed separately in wiring.
+ */
+export type ToolExecutorOverrides = Pick<UniversalToolExecutors, 'executeMcpTool'>;
 
 function formatError(message: string): CallToolResult {
   const content: TextContent = { type: 'text', text: `Error: ${message}` };

@@ -50,6 +50,12 @@ todos:
   - id: ws4-test-gaps
     content: "WS4 follow-up: search-retrieval-factory.ts has 9 integration tests (DI with FakeClient brand type). browse formatting.unit.test.ts has 7 unit tests (createFacet/createFacets helpers for generated SequenceFacet type). Mock shapes verified against generated types."
     status: completed
+  - id: fail-fast-es-creds
+    content: "Pre-WS5: Fail fast on missing Elasticsearch credentials — remove six layers of silent degradation. Server must fail at startup if ES creds missing, not return 'not configured' at runtime. See fail-fast-elasticsearch-credentials.md."
+    status: completed
+  - id: env-architecture-overhaul
+    content: "Pre-WS5: Fix broken environment loading architecture — entry points bypass runtime-config.ts, required keys defined in two places, Clerk keys unconditionally required, loadRootEnv given diagnostic responsibilities that belong in app layer. See env-architecture-overhaul.md."
+    status: pending
   - id: ws5-compare
     content: "WS5: Compare new search tools vs old REST API search on representative queries."
     status: pending
@@ -539,11 +545,11 @@ If SDK search is superior (expected: 4-way RRF + ELSER vs REST text search):
 
 ### E2E Transport Isolation Fix (17 previously failing tests — RESOLVED)
 
-**Root cause**: MCP `StreamableHTTPServerTransport` serves exactly one client per instance. Tests that shared an app instance (via `beforeAll`) silently failed on the second request — transport returned HTTP 500 (consumed), which SSE parsers reported as "missing data line".
+**Root cause**: MCP `StreamableHTTPServerTransport` in stateless mode served one client per instance. Tests that shared an app instance (via `beforeAll`) failed on the second request.
 
-**Fix**: Each test expecting a 200 from MCP transport now creates its own fresh `createApp()` instance. Tests checking for HTTP 401 (auth rejects before transport) were safe but updated for consistency.
+**Original fix** (WS4): Each test created its own fresh `createApp()` instance.
 
-**Files fixed** (6): `application-routing`, `auth-enforcement`, `public-resource-auth-bypass`, `get-knowledge-graph`, `widget-metadata`, `widget-resource`.
+**Superseded by ADR-112**: The per-request transport pattern (implemented as part of the stateless transport bug fix) means the app now handles multiple sequential requests correctly. E2E tests were simplified — multi-step MCP flows (e.g. `getWidgetHtml()`) now share a single app instance. The `withFreshServer` smoke test workaround was also removed. See [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md).
 
 ---
 
@@ -557,4 +563,4 @@ If SDK search is superior (expected: 4-way RRF + ELSER vs REST text search):
 | Too many tools overwhelms agents               | Three new tools is modest. Rich descriptions + `get-help` + prerequisite guidance help agents choose. |
 | Existing tool regression                       | `searchRetrieval` is optional. All existing code paths unchanged. E2E tests verify. |
 | NL guidance insufficient                       | WS3 pending. Iterate on descriptions based on agent testing. The guidance is in code, easy to refine. |
-| E2E transport isolation (was 17 failures)       | **Resolved.** Tests now create fresh `createApp()` per MCP request. 191/191 E2E pass. |
+| E2E transport isolation (was 17 failures)       | **Resolved.** Per-request transport (ADR-112) eliminated the root cause. Tests simplified. 193/193 E2E pass. |

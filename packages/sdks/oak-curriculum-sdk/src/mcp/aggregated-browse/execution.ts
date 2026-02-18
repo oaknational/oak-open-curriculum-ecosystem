@@ -16,11 +16,6 @@ import type { SearchFacets } from '../../types/generated/search/facets.js';
 import type { BrowseArgs } from './types.js';
 import { buildBrowseSummary } from './formatting.js';
 
-/** Error message when search retrieval service is not configured. */
-const NOT_CONFIGURED_MESSAGE =
-  'Curriculum browsing is not configured. Elasticsearch credentials are required. ' +
-  'All other tools remain available.';
-
 /**
  * Type guard for SearchFacets.
  */
@@ -42,10 +37,6 @@ export async function runBrowseTool(
   args: BrowseArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  if (deps.searchRetrieval === undefined) {
-    return formatError(NOT_CONFIGURED_MESSAGE);
-  }
-
   const result = await deps.searchRetrieval.fetchSequenceFacets({
     subject: args.subject,
     keyStage: args.keyStage,

@@ -85,12 +85,13 @@ changing behaviour.
   instance consumed by a prior test) passes or fails based
   on execution order. That is not a test — it is a
   coincidence. Each test must own its own state.
-- MCP `StreamableHTTPServerTransport` serves exactly one
-  client per instance. Every E2E test expecting HTTP 200
-  from the transport must create its own fresh `createApp()`.
-  Tests checking for HTTP 401 bypass the transport (auth
-  middleware rejects first) but should still use fresh apps
-  for consistency.
+- MCP `StreamableHTTPServerTransport` in stateless mode
+  (`sessionIdGenerator: undefined`) serves one request per
+  instance — the SDK enforces this via `_hasHandledRequest`.
+  Per ADR-112, the app uses a per-request factory pattern:
+  each request gets a fresh `McpServer` + transport. Heavy
+  deps (ES client, config, logger) are shared. E2E tests
+  can share a single app instance for multi-step flows.
 - Replace Express `_router` access in tests with HTTP
   assertions via supertest — more resilient, tests actual
   behaviour
@@ -109,6 +110,15 @@ changing behaviour.
   `process.env`
 - `max-lines-per-function` (50 lines) — extract per-command
   registration functions
+- ESLint complexity counts `??` and `?.` as branches — five
+  nullish-coalescing expressions in one function can breach the
+  limit. Fix: extract the merge logic into a named helper function
+- Repeated multi-line test setup → extract scoped helper inside
+  `describe` block (e.g. `registerWithOverrides`, `baseEnv`)
+- Spread with optional properties widens types:
+  `{ ...defaults, ...overrides }` where `overrides.prop?: T`
+  yields `prop: T | undefined` even if `defaults.prop: T`.
+  Fix: explicit property resolution with `??` or a typed merge helper
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
 
@@ -166,8 +176,29 @@ changing behaviour.
   local interface (`SearchRetrievalService`) structurally
   compatible with the concrete type. MCP servers inject the
   concrete implementation.
+- Fail-fast ES credentials pattern: validate at entry point
+  (Zod env schema for HTTP; explicit check in `loadRuntimeConfig`
+  for STDIO), make the type required everywhere downstream, delete
+  all `if-missing` branches as unreachable dead code. Stub mode
+  uses `createStubSearchRetrieval()` — a pure-data SDK function,
+  NOT a test fake — so no real ES client is ever constructed.
+- Stub vs fake distinction: runtime stubs (plain functions,
+  live in SDK, used in product code stub mode) vs test fakes
+  (`vi.fn()`, live in `test-helpers/`, used in tests only)
 - Prefer `git worktree` over `git stash` for baseline
   comparisons — stash risks lost work
+- Per-request transport pattern (ADR-112): factory closure
+  captures shared deps; per request creates `McpServer` +
+  `StreamableHTTPServerTransport`, connects, handles, cleans
+  up via `res.on('close')`. Cleanup errors logged, not
+  swallowed (`Promise.resolve().then().catch(logger.error)`)
+- When extracting types from a composition root to fix layer
+  violations, the composition root itself may still need a
+  local `import type` for its own internal usage — a
+  re-export alone is not sufficient for local references
+- `void promise` silently swallows rejections — use
+  `.catch(logger.error)` for cleanup promises in event
+  handlers like `res.on('close')`
 
 ## Domain Knowledge
 

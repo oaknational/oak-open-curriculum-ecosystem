@@ -27,6 +27,8 @@ export function createStubbedHttpApp(
     CLERK_PUBLISHABLE_KEY: 'pk_test_123',
     CLERK_SECRET_KEY: 'sk_test_123',
     ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_API_KEY: 'fake-api-key-for-stub-tests',
     ...envOverrides,
   };
 

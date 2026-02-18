@@ -120,6 +120,9 @@ export type {
 // Search retrieval service interface (dependency inversion for search SDK)
 export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';
 
+// Stub search retrieval for stub mode (no real ES client)
+export { createStubSearchRetrieval } from '../mcp/search-retrieval-stub.js';
+
 // Synonym utilities (ES export, lookup, phrase detection)
 export {
   buildElasticsearchSynonyms,

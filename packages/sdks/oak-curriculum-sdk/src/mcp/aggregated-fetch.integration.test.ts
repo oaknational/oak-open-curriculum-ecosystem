@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { runFetchTool } from './aggregated-fetch.js';
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
 import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
+import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 
 /**
  * Creates a mock executeMcpTool that returns predefined result for any tool.
@@ -25,6 +26,7 @@ import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 function createMockExecutor(result: ToolExecutionResult): UniversalToolExecutorDependencies {
   return {
     executeMcpTool: () => Promise.resolve(result),
+    searchRetrieval: createStubSearchRetrieval(),
   };
 }
 
@@ -144,6 +146,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const deps: UniversalToolExecutorDependencies = {
         executeMcpTool: () =>
           Promise.resolve({ error: new McpToolError('API failure', 'get-lessons-summary') }),
+        searchRetrieval: createStubSearchRetrieval(),
       };
 
       const result = await runFetchTool({ id: 'lesson:test' }, deps);

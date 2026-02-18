@@ -1,27 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-17
-
----
-
-## Active: Streamable HTTP Transport Bug (Priority: HIGH)
-
-A production bug in the streamable-http server prevents any real MCP
-client from completing a multi-request session. The application creates
-**one** `StreamableHTTPServerTransport` in stateless mode at startup.
-The MCP SDK (v1.26.0) forbids reusing a stateless transport — it throws
-after the first request. Local dev is broken; Vercel warm instances may
-also be affected.
-
-The smoke test (`smoke:dev:stub`) works around this with
-`withFreshServer` (fresh server per MCP assertion), but the underlying
-system bug remains. Needs an architectural decision: stateful mode,
-per-request transport, or dual mode.
-
-**Active plan**: [streamable-http-transport-stateless-bug.md](../../plans/semantic-search/active/streamable-http-transport-stateless-bug.md)
-
-**Next action**: Investigate (Phase 1 of the plan) — confirm impact
-on local dev and Vercel warm instances, then choose architecture.
+**Last Updated**: 2026-02-18
 
 ---
 
@@ -34,10 +13,24 @@ path, 8 ground truths span 5 subjects (MRR=0.938, NDCG@10=0.902),
 and legacy `test-query-*.ts` scripts have been deleted. All SDK
 retrieval methods have been validated against live Elasticsearch.
 
-**Active plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
+**Active plans**:
+- [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) — MCP search tools (WS1-WS4 complete, env overhaul + WS5 remaining)
+- [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md) — **current priority** (pre-WS5)
 
-**Next action**: WS5 (compare SDK search vs REST API search on
-representative queries; replace if superior). WS1-WS4 complete.
+**Next action**: Environment architecture overhaul. `@oaknational/mcp-env`
+is just a file loader — it should be a proper env resolution pipeline that
+defines the contract for how apps communicate their requirements. The lib
+takes a Zod schema from the app, reads the source hierarchy (`.env` <
+`.env.local` < `process.env`), merges into a protoconfig, validates, and
+returns `Result<T, EnvResolutionError>`. Apps conform to the contract; the
+lib owns loading, merging, validation, and diagnostics. The plan is reviewed
+and ready for execution. Read it first:
+[env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
+
+After the env overhaul: WS5 — compare SDK search (`search-sdk`) vs REST
+API search (`search`) on representative queries; replace if superior.
+
+**Completed**: [fail-fast-elasticsearch-credentials.md](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md)
 
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
@@ -243,6 +236,34 @@ Completed 2026-02-12. Six workstreams:
 
 **Plan**: [thread-search-sdk-integration.plan.md](../../plans/semantic-search/archive/completed/thread-search-sdk-integration.plan.md)
 
+### Fail-Fast Elasticsearch Credentials ✅
+
+Six layers of silent degradation removed across three workspaces.
+Both MCP servers now fail at startup if `ELASTICSEARCH_URL` or
+`ELASTICSEARCH_API_KEY` are absent; env validation (Zod for HTTP,
+explicit check for STDIO) enforces this at the entry point. All
+downstream code trusts the types — unreachable `if-missing` branches
+deleted. Stub mode uses `createStubSearchRetrieval()` (exported from
+curriculum-sdk `public/mcp-tools.ts`) instead of constructing a real
+ES client. `searchRetrieval` is required in `UniversalToolExecutorDependencies`,
+`ToolHandlerDependencies`, and `UniversalToolExecutors`.
+
+**Plan**: [fail-fast-elasticsearch-credentials.md](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md)
+
+### Streamable HTTP Transport Bug Fix (ADR-112) ✅
+
+The streamable-http server was creating one `StreamableHTTPServerTransport`
+in stateless mode at startup and reusing it. The MCP SDK (v1.26.0)
+forbids this — stateless transports throw after the first request.
+Fixed by implementing the per-request transport pattern (ADR-112):
+a factory creates a fresh `McpServer` + `StreamableHTTPServerTransport`
+per request while sharing heavy dependencies (ES client, config, logger).
+E2E tests simplified (6 files), smoke test `withFreshServer` workaround
+removed, all "one-client" comments removed.
+
+**ADR**: [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md)
+**Plan**: [streamable-http-transport-stateless-bug.md](../../plans/semantic-search/archive/completed/streamable-http-transport-stateless-bug.md)
+
 ### Code Quality Remediation ✅
 
 Two cross-cutting code quality workstreams completed
@@ -260,7 +281,7 @@ Two cross-cutting code quality workstreams completed
 
 ---
 
-## Phase 3a — MCP Search Tools (WS1-WS2 Complete)
+## Phase 3a — MCP Search Tools (WS1-WS4 Complete)
 
 Three new MCP tools expose the Search SDK's Elasticsearch-backed
 semantic search to agents and teachers. WS1 (RED), WS2 (GREEN),
@@ -287,10 +308,13 @@ WS5 will compare and likely replace it.
   in curriculum-sdk (`search-retrieval-types.ts`) breaks the
   circular dependency with search-sdk. Structurally compatible
   with `oak-search-sdk`'s `RetrievalService`.
-- **Optional `searchRetrieval`** on
-  `UniversalToolExecutorDependencies`. When absent, search
-  tools return "not configured" errors. All other tools
-  work normally.
+- **`searchRetrieval` on `UniversalToolExecutorDependencies`**:
+  **Required** (not optional). Both MCP servers fail at startup
+  if `ELASTICSEARCH_URL` or `ELASTICSEARCH_API_KEY` are absent.
+  In stub mode (`OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`),
+  `createStubSearchRetrieval()` is used instead of a real ES
+  client — no real connection is attempted. See
+  [fail-fast-elasticsearch-credentials.md](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md).
 - **MCP servers inject the concrete implementation**: Both
   STDIO and HTTP servers create `createSearchSdk().retrieval`
   when `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are set.
@@ -318,7 +342,26 @@ apps/oak-curriculum-mcp-streamable-http/src/
 
 ### What Needs Doing Next
 
-**WS5 (COMPARE AND REPLACE)** — only remaining workstream:
+**Environment Architecture Overhaul** — current priority (pre-WS5):
+
+The fail-fast ES credentials work exposed broken environment loading
+architecture. Both server entry points bypass `runtime-config.ts`,
+import `loadRootEnv` directly, manually validate keys, build diagnostics,
+and call `process.exit` — all responsibilities that belong inside
+`loadRuntimeConfig`. Required keys are defined in two places (entry
+point arrays AND Zod schemas) that will drift. Clerk keys are
+unconditionally required in the Zod schema despite being conditional
+on `DANGEROUSLY_DISABLE_AUTH`. The shared env lib was given diagnostic
+responsibilities that belong in the app layer.
+
+The fix overhauls three layers:
+1. `@oaknational/mcp-env` — becomes a proper env resolution pipeline (`resolveEnv`). Takes a Zod schema from the app, reads the source hierarchy (`.env` < `.env.local` < `process.env`) using non-mutating `dotenv.parse()`, merges into a protoconfig, validates, and returns `Result<T, EnvResolutionError>`. The lib defines the contract; apps conform to it.
+2. `env.ts` / `runtime-config.ts` (HTTP) — conditional Clerk keys via `superRefine`, `loadRuntimeConfig` calls the pipeline and returns `Result<RuntimeConfig, ConfigError>`, `RuntimeConfig` becomes a discriminated union on `dangerouslyDisableAuth`
+3. `index.ts` (HTTP) / `bin/oak-curriculum-mcp.ts` (STDIO) — gutted to minimal wiring, handles `Result`
+
+**Plan**: [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
+
+**After env overhaul — WS5 (COMPARE AND REPLACE)**:
 
 - Run representative teacher queries through both old `search`
   (REST) and new `search-sdk` (ES/SDK)
@@ -326,6 +369,14 @@ apps/oak-curriculum-mcp-streamable-http/src/
 - If superior, remove old `aggregated-search/` module
 - Full quality gate chain after replacement
 - Requires live Elasticsearch credentials in the environment
+
+**Completed (pre-WS5): Fail-fast ES credentials**. Six layers of
+silent degradation removed. `searchRetrieval` is now required across
+all three workspaces. Both servers fail at startup if ES credentials
+are absent. Stub mode uses `createStubSearchRetrieval()` — no real
+ES client constructed. `createStubSearchRetrieval()` exported from
+curriculum-sdk `public/mcp-tools.ts`. All quality gates pass.
+See [archived plan](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md).
 
 **Completed in WS3**: NL guidance (`tool-guidance-data.ts`,
 `tool-guidance-workflows.ts`), MCP prompts (`mcp-prompts.ts`,
@@ -337,7 +388,7 @@ integration tests (9 tests, DI with `FakeClient`), browse
 `formatting.unit.test.ts` (7 tests, `createFacet`/`createFacets`
 helpers for generated types).
 
-### Environment and Config (2026-02-17)
+### Environment and Config (2026-02-18)
 
 - Dead code removed from `@oaknational/mcp-env`:
   `createAdaptiveEnvironment()`, `EnvironmentProvider`, all
@@ -348,6 +399,14 @@ helpers for generated types).
   via `.extend(B.shape)` (Zod 4 deprecates `.merge()`)
 - STDIO–HTTP server alignment plan created as backlog
   (`.agent/plans/architecture/stdio-http-server-alignment.md`)
+- **Known broken**: `@oaknational/mcp-env` is just a file loader
+  with bolted-on diagnostics. It should be a proper env resolution
+  pipeline that defines the contract, reads the source hierarchy,
+  merges, validates, and returns `Result<T, E>`. Entry points
+  bypass `runtime-config.ts`, required keys defined in two places,
+  Clerk keys unconditionally required, source hierarchy loads
+  first file found instead of merging all sources. Fix:
+  [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
 
 ### Phase 4 — Search Quality + Ecosystem
 
@@ -423,8 +482,11 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
-| [Active plan: Transport Bug](../../plans/semantic-search/active/streamable-http-transport-stateless-bug.md) | Stateless transport reuse bug (HIGH priority) |
-| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS4 done, WS5 next) |
+| [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport (stateless bug fix) |
+| [Transport Bug Plan (archived)](../../plans/semantic-search/archive/completed/streamable-http-transport-stateless-bug.md) | Investigation and fix (complete) |
+| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS4 done, env overhaul + WS5 remaining) |
+| [Active plan: Env overhaul](../../plans/semantic-search/active/env-architecture-overhaul.md) | Fix broken env loading architecture (current priority) |
+| [Completed: Fail-fast ES creds](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) | Remove silent degradation on missing ES credentials ✅ |
 | [Background: wire-hybrid-search](../../plans/semantic-search/archive/completed/wire-hybrid-search-background.md) | Original architectural design (reference only) |
 | [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |
 | [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

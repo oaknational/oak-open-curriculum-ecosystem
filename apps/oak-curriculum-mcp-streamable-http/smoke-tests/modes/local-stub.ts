@@ -18,6 +18,8 @@ export async function prepareLocalStubEnvironment(
   // Disable auth – stub mode validates protocol behaviour with canned data.
   // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+  process.env.ELASTICSEARCH_URL ??= 'http://fake-es:9200';
+  process.env.ELASTICSEARCH_API_KEY ??= 'fake-api-key-for-smoke';
 
   const server = await startSmokeServer(options.port);
   const port = getServerPort(server);

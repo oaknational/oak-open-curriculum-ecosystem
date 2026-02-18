@@ -53,6 +53,8 @@ describe('MCP Protocol E2E', () => {
         OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     });
 

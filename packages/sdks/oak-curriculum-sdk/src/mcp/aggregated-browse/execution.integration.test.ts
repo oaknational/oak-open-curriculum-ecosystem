@@ -55,7 +55,7 @@ function createFakeRetrieval(facets?: SearchFacets): SearchRetrievalService {
   };
 }
 
-function createDeps(retrieval?: SearchRetrievalService): UniversalToolExecutorDependencies {
+function createDeps(retrieval: SearchRetrievalService): UniversalToolExecutorDependencies {
   return {
     executeMcpTool: () => Promise.reject(new Error('Should not call executeMcpTool')),
     searchRetrieval: retrieval,
@@ -124,13 +124,6 @@ describe('runBrowseTool', () => {
 
     const result = await runBrowseTool({}, deps);
     expect(result.structuredContent).toBeDefined();
-  });
-
-  it('returns error when searchRetrieval is not configured', async () => {
-    const deps = createDeps(undefined);
-
-    const result = await runBrowseTool({}, deps);
-    expect(result.isError).toBe(true);
   });
 
   it('returns error when fetchSequenceFacets fails', async () => {

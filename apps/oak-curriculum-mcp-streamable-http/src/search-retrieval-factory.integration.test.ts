@@ -1,9 +1,8 @@
 /**
  * Integration tests for the search retrieval factory.
  *
- * Verifies that createSearchRetrieval correctly handles credential
- * presence/absence, delegates to injected factories, and logs
- * appropriate status messages.
+ * Verifies that createSearchRetrieval delegates to injected factories
+ * and logs appropriate status messages when given valid credentials.
  *
  * Uses the generic `SearchRetrievalFactories<TClient>` interface to
  * inject simple fakes without constructing real ES Client instances.
@@ -16,6 +15,7 @@ import {
   createSearchRetrieval,
   type SearchRetrievalFactories,
 } from './search-retrieval-factory.js';
+import { createFakeSearchRetrieval } from './test-helpers/fakes.js';
 
 /**
  * Fake client type used in tests. An empty interface is fine because
@@ -27,18 +27,6 @@ interface FakeClient {
 
 /** A specific fake client value. */
 const fakeEsClient: FakeClient = { _brand: 'fake-es-client' };
-
-/** Creates a properly typed fake SearchRetrievalService. */
-function createFakeRetrieval(): SearchRetrievalService {
-  return {
-    searchLessons: vi.fn<SearchRetrievalService['searchLessons']>(),
-    searchUnits: vi.fn<SearchRetrievalService['searchUnits']>(),
-    searchSequences: vi.fn<SearchRetrievalService['searchSequences']>(),
-    searchThreads: vi.fn<SearchRetrievalService['searchThreads']>(),
-    suggest: vi.fn<SearchRetrievalService['suggest']>(),
-    fetchSequenceFacets: vi.fn<SearchRetrievalService['fetchSequenceFacets']>(),
-  };
-}
 
 /** Creates a simple fake logger that records info messages. */
 function createFakeLogger(): { info: (msg: string) => void; messages: string[] } {
@@ -64,59 +52,6 @@ function createFakeFactories(
 }
 
 describe('createSearchRetrieval', () => {
-  describe('when credentials are missing', () => {
-    it('returns undefined when ELASTICSEARCH_URL is absent', () => {
-      const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
-
-      const result = createSearchRetrieval({}, logger, factories);
-
-      expect(result).toBeUndefined();
-    });
-
-    it('returns undefined when ELASTICSEARCH_API_KEY is absent', () => {
-      const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
-
-      const result = createSearchRetrieval(
-        { ELASTICSEARCH_URL: 'http://localhost:9200' },
-        logger,
-        factories,
-      );
-
-      expect(result).toBeUndefined();
-    });
-
-    it('returns undefined when both credentials are absent', () => {
-      const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
-
-      const result = createSearchRetrieval({}, logger, factories);
-
-      expect(result).toBeUndefined();
-    });
-
-    it('logs a not-configured message', () => {
-      const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
-
-      createSearchRetrieval({}, logger, factories);
-
-      expect(logger.info).toHaveBeenCalledOnce();
-      expect(logger.messages[0]).toContain('not configured');
-    });
-
-    it('does not call factories when credentials are missing', () => {
-      const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
-
-      createSearchRetrieval({}, logger, factories);
-
-      expect(factories.createEsClient).not.toHaveBeenCalled();
-      expect(factories.createSdk).not.toHaveBeenCalled();
-    });
-  });
-
   describe('when credentials are present', () => {
     const validEnv = {
       ELASTICSEARCH_URL: 'http://localhost:9200',
@@ -125,7 +60,7 @@ describe('createSearchRetrieval', () => {
 
     it('returns a SearchRetrievalService', () => {
       const logger = createFakeLogger();
-      const retrieval = createFakeRetrieval();
+      const retrieval = createFakeSearchRetrieval();
       const factories = createFakeFactories(retrieval);
 
       const result = createSearchRetrieval(validEnv, logger, factories);
@@ -135,7 +70,7 @@ describe('createSearchRetrieval', () => {
 
     it('passes ES URL and API key to the client factory', () => {
       const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
+      const factories = createFakeFactories(createFakeSearchRetrieval());
 
       createSearchRetrieval(validEnv, logger, factories);
 
@@ -148,7 +83,7 @@ describe('createSearchRetrieval', () => {
 
     it('passes ES client to the SDK factory with primary index target', () => {
       const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
+      const factories = createFakeFactories(createFakeSearchRetrieval());
 
       createSearchRetrieval(validEnv, logger, factories);
 
@@ -161,7 +96,7 @@ describe('createSearchRetrieval', () => {
 
     it('logs a configured message', () => {
       const logger = createFakeLogger();
-      const factories = createFakeFactories(createFakeRetrieval());
+      const factories = createFakeFactories(createFakeSearchRetrieval());
 
       createSearchRetrieval(validEnv, logger, factories);
 

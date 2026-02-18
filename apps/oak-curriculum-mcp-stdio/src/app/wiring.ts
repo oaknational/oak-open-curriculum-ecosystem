@@ -4,8 +4,11 @@
  */
 
 import { createMcpToolsModule } from '../tools/index.js';
-import type { McpToolsModule } from '../tools/index.js';
-import { createOakPathBasedClient } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { McpToolsModule, UniversalToolExecutors } from '../tools/index.js';
+import {
+  createOakPathBasedClient,
+  createStubSearchRetrieval,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { Client } from '@elastic/elasticsearch';
 import { createSearchSdk } from '@oaknational/oak-search-sdk';
@@ -66,7 +69,7 @@ export interface WiredDependencies {
     storage: ReturnType<typeof createInMemoryStorage>;
     clock: ReturnType<typeof createNodeClock>;
   };
-  toolExecutors: ReturnType<typeof resolveToolExecutors>;
+  toolExecutors: UniversalToolExecutors;
 }
 
 /**
@@ -96,23 +99,18 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
 }
 
 /**
- * Creates a SearchRetrievalService when Elasticsearch credentials are present.
+ * Creates a SearchRetrievalService from validated STDIO environment.
+ *
+ * ES credentials are guaranteed present by `loadRuntimeConfig` validation.
  */
 function createSearchRetrieval(
   env: StdioEnv,
   logger: { info: (msg: string) => void },
-): SearchRetrievalService | undefined {
-  const esUrl = env.ELASTICSEARCH_URL;
-  const esApiKey = env.ELASTICSEARCH_API_KEY;
-
-  if (!esUrl || !esApiKey) {
-    logger.info(
-      'Search retrieval service not configured — ELASTICSEARCH_URL or ELASTICSEARCH_API_KEY missing. Search tools will return "not configured" errors.',
-    );
-    return undefined;
-  }
-
-  const esClient = new Client({ node: esUrl, auth: { apiKey: esApiKey } });
+): SearchRetrievalService {
+  const esClient = new Client({
+    node: env.ELASTICSEARCH_URL,
+    auth: { apiKey: env.ELASTICSEARCH_API_KEY },
+  });
   const searchSdk = createSearchSdk({
     deps: { esClient },
     config: { indexTarget: 'primary' },
@@ -164,11 +162,14 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   }
   const client = createOakPathBasedClient(serverConfig.apiKey);
 
-  const toolExecutors = resolveToolExecutors();
-  const searchRetrieval = createSearchRetrieval(runtimeConfig.env, logger);
+  const executorOverrides = resolveToolExecutors();
+  const searchRetrieval = runtimeConfig.useStubTools
+    ? createStubSearchRetrieval()
+    : createSearchRetrieval(runtimeConfig.env, logger);
+  const toolExecutors: UniversalToolExecutors = { ...executorOverrides, searchRetrieval };
 
-  // Create MCP tools module with injected client and optional search retrieval
-  const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors, searchRetrieval });
+  // Create MCP tools module with injected client and search retrieval
+  const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors });
 
   return {
     logger,

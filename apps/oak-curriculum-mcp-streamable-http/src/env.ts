@@ -63,10 +63,10 @@ const CorsModeSchema = z.enum(['allow_all', 'explicit', 'automatic']).default('a
  * HTTP server environment schema.
  *
  * Composes shared contracts from `@oaknational/mcp-env` with
- * HTTP-server-specific fields. Elasticsearch is `.partial()` because
- * search tools are simply disabled when credentials are absent.
+ * HTTP-server-specific fields. Elasticsearch credentials are
+ * required — the server fails at startup if they are absent.
  */
-const EnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.partial().shape)
+const EnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
   .extend({
     // Clerk Authentication

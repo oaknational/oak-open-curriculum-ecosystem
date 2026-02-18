@@ -5,6 +5,7 @@ import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import type { UniversalToolName } from './universal-tools/index.js';
+import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 
 interface McpToolDefinition {
   readonly description?: string;
@@ -126,7 +127,10 @@ describe('createUniversalToolExecutor', () => {
       }
       return Promise.resolve({ data: null });
     });
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+    });
 
     const result = await callUniversalTool('search', { query: 'photosynthesis' });
 
@@ -164,7 +168,10 @@ describe('createUniversalToolExecutor', () => {
       }
       return Promise.resolve({ status: 200, data: null });
     });
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+    });
 
     const result = await callUniversalTool('fetch', { id: 'lesson:maths-lesson' });
 
@@ -189,7 +196,10 @@ describe('createUniversalToolExecutor', () => {
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
     const executeMcpTool = vi.fn().mockResolvedValue({ status: 200, data: { status: 'ok' } });
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+    });
 
     const args = {
       params: {
@@ -207,7 +217,10 @@ describe('createUniversalToolExecutor', () => {
     const executeMcpTool = vi
       .fn()
       .mockResolvedValue({ error: new McpToolError('Execution failed', SAMPLE_MCP_TOOL_NAME) });
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+    });
 
     const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
 
@@ -217,7 +230,10 @@ describe('createUniversalToolExecutor', () => {
 
   it('returns curriculum ontology with domain model structure', async () => {
     const executeMcpTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+    });
 
     const result = await callUniversalTool('get-ontology', {});
 

@@ -1,5 +1,111 @@
 # Napkin
 
+## Session: 2026-02-18 (a) — Fail Fast ES Credentials Implementation
+
+### What Was Done
+
+- Resumed from previous session where plan was reviewed and corrected
+- Executed full TDD cycle (RED → GREEN → REFACTOR) for fail-fast ES credentials
+- RED: added `env.unit.test.ts` tests for HTTP, created `runtime-config.unit.test.ts` for STDIO
+- GREEN: SDK stub (`createStubSearchRetrieval`), required `searchRetrieval` in all three interfaces, deleted all "not configured" guards, tightened env schemas, added fail-fast validation to STDIO `loadRuntimeConfig`, updated stub wiring in both servers, added dummy ES creds to all test environments
+- Fixed cascading type errors: `buildToolHandlerDependencies` spread-with-optional-properties bug, STDIO `ToolExecutorOverrides` type split, `create-stubbed-stdio-server.ts` missing `searchRetrieval`
+- REFACTOR: TSDoc updates, README "optional" language removed from both servers, full quality gate chain passes (lint, tests, E2E, UI tests, smoke)
+- Fixed three new lint violations introduced by the implementation:
+  1. ESLint `complexity` on `buildToolHandlerDependencies` (5 `??` = complexity 11) — extracted `mergeOverrides()`
+  2. `max-lines-per-function` on `runtime-config.unit.test.ts` (246 lines) — extracted `baseEnv` constant
+  3. `max-lines-per-function` on `handlers-auth-errors.integration.test.ts` (240 lines) — extracted `registerWithOverrides()` scoped helper
+- Archived `fail-fast-elasticsearch-credentials.md` to `archive/completed/`
+- Updated phase-3a plan, roadmap, session prompt, distilled.md
+
+### Files Changed (key)
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/search-retrieval-stub.ts` — new stub
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts` — required `searchRetrieval`
+- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-*/execution.ts` — removed 3× "not configured" guard
+- `apps/oak-curriculum-mcp-streamable-http/src/env.ts` — required ES creds in Zod schema
+- `apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts` — non-optional return
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — required `searchRetrieval` + `mergeOverrides`
+- `apps/oak-curriculum-mcp-streamable-http/src/application.ts` — stub branching
+- `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts` — fail-fast validation
+- `apps/oak-curriculum-mcp-stdio/src/tools/index.ts` — required + `ToolExecutorOverrides` type
+- `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` — stub branching, simplified factory
+- ~15 test/E2E/smoke files — dummy ES credentials added
+
+---
+
+## Session: 2026-02-17 (d) — Fail Fast Plan Creation
+
+### What Was Done
+
+- Discovered that search tools (`search-sdk`, `browse-curriculum`, `explore-topic`)
+  return "Unknown tool" on the local MCP server — the tools are conditionally
+  registered or not present when ES credentials are missing
+- Verified that the stateless transport fix (ADR-112) works correctly — multiple
+  sequential calls to REST-API-backed tools succeed
+- Confirmed that the "Unknown tool" issue is separate from the transport bug:
+  it's about silent degradation when ES credentials are absent
+- Created standalone plan: `fail-fast-elasticsearch-credentials.md` documenting
+  six layers of silent degradation across three workspaces
+- Updated roadmap, session prompt, and Phase 3a plan to reference the new plan
+- Plan is positioned as pre-WS5 work (must be done before comparing search services)
+
+### Lessons Learned
+
+- "Unknown tool" from the MCP server means the tool name is not in
+  `AGGREGATED_TOOL_DEFS` or the tool registration is conditional —
+  distinct from "not configured" error which means the tool IS registered
+  but the service dependency is missing
+- When tools are always defined in `AGGREGATED_TOOL_DEFS` but the runtime
+  dependency is optional, you get a confusing state where tools appear
+  in the tool list but fail when called. The correct fix is to make the
+  dependency required and fail at startup.
+
+## Session: 2026-02-17 (c) — Documentation Consolidation
+
+### What Was Done
+
+- Ran `/consolidate-docs` after completing the stateless transport bug fix
+- Archived transport bug plan from `active/` to `archive/completed/`
+- Updated all references (roadmap, high-level plan, session prompt, related documents table)
+- Marked transport bug as complete in roadmap (3b-bug section) and moved to Completed in high-level plan
+- Moved transport bug from "Active" section to "Completed Work" in session prompt
+- Synced Cursor plans with agent plans (WS3 + WS4 test gaps marked completed in Phase 3a)
+- Updated Phase 3a E2E transport isolation section to reference ADR-112 superseding the workaround
+- Updated distilled.md: replaced outdated "fresh createApp per test" testing entry with per-request factory pattern
+- Added new patterns to distilled.md: per-request transport, layer extraction `import type` gotcha, `void promise` antipattern
+- Napkin at 473 lines — no rotation needed
+- No experience file recorded (routine consolidation, not a shift in understanding)
+
+## Session: 2026-02-17 (b) — Fix Stateless Transport Bug (ADR-112)
+
+### What Was Done
+
+- Fixed StreamableHTTPServerTransport stateless mode reuse bug
+- Implemented per-request McpServer + transport factory pattern (ADR-112)
+- Shared deps (ES client, config, logger) created once at startup, factory creates lightweight per-request server+transport
+- Simplified E2E tests (removed 6 multi-app workarounds), smoke tests (removed withFreshServer wrapper), and all "one-client" comments
+- Extracted McpRequestContext/McpServerFactory to dedicated mcp-request-context.ts module (architecture review suggestion)
+- Added cleanup error logging in res.on('close') handler (code review suggestion)
+
+### Lessons Learned
+
+- MCP SDK stateless mode (`sessionIdGenerator: undefined`) enforces single-request-per-instance via `_hasHandledRequest` flag - this is by design, not a bug in the SDK
+- The SDK's canonical stateless example creates BOTH server AND transport per request - our code was only creating the transport once
+- When extracting types from a composition root to fix layer direction, remember the composition root itself may also need a local `import type` for its own usage (re-export alone is not sufficient)
+- `void promise` silently swallows rejections - use `.catch(logger.error)` for cleanup promises in event handlers
+- The `res.on('close')` event fires on both normal completion AND client abort, making it reliable for cleanup
+- max-lines lint rule (250) applies to all files - TSDoc can quickly consume the budget; be concise in heavily-used modules
+
+### Quality Gate Results (all pass)
+
+- type-gen, build, type-check, lint:fix, format:root, markdownlint:root, test (621 unit), test:e2e (193 E2E), test:ui (26 Playwright), smoke:dev:stub
+
+### Sub-Agent Reviews
+
+- code-reviewer: PASS (applied suggestion: log cleanup errors instead of void)
+- architecture-reviewer: PASS (applied suggestion: extract types to mcp-request-context.ts)
+- test-reviewer: PASS (no blocking issues)
+
 ## Session: 2026-02-17 (a) — WS3-WS5 Execution (Steps 1-3)
 
 ### What Was Done
@@ -418,6 +524,13 @@ Express middleware handles them before the transport is reached.
 - `local-server.ts` — added `withEphemeralServer` utility
 
 ---
+
+### Lessons: Fail-Fast ES Credentials Implementation
+
+1. **ESLint complexity rule counts `??` and `?.`**: Five nullish-coalescing expressions in one function hit complexity 11 (max 8). Fix: extract override-merge into a separate function so each stays under the limit.
+2. **Extract shared test env to `baseEnv` constant**: When many tests repeat the same 5 env properties, extract to a `const baseEnv` at describe scope and spread. Saved 110 lines across two files, fixing two `max-lines-per-function` violations.
+3. **Extract repeated `registerHandlers` calls**: When tests repeat the same multi-line setup call, extract a scoped helper (e.g. `registerWithOverrides`) inside the describe block.
+4. **Spread with optional properties widens types**: `{ ...defaults, ...overrides }` where overrides has `prop?: T | undefined` results in `prop: T | undefined` on the result, even when defaults has `prop: T`. Fix: use explicit property-by-property resolution with `??`.
 
 ### Files Modified This Session (c)
 

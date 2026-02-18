@@ -77,7 +77,7 @@ function createFakeRetrieval(overrides?: Partial<SearchRetrievalService>): Searc
   };
 }
 
-function createDeps(retrieval?: SearchRetrievalService): UniversalToolExecutorDependencies {
+function createDeps(retrieval: SearchRetrievalService): UniversalToolExecutorDependencies {
   return {
     executeMcpTool: () => Promise.reject(new Error('Should not call executeMcpTool')),
     searchRetrieval: retrieval,
@@ -295,15 +295,6 @@ describe('runSearchSdkTool', () => {
   });
 
   describe('error handling', () => {
-    it('returns error when searchRetrieval is not configured', async () => {
-      const deps = createDeps(undefined);
-      const args: SearchSdkArgs = { text: 'test', scope: 'lessons' };
-
-      const result = await runSearchSdkTool(args, deps);
-
-      expect(result.isError).toBe(true);
-    });
-
     it('returns error when retrieval returns an error result', async () => {
       const retrieval = createFakeRetrieval({
         searchLessons: vi

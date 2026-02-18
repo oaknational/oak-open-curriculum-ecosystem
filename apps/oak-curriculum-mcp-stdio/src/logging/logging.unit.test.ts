@@ -14,6 +14,8 @@ function createRuntimeConfig(
 ): RuntimeConfig {
   const env: NodeJS.ProcessEnv = {
     OAK_API_KEY: 'test-key',
+    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_API_KEY: 'fake-api-key',
     LOG_LEVEL: overrides.LOG_LEVEL ?? 'info',
     MCP_LOGGER_STDOUT: overrides.MCP_LOGGER_STDOUT,
     MCP_LOGGER_FILE_PATH: overrides.MCP_LOGGER_FILE_PATH,

@@ -129,6 +129,8 @@ export function createMockRuntimeConfig(): Pick<
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
       CLERK_SECRET_KEY: 'test-clerk-secret',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key',
     },
     useStubTools: false,
     dangerouslyDisableAuth: false,

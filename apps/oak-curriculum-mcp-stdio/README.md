@@ -34,11 +34,11 @@ This application follows the standard structure:
 ## Tool surface
 
 - Tools are generated from the SDK OpenAPI schema. Use Inspector or `tools/list` to discover available tools. The set matches the HTTP `/mcp` endpoint.
-- Three additional search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) are available when Elasticsearch credentials are configured. These provide semantic search across all four curriculum indexes (lessons, units, threads, sequences) plus typeahead suggestions and faceted browsing.
+- Three search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide semantic search across all four curriculum indexes (lessons, units, threads, sequences) plus typeahead suggestions and faceted browsing.
 
-### Search tools (optional)
+### Search tools
 
-Set `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` environment variables to enable the semantic search tools. Without these, the search tools return "not configured" errors; all other tools work normally.
+`ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are **required** environment variables — `loadRuntimeConfig` fails at startup if either is absent. In stub mode (`OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`), `createStubSearchRetrieval()` is used instead of a real Elasticsearch client, so credentials are still validated at startup but no real ES connection is made.
 
 ## Behaviour and validation
 

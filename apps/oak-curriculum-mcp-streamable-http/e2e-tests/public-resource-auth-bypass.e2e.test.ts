@@ -60,6 +60,8 @@ function createAuthEnabledApp(): Express {
         CLERK_PUBLISHABLE_KEY: 'pk_test_123',
         CLERK_SECRET_KEY: 'sk_test_123',
         NODE_ENV: 'test',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     }),
   });
@@ -90,9 +92,8 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
           r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
         )?.uri ?? '';
 
-      // resources/read needs a fresh app since resources/list consumed the transport
-      const readApp = createAuthEnabledApp();
-      const res = await request(readApp)
+      // resources/read on the same app (per-request transport)
+      const res = await request(widgetApp)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
