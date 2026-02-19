@@ -54,13 +54,22 @@ todos:
     content: "Pre-WS5: Fail fast on missing Elasticsearch credentials — remove six layers of silent degradation. Server must fail at startup if ES creds missing, not return 'not configured' at runtime. See fail-fast-elasticsearch-credentials.md."
     status: completed
   - id: env-architecture-overhaul
-    content: "Pre-WS5: Fix broken environment loading architecture — entry points bypass runtime-config.ts, required keys defined in two places, Clerk keys unconditionally required, loadRootEnv given diagnostic responsibilities that belong in app layer. See env-architecture-overhaul.md."
+    content: "Pre-WS5: Environment architecture overhaul complete — resolveEnv pipeline, conditional Clerk keys, discriminated RuntimeConfig. Archived. STDIO alignment deferred to stdio-http-server-alignment.md."
+    status: completed
+  - id: adr-113-env-resolution
+    content: "Pre-WS5: Write ADR-113 for the resolveEnv pipeline architecture — source hierarchy with non-mutating dotenv.parse, Result<T, E> return, conditional Clerk keys via superRefine, discriminated RuntimeConfig union. Supersedes ADR-016 (original dotenv decision)."
     status: pending
   - id: ws5-compare
     content: "WS5: Compare new search tools vs old REST API search on representative queries."
+    status: completed
+  - id: ws5-skip-old-gen
+    content: "WS5.1: Add SKIPPED_PATHS to mcp-tool-generator.ts to exclude /search/lessons and /search/transcripts from generated tools. TDD."
     status: pending
-  - id: ws5-replace
-    content: "WS5: If superior, replace old search tool (aggregated-search/ -> aggregated-search-sdk/). Full quality gates again."
+  - id: ws5-promote-search
+    content: "WS5.2: Promote search-sdk to search — rename in AGGREGATED_TOOL_DEFS, delete aggregated-search/ module, update executor dispatch, update all cross-references. TDD."
+    status: pending
+  - id: ws5-quality-gates
+    content: "WS5.4: Full quality gate chain after replacement (type-gen, build, type-check, lint, test, smoke)."
     status: pending
 isProject: false
 ---
@@ -493,27 +502,187 @@ All 7 existing aggregated tools + all generated tools must work identically.
 
 ---
 
-## WS5 -- Compare and Replace
+## WS5 -- Compare, Replace, and Retire Old Search
 
-### 5.1: Comparative queries
+### 5.0: Context and decisions
 
-Run the same queries through old `search` (REST API) and new `search` (SDK/ES, scope: lessons) on representative teacher queries. Compare relevance, coverage, latency.
+**Comparative testing (done informally):** The same query ("photosynthesis", KS3 science) was run through all four tools: old `search`, new `search-sdk`, `browse-curriculum`, and `explore-topic`. Results:
 
-### 5.2: Decision and transition
+- Old `search` returns 20 lessons (only 3 genuinely relevant, similarity drops from 1.0 to 0.07 after #3) + 3 short transcript snippets. Title-based fuzzy matching produces many irrelevant results (e.g., "Electrical resistance", "Magnetic poles").
+- New `search-sdk` (scope: lessons) returns 288 total hits (top 5 shown, all relevant). Includes keywords, learning points, misconceptions, teacher tips, highlighted transcript context. 4-way RRF + ELSER semantic ranking is strictly superior.
+- `explore-topic` gives a unified topic map across lessons (288), units (41), and threads in a single call.
+- `browse-curriculum` shows full KS3 Science structure (41 units, 290 lessons) without needing a query.
 
-If SDK search is superior (expected: 4-way RRF + ELSER vs REST text search):
+**Decision: replace.** The new search-sdk tools are superior in every dimension: relevance, coverage, richness, filtering, pagination. The old REST-based search adds no value.
 
-- Remove old `search` aggregated tool (`aggregated-search/`)
-- Rename new tool from internal `aggregated-search-sdk` to `aggregated-search` (or keep as-is if naming is clear)
-- Update the tool name in `AGGREGATED_TOOL_DEFS` to `'search'`
-- Update all cross-references in tool descriptions, help content, prerequisite guidance
-- Full quality gate chain again
+**Three things need to happen:**
 
-### 5.3: Cleanup
+1. **Remove old `search` aggregated tool** — delete `aggregated-search/`, promote `search-sdk` to `search`
+2. **Remove generated `get-search-lessons` and `get-search-transcripts`** — these REST API wrappers are now redundant (the old `search` was their only consumer)
+3. **Assess unsurfaced search-sdk capabilities** — admin and observability services are not exposed via MCP tools
 
-- Delete old `aggregated-search/` module if replaced
-- Update `get-help` workflows to reference final tool names
-- Update MCP prompts
+### 5.1: Remove generated search tools from the pipeline
+
+**Problem:** `get-search-lessons` and `get-search-transcripts` are generated from `/search/lessons` and `/search/transcripts` in the OpenAPI spec. They are text-based REST wrappers — now entirely superseded by direct Elasticsearch semantic search via the search-sdk.
+
+**Solution: endpoint skip list in the generator.**
+
+**File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`
+
+The `iterOperations()` function (line 60) iterates ALL paths in the OpenAPI spec. Add a const array of paths to skip, and filter before yielding:
+
+```typescript
+/**
+ * API paths excluded from MCP tool generation.
+ *
+ * These endpoints are superseded by direct Elasticsearch search
+ * via the search-sdk aggregated tools (search, browse-curriculum,
+ * explore-topic). Generating MCP tools for them would create
+ * redundant, inferior alternatives.
+ */
+const SKIPPED_PATHS: readonly string[] = [
+  '/search/lessons',
+  '/search/transcripts',
+];
+```
+
+Then in `iterOperations()`, skip matching paths:
+
+```typescript
+for (const [path, pathItem] of Object.entries(schema.paths)) {
+  if (SKIPPED_PATHS.some((skipped) => path.endsWith(skipped))) {
+    continue;
+  }
+  // ... existing logic
+}
+```
+
+**TDD approach:**
+
+1. RED: Add a unit test for `iterOperations` (or `generateCompleteMcpTools`) that asserts `get-search-lessons` and `get-search-transcripts` are NOT in the generated tool set.
+2. GREEN: Add the `SKIPPED_PATHS` filter.
+3. REFACTOR: Verify `pnpm type-gen` no longer produces files for the skipped tools.
+
+**Side effects to handle:**
+
+- The old `aggregated-search/execution.ts` calls `deps.executeMcpTool('get-search-lessons', ...)` — this will fail once the generated tools are removed. This is intentional: we delete that module in 5.2.
+- `list-tools.ts` will no longer include these tools in the tool list.
+- Existing tests that reference these tool names will need updating.
+- The `toolNames` array in the generated index will shrink by 2.
+
+### 5.2: Promote `search-sdk` to `search`, delete old `aggregated-search/`
+
+**Current state:**
+
+| Tool name | Module | Backend | Status |
+|-----------|--------|---------|--------|
+| `search` | `aggregated-search/` | REST API (`get-search-lessons` + `get-search-transcripts`) | To be deleted |
+| `search-sdk` | `aggregated-search-sdk/` | Elasticsearch via Search SDK (5 scopes) | To be promoted |
+
+**Transition plan:**
+
+1. **Rename `search-sdk` → `search` in `AGGREGATED_TOOL_DEFS`** (`definitions.ts` line 50). Change the key from `'search-sdk'` to `'search'`.
+
+2. **Update tool metadata** — the tool's `annotations.title` should become `'Search Curriculum'` (inheriting from the old tool). Update `toolName` in `_meta` to `'search'`.
+
+3. **Delete old module** — remove `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/` entirely:
+   - `execution.ts` — calls `get-search-lessons` and `get-search-transcripts` (both removed in 5.1)
+   - `tool-definition.ts` — old search tool definition
+   - `types.ts` — old `SearchArgs` type
+   - `validation.ts` — old search validation
+   - `index.ts` — barrel export
+   - `execution.integration.test.ts` — integration tests for old search
+
+4. **Update `definitions.ts`** — remove the `search` import line (line 16) and the old `search` entry (line 43). Replace with the promoted `search-sdk`:
+
+   ```typescript
+   export const AGGREGATED_TOOL_DEFS = {
+     search: { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },
+     fetch: { ... },
+     // ... rest unchanged
+     'browse-curriculum': { ... },
+     'explore-topic': { ... },
+   } as const;
+   ```
+
+5. **Update executor dispatch** — remove the old `search` case from the dispatch map in `executor.ts`. The new `search` case already exists (currently as `'search-sdk'`).
+
+6. **Update all cross-references:**
+   - `tool-guidance-data.ts` — update tool name references
+   - `tool-guidance-workflows.ts` — workflow tool references
+   - `mcp-prompts.ts` / `mcp-prompt-messages.ts` — prompt tool references
+   - `prerequisite-guidance.ts` — context hint references
+   - Tool descriptions that reference `search-sdk` by name
+   - README documentation
+
+7. **Update tests:**
+   - E2E tests that call `search` will now exercise the new implementation
+   - Integration tests that reference `search` tool by name
+   - Smoke tests that verify tool list
+
+**The `search` tool is the default broad search tool.** Its `scope` parameter lets agents choose the right index. For teachers who say "find me stuff about X" without specifying a scope, agents should use `explore-topic` (multi-index) or default to `search` with `scope: 'lessons'`. The tool description's NL guidance teaches agents this.
+
+### 5.3: Assess unsurfaced search-sdk capabilities
+
+**Capability audit:**
+
+| Service | Method | Exposed via MCP? | Assessment |
+|---------|--------|-------------------|------------|
+| **Retrieval** | `searchLessons()` | `search` (scope: lessons), `explore-topic` | Fully exposed |
+| | `searchUnits()` | `search` (scope: units), `explore-topic` | Fully exposed |
+| | `searchThreads()` | `search` (scope: threads), `explore-topic` | Fully exposed |
+| | `searchSequences()` | `search` (scope: sequences) | Fully exposed |
+| | `suggest()` | `search` (scope: suggest) | Fully exposed |
+| | `fetchSequenceFacets()` | `browse-curriculum` | Fully exposed |
+| **Admin** | `setup()` | No | Destructive. Not for MCP clients. |
+| | `reset()` | No | Destructive. Not for MCP clients. |
+| | `verifyConnection()` | No | Health check. Could be useful for diagnostics but not teacher-facing. |
+| | `listIndexes()` | No | Observability. Could surface document counts. Not priority. |
+| | `updateSynonyms()` | No | Admin. Not for MCP clients. |
+| | `ingest()` | No | Admin. Requires Oak API client. |
+| | `getIndexMeta()` | No | Version info. Not teacher-facing. |
+| | `setIndexMeta()` | No | Admin. Not for MCP clients. |
+| **Observability** | `recordZeroHit()` | No | Write. Not for MCP clients. |
+| | `getRecentZeroHits()` | No | Read-only. Could help debug search quality. Not priority. |
+| | `getZeroHitSummary()` | No | Read-only. Useful for monitoring. Not priority. |
+| | `persistZeroHitEvent()` | No | Write. Not for MCP clients. |
+| | `fetchTelemetry()` | No | Read-only. Analytics. Not priority. |
+
+**Conclusion:** All 6 retrieval methods are fully exposed. The 13 unexposed methods are admin/observability operations that are appropriately not teacher-facing. No action needed for WS5.
+
+**Future consideration (not WS5):** If we build an admin MCP tool or a diagnostics tool, `verifyConnection()`, `listIndexes()`, and the zero-hit summary methods could be useful. This is a separate workstream.
+
+### 5.4: TDD execution order
+
+1. **RED tests first:**
+   - Unit test: `iterOperations` (or equivalent) excludes `/search/lessons` and `/search/transcripts`
+   - Integration test: `search` tool name resolves to the SDK-backed handler (not the REST-backed one)
+   - E2E test: `search` tool returns the new response shape (scope, total, took, results with highlights)
+
+2. **GREEN implementation:**
+   - Add `SKIPPED_PATHS` to generator
+   - Run `pnpm type-gen` to regenerate (removes 2 generated tools)
+   - Delete `aggregated-search/` module
+   - Rename `search-sdk` → `search` in definitions and executor
+   - Update cross-references
+
+3. **REFACTOR:**
+   - Update NL guidance and help content
+   - Update documentation
+   - Clean up any orphaned imports or references
+
+4. **Quality gates:**
+   - `pnpm type-gen && pnpm build && pnpm type-check && pnpm lint && pnpm test && pnpm smoke:dev:stub`
+
+### 5.5: Risk assessment
+
+| Risk | Mitigation |
+|------|------------|
+| Agents already using `search` tool by name | Name stays `search` — agents won't notice the backend change. Input schema changes (adds `scope`, renames `q`→`text`). Tool description guides agents through the new schema. |
+| Agents using `search-sdk` tool by name | Name disappears. `get-help` and tool descriptions will no longer reference it. Agents adapt on next tool list. |
+| Generated `get-search-lessons` / `get-search-transcripts` used directly by agents | Rare — agents prefer the `search` aggregated tool. These generated tools had no special descriptions. Agents will use `search` instead. |
+| `SKIPPED_PATHS` mechanism is fragile | Paths are stable API routes. If the API schema changes paths, `pnpm type-gen` will surface the change (tools reappear in the generated set, tests catch it). |
+| Breaking change to `search` input schema | Old: `{ q, keyStage, subject, unit }`. New: `{ text, scope, subject, keyStage, ... }`. This is a breaking change for any client hardcoding the old schema. MCP clients re-read schemas on each session, so they adapt immediately. |
 
 ---
 

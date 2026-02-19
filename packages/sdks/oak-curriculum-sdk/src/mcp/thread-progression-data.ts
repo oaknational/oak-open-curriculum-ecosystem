@@ -10,7 +10,7 @@
  * - Use for learning path recommendations and progression queries
  *
  * @see ADR-086 for extraction methodology
- * @see knowledge-graph-data.ts for the graph pattern
+ * @see property-graph-data.ts for the property graph pattern
  */
 
 /**
@@ -5314,7 +5314,7 @@ export const threadProgressionGraph = {
   ],
 
   seeAlso:
-    'Use get-knowledge-graph for schema-level relationships. Use get-prerequisite-graph for unit dependencies.',
+    'Use get-ontology for schema-level relationships (includes property graph). Use get-prerequisite-graph for unit dependencies.',
 } as const;
 
 /**

@@ -112,29 +112,6 @@ describe('listUniversalTools annotations', () => {
     );
     expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
   });
-
-  it('get-knowledge-graph tool has correct annotations', () => {
-    const tools = listUniversalTools();
-    const kgTool = tools.find(findToolByName('get-knowledge-graph'));
-
-    expect(kgTool).toBeDefined();
-    const annotations = kgTool?.annotations;
-    expect(annotations?.readOnlyHint).toBe(true);
-    expect(annotations?.destructiveHint).toBe(false);
-    expect(annotations?.idempotentHint).toBe(true);
-    expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Get Knowledge Graph');
-  });
-
-  it('get-knowledge-graph tool has OpenAI _meta fields', () => {
-    const tools = listUniversalTools();
-    const kgTool = tools.find(findToolByName('get-knowledge-graph'));
-
-    expect(kgTool).toBeDefined();
-    expect(kgTool?._meta).toBeDefined();
-    expect(kgTool?._meta?.['openai/toolInvocation/invoking']).toBe('Loading knowledge graph…');
-    expect(kgTool?._meta?.['openai/toolInvocation/invoked']).toBe('Knowledge graph loaded');
-  });
 });
 
 /**
@@ -199,7 +176,7 @@ describe('listUniversalTools _meta integration', () => {
  * This catches the bug where listUniversalTools() didn't include _meta for generated tools.
  */
 describe('generated tools _meta integration', () => {
-  const aggregatedNames = ['search', 'fetch', 'get-ontology', 'get-help', 'get-knowledge-graph'];
+  const aggregatedNames = ['search', 'fetch', 'get-ontology', 'get-help'];
 
   it('generated tools (non-aggregated) have _meta defined', () => {
     const tools = listUniversalTools();

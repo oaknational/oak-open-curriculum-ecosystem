@@ -1,5 +1,5 @@
 /**
- * Section Data Structures for Knowledge Graph SVG.
+ * Section Data Structures for Property Graph SVG.
  * Re-exports section configurations from split module files.
  */
 

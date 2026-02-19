@@ -1,9 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
 
 import { extractToolPayload } from './tools.js';
 
-const noop = vi.fn();
+const noop = () => undefined;
 const logger: Logger = {
   trace: noop,
   debug: noop,

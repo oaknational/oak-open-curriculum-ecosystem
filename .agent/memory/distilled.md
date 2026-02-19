@@ -69,6 +69,15 @@ changing behaviour.
   `SearchSubjectSlug` mapping (KS4 variants)
 - Commander `this.args` in `function action(this: Command)`
   avoids unused parameter lint errors
+- Derive types from generated contracts via indexed access:
+  `type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>`
+  avoids modifying generators while maintaining type unification.
+  Use a bottom contract `ToolDescriptor<string, never, never, never, never, string>`
+  to extract invariant structural properties.
+- For discriminated unions of `readonly string[] | { excludes: readonly string[] }`,
+  use `'excludes' in value` (property check) not `Array.isArray(value)` —
+  `Array.isArray` narrows to `string[]` but leaves the else branch
+  still containing both union members.
 
 ## Elasticsearch
 

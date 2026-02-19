@@ -31,15 +31,16 @@ export const GET_ONTOLOGY_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_ONTOLOGY_TOOL_DEF = {
-  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, and tool usage guidance. Use this to understand Oak - it's the foundation for effective curriculum exploration.
+  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, property graph of concept relationships, and tool usage guidance. Use this to understand Oak - it's the foundation for effective curriculum exploration.
 
 ${ONTOLOGY_RECOMMENDED_FIRST_STEP}
 
 Use this when you need to understand:
 - How the curriculum is structured (key stages KS1-KS4, years, subjects)
-- How entities relate (subject → unit → lesson)
+- How entities relate (subject → unit → lesson) — see entityHierarchy and propertyGraph
 - Which tools to use for different workflows
 - How to interpret ID formats for the 'fetch' tool (e.g., "lesson:slug", "unit:slug")
+- How concept types connect structurally (propertyGraph with ~28 concepts, ~45 edges)
 
 Do NOT use for:
 - Fetching actual curriculum content (use 'search' or 'fetch')
@@ -75,7 +76,7 @@ This tool provides the foundation for effective use of all other curriculum tool
 export function runOntologyTool(): CallToolResult {
   return formatToolResponse({
     summary:
-      'Oak Curriculum domain model loaded. Includes key stages, subjects, entity hierarchy, and tool guidance.',
+      'Oak Curriculum domain model loaded. Includes key stages, subjects, entity hierarchy, property graph, and tool guidance.',
     data: ontologyData,
     status: 'success',
     timestamp: Date.now(),

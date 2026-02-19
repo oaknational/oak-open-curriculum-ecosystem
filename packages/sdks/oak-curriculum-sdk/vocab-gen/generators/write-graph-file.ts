@@ -37,7 +37,7 @@ function generateHeader(graph: ThreadProgressionGraph): readonly string[] {
     ' * - Use for learning path recommendations and progression queries',
     ' *',
     ' * @see ADR-086 for extraction methodology',
-    ' * @see knowledge-graph-data.ts for the graph pattern',
+    ' * @see property-graph-data.ts for the graph pattern',
     ' */',
     '',
   ];
@@ -187,7 +187,7 @@ function generatePrerequisiteHeader(graph: PrerequisiteGraph): readonly string[]
     ' * - Use for "what comes before" queries and learning path planning',
     ' *',
     ' * @see ADR-086 for extraction methodology',
-    ' * @see knowledge-graph-data.ts for the graph pattern',
+    ' * @see property-graph-data.ts for the graph pattern',
     ' */',
     '',
   ];

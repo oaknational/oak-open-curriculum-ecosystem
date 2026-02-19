@@ -9,7 +9,7 @@ This monorepo makes the [Oak Open Curriculum](https://open-api.thenational.acade
 - **A Curriculum SDK** generated at compile time from the Oak Curriculum OpenAPI schema — TypeScript types, Zod validators, MCP tool metadata, search type generators
 - **MCP servers** (stdio and HTTP) that expose the full curriculum to AI agents via the Model Context Protocol
 - **A semantic search system** with 4-way Reciprocal Rank Fusion hybrid search (BM25 + ELSER) across 7 Elasticsearch Serverless indices, covering lessons, units, curriculum threads, and subject-phase sequences
-- **Shared libraries** for logging, configuration, storage, and transport
+- **Core packages** (`Result<T, E>`, environment resolution pipeline) and a **logging library**
 
 ### The Open Curriculum
 
@@ -40,21 +40,24 @@ Everything flows from the OpenAPI schema:
 ## What's In The Repo
 
 - **`packages/sdks/oak-curriculum-sdk`** – Generated SDK: runtime clients, Zod schemas, MCP tool metadata, Elasticsearch mapping generators, and shared `parseSchema` validation helpers
+- **`packages/sdks/oak-search-sdk`** – Search SDK: Elasticsearch-backed retrieval, admin, and observability services with dependency injection. All methods return `Result<T, E>`.
 - **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
 - **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
-- **`apps/oak-search-cli`** – Semantic search: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline. Currently being extracted into a standalone Search SDK + CLI ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md))
-- **`packages/libs/`** – Shared libraries for logging, configuration, storage, and transport
-- **`docs/architecture/architectural-decisions/`** – 107 Architectural Decision Records documenting every significant design choice
+- **`apps/oak-search-cli`** – Semantic search CLI: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline
+- **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
+- **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
+- **`packages/libs/logger`** – Structured logging library
+- **`docs/architecture/architectural-decisions/`** – 112 Architectural Decision Records documenting every significant design choice
 
 ## Architecture Overview
 
-| Directory        | Purpose                                                                  |
-| ---------------- | ------------------------------------------------------------------------ |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search application           |
-| `packages/sdks/` | Generated SDKs (Curriculum SDK with type-gen, Zod schemas, MCP metadata) |
-| `packages/libs/` | Shared libraries for logging, configuration, storage, transport          |
-| `packages/core/` | Core infrastructure (ESLint configs, Zod adapters)                       |
-| `docs/`          | Developer documentation, onboarding guides, 111 ADRs                     |
+| Directory        | Purpose                                                                                                     |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                                      |
+| `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
+| `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
+| `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
+| `docs/`          | Developer documentation, onboarding guides, 112 ADRs                                                        |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 

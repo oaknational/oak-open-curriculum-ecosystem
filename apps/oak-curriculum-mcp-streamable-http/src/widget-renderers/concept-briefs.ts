@@ -1,7 +1,7 @@
 /**
  * Concept brief descriptions for SVG node tooltips.
  *
- * Imports from the SDK knowledge-graph-data.ts - the SINGLE SOURCE OF TRUTH.
+ * Imports from the SDK property-graph-data.ts - the SINGLE SOURCE OF TRUTH.
  * Node IDs use the format `node-\{conceptId\}`.
  *
  */

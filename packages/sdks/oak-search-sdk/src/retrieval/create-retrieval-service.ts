@@ -46,6 +46,11 @@ import { fetchSequenceFacets } from './sequence-facets.js';
 import { buildSequenceRetriever, deriveUnitDoc } from './retrieval-search-helpers.js';
 import { searchThreads } from './search-threads.js';
 import { toRetrievalError } from './retrieval-error.js';
+import {
+  LESSON_SOURCE_EXCLUDES,
+  UNIT_SOURCE_EXCLUDES,
+  SEQUENCE_SOURCE_EXCLUDES,
+} from './source-excludes.js';
 
 /**
  * Create the retrieval service implementation.
@@ -107,6 +112,7 @@ async function searchLessons(
       retriever: buildFourWayRetriever(cleanedText, filters, phrases, 'lesson'),
       highlight: params.highlight !== false ? buildLessonHighlight() : undefined,
       from: from > 0 ? from : undefined,
+      _source: LESSON_SOURCE_EXCLUDES,
     };
 
     logger?.debug('searchLessons', { text: params.text, size, from });
@@ -159,6 +165,7 @@ async function searchUnits(
       retriever: buildFourWayRetriever(cleanedText, filters, phrases, 'unit'),
       highlight: params.highlight !== false ? buildUnitHighlight() : undefined,
       from: from > 0 ? from : undefined,
+      _source: UNIT_SOURCE_EXCLUDES,
     };
 
     logger?.debug('searchUnits', { text: params.text, size, from });
@@ -217,6 +224,7 @@ async function searchSequences(
       size,
       retriever: buildSequenceRetriever(params.text, filterClause),
       from: from > 0 ? from : undefined,
+      _source: SEQUENCE_SOURCE_EXCLUDES,
     };
 
     logger?.debug('searchSequences', { text: params.text, size, from });

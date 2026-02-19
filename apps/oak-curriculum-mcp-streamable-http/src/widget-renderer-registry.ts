@@ -52,7 +52,7 @@ export type RendererId = (typeof RENDERER_IDS)[number];
  * - Search tools (3): Return search results with lessons/transcripts
  * - Fetch tool (1): Returns fetched resource with type/data/canonicalUrl
  * - Ontology tool (1): Returns curriculum domain model
- * - Knowledge graph tool (1): Returns concept relationship graph
+ * - Property graph: Concept relationships are included in the ontology response
  */
 export const TOOL_RENDERER_MAP: Readonly<Record<string, RendererId>> = {
   // Quiz tools → quizRenderer
@@ -106,9 +106,6 @@ export const TOOL_RENDERER_MAP: Readonly<Record<string, RendererId>> = {
 
   // Ontology tool → ontologyRenderer
   'get-ontology': 'ontology',
-
-  // Knowledge graph tool → knowledgeGraphRenderer
-  'get-knowledge-graph': 'knowledgeGraph',
 } as const;
 
 /**

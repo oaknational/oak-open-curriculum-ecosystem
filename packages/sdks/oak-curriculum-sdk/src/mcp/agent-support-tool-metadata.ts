@@ -70,7 +70,7 @@
  *
  * // Check all tool names (in call order)
  * console.log(AGENT_SUPPORT_TOOL_NAMES);
- * // ['get-ontology', 'get-knowledge-graph', 'get-help']
+ * // ['get-ontology', 'get-help']
  * ```
  *
  * @see ADR-060 (`docs/architecture/architectural-decisions/060-agent-support-metadata-system.md`)
@@ -110,27 +110,20 @@ export interface AgentSupportToolMetadata {
 export const AGENT_SUPPORT_TOOL_METADATA = {
   'get-ontology': {
     name: 'get-ontology',
-    shortDescription: 'Domain model definitions',
-    provides: ['key stages', 'subjects', 'entity hierarchy', 'ID formats', 'domain vocabulary'],
-    purpose: 'understand WHAT curriculum concepts are and what they mean',
-    callOrder: 1,
-    complementsTools: ['get-knowledge-graph', 'get-help'],
-    seeAlso: 'get-knowledge-graph for structural relationships, get-help for tool usage',
-    callAtStart: true,
-  },
-  'get-knowledge-graph': {
-    name: 'get-knowledge-graph',
-    shortDescription: 'Concept TYPE relationships',
+    shortDescription: 'Domain model definitions and property graph',
     provides: [
-      'domain structure graph',
-      'entity relationships',
-      'hierarchy paths',
-      'taxonomy connections',
+      'key stages',
+      'subjects',
+      'entity hierarchy',
+      'property graph',
+      'ID formats',
+      'domain vocabulary',
     ],
-    purpose: 'understand HOW curriculum concept types connect structurally',
-    callOrder: 2,
-    complementsTools: ['get-ontology', 'get-help'],
-    seeAlso: 'get-ontology for rich definitions, get-help for tool guidance',
+    purpose:
+      'understand WHAT curriculum concepts are, what they mean, and HOW they connect structurally',
+    callOrder: 1,
+    complementsTools: ['get-help'],
+    seeAlso: 'get-help for tool usage',
     callAtStart: true,
   },
   'get-help': {
@@ -138,9 +131,9 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
     shortDescription: 'Tool usage guidance',
     provides: ['tool categories', 'workflows', 'tips', 'common patterns'],
     purpose: 'understand WHICH tools to use and when',
-    callOrder: 3,
-    complementsTools: ['get-ontology', 'get-knowledge-graph'],
-    seeAlso: 'get-ontology for domain definitions, get-knowledge-graph for structure',
+    callOrder: 2,
+    complementsTools: ['get-ontology'],
+    seeAlso: 'get-ontology for domain definitions and structure',
     callAtStart: true,
   },
 } as const;

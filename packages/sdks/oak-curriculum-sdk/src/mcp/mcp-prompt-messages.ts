@@ -47,7 +47,7 @@ export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I want to find lessons about "${topic}".${keyStageNote}
 
-Before searching, you may want to call get-ontology to understand domain definitions (key stages, subjects, units) and get-knowledge-graph to understand how curriculum concepts relate to each other.
+Before searching, you may want to call get-ontology to understand domain definitions (key stages, subjects, units) and how curriculum concepts relate to each other.
 
 Please:
 1. Use search-sdk with scope "lessons" to find lessons matching this topic: search-sdk({ text: "${topic}", scope: "lessons"${keyStageParam} })
@@ -77,7 +77,7 @@ export function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I'm planning a lesson on "${topic}" for ${yearGroup}. Please help me gather materials.
 
-You may want to call get-ontology for domain definitions, get-knowledge-graph for concept relationships, and get-help for tool usage guidance.
+You may want to call get-ontology for domain definitions and concept relationships, and get-help for tool usage guidance.
 
 Steps:
 1. Use search-sdk with scope "lessons" to search for lessons on "${topic}" appropriate for ${yearGroup}
@@ -115,7 +115,7 @@ export function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I want to understand how the concept of "${concept}" develops across years in ${subject}.
 
-You may want to call get-ontology for domain definitions, get-knowledge-graph to understand how threads and units relate structurally, and get-help for tool guidance.
+You may want to call get-ontology for domain definitions and structural relationships, and get-help for tool guidance.
 
 Please:
 1. Use search-sdk with scope "threads" to find threads related to "${concept}" in ${subject}: search-sdk({ text: "${concept}", scope: "threads", subject: "${subject}" })

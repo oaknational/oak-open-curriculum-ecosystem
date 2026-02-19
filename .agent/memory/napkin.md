@@ -1,5 +1,96 @@
 # Napkin
 
+## Session: 2026-02-19 (c) — OAuth Spec Compliance Diagnosis
+
+### What Was Done
+
+- Diagnosed why Cursor UI does not show "Needs login" for the local MCP server
+- Used the search tool via Cursor MCP — got bare "Unauthorized" error, no OAuth flow triggered
+- Checked server health, `/.well-known/oauth-protected-resource` (200, valid metadata),
+  Clerk AS metadata (200, valid), `initialize` without auth (200 — THIS IS THE BUG)
+- Confirmed via curl that `tools/call` without auth correctly returns 401 + `WWW-Authenticate`
+- Read server logs: Cursor sends `tools/list`, `prompts/list`, `resources/list` — all skip auth,
+  all return 200. Cursor never sends `initialize` (goes straight to list methods). Cursor never
+  fetches `/.well-known/oauth-protected-resource`. Cursor never encounters a 401.
+- Researched MCP 2025-11-25 spec, OpenAI Apps SDK docs, Clerk MCP docs, Make MCP Cursor guide,
+  MCPJam OAuth checklist — all confirm: 401 on initial unauthenticated request is required
+- Discovered the "discovery methods skip auth" pattern was based on incorrect interpretation
+  of OpenAI ChatGPT requirements. ChatGPT's tool-level auth (`securitySchemes` +
+  `_meta["mcp/www_authenticate"]`) is an ADDITIVE extension, not a replacement for base 401
+- Created plan: `oauth-spec-compliance.md` in `.agent/plans/semantic-search/active/`
+
+### Root Cause
+
+Two layers bypass auth for discovery methods:
+1. `conditional-clerk-middleware.ts` — `CLERK_SKIP_METHODS` set
+2. `mcp-router.ts` — `shouldSkipAuth()` function
+
+Both cite "Per MCP spec and OpenAI Apps requirements" but this is incorrect.
+The MCP spec sequence diagram shows: `MCP request without token → 401`.
+No distinction between discovery and execution methods.
+
+### Lessons Learned
+
+- MCP spec 2025-11-25 is unambiguous: "Authorization MUST be included in every
+  HTTP request from client to server." Discovery methods are not exempt.
+- ChatGPT's `securitySchemes` (noauth/oauth2 per tool) and `_meta["mcp/www_authenticate"]`
+  are about incremental scope consent AFTER initial OAuth, not about whether
+  discovery can happen without auth.
+- Make MCP works with Cursor because it returns 401 on initial request.
+  Cursor shows "Needs login" button. Our server does not return 401, so Cursor
+  does not show the button.
+- Clerk MCP docs explicitly say: "Select the Needs login option when it loads" —
+  confirming Cursor supports the flow when the server complies with the spec.
+- The latency optimisation in conditional-clerk-middleware (175ms → 5ms for
+  discovery) is the wrong trade-off — a fast connection that cannot authenticate
+  is worse than a slow one that can.
+
+### Files Created
+
+- `.agent/plans/semantic-search/active/oauth-spec-compliance.md` — full plan
+
+---
+
+## Session: 2026-02-19 (b) — Search Response Tuning Implementation + WS5 Planning
+
+### What Was Done
+
+- Implemented all three phases of search-response-tuning.md via TDD:
+  - P1: Unified `formatToolResponse()` replacing two divergent formatters. Migrated 11
+    call sites. Updated E2E, smoke, and integration tests.
+  - P2: `ToolAnnotations`/`ToolMeta` now derived from generated `ToolDescriptor` via
+    indexed access types (`NonNullable<ContractDescriptor['annotations']>`). Approach
+    changed from modifying the generator (which caused TS2430) to type-level derivation.
+  - P3: ES `_source` filtering via centralised exclude lists in `source-excludes.ts`.
+    94% payload reduction for lessons (186 KB → ~12 KB for 5 results).
+- Ran 4 sub-agent reviews (code, type, architecture, test). Fixed 3 findings:
+  - Moved `THREAD_SOURCE_EXCLUDES` to `source-excludes.ts` for DRY
+  - Replaced `vi.fn()` with `() => undefined` in unit test
+  - Added per-export TSDoc to `source-excludes.ts`
+- Fixed pre-existing `Record<string, unknown>` type violation in search-sdk integration test
+- Comparative testing of old `search` vs new `search-sdk` — new tools strictly superior
+- Deep dive into WS5: analysed type-gen pipeline, designed `SKIPPED_PATHS` mechanism,
+  audited all search-sdk capabilities vs MCP exposure
+- Rewrote WS5 section of phase-3a plan with detailed implementation steps (5.0-5.5)
+- Consolidated docs: archived `search-response-tuning.md`, trimmed prompt 534→305 lines,
+  updated all cross-references
+
+### Lessons Learned
+
+- Indexed access types (`Type['property']`) are the right tool for deriving types from
+  generated contracts — avoids modifying generators while maintaining type unification.
+  Use a bottom contract (`never` type params) to extract invariant structural properties.
+- `Array.isArray()` does not narrow the else branch of a `readonly string[] | { excludes: ... }`
+  union — use `'excludes' in value` property check instead.
+- `doc_type` is a required field in generated index document types — cannot be excluded
+  from `_source` without breaking type contracts. User clarified: strict field-level
+  filtering is unnecessary once the bulk content fields are excluded.
+- When a generator modification causes downstream type errors (TS2430), step back and
+  ask whether the change is needed at all. The existing contract may already contain the
+  information needed, accessible via type-level operations.
+
+---
+
 ## Session: 2026-02-19 (a) — MCP Response Format Investigation and Plan
 
 ### What Was Done

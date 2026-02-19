@@ -11,7 +11,7 @@
  * ordered units showing the learning path.
  *
  * @see thread-progression-data.ts for the graph data structure
- * @see aggregated-knowledge-graph.ts for the companion schema-level graph
+ * @see property-graph-data.ts for the schema-level property graph (included in ontology)
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
@@ -56,7 +56,7 @@ Use this to answer questions like:
 
 ${ONTOLOGY_RECOMMENDED_FIRST_STEP}
 
-Complements get-knowledge-graph (schema-level structure) with actual progression data.`,
+Complements get-ontology (which includes the schema-level property graph) with actual progression data.`,
 
   inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
 

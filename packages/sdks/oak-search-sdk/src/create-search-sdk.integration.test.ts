@@ -9,7 +9,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createSearchSdk } from './create-search-sdk.js';
 import type { SearchSdk, SearchSdkDeps, SearchSdkConfig } from './types/index.js';
-import { Client } from '@elastic/elasticsearch';
+import { Client, type estypes } from '@elastic/elasticsearch';
 
 // ---------------------------------------------------------------------------
 // Test helpers — simple fakes injected as arguments
@@ -125,6 +125,42 @@ function createTestConfig(): SearchSdkConfig {
   };
 }
 
+function getLastSearchParams(client: Client): estypes.SearchRequest {
+  const calls = vi.mocked(client.search).mock.calls;
+  if (calls.length === 0) {
+    throw new Error('Expected client.search to have been called');
+  }
+  const params = calls[calls.length - 1]?.[0];
+  if (typeof params !== 'object' || params === null) {
+    throw new Error('Expected search params to be an object');
+  }
+  return params;
+}
+
+function extractSourceExcludes(client: Client): readonly string[] {
+  const params = getLastSearchParams(client);
+  if (!('_source' in params)) {
+    throw new Error('Expected _source to be set on search params');
+  }
+  const source = params._source;
+  if (typeof source !== 'object' || source === null || Array.isArray(source)) {
+    throw new Error('Expected _source to be an excludes object');
+  }
+  if (!('excludes' in source)) {
+    throw new Error('Expected _source to have an excludes property');
+  }
+  const excludes: unknown = source.excludes;
+  if (!Array.isArray(excludes)) {
+    throw new Error('Expected _source.excludes to be an array');
+  }
+  return excludes.map((field) => {
+    if (typeof field !== 'string') {
+      throw new Error(`Expected _source.excludes entries to be strings, got ${typeof field}`);
+    }
+    return field;
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Factory tests
 // ---------------------------------------------------------------------------
@@ -230,6 +266,18 @@ describe('RetrievalService', () => {
       if (result.ok) {
         expect(result.value.scope).toBe('lessons');
       }
+    });
+
+    it('excludes scoring-only fields from _source to reduce payload size', async () => {
+      const deps = createTestDeps();
+      const sdk = createSearchSdk({ deps, config: createTestConfig() });
+      await sdk.retrieval.searchLessons({ text: 'photosynthesis' });
+
+      const excludes = extractSourceExcludes(deps.esClient);
+      expect(excludes).toContain('lesson_content');
+      expect(excludes).toContain('lesson_content_semantic');
+      expect(excludes).toContain('lesson_structure');
+      expect(excludes).toContain('lesson_structure_semantic');
     });
   });
 

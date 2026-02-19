@@ -1,5 +1,5 @@
 /**
- * SVG Component Functions for Knowledge Graph Rendering.
+ * SVG Component Functions for Property Graph Rendering.
  * Pure functions that compose to build SVG using nested <g> groups.
  */
 

@@ -17,7 +17,6 @@ import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index
 import { FETCH_TOOL_DEF, FETCH_INPUT_SCHEMA } from '../aggregated-fetch.js';
 import { GET_ONTOLOGY_TOOL_DEF } from '../aggregated-ontology.js';
 import { GET_HELP_TOOL_DEF } from '../aggregated-help/index.js';
-import { GET_KNOWLEDGE_GRAPH_TOOL_DEF } from '../aggregated-knowledge-graph.js';
 import { GET_THREAD_PROGRESSIONS_TOOL_DEF } from '../aggregated-thread-progressions.js';
 import { GET_PREREQUISITE_GRAPH_TOOL_DEF } from '../aggregated-prerequisite-graph.js';
 import { SEARCH_SDK_TOOL_DEF, SEARCH_SDK_INPUT_SCHEMA } from '../aggregated-search-sdk/index.js';
@@ -32,7 +31,6 @@ import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/in
  * - `fetch`: Retrieve detailed content by prefixed ID
  * - `get-ontology`: Return curriculum domain model structure
  * - `get-help`: Return tool usage guidance
- * - `get-knowledge-graph`: Return concept type relationships
  * - `get-thread-progressions`: Return ordered unit sequences within threads
  * - `get-prerequisite-graph`: Return unit dependencies and prior knowledge
  *
@@ -44,7 +42,6 @@ export const AGGREGATED_TOOL_DEFS = {
   fetch: { ...FETCH_TOOL_DEF, inputSchema: FETCH_INPUT_SCHEMA },
   'get-ontology': GET_ONTOLOGY_TOOL_DEF,
   'get-help': GET_HELP_TOOL_DEF,
-  'get-knowledge-graph': GET_KNOWLEDGE_GRAPH_TOOL_DEF,
   'get-thread-progressions': GET_THREAD_PROGRESSIONS_TOOL_DEF,
   'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
   'search-sdk': { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },

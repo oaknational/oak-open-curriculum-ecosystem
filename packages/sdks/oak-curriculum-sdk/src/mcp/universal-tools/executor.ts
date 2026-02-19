@@ -20,7 +20,6 @@ import { validateSearchArgs, runSearchTool } from '../aggregated-search/index.js
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
 import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
-import { runKnowledgeGraphTool } from '../aggregated-knowledge-graph.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search-sdk/index.js';
@@ -173,7 +172,6 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   search: handleSearchTool,
   'get-ontology': () => Promise.resolve(runOntologyTool()),
   'get-help': (input) => Promise.resolve(handleHelpTool(input)),
-  'get-knowledge-graph': () => Promise.resolve(runKnowledgeGraphTool()),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
   fetch: handleFetchTool,
@@ -194,8 +192,8 @@ function executeAggregatedTool(
 /**
  * Creates a universal tool executor for MCP tool invocations.
  *
- * The executor handles both aggregated tools (search, fetch, get-ontology, get-help,
- * get-knowledge-graph) and generated tools from the OpenAPI schema. It performs
+ * The executor handles both aggregated tools (search, fetch, get-ontology, get-help)
+ * and generated tools from the OpenAPI schema. It performs
  * the following steps:
  *
  * 1. Validates the tool name is known

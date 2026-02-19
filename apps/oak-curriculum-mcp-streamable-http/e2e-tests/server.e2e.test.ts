@@ -151,7 +151,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'explore-topic',
       'fetch',
       'get-help',
-      'get-knowledge-graph',
       'get-ontology',
       'get-prerequisite-graph',
       'get-thread-progressions',
@@ -259,7 +258,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     // Verify instructions field exists and contains agent guidance
     expect(initResult?.instructions).toBeDefined();
     expect(initResult?.instructions).toContain('get-ontology');
-    expect(initResult?.instructions).toContain('get-knowledge-graph');
     expect(initResult?.instructions).toContain('get-help');
   });
 

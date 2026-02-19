@@ -14,6 +14,16 @@ import type { estypes } from '@elastic/elasticsearch';
  * 1. Traditional query mode: uses `query` for standard search
  * 2. Retriever mode (ES 8.11+): uses `retriever` for hybrid RRF search
  */
+/**
+ * Source exclude configuration for ES _source filtering.
+ *
+ * Excludes large scoring-only fields (e.g. lesson_content, lesson_content_semantic)
+ * from the response to reduce payload size without affecting relevance scoring.
+ */
+export interface EsSourceExcludes {
+  readonly excludes: readonly string[];
+}
+
 export interface EsSearchRequest {
   /** Target Elasticsearch index name. */
   readonly index: string;
@@ -33,8 +43,8 @@ export interface EsSearchRequest {
   /** Sort configuration. */
   readonly sort?: estypes.Sort;
 
-  /** Source field filtering. */
-  readonly _source?: readonly string[];
+  /** Source field filtering — include list or excludes object. */
+  readonly _source?: readonly string[] | EsSourceExcludes;
 
   /** Aggregation definitions. */
   readonly aggs?: Readonly<Record<string, estypes.AggregationsAggregationContainer>>;

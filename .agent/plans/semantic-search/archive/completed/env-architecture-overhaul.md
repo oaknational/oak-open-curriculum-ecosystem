@@ -45,17 +45,17 @@ todos:
     content: "GREEN: Remove the old loadRootEnv API surface (keyStatus, missingKeys, EnvKeyStatus, LoadRootEnvResult, buildKeyStatus). loadRootEnv may become internal to resolveEnv or remain exported for backward compat with a simplified contract. Update all consumers."
     status: completed
   - id: green-stdio-alignment
-    content: "GREEN: Apply the same pattern to the STDIO server. bin/oak-curriculum-mcp.ts delegates to loadRuntimeConfig which calls resolveEnv internally. STDIO's loadRuntimeConfig returns Result<RuntimeConfig, ConfigError>. Note: STDIO server is historical with a separate alignment plan — partial work done (loadRootEnv removed), full pipeline integration deferred to stdio-http-server-alignment.md."
-    status: pending
+    content: "DEFERRED: STDIO server alignment tracked separately in .agent/plans/architecture/stdio-http-server-alignment.md — covers env pipeline plus full server DRY alignment (tool registration, resources, prompts, search retrieval)."
+    status: cancelled
   - id: green-test-cleanup
     content: "GREEN: Tests that set DANGEROUSLY_DISABLE_AUTH=true no longer need dummy Clerk keys. Remove them from test env objects across the HTTP server test suite. Verify all tests pass."
     status: completed
   - id: refactor-docs
-    content: "REFACTOR: Update TSDoc, READMEs (HTTP, STDIO, env lib), env.example. Archive this plan when complete."
-    status: pending
+    content: "REFACTOR: Env lib README rewritten to document resolveEnv() (old loadRootEnv removed). HTTP server README updated with env pipeline reference and corrected env var requirements. Root README updated with core packages. .env.example already current. ADR-113 tracked as prerequisite in phase-3a."
+    status: completed
   - id: quality-gates
-    content: "Run full quality gate chain: pnpm clean && pnpm type-gen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub"
-    status: pending
+    content: "Full quality gate chain (pnpm check): all gates passed 2026-02-19."
+    status: completed
 isProject: false
 ---
 

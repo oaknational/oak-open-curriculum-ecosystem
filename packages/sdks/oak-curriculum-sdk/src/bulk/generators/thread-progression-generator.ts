@@ -5,12 +5,12 @@
  * Transforms extracted thread data into a static graph structure
  * suitable for MCP tool consumption and AI agent reasoning.
  *
- * The output follows the pattern established by `knowledge-graph-data.ts`:
+ * The output follows the pattern established by `property-graph-data.ts`:
  * - Static data with `as const` for type inference
  * - Version and source metadata for reproducibility
  * - TSDoc documentation for agent understanding
  *
- * @see knowledge-graph-data.ts for the canonical pattern
+ * @see property-graph-data.ts for the canonical pattern
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
 
  */
@@ -153,7 +153,7 @@ export function generateThreadProgressionData(
     },
     threads: sortedThreads.map(toThreadNode),
     seeAlso:
-      'Use get-knowledge-graph for schema-level relationships. ' +
+      'Use get-ontology for schema-level relationships (includes property graph). ' +
       'Use get-prerequisite-graph for unit dependencies.',
   };
 }

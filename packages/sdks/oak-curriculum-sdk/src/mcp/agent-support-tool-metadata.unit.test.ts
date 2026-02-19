@@ -80,12 +80,12 @@ describe('generateServerInstructions', () => {
     }
   });
 
-  it('includes tool purposes (HOW/WHAT/WHICH)', () => {
+  it('includes tool purposes (WHAT/HOW/WHICH)', () => {
     const instructions = generateServerInstructions();
 
-    expect(instructions).toContain('understand WHAT');
-    expect(instructions).toContain('understand HOW');
-    expect(instructions).toContain('understand WHICH');
+    expect(instructions).toContain('WHAT');
+    expect(instructions).toContain('HOW');
+    expect(instructions).toContain('WHICH');
   });
 
   it('includes relationship information', () => {
@@ -146,7 +146,7 @@ describe('getAgentSupportToolMetadata', () => {
   it('returns metadata for valid tools', () => {
     const metadata = getAgentSupportToolMetadata('get-ontology');
     expect(metadata.name).toBe('get-ontology');
-    expect(metadata.shortDescription).toBe('Domain model definitions');
+    expect(metadata.shortDescription).toBe('Domain model definitions and property graph');
   });
 });
 
@@ -154,7 +154,7 @@ describe('getSeeAlsoForTool', () => {
   it('returns seeAlso for agent support tools', () => {
     const seeAlso = getSeeAlsoForTool('get-ontology');
     expect(seeAlso).toBeDefined();
-    expect(seeAlso).toContain('get-knowledge-graph');
+    expect(seeAlso).toContain('get-help');
   });
 
   it('returns undefined for non-agent support tools', () => {

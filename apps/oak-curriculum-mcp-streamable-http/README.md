@@ -6,11 +6,13 @@ This app exposes the Curriculum MCP server over Streamable HTTP using the offici
 
 ## Quick start (local)
 
-1. Set env vars (minimal):
+1. Set env vars (minimal — auth disabled for local dev):
 
 ```bash
 export OAK_API_KEY=your_api_key
-export REMOTE_MCP_DEV_TOKEN=dev-token
+export ELASTICSEARCH_URL=https://your-es-url
+export ELASTICSEARCH_API_KEY=your_es_api_key
+export DANGEROUSLY_DISABLE_AUTH=true
 export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 ```
 
@@ -36,16 +38,21 @@ Note: The server automatically adds the required `Accept: application/json, text
 
 - Use Node runtime (not Edge)
 - Required env:
-  - `CLERK_PUBLISHABLE_KEY` - Clerk publishable key for OAuth
-  - `CLERK_SECRET_KEY` - Clerk secret key for auth middleware
-  - `OAK_API_KEY` - Oak Curriculum API key
+  - `OAK_API_KEY` — Oak Curriculum API key
+  - `ELASTICSEARCH_URL` — Elasticsearch endpoint (server fails at startup without this)
+  - `ELASTICSEARCH_API_KEY` — Elasticsearch API key (server fails at startup without this)
+  - `CLERK_PUBLISHABLE_KEY` — Clerk publishable key for OAuth (not required when `DANGEROUSLY_DISABLE_AUTH=true`)
+  - `CLERK_SECRET_KEY` — Clerk secret key for auth middleware (not required when `DANGEROUSLY_DISABLE_AUTH=true`)
 - Optional env:
+  - `DANGEROUSLY_DISABLE_AUTH` — set to `true` to disable auth (makes Clerk keys optional)
   - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards)
   - `ALLOWED_ORIGINS` for browser CORS
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
-  - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel - see `docs/vercel-environment-config.md`)
+  - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
   - `BASE_URL` (recommended; if omitted we derive from request host)
   - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
+
+Environment loading uses `resolveEnv` from `@oaknational/mcp-env`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 

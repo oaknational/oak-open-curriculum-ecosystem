@@ -26,7 +26,6 @@ export type AggregatedToolName =
   | 'fetch'
   | 'get-ontology'
   | 'get-help'
-  | 'get-knowledge-graph'
   | 'get-thread-progressions'
   | 'get-prerequisite-graph';
 

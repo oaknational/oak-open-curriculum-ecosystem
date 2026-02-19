@@ -1,10 +1,10 @@
 # MCP Result Pattern Unification
 
-**Stream**: mcp-integration (parallel)
-**Status**: 📋 Scheduled — runs parallel to search tool wiring, does not block it
-**Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
+**Stream**: mcp-integration (post-merge)
+**Status**: 📋 Scheduled — does not block merge, starts on a new branch
+**Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)
 **Created**: 2026-02-16
-**Last Updated**: 2026-02-16
+**Last Updated**: 2026-02-19
 
 ---
 

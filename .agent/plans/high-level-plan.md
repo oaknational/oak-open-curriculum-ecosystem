@@ -1,31 +1,33 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-17  
+**Last Updated**: 2026-02-19  
 **Scope**: Strategic overview for the Oak MCP Ecosystem. Details are in individual plan documents.
 
 ---
 
 ## Current Priorities
 
-The immediate sequence is:
+Three workstreams must complete before
+`feat/semantic_search_deployment` can merge:
 
-1. **MCP search integration** — wire the validated SDK
-   into MCP tools, compare with existing REST API search,
-   likely replace it
-2. **SDK workspace separation** — split the Curriculum SDK
-   type-gen code from the runtime code
-3. **Castr integration** — replace `openapi-zod-client`
-   and `openapi3-ts` with Castr for direct Zod v4
-   generation
+1. **MCP search WS5** — replace old REST API search with
+   SDK-backed search (comparative testing confirms
+   superiority)
+2. **OAuth spec compliance** — HTTP server must return 401
+   on unauthenticated discovery methods to trigger OAuth
+   flow in MCP clients (Cursor, Claude Desktop)
+3. **SDK workspace separation** — split the Curriculum SDK
+   type-gen code from the runtime code (one-way dependency:
+   runtime depends on type-gen, never the reverse)
 
-After these: search quality enhancements, ontology
-resource, and further MCP improvements.
+After merge: result pattern unification, STDIO-HTTP
+alignment, Castr integration, search quality enhancements.
 
 ---
 
 ## Active / Planned (Priority Order)
 
-### 1. Semantic Search — Status: 🔄 MCP INTEGRATION IN PROGRESS (Priority 1)
+### 1. Semantic Search + Merge Prep — Status: 🔄 IN PROGRESS (Priority 1)
 
 **Roadmap**: [semantic-search/roadmap.md](semantic-search/roadmap.md)
 
@@ -45,20 +47,26 @@ CLI has 935 tests. All quality gates pass.
 | Public release readiness | Secrets, licence, package.json, docs, GitHub config | ✅ Complete |
 | Developer onboarding | Canonical journey, command truth, link integrity | ✅ Complete |
 | Code quality remediation | TSDoc warnings (0), type shortcuts removed (137 files) | ✅ Complete |
-| **MCP search integration** | Wire SDK into MCP tools — WS1-WS4 done, only WS5 (compare/replace) remains | 🔄 **IN PROGRESS** |
-| Compare and replace | Evaluate SDK search vs REST API search, likely replace | 📋 Planned (WS5) |
+| **MCP search WS5** | Replace old REST API search with SDK-backed search | 🔄 **MERGE-BLOCKING** |
+| **OAuth spec compliance** | 401 on unauthenticated discovery methods | 🔄 **MERGE-BLOCKING** |
+| **SDK workspace separation** | Split type-gen from runtime (one-way dependency) | 🔄 **MERGE-BLOCKING** |
+| Result pattern unification | `ToolExecutionResult` → `Result<T, E>` | 📋 Post-merge |
 | Search enhancements | GT expansion, Levels 2–4, bulk data analysis | 📋 Future |
 
-**Immediate work**: WS5 (compare SDK search vs REST API on
-representative queries; replace if superior). WS1-WS4 complete.
-See [phase-3a-mcp-search-integration.md](semantic-search/active/phase-3a-mcp-search-integration.md).
+**Active plans** (all merge-blocking):
+
+- [phase-3a-mcp-search-integration.md](semantic-search/active/phase-3a-mcp-search-integration.md) — WS5
+- [oauth-spec-compliance.md](semantic-search/active/oauth-spec-compliance.md) — auth fix
+- [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md) — type-gen/runtime split
 
 ---
 
-### 2. SDK Workspace Decomposition — Status: 📋 PLANNED (Priority 2)
+### 2. SDK Workspace Decomposition — Status: 🔄 MERGE-BLOCKING (Priority 2)
 
 **ADR**: [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)  
-**Plan**: [pipeline-enhancements/sdk-workspace-separation-plan.md](pipeline-enhancements/sdk-workspace-separation-plan.md)
+**Active plan**: [semantic-search/active/sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)  
+**Meta-plan**: [semantic-search/active/sdk-workspace-separation-meta-plan.md](semantic-search/active/sdk-workspace-separation-meta-plan.md)  
+**Detailed plan**: [pipeline-enhancements/sdk-workspace-separation-plan.md](pipeline-enhancements/sdk-workspace-separation-plan.md)
 
 Decompose `@oaknational/curriculum-sdk` along two
 orthogonal axes (generic/Oak x type-gen/runtime) into
@@ -73,10 +81,10 @@ four workspaces:
 
 **Phased execution**:
 
-- **Step 1** (immediate): 2-way split — extract type-gen
-  into `oak-curriculum-sdk-generation` (WS2). This is the
-  [SDK workspace separation plan](pipeline-enhancements/sdk-workspace-separation-plan.md).
-- **Step 2**: Castr integration (Item #3)
+- **Step 1** (merge-blocking): 2-way split — extract
+  type-gen into `oak-curriculum-sdk-generation` (WS2).
+  Active plan in `semantic-search/active/`.
+- **Step 2** (post-merge): Castr integration (Item #3)
 - **Step 3** (future): Extract generic pipeline (WS1)
   from Oak type-gen (WS2), and generic runtime (WS3)
   from Oak runtime (WS4).
@@ -86,7 +94,7 @@ for external users, cleaner boundaries.
 
 ---
 
-### 3. Castr Integration — Status: 📋 PLANNED (Priority 3)
+### 3. Castr Integration — Status: 📋 PLANNED (Priority 3, post-merge)
 
 **Requirements**: [external/castr/README.md](external/castr/README.md)  
 **Contract docs**: [external/castr/](external/castr/)  
@@ -279,9 +287,10 @@ working artefacts.
 | M7b | Public Release Readiness | ✅ DONE |
 | M7c | Developer Onboarding Experience | ✅ DONE |
 | M7d | Code Quality Remediation (TSDoc warnings, type shortcuts) | ✅ DONE |
-| **M8** | **MCP Search Integration** | 🔄 **IN PROGRESS** (WS1-WS4 complete, WS5 remains) |
-| M9 | SDK Workspace Decomposition (ADR-108, Step 1: 2-way split) | 📋 Planned |
-| M10 | Castr Integration | 📋 Planned |
+| **M8** | **MCP Search WS5 — Replace old search** | 🔄 **MERGE-BLOCKING** |
+| **M8a** | **OAuth Spec Compliance — 401 on discovery** | 🔄 **MERGE-BLOCKING** |
+| **M9** | **SDK Workspace Separation (Step 1: type-gen/runtime split)** | 🔄 **MERGE-BLOCKING** |
+| M10 | Castr Integration | 📋 Planned (post-merge) |
 | M11 | Search Quality Enhancements | 📋 Future |
 | M12 | Ontology Resource | 📋 Planned |
 

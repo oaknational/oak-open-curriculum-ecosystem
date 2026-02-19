@@ -20,13 +20,21 @@ until token is created). Developer onboarding experience
 is complete. Type shortcuts have been removed across the
 monorepo.
 
-**MCP search integration is nearly complete.** Three new tools
-(`search-sdk`, `browse-curriculum`, `explore-topic`) are
-wired, documented, and passing all quality gates (WS1-WS4
-complete). Only WS5 remains: compare SDK search vs REST API
-search on representative queries, then replace if superior.
-Shared Zod env schemas added to `@oaknational/mcp-env`.
-STDIO–HTTP alignment plan on the backlog.
+**Three workstreams remain before the branch can merge:**
+
+1. **WS5 — Replace old search** (3a): Comparative testing
+   confirms the search-sdk tools are strictly superior.
+   WS5 replaces the old REST-based search and retires the
+   generated wrappers.
+2. **OAuth spec compliance** (3d): The HTTP server must
+   return 401 on unauthenticated discovery methods to
+   trigger the OAuth bootstrap flow in MCP clients.
+3. **SDK workspace separation** (3e): Split `curriculum-sdk`
+   into type-gen and runtime workspaces with enforced
+   one-way dependency.
+
+MCP result pattern unification (3b) and STDIO-HTTP alignment
+(3c) are deferred to post-merge.
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -64,11 +72,11 @@ Phase 2g: Developer Onboarding Experience             ✅ COMPLETE
 Phase 2h: Code Quality Remediation                     ✅ COMPLETE
   Remove type shortcuts, TSDoc warnings
          ↓
-Phase 3: MCP Search Integration                     🔄 IN PROGRESS
-  ├── Search tool wiring (blocking path)
-  │     Wire SDK retrieval into MCP tools
-  └── Result pattern unification (parallel, non-blocking)
-        Migrate MCP layer to Result<T, E>
+Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
+  ├── 3a. Search tool wiring — WS5 replace old search   (merge-blocking)
+  ├── 3d. OAuth spec compliance — 401 on initial req     (merge-blocking)
+  ├── 3e. SDK workspace separation — type-gen/runtime    (merge-blocking)
+  └── 3b. Result pattern unification                     (post-merge)
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
   ├── GT Expansion (30 → 80-100 queries)
@@ -240,23 +248,22 @@ onboarding. Two workstreams:
 
 ---
 
-## Phase 3: MCP Search Integration
+## Phase 3: MCP Search Integration + Merge Prep
 
 **Status**: 🔄 In Progress — all prerequisites complete
 
-Three workstreams. Search tool wiring (3a) is nearly complete
-— only WS5 (compare and replace) remains. STDIO–HTTP
-alignment (3c) is on the backlog. Result pattern unification
-(3b) runs in parallel and does not block search integration.
+Five workstreams. Three are **merge-blocking** (3a WS5,
+3d OAuth, 3e SDK split). Two are post-merge (3b result
+unification, 3c STDIO alignment).
 
-### 3a. Search Tool Wiring (blocking path)
+### 3a. Search Tool Wiring (merge-blocking)
 
 **Active plan**: [phase-3a-mcp-search-integration.md](active/phase-3a-mcp-search-integration.md)
 **Background**: [wire-hybrid-search (archived)](archive/completed/wire-hybrid-search-background.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
 consumer of the SDK. Then compare with existing REST API
-search and likely replace it.
+search and replace it.
 
 | Task | Status |
 |------|--------|
@@ -269,27 +276,57 @@ search and likely replace it.
 | Existing MCP tools unaffected | ✅ Complete |
 | All quality gates pass (191/191 E2E, 1241 SDK, 620 HTTP unit/integration) | ✅ Complete (WS4) |
 | Fail fast on missing ES credentials (remove silent degradation) | ✅ Complete — [plan](archive/completed/fail-fast-elasticsearch-credentials.md) |
-| Environment architecture overhaul (fix env loading, conditional Clerk keys, discriminated RuntimeConfig) | 📋 Pending — [plan](active/env-architecture-overhaul.md) |
+| Environment architecture overhaul (fix env loading, conditional Clerk keys, discriminated RuntimeConfig) | ✅ Complete — [plan](archive/completed/env-architecture-overhaul.md) |
 | Compare semantic search with existing `search` tool (REST API) | 📋 Pending (WS5) |
 | If superior, replace REST API composite search with SDK-backed search | 📋 Pending (WS5) |
 
-### 3c. STDIO–HTTP Server Alignment (backlog)
+### 3d. OAuth Spec Compliance (merge-blocking)
 
-**Plan**: [../../architecture/stdio-http-server-alignment.md](../../architecture/stdio-http-server-alignment.md)
+**Active plan**: [oauth-spec-compliance.md](active/oauth-spec-compliance.md)
 
-**Goal**: Eliminate all non-transport differences between the
-STDIO and HTTP servers. Both should share env validation, tool
-registration, search retrieval, resources, prompts, and error
-handling. Only transport-specific code (auth, logging sink,
-Express middleware, Vercel config, widgets) should differ.
+**Goal**: The MCP HTTP server must return HTTP 401 +
+`WWW-Authenticate` on any unauthenticated request,
+including discovery methods (`initialize`, `tools/list`).
+The current server returns 200 for discovery methods
+without auth, preventing MCP clients from triggering the
+OAuth bootstrap flow.
 
 | Task | Status |
 |------|--------|
-| STDIO uses shared Zod schemas from `@oaknational/mcp-env` | 📋 Pending |
-| Shared tool registration pattern | 📋 Pending |
-| Shared search retrieval factory | 📋 Pending |
-| STDIO registers resources and prompts | 📋 Pending |
-| E2E feature parity verification | 📋 Pending |
+| Analysis — map affected files and tests | ✅ Complete |
+| RED (E2E): Assert 401 for discovery without auth | 📋 Pending |
+| RED (integration): Invert router and middleware assertions | 📋 Pending |
+| RED (unit): Invert classifier assertions | 📋 Pending |
+| GREEN: Remove discovery bypass from mcp-router and clerk middleware | 📋 Pending |
+| GREEN: All tests pass | 📋 Pending |
+| REFACTOR: Delete dead code (classifier, sync tests) | 📋 Pending |
+| REFACTOR: Update TSDoc and README auth section | 📋 Pending |
+| ADR: Supersede ADR-056 (conditional clerk middleware) | 📋 Pending |
+| Update testing-strategy.md example | 📋 Pending |
+| Verify ChatGPT tool-level auth still works | 📋 Pending |
+| Verify Cursor OAuth flow (Needs login → Clerk) | 📋 Pending |
+| Full quality gate chain | 📋 Pending |
+
+### 3e. SDK Workspace Separation (merge-blocking)
+
+**Active plan**: [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+**Meta-plan**: [sdk-workspace-separation-meta-plan.md](active/sdk-workspace-separation-meta-plan.md)
+**Detailed plan**: [pipeline-enhancements/sdk-workspace-separation-plan.md](../pipeline-enhancements/sdk-workspace-separation-plan.md)
+**ADR**: [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+
+**Goal**: Split `@oaknational/curriculum-sdk` into two
+workspaces: `curriculum-sdk-generation` (type-gen) and
+`curriculum-sdk` (runtime). Runtime depends on type-gen,
+never the reverse.
+
+| Task | Status |
+|------|--------|
+| Foundations: inventory, import audit, CI review | 📋 Pending |
+| Public API blueprint: export grouping, barrel design | 📋 Pending |
+| Workspace scaffolding: create generation workspace | 📋 Pending |
+| Boundary enforcement: ESLint rules, turbo.json | 📋 Pending |
+| Runtime updates: switch imports, remove duplicates | 📋 Pending |
+| Documentation and validation | 📋 Pending |
 
 ### 3b-bug. Streamable HTTP Transport — Stateless Mode Bug ✅ COMPLETE
 
@@ -308,9 +345,27 @@ removed, all quality gates pass.
 | Implement fix with TDD (E2E first, then implementation) | ✅ Complete |
 | Full quality gates pass | ✅ Complete |
 
-### 3b. MCP Result Pattern Unification (parallel, non-blocking)
+### 3c. STDIO–HTTP Server Alignment (post-merge, backlog)
 
-**Plan**: [active/mcp-result-pattern-unification.md](active/mcp-result-pattern-unification.md)
+**Plan**: [../../architecture/stdio-http-server-alignment.md](../../architecture/stdio-http-server-alignment.md)
+
+**Goal**: Eliminate all non-transport differences between the
+STDIO and HTTP servers. Both should share env validation, tool
+registration, search retrieval, resources, prompts, and error
+handling. Only transport-specific code (auth, logging sink,
+Express middleware, Vercel config, widgets) should differ.
+
+| Task | Status |
+|------|--------|
+| STDIO uses shared Zod schemas from `@oaknational/mcp-env` | 📋 Pending |
+| Shared tool registration pattern | 📋 Pending |
+| Shared search retrieval factory | 📋 Pending |
+| STDIO registers resources and prompts | 📋 Pending |
+| E2E feature parity verification | 📋 Pending |
+
+### 3b. MCP Result Pattern Unification (post-merge)
+
+**Plan**: [post-sdk/mcp-integration/mcp-result-pattern-unification.md](post-sdk/mcp-integration/mcp-result-pattern-unification.md)
 
 **Goal**: Migrate the MCP tool execution layer from the
 custom `ToolExecutionResult` discriminated union to the
@@ -328,11 +383,9 @@ aligning with the Search SDK and Search CLI.
 | All quality gates pass | 📋 Pending |
 
 **Scope**: ~25-30 files across Curriculum SDK MCP code,
-STDIO server, HTTP server. Does not block 3a — the
+STDIO server, HTTP server. Does not block merge — the
 semantic-search tool bypasses `ToolExecutionResult`
-entirely. Best started after 3a WS2 (GREEN) is complete,
-so the search tool exists and can validate that the
-unification does not break it.
+entirely. Best started on a new branch after merge.
 
 ---
 

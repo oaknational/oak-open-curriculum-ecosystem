@@ -19,8 +19,6 @@ import {
   getDocumentationContent,
   ONTOLOGY_RESOURCE,
   getOntologyJson,
-  KNOWLEDGE_GRAPH_RESOURCE,
-  getKnowledgeGraphJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   getToolWidgetUri,
@@ -178,40 +176,9 @@ export function registerOntologyResource(server: ResourceRegistrar): void {
 }
 
 /**
- * Registers the curriculum knowledge graph as an MCP resource.
- *
- * This resource exposes the concept TYPE relationships graph as JSON,
- * complementing the `get-knowledge-graph` tool. While the tool is model-controlled,
- * this resource allows application-controlled context injection for MCP
- * clients that support pre-fetching resources.
- *
- * @param server - MCP server instance
- * @see ADR-058 for the dual exposure pattern
- */
-export function registerKnowledgeGraphResource(server: ResourceRegistrar): void {
-  server.registerResource(
-    KNOWLEDGE_GRAPH_RESOURCE.name,
-    KNOWLEDGE_GRAPH_RESOURCE.uri,
-    {
-      description: KNOWLEDGE_GRAPH_RESOURCE.description,
-      mimeType: KNOWLEDGE_GRAPH_RESOURCE.mimeType,
-    },
-    () => ({
-      contents: [
-        {
-          uri: KNOWLEDGE_GRAPH_RESOURCE.uri,
-          mimeType: KNOWLEDGE_GRAPH_RESOURCE.mimeType,
-          text: getKnowledgeGraphJson(),
-        },
-      ],
-    }),
-  );
-}
-
-/**
  * Registers all static resources with the MCP server.
  *
- * Combines widget, documentation, ontology, and knowledge graph resource
+ * Combines widget, documentation, and ontology resource
  * registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
@@ -220,7 +187,6 @@ export function registerAllResources(server: ResourceRegistrar): void {
   registerWidgetResource(server);
   registerDocumentationResources(server);
   registerOntologyResource(server);
-  registerKnowledgeGraphResource(server);
 }
 
 // Re-export prompts registration for use in handlers

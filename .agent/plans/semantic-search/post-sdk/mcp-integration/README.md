@@ -3,7 +3,7 @@
 **Domain**: Wiring the Search SDK into MCP tools  
 **Intent**: Enable AI agents to use semantic search capabilities  
 **Impact**: Agents can search Oak curriculum with full hybrid search power  
-**Status**: 🔄 In Progress — plan moved to `active/`
+**Status**: 🔄 In Progress — active plan in `active/`, post-merge work here
 
 ---
 
@@ -26,7 +26,8 @@ correct results across all indexes.
 
 | Plan | Description | Status |
 |------|-------------|--------|
-| [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) | MCP search tools (WS1-WS2 done, WS3+WS5 next) | 🔄 Active |
+| [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) | MCP search tools — WS1-WS4 done, WS5 (replace old search) remaining | 🔄 Active (merge-blocking) |
+| [mcp-result-pattern-unification.md](mcp-result-pattern-unification.md) | Migrate MCP tool execution to `Result<T, E>` pattern | 📋 Post-merge |
 
 ---
 
@@ -47,6 +48,8 @@ correct results across all indexes.
 - [x] Filter parameters passed through correctly
 - [x] `Result<T, E>` errors surfaced as MCP errors
 - [x] All existing MCP tools unaffected
-- [x] All quality gates pass (191/191 E2E, 1241 SDK, 611 HTTP)
-- [ ] NL guidance, documentation, TSDoc (WS3)
+- [x] All quality gates pass (191/191 E2E, 1241 SDK, 620 HTTP)
+- [x] NL guidance, documentation, TSDoc (WS3)
+- [x] Integration tests for search-retrieval-factory and browse formatting (WS4 follow-up)
 - [ ] Compare SDK search vs REST API search; replace if superior (WS5)
+- [ ] Result pattern unification — `ToolExecutionResult` → `Result<T, E>` (post-merge)

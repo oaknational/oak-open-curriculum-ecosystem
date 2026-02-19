@@ -94,11 +94,6 @@ export {
   type OntologyResource,
 } from '../mcp/ontology-resource.js';
 
-export {
-  KNOWLEDGE_GRAPH_RESOURCE,
-  getKnowledgeGraphJson,
-} from '../mcp/knowledge-graph-resource.js';
-
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 
 export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';
@@ -108,14 +103,14 @@ export { WIDGET_URI } from '../mcp/widget-constants.js';
 export { ontologyData } from '../mcp/ontology-data.js';
 export type { OntologyData } from '../mcp/ontology-data.js';
 
-// Knowledge graph data
-export { conceptGraph } from '../mcp/knowledge-graph-data.js';
+// Property graph data (concept TYPE relationships)
+export { conceptGraph } from '../mcp/property-graph-data.js';
 export type {
   ConceptGraph,
   ConceptId,
   ConceptCategory,
   ConceptEdge,
-} from '../mcp/knowledge-graph-data.js';
+} from '../mcp/property-graph-data.js';
 
 // Search retrieval service interface (dependency inversion for search SDK)
 export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';

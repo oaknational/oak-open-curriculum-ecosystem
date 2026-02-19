@@ -1,39 +1,18 @@
-/* eslint-disable max-lines -- this is a static knowledge graph data file, disabling to maintain readability */
+/* eslint-disable max-lines -- static property graph data file, structure requires length */
 /**
- * Oak Curriculum Knowledge Graph (schema-level) — A Property Graph
+ * Oak Curriculum Property Graph (schema-level)
  *
  * Captures concept TYPE relationships for agent reasoning.
  * This is a static data structure — not searchable, not instance-level.
  *
- * RELATIONSHIP TO ONTOLOGY:
- * This property graph is a SUBSET of what's in ontology-data.ts, expressed as explicit
- * nodes and edges. Almost everything here could be inferred from the ontology's narrative
- * descriptions, but the graph format is useful for:
- * - Explicit relationship direction and typing
- * - Graph-based traversal reasoning
- * - Compact structural overview
+ * This property graph is embedded in ontology-data.ts as the `propertyGraph`
+ * field, so calling `get-ontology` delivers both rich definitions AND the
+ * structural graph in a single response.
  *
- * WHAT THIS ADDS (not duplicated from ontology):
+ * What the graph provides:
  * - Explicit edge labeling with from/to/rel structure
  * - "inferred" markers distinguishing schema-explicit vs domain-inferred relationships
  * - Category groupings (structure, content, context, taxonomy, ks4, metadata)
- *
- * WHAT ONTOLOGY HAS (this does not):
- * - Rich definitions and examples
- * - Workflow guidance
- * - Structural patterns with detection logic
- * - UK education context
- * - Canonical URL patterns
- *
- * FUTURE CONSIDERATION:
- * Consider merging this into ontology-data.ts as an embedded `schema` section,
- * eliminating the need for two separate files. See 20-ontology-and-graphs-api-proposal.md.
- *
- * Use `get-ontology` for rich definitions and usage guidance.
- *
- * @see knowledge-graph-analysis-synthesis.md for design rationale
- * @see optimised-graph-proposal.md for target structure
- * @see 20-ontology-and-graphs-api-proposal.md for API consolidation proposal
  *
  * @remarks This is authored domain knowledge that complements the OpenAPI schema.
  * The graph captures relationships that are implied but not explicit in the API.
@@ -49,7 +28,7 @@ export const conceptGraph = {
     howToUse:
       'Nodes represent entity TYPES (not instances). Edges show how types relate. Inferred edges (marked inferred: true) are domain knowledge not explicit in the API.',
     combinedWith:
-      'Call get-ontology for rich definitions, enumerated values, workflow guidance, and structural patterns. Together they provide ~5K tokens of domain context.',
+      'This property graph is included in the get-ontology response alongside rich definitions, enumerated values, workflow guidance, and structural patterns.',
   },
   statistics: {
     conceptNodes:
@@ -311,18 +290,19 @@ export const conceptGraph = {
   ],
 
   /**
-   * Cross-reference to the ontology tool for rich definitions.
+   * Note on relationship to the ontology.
    *
    * This property graph defines entity TYPES and relationship TYPES.
    * For structural patterns (how to traverse the API for different subjects/keystages),
-   * see the ontology's `structuralPatterns` section.
+   * see the ontology's `structuralPatterns` section. Both are delivered together
+   * in the get-ontology response.
    */
   seeOntology:
-    'Call get-ontology for rich definitions, enumerated values, workflow guidance, and structural patterns for API traversal',
+    'This property graph is part of the get-ontology response. See structuralPatterns for API traversal guidance.',
 } as const;
 
 /**
- * Type representing the complete knowledge graph structure.
+ * Type representing the complete property graph structure.
  * Derived from the const data to ensure type safety.
  */
 export type ConceptGraph = typeof conceptGraph;
@@ -339,6 +319,6 @@ export type ConceptId = ConceptGraph['concepts'][number]['id'];
 export type ConceptCategory = ConceptGraph['concepts'][number]['category'];
 
 /**
- * Type representing an edge in the knowledge graph.
+ * Type representing an edge in the property graph.
  */
 export type ConceptEdge = ConceptGraph['edges'][number];

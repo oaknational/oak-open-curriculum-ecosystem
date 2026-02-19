@@ -1,12 +1,12 @@
 /**
- * Unit tests for knowledge graph data structure.
+ * Unit tests for property graph data structure.
  *
  * TDD: These tests are written FIRST to specify the expected structure.
  * Run this file before implementation to confirm RED phase.
  */
 
 import { describe, it, expect } from 'vitest';
-import { conceptGraph } from './knowledge-graph-data.js';
+import { conceptGraph } from './property-graph-data.js';
 import { ontologyData } from './ontology-data.js';
 
 describe('conceptGraph', () => {
@@ -169,14 +169,15 @@ describe('conceptGraph', () => {
       expect(estimatedTokens).toBeLessThan(2500);
     });
 
-    it('combined with ontology fits context budget (<65KB)', () => {
-      const graphSize = JSON.stringify(conceptGraph).length;
+    it('ontology (which embeds property graph) fits context budget (<70KB)', () => {
       const ontologySize = JSON.stringify(ontologyData).length;
-      const combined = graphSize + ontologySize;
+      // The property graph is now embedded in ontologyData, so ontologySize
+      // IS the total payload delivered to the model via get-ontology.
       // Budget history:
       // - 45KB for modular synonym expansion (2025-12-29)
       // - 65KB for complete 17-subject synonym coverage (2026-01-16)
-      expect(combined).toBeLessThan(65000);
+      // - 70KB after embedding property graph into ontology (2026-02-19)
+      expect(ontologySize).toBeLessThan(70000);
     });
   });
 });

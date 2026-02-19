@@ -107,7 +107,6 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('fetch')).toBe(true);
     expect(isUniversalToolName('get-ontology')).toBe(true);
     expect(isUniversalToolName('get-help')).toBe(true);
-    expect(isUniversalToolName('get-knowledge-graph')).toBe(true);
     expect(isUniversalToolName('get-thread-progressions')).toBe(true);
     expect(isUniversalToolName('get-prerequisite-graph')).toBe(true);
     expect(isUniversalToolName('search-sdk')).toBe(true);

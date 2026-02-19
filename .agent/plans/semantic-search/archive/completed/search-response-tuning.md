@@ -8,49 +8,40 @@ overview: >
 todos:
   - id: p1-red-format
     content: "P1 RED: Write tests asserting formatToolResponse() returns content array with 2 TextContent items (summary + JSON), structuredContent matches data, _meta present."
-    status: pending
+    status: completed
   - id: p1-green-format
     content: "P1 GREEN: Implement formatToolResponse() in universal-tool-shared.ts replacing both formatDataWithContext() and formatOptimizedResult()."
-    status: pending
+    status: completed
   - id: p1-migrate-generated
     content: "P1 REFACTOR: Migrate generated tool executor (mapExecutionResult in executor.ts) to use formatToolResponse(). Generated tools need a summary — use tool annotations title + status code."
-    status: pending
+    status: completed
   - id: p1-migrate-aggregated
     content: "P1 REFACTOR: Migrate all aggregated tool execution modules to use formatToolResponse()."
-    status: pending
+    status: completed
   - id: p1-delete-old
     content: "P1 CLEANUP: Delete formatDataWithContext() and formatOptimizedResult(). Update E2E tests that assert on response shape."
-    status: pending
+    status: completed
   - id: p1-e2e
     content: "P1 E2E: Update E2E tests to assert new unified response shape (2-item content array). Run full E2E + smoke suite."
-    status: pending
-  - id: p2-red-types
-    content: "P2 RED: Test that ToolAnnotations and ToolMeta are exported from the contract module."
-    status: pending
-  - id: p2-green-codegen
-    content: "P2 GREEN: Update generate-tool-descriptor-file.ts to emit ToolAnnotations and ToolMeta as named exported interfaces. Run pnpm type-gen."
-    status: pending
-  - id: p2-refactor-reexport
-    content: "P2 REFACTOR: Update universal-tools/types.ts to re-export from contract. Delete duplicated interfaces. Verify pnpm type-gen && pnpm type-check."
-    status: pending
-  - id: p3-red-source
-    content: "P3 RED: Test that searchLessons result docs do NOT contain lesson_content or lesson_content_semantic."
-    status: pending
-  - id: p3-green-source
-    content: "P3 GREEN: Add _source excludes to ES request in create-retrieval-service.ts. Extract default exclude lists to constants."
-    status: pending
-  - id: p3-configurable
-    content: "P3: Add sourceExcludes to SearchLessonsParams, thread through to ES request. Apply same pattern to units/threads/sequences."
-    status: pending
+    status: completed
+  - id: p2-types
+    content: "P2: Derive ToolAnnotations/ToolMeta from generated ToolDescriptor contract via indexed access types (approach changed from codegen emit to type-level derivation)."
+    status: completed
+  - id: p3-source-filtering
+    content: "P3: Add _source excludes to ES requests for all indexes (lessons, units, sequences, threads). Centralised in source-excludes.ts."
+    status: completed
   - id: quality-gates
-    content: "Run full quality gate chain: pnpm clean && pnpm type-gen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:e2e && pnpm smoke:dev:stub"
-    status: pending
+    content: "Run full quality gate chain."
+    status: completed
 isProject: false
 ---
 
 # Search Response Tuning
 
-## Status: Active
+## Status: Completed (2026-02-19)
+
+All three phases (P1 response unification, P2 type deduplication, P3 ES source filtering) completed.
+See [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) for the parent plan.
 
 ## Problem
 

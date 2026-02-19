@@ -13,6 +13,7 @@
 import { synonymsData } from './synonyms/index.js';
 import { threadProgressionGraph } from './thread-progression-data.js';
 import { toolGuidanceData } from './tool-guidance-data.js';
+import { conceptGraph } from './property-graph-data.js';
 
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.
@@ -28,8 +29,6 @@ export const ontologyData = {
     'This is a static POC. A future version will generate this data from the OpenAPI schema at compile time.',
   officialDocs: 'https://open-api.thenational.academy/docs/about-oaks-data/glossary',
   relatedResources: {
-    propertyGraph:
-      'Call get-knowledge-graph for concept TYPE relationships (schema-level entity connections)',
     threadProgressions:
       'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
     prerequisiteGraph:
@@ -531,16 +530,6 @@ export const ontologyData = {
   },
 
   /**
-   * Cross-reference to the property graph for concept relationships.
-   *
-   * The property graph (formerly called "knowledge graph") defines entity TYPES
-   * and their relationships. The ontology includes instance-level patterns.
-   * Together they describe the complete curriculum structure.
-   */
-  seeAlso:
-    'Call get-knowledge-graph for concept TYPE relationships. See structuralPatterns above for traversal guidance.',
-
-  /**
    * Domain synonyms for curriculum terminology.
    *
    * IMPORTANT: This synonyms data serves a DIFFERENT purpose than what LLMs need.
@@ -571,6 +560,20 @@ export const ontologyData = {
     note: 'This is not exhaustive - just examples and suggestions. Use your language understanding to recognise other variations, abbreviations, and natural phrasings.',
     ...synonymsData,
   },
+
+  /**
+   * Property graph of curriculum concept TYPE relationships.
+   *
+   * Captures the structural relationships between entity types in the
+   * curriculum domain model. Concepts represent entity TYPES (not instances),
+   * edges show how types relate. Inferred edges (marked `inferred: true`)
+   * are domain knowledge not explicit in the API.
+   *
+   * Categories: structure (core hierarchy), content (within lesson),
+   * context (scoping), taxonomy (cross-cutting), ks4 (KS4 complexity),
+   * metadata (educational annotations).
+   */
+  propertyGraph: conceptGraph,
 } as const;
 
 /**

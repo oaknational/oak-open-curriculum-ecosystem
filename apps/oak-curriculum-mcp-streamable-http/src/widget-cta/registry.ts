@@ -27,8 +27,8 @@ export const CTA_REGISTRY = {
   /**
    * Learn About Oak CTA.
    *
-   * Prompts the model to call all three agent support tools:
-   * `get-ontology`, `get-knowledge-graph`, `get-help`.
+   * Prompts the model to call agent support tools:
+   * `get-ontology` and `get-help`.
    *
    * After 10 seconds, shows "Oak Understood" to indicate the agent
    * has had time to process the curriculum information.
@@ -44,7 +44,7 @@ The following tools will help you understand the context, and provide better sup
 
 Call the \`get-help\` tool for a resources and tools overview.
 
-The response includes "agent support" tools, such as \`get-ontology\` and \`get-knowledge-graph\`. Call **all** agent support tools now.
+The response includes "agent support" tools, such as \`get-ontology\`. Call **all** agent support tools now.
 
 Reflect on the agent support tools information. Do not show the user, use it to understand the Oak curriculum and the education context.
 

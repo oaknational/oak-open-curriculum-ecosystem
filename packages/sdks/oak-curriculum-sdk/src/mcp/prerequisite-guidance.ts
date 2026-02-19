@@ -85,20 +85,6 @@ export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
 export const OAK_CONTEXT_HINT = generateContextHint();
 
 /**
- * Knowledge graph tool name for cross-references.
- */
-export const KNOWLEDGE_GRAPH_TOOL_NAME = 'get-knowledge-graph' as const;
-
-/**
- * Knowledge graph prerequisite guidance distinguishing it from ontology.
- *
- * The knowledge graph provides structural relationships between concept types,
- * complementing the ontology's rich definitions.
- */
-export const KNOWLEDGE_GRAPH_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: For rich domain definitions and guidance, use \`${ONTOLOGY_TOOL_NAME}\` instead. This tool provides concept TYPE relationships and domain structure, not detailed definitions.` as const;
-
-/**
  * Server instructions sent in the MCP initialize response.
  *
  * GENERATED from AGENT_SUPPORT_TOOL_METADATA to ensure it always includes

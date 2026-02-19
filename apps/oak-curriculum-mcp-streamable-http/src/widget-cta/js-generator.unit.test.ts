@@ -62,14 +62,13 @@ describe('escapeForTemplateLiteral', () => {
 
   it('should handle the actual CTA prompt with multiple backticks', () => {
     const input = `First, call the \`get-help\` tool to get an overview of the resources.
-The response should include \`get-ontology\` and \`get-knowledge-graph\`. Call those tools now.`;
+The response should include \`get-ontology\`. Call those tools now.`;
 
     const output = escapeForTemplateLiteral(input);
 
     // All backticks should be escaped
     expect(output).toContain('\\`get-help\\`');
     expect(output).toContain('\\`get-ontology\\`');
-    expect(output).toContain('\\`get-knowledge-graph\\`');
 
     // Verify no unescaped backticks remain
     const unescapedBacktickPattern = /(?<!\\)`/g;

@@ -79,7 +79,11 @@ function assignOptionalFields(params: estypes.SearchRequest, body: EsSearchReque
     params.sort = body.sort;
   }
   if (body._source !== undefined) {
-    params._source = [...body._source];
+    if ('excludes' in body._source) {
+      params._source = { excludes: [...body._source.excludes] };
+    } else {
+      params._source = [...body._source];
+    }
   }
   if (body.aggs !== undefined) {
     params.aggs = { ...body.aggs };

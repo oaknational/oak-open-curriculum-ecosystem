@@ -201,6 +201,6 @@ describe('generateThreadProgressionData', () => {
   it('includes cross-reference to related tools', () => {
     const result = generateThreadProgressionData([createThread()], 'test');
 
-    expect(result.seeAlso).toContain('get-knowledge-graph');
+    expect(result.seeAlso).toContain('get-ontology');
   });
 });

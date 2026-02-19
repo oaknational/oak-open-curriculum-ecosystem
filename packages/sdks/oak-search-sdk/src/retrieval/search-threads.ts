@@ -25,6 +25,7 @@ import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
 import { clampSize, clampFrom } from './rrf-query-helpers.js';
 import { buildThreadRetriever } from './retrieval-search-helpers.js';
 import { toRetrievalError } from './retrieval-error.js';
+import { THREAD_SOURCE_EXCLUDES } from './source-excludes.js';
 
 /**
  * Execute thread search with two-way RRF (BM25 + semantic).
@@ -59,6 +60,7 @@ export async function searchThreads(
       size,
       retriever: buildThreadRetriever(params.text, filterClause),
       from: from > 0 ? from : undefined,
+      _source: THREAD_SOURCE_EXCLUDES,
     };
 
     logger?.debug('searchThreads', { text: params.text, size, from });

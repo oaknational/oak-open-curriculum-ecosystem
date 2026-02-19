@@ -41,6 +41,24 @@ const OntologyResponseSchema = z.object({
       steps: z.array(z.unknown()),
     }),
   }),
+  propertyGraph: z.object({
+    version: z.string(),
+    concepts: z.array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+        brief: z.string(),
+        category: z.string(),
+      }),
+    ),
+    edges: z.array(
+      z.object({
+        from: z.string(),
+        to: z.string(),
+        rel: z.string(),
+      }),
+    ),
+  }),
 });
 
 /**

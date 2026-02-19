@@ -148,7 +148,6 @@ describe('generateCtaHandlerJs', () => {
       // The Learn Oak prompt contains backticks around tool names
       // These should be escaped as \` in the output
       expect(js).toContain('\\`get-ontology\\`');
-      expect(js).toContain('\\`get-knowledge-graph\\`');
       expect(js).toContain('\\`get-help\\`');
     });
   });
@@ -187,7 +186,6 @@ describe('CTA_REGISTRY', () => {
 
     it('prompts for all three agent support tools', () => {
       expect(learnOak.prompt).toContain('get-ontology');
-      expect(learnOak.prompt).toContain('get-knowledge-graph');
       expect(learnOak.prompt).toContain('get-help');
     });
 
