@@ -3,7 +3,13 @@ import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolExecutionResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
+import {
+  parseSseEnvelope,
+  parseJsonRpcResult,
+  getContentArray,
+  readFirstTextContent,
+  parseToolSuccessPayload,
+} from './helpers/sse.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -81,14 +87,20 @@ function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[
   const envelope = parseSseEnvelope(res.text);
   const result = parseJsonRpcResult(envelope);
   expect(result.isError).not.toBe(true);
+
+  const content = getContentArray(result);
+  expect(content).toHaveLength(2);
+
+  const summaryText = readFirstTextContent(content);
+  expect(typeof summaryText).toBe('string');
+
   const payload = parseToolSuccessPayload(result);
   expect(payload.status).toBe(200);
   if (!Array.isArray(payload.data)) {
-    throw new Error('Tool payload must be an array');
+    throw new Error('Tool payload data must be an array');
   }
-  expect(payload.data.length).toBe(2);
-  const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
-  expect(first).toHaveProperty('canonicalUrl');
+  expect(payload.data).toHaveLength(2);
+  expect(payload.data[0]).toHaveProperty('canonicalUrl');
 }
 
 async function exerciseToolCallSuccessScenario(): Promise<void> {

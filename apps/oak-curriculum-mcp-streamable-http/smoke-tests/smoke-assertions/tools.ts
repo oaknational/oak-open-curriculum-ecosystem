@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import type { Logger } from '@oaknational/mcp-logger';
 
 import {
-  extractFirstText,
+  extractJsonText,
   extractToolNames,
   fetchJson,
   ensureArray,
@@ -162,7 +162,7 @@ export function extractToolPayload(resultRecord: JsonObject, logger: Logger): re
     throw new Error('Successful tool call must not be flagged as error');
   }
   const content = ensureArray(resultRecord.content ?? [], 'tool call content array');
-  const payloadText = extractFirstText(content, 'tool call content');
+  const payloadText = extractJsonText(content, 'tool call content');
   const payload: unknown = JSON.parse(payloadText);
 
   if (Array.isArray(payload)) {

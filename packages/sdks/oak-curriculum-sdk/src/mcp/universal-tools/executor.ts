@@ -9,7 +9,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
 import {
-  formatDataWithContext,
+  formatToolResponse,
   formatError,
   formatUnknownTool,
   extractExecutionData,
@@ -52,14 +52,15 @@ function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): Ca
     return formatError(toErrorMessage(outcome.error));
   }
 
-  // Look up requiresDomainContext from the tool descriptor
   const descriptor = getToolFromToolName(toolName);
-  const includeContextHint = descriptor.requiresDomainContext;
+  const title = descriptor.annotations?.title ?? toolName;
 
-  return formatDataWithContext({
-    status: outcome.status,
-    data: outcome.data,
-    includeContextHint,
+  return formatToolResponse({
+    summary: `${title}: ${String(outcome.status)}`,
+    data: { status: outcome.status, data: outcome.data },
+    includeContextHint: descriptor.requiresDomainContext,
+    toolName,
+    annotationsTitle: title,
   });
 }
 

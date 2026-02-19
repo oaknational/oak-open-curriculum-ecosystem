@@ -79,7 +79,7 @@ export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
  * the model to call agent support tools for domain understanding.
  *
  * @remarks
- * All aggregated tools using formatOptimizedResult automatically include
+ * All tools using formatToolResponse automatically include
  * this hint, providing consistent context grounding across all tools.
  */
 export const OAK_CONTEXT_HINT = generateContextHint();

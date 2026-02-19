@@ -63,6 +63,25 @@ export function extractFirstText(content: readonly unknown[], description: strin
   throw new Error(`No text content found in ${description}`);
 }
 
+/**
+ * Extract the JSON data text from a 2-item content array.
+ *
+ * All tools return `[summary, jsonData]` via formatToolResponse().
+ * The summary (content[0]) is human-readable; the JSON (content[1])
+ * contains `{ status, data }`.
+ */
+export function extractJsonText(content: readonly unknown[], description: string): string {
+  const entries = ensureArray(content, `${description} array`);
+  if (entries.length < 2) {
+    throw new Error(`${description} must have at least 2 items (got ${String(entries.length)})`);
+  }
+  const jsonItem = entries[1];
+  if (!isTextContent(jsonItem)) {
+    throw new Error(`${description}[1] must be a text content entry`);
+  }
+  return jsonItem.text;
+}
+
 export function ensureRecord(value: unknown, description: string): JsonObject {
   if (!isJsonObject(value)) {
     throw new Error(`${description} must be an object`);

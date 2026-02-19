@@ -13,6 +13,7 @@ import type { z } from 'zod';
 import type {
   ToolName,
   ToolDescriptorForName,
+  ToolDescriptor,
 } from '../../types/generated/api-schema/mcp-tools/index.js';
 import type { SecurityScheme } from '../../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
@@ -50,58 +51,29 @@ type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolNam
 export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
 
 /**
- * MCP tool annotations providing hints about tool behavior.
+ * Contract-level ToolDescriptor with non-parametric properties.
  *
- * These annotations help MCP clients understand tool characteristics
- * for better UX decisions, such as whether a tool is safe to auto-invoke
- * or requires user confirmation.
- *
- * All annotation fields are explicitly enumerated per MCP specification.
- * No index signature - every field must be known at compile time.
+ * `annotations` and `_meta` on ToolDescriptor don't depend on any type
+ * parameter — they define the structural shape that ALL tools (generated
+ * and aggregated) conform to. We extract from the contract, not from
+ * concrete instances, so we get `title?: string` rather than a union
+ * of specific literal titles.
+ */
+type ContractDescriptor = ToolDescriptor<string, never, never, never, never, string>;
+
+/**
+ * MCP tool annotations — derived from the generated ToolDescriptor contract.
  *
  * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
  */
-export interface ToolAnnotations {
-  /** Whether the tool only reads data and doesn't modify state */
-  readonly readOnlyHint?: boolean;
-  /** Whether the tool might cause destructive/irreversible changes */
-  readonly destructiveHint?: boolean;
-  /** Whether repeated calls with same args produce same result */
-  readonly idempotentHint?: boolean;
-  /** Whether the tool interacts with external systems beyond the MCP server */
-  readonly openWorldHint?: boolean;
-  /** Human-readable title for the tool */
-  readonly title?: string;
-}
+export type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>;
 
 /**
- * OpenAI Apps SDK metadata for tool descriptors.
- *
- * These fields are used by ChatGPT to display status during tool invocation
- * and to render output using a custom widget.
- *
- * All known OpenAI _meta fields are explicitly enumerated per project rules.
- * No index signature - every field must be known at compile time.
+ * OpenAI Apps SDK metadata — derived from the generated ToolDescriptor contract.
  *
  * @see https://developers.openai.com/apps-sdk/reference
  */
-export interface ToolMeta {
-  /**
-   * URI of widget resource to render tool output.
-   * Widget must serve content with text/html+skybridge MIME type.
-   */
-  readonly 'openai/outputTemplate'?: string;
-  /** Status text shown while tool is running (max 64 characters) */
-  readonly 'openai/toolInvocation/invoking'?: string;
-  /** Status text shown after tool completes (max 64 characters) */
-  readonly 'openai/toolInvocation/invoked'?: string;
-  /** Allow widget to call this tool via window.openai.callTool() */
-  readonly 'openai/widgetAccessible'?: boolean;
-  /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
-  readonly 'openai/visibility'?: 'public' | 'private';
-  /** Mirror securitySchemes for clients that only read _meta */
-  readonly securitySchemes?: readonly SecurityScheme[];
-}
+export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
 
 /**
  * Entry in the universal tools list for MCP registration.

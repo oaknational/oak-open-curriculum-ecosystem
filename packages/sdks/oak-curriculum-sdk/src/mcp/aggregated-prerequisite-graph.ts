@@ -16,7 +16,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from './universal-tool-shared.js';
+import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from './prerequisite-graph-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
@@ -92,9 +92,9 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
  * @returns CallToolResult with graph in structuredContent
  */
 export function runPrerequisiteGraphTool(): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: `Prerequisite graph loaded. Contains ${prerequisiteGraph.stats.unitsWithPrerequisites} units with prior knowledge requirements and ${prerequisiteGraph.stats.totalEdges} edges.`,
-    fullData: prerequisiteGraph,
+    data: prerequisiteGraph,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-prerequisite-graph',

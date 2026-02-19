@@ -9,7 +9,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import {
   formatError,
-  formatOptimizedResult,
+  formatToolResponse,
   toErrorMessage,
   extractExecutionData,
 } from '../universal-tool-shared.js';
@@ -41,9 +41,9 @@ function formatSearchSuccess(
 ): CallToolResult {
   const summary = buildSearchSummary(lessons.length, transcripts.length, args.q);
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary,
-    fullData: {
+    data: {
       q: args.q,
       keyStage: args.keyStage,
       subject: args.subject,

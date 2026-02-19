@@ -10,7 +10,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from './universal-tool-shared.js';
+import { formatToolResponse } from './universal-tool-shared.js';
 import { conceptGraph } from './knowledge-graph-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
@@ -77,10 +77,10 @@ The graph includes both explicit relationships (from API schema) and inferred re
  * @returns CallToolResult with graph in structuredContent
  */
 export function runKnowledgeGraphTool(): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary:
       'Oak Curriculum knowledge graph loaded. Use with get-ontology for complete domain understanding.',
-    fullData: conceptGraph,
+    data: conceptGraph,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-knowledge-graph',

@@ -12,7 +12,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from '../universal-tool-shared.js';
+import { formatToolResponse } from '../universal-tool-shared.js';
 import type { SearchSdkScope } from './types.js';
 import type { SuggestionResponse } from '../search-retrieval-types.js';
 
@@ -95,9 +95,9 @@ function formatScopedResult(
   data: ScopedSearchData,
   query: string,
 ): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: buildSearchSummary(scope, data.total, query),
-    fullData: { scope: data.scope, total: data.total, took: data.took, results: data.results },
+    data: { scope: data.scope, total: data.total, took: data.took, results: data.results },
     query,
     timestamp: Date.now(),
     status: 'success',
@@ -108,9 +108,9 @@ function formatScopedResult(
 
 /** Formats suggestion results. */
 function formatSuggestResult(data: SuggestionResponse, prefix: string): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: buildSuggestSummary(data.suggestions.length, prefix),
-    fullData: { suggestions: data.suggestions, cache: data.cache },
+    data: { suggestions: data.suggestions, cache: data.cache },
     query: prefix,
     timestamp: Date.now(),
     status: 'success',

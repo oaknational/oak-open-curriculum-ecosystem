@@ -6,7 +6,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatError, formatOptimizedResult } from '../universal-tool-shared.js';
+import { formatError, formatToolResponse } from '../universal-tool-shared.js';
 import { toolGuidanceData } from '../tool-guidance-data.js';
 import { typeSafeEntries } from '../../types/helpers/type-helpers.js';
 
@@ -123,9 +123,9 @@ export function getToolSpecificHelp(toolName: string): CallToolResult {
   // Add ID format info if this is the fetch tool
   const fullData = toolName === 'fetch' ? { ...help, idFormats: toolGuidanceData.idFormats } : help;
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: `Help for tool: ${toolName}. Category: ${help.category}.`,
-    fullData,
+    data: fullData,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-help',
@@ -139,10 +139,10 @@ export function getToolSpecificHelp(toolName: string): CallToolResult {
  * @returns CallToolResult with full server guidance
  */
 export function getGeneralHelp(): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary:
       'Oak Curriculum MCP server guidance. Includes tool categories, workflows, ID formats, and tips.',
-    fullData: toolGuidanceData,
+    data: toolGuidanceData,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-help',

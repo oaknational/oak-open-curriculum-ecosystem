@@ -6,7 +6,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from '../universal-tool-shared.js';
+import { formatToolResponse } from '../universal-tool-shared.js';
 
 /** Shape of each scope's outcome from the parallel search. */
 interface ScopeOutcome {
@@ -92,9 +92,9 @@ export function formatTopicMap(
   const summary = buildTopicMapSummary(topic, totals);
   const nextSteps = buildNextSteps(totals);
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: `${summary}. ${nextSteps}`,
-    fullData: {
+    data: {
       topic,
       lessons: results.lessons.ok
         ? { ok: true, data: results.lessons.data }

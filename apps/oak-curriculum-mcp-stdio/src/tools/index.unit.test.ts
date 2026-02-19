@@ -25,11 +25,14 @@ function expectCallToolResult(value: unknown): CallToolResult {
 }
 
 function parseJsonContent(result: CallToolResult): unknown {
-  const textEntry = result.content.find((entry): entry is TextContent => entry.type === 'text');
-  if (!textEntry || typeof textEntry.text !== 'string') {
-    throw new Error('Expected textual content in CallToolResult');
+  if (result.content.length < 2) {
+    throw new Error('Expected 2-item content array in CallToolResult');
   }
-  const parsed: unknown = JSON.parse(textEntry.text);
+  const jsonEntry = result.content[1];
+  if (jsonEntry.type !== 'text' || !('text' in jsonEntry)) {
+    throw new Error('Expected TextContent at content[1]');
+  }
+  const parsed: unknown = JSON.parse(jsonEntry.text);
   return parsed;
 }
 

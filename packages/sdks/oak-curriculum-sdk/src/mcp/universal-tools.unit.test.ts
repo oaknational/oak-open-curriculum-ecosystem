@@ -64,11 +64,12 @@ function assertIsStructuredContent(value: unknown): asserts value is StructuredC
 }
 
 function parseTextContent(result: CallToolResult): StructuredContent {
-  const firstContent = result.content[0];
-  if (firstContent.type !== 'text') {
-    throw new Error(`Expected text content but received ${firstContent.type}`);
+  // content[0] = summary, content[1] = JSON (2-item format)
+  const jsonContent = result.content.length >= 2 ? result.content[1] : result.content[0];
+  if (jsonContent.type !== 'text') {
+    throw new Error(`Expected text content but received ${jsonContent.type}`);
   }
-  const parsed: unknown = JSON.parse(firstContent.text);
+  const parsed: unknown = JSON.parse(jsonContent.text);
   assertIsStructuredContent(parsed);
   return parsed;
 }

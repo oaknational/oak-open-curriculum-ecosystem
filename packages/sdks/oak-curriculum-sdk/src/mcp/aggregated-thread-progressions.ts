@@ -16,7 +16,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from './universal-tool-shared.js';
+import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from './thread-progression-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
@@ -88,9 +88,9 @@ Complements get-knowledge-graph (schema-level structure) with actual progression
  * @returns CallToolResult with graph in structuredContent
  */
 export function runThreadProgressionsTool(): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary: `Thread progression graph loaded. Contains ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects with ordered unit sequences.`,
-    fullData: threadProgressionGraph,
+    data: threadProgressionGraph,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-thread-progressions',

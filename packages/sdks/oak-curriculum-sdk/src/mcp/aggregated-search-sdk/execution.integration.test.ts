@@ -151,7 +151,7 @@ describe('runSearchSdkTool', () => {
 
       const result = await runSearchSdkTool(args, deps);
 
-      expect(result.content).toHaveLength(1);
+      expect(result.content).toHaveLength(2);
       const firstContent = result.content[0];
       expect(firstContent).toHaveProperty('type', 'text');
     });

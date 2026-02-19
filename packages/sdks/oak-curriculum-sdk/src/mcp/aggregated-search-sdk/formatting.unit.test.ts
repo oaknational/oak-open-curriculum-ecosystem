@@ -36,7 +36,7 @@ describe('formatSearchResults', () => {
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
-      expect(result.content).toHaveLength(1);
+      expect(result.content).toHaveLength(2);
     });
 
     it('includes count in summary', () => {

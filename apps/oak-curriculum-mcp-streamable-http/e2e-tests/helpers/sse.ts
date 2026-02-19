@@ -94,17 +94,27 @@ export function getStructuredContentData(result: JsonRpcResult): StructuredConte
 }
 
 /**
- * Parse tool success payload from generated tools using formatData().
+ * Parse tool success payload from content[1] (JSON data item).
  *
- * Generated tools (via universal-tools/executor.ts) return responses with
- * JSON in `content[0].text` containing `{ status, data }`.
+ * All tools now return a 2-item content array via formatToolResponse():
+ * - content[0]: human-readable summary
+ * - content[1]: JSON data containing `{ status, data }`
  *
- * For aggregated tools using formatOptimizedResult(), use getStructuredContentData()
- * which reads from `structuredContent`.
+ * For structured data access, use getStructuredContentData() which
+ * reads from `structuredContent`.
  */
 export function parseToolSuccessPayload(result: JsonRpcResult): ToolSuccessPayload {
   const content = getContentArray(result);
-  const textEntry = readFirstTextContent(content);
-  const parsed: unknown = JSON.parse(textEntry);
+  if (content.length < 2) {
+    throw new Error(`Expected 2-item content array, got ${String(content.length)}`);
+  }
+  const secondItem = content[1];
+  if (typeof secondItem !== 'object' || secondItem === null) {
+    throw new Error('content[1] must be a TextContent object');
+  }
+  if (!('text' in secondItem) || typeof secondItem.text !== 'string') {
+    throw new Error('content[1] must have a string text field');
+  }
+  const parsed: unknown = JSON.parse(secondItem.text);
   return ToolSuccessSchema.parse(parsed);
 }

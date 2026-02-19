@@ -17,8 +17,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     if (typeof value !== 'object' || value === null) {
       return false;
     }
-    const candidate = value as { readonly content?: unknown };
-    return Array.isArray(candidate.content);
+    return 'content' in value && Array.isArray(value.content);
   }
 
   function expectCallToolResult(value: unknown): CallToolResult {
@@ -28,12 +27,23 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     return value;
   }
 
-  function readTextPayload(result: CallToolResult): string {
+  function readFirstTextContent(result: CallToolResult): string {
     const textEntry = result.content.find((entry): entry is TextContent => entry.type === 'text');
     if (!textEntry) {
       throw new Error('Expected textual MCP content');
     }
     return textEntry.text;
+  }
+
+  function readJsonPayload(result: CallToolResult): string {
+    if (result.content.length < 2) {
+      throw new Error('Expected 2-item content array');
+    }
+    const jsonEntry = result.content[1];
+    if (jsonEntry.type !== 'text' || !('text' in jsonEntry)) {
+      throw new Error('Expected TextContent at content[1]');
+    }
+    return jsonEntry.text;
   }
 
   it('presents documented non-200 responses as successful tool outputs', async () => {
@@ -67,7 +77,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
 
     expect(executeMcpTool).toHaveBeenCalledWith('get-lessons-transcript', lessonArgs);
     expect(output.isError).not.toBe(true);
-    const decoded: unknown = JSON.parse(readTextPayload(output));
+    const decoded: unknown = JSON.parse(readJsonPayload(output));
     expect(decoded).toEqual({ status: transcript404.status, data: transcript404.data });
   });
 
@@ -89,7 +99,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(readTextPayload(result)).toContain('Execution failed');
+    expect(readFirstTextContent(result)).toContain('Execution failed');
   });
 
   it('formats unknown tool names as errors before hitting the executor', async () => {
@@ -108,7 +118,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     const result = expectCallToolResult(await module.handleTool('not-a-real-tool', {}));
 
     expect(result.isError).toBe(true);
-    expect(readTextPayload(result)).toBe('Error: Unknown tool: not-a-real-tool');
+    expect(readFirstTextContent(result)).toBe('Error: Unknown tool: not-a-real-tool');
     expect(executeMcpTool).not.toHaveBeenCalled();
   });
 });

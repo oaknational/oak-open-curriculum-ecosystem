@@ -2,7 +2,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import {
   formatError,
-  formatOptimizedResult,
+  formatToolResponse,
   toErrorMessage,
   extractExecutionData,
 } from './universal-tool-shared.js';
@@ -146,9 +146,9 @@ export async function runFetchTool(
   }
   const summary = buildFetchSummary(type, slug, canonicalUrl);
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary,
-    fullData: {
+    data: {
       id: args.id,
       type,
       canonicalUrl,

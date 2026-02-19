@@ -10,7 +10,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatOptimizedResult } from './universal-tool-shared.js';
+import { formatToolResponse } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
@@ -73,10 +73,10 @@ This tool provides the foundation for effective use of all other curriculum tool
  * @returns CallToolResult containing the curriculum ontology as JSON text
  */
 export function runOntologyTool(): CallToolResult {
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary:
       'Oak Curriculum domain model loaded. Includes key stages, subjects, entity hierarchy, and tool guidance.',
-    fullData: ontologyData,
+    data: ontologyData,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-ontology',

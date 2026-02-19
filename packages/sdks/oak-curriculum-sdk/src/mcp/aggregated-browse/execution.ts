@@ -9,7 +9,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import {
   formatError,
-  formatOptimizedResult,
+  formatToolResponse,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
 import type { SearchFacets } from '../../types/generated/search/facets.js';
@@ -52,9 +52,9 @@ export async function runBrowseTool(
 
   const summary = buildBrowseSummary(result.value, args);
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary,
-    fullData: {
+    data: {
       facets: result.value,
       filters: {
         subject: args.subject,
