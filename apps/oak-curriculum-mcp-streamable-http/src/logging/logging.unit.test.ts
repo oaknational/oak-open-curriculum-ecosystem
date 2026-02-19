@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { UnifiedLogger } from '@oaknational/mcp-logger';
 import type { Response } from 'express';
+import { unwrap } from '@oaknational/result';
 
 import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
@@ -13,7 +14,11 @@ function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeCon
     ELASTICSEARCH_URL: 'http://fake-es:9200',
     ELASTICSEARCH_API_KEY: 'fake-api-key',
   };
-  return loadRuntimeConfig({ ...baseEnv, ...overrides });
+  const result = loadRuntimeConfig({
+    processEnv: { ...baseEnv, ...overrides },
+    startDir: process.cwd(),
+  });
+  return unwrap(result);
 }
 
 describe('createHttpLogger', () => {

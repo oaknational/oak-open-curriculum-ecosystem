@@ -14,10 +14,18 @@ export async function startSmokeServer(port: number): Promise<Server> {
   if (port !== EPHEMERAL_PORT) {
     await assertPortAvailable(port);
   }
-  console.log(`[TRACE] startSmokeServer: importing createApp`);
+  console.log(`[TRACE] startSmokeServer: importing createApp and loadRuntimeConfig`);
   const { createApp } = await import('../src/application.js');
+  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: process.cwd(),
+  });
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
+  }
   console.log(`[TRACE] startSmokeServer: calling createApp()`);
-  const app = createApp();
+  const app = createApp({ runtimeConfig: configResult.value });
   const appId = app.__appId;
   console.log(
     `[TRACE] startSmokeServer: got app #${String(appId)}, starting server on port ${String(port)}`,
@@ -207,7 +215,15 @@ function buildPortCheckTimeoutError(port: number): Error {
  */
 export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>): Promise<T> {
   const { createApp } = await import('../src/application.js');
-  const app = createApp();
+  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: process.cwd(),
+  });
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
+  }
+  const app = createApp({ runtimeConfig: configResult.value });
 
   const server = await new Promise<Server>((resolve, reject) => {
     const instance = app.listen(EPHEMERAL_PORT, LOOPBACK_HOST, () => {

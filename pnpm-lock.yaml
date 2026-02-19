@@ -124,7 +124,7 @@ importers:
         version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
-        version: link:../../packages/libs/env
+        version: link:../../packages/core/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
@@ -173,13 +173,16 @@ importers:
         version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
-        version: link:../../packages/libs/env
+        version: link:../../packages/core/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../packages/core/result
       commander:
         specifier: ^14.0.2
         version: 14.0.2
@@ -226,6 +229,9 @@ importers:
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)
@@ -255,7 +261,7 @@ importers:
         version: link:../../packages/sdks/oak-curriculum-sdk
       '@oaknational/mcp-env':
         specifier: workspace:*
-        version: link:../../packages/libs/env
+        version: link:../../packages/core/env
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
@@ -264,7 +270,7 @@ importers:
         version: link:../../packages/sdks/oak-search-sdk
       '@oaknational/result':
         specifier: workspace:*
-        version: link:../../packages/libs/result
+        version: link:../../packages/core/result
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
@@ -326,6 +332,25 @@ importers:
       vitest:
         specifier: ^4.0.15
         version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.1)(@vitest/ui@4.0.15)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/core/env:
+    dependencies:
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../result
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../oak-eslint
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/core/oak-eslint:
     dependencies:
@@ -413,40 +438,11 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  packages/libs/env:
-    dependencies:
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
+  packages/core/result:
     devDependencies:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
-        version: link:../../core/oak-eslint
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
-  packages/libs/logger:
-    dependencies:
-      express:
-        specifier: ^5
-        version: 5.2.1
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../core/oak-eslint
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
-  packages/libs/result:
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../core/oak-eslint
+        version: link:../oak-eslint
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.49.0
         version: 8.49.0(@typescript-eslint/parser@8.49.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -472,6 +468,19 @@ importers:
         specifier: ^4.0.15
         version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.1)(@vitest/ui@4.0.15)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/libs/logger:
+    dependencies:
+      express:
+        specifier: ^5
+        version: 5.2.1
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../core/oak-eslint
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/sdks/oak-curriculum-sdk:
     dependencies:
       '@oaknational/mcp-logger':
@@ -482,7 +491,7 @@ importers:
         version: link:../../core/openapi-zod-client-adapter
       '@oaknational/result':
         specifier: workspace:*
-        version: link:../../libs/result
+        version: link:../../core/result
       '@zod/core':
         specifier: ^0.11.6
         version: 0.11.6
@@ -540,7 +549,7 @@ importers:
         version: link:../../libs/logger
       '@oaknational/result':
         specifier: workspace:*
-        version: link:../../libs/result
+        version: link:../../core/result
     devDependencies:
       '@elastic/elasticsearch':
         specifier: ^9.2.0
@@ -7549,6 +7558,14 @@ snapshots:
     optionalDependencies:
       vite: 7.2.7(@types/node@24.10.3)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
+  '@vitest/mocker@4.0.15(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))':
+    dependencies:
+      '@vitest/spy': 4.0.15
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      vite: 7.2.7(@types/node@25.0.1)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
+
   '@vitest/pretty-format@4.0.15':
     dependencies:
       tinyrainbow: 3.0.3
@@ -8538,8 +8555,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.1(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.1.13
-      zod-validation-error: 4.0.2(zod@4.1.13)
+      zod: 4.3.6
+      zod-validation-error: 4.0.2(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -9927,7 +9944,7 @@ snapshots:
 
   mutation-server-protocol@0.4.0:
     dependencies:
-      zod: 4.1.13
+      zod: 4.3.6
 
   mutation-testing-elements@3.6.0: {}
 
@@ -11377,7 +11394,7 @@ snapshots:
   vitest@4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.1)(@vitest/ui@4.0.15)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(tsx@4.21.0)(yaml@2.8.2):
     dependencies:
       '@vitest/expect': 4.0.15
-      '@vitest/mocker': 4.0.15(vite@7.2.7(@types/node@24.10.3)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@vitest/mocker': 4.0.15(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
       '@vitest/pretty-format': 4.0.15
       '@vitest/runner': 4.0.15
       '@vitest/snapshot': 4.0.15
@@ -11579,9 +11596,9 @@ snapshots:
     dependencies:
       zod: 4.1.13
 
-  zod-validation-error@4.0.2(zod@4.1.13):
+  zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
-      zod: 4.1.13
+      zod: 4.3.6
 
   zod@3.25.76: {}
 

@@ -59,8 +59,12 @@ changing behaviour.
   returns `any` — assign to `const v: unknown = ...`
 - `const parsed: unknown = JSON.parse(json)` avoids
   `no-unsafe-assignment`
-- `for...in` + `Object.prototype.hasOwnProperty.call()`
-  for iterating unknown objects
+- `Object.*` methods and `Reflect.*` methods are banned
+  because they widen types (e.g. `Object.keys()` returns
+  `string[]`, not the literal key union). Use `typeSafeKeys`
+  etc. from the SDK's `type-helpers.ts`. For plain objects
+  whose key type IS `string` (e.g. Zod shapes), `for...in`
+  is a language construct and is acceptable.
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
 - Commander `this.args` in `function action(this: Command)`

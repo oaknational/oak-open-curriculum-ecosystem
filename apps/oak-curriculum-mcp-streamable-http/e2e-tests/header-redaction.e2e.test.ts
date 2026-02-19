@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 
@@ -45,8 +46,6 @@ vi.mock('@clerk/express', () => ({
 const authBypassedEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-  CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
   ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -67,12 +66,20 @@ const authEnforcedEnv: NodeJS.ProcessEnv = {
 };
 
 function createBypassedApp(): ReturnType<typeof createApp> {
-  const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+  const result = loadRuntimeConfig({
+    processEnv: authBypassedEnv,
+    startDir: process.cwd(),
+  });
+  const runtimeConfig = unwrap(result);
   return createApp({ runtimeConfig });
 }
 
 function createEnforcedApp(): ReturnType<typeof createApp> {
-  const runtimeConfig = loadRuntimeConfig(authEnforcedEnv);
+  const result = loadRuntimeConfig({
+    processEnv: authEnforcedEnv,
+    startDir: process.cwd(),
+  });
+  const runtimeConfig = unwrap(result);
   return createApp({ runtimeConfig });
 }
 

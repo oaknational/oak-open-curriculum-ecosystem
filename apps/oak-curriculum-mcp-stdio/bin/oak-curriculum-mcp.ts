@@ -1,10 +1,11 @@
 #!/usr/bin/env tsx
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config as dotenvConfig } from 'dotenv';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
+import { findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {
     return JSON.stringify(value);
@@ -32,15 +33,9 @@ const log = createStartupLogger({
 log('[START-MCP] Starting oak-curriculum-mcp...');
 log(`[START-MCP] Root directory: ${rootDir}`);
 
-// Load environment variables from repo root (.env.local then .env) if needed
-const loaded = loadRootEnv({
-  requiredKeys: ['OAK_API_KEY', 'ELASTICSEARCH_URL', 'ELASTICSEARCH_API_KEY'],
-  startDir: rootDir,
-  env: { ...process.env },
-});
-if (loaded.loaded && loaded.path) {
-  log(`[START-MCP] Loaded env from: ${loaded.path}`);
-}
+// Load environment variables from repo root (.env.local then .env)
+dotenvConfig({ path: join(rootDir, '.env.local') });
+dotenvConfig({ path: join(rootDir, '.env') });
 const hasApiKey = typeof process.env.OAK_API_KEY === 'string' && process.env.OAK_API_KEY.length > 0;
 const logLevelValue = typeof process.env.LOG_LEVEL === 'string' ? process.env.LOG_LEVEL : 'not set';
 log(`[START-MCP] OAK_API_KEY present: ${hasApiKey ? 'true' : 'false'}`);

@@ -16,8 +16,8 @@ function validateApiKey(envLoad: LoadedEnvResult): void {
   if (!apiKey || apiKey.trim().length === 0) {
     const sourceHint =
       envLoad.loaded && envLoad.path
-        ? `loadRootEnv loaded ${envLoad.path}`
-        : 'loadRootEnv did not load a .env file';
+        ? `Loaded env from ${envLoad.path}`
+        : 'No .env file was loaded';
     throw new Error(
       `OAK_API_KEY is required for live smoke tests. ${sourceHint}. Repository root: ${envLoad.repoRoot}`,
     );

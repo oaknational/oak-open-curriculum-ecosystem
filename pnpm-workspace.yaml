@@ -4,9 +4,9 @@ packages:
   - apps/oak-search-cli
   - packages/core/oak-eslint
   - packages/core/openapi-zod-client-adapter
-  - packages/libs/env
+  - packages/core/env
+  - packages/core/result
   - packages/libs/logger
-  - packages/libs/result
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-search-sdk
 

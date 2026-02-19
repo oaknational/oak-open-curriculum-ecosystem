@@ -22,12 +22,10 @@ const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
  */
 function deriveBaseUrl(env: NodeJS.ProcessEnv): string | undefined {
   const explicit = env.BASE_URL;
-  // Accept empty strings or relative paths as undefined (Vercel may set BASE_URL="/")
   if (explicit && explicit !== '' && explicit !== '/' && !explicit.startsWith('/')) {
     return explicit;
   }
 
-  // Use VERCEL_URL as fallback (Vercel provides this without protocol)
   const vercelUrl = env.VERCEL_URL;
   if (vercelUrl) {
     return `https://${vercelUrl}`;
@@ -44,12 +42,10 @@ function deriveMcpCanonicalUri(
   baseUrl: string | undefined,
 ): string | undefined {
   const explicit = env.MCP_CANONICAL_URI;
-  // Accept empty strings or relative paths as undefined
   if (explicit && explicit !== '' && explicit !== '/' && !explicit.startsWith('/')) {
     return explicit;
   }
 
-  // If we have a BASE_URL (explicit or derived), append /mcp
   if (baseUrl) {
     return `${baseUrl}/mcp`;
   }
@@ -60,30 +56,25 @@ function deriveMcpCanonicalUri(
 const CorsModeSchema = z.enum(['allow_all', 'explicit', 'automatic']).default('automatic');
 
 /**
- * HTTP server environment schema.
+ * Base shape for the HTTP server environment.
  *
- * Composes shared contracts from `@oaknational/mcp-env` with
- * HTTP-server-specific fields. Elasticsearch credentials are
- * required — the server fails at startup if they are absent.
+ * Clerk keys are optional in the base shape; conditional requirement is
+ * enforced via `superRefine` on the final `HttpEnvSchema`.
  */
-const EnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
+const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
   .extend({
-    // Clerk Authentication
-    CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
-    CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
-    // MCP Server Configuration
+    CLERK_PUBLISHABLE_KEY: z.string().min(1).optional(),
+    CLERK_SECRET_KEY: z.string().min(1).optional(),
     BASE_URL: z.url().optional(),
     MCP_CANONICAL_URI: z.url().optional(),
     PORT: z.string().optional(),
-    // Transport Mode
     REMOTE_MCP_MODE: ModeSchema.optional(),
-    // Security & Development
     DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
+    OAK_CURRICULUM_MCP_USE_STUB_TOOLS: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),
     ALLOWED_ORIGINS: z.string().optional(),
     CORS_MODE: CorsModeSchema.optional(),
-    // Vercel System Environment Variables (read-only, for derivation logic)
     VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
     VERCEL_URL: z.string().optional(),
     VERCEL_BRANCH_URL: z.string().optional(),
@@ -91,15 +82,50 @@ const EnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     VERCEL_GIT_COMMIT_SHA: z.string().optional(),
   });
 
-export type Env = z.infer<typeof EnvSchema>;
+/**
+ * HTTP server environment schema with conditional Clerk key requirement.
+ *
+ * When `DANGEROUSLY_DISABLE_AUTH` is `'true'`, Clerk keys are optional.
+ * Otherwise, both `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are required.
+ */
+export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
+  if (data.DANGEROUSLY_DISABLE_AUTH === 'true') {
+    return;
+  }
 
-/* eslint-disable-next-line no-restricted-syntax -- This is the ONLY function that reads process.env to build validated config */
-export function readEnv(env: NodeJS.ProcessEnv = process.env): Env {
-  // Derive BASE_URL and MCP_CANONICAL_URI from Vercel system variables if needed
+  if (!data.CLERK_PUBLISHABLE_KEY) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['CLERK_PUBLISHABLE_KEY'],
+      message: 'CLERK_PUBLISHABLE_KEY is required when auth is enabled',
+    });
+  }
+
+  if (!data.CLERK_SECRET_KEY) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['CLERK_SECRET_KEY'],
+      message: 'CLERK_SECRET_KEY is required when auth is enabled',
+    });
+  }
+});
+
+/** Environment with auth enabled — Clerk keys guaranteed present */
+export type AuthEnabledEnv = Env & {
+  readonly CLERK_PUBLISHABLE_KEY: string;
+  readonly CLERK_SECRET_KEY: string;
+};
+
+/** Environment with auth disabled — Clerk keys may be absent */
+export type AuthDisabledEnv = Env;
+
+export type Env = z.infer<typeof BaseEnvSchema>;
+
+export function readEnv(env: NodeJS.ProcessEnv): Env {
   const derivedBaseUrl = deriveBaseUrl(env);
   const derivedMcpCanonicalUri = deriveMcpCanonicalUri(env, derivedBaseUrl);
 
-  const parsed = EnvSchema.safeParse({
+  const parsed = HttpEnvSchema.safeParse({
     ...env,
     BASE_URL: derivedBaseUrl,
     MCP_CANONICAL_URI: derivedMcpCanonicalUri,

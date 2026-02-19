@@ -1,8 +1,10 @@
 import { readFileSync, unlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import { join } from 'node:path';
 import { createClerkClient } from '@clerk/backend';
-import { loadRootEnv } from '@oaknational/mcp-env';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/mcp-env';
 import { HandshakeSnapshotSchema } from './snapshot.js';
 
 interface CleanupSnapshot {
@@ -14,7 +16,9 @@ interface CleanupSnapshot {
 }
 
 async function cleanup(): Promise<void> {
-  loadRootEnv({ startDir: process.cwd(), env: process.env });
+  const root = findRepoRoot(process.cwd());
+  dotenvConfig({ path: join(root, '.env.local') });
+  dotenvConfig({ path: join(root, '.env') });
 
   const secretKey = process.env.CLERK_SECRET_KEY;
   const publishableKey = process.env.CLERK_PUBLISHABLE_KEY;

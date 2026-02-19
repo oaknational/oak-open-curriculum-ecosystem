@@ -1,19 +1,24 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
   const createTestApp = () => {
-    const runtimeConfig = loadRuntimeConfig({
-      NODE_ENV: 'test',
-      OAK_API_KEY: 'test-api-key',
-      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-      CLERK_SECRET_KEY: 'sk_test_123',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key',
+    const result = loadRuntimeConfig({
+      processEnv: {
+        NODE_ENV: 'test',
+        OAK_API_KEY: 'test-api-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+        CLERK_SECRET_KEY: 'sk_test_123',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key',
+      },
+      startDir: process.cwd(),
     });
+    const runtimeConfig = unwrap(result);
     return createApp({ runtimeConfig });
   };
 

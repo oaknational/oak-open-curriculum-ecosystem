@@ -17,6 +17,7 @@
 
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
@@ -30,8 +31,6 @@ const ACCEPT = 'application/json, text/event-stream';
 const testEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'REDACTED',
-  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
   ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -90,7 +89,11 @@ function findToolByName(tools: McpToolWithMeta[], name: string): McpToolWithMeta
 }
 
 function createTestApp(): ReturnType<typeof createApp> {
-  const runtimeConfig = loadRuntimeConfig(testEnv);
+  const result = loadRuntimeConfig({
+    processEnv: testEnv,
+    startDir: process.cwd(),
+  });
+  const runtimeConfig = unwrap(result);
   return createApp({ runtimeConfig });
 }
 

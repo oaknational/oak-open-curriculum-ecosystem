@@ -1,5 +1,4 @@
 import type { Server } from 'node:http';
-import type { loadRootEnv } from '@oaknational/mcp-env';
 import type { SmokeSuiteMode, DevTokenSource, RemoteUrlSource } from './smoke-assertions/types.js';
 
 export interface SmokeSuiteOptions {
@@ -16,16 +15,25 @@ export interface PrepareEnvironmentOptions {
   readonly remoteDevToken?: string;
 }
 
+/**
+ * Result of loading `.env` files from the repo root.
+ *
+ * Reports whether a file was loaded and from where.
+ */
+export interface LoadedEnvResult {
+  readonly loaded: boolean;
+  readonly path?: string;
+  readonly repoRoot: string;
+}
+
 export interface PreparedEnvironment {
   readonly baseUrl: string;
   readonly devToken?: string;
-  readonly envLoad: ReturnType<typeof loadRootEnv>;
+  readonly envLoad: LoadedEnvResult;
   readonly server?: Server;
   readonly remoteUrlSource?: RemoteUrlSource;
   readonly devTokenSource: DevTokenSource;
 }
-
-export type LoadedEnvResult = ReturnType<typeof loadRootEnv>;
 
 export type EnvSnapshot = Pick<
   NodeJS.ProcessEnv,

@@ -6,7 +6,7 @@
 
 import { vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
-import type { RuntimeConfig } from '../runtime-config.js';
+import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
 import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
 import {
   McpToolError,
@@ -118,12 +118,9 @@ export function createMockLogger(): Pick<
 /**
  * Creates a mock runtime config for testing.
  *
- * @returns Partial runtime config with required fields
+ * @returns AuthEnabledRuntimeConfig with required fields
  */
-export function createMockRuntimeConfig(): Pick<
-  RuntimeConfig,
-  'env' | 'useStubTools' | 'dangerouslyDisableAuth' | 'version' | 'vercelHostnames'
-> {
+export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
   return {
     env: {
       OAK_API_KEY: 'test-key',

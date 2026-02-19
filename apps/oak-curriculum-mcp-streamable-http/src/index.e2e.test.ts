@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
@@ -10,8 +11,6 @@ import { loadRuntimeConfig } from './runtime-config.js';
 const testEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'REDACTED',
-  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
   ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -20,7 +19,11 @@ const testEnv: NodeJS.ProcessEnv = {
 
 describe('CORS and OAuth metadata', () => {
   it('serves /.well-known/oauth-protected-resource', async () => {
-    const runtimeConfig = loadRuntimeConfig(testEnv);
+    const result = loadRuntimeConfig({
+      processEnv: testEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(result);
     const app = createApp({ runtimeConfig });
     const res = await request(app).get('/.well-known/oauth-protected-resource');
     expect(res.status).toBe(200);

@@ -4,7 +4,8 @@ import { resolve, dirname } from 'node:path';
 import { URL, URLSearchParams } from 'node:url';
 
 import { createClerkClient } from '@clerk/backend';
-import { loadRootEnv } from '@oaknational/mcp-env';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/mcp-env';
 
 import { HandshakeSnapshotSchema, type HandshakeSnapshot } from './snapshot.js';
 
@@ -86,7 +87,9 @@ function parseArgs(): {
 }
 
 async function captureBrowserTrace(): Promise<void> {
-  loadRootEnv({ startDir: process.cwd(), env: process.env });
+  const root = findRepoRoot(process.cwd());
+  dotenvConfig({ path: join(root, '.env.local') });
+  dotenvConfig({ path: join(root, '.env') });
 
   const { secretKey, publishableKey } = requireClerkKeys(process.env);
   const snapshotPath = resolve('.tmp/clerk-handshake.json');

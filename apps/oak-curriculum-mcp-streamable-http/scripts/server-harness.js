@@ -121,7 +121,8 @@ log.info('Importing production bundle', {
 });
 
 try {
-  const { createApp } = await import(`${rootDir}/dist/src/index.js`);
+  const { createApp } = await import(`${rootDir}/dist/src/application.js`);
+  const { loadRuntimeConfig } = await import(`${rootDir}/dist/src/runtime-config.js`);
 
   if (typeof createApp !== 'function') {
     throw new Error('createApp is not a function in production bundle');
@@ -132,9 +133,23 @@ try {
     loadTimeMs: Date.now() - startTime,
   });
 
+  // Load runtime config from process.env (loaded from ENV_FILE above)
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: rootDir,
+  });
+
+  if (!configResult.ok) {
+    log.error('Failed to load runtime config', {
+      message: configResult.error.message,
+      diagnostics: configResult.error.diagnostics,
+    });
+    process.exit(1);
+  }
+
   // Create Express app
   const appCreationStart = Date.now();
-  const app = await createApp();
+  const app = createApp({ runtimeConfig: configResult.value });
   const appCreationTime = Date.now() - appCreationStart;
 
   log.info('Express app created', {

@@ -10,7 +10,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { RuntimeConfig } from './runtime-config.js';
+import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 // Mock dependencies
@@ -49,13 +49,34 @@ describe('checkMcpClientAuth', () => {
   const resourceUrl = 'https://example.com/mcp';
   const toolName: UniversalToolName = 'get-key-stages';
 
-  const createMockConfig = (dangerouslyDisableAuth: boolean): RuntimeConfig => ({
-    env: {} as RuntimeConfig['env'],
-    dangerouslyDisableAuth,
-    useStubTools: false,
-    version: '1.0.0',
-    vercelHostnames: [],
-  });
+  const createMockConfig = (
+    dangerouslyDisableAuth: boolean,
+  ): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig =>
+    dangerouslyDisableAuth
+      ? ({
+          env: {
+            OAK_API_KEY: 'test',
+            ELASTICSEARCH_URL: 'http://fake:9200',
+            ELASTICSEARCH_API_KEY: 'fake-key',
+          },
+          dangerouslyDisableAuth: true,
+          useStubTools: false,
+          version: '1.0.0',
+          vercelHostnames: [],
+        } satisfies AuthDisabledRuntimeConfig)
+      : ({
+          env: {
+            OAK_API_KEY: 'test',
+            CLERK_PUBLISHABLE_KEY: 'pk_test',
+            CLERK_SECRET_KEY: 'sk_test',
+            ELASTICSEARCH_URL: 'http://fake:9200',
+            ELASTICSEARCH_API_KEY: 'fake-key',
+          },
+          dangerouslyDisableAuth: false,
+          useStubTools: false,
+          version: '1.0.0',
+          vercelHostnames: [],
+        } satisfies AuthEnabledRuntimeConfig);
 
   beforeEach(() => {
     vi.clearAllMocks();

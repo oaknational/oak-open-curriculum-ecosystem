@@ -1,4 +1,7 @@
-import { loadRootEnv } from '@oaknational/mcp-env';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/mcp-env';
 import type { Logger } from '@oaknational/mcp-logger';
 import type {
   EnvSnapshot,
@@ -21,18 +24,16 @@ export async function prepareEnvironment(
   options: PrepareEnvironmentOptions,
 ): Promise<PreparedEnvironment> {
   if (options.mode === 'local-stub') {
-    const envLoad = loadEnvironment({ envFileOrder: [] });
+    const envLoad = loadEnvironment({ skipFiles: true });
     return prepareLocalStubEnvironment(options, envLoad);
   }
 
   if (options.mode === 'local-stub-auth') {
-    const envLoad = loadEnvironment({ envFileOrder: [] });
+    const envLoad = loadEnvironment({ skipFiles: true });
     return prepareLocalStubAuthEnvironment(options, envLoad);
   }
 
-  const requiredKeys =
-    options.mode === 'local-live' || options.mode === 'local-live-auth' ? ['OAK_API_KEY'] : [];
-  const envLoad = loadEnvironment({ requiredKeys });
+  const envLoad = loadEnvironment({ skipFiles: false });
 
   if (options.mode === 'local-live') {
     return prepareLocalLiveEnvironment(options, envLoad);
@@ -80,14 +81,38 @@ function restoreKey(key: keyof EnvSnapshot, value: string | undefined): void {
   }
 }
 
-function loadEnvironment(options: {
-  readonly envFileOrder?: string[];
-  readonly requiredKeys?: string[];
-}): LoadedEnvResult {
-  return loadRootEnv({
-    startDir: process.cwd(),
-    env: process.env,
-    envFileOrder: options.envFileOrder,
-    requiredKeys: options.requiredKeys,
-  });
+/**
+ * Loads `.env` files from the monorepo root into `process.env`.
+ *
+ * Uses `dotenv.config()` to load `.env.local` then `.env` (both are loaded,
+ * `.env.local` takes precedence via dotenv's default no-override behaviour).
+ */
+function loadEnvironment(options: { readonly skipFiles: boolean }): LoadedEnvResult {
+  const repoRoot = findRepoRoot(process.cwd());
+
+  if (options.skipFiles) {
+    return { loaded: false, repoRoot };
+  }
+
+  const localPath = join(repoRoot, '.env.local');
+  const basePath = join(repoRoot, '.env');
+
+  let loaded = false;
+  let loadedPath: string | undefined;
+
+  if (existsSync(localPath)) {
+    dotenvConfig({ path: localPath });
+    loaded = true;
+    loadedPath = localPath;
+  }
+
+  if (existsSync(basePath)) {
+    dotenvConfig({ path: basePath });
+    if (!loaded) {
+      loaded = true;
+      loadedPath = basePath;
+    }
+  }
+
+  return { loaded, path: loadedPath, repoRoot };
 }

@@ -2,8 +2,10 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes } from 'node:crypto';
 
+import { join } from 'node:path';
 import { createClerkClient } from '@clerk/backend';
-import { loadRootEnv } from '@oaknational/mcp-env';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/mcp-env';
 
 import { createAutomationIdentifier, createPkcePair, toBase64Url } from './utils.js';
 import { HandshakeSnapshotSchema, type HandshakeSnapshot } from './snapshot.js';
@@ -30,7 +32,9 @@ interface AutomationOAuthApp {
 }
 
 async function prepare(): Promise<void> {
-  loadRootEnv({ startDir: process.cwd(), env: process.env });
+  const root = findRepoRoot(process.cwd());
+  dotenvConfig({ path: join(root, '.env.local') });
+  dotenvConfig({ path: join(root, '.env') });
 
   const { secretKey, publishableKey } = requireClerkKeys(process.env);
   const clerk = createClerkClient({ secretKey, publishableKey });

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -41,8 +42,6 @@ vi.mock('@clerk/express', () => ({
 const authBypassedEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-  CLERK_SECRET_KEY: 'sk_test_123',
   OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
   ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -98,7 +97,11 @@ function toolNamesFromResult(value: unknown): string[] {
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
-    const runtimeConfig = loadRuntimeConfig(authEnforcedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authEnforcedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -122,7 +125,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -156,7 +163,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects missing Accept header with 406', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -168,7 +179,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects initialize without clientInfo', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -190,7 +205,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -207,14 +226,18 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       });
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(res.text);
-    const result = payload.result as
+    const initResult = payload.result as
       | { capabilities?: { tools?: { listChanged?: boolean } } }
       | undefined;
-    expect(result?.capabilities?.tools?.listChanged).toBe(true);
+    expect(initResult?.capabilities?.tools?.listChanged).toBe(true);
   });
 
   it('initialize response includes server instructions for agent guidance', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
@@ -231,17 +254,21 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       });
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(res.text);
-    const result = payload.result as { instructions?: string } | undefined;
+    const initResult = payload.result as { instructions?: string } | undefined;
 
     // Verify instructions field exists and contains agent guidance
-    expect(result?.instructions).toBeDefined();
-    expect(result?.instructions).toContain('get-ontology');
-    expect(result?.instructions).toContain('get-knowledge-graph');
-    expect(result?.instructions).toContain('get-help');
+    expect(initResult?.instructions).toBeDefined();
+    expect(initResult?.instructions).toContain('get-ontology');
+    expect(initResult?.instructions).toContain('get-knowledge-graph');
+    expect(initResult?.instructions).toContain('get-help');
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {
-    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
     const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')

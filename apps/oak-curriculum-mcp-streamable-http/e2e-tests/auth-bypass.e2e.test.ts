@@ -11,6 +11,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 
@@ -24,15 +25,17 @@ describe('Auth Bypass for Development (E2E)', () => {
       // Configure for auth bypass – this suite proves the DX helper works.
       // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
       DANGEROUSLY_DISABLE_AUTH: 'true',
-      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-      CLERK_SECRET_KEY: 'sk_test_123',
       OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
       ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
       ELASTICSEARCH_URL: 'http://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     };
 
-    const runtimeConfig = loadRuntimeConfig(testEnv);
+    const result = loadRuntimeConfig({
+      processEnv: testEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(result);
     app = createApp({ runtimeConfig });
   });
 

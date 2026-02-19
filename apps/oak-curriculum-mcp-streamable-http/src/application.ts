@@ -17,7 +17,7 @@ import {
   createStubSearchRetrieval,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createHttpLogger } from './logging/index.js';
-import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
+import type { RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
@@ -37,8 +37,8 @@ import type { McpServerFactory } from './mcp-request-context.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 
 export interface CreateAppOptions {
+  readonly runtimeConfig: RuntimeConfig;
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
-  readonly runtimeConfig?: RuntimeConfig;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
 }
@@ -63,8 +63,8 @@ let appCounter = 0;
  * @returns Configured Express application instance
  */
 
-export function createApp(options?: CreateAppOptions): ExpressWithAppId {
-  const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
+export function createApp(options: CreateAppOptions): ExpressWithAppId {
+  const runtimeConfig = options.runtimeConfig;
   const log =
     options?.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
 
@@ -148,7 +148,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 /** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
 function initializeCoreEndpoints(
   app: Express,
-  options: CreateAppOptions | undefined,
+  options: CreateAppOptions,
   runtimeConfig: RuntimeConfig,
   log: Logger,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
