@@ -13,43 +13,43 @@ overview: >
 todos:
   - id: move-result-to-core
     content: "PREREQUISITE: Move packages/libs/result to packages/core/result. Update pnpm-workspace.yaml. Run pnpm install. Verify all quality gates pass. Package name stays @oaknational/result — zero import changes."
-    status: pending
+    status: completed
   - id: red-env-pipeline
     content: "RED: Write integration tests for the new resolveEnv pipeline in @oaknational/mcp-env. Tests prove: (1) .env values are loaded, (2) .env.local overrides .env, (3) process.env overrides both, (4) schema validation produces Result ok with typed data, (5) schema validation failures produce Result err with per-key diagnostics. Run tests — they MUST fail (resolveEnv does not exist)."
-    status: pending
+    status: completed
   - id: red-env-conditional-clerk
     content: "RED: Write tests for the HTTP server schema proving that when DANGEROUSLY_DISABLE_AUTH=true, missing Clerk keys do NOT cause a validation error. Write tests proving that when DANGEROUSLY_DISABLE_AUTH is absent/false, missing Clerk keys DO cause a validation error. Run tests — they MUST fail (Clerk keys are unconditionally required in the current schema)."
-    status: pending
+    status: completed
   - id: red-runtime-config-uses-pipeline
     content: "RED: Write tests for loadRuntimeConfig (HTTP) proving it uses the env pipeline — i.e. loadRuntimeConfig({ processEnv, startDir }) resolves env sources, validates, and returns Result<RuntimeConfig, ConfigError>. Test that the error case includes per-key diagnostics. Run tests — they MUST fail (loadRuntimeConfig does not call the pipeline, does not return Result)."
-    status: pending
+    status: completed
   - id: red-discriminated-union
     content: "RED: Write tests proving RuntimeConfig is a discriminated union — when dangerouslyDisableAuth is true, Clerk keys may be absent; when false, Clerk keys are string. Tests assert type narrowing works. Run tests — they MUST fail (RuntimeConfig is not a union)."
-    status: pending
+    status: completed
   - id: green-env-pipeline
     content: "GREEN: Implement resolveEnv in @oaknational/mcp-env. Add @oaknational/result dependency. Use dotenv.parse() (non-mutating) to read .env files. Merge sources: { ...dotEnv, ...dotEnvLocal, ...processEnv }. Validate merged protoconfig against the app-provided schema. Return Result<T, EnvResolutionError> where error includes per-key diagnostics and Zod issues. Export the contract types (ResolveEnvOptions, EnvResolutionError, EnvKeyDiagnostic)."
-    status: pending
+    status: completed
   - id: green-env-conditional-clerk
     content: "GREEN: In HTTP env.ts, make Clerk keys optional in the base schema. Add superRefine that requires them when DANGEROUSLY_DISABLE_AUTH is not 'true'. Export AuthEnabledEnv and AuthDisabledEnv types."
-    status: pending
+    status: completed
   - id: green-runtime-config-uses-pipeline
     content: "GREEN: Refactor loadRuntimeConfig (HTTP) to call resolveEnv with the app schema. Handle the Result — on ok, build RuntimeConfig; on err, propagate. Return Result<RuntimeConfig, ConfigError>."
-    status: pending
+    status: completed
   - id: green-discriminated-union
     content: "GREEN: Make RuntimeConfig a discriminated union on dangerouslyDisableAuth. AuthEnabledRuntimeConfig has Clerk keys as string. AuthDisabledRuntimeConfig has them as string | undefined."
-    status: pending
+    status: completed
   - id: green-index-ts-http
     content: "GREEN: Gut index.ts (HTTP) to ~15 lines. One process.env access, one loadRuntimeConfig call. Handle Result: ok -> createApp + listen, err -> log diagnostic message + process.exit(1). Remove all loadRootEnv imports."
-    status: pending
+    status: completed
   - id: green-cleanup-old-loadrootenv
     content: "GREEN: Remove the old loadRootEnv API surface (keyStatus, missingKeys, EnvKeyStatus, LoadRootEnvResult, buildKeyStatus). loadRootEnv may become internal to resolveEnv or remain exported for backward compat with a simplified contract. Update all consumers."
-    status: pending
+    status: completed
   - id: green-stdio-alignment
-    content: "GREEN: Apply the same pattern to the STDIO server. bin/oak-curriculum-mcp.ts delegates to loadRuntimeConfig which calls resolveEnv internally. STDIO's loadRuntimeConfig returns Result<RuntimeConfig, ConfigError>."
+    content: "GREEN: Apply the same pattern to the STDIO server. bin/oak-curriculum-mcp.ts delegates to loadRuntimeConfig which calls resolveEnv internally. STDIO's loadRuntimeConfig returns Result<RuntimeConfig, ConfigError>. Note: STDIO server is historical with a separate alignment plan — partial work done (loadRootEnv removed), full pipeline integration deferred to stdio-http-server-alignment.md."
     status: pending
   - id: green-test-cleanup
     content: "GREEN: Tests that set DANGEROUSLY_DISABLE_AUTH=true no longer need dummy Clerk keys. Remove them from test env objects across the HTTP server test suite. Verify all tests pass."
-    status: pending
+    status: completed
   - id: refactor-docs
     content: "REFACTOR: Update TSDoc, READMEs (HTTP, STDIO, env lib), env.example. Archive this plan when complete."
     status: pending

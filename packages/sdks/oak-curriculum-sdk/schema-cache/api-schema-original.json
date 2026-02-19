@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-584c6fbbcd0f5e7cb82f10b494639f3aad559159"
+    "version": "0.6.0-2951b8add8e47847d9d80bb2f8b8e04f81601b87"
   },
   "servers": [
     {
@@ -1272,19 +1272,19 @@
                   },
                   "example": [
                     {
+                      "version": "0.6.0",
+                      "date": "2026-02-19",
+                      "changes": [
+                        "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
+                      ]
+                    },
+                    {
                       "version": "0.5.0",
                       "date": "2025-03-06",
                       "changes": [
                         "PPTX used for slideDeck assets",
                         "All video assets now fully downloadable in mp4 format",
                         "New /threads/* endpoints"
-                      ]
-                    },
-                    {
-                      "version": "0.4.0",
-                      "date": "2025-02-07",
-                      "changes": [
-                        "Added /sequences/* and /subjects/* endpoints, and add support for unit optionality"
                       ]
                     }
                   ]
@@ -1329,12 +1329,10 @@
                   "required": ["version", "date", "changes"],
                   "additionalProperties": false,
                   "example": {
-                    "version": "0.5.0",
-                    "date": "2025-03-06",
+                    "version": "0.6.0",
+                    "date": "2026-02-19",
                     "changes": [
-                      "PPTX used for slideDeck assets",
-                      "All video assets now fully downloadable in mp4 format",
-                      "New /threads/* endpoints"
+                      "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
                     ]
                   }
                 }

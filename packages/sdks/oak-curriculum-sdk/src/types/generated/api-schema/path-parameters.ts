@@ -1620,19 +1620,19 @@ export const PATH_OPERATIONS = [
               },
               "example": [
                 {
+                  "version": "0.6.0",
+                  "date": "2026-02-19",
+                  "changes": [
+                    "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
+                  ]
+                },
+                {
                   "version": "0.5.0",
                   "date": "2025-03-06",
                   "changes": [
                     "PPTX used for slideDeck assets",
                     "All video assets now fully downloadable in mp4 format",
                     "New /threads/* endpoints"
-                  ]
-                },
-                {
-                  "version": "0.4.0",
-                  "date": "2025-02-07",
-                  "changes": [
-                    "Added /sequences/* and /subjects/* endpoints, and add support for unit optionality"
                   ]
                 }
               ]
@@ -1676,12 +1676,10 @@ export const PATH_OPERATIONS = [
               ],
               "additionalProperties": false,
               "example": {
-                "version": "0.5.0",
-                "date": "2025-03-06",
+                "version": "0.6.0",
+                "date": "2026-02-19",
                 "changes": [
-                  "PPTX used for slideDeck assets",
-                  "All video assets now fully downloadable in mp4 format",
-                  "New /threads/* endpoints"
+                  "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
                 ]
               }
             }

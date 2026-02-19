@@ -1,10 +1,10 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-18
+**Last Updated**: 2026-02-19
 
 ---
 
-## Current Priority: MCP Search Integration (Phase 3)
+## Current Priority: Search Response Tuning
 
 SDK extraction is complete (Checkpoints A–E2). Thread search SDK
 integration is complete — `searchThreads` is wired through the SDK,
@@ -14,20 +14,35 @@ and legacy `test-query-*.ts` scripts have been deleted. All SDK
 retrieval methods have been validated against live Elasticsearch.
 
 **Active plans**:
-- [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) — MCP search tools (WS1-WS4 complete, env overhaul + WS5 remaining)
-- [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md) — **current priority** (pre-WS5)
+- [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) — MCP search tools (WS1-WS4 complete, WS5 remaining)
+- [search-response-tuning.md](../../plans/semantic-search/active/search-response-tuning.md) — **current priority** (P1 response format unification, P2 type deduplication, P3 ES source filtering)
+- [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md) — largely complete, needs final quality gate pass
 
-**Next action**: Environment architecture overhaul. `@oaknational/mcp-env`
-is just a file loader — it should be a proper env resolution pipeline that
-defines the contract for how apps communicate their requirements. The lib
-takes a Zod schema from the app, reads the source hierarchy (`.env` <
-`.env.local` < `process.env`), merges into a protoconfig, validates, and
-returns `Result<T, EnvResolutionError>`. Apps conform to the contract; the
-lib owns loading, merging, validation, and diagnostics. The plan is reviewed
-and ready for execution. Read it first:
-[env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
+**Next action**: Search response tuning. Three problems, prioritised:
 
-After the env overhaul: WS5 — compare SDK search (`search-sdk`) vs REST
+1. **P1: Response format drift.** Generated tools put full JSON in
+   `content[0].text` (Cursor sees it). Aggregated tools put a one-line
+   summary in `content[0].text` and full data in `structuredContent`
+   (Cursor cannot see it). Fix: one unified formatting function that
+   puts both a summary AND JSON in the `content` array (MCP spec
+   supports multiple content blocks). All tools, same shape.
+
+2. **P2: Duplicated type definitions.** `ToolAnnotations` and `ToolMeta`
+   are defined twice — inline in the generated contract AND as named
+   interfaces in `universal-tools/types.ts`. They can drift silently.
+   Fix: emit named types from the type-gen codegen, re-export in
+   runtime code. This is a focused subset of the broader Phase 0
+   aggregated-tools-to-type-gen migration.
+
+3. **P3: Bloated ES responses.** `search-sdk` returns 186 KB for 5
+   results because the full `lesson_content` transcript (14K chars per
+   lesson) is included. Fix: `_source` filtering in the Search SDK to
+   exclude transcript and semantic fields. 94% payload reduction.
+
+Read the plan first:
+[search-response-tuning.md](../../plans/semantic-search/active/search-response-tuning.md)
+
+After response tuning: WS5 — compare SDK search (`search-sdk`) vs REST
 API search (`search`) on representative queries; replace if superior.
 
 **Completed**: [fail-fast-elasticsearch-credentials.md](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md)
@@ -324,6 +339,15 @@ WS5 will compare and likely replace it.
 - **Dispatch maps**: `executor.ts` uses a const object map
   for tool dispatch; `execution.ts` uses a scope dispatcher
   map. Both avoid `switch` statements for ESLint complexity.
+- **`isAggregatedToolName` derives from `AGGREGATED_TOOL_DEFS`**:
+  The type guard in `universal-tools/type-guards.ts` uses
+  `value in AGGREGATED_TOOL_DEFS` — NOT a hardcoded list of
+  tool names. This was fixed (2026-02-19) after the guard had
+  drifted from the definitions, causing `search-sdk`,
+  `browse-curriculum`, and `explore-topic` to appear in
+  `tools/list` but return "Unknown tool" on `tools/call`.
+  The fix ensures the guard stays in sync automatically. Do
+  NOT revert to a manually maintained list.
 
 ### Module Locations
 
@@ -342,26 +366,32 @@ apps/oak-curriculum-mcp-streamable-http/src/
 
 ### What Needs Doing Next
 
-**Environment Architecture Overhaul** — current priority (pre-WS5):
+**Search Response Tuning** — current priority (pre-WS5):
 
-The fail-fast ES credentials work exposed broken environment loading
-architecture. Both server entry points bypass `runtime-config.ts`,
-import `loadRootEnv` directly, manually validate keys, build diagnostics,
-and call `process.exit` — all responsibilities that belong inside
-`loadRuntimeConfig`. Required keys are defined in two places (entry
-point arrays AND Zod schemas) that will drift. Clerk keys are
-unconditionally required in the Zod schema despite being conditional
-on `DANGEROUSLY_DISABLE_AUTH`. The shared env lib was given diagnostic
-responsibilities that belong in the app layer.
+Testing the new `search-sdk` tool revealed three problems that must
+be fixed before WS5 comparison can be meaningful:
 
-The fix overhauls three layers:
-1. `@oaknational/mcp-env` — becomes a proper env resolution pipeline (`resolveEnv`). Takes a Zod schema from the app, reads the source hierarchy (`.env` < `.env.local` < `process.env`) using non-mutating `dotenv.parse()`, merges into a protoconfig, validates, and returns `Result<T, EnvResolutionError>`. The lib defines the contract; apps conform to it.
-2. `env.ts` / `runtime-config.ts` (HTTP) — conditional Clerk keys via `superRefine`, `loadRuntimeConfig` calls the pipeline and returns `Result<RuntimeConfig, ConfigError>`, `RuntimeConfig` becomes a discriminated union on `dangerouslyDisableAuth`
-3. `index.ts` (HTTP) / `bin/oak-curriculum-mcp.ts` (STDIO) — gutted to minimal wiring, handles `Result`
+1. **Response format drift** (P1): Generated tools put full JSON in
+   `content[0].text` (visible to Cursor). Aggregated tools put only
+   a one-line summary there, hiding the data in `structuredContent`
+   (invisible to Cursor). This makes the aggregated tools functionally
+   useless for any MCP client that reads `content` only. Fix: unify
+   to one formatting function; all tools return summary + JSON in
+   `content[]` plus `structuredContent` plus `_meta`.
 
-**Plan**: [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
+2. **Duplicated types** (P2): `ToolAnnotations` and `ToolMeta` defined
+   independently in the generated contract AND in runtime types. Fix:
+   emit from type-gen codegen, re-export in runtime. A focused subset
+   of the broader Phase 0 aggregated-tools-to-type-gen migration
+   ([03-mcp-infrastructure-advanced-tools-plan.md](../../plans/sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md)).
 
-**After env overhaul — WS5 (COMPARE AND REPLACE)**:
+3. **Bloated ES responses** (P3): 186 KB for 5 results because
+   `lesson_content` (14K chars per lesson) is included. Fix: `_source`
+   filtering in Search SDK. 94% reduction.
+
+**Plan**: [search-response-tuning.md](../../plans/semantic-search/active/search-response-tuning.md)
+
+**After response tuning — WS5 (COMPARE AND REPLACE)**:
 
 - Run representative teacher queries through both old `search`
   (REST) and new `search-sdk` (ES/SDK)
@@ -370,9 +400,17 @@ The fix overhauls three layers:
 - Full quality gate chain after replacement
 - Requires live Elasticsearch credentials in the environment
 
-**Completed (pre-WS5): Fail-fast ES credentials**. Six layers of
-silent degradation removed. `searchRetrieval` is now required across
-all three workspaces. Both servers fail at startup if ES credentials
+**Completed: Environment architecture overhaul**. `@oaknational/mcp-env`
+overhauled to a proper `resolveEnv` pipeline. `Result<T, E>` pattern.
+HTTP server: conditional Clerk keys via `superRefine`, discriminated
+`RuntimeConfig` union, `loadRuntimeConfig` returns `Result`. Entry
+points gutted to minimal wiring. `result` and `env` packages moved
+to `packages/core/`. Quality gates passing.
+See [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md).
+
+**Completed: Fail-fast ES credentials**. Six layers of silent
+degradation removed. `searchRetrieval` is now required across all
+three workspaces. Both servers fail at startup if ES credentials
 are absent. Stub mode uses `createStubSearchRetrieval()` — no real
 ES client constructed. `createStubSearchRetrieval()` exported from
 curriculum-sdk `public/mcp-tools.ts`. All quality gates pass.
@@ -390,22 +428,22 @@ helpers for generated types).
 
 ### Environment and Config (2026-02-18)
 
-- Dead code removed from `@oaknational/mcp-env`:
-  `createAdaptiveEnvironment()`, `EnvironmentProvider`, all
-  supporting type guards
-- Shared Zod schemas added as opt-in contracts:
-  `OakApiKeyEnvSchema`, `ElasticsearchEnvSchema`, `LoggingEnvSchema`
-- HTTP server's `env.ts` now composes from shared schemas
-  via `.extend(B.shape)` (Zod 4 deprecates `.merge()`)
-- STDIO–HTTP server alignment plan created as backlog
-  (`.agent/plans/architecture/stdio-http-server-alignment.md`)
-- **Known broken**: `@oaknational/mcp-env` is just a file loader
-  with bolted-on diagnostics. It should be a proper env resolution
-  pipeline that defines the contract, reads the source hierarchy,
-  merges, validates, and returns `Result<T, E>`. Entry points
-  bypass `runtime-config.ts`, required keys defined in two places,
-  Clerk keys unconditionally required, source hierarchy loads
-  first file found instead of merging all sources. Fix:
+- `@oaknational/mcp-env` overhauled: `resolveEnv` pipeline reads
+  `.env` < `.env.local` < `process.env`, validates against
+  app-provided Zod schema, returns `Result<T, EnvResolutionError>`.
+  Dead code removed (`createAdaptiveEnvironment`,
+  `EnvironmentProvider`, bolted-on diagnostics).
+- Shared Zod schemas: `OakApiKeyEnvSchema`,
+  `ElasticsearchEnvSchema`, `LoggingEnvSchema` as composable
+  building blocks.
+- HTTP server: conditional Clerk keys via `superRefine`,
+  `RuntimeConfig` discriminated union on `dangerouslyDisableAuth`,
+  `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`.
+- `result` and `env` packages moved from `packages/libs/` to
+  `packages/core/`.
+- STDIO–HTTP server alignment plan on backlog
+  (`.agent/plans/architecture/stdio-http-server-alignment.md`).
+- Env overhaul largely complete, needs final quality gate pass:
   [env-architecture-overhaul.md](../../plans/semantic-search/active/env-architecture-overhaul.md)
 
 ### Phase 4 — Search Quality + Ecosystem
@@ -484,8 +522,10 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
 | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport (stateless bug fix) |
 | [Transport Bug Plan (archived)](../../plans/semantic-search/archive/completed/streamable-http-transport-stateless-bug.md) | Investigation and fix (complete) |
-| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS4 done, env overhaul + WS5 remaining) |
-| [Active plan: Env overhaul](../../plans/semantic-search/active/env-architecture-overhaul.md) | Fix broken env loading architecture (current priority) |
+| [Active plan: Phase 3a](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search integration (WS1-WS4 done, WS5 remaining) |
+| [Active plan: Response tuning](../../plans/semantic-search/active/search-response-tuning.md) | Unified response format, type deduplication, ES source filtering (current priority) |
+| [Active plan: Env overhaul](../../plans/semantic-search/active/env-architecture-overhaul.md) | Env resolution pipeline (largely complete) |
+| [Plan 03 Phase 0](../../plans/sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md) | Aggregated tools type-gen migration (future, blocks Phases 1-4) |
 | [Completed: Fail-fast ES creds](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) | Remove silent degradation on missing ES credentials ✅ |
 | [Background: wire-hybrid-search](../../plans/semantic-search/archive/completed/wire-hybrid-search-background.md) | Original architectural design (reference only) |
 | [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |

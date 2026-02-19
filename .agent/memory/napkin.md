@@ -1,5 +1,57 @@
 # Napkin
 
+## Session: 2026-02-19 (a) — MCP Response Format Investigation and Plan
+
+### What Was Done
+
+- Discovered and fixed `isAggregatedToolName` drift: type guard was a manually
+  maintained list that did not include `search-sdk`, `browse-curriculum`, or
+  `explore-topic`. Fixed to `value in AGGREGATED_TOOL_DEFS` with TDD cycle.
+- Investigated MCP response format drift between generated and aggregated tools:
+  - Generated tools use `formatDataWithContext()` → `content[0].text` = JSON,
+    `structuredContent` = typed data
+  - Aggregated tools use `formatOptimizedResult()` → `content[0].text` = summary,
+    `structuredContent` = typed data
+  - AI clients read `content[0].text` — so generated tools show raw JSON to the
+    model, aggregated tools show a summary. Neither includes both.
+- Discovered ES returns full `lesson_content` (186 KB for 5 lessons) because no
+  `_source` filtering is applied in `create-retrieval-service.ts`
+- Found duplicated type definitions: `ToolAnnotations`/`ToolMeta` defined inline
+  in generated `tool-descriptor.contract.ts` AND manually in
+  `universal-tools/types.ts`
+- Created `search-response-tuning.md` plan with three phases:
+  P1 (unified formatting), P2 (type deduplication), P3 (ES `_source` filtering)
+- Updated `env-architecture-overhaul.md` todos (12 of 15 completed)
+- Updated `semantic-search.prompt.md` as standalone entry point
+- Added `isAggregatedToolName` fix note to prompt
+- Ran `/consolidate-docs`: all plans/prompts up to date, no ephemeral content to
+  migrate, distilled.md clean, napkin 556 lines (no rotation), experience recorded
+
+### Lessons Learned
+
+- MCP `structuredContent` is for programmatic/widget use. AI clients (Cursor)
+  read `content[0].text`. If you put raw JSON there with no summary, the model
+  sees a blob of data with no context.
+- Type guards that shadow a data structure (like a hardcoded list of tool names)
+  drift silently. Use `in` operator on the source data structure.
+- Two formatting functions for the same protocol → guaranteed drift. Unify early.
+- ES `_source` filtering is easy to forget and expensive to skip.
+
+### Files Modified (key)
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/type-guards.ts` —
+  `isAggregatedToolName` fix
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.unit.test.ts` —
+  new test assertions
+- `packages/core/env/src/resolve-env.ts` — removed `Object.prototype.hasOwnProperty.call()`
+- `.agent/plans/semantic-search/active/search-response-tuning.md` — new plan
+- `.agent/plans/semantic-search/active/env-architecture-overhaul.md` — todo updates
+- `.agent/prompts/semantic-search/semantic-search.prompt.md` — standalone entry point
+- `.agent/memory/distilled.md` — `Object.*` rule clarification
+- `.agent/experience/2026-02-19-seeing-from-the-clients-perspective.md` — new
+
+---
+
 ## Session: 2026-02-18 (a) — Fail Fast ES Credentials Implementation
 
 ### What Was Done

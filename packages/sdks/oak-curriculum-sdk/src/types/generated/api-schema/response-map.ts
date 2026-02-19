@@ -289,7 +289,7 @@ const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
     method: 'get',
     source: 'inline',
     zodIdentifier: 'changelog_changelog_200',
-    jsonSchema: {"type":"array","items":{"type":"object","properties":{"version":{"type":"string"},"date":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}}},"required":["version","date","changes"],"additionalProperties":false},"example":[{"version":"0.5.0","date":"2025-03-06","changes":["PPTX used for slideDeck assets","All video assets now fully downloadable in mp4 format","New /threads/* endpoints"]},{"version":"0.4.0","date":"2025-02-07","changes":["Added /sequences/* and /subjects/* endpoints, and add support for unit optionality"]}],"title":"changelog-changelog 200 response"},
+    jsonSchema: {"type":"array","items":{"type":"object","properties":{"version":{"type":"string"},"date":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}}},"required":["version","date","changes"],"additionalProperties":false},"example":[{"version":"0.6.0","date":"2026-02-19","changes":["Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"]},{"version":"0.5.0","date":"2025-03-06","changes":["PPTX used for slideDeck assets","All video assets now fully downloadable in mp4 format","New /threads/* endpoints"]}],"title":"changelog-changelog 200 response"},
   },
   'changelog-latest:200': {
     schema: curriculumSchemas.changelog_latest_200,
@@ -300,7 +300,7 @@ const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
     method: 'get',
     source: 'inline',
     zodIdentifier: 'changelog_latest_200',
-    jsonSchema: {"type":"object","properties":{"version":{"type":"string"},"date":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}}},"required":["version","date","changes"],"additionalProperties":false,"example":{"version":"0.5.0","date":"2025-03-06","changes":["PPTX used for slideDeck assets","All video assets now fully downloadable in mp4 format","New /threads/* endpoints"]},"title":"changelog-latest 200 response"},
+    jsonSchema: {"type":"object","properties":{"version":{"type":"string"},"date":{"type":"string"},"changes":{"type":"array","items":{"type":"string"}}},"required":["version","date","changes"],"additionalProperties":false,"example":{"version":"0.6.0","date":"2026-02-19","changes":["Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"]},"title":"changelog-latest 200 response"},
   },
   'getRateLimit-getRateLimit:200': {
     schema: curriculumSchemas.RateLimitResponseSchema,

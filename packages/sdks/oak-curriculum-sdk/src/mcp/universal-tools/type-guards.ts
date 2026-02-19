@@ -7,14 +7,15 @@
  */
 
 import { isToolName } from '../../types/generated/api-schema/mcp-tools/index.js';
+import { AGGREGATED_TOOL_DEFS } from './definitions.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 
 /**
  * Type predicate for aggregated tool names.
  *
- * Aggregated tools are hand-written tools that combine multiple API
- * calls into a single operation. They have different execution paths
- * than generated tools.
+ * Derived from `AGGREGATED_TOOL_DEFS` so the guard stays in sync
+ * with the definitions automatically. Adding a new aggregated tool
+ * to the definitions map is sufficient — no manual update here.
  *
  * @param value - Value to check
  * @returns True if value is an aggregated tool name
@@ -22,21 +23,13 @@ import type { AggregatedToolName, UniversalToolName } from './types.js';
  * @example
  * ```typescript
  * if (isAggregatedToolName(toolName)) {
- *   // TypeScript knows toolName is 'search' | 'fetch' | 'get-ontology' | 'get-help' | ...
+ *   // TypeScript knows toolName is AggregatedToolName
  *   return executeAggregatedTool(toolName, args);
  * }
  * ```
  */
 export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
-  return (
-    value === 'search' ||
-    value === 'fetch' ||
-    value === 'get-ontology' ||
-    value === 'get-help' ||
-    value === 'get-knowledge-graph' ||
-    value === 'get-thread-progressions' ||
-    value === 'get-prerequisite-graph'
-  );
+  return typeof value === 'string' && value in AGGREGATED_TOOL_DEFS;
 }
 
 /**
