@@ -15,7 +15,8 @@ import type { Logger } from '@oaknational/mcp-logger';
  * Tests that the middleware correctly delegates to or skips clerkMiddleware
  * based on request properties. Uses simple mocks injected as arguments.
  *
- * Per ADR-056: Discovery methods skip Clerk auth context setup to reduce latency.
+ * Per MCP 2025-11-25: All MCP methods require auth. Path-based and public
+ * resource skips remain for non-MCP routes (health, OAuth metadata, widget).
  */
 describe('createConditionalClerkMiddleware (Integration)', () => {
   let mockClerkMw: RequestHandler;
@@ -83,31 +84,27 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
     });
   });
 
-  describe('when clerkMiddleware is skipped', () => {
-    it('skips clerkMiddleware for initialize on /mcp', () => {
+  describe('discovery methods require clerkMiddleware (MCP 2025-11-25)', () => {
+    it('runs clerkMiddleware for initialize on /mcp', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', { method: 'initialize' });
 
       conditionalMw(req, mockRes, mockNext);
 
-      expect(mockClerkMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
-      expect(mockLogger.debug).toHaveBeenCalledWith(
-        'clerkMiddleware skipped for discovery/public method',
-        expect.objectContaining({ mcpMethod: 'initialize' }),
-      );
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
     });
 
-    it('skips clerkMiddleware for tools/list on /mcp', () => {
+    it('runs clerkMiddleware for tools/list on /mcp', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', { method: 'tools/list' });
 
       conditionalMw(req, mockRes, mockNext);
 
-      expect(mockClerkMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
     });
+  });
 
+  describe('path-based skips (non-MCP routes)', () => {
     it('skips clerkMiddleware for /.well-known/oauth-protected-resource', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/.well-known/oauth-protected-resource', undefined);

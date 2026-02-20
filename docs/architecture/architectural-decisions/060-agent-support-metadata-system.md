@@ -4,6 +4,11 @@
 
 Accepted
 
+> **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool has since
+> been removed and merged into `get-ontology` (property graph data is now embedded in
+> ontology responses). This ADR remains a historical record of the metadata-system
+> pattern; references to `get-knowledge-graph` below reflect the accepted-state context.
+
 ## Context
 
 Agent support tools (`get-ontology`, `get-knowledge-graph`, `get-help`) help AI agents understand the Oak curriculum domain model before using other tools. These tools need to be discoverable through multiple channels:

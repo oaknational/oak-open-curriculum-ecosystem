@@ -25,7 +25,7 @@
 
 - [Data Variances](data/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
-- [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) - Entity relationships
+- [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) - Entity relationships
 
 ## AI Agent Guidance
 

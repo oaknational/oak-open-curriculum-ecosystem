@@ -73,7 +73,17 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 
 2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) links the key READMEs, AGENT.md directives, and validation tooling.
 
-3. **Configure environment variables**
+3. **Verify your local setup (no API keys required)**
+
+   ```bash
+   pnpm test
+   pnpm type-check
+   pnpm lint:fix
+   ```
+
+   If these pass, your toolchain is working and you can start contributing to SDK/docs work immediately.
+
+4. **Configure environment variables** (only if your task needs external services)
 
    ```bash
    cp .env.example .env
@@ -99,14 +109,18 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    > - Integration/E2E tests (`pnpm test:e2e`)
    > - Smoke tests (`pnpm smoke:dev:stub`)
 
-4. **Regenerate types & run quality gates**
+5. **Regenerate types & run quality gates**
 
    ```bash
-   pnpm make   # install -> type-gen -> build -> type-check -> doc-gen -> lint -> format
-   pnpm qg     # format-check -> type-check -> lint -> markdownlint -> test suites -> smoke
+   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint -> format
+   pnpm qg     # full gate: format-check -> type-check -> lint -> markdownlint -> test suites -> smoke
    ```
 
-5. **Choose your starting point**
+   `pnpm make` is the recommended first full pipeline run.
+   `pnpm qg` is slower and runs UI/E2E/smoke suites that may require additional service configuration.
+   For current caveats, see [docs/development/onboarding.md](docs/development/onboarding.md).
+
+6. **Choose your starting point**
 
    **For SDK/Library contributors** (no env vars needed):
    - Start with `packages/sdks/oak-curriculum-sdk/README.md` – SDK generation, MCP tool generation, shared parsing helpers
@@ -130,7 +144,7 @@ pnpm build          # Build all workspaces
 pnpm type-check     # Type-check apps and packages
 pnpm doc-gen        # Generate TypeDoc/OpenAPI/markdown/AI docs
 pnpm secrets:scan:all # Run secret scan (branches + tags + full history)
-pnpm lint -- --fix  # Lint and auto-fix where possible
+pnpm lint:fix       # Lint and auto-fix where possible
 pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests

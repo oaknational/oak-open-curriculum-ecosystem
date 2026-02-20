@@ -195,38 +195,37 @@ export function createMcpRouter(options: McpRouterOptions): RequestHandler {
 **Example - Correct TDD Sequence**:
 
 ```typescript
-// SCENARIO: We want discovery methods to work WITHOUT authentication
+// SCENARIO: We want ALL MCP methods to require auth (per MCP 2025-11-25)
 
 // 1. RED - Write E2E test FIRST specifying NEW behaviour
 describe('MCP Server E2E', () => {
-  it('allows tools/list without authentication', async () => {
+  it('returns 401 for tools/list without authentication', async () => {
     const response = await request(server).post('/mcp').send({ method: 'tools/list' });
 
-    expect(response.status).toBe(200); // NEW expected behaviour
-    expect(response.body).toHaveProperty('result');
+    expect(response.status).toBe(401); // NEW expected behaviour
   });
 
-  it('requires auth for protected tools', async () => {
+  it('returns 401 for tools/call without authentication', async () => {
     const response = await request(server)
       .post('/mcp')
       .send({ method: 'tools/call', params: { name: 'get-key-stages' } });
 
-    expect(response.status).toBe(401); // Still required
+    expect(response.status).toBe(401); // Was already 401, still 401
   });
 });
-// Run E2E test → FAILS (current system requires auth for ALL methods)
+// Run E2E test → FAILS (current system allows discovery without auth)
 
 // 2. GREEN - Now implement changes
-// - Write unit tests for isDiscoveryMethod() (RED → GREEN)
-// - Write integration tests for createMcpRouter() (RED → GREEN)
-// - Wire router into application
-// Run E2E test → PASSES (system now has new behaviour)
+// - Update integration tests for createMcpRouter() (RED → GREEN)
+// - Update unit tests for shouldSkipClerkMiddleware (RED → GREEN)
+// - Remove auth bypasses from router and middleware
+// Run E2E test → PASSES (system now requires auth for all methods)
 
-// 3. REFACTOR - Improve internals
+// 3. REFACTOR - Delete dead code, update TSDoc
 // E2E tests remain green
 ```
 
-**Example - WRONG Sequence (What We Did)**:
+**Example - WRONG Sequence**:
 
 ```typescript
 // ❌ VIOLATION: Updated implementation first, E2E tests after

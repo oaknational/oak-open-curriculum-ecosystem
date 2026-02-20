@@ -722,6 +722,24 @@ for (const [path, pathItem] of Object.entries(schema.paths)) {
 
 ---
 
+## Additional Tasks (from 2026-02-20 review)
+
+These items surfaced during the OAuth documentation review and are not OAuth-related, but affect the MCP server and developer experience.
+
+### Fix quick-start anchor
+
+`docs/quick-start.md` links to `#known-gate-caveats` but the onboarding heading is singular `### Known Gate Caveat`. Fix the link or the heading to match.
+
+### Preserve historical review cleanly
+
+`.agent/research/developer-experience/2026-02-20-onboarding-review.md` should have a historical snapshot note indicating when the review was conducted and any context that has since changed.
+
+### Canonical health endpoint alignment
+
+Adopt `/healthz` as canonical health check path. Align `conditional-clerk-middleware.ts` comments (which reference `/health` and `/ready`) with the actual route used by the server.
+
+---
+
 ## Key Risks and Mitigations
 
 | Risk                                           | Mitigation                                                                                            |

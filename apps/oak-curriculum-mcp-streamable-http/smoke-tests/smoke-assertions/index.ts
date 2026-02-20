@@ -10,6 +10,8 @@ import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import { assertAuthenticatedToolCall } from './authenticated.js';
+import { assertOAuthDiscoveryChain } from './oauth-discovery.js';
+import { assertSpecCompliantOAuthFlow } from './oauth-spec-e2e.js';
 import type { SmokeContext } from './types.js';
 
 export { type SmokeContext } from './types.js';
@@ -53,13 +55,21 @@ async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
 }
 
 async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<void> {
-  // For auth enforcement mode, we only test auth and discovery.
-  // MCP protocol tests would fail without a real Clerk token.
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
   await assertAuthRequired(context);
+  await assertOAuthDiscoveryChain(context);
   await assertAuthenticatedToolCall(context);
-  // TODO: Add OAuth discovery assertions
+}
+
+/**
+ * Validates the full spec-compliant OAuth path end-to-end: discovery
+ * chain, programmatic token acquisition, and authenticated MCP calls.
+ * Requires real Clerk credentials in the environment.
+ */
+export async function runSpecCompliantOAuthAssertions(context: SmokeContext): Promise<void> {
+  await assertHealthEndpoints(context);
+  await assertSpecCompliantOAuthFlow(context);
 }
 
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {

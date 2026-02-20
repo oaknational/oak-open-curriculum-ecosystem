@@ -50,29 +50,35 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 - [`apps/oak-search-cli/README.md`](../../apps/oak-search-cli/README.md) – ingestion, admin flows, hybrid search.
 - MCP server READMEs (`apps/oak-curriculum-mcp-*`) – running stdio/HTTP servers locally or on Vercel.
 
-## 4. Install & Regenerate Types
+## 4. Install, Verify, and Regenerate
 
 ```bash
 pnpm install
-pnpm make   # install → build → type-check → doc-gen → lint:fix → markdownlint → format
-pnpm qg     # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
+pnpm test       # Unit/integration suites that should pass without API keys
+pnpm type-check # TypeScript compilation checks
+pnpm lint:fix   # Linting and auto-fixes
+pnpm make       # install → build (includes type-gen via Turbo deps) → type-check → doc-gen → lint:fix → markdownlint → format
 ```
 
 `pnpm type-gen` rebuilds the SDK and the shared `parseSchema` helper so every workspace stays aligned with the OpenAPI schema.
 
-## 5. Verify Your Setup (No API Keys Required)
-
-Before configuring environment variables, verify your basic setup works:
+## 5. Run Full Quality Gates (When Ready)
 
 ```bash
-pnpm test          # Run unit tests — should all pass
-pnpm type-check    # Verify types compile
-pnpm lint:fix      # Check and auto-fix code style
+pnpm qg  # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
 ```
 
-If these pass, you have a working development environment! Environment variables are only needed for running servers and E2E tests.
+Use `pnpm qg` once you are ready to run full-gate validation across UI, E2E, and smoke suites. This is slower and typically requires service credentials.
 
 See [Environment Variables Guide](./environment-variables.md) for complete setup details when you're ready.
+
+### Known Gate Caveat
+
+As of **20 February 2026**, this suite is known to fail in clean local runs:
+
+- `apps/oak-curriculum-mcp-streamable-http/tests/widget/widget-rendering.spec.ts` (fails in `pnpm qg` via `test:ui`)
+
+If `pnpm qg` fails, run the affected suite directly and check latest issues/ADRs/plans before assuming local setup problems.
 
 ## 6. Shared Parsing Helpers
 

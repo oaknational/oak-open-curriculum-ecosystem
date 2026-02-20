@@ -156,6 +156,9 @@ importers:
 
   apps/oak-curriculum-mcp-streamable-http:
     dependencies:
+      '@clerk/backend':
+        specifier: ^2.29.2
+        version: 2.29.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@clerk/express':
         specifier: ^1.7.7
         version: 1.7.62(express@5.2.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)

@@ -320,7 +320,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(res.headers['cross-origin-resource-policy']).toBe('cross-origin');
     });
 
-    it('MCP requests still work with security headers', async () => {
+    it('MCP requests reach auth layer through security headers', async () => {
       const app = createTestApp();
       const res = await request(app)
         .post('/mcp')
@@ -328,8 +328,9 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
         .set('Content-Type', 'application/json')
         .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
 
-      // Should not be a 4xx/5xx error from security headers
-      expect(res.status).toBeLessThan(400);
+      // 401 confirms security headers did not block the request --
+      // it reached the auth layer, which correctly requires a token
+      expect(res.status).toBe(401);
     });
   });
 });

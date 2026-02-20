@@ -62,8 +62,8 @@ function createAuthEnabledApp(): Express {
 }
 
 describe('Application-Level Method-Aware Auth', () => {
-  describe('Discovery methods (no auth required)', () => {
-    it('allows tools/list without Bearer token', async () => {
+  describe('Discovery methods (auth required per MCP 2025-11-25)', () => {
+    it('returns HTTP 401 for tools/list without Bearer token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -73,10 +73,10 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/list',
         });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
 
-    it('allows initialize without Bearer token', async () => {
+    it('returns HTTP 401 for initialize without Bearer token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -91,10 +91,10 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/list with Bearer token (does not break)', async () => {
+    it('returns HTTP 401 for tools/list with fake Bearer token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -105,13 +105,12 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/list',
         });
 
-      // Discovery methods should work regardless of token presence
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
   });
 
-  describe('Public generated tools (no auth required)', () => {
-    it('allows tools/call get-changelog without token', async () => {
+  describe('All tools require HTTP auth (noauth = no scope check, not no token)', () => {
+    it('returns HTTP 401 for get-changelog without token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -124,11 +123,10 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/call get-changelog-latest without token', async () => {
+    it('returns HTTP 401 for get-changelog-latest without token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -141,11 +139,10 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/call get-rate-limit without token', async () => {
+    it('returns HTTP 401 for get-rate-limit without token', async () => {
       const response = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -158,8 +155,7 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
   });
 

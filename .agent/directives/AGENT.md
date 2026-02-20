@@ -57,6 +57,17 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 | `.cursor/commands/*.md` | Slash commands (`/jc-review`, `/jc-gates`, etc.) |
 | `.cursor/rules/*.mdc` | Always-applied rules |
 
+### Skills and Commands
+
+Commands and skills may be defined in more than one location. Check both the repo-native and Cursor-specific paths.
+
+| Location | Purpose |
+|----------|---------|
+| `.agent/skills/*/SKILL.md` | Repo-managed skills for shared workflows |
+| `.agent/prompts/*.md` | Reusable prompt playbooks |
+| `.cursor/commands/*.md` | Additional command definitions (currently Cursor-specific) |
+| `.cursor/skills/*/` | Additional skills (currently Cursor-specific) |
+
 ## Essential Links
 
 **Important**: These documents must be read.

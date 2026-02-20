@@ -68,8 +68,8 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # install → build → type-check → doc-gen → lint:fix → markdownlint → format
-pnpm qg      # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
+pnpm make    # Recommended first full pipeline run
+pnpm qg      # Full verification (includes UI/E2E/smoke suites)
 
 # 3. Start a dev server (choose one)
 pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
@@ -78,6 +78,9 @@ pnpm -C apps/oak-search-cli dev  # Search application
 ```
 
 See [environment variables guide](development/environment-variables.md) for complete setup details.
+
+For current known `pnpm qg` local caveats, see
+[Developer Onboarding → Known Gate Caveats](development/onboarding.md#known-gate-caveats).
 
 ## Key Concepts
 
@@ -231,9 +234,13 @@ pnpm test
 ### Run All Quality Gates
 
 ```bash
-pnpm make    # Build everything from scratch (install → build → type-check → doc-gen → lint:fix → markdownlint → format)
-pnpm qg      # Run all quality checks (format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke)
+pnpm make    # Build everything from scratch
+pnpm qg      # Run all quality checks (including UI/E2E/smoke suites)
 ```
+
+If `pnpm qg` fails locally, check
+[Developer Onboarding → Known Gate Caveats](development/onboarding.md#known-gate-caveats)
+before assuming setup issues.
 
 ### Test a Specific Workspace
 

@@ -18,40 +18,40 @@ todos:
     status: completed
   - id: red-e2e-system-behaviour
     content: "RED (E2E — system behaviour): Update E2E tests to specify the new system behaviour FIRST, per testing-strategy.md. DISCOVERY BYPASS: (1) auth-enforcement.e2e.test.ts: invert 'Discovery Methods (No Auth Required)' section — assert 401 for initialize and tools/list without auth headers. (2) application-routing.e2e.test.ts: invert 'Discovery methods (no auth required)' section (lines 65-96). NOTE: lines 97-110 (fake-token test) are NOT a simple inversion — a fake Bearer token will fail Clerk verification and return 401; either expect 401 or delete. (3) public-resource-auth-bypass.e2e.test.ts: the unauthenticated resources/list call (line 83) will return 401; refactor to use the widget URI constant directly. (4) web-security-selective.e2e.test.ts: lines 323-333 assert tools/list returns < 400; after the change it returns 401. Fix as appropriate (test is about web security headers not auth). NOAUTH TOOL BYPASS: (5) auth-enforcement.e2e.test.ts: invert 'Public Tools (noauth)' section (lines 435-485) — assert 401 for get-changelog and get-rate-limit without auth headers. (6) application-routing.e2e.test.ts: invert 'Public generated tools (no auth required)' section (lines 113-163) — assert 401 for get-changelog, get-changelog-latest, get-rate-limit without auth. Run ALL E2E tests — they MUST fail against the current system."
-    status: pending
+    status: completed
   - id: red-integration-router
     content: "RED (integration): Write/update integration tests for mcp-router and conditional-clerk-middleware. In mcp-router.integration.test.ts: (a) invert 'discovery methods' assertions — auth middleware MUST be called for initialize and tools/list; (b) invert 'noauth tools' assertions — auth middleware MUST be called for get-changelog and get-rate-limit. In conditional-clerk-middleware.integration.test.ts, invert skip assertions — clerkMiddleware MUST run for discovery methods. Run tests — they MUST fail."
-    status: pending
+    status: completed
   - id: red-unit-classifier
     content: "RED (unit): In conditional-clerk-middleware.unit.test.ts, update the 6 discovery method assertions (currently assert shouldSkipClerkMiddleware returns true). Run tests — they MUST fail."
-    status: pending
+    status: completed
   - id: green-remove-auth-bypasses
     content: "GREEN: Remove BOTH auth bypasses from mcp-router.ts: (1) discovery-method bypass (isDiscoveryMethod check in shouldSkipAuth) and (2) noauth tool bypass (toolRequiresAuth check in tools/call conditional). After this change, mcp-router.ts simplifies dramatically: shouldSkipAuth only checks for public resource reads (resources/read with public URI); everything else goes through options.auth(). The entire tools/call conditional block, getToolNameFromBody, hasParams, hasName become dead code — delete in refactor step. Also remove CLERK_SKIP_METHODS and isDiscoveryMethod call from conditional-clerk-middleware.ts (module is SIMPLIFIED, not deleted — retains CLERK_SKIP_PATHS and public resource URI bypasses). DANGEROUSLY_DISABLE_AUTH is UNAFFECTED — the entire auth stack is bypassed at app startup when this flag is set. Tool-level scope checking in check-mcp-client-auth.ts is UNAFFECTED — toolRequiresAuth() there determines whether deeper scope verification is needed AFTER base auth is already enforced at the HTTP layer."
-    status: pending
+    status: completed
   - id: green-all-tests-pass
     content: "GREEN: Run all tests (unit, integration, E2E). ALL tests from the RED phase MUST now pass. Public resource reads (widget HTML, documentation) must still bypass auth — these are accessed via resources/read with specific URIs, not discovery methods."
-    status: pending
+    status: completed
   - id: refactor-delete-dead-code
     content: "REFACTOR: Delete dead code created by the auth bypass removals. (1) Delete mcp-method-classifier.ts and mcp-method-classifier.unit.test.ts if isDiscoveryMethod has no remaining consumers. (2) Delete discovery-methods-sync.unit.test.ts — sync invariant no longer applies. (3) In mcp-router.ts: delete getToolNameFromBody, hasParams, hasName (dead after tools/call conditional removal); remove imports of toolRequiresAuth, isUniversalToolName, UniversalToolName, isDiscoveryMethod. (4) Consider adding a replacement sync invariant test for public-resource skip parity (both layers still have public-resource skip logic). (5) Check for any other dead code across all affected files."
-    status: pending
+    status: completed
   - id: refactor-docs
     content: "REFACTOR: Update TSDoc across all affected files. Specifically: (1) mcp-router.ts — rewrite module and createMcpRouter TSDoc to reflect simplified routing (public resource reads skip auth, everything else goes through auth). Remove all references to discovery bypass, noauth tool bypass, '@see isDiscoveryMethod', '@see toolRequiresAuth'. (2) tool-auth-checker.ts line 33 — remove stale '@see isDiscoveryMethod'. (3) conditional-clerk-middleware.ts — update TSDoc to reflect reduced scope (path-based and public-resource skips only). (4) auth-routes.ts line 94 — remove 'Public tools (noauth): Skip auth' from auth model comment; update to reflect all POST /mcp requests require auth. (5) check-mcp-client-auth.ts — update TSDoc to clarify that toolRequiresAuth() check is about SCOPE verification, not HTTP transport auth. Base auth is enforced at the HTTP layer; this function determines whether deeper scope checking is needed. (6) README.md auth section — update to reflect that all MCP requests require authentication."
-    status: pending
+    status: completed
   - id: adr-supersede-056
     content: "ADR: Write a new ADR superseding ADR-056 (Conditional Clerk Middleware for Discovery). ADR-056 explicitly states 'Discovery methods MUST work without authentication' — this is incorrect per MCP 2025-11-25 spec. The new ADR documents: (1) the spec requirement that Authorization MUST be included in every HTTP request, (2) why the discovery bypass AND the noauth tool HTTP bypass were both incorrect, (3) the distinction between HTTP transport auth (all requests) and tool-level scope metadata (securitySchemes describes scope consent, not auth bypass), (4) the latency trade-off (acknowledge ADR-056's '97% faster' measurement, accept regression for spec compliance, note JWKS caching as the correct optimisation path), (5) what remains of the conditional middleware (path-based skips for /.well-known/*, /health, /ready), (6) public resource reads bypass auth via URI check in resources/read (not a spec violation — these are specific resource URIs, not MCP methods). Mark ADR-056 status as 'Superseded by ADR-NNN'. Update docs/architecture/architectural-decisions/README.md index with the new ADR entry and cross-link."
-    status: pending
+    status: completed
   - id: update-testing-strategy-example
     content: "DOCS: Update .agent/directives/testing-strategy.md lines 199-227. The example currently encodes the old (incorrect) behaviour ('SCENARIO: We want discovery methods to work WITHOUT authentication'). Update to reflect the corrected understanding, or replace with a different example that does not reference the superseded approach."
-    status: pending
+    status: completed
   - id: chatgpt-tool-auth
     content: "VERIFY: Confirm that ChatGPT tool-level auth (securitySchemes + _meta['mcp/www_authenticate']) still works correctly. ChatGPT's auth flow is: 401 on initial request, OAuth, token, initialize succeeds, tools/list with securitySchemes per tool (noauth/oauth2), tool-level scope challenges via _meta. The securitySchemes metadata describes which tools need additional scopes AFTER base auth, not which tools skip HTTP auth. After this change, ALL tools require base auth (valid Bearer token); securitySchemes tells ChatGPT which tools need scope consent. noauth tools (get-changelog, get-rate-limit) work with the base token without additional scope consent."
-    status: pending
+    status: completed
   - id: cursor-e2e-verify
-    content: "VERIFY: Restart local server, restart Cursor MCP connection. Cursor should now show 'Needs login' for oak-curriculum-local. Complete the Clerk OAuth flow. Verify tools work after authentication."
-    status: pending
+    content: "VERIFY: Absorbed into oauth-validation-and-cursor-flows.plan.md — the problem persists despite AS metadata endpoint, needs further investigation after spec-compliant path is validated."
+    status: cancelled
   - id: quality-gates
     content: "Run full quality gate chain in correct order: pnpm format:root && pnpm type-check && pnpm lint:fix && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm build"
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -151,7 +151,7 @@ docs](https://developers.openai.com/apps-sdk/build/auth) describe a
 1. **Base flow**: 401 on initial request → OAuth → token → all subsequent
    requests include Bearer token
 2. **Tool-level extension**: `securitySchemes` per tool (`noauth` / `oauth2`)
-   + `_meta["mcp/www_authenticate"]` in tool responses for incremental scope
+   and `_meta["mcp/www_authenticate"]` in tool responses for incremental scope
    consent
 
 The OpenAI docs say: "Triggering the tool-level OAuth flow requires both
@@ -384,6 +384,7 @@ This was correct at the time but is now superseded by scope expansion —
 the `toolRequiresAuth()` HTTP bypass is also being removed. Fred's
 verification that the bypass was a separate code path remains accurate
 and useful for understanding the architecture.
+
 - Dead code deletion (classifier + sync test) justified
 - TDD ordering correct per `testing-strategy.md`
 - Latency trade-off proportionate

@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
-**Last Updated**: 2026-02-17  
+**Last Updated**: 2026-02-19  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -26,14 +26,13 @@ monorepo.
    confirms the search-sdk tools are strictly superior.
    WS5 replaces the old REST-based search and retires the
    generated wrappers.
-2. **OAuth spec compliance** (3d): The HTTP server must
-   return 401 on unauthenticated discovery methods to
-   trigger the OAuth bootstrap flow in MCP clients.
+2. **OAuth spec compliance** (3d): ✅ Complete — all MCP
+   methods now require auth (ADR-113). Cursor E2E manual
+   verification still pending.
 3. **SDK workspace separation** (3e): Split `curriculum-sdk`
    into type-gen and runtime workspaces with enforced
    one-way dependency.
-
-MCP result pattern unification (3b) and STDIO-HTTP alignment
+ern unification (3b) and STDIO-HTTP alignment
 (3c) are deferred to post-merge.
 
 | Index | GTs | MRR | NDCG@10 | Status |
@@ -74,7 +73,8 @@ Phase 2h: Code Quality Remediation                     ✅ COMPLETE
          ↓
 Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
   ├── 3a. Search tool wiring — WS5 replace old search   (merge-blocking)
-  ├── 3d. OAuth spec compliance — 401 on initial req     (merge-blocking)
+  ├── 3d. OAuth spec compliance — 401 on initial req     ✅ COMPLETE (ADR-113)
+  ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   (merge-blocking)
   ├── 3e. SDK workspace separation — type-gen/runtime    (merge-blocking)
   └── 3b. Result pattern unification                     (post-merge)
          ↓
@@ -280,31 +280,63 @@ search and replace it.
 | Compare semantic search with existing `search` tool (REST API) | 📋 Pending (WS5) |
 | If superior, replace REST API composite search with SDK-backed search | 📋 Pending (WS5) |
 
-### 3d. OAuth Spec Compliance (merge-blocking)
+### 3d. OAuth Spec Compliance ✅ COMPLETE
 
-**Active plan**: [oauth-spec-compliance.md](active/oauth-spec-compliance.md)
+**Completed plan**: [oauth-spec-compliance.md](archive/completed/oauth-spec-compliance.md)
+**ADR**: [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
 
-**Goal**: The MCP HTTP server must return HTTP 401 +
-`WWW-Authenticate` on any unauthenticated request,
-including discovery methods (`initialize`, `tools/list`).
-The current server returns 200 for discovery methods
-without auth, preventing MCP clients from triggering the
-OAuth bootstrap flow.
+All MCP methods now require HTTP-level authentication.
+Discovery method and noauth tool auth bypasses removed.
+ADR-056 superseded. ~300 lines of dead code deleted.
+`mcp-router.ts` simplified dramatically.
 
 | Task | Status |
 |------|--------|
 | Analysis — map affected files and tests | ✅ Complete |
-| RED (E2E): Assert 401 for discovery without auth | 📋 Pending |
-| RED (integration): Invert router and middleware assertions | 📋 Pending |
-| RED (unit): Invert classifier assertions | 📋 Pending |
-| GREEN: Remove discovery bypass from mcp-router and clerk middleware | 📋 Pending |
-| GREEN: All tests pass | 📋 Pending |
-| REFACTOR: Delete dead code (classifier, sync tests) | 📋 Pending |
-| REFACTOR: Update TSDoc and README auth section | 📋 Pending |
-| ADR: Supersede ADR-056 (conditional clerk middleware) | 📋 Pending |
-| Update testing-strategy.md example | 📋 Pending |
-| Verify ChatGPT tool-level auth still works | 📋 Pending |
-| Verify Cursor OAuth flow (Needs login → Clerk) | 📋 Pending |
+| RED (E2E): Assert 401 for discovery without auth | ✅ Complete |
+| RED (integration): Invert router and middleware assertions | ✅ Complete |
+| RED (unit): Invert classifier assertions | ✅ Complete |
+| GREEN: Remove discovery bypass from mcp-router and clerk middleware | ✅ Complete |
+| GREEN: All tests pass | ✅ Complete |
+| REFACTOR: Delete dead code (classifier, sync tests) | ✅ Complete |
+| REFACTOR: Update TSDoc and README auth section | ✅ Complete |
+| ADR: Supersede ADR-056 (conditional clerk middleware) | ✅ Complete |
+| Update testing-strategy.md example | ✅ Complete |
+| Verify ChatGPT tool-level auth still works | ✅ Complete |
+| Verify Cursor OAuth flow (Needs login → Clerk) | 📋 Pending — see 3e below |
+| Full quality gate chain | ✅ Complete |
+
+### 3e. OAuth Validation and Cursor Flow Debugging (active)
+
+**Active plan**: [oauth-validation-and-cursor-flows.plan.md](active/oauth-validation-and-cursor-flows.plan.md)
+
+AS metadata endpoint added. Cursor still fails. Priority: validate the
+spec-compliant OAuth path with automated smoke tests BEFORE investigating
+the Cursor-specific path. Partial smoke test exists (3 files, not yet
+runnable).
+
+| Task | Status |
+|------|--------|
+| AS metadata endpoint (`/.well-known/oauth-authorization-server`) | ✅ Complete |
+| Spec-compliant OAuth discovery chain smoke test | 📋 In Progress (partial) |
+| Spec-compliant OAuth E2E smoke test | 📋 In Progress (partial) |
+| Run spec smoke against live dev server | 📋 Pending |
+| Cursor-specific investigation | 📋 Pending (after spec path validated) |
+
+### 3d'. Widget Knowledge Graph Tidy-Up (merge-blocking)
+
+**Active plan**: [ontology-knowledge-graph-tidy-up.md](active/ontology-knowledge-graph-tidy-up.md)
+
+The `get-knowledge-graph` tool was removed and its data
+merged into `get-ontology`. A dangling renderer reference
+crashes all widget rendering, causing 19 UI test failures.
+
+| Task | Status |
+|------|--------|
+| Fix widget crash (remove dead knowledgeGraph reference) | 📋 Pending |
+| Migrate knowledge graph SVGs to ontology renderer | 📋 Pending |
+| Clean up widget-preview.html | 📋 Pending |
+| Update documentation (README, agent prompts) | 📋 Pending |
 | Full quality gate chain | 📋 Pending |
 
 ### 3e. SDK Workspace Separation (merge-blocking)

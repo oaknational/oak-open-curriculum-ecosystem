@@ -30,7 +30,6 @@
  * ```
  *
  * @see Sub-Phase 2.3 of schema-first-security-implementation.md
- * @see isDiscoveryMethod for MCP protocol method classification
  * @public
  */
 

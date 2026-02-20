@@ -89,18 +89,23 @@ pnpm test:smoke
 cd apps/oak-search-cli
 
 # Ensure environment is set up
-cat .env.local | grep -E 'ELASTICSEARCH|OAK_API'
-# Should show:
+grep -E '^(ELASTICSEARCH_URL|ELASTICSEARCH_API_KEY|OAK_API_KEY|SEARCH_API_KEY)=' .env.local
+# Output includes:
 # ELASTICSEARCH_URL=https://...
 # ELASTICSEARCH_API_KEY=...
 # OAK_API_KEY=...
+# SEARCH_API_KEY=...
 
 # Ensure SDK is built
 cd ../.. && pnpm build && cd apps/oak-search-cli
 ```
 
-`.env.local` is local-only and ignored by git. Keep real credentials local only and
-keep tracked files placeholder-only.
+`pnpm es:ingest-live` reads required values from `process.env`. If `.env.local` or
+`.env` exists in `apps/oak-search-cli`, the CLI loads it automatically and those values
+override existing process values.
+
+`.env.local` is local-only and ignored by git. Keep real credentials local-only and keep
+tracked files placeholder-only.
 
 ### Step 2: Setup Elasticsearch
 
@@ -188,7 +193,7 @@ pnpm es:ingest-live -- [options]
 
 Options:
   --subject <slug>    Subject to ingest (can repeat)
-                      Default: maths, english, science, history, geography
+                      Required unless --all or --bulk is set
   --key-stage <ks>     Key stage: ks1, ks2, ks3, ks4 (can repeat)
                       Default: all key stages
   --index <kind>      Index type: lessons, units, unit_rollup, sequences, sequence_facets
@@ -322,7 +327,10 @@ pnpm es:ingest-live -- --subject maths --key-stage ks4
 
 ### "Missing environment variables"
 
-**Fix**: Copy the example and fill in values:
+**Fix**: Set required values either via exported process environment values or
+`apps/oak-search-cli/.env.local`.
+
+`.env.local` option:
 
 ```bash
 cp .env.example .env.local

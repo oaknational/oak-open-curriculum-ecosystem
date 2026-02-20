@@ -30,6 +30,7 @@ import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 // Mock Clerk middleware to avoid network IO and requirement for valid keys
 vi.mock('@clerk/express', () => ({
@@ -69,45 +70,20 @@ function createAuthEnabledApp(): Express {
 
 describe('Public Resource Authentication Bypass (E2E)', () => {
   describe('Widget Resource (No Auth Required)', () => {
-    // eslint-disable-next-line complexity
     it('allows resources/read for widget URI without auth token', async () => {
-      const widgetApp = createAuthEnabledApp();
-
-      // First get the widget URI from resources/list
-      const listRes = await request(widgetApp)
-        .post('/mcp')
-        .set('Accept', 'application/json, text/event-stream')
-        .send({
-          jsonrpc: '2.0',
-          id: 'list1',
-          method: 'resources/list',
-        });
-      const listDataLine = listRes.text.split('\n').find((line) => line.startsWith('data:'));
-      expect(listDataLine).toBeDefined();
-      const listData = JSON.parse(listDataLine?.substring(6) ?? '{}') as {
-        result?: { resources?: { uri: string }[] };
-      };
-      const widgetUri =
-        listData.result?.resources?.find((r) =>
-          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
-        )?.uri ?? '';
-
-      // resources/read on the same app (per-request transport)
-      const res = await request(widgetApp)
+      const res = await request(createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
           jsonrpc: '2.0',
           id: '1',
           method: 'resources/read',
-          params: { uri: widgetUri },
+          params: { uri: WIDGET_URI },
         });
 
-      // Widget resource should be accessible without authentication
       expect(res.status).toBe(200);
       expect(res.text).toContain('data:');
 
-      // Response should contain resource content, not auth error
       const dataLine = res.text.split('\n').find((line) => line.startsWith('data:'));
       if (dataLine === undefined) {
         throw new Error('Expected SSE data line not found in response');

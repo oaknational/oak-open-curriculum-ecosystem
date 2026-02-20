@@ -1,7 +1,7 @@
 # ADR-056: Conditional Clerk Middleware for MCP Discovery Methods
 
-**Status**: Accepted  
-**Date**: 2025-12-01  
+**Status**: Superseded by [ADR-113](113-mcp-spec-compliant-auth-for-all-methods.md)
+**Date**: 2025-12-01
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-054 (Tool-Level Auth)](054-tool-level-auth-error-interception.md)
 
 ## Context

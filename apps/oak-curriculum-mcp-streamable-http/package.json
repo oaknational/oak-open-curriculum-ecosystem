@@ -25,6 +25,7 @@
     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
     "smoke:oauth-inspector": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
     "smoke:oauth-curl": "./smoke-tests/OAUTH-CURL-TESTS.sh",
+    "smoke:oauth:spec": "tsx smoke-tests/smoke-oauth-spec.ts",
     "smoke:remote": "tsx smoke-tests/smoke-remote.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",
@@ -35,6 +36,7 @@
     "test:ui": "playwright test"
   },
   "dependencies": {
+    "@clerk/backend": "^2.29.2",
     "@clerk/express": "^1.7.7",
     "@clerk/mcp-tools": "^0.3.1",
     "@elastic/elasticsearch": "^9.2.0",

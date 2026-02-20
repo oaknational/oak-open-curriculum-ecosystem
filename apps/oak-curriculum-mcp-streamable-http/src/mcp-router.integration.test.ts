@@ -32,35 +32,32 @@ describe('createMcpRouter (Integration)', () => {
     return createFakeExpressRequest({ body });
   }
 
-  describe('discovery methods (no auth required)', () => {
-    it('skips auth for tools/list', () => {
+  describe('discovery methods (auth required per MCP 2025-11-25)', () => {
+    it('requires auth for tools/list', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'tools/list' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
 
-    it('skips auth for initialize', () => {
+    it('requires auth for initialize', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'initialize' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
 
-    it('skips auth for resources/list', () => {
+    it('requires auth for resources/list', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'resources/list' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
   });
 

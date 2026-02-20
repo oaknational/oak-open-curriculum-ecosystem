@@ -29,13 +29,49 @@ function registerUnauthenticatedRoutes(
 }
 
 /**
+ * Derives RFC 8414 Authorization Server metadata locally from the Clerk
+ * publishable key. No runtime network call -- mirrors the PRM approach.
+ *
+ * Provides backward compatibility for MCP clients (e.g. Cursor v2.5.17)
+ * implementing the older spec (2025-03-26) that fetches AS metadata from
+ * the resource server rather than directly from the authorization server.
+ */
+function deriveAuthServerMetadata(publishableKey: string): {
+  issuer: string;
+  authorization_endpoint: string;
+  token_endpoint: string;
+  registration_endpoint: string;
+  revocation_endpoint: string;
+  introspection_endpoint: string;
+  userinfo_endpoint: string;
+  jwks_uri: string;
+  response_types_supported: string[];
+  grant_types_supported: string[];
+  code_challenge_methods_supported: string[];
+} {
+  const prmMetadata = generateClerkProtectedResourceMetadata({ publishableKey, resourceUrl: '' });
+  const authServerUrl = prmMetadata.authorization_servers[0];
+  if (!authServerUrl) {
+    throw new Error('Could not derive authorization server URL from publishable key');
+  }
+  return {
+    issuer: authServerUrl,
+    authorization_endpoint: `${authServerUrl}/oauth/authorize`,
+    token_endpoint: `${authServerUrl}/oauth/token`,
+    registration_endpoint: `${authServerUrl}/oauth/register`,
+    revocation_endpoint: `${authServerUrl}/oauth/token/revoke`,
+    introspection_endpoint: `${authServerUrl}/oauth/token_info`,
+    userinfo_endpoint: `${authServerUrl}/oauth/userinfo`,
+    jwks_uri: `${authServerUrl}/.well-known/jwks.json`,
+    response_types_supported: ['code'],
+    grant_types_supported: ['authorization_code', 'refresh_token'],
+    code_challenge_methods_supported: ['S256'],
+  };
+}
+
+/**
  * Registers PUBLIC OAuth metadata endpoints BEFORE clerkMiddleware.
- *
- * These endpoints MUST be publicly accessible without authentication per RFC 9470.
- * They are registered BEFORE clerkMiddleware to avoid any authentication checks.
- *
- * Standard HTTP caching applies (no evidence that preventing caching helps).
- * RFC 9728 has no requirements regarding cache headers.
+ * Publicly accessible without authentication per RFC 9728.
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -43,41 +79,36 @@ export function registerPublicOAuthMetadataEndpoints(
   log: Logger,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
-
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
-  // Custom handler that sets resource field to canonical MCP server URI per MCP spec
   app.get('/.well-known/oauth-protected-resource', (req, res) => {
     const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
     if (!publishableKey) {
       throw new Error('CLERK_PUBLISHABLE_KEY environment variable is required');
     }
-
     const host = req.get('host');
     if (!host) {
       throw new Error('Cannot generate OAuth metadata: missing host header');
     }
-
-    // Per MCP Authorization Spec: resource field must be the canonical URI of the MCP server
-    // Examples: https://mcp.example.com/mcp, http://localhost:3333/mcp
-    // Use http for localhost development, https for all other hosts
     const protocol = host.startsWith('localhost:') || host === 'localhost' ? 'http' : 'https';
     const resourceUrl = `${protocol}://${host}/mcp`;
-
-    // Scopes flow from mcp-security-policy.ts → type-gen → SCOPES_SUPPORTED constant
     const metadata = generateClerkProtectedResourceMetadata({
       publishableKey,
       resourceUrl,
-      properties: {
-        scopes_supported: [...SCOPES_SUPPORTED],
-      },
+      properties: { scopes_supported: [...SCOPES_SUPPORTED] },
     });
-
     res.json(metadata);
   });
 
+  app.get('/.well-known/oauth-authorization-server', (_req, res) => {
+    const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
+    if (!publishableKey) {
+      throw new Error('CLERK_PUBLISHABLE_KEY is required for AS metadata');
+    }
+    res.json(deriveAuthServerMetadata(publishableKey));
+  });
+
   if (runtimeConfig.useStubTools) {
-    // In stub mode we expose additional metadata for tooling to detect bypass scenarios
     app.get('/.well-known/mcp-stub-mode', (_req, res) => {
       res.json({ stubMode: true });
     });
@@ -85,56 +116,25 @@ export function registerPublicOAuthMetadataEndpoints(
 }
 
 /**
- * Registers MCP routes with HTTP-level auth middleware.
- *
- * Per MCP spec and OpenAI Apps docs, authentication is enforced at HTTP level:
- * - Discovery methods (initialize, tools/list): Skip auth, return HTTP 200
- * - Protected tools without token: Return HTTP 401 + WWW-Authenticate
- * - Protected tools with valid token: Proceed to tool handler
- * - Public tools (noauth): Skip auth, proceed to tool handler
- *
- * The method-aware router routes based on MCP method and tool security metadata.
- * Auth middleware returns HTTP 401 BEFORE the request reaches the MCP SDK.
- *
- * @see https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
- * @see https://platform.openai.com/docs/guides/apps-authentication
+ * Registers /mcp routes with HTTP-level auth (HTTP 401 for unauthenticated).
+ * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  */
 function registerAuthenticatedRoutes(
   app: Express,
   mcpFactory: McpServerFactory,
   log: Logger,
 ): void {
-  // Create method-aware router with HTTP-level auth
-  // This router checks method/tool and conditionally applies auth middleware
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
   const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog) });
-
-  // POST /mcp - main MCP endpoint
-  // Router runs BEFORE SDK handler to enable HTTP 401 responses
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
   app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, log));
-
-  // GET /mcp - for SSE connections and initial requests
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
   app.get('/mcp', mcpRouter, createMcpHandler(mcpFactory, log));
 }
 
 /**
- * Sets up global authentication context early in the middleware chain.
- *
- * This function MUST be called before path-specific middleware to ensure
- * Clerk's authentication context is available throughout the request lifecycle.
- *
- * Per Clerk best practices:
- * - clerkMiddleware() is applied globally to all routes
- * - It provides auth context without blocking any requests
- * - Actual enforcement happens later via createMcpAuthClerk on specific routes
- *
- * @param app - Express application instance
- * @param runtimeConfig - Runtime configuration including auth settings
- * @param log - Logger instance for auth-related events
- *
- * @see {@link setupAuthRoutes} for route registration (called after core initialization)
+ * Installs global Clerk middleware early in the chain. MUST be called before
+ * path-specific middleware. Actual auth enforcement happens via createMcpAuthClerk.
  */
 export function setupGlobalAuthContext(
   app: Express,
@@ -164,8 +164,8 @@ export function setupGlobalAuthContext(
   );
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 
-  // Wrap with conditional middleware to skip Clerk for discovery methods
-  // This reduces latency from ~175ms to ~5ms for discovery requests
+  // Wrap with conditional middleware to skip Clerk for non-MCP paths
+  // (/.well-known/*, /health, /ready) and public resource reads
   const conditionalClerkMw = measureAuthSetupStep(
     authLog,
     'conditionalClerkMiddleware.create',
@@ -174,8 +174,8 @@ export function setupGlobalAuthContext(
 
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
     // Apply conditional clerkMiddleware globally to all routes.
-    // Discovery methods (initialize, tools/list, etc.) skip Clerk entirely.
-    // Other requests get full Clerk auth context setup.
+    // Non-MCP paths (/.well-known/*, /health, /ready) and public resource
+    // reads skip Clerk. All MCP methods get full Clerk auth context.
     // Actual enforcement happens via createMcpAuthClerk on /mcp routes.
     authLog.info('Installing conditional Clerk middleware globally (all routes)');
     app.use(conditionalClerkMw);
@@ -183,25 +183,8 @@ export function setupGlobalAuthContext(
 }
 
 /**
- * Registers PROTECTED MCP routes with authentication.
- *
- * This function is called AFTER OAuth metadata endpoints are registered (in Phase 2.5)
- * and AFTER clerkMiddleware is installed (in Phase 3).
- *
- * Registers:
- * - Protected /mcp routes with createMcpAuthClerk enforcement (if auth enabled)
- * - Unprotected /mcp routes (if DANGEROUSLY_DISABLE_AUTH is true)
- *
- * NOTE: OAuth metadata endpoints are registered separately in Phase 2.5 by
- * registerPublicOAuthMetadataEndpoints() to ensure they are publicly accessible.
- *
- * @param app - Express application instance
- * @param mcpFactory - Factory creating fresh McpServer + transport per request
- * @param runtimeConfig - Runtime configuration including auth settings
- * @param log - Logger instance for auth-related events
- *
- * @see {@link setupGlobalAuthContext} for global auth middleware (called earlier)
- * @see {@link registerPublicOAuthMetadataEndpoints} for OAuth metadata endpoints
+ * Registers /mcp routes -- protected (auth enabled) or unprotected (bypass mode).
+ * Called AFTER OAuth metadata endpoints and clerkMiddleware are installed.
  */
 export function setupAuthRoutes(
   app: Express,

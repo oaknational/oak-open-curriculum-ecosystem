@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Right"
+  short_description: "Load start-right prompt into current session"
+  default_prompt: "Use $start-right to load and apply .agent/prompts/start-right.prompt.md in this session."

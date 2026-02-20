@@ -159,6 +159,11 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    | `SEARCH_INDEX_TARGET`          | ➖       | `primary` (default) or `sandbox` for alternate index namespaces                |
    | `ZERO_HIT_PERSISTENCE_ENABLED` | ➖       | `true` to persist zero-hit events to Elasticsearch                             |
 
+   Runtime behaviour:
+   - `pnpm es:ingest-live` reads required values from `process.env`.
+   - If `apps/oak-search-cli/.env.local` or `apps/oak-search-cli/.env` exists, it is loaded automatically and overrides existing process values.
+   - `pnpm es:ingest-live -- --help` exits successfully without env validation.
+
 3. **Run the standard quality gates**
 
    ```bash

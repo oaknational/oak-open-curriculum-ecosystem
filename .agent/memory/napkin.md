@@ -1,5 +1,24 @@
 # Napkin
 
+## Session: 2026-02-19 (d) — OAuth Spec Compliance Implementation
+
+### What Was Done
+
+- Executed the OAuth spec compliance plan in strict TDD order (RED-GREEN-REFACTOR)
+- RED: Updated 4 E2E, 2 integration, 1 unit test files to assert 401 for discovery methods and noauth tools. All failed as expected against old code.
+- GREEN: Removed discovery method bypass from `shouldSkipAuth()` in `mcp-router.ts` and `CLERK_SKIP_METHODS` + `isDiscoveryMethod()` from `conditional-clerk-middleware.ts`. All tests passed.
+- REFACTOR: Deleted `mcp-method-classifier.ts`, its unit test, and `discovery-methods-sync.unit.test.ts` (dead code). Simplified `mcp-router.ts` dramatically. Updated TSDoc across 5 files.
+- ADR-113 written, ADR-056 marked superseded, index updated.
+- Full quality gate chain passed (type-gen, build, type-check, format, markdownlint, lint, test, e2e, smoke).
+- UI tests have 19 pre-existing widget rendering failures unrelated to auth (confirmed by running against unmodified branch).
+
+### Key Insights
+
+- `mcp-router.ts` became dramatically simpler: `shouldSkipAuth` now only checks public resource reads
+- "noauth" means "no scope check", not "no HTTP auth" — this semantic confusion was the root cause
+- The 3 deleted files + dead helper functions removed ~300 lines of unnecessary code
+- TDD at all levels worked exactly as designed: E2E tests specified behaviour, then implementation made them pass
+
 ## Session: 2026-02-19 (c) — OAuth Spec Compliance Diagnosis
 
 ### What Was Done
@@ -697,3 +716,20 @@ Express middleware handles them before the transport is reached.
 - `.agent/plans/semantic-search/post-sdk/search-quality/document-relationships.md` — ready
 - `.agent/prompts/semantic-search/semantic-search.prompt.md` — completed work section
 - `.agent/plans/high-level-plan.md` — milestones and priorities updated
+
+## 2026-02-20 — OAuth Documentation Consolidation
+
+### What happened
+OAuth work was scattered across 3 docs:
+- `.cursor/plans/oauth_as_metadata_fix_139c4ac3.plan.md` (AS metadata endpoint — complete)
+- `.agent/plans/semantic-search/active/oauth-spec-compliance.md` (spec compliance — complete)
+- `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md` (active)
+
+Consolidated to just the active plan + prompt. Cursor plan deleted, spec compliance plan marked as reference-only with pending item cancelled (absorbed into active plan).
+
+### Current state
+- Spec-compliant path NOT YET validated by automated tests
+- 3 partial smoke test files exist: `oauth-discovery.ts`, `oauth-spec-e2e.ts`, `smoke-oauth-spec.ts`
+- Entry point needs import fixes before it can run
+- Cursor flow still broken — investigation deferred until spec path is proven
+- Priority order: validate spec path FIRST, then investigate Cursor

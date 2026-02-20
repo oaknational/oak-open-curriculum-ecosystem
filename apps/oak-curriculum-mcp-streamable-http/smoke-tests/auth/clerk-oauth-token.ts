@@ -129,6 +129,16 @@ function resolveRedirectUrl(locationHeader: string, currentUrl: string): URL {
   }
 }
 
+/**
+ * Clerk dev instances use cookieless dev mode: session identification
+ * requires `__clerk_db_jwt` as a URL query parameter, not a cookie.
+ */
+function withDevBrowserToken(url: string, devBrowserToken: string): string {
+  const parsed = new URL(url);
+  parsed.searchParams.set('__clerk_db_jwt', devBrowserToken);
+  return parsed.toString();
+}
+
 async function requestAuthorizationCode(
   app: OAuthApplicationInfo,
   identity: SmokeIdentity,
@@ -139,7 +149,10 @@ async function requestAuthorizationCode(
   const targetOrigin = new URL(redirectUri).origin;
   const cookieJar = createInitialCookieJar(identity);
 
-  let currentUrl = buildAuthorizeRequestUrl(app, redirectUri, codeChallenge, state);
+  let currentUrl = withDevBrowserToken(
+    buildAuthorizeRequestUrl(app, redirectUri, codeChallenge, state),
+    identity.devBrowserToken,
+  );
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
     const location = await fetchRedirectLocation(currentUrl, cookieJar, attempt);
@@ -148,7 +161,7 @@ async function requestAuthorizationCode(
     if (code) {
       return code;
     }
-    currentUrl = nextAuthorizeUrl(resolved);
+    currentUrl = withDevBrowserToken(nextAuthorizeUrl(resolved), identity.devBrowserToken);
   }
 
   throw new Error('Authorization flow did not reach redirect URI within 6 redirects');
@@ -201,11 +214,8 @@ export async function createClerkOAuthAccessToken(): Promise<ClerkOAuthAccess> {
   const identity = await createSmokeIdentity(clerk);
   const redirectUri = 'https://mcp-smoke.oaknational.dev/oauth/callback';
   const app = await createOAuthApplication(clerk, redirectUri);
-  const { verifier, challenge } = createPkcePair();
-  const state = toBase64Url(randomBytes(16));
-  const code = await requestAuthorizationCode(app, identity, redirectUri, challenge, state);
-  const accessToken = await exchangeAuthorizationCode(app, code, verifier, redirectUri);
-  const cleanup = async () => {
+
+  const cleanupResources = async (): Promise<void> => {
     await Promise.allSettled([
       clerk.sessions.revokeSession(identity.sessionId),
       clerk.users.deleteUser(identity.userId),
@@ -213,7 +223,12 @@ export async function createClerkOAuthAccessToken(): Promise<ClerkOAuthAccess> {
     ]);
   };
 
-  return { accessToken, cleanup };
+  const { verifier, challenge } = createPkcePair();
+  const state = toBase64Url(randomBytes(16));
+  const code = await requestAuthorizationCode(app, identity, redirectUri, challenge, state);
+  const accessToken = await exchangeAuthorizationCode(app, code, verifier, redirectUri);
+
+  return { accessToken, cleanup: cleanupResources };
 }
 
 async function fetchRedirectLocation(

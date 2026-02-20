@@ -54,7 +54,7 @@ For any incoming HTTP request, middleware executes in this order:
    9a. Custom OAuth metadata handler (publicly accessible)
    ↓
    [For GET /.well-known/oauth-authorization-server:]
-   9a. authServerMetadataHandlerClerk (publicly accessible)
+   9a. Locally-derived AS metadata handler (publicly accessible)
    ↓
    [For GET /:]
    9a. Landing Page Handler
@@ -226,24 +226,24 @@ Response (200 OK + HTML)
 
 ## Middleware Responsibilities
 
-| Middleware                     | Layer    | Purpose                              | Terminates?      | Modifies            |
-| ------------------------------ | -------- | ------------------------------------ | ---------------- | ------------------- |
-| Request Entry Log              | Base     | Records incoming request             | No               | res.locals          |
-| JSON Body Parser               | Base     | Parses JSON request bodies           | No               | req.body            |
-| Correlation Middleware         | Base     | Assigns unique request ID            | No               | res.locals, headers |
-| Request Logger                 | Base     | Logs request details (debug)         | No               | -                   |
-| Error Logger                   | Base     | Logs errors with context             | No               | -                   |
-| DNS Rebinding Protection       | Security | Validates Host header                | Yes (if invalid) | -                   |
-| CORS                           | Security | Sets CORS headers, handles preflight | Yes (preflight)  | headers             |
-| clerkMiddleware                | Auth     | Provides auth context                | No               | req.auth            |
-| Accept Header Validation       | MCP      | Ensures correct Accept header        | Yes (if invalid) | -                   |
-| MCP Readiness Check            | MCP      | Waits for server ready               | Yes (timeout)    | -                   |
-| mcpAuthClerk                   | Auth     | Validates OAuth tokens               | Yes (if invalid) | req.auth            |
-| Custom OAuth metadata handler  | OAuth    | Returns OAuth metadata with /mcp URI | Yes              | -                   |
-| authServerMetadataHandlerClerk | OAuth    | Returns OAuth server metadata        | Yes              | -                   |
-| streamableHttpHandlerClerk     | MCP      | Handles MCP requests                 | Yes              | -                   |
-| Health Check Handler           | Health   | Returns health status                | Yes              | -                   |
-| Landing Page Handler           | UI       | Returns landing page HTML            | Yes              | -                   |
+| Middleware                    | Layer    | Purpose                              | Terminates?      | Modifies            |
+| ----------------------------- | -------- | ------------------------------------ | ---------------- | ------------------- |
+| Request Entry Log             | Base     | Records incoming request             | No               | res.locals          |
+| JSON Body Parser              | Base     | Parses JSON request bodies           | No               | req.body            |
+| Correlation Middleware        | Base     | Assigns unique request ID            | No               | res.locals, headers |
+| Request Logger                | Base     | Logs request details (debug)         | No               | -                   |
+| Error Logger                  | Base     | Logs errors with context             | No               | -                   |
+| DNS Rebinding Protection      | Security | Validates Host header                | Yes (if invalid) | -                   |
+| CORS                          | Security | Sets CORS headers, handles preflight | Yes (preflight)  | headers             |
+| clerkMiddleware               | Auth     | Provides auth context                | No               | req.auth            |
+| Accept Header Validation      | MCP      | Ensures correct Accept header        | Yes (if invalid) | -                   |
+| MCP Readiness Check           | MCP      | Waits for server ready               | Yes (timeout)    | -                   |
+| mcpAuthClerk                  | Auth     | Validates OAuth tokens               | Yes (if invalid) | req.auth            |
+| Custom OAuth metadata handler | OAuth    | Returns OAuth metadata with /mcp URI | Yes              | -                   |
+| AS metadata handler (local)   | OAuth    | Returns OAuth server metadata        | Yes              | -                   |
+| streamableHttpHandlerClerk    | MCP      | Handles MCP requests                 | Yes              | -                   |
+| Health Check Handler          | Health   | Returns health status                | Yes              | -                   |
+| Landing Page Handler          | UI       | Returns landing page HTML            | Yes              | -                   |
 
 **Terminates?** = Whether the middleware sends a response and ends the request lifecycle
 

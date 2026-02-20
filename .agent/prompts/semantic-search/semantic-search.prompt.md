@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-19
+**Last Updated**: 2026-02-20
 
 ---
 
@@ -25,17 +25,38 @@ tools are strictly superior. WS5 implements the replacement:
    Update executor dispatch and all cross-references. TDD.
 3. **WS5.4**: Full quality gate chain.
 
-### 2. OAuth Spec Compliance — 401 on Initial Request
+### 2. OAuth — Validate Spec-Compliant Path, Then Cursor
 
-**Active plan**: [oauth-spec-compliance.md](../../plans/semantic-search/active/oauth-spec-compliance.md)
+**Active plan**: [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md)
 
-The HTTP server has two spec-violating auth bypasses:
-(1) discovery methods (initialize, tools/list) skip auth,
-preventing MCP clients from triggering OAuth bootstrap, and
-(2) noauth tools (get-changelog, get-rate-limit) skip HTTP
-auth entirely. Both violate the MCP spec requirement that
-"Authorization MUST be included in every HTTP request."
-`DANGEROUSLY_DISABLE_AUTH` mode is preserved unchanged.
+**Completed**:
+
+- OAuth spec compliance (ADR-113) — all MCP methods require auth
+- AS metadata endpoint restored for backward compatibility
+- Completed plan: [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md)
+
+**Current state**: Discovery chain (steps 1-3) passes against a live
+dev server. PKCE flow code is clean (sessionJwt fallback removed).
+One remaining blocker: the Clerk REST API supports creating OAuth apps
+with `consent_screen_enabled: false` (needed so the authorize endpoint
+redirects instead of showing an interactive consent page), but the
+`@clerk/backend` v2.29.2 SDK types don't expose this property. Next
+step: bypass the SDK types for this one call (direct REST, SDK upgrade,
+or post-create PATCH), then run `pnpm smoke:oauth:spec` against a live
+dev server. Consent-disabled apps are approved for ephemeral smoke tests
+only — all product apps MUST keep consent enabled. Cursor-specific path
+is lower priority, deferred until the spec path is proven.
+
+### 2b. Widget Knowledge Graph Tidy-Up
+
+**Active plan**: [ontology-knowledge-graph-tidy-up.md](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md)
+
+The `get-knowledge-graph` tool was removed and its data
+merged into `get-ontology`. A dangling `renderKnowledgeGraph`
+reference in `widget-script.ts` crashes all widget rendering,
+causing 19 UI test failures. Fix the crash, migrate the
+knowledge graph SVGs to the ontology renderer, clean up
+stale documentation references.
 
 ### 3. SDK Workspace Separation — Type-Gen / Runtime Split
 
@@ -205,6 +226,8 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Response Tuning | Unified `formatToolResponse()`, type dedup, 94% ES payload reduction | [search-response-tuning.md](../../plans/semantic-search/archive/completed/search-response-tuning.md) |
 | Env Architecture | `resolveEnv` pipeline, conditional Clerk keys, discriminated `RuntimeConfig` | [env-architecture-overhaul.md](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) |
 | MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, integration tests | [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) |
+| OAuth Spec Compliance | All MCP methods require auth, ADR-113, ADR-056 superseded | [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) |
+| AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) |
 
 ---
 
@@ -310,7 +333,9 @@ failure. If a gate fails, the work is not done. Fix it.**
 | Document | Purpose |
 |----------|---------|
 | [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search WS5 — replace old search |
-| [OAuth spec compliance](../../plans/semantic-search/active/oauth-spec-compliance.md) | 401 on unauthenticated discovery |
+| [OAuth spec compliance](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) | 401 on unauthenticated discovery (complete, archived) |
+| [OAuth validation / Cursor flows](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) | **Primary OAuth plan** — spec-compliant smoke test + Cursor flow |
+| [Widget KG tidy-up](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md) | Fix widget crash, migrate KG SVGs to ontology |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | Type-gen / runtime split |
 | [SDK split meta-plan](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md) | Guide for improving SDK split plan |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
@@ -331,6 +356,7 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
 | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport |
+| [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) | MCP spec-compliant auth for all methods |
 | [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | SDK Workspace Decomposition |
 | [Plan 03 Phase 0](../../plans/sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md) | Aggregated tools type-gen migration (future) |
 | [GT expansion](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

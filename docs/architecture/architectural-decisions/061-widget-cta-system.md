@@ -4,6 +4,11 @@
 
 Accepted
 
+> **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool has since
+> been removed and merged into `get-ontology` (property graph data now lives in
+> ontology output). This ADR remains a historical record of the CTA architecture;
+> references to `get-knowledge-graph` below reflect the accepted-state context.
+
 ## Context
 
 The Oak widget renders in ChatGPT when users interact with the Oak Curriculum MCP server. While the server provides comprehensive agent support tools (`get-ontology`, `get-knowledge-graph`, `get-help`) for grounding AI context, models don't always call these tools proactively.

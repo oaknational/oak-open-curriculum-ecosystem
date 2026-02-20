@@ -7,7 +7,7 @@
  * This suite tests the system with auth ENABLED, which mirrors production
  * configuration. No auth bypass is used here.
  *
- * ## Auth Model (Per MCP Spec + OpenAI Apps Docs)
+ * ## Auth Model (Per MCP 2025-11-25 Spec + OpenAI Apps Docs)
  *
  * The specs define TWO complementary auth mechanisms:
  *
@@ -15,6 +15,8 @@
  *    - For unauthenticated requests (no token, invalid token)
  *    - Triggers OAuth discovery flow
  *    - Returned BEFORE request reaches MCP SDK
+ *    - "Authorization MUST be included in every HTTP request"
+ *    - Applies to ALL MCP methods including discovery and noauth tools
  *
  * 2. **HTTP 200 + _meta["mcp/www_authenticate"]** (Tool-level)
  *    - For authenticated requests missing required scope
@@ -23,8 +25,8 @@
  *
  * Both are needed. HTTP 401 initiates OAuth, _meta handles scope issues.
  *
- * @see https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
- * @see https://platform.openai.com/docs/guides/apps-authentication
+ * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
+ * @see https://developers.openai.com/apps-sdk/build/auth
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -65,7 +67,7 @@ vi.mock('@clerk/express', () => ({
 }));
 
 /**
- * Type guard for OAuth metadata response
+ * Type guard for OAuth Protected Resource metadata response.
  */
 function isOAuthMetadata(value: unknown): value is {
   authorization_servers: string[];
@@ -77,6 +79,23 @@ function isOAuthMetadata(value: unknown): value is {
     'authorization_servers' in value &&
     Array.isArray(value.authorization_servers) &&
     'resource' in value
+  );
+}
+
+/**
+ * Type guard for OAuth Authorization Server metadata response (RFC 8414).
+ */
+function isAuthServerMetadata(value: unknown): value is {
+  authorization_endpoint: string;
+  token_endpoint: string;
+} {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'authorization_endpoint' in value &&
+    typeof value.authorization_endpoint === 'string' &&
+    'token_endpoint' in value &&
+    typeof value.token_endpoint === 'string'
   );
 }
 
@@ -122,8 +141,8 @@ function createAuthApp(): Express {
 }
 
 describe('Auth Enforcement (E2E - Production Equivalent)', () => {
-  describe('Discovery Methods (No Auth Required)', () => {
-    it('allows initialize without Authorization header', async () => {
+  describe('Discovery Methods (Auth Required per MCP 2025-11-25)', () => {
+    it('returns HTTP 401 for initialize without Authorization header', async () => {
       const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
@@ -139,25 +158,27 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
           },
         });
 
-      // Discovery methods should work without authentication
-      expect(res.status).toBe(200);
-      // MCP uses SSE, response will be in text format
-      expect(res.text).toBeDefined();
-      expect(res.text.length).toBeGreaterThan(0);
+      expect(res.status).toBe(401);
+
+      const wwwAuth = res.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('resource_metadata=');
     });
 
-    it('allows tools/list via POST without Authorization header', async () => {
+    it('returns HTTP 401 for tools/list via POST without Authorization header', async () => {
       const res = await request(createAuthApp())
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
-      // Discovery methods should work without authentication
-      expect(res.status).toBe(200);
-      // MCP uses SSE, response will be in text format
-      expect(res.text).toBeDefined();
-      expect(res.text.length).toBeGreaterThan(0);
+      expect(res.status).toBe(401);
+
+      const wwwAuth = res.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('resource_metadata=');
     });
   });
 
@@ -271,13 +292,21 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(asUrl).toMatch(/^https:\/\//);
     });
 
-    it('does not proxy authorization server metadata', async () => {
-      // Per MCP spec 2025-06-18: clients fetch AS metadata directly from
-      // authorization server, not from resource server proxy
+    it('serves authorization server metadata for backward-compatible clients', async () => {
       const res = await request(createAuthApp()).get('/.well-known/oauth-authorization-server');
 
-      // Expect 404 - we should NOT have this endpoint
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(200);
+
+      const metadata: unknown = res.body;
+
+      if (!isAuthServerMetadata(metadata)) {
+        throw new Error('Invalid authorization server metadata response');
+      }
+
+      expect(metadata.authorization_endpoint).toContain('clerk');
+      expect(metadata.authorization_endpoint).toMatch(/^https:\/\//);
+      expect(metadata.token_endpoint).toContain('clerk');
+      expect(metadata.token_endpoint).toMatch(/^https:\/\//);
     });
   });
 
@@ -432,8 +461,8 @@ describe('Auth Enforcement - RFC Compliance', () => {
   // fast validation without external service dependencies.
 });
 
-describe('Public Tools (noauth)', () => {
-  it('allows get-changelog without auth (noauth tool)', async () => {
+describe('All Tools Require HTTP Auth (noauth = no scope check, not no token)', () => {
+  it('returns HTTP 401 for get-changelog without auth', async () => {
     const res = await request(createAuthApp())
       .post('/mcp')
       .set('Host', 'localhost')
@@ -445,29 +474,15 @@ describe('Public Tools (noauth)', () => {
         params: { name: 'get-changelog', arguments: {} },
       });
 
-    // Public tools should work without auth - HTTP 200
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(401);
 
-    // Should contain tool result, not auth error
-    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result?: {
-        isError?: boolean;
-        content?: unknown[];
-      };
-    };
-
-    // Should be successful tool result
-    expect(jsonData.result).toBeDefined();
-    expect(jsonData.result?.isError).toBeFalsy();
+    const wwwAuth = res.headers['www-authenticate'];
+    expect(wwwAuth).toBeDefined();
+    expect(wwwAuth).toContain('Bearer');
+    expect(wwwAuth).toContain('resource_metadata=');
   });
 
-  it('allows get-rate-limit without auth (noauth tool)', async () => {
+  it('returns HTTP 401 for get-rate-limit without auth', async () => {
     const res = await request(createAuthApp())
       .post('/mcp')
       .set('Host', 'localhost')
@@ -479,7 +494,10 @@ describe('Public Tools (noauth)', () => {
         params: { name: 'get-rate-limit', arguments: {} },
       });
 
-    // Public tools should work without auth - HTTP 200
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(401);
+
+    const wwwAuth = res.headers['www-authenticate'];
+    expect(wwwAuth).toBeDefined();
+    expect(wwwAuth).toContain('Bearer');
   });
 });

@@ -1,6 +1,6 @@
 #!/bin/bash
 # OAuth Discovery curl Tests
-# These tests validate that the OAuth discovery chain works without the proxy endpoint
+# These tests validate that the OAuth discovery chain works correctly
 
 set -e
 
@@ -17,15 +17,16 @@ RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Test 1: Proxy endpoint should return 404
-echo -e "${BLUE}Test 1: Proxy endpoint removed (should return 404)${NC}"
-echo "Command: curl -i http://localhost:3333/.well-known/oauth-authorization-server"
+# Test 1: AS metadata endpoint should return 200 (backward compatibility for older MCP clients)
+echo -e "${BLUE}Test 1: Authorization Server metadata (should return 200 with JSON)${NC}"
+echo "Command: curl -s http://localhost:3333/.well-known/oauth-authorization-server | jq ."
 echo ""
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333/.well-known/oauth-authorization-server)
-if [ "$STATUS" = "404" ]; then
-    echo -e "${GREEN}✅ PASS${NC}: Proxy endpoint correctly returns 404"
+if [ "$STATUS" = "200" ]; then
+    echo -e "${GREEN}✅ PASS${NC}: AS metadata endpoint returns 200"
+    curl -s http://localhost:3333/.well-known/oauth-authorization-server | jq .
 else
-    echo -e "${RED}❌ FAIL${NC}: Expected 404, got $STATUS"
+    echo -e "${RED}❌ FAIL${NC}: Expected 200, got $STATUS"
     exit 1
 fi
 echo ""

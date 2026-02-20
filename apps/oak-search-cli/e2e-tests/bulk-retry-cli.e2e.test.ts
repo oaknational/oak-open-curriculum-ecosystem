@@ -15,29 +15,38 @@
  */
 import { describe, it, expect } from 'vitest';
 import { spawn } from 'child_process';
-import { resolve, dirname } from 'path';
+import { existsSync, renameSync } from 'node:fs';
+import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { childProcessEnv } from '../src/lib/env';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(currentDir, '..');
 
+const ENV_FILE_NAMES = ['.env.local', '.env'] as const;
+
 /**
  * Spawn a CLI process and capture output.
  *
  * @param args - CLI arguments
+ * @param envOverrides - Additional environment values for the child process
  * @returns Promise resolving to `{ stdout, stderr, exitCode }`
  */
-function runCli(args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+function runCli(
+  args: string[],
+  envOverrides: Record<string, string> = {},
+): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise((resolve) => {
     const child = spawn('npx', ['tsx', 'src/lib/elasticsearch/setup/ingest-live.ts', ...args], {
       cwd: appRoot,
       env: {
         ...childProcessEnv(),
-        // Set minimal environment to avoid actual ES connection
+        // Set required environment values without relying on .env files
         ELASTICSEARCH_URL: 'http://localhost:9200',
-        ELASTICSEARCH_API_KEY: 'test-key',
-        OAK_API_KEY: 'test-api-key',
+        ELASTICSEARCH_API_KEY: 'test-elasticsearch-api-key',
+        OAK_API_KEY: 'test-oak-api-key',
+        SEARCH_API_KEY: 'test-search-api-key',
+        ...envOverrides,
       },
     });
 
@@ -58,7 +67,48 @@ function runCli(args: string[]): Promise<{ stdout: string; stderr: string; exitC
   });
 }
 
+/**
+ * Temporarily hide `.env.local` / `.env` in app root to prove CLI does not
+ * depend on env files when required process env values are present.
+ */
+async function withHiddenEnvFiles(
+  run: () => Promise<void>,
+  suffix = `e2e-hidden-${Date.now().toString()}`,
+): Promise<void> {
+  const moved: { from: string; to: string }[] = [];
+
+  try {
+    for (const fileName of ENV_FILE_NAMES) {
+      const from = join(appRoot, fileName);
+      if (!existsSync(from)) {
+        continue;
+      }
+      const to = join(appRoot, `${fileName}.${suffix}`);
+      renameSync(from, to);
+      moved.push({ from, to });
+    }
+    await run();
+  } finally {
+    for (const { from, to } of moved.reverse()) {
+      if (existsSync(to)) {
+        renameSync(to, from);
+      }
+    }
+  }
+}
+
 describe('Bulk Retry CLI Flags E2E', () => {
+  it('prints help and exits 0 without env files', async () => {
+    await withHiddenEnvFiles(async () => {
+      const { stdout, stderr, exitCode } = await runCli(['--help']);
+
+      expect(exitCode).toBe(0);
+      const output = stdout + stderr;
+      expect(output).toContain('--max-retries');
+      expect(output).not.toContain('Environment not loaded');
+    });
+  });
+
   /**
    * Test: CLI should accept --max-retries flag.
    *
@@ -82,7 +132,6 @@ describe('Bulk Retry CLI Flags E2E', () => {
     const { stdout, stderr } = await runCli(['--help']);
 
     // Help text should include --retry-delay documentation
-    // Currently this will fail because the flag doesn't exist (TDD RED)
     expect(stdout + stderr).toContain('--retry-delay');
   });
 
@@ -96,7 +145,6 @@ describe('Bulk Retry CLI Flags E2E', () => {
     const { stdout, stderr } = await runCli(['--help']);
 
     // Help text should include --no-retry documentation
-    // Currently this will fail because the flag doesn't exist (TDD RED)
     expect(stdout + stderr).toContain('--no-retry');
   });
 

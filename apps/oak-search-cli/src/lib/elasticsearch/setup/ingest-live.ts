@@ -29,16 +29,21 @@ import { printBulkHeader, executeBulkIngestion } from './ingest-bulk.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
-/** Load environment variables from .env.local. */
-function initEnv(): boolean {
+/**
+ * Load environment values from app env files when present.
+ *
+ * If no env file exists, execution continues and runtime env validation
+ * determines whether required variables are available via process env.
+ */
+function initEnv(): void {
   const envResult = loadAppEnv(CURRENT_DIR);
-  if (!envResult.loaded) {
-    ingestLogger.error('Environment not loaded', { appRoot: envResult.appRoot });
-    process.exitCode = 1;
-    return false;
+  if (envResult.loaded) {
+    ingestLogger.debug('Environment loaded', { path: envResult.path });
+    return;
   }
-  ingestLogger.debug('Environment loaded', { path: envResult.path });
-  return true;
+  ingestLogger.debug('No app env file found; using process environment', {
+    appRoot: envResult.appRoot,
+  });
 }
 
 /** Handle cache clearing if requested. */
@@ -190,11 +195,14 @@ function generateLogFilePath(): string {
 
 /** Main CLI entry point. */
 async function main(): Promise<void> {
-  if (!initEnv()) {
+  const args = parseArgs(process.argv.slice(2));
+
+  if (args.help) {
+    // Commander already printed help, no runtime env setup required
     return;
   }
 
-  const args = parseArgs(process.argv.slice(2));
+  initEnv();
 
   if (args.verbose) {
     setLogLevel('DEBUG');
@@ -211,12 +219,6 @@ async function main(): Promise<void> {
         ? { bulkDir: args.bulkDir }
         : { subjects: args.subjects.join(','), keyStages: args.keyStages.join(',') }),
     });
-  }
-
-  if (args.help) {
-    // Commander already printed help, just exit cleanly
-    disableFileSink();
-    return;
   }
 
   try {

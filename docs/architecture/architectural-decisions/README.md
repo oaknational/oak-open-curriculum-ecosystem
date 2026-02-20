@@ -60,7 +60,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md)
 - [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-055: Zod Version Boundaries](055-zod-version-boundaries.md)
-- [ADR-056: Conditional Clerk Middleware for Discovery](056-conditional-clerk-middleware-for-discovery.md)
+- [ADR-056: ~~Conditional Clerk Middleware for Discovery~~](056-conditional-clerk-middleware-for-discovery.md) (SUPERSEDED by ADR-113)
 - [ADR-057: Selective Authentication for Public MCP Resources](057-selective-auth-public-resources.md)
 - [ADR-058: Context Grounding for AI Agents](058-context-grounding-for-ai-agents.md)
 - [ADR-059: Knowledge Graph for Agent Context](059-knowledge-graph-for-agent-context.md)
@@ -113,6 +113,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-109: HTTP 451 as Distinct Error Classification](109-http-451-distinct-classification.md)
 - [ADR-110: Thread Search Architecture](110-thread-search-architecture.md)
 - [ADR-111: Secret Scanning Quality Gate](111-secret-scanning-quality-gate.md)
+- [ADR-112: Per-Request MCP Transport](112-per-request-mcp-transport.md)
+- [ADR-113: MCP Spec-Compliant Auth for All Methods](113-mcp-spec-compliant-auth-for-all-methods.md)
 
 ## Key Architectural Decisions
 

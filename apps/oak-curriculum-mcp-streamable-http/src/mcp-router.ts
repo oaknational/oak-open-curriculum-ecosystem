@@ -15,12 +15,6 @@
  */
 
 import type { RequestHandler } from 'express';
-import { isDiscoveryMethod } from './mcp-method-classifier.js';
-import { toolRequiresAuth } from './tool-auth-checker.js';
-import {
-  isUniversalToolName,
-  type UniversalToolName,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
 import { isPublicResourceUri } from './auth/public-resources.js';
 
@@ -44,30 +38,14 @@ function hasMethod(value: unknown): value is { method: unknown } {
 }
 
 /**
- * Type guard for object with params property.
- */
-function hasParams(value: unknown): value is { params: unknown } {
-  return typeof value === 'object' && value !== null && 'params' in value;
-}
-
-/**
- * Type guard for params object with name property.
- */
-function hasName(value: unknown): value is { name: unknown } {
-  return typeof value === 'object' && value !== null && 'name' in value;
-}
-
-/**
  * Extract method from request body or query with type safety.
  *
  * Handles both POST (method in body) and GET (method in query params).
  */
 function getMethodFromRequest(req: { body?: unknown; query?: unknown }): string | undefined {
-  // Try body first (POST requests)
   if (hasMethod(req.body) && typeof req.body.method === 'string') {
     return req.body.method;
   }
-  // Fall back to query (GET requests)
   if (hasMethod(req.query) && typeof req.query.method === 'string') {
     return req.query.method;
   }
@@ -75,69 +53,16 @@ function getMethodFromRequest(req: { body?: unknown; query?: unknown }): string 
 }
 
 /**
- * Extract tool name from request body params with type safety.
- *
- * Note: UniversalToolName is a generated union type from the OpenAPI schema.
- * We cannot create a runtime type guard for it, so we assert that any string
- * from req.body.params.name conforms to UniversalToolName. Invalid tool names
- * will be handled by toolRequiresAuth() which checks against known tools.
- */
-function getToolNameFromBody(body: unknown): UniversalToolName | undefined {
-  if (hasParams(body) && hasName(body.params) && typeof body.params.name === 'string') {
-    const maybeToolName = body.params.name;
-    if (isUniversalToolName(maybeToolName)) {
-      return maybeToolName;
-    }
-  }
-  return undefined;
-}
-
-/**
- * Creates method-aware MCP routing middleware.
- *
- * Routes MCP requests based on method classification and tool security:
- * - Discovery methods (initialize, tools/list): Skip auth
- * - Execution methods (tools/call): Check tool's securitySchemes
- *   - OAuth2 tools: Require auth (HTTP 401 if missing)
- *   - NoAuth tools: Skip auth
- * - Unknown methods: Require auth (safe default)
- *
- * **Key Behavior**: This middleware runs BEFORE the MCP SDK, allowing
- * HTTP 401 responses per MCP spec. The SDK always returns HTTP 200.
- *
- * **Architecture**: This middleware wraps existing auth middleware without
- * modifying it. It reads method/tool from req.body, delegates to pure
- * classification functions, and conditionally applies auth based on
- * generated security metadata.
- *
- * @param options - Router configuration with auth middleware
- * @returns Express middleware that conditionally applies auth
- *
- * @example
- * ```typescript
- * // Wire into Express app
- * const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(logger) });
- * app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
- * ```
- *
- * @see isDiscoveryMethod for MCP method classification
- * @see toolRequiresAuth for tool security metadata reading
- *
- * @public
- */
-/**
  * Determines if a request should skip auth entirely.
  *
+ * Only public resource reads (widget HTML, documentation) skip auth.
+ * All MCP methods including discovery require auth per MCP 2025-11-25.
+ *
  * @param method - MCP method from request
- * @param body - Request body for extracting params
+ * @param body - Request body for extracting resource URI
  * @returns true if auth should be skipped
  */
 function shouldSkipAuth(method: string | undefined, body: unknown): boolean {
-  // Discovery methods: always skip auth
-  if (method && isDiscoveryMethod(method)) {
-    return true;
-  }
-  // Public resource reads: skip auth
   if (method === 'resources/read') {
     const uri = getResourceUriFromBody(body);
     if (uri && isPublicResourceUri(uri)) {
@@ -147,31 +72,37 @@ function shouldSkipAuth(method: string | undefined, body: unknown): boolean {
   return false;
 }
 
+/**
+ * Creates method-aware MCP routing middleware.
+ *
+ * Per MCP 2025-11-25: "Authorization MUST be included in every HTTP request
+ * from client to server." All MCP methods go through auth. The only exception
+ * is public resource reads (widget HTML, documentation) which contain no
+ * user-specific data.
+ *
+ * **Key Behaviour**: This middleware runs BEFORE the MCP SDK, allowing
+ * HTTP 401 responses per MCP spec. The SDK always returns HTTP 200.
+ *
+ * @param options - Router configuration with auth middleware
+ * @returns Express middleware that conditionally applies auth
+ *
+ * @example
+ * ```typescript
+ * const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(logger) });
+ * app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+ * ```
+ *
+ * @public
+ */
 export function createMcpRouter(options: McpRouterOptions): RequestHandler {
   return (req, res, next) => {
     const method = getMethodFromRequest(req);
-    const toolName = getToolNameFromBody(req.body);
 
-    // Check for methods that skip auth entirely
     if (shouldSkipAuth(method, req.body)) {
       next();
       return;
     }
 
-    // Execution methods: check tool security metadata
-    if (method === 'tools/call' && toolName) {
-      if (toolRequiresAuth(toolName)) {
-        // OAuth tool: delegate to auth middleware (may return HTTP 401)
-        options.auth(req, res, next);
-      } else {
-        // Public tool: skip auth
-        next();
-      }
-      return;
-    }
-
-    // Unknown/malformed: require auth (safe default)
-    // If we can't determine the method or tool, fail safe by requiring auth
     options.auth(req, res, next);
   };
 }

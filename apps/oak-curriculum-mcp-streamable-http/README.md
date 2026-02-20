@@ -1066,9 +1066,9 @@ When the widget renders in ChatGPT, CTA buttons appear in the header (right side
 
 **Current CTAs:**
 
-| Button             | Purpose                                                                                                     |
-| ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| 🌳 Learn About Oak | Prompts the model to call `get-ontology`, `get-knowledge-graph`, and `get-help` to build curriculum context |
+| Button             | Purpose                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🌳 Learn About Oak | Prompts the model to call `get-help`, then call all listed agent-support tools (currently including `get-ontology`) to build curriculum context |
 
 ### Adding a New CTA
 

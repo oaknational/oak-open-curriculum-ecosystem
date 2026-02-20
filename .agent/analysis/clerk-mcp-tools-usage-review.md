@@ -290,38 +290,32 @@ The original plan assumed we should remove @clerk/mcp-tools entirely. **This was
 ## Action Items
 
 1. ✅ **Create smoke test** - Validate spec-compliant discovery works
-2. ⏳ **Run smoke test** - Against dev/staging environment
-3. ⏳ **Make decision based on results:**
-   - If passes → Remove proxy endpoint, keep using package
-   - If fails → Investigate why, possibly keep proxy temporarily
-4. ⏳ **Update tests** - Remove tests for proxy endpoint
-5. ⏳ **Update documentation** - Document our usage of @clerk/mcp-tools
+2. ✅ **Run smoke test** - Against dev/staging environment
+3. ✅ **Decision made** - Proxy endpoint RESTORED for backward compatibility
+   - Cursor v2.5.17 fetches `/.well-known/oauth-authorization-server` from the resource
+     server and cannot complete OAuth without it
+   - Endpoint derives metadata locally using `generateClerkProtectedResourceMetadata`
+     (from `@clerk/mcp-tools/server`) -- no `authServerMetadataHandlerClerk`, no network call
+   - See ADR-113 amendment (2026-02-20) for full rationale
+4. ✅ **Update tests** - E2E test now asserts 200 with valid AS metadata structure
+5. ✅ **Update documentation** - ADR-113 amended, curl tests updated
 
 ---
 
 ## Conclusion
 
 **Should we remove @clerk/mcp-tools?**
-**NO** - We're using it correctly for protected resource metadata.
+**NO** - We use `generateClerkProtectedResourceMetadata` for both PRM and AS metadata derivation.
 
-**Should we lean on it more?**
-**Sort of** - We should stop using the parts it warns against (the proxy).
+**Do we use `authServerMetadataHandlerClerk`?**
+**NO** - It reads `process.env` directly. Instead, we use `generateClerkProtectedResourceMetadata`
+to derive the FAPI URL from the publishable key (DI-clean, no network call), then construct
+standard OIDC endpoint URLs locally.
 
-**What should we internalize?**
-**Probably nothing** - Just remove the proxy endpoint.
+**Do we serve `/.well-known/oauth-authorization-server`?**
+**YES** - Restored for backward compatibility with clients implementing the older MCP spec
+(2025-03-26), including Cursor v2.5.17. See ADR-113 amendment.
 
-**The real work is:**
+**Current usage from `@clerk/mcp-tools/server`:**
 
-1. Create smoke test to validate assumption
-2. Remove proxy endpoint if test passes
-3. Keep using the package for what it's good at
-
----
-
-## The Irony
-
-The original plan was to "internalize OAuth metadata generation to remove the immature dependency."
-
-**The reality:** The dependency is fine. We were using it wrong by using a feature it explicitly warns against. The fix is to use LESS of the dependency, not internalize it.
-
-**System-level thinking applied:** Read the docs, understand intent, use tools as designed.
+- `generateClerkProtectedResourceMetadata` -- PRM endpoint and AS metadata derivation

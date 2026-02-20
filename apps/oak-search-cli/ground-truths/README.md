@@ -135,7 +135,9 @@ Generated files are marked with `@generated - DO NOT EDIT`:
 
 - [GROUND-TRUTH-GUIDE.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) - Guide for designing and evaluating ground truths
 - [IR-METRICS.md](../docs/IR-METRICS.md) - Information retrieval metrics explanation
-- [ADR-XXX](../docs/architecture/architectural-decisions/) - Architectural decision record (TODO)
+- [ADR-085: Ground Truth Validation Discipline](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
+- [ADR-098: Ground Truth Registry as Single Source of Truth](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)
+- [ADR-106: Known-Answer-First Ground Truth Methodology](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md)
 
 ## Troubleshooting
 

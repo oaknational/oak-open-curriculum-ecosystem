@@ -1,20 +1,24 @@
-# OAuth Proxy Removal - Validation Results
+# OAuth Discovery - Validation Results
 
 ## Summary
 
-✅ **All curl tests PASSED** - The OAuth discovery chain works correctly without the proxy endpoint.
+✅ **All curl tests PASSED** - The OAuth discovery chain works correctly.
+
+**Update (2026-02-20)**: The AS metadata endpoint was restored for backward compatibility
+with Cursor v2.5.17 and other clients implementing the older MCP spec (2025-03-26). See
+ADR-113 amendment.
 
 ## Test Results
 
-### Test 1: Proxy Endpoint Removed (✅ PASS)
+### Test 1: Authorization Server Metadata (✅ PASS)
 
 ```bash
 curl -i http://localhost:3333/.well-known/oauth-authorization-server
 ```
 
-**Result**: `HTTP/1.1 404 Not Found`
+**Result**: `HTTP/1.1 200 OK` (AS metadata derived locally from publishable key)
 
-✅ **Proves**: The unnecessary proxy endpoint has been successfully removed.
+✅ **Proves**: Backward-compatible clients can discover token_endpoint from the resource server.
 
 ---
 
