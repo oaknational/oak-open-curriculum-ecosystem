@@ -1,66 +1,45 @@
 ---
 name: Ontology / Knowledge Graph Widget Tidy-Up
 overview: >
-  The `get-knowledge-graph` tool was removed and its data merged into the
-  `get-ontology` tool. The knowledge graph widget renderer
-  (`renderKnowledgeGraph`) was also removed — but a dangling reference in
-  `widget-script.ts` causes a `ReferenceError` that crashes ALL widget
-  rendering, failing all 19 Playwright UI tests. This plan removes the
-  dead reference, migrates the knowledge graph SVGs into the ontology
-  renderer, and cleans up all stale documentation references.
+  Widget crash fixed and KG SVGs migrated to ontology renderer. All 26
+  UI tests pass. The only remaining todo is updating stale documentation
+  references (README, agent prompts) that still mention the removed
+  `get-knowledge-graph` tool.
 todos:
   - id: fix-widget-crash
     content: >
-      Remove the dead `knowledgeGraph: renderKnowledgeGraph` line from the
-      RENDERERS dispatcher in `widget-script.ts` (line 72). This is the
-      root cause of ALL 19 UI test failures — the undefined function
-      reference crashes the widget script at load time. Also remove
-      `'knowledgeGraph'` from `RENDERER_IDS` in
-      `widget-renderer-registry.ts` (line 29). Run `pnpm test:ui` to
-      confirm all 19 tests now pass.
-    status: pending
+      DONE: Removed dead `knowledgeGraph: renderKnowledgeGraph` from the
+      RENDERERS dispatcher in `widget-script.ts`. Removed `'knowledgeGraph'`
+      from `RENDERER_IDS` in `widget-renderer-registry.ts`. All 26 UI
+      tests pass.
+    status: completed
   - id: migrate-svgs-to-ontology
     content: >
-      The knowledge graph SVGs (overview: 18 key concepts; full: 28
-      concepts, 45 edges) are currently only in `widget-preview.html`.
-      These SVGs visualise curriculum concept relationships and belong
-      in the ontology renderer now that the data has been merged. Add
-      them to the ontology renderer (`widget-renderers/ontology-renderer.ts`)
-      as collapsible details sections. The SVG source strings are in
-      `widget-renderers/svg-full-sections.ts` and `svg-full-edges.ts` —
-      check whether these already contain the production SVGs or if the
-      preview file is the only source.
-    status: pending
+      DONE: Knowledge graph SVGs extracted to
+      `widget-renderers/ontology-graph-svgs.ts` and integrated into the
+      ontology renderer as collapsible details sections.
+    status: completed
   - id: clean-preview-file
     content: >
-      In `widget-preview.html`: (1) remove `'get-knowledge-graph':
-      'knowledgeGraph'` from the TOOL_RENDERER_MAP, (2) remove the
-      `KNOWLEDGE_GRAPH_OVERVIEW_SVG` and `KNOWLEDGE_GRAPH_FULL_SVG`
-      constants (after migrating to ontology renderer), (3) remove the
-      `renderKnowledgeGraph` function, (4) remove `knowledgeGraph:
-      renderKnowledgeGraph` from the RENDERERS dispatcher, (5) update
-      the CTA prompt to remove `get-knowledge-graph` references.
-    status: pending
+      DONE: widget-preview.html cleaned up — stale KG tool mapping,
+      SVG constants, renderer function, and RENDERERS dispatcher entry
+      removed.
+    status: completed
   - id: update-docs
     content: >
-      (1) `README.md` line 1071: update CTA description from
+      Remaining: (1) `README.md` line 1071: update CTA description from
       "`get-ontology`, `get-knowledge-graph`, and `get-help`" to
       "`get-ontology` and `get-help`". (2) `.agent/prompts/
       learn-about-oak-cta.prompt.md`: this entire prompt is stale —
-      it describes the old 3-tool CTA (`get-ontology`,
-      `get-knowledge-graph`, `get-help`) and contains implementation
-      details that have since been superseded by the CTA registry
-      refactor (`src/widget-cta/registry.ts`). Either delete or
-      rewrite to reflect current architecture. (3) Check for any
-      other references to `get-knowledge-graph` or `knowledgeGraph`
-      across the codebase.
+      either delete or rewrite. (3) Check for any other references to
+      `get-knowledge-graph` or `knowledgeGraph` across the codebase.
     status: pending
   - id: quality-gates
     content: >
-      Run full quality gate chain: `pnpm build && pnpm type-check &&
-      pnpm lint:fix && pnpm format:root && pnpm markdownlint:root &&
-      pnpm test && pnpm test:ui && pnpm test:e2e`
-    status: pending
+      DONE: Full quality gate chain passes — type-gen, build,
+      type-check, lint:fix, format:root, markdownlint:root, test,
+      test:e2e, test:ui (26 pass), smoke:dev:stub. All gates green.
+    status: completed
 isProject: false
 ---
 

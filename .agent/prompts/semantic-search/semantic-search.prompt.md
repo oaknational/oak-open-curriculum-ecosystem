@@ -53,12 +53,10 @@ for Cursor-obtained tokens.
 
 **Active plan**: [ontology-knowledge-graph-tidy-up.md](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md)
 
-The `get-knowledge-graph` tool was removed and its data
-merged into `get-ontology`. A dangling `renderKnowledgeGraph`
-reference in `widget-script.ts` crashes all widget rendering,
-causing 19 UI test failures. Fix the crash, migrate the
-knowledge graph SVGs to the ontology renderer, clean up
-stale documentation references.
+**Completed**: The dangling `renderKnowledgeGraph` reference in
+`widget-script.ts` has been fixed. Knowledge graph SVGs migrated
+to the ontology renderer. All 26 UI tests pass. Remaining work
+(if any) is documented in the plan.
 
 ### 3. SDK Workspace Separation — Type-Gen / Runtime Split
 
@@ -338,7 +336,7 @@ failure. If a gate fails, the work is not done. Fix it.**
 | [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search WS5 — replace old search |
 | [OAuth spec compliance](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) | 401 on unauthenticated discovery (complete, archived) |
 | [OAuth validation / Cursor flows](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) | **Primary OAuth plan** — spec-compliant smoke test + Cursor flow |
-| [Widget KG tidy-up](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md) | Fix widget crash, migrate KG SVGs to ontology |
+| [Widget KG tidy-up](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md) | Widget crash fixed, SVGs migrated — docs cleanup remaining |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | Type-gen / runtime split |
 | [SDK split meta-plan](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md) | Guide for improving SDK split plan |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |

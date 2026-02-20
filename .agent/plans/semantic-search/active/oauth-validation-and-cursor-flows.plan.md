@@ -64,7 +64,7 @@ todos:
       is test infrastructure (token generation); phases 1 and 3 prove
       server behaviour. Quality gates pass (type-gen, build,
       type-check, lint, format, markdownlint, test, e2e, smoke:dev:stub).
-      test:ui has pre-existing failures (separate workstream).
+      test:ui now passes (26 tests, widget KG fix applied).
     status: completed
   - id: cursor-investigate
     content: >
@@ -82,8 +82,7 @@ todos:
     content: >
       DONE: Full quality gate chain passes — type-gen, build,
       type-check, lint:fix, format:root, markdownlint:root, test,
-      test:e2e, smoke:dev:stub. test:ui has pre-existing failures
-      (separate workstream, not blocking).
+      test:e2e, test:ui (26 pass), smoke:dev:stub. All gates green.
     status: completed
 isProject: false
 ---
