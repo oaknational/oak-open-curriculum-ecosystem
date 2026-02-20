@@ -717,19 +717,52 @@ Express middleware handles them before the transport is reached.
 - `.agent/prompts/semantic-search/semantic-search.prompt.md` — completed work section
 - `.agent/plans/high-level-plan.md` — milestones and priorities updated
 
-## 2026-02-20 — OAuth Documentation Consolidation
+## 2026-02-20 — OAuth Spec-Compliant Smoke Test Completion
 
 ### What happened
-OAuth work was scattered across 3 docs:
-- `.cursor/plans/oauth_as_metadata_fix_139c4ac3.plan.md` (AS metadata endpoint — complete)
-- `.agent/plans/semantic-search/active/oauth-spec-compliance.md` (spec compliance — complete)
-- `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md` (active)
 
-Consolidated to just the active plan + prompt. Cursor plan deleted, spec compliance plan marked as reference-only with pending item cancelled (absorbed into active plan).
+1. **Clerk SDK upgrades**: `@clerk/backend` 2.29.2 → 2.31.2, `@clerk/express` 1.7.7 → 1.7.72.
+   New SDK exposes `consentScreenEnabled` on OAuth application create.
+2. **`consentScreenEnabled: false`**: Added to `createOAuthApplication()` with TSDoc
+   documenting the security invariant (smoke tests only, never production).
+3. **Major FAPI sign-in refactoring**: The old approach incorrectly used a Clerk testing
+   token as a dev browser token. The correct flow for programmatic OAuth:
+   - Create user + testing token via Clerk Backend API
+   - Create OAuth app with `consentScreenEnabled: false`
+   - Derive FAPI base URL from OAuth app's authorize URL
+   - Create sign-in token via Backend API
+   - `POST /v1/dev_browser` on FAPI → `devBrowserJwt`
+   - `POST /v1/client/sign_ins` with ticket strategy on FAPI → session
+   - Pass `__clerk_db_jwt` and `__clerk_testing_token` as URL params for redirects
+4. **HTTP 303 handling**: Clerk's authorize endpoint returns 303 (See Other),
+   not just 302. Updated `requestAuthorizationCode` to accept both.
+5. **All quality gates pass** (type-gen through smoke:dev:stub). `test:ui` has
+   pre-existing failures (separate workstream).
 
-### Current state
-- Spec-compliant path NOT YET validated by automated tests
-- 3 partial smoke test files exist: `oauth-discovery.ts`, `oauth-spec-e2e.ts`, `smoke-oauth-spec.ts`
-- Entry point needs import fixes before it can run
-- Cursor flow still broken — investigation deferred until spec path is proven
-- Priority order: validate spec path FIRST, then investigate Cursor
+### Key Clerk FAPI concepts learned
+
+- **Testing token** (`__clerk_testing_token`): Bypasses bot detection. Created via
+  Backend API `testingTokens.create()`. Passed as URL query param to FAPI.
+- **Dev browser JWT** (`__clerk_db_jwt`): Session identifier for cookieless dev mode.
+  Created via FAPI `POST /v1/dev_browser`. Passed as URL query param.
+- **Sign-in token**: One-time ticket for programmatic sign-in. Created via Backend
+  API `signInTokens.createSignInToken()`. Used with FAPI ticket strategy.
+- These three are distinct mechanisms that work together. Confusing them causes
+  infinite redirect loops at the authorize endpoint.
+
+### What the smoke test proves vs doesn't prove
+
+The test has three phases:
+1. **Discovery chain** (phases 1+3): Tests SERVER behaviour — 401, PRM, AS
+   metadata, authenticated tools/list. This is what we're proving.
+2. **PKCE token acquisition** (phase 2): TEST INFRASTRUCTURE — generates a valid
+   Clerk OAuth token. Analogous to creating test data before testing an API.
+
+From the server's perspective, `getAuth(request, { acceptsToken: 'oauth_token' })`
+doesn't distinguish token origin. Whether consent-enabled, consent-disabled, or
+DCR-created app — Clerk's verification is the same.
+
+The test does NOT prove (and doesn't claim to):
+- Cursor can complete the flow (deferred to `cursor-investigate`)
+- The DCR-created OAuth app is correctly configured
+- The consent screen works

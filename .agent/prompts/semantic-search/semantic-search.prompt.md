@@ -25,7 +25,7 @@ tools are strictly superior. WS5 implements the replacement:
    Update executor dispatch and all cross-references. TDD.
 3. **WS5.4**: Full quality gate chain.
 
-### 2. OAuth — Validate Spec-Compliant Path, Then Cursor
+### 2. OAuth — Cursor-Specific Investigation
 
 **Active plan**: [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md)
 
@@ -33,19 +33,21 @@ tools are strictly superior. WS5 implements the replacement:
 
 - OAuth spec compliance (ADR-113) — all MCP methods require auth
 - AS metadata endpoint restored for backward compatibility
+- Spec-compliant smoke test (`pnpm smoke:oauth:spec`) passes end-to-end
+- `@clerk/backend` upgraded 2.29.2 → 2.31.2 (exposes `consentScreenEnabled`)
+- `@clerk/express` upgraded 1.7.7 → 1.7.72
+- PKCE flow uses Clerk FAPI for programmatic auth (dev browser +
+  sign-in token + ticket strategy)
 - Completed plan: [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md)
 
-**Current state**: Discovery chain (steps 1-3) passes against a live
-dev server. PKCE flow code is clean (sessionJwt fallback removed).
-One remaining blocker: the Clerk REST API supports creating OAuth apps
-with `consent_screen_enabled: false` (needed so the authorize endpoint
-redirects instead of showing an interactive consent page), but the
-`@clerk/backend` v2.29.2 SDK types don't expose this property. Next
-step: bypass the SDK types for this one call (direct REST, SDK upgrade,
-or post-create PATCH), then run `pnpm smoke:oauth:spec` against a live
-dev server. Consent-disabled apps are approved for ephemeral smoke tests
-only — all product apps MUST keep consent enabled. Cursor-specific path
-is lower priority, deferred until the spec path is proven.
+**Current state**: The spec-compliant path is fully validated. Our
+server correctly implements the MCP authorization spec for any
+standards-compliant client. The remaining work is investigating why
+Cursor specifically does not complete the OAuth flow
+(`cursor-investigate` todo in the plan). Possible causes: Cursor
+caches the old 404, locally-derived AS metadata has incorrect URLs,
+Cursor has requirements beyond the spec, or token verification fails
+for Cursor-obtained tokens.
 
 ### 2b. Widget Knowledge Graph Tidy-Up
 
@@ -228,6 +230,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, integration tests | [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) |
 | OAuth Spec Compliance | All MCP methods require auth, ADR-113, ADR-056 superseded | [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) |
 | AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) |
+| Spec-Compliant Smoke Test | Full PKCE flow via Clerk FAPI, `pnpm smoke:oauth:spec` passes e2e | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) |
 
 ---
 

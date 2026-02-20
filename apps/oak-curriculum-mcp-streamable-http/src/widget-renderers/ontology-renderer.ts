@@ -7,6 +7,7 @@
  *
  * @see widget-renderer-registry.ts - Registry that routes to this renderer
  */
+import { ONTOLOGY_GRAPH_FULL_SVG, ONTOLOGY_GRAPH_OVERVIEW_SVG } from './ontology-graph-svgs.js';
 
 /**
  * JavaScript function to render ontology content in the widget.
@@ -90,6 +91,31 @@ function renderOntology(o) {
       h += '</div></div>';
     }
   }
+
+  // Concept relationship visualisations merged into ontology output
+  h += '<div class="sec"><h2 class="sec-ttl">Concept Relationships</h2>';
+  h += '<p style="margin:0 0 8px;font-size:13px">The ontology includes curriculum concept relationships as a property graph. Open the sections below to explore the structure.</p>';
+  h += '</div>';
+
+  h += '<div class="sec">';
+  h += '<details style="border:1px solid var(--border-color);border-radius:8px;padding:12px">';
+  h += '<summary style="cursor:pointer;font-size:13px;font-weight:500;color:var(--fg-secondary)">Graph overview (18 key concepts)</summary>';
+  h += '<div style="margin-top:12px;text-align:center">';
+  h += ${JSON.stringify(ONTOLOGY_GRAPH_OVERVIEW_SVG)};
+  h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">Hover nodes for definitions and edges for relationship names. Solid edges are explicit, dashed edges are inferred.</p>';
+  h += '</div>';
+  h += '</details>';
+  h += '</div>';
+
+  h += '<div class="sec">';
+  h += '<details style="border:1px solid var(--border-color);border-radius:8px;padding:12px">';
+  h += '<summary style="cursor:pointer;font-size:13px;font-weight:500;color:var(--fg-secondary)">Full graph (28 concepts)</summary>';
+  h += '<div style="margin-top:12px;text-align:center">';
+  h += ${JSON.stringify(ONTOLOGY_GRAPH_FULL_SVG)};
+  h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">This full graph includes metadata and KS4 relationship paths within the ontology model.</p>';
+  h += '</div>';
+  h += '</details>';
+  h += '</div>';
 
   return h || '<div class="empty">No ontology data available.</div>';
 }

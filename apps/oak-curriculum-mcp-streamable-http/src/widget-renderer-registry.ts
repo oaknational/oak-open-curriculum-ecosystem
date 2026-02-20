@@ -26,7 +26,6 @@ export const RENDERER_IDS = [
   'search',
   'fetch',
   'ontology',
-  'knowledgeGraph',
 ] as const;
 
 /**

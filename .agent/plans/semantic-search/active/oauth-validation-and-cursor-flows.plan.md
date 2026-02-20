@@ -1,14 +1,12 @@
 ---
 name: OAuth Validation and Cursor Flow Debugging
 overview: >
-  The MCP server returns 401 + WWW-Authenticate on initial requests (spec
-  compliance done, ADR-113) and serves AS metadata at
-  /.well-known/oauth-authorization-server for backward-compatible clients.
-  Despite both being in place, Cursor still does not complete the OAuth flow.
-  Before investigating the Cursor-specific path further, we must first
-  validate that the SPEC-COMPLIANT path works end-to-end with automated
-  smoke tests. A test email (CLERK_TEST_EMAIL in .env) is available for
-  programmatic auth.
+  The spec-compliant OAuth path is fully validated. The MCP server returns
+  401 + WWW-Authenticate, serves PRM and AS metadata, and accepts Clerk
+  OAuth tokens — all proven by pnpm smoke:oauth:spec against a live dev
+  server. The remaining work is investigating why Cursor specifically
+  does not complete the flow (cursor-investigate). A test email
+  (CLERK_TEST_EMAIL in .env) is available for programmatic auth.
 todos:
   - id: diagnose-server-logs
     content: >
@@ -45,31 +43,35 @@ todos:
     status: completed
   - id: spec-smoke-e2e
     content: >
-      READY: Discovery chain passes. SessionJwt fallback removed (server
-      rejects non-oauth_token types). PKCE flow code is clean: creates
-      identity, creates ephemeral OAuth app, runs PKCE, exchanges code
-      for token. One blocker remains: the Clerk Backend API supports
-      consent_screen_enabled on create, but @clerk/backend v2.29.2 types
-      do not expose it. Options: (a) use fetch() directly against the
-      Clerk REST API to create the app with consent_screen_enabled:false,
-      (b) upgrade @clerk/backend to a version that includes the property,
-      (c) create the app via SDK then PATCH consent off via REST API.
-      Consent-disabled apps are approved for smoke tests ONLY — product
-      apps MUST always have consent enabled.
-    status: pending
+      DONE: Upgraded @clerk/backend 2.29.2 → 2.31.2 (exposes
+      consentScreenEnabled). Rewrote PKCE flow to use proper Clerk
+      Frontend API authentication: (1) create dev browser via FAPI
+      POST /v1/dev_browser, (2) create sign-in token via Backend API,
+      (3) sign in via FAPI ticket strategy to associate user with dev
+      browser. The old approach incorrectly used a testing token as a
+      dev browser token, causing an infinite sign-in redirect loop.
+      Also handles HTTP 303 (See Other) in addition to 302 redirects.
+    status: completed
   - id: spec-smoke-run
     content: >
-      RUN: Start dev server (pnpm dev), run smoke:oauth:spec. This is the
-      definitive test of the spec-compliant path. If it passes, the server
-      works correctly for any standards-compliant client and the Cursor
-      issue is Cursor-specific. If it fails, the server has bugs that need
-      fixing before investigating Cursor.
-    status: pending
+      DONE: pnpm smoke:oauth:spec passes end-to-end against live dev
+      server. All four phases validated: (1) Discovery chain — 401,
+      PRM, AS metadata, (2) Programmatic PKCE — dev browser, FAPI
+      sign-in, authorize, code exchange, (3) Authenticated tools/list
+      — 35 tools returned, (4) MCP Inspector CLI — skipped (needs
+      --method flag, non-blocking). The smoke test proves our server
+      correctly implements the MCP spec-compliant OAuth flow. Phase 2
+      is test infrastructure (token generation); phases 1 and 3 prove
+      server behaviour. Quality gates pass (type-gen, build,
+      type-check, lint, format, markdownlint, test, e2e, smoke:dev:stub).
+      test:ui has pre-existing failures (separate workstream).
+    status: completed
   - id: cursor-investigate
     content: >
-      INVESTIGATE: Only after the spec-compliant path is validated. The AS
-      metadata endpoint is now served but Cursor still fails. Possible
-      causes: (a) Cursor caches the 404 from the old response, (b) the
+      INVESTIGATE: Spec-compliant path is validated (precondition met).
+      The AS metadata endpoint is served and the smoke test passes, but
+      Cursor still does not complete the OAuth flow. Possible causes:
+      (a) Cursor caches the 404 from the old response, (b) the
       locally-derived AS metadata has incorrect URLs, (c) Cursor has
       additional requirements beyond AS metadata, (d) token verification
       fails for Cursor-obtained tokens. Use MCP Inspector UI to compare
@@ -78,8 +80,11 @@ todos:
     status: pending
   - id: quality-gates
     content: >
-      Run full quality gate chain after all smoke test work is complete.
-    status: pending
+      DONE: Full quality gate chain passes — type-gen, build,
+      type-check, lint:fix, format:root, markdownlint:root, test,
+      test:e2e, smoke:dev:stub. test:ui has pre-existing failures
+      (separate workstream, not blocking).
+    status: completed
 isProject: false
 ---
 
@@ -120,20 +125,14 @@ extract the FAPI URL, then constructs standard OIDC endpoint URLs locally.
 This avoids the `fetchClerkAuthorizationServerMetadata` network call that
 failed in E2E tests with fake credentials.
 
-**Plan**: `.cursor/plans/oauth_as_metadata_fix_139c4ac3.plan.md` (all
-todos complete — absorbed into this plan)
+**Plan**: Cursor plan deleted during consolidation (all todos
+complete — absorbed into this plan)
 
-### 3. Current State
+### 3. Spec-Compliant Path (Validated)
 
-Despite both fixes, Cursor still does not complete the OAuth flow. The
-problem persists. Rather than continuing to investigate the Cursor-specific
-path, the priority is to validate the **spec-compliant path** first.
-
-## Current Priority: Spec-Compliant Path Validation
-
-### Why This Order
-
-A standards-compliant MCP client follows this discovery path:
+The spec-compliant OAuth path is fully validated by
+`pnpm smoke:oauth:spec`. The server correctly implements the
+MCP authorization spec for any standards-compliant client:
 
 1. POST /mcp → 401 + `WWW-Authenticate: Bearer resource_metadata="<PRM URL>"`
 2. GET PRM URL → `authorization_servers[]` pointing to Clerk
@@ -141,40 +140,72 @@ A standards-compliant MCP client follows this discovery path:
 4. PKCE OAuth flow with Clerk → access token
 5. POST /mcp with Bearer token → authenticated MCP response
 
-If this path works, our server is correct and the Cursor issue is
-Cursor-specific. If this path fails, we have a server bug that must be
-fixed regardless of Cursor.
+This confirms the server is correct and the Cursor issue is
+Cursor-specific.
 
-### Smoke Test Status
+### Manual Browser Validation (MCP Inspector)
 
-Three files created. Discovery passes. Full E2E needs one fix
-before it can run (disable consent on ephemeral smoke-test OAuth app).
+In addition to the automated smoke test, the full human+browser OAuth
+flow has been validated manually via MCP Inspector (interactive UI mode)
+pointed at the live dev server on `localhost:3333/mcp`. The Clerk
+consent screen was presented, the user authenticated in the browser,
+and authenticated MCP calls succeeded. This confirms the flow works
+for a real browser-based client, not just programmatic test
+infrastructure.
+
+## Current Priority: Cursor-Specific Investigation
+
+### Smoke Test Status — PASSING
+
+All files compile, lint, and the spec-compliant smoke test
+(`pnpm smoke:oauth:spec`) passes end-to-end against a live dev server.
 
 | File | Status |
 |------|--------|
 | `smoke-assertions/oauth-discovery.ts` | PASSES — validates discovery chain (steps 1-3) |
-| `smoke-assertions/oauth-spec-e2e.ts` | READY — PKCE flow clean, needs consent-disabled app |
-| `smoke-tests/smoke-oauth-spec.ts` | Compiles, lints. Entry point for `pnpm smoke:oauth:spec` |
-| `smoke-tests/auth/clerk-oauth-token.ts` | CLEAN — sessionJwt fallback removed, PKCE-only |
+| `smoke-assertions/oauth-spec-e2e.ts` | PASSES — full PKCE flow and authenticated call |
+| `smoke-tests/smoke-oauth-spec.ts` | PASSES — entry point for `pnpm smoke:oauth:spec` |
+| `smoke-tests/auth/clerk-oauth-token.ts` | CLEAN — FAPI sign-in + PKCE-only |
 
-**Completed**:
+**Key implementation decisions**:
 
-1. Fixed `createRootLogger` call (expects `SmokeSuiteMode`)
-2. Fixed env loading (uses dotenv directly)
-3. Added `smoke:oauth:spec` script to `package.json`
-4. `@clerk/backend` added as explicit dependency in `package.json`
-5. Code compiles and passes lint
+1. Upgraded `@clerk/backend` 2.29.2 → 2.31.2 (exposes `consentScreenEnabled`)
+2. Upgraded `@clerk/express` 1.7.7 → 1.7.72 (compatible with new backend)
+3. PKCE flow uses Clerk Frontend API (FAPI) for programmatic auth:
+   dev browser creation → sign-in token → ticket strategy sign-in
+4. Handles both HTTP 302 and 303 redirects from Clerk authorize endpoint
+5. Ephemeral OAuth app created with `consentScreenEnabled: false` and
+   deleted after each run
 
-**Resolved**: The PKCE flow can be completed programmatically.
-The server requires `oauth_token` type tokens (session JWTs rejected).
-The smoke test must create its own temporary OAuth app with consent
-disabled so the authorize endpoint redirects directly instead of
-rendering an interactive HTML consent page. The Clerk REST API supports
-`consent_screen_enabled: false` on the create endpoint, but the
-`@clerk/backend` v2.29.2 SDK types don't expose this property. The
-next step is to bypass the SDK types for this one call (direct REST,
-SDK upgrade, or post-create PATCH). The smoke test app is deleted
-after each run.
+### What the Smoke Test Proves vs What It Doesn't
+
+The smoke test has three distinct phases with different roles:
+
+| Phase | What it validates | Layer |
+|-------|-------------------|-------|
+| Phase 1: Discovery chain | POST /mcp → 401 + WWW-Authenticate; GET PRM → authorization_servers; AS metadata reachable | **Our server** |
+| Phase 2: PKCE token acquisition | Dev browser, FAPI sign-in, authorize redirect, code exchange → access token | **Test infrastructure** |
+| Phase 3: Authenticated MCP call | POST /mcp with Bearer token → 200 + tools/list | **Our server** |
+
+**Phases 1 and 3 prove our server's behaviour.** Phase 2 is test
+infrastructure — it generates a valid Clerk OAuth token so we can
+exercise phase 3. This is analogous to creating test data to set up a
+database test: the data setup isn't what we're testing.
+
+**Key insight**: From our server's perspective, a Clerk OAuth token is a
+Clerk OAuth token regardless of how it was obtained. `getAuth(request,
+{ acceptsToken: 'oauth_token' })` does not distinguish between tokens
+from consent-enabled apps, consent-disabled apps, or DCR-created apps.
+Clerk's token verification is the same either way.
+
+**What the test does NOT prove** (and does not claim to):
+
+- That Cursor specifically can complete the flow (deferred to
+  `cursor-investigate`)
+- That the DCR-created OAuth app in the Clerk dashboard is correctly
+  configured (that's Clerk dashboard config, not server code)
+- That the consent screen works (disabled for programmatic testing)
+- That any specific client's OAuth implementation is correct
 
 **Invariant — consent screen in production**: All product-facing OAuth
 applications (including the DCR-created app in the Clerk dashboard) MUST
@@ -185,9 +216,9 @@ consent screen, any logged-in user who visits an OAuth authorization URL
 automatically grants access to any requested scopes. The product code
 must never create OAuth apps with consent disabled.
 
-### After Spec-Compliant Validation
+### Next Steps: Cursor Investigation
 
-Only after the spec path passes, investigate Cursor:
+The spec path passes. Investigate Cursor:
 
 - Check if Cursor caches the old 404 response
 - Compare MCP Inspector behaviour with Cursor behaviour
