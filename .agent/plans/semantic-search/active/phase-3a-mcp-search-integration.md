@@ -76,9 +76,38 @@ isProject: false
 
 # Phase 3a: MCP Search Integration — Execution Plan
 
-This is not a simple API adapter. This is an experience layer with two users: the human teacher and the AI agent. The tool architecture must serve both.
+## START HERE — WS5: Replace Old Search
 
-## Design Principles
+WS1-WS4 are **complete**. All three new search tools are implemented,
+tested, and working. The only remaining code work is **WS5**: replace
+the old REST-based `search` tool with the new SDK-backed `search-sdk`
+tool, and retire the generated REST wrappers.
+
+**Check the todo frontmatter above** — the pending items are:
+
+- `ws5-skip-old-gen` (WS5.1): Add `SKIPPED_PATHS` to the generator
+- `ws5-promote-search` (WS5.2): Promote `search-sdk` → `search`,
+  delete `aggregated-search/`
+- `ws5-quality-gates` (WS5.4): Full quality gate chain
+- `adr-116-env-resolution`: Write ADR-116 (documentation, independent)
+
+**Implementation details are in the WS5 section below** (section 5.0
+onwards). Read sections 5.1 through 5.5 before starting.
+
+**Key context you need:**
+
+1. The `search` tool name stays the same — only the backend changes.
+   Old backend: REST API. New backend: Elasticsearch via Search SDK.
+2. The `search-sdk` tool currently exists alongside `search`. After
+   WS5, `search-sdk` becomes `search` and the old module is deleted.
+3. Two generated tools (`get-search-lessons`, `get-search-transcripts`)
+   are also retired — they're REST wrappers superseded by direct ES.
+4. The tool guidance, prompts, and help content already reference
+   `search-sdk` — they need updating to reference `search`.
+
+---
+
+## Design Principles (WS1-WS4, for reference)
 
 1. **Every index gets exposed.** Four search indexes (lessons, units, threads, sequences) plus completion suggestions and faceted browsing = six retrieval capabilities. All must be accessible.
 2. **Passthrough AND compound.** Individual scope access for precision. Multi-index tools for discovery. Teachers often don't know which scope they need.
@@ -252,7 +281,10 @@ sequenceDiagram
 
 ---
 
-## WS1 -- Tool Definitions and Tests (RED)
+## WS1 -- Tool Definitions and Tests (RED) ✅ COMPLETE
+
+> WS1-WS4 are complete. These sections are retained for reference.
+> **Skip to WS5 below for the current work.**
 
 All tests MUST FAIL at the end of WS1.
 
@@ -325,7 +357,7 @@ pnpm test --filter @oaknational/curriculum-sdk
 
 ---
 
-## WS2 -- Wiring and Implementation (GREEN)
+## WS2 -- Wiring and Implementation (GREEN) ✅ COMPLETE
 
 All tests MUST PASS at the end of WS2.
 
@@ -408,7 +440,7 @@ pnpm test --filter @oaknational/curriculum-sdk
 
 ---
 
-## WS3 -- NL Guidance, Examples, and Documentation (REFACTOR)
+## WS3 -- NL Guidance, Examples, and Documentation (REFACTOR) ✅ COMPLETE
 
 This workstream is NOT an afterthought. It is where the user experience is defined.
 
@@ -472,7 +504,7 @@ Each scope's result formatter produces a human-readable summary that:
 
 ---
 
-## WS4 -- Quality Gates
+## WS4 -- Quality Gates ✅ COMPLETE
 
 ### 4.1: Full quality gate chain
 
@@ -502,7 +534,7 @@ All 7 existing aggregated tools + all generated tools must work identically.
 
 ---
 
-## WS5 -- Compare, Replace, and Retire Old Search
+## WS5 -- Compare, Replace, and Retire Old Search — CURRENT WORK
 
 ### 5.0: Context and decisions
 

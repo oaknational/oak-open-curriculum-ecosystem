@@ -4,68 +4,91 @@
 
 ---
 
-## Current Priority: Two Merge Blockers
+## Immediate Task: WS5 — Replace Old Search with Search SDK
+
+**Plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
+
+WS1-WS4 are complete. Three new search tools (`search-sdk`,
+`browse-curriculum`, `explore-topic`) are implemented, tested,
+and working. Comparative testing confirms they are strictly
+superior to the old REST-based `search` tool.
+
+**WS5 replaces the old search and retires the generated REST
+wrappers. There are four pending todos:**
+
+1. **WS5.1** (`ws5-skip-old-gen`): Add `SKIPPED_PATHS` to
+   `mcp-tool-generator.ts` to exclude `/search/lessons` and
+   `/search/transcripts` from generated tools. TDD.
+
+2. **WS5.2** (`ws5-promote-search`): Promote `search-sdk` to
+   `search` in `AGGREGATED_TOOL_DEFS`. Delete
+   `aggregated-search/` module. Update executor dispatch and
+   all cross-references. TDD.
+
+3. **WS5.4** (`ws5-quality-gates`): Full quality gate chain
+   after replacement.
+
+4. **ADR-116** (`adr-116-env-resolution`): Write ADR-116 for
+   the `resolveEnv` pipeline architecture. This is a documentation
+   task, independent of WS5 code changes.
+
+The plan file has detailed implementation steps for each
+(sections 5.1-5.5). Read the plan before starting.
+
+---
+
+## Two Merge Blockers Remain
 
 The `feat/semantic_search_deployment` branch requires two
-workstreams to complete before it can merge. All active plans
-are in `plans/semantic-search/active/`.
+workstreams before it can merge:
 
-### 1. WS5 — Replace Old Search with Search SDK
+1. **WS5** (this task) — replace old search
+2. **SDK workspace separation** — split `curriculum-sdk` into
+   type-gen and runtime workspaces
+   ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
 
-**Active plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
-
-WS1-WS4 complete. Comparative testing confirms the search-sdk
-tools are strictly superior. WS5 implements the replacement:
-
-1. **WS5.1**: Add `SKIPPED_PATHS` to `mcp-tool-generator.ts` to
-   exclude `/search/lessons` and `/search/transcripts` from
-   generated tools. TDD.
-2. **WS5.2**: Promote `search-sdk` → `search` in
-   `AGGREGATED_TOOL_DEFS`. Delete `aggregated-search/` module.
-   Update executor dispatch and all cross-references. TDD.
-3. **WS5.4**: Full quality gate chain.
-
-### 2. OAuth — Proxy OAuth AS for Cursor ✅ COMPLETE
-
-**Archived plan**: [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md)
-**ADR**: [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
-
-Transparent proxy OAuth AS working end-to-end with Cursor. Full details
-in [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
-and archived plan. Key outcomes:
-
-- Three proxy endpoints: `/oauth/register`, `/oauth/authorize`, `/oauth/token`
-- Fully transparent passthrough — no filtering, Clerk handles all validation
-- Path-qualified PRM per RFC 9728 Section 3.1
-- `openid` scope solved at source (`mcp-security-policy.ts`), not in proxy
-- DRY: aggregated tool defs import `SCOPES_SUPPORTED` via stable re-export
-- Quality gates: `SCOPES_SUPPORTED` sync test, AS metadata passthrough test
-- ADR-115 written, ADR-053 amended, ADR-113 cross-referenced
-
-### 2b. Widget Knowledge Graph Tidy-Up
-
-**Completed plan**: [ontology-knowledge-graph-tidy-up.md](../../plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md)
-
-**Completed**: The dangling `renderKnowledgeGraph` reference in
-`widget-script.ts` has been fixed. Knowledge graph SVGs migrated
-to the ontology renderer. All 26 UI tests pass. Remaining work
-(if any) is documented in the plan.
-
-### 3. SDK Workspace Separation — Type-Gen / Runtime Split
-
-**Active plan**: [sdk-workspace-separation.md](../../plans/semantic-search/active/sdk-workspace-separation.md)
-**Meta-plan**: [sdk-workspace-separation-meta-plan.md](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md)
-
-Split `@oaknational/curriculum-sdk` into `curriculum-sdk-generation`
-(type-gen) and `curriculum-sdk` (runtime). Runtime depends on
-type-gen, never the reverse.
-
-### Post-Merge
-
-- [mcp-result-pattern-unification.md](../../plans/semantic-search/post-sdk/mcp-integration/mcp-result-pattern-unification.md) — `ToolExecutionResult` → `Result<T, E>` (new branch after merge)
-- STDIO-HTTP server alignment — backlog
+All other merge blockers are complete (OAuth, proxy, auth).
 
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
+
+---
+
+## Current Search Tool Landscape
+
+Understanding these four tools is essential for WS5:
+
+| Tool | Module | Backend | Status |
+|------|--------|---------|--------|
+| `search` (old) | `aggregated-search/` | REST API (`get-search-lessons` + `get-search-transcripts`) | **To be deleted in WS5** |
+| `search-sdk` (new) | `aggregated-search-sdk/` | Elasticsearch via Search SDK (5 scopes) | **To be promoted to `search` in WS5** |
+| `browse-curriculum` | `aggregated-browse/` | `fetchSequenceFacets` | Working, no changes needed |
+| `explore-topic` | `aggregated-explore/` | Parallel `searchLessons` + `searchUnits` + `searchThreads` | Working, no changes needed |
+
+### Key Files for WS5
+
+| File | Role in WS5 |
+|------|-------------|
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` | Add `SKIPPED_PATHS` here (5.1) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts` | Rename `search-sdk` → `search` (5.2) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts` | Update dispatch map (5.2) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/` | **Delete entirely** (5.2) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search-sdk/` | Promoted to `search` (5.2) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help/tool-guidance-data.ts` | Update tool name references (5.2) |
+
+### Architecture Context
+
+- **DI**: `SearchRetrievalService` interface breaks circular dependency.
+  `searchRetrieval` is **required** on `UniversalToolExecutorDependencies`.
+- **Fail-fast**: Servers fail at startup without ES credentials. Stub
+  mode uses `createStubSearchRetrieval()`.
+- **Dispatch**: Const object maps (not switches) for tool/scope dispatch.
+- **`isAggregatedToolName`**: Derives from `AGGREGATED_TOOL_DEFS` via
+  `value in AGGREGATED_TOOL_DEFS` — do NOT revert to a hardcoded list.
+- **Response format**: Unified `formatToolResponse()` — all tools return
+  2-item `content` array (summary + JSON), `structuredContent`, `_meta`.
+- **Scopes via `SCOPES_SUPPORTED`**: All aggregated tool definitions
+  import OAuth scopes from the stable re-export at
+  `src/mcp/scopes-supported.ts` (not hardcoded). Follow this pattern.
 
 ---
 
@@ -144,27 +167,20 @@ the standards and produce work that must be rejected.
 ## What We Have
 
 A production-ready Elasticsearch-backed semantic search
-system split across three workspaces:
+system split across five workspaces:
 
-- **Search SDK** (`packages/sdks/oak-search-sdk/`): Fully
-  implemented retrieval, admin, and observability services
-  with dependency injection. All methods return
-  `Result<T, E>`. 36 tests.
-- **Search CLI** (`apps/oak-search-cli/`): Thin wrapper
-  over the SDK providing `oaksearch` commands for search,
-  admin, evaluation, and observability. 935 tests.
-- **Oak API SDK** (`packages/sdks/oak-curriculum-sdk/`):
-  Upstream Oak Open Curriculum API types, generated via
-  `pnpm type-gen`.
+| Workspace | Location | Purpose |
+|-----------|----------|---------|
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen, MCP tool definitions |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (36 tests) |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (935 tests) |
+| **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
+| **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
 
-**DI and credential safety**: The Search SDK requires ES
-URL and credentials as explicit constructor arguments —
-no environment variable access inside the SDK. Only the
-CLI reads env vars (centralised in `src/lib/env.ts`,
-ESLint-enforced). The `createCliSdk()` factory maps
-env → ES client → SDK instance. All other consumers
-(MCP servers, future apps) must provide their own
-credentials at construction time.
+The Search SDK consumes types from the Oak API SDK.
+The Search CLI consumes the Search SDK.
+Both MCP servers consume the Oak API SDK (tool definitions)
+and optionally the Search SDK (search retrieval).
 
 ### Search Pipeline
 
@@ -194,107 +210,9 @@ score normalisation.
 | Threads | 8 | 0.938 | 0.902 |
 | Sequences | 1 | 1.000 | 1.000* |
 
-\* Single-query index — mechanism check only. Thread GTs were
-expanded from 1 to 8 across 5 subjects as part of the
-[thread search plan](../../plans/semantic-search/archive/completed/thread-search-sdk-integration.plan.md)
-(now complete).
+\* Single-query index — mechanism check only.
 
 **Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
-
----
-
-## Completed Work
-
-All archived plans: `.agent/plans/semantic-search/archive/completed/`
-
-| Work | Key Outcome | Plan |
-|------|------------|------|
-| SDK Extraction (A–E2) | 16 I/O methods returning `Result<T, E>`, CLI with `oaksearch` | [search-sdk-cli.plan.md](../../plans/semantic-search/archive/completed/search-sdk-cli.plan.md) |
-| Thread Search | `searchThreads` wired, 8 GTs, MRR=0.938 | [thread-search-sdk-integration.plan.md](../../plans/semantic-search/archive/completed/thread-search-sdk-integration.plan.md) |
-| HTTP 451 Remediation | `legally_restricted` error kind (ADR-109) | [transcript-451-test-doc-remediation.plan.md](../../plans/semantic-search/archive/completed/transcript-451-test-doc-remediation.plan.md) |
-| Fail-Fast ES Credentials | Silent degradation removed, `searchRetrieval` required | [fail-fast-elasticsearch-credentials.md](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) |
-| Transport Bug Fix | Per-request transport pattern (ADR-112) | [streamable-http-transport-stateless-bug.md](../../plans/semantic-search/archive/completed/streamable-http-transport-stateless-bug.md) |
-| Code Quality | 1,693 TSDoc warnings → 0, type shortcuts eliminated | — |
-| TSDoc Compliance | Non-standard tags fixed at source (462 files) | — |
-| Response Tuning | Unified `formatToolResponse()`, type dedup, 94% ES payload reduction | [search-response-tuning.md](../../plans/semantic-search/archive/completed/search-response-tuning.md) |
-| Env Architecture | `resolveEnv` pipeline, conditional Clerk keys, discriminated `RuntimeConfig` | [env-architecture-overhaul.md](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) |
-| MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, integration tests | [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) |
-| OAuth Spec Compliance | All MCP methods require auth, ADR-113, ADR-056 superseded | [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) |
-| AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
-| Spec-Compliant Smoke Test | Full PKCE flow via Clerk FAPI, `pnpm smoke:oauth:spec` passes e2e | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
-| Cursor OAuth Investigation | Root cause: client-side `resource_metadata` URL loss (forum #151331) | [cursor-oauth-investigation-report.md](../../plans/semantic-search/archive/completed/cursor-oauth-investigation-report.md) |
-| Proxy OAuth AS ✅ | Async `createApp`, metadata DI, 3 transparent proxy endpoints, path-qualified PRM, `openid` solved at source, DRY scopes via re-export, sync + passthrough quality-gate tests, ADR-115 written, all gates pass | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md), [archived plan](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md) |
-
----
-
-## Phase 3a — MCP Search Tools
-
-**Plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
-
-### Current Tools
-
-| Tool | Scopes/Purpose | SDK Methods |
-|------|---------------|-------------|
-| `search-sdk` | 5 scopes: lessons, units, threads, sequences, suggest | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
-| `browse-curriculum` | Faceted navigation (no free-text query) | `fetchSequenceFacets` |
-| `explore-topic` | Compound parallel cross-scope discovery | `searchLessons` + `searchUnits` + `searchThreads` in parallel |
-| `search` (old) | REST API lessons + transcripts | `get-search-lessons` + `get-search-transcripts` |
-
-### Key Architecture
-
-- **DI**: `SearchRetrievalService` interface breaks circular dependency.
-  `searchRetrieval` is **required** on `UniversalToolExecutorDependencies`.
-- **Fail-fast**: Servers fail at startup without ES credentials. Stub
-  mode uses `createStubSearchRetrieval()`.
-- **Dispatch**: Const object maps (not switches) for tool/scope dispatch.
-- **`isAggregatedToolName`**: Derives from `AGGREGATED_TOOL_DEFS` via
-  `value in AGGREGATED_TOOL_DEFS` — do NOT revert to a hardcoded list.
-- **Response format**: Unified `formatToolResponse()` — all tools return
-  2-item `content` array (summary + JSON), `structuredContent`, `_meta`.
-- **`ToolAnnotations`/`ToolMeta`**: Derived from `ToolDescriptor`
-  contract via indexed access types (not duplicated).
-- **ES `_source` filtering**: Centralised exclude lists in
-  `source-excludes.ts` (94% payload reduction for lessons).
-
-### What Needs Doing (WS5)
-
-Comparative testing confirms search-sdk is strictly superior.
-WS5 replaces the old search and retires the generated REST wrappers.
-See the plan for detailed implementation steps (5.1-5.5).
-
-### Future: Phase 4 — Search Quality + Ecosystem
-
-| Stream | Focus |
-|--------|-------|
-| GT Expansion | 30 → 80-100 ground truths |
-| Search Quality Levels 2-4 | Document relationships → Modern ES → AI enhancement |
-| SDK API | Filter testing across 17 subjects × 4 key stages |
-| Subject Domain Model | Move subject knowledge to type-gen time |
-
-**Details**: [roadmap.md](../../plans/semantic-search/roadmap.md)
-
----
-
-## CLI Commands (`oaksearch`)
-
-See [apps/oak-search-cli/README.md](../../apps/oak-search-cli/README.md#cli-commands-oaksearch) for the full CLI command reference.
-
----
-
-## Five Workspaces
-
-| Workspace | Location | Purpose |
-|-----------|----------|---------|
-| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen, MCP tool definitions |
-| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (36 tests) |
-| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (935 tests) |
-| **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
-| **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
-
-The Search SDK consumes types from the Oak API SDK.
-The Search CLI consumes the Search SDK.
-Both MCP servers consume the Oak API SDK (tool definitions)
-and optionally the Search SDK (search retrieval).
 
 ---
 
@@ -322,37 +240,39 @@ failure. If a gate fails, the work is not done. Fix it.**
 
 ---
 
+## Completed Work (Reference Only)
+
+All archived plans: `.agent/plans/semantic-search/archive/completed/`
+
+| Work | Key Outcome | Reference |
+|------|------------|-----------|
+| MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, tests | This plan |
+| Proxy OAuth AS | Transparent proxy to Clerk, Cursor works (ADR-115) | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) |
+| OAuth Spec Compliance | All MCP methods require auth (ADR-113) | [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) |
+| Transport Bug Fix | Per-request transport pattern (ADR-112) | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) |
+| SDK Extraction | 16 I/O methods returning `Result<T, E>` | [plan](../../plans/semantic-search/archive/completed/search-sdk-cli.plan.md) |
+| Fail-Fast ES Credentials | Silent degradation removed | [plan](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) |
+| Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` | [plan](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) |
+| Code Quality | TSDoc warnings 0, type shortcuts eliminated | -- |
+
+---
+
 ## Related Documents
 
-### Active (Merge-Blocking)
+### Immediately Relevant to WS5
 
-| Document | Purpose |
-|----------|---------|
-| [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search WS5 — replace old search |
-| [Proxy OAuth AS for Cursor](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md) | ✅ COMPLETE — [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) |
-| [Widget KG tidy-up](../../plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md) | Widget crash fixed, SVGs migrated, docs cleaned (completed) |
-| [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | Type-gen / runtime split |
-| [SDK split meta-plan](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md) | Guide for improving SDK split plan |
-| [Review: docs/scripts/auth](../../plans/semantic-search/archive/completed/review-docs-search-cli-auth-2026-02-20.md) | Housekeeping fixes (completed): scripts, links, health endpoint alignment |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
+| Document | Why |
+|----------|-----|
+| [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | **The plan** -- read WS5 section before starting |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence |
+| [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 
-### Post-Merge
-
-| Document | Purpose |
-|----------|---------|
-| [Result pattern unification](../../plans/semantic-search/post-sdk/mcp-integration/mcp-result-pattern-unification.md) | `ToolExecutionResult` → `Result<T, E>` |
-| [Env overhaul](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) | Env resolution pipeline (completed) |
-
-### Architecture
+### Background Architecture
 
 | Document | Purpose |
 |----------|---------|
 | [ARCHITECTURE.md](/apps/oak-search-cli/docs/ARCHITECTURE.md) | Search pipeline architecture |
-| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and GT process |
-| [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
-| [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
-| [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport |
-| [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) | MCP spec-compliant auth for all methods |
 | [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | SDK Workspace Decomposition |
-| [Plan 03 Phase 0](../../plans/sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md) | Aggregated tools type-gen migration (future) |
-| [GT expansion](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |
+| [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport |
+| [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) | MCP spec-compliant auth |
+| [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) | Proxy OAuth AS for Cursor |
