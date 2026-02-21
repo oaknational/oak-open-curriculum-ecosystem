@@ -1,136 +1,304 @@
-# Meta-Plan: Improve SDK Workspace Separation Plan
+# SDK Workspace Separation Meta Plan: Canonical Findings Log
 
-**Status**: 📋 Pending  
-**Purpose**: Guide the improvement of the rough
-[sdk-workspace-separation.md](sdk-workspace-separation.md)
-into a fully actionable, TDD-compliant plan with concrete
-todos, file lists, and implementation steps.
-
----
-
-## What Exists
-
-Two plan documents cover the SDK workspace separation:
-
-1. **Active (rough)**: [sdk-workspace-separation.md](sdk-workspace-separation.md)
-   — merge-blocking summary with phase outline and
-   acceptance criteria. Needs enrichment.
-
-2. **Detailed (original)**: [pipeline-enhancements/sdk-workspace-separation-plan.md](../../pipeline-enhancements/sdk-workspace-separation-plan.md)
-   — comprehensive plan with goals (G1-G5), 6-phase
-   breakdown, acceptance criteria, validation strategy,
-   risks, and open questions. Needs updating to reflect
-   current codebase state (post-search-SDK, post-env-
-   architecture-overhaul).
+**Status**: Active, revalidated and aligned with plan revision  
+**Date**: 20 February 2026  
+**Repo**: `/Users/jim/code/oak/oak-mcp-ecosystem`  
+**Purpose**: canonical findings log for the SDK generation/runtime workspace split
 
 ---
 
-## Improvement Tasks
+## 1. Severity-Ordered Findings (Repo-Grounded Revalidation)
 
-### 1. Resolve Open Questions
+### Critical
 
-Before detailed planning can proceed:
+#### C1. WS5 prerequisite is still open, so split execution must stay blocked
 
-- [ ] **Generated artifact location**: Should generated files
-  live in the generation workspace (committed) or the
-  runtime workspace (generated on build)? This affects CI
-  and developer workflow.
-- [ ] **Aggregated tool definitions**: `search`, `fetch`,
-  `browse-curriculum`, `explore-topic` are currently
-  hand-written in `src/mcp/`. After WS5 replaces the old
-  `search` tool, the aggregated tool landscape changes.
-  Decide: do aggregated tool configs move to type-gen
-  (declarative definitions → generated code) or stay in
-  runtime (hand-written)?
-- [ ] **Versioning policy**: If the generation package
-  publishes independently, what semver policy applies?
+Evidence:
 
-### 2. Inventory Current State
+- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:65` (`ws5-skip-old-gen`) is `pending`.
+- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:68` (`ws5-promote-search`) is `pending`.
+- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:71` (`ws5-quality-gates`) is `pending`.
 
-The existing inventory in the detailed plan is from Feb 2026
-and predates the search SDK integration. Update:
+Impact:
 
-- [ ] Re-run the import audit: `grep -r` for all imports
-  from `types/generated/` across the runtime codebase
-- [ ] Document new generated artifacts added by search SDK
-  integration (search tool descriptors, Zod schemas for
-  search args, source exclude lists)
-- [ ] Map the env architecture (resolveEnv pipeline,
-  RuntimeConfig) — determine which parts are generation-time
-  vs runtime
-- [ ] Identify any new coupling introduced by WS1-WS4
+- Split work cannot begin without reintroducing moving-target risk.
 
-### 3. Add TDD Structure to Each Phase
+Plan consequence:
 
-The rough plan has phases but no RED/GREEN/REFACTOR
-structure. For each phase:
+- Hard gate (G0) remains mandatory before any split implementation phase.
 
-- [ ] Define what tests to write FIRST (RED)
-- [ ] Define the minimal implementation (GREEN)
-- [ ] Define what to clean up (REFACTOR)
+#### C2. Generation workspace does not yet exist
 
-Particularly important for Phase 3 (boundary enforcement)
-where the ESLint rules are testable, and Phase 4 (runtime
-updates) where existing tests must continue passing.
+Evidence:
 
-### 4. Create Concrete Todo Items
+- `packages/sdks` currently contains only `oak-curriculum-sdk` and
+  `oak-search-sdk`.
+- No `packages/sdks/oak-curriculum-sdk-generation` directory exists.
 
-Convert the rough phase descriptions into frontmatter todos
-with specific, verifiable actions. Each todo should name:
+Impact:
 
-- Exact files to create/move/modify
-- The test that must fail/pass
-- The quality gate to run after
+- Workspace split remains pre-implementation.
 
-### 5. Update the Detailed Plan
+Plan consequence:
 
-Sync the detailed plan in `pipeline-enhancements/` with:
+- Scaffold phase is still required; no tasks may assume pre-existing package
+  infrastructure.
 
-- [ ] Current codebase state (post-search-SDK, post-WS5)
-- [ ] Resolved open questions
-- [ ] Any scope changes discovered during inventory
-- [ ] Updated prerequisite status (MCP search integration
-  status, OAuth compliance status)
+#### C3. Search surface remains unstable across runtime and generated layers
 
-### 6. Cross-Reference Other Plans
+Evidence:
 
-Verify alignment with:
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts:41`
+  includes `search`.
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts:47`
+  includes `search-sdk`.
+- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts:57`
+  includes `get-search-lessons`.
+- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts:58`
+  includes `get-search-transcripts`.
+- No skip filter is present in
+  `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`.
 
-- [ ] [phase-3a-mcp-search-integration.md](phase-3a-mcp-search-integration.md)
-  — WS5 changes the aggregated tool surface
-- [ ] [oauth-spec-compliance.md](oauth-spec-compliance.md)
-  — changes to middleware may affect boundary decisions
-- [ ] [03-mcp-infrastructure-advanced-tools-plan.md](../../sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md)
-  — Phase 0 describes aggregated tools moving to type-gen,
-  which directly intersects with the separation boundary
-- [ ] [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
-  — confirm the plan still aligns with the 4-workspace
-  end state
+Impact:
+
+- Generator/runtime search boundary remains transitional until WS5 is complete.
+
+Plan consequence:
+
+- Keep split gated on WS5 and avoid introducing new tool-boundary assumptions
+  before replacement is complete.
+
+#### C4. All vocab-generated artefacts are still runtime-owned and consumed
+
+Evidence:
+
+- Vocab output root defaults to runtime path:
+  `packages/sdks/oak-curriculum-sdk/vocab-gen/run-vocab-gen.ts:42`
+  (`src/mcp`).
+- Generated filenames include runtime `src/mcp/**` artefacts:
+  - `thread-progression-data.ts`
+  - `prerequisite-graph-data.ts`
+  - `misconception-graph-data.ts`
+  - `vocabulary-graph-data.ts`
+  - `nc-coverage-graph-data.ts`
+  - `synonyms/generated/definition-synonyms.ts`
+- Runtime modules import generated vocab outputs directly:
+  - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts:20`
+  - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prerequisite-graph.ts:20`
+
+Impact:
+
+- Partial movement would violate the preserved decision and leave mixed
+  ownership.
+
+Plan consequence:
+
+- Step 1 must move all vocab-generated artefacts now, with no staged leftovers.
+
+### High
+
+#### H1. One-way boundary is currently violated inside vocab generation code
+
+Evidence:
+
+- `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.ts:59` imports from
+  runtime `src/bulk/reader.js`.
+
+Impact:
+
+- Moving this unchanged would make generation depend on runtime internals.
+
+Plan consequence:
+
+- Boundary correction must be an explicit execution task, not a cleanup item.
+
+#### H2. Runtime E2E tests are coupled to monolithic type-gen internals
+
+Evidence:
+
+- `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/typegen-core.e2e.test.ts:4`
+  imports `../../type-gen/typegen-core`.
+- `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/zodgen.e2e.test.ts:6`
+  imports `../../type-gen/zodgen-core`.
+
+Impact:
+
+- Split will break tests unless migrated.
+
+Plan consequence:
+
+- Test migration is required in the main split phases.
+
+#### H3. Script/config coupling is broad and must be migrated with file moves
+
+Evidence:
+
+- Generation scripts still live in runtime package scripts.
+- Runtime config currently references generation trees across tsconfig, lint,
+  test, and typedoc setup.
+
+Impact:
+
+- File moves alone are insufficient; config rewiring is first-class scope.
+
+Plan consequence:
+
+- Include explicit config/script migration phase and acceptance checks.
+
+#### H4. Scope guard helper is pinned to monolithic paths
+
+Evidence:
+
+- `scripts/check-generator-scope.sh` allowlist entries reference runtime
+  package generation paths.
+
+Impact:
+
+- Scope checker drifts or breaks after split if not updated.
+
+Plan consequence:
+
+- Script update is mandatory in split execution criteria.
+
+#### H5. OAuth plan cross-reference drift was present in split planning
+
+Evidence:
+
+- Active split plan previously referenced a legacy OAuth plan filename while
+  the active file is
+  `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`.
+
+Impact:
+
+- Cross-plan prerequisite checks become unreliable.
+
+Plan consequence:
+
+- All split-plan references now standardised to the active OAuth plan path.
+
+### Medium
+
+#### M1. Generated provenance comments still assume monolithic path ownership
+
+Evidence:
+
+- MCP generator template headers and widget constants comments currently encode
+  monolithic path assumptions.
+
+Impact:
+
+- Post-split generated comments will mislead maintainers unless updated.
+
+Plan consequence:
+
+- Template comment updates are part of split documentation work.
+
+#### M2. Baseline import metrics are query-sensitive
+
+Evidence:
+
+- Prior import-count statements used non-locked query scopes and are not
+  reproducible across command variants.
+
+Impact:
+
+- Progress/regression measurement can drift.
+
+Plan consequence:
+
+- Main plan now includes method-locked baseline commands.
 
 ---
 
-## Sequencing
+## 2. Preserved Decisions (Authoritative)
 
-This meta-plan should be executed **after WS5 completes**
-(since WS5 changes the aggregated tool landscape) and
-**before the separation work begins**. OAuth compliance
-can run in parallel.
+1. **Move all vocab-generated artefacts now.**
+   - No phased, partial, or temporary runtime ownership.
 
-Recommended order:
-
-1. Complete WS5 (old search replaced)
-2. Complete OAuth compliance (can overlap with #3)
-3. Execute this meta-plan (improve the SDK split plan)
-4. Execute the improved SDK split plan
+2. **Block split execution until WS5 is complete.**
+   - `ws5-skip-old-gen`, `ws5-promote-search`, and `ws5-quality-gates` must be
+     complete before split implementation begins.
 
 ---
 
-## Acceptance Criteria
+## 3. Revalidation Snapshot (20 February 2026)
 
-This meta-plan is complete when:
+### Key measured baselines
 
-1. All open questions have documented decisions
-2. The active plan has concrete todos with file-level detail
-3. The detailed plan is synced with current codebase state
-4. TDD structure is defined for each phase
-5. Cross-references are verified and up to date
+- `packages/sdks/oak-curriculum-sdk/type-gen`: **192 files**
+- `packages/sdks/oak-curriculum-sdk/src`: **310 files**
+- `packages/sdks/oak-curriculum-sdk/src/types/generated`: **110 files**
+- Non-test runtime source files importing local generated paths:
+  **58 files**
+
+### Revalidation command set
+
+```bash
+ls -1 packages/sdks
+
+rg -n "ws5-skip-old-gen|ws5-promote-search|ws5-quality-gates" \
+  .agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md
+
+rg -n "search-sdk|search" \
+  packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts
+
+rg -n "get-search-lessons|get-search-transcripts" \
+  packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts
+
+rg -n "SKIPPED_PATHS|skip|exclude" \
+  packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts
+
+rg -n "\.\./\.\./src/bulk/reader" \
+  packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.ts
+
+rg -n "typegen-core|zodgen-core|\.\./\.\./type-gen" \
+  packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/typegen-core.e2e.test.ts \
+  packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/zodgen.e2e.test.ts
+
+find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l
+find packages/sdks/oak-curriculum-sdk/src -type f | wc -l
+find packages/sdks/oak-curriculum-sdk/src/types/generated -type f | wc -l
+
+rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
+  packages/sdks/oak-curriculum-sdk/src \
+  --glob '!**/types/generated/**' \
+  --glob '!**/*.test.ts' | wc -l
+```
+
+---
+
+## 4. Required Plan Outcomes (Applied in this Revision)
+
+The companion execution plan
+`.agent/plans/semantic-search/active/sdk-workspace-separation.md` now includes:
+
+1. WS5 hard gate as Phase 0 blocker.
+2. Explicit movement of all vocab-generated artefacts now.
+3. Explicit boundary fix for `vocab-gen/lib/index.ts` reverse import.
+4. Explicit migration of E2E tests coupled to `type-gen/*` internals.
+5. Explicit migration tasks for scripts/config and scope guard script.
+6. Generated provenance/TSDoc/docs update phase.
+7. Method-locked baseline commands and mandatory acceptance criteria.
+8. Correct OAuth plan path references.
+
+---
+
+## 5. Coverage Summary
+
+Reviewed areas for this meta-plan update include:
+
+- planning docs in `.agent/plans/semantic-search/active/`
+- runtime SDK generation/runtime boundaries in
+  `packages/sdks/oak-curriculum-sdk/`
+- generator and vocab pipelines in
+  `packages/sdks/oak-curriculum-sdk/type-gen/` and
+  `packages/sdks/oak-curriculum-sdk/vocab-gen/`
+- supporting guard scripts in `scripts/`
+
+---
+
+## 6. Current State Conclusion
+
+The repository remains in a pre-split, WS5-blocked state. The updated execution
+plan is now decision-complete for Step 1 and aligned with current evidence.
+No assumptions from prior sessions were carried forward without revalidation.

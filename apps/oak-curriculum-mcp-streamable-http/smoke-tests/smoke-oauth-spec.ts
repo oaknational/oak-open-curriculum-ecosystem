@@ -64,9 +64,9 @@ function loadEnvironmentFromRepoRoot(): EnvLoadResult {
 
 function requireClerkCredentials(): void {
   if (!process.env.CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
-    console.error('CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY must be set.');
-    console.error('Add them to .env at the repo root.\n');
-    process.exit(1);
+    throw new Error(
+      'CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY must be set. Add them to .env at the repo root.',
+    );
   }
 }
 
@@ -91,10 +91,9 @@ async function waitForServer(baseUrl: string, maxAttempts = 15): Promise<boolean
 
 async function requireDevServer(baseUrl: string): Promise<void> {
   if (!(await waitForServer(baseUrl))) {
-    console.error(`Dev server not responding at ${baseUrl}`);
-    console.error('\nStart the dev server first:');
-    console.error('  pnpm -F \\@oaknational/oak-curriculum-mcp-streamable-http dev\n');
-    process.exit(1);
+    throw new Error(
+      `Dev server not responding at ${baseUrl}. Start it first: pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev`,
+    );
   }
 }
 
@@ -135,5 +134,5 @@ async function main(): Promise<void> {
 
 main().catch((err: unknown) => {
   console.error('\nSpec-compliant OAuth validation FAILED:', err);
-  process.exit(1);
+  process.exitCode = 1;
 });

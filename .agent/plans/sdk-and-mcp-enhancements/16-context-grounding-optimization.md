@@ -1,6 +1,6 @@
 # Context Grounding Optimization Plan
 
-> **Goal**: Ensure AI agents understand they should call `get-ontology`, `get-help` (and future `get-knowledge-graph`) to properly use Oak curriculum tools.
+> **Goal**: Ensure AI agents understand they should call `get-ontology` and `get-help` to properly use Oak curriculum tools.
 
 **Status**: Draft  
 **Created**: December 2025  
@@ -406,14 +406,12 @@ pnpm smoke:dev:stub
 
 ## 9. Future Considerations
 
-### `get-knowledge-graph` Integration
+### Ontology Concept-Graph Integration
 
-When `get-knowledge-graph` is implemented, add it to:
-
-1. `OAK_CONTEXT_HINT` constant
-2. `CURRICULUM_CONTEXT_HINT` constant
-3. Widget description
-4. Tool prerequisite guidance
+The standalone `get-knowledge-graph` tool has been removed and its concept
+relationship data merged into `get-ontology`. Any context guidance should
+continue to reference ontology as the canonical source for structure and
+relationships.
 
 ### Token Optimization (Separate Concern)
 

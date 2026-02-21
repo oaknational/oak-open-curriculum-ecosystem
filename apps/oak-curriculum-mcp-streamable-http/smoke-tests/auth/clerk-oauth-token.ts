@@ -270,6 +270,8 @@ export async function exchangeAuthorizationCode(
  * 8. Exchange authorization code for access token
  *
  * All ephemeral resources are cleaned up via the returned `cleanup` function.
+ * If the flow fails after creating resources, cleanup runs automatically
+ * before the error propagates.
  */
 export async function createClerkOAuthAccessToken(): Promise<ClerkOAuthAccess> {
   const secretKey = process.env.CLERK_SECRET_KEY;
@@ -291,40 +293,49 @@ export async function createClerkOAuthAccessToken(): Promise<ClerkOAuthAccess> {
     skipPasswordRequirement: true,
   });
 
-  const testingToken = await clerk.testingTokens.createTestingToken();
-
-  const redirectUri = 'https://mcp-smoke.oaknational.dev/oauth/callback';
-  const app = await createOAuthApplication(clerk, redirectUri);
-
-  const fapiBaseUrl = new URL(app.authorizeUrl).origin;
-
-  const signInToken = await clerk.signInTokens.createSignInToken({
-    userId: user.id,
-  });
-
-  const devBrowserJwt = await createDevBrowser(fapiBaseUrl, testingToken.token);
-  await signInWithTicket(fapiBaseUrl, devBrowserJwt, testingToken.token, signInToken.token);
+  const createdResourceIds: { userId: string; appId?: string } = { userId: user.id };
 
   const cleanupResources = async (): Promise<void> => {
-    await Promise.allSettled([
-      clerk.users.deleteUser(user.id),
-      clerk.oauthApplications.delete(app.id),
-    ]);
+    const deletions: Promise<unknown>[] = [clerk.users.deleteUser(createdResourceIds.userId)];
+    if (createdResourceIds.appId) {
+      deletions.push(clerk.oauthApplications.delete(createdResourceIds.appId));
+    }
+    await Promise.allSettled(deletions);
   };
 
-  const { verifier, challenge } = createPkcePair();
-  const state = toBase64Url(randomBytes(16));
+  try {
+    const testingToken = await clerk.testingTokens.createTestingToken();
 
-  const code = await requestAuthorizationCode(
-    app,
-    devBrowserJwt,
-    testingToken.token,
-    redirectUri,
-    challenge,
-    state,
-  );
+    const redirectUri = 'https://mcp-smoke.oaknational.dev/oauth/callback';
+    const app = await createOAuthApplication(clerk, redirectUri);
+    createdResourceIds.appId = app.id;
 
-  const accessToken = await exchangeAuthorizationCode(app, code, verifier, redirectUri);
+    const fapiBaseUrl = new URL(app.authorizeUrl).origin;
 
-  return { accessToken, cleanup: cleanupResources };
+    const signInToken = await clerk.signInTokens.createSignInToken({
+      userId: user.id,
+    });
+
+    const devBrowserJwt = await createDevBrowser(fapiBaseUrl, testingToken.token);
+    await signInWithTicket(fapiBaseUrl, devBrowserJwt, testingToken.token, signInToken.token);
+
+    const { verifier, challenge } = createPkcePair();
+    const state = toBase64Url(randomBytes(16));
+
+    const code = await requestAuthorizationCode(
+      app,
+      devBrowserJwt,
+      testingToken.token,
+      redirectUri,
+      challenge,
+      state,
+    );
+
+    const accessToken = await exchangeAuthorizationCode(app, code, verifier, redirectUri);
+
+    return { accessToken, cleanup: cleanupResources };
+  } catch (error) {
+    await cleanupResources();
+    throw error;
+  }
 }

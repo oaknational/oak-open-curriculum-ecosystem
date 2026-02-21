@@ -1,10 +1,10 @@
 ---
 name: Ontology / Knowledge Graph Widget Tidy-Up
 overview: >
-  Widget crash fixed and KG SVGs migrated to ontology renderer. All 26
-  UI tests pass. The only remaining todo is updating stale documentation
-  references (README, agent prompts) that still mention the removed
-  `get-knowledge-graph` tool.
+  COMPLETE: Widget crash fixed, KG SVGs migrated to ontology renderer,
+  preview cleaned, and stale active documentation references resolved.
+  All 26 UI tests pass. Remaining mentions of `get-knowledge-graph`
+  are in archival/historical documents only.
 todos:
   - id: fix-widget-crash
     content: >
@@ -27,13 +27,11 @@ todos:
     status: completed
   - id: update-docs
     content: >
-      Remaining: (1) `README.md` line 1071: update CTA description from
-      "`get-ontology`, `get-knowledge-graph`, and `get-help`" to
-      "`get-ontology` and `get-help`". (2) `.agent/prompts/
-      learn-about-oak-cta.prompt.md`: this entire prompt is stale —
-      either delete or rewrite. (3) Check for any other references to
-      `get-knowledge-graph` or `knowledgeGraph` across the codebase.
-    status: pending
+      DONE: Active docs verified. No stale `get-knowledge-graph` references
+      remain in `README.md` or active prompts. The previously referenced
+      `.agent/prompts/learn-about-oak-cta.prompt.md` file does not exist;
+      related references are in archive/historical materials only.
+    status: completed
   - id: quality-gates
     content: >
       DONE: Full quality gate chain passes — type-gen, build,

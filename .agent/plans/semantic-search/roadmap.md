@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
-**Last Updated**: 2026-02-19  
+**Last Updated**: 2026-02-20  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -74,7 +74,7 @@ Phase 2h: Code Quality Remediation                     ✅ COMPLETE
 Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
   ├── 3a. Search tool wiring — WS5 replace old search   (merge-blocking)
   ├── 3d. OAuth spec compliance — 401 on initial req     ✅ COMPLETE (ADR-113)
-  ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   (merge-blocking)
+  ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   ✅ COMPLETE
   ├── 3e. SDK workspace separation — type-gen/runtime    (merge-blocking)
   └── 3b. Result pattern unification                     (post-merge)
          ↓
@@ -323,21 +323,21 @@ runnable).
 | Run spec smoke against live dev server | 📋 Pending |
 | Cursor-specific investigation | 📋 Pending (after spec path validated) |
 
-### 3d'. Widget Knowledge Graph Tidy-Up (merge-blocking)
+### 3d'. Widget Knowledge Graph Tidy-Up ✅ Complete
 
-**Active plan**: [ontology-knowledge-graph-tidy-up.md](active/ontology-knowledge-graph-tidy-up.md)
+**Plan**: [ontology-knowledge-graph-tidy-up.md](active/ontology-knowledge-graph-tidy-up.md)
 
 The `get-knowledge-graph` tool was removed and its data
 merged into `get-ontology`. A dangling renderer reference
-crashes all widget rendering, causing 19 UI test failures.
+previously crashed all widget rendering. This remediation is now complete.
 
 | Task | Status |
 |------|--------|
-| Fix widget crash (remove dead knowledgeGraph reference) | 📋 Pending |
-| Migrate knowledge graph SVGs to ontology renderer | 📋 Pending |
-| Clean up widget-preview.html | 📋 Pending |
-| Update documentation (README, agent prompts) | 📋 Pending |
-| Full quality gate chain | 📋 Pending |
+| Fix widget crash (remove dead knowledgeGraph reference) | ✅ Complete |
+| Migrate knowledge graph SVGs to ontology renderer | ✅ Complete |
+| Clean up widget-preview.html | ✅ Complete |
+| Update documentation (README, agent prompts) | ✅ Complete |
+| Full quality gate chain | ✅ Complete |
 
 ### 3e. SDK Workspace Separation (merge-blocking)
 

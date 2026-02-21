@@ -39,31 +39,53 @@ async function prepare(): Promise<void> {
   const { secretKey, publishableKey } = requireClerkKeys(process.env);
   const clerk = createClerkClient({ secretKey, publishableKey });
 
-  const user = await createAutomationUser(clerk);
-  // Use environment variable for callback URI, or default to localhost for testing
-  // Note: The callback URL doesn't need to exist - we just capture the redirect parameters
-  const redirectUri = process.env.OAUTH_CALLBACK_URI || 'http://localhost:3333/oauth/callback';
-  const oauthApp = await createAutomationOAuthApp(clerk, redirectUri);
-  const pkce = createPkcePair();
-  const state = toBase64Url(randomBytes(16));
-  const authorizeRequestUrl = buildAuthorizeRequestUrl(
-    oauthApp,
-    redirectUri,
-    pkce.challenge,
-    state,
-  );
+  const createdResourceIds: { userId?: string; appId?: string } = {};
 
-  const snapshot = buildHandshakeSnapshot(
-    user,
-    oauthApp,
-    pkce,
-    state,
-    authorizeRequestUrl,
-    redirectUri,
-  );
-  persistSnapshot(snapshot, resolve('.tmp/clerk-handshake.json'));
+  const cleanupOnFailure = async (): Promise<void> => {
+    const deletions: Promise<unknown>[] = [];
+    if (createdResourceIds.userId) {
+      deletions.push(clerk.users.deleteUser(createdResourceIds.userId));
+    }
+    if (createdResourceIds.appId) {
+      deletions.push(clerk.oauthApplications.delete(createdResourceIds.appId));
+    }
+    if (deletions.length > 0) {
+      await Promise.allSettled(deletions);
+    }
+  };
 
-  console.log('Saved Clerk browser handshake snapshot to .tmp/clerk-handshake.json');
+  try {
+    const user = await createAutomationUser(clerk);
+    createdResourceIds.userId = user.userId;
+
+    const redirectUri = process.env.OAUTH_CALLBACK_URI || 'http://localhost:3333/oauth/callback';
+    const oauthApp = await createAutomationOAuthApp(clerk, redirectUri);
+    createdResourceIds.appId = oauthApp.id;
+
+    const pkce = createPkcePair();
+    const state = toBase64Url(randomBytes(16));
+    const authorizeRequestUrl = buildAuthorizeRequestUrl(
+      oauthApp,
+      redirectUri,
+      pkce.challenge,
+      state,
+    );
+
+    const snapshot = buildHandshakeSnapshot(
+      user,
+      oauthApp,
+      pkce,
+      state,
+      authorizeRequestUrl,
+      redirectUri,
+    );
+    persistSnapshot(snapshot, resolve('.tmp/clerk-handshake.json'));
+
+    console.log('Saved Clerk browser handshake snapshot to .tmp/clerk-handshake.json');
+  } catch (error) {
+    await cleanupOnFailure();
+    throw error;
+  }
 }
 
 prepare().catch((error: unknown) => {
