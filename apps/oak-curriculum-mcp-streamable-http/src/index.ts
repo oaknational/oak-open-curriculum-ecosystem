@@ -15,8 +15,8 @@ if (!result.ok) {
 }
 
 const config = result.value;
-const app = createApp({ runtimeConfig: config });
 const bootstrapLog = createHttpLogger(config, { name: 'streamable-http:bootstrap' });
+const app = await createApp({ runtimeConfig: config });
 
 const port = config.env.PORT ? Number(config.env.PORT) : 3333;
 bootstrapLog.debug(`Running locally, starting server on port ${String(port)}`);

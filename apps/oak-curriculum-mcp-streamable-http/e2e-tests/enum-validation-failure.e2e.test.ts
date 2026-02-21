@@ -46,7 +46,7 @@ function makeInvalidEnumBody() {
 async function post(body: Record<string, unknown>) {
   // Disable auth – this suite exercises validation errors only.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  const app = createApp({
+  const app = await createApp({
     runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);

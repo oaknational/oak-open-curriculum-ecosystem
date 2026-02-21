@@ -1,6 +1,5 @@
 import type { Express } from 'express';
 import { clerkMiddleware } from '@clerk/express';
-import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
@@ -12,6 +11,7 @@ import { createMcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 import type { McpServerFactory } from './mcp-request-context.js';
+import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
@@ -29,83 +29,60 @@ function registerUnauthenticatedRoutes(
 }
 
 /**
- * Derives RFC 8414 Authorization Server metadata locally from the Clerk
- * publishable key. No runtime network call -- mirrors the PRM approach.
- *
- * Provides backward compatibility for MCP clients (e.g. Cursor v2.5.17)
- * implementing the older spec (2025-03-26) that fetches AS metadata from
- * the resource server rather than directly from the authorization server.
+ * Returns true if the host string represents a loopback address.
+ * Handles `localhost`, `127.0.0.1`, and IPv6 `[::1]` with optional port.
  */
-function deriveAuthServerMetadata(publishableKey: string): {
-  issuer: string;
-  authorization_endpoint: string;
-  token_endpoint: string;
-  registration_endpoint: string;
-  revocation_endpoint: string;
-  introspection_endpoint: string;
-  userinfo_endpoint: string;
-  jwks_uri: string;
-  response_types_supported: string[];
-  grant_types_supported: string[];
-  code_challenge_methods_supported: string[];
-} {
-  const prmMetadata = generateClerkProtectedResourceMetadata({ publishableKey, resourceUrl: '' });
-  const authServerUrl = prmMetadata.authorization_servers[0];
-  if (!authServerUrl) {
-    throw new Error('Could not derive authorization server URL from publishable key');
+function isLoopbackHost(host: string): boolean {
+  if (host.startsWith('[')) {
+    return host.startsWith('[::1]');
   }
-  return {
-    issuer: authServerUrl,
-    authorization_endpoint: `${authServerUrl}/oauth/authorize`,
-    token_endpoint: `${authServerUrl}/oauth/token`,
-    registration_endpoint: `${authServerUrl}/oauth/register`,
-    revocation_endpoint: `${authServerUrl}/oauth/token/revoke`,
-    introspection_endpoint: `${authServerUrl}/oauth/token_info`,
-    userinfo_endpoint: `${authServerUrl}/oauth/userinfo`,
-    jwks_uri: `${authServerUrl}/.well-known/jwks.json`,
-    response_types_supported: ['code'],
-    grant_types_supported: ['authorization_code', 'refresh_token'],
-    code_challenge_methods_supported: ['S256'],
-  };
+  const colonIdx = host.indexOf(':');
+  const hostname = colonIdx >= 0 ? host.substring(0, colonIdx) : host;
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+/**
+ * Derives the self-origin from a request's Host header.
+ * Uses `http` for loopback addresses, `https` for everything else.
+ */
+function deriveSelfOrigin(req: { get(name: string): string | undefined }): string {
+  const host = req.get('host');
+  if (!host) {
+    throw new Error('Cannot generate OAuth metadata: missing host header');
+  }
+  const protocol = isLoopbackHost(host) ? 'http' : 'https';
+  return `${protocol}://${host}`;
 }
 
 /**
  * Registers PUBLIC OAuth metadata endpoints BEFORE clerkMiddleware.
  * Publicly accessible without authentication per RFC 9728.
+ *
+ * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
+ *   injected by the caller. Endpoint URLs are rewritten per-request to
+ *   point to this server's origin; capability fields are passed through.
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
   runtimeConfig: RuntimeConfig,
+  upstreamMetadata: UpstreamAuthServerMetadata,
   log: Logger,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
   app.get('/.well-known/oauth-protected-resource', (req, res) => {
-    const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
-    if (!publishableKey) {
-      throw new Error('CLERK_PUBLISHABLE_KEY environment variable is required');
-    }
-    const host = req.get('host');
-    if (!host) {
-      throw new Error('Cannot generate OAuth metadata: missing host header');
-    }
-    const protocol = host.startsWith('localhost:') || host === 'localhost' ? 'http' : 'https';
-    const resourceUrl = `${protocol}://${host}/mcp`;
-    const metadata = generateClerkProtectedResourceMetadata({
-      publishableKey,
-      resourceUrl,
-      properties: { scopes_supported: [...SCOPES_SUPPORTED] },
+    const selfOrigin = deriveSelfOrigin(req);
+    res.json({
+      resource: `${selfOrigin}/mcp`,
+      authorization_servers: [selfOrigin],
+      scopes_supported: [...SCOPES_SUPPORTED],
     });
-    res.json(metadata);
   });
 
-  app.get('/.well-known/oauth-authorization-server', (_req, res) => {
-    const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
-    if (!publishableKey) {
-      throw new Error('CLERK_PUBLISHABLE_KEY is required for AS metadata');
-    }
-    res.json(deriveAuthServerMetadata(publishableKey));
+  app.get('/.well-known/oauth-authorization-server', (req, res) => {
+    const selfOrigin = deriveSelfOrigin(req);
+    res.json(rewriteAuthServerMetadata(upstreamMetadata, selfOrigin));
   });
 
   if (runtimeConfig.useStubTools) {
@@ -165,7 +142,7 @@ export function setupGlobalAuthContext(
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 
   // Wrap with conditional middleware to skip Clerk for non-MCP paths
-  // (/.well-known/*, /health, /ready) and public resource reads
+  // (/.well-known/*, /healthz) and public resource reads
   const conditionalClerkMw = measureAuthSetupStep(
     authLog,
     'conditionalClerkMiddleware.create',
@@ -174,7 +151,7 @@ export function setupGlobalAuthContext(
 
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
     // Apply conditional clerkMiddleware globally to all routes.
-    // Non-MCP paths (/.well-known/*, /health, /ready) and public resource
+    // Non-MCP paths (/.well-known/*, /healthz) and public resource
     // reads skip Clerk. All MCP methods get full Clerk auth context.
     // Actual enforcement happens via createMcpAuthClerk on /mcp routes.
     authLog.info('Installing conditional Clerk middleware globally (all routes)');

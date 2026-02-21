@@ -38,7 +38,7 @@ const ResourcesReadResultSchema = z.object({
 
 /** Reads a resource and returns its text content */
 async function readResource(uri: string): Promise<string> {
-  const { app } = createStubbedHttpApp();
+  const { app } = await createStubbedHttpApp();
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
@@ -52,7 +52,7 @@ async function readResource(uri: string): Promise<string> {
 describe('Documentation Resources E2E', () => {
   describe('resources/list - Client can discover documentation', () => {
     it('returns getting-started documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -78,7 +78,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('returns tools reference documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -101,7 +101,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('returns workflows documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -126,7 +126,7 @@ describe('Documentation Resources E2E', () => {
 
   describe('resources/read - Client can read helpful content', () => {
     it('getting-started explains how to authenticate', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -153,7 +153,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('getting-started explains how to start using tools', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -176,7 +176,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('tools reference explains tool categories', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -199,7 +199,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('tools reference explains when to use each category', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -252,7 +252,7 @@ describe('Documentation Resources E2E', () => {
 describe('Ontology Resource E2E', () => {
   describe('resources/list - Client can discover ontology', () => {
     it('returns curriculum://ontology resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -280,7 +280,7 @@ describe('Ontology Resource E2E', () => {
 
   describe('resources/read - Client can read ontology', () => {
     it('curriculum://ontology returns valid JSON', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -309,7 +309,7 @@ describe('Ontology Resource E2E', () => {
     });
 
     it('curriculum://ontology includes curriculum structure', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -335,7 +335,7 @@ describe('Ontology Resource E2E', () => {
     });
 
     it('curriculum://ontology includes workflows', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')

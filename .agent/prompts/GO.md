@@ -35,14 +35,7 @@ strategy, schema-first execution).
   This consists of:
   1. Stepping back and reflecting on the action
   2. Checking alignment with the plan and rules
-  3. **Invoking the appropriate sub-agent(s)** for targeted review:
-     - Code changes -> `code-reviewer`
-     - Structural changes -> `architecture-reviewer`
-     - Test changes -> `test-reviewer`
-     - Type complexity -> `type-reviewer`
-     - Config changes -> `config-reviewer`
-     - **Cursor-specific**: Use Task tool with `readonly: true`,
-       `subagent_type: "[agent-name]"`
+     3. **Invoking the appropriate sub-agent(s)** per the `invoke-code-reviewers` rule (full matrix, timing, triage, and examples)
 - Make sure your todo list includes running the quality gates. These
   items should be prefixed with `QUALITY-GATE:` and happen reasonably
   often.

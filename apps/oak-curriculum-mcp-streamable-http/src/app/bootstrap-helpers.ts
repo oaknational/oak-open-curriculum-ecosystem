@@ -17,7 +17,9 @@ export type BootstrapPhaseName =
   | 'createCorsMiddleware'
   | 'createDnsRebindingMiddleware'
   | 'createSecurityHeaders'
+  | 'fetchUpstreamMetadata'
   | 'registerPublicOAuthMetadata'
+  | 'registerOAuthProxy'
   | 'addNoCacheToErrors'
   | 'setupGlobalAuthContext'
   | 'initializeCoreEndpoints'
@@ -51,6 +53,46 @@ export function runBootstrapPhase<T>(
 
   try {
     const result = operation();
+    const durationResult = phaseHandle.end();
+    log.info('bootstrap.phase.finish', {
+      ...context,
+      duration: durationResult.duration.formatted,
+      durationMs: durationResult.duration.ms,
+    });
+    return result;
+  } catch (error: unknown) {
+    const durationResult = phaseHandle.end();
+    const errorAsError =
+      error instanceof Error
+        ? error
+        : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
+    log.error('bootstrap.phase.error', errorAsError, {
+      ...context,
+      duration: durationResult.duration.formatted,
+      durationMs: durationResult.duration.ms,
+    });
+    throw error;
+  }
+}
+
+/**
+ * Executes an async bootstrap phase with instrumentation logging.
+ * Unlike {@link runBootstrapPhase}, this awaits the operation so phase
+ * timing reflects the full async duration (e.g. a network fetch).
+ */
+export async function runAsyncBootstrapPhase<T>(
+  log: Logger,
+  timer: PhasedTimer,
+  phase: BootstrapPhaseName,
+  appId: number,
+  operation: () => Promise<T>,
+): Promise<T> {
+  const context: BootstrapPhaseContext = { appId, phase };
+  log.debug('bootstrap.phase.start', context);
+  const phaseHandle = timer.startPhase(phase);
+
+  try {
+    const result = await operation();
     const durationResult = phaseHandle.end();
     log.info('bootstrap.phase.finish', {
       ...context,

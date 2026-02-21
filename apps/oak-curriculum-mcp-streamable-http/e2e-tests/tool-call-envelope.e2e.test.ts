@@ -59,7 +59,7 @@ describe('Tool response envelope formatting', () => {
       },
     };
 
-    const app = createApp({
+    const app = await createApp({
       toolHandlerOverrides: overrides,
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });

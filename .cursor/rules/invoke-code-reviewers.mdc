@@ -1,15 +1,27 @@
 ---
-description: After significant code changes, invoke the multi-model code reviewer ensemble for diverse perspectives. Use when completing features, fixing bugs, refactoring, or making architectural changes.
-globs: **/*.ts,**/*.tsx,**/*.*ts
+description: After non-trivial changes, invoke the required specialist reviewers (not just code-reviewer) and capture findings explicitly. This is the single source of truth for sub-agent invocation guidance.
+alwaysApply: true
 ---
 
-# Invoke Multi-Model Code Reviewers
+# Invoke Specialist Reviewers
 
-After significant code changes, invoke multiple code reviewer sub-agents for diverse perspectives. The value comes from the **multiplicity of approaches** — different models catch different issues. Invoke with the `/jc-review-ensemble` command @.cursor/commands/jc-review-ensemble.md
+After non-trivial changes, invoke `code-reviewer` plus all specialist reviewers required by the change profile.
+
+## Quick Triage (First 2 Minutes)
+
+Before starting any non-trivial task, answer these five questions to identify which specialists you will need:
+
+1. Does this touch auth, secrets, PII, or OAuth? → `security-reviewer`
+2. Does this change module boundaries, imports, or public APIs? → architecture reviewer(s)
+3. Does this add or modify tests? → `test-reviewer`
+4. Does this change types, generics, or schema flow? → `type-reviewer`
+5. Does this change tooling configs or quality gates? → `config-reviewer`
+
+Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
 ## When to Invoke
 
-Significant changes include:
+Non-trivial changes include:
 
 - Completing a feature or user story
 - Fixing a non-trivial bug
@@ -18,33 +30,50 @@ Significant changes include:
 - Changes touching multiple files
 - Architectural modifications
 
-Minor changes (typo fixes, comment updates, formatting) do not require full ensemble review.
+Minor changes (single typo/comment-only edits with no behaviour impact) may use lighter review, but still require explicit rationale.
 
-## The Ensemble
+## Timing Tiers
 
-Invoke **all 4 reviewers** from the general family sequentially for diverse perspectives:
+| Tier | When | What to invoke |
+|------|------|----------------|
+| Immediately after change | After each non-trivial code change | `code-reviewer` plus all specialists matching the change profile |
+| Before merge | Before the branch merges | Any applicable specialists not yet invoked during implementation |
+| Situational trigger | When the specific context arises | On-demand agents (see below) — not tied to every change |
 
-| Agent | Model | Invoke via Task tool |
-|-------|-------|---------------------|
-| `code-reviewer-general-composer` | Composer 1 | `subagent_type: "code-reviewer-general-composer"` |
-| `code-reviewer-general-gemini-pro` | Gemini 3 Pro | `subagent_type: "code-reviewer-general-gemini-pro"` |
-| `code-reviewer-general-sonnet` | Sonnet 4.5 Thinking | `subagent_type: "code-reviewer-general-sonnet"` |
-| `code-reviewer-general-codex` | GPT-5.2 Codex | `subagent_type: "code-reviewer-general-codex"` |
+## Required Reviewer Matrix
 
-Use the `/jc-review-ensemble` command to invoke all 4 sequentially with a single action.
+Always invoke:
 
-For security-sensitive changes, also invoke:
+- `code-reviewer` (gateway — also responsible for flagging when specialists are missing)
 
-| Agent | Model |
-|-------|-------|
-| `code-reviewer-security-codex` | GPT-5.2 Codex |
-| `code-reviewer-security-opus` | Opus 4.5 |
+Invoke additional specialists when applicable:
 
-For architectural changes (new workspaces, cross-boundary imports, structural refactoring), invoke the specialist:
+| Change Category | Required Specialist(s) |
+|----------------|------------------------|
+| Structural/boundary changes | `architecture-reviewer-barney` and/or `architecture-reviewer-fred` and/or `architecture-reviewer-betty` and/or `architecture-reviewer-wilma` |
+| Test changes or TDD concerns | `test-reviewer` |
+| Type-system complexity or assertion pressure | `type-reviewer` |
+| Tooling/config quality-gate changes | `config-reviewer` |
+| Auth/authz, OAuth, secrets, PII, injection, security-sensitive logic | `security-reviewer` |
+| README/TSDoc/ADR/docs updates or expected documentation drift | `docs-adr-reviewer` |
 
-| Agent | Focus |
-|-------|-------|
-| `architecture-reviewer` | Workspace boundaries, import direction, ADR compliance |
+Specialist on-demand (not standard roster — situational trigger only):
+
+- `release-readiness-reviewer` for release go/no-go checks at release boundaries
+- `ground-truth-designer` for semantic-search ground-truth design/review work
+- `subagent-architect` for sub-agent definition design/migration work
+
+## Worked Examples
+
+**Auth/OAuth/secrets change**: Invoke `code-reviewer` + `security-reviewer` immediately. If the change is also structural (new middleware, route reorganisation), add the relevant architecture reviewer(s).
+
+**Architecture refactor**: Invoke `code-reviewer` + relevant architecture reviewer(s) immediately. Add `type-reviewer` if generics or schema flow are affected. Add `docs-adr-reviewer` if boundaries or ADRs change.
+
+**Test-only change**: Invoke `code-reviewer` + `test-reviewer` immediately.
+
+**Docs/ADR update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately.
+
+**Release go/no-go**: Invoke `release-readiness-reviewer` (on-demand, situational trigger).
 
 ## Invocation Pattern
 
@@ -52,18 +81,62 @@ Use the Task tool with `readonly: true`:
 
 ```yaml
 Task tool:
-  subagent_type: "code-reviewer-general-gemini-pro"
+  subagent_type: "code-reviewer"
   readonly: true
   prompt: "Review the recent changes for quality, security, and maintainability."
 ```
 
-Invoke reviewers sequentially to avoid rate limits.
+```yaml
+Task tool:
+  subagent_type: "architecture-reviewer-barney"
+  readonly: true
+  prompt: "Review structural/boundary changes and dependency-direction risks."
+```
 
-## Synthesise Findings
+```yaml
+Task tool:
+  subagent_type: "security-reviewer"
+  readonly: true
+  prompt: "Review changes for auth/authz issues, OAuth risks, secret handling, PII exposure, and injection vulnerabilities."
+```
 
-After receiving feedback from multiple reviewers:
+```yaml
+Task tool:
+  subagent_type: "docs-adr-reviewer"
+  readonly: true
+  prompt: "Review README/TSDoc/ADR completeness and detect documentation drift against code changes."
+```
 
-1. Identify common themes (issues flagged by multiple models)
-2. Note unique insights (issues only one model caught)
-3. Prioritise by severity (Critical > Important > Suggestions)
-4. Present consolidated findings to user
+```yaml
+Task tool:
+  subagent_type: "release-readiness-reviewer"
+  readonly: true
+  prompt: "Assess release go/no-go readiness with explicit gate status, blockers, and residual risks."
+```
+
+```yaml
+Task tool:
+  subagent_type: "test-reviewer"
+  readonly: true
+  prompt: "Review test quality, TDD compliance, and mock simplicity for changed tests."
+```
+
+```yaml
+Task tool:
+  subagent_type: "type-reviewer"
+  readonly: true
+  prompt: "Review type-safety risks, assertion pressure, and schema-to-type flow correctness."
+```
+
+```yaml
+Task tool:
+  subagent_type: "config-reviewer"
+  readonly: true
+  prompt: "Review tooling/config consistency and quality-gate alignment."
+```
+
+## Reporting Requirement
+
+- Report which required specialists were invoked.
+- For any not invoked, explicitly state `N/A` with justification.
+- Do not claim "comprehensive review" if required specialists were skipped without rationale.

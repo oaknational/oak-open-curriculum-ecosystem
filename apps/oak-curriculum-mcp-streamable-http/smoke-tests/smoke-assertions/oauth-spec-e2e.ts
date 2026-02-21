@@ -10,7 +10,7 @@ import { createClerkOAuthAccessToken } from '../auth/clerk-oauth-token.js';
 /**
  * Validates the FULL spec-compliant OAuth path end-to-end:
  *
- * 1. Discovery chain (401 → PRM → AS metadata from Clerk directly)
+ * 1. Discovery chain (401 → PRM → AS metadata from proxy/self-origin)
  * 2. Programmatic token acquisition via Clerk Backend API
  * 3. Authenticated MCP tools/list call with Bearer token
  * 4. MCP Inspector CLI verification (optional, best-effort)

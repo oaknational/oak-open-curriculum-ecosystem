@@ -5,11 +5,10 @@ import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Logger } from '@oaknational/mcp-logger';
+import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page/index.js';
-import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
-import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';
 import {
@@ -18,7 +17,6 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createHttpLogger } from './logging/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
-import { createSecurityConfig } from './security-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
@@ -30,6 +28,7 @@ import {
   initializeAppInstance,
   type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
+import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { createSearchRetrieval } from './search-retrieval-factory.js';
 
@@ -41,6 +40,13 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
+  /**
+   * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
+   * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
+   * and uses this value directly. Required for tests; production callers
+   * omit this so the metadata is fetched at startup.
+   */
+  readonly upstreamMetadata?: UpstreamAuthServerMetadata;
 }
 
 let appCounter = 0;
@@ -63,10 +69,10 @@ let appCounter = 0;
  * @returns Configured Express application instance
  */
 
-export function createApp(options: CreateAppOptions): ExpressWithAppId {
-  const runtimeConfig = options.runtimeConfig;
+export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
+  const { runtimeConfig } = options;
   const log =
-    options?.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
+    options.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
 
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
@@ -79,29 +85,26 @@ export function createApp(options: CreateAppOptions): ExpressWithAppId {
   // Phase 2: Security - Create CORS and DNS rebinding protection middleware
   // CORS: Applied globally to ALL routes (protocol routes need it for browser clients)
   // DNS rebinding: Only applied to browser-accessible routes (landing page)
-  const securityConfig = createSecurityConfig(runtimeConfig);
-  const corsMiddleware = runBootstrapPhase(log, bootstrapTimer, 'createCorsMiddleware', appId, () =>
-    createCorsMiddleware(securityConfig.mode, securityConfig.allowedOrigins),
-  );
-  const dnsRebindingMiddleware = runBootstrapPhase(
+  // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
+  const dnsRebindingMiddleware = setupSecurityMiddleware(
+    app,
+    runtimeConfig,
     log,
     bootstrapTimer,
-    'createDnsRebindingMiddleware',
     appId,
-    () => dnsRebindingProtection(log, securityConfig.allowedHosts),
   );
 
-  // Apply CORS globally to ALL routes
-  app.use(corsMiddleware);
-  // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
-  runBootstrapPhase(log, bootstrapTimer, 'createSecurityHeaders', appId, () => {
-    app.use(createSecurityHeadersMiddleware());
-  });
-
-  // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
-  // These endpoints MUST be publicly accessible without authentication per RFC 9470.
+  // Phase 2.5 & 2.6: OAuth metadata endpoints, proxy routes, and error caching prevention.
+  // These endpoints MUST be publicly accessible without authentication per RFC 9728.
   // Registering them before clerkMiddleware ensures they never go through auth checks.
-  setupOAuthAndCaching(app, runtimeConfig, log, bootstrapTimer, appId);
+  await setupOAuthAndCaching(
+    app,
+    runtimeConfig,
+    log,
+    bootstrapTimer,
+    appId,
+    options.upstreamMetadata,
+  );
 
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.

@@ -7,7 +7,7 @@
  * What this proves:
  * 1. POST /mcp returns 401 + WWW-Authenticate with resource_metadata URL
  * 2. PRM endpoint returns valid metadata with authorization_servers
- * 3. Clerk AS metadata is accessible directly at the AS URL
+ * 3. AS metadata is accessible from the authorization server (proxy self-origin)
  * 4. Programmatic PKCE token acquisition succeeds
  * 5. Authenticated POST /mcp with Bearer token returns valid tools
  * 6. MCP Inspector CLI can make authenticated calls (best-effort)

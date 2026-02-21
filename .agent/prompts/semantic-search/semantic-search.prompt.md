@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-20
+**Last Updated**: 2026-02-21
 
 ---
 
@@ -25,33 +25,67 @@ tools are strictly superior. WS5 implements the replacement:
    Update executor dispatch and all cross-references. TDD.
 3. **WS5.4**: Full quality gate chain.
 
-### 2. OAuth — Cursor-Specific Investigation
+### 2. OAuth — Proxy OAuth AS for Cursor
 
-**Active plan**: [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md)
+**Active plan**: [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md)
 
-**Completed**:
+**Completed (pre-proxy)**:
 
 - OAuth spec compliance (ADR-113) — all MCP methods require auth
 - AS metadata endpoint restored for backward compatibility
 - Spec-compliant smoke test (`pnpm smoke:oauth:spec`) passes end-to-end
 - `@clerk/backend` upgraded 2.29.2 → 2.31.2 (exposes `consentScreenEnabled`)
 - `@clerk/express` upgraded 1.7.7 → 1.7.72
-- PKCE flow uses Clerk FAPI for programmatic auth (dev browser +
-  sign-in token + ticket strategy)
-- Completed plan: [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md)
+- Cursor investigation complete — root cause diagnosed as confirmed
+  client-side bug ([forum #151331](https://forum.cursor.com/t/mcp-oauth-callback-loses-authorization-server-url-discovered-from-resource-metadata-causing-token-exchange-failure/151331))
 
-**Current state**: The spec-compliant path is fully validated. Our
-server correctly implements the MCP authorization spec for any
-standards-compliant client. The remaining work is investigating why
-Cursor specifically does not complete the OAuth flow
-(`cursor-investigate` todo in the plan). Possible causes: Cursor
-caches the old 404, locally-derived AS metadata has incorrect URLs,
-Cursor has requirements beyond the spec, or token verification fails
-for Cursor-obtained tokens.
+**Completed (proxy implementation — functionally complete)**:
+
+- Three proxy endpoints implemented as transparent passthrough:
+  `POST /oauth/register`, `GET /oauth/authorize`, `POST /oauth/token`
+- Pure functions: `deriveUpstreamOAuthBaseUrl`, `buildAuthorizeRedirectUrl`,
+  `formatProxyErrorResponse`, `rewriteAuthServerMetadata` (spread-based),
+  `isUpstreamAuthServerMetadata` (Zod schema validation)
+- Validation removed — proxy does not gatekeep, Clerk handles all validation
+- Proxy paths added to `CLERK_SKIP_PATHS`
+- PRM `authorization_servers` updated to point to self-origin
+- `auth-routes.ts` accepts `upstreamMetadata: UpstreamAuthServerMetadata`
+  via DI (no hardcoded Clerk capability arrays)
+- `createApp` is now async (`Promise<ExpressWithAppId>`), all ~30 call
+  sites updated with `await`
+- `runAsyncBootstrapPhase` added for async bootstrap instrumentation
+- `upstreamMetadata` DI in `CreateAppOptions` — tests inject fixture,
+  production fetches from Clerk at startup
+- `setupOAuthAndCaching` properly awaited with metadata DI path
+- `UpstreamAuthServerMetadata` validated via Zod schema
+- E2E tests rewritten: 16 tests assert self-origin URLs in PRM + AS
+  metadata, proxy endpoint existence, upstream capability preservation,
+  RFC compliance
+- Integration tests updated: 9 tests including AS metadata assertions
+- Test fixture: `e2e-tests/helpers/upstream-metadata-fixture.ts`
+- 22 unit tests + 6 async bootstrap tests + 10 integration tests pass
+- 185 E2E tests pass, all quality gates pass
+- Four architectural reviews completed (Barney, Betty, Fred, Wilma),
+  all findings addressed
+- Passthrough philosophy documented: proxy MUST NOT alter, filter, or
+  lose information in either direction
+
+**Remaining work** (see plan for details):
+
+1. **Validate with Cursor** — start dev server with real Clerk keys,
+   connect Cursor, confirm full OAuth flow completes. This is the
+   critical next step.
+2. **Inject `fetch` into proxy config** — proxy routes use global
+   `fetch`. Integration tests violate testing strategy (real HTTP
+   calls). DI for `fetch` enables simple fakes in tests.
+3. **Auth-enabled smoke test assertions** — may need updates for
+   self-origin URLs. Add proxy-specific smoke test.
+4. **Error handling debt** — try/catch should migrate to `Result<T, E>`.
+5. **Documentation** — ADR updates, TSDoc, archive completed plans.
 
 ### 2b. Widget Knowledge Graph Tidy-Up
 
-**Active plan**: [ontology-knowledge-graph-tidy-up.md](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md)
+**Completed plan**: [ontology-knowledge-graph-tidy-up.md](../../plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md)
 
 **Completed**: The dangling `renderKnowledgeGraph` reference in
 `widget-script.ts` has been fixed. Knowledge graph SVGs migrated
@@ -227,8 +261,10 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Env Architecture | `resolveEnv` pipeline, conditional Clerk keys, discriminated `RuntimeConfig` | [env-architecture-overhaul.md](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) |
 | MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, integration tests | [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) |
 | OAuth Spec Compliance | All MCP methods require auth, ADR-113, ADR-056 superseded | [oauth-spec-compliance.md](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) |
-| AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) |
-| Spec-Compliant Smoke Test | Full PKCE flow via Clerk FAPI, `pnpm smoke:oauth:spec` passes e2e | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) |
+| AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
+| Spec-Compliant Smoke Test | Full PKCE flow via Clerk FAPI, `pnpm smoke:oauth:spec` passes e2e | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
+| Cursor OAuth Investigation | Root cause: client-side `resource_metadata` URL loss (forum #151331) | [cursor-oauth-investigation-report.md](../../plans/semantic-search/archive/completed/cursor-oauth-investigation-report.md) |
+| Proxy OAuth AS (functionally complete) | Async `createApp`, metadata DI, 3 proxy endpoints, self-origin metadata, 22+6 unit + 10 integration + 16 E2E proxy tests, all quality gates pass | [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md) |
 
 ---
 
@@ -334,11 +370,11 @@ failure. If a gate fails, the work is not done. Fix it.**
 | Document | Purpose |
 |----------|---------|
 | [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search WS5 — replace old search |
-| [OAuth spec compliance](../../plans/semantic-search/archive/completed/oauth-spec-compliance.md) | 401 on unauthenticated discovery (complete, archived) |
-| [OAuth validation / Cursor flows](../../plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md) | **Primary OAuth plan** — spec-compliant smoke test + Cursor flow |
-| [Widget KG tidy-up](../../plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md) | Widget crash fixed, SVGs migrated — docs cleanup remaining |
+| [Proxy OAuth AS for Cursor](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md) | **Primary OAuth plan** — proxy AS to workaround Cursor bug |
+| [Widget KG tidy-up](../../plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md) | Widget crash fixed, SVGs migrated, docs cleaned (completed) |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | Type-gen / runtime split |
 | [SDK split meta-plan](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md) | Guide for improving SDK split plan |
+| [Review: docs/scripts/auth](../../plans/semantic-search/archive/completed/review-docs-search-cli-auth-2026-02-20.md) | Housekeeping fixes (completed): scripts, links, health endpoint alignment |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
 
 ### Post-Merge

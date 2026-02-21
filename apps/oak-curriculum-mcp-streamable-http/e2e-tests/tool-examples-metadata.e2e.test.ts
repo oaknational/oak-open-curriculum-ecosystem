@@ -102,17 +102,17 @@ function getPropertyExamples(tool: McpTool, propName: string): readonly unknown[
   return prop?.examples ?? [];
 }
 
-function createTestApp(): ReturnType<typeof createApp> {
+async function createTestApp() {
   const result = loadRuntimeConfig({
     processEnv: testEnv,
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  return createApp({ runtimeConfig });
+  return await createApp({ runtimeConfig });
 }
 
 async function callToolsList(
-  app: ReturnType<typeof createApp>,
+  app: Awaited<ReturnType<typeof createApp>>,
 ): Promise<{ tools: McpTool[]; status: number }> {
   const res = await request(app)
     .post('/mcp')
@@ -124,7 +124,7 @@ async function callToolsList(
 
 describe('Tool Examples Metadata E2E', () => {
   it('verifies tools/list returns valid tool definitions', async () => {
-    const app = createTestApp();
+    const app = await createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -143,7 +143,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for generated tools with OpenAPI examples', async () => {
-    const app = createTestApp();
+    const app = await createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -160,7 +160,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for aggregated search tool', async () => {
-    const app = createTestApp();
+    const app = await createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -175,7 +175,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for aggregated fetch tool', async () => {
-    const app = createTestApp();
+    const app = await createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 

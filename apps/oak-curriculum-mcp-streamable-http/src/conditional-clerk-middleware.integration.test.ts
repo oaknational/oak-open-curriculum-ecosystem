@@ -119,19 +119,9 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       );
     });
 
-    it('skips clerkMiddleware for /health', () => {
+    it('skips clerkMiddleware for /healthz', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
-      const req = createMockRequest('/health', undefined);
-
-      conditionalMw(req, mockRes, mockNext);
-
-      expect(mockClerkMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
-    });
-
-    it('skips clerkMiddleware for /ready', () => {
-      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
-      const req = createMockRequest('/ready', undefined);
+      const req = createMockRequest('/healthz', undefined);
 
       conditionalMw(req, mockRes, mockNext);
 

@@ -766,3 +766,12 @@ The test does NOT prove (and doesn't claim to):
 - Cursor can complete the flow (deferred to `cursor-investigate`)
 - The DCR-created OAuth app is correctly configured
 - The consent screen works
+
+### Never strip comments/guidance to reduce file line count
+
+When hitting `max-lines` or `max-lines-per-function` lint limits:
+- **NEVER** consolidate or remove developer guidance comments
+- **DO** extract pure function helpers with TDD
+- **DO** split the file into a directory with a barrel file and smaller files
+- Comments are documentation, not waste. Reducing file size by removing
+  developer guidance is removing value, not adding it.

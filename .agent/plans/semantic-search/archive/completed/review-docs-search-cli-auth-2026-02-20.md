@@ -10,31 +10,31 @@ todos:
       Add `smoke:oauth:spec` script to
       `apps/oak-curriculum-mcp-streamable-http/package.json` so the documented
       command in `smoke-tests/smoke-oauth-spec.ts` works exactly as written.
-    status: pending
+    status: completed
   - id: fix-adr-113-adr-057-links
     content: >
       Fix ADR-113 links to ADR-057 filename
       (`057-selective-auth-public-resources.md`), replacing the non-existent
       path currently referenced.
-    status: pending
+    status: completed
   - id: fix-quick-start-anchor
     content: >
       Fix `docs/quick-start.md` links to the onboarding caveat anchor
       (`#known-gate-caveat`), or rename the onboarding heading to match the
       existing linked plural anchor.
-    status: pending
+    status: completed
   - id: preserve-historical-review-cleanly
     content: >
       Keep `.agent/research/developer-experience/2026-02-20-onboarding-review.md`
       as historical, but add a clear historical snapshot note and create a
       fresh follow-up review pass soon.
-    status: pending
+    status: completed
   - id: canonical-health-endpoint-alignment
     content: >
       Adopt and document one canonical health endpoint policy (recommended:
       `/healthz`), then align comments, skip-path docs, and middleware logging
       language with that canonical endpoint.
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -126,4 +126,20 @@ Targeted validation already run and passing in this review cycle:
 A fresh onboarding/developer-experience review should be scheduled after the
 pending documentation/script fixes above are merged, so we can replace the
 historical snapshot with an updated current-state assessment.
+
+## Closure Notes (21 February 2026)
+
+### Validation Outcomes
+
+On review, 2 of 5 findings were already resolved (smoke script existed,
+ADR links already correct). The remaining 3 were confirmed and fixed:
+
+- **Anchor mismatch**: `docs/development/onboarding.md` heading changed from
+  singular to plural (`Known Gate Caveats`) to match `docs/quick-start.md` links.
+- **Health endpoint**: `CLERK_SKIP_PATHS` contained phantom `/health` and `/ready`
+  (no routes existed for either). Replaced with `/healthz` (the actual endpoint).
+  Updated TSDoc, comments in `auth-routes.ts`, and both unit and integration tests.
+  All 37 tests pass.
+- **Historical review**: Added historical snapshot framing note to
+  `.agent/research/developer-experience/2026-02-20-onboarding-review.md`.
 

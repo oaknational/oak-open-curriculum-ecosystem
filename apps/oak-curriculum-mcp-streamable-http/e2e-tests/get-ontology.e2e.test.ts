@@ -81,7 +81,7 @@ const ToolListEntrySchema = z.object({
 describe('get-ontology E2E', () => {
   describe('tools/list', () => {
     it('includes get-ontology tool with correct metadata', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -111,7 +111,7 @@ describe('get-ontology E2E', () => {
 
   describe('tools/call', () => {
     it('returns curriculum ontology with expected structure', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -139,7 +139,7 @@ describe('get-ontology E2E', () => {
     });
 
     it('returns ontology with key stages covering all UK education phases', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -170,7 +170,7 @@ describe('get-ontology E2E', () => {
     });
 
     it('returns ontology with tool usage guidance for AI agents', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')

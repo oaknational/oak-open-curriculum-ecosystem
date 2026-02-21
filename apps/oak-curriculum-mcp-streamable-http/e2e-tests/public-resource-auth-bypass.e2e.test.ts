@@ -30,6 +30,7 @@ import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 // Mock Clerk middleware to avoid network IO and requirement for valid keys
@@ -52,10 +53,9 @@ vi.mock('@clerk/express', () => ({
  * This mirrors production configuration to prove the selective auth bypass works.
  * DANGEROUSLY_DISABLE_AUTH is NOT set - auth is enforced.
  */
-function createAuthEnabledApp(): Express {
-  return createApp({
+async function createAuthEnabledApp(): Promise<Express> {
+  return await createApp({
     runtimeConfig: createMockRuntimeConfig({
-      // DANGEROUSLY_DISABLE_AUTH is false by default in createMockRuntimeConfig
       env: {
         OAK_API_KEY: 'test-api-key',
         CLERK_PUBLISHABLE_KEY: 'pk_test_123',
@@ -65,13 +65,14 @@ function createAuthEnabledApp(): Express {
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     }),
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
   });
 }
 
 describe('Public Resource Authentication Bypass (E2E)', () => {
   describe('Widget Resource (No Auth Required)', () => {
     it('allows resources/read for widget URI without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -97,7 +98,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
 
   describe('Documentation Resources (No Auth Required)', () => {
     it('allows resources/read for getting-started documentation without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -122,7 +123,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
     });
 
     it('allows resources/read for tools documentation without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -137,7 +138,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
     });
 
     it('allows resources/read for workflows documentation without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -154,7 +155,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
 
   describe('Unknown Resources (Auth Required)', () => {
     it('returns HTTP 401 for unknown resource URI without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -174,7 +175,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
     });
 
     it('returns HTTP 401 for resources/read without uri param', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -189,7 +190,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
     });
 
     it('returns HTTP 401 for resources/read with malformed params', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({
@@ -206,7 +207,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
 
   describe('Security: Protected Tools Still Require Auth', () => {
     it('still returns HTTP 401 for tools/call without auth token', async () => {
-      const res = await request(createAuthEnabledApp())
+      const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .send({

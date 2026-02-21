@@ -3,6 +3,7 @@ import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 /**
  * Header Redaction E2E Tests
@@ -65,28 +66,28 @@ const authEnforcedEnv: NodeJS.ProcessEnv = {
   ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
-function createBypassedApp(): ReturnType<typeof createApp> {
+async function createBypassedApp() {
   const result = loadRuntimeConfig({
     processEnv: authBypassedEnv,
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  return createApp({ runtimeConfig });
+  return await createApp({ runtimeConfig });
 }
 
-function createEnforcedApp(): ReturnType<typeof createApp> {
+async function createEnforcedApp() {
   const result = loadRuntimeConfig({
     processEnv: authEnforcedEnv,
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  return createApp({ runtimeConfig });
+  return await createApp({ runtimeConfig, upstreamMetadata: TEST_UPSTREAM_METADATA });
 }
 
 describe('Header Redaction E2E', () => {
   describe('full request/response cycle', () => {
     it('should redact all sensitive headers in full request cycle', async () => {
-      const app = createBypassedApp();
+      const app = await createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -110,7 +111,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle request with IP headers without exposing full IPs in logs', async () => {
-      const app = createBypassedApp();
+      const app = await createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -129,7 +130,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle mixed sensitive and non-sensitive headers correctly', async () => {
-      const app = createBypassedApp();
+      const app = await createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -154,7 +155,7 @@ describe('Header Redaction E2E', () => {
 
   describe('real-world scenarios', () => {
     it('should handle simulated Clerk OAuth request headers', async () => {
-      const app = createBypassedApp();
+      const app = await createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -174,7 +175,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle production-like header set with full verification', async () => {
-      const app = createBypassedApp();
+      const app = await createBypassedApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -204,7 +205,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle auth failure with HTTP 401 and WWW-Authenticate header', async () => {
-      const app = createEnforcedApp();
+      const app = await createEnforcedApp();
 
       const response = await request(app)
         .post('/mcp')

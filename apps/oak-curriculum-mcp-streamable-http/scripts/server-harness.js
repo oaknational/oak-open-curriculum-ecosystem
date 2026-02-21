@@ -147,9 +147,9 @@ try {
     process.exit(1);
   }
 
-  // Create Express app
+  // Create Express app (async — fetches upstream metadata when auth is enabled)
   const appCreationStart = Date.now();
-  const app = createApp({ runtimeConfig: configResult.value });
+  const app = await createApp({ runtimeConfig: configResult.value });
   const appCreationTime = Date.now() - appCreationStart;
 
   log.info('Express app created', {

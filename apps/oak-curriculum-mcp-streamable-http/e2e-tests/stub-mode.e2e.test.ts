@@ -93,7 +93,7 @@ async function assertFetchLessonResponse(
 
 describe('Streamable HTTP server (stub mode)', () => {
   it('returns the full roster from listUniversalTools()', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', STUB_ACCEPT_HEADER)
@@ -104,7 +104,7 @@ describe('Streamable HTTP server (stub mode)', () => {
   });
 
   it('serialises stubbed fetch results with canonicalUrl', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';
     const lessonSlug = 'four-types-of-simple-sentence';
     const response = await request(app)
@@ -125,7 +125,7 @@ describe('Streamable HTTP server (stub mode)', () => {
   });
 
   it('reports parameter validation failures from stub executor', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', STUB_ACCEPT_HEADER)
@@ -151,7 +151,7 @@ describe('Streamable HTTP server (stub mode)', () => {
   // Stub mode uses auth bypass for convenience
 
   it('rejects requests missing text/event-stream in Accept header', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json')

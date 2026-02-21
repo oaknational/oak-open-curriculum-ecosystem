@@ -24,7 +24,7 @@ describe('CORS and OAuth metadata', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app).get('/.well-known/oauth-protected-resource');
     expect(res.status).toBe(200);
     const body: unknown = res.body;

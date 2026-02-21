@@ -49,7 +49,7 @@ const ToolCallResultSchema = z.object({
 describe('get-help Tool E2E', () => {
   describe('tools/list - Client can discover help', () => {
     it('includes get-help tool in tools list', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -74,7 +74,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('get-help tool description explains its purpose', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -99,7 +99,7 @@ describe('get-help Tool E2E', () => {
 
   describe('tools/call get-help - Client gets server guidance', () => {
     it('returns overview when called without parameters', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -130,7 +130,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('returns workflows to guide common tasks', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -157,7 +157,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('returns tips to help users succeed', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -186,7 +186,7 @@ describe('get-help Tool E2E', () => {
 
   describe('tools/call get-help with tool_name - Client gets specific help', () => {
     it('returns help for search tool', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -216,7 +216,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('returns category context for the tool', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -243,7 +243,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('returns related workflows for the tool', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -270,7 +270,7 @@ describe('get-help Tool E2E', () => {
     });
 
     it('returns error for unknown tool', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')

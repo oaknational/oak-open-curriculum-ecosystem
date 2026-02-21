@@ -151,7 +151,7 @@ function asOptionalRecord(value: unknown): Record<string, unknown> | undefined {
 }
 
 async function withStubbedHttpApp<T>(callback: (app: Express) => Promise<T>): Promise<T> {
-  const { app } = createStubbedHttpApp();
+  const { app } = await createStubbedHttpApp();
   return await callback(app);
 }
 

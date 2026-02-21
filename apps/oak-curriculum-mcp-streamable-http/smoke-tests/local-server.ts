@@ -25,7 +25,7 @@ export async function startSmokeServer(port: number): Promise<Server> {
     throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
   }
   console.log(`[TRACE] startSmokeServer: calling createApp()`);
-  const app = createApp({ runtimeConfig: configResult.value });
+  const app = await createApp({ runtimeConfig: configResult.value });
   const appId = app.__appId;
   console.log(
     `[TRACE] startSmokeServer: got app #${String(appId)}, starting server on port ${String(port)}`,
@@ -223,7 +223,7 @@ export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>
   if (!configResult.ok) {
     throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
   }
-  const app = createApp({ runtimeConfig: configResult.value });
+  const app = await createApp({ runtimeConfig: configResult.value });
 
   const server = await new Promise<Server>((resolve, reject) => {
     const instance = app.listen(EPHEMERAL_PORT, LOOPBACK_HOST, () => {

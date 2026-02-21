@@ -55,7 +55,7 @@ describe('HTTP boundary argument validation', () => {
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -75,7 +75,7 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -95,7 +95,7 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -138,7 +138,7 @@ describe('HTTP boundary argument validation', () => {
           ],
         }),
     };
-    const app = createApp({
+    const app = await createApp({
       toolHandlerOverrides: overrides,
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });

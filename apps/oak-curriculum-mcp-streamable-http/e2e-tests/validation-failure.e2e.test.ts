@@ -34,7 +34,7 @@ function parseFirstSseData(raw: string): unknown {
 async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   // Disable auth – validation tests isolate Zod enforcement.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  const app = createApp({
+  const app = await createApp({
     runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
   });
   const body = {

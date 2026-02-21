@@ -68,7 +68,7 @@ function getWidgetUri(listEnvelope: ReturnType<typeof parseSseEnvelope>): string
  * Per-request transport creates a fresh McpServer + transport per request.
  */
 async function getWidgetHtml(): Promise<string> {
-  const { app } = createStubbedHttpApp();
+  const { app } = await createStubbedHttpApp();
 
   // Get widget URI from resources/list
   const listResponse = await request(app)
@@ -103,7 +103,7 @@ async function getWidgetHtml(): Promise<string> {
 describe('oak-json-viewer widget resource E2E', () => {
   describe('resources/list', () => {
     it('includes oak-json-viewer widget with correct URI', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -135,7 +135,7 @@ describe('oak-json-viewer widget resource E2E', () => {
 
   describe('resources/read', () => {
     it('returns HTML content with text/html+skybridge MIME type', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       // Get widget URI from resources/list
       const listResponse = await request(app)

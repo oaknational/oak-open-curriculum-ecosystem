@@ -66,7 +66,7 @@ function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
 describe('Streamable HTTP server (live mode with overrides)', () => {
   it('formats successful tool responses identically to stub mode', async () => {
     const captured: CapturedCall[] = [];
-    const { app } = createLiveHttpApp(createOverrides(captured));
+    const { app } = await createLiveHttpApp(createOverrides(captured));
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
@@ -94,7 +94,7 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
   });
 
   it('propagates tool execution errors with the same SSE envelope structure', async () => {
-    const { app } = createLiveHttpApp(createErrorOverrides('Simulated execution failure'));
+    const { app } = await createLiveHttpApp(createErrorOverrides('Simulated execution failure'));
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')

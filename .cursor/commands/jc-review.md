@@ -32,15 +32,7 @@ Then, using your thoughts, reflections, and insights, work through the following
 
 The review MUST use all appropriate sub-agents. Invoke them as needed, as many times as needed, and use their reports to inform your review.
 
-**Cursor-specific**: Use the Task tool with `readonly: true` and the appropriate `subagent_type`:
-
-| Sub-agent | Purpose | When to Invoke |
-|-----------|---------|----------------|
-| `architecture-reviewer` | Structural compliance, boundaries | For import patterns, module structure, workspace boundaries |
-| `code-reviewer` | Quality, security, maintainability | For code quality, patterns, potential issues |
-| `test-reviewer` | Test quality, TDD compliance | For test structure, mock quality, test value |
-| `type-reviewer` | Type safety, compile-time embedding | For type assertions, generics, type flow |
-| `config-reviewer` | Configuration consistency | For tooling configs, quality gates |
+**Cursor-specific**: Use the Task tool with `readonly: true` and the appropriate `subagent_type`. See the `invoke-code-reviewers` rule for the full invocation matrix, timing guidance, and worked examples.
 
 Make it clear to each sub-agent that they are to **review and report**, not to modify or fix.
 
@@ -88,11 +80,17 @@ Now: carry out the review and produce a detailed, actionable report, thinking ha
 
 | Agent | Status | Key Findings |
 |-------|--------|--------------|
-| architecture-reviewer | [status] | [summary] |
+| architecture-reviewer-barney | [status] | [summary] |
+| architecture-reviewer-fred | [status] | [summary] |
+| architecture-reviewer-betty | [status] | [summary] |
+| architecture-reviewer-wilma | [status] | [summary] |
 | code-reviewer | [status] | [summary] |
 | test-reviewer | [status] | [summary] |
 | type-reviewer | [status] | [summary] |
 | config-reviewer | [status] | [summary] |
+| security-reviewer | [status] | [summary] |
+| docs-adr-reviewer | [status] | [summary] |
+| release-readiness-reviewer | [status or N/A] | [summary] |
 
 ### Critical Issues
 

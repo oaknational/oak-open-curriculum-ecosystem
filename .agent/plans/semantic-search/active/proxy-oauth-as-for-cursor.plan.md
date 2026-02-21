@@ -8,56 +8,84 @@ overview: >
   This affects both dev (localhost) and production (real domain) because
   the root cause is origin mismatch between RS and AS.
 
-  The fix is to act as a proxy OAuth AS so that Cursor sees the RS and
-  AS on the same origin. The MCP SDK provides ProxyOAuthServerProvider
-  for this exact pattern. A community-validated workaround for Microsoft
-  Entra ID confirms the approach works.
-
-  This plan includes an early proof of concept (Phase 1) to validate
-  the approach before any architectural changes.
+  The fix: act as a proxy OAuth AS so Cursor sees RS and AS on the same
+  origin. Implementation is functionally complete — async createApp,
+  metadata DI, proxy endpoints, self-origin metadata, all tests pass.
+  Remaining: Cursor validation, fetch DI for proxy routes, error
+  handling migration to Result<T, E>, documentation.
 todos:
   - id: poc-tests-red
     content: >
       Phase 1 (RED): Write failing integration tests for proxy
       endpoints (fake upstream). Write failing unit tests for pure
-      functions (URL construction, validation, error formatting).
-    status: pending
+      functions (URL construction, metadata rewriting, error formatting).
+    status: completed
   - id: poc-implement-green
     content: >
       Phase 1 (GREEN): Implement proxy endpoints and pure functions.
       Tests pass. Register in Phase 2.5 of application.ts. Add paths
       to CLERK_SKIP_PATHS. Update PRM and AS metadata.
+    status: completed
+  - id: async-bootstrap
+    content: >
+      Make createApp async (returns Promise<ExpressWithAppId>).
+      Added runAsyncBootstrapPhase (6 unit tests).
+      Added 'fetchUpstreamMetadata' + 'registerOAuthProxy' to BootstrapPhaseName.
+      Added upstreamMetadata to CreateAppOptions for DI.
+      setupOAuthAndCaching properly awaited with metadata DI path.
+      All ~30 call sites updated. Production entry uses top-level await.
+      UpstreamAuthServerMetadata validated via Zod schema.
+    status: completed
+  - id: update-e2e-tests
+    content: >
+      auth-enforcement.e2e.test.ts completely rewritten (16 tests):
+      PRM asserts self-origin authorization_servers (not Clerk),
+      AS metadata asserts self-origin endpoints + upstream capabilities,
+      proxy endpoint existence verified, RFC compliance tests.
+      auth-routes.integration.test.ts updated (9 tests):
+      self-origin authorization_servers, AS metadata with rewritten URLs.
+      Test fixture: e2e-tests/helpers/upstream-metadata-fixture.ts.
+      All auth-enabled E2E tests inject upstreamMetadata via CreateAppOptions.
+    status: completed
+  - id: quality-gates
+    content: >
+      Full quality gate chain passes: type-gen, build, type-check,
+      lint:fix, format:root, markdownlint:root, test (634),
+      test:e2e (185), smoke:dev:stub. All clean.
+    status: completed
+  - id: inject-fetch-di
+    content: >
+      Inject fetch into OAuthProxyConfig for testability. Integration
+      tests currently use real HTTP calls via globalThis.fetch to a
+      fake Express server, violating testing strategy. With DI,
+      integration tests inject a simple fake fetch function. E2E tests
+      (supertest, out-of-process) continue to use real HTTP.
+      Separate TDD cycle — write tests first, then implement.
     status: pending
   - id: poc-validate-cursor
     content: >
-      Phase 1 (VALIDATE): Start dev server with proxy. Enable Cursor.
-      Confirm full OAuth flow completes. Capture server logs showing
-      Authorization header on POST /mcp. Monitor for Basic auth bug.
-    status: pending
-  - id: design-architecture
-    content: >
-      Phase 2: Design production architecture. Decide SDK mcpAuthRouter
-      vs custom routes. Define boundary between proxy auth and Clerk
-      token verification. Write ADR documenting opaque token assumption.
-    status: pending
-  - id: implement-production
-    content: >
-      Phase 3: Production implementation with TDD. Unit tests for pure
-      functions. Integration tests with fake upstream. Error handling,
-      timeouts, structured logging, DCR rate limiting.
+      VALIDATE: Start dev server with proxy (real Clerk keys).
+      Connect Cursor. Confirm full OAuth flow completes. Capture
+      server logs showing Authorization header on POST /mcp.
+      Monitor for Basic auth bug (GitHub #3734).
     status: pending
   - id: smoke-tests-update
     content: >
-      Phase 3: Update smoke test assertions (self-origin instead of
-      Clerk HTTPS URLs). Add proxy-specific smoke test.
+      Auth-enabled smoke tests may need assertion updates for
+      self-origin URLs in AS metadata. Add proxy-specific smoke
+      test validating DCR → authorise → token exchange through
+      the proxy against real Clerk.
     status: pending
-  - id: quality-gates
+  - id: error-handling-debt
     content: >
-      Phase 4: Run full quality gate chain. Fix any issues.
+      Migrate try/catch with unknown error types in
+      oauth-proxy-routes.ts to Result<T, E> for explicit,
+      traceable error paths. Currently conflates upstream JSON
+      parse failures with network errors.
     status: pending
   - id: documentation
     content: >
-      Phase 4: Update ADR-113, write proxy ADR, archive completed
+      Update ADR-113, write proxy ADR, archive completed
       plans, update auth-routes and application TSDoc.
     status: pending
 isProject: false
@@ -65,7 +93,7 @@ isProject: false
 
 ## Context
 
-**Session entry point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Session entry point**: [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md)
 **Prerequisite (complete)**: OAuth spec compliance — ADR-113, all MCP methods require auth
 **Prerequisite (complete)**: AS metadata endpoint — backward-compatible `/.well-known/oauth-authorization-server`
 **Prerequisite (complete)**: Cursor investigation — root cause diagnosed as client-side bug
@@ -360,75 +388,75 @@ The MCP SDK provides `ProxyOAuthServerProvider` as an official pattern.
 
 ---
 
-## Security Validations
+## Security Model
 
-The proxy is a transparent pass-through, which limits the attack surface.
-However, three specific risks must be addressed at implementation time.
+The proxy is a transparent passthrough. It does NOT validate, filter,
+or rate-limit anything. Clerk is the real authorisation server — Clerk
+handles all security, all validation, all rate limiting. The proxy adds
+nothing of its own.
 
-### 1. Open Redirect Prevention on `/oauth/authorize`
+### Open Redirect: Not a Risk
 
-The `/oauth/authorize` endpoint constructs a redirect to Clerk. The
-redirect target MUST be validated against the known Clerk FAPI domain
-derived at startup from `CLERK_PUBLISHABLE_KEY`. Never accept the
-upstream URL as a request parameter. Never redirect to a domain other
-than the derived FAPI domain.
+`/oauth/authorize` redirects to a URL derived at startup from
+`CLERK_PUBLISHABLE_KEY` via `deriveUpstreamOAuthBaseUrl()`. The
+redirect target is an immutable value set once at process start. Client
+requests append query parameters to this known-good base URL — they
+cannot control the redirect hostname.
 
-**Implementation**: Derive the upstream Clerk authorisation URL once at
-startup (as `deriveAuthServerMetadata` already does). Store it as an
-immutable value. Construct the redirect by appending query parameters to
-this known-good base URL.
+### No Request Validation
 
-### 2. Request Validation on `/oauth/token`
+The proxy does NOT validate `grant_type`, `code`, `code_verifier`, or
+any other parameter. If a client sends garbage, Clerk rejects it and
+returns an appropriate OAuth error. The proxy passes that error through
+verbatim. This is by design: the proxy is a transparent pipe, not a
+security layer. Any validation the proxy performs is something Clerk
+also performs — it would be redundant at best and information-losing
+at worst.
 
-The `/oauth/token` proxy forwards request bodies to Clerk's token
-endpoint. Minimal validation must ensure:
+### No DCR Rate Limiting
 
-- `grant_type` is one of `authorization_code` or `refresh_token`
-- `code` is present for `authorization_code` grants
-- `code_verifier` is present (PKCE is mandatory per OAuth 2.1)
-
-Without this, the proxy could be used to send arbitrary POST bodies to
-Clerk's token endpoint. Reject invalid requests with a 400 before
-forwarding.
-
-### 3. DCR Rate Limiting
-
-The `/oauth/register` proxy creates an additional entry point for Clerk
-DCR. Clerk's own rate limiting applies, but we should add rate limiting
-at the proxy level too. A reasonable default: 20 registrations per hour
-per IP address.
+Clerk already rate-limits its own DCR endpoint. Adding proxy-level rate
+limiting would create a second, potentially conflicting enforcement
+point. The proxy is not a service; it should not make policy decisions
+that belong to the upstream AS.
 
 ---
 
-## Error Handling Strategy
+## Error Handling Strategy (Implemented)
 
 ### Principle: Pass Through + Log
 
-The proxy follows a simple error model:
+The proxy follows a simple error model (all implemented):
 
 1. **Pass through** Clerk's error responses verbatim (status code +
    body) for all Clerk-originated errors (4xx, 5xx)
-2. **Generate proxy-level errors** for infrastructure failures
-   (timeout, network error, DNS failure, malformed request)
-3. **Log all** upstream calls with structured logging (request URL,
-   response status, duration, correlation ID)
-4. **Never swallow errors** — every failure must be visible in logs
+2. **Generate proxy-level errors** only for infrastructure failures
+   (timeout, network error)
+3. **Log all** upstream calls with structured logging (upstream URL,
+   response status, duration)
+4. **Never swallow errors** — every failure is visible in logs
 
-### Upstream Timeout Handling
+### Upstream Error Handling (Implemented)
 
-All HTTP calls to Clerk MUST have an explicit timeout (10 seconds).
-When Clerk is unreachable or slow:
+All HTTP calls to Clerk use `fetchWithTimeout()` with a 10-second
+default timeout (configurable via `OAuthProxyConfig.timeoutMs`).
 
-| Failure | Proxy Response |
-|---------|----------------|
-| Clerk returns 4xx | Pass through Clerk's status + body |
-| Clerk returns 5xx | Pass through Clerk's status + body |
-| Clerk times out (>10s) | HTTP 504 + `{ "error": "temporarily_unavailable" }` |
-| Network error (DNS, connection refused) | HTTP 502 + `{ "error": "temporarily_unavailable" }` |
-| Malformed request to proxy | HTTP 400 + `{ "error": "invalid_request", "error_description": "..." }` |
+| Failure | Proxy Response | Implementation |
+|---------|----------------|----------------|
+| Clerk returns 4xx | Pass through Clerk's status + body | `res.status(upstream.status).json(body)` |
+| Clerk returns 5xx | Pass through Clerk's status + body | Same |
+| Clerk times out (>10s) | HTTP 504 + `{ "error": "temporarily_unavailable" }` | `AbortError` → 504 |
+| Network error (DNS, connection refused) | HTTP 502 + `{ "error": "temporarily_unavailable" }` | Catch → 502 |
+| Unhandled promise rejection | HTTP 500 + `{ "error": "server_error" }` | `asyncRoute` wrapper |
 
-Error responses MUST use the OAuth 2.0 error format (RFC 6749 Section
-5.2) where applicable.
+Error responses use the OAuth 2.0 error format (RFC 6749 Section 5.2)
+via `formatProxyErrorResponse()`.
+
+**Known debt**: Error handling uses `try/catch` with `unknown` error
+types. Should migrate to `Result<T, E>` for explicit, traceable error
+paths. Currently conflates upstream JSON parse failures with network
+errors in the catch blocks. This is documented in TSDoc on
+`oauth-proxy-routes.ts`.
 
 ### `/oauth/authorize` Is Special
 
@@ -469,34 +497,39 @@ The fact that the tokens originate from Clerk is an implementation
 detail — the proxy IS the authorisation server from the client's
 perspective, per the same pattern used by `ProxyOAuthServerProvider`.
 
-### 3. Transparent Forwarding
+### 3. Transparent Forwarding (Implemented)
 
-The proxy MUST forward all parameters transparently:
+The proxy forwards all parameters transparently. This is implemented:
 
-- `/oauth/authorize`: Forward all query parameters to the upstream
-  redirect URL. Do not filter, transform, or omit any parameters.
-- `/oauth/token`: Forward the complete request body to the upstream
-  token endpoint. Do not filter or transform.
-- `/oauth/register`: Forward the complete request body to the upstream
-  registration endpoint. Do not filter or transform.
+- `/oauth/authorize`: All query parameters forwarded via
+  `buildAuthorizeRedirectUrl()`. No filtering.
+- `/oauth/token`: Raw `application/x-www-form-urlencoded` body
+  forwarded as-is (parsed by `express.text()`, not `express.urlencoded()`).
+  No field-level inspection.
+- `/oauth/register`: JSON body forwarded via `JSON.stringify(req.body)`.
+  No field-level inspection.
 
 This makes the proxy resilient to upstream changes (e.g., Clerk adding
 new parameters). Selective forwarding would be fragile.
 
-### 4. AS Metadata Capability Parity
+### 4. AS Metadata: Fetch and Rewrite (Fully Implemented)
 
-The proxy's AS metadata MUST advertise only capabilities that the proxy
-actually serves. Strategy: mirror the upstream Clerk metadata's
-structure, but rewrite all endpoint URLs to point to our proxy. This
-ensures clients see the full set of supported capabilities while all
-traffic flows through the proxy.
+Strategy: fetch Clerk's live AS metadata at startup, cache it for
+process lifetime, rewrite endpoint URLs per-request to the server's
+own origin. All capability fields pass through unchanged.
 
-Specifically, fetch and cache Clerk's AS metadata at startup, then
-rewrite `issuer`, `authorization_endpoint`, `token_endpoint`,
-`registration_endpoint` to our origin. Fields like
-`token_endpoint_auth_methods_supported`, `scopes_supported`,
-`grant_types_supported`, and `code_challenge_methods_supported` are
-passed through unchanged from Clerk.
+**Implemented**:
+
+- `rewriteAuthServerMetadata()` uses object spread to preserve all
+  fields, then overrides `issuer`, `authorization_endpoint`,
+  `token_endpoint`, and `registration_endpoint`
+- `isUpstreamAuthServerMetadata()` type guard uses Zod schema
+  (`upstreamAuthServerMetadataSchema`) for validation
+- `registerPublicOAuthMetadataEndpoints()` accepts metadata via DI
+- `setupOAuthAndCaching()` properly awaited by async `createApp()`
+- When `upstreamMetadata` is injected (tests), uses it directly
+- When not (production), fetches from Clerk via `runAsyncBootstrapPhase`
+- All ~30 `createApp` call sites updated with `await`
 
 ---
 
@@ -504,31 +537,57 @@ passed through unchanged from Clerk.
 
 TDD applies at ALL levels. The PoC is not exempt.
 
-### Unit Tests (pure functions, no I/O)
+### Unit Tests (pure functions, no I/O) — 22 tests, DONE
 
-| Function | Test |
-|----------|------|
-| Upstream URL derivation from publishable key | Given a publishable key, returns correct FAPI domain and OAuth endpoints |
-| Authorise redirect URL construction | Given query params, returns correct upstream URL with all params appended |
-| Grant type validation | Rejects unknown grant types; accepts `authorization_code` and `refresh_token` |
-| Token request validation | Rejects missing `code` or `code_verifier` for auth_code grants |
-| Proxy error response construction | Given a timeout/network error, returns correct OAuth error format |
-| AS metadata rewriting | Given upstream metadata and local origin, returns correctly rewritten metadata |
+| Function | Test | Status |
+|----------|------|--------|
+| `deriveUpstreamOAuthBaseUrl` | Derives FAPI domain from publishable key; throws on empty/invalid | Done |
+| `buildAuthorizeRedirectUrl` | Appends all query params to upstream URL; handles empty params; preserves URL encoding | Done |
+| `formatProxyErrorResponse` | Creates OAuth 2.0 error response per RFC 6749 Section 5.2 | Done |
+| `rewriteAuthServerMetadata` | Rewrites issuer + endpoints to local origin; preserves capabilities unchanged; passes through optional endpoint URLs; omits absent optional endpoints | Done |
+| `isUpstreamAuthServerMetadata` | Validates required string and array fields; rejects null, string, missing fields, non-array fields, arrays with non-strings | Done |
 
-### Integration Tests (in-process, with simple fakes)
+File: `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts`
 
-| Scenario | Test |
-|----------|------|
-| `POST /oauth/register` | Forwards body to fake upstream, returns response |
-| `GET /oauth/authorize` | Constructs correct redirect URL with all params |
-| `POST /oauth/token` (auth_code) | Forwards authorisation code grant to fake upstream |
-| `POST /oauth/token` (refresh) | Forwards refresh token grant to fake upstream |
-| `POST /oauth/token` (invalid grant) | Rejects unknown grant type with 400 |
-| Upstream 4xx | Passes through Clerk's error response |
-| Upstream 5xx | Passes through Clerk's error response |
-| Upstream timeout | Returns 504 with meaningful error |
-| AS metadata endpoint | Advertises correct proxy endpoints |
-| PRM endpoint | `authorization_servers` points to self |
+### Integration Tests (in-process, with fake upstream) — 10 tests, DONE
+
+| Scenario | Test | Status |
+|----------|------|--------|
+| `POST /oauth/register` | Forwards body to fake upstream, returns response | Done |
+| `GET /oauth/authorize` | Constructs correct redirect URL with all params | Done |
+| `POST /oauth/token` (auth_code) | Forwards authorisation code grant | Done |
+| `POST /oauth/token` (refresh) | Forwards refresh token grant | Done |
+| `POST /oauth/token` (unknown params) | Forwards unknown parameters transparently | Done |
+| `POST /oauth/token` (any grant type) | Forwards any grant type without filtering | Done |
+| Upstream 4xx | Passes through Clerk's error response verbatim | Done |
+| Upstream 5xx | Passes through Clerk's error response verbatim | Done |
+| Upstream timeout | Returns 504 with meaningful error | Done |
+| Upstream unreachable | Returns 502 with meaningful error | Done |
+
+File: `src/oauth-proxy/oauth-proxy-routes.integration.test.ts`
+
+**KNOWN ISSUE**: Integration tests currently use real HTTP calls via
+`globalThis.fetch` to a fake Express server running on `127.0.0.1`.
+This violates the testing strategy: "Integration tests DO NOT trigger
+IO." The architecturally correct fix is to inject `fetch` into
+`OAuthProxyConfig` as a DI dependency. Integration tests then inject a
+simple fake function. See todo `inject-fetch-di`.
+
+### E2E Tests — DONE (16 tests)
+
+`auth-enforcement.e2e.test.ts` completely rewritten. Now verifies:
+
+| Test Group | Assertions |
+|-----------|-----------|
+| PRM (`/.well-known/oauth-protected-resource`) | `authorization_servers` is `[self-origin]`, `resource` is `self-origin/mcp` |
+| AS Metadata (`/.well-known/oauth-authorization-server`) | `issuer`, `authorization_endpoint`, `token_endpoint`, `registration_endpoint` all self-origin; upstream capabilities preserved unchanged |
+| Proxy Endpoints | `/oauth/register`, `/oauth/authorize`, `/oauth/token` all respond (not 404) |
+| RFC Compliance | Issuer matches retrieval URL per RFC 8414 Section 3.3 |
+| Unauthenticated MCP | 401 + `WWW-Authenticate` with `resource_metadata` pointing to self-origin |
+
+All auth-enabled E2E tests inject `TEST_UPSTREAM_METADATA` from
+`e2e-tests/helpers/upstream-metadata-fixture.ts` via `CreateAppOptions`.
+No network calls to Clerk in tests.
 
 ### Smoke Tests (out-of-process, real Clerk)
 
@@ -541,118 +600,83 @@ TDD applies at ALL levels. The PoC is not exempt.
 
 - Unit: `*.unit.test.ts` next to the pure function
 - Integration: `*.integration.test.ts` next to the integration point
+- E2E: `*.e2e.test.ts` in `e2e-tests/`
 - Smoke: in `smoke-tests/` directory
 
 ---
 
-## Phase 1: Proof of Concept (Validate Approach with TDD)
+## Phase 1: Proof of Concept — Implementation Status
 
-**Goal**: Prove the proxy approach fixes Cursor with the smallest
-possible change, using TDD. Write failing tests first, implement
-minimally, validate with Cursor.
+### Completed (RED + GREEN)
 
-### TDD Cycle
+All proxy route handlers, pure functions, unit tests, and integration
+tests are implemented and passing. Four architectural reviews completed
+(Barney, Betty, Fred, Wilma). Passthrough philosophy applied: all
+validation removed, proxy does not gatekeep.
 
-1. **RED**: Write integration tests for each proxy endpoint (fake
-   upstream). Run them — they fail (endpoints do not exist).
-2. **GREEN**: Implement the proxy endpoints. Run tests — they pass.
-3. **VALIDATE**: Start the dev server. Enable Cursor. Observe the flow.
-4. **REFACTOR**: Improve implementation. Tests remain green.
+| Step | Status | Evidence |
+|------|--------|----------|
+| Unit tests (pure functions) | ✅ 22 tests pass | `oauth-proxy-upstream.unit.test.ts` |
+| Integration tests (proxy routes + fake upstream) | ✅ 10 tests pass | `oauth-proxy-routes.integration.test.ts` |
+| `POST /oauth/register` handler | ✅ Implemented | Forwards JSON body to Clerk, returns response verbatim |
+| `GET /oauth/authorize` handler | ✅ Implemented | Redirects (302) to Clerk with all query params preserved |
+| `POST /oauth/token` handler | ✅ Implemented | Forwards raw `application/x-www-form-urlencoded` body to Clerk |
+| Pure functions (derive URL, build redirect, format error, rewrite metadata, type guard) | ✅ Implemented | `oauth-proxy-upstream.ts` |
+| Proxy paths added to `CLERK_SKIP_PATHS` | ✅ Done | `conditional-clerk-middleware.ts` |
+| PRM `authorization_servers` → self-origin | ✅ Done | `auth-routes.ts` |
+| `registerPublicOAuthMetadataEndpoints` accepts `upstreamMetadata` via DI | ✅ Done | `auth-routes.ts` |
+| `rewriteAuthServerMetadata` uses spread (no hardcoded capabilities) | ✅ Done | `oauth-proxy-upstream.ts` |
+| `isUpstreamAuthServerMetadata` type guard | ✅ Done | `oauth-proxy-upstream.ts` |
+| Structured logging (upstream URL, status, duration) | ✅ Done | All proxy handlers |
+| TSDoc: passthrough philosophy, error handling debt, `req.url` vs `req.originalUrl` | ✅ Done | `oauth-proxy-routes.ts`, `oauth-proxy-upstream.ts` |
+| Architectural review (Barney, Betty, Fred, Wilma) | ✅ All findings addressed | |
+| Lint clean | ✅ | |
 
-### What to Build
+### RESOLVED — Async Bootstrap Fully Wired (2026-02-21)
 
-Add three proxy endpoints to the existing Express app. Derive the
-upstream Clerk URL from `CLERK_PUBLISHABLE_KEY` at startup — do not
-hardcode the FAPI domain.
+The async bootstrap challenge has been resolved. Option A was
+implemented: `createApp` is now async, all call sites updated.
 
-#### 1. `POST /oauth/register` — Dynamic Client Registration proxy
+**What was done:**
 
-```text
-Receives: DCR request from Cursor
-Does: Forwards complete request body to Clerk /oauth/register
-Returns: Clerk's DCR response (client_id, etc.)
-```
+1. `createApp` returns `Promise<ExpressWithAppId>` — all ~30 call sites
+   updated with `await`
+2. `runAsyncBootstrapPhase` added to `bootstrap-helpers.ts` — measures
+   async duration correctly (6 unit tests)
+3. `'fetchUpstreamMetadata'` + `'registerOAuthProxy'` added to
+   `BootstrapPhaseName`
+4. `upstreamMetadata?: UpstreamAuthServerMetadata` added to
+   `CreateAppOptions` — tests inject fixture, production fetches from Clerk
+5. `setupOAuthAndCaching` properly awaited — when metadata is injected,
+   uses it directly; when not, derives upstream URL from publishable key
+   and fetches from Clerk via `runAsyncBootstrapPhase`
+6. `UpstreamAuthServerMetadata` validated via Zod schema
+   (`upstreamAuthServerMetadataSchema` in `oauth-proxy-upstream.ts`)
+7. Test fixture: `e2e-tests/helpers/upstream-metadata-fixture.ts`
+8. `auth-enforcement.e2e.test.ts` completely rewritten — 16 tests assert
+   self-origin URLs in PRM and AS metadata, proxy endpoint existence,
+   upstream capability preservation, RFC compliance
+9. `auth-routes.integration.test.ts` updated — 9 tests including AS
+   metadata endpoint with self-origin URLs + upstream capabilities
+10. Production entry (`index.ts`) uses top-level `await`
+11. All quality gates pass: 634 unit/integration + 185 E2E + smoke
 
-#### 2. `GET /oauth/authorize` — Authorisation redirect proxy
+### Remaining Steps
 
-```text
-Receives: Authorisation request from Cursor (client_id, redirect_uri,
-          code_challenge, state, scope, resource, etc.)
-Does: Validates redirect target is the known Clerk FAPI domain.
-      Redirects (302) to Clerk's authorisation endpoint with ALL
-      query parameters forwarded transparently.
-```
+| Step | Status | Notes |
+|------|--------|-------|
+| Inject `fetch` into `OAuthProxyConfig` | Pending | Fix testing strategy violation (separate TDD cycle) |
+| Validate with Cursor | **Pending — next priority** | Start dev server with real Clerk keys, connect Cursor, confirm full flow |
+| Update auth-enabled smoke test assertions | Pending | Self-origin in AS metadata |
+| Error handling → `Result<T, E>` | Pending | `try/catch` in proxy routes should use Result pattern |
+| Documentation (ADR, TSDoc, archive plans) | Pending | |
 
-#### 3. `POST /oauth/token` — Token exchange proxy
-
-```text
-Receives: Token exchange request from Cursor (grant_type, code,
-          code_verifier, redirect_uri, client_id, resource, etc.)
-Does: Validates grant_type is authorization_code or refresh_token.
-      Forwards complete request body to Clerk /oauth/token.
-Returns: Clerk's token response (access_token, etc.)
-Timeout: 10 seconds to Clerk, 504 on timeout.
-```
-
-#### 4. Update PRM `authorization_servers`
-
-Change `authorization_servers` to point to the server's own origin
-(dynamically derived from runtime config, not hardcoded):
-
-```json
-{ "authorization_servers": ["http://localhost:3333"] }
-```
-
-#### 5. Update AS metadata `/.well-known/oauth-authorization-server`
-
-Fetch Clerk's AS metadata at startup, cache it, and rewrite endpoint
-URLs to point to our proxy. Pass through capability fields unchanged:
-
-```json
-{
-  "issuer": "http://localhost:3333",
-  "authorization_endpoint": "http://localhost:3333/oauth/authorize",
-  "token_endpoint": "http://localhost:3333/oauth/token",
-  "registration_endpoint": "http://localhost:3333/oauth/register",
-  "token_endpoint_auth_methods_supported": ["client_secret_basic", "none", "client_secret_post"],
-  "scopes_supported": ["openid", "profile", "email", "public_metadata", "private_metadata", "offline_access"],
-  "response_types_supported": ["code"],
-  "grant_types_supported": ["authorization_code", "refresh_token"],
-  "code_challenge_methods_supported": ["S256"]
-}
-```
-
-#### 6. Register proxy endpoints in the pre-auth public phase
-
-Proxy endpoints MUST be registered in the same middleware phase as
-`registerPublicOAuthMetadataEndpoints` (Phase 2.5 in `application.ts`),
-before the global Clerk middleware. They are public OAuth infrastructure,
-not protected routes.
-
-Add `/oauth/authorize`, `/oauth/token`, `/oauth/register` to
-`CLERK_SKIP_PATHS` in `conditional-clerk-middleware.ts`.
-
-#### 7. Structured logging
-
-Every proxy call MUST log: upstream URL, response status, duration, and
-correlation ID. Use the existing structured logger.
-
-### What NOT to Change
+### What Was NOT Changed
 
 - The `/mcp` endpoint and auth middleware — unchanged
 - Clerk token verification — unchanged (tokens are still Clerk tokens)
 - The resource-parameter-validator — unchanged
 - CORS configuration — unchanged (proxy endpoints inherit global CORS)
-
-### Acceptance Criteria
-
-1. Integration tests pass (proxy routes with fake upstream)
-2. Cursor completes the OAuth flow end-to-end
-3. Server logs show `Authorization: Bearer oat_...` on `POST /mcp`
-4. Cursor shows green "Connected" with tools listed
-5. Existing `pnpm smoke:oauth:spec` passes (with updated assertions:
-   `authorization_servers` now points to self-origin, not Clerk HTTPS)
-6. Server logs show structured logging for all proxy calls
 
 ### Monitoring for Cursor's `Basic` Auth Bug
 
@@ -675,46 +699,39 @@ must strip the `Authorization` header before forwarding.
 
 ---
 
-## Phase 2: Architecture Design (After PoC Validates)
+## Resolved Design Decisions (Phase 2 — Architecture)
 
-Only proceed if Phase 1 succeeds.
+Phase 2 (architecture design) is resolved. Custom Express routes were
+chosen over the MCP SDK's `mcpAuthRouter`. Phases 2 and 3 from the
+original plan have been merged into Phase 1 implementation.
 
-### Decision: SDK `mcpAuthRouter` vs Custom Routes
+### Decision: Custom Routes (not SDK `mcpAuthRouter`)
 
-| Aspect | SDK `mcpAuthRouter` | Custom Routes |
-|--------|---------------------|---------------|
-| Endpoint paths | Fixed at root (`/authorize`, `/token`, etc.) | Flexible (`/oauth/authorize`, etc.) |
-| Metadata endpoints | Creates its own `/.well-known/*` | Use our existing endpoints |
-| Rate limiting | Built-in | Must implement |
-| CORS | Built-in | Use our existing CORS |
-| Middleware chain | Replaces ours | Integrates with ours |
-| Error handling | SDK standard | Our patterns |
-| Observability | None built-in | Our structured logging |
+Custom Express routes using `Router()` preserve our existing middleware
+chain, structured logging, CORS, and error handling. The SDK's
+`mcpAuthRouter` would replace our middleware chain with its own
+opinionated layout, create its own `/.well-known/*` endpoints (colliding
+with ours), and provide no structured logging.
 
-**Likely choice: Custom routes using `ProxyOAuthServerProvider`
-internally.** This preserves our existing middleware chain, logging,
-CORS, and error handling. We use the provider's proxy logic without
-adopting the router's opinionated layout.
-
-### Boundary Definition
+### Architecture Diagram
 
 ```text
                     ┌─────────────────────────────────────────┐
                     │           Our MCP Server                │
                     │                                         │
                     │  ┌──────────────────────────────────┐   │
-                    │  │  OAuth Proxy Layer (NEW)          │   │
+                    │  │  OAuth Proxy Layer                │   │
                     │  │  /oauth/authorize  → Clerk        │   │
                     │  │  /oauth/token      → Clerk        │   │
                     │  │  /oauth/register   → Clerk        │   │
                     │  └──────────────────────────────────┘   │
                     │                                         │
                     │  ┌──────────────────────────────────┐   │
-                    │  │  OAuth Metadata (UPDATED)         │   │
+                    │  │  OAuth Metadata                   │   │
                     │  │  /.well-known/oauth-protected-    │   │
                     │  │    resource → points AS to self   │   │
                     │  │  /.well-known/oauth-authorization-│   │
-                    │  │    server → advertises proxy      │   │
+                    │  │    server → rewritten from Clerk  │   │
                     │  └──────────────────────────────────┘   │
                     │                                         │
                     │  ┌──────────────────────────────────┐   │
@@ -740,73 +757,78 @@ adopting the router's opinionated layout.
    still verifies tokens using Clerk's `getAuth()`.
 
 2. **The proxy is transparent.** It holds no OAuth session or token
-   state. It is a stateless pass-through for all OAuth operations.
-   Bounded operational state is permitted: cached upstream AS metadata
-   (fetched once at startup) and rate-limit counters for DCR.
+   state. It is a stateless passthrough for all OAuth operations. The
+   only state: cached upstream AS metadata (fetched once at startup).
 
-3. **DCR clients are Clerk DCR clients.** The proxy forwards DCR to
+3. **The proxy does NOT validate.** Clerk handles all validation,
+   security, and rate limiting. The proxy forwards everything verbatim.
+
+4. **DCR clients are Clerk DCR clients.** The proxy forwards DCR to
    Clerk. Clerk manages the registered clients.
 
-4. **PKCE is validated by Clerk, not by us.** The proxy passes through
+5. **PKCE is validated by Clerk, not by us.** The proxy passes through
    `code_challenge` and `code_verifier` to Clerk.
 
-5. **The proxy is always-on.** One code path for all clients, all
-   environments. No client detection, no conditional enablement, no
-   toggle management. This simplifies testing (one path to validate),
-   operations (no environment-specific config), and architecture
-   (consistent metadata for all clients). If Cursor fixes the bug, the
-   proxy can be removed — but there is no urgency, as it adds no
-   overhead.
+6. **The proxy is always-on.** One code path for all clients, all
+   environments. No client detection, no conditional enablement. If
+   Cursor fixes the bug, the proxy can be removed — but there is no
+   urgency, as it adds no overhead.
 
-6. **Other clients are unaffected.** MCP Inspector and programmatic
+7. **Other clients are unaffected.** MCP Inspector and programmatic
    clients follow the PRM `authorization_servers` to our server, which
-   proxies to Clerk. The tokens are identical. Existing smoke tests
-   should continue to pass.
+   proxies to Clerk. The tokens are identical.
 
-### Files Affected
+### Files (Current State)
 
-| File | Change |
-|------|--------|
-| `src/oauth-proxy/` (NEW directory) | Proxy route handlers, pure functions, types |
-| `src/oauth-proxy/oauth-proxy-routes.ts` (NEW) | Express route handlers |
-| `src/oauth-proxy/oauth-proxy-upstream.ts` (NEW) | Pure functions for URL construction, validation |
-| `src/oauth-proxy/oauth-proxy-routes.integration.test.ts` (NEW) | Integration tests with fake upstream |
-| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` (NEW) | Unit tests for pure functions |
-| `src/oauth-proxy/index.ts` (NEW) | Public API boundary |
-| `src/auth-routes.ts` | Update PRM and AS metadata generation |
-| `src/application.ts` | Register proxy routes in Phase 2.5 (pre-auth) |
-| `src/conditional-clerk-middleware.ts` | Add proxy paths to `CLERK_SKIP_PATHS` |
-| `src/auth/mcp-auth/mcp-auth.ts` | No change |
-| `src/security.ts` | No change (global CORS covers proxy endpoints) |
-
----
-
-## Phase 3: Production Implementation (After Architecture Design)
-
-TDD at all levels. Write tests first, then implement.
-
-1. **Unit tests (RED)**: Write failing unit tests for pure functions
-   (URL construction, validation, error formatting, metadata rewriting)
-2. **Unit implementation (GREEN)**: Implement pure functions. Tests pass.
-3. **Integration tests (RED)**: Write failing integration tests for
-   proxy route handlers with fake upstream
-4. **Route implementation (GREEN)**: Implement proxy routes with error
-   handling, timeouts, structured logging. Tests pass.
-5. **Wire into middleware chain**: Register proxy routes in Phase 2.5
-   of `application.ts`. Add paths to `CLERK_SKIP_PATHS`.
-6. **Update metadata generation**: Update
-   `generateClerkProtectedResourceMetadata` to use server origin.
-   Update `deriveAuthServerMetadata` (or replace with cached upstream
-   rewriting) to advertise proxy endpoints.
-7. **Smoke test updates**: Update existing `pnpm smoke:oauth:spec`
-   assertions (self-origin instead of Clerk HTTPS URLs). Add
-   proxy-specific smoke test.
-8. **Rate limiting**: Add DCR rate limiting (20 per hour per IP)
-9. **Quality gates**: Run full gate chain
+| File | Role | Status |
+|------|------|--------|
+| `src/oauth-proxy/oauth-proxy-routes.ts` | Express route handlers (register, authorize, token) | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.ts` | Pure functions + Zod schema for `UpstreamAuthServerMetadata` | Done |
+| `src/oauth-proxy/oauth-proxy-routes.integration.test.ts` | Integration tests with fake upstream (10 tests) | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` | Unit tests for pure functions (22 tests) | Done |
+| `src/oauth-proxy/index.ts` | Public API boundary (barrel file) | Done |
+| `src/auth-routes.ts` | PRM + AS metadata endpoints; accepts `upstreamMetadata` via DI | Done |
+| `src/conditional-clerk-middleware.ts` | Proxy paths in `CLERK_SKIP_PATHS` | Done |
+| `src/app/oauth-and-caching-setup.ts` | Wires OAuth metadata + proxy into bootstrap; DI or fetch | Done |
+| `src/application.ts` | `createApp` async, `upstreamMetadata` in `CreateAppOptions` | Done |
+| `src/app/bootstrap-helpers.ts` | `runAsyncBootstrapPhase`, `BootstrapPhaseName` complete | Done |
+| `src/app/bootstrap-helpers.unit.test.ts` | Unit tests for `runAsyncBootstrapPhase` (6 tests) | Done |
+| `e2e-tests/helpers/upstream-metadata-fixture.ts` | Test fixture for DI metadata injection | Done |
+| `e2e-tests/auth-enforcement.e2e.test.ts` | Self-origin assertions, proxy endpoint tests (16 tests) | Done |
+| `src/auth-routes.integration.test.ts` | Self-origin + AS metadata tests (9 tests) | Done |
 
 ---
 
-## Phase 4: Documentation and Cleanup
+## Resolved: Async Bootstrap (Option A Implemented — 2026-02-21)
+
+Option A was implemented with full multi-level TDD:
+
+1. **RED (Unit)**: 6 tests for `runAsyncBootstrapPhase` — all failed
+   (function didn't exist)
+2. **GREEN (Unit)**: Implemented `runAsyncBootstrapPhase` — all passed
+3. **RED (E2E)**: Rewrote `auth-enforcement.e2e.test.ts` with
+   self-origin assertions, async `createApp`, DI metadata — all failed
+4. **RED (Integration)**: Updated `auth-routes.integration.test.ts`
+   with AS metadata tests — all failed
+5. **GREEN**: Made `createApp` async, wired `setupOAuthAndCaching`,
+   updated all ~30 call sites — all tests passed
+6. **REFACTOR**: Replaced manual type guard with Zod schema, fixed
+   lint errors
+
+**Key design decisions:**
+
+- `runAsyncBootstrapPhase` is a separate function from
+  `runBootstrapPhase` (simpler than overloads)
+- When `upstreamMetadata` is injected (tests), `setupOAuthAndCaching`
+  derives `upstreamBaseUrl` from `metadata.issuer` — no need for valid
+  publishable key format in tests
+- When not injected (production), derives URL from publishable key
+  and fetches metadata via `runAsyncBootstrapPhase`
+- Production entry (`index.ts`) uses top-level `await` (ESM)
+
+---
+
+## Phase 2: Documentation and Cleanup (After Proxy Works)
 
 1. Update ADR-113 with proxy OAuth AS approach
 2. Consider writing a dedicated ADR for the proxy decision
@@ -841,20 +863,33 @@ the proxy instead of directly to Clerk. The tokens are the same.
 ## Resolved Design Decisions
 
 1. **The proxy is always-on.** One code path for all clients, all
-   environments. No client detection, no conditional enablement. This
-   simplifies testing, operations, and architecture.
+   environments. No client detection, no conditional enablement.
 
 2. **No `/cursor` path.** Not needed with an always-on proxy.
 
-3. **Token refresh is supported.** The proxy handles
-   `grant_type=refresh_token`. It is architecturally ready for when
+3. **Custom Express routes, not SDK `mcpAuthRouter`.** Preserves our
+   middleware chain, structured logging, and error handling.
+
+4. **No validation in the proxy.** The proxy is a transparent
+   passthrough. Clerk handles all validation, security, rate limiting.
+
+5. **Token refresh is supported.** The proxy forwards any
+   `grant_type` without filtering. It is architecturally ready for when
    Cursor fixes its refresh bug
    ([forum #149511](https://forum.cursor.com/t/cursor-does-not-refresh-oauth-tokens-for-mcp-servers/149511)).
 
-4. **The proxy can be removed later.** If Cursor fixes the
+6. **The proxy can be removed later.** If Cursor fixes the
    `resource_metadata` persistence bug, the proxy can be removed. But
-   there is no urgency — it adds no overhead and simplifies the metadata
-   chain (clients never need to know about Clerk's domain).
+   there is no urgency — it adds no overhead.
+
+7. **Metadata fetched from Clerk, not hardcoded.** Capability arrays
+   (`scopes_supported`, `grant_types_supported`, etc.) come from
+   Clerk's live `/.well-known/oauth-authorization-server` endpoint,
+   fetched once at startup. Only endpoint URLs are rewritten.
+
+8. **DI for metadata in tests.** Tests inject an
+   `UpstreamAuthServerMetadata` fixture via `CreateAppOptions`. No
+   network calls in tests.
 
 ## Known Limitations
 
@@ -875,15 +910,22 @@ the proxy instead of directly to Clerk. The tokens are the same.
 - **Token URL**: `https://native-hippo-15.clerk.accounts.dev/oauth/token`
 - **Registration URL**: `https://native-hippo-15.clerk.accounts.dev/oauth/register`
 
-### Current Metadata Snapshots
+### Metadata Snapshots (Before and After Proxy)
 
 **Our PRM** (`/.well-known/oauth-protected-resource`):
 
 ```json
+// BEFORE (pointed to Clerk — Cursor breaks):
 {
   "resource": "http://localhost:3333/mcp",
   "authorization_servers": ["https://native-hippo-15.clerk.accounts.dev"],
-  "token_types_supported": ["urn:ietf:params:oauth:token-type:access_token"],
+  "scopes_supported": ["email", "openid"]
+}
+
+// AFTER (points to self — Cursor works):
+{
+  "resource": "http://localhost:3333/mcp",
+  "authorization_servers": ["http://localhost:3333"],
   "scopes_supported": ["email", "openid"]
 }
 ```
@@ -891,11 +933,25 @@ the proxy instead of directly to Clerk. The tokens are the same.
 **Our AS Metadata** (`/.well-known/oauth-authorization-server`):
 
 ```json
+// BEFORE (hardcoded capabilities, pointed to Clerk):
 {
   "issuer": "https://native-hippo-15.clerk.accounts.dev",
   "authorization_endpoint": "https://native-hippo-15.clerk.accounts.dev/oauth/authorize",
   "token_endpoint": "https://native-hippo-15.clerk.accounts.dev/oauth/token",
   "registration_endpoint": "https://native-hippo-15.clerk.accounts.dev/oauth/register",
+  "response_types_supported": ["code"],
+  "grant_types_supported": ["authorization_code", "refresh_token"],
+  "code_challenge_methods_supported": ["S256"]
+}
+
+// AFTER (fetched from Clerk, endpoints rewritten to self-origin):
+{
+  "issuer": "http://localhost:3333",
+  "authorization_endpoint": "http://localhost:3333/oauth/authorize",
+  "token_endpoint": "http://localhost:3333/oauth/token",
+  "registration_endpoint": "http://localhost:3333/oauth/register",
+  "token_endpoint_auth_methods_supported": ["client_secret_basic", "none", "client_secret_post"],
+  "scopes_supported": ["openid", "profile", "email", "public_metadata", "private_metadata", "offline_access"],
   "response_types_supported": ["code"],
   "grant_types_supported": ["authorization_code", "refresh_token"],
   "code_challenge_methods_supported": ["S256"]
@@ -918,21 +974,49 @@ the proxy instead of directly to Clerk. The tokens are the same.
 }
 ```
 
+The AFTER state exactly matches Clerk's own metadata except for the
+four endpoint URLs, which are rewritten to self-origin by
+`rewriteAuthServerMetadata()`. All capability arrays come from Clerk
+and are passed through unchanged via object spread.
+
 ---
 
 ## Key Files
 
+### OAuth Proxy
+
+| File | Role | Status |
+|------|------|--------|
+| `src/oauth-proxy/oauth-proxy-routes.ts` | Route handlers: register, authorize, token | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.ts` | Pure functions: URL derivation, redirect, error, metadata rewrite, type guard | Done |
+| `src/oauth-proxy/oauth-proxy-routes.integration.test.ts` | Integration tests with fake upstream (10 tests) | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` | Unit tests for pure functions (22 tests) | Done |
+| `src/oauth-proxy/index.ts` | Barrel file | Done |
+
 ### Server-Side Auth Chain
 
-| File | Role |
-|------|------|
-| `src/auth-routes.ts` | OAuth metadata endpoints (PRM + AS metadata) + `deriveAuthServerMetadata()` |
-| `src/auth/mcp-auth/mcp-auth.ts` | Generic auth middleware (401 + WWW-Authenticate) |
-| `src/auth/mcp-auth/mcp-auth-clerk.ts` | Clerk-specific token verification |
-| `src/conditional-clerk-middleware.ts` | Path-based Clerk bypass |
-| `src/resource-parameter-validator.ts` | JWT `aud` claim validation (RFC 8707) |
-| `src/security.ts` | CORS middleware (exposes `WWW-Authenticate` header) |
-| `src/application.ts` | Middleware chain wiring |
+| File | Role | Status |
+|------|------|--------|
+| `src/auth-routes.ts` | OAuth metadata endpoints (PRM + AS metadata); accepts `upstreamMetadata` via DI | Done |
+| `src/app/oauth-and-caching-setup.ts` | Wires OAuth metadata + proxy; DI path or Clerk fetch | Done |
+| `src/application.ts` | `createApp` async, `upstreamMetadata` in `CreateAppOptions` | Done |
+| `src/app/bootstrap-helpers.ts` | `runAsyncBootstrapPhase`, complete `BootstrapPhaseName` | Done |
+| `src/app/bootstrap-helpers.unit.test.ts` | Unit tests for `runAsyncBootstrapPhase` (6 tests) | Done |
+| `src/conditional-clerk-middleware.ts` | Proxy paths in `CLERK_SKIP_PATHS` | Done |
+| `src/auth/mcp-auth/mcp-auth.ts` | Generic auth middleware (401 + WWW-Authenticate) | Unchanged |
+| `src/auth/mcp-auth/mcp-auth-clerk.ts` | Clerk-specific token verification | Unchanged |
+| `src/resource-parameter-validator.ts` | JWT `aud` claim validation (RFC 8707) | Unchanged |
+| `src/security.ts` | CORS middleware (exposes `WWW-Authenticate` header) | Unchanged |
+
+### E2E Test Infrastructure
+
+| File | Role | Status |
+|------|------|--------|
+| `e2e-tests/auth-enforcement.e2e.test.ts` | Self-origin metadata, proxy endpoints, RFC compliance (16 tests) | Done |
+| `e2e-tests/helpers/upstream-metadata-fixture.ts` | `TEST_UPSTREAM_METADATA` fixture for DI | Done |
+| `e2e-tests/helpers/create-stubbed-http-app.ts` | Async `createStubbedHttpApp` wrapper | Done |
+| `e2e-tests/helpers/create-live-http-app.ts` | Async `createLiveHttpApp` wrapper | Done |
+| `src/auth-routes.integration.test.ts` | AS metadata endpoint with self-origin assertions (9 tests) | Done |
 
 ### Smoke Test Infrastructure
 

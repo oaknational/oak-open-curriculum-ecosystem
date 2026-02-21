@@ -25,6 +25,10 @@ export interface DiscoveryChainResult {
  * 2. GET resource_metadata → receive PRM with authorization_servers[]
  * 3. Fetch AS metadata directly from the authorization server
  *
+ * The proxy OAuth AS makes the authorization server the same origin as the
+ * resource server, so `authorization_servers[0]` MUST match the server's
+ * own origin (not a third-party AS like Clerk).
+ *
  * This assertion walks the entire chain and validates every link.
  */
 export async function assertOAuthDiscoveryChain(
@@ -33,7 +37,7 @@ export async function assertOAuthDiscoveryChain(
   const logger = createAssertionLogger(context, 'oauth-discovery');
 
   const prmUrl = await assertUnauthenticatedReturns401(context, logger);
-  const firstServer = await assertPrmReturnsAuthServers(prmUrl, logger);
+  const firstServer = await assertPrmReturnsAuthServers(prmUrl, context, logger);
   const asMetadata = await assertAsMetadataFromAuthServer(firstServer, logger);
 
   logAssertionSuccess(logger, 'Full spec-compliant OAuth discovery chain validated');
@@ -69,6 +73,7 @@ async function assertUnauthenticatedReturns401(
 
 async function assertPrmReturnsAuthServers(
   prmUrl: string,
+  context: SmokeContext,
   logger: ReturnType<typeof createAssertionLogger>,
 ): Promise<string> {
   logger.debug('Step 2: Fetching Protected Resource Metadata', { prmUrl });
@@ -88,8 +93,16 @@ async function assertPrmReturnsAuthServers(
   assert.ok(authServers.length > 0, 'PRM must list at least one authorization server');
 
   const firstServer = ensureString(authServers[0], 'PRM authorization_servers[0]');
-  assert.match(firstServer, /^https:\/\//, 'Authorization server must be an HTTPS URL');
-  logAssertionSuccess(logger, 'Step 2: PRM valid with authorization_servers', {
+  assert.match(firstServer, /^https?:\/\//, 'Authorization server must be an HTTP(S) URL');
+
+  const serverOrigin = new URL(context.baseUrl).origin;
+  assert.equal(
+    new URL(firstServer).origin,
+    serverOrigin,
+    `PRM authorization_servers[0] must be self-origin (${serverOrigin}), not a third-party AS`,
+  );
+
+  logAssertionSuccess(logger, 'Step 2: PRM valid with self-origin authorization_servers', {
     resource,
     authorizationServer: firstServer,
   });
@@ -104,7 +117,7 @@ async function assertAsMetadataFromAuthServer(
     url: authorizationServer,
   });
   const asMetadata = await fetchAndValidateAsMetadata(authorizationServer, logger);
-  logAssertionSuccess(logger, 'Step 3: AS metadata valid from Clerk', {
+  logAssertionSuccess(logger, 'Step 3: AS metadata valid from authorization server', {
     authorizationEndpoint: asMetadata.authorizationEndpoint,
     tokenEndpoint: asMetadata.tokenEndpoint,
   });
@@ -177,8 +190,12 @@ function validateAsMetadataResponse(body: string, source: string): AsMetadataFie
   );
   const tokenEndpoint = ensureString(metadata.token_endpoint, `${source} token_endpoint`);
 
-  assert.match(authorizationEndpoint, /^https:\/\//, 'authorization_endpoint must be HTTPS');
-  assert.match(tokenEndpoint, /^https:\/\//, 'token_endpoint must be HTTPS');
+  assert.match(
+    authorizationEndpoint,
+    /^https?:\/\//,
+    'authorization_endpoint must be an HTTP(S) URL',
+  );
+  assert.match(tokenEndpoint, /^https?:\/\//, 'token_endpoint must be an HTTP(S) URL');
 
   let registrationEndpoint = '';
   if ('registration_endpoint' in metadata && typeof metadata.registration_endpoint === 'string') {

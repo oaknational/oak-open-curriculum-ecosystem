@@ -23,6 +23,7 @@ import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 
@@ -46,8 +47,8 @@ vi.mock('@clerk/express', () => ({
  *
  * Each test creates its own app for isolation.
  */
-function createAuthEnabledApp(): Express {
-  return createApp({
+async function createAuthEnabledApp(): Promise<Express> {
+  return await createApp({
     runtimeConfig: createMockRuntimeConfig({
       env: {
         OAK_API_KEY: 'test-api-key',
@@ -58,13 +59,14 @@ function createAuthEnabledApp(): Express {
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     }),
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
   });
 }
 
 describe('Application-Level Method-Aware Auth', () => {
   describe('Discovery methods (auth required per MCP 2025-11-25)', () => {
     it('returns HTTP 401 for tools/list without Bearer token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -77,7 +79,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 for initialize without Bearer token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -95,7 +97,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 for tools/list with fake Bearer token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .set('Authorization', 'Bearer fake-token-for-discovery')
@@ -111,7 +113,7 @@ describe('Application-Level Method-Aware Auth', () => {
 
   describe('All tools require HTTP auth (noauth = no scope check, not no token)', () => {
     it('returns HTTP 401 for get-changelog without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -127,7 +129,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 for get-changelog-latest without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -143,7 +145,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 for get-rate-limit without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -166,7 +168,7 @@ describe('Application-Level Method-Aware Auth', () => {
      * Auth middleware rejects before MCP transport, so fresh app per test is optional.
      */
     it('returns HTTP 401 with WWW-Authenticate for get-key-stages without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -190,7 +192,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 with WWW-Authenticate for get-subjects without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -214,7 +216,7 @@ describe('Application-Level Method-Aware Auth', () => {
 
   describe('Aggregated tools (require auth)', () => {
     it('returns HTTP 401 with WWW-Authenticate for search without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -236,7 +238,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 with WWW-Authenticate for fetch without token', async () => {
-      const response = await request(createAuthEnabledApp())
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -263,8 +265,8 @@ describe('Application-Level Method-Aware Auth', () => {
      * Creates a fresh app with auth disabled.
      * Each test creates its own app for isolation.
      */
-    function createBypassApp(): Express {
-      return createApp({
+    async function createBypassApp(): Promise<Express> {
+      return await createApp({
         runtimeConfig: createMockRuntimeConfig({
           dangerouslyDisableAuth: true,
           env: {
@@ -278,7 +280,7 @@ describe('Application-Level Method-Aware Auth', () => {
     }
 
     it('allows discovery methods without token when flag is true', async () => {
-      const response = await request(createBypassApp())
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -291,7 +293,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('allows auth-required tool without token when flag is true', async () => {
-      const response = await request(createBypassApp())
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -308,7 +310,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('bypasses all auth checks when flag is true', async () => {
-      const response = await request(createBypassApp())
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({

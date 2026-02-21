@@ -48,7 +48,7 @@ const PromptsGetResultSchema = z.object({
 describe('MCP Prompts E2E', () => {
   describe('prompts/list - Client can discover workflow prompts', () => {
     it('returns find-lessons prompt', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -73,7 +73,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('returns lesson-planning prompt', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -95,7 +95,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('returns progression-map prompt', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -117,7 +117,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('prompts include helpful descriptions', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -144,7 +144,7 @@ describe('MCP Prompts E2E', () => {
 
   describe('prompts/get - Client gets workflow guidance', () => {
     it('find-lessons prompt includes topic in messages', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -174,7 +174,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('find-lessons prompt guides to use search tool', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -201,7 +201,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('lesson-planning prompt includes yearGroup context', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -229,7 +229,7 @@ describe('MCP Prompts E2E', () => {
     });
 
     it('progression-map prompt guides concept tracking', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')

@@ -62,7 +62,7 @@ async function executeToolCall(): Promise<{
 }> {
   const captured: CapturedCall[] = [];
   const overrides = createStubOverrides(captured);
-  const app = createApp({
+  const app = await createApp({
     toolHandlerOverrides: overrides,
     runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
   });

@@ -54,17 +54,7 @@ All plans must include instructions to create:
 
 ## Sub-agent Reviews
 
-After making changes, consider invoking appropriate sub-agents:
-
-| Change Type | Sub-agent |
-|-------------|-----------|
-| Code changes | `code-reviewer` (or model-specific variants) |
-| Structural changes | `architecture-reviewer` |
-| Test changes | `test-reviewer` |
-| Type complexity | `type-reviewer` |
-| Config changes | `config-reviewer` |
-
-Use the Task tool with `readonly: true` and appropriate `subagent_type`.
+Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready Task tool snippets.
 
 ## Quality Gates
 

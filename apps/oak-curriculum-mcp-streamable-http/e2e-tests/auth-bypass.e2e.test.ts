@@ -18,7 +18,7 @@ import { createApp } from '../src/application.js';
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     // Create isolated env with auth DISABLED (DX helper validation)
     const testEnv: NodeJS.ProcessEnv = {
       NODE_ENV: 'test',
@@ -36,7 +36,7 @@ describe('Auth Bypass for Development (E2E)', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    app = createApp({ runtimeConfig });
+    app = await createApp({ runtimeConfig });
   });
 
   it('allows /mcp POST without Authorization when bypass enabled', async () => {

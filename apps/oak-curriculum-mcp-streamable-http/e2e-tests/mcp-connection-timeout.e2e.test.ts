@@ -335,8 +335,11 @@ describe('MCP Connection Timeout E2E', () => {
     beforeAll(async () => {
       const { createApp } = await import('../src/application.js');
 
-      // Use mock config
-      app = createApp({ runtimeConfig: createMockRuntimeConfig() });
+      const { TEST_UPSTREAM_METADATA } = await import('./helpers/upstream-metadata-fixture.js');
+      app = await createApp({
+        runtimeConfig: createMockRuntimeConfig(),
+        upstreamMetadata: TEST_UPSTREAM_METADATA,
+      });
     });
 
     it('should respond to health check immediately with real app', async () => {

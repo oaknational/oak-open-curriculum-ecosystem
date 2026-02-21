@@ -4,6 +4,7 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
@@ -102,7 +103,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig, upstreamMetadata: TEST_UPSTREAM_METADATA });
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
@@ -114,7 +115,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         params: { name: 'get-key-stages', arguments: {} },
       });
 
-    // HTTP 401 per MCP spec for protected tools without auth
     expect(res.status).toBe(401);
 
     // WWW-Authenticate header per RFC 6750
@@ -130,7 +130,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -167,7 +167,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -183,7 +183,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -209,7 +209,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -237,7 +237,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -267,7 +267,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = createApp({ runtimeConfig });
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)

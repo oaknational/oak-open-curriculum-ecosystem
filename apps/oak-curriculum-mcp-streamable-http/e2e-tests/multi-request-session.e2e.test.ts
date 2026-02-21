@@ -18,7 +18,7 @@ import { parseSseEnvelope } from './helpers/sse.js';
 
 describe('Multi-request session against a single app instance', () => {
   it('handles sequential initialize then tools/list on the same app', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
 
     // First request: initialize
     const initResponse = await request(app)
@@ -57,7 +57,7 @@ describe('Multi-request session against a single app instance', () => {
   });
 
   it('handles three sequential requests (initialize, tools/list, tools/call)', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
 
     // Request 1: initialize
     const initResponse = await request(app)

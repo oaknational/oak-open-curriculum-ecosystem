@@ -13,14 +13,10 @@ export interface CreateLiveHttpAppOptions {
   readonly envOverrides?: Partial<NodeJS.ProcessEnv>;
 }
 
-export function createLiveHttpApp(options?: CreateLiveHttpAppOptions): LiveHttpApp {
-  // Create isolated env with live credentials
+export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Promise<LiveHttpApp> {
   const testEnv: NodeJS.ProcessEnv = {
     NODE_ENV: 'test',
-    // Use real API key from environment or fallback
     OAK_API_KEY: process.env.OAK_API_KEY ?? 'live-mode-api-key',
-    // Disable auth – live-mode E2E tests assert Oak API integration, not Clerk enforcement.
-    // Auth coverage lives in auth-enforcement.e2e.test.ts and smoke-dev-auth.
     DANGEROUSLY_DISABLE_AUTH: 'true',
     ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
     ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -33,7 +29,7 @@ export function createLiveHttpApp(options?: CreateLiveHttpAppOptions): LiveHttpA
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  const app = createApp({ runtimeConfig, toolHandlerOverrides: options?.overrides });
+  const app = await createApp({ runtimeConfig, toolHandlerOverrides: options?.overrides });
 
   return { app };
 }

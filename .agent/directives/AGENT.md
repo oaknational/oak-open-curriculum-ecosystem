@@ -36,16 +36,15 @@ Always apply your own critical thinking to your work, and then use the sub-agent
 
 ### Available Sub-agents
 
-Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance.
+Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance. For the full invocation matrix, timing guidance, triage checklist, and worked examples, see the `invoke-code-reviewers` rule (`.cursor/rules/invoke-code-reviewers.mdc`, always applied).
 
-| Agent | Purpose | When to Use |
-|-------|---------|-------------|
-| `architecture-reviewer` | Boundary compliance, import patterns | Structural changes, new modules, refactoring |
-| `code-reviewer` | Quality, security, maintainability | After writing/modifying code, completing features |
-| `test-reviewer` | Test quality, TDD compliance, mock simplicity | After test changes, when auditing test suites |
-| `type-reviewer` | Type safety, compile-time embedding | Complex generics, type narrowing, external data |
-| `config-reviewer` | Tooling configuration, quality gates | Config changes, new workspaces, base config updates |
-| `subagent-architect` | Creating and optimising sub-agents | Agent design, system prompts, orchestration |
+#### Standard Quality Roster
+
+`code-reviewer` (gateway), `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `architecture-reviewer-wilma`, `test-reviewer`, `type-reviewer`, `config-reviewer`, `security-reviewer`, `docs-adr-reviewer`
+
+#### Specialist On-Demand
+
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 

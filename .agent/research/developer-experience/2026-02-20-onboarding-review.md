@@ -1,5 +1,11 @@
 # Developer Onboarding Experience Review
 
+> **Historical snapshot (20 February 2026).** Some findings have since been
+> resolved (e.g. the `renderKnowledgeGraph` widget crash was fixed as part of
+> the ontology knowledge graph tidy-up). Do not treat this document as
+> current-state truth. A fresh review pass should be scheduled to replace
+> this snapshot.
+
 Date: 20 February 2026
 Reviewer: Codex (GPT-5)
 Scope: Follow new developer onboarding from root `README.md`, validate the flow end-to-end, and assess accuracy/helpfulness/completeness.

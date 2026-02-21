@@ -72,7 +72,7 @@ Use `pnpm qg` once you are ready to run full-gate validation across UI, E2E, and
 
 See [Environment Variables Guide](./environment-variables.md) for complete setup details when you're ready.
 
-### Known Gate Caveat
+### Known Gate Caveats
 
 As of **20 February 2026**, this suite is known to fail in clean local runs:
 

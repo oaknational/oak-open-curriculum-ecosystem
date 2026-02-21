@@ -12,17 +12,13 @@ export interface StubbedHttpApp {
   readonly app: express.Express;
 }
 
-export function createStubbedHttpApp(
+export async function createStubbedHttpApp(
   envOverrides: Partial<NodeJS.ProcessEnv> = {},
-): StubbedHttpApp {
-  // Create isolated env - NO global mutation
+): Promise<StubbedHttpApp> {
   const testEnv: NodeJS.ProcessEnv = {
     NODE_ENV: 'test',
-    // Configure for stub mode with auth bypass
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
     OAK_API_KEY: STUB_API_KEY,
-    // Disable auth – stub-mode E2E tests focus on protocol responses.
-    // Auth enforcement is proven by auth-enforcement.e2e.test.ts and smoke-dev-auth.
     DANGEROUSLY_DISABLE_AUTH: 'true',
     ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
     ELASTICSEARCH_URL: 'http://fake-es:9200',
@@ -35,7 +31,7 @@ export function createStubbedHttpApp(
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  const app = createApp({ runtimeConfig });
+  const app = await createApp({ runtimeConfig });
 
   return { app };
 }

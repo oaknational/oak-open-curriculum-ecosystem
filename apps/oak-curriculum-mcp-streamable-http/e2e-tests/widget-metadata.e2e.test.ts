@@ -88,17 +88,17 @@ function findToolByName(tools: McpToolWithMeta[], name: string): McpToolWithMeta
   return tools.find((t) => t.name === name);
 }
 
-function createTestApp(): ReturnType<typeof createApp> {
+async function createTestApp() {
   const result = loadRuntimeConfig({
     processEnv: testEnv,
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  return createApp({ runtimeConfig });
+  return await createApp({ runtimeConfig });
 }
 
 async function callToolsList(
-  app: ReturnType<typeof createApp>,
+  app: Awaited<ReturnType<typeof createApp>>,
 ): Promise<{ tools: McpToolWithMeta[]; status: number }> {
   const res = await request(app)
     .post('/mcp')
@@ -118,7 +118,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns _meta with openai/outputTemplate in tools/list',
       async (toolName) => {
-        const app = createTestApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -131,7 +131,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
 
     it('outputTemplate URI matches a registered resource', async () => {
       // Get the outputTemplate URI from tools/list
-      const toolsApp = createTestApp();
+      const toolsApp = await createTestApp();
       const { tools } = await callToolsList(toolsApp);
       const searchTool = findToolByName(tools, 'search');
       const templateUri = searchTool?._meta?.['openai/outputTemplate'];
@@ -156,7 +156,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns invoking status text in tools/list',
       async (toolName) => {
-        const app = createTestApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -170,7 +170,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns invoked status text in tools/list',
       async (toolName) => {
-        const app = createTestApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -195,7 +195,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(allToolNames)(
       '%s tool has widgetAccessible set to true in tools/list',
       async (toolName) => {
-        const app = createTestApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -205,7 +205,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     );
 
     it('ALL tools have widgetAccessible (universal coverage)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const { tools, status } = await callToolsList(app);
       expect(status).toBe(200);
 
@@ -217,7 +217,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
 
   describe('openai/visibility (tool visibility control)', () => {
     it('ALL tools have visibility set to public', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const { tools, status } = await callToolsList(app);
       expect(status).toBe(200);
 
@@ -233,7 +233,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(generatedToolNames)(
       'generated tool %s has complete _meta in tools/list',
       async (toolName) => {
-        const app = createTestApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 

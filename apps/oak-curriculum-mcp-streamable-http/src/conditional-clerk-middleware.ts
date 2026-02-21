@@ -9,7 +9,7 @@
  *
  * ## What Skips Clerk
  *
- * - **Path-based**: `/.well-known/*`, `/health`, `/ready` (RFC 9728, health checks)
+ * - **Path-based**: `/.well-known/*`, `/healthz` (RFC 9728, health checks)
  * - **Public resources**: `resources/read` for widget HTML and documentation URIs
  *
  * ## What Does NOT Skip Clerk
@@ -35,8 +35,10 @@ const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource',
   '/.well-known/oauth-authorization-server',
   '/.well-known/openid-configuration',
-  '/health',
-  '/ready',
+  '/healthz',
+  '/oauth/authorize',
+  '/oauth/token',
+  '/oauth/register',
 ]);
 
 /**

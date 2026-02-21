@@ -14,7 +14,7 @@ import type { Express } from 'express';
 describe('Security Headers (Integration)', () => {
   let app: Express;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const testEnv: NodeJS.ProcessEnv = {
       NODE_ENV: 'test',
       DANGEROUSLY_DISABLE_AUTH: 'true',
@@ -28,7 +28,7 @@ describe('Security Headers (Integration)', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    app = createApp({ runtimeConfig });
+    app = await createApp({ runtimeConfig });
   });
 
   describe('Landing page (/) - HTML endpoint', () => {

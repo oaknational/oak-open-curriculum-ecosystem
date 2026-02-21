@@ -19,13 +19,23 @@ describe('shouldSkipClerkMiddleware', () => {
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
-    it('returns true for health check path', () => {
-      const req = createMockRequest('/health', undefined);
+    it('returns true for healthz check path', () => {
+      const req = createMockRequest('/healthz', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
-    it('returns true for ready check path', () => {
-      const req = createMockRequest('/ready', undefined);
+    it('returns true for OAuth proxy authorize path', () => {
+      const req = createMockRequest('/oauth/authorize', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns true for OAuth proxy token path', () => {
+      const req = createMockRequest('/oauth/token', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns true for OAuth proxy register path', () => {
+      const req = createMockRequest('/oauth/register', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
   });

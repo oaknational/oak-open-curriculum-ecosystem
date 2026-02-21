@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
-**Last Updated**: 2026-02-20  
+**Last Updated**: 2026-02-21  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -26,13 +26,16 @@ monorepo.
    confirms the search-sdk tools are strictly superior.
    WS5 replaces the old REST-based search and retires the
    generated wrappers.
-2. **OAuth spec compliance** (3d): ✅ Complete — all MCP
-   methods now require auth (ADR-113). Cursor E2E manual
-   verification still pending.
+2. **Proxy OAuth AS for Cursor** (3f): Phase 1 (RED + GREEN)
+   mostly complete — 3 proxy endpoints, 32 tests, passthrough
+   philosophy applied. Remaining: async bootstrap, `fetch` DI,
+   E2E updates, Cursor validation.
+   Plan: [proxy-oauth-as-for-cursor.plan.md](active/proxy-oauth-as-for-cursor.plan.md)
 3. **SDK workspace separation** (3e): Split `curriculum-sdk`
    into type-gen and runtime workspaces with enforced
    one-way dependency.
-ern unification (3b) and STDIO-HTTP alignment
+
+Result pattern unification (3b) and STDIO-HTTP alignment
 (3c) are deferred to post-merge.
 
 | Index | GTs | MRR | NDCG@10 | Status |
@@ -75,7 +78,9 @@ Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
   ├── 3a. Search tool wiring — WS5 replace old search   (merge-blocking)
   ├── 3d. OAuth spec compliance — 401 on initial req     ✅ COMPLETE (ADR-113)
   ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   ✅ COMPLETE
+  ├── 3e'. OAuth validation + Cursor investigation       ✅ COMPLETE
   ├── 3e. SDK workspace separation — type-gen/runtime    (merge-blocking)
+  ├── 3f. Proxy OAuth AS for Cursor                      (merge-blocking, Phase 1 partial)
   └── 3b. Result pattern unification                     (post-merge)
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
@@ -252,9 +257,10 @@ onboarding. Two workstreams:
 
 **Status**: 🔄 In Progress — all prerequisites complete
 
-Five workstreams. Three are **merge-blocking** (3a WS5,
-3d OAuth, 3e SDK split). Two are post-merge (3b result
-unification, 3c STDIO alignment).
+Multiple workstreams. Three are **merge-blocking** (3a WS5,
+3e SDK split, 3f proxy OAuth AS). Two are completed (3d OAuth
+spec compliance, 3e' OAuth validation). Two are post-merge
+(3b result unification, 3c STDIO alignment).
 
 ### 3a. Search Tool Wiring (merge-blocking)
 
@@ -303,29 +309,57 @@ ADR-056 superseded. ~300 lines of dead code deleted.
 | ADR: Supersede ADR-056 (conditional clerk middleware) | ✅ Complete |
 | Update testing-strategy.md example | ✅ Complete |
 | Verify ChatGPT tool-level auth still works | ✅ Complete |
-| Verify Cursor OAuth flow (Needs login → Clerk) | 📋 Pending — see 3e below |
+| Verify Cursor OAuth flow (Needs login → Clerk) | ✅ Investigated — Cursor bug confirmed, see 3f (proxy OAuth AS) |
 | Full quality gate chain | ✅ Complete |
 
-### 3e. OAuth Validation and Cursor Flow Debugging (active)
+### 3e'. OAuth Validation and Cursor Investigation ✅ COMPLETE
 
-**Active plan**: [oauth-validation-and-cursor-flows.plan.md](active/oauth-validation-and-cursor-flows.plan.md)
+**Archived plans**: [oauth-validation-and-cursor-flows.plan.md](archive/completed/oauth-validation-and-cursor-flows.plan.md),
+[cursor-oauth-investigation-report.md](archive/completed/cursor-oauth-investigation-report.md)
 
-AS metadata endpoint added. Cursor still fails. Priority: validate the
-spec-compliant OAuth path with automated smoke tests BEFORE investigating
-the Cursor-specific path. Partial smoke test exists (3 files, not yet
-runnable).
+AS metadata endpoint added. Spec-compliant smoke test (`pnpm smoke:oauth:spec`)
+passes end-to-end. Cursor investigation complete — root cause diagnosed as
+a confirmed client-side bug ([forum #151331](https://forum.cursor.com/t/mcp-oauth-callback-loses-authorization-server-url-discovered-from-resource-metadata-causing-token-exchange-failure/151331)).
 
 | Task | Status |
 |------|--------|
 | AS metadata endpoint (`/.well-known/oauth-authorization-server`) | ✅ Complete |
-| Spec-compliant OAuth discovery chain smoke test | 📋 In Progress (partial) |
-| Spec-compliant OAuth E2E smoke test | 📋 In Progress (partial) |
-| Run spec smoke against live dev server | 📋 Pending |
-| Cursor-specific investigation | 📋 Pending (after spec path validated) |
+| Spec-compliant OAuth discovery chain smoke test | ✅ Complete |
+| Spec-compliant OAuth E2E smoke test | ✅ Complete |
+| Run spec smoke against live dev server | ✅ Complete |
+| Cursor-specific investigation | ✅ Complete — root cause: `resource_metadata` URL loss |
+
+### 3f. Proxy OAuth AS for Cursor (merge-blocking)
+
+**Active plan**: [proxy-oauth-as-for-cursor.plan.md](active/proxy-oauth-as-for-cursor.plan.md)
+
+**Goal**: Act as a proxy OAuth AS so Cursor sees RS and AS on the same
+origin, bypassing the confirmed Cursor bug.
+
+**Completed**: Three proxy endpoints (register, authorize, token),
+pure functions, 22 unit tests, 10 integration tests, four architectural
+reviews. Passthrough philosophy: proxy does NOT validate.
+
+**Remaining**: Async bootstrap (make `createApp` async, ~25 call sites),
+inject `fetch` for test DI, update E2E test assertions, Cursor
+validation, smoke test updates, quality gates, documentation.
+
+| Task | Status |
+|------|--------|
+| Phase 1 (RED): Failing integration + unit tests for proxy | ✅ Complete (22 + 10 tests) |
+| Phase 1 (GREEN): Implement proxy endpoints, update metadata | ✅ Complete |
+| Architecture design (custom routes chosen over SDK router) | ✅ Complete |
+| Architectural review (Barney, Betty, Fred, Wilma) | ✅ Complete |
+| Make `createApp` async for metadata fetch | 📋 Pending |
+| Inject `fetch` into proxy config for test DI | 📋 Pending |
+| Update E2E test assertions (self-origin in metadata) | 📋 Pending |
+| Phase 1 (VALIDATE): Cursor E2E, smoke tests pass | 📋 Pending |
+| Quality gates | 📋 Pending |
+| Documentation, ADRs, archive plans | 📋 Pending |
 
 ### 3d'. Widget Knowledge Graph Tidy-Up ✅ Complete
 
-**Plan**: [ontology-knowledge-graph-tidy-up.md](active/ontology-knowledge-graph-tidy-up.md)
+**Plan**: [ontology-knowledge-graph-tidy-up.md](archive/completed/ontology-knowledge-graph-tidy-up.md)
 
 The `get-knowledge-graph` tool was removed and its data
 merged into `get-ontology`. A dangling renderer reference
@@ -479,16 +513,20 @@ retriever using `multilingual-e5-base`.
 
 ---
 
-## Three Workspaces
+## Five Workspaces
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen, MCP tool definitions |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (36 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (935 tests) |
+| **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
+| **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
 
 The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
+Both MCP servers consume the Oak API SDK (tool definitions)
+and optionally the Search SDK (search retrieval).
 
 ---
 

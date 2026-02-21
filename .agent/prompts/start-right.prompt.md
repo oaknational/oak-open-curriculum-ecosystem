@@ -6,6 +6,10 @@ The schema first is an absolute for parts of the sdk related directly to calling
 
 When analysing a generated file, always analyse the generator code that produced it as well, as it is the source of truth for the generated file.
 
+## Sub-agent Reviews
+
+Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready Task tool snippets.
+
 Do not assume you know what the initial step should be, discuss with the user first.
 
 Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/development/build-system.md` and ADR 065.
