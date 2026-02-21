@@ -6,7 +6,7 @@
  * client bug. This is NOT a service — it is a transparent passthrough that
  * must not alter, filter, or lose information in either direction.
  *
- * @see .agent/plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md
+ * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
 
 export { createOAuthProxyRoutes, type OAuthProxyConfig } from './oauth-proxy-routes.js';

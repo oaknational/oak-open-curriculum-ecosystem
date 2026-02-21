@@ -56,8 +56,8 @@ todos:
   - id: env-architecture-overhaul
     content: "Pre-WS5: Environment architecture overhaul complete — resolveEnv pipeline, conditional Clerk keys, discriminated RuntimeConfig. Archived. STDIO alignment deferred to stdio-http-server-alignment.md."
     status: completed
-  - id: adr-113-env-resolution
-    content: "Pre-WS5: Write ADR-113 for the resolveEnv pipeline architecture — source hierarchy with non-mutating dotenv.parse, Result<T, E> return, conditional Clerk keys via superRefine, discriminated RuntimeConfig union. Supersedes ADR-016 (original dotenv decision)."
+  - id: adr-116-env-resolution
+    content: "Pre-WS5: Write ADR-116 for the resolveEnv pipeline architecture — source hierarchy with non-mutating dotenv.parse, Result<T, E> return, conditional Clerk keys via superRefine, discriminated RuntimeConfig union. Supersedes ADR-016 (original dotenv decision). (ADR-113 is taken — MCP spec-compliant auth.)"
     status: pending
   - id: ws5-compare
     content: "WS5: Compare new search tools vs old REST API search on representative queries."

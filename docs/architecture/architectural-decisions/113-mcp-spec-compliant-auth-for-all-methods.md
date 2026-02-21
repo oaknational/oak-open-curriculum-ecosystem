@@ -101,6 +101,51 @@ After implementing ADR-113, the Cursor OAuth flow was observed to fail: Cursor o
 
 This endpoint is harmless -- spec-compliant clients that fetch AS metadata directly from Clerk will simply not use it. It is only served when auth is enabled (not registered in `DANGEROUSLY_DISABLE_AUTH` mode).
 
+## Troubleshooting: Clerk Rejects `openid` Scope for Dynamic Clients (2026-02-21)
+
+### Symptom
+
+The Cursor OAuth flow silently fails. Server logs show a perfect discovery and authorise sequence (PRM, AS metadata, DCR, 302 redirect to Clerk) but no `POST /oauth/token` ever arrives. Cursor loops between `needsAuth` and `Clearing OAuth state (manual_or_external)` with no error message.
+
+### Root Cause
+
+Clerk's `/oauth/authorize` returns `error=invalid_scope` when a dynamically registered client (created via RFC 7591 DCR) requests the `openid` scope:
+
+```text
+error=invalid_scope
+error_description=The requested scope is invalid, unknown, or malformed.
+  The OAuth 2.0 Client is not allowed to request scope 'openid'.
+```
+
+Clerk accepts `openid` during client registration but rejects it during authorisation. The error is returned as query parameters on the `cursor://` callback redirect -- it never reaches the MCP server.
+
+### Why It Is Silent
+
+Two layers compound to make this invisible:
+
+1. **OAuth spec behaviour**: RFC 6749 Section 4.1.2.1 routes authorisation errors via redirect to `redirect_uri`, not via HTTP error responses. The MCP server is completely bypassed -- the error flows from Clerk to the browser to Cursor.
+
+2. **Cursor does not surface callback errors**: When Cursor receives `error=invalid_scope` in its callback, it silently clears OAuth state and re-enters the authentication loop. No error toast, no log entry beyond `Clearing OAuth state (manual_or_external)`.
+
+### How to Diagnose
+
+The error is **only visible** in a HAR (HTTP Archive) capture of the network traffic between the browser and Clerk. Look for the `Location` header in Clerk's 302 redirect response -- it contains the `error=invalid_scope` query parameter on the `cursor://` callback URL.
+
+Server-side logs will show nothing wrong. The flow appears to stop after the initial `/oauth/authorize` 302 redirect.
+
+### Resolution
+
+Two changes prevent compliant clients from requesting the `openid` scope:
+
+1. **Source of truth**: `openid` removed from `DEFAULT_AUTH_SCHEME.scopes` in `mcp-security-policy.ts`. Cascaded via `pnpm type-gen` to all generated tool security metadata.
+2. **PRM**: `scopes_supported` no longer advertises `openid`, so compliant clients (RFC 9728) do not request it.
+
+The OAuth proxy is fully transparent -- it forwards all parameters (including `scope`) and all upstream AS metadata fields (including `scopes_supported`) unchanged. No filtering is applied at the proxy layer. If a non-compliant client reads `openid` from Clerk's AS metadata and requests it, Clerk will reject it with `error=invalid_scope`.
+
+### Broader Lesson
+
+OAuth authorisation errors routed via redirect are invisible to the resource server. When debugging OAuth flows that "silently stop" after the authorise redirect, capture the full redirect chain (browser DevTools HAR export) -- the error is in the callback URL, not in server logs.
+
 ## References
 
 - **MCP Specification (2025-11-25)**: [Authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)
@@ -108,6 +153,9 @@ This endpoint is harmless -- spec-compliant clients that fetch AS metadata direc
 - **Implementation**:
   - `apps/oak-curriculum-mcp-streamable-http/src/mcp-router.ts`
   - `apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts`
+  - `packages/sdks/oak-curriculum-sdk/type-gen/mcp-security-policy.ts` (scope source of truth)
+  - `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts` (transparent proxy passthrough)
+  - `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts` (PRM endpoint)
 
 ## Related ADRs
 
@@ -116,3 +164,4 @@ This endpoint is harmless -- spec-compliant clients that fetch AS metadata direc
 - [ADR-054: Tool-Level Auth Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-056: Conditional Clerk Middleware for Discovery](056-conditional-clerk-middleware-for-discovery.md) (SUPERSEDED by this ADR)
 - [ADR-057: Selective Authentication for Public Resources](057-selective-auth-public-resources.md)
+- [ADR-115: Proxy OAuth AS for Cursor](115-proxy-oauth-as-for-cursor.md)

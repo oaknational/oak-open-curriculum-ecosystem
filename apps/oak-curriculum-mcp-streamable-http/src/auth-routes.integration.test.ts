@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
@@ -131,8 +130,29 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
   });
 
+  describe('path-qualified PRM (RFC 9728 Section 3.1)', () => {
+    it('serves PRM at /.well-known/oauth-protected-resource/mcp with self-origin AS', async () => {
+      const app = await createTestApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource/mcp')
+        .set('Host', 'localhost:3333');
+
+      expect(res.status).toBe(200);
+
+      const body: unknown = res.body;
+      const servers = (body as { authorization_servers: unknown }).authorization_servers;
+
+      expect(Array.isArray(servers)).toBe(true);
+      expect(servers).toEqual(['http://localhost:3333']);
+
+      const resource = (body as { resource: unknown }).resource;
+      expect(resource).toBe('http://localhost:3333/mcp');
+    });
+  });
+
   describe('scopes_supported field', () => {
-    it('returns scopes_supported from generated SCOPES_SUPPORTED constant', async () => {
+    it('returns scopes_supported without openid (Clerk dynamic clients reject it)', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -146,26 +166,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       const scopesSupported = (body as { scopes_supported: unknown }).scopes_supported;
       expect(Array.isArray(scopesSupported)).toBe(true);
-
-      const expectedScopes = Array.from(SCOPES_SUPPORTED);
-      expect(scopesSupported).toEqual(expect.arrayContaining(expectedScopes));
-      expect(scopesSupported).toHaveLength(expectedScopes.length);
-    });
-
-    it('scopes_supported includes openid and email from security policy', async () => {
-      const app = await createTestApp();
-
-      const res = await request(app)
-        .get('/.well-known/oauth-protected-resource')
-        .set('Host', 'example.com');
-
-      expect(res.status).toBe(200);
-
-      const body: unknown = res.body;
-      const scopesSupported = (body as { scopes_supported: unknown }).scopes_supported;
-
-      expect(scopesSupported).toContain('openid');
       expect(scopesSupported).toContain('email');
+      expect(scopesSupported).not.toContain('openid');
     });
   });
 
@@ -200,6 +202,21 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       expect(md.code_challenge_methods_supported).toEqual(
         TEST_UPSTREAM_METADATA.code_challenge_methods_supported,
       );
+    });
+
+    it('passes through scopes_supported unchanged from upstream (transparent proxy)', async () => {
+      const app = await createTestApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'localhost:3333');
+
+      expect(res.status).toBe(200);
+
+      const body: unknown = res.body;
+      const md = body as { scopes_supported: readonly string[] };
+
+      expect(md.scopes_supported).toStrictEqual(TEST_UPSTREAM_METADATA.scopes_supported);
     });
   });
 });

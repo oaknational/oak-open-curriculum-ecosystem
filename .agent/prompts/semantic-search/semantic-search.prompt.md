@@ -4,9 +4,9 @@
 
 ---
 
-## Current Priority: Three Merge Blockers
+## Current Priority: Two Merge Blockers
 
-The `feat/semantic_search_deployment` branch requires three
+The `feat/semantic_search_deployment` branch requires two
 workstreams to complete before it can merge. All active plans
 are in `plans/semantic-search/active/`.
 
@@ -25,63 +25,22 @@ tools are strictly superior. WS5 implements the replacement:
    Update executor dispatch and all cross-references. TDD.
 3. **WS5.4**: Full quality gate chain.
 
-### 2. OAuth — Proxy OAuth AS for Cursor
+### 2. OAuth — Proxy OAuth AS for Cursor ✅ COMPLETE
 
-**Active plan**: [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md)
+**Archived plan**: [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md)
+**ADR**: [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
 
-**Completed (pre-proxy)**:
+Transparent proxy OAuth AS working end-to-end with Cursor. Full details
+in [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
+and archived plan. Key outcomes:
 
-- OAuth spec compliance (ADR-113) — all MCP methods require auth
-- AS metadata endpoint restored for backward compatibility
-- Spec-compliant smoke test (`pnpm smoke:oauth:spec`) passes end-to-end
-- `@clerk/backend` upgraded 2.29.2 → 2.31.2 (exposes `consentScreenEnabled`)
-- `@clerk/express` upgraded 1.7.7 → 1.7.72
-- Cursor investigation complete — root cause diagnosed as confirmed
-  client-side bug ([forum #151331](https://forum.cursor.com/t/mcp-oauth-callback-loses-authorization-server-url-discovered-from-resource-metadata-causing-token-exchange-failure/151331))
-
-**Completed (proxy implementation — functionally complete)**:
-
-- Three proxy endpoints implemented as transparent passthrough:
-  `POST /oauth/register`, `GET /oauth/authorize`, `POST /oauth/token`
-- Pure functions: `deriveUpstreamOAuthBaseUrl`, `buildAuthorizeRedirectUrl`,
-  `formatProxyErrorResponse`, `rewriteAuthServerMetadata` (spread-based),
-  `isUpstreamAuthServerMetadata` (Zod schema validation)
-- Validation removed — proxy does not gatekeep, Clerk handles all validation
-- Proxy paths added to `CLERK_SKIP_PATHS`
-- PRM `authorization_servers` updated to point to self-origin
-- `auth-routes.ts` accepts `upstreamMetadata: UpstreamAuthServerMetadata`
-  via DI (no hardcoded Clerk capability arrays)
-- `createApp` is now async (`Promise<ExpressWithAppId>`), all ~30 call
-  sites updated with `await`
-- `runAsyncBootstrapPhase` added for async bootstrap instrumentation
-- `upstreamMetadata` DI in `CreateAppOptions` — tests inject fixture,
-  production fetches from Clerk at startup
-- `setupOAuthAndCaching` properly awaited with metadata DI path
-- `UpstreamAuthServerMetadata` validated via Zod schema
-- E2E tests rewritten: 16 tests assert self-origin URLs in PRM + AS
-  metadata, proxy endpoint existence, upstream capability preservation,
-  RFC compliance
-- Integration tests updated: 9 tests including AS metadata assertions
-- Test fixture: `e2e-tests/helpers/upstream-metadata-fixture.ts`
-- 22 unit tests + 6 async bootstrap tests + 10 integration tests pass
-- 185 E2E tests pass, all quality gates pass
-- Four architectural reviews completed (Barney, Betty, Fred, Wilma),
-  all findings addressed
-- Passthrough philosophy documented: proxy MUST NOT alter, filter, or
-  lose information in either direction
-
-**Remaining work** (see plan for details):
-
-1. **Validate with Cursor** — start dev server with real Clerk keys,
-   connect Cursor, confirm full OAuth flow completes. This is the
-   critical next step.
-2. **Inject `fetch` into proxy config** — proxy routes use global
-   `fetch`. Integration tests violate testing strategy (real HTTP
-   calls). DI for `fetch` enables simple fakes in tests.
-3. **Auth-enabled smoke test assertions** — may need updates for
-   self-origin URLs. Add proxy-specific smoke test.
-4. **Error handling debt** — try/catch should migrate to `Result<T, E>`.
-5. **Documentation** — ADR updates, TSDoc, archive completed plans.
+- Three proxy endpoints: `/oauth/register`, `/oauth/authorize`, `/oauth/token`
+- Fully transparent passthrough — no filtering, Clerk handles all validation
+- Path-qualified PRM per RFC 9728 Section 3.1
+- `openid` scope solved at source (`mcp-security-policy.ts`), not in proxy
+- DRY: aggregated tool defs import `SCOPES_SUPPORTED` via stable re-export
+- Quality gates: `SCOPES_SUPPORTED` sync test, AS metadata passthrough test
+- ADR-115 written, ADR-053 amended, ADR-113 cross-referenced
 
 ### 2b. Widget Knowledge Graph Tidy-Up
 
@@ -264,7 +223,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | AS Metadata Endpoint | Backward-compatible `/.well-known/oauth-authorization-server` via local derivation | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
 | Spec-Compliant Smoke Test | Full PKCE flow via Clerk FAPI, `pnpm smoke:oauth:spec` passes e2e | [oauth-validation-and-cursor-flows.plan.md](../../plans/semantic-search/archive/completed/oauth-validation-and-cursor-flows.plan.md) |
 | Cursor OAuth Investigation | Root cause: client-side `resource_metadata` URL loss (forum #151331) | [cursor-oauth-investigation-report.md](../../plans/semantic-search/archive/completed/cursor-oauth-investigation-report.md) |
-| Proxy OAuth AS (functionally complete) | Async `createApp`, metadata DI, 3 proxy endpoints, self-origin metadata, 22+6 unit + 10 integration + 16 E2E proxy tests, all quality gates pass | [proxy-oauth-as-for-cursor.plan.md](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md) |
+| Proxy OAuth AS ✅ | Async `createApp`, metadata DI, 3 transparent proxy endpoints, path-qualified PRM, `openid` solved at source, DRY scopes via re-export, sync + passthrough quality-gate tests, ADR-115 written, all gates pass | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md), [archived plan](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md) |
 
 ---
 
@@ -370,7 +329,7 @@ failure. If a gate fails, the work is not done. Fix it.**
 | Document | Purpose |
 |----------|---------|
 | [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | MCP search WS5 — replace old search |
-| [Proxy OAuth AS for Cursor](../../plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md) | **Primary OAuth plan** — proxy AS to workaround Cursor bug |
+| [Proxy OAuth AS for Cursor](../../plans/semantic-search/archive/completed/proxy-oauth-as-for-cursor.plan.md) | ✅ COMPLETE — [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) |
 | [Widget KG tidy-up](../../plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md) | Widget crash fixed, SVGs migrated, docs cleaned (completed) |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | Type-gen / runtime split |
 | [SDK split meta-plan](../../plans/semantic-search/active/sdk-workspace-separation-meta-plan.md) | Guide for improving SDK split plan |

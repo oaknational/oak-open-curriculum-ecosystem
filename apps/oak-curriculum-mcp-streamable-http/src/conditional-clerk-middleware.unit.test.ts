@@ -14,6 +14,11 @@ describe('shouldSkipClerkMiddleware', () => {
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
+    it('returns true for path-qualified PRM (RFC 9728 Section 3.1)', () => {
+      const req = createMockRequest('/.well-known/oauth-protected-resource/mcp', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
     it('returns true for OIDC discovery path', () => {
       const req = createMockRequest('/.well-known/openid-configuration', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);

@@ -121,7 +121,7 @@ export const getSubjectsKeyStages = {
   path,
   method,
   documentedStatuses,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   requiresDomainContext: true,
   annotations: {
     readOnlyHint: true,
@@ -136,7 +136,7 @@ export const getSubjectsKeyStages = {
     'openai/toolInvocation/invoked': "Get Subjects Key Stages loaded",
     'openai/widgetAccessible': true,
     'openai/visibility': 'public',
-    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+    securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];

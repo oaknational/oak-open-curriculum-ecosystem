@@ -9,8 +9,7 @@ describe('generateScopesSupportedFile', () => {
 
   it('includes the correct scopes from security policy', () => {
     const result = generateScopesSupportedFile();
-    // Current policy has ['openid', 'email'] which sorts to ['email', 'openid']
-    expect(result).toContain("['email', 'openid']");
+    expect(result).toContain("['email']");
   });
 
   it('has as const assertion for type narrowing', () => {

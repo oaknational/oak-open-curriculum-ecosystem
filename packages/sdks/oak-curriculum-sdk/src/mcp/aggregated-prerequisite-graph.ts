@@ -20,6 +20,7 @@ import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from './prerequisite-graph-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
  * Input schema for get-prerequisite-graph tool.
@@ -64,7 +65,7 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
 
   inputSchema: GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
 
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 
   annotations: {
     readOnlyHint: true,

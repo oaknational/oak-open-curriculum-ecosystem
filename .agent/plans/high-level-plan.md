@@ -1,24 +1,24 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-19  
+**Last Updated**: 2026-02-21  
 **Scope**: Strategic overview for the Oak MCP Ecosystem. Details are in individual plan documents.
 
 ---
 
 ## Current Priorities
 
-Three workstreams must complete before
+Two workstreams must complete before
 `feat/semantic_search_deployment` can merge:
 
 1. **MCP search WS5** — replace old REST API search with
    SDK-backed search (comparative testing confirms
    superiority)
-2. **OAuth spec compliance** — HTTP server must return 401
-   on unauthenticated discovery methods to trigger OAuth
-   flow in MCP clients (Cursor, Claude Desktop)
-3. **SDK workspace separation** — split the Curriculum SDK
+2. **SDK workspace separation** — split the Curriculum SDK
    type-gen code from the runtime code (one-way dependency:
    runtime depends on type-gen, never the reverse)
+
+OAuth spec compliance and the proxy OAuth AS for Cursor are
+both **complete** (ADR-113, ADR-115).
 
 After merge: result pattern unification, STDIO-HTTP
 alignment, Castr integration, search quality enhancements.
@@ -48,15 +48,15 @@ CLI has 935 tests. All quality gates pass.
 | Developer onboarding | Canonical journey, command truth, link integrity | ✅ Complete |
 | Code quality remediation | TSDoc warnings (0), type shortcuts removed (137 files) | ✅ Complete |
 | **MCP search WS5** | Replace old REST API search with SDK-backed search | 🔄 **MERGE-BLOCKING** |
-| **OAuth spec compliance** | 401 on unauthenticated discovery methods | 🔄 **MERGE-BLOCKING** |
+| OAuth spec compliance | 401 on unauthenticated discovery methods (ADR-113) | ✅ Complete |
+| Proxy OAuth AS for Cursor | Transparent proxy to Clerk (ADR-115) | ✅ Complete |
 | **SDK workspace separation** | Split type-gen from runtime (one-way dependency) | 🔄 **MERGE-BLOCKING** |
 | Result pattern unification | `ToolExecutionResult` → `Result<T, E>` | 📋 Post-merge |
 | Search enhancements | GT expansion, Levels 2–4, bulk data analysis | 📋 Future |
 
-**Active plans** (all merge-blocking):
+**Active plans** (merge-blocking):
 
 - [phase-3a-mcp-search-integration.md](semantic-search/active/phase-3a-mcp-search-integration.md) — WS5
-- [oauth-spec-compliance.md](semantic-search/active/oauth-spec-compliance.md) — auth fix
 - [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md) — type-gen/runtime split
 
 ---
@@ -259,6 +259,8 @@ working artefacts.
 | Strict Zod Schema Generation | [archive/strict-zod-schema-generation.md](archive/strict-zod-schema-generation.md) | .strict() on all schemas |
 | Widget Playwright Tests | [sdk-and-mcp-enhancements/archive/07-widget-playwright-tests-plan.md](sdk-and-mcp-enhancements/archive/07-widget-playwright-tests-plan.md) | E2E coverage |
 | Synonym Enrichment | [sdk-and-mcp-enhancements/17-synonym-enrichment-from-owa-oala.md](sdk-and-mcp-enhancements/17-synonym-enrichment-from-owa-oala.md) | OWA + OALA synonyms |
+| OAuth Spec Compliance | [semantic-search/archive/completed/oauth-spec-compliance.md](semantic-search/archive/completed/oauth-spec-compliance.md) | All MCP methods require auth (ADR-113) |
+| Proxy OAuth AS for Cursor | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) | Transparent proxy to Clerk, Cursor works |
 
 ---
 
@@ -288,7 +290,8 @@ working artefacts.
 | M7c | Developer Onboarding Experience | ✅ DONE |
 | M7d | Code Quality Remediation (TSDoc warnings, type shortcuts) | ✅ DONE |
 | **M8** | **MCP Search WS5 — Replace old search** | 🔄 **MERGE-BLOCKING** |
-| **M8a** | **OAuth Spec Compliance — 401 on discovery** | 🔄 **MERGE-BLOCKING** |
+| M8a | OAuth Spec Compliance — 401 on discovery (ADR-113) | ✅ DONE |
+| M8b | Proxy OAuth AS for Cursor (ADR-115) | ✅ DONE |
 | **M9** | **SDK Workspace Separation (Step 1: type-gen/runtime split)** | 🔄 **MERGE-BLOCKING** |
 | M10 | Castr Integration | 📋 Planned (post-merge) |
 | M11 | Search Quality Enhancements | 📋 Future |

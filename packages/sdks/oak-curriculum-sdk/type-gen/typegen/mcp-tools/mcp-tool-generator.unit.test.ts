@@ -91,7 +91,7 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
 
     // Verify OAuth2 scheme for protected tools (default)
     expect(getUsersToolFile).toContain("type: 'oauth2'");
-    expect(getUsersToolFile).toContain("scopes: ['openid', 'email']");
+    expect(getUsersToolFile).toContain("scopes: ['email']");
 
     // Verify field position (after documentedStatuses, before validateOutput)
     const documentedStatusesIndex = getUsersToolFile.indexOf('documentedStatuses,');

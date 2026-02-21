@@ -1,5 +1,41 @@
 # Napkin
 
+## Session: 2026-02-21 — Path-Qualified PRM Fix (RFC 9728 Section 3.1)
+
+### What Was Done
+
+- Fixed blocking Cursor OAuth issue: server now serves path-qualified
+  PRM at `/.well-known/oauth-protected-resource/mcp` per RFC 9728
+  Section 3.1
+- Full TDD cycle: RED (10 test assertions updated/added, all failed),
+  GREEN (4 source files changed, all passed), REFACTOR (TSDoc, README)
+- Files changed: `get-prm-url.ts`, `auth-error-response.ts`,
+  `auth-routes.ts`, `conditional-clerk-middleware.ts`
+- Tests updated: `get-prm-url.unit.test.ts` (5 tests rewritten),
+  `auth-error-response.unit.test.ts` (4 assertions updated),
+  `auth-enforcement.e2e.test.ts` (+1 test, 17 total),
+  `auth-routes.integration.test.ts` (+1 test, 10 total)
+- TSDoc and README corrected: RFC 9728 (not RFC 9470), removed
+  incorrect "Clerk bug" framing
+- All quality gates pass (type-gen, build, type-check, lint, format,
+  markdownlint, test 633, e2e, ui 26, smoke)
+
+### Key Insights
+
+- RFC 9728 Section 3.1 specifies path-qualified PRM URLs; what we
+  labelled a "bug in @clerk/mcp-tools" was actually correct behaviour
+- Shared `servePrm` handler for both unqualified and path-qualified
+  routes avoids duplication; use `RequestHandler` type import not
+  inline `import()` (lint rule: `consistent-type-imports`)
+- `generateMetadataUrl()` uses `url.pathname` to dynamically derive
+  the path suffix, making it generic for any resource path
+- Cursor falls back to RFC 9728 path-qualified URL construction after
+  losing `resource_metadata` during OAuth redirect — both the
+  `WWW-Authenticate` header and the route must be path-qualified
+- CLERK_SKIP_PATHS must include the path-qualified PRM URL
+
+---
+
 ## Session: 2026-02-19 (d) — OAuth Spec Compliance Implementation
 
 ### What Was Done
@@ -767,6 +803,25 @@ The test does NOT prove (and doesn't claim to):
 - The DCR-created OAuth app is correctly configured
 - The consent screen works
 
+### RFC 9728: Path-Qualified PRM URL IS correct (we were wrong)
+
+Our `get-prm-url.ts` generates `/.well-known/oauth-protected-resource` and explicitly
+rejects the `/mcp` suffix, calling it a "bug in @clerk/mcp-tools". We were WRONG.
+RFC 9728 Section 3.1 specifies the PRM URL for `http://host/mcp` as
+`http://host/.well-known/oauth-protected-resource/mcp` (the path IS appended).
+
+This is WHY the proxy doesn't work with Cursor:
+1. Cursor loses `resource_metadata` URL after OAuth redirect (known Cursor bug)
+2. Cursor falls back to RFC 9728 construction: `/.well-known/oauth-protected-resource/mcp`
+3. Our server returns 404 (route not registered, falls through to Clerk interstitial)
+4. Cursor can't re-discover AS → token exchange fails
+
+Fix requires:
+- Register PRM route at the path-qualified URL
+- Add path to CLERK_SKIP_PATHS
+- Fix getPRMUrl() and generateMetadataUrl() to include path suffix
+- Update the resource_metadata URL in WWW-Authenticate 401 header
+
 ### Never strip comments/guidance to reduce file line count
 
 When hitting `max-lines` or `max-lines-per-function` lint limits:
@@ -775,3 +830,97 @@ When hitting `max-lines` or `max-lines-per-function` lint limits:
 - **DO** split the file into a directory with a barrel file and smaller files
 - Comments are documentation, not waste. Reducing file size by removing
   developer guidance is removing value, not adding it.
+
+### Transparent proxy means transparent -- no exceptions
+
+When we first added `stripUnsupportedScopes` to the OAuth proxy, it was
+a quick fix for Clerk rejecting `openid`. But it violated the proxy's own
+documented contract ("MUST NOT alter, filter, or lose information").
+
+The correct fix was at the source: remove `openid` from `SCOPES_SUPPORTED`
+in `mcp-security-policy.ts`. Compliant clients (RFC 9728) read scopes from
+PRM, not AS metadata. The proxy should never have been filtering -- it
+created a contradiction between the TSDoc contract and the runtime behaviour.
+
+Lesson: when a transparent passthrough needs an "exception", question whether
+the fix belongs at a different layer.
+
+### ADR drift happens immediately after removing code
+
+When we removed `stripUnsupportedScopes`, ADR-113 still described it as an
+active defence. Both code-reviewer and security-reviewer flagged this. ADRs
+must be updated in the same change that removes the code they describe.
+
+### DRY: aggregated tool defs hardcoded scopes
+
+Nine hand-written aggregated tool definitions hardcoded `scopes: ['email']`.
+When the upstream scopes change, these would have been out of sync. Fixed by
+importing `SCOPES_SUPPORTED` from the generated constant. The cardinal rule
+applies to hand-written code too -- it must consume generated artefacts.
+
+---
+
+## Session: 2026-02-21 (b) — Reviewer Improvements and Consolidation
+
+### What Was Done
+
+- **Barney's suggestion**: Created `src/mcp/scopes-supported.ts` — a stable
+  re-export for `SCOPES_SUPPORTED` following the existing `widget-constants.ts`
+  pattern. All 9 aggregated tool definitions updated to import from the local
+  re-export instead of the deep generated path. If generated file layout
+  changes, only one file needs updating.
+- **Wilma's suggestion 1**: Added integration test in
+  `auth-routes.integration.test.ts` asserting AS metadata
+  `scopes_supported` passes through unchanged from upstream. Regression-
+  protects the transparent proxy contract.
+- **Wilma's suggestion 2**: Added unit test in
+  `mcp-security-policy.unit.test.ts` comparing generated `SCOPES_SUPPORTED`
+  against `getScopesSupported()`. Fails with "run pnpm type-gen" if stale.
+- All quality gates pass (build, type-check, lint, 18 tasks, all green).
+- Ran `/consolidate-docs`: updated plan status, prompt, verified no
+  ephemeral → permanent migration needed, distilled.md clean, napkin
+  under rotation threshold.
+
+### Lessons Learned
+
+- The `widget-constants.ts` re-export pattern is a good model for insulating
+  hand-written code from generated file layout churn. One stable import path,
+  one file to update if the generator changes.
+- Sync tests between generated and source-of-truth data are cheap quality
+  gates that catch forgotten `pnpm type-gen` runs.
+
+## Session: 2026-02-21 (c) — ADR Writing and Plan Archival
+
+### What happened
+
+- Wrote ADR-115: Proxy OAuth AS for Cursor — the first-class architectural
+  decision for the proxy pattern. Covers transparent passthrough, always-on
+  design, opaque token assumption, open redirect prevention, error handling,
+  and removal conditions.
+- Amended ADR-053: Clerk as Identity Provider. Added amendment section noting
+  the server is no longer "Resource Server only", opaque tokens not JWTs,
+  DCR via proxy, and AS metadata rewriting superseding the original discovery
+  pattern.
+- Cross-referenced ADR-115 from ADR-113 and the ADR index README (both
+  sequential listing and Key Architectural Decisions auth section).
+- Archived `proxy-oauth-as-for-cursor.plan.md` from `active/` to
+  `archive/completed/`. All plan todos complete.
+- Updated 10+ cross-references: roadmap 3f → complete, prompt → 2 merge
+  blockers (not 3), merge-blocker plan, transparent proxy plan, path-qualified
+  PRM plan. Source code TSDoc references in `oauth-proxy-routes.ts`,
+  `oauth-proxy-upstream.ts`, `index.ts` now point to ADR-115 instead of
+  archived plan.
+- Ran consolidate-docs protocol: napkin under threshold, distilled.md has no
+  overlap with new ADRs, no Cursor plans have pending/in-progress todos.
+
+### Lessons Learned
+
+- TSDoc `@see` references to plan files become broken links when plans are
+  archived. ADRs are the correct permanent reference for source code TSDoc.
+- When archiving a plan, grep for ALL references to its path across the repo
+  (not just plans/ and prompts/) — source code TSDoc and other plan files
+  reference it too.
+- ADR amendments are the right pattern when the original decision's context
+  has shifted but hasn't been superseded. ADR-053's "Resource Server only"
+  framing was technically incorrect since the proxy was added, but the
+  decision to use Clerk remains sound.

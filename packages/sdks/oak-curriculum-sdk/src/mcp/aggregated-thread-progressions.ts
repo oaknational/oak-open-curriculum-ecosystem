@@ -20,6 +20,7 @@ import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from './thread-progression-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
  * Input schema for get-thread-progressions tool.
@@ -60,7 +61,7 @@ Complements get-ontology (which includes the schema-level property graph) with a
 
   inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
 
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 
   annotations: {
     readOnlyHint: true,

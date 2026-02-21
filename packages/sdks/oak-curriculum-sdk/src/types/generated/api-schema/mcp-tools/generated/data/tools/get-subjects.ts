@@ -108,7 +108,7 @@ export const getSubjects = {
   path,
   method,
   documentedStatuses,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   requiresDomainContext: true,
   annotations: {
     readOnlyHint: true,
@@ -123,7 +123,7 @@ export const getSubjects = {
     'openai/toolInvocation/invoked': "Get Subjects loaded",
     'openai/widgetAccessible': true,
     'openai/visibility': 'public',
-    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+    securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];

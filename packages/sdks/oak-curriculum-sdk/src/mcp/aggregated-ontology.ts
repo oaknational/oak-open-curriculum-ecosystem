@@ -14,6 +14,7 @@ import { formatToolResponse } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
  * Input schema for get-ontology tool (no parameters required).
@@ -48,7 +49,7 @@ Do NOT use for:
 
 This tool provides the foundation for effective use of all other curriculum tools.`,
   inputSchema: GET_ONTOLOGY_INPUT_SCHEMA,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

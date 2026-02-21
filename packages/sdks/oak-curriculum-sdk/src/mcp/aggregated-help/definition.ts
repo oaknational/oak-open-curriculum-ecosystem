@@ -7,6 +7,7 @@
 
 import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
  * Input schema for get-help tool.
@@ -49,7 +50,7 @@ Do NOT use for:
 
 Optionally provide a tool_name to get specific help for that tool.`,
   inputSchema: GET_HELP_INPUT_SCHEMA,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

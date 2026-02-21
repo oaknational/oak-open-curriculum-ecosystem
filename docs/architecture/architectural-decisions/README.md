@@ -116,6 +116,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-112: Per-Request MCP Transport](112-per-request-mcp-transport.md)
 - [ADR-113: MCP Spec-Compliant Auth for All Methods](113-mcp-spec-compliant-auth-for-all-methods.md)
 - [ADR-114: Layered Sub-agent Prompt Composition Architecture](114-layered-sub-agent-prompt-composition-architecture.md)
+- [ADR-115: Proxy OAuth AS for Cursor](115-proxy-oauth-as-for-cursor.md)
 
 ## Key Architectural Decisions
 
@@ -133,6 +134,7 @@ For understanding authentication, authorization, and observability:
 
 - **[ADR-052](052-oauth-2.1-for-mcp-http-authentication.md)** - OAuth 2.1 for MCP HTTP server authentication
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
+- **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 

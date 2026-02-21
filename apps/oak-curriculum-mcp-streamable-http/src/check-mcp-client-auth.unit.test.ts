@@ -195,13 +195,13 @@ describe('checkMcpClientAuth', () => {
           isAuthenticated: true,
           userId: 'user_123',
           clientId: 'client_123',
-          scopes: ['openid', 'email'],
+          scopes: ['email'],
         }),
       );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
-        scopes: ['openid', 'email'],
+        scopes: ['email'],
         extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({
@@ -232,13 +232,13 @@ describe('checkMcpClientAuth', () => {
           isAuthenticated: true,
           userId: 'user_123',
           clientId: 'client_123',
-          scopes: ['openid', 'email'],
+          scopes: ['email'],
         }),
       );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
-        scopes: ['openid', 'email'],
+        scopes: ['email'],
         extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({

@@ -15,7 +15,7 @@
  * discriminated error paths. Timeout errors (504) and network errors (502)
  * are distinguished at the point of failure via `ProxyFetchError.kind`.
  *
- * @see .agent/plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md
+ * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
 
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';

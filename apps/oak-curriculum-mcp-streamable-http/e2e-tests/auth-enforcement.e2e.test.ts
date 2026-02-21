@@ -341,6 +341,24 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(asUrl).not.toContain('clerk');
     });
 
+    it('serves path-qualified PRM at /.well-known/oauth-protected-resource/mcp (RFC 9728 Section 3.1)', async () => {
+      const res = await request(await createAuthApp()).get(
+        '/.well-known/oauth-protected-resource/mcp',
+      );
+      expect(res.status).toBe(200);
+
+      const metadata: unknown = res.body;
+
+      if (!isOAuthMetadata(metadata)) {
+        throw new Error('Invalid OAuth metadata at path-qualified PRM URL');
+      }
+
+      expect(metadata.authorization_servers.length).toBeGreaterThan(0);
+      const asUrl = metadata.authorization_servers[0];
+      expect(asUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
+      expect(asUrl).not.toContain('clerk');
+    });
+
     it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
       const res = await request(await createAuthApp()).get('/.well-known/oauth-protected-resource');
 
@@ -355,8 +373,9 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       }
 
       const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
-      expect(scopes).toEqual(expect.arrayContaining(['openid', 'email']));
-      expect(scopes).toHaveLength(2);
+      expect(scopes).toEqual(expect.arrayContaining(['email']));
+      expect(scopes).not.toContain('openid');
+      expect(scopes).toHaveLength(1);
     });
   });
 });

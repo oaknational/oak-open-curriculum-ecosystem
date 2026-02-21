@@ -33,10 +33,25 @@ export const PUBLIC_TOOLS: readonly string[] = [
  * Default OAuth 2.1 security scheme for protected tools.
  *
  * Applied to all tools NOT in PUBLIC_TOOLS list.
+ *
+ * @remarks
+ * **Why `openid` is excluded**: Clerk rejects the `openid` (OIDC) scope for
+ * dynamically registered clients (RFC 7591 DCR). Clerk accepts `openid` during
+ * client registration but returns `error=invalid_scope` during authorisation.
+ * This error is routed via redirect to the client's callback URL (per RFC 6749
+ * Section 4.1.2.1), bypassing the server entirely and causing a silent failure
+ * in clients like Cursor. MCP only needs an OAuth access token, not an OIDC ID
+ * token, so `openid` is not required.
+ *
+ * Because `openid` is not in our PRM `scopes_supported`, compliant clients
+ * (RFC 9728) will not request it. The proxy forwards all scopes transparently
+ * without filtering.
+ *
+ * @see ADR-113 Troubleshooting section (docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
  */
 export const DEFAULT_AUTH_SCHEME = {
   type: 'oauth2',
-  scopes: ['openid', 'email'],
+  scopes: ['email'],
 } as const;
 
 /**

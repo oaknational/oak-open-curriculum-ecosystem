@@ -12,6 +12,7 @@ import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
  * Search tool definition with full MCP metadata.
@@ -38,7 +39,7 @@ Do NOT use for:
 - Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
 
 Executes get-search-lessons and get-search-transcripts in parallel.`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

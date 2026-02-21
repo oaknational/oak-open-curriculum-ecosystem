@@ -16,7 +16,7 @@
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
     },
-    "oak-curriculum-http-local-200226": {
+    "oak-local": {
       "type": "http",
       "url": "http://localhost:3333/mcp"
     },

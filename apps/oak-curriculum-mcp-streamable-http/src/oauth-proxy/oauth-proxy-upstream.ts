@@ -5,7 +5,7 @@
  * formatting. None perform I/O. They exist to support the transparent
  * proxy — not to add validation or security logic of their own.
  *
- * @see .agent/plans/semantic-search/active/proxy-oauth-as-for-cursor.plan.md
+ * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
 
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
@@ -124,8 +124,8 @@ export function formatProxyErrorResponse(
  *
  * Replaces `issuer`, `authorization_endpoint`, `token_endpoint`, and
  * `registration_endpoint` with proxy URLs on the local origin. All
- * capability fields (`scopes_supported`, `grant_types_supported`, etc.)
- * are passed through unchanged from the upstream AS.
+ * capability fields including `scopes_supported` are passed through
+ * unchanged from the upstream AS.
  *
  * @param upstreamMetadata - The original AS metadata from Clerk
  * @param localOrigin - The proxy's origin, e.g. `http://localhost:3333`

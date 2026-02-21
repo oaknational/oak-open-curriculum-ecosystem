@@ -111,6 +111,7 @@ describe('GET /oauth/authorize', () => {
       expect(location).toContain('response_type=code');
       expect(location).toContain('state=random-state');
       expect(location).toContain('code_challenge=challenge-value');
+      expect(location).toContain('scope=openid');
     }
   });
 });

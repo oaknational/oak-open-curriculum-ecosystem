@@ -10,6 +10,7 @@ import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
  * Browse-curriculum tool definition with MCP metadata.
@@ -40,7 +41,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 - "Show me KS2 science" → { subject: 'science', keyStage: 'ks2' }
 - "What's in the maths curriculum?" → { subject: 'maths' }
 - "What subjects are at Key Stage 3?" → { keyStage: 'ks3' }`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

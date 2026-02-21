@@ -17,7 +17,7 @@
  * Generator reads security policy and emits this constant during type-gen.
  */
 
-export const SCOPES_SUPPORTED = ['email', 'openid'] as const;
+export const SCOPES_SUPPORTED = ['email'] as const;
 
 /**
  * Type representing the supported OAuth scopes.

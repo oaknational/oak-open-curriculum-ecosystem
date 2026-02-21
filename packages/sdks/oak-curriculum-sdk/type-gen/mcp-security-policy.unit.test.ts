@@ -10,6 +10,7 @@ import {
   toolRequiresAuth,
   getScopesSupported,
 } from './mcp-security-policy.js';
+import { SCOPES_SUPPORTED } from '../src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
 
 describe('MCP Security Policy Configuration', () => {
   describe('PUBLIC_TOOLS', () => {
@@ -34,12 +35,12 @@ describe('MCP Security Policy Configuration', () => {
       expect(Array.isArray(DEFAULT_AUTH_SCHEME.scopes)).toBe(true);
     });
 
-    it('includes required openid scope', () => {
-      expect(DEFAULT_AUTH_SCHEME.scopes).toContain('openid');
-    });
-
     it('includes required email scope', () => {
       expect(DEFAULT_AUTH_SCHEME.scopes).toContain('email');
+    });
+
+    it('does not include openid scope (Clerk rejects it for DCR clients)', () => {
+      expect(DEFAULT_AUTH_SCHEME.scopes).not.toContain('openid');
     });
   });
 
@@ -87,7 +88,7 @@ describe('MCP Security Policy Configuration', () => {
   describe('getScopesSupported', () => {
     it('returns scopes from DEFAULT_AUTH_SCHEME', () => {
       const scopes = getScopesSupported();
-      expect(scopes).toEqual(['email', 'openid']); // sorted
+      expect(scopes).toEqual(['email']);
     });
 
     it('returns sorted array', () => {
@@ -114,6 +115,12 @@ describe('MCP Security Policy Configuration', () => {
         expect(typeof scope).toBe('string');
         expect(scope.length).toBeGreaterThan(0);
       }
+    });
+  });
+
+  describe('generated SCOPES_SUPPORTED sync check', () => {
+    it('matches getScopesSupported() — run pnpm type-gen if this fails', () => {
+      expect([...SCOPES_SUPPORTED]).toStrictEqual([...getScopesSupported()]);
     });
   });
 });

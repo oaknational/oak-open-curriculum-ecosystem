@@ -14,6 +14,7 @@ import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 import { SEARCH_SDK_SCOPES } from './types.js';
 
 /**
@@ -59,7 +60,7 @@ CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
 - For prerequisites: search(scope: 'threads') → get-prerequisite-graph for dependencies
 - For progressions: search(scope: 'threads') → get-thread-progressions for ordered units`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

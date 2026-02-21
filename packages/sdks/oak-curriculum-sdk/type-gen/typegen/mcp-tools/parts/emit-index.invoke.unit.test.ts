@@ -44,7 +44,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
     expect(code).toContain('securitySchemes:');
 
     // Verify OAuth2 scheme
-    expect(code).toContain("{ type: 'oauth2', scopes: ['openid', 'email'] }");
+    expect(code).toContain("{ type: 'oauth2', scopes: ['email'] }");
 
     // Verify field ordering (after documentedStatuses)
     expect(code).toMatch(/documentedStatuses,[\s\S]*securitySchemes:/);

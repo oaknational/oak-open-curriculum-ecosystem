@@ -132,7 +132,7 @@ export const getLessonsAssets = {
   path,
   method,
   documentedStatuses,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   requiresDomainContext: true,
   annotations: {
     readOnlyHint: true,
@@ -147,7 +147,7 @@ export const getLessonsAssets = {
     'openai/toolInvocation/invoked': "Get Lessons Assets loaded",
     'openai/widgetAccessible': true,
     'openai/visibility': 'public',
-    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+    securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];

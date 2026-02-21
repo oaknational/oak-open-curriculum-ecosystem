@@ -1,4 +1,4 @@
-import type { Express } from 'express';
+import type { Express, RequestHandler } from 'express';
 import { clerkMiddleware } from '@clerk/express';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Logger } from '@oaknational/mcp-logger';
@@ -58,6 +58,11 @@ function deriveSelfOrigin(req: { get(name: string): string | undefined }): strin
  * Registers PUBLIC OAuth metadata endpoints BEFORE clerkMiddleware.
  * Publicly accessible without authentication per RFC 9728.
  *
+ * PRM is served at both the unqualified path (`/.well-known/oauth-protected-resource`)
+ * for backwards compatibility and the path-qualified path
+ * (`/.well-known/oauth-protected-resource/mcp`) per RFC 9728 Section 3.1.
+ * Both serve identical responses.
+ *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
  *   injected by the caller. Endpoint URLs are rewritten per-request to
  *   point to this server's origin; capability fields are passed through.
@@ -71,14 +76,17 @@ export function registerPublicOAuthMetadataEndpoints(
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
-  app.get('/.well-known/oauth-protected-resource', (req, res) => {
+  const servePrm: RequestHandler = (req, res) => {
     const selfOrigin = deriveSelfOrigin(req);
     res.json({
       resource: `${selfOrigin}/mcp`,
       authorization_servers: [selfOrigin],
-      scopes_supported: [...SCOPES_SUPPORTED],
+      scopes_supported: SCOPES_SUPPORTED,
     });
-  });
+  };
+
+  app.get('/.well-known/oauth-protected-resource', servePrm);
+  app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
 
   app.get('/.well-known/oauth-authorization-server', (req, res) => {
     const selfOrigin = deriveSelfOrigin(req);

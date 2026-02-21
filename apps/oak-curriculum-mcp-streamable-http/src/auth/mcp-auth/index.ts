@@ -1,20 +1,11 @@
 /**
- * MCP OAuth authentication with Clerk - fixed version.
+ * MCP OAuth authentication with Clerk.
  *
- * This module provides a fixed implementation of MCP OAuth authentication
- * that resolves the bug in `@clerk/mcp-tools` where getPRMUrl incorrectly
- * appends req.originalUrl to the OAuth metadata path.
+ * Generates path-qualified PRM URLs per RFC 9728 Section 3.1 and enforces
+ * HTTP 401 for auth failures per MCP spec. Runs BEFORE the MCP SDK to
+ * enable proper HTTP 401 responses with `WWW-Authenticate` headers.
  *
- * Bug: `@clerk/mcp-tools` generates URLs like:
- *   /.well-known/oauth-protected-resource/mcp
- *
- * Fix: We generate the correct RFC 9470 compliant URL:
- *   /.well-known/oauth-protected-resource
- *
- * ## Auth Model
- *
- * Per MCP spec and OpenAI Apps docs, HTTP 401 is required for auth failures.
- * This middleware runs BEFORE the MCP SDK to enable proper HTTP 401 responses.
+ * @see {@link https://datatracker.ietf.org/doc/html/rfc9728#section-3.1 | RFC 9728 Section 3.1}
  */
 
 export { mcpAuth } from './mcp-auth.js';

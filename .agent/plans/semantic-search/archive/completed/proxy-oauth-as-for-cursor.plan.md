@@ -5,14 +5,15 @@ overview: >
   resource_metadata URL is not persisted across the OAuth redirect flow.
   When the MCP resource server and OAuth authorization server are on
   different origins, the token exchange fails after browser authorization.
-  This affects both dev (localhost) and production (real domain) because
-  the root cause is origin mismatch between RS and AS.
 
-  The fix: act as a proxy OAuth AS so Cursor sees RS and AS on the same
-  origin. Implementation is functionally complete — async createApp,
-  metadata DI, proxy endpoints, self-origin metadata, all tests pass.
-  Remaining: Cursor validation, fetch DI for proxy routes, error
-  handling migration to Result<T, E>, documentation.
+  RESOLVED 2026-02-21: Proxy OAuth AS working end-to-end with Cursor.
+  Two issues were fixed: (1) path-qualified PRM URL per RFC 9728, and
+  (2) Clerk rejects 'openid' scope for DCR clients — removed from
+  PRM source (mcp-security-policy.ts). The proxy is now fully
+  transparent: no scope filtering, no parameter alteration. All scopes
+  including upstream 'openid' pass through unchanged in AS metadata
+  and authorize requests. Full TDD cycle at all levels.
+  Remaining: documentation (ADR updates, archive).
 todos:
   - id: poc-tests-red
     content: >
@@ -53,41 +54,56 @@ todos:
       lint:fix, format:root, markdownlint:root, test (634),
       test:e2e (185), smoke:dev:stub. All clean.
     status: completed
+  - id: fix-path-qualified-prm
+    content: >
+      COMPLETED 2026-02-21: Registered PRM at path-qualified URL
+      /.well-known/oauth-protected-resource/mcp per RFC 9728
+      Section 3.1. Added path to CLERK_SKIP_PATHS. Fixed getPRMUrl()
+      and generateMetadataUrl() to generate correct path-qualified
+      URLs. Updated resource_metadata in 401 WWW-Authenticate header.
+      Full TDD cycle: 5 unit tests updated, 4 auth-error tests updated,
+      1 E2E test added (17 total), 1 integration test added (10 total).
+      All quality gates pass. TSDoc and README corrected (RFC 9728, not
+      RFC 9470; removed incorrect "Clerk bug" framing).
+    status: completed
+  - id: revalidate-cursor
+    content: >
+      VALIDATED 2026-02-21: Full Cursor OAuth flow works end-to-end.
+      Two issues resolved: (1) path-qualified PRM URL per RFC 9728,
+      (2) Clerk rejects 'openid' scope for dynamically registered
+      clients — stripped from authorize proxy, PRM, and AS metadata.
+      See "Cursor Validation: Scope Bug" section for full diagnosis.
+    status: completed
   - id: inject-fetch-di
     content: >
       Inject fetch into OAuthProxyConfig for testability. Integration
-      tests currently use real HTTP calls via globalThis.fetch to a
-      fake Express server, violating testing strategy. With DI,
-      integration tests inject a simple fake fetch function. E2E tests
-      (supertest, out-of-process) continue to use real HTTP.
-      Separate TDD cycle — write tests first, then implement.
-    status: pending
+      tests use injected fake fetch function. No real HTTP in
+      integration tests. Completed 2026-02-21.
+    status: completed
   - id: poc-validate-cursor
     content: >
-      VALIDATE: Start dev server with proxy (real Clerk keys).
-      Connect Cursor. Confirm full OAuth flow completes. Capture
-      server logs showing Authorization header on POST /mcp.
-      Monitor for Basic auth bug (GitHub #3734).
-    status: pending
+      VALIDATED 2026-02-21: Inspector works end-to-end. Cursor
+      FAILS due to path-qualified PRM URL not being served.
+      See "Cursor Validation Results" section for diagnosis.
+    status: completed
   - id: smoke-tests-update
     content: >
-      Auth-enabled smoke tests may need assertion updates for
-      self-origin URLs in AS metadata. Add proxy-specific smoke
-      test validating DCR → authorise → token exchange through
-      the proxy against real Clerk.
-    status: pending
+      Self-origin assertion added to PRM validation in
+      oauth-discovery.ts. Full smoke:oauth:spec passes.
+      Completed 2026-02-21.
+    status: completed
   - id: error-handling-debt
     content: >
-      Migrate try/catch with unknown error types in
-      oauth-proxy-routes.ts to Result<T, E> for explicit,
-      traceable error paths. Currently conflates upstream JSON
-      parse failures with network errors.
-    status: pending
+      Migrated to Result<T, E> with ProxyFetchError discriminated
+      union (timeout|network). fetchUpstream returns Result.
+      Completed 2026-02-21.
+    status: completed
   - id: documentation
     content: >
-      Update ADR-113, write proxy ADR, archive completed
-      plans, update auth-routes and application TSDoc.
-    status: pending
+      ADR-115 written (proxy OAuth AS decision). ADR-053 amended
+      (proxy role, opaque tokens, DCR). ADR-113 cross-referenced.
+      ADR index updated. Plan archived.
+    status: completed
 isProject: false
 ---
 
@@ -254,8 +270,10 @@ investigation):
 - Clerk token endpoint: accepts `resource` parameter (ignores it
   gracefully)
 - Our PRM: correct `resource`, `authorization_servers`,
-  `scopes_supported`
-- Our AS metadata: correct `issuer`, all endpoints point to Clerk
+  `scopes_supported` (without `openid`)
+- Our AS metadata: correct `issuer`, all endpoints point to self-origin
+- **Cursor**: Full OAuth flow works (DCR → authorize → sign-in →
+  token exchange → authenticated MCP calls). Validated 2026-02-21.
 - MCP Inspector: connects and authenticates successfully (manual
   browser validation + smoke tests)
 - Programmatic PKCE flow: smoke tests pass end-to-end
@@ -403,15 +421,20 @@ redirect target is an immutable value set once at process start. Client
 requests append query parameters to this known-good base URL — they
 cannot control the redirect hostname.
 
-### No Request Validation
+### No Request Validation (One Exception)
 
 The proxy does NOT validate `grant_type`, `code`, `code_verifier`, or
 any other parameter. If a client sends garbage, Clerk rejects it and
 returns an appropriate OAuth error. The proxy passes that error through
 verbatim. This is by design: the proxy is a transparent pipe, not a
-security layer. Any validation the proxy performs is something Clerk
-also performs — it would be redundant at best and information-losing
-at worst.
+security layer.
+
+**No exceptions remain.** The proxy formerly stripped `openid` from
+the `scope` parameter in `/oauth/authorize` via `stripUnsupportedScopes()`.
+This was removed in favour of fixing the source: `openid` is no longer
+in our PRM `scopes_supported` (see `mcp-security-policy.ts`), so
+compliant clients (RFC 9728) will not request it. The proxy is now
+fully transparent with zero parameter alteration.
 
 ### No DCR Rate Limiting
 
@@ -452,11 +475,9 @@ default timeout (configurable via `OAuthProxyConfig.timeoutMs`).
 Error responses use the OAuth 2.0 error format (RFC 6749 Section 5.2)
 via `formatProxyErrorResponse()`.
 
-**Known debt**: Error handling uses `try/catch` with `unknown` error
-types. Should migrate to `Result<T, E>` for explicit, traceable error
-paths. Currently conflates upstream JSON parse failures with network
-errors in the catch blocks. This is documented in TSDoc on
-`oauth-proxy-routes.ts`.
+**RESOLVED**: Error handling migrated to `Result<T, E>` with
+`ProxyFetchError` discriminated union (`timeout` | `network`).
+`fetchUpstream` returns `Result`. Fixed 2026-02-21.
 
 ### `/oauth/authorize` Is Special
 
@@ -497,12 +518,12 @@ The fact that the tokens originate from Clerk is an implementation
 detail — the proxy IS the authorisation server from the client's
 perspective, per the same pattern used by `ProxyOAuthServerProvider`.
 
-### 3. Transparent Forwarding (Implemented)
+### 3. Transparent Forwarding (Fully Implemented, No Exceptions)
 
-The proxy forwards all parameters transparently. This is implemented:
+The proxy forwards all parameters transparently with zero alteration:
 
 - `/oauth/authorize`: All query parameters forwarded via
-  `buildAuthorizeRedirectUrl()`. No filtering.
+  `buildAuthorizeRedirectUrl()`. No filtering, no transformation.
 - `/oauth/token`: Raw `application/x-www-form-urlencoded` body
   forwarded as-is (parsed by `express.text()`, not `express.urlencoded()`).
   No field-level inspection.
@@ -510,7 +531,9 @@ The proxy forwards all parameters transparently. This is implemented:
   No field-level inspection.
 
 This makes the proxy resilient to upstream changes (e.g., Clerk adding
-new parameters). Selective forwarding would be fragile.
+new parameters). The `openid` issue is solved at the source: our PRM
+does not advertise `openid` in `scopes_supported`, so compliant clients
+(RFC 9728) will not request it. The proxy does not need to filter it.
 
 ### 4. AS Metadata: Fetch and Rewrite (Fully Implemented)
 
@@ -521,8 +544,8 @@ own origin. All capability fields pass through unchanged.
 **Implemented**:
 
 - `rewriteAuthServerMetadata()` uses object spread to preserve all
-  fields, then overrides `issuer`, `authorization_endpoint`,
-  `token_endpoint`, and `registration_endpoint`
+  fields (including `scopes_supported`), then overrides `issuer`,
+  `authorization_endpoint`, `token_endpoint`, `registration_endpoint`
 - `isUpstreamAuthServerMetadata()` type guard uses Zod schema
   (`upstreamAuthServerMetadataSchema`) for validation
 - `registerPublicOAuthMetadataEndpoints()` accepts metadata via DI
@@ -537,14 +560,14 @@ own origin. All capability fields pass through unchanged.
 
 TDD applies at ALL levels. The PoC is not exempt.
 
-### Unit Tests (pure functions, no I/O) — 22 tests, DONE
+### Unit Tests (pure functions, no I/O) — 25+ tests, DONE
 
 | Function | Test | Status |
 |----------|------|--------|
 | `deriveUpstreamOAuthBaseUrl` | Derives FAPI domain from publishable key; throws on empty/invalid | Done |
 | `buildAuthorizeRedirectUrl` | Appends all query params to upstream URL; handles empty params; preserves URL encoding | Done |
 | `formatProxyErrorResponse` | Creates OAuth 2.0 error response per RFC 6749 Section 5.2 | Done |
-| `rewriteAuthServerMetadata` | Rewrites issuer + endpoints to local origin; preserves capabilities unchanged; passes through optional endpoint URLs; omits absent optional endpoints | Done |
+| `rewriteAuthServerMetadata` | Rewrites issuer + endpoints to local origin; preserves all capabilities unchanged including `scopes_supported` | Done |
 | `isUpstreamAuthServerMetadata` | Validates required string and array fields; rejects null, string, missing fields, non-array fields, arrays with non-strings | Done |
 
 File: `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts`
@@ -566,12 +589,8 @@ File: `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts`
 
 File: `src/oauth-proxy/oauth-proxy-routes.integration.test.ts`
 
-**KNOWN ISSUE**: Integration tests currently use real HTTP calls via
-`globalThis.fetch` to a fake Express server running on `127.0.0.1`.
-This violates the testing strategy: "Integration tests DO NOT trigger
-IO." The architecturally correct fix is to inject `fetch` into
-`OAuthProxyConfig` as a DI dependency. Integration tests then inject a
-simple fake function. See todo `inject-fetch-di`.
+**RESOLVED**: Integration tests now use injected fake `fetch` functions
+via `OAuthProxyConfig.fetch` DI. No real HTTP calls. Fixed 2026-02-21.
 
 ### E2E Tests — DONE (16 tests)
 
@@ -616,7 +635,7 @@ validation removed, proxy does not gatekeep.
 
 | Step | Status | Evidence |
 |------|--------|----------|
-| Unit tests (pure functions) | ✅ 22 tests pass | `oauth-proxy-upstream.unit.test.ts` |
+| Unit tests (pure functions) | ✅ 25+ tests pass | `oauth-proxy-upstream.unit.test.ts` |
 | Integration tests (proxy routes + fake upstream) | ✅ 10 tests pass | `oauth-proxy-routes.integration.test.ts` |
 | `POST /oauth/register` handler | ✅ Implemented | Forwards JSON body to Clerk, returns response verbatim |
 | `GET /oauth/authorize` handler | ✅ Implemented | Redirects (302) to Clerk with all query params preserved |
@@ -661,14 +680,94 @@ implemented: `createApp` is now async, all call sites updated.
 10. Production entry (`index.ts`) uses top-level `await`
 11. All quality gates pass: 634 unit/integration + 185 E2E + smoke
 
+### Cursor Validation Results (2026-02-21)
+
+**Inspector**: Works end-to-end. Full OAuth flow completes: DCR, authorize
+redirect, Clerk consent, token exchange, authenticated MCP calls.
+
+**Cursor**: Required TWO fixes before the full flow completed:
+
+#### Issue 1: Path-Qualified PRM URL Not Served (RESOLVED)
+
+RFC 9728 Section 3.1 specifies that for resource `http://localhost:3333/mcp`,
+the PRM URL is `http://localhost:3333/.well-known/oauth-protected-resource/mcp`
+(path appended). Our server only served `/.well-known/oauth-protected-resource`
+(without `/mcp`). Cursor requests the path-qualified URL after the OAuth
+redirect and gets 404, breaking the flow. Fixed by registering the
+path-qualified PRM route, adding it to `CLERK_SKIP_PATHS`, and fixing
+`getPRMUrl()` and `generateMetadataUrl()` to generate path-qualified URLs.
+
+#### Issue 2: Clerk Rejects `openid` Scope for Dynamic Clients (RESOLVED)
+
+**Root Cause**: Clerk's `/oauth/authorize` endpoint returns
+`error=invalid_scope` when a dynamically registered client requests the
+`openid` scope. The full error:
+
+```
+The requested scope is invalid, unknown, or malformed.
+The OAuth 2.0 Client is not allowed to request scope 'openid'.
+```
+
+**How It Manifested**: After fixing Issue 1, the full OAuth discovery,
+client registration, and authorize redirect all succeeded. But Clerk
+redirected to the Cursor callback with an ERROR instead of an auth code:
+
+```
+cursor://anysphere.cursor-mcp/oauth/callback
+  ?error=invalid_scope
+  &error_description=The+requested+scope+is+invalid...scope+'openid'
+  &state=eyJpZCI6...
+```
+
+This was invisible from server logs because the error redirect happened
+entirely between Clerk and the browser — our server never saw the error.
+The only symptom was that Cursor's MCP OAuth log showed an endless
+`needsAuth → cleared → needsAuth` loop with no token exchange.
+
+**Why It Was Hard to Diagnose**:
+1. Server logs showed a perfect flow: PRM → AS metadata → register → authorize redirect (302) → nothing after
+2. No `POST /oauth/token` ever arrived — the flow died silently
+3. Cursor's MCP OAuth output only showed `cause=manual_or_external` clearing
+4. The `cursor://` URI scheme handler worked from Terminal (`open "cursor://..."`) but appeared dead from browser redirects
+5. The actual error was only visible in a Chrome HAR capture of the network traffic, which revealed Clerk's `error=invalid_scope` response
+
+**Why `openid` Was Requested**:
+- Our PRM advertised `scopes_supported: ["email", "openid"]` (from SDK's `SCOPES_SUPPORTED` constant)
+- Our AS metadata passed through Clerk's `scopes_supported` which includes `openid`
+- Cursor saw `openid` as supported and requested `scope=email+openid`
+- Clerk accepted the scope during client registration but rejected it during authorization
+
+**Fix (at the source, not in the proxy)**:
+1. **Source of truth** (`mcp-security-policy.ts`): `openid` removed from `DEFAULT_AUTH_SCHEME.scopes`. Running `pnpm type-gen` propagates to all generated tool definitions and `SCOPES_SUPPORTED`.
+2. **PRM endpoint** (`auth-routes.ts`): Uses `SCOPES_SUPPORTED` from generated source — no longer contains `openid`.
+3. **Proxy**: Fully transparent. No scope filtering. AS metadata `scopes_supported` passed through unchanged from Clerk (includes `openid`). Authorize requests forwarded verbatim. Compliant clients (RFC 9728) read scopes from PRM, not AS metadata, so they will not request `openid`.
+
+After both fixes, the full Cursor OAuth flow completes: DCR → authorize →
+Clerk sign-in → callback with auth code → token exchange → authenticated
+MCP calls.
+
+#### Debugging Timeline
+
+| Time | What happened | Visible? |
+|------|---------------|----------|
+| PRM fix deployed | Path-qualified PRM now served | Server logs: 200 ✓ |
+| Cursor starts OAuth | Discovery → register → authorize | Server logs: all 200/201/302 ✓ |
+| Clerk authorizes user | User already signed in, immediate redirect | Browser: "Open Cursor?" dialog |
+| Clerk redirects to cursor:// | `error=invalid_scope` in callback URL | **Not visible in server logs** |
+| User clicks "Open Cursor" | Cursor receives error callback | Cursor: clears state, no log entry |
+| Cursor re-enters needsAuth | Loop begins | Cursor MCP OAuth output |
+| HAR capture | Reveals `error=invalid_scope` in redirect Location header | **Chrome DevTools only** |
+
 ### Remaining Steps
 
 | Step | Status | Notes |
 |------|--------|-------|
-| Inject `fetch` into `OAuthProxyConfig` | Pending | Fix testing strategy violation (separate TDD cycle) |
-| Validate with Cursor | **Pending — next priority** | Start dev server with real Clerk keys, connect Cursor, confirm full flow |
-| Update auth-enabled smoke test assertions | Pending | Self-origin in AS metadata |
-| Error handling → `Result<T, E>` | Pending | `try/catch` in proxy routes should use Result pattern |
+| Fix path-qualified PRM URL | **Done** | Route registered, CLERK_SKIP_PATHS updated, getPRMUrl/generateMetadataUrl fixed |
+| Fix `openid` scope rejection | **Done** | Stripped from authorize proxy, PRM, AS metadata; full TDD cycle |
+| Re-validate with Cursor | **Done — WORKS** | Full OAuth flow: DCR → authorize → Clerk sign-in → token exchange → authenticated MCP calls |
+| Inject `fetch` into `OAuthProxyConfig` | Done | Completed in previous session |
+| Update auth-enabled smoke test assertions | Done | Completed in previous session |
+| Error handling → `Result<T, E>` | Done | Completed in previous session |
 | Documentation (ADR, TSDoc, archive plans) | Pending | |
 
 ### What Was NOT Changed
@@ -688,14 +787,20 @@ Clerk's dev-mode token endpoint tolerates this — but log it so we can
 confirm whether it affects us. If it causes failures, the token proxy
 must strip the `Authorization` header before forwarding.
 
-### Risks
+### Risks (Updated 2026-02-21)
 
-- Clerk may send `cursor://` redirect URIs that need special handling
-  in the proxy authorise endpoint
-- Token exchange may require matching the redirect_uri exactly
-  (the redirect goes through Clerk's authorisation endpoint, not ours)
-- CORS preflight on proxy endpoints may need attention
-- Cursor's `Basic` auth bug may require header stripping at the proxy
+- ~~Clerk may send `cursor://` redirect URIs~~ **Confirmed working**: Clerk
+  correctly passes `cursor://` URIs through the authorize flow
+- ~~Token exchange may require matching the redirect_uri exactly~~
+  **Confirmed working**: redirect_uri matching works through the proxy
+- ~~CORS preflight on proxy endpoints~~ **No issues observed** during
+  Cursor validation
+- Cursor's `Basic` auth bug ([GitHub #3734](https://github.com/cursor/cursor/issues/3734))
+  may require header stripping at the proxy — **not yet observed** but
+  monitor in production
+- **Host header trust**: Server trusts `Host` header to build OAuth
+  discovery/auth URLs without local allow-list validation (security
+  reviewer finding — address before production deployment)
 
 ---
 
@@ -783,7 +888,7 @@ with ours), and provide no structured logging.
 | File | Role | Status |
 |------|------|--------|
 | `src/oauth-proxy/oauth-proxy-routes.ts` | Express route handlers (register, authorize, token) | Done |
-| `src/oauth-proxy/oauth-proxy-upstream.ts` | Pure functions + Zod schema for `UpstreamAuthServerMetadata` | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.ts` | Pure functions + Zod schema (transparent passthrough, no scope filtering) | Done |
 | `src/oauth-proxy/oauth-proxy-routes.integration.test.ts` | Integration tests with fake upstream (10 tests) | Done |
 | `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` | Unit tests for pure functions (22 tests) | Done |
 | `src/oauth-proxy/index.ts` | Public API boundary (barrel file) | Done |
@@ -872,6 +977,8 @@ the proxy instead of directly to Clerk. The tokens are the same.
 
 4. **No validation in the proxy.** The proxy is a transparent
    passthrough. Clerk handles all validation, security, rate limiting.
+   No exceptions — the `openid` issue is solved at the source
+   (`mcp-security-policy.ts`), not in the proxy.
 
 5. **Token refresh is supported.** The proxy forwards any
    `grant_type` without filtering. It is architecturally ready for when
@@ -901,6 +1008,14 @@ the proxy instead of directly to Clerk. The tokens are the same.
    opaque tokens. If Clerk switches to JWT access tokens, the issuer
    mismatch will need addressing (see Architectural Assumptions).
 
+3. **`openid` scope not available for DCR clients**: Clerk rejects the
+   `openid` scope for dynamically registered (DCR) clients. This is
+   solved at the source: `openid` is excluded from `DEFAULT_AUTH_SCHEME`
+   in `mcp-security-policy.ts`, so our PRM does not advertise it. The
+   proxy is fully transparent and does not filter any scopes. If Clerk
+   adds `openid` support for DCR clients in the future, add `openid`
+   back to `DEFAULT_AUTH_SCHEME.scopes` and run `pnpm type-gen`.
+
 ---
 
 ## Known Clerk Configuration
@@ -912,21 +1027,21 @@ the proxy instead of directly to Clerk. The tokens are the same.
 
 ### Metadata Snapshots (Before and After Proxy)
 
-**Our PRM** (`/.well-known/oauth-protected-resource`):
+**Our PRM** (`/.well-known/oauth-protected-resource` and `/.well-known/oauth-protected-resource/mcp`):
 
 ```json
-// BEFORE (pointed to Clerk — Cursor breaks):
+// BEFORE (pointed to Clerk, included openid — Cursor breaks):
 {
   "resource": "http://localhost:3333/mcp",
   "authorization_servers": ["https://native-hippo-15.clerk.accounts.dev"],
   "scopes_supported": ["email", "openid"]
 }
 
-// AFTER (points to self — Cursor works):
+// AFTER (points to self, openid removed — Cursor works):
 {
   "resource": "http://localhost:3333/mcp",
   "authorization_servers": ["http://localhost:3333"],
-  "scopes_supported": ["email", "openid"]
+  "scopes_supported": ["email"]
 }
 ```
 
@@ -944,7 +1059,7 @@ the proxy instead of directly to Clerk. The tokens are the same.
   "code_challenge_methods_supported": ["S256"]
 }
 
-// AFTER (fetched from Clerk, endpoints rewritten to self-origin):
+// AFTER (fetched from Clerk, endpoints rewritten, scopes passed through):
 {
   "issuer": "http://localhost:3333",
   "authorization_endpoint": "http://localhost:3333/oauth/authorize",
@@ -974,10 +1089,10 @@ the proxy instead of directly to Clerk. The tokens are the same.
 }
 ```
 
-The AFTER state exactly matches Clerk's own metadata except for the
-four endpoint URLs, which are rewritten to self-origin by
-`rewriteAuthServerMetadata()`. All capability arrays come from Clerk
-and are passed through unchanged via object spread.
+The AFTER state matches Clerk's own metadata except for four endpoint
+URLs rewritten to self-origin by `rewriteAuthServerMetadata()`. All
+capability arrays including `scopes_supported` come from Clerk and are
+passed through unchanged via object spread.
 
 ---
 
@@ -990,7 +1105,7 @@ and are passed through unchanged via object spread.
 | `src/oauth-proxy/oauth-proxy-routes.ts` | Route handlers: register, authorize, token | Done |
 | `src/oauth-proxy/oauth-proxy-upstream.ts` | Pure functions: URL derivation, redirect, error, metadata rewrite, type guard | Done |
 | `src/oauth-proxy/oauth-proxy-routes.integration.test.ts` | Integration tests with fake upstream (10 tests) | Done |
-| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` | Unit tests for pure functions (22 tests) | Done |
+| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts` | Unit tests for pure functions (25+ tests) | Done |
 | `src/oauth-proxy/index.ts` | Barrel file | Done |
 
 ### Server-Side Auth Chain

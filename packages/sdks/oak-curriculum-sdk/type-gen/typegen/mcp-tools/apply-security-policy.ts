@@ -33,7 +33,7 @@ import type { SecurityScheme } from './security-types.js';
  *
  * // Protected tool
  * const protectedSchemes = getSecuritySchemeForTool('get-lessons');
- * // Returns: [{ type: 'oauth2', scopes: ['openid', 'email'] }]
+ * // Returns: [{ type: 'oauth2', scopes: ['email'] }]
  * ```
  */
 export function getSecuritySchemeForTool(toolName: string): readonly SecurityScheme[] {

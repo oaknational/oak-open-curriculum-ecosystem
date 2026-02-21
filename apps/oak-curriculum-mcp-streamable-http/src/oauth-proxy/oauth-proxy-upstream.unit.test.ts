@@ -120,17 +120,21 @@ describe('rewriteAuthServerMetadata', () => {
     expect(result.registration_endpoint).toBe('http://localhost:3333/oauth/register');
   });
 
-  it('preserves capability fields unchanged', () => {
+  it('preserves non-scope capability fields unchanged', () => {
     const result = rewriteAuthServerMetadata(TEST_UPSTREAM_METADATA, 'http://localhost:3333');
     expect(result.token_endpoint_auth_methods_supported).toStrictEqual([
       'client_secret_basic',
       'none',
       'client_secret_post',
     ]);
-    expect(result.scopes_supported).toStrictEqual(['openid', 'profile', 'email']);
     expect(result.response_types_supported).toStrictEqual(['code']);
     expect(result.grant_types_supported).toStrictEqual(['authorization_code', 'refresh_token']);
     expect(result.code_challenge_methods_supported).toStrictEqual(['S256']);
+  });
+
+  it('passes through scopes_supported unchanged from upstream', () => {
+    const result = rewriteAuthServerMetadata(TEST_UPSTREAM_METADATA, 'http://localhost:3333');
+    expect(result.scopes_supported).toStrictEqual(TEST_UPSTREAM_METADATA.scopes_supported);
   });
 
   it('works with a production HTTPS origin', () => {

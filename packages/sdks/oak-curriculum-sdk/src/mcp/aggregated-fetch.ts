@@ -15,6 +15,7 @@ import {
 } from '../types/generated/api-schema/routing/url-helpers.js';
 import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
  * Fetch tool definition with full MCP metadata.
@@ -38,7 +39,7 @@ Do NOT use for:
 - Understanding ID formats (use '${ONTOLOGY_TOOL_NAME}' first)
 
 Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

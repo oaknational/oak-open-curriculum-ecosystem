@@ -10,6 +10,7 @@ import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
  * Explore-topic tool definition with MCP metadata.
@@ -48,7 +49,7 @@ NEXT STEPS AFTER EXPLORE:
 - Use search(scope: 'threads') for progression details
 - Use fetch(lesson:slug) for full lesson content
 - Use get-thread-progressions for ordered unit sequences`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

@@ -33,6 +33,7 @@ import { isPublicResourceUri } from './auth/public-resources.js';
  */
 const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource',
+  '/.well-known/oauth-protected-resource/mcp',
   '/.well-known/oauth-authorization-server',
   '/.well-known/openid-configuration',
   '/healthz',

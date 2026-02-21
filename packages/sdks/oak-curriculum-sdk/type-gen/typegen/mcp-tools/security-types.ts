@@ -55,7 +55,7 @@ export interface NoAuthScheme {
  * ```typescript
  * const scheme: OAuth2Scheme = {
  *   type: 'oauth2',
- *   scopes: ['openid', 'email']
+ *   scopes: ['email']
  * };
  * ```
  */

@@ -20,20 +20,18 @@ until token is created). Developer onboarding experience
 is complete. Type shortcuts have been removed across the
 monorepo.
 
-**Three workstreams remain before the branch can merge:**
+**Two workstreams remain before the branch can merge:**
 
 1. **WS5 — Replace old search** (3a): Comparative testing
    confirms the search-sdk tools are strictly superior.
    WS5 replaces the old REST-based search and retires the
    generated wrappers.
-2. **Proxy OAuth AS for Cursor** (3f): Phase 1 (RED + GREEN)
-   mostly complete — 3 proxy endpoints, 32 tests, passthrough
-   philosophy applied. Remaining: async bootstrap, `fetch` DI,
-   E2E updates, Cursor validation.
-   Plan: [proxy-oauth-as-for-cursor.plan.md](active/proxy-oauth-as-for-cursor.plan.md)
-3. **SDK workspace separation** (3e): Split `curriculum-sdk`
+2. **SDK workspace separation** (3e): Split `curriculum-sdk`
    into type-gen and runtime workspaces with enforced
    one-way dependency.
+
+**Proxy OAuth AS for Cursor** (3f) is now **complete**
+([ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)).
 
 Result pattern unification (3b) and STDIO-HTTP alignment
 (3c) are deferred to post-merge.
@@ -80,7 +78,7 @@ Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
   ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   ✅ COMPLETE
   ├── 3e'. OAuth validation + Cursor investigation       ✅ COMPLETE
   ├── 3e. SDK workspace separation — type-gen/runtime    (merge-blocking)
-  ├── 3f. Proxy OAuth AS for Cursor                      (merge-blocking, Phase 1 partial)
+  ├── 3f. Proxy OAuth AS for Cursor                      ✅ COMPLETE (ADR-115)
   └── 3b. Result pattern unification                     (post-merge)
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
@@ -257,9 +255,9 @@ onboarding. Two workstreams:
 
 **Status**: 🔄 In Progress — all prerequisites complete
 
-Multiple workstreams. Three are **merge-blocking** (3a WS5,
-3e SDK split, 3f proxy OAuth AS). Two are completed (3d OAuth
-spec compliance, 3e' OAuth validation). Two are post-merge
+Multiple workstreams. Two are **merge-blocking** (3a WS5,
+3e SDK split). Three are completed (3d OAuth spec compliance,
+3e' OAuth validation, 3f proxy OAuth AS). Two are post-merge
 (3b result unification, 3c STDIO alignment).
 
 ### 3a. Search Tool Wiring (merge-blocking)
@@ -329,33 +327,29 @@ a confirmed client-side bug ([forum #151331](https://forum.cursor.com/t/mcp-oaut
 | Run spec smoke against live dev server | ✅ Complete |
 | Cursor-specific investigation | ✅ Complete — root cause: `resource_metadata` URL loss |
 
-### 3f. Proxy OAuth AS for Cursor (merge-blocking)
+### 3f. Proxy OAuth AS for Cursor ✅ COMPLETE
 
-**Active plan**: [proxy-oauth-as-for-cursor.plan.md](active/proxy-oauth-as-for-cursor.plan.md)
+**Archived plan**: [proxy-oauth-as-for-cursor.plan.md](archive/completed/proxy-oauth-as-for-cursor.plan.md)
+**ADR**: [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
 
-**Goal**: Act as a proxy OAuth AS so Cursor sees RS and AS on the same
-origin, bypassing the confirmed Cursor bug.
-
-**Completed**: Three proxy endpoints (register, authorize, token),
-pure functions, 22 unit tests, 10 integration tests, four architectural
-reviews. Passthrough philosophy: proxy does NOT validate.
-
-**Remaining**: Async bootstrap (make `createApp` async, ~25 call sites),
-inject `fetch` for test DI, update E2E test assertions, Cursor
-validation, smoke test updates, quality gates, documentation.
+Transparent proxy OAuth AS working end-to-end with Cursor. Three proxy
+endpoints (register, authorize, token), async `createApp`, DI metadata,
+path-qualified PRM (RFC 9728), `openid` scope solved at source, DRY
+scopes via re-export, quality-gate sync tests. All reviews completed.
 
 | Task | Status |
 |------|--------|
-| Phase 1 (RED): Failing integration + unit tests for proxy | ✅ Complete (22 + 10 tests) |
-| Phase 1 (GREEN): Implement proxy endpoints, update metadata | ✅ Complete |
-| Architecture design (custom routes chosen over SDK router) | ✅ Complete |
-| Architectural review (Barney, Betty, Fred, Wilma) | ✅ Complete |
-| Make `createApp` async for metadata fetch | 📋 Pending |
-| Inject `fetch` into proxy config for test DI | 📋 Pending |
-| Update E2E test assertions (self-origin in metadata) | 📋 Pending |
-| Phase 1 (VALIDATE): Cursor E2E, smoke tests pass | 📋 Pending |
-| Quality gates | 📋 Pending |
-| Documentation, ADRs, archive plans | 📋 Pending |
+| Phase 1 (RED + GREEN): Proxy endpoints, pure functions, tests | ✅ Complete |
+| Architecture design + four architectural reviews | ✅ Complete |
+| Async bootstrap (`createApp` async, ~30 call sites) | ✅ Complete |
+| `fetch` DI, E2E rewrite (16 tests), smoke updates | ✅ Complete |
+| Path-qualified PRM (RFC 9728 Section 3.1) | ✅ Complete |
+| `openid` scope: solved at source (`mcp-security-policy.ts`) | ✅ Complete |
+| Transparent proxy: removed all scope filtering | ✅ Complete |
+| DRY fix: aggregated tools import `SCOPES_SUPPORTED` via re-export | ✅ Complete |
+| Quality-gate tests: `SCOPES_SUPPORTED` sync, AS metadata passthrough | ✅ Complete |
+| Cursor validation: full OAuth flow works | ✅ Complete |
+| ADR-115, ADR-053 amendment, ADR-113 cross-reference | ✅ Complete |
 
 ### 3d'. Widget Knowledge Graph Tidy-Up ✅ Complete
 
