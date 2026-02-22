@@ -93,11 +93,11 @@ Three aggregated MCP tools expose the Search SDK's Elasticsearch-backed semantic
 
 | Tool                | Purpose                                                               | SDK Methods                                                                   |
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `search-sdk`        | 5-scope semantic search (lessons, units, threads, sequences, suggest) | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
+| `search`            | 5-scope semantic search (lessons, units, threads, sequences, suggest) | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
 | `browse-curriculum` | Faceted navigation without a search query                             | `fetchSequenceFacets`                                                         |
 | `explore-topic`     | Compound parallel cross-scope discovery                               | `searchLessons` + `searchUnits` + `searchThreads` in parallel                 |
 
-These tools consume a `SearchRetrievalService` interface defined in `src/mcp/search-retrieval-types.ts`. This interface is structurally compatible with the Search SDK's `RetrievalService` but does not import from it, avoiding a circular dependency between curriculum-sdk and search-sdk. The MCP servers inject the concrete implementation when Elasticsearch credentials are available.
+These tools consume a `SearchRetrievalService` interface defined in `src/mcp/search-retrieval-types.ts`. This interface is structurally compatible with the Search SDK's `RetrievalService` but does not import from it, avoiding a circular dependency between curriculum-sdk and oak-search-sdk. The MCP servers inject the concrete implementation when Elasticsearch credentials are available.
 
 When `searchRetrieval` is not provided, the tools return a "not configured" error. All other tools continue to work normally.
 

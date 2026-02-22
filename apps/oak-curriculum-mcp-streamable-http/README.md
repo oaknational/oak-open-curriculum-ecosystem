@@ -975,7 +975,7 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 
 ## Search tools
 
-Three search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide Elasticsearch-backed semantic search. `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are **required** environment variables — the server fails at startup if either is absent. In stub mode (`OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`), `createStubSearchRetrieval()` is used instead of a real Elasticsearch client, so credentials are still required by the env schema but no real ES connection is made.
+Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide Elasticsearch-backed semantic search. `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` are **required** environment variables — the server fails at startup if either is absent. In stub mode (`OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`), `createStubSearchRetrieval()` is used instead of a real Elasticsearch client, so credentials are still required by the env schema but no real ES connection is made.
 
 ## How it works
 

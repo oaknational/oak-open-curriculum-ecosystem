@@ -295,10 +295,10 @@ describe('formatToolResponse', () => {
       const result = formatToolResponse({
         summary: 'Summary',
         data: { items: [] },
-        toolName: 'search-sdk',
+        toolName: 'search',
       });
 
-      expect(result._meta).toHaveProperty('toolName', 'search-sdk');
+      expect(result._meta).toHaveProperty('toolName', 'search');
     });
 
     it('includes annotations/title when provided', () => {

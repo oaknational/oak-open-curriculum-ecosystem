@@ -170,8 +170,8 @@ describe('Tool Examples Metadata E2E', () => {
       throw new Error('Tool not found');
     }
 
-    const qExamples = getPropertyExamples(searchTool, 'q');
-    expect(qExamples.length).toBeGreaterThan(0);
+    const textExamples = getPropertyExamples(searchTool, 'text');
+    expect(textExamples.length).toBeGreaterThan(0);
   });
 
   it('tools/list includes examples for aggregated fetch tool', async () => {

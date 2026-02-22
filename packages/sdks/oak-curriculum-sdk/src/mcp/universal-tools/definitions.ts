@@ -13,7 +13,6 @@
  * combined definition map.
  */
 
-import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index.js';
 import { FETCH_TOOL_DEF, FETCH_INPUT_SCHEMA } from '../aggregated-fetch.js';
 import { GET_ONTOLOGY_TOOL_DEF } from '../aggregated-ontology.js';
 import { GET_HELP_TOOL_DEF } from '../aggregated-help/index.js';
@@ -38,13 +37,12 @@ import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/in
  * OpenAI Apps SDK _meta fields are included where defined.
  */
 export const AGGREGATED_TOOL_DEFS = {
-  search: { ...SEARCH_TOOL_DEF, inputSchema: SEARCH_INPUT_SCHEMA },
+  search: { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },
   fetch: { ...FETCH_TOOL_DEF, inputSchema: FETCH_INPUT_SCHEMA },
   'get-ontology': GET_ONTOLOGY_TOOL_DEF,
   'get-help': GET_HELP_TOOL_DEF,
   'get-thread-progressions': GET_THREAD_PROGRESSIONS_TOOL_DEF,
   'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
-  'search-sdk': { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },
   'browse-curriculum': { ...BROWSE_TOOL_DEF, inputSchema: BROWSE_INPUT_SCHEMA },
   'explore-topic': { ...EXPLORE_TOOL_DEF, inputSchema: EXPLORE_INPUT_SCHEMA },
 } as const;

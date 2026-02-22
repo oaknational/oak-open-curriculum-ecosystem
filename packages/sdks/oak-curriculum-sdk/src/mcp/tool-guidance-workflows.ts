@@ -60,9 +60,9 @@ export const toolGuidanceWorkflows = {
       {
         step: 1,
         action: 'Search for lessons matching your topic using semantic search',
-        tool: 'search-sdk',
+        tool: 'search',
         example:
-          'search-sdk({ text: "photosynthesis", scope: "lessons", subject: "science", keyStage: "ks3" })',
+          'search({ text: "photosynthesis", scope: "lessons", subject: "science", keyStage: "ks3" })',
         returns: 'Ranked list of matching lessons with titles, subjects, and relevance scores',
       },
       {
@@ -87,9 +87,9 @@ export const toolGuidanceWorkflows = {
       {
         step: 1,
         action: 'Find a relevant lesson using semantic search',
-        tool: 'search-sdk',
+        tool: 'search',
         example:
-          'search-sdk({ text: "adding fractions", scope: "lessons", subject: "maths", keyStage: "ks2" })',
+          'search({ text: "adding fractions", scope: "lessons", subject: "maths", keyStage: "ks2" })',
         returns: 'Lessons matching your criteria with relevance ranking',
       },
       {
@@ -158,8 +158,8 @@ export const toolGuidanceWorkflows = {
       {
         step: 1,
         action: 'Search for learning progression threads on the concept',
-        tool: 'search-sdk',
-        example: 'search-sdk({ text: "algebra", scope: "threads", subject: "maths" })',
+        tool: 'search',
+        example: 'search({ text: "algebra", scope: "threads", subject: "maths" })',
         returns: 'Matching threads with relevance ranking',
       },
       {
@@ -193,8 +193,8 @@ export const toolGuidanceWorkflows = {
       {
         step: 2,
         action: 'Drill down into the most relevant scope',
-        tool: 'search-sdk',
-        example: 'search-sdk({ text: "volcanos", scope: "lessons", subject: "geography" })',
+        tool: 'search',
+        example: 'search({ text: "volcanos", scope: "lessons", subject: "geography" })',
         returns: 'Full ranked results for the chosen scope',
       },
       {

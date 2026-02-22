@@ -66,7 +66,7 @@ CROSS-TOOL WORKFLOWS:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Search Curriculum (Semantic)',
+    title: 'Search Curriculum',
   },
   _meta: {
     'openai/outputTemplate': WIDGET_URI,

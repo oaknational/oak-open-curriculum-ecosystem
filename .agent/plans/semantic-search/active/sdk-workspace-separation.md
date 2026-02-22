@@ -4,12 +4,12 @@ overview: >
   Execute ADR-108 Step 1 by splitting generation-time responsibilities from
   runtime responsibilities into a dedicated
   `@oaknational/curriculum-sdk-generation` workspace, while preserving runtime
-  behaviour and enforcing strict one-way boundaries. Execution is blocked until
-  WS5 search replacement work is complete.
+  behaviour and enforcing strict one-way boundaries.
+  WS5 search replacement is complete; this plan is unblocked.
 todos:
   - id: gate-ws5-completion
     content: "Hard gate: do not start split implementation until WS5 tasks are completed in phase-3a-mcp-search-integration.md."
-    status: pending
+    status: completed
   - id: grounding-and-decisions
     content: "Re-read directives and lock architectural decisions (WS5 gate, all vocab artefacts move now, one-way dependency)."
     status: pending
@@ -57,16 +57,15 @@ aligned to the canonical findings in:
 
 ## 2. Hard Gates and Non-Negotiable Decisions
 
-### G0. WS5 completion gate (hard blocker)
+### G0. WS5 completion gate (hard blocker) ✅ SATISFIED
 
 **Decision (preserved)**: split execution is blocked until WS5 is complete.
 
-Execution may start only when all are `completed` in
-`.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md`:
-
-- `ws5-skip-old-gen`
-- `ws5-promote-search`
-- `ws5-quality-gates`
+**Gate satisfied 2026-02-22**: WS5 tasks (`ws5-skip-old-gen`,
+`ws5-promote-search`, `ws5-quality-gates`) completed and verified
+before Phase 3a plan was archived. See
+[archived plan](../archive/completed/phase-3a-mcp-search-integration.md)
+for evidence.
 
 ### D1. Move all vocab-generated artefacts now
 

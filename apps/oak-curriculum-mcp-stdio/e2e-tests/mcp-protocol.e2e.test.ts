@@ -90,7 +90,7 @@ describe('MCP Protocol E2E', () => {
       const toolNames = toolsResponse.tools.map((t) => t.name);
       expect(toolNames).toContain('get-subjects');
       expect(toolNames).toContain('get-key-stages');
-      expect(toolNames).toContain('get-search-lessons');
+      expect(toolNames).toContain('get-lessons-quiz');
 
       // Verify tool structure
       const firstTool = toolsResponse.tools[0];
@@ -116,13 +116,13 @@ describe('MCP Protocol E2E', () => {
     it('should execute tool with parameters', async () => {
       const payload = expectSuccessfulResult(
         await client.callTool({
-          name: 'get-search-lessons',
+          name: 'get-subject-detail',
           arguments: {
-            q: 'fractions',
+            subject: 'maths',
           },
         }),
       );
-      expect(Array.isArray(extractDataArray(payload))).toBe(true);
+      expect(payload).toBeTruthy();
     });
 
     it('should handle optional parameters correctly', async () => {
@@ -166,14 +166,14 @@ describe('MCP Protocol E2E', () => {
 
     it('should handle missing required parameters', async () => {
       // MCP SDK returns isError: true instead of rejecting
-      const result = await client.callTool({ name: 'get-search-lessons', arguments: {} });
+      const result = await client.callTool({ name: 'get-lessons-quiz', arguments: {} });
       expect(result.isError).toBe(true);
       const contentList = result.content as McpContent | undefined;
       const content = contentList?.[0];
       if (!content || !('text' in content)) {
         throw new TypeError('Test: Expected text content');
       }
-      expect(content.text).toMatch(/Invalid arguments.*get-search-lessons/);
+      expect(content.text).toMatch(/Invalid arguments.*get-lessons-quiz/);
     });
 
     it('should handle invalid parameter values', async () => {

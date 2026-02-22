@@ -31,7 +31,7 @@ export const HELP_OUTPUT_FIXTURE = {
     discovery: {
       description: 'Tools for finding curriculum content by topic or keyword.',
       whenToUse: 'When you need to search for lessons, units, or questions.',
-      tools: ['search', 'get-search-lessons', 'get-search-transcripts'],
+      tools: ['search'],
     },
     browsing: {
       description: 'Tools for exploring curriculum structure systematically.',
@@ -82,58 +82,46 @@ export const HELP_OUTPUT_FIXTURE = {
 /**
  * Search results fixture.
  *
- * Represents the response from search tool with lessons and transcripts.
- * Triggers the widget's search results rendering mode.
+ * Represents the scoped response from the SDK-backed search tool.
+ * Shape: `{ scope, total, took, results: [...] }`.
  */
 export const SEARCH_OUTPUT_FIXTURE = {
-  status: 200,
-  data: {
-    q: 'photosynthesis',
-    lessonsTotal: 15,
-    lessons: [
-      {
-        lessonTitle: 'Introduction to Photosynthesis',
-        subjectTitle: 'Science',
-        keyStage: 'KS3',
-        slug: 'introduction-to-photosynthesis',
-        canonicalUrl: 'https://teachers.thenational.academy/lessons/introduction-to-photosynthesis',
-      },
-      {
-        lessonTitle: 'The Light-Dependent Reactions',
-        subjectTitle: 'Biology',
-        keyStage: 'KS4',
-        slug: 'the-light-dependent-reactions',
-        canonicalUrl: 'https://teachers.thenational.academy/lessons/the-light-dependent-reactions',
-      },
-      {
-        lessonTitle: 'Factors Affecting Photosynthesis',
-        subjectTitle: 'Science',
-        keyStage: 'KS3',
-        slug: 'factors-affecting-photosynthesis',
-        canonicalUrl:
-          'https://teachers.thenational.academy/lessons/factors-affecting-photosynthesis',
-      },
-    ],
-    transcriptsTotal: 4,
-    transcripts: [
-      {
-        lessonTitle: 'Photosynthesis Overview',
-        highlightedContent: 'Plants use sunlight to convert carbon dioxide and water into glucose.',
-      },
-      {
-        lessonTitle: 'Chloroplasts and Chlorophyll',
-        highlightedContent: 'The green pigment chlorophyll absorbs light energy.',
-      },
-    ],
-  },
+  scope: 'lessons',
+  total: 15,
+  took: 42,
+  results: [
+    {
+      lessonTitle: 'Introduction to Photosynthesis',
+      subject: 'Science',
+      keyStageTitle: 'KS3',
+      slug: 'introduction-to-photosynthesis',
+      canonicalUrl: 'https://teachers.thenational.academy/lessons/introduction-to-photosynthesis',
+    },
+    {
+      lessonTitle: 'The Light-Dependent Reactions',
+      subject: 'Biology',
+      keyStageTitle: 'KS4',
+      slug: 'the-light-dependent-reactions',
+      canonicalUrl: 'https://teachers.thenational.academy/lessons/the-light-dependent-reactions',
+    },
+    {
+      lessonTitle: 'Factors Affecting Photosynthesis',
+      subject: 'Science',
+      keyStageTitle: 'KS3',
+      slug: 'factors-affecting-photosynthesis',
+      canonicalUrl: 'https://teachers.thenational.academy/lessons/factors-affecting-photosynthesis',
+    },
+  ],
 } as const;
 
 /**
- * Empty search results fixture.
+ * Empty search results fixture (scoped shape with zero results).
  */
 export const EMPTY_SEARCH_OUTPUT_FIXTURE = {
-  status: 200,
-  data: { q: 'xyznonexistent', lessonsTotal: 0, lessons: [], transcriptsTotal: 0, transcripts: [] },
+  scope: 'lessons',
+  total: 0,
+  took: 5,
+  results: [],
 } as const;
 
 /**

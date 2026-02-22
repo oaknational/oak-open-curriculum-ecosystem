@@ -1,110 +1,83 @@
-# Deep Codebase Review
+# Review
 
-Read this WHOLE document _before_ taking action.
+Perform a review of the work described by the user or inferred
+from context.
 
-## Request
+## Scope
 
-Perform a slow, deep, COMPREHENSIVE review of the **entire** codebase: go slowly, take your time, get it right. I do not expect this process to be quick, I do expect it to be both thorough and accurate.
+Determine the review scope from the user's request:
 
-As you go, compare the code to the rules @.agent/directives/rules.md and other guidance @.agent/directives/AGENT.md, and make notes of any discrepancies.
+- **Post-change review** (default): Review recent changes only.
+  Check `git diff` and `git status` to identify what changed.
+- **Broad review**: Review a specific area, module, or subsystem.
+  The user will specify the scope.
+- **Full codebase review**: Only when explicitly requested. This
+  is expensive — confirm scope with the user before proceeding.
 
-If additional context was provided by the user, consider all feedback in that context.
+## Step 1: Quality Gates
 
-## Structured Thinking
+Run the full quality gate sequence from repo root. If any gate
+fails, report it as a critical finding.
 
-First, before taking action:
-
-1. **Think hard** about the request - these are your thoughts.
-2. **Reflect deeply** on those thoughts - these are your reflections.
-3. **Comprehensively consider** those reflections - these are your insights.
-4. **Think hard** about what the insights tell you about the original request, and the context and desired impact. What has changed? _Why?_
-5. **Report** your insights and how they inform the original request.
-
-Then, using your thoughts, reflections, and insights, work through the following step-by-step, thinking really hard at each point:
-
-1. **UNDERSTAND**: What is the core question being asked?
-2. **ANALYSE**: What are the key factors/components involved?
-3. **REASON**: What logical connections can I make?
-4. **SYNTHESISE**: How do these elements combine?
-5. **CONCLUDE**: What is the most accurate/helpful response?
-
-## Sub-agent Orchestration
-
-The review MUST use all appropriate sub-agents. Invoke them as needed, as many times as needed, and use their reports to inform your review.
-
-**Cursor-specific**: Use the Task tool with `readonly: true` and the appropriate `subagent_type`. See the `invoke-code-reviewers` rule for the full invocation matrix, timing guidance, and worked examples.
-
-Make it clear to each sub-agent that they are to **review and report**, not to modify or fix.
-
-## Execution
-
-Now: carry out the review and produce a detailed, actionable report, thinking hard at each step.
-
-1. Gather context using quality gate commands:
-
-   ```bash
-   pnpm type-check
-   pnpm lint
-   pnpm test
-   ```
-
-2. Invoke each relevant sub-agent to review and report.
-
-3. Reflect on their reports and your own analysis.
-
-4. Produce a consolidated report with:
-   - **Summary**: Overall assessment
-   - **Critical Issues**: Must be addressed
-   - **Improvements**: Should be addressed
-   - **Positive Observations**: What's working well
-   - **Recommendations**: Strategic next steps
-
-## Output Format
-
-```text
-## Comprehensive Review Report
-
-**Date**: [Date]
-**Scope**: [What was reviewed]
-**Overall Status**: [HEALTHY / CONCERNS / CRITICAL]
-
-### Quality Gate Status
-
-| Gate | Status | Notes |
-|------|--------|-------|
-| Type Check | PASS/FAIL | [notes] |
-| Lint | PASS/FAIL | [notes] |
-| Tests | PASS/FAIL | [notes] |
-
-### Sub-agent Reports Summary
-
-| Agent | Status | Key Findings |
-|-------|--------|--------------|
-| architecture-reviewer-barney | [status] | [summary] |
-| architecture-reviewer-fred | [status] | [summary] |
-| architecture-reviewer-betty | [status] | [summary] |
-| architecture-reviewer-wilma | [status] | [summary] |
-| code-reviewer | [status] | [summary] |
-| test-reviewer | [status] | [summary] |
-| type-reviewer | [status] | [summary] |
-| config-reviewer | [status] | [summary] |
-| security-reviewer | [status] | [summary] |
-| docs-adr-reviewer | [status] | [summary] |
-| release-readiness-reviewer | [status or N/A] | [summary] |
-
-### Critical Issues
-
-[Issues that must be addressed immediately]
-
-### Improvements
-
-[Issues that should be addressed]
-
-### Positive Observations
-
-[What's working well - be specific]
-
-### Strategic Recommendations
-
-[Next steps and priorities]
+```bash
+pnpm clean
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm format:root
+pnpm markdownlint:root
+pnpm lint:fix
+pnpm test
+pnpm test:e2e
+pnpm test:ui
+pnpm smoke:dev:stub
 ```
+
+## Step 2: Triage Specialists
+
+Answer these five questions to identify which specialists
+are needed (from the `invoke-code-reviewers` rule):
+
+1. Does this touch auth, secrets, PII, or OAuth? → `security-reviewer`
+2. Does this change module boundaries, imports, or public APIs? → architecture reviewer(s)
+3. Does this add or modify tests? → `test-reviewer`
+4. Does this change types, generics, or schema flow? → `type-reviewer`
+5. Does this change tooling configs or quality gates? → `config-reviewer`
+
+Documentation drift (`docs-adr-reviewer`) applies whenever
+behaviour or architecture changes, even if no docs are edited.
+
+Always invoke `code-reviewer`. Only invoke other specialists
+when the triage questions indicate they are relevant.
+
+## Step 3: Invoke Specialists
+
+Use the Task tool with `readonly: true` and the appropriate
+`subagent_type`. Give each reviewer specific context about
+what changed and what to focus on.
+
+Do NOT invoke specialists that are not relevant. Report
+which were invoked and which were skipped (with rationale).
+
+## Step 4: Consolidate and Report
+
+Produce a report with:
+
+- **Summary**: Overall assessment (PASS / PASS WITH SUGGESTIONS / ISSUES FOUND)
+- **Quality Gate Status**: Which gates passed/failed
+- **Specialist Findings**: Key findings from each invoked reviewer
+- **Critical Issues**: Must fix (blocking)
+- **Improvements**: Should fix (non-blocking)
+- **Positive Observations**: What is working well
+- **Specialists Invoked**: Which reviewers ran and which were N/A
+- **Follow-up Actions**: Concrete next steps if issues found
+
+## After the Review
+
+If the review identified issues that were fixed, re-run
+affected quality gates to confirm the fixes.
+
+If the review is part of a plan's adversarial review phase,
+document findings using the severity scheme from the
+[adversarial-review component](/.agent/plans/templates/components/adversarial-review.md):
+BLOCKER, WARNING, NOTE.

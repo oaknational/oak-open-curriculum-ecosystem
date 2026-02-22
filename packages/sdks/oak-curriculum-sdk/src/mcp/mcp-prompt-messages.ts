@@ -31,7 +31,7 @@ export interface PromptMessage {
  * Generates messages for the find-lessons prompt.
  *
  * @param args - User-provided arguments (topic, optional keyStage)
- * @returns Messages guiding the model to search-sdk with scope "lessons"
+ * @returns Messages guiding the model to search with scope "lessons"
  */
 export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
@@ -50,7 +50,7 @@ export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
 Before searching, you may want to call get-ontology to understand domain definitions (key stages, subjects, units) and how curriculum concepts relate to each other.
 
 Please:
-1. Use search-sdk with scope "lessons" to find lessons matching this topic: search-sdk({ text: "${topic}", scope: "lessons"${keyStageParam} })
+1. Use search with scope "lessons" to find lessons matching this topic: search({ text: "${topic}", scope: "lessons"${keyStageParam} })
 2. Review the results and identify the most relevant lessons
 3. For the top 3-5 lessons, provide a brief summary of what each covers
 4. Suggest which lesson might be best for different learning objectives
@@ -80,7 +80,7 @@ export function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
 You may want to call get-ontology for domain definitions and concept relationships, and get-help for tool usage guidance.
 
 Steps:
-1. Use search-sdk with scope "lessons" to search for lessons on "${topic}" appropriate for ${yearGroup}
+1. Use search with scope "lessons" to search for lessons on "${topic}" appropriate for ${yearGroup}
 2. Select the most relevant lesson
 3. Get the lesson summary for learning objectives and keywords
 4. Get the lesson transcript to understand the content delivery
@@ -118,7 +118,7 @@ export function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
 You may want to call get-ontology for domain definitions and structural relationships, and get-help for tool guidance.
 
 Please:
-1. Use search-sdk with scope "threads" to find threads related to "${concept}" in ${subject}: search-sdk({ text: "${concept}", scope: "threads", subject: "${subject}" })
+1. Use search with scope "threads" to find threads related to "${concept}" in ${subject}: search({ text: "${concept}", scope: "threads", subject: "${subject}" })
 2. Use get-thread-progressions to get the full progression graph for all threads
 3. Map out the progression showing:
    - What is taught at each stage
@@ -155,7 +155,7 @@ You may want to call get-ontology for domain definitions first.
 Please:
 1. Use explore-topic to search across lessons, units, and threads in parallel: explore-topic({ text: "${topic}"${subjectParam} })
 2. Review the topic map and summarise what is available
-3. For the most relevant results, drill down using search-sdk with a specific scope
+3. For the most relevant results, drill down using search with a specific scope
 4. If there are learning threads, note how the topic develops across year groups
 5. Suggest next steps based on what you find`,
       },
@@ -183,7 +183,7 @@ export function getLearningProgressionMessages(args: PromptArgs): PromptMessage[
 You may want to call get-ontology for domain definitions first.
 
 Please:
-1. Use search-sdk with scope "threads" to find progression threads: search-sdk({ text: "${concept}", scope: "threads", subject: "${subject}" })
+1. Use search with scope "threads" to find progression threads: search({ text: "${concept}", scope: "threads", subject: "${subject}" })
 2. Use get-thread-progressions for the full progression graph
 3. Use get-prerequisite-graph for unit-level dependencies
 4. Map out:

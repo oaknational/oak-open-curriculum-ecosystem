@@ -6,28 +6,14 @@
  *
  * @remarks Type hierarchy:
  * - ToolName: Generated from OpenAPI spec (type-gen output)
- * - AggregatedToolName: Hand-written tool names (runtime, will move to type-gen)
+ * - AggregatedToolName: Derived from `AGGREGATED_TOOL_DEFS` (single source of truth)
  * - AllToolName: Union of both
  */
 
 import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { AggregatedToolName } from './universal-tools/types.js';
 
-/**
- * Aggregated tool names (hand-written tools, not from OpenAPI spec).
- *
- * These tools combine multiple API calls into a single operation.
- * They're currently defined in runtime but will move to type-gen time.
- */
-export type AggregatedToolName =
-  | 'search'
-  | 'search-sdk'
-  | 'browse-curriculum'
-  | 'explore-topic'
-  | 'fetch'
-  | 'get-ontology'
-  | 'get-help'
-  | 'get-thread-progressions'
-  | 'get-prerequisite-graph';
+export type { AggregatedToolName } from './universal-tools/types.js';
 
 /**
  * All available tool names combining generated and aggregated tools.

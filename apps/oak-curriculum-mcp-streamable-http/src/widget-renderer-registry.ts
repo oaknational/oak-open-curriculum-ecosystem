@@ -48,7 +48,7 @@ export type RendererId = (typeof RENDERER_IDS)[number];
  * - Changelog tools (2): Return version history
  * - Rate limit tool (1): Returns rate limit status
  * - Help tool (1): Returns server help content
- * - Search tools (3): Return search results with lessons/transcripts
+ * - Search tool (1): Returns scoped search results via Elasticsearch
  * - Fetch tool (1): Returns fetched resource with type/data/canonicalUrl
  * - Ontology tool (1): Returns curriculum domain model
  * - Property graph: Concept relationships are included in the ontology response
@@ -95,10 +95,8 @@ export const TOOL_RENDERER_MAP: Readonly<Record<string, RendererId>> = {
   // Help tool → helpContentRenderer (existing)
   'get-help': 'help',
 
-  // Search tools → searchResultsRenderer (existing)
+  // Search tool → searchResultsRenderer (existing)
   search: 'search',
-  'get-search-lessons': 'search',
-  'get-search-transcripts': 'search',
 
   // Fetch tool → fetchResultRenderer (existing)
   fetch: 'fetch',

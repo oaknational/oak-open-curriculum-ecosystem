@@ -177,13 +177,13 @@ describe('getPromptMessages', () => {
       expect(content).toContain('maths');
     });
 
-    it('references search-sdk with threads scope', () => {
+    it('references search with threads scope', () => {
       const messages = getPromptMessages('learning-progression', {
         concept: 'algebra',
         subject: 'maths',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toContain('search-sdk');
+      expect(content).toContain('search');
       expect(content).toContain('threads');
     });
 

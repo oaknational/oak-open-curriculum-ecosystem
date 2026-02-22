@@ -115,7 +115,7 @@ function render() {
     c.innerHTML = renderer(fullData);
   } else if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {
     c.innerHTML = renderHelp(fullData);
-  } else if (fullData.lessons !== undefined || fullData.transcripts !== undefined) {
+  } else if (fullData.results !== undefined && fullData.scope !== undefined) {
     c.innerHTML = renderSearch(fullData);
   } else if (fullData.type && fullData.data !== undefined) {
     c.innerHTML = renderFetch(fullData);

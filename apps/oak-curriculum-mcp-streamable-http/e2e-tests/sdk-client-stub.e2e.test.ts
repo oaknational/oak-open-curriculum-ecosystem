@@ -44,13 +44,6 @@ interface LessonSummaryResponse {
   readonly [key: string]: unknown;
 }
 
-type SearchResult = readonly {
-  readonly lessonSlug: string;
-  readonly lessonTitle: string;
-  readonly canonicalUrl?: string;
-  readonly [key: string]: unknown;
-}[];
-
 interface RateLimitResponse {
   readonly limit: number;
   readonly remaining: number;
@@ -279,44 +272,25 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
     });
   });
 
-  it('returns search results for lessons', async () => {
+  it('returns quiz data for a lesson', async () => {
     await withStubbedHttpApp(async (app) => {
-      const expectedLessons = (await executeStubTool('get-search-lessons', {
-        q: 'algebra',
-      })) as SearchResult;
+      const { lessonSlug } = await getSampleLessonReference();
+      const expected = await executeStubTool('get-lessons-quiz', { lesson: lessonSlug });
 
-      const { result } = await callTool(app, 'get-search-lessons', {
-        q: 'algebra',
-      });
-      const lessonPayload = expectSuccessfulPayload(result) as SearchResult;
-      expect(lessonPayload).toEqual(expectedLessons);
+      const { result } = await callTool(app, 'get-lessons-quiz', { lesson: lessonSlug });
+      const payload = expectSuccessfulPayload(result);
+      expect(payload).toEqual(expected);
     });
   });
 
-  it('returns search transcript results', async () => {
+  it('returns transcript for a lesson', async () => {
     await withStubbedHttpApp(async (app) => {
-      const expectedTranscripts = (await executeStubTool('get-search-transcripts', {
-        q: 'algebra',
-      })) as SearchResult;
+      const { lessonSlug } = await getSampleLessonReference();
+      const expected = await executeStubTool('get-lessons-transcript', { lesson: lessonSlug });
 
-      const { result } = await callTool(app, 'get-search-transcripts', {
-        q: 'algebra',
-      });
-      const transcriptPayload = expectSuccessfulPayload(result) as SearchResult;
-      expect(transcriptPayload).toEqual(expectedTranscripts);
-      const firstTranscript = transcriptPayload.at(0);
-      if (!firstTranscript) {
-        return;
-      }
-      const canonicalUrl = ensureOptionalString(
-        firstTranscript.canonicalUrl,
-        'transcript canonicalUrl',
-      );
-      if (!canonicalUrl) {
-        return;
-      }
-      const lessonSlug = ensureString(firstTranscript.lessonSlug, 'transcript lesson slug');
-      expect(canonicalUrl).toContain(lessonSlug);
+      const { result } = await callTool(app, 'get-lessons-transcript', { lesson: lessonSlug });
+      const payload = expectSuccessfulPayload(result);
+      expect(payload).toEqual(expected);
     });
   });
 

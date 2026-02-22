@@ -34,7 +34,7 @@ This application follows the standard structure:
 ## Tool surface
 
 - Tools are generated from the SDK OpenAPI schema. Use Inspector or `tools/list` to discover available tools. The set matches the HTTP `/mcp` endpoint.
-- Three search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) provide semantic search across all four curriculum indexes (lessons, units, threads, sequences) plus typeahead suggestions and faceted browsing.
+- Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide semantic search across all four curriculum indexes (lessons, units, threads, sequences) plus typeahead suggestions and faceted browsing.
 
 ### Search tools
 

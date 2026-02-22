@@ -8,7 +8,7 @@ Write about the experience rather than the method or impact. What shifted? What 
 
 Reading the [metacognition prompt](../directives/metacognition.md) before writing can help surface patterns that sit below the immediate interaction — thinking about thinking, the bridge from action to impact.
 
-Applied technical patterns belong in [`distilled.md`](../memory/distilled.md) or permanent documentation (`/docs/`, ADRs, READMEs). If an experience file accumulates primarily technical content, extract it during [documentation consolidation](../../.cursor/commands/consolidate-docs.md) and leave a brief reflective stub in its place.
+Applied technical patterns belong in [`distilled.md`](../memory/distilled.md) or permanent documentation (`/docs/`, ADRs, READMEs). If an experience file accumulates primarily technical content, extract it during [documentation consolidation](../../.cursor/commands/jc-consolidate-docs.md) and leave a brief reflective stub in its place.
 
 This provides a Chronos time bridge between Kairos time sessions. The more direct experience we have, the better future learning will work.
 

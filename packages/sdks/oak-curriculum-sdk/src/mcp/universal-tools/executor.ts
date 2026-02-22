@@ -16,7 +16,6 @@ import {
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
-import { validateSearchArgs, runSearchTool } from '../aggregated-search/index.js';
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
 import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
@@ -83,20 +82,6 @@ function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): Ca
  * ```
  */
 /**
- * Handles search tool validation and execution.
- */
-async function handleSearchTool(
-  input: unknown,
-  deps: UniversalToolExecutorDependencies,
-): Promise<CallToolResult> {
-  const validation = validateSearchArgs(input);
-  if (!validation.ok) {
-    return formatError(validation.message);
-  }
-  return runSearchTool(validation.value, deps);
-}
-
-/**
  * Handles help tool validation and execution.
  */
 function handleHelpTool(input: unknown): CallToolResult {
@@ -122,9 +107,12 @@ async function handleFetchTool(
 }
 
 /**
- * Handles search-sdk tool validation and execution.
+ * Handles search tool validation and execution via the Search SDK.
+ *
+ * Dispatches by scope to Elasticsearch-backed retrieval methods
+ * (lessons, units, threads, sequences, suggest).
  */
-async function handleSearchSdkTool(
+async function handleSearchTool(
   input: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
@@ -175,7 +163,6 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
   fetch: handleFetchTool,
-  'search-sdk': handleSearchSdkTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,
 };

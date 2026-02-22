@@ -1,79 +1,57 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-21
+**Last Updated**: 2026-02-22
 
 ---
 
-## Immediate Task: WS5 — Replace Old Search with Search SDK
+## Immediate Context
 
-**Plan**: [phase-3a-mcp-search-integration.md](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md)
+**Branch**: `feat/semantic_search_deployment`
 
-WS1-WS4 are complete. Three new search tools (`search-sdk`,
-`browse-curriculum`, `explore-topic`) are implemented, tested,
-and working. Comparative testing confirms they are strictly
-superior to the old REST-based `search` tool.
+**Phase 3a** (MCP search integration) is **complete** — all five
+workstreams done, all quality gates pass. The old REST-based
+search has been replaced by SDK-backed Elasticsearch search.
+Three tools (`search`, `browse-curriculum`, `explore-topic`)
+are the sole search interface.
 
-**WS5 replaces the old search and retires the generated REST
-wrappers. There are four pending todos:**
+**One merge blocker remains**: SDK workspace separation (3e).
 
-1. **WS5.1** (`ws5-skip-old-gen`): Add `SKIPPED_PATHS` to
-   `mcp-tool-generator.ts` to exclude `/search/lessons` and
-   `/search/transcripts` from generated tools. TDD.
+**Open architectural debt**: Post-WS5 adversarial reviews surfaced
+4 correctness/safety gaps and 8 warnings. These are pre-existing
+issues, not regressions. See
+[WS6: Search Contract Hardening](../../plans/semantic-search/active/ws6-search-contract-hardening.md)
+for the full findings and execution plan.
 
-2. **WS5.2** (`ws5-promote-search`): Promote `search-sdk` to
-   `search` in `AGGREGATED_TOOL_DEFS`. Delete
-   `aggregated-search/` module. Update executor dispatch and
-   all cross-references. TDD.
+**Plans**:
 
-3. **WS5.4** (`ws5-quality-gates`): Full quality gate chain
-   after replacement.
-
-4. **ADR-116** (`adr-116-env-resolution`): Write ADR-116 for
-   the `resolveEnv` pipeline architecture. This is a documentation
-   task, independent of WS5 code changes.
-
-The plan file has detailed implementation steps for each
-(sections 5.1-5.5). Read the plan before starting.
+- [WS6: Search Contract Hardening](../../plans/semantic-search/active/ws6-search-contract-hardening.md) — addresses B1-B4 + W1
+- [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — remaining merge blocker (WS5 gate satisfied)
+- [Phase 3a closeout](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) — complete, archived
+- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence
 
 ---
 
-## Two Merge Blockers Remain
+## One Merge Blocker Remains
 
-The `feat/semantic_search_deployment` branch requires two
-workstreams before it can merge:
+The `feat/semantic_search_deployment` branch requires one
+remaining workstream before it can merge:
 
-1. **WS5** (this task) — replace old search
-2. **SDK workspace separation** — split `curriculum-sdk` into
-   type-gen and runtime workspaces
-   ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
+- **SDK workspace separation** (3e) — split `curriculum-sdk`
+  into type-gen and runtime workspaces
+  ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
 
-All other merge blockers are complete (OAuth, proxy, auth).
-
-**Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
+All other merge blockers are complete (OAuth, proxy, auth,
+search replacement).
 
 ---
 
 ## Current Search Tool Landscape
 
-Understanding these four tools is essential for WS5:
-
-| Tool | Module | Backend | Status |
-|------|--------|---------|--------|
-| `search` (old) | `aggregated-search/` | REST API (`get-search-lessons` + `get-search-transcripts`) | **To be deleted in WS5** |
-| `search-sdk` (new) | `aggregated-search-sdk/` | Elasticsearch via Search SDK (5 scopes) | **To be promoted to `search` in WS5** |
-| `browse-curriculum` | `aggregated-browse/` | `fetchSequenceFacets` | Working, no changes needed |
-| `explore-topic` | `aggregated-explore/` | Parallel `searchLessons` + `searchUnits` + `searchThreads` | Working, no changes needed |
-
-### Key Files for WS5
-
-| File | Role in WS5 |
-|------|-------------|
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` | Add `SKIPPED_PATHS` here (5.1) |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts` | Rename `search-sdk` → `search` (5.2) |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts` | Update dispatch map (5.2) |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/` | **Delete entirely** (5.2) |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search-sdk/` | Promoted to `search` (5.2) |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help/tool-guidance-data.ts` | Update tool name references (5.2) |
+| Tool | Module | Backend |
+|------|--------|---------|
+| `search` | `aggregated-search-sdk/` | Elasticsearch via Search SDK (5 scopes) |
+| `browse-curriculum` | `aggregated-browse/` | `fetchSequenceFacets` |
+| `explore-topic` | `aggregated-explore/` | Parallel `searchLessons` + `searchUnits` + `searchThreads` |
 
 ### Architecture Context
 
@@ -84,6 +62,9 @@ Understanding these four tools is essential for WS5:
 - **Dispatch**: Const object maps (not switches) for tool/scope dispatch.
 - **`isAggregatedToolName`**: Derives from `AGGREGATED_TOOL_DEFS` via
   `value in AGGREGATED_TOOL_DEFS` — do NOT revert to a hardcoded list.
+- **`AggregatedToolName`**: Derived as `keyof typeof AGGREGATED_TOOL_DEFS`
+  in `universal-tools/types.ts`, re-exported from `tool-guidance-types.ts`.
+  Do NOT create manual unions — they drift.
 - **Response format**: Unified `formatToolResponse()` — all tools return
   2-item `content` array (summary + JSON), `structuredContent`, `_meta`.
 - **Scopes via `SCOPES_SUPPORTED`**: All aggregated tool definitions
@@ -246,26 +227,28 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Work | Key Outcome | Reference |
 |------|------------|-----------|
-| MCP Search WS1-WS4 | 3 new search tools wired, NL guidance, prompts, tests | This plan |
+| Phase 3a Complete | MCP search wiring (WS1-WS4), old search replaced (WS5), adversarial review, follow-up cleanup | [Phase 3a closeout](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md), [archived plan](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md) |
 | Proxy OAuth AS | Transparent proxy to Clerk, Cursor works (ADR-115) | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) |
 | OAuth Spec Compliance | All MCP methods require auth (ADR-113) | [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) |
 | Transport Bug Fix | Per-request transport pattern (ADR-112) | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) |
 | SDK Extraction | 16 I/O methods returning `Result<T, E>` | [plan](../../plans/semantic-search/archive/completed/search-sdk-cli.plan.md) |
 | Fail-Fast ES Credentials | Silent degradation removed | [plan](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) |
-| Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` | [plan](../../plans/semantic-search/archive/completed/env-architecture-overhaul.md) |
+| Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` (ADR-116) | [ADR-116](/docs/architecture/architectural-decisions/116-resolve-env-pipeline-architecture.md) |
 | Code Quality | TSDoc warnings 0, type shortcuts eliminated | -- |
 
 ---
 
 ## Related Documents
 
-### Immediately Relevant to WS5
+### Immediately Relevant
 
 | Document | Why |
 |----------|-----|
-| [Phase 3a plan](../../plans/semantic-search/active/phase-3a-mcp-search-integration.md) | **The plan** -- read WS5 section before starting |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence — start here for "what's next" |
+| [WS6: Search Contract Hardening](../../plans/semantic-search/active/ws6-search-contract-hardening.md) | Addresses B1-B4 adversarial findings + W1 rename |
+| [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Remaining merge blocker** — split curriculum-sdk (WS5 gate satisfied) |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
+| [ADR-117](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
 
 ### Background Architecture
 
@@ -276,3 +259,4 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request MCP transport |
 | [ADR-113](/docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) | MCP spec-compliant auth |
 | [ADR-115](/docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) | Proxy OAuth AS for Cursor |
+| [ADR-116](/docs/architecture/architectural-decisions/116-resolve-env-pipeline-architecture.md) | resolveEnv pipeline architecture |

@@ -1,43 +1,73 @@
 # Create a Plan
 
-All plans, prompts, and work must be fully aligned with the foundations docs @.agent/directives/rules.md @.agent/directives/schema-first-execution.md @.agent/directives/testing-strategy.md and all sub-sections must have goals and intended impacts, and explicit, measurable acceptance criteria.
+Create an executable plan aligned with the foundation documents
+and the plan architecture defined in
+[ADR-117](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md).
 
-All code must be documented with comprehensive TSDoc comments. Authored markdown documentation must be created as appropriate, and all significant decisions must be documented with ADRs @docs/architecture/architectural-decisions/README.md .
+## Before Writing
 
-Use the provided details to create a plan that is fully aligned with the foundations docs. If no details were provided, or the details are not clear, ask the user for more details, ask specific questions to clarify the details.
+1. Read the foundation documents:
+   - @.agent/directives/rules.md
+   - @.agent/directives/testing-strategy.md
+   - @.agent/directives/schema-first-execution.md
 
-## Example
+2. Read the plan templates and components:
+   - @.agent/plans/templates/README.md
 
-```markdown
-# Plan Title
+3. If the user has not provided enough detail, ask specific
+   questions. Do not guess scope, intent, or acceptance criteria.
 
-## Overview
+## Choose a Template
 
-## Phases
+Pick the template closest to the work:
 
-[Summary of all phases]
+| Template | Use When |
+|----------|----------|
+| `feature-workstream-template.md` | New feature with TDD phases |
+| `quality-fix-plan-template.md` | Quality improvement, refactoring, tech debt |
+| `closeout-stub-template.md` | Archiving a completed plan |
 
-### Phase 1
+Copy the template to the appropriate `active/` directory and
+fill in all `[bracketed]` placeholders.
 
-[Summary of phase 1, including the key principle, the intended high-level impact, and the high-level acceptance criteria]
+## Plan Requirements
 
-#### Tasks
+Every plan MUST have:
 
-[List of tasks for phase 1, each task should have a name, a description, intended impact, and a list of acceptance criteria]
+1. **YAML frontmatter** with machine-readable todos (id, content, status)
+2. **TDD phase structure** — RED (tests first, must fail), GREEN
+   (minimal implementation), REFACTOR (docs, cleanup)
+3. **Quality gates** after each phase — reference the
+   [quality-gates component](/plans/templates/components/quality-gates.md)
+4. **Acceptance criteria** for every task — specific, checkable,
+   with deterministic validation commands
+5. **Risk assessment** — what could go wrong and how to mitigate
+6. **Foundation alignment** — explicit references to rules.md,
+   testing-strategy.md, schema-first-execution.md
+7. **Non-goals** — what we are explicitly NOT doing (YAGNI)
 
-### Phase 2
+## Document Hierarchy (ADR-117)
 
-[Summary of phase 2, including the key principle, the intended high-level impact, and the high-level acceptance criteria]
+Plans are one layer in a three-document hierarchy. Do not
+duplicate content across layers:
 
-#### Tasks
+- **Session prompt** (`.agent/prompts/`) — operational entry point
+- **Executable plan** (`.agent/plans/*/active/`) — this is what you are creating
+- **Roadmap** (`.agent/plans/*/roadmap.md`) — strategic milestone sequence
 
-[List of tasks for phase 2, each task should have a name, a description, intended impact, and a list of acceptance criteria]
+Facts are authoritative in one document and referenced by the
+others. When the plan contains findings or metrics, state them
+once and have other documents link to the plan.
 
-### Phase N
+## Plan Location
 
-[Summary of phase N, including the key principle, the intended high-level impact, and the high-level acceptance criteria]
+Place plans in the relevant `active/` directory:
 
-#### Tasks
-
-[List of tasks for phase N, each task should have a name, a description, intended impact, and a list of acceptance criteria]
+```bash
+.agent/plans/semantic-search/active/your-plan-name.md
 ```
+
+## First Question
+
+Before every decision in the plan: **could it be simpler
+without compromising quality?**

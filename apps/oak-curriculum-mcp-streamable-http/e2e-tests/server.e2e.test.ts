@@ -155,7 +155,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'get-prerequisite-graph',
       'get-thread-progressions',
       'search',
-      'search-sdk',
     ];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());

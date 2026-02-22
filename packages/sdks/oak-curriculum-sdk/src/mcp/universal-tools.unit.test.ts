@@ -3,7 +3,8 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
-import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
+import { ok } from '@oaknational/result';
+import { SEARCH_SDK_INPUT_SCHEMA } from './aggregated-search-sdk/index.js';
 import type { UniversalToolName } from './universal-tools/index.js';
 import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 
@@ -97,7 +98,7 @@ describe('listUniversalTools', () => {
     const tools = listUniversalTools();
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
+    expect(searchTool?.inputSchema).toEqual(SEARCH_SDK_INPUT_SCHEMA);
   });
 });
 
@@ -109,7 +110,6 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('get-help')).toBe(true);
     expect(isUniversalToolName('get-thread-progressions')).toBe(true);
     expect(isUniversalToolName('get-prerequisite-graph')).toBe(true);
-    expect(isUniversalToolName('search-sdk')).toBe(true);
     expect(isUniversalToolName('browse-curriculum')).toBe(true);
     expect(isUniversalToolName('explore-topic')).toBe(true);
   });
@@ -124,46 +124,45 @@ describe('isUniversalToolName', () => {
 });
 
 describe('createUniversalToolExecutor', () => {
-  it('aggregates search results using the MCP executor', async () => {
-    const executeMcpTool = vi.fn().mockImplementation((name: string) => {
-      if (name === 'get-search-lessons') {
-        return Promise.resolve({ status: 200, data: { lessons: ['lesson-a'] } });
-      }
-      if (name === 'get-search-transcripts') {
-        return Promise.resolve({ status: 200, data: { transcripts: ['transcript-a'] } });
-      }
-      return Promise.resolve({ data: null });
-    });
+  it('dispatches search to searchRetrieval service', async () => {
+    const executeMcpTool = vi.fn();
+    const searchRetrieval = {
+      ...createStubSearchRetrieval(),
+      searchLessons: vi.fn().mockResolvedValue(
+        ok({
+          scope: 'lessons',
+          total: 1,
+          took: 5,
+          timedOut: false,
+          results: [{ title: 'Photosynthesis' }],
+        }),
+      ),
+    };
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
-      searchRetrieval: createStubSearchRetrieval(),
+      searchRetrieval,
     });
 
-    const result = await callUniversalTool('search', { query: 'photosynthesis' });
+    const result = await callUniversalTool('search', {
+      text: 'photosynthesis',
+      scope: 'lessons',
+    });
 
-    expect(executeMcpTool).toHaveBeenCalledWith('get-search-lessons', {
-      q: 'photosynthesis',
-    });
-    expect(executeMcpTool).toHaveBeenCalledWith('get-search-transcripts', {
-      q: 'photosynthesis',
-    });
+    expect(searchRetrieval.searchLessons).toHaveBeenCalled();
+    expect(executeMcpTool).not.toHaveBeenCalled();
     expect(result.isError).toBeUndefined();
 
-    // New optimized structure: human-readable content, minimal structuredContent, full data in _meta
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
-      // content has human-readable summary for conversation
       expect(firstContent.text).toContain('photosynthesis');
     }
 
-    // structuredContent has FULL data for model reasoning (OpenAI Apps SDK pattern)
     expect(result.structuredContent).toBeDefined();
-    expect(result.structuredContent).toHaveProperty('summary');
-    expect(result.structuredContent).toHaveProperty('lessons');
-    expect(result.structuredContent).toHaveProperty('transcripts');
+    expect(result.structuredContent).toHaveProperty('scope', 'lessons');
+    expect(result.structuredContent).toHaveProperty('total', 1);
+    expect(result.structuredContent).toHaveProperty('results');
 
-    // _meta has widget metadata only (not fullResults - that's in structuredContent now)
     expect(result._meta).toBeDefined();
     expect(result._meta).toHaveProperty('query', 'photosynthesis');
   });
@@ -322,14 +321,23 @@ describe('get-ontology tool descriptor', () => {
 /**
  * Tests for OpenAI Apps SDK _meta fields on all aggregated tools.
  *
- * These tests verify that all aggregated tools (search, fetch, get-ontology, get-help) have
- * the required _meta fields for ChatGPT widget integration:
+ * These tests verify that all aggregated tools have the required _meta fields
+ * for ChatGPT widget integration:
  * - openai/outputTemplate: URI of widget to render output
  * - openai/toolInvocation/invoking: Status text during execution
  * - openai/toolInvocation/invoked: Status text after completion
  */
 describe('aggregated tool _meta fields', () => {
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
+  const aggregatedToolNames = [
+    'search',
+    'fetch',
+    'get-ontology',
+    'get-help',
+    'browse-curriculum',
+    'explore-topic',
+    'get-thread-progressions',
+    'get-prerequisite-graph',
+  ] as const;
 
   it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
     const tools = listUniversalTools();
@@ -358,7 +366,16 @@ describe('aggregated tool _meta fields', () => {
  * - Tool visibility control (public vs private)
  */
 describe('aggregated tool widgetAccessible and visibility', () => {
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
+  const aggregatedToolNames = [
+    'search',
+    'fetch',
+    'get-ontology',
+    'get-help',
+    'browse-curriculum',
+    'explore-topic',
+    'get-thread-progressions',
+    'get-prerequisite-graph',
+  ] as const;
 
   it.each(aggregatedToolNames)('%s has openai/widgetAccessible set to true', (toolName) => {
     const tools = listUniversalTools();

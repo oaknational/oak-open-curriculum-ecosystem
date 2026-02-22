@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-116 (resolveEnv pipeline)](116-resolve-env-pipeline-architecture.md)
 
 ## Context
 

@@ -50,20 +50,127 @@ todos:
   - id: ws4-test-gaps
     content: "WS4 follow-up: search-retrieval-factory.ts has 9 integration tests (DI with FakeClient brand type). browse formatting.unit.test.ts has 7 unit tests (createFacet/createFacets helpers for generated SequenceFacet type). Mock shapes verified against generated types."
     status: completed
+  - id: fail-fast-es-creds
+    content: "Pre-WS5: Fail fast on missing Elasticsearch credentials — remove six layers of silent degradation. Server must fail at startup if ES creds missing, not return 'not configured' at runtime. See fail-fast-elasticsearch-credentials.md."
+    status: completed
+  - id: env-architecture-overhaul
+    content: "Pre-WS5: Environment architecture overhaul complete — resolveEnv pipeline, conditional Clerk keys, discriminated RuntimeConfig. Archived. STDIO alignment deferred to stdio-http-server-alignment.md."
+    status: completed
+  - id: adr-116-env-resolution
+    content: "Pre-WS5: Write ADR-116 for the resolveEnv pipeline architecture — source hierarchy with non-mutating dotenv.parse, Result<T, E> return, conditional Clerk keys via superRefine, discriminated RuntimeConfig union. Supersedes ADR-016 (original dotenv decision). (ADR-113 is taken — MCP spec-compliant auth.)"
+    status: completed
   - id: ws5-compare
     content: "WS5: Compare new search tools vs old REST API search on representative queries."
-    status: pending
-  - id: ws5-replace
-    content: "WS5: If superior, replace old search tool (aggregated-search/ -> aggregated-search-sdk/). Full quality gates again."
-    status: pending
+    status: completed
+  - id: ws5-skip-old-gen
+    content: "WS5.1: Add SKIPPED_PATHS to mcp-tool-generator.ts to exclude /search/lessons and /search/transcripts from generated tools. TDD."
+    status: completed
+  - id: ws5-promote-search
+    content: "WS5.2: Promote search-sdk to search — rename in AGGREGATED_TOOL_DEFS, delete aggregated-search/ module, update executor dispatch, update all cross-references. TDD."
+    status: completed
+  - id: ws5-quality-gates
+    content: "WS5.4: Full quality gate chain after replacement (type-gen, build, type-check, lint, test, smoke)."
+    status: completed
+  - id: ws5-follow-up-cleanup
+    content: "WS5 follow-up: Remove dead transcript rendering from widget, unify AggregatedToolName types, clean stale comments/fixtures. All quality gates pass."
+    status: completed
+  - id: ws5-adversarial-review
+    content: "WS5 adversarial sweep: Barney + Betty architectural reviews. 4 blockers (B1-B4), 8 warnings (W1-W8) documented. No regressions; all are pre-existing architectural debt surfaced by WS5."
+    status: completed
 isProject: false
 ---
 
 # Phase 3a: MCP Search Integration — Execution Plan
 
-This is not a simple API adapter. This is an experience layer with two users: the human teacher and the AI agent. The tool architecture must serve both.
+## WS1-WS5: COMPLETE
 
-## Design Principles
+All five workstreams are **complete**. The old REST-based `search`
+tool has been replaced by the SDK-backed Elasticsearch `search` tool.
+Generated REST wrappers (`get-search-lessons`, `get-search-transcripts`)
+are retired. ADR-116 (resolveEnv pipeline) has been written.
+
+Follow-up cleanup is also complete: dead transcript rendering removed
+from widget, `AggregatedToolName` unified via `keyof typeof
+AGGREGATED_TOOL_DEFS`, stale comments/fixtures updated.
+
+All quality gates pass.
+
+---
+
+## Adversarial Review Findings (Post-WS5)
+
+Barney (simplification/boundary) and Betty (cohesion/coupling/
+change-cost) performed adversarial sweeps after WS5 completion.
+These findings are **architectural debt surfaced by WS5** — not
+regressions from the WS5 work.
+
+### Blockers (Correctness/Safety Gaps)
+
+**B1: `ScopeDispatcher` erases per-scope result types to `unknown`**
+
+`execution.ts` line 115-118: The dispatch table widens
+`LessonsSearchResult`, `UnitsSearchResult`, `ThreadsSearchResult`,
+`SequencesSearchResult` to `Result<unknown, SearchRetrievalError>`.
+`formatting.ts` then recovers types via runtime guards
+(`isScopedSearchResult`, `isSuggestionResponse`). This is a
+self-inflicted type-erasure/recovery cycle that contradicts the
+cardinal rule: once data is typed, never broaden it.
+
+*Fix*: Use a discriminated-union return from the dispatch table, or
+move formatting into each dispatcher so the type is never widened.
+
+**B2: Widget renderer has zero compile-time feedback**
+
+`search-renderer.ts` is a raw JS string template accessing index
+document fields (`l.lessonTitle`, `l.canonicalUrl`,
+`l.units[0].subjectSlug`) with no type checking. Any ES index
+document schema change silently breaks the widget.
+
+*Fix*: Contract tests validating renderer field access against actual
+generated index document types. Or build-time renderer generation.
+
+**B3: Widget-to-SDK field mismatch**
+
+Renderer expects flat fields (`l.lessonTitle`) but `LessonResult`
+wraps lesson data inside a nested `lesson` property:
+`{ id, rankScore, lesson: SearchLessonsIndexDoc, highlights }`.
+With real ES data, cards render as "Untitled" with no metadata.
+
+*Fix*: Update renderer to access `l.lesson.lessonTitle` (or flatten
+results in `formatting.ts` before they reach the widget).
+
+**B4: `suggest` scope not handled by widget**
+
+Suggest returns `{ suggestions, cache }` (no `results` property),
+so `renderSearch` shows "No results found" for valid suggest output.
+
+*Fix*: Add scope-aware branching in the renderer, or a dedicated
+suggest renderer.
+
+### Warnings
+
+| ID | Finding | Priority |
+|----|---------|----------|
+| W1 | **Rename `aggregated-search-sdk/` → `aggregated-search/`** — transitional fossil. Also rename `SEARCH_SDK_*` exports to `SEARCH_*`. | Low (mechanical) |
+| W2 | **Fat interface**: `UniversalToolExecutorDependencies` bundles `executeMcpTool` + `searchRetrieval` — most tools only use one. | Medium (ISP) |
+| W3 | **`buildSuggestParams` hardcodes scope to `'lessons'`** — suggest API supports scoped suggestions but builder doesn't expose it. | Medium |
+| W4 | **`SearchLessonsParams` has `examSubject`/`ks4Option` not exposed in `SearchSdkArgs`** — silent capability gap. | Low |
+| W5 | **`TOOL_RENDERER_MAP` keys are `string` not `UniversalToolName`** — no compile-time drift protection. | Medium |
+| W6 | **Scope-specific filter params validated but silently dropped** — tool schema documents as scope-limited but validation accepts all. | Medium (fail-fast gap) |
+| W7 | **`SKIPPED_PATHS` uses exact string equality** — brittle against future API path variants. | Low |
+| W8 | **Search retrieval factory duplicated across HTTP and STDIO apps** — same composition logic in two places. | Addressed by 3c |
+
+### Positive Notes
+
+- Strong internal cohesion in `aggregated-search-sdk/` — well decomposed
+- `SearchRetrievalService` DI boundary is well-designed
+- `keyof typeof AGGREGATED_TOOL_DEFS` + exhaustive handler map scales correctly
+- Three tools sharing `SearchRetrievalService` is coherent, not over-coupled
+- `formatting.ts` throw is correct fail-fast (symptom of B1)
+
+---
+
+## Design Principles (WS1-WS4, for reference)
 
 1. **Every index gets exposed.** Four search indexes (lessons, units, threads, sequences) plus completion suggestions and faceted browsing = six retrieval capabilities. All must be accessible.
 2. **Passthrough AND compound.** Individual scope access for precision. Multi-index tools for discovery. Teachers often don't know which scope they need.
@@ -237,7 +344,10 @@ sequenceDiagram
 
 ---
 
-## WS1 -- Tool Definitions and Tests (RED)
+## WS1 -- Tool Definitions and Tests (RED) ✅ COMPLETE
+
+> WS1-WS4 are complete. These sections are retained for reference.
+> **Skip to WS5 below for the current work.**
 
 All tests MUST FAIL at the end of WS1.
 
@@ -310,7 +420,7 @@ pnpm test --filter @oaknational/curriculum-sdk
 
 ---
 
-## WS2 -- Wiring and Implementation (GREEN)
+## WS2 -- Wiring and Implementation (GREEN) ✅ COMPLETE
 
 All tests MUST PASS at the end of WS2.
 
@@ -393,7 +503,7 @@ pnpm test --filter @oaknational/curriculum-sdk
 
 ---
 
-## WS3 -- NL Guidance, Examples, and Documentation (REFACTOR)
+## WS3 -- NL Guidance, Examples, and Documentation (REFACTOR) ✅ COMPLETE
 
 This workstream is NOT an afterthought. It is where the user experience is defined.
 
@@ -457,7 +567,7 @@ Each scope's result formatter produces a human-readable summary that:
 
 ---
 
-## WS4 -- Quality Gates
+## WS4 -- Quality Gates ✅ COMPLETE
 
 ### 4.1: Full quality gate chain
 
@@ -487,27 +597,187 @@ All 7 existing aggregated tools + all generated tools must work identically.
 
 ---
 
-## WS5 -- Compare and Replace
+## WS5 -- Compare, Replace, and Retire Old Search ✅ COMPLETE
 
-### 5.1: Comparative queries
+### 5.0: Context and decisions
 
-Run the same queries through old `search` (REST API) and new `search` (SDK/ES, scope: lessons) on representative teacher queries. Compare relevance, coverage, latency.
+**Comparative testing (done informally):** The same query ("photosynthesis", KS3 science) was run through all four tools: old `search`, new `search-sdk`, `browse-curriculum`, and `explore-topic`. Results:
 
-### 5.2: Decision and transition
+- Old `search` returns 20 lessons (only 3 genuinely relevant, similarity drops from 1.0 to 0.07 after #3) + 3 short transcript snippets. Title-based fuzzy matching produces many irrelevant results (e.g., "Electrical resistance", "Magnetic poles").
+- New `search-sdk` (scope: lessons) returns 288 total hits (top 5 shown, all relevant). Includes keywords, learning points, misconceptions, teacher tips, highlighted transcript context. 4-way RRF + ELSER semantic ranking is strictly superior.
+- `explore-topic` gives a unified topic map across lessons (288), units (41), and threads in a single call.
+- `browse-curriculum` shows full KS3 Science structure (41 units, 290 lessons) without needing a query.
 
-If SDK search is superior (expected: 4-way RRF + ELSER vs REST text search):
+**Decision: replace.** The new search-sdk tools are superior in every dimension: relevance, coverage, richness, filtering, pagination. The old REST-based search adds no value.
 
-- Remove old `search` aggregated tool (`aggregated-search/`)
-- Rename new tool from internal `aggregated-search-sdk` to `aggregated-search` (or keep as-is if naming is clear)
-- Update the tool name in `AGGREGATED_TOOL_DEFS` to `'search'`
-- Update all cross-references in tool descriptions, help content, prerequisite guidance
-- Full quality gate chain again
+**Three things need to happen:**
 
-### 5.3: Cleanup
+1. **Remove old `search` aggregated tool** — delete `aggregated-search/`, promote `search-sdk` to `search`
+2. **Remove generated `get-search-lessons` and `get-search-transcripts`** — these REST API wrappers are now redundant (the old `search` was their only consumer)
+3. **Assess unsurfaced search-sdk capabilities** — admin and observability services are not exposed via MCP tools
 
-- Delete old `aggregated-search/` module if replaced
-- Update `get-help` workflows to reference final tool names
-- Update MCP prompts
+### 5.1: Remove generated search tools from the pipeline
+
+**Problem:** `get-search-lessons` and `get-search-transcripts` are generated from `/search/lessons` and `/search/transcripts` in the OpenAPI spec. They are text-based REST wrappers — now entirely superseded by direct Elasticsearch semantic search via the search-sdk.
+
+**Solution: endpoint skip list in the generator.**
+
+**File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`
+
+The `iterOperations()` function (line 60) iterates ALL paths in the OpenAPI spec. Add a const array of paths to skip, and filter before yielding:
+
+```typescript
+/**
+ * API paths excluded from MCP tool generation.
+ *
+ * These endpoints are superseded by direct Elasticsearch search
+ * via the search-sdk aggregated tools (search, browse-curriculum,
+ * explore-topic). Generating MCP tools for them would create
+ * redundant, inferior alternatives.
+ */
+const SKIPPED_PATHS: readonly string[] = [
+  '/search/lessons',
+  '/search/transcripts',
+];
+```
+
+Then in `iterOperations()`, skip matching paths:
+
+```typescript
+for (const [path, pathItem] of Object.entries(schema.paths)) {
+  if (SKIPPED_PATHS.some((skipped) => path.endsWith(skipped))) {
+    continue;
+  }
+  // ... existing logic
+}
+```
+
+**TDD approach:**
+
+1. RED: Add a unit test for `iterOperations` (or `generateCompleteMcpTools`) that asserts `get-search-lessons` and `get-search-transcripts` are NOT in the generated tool set.
+2. GREEN: Add the `SKIPPED_PATHS` filter.
+3. REFACTOR: Verify `pnpm type-gen` no longer produces files for the skipped tools.
+
+**Side effects to handle:**
+
+- The old `aggregated-search/execution.ts` calls `deps.executeMcpTool('get-search-lessons', ...)` — this will fail once the generated tools are removed. This is intentional: we delete that module in 5.2.
+- `list-tools.ts` will no longer include these tools in the tool list.
+- Existing tests that reference these tool names will need updating.
+- The `toolNames` array in the generated index will shrink by 2.
+
+### 5.2: Promote `search-sdk` to `search`, delete old `aggregated-search/`
+
+**Current state:**
+
+| Tool name | Module | Backend | Status |
+|-----------|--------|---------|--------|
+| `search` | `aggregated-search/` | REST API (`get-search-lessons` + `get-search-transcripts`) | To be deleted |
+| `search-sdk` | `aggregated-search-sdk/` | Elasticsearch via Search SDK (5 scopes) | To be promoted |
+
+**Transition plan:**
+
+1. **Rename `search-sdk` → `search` in `AGGREGATED_TOOL_DEFS`** (`definitions.ts` line 50). Change the key from `'search-sdk'` to `'search'`.
+
+2. **Update tool metadata** — the tool's `annotations.title` should become `'Search Curriculum'` (inheriting from the old tool). Update `toolName` in `_meta` to `'search'`.
+
+3. **Delete old module** — remove `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/` entirely:
+   - `execution.ts` — calls `get-search-lessons` and `get-search-transcripts` (both removed in 5.1)
+   - `tool-definition.ts` — old search tool definition
+   - `types.ts` — old `SearchArgs` type
+   - `validation.ts` — old search validation
+   - `index.ts` — barrel export
+   - `execution.integration.test.ts` — integration tests for old search
+
+4. **Update `definitions.ts`** — remove the `search` import line (line 16) and the old `search` entry (line 43). Replace with the promoted `search-sdk`:
+
+   ```typescript
+   export const AGGREGATED_TOOL_DEFS = {
+     search: { ...SEARCH_SDK_TOOL_DEF, inputSchema: SEARCH_SDK_INPUT_SCHEMA },
+     fetch: { ... },
+     // ... rest unchanged
+     'browse-curriculum': { ... },
+     'explore-topic': { ... },
+   } as const;
+   ```
+
+5. **Update executor dispatch** — remove the old `search` case from the dispatch map in `executor.ts`. The new `search` case already exists (currently as `'search-sdk'`).
+
+6. **Update all cross-references:**
+   - `tool-guidance-data.ts` — update tool name references
+   - `tool-guidance-workflows.ts` — workflow tool references
+   - `mcp-prompts.ts` / `mcp-prompt-messages.ts` — prompt tool references
+   - `prerequisite-guidance.ts` — context hint references
+   - Tool descriptions that reference `search-sdk` by name
+   - README documentation
+
+7. **Update tests:**
+   - E2E tests that call `search` will now exercise the new implementation
+   - Integration tests that reference `search` tool by name
+   - Smoke tests that verify tool list
+
+**The `search` tool is the default broad search tool.** Its `scope` parameter lets agents choose the right index. For teachers who say "find me stuff about X" without specifying a scope, agents should use `explore-topic` (multi-index) or default to `search` with `scope: 'lessons'`. The tool description's NL guidance teaches agents this.
+
+### 5.3: Assess unsurfaced search-sdk capabilities
+
+**Capability audit:**
+
+| Service | Method | Exposed via MCP? | Assessment |
+|---------|--------|-------------------|------------|
+| **Retrieval** | `searchLessons()` | `search` (scope: lessons), `explore-topic` | Fully exposed |
+| | `searchUnits()` | `search` (scope: units), `explore-topic` | Fully exposed |
+| | `searchThreads()` | `search` (scope: threads), `explore-topic` | Fully exposed |
+| | `searchSequences()` | `search` (scope: sequences) | Fully exposed |
+| | `suggest()` | `search` (scope: suggest) | Fully exposed |
+| | `fetchSequenceFacets()` | `browse-curriculum` | Fully exposed |
+| **Admin** | `setup()` | No | Destructive. Not for MCP clients. |
+| | `reset()` | No | Destructive. Not for MCP clients. |
+| | `verifyConnection()` | No | Health check. Could be useful for diagnostics but not teacher-facing. |
+| | `listIndexes()` | No | Observability. Could surface document counts. Not priority. |
+| | `updateSynonyms()` | No | Admin. Not for MCP clients. |
+| | `ingest()` | No | Admin. Requires Oak API client. |
+| | `getIndexMeta()` | No | Version info. Not teacher-facing. |
+| | `setIndexMeta()` | No | Admin. Not for MCP clients. |
+| **Observability** | `recordZeroHit()` | No | Write. Not for MCP clients. |
+| | `getRecentZeroHits()` | No | Read-only. Could help debug search quality. Not priority. |
+| | `getZeroHitSummary()` | No | Read-only. Useful for monitoring. Not priority. |
+| | `persistZeroHitEvent()` | No | Write. Not for MCP clients. |
+| | `fetchTelemetry()` | No | Read-only. Analytics. Not priority. |
+
+**Conclusion:** All 6 retrieval methods are fully exposed. The 13 unexposed methods are admin/observability operations that are appropriately not teacher-facing. No action needed for WS5.
+
+**Future consideration (not WS5):** If we build an admin MCP tool or a diagnostics tool, `verifyConnection()`, `listIndexes()`, and the zero-hit summary methods could be useful. This is a separate workstream.
+
+### 5.4: TDD execution order
+
+1. **RED tests first:**
+   - Unit test: `iterOperations` (or equivalent) excludes `/search/lessons` and `/search/transcripts`
+   - Integration test: `search` tool name resolves to the SDK-backed handler (not the REST-backed one)
+   - E2E test: `search` tool returns the new response shape (scope, total, took, results with highlights)
+
+2. **GREEN implementation:**
+   - Add `SKIPPED_PATHS` to generator
+   - Run `pnpm type-gen` to regenerate (removes 2 generated tools)
+   - Delete `aggregated-search/` module
+   - Rename `search-sdk` → `search` in definitions and executor
+   - Update cross-references
+
+3. **REFACTOR:**
+   - Update NL guidance and help content
+   - Update documentation
+   - Clean up any orphaned imports or references
+
+4. **Quality gates:**
+   - `pnpm type-gen && pnpm build && pnpm type-check && pnpm lint && pnpm test && pnpm smoke:dev:stub`
+
+### 5.5: Risk assessment
+
+| Risk | Mitigation |
+|------|------------|
+| Agents already using `search` tool by name | Name stays `search` — agents won't notice the backend change. Input schema changes (adds `scope`, renames `q`→`text`). Tool description guides agents through the new schema. |
+| Agents using `search-sdk` tool by name | Name disappears. `get-help` and tool descriptions will no longer reference it. Agents adapt on next tool list. |
+| Generated `get-search-lessons` / `get-search-transcripts` used directly by agents | Rare — agents prefer the `search` aggregated tool. These generated tools had no special descriptions. Agents will use `search` instead. |
+| `SKIPPED_PATHS` mechanism is fragile | Paths are stable API routes. If the API schema changes paths, `pnpm type-gen` will surface the change (tools reappear in the generated set, tests catch it). |
+| Breaking change to `search` input schema | Old: `{ q, keyStage, subject, unit }`. New: `{ text, scope, subject, keyStage, ... }`. This is a breaking change for any client hardcoding the old schema. MCP clients re-read schemas on each session, so they adapt immediately. |
 
 ---
 
@@ -521,40 +791,60 @@ If SDK search is superior (expected: 4-way RRF + ELSER vs REST text search):
 
 - **Dispatch maps, not switches**: `executor.ts` and `execution.ts` use const object maps for tool/scope dispatch to stay within ESLint complexity limits
 - **Two error patterns coexist**: Existing tools use `ToolExecutionResult`; search tools use `Result<T, E>` from `@oaknational/result`. Clean boundary. Unification is a separate future workstream (Phase 3b)
-- `**_meta` and `securitySchemes` required**: All aggregated tools must include OpenAI Apps SDK `_meta` fields and OAuth `securitySchemes` for widget rendering and auth enforcement
+- **`_meta` and `securitySchemes` required**: All aggregated tools must include OpenAI Apps SDK `_meta` fields and OAuth `securitySchemes` for widget rendering and auth enforcement
 
 ### Quality Gate Results (WS4)
 
-| Gate                  | Result                  | Notes                                   |
-| --------------------- | ----------------------- | --------------------------------------- |
-| type-gen              | Pass                    |                                         |
-| build                 | Pass                    |                                         |
-| type-check            | Pass                    |                                         |
-| lint:fix              | Pass                    |                                         |
-| format:root           | Pass                    |                                         |
-| SDK tests             | 1241 passed (113 files) | All green                               |
-| STDIO E2E             | 10 passed (4 files)     | All green                               |
-| HTTP unit/integration | 611 passed (51 files)   | All green                               |
-| HTTP E2E              | 191 passed (25 files)   | All green after transport isolation fix |
+| Gate | Result | Notes |
+| ---- | ------ | ----- |
+| type-gen | Pass | |
+| build | Pass | |
+| type-check | Pass | |
+| lint:fix | Pass | |
+| format:root | Pass | |
+| SDK tests | 1241 passed (113 files) | All green |
+| STDIO E2E | 10 passed (4 files) | All green |
+| HTTP unit/integration | 611 passed (51 files) | All green |
+| HTTP E2E | 191 passed (25 files) | All green after transport isolation fix |
 
 ### E2E Transport Isolation Fix (17 previously failing tests — RESOLVED)
 
-**Root cause**: MCP `StreamableHTTPServerTransport` serves exactly one client per instance. Tests that shared an app instance (via `beforeAll`) silently failed on the second request — transport returned HTTP 500 (consumed), which SSE parsers reported as "missing data line".
+**Root cause**: MCP `StreamableHTTPServerTransport` in stateless mode served one client per instance. Tests that shared an app instance (via `beforeAll`) failed on the second request.
 
-**Fix**: Each test expecting a 200 from MCP transport now creates its own fresh `createApp()` instance. Tests checking for HTTP 401 (auth rejects before transport) were safe but updated for consistency.
+**Original fix** (WS4): Each test created its own fresh `createApp()` instance.
 
-**Files fixed** (6): `application-routing`, `auth-enforcement`, `public-resource-auth-bypass`, `get-knowledge-graph`, `widget-metadata`, `widget-resource`.
+**Superseded by ADR-112**: The per-request transport pattern (implemented as part of the stateless transport bug fix) means the app now handles multiple sequential requests correctly. E2E tests were simplified — multi-step MCP flows (e.g. `getWidgetHtml()`) now share a single app instance. The `withFreshServer` smoke test workaround was also removed. See [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md).
+
+---
+
+## Additional Tasks (from 2026-02-20 review)
+
+These items surfaced during the OAuth documentation review and are not OAuth-related, but affect the MCP server and developer experience.
+
+### Fix quick-start anchor
+
+`docs/quick-start.md` links to `#known-gate-caveats` but the onboarding heading is singular `### Known Gate Caveat`. Fix the link or the heading to match.
+
+### Preserve historical review cleanly
+
+`.agent/research/developer-experience/2026-02-20-onboarding-review.md` should have a historical snapshot note indicating when the review was conducted and any context that has since changed.
+
+### Canonical health endpoint alignment
+
+Adopt `/healthz` as canonical health check path. Align `conditional-clerk-middleware.ts` comments (which reference `/health` and `/ready`) with the actual route used by the server.
 
 ---
 
 ## Key Risks and Mitigations
 
-| Risk                                           | Mitigation                                                                                                                |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Cross-SDK circular dependency                  | Solved via dependency inversion. `SearchRetrievalService` interface in curriculum-sdk. Extract to `packages/core/` later. |
-| `@elastic/elasticsearch` bundle size on Vercel | Not yet verified. Lazy imports if needed.                                                                                 |
-| ES credentials missing in deployment           | Optional env vars + fail-fast error. Existing tools unaffected.                                                           |
-| Too many tools overwhelms agents               | Three new tools is modest. Rich descriptions + `get-help` + prerequisite guidance help agents choose.                     |
-| Existing tool regression                       | `searchRetrieval` is optional. All existing code paths unchanged. E2E tests verify.                                       |
-| NL guidance insufficient                       | WS3 pending. Iterate on descriptions based on agent testing. The guidance is in code, easy to refine.                     |
-| E2E transport isolation (was 17 failures)      | **Resolved.** Tests now create fresh `createApp()` per MCP request. 191/191 E2E pass.                                     |
+| Risk                                           | Mitigation                                                                                            |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Cross-SDK circular dependency                  | **Solved.** Dependency inversion via `SearchRetrievalService` interface in curriculum-sdk. |
+| `@elastic/elasticsearch` bundle size on Vercel | Not yet verified. Lazy imports if needed. |
+| ES credentials missing in deployment           | **Solved.** Fail-fast at startup — servers refuse to start without ES credentials. Stub mode for local dev. |
+| Too many tools overwhelms agents               | Three new tools is modest. Rich descriptions + `get-help` + prerequisite guidance help agents choose. |
+| Existing tool regression                       | **Verified.** `searchRetrieval` is required but all existing code paths unchanged. E2E tests verify. |
+| NL guidance insufficient                       | **WS3 complete.** Rich NL guidance in tool descriptions, workflows, and prompts. Iterate based on agent testing. |
+| E2E transport isolation (was 17 failures)       | **Resolved.** Per-request transport (ADR-112) eliminated the root cause. Tests simplified. |
+| Widget-to-SDK contract drift (B2, B3)          | **Open.** See adversarial findings above. Renderer accesses fields without type checking. |
+| `ScopeDispatcher` type erasure (B1)            | **Open.** See adversarial findings above. Dispatch widens types to `unknown`. |

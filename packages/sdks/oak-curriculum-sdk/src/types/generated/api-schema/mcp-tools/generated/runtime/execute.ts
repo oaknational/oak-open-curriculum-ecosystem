@@ -256,42 +256,6 @@ async function invokeToolByName<TName extends ToolName>(
       }
       return { status: validation.status, data: validation.data };
     }
-    case 'get-search-lessons': {
-      const entry = getToolEntryFromToolName('get-search-lessons');
-      const descriptor: ToolDescriptorForName<'get-search-lessons'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
-    case 'get-search-transcripts': {
-      const entry = getToolEntryFromToolName('get-search-transcripts');
-      const descriptor: ToolDescriptorForName<'get-search-transcripts'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
     case 'get-sequences-assets': {
       const entry = getToolEntryFromToolName('get-sequences-assets');
       const descriptor: ToolDescriptorForName<'get-sequences-assets'> = entry.descriptor;
@@ -560,16 +524,6 @@ export function callTool(
   client: ToolClientForName<'get-rate-limit'>,
   rawArgs: ToolArgsForName<'get-rate-limit'>,
 ): Promise<ToolResultForName<'get-rate-limit'>>;
-export function callTool(
-  name: 'get-search-lessons',
-  client: ToolClientForName<'get-search-lessons'>,
-  rawArgs: ToolArgsForName<'get-search-lessons'>,
-): Promise<ToolResultForName<'get-search-lessons'>>;
-export function callTool(
-  name: 'get-search-transcripts',
-  client: ToolClientForName<'get-search-transcripts'>,
-  rawArgs: ToolArgsForName<'get-search-transcripts'>,
-): Promise<ToolResultForName<'get-search-transcripts'>>;
 export function callTool(
   name: 'get-sequences-assets',
   client: ToolClientForName<'get-sequences-assets'>,

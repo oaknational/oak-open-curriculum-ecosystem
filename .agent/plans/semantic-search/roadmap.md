@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Phase 3 (MCP Search Integration) in progress** — all prerequisites complete  
-**Last Updated**: 2026-02-21  
+**Last Updated**: 2026-02-22  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -20,12 +20,10 @@ until token is created). Developer onboarding experience
 is complete. Type shortcuts have been removed across the
 monorepo.
 
-**Two workstreams remain before the branch can merge:**
+**One workstream remains before the branch can merge:**
 
-1. **WS5 — Replace old search** (3a): Comparative testing
-   confirms the search-sdk tools are strictly superior.
-   WS5 replaces the old REST-based search and retires the
-   generated wrappers.
+1. ~~**WS5 — Replace old search** (3a)~~ **DONE** — old search
+   replaced, generated wrappers retired, all quality gates pass.
 2. **SDK workspace separation** (3e): Split `curriculum-sdk`
    into type-gen and runtime workspaces with enforced
    one-way dependency.
@@ -38,8 +36,8 @@ Result pattern unification (3b) and STDIO-HTTP alignment
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
-| `oak_lessons` | 30 | 0.983 | 0.955 | ✅ Done |
-| `oak_units` | 2 | 1.000 | 0.926 | ✅ Done |
+| `oak_lessons` | 30 | 0.983 | 0.944 | ✅ Done |
+| `oak_unit_rollup` | 2 | 1.000 | 0.923 | ✅ Done |
 | `oak_threads` | 8 | 0.938 | 0.902 | ✅ SDK integrated, CLI wired, benchmarks migrated |
 | `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
 
@@ -73,7 +71,7 @@ Phase 2h: Code Quality Remediation                     ✅ COMPLETE
   Remove type shortcuts, TSDoc warnings
          ↓
 Phase 3: MCP Search Integration + Merge Prep          🔄 IN PROGRESS
-  ├── 3a. Search tool wiring — WS5 replace old search   (merge-blocking)
+  ├── 3a. Search tool wiring — WS5 replace old search   ✅ COMPLETE
   ├── 3d. OAuth spec compliance — 401 on initial req     ✅ COMPLETE (ADR-113)
   ├── 3d'. Widget KG tidy-up — fix crash, migrate SVGs   ✅ COMPLETE
   ├── 3e'. OAuth validation + Cursor investigation       ✅ COMPLETE
@@ -255,14 +253,15 @@ onboarding. Two workstreams:
 
 **Status**: 🔄 In Progress — all prerequisites complete
 
-Multiple workstreams. Two are **merge-blocking** (3a WS5,
-3e SDK split). Three are completed (3d OAuth spec compliance,
-3e' OAuth validation, 3f proxy OAuth AS). Two are post-merge
+Multiple workstreams. One remaining **merge-blocker** (3e SDK
+split). Six are completed (3a search wiring, 3d OAuth spec
+compliance, 3d' widget KG tidy-up, 3e' OAuth validation, 3f
+proxy OAuth AS, 3b-bug transport fix). Two are post-merge
 (3b result unification, 3c STDIO alignment).
 
-### 3a. Search Tool Wiring (merge-blocking)
+### 3a. Search Tool Wiring ✅ COMPLETE
 
-**Active plan**: [phase-3a-mcp-search-integration.md](active/phase-3a-mcp-search-integration.md)
+**Plan**: [phase-3a-mcp-search-integration.md](active/phase-3a-mcp-search-integration.md)
 **Background**: [wire-hybrid-search (archived)](archive/completed/wire-hybrid-search-background.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
@@ -271,7 +270,7 @@ search and replace it.
 
 | Task | Status |
 |------|--------|
-| Three MCP search tools (`search-sdk`, `browse-curriculum`, `explore-topic`) wired to SDK retrieval | ✅ Complete (WS1-WS2) |
+| Three MCP search tools (`search`, `browse-curriculum`, `explore-topic`) wired to SDK retrieval | ✅ Complete (WS1-WS5) |
 | Filter parameters passed through correctly | ✅ Complete |
 | `Result<T, E>` errors surfaced as MCP errors | ✅ Complete |
 | NL guidance, tool descriptions, workflow guidance, MCP prompts | ✅ Complete (WS3) |
@@ -281,8 +280,10 @@ search and replace it.
 | All quality gates pass (191/191 E2E, 1241 SDK, 620 HTTP unit/integration) | ✅ Complete (WS4) |
 | Fail fast on missing ES credentials (remove silent degradation) | ✅ Complete — [plan](archive/completed/fail-fast-elasticsearch-credentials.md) |
 | Environment architecture overhaul (fix env loading, conditional Clerk keys, discriminated RuntimeConfig) | ✅ Complete — [plan](archive/completed/env-architecture-overhaul.md) |
-| Compare semantic search with existing `search` tool (REST API) | 📋 Pending (WS5) |
-| If superior, replace REST API composite search with SDK-backed search | 📋 Pending (WS5) |
+| Compare semantic search with existing `search` tool (REST API) | ✅ Complete (WS5) |
+| Replace REST API composite search with SDK-backed search | ✅ Complete (WS5) |
+| Follow-up cleanup: dead code, type unification, stale fixtures | ✅ Complete |
+| Adversarial sweep (Barney + Betty): 4 blockers, 8 warnings documented | ✅ Complete — see [WS6 plan](active/ws6-search-contract-hardening.md) |
 
 ### 3d. OAuth Spec Compliance ✅ COMPLETE
 
@@ -372,7 +373,7 @@ previously crashed all widget rendering. This remediation is now complete.
 **Active plan**: [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
 **Meta-plan**: [sdk-workspace-separation-meta-plan.md](active/sdk-workspace-separation-meta-plan.md)
 **Detailed plan**: [pipeline-enhancements/sdk-workspace-separation-plan.md](../pipeline-enhancements/sdk-workspace-separation-plan.md)
-**ADR**: [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+**ADR**: [ADR-108](/docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 
 **Goal**: Split `@oaknational/curriculum-sdk` into two
 workspaces: `curriculum-sdk-generation` (type-gen) and
@@ -407,7 +408,7 @@ removed, all quality gates pass.
 
 ### 3c. STDIO–HTTP Server Alignment (post-merge, backlog)
 
-**Plan**: [../../architecture/stdio-http-server-alignment.md](../../architecture/stdio-http-server-alignment.md)
+**Plan**: [stdio-http-server-alignment.md](../architecture/stdio-http-server-alignment.md)
 
 **Goal**: Eliminate all non-transport differences between the
 STDIO and HTTP servers. Both should share env validation, tool

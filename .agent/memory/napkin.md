@@ -1,5 +1,97 @@
 # Napkin
 
+## Session: 2026-02-22 — Consolidation, ADR-117, Plan Templates
+
+### What Was Done
+
+- Ran full `/consolidate-docs` flow:
+  - Fixed factual contradictions: roadmap NDCG@10 for lessons (0.955→0.944)
+    and units (0.926→0.923) to match ground truth protocol
+  - Fixed stale tool name `search-sdk` → `search` in roadmap task table
+  - Updated SDK workspace separation plan: WS5 gate marked completed,
+    description updated to reflect unblocked state
+  - Checked experience files (recent ones are appropriately reflective,
+    technical content already extracted to distilled.md)
+  - Checked distilled.md (no overlap with permanent docs)
+  - Napkin at 968 lines (under 1200, no rotation needed)
+- Wrote ADR-117: Plan Templates and Reusable Plan Components
+  - Establishes document hierarchy (prompt = entry, plan = executable,
+    roadmap = strategic)
+  - Content authority rule: facts are authoritative in one document,
+    referenced (not restated) by others
+  - Plan lifecycle: active/ → archive/completed/ with closeout stubs
+  - Template types: quality-fix, feature-workstream, closeout-stub
+  - Component types: quality-gates, tdd-phases, foundation-alignment,
+    risk-assessment, adversarial-review
+- Created 5 plan components in `.agent/plans/templates/components/`
+- Created 2 new plan templates (feature-workstream, closeout-stub)
+- Updated templates README with full documentation
+- Archived Phase 3a plan:
+  - Copied to `archive/completed/phase-3a-mcp-search-integration.md`
+  - Created closeout stub in `active/` (using new closeout template)
+  - Created WS6 plan: `ws6-search-contract-hardening.md` from B1-B4 + W1
+  - Updated prompt: replaced 65-line adversarial findings section with
+    7-line summary referencing WS6 plan (per ADR-117 hierarchy rule)
+  - Updated roadmap: adversarial findings now reference WS6 plan
+  - Updated completed work table in prompt
+  - Updated related documents in prompt
+
+### Lessons Learned
+
+- The document hierarchy rule (facts authoritative in one place) is the
+  most impactful part of ADR-117. The prompt had 65 lines duplicating
+  what belongs in the plan. Each duplication creates a drift opportunity.
+- When the roadmap metrics contradicted the prompt and neither matched
+  the ground truth protocol, the source of truth was obvious — but
+  finding the contradiction required systematic comparison. The
+  consolidation flow catches these.
+- Closeout stubs are a small but useful pattern: the active/ directory
+  shows what's current (stubs for completed work, full plans for active
+  work). Without stubs, you have to check the archive to know whether
+  a referenced plan is done.
+
+## Session: 2026-02-21 — WS5: Replace Old Search with Search SDK
+
+### What Was Done
+
+- **WS5.1**: Added `SKIPPED_PATHS` to `mcp-tool-generator.ts` to exclude
+  `/search/lessons` and `/search/transcripts` from generated MCP tools.
+  Full TDD: RED (3 tests asserting exclusion, all failed), GREEN (filter
+  in `iterOperations()`), then `pnpm type-gen` removed the generated
+  tools from the output.
+- **WS5.2**: Deleted entire `aggregated-search/` directory (7 files).
+  Renamed `search-sdk` to `search` across ~20 source files and ~12 test
+  files. Updated definitions, executor, type unions, guidance data,
+  workflows, prompt messages, widget renderer registry, and all READMEs.
+- **WS5.4**: Full quality gate chain passed: type-gen, build, type-check,
+  lint:fix, format:root, markdownlint:root, test (1260 SDK), test:e2e
+  (186), test:ui (26), smoke:dev:stub.
+- **ADR-116**: Wrote ADR for resolveEnv pipeline architecture
+  (supersedes ADR-016). Updated index and cross-references.
+
+### Gotchas Encountered
+
+- `mcp-tool-generator.ts` hit 250-line ESLint limit after adding
+  `SKIPPED_PATHS`. Had to condense the TSDoc comment to a single line.
+- The `tool-examples-metadata.e2e.test.ts` asserted the search tool
+  has a `q` parameter (old REST API). The new SDK tool uses `text`.
+  Easy to miss because the test name said "search tool" generically.
+- The search-sdk `tool-definition.ts` had title `'Search Curriculum
+  (Semantic)'` which didn't match the integration test expectation
+  of `'Search Curriculum'`. Once promoted to `search`, the disambiguating
+  `(Semantic)` suffix is no longer needed.
+
+### Lessons Learned
+
+- When renaming a tool across the codebase, the easy-to-miss spots
+  are: (1) E2E tests that assert on parameter names, (2) annotation
+  titles that were disambiguating between old/new, (3) README docs
+  in multiple app directories.
+- The `SKIPPED_PATHS` approach works but is a hardcoded exclusion
+  list in the generator. If upstream API adds more search paths,
+  someone must remember to update. Consider moving to a more
+  semantic approach (operation tags) if more paths need skipping.
+
 ## Session: 2026-02-21 — Path-Qualified PRM Fix (RFC 9728 Section 3.1)
 
 ### What Was Done

@@ -135,14 +135,6 @@ describe('getRendererIdForTool', () => {
       expect(getRendererIdForTool('search')).toBe('search');
     });
 
-    it('returns "search" for get-search-lessons', () => {
-      expect(getRendererIdForTool('get-search-lessons')).toBe('search');
-    });
-
-    it('returns "search" for get-search-transcripts', () => {
-      expect(getRendererIdForTool('get-search-transcripts')).toBe('search');
-    });
-
     it('returns "fetch" for fetch', () => {
       expect(getRendererIdForTool('fetch')).toBe('fetch');
     });

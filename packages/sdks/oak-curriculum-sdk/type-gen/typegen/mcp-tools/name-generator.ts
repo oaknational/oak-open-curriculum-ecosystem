@@ -11,7 +11,7 @@
  * Examples:
  * - `/lessons/\{lesson\}/transcript` + GET → `oak-get-lessons-transcript`
  * - `/key-stages/\{keyStage\}/subject/\{subject\}/units` + GET → `oak-get-key-stages-subject-units`
- * - `/search/lessons` + GET → `oak-get-search-lessons`
+ * - `/lessons/\{lesson\}/quiz` + GET → `oak-get-lessons-quiz`
  * - `/lessons/\{lesson\}/assets/\{type\}` + GET → `oak-get-lessons-asset-type` (special case to avoid duplicate)
  */
 export function generateMcpToolName(path: string, method: string): string {

@@ -49,22 +49,15 @@ export const toolGuidanceData = {
    */
   toolCategories: {
     discovery: {
-      tools: [
-        'search-sdk',
-        'explore-topic',
-        'browse-curriculum',
-        'search',
-        'get-subjects',
-        'get-key-stages',
-      ],
+      tools: ['search', 'explore-topic', 'browse-curriculum', 'get-subjects', 'get-key-stages'],
       description:
         'Find curriculum content using semantic search, topic exploration, or structured listing. ' +
-        'search-sdk provides semantic search across lessons, units, threads, and sequences via a scope parameter. ' +
+        'search provides semantic search across lessons, units, threads, and sequences via a scope parameter. ' +
         'explore-topic searches all scopes in parallel for broad discovery. ' +
         'browse-curriculum returns structured facets without a search query.',
       whenToUse:
         'When you need to find content on a topic, explore what is available, or browse the curriculum structure. ' +
-        'Use search-sdk with a specific scope for targeted results, explore-topic for broad discovery, ' +
+        'Use search with a specific scope for targeted results, explore-topic for broad discovery, ' +
         'or browse-curriculum to see what subjects and key stages exist.',
     } satisfies ToolCategory,
 
@@ -129,7 +122,7 @@ export const toolGuidanceData = {
 
   /** Quick tips for effective tool usage. */
   tips: [
-    'Use search-sdk with a scope for targeted semantic search: scope "lessons" for specific lessons, "units" for topic groups, "threads" for progressions, "sequences" for programme structures, "suggest" for typeahead.',
+    'Use search with a scope for targeted semantic search: scope "lessons" for specific lessons, "units" for topic groups, "threads" for progressions, "sequences" for programme structures, "suggest" for typeahead.',
     'Use explore-topic when you do not know which scope to search — it searches lessons, units, and threads in parallel.',
     'Use browse-curriculum to see what subjects and key stages are available, without needing a search query.',
     'The "fetch" tool uses prefixed IDs: lesson:slug, unit:slug, thread:slug, subject:slug.',

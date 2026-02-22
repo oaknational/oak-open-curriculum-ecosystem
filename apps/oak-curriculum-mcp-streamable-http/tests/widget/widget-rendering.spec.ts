@@ -131,23 +131,14 @@ test.describe('Widget rendering behaviour', () => {
     expect(await sections.count()).toBeGreaterThanOrEqual(2);
   });
 
-  test('renders lesson cards when data has lessons array', async ({ page }) => {
-    await injectToolOutput(page, SEARCH_OUTPUT_FIXTURE);
+  test('renders scoped search results with lesson cards', async ({ page }) => {
+    await injectToolOutput(page, SEARCH_OUTPUT_FIXTURE, 'search');
     await page.goto(`${serverUrl}/widget`);
 
-    // Widget should detect search shape and render lesson results
-    await expect(page.getByText('From lesson similarity')).toBeVisible();
+    await expect(page.getByText('Search lessons')).toBeVisible();
     await expect(page.getByText('Introduction to Photosynthesis')).toBeVisible();
-    // Should render links to Oak
     await expect(page.getByRole('link', { name: /View/ }).first()).toBeVisible();
-  });
-
-  test('renders transcript snippets when data has transcripts array', async ({ page }) => {
-    await injectToolOutput(page, SEARCH_OUTPUT_FIXTURE);
-    await page.goto(`${serverUrl}/widget`);
-
-    await expect(page.getByText('From transcript search')).toBeVisible();
-    await expect(page.getByText(/Plants use sunlight/)).toBeVisible();
+    await expect(page.getByText('15')).toBeVisible();
   });
 
   test('shows "No results found" for empty search', async ({ page }) => {
@@ -174,19 +165,17 @@ test.describe('Widget rendering behaviour', () => {
   });
 
   test('re-renders when openai:set_globals event fires', async ({ page }) => {
-    // Start with empty data
     await injectToolOutput(page, EMPTY_OUTPUT_FIXTURE);
     await page.goto(`${serverUrl}/widget`);
 
-    // Initially shows loading
     await expect(page.getByText('Loading...')).toBeVisible();
 
-    // Simulate ChatGPT dispatching set_globals with search data
     await page.evaluate((searchData: object) => {
       /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- Browser context requires any for window.openai access */
       const openai = (globalThis as any).openai;
       if (openai) {
         openai.toolOutput = searchData;
+        openai.toolResponseMetadata = { toolName: 'search' };
       }
       (globalThis as any).dispatchEvent(
         new CustomEvent('openai:set_globals', {
@@ -196,8 +185,7 @@ test.describe('Widget rendering behaviour', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
     }, SEARCH_OUTPUT_FIXTURE);
 
-    // Widget should now show search results
-    await expect(page.getByText('From lesson similarity')).toBeVisible();
+    await expect(page.getByText('Search lessons')).toBeVisible();
   });
 });
 
@@ -268,10 +256,10 @@ test.describe('Tool name routing', () => {
     await expect(page.getByText(/85/)).toBeVisible();
   });
 
-  test('routes get-search-lessons array response to search renderer', async ({ page }) => {
-    // get-search-lessons returns a flat array, NOT { lessons: [...] }
+  test('routes search tool flat array response to search renderer', async ({ page }) => {
+    // Search results can arrive as a flat array, NOT { lessons: [...] }
     // The search renderer must handle this structure
-    await injectToolOutput(page, SEARCH_LESSONS_ARRAY_FIXTURE, 'get-search-lessons');
+    await injectToolOutput(page, SEARCH_LESSONS_ARRAY_FIXTURE, 'search');
     await page.goto(`${serverUrl}/widget`);
 
     // Should render lesson titles from the array

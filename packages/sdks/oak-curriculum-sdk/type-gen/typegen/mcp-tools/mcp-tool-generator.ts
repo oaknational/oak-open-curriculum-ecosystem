@@ -32,6 +32,9 @@ export type PrimitiveTypeLabel =
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
+/** API paths excluded from MCP tool generation (superseded by Elasticsearch search tools). */
+const SKIPPED_PATHS: readonly string[] = ['/search/lessons', '/search/transcripts'];
+
 function isPathItemObject(value: unknown): value is PathItemObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value) && !('$ref' in value);
 }
@@ -66,6 +69,9 @@ function iterOperations(
     return out;
   }
   for (const [path, pathItem] of Object.entries(schema.paths)) {
+    if (SKIPPED_PATHS.some((skipped) => path === skipped)) {
+      continue;
+    }
     if (!isPathItemObject(pathItem)) {
       continue;
     }

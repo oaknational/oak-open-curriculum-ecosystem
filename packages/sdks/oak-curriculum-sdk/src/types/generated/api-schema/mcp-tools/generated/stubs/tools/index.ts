@@ -12,8 +12,6 @@ import { stubGetLessonsQuizResponse } from './get-lessons-quiz.js';
 import { stubGetLessonsSummaryResponse } from './get-lessons-summary.js';
 import { stubGetLessonsTranscriptResponse } from './get-lessons-transcript.js';
 import { stubGetRateLimitResponse } from './get-rate-limit.js';
-import { stubGetSearchLessonsResponse } from './get-search-lessons.js';
-import { stubGetSearchTranscriptsResponse } from './get-search-transcripts.js';
 import { stubGetSequencesAssetsResponse } from './get-sequences-assets.js';
 import { stubGetSequencesQuestionsResponse } from './get-sequences-questions.js';
 import { stubGetSequencesUnitsResponse } from './get-sequences-units.js';
@@ -40,8 +38,6 @@ export const stubbedToolResponses = {
   'get-lessons-summary': () => stubGetLessonsSummaryResponse,
   'get-lessons-transcript': () => stubGetLessonsTranscriptResponse,
   'get-rate-limit': () => stubGetRateLimitResponse,
-  'get-search-lessons': () => stubGetSearchLessonsResponse,
-  'get-search-transcripts': () => stubGetSearchTranscriptsResponse,
   'get-sequences-assets': () => stubGetSequencesAssetsResponse,
   'get-sequences-questions': () => stubGetSequencesQuestionsResponse,
   'get-sequences-units': () => stubGetSequencesUnitsResponse,

@@ -30,7 +30,7 @@ todos:
     content: "Phase 5: Run full quality gate chain (type-gen through smoke:dev:stub), verify all pass"
     status: completed
   - id: reviews
-    content: "Phase 6: Invoke code-reviewer, architecture-reviewer, test-reviewer sub-agents"
+    content: "Phase 6: Invoke code-reviewer, architecture-reviewer-barney (and other architecture specialist reviewers as needed: architecture-reviewer-fred, architecture-reviewer-betty, architecture-reviewer-wilma), test-reviewer sub-agents"
     status: completed
 isProject: false
 ---
@@ -172,7 +172,7 @@ With per-request transport, the app handles multiple requests. This simplifies:
 After implementation, invoke:
 
 - `code-reviewer` for quality/security/maintainability
-- `architecture-reviewer` for boundary compliance
+- `architecture-reviewer-barney` for boundary compliance (and `architecture-reviewer-fred`, `architecture-reviewer-betty`, `architecture-reviewer-wilma` as needed for ADR discipline, architectural cohesion/coupling, or resilience failure-mode checks)
 - `test-reviewer` for TDD compliance and test quality
 
 ## Risk Assessment

@@ -252,3 +252,57 @@ describe('parameter example extraction behaviour', () => {
     expect(toolFile).not.toContain('"examples":');
   });
 });
+
+describe('SKIPPED_PATHS excludes superseded search endpoints', () => {
+  const schemaWithSearchPaths: OpenAPIObject = {
+    openapi: '3.0.0',
+    info: { title: 'Test', version: '1.0.0' },
+    paths: {
+      '/search/lessons': {
+        get: {
+          operationId: 'getLessons-searchByTextSimilarity',
+          parameters: [{ name: 'q', in: 'query', schema: { type: 'string' } }],
+          responses: { '200': { description: 'Success' } },
+        },
+      },
+      '/search/transcripts': {
+        get: {
+          operationId: 'searchTranscripts-searchTranscripts',
+          parameters: [{ name: 'q', in: 'query', schema: { type: 'string' } }],
+          responses: { '200': { description: 'Success' } },
+        },
+      },
+      '/lessons/{lesson}/transcript': {
+        get: {
+          operationId: 'getTranscript',
+          parameters: [{ name: 'lesson', in: 'path', required: true, schema: { type: 'string' } }],
+          responses: { '200': { description: 'Success' } },
+        },
+      },
+    },
+  };
+
+  it('does not generate tool files for /search/lessons or /search/transcripts', () => {
+    const files = generateCompleteMcpTools(schemaWithSearchPaths);
+    const toolFileNames = Object.keys(files.data.tools);
+
+    expect(toolFileNames).not.toContain('get-search-lessons.ts');
+    expect(toolFileNames).not.toContain('get-search-transcripts.ts');
+  });
+
+  it('still generates tools for non-skipped endpoints', () => {
+    const files = generateCompleteMcpTools(schemaWithSearchPaths);
+    const toolFileNames = Object.keys(files.data.tools);
+
+    expect(toolFileNames).toContain('get-lessons-transcript.ts');
+  });
+
+  it('excludes skipped tools from definitions and runtime', () => {
+    const files = generateCompleteMcpTools(schemaWithSearchPaths);
+
+    expect(files.data['definitions.ts']).not.toContain('get-search-lessons');
+    expect(files.data['definitions.ts']).not.toContain('get-search-transcripts');
+    expect(files.runtime['execute.ts']).not.toContain('get-search-lessons');
+    expect(files.runtime['execute.ts']).not.toContain('get-search-transcripts');
+  });
+});

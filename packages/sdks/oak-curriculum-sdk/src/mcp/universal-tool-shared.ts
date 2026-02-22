@@ -37,7 +37,7 @@ export interface UniversalToolExecutorDependencies {
   /**
    * Search retrieval service for SDK-backed search tools.
    *
-   * Used by search-sdk, browse-curriculum, and explore-topic tools
+   * Used by search, browse-curriculum, and explore-topic tools
    * to query Elasticsearch directly via the Search SDK. The type is
    * structurally compatible with Search SDK's RetrievalService.
    *
@@ -105,7 +105,7 @@ export interface ToolResponseOptions {
   readonly timestamp?: number;
   /** Optional status indicator */
   readonly status?: string;
-  /** Tool name for widget routing (e.g., 'search-sdk') */
+  /** Tool name for widget routing (e.g., 'search') */
   readonly toolName?: string;
   /** Human-readable tool title from annotations (e.g., 'Search Curriculum') */
   readonly annotationsTitle?: string;

@@ -21,7 +21,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-013: Git Hooks with Husky and lint-staged](013-husky-and-lint-staged.md)
 - [ADR-014: Conventional Commits Standard](014-conventional-commits.md)
 - [ADR-015: Node.js 24.x Requirement](015-node-24-minimum.md)
-- [ADR-016: Use dotenv for Environment Configuration](016-dotenv-for-configuration.md)
+- [ADR-016: Use dotenv for Environment Configuration](016-dotenv-for-configuration.md) ← **Superseded** by ADR-116
 - [ADR-017: Use Consola for Logging](017-consola-for-logging.md)
 - [ADR-018: Complete Biological Architecture](018-complete-biological-architecture.md)
 - [ADR-019: Domain-Driven File Splitting](019-domain-driven-file-splitting.md)
@@ -117,6 +117,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-113: MCP Spec-Compliant Auth for All Methods](113-mcp-spec-compliant-auth-for-all-methods.md)
 - [ADR-114: Layered Sub-agent Prompt Composition Architecture](114-layered-sub-agent-prompt-composition-architecture.md)
 - [ADR-115: Proxy OAuth AS for Cursor](115-proxy-oauth-as-for-cursor.md)
+- [ADR-116: resolveEnv Pipeline Architecture](116-resolve-env-pipeline-architecture.md) (supersedes ADR-016)
+- [ADR-117: Plan Templates and Reusable Plan Components](117-plan-templates-and-components.md)
 
 ## Key Architectural Decisions
 
@@ -138,9 +140,10 @@ For understanding authentication, authorization, and observability:
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
-For understanding sub-agent prompt architecture:
+For understanding sub-agent and plan composition architecture:
 
 - **[ADR-114](114-layered-sub-agent-prompt-composition-architecture.md)** - Layered prompt composition architecture (components -> templates -> wrappers)
+- **[ADR-117](117-plan-templates-and-components.md)** - Plan templates and reusable plan components (document hierarchy, lifecycle, TDD phases)
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

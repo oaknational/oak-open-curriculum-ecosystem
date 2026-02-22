@@ -52,7 +52,16 @@ function getRelatedWorkflows(toolName: string): string[] {
 }
 
 /** Known aggregated tool names for help lookup */
-const AGGREGATED_TOOL_NAMES: readonly string[] = ['search', 'fetch', 'get-ontology', 'get-help'];
+const AGGREGATED_TOOL_NAMES: readonly string[] = [
+  'search',
+  'fetch',
+  'get-ontology',
+  'get-help',
+  'get-thread-progressions',
+  'get-prerequisite-graph',
+  'browse-curriculum',
+  'explore-topic',
+];
 
 /**
  * Checks if a string is a known aggregated tool name.
