@@ -1,41 +1,45 @@
 ---
 name: "Pre-Merge Widget Stabilisation"
-overview: "Pre-merge widget stabilisation plan (Tracks 1a + 1b): enforce non-search shell-only widgets and fix search widget rendering with contract tests."
+overview: "Pre-merge widget stabilisation plan (Tracks 1a + 1b): fix search/browse/explore widget rendering, harden resilience gaps found by architecture reviews. Three-level TDD throughout."
 todos:
-  - id: a1-shell-only-non-search
-    content: "1a: Reduce non-search widgets to static Oak branding shells with no tool payload rendering or renderer dispatch."
-    status: pending
-  - id: b3-field-mismatch
-    content: "B3: Fix widget renderer field mismatch — renderer accesses flat camelCase fields but LessonResult wraps data in nested snake_case `lesson` property. Multi-level TDD."
-    status: pending
-  - id: b4-suggest-renderer
-    content: "B4: Handle suggest scope in widget renderer — suggest returns `{ suggestions, cache }`, not `{ results }`. Multi-level TDD."
-    status: pending
-  - id: b2-contract-tests
-    content: "B2: Add contract tests validating renderer field access against generated index document types. TDD."
-    status: pending
-  - id: widget-quality-gates
-    content: "Full quality gate chain after all changes."
-    status: pending
-  - id: widget-review
-    content: "Specialist reviews (code-reviewer, test-reviewer)."
-    status: pending
+  - id: phase-0-deletion-and-infra
+    content: "Phase 0: Track 1a — delete 18 non-search-family renderers, fix Record<string,...> type violations, add build-time JS parse check, create renderer test harness."
+    status: completed
+  - id: phase-1-search-alignment
+    content: "Phase 1: Search renderer alignment — B3 field fix, B4 suggest, multi-scope helpers, comprehensive contract tests. Three-level TDD."
+    status: completed
+  - id: phase-2-browse-renderer
+    content: "Phase 2: Browse renderer — new browse-curriculum renderer + integration contract tests. Three-level TDD."
+    status: completed
+  - id: phase-3-explore-renderer
+    content: "Phase 3: Explore renderer — new explore-topic renderer + integration contract tests. Three-level TDD."
+    status: completed
+  - id: phase-4-quality-gates
+    content: "Phase 4: Full quality gate chain + specialist reviews."
+    status: completed
+  - id: phase-5-resilience
+    content: "Phase 5: Fix critical and important resilience gaps from architecture reviews. Three-level TDD."
+    status: completed
 isProject: false
 ---
 
 # Pre-Merge Widget Stabilisation
 
 **Last Updated**: 2026-02-22
-**Status**: ACTIVE (pre-merge execution-ready)
-**Scope**: Pre-merge widget stabilisation across both tracks:
-Track 1a non-search shell-only reduction and Track 1b search
-widget correctness + drift protection tests.
-**Merge-blocking**: Yes — Tracks 1a and 1b are both pre-merge
-requirements and both must complete before the upcoming merge.
+**Status**: COMPLETE — All phases (0-5) complete. Phase 5
+resilience hardening addressed all critical and important findings.
+**Merge-blocking**: Yes — critical resilience gaps must be
+resolved before merge.
 
 ---
 
-## Standalone Session Bootstrap (Next Session)
+## Standalone Session Bootstrap
+
+**Session entry point**:
+[semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md)
+provides broader context (architecture, search landscape, quality
+gates, mandatory reading). Start there, then return here for
+execution.
 
 1. Re-read foundation directives before code changes:
    - [rules.md](../../../directives/rules.md)
@@ -48,422 +52,238 @@ requirements and both must complete before the upcoming merge.
    ls -1 .agent/plans/semantic-search/active
    ```
 
-3. Use this file as the single owner of pre-merge Tracks 1a and 1b.
-4. Treat dispatch type-safety work as complete and archived:
-   - `../archive/completed/search-dispatch-type-safety.md`
-5. Keep post-merge rendering and extensions work out of scope for this file:
-   - `../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md`
+3. Read the widget rendering architecture documentation in the
+   HTTP MCP server README (permanent location for all widget
+   architecture docs):
+   [README.md — Widget Rendering Architecture](../../../../apps/oak-curriculum-mcp-streamable-http/README.md)
 
 ---
 
-## Context
+## What Was Done (Phases 0-4)
 
-Post-WS5 adversarial reviews surfaced 4 blockers and 8 warnings.
-Three of the blockers (B3, B4, B2) are exclusively ChatGPT
-widget concerns:
+Phases 0-4 implemented Tracks 1a + 1b with genuine three-level
+TDD. Full implementation details are in git history.
 
-- **B3**: Search results render as "Untitled" — broken UX
-- **B4**: Suggestions silently show "No results found"
-- **B2**: Zero compile-time feedback on renderer field access
+- **Phase 0**: Deleted 18 non-search-family renderers, created
+  neutral shell, renderer test harness, fixture builder,
+  `Record<string,...>` type fixes, ESLint restricted types
+  expanded, dead code removed, type assertions eliminated.
+- **Phase 1**: Multi-scope search rendering (4 scopes + suggest),
+  field-extraction helpers, Zod contract tests, XSS hardening
+  (single-quote escaping), `rel="noopener noreferrer"` on all
+  links.
+- **Phase 2**: Browse renderer for `browse-curriculum` tool
+  (camelCase SequenceFacet fields), 8 integration tests.
+- **Phase 3**: Explore renderer for `explore-topic` tool
+  (multi-scope with ok/error per scope), 9 integration tests,
+  reuses Phase 1 field-extraction helpers.
+- **Phase 4**: Full quality gate chain, specialist reviews
+  (code-reviewer, test-reviewer, type-reviewer,
+  architecture-reviewer-barney, architecture-reviewer-betty,
+  architecture-reviewer-wilma).
 
-The remaining items (B1, W1) were SDK-level concerns now closed in
-the archived merge-blocking plan:
-[search-dispatch-type-safety.md](../archive/completed/search-dispatch-type-safety.md).
-
-**Source**: [Phase 3a archived plan](../archive/completed/phase-3a-mcp-search-integration.md)
-(Adversarial Review Findings section)
-Track 1a requirements come from the sequencing decision captured on
-22 February 2026.
-
----
-
-## Merge Window Sequencing (Agreed)
-
-1. **Track 1a (this file, pre-merge)**: Reduce current non-search
-   widgets to no rendering in most paths, with basic static Oak
-   branding in a limited subset.
-2. **Track 1b (this plan, pre-merge)**: Fix the search widget so
-   search and suggest output render correctly and are protected by
-   contract tests.
-3. **Track 2 (later, unscheduled)**: All other rendering-system
-   work, including React component replacement.
-   Track 2 planning and backlog remain in
-   [mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md).
-
-This plan now carries both pre-merge tracks. It does not absorb
-Track 2 architecture, research, or feature-expansion work.
+All quality gates pass: type-check, lint, 9 test suites,
+19 Playwright E2E.
 
 ---
 
-## Track 1a: Non-Search Widget Hard Block (Prerequisite)
+## Phase 5: Resilience Hardening (Next Steps)
 
-**Objective**: Enforce minimal Oak-branded shell-only widgets for
-non-search paths, with no content rendering and no tool payload
-usage.
+Architecture reviews (Barney, Betty, Wilma) identified critical
+and important issues that must be fixed before merge. We do not
+defer important work.
 
-**Scope**:
+### Critical Findings
 
-1. Static branding shell only (neutral copy, no data cards).
-2. No `window.openai.toolOutput`, no payload parsing, and no
-   renderer dispatch for non-search widget paths.
-3. Keep only minimum metadata needed for host attachment and shell
-   loading.
-4. Search widget remains enabled and is fixed under Track 1b in
-   this same file.
+#### C1: No try/catch around renderer calls
 
-**Acceptance criteria**:
+**Location**: `widget-script.ts` line ~97
 
-1. Non-search widget HTML paths are shell-only.
-2. Non-search widget script paths contain no tool-output access.
-3. Search widget continues to function as the one active rich path.
-4. Validation output is recorded with deterministic checks.
+**Problem**: `renderer(fullData)` is not wrapped in `try/catch`.
+Any runtime error (e.g. accessing a property on `undefined` or
+unexpected data shape) propagates and crashes the entire widget
+script. No error reporting, no fallback.
 
-**Deterministic validation (planned implementation checks)**:
+**Impact**: One bad tool output or one bug in any renderer breaks
+all tools for all users.
 
-```bash
-rg -n "toolOutput|toolResponseMetadata|TOOL_RENDERER_MAP|getRendererForTool" \
-  apps/oak-curriculum-mcp-streamable-http/src/widget-*.ts \
-  apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts
+**Fix**: Wrap `renderer(fullData)` in `try/catch`. On error,
+show a neutral fallback ("Unable to display results") and log to
+`console.error`. Use three-level TDD: write a Playwright test
+that asserts error containment, then an integration test, then
+implement.
 
-rg -n "window\\.openai\\.(toolOutput|toolInput|toolResponseMetadata)" \
-  apps/oak-curriculum-mcp-streamable-http/src
-```
+**Files**: `src/widget-script.ts`
 
----
+#### C2: CTA config string injection
 
-## Why This Matters
+**Location**: `src/widget-cta/js-generator.ts` lines 44-50
 
-1. **Immediate value**: Teachers using the ChatGPT widget see
-   working search results with correct titles, subjects, key
-   stages, and links instead of "Untitled" cards.
-2. **System-level impact**: Contract tests catch future ES index
-   document schema drift before it reaches users.
-3. **Risk of inaction**: The widget is the primary visual interface
-   for ChatGPT users. Broken rendering undermines trust.
+**Problem**: Only `prompt` is escaped via `escapeForTemplateLiteral`.
+`id`, `buttonText`, `loadingText`, `understoodText` are interpolated
+into JS string literals without escaping. A single quote in any of
+these (e.g. `"Teacher's guide"`) breaks the generated JS and the
+entire widget.
 
----
+**Impact**: Same as C1 — one bad CTA config breaks all tools.
 
-## Multi-Level TDD is Vital
+**Fix**: Escape all string values for JS string literals before
+interpolation, or use `JSON.stringify` for the entire CTA config
+object. TDD: write a unit test with a single-quote CTA label,
+verify it parses and executes correctly.
 
-> See [testing-strategy.md](../../../directives/testing-strategy.md)
+**Files**: `src/widget-cta/js-generator.ts`
 
-This workstream touches code at three levels: pure formatting
-functions (unit), SDK-to-widget data flow (integration), and
-widget rendering in a browser (E2E/Playwright). TDD must apply
-at **all three levels** for each phase.
+#### C3: Four-way sync — incomplete test enforcement
 
-### Why multi-level TDD matters here
+**Location**: `widget-renderer-registry.unit.test.ts`
 
-**B3 is a case study in what happens without it.** The Playwright
-test fixtures (`tests/widget/fixtures.ts`) use flat camelCase
-fields that match the old REST API response shape, not the SDK's
-`LessonResult` shape. The renderer was written to match those
-fixtures. The tests pass. The widget is broken.
+**Problem**: The execution test checks that `RENDERER_IDS` have
+corresponding functions in `RENDERERS`, but does not:
 
-The tests passed because they tested the wrong contract. A unit
-test validating field access against the generated
-`SearchLessonsIndexDoc` type would have caught this at compile
-time. A Playwright test using a fixture derived from the real SDK
-shape would have caught it at runtime. Neither existed.
+- Assert every `TOOL_RENDERER_MAP` value maps to a `RENDERER_IDS` entry
+- Assert every `RENDERER_IDS` entry has a corresponding renderer
+  in `WIDGET_RENDERER_FUNCTIONS`
 
-### TDD at each level
+**Impact**: A missing renderer function causes `ReferenceError` in
+the sandbox, breaking ALL tools.
 
-| Level | What it proves | When to write | RED phase |
-|-------|---------------|---------------|-----------|
-| **Unit** | Field extraction functions produce correct access patterns | Before fixing extraction logic | Tests fail against current wrong fields |
-| **Integration** | Contract tests validate field existence against generated types | After fixing renderer (B2) | Tests verify correct fields exist on Zod schemas |
-| **E2E (Playwright)** | Widget renders correct titles, subjects, URLs from real SDK shapes | Before fixing the renderer | Tests fail with "Untitled" cards |
+**Fix**: Extend the test to verify the full chain:
+`TOOL_RENDERER_MAP` values ⊆ `RENDERER_IDS`, every ID has a
+function in the concatenated JS. TDD.
 
----
+**Files**: `src/widget-renderer-registry.unit.test.ts`
 
-## B3: Widget-to-SDK Field Mismatch (Broken UX)
+### Important Findings
 
-**Location**: `apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/search-renderer.ts`
+#### I1: `scopeObj` implicit default for unknown scopes
 
-**Problem**: The search renderer expects flat, camelCase fields:
+**Location**: `src/widget-renderers/helpers.ts` lines 31-35
+
+**Problem**: Unknown scopes silently default to `'sequence'` key.
+A new scope or a typo would return `result.sequence` when the data
+is in `result.lesson`, producing wrong or empty titles.
+
+**Fix**: Explicit scope whitelist; return `null` for unknown values:
 
 ```javascript
-const t = l.lessonTitle || l.title || l.slug || 'Untitled';
-const s = l.subjectTitle || l.subject || (un ? un.subjectSlug : '') || '';
-const k = l.keyStageTitle || l.keyStage || (un ? un.keyStageSlug : '') || '';
-const u = l.canonicalUrl || '';
+var key = scope === 'lessons' ? 'lesson'
+  : scope === 'units' ? 'unit'
+  : scope === 'threads' ? 'thread'
+  : scope === 'sequences' ? 'sequence'
+  : null;
+return (key && r && r[key]) || null;
 ```
 
-But `LessonResult` from the SDK has a nested structure with
-snake_case fields:
+**Files**: `src/widget-renderers/helpers.ts`, `helpers.unit.test.ts`
 
-```typescript
-interface LessonResult {
-  readonly id: string;
-  readonly rankScore: number;
-  readonly lesson: SearchLessonsIndexDoc;  // nested
-  readonly highlights: readonly string[];
-}
-```
+#### I2: Browse/explore contract tests lack Zod schema validation
 
-Where `SearchLessonsIndexDoc` has `lesson_title`, `subject_slug`,
-`key_stage`, `lesson_url` — not `lessonTitle`, `subjectTitle`,
-`keyStageTitle`, `canonicalUrl`.
+**Location**: `browse-renderer.integration.test.ts`,
+`explore-renderer.integration.test.ts`
 
-**Impact**: Every field access misses. Every search result renders
-as **"Untitled"** with no subject, no key stage, and no URL.
+**Problem**: Search contract tests parse fixtures through SDK Zod
+schemas; browse and explore use hand-authored fixture literals with
+no schema validation. Schema drift risk is higher for these two.
 
-The Playwright test fixtures also use the wrong shape:
+**Fix**: Extend `fixture-builder.ts` with browse/explore builders
+derived from SDK types. Add Zod validation where schemas are
+available (e.g. `SequenceFacetSchema` for browse). TDD.
 
-- `tests/widget/fixtures.ts`: `SEARCH_OUTPUT_FIXTURE` uses flat
-  `{ lessonTitle, subject, keyStageTitle, canonicalUrl }`
-- `tests/widget/renderer-fixtures.ts`: `SEARCH_LESSONS_ARRAY_FIXTURE`
-  uses flat `{ lessonTitle, units: [{ unitSlug }] }`
+**Files**: `tests/widget/fixture-builder.ts`,
+`browse-renderer.integration.test.ts`,
+`explore-renderer.integration.test.ts`
 
-**Scope-specific field mapping** (from `search-retrieval-types.ts`):
+#### I3: Search renderer scope fallback
 
-| Scope | Result type | Nested property | Title field | Subject field | Key stage field | URL field |
-|-------|------------|----------------|-------------|--------------|----------------|-----------|
-| `lessons` | `LessonResult` | `.lesson` | `lesson_title` | `subject_slug` | `key_stage` | `lesson_url` |
-| `units` | `UnitResult` | `.unit` | `unit_title` | `subject_slug` | `key_stage` | `unit_url` |
-| `threads` | `ThreadResult` | `.thread` | `thread_title` | (via `subject_slugs`) | — | `thread_url` |
-| `sequences` | `SequenceResult` | `.sequence` | `sequence_title` | `subject_slug` | (via `key_stages`) | `sequence_url` |
+**Location**: `search-renderer.ts` line ~41
 
-## B4: Suggest Scope Silently Broken
+**Problem**: When `d.scope` is undefined, `scopeLabel` becomes
+`'results'`. `scopeObj(r, 'results')` then uses the default
+fallback and treats results as sequences. If the API returns
+lessons without a scope, titles will be wrong.
 
-**Location**: Widget renderer + `widget-script.ts` fallback logic.
+**Fix**: If `d.scope` is absent, either infer it from the result
+structure or treat as unknown scope and use neutral display.
 
-**Problem**: The widget fallback (line 118 of `widget-script.ts`)
-checks `fullData.results !== undefined && fullData.scope !== undefined`
-to match search results. Suggest returns
-`{ suggestions: [...], cache: { version, ttlSeconds } }` — no
-`results` property, no `scope` property.
+**Files**: `src/widget-renderers/search-renderer.ts`
 
-**Impact**: Suggest output falls through to raw JSON rendering
-or "Loading..." state.
+#### I4: Tool name escaping in `generateToolRendererMapJs`
 
-**Fix**: Add suggest-aware branching in the search renderer.
-When data has a `suggestions` property, render suggestion items
-instead of search cards. The `TOOL_RENDERER_MAP` already routes
-`search` to the `search` renderer, so suggest output will reach
-the renderer — the renderer just needs to handle the shape.
+**Location**: `src/widget-script-state.ts` lines 21-29
 
-## B2: Zero Compile-Time Feedback on Renderer Fields
+**Problem**: Tool names and renderer IDs are interpolated into
+generated JS without escaping. A future tool name containing `'`
+or `\` would break the generated JS.
 
-**Location**: `apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/search-renderer.ts`
+**Fix**: Use `JSON.stringify` for the map object, or escape
+keys and values. TDD.
 
-**Problem**: Raw JS string template accessing index document
-fields with no type checking. Any ES index document schema change
-silently breaks the widget.
+**Files**: `src/widget-script-state.ts`
 
-**Fix**: Contract tests that validate the *fixed* renderer's field
-access against generated index document types. Tests import from
-generated Zod schemas (`SearchLessonsIndexDocSchema`, etc.), not
-hardcoded strings — so they automatically detect drift when
-`pnpm type-gen` produces new field shapes.
+#### I5: Explore renderer omits sequences scope
 
----
+**Location**: `src/widget-renderers/explore-renderer.ts` line 18
 
-## Execution Plan
+**Problem**: `var scopes = ['lessons', 'units', 'threads']` —
+the explore-topic tool could add `sequences` in the future,
+and they would not be rendered.
 
-### Phase 0: Track 1a — Non-Search Shell-Only Reduction
+**Fix**: Document as intentional and add a comment, OR add
+`sequences` defensively. Check the actual explore-topic tool
+implementation to determine whether sequences are returned.
 
-**RED**: Add tests that assert non-search widget templates and
-scripts do not consume tool payload fields or renderer map paths.
-Run tests. They MUST fail against current mixed rendering state.
+**Files**: `src/widget-renderers/explore-renderer.ts`
 
-**GREEN**: Remove non-search payload rendering paths and keep
-static branding-only shells. Run tests. They MUST pass.
+### Suggestions (Lower Priority)
 
-**REFACTOR**: Reduce duplicated non-search widget logic, keep
-boundaries clear, and update TSDoc/comments where needed.
+- De-duplicate repeated card/link HTML assembly across renderers
+  into a shared helper function to reduce patch fan-out for
+  security fixes (e.g. `rel` attributes were fixed in 3 places)
+- Add dispatch-level E2E Playwright coverage for
+  `browse-curriculum` and `explore-topic` tool names
+- Normalise data at MCP tool boundary (Track 2 preparation):
+  renderers should not know about snake_case vs camelCase
 
-**Likely files to change**:
+### Execution Approach for Phase 5
 
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-script.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts`
+Use genuine three-level TDD per finding:
 
-**Deterministic validation**:
+1. **RED**: Write tests that expose the problem (e.g. renderer
+   throws → Playwright test shows crash; CTA with single quote
+   → unit test shows parse failure)
+2. **GREEN**: Implement the minimal fix
+3. **REFACTOR**: Clean up, update TSDoc
+
+Run full quality gates after all fixes:
 
 ```bash
-rg -n "toolOutput|toolResponseMetadata|TOOL_RENDERER_MAP|getRendererForTool" \
-  apps/oak-curriculum-mcp-streamable-http/src/widget-*.ts \
-  apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts
-
-pnpm test --filter @oaknational/oak-curriculum-mcp-streamable-http
-```
-
-### Phase 1: B3 — Widget Field Fix (RED/GREEN/REFACTOR at all levels)
-
-> See [TDD Phases component](../../templates/components/tdd-phases.md)
-
-**E2E RED**: Update Playwright test fixtures in
-`tests/widget/fixtures.ts` and `tests/widget/renderer-fixtures.ts`
-to use the real SDK result shape:
-
-- `SEARCH_OUTPUT_FIXTURE`: change from flat `{ lessonTitle }` to
-  nested `{ lesson: { lesson_title, subject_slug, key_stage, lesson_url } }`
-- `SEARCH_LESSONS_ARRAY_FIXTURE`: same transformation
-
-Run Playwright tests. They MUST fail — the renderer will produce
-"Untitled" cards.
-
-**Unit RED**: Write unit tests for a field-extraction helper that
-extracts title, subject, key stage, and URL from each scope's
-result type. Tests should cover all four scopes. Run tests. They
-MUST fail — the helper does not exist.
-
-**GREEN**: Fix the search renderer to access the correct nested
-fields. Implement scope-aware field extraction. The renderer must
-handle all four scopes — each has a different nested property
-(`lesson`, `unit`, `thread`, `sequence`). Run all tests. They
-MUST pass.
-
-**REFACTOR**: Remove fallback field chains
-(`l.lessonTitle || l.title || l.slug || 'Untitled'`). Update TSDoc.
-
-**Files to change**:
-
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/search-renderer.ts`
-- `apps/oak-curriculum-mcp-streamable-http/tests/widget/fixtures.ts`
-- `apps/oak-curriculum-mcp-streamable-http/tests/widget/renderer-fixtures.ts`
-
-**Deterministic validation**:
-
-```bash
-pnpm test:ui
-# Expected: Playwright search rendering tests pass with correct field access
-```
-
-### Phase 2: B4 — Suggest Rendering (RED/GREEN/REFACTOR at all levels)
-
-**E2E RED**: Add a Playwright test fixture using the real
-`SuggestionResponse` shape (`{ suggestions: [...], cache: {...} }`).
-Write a test asserting suggestion items render with their text.
-Run test. It MUST fail.
-
-**Unit RED**: Write unit tests for suggest rendering logic.
-Tests should verify that suggestion items are rendered as a list.
-Run tests. They MUST fail.
-
-**GREEN**: Add suggest-aware branching in the search renderer.
-When data has `suggestions` property (and no `results`), render
-suggestions. Update `widget-script.ts` fallback logic if needed
-to recognise the suggest shape. Run all tests. They MUST pass.
-
-**REFACTOR**: Add suggest fixture data file. Update TSDoc.
-
-**Files to change**:
-
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/search-renderer.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-script.ts` (if fallback needs updating)
-- `apps/oak-curriculum-mcp-streamable-http/tests/widget/renderer-fixtures.ts`
-
-**Deterministic validation**:
-
-```bash
-pnpm test:ui
-# Expected: Playwright suggest rendering test passes
-```
-
-### Phase 3: B2 — Contract Tests (RED/GREEN/REFACTOR)
-
-**RED**: Write contract tests that validate the *fixed* renderer's
-field access against generated index document types. For each scope:
-assert that every field the renderer accesses exists on the
-corresponding generated Zod schema (`SearchLessonsIndexDocSchema`,
-`SearchUnitsIndexDocSchema`, `SearchThreadIndexDocSchema`,
-`SearchSequenceIndexDocSchema`). Run tests. They MUST pass
-(because the renderer was fixed in Phase 1). If they fail,
-the renderer still has wrong field access — fix it.
-
-**GREEN**: Contract tests are the deliverable. They catch
-*future* drift, not current bugs (those were fixed in Phase 1).
-
-**REFACTOR**: Add TSDoc explaining what the contract tests prove
-and when they would fail (schema change without renderer update).
-
-**Files to create/change**:
-
-- New test file (location TBD — could be in the HTTP server's
-  test directory or alongside the renderer)
-
-**Deterministic validation**:
-
-```bash
-pnpm test --filter @oaknational/oak-curriculum-mcp-streamable-http
-# Expected: contract tests pass
-```
-
-### Phase 4: Quality Gates + Review
-
-> See [Quality Gates](../../templates/components/quality-gates.md)
-> and [Adversarial Review](../../templates/components/adversarial-review.md)
-
-Full quality gate chain from repo root:
-
-```bash
-pnpm clean
-pnpm type-gen
-pnpm build
 pnpm type-check
-pnpm format:root
-pnpm markdownlint:root
 pnpm lint:fix
 pnpm test
 pnpm test:ui
-pnpm test:e2e
-pnpm smoke:dev:stub
 ```
 
-Invoke specialist reviewers:
+Invoke specialist reviewers after Phase 5:
 
 - `code-reviewer` (gateway)
-- `test-reviewer` (contract tests, fixture updates, TDD compliance)
+- `security-reviewer` (XSS and injection findings)
 
 ---
 
-## Non-Goals (YAGNI)
+## Reference Documentation
 
-- **Redesigning the widget rendering architecture** — fix the
-  field access, do not redesign the infrastructure.
-- **Replacing the rendering system with React components** — this is
-  explicitly deferred to Track 2, after the pre-merge window.
-- **Track 2 research and ADR backlog expansion** — stays in
-  [mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md).
-- **Adding typed renderers in TypeScript** — the widget runs as
-  a JS string template inside a ChatGPT sandbox. Type safety
-  comes from contract tests, not from converting to TypeScript.
-- **SDK-level type safety changes** — addressed in
-  [search-dispatch-type-safety.md](../archive/completed/search-dispatch-type-safety.md).
-- **W2-W8 warnings** — future workstreams.
+Widget rendering architecture, data shapes, sandbox
+dependencies, edge cases, and known resilience gaps are
+documented permanently in the HTTP MCP server README:
+
+[README.md — Widget Rendering Architecture](../../../../apps/oak-curriculum-mcp-streamable-http/README.md)
 
 ---
 
-## Risk Assessment
+## Related Plans
 
-> See [Risk Assessment component](../../templates/components/risk-assessment.md)
-
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| B3 renderer fix breaks widget rendering for other scopes | Medium | Playwright tests catch regressions | E2E tests for all scopes before changing renderer |
-| Playwright fixtures diverge from real SDK shapes again | Medium | Future schema changes break tests | Contract tests (B2) validate field existence against generated types |
-| B4 suggest rendering conflicts with search renderer logic | Low | Suggest is a distinct data shape | Clear branching on `suggestions` vs `results` property |
-| B2 contract tests are brittle against schema changes | Low | Tests derive from generated types | Import from Zod schemas, not hardcoded strings |
-
----
-
-## Dependencies
-
-**Execution dependency**: Tracks 1a and 1b are both defined in this
-file and can execute in parallel where they do not modify the same
-paths.
-**Release dependency**: Upcoming merge is blocked until all Track
-1a and Track 1b acceptance criteria in this file are complete.
-**Note**: The dispatch plan (B1/W1) is complete and archived.
-Even with improved dispatch typing in place, the renderer fixes in
-this file remain independently required for correct ChatGPT widget
-output.
-
-**Related Plans**:
-
-- [mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Track 2 research, specialist, refactor, and future feature backlog
+- [mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Track 2 research and post-merge extensions
 - [search-dispatch-type-safety.md](../archive/completed/search-dispatch-type-safety.md) — SDK-level B1+W1 (complete)
 - [Phase 3a (archived)](../archive/completed/phase-3a-mcp-search-integration.md) — source of adversarial findings
 

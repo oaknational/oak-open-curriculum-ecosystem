@@ -72,9 +72,16 @@ export function restoreEnv(snapshot: EnvSnapshot): void {
   });
 }
 
+/**
+ * Architectural debt: smoke tests mutate global `process.env` because the
+ * local server reads config from `process.env` at startup. The proper fix
+ * is to build a per-mode env object and pass it via
+ * `loadRuntimeConfig({ processEnv: modeEnv })`, eliminating all mutation.
+ * See ADR-078 (DI for testability).
+ */
 function restoreKey(key: keyof EnvSnapshot, value: string | undefined): void {
   if (value === undefined) {
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
+    // eslint-disable-next-line no-restricted-properties -- Architectural debt: smoke tests mutate process.env (see TSDoc above)
     Reflect.deleteProperty(process.env, key);
   } else {
     process.env[key] = value;

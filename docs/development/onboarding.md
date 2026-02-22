@@ -5,6 +5,17 @@ Welcome to the Oak MCP ecosystem — infrastructure for AI agents and teacher se
 > **Note**: This repo works with the [Oak Open Curriculum API](https://open-api.thenational.academy/) — Oak's openly-licensed curriculum data, organised to support reuse. See the root README for context on how this relates to Oak's main site.
 >
 > **Canonical path**: this is the single onboarding source of truth.
+>
+> **Audience**: human contributors (especially junior-to-mid-level developers).
+>
+> **AI agents**: onboarding starts with the `start-right` workflow:
+>
+> - Cursor command: [`.cursor/commands/jc-start-right.md`](../../.cursor/commands/jc-start-right.md)
+> - Prompt: [`.agent/prompts/start-right.prompt.md`](../../.agent/prompts/start-right.prompt.md)
+> - Skill: [`.agent/skills/start-right/SKILL.md`](../../.agent/skills/start-right/SKILL.md)
+>   Then continue with [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md).
+>
+> **Architecture source of truth**: Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
 
 ## 0. Choose Your Path
 
@@ -31,7 +42,9 @@ Everything in this repository flows from OpenAPI specifications:
 
 Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/openapi-pipeline.md)
 
-**Key ADRs**:
+Start with the [ADR index](../architecture/architectural-decisions/), then read this lightweight foundational set:
+
+**Foundational ADRs**:
 
 - [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
 - [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
@@ -58,7 +71,7 @@ pnpm install
 pnpm test       # Unit/integration suites that should pass without API keys
 pnpm type-check # TypeScript compilation checks
 pnpm lint:fix   # Linting and auto-fixes
-pnpm make       # install → build (includes type-gen via Turbo deps) → type-check → doc-gen → lint:fix → markdownlint → format
+pnpm make       # install → build (includes type-gen via Turbo deps) → type-check → doc-gen → lint:fix → markdownlint:root → format:root
 ```
 
 `pnpm type-gen` rebuilds the SDK and the shared `parseSchema` helper so every workspace stays aligned with the OpenAPI schema.
@@ -66,7 +79,7 @@ pnpm make       # install → build (includes type-gen via Turbo deps) → type-
 ## 5. Run Full Quality Gates (When Ready)
 
 ```bash
-pnpm qg  # format-check → markdownlint-check → type-check → lint → test → test:ui → test:e2e → smoke
+pnpm qg  # format-check:root → markdownlint-check:root → type-check → lint → test → test:ui → test:e2e → smoke
 ```
 
 Use `pnpm qg` once you are ready to run full-gate validation across UI, E2E, and smoke suites. This is slower and typically requires service credentials.
@@ -92,6 +105,12 @@ If `pnpm qg` fails, run the affected suite directly and check latest issues/ADRs
 - **Curriculum SDK (`packages/sdks/oak-curriculum-sdk`)** – The type generation pipeline. Keep generation scripts deterministic, update docs via `pnpm doc-gen`, and ensure new helpers are exported from `src/validation/index.ts`.
 - **Semantic Search (`apps/oak-search-cli`)** – The largest workspace. 4-way RRF hybrid search across 7 Elasticsearch indices, with ingestion, query processing, ground truth evaluation, and benchmark suite. Currently being extracted into a standalone Search SDK + CLI. See [ARCHITECTURE.md](../../apps/oak-search-cli/docs/ARCHITECTURE.md) for the full picture.
 - **MCP Servers** – Expose the curriculum to AI agents. Consume SDK exports directly; configuration examples live in the app READMEs.
+
+**Domain ADR handoffs** (read when you start work in that area):
+
+- **SDK generation**: [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data.md), [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md), [ADR-031](../architecture/architectural-decisions/031-generation-time-extraction.md), [ADR-048](../architecture/architectural-decisions/048-shared-parse-schema-helper.md)
+- **Semantic search**: [ADR-063](../architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md), [ADR-074](../architecture/architectural-decisions/074-elastic-native-first-philosophy.md), [ADR-076](../architecture/architectural-decisions/076-elser-only-embedding-strategy.md)
+- **MCP runtime/auth**: [ADR-107](../architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md), [ADR-113](../architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md), [ADR-115](../architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
 
 ## 8. Documentation Expectations
 

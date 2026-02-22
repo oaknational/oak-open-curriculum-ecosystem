@@ -3,7 +3,7 @@ name: distillation
 description: >-
   Extract high-signal patterns from the napkin into a curated
   distilled.md rulebook. Triggered when the napkin exceeds
-  ~1,200 lines. Handles archival, deduplication, and rotation.
+  ~800 lines. Handles archival, deduplication, and rotation.
 version: 1.0.0
 date: 2026-02-16
 ---

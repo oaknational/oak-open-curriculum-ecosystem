@@ -56,7 +56,7 @@ The practice improves through use. Mistakes, corrections, and discoveries flow t
 ```mermaid
 graph LR
     W[Work] -->|mistakes & discoveries| N[Napkin]
-    N -->|accumulates ~1200 lines| D[Distilled Learnings]
+    N -->|accumulates ~800 lines| D[Distilled Learnings]
     D -->|high-signal patterns| R[Rules & Directives]
     R -->|govern| W
 ```
@@ -88,8 +88,12 @@ graph LR
 ```
 
 - **Commands** (`.cursor/commands/`) — slash commands that initiate structured workflows
-- **Prompts** (`.agent/prompts/`) — reusable playbooks that provide domain context and operational guidance
-- **Plans** (`.agent/plans/`) — executable work plans with YAML frontmatter for progress tracking. Active plans live in `active/`, completed plans move to `archive/completed/`
+- **Prompts** (`.agent/prompts/`) — reusable playbooks that provide domain context and operational guidance. Session entry points (e.g. `semantic-search.prompt.md`) combine grounding, context, and a pointer to the active execution plan
+- **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from strategic overview down to hands-on implementation tasks:
+  1. **Strategic index** — `high-level-plan.md` cross-collection overview
+  2. **Collection roadmaps** — e.g. `semantic-search/roadmap.md` milestone sequence
+  3. **Active execution plans** — e.g. `semantic-search/active/widget-search-rendering.md` with YAML frontmatter, phased execution, and deterministic validation. Active plans live in `active/`, completed plans move to `archive/completed/`
+  4. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement the lowest-level active plans with session-scoped implementation tasks, batch breakdowns, and review checkpoints. These are created per-session and track fine-grained progress that is too ephemeral for the active plan itself
 - **Templates** (`.agent/plans/templates/`) — reusable plan components ([ADR-117](../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md))
 - **Quality gates** — see [rules.md](rules.md) and `pnpm qg`. All gates are always blocking.
 
@@ -109,6 +113,41 @@ graph LR
 | `.cursor/agents/` | Sub-agent definitions (Cursor-specific) |
 | `.cursor/skills/` | Skills (Cursor-specific) |
 | `docs/architecture/architectural-decisions/` | Permanent architectural decision records |
+
+## Feedback Loops and Recursive Self-Improvement
+
+The practice is stabilised by interlocking feedback loops -- the same mechanism that stabilises any complex system. Each loop is a cycle where outputs feed back to improve inputs.
+
+```mermaid
+graph TB
+    subgraph negative ["Negative Feedback Loops — error correction"]
+        QG["Quality Gates<br/>catch regressions"]
+        SAR["Sub-agent Reviews<br/>catch design issues"]
+        LL2["Learning Loop<br/>napkin → distilled → rules"]
+    end
+
+    subgraph positive ["Positive Feedback Loops — capability growth"]
+        AIA["Agents improve agents<br/>architect → templates → better reviews"]
+        STP["Self-teaching property<br/>use → discovery → fluency"]
+        CONSOL["Consolidation<br/>extract common threads → simpler system"]
+    end
+
+    negative --> positive
+```
+
+**Negative feedback loops** correct errors and prevent drift:
+
+- **Quality gates** catch regressions before they propagate
+- **Sub-agent reviews** catch design, security, and architectural issues
+- **The learning loop** converts mistakes into rules that prevent repetition
+
+**Positive feedback loops** compound capability over time:
+
+- **Agents improve agents** -- the subagent-architect reviews and upgrades other agents, which then produce better reviews, which improve code quality, which raises the bar for what agents must understand. This recursive self-improvement is analogous to how a mature engineering team raises its own standards through retrospectives and practice refinement
+- **Self-teaching** -- each new user (human or AI) who follows the practice from `AGENT.md` discovers the system through use, and their questions and mistakes feed back into documentation improvements
+- **Consolidation** -- the `/jc-consolidate-docs` workflow and the subagent-architect's ecosystem consolidation procedure both extract common threads into shared, reusable structures. Each consolidation pass leaves the system simpler and more consistent
+
+These loops operate at different timescales -- quality gates within seconds, learning loops within sessions, consolidation across sessions -- but they all serve the same purpose: keeping the practice aligned with reality and continuously improving.
 
 ## The Self-Teaching Property
 

@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 2 January 2026  
+**Last Updated**: 22 February 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -79,6 +79,7 @@ Research on auth patterns and security.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
+| **[auth/clerk-production-migration.md](auth/clerk-production-migration.md)** | **Clerk production migration** | **Shared vs independent instance decision, phased social provider rollout, access control strategy, operational security controls, go-live gates** |
 | [clerk-testing-patterns.md](clerk-testing-patterns.md) | Clerk testing | Test patterns for Clerk auth |
 | [clerk-unified-auth-mcp-nextjs.md](clerk-unified-auth-mcp-nextjs.md) | Unified auth architecture | MCP + Next.js + Clerk |
 | [http-level-auth-architecture.md](http-level-auth-architecture.md) | HTTP auth patterns | |
@@ -123,7 +124,13 @@ Research on API structure and data analysis.
 
 ---
 
-## Recent Additions (2025-12-26 & 2025-12-27)
+## Recent Additions (2026-02-22)
+
+| Document | Summary |
+|----------|---------|
+| [auth/clerk-production-migration.md](auth/clerk-production-migration.md) | Comprehensive research on migrating Clerk from development to production for public alpha. Covers shared vs independent instance decision, phased social provider rollout, access control strategy, operational security controls, edge rate limiting, and go-live gates. Reviewed by architecture, security, and docs specialists. |
+
+## Earlier Additions (2025-12-26 & 2025-12-27)
 
 | Document | Summary |
 |----------|---------|

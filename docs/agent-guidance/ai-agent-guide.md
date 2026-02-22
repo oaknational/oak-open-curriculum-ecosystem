@@ -4,12 +4,17 @@ This guide helps AI agents and human developers work effectively with the Oak MC
 
 ## Getting Started
 
-1. Read [AGENT.md](../../.agent/directives/AGENT.md) and follow all instructions
-2. Read [rules.md](../../.agent/directives/rules.md) — the authoritative rules
-3. Read [distilled.md](../../.agent/memory/distilled.md) — curated rules and patterns from prior sessions
-4. Read [testing-strategy.md](../../.agent/directives/testing-strategy.md) — TDD at all levels
-5. Create your todo list (see [Task Management](#task-management) below)
-6. Mark the first task as in-progress and begin
+1. Start with the `start-right` workflow:
+   - Cursor command: [`.cursor/commands/jc-start-right.md`](../../.cursor/commands/jc-start-right.md)
+   - Prompt: [`.agent/prompts/start-right.prompt.md`](../../.agent/prompts/start-right.prompt.md)
+   - Skill: [`.agent/skills/start-right/SKILL.md`](../../.agent/skills/start-right/SKILL.md)
+2. Read [AGENT.md](../../.agent/directives/AGENT.md) and follow all instructions
+3. Read [rules.md](../../.agent/directives/rules.md) — the authoritative rules
+4. Read the [ADR index](../architecture/architectural-decisions/) — ADRs define how the system should work and are the architectural source of truth
+5. Read [distilled.md](../../.agent/memory/distilled.md) — curated rules and patterns from prior sessions
+6. Read [testing-strategy.md](../../.agent/directives/testing-strategy.md) — TDD at all levels
+7. Create your todo list (see [Task Management](#task-management) below)
+8. Mark the first task as in-progress and begin
 
 ## Standard Architecture
 
@@ -25,6 +30,7 @@ Key implementation principles:
 - Small modules with clear interfaces
 - Dependency injection instead of direct imports for runtime concerns
 - Strict lint boundaries for safe cross-package interactions
+- Architectural changes must align with ADRs; check domain ADRs before implementation-level deep dives
 
 ## Task Management
 
@@ -115,7 +121,7 @@ Agent sessions produce learnings — repo quirks, type patterns, build issues, u
 ### Operational memory (napkin and distilled)
 
 1. **Every session**: read `distilled.md` first (compact, actionable), then the napkin. Log findings to the napkin as you work.
-2. **When the napkin exceeds ~1,200 lines**: follow the [distillation skill](../../.cursor/skills/distillation/SKILL.md) — extract patterns into `distilled.md`, archive the old napkin, and start fresh.
+2. **When the napkin exceeds ~800 lines**: follow the [distillation skill](../../.cursor/skills/distillation/SKILL.md) — extract patterns into `distilled.md`, archive the old napkin, and start fresh.
 3. **When consolidating docs**: check whether `distilled.md` entries have graduated to permanent documentation. If so, remove them from `distilled.md` — it should only hold what is not already captured permanently.
 
 The [napkin skill](../../.cursor/skills/napkin/SKILL.md) governs day-to-day usage; the [distillation skill](../../.cursor/skills/distillation/SKILL.md) governs rotation and curation.

@@ -4,14 +4,19 @@
 
 - **New to the repo?** → [Developer Onboarding](development/onboarding.md) – canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
 - **Quick start?** → [Quick Start Guide](quick-start.md) - Zero-setup path to productive changes
-- **Working with AI?** → [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Essential patterns and practices
+- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](agent-guidance/ai-agent-guide.md)
+- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) - Architectural Decision Records define how the system should work
 
 ## Core Documentation
 
 ### Architecture
 
 - [OpenAPI Pipeline](architecture/openapi-pipeline.md) - **THE** architecture doc: how types flow from schema
-- [Architecture Decision Records](architecture/architectural-decisions/) - All architectural decisions
+- [Architecture Decision Records](architecture/architectural-decisions/) - Architectural source of truth
+- [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 - [Provider System](architecture/provider-system.md) - Multi-provider MCP architecture
 
 ### Development

@@ -4,81 +4,79 @@
  * These are pure functions that generate HTML strings.
  * They run inside the ChatGPT sandbox as embedded JavaScript.
  *
+ * Field-extraction helpers handle the scope-specific nested
+ * structures from the SDK's search result types:
+ * - lessons: `result.lesson.lesson_title` etc.
+ * - units: `result.unit.unit_title` etc. (unit can be null)
+ * - threads: `result.thread.thread_title`, `subject_slugs` (array)
+ * - sequences: `result.sequence.sequence_title`, `key_stages` (array)
+ *
  * @see widget-script.ts - Main widget script that uses these helpers
  */
 
 /**
- * Helper JavaScript functions that are shared across all renderers.
+ * Helper JavaScript functions shared across all renderers.
  *
  * Includes:
- * - esc(): HTML entity escaping
- * - renderSection(): Section container with title and optional badge
- * - renderItem(): Item card with title and metadata
- * - renderBadge(): Count/status badge
- * - renderLink(): Oak website link with openExternal support
+ * - esc(): HTML entity escaping (prevents XSS)
+ * - extractTitle(result, scope): title from nested scope object
+ * - extractSubject(result, scope): subject, joining arrays for threads
+ * - extractKeyStage(result, scope): key stage, joining arrays for sequences
+ * - extractUrl(result, scope): scope-appropriate URL field
  */
 export const WIDGET_HELPERS = `
-/**
- * Escapes HTML entities to prevent XSS.
- */
 function esc(s) {
   if (typeof s !== 'string') return '';
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
-/**
- * Renders a section container with title and optional badge.
- */
-function renderSection(title, content, badgeCount) {
-  const badge = badgeCount !== undefined ? '<span class="badge">' + badgeCount + '</span>' : '';
-  return '<div class="sec"><h2 class="sec-ttl">' + esc(title) + badge + '</h2>' + content + '</div>';
+function scopeObj(r, scope) {
+  var key = scope === 'lessons' ? 'lesson'
+    : scope === 'units' ? 'unit'
+    : scope === 'threads' ? 'thread'
+    : scope === 'sequences' ? 'sequence'
+    : null;
+  return (key && r && r[key]) || null;
 }
 
-/**
- * Renders an item card with title and optional metadata.
- */
-function renderItem(title, meta, link) {
-  let h = '<div class="item"><p class="item-ttl">' + esc(title) + '</p>';
-  if (meta) h += '<p class="meta">' + esc(meta) + '</p>';
-  if (link) h += '<a class="link" href="' + esc(link) + '" target="_blank" onclick="openOnOakWebsite(event, \\'' + esc(link) + '\\')">View on Oak →</a>';
-  h += '</div>';
-  return h;
+function extractTitle(r, scope) {
+  var o = scopeObj(r, scope);
+  if (!o) return 'Untitled';
+  if (scope === 'lessons') return o.lesson_title || o.lesson_slug || 'Untitled';
+  if (scope === 'units') return o.unit_title || o.unit_slug || 'Untitled';
+  if (scope === 'threads') return o.thread_title || o.thread_slug || 'Untitled';
+  return o.sequence_title || o.sequence_slug || 'Untitled';
 }
 
-/**
- * Renders a badge with count or text.
- */
-function renderBadge(text) {
-  return '<span class="badge">' + esc(String(text)) + '</span>';
+function extractSubject(r, scope) {
+  var o = scopeObj(r, scope);
+  if (!o) return '';
+  if (scope === 'threads') {
+    var slugs = o.subject_slugs;
+    if (Array.isArray(slugs) && slugs.length > 0) return slugs.join(' / ');
+    return '';
+  }
+  return o.subject_title || o.subject_slug || '';
 }
 
-/**
- * Renders a link to Oak website with openExternal support.
- */
-function renderOakLink(url, text) {
-  if (!url) return '';
-  const label = text || 'View on Oak →';
-  return '<a class="link" href="' + esc(url) + '" target="_blank" onclick="openOnOakWebsite(event, \\'' + esc(url) + '\\')">' + esc(label) + '</a>';
+function extractKeyStage(r, scope) {
+  var o = scopeObj(r, scope);
+  if (!o) return '';
+  if (scope === 'threads') return '';
+  if (scope === 'sequences') {
+    var ks = o.key_stages;
+    if (Array.isArray(ks) && ks.length > 0) return ks.join(' / ');
+    return '';
+  }
+  return o.key_stage_title || o.key_stage || '';
 }
 
-/**
- * Renders a list container.
- */
-function renderList(items) {
-  return '<div class="list">' + items + '</div>';
-}
-
-/**
- * Renders a code block.
- */
-function renderCode(text) {
-  return '<code>' + esc(text) + '</code>';
-}
-
-/**
- * Renders a pre-formatted JSON block.
- */
-function renderJson(data) {
-  return '<pre style="font-size:12px;max-height:300px;overflow:auto">' + esc(JSON.stringify(data, null, 2)) + '</pre>';
+function extractUrl(r, scope) {
+  var o = scopeObj(r, scope);
+  if (!o) return '';
+  if (scope === 'lessons') return o.lesson_url || '';
+  if (scope === 'units') return o.unit_url || '';
+  if (scope === 'threads') return o.thread_url || '';
+  return o.sequence_url || '';
 }
 `.trim();

@@ -65,6 +65,22 @@ changing behaviour.
   etc. from the SDK's `type-helpers.ts`. For plain objects
   whose key type IS `string` (e.g. Zod shapes), `for...in`
   is a language construct and is acceptable.
+- ESLint `@typescript-eslint/no-restricted-types` in the
+  strict config restricts 10 type-destroying patterns:
+  `Record<string, unknown>`, `Record<string, any>`,
+  `Record<string, undefined>`, `Readonly<Record<string, undefined>>`,
+  `Record<PropertyKey, undefined>`, `object`, `Object`,
+  `Function`, `unknown[]`, `{}`. The `satisfies Record<...>`
+  pattern is acceptable because `satisfies` validates without
+  widening — the inferred type stays narrow.
+- `{}` as a generic constraint (`T extends {}`) is an escape
+  hatch, not a solution. MCP responses have full Zod
+  validation — the types ARE known. Use specific per-type
+  builder functions instead of generic `T extends object`.
+- ESLint flat config uses last-writer-wins for rule
+  declarations. When `strict.ts` overrides a rule from
+  `recommended.ts`, all entries from recommended are silently
+  lost. Always replicate restricted types in strict.
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
 - Commander `this.args` in `function action(this: Command)`
@@ -78,6 +94,30 @@ changing behaviour.
   use `'excludes' in value` (property check) not `Array.isArray(value)` —
   `Array.isArray` narrows to `string[]` but leaves the else branch
   still containing both union members.
+
+## Widget Rendering (ChatGPT Sandbox)
+
+Widget architecture, dispatch pattern, data shapes, sandbox
+dependencies, edge cases, and resilience hardening are
+documented in the HTTP MCP server README (`Widget Rendering
+Architecture` section). Dev gotchas not covered there:
+
+- Zod schema fixtures must use parent-level enum values (e.g.
+  `'science'` not `'biology'` for `subject_parent`) — the
+  generated `SUBJECTS` enum only contains top-level subjects
+- Generic `T extends SomeBase` constraints fail with TS7053
+  weak type detection when union members don't overlap
+  sufficiently. Use per-type builder functions instead.
+- `onclick` inline handlers are exploitable in HTML-embedded
+  JS: `esc()` HTML-encodes `'` to `&#39;`, but the browser
+  HTML-decodes the attribute value before evaluating as JS.
+  Use `data-oak-url` + delegated click handler instead.
+- `JSON.stringify` for ALL dynamic data injected into
+  generated JS string templates — the non-negotiable
+  standard pattern for the `WIDGET_SCRIPT`.
+- `expect.any(String)` returns `any` which triggers
+  `no-unsafe-assignment`. Use `toHaveProperty` for
+  structural checks on `unknown` values from `new Function`.
 
 ## Elasticsearch
 
@@ -118,6 +158,13 @@ changing behaviour.
   IO allowed, NO mocks
 - Naming: `test:*` for vitest tests, `smoke:*` for
   standalone tsx scripts
+- For refactoring TDD (runtime behaviour unchanged), the
+  RED phase is compiler errors from signature changes, not
+  runtime test failures. Update test call sites first.
+- Compile-time type assertions (e.g. `AssertNoX<T>`) are
+  inert unless the resulting type is consumed in a binding
+  or type path — all three reviewers independently caught
+  this pattern
 - Compliant `process.env` pattern:
   `loadRuntimeConfig(testEnv)` — never mutate global
   `process.env`
@@ -126,6 +173,13 @@ changing behaviour.
 - ESLint complexity counts `??` and `?.` as branches — five
   nullish-coalescing expressions in one function can breach the
   limit. Fix: extract the merge logic into a named helper function
+- `tsconfig.json` `include` patterns `**/*.test.ts` and
+  `**/*.spec.ts` do NOT match test utility files (harness,
+  fixture builder). Add `tests/**/*.ts` to include array
+  when creating non-test utilities in test directories.
+- ESLint `projectService: true` uses the nearest
+  `tsconfig.json`, not `tsconfig.lint.json`. Files must be
+  included in both for linting to work.
 - Repeated multi-line test setup → extract scoped helper inside
   `describe` block (e.g. `registerWithOverrides`, `baseEnv`)
 - Spread with optional properties widens types:
@@ -189,22 +243,11 @@ changing behaviour.
   local interface (`SearchRetrievalService`) structurally
   compatible with the concrete type. MCP servers inject the
   concrete implementation.
-- Fail-fast ES credentials pattern: validate at entry point
-  (Zod env schema for HTTP; explicit check in `loadRuntimeConfig`
-  for STDIO), make the type required everywhere downstream, delete
-  all `if-missing` branches as unreachable dead code. Stub mode
-  uses `createStubSearchRetrieval()` — a pure-data SDK function,
-  NOT a test fake — so no real ES client is ever constructed.
 - Stub vs fake distinction: runtime stubs (plain functions,
   live in SDK, used in product code stub mode) vs test fakes
   (`vi.fn()`, live in `test-helpers/`, used in tests only)
 - Prefer `git worktree` over `git stash` for baseline
   comparisons — stash risks lost work
-- Per-request transport pattern (ADR-112): factory closure
-  captures shared deps; per request creates `McpServer` +
-  `StreamableHTTPServerTransport`, connects, handles, cleans
-  up via `res.on('close')`. Cleanup errors logged, not
-  swallowed (`Promise.resolve().then().catch(logger.error)`)
 - When extracting types from a composition root to fix layer
   violations, the composition root itself may still need a
   local `import type` for its own internal usage — a
@@ -212,6 +255,11 @@ changing behaviour.
 - `void promise` silently swallows rejections — use
   `.catch(logger.error)` for cleanup promises in event
   handlers like `res.on('close')`
+- TSDoc `@see` references should point to ADRs, not plan
+  files — plans are archived/deleted after completion
+- "noauth" in MCP means "no scope check", not "no HTTP
+  auth" — the semantic confusion was root cause of the
+  OAuth spec compliance issue
 
 ## Domain Knowledge
 

@@ -12,9 +12,8 @@ export function createAssertionLogger(context: SmokeContext, assertion: string):
 
 export function logAssertionSuccess(logger: Logger, message: string, details?: JsonObject): void {
   logger.info(message, details);
-  const detailText =
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    details && Object.keys(details).length > 0 ? ` ${JSON.stringify(details)}` : '';
+  const serialized = details ? JSON.stringify(details) : '';
+  const detailText = serialized.length > 2 ? ` ${serialized}` : '';
   console.log(`✅ ${message}${detailText}`);
 }
 

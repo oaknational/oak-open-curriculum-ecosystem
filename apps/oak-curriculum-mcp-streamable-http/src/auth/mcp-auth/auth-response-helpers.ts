@@ -18,6 +18,11 @@ export interface AuthLogContext {
 }
 
 /**
+ * Constraint for additional log context fields merged into {@link AuthLogContext}.
+ */
+type LoggableExtras = Readonly<Record<string, string | string[] | number | boolean | undefined>>;
+
+/**
  * Creates standardized log context for auth events.
  *
  * Pure function that constructs a consistent logging context object
@@ -35,14 +40,12 @@ export interface AuthLogContext {
  * ```
  */
 export function createAuthLogContext(req: Request, res: Response): AuthLogContext;
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-export function createAuthLogContext<T extends object>(
+export function createAuthLogContext<T extends LoggableExtras>(
   req: Request,
   res: Response,
   extra: T,
 ): AuthLogContext & T;
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-export function createAuthLogContext<T extends object = object>(
+export function createAuthLogContext<T extends LoggableExtras>(
   req: Request,
   res: Response,
   extra?: T,
@@ -168,12 +171,13 @@ export function handleAuthSuccess(
   logger: Logger,
   authData: AuthInfo,
 ): void {
+  const extraUserId = authData.extra?.userId;
   logger.debug(
     'Authentication successful',
     createAuthLogContext(req, res, {
       clientId: authData.clientId,
       scopes: authData.scopes,
-      userId: authData.extra?.userId,
+      userId: typeof extraUserId === 'string' ? extraUserId : undefined,
     }),
   );
   // NOTE: We no longer set req.auth here - Clerk's middleware handles that

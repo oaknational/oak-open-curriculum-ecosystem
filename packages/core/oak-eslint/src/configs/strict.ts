@@ -1,5 +1,5 @@
 import type { Linter } from 'eslint';
-import { recommended } from './recommended.js';
+import { recommended, RECOMMENDED_RESTRICTED_TYPES } from './recommended.js';
 
 export const strict: Linter.Config[] = [
   ...recommended,
@@ -84,6 +84,7 @@ export const strict: Linter.Config[] = [
         'error',
         {
           types: {
+            ...RECOMMENDED_RESTRICTED_TYPES,
             'Record<string, unknown>': {
               message:
                 'FORBIDDEN: Record<string, unknown> destroys type information. ' +
@@ -101,10 +102,25 @@ export const strict: Linter.Config[] = [
                 'FORBIDDEN: object type is too vague. ' +
                 'Use a specific type that describes the actual shape.',
             },
+            Object: {
+              message:
+                'FORBIDDEN: Object accepts any non-nullish value (identical to {}). ' +
+                'Use a specific type that describes the actual shape.',
+            },
+            Function: {
+              message:
+                'FORBIDDEN: Function accepts any callable with no parameter or return type safety. ' +
+                'Use a specific function signature, e.g. (arg: string) => number.',
+            },
             'unknown[]': {
               message:
                 'FORBIDDEN: unknown[] destroys type information. ' +
                 'What is the real shape of the data? Use a specific array type.',
+            },
+            '{}': {
+              message:
+                'FORBIDDEN: {} accepts any non-nullish value — it destroys type information. ' +
+                'Use a specific type that describes the actual shape.',
             },
           },
         },

@@ -4,6 +4,14 @@ The operator CLI for Oak's semantic search system. Consumes `@oaknational/oak-se
 
 > **All curriculum data flows through `@oaknational/curriculum-sdk`; types and validators are generated via `pnpm type-gen` from the OpenAPI schema.** When the API changes, `pnpm type-gen` regenerates types, and this workspace automatically uses the updated definitions. No manual type definitions exist — everything imports from the generated SDK.
 
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](../../docs/architecture/architectural-decisions/), then this search-focused set:
+
+- [ADR-063](../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) - Synonyms source-of-truth and deployment flow
+- [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) - Elastic-native-first strategy
+- [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER embedding strategy
+- [ADR-048](../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
+
 ## What It Does
 
 The semantic search workspace indexes Oak's entire curriculum into Elasticsearch for users to search using natural language.
@@ -78,7 +86,7 @@ And when that isn't possible, we can deploy open source models **within** the ES
 - **Simplified architecture** — Fewer dependencies, single platform
 - **Graceful degradation** — If inference unavailable, fallback to lexical search
 
-See [ADR-074: Elastic-Native-First Philosophy](/docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) for the detailed rationale.
+See [ADR-074: Elastic-Native-First Philosophy](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) for the detailed rationale.
 
 ---
 
@@ -167,8 +175,8 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
 3. **Run the standard quality gates**
 
    ```bash
-   pnpm make   # install → type-gen → build → type-check → doc-gen → lint → format
-   pnpm qg     # format-check → type-check → lint → markdownlint → unit/int/ui tests → smoke
+   pnpm make   # install → build/type-gen → type-check → doc-gen → lint:fix → markdownlint:root → format:root
+   pnpm qg     # format-check:root → markdownlint-check:root → type-check → lint → unit/int/ui tests → smoke
    ```
 
 4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**

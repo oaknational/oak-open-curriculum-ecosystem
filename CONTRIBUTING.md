@@ -17,6 +17,14 @@ By participating in this project, you agree to abide by our
 
 ## Architecture Guidelines
 
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](docs/architecture/architectural-decisions/), then these foundational ADRs:
+
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
+
 ### The Generation-First Principle
 
 This repository is fundamentally about **code generation from OpenAPI schemas**.
@@ -40,7 +48,7 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 - Re-validate or re-parse in runtime code (use generated helpers)
 - Widen types or add fallbacks for "missing" descriptors
 
-> **Critical**: Read [Schema-First Execution Directive](../.agent/directives/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behaviour must flow from generated artefacts.
+> **Critical**: Read [Schema-First Execution Directive](.agent/directives/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behaviour must flow from generated artefacts.
 
 ### Layer Boundaries
 

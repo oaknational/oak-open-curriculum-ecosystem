@@ -9,13 +9,14 @@ After non-trivial changes, invoke `code-reviewer` plus all specialist reviewers 
 
 ## Quick Triage (First 2 Minutes)
 
-Before starting any non-trivial task, answer these five questions to identify which specialists you will need:
+Before starting any non-trivial task, answer these questions to identify which specialists you will need:
 
 1. Does this touch auth, secrets, PII, or OAuth? → `security-reviewer`
 2. Does this change module boundaries, imports, or public APIs? → architecture reviewer(s)
 3. Does this add or modify tests? → `test-reviewer`
 4. Does this change types, generics, or schema flow? → `type-reviewer`
 5. Does this change tooling configs or quality gates? → `config-reviewer`
+6. Does this change onboarding flows (human or AI), start-right entrypoints, or ADR discoverability? → `onboarding-reviewer` (situational)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -62,6 +63,7 @@ Specialist on-demand (not standard roster — situational trigger only):
 - `release-readiness-reviewer` for release go/no-go checks at release boundaries
 - `ground-truth-designer` for semantic-search ground-truth design/review work
 - `subagent-architect` for sub-agent definition design/migration work
+- `onboarding-reviewer` for onboarding-path audits (accuracy, efficacy, readability, consistency, stale info, and gap detection)
 
 ## Worked Examples
 
@@ -72,6 +74,8 @@ Specialist on-demand (not standard roster — situational trigger only):
 **Test-only change**: Invoke `code-reviewer` + `test-reviewer` immediately.
 
 **Docs/ADR update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately.
+
+**Onboarding docs/path update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately. Add `onboarding-reviewer` when the change affects onboarding journeys (human and/or AI), `start-right` discoverability, or ADR progressive disclosure.
 
 **Release go/no-go**: Invoke `release-readiness-reviewer` (on-demand, situational trigger).
 
@@ -112,6 +116,13 @@ Task tool:
   subagent_type: "release-readiness-reviewer"
   readonly: true
   prompt: "Assess release go/no-go readiness with explicit gate status, blockers, and residual risks."
+```
+
+```yaml
+Task tool:
+  subagent_type: "onboarding-reviewer"
+  readonly: true
+  prompt: "Review onboarding paths for human contributors and AI agents, including start-right discoverability, ADR signposting, and documentation drift."
 ```
 
 ```yaml

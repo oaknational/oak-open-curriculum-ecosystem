@@ -5,7 +5,7 @@
  */
 
 import type { CtaConfig } from './types.js';
-import { CTA_REGISTRY } from './registry.js';
+import { CTA_LIST } from './registry.js';
 
 /**
  * Escapes special characters for safe embedding in JavaScript template literals.
@@ -32,6 +32,10 @@ function formatButtonText(icon: string | undefined, text: string): string {
 /**
  * Generates a single CTA config entry as JavaScript object literal.
  *
+ * Uses `JSON.stringify` for all string fields to prevent injection
+ * from special characters (single quotes, backslashes) in CTA labels.
+ * The `prompt` field uses a template literal for multi-line readability.
+ *
  * @param cta - CTA configuration
  * @returns JavaScript object literal string
  */
@@ -42,10 +46,10 @@ function generateCtaConfigEntry(cta: CtaConfig): string {
   const understoodText = formatButtonText(cta.icon, cta.understoodLabel);
 
   return `  {
-    id: '${cta.id}',
-    buttonText: '${buttonText}',
-    loadingText: '${loadingText}',
-    understoodText: '${understoodText}',
+    id: ${JSON.stringify(cta.id)},
+    buttonText: ${JSON.stringify(buttonText)},
+    loadingText: ${JSON.stringify(loadingText)},
+    understoodText: ${JSON.stringify(understoodText)},
     prompt: \`${escapedPrompt}\`,
   }`;
 }
@@ -56,13 +60,13 @@ function generateCtaConfigEntry(cta: CtaConfig): string {
  * @returns JavaScript array declaration string
  */
 function generateCtaConfigsArray(): string {
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const entries = Object.values(CTA_REGISTRY)
-    .map((cta) => generateCtaConfigEntry(cta))
-    .join(',\n');
+  const entries: string[] = [];
+  for (const cta of CTA_LIST) {
+    entries.push(generateCtaConfigEntry(cta));
+  }
 
   return `const CTA_CONFIGS = [
-${entries}
+${entries.join(',\n')}
 ];`;
 }
 

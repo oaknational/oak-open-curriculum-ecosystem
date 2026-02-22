@@ -1,22 +1,29 @@
 # Oak MCP Ecosystem
 
-**Infrastructure for AI agents and teacher search over Oak's openly-licensed curriculum — SDKs, MCP servers, and Elasticsearch-backed semantic search, all generated from the OpenAPI schema.**
+**Infrastructure for AI agents to access, understand, and use Oak's openly-licensed, fully-sequenced and resourced curriculum — SDKs, MCP servers, and Elasticsearch-serverless--backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.**
 
 ## Vision
 
 [Oak's mission](https://www.thenational.academy/about-us/who-we-are) is to
 improve pupil outcomes and close the disadvantage gap by supporting teachers to
-teach. This repository contributes by publishing infrastructure, not end-user
-products: SDKs, MCP servers, and semantic search that make Oak's openly licensed
-curriculum accessible to AI services and searchable teacher experiences.
+teach. Oak's open curriculum API provides a major public asset, and this
+repository amplifies its impact through AI-native infrastructure: SDKs, MCP
+servers, and semantic search.
 
-Its impact compounds through three orders of effect: safe, high-quality delivery
-in this repository; enablement for Oak and external developers as packages and
-source are released; then downstream products that reduce lesson-planning
-workload and improve outcomes for teachers and children at scale.
+Today, it is a build-and-delivery pipeline for reliable curriculum access. At
+public alpha for MCP Apps extensions, it also becomes a direct interaction
+surface for curriculum use within platforms such as ChatGPT, Claude, and Gemini.
 
-This repository also contributes a transferable agentic engineering practice, not
-just product code. See [docs/VISION.md](docs/VISION.md) for the full framing.
+The roadmap includes integration of Oak's wider AI capabilities (including
+knowledge graph and pedagogical rigour services), with Aila and this ecosystem as
+complementary, mutually reinforcing tracks. See [docs/VISION.md](docs/VISION.md)
+for the full framing.
+The full vision also includes explicit non-goals, capability staging
+(Current/Next/Later), and impact measures for investment decisions.
+
+This vision serves two audiences: external developers/edtech teams who want to
+know what they can build, and internal stakeholders who need a clear investment
+and impact case for Oak.
 
 ## What This Is
 
@@ -43,6 +50,14 @@ Everything flows from the OpenAPI schema:
 4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
 
 **The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
+
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](docs/architecture/architectural-decisions/), then the foundational ADRs:
+
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ### Who Uses What
 
@@ -87,7 +102,10 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    pnpm install
    ```
 
-2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) links the key READMEs, AGENT.md directives, and validation tooling.
+2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) is the human contributor onboarding path (junior-to-mid-level friendly), with key READMEs, directives, and a lightweight ADR path.
+
+   For AI agents, onboarding starts with `start-right`:
+   [command](.cursor/commands/jc-start-right.md), [prompt](.agent/prompts/start-right.prompt.md), or [skill](.agent/skills/start-right/SKILL.md), then [AGENT.md](.agent/directives/AGENT.md).
 
 3. **Verify your local setup (no API keys required)**
 
@@ -116,7 +134,7 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    >
    > - `pnpm test` (unit tests)
    > - `pnpm type-check` (type checking)
-   > - `pnpm lint` (linting)
+   > - `pnpm lint:fix` (linting and autofix)
    > - `pnpm build` (SDK and library builds)
    >
    > Environment variables are only required for:
@@ -128,8 +146,8 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 5. **Regenerate types & run quality gates**
 
    ```bash
-   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint -> format
-   pnpm qg     # full gate: format-check -> type-check -> lint -> markdownlint -> test suites -> smoke
+   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint:fix -> markdownlint:root -> format:root
+   pnpm qg     # full gate: format-check:root -> markdownlint-check:root -> type-check -> lint -> test suites -> smoke
    ```
 
    `pnpm make` is the recommended first full pipeline run.
@@ -165,8 +183,8 @@ pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests
 pnpm smoke:dev:stub # Local smoke harness for MCP servers
-pnpm make           # Full pipeline (install -> type-gen -> build -> docs -> lint -> format)
-pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdownlint -> tests -> smoke)
+pnpm make           # Full pipeline (install -> build/type-gen -> docs -> lint:fix -> markdownlint:root -> format:root)
+pnpm qg             # Quality gate (format-check:root -> markdownlint-check:root -> type-check -> lint -> tests -> smoke)
 ```
 
 ## Type Safety & Validation

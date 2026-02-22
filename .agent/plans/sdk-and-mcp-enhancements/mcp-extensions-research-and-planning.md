@@ -4,7 +4,7 @@ overview: Decision-complete MCP-first planning for post-merge extension research
 lastValidatedDate: 2026-02-22
 todos:
   - id: premerge-tracks-consolidated-reference
-    content: "Treat Track 1a + 1b as a single pre-merge dependency owned by `widget-search-rendering.md` and block this plan until it is complete."
+    content: "Treat Track 1a + 1b as a single pre-merge dependency owned by `widget-search-rendering.md` and block this plan until it is complete. Phase 5 (resilience hardening) remains pending."
     status: pending
   - id: research-source-refresh-and-link-health
     content: "Refresh mandatory and high-value source list, replace broken URLs, and maintain dated link-health evidence."
@@ -88,12 +88,16 @@ Execution split across related files:
 1. Pre-merge Tracks 1a + 1b:
    - Consolidated in `.agent/plans/semantic-search/active/widget-search-rendering.md`.
    - Merge-blocking and owned as one pre-merge stream.
+   - **Status**: Phases 0-4 complete. Phase 5 (resilience
+     hardening from architecture reviews) is pending — critical
+     findings include no try/catch around renderer calls, CTA
+     config string injection, and incomplete four-way sync enforcement.
 2. Post-merge Track 2:
    - This file.
    - Covers research, specialist specification, refactoring backlog, and future feature backlog.
 
 Entry condition for this file:
-- Work in this file starts only after the consolidated pre-merge file is complete.
+- Work in this file starts only after the consolidated pre-merge file is complete (all phases including Phase 5).
 
 ## Domain A - Further Research Backlog
 Objective:
@@ -269,9 +273,10 @@ Gate 2 - ADR matrix complete:
 - Go when all required ADR rows are present with evidence and planned action.
 
 Gate 3 - Pre-merge prerequisite complete:
-- Stop if Tracks 1a and 1b are not complete in `widget-search-rendering.md`.
-- Go when the consolidated pre-merge plan is explicitly marked ready.
+- Stop if Tracks 1a and 1b are not complete in `widget-search-rendering.md` (including Phase 5 resilience hardening).
+- Go when the consolidated pre-merge plan is explicitly marked ready (all phases complete).
 - Rollback: return this file to blocked state if pre-merge scope reopens.
+- **Current status**: BLOCKED — Phase 5 pending.
 
 Gate 4 - Specialist profile complete:
 - Stop if escalation criteria or review checklist are incomplete.

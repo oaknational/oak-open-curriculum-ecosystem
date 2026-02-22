@@ -1,8 +1,12 @@
 /**
  * Unit tests for widget renderer registry.
  *
- * Tests the tool name → renderer mapping logic.
+ * Tests the tool name to renderer mapping logic.
  * These are pure function tests with no IO or mocks.
+ *
+ * After Track 1a, only the search renderer remains.
+ * Browse and explore entries are added in Phases 2-3
+ * when their renderer functions exist.
  *
  * @see widget-renderer-registry.ts
  */
@@ -11,132 +15,46 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getRendererIdForTool,
+  isToolWithRenderer,
   TOOL_RENDERER_MAP,
   RENDERER_IDS,
 } from './widget-renderer-registry.js';
+import { WIDGET_SCRIPT } from './widget-script.js';
 
 describe('getRendererIdForTool', () => {
-  describe('quiz tools', () => {
-    it('returns "quiz" for get-lessons-quiz', () => {
-      expect(getRendererIdForTool('get-lessons-quiz')).toBe('quiz');
-    });
-
-    it('returns "quiz" for get-key-stages-subject-questions', () => {
-      expect(getRendererIdForTool('get-key-stages-subject-questions')).toBe('quiz');
-    });
-
-    it('returns "quiz" for get-sequences-questions', () => {
-      expect(getRendererIdForTool('get-sequences-questions')).toBe('quiz');
-    });
-  });
-
-  describe('entity summary tools', () => {
-    it('returns "entitySummary" for get-lessons-summary', () => {
-      expect(getRendererIdForTool('get-lessons-summary')).toBe('entitySummary');
-    });
-
-    it('returns "entitySummary" for get-units-summary', () => {
-      expect(getRendererIdForTool('get-units-summary')).toBe('entitySummary');
-    });
-
-    it('returns "entitySummary" for get-subject-detail', () => {
-      expect(getRendererIdForTool('get-subject-detail')).toBe('entitySummary');
-    });
-  });
-
-  describe('entity list tools', () => {
-    it('returns "entityList" for get-key-stages', () => {
-      expect(getRendererIdForTool('get-key-stages')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-subjects', () => {
-      expect(getRendererIdForTool('get-subjects')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-key-stages-subject-lessons', () => {
-      expect(getRendererIdForTool('get-key-stages-subject-lessons')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-key-stages-subject-units', () => {
-      expect(getRendererIdForTool('get-key-stages-subject-units')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-sequences-units', () => {
-      expect(getRendererIdForTool('get-sequences-units')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-threads', () => {
-      expect(getRendererIdForTool('get-threads')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-threads-units', () => {
-      expect(getRendererIdForTool('get-threads-units')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-subjects-key-stages', () => {
-      expect(getRendererIdForTool('get-subjects-key-stages')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-subjects-years', () => {
-      expect(getRendererIdForTool('get-subjects-years')).toBe('entityList');
-    });
-
-    it('returns "entityList" for get-subjects-sequences', () => {
-      expect(getRendererIdForTool('get-subjects-sequences')).toBe('entityList');
-    });
-  });
-
-  describe('transcript tool', () => {
-    it('returns "transcript" for get-lessons-transcript', () => {
-      expect(getRendererIdForTool('get-lessons-transcript')).toBe('transcript');
-    });
-  });
-
-  describe('assets tools', () => {
-    it('returns "assets" for get-lessons-assets', () => {
-      expect(getRendererIdForTool('get-lessons-assets')).toBe('assets');
-    });
-
-    it('returns "assets" for get-lessons-assets-by-type', () => {
-      expect(getRendererIdForTool('get-lessons-assets-by-type')).toBe('assets');
-    });
-
-    it('returns "assets" for get-key-stages-subject-assets', () => {
-      expect(getRendererIdForTool('get-key-stages-subject-assets')).toBe('assets');
-    });
-
-    it('returns "assets" for get-sequences-assets', () => {
-      expect(getRendererIdForTool('get-sequences-assets')).toBe('assets');
-    });
-  });
-
-  describe('changelog tools', () => {
-    it('returns "changelog" for get-changelog', () => {
-      expect(getRendererIdForTool('get-changelog')).toBe('changelog');
-    });
-
-    it('returns "changelog" for get-changelog-latest', () => {
-      expect(getRendererIdForTool('get-changelog-latest')).toBe('changelog');
-    });
-  });
-
-  describe('rate limit tool', () => {
-    it('returns "rateLimit" for get-rate-limit', () => {
-      expect(getRendererIdForTool('get-rate-limit')).toBe('rateLimit');
-    });
-  });
-
-  describe('existing renderers', () => {
-    it('returns "help" for get-help', () => {
-      expect(getRendererIdForTool('get-help')).toBe('help');
-    });
-
+  describe('search tool', () => {
     it('returns "search" for search', () => {
       expect(getRendererIdForTool('search')).toBe('search');
     });
+  });
 
-    it('returns "fetch" for fetch', () => {
-      expect(getRendererIdForTool('fetch')).toBe('fetch');
+  describe('browse-curriculum tool', () => {
+    it('returns "browse" for browse-curriculum', () => {
+      expect(getRendererIdForTool('browse-curriculum')).toBe('browse');
+    });
+  });
+
+  describe('explore-topic tool', () => {
+    it('returns "explore" for explore-topic', () => {
+      expect(getRendererIdForTool('explore-topic')).toBe('explore');
+    });
+  });
+
+  describe('deleted tools return undefined', () => {
+    it('returns undefined for get-lessons-quiz (deleted renderer)', () => {
+      expect(getRendererIdForTool('get-lessons-quiz')).toBeUndefined();
+    });
+
+    it('returns undefined for get-help (deleted renderer)', () => {
+      expect(getRendererIdForTool('get-help')).toBeUndefined();
+    });
+
+    it('returns undefined for fetch (deleted renderer)', () => {
+      expect(getRendererIdForTool('fetch')).toBeUndefined();
+    });
+
+    it('returns undefined for get-ontology (deleted renderer)', () => {
+      expect(getRendererIdForTool('get-ontology')).toBeUndefined();
     });
   });
 
@@ -152,44 +70,72 @@ describe('getRendererIdForTool', () => {
 });
 
 describe('TOOL_RENDERER_MAP', () => {
-  it('is a readonly object', () => {
-    expect(typeof TOOL_RENDERER_MAP).toBe('object');
-  });
-
-  it('maps all 26 tools to renderer IDs', () => {
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    const mappedTools = Object.keys(TOOL_RENDERER_MAP);
-    // 26 tools from the API, plus search and fetch helper tools
-    expect(mappedTools.length).toBeGreaterThanOrEqual(26);
-  });
-
-  it('only uses valid renderer IDs', () => {
-    const validIds = new Set(RENDERER_IDS);
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    for (const rendererId of Object.values(TOOL_RENDERER_MAP)) {
-      expect(validIds.has(rendererId)).toBe(true);
+  it('contains entries for all search-family tools', () => {
+    const keys = [];
+    for (const key in TOOL_RENDERER_MAP) {
+      keys.push(key);
     }
+    expect(keys).toStrictEqual(['search', 'browse-curriculum', 'explore-topic']);
+  });
+
+  it('maps search to the search renderer', () => {
+    expect(TOOL_RENDERER_MAP.search).toBe('search');
+  });
+
+  it('maps browse-curriculum to the browse renderer', () => {
+    expect(TOOL_RENDERER_MAP['browse-curriculum']).toBe('browse');
+  });
+
+  it('maps explore-topic to the explore renderer', () => {
+    expect(TOOL_RENDERER_MAP['explore-topic']).toBe('explore');
   });
 });
 
 describe('RENDERER_IDS', () => {
-  it('contains all expected renderer IDs', () => {
-    expect(RENDERER_IDS).toContain('quiz');
-    expect(RENDERER_IDS).toContain('entitySummary');
-    expect(RENDERER_IDS).toContain('entityList');
-    expect(RENDERER_IDS).toContain('transcript');
-    expect(RENDERER_IDS).toContain('assets');
-    expect(RENDERER_IDS).toContain('changelog');
-    expect(RENDERER_IDS).toContain('rateLimit');
-    expect(RENDERER_IDS).toContain('help');
-    expect(RENDERER_IDS).toContain('search');
-    expect(RENDERER_IDS).toContain('fetch');
-    expect(RENDERER_IDS).toContain('ontology');
+  it('contains all renderer IDs', () => {
+    expect(RENDERER_IDS).toStrictEqual(['search', 'browse', 'explore']);
   });
 });
 
-describe('ontology tool routing', () => {
-  it('routes get-ontology to ontology renderer', () => {
-    expect(getRendererIdForTool('get-ontology')).toBe('ontology');
+describe('widget script parse check', () => {
+  it('concatenated widget JS parses without error', () => {
+    expect(() => new Function(WIDGET_SCRIPT)).not.toThrow();
+  });
+});
+
+describe('four-way renderer sync', () => {
+  const stubGlobals = [
+    'const window = { openai: null };',
+    'const document = { getElementById: () => null, querySelector: () => null, documentElement: { scrollTop: 0, style: { setProperty: () => {} } }, addEventListener: () => {} };',
+    'window.addEventListener = () => {};',
+  ].join('\n');
+
+  it('every TOOL_RENDERER_MAP value is a valid RENDERER_ID', () => {
+    for (const key in TOOL_RENDERER_MAP) {
+      if (isToolWithRenderer(key)) {
+        const rendererId = TOOL_RENDERER_MAP[key];
+        expect(RENDERER_IDS).toContain(rendererId);
+      }
+    }
+  });
+
+  it('every RENDERER_ID has a corresponding function in RENDERERS', () => {
+    const factory = new Function(`${stubGlobals}\n${WIDGET_SCRIPT}\nreturn RENDERERS;`);
+    const renderers: unknown = factory();
+
+    if (typeof renderers !== 'object' || renderers === null) {
+      expect.fail('RENDERERS must be a non-null object');
+    }
+
+    for (const id of RENDERER_IDS) {
+      expect(id in renderers).toBe(true);
+    }
+  });
+
+  it('every RENDERER_ID has a render function in the widget JS', () => {
+    for (const id of RENDERER_IDS) {
+      const fnName = `render${id.charAt(0).toUpperCase()}${id.slice(1)}`;
+      expect(WIDGET_SCRIPT).toContain(`function ${fnName}(`);
+    }
   });
 });

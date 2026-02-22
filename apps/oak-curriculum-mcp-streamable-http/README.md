@@ -4,6 +4,15 @@ This app exposes the Curriculum MCP server over Streamable HTTP using the offici
 
 **Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm type-gen` updates the SDK, and this server automatically has access to new/changed tools.
 
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](../../docs/architecture/architectural-decisions/), then this HTTP MCP-focused set:
+
+- [ADR-029](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-113](../../docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) - MCP auth compliance
+- [ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) - OAuth authorisation server model
+
 ## Quick start (local)
 
 1. Set env vars (minimal — auth disabled for local dev):
@@ -1142,6 +1151,112 @@ Integration points:
 - [ADR-061: Widget Call-to-Action System](../../docs/architecture/architectural-decisions/061-widget-cta-system.md)
 - [ADR-060: Agent Support Tool Metadata System](../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md)
 
+## Widget Rendering Architecture
+
+The widget renders MCP tool output inside a ChatGPT sandbox as pure JavaScript string templates concatenated into a single bundle. There is no server-side visibility into widget errors — a single syntax error in any renderer breaks ALL tools.
+
+### Dispatch Pattern
+
+```text
+toolName (from window.openai)
+  → TOOL_RENDERER_MAP (generated in WIDGET_STATE_JS)
+  → rendererId
+  → RENDERERS object in widget-script.ts
+  → renderer function (from concatenated WIDGET_RENDERER_FUNCTIONS)
+  → HTML output
+```
+
+Three renderers exist:
+
+| Renderer        | Tool                | Data Convention               | Key Fields                                                                                 |
+| --------------- | ------------------- | ----------------------------- | ------------------------------------------------------------------------------------------ |
+| `renderSearch`  | `search`            | snake_case (ES index docs)    | `lesson.lesson_title`, `unit.unit_title`, `thread.thread_title`, `sequence.sequence_title` |
+| `renderBrowse`  | `browse-curriculum` | camelCase (SequenceFacet API) | `subjectSlug`, `keyStageTitle`, `phaseTitle`, `unitCount`, `lessonCount`                   |
+| `renderExplore` | `explore-topic`     | snake_case (ES index docs)    | Reuses search field-extraction helpers across lessons/units/threads                        |
+
+Non-search-family tools show the Oak logo and heading only (neutral shell).
+
+### Renderer Registration (Four-Way Sync)
+
+Adding a new renderer requires coordinated edits in four files:
+
+1. `src/widget-renderers/{name}-renderer.ts` — the JS string template
+2. `src/widget-renderers/index.ts` — import and include in `WIDGET_RENDERER_FUNCTIONS`
+3. `src/widget-renderer-registry.ts` — `TOOL_RENDERER_MAP` and `RENDERER_IDS` entries
+4. `src/widget-script.ts` — `RENDERERS` object entry
+
+Missing any one causes `ReferenceError` in the ChatGPT sandbox, breaking ALL tools. Four-way sync tests in `widget-renderer-registry.unit.test.ts` verify the full chain: every `TOOL_RENDERER_MAP` value maps to a `RENDERER_IDS` entry, every `RENDERER_IDS` entry has a function in the `RENDERERS` object, and every ID has a corresponding `render{Id}` function in the concatenated JS string.
+
+### Shared Helpers (`helpers.ts`)
+
+Field-extraction helpers handle scope-specific field access:
+
+- `esc(s)` — HTML entity escaping including single quotes (`&#39;`) for XSS prevention
+- `scopeObj(r, scope)` — retrieves the nested scope object (`lesson`, `unit`, `thread`, `sequence`)
+- `extractTitle(result, scope)` — scope-appropriate title field
+- `extractSubject(result, scope)` — handles `subject_slugs` array for threads, `subject_slug` string for others
+- `extractKeyStage(result, scope)` — handles absent key stage on threads, `key_stages` array on sequences
+- `extractUrl(result, scope)` — scope-appropriate URL field
+
+### Search Data Shapes
+
+The search renderer handles five distinct data shapes:
+
+| Scope       | Nested Property    | Title            | Subject                 | Key Stage              | URL            | Highlights |
+| ----------- | ------------------ | ---------------- | ----------------------- | ---------------------- | -------------- | ---------- |
+| `lessons`   | `.lesson`          | `lesson_title`   | `subject_slug`          | `key_stage`            | `lesson_url`   | Yes        |
+| `units`     | `.unit` (nullable) | `unit_title`     | `subject_slug`          | `key_stage`            | `unit_url`     | Yes        |
+| `threads`   | `.thread`          | `thread_title`   | `subject_slugs` (array) | —                      | `thread_url`   | Yes        |
+| `sequences` | `.sequence`        | `sequence_title` | `subject_slug`          | `key_stages` (array)   | `sequence_url` | No         |
+| `suggest`   | —                  | `label`          | `subject` (camelCase)   | `keyStage` (camelCase) | `url`          | No         |
+
+Key gotchas:
+
+- `thread.subject_slugs` is `string[]`, not `string` — joined with `/`
+- `UnitResult.unit` is nullable — must null-check before field access
+- `SequenceResult` has no `highlights` property
+- Suggest uses camelCase (`keyStage`), search scopes use snake_case (`key_stage`)
+
+### Sandbox Dependencies
+
+The widget depends on these ChatGPT sandbox APIs. Changes break the widget with no server-side visibility:
+
+- `window.openai.toolOutput` — tool JSON output
+- `window.openai.toolResponseMetadata` — `_meta` fields
+- `window.openai.toolInput` — tool input arguments
+- `window.openai.setWidgetState(state)` — state persistence across invocations
+- `window.openai.openExternal(url)` — external link opening
+- `window.openai.safeArea` — safe-area insets
+- `openai:set_globals` event — initial data load trigger
+
+### Edge Cases
+
+| Edge Case                             | Renderer         | Handling                           |
+| ------------------------------------- | ---------------- | ---------------------------------- |
+| `results: []`                         | Search           | "No results found"                 |
+| `results: [{ unit: null }]`           | Search           | Null check before field extraction |
+| `SequenceResult` without `highlights` | Search, Explore  | Field helpers handle absence       |
+| `d.facets` undefined                  | Browse           | Optional chaining, default to `[]` |
+| `suggestions: []`                     | Search (suggest) | "No suggestions found"             |
+| `ok: false` per scope                 | Explore          | Error message shown                |
+| Unknown scope value                   | Search           | Fail-fast: explicit error message  |
+| Null DOM elements                     | `render()`       | Guards before `innerHTML`          |
+
+### Contract Tests
+
+Integration contract tests validate renderer output against SDK Zod schemas (`SearchLessonsIndexDocSchema`, `SearchUnitsIndexDocSchema`, `SearchThreadIndexDocSchema`, `SearchSequenceIndexDocSchema`). Fixtures use `Pick<SDKType, fields>` to couple test data to SDK type evolution. The renderer test harness (`tests/widget/renderer-test-harness.ts`) evaluates concatenated JS in a `new Function()` sandbox, mirroring the ChatGPT execution environment.
+
+### Resilience Hardening (Phase 5)
+
+All critical and important resilience gaps from architecture reviews have been fixed:
+
+- **Error containment**: `renderer(fullData)` wrapped in try/catch; shows "Unable to display results" fallback on error.
+- **CTA config injection prevention**: All string fields use `JSON.stringify` for safe serialisation into generated JS.
+- **Scope validation**: `scopeObj` returns `null` for unknown scopes; search renderer fails fast with explicit error messages for missing `scope`, `results`, or `total`.
+- **Delegated click handling**: All external links use `data-oak-url` attributes with a single delegated `click` listener in `widget-script.ts`. No inline `onclick` handlers. A regression test in `renderer-contracts.integration.test.ts` enforces this invariant.
+- **Tool renderer map**: `JSON.stringify(TOOL_RENDERER_MAP)` for safe serialisation.
+- **Four-way sync enforcement**: Unit tests verify the full TOOL_RENDERER_MAP → RENDERER_IDS → RENDERERS → render functions chain.
+
 ## Testing
 
 This application has comprehensive test coverage across three testing layers:
@@ -1182,8 +1297,10 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
 # Run E2E tests
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
-# Run all tests
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:all
+# Run all workspace test suites
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 ```
 
 ## Historical Context: OAuth Metadata Workarounds

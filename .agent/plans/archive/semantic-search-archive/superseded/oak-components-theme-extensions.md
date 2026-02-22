@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-The Semantic Search POC application integrated `@oaknational/oak-components` (v1.149.0) into a dual light/dark experience. Delivering that experience demanded roughly **1,200 lines of bespoke production code** (plus ~850 lines of tests) across ten theming files to to enable theme switching. The engineering cost falls into three buckets:
+The Semantic Search POC application integrated `@oaknational/oak-components` (v1.149.0) into a dual light/dark experience. Delivering that experience demanded roughly **800 lines of bespoke production code** (plus ~850 lines of tests) across ten theming files to to enable theme switching. The engineering cost falls into three buckets:
 
 - **Theme creation**: no variant API, no dark-mode baseline, and limited theme surface area forced manual overrides for ~24 UI role tokens per mode.
 - **Token + CSS delivery**: Oak exports raw design tokens but no resolution utilities or CSS variable emission, so every consuming app must re-implement parsing and bridging logic.
@@ -208,4 +208,4 @@ Although outside the symposium remit, the Semantic Search team is tracking the f
 
 ## 6. Conclusion
 
-Oak Components excels in its original single-theme, light-mode setting, but extending it to contemporary multi-theme requirements currently shifts significant complexity to consuming applications. Semantic Search built ~1,200 lines of theming infrastructure, alongside bespoke tests and runtime workarounds, to bridge the gaps. Investing in theme factories, token-resolution utilities, CSS variable support, and aligned documentation will give every Oak product multi-theme capability by default, reduce duplication across teams, and accelerate delivery of accessible, brand-consistent experiences.
+Oak Components excels in its original single-theme, light-mode setting, but extending it to contemporary multi-theme requirements currently shifts significant complexity to consuming applications. Semantic Search built ~800 lines of theming infrastructure, alongside bespoke tests and runtime workarounds, to bridge the gaps. Investing in theme factories, token-resolution utilities, CSS variable support, and aligned documentation will give every Oak product multi-theme capability by default, reduce duplication across teams, and accelerate delivery of accessible, brand-consistent experiences.

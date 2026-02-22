@@ -5,16 +5,19 @@ overview: >
   runtime responsibilities into a dedicated
   `@oaknational/curriculum-sdk-generation` workspace, while preserving runtime
   behaviour and enforcing strict one-way boundaries.
-  WS5 search replacement is complete; this plan is unblocked.
+  This canonical plan is self-sufficient, ADR-anchored, and merge-blocking.
 todos:
-  - id: gate-ws5-completion
-    content: "Hard gate: do not start split implementation until WS5 tasks are completed in phase-3a-mcp-search-integration.md."
+  - id: gate-prerequisite-baseline
+    content: "Hard gate: baseline invariants are captured and the generation workspace absence is confirmed before split execution."
     status: completed
   - id: grounding-and-decisions
-    content: "Re-read directives and lock architectural decisions (WS5 gate, all vocab artefacts move now, one-way dependency)."
+    content: "Re-read directives and lock architectural decisions (all vocab artefacts move now, one-way dependency, ADR-only context)."
     status: pending
   - id: baseline-inventory
     content: "Capture and persist reproducible baseline metrics and command definitions before file moves."
+    status: pending
+  - id: turbo-task-alignment
+    content: "Update turbo.json to reflect the new cross-package task dependencies (runtime:build depends on generation:type-gen)."
     status: pending
   - id: generation-workspace-scaffold
     content: "Create packages/sdks/oak-curriculum-sdk-generation with package metadata, TS/ESLint/tsup configs, scripts, and README."
@@ -50,22 +53,23 @@ Execute **ADR-108 Step 1** by splitting the current monolithic
 1. `@oaknational/curriculum-sdk-generation` (generation-time ownership)
 2. `@oaknational/curriculum-sdk` (runtime ownership)
 
-This plan is merge-blocking for semantic-search branch work and is explicitly
-aligned to the canonical findings in:
-
-- `.agent/plans/semantic-search/active/sdk-workspace-separation-meta-plan.md`
+This plan is merge-blocking for semantic-search branch work and is the single
+authoritative execution source for this split.
 
 ## 2. Hard Gates and Non-Negotiable Decisions
 
-### G0. WS5 completion gate (hard blocker) ✅ SATISFIED
+### G0. Prerequisite baseline gate (hard blocker) ✅ SATISFIED
 
-**Decision (preserved)**: split execution is blocked until WS5 is complete.
+**Decision (preserved)**: split implementation starts only from a verified,
+reproducible pre-split baseline.
 
-**Gate satisfied 2026-02-22**: WS5 tasks (`ws5-skip-old-gen`,
-`ws5-promote-search`, `ws5-quality-gates`) completed and verified
-before Phase 3a plan was archived. See
-[archived plan](../archive/completed/phase-3a-mcp-search-integration.md)
-for evidence.
+**Gate satisfied 22 February 2026**:
+
+- generation workspace is absent (split not yet started)
+- baseline file counts and import counts are measured with locked commands
+- WS5 historical blocker is closed; split execution is unblocked
+- OAuth/auth prerequisites are treated as completed architectural baseline via
+  ADR-113 and ADR-115 (no plan-status dependency)
 
 ### D1. Move all vocab-generated artefacts now
 
@@ -85,13 +89,10 @@ This explicitly includes generated files currently emitted under runtime
 Runtime aggregated tool orchestration remains in runtime SDK for Step 1.
 Generated MCP descriptors/executors remain generation-owned.
 
-### D4. Cross-plan references must stay current
+### D4. ADR-only dependency context
 
-Use:
-
-- `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`
-
-Do not reference any legacy OAuth plan filename.
+Architectural dependencies and external context for this plan are anchored to
+ADRs only.
 
 ## 3. Grounding Commitments (mandatory per phase boundary)
 
@@ -101,26 +102,21 @@ Re-read and recommit before Phase 0, and at each phase transition:
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 
-Primary references:
+Authoritative ADR anchors:
 
 - `docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md`
-- `docs/architecture/openapi-pipeline.md`
-- `docs/architecture/programmatic-tool-generation.md`
-- `docs/development/build-system.md`
 - `docs/architecture/architectural-decisions/065-turbo-task-dependencies.md`
-- `.agent/plans/pipeline-enhancements/sdk-workspace-separation-plan.md`
-- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`
-- `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`
+- `docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`
+- `docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md`
+- `docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md`
 
-## 4. Repo-Grounded Baseline Snapshot (20 February 2026)
+## 4. Repo-Grounded Baseline Snapshot (22 February 2026)
 
 - `packages/sdks/oak-curriculum-sdk-generation`: does not exist
 - `packages/sdks/oak-curriculum-sdk/type-gen`: 192 files
-- `packages/sdks/oak-curriculum-sdk/src`: 310 files
-- `packages/sdks/oak-curriculum-sdk/src/types/generated`: 110 files
-- non-test runtime source files importing local `types/generated/*`: 58 files
-- WS5 tasks `ws5-skip-old-gen`, `ws5-promote-search`, `ws5-quality-gates`:
-  all pending
+- `packages/sdks/oak-curriculum-sdk/src`: 300 files
+- `packages/sdks/oak-curriculum-sdk/src/types/generated`: 106 files
+- non-test runtime source files importing local `types/generated/*`: 56 files
 
 Method-locked baseline commands:
 
@@ -128,17 +124,30 @@ Method-locked baseline commands:
 find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l
 find packages/sdks/oak-curriculum-sdk/src -type f | wc -l
 find packages/sdks/oak-curriculum-sdk/src/types/generated -type f | wc -l
+ls -1 packages/sdks
 
 rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   packages/sdks/oak-curriculum-sdk/src \
   --glob '!**/types/generated/**' \
   --glob '!**/*.test.ts' | wc -l
-
-rg -n "ws5-skip-old-gen|ws5-promote-search|ws5-quality-gates" \
-  .agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md
 ```
 
-## 5. Scope
+## 5. Integrated Findings (Canonical)
+
+All active findings from the former meta analysis are integrated here and
+mapped to execution phases and acceptance criteria.
+
+| Finding | Current truth | Execution phase(s) | Acceptance criteria |
+|---|---|---|---|
+| Generation workspace is absent | `packages/sdks/oak-curriculum-sdk-generation` does not exist yet | Phase 0, Phase 1 | AC1, AC2 |
+| Turbo task graph must be split-aware | Build/type-gen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC6 |
+| Vocab-generated artefacts are runtime-owned today and must move now | Runtime `src/mcp/**` still contains generated graph/synonym outputs; Step 1 must move all | Phase 3 | AC3 |
+| Reverse dependency must be removed | `vocab-gen/lib/index.ts` currently depends on runtime internals and must be corrected | Phase 4 | AC5 |
+| E2E tests are coupled to `type-gen` internals | Runtime tests currently import `../../type-gen/*` paths and will break after split | Phase 5 | AC7 |
+| Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC7 |
+| Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC8 |
+
+## 6. Scope
 
 ### In scope (ADR-108 Step 1 only)
 
@@ -156,7 +165,7 @@ rg -n "ws5-skip-old-gen|ws5-promote-search|ws5-quality-gates" \
 - Broader aggregated-tool architecture changes outside Step 1 boundary split.
 - Separate public release policy for generation package.
 
-## 6. Target State
+## 7. Target State
 
 ```text
 packages/sdks/oak-curriculum-sdk-generation/
@@ -186,29 +195,25 @@ Dependency direction:
 apps/* and search SDK                   -> continue depending on runtime SDK
 ```
 
-## 7. Execution Phases (RED -> GREEN -> REFACTOR)
+## 8. Execution Phases (RED -> GREEN -> REFACTOR)
 
-### Phase 0 - Gate Validation and Baseline Lock
+### Phase 0 - Baseline Lock and Prerequisite Verification
 
 Goal: enforce prerequisites and freeze reproducible baseline.
 
 - RED:
-  - prove gate is closed while WS5 tasks are pending.
-  - prove baseline commands fail if paths/queries are invalid.
+  - prove baseline commands detect drift when paths/queries are wrong.
+  - prove generation workspace does not yet exist.
 - GREEN:
   - record baseline metrics and command definitions in this plan.
-  - confirm WS5 status via explicit IDs.
+  - lock prerequisite baseline invariants used by later phases.
 - REFACTOR:
   - simplify baseline command set to minimum reproducible set.
 
 File-level tasks:
 
-- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`
-  (status checks only)
 - `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
   (baseline updates)
-- `.agent/plans/semantic-search/active/sdk-workspace-separation-meta-plan.md`
-  (findings log updates)
 
 ### Phase 1 - Scaffold Generation Workspace
 
@@ -220,6 +225,7 @@ Goal: introduce first-class generation workspace before moving content.
   - create workspace package/config/readme/entrypoint.
   - register in `pnpm-workspace.yaml`.
   - workspace build and type-check pass.
+  - align task graph with ADR-065 split-aware dependency strategy.
 - REFACTOR:
   - align config shape with existing SDK workspace conventions.
 
@@ -234,6 +240,7 @@ File-level tasks:
 - `packages/sdks/oak-curriculum-sdk-generation/tsup.config.ts`
 - `packages/sdks/oak-curriculum-sdk-generation/README.md`
 - `packages/sdks/oak-curriculum-sdk-generation/src/index.ts`
+- `turbo.json`
 
 ### Phase 2 - Move Type-Gen Core and Generated API Artefacts
 
@@ -325,7 +332,7 @@ Goal: migrate coupling points that assume monolithic SDK layout.
 - GREEN:
   - migrate tests importing `../../type-gen/*` internals.
   - update scripts/config for split ownership.
-  - update scope guard script paths and plan reference.
+  - update scope guard script paths and allowlist entries.
 - REFACTOR:
   - tighten config inputs to avoid cache drift and excess coupling.
 
@@ -372,7 +379,6 @@ File-level tasks (minimum):
 - `docs/architecture/programmatic-tool-generation.md`
 - `docs/development/build-system.md`
 - `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
-- `.agent/plans/semantic-search/active/sdk-workspace-separation-meta-plan.md`
 
 ### Phase 7 - Full Quality Gates and Evidence Capture
 
@@ -400,12 +406,16 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-## 8. Acceptance Criteria (all mandatory)
+## 9. Acceptance Criteria (all mandatory)
 
-1. **WS5 gate satisfied before execution**
-   - `ws5-skip-old-gen`, `ws5-promote-search`, `ws5-quality-gates` are
-     `completed` in
-     `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`.
+1. **Pre-split baseline invariants are explicit and reproducible**
+   - baseline commands in Section 4 return:
+     - `type-gen` files = `192`
+     - `src` files = `300`
+     - `src/types/generated` files = `106`
+     - runtime non-test local generated imports = `56`
+   - `ls -1 packages/sdks` does not include
+     `oak-curriculum-sdk-generation` at baseline time.
 
 2. **Ownership split physically complete**
    - generation workspace contains moved `type-gen/`, `schema-cache/`,
@@ -428,35 +438,52 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 
 5. **One-way dependency enforced**
    - runtime depends on generation package.
-   - generation package does not import runtime package internals.
+   - generation package does not import runtime package internals, including
+     removal of reverse dependency in
+     `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/lib/index.ts`.
    - boundary linting fails illegal imports and passes legal imports.
 
-6. **Coupled tests/scripts/config migrated**
+6. **Turbo graph and build dependencies are split-aware**
+   - `turbo.json` dependency chain reflects runtime/generation split and
+     remains aligned with ADR-065 task dependency intent.
+   - cache-relevant inputs/outputs remain valid after path moves.
+
+7. **Coupled tests/scripts/config migrated**
    - no tests import `../../type-gen/*` from runtime package.
-   - `scripts/check-generator-scope.sh` allowlist and plan path are updated for
-     split layout.
+   - `scripts/check-generator-scope.sh` allowlist is updated for split layout.
 
-7. **Cross-reference drift fixed**
-   - no references remain to legacy OAuth plan filenames in active SDK split
-     plan documents.
-   - all OAuth references use
-     `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`.
+8. **Generated provenance and docs match split ownership**
+   - generator template banners/provenance comments point to split paths.
+   - runtime/generation READMEs and architecture docs describe split ownership
+     and execution flow.
 
-8. **Determinism and parity proven**
+9. **Determinism and parity proven**
    - full quality gate sequence passes.
    - re-running `pnpm type-gen` without input changes yields no diff.
    - runtime/consumer behavioural tests pass with no regression.
 
-9. **Documentation and TSDoc are complete**
-   - generation public APIs and runtime facades have comprehensive TSDoc.
-   - workspace and architecture docs reflect new ownership and execution flow.
-   - ADR update/addendum is recorded if any architectural intent diverges from
-     ADR-108 assumptions during implementation.
+## 10. Validation Commands
 
-## 9. Risks and Mitigations
+```bash
+# required ADR anchors are present
+rg -n "108-sdk-workspace-decomposition|065-turbo-task-dependencies|086-vocab-gen-graph-export-pattern|113-mcp-spec-compliant-auth-for-all-methods|115-proxy-oauth-as-for-cursor" \
+  .agent/plans/semantic-search/active/sdk-workspace-separation.md
 
-- WS5 drift reopens moving target risk:
-  keep G0 hard blocker and verify WS5 IDs before implementation starts.
+# baseline commands (must match section 4 exactly)
+find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l
+find packages/sdks/oak-curriculum-sdk/src -type f | wc -l
+find packages/sdks/oak-curriculum-sdk/src/types/generated -type f | wc -l
+ls -1 packages/sdks
+rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
+  packages/sdks/oak-curriculum-sdk/src \
+  --glob '!**/types/generated/**' \
+  --glob '!**/*.test.ts' | wc -l
+```
+
+## 11. Risks and Mitigations
+
+- Baseline drift before split starts:
+  keep G0 hard blocker and refresh Section 4 metrics before file moves.
 - Partial vocab move creates split ownership entropy:
   enforce D1 and explicit acceptance criterion 3.
 - Hidden reverse dependency in generation tooling:
@@ -466,11 +493,15 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 - Documentation drift:
   treat docs/TSDoc as same-phase deliverables, not post-merge cleanup.
 
-## 10. Relationship to Other Plans
+## 12. Relationship to ADRs
 
-- Executes **ADR-108 Step 1**.
-- Blocked by WS5 completion in:
-  `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`.
-- OAuth and cursor-flow dependencies tracked in:
-  `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`.
-- Follow-on decomposition remains deferred to ADR-108 Step 2/3.
+- **ADR-108** (`108-sdk-workspace-decomposition.md`)
+  - defines Step 1 split intent, boundary direction, and phased decomposition.
+- **ADR-065** (`065-turbo-task-dependencies.md`)
+  - defines task graph dependency/caching principles for split rewiring.
+- **ADR-086** (`086-vocab-gen-graph-export-pattern.md`)
+  - defines vocab pipeline ownership and generated graph artefact patterns.
+- **ADR-113** (`113-mcp-spec-compliant-auth-for-all-methods.md`)
+  - establishes completed OAuth/auth baseline context for merge-prep.
+- **ADR-115** (`115-proxy-oauth-as-for-cursor.md`)
+  - establishes completed Cursor OAuth compatibility baseline context.

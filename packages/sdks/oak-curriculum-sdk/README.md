@@ -8,7 +8,16 @@ This SDK implements the **OpenAPI-First Pipeline** pattern: a type-safe, compile
 
 **Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm type-gen` regenerates all types, validators, and MCP tools automatically.
 
-For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md)
+For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md)
+
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](../../../docs/architecture/architectural-decisions/), then this SDK-focused set:
+
+- [ADR-029](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-035](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - Unified SDK and MCP generation
+- [ADR-048](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ## Architecture
 
@@ -44,7 +53,7 @@ This is achieved through:
 - **ADR-030**: SDK as the single source of truth - consumers import SDK types directly
 - **ADR-031**: Generation at build time - all transformations happen during SDK build
 
-> **This SDK demonstrates the compile-time generation pattern that works for any OpenAPI-compliant API.** The same pattern can be applied to other APIs, different versions, or custom implementations. See [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md) for how to extend this to new APIs.
+> **This SDK demonstrates the compile-time generation pattern that works for any OpenAPI-compliant API.** The same pattern can be applied to other APIs, different versions, or custom implementations. See [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md) for how to extend this to new APIs.
 
 #### Key Components:
 
@@ -141,17 +150,17 @@ const validated = validateToolResponse(toolName, response);
 
 Downstream consumers **must** import these helpers rather than duplicating validation logic. If the OpenAPI schema changes, rerunning `pnpm type-gen` updates the generated Zod schemas and the helpers continue to provide the correct `_input`/`_output` types.
 
-### Architectural Decisions
+### Architectural Decisions (Deep Dive)
 
 This SDK follows several important architectural patterns documented in our ADRs:
 
-- [ADR-026: OpenAPI Type Generation Strategy](../../docs/architecture/architectural-decisions/026-openapi-type-generation-strategy.md) - How we generate types from OpenAPI
-- [ADR-029: No Manual API Data](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - All API data comes from the OpenAPI schema
-- [ADR-030: SDK as Single Source of Truth](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - The SDK is the authoritative source for API types
-- [ADR-031: Generation-Time Extraction](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
-- [ADR-035: Unified SDK-MCP Type Generation](../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - MCP tool types flow from the SDK
-- [ADR-047: Canonical URL Generation at Type-Gen Time](../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md) - Automatic canonical URL generation in all responses
-- [ADR-048: Shared Parse Schema Helper](../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Describes how `parseSchema` validates curriculum/search requests and responses.
+- [ADR-026: OpenAPI Type Generation Strategy](../../../docs/architecture/architectural-decisions/026-openapi-type-generation-strategy.md) - How we generate types from OpenAPI
+- [ADR-029: No Manual API Data](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - All API data comes from the OpenAPI schema
+- [ADR-030: SDK as Single Source of Truth](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - The SDK is the authoritative source for API types
+- [ADR-031: Generation-Time Extraction](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
+- [ADR-035: Unified SDK-MCP Type Generation](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - MCP tool types flow from the SDK
+- [ADR-047: Canonical URL Generation at Type-Gen Time](../../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md) - Automatic canonical URL generation in all responses
+- [ADR-048: Shared Parse Schema Helper](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Describes how `parseSchema` validates curriculum/search requests and responses.
 
 ### Directory Structure
 

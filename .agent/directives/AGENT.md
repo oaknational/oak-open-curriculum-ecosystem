@@ -16,6 +16,13 @@ Read the [metacognitive prompt](./metacognition.md) and follow all instructions,
 
 This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For the full map, see [practice.md](practice.md).
 
+Agent onboarding starts with the `start-right` workflow:
+- Cursor command: [`.cursor/commands/jc-start-right.md`](../../.cursor/commands/jc-start-right.md)
+- Prompt: [`.agent/prompts/start-right.prompt.md`](../prompts/start-right.prompt.md)
+- Skill: [`.agent/skills/start-right/SKILL.md`](../skills/start-right/SKILL.md)
+
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Start with the [ADR index](../../docs/architecture/architectural-decisions/).
+
 ## First Question
 
 Always apply the first question; **Ask: could it be simpler without compromising quality?**
@@ -38,6 +45,8 @@ Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followe
 
 Always apply your own critical thinking to your work, and then use the sub-agents to gain additional perspectives and insights.
 
+**Reviewers can review intentions, not just code.** Before implementing a complex change, ask a reviewer whether the approach is sound. Describe what you intend to do, why, and what alternatives you considered. The reviewer can identify architectural issues, missing considerations, or simpler approaches before any code is written. This is often more valuable than post-implementation review because it avoids wasted effort on the wrong approach.
+
 ### Available Sub-agents
 
 Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance. For the full invocation matrix, timing guidance, triage checklist, and worked examples, see the `invoke-code-reviewers` rule (`.cursor/rules/invoke-code-reviewers.mdc`, always applied).
@@ -48,7 +57,7 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 #### Specialist On-Demand
 
-`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
@@ -85,6 +94,10 @@ Commands and skills may be defined in more than one location. Check both the rep
 ### Architecture and Schema
 
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
+- [ADR Index](../../docs/architecture/architectural-decisions/) - Architectural source of truth
+- [ADR-029](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
 - [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
 - [Semantic Search Architecture](./semantic-search-architecture.md) - Structure is the foundation, transcripts are a bonus
 

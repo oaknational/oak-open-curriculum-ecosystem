@@ -86,7 +86,7 @@ Add `### Mistakes Made` or `### Fixes` subsections as needed.
 
 ## Rotation
 
-When the napkin exceeds ~1,200 lines, follow the
+When the napkin exceeds ~800 lines, follow the
 [distillation skill](../distillation/SKILL.md) to extract
 high-signal content into `distilled.md`, archive the napkin,
 and start fresh.

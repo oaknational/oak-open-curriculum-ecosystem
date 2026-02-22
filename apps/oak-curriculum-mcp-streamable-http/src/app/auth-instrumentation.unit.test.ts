@@ -7,8 +7,10 @@ function contextMatchesStep(context: unknown, step: string): boolean {
   if (typeof context !== 'object' || context === null || Array.isArray(context)) {
     return false;
   }
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  return Reflect.get(context, 'step') === step;
+  if (!('step' in context)) {
+    return false;
+  }
+  return context.step === step;
 }
 
 describe('measureAuthSetupStep', () => {

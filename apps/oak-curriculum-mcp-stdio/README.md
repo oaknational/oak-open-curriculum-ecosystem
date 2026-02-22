@@ -4,6 +4,14 @@ MCP server that provides AI assistants with access to Oak National Academy's cur
 
 **Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm type-gen` updates the SDK, and this server automatically has access to new/changed tools.
 
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](../../docs/architecture/architectural-decisions/), then this MCP-focused set:
+
+- [ADR-029](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-107](../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) - Deterministic SDK and NL boundary
+
 ## Quick start
 
 ```bash

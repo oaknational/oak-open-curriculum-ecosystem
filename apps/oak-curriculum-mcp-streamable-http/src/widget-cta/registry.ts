@@ -54,3 +54,18 @@ Tell the user that you are ready to help them use the Oak Open Curriculum resour
 
 /** Type-safe CTA names from the registry */
 export type CtaName = keyof typeof CTA_REGISTRY;
+
+function isCtaName(key: string): key is CtaName {
+  return key in CTA_REGISTRY;
+}
+
+/** Pre-built typed list of all CTA configs for iteration without type plumbing. */
+export const CTA_LIST: readonly CtaConfig[] = (() => {
+  const list: CtaConfig[] = [];
+  for (const key in CTA_REGISTRY) {
+    if (isCtaName(key)) {
+      list.push(CTA_REGISTRY[key]);
+    }
+  }
+  return list;
+})();

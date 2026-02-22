@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 Phase 3 merge preparation in progress  
-**Last Updated**: 2026-02-22  
+**Status**: 🔄 Milestone 0 — merge preparation in progress
+**Last Updated**: 2026-02-22
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -18,6 +18,25 @@ Authoritative active execution sources:
 
 1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
 2. [widget-search-rendering.md](active/widget-search-rendering.md)
+
+---
+
+## Milestone Context
+
+This roadmap sits within the high-level milestone sequence:
+
+```text
+Milestone 0: Open Source Readiness               🔄 THIS ROADMAP
+  → Complete merge gates, secrets sweep, make repo public
+
+Milestone 1: Public Alpha                        📋 NEXT
+  → Clerk production migration, mcp-ext-app UI architecture
+
+Milestone 2: Post-Alpha Enhancements             📋 PLANNED
+  → MCP extensions, architectural enforcement, search quality Phase 4
+```
+
+See [high-level-plan.md](../high-level-plan.md) for full milestone definitions.
 
 ---
 
@@ -47,17 +66,26 @@ Ground-truth baselines currently tracked:
 
 ---
 
-## Merge Gates (Current)
+## Milestone 0 — Merge Gates (Current)
 
-The branch merge remains blocked until both of these complete:
+The branch merge remains blocked until these complete:
 
 1. **3e SDK workspace separation** (type-gen/runtime split)
-2. **3h Widget stabilisation** (Tracks 1a + 1b in one pre-merge plan)
+2. **Secrets and PII sweep** — final scan before making repo public
 
-Notes:
+Completed merge gates:
 
-- 3g dispatch safety is complete and archived.
+- 3h Widget stabilisation Phases 0-5 — all renderers and resilience
+  hardening complete, quality gates pass.
+- 3g dispatch safety — complete and archived.
 - 3b and 3c are post-merge by design.
+
+### Post-merge, pre-Milestone-1 work
+
+These are not merge-blocking but should complete before public alpha:
+
+- 3b Result pattern unification
+- 3c STDIO-HTTP alignment
 
 ---
 
@@ -74,16 +102,22 @@ Phase 2h: Code Quality Remediation                  ✅ COMPLETE
 Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3a. MCP search integration                        ✅ COMPLETE (archived)
   3d. OAuth spec compliance                         ✅ COMPLETE
-  3e'. OAuth validation/Cursor investigation        ✅ COMPLETE (archived)
+  3e-auth. OAuth validation/Cursor investigation     ✅ COMPLETE (archived)
   3f. Proxy OAuth AS for Cursor                     ✅ COMPLETE
   3g. Search dispatch type safety                   ✅ COMPLETE (archived)
   3e. SDK workspace separation                      🔄 MERGE-BLOCKING
-  3h. Widget stabilisation (Tracks 1a + 1b)         🔄 MERGE-BLOCKING
+  3h. Widget stabilisation (Tracks 1a + 1b)         ✅ COMPLETE
+  ── Secrets/PII sweep ──                           📋 PRE-PUBLIC
+  ── Merge + make repo public ──                    📋 MILESTONE 0 EXIT
   3b. Result pattern unification                    📋 POST-MERGE
   3c. STDIO-HTTP alignment                          📋 POST-MERGE
         ↓
-Phase 4: Search Quality + Ecosystem                📋 PLANNED
-Phase 5: Extensions                                ⏸️ BLOCKED BY PHASE 4
+Milestone 1: Public Alpha                           📋 PLANNED
+  Clerk production migration                        📋 RESEARCH COMPLETE
+  mcp-ext-app UI architecture                       📋 DECISION GATE
+        ↓
+Phase 4: Search Quality + Ecosystem                 📋 MILESTONE 2
+Phase 5: Extensions                                 📋 MILESTONE 2
 ```
 
 ---
@@ -93,26 +127,44 @@ Phase 5: Extensions                                ⏸️ BLOCKED BY PHASE 4
 ### 3e SDK Workspace Separation (Merge-Blocking)
 
 - Active plan: [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
-- Findings/meta plan: [sdk-workspace-separation-meta-plan.md](active/sdk-workspace-separation-meta-plan.md)
 - Strategic dependency: [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+- Task-graph dependency: [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)
+- Vocab pipeline dependency: [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md)
 
 Goal:
 
 - Split generation-time and runtime ownership into separate SDK workspaces,
   with strict one-way dependency (runtime -> generation).
 
-### 3h Widget Stabilisation (Merge-Blocking)
+### 3h Widget Stabilisation (Complete)
 
-- Active plan: [widget-search-rendering.md](active/widget-search-rendering.md)
+- Plan: [widget-search-rendering.md](active/widget-search-rendering.md)
 
-Goal:
+All phases (0-5) complete:
 
 - Track 1a: non-search widgets reduced to shell-only branding paths.
-- Track 1b: search and suggest rendering correctness with drift-protection tests.
+- Track 1b: search (4 scopes + suggest), browse, and explore renderers implemented with three-level TDD, Zod contract tests, and architecture reviews.
+- Phase 5: critical resilience hardening — error containment, JSON.stringify for JS generation, fail-fast validation, delegated click handlers, four-way sync enforcement.
 
 ---
 
-## Post-Merge Work (Planned)
+## Milestone 1: Public Alpha
+
+Research and planning for public alpha:
+
+1. **Clerk production migration** — research complete, decision
+   pending.
+   [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md)
+2. **MCP ext-app UI architecture** — decision gate before Milestone 1
+   execution. Option X: migrate before alpha. Option Y: launch with
+   current widgets, migrate in Milestone 2. See
+   [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   (Domain A) and [high-level-plan.md](../high-level-plan.md) for
+   decision criteria.
+
+---
+
+## Post-Merge Work (Milestone 0 Exit → Milestone 1)
 
 ### 3b Result Pattern Unification
 
@@ -124,9 +176,9 @@ Goal:
 
 ---
 
-## Phase 4 Streams
+## Phase 4 Streams (Milestone 2)
 
-Primary stream hubs (post-merge):
+Primary stream hubs (post-alpha):
 
 - [post-sdk/search-quality/](post-sdk/search-quality/)
 - [post-sdk/bulk-data-analysis/](post-sdk/bulk-data-analysis/)
@@ -158,11 +210,15 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-1. [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
-2. [semantic-search/README.md](README.md)
-3. [completed-plans.md](../completed-plans.md)
-4. [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
-5. [search-acceptance-criteria.md](search-acceptance-criteria.md)
+1. [high-level-plan.md](../high-level-plan.md) — milestone sequence
+2. [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+3. [semantic-search/README.md](README.md)
+4. [completed-plans.md](../completed-plans.md)
+5. [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
+6. [search-acceptance-criteria.md](search-acceptance-criteria.md)
+7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 1 research
+8. [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Milestone 1-2 plan
+9. [architectural-enforcement-adoption.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.md) — Milestone 2 plan
 
 ---
 

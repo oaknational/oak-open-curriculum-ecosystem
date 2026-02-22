@@ -91,14 +91,6 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .ftr-sep { opacity: 0.5; }
 .nowrap { white-space: nowrap; }
 @media (max-width: 480px) { .ftr-links { flex-direction: column; gap: 0; } .ftr-sep { display: none; } .ftr-link { padding-top: 8px; border-top: 1px solid var(--border-color); } }
-.actions { display: flex; gap: 8px; margin-bottom: 12px; }
-.btn { background: var(--accent); color: white; border: none; border-radius: 6px; padding: 8px 16px; font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
-.btn:hover { opacity: 0.9; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-@media (prefers-color-scheme: dark) { .btn { color: #1b3d1c; } }
-.loading { opacity: 0.6; pointer-events: none; }
-.error { background: rgba(200,50,50,0.1); color: #c83232; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
-@media (prefers-color-scheme: dark) { .error { background: rgba(255,100,100,0.15); color: #ff9999; } }
 .cta-container { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .cta-btn { background: var(--item-bg); color: var(--fg); font-size: 12px; padding: 8px 14px; border-radius: 6px; border: 2px solid var(--accent-high-contrast); white-space: nowrap; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s, transform 0.1s, box-shadow 0.1s; }
 .cta-btn:hover { background: var(--code-bg); }

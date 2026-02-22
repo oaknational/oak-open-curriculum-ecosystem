@@ -1,4 +1,5 @@
 .agent/
+tmp/
 CHANGELOG.md
 **/archive/**
 **/reference/**

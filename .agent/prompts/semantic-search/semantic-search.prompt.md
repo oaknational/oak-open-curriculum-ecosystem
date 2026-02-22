@@ -19,23 +19,25 @@ are the sole search interface.
 1. **SDK workspace separation** (3e) — split `curriculum-sdk`
    into type-gen and runtime workspaces
    ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
-2. **Widget stabilisation** (Tracks 1a + 1b) — non-search shell-only hard block
-   plus search/suggest renderer fixes
-   ([plan](../../plans/semantic-search/active/widget-search-rendering.md))
 
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
 
-**Open widget debt**: ChatGPT widget search rendering is broken
-(search results show "Untitled", suggestions silently fail). This
-is exclusively a ChatGPT widget concern — Cursor, STDIO, and
-other MCP clients are unaffected. See
-[Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md).
+**Widget stabilisation status**: **COMPLETE** (all phases 0-5).
+Three renderers (search, browse, explore) handle all tool output
+shapes with integration contract tests, Zod schema validation,
+and Playwright E2E coverage. XSS prevention hardened (single-quote
+escaping, `rel="noopener noreferrer"`, `data-oak-url` delegated
+click handlers). Phase 5 resilience hardening addressed all
+critical and important findings: error containment, JSON.stringify
+for JS generation, fail-fast scope validation, four-way sync
+enforcement.
+See [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md).
 
 **Plans** (in priority order):
 
+- [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
 - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** — split curriculum-sdk (WS5 gate satisfied)
-- [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) — **merge-blocking** — Track 1a + 1b pre-merge stabilisation
 - [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence
 - [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — post-merge only
 
@@ -61,12 +63,37 @@ Run this checklist at the start of the next session:
 
 3. Treat these as the only pre-merge active execution plans:
    - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md)
-   - [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md)
+   - [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) — COMPLETE (reference only)
 4. Treat these as complete/archive references only:
    - [search-dispatch-type-safety.md](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
 5. Keep post-merge MCP extension work separate:
    - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+
+### Next Execution Targets
+
+One merge blocker remains:
+
+**SDK workspace separation** — 7 phases. G0 gate is
+satisfied but no execution phases have started. Read the full
+plan before creating a platform-specific implementation plan.
+
+Widget stabilisation is now **complete** (all phases 0-5).
+
+**Critical principles for the next session**:
+
+- **Never manipulate global state.** Step back and consider the
+  desired impact, whether it is valid, and whether this is the
+  right level of abstraction.
+- **Ask reviewers about intentions before implementing.** Describe
+  the approach and alternatives; catch architectural issues before
+  writing code.
+- **Types flow from the schema.** The cardinal rule applies
+  throughout all work — ensure types derive from the OpenAPI
+  schema via `pnpm type-gen`.
+- **We always choose long-term architectural excellence.** We do
+  not put important work off until later. If reviewers find
+  issues, those issues become next steps.
 
 ---
 
@@ -74,7 +101,7 @@ Run this checklist at the start of the next session:
 
 | Tool | Module | Backend |
 |------|--------|---------|
-| `search` | `aggregated-search/` | Elasticsearch via Search SDK (5 scopes) |
+| `search` | `aggregated-search/` | Elasticsearch via Search SDK (4 scopes + suggest) |
 | `browse-curriculum` | `aggregated-browse/` | `fetchSequenceFacets` |
 | `explore-topic` | `aggregated-explore/` | Parallel `searchLessons` + `searchUnits` + `searchThreads` |
 
@@ -96,6 +123,13 @@ Run this checklist at the start of the next session:
 - **Scopes via `SCOPES_SUPPORTED`**: All aggregated tool definitions
   import OAuth scopes from the stable re-export at
   `src/mcp/scopes-supported.ts` (not hardcoded). Follow this pattern.
+
+### Widget Rendering Architecture
+
+Widget rendering documentation (dispatch pattern, data shapes,
+sandbox dependencies, edge cases, contract tests, known
+resilience gaps) lives permanently in the HTTP MCP server README:
+[README.md — Widget Rendering Architecture](../../../apps/oak-curriculum-mcp-streamable-http/README.md)
 
 ---
 
@@ -262,6 +296,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Fail-Fast ES Credentials | Silent degradation removed | [plan](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) |
 | Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` (ADR-116) | [ADR-116](../../../docs/architecture/architectural-decisions/116-resolve-env-pipeline-architecture.md) |
 | Code Quality | TSDoc warnings 0, type shortcuts eliminated | -- |
+| Widget Phases 0-5 | 18 renderers deleted, 3 renderers built, Zod contract tests, XSS hardening, resilience hardening (error containment, JSON.stringify, fail-fast, delegated clicks, four-way sync) | [plan](../../plans/semantic-search/active/widget-search-rendering.md) |
 
 ---
 
@@ -271,8 +306,8 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Document | Why |
 |----------|-----|
+| [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) | **Merge-blocking** — Phase 5 resilience hardening |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied) |
-| [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) | **Merge-blocking** — Track 1a + 1b pre-merge widget stabilisation |
 | [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | Post-merge extensions backlog only (not pre-merge execution) |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence — start here for "what's next" |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |

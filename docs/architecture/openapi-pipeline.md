@@ -248,7 +248,7 @@ The OpenAPI pipeline doesn't stop at type generation - it extends to **runtime e
 
 ### Key Constraints
 
-From [Schema-First Execution Directive](.agent/directives/schema-first-execution.md):
+From [Schema-First Execution Directive](../../.agent/directives/schema-first-execution.md):
 
 - **No manual tool registration** - All tools come from `MCP_TOOL_DESCRIPTORS`
 - **No type widening** - Runtime code never returns `unknown` or widens unions
@@ -273,7 +273,7 @@ When behavior needs to change:
 3. ❌ Never edit generated files manually
 4. ❌ Never add runtime workarounds for "missing" descriptors
 
-See [Schema-First Execution Directive](.agent/directives/schema-first-execution.md) for complete implementation requirements.
+See [Schema-First Execution Directive](../../.agent/directives/schema-first-execution.md) for complete implementation requirements.
 
 ## Key Takeaway
 

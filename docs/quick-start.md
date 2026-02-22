@@ -3,6 +3,18 @@
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
 
 > **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](architecture/openapi-pipeline.md) and [onboarding guide](development/onboarding.md).
+>
+> **Audience**: junior-to-mid-level human developers.
+>
+> **AI agents**: start with the `start-right` workflow first (command, prompt, or skill), then continue with [AGENT.md](../.agent/directives/AGENT.md) and [AI Agent Guide](agent-guidance/ai-agent-guide.md).
+
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](architecture/architectural-decisions/), then this foundational set:
+
+- [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ## Working with AI Agents
 
@@ -31,9 +43,17 @@ Runtime Apps        MCP Servers            Semantic Search
 
 **Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm type-gen` updates everything automatically.
 
+## ADR Start Here
+
+Use progressive disclosure:
+
+1. First pass: read the foundational ADRs listed at the top of this guide.
+2. Domain handoff: read ADRs for your area only (SDK generation, search, or MCP runtime/auth).
+3. Task-time deep dive: read additional ADRs only when your task changes behaviour or architecture in that area.
+
 ## Zero-Setup Quick Start (0 minutes)
 
-You can start contributing immediately without any API keys:
+Oak team contributors can start immediately without any API keys:
 
 ```bash
 # Clone and install
@@ -68,13 +88,15 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # Recommended first full pipeline run
-pnpm qg      # Full verification (includes UI/E2E/smoke suites)
+pnpm make    # Recommended first full pipeline run (lint:fix + markdownlint:root + format:root)
+pnpm qg      # Full verification (format-check:root + markdownlint-check:root + UI/E2E/smoke suites)
 
-# 3. Start a dev server (choose one)
+# 3. Start an MCP dev server (choose one)
 pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
-pnpm -C apps/oak-search-cli dev  # Search application
+
+# Search workflows are command-driven (no long-running `dev` script).
+# See apps/oak-search-cli/README.md for search setup and CLI commands.
 ```
 
 See [environment variables guide](development/environment-variables.md) for complete setup details.
@@ -342,7 +364,7 @@ test('MCP server lists all generated tools', async () => {
 1. **Understand the architecture**: Read [OpenAPI Pipeline](architecture/openapi-pipeline.md)
 2. **Set up your environment**: Follow [Environment Variables](development/environment-variables.md)
 3. **Read the contribution guide**: See [CONTRIBUTING.md](../CONTRIBUTING.md)
-4. **Pick an issue**: Browse [good first issues](https://github.com/oaknational/oak-mcp-ecosystem/labels/good%20first%20issue)
-5. **Start coding**: Follow the TDD workflow above
+4. **Pick your task source**: Oak team members should use active plans and roadmap docs in `.agent/plans/`; external readers can explore architecture docs and published packages.
+5. **Start coding**: Follow the TDD workflow above (for internal contributors)
 
 Ready? Let's build type-safe, schema-driven APIs.

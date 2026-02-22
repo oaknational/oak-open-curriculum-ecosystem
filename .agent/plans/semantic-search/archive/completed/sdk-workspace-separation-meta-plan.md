@@ -1,9 +1,13 @@
 # SDK Workspace Separation Meta Plan: Canonical Findings Log
 
-**Status**: Active, revalidated and aligned with plan revision  
+> Historical note (archived 22 February 2026): this file is a superseded
+> historical snapshot and is non-authoritative. The canonical source for this
+> work is `active/sdk-workspace-separation.md`.
+
+**Status**: Archived historical snapshot (superseded)  
 **Date**: 20 February 2026  
 **Repo**: `/Users/jim/code/oak/oak-mcp-ecosystem`  
-**Purpose**: canonical findings log for the SDK generation/runtime workspace split
+**Purpose**: historical findings log preserved for record only
 
 ---
 
@@ -68,7 +72,22 @@ Plan consequence:
 - Keep split gated on WS5 and avoid introducing new tool-boundary assumptions
   before replacement is complete.
 
-#### C4. All vocab-generated artefacts are still runtime-owned and consumed
+#### C4. Turbo.json task graph is monolithic
+
+Evidence:
+
+- `turbo.json` defines `type-gen` outputs and `build` dependencies relative to a single workspace's root.
+- No cross-package task dependencies exist between two SDK workspaces.
+
+Impact:
+
+- Splitting the code without updating the task graph will lead to cache misses or stale builds in the runtime SDK.
+
+Plan consequence:
+
+- Turbo task alignment is a first-class Phase 1 scaffold task.
+
+#### C5. All vocab-generated artefacts are still runtime-owned and consumed
 
 Evidence:
 
