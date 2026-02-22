@@ -45,7 +45,6 @@ starting point — copy, fill in the bracketed placeholders, and begin.
 | -------------------------------- | ------------------------------------------------ |
 | `quality-fix-plan-template.md`   | Quality improvement, refactoring, technical debt |
 | `feature-workstream-template.md` | New feature delivery with TDD phases             |
-| `closeout-stub-template.md`      | Archiving a completed plan with a brief summary  |
 
 ### 2. Plan Components
 
@@ -91,10 +90,10 @@ archive/completed/ → completed, read-only historical record
 When archiving a plan:
 
 1. Move the file to `archive/completed/`.
-2. Create a closeout stub in `active/` (from the closeout stub template)
-   that documents what was done and points to the archived plan.
-3. Update all cross-references (roadmap, prompt, other plans, source code
-   TSDoc `@see` links).
+2. Add an entry to the [completed plans index](/.agent/plans/completed-plans.md)
+   (plan name, date, key outcomes, archive link).
+3. Update all cross-references to point directly to
+   `archive/completed/` — clean break, no stubs, no redirects.
 4. Run the consolidation flow to synchronise all documents.
 
 ### 5. Frontmatter Todo Tracking
@@ -171,8 +170,8 @@ the plan content.
 - Keep components as guidance references, not mandatory inclusions.
 - When facts appear in multiple documents, mark one as authoritative and
   make the others reference it.
-- Archive completed plans promptly; do not leave completed plans in
-  `active/`.
+- Archive completed plans promptly; `active/` must contain only
+  in-progress work — no stubs, no redirects, no compatibility layers.
 - Run the consolidation flow (`/jc-consolidate-docs`) after every milestone.
 
 ## References

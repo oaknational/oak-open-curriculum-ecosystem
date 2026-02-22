@@ -26,7 +26,7 @@ correct results across all indexes.
 
 | Plan | Description | Status |
 |------|-------------|--------|
-| [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) | MCP search tools — WS1-WS4 done, WS5 (replace old search) remaining | 🔄 Active (merge-blocking) |
+| [phase-3a-mcp-search-integration.md](../../archive/completed/phase-3a-mcp-search-integration.md) | MCP search tools — WS1-WS4 done, WS5 (replace old search) remaining | 🔄 Active (merge-blocking) |
 | [mcp-result-pattern-unification.md](mcp-result-pattern-unification.md) | Migrate MCP tool execution to `Result<T, E>` pattern | 📋 Post-merge |
 
 ---

@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-ecosystem",
-  "version": "0.5.0",
+  "version": "0.8.0",
   "private": true,
   "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
   "author": {

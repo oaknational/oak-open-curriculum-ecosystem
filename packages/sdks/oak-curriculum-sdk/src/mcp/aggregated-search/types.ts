@@ -7,6 +7,13 @@
  */
 
 import type { KeyStage, Subject } from '../../types/generated/api-schema/path-parameters.js';
+import type {
+  LessonsSearchResult,
+  UnitsSearchResult,
+  ThreadsSearchResult,
+  SequencesSearchResult,
+  SuggestionResponse,
+} from '../search-retrieval-types.js';
 
 /**
  * All search scopes exposed through the SDK-backed search tool.
@@ -18,10 +25,10 @@ import type { KeyStage, Subject } from '../../types/generated/api-schema/path-pa
  * - `sequences` maps to `searchSequences` (2-way RRF on oak_sequences)
  * - `suggest`   maps to `suggest`         (completion suggester)
  */
-export const SEARCH_SDK_SCOPES = ['lessons', 'units', 'threads', 'sequences', 'suggest'] as const;
+export const SEARCH_SCOPES = ['lessons', 'units', 'threads', 'sequences', 'suggest'] as const;
 
 /** Union of all supported search scopes. */
-export type SearchSdkScope = (typeof SEARCH_SDK_SCOPES)[number];
+export type SearchSdkScope = (typeof SEARCH_SCOPES)[number];
 
 /**
  * Type guard for SearchSdkScope.
@@ -30,7 +37,7 @@ export type SearchSdkScope = (typeof SEARCH_SDK_SCOPES)[number];
  * @returns True if the value is a valid search scope
  */
 export function isSearchSdkScope(value: string): value is SearchSdkScope {
-  const scopes: readonly string[] = SEARCH_SDK_SCOPES;
+  const scopes: readonly string[] = SEARCH_SCOPES;
   return scopes.includes(value);
 }
 
@@ -103,3 +110,46 @@ export interface SearchSdkArgs {
   /** Maximum number of suggestions (suggest only). */
   readonly limit?: number;
 }
+
+// ---------------------------------------------------------------------------
+// Dispatch result union — preserves per-scope result types through dispatch
+// ---------------------------------------------------------------------------
+
+/**
+ * Union of the four scoped search result types.
+ *
+ * Each member has a literal `scope` field (`'lessons'`, `'units'`,
+ * `'threads'`, `'sequences'`) that serves as the discriminant.
+ */
+export type ScopedSearchResult =
+  | LessonsSearchResult
+  | UnitsSearchResult
+  | ThreadsSearchResult
+  | SequencesSearchResult;
+
+/**
+ * Compile-time assertion: no member of `ScopedSearchResult` may have a
+ * `suggestions` property. The `'suggestions' in result` check in
+ * `formatting.ts` relies on this structural invariant to discriminate
+ * `SuggestionResponse` from `ScopedSearchResult`.
+ *
+ * Distributes over the union — checks each member individually.
+ * If any member gains `suggestions`, that member becomes `never`,
+ * causing compile errors at every site that uses `SearchDispatchResult`.
+ */
+type AssertNoSuggestions<T> = T extends { suggestions: unknown } ? never : T;
+type VerifiedScopedSearchResult = AssertNoSuggestions<ScopedSearchResult>;
+
+/**
+ * Union of all possible search dispatch results.
+ *
+ * Returned by `dispatchByScope` and consumed by `formatSearchResults`.
+ * Uses `VerifiedScopedSearchResult` to enforce the discrimination invariant:
+ * if any scoped result type gained a `suggestions` property, that member
+ * would resolve to `never`, causing compile errors at dispatch sites.
+ *
+ * Discriminate using `'suggestions' in result`:
+ * - `true`  narrows to `SuggestionResponse`
+ * - `false` narrows to `VerifiedScopedSearchResult` (further narrowable via `scope`)
+ */
+export type SearchDispatchResult = VerifiedScopedSearchResult | SuggestionResponse;

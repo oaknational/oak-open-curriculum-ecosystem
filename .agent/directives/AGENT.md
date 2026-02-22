@@ -12,6 +12,10 @@ Now reflect on what you are doing. Would you like to update your self-managed, i
 
 Read the [metacognitive prompt](./metacognition.md) and follow all instructions, reflect on it.
 
+## The Practice
+
+This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For the full map, see [practice.md](practice.md).
+
 ## First Question
 
 Always apply the first question; **Ask: could it be simpler without compromising quality?**
@@ -83,6 +87,10 @@ Commands and skills may be defined in more than one location. Check both the rep
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
 - [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
 - [Semantic Search Architecture](./semantic-search-architecture.md) - Structure is the foundation, transcripts are a bonus
+
+### Vision
+
+- [Vision](../../docs/VISION.md) - Why this repository exists and the impact it aims to achieve (current framing; supersedes ADR-008)
 
 ### Domain and Context
 

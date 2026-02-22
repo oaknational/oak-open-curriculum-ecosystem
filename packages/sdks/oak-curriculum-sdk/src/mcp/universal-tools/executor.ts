@@ -21,7 +21,7 @@ import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
-import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search-sdk/index.js';
+import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';

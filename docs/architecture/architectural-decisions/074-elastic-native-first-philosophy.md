@@ -3,7 +3,7 @@
 **Status**: Accepted  
 **Date**: 2025-12-07  
 **Decision Makers**: Development Team  
-**Related**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md)
+**Related**: [ADR-118](118-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md)
 
 ## Context
 
@@ -226,7 +226,7 @@ To override this philosophy and use an external API, the team must:
 - [Elasticsearch Inference API](https://www.elastic.co/guide/en/elasticsearch/reference/current/inference-apis.html)
 - [Elasticsearch NLP Capabilities](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-overview)
 - [Elasticsearch Graph API](https://www.elastic.co/guide/en/elasticsearch/reference/current/graph-explore-api.html)
-- [ADR-071: Elastic-Native Dense Vector Strategy](071-elastic-native-dense-vector-strategy.md)
+- [ADR-118: Elastic-Native Dense Vector Strategy](118-elastic-native-dense-vector-strategy.md)
 - [ADR-072: Three-Way Hybrid Search Architecture](072-three-way-hybrid-search-architecture.md)
 
 ## Related Documents

@@ -2,6 +2,22 @@
 
 **Infrastructure for AI agents and teacher search over Oak's openly-licensed curriculum — SDKs, MCP servers, and Elasticsearch-backed semantic search, all generated from the OpenAPI schema.**
 
+## Vision
+
+[Oak's mission](https://www.thenational.academy/about-us/who-we-are) is to
+improve pupil outcomes and close the disadvantage gap by supporting teachers to
+teach. This repository contributes by publishing infrastructure, not end-user
+products: SDKs, MCP servers, and semantic search that make Oak's openly licensed
+curriculum accessible to AI services and searchable teacher experiences.
+
+Its impact compounds through three orders of effect: safe, high-quality delivery
+in this repository; enablement for Oak and external developers as packages and
+source are released; then downstream products that reduce lesson-planning
+workload and improve outcomes for teachers and children at scale.
+
+This repository also contributes a transferable agentic engineering practice, not
+just product code. See [docs/VISION.md](docs/VISION.md) for the full framing.
+
 ## What This Is
 
 This monorepo makes the [Oak Open Curriculum](https://open-api.thenational.academy/) accessible to AI agents and searchable for teachers. It contains:
@@ -47,7 +63,7 @@ Everything flows from the OpenAPI schema:
 - **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
 - **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
 - **`packages/libs/logger`** – Structured logging library
-- **`docs/architecture/architectural-decisions/`** – 112 Architectural Decision Records documenting every significant design choice
+- **`docs/architecture/architectural-decisions/`** – 110+ Architectural Decision Records documenting every significant design choice
 
 ## Architecture Overview
 
@@ -57,7 +73,7 @@ Everything flows from the OpenAPI schema:
 | `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
 | `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
 | `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
-| `docs/`          | Developer documentation, onboarding guides, 112 ADRs                                                        |
+| `docs/`          | Developer documentation, onboarding guides, 110+ ADRs                                                       |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 
@@ -164,6 +180,14 @@ pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdo
 - [docs/development/onboarding.md](docs/development/onboarding.md) – first-stop checklist for new developers and AI assistants.
 - [docs/README.md](docs/README.md) – architecture and development index.
 - Workspace READMEs (SDK + Semantic Search) explain local setup, admin workflows, and validation flow.
+
+## Agentic Engineering Practice
+
+This repository is governed by an **agentic engineering practice** — a self-reinforcing system of principles, structures, specialist reviewers, and tooling that creates a safe environment for human-AI collaboration. The practice is what produces the product code; it is not the product code itself.
+
+The practice operates in three layers: **philosophy** (the First Question, metacognition, the learning loop), **structure** (directives, plans, templates, ADRs, sub-agents, quality gates, institutional memory), and **tooling** (platform-specific bindings in `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`).
+
+The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md).
 
 ## Contributing
 

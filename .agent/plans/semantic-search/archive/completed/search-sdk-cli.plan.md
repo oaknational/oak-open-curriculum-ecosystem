@@ -7,7 +7,7 @@
 **Last Updated**: 2026-02-11
 
 > **MCP integration** is a separate concern — consuming the SDK, not
-> extracting it. See [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md).
+> extracting it. See [phase-3a-mcp-search-integration.md](phase-3a-mcp-search-integration.md).
 
 ---
 

@@ -2,7 +2,8 @@
 
 Strategic and tactical planning documents for the Oak MCP Ecosystem.
 
-**High-Level Coordination**: [high-level-plan.md](high-level-plan.md)  
+**High-Level Coordination**: [high-level-plan.md](high-level-plan.md)
+**Completed Plans**: [completed-plans.md](completed-plans.md)
 **Foundation Documents**: [.agent/directives/](../directives/)
 
 ---

@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-13
+**Last Updated**: 2026-02-22
 
 ---
 
@@ -10,15 +10,21 @@
 
 ---
 
-## Current Work: MCP Search Integration
+## Current Work: Merge Prep
 
-SDK extraction is complete (Checkpoints A–E2, Feb 2026).
-Thread search is fully integrated — SDK method, CLI command,
-benchmarks migrated, 8 ground truths across 5 subjects.
-The immediate priority is wiring the Search SDK into MCP
-curriculum servers.
+MCP search integration (Phase 3a) is complete — three tools
+wired, old REST search replaced. Two merge blockers remain:
+
+1. **SDK workspace separation** (3e) — split curriculum-sdk into
+   type-gen and runtime workspaces
+2. **Widget stabilisation** (3h) — Track 1a shell-only non-search
+   widgets and Track 1b search/suggest rendering fixes
 
 **Roadmap**: [roadmap.md](roadmap.md)
+**Completed plans**: [completed-plans.md](../completed-plans.md)
+
+Search dispatch type safety (3g) is complete and archived:
+[search-dispatch-type-safety.md](archive/completed/search-dispatch-type-safety.md).
 
 ---
 
@@ -34,8 +40,17 @@ curriculum servers.
 2e. SDK Validation against Real ES               ✅ COMPLETE
     Baselines confirmed, thread search validated
          ↓
-3. MCP Search Integration                        ← CURRENT
-   Wire hybrid search into MCP tools
+2f. Public Release Readiness                     ✅ COMPLETE
+2g. Developer Onboarding                         ✅ COMPLETE
+2h. Code Quality Remediation                     ✅ COMPLETE
+         ↓
+3. MCP Integration + Merge Preparation           🔄 IN PROGRESS
+   3a MCP search integration                     ✅ COMPLETE (archived)
+   3d OAuth spec compliance                      ✅ COMPLETE
+   3f Proxy OAuth AS for Cursor                  ✅ COMPLETE
+   3g Search dispatch type safety                ✅ COMPLETE (archived)
+   3e SDK workspace separation                   🔄 MERGE-BLOCKING
+   3h Widget stabilisation (Tracks 1a + 1b)      🔄 MERGE-BLOCKING
          ↓
 4. Search Quality + Ecosystem (parallel streams)
    GT expansion, Levels 2-4, bulk data, SDK API,
@@ -51,7 +66,7 @@ curriculum servers.
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Active plans (MCP search integration) | 🔄 Active |
+| `active/` | Merge-prep plans (`3e` and `3h`) | 🔄 Active |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |
 | `post-sdk/` | Streams of post-extraction work | 📋 Ready |
 | `archive/` | Historical work | ✅ Reference only |
@@ -81,14 +96,15 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [Active: Phase 3a MCP Search Integration](active/phase-3a-mcp-search-integration.md) | 🔄 MCP search tools (WS1-WS2 done, WS3+WS5 next) |
-| [Active: Result pattern unification](active/mcp-result-pattern-unification.md) | 📋 Migrate MCP layer to `Result<T, E>` (parallel) |
-| [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
-| [Public Release Readiness](archive/completed/public-release-readiness.plan.md) | ✅ Secrets, licence, package.json, docs, GitHub config, npm publish |
-| [Developer Onboarding Experience](archive/completed/developer-onboarding-experience.plan.md) | ✅ Onboarding journey, command/link integrity, release runbook |
-| [Thread Search SDK Integration](archive/completed/thread-search-sdk-integration.plan.md) | ✅ SDK method, CLI command, benchmarks, 8 GTs across 5 subjects |
+| [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
+| [SDK Workspace Separation Meta Plan](active/sdk-workspace-separation-meta-plan.md) | 🔄 Active analysis and execution guardrails for `3e` |
+| [SDK Workspace Separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking — split curriculum-sdk |
+| [Widget Search Rendering](active/widget-search-rendering.md) | 🔄 Merge-blocking — pre-merge Tracks 1a + 1b |
+| [Result Pattern Unification](post-sdk/mcp-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
-| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [MCP Extensions Future Work](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | 📋 Post-merge SDK/MCP enhancements governance |
+| [Completed Plans](../completed-plans.md) | Index of all archived plans |
 
 ---
 

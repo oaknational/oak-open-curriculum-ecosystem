@@ -13,7 +13,7 @@ import {
   type Subject,
   isSubject,
 } from '../../types/generated/api-schema/path-parameters.js';
-import { type SearchSdkArgs, SEARCH_SDK_SCOPES, isSearchSdkScope } from './types.js';
+import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js';
 
 /**
  * Zod schema for the search tool's object input.
@@ -93,7 +93,7 @@ function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
   const { scope, keyStage, subject, ...rest } = parsed;
 
   if (!isSearchSdkScope(scope)) {
-    return { ok: false, message: `scope must be one of: ${SEARCH_SDK_SCOPES.join(', ')}` };
+    return { ok: false, message: `scope must be one of: ${SEARCH_SCOPES.join(', ')}` };
   }
 
   const keyStageResult = normaliseKeyStage(keyStage);

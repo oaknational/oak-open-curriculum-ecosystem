@@ -1,28 +1,20 @@
 /**
  * Result formatting for the SDK-backed search tool.
  *
- * Formats Search SDK results into MCP CallToolResult with:
+ * Formats typed `SearchDispatchResult` into MCP `CallToolResult` with:
  * - Human-readable summary for conversation display
  * - Structured content for model reasoning and widget display
  * - Widget metadata for routing
  *
- * Each scope has formatting logic that extracts the most useful
- * information for both the agent (structured data) and the teacher
- * (readable summary with next-action suggestions).
+ * Discriminates `SuggestionResponse` from `ScopedSearchResult` using
+ * `'suggestions' in result` — no runtime type guards needed because
+ * the dispatch layer preserves per-scope types through the union.
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from '../universal-tool-shared.js';
-import type { SearchSdkScope } from './types.js';
+import type { SearchSdkScope, ScopedSearchResult, SearchDispatchResult } from './types.js';
 import type { SuggestionResponse } from '../search-retrieval-types.js';
-
-/** Type guard for SuggestionResponse. */
-function isSuggestionResponse(value: unknown): value is SuggestionResponse {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  return 'suggestions' in value && 'cache' in value;
-}
 
 /** Scope labels for human-readable summaries. */
 const SCOPE_LABELS: Readonly<Record<SearchSdkScope, string>> = {
@@ -58,28 +50,6 @@ function buildSuggestSummary(count: number, prefix: string): string {
   return `Found ${String(count)} ${word} for "${prefix}"`;
 }
 
-/** Common shape for scoped search results (all except suggest). */
-interface ScopedSearchData {
-  readonly scope: string;
-  readonly total: number;
-  readonly took: number;
-  readonly results: readonly unknown[];
-}
-
-/** Type guard for common scoped search result shape. */
-function isScopedSearchResult(scope: SearchSdkScope, value: unknown): value is ScopedSearchData {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  return (
-    'scope' in value &&
-    value.scope === scope &&
-    'total' in value &&
-    'took' in value &&
-    'results' in value
-  );
-}
-
 /** Annotation titles per scope. */
 const SCOPE_TITLES: Readonly<Record<SearchSdkScope, string>> = {
   lessons: 'Search Lessons',
@@ -90,19 +60,15 @@ const SCOPE_TITLES: Readonly<Record<SearchSdkScope, string>> = {
 };
 
 /** Formats a scoped search result (lessons, units, threads, sequences). */
-function formatScopedResult(
-  scope: SearchSdkScope,
-  data: ScopedSearchData,
-  query: string,
-): CallToolResult {
+function formatScopedResult(data: ScopedSearchResult, query: string): CallToolResult {
   return formatToolResponse({
-    summary: buildSearchSummary(scope, data.total, query),
+    summary: buildSearchSummary(data.scope, data.total, query),
     data: { scope: data.scope, total: data.total, took: data.took, results: data.results },
     query,
     timestamp: Date.now(),
     status: 'success',
     toolName: 'search',
-    annotationsTitle: SCOPE_TITLES[scope],
+    annotationsTitle: SCOPE_TITLES[data.scope],
   });
 }
 
@@ -122,27 +88,18 @@ function formatSuggestResult(data: SuggestionResponse, prefix: string): CallTool
 /**
  * Formats search results into a CallToolResult appropriate for the scope.
  *
- * @param scope - Which search scope produced the results
- * @param result - Raw result data from the Search SDK
+ * Discriminates `SuggestionResponse` from `ScopedSearchResult` using
+ * `'suggestions' in result`. The compile-time `VerifiedScopedSearchResult`
+ * assertion in `types.ts` guards against this invariant drifting.
+ *
+ * @param result - Typed dispatch result from the search retrieval service
  * @param query - The original search query text
  * @returns Formatted CallToolResult for MCP response
  */
-export function formatSearchResults(
-  scope: SearchSdkScope,
-  result: unknown,
-  query: string,
-): CallToolResult {
-  if (scope === 'suggest' && isSuggestionResponse(result)) {
+export function formatSearchResults(result: SearchDispatchResult, query: string): CallToolResult {
+  if ('suggestions' in result) {
     return formatSuggestResult(result, query);
   }
 
-  if (scope !== 'suggest' && isScopedSearchResult(scope, result)) {
-    return formatScopedResult(scope, result, query);
-  }
-
-  throw new Error(
-    `Unexpected result shape for scope "${scope}": ` +
-      `expected ${scope === 'suggest' ? 'SuggestionResponse' : `SearchResultMeta with scope="${scope}"`}, ` +
-      `got ${typeof result}`,
-  );
+  return formatScopedResult(result, query);
 }

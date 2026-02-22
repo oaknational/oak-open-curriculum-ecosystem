@@ -41,7 +41,7 @@ isProject: false
 ## Status: Completed (2026-02-19)
 
 All three phases (P1 response unification, P2 type deduplication, P3 ES source filtering) completed.
-See [phase-3a-mcp-search-integration.md](../../active/phase-3a-mcp-search-integration.md) for the parent plan.
+See [phase-3a-mcp-search-integration.md](phase-3a-mcp-search-integration.md) for the parent plan.
 
 ## Problem
 

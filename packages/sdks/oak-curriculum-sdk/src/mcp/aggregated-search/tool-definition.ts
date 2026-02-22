@@ -15,7 +15,7 @@ import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-para
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../../types/generated/widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
-import { SEARCH_SDK_SCOPES } from './types.js';
+import { SEARCH_SCOPES } from './types.js';
 
 /**
  * SDK-backed search tool definition with MCP metadata.
@@ -24,7 +24,7 @@ import { SEARCH_SDK_SCOPES } from './types.js';
  * query mapping, and cross-tool workflows. Designed for two users: the AI
  * agent (who reads the description) and the human teacher (who sees results).
  */
-export const SEARCH_SDK_TOOL_DEF = {
+export const SEARCH_TOOL_DEF = {
   description: `Search Oak's curriculum using semantic search across all four content indexes.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
@@ -84,7 +84,7 @@ CROSS-TOOL WORKFLOWS:
  * Scope-specific filters are optional and validated in the handler to keep
  * the schema simple for agents.
  */
-export const SEARCH_SDK_INPUT_SCHEMA = {
+export const SEARCH_INPUT_SCHEMA = {
   type: 'object',
   required: ['text', 'scope'],
   additionalProperties: false,
@@ -99,7 +99,7 @@ export const SEARCH_SDK_INPUT_SCHEMA = {
       type: 'string',
       description:
         'Which index to search. "lessons" for specific lessons, "units" for topic groups, "threads" for cross-year progressions, "sequences" for programme structures, "suggest" for typeahead.',
-      enum: [...SEARCH_SDK_SCOPES],
+      enum: [...SEARCH_SCOPES],
       examples: ['lessons', 'units', 'threads'],
     },
     subject: {

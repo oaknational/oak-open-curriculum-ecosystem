@@ -21,12 +21,13 @@ The analogy with ADR-114 (sub-agent prompt composition) was exact. Components �
 
 The document hierarchy rule is the real contribution of ADR-117 — more than the templates themselves. Facts authoritative in one place, referenced elsewhere. This is obvious in code (DRY). It is less obvious in documentation, where the temptation is to make each document self-contained. But self-contained documents with duplicated facts become contradictory documents. The consolidation flow is the check that catches this, but the hierarchy prevents it.
 
-The closeout stub pattern was a small discovery. When a plan is archived, the `active/` directory loses its entry. But other documents reference it by that path. A stub keeps the path valid and provides a redirect to the archive plus a summary. It is the plan equivalent of a HTTP 301 redirect.
+The closeout stub pattern was initially adopted but later recognised as a compatibility layer — a "301 redirect" that fills `active/` with non-plans. The clean break is better: delete the stub, fix all references at the source to point to `archive/completed/`, and track completions in a central index (`.agent/plans/completed-plans.md`). This aligns with rules.md: "NEVER create compatibility layers."
 
 ## Technical content
 
 Patterns extracted to ADR-117:
+
 - Document hierarchy: prompt (operational entry) → plan (executable work) → roadmap (strategic sequence)
 - Content authority: facts authoritative in one document, referenced by others
-- Plan lifecycle: active → archived, with closeout stubs
+- Plan lifecycle: active → archived, with completed plans index (no stubs)
 - Plan templates and components: reusable building blocks

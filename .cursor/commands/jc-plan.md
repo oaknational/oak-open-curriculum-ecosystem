@@ -25,7 +25,6 @@ Pick the template closest to the work:
 |----------|----------|
 | `feature-workstream-template.md` | New feature with TDD phases |
 | `quality-fix-plan-template.md` | Quality improvement, refactoring, tech debt |
-| `closeout-stub-template.md` | Archiving a completed plan |
 
 Copy the template to the appropriate `active/` directory and
 fill in all `[bracketed]` placeholders.

@@ -19,16 +19,16 @@
     roadmap = strategic)
   - Content authority rule: facts are authoritative in one document,
     referenced (not restated) by others
-  - Plan lifecycle: active/ → archive/completed/ with closeout stubs
-  - Template types: quality-fix, feature-workstream, closeout-stub
+  - Plan lifecycle: active/ → archive/completed/ with completed plans index
+  - Template types: quality-fix, feature-workstream
   - Component types: quality-gates, tdd-phases, foundation-alignment,
     risk-assessment, adversarial-review
 - Created 5 plan components in `.agent/plans/templates/components/`
-- Created 2 new plan templates (feature-workstream, closeout-stub)
+- Created feature-workstream plan template
 - Updated templates README with full documentation
 - Archived Phase 3a plan:
-  - Copied to `archive/completed/phase-3a-mcp-search-integration.md`
-  - Created closeout stub in `active/` (using new closeout template)
+  - Moved to `archive/completed/phase-3a-mcp-search-integration.md`
+  - Added entry to `.agent/plans/completed-plans.md` (clean break, no stub)
   - Created WS6 plan: `ws6-search-contract-hardening.md` from B1-B4 + W1
   - Updated prompt: replaced 65-line adversarial findings section with
     7-line summary referencing WS6 plan (per ADR-117 hierarchy rule)
@@ -45,10 +45,9 @@
   the ground truth protocol, the source of truth was obvious — but
   finding the contradiction required systematic comparison. The
   consolidation flow catches these.
-- Closeout stubs are a small but useful pattern: the active/ directory
-  shows what's current (stubs for completed work, full plans for active
-  work). Without stubs, you have to check the archive to know whether
-  a referenced plan is done.
+- Closeout stubs were initially adopted but later removed — they are
+  compatibility layers (rules.md forbids these). Clean break: fix
+  references at the source, track completions in `.agent/plans/completed-plans.md`.
 
 ## Session: 2026-02-21 — WS5: Replace Old Search with Search SDK
 
@@ -1016,3 +1015,43 @@ applies to hand-written code too -- it must consume generated artefacts.
   has shifted but hasn't been superseded. ADR-053's "Resource Server only"
   framing was technically incorrect since the proxy was added, but the
   decision to use Clerk remains sound.
+
+---
+
+## Session: 2026-02-22 — Search Dispatch Type Safety (B1 + W1)
+
+### What Happened
+
+- Executed the search dispatch type safety plan: eliminated type erasure
+  from `ScopeDispatcher` / `SCOPE_DISPATCHERS` dispatch table in
+  `execution.ts`, replaced with switch-based dispatch returning
+  `Result<SearchDispatchResult, SearchRetrievalError>`.
+- Removed runtime type guards (`isScopedSearchResult`, `isSuggestionResponse`)
+  and `ScopedSearchData` interface from `formatting.ts`. New signature:
+  `formatSearchResults(result: SearchDispatchResult, query: string)`.
+- `'suggestions' in result` used to discriminate `SuggestionResponse` from
+  `ScopedSearchResult` — no runtime guards needed.
+- Renamed `aggregated-search-sdk/` → `aggregated-search/`, renamed
+  `SEARCH_SDK_SCOPES` → `SEARCH_SCOPES`, `SEARCH_SDK_TOOL_DEF` →
+  `SEARCH_TOOL_DEF`, `SEARCH_SDK_INPUT_SCHEMA` → `SEARCH_INPUT_SCHEMA`.
+- All quality gates pass: type-gen, build, type-check, lint:fix, format,
+  markdownlint, test (1260), test:e2e.
+
+### Lessons Learned
+
+- When `mv`-ing a directory to a new name, if the target already exists
+  (even as an empty dir), `mv` nests instead of renaming. Always check
+  the target doesn't exist, or use `mv src/* dest/ && rmdir src`.
+- Compile-time type assertions (like `AssertNoSuggestions<T>`) are inert
+  unless the resulting type is consumed in a binding or type path. All
+  three reviewers (code, type, architecture) independently caught this.
+  Fix: wire the verified type into `SearchDispatchResult` so any violation
+  propagates as compile errors at dispatch sites.
+- The distributive form `T extends { suggestions: unknown } ? never : T`
+  checks each union member individually, while `'suggestions' extends
+  keyof T ? never : T` also distributes when `T` is naked — but the
+  `extends` form is clearer about intent and avoids `keyof` subtleties.
+- For a refactoring exercise (runtime behaviour unchanged), the RED phase
+  of TDD is compiler errors from signature changes, not runtime test
+  failures. Update test call sites first, then implement — the compiler
+  validates the type-safety improvement.

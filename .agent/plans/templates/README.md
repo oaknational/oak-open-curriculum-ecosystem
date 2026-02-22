@@ -13,7 +13,6 @@ placeholders, and begin.
 |----------|----------|
 | [`quality-fix-plan-template.md`](quality-fix-plan-template.md) | Quality improvement, refactoring, technical debt |
 | [`feature-workstream-template.md`](feature-workstream-template.md) | New feature delivery with TDD phases (RED/GREEN/REFACTOR) |
-| [`closeout-stub-template.md`](closeout-stub-template.md) | Archiving a completed plan — brief summary + pointer |
 
 ## Components
 
@@ -53,9 +52,10 @@ archive/completed/  → completed, read-only
 When archiving:
 
 1. Move the plan file to `archive/completed/`.
-2. Create a closeout stub in `active/` (use the closeout template).
-3. Update all cross-references (roadmap, prompt, other plans, source
-   code TSDoc `@see` links).
+2. Add an entry to the [completed plans index](../completed-plans.md)
+   (plan name, date, key outcomes, archive link).
+3. Update all cross-references to point directly to
+   `archive/completed/` — clean break, no stubs.
 4. Run `/jc-consolidate-docs`.
 
 ## How to Use

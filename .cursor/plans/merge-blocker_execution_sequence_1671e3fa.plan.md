@@ -111,7 +111,7 @@ Cursor users cannot authenticate at all. The server is spec-compliant but Cursor
 
 ## 2. WS5 -- Replace Old Search (After Proxy Validates)
 
-**Plan**: [phase-3a-mcp-search-integration.md](/.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md) sections 5.1-5.4
+**Plan**: [phase-3a-mcp-search-integration.md](/.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md) sections 5.1-5.4
 **Location**: `packages/sdks/oak-curriculum-sdk/`
 
 ### What remains

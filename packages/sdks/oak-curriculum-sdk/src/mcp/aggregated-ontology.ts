@@ -5,8 +5,10 @@
  * structure, entity relationships, and tool usage guidance. It enables AI
  * agents to understand the domain model before making other API calls.
  *
- * @remarks This is a POC implementation. See 02-curriculum-ontology-resource-plan.md
- * for the full schema-derived implementation.
+ * @remarks This is a POC implementation. For historical planning provenance,
+ * see `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`.
+ * The original ontology plan is archived at
+ * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

@@ -259,8 +259,9 @@ The monorepo is ESM-only (`"type": "module"`).
 - Semantic-release managed packages use
   `"version": "0.0.0-development"`
 - Never commit `.turbo/` cache files
-- Quality gates always run in order: format → type-check →
-  lint → test → build
+- Quality gates always run in order: clean → type-gen →
+  build → type-check → format → markdownlint → lint →
+  test → test:ui → test:e2e → smoke:dev:stub
 
 ## Troubleshooting
 

@@ -15,9 +15,9 @@
 
 Evidence:
 
-- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:65` (`ws5-skip-old-gen`) is `pending`.
-- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:68` (`ws5-promote-search`) is `pending`.
-- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md:71` (`ws5-quality-gates`) is `pending`.
+- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md:65` (`ws5-skip-old-gen`) is `pending`.
+- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md:68` (`ws5-promote-search`) is `pending`.
+- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md:71` (`ws5-quality-gates`) is `pending`.
 
 Impact:
 
@@ -237,7 +237,7 @@ Plan consequence:
 ls -1 packages/sdks
 
 rg -n "ws5-skip-old-gen|ws5-promote-search|ws5-quality-gates" \
-  .agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md
+  .agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md
 
 rg -n "search-sdk|search" \
   packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts

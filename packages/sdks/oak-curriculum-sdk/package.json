@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/curriculum-sdk",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",

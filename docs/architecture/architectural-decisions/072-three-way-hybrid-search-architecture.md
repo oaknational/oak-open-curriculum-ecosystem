@@ -4,7 +4,7 @@
 **Date**: 2025-12-07  
 **Superseded Date**: 2025-12-12  
 **Decision Makers**: Development Team  
-**Related**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-073](073-dense-vector-field-configuration.md)
+**Related**: [ADR-118](118-elastic-native-dense-vector-strategy.md), [ADR-073](073-dense-vector-field-configuration.md)
 
 > ⚠️ **This ADR has been superseded.** Phase 2 evaluation showed three-way hybrid (BM25 + ELSER + E5) provides no benefit over two-way hybrid (BM25 + ELSER). The architecture reverted to two-way hybrid. See [ADR-075](075-dense-vector-removal.md) for the decision to remove dense vector code.
 
@@ -252,7 +252,7 @@ apps/oak-search-cli/e2e-tests/
 
 ## Related Documents
 
-- [ADR-071: Elastic-Native Dense Vector Strategy](071-elastic-native-dense-vector-strategy.md)
+- [ADR-118: Elastic-Native Dense Vector Strategy](118-elastic-native-dense-vector-strategy.md)
 - [ADR-073: Dense Vector Field Configuration](073-dense-vector-field-configuration.md)
 - [Elasticsearch RRF Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html)
 - [Elasticsearch kNN Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html)

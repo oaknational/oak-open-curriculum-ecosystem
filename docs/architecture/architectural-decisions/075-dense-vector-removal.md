@@ -4,11 +4,11 @@
 **Date**: 2025-12-12  
 **Implemented**: 2025-12-15  
 **Decision Makers**: Development Team  
-**Supersedes**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-073](073-dense-vector-field-configuration.md)
+**Supersedes**: [ADR-118](118-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-073](073-dense-vector-field-configuration.md)
 
 ## Context
 
-Phase 2 of the semantic search project evaluated three-way hybrid search (BM25 + ELSER + E5 dense vectors) as documented in ADR-071, ADR-072, and ADR-073. The hypothesis was that dense vectors would provide measurable improvements over two-way hybrid (BM25 + ELSER).
+Phase 2 of the semantic search project evaluated three-way hybrid search (BM25 + ELSER + E5 dense vectors) as documented in ADR-118, ADR-072, and ADR-073. The hypothesis was that dense vectors would provide measurable improvements over two-way hybrid (BM25 + ELSER).
 
 **Experimental Results (Phase 2)**:
 
@@ -113,7 +113,7 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-s
 
 ## Related Documents
 
-- [ADR-071](071-elastic-native-dense-vector-strategy.md) - Original E5 decision (SUPERSEDED)
+- [ADR-118](118-elastic-native-dense-vector-strategy.md) - Original E5 decision (SUPERSEDED)
 - [ADR-072](072-three-way-hybrid-search-architecture.md) - Three-way RRF (SUPERSEDED)
 - [ADR-073](073-dense-vector-field-configuration.md) - Dense vector config (SUPERSEDED)
 - [ADR-074](074-elastic-native-first-philosophy.md) - Elastic-native philosophy (still valid)

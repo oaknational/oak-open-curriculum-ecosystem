@@ -41,7 +41,8 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 
 1. [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md) – the canonical agent entry point. Links to rules, testing strategy, schema-first execution, and essential reading.
 2. [`.agent/directives/rules.md`](../../.agent/directives/rules.md) – British spelling, TDD, no disabled quality gates, type safety, and all other mandatory rules.
-3. Relevant plans and context documents for the area you're working on (e.g., `.agent/plans/semantic-search/*` for search features).
+3. [`.agent/directives/practice.md`](../../.agent/directives/practice.md) – a map of the agentic engineering practice: the system of rules, workflows, sub-agents, and quality gates that governs how work happens.
+4. Relevant plans and context documents for the area you're working on (e.g., `.agent/plans/semantic-search/*` for search features).
 
 ## 3. Understand the Repository Layout
 

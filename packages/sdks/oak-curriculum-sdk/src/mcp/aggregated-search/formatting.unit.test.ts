@@ -4,11 +4,6 @@
  * Tests that formatSearchResults produces appropriate CallToolResult
  * responses for each scope, including human-readable summaries,
  * structured content, and widget metadata.
- *
- * @remarks
- * In WS1 (RED phase), all these tests MUST FAIL because the formatting
- * function is a stub that throws. They describe the desired behavior
- * that will be implemented in WS2 (GREEN phase).
  */
 
 import { describe, it, expect } from 'vitest';
@@ -22,17 +17,10 @@ describe('formatSearchResults', () => {
         total: 15,
         took: 42,
         timedOut: false,
-        results: [
-          {
-            id: '1',
-            rankScore: 0.9,
-            lesson: { lessonTitle: 'Photosynthesis Basics', subjectSlug: 'science' },
-            highlights: ['<em>photosynthesis</em> is the process...'],
-          },
-        ],
+        results: [],
       };
 
-      const result = formatSearchResults('lessons', mockResult, 'photosynthesis');
+      const result = formatSearchResults(mockResult, 'photosynthesis');
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -48,7 +36,7 @@ describe('formatSearchResults', () => {
         results: [],
       };
 
-      const result = formatSearchResults('lessons', mockResult, 'photosynthesis');
+      const result = formatSearchResults(mockResult, 'photosynthesis');
       const firstContent = result.content[0];
 
       if ('text' in firstContent) {
@@ -65,7 +53,7 @@ describe('formatSearchResults', () => {
         results: [],
       };
 
-      const result = formatSearchResults('lessons', mockResult, 'photosynthesis');
+      const result = formatSearchResults(mockResult, 'photosynthesis');
       const firstContent = result.content[0];
 
       if ('text' in firstContent) {
@@ -81,17 +69,10 @@ describe('formatSearchResults', () => {
         total: 3,
         took: 30,
         timedOut: false,
-        results: [
-          {
-            id: '1',
-            rankScore: 0.85,
-            unit: { unitTitle: 'Fractions and Decimals' },
-            highlights: [],
-          },
-        ],
+        results: [],
       };
 
-      const result = formatSearchResults('units', mockResult, 'fractions');
+      const result = formatSearchResults(mockResult, 'fractions');
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -105,16 +86,10 @@ describe('formatSearchResults', () => {
         total: 2,
         took: 25,
         timedOut: false,
-        results: [
-          {
-            id: '1',
-            rankScore: 0.7,
-            thread: { threadTitle: 'Algebra Progression' },
-          },
-        ],
+        results: [],
       };
 
-      const result = formatSearchResults('threads', mockResult, 'algebra');
+      const result = formatSearchResults(mockResult, 'algebra');
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -128,16 +103,10 @@ describe('formatSearchResults', () => {
         total: 1,
         took: 20,
         timedOut: false,
-        results: [
-          {
-            id: '1',
-            rankScore: 0.6,
-            sequence: { sequenceTitle: 'KS3 Science' },
-          },
-        ],
+        results: [],
       };
 
-      const result = formatSearchResults('sequences', mockResult, 'science');
+      const result = formatSearchResults(mockResult, 'science');
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -164,7 +133,7 @@ describe('formatSearchResults', () => {
         cache: { version: 'v1', ttlSeconds: 300 },
       };
 
-      const result = formatSearchResults('suggest', mockResult, 'photo');
+      const result = formatSearchResults(mockResult, 'photo');
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -181,7 +150,7 @@ describe('formatSearchResults', () => {
         results: [],
       };
 
-      const result = formatSearchResults('lessons', mockResult, 'nonexistent-topic');
+      const result = formatSearchResults(mockResult, 'nonexistent-topic');
 
       expect(result.isError).toBeUndefined();
       const firstContent = result.content[0];

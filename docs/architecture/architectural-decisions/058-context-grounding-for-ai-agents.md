@@ -189,4 +189,4 @@ This ensures:
 ## References
 
 - [OpenAI Apps SDK Reference - Tool Results](https://developers.openai.com/apps-sdk/reference#tool-results)
-- [Context Grounding Optimization Plan](/.agent/plans/sdk-and-mcp-enhancements/16-context-grounding-optimization.md)
+- [Context Grounding Optimization Plan](/.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/16-context-grounding-optimization.md)

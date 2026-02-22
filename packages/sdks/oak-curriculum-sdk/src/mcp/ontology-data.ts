@@ -6,8 +6,10 @@
  * It's imported by the aggregated-ontology tool to provide curriculum context
  * to AI agents.
  *
- * @remarks This is a POC implementation. See 02-curriculum-ontology-resource-plan.md
- * for the full schema-derived implementation.
+ * @remarks This is a POC implementation. For historical planning provenance,
+ * see `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`.
+ * The original ontology plan is archived at
+ * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
  */
 
 import { synonymsData } from './synonyms/index.js';

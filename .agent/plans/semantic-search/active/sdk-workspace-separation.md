@@ -109,7 +109,7 @@ Primary references:
 - `docs/development/build-system.md`
 - `docs/architecture/architectural-decisions/065-turbo-task-dependencies.md`
 - `.agent/plans/pipeline-enhancements/sdk-workspace-separation-plan.md`
-- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md`
+- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`
 - `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`
 
 ## 4. Repo-Grounded Baseline Snapshot (20 February 2026)
@@ -135,7 +135,7 @@ rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   --glob '!**/*.test.ts' | wc -l
 
 rg -n "ws5-skip-old-gen|ws5-promote-search|ws5-quality-gates" \
-  .agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md
+  .agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md
 ```
 
 ## 5. Scope
@@ -203,7 +203,7 @@ Goal: enforce prerequisites and freeze reproducible baseline.
 
 File-level tasks:
 
-- `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md`
+- `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`
   (status checks only)
 - `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
   (baseline updates)
@@ -405,7 +405,7 @@ pnpm smoke:dev:stub
 1. **WS5 gate satisfied before execution**
    - `ws5-skip-old-gen`, `ws5-promote-search`, `ws5-quality-gates` are
      `completed` in
-     `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md`.
+     `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`.
 
 2. **Ownership split physically complete**
    - generation workspace contains moved `type-gen/`, `schema-cache/`,
@@ -470,7 +470,7 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 
 - Executes **ADR-108 Step 1**.
 - Blocked by WS5 completion in:
-  `.agent/plans/semantic-search/active/phase-3a-mcp-search-integration.md`.
+  `.agent/plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md`.
 - OAuth and cursor-flow dependencies tracked in:
   `.agent/plans/semantic-search/active/oauth-validation-and-cursor-flows.plan.md`.
 - Follow-on decomposition remains deferred to ADR-108 Step 2/3.

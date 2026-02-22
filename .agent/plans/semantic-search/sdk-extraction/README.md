@@ -26,4 +26,4 @@ The full extraction plan (Checkpoints A–E2) is complete:
 
 ## Next
 
-MCP integration: [phase-3a-mcp-search-integration.md](../active/phase-3a-mcp-search-integration.md)
+MCP integration: [phase-3a-mcp-search-integration.md](../archive/completed/phase-3a-mcp-search-integration.md)

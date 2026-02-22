@@ -18,7 +18,7 @@ import type {
   SuggestParams,
   SearchRetrievalError,
 } from '../search-retrieval-types.js';
-import type { SearchSdkArgs, SearchSdkScope } from './types.js';
+import type { SearchSdkArgs, SearchDispatchResult } from './types.js';
 import { formatSearchResults } from './formatting.js';
 
 /**
@@ -112,32 +112,33 @@ function formatRetrievalError(error: SearchRetrievalError): string {
   return `Unexpected search error: ${error.message}`;
 }
 
-type ScopeDispatcher = (
-  args: SearchSdkArgs,
-  retrieval: SearchRetrievalService,
-) => Promise<Result<unknown, SearchRetrievalError>>;
-
-const SCOPE_DISPATCHERS: Readonly<Record<SearchSdkScope, ScopeDispatcher>> = {
-  lessons: (args, r) => r.searchLessons(buildLessonsParams(args)),
-  units: (args, r) => r.searchUnits(buildUnitsParams(args)),
-  threads: (args, r) => r.searchThreads(buildThreadsParams(args)),
-  sequences: (args, r) => r.searchSequences(buildSequencesParams(args)),
-  suggest: (args, r) => r.suggest(buildSuggestParams(args)),
-};
-
-/** Dispatches a search request to the appropriate SDK method by scope. */
+/**
+ * Dispatches a search request to the appropriate SDK retrieval method.
+ *
+ * Uses a `switch` on `args.scope` to preserve per-scope return types
+ * through the `SearchDispatchResult` union. The `default: never` guard
+ * ensures exhaustiveness at compile time.
+ */
 async function dispatchByScope(
-  scope: SearchSdkScope,
   args: SearchSdkArgs,
   retrieval: SearchRetrievalService,
-): Promise<{ ok: true; data: unknown } | { ok: false; result: CallToolResult }> {
-  const dispatch = SCOPE_DISPATCHERS[scope];
-  const result = await dispatch(args, retrieval);
-
-  if (!result.ok) {
-    return { ok: false, result: formatError(formatRetrievalError(result.error)) };
+): Promise<Result<SearchDispatchResult, SearchRetrievalError>> {
+  switch (args.scope) {
+    case 'lessons':
+      return retrieval.searchLessons(buildLessonsParams(args));
+    case 'units':
+      return retrieval.searchUnits(buildUnitsParams(args));
+    case 'threads':
+      return retrieval.searchThreads(buildThreadsParams(args));
+    case 'sequences':
+      return retrieval.searchSequences(buildSequencesParams(args));
+    case 'suggest':
+      return retrieval.suggest(buildSuggestParams(args));
+    default: {
+      const exhaustive: never = args.scope;
+      throw new Error(`Unhandled search scope: ${String(exhaustive)}`);
+    }
   }
-  return { ok: true, data: result.value };
 }
 
 /**
@@ -158,11 +159,11 @@ export async function runSearchSdkTool(
   args: SearchSdkArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  const outcome = await dispatchByScope(args.scope, args, deps.searchRetrieval);
+  const result = await dispatchByScope(args, deps.searchRetrieval);
 
-  if (!outcome.ok) {
-    return outcome.result;
+  if (!result.ok) {
+    return formatError(formatRetrievalError(result.error));
   }
 
-  return formatSearchResults(args.scope, outcome.data, args.text);
+  return formatSearchResults(result.value, args.text);
 }

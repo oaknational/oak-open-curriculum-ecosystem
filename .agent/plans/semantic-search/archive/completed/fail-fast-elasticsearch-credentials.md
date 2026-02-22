@@ -77,7 +77,7 @@ isProject: false
 
 **Status**: ✅ Complete (2026-02-18)
 **Priority**: High — blocking tool usability verification (WS5)
-**Parent**: [Phase 3a — MCP Search Integration](../active/phase-3a-mcp-search-integration.md)
+**Parent**: [Phase 3a — MCP Search Integration](phase-3a-mcp-search-integration.md)
 **Branch**: `feat/semantic_search_deployment`
 
 ---

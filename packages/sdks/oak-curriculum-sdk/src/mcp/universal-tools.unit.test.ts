@@ -4,7 +4,7 @@ import { WIDGET_URI } from '../types/generated/widget-constants.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { ok } from '@oaknational/result';
-import { SEARCH_SDK_INPUT_SCHEMA } from './aggregated-search-sdk/index.js';
+import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import type { UniversalToolName } from './universal-tools/index.js';
 import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 
@@ -98,7 +98,7 @@ describe('listUniversalTools', () => {
     const tools = listUniversalTools();
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.inputSchema).toEqual(SEARCH_SDK_INPUT_SCHEMA);
+    expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
   });
 });
 

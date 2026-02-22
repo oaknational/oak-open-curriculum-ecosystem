@@ -77,7 +77,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
 - [ADR-074: Elastic-Native-First Philosophy](074-elastic-native-first-philosophy.md)
-- [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-071, 072, 073**
+- [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-118, 072, 073**
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)
 - [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
 - [ADR-078: Dependency Injection for Testability](078-dependency-injection-for-testability.md)
@@ -119,6 +119,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-115: Proxy OAuth AS for Cursor](115-proxy-oauth-as-for-cursor.md)
 - [ADR-116: resolveEnv Pipeline Architecture](116-resolve-env-pipeline-architecture.md) (supersedes ADR-016)
 - [ADR-117: Plan Templates and Reusable Plan Components](117-plan-templates-and-components.md)
+- [ADR-118: Elastic-Native Dense Vector Strategy](118-elastic-native-dense-vector-strategy.md) ← **Superseded** by ADR-075
+- [ADR-119: Agentic Engineering Practice](119-agentic-engineering-practice.md)
 
 ## Key Architectural Decisions
 
@@ -140,15 +142,16 @@ For understanding authentication, authorization, and observability:
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
-For understanding sub-agent and plan composition architecture:
+For understanding the agentic engineering practice:
 
 - **[ADR-114](114-layered-sub-agent-prompt-composition-architecture.md)** - Layered prompt composition architecture (components -> templates -> wrappers)
 - **[ADR-117](117-plan-templates-and-components.md)** - Plan templates and reusable plan components (document hierarchy, lifecycle, TDD phases)
+- **[ADR-119](119-agentic-engineering-practice.md)** - Practice naming, boundary, three-layer model, and self-teaching property
 
 For understanding semantic search and Elastic-native AI/ML approach:
 
 - **[ADR-074](074-elastic-native-first-philosophy.md)** - Elastic-Native-First Philosophy for AI/ML features
-- **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-071, 072, 073)
+- **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-118, 072, 073)
 - **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
@@ -178,7 +181,7 @@ For understanding the unified ingestion pipeline architecture:
 
 For historical context on dense vector evaluation (superseded):
 
-- **[ADR-071](071-elastic-native-dense-vector-strategy.md)** - ~~E5 embeddings~~ (SUPERSEDED by ADR-075)
+- **[ADR-118](118-elastic-native-dense-vector-strategy.md)** - ~~E5 embeddings~~ (SUPERSEDED by ADR-075)
 - **[ADR-072](072-three-way-hybrid-search-architecture.md)** - ~~Three-way hybrid~~ (SUPERSEDED by ADR-075)
 - **[ADR-073](073-dense-vector-field-configuration.md)** - ~~Dense vector config~~ (SUPERSEDED by ADR-075)
 

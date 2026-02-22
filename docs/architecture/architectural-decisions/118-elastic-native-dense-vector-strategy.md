@@ -1,8 +1,9 @@
-# ADR-071: Elastic-Native Dense Vector Strategy
+# ADR-118: Elastic-Native Dense Vector Strategy
 
 **Status**: SUPERSEDED by [ADR-075](075-dense-vector-removal.md)  
 **Date**: 2025-12-07  
 **Superseded Date**: 2025-12-12  
+**Renumbered Date**: 2026-02-22  
 **Decision Makers**: Development Team  
 **Related**: [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-073](073-dense-vector-field-configuration.md)
 
