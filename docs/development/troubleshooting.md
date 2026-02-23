@@ -10,7 +10,7 @@ Run these commands from the repo root to check your setup:
 
 ```bash
 node --version           # Should be 24.x
-pnpm --version           # Should be 9.x+
+pnpm --version           # Should be 10.x
 pnpm install             # Install dependencies
 pnpm type-gen            # Generate types from OpenAPI schema
 pnpm build               # Build all workspaces

@@ -10,6 +10,13 @@ const TestSchema = z.object({
   BAR: z.string().min(1),
 });
 
+const MixedSchema = z.object({
+  REQUIRED_A: z.string().min(1),
+  REQUIRED_B: z.string().min(1),
+  OPTIONAL_X: z.string().optional(),
+  OPTIONAL_Y: z.string().optional(),
+});
+
 /**
  * Creates a temp directory tree that mimics a monorepo:
  *
@@ -250,6 +257,57 @@ describe('resolveEnv', () => {
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.error.message).not.toContain('Vercel');
+      }
+    });
+
+    it('Vercel guidance lists only keys that failed validation, not optional absent keys', () => {
+      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-mixed-'));
+      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
+
+      const result = resolveEnv({
+        schema: MixedSchema,
+        processEnv: { VERCEL: '1' },
+        startDir: noMarkerDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('REQUIRED_A');
+        expect(result.error.message).toContain('REQUIRED_B');
+
+        const vercelLine = result.error.message.split('\n').find((line) => line.includes('Vercel'));
+
+        expect(vercelLine).toBeDefined();
+        if (vercelLine) {
+          expect(vercelLine).toContain('REQUIRED_A');
+          expect(vercelLine).toContain('REQUIRED_B');
+          expect(vercelLine).not.toContain('OPTIONAL_X');
+          expect(vercelLine).not.toContain('OPTIONAL_Y');
+        }
+      }
+    });
+
+    it('Vercel guidance omits optional keys even when mixed with failing required keys', () => {
+      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-partial-'));
+      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
+
+      const result = resolveEnv({
+        schema: MixedSchema,
+        processEnv: { VERCEL: '1', REQUIRED_A: 'set' },
+        startDir: noMarkerDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        const vercelLine = result.error.message.split('\n').find((line) => line.includes('Vercel'));
+
+        expect(vercelLine).toBeDefined();
+        if (vercelLine) {
+          expect(vercelLine).toContain('REQUIRED_B');
+          expect(vercelLine).not.toContain('REQUIRED_A');
+          expect(vercelLine).not.toContain('OPTIONAL_X');
+          expect(vercelLine).not.toContain('OPTIONAL_Y');
+        }
       }
     });
   });

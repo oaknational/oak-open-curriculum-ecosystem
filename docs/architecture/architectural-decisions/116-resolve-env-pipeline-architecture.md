@@ -85,7 +85,7 @@ This eliminates runtime type checks for Clerk key presence throughout the applic
 
 `findRepoRoot()` returns `string | undefined`. When a repo root is found, `.env` and `.env.local` files are loaded and merged with `processEnv` as described above. When no repo root is found (e.g. Vercel serverless, where the deployed bundle at `/var/task/` contains no `.git` or `pnpm-workspace.yaml`), file loading is skipped and only `processEnv` is validated. This is correct because serverless platforms inject all configuration via process environment variables.
 
-When validation fails on a Vercel deployment (`processEnv.VERCEL === '1'`), the error message includes deployment-specific guidance naming the missing keys and directing the developer to configure them in the Vercel project settings (Settings → Environment Variables).
+When validation fails on a Vercel deployment (`processEnv.VERCEL === '1'`), the error message includes deployment-specific guidance listing only the keys that actually caused validation failures (extracted from the Zod issue paths) and directing the developer to configure them in the Vercel project settings (Settings → Environment Variables). Keys that are absent but optional are reported in the general diagnostics for context but excluded from the actionable Vercel guidance.
 
 Callers that require a repo root (STDIO server, smoke tests, build-time scripts) check the return value and fail-fast with a context-appropriate error message.
 

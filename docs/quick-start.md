@@ -88,7 +88,7 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # Recommended first full pipeline run (lint:fix + markdownlint:root + format:root)
+pnpm make    # Full pipeline (install → build/type-gen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
 pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
 
 # 3. Start an MCP dev server (choose one)
@@ -316,9 +316,9 @@ oak-mcp-ecosystem/
 
 This repository enforces strict type safety:
 
-- **Never use `any`** - Use `unknown` at boundaries, then validate
-- **Never use `as`** - No type assertions (except `as const` for literals)
-- **Always validate** - Use Zod schemas from the SDK at all boundaries
+- **Never use `any`** — Data entering the system is genuinely `unknown`; immediately validate it using the generated Zod schemas from the SDK. After validation, you have exact types; never widen them back.
+- **Never use `as`** — No type assertions (except `as const`, which is a data-structure annotation, not a type assertion)
+- **Always validate** — Use Zod schemas from the SDK at all boundaries
 - **Use type guards** - Functions with `is` keyword for type narrowing
 - **Import from SDK** - Never manually define API types
 

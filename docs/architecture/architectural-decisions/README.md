@@ -1,8 +1,18 @@
 # Architectural Decisions Records
 
-> 🗺️ **Quick Navigation**: [Architecture Map](../../archive/ARCHITECTURE_MAP.md) | [Architecture Overview](../../archive/architecture-overview.md) | [Architecture Home](../README.md)
+> **Navigation**: [Architecture Home](../README.md) | [Architecture Map (archived)](../../archive/ARCHITECTURE_MAP.md) | [Architecture Overview (archived)](../../archive/architecture-overview.md)
 
 This file is an index of architectural decisions made during the development of this repository.
+
+## Start Here: 5 ADRs in 15 Minutes
+
+New to the repo? Read these five ADRs first for the architectural foundations:
+
+1. [ADR-029](029-no-manual-api-data.md) — No manual API data structures (the cardinal rule)
+2. [ADR-030](030-sdk-single-source-truth.md) — SDK as single source of truth
+3. [ADR-031](031-generation-time-extraction.md) — Generation-time extraction
+4. [ADR-048](048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+5. [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK / NL-in-MCP boundary
 
 ## Index
 

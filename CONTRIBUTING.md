@@ -61,6 +61,8 @@ The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 5. **Core Infrastructure** (`packages/core/`)
 6. **Infrastructure Libraries** (`packages/libs/`)
 
+For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/development/extending.md).
+
 ## For Oak Team Members
 
 The rest of this guide is for internal contributors.
@@ -157,17 +159,19 @@ Get your Oak API key from: Contact Oak engineering team or see
 
 **Requires: Multiple service credentials**
 
-For complete E2E testing and search functionality:
+For smoke testing and search functionality (E2E tests use mocks and DI — no
+real credentials needed; see [Build System](docs/development/build-system.md)):
 
 - `OAK_API_KEY` — Curriculum API
 - `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices
-- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth testing
-- `OPENAI_API_KEY` — Natural language search (optional)
+- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth smoke testing
 - `SEARCH_API_KEY` — Admin endpoints
 
 See workspace READMEs for detailed setup instructions.
 
 ## Development Process
+
+For the complete development lifecycle — branching, TDD, quality gates, CI, AI review, human review, merge, and release — see the [Development Workflow](docs/development/workflow.md).
 
 ### 1. Create a Feature Branch
 

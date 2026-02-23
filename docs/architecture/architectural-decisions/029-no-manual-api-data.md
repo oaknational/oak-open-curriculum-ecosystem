@@ -178,5 +178,5 @@ We will know this decision is successful when:
 
 ## References
 
-- [Phase 6 Implementation Plan](../../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md)
-- [Oak Curriculum SDK](../../../packages/oak-curriculum-sdk/README.md)
+- [Phase 6 Implementation Plan](../../../.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md)
+- [Oak Curriculum SDK](../../../packages/sdks/oak-curriculum-sdk/README.md)

@@ -55,7 +55,7 @@ Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with n
 Prepares the codebase by building, checking, and auto-fixing issues:
 
 ```bash
-pnpm i && turbo run build type-check doc-gen lint:fix && pnpm markdownlint:root && pnpm format:root
+pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 **Flow**:
@@ -67,6 +67,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm markdownlint:root 
    - `doc-gen` - generate documentation
    - `lint:fix` - auto-fix linting issues
 3. Root-only fixes:
+   - `subagents:check` - validate sub-agent wrapper/template standards
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 
@@ -75,7 +76,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm markdownlint:root 
 Verifies the codebase passes all checks without modifications:
 
 ```bash
-pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
+pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
 ```
 
 **Flow**:
@@ -83,6 +84,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check l
 1. Root-only checks (no fixes):
    - `format-check:root` - verify formatting
    - `markdownlint-check:root` - verify markdown
+   - `subagents:check` - validate sub-agent wrapper/template standards
 2. Single turbo run:
    - `type-check` - TypeScript validation
    - `lint` - ESLint (verify only, no --fix)
@@ -96,15 +98,15 @@ pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check l
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && turbo run type-gen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && turbo run type-gen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites
 
-Runs all test types in a single turbo invocation:
+Runs all test types sequentially:
 
 ```bash
-turbo run test test:e2e test:ui smoke:dev:stub
+pnpm test && pnpm test:e2e && pnpm test:ui && pnpm smoke:dev:stub
 ```
 
 ### `pnpm fix` - Auto-fix only

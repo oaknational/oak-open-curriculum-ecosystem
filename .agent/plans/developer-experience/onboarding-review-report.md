@@ -7,7 +7,9 @@
 >
 > **Merge-blocking plan**: [active/onboarding.plan.md](../semantic-search/active/onboarding.plan.md)
 >
-> **Strategic follow-on plan**: [onboarding-strategic-follow-on.plan.md](./onboarding-strategic-follow-on.plan.md)
+> **Documentation follow-on**: [onboarding-documentation-follow-on.plan.md](./onboarding-documentation-follow-on.plan.md)
+>
+> **Governance follow-on**: [governance/onboarding-governance-follow-on.plan.md](./governance/onboarding-governance-follow-on.plan.md)
 
 ## Executive Summary
 

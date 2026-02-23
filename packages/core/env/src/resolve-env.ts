@@ -150,6 +150,53 @@ function buildDiagnostics(
 }
 
 /**
+ * Extracts unique top-level keys from Zod validation issues.
+ *
+ * These are keys that actually caused validation failures, as opposed to
+ * keys that are merely absent but optional.
+ */
+function extractFailingKeys(issues: readonly z.core.$ZodIssue[]): readonly string[] {
+  return [
+    ...new Set(
+      issues.flatMap((i) =>
+        i.path.filter((segment): segment is string => typeof segment === 'string'),
+      ),
+    ),
+  ];
+}
+
+/**
+ * Builds a structured error for a failed environment validation.
+ *
+ * The Vercel guidance (when applicable) only lists keys that actually
+ * failed validation — not all absent keys — so operators know exactly
+ * which keys to configure.
+ */
+function buildEnvResolutionError(
+  diagnostics: readonly EnvKeyDiagnostic[],
+  issues: readonly z.core.$ZodIssue[],
+  isVercel: boolean,
+): EnvResolutionError {
+  const absentKeys = diagnostics.filter((d) => !d.present).map((d) => d.key);
+  const failingKeys = extractFailingKeys(issues);
+  const issueMessages = issues.map((i) => i.message);
+
+  const vercelGuidance =
+    isVercel && failingKeys.length > 0
+      ? `\n  This is a Vercel deployment. Configure the missing keys in your ` +
+        `Vercel project settings (Settings → Environment Variables): ${failingKeys.join(', ')}`
+      : '';
+
+  const message =
+    `Environment validation failed.\n` +
+    `  Missing keys: ${absentKeys.length > 0 ? absentKeys.join(', ') : 'none'}\n` +
+    `  Validation errors: ${issueMessages.join('; ')}` +
+    vercelGuidance;
+
+  return { message, diagnostics, zodIssues: issues };
+}
+
+/**
  * Resolves environment variables from the standard source hierarchy,
  * validates against the provided Zod schema, and returns a typed Result.
  *
@@ -186,26 +233,5 @@ export function resolveEnv<TSchema extends z.ZodType>(
     return ok(parsed.data);
   }
 
-  const missingKeys = diagnostics.filter((d) => !d.present).map((d) => d.key);
-
-  const issueMessages = parsed.error.issues.map((i: z.core.$ZodIssue) => i.message);
-
-  const isVercel = processEnv.VERCEL === '1';
-
-  const vercelGuidance = isVercel
-    ? `\n  This is a Vercel deployment. Configure the missing keys in your ` +
-      `Vercel project settings (Settings → Environment Variables): ${missingKeys.join(', ')}`
-    : '';
-
-  const message =
-    `Environment validation failed.\n` +
-    `  Missing keys: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'none'}\n` +
-    `  Validation errors: ${issueMessages.join('; ')}` +
-    vercelGuidance;
-
-  return err({
-    message,
-    diagnostics,
-    zodIssues: parsed.error.issues,
-  });
+  return err(buildEnvResolutionError(diagnostics, parsed.error.issues, processEnv.VERCEL === '1'));
 }

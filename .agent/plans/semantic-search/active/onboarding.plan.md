@@ -8,8 +8,11 @@
 > — 8 independent onboarding reviews across junior devs, mid-level devs, lead
 > devs, principal engineers, engineering managers, product owners, CTOs, and CEOs
 >
-> **Strategic follow-on**: [onboarding-strategic-follow-on.plan.md](../../developer-experience/onboarding-strategic-follow-on.plan.md)
-> (B1-B10, schedule post-merge)
+> **Documentation follow-on**: [onboarding-documentation-follow-on.plan.md](../../developer-experience/onboarding-documentation-follow-on.plan.md)
+> (B7-B10 docs, schedule post-merge)
+>
+> **Governance follow-on**: [governance/onboarding-governance-follow-on.plan.md](../../developer-experience/governance/onboarding-governance-follow-on.plan.md)
+> (B1-B6 governance, requires leadership input)
 >
 > **Reviewed by**: `architecture-reviewer-barney` — restructured per
 > simplification recommendations (track separation, duplicate collapse,

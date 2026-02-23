@@ -8,8 +8,11 @@
 > **Merge-blocking plan**: [onboarding.plan.md](./onboarding.plan.md) — Track A
 > (A1-A8), ordered by dependency
 >
-> **Strategic follow-on**: [onboarding-strategic-follow-on.plan.md](../../developer-experience/onboarding-strategic-follow-on.plan.md)
-> — Track B (B1-B10), schedule post-merge
+> **Documentation follow-on**: [onboarding-documentation-follow-on.plan.md](../../developer-experience/onboarding-documentation-follow-on.plan.md)
+> — Track B docs (B7-B10), schedule post-merge
+>
+> **Governance follow-on**: [governance/onboarding-governance-follow-on.plan.md](../../developer-experience/governance/onboarding-governance-follow-on.plan.md)
+> — Track B governance (B1-B6), requires leadership input
 
 ## What This Is
 
@@ -26,7 +29,8 @@ The plan was reviewed and restructured by `architecture-reviewer-barney`.
 - **5 audiences** at GAPS FOUND (mid-level, lead, principal, EM, CTO)
 - **7 cross-cutting findings** flagged by 4+ of 8 reviewers
 - **8 merge-blocking workstreams** (A1-A8) in the active plan
-- **10 strategic follow-on items** (B1-B10) for post-merge scheduling
+- **4 documentation follow-on items** (B7-B10) for post-merge scheduling
+- **6 governance follow-on items** (B1-B6) requiring leadership input
 
 ## Cross-Cutting Findings (flagged by 4+ reviewers)
 
@@ -53,5 +57,6 @@ achieve it.
 | Content | Location |
 |---|---|
 | Full findings (all 8 audiences, all severity levels) | [`developer-experience/onboarding-review-report.md`](../../developer-experience/onboarding-review-report.md) |
-| Merge-blocking plan (A1-A8) | [`active/onboarding.plan.md`](./onboarding.plan.md) |
-| Strategic follow-on (B1-B10) | [`developer-experience/onboarding-strategic-follow-on.plan.md`](../../developer-experience/onboarding-strategic-follow-on.plan.md) |
+| Merge-blocking plan (A1-A8, complete) | [`active/onboarding.plan.md`](./onboarding.plan.md) |
+| Documentation follow-on (B7-B10) | [`developer-experience/onboarding-documentation-follow-on.plan.md`](../../developer-experience/onboarding-documentation-follow-on.plan.md) |
+| Governance follow-on (B1-B6) | [`developer-experience/governance/onboarding-governance-follow-on.plan.md`](../../developer-experience/governance/onboarding-governance-follow-on.plan.md) |

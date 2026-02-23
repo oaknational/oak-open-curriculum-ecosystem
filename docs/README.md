@@ -2,10 +2,11 @@
 
 ## Getting Started
 
-- **New to the repo?** → [Developer Onboarding](development/onboarding.md) – canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
-- **Quick start?** → [Quick Start Guide](quick-start.md) - Zero-setup path to productive changes
+- **New to the repo?** → [Developer Onboarding](development/onboarding.md) — canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
+- **Quick start?** → [Quick Start Guide](quick-start.md) — Zero-setup path to productive changes
+- **Vision and strategy?** → [VISION.md](VISION.md) — why this repository exists, what it delivers, and how we measure impact
 - **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](agent-guidance/ai-agent-guide.md)
-- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) - Architectural Decision Records define how the system should work
+- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — 115+ Architectural Decision Records define how the system should work
 
 ## Core Documentation
 
@@ -22,7 +23,9 @@
 ### Development
 
 - [Developer Onboarding](development/onboarding.md) - First-stop checklist for new contributors
+- [Development Workflow](development/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
 - [Environment Variables](development/environment-variables.md) - Complete setup guide
+- [Extension Points](development/extending.md) - How to add new MCP tools, search indices, SDK helpers
 - [Troubleshooting](development/troubleshooting.md) - Common issues and solutions
 - [Tooling](development/tooling.md) - Development tools and versions
 
@@ -31,6 +34,12 @@
 - [Data Variances](data/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 - [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) - Entity relationships
+
+### Agentic Engineering Practice
+
+- [Practice Explanation (for humans)](development/onboarding.md#12-the-agentic-engineering-practice) - What the AI sub-agents do, when they run, and what is expected of human developers
+- [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
+- [practice.md](../.agent/directives/practice.md) - Full map of the practice system
 
 ## AI Agent Guidance
 

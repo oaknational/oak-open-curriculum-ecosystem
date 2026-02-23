@@ -1,5 +1,92 @@
 # Napkin
 
+## Session: 2026-02-23 (c) — Onboarding Remediation A1-A8
+
+### What Was Done
+
+Implemented all 8 merge-blocking onboarding remediation workstreams (A1-A8)
+from the multi-audience onboarding review plan. All 7 cross-cutting findings
+(flagged by 4+ of 8 reviewers) fully addressed. All 3 audiences previously at
+CRITICAL GAPS (junior devs, product owners, CEOs) now at PASS.
+
+**A1 (Correctness Sweep)**: Fixed broken institutional-memory.md link in
+README, added prerequisites sections (Node.js 24.x, pnpm, gitleaks), created
+.nvmrc, fixed .env.example misleading Elasticsearch comment and path, fixed
+script-documentation drift in 5 files (subagents:check added to pnpm make/qg
+descriptions), fixed pnpm version 9.x→10.x, fixed double-dash typo, fixed
+ADR-029 stale references, fixed ADR index Quick Navigation labels, resolved
+CONTRIBUTING.md E2E credential contradiction.
+
+**A2 (Human-First Structure)**: Restructured onboarding.md — added "What's
+Different About This Repo" section with 6 principles and rationale, defined
+jargon inline (MCP, OpenAPI, ADR, SDK, TDD, Zod, workspace), added default
+path recommendation, Day 1 Essentials vs Reference separation, time estimates,
+"You're Ready When..." checklist, architecture diagram, fix type safety
+guidance in quick-start.md, added as-const exception to rules.md.
+
+**A3 (Workflow)**: Created docs/development/workflow.md — full dev lifecycle
+(branch, TDD, local gates, commit, push, PR, CI, AI review, human review,
+merge, release), CI-vs-local gap table, quality metrics.
+
+**A4 (Strategic Entry)**: Added plain-language README opening, prominent
+VISION.md link, strategic/leadership path in onboarding, mission-framing
+paragraph, Vision section in docs/README.md.
+
+**A5 (Vision Translation)**: Enhanced VISION.md capability table with
+user-value descriptions and evidence column, added MRR baseline metrics
+table, expanded Aila section with 3 concrete examples, added Last Updated
+date.
+
+**A6 (Practice Explanation)**: Added section 12 to onboarding.md — human-facing
+practice explanation (sub-agent table, when they run, napkin/distilled
+explanation, human expectations, AI review in PR lifecycle, manager summary
+with ADR-119 evidence). Updated README practice section with "single engineer
++ AI" evidence. Added practice section to docs/README.md.
+
+**A7 (ADR Hygiene)**: Added "Start Here: 5 ADRs in 15 Minutes" section to ADR
+index (ADR-029, 030, 031, 048, 107). ADR-029 fixes and Quick Navigation
+relabelling done in A1.
+
+**A8 (Extension Points)**: Created docs/development/extending.md — guidance for
+adding MCP tools (generated and aggregated), search indices, SDK helpers, core
+packages.
+
+### Reviewer Findings and Fixes
+
+Four reviewers invoked in parallel (code-reviewer, docs-adr-reviewer,
+config-reviewer, onboarding-reviewer). All returned APPROVED with fixes:
+
+1. extending.md: ADR-041 link was wrong (`041-standard-monorepo-layout.md`
+   → `041-workspace-structure-option-a.md`) — FIXED
+2. build-system.md: `pnpm check` description missing subagents:check — FIXED
+3. build-system.md: `pnpm test:all` showed turbo command instead of
+   sequential pnpm calls — FIXED
+4. .cursor/rules/no-type-shortcuts.mdc: as-const exception not propagated
+   from rules.md — FIXED
+5. onboarding.md: Added handoff from 3-ADR list to "5 ADRs in 15 Minutes"
+   in ADR index — FIXED
+
+### Patterns Learned
+
+- When adding `subagents:check` to one command description, check ALL
+  command descriptions on the same page — the config-reviewer caught that
+  `pnpm check` was missed despite being on the same page as `pnpm make` and
+  `pnpm qg`
+- ADR file names do not always match their conceptual titles — ADR-041 is
+  called `041-workspace-structure-option-a.md`, not the more intuitive
+  `041-standard-monorepo-layout.md`. Always verify with glob.
+- When adding `as const` exception to rules.md, also propagate to the
+  always-applied cursor rule in `.cursor/rules/no-type-shortcuts.mdc` —
+  the code-reviewer correctly identified that the cursor rule is injected
+  into every AI interaction and would cause false-positive violations
+- VISION.md "7 different curriculum structures" was slightly misleading — 7
+  is the count of Elasticsearch indices, not structures; the actual
+  structures are 4 (lessons, units, threads, sequences)
+
+### Quality Gates
+
+markdownlint:root, format:root, lint:fix all pass.
+
 ## Session: 2026-02-22 (d) — Consolidation and Architecture Reviews
 
 ### What Was Done
