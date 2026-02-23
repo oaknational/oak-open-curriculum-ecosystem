@@ -21,6 +21,11 @@ export async function benchmarkSequences(): Promise<IndexResult> {
   const results: BenchmarkMetrics[] = [];
 
   for (const entry of entries) {
+    if (entry.subject === undefined || entry.phase === undefined) {
+      console.warn(`  \u26A0 Skipping cross-subject entry (sequences require subject + phase)`);
+      continue;
+    }
+
     if (!isSubject(entry.subject)) {
       console.warn(`  \u26A0 Skipping: subject "${entry.subject}" is not a valid sequence subject`);
       continue;

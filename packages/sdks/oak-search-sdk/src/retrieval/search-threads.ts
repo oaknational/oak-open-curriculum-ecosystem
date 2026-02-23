@@ -22,7 +22,7 @@ import type { SearchThreadIndexDoc } from '@oaknational/curriculum-sdk/public/se
 import type { RetrievalError, ThreadsSearchResult } from '../types/retrieval-results.js';
 import type { SearchParamsBase } from '../types/retrieval-params.js';
 import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
-import { clampSize, clampFrom } from './rrf-query-helpers.js';
+import { clampSize, clampFrom } from './rrf-score-processing.js';
 import { buildThreadRetriever } from './retrieval-search-helpers.js';
 import { toRetrievalError } from './retrieval-error.js';
 import { THREAD_SOURCE_EXCLUDES } from './source-excludes.js';
@@ -71,9 +71,9 @@ export async function searchThreads(
       thread: hit._source,
     }));
     return ok({
-      scope: 'threads' as const,
+      scope: 'threads',
       results,
-      total: res.hits.total.value,
+      total: results.length,
       took: res.took,
       timedOut: res.timed_out,
     });

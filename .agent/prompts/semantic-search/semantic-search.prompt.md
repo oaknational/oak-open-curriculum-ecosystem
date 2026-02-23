@@ -14,16 +14,19 @@ search has been replaced by SDK-backed Elasticsearch search.
 Three tools (`search`, `browse-curriculum`, `explore-topic`)
 are the sole search interface.
 
+**Search results quality** is a **merge blocker** — an
+implementation draft exists (fuzziness + score filtering), but
+it has NOT been validated against the live Elasticsearch cluster.
+This is the primary execution target for the next session.
+[search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
+
 **Pre-merge required workstreams remaining**:
 
-1. **SDK workspace separation** (3e) — split `curriculum-sdk`
+1. **Search results quality validation** — validate and
+   complete the search quality changes (see below)
+2. **SDK workspace separation** (3e) — split `curriculum-sdk`
    into type-gen and runtime workspaces
    ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
-
-**Search results quality** is a **merge blocker** — single-word
-cross-subject queries return the entire lesson index (8,000–10,000
-results) with poor-to-mixed ranking:
-[search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
 
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
@@ -41,7 +44,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 
 **Plans** (in priority order):
 
-- [Search results quality](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — fix single-word query pollution (fuzziness, min_score)
+- [Search results quality](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — validate and complete fuzziness + min_score changes
 - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** — split curriculum-sdk (WS5 gate satisfied)
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
@@ -72,10 +75,10 @@ Run this checklist at the start of the next session:
    execution target for the next session:
    - [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
    — contains full root cause analysis, cross-query evidence
-   (apple/tree/mountain), impact analysis, and five remediation
-   options with file pointers
+   (apple/tree/mountain), implementation status, AND a critical
+   list of outstanding validation items that MUST be addressed
 4. Treat these as active execution plans:
-   - [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — search configuration fixes
+   - [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — validate search quality changes
    - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**
 5. Treat these as complete/archive references only:
    - [search-snagging.md](../../plans/semantic-search/archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
@@ -85,44 +88,116 @@ Run this checklist at the start of the next session:
 6. Keep post-merge MCP extension work separate:
    - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
 
-### Next Execution Targets
+---
 
-**Merge blocker — Search quality** (Milestone 0):
+## Search Quality: What Happened and What Remains
 
-**Search results quality** — single-word cross-subject queries
-return the entire lesson index with poor-to-mixed ranking. The
-plan documents three reference queries ("apple", "tree",
-"mountain"), root cause analysis (fuzziness, no min_score, ELSER
-volume, transcript amplification), and five remediation options.
+### What was implemented (code changes exist, NOT validated)
 
-**Recommended execution order** for search quality fixes:
+1. **Fuzziness change**: Lesson BM25 fuzziness changed from
+   `AUTO` to `AUTO:6,9` with `prefix_length: 1` in
+   `rrf-query-builders.ts`. This eliminates ALL fuzzy matching
+   for words under 6 characters.
 
-1. **Create additional cross-subject ground truths** — "tree"
-   and "mountain" entries following the `APPLE_LESSONS` pattern in
-   `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/`
-2. **Adapt benchmark runner** for cross-subject queries — make
-   `subject` optional in `RunQueryInput`, `GroundTruthEntry`,
-   `EntryBenchmarkResult`, and adapt output formatting in
-   `apps/oak-search-cli/evaluation/analysis/`
-3. **Run baseline benchmarks** — capture current MRR/NDCG@10 for
-   all ground truths (per-subject + cross-subject) before changes
-4. **Implement Option 1** (reduce fuzziness) — change lesson
-   BM25 config from `fuzziness: 'AUTO'` to `fuzziness: 'AUTO:4,7'`
-   in `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
-5. **Implement Option 2** (add min_score threshold) — filter
-   results below a calibrated score threshold
-6. **Run comparison benchmarks** — verify cross-subject MRR
-   improves while per-subject MRR ≥ 0.95 (no regression)
-7. **Evaluate Option 3** (transcript weighting) if Options 1+2
-   are insufficient
+2. **Score filtering**: `filterByMinScore()` added to
+   `rrf-query-helpers.ts` with `DEFAULT_MIN_SCORE = 0.04`.
+   Applied in `searchLessons()` after score normalisation.
+   The `total` field was changed from ES-reported count to
+   filtered count.
 
-**Key files for search quality work**:
+3. **Cross-subject benchmark infrastructure**: `subject` and
+   `phase` made optional throughout the benchmark pipeline.
+   Three cross-subject ground truths created (apple, tree,
+   mountain).
 
-- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts` — fuzziness and field weights
-- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts` — filter builders, score normalisation
-- `packages/sdks/oak-search-sdk/src/retrieval/create-retrieval-service.ts` — query preprocessing
-- `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/` — cross-subject ground truths
-- `apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-lessons.ts` — benchmark runner
+### What has NOT been done — ALL of these are blocking
+
+1. **No benchmarks have been run against live ES.** We do not
+   know if the changes improve cross-subject results, and we
+   do not know if they regress per-subject results. This is the
+   most critical gap.
+
+2. **No architecture review.** The code reviewer, test reviewer,
+   and type reviewer were invoked. The architecture reviewers
+   were not. Changes to the SDK's search behaviour and API
+   contract warrant architectural review.
+
+3. **TSDoc was removed from production code** to satisfy
+   line-count lint limits. The correct fix is to split files,
+   not remove documentation. Files affected:
+   - `rrf-query-helpers.ts`
+   - `benchmark-main.ts`
+
+4. **Test issues flagged by reviewers are unresolved:**
+   - Type-only test that proves nothing about product code
+   - Redundant test that repeats proof across enum variants
+   - File misclassified as unit test (uses mocks → integration)
+   - Missing `buildFourWayRetriever` coverage with phrases/filters
+   - Duplicated `stubLessonDoc` across 5 files
+
+5. **The `total` semantic change is undocumented.** This could
+   break pagination for any consumer. No ADR, no TSDoc update,
+   no consumer impact assessment.
+
+6. **Regression risk is unknown.** `AUTO:6,9` eliminates ALL
+   fuzzy matching for 1-5 char words. `DEFAULT_MIN_SCORE = 0.04`
+   is calibrated from visual inspection of three queries. Neither
+   has been validated against the 30 per-subject ground truths.
+
+7. **No E2E or smoke tests.** Per the testing strategy, TDD
+   applies at ALL levels. Search behaviour changes need E2E
+   validation.
+
+8. **Question: is this the right place for the change?** Should
+   fuzziness be an ES index/template setting rather than a
+   per-query parameter? Should score filtering apply to all
+   scopes, not just lessons?
+
+9. **Other indexes are exposed to the same problem.** Threads
+   and sequences still use `fuzziness: 'AUTO'` — the exact
+   configuration identified as the primary cause. Units use
+   `AUTO:3,6`. No score filtering on any non-lesson scope.
+   Consistency and deliberate configuration required.
+
+10. **Directive compliance gaps.** TDD not at all levels (no
+    integration or E2E tests for the pipeline changes). TSDoc
+    removed instead of files split. `total` semantic change
+    undocumented. Score filtering applied selectively without
+    an explicit, documented rationale.
+
+### Execution plan for next session
+
+See the full execution plan in
+[search-results-quality.md § Next Session Execution Plan](../../plans/semantic-search/active/search-results-quality.md#next-session-execution-plan).
+
+Summary:
+
+1. Restore removed documentation (split files if too long)
+2. Fix flagged test issues
+3. Run full benchmarks against live ES — this is the critical gate
+4. Evaluate other indexes (threads/sequences use `fuzziness: 'AUTO'`, units `AUTO:3,6`, none have score filtering)
+5. Evaluate architectural concerns (correct level for changes, scope consistency, `total` semantics, directive compliance)
+6. Invoke architecture reviewers
+7. Run full quality gate chain including E2E/smoke
+
+---
+
+## Next Execution Targets
+
+**Merge blocker — Search quality validation** (Milestone 0):
+
+The code changes are drafted. The next session's job is
+VALIDATION, not more implementation. The questions to answer:
+
+1. Do the changes improve cross-subject MRR? (run benchmarks)
+2. Do the changes regress per-subject MRR? (run benchmarks)
+3. Are the changes at the right level of abstraction? (architecture review)
+4. Is the `total` semantic change acceptable? (consumer audit)
+5. Have we tuned too aggressively? (benchmark the edge cases)
+6. Do units/threads/sequences need the same fixes? (evaluate other indexes)
+7. Does the implementation comply with the directives? (audit against rules.md, testing-strategy.md)
+
+**Only after search quality is validated and complete:**
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
@@ -153,7 +228,13 @@ schema alignment item.
 
 Widget stabilisation is **complete** (all phases 0-5).
 
-**Critical principles for the next session**:
+---
+
+## Critical Principles
+
+These are not suggestions. They are requirements. If any
+principle was violated during implementation, the work is
+not done until the violation is corrected.
 
 - **Never manipulate global state.** Step back and consider the
   desired impact, whether it is valid, and whether this is the
@@ -166,22 +247,32 @@ Widget stabilisation is **complete** (all phases 0-5).
   schema via `pnpm type-gen`.
 - **We always choose long-term architectural excellence.** We do
   not put important work off until later. If reviewers find
-  issues, those issues become next steps.
+  issues, those issues become next steps — they are not
+  "non-blocking". Critical issues are always blocking.
 - **Tests that agree with the code on the wrong contract are
   worse than no tests.** They provide false confidence instead
   of genuine verification. Anchor test fixtures to the schema
   (or captured API responses), not to the assumptions of the
   code under test.
-- **Ground truths before configuration changes.** Always run
-  baseline benchmarks before and after any search configuration
+- **Ground truths before AND after configuration changes.** Always
+  run baseline benchmarks before and after any search configuration
   change. The existing 30 per-subject lesson ground truths
   (MRR 0.983) must not regress.
+- **Never make files shorter by removing documentation.** The
+  point is to improve developer experience, not make it worse.
+  If a file is too long, split it into smaller files with clear
+  boundaries and index.ts re-exports.
+- **All reviewer issues are blocking.** There is no such thing as
+  a "non-blocking critical issue". If a reviewer flags it as
+  critical, it gets fixed before the work is considered done.
 
 ---
 
 ## Search Quality Problem Summary
 
-Single-word cross-subject queries are fundamentally broken:
+Single-word cross-subject queries were fundamentally broken.
+Code changes have been drafted to address them, but those
+changes have NOT been validated against live search:
 
 | Query | Length | Total results | Top-3 quality | Root cause |
 |-------|--------|---------------|---------------|------------|
@@ -197,11 +288,16 @@ Single-word cross-subject queries are fundamentally broken:
    matches to common words ("apply", "three", "true") that appear
    in thousands of transcripts, overwhelming genuine matches.
 
+**Drafted fixes** (in code, not validated):
+
+1. `fuzziness: 'AUTO:6,9'` — eliminates fuzzy matching for words <6 chars
+2. `filterByMinScore(hits, 0.04)` — post-RRF score threshold
+
 **Full analysis**: [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
 
-**Existing ground truth**: `CrossSubjectLessonGroundTruth` type and
-`APPLE_LESSONS` entry in
-`apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/apple-lessons.ts`
+**Existing ground truths**: 3 cross-subject (`APPLE_LESSONS`,
+`TREE_LESSONS`, `MOUNTAIN_LESSONS`) in
+`apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/`
 
 ---
 
@@ -234,23 +330,66 @@ Single-word cross-subject queries are fundamentally broken:
 
 ### Search Pipeline Architecture
 
-4-way RRF hybrid search (BM25 + ELSER on Content + Structure):
+**Lessons** (4-way RRF, 12,833 docs):
 
 ```text
-query
-  → removeNoisePhrases()
-  → detectCurriculumPhrases()
-  → buildFourWayRetriever():
-     BM25 Content  (fuzziness: AUTO, lesson_title^3, lesson_keywords^2, ...)
+query → removeNoisePhrases() → detectCurriculumPhrases()
+  → buildFourWayRetriever(scope='lesson'):
+     BM25 Content  (fuzziness: AUTO:6,9, prefix_length: 1, min_should_match: '2<65%')
      ELSER Content  (lesson_content_semantic)
-     BM25 Structure (fuzziness: AUTO, lesson_structure^2, lesson_title^3)
+     BM25 Structure (fuzziness: AUTO:6,9, prefix_length: 1, min_should_match: '2<65%')
      ELSER Structure (lesson_structure_semantic)
   → RRF (rank_window_size: 80, rank_constant: 60)
   → normaliseTranscriptScores()
-  → results (no min_score filtering currently)
+  → filterByMinScore(0.04)  ← NEW, NOT VALIDATED
+  → results (total = filtered count)
 ```
 
-**Key configuration file**: `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
+**Units** (4-way RRF, 1,665 docs):
+
+```text
+query → removeNoisePhrases() → detectCurriculumPhrases()
+  → buildFourWayRetriever(scope='unit'):
+     BM25 Content  (fuzziness: AUTO:3,6, prefix_length: 1)
+     ELSER Content  (unit_content_semantic)
+     BM25 Structure (fuzziness: AUTO:3,6, prefix_length: 1)
+     ELSER Structure (unit_structure_semantic)
+  → RRF (rank_window_size: 80, rank_constant: 60)
+  → results (NO score filtering, total = ES raw count)
+```
+
+**Threads** (2-way RRF, 164 docs):
+
+```text
+query → buildThreadRetriever():
+     BM25 (fuzziness: AUTO, thread_title^2)  ← SAME AS ORIGINAL LESSON PROBLEM
+     ELSER (thread_semantic)
+  → RRF (rank_window_size: 40, rank_constant: 40)
+  → results (NO score filtering, total = ES raw count)
+```
+
+**Sequences** (2-way RRF, 30 docs):
+
+```text
+query → buildSequenceRetriever():
+     BM25 (fuzziness: AUTO, sequence_title^2, ...)  ← SAME AS ORIGINAL LESSON PROBLEM
+     ELSER (sequence_semantic)
+  → RRF (rank_window_size: 40, rank_constant: 40)
+  → results (NO score filtering, total = ES raw count)
+```
+
+**Key configuration files**:
+
+- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts` — lesson + unit fuzziness
+- `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts` — thread + sequence fuzziness
+- `packages/sdks/oak-search-sdk/src/retrieval/create-retrieval-service.ts` — score filtering (lessons only)
+
+**WARNING**: The lesson pipeline above reflects current CODE, not
+validated behaviour. The fuzziness and score filter changes must
+be benchmarked against all ground truths before this can be
+considered the production pipeline. Threads and sequences still
+use `fuzziness: 'AUTO'` — the configuration identified as the
+root cause of the lesson ranking problem.
 
 ### Widget Rendering Architecture
 
@@ -375,17 +514,17 @@ score normalisation.
 | Index | GTs | MRR | NDCG@10 |
 |-------|-----|-----|---------|
 | Lessons (per-subject) | 30 | 0.983 | 0.944 |
-| Lessons (cross-subject) | 1 | — | — |
+| Lessons (cross-subject) | 3 | not benchmarked | not benchmarked |
 | Units | 2 | 1.000 | 0.923 |
 | Threads | 8 | 0.938 | 0.902 |
 | Sequences | 1 | 1.000 | 1.000* |
 
 \* Single-query index — mechanism check only.
 
-Cross-subject ground truth (1 entry: "apple") cannot yet be
-benchmarked — benchmark runner needs adaptation to support
-queries without subject filters. This is follow-on work
-documented in [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md).
+Cross-subject ground truths (3 entries: apple, tree, mountain)
+have been created and the benchmark infrastructure supports them.
+Benchmarks have NOT been run. Running `pnpm benchmark:lessons --all`
+is the first action for the next session.
 
 **Protocol**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
@@ -440,7 +579,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Document | Why |
 |----------|-----|
-| [Search results quality](../../plans/semantic-search/active/search-results-quality.md) | **Merge-blocking** — fix single-word query pollution |
+| [Search results quality](../../plans/semantic-search/active/search-results-quality.md) | **Merge-blocking** — validate fuzziness + score filter changes |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied) |
 | [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) | **Post-merge, pre-alpha** — 5 SDK tool bugs with TDD test specs |
 | [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) | **COMPLETE** — reference only |

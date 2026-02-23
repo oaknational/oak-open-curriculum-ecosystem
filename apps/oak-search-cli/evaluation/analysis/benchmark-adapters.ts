@@ -11,7 +11,9 @@
 import type { AllSubjectSlug, KeyStage } from '@oaknational/curriculum-sdk';
 import {
   LESSON_GROUND_TRUTHS,
+  CROSS_SUBJECT_LESSON_GROUND_TRUTHS,
   type LessonGroundTruth,
+  type CrossSubjectLessonGroundTruth,
 } from '../../src/lib/search-quality/ground-truth/index.js';
 import {
   UNIT_GROUND_TRUTHS,
@@ -157,4 +159,38 @@ export function getSequenceGroundTruthEntries(): readonly GroundTruthEntry[] {
     (gt: SequenceGroundTruth) => `${gt.subject}-${gt.phase}`,
     (gt: SequenceGroundTruth) => gt.phase,
   );
+}
+
+/**
+ * Convert a cross-subject ground truth to a GroundTruthQuery.
+ *
+ * @param gt - Cross-subject ground truth entry
+ * @returns Ground truth query for the benchmark entry runner
+ */
+function crossSubjectToQuery(gt: CrossSubjectLessonGroundTruth): GroundTruthQuery {
+  return {
+    query: gt.query,
+    expectedRelevance: gt.expectedRelevance,
+    category: 'basic',
+    description: gt.description,
+    keyStage: gt.keyStage,
+  };
+}
+
+/**
+ * Get all cross-subject lesson ground truth entries for benchmarking.
+ *
+ * Cross-subject entries have no subject or phase filter and are mapped
+ * directly to `GroundTruthEntry` without grouping. Each cross-subject
+ * ground truth becomes a separate entry with `subject: undefined` and
+ * `phase: undefined`.
+ *
+ * @returns Ground truth entries for cross-subject lesson benchmarks
+ */
+export function getCrossSubjectGroundTruthEntries(): readonly GroundTruthEntry[] {
+  return CROSS_SUBJECT_LESSON_GROUND_TRUTHS.map((gt) => ({
+    subject: gt.subject,
+    phase: gt.phase,
+    queries: [crossSubjectToQuery(gt)],
+  }));
 }

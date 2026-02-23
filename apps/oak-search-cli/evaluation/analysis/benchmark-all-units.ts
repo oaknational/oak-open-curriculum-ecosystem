@@ -20,6 +20,11 @@ export async function benchmarkUnits(): Promise<IndexResult> {
   const results: BenchmarkMetrics[] = [];
 
   for (const entry of entries) {
+    if (entry.subject === undefined || entry.phase === undefined) {
+      console.warn(`  \u26A0 Skipping cross-subject entry (units require subject + phase)`);
+      continue;
+    }
+
     for (const query of entry.queries) {
       const result = await runUnitQuery(
         {

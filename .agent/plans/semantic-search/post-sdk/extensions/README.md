@@ -20,6 +20,7 @@ These are **new capabilities**, not improvements to existing search. They build 
 
 | Plan | Description | Status |
 |------|-------------|--------|
+| [widget-renderer-reactivation.md](widget-renderer-reactivation.md) | Wire search/browse/explore results back into widget renderers | ⏸️ Blocked — awaiting MCP extensions research + Apps SDK work |
 | [advanced-features.md](advanced-features.md) | RAG, knowledge graph evolution, future capabilities | 📋 Pending |
 
 ---

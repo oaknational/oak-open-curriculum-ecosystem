@@ -117,6 +117,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [MCP Extensions Future Work](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | 📋 Post-merge SDK/MCP enhancements governance |
+| [Widget Renderer Reactivation](post-sdk/extensions/widget-renderer-reactivation.md) | ⏸️ Post-merge — wire renderers back after MCP extensions + Apps SDK work |
 | [Completed Plans](../completed-plans.md) | Index of all archived plans |
 
 ---

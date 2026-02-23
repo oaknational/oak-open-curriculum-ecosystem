@@ -5,10 +5,10 @@
  * This is a presentation-layer concern — the mapping is hand-authored
  * based on how we want each tool's output to be rendered.
  *
- * After Track 1a, only the search renderer remains. Browse and
- * explore entries are added in Phases 2-3 when their renderer
- * functions exist. Non-search-family tools show the neutral
- * shell (Oak logo + heading only).
+ * Renderers are parked for the current release — all tools show
+ * the neutral shell (Oak logo + heading only). Restore the map
+ * entries post-merge to activate search, browse, and explore
+ * renderers.
  *
  * @see widget-script.ts - Uses this registry for rendering
  * @see widget-renderers/ - Renderer implementations
@@ -35,10 +35,12 @@ export type RendererId = (typeof RENDERER_IDS)[number];
  * @remarks
  * Adding a map entry before the corresponding JS renderer function
  * exists causes `ReferenceError` at parse time in the ChatGPT sandbox,
- * breaking ALL tools.
+ * breaking ALL tools. Each entry here must have a matching
+ * `renderX()` function in the widget script — enforced by
+ * four-way sync tests.
  */
 export const TOOL_RENDERER_MAP = {
-  // All custom renderers parked pre-merge. Restore post-merge:
+  // Renderers parked for current release. Restore post-merge:
   // search: 'search',
   // 'browse-curriculum': 'browse',
   // 'explore-topic': 'explore',

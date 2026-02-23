@@ -54,6 +54,11 @@ async function runEntryQueries(
 ): Promise<readonly ThreadQueryResult[]> {
   const results: ThreadQueryResult[] = [];
 
+  if (entry.subject === undefined) {
+    console.warn(`  ⚠ Skipping cross-subject entry (threads require subject)`);
+    return results;
+  }
+
   for (const query of entry.queries) {
     try {
       const result = await runThreadQuery(

@@ -55,8 +55,17 @@ export function buildFourWayRetriever(
 
   const bm25Config =
     scope === 'lesson'
-      ? { fuzziness: 'AUTO' as const, minimum_should_match: '2<65%' }
-      : { fuzziness: 'AUTO:3,6' as const, prefix_length: 1, fuzzy_transpositions: true };
+      ? {
+          fuzziness: 'AUTO:6,9' as const,
+          prefix_length: 1,
+          fuzzy_transpositions: true,
+          minimum_should_match: '2<65%',
+        }
+      : {
+          fuzziness: 'AUTO:6,9' as const,
+          prefix_length: 1,
+          fuzzy_transpositions: true,
+        };
 
   return {
     rrf: {
@@ -77,7 +86,7 @@ export function buildFourWayRetriever(
         },
       ],
       rank_window_size: 80,
-      rank_constant: 60,
+      rank_constant: 60, // coupled to DEFAULT_MIN_SCORE — recalibrate if changed
     },
   };
 }

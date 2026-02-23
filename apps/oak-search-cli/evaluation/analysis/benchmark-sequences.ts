@@ -54,7 +54,11 @@ async function runEntryQueries(
 ): Promise<readonly SequenceQueryResult[]> {
   const results: SequenceQueryResult[] = [];
 
-  // Validate subject is a valid SearchSubjectSlug (Subject type)
+  if (entry.subject === undefined || entry.phase === undefined) {
+    console.warn(`  ⚠ Skipping cross-subject entry (sequences require subject + phase)`);
+    return results;
+  }
+
   if (!isSubject(entry.subject)) {
     console.warn(`  ⚠ Skipping entry: subject "${entry.subject}" is not a valid sequence subject`);
     return results;

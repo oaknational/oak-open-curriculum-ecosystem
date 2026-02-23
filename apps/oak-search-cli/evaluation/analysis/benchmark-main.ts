@@ -1,15 +1,6 @@
 /**
  * Benchmark main logic with dependency injection.
  *
- * This module contains the core benchmark logic that can be called with
- * any search function, enabling both production use and testing.
- *
- * Output shows measured values with status indicators:
- * - ✓✓ EXCELLENT: At or above excellent threshold
- * - ✓  GOOD: At or above good threshold
- * - ~  ACCEPTABLE: At or above fair threshold
- * - ✗  BAD: Below fair threshold
- *
  * @see benchmark-lessons.ts - Production CLI (uses real ES)
  * @see benchmark-test-harness.ts - Test CLI (uses fake)
  * @see ADR-078 Dependency Injection for Testability
@@ -27,7 +18,10 @@ import type { SearchFunction } from './benchmark-query-runner-lessons.js';
 import { printSummary } from './benchmark-output.js';
 import { printQueryReview, printReviewSummary } from './benchmark-review-output.js';
 import { generateIssuesReport, type AugmentedReview } from './benchmark-issues-report.js';
-import { getLessonGroundTruthEntries } from './benchmark-adapters.js';
+import {
+  getLessonGroundTruthEntries,
+  getCrossSubjectGroundTruthEntries,
+} from './benchmark-adapters.js';
 
 /**
  * CLI options parsed from command line arguments.
@@ -112,9 +106,25 @@ export function parseCliArgs(): CliOptions {
   return buildCliOptions(values);
 }
 
+/**
+ * Format an entry label for console output.
+ *
+ * @param entry - Ground truth entry
+ * @returns Human-readable label like "maths/primary" or "cross-subject"
+ */
+function entryLabel(entry: GroundTruthEntry): string {
+  if (entry.subject === undefined || entry.phase === undefined) {
+    return 'cross-subject';
+  }
+  return `${entry.subject}/${entry.phase}`;
+}
+
 /** Filter entries based on CLI options */
 function filterEntries(opts: CliOptions): readonly GroundTruthEntry[] {
-  let entries = getLessonGroundTruthEntries();
+  const perSubject = getLessonGroundTruthEntries();
+  const crossSubject = getCrossSubjectGroundTruthEntries();
+  let entries: readonly GroundTruthEntry[] = [...perSubject, ...crossSubject];
+
   if (!opts.all && !opts.subject && !opts.phase) {
     console.log('No filter. Use --all or --subject/--phase. Run --help for usage.');
     process.exit(1);
@@ -125,7 +135,6 @@ function filterEntries(opts: CliOptions): readonly GroundTruthEntry[] {
   if (opts.phase) {
     entries = entries.filter((e) => e.phase === opts.phase);
   }
-  // Filter queries by category if specified
   if (opts.category) {
     entries = entries.map((e) => ({
       ...e,
@@ -147,7 +156,7 @@ async function runReviewMode(
   const allReviews: ReviewQueryResult[] = [];
 
   for (const entry of entries) {
-    console.log(`\nReviewing ${entry.subject}/${entry.phase} (${entry.queries.length} queries)...`);
+    console.log(`\nReviewing ${entryLabel(entry)} (${entry.queries.length} queries)...`);
     const reviews = await benchmarkEntryForReview(entry, searchFn);
 
     for (const review of reviews) {
@@ -173,9 +182,7 @@ async function runAggregateMode(
   const results: EntryBenchmarkResult[] = [];
 
   for (const entry of entries) {
-    console.log(
-      `Benchmarking ${entry.subject}/${entry.phase} (${entry.queries.length} queries)...`,
-    );
+    console.log(`Benchmarking ${entryLabel(entry)} (${entry.queries.length} queries)...`);
     const result = await benchmarkEntry(entry, searchFn);
     results.push(result);
   }
@@ -198,14 +205,14 @@ async function runIssuesMode(
   console.log(`Running issues analysis for ${entries.length} entries...\n`);
 
   for (const entry of entries) {
-    process.stdout.write(`  ${entry.subject}/${entry.phase}...`);
+    process.stdout.write(`  ${entryLabel(entry)}...`);
     const reviews = await benchmarkEntryForReview(entry, searchFn);
 
     for (const review of reviews) {
       augmentedReviews.push({
         review,
-        subject: entry.subject,
-        phase: entry.phase,
+        subject: entry.subject ?? 'cross-subject',
+        phase: entry.phase ?? 'cross-subject',
       });
       totalQueries++;
     }

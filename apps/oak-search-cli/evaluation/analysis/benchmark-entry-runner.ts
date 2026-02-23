@@ -25,12 +25,14 @@ import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
  * Ground truth entry for benchmarking.
  *
  * Uses AllSubjectSlug to support both archive (Subject) and foundational (AllSubjectSlug) ground truths.
+ * When `subject` is undefined, the entry represents a cross-subject query
+ * that runs without subject filtering.
  */
 export interface GroundTruthEntry {
-  /** Subject slug for this entry. */
-  readonly subject: AllSubjectSlug;
-  /** Phase (e.g. primary, secondary). */
-  readonly phase: Phase;
+  /** Subject slug for this entry. Undefined for cross-subject queries. */
+  readonly subject: AllSubjectSlug | undefined;
+  /** Phase (e.g. primary, secondary). Undefined for cross-subject queries. */
+  readonly phase: Phase | undefined;
   /** Ground truth queries to run for this entry. */
   readonly queries: readonly GroundTruthQuery[];
 }
@@ -54,10 +56,10 @@ export type { QueryResult } from './benchmark-query-runner-lessons.js';
  * from baseline comparison.
  */
 export interface EntryBenchmarkResult {
-  /** Subject slug for this entry. */
-  readonly subject: AllSubjectSlug;
-  /** Phase (e.g. primary, secondary). */
-  readonly phase: Phase;
+  /** Subject slug for this entry. Undefined for cross-subject queries. */
+  readonly subject: AllSubjectSlug | undefined;
+  /** Phase (e.g. primary, secondary). Undefined for cross-subject queries. */
+  readonly phase: Phase | undefined;
   /** Number of queries (excludes future-intent). */
   readonly queryCount: number;
   readonly mrr: number;

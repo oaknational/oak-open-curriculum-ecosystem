@@ -4,9 +4,8 @@
  * Tests the tool name to renderer mapping logic.
  * These are pure function tests with no IO or mocks.
  *
- * After Track 1a, only the search renderer remains.
- * Browse and explore entries are added in Phases 2-3
- * when their renderer functions exist.
+ * Renderers are parked for the current release — all tools
+ * show the neutral shell. Tests verify the parked state.
  *
  * @see widget-renderer-registry.ts
  */
@@ -22,7 +21,7 @@ import {
 import { WIDGET_SCRIPT } from './widget-script.js';
 
 describe('getRendererIdForTool', () => {
-  it('returns undefined for all tools (renderers parked pre-merge)', () => {
+  it('returns undefined for all tools (renderers parked for current release)', () => {
     expect(getRendererIdForTool('search')).toBeUndefined();
     expect(getRendererIdForTool('browse-curriculum')).toBeUndefined();
     expect(getRendererIdForTool('explore-topic')).toBeUndefined();
@@ -33,7 +32,7 @@ describe('getRendererIdForTool', () => {
 });
 
 describe('TOOL_RENDERER_MAP', () => {
-  it('is empty (all tools use neutral shell pre-merge)', () => {
+  it('is empty (renderers parked for current release)', () => {
     const keys = [];
     for (const key in TOOL_RENDERER_MAP) {
       keys.push(key);

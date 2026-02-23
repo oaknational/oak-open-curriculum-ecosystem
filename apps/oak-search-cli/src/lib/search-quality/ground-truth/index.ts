@@ -91,6 +91,8 @@ import { SPANISH_SECONDARY } from './entries/spanish-secondary';
 
 // Cross-subject ground truths
 import { APPLE_LESSONS } from './cross-subject/apple-lessons';
+import { TREE_LESSONS } from './cross-subject/tree-lessons';
+import { MOUNTAIN_LESSONS } from './cross-subject/mountain-lessons';
 
 /**
  * All lesson ground truths in the system.
@@ -167,6 +169,8 @@ export { SPANISH_SECONDARY } from './entries/spanish-secondary';
 // =============================================================================
 
 export { APPLE_LESSONS } from './cross-subject/apple-lessons';
+export { TREE_LESSONS } from './cross-subject/tree-lessons';
+export { MOUNTAIN_LESSONS } from './cross-subject/mountain-lessons';
 
 /**
  * All cross-subject lesson ground truths.
@@ -177,6 +181,8 @@ export { APPLE_LESSONS } from './cross-subject/apple-lessons';
  */
 export const CROSS_SUBJECT_LESSON_GROUND_TRUTHS: readonly CrossSubjectLessonGroundTruth[] = [
   APPLE_LESSONS,
+  TREE_LESSONS,
+  MOUNTAIN_LESSONS,
 ] as const;
 
 // =============================================================================

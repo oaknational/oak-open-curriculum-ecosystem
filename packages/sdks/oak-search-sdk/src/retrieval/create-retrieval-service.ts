@@ -2,12 +2,11 @@
  * Retrieval service factory.
  */
 
-import type { Client, estypes } from '@elastic/elasticsearch';
+import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type {
   SearchLessonsIndexDoc,
-  SearchSequenceIndexDoc,
   SearchUnitRollupDoc,
 } from '@oaknational/curriculum-sdk/public/search.js';
 
@@ -16,15 +15,10 @@ import type {
   RetrievalError,
   LessonsSearchResult,
   UnitsSearchResult,
-  SequencesSearchResult,
   LessonResult,
   UnitResult,
 } from '../types/retrieval-results.js';
-import type {
-  SearchLessonsParams,
-  SearchUnitsParams,
-  SearchSequencesParams,
-} from '../types/retrieval-params.js';
+import type { SearchLessonsParams, SearchUnitsParams } from '../types/retrieval-params.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
 import { createEsSearchFn } from '../internal/es-search.js';
@@ -37,20 +31,21 @@ import {
   buildUnitFilters,
   buildLessonHighlight,
   buildUnitHighlight,
+} from './rrf-query-helpers.js';
+import {
   normaliseTranscriptScores,
+  filterByMinScore,
+  DEFAULT_MIN_SCORE,
   clampSize,
   clampFrom,
-} from './rrf-query-helpers.js';
+} from './rrf-score-processing.js';
 import { suggest } from './suggestions.js';
 import { fetchSequenceFacets } from './sequence-facets.js';
-import { buildSequenceRetriever, deriveUnitDoc } from './retrieval-search-helpers.js';
+import { deriveUnitDoc } from './unit-doc-mapper.js';
+import { searchSequences } from './search-sequences.js';
 import { searchThreads } from './search-threads.js';
 import { toRetrievalError } from './retrieval-error.js';
-import {
-  LESSON_SOURCE_EXCLUDES,
-  UNIT_SOURCE_EXCLUDES,
-  SEQUENCE_SOURCE_EXCLUDES,
-} from './source-excludes.js';
+import { LESSON_SOURCE_EXCLUDES, UNIT_SOURCE_EXCLUDES } from './source-excludes.js';
 
 /**
  * Create the retrieval service implementation.
@@ -118,7 +113,8 @@ async function searchLessons(
     logger?.debug('searchLessons', { text: params.text, size, from });
     const res = await search<SearchLessonsIndexDoc>(request);
     const normalisedHits = normaliseTranscriptScores(res.hits.hits);
-    const results: readonly LessonResult[] = normalisedHits.map((hit) => ({
+    const filteredHits = filterByMinScore(normalisedHits, DEFAULT_MIN_SCORE);
+    const results: readonly LessonResult[] = filteredHits.map((hit) => ({
       id: hit._id,
       rankScore: hit._score,
       lesson: hit._source,
@@ -128,7 +124,7 @@ async function searchLessons(
     return ok({
       scope: 'lessons',
       results,
-      total: res.hits.total.value,
+      total: filteredHits.length,
       took: res.took,
       timedOut: res.timed_out,
     });
@@ -170,74 +166,19 @@ async function searchUnits(
 
     logger?.debug('searchUnits', { text: params.text, size, from });
     const res = await search<SearchUnitRollupDoc>(request);
-    const results: readonly UnitResult[] = res.hits.hits.map((hit) => ({
-      id: hit._id,
-      rankScore: hit._score ?? 0,
-      unit: deriveUnitDoc(hit),
-      highlights: hit.highlight?.unit_content ?? [],
+    const scored = res.hits.hits.map((h) => ({ _score: h._score ?? 0, _hit: h }));
+    const kept = filterByMinScore(scored, DEFAULT_MIN_SCORE);
+    const results: readonly UnitResult[] = kept.map((s) => ({
+      id: s._hit._id,
+      rankScore: s._score,
+      unit: deriveUnitDoc(s._hit),
+      highlights: s._hit.highlight?.unit_content ?? [],
     }));
 
     return ok({
       scope: 'units',
       results,
-      total: res.hits.total.value,
-      took: res.took,
-      timedOut: res.timed_out,
-    });
-  } catch (error: unknown) {
-    return err(toRetrievalError(error));
-  }
-}
-
-/**
- * Execute sequence search with two-way RRF (BM25+semantic).
- *
- * Sequences are API data structures for curriculum retrieval, not
- * user-facing programmes. One sequence generates many programme views.
- *
- * @param params - Search sequences parameters
- * @param search - ES search function
- * @param resolveIndex - Index name resolver
- * @param logger - Optional logger
- * @returns Result with sequences or retrieval error
- */
-async function searchSequences(
-  params: SearchSequencesParams,
-  search: EsSearchFn,
-  resolveIndex: (kind: 'sequences') => string,
-  logger?: Logger,
-): Promise<Result<SequencesSearchResult, RetrievalError>> {
-  try {
-    const size = clampSize(params.size);
-    const from = clampFrom(params.from);
-    const filters: estypes.QueryDslQueryContainer[] = [];
-    if (params.subject) {
-      filters.push({ term: { subject_slug: params.subject } });
-    }
-    if (params.phaseSlug) {
-      filters.push({ term: { phase_slug: params.phaseSlug } });
-    }
-
-    const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-    const request: EsSearchRequest = {
-      index: resolveIndex('sequences'),
-      size,
-      retriever: buildSequenceRetriever(params.text, filterClause),
-      from: from > 0 ? from : undefined,
-      _source: SEQUENCE_SOURCE_EXCLUDES,
-    };
-
-    logger?.debug('searchSequences', { text: params.text, size, from });
-    const res = await search<SearchSequenceIndexDoc>(request);
-    const results = res.hits.hits.map((hit) => ({
-      id: hit._id,
-      rankScore: hit._score ?? 0,
-      sequence: hit._source,
-    }));
-    return ok({
-      scope: 'sequences',
-      results,
-      total: res.hits.total.value,
+      total: kept.length,
       took: res.took,
       timedOut: res.timed_out,
     });

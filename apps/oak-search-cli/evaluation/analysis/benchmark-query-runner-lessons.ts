@@ -46,12 +46,15 @@ export type SearchFunction = (
  *
  * Includes the query category for per-category metric aggregation.
  * Uses AllSubjectSlug to support KS4 science variants.
+ *
+ * When `subject` is undefined, the query runs across all subjects
+ * (cross-subject benchmarking for unfiltered search quality).
  */
 export interface RunQueryInput {
   readonly query: string;
   readonly expectedRelevance: Readonly<Record<string, number>>;
-  readonly subject: AllSubjectSlug;
-  readonly phase: Phase;
+  readonly subject: AllSubjectSlug | undefined;
+  readonly phase: Phase | undefined;
   readonly queryKeyStage?: KeyStage;
   /** Category of user scenario this query represents. */
   readonly category: QueryCategory;
@@ -132,16 +135,17 @@ export async function runQuery(
   const start = performance.now();
 
   // Build SDK params from benchmark input.
-  // Map AllSubjectSlug to SearchSubjectSlug: KS4 science variants
+  // When subject is undefined, run an unfiltered cross-subject query.
+  // Otherwise map AllSubjectSlug to SearchSubjectSlug: KS4 science variants
   // (physics, chemistry, biology, combined-science) map to parent 'science'
   // because the SDK subject filter accepts canonical subjects only.
-  const subject: SearchSubjectSlug = isSubject(input.subject) ? input.subject : 'science';
-
   const sdkParams: SearchLessonsParams = {
     text: input.query,
-    subject,
     keyStage: input.queryKeyStage,
     size: 10,
+    ...(input.subject !== undefined && {
+      subject: isSubject(input.subject) ? input.subject : ('science' satisfies SearchSubjectSlug),
+    }),
   };
 
   // Execute search via injected SDK function

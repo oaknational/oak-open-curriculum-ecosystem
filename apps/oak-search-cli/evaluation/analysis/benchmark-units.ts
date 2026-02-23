@@ -53,6 +53,11 @@ async function runEntryQueries(
 ): Promise<readonly UnitQueryResult[]> {
   const results: UnitQueryResult[] = [];
 
+  if (entry.subject === undefined || entry.phase === undefined) {
+    console.warn(`  ⚠ Skipping cross-subject entry (units require subject + phase)`);
+    return results;
+  }
+
   for (const query of entry.queries) {
     try {
       const result = await runUnitQuery(

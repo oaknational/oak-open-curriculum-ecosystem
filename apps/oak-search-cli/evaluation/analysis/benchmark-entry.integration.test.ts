@@ -15,8 +15,11 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { ok } from '@oaknational/result';
-import { benchmarkEntry, type SearchFunction } from './benchmark-entry-runner.js';
-import type { GroundTruthEntry } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
+import {
+  benchmarkEntry,
+  type SearchFunction,
+  type GroundTruthEntry,
+} from './benchmark-entry-runner.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
 import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 
@@ -243,6 +246,32 @@ describe('benchmarkEntry', () => {
 
       expect(result.subject).toBe('science');
       expect(result.phase).toBe('primary');
+    });
+  });
+
+  describe('cross-subject entries', () => {
+    it('benchmarks entries with undefined subject and phase', async () => {
+      const mockSearch = createMockSearchFn(['expected-slug']);
+
+      const entry: GroundTruthEntry = {
+        subject: undefined,
+        phase: undefined,
+        queries: [
+          {
+            query: 'apple',
+            expectedRelevance: { 'expected-slug': 3 },
+            category: 'basic',
+            description: 'Cross-subject test fixture',
+          },
+        ],
+      };
+
+      const result = await benchmarkEntry(entry, mockSearch);
+
+      expect(result.subject).toBeUndefined();
+      expect(result.phase).toBeUndefined();
+      expect(result.mrr).toBe(1.0);
+      expect(result.queryCount).toBe(1);
     });
   });
 });

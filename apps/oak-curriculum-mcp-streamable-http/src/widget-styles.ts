@@ -61,17 +61,18 @@ export const WIDGET_STYLES = `
 }
 html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
-html, body { margin: 0; padding: 0; }
-body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
-#root { background: var(--bg); color: var(--fg); flex: 1; display: flex; flex-direction: column; }
-#content-container { margin: 0.8em; flex: 1; display: flex; flex-direction: column; }
-.hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+html { background: transparent; }
+html, body { margin: 0; padding: 0; height: auto; }
+body { font-family: 'Lexend', system-ui, sans-serif; background: transparent; }
+#root { background: var(--bg); color: var(--fg); border-radius: 12px; margin: 16px; }
+#content-container { padding: 12px; }
+.hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .hdr-link { display: flex; align-items: center; gap: 6px; text-decoration: none; color: inherit; }
 .logo { width: 20px; height: 26px; }
 .logo svg { width: 100%; height: 100%; }
 .ttl { font-weight: 600; font-size: 13px; margin: 0; }
 .sub-ttl { font-size: 12px; color: var(--fg-secondary); margin: 0; }
-#c { flex: 1; }
+#c { }
 .sec { margin-bottom: 16px; }
 .sec-ttl { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 10px; color: var(--fg-secondary); }
 .list { display: flex; flex-direction: column; gap: 8px; }
@@ -84,7 +85,7 @@ body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display:
 pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; line-height: 1.5; margin: 0; font-family: monospace; background: var(--code-bg); padding: 12px; border-radius: 8px; }
 code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 .empty { text-align: center; padding: 24px; color: var(--fg-secondary); font-size: 14px; }
-.ftr { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
+.ftr { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
 .ftr-disclaimer { margin: 0 0 8px; }
 .ftr-links { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; }
 .ftr-link { color: var(--accent-high-contrast); text-decoration: none; font-weight: 600; text-align: center; }

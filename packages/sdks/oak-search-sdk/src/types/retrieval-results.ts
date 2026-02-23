@@ -134,7 +134,15 @@ export interface ThreadResult {
 
 /** Metadata common to all search results. */
 export interface SearchResultMeta {
-  /** Total number of matching documents. */
+  /**
+   * Count of results returned for this query — always equals
+   * `results.length`.
+   *
+   * For lessons/units (4-way RRF): count after post-RRF score filtering.
+   * For threads/sequences (2-way RRF): count of hits in this page.
+   * This is NOT the ES total-matching-documents count; consumers
+   * needing corpus-wide totals for pagination should not rely on this.
+   */
   readonly total: number;
 
   /** Time taken by Elasticsearch (milliseconds). */

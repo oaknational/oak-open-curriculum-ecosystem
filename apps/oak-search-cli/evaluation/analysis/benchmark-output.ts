@@ -104,6 +104,9 @@ function printDetailedResults(
  * test capabilities requiring Level 3-4 features not yet implemented.
  */
 function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): void {
+  const subjectLabel = r.subject ?? 'cross-subject';
+  const phaseLabel = r.phase ?? '—';
+
   for (const cat of r.perCategory) {
     const row = formatMetricRow(
       cat.mrr,
@@ -114,16 +117,15 @@ function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): v
       cat.p95LatencyMs,
       refs,
     );
-    // Mark future-intent queries as excluded from stats
     const categoryLabel = cat.category === 'future-intent' ? 'future-intent (excl)' : cat.category;
     console.log(
-      `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${categoryLabel.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${row}`,
+      `${subjectLabel.padEnd(14)} | ${phaseLabel.padEnd(9)} | ${categoryLabel.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${row}`,
     );
   }
   const p95 = calculateP95(r.latencies);
   const row = formatMetricRow(r.mrr, r.ndcg10, r.precision3, r.recall10, r.zeroHitRate, p95, refs);
   console.log(
-    `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${'AGGREGATE'.padEnd(20)} | ${String(r.queryCount).padEnd(4)} | ${row}`,
+    `${subjectLabel.padEnd(14)} | ${phaseLabel.padEnd(9)} | ${'AGGREGATE'.padEnd(20)} | ${String(r.queryCount).padEnd(4)} | ${row}`,
   );
   console.log('-'.repeat(130));
 }
@@ -174,8 +176,10 @@ function printAggregateSummary(
       p95,
       refs,
     );
+    const subjectLabel = r.subject ?? 'cross-subject';
+    const phaseLabel = r.phase ?? '—';
     console.log(
-      `${r.subject.padEnd(20)} | ${r.phase.padEnd(10)} | ${String(r.queryCount).padEnd(4)} | ${row}`,
+      `${subjectLabel.padEnd(20)} | ${phaseLabel.padEnd(10)} | ${String(r.queryCount).padEnd(4)} | ${row}`,
     );
   }
   console.log('-'.repeat(120));

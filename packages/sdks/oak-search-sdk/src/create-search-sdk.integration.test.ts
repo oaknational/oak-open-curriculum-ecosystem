@@ -230,7 +230,7 @@ describe('RetrievalService', () => {
       if (result.ok) {
         expect(result.value.scope).toBe('lessons');
         expect(result.value.results).toBeInstanceOf(Array);
-        expect(typeof result.value.total).toBe('number');
+        expect(result.value.total).toBe(result.value.results.length);
         expect(typeof result.value.took).toBe('number');
         expect(typeof result.value.timedOut).toBe('boolean');
       }
@@ -295,7 +295,7 @@ describe('RetrievalService', () => {
       if (result.ok) {
         expect(result.value.scope).toBe('units');
         expect(result.value.results).toBeInstanceOf(Array);
-        expect(typeof result.value.total).toBe('number');
+        expect(result.value.total).toBe(result.value.results.length);
       }
     });
   });
@@ -313,7 +313,7 @@ describe('RetrievalService', () => {
       if (result.ok) {
         expect(result.value.scope).toBe('sequences');
         expect(result.value.results).toBeInstanceOf(Array);
-        expect(typeof result.value.total).toBe('number');
+        expect(result.value.total).toBe(result.value.results.length);
       }
     });
 
@@ -345,7 +345,7 @@ describe('RetrievalService', () => {
       if (result.ok) {
         expect(result.value.scope).toBe('threads');
         expect(result.value.results).toBeInstanceOf(Array);
-        expect(typeof result.value.total).toBe('number');
+        expect(result.value.total).toBe(result.value.results.length);
         expect(typeof result.value.took).toBe('number');
         expect(typeof result.value.timedOut).toBe('boolean');
       }

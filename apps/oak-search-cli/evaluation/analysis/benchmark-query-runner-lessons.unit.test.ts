@@ -111,6 +111,42 @@ describe('runQuery', () => {
     });
   });
 
+  describe('cross-subject queries', () => {
+    it('should omit subject from SDK params when subject is undefined', async () => {
+      const mockSearch = createMockSearch(['relevant-slug']);
+
+      const input: RunQueryInput = {
+        query: 'apple',
+        expectedRelevance: { 'relevant-slug': 3 },
+        subject: undefined,
+        phase: undefined,
+        category: 'basic',
+      };
+
+      await runQuery(input, mockSearch);
+
+      expect(mockSearch).toHaveBeenCalledOnce();
+      expect(mockSearch).toHaveBeenCalledWith(expect.objectContaining({ text: 'apple', size: 10 }));
+    });
+
+    it('should calculate metrics correctly for cross-subject queries', async () => {
+      const mockSearch = createMockSearch(['relevant-slug', 'other-slug']);
+
+      const input: RunQueryInput = {
+        query: 'tree',
+        expectedRelevance: { 'relevant-slug': 3 },
+        subject: undefined,
+        phase: undefined,
+        category: 'basic',
+      };
+
+      const result = await runQuery(input, mockSearch);
+
+      expect(result.mrr).toBe(1);
+      expect(result.hasHit).toBe(true);
+    });
+  });
+
   describe('metric calculation', () => {
     it('should calculate MRR correctly when first result is relevant', async () => {
       const mockSearch = createMockSearch(['relevant-slug', 'other-slug']);

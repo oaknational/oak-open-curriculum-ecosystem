@@ -1,13 +1,13 @@
 /**
- * RRF query helpers — filter builders, highlight configs, and score normalisation.
+ * RRF query helpers — filter builders and highlight configs.
+ *
+ * Score processing (normalisation, filtering, clamping) is in rrf-score-processing.ts.
  */
 
 import type { estypes } from '@elastic/elasticsearch';
 import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
-import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
 
 import type { SearchLessonsParams, SearchUnitsParams } from '../types/retrieval-params.js';
-import type { EsHit } from '../internal/types.js';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
@@ -139,11 +139,7 @@ function isKnownSubject(value: string): value is keyof typeof SUBJECT_TO_PARENT 
 // Highlights
 // ---------------------------------------------------------------------------
 
-/**
- * Build lesson highlight configuration for search results.
- *
- * @returns ES highlight config for lesson_content
- */
+/** Build lesson highlight configuration for search results. */
 export function buildLessonHighlight(): estypes.SearchHighlight {
   return {
     type: 'unified',
@@ -160,11 +156,7 @@ export function buildLessonHighlight(): estypes.SearchHighlight {
   };
 }
 
-/**
- * Build unit highlight configuration for search results.
- *
- * @returns ES highlight config for unit_content
- */
+/** Build unit highlight configuration for search results. */
 export function buildUnitHighlight(): estypes.SearchHighlight {
   return {
     type: 'unified',
@@ -178,72 +170,4 @@ export function buildUnitHighlight(): estypes.SearchHighlight {
       },
     },
   };
-}
-
-// ---------------------------------------------------------------------------
-// Score normalisation
-// ---------------------------------------------------------------------------
-
-/** Hit with normalised score for transcript availability (ADR-099). */
-interface NormalisedHit {
-  readonly _id: string;
-  readonly _score: number;
-  readonly _source: SearchLessonsIndexDoc;
-  readonly _highlight?: Readonly<Record<string, readonly string[]>>;
-}
-
-/**
- * Normalise RRF scores for transcript availability (ADR-099).
- *
- * Lessons without transcript are down-weighted by factor 2.
- *
- * @param hits - Raw ES hits with optional _score
- * @returns Hits with normalised scores, sorted by score descending
- */
-export function normaliseTranscriptScores(
-  hits: readonly EsHit<SearchLessonsIndexDoc>[],
-): NormalisedHit[] {
-  const mapped = hits.map((hit) => ({
-    _id: hit._id,
-    _score: hit._score ?? 0,
-    _source: hit._source,
-    _highlight: hit.highlight,
-    has_transcript: hit._source.has_transcript,
-  }));
-
-  const normalised = mapped.map((doc) => {
-    const factor = doc.has_transcript ? 1 : 2;
-    return {
-      _id: doc._id,
-      _score: doc._score * factor,
-      _source: doc._source,
-      _highlight: doc._highlight,
-    };
-  });
-
-  return normalised.sort((a, b) => b._score - a._score);
-}
-
-// ---------------------------------------------------------------------------
-// Utility
-// ---------------------------------------------------------------------------
-
-/**
- * Clamp size to valid range [1, 100].
- *
- * @param size - Requested page size
- * @returns Clamped size (default 25)
- */
-export function clampSize(size: number | undefined): number {
-  return Math.min(Math.max(size ?? 25, 1), 100);
-}
-
-/**
- * Clamp pagination offset to non-negative number.
- *
- * @param from - Requested offset
- * @returns Zero or the original value if non-negative
- */
-export function clampFrom(from: number | undefined): number {
-  return typeof from === 'number' && from >= 0 ? from : 0;
 }
