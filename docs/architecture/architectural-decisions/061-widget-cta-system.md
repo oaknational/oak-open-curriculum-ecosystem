@@ -2,12 +2,19 @@
 
 ## Status
 
-Accepted
+Accepted (supersession pending)
 
+> **Update (23 February 2026)**: The CTA system has been removed from the widget
+> output. CTA HTML, CSS, and JavaScript are no longer embedded in the widget.
+> Context grounding is being moved to an MCP resource (`curriculum://context-grounding`)
+> that clients load before any other action. This ADR will be formally superseded
+> when the context-grounding resource is implemented. The CTA source code in
+> `src/widget-cta/` is retained until that implementation is complete.
+>
 > **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool has since
 > been removed and merged into `get-ontology` (property graph data now lives in
-> ontology output). This ADR remains a historical record of the CTA architecture;
-> references to `get-knowledge-graph` below reflect the accepted-state context.
+> ontology output). References to `get-knowledge-graph` below reflect the
+> accepted-state context.
 
 ## Context
 

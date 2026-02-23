@@ -1,6 +1,10 @@
 # Provider Contracts (Core ⇄ Providers)
 
-Purpose: Define a small, behaviour‑level contract that all runtime providers must satisfy to ensure parity and prevent feature drift.
+> **Status**: STALE — the `@oaknational/mcp-providers-node` package referenced
+> in examples below has been deleted. Provider implementations are now composed
+> locally in each app. The contract concepts and design principles remain valid.
+
+Purpose: Define a small, behaviour-level contract that all runtime providers must satisfy to ensure parity and prevent feature drift.
 
 ## What the contracts are
 

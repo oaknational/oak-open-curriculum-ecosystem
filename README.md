@@ -163,7 +163,7 @@ This repository is governed by an **agentic engineering practice** — a self-re
 
 The practice operates in three layers: **philosophy** (the First Question, metacognition, the learning loop), **structure** (directives, plans, templates, ADRs, sub-agents, quality gates, institutional memory), and **tooling** (platform-specific bindings in `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`).
 
-The practice has enabled a single engineer, working with AI under the practice's governance, to produce the SDK, MCP servers, semantic search, 115+ ADRs, and the practice itself ([ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)).
+The practice has enabled a single engineer, working with AI under the practice's governance, to produce the SDK, MCP servers, semantic search, 114 ADRs, and the practice itself ([ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
 The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md). For a human-friendly explanation, see the [onboarding guide's practice section](docs/development/onboarding.md#12-the-agentic-engineering-practice).
 
@@ -211,7 +211,7 @@ Start with the [ADR index](docs/architecture/architectural-decisions/), then the
 - **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
 - **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
 - **`packages/libs/logger`** – Structured logging library
-- **`docs/architecture/architectural-decisions/`** – 115+ Architectural Decision Records documenting every significant design choice
+- **`docs/architecture/architectural-decisions/`** – 114 Architectural Decision Records documenting every significant design choice
 
 ## Architecture Overview
 
@@ -221,7 +221,7 @@ Start with the [ADR index](docs/architecture/architectural-decisions/), then the
 | `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
 | `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
 | `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
-| `docs/`          | Developer documentation, onboarding guides, 115+ ADRs                                                       |
+| `docs/`          | Developer documentation, onboarding guides, 114 ADRs                                                        |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 

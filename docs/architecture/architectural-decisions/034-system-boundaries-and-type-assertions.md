@@ -30,7 +30,7 @@ When the Oak API changes:
 
 ### Layer 2: SDK (Generated Bridge)
 
-- **Location**: `packages/oak-curriculum-sdk`
+- **Location**: `packages/sdks/oak-curriculum-sdk`
 - **Components**:
   - Generated types (`api-paths-types.ts`)
   - Generated schemas (`api-schema.ts`)

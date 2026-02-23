@@ -294,7 +294,7 @@ file is redundant and misleading.
 | `docs/vercel-environment-config.md` | Vercel env config | Current | Keep as-is |
 | `smoke-tests/OAUTH-VALIDATION-RESULTS.md` | OAuth validation results | Current | Update -- confirm plan link |
 | `smoke-tests/README-oauth-inspector.md` | OAuth Inspector workflow | Current | Keep as-is |
-| `.agent/prompts/learn-about-oak-cta.prompt.md` | CTA button prompt | Partially stale | Update -- align with current implementation |
+| `.agent/prompts/learn-about-oak-cta.prompt.md` | CTA button prompt | Deleted | CTA system removed from widget; context grounding moving to MCP resource |
 
 ---
 

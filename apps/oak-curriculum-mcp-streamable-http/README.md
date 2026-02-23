@@ -1068,91 +1068,13 @@ export function getToolWidgetUri(): string {
 - [ADR-071: Widget URI Cache-Busting Simplification](../../docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md)
 - [OpenAI Apps SDK: Build MCP Server](https://developers.openai.com/apps-sdk/build/mcp-server)
 
-## Widget Call-to-Action (CTA) System
+## Widget Branding
 
-The Oak widget includes a reusable CTA system for adding buttons that send follow-up messages to the model. This enables users to trigger workflows without manually typing prompts.
+The widget header is a compact single line containing the Oak logo, the "Oak National Academy" wordmark, and the current tool name. The logo and wordmark link to `https://www.thenational.academy`.
 
-### Overview
+The header is only shown on major tools (`search`, `browse-curriculum`, `explore-topic`, `fetch`). All other tools render without branding. Visibility is controlled by the `HEADER_TOOLS` set in `widget-script.ts`, which sets `display` on the `#hdr` element at render time.
 
-When the widget renders in ChatGPT, CTA buttons appear in the header (right side). Clicking a button sends a pre-configured prompt to the model using the OpenAI Apps SDK's `window.openai.sendFollowUpMessage()` API.
-
-**Current CTAs:**
-
-| Button             | Purpose                                                                                                                                         |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🌳 Learn About Oak | Prompts the model to call `get-help`, then call all listed agent-support tools (currently including `get-ontology`) to build curriculum context |
-
-### Adding a New CTA
-
-CTAs are defined in `src/widget-cta.ts`. To add a new CTA:
-
-1. **Add an entry to `CTA_REGISTRY`:**
-
-```typescript
-export const CTA_REGISTRY = {
-  learnOak: { ... },
-
-  // New CTA
-  startLessonPlanning: {
-    id: 'start-lesson-planning',
-    label: 'Plan a Lesson',
-    loadingLabel: 'Starting...',
-    icon: '📝',
-    prompt: 'Help me plan a lesson. First ask about the subject and key stage.',
-  },
-} as const satisfies Record<string, CtaConfig>;
-```
-
-2. **Rebuild the widget:**
-
-```bash
-pnpm build
-```
-
-3. **Test in ChatGPT** - The new button automatically appears
-
-### CTA Configuration
-
-Each CTA requires:
-
-| Field          | Type      | Description                                              |
-| -------------- | --------- | -------------------------------------------------------- |
-| `id`           | `string`  | Unique identifier (kebab-case), used for DOM element IDs |
-| `label`        | `string`  | Button text (2-4 words, action verb)                     |
-| `loadingLabel` | `string`  | Text shown while sending (1-2 words + ellipsis)          |
-| `icon`         | `string?` | Optional emoji prefix                                    |
-| `prompt`       | `string`  | Follow-up message sent to the model                      |
-
-### Architecture
-
-The CTA system uses a **registry + generator** pattern:
-
-```text
-src/widget-cta.ts
-├── CTA_REGISTRY           → Single source of truth for all CTAs
-├── generateCtaButtonHtml()     → Pure function: config → button HTML
-├── generateCtaContainerHtml()  → Pure function: all CTAs → container HTML
-└── generateCtaHandlerJs()      → Pure function: all CTAs → JavaScript handlers
-```
-
-Integration points:
-
-- `aggregated-tool-widget.ts` - Embeds `generateCtaContainerHtml()` in header
-- `widget-script-state.ts` - Embeds `generateCtaHandlerJs()` output
-- `widget-styles.ts` - Contains `.cta-container` and `.cta-btn` styles
-
-### UX Behavior
-
-1. **Feature detection**: CTAs only appear when `sendFollowUpMessage` is available
-2. **Loading state**: Button shows "🌳 Loading..." while sending
-3. **Hide on success**: All CTAs hide after any button is clicked
-4. **Error recovery**: Button re-enables on error for retry
-
-### Related Documentation
-
-- [OpenAI Apps SDK - Build UI](https://developers.openai.com/apps-sdk/build/chatgpt-ui)
-- [ADR-061: Widget Call-to-Action System](../../docs/architecture/architectural-decisions/061-widget-cta-system.md)
-- [ADR-060: Agent Support Tool Metadata System](../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md)
+> **Historical note**: The widget previously included a CTA button system (documented in [ADR-061](../../docs/architecture/architectural-decisions/061-widget-cta-system.md)). CTA buttons have been removed from the widget output. Context grounding is being moved to an MCP resource (`curriculum://context-grounding`). The CTA source code in `src/widget-cta/` is retained pending that implementation.
 
 ## Widget Rendering Architecture
 
@@ -1177,7 +1099,7 @@ Three renderers exist:
 | `renderBrowse`  | `browse-curriculum` | camelCase (SequenceFacet API) | `subjectSlug`, `keyStageTitle`, `phaseTitle`, `unitCount`, `lessonCount`                   |
 | `renderExplore` | `explore-topic`     | snake_case (ES index docs)    | Reuses search field-extraction helpers across lessons/units/threads                        |
 
-Non-search-family tools show the Oak logo and heading only (neutral shell).
+Non-search-family tools render without a branding header. The header (logo, wordmark, tool name) is shown only for tools in the `HEADER_TOOLS` set: `search`, `browse-curriculum`, `explore-topic`, and `fetch`.
 
 ### Renderer Registration (Four-Way Sync)
 
@@ -1254,7 +1176,7 @@ Integration contract tests validate renderer output against SDK Zod schemas (`Se
 All critical and important resilience gaps from architecture reviews have been fixed:
 
 - **Error containment**: `renderer(fullData)` wrapped in try/catch; shows "Unable to display results" fallback on error.
-- **CTA config injection prevention**: All string fields use `JSON.stringify` for safe serialisation into generated JS.
+- **String injection prevention**: All string fields use `JSON.stringify` for safe serialisation into generated JS.
 - **Scope validation**: `scopeObj` returns `null` for unknown scopes; search renderer fails fast with explicit error messages for missing `scope`, `results`, or `total`.
 - **Delegated click handling**: All external links use `data-oak-url` attributes with a single delegated `click` listener in `widget-script.ts`. No inline `onclick` handlers. A regression test in `renderer-contracts.integration.test.ts` enforces this invariant.
 - **Tool renderer map**: `JSON.stringify(TOOL_RENDERER_MAP)` for safe serialisation.

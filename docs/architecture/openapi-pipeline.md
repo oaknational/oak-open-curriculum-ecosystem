@@ -334,12 +334,12 @@ The architectural decisions that define this pipeline have documented trade-offs
 
 - SDK dependency creates a build bottleneck — all workspaces depend on the SDK
   build completing first
-  ([ADR-029](../architectural-decisions/029-no-manual-api-data.md))
+  ([ADR-029](./architectural-decisions/029-no-manual-api-data.md))
 - Single source of truth creates coupling — changes to the SDK ripple through
   all consumers
-  ([ADR-030](../architectural-decisions/030-sdk-single-source-truth.md))
+  ([ADR-030](./architectural-decisions/030-sdk-single-source-truth.md))
 - Generation-time extraction increases build complexity and output file size
-  ([ADR-031](../architectural-decisions/031-generation-time-extraction.md))
+  ([ADR-031](./architectural-decisions/031-generation-time-extraction.md))
 
 ### Planned Migration: Castr
 
@@ -347,8 +347,8 @@ The current `openapi-zod-client` + adapter pipeline is planned for replacement
 by Castr, which will produce Zod v4 output directly, eliminating the
 transformation layer entirely. Prerequisites: SDK workspace separation (in
 progress), side-by-side validation, then adapter removal. See
-[ADR-055](../architectural-decisions/055-zod-version-boundaries.md),
-[ADR-108](../architectural-decisions/108-sdk-workspace-decomposition.md), and
+[ADR-055](./architectural-decisions/055-zod-version-boundaries.md),
+[ADR-108](./architectural-decisions/108-sdk-workspace-decomposition.md), and
 the [Castr plan](../../.agent/plans/external/castr/README.md).
 
 ## Key Takeaway

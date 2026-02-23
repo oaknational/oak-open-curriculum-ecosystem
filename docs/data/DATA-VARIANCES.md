@@ -412,7 +412,7 @@ The `/key-stages/{ks}/subject/{subject}/lessons` endpoint returns **incomplete d
 
 ## 10. Entity Relationships
 
-> **Source**: [knowledge-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts)
+> **Source**: [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts)
 
 ### Core Hierarchy
 
@@ -603,18 +603,16 @@ Note: `all-years` only valid for `physical-education-primary` sequence.
 
 ### Planning
 
-| Document                                                                                                                 | Focus                  |
-| ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| [comprehensive-filter-testing.md](../../.agent/plans/semantic-search/pre-sdk-extraction/comprehensive-filter-testing.md) | Filter testing plan    |
-| [mfl-multilingual-embeddings.md](../../.agent/plans/semantic-search/post-sdk-extraction/mfl-multilingual-embeddings.md)  | MFL search limitations |
-| [current-state.md](../../.agent/plans/semantic-search/current-state.md)                                                  | Current MRR baselines  |
+| Document                                                                                                                    | Focus                  |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| [mfl-multilingual-embeddings.md](../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md) | MFL search limitations |
 
 ### SDK Sources
 
 | File                                                                                                             | Content                                             |
 | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts)                              | Structural patterns, KS4 complexity, key stage gaps |
-| [knowledge-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts)                | Entity relationships, concept graph                 |
+| [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts)                  | Entity relationships, concept graph                 |
 | [api-schema-sdk.json](../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json) | Complete OpenAPI schema                             |
 
 ### Technical
@@ -632,5 +630,5 @@ Note: `all-years` only valid for `physical-education-primary` sequence.
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2026-01-03 | **NEW Section 12**: Type Consistency Issues — year format variations, null handling semantics, duplicate records                                                     |
 | 2026-01-03 | Major expansion: Added bulk download integrity issues, API pagination bug, RSHE-PSHE status, API schema insights, exam boards by subject, many-to-many relationships |
-| 2026-01-03 | Moved to docs/data/, integrated ontology-data.ts and knowledge-graph-data.ts insights                                                                                |
+| 2026-01-03 | Moved to docs/data/, integrated ontology-data.ts and property-graph-data.ts insights                                                                                 |
 | 2026-01-03 | Created with consolidated findings from MFL transcript investigation                                                                                                 |

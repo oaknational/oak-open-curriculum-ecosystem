@@ -251,5 +251,5 @@ function validateLesson(lesson: string) {
 ## References
 
 - [OpenAPI Specification](https://www.openapis.org/)
-- [Oak Curriculum SDK](../../../packages/oak-curriculum-sdk/README.md)
+- [Oak Curriculum SDK](../../../packages/sdks/oak-curriculum-sdk/README.md)
 - [MCP Server](../../../ecosystem/psycha/oak-curriculum-mcp/README.md)

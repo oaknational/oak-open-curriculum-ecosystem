@@ -85,7 +85,7 @@ OpenAPI Schema (Single Source of Truth)
 ### File Structure
 
 ```text
-packages/oak-curriculum-sdk/
+packages/sdks/oak-curriculum-sdk/
 ├── scripts/
 │   ├── typegen.ts              # Phase 1: OpenAPI types
 │   ├── zodgen.ts               # Phase 2: Zod schemas

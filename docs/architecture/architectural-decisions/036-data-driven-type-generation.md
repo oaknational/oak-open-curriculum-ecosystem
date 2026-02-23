@@ -152,7 +152,7 @@ This pattern extends to domain knowledge not available in the OpenAPI schema. Wh
 
 ### Phase 1: Refactor MCP Tool Generation
 
-Update `/packages/oak-curriculum-sdk/type-gen/mcp-tools/mcp-tool-mapping-generator.ts`:
+Update `/packages/sdks/oak-curriculum-sdk/type-gen/mcp-tools/mcp-tool-mapping-generator.ts`:
 
 - Remove switch statement generation
 - Generate pure data structure
