@@ -61,6 +61,23 @@ const WIDGET_DESCRIPTION =
   'Oak curriculum explorer. For best results, call get-ontology and get-help first to understand the curriculum domain model.';
 
 /**
+ * Options for widget resource registration.
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
+ */
+export interface WidgetResourceOptions {
+  /**
+   * Dedicated origin for the widget sandbox, required for OpenAI app submission.
+   *
+   * ChatGPT renders the widget under `<domain>.web-sandbox.oaiusercontent.com`.
+   * Derived from the deployment URL at runtime (e.g. VERCEL_URL).
+   *
+   * @example "https://curriculum-mcp-alpha.oaknational.dev"
+   */
+  readonly widgetDomain?: string;
+}
+
+/**
  * Registers the Oak JSON viewer widget as an MCP resource.
  *
  * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
@@ -77,12 +94,17 @@ const WIDGET_DESCRIPTION =
  * - openai/widgetCSP: Content Security Policy for outbound requests
  * - openai/widgetPrefersBorder: Hint for bordered card rendering
  * - openai/widgetDescription: Human-readable summary for the model
+ * - openai/widgetDomain: Dedicated sandbox origin (when available)
  *
  * @param server - MCP server instance
+ * @param options - Optional widget configuration (e.g. widgetDomain)
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting guidance)
  */
-export function registerWidgetResource(server: ResourceRegistrar): void {
+export function registerWidgetResource(
+  server: ResourceRegistrar,
+  options?: WidgetResourceOptions,
+): void {
   const widgetUri = getToolWidgetUri();
   server.registerResource(
     'oak-json-viewer',
@@ -101,6 +123,7 @@ export function registerWidgetResource(server: ResourceRegistrar): void {
             'openai/widgetCSP': WIDGET_CSP,
             'openai/widgetPrefersBorder': true,
             'openai/widgetDescription': WIDGET_DESCRIPTION,
+            ...(options?.widgetDomain ? { 'openai/widgetDomain': options.widgetDomain } : {}),
           },
         },
       ],
@@ -182,9 +205,13 @@ export function registerOntologyResource(server: ResourceRegistrar): void {
  * registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
+ * @param options - Optional widget configuration (e.g. widgetDomain)
  */
-export function registerAllResources(server: ResourceRegistrar): void {
-  registerWidgetResource(server);
+export function registerAllResources(
+  server: ResourceRegistrar,
+  options?: WidgetResourceOptions,
+): void {
+  registerWidgetResource(server, options);
   registerDocumentationResources(server);
   registerOntologyResource(server);
 }

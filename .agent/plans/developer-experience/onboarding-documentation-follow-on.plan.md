@@ -28,11 +28,13 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     for the three audience groups (developers, AI agents, teachers) with needs
     and journeys.
 
-- [ ] **B8. Add mission framing to roadmap milestones**
+- [x] **B8. Add mission framing to roadmap milestones**
   - Audiences: PO, CEO
   - Action: For each milestone in `high-level-plan.md`, add a one-sentence
     user-impact summary. E.g. "Milestone 1: Public Alpha — external developers
     and AI platforms can access Oak's curriculum for the first time."
+  - Done: 23 February 2026 — user-impact summaries added to all 4 milestones
+    plus the milestone sequence overview
 
 - [ ] **B9. Document type-generation pipeline constraints and failure modes**
   - Audiences: Principal

@@ -2,9 +2,10 @@
 
 This repository is how Oak makes its curriculum available to AI tools and the wider education technology community. It powers the infrastructure that lets AI assistants help teachers find, adapt, and use Oak's openly-licensed curriculum.
 
-**For strategic overview, start with [Vision](docs/VISION.md).**
+> For an overview of the **impact** we aim to achieve with this repo, see [Vision](docs/VISION.md) — it explains what
+> this repository delivers, why it matters for Oak's mission. No technical background required.
 
-**Infrastructure for humans and AI agents to access, understand, and use Oak's openly-licensed, fully-sequenced and resourced curriculum — SDKs, MCP (Model Context Protocol) servers, and Elasticsearch-serverless-backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.**
+SDKs, MCP (Model Context Protocol) servers, and Elasticsearch-serverless-backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.
 
 ## Repo Contents
 
@@ -228,24 +229,10 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 
 [Oak's mission](https://www.thenational.academy/about-us/who-we-are) is to
 improve pupil outcomes and close the disadvantage gap by supporting teachers to
-teach. Oak's open curriculum API provides a major public asset, and this
-repository amplifies its impact through AI-native infrastructure: SDKs, MCP
-servers, and semantic search.
+teach. This repository amplifies that mission through AI-native infrastructure.
 
-Today, it is a build-and-delivery pipeline for reliable curriculum access. At
-public alpha for MCP Apps extensions, it also becomes a direct interaction
-surface for curriculum use within platforms such as ChatGPT, Claude, and Gemini.
-
-The roadmap includes integration of Oak's wider AI capabilities (including
-knowledge graph and pedagogical rigour services), with Aila and this ecosystem as
-complementary, mutually reinforcing tracks. See [docs/VISION.md](docs/VISION.md)
-for the full framing.
-The full vision also includes explicit non-goals, capability staging
-(Current/Next/Later), and impact measures for investment decisions.
-
-This vision serves two audiences: external developers/edtech teams who want to
-know what they can build, and internal stakeholders who need a clear investment
-and impact case for Oak.
+See [docs/VISION.md](docs/VISION.md) for the full framing — capability staging,
+non-goals, impact measures, evidence baselines, and the investment case.
 
 ## Contributing
 

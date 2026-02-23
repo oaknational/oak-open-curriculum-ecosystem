@@ -182,6 +182,32 @@ describe('registerWidgetResource', () => {
       expect(description).toBeDefined();
       expect(description).toContain('get-ontology');
     });
+
+    it('includes openai/widgetDomain when widgetDomain option is provided', () => {
+      registerWidgetResource(server, {
+        widgetDomain: 'https://curriculum-mcp-alpha.oaknational.dev',
+      });
+
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
+        contents: readonly { _meta?: { 'openai/widgetDomain'?: string } }[];
+      };
+      const meta = resource.contents[0]?._meta;
+
+      expect(meta?.['openai/widgetDomain']).toBe('https://curriculum-mcp-alpha.oaknational.dev');
+    });
+
+    it('omits openai/widgetDomain when widgetDomain option is not provided', () => {
+      registerWidgetResource(server);
+
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
+        contents: readonly { _meta?: { 'openai/widgetDomain'?: string } }[];
+      };
+      const meta = resource.contents[0]?._meta;
+
+      expect(meta?.['openai/widgetDomain']).toBeUndefined();
+    });
   });
 });
 

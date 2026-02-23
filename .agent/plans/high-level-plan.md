@@ -13,15 +13,19 @@ and active plans.
 
 ```text
 Milestone 0: Open Source Readiness               🔄 IN PROGRESS
+  → Make the repo public — external teams can build on Oak's curriculum
   → Secrets/PII sweep, merge branch, make repo public on GitHub
 
 Milestone 1: Public Alpha                        📋 NEXT
+  → Teachers use AI tools to access curriculum directly
   → Clerk production migration, mcp-ext-app UI architecture
 
 Milestone 2: Post-Alpha Enhancements             📋 PLANNED
+  → Richer curriculum interactions, more tools can connect
   → MCP extensions, architectural enforcement
 
 Milestone 3: Public Beta                         📋 PLANNED
+  → Production-grade reliability for daily teacher use
   → Mutation testing, observability, quality metrics, supply chain
 ```
 
@@ -30,6 +34,10 @@ Milestone 3: Public Beta                         📋 PLANNED
 ## Milestone 0: Open Source Readiness
 
 **Goal**: Make the repository safe to be public on GitHub.
+
+**User impact**: The SDK, MCP servers, and search infrastructure become publicly
+available — external developers and edtech teams can start building curriculum
+tools on Oak's open data for the first time.
 
 **Remaining work**:
 
@@ -62,6 +70,10 @@ Milestone 3: Public Beta                         📋 PLANNED
 ## Milestone 1: Public Alpha
 
 **Goal**: Enable external users to authenticate and use the MCP server.
+
+**User impact**: Teachers and developers can use AI assistants (ChatGPT, Claude,
+Gemini) to access Oak's curriculum directly — asking questions about lessons,
+finding resources, and adapting content without leaving their existing tools.
 
 **Pre-alpha work**:
 
@@ -103,6 +115,10 @@ Milestone 3: Public Beta                         📋 PLANNED
 **Goal**: Extend capabilities and harden architecture after public
 alpha feedback.
 
+**User impact**: Richer curriculum interactions through MCP extensions, broader
+authentication options, and stronger architectural quality — more tools can
+connect to curriculum data, and the ones that do are more reliable.
+
 **Primary streams**:
 
 1. **MCP extensions execution**
@@ -137,6 +153,10 @@ alpha feedback.
 
 **Goal**: Achieve production-grade quality assurance and observability
 before exiting public alpha and entering public beta.
+
+**User impact**: Production-grade reliability for tools that teachers depend on
+daily. Measurable quality assurance ensures curriculum resources maintain high
+pedagogical standards, and supply chain controls secure the published packages.
 
 **Pre-beta gates** (all must be operational before beta):
 
