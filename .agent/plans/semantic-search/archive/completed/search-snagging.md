@@ -1183,7 +1183,7 @@ for proper OTEL attributes. The middleware factory now accepts an
 optional `Logger` for DI. Integration tests added (4 tests covering
 injection, fallback, and error containment). The broader `no-console`
 enforcement across the codebase is tracked separately in
-[no-console-enforcement.plan.md](../../quality-and-maintainability/no-console-enforcement.plan.md).
+[no-console-enforcement.plan.md](../../architecture/no-console-enforcement.plan.md).
 
 ---
 

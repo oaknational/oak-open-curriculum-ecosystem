@@ -1,10 +1,10 @@
 # Config Architecture Standardisation Plan
 
 **Status**: 📋 READY TO START (Analysis Complete)  
-**Priority**: High - Blocks global state elimination work  
+**Priority**: Medium — post-merge, pre-alpha work  
 **Estimated Effort**: 8-12 hours  
 **Created**: 2025-12-16  
-**Updated**: 2025-12-17
+**Updated**: 2026-02-23
 
 ---
 
@@ -23,8 +23,13 @@ This plan prioritises:
 
 ## Related Plans
 
-- **Parent**: [Global State Elimination and Testing Discipline Plan](../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md) - This plan unblocks Phase 3 and subsequent phases
 - **ADR**: [ADR-078: Dependency Injection for Testability](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
+- **Predecessor** (archived): Global State Elimination and Testing
+  Discipline Plan — partially completed, partially superseded by
+  oak-search-cli UI removal. Config DI was Phase 3 of that plan,
+  now tracked here independently.
+- **Subsumes**: Node SDK Config and DI Remediation Plan (deleted
+  2026-02-23, scope absorbed into this plan)
 
 ---
 
@@ -49,7 +54,8 @@ This plan prioritises:
 
 ### Existing Shared Package: `@oaknational/mcp-env`
 
-**Location**: `packages/libs/env/`
+**Location**: `packages/core/env/` (moved from `packages/libs/env/`
+as of 2026-02)
 
 | Export                        | Used By              | Status                 |
 | ----------------------------- | -------------------- | ---------------------- |
@@ -528,7 +534,7 @@ Remove obsolete code and packages.
 
 #### 3.1 Delete `@oaknational/mcp-env`
 
-**Delete**: `packages/libs/env/` directory entirely
+**Delete**: `packages/core/env/` directory entirely
 
 **Update**: All imports across codebase to use `@oaknational/mcp-config`
 
@@ -582,14 +588,14 @@ pnpm test:e2e:built
 
 ### Apps
 
-- [ ] All 4 apps use `@oaknational/mcp-config`
-- [ ] All 4 apps follow canonical `env.ts` + `runtime-config.ts` pattern
+- [ ] All 3 apps use `@oaknational/mcp-config`
+- [ ] All 3 apps follow canonical `env.ts` + `runtime-config.ts` pattern
 - [ ] Zero `vi.doMock` in any unit test
 - [ ] Zero `process.env` mutations in any unit test
 
 ### Cleanup
 
-- [ ] `packages/libs/env/` deleted
+- [ ] `packages/core/env/` deleted
 - [ ] No duplicate parsing utilities across apps
 - [ ] All quality gates pass
 

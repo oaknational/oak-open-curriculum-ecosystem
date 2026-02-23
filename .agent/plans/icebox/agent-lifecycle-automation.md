@@ -410,7 +410,7 @@ pnpm agent-lifecycle-check --dry-run
 
 - `developer-experience/` - SDK publishing and docs tooling
 - `developer-experience/sdk-publishing-and-versioning-plan.md` - Related to commit/release workflow
-- `quality-and-maintainability/contract-testing-schema-evolution.plan.md` - Quality gates
+- `icebox/contract-testing-schema-evolution.md` - Quality gates (iceboxed)
 
 ## References
 

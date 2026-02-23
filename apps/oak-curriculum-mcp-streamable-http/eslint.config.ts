@@ -82,7 +82,7 @@ const config = defineConfig(
     },
     {
       files: ['**/*.ts'],
-      // TODO: remove once we start .agent/plans/quality-and-maintainability/di-architecture-consistency.md
+      // TODO: remove once config DI standardisation is complete (see .agent/plans/architecture/config-architecture-standardisation-plan.md)
       ignores: ['**/*.test.ts', '**/*.spec.ts', 'smoke-tests/**', 'e2e-tests/**', 'src/index.ts'],
       rules: {
         'no-restricted-syntax': [

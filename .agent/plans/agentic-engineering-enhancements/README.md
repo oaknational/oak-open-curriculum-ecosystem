@@ -6,7 +6,7 @@ Plans and research for hardening the agentic engineering practice through physic
 
 | File | Type | Description |
 |------|------|-------------|
-| `architectural-enforcement-adoption.plan.md` | Plan | ESLint boundaries, dependency-cruiser, knip — physical enforcement |
+| `architectural-enforcement-adoption.plan.md` | Plan | ESLint boundaries (incl. strict completion and max-files-per-dir), dependency-cruiser, knip — physical enforcement |
 | `cross-agent-standardisation.plan.md` | Plan | Cross-platform portability (skills, commands, sub-agent wrappers) |
 | `mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
 | `documentation-accuracy-improvements.plan.md` | Plan | Fix documentation inaccuracies and structural issues (prerequisite for enforcement) — **COMPLETE** |

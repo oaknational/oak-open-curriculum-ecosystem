@@ -5,8 +5,11 @@ overview: >
   monolith decay and enforce domain boundaries using ESLint constraints,
   dependency-cruiser, and knip.
 todos:
+  - id: eslint-strict-completion
+    content: "Complete ESLint strict enforcement (Phase 0): resolve remaining lint errors."
+    status: pending
   - id: baseline-lint-rules
-    content: "Implement 'max-files-per-dir' ESLint rule and set threshold to 10."
+    content: "Export and wire existing 'max-files-per-dir' rule; set threshold to 10."
     status: pending
   - id: boundary-configuration
     content: "Configure 'eslint-plugin-boundaries' per the canonical import matrix (ADR-041)."
@@ -47,10 +50,29 @@ Based on requirements and analysis in:
 
 ## 2. Phases
 
+### Phase 0: ESLint Strict Enforcement Completion (Prerequisite)
+
+- **Goal:** Complete the ESLint centralisation already in progress.
+- **Current state:** ESLint centralisation Phases 1-4 are complete (plugin
+  created, all workspaces migrated, legacy configs deleted). Phase 5
+  (strict enforcement) is partially done — all packages use `strict`
+  config but persistent lint errors remain in `streamable-http` and
+  `semantic-search`.
+- **Task:** Resolve remaining lint errors in `streamable-http` and
+  `semantic-search`. Verify `pnpm lint` passes cleanly across the
+  monorepo.
+
 ### Phase 1: Physical Modularity (ESLint)
 
 - **Goal:** Break up "God Folders."
-- **Task:** Implement the `max-files-per-dir` custom rule (as defined in the playbook) in `packages/core/oak-eslint`.
+- **Current state:** The `max-files-per-dir` rule already exists at
+  `packages/core/oak-eslint/src/rules/max-files-per-dir.ts` with tests,
+  but is NOT exported from the plugin index and NOT included in any
+  config. The plugin index currently exports only
+  `no-export-trivial-type-aliases`.
+- **Task:** Export the rule from the plugin, include it in the `strict`
+  config, audit existing directories for threshold breaches, and resolve
+  violations by structural refactoring.
 - **Target:** Root `eslint.config.ts` to apply this rule to all workspaces.
 
 ### Phase 2: Boundary Definition (ESLint)

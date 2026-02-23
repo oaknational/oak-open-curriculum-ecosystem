@@ -12,7 +12,8 @@ Provide focussed documents for the ESLint enhancement roadmap while retaining th
 
 ## Related plans
 
-- `.agent/plans/quality-and-maintainability/eslint/index.md`
+- `.agent/plans/agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  (ESLint plans consolidated 2026-02-23)
 
 ## Source
 

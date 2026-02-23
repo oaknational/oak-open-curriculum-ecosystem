@@ -33,6 +33,18 @@ at the source (clean break — no stubs, no redirects).
 
 ---
 
+## Quality and Architecture
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| Test Isolation Architecture Fix | 2025-12-22 | Vitest exit-code bug fixed, MediaQueryContext DI pattern created, global state mutations eliminated. Work later superseded when oak-search-cli UI layer was removed. | [archived plan](archive/completed/test-isolation-architecture-fix.md) |
+| Test Isolation Root Cause Analysis | 2025-12-22 | Identified global state mutation as root cause (not missing cleanup). Led to DI refactoring pattern. | [archived plan](archive/completed/ANALYSIS-test-isolation-root-cause.md) |
+| Ingestion Data Quality Fix | 2025-12-22 | Upstream API pagination bug workaround (unit-by-unit fetching), 436/436 lessons indexed. | [archived plan](archive/completed/COMPLETION-REPORT-2025-12-22.md) |
+| matchMedia DI Refactoring | 2025-12-22 | MediaQueryContext provider, DI pattern for browser APIs. Work later superseded when oak-search-cli UI layer was removed. | [archived plan](archive/completed/matchmedia-di-refactoring-plan.md) |
+| Global State Elimination | 2025-12-22 | vi.stubGlobal and vi.doMock eliminated, matchMedia DI completed. Remaining phases (config DI, testing discipline) tracked separately. UI-specific work superseded when oak-search-cli UI layer was removed. | [archived plan](archive/completed/global-state-elimination-and-testing-discipline-plan.md) |
+
+---
+
 ## Adding Entries
 
 When archiving a plan:

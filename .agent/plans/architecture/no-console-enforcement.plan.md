@@ -101,5 +101,5 @@ per-file judgement but are well-bounded.
 ## Related
 
 - [search-snagging.md](../semantic-search/archive/completed/search-snagging.md) — origin (logger finding)
-- [logging-guidance.md](../../docs/agent-guidance/logging-guidance.md) — canonical logger patterns
-- [ADR-051](../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md) — OTEL logging architecture
+- [logging-guidance.md](../../../docs/agent-guidance/logging-guidance.md) — canonical logger patterns
+- [ADR-051](../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md) — OTEL logging architecture

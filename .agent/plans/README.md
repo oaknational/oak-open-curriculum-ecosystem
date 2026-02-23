@@ -14,8 +14,8 @@ Strategic and tactical planning documents for the Oak MCP Ecosystem.
 |------------|---------|--------|
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Active |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
-| [quality-and-maintainability/](quality-and-maintainability/) | Type discipline, ESLint, testing | 📋 Planned |
-| [architecture/](architecture/) | Logging, errors, config | 📋 Planned |
+| [architecture/](architecture/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, cross-agent standardisation, mutation testing | 📋 Planned |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 📋 Planned |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |

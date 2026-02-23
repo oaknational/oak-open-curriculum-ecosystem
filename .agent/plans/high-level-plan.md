@@ -94,7 +94,7 @@ Milestone 3: Public Beta                         📋 PLANNED
 - STDIO/HTTP alignment:
   [stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md)
 - no-console ESLint enforcement (~110 files, largely mechanical):
-  [no-console-enforcement.plan.md](quality-and-maintainability/no-console-enforcement.plan.md)
+  [no-console-enforcement.plan.md](architecture/no-console-enforcement.plan.md)
 
 ---
 
@@ -149,7 +149,7 @@ before exiting public alpha and entering public beta.
      coverage
 2. **Observability and quality metrics**
    - Full plan:
-     [observability-and-quality-metrics.plan.md](quality-and-maintainability/observability-and-quality-metrics.plan.md)
+     [observability-and-quality-metrics.plan.md](architecture/observability-and-quality-metrics.plan.md)
    - Covers: structured logging, monitoring, alerting, quality metrics
      dashboards (duplication rate, complexity trends, change failure
      rate)
@@ -182,8 +182,7 @@ Strategic architecture remains anchored in:
 | `semantic-search/` | Merge-prep execution and search roadmap | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
 | `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
 | `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
-| `architecture/` | Cross-cutting architecture and alignment backlog | 📋 Milestone 1 | [architecture/stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md) |
-| `quality-and-maintainability/` | Quality/system-hardening and observability | 📋 Pre-alpha / Milestone 3 | [no-console-enforcement.plan.md](quality-and-maintainability/no-console-enforcement.plan.md) (pre-alpha), [observability-and-quality-metrics.plan.md](quality-and-maintainability/observability-and-quality-metrics.plan.md) (M3) |
+| `architecture/` | Cross-cutting architecture, system quality, and observability | 📋 Milestone 1 / 3 | [architecture/README.md](architecture/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 Planned | [tsdoc-generated-docs-overhaul.plan.md](developer-experience/tsdoc-generated-docs-overhaul.plan.md), [sdk-publishing-and-versioning-plan.md](developer-experience/sdk-publishing-and-versioning-plan.md) |
 | `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |

@@ -193,7 +193,7 @@ Research and planning for public alpha:
 
 ### no-console ESLint Enforcement
 
-- Plan: [no-console-enforcement.plan.md](../../quality-and-maintainability/no-console-enforcement.plan.md)
+- Plan: [no-console-enforcement.plan.md](../architecture/no-console-enforcement.plan.md)
 - Add `no-console: 'error'` to shared ESLint config, eliminate all
   `console.*` usage (~110 files, largely mechanical)
 - Origin: logger architectural bug found during snagging session

@@ -12,7 +12,11 @@
 ## Phase 2: Implement `max-files-per-dir`
 
 - **Action**: Implement the research plan for `max-files-per-dir` within the new plugin.
-- **Context**: Use the implementation details from `.agent/plans/quality-and-maintainability/eslint/eslint-max-files-per-dir.md`.
+- **Context**: ESLint `max-files-per-dir` rule already exists at
+  `packages/core/oak-eslint/src/rules/max-files-per-dir.ts`. Wiring
+  tracked in
+  `.agent/plans/agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  (Phase 1).
 - **Benefit**: Enforces modularity structurally, preventing "junk drawer" directories (for example, `utils/` with 50 files).
 
 ## Phase 3: Standardise "Strict Mode"
