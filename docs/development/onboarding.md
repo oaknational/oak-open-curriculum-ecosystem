@@ -103,7 +103,7 @@ Start with the [ADR (Architectural Decision Record)](../architecture/architectur
 - [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](../architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
-For an expanded architectural introduction, see [Start Here: 5 ADRs in 15 Minutes](../architecture/architectural-decisions/#start-here-5-adrs-in-15-minutes) in the ADR index.
+For an expanded architectural introduction, see [Start Here: 5 ADRs in 15 Minutes](../architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) in the ADR index.
 
 ### 2. Read the Grounding Docs
 
@@ -245,7 +245,7 @@ This repository uses an **agentic engineering practice** — a system where AI a
 
 **How AI review fits the PR lifecycle**: AI sub-agent reviews happen during development. They are advisory and inform the code as it is written. CI gates and human review happen at PR time. See the [Development Workflow](./workflow.md) for the full lifecycle.
 
-**For managers**: The practice enables a single engineer working with AI to produce high-quality, well-architected software at significant velocity. The 115+ ADRs, comprehensive quality gate suite, and specialist sub-agent reviewers are evidence of engineering maturity. The practice is documented in [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) and mapped in [practice.md](../../.agent/directives/practice.md).
+**For managers**: The practice enables a single engineer working with AI to produce high-quality, well-architected software at significant velocity. The 114 ADRs, comprehensive quality gate suite, and specialist sub-agent reviewers are evidence of engineering maturity. The practice is documented in [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) and mapped in [practice.md](../../.agent/directives/practice.md).
 
 ### 13. Useful References
 

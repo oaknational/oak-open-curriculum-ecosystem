@@ -74,10 +74,9 @@ Only 3 subjects have categories:
 ### In SDK
 
 - [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) — Domain model, structural patterns
-- [knowledge-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) — Entity relationships
+- [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) — Entity relationships
 
 ### In Agent Plans
 
 - [Semantic Search Plans](../../.agent/plans/semantic-search/) — Roadmap, acceptance criteria
-- [Filter Testing](../../.agent/plans/semantic-search/pre-sdk-extraction/comprehensive-filter-testing.md) — Filter matrix
-- [MFL Limitations](../../.agent/plans/semantic-search/post-sdk-extraction/mfl-multilingual-embeddings.md) — MFL search issues
+- [MFL Limitations](../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md) — MFL search issues

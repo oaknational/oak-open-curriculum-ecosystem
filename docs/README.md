@@ -6,7 +6,7 @@
 - **Quick start?** → [Quick Start Guide](quick-start.md) — Zero-setup path to productive changes
 - **Vision and strategy?** → [VISION.md](VISION.md) — why this repository exists, what it delivers, and how we measure impact
 - **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](agent-guidance/ai-agent-guide.md)
-- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — 115+ Architectural Decision Records define how the system should work
+- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — 114 Architectural Decision Records define how the system should work
 
 ## Core Documentation
 
