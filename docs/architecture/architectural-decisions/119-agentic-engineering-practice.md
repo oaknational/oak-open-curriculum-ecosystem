@@ -90,83 +90,42 @@ is specific to Oak's curriculum; the practice is generalisable.
 
 ### Three Layers
 
-The practice operates in three layers, each building on the one
-below:
+The practice operates in three layers:
 
-1. **Philosophy** — the principles and learning mechanisms.
-   The First Question ("could it be simpler?"), metacognition,
-   experience records, and the napkin-distilled-rules learning
-   loop. This layer defines _why_ the practice works.
-   **Architectural Enforcement** is a core philosophical
-   commitment and an active adoption track: preferring physical
-   constraints (lint, boundaries) over human vigilance.
+1. **Philosophy** — the principles and learning mechanisms
+   that define _why_ the practice works. Includes architectural
+   enforcement as a core philosophical commitment.
+2. **Structure** — the organisational patterns that define
+   _what_ the practice consists of. Includes cross-agent
+   standardisation as an evolving implementation direction.
+3. **Tooling** — the platform-specific implementations that
+   define _how_ the practice is used.
 
-2. **Structure** — the organisational patterns. Directives,
-   plans and their templates (ADR-117), ADRs, sub-agent prompt
-   architecture (ADR-114), quality gates, institutional memory.
-   This layer defines _what_ the practice consists of. It
-   includes **Cross-Agent Standardisation** (AGENTS.md, Agent
-   Skills) as an evolving implementation direction to keep the
-   practice portable and platform-agnostic.
-
-   Plans form a **nested hierarchy** from strategic overview
-   down to hands-on implementation tasks:
-   (a) strategic index (`high-level-plan.md`),
-   (b) collection roadmaps (e.g. `roadmap.md`),
-   (c) active execution plans (e.g. `widget-search-rendering.md`),
-   (d) platform-specific session plans (e.g. `.cursor/plans/`).
-   The lowest-level active plans in `.agent/plans/` are
-   supplemented by platform-specific plans created per-session
-   for fine-grained task tracking (e.g. Cursor plans in
-   `.cursor/plans/` with batch breakdowns and review checkpoints).
-
-3. **Tooling** — the platform-specific implementations.
-   `.cursor/rules/` (always-applied workspace rules),
-   `.cursor/commands/` (slash commands), `.cursor/agents/`
-   (sub-agent definitions), `.cursor/skills/` (specialised
-   capabilities), and entry-point files (`AGENT.md`, `CLAUDE.md`,
-   `AGENTS.md`). This layer defines _how_ the practice is used.
+The plan hierarchy, workflow details, artefact map, and layer
+content are documented in the practice guide
+([practice.md](../../../.agent/directives/practice.md)), which
+serves as the orienting map for day-to-day use.
 
 ### Feedback Loops and Recursive Self-Improvement
 
-The practice is stabilised by interlocking feedback loops --
-the same mechanism that stabilises any complex system.
+The practice is stabilised by interlocking feedback loops.
+Negative loops (quality gates, sub-agent reviews, the
+napkin-distilled-rules learning loop) correct errors, create
+the conditions for emergent stability, and prevent drift.
+Positive loops (agents improving agents, consolidation
+workflows) compound capability over time. This recursive
+self-improvement is what makes the practice a _practice_
+rather than a static framework.
 
-**Negative feedback loops** correct errors and prevent drift:
-quality gates catch regressions, sub-agent reviews catch design
-issues, and the learning loop converts mistakes into rules that
-prevent repetition. These are the system's error-correcting
-mechanisms.
-
-**Positive feedback loops** compound capability over time: the
-subagent-architect reviews and upgrades other agents, which then
-produce better reviews, which improve code quality, which raises
-the bar for what agents must understand. The consolidation
-workflows (documentation and prompt architecture) extract common
-threads into shared structures, making the system simpler and
-more consistent with each pass.
-
-This recursive self-improvement -- agents improving agents,
-reviews improving reviews, consolidation simplifying
-consolidation -- is not incidental. It is the mechanism by
-which the practice adapts to changing requirements and growing
-complexity without external intervention. It is what makes the
-practice a _practice_ rather than a static framework.
+See [practice.md](../../../.agent/directives/practice.md) for
+mechanism detail and diagrams.
 
 ### Self-Teaching Property
 
-The practice is designed to be discoverable through use.
-`AGENT.md` links to `rules.md`, which references
-`testing-strategy.md` and `schema-first-execution.md`. Commands
-invoke prompts, prompts reference plans, plans use templates.
-Sub-agents review work against the same rules that guided its
-creation. The napkin captures what went wrong, distillation
-extracts rules, and the rules prevent repetition.
-
-This self-teaching property is intentional and should be
-preserved. Communication about the practice should explain
-_just enough_ for someone to know to follow the thread, then
-let the self-teaching nature do the rest.
+The practice is designed to be discoverable through use —
+each document links to the next, and the system teaches itself
+through that traversal. This property is intentional and should
+be preserved.
 
 ### Why "Practice" and Not "Framework"
 

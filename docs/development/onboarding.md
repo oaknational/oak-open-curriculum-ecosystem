@@ -79,7 +79,7 @@ pnpm make       # install → build (includes type-gen via Turbo deps) → type-
 ## 5. Run Full Quality Gates (When Ready)
 
 ```bash
-pnpm qg  # format-check:root → markdownlint-check:root → type-check → lint → test → test:ui → test:e2e → smoke
+pnpm qg  # format-check:root → markdownlint-check:root → subagents:check → type-check → lint → test → test:ui → test:e2e → smoke
 ```
 
 Use `pnpm qg` once you are ready to run full-gate validation across UI, E2E, and smoke suites. This is slower and typically requires service credentials.

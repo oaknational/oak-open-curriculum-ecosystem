@@ -1,6 +1,6 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-22
+**Last Updated**: 2026-02-23
 **Status**: 🔄 Active strategic index
 **Scope**: Strategic cross-collection overview for the Oak MCP ecosystem.
 
@@ -20,6 +20,9 @@ Milestone 1: Public Alpha                        📋 NEXT
 
 Milestone 2: Post-Alpha Enhancements             📋 PLANNED
   → MCP extensions, architectural enforcement
+
+Milestone 3: Public Beta                         📋 PLANNED
+  → Mutation testing, observability, quality metrics, supply chain
 ```
 
 ---
@@ -30,10 +33,8 @@ Milestone 2: Post-Alpha Enhancements             📋 PLANNED
 
 **Remaining work**:
 
-1. Complete merge-blocking plans:
+1. Complete merge-blocking plan:
    - [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
-   - [widget-search-rendering.md](semantic-search/active/widget-search-rendering.md)
-     (Phase 5 resilience hardening pending)
 2. Final secrets and PII sweep across the entire repository
    - Verify `pnpm secrets:scan:all` passes
    - Manual review of configuration files, environment examples,
@@ -49,7 +50,12 @@ Milestone 2: Post-Alpha Enhancements             📋 PLANNED
 - Search dispatch type safety
 - OAuth specification compliance (ADR-113)
 - Proxy OAuth AS for Cursor (ADR-115)
-- Widget Phases 0-4 (Track 1a + 1b)
+- Widget Phases 0-5 (Track 1a + 1b) — including Phase 5 resilience
+  hardening
+- MCP tool snagging — 5 SDK tool bugs fixed with TDD, smoke-tested
+  end-to-end (2026-02-23)
+- Logger architectural bug — SDK logger instances fixed with DI
+  and proper OTEL attributes
 
 ---
 
@@ -87,6 +93,8 @@ Milestone 2: Post-Alpha Enhancements             📋 PLANNED
   [mcp-result-pattern-unification.md](semantic-search/post-sdk/mcp-integration/mcp-result-pattern-unification.md)
 - STDIO/HTTP alignment:
   [stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md)
+- no-console ESLint enforcement (~110 files, largely mechanical):
+  [no-console-enforcement.plan.md](quality-and-maintainability/no-console-enforcement.plan.md)
 
 ---
 
@@ -105,18 +113,54 @@ alpha feedback.
    - Depends on: Milestone 1 complete, widget Phase 5 complete
 2. **Architectural enforcement adoption**
    - Full plan:
-     [architectural-enforcement-adoption.md](agentic-engineering-enhancements/architectural-enforcement-adoption.md)
+     [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md)
    - Covers: ESLint boundary rules, dependency-cruiser, knip dead
-     code detection, cross-agent standardisation
+     code detection, agentic grounding
    - Implements: [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-3. **Social providers Phase 2**: Apple, LinkedIn, GitLab
-4. **Search quality stream progression** via semantic-search roadmap
+3. **Cross-agent standardisation**
+   - Full plan:
+     [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md)
+   - Covers: skill frontmatter, command portability, YAGNI cleanup,
+     workspace context
+   - Implements: [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
+4. **Social providers Phase 2**: Apple, LinkedIn, GitLab
+5. **Search quality stream progression** via semantic-search roadmap
    (Phase 4)
 
 **Supporting plans**:
 
 - [concept-preservation-and-supersession-map.md](sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md)
-- [folder-disposition-ledger.md](sdk-and-mcp-enhancements/folder-disposition-ledger.md)
+
+---
+
+## Milestone 3: Public Beta
+
+**Goal**: Achieve production-grade quality assurance and observability
+before exiting public alpha and entering public beta.
+
+**Pre-beta gates** (all must be operational before beta):
+
+1. **Mutation testing**
+   - Full plan:
+     [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md)
+   - Covers: Stryker integration, `pnpm mutate`, workspace roll-out,
+     CI integration
+   - Validates: tests actually protect behaviour, not just achieve
+     coverage
+2. **Observability and quality metrics**
+   - Full plan:
+     [observability-and-quality-metrics.plan.md](quality-and-maintainability/observability-and-quality-metrics.plan.md)
+   - Covers: structured logging, monitoring, alerting, quality metrics
+     dashboards (duplication rate, complexity trends, change failure
+     rate)
+3. **Supply chain controls** (if npm publishing is imminent)
+   - Icebox stub:
+     [supply-chain-controls.md](icebox/supply-chain-controls.md)
+   - Covers: SBOM generation, SLSA provenance, artifact signing,
+     dependency scanning
+
+**Depends on**: Milestone 2 complete (architectural enforcement
+provides the boundary checks that quality metrics will track).
 
 ---
 
@@ -126,7 +170,8 @@ Strategic architecture remains anchored in:
 
 - [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 - [semantic-search/active/sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
-- [pipeline-enhancements/sdk-workspace-separation-plan.md](pipeline-enhancements/sdk-workspace-separation-plan.md)
+- Pipeline framework extraction (iceboxed):
+  [icebox/openapi-pipeline-framework.md](icebox/openapi-pipeline-framework.md)
 
 ---
 
@@ -135,12 +180,11 @@ Strategic architecture remains anchored in:
 | Collection | Strategic Role | Current Status | Primary Entry |
 |------------|----------------|----------------|---------------|
 | `semantic-search/` | Merge-prep execution and search roadmap | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
-| `agentic-engineering-enhancements/` | System-hardening via architectural constraints and AI guardrails | 📋 Milestone 2 | [architectural-enforcement-adoption.md](agentic-engineering-enhancements/architectural-enforcement-adoption.md) |
-| `sdk-and-mcp-enhancements/` | Post-merge MCP/extensions governance and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
-| `pipeline-enhancements/` | Architecture decomposition and reusable pipeline trajectory | 📋 Planned | [pipeline-enhancements/sdk-workspace-separation-plan.md](pipeline-enhancements/sdk-workspace-separation-plan.md) |
+| `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
+| `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
 | `architecture/` | Cross-cutting architecture and alignment backlog | 📋 Milestone 1 | [architecture/stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md) |
-| `quality-and-maintainability/` | Quality/system-hardening backlog | 📋 Planned | [global-state-elimination-and-testing-discipline-plan.md](quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md) |
-| `dev-tooling-and-dev-ai-support/` | Tooling and contract-testing enablement | 📋 Planned | [contract-testing-schema-evolution-plan.md](dev-tooling-and-dev-ai-support/contract-testing-schema-evolution-plan.md) |
+| `quality-and-maintainability/` | Quality/system-hardening and observability | 📋 Pre-alpha / Milestone 3 | [no-console-enforcement.plan.md](quality-and-maintainability/no-console-enforcement.plan.md) (pre-alpha), [observability-and-quality-metrics.plan.md](quality-and-maintainability/observability-and-quality-metrics.plan.md) (M3) |
+| `developer-experience/` | SDK publishing, generated docs, tooling | 📋 Planned | [tsdoc-generated-docs-overhaul.plan.md](developer-experience/tsdoc-generated-docs-overhaul.plan.md), [sdk-publishing-and-versioning-plan.md](developer-experience/sdk-publishing-and-versioning-plan.md) |
 | `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 
@@ -158,8 +202,15 @@ Recent semantic-search completions include:
 2. Search dispatch type safety
 3. OAuth specification compliance
 4. Proxy OAuth AS for Cursor
-5. Widget Phase 0 (Track 1a) + post-Phase-0 reviewer fixes (B3 data shape, ESLint DRY, CTA centralisation, dead code removal)
+5. Widget Phase 0 (Track 1a) + post-Phase-0 reviewer fixes
 6. Widget Phases 1-4 (Track 1b) — search, browse, explore renderers
+7. Widget Phase 5 — resilience hardening (error containment,
+   JSON.stringify for JS generation, delegated click handlers,
+   four-way sync enforcement)
+8. MCP tool snagging — 5 SDK tool bugs fixed with TDD,
+   smoke-tested end-to-end (32 tools verified)
+9. Logger architectural bug — SDK logger DI, OTEL attributes
+10. Documentation accuracy improvements (6 workstreams)
 
 ---
 

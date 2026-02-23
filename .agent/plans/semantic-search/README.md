@@ -98,7 +98,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [SDK Workspace Separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking — split curriculum-sdk |
-| [Widget Search Rendering](active/widget-search-rendering.md) | 🔄 Merge-blocking — pre-merge Tracks 1a + 1b |
+| [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
 | [Result Pattern Unification](post-sdk/mcp-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

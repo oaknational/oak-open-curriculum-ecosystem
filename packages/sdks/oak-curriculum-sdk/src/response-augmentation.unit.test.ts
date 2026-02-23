@@ -5,17 +5,13 @@
  * focusing on what the function does, not how it does it.
  */
 
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   augmentResponseWithCanonicalUrl,
   augmentArrayResponseWithCanonicalUrl,
 } from './response-augmentation.js';
 
 describe('augmentResponseWithCanonicalUrl', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('lesson responses', () => {
     it('should add canonicalUrl field to lesson responses', () => {
       const response = { slug: 'add-two-numbers', title: 'Add Two Numbers' };
@@ -111,7 +107,10 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const response = {
         slug: 'maths',
         title: 'Maths',
-        keyStageSlugs: ['ks1', 'ks2'],
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
       };
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
@@ -136,7 +135,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const response = {
         slug: 'maths',
         title: 'Maths',
-        keyStageSlugs: [],
+        keyStages: [],
       };
 
       expect(() => {
@@ -145,6 +144,70 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(() => {
         augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
       }).toThrow(/Missing required context for subject/);
+    });
+  });
+
+  describe('subject responses with keyStages objects (actual API shape)', () => {
+    it('extracts canonicalUrl from real API response shape', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
+        sequenceSlugs: [],
+        years: [1, 2, 3, 4, 5, 6],
+      };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
+      );
+    });
+
+    it('handles keyStages with non-string slugs gracefully', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [{ keyStageSlug: 123 }],
+        sequenceSlugs: [],
+        years: [],
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+
+    it('handles empty keyStages array', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [],
+        sequenceSlugs: [],
+        years: [],
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+  });
+
+  describe('sub-resource paths under /subjects/ (Snags 3/4)', () => {
+    it('does not augment /subjects/{s}/key-stages response', () => {
+      const response = { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths/key-stages', 'get');
+
+      expect(result).not.toHaveProperty('canonicalUrl');
+    });
+
+    it('does not augment /subjects/{s}/years response', () => {
+      const response = { years: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths/years', 'get');
+
+      expect(result).not.toHaveProperty('canonicalUrl');
     });
   });
 
@@ -369,7 +432,10 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const response = {
         subjectSlug: 'science',
         subjectTitle: 'Science',
-        keyStageSlugs: ['ks3', 'ks4'],
+        keyStages: [
+          { keyStageSlug: 'ks3', keyStageTitle: 'Key Stage 3' },
+          { keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' },
+        ],
       };
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/science', 'get');
 

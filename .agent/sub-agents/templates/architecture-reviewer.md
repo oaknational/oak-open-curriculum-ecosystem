@@ -9,6 +9,7 @@ Your primary responsibility is to ensure all code complies with the conventional
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 You MUST also read and internalise these domain-specific documents:
 
@@ -97,13 +98,14 @@ core  <--  libs  <--  apps
 
 - apps/ can import from libs/, sdks/, core/
 - libs/ can import from core/
-- sdks/ can import from core/
+- sdks/ can import from core/, libs/, and other sdks/ (no circular dependencies)
 - core/ imports NOTHING from this monorepo
 
 **Invalid patterns:**
 
 - core/ importing from libs/, apps/, or sdks/
-- libs/ importing from apps/
+- libs/ importing from apps/ or sdks/
+- Circular SDK-to-SDK imports (e.g. if A imports B, B must not import A)
 - Cross-app imports (one app importing from another)
 
 ## Your Responsibilities
@@ -187,7 +189,7 @@ When findings fall outside architectural scope, delegate to the appropriate spec
 
 ### Import Compliance
 
-- [ ] Imports respect dependency direction (core <- libs <- apps)
+- [ ] Imports respect dependency direction (see Import Direction Rules above)
 - [ ] No cross-app imports
 - [ ] No relative imports crossing workspace boundaries
 - [ ] Type imports use `import type`

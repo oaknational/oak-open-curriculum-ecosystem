@@ -89,7 +89,7 @@ cp .env.example .env
 
 # 2. Run full quality gates
 pnpm make    # Recommended first full pipeline run (lint:fix + markdownlint:root + format:root)
-pnpm qg      # Full verification (format-check:root + markdownlint-check:root + UI/E2E/smoke suites)
+pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
 
 # 3. Start an MCP dev server (choose one)
 pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server

@@ -10,7 +10,7 @@
     "src/types/generated/api-schema/routing/url-helpers.ts",
     "src/types/generated/search/index.ts",
     "src/types/search-response-guards.ts",
-    "src/types/search-response-schemas.ts",
+    "docs/_typedoc_src/types/search-response-schemas.ts",
     "src/types/public-types.ts",
     "src/types/generated/search/parsed-query.ts",
     "src/types/generated/search/responses.lessons.ts",

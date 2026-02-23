@@ -110,6 +110,55 @@ const x = 1;`;
     });
   });
 
+  describe('allOf intersection strict fix', () => {
+    it('removes .strict() from both sides of .and() intersections', () => {
+      const input = `z.array(
+              z
+                .object({ order: z.number() })
+                .strict()
+                .and(
+                  z.object({ type: z.string(), content: z.string() }).strict()
+                )
+            )`;
+
+      const result = transformZodV3ToV4(input);
+
+      expect(result).not.toContain('.strict()');
+      expect(result).toContain('.and(');
+      expect(result).toContain('.object({ order: z.number() })');
+      expect(result).toContain('z.object({ type: z.string(), content: z.string() })');
+    });
+
+    it('preserves .strict() on non-intersection objects', () => {
+      const input = `z.object({ name: z.string() }).strict()`;
+
+      const result = transformZodV3ToV4(input);
+
+      expect(result).toContain('.strict()');
+    });
+
+    it('handles multiple intersection occurrences while preserving non-intersection strict', () => {
+      const input = `z.union([
+        z.object({ a: z.string() }).strict(),
+        z.object({ order: z.number() })
+          .strict()
+          .and(
+            z.object({ type: z.string() }).strict()
+          ),
+        z.object({ b: z.number() }).strict(),
+      ])`;
+
+      const result = transformZodV3ToV4(input);
+
+      expect(result).toContain('z.object({ a: z.string() }).strict()');
+      expect(result).toContain('z.object({ b: z.number() }).strict()');
+      expect(result).toContain('.and(');
+      expect(result).not.toContain('z.object({ type: z.string() }).strict()');
+      expect(result).toContain('z.object({ type: z.string() })');
+      expect(result).not.toMatch(/\.strict\(\)\s*\.and\(/);
+    });
+  });
+
   describe('combined transformations', () => {
     it('applies all transformations to realistic input with strict schemas', () => {
       const input = `import { z, type ZodSchema } from "zod";

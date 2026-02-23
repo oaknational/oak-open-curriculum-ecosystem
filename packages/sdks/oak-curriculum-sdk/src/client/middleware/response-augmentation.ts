@@ -3,6 +3,17 @@ import {
   augmentResponseWithCanonicalUrl,
   augmentArrayResponseWithCanonicalUrl,
 } from '../../response-augmentation.js';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+} from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+
+interface MiddlewareOptions {
+  readonly logger?: Logger;
+}
 
 /**
  * Creates middleware that augments API responses with canonical URLs.
@@ -13,9 +24,12 @@ import {
  * The augmentation is idempotent - if a response already has a
  * `canonicalUrl` field, it will be preserved.
  *
+ * @param options - Optional configuration. Provide a `logger` for
+ *   dependency injection; defaults to a WARN-level UnifiedLogger.
  * @returns OpenAPI-Fetch middleware that augments responses.
  */
-export function createResponseAugmentationMiddleware(): Middleware {
+export function createResponseAugmentationMiddleware(options?: MiddlewareOptions): Middleware {
+  const log = options?.logger ?? createDefaultLogger();
   return {
     async onResponse({ request, response }) {
       if (!shouldAugmentResponse(request, response)) {
@@ -28,7 +42,7 @@ export function createResponseAugmentationMiddleware(): Middleware {
       }
 
       const path = extractApiPath(request.url);
-      const augmentedBody = augmentBody(body, path);
+      const augmentedBody = augmentBody(body, path, log);
 
       if (augmentedBody === undefined) {
         return response;
@@ -64,12 +78,46 @@ function extractApiPath(url: string): string {
   return parsed.pathname.replace(/^\/api\/v\d+/, '');
 }
 
-function augmentBody(body: unknown, path: string): unknown {
-  if (Array.isArray(body)) {
-    return augmentArrayResponseWithCanonicalUrl(body, path, 'get');
+function createDefaultLogger(): Logger {
+  return new UnifiedLogger({
+    minSeverity: logLevelToSeverityNumber('WARN'),
+    resourceAttributes: buildResourceAttributes(
+      process.env,
+      'response-augmentation-middleware',
+      process.env.npm_package_version ?? '0.0.0',
+    ),
+    context: {},
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
+  });
+}
+
+/**
+ * Augments a parsed response body with canonical URLs.
+ *
+ * Error containment: canonical URL decoration is supplementary and
+ * must never kill the API call. If augmentation fails, the
+ * unaugmented response is returned and the failure is logged.
+ *
+ * @see ADR-034 — system boundaries and type assertions
+ */
+function augmentBody(body: unknown, path: string, log: Logger): unknown {
+  try {
+    if (Array.isArray(body)) {
+      return augmentArrayResponseWithCanonicalUrl(body, path, 'get');
+    }
+    if (body && typeof body === 'object') {
+      return augmentResponseWithCanonicalUrl(body, path, 'get');
+    }
+    return undefined;
+  } catch (error: unknown) {
+    try {
+      log.warn(
+        `Response augmentation failed for ${path}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    } catch {
+      /* Logger failure must not propagate — augmentation is best-effort */
+    }
+    return undefined;
   }
-  if (body && typeof body === 'object') {
-    return augmentResponseWithCanonicalUrl(body, path, 'get');
-  }
-  return undefined;
 }

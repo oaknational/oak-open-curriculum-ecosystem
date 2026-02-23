@@ -561,9 +561,8 @@ git push --follow-tags
 
 ## Related Plans
 
-- `dev-tooling-and-dev-ai-support/` - Testing and infrastructure
-- `sdk-and-mcp-enhancements/` - SDK content improvements
-- `pipeline-enhancements/` - Type-gen pipeline improvements
+- `developer-experience/` - SDK publishing and docs tooling
+- `sdk-and-mcp-enhancements/` - SDK pipeline evolution and MCP extensions
 - `mcp-oauth-implementation-plan.md` - Production-ready OAuth (related to v1.0.0)
 
 ## References

@@ -1,49 +1,41 @@
 # SDK and MCP Enhancements
 
-This directory is the governance hub for SDK and MCP enhancement planning.
+**Last Updated**: 23 February 2026
 
-**Last Updated**: 22 February 2026
+Planning hub for SDK pipeline evolution, MCP extensions, and related
+architectural work. Consolidated from the former `pipeline-enhancements/`
+and `sdk-and-mcp-enhancements/` directories.
+
+## Active Documents
+
+| Document | Purpose | Status |
+|----------|---------|--------|
+| [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
+| [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |
+
+## Icebox (Pipeline Framework)
+
+The SDK workspace decomposition trajectory (ADR-108 Workspaces 1 and 3)
+and the OpenAPI pipeline framework extraction are iceboxed:
+
+- [openapi-pipeline-framework.md](../icebox/openapi-pipeline-framework.md)
 
 ## Source of Truth Model
 
 1. ADRs are the architecture source of truth.
 2. Code is the current implementation source of truth.
-3. Legacy plans are concept sources only.
+3. Archived plans are concept sources only — do not execute directly.
 
-## Current Execution Sources
-
-Use these for active execution sequencing:
-
-1. Pre-merge widget stabilisation (Tracks 1a + 1b):
-   [`../semantic-search/active/widget-search-rendering.md`](../semantic-search/active/widget-search-rendering.md)
-2. Search dispatch type safety (B1/W1):
-   [`../semantic-search/archive/completed/search-dispatch-type-safety.md`](../semantic-search/archive/completed/search-dispatch-type-safety.md)
-3. Post-merge MCP/extensions and ADR-aligned backlog:
-   [`./mcp-extensions-research-and-planning.md`](./mcp-extensions-research-and-planning.md)
-
-## Governance Documents
-
-1. File-by-file disposition authority:
-   [`./folder-disposition-ledger.md`](./folder-disposition-ledger.md)
-2. Concept preservation and ADR supersession crosswalk:
-   [`./concept-preservation-and-supersession-map.md`](./concept-preservation-and-supersession-map.md)
-3. Completed folder modernisation orchestration record:
-   [`./archive/completed/folder-modernisation-meta-plan.md`](./archive/completed/folder-modernisation-meta-plan.md)
-
-## Archive Layout
+## Archive
 
 All legacy materials are archived and should not be executed directly.
 
-1. Legacy numbered plans:
-   [`./archive/legacy-numbered/`](./archive/legacy-numbered/)
-2. Implemented historical references:
-   [`./archive/implemented/`](./archive/implemented/)
-3. Historical notes and older archive plans:
-   [`./archive/`](./archive/)
-4. Raw data artefacts:
-   [`./archive/data/`](./archive/data/)
-5. Completed plans:
-   [`./archive/completed/`](./archive/completed/)
+| Archive Path | Contents |
+|--------------|----------|
+| [archive/legacy-numbered/](archive/legacy-numbered/) | Legacy numbered plans (01–18) |
+| [archive/implemented/](archive/implemented/) | Historically implemented references |
+| [archive/completed/](archive/completed/) | Completed plans with provenance |
+| [archive/](archive/) | Historical notes, data artefacts |
 
 ## Workspace Context
 
@@ -57,7 +49,7 @@ Generator-first and schema-first remain non-negotiable.
 
 ## Usage Guidance
 
-When using a legacy concept:
+When promoting a concept from archive:
 
 1. Extract the concept from archived sources.
 2. Validate it against accepted ADR constraints.

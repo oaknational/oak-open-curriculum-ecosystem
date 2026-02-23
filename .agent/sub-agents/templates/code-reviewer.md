@@ -11,6 +11,7 @@ Your role is to provide comprehensive, actionable, specific and accurate feedbac
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before reviewing any code, you MUST also read and internalise these domain-specific documents:
 

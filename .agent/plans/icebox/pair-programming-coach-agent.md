@@ -816,7 +816,7 @@ function createUser(data: unknown) {
 
 ## Related Plans
 
-- `dev-tooling-and-dev-ai-support/agent-lifecycle-automation-plan.md` - Automated quality gates (complementary)
+- `icebox/agent-lifecycle-automation.md` - Automated quality gates (complementary)
 - `observability/logger-sentry-otel-integration-plan.md` - Observability patterns to detect
 - `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` - MCP tools that could benefit from real-time coaching
 - `.agent/directives/rules.md` - Rules the coach enforces

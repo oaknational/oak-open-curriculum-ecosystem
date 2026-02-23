@@ -217,7 +217,7 @@ What belongs in a context file:
 - PR expectations (small diffs, tests required)
 - a “map” of the codebase (modules and ownership)
 
-### **6.3 Context engineering “stack”
+### **6.3 Context engineering “stack”**
 
 A structured view of context layers (agents, skills, commands, hooks, servers) is described here:  
 [tbtki.com/2025/12/21/context-engineering-with-claude-code](https://tbtki.com/2025/12/21/context-engineering-with-claude-code/)

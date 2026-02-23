@@ -10,6 +10,7 @@ You are a specialist in designing, reviewing, and optimising AI subagents. Your 
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before reviewing, creating, or migrating subagents, you MUST also read and internalise these domain-specific documents:
 
@@ -84,6 +85,7 @@ templates/           Templates are platform-agnostic assembled workflows.
 Before finalising any template or wrapper change, verify every item:
 
 - [ ] Mandatory reading requirements are explicit where needed for quality and consistency
+- [ ] Templates include the shared identity declaration component (`.agent/sub-agents/components/behaviours/subagent-identity.md`)
 - [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/rules.md`)
 - [ ] Domain-specific references are explicit and all paths resolve
 - [ ] Legacy generic agent names are not used in active guidance (e.g. `architecture-reviewer` without a persona suffix)
@@ -194,11 +196,11 @@ Cursor wrappers live in `.cursor/agents/*.md` with YAML frontmatter:
 **Required frontmatter fields:**
 
 - `name` -- Unique identifier (lowercase, hyphens only)
+- `model` -- Explicit model selection (`auto` or named model)
 - `description` -- Delegation trigger (be specific)
 
 **Optional frontmatter fields:**
 
-- `model` -- AI model to use (`auto`, `claude-sonnet`, `claude-4.6-opus-max-thinking`, etc.)
 - `tools` -- Comma-separated list of available tools (inherits all if omitted)
 - `readonly` -- Set to `true` to restrict write operations
 

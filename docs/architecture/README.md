@@ -35,7 +35,7 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
 
 - Inter‑workspace imports use `@oaknational/*` package specifiers only.
 - Intra‑package relative imports are allowed; avoid private/internal subpaths.
-- Dependencies flow: `core` depends on nothing; `libs` depend on `core`; `sdks` depend on `core`/`libs`; `apps` depend on `sdks`/`libs`/`core`.
+- Dependencies flow: `core` depends on nothing; `libs` depend on `core`; `sdks` depend on `core`/`libs`/other `sdks` (no circular dependencies); `apps` depend on `sdks`/`libs`/`core`.
 
 ### Implementation Guides
 

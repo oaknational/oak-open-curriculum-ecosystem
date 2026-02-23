@@ -39,11 +39,11 @@ graph TB
 
 ### Philosophy
 
-The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](metacognition.md), [experience records](../experience/README.md), and the learning loop. This layer defines *why* the practice works.
+The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](metacognition.md), [experience records](../experience/README.md), and the learning loop. **Architectural enforcement** is a core philosophical commitment: preferring physical constraints (lint rules, boundary tooling) over human vigilance. This layer defines *why* the practice works.
 
 ### Structure
 
-The organisational patterns. [Directives](./) (this directory), [plans](../plans/) and their [templates](../plans/templates/), [ADRs](../../docs/architecture/architectural-decisions/), sub-agent [prompt architecture](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) ([ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)), quality gates, and [institutional memory](../memory/). This layer defines *what* the practice consists of.
+The organisational patterns. [Directives](./) (this directory), [plans](../plans/) and their [templates](../plans/templates/), [ADRs](../../docs/architecture/architectural-decisions/), sub-agent [prompt architecture](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) ([ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)), quality gates, and [institutional memory](../memory/). **Cross-agent standardisation** (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to keep the practice portable and platform-agnostic. This layer defines *what* the practice consists of.
 
 ### Tooling
 
@@ -92,7 +92,7 @@ graph LR
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — `high-level-plan.md` cross-collection overview
   2. **Collection roadmaps** — e.g. `semantic-search/roadmap.md` milestone sequence
-  3. **Active execution plans** — e.g. `semantic-search/active/widget-search-rendering.md` with YAML frontmatter, phased execution, and deterministic validation. Active plans live in `active/`, completed plans move to `archive/completed/`
+  3. **Active execution plans** — e.g. `semantic-search/active/sdk-workspace-separation.md` with YAML frontmatter, phased execution, and deterministic validation. Active plans live in `active/`, completed plans move to `archive/completed/`
   4. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement the lowest-level active plans with session-scoped implementation tasks, batch breakdowns, and review checkpoints. These are created per-session and track fine-grained progress that is too ephemeral for the active plan itself
 - **Templates** (`.agent/plans/templates/`) — reusable plan components ([ADR-117](../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md))
 - **Quality gates** — see [rules.md](rules.md) and `pnpm qg`. All gates are always blocking.
@@ -108,6 +108,8 @@ graph LR
 | `.agent/prompts/` | Reusable prompt playbooks |
 | `.agent/sub-agents/` | Reviewer prompt architecture (components, templates) |
 | `.agent/skills/` | Repo-managed skills for shared workflows |
+| `.agent/research/` | Research documents and analysis |
+| `.agent/reference-docs/` | Supporting reference material |
 | `.cursor/rules/` | Always-applied workspace rules |
 | `.cursor/commands/` | Slash commands |
 | `.cursor/agents/` | Sub-agent definitions (Cursor-specific) |
@@ -116,13 +118,15 @@ graph LR
 
 ## Feedback Loops and Recursive Self-Improvement
 
-The practice is stabilised by interlocking feedback loops -- the same mechanism that stabilises any complex system. Each loop is a cycle where outputs feed back to improve inputs.
+The practice is stabilised by interlocking feedback loops — the same mechanism that stabilises any complex system. Each loop is a cycle where outputs feed back to improve inputs.
+
+The checks and quality gates are the system's self-awareness. They detect variance from intended structure, surface it immediately, and prevent entropy from accumulating. Without them, each contribution — human or AI — would introduce small deviations that compound into structural decay. The gates do not merely catch errors; they are the mechanism by which the system maintains awareness of its own state and actively resists degradation. Stability is not a default — it is an emergent property of these feedback loops running continuously.
 
 ```mermaid
 graph TB
-    subgraph negative ["Negative Feedback Loops — error correction"]
-        QG["Quality Gates<br/>catch regressions"]
-        SAR["Sub-agent Reviews<br/>catch design issues"]
+    subgraph negative ["Negative Feedback Loops — entropy detection and reduction"]
+        QG["Quality Gates<br/>system self-awareness"]
+        SAR["Sub-agent Reviews<br/>specialist awareness"]
         LL2["Learning Loop<br/>napkin → distilled → rules"]
     end
 
@@ -135,17 +139,17 @@ graph TB
     negative --> positive
 ```
 
-**Negative feedback loops** correct errors and prevent drift:
+**Negative feedback loops** act against entropy — they detect variance, surface it, and correct it before it compounds:
 
-- **Quality gates** catch regressions before they propagate
-- **Sub-agent reviews** catch design, security, and architectural issues
-- **The learning loop** converts mistakes into rules that prevent repetition
+- **Quality gates** make the system self-aware: type-check, lint, test, format, and subagent validation each observe a different dimension of structural integrity. A failure is not an inconvenience — it is the system telling you that entropy has been introduced
+- **Sub-agent reviews** provide specialist awareness — architectural drift, security risks, type-safety erosion, and test quality degradation that no single gate can detect
+- **The learning loop** converts entropy that _was_ introduced into rules that prevent its recurrence
 
 **Positive feedback loops** compound capability over time:
 
 - **Agents improve agents** -- the subagent-architect reviews and upgrades other agents, which then produce better reviews, which improve code quality, which raises the bar for what agents must understand. This recursive self-improvement is analogous to how a mature engineering team raises its own standards through retrospectives and practice refinement
 - **Self-teaching** -- each new user (human or AI) who follows the practice from `AGENT.md` discovers the system through use, and their questions and mistakes feed back into documentation improvements
-- **Consolidation** -- the `/jc-consolidate-docs` workflow and the subagent-architect's ecosystem consolidation procedure both extract common threads into shared, reusable structures. Each consolidation pass leaves the system simpler and more consistent
+- **Consolidation** -- the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow and the subagent-architect's ecosystem consolidation procedure both extract common threads into shared, reusable structures. Each consolidation pass leaves the system simpler and more consistent
 
 These loops operate at different timescales -- quality gates within seconds, learning loops within sessions, consolidation across sessions -- but they all serve the same purpose: keeping the practice aligned with reality and continuously improving.
 

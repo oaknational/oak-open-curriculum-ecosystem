@@ -13,11 +13,10 @@ Strategic and tactical planning documents for the Oak MCP Ecosystem.
 | Collection | Purpose | Status |
 |------------|---------|--------|
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Active |
-| [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP tools, ontology, widgets | 🔄 Active |
+| [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [quality-and-maintainability/](quality-and-maintainability/) | Type discipline, ESLint, testing | 📋 Planned |
-| [pipeline-enhancements/](pipeline-enhancements/) | SDK workspace decomposition ([ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)), framework extraction | 📋 Planned |
 | [architecture/](architecture/) | Logging, errors, config | 📋 Planned |
-| [dev-tooling-and-dev-ai-support/](dev-tooling-and-dev-ai-support/) | Testing, automation | 📋 Planned |
+| [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 📋 Planned |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |

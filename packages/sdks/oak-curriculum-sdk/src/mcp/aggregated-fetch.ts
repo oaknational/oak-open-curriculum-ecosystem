@@ -13,6 +13,7 @@ import {
   extractSlug,
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
+import { extractContextFromResponse } from '../response-augmentation.js';
 import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '../types/generated/widget-constants.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
@@ -135,14 +136,14 @@ export async function runFetchTool(
     return formatError(toErrorMessage(result.error));
   }
 
-  // Try to generate canonical URL, but gracefully handle missing context.
-  // Some content types (units, subjects) require context from the API response
-  // that may not always be available.
+  // Extract context from the API response and pass to canonical URL generation.
+  // Units and subjects require context (subjectSlug/phaseSlug for units,
+  // keyStages for subjects) to generate the correct canonical URL.
+  const context = extractContextFromResponse(result.data);
   let canonicalUrl: string | null;
   try {
-    canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
+    canonicalUrl = generateCanonicalUrlWithContext(type, args.id, context);
   } catch {
-    // Context required for URL generation was missing - return null instead of failing
     canonicalUrl = null;
   }
   const summary = buildFetchSummary(type, slug, canonicalUrl);

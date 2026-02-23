@@ -9,6 +9,7 @@ You are a tooling configuration specialist for this monorepo. Your primary respo
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before reviewing any configuration changes, you MUST also read and internalise these domain-specific documents:
 

@@ -9,7 +9,7 @@ todos:
     content: "Implement 'max-files-per-dir' ESLint rule and set threshold to 10."
     status: pending
   - id: boundary-configuration
-    content: "Configure 'eslint-plugin-boundaries' to define core/sdk/app unidirectional flow."
+    content: "Configure 'eslint-plugin-boundaries' per the canonical import matrix (ADR-041)."
     status: pending
   - id: depcruise-lockdown
     content: "Initialize .dependency-cruiser.cjs with mandatory index.ts barrel enforcement."
@@ -23,57 +23,68 @@ todos:
   - id: agent-directive-grounding
     content: "Create .agent/directives/architectural-enforcement.md and ground all agents."
     status: pending
-  - id: cross-agent-standardisation
-    content: "Align skills and commands with AGENTS.md and Agent Skills specifications."
-    status: pending
 ---
 
-# Architectural Enforcement Adoption Plan
+# Architectural Enforcement Adoption
 
 ## 1. Intent
 
-Harden the repository against architectural decay by moving from **prescriptive guidance** to **physical constraints**. This ensures that both human developers and AI agents are forced to maintain a clean, modular structure. Additionally, align the repository with emerging cross-agent standards to ensure portability and reduce maintenance entropy.
+Harden the repository against architectural decay by moving from **prescriptive guidance** to **physical constraints**. This ensures that both human developers and AI agents are forced to maintain a clean, modular structure.
 
-This plan implements the principles and structural requirements defined in:
-- [ADR-119: Agentic Engineering Practice](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
+This plan implements the architectural enforcement direction established in:
+
+- [ADR-119: Agentic Engineering Practice](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) (establishes physical constraints as a core philosophical commitment)
+- [ADR-041: Workspace Structure Option A](../../../docs/architecture/architectural-decisions/041-workspace-structure-option-a.md) (defines workspace layout and dependency direction)
+
+See also: [Architecture README](../../../docs/architecture/README.md) for the canonical architecture overview.
+
+Based on requirements and analysis in:
+
+- [Architectural Enforcement Playbook](../../research/developer-experience/architectural-enforcement-playbook.md)
+- [Augmented Engineering Practices (industry evidence)](augmented-engineering-practices.research.md) (verification gaps, quality gates, mutation testing)
+
+**Related plan**: [Cross-Agent Standardisation](cross-agent-standardisation.plan.md) (separated concern — portability and platform-agnostic alignment).
 
 ## 2. Phases
 
 ### Phase 1: Physical Modularity (ESLint)
+
 - **Goal:** Break up "God Folders."
 - **Task:** Implement the `max-files-per-dir` custom rule (as defined in the playbook) in `packages/core/oak-eslint`.
 - **Target:** Root `eslint.config.ts` to apply this rule to all workspaces.
 
 ### Phase 2: Boundary Definition (ESLint)
+
 - **Goal:** Define semantic layers and enforce unidirectional flow.
-- **Task:** Configure `eslint-plugin-boundaries`.
-- **Layers:** `core` -> `libs` -> `sdks` -> `apps`.
+- **Task:** Configure `eslint-plugin-boundaries` using the canonical import matrix:
+
+| Importer | core | libs | sdks | apps | Constraint |
+|----------|------|------|------|------|------------|
+| core     | —    | no   | no   | no   | Must remain domain-agnostic |
+| libs     | yes  | —    | no   | no   | — |
+| sdks     | yes  | yes  | DAG  | no   | No circular SDK-to-SDK dependencies |
+| apps     | yes  | yes  | yes  | —    | — |
 
 ### Phase 3: Physics Lockdown (Dependency-Cruiser)
+
 - **Goal:** Enforce barrel-file (index.ts) encapsulation.
 - **Task:** Configure `dependency-cruiser` at the root and for key packages.
 - **Rule:** Disallow importing internals of a sibling directory; all traffic must traverse `index.ts`.
 
 ### Phase 4: Hygiene and Dead Code (Knip)
+
 - **Goal:** Keep the "surface area" of the SDK and MCP servers minimal.
 - **Task:** Add `knip` to the CI pipeline and root quality gate.
 
-### Phase 5: Cross-Agent Standardisation Alignment
-- **Goal:** Ensure portability across Cursor, Claude Code, Gemini CLI, and others.
-- **Task 1: Skill Frontmatter:** Normalise `SKILL.md` frontmatter to use `metadata:` block for non-standard fields (`version`, `date`).
-- **Task 2: Command Portability:** Extract canonical instruction content from `.cursor/commands/` and `.claude/commands/` into agent-agnostic `.agent/commands/*.md` templates.
-- **Task 3: YAGNI Cleanup:** Delete speculative `openai.yaml` stubs in `.agent/skills/`.
-- **Task 4: Workspace Context:** Add nested `AGENTS.md` files for high-complexity workspaces (e.g., streamable-http) to provide targeted per-package context.
+### Phase 5: Agentic Grounding
 
-### Phase 6: Agentic Grounding
 - **Goal:** Make the "First Question" mechanical for AI agents.
 - **Task:** Create `.agent/directives/architectural-enforcement.md` and update `AGENT.md` to reference it.
-- **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state.
+- **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The `qg` script must be updated to include `depcruise` and `knip` as each phase lands.
 
 ## 3. Success Metrics
+
 - Zero circular dependencies (via `madge` and `depcruise`).
-- No source directory contains more than 10 files (excluding tests).
+- No source directory contains more than the configured threshold of files (excluding tests).
 - All inter-package and inter-domain imports are routed through `index.ts`.
 - `knip` reports zero unused exports.
-- All `SKILL.md` files are 100% compliant with the `agentskills.io` specification.
-- Zero duplication of instruction logic between platform-specific command files.

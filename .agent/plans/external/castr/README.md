@@ -536,7 +536,7 @@ castr.generate({
 
 Before castr can be integrated into Oak's type generation pipeline:
 
-1. **SDK workspace separation** — Oak's type-gen code must be extracted into a dedicated generation workspace (separate from the runtime SDK). This is Step 1 of the [4-workspace decomposition](../../pipeline-enhancements/sdk-workspace-separation-plan.md) defined in [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). After separation, Castr becomes a dependency of the Generic Pipeline workspace (WS1).
+1. **SDK workspace separation** — Oak's type-gen code must be extracted into a dedicated generation workspace (separate from the runtime SDK). This is Step 1 of the [4-workspace decomposition](../../semantic-search/active/sdk-workspace-separation.md) defined in [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). After separation, Castr becomes a dependency of the Generic Pipeline workspace (WS1). Pipeline framework extraction is [iceboxed](../../icebox/openapi-pipeline-framework.md).
 
 2. **Side-by-side validation** — The existing `openapi-zod-client-adapter` can remain in place initially while Castr output is validated against the fixtures in this directory. This allows comparison of the two pipelines before committing to the switch.
 

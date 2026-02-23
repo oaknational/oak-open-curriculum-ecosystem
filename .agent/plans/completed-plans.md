@@ -10,6 +10,8 @@ at the source (clean break — no stubs, no redirects).
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| MCP Tool Snagging | 2026-02-23 | 5 SDK tool bugs (response augmentation, suggest, schema validation) fixed with TDD, smoke-tested end-to-end across 32 tools. Logger architectural bug also fixed with DI. | [archived plan](semantic-search/archive/completed/search-snagging.md) |
+| Pre-Merge Widget Stabilisation (3h) | 2026-02-22 | Phases 0-5: 18 non-search renderers deleted, 3 renderers built (search, browse, explore), Zod contract tests, XSS hardening, Phase 5 resilience hardening (error containment, JSON.stringify, delegated clicks, four-way sync) | [archived plan](semantic-search/archive/completed/widget-search-rendering.md) |
 | Search Dispatch Type Safety (3g) | 2026-02-22 | Eliminated `ScopeDispatcher` type erasure (B1) with switch-based `SearchDispatchResult` union + `default: never` exhaustiveness + `AssertNoSuggestions` invariant guard. Renamed `aggregated-search-sdk/` → `aggregated-search/`, `SEARCH_SDK_*` → `SEARCH_*` (W1). | [archived plan](semantic-search/archive/completed/search-dispatch-type-safety.md) |
 | Phase 3a: MCP Search Integration | 2026-02-22 | Three MCP search tools wired (`search`, `browse-curriculum`, `explore-topic`), old REST search deleted, `search-sdk` promoted to `search`, adversarial review (B1-B4, W1-W8) | [archived plan](semantic-search/archive/completed/phase-3a-mcp-search-integration.md) |
 | Thread Search SDK Integration | 2026-02 | SDK method, CLI command, benchmarks, 8 GTs across 5 subjects | [archived plan](semantic-search/archive/completed/thread-search-sdk-integration.plan.md) |

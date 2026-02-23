@@ -11,45 +11,34 @@ import {
   buildResourceAttributes,
   logLevelToSeverityNumber,
 } from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import type { HttpMethod } from './validation/types.js';
 import {
   getContentTypeFromPath,
   extractGenericId,
   extractContentTypeSpecificId,
+  isNonNullObject,
 } from './response-augmentation-helpers.js';
+import { rawCurriculumSchemas } from './types/generated/zod/curriculumZodSchemas.js';
 
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber('WARN'),
-  resourceAttributes: buildResourceAttributes({}, 'response-augmentation', '1.0.0'),
+  resourceAttributes: buildResourceAttributes(
+    process.env,
+    'response-augmentation',
+    process.env.npm_package_version ?? '0.0.0',
+  ),
   context: {},
-  stdoutSink: {
-    write: (line: string) => {
-      console.log(line);
-    },
-  },
+  stdoutSink: createNodeStdoutSink(),
   fileSink: null,
 });
 
-function isReadonlyStringArray(value: unknown): value is readonly string[] {
-  return Array.isArray(value) && value.every((v) => typeof v === 'string');
-}
-
 /**
- * A non-null object response that can be narrowed via property checks.
- * This type is used internally by type guards to narrow unknown values
- * to something compatible with the `in` operator.
+ * Key stage entry schema derived from the generated SubjectResponseSchema.
+ * Uses `.shape.keyStages` to anchor validation to the schema, ensuring
+ * property names stay in sync with the upstream API contract.
  */
-interface ObjectResponse {
-  readonly [Symbol.toStringTag]?: string;
-}
-
-/**
- * Type guard that narrows unknown to a non-null object.
- * Used to enable the `in` operator for property checking.
- */
-function isNonNullObject(value: unknown): value is ObjectResponse {
-  return typeof value === 'object' && value !== null;
-}
+const keyStagesSchema = rawCurriculumSchemas.SubjectResponseSchema.shape.keyStages;
 
 interface UnitContext {
   readonly subjectSlug?: string;
@@ -77,22 +66,28 @@ function extractUnitContext(response: unknown): UnitContext | undefined {
 }
 
 /**
- * Extracts subject context from response data
+ * Extracts subject context from response data.
+ *
+ * Validates the `keyStages` field against the schema derived from the
+ * generated `SubjectResponseSchema`, then maps to slug strings.
  */
 function extractSubjectContext(response: unknown): SubjectContext | undefined {
-  if (!isNonNullObject(response)) {
+  if (!isNonNullObject(response) || !('keyStages' in response)) {
     return undefined;
   }
-  if ('keyStageSlugs' in response && isReadonlyStringArray(response.keyStageSlugs)) {
-    return { keyStageSlugs: response.keyStageSlugs };
+  const parsed = keyStagesSchema.safeParse(response.keyStages);
+  if (!parsed.success || parsed.data.length === 0) {
+    return undefined;
   }
-  return undefined;
+  return { keyStageSlugs: parsed.data.map((ks) => ks.keyStageSlug) };
 }
 
 /**
- * Extracts context from response data for units and subjects
+ * Extracts context from response data for units and subjects.
+ * Exported for shared use by the response augmentation middleware
+ * and `runFetchTool` in `aggregated-fetch.ts`.
  */
-function extractContextFromResponse(response: unknown): ResponseContext {
+export function extractContextFromResponse(response: unknown): ResponseContext {
   if (!response || typeof response !== 'object' || Array.isArray(response)) {
     return {};
   }

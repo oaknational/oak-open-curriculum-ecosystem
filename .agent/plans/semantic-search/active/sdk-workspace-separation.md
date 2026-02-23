@@ -102,11 +102,14 @@ Re-read and recommit before Phase 0, and at each phase transition:
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 
-Authoritative ADR anchors:
+Authoritative ADR anchors (split-critical):
 
 - `docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md`
 - `docs/architecture/architectural-decisions/065-turbo-task-dependencies.md`
 - `docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`
+
+Background context (completed baseline, not re-read per phase):
+
 - `docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md`
 - `docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md`
 
@@ -114,7 +117,7 @@ Authoritative ADR anchors:
 
 - `packages/sdks/oak-curriculum-sdk-generation`: does not exist
 - `packages/sdks/oak-curriculum-sdk/type-gen`: 192 files
-- `packages/sdks/oak-curriculum-sdk/src`: 300 files
+- `packages/sdks/oak-curriculum-sdk/src`: 302 files
 - `packages/sdks/oak-curriculum-sdk/src/types/generated`: 106 files
 - non-test runtime source files importing local `types/generated/*`: 56 files
 
@@ -140,12 +143,30 @@ mapped to execution phases and acceptance criteria.
 | Finding | Current truth | Execution phase(s) | Acceptance criteria |
 |---|---|---|---|
 | Generation workspace is absent | `packages/sdks/oak-curriculum-sdk-generation` does not exist yet | Phase 0, Phase 1 | AC1, AC2 |
-| Turbo task graph must be split-aware | Build/type-gen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC6 |
+| Turbo task graph must be split-aware | Build/type-gen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC7 |
 | Vocab-generated artefacts are runtime-owned today and must move now | Runtime `src/mcp/**` still contains generated graph/synonym outputs; Step 1 must move all | Phase 3 | AC3 |
-| Reverse dependency must be removed | `vocab-gen/lib/index.ts` currently depends on runtime internals and must be corrected | Phase 4 | AC5 |
-| E2E tests are coupled to `type-gen` internals | Runtime tests currently import `../../type-gen/*` paths and will break after split | Phase 5 | AC7 |
-| Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC7 |
-| Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC8 |
+| Reverse dependencies must be removed | 9 files in `type-gen/` and `vocab-gen/` import from runtime `src/` (see inventory below) | Phase 4, Phase 5 | AC5, AC6 |
+| E2E tests are coupled to `type-gen` internals | Runtime tests currently import `../../type-gen/*` paths and will break after split | Phase 5 | AC8 |
+| Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC8 |
+| Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC9 |
+
+### Reverse-dependency inventory (generation -> runtime imports)
+
+Files in `type-gen/` and `vocab-gen/` that import from runtime `src/`:
+
+| File | Imports from |
+|---|---|
+| `vocab-gen/lib/index.ts` | `../../src/types/generated/bulk/index.js`, `../../src/bulk/reader.js` |
+| `vocab-gen/generators/analysis-report-generator.ts` | `../../src/types/helpers/type-helpers.js` |
+| `type-gen/generate-ai-doc.ts` | `../src/types/generated/api-schema/path-parameters.js`, `../src/types/generated/api-schema/mcp-tools/index.js` |
+| `type-gen/mcp-security-policy.unit.test.ts` | `../src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js` |
+| `type-gen/typegen/search/index-doc-exports.ts` | `../../../src/types/generated/search/index-documents.js` |
+| `type-gen/typegen/search/generate-search-response-docs.ts` | `../../../src/types/generated/search/responses.*.js`, `../../../src/types/generated/zod/curriculumZodSchemas.js` |
+| `type-gen/typegen/search/generate-subject-hierarchy.unit.test.ts` | `../../../src/types/generated/search/subject-hierarchy.js` |
+| `type-gen/typegen/search/generate-search-modules.unit.test.ts` | (string literal reference to generated path) |
+| `type-gen/typegen/error-types/classify-http-error.unit.test.ts` | `../../../src/types/generated/api-schema/error-types/sdk-error-types.js` |
+
+All of these must be resolved during Phase 4 (rewire) and Phase 5 (test migration).
 
 ## 6. Scope
 
@@ -290,6 +311,7 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/misconception-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts`
+- `packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/nc-coverage-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/generated/definition-synonyms.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts`
@@ -411,7 +433,7 @@ pnpm smoke:dev:stub
 1. **Pre-split baseline invariants are explicit and reproducible**
    - baseline commands in Section 4 return:
      - `type-gen` files = `192`
-     - `src` files = `300`
+     - `src` files = `302`
      - `src/types/generated` files = `106`
      - runtime non-test local generated imports = `56`
    - `ls -1 packages/sdks` does not include
@@ -436,31 +458,39 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   --glob '!**/*.test.ts'
 ```
 
-5. **One-way dependency enforced**
+5. **No deep imports into generation internals**
+   - runtime imports only `@oaknational/curriculum-sdk-generation` barrel
+     exports, not internal paths like
+     `@oaknational/curriculum-sdk-generation/src/...`,
+     `@oaknational/curriculum-sdk-generation/type-gen/...`, or
+     `@oaknational/curriculum-sdk-generation/vocab-gen/...`.
+
+6. **One-way dependency enforced**
    - runtime depends on generation package.
    - generation package does not import runtime package internals, including
      removal of reverse dependency in
      `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/lib/index.ts`.
    - boundary linting fails illegal imports and passes legal imports.
 
-6. **Turbo graph and build dependencies are split-aware**
+7. **Turbo graph and build dependencies are split-aware**
    - `turbo.json` dependency chain reflects runtime/generation split and
      remains aligned with ADR-065 task dependency intent.
    - cache-relevant inputs/outputs remain valid after path moves.
 
-7. **Coupled tests/scripts/config migrated**
+8. **Coupled tests/scripts/config migrated**
    - no tests import `../../type-gen/*` from runtime package.
    - `scripts/check-generator-scope.sh` allowlist is updated for split layout.
 
-8. **Generated provenance and docs match split ownership**
+9. **Generated provenance and docs match split ownership**
    - generator template banners/provenance comments point to split paths.
    - runtime/generation READMEs and architecture docs describe split ownership
      and execution flow.
 
-9. **Determinism and parity proven**
-   - full quality gate sequence passes.
-   - re-running `pnpm type-gen` without input changes yields no diff.
-   - runtime/consumer behavioural tests pass with no regression.
+10. **Determinism and parity proven**
+
+    - full quality gate sequence passes.
+    - re-running `pnpm type-gen` without input changes yields no diff.
+    - runtime/consumer behavioural tests pass with no regression.
 
 ## 10. Validation Commands
 
@@ -490,10 +520,28 @@ rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   fail lint/build on generation->runtime imports and fix root causes.
 - Config/task graph breakage after split:
   update turbo/package scripts alongside moves, not afterwards.
+- Root script wiring (`pnpm vocab-gen`, `pnpm type-gen`) targets monolithic
+  filters: update root `package.json` and `scripts/check-generator-scope.sh`
+  alongside workspace moves.
 - Documentation drift:
   treat docs/TSDoc as same-phase deliverables, not post-merge cleanup.
 
-## 12. Relationship to ADRs
+## 12. Pre-Phase-1 Open Decisions
+
+Several architectural decisions must be resolved before Phase 1 starts.
+See [sdk-separation-pre-phase1-decisions.md](sdk-separation-pre-phase1-decisions.md)
+for full analysis and options:
+
+- **`public/bulk` ownership**: generation-time pipeline vs runtime facade
+  (CRITICAL — 22 consumer files in search CLI)
+- **Vocabulary mining convergence**: single pipeline replacing fragmented
+  synonym/alias/paraphrase sources
+- **Phase 3 move list**: distinguish generated, authored, and
+  runtime-composition files
+- **Baseline gate strategy**: commit-anchored evidence vs hard-coded numbers
+- **Phase collapse**: atomic vs sequential with intermediate compilation gates
+
+## 13. Relationship to ADRs
 
 - **ADR-108** (`108-sdk-workspace-decomposition.md`)
   - defines Step 1 split intent, boundary direction, and phased decomposition.

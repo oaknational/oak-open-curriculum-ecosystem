@@ -38,9 +38,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { httpStatus?: number; status?: string };
-      expect(structured.httpStatus).toBe(200);
-      expect(structured.status).toBe('success');
+      expect(result.structuredContent).toHaveProperty('httpStatus', 200);
+      expect(result.structuredContent).toHaveProperty('status', 'success');
     });
 
     it('includes FULL data for model reasoning', async () => {
@@ -54,8 +53,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:photosynthesis-basics' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { data?: typeof lessonData };
-      expect(structured.data).toEqual(lessonData);
+      expect(result.structuredContent).toHaveProperty('data', lessonData);
     });
 
     it('includes id and type in structuredContent', async () => {
@@ -64,9 +62,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { id?: string; type?: string };
-      expect(structured.id).toBe('unit:fractions');
-      expect(structured.type).toBe('unit');
+      expect(result.structuredContent).toHaveProperty('id', 'unit:fractions');
+      expect(result.structuredContent).toHaveProperty('type', 'unit');
     });
 
     it('includes canonicalUrl in structuredContent', async () => {
@@ -75,9 +72,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { canonicalUrl?: string };
-      expect(structured.canonicalUrl).toBeDefined();
-      expect(typeof structured.canonicalUrl).toBe('string');
+      expect(result.structuredContent).toHaveProperty('canonicalUrl', expect.any(String));
     });
 
     it('includes oakContextHint for model context grounding', async () => {
@@ -130,6 +125,67 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
         expect(meta.timestamp).toBeGreaterThanOrEqual(beforeTime);
         expect(meta.timestamp).toBeLessThanOrEqual(afterTime);
       }
+    });
+  });
+
+  describe('canonicalUrl for context-dependent types', () => {
+    it('includes non-null canonicalUrl for subject fetch', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          subjectTitle: 'Maths',
+          subjectSlug: 'maths',
+          keyStages: [
+            { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+            { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+          ],
+          sequenceSlugs: [],
+          years: [],
+        },
+      });
+
+      const result = await runFetchTool({ id: 'subject:maths' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
+      );
+    });
+
+    it('includes non-null canonicalUrl for unit fetch', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          unitTitle: 'Fractions',
+          unitSlug: 'fractions',
+          subjectSlug: 'maths',
+          phaseSlug: 'primary',
+        },
+      });
+
+      const result = await runFetchTool({ id: 'unit:fractions' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions',
+      );
+    });
+
+    it('returns null canonicalUrl gracefully when context is insufficient', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          subjectTitle: 'Maths',
+          subjectSlug: 'maths',
+        },
+      });
+
+      const result = await runFetchTool({ id: 'subject:maths' }, deps);
+
+      expect(result.isError).toBeUndefined();
+      expect(result.structuredContent).toHaveProperty('canonicalUrl', null);
     });
   });
 

@@ -122,6 +122,7 @@ pnpm build          # Build
 pnpm type-check     # Type check
 pnpm format:root    # Format code
 pnpm markdownlint:root    # Markdown lint
+pnpm subagents:check    # Validate sub-agent standards
 pnpm lint:fix       # Lint
 pnpm test           # Unit and integration tests
 pnpm test:ui        # UI tests
@@ -129,7 +130,7 @@ pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 
 # All in one command
-pnpm check          # secrets:scan:all, clean, type-gen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, markdownlint:root, format:root
+pnpm check          # secrets:scan:all, clean, type-gen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

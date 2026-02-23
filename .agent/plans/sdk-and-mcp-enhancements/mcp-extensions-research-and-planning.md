@@ -1,11 +1,11 @@
 ---
 name: MCP Extensions Expert Specialist Plan (Advisor + Reviewer)
 overview: Decision-complete MCP-first planning for post-merge extension research, specialist design, refactoring backlog, and ADR-aligned execution sequencing.
-lastValidatedDate: 2026-02-22
+lastValidatedDate: 2026-02-23
 todos:
   - id: premerge-tracks-consolidated-reference
-    content: "Treat Track 1a + 1b as a single pre-merge dependency owned by `widget-search-rendering.md` and block this plan until it is complete. Phase 5 (resilience hardening) remains pending."
-    status: pending
+    content: "Pre-merge prerequisite (Tracks 1a + 1b, Phases 0-5 including resilience hardening) completed 2026-02-22. Gate 3 passed."
+    status: completed
   - id: research-source-refresh-and-link-health
     content: "Refresh mandatory and high-value source list, replace broken URLs, and maintain dated link-health evidence."
     status: pending
@@ -30,14 +30,17 @@ isProject: false
 # MCP Extensions Expert Specialist Plan (Advisor + Reviewer)
 
 ## Purpose and Value
-This document provides a decision-complete plan for MCP extensions work in the Oak ecosystem.
-It now covers all post-merge work only, while pre-merge widget stabilisation (Tracks 1a + 1b) is consolidated into `widget-search-rendering.md`.
+
+This document provides a decision-complete plan for post-merge MCP
+extensions work in the Oak ecosystem. Pre-merge widget stabilisation
+(Tracks 1a + 1b, Phases 0-5) is complete and archived.
 
 Legacy concept ingestion for this plan is governed by:
-- `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`
+
+- [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md)
 
 Value delivered:
-- Clear split between pre-merge widget stabilisation and post-merge extension work.
+
 - Clear ownership and sequencing for SDK and HTTP MCP server teams.
 - Explicit ADR compliance for MCP protocol, OAuth/security, and generator-first architecture.
 - Reduced risk of stale planning assumptions through dated evidence and link-health checks.
@@ -58,11 +61,13 @@ Non-negotiables for this plan:
 - No runtime API contract changes in this document rewrite step.
 
 ## Current State Evidence (Dated)
-Evidence date baseline: 22 February 2026.
+
+Evidence date baseline: 23 February 2026.
 
 Confirmed current-state findings:
-1. Stale completion metadata:
-   - `.agent/plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md` had all todos marked `completed` while unresolved work remained.
+
+1. Stale completion metadata (corrected 2026-02-23):
+   - Frontmatter todos were stale; now reset to reflect actual states.
 2. Broken high-value source links:
    - `.agent/plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md` contained five 404 URLs in the ext-apps API section.
 3. OpenAI-coupled metadata emitted in generator:
@@ -83,21 +88,23 @@ Confirmed current-state findings:
    - Current local behaviour emits `local` hash token instead of per-run hash parity.
 
 ## Plan Split (Agreed)
+
 Execution split across related files:
 
 1. Pre-merge Tracks 1a + 1b:
-   - Consolidated in `.agent/plans/semantic-search/active/widget-search-rendering.md`.
-   - Merge-blocking and owned as one pre-merge stream.
-   - **Status**: Phases 0-4 complete. Phase 5 (resilience
-     hardening from architecture reviews) is pending — critical
-     findings include no try/catch around renderer calls, CTA
-     config string injection, and incomplete four-way sync enforcement.
+   - Archived:
+     [widget-search-rendering.md](../semantic-search/archive/completed/widget-search-rendering.md).
+   - **Status**: COMPLETE (Phases 0-5, including Phase 5
+     resilience hardening — error containment, JSON.stringify
+     for JS generation, delegated click handlers, four-way
+     sync enforcement). Completed 2026-02-22.
 2. Post-merge Track 2:
    - This file.
    - Covers research, specialist specification, refactoring backlog, and future feature backlog.
 
 Entry condition for this file:
-- Work in this file starts only after the consolidated pre-merge file is complete (all phases including Phase 5).
+
+- Pre-merge prerequisite is satisfied (Gate 3 passed).
 
 ## Domain A - Further Research Backlog
 Objective:
@@ -213,7 +220,8 @@ Feature backlog candidates:
 4. Host capability enhancements only where MCP-first fallback is preserved.
 
 Feature readiness conditions:
-1. Pre-merge Tracks 1a and 1b are complete in `widget-search-rendering.md`.
+
+1. Pre-merge Tracks 1a and 1b complete (satisfied 2026-02-22).
 2. ADR matrix gaps owned and scheduled.
 3. Refactor backlog critical items complete.
 4. Security sign-off from specialist checklist.
@@ -273,10 +281,10 @@ Gate 2 - ADR matrix complete:
 - Go when all required ADR rows are present with evidence and planned action.
 
 Gate 3 - Pre-merge prerequisite complete:
-- Stop if Tracks 1a and 1b are not complete in `widget-search-rendering.md` (including Phase 5 resilience hardening).
+- Stop if Tracks 1a and 1b are not complete (including Phase 5 resilience hardening).
 - Go when the consolidated pre-merge plan is explicitly marked ready (all phases complete).
 - Rollback: return this file to blocked state if pre-merge scope reopens.
-- **Current status**: BLOCKED — Phase 5 pending.
+- **Current status**: PASSED — all phases (0-5) complete, 2026-02-22.
 
 Gate 4 - Specialist profile complete:
 - Stop if escalation criteria or review checklist are incomplete.
@@ -335,15 +343,15 @@ rg -n "WIDGET_URI|BASE_WIDGET_URI|openai/outputTemplate" \
 ```
 
 Future-code readiness checks to preserve in downstream implementation plans:
+
 1. Metadata contract tests for host-neutral core plus host projections.
 2. Auth safety tests for missing `securitySchemes`.
 3. URI parity tests for generated and runtime widget URI alignment.
-4. Cross-check that pre-merge widget constraints remain satisfied in `widget-search-rendering.md`.
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation | Owner |
 | --- | --- | --- | --- |
-| Scope bleed from pre-merge into post-merge plan | Delays and ownership confusion | Keep consolidated pre-merge scope in `widget-search-rendering.md` and gate this file on completion | Plan owner |
+| Scope bleed from pre-merge into post-merge plan | Delays and ownership confusion | Pre-merge scope complete and archived; gate satisfied | Plan owner |
 | Reintroduction of broken references | Research drift and weak evidence | Keep dated link-health command in quality gates | Research owner |
 | ADR omissions | Hidden architecture conflicts | Use explicit ADR matrix with required list and gate ownership | Architecture owner |
 | Host lock-in in core path | Reduced portability | Keep MCP-first baseline and adapter boundary only | Specialist reviewer |
@@ -351,8 +359,9 @@ Future-code readiness checks to preserve in downstream implementation plans:
 | Generator/runtime drift | Release-time widget or metadata failures | Add parity checks and gate before feature rollout | SDK owner |
 
 ## Exit Criteria
+
 1. Frontmatter todos reset to realistic states and include required ids.
-2. `lastValidatedDate: 2026-02-22` present.
+2. `lastValidatedDate` is current.
 3. Document structure follows required section order.
 4. Domain A to D are explicitly separated with dependency ordering.
 5. Source list refreshed with broken links replaced.
@@ -361,12 +370,13 @@ Future-code readiness checks to preserve in downstream implementation plans:
 8. Public API/interface implications are stated as future tasks only.
 9. Quality gates and deterministic validation commands are present.
 10. Stop/go and rollback logic is explicitly documented.
-11. Pre-merge Tracks 1a and 1b are consolidated in `widget-search-rendering.md`, and this file stays post-merge only.
+11. Pre-merge prerequisite (Tracks 1a + 1b) is complete and archived; this file stays post-merge only.
 
 ## Assumptions and Defaults
-1. Date baseline for this review is 22 February 2026.
+
+1. Date baseline for this review is 23 February 2026.
 2. MCP and security ADR review treats accepted ADRs as binding and superseded ADRs as context.
-3. Widget prerequisite work (Tracks 1a and 1b) is consolidated in `widget-search-rendering.md`.
+3. Widget prerequisite work (Tracks 1a and 1b) is complete and archived.
 4. `/mcp` remains the single transport surface.
 5. Public resource auth bypass remains constrained to ADR-057 and ADR-113 scope only.
 6. Generator-first/schema-first remains non-negotiable for SDK and MCP contract work.

@@ -408,9 +408,9 @@ pnpm agent-lifecycle-check --dry-run
 
 ## Related Plans
 
-- `dev-tooling-and-dev-ai-support/` - Testing and infrastructure
-- `sdk-publishing-and-versioning-plan.md` - Related to commit/release workflow
-- `contract-testing-schema-evolution-plan.md` - Quality gates
+- `developer-experience/` - SDK publishing and docs tooling
+- `developer-experience/sdk-publishing-and-versioning-plan.md` - Related to commit/release workflow
+- `quality-and-maintainability/contract-testing-schema-evolution.plan.md` - Quality gates
 
 ## References
 

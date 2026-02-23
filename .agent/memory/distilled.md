@@ -55,6 +55,12 @@ changing behaviour.
   as required in the schema, consumers use `.partial()` for
   optionality. This preserves the contract semantics: "if
   you use this capability, you must satisfy these fields."
+- `openapi-zod-client` with `strictObjects: true` generates
+  `.strict().and(.strict())` for OpenAPI `allOf` schemas — each
+  `.strict()` rejects the other side's properties, making the
+  intersection impossible to validate. Fixed via two-pass regex
+  in `zod-v3-to-v4-transform.ts`. The adapter package must be
+  rebuilt (`pnpm build`) before `pnpm type-gen` picks up changes.
 - `Object.getOwnPropertyDescriptor(obj, key)?.value`
   returns `any` — assign to `const v: unknown = ...`
 - `const parsed: unknown = JSON.parse(json)` avoids
@@ -217,9 +223,33 @@ Architecture` section). Dev gotchas not covered there:
   responsibility instead
 - When removing a workspace, also search TSDoc `@see`
   links for old GitHub repo URLs
+- ADR "Accepted (Revised)" status: use for documentation
+  entropy fixes where the core decision is unchanged
+  (follows ADR-055 precedent). Do not supersede — it
+  adds overhead for no structural benefit
+- ADR Consequences sections should use past tense for
+  completed actions — stale future tense creates a false
+  impression of outstanding work
 
 ## Architecture
 
+- **Response augmentation is best-effort**: canonical URL
+  decoration must NEVER fail the API call. Wrap `augmentBody()`
+  in try-catch that logs and returns unaugmented response.
+  Middleware factory should accept optional `Logger` for DI.
+- **Tests that agree with code on the wrong contract are worse
+  than no tests**: the snagging bugs were invisible because
+  tests encoded the same wrong assumptions (e.g. `keyStageSlugs`
+  instead of API's `keyStages`). Anchor test fixtures to the
+  schema or captured API responses, not to code assumptions.
+- **ES completion index has mandatory contexts**: `suggest()`
+  must validate that at least one of subject/keyStage is
+  provided. Bare suggest without context is an ES index
+  constraint, not a code workaround.
+- **SDK packages consumed as built dist**: `tsx` transpiles app
+  source on the fly but imports SDK packages from `dist/`.
+  Always `pnpm build` after SDK changes before smoke-testing
+  the HTTP server.
 - NEVER collapse distinct HTTP semantics into a single
   error kind — 404 and 451 have different meanings
 - Per-service error types are cleaner than a unified error

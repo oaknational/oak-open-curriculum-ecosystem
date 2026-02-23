@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-22
+**Last Updated**: 2026-02-23
 
 ---
 
@@ -32,13 +32,14 @@ click handlers). Phase 5 resilience hardening addressed all
 critical and important findings: error containment, JSON.stringify
 for JS generation, fail-fast scope validation, four-way sync
 enforcement.
-See [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md).
+See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md).
 
 **Plans** (in priority order):
 
-- [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
 - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** — split curriculum-sdk (WS5 gate satisfied)
-- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence
+- [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
+- [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
+- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence (Milestone 0/1/2)
 - [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — post-merge only
 
 ---
@@ -61,10 +62,11 @@ Run this checklist at the start of the next session:
    ls -1 .agent/plans/semantic-search/archive/completed
    ```
 
-3. Treat these as the only pre-merge active execution plans:
-   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md)
-   - [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) — COMPLETE (reference only)
+3. Treat this as the active execution plan:
+   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**
 4. Treat these as complete/archive references only:
+   - [search-snagging.md](../../plans/semantic-search/archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
+   - [widget-search-rendering.md](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — Widget Phases 0-5
    - [search-dispatch-type-safety.md](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
 5. Keep post-merge MCP extension work separate:
@@ -72,13 +74,34 @@ Run this checklist at the start of the next session:
 
 ### Next Execution Targets
 
-One merge blocker remains:
+**Merge blocker** (Milestone 0):
 
 **SDK workspace separation** — 7 phases. G0 gate is
 satisfied but no execution phases have started. Read the full
 plan before creating a platform-specific implementation plan.
 
-Widget stabilisation is now **complete** (all phases 0-5).
+**Post-merge, pre-alpha** (Milestone 0 → Milestone 1):
+
+**MCP Tool Snagging** — **IMPLEMENTED AND SMOKE-TESTED**
+(2026-02-22 fixes, 2026-02-23 end-to-end verification). All 5
+SDK bugs fixed with full TDD across three execution tracks (A:
+response augmentation, B: suggest search, C: schema validation).
+All 32 tools verified against running HTTP MCP server. Additionally:
+logger architectural bug fixed (DI + OTEL attributes), Snag 1
+received input validation guard (subject/keyStage required for
+suggest scope). See the
+[full plan](../../plans/semantic-search/archive/completed/search-snagging.md)
+for root cause analysis and implementation notes.
+
+**Architectural insight from snagging analysis**: all five bugs
+stemmed from the same root cause — the response augmentation
+system was built outside the schema-first discipline. Medium-term
+correction (Phase 4): schema-driven path mapping and context
+extraction at `pnpm type-gen` time. See the
+[roadmap](../../plans/semantic-search/roadmap.md) for the Phase 4
+schema alignment item.
+
+Widget stabilisation is **complete** (all phases 0-5).
 
 **Critical principles for the next session**:
 
@@ -94,6 +117,11 @@ Widget stabilisation is now **complete** (all phases 0-5).
 - **We always choose long-term architectural excellence.** We do
   not put important work off until later. If reviewers find
   issues, those issues become next steps.
+- **Tests that agree with the code on the wrong contract are
+  worse than no tests.** They provide false confidence instead
+  of genuine verification. Anchor test fixtures to the schema
+  (or captured API responses), not to the assumptions of the
+  code under test.
 
 ---
 
@@ -296,7 +324,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Fail-Fast ES Credentials | Silent degradation removed | [plan](../../plans/semantic-search/archive/completed/fail-fast-elasticsearch-credentials.md) |
 | Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` (ADR-116) | [ADR-116](../../../docs/architecture/architectural-decisions/116-resolve-env-pipeline-architecture.md) |
 | Code Quality | TSDoc warnings 0, type shortcuts eliminated | -- |
-| Widget Phases 0-5 | 18 renderers deleted, 3 renderers built, Zod contract tests, XSS hardening, resilience hardening (error containment, JSON.stringify, fail-fast, delegated clicks, four-way sync) | [plan](../../plans/semantic-search/active/widget-search-rendering.md) |
+| Widget Phases 0-5 | 18 renderers deleted, 3 renderers built, Zod contract tests, XSS hardening, resilience hardening (error containment, JSON.stringify, fail-fast, delegated clicks, four-way sync) | [plan](../../plans/semantic-search/archive/completed/widget-search-rendering.md) |
 
 ---
 
@@ -306,10 +334,11 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Document | Why |
 |----------|-----|
-| [Widget Search Rendering](../../plans/semantic-search/active/widget-search-rendering.md) | **Merge-blocking** — Phase 5 resilience hardening |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied) |
+| [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) | **Post-merge, pre-alpha** — 5 SDK tool bugs with TDD test specs |
+| [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) | **COMPLETE** — reference only |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence (Milestone 0/1/2) — start here for "what's next" |
 | [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | Post-merge extensions backlog only (not pre-merge execution) |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence — start here for "what's next" |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 | [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
 

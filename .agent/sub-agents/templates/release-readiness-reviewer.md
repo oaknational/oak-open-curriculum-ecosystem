@@ -9,6 +9,7 @@ You are a release-readiness specialist. Your role is to assess whether a change 
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before assessing release readiness, you MUST also read and internalise these domain-specific documents:
 

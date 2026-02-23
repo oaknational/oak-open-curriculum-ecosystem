@@ -1,98 +1,37 @@
 # Oak MCP Ecosystem
 
-**Infrastructure for AI agents to access, understand, and use Oak's openly-licensed, fully-sequenced and resourced curriculum — SDKs, MCP servers, and Elasticsearch-serverless--backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.**
+**Infrastructure for humans and AI agents to access, understand, and use Oak's openly-licensed, fully-sequenced and resourced curriculum — SDKs, MCP servers, and Elasticsearch-serverless--backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.**
 
-## Vision
+## Repo Contents
 
-[Oak's mission](https://www.thenational.academy/about-us/who-we-are) is to
-improve pupil outcomes and close the disadvantage gap by supporting teachers to
-teach. Oak's open curriculum API provides a major public asset, and this
-repository amplifies its impact through AI-native infrastructure: SDKs, MCP
-servers, and semantic search.
+This repo has roughly three distinct audiences:
 
-Today, it is a build-and-delivery pipeline for reliable curriculum access. At
-public alpha for MCP Apps extensions, it also becomes a direct interaction
-surface for curriculum use within platforms such as ChatGPT, Claude, and Gemini.
+- External developers and edtech teams who will benefit from the infrastructure and tools in this repo
+- Contributors to this repo who will use the agentic engineering practice to build the product faster and to a higher standard than would otherwise be possible.
+- Teachers and other end-users who will use the MCP-app to discover, access, and adapt curriculum content.
 
-The roadmap includes integration of Oak's wider AI capabilities (including
-knowledge graph and pedagogical rigour services), with Aila and this ecosystem as
-complementary, mutually reinforcing tracks. See [docs/VISION.md](docs/VISION.md)
-for the full framing.
-The full vision also includes explicit non-goals, capability staging
-(Current/Next/Later), and impact measures for investment decisions.
+### External Facing
 
-This vision serves two audiences: external developers/edtech teams who want to
-know what they can build, and internal stakeholders who need a clear investment
-and impact case for Oak.
+- Curriculum SDK generation and runtime - including a general OpenAPI -> SDK -> MCP tool generation pipeline
+- Semantic search SDK
+- MCP server
+- MCP-app user-facing Oak product (discover, access, adapt curriculum content)
 
-## What This Is
+### Internal Facing
 
-This monorepo makes the [Oak Open Curriculum](https://open-api.thenational.academy/) accessible to AI agents and searchable for teachers. It contains:
+This repo is designed to support [agentic or augmented product engineering practice](.agent/directives/practice.md). It has extensive guidance for AI and human contributors ([docs](docs/README.md), [process](docs/development/onboarding.md), [guidance](.agent/directives/AGENT.md), [ADRs](docs/architecture/architectural-decisions/), [memory](docs/architecture/institutional-memory.md)), strict and comprehensive [quality gates](.agent/directives/rules.md), and feedback loops to improve both.
 
-- **A Curriculum SDK** generated at compile time from the Oak Curriculum OpenAPI schema — TypeScript types, Zod validators, MCP tool metadata, search type generators
-- **MCP servers** (stdio and HTTP) that expose the full curriculum to AI agents via the Model Context Protocol
-- **A semantic search system** with 4-way Reciprocal Rank Fusion hybrid search (BM25 + ELSER) across 7 Elasticsearch Serverless indices, covering lessons, units, curriculum threads, and subject-phase sequences
-- **Core packages** (`Result<T, E>`, environment resolution pipeline) and a **logging library**
+It also has a large collection of repo specific agent skills, commands, sub-agents, and other tools to support the practice. While some of these are currently configured for Cursor only, the philosophy is that they should all be platform-agnostic, and we will continue to work towards that goal.
 
-### The Open Curriculum
+The tools are specific for this repo, but we hope that they demonstrate portable patterns and practices that can be applied elsewhere, and towards that end we try to maintain the boundary between the generic approach and the specific instances.
 
-The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides a subset of Oak's curriculum data — specifically the content that is openly licensed and free of third-party copyright. Unlike the data behind [www.thenational.academy](https://www.thenational.academy/), the Open Curriculum is organised to support reuse: by developers, AI agents, and anyone building on Oak's curriculum.
+## Quick Start for AI Agents
 
-Everything in this repository works with the Open Curriculum API. When you see "curriculum" in the codebase, it means the open, reusable subset.
+Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 
-### The Architectural Foundation
+## Quick Start for Everyone
 
-Everything flows from the OpenAPI schema:
-
-1. **OpenAPI Schema** (single source of truth)
-2. **→ TypeScript SDK** (generated at `pnpm type-gen`)
-3. **→ MCP Tools** (generated from the same schema)
-4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
-
-**The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
-
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
-Start with the [ADR index](docs/architecture/architectural-decisions/), then the foundational ADRs:
-
-- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
-- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
-- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
-
-### Who Uses What
-
-| If you are...                              | Start here                                                               |
-| ------------------------------------------ | ------------------------------------------------------------------------ |
-| A teacher searching for curriculum content | The search system serves you (via products built on this infrastructure) |
-| An AI agent accessing the curriculum       | MCP servers expose the full curriculum via tools                         |
-| A developer building on the curriculum     | The SDK gives you typed access to the API                                |
-| A contributor to this repo                 | Read on — the rest of this README is for you                             |
-
-## What's In The Repo
-
-- **`packages/sdks/oak-curriculum-sdk`** – Generated SDK: runtime clients, Zod schemas, MCP tool metadata, Elasticsearch mapping generators, and shared `parseSchema` validation helpers
-- **`packages/sdks/oak-search-sdk`** – Search SDK: Elasticsearch-backed retrieval, admin, and observability services with dependency injection. All methods return `Result<T, E>`.
-- **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
-- **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
-- **`apps/oak-search-cli`** – Semantic search CLI: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline
-- **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
-- **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
-- **`packages/libs/logger`** – Structured logging library
-- **`docs/architecture/architectural-decisions/`** – 110+ Architectural Decision Records documenting every significant design choice
-
-## Architecture Overview
-
-| Directory        | Purpose                                                                                                     |
-| ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                                      |
-| `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
-| `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
-| `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
-| `docs/`          | Developer documentation, onboarding guides, 110+ ADRs                                                       |
-
-Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
-
-## Quick Start
+### Install
 
 1. **Clone & install**
 
@@ -146,8 +85,8 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 5. **Regenerate types & run quality gates**
 
    ```bash
-   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint:fix -> markdownlint:root -> format:root
-   pnpm qg     # full gate: format-check:root -> markdownlint-check:root -> type-check -> lint -> test suites -> smoke
+   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint:fix -> subagents:check -> markdownlint:root -> format:root
+   pnpm qg     # full gate: format-check:root -> markdownlint-check:root -> subagents:check -> type-check -> lint -> test suites -> smoke
    ```
 
    `pnpm make` is the recommended first full pipeline run.
@@ -172,6 +111,8 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 ## Key Commands (root)
 
 ```bash
+# What is available
+
 pnpm install        # Install dependencies
 pnpm type-gen       # Regenerate SDK + MCP artefacts from OpenAPI
 pnpm build          # Build all workspaces
@@ -183,8 +124,14 @@ pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests
 pnpm smoke:dev:stub # Local smoke harness for MCP servers
-pnpm make           # Full pipeline (install -> build/type-gen -> docs -> lint:fix -> markdownlint:root -> format:root)
-pnpm qg             # Quality gate (format-check:root -> markdownlint-check:root -> type-check -> lint -> tests -> smoke)
+pnpm subagents:check # Validate sub-agent wrapper/template standards
+pnpm make           # Full pipeline (install -> build/type-gen -> docs -> lint:fix -> subagents:check -> markdownlint:root -> format:root)
+pnpm qg             # Quality gate (format-check:root -> markdownlint-check:root -> subagents:check -> type-check -> lint -> tests -> smoke)
+
+# What actually gets used
+
+pnpm fix # format:root -> markdownlint:root -> lint:fix
+pnpm check # Build and validate EVERYTHING
 ```
 
 ## Type Safety & Validation
@@ -206,6 +153,87 @@ This repository is governed by an **agentic engineering practice** — a self-re
 The practice operates in three layers: **philosophy** (the First Question, metacognition, the learning loop), **structure** (directives, plans, templates, ADRs, sub-agents, quality gates, institutional memory), and **tooling** (platform-specific bindings in `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`).
 
 The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md).
+
+## What This Is
+
+This monorepo makes the [Oak Open Curriculum](https://open-api.thenational.academy/) accessible to AI agents and searchable for teachers. It contains:
+
+- **A Curriculum SDK** generated at compile time from the Oak Curriculum OpenAPI schema — TypeScript types, Zod validators, MCP tool metadata, search type generators
+- **MCP servers** (stdio and HTTP) that expose the full curriculum to AI agents via the Model Context Protocol
+- **A semantic search system** with 4-way Reciprocal Rank Fusion hybrid search (BM25 + ELSER) across 7 Elasticsearch Serverless indices, covering lessons, units, curriculum threads, and subject-phase sequences
+- **Core packages** (`Result<T, E>`, environment resolution pipeline) and a **logging library**
+
+### The Open Curriculum
+
+The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides a subset of Oak's curriculum data — specifically the content that is openly licensed and free of third-party copyright. Unlike the data behind [www.thenational.academy](https://www.thenational.academy/), the Open Curriculum is organised to support reuse: by developers, AI agents, and anyone building on Oak's curriculum.
+
+Everything in this repository works with the Open Curriculum API. When you see "curriculum" in the codebase, it means the open, reusable subset.
+
+### The Architectural Foundation
+
+Everything flows from the OpenAPI schema:
+
+1. **OpenAPI Schema** (single source of truth)
+2. **→ TypeScript SDK** (generated at `pnpm type-gen`)
+3. **→ MCP Tools** (generated from the same schema)
+4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
+
+**The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
+
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
+Start with the [ADR index](docs/architecture/architectural-decisions/), then the foundational ADRs:
+
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
+
+## What's In The Repo
+
+- **`packages/sdks/oak-curriculum-sdk`** – Generated SDK: runtime clients, Zod schemas, MCP tool metadata, Elasticsearch mapping generators, and shared `parseSchema` validation helpers
+- **`packages/sdks/oak-search-sdk`** – Search SDK: Elasticsearch-backed retrieval, admin, and observability services with dependency injection. All methods return `Result<T, E>`.
+- **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
+- **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
+- **`apps/oak-search-cli`** – Semantic search CLI: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline
+- **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
+- **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
+- **`packages/libs/logger`** – Structured logging library
+- **`docs/architecture/architectural-decisions/`** – 110+ Architectural Decision Records documenting every significant design choice
+
+## Architecture Overview
+
+| Directory        | Purpose                                                                                                     |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                                      |
+| `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
+| `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
+| `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
+| `docs/`          | Developer documentation, onboarding guides, 110+ ADRs                                                       |
+
+Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
+
+## Vision
+
+[Oak's mission](https://www.thenational.academy/about-us/who-we-are) is to
+improve pupil outcomes and close the disadvantage gap by supporting teachers to
+teach. Oak's open curriculum API provides a major public asset, and this
+repository amplifies its impact through AI-native infrastructure: SDKs, MCP
+servers, and semantic search.
+
+Today, it is a build-and-delivery pipeline for reliable curriculum access. At
+public alpha for MCP Apps extensions, it also becomes a direct interaction
+surface for curriculum use within platforms such as ChatGPT, Claude, and Gemini.
+
+The roadmap includes integration of Oak's wider AI capabilities (including
+knowledge graph and pedagogical rigour services), with Aila and this ecosystem as
+complementary, mutually reinforcing tracks. See [docs/VISION.md](docs/VISION.md)
+for the full framing.
+The full vision also includes explicit non-goals, capability staging
+(Current/Next/Later), and impact measures for investment decisions.
+
+This vision serves two audiences: external developers/edtech teams who want to
+know what they can build, and internal stakeholders who need a clear investment
+and impact case for Oak.
 
 ## Contributing
 
@@ -231,5 +259,3 @@ commit conventions, and quality expectations.
 - Licence (curriculum data) – see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
 - Branding – see [BRANDING.md](BRANDING.md)
 - Security – see [SECURITY.md](SECURITY.md)
-
-Built by [Oak National Academy](https://www.thenational.academy/).

@@ -47,28 +47,24 @@ export async function suggest(
     return err({ type: 'validation_error', message: 'suggest: prefix must not be empty' });
   }
 
+  if (!params.subject && !params.keyStage) {
+    return err({
+      type: 'validation_error',
+      message:
+        'suggest: at least one of subject or keyStage is required ' +
+        '(the completion index has mandatory contexts)',
+    });
+  }
+
   try {
-    const limit = Math.min(
-      Math.max(params.limit ?? DEFAULT_SUGGESTION_LIMIT, 1),
-      MAX_SUGGESTION_LIMIT,
-    );
-    const indexKind =
-      params.scope === 'units'
-        ? ('units' as const)
-        : params.scope === 'sequences'
-          ? ('sequences' as const)
-          : ('lessons' as const);
-    const index = resolveIndex(indexKind);
+    const limit = clampLimit(params.limit);
+    const index = resolveIndex(resolveIndexKind(params.scope));
+    const completion = buildCompletionClause(prefix, limit, params.subject, params.keyStage);
 
     const completionResponse = await client.search({
       index,
       size: 0,
-      suggest: {
-        suggestions: {
-          prefix,
-          completion: { field: 'title_suggest', size: limit, skip_duplicates: true },
-        },
-      },
+      suggest: { suggestions: completion },
     });
 
     const suggestions = extractSuggestionItems(completionResponse, limit, params.scope);
@@ -81,6 +77,58 @@ export async function suggest(
     const message = error instanceof Error ? error.message : String(error);
     return err({ type: 'es_error', message, statusCode: extractStatusCode(error) });
   }
+}
+
+function clampLimit(raw: number | undefined): number {
+  return Math.min(Math.max(raw ?? DEFAULT_SUGGESTION_LIMIT, 1), MAX_SUGGESTION_LIMIT);
+}
+
+function resolveIndexKind(scope: SuggestParams['scope']): 'lessons' | 'units' | 'sequences' {
+  if (scope === 'units') {
+    return 'units';
+  }
+  if (scope === 'sequences') {
+    return 'sequences';
+  }
+  return 'lessons';
+}
+
+/**
+ * Builds the full completion suggest clause including prefix, field, size,
+ * and optional category contexts.
+ */
+function buildCompletionClause(
+  prefix: string,
+  limit: number,
+  subject: SuggestParams['subject'],
+  keyStage: SuggestParams['keyStage'],
+): { prefix: string; completion: CompletionDescriptor } {
+  const contexts = buildCompletionContexts(subject, keyStage);
+  const completion: CompletionDescriptor = {
+    field: 'title_suggest',
+    size: limit,
+    skip_duplicates: true,
+  };
+  if (contexts) {
+    completion.contexts = contexts;
+  }
+  return { prefix, completion };
+}
+
+/**
+ * ES completion suggest category contexts.
+ *
+ * Keys are ES context category names (`subject`, `key_stage`).
+ * Uses Record to satisfy the ES client's SearchFieldSuggester type.
+ * Construction-time safety is provided by `buildCompletionContexts`.
+ */
+type CompletionContexts = Record<'subject' | 'key_stage', string[]>;
+
+interface CompletionDescriptor {
+  field: string;
+  size: number;
+  skip_duplicates: boolean;
+  contexts?: Partial<CompletionContexts>;
 }
 
 /**
@@ -136,4 +184,27 @@ function isOptionWithText(value: unknown): value is { text: string } {
     return false;
   }
   return typeof value.text === 'string';
+}
+
+/**
+ * Builds completion contexts from optional subject and keyStage filters.
+ *
+ * Returns `undefined` when no filters are provided (no contexts to constrain).
+ * Follows the same pattern as the CLI's `buildSubjectContexts`.
+ */
+function buildCompletionContexts(
+  subject: SuggestParams['subject'],
+  keyStage: SuggestParams['keyStage'],
+): Partial<CompletionContexts> | undefined {
+  if (!subject && !keyStage) {
+    return undefined;
+  }
+  const contexts: Partial<CompletionContexts> = {};
+  if (subject) {
+    contexts.subject = [subject];
+  }
+  if (keyStage) {
+    contexts.key_stage = [keyStage];
+  }
+  return contexts;
 }

@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 Milestone 0 — merge preparation in progress
-**Last Updated**: 2026-02-22
+**Last Updated**: 2026-02-23
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -14,10 +14,14 @@ This roadmap is the strategic milestone sequence for semantic search work.
 Execution detail lives in active plans under `active/` and completed plans under
 `archive/completed/`.
 
-Authoritative active execution sources:
+Authoritative active execution source:
 
 1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
-2. [widget-search-rendering.md](active/widget-search-rendering.md)
+
+Completed plans (archived):
+
+- [widget-search-rendering.md](archive/completed/widget-search-rendering.md) — Widget Phases 0-5
+- [search-snagging.md](archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
 
 ---
 
@@ -138,7 +142,7 @@ Goal:
 
 ### 3h Widget Stabilisation (Complete)
 
-- Plan: [widget-search-rendering.md](active/widget-search-rendering.md)
+- Plan: [widget-search-rendering.md](archive/completed/widget-search-rendering.md)
 
 All phases (0-5) complete:
 
@@ -166,6 +170,34 @@ Research and planning for public alpha:
 
 ## Post-Merge Work (Milestone 0 Exit → Milestone 1)
 
+### MCP Tool Snagging — IMPLEMENTED AND SMOKE-TESTED
+
+- Plan: [search-snagging.md](archive/completed/search-snagging.md)
+- 5 SDK tool bugs (response augmentation, suggest search, schema
+  validation) found during 31-tool smoke test — **all fixed** with
+  full TDD (2026-02-22), end-to-end smoke-tested against running
+  HTTP MCP server (2026-02-23)
+- **Architectural insight**: all five bugs stemmed from the same root
+  cause — the response augmentation system was built outside the
+  schema-first discipline. Path matching used substring heuristics
+  instead of schema-derived maps; context extraction manually checked
+  property names instead of validating against generated schemas;
+  tests encoded the same wrong assumptions as the code.
+- Three execution tracks completed: A (response augmentation —
+  Snags 2/3/4), B (suggest search — Snag 1), C (schema validation
+  — Snag 5)
+- **Logger architectural bug** also fixed: two SDK logger instances
+  updated from `console.log` sinks to `createNodeStdoutSink()` +
+  `buildResourceAttributes(process.env, ...)`, middleware factory
+  updated with DI for logger injection. 4 integration tests added.
+
+### no-console ESLint Enforcement
+
+- Plan: [no-console-enforcement.plan.md](../../quality-and-maintainability/no-console-enforcement.plan.md)
+- Add `no-console: 'error'` to shared ESLint config, eliminate all
+  `console.*` usage (~110 files, largely mechanical)
+- Origin: logger architectural bug found during snagging session
+
 ### 3b Result Pattern Unification
 
 - Plan: [mcp-result-pattern-unification.md](post-sdk/mcp-integration/mcp-result-pattern-unification.md)
@@ -185,6 +217,30 @@ Primary stream hubs (post-alpha):
 - [post-sdk/sdk-api/](post-sdk/sdk-api/)
 - [post-sdk/operations/](post-sdk/operations/)
 - [post-sdk/extensions/](post-sdk/extensions/)
+
+### Response Augmentation Schema Alignment (Phase 4)
+
+Bring the response augmentation system into the schema-first
+discipline. Origin: architectural root cause analysis from
+[MCP tool snagging](archive/completed/search-snagging.md).
+
+**Depends on**: MCP tool snagging fixes complete (Track A
+establishes the schema-driven context extraction pattern that
+Phase 4 extends to path mapping).
+
+Work items:
+
+- **4a Schema-driven path-to-content-type mapping**: generate a
+  static path-to-content-type allowlist from OpenAPI path
+  definitions at `pnpm type-gen` time, replacing the current
+  hand-written `isSingleEntityEndpoint` regex heuristic.
+- **4b Schema conformance tests**: add captured API response
+  fixtures as part of type-gen quality gates to prevent schema
+  drift.
+
+**Acceptance criteria**: path-to-content-type mapping is generated
+at `pnpm type-gen` time; no hand-written path heuristics remain
+in response augmentation.
 
 ---
 
@@ -218,7 +274,8 @@ pnpm smoke:dev:stub
 6. [search-acceptance-criteria.md](search-acceptance-criteria.md)
 7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 1 research
 8. [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Milestone 1-2 plan
-9. [architectural-enforcement-adoption.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.md) — Milestone 2 plan
+9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md) — Milestone 2 plan
+10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/cross-agent-standardisation.plan.md) — Milestone 2 plan
 
 ---
 

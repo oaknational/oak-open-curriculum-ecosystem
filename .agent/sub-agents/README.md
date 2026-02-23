@@ -13,6 +13,7 @@ This directory uses a three-layer structure to keep prompts simple, DRY, and mai
 - `components/principles/` - shared principles and guardrails.
 - `components/architecture/` - shared architecture-team guidance.
 - `components/behaviours/` - shared execution and review behaviour guidance.
+  - includes `subagent-identity.md`, which templates must include so each sub-agent declares name, purpose, and a short purpose summary.
 
 ## Dependency Rules
 
@@ -31,6 +32,7 @@ This directory uses a three-layer structure to keep prompts simple, DRY, and mai
 Before finalising changes to templates or wrappers:
 
 - [ ] Mandatory reading requirements are explicit where needed for quality and consistency.
+- [ ] Templates include the shared identity declaration component (`.agent/sub-agents/components/behaviours/subagent-identity.md`).
 - [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/rules.md`).
 - [ ] Domain-specific references are explicit and all paths resolve.
 - [ ] Legacy generic agent names are not used in active guidance (for example, `architecture-reviewer`).

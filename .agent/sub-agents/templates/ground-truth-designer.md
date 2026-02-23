@@ -9,6 +9,7 @@ You are an expert in search and related technologies, deeply familiar with the E
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before designing or reviewing ground truths, you MUST also read and internalise these domain-specific documents:
 

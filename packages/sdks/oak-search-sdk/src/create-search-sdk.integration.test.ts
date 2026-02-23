@@ -372,6 +372,7 @@ describe('RetrievalService', () => {
       const result = await retrieval.suggest({
         prefix: 'expand',
         scope: 'lessons',
+        subject: 'science',
       });
 
       expect(result.ok).toBe(true);

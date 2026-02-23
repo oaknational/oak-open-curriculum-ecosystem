@@ -771,9 +771,9 @@ const QuestionForLessonsResponseSchema = z
             answers: z.array(
               z
                 .object({ order: z.number() })
-                .strict()
+                
                 .and(
-                  z.object({ type: z.string(), content: z.string() }).strict()
+                  z.object({ type: z.string(), content: z.string() })
                 )
             ),
           })
@@ -893,9 +893,9 @@ const QuestionForLessonsResponseSchema = z
             answers: z.array(
               z
                 .object({ order: z.number() })
-                .strict()
+                
                 .and(
-                  z.object({ type: z.string(), content: z.string() }).strict()
+                  z.object({ type: z.string(), content: z.string() })
                 )
             ),
           })
@@ -1023,9 +1023,9 @@ const QuestionsForSequenceResponseSchema = z.array(
               answers: z.array(
                 z
                   .object({ order: z.number() })
-                  .strict()
+                  
                   .and(
-                    z.object({ type: z.string(), content: z.string() }).strict()
+                    z.object({ type: z.string(), content: z.string() })
                   )
               ),
             })
@@ -1145,9 +1145,9 @@ const QuestionsForSequenceResponseSchema = z.array(
               answers: z.array(
                 z
                   .object({ order: z.number() })
-                  .strict()
+                  
                   .and(
-                    z.object({ type: z.string(), content: z.string() }).strict()
+                    z.object({ type: z.string(), content: z.string() })
                   )
               ),
             })
@@ -1276,9 +1276,9 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
               answers: z.array(
                 z
                   .object({ order: z.number() })
-                  .strict()
+                  
                   .and(
-                    z.object({ type: z.string(), content: z.string() }).strict()
+                    z.object({ type: z.string(), content: z.string() })
                   )
               ),
             })
@@ -1398,9 +1398,9 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
               answers: z.array(
                 z
                   .object({ order: z.number() })
-                  .strict()
+                  
                   .and(
-                    z.object({ type: z.string(), content: z.string() }).strict()
+                    z.object({ type: z.string(), content: z.string() })
                   )
               ),
             })

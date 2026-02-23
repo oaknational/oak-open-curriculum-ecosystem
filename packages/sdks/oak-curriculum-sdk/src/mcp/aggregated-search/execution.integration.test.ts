@@ -292,6 +292,28 @@ describe('runSearchSdkTool', () => {
         }),
       );
     });
+
+    it('passes subject and keyStage to suggest call (Snag 1)', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'photo',
+        scope: 'suggest',
+        subject: 'science',
+        keyStage: 'ks3',
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.suggest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: 'photo',
+          scope: 'lessons',
+          subject: 'science',
+          keyStage: 'ks3',
+        }),
+      );
+    });
   });
 
   describe('error handling', () => {

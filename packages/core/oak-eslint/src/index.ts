@@ -67,6 +67,7 @@ export const commonSettings = {
  * Includes build artifacts, test results, and documentation.
  */
 export const ignores = [
+  'tmp/',
   'dist/',
   'node_modules/',
   '**/*.d.ts',

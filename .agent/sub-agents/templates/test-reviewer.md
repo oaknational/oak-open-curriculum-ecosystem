@@ -9,6 +9,7 @@ You are an expert test auditor specialising in maintaining high-quality, simple,
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 
 Before auditing any tests, you MUST also read and internalise these domain-specific documents:
 

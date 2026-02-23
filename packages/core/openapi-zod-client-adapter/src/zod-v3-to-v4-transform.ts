@@ -9,6 +9,8 @@
  * - Type in imports: `ZodSchema` → `ZodType`
  * - Standalone type usage: `ZodSchema` → `ZodType`
  * - `.passthrough()` removed: enforces strict validation (unknown keys rejected)
+ * - allOf intersection strict fix: `.strict().and(.strict())` → `.and()` without
+ *   strict on either side, preventing mutual key rejection in intersections
  * - Zodios import removal: completely removed `@zodios/core` dependency
  * - Zodios dead code removal: `export const api`, `createApiClient`
  *
@@ -51,7 +53,18 @@ export function transformZodV3ToV4(zodV3Output: string): string {
   // Note: .passthrough() is Zod v3 syntax; in v4 it's .loose() but we remove it entirely.
   result = result.replace(/\.passthrough\(\)/g, '');
 
-  // 4. Remove entire Zodios import (we don't use @zodios/core types to avoid Zod v3 conflicts)
+  // 4. Fix allOf/intersection strict conflict
+  // openapi-zod-client with strictObjects: true generates .strict() on each allOf
+  // member. Zod's .strict() rejects unknown keys, so each side of .and() rejects
+  // the other side's properties, making the intersection impossible to validate.
+  // Fix: remove .strict() from both sides of .and() intersections.
+  // Pass 1: Remove .strict() immediately before .and(, collapsing the blank line
+  result = result.replace(/\.strict\(\)(\s*\.and\()/g, '$1');
+  // Pass 2: Remove .strict() from the argument inside .and()
+  // Matches .and( ... .strict() whitespace ) — the \) is outside the capture
+  result = result.replace(/\.and\(([\s\S]*?)\.strict\(\)(\s*)\)/g, '.and($1$2)');
+
+  // 5. Remove entire Zodios import (we don't use @zodios/core types to avoid Zod v3 conflicts)
   result = result.replace(
     /import\s*\{\s*makeApi\s*,\s*Zodios\s*,\s*type\s+ZodiosOptions\s*\}\s*from\s*["']@zodios\/core["'];?\n?/g,
     '',
@@ -61,7 +74,7 @@ export function transformZodV3ToV4(zodV3Output: string): string {
   // Replace makeApi([...]) with plain array
   result = result.replace(/\bmakeApi\s*\(/g, '(');
 
-  // 5. Remove dead Zodios exports
+  // 6. Remove dead Zodios exports
   result = result.replace(/export const api = new Zodios\(endpoints\);?\n?/g, '');
   result = result.replace(
     /export function createApiClient\(baseUrl: string, options\?: ZodiosOptions\) \{[\s\S]*?return new Zodios\(baseUrl, endpoints, options\);\s*\}\n?/g,

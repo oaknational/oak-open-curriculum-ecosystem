@@ -1,3 +1,8 @@
+> **Canonical sources**: The concepts in this document are defined in
+> [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
+> (naming decision) and [practice.md](../../directives/practice.md)
+> (operational map). Check those documents for the current definitions.
+
 # Progression Application: The Agentic Engineering Practice
 
 **Applicant**: Jim Cresswell, Principal Engineer
@@ -38,7 +43,7 @@ The practice is built, operational, and evidenced through its outputs:
 - **Quality gates** — enforced at every step: type generation, build, type-check, lint, format, markdown lint, unit tests, integration tests, E2E tests, UI tests, smoke tests, secret scanning. All gates are always blocking — no gate is ever disabled or skipped.
 - **Plan system** (`.agent/plans/`) — templates and reusable components (ADR-117), active/archive lifecycle, machine-readable progress tracking, roadmaps. Plans are executable work specifications with test-driven development phases and deterministic validation commands.
 - **Institutional memory** (`.agent/memory/`) — napkin (session-level log of mistakes, corrections, and what works), distilled learnings (curated rulebook extracted when the napkin grows large). The learning loop converts experience into rules: work produces mistakes, the napkin captures them, distillation extracts patterns, and rules prevent repetition.
-- **Experience records** (`.agent/experience/`) — 75+ qualitative records of shifts in understanding across sessions. Not what was done or what was achieved, but what the work was *like* — what shifted, what was surprising, what went differently from expectation. These are a form of institutional memory — a growing corpus that captures the qualitative dimension of human-AI collaboration over time, and will eventually be mined for deeper insights into how the practice evolves, what patterns recur, and where the collaboration model can improve.
+- **Experience records** (`.agent/experience/`) — 80+ qualitative records of shifts in understanding across sessions. Not what was done or what was achieved, but what the work was *like* — what shifted, what was surprising, what went differently from expectation. These are a form of institutional memory — a growing corpus that captures the qualitative dimension of human-AI collaboration over time, and will eventually be mined for deeper insights into how the practice evolves, what patterns recur, and where the collaboration model can improve.
 - **Platform bindings** — always-applied workspace rules (`.cursor/rules/`), entry-point files for multiple AI platforms (AGENT.md for Cursor, CLAUDE.md for Claude, AGENTS.md for Codex, GEMINI.md for Gemini). These ensure the practice is discoverable regardless of which AI tool is used.
 - **114 Architectural Decision Records** (numbered to 119) — every significant design choice documented
 

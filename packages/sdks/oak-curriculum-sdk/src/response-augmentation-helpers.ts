@@ -15,7 +15,7 @@ interface ObjectResponse {
  * Type guard that narrows unknown to a non-null object.
  * Used to enable the `in` operator for property checking.
  */
-function isNonNullObject(value: unknown): value is ObjectResponse {
+export function isNonNullObject(value: unknown): value is ObjectResponse {
   return typeof value === 'object' && value !== null;
 }
 
@@ -51,6 +51,12 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
  * Note: Order matters for paths like `/subjects/\{subject\}/sequences` which
  * contains both `/subjects/` and ends with `/sequences`. We prioritise based
  * on what the endpoint actually returns.
+ *
+ * Subject paths use positive exact-depth matching to prevent sub-resource
+ * paths like `/subjects/maths/key-stages` or `/subjects/maths/years` from
+ * being misclassified as subject entities. Lesson and unit paths retain
+ * `includes()` matching because they have valid deeper paths (e.g.,
+ * `/lessons/\{l\}/summary`, `/units/\{u\}/summary`).
  */
 export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (path.includes('/lessons/')) {
@@ -62,12 +68,10 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (path.includes('/sequences/')) {
     return 'sequence';
   }
-  // /subjects/\{subject\}/sequences returns sequences, not subjects
-  // Check for sequences endpoint before subjects
   if (path.endsWith('/sequences')) {
     return 'sequence';
   }
-  if (path.includes('/subjects/')) {
+  if (/\/subjects(\/[^/]+)?$/.test(path)) {
     return 'subject';
   }
   if (path.includes('/threads/')) {

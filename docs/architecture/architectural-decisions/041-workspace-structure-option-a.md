@@ -1,7 +1,8 @@
 # ADR-041: Workspace Structure Option A Adopted
 
-Status: Accepted
+Status: Accepted (Revised)
 Date: 2025-09-08
+Updated: 2026-02-22
 
 ## Context
 
@@ -11,30 +12,37 @@ We compared multiple workspace layouts to improve clarity, onboarding, and long-
 
 Adopt Option A (conventional) with clear directories:
 
-- `apps/` – runnable MCP servers
-- `packages/libs/` – lib contracts/utilities (logger, storage, transport, env)
-- `packages/libs/` – reusable libraries
-- `packages/providers/` – platform providers (e.g., Node, Workers)
-- `packages/sdks/` – client SDKs (future growth)
+- `apps/` – application runtimes (MCP servers, search CLI)
+- `packages/core/` – foundational shared code (result types, ESLint config, env, OpenAPI adapter)
+- `packages/libs/` – shared runtime libraries (logger)
+- `packages/sdks/` – SDK packages (curriculum-sdk, oak-search-sdk)
 
 Rules & relationships:
 
 - Inter‑workspace imports use `@oaknational/*` package specifiers only.
 - Intra‑package relative imports allowed; avoid private/internal subpaths.
-- Dependency flow: core → libs → apps/SDKs; core never imports providers.
+- Dependency direction (imports flow upward):
+
+| Importer | core | libs | sdks | apps | Constraint                          |
+| -------- | ---- | ---- | ---- | ---- | ----------------------------------- |
+| core     | —    | no   | no   | no   | Must remain domain-agnostic         |
+| libs     | yes  | —    | no   | no   | —                                   |
+| sdks     | yes  | yes  | DAG  | no   | No circular SDK-to-SDK dependencies |
+| apps     | yes  | yes  | yes  | —    | —                                   |
 
 ## Rationale
 
 - Highest familiarity and discoverability; minimal churn from current state.
-- Scales cleanly for more SDKs and providers.
+- Scales cleanly for more SDKs.
+- Cross-SDK imports (the "DAG" cell) are legitimate essential domain coupling: `oak-search-sdk` depends on `curriculum-sdk` because semantic search inherently operates on curriculum concepts. Forbidding this would force type duplication or generic types, violating DRY and the no-type-shortcuts rule. Circular dependencies remain forbidden.
 
 ## Consequences
 
-- Update architecture README and onboarding to reflect Option A.
-- Consider moving SDKs under `packages/sdks/` in a later tidy-up; not required now.
+- Architecture README and onboarding updated to reflect Option A.
+- SDKs moved under `packages/sdks/` as part of the workspace tidy-up.
 
 ## Links
 
-- Plan: `.agent/plans/architectural-refinements-plan.md`
-- Options analysis: `.agent/plans/workspace-structure-options.md`
+- Plan (completed): `.agent/plans/archive/completed/architectural-refinements-plan.md`
+- Options analysis (completed): `.agent/plans/archive/completed/workspace-structure-options.md`
 - Provider system: `docs/architecture/provider-system.md`

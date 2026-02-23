@@ -365,7 +365,7 @@ can audit coverage quickly.
 
 ## Related Work & Dependencies
 
-- **Stryker Integration Plan** (`.agent/plans/stryker-integration-plan.md`) – mutation testing validates quality of unit tests; contract testing validates adherence to Cardinal Rule; complementary strategies.
+- **Mutation Testing Plan** (`.agent/plans/agentic-engineering-enhancements/mutation-testing-implementation.plan.md`) – mutation testing validates quality of unit tests; contract testing validates adherence to Cardinal Rule; complementary strategies.
 - **OpenAPI Framework Extraction Plan** (`.agent/plans/openapi-to-mcp-framework-extraction-plan.md`) – contract testing provides validation evidence that OpenAPI → SDK → Apps pipeline is robust; supports extraction roadmap.
 - **Semantic Search Target Alignment Plan** (`.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`) – contract scenarios must include Search service validation where schema affects indexed entities or query responses.
 - **ADR-029, ADR-030, ADR-031** – contract testing operationalizes these architectural decisions; provides continuous validation that principles are maintained.
