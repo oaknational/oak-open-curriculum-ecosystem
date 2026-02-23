@@ -20,7 +20,7 @@ This document captures **data quirks** that affect how consumers process curricu
 | Bulk duplicate causes              | ❌ No        | Section 7 of this document        |
 
 **TODO**: Consider adding a `dataQuirks` section to the ontology to capture these edge cases.
-See `.agent/plans/external/ooc-api-wishlist/20-ontology-and-graphs-api-proposal.md` for the full proposal.
+See `.agent/plans/external/ooc-api-wishlist/22-ontology-and-graphs-api-proposal.md` for the full proposal.
 
 ---
 

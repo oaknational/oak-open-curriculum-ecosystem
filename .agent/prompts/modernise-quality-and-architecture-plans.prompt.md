@@ -1,5 +1,15 @@
 # Modernise quality-and-maintainability/ and architecture/ Plan Directories
 
+**Status**: COMPLETE (2026-02-23)
+
+Merged both directories into a single `architecture/` directory. Archived 5
+completed plans, iceboxed 3 speculative plans, consolidated overlapping
+config/DI plans, and condensed the ESLint subdirectory into the
+`architectural-enforcement-adoption.plan.md` in `agentic-engineering-enhancements/`.
+All cross-references updated. See napkin session "2026-02-23 (b)" for details.
+
+---
+
 ## Context
 
 Two plan directories need analysis and modernisation to match current

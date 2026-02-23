@@ -5,11 +5,16 @@ import { dirname, join } from 'node:path';
  * Finds the monorepo root by walking up from `startDir` until a
  * directory containing `pnpm-workspace.yaml` or `.git` is found.
  *
+ * Returns `undefined` when no marker is found (e.g. serverless
+ * environments like Vercel where the deployed bundle has no repo
+ * structure). Callers that require a repo root should check the
+ * return value and fail with context-appropriate guidance.
+ *
  * @param startDir - Directory to start searching from
- * @returns Absolute path to the monorepo root
- * @throws Error if the filesystem root is reached without finding a marker
+ * @returns Absolute path to the monorepo root, or `undefined` if
+ *          the filesystem root is reached without finding a marker
  */
-export function findRepoRoot(startDir: string): string {
+export function findRepoRoot(startDir: string): string | undefined {
   let current = startDir;
   for (;;) {
     const workspace = join(current, 'pnpm-workspace.yaml');
@@ -18,11 +23,8 @@ export function findRepoRoot(startDir: string): string {
       return current;
     }
     const parent = dirname(current);
-    if (parent === '/') {
-      throw new Error('Could not find repo root. Iterated to `/`');
-    }
-    if (parent === current) {
-      return current;
+    if (parent === '/' || parent === current) {
+      return undefined;
     }
     current = parent;
   }

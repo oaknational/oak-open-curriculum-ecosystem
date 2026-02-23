@@ -6,7 +6,7 @@
  */
 
 import { createServer } from './app/server.js';
-import { createStartupLogger, defaultStartupLoggerDeps } from './app/startup.js';
+import { createStartupLogger, createDefaultStartupLoggerDeps } from './app/startup.js';
 
 export { createServer } from './app/server.js';
 export type { ServerConfig } from './app/wiring.js';
@@ -17,7 +17,7 @@ export type { ServerConfig } from './app/wiring.js';
 // Main entry point when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.debug('Creating startup logger from curriculum mcp index.ts...');
-  const startupLog = createStartupLogger(defaultStartupLoggerDeps);
+  const startupLog = createStartupLogger(createDefaultStartupLoggerDeps());
   startupLog('[STARTUP] Oak Curriculum MCP server starting...');
 
   // Parse log level from environment

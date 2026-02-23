@@ -169,8 +169,8 @@ export function resolveEnv<TSchema extends z.ZodType>(
 
   const repoRoot = findRepoRoot(startDir);
 
-  const dotEnvValues = parseEnvFile(join(repoRoot, '.env'));
-  const dotEnvLocalValues = parseEnvFile(join(repoRoot, '.env.local'));
+  const dotEnvValues = repoRoot ? parseEnvFile(join(repoRoot, '.env')) : {};
+  const dotEnvLocalValues = repoRoot ? parseEnvFile(join(repoRoot, '.env.local')) : {};
 
   const merged: Record<string, string | undefined> = {
     ...dotEnvValues,
@@ -190,10 +190,18 @@ export function resolveEnv<TSchema extends z.ZodType>(
 
   const issueMessages = parsed.error.issues.map((i: z.core.$ZodIssue) => i.message);
 
+  const isVercel = processEnv.VERCEL === '1';
+
+  const vercelGuidance = isVercel
+    ? `\n  This is a Vercel deployment. Configure the missing keys in your ` +
+      `Vercel project settings (Settings → Environment Variables): ${missingKeys.join(', ')}`
+    : '';
+
   const message =
     `Environment validation failed.\n` +
     `  Missing keys: ${missingKeys.length > 0 ? missingKeys.join(', ') : 'none'}\n` +
-    `  Validation errors: ${issueMessages.join('; ')}`;
+    `  Validation errors: ${issueMessages.join('; ')}` +
+    vercelGuidance;
 
   return err({
     message,

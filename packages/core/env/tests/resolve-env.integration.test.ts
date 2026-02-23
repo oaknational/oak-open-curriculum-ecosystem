@@ -12,11 +12,14 @@ const TestSchema = z.object({
 
 /**
  * Creates a temp directory tree that mimics a monorepo:
+ *
+ * ```text
  * tempDir/
  *   pnpm-workspace.yaml   (marker for findRepoRoot)
  *   .env                   (optional)
  *   .env.local             (optional)
- *   nested/                (startDir)
+ *   nested/                (startDir — exercises walk-up)
+ * ```
  */
 function createTestTree(
   dotEnv?: string,
@@ -36,12 +39,11 @@ function createTestTree(
     writeFileSync(join(repoRoot, '.env.local'), dotEnvLocal);
   }
 
-  const startDir = join(repoRoot, 'nested');
-  mkdtempSync(startDir);
+  const nestedDir = mkdtempSync(join(repoRoot, 'nested-'));
 
   return {
     repoRoot,
-    startDir: repoRoot,
+    startDir: nestedDir,
     cleanup: () => rmSync(repoRoot, { recursive: true, force: true }),
   };
 }
@@ -179,6 +181,76 @@ describe('resolveEnv', () => {
       });
 
       expect(processEnv).toEqual({});
+    });
+  });
+
+  describe('serverless environment (no repo root)', () => {
+    it('validates processEnv directly when no repo root markers exist', () => {
+      const noMarkerDir = mkdtempSync(join(tmpdir(), 'serverless-env-'));
+      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
+
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'from_vercel', BAR: 'from_vercel' },
+        startDir: noMarkerDir,
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.FOO).toBe('from_vercel');
+        expect(result.value.BAR).toBe('from_vercel');
+      }
+    });
+
+    it('returns validation error when processEnv is incomplete and no .env files available', () => {
+      const noMarkerDir = mkdtempSync(join(tmpdir(), 'serverless-env-'));
+      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
+
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'only_foo' },
+        startDir: noMarkerDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.diagnostics.find((d) => d.key === 'BAR')?.present).toBe(false);
+      }
+    });
+  });
+
+  describe('Vercel-specific error guidance', () => {
+    it('includes Vercel guidance when VERCEL=1 and validation fails', () => {
+      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-env-'));
+      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
+
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { VERCEL: '1', FOO: 'present' },
+        startDir: noMarkerDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('Vercel');
+        expect(result.error.message).toContain('BAR');
+      }
+    });
+
+    it('does not include Vercel guidance when not on Vercel', () => {
+      const tree = createTestTree('FOO=hello');
+      cleanup = tree.cleanup;
+
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: {},
+        startDir: tree.startDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).not.toContain('Vercel');
+      }
     });
   });
 });

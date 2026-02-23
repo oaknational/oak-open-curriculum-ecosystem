@@ -37,6 +37,9 @@ const TARGETS: RestCaptureTarget[] = [
 function ensureApiKey(): string {
   if (!process.env.OAK_API_KEY) {
     const root = findRepoRoot(process.cwd());
+    if (root === undefined) {
+      throw new Error('Smoke tests must run inside the monorepo');
+    }
     dotenvConfig({ path: join(root, '.env.local') });
     dotenvConfig({ path: join(root, '.env') });
   }

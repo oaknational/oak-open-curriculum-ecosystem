@@ -13,7 +13,7 @@
  * 2. This generator is run manually (pnpm generate:graphs)
  * 3. Output is committed as static TypeScript file (vocabulary-graph-data.ts)
  *
- * FUTURE VISION (see 20-ontology-and-graphs-api-proposal.md):
+ * FUTURE VISION (see 22-ontology-and-graphs-api-proposal.md):
  * Pre-compute this graph at API build time and expose via /graphs/vocabulary endpoint.
  * Benefits:
  * - Eliminates need for local bulk data processing

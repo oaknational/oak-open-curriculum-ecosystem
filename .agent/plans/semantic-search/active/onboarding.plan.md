@@ -46,10 +46,12 @@ clean.
 
 - [ ] **A1.2. Add prerequisites section (Node 24, pnpm, gitleaks)**
   - Files: `docs/development/onboarding.md`, `README.md`
-  - Action: Add a "Prerequisites" section before the clone step covering
-    Node.js 24.x (with `nvm`/`fnm` link), pnpm (with `corepack enable`), and
-    gitleaks (with install link). Mention that `corepack enable` auto-installs
-    the pinned pnpm version.
+  - Action: Add a "Prerequisites" section before the clone step with two tiers:
+    - **Required** (clone, build, test): Node.js 24.x (with `nvm`/`fnm` link),
+      pnpm (with `corepack enable` — auto-installs the pinned pnpm version)
+    - **Required for push**: gitleaks (with install link) — the husky pre-push
+      hook runs `gitleaks detect`; first push fails with a confusing
+      binary-not-found error if not installed
 
 - [ ] **A1.3. Add `.nvmrc` file**
   - Files: `.nvmrc` (new)

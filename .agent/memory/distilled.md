@@ -287,9 +287,6 @@ Architecture` section). Dev gotchas not covered there:
   handlers like `res.on('close')`
 - TSDoc `@see` references should point to ADRs, not plan
   files — plans are archived/deleted after completion
-- "noauth" in MCP means "no scope check", not "no HTTP
-  auth" — the semantic confusion was root cause of the
-  OAuth spec compliance issue
 
 ## Domain Knowledge
 

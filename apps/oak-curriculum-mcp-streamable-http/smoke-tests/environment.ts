@@ -96,6 +96,9 @@ function restoreKey(key: keyof EnvSnapshot, value: string | undefined): void {
  */
 function loadEnvironment(options: { readonly skipFiles: boolean }): LoadedEnvResult {
   const repoRoot = findRepoRoot(process.cwd());
+  if (repoRoot === undefined) {
+    throw new Error('Smoke tests must run inside the monorepo');
+  }
 
   if (options.skipFiles) {
     return { loaded: false, repoRoot };

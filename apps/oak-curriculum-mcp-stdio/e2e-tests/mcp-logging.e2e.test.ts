@@ -50,6 +50,9 @@ describe('MCP Startup logging', () => {
     const tools = await client.listTools();
     expect(Array.isArray(tools.tools)).toBe(true);
     const repoRoot = findRepoRoot(process.cwd());
+    if (repoRoot === undefined) {
+      throw new Error('E2E tests must run inside the monorepo');
+    }
     const log = readStartupLog(repoRoot);
     // Expect at least one of these diagnostics to appear once implemented
     expect(log.toLowerCase()).toContain('tool count');

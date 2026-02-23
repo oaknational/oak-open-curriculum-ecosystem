@@ -88,6 +88,9 @@ function parseArgs(): {
 
 async function captureBrowserTrace(): Promise<void> {
   const root = findRepoRoot(process.cwd());
+  if (root === undefined) {
+    throw new Error('Smoke tests must run inside the monorepo');
+  }
   dotenvConfig({ path: join(root, '.env.local') });
   dotenvConfig({ path: join(root, '.env') });
 

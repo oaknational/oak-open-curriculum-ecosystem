@@ -201,3 +201,47 @@ Created `no-console-enforcement.plan.md` — post-public-repo,
 pre-public-alpha. Add `no-console: 'error'` to shared ESLint config
 and fix ~110 files (largely mechanical, nuanced for CLI/build/widget).
 Added to roadmap.
+
+## Session: 2026-02-23 (b) — Plan Modernisation and Consolidation
+
+### What Was Done
+
+- Modernised `quality-and-maintainability/` and `architecture/` plan
+  directories per prompt; merged into single `architecture/` directory
+- Archived 5 completed plans to `completed-plans.md`
+- Iceboxed 3 speculative plans with stubs
+- Consolidated overlapping config/DI plans into
+  `config-architecture-standardisation-plan.md`
+- Condensed ESLint subdirectory (5 files) into
+  `architectural-enforcement-adoption.plan.md` in
+  `agentic-engineering-enhancements/`
+- Fixed ADR-078 stale reference to archived plan
+- Updated all cross-references across active docs
+- Created `architecture/README.md` for the consolidated directory
+
+### Icebox and External Scan
+
+- Icebox (10 files): all healthy, no deletions needed
+- `cross-agent-standardisation.md` already a clean supersession stub
+- `openapi-pipeline-framework.md` mentions deleted
+  `pipeline-enhancements/` as historical provenance — acceptable
+- OOC API wishlist: well-structured, fixed numbering collision
+  (two files numbered 20) — renamed `20-ontology-and-graphs-api-proposal.md`
+  to `22-ontology-and-graphs-api-proposal.md`, updated index and 3
+  cross-references (ontology-data.ts, vocabulary-graph-generator.ts,
+  DATA-VARIANCES.md)
+- Castr collection: thorough contract documentation, no issues
+
+### Consolidate-Docs Sweep
+
+- Napkin: 203 lines, well under 800-line threshold
+- Distilled.md: removed "noauth" semantic entry — now fully
+  documented in ADR-113
+- Experience files: ~50 files could be reduced to reflective stubs
+  (technical patterns already in permanent docs) — noted for future
+  pass, too large for this session
+- Plans scan: 6 medium-risk plans have architectural content that
+  ideally belongs in permanent docs — all are active plans with
+  ongoing work, extraction premature until completion
+- One reported broken link in mutation-testing plan was a false
+  positive (relative path resolves correctly)

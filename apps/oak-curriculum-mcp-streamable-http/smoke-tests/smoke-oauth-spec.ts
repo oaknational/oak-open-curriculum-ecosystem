@@ -40,6 +40,9 @@ interface EnvLoadResult {
 
 function loadEnvironmentFromRepoRoot(): EnvLoadResult {
   const repoRoot = findRepoRoot(process.cwd());
+  if (repoRoot === undefined) {
+    throw new Error('Smoke tests must run inside the monorepo');
+  }
   const localEnvPath = join(repoRoot, '.env.local');
   const baseEnvPath = join(repoRoot, '.env');
   let loaded = false;

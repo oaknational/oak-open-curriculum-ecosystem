@@ -554,7 +554,7 @@ export const ontologyData = {
    * The vocabulary-graph-data.ts already provides term definitions - that's closer to what's needed.
    *
    * @see ./synonyms/index.ts for individual synonym modules
-   * @see 20-ontology-and-graphs-api-proposal.md for planned refactoring
+   * @see 22-ontology-and-graphs-api-proposal.md for planned refactoring
    * @remarks Use `buildElasticsearchSynonyms()` to export ES-compatible format for search app.
    */
   synonyms: {

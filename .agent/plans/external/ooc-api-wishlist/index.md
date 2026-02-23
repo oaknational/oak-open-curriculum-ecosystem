@@ -58,7 +58,7 @@ If someone handed you this pack, would you know how to find what you want, and w
 - `19-semantic-summary-examples.md` — examples for `semantic_summary`.
 - `20-validation-and-schema-examples.md` — examples for schema export, `z.unknown()` exceptions, and OpenAPI questions.
 - `21-maths-education-enhancements.md` — maths-focused API enhancements with examples and OpenAPI change sketches.
-- `20-ontology-and-graphs-api-proposal.md` — **NEW 2026-02-04** Proposal for API endpoints serving ontology and pre-computed graph data (vocabulary, prerequisites, progressions, misconceptions, NC coverage).
+- `22-ontology-and-graphs-api-proposal.md` — **NEW 2026-02-04** Proposal for API endpoints serving ontology and pre-computed graph data (vocabulary, prerequisites, progressions, misconceptions, NC coverage).
 
 ## Related Analysis Documents
 

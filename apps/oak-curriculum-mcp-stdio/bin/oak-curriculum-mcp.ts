@@ -1,11 +1,10 @@
 #!/usr/bin/env tsx
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { config as dotenvConfig } from 'dotenv';
-// Updated path after mechanical renaming: app wiring centralised under src/app
-import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
+import { createStartupLogger, createDefaultStartupLoggerDeps } from '../src/app/startup.js';
+import { requireRepoRoot } from '../src/app/require-repo-root.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { findRepoRoot } from '@oaknational/mcp-env';
+
 function safeStringify(value: unknown): string {
   try {
     return JSON.stringify(value);
@@ -14,16 +13,12 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const thisDir = dirname(fileURLToPath(import.meta.url));
-// Resolve repo root reliably
-const rootDir = findRepoRoot(thisDir);
+const rootDir = requireRepoRoot();
 
-// Create logger with ROOT directory for logs
-// Override console to only write to stderr to keep stdout clean for MCP protocol
 console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
 const log = createStartupLogger({
-  ...defaultStartupLoggerDeps,
-  rootDir: rootDir, // Override to use repo root
+  ...createDefaultStartupLoggerDeps(),
+  rootDir,
   console: {
     log: (msg: string) => process.stderr.write(msg + '\n'),
     error: (msg: string) => process.stderr.write(msg + '\n'),

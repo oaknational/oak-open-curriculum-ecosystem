@@ -2,11 +2,18 @@
 
 ## Status
 
-Accepted (2026-02-21)
+Accepted (Revised 2026-02-23)
 
 **Supersedes**: [ADR-016 (dotenv for configuration)](016-dotenv-for-configuration.md)
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md)
+
+> **Revision note (2026-02-23)**: Added serverless environment compatibility.
+> The original design unconditionally called `findRepoRoot()`, which threw
+> in Vercel's serverless runtime where no `.git` or `pnpm-workspace.yaml`
+> exists. `findRepoRoot` now returns `string | undefined`, and `resolveEnv`
+> gracefully skips `.env` file loading when no repo root is found. See
+> [Serverless Compatibility](#serverless-compatibility) below.
 
 ## Context
 
@@ -74,6 +81,14 @@ The discriminant is `dangerouslyDisableAuth: boolean`. When the compiler narrows
 
 This eliminates runtime type checks for Clerk key presence throughout the application.
 
+### Serverless Compatibility
+
+`findRepoRoot()` returns `string | undefined`. When a repo root is found, `.env` and `.env.local` files are loaded and merged with `processEnv` as described above. When no repo root is found (e.g. Vercel serverless, where the deployed bundle at `/var/task/` contains no `.git` or `pnpm-workspace.yaml`), file loading is skipped and only `processEnv` is validated. This is correct because serverless platforms inject all configuration via process environment variables.
+
+When validation fails on a Vercel deployment (`processEnv.VERCEL === '1'`), the error message includes deployment-specific guidance naming the missing keys and directing the developer to configure them in the Vercel project settings (Settings → Environment Variables).
+
+Callers that require a repo root (STDIO server, smoke tests, build-time scripts) check the return value and fail-fast with a context-appropriate error message.
+
 ## Rationale
 
 - **Non-mutating**: `dotenv.parse()` returns a plain object without touching `process.env`, enabling isolated testing and deterministic behaviour
@@ -81,6 +96,7 @@ This eliminates runtime type checks for Clerk key presence throughout the applic
 - **Fail-fast with diagnostics**: structured `EnvResolutionError` with per-key presence reporting makes misconfiguration immediately obvious
 - **Type-safe**: the discriminated union propagates auth-state knowledge through the type system, eliminating an entire class of runtime errors
 - **Monorepo-aware**: `findRepoRoot()` walks up the directory tree looking for `pnpm-workspace.yaml` or `.git`, so apps in any workspace directory find the root `.env` files automatically
+- **Serverless-safe**: when no repo root exists, the pipeline degrades gracefully to validating `processEnv` only, with platform-specific error guidance when configuration is incomplete
 
 ## Consequences
 
@@ -92,12 +108,14 @@ This eliminates runtime type checks for Clerk key presence throughout the applic
 - Conditional Clerk keys via `superRefine` remove the need for dummy credentials
 - Discriminated `RuntimeConfig` union provides compile-time auth-state guarantees
 - Composable Zod schemas let each app define its own requirements while sharing common shapes
+- Works in both monorepo and serverless environments without caller-side branching
 
 ### Negative
 
 - `findRepoRoot()` adds filesystem traversal at startup (mitigated: only called once, traversal is bounded)
 - The `superRefine` pattern for conditional keys requires Zod-specific knowledge
 - Dual `readEnv` (legacy, throws) and `resolveEnv` (new, returns Result) paths coexist during migration
+- Callers that genuinely require a repo root (STDIO server, build scripts) must check `findRepoRoot`'s return value and provide their own error handling
 
 ## Implementation
 

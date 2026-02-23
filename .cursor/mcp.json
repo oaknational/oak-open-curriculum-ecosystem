@@ -12,9 +12,13 @@
         "LOG_LEVEL": "debug"
       }
     },
-    "oak-curriculum-http-remote": {
+    "oak-remote-prod": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+    },
+    "oak-remote-preview": {
+      "type": "http",
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-semanticsearchdeployment.vercel.thenational.academy/mcp"
     },
     "oak-local": {
       "type": "http",
