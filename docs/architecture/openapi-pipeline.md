@@ -275,6 +275,82 @@ When behavior needs to change:
 
 See [Schema-First Execution Directive](../../.agent/directives/schema-first-execution.md) for complete implementation requirements.
 
+## Known Constraints and Limitations
+
+### Zod v3-to-v4 Transformation Edge Cases
+
+The current pipeline uses `openapi-zod-client` to generate Zod schemas, then
+transforms them from v3 to v4 via an adapter
+(`packages/core/openapi-zod-client-adapter`). Two edge cases are known:
+
+- **`.strict().and(.strict())` intersection failure**: When `strictObjects: true`
+  is enabled, `openapi-zod-client` generates `.strict().and(.strict())` for
+  OpenAPI `allOf` schemas. Each `.strict()` rejects the other side's properties,
+  making intersections impossible to validate. This is fixed via a two-pass regex
+  in `zod-v3-to-v4-transform.ts`.
+- **Regex replacement gotcha**: The `.and($1$2)` replacement capture groups can
+  produce double parentheses if `$2` captures the closing `)`. Test assertions
+  must be scoped carefully to avoid false positives.
+
+### Adapter Rebuild Requirement
+
+The adapter package must be built (`pnpm build`) before `pnpm type-gen` picks
+up changes. The SDK consumes the adapter's built output, not its source. If you
+modify the adapter and run `pnpm type-gen` without rebuilding first, the old
+transformation logic will be used. Turbo's dependency graph handles this when
+using `pnpm make`, but manual `pnpm type-gen` invocations may miss it.
+
+### CI and Offline Mode
+
+CI type-gen requires a cached SDK schema. If the cached schema is missing, the
+pipeline throws an error directing you to run `pnpm type-gen` locally first to
+populate the cache. This constraint exists because CI environments may not have
+network access to the upstream OpenAPI endpoint.
+
+### Parameter Generation Edge Cases
+
+If an API parameter has no concrete enum values, no constant or type guard is
+emitted — open-ended parameters are handled as open sets. This means some
+parameters will not have compile-time-validated values and must be validated
+at the application layer.
+
+### Runtime Type Inference Limitation
+
+Tool descriptor resolution is dynamic at runtime, so TypeScript cannot
+statically infer the output type from a descriptor name. A single controlled
+cast in `emit-index.ts` bridges the gap between the runtime-selected schema
+and the static type. This is a structural limitation, not a workaround.
+
+### Schema Validation Requirements
+
+The canonical URL decoration requires `components.schemas` to be an object in
+the OpenAPI specification. Not all minimal OpenAPI 3 structures meet this
+requirement. If the upstream schema changes structure significantly, the
+`schema-validator.ts` checks will surface this early.
+
+### ADR-Documented Negative Consequences
+
+The architectural decisions that define this pipeline have documented trade-offs:
+
+- SDK dependency creates a build bottleneck — all workspaces depend on the SDK
+  build completing first
+  ([ADR-029](../architectural-decisions/029-no-manual-api-data.md))
+- Single source of truth creates coupling — changes to the SDK ripple through
+  all consumers
+  ([ADR-030](../architectural-decisions/030-sdk-single-source-truth.md))
+- Generation-time extraction increases build complexity and output file size
+  ([ADR-031](../architectural-decisions/031-generation-time-extraction.md))
+
+### Planned Migration: Castr
+
+The current `openapi-zod-client` + adapter pipeline is planned for replacement
+by Castr, which will produce Zod v4 output directly, eliminating the
+transformation layer entirely. Prerequisites: SDK workspace separation (in
+progress), side-by-side validation, then adapter removal. See
+[ADR-055](../architectural-decisions/055-zod-version-boundaries.md),
+[ADR-108](../architectural-decisions/108-sdk-workspace-decomposition.md), and
+the [Castr plan](../../.agent/plans/external/castr/README.md).
+
 ## Key Takeaway
 
 **The OpenAPI schema is the single source of truth. Everything else is generated.**

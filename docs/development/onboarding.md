@@ -36,13 +36,13 @@ Before cloning, ensure you have:
 
 Pick the path that matches your first task. If you are not sure, **start with the SDK/docs path** — it requires no credentials and lets you explore the codebase safely.
 
-| Path                       | What you will do                                                                                           | Credentials needed                                                                                                                                                   |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SDK/docs path              | Work on the SDK (Software Development Kit) generation pipeline, TypeScript types, documentation, and tests | None                                                                                                                                                                 |
-| MCP server path            | Build features for the MCP (Model Context Protocol) servers that connect AI tools to curriculum data       | `OAK_API_KEY`                                                                                                                                                        |
-| Search/release path        | Work on the semantic search application, Elasticsearch indexing, or npm releases                           | Multiple (`OAK_API_KEY`, `ELASTICSEARCH_*`, release credentials)                                                                                                     |
-| Lead/senior developer path | Understand architecture, review process, extension points, and team workflow                               | None to start                                                                                                                                                        |
-| Strategic / leadership     | Understand vision, impact, and investment case                                                             | None — start with [VISION.md](../VISION.md), then the [ADR index](../architecture/architectural-decisions/), then [practice.md](../../.agent/directives/practice.md) |
+| Path                       | What you will do                                                                                           | Credentials needed                                                                                                                                                                                                                                                                             |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SDK/docs path              | Work on the SDK (Software Development Kit) generation pipeline, TypeScript types, documentation, and tests | None                                                                                                                                                                                                                                                                                           |
+| MCP server path            | Build features for the MCP (Model Context Protocol) servers that connect AI tools to curriculum data       | `OAK_API_KEY`                                                                                                                                                                                                                                                                                  |
+| Search/release path        | Work on the semantic search application, Elasticsearch indexing, or npm releases                           | Multiple (`OAK_API_KEY`, `ELASTICSEARCH_*`, release credentials)                                                                                                                                                                                                                               |
+| Lead/senior developer path | Understand architecture, review process, extension points, and team workflow                               | None to start                                                                                                                                                                                                                                                                                  |
+| Strategic / leadership     | Understand vision, impact, and investment case                                                             | None — start with [VISION.md](../VISION.md), then [Curriculum Guide](../curriculum-guide.md), then [roadmap milestones](../../.agent/plans/high-level-plan.md). For technical depth: [ADR index](../architecture/architectural-decisions/), [practice.md](../../.agent/directives/practice.md) |
 
 ## What's Different About This Repo
 
@@ -212,7 +212,8 @@ Keep CI green locally; no `--no-verify` or disabled lint rules. See [Build Syste
 
 The Oak curriculum data has significant variances across subjects and key stages. Before working on search or ingestion:
 
-- **Read**: [Data Variances](../data/DATA-VARIANCES.md) — transcript availability, structural patterns, KS4 complexity
+- **Start here**: [Curriculum Guide](../curriculum-guide.md) — plain-language overview of how the curriculum is organised, what makes KS4 different, and what it means for search
+- **Then read**: [Data Variances](../data/DATA-VARIANCES.md) — transcript availability, structural patterns, KS4 complexity
 - **Key insight**: MFL subjects (French, Spanish, German) have 0% transcript coverage; Maths has 100%
 - **Key insight**: KS4 has tiers, exam boards, pathways that don't exist in KS1-3
 - **Key insight**: Only 3 subjects (English, Science, RE) have categories
@@ -238,7 +239,7 @@ This repository uses an **agentic engineering practice** — a system where AI a
 
 **When they run**: Sub-agents run during AI-assisted development, not in CI. They are invoked after non-trivial changes and their findings are addressed during the development session.
 
-**What about napkin.md and distilled.md?**: These are AI institutional memory files in `.agent/memory/`. The napkin captures session-level learnings; the distilled file is a curated rulebook of hard-won patterns. You can ignore them unless you are curious about what the AI agents have learned.
+**What about napkin.md and distilled.md?**: These are AI institutional memory files in `.agent/memory/`. The napkin captures session-level learnings; the distilled file is a curated rulebook of hard-won patterns. You can ignore them unless you are curious about what the AI agents have learned. The [Sustainability and Scaling](../../.agent/directives/practice.md#sustainability-and-scaling) section of practice.md explains how these files and the broader documentation volume are managed.
 
 **What is expected of human developers**: Follow the same rules the AI agents follow — TDD at all levels, no type shortcuts, no disabled quality gates, Result pattern for error handling. The rules apply equally to humans and AI. See [rules.md](../../.agent/directives/rules.md).
 

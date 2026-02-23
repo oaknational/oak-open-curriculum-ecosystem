@@ -158,3 +158,39 @@ These loops operate at different timescales -- quality gates within seconds, lea
 The practice is designed to be discoverable through use. `AGENT.md` links to `rules.md`, which references `testing-strategy.md` and `schema-first-execution.md`. Commands invoke prompts, prompts reference plans, plans use templates. Sub-agents review work against the same rules that guided its creation. The napkin captures what went wrong, distillation extracts rules, and the rules prevent repetition.
 
 If you are new to this repository, start with [AGENT.md](AGENT.md). Follow the links. The practice will teach itself.
+
+## Sustainability and Scaling
+
+### Current Volume
+
+The practice spans ~1,000+ files across `.agent/`, `.cursor/`, and `docs/`. This volume is a consequence of the three-layer model (philosophy, structure, tooling) and is managed, not accidental. Each layer generates files with distinct lifecycles: directives are stable, plans are ephemeral, and generated artifacts are rebuilt on demand.
+
+### Consolidation Mechanisms
+
+Three mechanisms keep the volume manageable:
+
+1. **Distillation skill** — when the napkin exceeds ~800 lines, the [distillation skill](../../.cursor/skills/distillation/SKILL.md) extracts high-signal patterns into a curated `distilled.md` (target: <200 lines) and archives the old napkin. This prevents session-level learnings from growing unboundedly.
+
+2. **Consolidate-docs command** — the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow migrates settled knowledge from ephemeral plans to permanent documentation. It enforces the principle that plans are not documentation: once a plan's insights are proven, they belong in `docs/` or `directives/`, and the plan moves to `archive/`.
+
+3. **Sub-agent architect consolidation** — the sub-agent architect reviews the prompt ecosystem and extracts common patterns into shared templates, reducing duplication across agent definitions.
+
+### Intentional Repetition Trade-Off
+
+The Cardinal Rule ("Types Flow From The Schema") appears in ~66 files. This is a conscious trade-off: a contributor can start anywhere in the repository and encounter the foundational rules within their first few documents. DRY is important for code; for onboarding documentation, discoverability outweighs deduplication. The risk is formulation drift — mitigated by the consolidate-docs command, which checks for consistency across repetitions.
+
+### Scaling Constraints
+
+High file volume has mechanical costs beyond human perception. Semantic search degrades when a core concept returns many equally-weighted hits across duplicated files, and AI agents exhaust finite context windows reading overlapping content. The consolidation mechanisms above address volume growth, but search signal quality and context efficiency are independent constraints that must also be monitored.
+
+### When This Needs Restructuring
+
+The practice should be restructured if:
+
+- Consolidation mechanisms cannot keep pace with new file creation
+- The distillation cycle takes longer than a single session
+- New contributors report that the volume is intimidating rather than helpful
+- Semantic search for a core concept (e.g. the Cardinal Rule) returns more than 5 equally-weighted hits, indicating that centralisation has degraded
+- AI agents consistently exhaust context windows reading overlapping plans or directives
+
+The first three are trailing indicators — by the time they trigger, structural debt may already be deep. The last two are leading mechanical indicators that can be measured before human perception catches up. The onboarding review process (8 audience-specific reviews) is itself a monitoring mechanism for these thresholds. See [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) for the formal architectural decision that names and frames this practice.

@@ -1,5 +1,32 @@
 # Napkin
 
+## Session: 2026-02-23 (d) — Documentation Follow-On B7, B9, B10
+
+### What Was Done
+
+Implemented 3 documentation follow-on items from the onboarding remediation Track B plan:
+
+- **B9**: Added "Known Constraints and Limitations" section (8 subsections) to `openapi-pipeline.md`. Cross-referenced from `extending.md`.
+- **B7**: Created `docs/curriculum-guide.md` — plain-language curriculum structure for non-technical audiences. Cross-referenced from `docs/README.md`, `onboarding.md`, `VISION.md`.
+- **B10**: Added "Sustainability and Scaling" section to `practice.md` — volume, consolidation mechanisms, intentional repetition trade-off, scaling constraints, restructuring triggers. Updated ADR-119 file count from "500+" to "1,000+".
+
+All items in `onboarding-documentation-follow-on.plan.md` now marked complete
+(archived to `developer-experience/archive/completed/`).
+
+### Reviewer Findings Addressed
+
+- **docs-adr-reviewer**: Fixed broken relative link in ADR-119 (used `../../` instead of `../../../`). Added Religious Education coverage gap, Sequence explanation note, and subject count clarification to curriculum guide. Added MRR source citation.
+- **architecture-reviewer-betty**: Added search pollution and context-window exhaustion as scaling constraints. Added leading mechanical indicators (>5 equal-weight search hits, context exhaustion) alongside the trailing human indicators. Loosened ADR-119 anchor link to point to practice.md root rather than a specific header.
+
+### Patterns Learned
+
+- **Relative link depth matters**: From `docs/architecture/architectural-decisions/`, `../../` goes to `docs/`, not the repo root. Always verify by counting directory levels. The same ADR file already had correct `../../../` links on other lines.
+- **Non-technical guides need careful scope**: When the mermaid diagram included "Sequence" (an API implementation detail), the docs reviewer correctly flagged it as confusing for non-technical readers. Simplified the diagram and added a developer-only note.
+- **Subject count discrepancies**: The ontology `subjects` array (13) and thread `subjectsCovered` (16) differ — the thread data covers 3 additional subjects. Must reconcile when quoting counts.
+- **Trailing vs leading indicators**: The architecture reviewer's distinction between trailing indicators (human reports of intimidation) and leading mechanical indicators (search hit counts, context exhaustion) is a valuable framing for sustainability monitoring.
+
+---
+
 ## Session: 2026-02-23 (c) — Onboarding Remediation A1-A8
 
 ### What Was Done

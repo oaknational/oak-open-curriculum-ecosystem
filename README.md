@@ -11,16 +11,16 @@ SDKs, MCP (Model Context Protocol) servers, and Elasticsearch-serverless-backed 
 
 This repo has roughly three distinct audiences:
 
-- External developers and edtech teams who will benefit from the infrastructure and tools in this repo
+- External developers, AI engineers, and ed-tech product teams who will benefit from the infrastructure and tools in this repo
 - Contributors to this repo who will use the agentic engineering practice to build the product faster and to a higher standard than would otherwise be possible.
-- Teachers and other end-users who will use the MCP-app to discover, access, and adapt curriculum content.
+- Teachers and other end-users who will use the curriculum app to discover, access, and adapt curriculum content.
 
 ### External Facing
 
 - Curriculum SDK generation and runtime - including a general OpenAPI -> SDK -> MCP tool generation pipeline
 - Semantic search SDK
 - MCP server
-- MCP-app user-facing Oak product (discover, access, adapt curriculum content)
+- Curriculum app — user-facing Oak product (discover, access, adapt curriculum content via MCP)
 
 ### Internal Facing
 

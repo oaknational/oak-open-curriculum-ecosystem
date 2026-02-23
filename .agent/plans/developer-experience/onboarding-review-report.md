@@ -5,9 +5,9 @@
 > **Methodology**: 8 independent onboarding reviews via the `onboarding-reviewer`
 > sub-agent, each through the lens of a specific audience persona
 >
-> **Merge-blocking plan**: [active/onboarding.plan.md](../semantic-search/active/onboarding.plan.md)
+> **Merge-blocking plan (complete, archived)**: [onboarding.plan.md](../semantic-search/archive/completed/onboarding.plan.md)
 >
-> **Documentation follow-on**: [onboarding-documentation-follow-on.plan.md](./onboarding-documentation-follow-on.plan.md)
+> **Documentation follow-on (complete, archived)**: [onboarding-documentation-follow-on.plan.md](./archive/completed/onboarding-documentation-follow-on.plan.md)
 >
 > **Governance follow-on**: [governance/onboarding-governance-follow-on.plan.md](./governance/onboarding-governance-follow-on.plan.md)
 

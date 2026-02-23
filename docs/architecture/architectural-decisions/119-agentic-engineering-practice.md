@@ -178,7 +178,7 @@ three successive orders:
 - The conceptual boundary clarifies what is part of the practice
   (and what is product code), preventing scope confusion
 - The three-layer model provides a mental map for navigating the
-  500+ files across 20+ categories
+  1,000+ files across 20+ categories
 - The self-teaching property is named and can be consciously
   preserved as the practice evolves
 - The deliberate separation of practice from product makes the
@@ -191,6 +191,11 @@ three successive orders:
   this
 - Naming the system creates an expectation of completeness that
   the self-teaching design intentionally avoids
+- The file volume (~1,000+ files) is a consequence of the
+  three-layer model and is managed through consolidation
+  mechanisms (distillation, consolidate-docs, sub-agent
+  architect); see [practice.md](../../../.agent/directives/practice.md)
+  for details
 
 ### Neutral
 

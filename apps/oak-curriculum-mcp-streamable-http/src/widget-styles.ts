@@ -65,10 +65,11 @@ html, body { margin: 0; padding: 0; }
 body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
 #root { background: var(--bg); color: var(--fg); flex: 1; display: flex; flex-direction: column; }
 #content-container { margin: 0.8em; flex: 1; display: flex; flex-direction: column; }
-.hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
-.hdr-text { display: flex; flex-direction: column; gap: 2px; }
-.logo { width: 36px; height: 47px; }
-.ttl { font-weight: 600; font-size: 16px; margin: 0; }
+.hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.hdr-link { display: flex; align-items: center; gap: 6px; text-decoration: none; color: inherit; }
+.logo { width: 20px; height: 26px; }
+.logo svg { width: 100%; height: 100%; }
+.ttl { font-weight: 600; font-size: 13px; margin: 0; }
 .sub-ttl { font-size: 12px; color: var(--fg-secondary); margin: 0; }
 #c { flex: 1; }
 .sec { margin-bottom: 16px; }
@@ -91,9 +92,4 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .ftr-sep { opacity: 0.5; }
 .nowrap { white-space: nowrap; }
 @media (max-width: 480px) { .ftr-links { flex-direction: column; gap: 0; } .ftr-sep { display: none; } .ftr-link { padding-top: 8px; border-top: 1px solid var(--border-color); } }
-.cta-container { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-.cta-btn { background: var(--item-bg); color: var(--fg); font-size: 12px; padding: 8px 14px; border-radius: 6px; border: 2px solid var(--accent-high-contrast); white-space: nowrap; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s, transform 0.1s, box-shadow 0.1s; }
-.cta-btn:hover { background: var(--code-bg); }
-.cta-btn:active { transform: scale(0.94); background: var(--accent-high-contrast); color: #fff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
-.cta-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 `.trim();

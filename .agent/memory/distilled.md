@@ -55,12 +55,6 @@ changing behaviour.
   as required in the schema, consumers use `.partial()` for
   optionality. This preserves the contract semantics: "if
   you use this capability, you must satisfy these fields."
-- `openapi-zod-client` with `strictObjects: true` generates
-  `.strict().and(.strict())` for OpenAPI `allOf` schemas — each
-  `.strict()` rejects the other side's properties, making the
-  intersection impossible to validate. Fixed via two-pass regex
-  in `zod-v3-to-v4-transform.ts`. The adapter package must be
-  rebuilt (`pnpm build`) before `pnpm type-gen` picks up changes.
 - `Object.getOwnPropertyDescriptor(obj, key)?.value`
   returns `any` — assign to `const v: unknown = ...`
 - `const parsed: unknown = JSON.parse(json)` avoids

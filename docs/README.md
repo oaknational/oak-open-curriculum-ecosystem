@@ -31,6 +31,7 @@
 
 ### Curriculum Data
 
+- [Curriculum Guide](curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
 - [Data Variances](data/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 - [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) - Entity relationships

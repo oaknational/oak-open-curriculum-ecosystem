@@ -1,14 +1,11 @@
 /**
  * Widget state management and utility JavaScript.
  *
- * Contains state persistence, locale support, external links,
- * display mode, and CTA (Call-to-Action) functionality.
+ * Contains state persistence, locale support, and external links.
  *
  * @see widget-script.ts - Main widget script
- * @see widget-cta/ - CTA configuration and handler generation
  */
 
-import { generateCtaHandlerJs } from './widget-cta/index.js';
 import { TOOL_RENDERER_MAP } from './widget-renderer-registry.js';
 
 /**
@@ -28,7 +25,6 @@ function generateToolRendererMapJs(): string {
  * - Tool renderer map
  * - Widget state persistence
  * - External link handling
- * - CTA handler
  */
 export const WIDGET_STATE_JS = `
 // ========================================
@@ -73,6 +69,4 @@ function openOnOakWebsite(event, url) {
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 }
-
-${generateCtaHandlerJs()}
 `.trim();

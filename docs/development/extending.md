@@ -20,6 +20,7 @@ MCP tools are generated from the OpenAPI schema — you do not write tool defini
 - Generated output: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/`
 - Descriptor map: `MCP_TOOL_DESCRIPTORS` in the generated output
 - Schema-first execution: see [schema-first-execution.md](../../.agent/directives/schema-first-execution.md)
+- Pipeline constraints and edge cases: see [Known Constraints and Limitations](../architecture/openapi-pipeline.md#known-constraints-and-limitations)
 
 ### Aggregated tools (combining multiple API calls)
 

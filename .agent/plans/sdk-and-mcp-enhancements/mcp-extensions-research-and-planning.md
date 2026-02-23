@@ -75,9 +75,12 @@ Confirmed current-state findings:
    - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts:153`
 4. Tool descriptor contract currently defines OpenAI-specific `_meta` keys:
    - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts:134`
-5. Widget layer remains content-rich and renderer-heavy:
-   - `apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts:17`
-   - `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts:85`
+5. Widget layer partially simplified (updated 2026-02-23):
+   - CTA system removed from widget output (HTML, CSS, JS); CTA source in `widget-cta/` retained pending full overhaul.
+   - Header reduced to logo, wordmark, and tool name; shown only on major tools (`search`, `browse-curriculum`, `explore-topic`, `fetch`).
+   - Renderer registry and resource registration still exist:
+     - `apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts:17`
+     - `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts:85`
 6. Auth safety gap in tool auth checker:
    - `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts:43`
    - `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts:48`
@@ -196,7 +199,9 @@ Refactor backlog items:
 4. URI parity hardening:
    - Enforce generated/runtime widget URI parity checks.
 5. Renderer stack simplification:
-   - Keep shell-only baseline until explicit feature gate allows reintroduction.
+   - Partial simplification achieved: CTA removed from widget output, branding minimised to logo/wordmark/tool-name on major tools only.
+   - CTA source code (`widget-cta/`) retained pending full deletion in context-grounding resource implementation.
+   - Remaining renderer registry complexity to be assessed after Domain A research.
 
 Public API/interface/type implications (plan-level, future tasks only):
 1. Immediate rewrite step: no runtime API change.
@@ -214,7 +219,7 @@ Objective:
 - Additive feature work only after Domains A to C pass all required gates.
 
 Feature backlog candidates:
-1. Controlled reintroduction of richer widget behaviours behind explicit gates.
+1. Context-grounding via MCP resource (`load-me-first`) replacing the removed CTA system; see `widget-cta-overhaul.md` plan.
 2. Standard-first MCP Apps capability expansion with optional adapters.
 3. Search UX reintroduction aligned with new search backend and hard safety controls.
 4. Host capability enhancements only where MCP-first fallback is preserved.
@@ -245,7 +250,7 @@ Policy:
 | ADR-047 | Accepted | Type-gen canonical URL generation | `docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md` | None confirmed | Reuse generator-time pattern for URI parity checks | Gate 5 |
 | ADR-058 | Accepted | Model-visible context grounding design | `docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md` | Widget simplification can remove model hints if unmanaged | Keep model-facing hints outside widget payload | Gate 3 |
 | ADR-060 | Accepted | Agent support metadata single-source pattern | `docs/architecture/architectural-decisions/060-agent-support-metadata-system.md` | None confirmed | Reuse single-source approach for specialist metadata | Gate 4 |
-| ADR-061 | Accepted | Widget CTA system architecture | `docs/architecture/architectural-decisions/061-widget-cta-system.md` | Hard-block shell mode temporarily conflicts with CTA richness | Defer CTA-rich behaviour to Domain D | Gate 5 |
+| ADR-061 | Accepted (supersession pending) | Widget CTA system architecture | `docs/architecture/architectural-decisions/061-widget-cta-system.md` | CTA removed from widget output; context grounding moving to MCP resource | Supersede when context-grounding resource (`widget-cta-overhaul.md`) is implemented | Gate 5 |
 | ADR-071 | Accepted | Type-gen widget URI cache-busting simplification | `docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md` | Current local hash behaviour diverges from ADR wording | Add explicit local/prod parity decision in Domain D | Gate 5 |
 | ADR-107 | Accepted | Deterministic SDK, NL in MCP layer | `docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md` | None confirmed | Keep NL behaviour out of SDK core refactors | Gate 5 |
 | ADR-112 | Accepted | Per-request MCP transport | `docs/architecture/architectural-decisions/112-per-request-mcp-transport.md` | None confirmed | Preserve stateless per-request assumptions | Gate 2 |

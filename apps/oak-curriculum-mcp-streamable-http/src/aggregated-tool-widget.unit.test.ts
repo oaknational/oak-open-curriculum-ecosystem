@@ -136,6 +136,50 @@ describe('generateWidgetHtml', () => {
     }
   });
 
+  describe('minimal branding header', () => {
+    it('wraps logo and wordmark in a link to thenational.academy', () => {
+      const html = generateWidgetHtml();
+
+      expect(html).toContain('href="https://www.thenational.academy"');
+      expect(html).toContain('class="hdr-link"');
+    });
+
+    it('header starts hidden (display:none) for conditional visibility', () => {
+      const html = generateWidgetHtml();
+
+      expect(html).toMatch(/<header[^>]*style="display:none"/);
+    });
+
+    it('header has no border-bottom in CSS', () => {
+      const html = generateWidgetHtml();
+      const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
+      expect(styleMatch).toBeTruthy();
+
+      if (styleMatch) {
+        const hdrRule = styleMatch[1].match(/\.hdr\s*\{[^}]*\}/);
+        expect(hdrRule).toBeTruthy();
+        if (hdrRule) {
+          expect(hdrRule[0]).not.toContain('border-bottom');
+        }
+      }
+    });
+
+    it('JavaScript includes HEADER_TOOLS set for conditional visibility', () => {
+      const html = generateWidgetHtml();
+      const scriptMatch = html.match(/<script type="module">([\s\S]*?)<\/script>/);
+      expect(scriptMatch).toBeTruthy();
+
+      if (scriptMatch) {
+        const jsContent = scriptMatch[1];
+        expect(jsContent).toContain('HEADER_TOOLS');
+        expect(jsContent).toContain('search');
+        expect(jsContent).toContain('browse-curriculum');
+        expect(jsContent).toContain('explore-topic');
+        expect(jsContent).toContain('fetch');
+      }
+    });
+  });
+
   it('should not break JavaScript syntax with template literal nesting', () => {
     const html = generateWidgetHtml();
 

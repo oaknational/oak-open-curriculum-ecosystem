@@ -5,11 +5,11 @@
 > **Full report**: [onboarding-review-report.md](../../developer-experience/onboarding-review-report.md)
 > — 8 audience-specific reviews with all findings
 >
-> **Merge-blocking plan**: [onboarding.plan.md](./onboarding.plan.md) — Track A
-> (A1-A8), ordered by dependency
+> **Merge-blocking plan (complete, archived)**: [onboarding.plan.md](../archive/completed/onboarding.plan.md) — Track A
+> (A1-A8), all workstreams resolved 23 February 2026
 >
-> **Documentation follow-on**: [onboarding-documentation-follow-on.plan.md](../../developer-experience/onboarding-documentation-follow-on.plan.md)
-> — Track B docs (B7-B10), schedule post-merge
+> **Documentation follow-on (complete, archived)**: [onboarding-documentation-follow-on.plan.md](../../developer-experience/archive/completed/onboarding-documentation-follow-on.plan.md)
+> — Track B docs (B7-B10), all resolved 23 February 2026
 >
 > **Governance follow-on**: [governance/onboarding-governance-follow-on.plan.md](../../developer-experience/governance/onboarding-governance-follow-on.plan.md)
 > — Track B governance (B1-B6), requires leadership input
@@ -25,12 +25,11 @@ The plan was reviewed and restructured by `architecture-reviewer-barney`.
 
 ## Key Numbers
 
-- **3 audiences** at CRITICAL GAPS (junior devs, product owners, CEOs)
-- **5 audiences** at GAPS FOUND (mid-level, lead, principal, EM, CTO)
-- **7 cross-cutting findings** flagged by 4+ of 8 reviewers
-- **8 merge-blocking workstreams** (A1-A8) in the active plan
-- **4 documentation follow-on items** (B7-B10) for post-merge scheduling
-- **6 governance follow-on items** (B1-B6) requiring leadership input
+- **7 cross-cutting findings** flagged by 4+ of 8 reviewers — all resolved
+- **8 merge-blocking workstreams** (A1-A8) — all complete
+- **4 documentation follow-on items** (B7-B10) — all complete
+- **6 governance follow-on items** (B1-B6) — pending leadership input
+- **CEO and Product Owner re-reviews**: both PASS (23 February 2026)
 
 ## Cross-Cutting Findings (flagged by 4+ reviewers)
 
@@ -57,6 +56,6 @@ achieve it.
 | Content | Location |
 |---|---|
 | Full findings (all 8 audiences, all severity levels) | [`developer-experience/onboarding-review-report.md`](../../developer-experience/onboarding-review-report.md) |
-| Merge-blocking plan (A1-A8, complete) | [`active/onboarding.plan.md`](./onboarding.plan.md) |
-| Documentation follow-on (B7-B10) | [`developer-experience/onboarding-documentation-follow-on.plan.md`](../../developer-experience/onboarding-documentation-follow-on.plan.md) |
+| Merge-blocking plan (A1-A8, archived) | [`archive/completed/onboarding.plan.md`](../archive/completed/onboarding.plan.md) |
+| Documentation follow-on (B7-B10, archived) | [`developer-experience/archive/completed/onboarding-documentation-follow-on.plan.md`](../../developer-experience/archive/completed/onboarding-documentation-follow-on.plan.md) |
 | Governance follow-on (B1-B6) | [`developer-experience/governance/onboarding-governance-follow-on.plan.md`](../../developer-experience/governance/onboarding-governance-follow-on.plan.md) |

@@ -62,6 +62,11 @@ const RENDERERS = {
 };
 
 // ========================================
+// Header visibility
+// ========================================
+const HEADER_TOOLS = new Set(['search', 'browse-curriculum', 'explore-topic', 'fetch']);
+
+// ========================================
 // Rendering
 // ========================================
 function updateToolName() {
@@ -89,9 +94,11 @@ function getRendererForTool(toolName) {
 }
 
 function render() {
-  updateToolName();
   const fullData = getFullResults();
   const toolName = getToolName();
+  const hdr = document.getElementById('hdr');
+  if (hdr) hdr.style.display = HEADER_TOOLS.has(toolName) ? '' : 'none';
+  updateToolName();
   const renderer = getRendererForTool(toolName);
   const ftr = document.querySelector('.ftr');
   if (renderer) {

@@ -52,6 +52,9 @@ It serves three groups:
 - products for teachers that require strong search and retrieval over curriculum
   content
 
+For a plain-language introduction to Oak's curriculum structure, KS4 complexity,
+and user personas, see the [Curriculum Guide](curriculum-guide.md).
+
 The central objective is leverage: reduce the cost, time, and risk of building
 high-quality curriculum tooling.
 
@@ -89,6 +92,9 @@ guardrails, including architectural enforcement and human-AI collaboration
 improvements ([ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
 ## Capability Status (Current / Next / Later)
+
+For the delivery roadmap with milestones and user-impact summaries, see the
+[high-level plan](../.agent/plans/high-level-plan.md).
 
 | Capability                                      | Status  | What this means for users                                                                                                                                                         | Evidence                                                                                                           |
 | ----------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |

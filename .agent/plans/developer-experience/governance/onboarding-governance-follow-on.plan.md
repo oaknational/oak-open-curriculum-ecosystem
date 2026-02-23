@@ -6,11 +6,11 @@
 >
 > **Source**: [onboarding-review-report.md](../onboarding-review-report.md)
 >
-> **Merge-blocking plan (complete)**:
-> [active/onboarding.plan.md](../../semantic-search/active/onboarding.plan.md)
+> **Merge-blocking plan (complete, archived)**:
+> [onboarding.plan.md](../../semantic-search/archive/completed/onboarding.plan.md)
 >
-> **Documentation follow-on**:
-> [onboarding-documentation-follow-on.plan.md](../onboarding-documentation-follow-on.plan.md)
+> **Documentation follow-on (complete, archived)**:
+> [onboarding-documentation-follow-on.plan.md](../archive/completed/onboarding-documentation-follow-on.plan.md)
 >
 > These items emerged from the CTO, CEO, and principal engineer reviews. They
 > require **organisational policy input, cost data, or strategic decisions**
