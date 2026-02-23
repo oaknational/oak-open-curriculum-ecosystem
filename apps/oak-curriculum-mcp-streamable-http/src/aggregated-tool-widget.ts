@@ -75,7 +75,7 @@ export function generateWidgetHtml(): string {
     <header class="hdr" id="hdr" style="display:none">
       <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="hdr-link">
         <div class="logo">${OAK_LOGO_SVG}</div>
-        <span class="ttl">Oak National Academy</span>
+        <h1 class="ttl">Oak National Academy</h1>
       </a>
       <span class="sub-ttl" id="tool-name"></span>
     </header>

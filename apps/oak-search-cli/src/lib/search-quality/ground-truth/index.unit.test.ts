@@ -9,6 +9,8 @@ import { typeSafeKeys } from '@oaknational/curriculum-sdk';
 import { describe, it, expect } from 'vitest';
 import {
   LESSON_GROUND_TRUTHS,
+  CROSS_SUBJECT_LESSON_GROUND_TRUTHS,
+  APPLE_LESSONS,
   MATHS_PRIMARY,
   MATHS_SECONDARY,
   getLessonGroundTruth,
@@ -72,6 +74,50 @@ describe('LESSON_GROUND_TRUTHS', () => {
       expect(resultCount).toBeGreaterThanOrEqual(2);
       expect(resultCount).toBeLessThanOrEqual(3);
     }
+  });
+});
+
+// =============================================================================
+// CROSS_SUBJECT_LESSON_GROUND_TRUTHS — Data integrity tests
+// =============================================================================
+
+describe('CROSS_SUBJECT_LESSON_GROUND_TRUTHS', () => {
+  it('is a non-empty array', () => {
+    expect(Array.isArray(CROSS_SUBJECT_LESSON_GROUND_TRUTHS)).toBe(true);
+    expect(CROSS_SUBJECT_LESSON_GROUND_TRUTHS.length).toBeGreaterThan(0);
+  });
+
+  it('contains the APPLE_LESSONS entry', () => {
+    expect(CROSS_SUBJECT_LESSON_GROUND_TRUTHS).toContain(APPLE_LESSONS);
+  });
+
+  it('all queries follow the 1-10 word constraint (single-word queries are valid stress tests)', () => {
+    for (const gt of CROSS_SUBJECT_LESSON_GROUND_TRUTHS) {
+      const wordCount = gt.query.split(/\s+/).length;
+      expect(wordCount).toBeGreaterThanOrEqual(1);
+      expect(wordCount).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('all entries have expected relevance with 2-3 results', () => {
+    for (const gt of CROSS_SUBJECT_LESSON_GROUND_TRUTHS) {
+      const resultCount = typeSafeKeys(gt.expectedRelevance).length;
+      expect(resultCount).toBeGreaterThanOrEqual(2);
+      expect(resultCount).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('all entries have meaningful descriptions', () => {
+    for (const gt of CROSS_SUBJECT_LESSON_GROUND_TRUTHS) {
+      expect(gt.description.length).toBeGreaterThan(20);
+    }
+  });
+
+  it('unfiltered entries have no subject, phase, or keyStage', () => {
+    const unfilteredEntries = CROSS_SUBJECT_LESSON_GROUND_TRUTHS.filter(
+      (gt) => gt.subject === undefined && gt.phase === undefined && gt.keyStage === undefined,
+    );
+    expect(unfilteredEntries.length).toBeGreaterThan(0);
   });
 });
 

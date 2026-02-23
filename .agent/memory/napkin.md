@@ -1,5 +1,60 @@
 # Napkin
 
+## Session: 2026-02-23 (e) — Cross-Query Search Quality Investigation
+
+### What Was Done
+
+Investigated single-word cross-subject lesson queries to characterise
+the search quality problem. Ran "apple", "tree", "mountain" through
+the MCP search tool and analysed results, scores, and highlights.
+
+**Key findings**:
+
+- **Two compounding problems**: (1) volume — ALL queries return entire
+  index (8k–10k results), no min_score threshold; (2) ranking — short
+  words (3–5 chars) fuzzy-match to common English words via
+  `fuzziness: 'AUTO'`
+- "apple" (5 chars) → "apply" (1 edit) — PE lessons dominate, only
+  1/5 top results relevant
+- "tree" (4 chars) → "three" (1 edit: insert h) AND "true" (1 edit:
+  e→u) — 10,000 results (index cap!), highlights confirm "three"
+  matches in non-tree lessons
+- "mountain" (8 chars) → no common word within 2 edits — good top-3
+  results but still 8,277 total
+- Score ranges (0.03–0.06) indicate marginal-to-weak matches across
+  the board; no clear signal-to-noise separation
+
+**Documentation updates**: Comprehensive rewrite of
+search-results-quality.md with all three queries, pattern analysis,
+impact analysis, root cause chain, five prioritised remediation
+options. Updated 5 interconnected files (quality plan, session prompt,
+README, roadmap, high-level plan) to function as standalone entry
+points for the next session.
+
+**Consolidation**: All plans and prompts verified up to date. No
+documentation extraction needed from active plans (technical detail
+is execution context, not permanent architecture). Napkin 362 lines
+(under 800 threshold). Distilled.md — no entries to remove.
+
+### Patterns Learned
+
+- Running the same class of query with different word lengths
+  immediately reveals whether a problem is universal (volume) or
+  length-dependent (ranking). Three queries was the right number:
+  one short with fuzzy poison ("apple"), one short with different
+  fuzzy poison ("tree"), one long without fuzzy poison ("mountain").
+- The "tree"→"three" match is arguably worse than "apple"→"apply"
+  because "three" appears in EVERY lesson (counting, numbering,
+  sequencing). This produces 10,000 results vs 8,329 for "apple".
+- Elasticsearch highlight data is essential for diagnosing fuzzy
+  match pollution — the `<mark>three</mark>` tags in "tree" results
+  made the problem unambiguous.
+- Five interconnected documents (plan, prompt, README, roadmap, HLP)
+  need to be updated atomically or they drift. Doing them all in
+  one pass is better than incremental updates across sessions.
+
+---
+
 ## Session: 2026-02-23 (d) — Documentation Follow-On B7, B9, B10
 
 ### What Was Done

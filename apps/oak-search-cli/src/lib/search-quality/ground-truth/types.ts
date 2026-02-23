@@ -116,6 +116,67 @@ export interface LessonGroundTruth {
 }
 
 /**
+ * A cross-subject ground truth entry for unfiltered search quality testing.
+ *
+ * Unlike {@link LessonGroundTruth}, this type supports queries without subject,
+ * phase, or key stage filters. It captures scenarios where a teacher searches
+ * across the entire curriculum without narrowing by subject.
+ *
+ * These ground truths validate that unfiltered search returns relevant results
+ * rather than noise from fuzzy matching or over-broad semantic similarity.
+ *
+ * @example
+ * ```typescript
+ * const appleSearch: CrossSubjectLessonGroundTruth = {
+ *   query: 'apple fruit cooking',
+ *   expectedRelevance: {
+ *     'making-apple-flapjack-bites': 3,
+ *     'producing-our-food': 3,
+ *     'selective-breeding-of-plants-non-statutory': 2,
+ *   },
+ *   description: 'Cross-subject query for apple-related lessons without subject filter.',
+ * };
+ * ```
+ */
+export interface CrossSubjectLessonGroundTruth {
+  /**
+   * The natural-phrasing query a teacher would type.
+   *
+   * Must reflect natural teacher search behaviour.
+   */
+  readonly query: string;
+
+  /**
+   * Expected relevance judgments for the top results.
+   *
+   * Maps lesson slugs to relevance scores (1-3).
+   * Should include 2-3 expected results for meaningful metrics.
+   */
+  readonly expectedRelevance: ExpectedRelevance;
+
+  /**
+   * Brief description explaining WHY the query should find these lessons
+   * and what search quality issue this ground truth captures.
+   */
+  readonly description: string;
+
+  /**
+   * Optional subject filter. When absent, search runs across all subjects.
+   */
+  readonly subject?: AllSubjectSlug;
+
+  /**
+   * Optional phase filter. When absent, search runs across all phases.
+   */
+  readonly phase?: Phase;
+
+  /**
+   * Optional key stage filter. When absent, search runs across all key stages.
+   */
+  readonly keyStage?: KeyStage;
+}
+
+/**
  * All subject-phase pairs that need ground truths.
  *
  * Based on the curriculum structure:

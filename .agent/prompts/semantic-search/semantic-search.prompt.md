@@ -20,6 +20,11 @@ are the sole search interface.
    into type-gen and runtime workspaces
    ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
 
+**Search results quality** is a **merge blocker** — single-word
+cross-subject queries return the entire lesson index (8,000–10,000
+results) with poor-to-mixed ranking:
+[search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
+
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
 
@@ -36,6 +41,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 
 **Plans** (in priority order):
 
+- [Search results quality](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — fix single-word query pollution (fuzziness, min_score)
 - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** — split curriculum-sdk (WS5 gate satisfied)
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
@@ -62,19 +68,63 @@ Run this checklist at the start of the next session:
    ls -1 .agent/plans/semantic-search/archive/completed
    ```
 
-3. Treat this as the active execution plan:
+3. **Read the search quality plan first** — this is the primary
+   execution target for the next session:
+   - [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
+   — contains full root cause analysis, cross-query evidence
+   (apple/tree/mountain), impact analysis, and five remediation
+   options with file pointers
+4. Treat these as active execution plans:
+   - [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md) — **merge-blocking** — search configuration fixes
    - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**
-4. Treat these as complete/archive references only:
+5. Treat these as complete/archive references only:
    - [search-snagging.md](../../plans/semantic-search/archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
    - [widget-search-rendering.md](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — Widget Phases 0-5
    - [search-dispatch-type-safety.md](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
-5. Keep post-merge MCP extension work separate:
+6. Keep post-merge MCP extension work separate:
    - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
 
 ### Next Execution Targets
 
-**Merge blocker** (Milestone 0):
+**Merge blocker — Search quality** (Milestone 0):
+
+**Search results quality** — single-word cross-subject queries
+return the entire lesson index with poor-to-mixed ranking. The
+plan documents three reference queries ("apple", "tree",
+"mountain"), root cause analysis (fuzziness, no min_score, ELSER
+volume, transcript amplification), and five remediation options.
+
+**Recommended execution order** for search quality fixes:
+
+1. **Create additional cross-subject ground truths** — "tree"
+   and "mountain" entries following the `APPLE_LESSONS` pattern in
+   `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/`
+2. **Adapt benchmark runner** for cross-subject queries — make
+   `subject` optional in `RunQueryInput`, `GroundTruthEntry`,
+   `EntryBenchmarkResult`, and adapt output formatting in
+   `apps/oak-search-cli/evaluation/analysis/`
+3. **Run baseline benchmarks** — capture current MRR/NDCG@10 for
+   all ground truths (per-subject + cross-subject) before changes
+4. **Implement Option 1** (reduce fuzziness) — change lesson
+   BM25 config from `fuzziness: 'AUTO'` to `fuzziness: 'AUTO:4,7'`
+   in `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
+5. **Implement Option 2** (add min_score threshold) — filter
+   results below a calibrated score threshold
+6. **Run comparison benchmarks** — verify cross-subject MRR
+   improves while per-subject MRR ≥ 0.95 (no regression)
+7. **Evaluate Option 3** (transcript weighting) if Options 1+2
+   are insufficient
+
+**Key files for search quality work**:
+
+- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts` — fuzziness and field weights
+- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts` — filter builders, score normalisation
+- `packages/sdks/oak-search-sdk/src/retrieval/create-retrieval-service.ts` — query preprocessing
+- `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/` — cross-subject ground truths
+- `apps/oak-search-cli/evaluation/analysis/benchmark-query-runner-lessons.ts` — benchmark runner
+
+**Merge blocker — SDK workspace separation** (Milestone 0):
 
 **SDK workspace separation** — 7 phases. G0 gate is
 satisfied but no execution phases have started. Read the full
@@ -122,6 +172,36 @@ Widget stabilisation is **complete** (all phases 0-5).
   of genuine verification. Anchor test fixtures to the schema
   (or captured API responses), not to the assumptions of the
   code under test.
+- **Ground truths before configuration changes.** Always run
+  baseline benchmarks before and after any search configuration
+  change. The existing 30 per-subject lesson ground truths
+  (MRR 0.983) must not regress.
+
+---
+
+## Search Quality Problem Summary
+
+Single-word cross-subject queries are fundamentally broken:
+
+| Query | Length | Total results | Top-3 quality | Root cause |
+|-------|--------|---------------|---------------|------------|
+| "apple" | 5 | 8,329 | Poor — #1 is false positive | `fuzziness:AUTO` matches "apply" |
+| "tree" | 4 | 10,000 | Mixed — trees + maths "tree diagrams" | `fuzziness:AUTO` matches "three"/"true" |
+| "mountain" | 8 | 8,277 | Good — genuine mountains | Volume only (no fuzzy poison) |
+
+**Two compounding problems**:
+
+1. **Volume**: Every query returns the entire index. No `min_score`
+   threshold. ELSER assigns non-zero scores to everything.
+2. **Ranking** (short words): `fuzziness: 'AUTO'` allows 1-edit
+   matches to common words ("apply", "three", "true") that appear
+   in thousands of transcripts, overwhelming genuine matches.
+
+**Full analysis**: [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md)
+
+**Existing ground truth**: `CrossSubjectLessonGroundTruth` type and
+`APPLE_LESSONS` entry in
+`apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/apple-lessons.ts`
 
 ---
 
@@ -151,6 +231,26 @@ Widget stabilisation is **complete** (all phases 0-5).
 - **Scopes via `SCOPES_SUPPORTED`**: All aggregated tool definitions
   import OAuth scopes from the stable re-export at
   `src/mcp/scopes-supported.ts` (not hardcoded). Follow this pattern.
+
+### Search Pipeline Architecture
+
+4-way RRF hybrid search (BM25 + ELSER on Content + Structure):
+
+```text
+query
+  → removeNoisePhrases()
+  → detectCurriculumPhrases()
+  → buildFourWayRetriever():
+     BM25 Content  (fuzziness: AUTO, lesson_title^3, lesson_keywords^2, ...)
+     ELSER Content  (lesson_content_semantic)
+     BM25 Structure (fuzziness: AUTO, lesson_structure^2, lesson_title^3)
+     ELSER Structure (lesson_structure_semantic)
+  → RRF (rank_window_size: 80, rank_constant: 60)
+  → normaliseTranscriptScores()
+  → results (no min_score filtering currently)
+```
+
+**Key configuration file**: `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
 
 ### Widget Rendering Architecture
 
@@ -274,12 +374,18 @@ score normalisation.
 
 | Index | GTs | MRR | NDCG@10 |
 |-------|-----|-----|---------|
-| Lessons | 30 | 0.983 | 0.944 |
+| Lessons (per-subject) | 30 | 0.983 | 0.944 |
+| Lessons (cross-subject) | 1 | — | — |
 | Units | 2 | 1.000 | 0.923 |
 | Threads | 8 | 0.938 | 0.902 |
 | Sequences | 1 | 1.000 | 1.000* |
 
 \* Single-query index — mechanism check only.
+
+Cross-subject ground truth (1 entry: "apple") cannot yet be
+benchmarked — benchmark runner needs adaptation to support
+queries without subject filters. This is follow-on work
+documented in [search-results-quality.md](../../plans/semantic-search/active/search-results-quality.md).
 
 **Protocol**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
@@ -334,6 +440,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Document | Why |
 |----------|-----|
+| [Search results quality](../../plans/semantic-search/active/search-results-quality.md) | **Merge-blocking** — fix single-word query pollution |
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied) |
 | [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) | **Post-merge, pre-alpha** — 5 SDK tool bugs with TDD test specs |
 | [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) | **COMPLETE** — reference only |

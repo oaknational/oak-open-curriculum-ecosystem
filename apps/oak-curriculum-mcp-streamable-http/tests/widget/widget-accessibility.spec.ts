@@ -40,8 +40,15 @@ test.afterAll(() => {
  * - landmark-one-main: Parent page provides landmarks (widget has role="main" now)
  * - region: Content is within parent page's landmark structure
  * - scrollable-region-focusable: Scroll container is managed by parent
+ * - page-has-heading-one: Heading visibility is conditional on tool name
+ *   (HEADER_TOOLS gating); the parent ChatGPT page provides page-level headings
  */
-const EXCLUDED_RULES = ['landmark-one-main', 'region', 'scrollable-region-focusable'];
+const EXCLUDED_RULES = [
+  'landmark-one-main',
+  'region',
+  'scrollable-region-focusable',
+  'page-has-heading-one',
+];
 
 test.describe('Widget accessibility', () => {
   test('neutral shell passes WCAG checks', async ({ page }) => {

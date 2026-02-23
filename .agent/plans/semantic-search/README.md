@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-22
+**Last Updated**: 2026-02-23
 
 ---
 
@@ -15,10 +15,13 @@
 MCP search integration (Phase 3a) is complete — three tools
 wired, old REST search replaced. Two merge blockers remain:
 
-1. **SDK workspace separation** (3e) — split curriculum-sdk into
+1. **Search results quality** — single-word cross-subject queries
+   return the entire lesson index with poor-to-mixed ranking
+   (fuzziness pollution, no min_score threshold)
+2. **SDK workspace separation** (3e) — split curriculum-sdk into
    type-gen and runtime workspaces
-2. **Widget stabilisation** (3h) — Track 1a shell-only non-search
-   widgets and Track 1b search/suggest rendering fixes
+
+Widget stabilisation (3h) is **COMPLETE** (all phases 0-5).
 
 **Roadmap**: [roadmap.md](roadmap.md)
 **Completed plans**: [completed-plans.md](../completed-plans.md)
@@ -49,8 +52,9 @@ Search dispatch type safety (3g) is complete and archived:
    3d OAuth spec compliance                      ✅ COMPLETE
    3f Proxy OAuth AS for Cursor                  ✅ COMPLETE
    3g Search dispatch type safety                ✅ COMPLETE (archived)
+   3h Widget stabilisation (Tracks 1a + 1b)      ✅ COMPLETE
    3e SDK workspace separation                   🔄 MERGE-BLOCKING
-   3h Widget stabilisation (Tracks 1a + 1b)      🔄 MERGE-BLOCKING
+   3i Search results quality                     🔄 MERGE-BLOCKING
          ↓
 4. Search Quality + Ecosystem (parallel streams)
    GT expansion, Levels 2-4, bulk data, SDK API,
@@ -62,11 +66,20 @@ Search dispatch type safety (3g) is complete and archived:
 
 ---
 
+## Active Plans
+
+| Plan | Status | Priority |
+|------|--------|----------|
+| [Search results quality](active/search-results-quality.md) | 🔄 Merge-blocking | **P0** — fix single-word query pollution |
+| [SDK workspace separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking | **P0** — split curriculum-sdk |
+
+---
+
 ## Folder Structure
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Merge-prep plans (`3e` and `3h`) | 🔄 Active |
+| `active/` | Merge-prep plans (`3e`, `3i`) | 🔄 Active |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |
 | `post-sdk/` | Streams of post-extraction work | 📋 Ready |
 | `archive/` | Historical work | ✅ Reference only |
@@ -96,8 +109,9 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
+| [Search Results Quality](active/search-results-quality.md) | 🔄 Merge-blocking — cross-query analysis + remediation options |
 | [SDK Workspace Separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking — split curriculum-sdk |
+| [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
 | [Result Pattern Unification](post-sdk/mcp-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |

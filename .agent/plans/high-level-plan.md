@@ -41,7 +41,14 @@ tools on Oak's open data for the first time.
 
 **Remaining work**:
 
-1. Complete merge-blocking plan:
+1. Complete merge-blocking plans:
+   - [search-results-quality.md](semantic-search/active/search-results-quality.md) —
+     fix single-word query pollution (fuzziness, min_score threshold).
+     Single-word cross-subject queries ("apple", "tree", "mountain")
+     return the entire lesson index (8,000–10,000 results) with
+     poor-to-mixed ranking. Root causes: `fuzziness: 'AUTO'` matches
+     common words ("apple"→"apply", "tree"→"three"), no `min_score`,
+     ELSER volume, transcript amplification.
    - [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
 2. Final secrets and PII sweep across the entire repository
    - Verify `pnpm secrets:scan:all` passes
@@ -54,6 +61,10 @@ tools on Oak's open data for the first time.
 
 **Already complete for this milestone**:
 
+- Search results quality investigation — root cause analysis and
+  cross-subject ground truth infrastructure (ground truth type,
+  `APPLE_LESSONS` entry, cross-query evidence). Remediation
+  (fuzziness tuning, min_score threshold) is the remaining work.
 - Phase 3a MCP integration
 - Search dispatch type safety
 - OAuth specification compliance (ADR-113)
@@ -199,7 +210,7 @@ Strategic architecture remains anchored in:
 
 | Collection | Strategic Role | Current Status | Primary Entry |
 |------------|----------------|----------------|---------------|
-| `semantic-search/` | Merge-prep execution and search roadmap | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
+| `semantic-search/` | Merge-prep execution and search roadmap (search quality + SDK separation) | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
 | `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
 | `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
 | `architecture/` | Cross-cutting architecture, system quality, and observability | 📋 Milestone 1 / 3 | [architecture/README.md](architecture/README.md) |
@@ -230,6 +241,10 @@ Recent semantic-search completions include:
    smoke-tested end-to-end (32 tools verified)
 9. Logger architectural bug — SDK logger DI, OTEL attributes
 10. Documentation accuracy improvements (6 workstreams)
+11. Search quality investigation — cross-subject ground truth
+    infrastructure (`CrossSubjectLessonGroundTruth` type,
+    `APPLE_LESSONS` entry), root cause analysis (fuzziness,
+    no min_score, ELSER volume, transcript amplification)
 
 ---
 

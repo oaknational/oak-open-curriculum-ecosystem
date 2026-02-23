@@ -14,9 +14,11 @@ This roadmap is the strategic milestone sequence for semantic search work.
 Execution detail lives in active plans under `active/` and completed plans under
 `archive/completed/`.
 
-Authoritative active execution source:
+Authoritative active execution sources:
 
-1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+1. [search-results-quality.md](active/search-results-quality.md) — fix
+   single-word query pollution
+2. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
 
 Completed plans (archived):
 
@@ -63,10 +65,24 @@ Ground-truth baselines currently tracked:
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
-| `oak_lessons` | 30 | 0.983 | 0.944 | ✅ Established |
+| `oak_lessons` (per-subject) | 30 | 0.983 | 0.944 | ✅ Established |
+| `oak_lessons` (cross-subject) | 1 | — | — | 🔄 Benchmark runner needs adaptation |
 | `oak_unit_rollup` | 2 | 1.000 | 0.923 | ✅ Established |
 | `oak_threads` | 8 | 0.938 | 0.902 | ✅ Established |
 | `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Mechanism check |
+
+### Search quality findings (2026-02-23)
+
+Single-word cross-subject queries return the entire lesson index
+(8,000–10,000 results) with poor-to-mixed ranking:
+
+| Query | Total | Top-3 quality | Root cause |
+|-------|-------|---------------|------------|
+| "apple" | 8,329 | Poor — #1 is false positive | `fuzziness:AUTO` matches "apply" |
+| "tree" | 10,000 | Mixed — trees + "three"/"true" noise | `fuzziness:AUTO` matches "three" |
+| "mountain" | 8,277 | Good — genuine mountains | Volume only (no fuzzy poison) |
+
+Full analysis: [search-results-quality.md](active/search-results-quality.md)
 
 ---
 
@@ -74,8 +90,9 @@ Ground-truth baselines currently tracked:
 
 The branch merge remains blocked until these complete:
 
-1. **3e SDK workspace separation** (type-gen/runtime split)
-2. **Secrets and PII sweep** — final scan before making repo public
+1. **3i Search results quality** (fuzziness tuning, min_score threshold)
+2. **3e SDK workspace separation** (type-gen/runtime split)
+3. **Secrets and PII sweep** — final scan before making repo public
 
 Completed merge gates:
 
@@ -83,6 +100,21 @@ Completed merge gates:
   hardening complete, quality gates pass.
 - 3g dispatch safety — complete and archived.
 - 3b and 3c are post-merge by design.
+
+### 3i Search Results Quality (Merge-Blocking)
+
+- Active plan: [search-results-quality.md](active/search-results-quality.md)
+- Cross-subject ground truth: `APPLE_LESSONS` in
+  `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/`
+
+Execution sequence:
+
+1. Create additional cross-subject ground truths ("tree", "mountain")
+2. Adapt benchmark runner for cross-subject queries
+3. Run baseline benchmarks (per-subject + cross-subject)
+4. Implement fuzziness reduction (`AUTO` → `AUTO:4,7` or similar)
+5. Implement min_score threshold
+6. Run comparison benchmarks — verify improvement without regression
 
 ### Post-merge, pre-Milestone-1 work
 
@@ -109,8 +141,9 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3e-auth. OAuth validation/Cursor investigation     ✅ COMPLETE (archived)
   3f. Proxy OAuth AS for Cursor                     ✅ COMPLETE
   3g. Search dispatch type safety                   ✅ COMPLETE (archived)
-  3e. SDK workspace separation                      🔄 MERGE-BLOCKING
   3h. Widget stabilisation (Tracks 1a + 1b)         ✅ COMPLETE
+  3i. Search results quality                        🔄 MERGE-BLOCKING
+  3e. SDK workspace separation                      🔄 MERGE-BLOCKING
   ── Secrets/PII sweep ──                           📋 PRE-PUBLIC
   ── Merge + make repo public ──                    📋 MILESTONE 0 EXIT
   3b. Result pattern unification                    📋 POST-MERGE
@@ -127,6 +160,22 @@ Phase 5: Extensions                                 📋 MILESTONE 2
 ---
 
 ## Phase 3 Details
+
+### 3i Search Results Quality (Merge-Blocking)
+
+- Active plan: [search-results-quality.md](active/search-results-quality.md)
+- Key file: `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
+
+Two compounding problems:
+
+1. **Volume**: Every single-word query returns 8,000–10,000 results. No
+   `min_score` threshold. ELSER assigns non-zero scores to everything.
+2. **Ranking** (short words 3–5 chars): `fuzziness: 'AUTO'` allows 1-edit
+   matches to common English words ("apple"→"apply", "tree"→"three"),
+   overwhelming genuine matches via transcript amplification.
+
+Remediation options: fuzziness reduction, min_score threshold, transcript
+weighting, query-aware fuzziness. See full plan for details and file pointers.
 
 ### 3e SDK Workspace Separation (Merge-Blocking)
 
