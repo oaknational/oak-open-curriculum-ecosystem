@@ -38,9 +38,10 @@ export type RendererId = (typeof RENDERER_IDS)[number];
  * breaking ALL tools.
  */
 export const TOOL_RENDERER_MAP = {
-  search: 'search',
-  'browse-curriculum': 'browse',
-  'explore-topic': 'explore',
+  // All custom renderers parked pre-merge. Restore post-merge:
+  // search: 'search',
+  // 'browse-curriculum': 'browse',
+  // 'explore-topic': 'explore',
 } as const satisfies Readonly<Record<string, RendererId>>;
 
 /**

@@ -22,72 +22,23 @@ import {
 import { WIDGET_SCRIPT } from './widget-script.js';
 
 describe('getRendererIdForTool', () => {
-  describe('search tool', () => {
-    it('returns "search" for search', () => {
-      expect(getRendererIdForTool('search')).toBe('search');
-    });
-  });
-
-  describe('browse-curriculum tool', () => {
-    it('returns "browse" for browse-curriculum', () => {
-      expect(getRendererIdForTool('browse-curriculum')).toBe('browse');
-    });
-  });
-
-  describe('explore-topic tool', () => {
-    it('returns "explore" for explore-topic', () => {
-      expect(getRendererIdForTool('explore-topic')).toBe('explore');
-    });
-  });
-
-  describe('deleted tools return undefined', () => {
-    it('returns undefined for get-lessons-quiz (deleted renderer)', () => {
-      expect(getRendererIdForTool('get-lessons-quiz')).toBeUndefined();
-    });
-
-    it('returns undefined for get-help (deleted renderer)', () => {
-      expect(getRendererIdForTool('get-help')).toBeUndefined();
-    });
-
-    it('returns undefined for fetch (deleted renderer)', () => {
-      expect(getRendererIdForTool('fetch')).toBeUndefined();
-    });
-
-    it('returns undefined for get-ontology (deleted renderer)', () => {
-      expect(getRendererIdForTool('get-ontology')).toBeUndefined();
-    });
-  });
-
-  describe('unknown tools', () => {
-    it('returns undefined for unknown tool names', () => {
-      expect(getRendererIdForTool('unknown-tool')).toBeUndefined();
-    });
-
-    it('returns undefined for empty string', () => {
-      expect(getRendererIdForTool('')).toBeUndefined();
-    });
+  it('returns undefined for all tools (renderers parked pre-merge)', () => {
+    expect(getRendererIdForTool('search')).toBeUndefined();
+    expect(getRendererIdForTool('browse-curriculum')).toBeUndefined();
+    expect(getRendererIdForTool('explore-topic')).toBeUndefined();
+    expect(getRendererIdForTool('get-lessons-quiz')).toBeUndefined();
+    expect(getRendererIdForTool('unknown-tool')).toBeUndefined();
+    expect(getRendererIdForTool('')).toBeUndefined();
   });
 });
 
 describe('TOOL_RENDERER_MAP', () => {
-  it('contains entries for all search-family tools', () => {
+  it('is empty (all tools use neutral shell pre-merge)', () => {
     const keys = [];
     for (const key in TOOL_RENDERER_MAP) {
       keys.push(key);
     }
-    expect(keys).toStrictEqual(['search', 'browse-curriculum', 'explore-topic']);
-  });
-
-  it('maps search to the search renderer', () => {
-    expect(TOOL_RENDERER_MAP.search).toBe('search');
-  });
-
-  it('maps browse-curriculum to the browse renderer', () => {
-    expect(TOOL_RENDERER_MAP['browse-curriculum']).toBe('browse');
-  });
-
-  it('maps explore-topic to the explore renderer', () => {
-    expect(TOOL_RENDERER_MAP['explore-topic']).toBe('explore');
+    expect(keys).toStrictEqual([]);
   });
 });
 

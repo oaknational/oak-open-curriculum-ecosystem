@@ -1,8 +1,12 @@
 /**
  * Lesson Ground Truths.
  *
- * One ground truth per subject-phase pair (~33 total).
- * Uses known-answer-first methodology to prove baseline search quality.
+ * Two categories of ground truths:
+ *
+ * 1. **Per-subject**: One ground truth per subject-phase pair (~33 total).
+ *    Uses known-answer-first methodology to prove baseline search quality.
+ * 2. **Cross-subject**: Unfiltered queries that test search quality across
+ *    the entire curriculum without subject filtering.
  *
  * ## Coverage Target
  *
@@ -15,11 +19,20 @@
  * ## Usage
  *
  * ```typescript
- * import { LESSON_GROUND_TRUTHS, getLessonGroundTruth } from './ground-truth';
+ * import {
+ *   LESSON_GROUND_TRUTHS,
+ *   CROSS_SUBJECT_LESSON_GROUND_TRUTHS,
+ *   getLessonGroundTruth,
+ * } from './ground-truth';
  *
- * // Get all lesson ground truths
+ * // Get all per-subject lesson ground truths
  * for (const gt of LESSON_GROUND_TRUTHS) {
  *   console.log(`${gt.subject}/${gt.phase}: ${gt.query}`);
+ * }
+ *
+ * // Get cross-subject ground truths
+ * for (const gt of CROSS_SUBJECT_LESSON_GROUND_TRUTHS) {
+ *   console.log(`cross-subject: ${gt.query}`);
  * }
  *
  * // Get specific lesson ground truth
@@ -29,9 +42,15 @@
 
 import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 
-import type { Phase, LessonGroundTruth } from './types';
+import type { CrossSubjectLessonGroundTruth, LessonGroundTruth, Phase } from './types.js';
 
-export type { LessonGroundTruth, SubjectPhasePair, Phase, SubjectPhaseKey } from './types';
+export type {
+  LessonGroundTruth,
+  CrossSubjectLessonGroundTruth,
+  SubjectPhasePair,
+  Phase,
+  SubjectPhaseKey,
+} from './types.js';
 export { subjectPhaseKey } from './types';
 
 // =============================================================================
@@ -69,6 +88,9 @@ import { SCIENCE_PRIMARY } from './entries/science-primary';
 import { SCIENCE_SECONDARY } from './entries/science-secondary';
 import { SPANISH_PRIMARY } from './entries/spanish-primary';
 import { SPANISH_SECONDARY } from './entries/spanish-secondary';
+
+// Cross-subject ground truths
+import { APPLE_LESSONS } from './cross-subject/apple-lessons';
 
 /**
  * All lesson ground truths in the system.
@@ -139,6 +161,23 @@ export { SCIENCE_PRIMARY } from './entries/science-primary';
 export { SCIENCE_SECONDARY } from './entries/science-secondary';
 export { SPANISH_PRIMARY } from './entries/spanish-primary';
 export { SPANISH_SECONDARY } from './entries/spanish-secondary';
+
+// =============================================================================
+// Cross-Subject Ground Truth Entries
+// =============================================================================
+
+export { APPLE_LESSONS } from './cross-subject/apple-lessons';
+
+/**
+ * All cross-subject lesson ground truths.
+ *
+ * These test search quality for queries without subject filtering,
+ * capturing scenarios where unfiltered search must return relevant
+ * results across the entire curriculum.
+ */
+export const CROSS_SUBJECT_LESSON_GROUND_TRUTHS: readonly CrossSubjectLessonGroundTruth[] = [
+  APPLE_LESSONS,
+] as const;
 
 // =============================================================================
 // Accessors
