@@ -2,17 +2,19 @@
 
 ## Status
 
-Accepted (supersession pending)
+Superseded
 
-> **Update (23 February 2026)**: The CTA system has been removed from the widget
-> output. CTA HTML, CSS, and JavaScript are no longer embedded in the widget.
-> Context grounding is being moved to an MCP resource (`curriculum://context-grounding`)
-> that clients load before any other action. This ADR will be formally superseded
-> when the context-grounding resource is implemented. The CTA source code in
-> `src/widget-cta/` is retained until that implementation is complete.
+> **Superseded (23 February 2026)**: The CTA system has been removed from the
+> widget. CTA HTML, CSS, and JavaScript are no longer embedded in the widget
+> output. The CTA source code in `src/widget-cta/` has been retained as dead
+> code pending cleanup.
 >
-> **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool has since
-> been removed and merged into `get-ontology` (property graph data now lives in
+> The original problem (context grounding) is now addressed through MCP's native
+> resource primitive rather than widget buttons. The `get-ontology` and `get-help`
+> tools remain for model-controlled context loading.
+>
+> **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool was
+> removed and merged into `get-ontology` (property graph data now lives in
 > ontology output). References to `get-knowledge-graph` below reflect the
 > accepted-state context.
 

@@ -75,7 +75,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-058: Context Grounding for AI Agents](058-context-grounding-for-ai-agents.md)
 - [ADR-059: Knowledge Graph for Agent Context](059-knowledge-graph-for-agent-context.md)
 - [ADR-060: Agent Support Tool Metadata System](060-agent-support-metadata-system.md)
-- [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md)
+- [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md) _(superseded)_
 - [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
 - [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)

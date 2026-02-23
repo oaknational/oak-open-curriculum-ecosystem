@@ -219,7 +219,7 @@ Objective:
 - Additive feature work only after Domains A to C pass all required gates.
 
 Feature backlog candidates:
-1. Context-grounding via MCP resource (`load-me-first`) replacing the removed CTA system; see `widget-cta-overhaul.md` plan.
+1. Context-grounding resource (`curriculum://context-grounding`) as a single-request convenience for clients that want ontology + help content up front (CTA removal complete, ADR-061 superseded).
 2. Standard-first MCP Apps capability expansion with optional adapters.
 3. Search UX reintroduction aligned with new search backend and hard safety controls.
 4. Host capability enhancements only where MCP-first fallback is preserved.
@@ -250,7 +250,7 @@ Policy:
 | ADR-047 | Accepted | Type-gen canonical URL generation | `docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md` | None confirmed | Reuse generator-time pattern for URI parity checks | Gate 5 |
 | ADR-058 | Accepted | Model-visible context grounding design | `docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md` | Widget simplification can remove model hints if unmanaged | Keep model-facing hints outside widget payload | Gate 3 |
 | ADR-060 | Accepted | Agent support metadata single-source pattern | `docs/architecture/architectural-decisions/060-agent-support-metadata-system.md` | None confirmed | Reuse single-source approach for specialist metadata | Gate 4 |
-| ADR-061 | Accepted (supersession pending) | Widget CTA system architecture | `docs/architecture/architectural-decisions/061-widget-cta-system.md` | CTA removed from widget output; context grounding moving to MCP resource | Supersede when context-grounding resource (`widget-cta-overhaul.md`) is implemented | Gate 5 |
+| ADR-061 | Superseded | Widget CTA system architecture | `docs/architecture/architectural-decisions/061-widget-cta-system.md` | CTA removed; context grounding via MCP resources and tools | Context only; do not reintroduce widget CTA pattern | Gate 5 |
 | ADR-071 | Accepted | Type-gen widget URI cache-busting simplification | `docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md` | Current local hash behaviour diverges from ADR wording | Add explicit local/prod parity decision in Domain D | Gate 5 |
 | ADR-107 | Accepted | Deterministic SDK, NL in MCP layer | `docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md` | None confirmed | Keep NL behaviour out of SDK core refactors | Gate 5 |
 | ADR-112 | Accepted | Per-request MCP transport | `docs/architecture/architectural-decisions/112-per-request-mcp-transport.md` | None confirmed | Preserve stateless per-request assumptions | Gate 2 |
