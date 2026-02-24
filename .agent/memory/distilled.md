@@ -81,6 +81,16 @@ changing behaviour.
   declarations. When `strict.ts` overrides a rule from
   `recommended.ts`, all entries from recommended are silently
   lost. Always replicate restricted types in strict.
+- `@typescript-eslint/no-restricted-imports` `group` patterns
+  use minimatch: `*` matches one path segment (not `/`),
+  `**` matches zero or more segments. Use `**` for deep
+  sub-path coverage — `@oaknational/pkg/*` catches
+  `@oaknational/pkg/foo` but NOT `@oaknational/pkg/foo/bar`.
+- SDK boundary rules (`createSdkBoundaryRules`) must include
+  `@workspace/*` restriction alongside package-specific
+  patterns. Without it, pnpm workspace aliases bypass the
+  boundary rules entirely. All boundary rule sets in
+  `boundary.ts` must include this pattern for consistency.
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
 - Commander `this.args` in `function action(this: Command)`

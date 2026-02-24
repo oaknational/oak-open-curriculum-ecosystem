@@ -12,16 +12,16 @@ todos:
     status: completed
   - id: grounding-and-decisions
     content: "Re-read directives and lock architectural decisions (all vocab artefacts move now, one-way dependency, ADR-only context)."
-    status: pending
+    status: completed
   - id: baseline-inventory
     content: "Capture and persist reproducible baseline metrics and command definitions before file moves."
-    status: pending
+    status: completed
   - id: turbo-task-alignment
     content: "Update turbo.json to reflect the new cross-package task dependencies (runtime:build depends on generation:type-gen)."
     status: pending
   - id: generation-workspace-scaffold
     content: "Create packages/sdks/oak-curriculum-sdk-generation with package metadata, TS/ESLint/tsup configs, scripts, and README."
-    status: pending
+    status: completed
   - id: move-typegen-and-generated
     content: "Move type-gen/, schema-cache/, src/types/generated/, and vocab-gen/ into generation workspace with git-aware moves."
     status: pending
@@ -71,9 +71,10 @@ reproducible pre-split baseline.
 - OAuth/auth prerequisites are treated as completed architectural baseline via
   ADR-113 and ADR-115 (no plan-status dependency)
 
-**Phase 0 execution still required**: the `sdk-workspace-separation-baseline.json`
-evidence file must be committed at Phase 0 completion (AC1). Phase 0 is the
-first execution step.
+**Phase 0 executed 24 Feb 2026**: baseline evidence committed as
+[`sdk-workspace-separation-baseline.json`](sdk-workspace-separation-baseline.json)
+(AC1 satisfied). Phase 1 scaffold, boundary rules, and turbo alignment also
+complete — see commit `86a71125`.
 
 ### D1. Move all generation-owned artefacts and infrastructure now
 
@@ -272,7 +273,7 @@ generation imports for type-only surfaces is a future refinement.
 
 ## 8. Execution Phases (RED -> GREEN -> REFACTOR)
 
-### Phase 0 - Baseline Lock and Prerequisite Verification
+### Phase 0 - Baseline Lock and Prerequisite Verification ✅ COMPLETE (24 Feb 2026)
 
 Goal: enforce prerequisites and freeze reproducible baseline.
 
@@ -290,7 +291,7 @@ File-level tasks:
 - `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
   (baseline updates)
 
-### Phase 1 - Scaffold Generation Workspace
+### Phase 1 - Scaffold Generation Workspace ✅ COMPLETE (24 Feb 2026)
 
 Goal: introduce first-class generation workspace before moving content.
 

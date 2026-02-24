@@ -1,5 +1,76 @@
 # Napkin
 
+## Session: 2026-02-24 (a) — SDK Workspace Separation Phase 0+1
+
+### What Was Done
+
+Executed Phase 0 and Phase 1 of the SDK workspace separation plan
+(ADR-108 Step 1). Commit `86a71125`.
+
+**Phase 0**: Captured reproducible baseline evidence
+(`sdk-workspace-separation-baseline.json`). Counts: type-gen 192,
+src 303, generated 106, runtime importing generated 56, SDK
+workspaces 2 (no generation). Updated plan Section 4 baseline
+from 302→303 (drift from dependency bump commit).
+
+**Phase 1**: Full TDD cycle for SDK boundary rules.
+
+1. RED: 6 unit tests for `createSdkBoundaryRules()` — all failed
+   (`is not a function`).
+2. GREEN: Implemented function in `boundary.ts`, exported from
+   `index.ts`. 20/20 tests pass.
+3. Scaffolded `packages/sdks/oak-curriculum-sdk-generation/` with
+   10 config files following `oak-search-sdk` conventions.
+4. Registered in `pnpm-workspace.yaml`, installed.
+5. Applied `createSdkBoundaryRules('runtime')` to runtime SDK
+   ESLint config.
+6. Updated `turbo.json` — added `**/vocab-gen/**/*.ts` to
+   `type-gen` inputs.
+7. Final gate: `pnpm build` (12/12), `pnpm type-check` (19/19),
+   lint all affected workspaces — clean.
+8. Commit + 4 reviewer invocations.
+
+**Reviewer findings addressed** (amended commit):
+- Glob depth `**` not `*` for deep sub-path coverage (Fred)
+- `@workspace/*` restriction added for parity (code-reviewer, Fred)
+- Test helper type fixed: `Linter.RulesRecord` not
+  `Record<string, unknown>` (test-reviewer)
+- Fail-fast throws instead of silent empty returns (test-reviewer)
+- 5 new test cases: severity, ADR-108 reference, self-restriction,
+  `@workspace/*` (test-reviewer)
+- Baseline file relocated from repo root to plan-adjacent
+  directory (code-reviewer, Fred)
+- `test:watch` script added for convention parity (config-reviewer)
+- Pre-existing `_libName` unused parameter fixed (code-reviewer)
+
+**Cross-references**: Added bidirectional links between
+`sdk-workspace-separation.md` and
+`architectural-enforcement-adoption.plan.md`.
+
+### Patterns Learned
+
+- `@typescript-eslint/no-restricted-imports` `group` patterns
+  use minimatch: `*` matches one segment, `**` matches deep paths.
+  Always use `**` for package import restrictions.
+- `@workspace/*` aliases are a bypass vector for boundary rules.
+  All boundary rule sets must include this restriction.
+- Pre-commit hooks running the full quality gate suite (type-check,
+  lint, test across all workspaces) are a powerful final safety net
+  but add ~50s to commit time. The trade-off is worth it for
+  structural changes like new workspace additions.
+- `pnpm install` with `frozen-lockfile` (CI default) rejects new
+  workspace registrations — use `--no-frozen-lockfile` for the
+  initial install after adding a workspace.
+- TSDoc `@` in package names (e.g. `@oaknational/...`) triggers
+  tsdoc-characters-after-block-tag warnings. Escape with `\@`.
+- Baseline evidence files belong adjacent to the plan they serve,
+  not at the repo root.
+
+### Quality Gates
+
+All pass: build 12/12, type-check 19/19, lint clean,
+25/25 eslint plugin tests, pre-commit hooks pass.
+
 ## Session: 2026-02-23 (g) — Document Cohesion and Archival
 
 ### What Was Done

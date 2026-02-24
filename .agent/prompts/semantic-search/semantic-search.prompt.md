@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-02-24 (post Phase 0+1 execution)
 
 ---
 
@@ -84,12 +84,18 @@ Run this checklist at the start of the next session:
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
-**SDK workspace separation** — Phase 0 + 7 execution phases
-(8 total). G0 prerequisites are satisfied, all pre-Phase-1
+**SDK workspace separation** — Phase 0 and Phase 1 are
+**complete** (commit `86a71125`, 24 Feb 2026). Phases 2-7
+remain. G0 prerequisites are satisfied, all pre-Phase-1
 decisions are resolved (archived:
 [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md)).
-No execution phases have started. Read the full plan before
-creating a platform-specific implementation plan.
+
+**Completed**: Phase 0 (baseline evidence), Phase 1 (generation
+workspace scaffold, SDK boundary rules, turbo vocab-gen inputs).
+The `@oaknational/curriculum-sdk-generation` workspace exists
+with ESLint boundary rules enforcing one-way dependency.
+
+**Next**: Phase 2 (move type-gen core and generated API artefacts).
 
 **Key architectural insight — two pipelines**: the generation
 workspace will host two separate data pipelines:
@@ -109,17 +115,14 @@ within the generation workspace. See
 [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 for the full decomposition architecture.
 
-**Non-negotiable boundaries** (enforced by ESLint SDK boundary rules):
+**Non-negotiable boundaries** (enforced by ESLint SDK boundary rules,
+implemented in `createSdkBoundaryRules()` in `boundary.ts`):
 
 - Generation → no runtime imports (one-way dependency)
 - Runtime → generation barrel-only imports (no deep imports)
+- Both roles → no `@workspace/*` alias imports
 - Runtime `public/bulk` is removed (consumers import generation directly)
 - Always run `pnpm type-gen` from repo root, not individual workspaces
-
-**Phase 0 execution**: prerequisites are confirmed but Phase 0
-must still be executed to commit the
-`sdk-workspace-separation-baseline.json` evidence file (AC1)
-before proceeding to Phase 1.
 
 **Post-merge work** (Milestone 0 → Milestone 1): MCP tool snagging
 (complete), widget stabilisation (complete), schema alignment
