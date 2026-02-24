@@ -138,13 +138,6 @@ Architecture` section). Dev gotchas not covered there:
   instance consumed by a prior test) passes or fails based
   on execution order. That is not a test — it is a
   coincidence. Each test must own its own state.
-- MCP `StreamableHTTPServerTransport` in stateless mode
-  (`sessionIdGenerator: undefined`) serves one request per
-  instance — the SDK enforces this via `_hasHandledRequest`.
-  Per ADR-112, the app uses a per-request factory pattern:
-  each request gets a fresh `McpServer` + transport. Heavy
-  deps (ES client, config, logger) are shared. E2E tests
-  can share a single app instance for multi-step flows.
 - Replace Express `_router` access in tests with HTTP
   assertions via supertest — more resilient, tests actual
   behaviour
@@ -224,6 +217,11 @@ Architecture` section). Dev gotchas not covered there:
 - ADR Consequences sections should use past tense for
   completed actions — stale future tense creates a false
   impression of outstanding work
+- Permanently useful information does NOT belong in plans
+  or archived plans — it belongs in ADRs. Plans are
+  execution documents (what to do, in what order); they
+  reference ADRs for architectural context. Extract
+  permanent knowledge to ADRs before archiving a plan.
 
 ## Architecture
 
@@ -236,10 +234,6 @@ Architecture` section). Dev gotchas not covered there:
   tests encoded the same wrong assumptions (e.g. `keyStageSlugs`
   instead of API's `keyStages`). Anchor test fixtures to the
   schema or captured API responses, not to code assumptions.
-- **ES completion index has mandatory contexts**: `suggest()`
-  must validate that at least one of subject/keyStage is
-  provided. Bare suggest without context is an ES index
-  constraint, not a code workaround.
 - **SDK packages consumed as built dist**: `tsx` transpiles app
   source on the fly but imports SDK packages from `dist/`.
   Always `pnpm build` after SDK changes before smoke-testing

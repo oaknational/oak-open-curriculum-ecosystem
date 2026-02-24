@@ -478,3 +478,9 @@ Added to roadmap.
   ongoing work, extraction premature until completion
 - One reported broken link in mutation-testing plan was a false
   positive (relative path resolves correctly)
+
+### Information Placement Discipline (23 Feb 2026)
+
+Extracted to distilled.md ("Documentation and Markdown" section).
+Applied: moved consumer model and boundary invariants from
+sdk-workspace-separation plan to ADR-108.

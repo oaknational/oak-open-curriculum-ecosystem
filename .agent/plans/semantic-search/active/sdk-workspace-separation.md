@@ -88,46 +88,20 @@ This explicitly includes:
 - all of `src/bulk/` (readers, extractors, generators, processing, types)
 - `property-graph-data.ts` (authored domain ontology, belongs with graph data)
 
-**Two pipelines, one generation workspace**: the generation workspace contains
-two separate pipelines with different inputs, change triggers, and consumers:
+The architectural rationale — two pipelines (API and bulk) in one generation
+workspace, the consumer model, and boundary invariants — is documented in
+[ADR-108 § Two Data Pipelines, Consumer Model, Boundary Invariants](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md).
 
-- **API pipeline**: OpenAPI spec → API types, Zod schemas, MCP tool descriptors.
-  Changes when the API schema changes. Consumed by the curriculum SDK runtime
-  and MCP server apps.
-- **Bulk pipeline**: bulk download JSON files → bulk types, extractors,
-  knowledge graphs, ES mappings, vocabulary. Changes when curriculum content
-  changes. Consumed by the search SDK and search CLI.
-
-The search SDK never calls the Oak API — it is purely an Elasticsearch client.
-Its data pipeline runs entirely through bulk data. The curriculum SDK runtime
-handles API access (client, auth, MCP tool execution). At the package level
-the search SDK still depends on the curriculum SDK runtime for shared exports
-(e.g. `buildElasticsearchSynonyms`), but the data sources are separate. The
-two SDKs are connected at the MCP application layer, where aggregated tools
-orchestrate both. The bulk pipeline also has a small dependency on API pipeline
-constants (`SUBJECTS`, `KEY_STAGES`).
-
-Both pipelines produce compile-time artefacts during `pnpm type-gen`. They are
-partitioned internally within the generation workspace (different directories,
-different barrel exports) but do not need separate packages.
-
-**Generation as shared foundation**: the generation package becomes the
-foundation for type information. The runtime SDK depends on generation for
-types and generated artefacts. Apps that need type infrastructure (e.g. search
-CLI for bulk types) can depend on generation directly. The runtime SDK is for
-accessing data (API client, middleware); generation is for information *about*
-data.
-
-No runtime facade for bulk — consumers that need bulk type information import
-directly from `@oaknational/curriculum-sdk-generation`. The runtime
-`public/bulk` re-export surface is removed. The search SDK remains on the
-runtime SDK for Step 1; migration to direct generation imports for type-only
-surfaces is a future refinement.
+The runtime `public/bulk` re-export surface is removed as part of this work.
+The search SDK remains on the runtime SDK for Step 1; migration to direct
+generation imports for type-only surfaces is a future refinement.
 
 ### D2. One-way dependency remains strict
 
 `@oaknational/curriculum-sdk` may depend on
 `@oaknational/curriculum-sdk-generation`; generation may not depend on runtime.
+See [ADR-108 § Boundary Invariants](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+for the full set of enforced boundary rules.
 
 ### D3. Aggregated tools remain runtime composition in Step 1
 
@@ -198,8 +172,8 @@ mapped to execution phases and acceptance criteria.
 | Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/curriculum-sdk-generation` | Phase 4 | AC11 |
 | `public/bulk` runtime surface is removed | No thin facade — consumers import directly from generation for type infrastructure | Phase 4 | AC11 |
 | `property-graph-data.ts` is authored domain ontology | Moves to generation alongside generated graph data despite being authored, not generated | Phase 3 | AC3 |
-| Generation workspace hosts two distinct pipelines | API pipeline (OpenAPI to types/Zod/MCP) and bulk pipeline (JSON files to bulk types/extractors/ES mappings/vocab); both run during `pnpm type-gen`, partitioned by directory | All phases | AC2, AC3, AC11 |
-| Search SDK serves bulk data, not API data | Search SDK never calls the Oak API; it is an ES client consuming bulk-derived data. Curriculum SDK runtime serves API access. Search SDK retains runtime SDK dependency for shared exports in Step 1; data sources are separate | Architecture context | -- |
+| Generation workspace hosts two distinct pipelines | See [ADR-108 § Two Data Pipelines](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | All phases | AC2, AC3, AC11 |
+| Search SDK serves bulk data, not API data | See [ADR-108 § Consumer Model](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). Search SDK retains runtime SDK dependency for shared exports in Step 1 | Architecture context | -- |
 
 ### Reverse-dependency inventory (generation -> runtime imports)
 
@@ -713,17 +687,9 @@ rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 
 ## Execution Invariants
 
-**Always run from repo root**: `pnpm type-gen`, `pnpm build`, and all quality
-gates must be run from the repo root, not from individual workspaces. After the
-split, the runtime workspace will not have a `type-gen` script. Turbo
-orchestrates cross-workspace dependencies from the root.
-
-**New file placement rule**: if a new generated file is produced from the
-OpenAPI spec, it belongs in the API pipeline (`type-gen/`, `src/types/generated/`).
-If produced from bulk download JSON data, it belongs in the bulk pipeline
-(`vocab-gen/`, `src/bulk/`, `src/generated/vocab/`). If it is runtime
-composition (wrapping generated data for MCP tool responses), it stays in the
-runtime workspace.
+See [ADR-108 § Boundary Invariants](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+for the permanent rules (run from root, file placement, one-way dependency,
+barrel-only imports).
 
 ## 11. Risks and Mitigations
 
@@ -751,17 +717,10 @@ All five pre-Phase-1 decisions have been resolved. Full analysis and rationale
 Summary:
 
 - **D1 `public/bulk` ownership**: all of `src/bulk/` moves to generation.
-  Generation becomes shared foundation for type information. No thin facade;
-  consumers import directly from generation. Search CLI (22 files) rewired.
-  Caching strategy deferred to vocabulary convergence pipeline (D2).
-  The generation workspace hosts two distinct pipelines: API pipeline
-  (OpenAPI spec → types, Zod, MCP descriptors) and bulk pipeline (JSON files →
-  bulk types, extractors, ES mappings, vocabulary). The search SDK serves
-  bulk-derived data exclusively; the curriculum SDK runtime serves API access.
-  At the package level, the search SDK retains a runtime SDK dependency for
-  shared exports in Step 1; the data sources themselves are separate. The
-  bulk pipeline has a small dependency on API pipeline constants (`SUBJECTS`,
-  `KEY_STAGES`).
+  No thin facade; consumers import directly from generation. Search CLI
+  (22 files) rewired. Caching strategy deferred to vocabulary convergence
+  pipeline (D2). See [ADR-108 § Two Data Pipelines, Consumer Model](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+  for the full architectural rationale.
 - **D2 Vocabulary convergence**: proceed with the split as planned. Converged
   mining pipeline is post-split work. Generation public API uses barrel exports.
 - **D3 Phase 3 move list**: `property-graph-data.ts` moves to generation

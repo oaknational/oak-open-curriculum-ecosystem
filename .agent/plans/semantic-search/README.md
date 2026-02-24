@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-02-24
 
 ---
 
@@ -16,7 +16,7 @@ MCP search integration (Phase 3a) is complete — three tools
 wired, old REST search replaced. One merge blocker remains:
 
 1. **SDK workspace separation** (3e) — split curriculum-sdk into
-   type-gen and runtime workspaces
+   generation and runtime workspaces
 
 Search results quality is **COMPLETE** — documented in
 [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md).

@@ -260,6 +260,33 @@ the curriculum SDK runtime consumes its API pipeline
 output; the search SDK and search CLI consume its bulk
 pipeline output.
 
+### Consumer Model
+
+Generation (WS2) is the shared foundation for type
+infrastructure. All consumers depend on the generation
+workspace for types, schemas, type guards, extractors, and
+generated artefacts:
+
+- The runtime SDK (WS4) imports API pipeline output from
+  generation. It adds runtime concerns: HTTP client, auth,
+  middleware, MCP tool execution.
+- The search SDK imports bulk pipeline output from
+  generation. It adds search-specific runtime: ES queries,
+  index management, RRF scoring.
+- The search CLI imports bulk pipeline output from
+  generation directly.
+
+There is no thin runtime facade that re-exports generation
+artefacts. The runtime SDK's public API covers only runtime
+concerns — not type re-exports. Consumers needing type
+infrastructure (types, schemas, readers, extractors) import
+from the generation package directly.
+
+The distinction: the runtime SDK is for _accessing data_
+(API client, middleware). Generation is for information
+_about_ data (types, schemas, extractors, generated
+artefacts).
+
 ## Why Four — Not More, Not Fewer
 
 ### Why not five or more?
@@ -379,6 +406,30 @@ openapi3-ts dependencies are removed.
 - Inter-workspace dependency management required
 - Plugin interface design is non-trivial
 - Migration effort is significant (phased to manage risk)
+
+### Boundary Invariants
+
+These rules are permanent consequences of the decomposition
+and are enforced by ESLint SDK boundary rules:
+
+1. **One-way dependency**: generation may not import from
+   runtime. The generation workspace has no knowledge of
+   runtime concerns.
+2. **Barrel-only imports**: runtime may import from
+   generation only through barrel exports (`src/index.ts`),
+   never via deep imports to internal paths.
+3. **Run from repo root**: `pnpm type-gen`, `pnpm build`,
+   and all quality gates must be run from the repo root.
+   After the split, the runtime workspace does not have a
+   `type-gen` script. Turbo orchestrates cross-workspace
+   dependencies from the root per ADR-065.
+4. **File placement**: new generated files from the OpenAPI
+   spec belong in the API pipeline (`type-gen/`,
+   `src/types/generated/`). Files from bulk download JSON
+   data belong in the bulk pipeline (`vocab-gen/`,
+   `src/bulk/`, `src/generated/vocab/`). Runtime
+   composition (wrapping generated data for MCP tool
+   responses) stays in the runtime workspace.
 
 ## References
 

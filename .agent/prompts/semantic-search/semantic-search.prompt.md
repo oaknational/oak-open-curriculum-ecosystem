@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-02-24
 
 ---
 
@@ -31,15 +31,7 @@ Archived plan:
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
 
-**Widget stabilisation status**: **COMPLETE** (all phases 0-5).
-Three renderers (search, browse, explore) handle all tool output
-shapes with integration contract tests, Zod schema validation,
-and Playwright E2E coverage. XSS prevention hardened (single-quote
-escaping, `rel="noopener noreferrer"`, `data-oak-url` delegated
-click handlers). Phase 5 resilience hardening addressed all
-critical and important findings: error containment, JSON.stringify
-for JS generation, fail-fast scope validation, four-way sync
-enforcement.
+**Widget stabilisation**: **COMPLETE** (all phases 0-5).
 See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md).
 
 **Plans** (in priority order):
@@ -71,7 +63,7 @@ Run this checklist at the start of the next session:
    ```
 
 3. Read split-critical ADRs:
-   - [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture, 4-workspace vision
+   - [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture, consumer model, boundary invariants, 4-workspace vision
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 4. Treat these as active execution plans:
@@ -85,35 +77,6 @@ Run this checklist at the start of the next session:
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
 6. Keep post-merge MCP extension work separate:
    - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
-
----
-
-## Search Quality: Complete
-
-All search quality work is validated and documented in
-[ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md).
-Archived plan:
-[search-results-quality.md](../../plans/semantic-search/archive/completed/search-results-quality.md).
-
-**What was done:**
-
-1. **Fuzziness**: Lessons and units aligned to `AUTO:6,9`.
-   Threads/sequences retain `AUTO` (justified by small indices).
-2. **Score filtering**: `DEFAULT_MIN_SCORE = 0.02` applied to
-   lessons and units. Not applied to threads/sequences (2-way
-   RRF max score too low).
-3. **`total` semantics**: Unified as `results.length` across
-   all four scopes. TSDoc on `SearchResultMeta.total` documents
-   the contract.
-4. **Module extractions**: `search-sequences.ts`,
-   `rrf-score-processing.ts`, `unit-doc-mapper.ts` — all
-   documentation preserved.
-5. **Architecture review**: All four reviewers (Barney, Betty,
-   Fred, Wilma) invoked. Feedback applied.
-6. **Benchmarks**: Validated against live ES. Per-subject MRR
-   stable (29/30 at 1.000). Cross-subject apple R@10 = 1.000.
-
-**Non-blocking remaining**: minor test cleanup, E2E/smoke tests.
 
 ---
 
@@ -158,28 +121,10 @@ must still be executed to commit the
 `sdk-workspace-separation-baseline.json` evidence file (AC1)
 before proceeding to Phase 1.
 
-**Post-merge, pre-alpha** (Milestone 0 → Milestone 1):
-
-**MCP Tool Snagging** — **IMPLEMENTED AND SMOKE-TESTED**
-(2026-02-22 fixes, 2026-02-23 end-to-end verification). All 5
-SDK bugs fixed with full TDD across three execution tracks (A:
-response augmentation, B: suggest search, C: schema validation).
-All 32 tools verified against running HTTP MCP server. Additionally:
-logger architectural bug fixed (DI + OTEL attributes), Snag 1
-received input validation guard (subject/keyStage required for
-suggest scope). See the
-[full plan](../../plans/semantic-search/archive/completed/search-snagging.md)
-for root cause analysis and implementation notes.
-
-**Architectural insight from snagging analysis**: all five bugs
-stemmed from the same root cause — the response augmentation
-system was built outside the schema-first discipline. Medium-term
-correction (Phase 4): schema-driven path mapping and context
-extraction at `pnpm type-gen` time. See the
-[roadmap](../../plans/semantic-search/roadmap.md) for the Phase 4
-schema alignment item.
-
-Widget stabilisation is **complete** (all phases 0-5).
+**Post-merge work** (Milestone 0 → Milestone 1): MCP tool snagging
+(complete), widget stabilisation (complete), schema alignment
+(roadmap Phase 4). See [Completed Work](#completed-work-reference-only)
+and [roadmap](../../plans/semantic-search/roadmap.md).
 
 ---
 
@@ -218,20 +163,6 @@ not done until the violation is corrected.
 - **All reviewer issues are blocking.** There is no such thing as
   a "non-blocking critical issue". If a reviewer flags it as
   critical, it gets fixed before the work is considered done.
-
----
-
-## Search Quality (Resolved)
-
-Single-word cross-subject queries were fixed. See
-[ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md)
-for the full decision record and
-[search-results-quality.md](../../plans/semantic-search/archive/completed/search-results-quality.md)
-for the archived investigation.
-
-**Ground truths**: 33 lesson queries (30 per-subject + 3
-cross-subject), 2 unit, 8 thread, 1 sequence. All in
-`apps/oak-search-cli/src/lib/search-quality/ground-truth/`.
 
 ---
 
@@ -421,6 +352,10 @@ score normalisation.
 
 \* Single-query index — mechanism check only.
 
+**Ground truths**: 33 lesson queries (30 per-subject + 3
+cross-subject), 2 unit, 8 thread, 1 sequence. All in
+`apps/oak-search-cli/src/lib/search-quality/ground-truth/`.
+
 **Protocol**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
 ---
@@ -477,12 +412,11 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Document | Why |
 |----------|-----|
 | [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied, pre-Phase-1 decisions resolved) |
-| [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | SDK workspace decomposition (4-workspace vision, two-pipeline architecture, phased execution) |
+| [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | SDK workspace decomposition (4-workspace vision, two-pipeline architecture, consumer model, boundary invariants) |
+| [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) | Turbo task dependencies and caching (split-critical for task graph rewiring) |
+| [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Vocab pipeline ownership and generated graph artefact patterns |
 | [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md) | Per-scope search tuning decisions (fuzziness, score filtering, total semantics) |
-| [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) | **Post-merge, pre-alpha** — 5 SDK tool bugs with TDD test specs |
-| [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) | **COMPLETE** — reference only |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence (Milestone 0/1/2) — start here for "what's next" |
-| [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | Post-merge extensions backlog only (not pre-merge execution) |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 | [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
 
