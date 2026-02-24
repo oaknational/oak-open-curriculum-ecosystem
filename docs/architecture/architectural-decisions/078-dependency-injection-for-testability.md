@@ -175,4 +175,4 @@ const app = createApp({ runtimeConfig });
 
 **Target**: Remove workarounds after product code refactoring is complete
 
-See `.agent/plans/architecture/config-architecture-standardisation-plan.md` for the remaining config DI standardisation work.
+See `.agent/plans/architecture-and-infrastructure/config-architecture-standardisation-plan.md` for the remaining config DI standardisation work.

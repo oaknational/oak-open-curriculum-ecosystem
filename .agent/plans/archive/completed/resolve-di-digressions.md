@@ -1320,7 +1320,7 @@ const config = createTestConfig({ apiKey: 'custom-key' });
 
 ## See Also
 
-- [ADR 054: Dependency Injection for Configuration](../architecture/architectural-decisions/0001-dependency-injection-for-configuration.md)
+- [ADR 078: Dependency Injection for Testability](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
 - [Testing Strategy](../../directives/testing-strategy.md)
 - [Rules: No Global State](.agent/directives/rules.md)
 

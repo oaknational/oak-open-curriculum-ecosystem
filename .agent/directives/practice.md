@@ -94,6 +94,7 @@ graph LR
   2. **Collection roadmaps** — e.g. `semantic-search/roadmap.md` milestone sequence
   3. **Active execution plans** — e.g. `semantic-search/active/sdk-workspace-separation.md` with YAML frontmatter, phased execution, and deterministic validation. Active plans live in `active/`, completed plans move to `archive/completed/`
   4. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement the lowest-level active plans with session-scoped implementation tasks, batch breakdowns, and review checkpoints. These are created per-session and track fine-grained progress that is too ephemeral for the active plan itself
+  5. **Documentation propagation** — before phase closure, propagate settled outcomes from plans into permanent docs: ADR-119, `.agent/directives/practice.md`, `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`, and any additionally impacted ADRs/docs/READMEs. Apply `.cursor/commands/jc-consolidate-docs.md`
 - **Templates** (`.agent/plans/templates/`) — reusable plan components ([ADR-117](../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md))
 - **Quality gates** — see [rules.md](rules.md) and `pnpm qg`. All gates are always blocking.
 

@@ -18,7 +18,7 @@
 | Phase 2A                    | ✅ COMPLETE  | `vi.stubGlobal` eliminated                                                                                  |
 | Phase 2B                    | ✅ COMPLETE  | `vi.doMock` eliminated                                                                                      |
 | **Phase 2C**                | 🔄 90% DONE  | `window.matchMedia` DI refactoring (completing quality gates)                                               |
-| Phase 3                     | 🔗 DELEGATED | See [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md) |
+| Phase 3                     | 🔗 DELEGATED | See [Config Architecture Standardisation Plan](../../architecture-and-infrastructure/config-architecture-standardisation-plan.md) |
 | Phase 1B                    | ⏳ BLOCKED   | Requires Phase 3                                                                                            |
 | Phase 4A-7                  | ⏳ PENDING   | Requires Phase 3                                                                                            |
 | **NEW: Testing Discipline** | ⏳ PENDING   | Quick wins available                                                                                        |
@@ -587,7 +587,7 @@ Item #4 in the [high-level plan](../high-level-plan.md)).
 These issues no longer exist.
 
 Remaining config standardisation work for other apps is
-tracked in the [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md).
+tracked in the [Config Architecture Standardisation Plan](../../architecture-and-infrastructure/config-architecture-standardisation-plan.md).
 
 ---
 
@@ -706,7 +706,7 @@ Negative assertions:                 ~385 instances (mixed)
 
 ### Related Plans
 
-- **Delegates to**: [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md)
+- **Delegates to**: [Config Architecture Standardisation Plan](../../architecture-and-infrastructure/config-architecture-standardisation-plan.md)
 - **References**: [vi-mock-audit-report.md](../../research/vi-mock-audit-report.md)
 - Supersedes: `global-state-test-refactoring.md` → moved to `archive/`
 - Supersedes: `di-architecture-consistency.md` → moved to `archive/`

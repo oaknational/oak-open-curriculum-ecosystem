@@ -6,7 +6,7 @@
  * and generated tools (from OpenAPI spec).
  */
 
-import { isToolName } from '../../types/generated/api-schema/mcp-tools/index.js';
+import { isToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import { AGGREGATED_TOOL_DEFS } from './definitions.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 

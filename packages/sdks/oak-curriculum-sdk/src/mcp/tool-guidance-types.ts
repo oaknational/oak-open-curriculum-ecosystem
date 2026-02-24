@@ -10,7 +10,7 @@
  * - AllToolName: Union of both
  */
 
-import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import type { AggregatedToolName } from './universal-tools/types.js';
 
 export type { AggregatedToolName } from './universal-tools/types.js';

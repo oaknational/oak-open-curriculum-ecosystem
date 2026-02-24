@@ -1,5 +1,74 @@
 # Napkin
 
+## Session: 2026-02-24 (b) — SDK Workspace Separation Phase 2
+
+### What Was Done
+
+Executed Phase 2 of the SDK workspace separation plan (ADR-108 Step 1).
+Moved `type-gen/` (192 files), `schema-cache/` (2 files), and
+`src/types/generated/` (106 files) from runtime SDK to generation
+workspace. Created 10 subpath barrel files. Rewired ~70 runtime SDK
+imports. Passed full quality gate chain.
+
+### Key Decisions
+
+- **Subpath exports one level deep**: e.g. `/api-schema`, `/mcp-tools`,
+  `/search`, not `/api-schema/path-parameters`.
+- **ESLint boundary pattern**: `@oaknational/curriculum-sdk-generation/*/**`
+  blocks two-or-more levels, allows single-level subpath exports.
+- **Named exports only**: `export * from` violates `no-restricted-syntax`
+  rule; all barrels use explicit named exports.
+- **`OakApiPathBasedClient` is generated**: Added to `typegen-core.ts`
+  `createFileMap` so it survives `generate:clean`.
+
+### Patterns Learned
+
+- **When moving files between workspaces, ESLint rule overrides must move
+  too**. The runtime SDK had `type-gen/**` and `src/types/generated/**`
+  overrides that needed copying to the generation workspace. 270 lint
+  errors appeared until this was done.
+- **`vi.mock` paths must be updated when imports are rewired**. The
+  `universal-tools.unit.test.ts` mock path was stale and inert after
+  rewiring. Fixing it required a partial mock (`importOriginal`) to avoid
+  breaking unrelated imports like `SCOPES_SUPPORTED`.
+- **`*.config.ts` glob does not match `*.config.e2e.ts`**. The additional
+  glob `*.config.e2e.ts` must be explicitly added to tsconfig includes.
+- **Root barrel files with full re-exports easily exceed `max-lines`**.
+  Keep the root barrel as a curated subset; consumers should use subpath
+  imports.
+- **`export * from` is banned by `no-restricted-syntax`**. Always use
+  named exports in barrel files, even though it requires reading the
+  target module to list all exports.
+- **Stale vitest include globs are silent** because of
+  `passWithNoTests: true`. Remove dead globs promptly.
+- **Dead ESLint overrides for removed paths** add cognitive load and should
+  be cleaned up immediately when files are moved.
+
+### Mistakes Made
+
+- Initially forgot to copy the ESLint rule overrides for `type-gen/` and
+  `src/types/generated/` from the runtime SDK to the generation workspace,
+  causing 270 lint errors.
+- Updated `vi.mock` path without checking that the mock replaces ALL
+  module exports, breaking `SCOPES_SUPPORTED`. Fixed by using partial mock
+  with `importOriginal`.
+- Created `vitest.config.e2e.ts` but didn't add `*.config.e2e.ts` to the
+  tsconfig include, causing an ESLint parsing error.
+
+### Reviewer Findings Summary
+
+**Architecture reviewers**: All compliant. Fred found stale JSDoc import
+paths in generator templates. Barney suggested merging `query-parser`,
+`observability`, and `admin` subpaths into `search` (deferred). Betty
+recommended generating barrel files (deferred). Wilma flagged
+`generate:clean` atomicity risk and missing CI check for generated file
+drift (both deferred).
+
+**Specialist reviewers**: Code-reviewer approved with suggestions. Config
+reviewer found orphaned E2E tests (fixed), dead ESLint overrides (fixed),
+stale vitest globs (fixed). Test-reviewer found orphaned `vi.mock` (fixed).
+Type-reviewer confirmed safe — no type widening detected.
+
 ## Session: 2026-02-24 (a) — SDK Workspace Separation Phase 0+1
 
 ### What Was Done

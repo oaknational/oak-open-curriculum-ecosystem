@@ -1,5 +1,16 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "type-gen/**/*.ts",
+    "docs/**/*.ts",
+    "e2e-tests/**/*.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "*.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "test-cache"]
 }

@@ -8,7 +8,7 @@
 
  */
 
-import type { Unit } from '../../types/generated/bulk/index.js';
+import type { Unit } from '@oaknational/curriculum-sdk-generation/bulk';
 
 /**
  * Extracted unit description with context.

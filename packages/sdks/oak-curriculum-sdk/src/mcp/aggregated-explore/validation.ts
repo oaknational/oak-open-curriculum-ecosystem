@@ -10,7 +10,7 @@ import {
   isKeyStage,
   type Subject,
   isSubject,
-} from '../../types/generated/api-schema/path-parameters.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 import type { ExploreArgs } from './types.js';
 
 const ExploreObjectSchema = z

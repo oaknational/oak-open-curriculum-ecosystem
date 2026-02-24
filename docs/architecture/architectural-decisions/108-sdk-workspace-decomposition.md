@@ -415,9 +415,18 @@ and are enforced by ESLint SDK boundary rules:
 1. **One-way dependency**: generation may not import from
    runtime. The generation workspace has no knowledge of
    runtime concerns.
-2. **Barrel-only imports**: runtime may import from
-   generation only through barrel exports (`src/index.ts`),
-   never via deep imports to internal paths.
+2. **Subpath exports only**: runtime may import from
+   generation only through declared subpath exports in
+   `package.json`, never via deep imports to internal paths.
+   Subpaths are one level deep only (e.g.
+   `@oaknational/curriculum-sdk-generation/api-schema`,
+   not `@oaknational/curriculum-sdk-generation/api-schema/errors`).
+   Each subpath is backed by a hand-authored barrel file in
+   `src/` that re-exports from generated files. The ESLint
+   SDK boundary rule `createSdkBoundaryRules('runtime')` uses
+   the pattern `@oaknational/curriculum-sdk-generation/*/**`
+   to block two-or-more-level imports while allowing single-level
+   subpath exports.
 3. **Run from repo root**: `pnpm type-gen`, `pnpm build`,
    and all quality gates must be run from the repo root.
    After the split, the runtime workspace does not have a

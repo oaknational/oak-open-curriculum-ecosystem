@@ -105,4 +105,4 @@ export function createOakBaseClient(config: OakClientConfig | string): BaseApiCl
 // Re-export types for convenience
 export type { OakApiClient, OakApiPathBasedClient, OakClientConfig } from './oak-base-client.js';
 export { BaseApiClient } from './oak-base-client.js';
-export type { paths } from '../types/generated/api-schema/api-paths-types';
+export type { paths } from '@oaknational/curriculum-sdk-generation/api-schema';

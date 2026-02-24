@@ -45,8 +45,19 @@ Based on requirements and analysis in:
 
 - [Architectural Enforcement Playbook](../../research/developer-experience/architectural-enforcement-playbook.md)
 - [Augmented Engineering Practices (industry evidence)](augmented-engineering-practices.research.md) (verification gaps, quality gates, mutation testing)
+- [Evidence Bundle Template](evidence-bundle.template.md) (for non-trivial enforcement claims and merge-readiness evidence)
 
-**Related plan**: [Cross-Agent Standardisation](cross-agent-standardisation.plan.md) (separated concern — portability and platform-agnostic alignment).
+**Related plans**:
+
+- [Cross-Agent Standardisation](cross-agent-standardisation.plan.md) (separated concern — portability and platform-agnostic alignment)
+- [Hallucination and Evidence Guard Adoption](hallucination-and-evidence-guard-adoption.plan.md) (claim integrity and evidence policy)
+
+### Execution Role
+
+This is a strategic source plan (intent, constraints, and phase design). The
+authoritative execution tasks for this stream live in:
+
+- [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
 
 ## 2. Phases
 
@@ -108,8 +119,16 @@ Based on requirements and analysis in:
 - **Goal:** Make the "First Question" mechanical for AI agents.
 - **Task:** Create `.agent/directives/architectural-enforcement.md` and update `AGENT.md` to reference it.
 - **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The `qg` script must be updated to include `depcruise` and `knip` as each phase lands.
+- **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](evidence-bundle.template.md).
 
-## 3. Success Metrics
+## 3. Documentation Propagation Requirement
+
+Apply the shared documentation-propagation contract:
+
+- [Documentation Propagation component](../templates/components/documentation-propagation.md)
+- [documentation-sync-log.md](documentation-sync-log.md) (collection tracking)
+
+## 4. Success Metrics
 
 - Zero circular dependencies (via `madge` and `depcruise`).
 - No source directory contains more than the configured threshold of files (excluding tests).

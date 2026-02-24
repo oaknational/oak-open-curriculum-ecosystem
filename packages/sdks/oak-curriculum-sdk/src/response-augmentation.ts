@@ -4,7 +4,7 @@
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
+import { generateCanonicalUrlWithContext } from '@oaknational/curriculum-sdk-generation/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import {
   UnifiedLogger,
@@ -19,7 +19,7 @@ import {
   extractContentTypeSpecificId,
   isNonNullObject,
 } from './response-augmentation-helpers.js';
-import { rawCurriculumSchemas } from './types/generated/zod/curriculumZodSchemas.js';
+import { rawCurriculumSchemas } from '@oaknational/curriculum-sdk-generation/zod';
 
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber('WARN'),

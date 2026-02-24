@@ -95,7 +95,7 @@ Vitest was exiting with code 0 despite test failures when configured with `isola
 
 ## TL;DR
 
-Tests fail because they mutate `window.matchMedia` globally. This is a **product code architecture issue**, not a test cleanup issue. Fix requires refactoring product code to use dependency injection. See [matchMedia DI Refactoring Plan](../../architecture/matchmedia-di-refactoring-plan.md).
+Tests fail because they mutate `window.matchMedia` globally. This is a **product code architecture issue**, not a test cleanup issue. Fix requires refactoring product code to use dependency injection. See [matchMedia DI Refactoring Plan](matchmedia-di-refactoring-plan.md).
 
 ---
 
@@ -178,7 +178,7 @@ The test failures are a **feature, not a bug** - they're revealing that our test
 
 Product code must be refactored to accept `matchMedia` as an injected dependency. This is **not a test issue** - it's an **architecture issue**.
 
-**See**: [matchMedia DI Refactoring Plan](../../architecture/matchmedia-di-refactoring-plan.md)
+**See**: [matchMedia DI Refactoring Plan](matchmedia-di-refactoring-plan.md)
 
 The refactoring plan includes:
 1. Create `MediaQueryContext` provider
@@ -455,7 +455,7 @@ Key principles:
 
 ## Related Documents
 
-- **Prerequisite**: [matchMedia DI Refactoring Plan](../../architecture/matchmedia-di-refactoring-plan.md)
+- **Prerequisite**: [matchMedia DI Refactoring Plan](matchmedia-di-refactoring-plan.md)
 - **Part of**: [Global State Elimination and Testing Discipline Plan](../../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md)
 - **Testing Strategy**: `.agent/directives/testing-strategy.md` (line 25, 37)
 

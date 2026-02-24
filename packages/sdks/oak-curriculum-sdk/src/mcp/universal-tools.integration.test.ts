@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { listUniversalTools } from './universal-tools/index.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations.

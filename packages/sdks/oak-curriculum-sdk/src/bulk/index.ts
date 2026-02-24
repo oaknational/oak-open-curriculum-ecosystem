@@ -59,7 +59,7 @@ export {
   bulkDownloadFileSchema,
   // Schema delta documentation
   BULK_SCHEMA_DELTA,
-} from '../types/generated/bulk/index.js';
+} from '@oaknational/curriculum-sdk-generation/bulk';
 
 // ============================================================================
 // Schema Types
@@ -84,7 +84,7 @@ export type {
   BulkDownloadFile,
   // NULL sentinel type
   NullSentinel,
-} from '../types/generated/bulk/index.js';
+} from '@oaknational/curriculum-sdk-generation/bulk';
 
 // ============================================================================
 // Reader utilities

@@ -19,36 +19,27 @@ export {
   misconceptionSchema,
   nullSentinelSchema,
   teacherTipSchema,
-} from '../../src/types/generated/bulk/index.js';
+  contentGuidanceItemSchema,
+  contentGuidanceSchema,
+  unitLessonSchema,
+  unitSchema,
+  unitThreadSchema,
+  lessonSchema,
+  bulkDownloadFileSchema,
+} from '@oaknational/curriculum-sdk-generation/bulk';
 export type {
   KeyLearningPoint,
   LessonKeyword,
   Misconception,
   TeacherTip,
-} from '../../src/types/generated/bulk/index.js';
-
-// Content guidance schema
-export {
-  contentGuidanceItemSchema,
-  contentGuidanceSchema,
-} from '../../src/types/generated/bulk/index.js';
-export type { ContentGuidance, ContentGuidanceItem } from '../../src/types/generated/bulk/index.js';
-
-// Unit schemas (threads, lessons, units)
-export {
-  unitLessonSchema,
-  unitSchema,
-  unitThreadSchema,
-} from '../../src/types/generated/bulk/index.js';
-export type { Unit, UnitLesson, UnitThread } from '../../src/types/generated/bulk/index.js';
-
-// Lesson schema
-export { lessonSchema } from '../../src/types/generated/bulk/index.js';
-export type { Lesson } from '../../src/types/generated/bulk/index.js';
-
-// Bulk download file schema
-export { bulkDownloadFileSchema } from '../../src/types/generated/bulk/index.js';
-export type { BulkDownloadFile } from '../../src/types/generated/bulk/index.js';
+  ContentGuidance,
+  ContentGuidanceItem,
+  Unit,
+  UnitLesson,
+  UnitThread,
+  Lesson,
+  BulkDownloadFile,
+} from '@oaknational/curriculum-sdk-generation/bulk';
 
 // Bulk reader utilities
 export {

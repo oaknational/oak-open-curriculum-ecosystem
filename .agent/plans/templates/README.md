@@ -13,6 +13,11 @@ placeholders, and begin.
 |----------|----------|
 | [`quality-fix-plan-template.md`](quality-fix-plan-template.md) | Quality improvement, refactoring, technical debt |
 | [`feature-workstream-template.md`](feature-workstream-template.md) | New feature delivery with TDD phases (RED/GREEN/REFACTOR) |
+| [`adoption-rollout-plan-template.md`](adoption-rollout-plan-template.md) | Policy/process/tooling adoption across existing workflows |
+| [`collection-roadmap-template.md`](collection-roadmap-template.md) | Strategic roadmap for a plan collection with phase mapping |
+| [`collection-readme-template.md`](collection-readme-template.md) | Collection navigation hub with explicit document-role boundaries |
+| [`active-plan-index-template.md`](active-plan-index-template.md) | `active/README.md` index for atomic phase execution plans |
+| [`active-atomic-implementation-plan-template.md`](active-atomic-implementation-plan-template.md) | Atomic phase execution plan with preflight, deterministic validation, and evidence hooks |
 
 ## Components
 
@@ -27,6 +32,8 @@ sections.
 | [`foundation-alignment.md`](components/foundation-alignment.md) | Foundation document commitment checklist |
 | [`risk-assessment.md`](components/risk-assessment.md) | Risk/mitigation table structure |
 | [`adversarial-review.md`](components/adversarial-review.md) | Post-implementation specialist review phase |
+| [`evidence-and-claims.md`](components/evidence-and-claims.md) | Claim classification and evidence/verification requirements |
+| [`documentation-propagation.md`](components/documentation-propagation.md) | Required ADR/directive/reference-doc and README update propagation |
 
 ## Document Hierarchy
 

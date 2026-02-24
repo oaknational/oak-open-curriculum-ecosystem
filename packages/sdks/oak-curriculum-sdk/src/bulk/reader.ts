@@ -18,7 +18,10 @@
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
-import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
+import {
+  bulkDownloadFileSchema,
+  type BulkDownloadFile,
+} from '@oaknational/curriculum-sdk-generation/bulk';
 
 /**
  * Subject and phase extracted from a bulk download filename.

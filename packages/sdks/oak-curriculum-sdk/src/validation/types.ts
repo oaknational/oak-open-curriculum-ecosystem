@@ -12,7 +12,7 @@ import {
   curriculumSchemas,
   type CurriculumSchemaDefinition,
   type CurriculumSchemaName,
-} from '../types/generated/zod/curriculumZodSchemas.js';
+} from '@oaknational/curriculum-sdk-generation/zod';
 import {
   SearchLessonsResponseSchema,
   SearchMultiScopeResponseSchema,
@@ -20,8 +20,8 @@ import {
   SearchSuggestionResponseSchema,
   SearchUnitsResponseSchema,
   type SearchSuggestionResponse,
-} from '../types/generated/search/index.js';
-import { type SearchScopeWithAll } from '../types/generated/search/scopes.js';
+  type SearchScopeWithAll,
+} from '@oaknational/curriculum-sdk-generation/search';
 
 /**
  * Result type for validation operations

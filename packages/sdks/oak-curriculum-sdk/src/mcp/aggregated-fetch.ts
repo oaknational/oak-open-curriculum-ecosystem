@@ -12,10 +12,10 @@ import {
   generateCanonicalUrlWithContext,
   extractSlug,
   type ContentType,
-} from '../types/generated/api-schema/routing/url-helpers.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 import { extractContextFromResponse } from '../response-augmentation.js';
 import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**

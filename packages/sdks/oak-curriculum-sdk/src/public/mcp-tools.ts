@@ -39,12 +39,12 @@ export {
   type ToolResult,
   type ToolResultForOperationId,
   type RegisteredToolEntries,
-} from '../types/generated/api-schema/mcp-tools/index.js';
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 export {
   SCOPES_SUPPORTED,
   type ScopesSupported,
-} from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 export {
   createStubToolExecutionAdapter,
@@ -52,13 +52,13 @@ export {
   hasStubForTool,
   assertStubAvailable,
 } from '../mcp/stub-tool-executor.js';
-export type { StubbedToolName } from '../types/generated/api-schema/mcp-tools/generated/stubs/index.js';
+export type { StubbedToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 export type {
   SecurityScheme,
   SecuritySchemeType,
   NoAuthScheme,
   OAuth2Scheme,
-} from '../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';

@@ -103,15 +103,24 @@ finding resources, and adapting content without leaving their existing tools.
    - The decision depends on Domain A research maturity and ext-app
      standard stability. If the standard is not yet stable enough,
      Option Y is the lower-risk path.
+3. **Security and privacy baseline progression**
+   - Collection roadmap:
+     [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
+   - Immediate priority sequence:
+     - hallucination guarding for security-relevant claims
+     - evidence-based claim verification
+   - Lower-priority controls (sandboxing expansion and prompt-injection
+     automation) tracked as deferred notes until the first two controls
+     are operational.
 
 **Post-merge, pre-alpha work** (not merge-blocking):
 
 - Result pattern unification:
   [mcp-result-pattern-unification.md](semantic-search/post-sdk/mcp-integration/mcp-result-pattern-unification.md)
 - STDIO/HTTP alignment:
-  [stdio-http-server-alignment.md](architecture/stdio-http-server-alignment.md)
+  [stdio-http-server-alignment.md](architecture-and-infrastructure/stdio-http-server-alignment.md)
 - no-console ESLint enforcement (~110 files, largely mechanical):
-  [no-console-enforcement.plan.md](architecture/no-console-enforcement.plan.md)
+  [no-console-enforcement.plan.md](architecture-and-infrastructure/no-console-enforcement.plan.md)
 
 ---
 
@@ -144,8 +153,20 @@ connect to curriculum data, and the ones that do are more reliable.
    - Covers: skill frontmatter, command portability, YAGNI cleanup,
      workspace context
    - Implements: [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-4. **Social providers Phase 2**: Apple, LinkedIn, GitLab
-5. **Search quality stream progression** via semantic-search roadmap
+4. **Hallucination and evidence guard adoption**
+   - Full plan:
+     [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md)
+   - Covers: hallucination guard policy, claim-to-evidence verification,
+     and merge-readiness evidence standards
+   - Primary artefact: [evidence-bundle.template.md](agentic-engineering-enhancements/evidence-bundle.template.md)
+5. **Security and privacy hardening progression**
+   - Collection roadmap:
+     [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
+   - Covers: protocol strictness baseline, auth/token handling baseline,
+     and tool-governance baseline, after hallucination/evidence
+     safeguards are established
+6. **Social providers Phase 2**: Apple, LinkedIn, GitLab
+7. **Search quality stream progression** via semantic-search roadmap
    (Phase 4)
 
 **Supporting plans**:
@@ -174,7 +195,7 @@ pedagogical standards, and supply chain controls secure the published packages.
      coverage
 2. **Observability and quality metrics**
    - Full plan:
-     [observability-and-quality-metrics.plan.md](architecture/observability-and-quality-metrics.plan.md)
+     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
    - Covers: structured logging, monitoring, alerting, quality metrics
      dashboards (duplication rate, complexity trends, change failure
      rate)
@@ -205,9 +226,10 @@ Strategic architecture remains anchored in:
 | Collection | Strategic Role | Current Status | Primary Entry |
 |------------|----------------|----------------|---------------|
 | `semantic-search/` | Merge-prep execution and search roadmap (search quality + SDK separation) | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
-| `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
+| `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md), [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
+| `security-and-privacy/` | Security hardening progression with priority on hallucination guards and evidence-backed claims | 📋 Milestone 1-2 | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
 | `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
-| `architecture/` | Cross-cutting architecture, system quality, and observability | 📋 Milestone 1 / 3 | [architecture/README.md](architecture/README.md) |
+| `architecture-and-infrastructure/` | Cross-cutting architecture, system quality, and observability | 📋 Milestone 1 / 3 | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 Planned | [tsdoc-generated-docs-overhaul.plan.md](developer-experience/tsdoc-generated-docs-overhaul.plan.md), [sdk-publishing-and-versioning-plan.md](developer-experience/sdk-publishing-and-versioning-plan.md) |
 | `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |

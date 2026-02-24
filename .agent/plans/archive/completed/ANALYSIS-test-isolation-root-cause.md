@@ -151,7 +151,7 @@ This isn't a guideline - it's a hard requirement. When tests violate it, the fix
 
 ## Related Documents
 
-- **DI Plan**: [matchmedia-di-refactoring-plan.md](../architecture/matchmedia-di-refactoring-plan.md)
+- **DI Plan**: [matchmedia-di-refactoring-plan.md](matchmedia-di-refactoring-plan.md)
 - **Test Fix Plan**: [test-isolation-architecture-fix.md](test-isolation-architecture-fix.md)
 - **Global State Plan**: [global-state-elimination-and-testing-discipline-plan.md](../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md)
 - **Testing Strategy**: `.agent/directives/testing-strategy.md`
@@ -169,5 +169,4 @@ This analysis demonstrates the value of:
 5. **First Question** - Simplicity comes from proper design, not clever workarounds
 
 The test failures were a **gift** - they revealed a fundamental architecture problem that process isolation was hiding.
-
 

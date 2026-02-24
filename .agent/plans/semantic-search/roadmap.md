@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 Milestone 0 — merge preparation in progress
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-02-24
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -158,6 +158,13 @@ Goal:
 - Split generation-time and runtime ownership into separate SDK workspaces,
   with strict one-way dependency (runtime -> generation).
 
+Progress (24 Feb 2026):
+
+- Phases 0, 1, 2 complete. Generation workspace exists with type-gen pipeline,
+  generated types, 10 subpath exports, and boundary rules. ~70 runtime files
+  rewired. 8 specialist reviews completed, all blocking findings resolved.
+- Phases 3–7 remain (vocab-gen/bulk moves, search CLI rewire, docs, CI hardening).
+
 ### 3h Widget Stabilisation (Complete)
 
 - Plan: [widget-search-rendering.md](archive/completed/widget-search-rendering.md)
@@ -211,7 +218,7 @@ Research and planning for public alpha:
 
 ### no-console ESLint Enforcement
 
-- Plan: [no-console-enforcement.plan.md](../architecture/no-console-enforcement.plan.md)
+- Plan: [no-console-enforcement.plan.md](../architecture-and-infrastructure/no-console-enforcement.plan.md)
 - Add `no-console: 'error'` to shared ESLint config, eliminate all
   `console.*` usage (~110 files, largely mechanical)
 - Origin: logger architectural bug found during snagging session
@@ -222,7 +229,7 @@ Research and planning for public alpha:
 
 ### 3c STDIO-HTTP Alignment
 
-- Plan: [stdio-http-server-alignment.md](../architecture/stdio-http-server-alignment.md)
+- Plan: [stdio-http-server-alignment.md](../architecture-and-infrastructure/stdio-http-server-alignment.md)
 
 ---
 

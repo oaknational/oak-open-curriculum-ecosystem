@@ -17,21 +17,77 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./api-schema": {
+      "types": "./dist/api-schema.d.ts",
+      "default": "./dist/api-schema.js"
+    },
+    "./mcp-tools": {
+      "types": "./dist/mcp-tools.d.ts",
+      "default": "./dist/mcp-tools.js"
+    },
+    "./search": {
+      "types": "./dist/search.d.ts",
+      "default": "./dist/search.js"
+    },
+    "./zod": {
+      "types": "./dist/zod.d.ts",
+      "default": "./dist/zod.js"
+    },
+    "./bulk": {
+      "types": "./dist/bulk.d.ts",
+      "default": "./dist/bulk.js"
+    },
+    "./query-parser": {
+      "types": "./dist/query-parser.d.ts",
+      "default": "./dist/query-parser.js"
+    },
+    "./observability": {
+      "types": "./dist/observability.d.ts",
+      "default": "./dist/observability.js"
+    },
+    "./admin": {
+      "types": "./dist/admin.d.ts",
+      "default": "./dist/admin.js"
+    },
+    "./widget-constants": {
+      "types": "./dist/widget-constants.d.ts",
+      "default": "./dist/widget-constants.js"
     }
   },
   "scripts": {
+    "type-gen": "pnpm generate:types",
+    "posttype-gen": "pnpm -w format:root",
+    "pregenerate:types": "pnpm generate:clean",
+    "generate:types": "pnpm generate:openapi && pnpm generate:zod && pnpm generate:bulk",
+    "generate:openapi": "tsx type-gen/typegen.ts",
+    "generate:zod": "tsx type-gen/zodgen.ts",
+    "generate:bulk": "tsx type-gen/bulkgen.ts",
+    "generate:clean": "rm -rf src/types/generated",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "clean": "rm -rf dist .turbo",
+    "clean": "rm -rf dist .turbo src/types/generated",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "test:e2e": "vitest run --config vitest.config.e2e.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@zod/core": "^0.11.6",
+    "openapi-fetch": "^0.15.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/openapi-zod-client-adapter": "workspace:*",
     "@types/node": "^24.10.13",
+    "dotenv": "^17.3.1",
+    "openapi-typescript": "^7.10.1",
+    "openapi3-ts": "^4.5.0",
     "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },

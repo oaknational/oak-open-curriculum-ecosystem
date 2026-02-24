@@ -5,7 +5,10 @@
  */
 
 import type { z } from 'zod';
-import { rawCurriculumSchemas, curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
+import {
+  rawCurriculumSchemas,
+  curriculumSchemas,
+} from '@oaknational/curriculum-sdk-generation/zod';
 
 /** Schema for lesson summaries derived from the OpenAPI specification. */
 export const lessonSummarySchema = rawCurriculumSchemas.LessonSummaryResponseSchema;

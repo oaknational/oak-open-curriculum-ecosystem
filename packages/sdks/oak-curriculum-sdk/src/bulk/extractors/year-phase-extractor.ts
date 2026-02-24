@@ -7,8 +7,8 @@
  * (primary/secondary).
  */
 
-import { isKeyStage, type KeyStage } from '../../types/generated/api-schema/path-parameters.js';
-import type { Unit } from '../../types/generated/bulk/index.js';
+import { isKeyStage, type KeyStage } from '@oaknational/curriculum-sdk-generation/api-schema';
+import type { Unit } from '@oaknational/curriculum-sdk-generation/bulk';
 
 /** Phase slug derived from year (primary, secondary, or unknown). */
 export type PhaseSlug = 'primary' | 'secondary' | 'unknown';

@@ -2,8 +2,8 @@
 name: Stryker Mutation Testing Integration
 overview: >
   Deliver mutation-testing capability across all pnpm workspaces via Stryker,
-  adding pnpm mutate as a quality gate to validate that tests actually protect
-  behaviour.
+  adding pnpm mutate as a phased supplementary signal (with later quality-gate
+  promotion) to validate that tests actually protect behaviour.
 todos:
   - id: re-baseline
     content: "Re-audit workspace layout, vitest configs, and dependency posture against current state."
@@ -28,11 +28,20 @@ todos:
 
 - [Testing Strategy](../../directives/testing-strategy.md)
 - [Augmented Engineering Practices (industry evidence)](augmented-engineering-practices.research.md) — mutation testing rationale (Parts 8.1, 8.2, Part G)
+- [Hallucination and Evidence Guard Adoption](hallucination-and-evidence-guard-adoption.plan.md)
+- [Evidence Bundle Template](evidence-bundle.template.md) — claim and evidence format for pilot and roll-out reporting
 - [StrykerJS documentation](https://stryker-mutator.io/docs/stryker-js/introduction/) — full docs available via `@StrykerJS` in Cursor
 
 ## Intent
 
-Deliver a dependable mutation-testing capability across all pnpm workspaces so that quality gates gain mutation coverage (via `pnpm mutate`) without disrupting existing Vitest unit and integration suites. Mutation testing validates that tests actually protect behaviour — if you introduce a bug and tests still pass, tests are not protecting you.
+Deliver a dependable mutation-testing capability across all pnpm workspaces so that mutation coverage (via `pnpm mutate`) is available as a supplementary signal in Phases 0-2, with a Phase 3 decision on promotion into `pnpm qg`. Mutation testing validates that tests actually protect behaviour — if you introduce a bug and tests still pass, tests are not protecting you.
+
+### Execution Role
+
+This is a strategic source plan (intent, milestones, and success criteria).
+The authoritative execution tasks for this stream live in:
+
+- [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
 
 ## Milestone Position
 
@@ -88,6 +97,7 @@ See [Appendix: Historical Pilot](#appendix-historical-pilot) for findings from t
 
 - Mutation testing operational in one library (`packages/libs/logger/`) and one app (`apps/oak-curriculum-mcp-stdio/`), validating Node pathways
 - Capture performance metrics, mutant survival hotspots, and remediation guidance
+- Record pilot claims and verification evidence using [Evidence Bundle Template](evidence-bundle.template.md)
 
 ### Phase 2 — Monorepo Roll-out
 
@@ -95,12 +105,20 @@ See [Appendix: Historical Pilot](#appendix-historical-pilot) for findings from t
 - Roll out workspace-level `mutate` scripts
 - Establish reporting to surface mutation results in CI
 - Build shared testing configuration workspace if justified by pilot findings
+- Use evidence bundles for mutation-score and runtime-overhead claims before merge-ready updates
 
 ### Phase 3 — Optimisation and Automation
 
 - Incremental mutant runs (touched-files mode) to reduce feedback loop time
 - Automated detection of missing `stryker.config.ts` in new workspaces
 - Contributor guidance and remediation patterns
+
+## Documentation Propagation Requirement
+
+Apply the shared documentation-propagation contract:
+
+- [Documentation Propagation component](../templates/components/documentation-propagation.md)
+- [documentation-sync-log.md](documentation-sync-log.md) (collection tracking)
 
 ## Success Metrics
 

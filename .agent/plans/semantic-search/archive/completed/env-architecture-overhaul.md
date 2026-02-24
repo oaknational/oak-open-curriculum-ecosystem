@@ -45,7 +45,7 @@ todos:
     content: "GREEN: Remove the old loadRootEnv API surface (keyStatus, missingKeys, EnvKeyStatus, LoadRootEnvResult, buildKeyStatus). loadRootEnv may become internal to resolveEnv or remain exported for backward compat with a simplified contract. Update all consumers."
     status: completed
   - id: green-stdio-alignment
-    content: "DEFERRED: STDIO server alignment tracked separately in .agent/plans/architecture/stdio-http-server-alignment.md — covers env pipeline plus full server DRY alignment (tool registration, resources, prompts, search retrieval)."
+    content: "DEFERRED: STDIO server alignment tracked separately in .agent/plans/architecture-and-infrastructure/stdio-http-server-alignment.md — covers env pipeline plus full server DRY alignment (tool registration, resources, prompts, search retrieval)."
     status: cancelled
   - id: green-test-cleanup
     content: "GREEN: Tests that set DANGEROUSLY_DISABLE_AUTH=true no longer need dummy Clerk keys. Remove them from test env objects across the HTTP server test suite. Verify all tests pass."

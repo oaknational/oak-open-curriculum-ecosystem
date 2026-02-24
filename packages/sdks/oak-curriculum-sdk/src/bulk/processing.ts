@@ -22,7 +22,7 @@ import {
   type ExtractedTeacherTip,
   type ExtractedThread,
 } from './extractors/index.js';
-import type { Lesson, Unit } from '../types/generated/bulk/index.js';
+import type { Lesson, Unit } from '@oaknational/curriculum-sdk-generation/bulk';
 
 /**
  * Input data for processing bulk download files.

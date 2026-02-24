@@ -6,7 +6,7 @@
  * what I'm looking for yet" tool.
  */
 
-import type { KeyStage, Subject } from '../../types/generated/api-schema/path-parameters.js';
+import type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 /**
  * Validated arguments for the explore-topic tool.

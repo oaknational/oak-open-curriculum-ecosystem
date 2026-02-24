@@ -11,14 +11,14 @@ import {
   isValidPath,
   isAllowedMethod,
   isValidResponseCode,
+  getResponseSchemaByOperationIdAndStatus,
   type ValidPath,
   type AllowedMethodsForPath,
   type JsonBody200,
   type OperationId,
-} from '../types/generated/api-schema/path-parameters.js';
-import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
-import type { CurriculumSchemaDefinition } from '../types/generated/zod/curriculumZodSchemas.js';
+import type { CurriculumSchemaDefinition } from '@oaknational/curriculum-sdk-generation/zod';
 
 /**
  * Parse and validate response data

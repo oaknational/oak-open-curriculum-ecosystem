@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { ok } from '@oaknational/result';
@@ -49,11 +49,23 @@ const { sampleMcpToolName, mcpTools } = vi.hoisted(() => {
   };
 });
 
-vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
-  toolNames: [sampleMcpToolName] as const,
-  getToolFromToolName: (name: string) => mcpTools[name],
-  isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
-}));
+vi.mock('@oaknational/curriculum-sdk-generation/mcp-tools', async () => {
+  const actual: unknown = await vi.importActual('@oaknational/curriculum-sdk-generation/mcp-tools');
+  if (typeof actual !== 'object' || actual === null || !('SCOPES_SUPPORTED' in actual)) {
+    throw new Error('Expected SCOPES_SUPPORTED export in mcp-tools module');
+  }
+  const scopes: unknown = actual.SCOPES_SUPPORTED;
+  if (!Array.isArray(scopes) || !scopes.every((s): s is string => typeof s === 'string')) {
+    throw new Error('Expected SCOPES_SUPPORTED to be a string array');
+  }
+
+  return {
+    toolNames: [sampleMcpToolName] as const,
+    getToolFromToolName: (name: string) => mcpTools[name],
+    isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
+    SCOPES_SUPPORTED: scopes,
+  };
+});
 
 /** Type alias to reference SDK's structuredContent type without direct Record usage */
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;

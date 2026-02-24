@@ -261,9 +261,9 @@ export function createSdkBoundaryRules(
       {
         patterns: [
           {
-            group: ['@oaknational/curriculum-sdk-generation/**'],
+            group: ['@oaknational/curriculum-sdk-generation/*/**'],
             message:
-              'Runtime must import from @oaknational/curriculum-sdk-generation barrel only, not internal paths (ADR-108).',
+              'Runtime must import from @oaknational/curriculum-sdk-generation subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
           },
           {
             group: ['@workspace/*'],

@@ -36,15 +36,14 @@ export { createOakClient as createApiClient } from './client/index.js';
 // Generated Types from OpenAPI Schema
 // ============================================================================
 
-export type { paths } from './types/generated/api-schema/api-paths-types.js';
-export type { components } from './types/generated/api-schema/api-paths-types.js';
+export type { paths, components } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 /** Public aliases for documentation clarity */
-export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types.js';
 export type {
+  paths as OakApiPaths,
   Subject as OakSubject,
   KeyStage as OakKeyStage,
-} from './types/generated/api-schema/path-parameters.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
 export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './types/doc-bridges.js';
 
@@ -80,16 +79,16 @@ export {
   VALID_PATHS_BY_PARAMETERS,
   PATH_OPERATIONS,
   OPERATIONS_BY_ID,
-} from './types/generated/api-schema/path-parameters.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
 export type {
   PathOperation,
   OperationId,
   KeyStage,
   Subject,
-} from './types/generated/api-schema/path-parameters.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
-export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
+export { schemaBase as schema } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 // ============================================================================
 // Subject Hierarchy (ADR-101)
@@ -103,13 +102,13 @@ export {
   isKs4ScienceVariant,
   getSubjectParent,
   isAllSubject,
-} from './types/generated/search/subject-hierarchy.js';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 export type {
   AllSubjectSlug,
   ParentSubjectSlug,
   Ks4ScienceVariant,
-} from './types/generated/search/subject-hierarchy.js';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 // ============================================================================
 // Validation
@@ -140,7 +139,7 @@ export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,
-} from './types/generated/api-schema/routing/url-helpers.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
 // ============================================================================
 // Type-Safe Object Helpers
@@ -172,7 +171,7 @@ export type {
   SdkValidationError,
   ResourceType,
   ServerErrorStatus,
-} from './types/generated/api-schema/error-types/sdk-error-types.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
 export {
   classifyHttpError,
@@ -180,4 +179,4 @@ export {
   validationError,
   isRecoverableError,
   formatSdkError,
-} from './types/generated/api-schema/error-types/sdk-error-types.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';

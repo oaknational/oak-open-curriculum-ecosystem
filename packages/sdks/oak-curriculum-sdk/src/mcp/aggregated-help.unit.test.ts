@@ -7,7 +7,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { GET_HELP_TOOL_DEF, GET_HELP_INPUT_SCHEMA, runHelpTool } from './aggregated-help/index.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 
 describe('GET_HELP_TOOL_DEF', () => {
   it('has description with usage guidance', () => {

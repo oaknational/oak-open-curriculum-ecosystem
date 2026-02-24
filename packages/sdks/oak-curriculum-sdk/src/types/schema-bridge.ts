@@ -5,7 +5,7 @@
  *
  * @generated
  */
-import { schemaBase } from './generated/api-schema/api-schema-base.js';
+import { schemaBase } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 export type OpenApiSchemaBase = typeof schemaBase;
 

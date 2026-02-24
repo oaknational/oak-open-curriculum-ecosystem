@@ -13,9 +13,12 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { isToolName, type ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
-import type { ToolResultForName } from '../types/generated/api-schema/mcp-tools/generated/aliases/types.js';
-import { callTool } from '../types/generated/api-schema/mcp-tools/generated/runtime/execute.js';
+import {
+  isToolName,
+  type ToolName,
+  type ToolResultForName,
+  callTool,
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 /**
  * Error types with proper cause chains

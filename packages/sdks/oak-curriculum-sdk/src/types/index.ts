@@ -3,14 +3,14 @@
  */
 
 // Re-export generated types
-export type { paths } from './generated/api-schema/api-paths-types';
-export type { components } from './generated/api-schema/api-paths-types';
+export type { paths, components } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 // Re-export path operations - Note: PATH_OPERATIONS is the const, PathOperation is the type
-export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './generated/api-schema/path-parameters';
-export type { PathOperation, OperationId } from './generated/api-schema/path-parameters';
-
-// Export the helpers
+export {
+  PATH_OPERATIONS,
+  OPERATIONS_BY_ID,
+} from '@oaknational/curriculum-sdk-generation/api-schema';
+export type { PathOperation, OperationId } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 // Hybrid search index types and guards (per-index completion schemas)
 export {
@@ -34,7 +34,7 @@ export {
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
   isSearchThreadIndexDoc,
-} from './generated/search/index';
+} from '@oaknational/curriculum-sdk-generation/search';
 export type {
   SearchLessonsCompletionContexts,
   SearchUnitsCompletionContexts,
@@ -52,15 +52,19 @@ export type {
   SearchSequenceIndexDoc,
   SearchThreadIndexDoc,
   SearchSubjectSlug,
-} from './generated/search/index';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 // Hybrid search facet types and schemas
-export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index';
+export type {
+  SequenceFacetUnit,
+  SequenceFacet,
+  SearchFacets,
+} from '@oaknational/curriculum-sdk-generation/search';
 export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
   SearchFacetsSchema,
-} from './generated/zod/search/output/index';
+} from '@oaknational/curriculum-sdk-generation/zod';
 
 // Response-shape type guards for search-related endpoints
 export {

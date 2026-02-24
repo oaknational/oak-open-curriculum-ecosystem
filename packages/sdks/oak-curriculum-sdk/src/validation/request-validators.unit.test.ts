@@ -6,7 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { validateRequest } from './request-validators.js';
 import type { HttpMethod } from './types.js';
-import type { ValidPath } from 'src/types/generated/api-schema/path-parameters.js';
+import type { ValidPath } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 function hasOwnString(o: unknown, key: string, expected: string): boolean {
   if (typeof o !== 'object' || o === null) {

@@ -19,7 +19,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from './prerequisite-graph-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**

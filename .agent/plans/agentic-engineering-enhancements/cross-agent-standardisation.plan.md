@@ -40,6 +40,13 @@ Based on requirements and analysis in:
 
 **Related plan**: [Architectural Enforcement Adoption](architectural-enforcement-adoption.plan.md) (separated concern — physical constraints and boundary enforcement).
 
+### Execution Role
+
+This is a strategic source plan (intent, committed-vs-conditional split, and
+trigger policy). The authoritative execution tasks for this stream live in:
+
+- [phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)
+
 ## 2a. Committed Work
 
 ### Task 1: Skill Frontmatter Normalisation
@@ -82,7 +89,14 @@ The following tasks are deferred until their explicit triggers fire.
 - **Trigger:** When Claude Code or GitHub Copilot becomes an active development platform.
 - **Research**: Landscape report sections 3.1 and 5.7.
 
-## 3. Success Metrics
+## 3. Documentation Propagation Requirement
+
+Apply the shared documentation-propagation contract:
+
+- [Documentation Propagation component](../templates/components/documentation-propagation.md)
+- [documentation-sync-log.md](documentation-sync-log.md) (collection tracking)
+
+## 4. Success Metrics
 
 ### Committed (Tasks 1, 3)
 

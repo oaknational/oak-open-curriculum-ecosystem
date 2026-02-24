@@ -5,7 +5,6 @@
   },
   "include": [
     "src/**/*.ts",
-    "type-gen/**/*.ts",
     "vocab-gen/**/*.ts",
     "tests/**/*.ts",
     "**/*.test.ts",

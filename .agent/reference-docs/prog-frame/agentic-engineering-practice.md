@@ -2,6 +2,9 @@
 > [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
 > (naming decision) and [practice.md](../../directives/practice.md)
 > (operational map). Check those documents for the current definitions.
+> Active plans must propagate settled practice changes into these canonical
+> documents (plus any impacted ADRs/docs/READMEs) before closure, using the
+> `.cursor/commands/jc-consolidate-docs.md` workflow.
 
 # Progression Application: The Agentic Engineering Practice
 

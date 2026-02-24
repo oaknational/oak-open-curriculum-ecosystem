@@ -3,7 +3,7 @@
 **Status**: 📋 BACKLOG
 **Priority**: Medium-High — improves type safety, eliminates hardcoded domain constants
 **Created**: 2026-02-17
-**Related**: [Config Architecture Standardisation](../../architecture/config-architecture-standardisation-plan.md), [Subject Domain Model](move-search-domain-knowledge-to-typegen-time.md)
+**Related**: [Config Architecture Standardisation](../../architecture-and-infrastructure/config-architecture-standardisation-plan.md), [Subject Domain Model](move-search-domain-knowledge-to-typegen-time.md)
 
 ---
 

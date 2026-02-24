@@ -10,7 +10,7 @@ import { ok, err } from '@oaknational/result';
 import { runBrowseTool } from './execution.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type { SearchRetrievalService } from '../search-retrieval-types.js';
-import type { SearchFacets } from '../../types/generated/search/facets.js';
+import type { SearchFacets } from '@oaknational/curriculum-sdk-generation/search';
 
 function createFakeRetrieval(facets?: SearchFacets): SearchRetrievalService {
   const defaultFacets: SearchFacets = {

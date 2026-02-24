@@ -6,13 +6,13 @@
 import type { ZodType } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
 import { parseEndpointParameters } from './types.js';
-import { toColon } from '../types/generated/api-schema/path-utils.js';
+import { toColon } from '@oaknational/curriculum-sdk-generation/api-schema';
 import { typeSafeEntries } from '../types/helpers/type-helpers.js';
-import type {
-  AllowedMethodsForPath,
-  ValidPath,
-} from '../types/generated/api-schema/path-parameters.js';
-import { REQUEST_PARAMETER_SCHEMAS } from '../types/generated/api-schema/validation/request-parameter-map.js';
+import {
+  REQUEST_PARAMETER_SCHEMAS,
+  type AllowedMethodsForPath,
+  type ValidPath,
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 
 const parameterSchemaEntries = typeSafeEntries(REQUEST_PARAMETER_SCHEMAS);
 const parameterSchemaMap = new Map<string, ZodType>(parameterSchemaEntries);

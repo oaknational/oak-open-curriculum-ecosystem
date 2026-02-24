@@ -19,7 +19,12 @@ export default defineConfig({
         '**/*.spec.*',
       ],
     },
-    include: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
+    include: [
+      'src/**/*.test.ts',
+      'src/**/*.spec.ts',
+      'type-gen/**/*.test.ts',
+      'type-gen/**/*.spec.ts',
+    ],
     exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
   },
 });

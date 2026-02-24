@@ -31,19 +31,19 @@ export {
   isIndexMetaDoc,
   ZeroHitDocSchema,
   isZeroHitDoc,
-} from '../types/generated/search/index.js';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 export {
   QueryParserRequestSchema,
   QueryParserResponseSchema,
   isQueryParserResponse,
   QUERY_PARSER_INTENT_ENUM,
-} from '../types/generated/query-parser/index.js';
+} from '@oaknational/curriculum-sdk-generation/query-parser';
 export type {
   QueryParserRequest,
   QueryParserResponse,
   QueryParserIntent,
-} from '../types/generated/query-parser/index.js';
+} from '@oaknational/curriculum-sdk-generation/query-parser';
 
 export {
   ZERO_HIT_SCOPES,
@@ -61,7 +61,7 @@ export {
   type ZeroHitSummary,
   type ZeroHitEvent,
   type ZeroHitTelemetry,
-} from '../types/generated/observability/index.js';
+} from '@oaknational/curriculum-sdk-generation/observability';
 
 export {
   ADMIN_STREAM_ACTIONS,
@@ -78,7 +78,7 @@ export {
   type AdminStreamErrorFixture,
   type AdminStreamFixture,
   type AdminStreamFixtureMap,
-} from '../types/generated/admin/index.js';
+} from '@oaknational/curriculum-sdk-generation/admin';
 
 export type {
   SearchStructuredRequest,
@@ -116,7 +116,7 @@ export type {
   AllSubjectSlug,
   ParentSubjectSlug,
   Ks4ScienceVariant,
-} from '../types/generated/search/index.js';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 export {
   SUBJECT_TO_PARENT,
@@ -126,7 +126,7 @@ export {
   isKs4ScienceVariant,
   getSubjectParent,
   isAllSubject,
-} from '../types/generated/search/index.js';
+} from '@oaknational/curriculum-sdk-generation/search';
 
 export {
   lessonSummarySchema,
@@ -158,7 +158,7 @@ export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
   SearchFacetsSchema,
-} from '../types/generated/zod/search/output/index.js';
+} from '@oaknational/curriculum-sdk-generation/zod';
 
 export {
   SearchLessonsIndexDocSchema,
@@ -173,4 +173,4 @@ export {
   isSearchSequenceIndexDoc,
   isSearchSequenceFacetsIndexDoc,
   isSearchThreadIndexDoc,
-} from '../types/generated/search/index.js';
+} from '@oaknational/curriculum-sdk-generation/search';

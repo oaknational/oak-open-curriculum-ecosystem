@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-24 (post Phase 0+1 execution)
+**Last Updated**: 2026-02-24 (post Phase 2 execution)
 
 ---
 
@@ -84,42 +84,33 @@ Run this checklist at the start of the next session:
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
-**SDK workspace separation** — Phase 0 and Phase 1 are
-**complete** (commit `86a71125`, 24 Feb 2026). Phases 2-7
-remain. G0 prerequisites are satisfied, all pre-Phase-1
-decisions are resolved (archived:
-[sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md)).
+**SDK workspace separation** — Phases 0, 1, and 2 are
+**complete** (24 Feb 2026). Phases 3–7 remain.
 
-**Completed**: Phase 0 (baseline evidence), Phase 1 (generation
-workspace scaffold, SDK boundary rules, turbo vocab-gen inputs).
-The `@oaknational/curriculum-sdk-generation` workspace exists
-with ESLint boundary rules enforcing one-way dependency.
+**Completed**:
+- Phase 0: baseline evidence committed
+- Phase 1: generation workspace scaffold, SDK boundary rules,
+  turbo vocab-gen inputs
+- Phase 2: `type-gen/`, `schema-cache/`, `src/types/generated/`
+  moved to generation workspace. ~70 runtime SDK files rewired
+  to use 10 subpath exports. E2E tests migrated. 8 specialist
+  reviews completed, all blocking findings resolved. Full
+  quality gate chain passed.
 
-**Next**: Phase 2 (move type-gen core and generated API artefacts).
+**Next**: Phase 3 (move vocab-gen, bulk infrastructure,
+authored domain ontology, generated vocab outputs).
 
-**Key architectural insight — two pipelines**: the generation
-workspace will host two separate data pipelines:
-
-- **API pipeline**: OpenAPI spec → types, Zod schemas, MCP
-  tool descriptors. Consumed by the curriculum SDK runtime
-  and MCP server apps.
-- **Bulk pipeline**: bulk download JSON files → bulk types,
-  extractors, ES mappings, vocabulary, domain ontology.
-  Consumed by the search SDK and search CLI.
-
-The search SDK never calls the Oak API — it is purely an
-Elasticsearch client consuming bulk-derived data. The
-curriculum SDK runtime handles API access. Both pipelines
-run during `pnpm type-gen` and are partitioned by directory
-within the generation workspace. See
-[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
-for the full decomposition architecture.
+**Two-pipeline architecture** (see
+[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)):
+generation workspace hosts API pipeline (OpenAPI → types, Zod,
+MCP descriptors) and bulk pipeline (bulk JSON → types, ES
+mappings, vocabulary, ontology). Both run during `pnpm type-gen`.
 
 **Non-negotiable boundaries** (enforced by ESLint SDK boundary rules,
 implemented in `createSdkBoundaryRules()` in `boundary.ts`):
 
 - Generation → no runtime imports (one-way dependency)
-- Runtime → generation barrel-only imports (no deep imports)
+- Runtime → generation subpath exports only (no deep imports)
 - Both roles → no `@workspace/*` alias imports
 - Runtime `public/bulk` is removed (consumers import generation directly)
 - Always run `pnpm type-gen` from repo root, not individual workspaces
@@ -300,30 +291,25 @@ the standards and produce work that must be rejected.
 ## What We Have
 
 A production-ready Elasticsearch-backed semantic search
-system split across five workspaces. **Note**: this table
-reflects the pre-split state. During SDK workspace separation
-execution, the plan's target state (Section 7) overrides this
-table — `type-gen/`, `vocab-gen/`, `src/bulk/`, and
-`src/types/generated/` move to
-`@oaknational/curriculum-sdk-generation`.
+system split across six workspaces.
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen, MCP tool definitions |
+| **Generation SDK** | `packages/sdks/oak-curriculum-sdk-generation/` | Type-gen pipeline, generated types, Zod schemas, MCP tool descriptors (Phase 2 complete; vocab-gen, bulk still pending Phase 3) |
+| **Runtime SDK** | `packages/sdks/oak-curriculum-sdk/` | Runtime client, auth, validation, MCP tool composition |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
 | **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
 | **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
 
-The Search SDK imports shared exports from the Oak API SDK
-but serves bulk-derived data exclusively (Elasticsearch, not
-the Oak API). The Search CLI consumes the Search SDK and
-will depend directly on the generation workspace for bulk
-types after the SDK split. Both MCP servers consume the Oak
-API SDK (tool definitions) and optionally the Search SDK
-(search retrieval). The MCP application layer is where both
-SDKs connect — aggregated tools orchestrate API and search
-together.
+The Generation SDK is the shared foundation — runtime SDK and
+search CLI import generated types through its subpath exports.
+The Search SDK imports from the runtime SDK (shared exports)
+and serves bulk-derived data exclusively. Both MCP servers
+consume the runtime SDK (tool definitions) and optionally the
+Search SDK (search retrieval). The MCP application layer is
+where both SDKs connect — aggregated tools orchestrate API
+and search together.
 
 ### Search Pipeline
 

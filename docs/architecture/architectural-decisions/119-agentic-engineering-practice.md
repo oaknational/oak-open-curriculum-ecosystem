@@ -127,6 +127,22 @@ each document links to the next, and the system teaches itself
 through that traversal. This property is intentional and should
 be preserved.
 
+### Documentation Propagation Contract
+
+Plans are execution artefacts, not permanent documentation. When practice
+behaviour or governance changes, the settled outcome must be propagated to
+permanent documentation before phase closure.
+
+Minimum canonical update surfaces are:
+
+1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
+2. `.agent/directives/practice.md`
+3. `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
+
+Additionally, update any impacted ADRs, `/docs/` pages, and README files.
+Apply the consolidation workflow in
+`.cursor/commands/jc-consolidate-docs.md` before closing major phases.
+
 ### Why "Practice" and Not "Framework"
 
 - A **framework** is adopted wholesale. The practice evolved

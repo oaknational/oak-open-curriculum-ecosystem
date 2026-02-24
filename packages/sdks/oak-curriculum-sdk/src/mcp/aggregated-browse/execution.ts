@@ -12,7 +12,7 @@ import {
   formatToolResponse,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
-import type { SearchFacets } from '../../types/generated/search/facets.js';
+import type { SearchFacets } from '@oaknational/curriculum-sdk-generation/search';
 import type { BrowseArgs } from './types.js';
 import { buildBrowseSummary } from './formatting.js';
 

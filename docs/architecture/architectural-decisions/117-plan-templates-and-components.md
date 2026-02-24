@@ -41,10 +41,12 @@ Adopt a template-and-component architecture for plans in `.agent/plans/templates
 Full plan scaffolds for common workstream types. A template is a complete
 starting point — copy, fill in the bracketed placeholders, and begin.
 
-| Template                         | Use When                                         |
-| -------------------------------- | ------------------------------------------------ |
-| `quality-fix-plan-template.md`   | Quality improvement, refactoring, technical debt |
-| `feature-workstream-template.md` | New feature delivery with TDD phases             |
+| Template                            | Use When                                            |
+| ----------------------------------- | --------------------------------------------------- |
+| `quality-fix-plan-template.md`      | Quality improvement, refactoring, technical debt    |
+| `feature-workstream-template.md`    | New feature delivery with TDD phases                |
+| `adoption-rollout-plan-template.md` | Policy/process/tooling adoption across workflows    |
+| `collection-roadmap-template.md`    | Strategic roadmap with phase-to-active-plan mapping |
 
 ### 2. Plan Components
 
@@ -52,13 +54,15 @@ Reusable building blocks that appear across multiple plan types. Components
 live in `.agent/plans/templates/components/` and are referenced (not
 inlined) by templates.
 
-| Component                 | Purpose                                                     |
-| ------------------------- | ----------------------------------------------------------- |
-| `quality-gates.md`        | Standard quality gate sequence and rationale                |
-| `tdd-phases.md`           | RED/GREEN/REFACTOR phase structure with acceptance criteria |
-| `foundation-alignment.md` | Foundation document commitment checklist                    |
-| `risk-assessment.md`      | Risk/mitigation table structure                             |
-| `adversarial-review.md`   | Post-implementation specialist review phase                 |
+| Component                      | Purpose                                                     |
+| ------------------------------ | ----------------------------------------------------------- |
+| `quality-gates.md`             | Standard quality gate sequence and rationale                |
+| `tdd-phases.md`                | RED/GREEN/REFACTOR phase structure with acceptance criteria |
+| `foundation-alignment.md`      | Foundation document commitment checklist                    |
+| `risk-assessment.md`           | Risk/mitigation table structure                             |
+| `adversarial-review.md`        | Post-implementation specialist review phase                 |
+| `evidence-and-claims.md`       | Claim classification and evidence/verification requirements |
+| `documentation-propagation.md` | Required ADR/directive/reference-doc and README propagation |
 
 ### 3. Document Hierarchy
 
@@ -168,6 +172,8 @@ the plan content.
 - Add new components only when the same structure appears in three or more
   plans.
 - Keep components as guidance references, not mandatory inclusions.
+- Include explicit documentation propagation handling in phase completion
+  criteria (update impacted docs or record no-change rationale).
 - When facts appear in multiple documents, mark one as authoritative and
   make the others reference it.
 - Archive completed plans promptly; `active/` must contain only

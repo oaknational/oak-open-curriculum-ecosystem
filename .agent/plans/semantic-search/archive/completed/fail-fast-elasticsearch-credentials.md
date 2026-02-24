@@ -807,7 +807,7 @@ identified and corrected:
 |----------|---------|
 | [Phase 3a Plan](phase-3a-mcp-search-integration.md) | Parent plan for MCP search integration |
 | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request transport (recently completed) |
-| [STDIO-HTTP Alignment](../../architecture/stdio-http-server-alignment.md) | Future: shared Zod validation for STDIO |
+| [STDIO-HTTP Alignment](../../../architecture-and-infrastructure/stdio-http-server-alignment.md) | Future: shared Zod validation for STDIO |
 | [rules.md](../../../directives/rules.md) | Fail FAST, keep it strict |
 | [testing-strategy.md](../../../directives/testing-strategy.md) | TDD at ALL levels |
 | [roadmap.md](../roadmap.md) | Semantic search roadmap |

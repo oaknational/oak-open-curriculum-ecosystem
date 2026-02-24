@@ -7,7 +7,7 @@
  *
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
-import type { Unit } from '../../types/generated/bulk/index.js';
+import type { Unit } from '@oaknational/curriculum-sdk-generation/bulk';
 
 /**
  * Extracted NC statement with unit context.

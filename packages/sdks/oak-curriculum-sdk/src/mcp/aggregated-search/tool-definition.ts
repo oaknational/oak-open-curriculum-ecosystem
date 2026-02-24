@@ -11,9 +11,9 @@
  */
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
-import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
+import { KEY_STAGES, SUBJECTS } from '@oaknational/curriculum-sdk-generation/api-schema';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 import { SEARCH_SCOPES } from './types.js';
 

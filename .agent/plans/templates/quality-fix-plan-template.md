@@ -1,3 +1,18 @@
+---
+name: "[Plan Title]"
+overview: "[One-line scope description]"
+todos:
+  - id: phase-0-foundation
+    content: "Phase 0: Verify foundation assumptions."
+    status: pending
+  - id: phase-1-resolution
+    content: "Phase 1: Implement and validate fixes."
+    status: pending
+  - id: phase-2-hardening
+    content: "Phase 2: Quality gates, documentation, and follow-up hardening."
+    status: pending
+---
+
 # [Plan Title: Brief, Action-Oriented Name]
 
 **Last Updated**: [YYYY-MM-DD]  
@@ -113,6 +128,20 @@ Before beginning work and at the start of each phase:
 3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
 5. **Verify**: No compatibility layers, no type shortcuts, no disabled checks
+
+---
+
+## Documentation Propagation Commitment
+
+Before marking a phase complete:
+
+1. Update `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` if impacted
+2. Update `.agent/directives/practice.md` if impacted
+3. Update `.agent/reference-docs/prog-frame/agentic-engineering-practice.md` if impacted
+4. Update any additionally impacted ADRs, `/docs/` pages, or README files
+5. Apply `.cursor/commands/jc-consolidate-docs.md` to ensure settled documentation is not trapped in plans
+
+If no update is needed for a required surface, record an explicit no-change rationale.
 
 ---
 

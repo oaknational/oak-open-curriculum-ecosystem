@@ -6,8 +6,10 @@
 import type { ValidationResult, SearchResponseForScope } from './types.js';
 import { parseSearchResponse, parseSearchSuggestionResponse } from './types.js';
 
-import { type SearchScopeWithAll } from '../types/generated/search/scopes.js';
-import type { SearchSuggestionResponse } from '../types/generated/search/index.js';
+import type {
+  SearchSuggestionResponse,
+  SearchScopeWithAll,
+} from '@oaknational/curriculum-sdk-generation/search';
 
 export function validateSearchResponse<S extends SearchScopeWithAll>(
   scope: S,

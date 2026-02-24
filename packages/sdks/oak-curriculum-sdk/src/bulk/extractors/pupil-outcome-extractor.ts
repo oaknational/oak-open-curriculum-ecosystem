@@ -8,7 +8,7 @@
 
  */
 
-import type { Lesson } from '../../types/generated/bulk/index.js';
+import type { Lesson } from '@oaknational/curriculum-sdk-generation/bulk';
 
 /**
  * Extracted pupil outcome with lesson context.

@@ -83,60 +83,6 @@ const config = defineConfig(
       ...testRules,
     },
   },
-  // Rules for the type-gen code
-  {
-    files: ['type-gen/**'],
-    rules: {
-      'no-restricted-properties': 'off',
-      '@typescript-eslint/no-restricted-types': 'off',
-      'max-lines-per-function': 'off',
-      'max-statements': 'off',
-      'max-depth': 'off',
-      complexity: 'off',
-    },
-  },
-  // Rules for the generated files
-  {
-    files: ['src/types/generated/**'],
-    rules: {
-      // Disable until quality gates green, then fix.
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
-      '@typescript-eslint/no-unnecessary-type-conversion': 'off',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-redundant-type-constituents': 'off',
-      '@typescript-eslint/consistent-indexed-object-style': 'off',
-      '@typescript-eslint/no-restricted-types': 'off',
-      'no-restricted-properties': 'off',
-      // Temporarily disabled rules for generated code -- some are probably permanent, some are just during MVP
-      'max-lines': 'off',
-      'max-lines-per-function': 'off',
-      'max-depth': 'off',
-      complexity: 'off',
-      'max-statements': 'off',
-      // Most likely permanent rules
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      'no-irregular-whitespace': 'off',
-      curly: 'off',
-    },
-  },
-  // Rules for the generated files
-  {
-    files: ['src/types/generated/search/**'],
-    rules: {
-      '@typescript-eslint/consistent-type-assertions': 'off',
-    },
-  },
-  // Allow the type helper file to use restricted APIs internally
-  {
-    files: ['src/types/helpers.ts'],
-    rules: {
-      'no-restricted-properties': 'off',
-    },
-  },
-
   // Config files
   {
     files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],

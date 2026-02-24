@@ -12,7 +12,7 @@ import {
   isKeyStage,
   type Subject,
   isSubject,
-} from '../../types/generated/api-schema/path-parameters.js';
+} from '@oaknational/curriculum-sdk-generation/api-schema';
 import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js';
 
 /**

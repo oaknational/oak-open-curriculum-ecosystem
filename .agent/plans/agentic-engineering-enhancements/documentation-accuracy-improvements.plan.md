@@ -28,6 +28,10 @@ todos:
 
 # Documentation Accuracy Improvements
 
+> **Status**: Complete historical prerequisite. Retained as an audit and
+> rationale record; execution authority for current work is in `roadmap.md`
+> and `active/*.md` plans.
+
 ## How to Use This Plan
 
 This plan is a standalone entry point. It contains all context needed to execute the improvements without referring to the originating session. Read the Background section first, then execute workstreams in the order specified under Recommended Execution Order.
@@ -45,9 +49,11 @@ A multi-reviewer chain on 2026-02-22 examined the `agentic-engineering-enhanceme
 | Betty (architecture, systems thinking) | Cross-SDK import policy, change-cost | 1 (confirmed policy) |
 | docs-adr-reviewer | Completeness, accuracy, drift | 5 |
 
-Transcript: [Agentic engineering doc review](4febb7bd-6c79-4ed9-8ae4-2a398b63e224)
+Transcript ID: `4febb7bd-6c79-4ed9-8ae4-2a398b63e224`
 
 ### Collection Inventory
+
+> Snapshot note: this inventory reflects the collection state at the time of this plan (2026-02-22). For live inventory, use `README.md` in this directory.
 
 All files in `.agent/plans/agentic-engineering-enhancements/`:
 
@@ -219,14 +225,14 @@ After A1–A4, invoke:
 
 **Current text** (line 29):
 ```markdown
-- [Testing Strategy](../../.agent/directives/testing-strategy.md)
+- Testing Strategy link pointed at `../../.agent/directives/testing-strategy.md`
 ```
 
 This resolves to `.agent/.agent/directives/testing-strategy.md` (doubled path) because the file lives in `.agent/plans/agentic-engineering-enhancements/` — going up two levels reaches `.agent/`, then `.agent/directives/...` creates a double-nested path.
 
 **Corrected text**:
 ```markdown
-- [Testing Strategy](../../directives/testing-strategy.md)
+- Testing Strategy link points at `../../directives/testing-strategy.md`
 ```
 
 ### B2 — Trim stale operational state (MEDIUM)
@@ -299,8 +305,8 @@ This progression framework application document reproduces core concepts (three 
 **Action**: Add a note at the top indicating which documents are canonical for the concepts it describes:
 ```markdown
 > **Canonical sources**: The concepts in this document are defined in
-> [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-> (naming decision) and [practice.md](../../.agent/directives/practice.md)
+> [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
+> (naming decision) and [practice.md](../../directives/practice.md)
 > (operational map). Check those documents for the current definitions.
 ```
 

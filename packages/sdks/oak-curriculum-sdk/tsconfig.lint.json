@@ -9,10 +9,9 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",
-    "type-gen/**/*.ts",
     "vocab-gen/**/*.ts",
     "bin/**/*.ts",
     "e2e-tests/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "e2e-tests/scripts/**", "docs/_typedoc_src/**"]
+  "exclude": ["node_modules", "dist", "test-cache", "e2e-tests/scripts/**", "docs/_typedoc_src/**"]
 }

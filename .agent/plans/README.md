@@ -14,8 +14,9 @@ Strategic and tactical planning documents for the Oak MCP Ecosystem.
 |------------|---------|--------|
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Active |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
-| [architecture/](architecture/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
-| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, cross-agent standardisation, mutation testing | 📋 Planned |
+| [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 📋 Planned |
+| [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 📋 Planned |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 📋 Planned |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
@@ -83,6 +84,39 @@ When creating a new plan collection:
 4. **Follow the hierarchy guidelines** in the next section
 5. **Update this file**: Add to the Plan Collections table
 6. **Update high-level-plan.md**: Add to directory structure and active items
+
+---
+
+## Plan Triage Protocol
+
+Use this when modernising an existing collection, consolidating stale plans, or
+preparing archive moves.
+
+### Triage Questions
+
+1. Is the work still relevant to current repository state?
+2. Is the plan stale (paths, ADR links, assumptions)?
+3. Is there overlap or duplication with another plan?
+4. Is the plan referenced by `high-level-plan.md` or other active documents?
+5. Does the plan contain settled documentation that must be extracted before
+   archiving?
+
+### Decision Taxonomy
+
+| Decision | Meaning | Typical Action |
+|----------|---------|----------------|
+| Keep | Current and actively useful | Retain in place; ensure status is accurate |
+| Rewrite | Core intent valid, structure stale | Replace with a modernised plan |
+| Consolidate | Duplicative with another plan | Merge content; keep one canonical plan |
+| Icebox | Useful but not currently prioritised | Move to `icebox/` with a clear trigger |
+| Archive | Complete and historical | Move to `archive/completed/` and update references |
+| Delete | Obsolete/superseded with no remaining value | Remove after reference checks |
+
+### Archive Prerequisite
+
+Before archiving, extract settled documentation to permanent locations (ADRs,
+`/docs/`, or workspace README files) and apply
+[`jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md).
 
 ---
 

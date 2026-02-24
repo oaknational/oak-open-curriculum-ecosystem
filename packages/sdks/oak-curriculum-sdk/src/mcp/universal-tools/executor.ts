@@ -29,7 +29,7 @@ import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
 import {
   getToolFromToolName,
   type ToolName,
-} from '../../types/generated/api-schema/mcp-tools/index.js';
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.

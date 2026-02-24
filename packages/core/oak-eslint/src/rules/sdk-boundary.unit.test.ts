@@ -81,20 +81,21 @@ describe('createSdkBoundaryRules', () => {
   });
 
   describe('runtime role', () => {
-    it('restricts deep imports into generation internals at all depths', () => {
+    it('restricts deep imports into generation internals (two or more levels)', () => {
       const rules = createSdkBoundaryRules('runtime');
       const patterns = getRestrictedImportPatterns(rules);
 
       const groups = patterns.flatMap((p) => p.group);
-      expect(groups).toContain('@oaknational/curriculum-sdk-generation/**');
+      expect(groups).toContain('@oaknational/curriculum-sdk-generation/*/**');
     });
 
-    it('does not restrict barrel imports from generation', () => {
+    it('allows single-level subpath exports from generation', () => {
       const rules = createSdkBoundaryRules('runtime');
       const patterns = getRestrictedImportPatterns(rules);
       const groups = patterns.flatMap((p) => p.group);
 
       expect(groups).not.toContain('@oaknational/curriculum-sdk-generation');
+      expect(groups).not.toContain('@oaknational/curriculum-sdk-generation/**');
     });
 
     it('does not restrict its own runtime SDK package', () => {
@@ -128,12 +129,12 @@ describe('createSdkBoundaryRules', () => {
       const rules = createSdkBoundaryRules('runtime');
       const patterns = getRestrictedImportPatterns(rules);
       const genPattern = patterns.find((p) =>
-        p.group.includes('@oaknational/curriculum-sdk-generation/**'),
+        p.group.includes('@oaknational/curriculum-sdk-generation/*/**'),
       );
 
       if (!genPattern) {
         throw new Error(
-          'Expected to find a pattern restricting @oaknational/curriculum-sdk-generation/**',
+          'Expected to find a pattern restricting @oaknational/curriculum-sdk-generation/*/**',
         );
       }
       expect(genPattern.message).toContain('ADR-108');

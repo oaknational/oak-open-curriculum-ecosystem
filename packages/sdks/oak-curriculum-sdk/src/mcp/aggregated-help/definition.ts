@@ -6,7 +6,7 @@
  */
 
 import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '../../types/generated/widget-constants.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**

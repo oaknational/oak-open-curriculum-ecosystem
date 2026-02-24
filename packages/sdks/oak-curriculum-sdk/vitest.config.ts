@@ -24,8 +24,6 @@ export default defineConfig({
       'src/**/*.spec.ts',
       'tests/**/*.test.ts',
       'tests/**/*.spec.ts',
-      'type-gen/**/*.test.ts',
-      'type-gen/**/*.spec.ts',
       'vocab-gen/**/*.test.ts',
       'vocab-gen/**/*.spec.ts',
     ],

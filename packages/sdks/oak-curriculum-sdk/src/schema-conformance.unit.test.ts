@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { rawCurriculumSchemas } from './types/generated/zod/curriculumZodSchemas.js';
+import { rawCurriculumSchemas } from '@oaknational/curriculum-sdk-generation/zod';
 
 describe('QuestionsForKeyStageAndSubjectResponseSchema conformance', () => {
   const schema = rawCurriculumSchemas.QuestionsForKeyStageAndSubjectResponseSchema;

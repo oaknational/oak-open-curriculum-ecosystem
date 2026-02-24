@@ -14,8 +14,8 @@ import type {
   ToolName,
   ToolDescriptorForName,
   ToolDescriptor,
-} from '../../types/generated/api-schema/mcp-tools/index.js';
-import type { SecurityScheme } from '../../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+  SecurityScheme,
+} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
 
 /**

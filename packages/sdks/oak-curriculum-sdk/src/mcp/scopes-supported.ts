@@ -9,4 +9,4 @@
  * Source of truth: `type-gen/mcp-security-policy.ts`
  */
 
-export { SCOPES_SUPPORTED } from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+export { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk-generation/mcp-tools';

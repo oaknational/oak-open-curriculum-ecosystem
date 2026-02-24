@@ -17,6 +17,9 @@ todos:
   - id: ws5-adversarial-review
     content: "WS5: Adversarial specialist reviews. Document findings."
     status: pending
+  - id: ws6-doc-propagation
+    content: "WS6: Propagate settled outcomes to canonical ADR/directive/reference docs and relevant READMEs."
+    status: pending
 isProject: false
 ---
 
@@ -150,6 +153,12 @@ plan if BLOCKERs found.
 ## Foundation Alignment
 
 > See [Foundation Alignment component](../templates/components/foundation-alignment.md)
+
+---
+
+## Documentation Propagation
+
+> See [Documentation Propagation component](../templates/components/documentation-propagation.md)
 
 ---
 

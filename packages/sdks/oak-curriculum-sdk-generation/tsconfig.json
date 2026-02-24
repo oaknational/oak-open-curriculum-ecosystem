@@ -3,6 +3,13 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*.ts",
+    "type-gen/**/*.ts",
+    "docs/**/*.ts",
+    "**/*.test.ts",
+    "*.config.ts",
+    "*.config.e2e.ts"
+  ],
+  "exclude": ["node_modules", "dist", "test-cache"]
 }
