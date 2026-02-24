@@ -76,10 +76,10 @@ export {
   isSubjectSequences,
   sequenceUnitsSchema,
   isSequenceUnitsResponse,
-} from './search-response-guards';
+} from './search-response-guards.js';
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
   SequenceUnitsResponse,
-} from './search-response-guards';
+} from './search-response-guards.js';
