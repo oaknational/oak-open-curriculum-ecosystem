@@ -8,6 +8,7 @@ packages:
   - packages/core/result
   - packages/libs/logger
   - packages/sdks/oak-curriculum-sdk
+  - packages/sdks/oak-curriculum-sdk-generation
   - packages/sdks/oak-search-sdk
 
 onlyBuiltDependencies:

@@ -10,7 +10,12 @@
       "dependsOn": ["^type-gen", "^build"],
       "cache": true,
       "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/type-gen/**/*.ts",
+        "**/vocab-gen/**/*.ts",
+        "**/scripts/**/*.ts"
+      ],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {

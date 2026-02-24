@@ -77,6 +77,11 @@ Based on requirements and analysis in:
 
 ### Phase 2: Boundary Definition (ESLint)
 
+- **Precursor:** The [SDK workspace separation](../semantic-search/active/sdk-workspace-separation.md)
+  plan implements targeted SDK boundary rules (`createSdkBoundaryRules()` in
+  `boundary.ts`) enforcing the sdks DAG constraint for the generation/runtime
+  split. These should integrate with the broader layer enforcement when
+  `eslint-plugin-boundaries` is adopted.
 - **Goal:** Define semantic layers and enforce unidirectional flow.
 - **Task:** Configure `eslint-plugin-boundaries` using the canonical import matrix:
 

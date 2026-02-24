@@ -1,5 +1,8 @@
 /**
  * ESLint Configuration for oak-curriculum-sdk
+ *
+ * Applies strict Oak standards plus SDK boundary rules that prevent
+ * deep imports into the generation workspace (ADR-108).
  */
 
 import { defineConfig } from 'eslint/config';
@@ -7,6 +10,7 @@ import oakStandards, {
   ignores,
   testRules,
   commonSettings,
+  createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
 import type { Linter } from 'eslint';
 
@@ -56,6 +60,13 @@ const config = defineConfig(
           projectService: true,
         },
       },
+    },
+  },
+  // SDK boundary rules: prevent deep imports into generation workspace (ADR-108)
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      ...createSdkBoundaryRules('runtime'),
     },
   },
   // Test file rules

@@ -84,7 +84,7 @@ export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
  * @param otherLibs - Array of other library names to prevent imports from
  */
 export function createLibBoundaryRules(
-  _libName: string,
+  libName: string,
   otherLibs: string[],
 ): Partial<Linter.RulesRecord> {
   const zones = [
@@ -92,8 +92,7 @@ export function createLibBoundaryRules(
     ...otherLibs.map((otherLib) => ({
       target: './src/**' as const,
       from: `../${otherLib}/**` as const,
-      message:
-        'Libraries cannot depend on each other. Each library must be independently reusable.',
+      message: `Library '${libName}' cannot depend on '${otherLib}'. Each library must be independently reusable.`,
     })),
     // Cannot import from apps
     {
@@ -207,6 +206,75 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
     },
   ],
 };
+
+/**
+ * SDK boundary rules for the generation/runtime workspace split.
+ *
+ * Enforces the one-way dependency direction defined in
+ * {@link ../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md | ADR-108}:
+ *
+ * - **generation** workspace has no knowledge of runtime concerns.
+ *   It cannot import from `@oaknational/curriculum-sdk`.
+ * - **runtime** workspace imports generation artefacts through barrel
+ *   exports only (`@oaknational/curriculum-sdk-generation`), never via
+ *   deep paths into generation internals.
+ *
+ * @param role - Whether the calling workspace is the generation or runtime SDK
+ *
+ * @example
+ * ```typescript
+ * // In generation workspace eslint.config.ts:
+ * { files: ['src/**\/*.ts'], rules: { ...createSdkBoundaryRules('generation') } }
+ *
+ * // In runtime workspace eslint.config.ts:
+ * { files: ['src/**\/*.ts'], rules: { ...createSdkBoundaryRules('runtime') } }
+ * ```
+ */
+export function createSdkBoundaryRules(
+  role: 'generation' | 'runtime',
+): Partial<Linter.RulesRecord> {
+  if (role === 'generation') {
+    return {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@oaknational/curriculum-sdk', '@oaknational/curriculum-sdk/**'],
+              message:
+                'Generation cannot import from runtime SDK. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
+            },
+            {
+              group: ['@workspace/*'],
+              message:
+                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  return {
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@oaknational/curriculum-sdk-generation/**'],
+            message:
+              'Runtime must import from @oaknational/curriculum-sdk-generation barrel only, not internal paths (ADR-108).',
+          },
+          {
+            group: ['@workspace/*'],
+            message:
+              'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+          },
+        ],
+      },
+    ],
+  };
+}
 
 /**
  * List of all libraries for reference

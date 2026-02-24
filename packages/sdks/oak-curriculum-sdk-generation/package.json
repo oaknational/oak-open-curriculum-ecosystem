@@ -1,0 +1,69 @@
+{
+  "name": "@oaknational/curriculum-sdk-generation",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Generation-time workspace for the Oak Curriculum SDK — OpenAPI types, Zod schemas, MCP tool descriptors, bulk data infrastructure, and vocabulary generation",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24.10.13",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/sdks/oak-curriculum-sdk-generation"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/sdks/oak-curriculum-sdk-generation#readme",
+  "keywords": [
+    "oak",
+    "curriculum",
+    "sdk",
+    "generation",
+    "openapi",
+    "typescript",
+    "education"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

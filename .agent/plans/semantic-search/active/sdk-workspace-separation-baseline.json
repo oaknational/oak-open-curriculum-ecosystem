@@ -1,0 +1,30 @@
+{
+  "description": "SDK workspace separation baseline evidence — Phase 0 of ADR-108 Step 1",
+  "capturedAt": "2026-02-24T00:00:00Z",
+  "branch": "feat/semantic_search_deployment",
+  "planReference": ".agent/plans/semantic-search/active/sdk-workspace-separation.md",
+  "adrReference": "docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md",
+  "generationWorkspaceAbsent": true,
+  "commands": {
+    "typeGenFileCount": {
+      "command": "find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l",
+      "result": 192
+    },
+    "srcFileCount": {
+      "command": "find packages/sdks/oak-curriculum-sdk/src -type f | wc -l",
+      "result": 303
+    },
+    "generatedTypeFileCount": {
+      "command": "find packages/sdks/oak-curriculum-sdk/src/types/generated -type f | wc -l",
+      "result": 106
+    },
+    "sdkWorkspaces": {
+      "command": "ls -1 packages/sdks",
+      "result": ["oak-curriculum-sdk", "oak-search-sdk"]
+    },
+    "runtimeFilesImportingGenerated": {
+      "command": "rg -l \"from ['\\\"](\\\\.\\\\.{1,2}/)+types/generated|from ['\\\"]src/types/generated\" packages/sdks/oak-curriculum-sdk/src --glob '!**/types/generated/**' --glob '!**/*.test.ts' | wc -l",
+      "result": 56
+    }
+  }
+}

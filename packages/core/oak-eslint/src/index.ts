@@ -12,6 +12,7 @@ export {
   coreBoundaryRules,
   coreTestConfigRules,
   createLibBoundaryRules,
+  createSdkBoundaryRules,
   appBoundaryRules,
   appArchitectureRules,
   LIB_PACKAGES,

@@ -136,7 +136,7 @@ Background context (completed baseline, not re-read per phase):
 
 - `packages/sdks/oak-curriculum-sdk-generation`: does not exist
 - `packages/sdks/oak-curriculum-sdk/type-gen`: 192 files
-- `packages/sdks/oak-curriculum-sdk/src`: 302 files
+- `packages/sdks/oak-curriculum-sdk/src`: 303 files
 - `packages/sdks/oak-curriculum-sdk/src/types/generated`: 106 files
 - non-test runtime source files importing local `types/generated/*`: 56 files
 
@@ -691,7 +691,15 @@ See [ADR-108 § Boundary Invariants](../../../docs/architecture/architectural-de
 for the permanent rules (run from root, file placement, one-way dependency,
 barrel-only imports).
 
-## 11. Risks and Mitigations
+## 11. Related Plans
+
+- [Architectural Enforcement Adoption](../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md)
+  — Phase 1 SDK boundary rules (`createSdkBoundaryRules()`) are an early,
+  targeted implementation of the canonical import matrix (sdks DAG) defined
+  in that plan's Phase 2. When `eslint-plugin-boundaries` is adopted later,
+  the SDK-specific rules should integrate with the broader layer enforcement.
+
+## 12. Risks and Mitigations
 
 - Baseline drift before split starts:
   keep G0 hard blocker and refresh Section 4 metrics before file moves.
@@ -707,7 +715,7 @@ barrel-only imports).
 - Documentation drift:
   treat docs/TSDoc as same-phase deliverables, not post-merge cleanup.
 
-## 12. Pre-Phase-1 Decisions (all resolved 23 Feb 2026)
+## 13. Pre-Phase-1 Decisions (all resolved 23 Feb 2026)
 
 All five pre-Phase-1 decisions have been resolved. Full analysis and rationale
 (alternatives considered, user direction, trade-offs):
@@ -730,7 +738,7 @@ Summary:
 - **D5 Phase collapse**: keep sequential phases with intermediate compilation
   gates (`pnpm build && pnpm type-check` after each phase).
 
-## 13. Relationship to ADRs
+## 14. Relationship to ADRs
 
 - **ADR-108** (`108-sdk-workspace-decomposition.md`)
   - defines Step 1 split intent, boundary direction, and phased decomposition.
