@@ -76,22 +76,6 @@ export interface UnitRerankingParams extends SearchFilterOptions {
 }
 
 /**
- * Extended RetrieverContainer that includes text_similarity_reranker.
- *
- * The ES client types may not include this in older versions, so we
- * extend the type to include it.
- */
-interface RerankingRetrieverContainer extends estypes.RetrieverContainer {
-  text_similarity_reranker?: {
-    retriever: estypes.RetrieverContainer;
-    field: string;
-    inference_id: string;
-    inference_text: string;
-    rank_window_size: number;
-  };
-}
-
-/**
  * Builds a lesson search request with 4-way RRF + semantic reranking.
  *
  * Wraps the standard 4-way RRF retriever (BM25 + ELSER on content + structure)
@@ -124,7 +108,7 @@ export function buildLessonRerankingRrfRequest(params: LessonRerankingParams): E
   const filters = createLessonFilters(filterOptions);
   const innerRrfRetriever = createLessonRrfRetriever(text, filters);
 
-  const retriever: RerankingRetrieverContainer = {
+  const retriever: estypes.RetrieverContainer = {
     text_similarity_reranker: {
       retriever: innerRrfRetriever,
       field: 'lesson_structure',
@@ -165,7 +149,7 @@ export function buildUnitRerankingRrfRequest(params: UnitRerankingParams): EsSea
   const filters = createUnitFilters(filterOptions);
   const innerRrfRetriever = createUnitRrfRetriever(text, filters);
 
-  const retriever: RerankingRetrieverContainer = {
+  const retriever: estypes.RetrieverContainer = {
     text_similarity_reranker: {
       retriever: innerRrfRetriever,
       field: 'unit_structure',

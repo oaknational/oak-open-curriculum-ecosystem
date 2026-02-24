@@ -484,3 +484,28 @@ Added to roadmap.
 Extracted to distilled.md ("Documentation and Markdown" section).
 Applied: moved consumer model and boundary invariants from
 sdk-workspace-separation plan to ADR-108.
+
+### Deferred Dependency Updates (24 Feb 2026)
+
+Batch dependency update bumped 28 packages within major version.
+The following were intentionally deferred:
+
+| Package | Current | Latest | Reason |
+|---|---|---|---|
+| `eslint` | 9.39.1 | 10.0.2 | ESLint 10 migration (dedicated task) |
+| `@eslint/js` | 9.39.1 | 10.0.1 | Coupled to ESLint 10 |
+| `eslint-plugin-sonarjs` | 3.0.5 | 4.0.0 | Coupled to ESLint 10 |
+| `globals` | 16.5.0 | 17.3.0 | ESLint config dependency; defer with ESLint 10 |
+| `@types/node` | 24.10.x | 25.3.0 | We target Node 24; stay on latest 24.x |
+| `zod` (openapi-zod-client-adapter) | 3.25.76 | 4.3.6 | Zod 3-to-4 migration; pinned exactly |
+| `openapi-typescript` | 7.10.1 | 7.13.0 | Affects type-gen pipeline (dedicated task) |
+| `openapi-fetch` | 0.15.0 | 0.17.0 | Coupled to openapi-typescript |
+| `vite-tsconfig-paths` | 5.1.4 | 6.1.1 | Vite ecosystem update (dedicated task) |
+
+ES SDK 9.3 type changes required fixes:
+- `ClientOptions` ESM barrel missing re-export — derived from
+  `ConstructorParameters<typeof Client>[0]` instead of deep import
+- `RetrieverContainer` now `ExactlyOne<>` union — tests need
+  `'standard' in entry` narrowing for `RRFRetrieverEntry`
+- `RerankingRetrieverContainer` removed — `text_similarity_reranker`
+  now natively in `RetrieverContainerExclusiveProps`

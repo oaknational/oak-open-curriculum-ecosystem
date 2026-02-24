@@ -38,18 +38,18 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^9.2.0",
-    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@elastic/elasticsearch": "^9.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
-    "dotenv": "^17.2.3",
-    "zod": "^4.1.13"
+    "dotenv": "^17.3.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^24",
+    "@types/node": "^24.10.13",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"

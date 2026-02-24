@@ -9,8 +9,11 @@
  */
 
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { Client, type ClientOptions } from '@elastic/elasticsearch';
+import { Client } from '@elastic/elasticsearch';
 import { createSearchSdk } from '@oaknational/oak-search-sdk';
+
+/** Derived from the public Client constructor — avoids deep-importing internal types. */
+export type EsClientConfig = ConstructorParameters<typeof Client>[0];
 
 /**
  * Injectable factory dependencies for testability.
@@ -24,7 +27,7 @@ import { createSearchSdk } from '@oaknational/oak-search-sdk';
  */
 export interface SearchRetrievalFactories<TClient = Client> {
   /** Creates an Elasticsearch client from configuration. */
-  readonly createEsClient: (config: ClientOptions) => TClient;
+  readonly createEsClient: (config: EsClientConfig) => TClient;
   /** Creates the Search SDK from an ES client and configuration. */
   readonly createSdk: (config: {
     readonly deps: { readonly esClient: TClient };

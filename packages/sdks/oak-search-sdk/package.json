@@ -37,10 +37,10 @@
     "@oaknational/curriculum-sdk": "workspace:*"
   },
   "devDependencies": {
-    "@elastic/elasticsearch": "^9.2.0",
-    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@elastic/elasticsearch": "^9.3.2",
     "@oaknational/curriculum-sdk": "workspace:*",
-    "@types/node": "^24",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24.10.13",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"

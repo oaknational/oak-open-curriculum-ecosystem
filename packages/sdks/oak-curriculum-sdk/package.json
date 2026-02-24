@@ -126,20 +126,20 @@
     "@oaknational/result": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
-    "zod": "^4.1.13"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@elastic/elasticsearch": "^9.2.0",
-    "@modelcontextprotocol/sdk": "^1.26.0",
-    "@next/eslint-plugin-next": "^16.0.10",
+    "@elastic/elasticsearch": "^9.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@next/eslint-plugin-next": "^16.1.6",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^24",
-    "dotenv": "^17.2.3",
+    "@types/node": "^24.10.13",
+    "dotenv": "^17.3.1",
     "openapi-typescript": "^7.10.1",
     "openapi3-ts": "^4.5.0",
     "tsx": "^4.21.0",
-    "typedoc": "^0.28.15",
-    "typedoc-plugin-markdown": "^4.9.0",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-markdown": "^4.10.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },

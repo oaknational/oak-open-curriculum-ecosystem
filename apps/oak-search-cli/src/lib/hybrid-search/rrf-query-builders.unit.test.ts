@@ -32,6 +32,21 @@ function extractMultiMatch(
 }
 
 /**
+ * Extracts the standard retriever from an RRF entry,
+ * narrowing past the RetrieverContainer | RRFRetrieverComponent union.
+ */
+function getStandardRetriever(
+  request: ReturnType<typeof buildLessonRrfRequest>,
+  retrieverIndex: number,
+): estypes.StandardRetriever | undefined {
+  const entry = request.retriever?.rrf?.retrievers?.[retrieverIndex];
+  if (!entry || !('standard' in entry)) {
+    return undefined;
+  }
+  return entry.standard ?? undefined;
+}
+
+/**
  * Extracts multi_match query from a BM25 retriever.
  * Handles both simple queries (no phrases detected) and phrase-boosted queries
  * where the multi_match is wrapped in a bool.must structure.
@@ -40,8 +55,8 @@ function getBm25Query(
   request: ReturnType<typeof buildLessonRrfRequest>,
   retrieverIndex: number,
 ): estypes.QueryDslMultiMatchQuery | undefined {
-  const query = request.retriever?.rrf?.retrievers?.[retrieverIndex]?.standard?.query;
-  return extractMultiMatch(query);
+  const standard = getStandardRetriever(request, retrieverIndex);
+  return extractMultiMatch(standard?.query);
 }
 
 describe('buildLessonRrfRequest (four-way)', () => {
@@ -64,7 +79,7 @@ describe('buildLessonRrfRequest (four-way)', () => {
 
   it('uses ELSER content retriever as second retriever', () => {
     const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
-    expect(request.retriever?.rrf?.retrievers?.[1]?.standard?.query).toHaveProperty('semantic');
+    expect(getStandardRetriever(request, 1)?.query).toHaveProperty('semantic');
   });
 
   it('uses BM25 structure retriever as third retriever', () => {
@@ -75,7 +90,7 @@ describe('buildLessonRrfRequest (four-way)', () => {
 
   it('uses ELSER structure retriever as fourth retriever', () => {
     const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
-    expect(request.retriever?.rrf?.retrievers?.[3]?.standard?.query).toHaveProperty('semantic');
+    expect(getStandardRetriever(request, 3)?.query).toHaveProperty('semantic');
   });
 
   it('lesson BM25 includes fuzziness for typo tolerance', () => {
@@ -97,7 +112,7 @@ describe('buildLessonRrfRequest (four-way)', () => {
       subject: 'maths',
       keyStage: 'ks4',
     });
-    expect(request.retriever?.rrf?.retrievers?.[0]?.standard?.filter).toBeDefined();
+    expect(getStandardRetriever(request, 0)?.filter).toBeDefined();
   });
 });
 
@@ -123,7 +138,7 @@ describe('buildUnitRrfRequest (four-way)', () => {
 
   it('uses ELSER for semantic matching', () => {
     const request = buildUnitRrfRequest({ text: 'algebra', size: 10 });
-    expect(request.retriever?.rrf?.retrievers?.[1]?.standard?.query).toHaveProperty('semantic');
+    expect(getStandardRetriever(request, 1)?.query).toHaveProperty('semantic');
   });
 
   it('includes filters when subject and keyStage provided', () => {
@@ -133,6 +148,6 @@ describe('buildUnitRrfRequest (four-way)', () => {
       subject: 'maths',
       keyStage: 'ks4',
     });
-    expect(request.retriever?.rrf?.retrievers?.[0]?.standard?.filter).toBeDefined();
+    expect(getStandardRetriever(request, 0)?.filter).toBeDefined();
   });
 });

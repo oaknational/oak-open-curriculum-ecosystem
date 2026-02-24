@@ -9,7 +9,6 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { ClientOptions } from '@elastic/elasticsearch';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   createSearchRetrieval,
@@ -44,7 +43,9 @@ function createFakeFactories(
   retrieval: SearchRetrievalService,
 ): SearchRetrievalFactories<FakeClient> {
   return {
-    createEsClient: vi.fn<(config: ClientOptions) => FakeClient>().mockReturnValue(fakeEsClient),
+    createEsClient: vi
+      .fn<SearchRetrievalFactories<FakeClient>['createEsClient']>()
+      .mockReturnValue(fakeEsClient),
     createSdk: vi
       .fn<SearchRetrievalFactories<FakeClient>['createSdk']>()
       .mockReturnValue({ retrieval }),
