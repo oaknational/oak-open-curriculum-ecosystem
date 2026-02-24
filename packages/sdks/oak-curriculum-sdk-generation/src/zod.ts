@@ -21,5 +21,4 @@ export type {
 export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
-  SearchFacetsSchema,
 } from './types/generated/zod/search/index.js';

@@ -36,7 +36,7 @@ export { createOakClient as createApiClient } from './client/index.js';
 // Generated Types from OpenAPI Schema
 // ============================================================================
 
-export type { paths, components } from '@oaknational/curriculum-sdk-generation/api-schema';
+export type { paths, components } from './types/index.js';
 
 /** Public aliases for documentation clarity */
 export type {
@@ -77,16 +77,12 @@ export {
   SUBJECTS,
   ASSET_TYPES,
   VALID_PATHS_BY_PARAMETERS,
-  PATH_OPERATIONS,
-  OPERATIONS_BY_ID,
 } from '@oaknational/curriculum-sdk-generation/api-schema';
 
-export type {
-  PathOperation,
-  OperationId,
-  KeyStage,
-  Subject,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/index.js';
+export type { PathOperation, OperationId } from './types/index.js';
+
+export type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
 
 export { schemaBase as schema } from '@oaknational/curriculum-sdk-generation/api-schema';
 

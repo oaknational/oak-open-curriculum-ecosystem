@@ -5,7 +5,7 @@
  * Follows DRY by reusing shared helpers and document builders.
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
-import type { BulkDownloadFile, Unit, Lesson } from '@oaknational/curriculum-sdk/public/bulk';
+import type { BulkDownloadFile, Unit, Lesson } from '@oaknational/curriculum-sdk-generation/bulk';
 import type { BulkOperationEntry, BulkIndexAction } from '../lib/indexing/bulk-operation-types';
 import type { CreateSequenceDocumentParams } from '../lib/indexing/sequence-document-builder';
 import {

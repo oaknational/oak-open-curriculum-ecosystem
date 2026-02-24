@@ -63,8 +63,8 @@ export type {
 export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
-  SearchFacetsSchema,
 } from '@oaknational/curriculum-sdk-generation/zod';
+export { SearchFacetsSchema } from '@oaknational/curriculum-sdk-generation/search';
 
 // Response-shape type guards for search-related endpoints
 export {

@@ -51,15 +51,15 @@ export type {
   StatusDiscriminant,
 } from './types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
 
-export { callTool } from './types/generated/api-schema/mcp-tools/generated/runtime/execute.js';
+export { callTool } from './types/generated/api-schema/mcp-tools/runtime/execute.js';
 
 export {
   createStubToolExecutor,
   stubbedToolResponses,
   type StubbedToolName,
-} from './types/generated/api-schema/mcp-tools/generated/stubs/index.js';
+} from './types/generated/api-schema/mcp-tools/stubs/index.js';
 
 export {
   SCOPES_SUPPORTED,
   type ScopesSupported,
-} from './types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+} from './types/generated/api-schema/mcp-tools/scopes-supported.js';

@@ -18,10 +18,6 @@ case "${path}" in
     scripts/check-generator-scope.sh) ;;
     packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/*) ;;
     packages/sdks/oak-curriculum-sdk-generation/src/types/generated/*) ;;
-    .agent/plans/semantic-search/context.md) ;;
-    .agent/plans/semantic-search/snagging-resolution-plan.md) ;;
-    .agent/plans/sdk-workspace-separation-plan.md) ;;
-    .agent/prompts/schema-first.prompt-2.md) ;;
     *)
       echo "❌ Disallowed change detected: ${path}"
       exit 1

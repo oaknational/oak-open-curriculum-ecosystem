@@ -31,7 +31,7 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     );
     const aliasesFile = output.aliases['types.ts'];
     expect(aliasesFile).toContain(
-      "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
+      "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../definitions.js';",
     );
     expect(output.runtime['execute.ts']).toContain(
       "export function callTool(\n  name: 'get-lessons-transcript',",
@@ -42,7 +42,7 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(output.runtime['index.ts']).toContain(
       "export { callTool, listAllToolDescriptors } from './execute.js';",
     );
-    expect(output.index).toContain('generated/data/index.js');
+    expect(output.index).toContain('./definitions.js');
 
     expect(output.stubs['index.ts']).toContain('createStubToolExecutor');
     expect(output.stubs['tools/index.ts']).toContain('stubbedToolResponses');

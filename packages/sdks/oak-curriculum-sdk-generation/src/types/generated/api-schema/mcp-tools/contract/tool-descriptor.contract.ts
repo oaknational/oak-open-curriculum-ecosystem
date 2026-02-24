@@ -4,7 +4,7 @@
  * Tool descriptor contract used by all generated MCP tools.
  *
  * This contract intentionally avoids importing generated data.
- * All concrete tool descriptors are emitted under generated/data/tools
+ * All concrete tool descriptors are emitted under mcp-tools/tools
  * and must depend on this contract rather than the other way around.
  *
  * @remarks See .agent/directives/schema-first-execution.md

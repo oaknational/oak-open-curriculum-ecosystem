@@ -1,73 +1,64 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
+import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import { McpToolError } from './execute-tool-call.js';
-import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { ok } from '@oaknational/result';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
-import type { UniversalToolName } from './universal-tools/index.js';
+import { listUniversalTools } from './universal-tools/list-tools.js';
+import { isUniversalToolName } from './universal-tools/type-guards.js';
+import { createUniversalToolExecutor } from './universal-tools/executor.js';
+import type {
+  GeneratedToolRegistry,
+  ToolRegistryDescriptor,
+  UniversalToolName,
+} from './universal-tools/types.js';
 import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 
-interface McpToolDefinition {
-  readonly description?: string;
-  readonly inputSchema: GenericToolInputJsonSchema;
-}
+const sampleMcpToolName = 'get-key-stages-subject-lessons' as const satisfies ToolName;
 
-const { sampleMcpToolName, mcpTools } = vi.hoisted(() => {
-  const name = 'get-key-stages-subject-lessons' as const;
-  const definition: McpToolDefinition = {
-    description: 'List lessons for a subject',
-    inputSchema: {
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        params: {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            path: {
-              type: 'object',
-              additionalProperties: false,
-              properties: {
-                keyStage: { type: 'string' },
-                subject: { type: 'string' },
-              },
+const sampleDescriptor: ToolRegistryDescriptor = {
+  description: 'List lessons for a subject',
+  inputSchema: {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      params: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          path: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              keyStage: { type: 'string' },
+              subject: { type: 'string' },
             },
           },
         },
       },
     },
-  };
+  },
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: 'Get Lessons',
+  },
+  securitySchemes: [],
+  requiresDomainContext: false,
+};
 
-  const tools: Record<string, McpToolDefinition> = {
-    [name]: definition,
-  };
-
+function createFakeRegistry(): GeneratedToolRegistry {
   return {
-    sampleMcpToolName: name,
-    mcpTools: tools,
+    toolNames: [sampleMcpToolName],
+    getToolFromToolName: () => sampleDescriptor,
+    isToolName: (value: unknown): value is ToolName =>
+      typeof value === 'string' && value === sampleMcpToolName,
   };
-});
+}
 
-vi.mock('@oaknational/curriculum-sdk-generation/mcp-tools', async () => {
-  const actual: unknown = await vi.importActual('@oaknational/curriculum-sdk-generation/mcp-tools');
-  if (typeof actual !== 'object' || actual === null || !('SCOPES_SUPPORTED' in actual)) {
-    throw new Error('Expected SCOPES_SUPPORTED export in mcp-tools module');
-  }
-  const scopes: unknown = actual.SCOPES_SUPPORTED;
-  if (!Array.isArray(scopes) || !scopes.every((s): s is string => typeof s === 'string')) {
-    throw new Error('Expected SCOPES_SUPPORTED to be a string array');
-  }
-
-  return {
-    toolNames: [sampleMcpToolName] as const,
-    getToolFromToolName: (name: string) => mcpTools[name],
-    isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
-    SCOPES_SUPPORTED: scopes,
-  };
-});
-
-/** Type alias to reference SDK's structuredContent type without direct Record usage */
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
 
 function assertIsStructuredContent(value: unknown): asserts value is StructuredContent {
@@ -77,7 +68,6 @@ function assertIsStructuredContent(value: unknown): asserts value is StructuredC
 }
 
 function parseTextContent(result: CallToolResult): StructuredContent {
-  // content[0] = summary, content[1] = JSON (2-item format)
   const jsonContent = result.content.length >= 2 ? result.content[1] : result.content[0];
   if (jsonContent.type !== 'text') {
     throw new Error(`Expected text content but received ${jsonContent.type}`);
@@ -87,27 +77,25 @@ function parseTextContent(result: CallToolResult): StructuredContent {
   return parsed;
 }
 
-const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } =
-  await import('./universal-tools/index.js');
-
+const registry = createFakeRegistry();
 const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;
 
 describe('listUniversalTools', () => {
   it('includes aggregated helpers', () => {
-    const tools = listUniversalTools();
-    const names = tools.map((tool) => tool.name as string);
+    const tools = listUniversalTools(registry);
+    const names = tools.map((tool) => tool.name);
     expect(names).toContain('search');
     expect(names).toContain('fetch');
   });
 
   it('includes generated curriculum tools', () => {
-    const tools = listUniversalTools();
-    const names = tools.map((tool) => tool.name as string);
+    const tools = listUniversalTools(registry);
+    const names = tools.map((tool) => tool.name);
     expect(names).toContain(SAMPLE_MCP_TOOL_NAME);
   });
 
   it('preserves aggregator schema metadata', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
     expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
@@ -116,22 +104,22 @@ describe('listUniversalTools', () => {
 
 describe('isUniversalToolName', () => {
   it('matches aggregated tool names', () => {
-    expect(isUniversalToolName('search')).toBe(true);
-    expect(isUniversalToolName('fetch')).toBe(true);
-    expect(isUniversalToolName('get-ontology')).toBe(true);
-    expect(isUniversalToolName('get-help')).toBe(true);
-    expect(isUniversalToolName('get-thread-progressions')).toBe(true);
-    expect(isUniversalToolName('get-prerequisite-graph')).toBe(true);
-    expect(isUniversalToolName('browse-curriculum')).toBe(true);
-    expect(isUniversalToolName('explore-topic')).toBe(true);
+    expect(isUniversalToolName('search', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('fetch', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-ontology', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-help', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-thread-progressions', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-prerequisite-graph', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('browse-curriculum', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('explore-topic', registry.isToolName)).toBe(true);
   });
 
   it('matches curriculum tool names', () => {
-    expect(isUniversalToolName(SAMPLE_MCP_TOOL_NAME)).toBe(true);
+    expect(isUniversalToolName(SAMPLE_MCP_TOOL_NAME, registry.isToolName)).toBe(true);
   });
 
   it('rejects unknown names', () => {
-    expect(isUniversalToolName('unknown-tool')).toBe(false);
+    expect(isUniversalToolName('unknown-tool', registry.isToolName)).toBe(false);
   });
 });
 
@@ -153,6 +141,7 @@ describe('createUniversalToolExecutor', () => {
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval,
+      generatedTools: registry,
     });
 
     const result = await callUniversalTool('search', {
@@ -189,6 +178,7 @@ describe('createUniversalToolExecutor', () => {
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
     });
 
     const result = await callUniversalTool('fetch', { id: 'lesson:maths-lesson' });
@@ -198,18 +188,15 @@ describe('createUniversalToolExecutor', () => {
     });
     expect(result.isError).toBeUndefined();
 
-    // Content has human-readable summary for conversation display
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
       expect(firstContent.text).toContain('lesson');
     }
 
-    // structuredContent has FULL data for model reasoning (OpenAI Apps SDK pattern)
     expect(result.structuredContent).toBeDefined();
-    const structured = result.structuredContent as { id?: string; type?: string };
-    expect(structured).toHaveProperty('id', 'lesson:maths-lesson');
-    expect(structured).toHaveProperty('type', 'lesson');
+    expect(result.structuredContent).toHaveProperty('id', 'lesson:maths-lesson');
+    expect(result.structuredContent).toHaveProperty('type', 'lesson');
   });
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
@@ -217,6 +204,7 @@ describe('createUniversalToolExecutor', () => {
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
     });
 
     const args = {
@@ -238,6 +226,7 @@ describe('createUniversalToolExecutor', () => {
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
     });
 
     const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
@@ -251,59 +240,53 @@ describe('createUniversalToolExecutor', () => {
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
     });
 
     const result = await callUniversalTool('get-ontology', {});
 
     expect(result.isError).toBeUndefined();
 
-    // Content has human-readable summary for conversation display
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
       expect(firstContent.text).toContain('Curriculum');
     }
 
-    // structuredContent has FULL ontology data for model reasoning (OpenAI Apps SDK pattern)
     expect(result.structuredContent).toBeDefined();
-    const structured = result.structuredContent as {
-      version?: string;
-      curriculumStructure?: unknown;
-      workflows?: unknown;
-    };
-    expect(structured).toHaveProperty('version');
-    expect(structured).toHaveProperty('curriculumStructure');
-    expect(structured).toHaveProperty('workflows');
+    expect(result.structuredContent).toHaveProperty('version');
+    expect(result.structuredContent).toHaveProperty('curriculumStructure');
+    expect(result.structuredContent).toHaveProperty('workflows');
   });
 });
 
 describe('get-ontology tool descriptor', () => {
   it('appears in listUniversalTools', () => {
-    const tools = listUniversalTools();
-    const names = tools.map((tool) => tool.name as string);
+    const tools = listUniversalTools(registry);
+    const names = tools.map((tool) => tool.name);
     expect(names).toContain('get-ontology');
   });
 
   it('has readOnlyHint annotation set to true', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?.annotations?.readOnlyHint).toBe(true);
   });
 
   it('has idempotentHint annotation set to true', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?.annotations?.idempotentHint).toBe(true);
   });
 
   it('has title annotation', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?.annotations?.title).toBe('Get Curriculum Ontology');
   });
 
   it('has _meta with openai/toolInvocation fields', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?._meta).toBeDefined();
     expect(ontologyTool?._meta?.['openai/toolInvocation/invoking']).toBe(
@@ -313,14 +296,14 @@ describe('get-ontology tool descriptor', () => {
   });
 
   it('has description with "Use when" guidance', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?.description).toContain('Use this when');
     expect(ontologyTool?.description).toContain('Do NOT use for');
   });
 
   it('has empty input schema (no parameters)', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
     expect(ontologyTool?.inputSchema).toEqual({
       type: 'object',
@@ -330,15 +313,6 @@ describe('get-ontology tool descriptor', () => {
   });
 });
 
-/**
- * Tests for OpenAI Apps SDK _meta fields on all aggregated tools.
- *
- * These tests verify that all aggregated tools have the required _meta fields
- * for ChatGPT widget integration:
- * - openai/outputTemplate: URI of widget to render output
- * - openai/toolInvocation/invoking: Status text during execution
- * - openai/toolInvocation/invoked: Status text after completion
- */
 describe('aggregated tool _meta fields', () => {
   const aggregatedToolNames = [
     'search',
@@ -352,31 +326,24 @@ describe('aggregated tool _meta fields', () => {
   ] as const;
 
   it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
   });
 
   it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoking', (toolName) => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
   });
 
   it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoked', (toolName) => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
   });
 });
 
-/**
- * Tests for OpenAI Apps SDK _meta fields enabling widget interactivity.
- *
- * Phase 2 adds widgetAccessible and visibility fields to enable:
- * - Widget-initiated tool calls via window.openai.callTool()
- * - Tool visibility control (public vs private)
- */
 describe('aggregated tool widgetAccessible and visibility', () => {
   const aggregatedToolNames = [
     'search',
@@ -390,47 +357,34 @@ describe('aggregated tool widgetAccessible and visibility', () => {
   ] as const;
 
   it.each(aggregatedToolNames)('%s has openai/widgetAccessible set to true', (toolName) => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
   });
 
   it.each(aggregatedToolNames)('%s has openai/visibility set to public', (toolName) => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/visibility']).toBe('public');
   });
 });
 
-/**
- * Tests for description quality on search and fetch tools.
- *
- * Per OpenAI Apps SDK metadata optimization guidance, tool descriptions should
- * include "Use this when" and "Do NOT use" patterns to help ChatGPT select
- * the correct tool for user requests.
- */
 describe('search and fetch descriptions', () => {
   it('search description includes "Use this when" guidance', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === 'search');
     expect(tool?.description).toContain('Use this when');
     expect(tool?.description).toContain('Do NOT use');
   });
 
   it('fetch description includes "Use this when" guidance', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === 'fetch');
     expect(tool?.description).toContain('Use this when');
     expect(tool?.description).toContain('Do NOT use');
   });
 });
 
-/**
- * Tests for ontologyData structure.
- *
- * The ontology data includes static curriculum domain information that
- * helps LLMs understand the Oak curriculum structure.
- */
 describe('ontologyData', () => {
   it('includes synonyms section with subjects and keyStages', async () => {
     const { ontologyData } = await import('./ontology-data.js');
@@ -439,5 +393,11 @@ describe('ontologyData', () => {
     expect(ontologyData.synonyms.keyStages).toBeDefined();
     expect(ontologyData.synonyms.subjects.maths).toContain('mathematics');
     expect(ontologyData.synonyms.keyStages.ks4).toContain('gcse');
+  });
+
+  it('fits context budget (<70KB) for LLM tool-calling', async () => {
+    const { ontologyData } = await import('./ontology-data.js');
+    const ontologySize = JSON.stringify(ontologyData).length;
+    expect(ontologySize).toBeLessThan(70000);
   });
 });

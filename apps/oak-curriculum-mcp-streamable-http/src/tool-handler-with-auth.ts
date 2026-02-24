@@ -11,6 +11,7 @@ import type {
   UniversalToolName,
   createStubToolExecutionAdapter,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { generatedToolRegistry } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
@@ -81,6 +82,7 @@ export async function handleToolWithAuthInterception(
       return execution;
     },
     searchRetrieval: deps.searchRetrieval,
+    generatedTools: generatedToolRegistry,
   });
 
   const result = await executor(tool.name, params ?? {});

@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { createVocabularyMiningAdapter } from './vocabulary-mining-adapter';
-import type { BulkDownloadFile } from '@oaknational/curriculum-sdk/public/bulk';
+import type { BulkDownloadFile } from '@oaknational/curriculum-sdk-generation/bulk';
 
 // ============================================================================
 // Test Fixtures

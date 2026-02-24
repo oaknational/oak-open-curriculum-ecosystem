@@ -12,6 +12,7 @@ import {
 } from './helpers/sse.js';
 import {
   listUniversalTools,
+  generatedToolRegistry,
   createStubToolExecutionAdapter,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
@@ -100,7 +101,7 @@ describe('Streamable HTTP server (stub mode)', () => {
       .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
 
     expect(response.status).toBe(200);
-    assertToolRoster(response.text, listUniversalTools());
+    assertToolRoster(response.text, listUniversalTools(generatedToolRegistry));
   });
 
   it('serialises stubbed fetch results with canonicalUrl', async () => {

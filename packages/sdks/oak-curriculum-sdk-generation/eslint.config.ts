@@ -47,7 +47,7 @@ const config = defineConfig(
   },
 
   {
-    files: ['src/**/*.ts'],
+    files: ['src/**/*.ts', 'type-gen/**/*.ts', 'vocab-gen/**/*.ts'],
     rules: {
       ...createSdkBoundaryRules('generation'),
     },
@@ -76,6 +76,26 @@ const config = defineConfig(
       'max-statements': 'off',
       'max-depth': 'off',
       complexity: 'off',
+    },
+  },
+
+  {
+    files: ['vocab-gen/**'],
+    rules: {
+      'no-restricted-properties': 'off',
+      '@typescript-eslint/no-restricted-types': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      'max-depth': 'off',
+      complexity: 'off',
+    },
+  },
+
+  {
+    files: ['src/generated/vocab/**'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
     },
   },
 

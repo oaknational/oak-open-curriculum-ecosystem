@@ -1,5 +1,156 @@
 # Napkin
 
+## Session: 2026-02-24 (d) — SDK Workspace Separation Phase 5
+
+### What Was Done
+
+Completed Phase 5 of ADR-108 SDK workspace separation: tests, scripts,
+config migration, and reviewer hardening. 13 findings triaged, 7 already
+resolved, 6 implemented in 4 batches with review checkpoints.
+
+**F1 (scope guard)**: Removed 4 stale allowlist entries from
+`scripts/check-generator-scope.sh` pointing to deleted agent files.
+
+**F4 (test split)**: Moved `writeMcpToolsDirectory` filesystem I/O test
+from `typegen-core.unit.test.ts` to new
+`typegen-core-file-operations.integration.test.ts`.
+
+**F7 (path test)**: Verified already implemented and passing.
+
+**F10 (barrel simplification)**: Removed duplicate exports (`paths`,
+`components`, `PATH_OPERATIONS`, `OPERATIONS_BY_ID`, `PathOperation`,
+`OperationId`) from runtime SDK `src/index.ts`. Re-exported from
+`./types/index.js` to establish single canonical source.
+
+**F18 (DI refactoring)**: Largest change. Introduced `GeneratedToolRegistry`
+interface and `ToolRegistryDescriptor` (ISP-narrowed type). Created default
+implementation (`generated-tool-registry.ts`). Modified `listUniversalTools`,
+`isUniversalToolName`, and executor to accept injected dependencies.
+Rewrote `universal-tools.unit.test.ts` to eliminate all `vi.mock`/`vi.hoisted`.
+Updated 10 call sites across apps, SDK, and tests. Removed all `as` type
+assertions from tests.
+
+**F8 (resilience)**: Already documented in generation SDK README (lines 52-58).
+
+**Type predicate fix**: Fixed `isToolName` stubs in 4 integration test files
+to use proper `(value: unknown): value is ToolName =>` signatures.
+
+**Max-lines fix**: Removed orphaned JSDoc block from `handlers.ts`.
+
+### Key Decisions
+
+- **`ToolRegistryDescriptor` over full `ToolDescriptorForName<TName>`**:
+  The narrowed interface includes only fields the universal-tools layer
+  accesses. This makes test fakes constructible without `as` assertions.
+  Type-reviewer confirmed it's a proper supertype via Interface Segregation.
+- **`isToolName` stubs use sentinel comparison**: `typeof value === 'string'
+  && value === '__never__'` satisfies the type predicate requirement, uses
+  `value` in the body (avoiding `noUnusedParameters`), and always returns
+  false. Cleaner than `void value` or block body.
+- **Orphaned JSDoc removal**: An orphaned `@param transport` JSDoc block was
+  left behind from a prior refactor. `createMcpHandler` already had its own
+  JSDoc. Removing saved 9 lines, fixing the max-lines violation.
+
+### Patterns Learned
+
+- **Type predicate stubs need body usage**: TypeScript's `noUnusedParameters`
+  flags type predicate parameters even though they're referenced in the return
+  type annotation. Use the parameter in a meaningful expression like
+  `typeof value === 'string' && value === '__never__'` rather than just
+  returning `false`.
+- **`as const satisfies T` is the gold standard** for test data that must be
+  both a literal type and structurally valid. The unit test uses
+  `'get-key-stages-subject-lessons' as const satisfies ToolName`.
+- **Interface Segregation eliminates assertion pressure**: When test fakes
+  can't satisfy a complex generated type without `as`, extract a narrowed
+  interface with only the consumed fields. This is not loss of information —
+  it's correct scoping.
+- **Check `noUnusedParameters` in tsconfig before assuming arrow function
+  stubs compile**: `() => false` is clean but doesn't compile when the
+  interface requires a parameter and the tsconfig enforces usage.
+
+### Quality Gates
+
+build 13/13, type-check 22/22, lint:fix 24/24, test 22/22, format clean,
+markdownlint clean.
+
+### Reviewer Summary
+
+Final Phase 5 review: 4 specialists invoked (code-reviewer,
+architecture-reviewer-barney, test-reviewer, type-reviewer). All APPROVED.
+Non-blocking follow-ups: shared test stub extraction (DRY), test naming
+hygiene (vi.fn in unit test file), redundant `in` check in list-tools.ts.
+
+## Session: 2026-02-24 (c) — Architecture Review Remediation (N1-N6)
+
+### What Was Done
+
+Implemented all 6 findings from the architecture review remediation plan
+plus the canonical plan update, completing all blocking architectural issues
+identified by the four-reviewer sweep.
+
+**N1**: Added `**/schema-cache/**` to `turbo.json` `type-gen` inputs (1 line).
+
+**N2**: Extended `createSdkBoundaryRules('generation')` to cover
+`type-gen/**/*.ts` and `vocab-gen/**/*.ts` in generation ESLint config.
+Verified no existing `type-gen/` files import from `@oaknational/curriculum-sdk`.
+
+**N3**: Created `@oaknational/type-helpers` core package (Option A).
+Scaffolded following `@oaknational/result` conventions. Moved all 9
+`typeSafe*` helpers. Both SDKs now re-export from the shared package.
+Added to `LIB_PACKAGES` in `boundary.ts`. 11 unit tests pass.
+
+**N4**: Created `/vocab` subpath on generation SDK, separating static graph
+data and ontology from pipeline APIs. Rewired 6 runtime SDK files from
+`/bulk` to `/vocab`. Graph-related types remain exported from `/bulk` for
+generator function signatures.
+
+**N5**: Flattened MCP tool generated directory structure, removing
+`generated/data/` intermediate directories. Tool file depth reduced from
+8 to 6 levels. Import paths shortened (`../../../../` to `../../`).
+Modified 7 generator files, updated all barrel/index paths, fixed 3 test
+files. All 26 tool files + stubs regenerated automatically.
+
+**N6**: Broke generator bootstrap cycle in `generate-ai-doc.ts`. Static
+imports from generated output replaced with dynamic `import()` inside
+`main()`. `renderToolCatalog` made generic to preserve type safety.
+
+**Canonical plan update**: Integrated N1-N6 into findings table, Phase 5,
+Phase 6, and reverse-dependency inventory.
+
+### Key Decisions
+
+- **Type-helpers as core package** (not lib): Follows `@oaknational/result`
+  pattern. Added to `LIB_PACKAGES` for boundary enforcement.
+- **Graph types stay in `/bulk`**: Even though data values moved to `/vocab`,
+  the types are return types of generator functions that remain in `/bulk`.
+  Dual-export is correct.
+- **MCP tool flattening removes 2 levels**: `generated/data/` removed. The
+  `generated/` boundary between authored and generated is no longer needed
+  because all files under `mcp-tools/` except `contract/` are generated.
+- **Dynamic import for bootstrap cycle**: `import()` defers module loading
+  to runtime. TypeScript still resolves types at compile time but this is
+  acceptable because `doc-gen` depends on `type-gen` in Turbo.
+
+### Patterns Learned
+
+- **`typeSafeFromEntries` type annotation**: When entries have mixed value
+  types, use `readonly (readonly ['x' | 'y', number | string])[]` not
+  `readonly (readonly ['x', number] | readonly ['y', string])[]` — the
+  latter creates incompatible tuple union.
+- **`generateDataIndexFile` was a pure pass-through**: After flattening,
+  the data barrel became unnecessary because `index.ts` imports directly
+  from `./definitions.js`. One less generated file.
+- **Generator modifications propagate automatically**: When changing
+  import paths in generator files, the 26+ tool files don't need manual
+  updates — `pnpm type-gen` regenerates them all.
+- **StrReplace can fail on long multi-function blocks**: For large file
+  edits, target smaller unique chunks instead of entire functions.
+
+### Quality Gates
+
+type-gen 22/22, build 22/22, type-check 22/22, test 22/22.
+
 ## Session: 2026-02-24 (b) — SDK Workspace Separation Phase 2
 
 ### What Was Done
@@ -649,3 +800,36 @@ ES SDK 9.3 type changes required fixes:
   `'standard' in entry` narrowing for `RRFRetrieverEntry`
 - `RerankingRetrieverContainer` removed — `text_similarity_reranker`
   now natively in `RetrieverContainerExclusiveProps`
+
+### SDK Workspace Separation Phase 4 Complete (24 Feb 2026)
+
+Phase 4.3-4.4 executed: 22 search CLI files rewired from
+`@oaknational/curriculum-sdk/public/bulk` to
+`@oaknational/curriculum-sdk-generation/bulk`. Dead `public/bulk.ts`
+facade deleted. Export entries removed from runtime SDK package.json.
+
+Key learnings:
+- **TS2209 rootDir ambiguity**: When `tsconfig.build.json` extends a
+  base with wide `include` but narrows its own `include` to `src/**/*`,
+  tsc may not infer `rootDir` for export map resolution. Fix: explicit
+  `rootDir: "./src"` in build config.
+- **Moved files may have reverse deps on helpers**: The bulk generators
+  imported `typeSafeEntries` from runtime SDK's `type-helpers.ts` via
+  relative path. After moving, the import path broke. Fix: create a
+  generation-workspace copy (one function, documented justification).
+- **Test coverage migration**: When removing an import from a moved test
+  file, check whether the removed test should be recreated in the
+  destination workspace. The ontology budget test (70KB check) was lost
+  until the test reviewer caught it.
+- **Stale tsup entries**: After moving `src/bulk/` to generation, the
+  runtime SDK's `tsup.config.ts` still had `src/bulk/**/*.ts` as an
+  entry. It matched nothing silently — removed.
+- **Turbo stale cache**: After file moves and config changes, turbo may
+  report false test failures from stale cache. `--force` or clean build
+  resolves.
+
+Reviewer findings addressed:
+- test-reviewer: ontology budget test recreated in runtime SDK
+  (blocking finding resolved)
+- config-reviewer: stale tsup entry removed (non-blocking)
+- All 4 reviewers invoked: code, architecture-barney, test, config

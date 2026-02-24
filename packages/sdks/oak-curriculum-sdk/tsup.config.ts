@@ -18,9 +18,6 @@ export default defineConfig({
     // Public entry points — consumer-facing barrels
     'src/public/**/*.ts',
 
-    // Bulk data — parsing, extractors, generators
-    'src/bulk/**/*.ts',
-
     // MCP — tool definitions, execution, synonyms, resources
     'src/mcp/**/*.ts',
 

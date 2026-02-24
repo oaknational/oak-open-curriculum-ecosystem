@@ -12,7 +12,7 @@
  * @see `./tool-guidance-types.ts` for type definitions
  */
 
-import { threadProgressionGraph } from './thread-progression-data.js';
+import { threadProgressionGraph } from '@oaknational/curriculum-sdk-generation/vocab';
 import type { Workflow } from './tool-guidance-types.js';
 
 /**

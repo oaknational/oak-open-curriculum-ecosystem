@@ -29,7 +29,10 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { listUniversalTools } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import {
+  listUniversalTools,
+  generatedToolRegistry,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Overrides the tools/list handler on an McpServer to return our pre-generated
@@ -39,7 +42,7 @@ import { listUniversalTools } from '@oaknational/curriculum-sdk/public/mcp-tools
  */
 export function overrideToolsListHandler(server: McpServer): void {
   server.server.setRequestHandler(ListToolsRequestSchema, () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     return Promise.resolve({
       tools: tools.map((tool) => ({
         name: tool.name,

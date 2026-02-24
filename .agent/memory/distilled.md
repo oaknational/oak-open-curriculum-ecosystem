@@ -62,9 +62,9 @@ changing behaviour.
 - `Object.*` methods and `Reflect.*` methods are banned
   because they widen types (e.g. `Object.keys()` returns
   `string[]`, not the literal key union). Use `typeSafeKeys`
-  etc. from the SDK's `type-helpers.ts`. For plain objects
-  whose key type IS `string` (e.g. Zod shapes), `for...in`
-  is a language construct and is acceptable.
+  etc. from `@oaknational/type-helpers` (core package). For
+  plain objects whose key type IS `string` (e.g. Zod shapes),
+  `for...in` is a language construct and is acceptable.
 - ESLint `@typescript-eslint/no-restricted-types` in the
   strict config restricts 10 type-destroying patterns:
   `Record<string, unknown>`, `Record<string, any>`,

@@ -23,16 +23,14 @@ export function writeMcpToolsDirectory(
 ): void {
   const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
   const contractDir = path.resolve(mcpToolsDir, 'contract');
-  const generatedDir = path.resolve(mcpToolsDir, 'generated');
-  const dataDir = path.resolve(generatedDir, 'data');
-  const dataToolsDir = path.resolve(dataDir, 'tools');
-  const aliasesDir = path.resolve(generatedDir, 'aliases');
-  const runtimeDir = path.resolve(generatedDir, 'runtime');
-  const stubsDir = path.resolve(generatedDir, 'stubs');
+  const toolsDir = path.resolve(mcpToolsDir, 'tools');
+  const aliasesDir = path.resolve(mcpToolsDir, 'aliases');
+  const runtimeDir = path.resolve(mcpToolsDir, 'runtime');
+  const stubsDir = path.resolve(mcpToolsDir, 'stubs');
   const stubsToolsDir = path.resolve(stubsDir, 'tools');
 
   fs.mkdirSync(contractDir, { recursive: true });
-  fs.mkdirSync(dataToolsDir, { recursive: true });
+  fs.mkdirSync(toolsDir, { recursive: true });
   fs.mkdirSync(aliasesDir, { recursive: true });
   fs.mkdirSync(runtimeDir, { recursive: true });
   fs.mkdirSync(stubsToolsDir, { recursive: true });
@@ -43,14 +41,13 @@ export function writeMcpToolsDirectory(
     fs.writeFileSync(path.resolve(contractDir, filename), content);
   }
 
-  fs.writeFileSync(path.resolve(dataDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
   fs.writeFileSync(
-    path.resolve(dataDir, 'scopes-supported.ts'),
+    path.resolve(mcpToolsDir, 'scopes-supported.ts'),
     mcpTools.data['scopes-supported.ts'],
   );
-  fs.writeFileSync(path.resolve(dataDir, 'index.ts'), mcpTools.data['index.ts']);
   for (const [filename, content] of Object.entries(mcpTools.data.tools)) {
-    fs.writeFileSync(path.resolve(dataToolsDir, filename), content);
+    fs.writeFileSync(path.resolve(toolsDir, filename), content);
   }
 
   for (const [filename, content] of Object.entries(mcpTools.aliases)) {

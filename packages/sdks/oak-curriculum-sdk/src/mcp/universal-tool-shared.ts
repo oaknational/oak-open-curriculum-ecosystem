@@ -9,6 +9,7 @@ import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
 import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
 import type { SearchRetrievalService } from './search-retrieval-types.js';
+import type { GeneratedToolRegistry } from './universal-tools/types.js';
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
@@ -45,6 +46,15 @@ export interface UniversalToolExecutorDependencies {
    * stub service (`createStubSearchRetrieval`) in stub mode.
    */
   readonly searchRetrieval: SearchRetrievalService;
+
+  /**
+   * Generated tool registry for DI of generation SDK functions.
+   *
+   * Provides `getToolFromToolName`, `isToolName`, and `toolNames`
+   * without hardcoding imports from the generation package. This
+   * enables tests to inject lightweight fakes.
+   */
+  readonly generatedTools: GeneratedToolRegistry;
 }
 
 export function formatError(message: string): CallToolResult {

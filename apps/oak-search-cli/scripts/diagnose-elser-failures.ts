@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
 import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
 import { env } from '../src/lib/env.js';
-import { readAllBulkFiles } from '@oaknational/curriculum-sdk/public/bulk';
+import { readAllBulkFiles } from '@oaknational/curriculum-sdk-generation/bulk';
 import { createOakClient } from '../src/adapters/oak-adapter';
 import { createHybridDataSource } from '../src/adapters/hybrid-data-source';
 import {

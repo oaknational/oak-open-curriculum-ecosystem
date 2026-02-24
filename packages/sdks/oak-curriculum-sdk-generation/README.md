@@ -42,11 +42,20 @@ in `@oaknational/eslint-plugin-standards`):
 ```bash
 pnpm build        # Build with tsup + tsc declarations
 pnpm clean        # Remove dist and turbo cache
+pnpm type-gen     # Regenerate types from OpenAPI schema (runs generate:clean first)
 pnpm type-check   # Type-check without emitting
 pnpm lint         # Lint with ESLint
 pnpm lint:fix     # Lint and auto-fix
 pnpm test         # Run tests
 ```
+
+### `generate:clean` caveat
+
+`generate:clean` removes `src/types/generated/` before regeneration. If
+`type-gen` fails after the clean step, the workspace is left without
+generated artefacts and will not compile. Re-run `pnpm type-gen` from the
+repo root to recover. A future improvement could use atomic
+write-to-temp-then-rename to prevent this intermediate broken state.
 
 ## References
 

@@ -73,7 +73,9 @@ export {
   isUniversalToolName,
   isAggregatedToolName,
   createUniversalToolExecutor,
+  generatedToolRegistry,
   AGGREGATED_TOOL_DEFS,
+  type GeneratedToolRegistry,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
@@ -104,13 +106,13 @@ export { ontologyData } from '../mcp/ontology-data.js';
 export type { OntologyData } from '../mcp/ontology-data.js';
 
 // Property graph data (concept TYPE relationships)
-export { conceptGraph } from '../mcp/property-graph-data.js';
+export { conceptGraph } from '@oaknational/curriculum-sdk-generation/vocab';
 export type {
   ConceptGraph,
   ConceptId,
   ConceptCategory,
   ConceptEdge,
-} from '../mcp/property-graph-data.js';
+} from '@oaknational/curriculum-sdk-generation/vocab';
 
 // Search retrieval service interface (dependency inversion for search SDK)
 export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';

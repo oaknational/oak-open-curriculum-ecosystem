@@ -10,6 +10,7 @@ import {
   executeToolCall,
   createUniversalToolExecutor,
   isUniversalToolName,
+  generatedToolRegistry,
   type ToolExecutionResult,
   type ToolName,
   type OakApiPathBasedClient,
@@ -48,11 +49,12 @@ export function createMcpToolsModule(
   const executor = createUniversalToolExecutor({
     executeMcpTool,
     searchRetrieval: deps.searchRetrieval,
+    generatedTools: generatedToolRegistry,
   });
 
   return {
     handleTool: async (name: string, args: unknown) => {
-      if (!isUniversalToolName(name)) {
+      if (!isUniversalToolName(name, generatedToolRegistry.isToolName)) {
         return formatError(`Unknown tool: ${name}`);
       }
       try {

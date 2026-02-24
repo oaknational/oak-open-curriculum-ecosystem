@@ -10,7 +10,7 @@ const GENERATED_BANNER = [
 ].join('\n');
 
 const GENERATED_IMPORTS =
-  "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';";
+  "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../definitions.js';";
 
 const TOOL_TYPE_ALIASES = `type ToolDescriptorMap = { readonly [TName in ToolName]: ToolEntryForName<TName>['descriptor'] };
 type ToolInvokeParametersMap = {

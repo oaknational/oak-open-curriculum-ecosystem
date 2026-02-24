@@ -14,6 +14,7 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
+  generatedToolRegistry,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
@@ -95,7 +96,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     ? createStubToolExecutionAdapter()
     : undefined;
 
-  for (const tool of listUniversalTools()) {
+  for (const tool of listUniversalTools(generatedToolRegistry)) {
     // Use generated Zod schema directly when available (includes .describe() for MCP clients).
     // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
     const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
@@ -123,15 +124,6 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
   registerPrompts(server);
 }
 
-/**
- * Creates an MCP request handler with correlation ID support.
- *
- * @param transport - MCP server transport
- * @param logger - Base logger instance
- * @returns Express request handler for MCP protocol
- *
- * @public
- */
 /**
  * Adapts Express Request for MCP SDK transport by omitting Clerk's auth property.
  *

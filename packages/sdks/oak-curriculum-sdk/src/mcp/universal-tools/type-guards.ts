@@ -6,7 +6,7 @@
  * and generated tools (from OpenAPI spec).
  */
 
-import { isToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
+import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import { AGGREGATED_TOOL_DEFS } from './definitions.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 
@@ -43,15 +43,18 @@ export function isAggregatedToolName(value: unknown): value is AggregatedToolNam
  *
  * @example
  * ```typescript
- * if (!isUniversalToolName(name)) {
+ * if (!isUniversalToolName(name, registry.isToolName)) {
  *   return formatError(`Unknown tool: ${name}`);
  * }
  * // TypeScript knows name is UniversalToolName here
  * ```
  */
-export function isUniversalToolName(value: unknown): value is UniversalToolName {
+export function isUniversalToolName(
+  value: unknown,
+  isToolNameFn: (v: unknown) => v is ToolName,
+): value is UniversalToolName {
   if (typeof value !== 'string') {
     return false;
   }
-  return isAggregatedToolName(value) || isToolName(value);
+  return isAggregatedToolName(value) || isToolNameFn(value);
 }

@@ -6,10 +6,9 @@
  * and generated tools (from OpenAPI spec).
  */
 
-import { toolNames, getToolFromToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import { typeSafeKeys } from '../../types/helpers/type-helpers.js';
 import { AGGREGATED_TOOL_DEFS } from './definitions.js';
-import type { UniversalToolListEntry } from './types.js';
+import type { GeneratedToolRegistry, UniversalToolListEntry } from './types.js';
 import { extractZodShape } from './zod-utils.js';
 
 /**
@@ -28,7 +27,7 @@ import { extractZodShape } from './zod-utils.js';
  *
  * @example
  * ```typescript
- * const tools = listUniversalTools();
+ * const tools = listUniversalTools(registry);
  * for (const tool of tools) {
  *   if (tool.flatZodSchema) {
  *     server.registerTool(tool.name, tool.flatZodSchema, handler);
@@ -38,7 +37,7 @@ import { extractZodShape } from './zod-utils.js';
  * }
  * ```
  */
-export function listUniversalTools(): UniversalToolListEntry[] {
+export function listUniversalTools(registry: GeneratedToolRegistry): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
     (name) => {
       const def = AGGREGATED_TOOL_DEFS[name];
@@ -55,8 +54,8 @@ export function listUniversalTools(): UniversalToolListEntry[] {
     },
   );
 
-  const generatedEntries: UniversalToolListEntry[] = toolNames.map((name) => {
-    const descriptor = getToolFromToolName(name);
+  const generatedEntries: UniversalToolListEntry[] = registry.toolNames.map((name) => {
+    const descriptor = registry.getToolFromToolName(name);
     return {
       name,
       description: descriptor.description,

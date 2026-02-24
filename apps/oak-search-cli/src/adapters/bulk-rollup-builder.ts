@@ -8,7 +8,7 @@
 
  */
 
-import type { Unit, Lesson } from '@oaknational/curriculum-sdk/public/bulk.js';
+import type { Unit, Lesson } from '@oaknational/curriculum-sdk-generation/bulk';
 import type {
   KeyStage,
   SearchSubjectSlug,

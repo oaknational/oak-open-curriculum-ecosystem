@@ -10,7 +10,7 @@ import {
   toolRequiresAuth,
   getScopesSupported,
 } from './mcp-security-policy.js';
-import { SCOPES_SUPPORTED } from '../src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+import { SCOPES_SUPPORTED } from '../src/types/generated/api-schema/mcp-tools/scopes-supported.js';
 
 describe('MCP Security Policy Configuration', () => {
   describe('PUBLIC_TOOLS', () => {

@@ -286,6 +286,7 @@ export const LIB_PACKAGES = [
   'env',
   'transport',
   'openapi-zod-client-adapter',
+  'type-helpers',
 ] as const;
 
 /**

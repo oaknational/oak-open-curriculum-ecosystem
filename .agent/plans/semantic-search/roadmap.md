@@ -160,10 +160,13 @@ Goal:
 
 Progress (24 Feb 2026):
 
-- Phases 0, 1, 2 complete. Generation workspace exists with type-gen pipeline,
+- Phases 0–5 complete. Generation workspace exists with type-gen pipeline,
   generated types, 10 subpath exports, and boundary rules. ~70 runtime files
-  rewired. 8 specialist reviews completed, all blocking findings resolved.
-- Phases 3–7 remain (vocab-gen/bulk moves, search CLI rewire, docs, CI hardening).
+  rewired. Vocab-gen/bulk moved, search CLI rewired. DI refactoring for
+  universal tools (GeneratedToolRegistry). All Phase 5 reviewer findings
+  (F1–F10, F18) resolved. Architecture remediation N1–N6 complete.
+- Phases 6–7 remain (provenance/TSDoc/docs, CI drift check). Phase 5
+  reviewer suggestions (§13.6 of canonical plan) queued for Phase 6 start.
 
 ### 3h Widget Stabilisation (Complete)
 

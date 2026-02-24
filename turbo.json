@@ -14,7 +14,8 @@
         "$TURBO_DEFAULT$",
         "**/type-gen/**/*.ts",
         "**/vocab-gen/**/*.ts",
-        "**/scripts/**/*.ts"
+        "**/scripts/**/*.ts",
+        "**/schema-cache/**"
       ],
       "passThroughEnv": ["OAK_API_KEY"]
     },
@@ -127,7 +128,7 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.config.e2e.ts"],
       "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:ui": {

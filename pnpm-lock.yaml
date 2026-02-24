@@ -262,6 +262,9 @@ importers:
       '@oaknational/curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
+      '@oaknational/curriculum-sdk-generation':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-curriculum-sdk-generation
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/core/env
@@ -471,6 +474,36 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.0)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/core/type-helpers:
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../oak-eslint
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.56.1
+        version: 8.56.1(@typescript-eslint/parser@8.56.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.56.1
+        version: 8.56.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      '@vitest/ui':
+        specifier: ^4.0.18
+        version: 4.0.18(vitest@4.0.18)
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
+      globals:
+        specifier: ^16.5.0
+        version: 16.5.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.0)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
+
   packages/libs/logger:
     dependencies:
       express:
@@ -495,6 +528,9 @@ importers:
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../core/result
+      '@oaknational/type-helpers':
+        specifier: workspace:*
+        version: link:../../core/type-helpers
       '@zod/core':
         specifier: ^0.11.6
         version: 0.11.6
@@ -511,15 +547,15 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.27.0
         version: 1.27.0(zod@4.3.6)
-      '@next/eslint-plugin-next':
-        specifier: ^16.1.6
-        version: 16.1.6
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../core/oak-eslint
       '@types/node':
         specifier: ^24.10.13
         version: 24.10.13
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -541,6 +577,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.27.0
         version: 1.27.0(zod@4.3.6)
+      '@oaknational/type-helpers':
+        specifier: workspace:*
+        version: link:../../core/type-helpers
       '@zod/core':
         specifier: ^0.11.6
         version: 0.11.6

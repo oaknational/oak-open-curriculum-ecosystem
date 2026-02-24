@@ -13,9 +13,8 @@
  */
 
 import { synonymsData } from './synonyms/index.js';
-import { threadProgressionGraph } from './thread-progression-data.js';
+import { threadProgressionGraph, conceptGraph } from '@oaknational/curriculum-sdk-generation/vocab';
 import { toolGuidanceData } from './tool-guidance-data.js';
-import { conceptGraph } from './property-graph-data.js';
 
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.

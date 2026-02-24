@@ -15,13 +15,6 @@ import { fileURLToPath } from 'node:url';
 import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
-// Import generated artifacts directly for endpoint/tool catalogs
-import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
-import {
-  toolNames,
-  getToolFromToolName,
-  type ToolDescriptorForName,
-} from '../src/types/generated/api-schema/mcp-tools/index.js';
 import { ZodError } from 'zod';
 
 /** Type for Zod validation issues (derived from ZodError to avoid deprecated ZodIssue import) */
@@ -273,12 +266,15 @@ function listParamObjectKeys(obj: unknown): string {
   return keys.length === 0 ? '_None_' : keys.join(', ');
 }
 
-function renderToolCatalog(): string {
+function renderToolCatalog<T extends string>(
+  names: readonly T[],
+  lookupTool: (name: T) => unknown,
+): string {
   const lines: string[] = [];
   lines.push('## MCP Tool Catalog');
-  const entries = [...toolNames].sort((a, b) => a.localeCompare(b));
+  const entries = [...names].sort((a, b) => a.localeCompare(b));
   for (const name of entries) {
-    const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
+    const descriptor: unknown = lookupTool(name);
     const opId = getOwnString(descriptor, 'operationId') ?? '';
     const path = getOwnString(descriptor, 'path') ?? '';
     const method = getOwnString(descriptor, 'method') ?? '';
@@ -299,6 +295,12 @@ function renderToolCatalog(): string {
 
 async function main(): Promise<void> {
   const { docsDir, typedocJsonPath, outPath } = resolvePaths();
+
+  const [pathParamsModule, mcpToolsModule] = await Promise.all([
+    import('../src/types/generated/api-schema/path-parameters.js'),
+    import('../src/types/generated/api-schema/mcp-tools/index.js'),
+  ]);
+
   const project = await readTypedocProject(typedocJsonPath);
   // Filter out internal helper functions that aren’t useful for AI agents
   const exported = collectExports(project).filter((r) => {
@@ -326,8 +328,11 @@ async function main(): Promise<void> {
   const grouped = groupByKind(exported);
   const quickstart = makeQuickstartSection();
   const conventions = buildConventionsSection();
-  const endpointCatalog = renderEndpointCatalog(PATH_OPERATIONS);
-  const toolCatalog = renderToolCatalog();
+  const endpointCatalog = renderEndpointCatalog(pathParamsModule.PATH_OPERATIONS);
+  const toolCatalog = renderToolCatalog(
+    mcpToolsModule.toolNames,
+    mcpToolsModule.getToolFromToolName,
+  );
   const content = [
     buildHeader(),
     quickstart,

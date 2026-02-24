@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-24 (post Phase 2 execution)
+**Last Updated**: 2026-02-24 (Phases 0-5 complete, N1-N6 remediation complete, Phase 6 next)
 
 ---
 
@@ -58,24 +58,58 @@ Run this checklist at the start of the next session:
 
    ```bash
    git status --short
+   git branch --show-current
    ls -1 .agent/plans/semantic-search/active
-   ls -1 .agent/plans/semantic-search/archive/completed
    ```
 
-3. Read split-critical ADRs:
+3. Verify post-split repo structure (compare against
+   [baseline](../../plans/semantic-search/active/sdk-workspace-separation-baseline.json)
+   captured pre-split at Phase 0):
+
+   ```bash
+   # Generation workspace exists (baseline: absent)
+   ls -d packages/sdks/oak-curriculum-sdk-generation
+
+   # SDK workspaces (baseline: 2, now: 3)
+   ls -1 packages/sdks
+
+   # Core packages (baseline: 4, now: 5 — type-helpers added in N3)
+   ls -1 packages/core
+
+   # Runtime SDK has NO local generated imports (baseline: 56, now: 0)
+   rg -l "from ['\"](\.{1,2}/)+types/generated" \
+     packages/sdks/oak-curriculum-sdk/src \
+     --glob '!**/types/generated/**' \
+     --glob '!**/*.test.ts' | wc -l
+
+   # Runtime SDK has no type-gen, no src/types/generated,
+   # no src/bulk, no public/bulk.ts
+   test -d packages/sdks/oak-curriculum-sdk/type-gen && echo "FAIL" || echo "OK"
+   test -d packages/sdks/oak-curriculum-sdk/src/types/generated && echo "FAIL" || echo "OK"
+   test -d packages/sdks/oak-curriculum-sdk/src/bulk && echo "FAIL" || echo "OK"
+   test -f packages/sdks/oak-curriculum-sdk/src/public/bulk.ts && echo "FAIL" || echo "OK"
+
+   # Generation SDK subpath exports (11 total)
+   node -e "const p=JSON.parse(require('fs').readFileSync( \
+     './packages/sdks/oak-curriculum-sdk-generation/package.json','utf8')); \
+     Object.keys(p.exports).forEach(k=>console.log(k))"
+   ```
+
+4. Read split-critical ADRs:
    - [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture, consumer model, boundary invariants, 4-workspace vision
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
-4. Treat these as active execution plans:
-   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** (self-sufficient, all decisions resolved)
-5. Treat these as complete/archive references only:
+5. Read the active execution plan — it is self-sufficient:
+   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**, Phases 5-7 remain
+6. Treat these as complete/archive references only:
+   - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
    - [search-results-quality.md](../../plans/semantic-search/archive/completed/search-results-quality.md) — search quality (ADR-120)
    - [search-snagging.md](../../plans/semantic-search/archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
    - [widget-search-rendering.md](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — Widget Phases 0-5
    - [search-dispatch-type-safety.md](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
-6. Keep post-merge MCP extension work separate:
+7. Keep post-merge MCP extension work separate:
    - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
 
 ---
@@ -84,8 +118,9 @@ Run this checklist at the start of the next session:
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
-**SDK workspace separation** — Phases 0, 1, and 2 are
-**complete** (24 Feb 2026). Phases 3–7 remain.
+**SDK workspace separation** — Phases 0-4 are **complete**.
+Architecture review remediation (N1-N6) is **complete**.
+Phases 5-7 remain.
 
 **Completed**:
 - Phase 0: baseline evidence committed
@@ -96,9 +131,39 @@ Run this checklist at the start of the next session:
   to use 10 subpath exports. E2E tests migrated. 8 specialist
   reviews completed, all blocking findings resolved. Full
   quality gate chain passed.
+- Phase 3: `vocab-gen/` (39 files), `src/bulk/` (36 files),
+  5 graph data files, `definition-synonyms.ts`, and
+  `property-graph-data.ts` moved to generation workspace.
+  Generation barrel exports and config updated.
+- Phase 4: reverse dependency resolved (4.1), runtime SDK
+  internal imports rewired (4.2), 22 search CLI files rewired
+  from `public/bulk` to generation (4.3), `public/bulk.ts`
+  facade deleted (4.4). Compilation gate passed.
+- Architecture remediation: N1 (turbo schema-cache inputs),
+  N2 (ESLint boundary gap), N3 (`@oaknational/type-helpers`
+  extraction), N4 (`/vocab` subpath), N5 (MCP tool dir
+  flattening), N6 (generator bootstrap cycle). All 6 completed.
 
-**Next**: Phase 3 (move vocab-gen, bulk infrastructure,
-authored domain ontology, generated vocab outputs).
+- Phase 5 COMPLETED: 13 findings triaged (7 already resolved,
+  6 implemented). Scope guard stale entries removed. Test split
+  to integration (F4). Barrel simplification — duplicate exports
+  removed (F10). DI refactoring — `GeneratedToolRegistry` interface
+  + `ToolRegistryDescriptor` (ISP), eliminated `vi.mock`/`vi.hoisted`,
+  removed all `as` assertions (F18). `generate:clean` recovery
+  documented (F8). All gates pass. 4 specialist reviewers approved.
+  Phase 5 reviewer suggestions tracked in plan §13.6.
+
+**Next**: Phase 6 — generated provenance, TSDoc, documentation
+alignment, and structural refinements. Start with Phase 5
+reviewer suggestions (plan §13.6): shared test stub extraction
+(S1), test naming hygiene (S2), redundant `_meta` in guard (S3),
+semver for API surface change (S4). Then Phase 6 scope: provenance
+banner updates (F11), barrel auto-generation evaluation (F12),
+subpath granularity (F13), OakApiPathBasedClient ownership (F14),
+wildcard export audit (F15). Also: documentation extraction tasks
+added by consolidation review — synonyms README (§16 domain
+knowledge), generation SDK README (subpath table), ESLint plugin
+README (`createSdkBoundaryRules`), type-helpers README.
 
 **Two-pipeline architecture** (see
 [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)):
@@ -295,7 +360,7 @@ system split across six workspaces.
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Generation SDK** | `packages/sdks/oak-curriculum-sdk-generation/` | Type-gen pipeline, generated types, Zod schemas, MCP tool descriptors (Phase 2 complete; vocab-gen, bulk still pending Phase 3) |
+| **Generation SDK** | `packages/sdks/oak-curriculum-sdk-generation/` | Two pipelines: API (type-gen, generated types, Zod, MCP descriptors) and bulk (vocab-gen, bulk infrastructure, graph data, mined synonyms). 11 subpath exports. Phases 0-4 + N1-N6 complete. |
 | **Runtime SDK** | `packages/sdks/oak-curriculum-sdk/` | Runtime client, auth, validation, MCP tool composition |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
@@ -310,6 +375,17 @@ consume the runtime SDK (tool definitions) and optionally the
 Search SDK (search retrieval). The MCP application layer is
 where both SDKs connect — aggregated tools orchestrate API
 and search together.
+
+**Synonym system**: ~500 curated vocabulary entries across
+23 categories serve two distinct concerns currently conflated
+into one `synonymsData` object: (1) agent context injection
+via the `get-ontology` MCP tool (primary intent), and
+(2) interim Elasticsearch query expansion pending a
+bulk-data-derived synonym pipeline. The curated lists remain
+in runtime `src/mcp/synonyms/`; mined synonyms moved to
+generation in Phase 3. Co-location of all synonym content is
+a follow-on target. See ADR-063 and the canonical plan §16
+(Synonym System Reference) for full details.
 
 ### Search Pipeline
 
@@ -391,6 +467,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | Env Architecture | `resolveEnv` pipeline, discriminated `RuntimeConfig` (ADR-116) | [ADR-116](../../../docs/architecture/architectural-decisions/116-resolve-env-pipeline-architecture.md) |
 | Code Quality | TSDoc warnings 0, type shortcuts eliminated | -- |
 | Widget Phases 0-5 | 18 renderers deleted, 3 renderers built, Zod contract tests, XSS hardening, resilience hardening (error containment, JSON.stringify, fail-fast, delegated clicks, four-way sync) | [plan](../../plans/semantic-search/archive/completed/widget-search-rendering.md) |
+| Architecture Remediation (N1-N6) | Turbo schema-cache, ESLint boundary gap, `@oaknational/type-helpers` core package, `/vocab` subpath, MCP tool dir flattening, generator bootstrap cycle | [plan](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) |
 
 ---
 
@@ -408,6 +485,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence (Milestone 0/1/2) — start here for "what's next" |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 | [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK domain synonyms source of truth (predates two-concern insight; revision needed post-pipeline) |
 
 ### Background Architecture
 

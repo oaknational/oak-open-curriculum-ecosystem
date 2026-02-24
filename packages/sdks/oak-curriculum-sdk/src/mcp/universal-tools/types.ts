@@ -19,6 +19,37 @@ import type {
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
 
 /**
+ * Subset of ToolDescriptor fields that the universal-tools layer accesses.
+ *
+ * Narrowed from the full `ToolDescriptorForName<TName>` via Interface
+ * Segregation: consumers only need listing metadata and domain-context
+ * hints, not invoke functions or Zod schemas.
+ */
+export interface ToolRegistryDescriptor {
+  readonly description?: string;
+  readonly inputSchema: GeneratedToolInputSchema;
+  readonly toolMcpFlatInputSchema?: z.ZodType;
+  readonly securitySchemes?: readonly SecurityScheme[];
+  readonly annotations?: ToolAnnotations;
+  readonly _meta?: ToolMeta;
+  readonly requiresDomainContext?: boolean;
+}
+
+/**
+ * Dependency interface for generated tool functions from the generation SDK.
+ *
+ * Abstracts the generation SDK's runtime exports behind an interface,
+ * enabling dependency injection in both product code and tests.
+ * The default implementation wires the real generation SDK functions;
+ * tests inject lightweight fakes.
+ */
+export interface GeneratedToolRegistry {
+  readonly toolNames: readonly ToolName[];
+  readonly getToolFromToolName: (name: ToolName) => ToolRegistryDescriptor;
+  readonly isToolName: (value: unknown) => value is ToolName;
+}
+
+/**
  * Aggregated tool names derived from the aggregated tool definitions.
  *
  * These are hand-written tools that combine multiple API calls into

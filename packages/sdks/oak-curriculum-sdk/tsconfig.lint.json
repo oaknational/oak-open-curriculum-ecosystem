@@ -9,7 +9,6 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",
-    "vocab-gen/**/*.ts",
     "bin/**/*.ts",
     "e2e-tests/**/*.ts"
   ],

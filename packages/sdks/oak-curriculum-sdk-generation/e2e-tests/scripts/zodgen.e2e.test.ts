@@ -30,12 +30,7 @@ describe('zod generator - functionality tests', () => {
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
   beforeEach(() => {
-    // clean output directory between runs
-    try {
-      rmSync(outDir, { recursive: true, force: true });
-    } catch {
-      // ignore
-    }
+    rmSync(outDir, { recursive: true, force: true });
     if (!existsSync(outDir)) {
       mkdirSync(outDir, { recursive: true });
     }
@@ -74,8 +69,6 @@ describe('zod generator - functionality tests', () => {
 
     try {
       execSync('npx tsc', { cwd: outDir, stdio: 'pipe' });
-      // If we get here, compilation succeeded
-      expect(true).toBe(true);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Generated Zod schemas failed to compile: ${errorMessage}`);
@@ -142,7 +135,6 @@ describe('zod generator - functionality tests', () => {
 
     try {
       execSync('npx tsc', { cwd: outDir, stdio: 'pipe' });
-      expect(true).toBe(true);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Generated Zod schemas are not usable: ${errorMessage}`);

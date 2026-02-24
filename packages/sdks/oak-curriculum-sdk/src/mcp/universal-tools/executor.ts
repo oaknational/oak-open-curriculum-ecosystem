@@ -24,12 +24,9 @@ import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
+import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
-import {
-  getToolFromToolName,
-  type ToolName,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.
@@ -44,13 +41,17 @@ import {
  * @param toolName - Name of the tool (to look up requiresDomainContext)
  * @returns Formatted CallToolResult for MCP
  */
-function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): CallToolResult {
+function mapExecutionResult(
+  result: ToolExecutionResult,
+  toolName: ToolName,
+  deps: UniversalToolExecutorDependencies,
+): CallToolResult {
   const outcome = extractExecutionData(result);
   if (!outcome.ok) {
     return formatError(toErrorMessage(outcome.error));
   }
 
-  const descriptor = getToolFromToolName(toolName);
+  const descriptor = deps.generatedTools.getToolFromToolName(toolName);
   const title = descriptor.annotations?.title ?? toolName;
 
   return formatToolResponse({
@@ -206,7 +207,7 @@ export function createUniversalToolExecutor(
   deps: UniversalToolExecutorDependencies,
 ): (name: UniversalToolName, args: unknown) => Promise<CallToolResult> {
   return async (name: UniversalToolName, args: unknown): Promise<CallToolResult> => {
-    if (!isUniversalToolName(name)) {
+    if (!isUniversalToolName(name, deps.generatedTools.isToolName)) {
       return formatUnknownTool(name);
     }
 
@@ -216,10 +217,8 @@ export function createUniversalToolExecutor(
       return executeAggregatedTool(name, input, deps);
     }
 
-    // Generated tool - dispatch to the MCP tool executor
-    // The name is already validated as a ToolName at this point
     const result = await deps.executeMcpTool(name, input);
-    return mapExecutionResult(result, name);
+    return mapExecutionResult(result, name, deps);
   };
 }
 

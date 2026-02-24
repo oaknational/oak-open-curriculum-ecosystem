@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listUniversalTools } from './universal-tools/index.js';
+import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
 
 /**
@@ -10,7 +10,7 @@ import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-consta
  */
 describe('listUniversalTools annotations', () => {
   it('returns tools with annotations property', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     expect(tools.length).toBeGreaterThan(0);
 
@@ -20,7 +20,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('all tools have readOnlyHint set to true', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool.annotations?.readOnlyHint).toBe(true);
@@ -28,7 +28,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('all tools have destructiveHint set to false', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool.annotations?.destructiveHint).toBe(false);
@@ -36,7 +36,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('all tools have idempotentHint set to true', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool.annotations?.idempotentHint).toBe(true);
@@ -44,7 +44,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('all tools have openWorldHint set to false', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool.annotations?.openWorldHint).toBe(false);
@@ -52,7 +52,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('all tools have a human-readable title', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool.annotations?.title).toBeDefined();
@@ -63,7 +63,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('search tool has correct annotations', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const searchTool = tools.find(findToolByName('search'));
 
     expect(searchTool).toBeDefined();
@@ -76,7 +76,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('fetch tool has correct annotations', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const fetchTool = tools.find(findToolByName('fetch'));
 
     expect(fetchTool).toBeDefined();
@@ -89,7 +89,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('get-ontology tool has correct annotations', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const ontologyTool = tools.find(findToolByName('get-ontology'));
 
     expect(ontologyTool).toBeDefined();
@@ -102,7 +102,7 @@ describe('listUniversalTools annotations', () => {
   });
 
   it('get-ontology tool has OpenAI _meta fields', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const ontologyTool = tools.find(findToolByName('get-ontology'));
 
     expect(ontologyTool).toBeDefined();
@@ -123,7 +123,7 @@ describe('listUniversalTools annotations', () => {
  */
 describe('listUniversalTools _meta integration', () => {
   it('ALL tools (generated + aggregated) have _meta defined', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta).toBeDefined();
@@ -131,7 +131,7 @@ describe('listUniversalTools _meta integration', () => {
   });
 
   it('ALL tools have openai/outputTemplate pointing to widget', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
@@ -139,7 +139,7 @@ describe('listUniversalTools _meta integration', () => {
   });
 
   it('ALL tools have openai/widgetAccessible set to true', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
@@ -147,7 +147,7 @@ describe('listUniversalTools _meta integration', () => {
   });
 
   it('ALL tools have openai/visibility set to public', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/visibility']).toBe('public');
@@ -155,7 +155,7 @@ describe('listUniversalTools _meta integration', () => {
   });
 
   it('ALL tools have openai/toolInvocation/invoking status text', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/toolInvocation/invoking']).toBeDefined();
@@ -163,7 +163,7 @@ describe('listUniversalTools _meta integration', () => {
   });
 
   it('ALL tools have openai/toolInvocation/invoked status text', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
@@ -179,7 +179,7 @@ describe('generated tools _meta integration', () => {
   const aggregatedNames = ['search', 'fetch', 'get-ontology', 'get-help'];
 
   it('generated tools (non-aggregated) have _meta defined', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
 
     expect(generatedTools.length).toBeGreaterThan(0);
@@ -190,7 +190,7 @@ describe('generated tools _meta integration', () => {
   });
 
   it('at least one generated tool has complete _meta with all fields', () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
     const sampleTool = generatedTools[0];
 

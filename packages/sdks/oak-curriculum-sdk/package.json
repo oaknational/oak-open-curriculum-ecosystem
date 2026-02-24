@@ -74,14 +74,6 @@
       "types": "./dist/public/mcp-tools.d.ts",
       "default": "./dist/public/mcp-tools.js"
     },
-    "./public/bulk": {
-      "types": "./dist/public/bulk.d.ts",
-      "default": "./dist/public/bulk.js"
-    },
-    "./public/bulk.js": {
-      "types": "./dist/public/bulk.d.ts",
-      "default": "./dist/public/bulk.js"
-    },
     "./elasticsearch": {
       "types": "./dist/elasticsearch.d.ts",
       "default": "./dist/elasticsearch.js"
@@ -93,7 +85,6 @@
   },
   "scripts": {
     "prepublishOnly": "cp ../../../LICENSE ./LICENSE",
-    "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
@@ -112,6 +103,7 @@
     "@oaknational/curriculum-sdk-generation": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/result": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
     "zod": "^4.3.6"
@@ -119,9 +111,9 @@
   "devDependencies": {
     "@elastic/elasticsearch": "^9.3.2",
     "@modelcontextprotocol/sdk": "^1.27.0",
-    "@next/eslint-plugin-next": "^16.1.6",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^24.10.13",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.17",
     "typedoc-plugin-markdown": "^4.10.0",

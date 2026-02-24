@@ -19,14 +19,7 @@ export default defineConfig({
         '**/*.spec.*',
       ],
     },
-    include: [
-      'src/**/*.test.ts',
-      'src/**/*.spec.ts',
-      'tests/**/*.test.ts',
-      'tests/**/*.spec.ts',
-      'vocab-gen/**/*.test.ts',
-      'vocab-gen/**/*.spec.ts',
-    ],
+    include: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'tests/**/*.test.ts', 'tests/**/*.spec.ts'],
     exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
   },
 });

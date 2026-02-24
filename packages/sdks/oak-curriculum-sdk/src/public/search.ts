@@ -157,8 +157,8 @@ export {
 export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
-  SearchFacetsSchema,
 } from '@oaknational/curriculum-sdk-generation/zod';
+export { SearchFacetsSchema } from '@oaknational/curriculum-sdk-generation/search';
 
 export {
   SearchLessonsIndexDocSchema,
