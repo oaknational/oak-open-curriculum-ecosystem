@@ -32,7 +32,7 @@ todos:
     content: "Runtime rewire done in Phase 2 (~70 files). Remaining: search CLI (22 files) to generation, remove public/bulk facade (depends on Phase 3)."
     status: pending
   - id: tests-scripts-config-migration
-    content: "Phase 5: E2E tests and config migration partially done in Phase 2. Remaining: scope guard script, root package.json vocab-gen filter, typedoc, plus all reviewer findings F1–F10 (turbo inputs, deps, test naming, zodgen assertions, SearchFacetsSchema dual export, generate:clean atomicity)."
+    content: "Phase 5: E2E tests and config migration partially done in Phase 2. Remaining: scope guard script, root package.json vocab-gen filter, typedoc, plus all reviewer findings F1–F10 and F18 (turbo inputs, deps, test naming, zodgen assertions, SearchFacetsSchema dual export, generate:clean atomicity, DI refactoring for universal-tools mock)."
     status: pending
   - id: docs-tsdoc-and-adr
     content: "Phase 6: Update TSDoc, READMEs, architecture docs, ADR references, generator provenance banners. Evaluate barrel auto-generation, subpath granularity, OakApiPathBasedClient ownership. Reviewer findings F11–F15."
