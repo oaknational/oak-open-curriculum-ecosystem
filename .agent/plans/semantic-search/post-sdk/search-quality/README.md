@@ -60,6 +60,12 @@ Supporting plans can run in parallel:
 | [mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md) | Fix MFL search (0.19-0.29 MRR) | 📋 Pending |
 | [mfl-synonym-architecture.md](mfl-synonym-architecture.md) | DRY refactoring of MFL synonyms | 📋 Pending |
 
+### Future Investigation
+
+| Topic | Context | When |
+|-------|---------|------|
+| **Reranking** | With fuzziness and score filtering in place ([ADR-120](../../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md)), the ranking within results is driven by RRF score ordering. Reranking (e.g. Elastic's semantic reranker, cross-encoder models, or LLM-based reranking) could improve within-result ordering — particularly for polysemous queries like "tree" where maths tree diagrams still interleave with science trees. Investigate as part of Level 3. | After Level 2 is exhausted |
+
 ---
 
 ## "Exhausted" Definition

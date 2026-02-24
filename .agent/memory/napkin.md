@@ -1,5 +1,69 @@
 # Napkin
 
+## Session: 2026-02-23 (g) — Document Cohesion and Archival
+
+### What Was Done
+
+1. Audited cohesion across prompt, canonical plan, and pre-phase1 decisions
+2. Reviewed both against directives (rules.md, testing-strategy.md, schema-first, AGENT.md)
+3. Archived `sdk-separation-pre-phase1-decisions.md` to `archive/completed/`
+4. Updated canonical plan Section 12 link to archived path
+5. Updated prompt: added two-pipeline context to "Next Execution Targets",
+   nuanced search SDK relationship in "What We Have", added ADR-108 to
+   "Immediately Relevant" documents, added pre-phase1 to archive references
+   in bootstrap checklist
+6. Updated plans README: added archived pre-phase1 entry to documents table
+
+### Key Insight
+
+Decision rationale (WHY, alternatives, trade-offs) belongs in archive
+reference, not execution guidance. The canonical plan has the WHAT (decisions)
+and execution phases. The prompt + canonical plan are now self-sufficient
+entry points — a fresh session can bootstrap without reading the pre-phase1 doc.
+
+### Pattern Learned
+
+When archiving, verify ALL cross-references point to the new location. Four
+files referenced the pre-phase1 doc — all needed updating. Search for the
+filename before deleting the original.
+
+## Session: 2026-02-23 (f) — Two-Pipeline Architecture Documentation
+
+### What Was Done
+
+Updated three documents to integrate the API vs bulk data pipeline insight
+into the SDK decomposition architecture:
+
+1. **sdk-separation-pre-phase1-decisions.md**: Added "Architectural rationale:
+   two pipelines, one generation workspace" subsection under D1. Documents the
+   API pipeline (OpenAPI → types/Zod/MCP) and bulk pipeline (JSON files →
+   bulk types/extractors/ES mappings/vocab), their different inputs, change
+   triggers, and consumers.
+
+2. **sdk-workspace-separation.md**: Updated D1 (Section 2), added two new
+   findings to Section 5 (pipeline partitioning, search SDK serves bulk data),
+   updated Section 7 target state diagram with pipeline annotations, updated
+   Section 12 D1 summary.
+
+3. **ADR-108**: Added "Two Data Pipelines" subsection to Context, updated WS2
+   to show both pipelines, updated WS4 consumers, added "Split the two
+   pipelines into separate workspaces?" to the "Why not five?" section, updated
+   Step 1 phased execution description.
+
+### Key Insight
+
+The curriculum SDK was designed for API access; the search SDK shifted to bulk
+download data. These are genuinely separate data pipelines with different
+inputs, triggers, and consumers. They share the generation workspace but are
+internally partitioned. The connection between them at runtime is only at the
+MCP application layer (aggregated tools).
+
+### Pattern Learned
+
+When documenting architectural boundaries, capture not just what moves where,
+but *why* the boundary exists in terms of data flow. The two-pipeline model
+explains the boundary better than "generation vs runtime" alone.
+
 ## Session: 2026-02-23 (e) — Cross-Query Search Quality Investigation
 
 ### What Was Done

@@ -1,6 +1,6 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-02-24
 **Status**: 🔄 Active strategic index
 **Scope**: Strategic cross-collection overview for the Oak MCP ecosystem.
 
@@ -42,13 +42,6 @@ tools on Oak's open data for the first time.
 **Remaining work**:
 
 1. Complete merge-blocking plans:
-   - [search-results-quality.md](semantic-search/active/search-results-quality.md) —
-     fix single-word query pollution (fuzziness, min_score threshold).
-     Single-word cross-subject queries ("apple", "tree", "mountain")
-     return the entire lesson index (8,000–10,000 results) with
-     poor-to-mixed ranking. Root causes: `fuzziness: 'AUTO'` matches
-     common words ("apple"→"apply", "tree"→"three"), no `min_score`,
-     ELSER volume, transcript amplification.
    - [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
 2. Final secrets and PII sweep across the entire repository
    - Verify `pnpm secrets:scan:all` passes
@@ -61,10 +54,11 @@ tools on Oak's open data for the first time.
 
 **Already complete for this milestone**:
 
-- Search results quality investigation — root cause analysis and
-  cross-subject ground truth infrastructure (ground truth type,
-  `APPLE_LESSONS` entry, cross-query evidence). Remediation
-  (fuzziness tuning, min_score threshold) is the remaining work.
+- Search results quality — fuzziness aligned to `AUTO:6,9`,
+  score filtering at `DEFAULT_MIN_SCORE = 0.02`, total semantics
+  unified, four architecture reviewers invoked
+  ([ADR-120](../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md),
+  [archived plan](semantic-search/archive/completed/search-results-quality.md))
 - Phase 3a MCP integration
 - Search dispatch type safety
 - OAuth specification compliance (ADR-113)
@@ -245,6 +239,11 @@ Recent semantic-search completions include:
     infrastructure (`CrossSubjectLessonGroundTruth` type,
     `APPLE_LESSONS` entry), root cause analysis (fuzziness,
     no min_score, ELSER volume, transcript amplification)
+12. Search quality remediation — fuzziness `AUTO:6,9` for
+    lessons/units, `DEFAULT_MIN_SCORE = 0.02`, `total` semantics
+    unified as `results.length`, module extractions
+    (`rrf-score-processing.ts`, `search-sequences.ts`,
+    `unit-doc-mapper.ts`), ADR-120 written
 
 ---
 

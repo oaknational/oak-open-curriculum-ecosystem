@@ -1,6 +1,6 @@
 # Search Results Quality
 
-**Status**: Merge blocker — implementation validated, remaining work: documentation + reviews
+**Status**: Complete — all implementation validated, ADR-120 captures decisions
 **Priority**: High
 **Area**: Search (Elasticsearch)
 **Last Updated**: 2026-02-23
@@ -407,26 +407,28 @@ This eliminates ALL fuzzy matching for words under 6 characters, preventing "app
 
 6. **TSDoc** — RESOLVED. `normaliseTranscriptScores` TSDoc corrected from "down-weighted" to "UP-WEIGHTED" per ADR-099. `DEFAULT_MIN_SCORE` now has TSDoc explaining the RRF math rationale.
 
-### Still Outstanding
+### Resolved (this session, continued)
 
-7. **`total` semantics unified** — RESOLVED. All four scopes now report `total = results.length` (count of results actually returned). For lessons/units this is the post-score-filter count; for threads/sequences this is the ES hit count (no filtering applied). TSDoc on `SearchResultMeta.total` updated to document this.
+7. **`total` semantics unified** — RESOLVED. All four scopes report `total = results.length`. TSDoc and ADR-120 document the contract.
 
-8. **Test coverage gaps**: Test reviewer flagged type-only tests, file misclassification, and duplicate stubs. These should be cleaned up.
+8. **Architecture reviewers** — RESOLVED. All four architecture reviewers invoked (Barney, Betty, Fred, Wilma). Feedback applied: NaN guards on clamping, `@see` cross-references, file split for `retrieval-search-helpers`, integration tests pinning `total === results.length`.
 
-9. **TSDoc restoration**: Some TSDoc was trimmed to meet line-count lint limits. Files should be split rather than losing documentation.
+9. **TSDoc restoration** — RESOLVED. Files split (`search-sequences.ts`, `rrf-score-processing.ts`, `unit-doc-mapper.ts`) rather than documentation removal.
 
-10. **Architecture reviewers**: Not yet invoked on the complete change set.
+10. **Threads/sequences fuzziness** — RESOLVED. Documented as intentional in ADR-120 and TSDoc on `buildSequenceRetriever`/`buildThreadRetriever`.
 
-11. **E2E/smoke tests**: Changes to search behaviour should be validated at E2E level.
+### Still Outstanding (non-blocking)
 
-12. **Threads/sequences fuzziness**: Still use raw `fuzziness: 'AUTO'` in `retrieval-search-helpers.ts`. Deliberately not changed (justified by small index sizes and 2-way RRF), but should be documented as an explicit decision, not an oversight.
+11. **Test coverage gaps**: Test reviewer flagged type-only tests, file misclassification, and duplicate stubs. Low priority cleanup.
+
+12. **E2E/smoke tests**: Changes to search behaviour should be validated at E2E level.
 
 ### Per-Scope Configuration Summary (current state)
 
 | Index | Docs | RRF | Fuzziness | Score filter | Transcript norm. | Total semantics |
 |---|---|---|---|---|---|---|
-| **Lessons** | 12,833 | 4-way | `AUTO:6,9` | Yes (0.02) | Yes (ADR-099) | Filtered count |
-| **Units** | 1,665 | 4-way | `AUTO:6,9` | Yes (0.02) | No (no field) | Filtered count |
+| **Lessons** | 12,833 | 4-way | `AUTO:6,9` | Yes (0.02) | Yes (ADR-099) | results.length |
+| **Units** | 1,665 | 4-way | `AUTO:6,9` | Yes (0.02) | No (no field) | results.length |
 | **Threads** | 164 | 2-way | `AUTO` | No | No | results.length |
 | **Sequences** | 30 | 2-way | `AUTO` | No | No | results.length |
 
@@ -434,28 +436,19 @@ Threads and sequences deliberately NOT filtered: 2-way RRF max score ≈ 0.049, 
 
 ---
 
-## Remaining Work
+## Remaining Work (non-blocking)
 
-### 1. Document `total` semantic change
+All architectural decisions are permanently documented in
+[ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md).
 
-Decide and document: `total` now means filtered count for lessons/units but ES total for threads/sequences. Options: (a) ADR documenting intentional per-scope behaviour, (b) TSDoc on the return types explaining what `total` means per scope.
-
-### 2. Clean up flagged test issues
+### 1. Clean up flagged test issues
 
 - Delete the type-only test (line 60-71 in `benchmark-query-runner-lessons.unit.test.ts`)
 - Delete the redundant category test (lines 90-111)
 - Rename the file to `*.integration.test.ts`
 - Consider extracting shared test stubs to a fixture module
 
-### 3. Restore trimmed TSDoc
-
-Fix files where TSDoc was removed to meet lint limits. Split long files rather than removing documentation.
-
-### 4. Invoke architecture reviewers
-
-Run architecture reviewers on the complete change set (fuzziness, score filtering, total semantics, per-scope strategy).
-
-### 5. E2E/smoke test coverage
+### 2. E2E/smoke test coverage
 
 Add E2E or smoke test verifying the search behaviour changes.
 

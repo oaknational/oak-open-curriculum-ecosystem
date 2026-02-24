@@ -16,12 +16,11 @@ Execution detail lives in active plans under `active/` and completed plans under
 
 Authoritative active execution sources:
 
-1. [search-results-quality.md](active/search-results-quality.md) — fix
-   single-word query pollution
-2. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
 
 Completed plans (archived):
 
+- [search-results-quality.md](archive/completed/search-results-quality.md) — fuzziness + score filtering ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
 - [widget-search-rendering.md](archive/completed/widget-search-rendering.md) — Widget Phases 0-5
 - [search-snagging.md](archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
 
@@ -66,23 +65,19 @@ Ground-truth baselines currently tracked:
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
 | `oak_lessons` (per-subject) | 30 | 0.983 | 0.944 | ✅ Established |
-| `oak_lessons` (cross-subject) | 1 | — | — | 🔄 Benchmark runner needs adaptation |
+| `oak_lessons` (cross-subject) | 3 | 0.750 | 0.814 | ✅ Established |
 | `oak_unit_rollup` | 2 | 1.000 | 0.923 | ✅ Established |
 | `oak_threads` | 8 | 0.938 | 0.902 | ✅ Established |
 | `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Mechanism check |
 
-### Search quality findings (2026-02-23)
+### Search quality — RESOLVED (2026-02-23)
 
-Single-word cross-subject queries return the entire lesson index
-(8,000–10,000 results) with poor-to-mixed ranking:
+Fuzziness aligned to `AUTO:6,9`, score filtering at `DEFAULT_MIN_SCORE = 0.02`,
+total semantics unified as `results.length`. All four architecture reviewers
+invoked; feedback applied. Decisions documented in
+[ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md).
 
-| Query | Total | Top-3 quality | Root cause |
-|-------|-------|---------------|------------|
-| "apple" | 8,329 | Poor — #1 is false positive | `fuzziness:AUTO` matches "apply" |
-| "tree" | 10,000 | Mixed — trees + "three"/"true" noise | `fuzziness:AUTO` matches "three" |
-| "mountain" | 8,277 | Good — genuine mountains | Volume only (no fuzzy poison) |
-
-Full analysis: [search-results-quality.md](active/search-results-quality.md)
+Archived plan: [search-results-quality.md](archive/completed/search-results-quality.md)
 
 ---
 
@@ -90,7 +85,7 @@ Full analysis: [search-results-quality.md](active/search-results-quality.md)
 
 The branch merge remains blocked until these complete:
 
-1. **3i Search results quality** (fuzziness tuning, min_score threshold)
+1. ~~**3i Search results quality**~~ — ✅ COMPLETE ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
 2. **3e SDK workspace separation** (type-gen/runtime split)
 3. **Secrets and PII sweep** — final scan before making repo public
 
@@ -101,20 +96,10 @@ Completed merge gates:
 - 3g dispatch safety — complete and archived.
 - 3b and 3c are post-merge by design.
 
-### 3i Search Results Quality (Merge-Blocking)
+### 3i Search Results Quality — ✅ COMPLETE
 
-- Active plan: [search-results-quality.md](active/search-results-quality.md)
-- Cross-subject ground truth: `APPLE_LESSONS` in
-  `apps/oak-search-cli/src/lib/search-quality/ground-truth/cross-subject/`
-
-Execution sequence:
-
-1. Create additional cross-subject ground truths ("tree", "mountain")
-2. Adapt benchmark runner for cross-subject queries
-3. Run baseline benchmarks (per-subject + cross-subject)
-4. Implement fuzziness reduction (`AUTO` → `AUTO:4,7` or similar)
-5. Implement min_score threshold
-6. Run comparison benchmarks — verify improvement without regression
+- Archived plan: [search-results-quality.md](archive/completed/search-results-quality.md)
+- ADR: [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md)
 
 ### Post-merge, pre-Milestone-1 work
 
@@ -142,7 +127,7 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3f. Proxy OAuth AS for Cursor                     ✅ COMPLETE
   3g. Search dispatch type safety                   ✅ COMPLETE (archived)
   3h. Widget stabilisation (Tracks 1a + 1b)         ✅ COMPLETE
-  3i. Search results quality                        🔄 MERGE-BLOCKING
+  3i. Search results quality                        ✅ COMPLETE (ADR-120)
   3e. SDK workspace separation                      🔄 MERGE-BLOCKING
   ── Secrets/PII sweep ──                           📋 PRE-PUBLIC
   ── Merge + make repo public ──                    📋 MILESTONE 0 EXIT
@@ -160,22 +145,6 @@ Phase 5: Extensions                                 📋 MILESTONE 2
 ---
 
 ## Phase 3 Details
-
-### 3i Search Results Quality (Merge-Blocking)
-
-- Active plan: [search-results-quality.md](active/search-results-quality.md)
-- Key file: `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts`
-
-Two compounding problems:
-
-1. **Volume**: Every single-word query returns 8,000–10,000 results. No
-   `min_score` threshold. ELSER assigns non-zero scores to everything.
-2. **Ranking** (short words 3–5 chars): `fuzziness: 'AUTO'` allows 1-edit
-   matches to common English words ("apple"→"apply", "tree"→"three"),
-   overwhelming genuine matches via transcript amplification.
-
-Remediation options: fuzziness reduction, min_score threshold, transcript
-weighting, query-aware fuzziness. See full plan for details and file pointers.
 
 ### 3e SDK Workspace Separation (Merge-Blocking)
 
@@ -261,11 +230,24 @@ Research and planning for public alpha:
 
 Primary stream hubs (post-alpha):
 
-- [post-sdk/search-quality/](post-sdk/search-quality/)
+- [post-sdk/search-quality/](post-sdk/search-quality/) — includes future reranking investigation (Level 3)
 - [post-sdk/bulk-data-analysis/](post-sdk/bulk-data-analysis/)
 - [post-sdk/sdk-api/](post-sdk/sdk-api/)
 - [post-sdk/operations/](post-sdk/operations/)
 - [post-sdk/extensions/](post-sdk/extensions/)
+
+### Reranking (Future — Level 3)
+
+With fuzziness tuning and score filtering complete
+([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md)),
+result sets are now focused and relevant. The next ranking
+improvement opportunity is reranking — using cross-encoder
+models, Elastic's semantic reranker, or LLM-based reranking to
+improve within-result ordering. This is particularly relevant
+for polysemous queries (e.g. "tree" returning both science
+trees and maths tree diagrams). Investigate as part of search
+quality Level 3, after Level 2 (document relationships) is
+exhausted.
 
 ### Response Augmentation Schema Alignment (Phase 4)
 

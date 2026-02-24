@@ -56,6 +56,44 @@ The monolithic structure also prevents reuse. External users
 wanting an OpenAPI-to-SDK pipeline must take the entire Oak
 SDK, including Oak-specific domain logic.
 
+### Two Data Pipelines
+
+A further structural insight is that the Oak-specific
+generation concern (concern 2 above) contains two genuinely
+separate data pipelines:
+
+1. **API pipeline**: processes the OpenAPI spec to produce
+   TypeScript types, Zod schemas, and MCP tool descriptors.
+   Changes when the API schema changes. Consumed by the
+   curriculum SDK runtime and MCP server apps.
+
+2. **Bulk pipeline**: processes bulk download JSON files
+   to produce bulk types, extractors, Elasticsearch
+   mappings, knowledge graphs, and vocabulary artefacts.
+   Changes when curriculum content changes. Consumed by
+   the search SDK and search CLI.
+
+The search SDK never calls the Oak API — it is purely an
+Elasticsearch client whose data flows through the bulk
+pipeline. The curriculum SDK runtime handles API access
+(HTTP client, auth, MCP tools). At the package level the
+search SDK still depends on the curriculum SDK runtime for
+shared exports (e.g. `buildElasticsearchSynonyms`), but
+the data sources are separate. The two SDKs are connected
+at the MCP application layer, where aggregated tools
+orchestrate both.
+
+Both pipelines run during `pnpm type-gen` and produce
+compile-time artefacts. They share the generation workspace
+but are internally partitioned by directory and barrel
+export. This partition does not warrant separate packages
+at this stage — the boundary between them is a directory
+boundary, not a package boundary — but it informs the
+internal structure of workspace 2 and validates the
+"generation as shared foundation" consumer model where
+both runtime SDKs depend on generation for type
+infrastructure.
+
 ## Decision
 
 Decompose `@oaknational/curriculum-sdk` along two
@@ -107,23 +145,35 @@ external users with different OpenAPI specs.
 
 Configure the generic pipeline for the Oak Curriculum API
 and add generators that produce Oak-specific artifacts.
+Hosts two internally partitioned data pipelines.
 
-**Contains**:
+**API pipeline** (processes the OpenAPI spec):
 
 - Schema decoration (canonicalUrl, 404 enhancement)
 - Security configuration (PUBLIC_TOOLS, DEFAULT_AUTH_SCHEME)
 - Tool naming overrides (path-specific overrides)
 - Domain guidance (DOMAIN_PREREQUISITE_GUIDANCE)
 - Widget constants (BASE_WIDGET_URI)
-- Search/ES generation (mappings, field definitions, index
-  documents, search responses, facets, subject hierarchy)
-- Bulk generation, vocabulary generation, admin/observability
-  fixtures
 - The orchestrator wiring Oak config into the generic pipeline
 - Schema cache with Oak OpenAPI snapshots
 
-**Consumers**: Workspace 4 (Oak Runtime), via the generated
-artifacts it produces.
+**Bulk pipeline** (processes bulk download JSON files):
+
+- Bulk data readers, extractors, generators, and processing
+- Search/ES generation (mappings, field definitions, index
+  documents, search responses, facets, subject hierarchy)
+- Vocabulary generation
+- Domain ontology (property graph data)
+- Admin/observability fixtures
+
+Both pipelines run during `pnpm type-gen`. They are
+partitioned by directory and barrel export within the
+workspace.
+
+**Consumers**: Workspace 4 (Oak Runtime) via API pipeline
+artifacts; Search SDK and search CLI via bulk pipeline
+artifacts. The generation workspace serves as a shared
+foundation for type infrastructure.
 
 ### Workspace 3: Generic Runtime SDK Framework
 
@@ -150,8 +200,10 @@ external users building runtime SDKs.
 ### Workspace 4: Oak Runtime SDK
 
 The package that MCP server apps actually import. Composes
-workspace 3's framework with workspace 2's generated
-artifacts and adds Oak-specific runtime behaviour.
+workspace 3's framework with workspace 2's API pipeline
+artifacts and adds Oak-specific runtime behaviour. This
+workspace is about **accessing the API** — HTTP client,
+auth, middleware, MCP tool execution.
 
 **Contains**:
 
@@ -162,11 +214,12 @@ artifacts and adds Oak-specific runtime behaviour.
   get-prerequisite-graph)
 - Domain features (ontology, knowledge graph, synonyms)
 - Agent support (documentation resources, getting-started)
-- Generated artifacts (output of workspace 2)
+- API pipeline artifacts (output of workspace 2)
 - Public API exports (./client, ./mcp, ./validation, etc.)
 
 **Consumers**: MCP server apps (stdio, streamable-http),
-Search SDK.
+Search SDK (for shared runtime exports and functions, not
+bulk data — this coupling is retained in Step 1).
 
 ## Dependency Graph
 
@@ -178,22 +231,34 @@ Search SDK.
   WS1: Generic Pipeline
         |
         v
-  WS2: Oak Type-Gen Config --generates--> artifacts
+  WS2: Oak Type-Gen Config
+        |
+        +--[API pipeline]---generates---> API types, Zod, MCP descriptors
+        |
+        +--[Bulk pipeline]--generates---> bulk types, extractors, ES mappings, vocab
 
 [Runtime]
   WS3: Generic Runtime Framework
         |
         v
-  WS4: Oak Runtime SDK (+ artifacts from WS2)
+  WS4: Oak Runtime SDK (+ API pipeline artifacts from WS2)
         |
         v
-  MCP servers, Search SDK
+  MCP servers (orchestrate both SDKs)
+
+  Search SDK (+ bulk pipeline artifacts from WS2)
+        |
+        v
+  Search CLI, MCP servers
 ```
 
 Key property: no cycles, all arrows point downward. The
 generic workspaces (1, 3) have no knowledge of Oak. The
 Oak workspaces (2, 4) compose the generic workspaces with
-domain configuration.
+domain configuration. WS2 serves as a shared foundation:
+the curriculum SDK runtime consumes its API pipeline
+output; the search SDK and search CLI consume its bulk
+pipeline output.
 
 ## Why Four — Not More, Not Fewer
 
@@ -210,6 +275,20 @@ selective imports.
 large (~60 files) but purely Oak-specific type-gen. It
 belongs in workspace 2. If it develops its own consumers or
 change cadence, it can be extracted later.
+
+**Split the two data pipelines into separate workspaces?**
+Not yet. The API pipeline and bulk pipeline have different
+inputs (OpenAPI spec vs. bulk JSON files), different change
+triggers (API schema changes vs. curriculum content changes),
+and largely different consumers (curriculum SDK runtime vs.
+search SDK/CLI). However, they share the generation
+infrastructure (build tooling, output paths, `pnpm type-gen`
+orchestration) and the bulk pipeline does import a small
+number of constants from the API pipeline (e.g. `SUBJECTS`,
+`KEY_STAGES`). The directory-level partition within
+workspace 2 is sufficient for now. If the pipelines develop
+truly independent change cadences or deployment needs, they
+can be extracted into separate workspaces later.
 
 **An interface/contract package?** No. Interfaces should be
 defined in the workspace that owns the contract. Workspace 1
@@ -236,7 +315,12 @@ The decomposition is implemented in phases:
 
 1. **Step 1 (2-way split)**: Extract workspace 2 (Oak
    Type-Gen) from the current monolith, establishing the
-   generation/runtime boundary. This is the existing
+   generation/runtime boundary. Both data pipelines (API
+   and bulk) move to the generation workspace together.
+   The generation workspace becomes a shared foundation:
+   the curriculum SDK runtime consumes API pipeline output;
+   the search SDK and search CLI consume bulk pipeline
+   output. This is the existing
    [SDK workspace separation plan][ws-sep].
 
 2. **Step 2 (Castr integration)**: Replace

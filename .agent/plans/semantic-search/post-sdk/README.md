@@ -43,7 +43,7 @@ Each stream is a coherent domain of work with its own README explaining intent a
 | Stream | Intent | First Plan |
 |--------|--------|------------|
 | [mcp-integration/](mcp-integration/) | Wire hybrid search into MCP tools | [phase-3a-mcp-search-integration.md](../archive/completed/phase-3a-mcp-search-integration.md) |
-| [search-quality/](search-quality/) | Improve search result relevance | Levels 2 → 3 → 4 (sequential) |
+| [search-quality/](search-quality/) | Improve search result relevance | Levels 2 → 3 → 4 (sequential); reranking investigation at Level 3 |
 | [bulk-data-analysis/](bulk-data-analysis/) | Mine vocabulary from curriculum data | vocabulary-mining.md |
 | [sdk-api/](sdk-api/) | Understand and stabilise SDK API surface | filter-testing.md |
 | [operations/](operations/) | Run the system safely and reliably | governance.md |

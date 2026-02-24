@@ -8,32 +8,32 @@ overview: >
 todos:
   - id: bulk-ownership-decision
     content: "Decide public/bulk ownership: generation-time pipeline vs runtime facade."
-    status: pending
+    status: completed
   - id: bulk-download-caching
     content: "Design bulk download caching at type-gen time with staleness detection."
-    status: pending
+    status: completed
   - id: vocabulary-convergence
     content: "Design single vocabulary/synonym mining pipeline replacing fragmented sources."
-    status: pending
+    status: completed
   - id: d1-scope-refinement
     content: "Refine Phase 3 move list: distinguish generated, authored, and runtime-composition files."
-    status: pending
+    status: completed
   - id: baseline-gate-strategy
     content: "Replace hard-coded baseline numbers with commit-anchored evidence."
-    status: pending
+    status: completed
   - id: phase-collapse-evaluation
     content: "Evaluate collapsing Phases 2+3+4 into one atomic move-and-rewire slice."
-    status: pending
+    status: completed
   - id: update-canonical-plan
     content: "Apply all resolved decisions back to sdk-workspace-separation.md."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # SDK Separation Pre-Phase-1 Decisions
 
 Decisions required before Phase 1 of the
-[canonical SDK workspace separation plan](sdk-workspace-separation.md) begins.
+[canonical SDK workspace separation plan](../../active/sdk-workspace-separation.md) begins.
 
 ## Origin
 
@@ -90,11 +90,84 @@ target is a deterministic generation pipeline that:
   for indexing. Does this become a generation-time pre-processing step, or does
   the search CLI continue to read bulk files directly for index operations?
 
-### Decision needed before Phase 1
+### Decision (resolved 23 Feb 2026)
 
-At minimum: decide whether `src/bulk/` moves to the generation workspace in
-Step 1, or remains runtime with a rewire in a later step. The downstream
-consumer surface (22 files in search CLI) makes this a high-impact decision.
+**All of `src/bulk/` moves to the generation workspace.** The guiding
+principle: if something CAN be created or owned at type-gen time, it should be.
+The runtime should be as thin as possible while respecting architectural
+boundaries.
+
+What moves:
+
+- **Types and schemas** (`BulkDownloadFile`, `Lesson`, `Unit`, etc.) —
+  generation-owned type information
+- **Readers** (`readAllBulkFiles`, `parseBulkFile`, `discoverBulkFiles`) —
+  generation-time tooling
+- **Extractors** (15 pure functions) — generation-owned processing logic
+- **Generators** (`synonym-miner`, `*-graph-generator`) — generation-time
+  artefact producers
+- **Processing** (`processBulkData`) — generation-time orchestration
+
+### Architectural rationale: two pipelines, one generation workspace
+
+The generation workspace contains two genuinely separate pipelines with
+different inputs, change triggers, and consumers:
+
+| Pipeline | Input | Change trigger | Primary consumers |
+|---|---|---|---|
+| **API pipeline** | OpenAPI spec (network/cache) | API schema changes | Curriculum SDK runtime, MCP server apps |
+| **Bulk pipeline** | Bulk download JSON files (disk) | Curriculum content changes | Search SDK, search CLI |
+
+The curriculum SDK was designed around the API concern: how to access
+curriculum data via HTTP endpoints. The search SDK was designed to consume
+API types but shifted to primarily using bulk download data for Elasticsearch
+indexing. The search SDK never calls the Oak API — it is purely an
+Elasticsearch client whose data pipeline is:
+
+```text
+Bulk JSON files → extractors → ES index → queries → results
+```
+
+The only connection between search and the OpenAPI spec is that search type
+generators extract `SUBJECTS` and `KEY_STAGES` constants from it. Even the
+bulk type generation is currently template-based, not driven from the OpenAPI
+spec.
+
+This reveals the natural runtime boundary: the curriculum SDK runtime is for
+**accessing the API** (client, auth, MCP tool execution). The search SDK
+runtime is for **searching bulk-derived data** (ES queries, index management).
+At the package level the search SDK still depends on the curriculum SDK runtime
+for shared exports (e.g. `buildElasticsearchSynonyms`), but the data sources
+are separate. The two SDKs are connected at the MCP application layer, where
+aggregated tools orchestrate both.
+
+Both pipelines produce compile-time artefacts and both run during
+`pnpm type-gen`. The generation workspace is the natural home for both. They
+are partitioned internally (different directories, different barrel exports)
+but do not need separate packages — the boundary between them is a directory
+boundary, not a package boundary.
+
+### Consumer model — generation as shared foundation
+
+The generation package becomes a shared foundation for type information. Both
+`@oaknational/curriculum-sdk` (runtime) and `@oaknational/oak-search-sdk` can
+depend on generation for types, guards, enums, and schemas. The runtime SDK is
+for accessing data (API client, middleware); generation is for information
+*about* data (types, schemas, readers, extractors, generated artefacts).
+
+**No thin facade**: The runtime `public/bulk` re-export surface is removed.
+Consumers that need type information import directly from
+`@oaknational/curriculum-sdk-generation`. This is the intended pattern — direct
+dependency on generation for type infrastructure.
+
+**Search CLI impact**: The 22 files currently importing from
+`@oaknational/curriculum-sdk/public/bulk` are rewired to import from
+`@oaknational/curriculum-sdk-generation`.
+
+**Caching and staleness**: Bulk download caching (cache location, staleness
+detection) is deferred to the vocabulary convergence pipeline (D2). The
+generation workspace provides the infrastructure; caching strategy is designed
+when the converged pipeline is built.
 
 ---
 
@@ -134,16 +207,17 @@ from keyword definitions in bulk data. Quality is variable — some entries are
 noise (e.g., Spanish verb conjugations mapped as "synonyms"). This file would
 be subsumed by the converged mining pipeline.
 
-### Decision needed before Phase 1
+### Decision (resolved 23 Feb 2026)
 
-This convergence is a larger effort than the SDK split itself. The question for
-Phase 1 is: does the split plan need to account for this future convergence in
-its boundary placement, or can it proceed with the current `vocab-gen` output
-structure and refactor later?
+**Proceed with the split as planned.** The converged mining pipeline (OpenAPI +
+JSON Schema + bulk data) is larger work for after the split. The generation
+workspace's public API must use barrel exports (not specific file paths) to
+accommodate future convergence without breaking consumers.
 
-Recommended: proceed with the split as planned, but ensure the generation
-workspace's public API is designed to accommodate future convergence (i.e.,
-don't hard-wire consumers to specific generated file paths).
+The vocabulary convergence work is deferred but the split boundary placement
+does not need to change — moving all bulk infrastructure to generation (D1)
+naturally places the extraction and generation code where the converged pipeline
+will eventually live.
 
 ---
 
@@ -161,14 +235,21 @@ The canonical plan's Phase 3 lists files to move, but mixes three categories:
 | `aggregated-thread-progressions.ts` | **Runtime composition** (wraps generated data) | Stays runtime per D3 |
 | `aggregated-prerequisite-graph.ts` | **Runtime composition** (wraps generated data) | Stays runtime per D3 |
 
-### Decision needed
+### Decision (resolved 23 Feb 2026)
 
-1. Confirm `property-graph-data.ts` ownership. It's authored, not generated,
-   but describes domain ontology that could logically belong to the generation
-   pipeline. If it stays runtime, remove from Phase 3 list. If it moves,
-   reclassify it.
-2. Remove `aggregated-*` files from Phase 3 list — they are runtime composition
-   per decision D3 and should not move.
+1. **`property-graph-data.ts` moves to generation.** Although authored (not
+   generated), it is domain ontology that belongs alongside the generated graph
+   data. It will be reclassified as authored domain content within the generation
+   workspace.
+2. **`aggregated-thread-progressions.ts` stays runtime.** Runtime composition
+   per preserved decision D3.
+3. **`aggregated-prerequisite-graph.ts` stays runtime.** Runtime composition
+   per preserved decision D3.
+4. **All `*-graph-data.ts` and `definition-synonyms.ts` move to generation.**
+   Generated artefacts.
+
+The Phase 3 file list in the canonical plan is updated to reflect these
+classifications.
 
 ---
 
@@ -189,11 +270,13 @@ that will drift with unrelated branch work.
 2. **Range tolerance**: keep numbers but allow ±5% drift with mandatory refresh.
 3. **Keep as-is**: accept that numbers may need updating before Phase 1 starts.
 
-### Recommendation
+### Decision (resolved 23 Feb 2026)
 
-Option 1 (commit-anchored evidence). Create a
+**Option 1: commit-anchored evidence.** Create a
 `sdk-workspace-separation-baseline.json` committed alongside Phase 0
-completion, and AC1 becomes "command replay matches committed baseline."
+completion. AC1 becomes "command replay matches committed baseline." This
+eliminates drift from unrelated branch work and makes the baseline
+reproducible without hard-coded numbers.
 
 ---
 
@@ -212,24 +295,44 @@ states where the codebase is partially split.
 | Atomic (2+3+4 merged) | No fragile intermediate state; simpler rollback | Larger single change; harder to review; harder to TDD incrementally |
 | Sequential (current) | Smaller reviewable units; TDD red-green-refactor per phase | Intermediate states may not compile; requires careful ordering |
 
-### Recommendation
+### Decision (resolved 23 Feb 2026)
 
-Keep the current sequential phases but add explicit **intermediate compilation
-gates** between phases. Each phase must end with `pnpm build && pnpm type-check`
-passing. This preserves incremental TDD while preventing fragile intermediate
-states.
+**Keep sequential phases with intermediate compilation gates.** Each phase must
+end with `pnpm build && pnpm type-check` passing. This preserves incremental
+TDD red-green-refactor per phase while preventing fragile intermediate states.
+The atomic collapse is rejected because it would make the change harder to
+review and harder to TDD incrementally.
 
 ---
 
 ## Resolved Decisions (applied to canonical plan)
 
-These items from Barney's review have been directly applied:
+### From adversarial review (22 Feb 2026)
 
 - [x] Reverse-dependency inventory expanded from 1 to 9 files (Section 5)
 - [x] Auth ADRs moved to background context (Section 3)
 - [x] "No deep imports" acceptance criterion added (AC5)
 - [x] Root script wiring risk added (Section 11)
 - [x] Legacy plan superseded, ADR-108 link updated
-- [x] `property-graph-data.ts` added to Phase 3 file list (pending D3 decision
-  above on whether it should stay or be reclassified)
+- [x] `property-graph-data.ts` added to Phase 3 file list (ownership confirmed
+  in D3 below: moves to generation as authored domain ontology)
 - [x] Baseline src count refreshed from 300 to 302
+
+### Pre-Phase-1 decisions (resolved 23 Feb 2026)
+
+- [x] **D1**: All of `src/bulk/` moves to generation. Generation becomes shared
+  foundation for type information. No runtime facade — consumers import
+  directly from generation for types, schemas, readers, extractors. Search CLI
+  (22 files) rewired to `@oaknational/curriculum-sdk-generation`. Caching
+  strategy deferred to vocabulary convergence pipeline.
+- [x] **D2**: Proceed with the split as planned. Converged mining pipeline is
+  post-split work. Generation public API uses barrel exports to accommodate
+  future convergence.
+- [x] **D3**: `property-graph-data.ts` moves to generation (authored domain
+  ontology). `aggregated-*` files stay runtime (composition). Phase 3 file
+  list updated accordingly.
+- [x] **D4**: Commit-anchored evidence file replaces hard-coded baseline
+  numbers. AC1 becomes "command replay matches committed baseline."
+- [x] **D5**: Keep sequential phases with intermediate compilation gates
+  (`pnpm build && pnpm type-check` after each phase). Atomic collapse
+  rejected.

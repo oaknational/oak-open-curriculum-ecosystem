@@ -26,10 +26,10 @@ todos:
     content: "Move type-gen/, schema-cache/, src/types/generated/, and vocab-gen/ into generation workspace with git-aware moves."
     status: pending
   - id: move-vocab-generated-runtime-artefacts
-    content: "Move all vocab-generated runtime artefacts now (including src/mcp graph and synonym outputs) into generation ownership."
+    content: "Move all generation-owned artefacts now: vocab outputs (src/mcp graph and synonym), bulk infrastructure (src/bulk/**), and authored domain ontology (property-graph-data.ts)."
     status: pending
   - id: runtime-rewire-and-boundaries
-    content: "Rewire runtime imports to generation public API, remove local generation ownership, and enforce runtime->generation only dependency direction."
+    content: "Rewire runtime and consumer imports: runtime to generation public API, search CLI (22 files) to generation, remove public/bulk facade, enforce one-way dependency direction."
     status: pending
   - id: tests-scripts-config-migration
     content: "Migrate coupled tests, script wiring, and config references (tsconfig/eslint/vitest/typedoc/check-generator-scope/turbo)."
@@ -58,12 +58,12 @@ authoritative execution source for this split.
 
 ## 2. Hard Gates and Non-Negotiable Decisions
 
-### G0. Prerequisite baseline gate (hard blocker) ✅ SATISFIED
+### G0. Prerequisite baseline gate (hard blocker) ✅ PREREQUISITES SATISFIED
 
 **Decision (preserved)**: split implementation starts only from a verified,
 reproducible pre-split baseline.
 
-**Gate satisfied 22 February 2026**:
+**Prerequisites confirmed 22 February 2026**:
 
 - generation workspace is absent (split not yet started)
 - baseline file counts and import counts are measured with locked commands
@@ -71,13 +71,58 @@ reproducible pre-split baseline.
 - OAuth/auth prerequisites are treated as completed architectural baseline via
   ADR-113 and ADR-115 (no plan-status dependency)
 
-### D1. Move all vocab-generated artefacts now
+**Phase 0 execution still required**: the `sdk-workspace-separation-baseline.json`
+evidence file must be committed at Phase 0 completion (AC1). Phase 0 is the
+first execution step.
 
-**Decision (preserved)**: all vocab-generated artefacts move in Step 1 now;
-no phased partial ownership.
+### D1. Move all generation-owned artefacts and infrastructure now
 
-This explicitly includes generated files currently emitted under runtime
-`src/mcp/**`, not only `src/types/generated/**`.
+**Decision (expanded 23 Feb 2026)**: all vocab-generated artefacts AND all
+bulk data infrastructure (`src/bulk/`) move in Step 1 now; no phased partial
+ownership. The guiding principle: if something CAN be created or owned at
+type-gen time, it should be.
+
+This explicitly includes:
+
+- generated files currently emitted under runtime `src/mcp/**`
+- all of `src/bulk/` (readers, extractors, generators, processing, types)
+- `property-graph-data.ts` (authored domain ontology, belongs with graph data)
+
+**Two pipelines, one generation workspace**: the generation workspace contains
+two separate pipelines with different inputs, change triggers, and consumers:
+
+- **API pipeline**: OpenAPI spec → API types, Zod schemas, MCP tool descriptors.
+  Changes when the API schema changes. Consumed by the curriculum SDK runtime
+  and MCP server apps.
+- **Bulk pipeline**: bulk download JSON files → bulk types, extractors,
+  knowledge graphs, ES mappings, vocabulary. Changes when curriculum content
+  changes. Consumed by the search SDK and search CLI.
+
+The search SDK never calls the Oak API — it is purely an Elasticsearch client.
+Its data pipeline runs entirely through bulk data. The curriculum SDK runtime
+handles API access (client, auth, MCP tool execution). At the package level
+the search SDK still depends on the curriculum SDK runtime for shared exports
+(e.g. `buildElasticsearchSynonyms`), but the data sources are separate. The
+two SDKs are connected at the MCP application layer, where aggregated tools
+orchestrate both. The bulk pipeline also has a small dependency on API pipeline
+constants (`SUBJECTS`, `KEY_STAGES`).
+
+Both pipelines produce compile-time artefacts during `pnpm type-gen`. They are
+partitioned internally within the generation workspace (different directories,
+different barrel exports) but do not need separate packages.
+
+**Generation as shared foundation**: the generation package becomes the
+foundation for type information. The runtime SDK depends on generation for
+types and generated artefacts. Apps that need type infrastructure (e.g. search
+CLI for bulk types) can depend on generation directly. The runtime SDK is for
+accessing data (API client, middleware); generation is for information *about*
+data.
+
+No runtime facade for bulk — consumers that need bulk type information import
+directly from `@oaknational/curriculum-sdk-generation`. The runtime
+`public/bulk` re-export surface is removed. The search SDK remains on the
+runtime SDK for Step 1; migration to direct generation imports for type-only
+surfaces is a future refinement.
 
 ### D2. One-way dependency remains strict
 
@@ -149,6 +194,12 @@ mapped to execution phases and acceptance criteria.
 | E2E tests are coupled to `type-gen` internals | Runtime tests currently import `../../type-gen/*` paths and will break after split | Phase 5 | AC8 |
 | Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC8 |
 | Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC9 |
+| `src/bulk/` is generation-owned and must move | All bulk readers, extractors, generators, processing, and types move to generation | Phase 3 | AC2, AC3, AC11 |
+| Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/curriculum-sdk-generation` | Phase 4 | AC11 |
+| `public/bulk` runtime surface is removed | No thin facade — consumers import directly from generation for type infrastructure | Phase 4 | AC11 |
+| `property-graph-data.ts` is authored domain ontology | Moves to generation alongside generated graph data despite being authored, not generated | Phase 3 | AC3 |
+| Generation workspace hosts two distinct pipelines | API pipeline (OpenAPI to types/Zod/MCP) and bulk pipeline (JSON files to bulk types/extractors/ES mappings/vocab); both run during `pnpm type-gen`, partitioned by directory | All phases | AC2, AC3, AC11 |
+| Search SDK serves bulk data, not API data | Search SDK never calls the Oak API; it is an ES client consuming bulk-derived data. Curriculum SDK runtime serves API access. Search SDK retains runtime SDK dependency for shared exports in Step 1; data sources are separate | Architecture context | -- |
 
 ### Reverse-dependency inventory (generation -> runtime imports)
 
@@ -175,7 +226,11 @@ All of these must be resolved during Phase 4 (rewire) and Phase 5 (test migratio
 - Create generation workspace.
 - Move generation code and generated artefacts into generation workspace.
 - Move all vocab-generated artefacts now, including runtime `src/mcp/**` outputs.
+- Move all bulk data infrastructure (`src/bulk/`) to generation workspace.
+- Move authored domain ontology (`property-graph-data.ts`) to generation workspace.
+- Remove runtime `public/bulk` re-export surface.
 - Rewire runtime SDK to import from generation public exports only.
+- Rewire search CLI (22 files) to import from generation package directly.
 - Migrate coupled tests/scripts/config that assume monolithic paths.
 - Enforce one-way boundaries with lint and package dependencies.
 - Preserve runtime behaviour.
@@ -190,31 +245,56 @@ All of these must be resolved during Phase 4 (rewire) and Phase 5 (test migratio
 
 ```text
 packages/sdks/oak-curriculum-sdk-generation/
-  type-gen/
-  schema-cache/
-  vocab-gen/
+  type-gen/                              # API pipeline: OpenAPI → types, Zod, MCP descriptors
+  schema-cache/                          # API pipeline: cached OpenAPI spec
+  vocab-gen/                             # Bulk pipeline: vocabulary generation
   src/
-    types/generated/**
-    generated/vocab/**           # or equivalent generation-owned path
-    index.ts                     # public generation exports only
+    types/generated/**                   # API pipeline output: API types, Zod schemas
+    bulk/**                              # Bulk pipeline: readers, extractors, generators, processing
+    generated/vocab/**                   # Bulk pipeline output: vocabulary artefacts
+    mcp/property-graph-data.ts           # Bulk pipeline: authored domain ontology (mcp/ path preserved for move simplicity)
+    index.ts                             # public generation exports (barrel only)
 
 packages/sdks/oak-curriculum-sdk/
   src/
-    client/**
-    mcp/**                       # runtime composition/facades only
-    public/**
-    validation/**
+    client/**                            # API runtime: HTTP client, auth, middleware
+    mcp/**                               # runtime composition/facades only
+    validation/**                        # API runtime: request/response validation
     index.ts
-  (no local type-gen/, schema-cache/, vocab-gen/, src/types/generated/)
+  (no local type-gen/, schema-cache/, vocab-gen/, src/types/generated/,
+   src/bulk/, public/bulk)
 ```
 
-Dependency direction:
+The generation workspace contains two pipelines:
+
+- **API pipeline** (`type-gen/`, `schema-cache/`, `src/types/generated/`):
+  OpenAPI spec → TypeScript types, Zod schemas, MCP tool descriptors.
+  Consumed by the curriculum SDK runtime and MCP server apps.
+
+- **Bulk pipeline** (`vocab-gen/`, `src/bulk/`, `src/generated/vocab/`,
+  `src/mcp/property-graph-data.ts`): bulk download JSON files → bulk types,
+  extractors, knowledge graphs, ES mappings, vocabulary, domain ontology.
+  Consumed by the search SDK and search CLI.
+
+Both run during `pnpm type-gen`. They share the workspace but are internally
+partitioned — different directories, different entry points.
+
+Dependency direction (generation as shared foundation):
 
 ```text
-@oaknational/curriculum-sdk-generation  -> no dependency on runtime SDK
-@oaknational/curriculum-sdk             -> depends on generation SDK
-apps/* and search SDK                   -> continue depending on runtime SDK
+@oaknational/curriculum-sdk-generation  -> no dependency on runtime SDK or search SDK
+@oaknational/curriculum-sdk             -> depends on generation SDK (API pipeline output)
+@oaknational/oak-search-sdk            -> depends on runtime SDK (unchanged in Step 1)
+apps/oak-search-cli                    -> depends on generation SDK (bulk types),
+                                          search SDK, and runtime SDK
+apps/*                                 -> depend on runtime SDK and/or search SDK
 ```
+
+Note: `oak-search-sdk` currently imports types and functions from
+`@oaknational/curriculum-sdk/public/search.js` and `public/mcp-tools.js`.
+These include runtime functions (e.g. `buildElasticsearchSynonyms`), not just
+types. The search SDK stays on the runtime SDK for Step 1. Migration to direct
+generation imports for type-only surfaces is a future refinement.
 
 ## 8. Execution Phases (RED -> GREEN -> REFACTOR)
 
@@ -242,13 +322,27 @@ Goal: introduce first-class generation workspace before moving content.
 
 - RED:
   - `pnpm -F @oaknational/curriculum-sdk-generation build` fails before scaffold.
+  - boundary lint rule rejects a reverse import (generation → runtime) — RED
+    before the rule exists.
 - GREEN:
   - create workspace package/config/readme/entrypoint.
   - register in `pnpm-workspace.yaml`.
   - workspace build and type-check pass.
   - align task graph with ADR-065 split-aware dependency strategy.
+  - create SDK boundary lint rules in `packages/core/oak-eslint/src/rules/boundary.ts`
+    (`createSdkBoundaryRules()`) preventing generation → runtime imports and
+    deep imports into generation internals.
+  - apply boundary rules in both SDK ESLint configs.
 - REFACTOR:
   - align config shape with existing SDK workspace conventions.
+
+**Turbo target state** (per ADR-065): update `turbo.json` `type-gen` task to
+include `**/vocab-gen/**/*.ts` in inputs. Ensure runtime workspace `build`
+depends on generation workspace completion via `^build`. Generation workspace
+`type-gen` should produce outputs consumed by runtime `build`.
+
+**Intermediate compilation gate**: `pnpm build && pnpm type-check` must pass
+before proceeding to Phase 2.
 
 File-level tasks:
 
@@ -257,11 +351,14 @@ File-level tasks:
 - `packages/sdks/oak-curriculum-sdk-generation/tsconfig.json`
 - `packages/sdks/oak-curriculum-sdk-generation/tsconfig.build.json`
 - `packages/sdks/oak-curriculum-sdk-generation/tsconfig.lint.json`
-- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`
+- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts` (apply SDK boundary rules)
 - `packages/sdks/oak-curriculum-sdk-generation/tsup.config.ts`
 - `packages/sdks/oak-curriculum-sdk-generation/README.md`
 - `packages/sdks/oak-curriculum-sdk-generation/src/index.ts`
-- `turbo.json`
+- `packages/sdks/oak-curriculum-sdk/eslint.config.ts` (apply SDK boundary rules)
+- `packages/core/oak-eslint/src/rules/boundary.ts` (add `createSdkBoundaryRules()`)
+- `packages/core/oak-eslint/src/index.ts` (export new rules)
+- `turbo.json` (add `vocab-gen` inputs, split-aware task deps)
 
 ### Phase 2 - Move Type-Gen Core and Generated API Artefacts
 
@@ -278,6 +375,10 @@ artefacts.
 - REFACTOR:
   - remove stale runtime references to moved paths.
 
+**Intermediate compilation gate**: `pnpm type-gen && pnpm build && pnpm type-check`
+must pass before proceeding to Phase 3. `type-gen` is explicit because Phase 2
+moves the type-gen infrastructure itself — cached artefacts must not mask failures.
+
 File-level tasks:
 
 - `packages/sdks/oak-curriculum-sdk/type-gen/**` ->
@@ -289,21 +390,33 @@ File-level tasks:
 - `packages/sdks/oak-curriculum-sdk/package.json`
 - `packages/sdks/oak-curriculum-sdk-generation/package.json`
 
-### Phase 3 - Move All Vocab-Generated Artefacts (Now)
+### Phase 3 - Move All Generation-Owned Artefacts and Infrastructure (Now)
 
-Goal: complete the preserved decision to move all vocab-generated artefacts now.
+Goal: complete the expanded decision to move all generation-owned artefacts,
+bulk data infrastructure, and authored domain ontology now. Phase 3 is
+**physical moves and generation exports only** — all runtime and consumer
+import rewiring happens in Phase 4.
 
 - RED:
   - runtime modules fail until imports are rewired from moved vocab outputs.
+  - bulk consumers fail until imports are rewired from moved bulk infrastructure.
 - GREEN:
   - move `vocab-gen/**` into generation workspace.
   - move generated vocab outputs currently in runtime `src/mcp/**`.
-  - update vocab output roots and export barrels so runtime consumes generation
-    package exports, not local generated files.
+  - move all of `src/bulk/**` (readers, extractors, generators, processing,
+    types) into generation workspace.
+  - move `property-graph-data.ts` (authored domain ontology) to generation.
+  - update generation barrel exports to expose all moved artefacts.
 - REFACTOR:
   - normalise generated-path naming for clarity and future decomposition.
 
+**Intermediate compilation gate**: `pnpm type-gen && pnpm build && pnpm type-check`
+must pass before proceeding to Phase 4. `type-gen` is explicit because Phase 3
+moves vocab-gen and bulk infrastructure — cached artefacts must not mask failures.
+
 File-level tasks (minimum):
+
+Vocab-gen and generated artefacts:
 
 - `packages/sdks/oak-curriculum-sdk/vocab-gen/**` ->
   `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/**`
@@ -311,38 +424,98 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/misconception-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/nc-coverage-graph-data.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/generated/definition-synonyms.ts`
+
+Authored domain ontology:
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts`
+
+Bulk data infrastructure:
+
+- `packages/sdks/oak-curriculum-sdk/src/bulk/**` ->
+  `packages/sdks/oak-curriculum-sdk-generation/src/bulk/**`
+
+Files that **stay runtime** (runtime composition, per D3):
+
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prerequisite-graph.ts`
 
-### Phase 4 - Runtime Rewire and Boundary Corrections
+### Phase 4 - Runtime Rewire, Consumer Rewire, and Boundary Corrections
 
-Goal: runtime consumes only generation package public exports; no reverse
-imports from generation to runtime.
+Goal: runtime and consumers use only generation package public exports; no
+reverse imports from generation to runtime; search CLI imports rewired.
 
 - RED:
   - runtime build/type-check fails until imports/dependencies are corrected.
+  - search CLI build fails until bulk imports are rewired.
   - failing checks added for deep imports and reverse dependency attempts.
 - GREEN:
   - replace local generated imports in runtime with
     `@oaknational/curriculum-sdk-generation` exports.
-  - remove generation->runtime import in `vocab-gen/lib/index.ts`.
+  - remove generation->runtime import in `vocab-gen/lib/index.ts`
+    (resolved naturally — both `vocab-gen` and `src/bulk/` are now in
+    the generation workspace).
+  - rewire search CLI (22 files) from `@oaknational/curriculum-sdk/public/bulk`
+    to `@oaknational/curriculum-sdk-generation`.
+  - remove runtime `public/bulk.ts` re-export surface.
+  - add `@oaknational/curriculum-sdk-generation` as a dependency in
+    `apps/oak-search-cli/package.json`.
   - keep runtime aggregated tool composition local while consuming generated
     descriptor layers from generation exports.
 - REFACTOR:
   - delete dead compatibility glue; simplify barrels to a single source.
 
+**Export parity**: generation `src/index.ts` must export all symbols currently
+in `public/bulk.ts`. Derive the export list from `public/bulk.ts` before
+removing it to ensure no consumer breakage.
+
+**Boundary verification**: after rewiring, run `pnpm lint` and confirm
+SDK boundary rules reject reverse imports and deep imports. The rules created
+in Phase 1 enforce this automatically.
+
+**Test mock paths**: update all `vi.mock('@oaknational/curriculum-sdk/public/bulk', ...)`
+in search CLI tests to `vi.mock('@oaknational/curriculum-sdk-generation', ...)`.
+
+**Intermediate compilation gate**: `pnpm build && pnpm type-check && pnpm lint`
+must pass before proceeding to Phase 5. Lint is added to this gate because
+Phase 4 establishes boundary compliance.
+
 File-level tasks (minimum):
 
+Runtime SDK rewiring:
+
 - `packages/sdks/oak-curriculum-sdk/src/index.ts`
-- `packages/sdks/oak-curriculum-sdk/src/public/*.ts`
+- `packages/sdks/oak-curriculum-sdk/src/public/*.ts` (remove `public/bulk.ts`;
+  update `public/mcp-tools.ts` to re-export `conceptGraph` and related types
+  from generation instead of local `../mcp/property-graph-data.js`)
+- `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` (import
+  `conceptGraph` from generation instead of local `./property-graph-data.js`)
 - `packages/sdks/oak-curriculum-sdk/src/mcp/**/*.ts`
-- `packages/sdks/oak-curriculum-sdk/src/bulk/**/*.ts`
 - `packages/sdks/oak-curriculum-sdk/src/validation/**/*.ts`
+
+Generation workspace exports:
+
 - `packages/sdks/oak-curriculum-sdk-generation/src/index.ts`
 - `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/lib/index.ts`
+
+Search CLI rewiring (22 files):
+
+- `apps/oak-search-cli/package.json` (add generation dependency)
+- `apps/oak-search-cli/src/adapters/bulk-data-adapter.ts`
+- `apps/oak-search-cli/src/adapters/bulk-lesson-transformer.ts`
+- `apps/oak-search-cli/src/adapters/bulk-unit-transformer.ts`
+- `apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts`
+- `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts`
+- `apps/oak-search-cli/src/adapters/bulk-rollup-builder.ts`
+- `apps/oak-search-cli/src/adapters/bulk-transform-helpers.ts`
+- `apps/oak-search-cli/src/adapters/vocabulary-mining-adapter.ts`
+- `apps/oak-search-cli/src/adapters/hybrid-data-source.ts`
+- `apps/oak-search-cli/src/adapters/hybrid-batch-processor.ts`
+- `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts`
+- `apps/oak-search-cli/scripts/analyze-elser-failures.ts`
+- `apps/oak-search-cli/scripts/diagnose-elser-failures.ts`
+- (plus corresponding test files)
 
 ### Phase 5 - Tests, Scripts, and Config Migration
 
@@ -352,11 +525,21 @@ Goal: migrate coupling points that assume monolithic SDK layout.
   - e2e/typegen script tests fail due to moved internals.
   - lint/type-check/build configs fail due to stale include paths.
 - GREEN:
-  - migrate tests importing `../../type-gen/*` internals.
+  - migrate tests importing `../../type-gen/*` internals to use
+    `@oaknational/curriculum-sdk-generation` package exports or generation
+    workspace paths. Runtime tests must not mock generation artefacts — they
+    consume the actual generated output.
   - update scripts/config for split ownership.
-  - update scope guard script paths and allowlist entries.
+  - update scope guard script paths and allowlist entries (add generation
+    workspace paths: `packages/sdks/oak-curriculum-sdk-generation/type-gen/**`,
+    `packages/sdks/oak-curriculum-sdk-generation/src/types/generated/**`).
+  - update root `package.json` scripts: `vocab-gen` must target
+    `@oaknational/curriculum-sdk-generation`, not `@oaknational/curriculum-sdk`.
 - REFACTOR:
   - tighten config inputs to avoid cache drift and excess coupling.
+
+**Intermediate compilation gate**: `pnpm build && pnpm type-check` must pass
+before proceeding to Phase 6.
 
 File-level tasks (minimum):
 
@@ -371,6 +554,7 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk-generation/package.json`
 - `packages/sdks/oak-curriculum-sdk-generation/tsconfig*.json`
 - `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`
+- `package.json` (root — update `vocab-gen` filter target)
 - `scripts/check-generator-scope.sh`
 - `turbo.json`
 
@@ -399,6 +583,8 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk-generation/README.md`
 - `docs/architecture/openapi-pipeline.md`
 - `docs/architecture/programmatic-tool-generation.md`
+- `docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`
+  (update pipeline location paths to generation workspace)
 - `docs/development/build-system.md`
 - `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
 
@@ -416,12 +602,14 @@ Goal: prove determinism, boundary compliance, and behavioural parity.
 Mandatory quality gates (root, one at a time):
 
 ```bash
+pnpm clean
 pnpm type-gen
 pnpm build
 pnpm type-check
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
+pnpm subagents:check
+pnpm lint:fix
 pnpm test
 pnpm test:e2e
 pnpm test:ui
@@ -431,17 +619,15 @@ pnpm smoke:dev:stub
 ## 9. Acceptance Criteria (all mandatory)
 
 1. **Pre-split baseline invariants are explicit and reproducible**
-   - baseline commands in Section 4 return:
-     - `type-gen` files = `192`
-     - `src` files = `302`
-     - `src/types/generated` files = `106`
-     - runtime non-test local generated imports = `56`
+   - a committed `sdk-workspace-separation-baseline.json` evidence file
+     captures baseline metrics at Phase 0 completion.
+   - baseline commands in Section 4 replay matches the committed evidence.
    - `ls -1 packages/sdks` does not include
      `oak-curriculum-sdk-generation` at baseline time.
 
 2. **Ownership split physically complete**
    - generation workspace contains moved `type-gen/`, `schema-cache/`,
-     `vocab-gen/`, and `src/types/generated/`.
+     `vocab-gen/`, `src/types/generated/`, and `src/bulk/`.
    - runtime workspace no longer contains those directories.
 
 3. **All vocab-generated artefacts moved now**
@@ -492,6 +678,21 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
     - re-running `pnpm type-gen` without input changes yields no diff.
     - runtime/consumer behavioural tests pass with no regression.
 
+11. **Generation as shared foundation — consumer rewiring complete**
+    - search CLI imports from `@oaknational/curriculum-sdk-generation`, not
+      `@oaknational/curriculum-sdk/public/bulk`.
+    - runtime `public/bulk.ts` re-export surface is removed.
+    - `apps/oak-search-cli/package.json` lists
+      `@oaknational/curriculum-sdk-generation` as a dependency.
+    - search CLI builds and tests pass with the rewired imports.
+
+12. **SDK boundary lint rules exist and are enforced**
+    - `createSdkBoundaryRules()` exists in
+      `packages/core/oak-eslint/src/rules/boundary.ts`.
+    - both SDK ESLint configs apply the boundary rules.
+    - `pnpm lint` fails on a generation → runtime import.
+    - `pnpm lint` fails on a deep import into generation internals.
+
 ## 10. Validation Commands
 
 ```bash
@@ -510,6 +711,20 @@ rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   --glob '!**/*.test.ts' | wc -l
 ```
 
+## Execution Invariants
+
+**Always run from repo root**: `pnpm type-gen`, `pnpm build`, and all quality
+gates must be run from the repo root, not from individual workspaces. After the
+split, the runtime workspace will not have a `type-gen` script. Turbo
+orchestrates cross-workspace dependencies from the root.
+
+**New file placement rule**: if a new generated file is produced from the
+OpenAPI spec, it belongs in the API pipeline (`type-gen/`, `src/types/generated/`).
+If produced from bulk download JSON data, it belongs in the bulk pipeline
+(`vocab-gen/`, `src/bulk/`, `src/generated/vocab/`). If it is runtime
+composition (wrapping generated data for MCP tool responses), it stays in the
+runtime workspace.
+
 ## 11. Risks and Mitigations
 
 - Baseline drift before split starts:
@@ -526,20 +741,35 @@ rg -l "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 - Documentation drift:
   treat docs/TSDoc as same-phase deliverables, not post-merge cleanup.
 
-## 12. Pre-Phase-1 Open Decisions
+## 12. Pre-Phase-1 Decisions (all resolved 23 Feb 2026)
 
-Several architectural decisions must be resolved before Phase 1 starts.
-See [sdk-separation-pre-phase1-decisions.md](sdk-separation-pre-phase1-decisions.md)
-for full analysis and options:
+All five pre-Phase-1 decisions have been resolved. Full analysis and rationale
+(alternatives considered, user direction, trade-offs):
+[sdk-separation-pre-phase1-decisions.md](../archive/completed/sdk-separation-pre-phase1-decisions.md)
+(archived — all decisions integrated into this plan).
 
-- **`public/bulk` ownership**: generation-time pipeline vs runtime facade
-  (CRITICAL — 22 consumer files in search CLI)
-- **Vocabulary mining convergence**: single pipeline replacing fragmented
-  synonym/alias/paraphrase sources
-- **Phase 3 move list**: distinguish generated, authored, and
-  runtime-composition files
-- **Baseline gate strategy**: commit-anchored evidence vs hard-coded numbers
-- **Phase collapse**: atomic vs sequential with intermediate compilation gates
+Summary:
+
+- **D1 `public/bulk` ownership**: all of `src/bulk/` moves to generation.
+  Generation becomes shared foundation for type information. No thin facade;
+  consumers import directly from generation. Search CLI (22 files) rewired.
+  Caching strategy deferred to vocabulary convergence pipeline (D2).
+  The generation workspace hosts two distinct pipelines: API pipeline
+  (OpenAPI spec → types, Zod, MCP descriptors) and bulk pipeline (JSON files →
+  bulk types, extractors, ES mappings, vocabulary). The search SDK serves
+  bulk-derived data exclusively; the curriculum SDK runtime serves API access.
+  At the package level, the search SDK retains a runtime SDK dependency for
+  shared exports in Step 1; the data sources themselves are separate. The
+  bulk pipeline has a small dependency on API pipeline constants (`SUBJECTS`,
+  `KEY_STAGES`).
+- **D2 Vocabulary convergence**: proceed with the split as planned. Converged
+  mining pipeline is post-split work. Generation public API uses barrel exports.
+- **D3 Phase 3 move list**: `property-graph-data.ts` moves to generation
+  (authored domain ontology). `aggregated-*` files stay runtime (composition).
+- **D4 Baseline gate**: commit-anchored evidence file replaces hard-coded
+  numbers. AC1 updated.
+- **D5 Phase collapse**: keep sequential phases with intermediate compilation
+  gates (`pnpm build && pnpm type-check` after each phase).
 
 ## 13. Relationship to ADRs
 
