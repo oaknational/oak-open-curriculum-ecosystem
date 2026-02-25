@@ -32,6 +32,7 @@ Completed plans (archived):
 - [search-results-quality.md](archive/completed/search-results-quality.md) — fuzziness + score filtering ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
 - [widget-search-rendering.md](archive/completed/widget-search-rendering.md) — Widget Phases 0-5
 - [search-snagging.md](archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
+- [typegen-vs-codegen-semantic-split.md](archive/completed/typegen-vs-codegen-semantic-split.md) — typegen/codegen naming (part of SDK workspace separation)
 
 ---
 

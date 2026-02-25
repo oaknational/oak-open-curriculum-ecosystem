@@ -1,5 +1,30 @@
 # Napkin
 
+## Session: 2026-02-25 — Consolidation (Typegen Plan, Codegen README)
+
+### What happened
+
+Ran `/jc-consolidate-docs` on sdk-workspace-separation, typegen plan,
+roadmap, high-level-plan, and semantic-search prompt.
+
+### Changes made
+
+1. **Typegen vs codegen** — extracted naming convention from completed
+   Cursor plan to `packages/sdks/oak-sdk-codegen/README.md` (new section).
+   Archived plan to `.agent/plans/semantic-search/archive/completed/
+   typegen-vs-codegen-semantic-split.md`. Deleted `.cursor/plans/
+   typegen_vs_codegen_semantic_split_623def28.plan.md`.
+2. **Codegen README** — updated status to Phases 0–6 complete.
+3. **Roadmap** — added typegen-vs-codegen-semantic-split to completed list.
+4. **High-level-plan** — Last Updated 2026-02-25.
+
+### Patterns noted
+
+- Completed Cursor plans are safe to delete once documentation is
+  extracted to permanent locations (README, ADR).
+
+---
+
 ## Session: 2026-02-25 — Self-Ref Fix, code-generation Rename, Consolidation Docs
 
 ### What happened

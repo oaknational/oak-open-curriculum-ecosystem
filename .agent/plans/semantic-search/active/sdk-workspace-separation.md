@@ -21,7 +21,7 @@ todos:
     content: "Update turbo.json to reflect the new cross-package task dependencies (runtime:build depends on generation:sdk-codegen). Completed in Phase 1 — see commit 86a71125. Remaining turbo fixes (test:e2e input filename) tracked as F1 in Phase 5."
     status: completed
   - id: generation-workspace-scaffold
-    content: "Create packages/sdks/oak-curriculum-sdk-generation with package metadata, TS/ESLint/tsup configs, scripts, and README."
+    content: "Create packages/sdks/oak-sdk-codegen (scaffolded as oak-curriculum-sdk-generation, renamed Phase 6.3)."
     status: completed
   - id: move-codegen-and-generated
     content: "Move code-generation/, schema-cache/, src/types/generated/ into generation workspace with git-aware moves. Rewire runtime imports via subpath exports. Full quality gates passed."
@@ -66,6 +66,15 @@ isProject: false
 ---
 
 # SDK Workspace Separation Plan (Canonical)
+
+**Standalone entry point** — read this plan plus
+[semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md)
+at session start. Phases 0–6 complete; Phase 7 (CI drift check) remains.
+
+**Recent session (25 Feb 2026)**: type-gen→sdk-codegen rename, typegen/codegen
+semantic split (type-focused modules: typegen-*; orchestration: codegen-*),
+consolidation workflow updates, semantic search plan reorg (post-sdk→future/).
+All reflected in this plan and the prompt.
 
 ## 1. Intent
 
@@ -190,7 +199,7 @@ at Phase 0, before any file moves.
 
 | Metric | Pre-split value |
 |--------|----------------|
-| `packages/sdks/oak-curriculum-sdk-generation` | did not exist |
+| `packages/sdks/oak-sdk-codegen` | did not exist |
 | `packages/sdks/` workspaces | 2 (`oak-curriculum-sdk`, `oak-search-sdk`) |
 | `packages/core/` packages | 4 (`env`, `oak-eslint`, `openapi-zod-client-adapter`, `result`) |
 | Runtime SDK `code-generation/` files | 192 |
@@ -202,7 +211,7 @@ at Phase 0, before any file moves.
 
 | Metric | Current value | Change |
 |--------|--------------|--------|
-| `packages/sdks/oak-curriculum-sdk-generation` | exists | created Phase 1 |
+| `packages/sdks/oak-sdk-codegen` | exists | created Phase 1 |
 | `packages/sdks/` workspaces | 3 | +1 (generation SDK) |
 | `packages/core/` packages | 5 | +1 (`type-helpers`, N3) |
 | Generation SDK `code-generation/` files | 193 | moved from runtime |
@@ -240,7 +249,7 @@ mapped to execution phases and acceptance criteria.
 
 | Finding | Current truth | Execution phase(s) | Acceptance criteria |
 |---|---|---|---|
-| Generation workspace is absent | `packages/sdks/oak-curriculum-sdk-generation` does not exist yet | Phase 0, Phase 1 | AC1, AC2 |
+| Generation workspace is absent | `packages/sdks/oak-sdk-codegen` does not exist yet | Phase 0, Phase 1 | AC1, AC2 |
 | Turbo task graph must be split-aware | Build/sdk-codegen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC7 |
 | Vocab-generated artefacts are runtime-owned today and must move now | Runtime `src/mcp/**` still contains generated graph data and mined synonym output (`definition-synonyms.ts`); Step 1 moves these. Curated synonym lists (`src/mcp/synonyms/`, 25 files) are agent context injection, not generation-owned artefacts — they stay runtime for Step 1. Co-location of all synonym content is a follow-on refinement. | Phase 3 | AC3 |
 | Reverse dependencies must be removed | 9 files in `code-generation/` and `vocab-gen/` import from runtime `src/` (see inventory below) | Phase 4, Phase 5 | AC5, AC6 |
@@ -248,7 +257,7 @@ mapped to execution phases and acceptance criteria.
 | Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC8 |
 | Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC9 |
 | `src/bulk/` is generation-owned and must move | All bulk readers, extractors, generators, processing, and types move to generation | Phase 3 | AC2, AC3, AC11 |
-| Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/curriculum-sdk-generation` (renamed to `@oaknational/sdk-codegen` in Phase 6.3) | Phase 4 | AC11 |
+| Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/sdk-codegen` (was `@oaknational/curriculum-sdk-generation` before Phase 6.3) | Phase 4 | AC11 |
 | `public/bulk` runtime surface is removed | No thin facade — consumers import directly from generation for type infrastructure | Phase 4 | AC11 |
 | `property-graph-data.ts` is authored domain ontology | Moves to generation alongside generated graph data despite being authored, not generated | Phase 3 | AC3 |
 | Generation workspace hosts two distinct pipelines | See [ADR-108 § Two Data Pipelines](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | All phases | AC2, AC3, AC11 |
@@ -337,6 +346,11 @@ The generation workspace contains two pipelines:
 Both run during `pnpm sdk-codegen`. They share the workspace but are internally
 partitioned — different directories, different entry points.
 
+**Typegen vs codegen naming** (25 Feb 2026): Within `code-generation/`, type-focused
+modules use the `typegen-*` prefix (e.g. `typegen-extraction.ts`, `typegen-writers.ts`,
+`typegen-interface-gen.ts`); orchestration uses `codegen-*` (e.g. `codegen.ts`,
+`codegen-core.ts`). The `typegen/` subdirectory holds generator templates.
+
 Dependency direction (generation as shared foundation):
 
 ```text
@@ -391,7 +405,7 @@ File-level tasks:
 Goal: introduce first-class generation workspace before moving content.
 
 - RED:
-  - `pnpm -F @oaknational/curriculum-sdk-generation build` fails before scaffold.
+  - `pnpm -F @oaknational/sdk-codegen build` fails before scaffold.
   - boundary lint rule rejects a reverse import (generation → runtime) — RED
     before the rule exists.
 - GREEN:
@@ -417,14 +431,14 @@ before proceeding to Phase 2.
 File-level tasks:
 
 - `pnpm-workspace.yaml`
-- `packages/sdks/oak-curriculum-sdk-generation/package.json`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig.json`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig.build.json`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig.lint.json`
-- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts` (apply SDK boundary rules)
-- `packages/sdks/oak-curriculum-sdk-generation/tsup.config.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/README.md`
-- `packages/sdks/oak-curriculum-sdk-generation/src/index.ts`
+- `packages/sdks/oak-sdk-codegen/package.json`
+- `packages/sdks/oak-sdk-codegen/tsconfig.json`
+- `packages/sdks/oak-sdk-codegen/tsconfig.build.json`
+- `packages/sdks/oak-sdk-codegen/tsconfig.lint.json`
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts` (apply SDK boundary rules)
+- `packages/sdks/oak-sdk-codegen/tsup.config.ts`
+- `packages/sdks/oak-sdk-codegen/README.md`
+- `packages/sdks/oak-sdk-codegen/src/index.ts`
 - `packages/sdks/oak-curriculum-sdk/eslint.config.ts` (apply SDK boundary rules)
 - `packages/core/oak-eslint/src/rules/boundary.ts` (add `createSdkBoundaryRules()`)
 - `packages/core/oak-eslint/src/index.ts` (export new rules)
@@ -444,11 +458,11 @@ artefacts.
   - create 10 subpath barrel files (see §8.2a below) exposing generated
     artefacts through `package.json` `exports` field.
   - rewire ~70 runtime SDK source files from `./types/generated/` to
-    `@oaknational/curriculum-sdk-generation/<subpath>` imports.
+    `@oaknational/sdk-codegen/<subpath>` imports.
   - update ESLint boundary rules to allow single-level subpath exports
     while blocking deeper internal paths.
   - move E2E tests for code-generation to generation workspace.
-  - `pnpm -F @oaknational/curriculum-sdk-generation code-generation` regenerates
+  - `pnpm -F @oaknational/sdk-codegen code-generation` regenerates
     artefacts in generation workspace.
 - REFACTOR:
   - remove stale runtime references to moved paths.
@@ -493,30 +507,30 @@ rather than a single monolithic barrel. Subpaths are one level deep only.
 | `@oaknational/sdk-codegen/widget-constants` | widget URI | `src/widget-constants.ts` |
 
 ESLint boundary rule: `createSdkBoundaryRules('runtime')` uses
-`@oaknational/curriculum-sdk-generation/*/**` to block two-or-more-level
+`@oaknational/sdk-codegen/*/**` to block two-or-more-level
 imports while allowing single-level subpath exports.
 
 File-level tasks (all completed):
 
 - `packages/sdks/oak-curriculum-sdk/code-generation/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/code-generation/**`
+  `packages/sdks/oak-sdk-codegen/code-generation/**`
 - `packages/sdks/oak-curriculum-sdk/schema-cache/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/schema-cache/**`
+  `packages/sdks/oak-sdk-codegen/schema-cache/**`
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/src/types/generated/**`
+  `packages/sdks/oak-sdk-codegen/src/types/generated/**`
 - `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/codegen-core.e2e.test.ts` ->
-  `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/`
+  `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/`
 - `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/zodgen.e2e.test.ts` ->
-  `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/`
+  `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/`
 - `packages/sdks/oak-curriculum-sdk/package.json`
-- `packages/sdks/oak-curriculum-sdk-generation/package.json`
-- `packages/sdks/oak-curriculum-sdk-generation/src/*.ts` (10 barrel files)
-- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig.json`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig.lint.json`
-- `packages/sdks/oak-curriculum-sdk-generation/vitest.config.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/vitest.config.e2e.ts` (new)
-- `packages/sdks/oak-curriculum-sdk-generation/tsup.config.ts`
+- `packages/sdks/oak-sdk-codegen/package.json`
+- `packages/sdks/oak-sdk-codegen/src/*.ts` (10 barrel files)
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts`
+- `packages/sdks/oak-sdk-codegen/tsconfig.json`
+- `packages/sdks/oak-sdk-codegen/tsconfig.lint.json`
+- `packages/sdks/oak-sdk-codegen/vitest.config.ts`
+- `packages/sdks/oak-sdk-codegen/vitest.config.e2e.ts` (new)
+- `packages/sdks/oak-sdk-codegen/tsup.config.ts`
 - `packages/sdks/oak-curriculum-sdk/eslint.config.ts`
 - `packages/sdks/oak-curriculum-sdk/vitest.config.ts`
 - `packages/sdks/oak-curriculum-sdk/src/` (~70 files rewired)
@@ -563,7 +577,7 @@ File-level tasks (minimum):
 Vocab-gen (39 files):
 
 - `packages/sdks/oak-curriculum-sdk/vocab-gen/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/**`
+  `packages/sdks/oak-sdk-codegen/vocab-gen/**`
   - root (6 files): `vocab-gen.ts`, `vocab-gen.unit.test.ts`,
     `vocab-gen.integration.test.ts`, `vocab-gen-format.ts`,
     `vocab-gen-core.ts`, `run-vocab-gen.ts`
@@ -575,7 +589,7 @@ Vocab-gen (39 files):
 Bulk data infrastructure (36 files):
 
 - `packages/sdks/oak-curriculum-sdk/src/bulk/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/src/bulk/**`
+  `packages/sdks/oak-sdk-codegen/src/bulk/**`
   - root (4 files): `index.ts`, `reader.ts`, `reader.unit.test.ts`,
     `processing.ts`
   - `extractors/` (16 files)
@@ -622,9 +636,9 @@ retains only the work that depends on Phase 3 moves.
     (resolved naturally — both `vocab-gen` and `src/bulk/` are now in
     the generation workspace).
   - rewire search CLI (22 files) from `@oaknational/curriculum-sdk/public/bulk`
-    to `@oaknational/curriculum-sdk-generation`.
+    to `@oaknational/sdk-codegen`.
   - remove runtime `public/bulk.ts` re-export surface.
-  - add `@oaknational/curriculum-sdk-generation` as a dependency in
+  - add `@oaknational/sdk-codegen` as a dependency in
     `apps/oak-search-cli/package.json`.
   - update `public/mcp-tools.ts` to re-export `conceptGraph` and related
     types from generation instead of local `../mcp/property-graph-data.js`.
@@ -644,7 +658,7 @@ SDK boundary rules reject reverse imports and deep imports. The rules created
 in Phase 1 enforce this automatically.
 
 **Test mock paths**: update all `vi.mock('@oaknational/curriculum-sdk/public/bulk', ...)`
-in search CLI tests to `vi.mock('@oaknational/curriculum-sdk-generation', ...)`.
+in search CLI tests to `vi.mock('@oaknational/sdk-codegen', ...)`.
 
 **Phase 3+4 intermediate compilation gate**: see Phase 3 above for the
 combined gate commands. Must pass before proceeding to Phase 5.
@@ -666,7 +680,7 @@ File-level tasks (minimum):
 Runtime SDK rewiring (completed in Phase 2):
 
 - ~70 files in `packages/sdks/oak-curriculum-sdk/src/` — rewired to
-  `@oaknational/curriculum-sdk-generation/<subpath>` imports.
+  `@oaknational/sdk-codegen/<subpath>` imports.
 
 Remaining Phase 4 tasks (depend on Phase 3 moves):
 
@@ -675,7 +689,7 @@ Remaining Phase 4 tasks (depend on Phase 3 moves):
   `conceptGraph` from generation
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` — import
   `conceptGraph` from generation
-- `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/lib/index.ts` —
+- `packages/sdks/oak-sdk-codegen/vocab-gen/lib/index.ts` —
   resolve generation->runtime import (natural after Phase 3)
 
 Search CLI rewiring (22 files):
@@ -711,10 +725,10 @@ overrides, and runtime SDK config cleanup were completed in Phase 2.
 - GREEN:
   - update remaining scripts/config for split ownership.
   - update scope guard script paths and allowlist entries (add generation
-    workspace paths: `packages/sdks/oak-curriculum-sdk-generation/code-generation/**`,
-    `packages/sdks/oak-curriculum-sdk-generation/src/types/generated/**`).
+    workspace paths: `packages/sdks/oak-sdk-codegen/code-generation/**`,
+    `packages/sdks/oak-sdk-codegen/src/types/generated/**`).
   - update root `package.json` scripts: `vocab-gen` must target
-    `@oaknational/curriculum-sdk-generation`, not `@oaknational/curriculum-sdk`.
+    `@oaknational/sdk-codegen`, not `@oaknational/curriculum-sdk`.
   - **[config-reviewer]** fix turbo `test:e2e` input filename mismatch:
     `vitest.e2e.config.ts` vs actual `vitest.config.e2e.ts` — stale cache
     invalidation risk.
@@ -783,14 +797,14 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk/eslint.config.ts`
 - `packages/sdks/oak-curriculum-sdk/typedoc.json`
 - `packages/sdks/oak-curriculum-sdk/src/types/index.ts` (simplify)
-- `packages/sdks/oak-curriculum-sdk-generation/package.json`
-- `packages/sdks/oak-curriculum-sdk-generation/tsconfig*.json`
-- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/code-generation/codegen-core.test.ts`
+- `packages/sdks/oak-sdk-codegen/package.json`
+- `packages/sdks/oak-sdk-codegen/tsconfig*.json`
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/codegen-core.test.ts`
   (rename + split)
-- `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/zodgen.e2e.test.ts`
+- `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/zodgen.e2e.test.ts`
   (fix assertions and error handling)
-- `packages/sdks/oak-curriculum-sdk-generation/code-generation/typegen/mcp-tools/parts/generate-tool-file.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-file.ts`
   (add path resolution test)
 - `package.json` (root — update `vocab-gen` filter target)
 - `scripts/check-generator-scope.sh`
@@ -1219,7 +1233,7 @@ git diff --exit-code packages/sdks/oak-sdk-codegen/src/types/generated/
    - Update `semantic-search.prompt.md`: mark SDK workspace separation complete.
    - Archive this canonical plan to `.agent/plans/semantic-search/archive/completed/`.
    - Extract any remaining permanent knowledge to ADRs or docs.
-   - Update the [roadmap](.agent/plans/semantic-search/roadmap.md).
+   - Update the [roadmap](../roadmap.md).
 
 ## 9. Acceptance Criteria (all mandatory)
 
@@ -1306,7 +1320,7 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
     - `rg 'oak-mcp-ecosystem' --glob '!.agent/**' --glob '!pnpm-lock.yaml'
       --glob '!**/docs/api-md/**'` returns zero matches.
     - ESLint boundary rules reference `@oaknational/sdk-codegen`, not
-      `@oaknational/curriculum-sdk-generation`.
+      `@oaknational/sdk-codegen`.
     - All package.json `repository.url` fields reference
       `oak-open-data-ecosystem`.
     - `.agent/` planning docs may still contain old names in

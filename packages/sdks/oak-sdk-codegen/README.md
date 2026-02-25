@@ -5,10 +5,9 @@ Generation-time workspace for the Oak Curriculum SDK, implementing
 
 ## Status
 
-**Phases 0–5 complete** — workspace hosts both data pipelines (API
+**Phases 0–6 complete** — workspace hosts both data pipelines (API
 and bulk), all generated artefacts, 11 subpath exports, and ESLint
-boundary rules. Phases 6–7 (documentation alignment, CI drift
-check) remain.
+boundary rules. Phase 7 (CI drift check) remains.
 
 ## Two Data Pipelines
 
@@ -24,6 +23,18 @@ that run during `pnpm sdk-codegen`:
   `src/generated/vocab/`): bulk download JSON files to types,
   extractors, Elasticsearch mappings, knowledge graphs, and
   vocabulary artefacts. Consumed by the search SDK and search CLI.
+
+### Typegen vs codegen naming
+
+Within `code-generation/`, modules are named by responsibility:
+
+- **`typegen-*`** — type-focused: extract and emit TypeScript types from the
+  OpenAPI schema (`typegen-extraction.ts`, `typegen-writers.ts`,
+  `typegen-interface-gen.ts`, etc.)
+- **`codegen-*`** — orchestration and broad code generation: entry point,
+  pipeline coordination, validators, MCP tools (`codegen.ts`, `codegen-core.ts`,
+  etc.)
+- **`typegen/`** — directory of generator templates (paths, parameters, mcp-tools)
 
 ## Subpath Exports
 

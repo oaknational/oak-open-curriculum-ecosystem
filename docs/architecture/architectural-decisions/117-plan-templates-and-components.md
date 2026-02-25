@@ -24,8 +24,8 @@ scratch each time. This created three problems:
    "adversarial review as closing phase" pattern from Phase 3a) were not
    available as starting points for subsequent plans.
 3. **Unclear document hierarchy**: The relationship between session prompts
-   (`.agent/prompts/`), executable plans
-   (`.agent/plans/*/{active,current,future}/`), and
+   (`.agent/prompts/`), strategic plans (`.agent/plans/*/future/`),
+   executable plans (`.agent/plans/*/{current,active}/`), and
    the strategic roadmap was implicit, leading to content duplication and
    contradictory facts across documents.
 
@@ -67,13 +67,14 @@ inlined) by templates.
 
 ### 3. Document Hierarchy
 
-Three document types serve distinct purposes and must not duplicate content:
+Four document types serve distinct purposes and must not duplicate content:
 
-| Document            | Purpose                                                                                     | Location                                  | Mutability                                       |
-| ------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
-| **Session prompt**  | Operational entry point — "where are we now, what to read, what to do"                      | `.agent/prompts/`                         | Updated every session                            |
-| **Executable plan** | Per-workstream task list with TDD phases, acceptance criteria, and deterministic validation | `.agent/plans/*/{active,current,future}/` | Updated during execution, archived on completion |
-| **Roadmap**         | Strategic milestone sequence — phases, dependencies, completion status                      | `.agent/plans/*/roadmap.md`               | Updated at milestone boundaries                  |
+| Document            | Purpose                                                                                     | Location                           | Mutability                                       |
+| ------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| **Session prompt**  | Operational entry point — "where are we now, what to read, what to do"                      | `.agent/prompts/`                  | Updated every session                            |
+| **Strategic plan**  | Later/backlog intent, boundaries, sequencing assumptions, promotion triggers                | `.agent/plans/*/future/`           | Updated during backlog grooming and promotion    |
+| **Executable plan** | Per-workstream task list with TDD phases, acceptance criteria, and deterministic validation | `.agent/plans/*/{current,active}/` | Updated during execution, archived on completion |
+| **Roadmap**         | Strategic milestone sequence — phases, dependencies, completion status                      | `.agent/plans/*/roadmap.md`        | Updated at milestone boundaries                  |
 
 **Content flows one way**: facts are authoritative in one document and
 referenced (not restated) by the others. Specifically:
@@ -84,21 +85,41 @@ referenced (not restated) by the others. Specifically:
   plan that will address them. The prompt references the plan.
 - **Milestone completion status** is authoritative in the roadmap. The
   prompt summarises it.
+- **Future strategic intent** is authoritative in `future/`; executable detail
+  is authored in `current/`/`active/` at promotion time.
 
 ### 4. Plan Lifecycle
 
 ```text
 active/             → NOW: in-progress execution only (frontmatter todos track state)
 current/            → NEXT: queued/ready plans, not yet in progress
-future/             → LATER: deferred strategic plans
+future/             → LATER: strategic plans only (not yet executable)
 archive/completed/  → completed, read-only historical record
 ```
 
 `active/` is a strict execution lane. A plan moves into `active/` only when
 work has started.
 
-Strategic backlog hubs should organise planned work between `current/` and
-`future/`, then promote an item into `active/` when execution begins.
+`future/` is a strategic lane. Plans in this directory are not required to be
+executable and should not be used as in-progress implementation trackers.
+Strategic plans may still retain accurate implementation detail discovered during
+research (examples, command sequences, design sketches) to preserve knowledge.
+That detail is reference context until the work is promoted and rewritten as an
+executable plan in `current/`/`active/`.
+
+`current/` and `active/` are executable lanes. TDD structure, deterministic
+quality gates, and frontmatter todos apply in these lanes.
+
+### 5. Promotion Process (`future/` → `current/` → `active/`)
+
+1. Select a `future/` strategic plan when prerequisites and sequencing are clear.
+2. Create a new executable plan in `current/` from the appropriate template.
+3. Mine strategic intent from `future/` into executable tasks, RED/GREEN/REFACTOR
+   phases, acceptance criteria, and deterministic validation commands.
+4. Keep traceability by linking the new `current/` plan back to the source
+   `future/` strategic plan.
+5. Move the executable plan to `active/` only when implementation starts.
+6. Mine outcomes into permanent documentation, then archive on completion.
 
 When archiving a plan:
 
@@ -111,9 +132,10 @@ When archiving a plan:
    `archive/completed/` — clean break, no stubs, no redirects.
 5. Run the consolidation flow to synchronise all documents.
 
-### 5. Frontmatter Todo Tracking
+### 6. Frontmatter Todo Tracking
 
-All executable plans use YAML frontmatter with machine-readable todos:
+All executable plans (`current/`, `active/`) use YAML frontmatter with
+machine-readable todos:
 
 ```yaml
 ---
@@ -126,8 +148,8 @@ todos:
 ---
 ```
 
-This enables tooling to track progress across plans and sessions without
-parsing markdown.
+This enables tooling to track progress across executable plans and sessions
+without parsing markdown.
 
 ## Rationale
 
@@ -167,6 +189,8 @@ the plan content.
 - Document hierarchy prevents content duplication and fact contradiction.
 - Plan lifecycle is explicit: `active` (now), `current` (next), `future`
   (later), and `archive/completed` (historical record).
+- Strategic and executable plans are explicitly separated by lane (`future`
+  vs `current`/`active`), reducing premature execution detail in deferred work.
 - Frontmatter todos provide machine-readable progress tracking.
 
 ### Trade-offs
@@ -190,6 +214,11 @@ the plan content.
 - Archive completed plans promptly after mining outcomes into permanent
   documentation.
 - `active/` must contain only in-progress work.
+- `future/` must contain strategic plans only; it is not an execution lane.
+- Implementation detail in `future/` is permitted when it preserves validated
+  research, but it must be treated as non-binding until promotion.
+- Promote work through `future/` → `current/` → `active/` rather than executing
+  directly from `future/`.
 - `current/` and `future/` hold not-yet-started work only — no in-progress
   execution in these directories.
 - No stubs, no redirects, no compatibility layers.

@@ -1,6 +1,6 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-02-25
 **Status**: 🔄 Active strategic index
 **Scope**: Strategic cross-collection overview for the Oak MCP ecosystem.
 
@@ -112,6 +112,13 @@ finding resources, and adapting content without leaving their existing tools.
    - Lower-priority controls (sandboxing expansion and prompt-injection
      automation) tracked as deferred notes until the first two controls
      are operational.
+4. **User-experience contract for public alpha**
+   - Collection hub:
+     [user-experience/README.md](user-experience/README.md)
+   - Alpha readiness contract:
+     [user-experience/public-alpha-experience-contract.md](user-experience/public-alpha-experience-contract.md)
+   - Confirms in-scope users (educator, engineering/Ed-Tech) and explicit
+     learner deferment conditions.
 
 **Post-merge, pre-alpha work** (not merge-blocking):
 
@@ -229,6 +236,7 @@ Strategic architecture remains anchored in:
 | `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md), [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
 | `security-and-privacy/` | Security hardening progression with priority on hallucination guards and evidence-backed claims | 📋 Milestone 1-2 | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
 | `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
+| `user-experience/` | Persona-level outcome contract for public alpha and post-alpha scope progression | 📋 Milestone 1-2 | [user-experience/README.md](user-experience/README.md), [user-experience/public-alpha-experience-contract.md](user-experience/public-alpha-experience-contract.md) |
 | `architecture-and-infrastructure/` | Cross-cutting architecture, system quality, and observability | 📋 Milestone 1 / 3 | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 Planned | [tsdoc-generated-docs-overhaul.plan.md](developer-experience/tsdoc-generated-docs-overhaul.plan.md), [sdk-publishing-and-versioning-plan.md](developer-experience/sdk-publishing-and-versioning-plan.md) |
 | `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |

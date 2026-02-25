@@ -2,6 +2,11 @@
 
 **Last Updated**: 2026-02-25 (Phases 0-6 complete, Phase 7 next — CI drift check)
 
+**Recent session (25 Feb 2026)**: type-gen→sdk-codegen rename, typegen/codegen semantic
+split (type-focused modules: `typegen-*`; orchestration: `codegen-*`), consolidation
+workflow updates, semantic search plan reorg (post-sdk→future/). See
+[active plan](../../plans/semantic-search/active/sdk-workspace-separation.md) for full context.
+
 ---
 
 ## Immediate Context
@@ -372,7 +377,7 @@ system split across six workspaces.
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Codegen SDK** | `packages/sdks/oak-sdk-codegen/` | Two pipelines: API (sdk-codegen, generated types, Zod, MCP descriptors) and bulk (vocab-gen, bulk infrastructure, graph data, mined synonyms). 11 subpath exports. `@oaknational/sdk-codegen`. |
+| **Codegen SDK** | `packages/sdks/oak-sdk-codegen/` | Two pipelines: API (sdk-codegen, generated types, Zod, MCP descriptors) and bulk (vocab-gen, bulk infrastructure, graph data, mined synonyms). 11 subpath exports. `@oaknational/sdk-codegen`. Type-focused modules: `typegen-*`; orchestration: `codegen-*`. |
 | **Runtime SDK** | `packages/sdks/oak-curriculum-sdk/` | Runtime client, auth, validation, MCP tool composition |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
