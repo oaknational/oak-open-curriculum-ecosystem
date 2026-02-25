@@ -153,8 +153,7 @@ the [Quick Start Guide](../foundation/quick-start.md).
 Access curriculum content through MCP (Model Context Protocol) servers.
 AI agents get structured, searchable content with curriculum-aware ontology
 data. They care about accurate retrieval, curriculum relationships, and
-consistent data formats. See the
-[AI Agent Guide](../governance/ai-agent-guide.md).
+consistent data formats. See [AGENT.md](../../.agent/directives/AGENT.md).
 
 ### Teachers (via AI tools)
 

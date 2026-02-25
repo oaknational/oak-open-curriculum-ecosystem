@@ -2,7 +2,8 @@
 
 **Status**: Active  
 **Last Updated**: 2026-02-25  
-**Milestone**: Milestone 1 (Public Alpha)
+**Milestone**: Milestone 1 (Public Alpha)  
+**Open items**: 26 remaining (was 42; Batch A complete, O11 cancelled, F18 subsumed by F5; O1, O2, O3, O4, O9 resolved by parallel onboarding/docs session; ai-agent-guide.md deleted)
 
 ---
 
@@ -36,17 +37,51 @@ Primary strategic reference:
 
 ## Next Session Checklist (Handoff)
 
-1. **Close final Phase 1 remediation item: R2**
-   - Add startup-failure coverage for `apps/oak-curriculum-mcp-streamable-http/src/index.ts`
-   - Verify `createApp()` rejection is logged and exits with code `1`
-   - Update R2 status in §R once green
-2. **Commit Phase 1 remediation closure**
-   - R1 and R3 are already complete
-   - R2 completion is the remaining prerequisite for Phase 2 start
-3. **Start Phase 2 P1/P2 fixes in order**
-   - F4 -> F5 -> F6 -> F7 -> F8 -> F9 -> F10 -> F20/F25 -> F26-F30
-4. **Keep R4 deferred unless explicitly pulled in**
-   - R4 is non-blocking and currently parked for later refactor capacity
+### Getting Started
+
+1. Read this plan. It is self-contained.
+2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
+3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
+4. The plan below has all context needed. Start with Batch B.
+
+### Current State
+
+- **Batch A**: Complete (8 items). All quality gates pass. Phase 1 remediation closed.
+- **Batches B–E**: Open. 32 items remain.
+- **Parallel docs session complete**: `docs/foundation/onboarding.md` removed (content integrated into quick-start.md and troubleshooting.md). `docs/governance/ai-agent-guide.md` removed (entirely redundant with start-right → AGENT.md path). Start-right commands reduced to thin pointers to prompts. ADR count updated to 116. All references updated across ~20 files.
+- **F18 is subsumed by F5** — they share the same fix (env identity + LIB_PACKAGES cleanup).
+- **Uncommitted work**: Batch A + parallel docs changes are on the working tree. Check `git status` — if changes are present, commit them before starting Batch B.
+
+### Execution Plan
+
+Execute in batches. Run quality gates after each batch. Commit after each batch.
+
+1. ~~**Batch A: Remediation + Trivial Fixes** (8 items)~~ **COMPLETE**
+   - R2, F4, F9, F26, F30, O4, O6, O7 — all done, all gates green.
+2. **Batch B: Small Architecture + Documentation** (11 items, ~1 session)
+   - **F6** (small): Extract shared retrieval bootstrap helper from `search-retrieval-factory.ts` and `wiring.ts`
+   - **F10** (small): Add timeout/retry to OAuth metadata fetch in `oauth-and-caching-setup.ts`
+   - **F20** (small): Fix/archive contradictory deployment docs (`BUILD_VERIFICATION.md`, `TESTING_GAP_ANALYSIS.md`)
+   - **F25** (small): Fix deployment-architecture.md (describes sync `createApp`, should be async)
+   - **F28** (small): Replace blanket eslint-disables in `apps/oak-search-cli/ground-truths/generation/*.ts`
+   - **F29** (small): Fix "core depends on nothing" wording in `docs/architecture/README.md`
+   - ~~**O1** (small): Resolved — commands are thin pointers to prompts; prompts have full 10-gate list~~
+   - ~~**O2** (small): Resolved — quick-start.md tree updated with packages/core/, search SDK, correct libs, current docs/ dirs~~
+   - ~~**O3** (small): Resolved — ai-agent-guide.md deleted; rules.md references AGENT.md for full listing; canonical gate sequence in start-right.prompt.md~~
+   - **O5** (small): Add `doc-gen` / `subagents:check` to start-right gate lists
+   - **O10** (small): Add convenience commands (`pnpm make`, `pnpm qg`, `pnpm fix`, `pnpm doc-gen`) to AGENT.md
+3. **Batch C: Medium Complexity** (3 items, ~1–2 sessions)
+   - **F5** (medium): Env identity + LIB_PACKAGES cleanup — decide core vs lib for `env`, remove stale `storage`/`transport` entries (subsumes F18)
+   - **F8** (medium): Env pipeline unification — migrate Search CLI and STDIO to `resolveEnv`
+   - **F27** (medium): DI for response-augmentation — `process.env` reads in SDK violate ADR-078
+   - ~~**O9** (medium): Resolved — commands reduced to thin pointers to prompts~~
+4. **Batch D: Large / Architectural** (1 item, design decision required)
+   - **F7** (large): Contract consolidation — `SearchRetrievalService` vs `RetrievalService`
+   - May defer to post-release if structural typing remains safe
+5. **Batch E: Phase 3 / Deferred** (16 items, post-release backlog)
+   - R4, F11–F17, F19, F31–F35, O8, O12
+   - All P3 — none release-blocking
+   - Record disposition in snag register
 
 ---
 
@@ -207,7 +242,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `apps/oak-search-cli/src/lib/indexing/pattern-config-validator.ts` imports `typeSafeEntries` from `@oaknational/curriculum-sdk`. Creates unnecessary dependency on runtime SDK for a core utility. |
 | **Files** | `apps/oak-search-cli/src/lib/indexing/pattern-config-validator.ts` |
 | **Fix** | Import `typeSafeEntries` directly from `@oaknational/type-helpers`. Add `@oaknational/type-helpers` to search CLI dependencies. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Import changed, dependency added. |
 
 #### F5: packages/core/env has mixed identity — lib boundary rules, core location
 
@@ -268,7 +303,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `apps/oak-search-cli/eslint.config.ts` does not apply `appBoundaryRules` or `appArchitectureRules`. Contrast with `oak-curriculum-mcp-streamable-http`. |
 | **Files** | `apps/oak-search-cli/eslint.config.ts` |
 | **Fix** | Apply `appBoundaryRules` and `appArchitectureRules` to oak-search-cli. Decide if CLI is treated as app or library-style workspace; document. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Both rule sets added to ESLint config. |
 
 #### F10: OAuth metadata fetch — no timeout or retry
 
@@ -367,7 +402,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Fred |
 | **Problem** | `LIB_PACKAGES` has stale entries. Env package identity (core vs lib) unclear. |
 | **Fix** | Invoke config-reviewer. Remove stale entries, decide core vs lib categorisation. |
-| **Status** | [ ] Open |
+| **Status** | [ ] Subsumed by F5 — same fix (env identity + LIB_PACKAGES cleanup). Address together in Batch C. |
 
 #### F19: type-reviewer — type-helpers assertion strategy
 
@@ -416,7 +451,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | F23 implementation (try/catch around `createApp()`) was written without tests. The startup failure path — where `createApp` throws and the process should log and exit — has zero test coverage. TDD was not followed; the gap cannot be retroactively closed for the design process, but test coverage can be added. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/src/index.ts` |
 | **Fix** | Add a test that verifies `createApp` rejection is caught, logged, and results in `process.exit(1)`. Consider whether this is best tested as a unit test (mocking `createApp`) or integration test (injecting a config that causes startup failure). |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Extracted `bootstrapApp<T>` function with DI (`BootstrapAppDeps`). 3 integration tests (success path, failure-logs-and-exits, call-order). `index.ts` refactored to use `bootstrapApp`. |
 
 #### R3: Run remaining quality gates
 
@@ -438,29 +473,33 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Fix** | Refactor to return `Result<T, E>`. Callers pattern-match on `ok` / `error`. Consider during Phase 2 or later — not blocking release. |
 | **Status** | [ ] Open |
 
-### Execution Order (Updated)
+### Execution Order (Batched — Updated 2026-02-25)
 
-**Phase 1 remediation** (must complete first):
+Batched by complexity for efficient execution. Run quality gates and commit after each batch.
 
-1. **R2** (add F23 startup failure test) — final remaining Phase 1 remediation item
-2. Commit Phase 1 remediation closure
+~~**Batch A — Remediation + Trivial** (8 items)~~ **COMPLETE**
 
-**Phase 2** (remaining P1/P2 architecture fixes):
+1. ~~R2, F4, F9, F26, F30, O4, O6, O7~~
 
-3. **F4** (Search CLI typeSafeEntries)
-4. **F5** (core/env identity, LIB_PACKAGES)
-5. **F6** (shared retrieval bootstrap)
-6. **F7** (contract consolidation, after F1)
-7. **F8** (env pipeline migration)
-8. **F9** (oak-search-cli boundary rules)
-9. **F10** (OAuth metadata timeout)
-10. **F20**, **F25** (deployment docs fix/archive)
-11. **F26–F30** (package locations, DI, eslint, boundary wording, STDIO)
+**Batch B — Small Architecture + Documentation** (11 items):
 
-**Phase 3** (low priority + deferred):
+2. **F6**, **F10**, **F20**, **F25**, **F28**, **F29** (small arch/doc fixes)
+3. **O1**, **O2**, **O3**, **O5**, **O10** (small onboarding fixes)
 
-12. **R4** (Result pattern for deriveSelfOrigin/fetchUpstreamMetadata)
-13. **F11–F19**, **F31–F35** (low priority, as capacity allows)
+**Batch C — Medium Complexity** (4 items):
+
+4. **F5** (env identity + LIB_PACKAGES; subsumes F18)
+5. **F8** (env pipeline unification)
+6. **F27** (response-augmentation DI)
+7. **O9** (start-right DRY)
+
+**Batch D — Large / Architectural** (1 item):
+
+8. **F7** (contract consolidation — may defer if structural typing is safe)
+
+**Batch E — Phase 3 / Deferred** (16 items):
+
+9. **R4**, **F11–F17**, **F19**, **F31–F35**, **O8**, **O12** (P3, as capacity allows)
 
 ### Specialist Follow-Ups (Post-Fix)
 
@@ -468,7 +507,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 |---------|----------|-----------|
 | F16 (rate limit) | security-reviewer | ADR-115 deployment preconditions |
 | F17 | docs-adr-reviewer | ADR-108 text alignment |
-| F18 | config-reviewer | LIB_PACKAGES, ESLint config |
+| F18 | config-reviewer | Subsumed by F5 — address in Batch C |
 | F19 | type-reviewer | type-helpers assertion audit |
 
 ---
@@ -560,7 +599,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | `@oaknational/result` and `@oaknational/env` listed under `packages/libs/`; both are in `packages/core/`. Actual libs = `logger` only. |
 | **Files** | `.agent/directives/AGENT.md`, `docs/governance/ai-agent-guide.md` |
 | **Fix** | Move `@oaknational/result` and `@oaknational/env` to `packages/core/` line. Update ai-agent-guide architecture section to match. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Both docs updated. Also added `@oaknational/oak-search-sdk` and `@oaknational/sdk-codegen` to AGENT.md SDKs line. Note: `ai-agent-guide.md` subsequently deleted as entirely redundant. |
 
 #### F27: SDK response-augmentation reads process.env directly
 
@@ -605,7 +644,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | `rootDir` from `requireRepoRoot()` passed to `createDefaultStartupLoggerDeps()` which also calls `requireRepoRoot()`. Redundant second call. |
 | **Files** | `apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts` |
 | **Fix** | Call `requireRepoRoot()` once at entry point; pass result without duplicate call inside deps. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Captured `createDefaultStartupLoggerDeps()` result, extracted `rootDir` from it. Removed redundant `requireRepoRoot()` import and call. |
 
 ---
 
@@ -684,7 +723,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | Command lists 8 gates; `start-right.prompt.md` lists 10. Missing: `pnpm test:ui` and `pnpm smoke:dev:stub`. AI agents via command skip two gates. |
 | **Files** | `.cursor/commands/jc-start-right.md` |
 | **Fix** | Add `pnpm test:ui` and `pnpm smoke:dev:stub` to gate list to match `start-right.prompt.md`. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Commands reduced to thin pointers to prompts; prompts have the full 10-gate list. Gate-list divergence eliminated. |
 
 ### High (P2)
 
@@ -697,7 +736,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | Missing `packages/core/`; missing `oak-search-sdk`; `packages/libs/` says "logger, storage, etc." but only logger exists; `docs/` shows wrong subdirs; `docs/development/` empty. |
 | **Files** | `docs/foundation/quick-start.md` |
 | **Fix** | Update tree to reflect actual structure including `packages/core/`, search SDK, real docs subdirs. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Tree updated: added `packages/core/`, `oak-search-sdk/`; corrected libs to just logger; docs subdirs now match actual structure. |
 
 #### O3: Quality gate ordering — subset context missing
 
@@ -705,10 +744,10 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 |-------|-------|
 | **Severity** | P2 |
 | **Reviewers** | Onboarding-reviewer |
-| **Problem** | `rules.md`, `ai-agent-guide.md`, `onboarding.md` give different gate orderings without stating they are iteration-time subsets. |
+| **Problem** | `rules.md` and `ai-agent-guide.md` give different gate orderings without stating they are iteration-time subsets. (Previously also `onboarding.md`, now removed.) |
 | **Files** | `.agent/directives/rules.md`, `docs/governance/ai-agent-guide.md` |
 | **Fix** | Add brief note indicating subsets and pointer to full sequence in `start-right.prompt.md` or `docs/engineering/build-system.md`. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). `ai-agent-guide.md` deleted (entirely redundant). `rules.md` now cross-references AGENT.md. Canonical gate sequence lives in `start-right.prompt.md`. No divergent subset lists remain. |
 
 #### O4: ai-agent-guide.md — pnpm build omitted from development gates
 
@@ -719,7 +758,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | "During Development" gate list omits `pnpm build`. |
 | **Files** | `docs/governance/ai-agent-guide.md` |
 | **Fix** | Add `pnpm build` to development gate list. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Added `pnpm build` and reordered gates to canonical sequence. Note: `ai-agent-guide.md` subsequently deleted as entirely redundant. |
 
 #### O5: doc-gen and subagents:check absent from start-right sequences
 
@@ -728,8 +767,8 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Severity** | P2 |
 | **Reviewers** | Onboarding-reviewer |
 | **Problem** | Both gates part of `pnpm make` and `pnpm check` but not in start-right canonical lists. AI agents following only start-right skip them. |
-| **Files** | `.agent/prompts/start-right.prompt.md`, `.cursor/commands/jc-start-right.md` |
-| **Fix** | Add to canonical gate list or explicitly note they are only for specific contexts (e.g. after docs/sub-agent changes). |
+| **Files** | `.agent/prompts/start-right.prompt.md` (commands are now thin pointers) |
+| **Fix** | Add to canonical gate list in prompt, or explicitly note they are only for specific contexts (e.g. after docs/sub-agent changes). |
 | **Status** | [ ] Open |
 
 #### O6: start-right-thorough.prompt.md — grammar error
@@ -741,7 +780,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | "what value are delivering" — missing "we". |
 | **Files** | `.agent/prompts/start-right-thorough.prompt.md` |
 | **Fix** | Change to "what value are we delivering". |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Grammar fixed. |
 
 #### O7: onboarding.md — add onboarding-reviewer to reviewer table
 
@@ -752,7 +791,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | Sub-agent table lists standard specialists but not `onboarding-reviewer`; invoke-code-reviewers rule adds it for onboarding-flow changes. |
 | **Files** | `docs/foundation/onboarding.md` |
 | **Fix** | Add `onboarding-reviewer` to table (marked situational/on-demand). |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Added `onboarding-reviewer` and `config-reviewer` to table. Note: `onboarding.md` subsequently removed; useful content integrated into quick-start.md and troubleshooting.md. |
 
 ### Low (P3)
 
@@ -765,7 +804,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | Listed in quick-start tree as "Development guides" but contains no files. |
 | **Files** | `docs/development/`, `docs/foundation/quick-start.md` |
 | **Fix** | Populate, remove directory, or correct tree reference. |
-| **Status** | [ ] Open |
+| **Status** | [~] Partially resolved (2026-02-25). Quick-start tree updated to show current `docs/` subdirs (no longer references `docs/development/`). Empty `docs/development/` directory still exists on disk — can be deleted. |
 
 #### O9: jc-start-right.md and start-right.prompt.md near-duplicates
 
@@ -776,7 +815,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | Command duplicates prompt content; root cause of gate-list divergence. SKILL correctly references prompt. |
 | **Files** | `.cursor/commands/jc-start-right.md`, `.agent/prompts/start-right.prompt.md` |
 | **Fix** | Consider having command reference prompt rather than duplicating (DRY). |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Commands reduced to single-line pointers to their respective prompts. No duplication remains. |
 
 #### O10: AGENT.md — convenience commands omitted
 
@@ -798,30 +837,28 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Problem** | "Quality Gate Checklist" reads like full list but is quick-iteration subset. |
 | **Files** | `docs/foundation/onboarding.md` |
 | **Fix** | Add "(quick iteration)" or "(local development)" to disambiguate. |
-| **Status** | [ ] Open |
+| **Status** | [x] Cancelled — `onboarding.md` is being removed. Useful content integrated elsewhere by separate agent. |
 
-#### O12: Onboarding troubleshooting — OAuth metadata fetch
+#### O12: OAuth bootstrap troubleshooting note
 
 | Field | Value |
 |-------|-------|
 | **Severity** | P3 |
 | **Reviewers** | Wilma |
-| **Problem** | Onboarding does not mention async bootstrap or OAuth metadata fetch for HTTP app. Under Clerk outage, first-time contributors may not connect startup failures to OAuth. |
-| **Files** | `docs/foundation/onboarding.md` |
-| **Fix** | Add troubleshooting note: "If HTTP server fails to start, ensure Clerk's `/.well-known/oauth-authorization-server` is reachable." |
+| **Problem** | No troubleshooting guidance for OAuth metadata fetch failures at startup. Under Clerk outage, contributors may not connect startup failures to OAuth. |
+| **Files** | `apps/oak-curriculum-mcp-streamable-http/README.md` (target redirected from removed `onboarding.md`) |
+| **Fix** | Add troubleshooting note to HTTP server README: "If server fails to start, ensure Clerk's `/.well-known/oauth-authorization-server` is reachable." |
 | **Status** | [ ] Open |
 
 ---
 
-### Onboarding Execution Order (Recommended)
+### Onboarding Execution Order
 
-1. **O1** (jc-start-right gate list) — quick win, fixes P1
-2. **O6** (grammar) — quick win
-3. **O2** (quick-start tree)
-4. **O3**, **O4** (gate subset context)
-5. **O5** (doc-gen, subagents:check)
-6. **O7** (onboarding-reviewer table)
-7. **O8–O12** (low priority)
+Onboarding items are interleaved into the main batched execution order (see §Execution Order above):
+
+- **Batch A** (trivial): O4, O6, O7 — **COMPLETE**
+- **Batch B** (small): O1, O2, O3, O5, O10 (O8 moved to Batch E — low value; O11 cancelled — target file removed)
+- **Batch C** (medium): ~~O9~~, O12 (O9 resolved — commands are thin pointers; O12 retargeted to HTTP server README)
 
 ---
 
@@ -889,6 +926,10 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `rules.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.
+- **2026-02-25**: Plan updated for standalone handoff. `onboarding.md` being removed by parallel agent — O11 cancelled (target file removed), O12 retargeted to HTTP server README, O8 demoted to Batch E. Next Session Checklist rewritten as self-contained entry point with Getting Started steps, Current State summary, and item-level file references. Execution Order and Onboarding Execution Order aligned. Open items: 32 remaining.
+- **2026-02-25**: **Batch A complete** (8 items: R2, F4, F9, F26, F30, O4, O6, O7). R2: extracted `bootstrapApp<T>` with DI + 3 integration tests. F4: typeSafeEntries import fixed. F9: app boundary rules added to Search CLI. F26: package locations corrected in AGENT.md and ai-agent-guide. F30: redundant `requireRepoRoot()` removed. O4: `pnpm build` added to gate list. O6: grammar fixed. O7: `onboarding-reviewer` and `config-reviewer` added to table. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e, test:ui, smoke:dev:stub).
+- **2026-02-25**: Full codebase verification of all 42 open items — every problem confirmed still present. Replaced linear execution order with batched approach (A–E) grouped by complexity for efficient execution. F18 marked as subsumed by F5. Updated Next Session Checklist with batch definitions and item-level complexity estimates.
 - **2026-02-25**: Phase 1 execution complete (F1, F2, F3, F21, F22, F23, F24). Added Phase 1 Execution Report, §R Remediation section (R1–R4), and updated execution order to prioritise remediation before Phase 2. Key findings: `as` assertions introduced in test files (R1), F23 startup failure path untested (R2), remaining quality gates not run (R3). Status lines updated on all 7 completed items.
 - **2026-02-25**: Remediation progress update: **R1 complete** (removed assertion shortcuts in test files), **R3 complete** (ran `test:e2e`, `test:ui`, `smoke:dev:stub` all green). F3 hardening expanded to enforce host validation consistently across OAuth metadata and MCP auth challenge/resource URL generation with added unit/integration/E2E coverage. Extracted settled behavior into permanent docs by updating `apps/oak-curriculum-mcp-streamable-http/README.md` (`ALLOWED_HOSTS` semantics and 403 behavior for malformed/disallowed host headers). **R2** remains open.
 - **2026-02-25**: Added Additional Architecture Fixes (F20–F35) and Pre-Release Onboarding and Documentation Fixes (O1–O12) from thorough review 2026-02-25. F20–F35 from second-pass architecture review (Barney, Fred, Wilma) and onboarding-reviewer; O1–O12 from onboarding-reviewer. Updated scope to cover all findings in dedicated session, including low-priority items. Revised execution order to include new architecture fixes.

@@ -1,5 +1,79 @@
 # Napkin
 
+## Session: 2026-02-25 — Onboarding Review and Documentation Restructure
+
+### What happened
+
+Invoked onboarding-reviewer to audit the onboarding journey from
+root README through to contribution-ready state. The reviewer
+produced a false positive: claimed 9 documents were missing, but
+all 9 existed at their correct paths (moved during the
+`docs/development/` → `docs/engineering/` restructure in commit
+`5c8bfc2d`). This wasted time investigating a non-issue.
+
+After validating, executed the user's three-part request:
+(1) Fixed start-right prompts/commands so commands are thin
+pointers to prompts and prompts contain the structured content.
+(2) Dissolved `docs/foundation/onboarding.md` — integrated
+genuinely unique content (Ready When checklist, domain ADR
+handoffs, Known Gate Caveats) into quick-start.md and
+troubleshooting.md. Updated 15+ files that referenced onboarding.md.
+(3) Fixed `<repo>` placeholder in quick-start.md and stale
+`docs/development/` directory listing.
+
+Follow-on items completed in same session:
+(4) Updated ADR count from "114" to "116" in README, VISION,
+and reference-docs (4 locations).
+(5) Fixed CONTRIBUTING.md "Use unknown at boundaries" wording
+to clarify that unknown is transient, not a resting type.
+(6) Deleted `docs/governance/ai-agent-guide.md` — entirely
+redundant with start-right → AGENT.md path. Updated 8+
+active references. Only unique content (Kairos time, 4-layer
+memory table) already covered by practice.md.
+(7) Fixed rules.md Architectural Model section — had inaccurate
+package descriptions (listed env, result in libs instead of
+core). Added cross-reference to AGENT.md for full listing.
+
+### Patterns noted
+
+- Sub-agent reviewers can produce false positives on file existence
+  checks. Always verify claims before acting on them.
+- "Onboarding" is a process, not a document. Good documentation
+  and organisation IS onboarding. A standalone "onboarding document"
+  tends to duplicate content from README, quick-start, and other
+  docs.
+- When dissolving a document, trace ALL references (grep the repo)
+  before deleting. Archive/plan references are historical records
+  and should not be updated.
+- Commands should be thin pointers to prompts, not duplicates.
+  The prompt is the source of truth; the command is a
+  platform-specific entry point.
+
+---
+
+## Session: 2026-02-25 — Plan Handoff Preparation
+
+### What happened
+
+Updated `release-plan-m1.plan.md` to function as a standalone entry
+point for the next session. Added "Getting Started" and "Current State"
+sections. Accounted for parallel removal of `docs/foundation/onboarding.md`
+by another agent — O11 cancelled, O12 retargeted to HTTP server README,
+O8 demoted to Batch E. Fixed item counts and cross-references for
+consistency.
+
+### Patterns noted
+
+- When a file is being removed by a parallel agent, scan all plan items
+  that reference it as a target. Three possible dispositions: cancel
+  (target gone, fix no longer needed), retarget (useful content, different
+  location), or demote (low value, defer).
+- Plan handoff sections must be self-contained: tell the next agent
+  exactly which files to read and where to start. Don't assume prior
+  context or access to conversation history.
+
+---
+
 ## Session: 2026-02-25 — M1 Release Fixes Phase 1 Execution
 
 ### What happened
@@ -344,3 +418,43 @@ Documentation extractions completed before distillation:
 - Security findings can surface semantic mismatches between route
   categories ("no DNS middleware on /mcp") and effective protection
   (auth middleware can still and should reject malformed/disallowed hosts).
+
+---
+
+## Session: 2026-02-25 (onboarding docs consolidation)
+
+### What changed
+
+1. **Dissolved `docs/foundation/onboarding.md`** — unique content
+   migrated to `quick-start.md` (domain ADR handoffs, "You're Ready
+   When" checklist) and `troubleshooting.md` (Known Gate Caveats).
+   Updated ~20 files with reference changes.
+2. **Deleted `docs/governance/ai-agent-guide.md`** — assessed as
+   entirely redundant with start-right → AGENT.md → rules.md path.
+   Updated all active references.
+3. **Fixed start-right commands/prompts** — commands were duplicating
+   prompt content (root cause of gate-list divergence). Elevated
+   prompts to contain full structured guidance; reduced commands to
+   thin single-line pointers.
+4. **Updated ADR count** from 114 → 116 in README, VISION, and
+   agentic-engineering-practice.md.
+5. **Improved CONTRIBUTING.md** type-safety wording — "Use `unknown`
+   at boundaries" now explains Zod validation flow.
+6. **Corrected `rules.md` architectural model** — packages/core/ and
+   packages/libs/ now accurate, cross-references AGENT.md.
+7. **Fixed quick-start.md repository structure tree** — added
+   packages/core/, oak-search-sdk, corrected libs, updated docs/ dirs.
+8. **Updated release plan** — 6 O-items resolved (O1, O2, O3, O4
+   annotated, O8 partial, O9), open items 42 → 26.
+
+### Lessons
+
+- Onboarding-reviewer false positives: reported 9 files "missing"
+  that were actually moved/renamed in commit 5c8bfc2d. Always verify
+  reviewer claims against git history before acting.
+- Commands duplicating prompt content is a DRY violation that
+  compounds: each edit only updates one copy, creating divergence.
+  Thin-pointer pattern prevents this.
+- "Onboarding" as a document conflates process with artefact. The
+  process is supported by existing docs (README → quick-start →
+  AGENT.md), not a standalone instruction bucket.

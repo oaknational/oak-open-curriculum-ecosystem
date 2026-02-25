@@ -82,7 +82,7 @@ Common prefixes: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`.
 
 ## 5. Push
 
-The pre-push hook runs `gitleaks detect` to scan for secrets. If gitleaks is not installed, the push will fail — see [Prerequisites](../foundation/onboarding.md#prerequisites).
+The pre-push hook runs `gitleaks detect` to scan for secrets. If gitleaks is not installed, the push will fail — install from [gitleaks releases](https://github.com/gitleaks/gitleaks/releases).
 
 ```bash
 git push -u origin HEAD

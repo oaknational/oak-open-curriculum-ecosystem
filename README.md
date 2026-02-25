@@ -24,7 +24,7 @@ This repo has roughly three distinct audiences:
 
 ### Internal Facing
 
-This repo is designed to support [agentic or augmented product engineering practice](.agent/directives/practice.md). It has extensive guidance for AI and human contributors ([docs](docs/README.md), [process](docs/foundation/onboarding.md), [guidance](.agent/directives/AGENT.md), [ADRs](docs/architecture/architectural-decisions/), [memory](.agent/memory/distilled.md)), strict and comprehensive [quality gates](.agent/directives/rules.md), and feedback loops to improve both.
+This repo is designed to support [agentic or augmented product engineering practice](.agent/directives/practice.md). It has extensive guidance for AI and human contributors ([docs](docs/README.md), [quick start](docs/foundation/quick-start.md), [guidance](.agent/directives/AGENT.md), [ADRs](docs/architecture/architectural-decisions/), [memory](.agent/memory/distilled.md)), strict and comprehensive [quality gates](.agent/directives/rules.md), and feedback loops to improve both.
 
 It also has a large collection of repo specific agent skills, commands, sub-agents, and other tools to support the practice. While some of these are currently configured for Cursor only, the philosophy is that they should all be platform-agnostic, and we will continue to work towards that goal.
 
@@ -52,7 +52,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
    pnpm install
    ```
 
-2. **Read the onboarding guide** – [docs/foundation/onboarding.md](docs/foundation/onboarding.md) is the human contributor onboarding path (junior-to-mid-level friendly), with key READMEs, directives, and a lightweight ADR path.
+2. **Read the quick start guide** – [docs/foundation/quick-start.md](docs/foundation/quick-start.md) covers architecture, setup, key concepts, and development workflows (junior-to-mid-level friendly).
 
    For AI agents, onboarding starts with `start-right`:
    [command](.cursor/commands/jc-start-right.md), [prompt](.agent/prompts/start-right.prompt.md), or [skill](.agent/skills/start-right/SKILL.md), then [AGENT.md](.agent/directives/AGENT.md).
@@ -102,7 +102,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 
    `pnpm make` is the recommended first full pipeline run.
    `pnpm qg` is slower and runs UI/E2E/smoke suites that may require additional service configuration.
-   For current caveats, see [docs/foundation/onboarding.md](docs/foundation/onboarding.md).
+   For current caveats, see [Troubleshooting → Known Gate Caveats](docs/operations/troubleshooting.md#known-gate-caveats).
 
 6. **Choose your starting point**
 
@@ -152,9 +152,9 @@ pnpm check # Build and validate EVERYTHING
 - `parseSchema`, `parseWithCurriculumSchema`, `parseEndpointParameters`, and `parseSearchResponse` wrap `schema.safeParse`, returning typed `ValidationResult` objects without manual assertions.
 - MCP servers, the search system, and admin tooling import these helpers — no consumer duplicates schema knowledge ([ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md)).
 
-## Documentation & Onboarding
+## Documentation
 
-- [docs/foundation/onboarding.md](docs/foundation/onboarding.md) – first-stop checklist for new developers and AI assistants.
+- [docs/foundation/quick-start.md](docs/foundation/quick-start.md) – quick-reference guide for new developers.
 - [docs/README.md](docs/README.md) – architecture and development index.
 - Workspace READMEs (SDK + Semantic Search) explain local setup, admin workflows, and validation flow.
 
@@ -164,9 +164,9 @@ This repository is governed by an **agentic engineering practice** — a self-re
 
 The practice operates in three layers: **philosophy** (the First Question, metacognition, the learning loop), **structure** (directives, plans, templates, ADRs, sub-agents, quality gates, institutional memory), and **tooling** (platform-specific bindings in `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`).
 
-The practice has enabled a single engineer, working with AI under the practice's governance, to produce the SDK, MCP servers, semantic search, 114 ADRs, and the practice itself ([ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)).
+The practice has enabled a single engineer, working with AI under the practice's governance, to produce the SDK, MCP servers, semantic search, 116 ADRs, and the practice itself ([ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
-The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md). For a human-friendly explanation, see the [onboarding guide's practice section](docs/foundation/onboarding.md#12-the-agentic-engineering-practice).
+The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md).
 
 ## What This Is
 
@@ -222,7 +222,7 @@ Start with the [ADR index](docs/architecture/architectural-decisions/), then the
 | `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                |
 | `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
 | `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
-| `docs/`          | Developer documentation, onboarding guides, 114 ADRs                                                        |
+| `docs/`          | Developer documentation, guides, 116 ADRs                                                                   |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 

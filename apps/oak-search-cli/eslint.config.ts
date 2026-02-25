@@ -9,7 +9,13 @@ import { dirname } from 'node:path';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import type { Linter } from 'eslint';
 import { parser as tseslintParser } from 'typescript-eslint';
-import { configs, ignores, testRules } from '@oaknational/eslint-plugin-standards';
+import {
+  configs,
+  ignores,
+  testRules,
+  appBoundaryRules,
+  appArchitectureRules,
+} from '@oaknational/eslint-plugin-standards';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
@@ -37,9 +43,8 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
-      // ============================================================
-      // COMPLEXITY RULES
-      // ============================================================
+      ...appBoundaryRules,
+      ...appArchitectureRules,
       complexity: ['error', { max: 8 }],
       'max-depth': ['error', 3],
       'max-statements': ['error', 20],

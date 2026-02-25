@@ -266,6 +266,6 @@ pnpm test:e2e       # E2E tests (requires env vars)
 
 ## Related Documentation
 
-- [Onboarding Guide](../foundation/onboarding.md) - Getting started with development
+- [Quick Start Guide](../foundation/quick-start.md) - Getting started with development
 - [Root README](../../README.md) - Repository overview
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines

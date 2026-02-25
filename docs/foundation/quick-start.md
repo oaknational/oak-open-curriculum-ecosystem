@@ -5,11 +5,11 @@
 
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
 
-> **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](../architecture/openapi-pipeline.md) and [onboarding guide](./onboarding.md).
+> **New here?** This guide gets you running quickly. For the full architecture, see the [OpenAPI pipeline](../architecture/openapi-pipeline.md). For documentation navigation, see [docs/README.md](../README.md).
 >
 > **Audience**: junior-to-mid-level human developers.
 >
-> **AI agents**: start with the `start-right` workflow first (command, prompt, or skill), then continue with [AGENT.md](../../.agent/directives/AGENT.md) and [AI Agent Guide](../governance/ai-agent-guide.md).
+> **AI agents**: start with the `start-right` workflow first (command, prompt, or skill), then continue with [AGENT.md](../../.agent/directives/AGENT.md).
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
 Start with the [ADR index](../architecture/architectural-decisions/), then this foundational set:
@@ -22,8 +22,6 @@ Start with the [ADR index](../architecture/architectural-decisions/), then this 
 ## Working with AI Agents
 
 AI agents working with this codebase should read [AGENT.md](../../.agent/directives/AGENT.md) as their canonical entry point. It links to rules, testing strategy, and schema-first directives.
-
-See the [AI Agent Guide](../governance/ai-agent-guide.md) for workflow patterns and task management advice.
 
 ## Architecture TL;DR
 
@@ -54,13 +52,19 @@ Use progressive disclosure:
 2. Domain handoff: read ADRs for your area only (SDK generation, search, or MCP runtime/auth).
 3. Task-time deep dive: read additional ADRs only when your task changes behaviour or architecture in that area.
 
+**Domain ADR handoffs** (read when you start work in that area):
+
+- **SDK generation**: [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data.md), [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md), [ADR-031](../architecture/architectural-decisions/031-generation-time-extraction.md), [ADR-048](../architecture/architectural-decisions/048-shared-parse-schema-helper.md)
+- **Semantic search**: [ADR-063](../architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md), [ADR-074](../architecture/architectural-decisions/074-elastic-native-first-philosophy.md), [ADR-076](../architecture/architectural-decisions/076-elser-only-embedding-strategy.md)
+- **MCP runtime/auth**: [ADR-107](../architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md), [ADR-113](../architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md), [ADR-115](../architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
+
 ## Zero-Setup Quick Start (0 minutes)
 
 Oak team contributors can start immediately without any API keys:
 
 ```bash
 # Clone and install
-git clone <repo> && cd oak-open-data-ecosystem
+git clone https://github.com/oaknational/oak-open-data-ecosystem.git && cd oak-open-data-ecosystem
 pnpm install
 
 # Run tests and quality checks (no env vars required)
@@ -115,8 +119,15 @@ a time as specified in
 
 See [environment variables guide](../operations/environment-variables.md) for complete setup details.
 
-For current known `pnpm qg` local caveats, see
-[Developer Onboarding → Known Gate Caveats](./onboarding.md#known-gate-caveats).
+### You're Ready When
+
+- [ ] `pnpm test` passes with no failures
+- [ ] `pnpm type-check` reports no errors
+- [ ] `pnpm lint:fix` reports no remaining issues
+- [ ] You have read the three foundational ADRs (029, 030, 031)
+- [ ] You know which area you are working on (SDK, MCP server, search, or docs)
+
+For known `pnpm qg` local caveats, see [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats).
 
 ## Key Concepts
 
@@ -274,9 +285,7 @@ pnpm make    # Build everything from scratch
 pnpm qg      # Run all quality checks (including UI/E2E/smoke suites)
 ```
 
-If `pnpm qg` fails locally, check
-[Developer Onboarding → Known Gate Caveats](./onboarding.md#known-gate-caveats)
-before assuming setup issues.
+If `pnpm qg` fails locally, check [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats) before assuming setup issues.
 
 ### Test a Specific Workspace
 
@@ -311,18 +320,22 @@ open packages/sdks/oak-curriculum-sdk/docs/index.html
 oak-open-data-ecosystem/
 ├── packages/
 │   ├── sdks/
-│   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation source
-│   │   │   ├── code-generation/typegen/     # Generator templates and emitters
-│   │   │   └── src/types/generated/         # Generated schema/tool artefacts
-│   │   └── oak-curriculum-sdk/      # Runtime SDK consumed by apps
-│   └── libs/                         # Shared libraries (logger, storage, etc.)
+│   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation pipeline
+│   │   ├── oak-curriculum-sdk/       # Runtime SDK consumed by apps
+│   │   └── oak-search-sdk/           # Search SDK (ES retrieval, admin)
+│   ├── core/                          # Shared low-level code (result, env, type-helpers, ESLint plugin)
+│   └── libs/                          # Shared libraries (logger)
 ├── apps/
-│   ├── oak-curriculum-mcp-stdio/     # MCP server for Claude Desktop
-│   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web
-│   └── oak-search-cli/ # Search application
+│   ├── oak-curriculum-mcp-stdio/      # MCP server for Claude Desktop, Cursor
+│   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web (Vercel)
+│   └── oak-search-cli/               # Semantic search CLI
 └── docs/
-    ├── architecture/                 # Architecture decisions
-    └── development/                  # Development guides
+    ├── architecture/                 # Architecture decisions and ADRs
+    ├── domain/                       # Curriculum data guides
+    ├── engineering/                  # Build system, workflow, tooling
+    ├── foundation/                   # Quick start, vision
+    ├── governance/                   # Development practice, safety
+    └── operations/                   # Environment, troubleshooting
 ```
 
 ## Type Safety Rules
@@ -357,8 +370,7 @@ test('MCP server lists all generated tools', async () => {
 1. **Architecture**: [OpenAPI Pipeline](../architecture/openapi-pipeline.md)
 2. **Curriculum Data**: [Data Variances](../domain/DATA-VARIANCES.md)
 3. **Setup**: [Environment Variables](../operations/environment-variables.md)
-4. **Onboarding**: [Developer Onboarding](./onboarding.md)
-5. **Contributing**: [CONTRIBUTING.md](../../CONTRIBUTING.md)
+4. **Contributing**: [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 ### Troubleshooting
 

@@ -1,33 +1,73 @@
-read @rules.md , @testing-strategy.md , and @schema-first-execution.md , and take to heart that it is encouraged to take a step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you. Identify and question assumptions. Even before the First Question, ask, are we solving the right problem, at the right layer? Any generated plans must include regularly re-reading and re-committing to those foundation documents.
+# Start Right (Thorough)
 
-**Commit** to excellence in systems' architecture design, software engineering and developer experience. Choose architectural correctness over short-term expediency. This requires critical and _long-term_ thinking.
+Ground yourself rigorously before beginning significant work.
 
-The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at sdk-codegen time.
+## Foundation Documents
 
-When analysing a generated file, always analyse the generator code that produced it as well, as it is the source of truth for the generated file.
+Read and internalise these documents:
+
+1. @.agent/directives/AGENT.md — Entry point and documentation index
+2. @.agent/directives/rules.md — **THE AUTHORITATIVE RULES**
+3. @.agent/directives/testing-strategy.md — TDD at all levels
+4. @.agent/directives/schema-first-execution.md — Types flow from schema
+
+**Plans must include regularly re-reading and re-committing to these foundation documents.**
+
+## Guiding Questions
+
+Before diving in, pause and ask:
+
+1. **Are we solving the right problem, at the right layer?**
+2. **What value are we delivering, through what impact, for which users?**
+3. **Could it be simpler without compromising quality?**
+4. **What assumptions am I making? Are they valid?**
+
+Step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you.
+
+## Commit
+
+**Commit** to excellence in systems architecture, software engineering, and developer experience. Choose architectural correctness over short-term expediency. This requires critical and _long-term_ thinking.
+
+## Schema-First Nuance
+
+Schema-first is absolute for SDK code calling the upstream API or extracting from the OpenAPI spec. It is acceptable to add additional metadata (e.g., MCP tool descriptions) at sdk-codegen time.
+
+When analysing generated files, always analyse the generator code that produced them — the generator is the source of truth.
+
+## After Each Piece of Work
+
+1. **Run the full quality gate suite** one gate at a time
+2. **Wait for all gates to complete** before analysing issues
+3. **Analysis must include**: Are there fundamental architectural issues or opportunities for improvement?
+
+## Documentation Requirements
+
+All plans must include instructions to create:
+
+- **TSDoc**: General on all logic and state, extensive examples on public interfaces
+- **Markdown**: READMEs for each workspace
+- **ADRs**: For significant architectural decisions
 
 ## Sub-agent Reviews
 
 Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready Task tool snippets.
 
-After each piece of work, the full quality gate suite must be run one gate at a time, and analysis of issues must wait until all gates are complete. Analysis must include asking if there are fundamental architectural issues or opportunities for improvement.
+## Process
 
-All plans must include instructions to create comprehensive TSDoc (general on all logic and state, with additional extensive examples on public interfaces), markdown documentation such as READMEs, and ADRs as appropriate.
+**Do not assume you know the initial step.** Discuss with the user first.
 
-Always ask, "what value are delivering, through what impact for which users?"
+## Quality Gates
 
-Do not assume you know what the initial step should be, discuss with the user first.
+Run after making changes. Note: some gates trigger earlier ones; caching prevents duplicate work. See @docs/engineering/build-system.md and ADR-065 for caching details.
 
-Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/engineering/build-system.md` and ADR 065.
-
-```shell
-# From the repo root, one at a time, with no filters
-pnpm sdk-codegen # Makes changes
-pnpm build # Makes changes
+```bash
+# From repo root, one at a time, with no filters
+pnpm sdk-codegen        # Makes changes
+pnpm build              # Makes changes
 pnpm type-check
-pnpm lint:fix # Makes changes
-pnpm format:root # Makes changes
-pnpm markdownlint:root # Makes changes
+pnpm lint:fix           # Makes changes
+pnpm format:root        # Makes changes
+pnpm markdownlint:root  # Makes changes
 pnpm test
 pnpm test:e2e
 pnpm test:ui

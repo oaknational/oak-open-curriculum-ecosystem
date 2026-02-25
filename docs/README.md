@@ -13,10 +13,9 @@ last_reviewed: 2026-02-25
 
 ## Getting Started
 
-- **New to the repo?** → [Developer Onboarding](foundation/onboarding.md) — canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
-- **Quick start?** → [Quick Start Guide](foundation/quick-start.md) — Zero-setup path to productive changes
+- **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
 - **Vision and strategy?** → [foundation/VISION.md](foundation/VISION.md) — why this repository exists, what it delivers, and how we measure impact
-- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](governance/ai-agent-guide.md)
+- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then [AGENT.md](../.agent/directives/AGENT.md)
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 
 ## Core Documentation
@@ -33,7 +32,7 @@ last_reviewed: 2026-02-25
 
 ### Development
 
-- [Developer Onboarding](foundation/onboarding.md) - First-stop checklist for new contributors
+- [Quick Start Guide](foundation/quick-start.md) - Architecture, setup, and development workflows for new contributors
 - [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
 - [Environment Variables](operations/environment-variables.md) - Complete setup guide
 - [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers
@@ -49,7 +48,6 @@ last_reviewed: 2026-02-25
 
 ### Agentic Engineering Practice
 
-- [Practice Explanation (for humans)](foundation/onboarding.md#12-the-agentic-engineering-practice) - What the AI sub-agents do, when they run, and what is expected of human developers
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
 - [practice.md](../.agent/directives/practice.md) - Full map of the practice system
 
@@ -57,7 +55,6 @@ last_reviewed: 2026-02-25
 
 Comprehensive documentation for AI agents working with this codebase:
 
-- [AI Agent Guide](governance/ai-agent-guide.md) - Primary guide for AI agents
 - [Development Practice](governance/development-practice.md) - Code standards and workflow
 - [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines
 - [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels

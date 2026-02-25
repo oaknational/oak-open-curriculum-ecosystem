@@ -169,7 +169,7 @@ Run updated onboarding simulations against current repository state for:
 
 - [README.md](../../../README.md)
 - [docs/README.md](../../../docs/README.md)
-- [docs/foundation/onboarding.md](../../../docs/foundation/onboarding.md)
+- [docs/foundation/quick-start.md](../../../docs/foundation/quick-start.md)
 - [docs/foundation/VISION.md](../../../docs/foundation/VISION.md)
 - [high-level-plan.md](../high-level-plan.md)
 - [user-experience/public-alpha-experience-contract.md](../user-experience/public-alpha-experience-contract.md)

@@ -67,8 +67,8 @@ For practical guidance on adding new MCP tools, search indices, SDK helpers, and
 
 The rest of this guide is for internal contributors.
 
-Before making changes, start with the canonical onboarding guide:
-[docs/foundation/onboarding.md](docs/foundation/onboarding.md)
+Before making changes, start with the quick start guide:
+[docs/foundation/quick-start.md](docs/foundation/quick-start.md)
 
 ### Prerequisites
 
@@ -275,10 +275,10 @@ Include:
 
 ### TypeScript
 
-- **No `any` types** — Use `unknown` at boundaries
-- **No type assertions** — No `as` casting
-- **Use type guards** — Functions with `is` keyword
-- **Validate inputs** — Use the generated Zod schemas via the shared helpers in
+- **No `any` types** — Data entering the system is genuinely `unknown`; validate immediately with generated Zod schemas so it has a specific type from that point on
+- **No type assertions** — No `as` casting (except `as const`)
+- **Use type guards** — Functions with `is` keyword for type narrowing
+- **Validate at boundaries** — Use the generated Zod schemas via the shared helpers in
   `@oaknational/curriculum-sdk` (see `parseSchema` and friends)
 
 ### Functions

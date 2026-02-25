@@ -88,6 +88,14 @@ Use `.env.example` and other docs as placeholders.
 2. For search CLI: copy `apps/oak-search-cli/.env.example` to `apps/oak-search-cli/.env.local`
 3. See [environment-variables.md](./environment-variables.md) for the complete reference
 
+## Known Gate Caveats
+
+As of **25 February 2026**, `pnpm qg` is known to fail in clean local runs:
+
+- `apps/oak-curriculum-mcp-streamable-http/tests/widget/widget-rendering.spec.ts` (fails in `pnpm qg` via `test:ui`)
+
+If `pnpm qg` fails, run the affected suite directly and check latest issues/ADRs/plans before assuming local setup problems.
+
 ## Quality Gate Failures
 
 If any quality gate fails, run the full chain in order to isolate the issue:

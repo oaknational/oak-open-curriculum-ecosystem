@@ -12,7 +12,7 @@ This directory contains engineering workflow and implementation documentation fo
 
 ## Contents
 
-- [Onboarding](../foundation/onboarding.md) - Foundation onboarding path for new developers and AI assistants
+- [Quick Start Guide](../foundation/quick-start.md) - Architecture, setup, and development workflows for new developers
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Build System](./build-system.md) - Turborepo tasks, caching, and quality gate commands
 - [Troubleshooting](../operations/troubleshooting.md) - Operational issues and resolutions
@@ -33,6 +33,6 @@ These documents help developers:
 
 ## Getting Started
 
-New developers should start with the [Onboarding guide](../foundation/onboarding.md), which links the root README, shared parsing helpers, AGENT.md directives, and workspace walkthroughs.
+New developers should start with the [Quick Start Guide](../foundation/quick-start.md), which covers architecture, setup, key concepts, and development workflows.
 
 For quick solutions to common problems, check the [Troubleshooting](../operations/troubleshooting.md) guide.

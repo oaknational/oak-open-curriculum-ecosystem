@@ -15,12 +15,12 @@ human contributors and AI agents.
 
 - [VISION.md](./VISION.md) - Repository mission, value, and strategic direction
 - [Quick Start](./quick-start.md) - Fast path to productive contribution
-- [Onboarding](./onboarding.md) - Canonical first-stop onboarding journey
+- [Quick Start Guide](./quick-start.md) - Architecture, setup, and development workflows
 
 ## Usage
 
 1. Start with [VISION.md](./VISION.md) for context and impact.
-2. Follow [Onboarding](./onboarding.md) for setup and contribution model.
+2. Follow the [Quick Start Guide](./quick-start.md) for setup and development workflows.
 3. Use [Quick Start](./quick-start.md) for day-to-day command patterns.
 
 For cross-boundary navigation, return to the root docs index:

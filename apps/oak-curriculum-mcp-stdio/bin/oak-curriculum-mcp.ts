@@ -2,7 +2,6 @@
 import { join } from 'node:path';
 import { config as dotenvConfig } from 'dotenv';
 import { createStartupLogger, createDefaultStartupLoggerDeps } from '../src/app/startup.js';
-import { requireRepoRoot } from '../src/app/require-repo-root.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 function safeStringify(value: unknown): string {
@@ -13,12 +12,12 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const rootDir = requireRepoRoot();
+const startupDeps = createDefaultStartupLoggerDeps();
+const rootDir = startupDeps.rootDir;
 
 console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
 const log = createStartupLogger({
-  ...createDefaultStartupLoggerDeps(),
-  rootDir,
+  ...startupDeps,
   console: {
     log: (msg: string) => process.stderr.write(msg + '\n'),
     error: (msg: string) => process.stderr.write(msg + '\n'),

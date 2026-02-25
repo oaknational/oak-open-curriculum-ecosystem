@@ -121,9 +121,9 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 
 Use conventional monorepo structure in active code and docs:
 
-- `apps/` – MCP servers and app wiring
-- `packages/sdks/` – SDKs (Curriculum SDK, Search SDK)
-- `packages/core/` – pure abstractions and shared types
-- `packages/libs/` – shared libraries (env, logger, result)
+- `apps/` – runnable apps that provide services to users
+- `packages/sdks/` – SDKs (Curriculum SDK, Search SDK, SDK Codegen)
+- `packages/core/` – shared low-level code (ESLint plugin, type-helpers, result, env)
+- `packages/libs/` – shared libraries (logger)
 
-Architectural boundaries are enforced by custom ESLint rules in `eslint-rules/`.
+See [AGENT.md](./AGENT.md#structure) for the full package listing. Architectural boundaries are enforced by custom ESLint rules.

@@ -1,6 +1,7 @@
 import http from 'node:http';
 
 import { createApp } from './application.js';
+import { bootstrapApp } from './bootstrap-app.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
@@ -17,13 +18,11 @@ if (!result.ok) {
 const config = result.value;
 const bootstrapLog = createHttpLogger(config, { name: 'streamable-http:bootstrap' });
 
-let app: Awaited<ReturnType<typeof createApp>>;
-try {
-  app = await createApp({ runtimeConfig: config });
-} catch (startupError: unknown) {
-  bootstrapLog.error('Application startup failed', startupError);
-  process.exit(1);
-}
+const app = await bootstrapApp({
+  startApp: () => createApp({ runtimeConfig: config }),
+  logger: bootstrapLog,
+  exit: (code) => process.exit(code),
+});
 
 const port = config.env.PORT ? Number(config.env.PORT) : 3333;
 bootstrapLog.debug(`Running locally, starting server on port ${String(port)}`);

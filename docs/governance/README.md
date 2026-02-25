@@ -12,7 +12,6 @@ This directory contains documentation for AI agents and human developers working
 
 ## Contents
 
-- [AI Agent Guide](./ai-agent-guide.md) - Lighter companion to AGENT.md: task management, workflow patterns, success checklist
 - [Development Practice](./development-practice.md) - Best practices for development in this project
 - [Safety and Security](./safety-and-security.md) - Critical safety guidelines and security considerations
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - **MOVED**: Comprehensive TDD approach at all levels (now in directives)
@@ -39,4 +38,4 @@ These documents help AI agents and developers:
 
 ## Starting Point
 
-New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first, then consult the [AI Agent Guide](./ai-agent-guide.md) for workflow patterns.
+New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first; it links to rules, testing strategy, and all directives.
