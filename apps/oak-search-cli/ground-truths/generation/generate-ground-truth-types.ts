@@ -9,9 +9,6 @@
  * Run with: pnpm bulk:codegen
  */
 
-/* eslint-disable max-lines, max-lines-per-function, max-statements, complexity */
-// This is a code generator - procedural code that builds strings is inherently long
-
 import { readdirSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { ok, err, type Result } from '@oaknational/result';

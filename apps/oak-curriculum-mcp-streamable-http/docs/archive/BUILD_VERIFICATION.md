@@ -261,6 +261,6 @@ Potential additions:
 
 ## Related Documentation
 
-- [deployment-architecture.md](./deployment-architecture.md) - Dual-mode deployment pattern
-- [DEPLOYMENT_FIX_SUMMARY.md](./archive/DEPLOYMENT_FIX_SUMMARY.md) - Original bug fix (archived)
-- [vercel-environment-config.md](./vercel-environment-config.md) - Environment setup
+- [deployment-architecture.md](../deployment-architecture.md) - Dual-mode deployment pattern
+- [DEPLOYMENT_FIX_SUMMARY.md](./DEPLOYMENT_FIX_SUMMARY.md) - Original bug fix (archived)
+- [vercel-environment-config.md](../vercel-environment-config.md) - Environment setup

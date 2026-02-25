@@ -278,8 +278,8 @@ Potential enhancements:
 ## References
 
 - [BUILD_VERIFICATION.md](./BUILD_VERIFICATION.md) - Implementation details
-- [deployment-architecture.md](./deployment-architecture.md) - Dual-mode deployment
-- [DEPLOYMENT_FIX_SUMMARY.md](./archive/DEPLOYMENT_FIX_SUMMARY.md) - Original bug fix (archived)
+- [deployment-architecture.md](../deployment-architecture.md) - Dual-mode deployment
+- [DEPLOYMENT_FIX_SUMMARY.md](./DEPLOYMENT_FIX_SUMMARY.md) - Original bug fix (archived)
 
 ---
 

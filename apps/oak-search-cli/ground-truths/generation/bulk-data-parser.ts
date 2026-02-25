@@ -22,7 +22,6 @@
  * ```
  */
 
-/* eslint-disable max-lines, max-lines-per-function, max-statements, complexity, @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-restricted-types */
 // Type assertions and Record<string, unknown> are required for safe JSON parsing from unknown
 // This is the boundary where external data enters our system
 
@@ -96,13 +95,17 @@ function isBulkLesson(value: unknown): value is BulkLesson {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const obj = value as Partial<Record<string, unknown>>;
   return (
-    typeof obj['lessonSlug'] === 'string' &&
-    typeof obj['lessonTitle'] === 'string' &&
-    typeof obj['subjectSlug'] === 'string' &&
-    typeof obj['keyStageSlug'] === 'string' &&
-    typeof obj['unitSlug'] === 'string'
+    'lessonSlug' in value &&
+    typeof value.lessonSlug === 'string' &&
+    'lessonTitle' in value &&
+    typeof value.lessonTitle === 'string' &&
+    'subjectSlug' in value &&
+    typeof value.subjectSlug === 'string' &&
+    'keyStageSlug' in value &&
+    typeof value.keyStageSlug === 'string' &&
+    'unitSlug' in value &&
+    typeof value.unitSlug === 'string'
   );
 }
 
@@ -118,11 +121,13 @@ function hasBulkDataStructure(
   if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const obj = value as Partial<Record<string, unknown>>;
   return (
-    Array.isArray(obj['lessons']) &&
-    typeof obj['sequenceSlug'] === 'string' &&
-    typeof obj['subjectTitle'] === 'string'
+    'lessons' in value &&
+    Array.isArray(value.lessons) &&
+    'sequenceSlug' in value &&
+    typeof value.sequenceSlug === 'string' &&
+    'subjectTitle' in value &&
+    typeof value.subjectTitle === 'string'
   );
 }
 
@@ -172,14 +177,13 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
         message: 'Expected an object with lessons array',
       });
     }
-    const obj = parsed as Partial<Record<string, unknown>>;
-    if (!Array.isArray(obj['lessons'])) {
+    if (!('lessons' in parsed) || !Array.isArray(parsed.lessons)) {
       missingFields.push('lessons (array)');
     }
-    if (typeof obj['sequenceSlug'] !== 'string') {
+    if (!('sequenceSlug' in parsed) || typeof parsed.sequenceSlug !== 'string') {
       missingFields.push('sequenceSlug');
     }
-    if (typeof obj['subjectTitle'] !== 'string') {
+    if (!('subjectTitle' in parsed) || typeof parsed.subjectTitle !== 'string') {
       missingFields.push('subjectTitle');
     }
     return err({
@@ -200,20 +204,19 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
           message: `Lesson at index ${i} is not an object`,
         });
       }
-      const lessonObj = lesson as Partial<Record<string, unknown>>;
-      if (typeof lessonObj['lessonSlug'] !== 'string') {
+      if (!('lessonSlug' in lesson) || typeof lesson.lessonSlug !== 'string') {
         missingFields.push('lessonSlug');
       }
-      if (typeof lessonObj['lessonTitle'] !== 'string') {
+      if (!('lessonTitle' in lesson) || typeof lesson.lessonTitle !== 'string') {
         missingFields.push('lessonTitle');
       }
-      if (typeof lessonObj['subjectSlug'] !== 'string') {
+      if (!('subjectSlug' in lesson) || typeof lesson.subjectSlug !== 'string') {
         missingFields.push('subjectSlug');
       }
-      if (typeof lessonObj['keyStageSlug'] !== 'string') {
+      if (!('keyStageSlug' in lesson) || typeof lesson.keyStageSlug !== 'string') {
         missingFields.push('keyStageSlug');
       }
-      if (typeof lessonObj['unitSlug'] !== 'string') {
+      if (!('unitSlug' in lesson) || typeof lesson.unitSlug !== 'string') {
         missingFields.push('unitSlug');
       }
       return err({

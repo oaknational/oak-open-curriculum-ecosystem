@@ -149,6 +149,20 @@ const eslintConfig = defineConfig(
     },
   },
 
+  // Code generation scripts — inherently large with many statements.
+  // Structural limits are relaxed but type-safety rules remain enforced.
+  {
+    files: ['ground-truths/generation/**/*.ts'],
+    ignores: ['ground-truths/generation/**/*.test.ts'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      complexity: 'off',
+      'no-console': 'off',
+    },
+  },
+
   // ──────────────────────────────────────────────────
   // process.env access restriction
   // Only src/lib/env.ts may touch process.env.

@@ -10,9 +10,6 @@
  * - Type guards for narrowing
  */
 
-/* eslint-disable max-lines, max-lines-per-function, max-statements */
-// This is a code generator - procedural code that builds strings is inherently long
-
 // ============================================================================
 // Types
 // ============================================================================

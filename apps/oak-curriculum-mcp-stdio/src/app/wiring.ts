@@ -10,8 +10,7 @@ import {
   createStubSearchRetrieval,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { Client } from '@elastic/elasticsearch';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createSearchRetrieval as createSearchRetrievalFromCredentials } from '@oaknational/oak-search-sdk';
 
 /**
  * Creates a simple clock provider for runtime timing needs.
@@ -101,22 +100,16 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
 /**
  * Creates a SearchRetrievalService from validated STDIO environment.
  *
+ * Delegates to the shared factory in `@oaknational/oak-search-sdk`.
  * ES credentials are guaranteed present by `loadRuntimeConfig` validation.
  */
 function createSearchRetrieval(
   env: StdioEnv,
   logger: { info: (msg: string) => void },
 ): SearchRetrievalService {
-  const esClient = new Client({
-    node: env.ELASTICSEARCH_URL,
-    auth: { apiKey: env.ELASTICSEARCH_API_KEY },
-  });
-  const searchSdk = createSearchSdk({
-    deps: { esClient },
-    config: { indexTarget: 'primary' },
-  });
+  const retrieval = createSearchRetrievalFromCredentials(env);
   logger.info('Search retrieval service configured (Elasticsearch connected)');
-  return searchSdk.retrieval;
+  return retrieval;
 }
 
 /**

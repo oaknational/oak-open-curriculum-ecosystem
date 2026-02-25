@@ -129,7 +129,13 @@ pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 
-# All in one command
+# Convenience commands
+pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, markdownlint, format
+pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, type-check, lint, test, test:ui, test:e2e, smoke:dev:stub
+pnpm fix            # Auto-fix: format, markdownlint, lint:fix
+pnpm doc-gen        # Generate documentation from TSDoc
+
+# All in one command (clean rebuild + full verification)
 pnpm check          # secrets:scan:all, clean, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, markdownlint:root, format:root
 ```
 

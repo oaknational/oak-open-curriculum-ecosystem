@@ -2,9 +2,10 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
-    // Public barrel and factory
+    // Public barrel and factories
     'src/index.ts',
     'src/create-search-sdk.ts',
+    'src/create-search-retrieval.ts',
 
     // Type definitions — service interfaces, params, results
     'src/types/**/*.ts',

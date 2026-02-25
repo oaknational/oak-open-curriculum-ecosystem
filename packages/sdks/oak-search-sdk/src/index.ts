@@ -34,6 +34,8 @@
 // ---------------------------------------------------------------------------
 
 export { createSearchSdk } from './create-search-sdk.js';
+export { createSearchRetrieval } from './create-search-retrieval.js';
+export type { SearchRetrievalFactories, EsClientConfig } from './create-search-retrieval.js';
 
 // ---------------------------------------------------------------------------
 // All public types

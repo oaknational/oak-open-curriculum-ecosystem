@@ -10,9 +10,6 @@
  * - Validation helper functions
  */
 
-/* eslint-disable max-lines-per-function, max-statements */
-// This is a code generator - procedural code that builds strings is inherently long
-
 // ============================================================================
 // Types (re-export from type-emitter for consistency)
 // ============================================================================

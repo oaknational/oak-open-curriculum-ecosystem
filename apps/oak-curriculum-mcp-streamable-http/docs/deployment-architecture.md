@@ -58,25 +58,27 @@ Vercel's Express framework support automatically:
 **src/index.ts** (Simplified)
 
 ```typescript
-import express from 'express';
+import { createApp } from './application.js';
+import { bootstrapApp } from './bootstrap-app.js';
 
-export function createApp(options?: CreateAppOptions): Express {
-  const app = express();
-  // Setup middleware, routes, etc.
-  return app;
-}
-
-// Module-level instantiation (canonical Vercel pattern)
-const app = createApp();
+const app = await bootstrapApp({
+  startApp: () => createApp({ runtimeConfig: config }),
+  logger: bootstrapLog,
+  exit: (code) => process.exit(code),
+});
 
 // Conditional listening - exactly one place that checks VERCEL
 if (!process.env.VERCEL) {
   const port = Number(process.env.PORT ?? 3333);
-  app.listen(port, () => console.log(`Server on port ${port}`));
+  http.createServer(app).listen(port);
 }
 
 export default app; // ✅ Export app instance for Vercel
 ```
+
+Note: `createApp` is **async** (returns `Promise<ExpressWithAppId>`) because it fetches
+OAuth upstream metadata at startup. `bootstrapApp` wraps this in structured error handling
+with log-and-exit on failure.
 
 ### What Vercel Does
 
@@ -161,21 +163,25 @@ This configuration builds the single canonical entry point:
 
 ## Async Initialization
 
-The application has an important async initialization pattern that works correctly in both modes:
+The application uses an async factory pattern (ADR-112: per-request MCP transport):
 
 ```typescript
-// From src/index.ts
-export function createApp(options?: CreateAppOptions): ExpressWithAppId {
+// From src/application.ts
+export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const app = express();
-  // ... setup middleware ...
+  // ... setup middleware phases 1-3 ...
 
-  const { transport, ready } = initializeCoreEndpoints(/* ... */);
+  // Phase 2.5: OAuth metadata fetch (async — fetches upstream AS metadata)
+  await setupOAuthAndCaching(app, runtimeConfig, log, ...);
 
-  // ✅ Critical: Wait for MCP server to be ready before handling requests
-  app.use(async (_req, _res, next) => {
-    await ready;
-    next();
-  });
+  // Phase 4: MCP factory creates a fresh McpServer + transport per request
+  const { mcpFactory, ready } = initializeCoreEndpoints(app, options, runtimeConfig, log);
+
+  // Phase 6: Readiness middleware waits for factory initialisation
+  app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
+
+  // Phase 7: Auth routes use mcpFactory for per-request transport
+  setupAuthRoutes(app, mcpFactory, runtimeConfig, log, allowedHosts);
 
   return app;
 }
@@ -183,9 +189,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
 This pattern ensures:
 
-- **Cold starts** - MCP server initializes fully before processing requests
-- **Warm starts** - Promise already resolved, requests pass through immediately
-- **Serverless safety** - No race conditions between initialization and request handling
+- **Per-request isolation** — each MCP request gets a fresh transport (no shared state)
+- **Cold starts** — readiness middleware holds requests until the factory is initialised
+- **Warm starts** — readiness promise already resolved, requests pass through immediately
+- **Serverless safety** — stateless design, no cross-request state leakage
 
 ## Middleware Chain
 
@@ -267,32 +274,32 @@ app.post('/mcp', mcpAuthClerk, handler); // mcpAuthClerk will fail
 The middleware registration happens in `src/application.ts`:
 
 ```typescript
-export function createApp(options?: CreateAppOptions): ExpressWithAppId {
+export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const app = express();
 
   // Phase 1: Base middleware
   setupBaseMiddleware(app, log);
 
-  // Phase 2: Security
-  applySecurity(app, ...);
+  // Phase 2: Security (CORS, DNS rebinding, security headers)
+  const { dnsRebindingMiddleware, allowedHosts } = setupSecurityMiddleware(app, runtimeConfig, log, ...);
+
+  // Phase 2.5: OAuth metadata + proxy routes (async — fetches upstream metadata)
+  await setupOAuthAndCaching(app, runtimeConfig, log, ..., allowedHosts, ...);
 
   // Phase 3: Global auth context (CRITICAL - runs before path-specific middleware)
-  if (!runtimeConfig.dangerouslyDisableAuth) {
-    setupGlobalAuthContext(app, runtimeConfig, log);
-  }
+  setupGlobalAuthContext(app, runtimeConfig, log);
 
-  // Phase 4: Core endpoints
-  initializeCoreEndpoints(app, ...);
+  // Phase 4: Core endpoints (MCP factory, health checks)
+  const { mcpFactory, ready } = initializeCoreEndpoints(app, options, runtimeConfig, log);
 
   // Phase 5: Static assets & landing page
-  mountStaticAssets(app);
-  addRootLandingPage(app, ...);
+  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, runtimeConfig.displayHostname);
 
   // Phase 6: Path-specific /mcp middleware
-  app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
+  app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
-  // Phase 7: Auth routes
-  setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+  // Phase 7: Auth routes (uses mcpFactory for per-request transport)
+  setupAuthRoutes(app, mcpFactory, runtimeConfig, log, allowedHosts);
 
   return app;
 }

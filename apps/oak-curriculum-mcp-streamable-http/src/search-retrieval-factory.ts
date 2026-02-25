@@ -1,47 +1,17 @@
 /**
  * Factory for creating the SearchRetrievalService from validated ES credentials.
  *
- * Extracted from handlers.ts to keep that file within the max-lines limit.
- * Accepts injectable factory dependencies for testability per ADR-078.
- *
- * The factory uses a generic type parameter `TClient` so that tests can
- * inject simple fakes without needing to construct a real ES Client.
+ * Delegates to the shared `createSearchRetrieval` in `@oaknational/oak-search-sdk`
+ * and re-exports its DI types for app-local test usage.
  */
 
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { Client } from '@elastic/elasticsearch';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import {
+  createSearchRetrieval as createRetrievalFromCredentials,
+  type SearchRetrievalFactories,
+} from '@oaknational/oak-search-sdk';
 
-/** Derived from the public Client constructor — avoids deep-importing internal types. */
-export type EsClientConfig = ConstructorParameters<typeof Client>[0];
-
-/**
- * Injectable factory dependencies for testability.
- *
- * Defaults to the real `@elastic/elasticsearch` Client and
- * `@oaknational/oak-search-sdk` createSearchSdk. Tests inject
- * simple fakes to avoid external resource creation.
- *
- * @typeParam TClient - The ES client type. Defaults to `Client` for
- *   production. Tests can use any type (e.g., an empty object).
- */
-export interface SearchRetrievalFactories<TClient = Client> {
-  /** Creates an Elasticsearch client from configuration. */
-  readonly createEsClient: (config: EsClientConfig) => TClient;
-  /** Creates the Search SDK from an ES client and configuration. */
-  readonly createSdk: (config: {
-    readonly deps: { readonly esClient: TClient };
-    readonly config: { readonly indexTarget: 'primary' };
-  }) => { readonly retrieval: SearchRetrievalService };
-}
-
-/**
- * Default factories using the real Elasticsearch client and Search SDK.
- */
-const defaultFactories: SearchRetrievalFactories<Client> = {
-  createEsClient: (config) => new Client(config),
-  createSdk: (config) => createSearchSdk(config),
-};
+export type { SearchRetrievalFactories };
 
 /**
  * Creates a SearchRetrievalService from validated environment credentials.
@@ -72,16 +42,11 @@ export function createSearchRetrieval<TClient>(
 export function createSearchRetrieval(
   env: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string },
   logger: { info: (msg: string) => void },
-  factories: SearchRetrievalFactories = defaultFactories,
+  factories?: SearchRetrievalFactories,
 ): SearchRetrievalService {
-  const esClient = factories.createEsClient({
-    node: env.ELASTICSEARCH_URL,
-    auth: { apiKey: env.ELASTICSEARCH_API_KEY },
-  });
-  const searchSdk = factories.createSdk({
-    deps: { esClient },
-    config: { indexTarget: 'primary' },
-  });
+  const retrieval = factories
+    ? createRetrievalFromCredentials(env, factories)
+    : createRetrievalFromCredentials(env);
   logger.info('Search retrieval service configured (Elasticsearch connected)');
-  return searchSdk.retrieval;
+  return retrieval;
 }
