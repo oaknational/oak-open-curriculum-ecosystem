@@ -7,8 +7,8 @@
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  createLibBoundaryRules,
-  getOtherLibs,
+  coreBoundaryRules,
+  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -49,12 +49,16 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules('type-helpers', getOtherLibs('type-helpers')),
+  },
+  {
+    files: ['src/**/*.ts'],
+    rules: coreBoundaryRules,
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
     rules: {
       ...testRules,
+      ...coreTestConfigRules,
     },
   },
   {
@@ -65,6 +69,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
+    rules: coreTestConfigRules,
   },
 );
 

@@ -4,11 +4,8 @@
 
 import type { estypes } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
-import type {
-  SearchSequenceFacetsIndexDoc,
-  SearchFacets,
-} from '@oaknational/curriculum-sdk/public/search.js';
-import { isKeyStage } from '@oaknational/curriculum-sdk';
+import type { SearchSequenceFacetsIndexDoc, SearchFacets } from '@oaknational/sdk-codegen/search';
+import { isKeyStage } from '@oaknational/sdk-codegen';
 
 import type { FacetParams } from '../types/retrieval-params.js';
 import type { RetrievalError } from '../types/retrieval-results.js';

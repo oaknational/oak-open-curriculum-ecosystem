@@ -37,8 +37,8 @@ async function createTestApp() {
 /**
  * E2E tests for selective web security application.
  *
- * Tests that web security (CORS + DNS rebinding protection) is applied
- * ONLY to the landing page (/) and NOT to protocol routes.
+ * CORS is applied globally for browser compatibility.
+ * DNS rebinding protection is selective by route.
  */
 describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
   describe('Landing page (/) - HAS web security', () => {
@@ -76,6 +76,22 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.body).toHaveProperty('error');
 
       expect(res.body.error).toContain('host not allowed');
+    });
+
+    it('blocks malformed Host header with userinfo-like syntax', async () => {
+      const app = await createTestApp();
+      const res = await request(app).get('/').set('Host', 'localhost:3333@evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
+    });
+
+    it('blocks malformed bracketed Host header', async () => {
+      const app = await createTestApp();
+      const res = await request(app).get('/').set('Host', '[::1]evil');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
     });
 
     it('allows requests with valid Host header', async () => {
@@ -151,17 +167,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
   });
 
-  describe('DNS rebinding protection - ONLY on landing page', () => {
-    it('landing page blocks evil.com Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'evil.com');
-
-      expect(res.status).toBe(403);
-      expect(res.body).toHaveProperty('error');
-
-      expect(res.body.error).toContain('host not allowed');
-    });
-
+  describe('DNS rebinding protection - selective by route', () => {
     it('/healthz allows any Host header (no DNS protection)', async () => {
       const app = await createTestApp();
       const res = await request(app).get('/healthz').set('Host', 'evil.com');
@@ -170,7 +176,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.status).toBe(200);
     });
 
-    it('/mcp allows any Host header (no DNS protection)', async () => {
+    it('/mcp rejects disallowed Host header in auth challenge generation', async () => {
       const app = await createTestApp();
       const res = await request(app)
         .post('/mcp')
@@ -179,23 +185,70 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
         .set('Content-Type', 'application/json')
         .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
 
-      // Should NOT be blocked - protocol routes need to work from any host
-      // Auth will handle security (401), but not DNS rebinding (403)
-      expect(res.status).not.toBe(403);
+      expect(res.status).toBe(403);
     });
 
-    it('OAuth metadata allows any Host header (no DNS protection)', async () => {
+    it('/mcp rejects malformed Host header in auth challenge generation', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .post('/mcp')
+        .set('Host', 'example.com:443@evil.com')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Content-Type', 'application/json')
+        .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth protected resource metadata rejects disallowed Host header', async () => {
       const app = await createTestApp();
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
         .set('Host', 'evil.com');
 
-      // Should NOT be blocked - no DNS rebinding protection on OAuth metadata
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error', 'forbidden');
+    });
+
+    it('OAuth authorization server metadata rejects disallowed Host header', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error', 'forbidden');
+    });
+
+    it('OAuth metadata rejects malformed Host with userinfo-like syntax', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'example.com:443@evil.com');
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth metadata rejects malformed bracketed Host value', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', '[::1]evil');
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth authorization-server metadata rejects malformed Host value', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'example.com:443@evil.com');
+
+      expect(res.status).toBe(403);
     });
   });
 
-  describe('CORS behavior - ONLY on landing page', () => {
+  describe('CORS behavior - applied globally', () => {
     it('landing page has CORS with allowed origin', async () => {
       const app = await createTestApp();
       const res = await request(app)

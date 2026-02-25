@@ -26,7 +26,7 @@ import { runBootstrapPhase } from './bootstrap-helpers.js';
  * it for browser-based clients. DNS rebinding protection is only needed on
  * the landing page (`/`), so it is returned for selective application.
  *
- * @returns DNS rebinding middleware for selective route application
+ * @returns DNS rebinding middleware and resolved allowed hosts
  */
 export function setupSecurityMiddleware(
   app: Express,
@@ -34,7 +34,7 @@ export function setupSecurityMiddleware(
   log: Logger,
   timer: PhasedTimer,
   appId: number,
-): RequestHandler {
+): { dnsRebindingMiddleware: RequestHandler; allowedHosts: readonly string[] } {
   const securityConfig = createSecurityConfig(runtimeConfig);
 
   const corsMiddleware = runBootstrapPhase(log, timer, 'createCorsMiddleware', appId, () =>
@@ -57,5 +57,5 @@ export function setupSecurityMiddleware(
     app.use(createSecurityHeadersMiddleware());
   });
 
-  return dnsRebindingMiddleware;
+  return { dnsRebindingMiddleware, allowedHosts: securityConfig.allowedHosts };
 }

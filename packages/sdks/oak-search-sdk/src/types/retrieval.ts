@@ -11,7 +11,7 @@
  */
 
 import type { Result } from '@oaknational/result';
-import type { SearchFacets } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchFacets } from '@oaknational/sdk-codegen/search';
 import type {
   SearchParamsBase,
   SearchLessonsParams,

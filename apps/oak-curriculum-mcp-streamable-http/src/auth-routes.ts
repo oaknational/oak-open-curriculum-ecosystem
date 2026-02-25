@@ -12,6 +12,8 @@ import type { RuntimeConfig } from './runtime-config.js';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
+import { extractHostname } from './security.js';
+import { isAllowedHostname, isValidHostHeader } from './host-header-validation.js';
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
@@ -33,22 +35,37 @@ function registerUnauthenticatedRoutes(
  * Handles `localhost`, `127.0.0.1`, and IPv6 `[::1]` with optional port.
  */
 function isLoopbackHost(host: string): boolean {
-  if (host.startsWith('[')) {
-    return host.startsWith('[::1]');
+  const normalizedHost = host.toLowerCase();
+  if (normalizedHost.startsWith('[')) {
+    return normalizedHost.startsWith('[::1]');
   }
-  const colonIdx = host.indexOf(':');
-  const hostname = colonIdx >= 0 ? host.substring(0, colonIdx) : host;
+  const colonIdx = normalizedHost.indexOf(':');
+  const hostname = colonIdx >= 0 ? normalizedHost.substring(0, colonIdx) : normalizedHost;
   return hostname === 'localhost' || hostname === '127.0.0.1';
 }
 
 /**
- * Derives the self-origin from a request's Host header.
+ * Derives the self-origin from a request's Host header after validating
+ * it against the allowed hosts list.
+ *
  * Uses `http` for loopback addresses, `https` for everything else.
+ *
+ * @throws Error if the host header is missing or not in the allowed list
  */
-function deriveSelfOrigin(req: { get(name: string): string | undefined }): string {
+export function deriveSelfOrigin(
+  req: { get(name: string): string | undefined },
+  allowedHosts: readonly string[],
+): string {
   const host = req.get('host');
   if (!host) {
     throw new Error('Cannot generate OAuth metadata: missing host header');
+  }
+  if (!isValidHostHeader(host)) {
+    throw new Error(`Rejected Host header '${host}': invalid host header format`);
+  }
+  const hostname = extractHostname(host).toLowerCase();
+  if (!hostname || !isAllowedHostname(hostname, allowedHosts)) {
+    throw new Error(`Rejected Host header '${hostname}': not in allowed hosts list`);
   }
   const protocol = isLoopbackHost(host) ? 'http' : 'https';
   return `${protocol}://${host}`;
@@ -72,25 +89,38 @@ export function registerPublicOAuthMetadataEndpoints(
   runtimeConfig: RuntimeConfig,
   upstreamMetadata: UpstreamAuthServerMetadata,
   log: Logger,
+  allowedHosts: readonly string[],
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
   const servePrm: RequestHandler = (req, res) => {
-    const selfOrigin = deriveSelfOrigin(req);
-    res.json({
-      resource: `${selfOrigin}/mcp`,
-      authorization_servers: [selfOrigin],
-      scopes_supported: SCOPES_SUPPORTED,
-    });
+    try {
+      const selfOrigin = deriveSelfOrigin(req, allowedHosts);
+      res.json({
+        resource: `${selfOrigin}/mcp`,
+        authorization_servers: [selfOrigin],
+        scopes_supported: SCOPES_SUPPORTED,
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      authLog.warn('Host validation failed for OAuth metadata', { error: msg });
+      res.status(403).json({ error: 'forbidden', error_description: msg });
+    }
   };
 
   app.get('/.well-known/oauth-protected-resource', servePrm);
   app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
 
   app.get('/.well-known/oauth-authorization-server', (req, res) => {
-    const selfOrigin = deriveSelfOrigin(req);
-    res.json(rewriteAuthServerMetadata(upstreamMetadata, selfOrigin));
+    try {
+      const selfOrigin = deriveSelfOrigin(req, allowedHosts);
+      res.json(rewriteAuthServerMetadata(upstreamMetadata, selfOrigin));
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      authLog.warn('Host validation failed for OAuth AS metadata', { error: msg });
+      res.status(403).json({ error: 'forbidden', error_description: msg });
+    }
   });
 
   if (runtimeConfig.useStubTools) {
@@ -108,9 +138,10 @@ function registerAuthenticatedRoutes(
   app: Express,
   mcpFactory: McpServerFactory,
   log: Logger,
+  allowedHosts: readonly string[],
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
-  const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog) });
+  const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog, allowedHosts) });
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
   app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, log));
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
@@ -176,6 +207,7 @@ export function setupAuthRoutes(
   mcpFactory: McpServerFactory,
   runtimeConfig: RuntimeConfig,
   log: Logger,
+  allowedHosts: readonly string[],
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
@@ -191,6 +223,6 @@ export function setupAuthRoutes(
   // Auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs
   authLog.debug('Registering MCP routes (HTTP-level auth enforcement)');
   measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
-    registerAuthenticatedRoutes(app, mcpFactory, authLog);
+    registerAuthenticatedRoutes(app, mcpFactory, authLog, allowedHosts);
   });
 }

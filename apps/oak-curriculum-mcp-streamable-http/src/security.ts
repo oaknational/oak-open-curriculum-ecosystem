@@ -1,6 +1,7 @@
 import type express from 'express';
 import cors from 'cors';
 import type { Logger } from '@oaknational/logger';
+import { isAllowedHostname, isValidHostHeader } from './host-header-validation.js';
 
 /**
  * Extracts the hostname from a Host header value, handling IPv6 addresses.
@@ -15,7 +16,7 @@ import type { Logger } from '@oaknational/logger';
  * @param hostHeader - The value of the Host header
  * @returns The hostname portion, or empty string if invalid
  */
-function extractHostname(hostHeader: string): string {
+export function extractHostname(hostHeader: string): string {
   // IPv6 addresses are wrapped in brackets: [::1]:port
   if (hostHeader.startsWith('[')) {
     const closeBracket = hostHeader.indexOf(']');
@@ -32,37 +33,20 @@ function extractHostname(hostHeader: string): string {
   return hostHeader.slice(0, colonIndex);
 }
 
-function compileHostMatchers(allowedHosts: readonly string[]): ((host: string) => boolean)[] {
-  const matchers: ((host: string) => boolean)[] = [];
-  for (const raw of allowedHosts) {
-    const value = raw.trim().toLowerCase();
-    if (!value) {
-      continue;
-    }
-    if (value.includes('*')) {
-      // Convert simple glob to a safe anchored regex
-      // - Escape dots
-      // - Replace * with character class covering typical hostname chars (including dots)
-      const pattern = '^' + value.replace(/\./g, '\\.').replace(/\*/g, '[a-z0-9.-]*') + '$';
-      const regex = new RegExp(pattern);
-      matchers.push((h: string) => regex.test(h));
-    } else {
-      matchers.push((h: string) => h === value);
-    }
-  }
-  return matchers;
-}
-
 export function dnsRebindingProtection(
   log: Logger,
   allowedHosts: readonly string[],
 ): express.RequestHandler {
-  const matchers = compileHostMatchers(allowedHosts);
   return (req, res, next) => {
     const hostHeader = req.headers.host;
     if (!hostHeader) {
       log.warn('Forbidden: missing Host header');
       res.status(403).json({ error: 'Forbidden: missing Host header' });
+      return;
+    }
+    if (!isValidHostHeader(hostHeader)) {
+      log.warn(`Forbidden: invalid Host header format: ${hostHeader}`);
+      res.status(403).json({ error: 'Forbidden: invalid Host header format' });
       return;
     }
     const hostname = extractHostname(hostHeader).toLowerCase();
@@ -71,7 +55,7 @@ export function dnsRebindingProtection(
       res.status(403).json({ error: 'Forbidden: invalid Host header format' });
       return;
     }
-    const isAllowed = matchers.length === 0 || matchers.some((m) => m(hostname));
+    const isAllowed = allowedHosts.length === 0 || isAllowedHostname(hostname, allowedHosts);
     if (!isAllowed) {
       log.warn(
         `Forbidden: host not allowed: ${hostname}. Allowed hosts: ${allowedHosts.join(', ')}`,

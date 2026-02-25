@@ -9,7 +9,7 @@
  * @see rrf-query-helpers.ts for filter builders and highlight configs
  */
 
-import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { EsHit } from '../internal/types.js';
 
 // ---------------------------------------------------------------------------

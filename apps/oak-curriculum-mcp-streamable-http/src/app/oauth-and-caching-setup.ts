@@ -35,12 +35,31 @@ function createNoCacheErrorMiddleware(): RequestHandler {
 }
 
 /**
+ * Minimal subset of the Fetch API needed by {@link fetchUpstreamMetadata}.
+ * Accepting this as a parameter enables unit testing without global mocks.
+ */
+export type FetchFn = (
+  url: string,
+) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
+
+/**
  * Fetches and validates upstream AS metadata from Clerk's well-known endpoint.
  * Called once at startup; the result is cached for the process lifetime.
+ *
+ * @param upstreamBaseUrl - Base URL of the upstream authorization server
+ * @param fetchFn - Fetch implementation (defaults to global `fetch`)
  */
-async function fetchUpstreamMetadata(upstreamBaseUrl: string): Promise<UpstreamAuthServerMetadata> {
+export async function fetchUpstreamMetadata(
+  upstreamBaseUrl: string,
+  fetchFn: FetchFn = fetch,
+): Promise<UpstreamAuthServerMetadata> {
   const metadataUrl = `${upstreamBaseUrl}/.well-known/oauth-authorization-server`;
-  const response = await fetch(metadataUrl);
+  const response = await fetchFn(metadataUrl);
+  if (!response.ok) {
+    throw new Error(
+      `Upstream AS metadata fetch failed: ${metadataUrl} returned HTTP ${String(response.status)}`,
+    );
+  }
   const data: unknown = await response.json();
   if (!isUpstreamAuthServerMetadata(data)) {
     throw new Error(`Upstream AS metadata at ${metadataUrl} does not match expected shape`);
@@ -71,6 +90,7 @@ export async function setupOAuthAndCaching(
   log: Logger,
   bootstrapTimer: PhasedTimer,
   appCounter: number,
+  allowedHosts: readonly string[],
   injectedMetadata?: UpstreamAuthServerMetadata,
 ): Promise<void> {
   if (!runtimeConfig.dangerouslyDisableAuth) {
@@ -97,7 +117,7 @@ export async function setupOAuthAndCaching(
     }
 
     runBootstrapPhase(log, bootstrapTimer, 'registerPublicOAuthMetadata', appCounter, () => {
-      registerPublicOAuthMetadataEndpoints(app, runtimeConfig, upstreamMetadata, log);
+      registerPublicOAuthMetadataEndpoints(app, runtimeConfig, upstreamMetadata, log, allowedHosts);
     });
 
     runBootstrapPhase(log, bootstrapTimer, 'registerOAuthProxy', appCounter, () => {

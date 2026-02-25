@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "@oaknational/logger": "workspace:*",
-    "@oaknational/result": "workspace:*"
+    "@oaknational/result": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*"
   },
   "peerDependencies": {
     "@elastic/elasticsearch": "^9.2.0",

@@ -1,12 +1,12 @@
 /**
  * Retrieval service parameter types — per-scope search and suggestion params.
  *
- * Types that flow from the Curriculum SDK schema (`SearchSubjectSlug`,
+ * Types that flow from the SDK codegen schema (`SearchSubjectSlug`,
  * `KeyStage`, `SearchScope`) are imported, not redefined.
  */
 
-import type { KeyStage } from '@oaknational/curriculum-sdk';
-import type { SearchScope, SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
+import type { KeyStage } from '@oaknational/sdk-codegen';
+import type { SearchScope, SearchSubjectSlug } from '@oaknational/sdk-codegen/search';
 
 /**
  * Common search parameters shared across all scopes.

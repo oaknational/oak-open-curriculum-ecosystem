@@ -1,5 +1,64 @@
 # Napkin
 
+## Session: 2026-02-25 — M1 Release Fixes Phase 1 Execution
+
+### What happened
+
+Executed Phase 1 of M1 release fixes (F1, F2, F3, F21, F22, F23,
+F24) — 7 critical/high architecture and resilience fixes from the
+four-reviewer consolidation. All implementations complete. Quality
+gates partially run (type-check, lint, test pass; e2e/ui/smoke not
+run). Specialist reviewers invoked (code, arch-barney, arch-fred,
+arch-wilma, security). Self-assessed against testing-strategy.md
+and rules.md — identified remediation items. Consolidated into
+canonical release plan with §R remediation section as top priority
+for next session.
+
+### Changes made
+
+1. **F1**: Rewired all oak-search-sdk imports from curriculum-sdk
+   to sdk-codegen. Two runtime functions kept per ADR-108 Step 1.
+2. **F2**: Added `createSdkBoundaryRules('search')` role. Used
+   `paths` (not `patterns`) for bare package blocking — patterns
+   matched prefixes and incorrectly blocked allowed subpaths.
+3. **F21**: Added SDK zone to coreBoundaryRules (TDD applied).
+4. **F22**: Switched result and type-helpers to coreBoundaryRules
+   with coreTestConfigRules for test/config files.
+5. **F3**: Host header validation via extractHostname + allowedHosts
+   threading. 403 for disallowed hosts.
+6. **F23**: try/catch around createApp with log + exit(1).
+7. **F24**: response.ok check with DI (FetchFn parameter). 4 unit
+   tests.
+
+### Patterns noted
+
+- `no-restricted-imports` `paths` vs `patterns`: `paths` matches
+  exact package names; `patterns` with `group` uses minimatch which
+  matches prefixes. Use `paths` when you want to block the bare
+  import but allow subpath imports (e.g. block `@oaknational/pkg`
+  but permit `@oaknational/pkg/public/foo.js`).
+- TDD gaps are costly: F23 and F3 were implemented before tests,
+  producing untested paths and test-follows-implementation ordering.
+  The remediation cost (writing tests after the fact, plus the
+  self-assessment overhead) exceeds the original TDD cost.
+- `parsePrmBody` pattern for Supertest response bodies: create a
+  typed interface + type guard function to safely narrow `unknown`
+  response bodies without `as` assertions. Each distinct response
+  shape needs its own guard.
+- Threading config through multiple layers (security config →
+  bootstrap → OAuth setup → route handlers) requires touching
+  multiple function signatures — plan the threading path before
+  starting implementation.
+
+### Remediation identified (for next session)
+
+1. R1: ~14 `as` assertions in 2 test files
+2. R2: F23 startup failure path untested
+3. R3: Remaining quality gates (test:e2e, test:ui, smoke:dev:stub)
+4. R4: Result pattern for deriveSelfOrigin/fetchUpstreamMetadata (P2)
+
+---
+
 ## Session: 2026-02-25 — Phase 7 Merge Readiness (COMPLETE)
 
 ### What happened
@@ -254,3 +313,34 @@ Documentation extractions completed before distillation:
 4. ESLint plugin README — `createSdkBoundaryRules` documentation
 5. Type-helpers README — created with rationale, helpers table,
    assertion discipline
+
+---
+
+## Session: 2026-02-25 (host-validation hardening)
+
+### What changed
+
+1. Added unit coverage for previously flagged security helpers:
+   - `deriveSelfOrigin` in `auth-routes.unit.test.ts`
+   - `extractHostname` in `security.unit.test.ts`
+2. Removed `as` assertions from `auth-routes.integration.test.ts`
+   and boundary-rule tests by using explicit runtime narrowing.
+3. Hardened host handling:
+   - Introduced shared `host-header-validation.ts`
+     (`isValidHostHeader`, `isAllowedHostname`)
+   - Applied consistent validation in OAuth metadata routes,
+     DNS-rebinding middleware, and MCP auth challenge/resource URL generation.
+4. Added malformed-host and wildcard-parity coverage across unit,
+   integration, and E2E tests.
+
+### Lessons
+
+- Fixing one host-validation path is not enough; all places that
+  emit origin/resource URLs from `Host` must share the same checks,
+  or security posture drifts.
+- When tightening auth/challenge URL generation, update expected
+  `/mcp` error-path behaviour (`401` vs `403`) in E2E tests early
+  to avoid masking real regressions behind generic `500`s.
+- Security findings can surface semantic mismatches between route
+  categories ("no DNS middleware on /mcp") and effective protection
+  (auth middleware can still and should reject malformed/disallowed hosts).

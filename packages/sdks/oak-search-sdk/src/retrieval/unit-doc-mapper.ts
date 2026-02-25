@@ -5,10 +5,7 @@
  * result shaping in distinct modules with independent change reasons.
  */
 
-import type {
-  SearchUnitRollupDoc,
-  SearchUnitsIndexDoc,
-} from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 import type { EsHit } from '../internal/types.js';
 

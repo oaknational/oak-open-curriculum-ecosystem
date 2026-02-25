@@ -5,7 +5,7 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
-import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
+import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/sdk-codegen/search';
 
 import type { SearchLessonsParams, SearchUnitsParams } from '../types/retrieval-params.js';
 

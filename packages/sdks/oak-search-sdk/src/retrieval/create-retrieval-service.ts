@@ -5,10 +5,7 @@
 import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
-import type {
-  SearchLessonsIndexDoc,
-  SearchUnitRollupDoc,
-} from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '@oaknational/sdk-codegen/search';
 
 import type { RetrievalService } from '../types/retrieval.js';
 import type {

@@ -93,15 +93,36 @@ function checkResourceParameter(
   token: string,
   req: Request,
   logger: Logger,
+  allowedHosts: readonly string[],
 ): { valid: boolean; reason?: string } {
-  const expectedResource = getMcpResourceUrl(req);
+  const expectedResource = getMcpResourceUrl(req, allowedHosts);
   return validateResourceParameter(token, expectedResource, logger);
 }
 
 /**
  * Log and forward error from auth middleware.
  */
-function handleAuthError(error: unknown, req: Request, logger: Logger, next: NextFunction): void {
+function handleAuthError(
+  error: unknown,
+  req: Request,
+  res: Response,
+  logger: Logger,
+  next: NextFunction,
+): void {
+  if (error instanceof Error) {
+    const isHostValidationError =
+      error.message.startsWith('Cannot generate OAuth metadata URL:') ||
+      error.message.startsWith('Cannot generate MCP resource URL:');
+    if (isHostValidationError) {
+      logger.warn('Rejected request due to invalid or disallowed Host header', {
+        error: error.message,
+        path: req.path,
+        method: req.method,
+      });
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+  }
   logger.error('MCP auth middleware error', {
     error: error instanceof Error ? error.message : String(error),
     path: req.path,
@@ -145,10 +166,14 @@ function handleAuthError(error: unknown, req: Request, logger: Logger, next: Nex
  * app.post('/mcp', auth, mcpHandler);
  * ```
  */
-export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHandler {
+export function mcpAuth(
+  verifyToken: TokenVerifier,
+  logger: Logger,
+  allowedHosts: readonly string[],
+): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const prmUrl = getPRMUrl(req);
+      const prmUrl = getPRMUrl(req, allowedHosts);
 
       // No authorization header - return 401 with WWW-Authenticate pointing to metadata
       if (!req.headers.authorization) {
@@ -171,7 +196,7 @@ export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHand
       }
 
       // RFC 8707: Validate resource parameter (JWT audience claim)
-      const validation = checkResourceParameter(token, req, logger);
+      const validation = checkResourceParameter(token, req, logger, allowedHosts);
       if (!validation.valid) {
         const reason = validation.reason ?? 'Unknown validation error';
         sendInvalidResourceResponse(res, prmUrl, reason);
@@ -184,7 +209,7 @@ export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHand
       next();
     } catch (error) {
       // Error is logged by handleAuthError
-      handleAuthError(error, req, logger, next);
+      handleAuthError(error, req, res, logger, next);
     }
   };
 }

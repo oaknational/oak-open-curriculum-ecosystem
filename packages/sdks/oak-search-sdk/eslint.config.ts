@@ -7,6 +7,7 @@ import oakStandards, {
   ignores,
   testRules,
   commonSettings,
+  createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
 import type { Linter } from 'eslint';
 
@@ -40,6 +41,13 @@ const config = defineConfig(
           projectService: true,
         },
       },
+    },
+  },
+
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      ...createSdkBoundaryRules('search'),
     },
   },
 

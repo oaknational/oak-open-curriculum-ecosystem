@@ -57,7 +57,7 @@ Note: The server automatically adds the required `Accept: application/json, text
   - `CLERK_SECRET_KEY` — Clerk secret key for auth middleware (not required when `DANGEROUSLY_DISABLE_AUTH=true`)
 - Optional env:
   - `DANGEROUSLY_DISABLE_AUTH` — set to `true` to disable auth (makes Clerk keys optional)
-  - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards)
+  - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards). Applied consistently to OAuth metadata endpoints and `/mcp` auth challenge/resource URL generation.
   - `ALLOWED_ORIGINS` for browser CORS
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
@@ -75,6 +75,7 @@ Environment loading uses `resolveEnv` from `@oaknational/env`: reads `.env` < `.
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
 - POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
 - POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
+- Disallowed or malformed `Host` headers return 403 on OAuth metadata and `/mcp` auth challenge path
 
 ### OAuth discovery
 

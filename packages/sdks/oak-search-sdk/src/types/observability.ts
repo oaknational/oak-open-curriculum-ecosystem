@@ -5,8 +5,8 @@
  * Events are held in an instance-level in-memory store (not module-level
  * state) and optionally persisted to Elasticsearch.
  *
- * Types for zero-hit events, summaries, and telemetry flow from the
- * Curriculum SDK and are re-exported, not redefined.
+ * Types for zero-hit events, summaries, and telemetry flow from
+ * `@oaknational/sdk-codegen/observability` and are re-exported, not redefined.
  */
 
 import type { Result } from '@oaknational/result';
@@ -15,7 +15,7 @@ import type {
   ZeroHitEvent,
   ZeroHitSummary,
   ZeroHitTelemetry,
-} from '@oaknational/curriculum-sdk/public/search.js';
+} from '@oaknational/sdk-codegen/observability';
 
 // ---------------------------------------------------------------------------
 // Observability error type

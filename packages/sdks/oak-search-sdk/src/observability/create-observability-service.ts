@@ -12,7 +12,7 @@ import type {
   ZeroHitEvent,
   ZeroHitScope,
   ZeroHitSummary,
-} from '@oaknational/curriculum-sdk/public/search.js';
+} from '@oaknational/sdk-codegen/observability';
 
 import type {
   ObservabilityService,

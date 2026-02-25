@@ -25,7 +25,7 @@ describe('getPRMUrl', () => {
       },
     };
 
-    const result = getPRMUrl(mockReq);
+    const result = getPRMUrl(mockReq, ['example.com']);
 
     expect(result).toBe('https://example.com/.well-known/oauth-protected-resource/mcp');
   });
@@ -41,7 +41,7 @@ describe('getPRMUrl', () => {
       },
     };
 
-    const result = getPRMUrl(mockReq);
+    const result = getPRMUrl(mockReq, ['localhost']);
 
     expect(result).toBe('http://localhost:3000/.well-known/oauth-protected-resource/mcp');
   });
@@ -57,7 +57,7 @@ describe('getPRMUrl', () => {
       },
     };
 
-    const result = getPRMUrl(mockReq);
+    const result = getPRMUrl(mockReq, ['api.production.com']);
 
     expect(result).toBe('https://api.production.com:8080/.well-known/oauth-protected-resource/mcp');
   });
@@ -68,8 +68,30 @@ describe('getPRMUrl', () => {
       get: () => undefined,
     };
 
-    expect(() => getPRMUrl(mockReq)).toThrow(
+    expect(() => getPRMUrl(mockReq, ['example.com'])).toThrow(
       'Cannot generate OAuth metadata URL: missing host header',
+    );
+  });
+
+  it('throws when host header is malformed', () => {
+    const mockReq = {
+      protocol: 'https',
+      get: () => 'example.com:443@evil.com',
+    };
+
+    expect(() => getPRMUrl(mockReq, ['example.com'])).toThrow(
+      'Cannot generate OAuth metadata URL: invalid host header format: example.com:443@evil.com',
+    );
+  });
+
+  it('throws when host is not allow-listed', () => {
+    const mockReq = {
+      protocol: 'https',
+      get: () => 'evil.com',
+    };
+
+    expect(() => getPRMUrl(mockReq, ['example.com'])).toThrow(
+      'Cannot generate OAuth metadata URL: host not allowed: evil.com',
     );
   });
 });

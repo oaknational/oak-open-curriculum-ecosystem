@@ -30,6 +30,11 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
           from: '../../../apps/**',
           message: 'Core cannot import from apps. Core must remain pure with zero dependencies.',
         },
+        {
+          target: './src/**',
+          from: '../../../packages/sdks/**',
+          message: 'Core cannot import from SDKs. Core must remain domain-agnostic.',
+        },
       ],
     },
   ],
@@ -231,7 +236,7 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
  * ```
  */
 export function createSdkBoundaryRules(
-  role: 'generation' | 'runtime',
+  role: 'generation' | 'runtime' | 'search',
 ): Partial<Linter.RulesRecord> {
   if (role === 'generation') {
     return {
@@ -248,6 +253,58 @@ export function createSdkBoundaryRules(
               group: ['@workspace/*'],
               message:
                 'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  if (role === 'search') {
+    return {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@oaknational/curriculum-sdk',
+              message:
+                'Search SDK must import types from @oaknational/sdk-codegen, not @oaknational/curriculum-sdk base (ADR-108).',
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@oaknational/curriculum-sdk/public/search',
+                '@oaknational/curriculum-sdk/public/search.js',
+                '@oaknational/curriculum-sdk/elasticsearch',
+                '@oaknational/curriculum-sdk/elasticsearch.js',
+              ],
+              message:
+                'Search SDK must import search types from @oaknational/sdk-codegen/search, not via curriculum-sdk facade (ADR-108).',
+            },
+            {
+              group: ['@oaknational/sdk-codegen/*/**'],
+              message:
+                'Search SDK must import from @oaknational/sdk-codegen subpath exports only (e.g. /search, /observability), not deep internal paths (ADR-108).',
+            },
+            {
+              group: ['@workspace/*'],
+              message:
+                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            },
+          ],
+        },
+      ],
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: './src/**',
+              from: '../../../apps/**',
+              message:
+                'SDKs cannot import from apps. SDKs must remain reusable across applications.',
             },
           ],
         },

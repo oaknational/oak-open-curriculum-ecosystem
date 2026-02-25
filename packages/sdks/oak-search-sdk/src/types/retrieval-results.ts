@@ -1,8 +1,8 @@
 /**
  * Retrieval service result types — search results, suggestions, errors, and metadata.
  *
- * Index document types (`SearchLessonsIndexDoc`, etc.) flow from the
- * Curriculum SDK and are imported, not redefined.
+ * Index document types (`SearchLessonsIndexDoc`, etc.) flow from
+ * `@oaknational/sdk-codegen/search` and are imported, not redefined.
  */
 
 import type {
@@ -12,7 +12,7 @@ import type {
   SearchThreadIndexDoc,
   SearchFacets,
   SearchSuggestionItem,
-} from '@oaknational/curriculum-sdk/public/search.js';
+} from '@oaknational/sdk-codegen/search';
 
 // ---------------------------------------------------------------------------
 // Retrieval error type

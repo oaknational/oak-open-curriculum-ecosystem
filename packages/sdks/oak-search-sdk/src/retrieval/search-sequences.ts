@@ -11,7 +11,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
-import type { SearchSequenceIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 
 import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
 import type { SearchSequencesParams } from '../types/retrieval-params.js';

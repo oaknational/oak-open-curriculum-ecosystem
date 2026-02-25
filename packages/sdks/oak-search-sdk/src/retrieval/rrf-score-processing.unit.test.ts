@@ -8,7 +8,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { filterByMinScore, clampSize, clampFrom } from './rrf-score-processing.js';
-import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 function stubLessonDoc(slug: string): SearchLessonsIndexDoc {
   return {

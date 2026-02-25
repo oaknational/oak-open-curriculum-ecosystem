@@ -16,7 +16,14 @@ if (!result.ok) {
 
 const config = result.value;
 const bootstrapLog = createHttpLogger(config, { name: 'streamable-http:bootstrap' });
-const app = await createApp({ runtimeConfig: config });
+
+let app: Awaited<ReturnType<typeof createApp>>;
+try {
+  app = await createApp({ runtimeConfig: config });
+} catch (startupError: unknown) {
+  bootstrapLog.error('Application startup failed', startupError);
+  process.exit(1);
+}
 
 const port = config.env.PORT ? Number(config.env.PORT) : 3333;
 bootstrapLog.debug(`Running locally, starting server on port ${String(port)}`);

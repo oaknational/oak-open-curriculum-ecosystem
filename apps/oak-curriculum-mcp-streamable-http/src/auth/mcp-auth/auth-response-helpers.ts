@@ -151,12 +151,13 @@ export function handleResourceValidationFailed(
   logger: Logger,
   prmUrl: string,
   reason: string,
+  allowedHosts: readonly string[],
 ): void {
   logger.warn(
     'Resource parameter validation failed',
     createAuthLogContext(req, res, {
       reason,
-      expectedResource: getMcpResourceUrl(req),
+      expectedResource: getMcpResourceUrl(req, allowedHosts),
     }),
   );
   sendInvalidResourceResponse(res, prmUrl, reason);

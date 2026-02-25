@@ -30,6 +30,48 @@ function getRestrictedImportPatterns(
   return options.patterns;
 }
 
+function getRestrictedImportPaths(
+  rules: Partial<Linter.RulesRecord>,
+): readonly { readonly name: string }[] {
+  const rule = rules['@typescript-eslint/no-restricted-imports'];
+  if (!Array.isArray(rule) || rule.length < 2) {
+    throw new Error(
+      `Expected '@typescript-eslint/no-restricted-imports' to be a [severity, options] tuple, got: ${JSON.stringify(rule)}`,
+    );
+  }
+  const options: unknown = rule[1];
+  if (
+    typeof options !== 'object' ||
+    options === null ||
+    !('paths' in options) ||
+    !Array.isArray(options.paths)
+  ) {
+    throw new Error(`Expected options to have a 'paths' array, got: ${JSON.stringify(options)}`);
+  }
+  return options.paths;
+}
+
+function getRestrictedPathZones(
+  rules: Partial<Linter.RulesRecord>,
+): readonly { readonly from: string }[] {
+  const rule = rules['import-x/no-restricted-paths'];
+  if (!Array.isArray(rule) || rule.length < 2) {
+    throw new Error(
+      `Expected 'import-x/no-restricted-paths' to be a [severity, options] tuple, got: ${JSON.stringify(rule)}`,
+    );
+  }
+  const options: unknown = rule[1];
+  if (
+    typeof options !== 'object' ||
+    options === null ||
+    !('zones' in options) ||
+    !Array.isArray(options.zones)
+  ) {
+    throw new Error(`Expected options to have a 'zones' array, got: ${JSON.stringify(options)}`);
+  }
+  return options.zones;
+}
+
 describe('createSdkBoundaryRules', () => {
   describe('generation role', () => {
     it('restricts imports from runtime SDK package at all depths', () => {
@@ -134,6 +176,56 @@ describe('createSdkBoundaryRules', () => {
         throw new Error('Expected to find a pattern restricting @oaknational/sdk-codegen/*/**');
       }
       expect(genPattern.message).toContain('ADR-108');
+    });
+  });
+
+  describe('search role', () => {
+    it('blocks curriculum-sdk base import via paths (not patterns)', () => {
+      const rules = createSdkBoundaryRules('search');
+      const paths = getRestrictedImportPaths(rules);
+      expect(paths.some((p) => p.name === '@oaknational/curriculum-sdk')).toBe(true);
+    });
+
+    it('blocks curriculum-sdk search and elasticsearch facade subpaths', () => {
+      const rules = createSdkBoundaryRules('search');
+      const patterns = getRestrictedImportPatterns(rules);
+      const groups = patterns.flatMap((p) => p.group);
+
+      expect(groups).toContain('@oaknational/curriculum-sdk/public/search');
+      expect(groups).toContain('@oaknational/curriculum-sdk/elasticsearch');
+    });
+
+    it('blocks deep sdk-codegen imports', () => {
+      const rules = createSdkBoundaryRules('search');
+      const patterns = getRestrictedImportPatterns(rules);
+      const groups = patterns.flatMap((p) => p.group);
+
+      expect(groups).toContain('@oaknational/sdk-codegen/*/**');
+    });
+
+    it('blocks @workspace/* alias imports', () => {
+      const rules = createSdkBoundaryRules('search');
+      const patterns = getRestrictedImportPatterns(rules);
+      const groups = patterns.flatMap((p) => p.group);
+
+      expect(groups).toContain('@workspace/*');
+    });
+
+    it('blocks imports from apps via import-x/no-restricted-paths', () => {
+      const rules = createSdkBoundaryRules('search');
+      const zones = getRestrictedPathZones(rules);
+      expect(zones.some((z) => z.from.includes('apps'))).toBe(true);
+    });
+
+    it('provides messages referencing ADR-108', () => {
+      const rules = createSdkBoundaryRules('search');
+      const patterns = getRestrictedImportPatterns(rules);
+      const sdkPattern = patterns.find((p) => p.group.includes('@oaknational/sdk-codegen/*/**'));
+
+      if (!sdkPattern) {
+        throw new Error('Expected to find a pattern restricting @oaknational/sdk-codegen/*/**');
+      }
+      expect(sdkPattern.message).toContain('ADR-108');
     });
   });
 });

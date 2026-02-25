@@ -19,7 +19,7 @@ import {
   OAK_SEQUENCE_FACETS_MAPPING,
   OAK_THREADS_MAPPING,
   OAK_META_MAPPING,
-} from '@oaknational/curriculum-sdk/elasticsearch.js';
+} from '@oaknational/sdk-codegen/search';
 
 import type { AdminError, IndexSetupResult, SetupOptions } from '../types/admin-types.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';

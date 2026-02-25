@@ -86,7 +86,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   // CORS: Applied globally to ALL routes (protocol routes need it for browser clients)
   // DNS rebinding: Only applied to browser-accessible routes (landing page)
   // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
-  const dnsRebindingMiddleware = setupSecurityMiddleware(
+  const { dnsRebindingMiddleware, allowedHosts } = setupSecurityMiddleware(
     app,
     runtimeConfig,
     log,
@@ -103,6 +103,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     log,
     bootstrapTimer,
     appId,
+    allowedHosts,
     options.upstreamMetadata,
   );
 
@@ -138,7 +139,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   // Phase 7: Auth routes (protected /mcp route handlers)
   // Needs mcpFactory, so must run after initializeCoreEndpoints.
   runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appId, () => {
-    setupAuthRoutes(app, mcpFactory, runtimeConfig, log);
+    setupAuthRoutes(app, mcpFactory, runtimeConfig, log, allowedHosts);
   });
 
   const routes = listRoutes(app);

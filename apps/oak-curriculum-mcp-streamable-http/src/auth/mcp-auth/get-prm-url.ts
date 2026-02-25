@@ -1,3 +1,6 @@
+import { extractHostname } from '../../security.js';
+import { isAllowedHostname, isValidHostHeader } from '../../host-header-validation.js';
+
 /**
  * Generate path-qualified OAuth Protected Resource Metadata URL per RFC 9728.
  *
@@ -28,11 +31,19 @@
  */
 export function getPRMUrl(
   req: Pick<{ protocol: string; get: (header: string) => string | undefined }, 'protocol' | 'get'>,
+  allowedHosts: readonly string[],
 ): string {
   const host = req.get('host');
 
   if (!host) {
     throw new Error('Cannot generate OAuth metadata URL: missing host header');
+  }
+  if (!isValidHostHeader(host)) {
+    throw new Error(`Cannot generate OAuth metadata URL: invalid host header format: ${host}`);
+  }
+  const hostname = extractHostname(host).toLowerCase();
+  if (!hostname || !isAllowedHostname(hostname, allowedHosts)) {
+    throw new Error(`Cannot generate OAuth metadata URL: host not allowed: ${hostname}`);
   }
 
   return `${req.protocol}://${host}/.well-known/oauth-protected-resource/mcp`;

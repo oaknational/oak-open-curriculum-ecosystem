@@ -6,7 +6,9 @@ import { loadRuntimeConfig } from './runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
-  const createTestApp = async () => {
+  const createTestApp = async (
+    allowedHosts = 'localhost,127.0.0.1,example.com,api.example.com',
+  ) => {
     const result = loadRuntimeConfig({
       processEnv: {
         NODE_ENV: 'test',
@@ -15,6 +17,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
         CLERK_SECRET_KEY: 'sk_test_123',
         ELASTICSEARCH_URL: 'http://fake-es:9200',
         ELASTICSEARCH_API_KEY: 'fake-api-key',
+        ALLOWED_HOSTS: allowedHosts,
       },
       startDir: process.cwd(),
     });
@@ -32,13 +35,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      expect(body).toHaveProperty('resource');
-
-      const resource = (body as { resource: unknown }).resource;
-      expect(typeof resource).toBe('string');
-
-      expect(resource).toBe('https://example.com/mcp');
+      expect(res.body).toHaveProperty('resource', 'https://example.com/mcp');
     });
 
     it('resource URL uses http protocol for local development', async () => {
@@ -50,10 +47,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const resource = (body as { resource: unknown }).resource;
-
-      expect(resource).toBe('http://localhost:3333/mcp');
+      expect(res.body).toHaveProperty('resource', 'http://localhost:3333/mcp');
     });
 
     it('resource URL matches request host header and includes /mcp path', async () => {
@@ -73,10 +67,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
         expect(res.status).toBe(200);
 
-        const body: unknown = res.body;
-        const resource = (body as { resource: unknown }).resource;
-
-        expect(resource).toBe(expected);
+        expect(res.body).toHaveProperty('resource', expected);
       }
     });
 
@@ -89,11 +80,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const resource = (body as { resource: unknown }).resource;
-
-      expect(resource).toBe('https://api.example.com/mcp');
-      expect(resource).toMatch(/\/mcp$/);
+      expect(res.body).toHaveProperty('resource', 'https://api.example.com/mcp');
+      expect(res.body).toHaveProperty('resource', expect.stringMatching(/\/mcp$/));
     });
   });
 
@@ -107,11 +95,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const servers = (body as { authorization_servers: unknown }).authorization_servers;
-
-      expect(Array.isArray(servers)).toBe(true);
-      expect(servers).toEqual(['http://localhost:3333']);
+      expect(res.body).toHaveProperty('authorization_servers', ['http://localhost:3333']);
     });
 
     it('uses https for non-loopback hosts', async () => {
@@ -123,10 +107,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const servers = (body as { authorization_servers: unknown }).authorization_servers;
-
-      expect(servers).toEqual(['https://api.example.com']);
+      expect(res.body).toHaveProperty('authorization_servers', ['https://api.example.com']);
     });
   });
 
@@ -140,14 +121,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const servers = (body as { authorization_servers: unknown }).authorization_servers;
-
-      expect(Array.isArray(servers)).toBe(true);
-      expect(servers).toEqual(['http://localhost:3333']);
-
-      const resource = (body as { resource: unknown }).resource;
-      expect(resource).toBe('http://localhost:3333/mcp');
+      expect(res.body).toHaveProperty('authorization_servers', ['http://localhost:3333']);
+      expect(res.body).toHaveProperty('resource', 'http://localhost:3333/mcp');
     });
   });
 
@@ -161,13 +136,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      expect(body).toHaveProperty('scopes_supported');
-
-      const scopesSupported = (body as { scopes_supported: unknown }).scopes_supported;
-      expect(Array.isArray(scopesSupported)).toBe(true);
-      expect(scopesSupported).toContain('email');
-      expect(scopesSupported).not.toContain('openid');
+      expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['email']));
+      expect(res.body).not.toHaveProperty('scopes_supported', expect.arrayContaining(['openid']));
     });
   });
 
@@ -181,25 +151,26 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const md = body as {
-        issuer: string;
-        authorization_endpoint: string;
-        token_endpoint: string;
-        registration_endpoint: string;
-        response_types_supported: string[];
-        grant_types_supported: string[];
-        code_challenge_methods_supported: string[];
-      };
-
-      expect(md.issuer).toBe('http://localhost:3333');
-      expect(md.authorization_endpoint).toBe('http://localhost:3333/oauth/authorize');
-      expect(md.token_endpoint).toBe('http://localhost:3333/oauth/token');
-      expect(md.registration_endpoint).toBe('http://localhost:3333/oauth/register');
-
-      expect(md.response_types_supported).toEqual(TEST_UPSTREAM_METADATA.response_types_supported);
-      expect(md.grant_types_supported).toEqual(TEST_UPSTREAM_METADATA.grant_types_supported);
-      expect(md.code_challenge_methods_supported).toEqual(
+      expect(res.body).toHaveProperty('issuer', 'http://localhost:3333');
+      expect(res.body).toHaveProperty(
+        'authorization_endpoint',
+        'http://localhost:3333/oauth/authorize',
+      );
+      expect(res.body).toHaveProperty('token_endpoint', 'http://localhost:3333/oauth/token');
+      expect(res.body).toHaveProperty(
+        'registration_endpoint',
+        'http://localhost:3333/oauth/register',
+      );
+      expect(res.body).toHaveProperty(
+        'response_types_supported',
+        TEST_UPSTREAM_METADATA.response_types_supported,
+      );
+      expect(res.body).toHaveProperty(
+        'grant_types_supported',
+        TEST_UPSTREAM_METADATA.grant_types_supported,
+      );
+      expect(res.body).toHaveProperty(
+        'code_challenge_methods_supported',
         TEST_UPSTREAM_METADATA.code_challenge_methods_supported,
       );
     });
@@ -213,10 +184,52 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      const body: unknown = res.body;
-      const md = body as { scopes_supported: readonly string[] };
+      expect(res.body).toHaveProperty('scopes_supported', TEST_UPSTREAM_METADATA.scopes_supported);
+    });
+  });
 
-      expect(md.scopes_supported).toStrictEqual(TEST_UPSTREAM_METADATA.scopes_supported);
+  describe('host validation for OAuth metadata', () => {
+    it('rejects disallowed Host header with 403', async () => {
+      const app = await createTestApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error', 'forbidden');
+    });
+
+    it('rejects disallowed Host on authorization server metadata', async () => {
+      const app = await createTestApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'evil.com');
+
+      expect(res.status).toBe(403);
+    });
+
+    it('allows wildcard hosts on protected-resource metadata', async () => {
+      const app = await createTestApp('localhost,127.0.0.1,*.example.com');
+
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'api.example.com');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('resource', 'https://api.example.com/mcp');
+    });
+
+    it('allows wildcard hosts on authorization-server metadata', async () => {
+      const app = await createTestApp('localhost,127.0.0.1,*.example.com');
+
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'api.example.com');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('issuer', 'https://api.example.com');
     });
   });
 });

@@ -17,7 +17,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
-import type { SearchThreadIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchThreadIndexDoc } from '@oaknational/sdk-codegen/search';
 
 import type { RetrievalError, ThreadsSearchResult } from '../types/retrieval-results.js';
 import type { SearchParamsBase } from '../types/retrieval-params.js';
