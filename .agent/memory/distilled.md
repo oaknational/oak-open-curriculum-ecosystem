@@ -4,8 +4,8 @@ Hard-won rules extracted from napkin sessions. Read this
 before every session. Every entry earned its place by
 changing behaviour.
 
-**Source**: Distilled from `archive/napkin-2026-02-16.md`
-(sessions 2026-02-10 to 2026-02-16).
+**Source**: Distilled from `archive/napkin-2026-02-24.md`
+(sessions 2026-02-10 to 2026-02-24).
 
 ---
 
@@ -40,6 +40,12 @@ changing behaviour.
 - `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved
+- When moving files between workspaces, ESLint rule overrides
+  must also move — otherwise lint errors appear silently
+- `*.config.ts` glob does NOT match `*.config.e2e.ts` —
+  add explicit glob for E2E configs in tsconfig includes
+- `export * from` is banned by `no-restricted-syntax` —
+  always use named exports in barrel files
 
 ## TypeScript and Type Safety
 
@@ -93,8 +99,6 @@ changing behaviour.
   `boundary.ts` must include this pattern for consistency.
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
-- Commander `this.args` in `function action(this: Command)`
-  avoids unused parameter lint errors
 - Derive types from generated contracts via indexed access:
   `type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>`
   avoids modifying generators while maintaining type unification.
@@ -104,6 +108,14 @@ changing behaviour.
   use `'excludes' in value` (property check) not `Array.isArray(value)` —
   `Array.isArray` narrows to `string[]` but leaves the else branch
   still containing both union members.
+- Type predicate stubs with `noUnusedParameters`: `() => false`
+  won't compile — use the parameter in the body, e.g.
+  `(v: unknown): v is T => typeof v === 'string' && v === '__never__'`
+- `as const satisfies T` is the gold standard for test data
+  that must be both a literal type and structurally valid
+- Interface Segregation eliminates assertion pressure: when
+  test fakes can't satisfy a complex generated type without
+  `as`, extract a narrowed interface with only consumed fields
 
 ## Widget Rendering (ChatGPT Sandbox)
 
@@ -191,6 +203,10 @@ Architecture` section). Dev gotchas not covered there:
   Fix: explicit property resolution with `??` or a typed merge helper
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
+- When moving files between workspaces, check whether
+  removed tests should be recreated in the destination
+- Stale vitest include globs are silent because of
+  `passWithNoTests: true` — remove dead globs promptly
 
 ## TSDoc
 
@@ -285,6 +301,14 @@ Architecture` section). Dev gotchas not covered there:
   handlers like `res.on('close')`
 - TSDoc `@see` references should point to ADRs, not plan
   files — plans are archived/deleted after completion
+- TS2209 rootDir ambiguity: when `tsconfig.build.json`
+  narrows `include` from a wide base, add explicit
+  `rootDir: "./src"` for export map resolution
+- Stale tsup entries match nothing silently after file
+  moves — remove dead entry points promptly
+- Adapter/core packages must be rebuilt (`pnpm build`)
+  before `pnpm type-gen` picks up changes — the SDK
+  consumes built output, not source
 
 ## Domain Knowledge
 
@@ -317,7 +341,10 @@ The monorepo is ESM-only (`"type": "module"`).
 - tsup ESM config: `format: ['esm']`, `platform: 'node'`,
   `target: 'node22'`
 - Common error "Cannot find module" → check missing `.js`
-  extension
+  extension. Applies to ALL relative imports including
+  barrel re-exports. `pnpm build` + `pnpm type-check` do
+  NOT catch this — only E2E tests against built `dist/`
+  surface the error. Run `test:e2e` before pushing.
 - Common error `__dirname is not defined` → use
   `import.meta.dirname`
 

@@ -28,8 +28,25 @@ layer separation:
 | ------------------------ | ----------------- | ------------------------------------------------------------------------- |
 | `coreBoundaryRules`      | `packages/core/`  | No imports from libs or apps                                              |
 | `createLibBoundaryRules` | `packages/libs/`  | No imports from other libs or apps; no `process`/`__dirname`/`__filename` |
+| `createSdkBoundaryRules` | `packages/sdks/`  | One-way dependency between generation and runtime SDK workspaces          |
 | `appBoundaryRules`       | `apps/`           | No imports from other apps                                                |
 | `appArchitectureRules`   | `apps/` internals | Integrations cannot import tools and vice versa                           |
+
+#### `createSdkBoundaryRules(role)`
+
+Factory function that returns boundary rules for SDK workspaces. The `role`
+parameter (`'generation'` or `'runtime'`) determines the constraint set:
+
+- **`'generation'`**: blocks imports from the runtime SDK
+  (`@oaknational/curriculum-sdk`). The generation workspace must not depend
+  on its consumer.
+- **`'runtime'`**: blocks deep imports into the generation workspace
+  (`@oaknational/curriculum-sdk-generation/*/**`) — only single-level
+  subpath exports are permitted. Also blocks `@workspace/*` aliases to
+  prevent pnpm workspace aliases from bypassing the boundary rules.
+
+Both roles block `@workspace/*` imports to ensure all cross-workspace
+dependencies go through published package names.
 
 ## Configs
 

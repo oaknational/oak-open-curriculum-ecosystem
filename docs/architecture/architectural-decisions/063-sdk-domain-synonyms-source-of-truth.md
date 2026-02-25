@@ -5,6 +5,19 @@
 **Decision Makers**: Development Team  
 **Extends**: [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 
+> **Revision note (2026-02-24)**: This ADR frames curated synonym lists as
+> the "single source of truth" for all consumers. Subsequent analysis
+> identified two distinct concerns conflated into one data structure:
+> (1) **agent context injection** — the primary use of curated lists, giving
+> AI agents vocabulary awareness, and (2) **search synonym expansion** — an
+> interim use pending a bulk-data-derived synonym pipeline. The authoritative
+> source of truth for search synonyms is the bulk curriculum data (13,349
+> keywords with definitions), not the curated lists. When a bulk pipeline is
+> built, this ADR should be revised to distinguish the two concerns by source
+> and intent. See the
+> [synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+> for the full architectural framing.
+
 ## Context
 
 The semantic search system requires domain-specific synonyms for curriculum terminology (e.g., "maths" ↔ "mathematics", "ks1" ↔ "key stage 1"). These synonyms are needed in multiple places:

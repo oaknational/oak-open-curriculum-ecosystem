@@ -10,7 +10,34 @@ This module is the **single source of truth** for curriculum domain synonyms use
 
 All synonym definitions live here and flow to consumers via SDK exports.
 
-## Architecture
+## Architectural Framing: Two Distinct Concerns
+
+The synonym system serves two fundamentally different purposes that are
+currently conflated into a single data structure (`synonymsData`):
+
+**Concern 1 — Agent context injection** (primary use of curated lists)
+
+The hand-written curated synonym lists are vocabulary hints injected into
+the `get-ontology` MCP tool response. They help AI agents understand how
+teachers and students talk about curriculum concepts — colloquialisms
+("sohcahtoa"), abbreviations ("PE"), UK/US variants ("factorising" /
+"factoring"), and informal phrasings ("solving for x"). These are curated
+context for natural language interpretation, not an authoritative synonym
+database.
+
+**Concern 2 — Search synonym expansion** (interim use of curated lists)
+
+The authoritative source of truth for what terms mean the same thing in the
+Oak curriculum is the bulk curriculum data itself — 13,349 keywords with
+definitions. A processing pipeline to extract authoritative synonyms from
+this data does not yet exist. The curated lists are a useful interim source
+for Elasticsearch query expansion, but the long-term architecture separates
+these concerns by source and intent. When a bulk-data-derived synonym
+pipeline exists, it should replace the curated lists for search purposes
+while the curated lists continue serving agent context. See ADR-063 for
+the current framing and its planned revision.
+
+## File Layout
 
 ```text
 synonyms/
@@ -76,12 +103,23 @@ The canonical term is typically the curriculum terminology; alternatives include
 - UK/US variants (factorising ↔ factoring)
 - Abbreviations (trig ↔ trigonometry)
 
-## How Synonyms Are Consumed
+## How Synonyms Are Consumed (Four Domains, Two Concerns)
 
-### 1. Ontology Data (AI Agents)
+All 23 curated categories are aggregated in `synonyms/index.ts` into a single
+`synonymsData` object (typed as `SynonymsData`). This barrel is the only
+import point for consumers. Adding a new category to `synonymsData`
+automatically propagates to all four consumer domains.
 
-The `ontology-data.ts` module imports `synonymsData` and includes it in the ontology
-returned to AI agents via the `get-ontology` MCP tool:
+### Concern 1: Agent Context Injection
+
+#### Domain 1 — AI Agent Ontology (runtime, `ontology-data.ts`)
+
+`synonymsData` is spread into the ontology returned by the `get-ontology` MCP
+tool. This is the **primary intended use** of the curated lists — giving AI
+agents vocabulary awareness for interpreting teacher queries.
+
+Consumer chain: `synonyms/index.ts` → `ontology-data.ts` → MCP tool response
+→ AI agent
 
 ```typescript
 // ontology-data.ts
@@ -96,10 +134,22 @@ export const ontologyData = {
 } as const;
 ```
 
-### 2. Elasticsearch (Search)
+### Concern 2: Search Expansion (interim, pending bulk data pipeline)
 
-The `synonym-export.ts` module provides utilities to transform synonyms into
-Elasticsearch format:
+The following three consumers use the curated lists as an interim synonym
+source for search. When a bulk-data-derived synonym pipeline exists, these
+consumers should transition to pipeline output for authoritative search
+expansion, while the curated lists continue serving agent context.
+
+#### Domain 2 — Elasticsearch Query Expansion (search infrastructure)
+
+`buildElasticsearchSynonyms()` in `synonym-export.ts` transforms all
+categories into ES entries with IDs like `{categoryName}_{canonical}` and
+comma-separated synonym strings. Deployed as the `oak-syns` synonym set via
+`PUT /_synonyms/oak-syns`.
+
+Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
+`public/mcp-tools.ts` (re-export) → search SDK → Elasticsearch
 
 ```typescript
 import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
@@ -115,16 +165,38 @@ cd apps/oak-search-cli
 pnpm es:setup   # Creates indexes and deploys oak-syns synonym set
 ```
 
-### 3. Search App (Phrase Detection)
+#### Domain 3 — Phrase Detection and Boosting (search quality)
 
-The SDK also exports phrase vocabulary for query preprocessing:
+`buildPhraseVocabulary()` extracts all multi-word terms (containing spaces)
+into a `Set<string>`. Critical because ES synonym filters apply after
+tokenisation — multi-word synonyms like "straight line" → "linear" cannot
+expand via the synonym filter. ~40% of current synonyms are multi-word.
+
+Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
+`public/mcp-tools.ts` → search SDK `detect-curriculum-phrases.ts`
 
 ```typescript
 import { buildPhraseVocabulary } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 const phrases = buildPhraseVocabulary();
 // Returns Set<string> of multi-word curriculum terms
-// Used for phrase boosting in hybrid search
+// Used for phrase boosting in hybrid search (ADR-084)
+```
+
+#### Domain 4 — Term Normalisation (lookup)
+
+`buildSynonymLookup()` builds a flat `ReadonlyMap<string, string>` mapping
+alternative terms (lowercased) to canonical terms. Used for normalising user
+input before API calls.
+
+Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
+`public/mcp-tools.ts` → consumers
+
+```typescript
+import { buildSynonymLookup } from '@oaknational/curriculum-sdk/public/mcp-tools';
+
+const lookup = buildSynonymLookup();
+// Returns ReadonlyMap<string, string> (alternative → canonical)
 ```
 
 ## Adding New Synonyms
@@ -347,9 +419,32 @@ See:
 - [02b-vocabulary-mining.md](../../../../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Full plan
 - [ADR-063](../../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Integration decisions
 
+## Current Location (Fragmented)
+
+After ADR-108 Step 1 Phase 3, synonym content is split across workspaces:
+
+| Workspace      | Path                                                  | Type                              |
+| -------------- | ----------------------------------------------------- | --------------------------------- |
+| Runtime SDK    | `src/mcp/synonyms/` (25 files)                        | Curated agent context             |
+| Runtime SDK    | `src/mcp/synonym-export.ts`                           | Transform utilities (4 functions) |
+| Generation SDK | `src/generated/vocab/synonyms/definition-synonyms.ts` | Mined (early pipeline experiment) |
+| Generation SDK | `vocab-gen/generators/synonym-miner.ts`               | Mining generator                  |
+
+This fragmentation is a known follow-on target after the SDK workspace
+separation is complete. All synonym content should be co-located and
+organised by source and intent:
+
+| Source                                        | Intent                           | Target state                                    |
+| --------------------------------------------- | -------------------------------- | ----------------------------------------------- |
+| **Curated** (hand-written, 23 files)          | Agent context injection          | Co-located, labelled as agent vocabulary hints  |
+| **Mined** (regex-extracted, 1 file)           | Early search pipeline experiment | Co-located alongside curated                    |
+| **Bulk-derived** (pipeline output)            | Authoritative search synonyms    | Future: co-located, labelled as pipeline output |
+| **Transform utilities** (`synonym-export.ts`) | Consumer-format adapters         | Co-located with the data they transform         |
+
 ## Related Documents
 
 - [ADR-063: SDK Domain Synonyms Source of Truth](../../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
+- [ADR-084: Phrase Query Boosting](../../../../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
 - [synonym-export.ts](../synonym-export.ts) — Export utilities
 - [ontology-data.ts](../ontology-data.ts) — Consumes synonymsData
 - [SYNONYMS.md](../../../../../../apps/oak-search-cli/docs/SYNONYMS.md) — Search app synonym documentation

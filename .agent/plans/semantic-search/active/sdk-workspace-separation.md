@@ -789,17 +789,13 @@ phases are completed here.
   - keep progressive disclosure coherent: root -> workspace -> deep docs.
   - **[fred W2]** audit runtime SDK wildcard exports for barrel discipline
     consistency (cross-reference with ESLint override removal plan).
-  - **[consolidation]** extract §16 synonym system domain knowledge to
-    `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md` (two-concern
-    insight, 4th consumer domain, consumer chains, co-location target). Add
-    revision note to ADR-063. Required before plan archival.
-  - **[consolidation]** add subpath export table (§8.2a, 11 subpaths with
-    domains) to generation SDK README. Required before plan archival.
-  - **[consolidation]** add `createSdkBoundaryRules` to ESLint plugin README
-    boundary rules table.
-  - **[consolidation]** create `packages/core/type-helpers/README.md`
-    documenting rationale (why `Object.*`/`Reflect.*` are banned), usage,
-    and type-assertion discipline.
+  - ~~**[consolidation]** extract §16 synonym system domain knowledge to
+    synonyms README and ADR-063 revision note~~ — DONE (2026-02-24)
+  - ~~**[consolidation]** add subpath export table to generation SDK
+    README~~ — DONE (2026-02-24)
+  - ~~**[consolidation]** add `createSdkBoundaryRules` to ESLint plugin
+    README~~ — DONE (2026-02-24)
+  - ~~**[consolidation]** create type-helpers README~~ — DONE (2026-02-24)
 
 File-level tasks (minimum):
 

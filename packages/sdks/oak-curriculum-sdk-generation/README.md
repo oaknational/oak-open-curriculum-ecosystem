@@ -5,9 +5,10 @@ Generation-time workspace for the Oak Curriculum SDK, implementing
 
 ## Status
 
-**Phase 1 scaffold** — workspace structure is in place. Content
-(type-gen, vocab-gen, generated types, bulk infrastructure) will
-be moved from `@oaknational/curriculum-sdk` in subsequent phases.
+**Phases 0–5 complete** — workspace hosts both data pipelines (API
+and bulk), all generated artefacts, 11 subpath exports, and ESLint
+boundary rules. Phases 6–7 (documentation alignment, CI drift
+check) remain.
 
 ## Two Data Pipelines
 
@@ -24,6 +25,25 @@ that run during `pnpm type-gen`:
   extractors, Elasticsearch mappings, knowledge graphs, and
   vocabulary artefacts. Consumed by the search SDK and search CLI.
 
+## Subpath Exports
+
+Generated artefacts are exposed through subpath exports rather than a
+single monolithic barrel. Subpaths are one level deep only.
+
+| Subpath                                                   | Domain                                               | Barrel                    |
+| --------------------------------------------------------- | ---------------------------------------------------- | ------------------------- |
+| `@oaknational/curriculum-sdk-generation`                  | curated subset                                       | `src/index.ts`            |
+| `@oaknational/curriculum-sdk-generation/api-schema`       | API types, paths, routing, validation, errors        | `src/api-schema.ts`       |
+| `@oaknational/curriculum-sdk-generation/mcp-tools`        | tool descriptors, execution, stubs, scopes           | `src/mcp-tools.ts`        |
+| `@oaknational/curriculum-sdk-generation/search`           | index docs, scopes, facets, suggestions, ES mappings | `src/search.ts`           |
+| `@oaknational/curriculum-sdk-generation/zod`              | Zod schemas                                          | `src/zod.ts`              |
+| `@oaknational/curriculum-sdk-generation/bulk`             | bulk pipeline APIs, schemas, types                   | `src/bulk.ts`             |
+| `@oaknational/curriculum-sdk-generation/vocab`            | static graph data, ontology, mined synonyms          | `src/vocab.ts`            |
+| `@oaknational/curriculum-sdk-generation/query-parser`     | query parser types                                   | `src/query-parser.ts`     |
+| `@oaknational/curriculum-sdk-generation/observability`    | zero-hit telemetry                                   | `src/observability.ts`    |
+| `@oaknational/curriculum-sdk-generation/admin`            | admin fixtures                                       | `src/admin.ts`            |
+| `@oaknational/curriculum-sdk-generation/widget-constants` | widget URI                                           | `src/widget-constants.ts` |
+
 ## Boundary Rules
 
 Enforced by ESLint SDK boundary rules (`createSdkBoundaryRules`
@@ -33,9 +53,10 @@ in `@oaknational/eslint-plugin-standards`):
   (`@oaknational/curriculum-sdk`). The dependency direction is
   one-way: runtime depends on generation, not vice versa.
 
-- **Consumers must use barrel imports only**
-  (`@oaknational/curriculum-sdk-generation`), not deep paths
-  into internal directories.
+- **Consumers must use barrel imports only** via the subpath
+  exports listed above. Deep paths into internal directories are
+  blocked by the `@oaknational/curriculum-sdk-generation/*/**`
+  ESLint pattern.
 
 ## Scripts
 

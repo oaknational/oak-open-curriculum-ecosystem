@@ -160,10 +160,11 @@ reviewer suggestions (plan §13.6): shared test stub extraction
 semver for API surface change (S4). Then Phase 6 scope: provenance
 banner updates (F11), barrel auto-generation evaluation (F12),
 subpath granularity (F13), OakApiPathBasedClient ownership (F14),
-wildcard export audit (F15). Also: documentation extraction tasks
-added by consolidation review — synonyms README (§16 domain
-knowledge), generation SDK README (subpath table), ESLint plugin
-README (`createSdkBoundaryRules`), type-helpers README.
+wildcard export audit (F15). Documentation extraction tasks from
+consolidation review completed: synonyms README updated with
+two-concern insight and Domain 4, ADR-063 revision note added,
+generation SDK README subpath table added, ESLint plugin README
+updated with `createSdkBoundaryRules`, type-helpers README created.
 
 **Two-pipeline architecture** (see
 [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)):
