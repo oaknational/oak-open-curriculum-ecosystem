@@ -1,5 +1,8 @@
 # Quick Start Guide
 
+**Last Updated**: 2026-02-25  
+**Status**: Active quick-reference guide
+
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
 
 > **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](architecture/openapi-pipeline.md) and [onboarding guide](development/onboarding.md).
@@ -99,6 +102,11 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
 # See apps/oak-search-cli/README.md for search setup and CLI commands.
 ```
 
+For AI agent execution order, directives are normative: run quality gates one at
+a time as specified in
+[`start-right-thorough.prompt.md`](../.agent/prompts/start-right-thorough.prompt.md).
+`pnpm make` and `pnpm qg` remain convenience commands for human local workflows.
+
 See [environment variables guide](development/environment-variables.md) for complete setup details.
 
 For current known `pnpm qg` local caveats, see
@@ -112,9 +120,9 @@ The Oak curriculum data has significant differences across subjects and key stag
 
 - **[Data Variances](data/DATA-VARIANCES.md)** — Essential reading for understanding data shapes
 - **Transcript availability**: MFL (French, Spanish, German) has 0%; most subjects have 100%
-- **KS4 complexity**: Tiers, exam boards, pathways don't exist in KS1-3
+- **KS4 complexity**: Tiers, exam boards, and `ks4Options` don't exist in KS1-3
 - **Categories**: Only English, Science, RE have categories
-- **Structural patterns**: 6 API traversal patterns that can combine
+- **Structural patterns**: 7 API traversal patterns that can combine
 
 ### OpenAPI-First Pipeline
 
@@ -238,7 +246,7 @@ pnpm test
 
 ```bash
 # 1. Make changes to generation scripts
-# Edit files in packages/sdks/oak-curriculum-sdk/code-generation/
+# Edit files in packages/sdks/oak-sdk-codegen/code-generation/typegen/
 
 # 2. Regenerate
 pnpm sdk-codegen
@@ -278,7 +286,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
 LOG_LEVEL=debug pnpm sdk-codegen
 
 # Check the generated output
-cat packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.ts | head -100
+cat packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts | head -100
 ```
 
 ### Update Documentation
@@ -297,11 +305,10 @@ open packages/sdks/oak-curriculum-sdk/docs/index.html
 oak-open-data-ecosystem/
 ├── packages/
 │   ├── sdks/
-│   │   └── oak-curriculum-sdk/      # Generated SDK (THE SOURCE)
-│   │       ├── code-generation/             # Generation scripts
-│   │       └── src/
-│   │           ├── types/generated/  # Generated types (DO NOT EDIT)
-│   │           └── tool-generation/  # Generated MCP tools (DO NOT EDIT)
+│   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation source
+│   │   │   ├── code-generation/typegen/     # Generator templates and emitters
+│   │   │   └── src/types/generated/         # Generated schema/tool artefacts
+│   │   └── oak-curriculum-sdk/      # Runtime SDK consumed by apps
 │   └── libs/                         # Shared libraries (logger, storage, etc.)
 ├── apps/
 │   ├── oak-curriculum-mcp-stdio/     # MCP server for Claude Desktop

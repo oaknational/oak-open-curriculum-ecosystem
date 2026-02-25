@@ -1,5 +1,8 @@
 # Development Practice
 
+**Last Updated**: 2026-02-25  
+**Status**: Active guidance
+
 NEVER disable checks of any kind, ever.
 
 ## Quality Gates
@@ -17,6 +20,10 @@ The quality gates must be run after all major changes, and before each commit:
 Locally we can also run
 
 - `pnpm test:e2e` - E2E tests (requires appropriate API keys set in the root `.env`)
+
+For AI agent execution order, follow directive-defined one-gate-at-a-time runs
+from the grounding directives/prompts first; aggregate commands remain
+convenience workflows for local human development.
 
 Where the quality gates reveal an issue, the issue must be fixed, regardless of the location or cause. There is no such thing as an acceptable failure, ever.
 

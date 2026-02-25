@@ -1,5 +1,8 @@
 # Developer Onboarding
 
+**Last Updated**: 2026-02-25  
+**Status**: Active onboarding guide
+
 Welcome to the Oak MCP ecosystem. Oak's mission is to improve pupil outcomes and close the disadvantage gap by supporting teachers to teach. This repository turns Oak's openly-licensed curriculum into AI-native infrastructure — SDKs, MCP servers, and semantic search — so that AI tools can help teachers find, adapt, and use high-quality curriculum content. Your engineering work here has a direct path to teacher impact and pupil outcomes.
 
 This guide points you to the documentation, plans, and tooling you need in your first pass through the repository.
@@ -115,7 +118,8 @@ For an expanded architectural introduction, see [Start Here: 5 ADRs in 15 Minute
 ### 3. Understand the Repository Layout
 
 - [`README.md`](../../README.md) — high-level description of the ecosystem and shared parsing helpers.
-- [`packages/sdks/oak-curriculum-sdk/README.md`](../../packages/sdks/oak-curriculum-sdk/README.md) — SDK generation pipeline, MCP tool exports, validation helpers.
+- [`packages/sdks/oak-sdk-codegen/README.md`](../../packages/sdks/oak-sdk-codegen/README.md) — OpenAPI/code-generation pipeline and generated artefacts.
+- [`packages/sdks/oak-curriculum-sdk/README.md`](../../packages/sdks/oak-curriculum-sdk/README.md) — Runtime SDK exports consumed by applications.
 - [`apps/oak-search-cli/README.md`](../../apps/oak-search-cli/README.md) — ingestion, admin flows, hybrid search.
 - MCP server READMEs (`apps/oak-curriculum-mcp-*`) — running stdio/HTTP servers locally or on Vercel.
 
@@ -159,6 +163,10 @@ pnpm qg  # format-check:root → markdownlint-check:root → subagents:check →
 ```
 
 Use `pnpm qg` once you are ready to run full-gate validation across UI, E2E, and smoke suites. This is slower and typically requires service credentials.
+For AI agent execution order, directive-defined one-gate-at-a-time runs take
+precedence (see
+[`start-right-thorough.prompt.md`](../../.agent/prompts/start-right-thorough.prompt.md));
+`pnpm qg` remains a convenience aggregate for human local workflows.
 
 See [Environment Variables Guide](./environment-variables.md) for complete setup details when you're ready.
 
@@ -215,7 +223,7 @@ The Oak curriculum data has significant variances across subjects and key stages
 - **Start here**: [Curriculum Guide](../curriculum-guide.md) — plain-language overview of how the curriculum is organised, what makes KS4 different, and what it means for search
 - **Then read**: [Data Variances](../data/DATA-VARIANCES.md) — transcript availability, structural patterns, KS4 complexity
 - **Key insight**: MFL subjects (French, Spanish, German) have 0% transcript coverage; Maths has 100%
-- **Key insight**: KS4 has tiers, exam boards, pathways that don't exist in KS1-3
+- **Key insight**: KS4 has tiers, exam boards, and `ks4Options` that don't exist in KS1-3
 - **Key insight**: Only 3 subjects (English, Science, RE) have categories
 
 ### 11. The Development Workflow
@@ -245,7 +253,7 @@ This repository uses an **agentic engineering practice** — a system where AI a
 
 **How AI review fits the PR lifecycle**: AI sub-agent reviews happen during development. They are advisory and inform the code as it is written. CI gates and human review happen at PR time. See the [Development Workflow](./workflow.md) for the full lifecycle.
 
-**For managers**: The practice enables a single engineer working with AI to produce high-quality, well-architected software at significant velocity. The 114 ADRs, comprehensive quality gate suite, and specialist sub-agent reviewers are evidence of engineering maturity. The practice is documented in [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) and mapped in [practice.md](../../.agent/directives/practice.md).
+**For managers**: The practice enables a single engineer working with AI to produce high-quality, well-architected software at significant velocity. The extensive ADR catalogue, comprehensive quality gate suite, and specialist sub-agent reviewers are evidence of engineering maturity. The practice is documented in [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) and mapped in [practice.md](../../.agent/directives/practice.md).
 
 ### 13. Useful References
 

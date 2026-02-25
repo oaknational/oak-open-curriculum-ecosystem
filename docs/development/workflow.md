@@ -1,5 +1,8 @@
 # Development Workflow
 
+**Last Updated**: 2026-02-25  
+**Status**: Active workflow guide
+
 The complete development lifecycle for this repository, from branch creation to release.
 
 ## Overview
@@ -60,6 +63,9 @@ pnpm qg    # format-check:root → markdownlint-check:root → subagents:check �
 ```
 
 See [Build System](./build-system.md) for the single source of truth on all command definitions.
+For AI agent execution order, directives are normative and require one gate at
+a time; `pnpm make` and `pnpm qg` remain convenience aggregate commands for
+human local workflows.
 
 ## 4. Commit
 
