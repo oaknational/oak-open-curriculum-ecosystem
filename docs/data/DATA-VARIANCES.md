@@ -195,7 +195,7 @@ The API response structure varies by subject and key stage. Understanding patter
 | **Tier**         | foundation, higher                            | Maths, Science             |
 | **Exam Board**   | aqa, ocr, edexcel, eduqas, edexcelb           | All KS4 subjects           |
 | **Exam Subject** | biology, chemistry, physics, combined-science | Science only               |
-| **Pathway**      | core, gcse                                    | Citizenship, Computing, PE |
+| **`ks4Options`** | core, gcse                                    | Citizenship, Computing, PE |
 
 ### Exam Boards by Subject
 
@@ -412,7 +412,7 @@ The `/key-stages/{ks}/subject/{subject}/lessons` endpoint returns **incomplete d
 
 ## 10. Entity Relationships
 
-> **Source**: [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts)
+> **Source**: [property-graph-data.ts](../../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts)
 
 ### Core Hierarchy
 
@@ -552,7 +552,7 @@ See Section 7 for full tables and totals.
 
 ## 13. API Schema Insights
 
-> **Source**: [api-schema-sdk.json](../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json)
+> **Source**: [api-schema-sdk.json](../../packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json)
 
 ### Asset Types (Enum)
 
@@ -603,17 +603,17 @@ Note: `all-years` only valid for `physical-education-primary` sequence.
 
 ### Planning
 
-| Document                                                                                                                    | Focus                  |
-| --------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| [mfl-multilingual-embeddings.md](../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md) | MFL search limitations |
+| Document                                                                   | Focus                                                                 |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [Semantic Search Plan Index](../../.agent/plans/semantic-search/README.md) | Stable index for semantic-search planning and MFL limitations context |
 
 ### SDK Sources
 
-| File                                                                                                             | Content                                             |
-| ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts)                              | Structural patterns, KS4 complexity, key stage gaps |
-| [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts)                  | Entity relationships, concept graph                 |
-| [api-schema-sdk.json](../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json) | Complete OpenAPI schema                             |
+| File                                                                                                          | Content                                             |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts)                           | Structural patterns, KS4 complexity, key stage gaps |
+| [property-graph-data.ts](../../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts)                  | Entity relationships, concept graph                 |
+| [api-schema-sdk.json](../../packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json) | Complete OpenAPI schema                             |
 
 ### Technical
 

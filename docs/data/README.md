@@ -57,7 +57,7 @@ KS4 has additional metadata not present in KS1-3:
 
 - **Tiers**: Foundation/Higher (Maths, Science only)
 - **Exam boards**: AQA, OCR, Edexcel, Eduqas, etc.
-- **Pathways**: Core/GCSE
+- **`ks4Options`**: Programme options object (historically mislabelled as "pathway"), including Core/GCSE contexts
 - **Exam subjects**: Biology, Chemistry, Physics (Science only)
 - **Unit options**: Set texts, specialisms, topics
 
@@ -74,9 +74,9 @@ Only 3 subjects have categories:
 ### In SDK
 
 - [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) — Domain model, structural patterns
-- [property-graph-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) — Entity relationships
+- [property-graph-data.ts](../../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) — Entity relationships (generated-tool source of truth)
 
 ### In Agent Plans
 
 - [Semantic Search Plans](../../.agent/plans/semantic-search/) — Roadmap, acceptance criteria
-- [MFL Limitations](../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md) — MFL search issues
+- [Semantic Search Plan Index](../../.agent/plans/semantic-search/README.md) — Stable planning index including MFL search limitations tracking

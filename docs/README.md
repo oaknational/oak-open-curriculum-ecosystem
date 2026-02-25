@@ -6,7 +6,7 @@
 - **Quick start?** → [Quick Start Guide](quick-start.md) — Zero-setup path to productive changes
 - **Vision and strategy?** → [VISION.md](VISION.md) — why this repository exists, what it delivers, and how we measure impact
 - **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](agent-guidance/ai-agent-guide.md)
-- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — 114 Architectural Decision Records define how the system should work
+- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 
 ## Core Documentation
 
@@ -18,7 +18,7 @@
 - [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
 - [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
 - [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
-- [Provider System](architecture/provider-system.md) - Multi-provider MCP architecture
+- [Provider System](architecture/provider-system.md) - Current app-local provider composition and DI boundaries
 
 ### Development
 
@@ -34,7 +34,7 @@
 - [Curriculum Guide](curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
 - [Data Variances](data/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
-- [Knowledge Graph](../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts) - Entity relationships
+- [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) - Canonical entity-relationship source used by generated tooling
 
 ### Agentic Engineering Practice
 
