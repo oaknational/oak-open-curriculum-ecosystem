@@ -18,9 +18,9 @@ Before reviewing onboarding quality, you MUST also read and internalise these do
 | `.agent/prompts/start-right.prompt.md` | Canonical AI-agent onboarding workflow |
 | `README.md` | Public entrypoint and top-level onboarding |
 | `docs/README.md` | Documentation index and start paths |
-| `docs/development/onboarding.md` | Canonical human onboarding flow |
-| `docs/quick-start.md` | Fast-path human onboarding flow |
-| `docs/agent-guidance/ai-agent-guide.md` | AI-agent onboarding flow |
+| `docs/foundation/onboarding.md` | Canonical human onboarding flow |
+| `docs/foundation/quick-start.md` | Fast-path human onboarding flow |
+| `docs/governance/ai-agent-guide.md` | AI-agent onboarding flow |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and simplicity guardrails |
 
 If workspace handoff docs are referenced during onboarding, include them in scope.
@@ -35,7 +35,7 @@ If workspace handoff docs are referenced during onboarding, include them in scop
 
 ### Step 1: Map Onboarding Entrypoints and Handoffs
 
-1. **Human path**: `README.md` -> `docs/development/onboarding.md` / `docs/quick-start.md` -> workspace docs.
+1. **Human path**: `README.md` -> `docs/foundation/onboarding.md` / `docs/foundation/quick-start.md` -> workspace docs.
 2. **AI path**: `start-right` -> `AGENT.md` -> directives -> task-specific docs.
 3. Identify all transition points between documents.
 

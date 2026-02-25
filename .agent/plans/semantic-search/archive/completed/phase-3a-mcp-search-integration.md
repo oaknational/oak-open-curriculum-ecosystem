@@ -823,7 +823,7 @@ These items surfaced during the OAuth documentation review and are not OAuth-rel
 
 ### Fix quick-start anchor
 
-`docs/quick-start.md` links to `#known-gate-caveats` but the onboarding heading is singular `### Known Gate Caveat`. Fix the link or the heading to match.
+`docs/foundation/quick-start.md` links to `#known-gate-caveats` but the onboarding heading is singular `### Known Gate Caveat`. Fix the link or the heading to match.
 
 ### Preserve historical review cleanly
 

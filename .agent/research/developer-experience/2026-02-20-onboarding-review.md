@@ -23,7 +23,7 @@ Onboarding documentation quality is now materially better after doc updates made
 ## What I reviewed
 
 - `README.md`
-- `docs/development/onboarding.md`
+- `docs/foundation/onboarding.md`
 - `docs/README.md`
 - `CONTRIBUTING.md`
 - `apps/oak-search-cli/README.md`
@@ -41,11 +41,11 @@ These are documentation-only changes (no code changes):
 - Clarified `pnpm make` as first full pipeline and `pnpm qg` as slower full gate with caveats (`README.md:112`).
 - Updated command list to use `pnpm lint:fix` consistently (`README.md:147`).
 
-2. Canonical onboarding guide improved in `docs/development/onboarding.md`
+2. Canonical onboarding guide improved in `docs/foundation/onboarding.md`
 
-- Reworked early command sequence to install/verify/regenerate in developer-safe order (`docs/development/onboarding.md:53`).
-- Moved `pnpm qg` to “when ready” section (`docs/development/onboarding.md:65`).
-- Added a dated “Known Gate Caveats” section listing current known failing suites (`docs/development/onboarding.md:75`).
+- Reworked early command sequence to install/verify/regenerate in developer-safe order (`docs/foundation/onboarding.md:53`).
+- Moved `pnpm qg` to “when ready” section (`docs/foundation/onboarding.md:65`).
+- Added a dated “Known Gate Caveats” section listing current known failing suites (`docs/foundation/onboarding.md:75`).
 
 3. Broken docs link fixed in `docs/README.md`
 
@@ -137,7 +137,7 @@ Now strong for first-pass contribution flow. Remaining completeness gap is owner
 
 Validation commands run:
 
-- `pnpm exec markdownlint README.md docs/development/onboarding.md docs/README.md` (passed)
+- `pnpm exec markdownlint README.md docs/foundation/onboarding.md docs/README.md` (passed)
 - `pnpm --filter @oaknational/search-cli exec vitest run --config vitest.e2e.config.ts e2e-tests/bulk-retry-cli.e2e.test.ts --reporter=verbose`
   - Passes with `.env.local`
   - Fails without `.env.local` (`Environment not loaded`)
@@ -154,7 +154,7 @@ Validation commands run:
 - Search CLI env bootstrap behavior for `--help`/arg-validation e2e path.
 - Widget renderer dispatcher/runtime consistency (`knowledgeGraph` reference).
 
-3. Once fixed, remove or update “Known Gate Caveats” in `docs/development/onboarding.md` with exact date and issue references.
+3. Once fixed, remove or update “Known Gate Caveats” in `docs/foundation/onboarding.md` with exact date and issue references.
 
 ## Final Judgement
 

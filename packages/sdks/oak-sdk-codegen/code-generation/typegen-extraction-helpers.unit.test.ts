@@ -5,8 +5,12 @@ import {
   extractValidParameters,
 } from './typegen-extraction-helpers';
 import type { ExtractionContext } from './typegen/extraction-types.js';
-import type { OpenAPIObject, PathItemObject } from 'openapi3-ts/oas31';
-import { createFakePathItemObject } from './test-fakes.js';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import {
+  createFakePathItemObject,
+  createFakeOperationObject,
+  createFakeParameterObject,
+} from './test-fakes.js';
 
 // Helper to create a minimal valid OpenAPI object
 function createMockOpenAPIObject(): OpenAPIObject {
@@ -86,30 +90,21 @@ describe('typegen-extraction-helpers', () => {
   describe('processOperationParameters', () => {
     it('should process parameters from all operations in path item', () => {
       const mockProcessParameterList = vi.fn();
-      // put/delete intentionally non-OperationObject to test that only get/post are processed
-      const pathItem = {
-        get: {
-          parameters: [{ name: 'id', in: 'path' }],
-          responses: {},
-        },
-        post: {
-          parameters: [{ name: 'filter', in: 'query' }],
-          responses: {},
-        },
-        put: null,
-        delete: 'invalid',
-      };
+      const pathItem = createFakePathItemObject({
+        get: createFakeOperationObject({
+          parameters: [createFakeParameterObject({ name: 'id', in: 'path' })],
+        }),
+        post: createFakeOperationObject({
+          parameters: [createFakeParameterObject({ name: 'filter', in: 'query' })],
+        }),
+      });
       const context: ExtractionContext = {
         root: createMockOpenAPIObject(),
         pathParameters: {},
         validCombinations: {},
       };
 
-      processOperationParameters(
-        pathItem as unknown as PathItemObject,
-        context,
-        mockProcessParameterList,
-      );
+      processOperationParameters(pathItem, context, mockProcessParameterList);
 
       expect(mockProcessParameterList).toHaveBeenCalledTimes(2);
       expect(mockProcessParameterList).toHaveBeenCalledWith([{ name: 'id', in: 'path' }], context);

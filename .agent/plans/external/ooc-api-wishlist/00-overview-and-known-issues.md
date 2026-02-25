@@ -337,7 +337,7 @@ Change the description from "All the lessons" to accurately reflect the truncati
 
 Refactor ingestion to use the paginated lessons endpoint (`/key-stages/{ks}/subject/{subject}/lessons`) with proper pagination exhaustion instead of deriving from unit summaries.
 
-**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
 
 ---
 
@@ -834,7 +834,7 @@ Implemented tri-state `hasVideo()` function:
 - `false`: Lesson in assets response WITHOUT video
 - `undefined`: Lesson NOT in assets response (unknown — assume video exists, fetch transcript)
 
-**See**: [ADR-091: Video Availability Detection Strategy](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md)
+**See**: [ADR-091: Video Availability Detection Strategy](../../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md)
 
 ### Documentation Request (Not a Fix)
 
@@ -985,8 +985,8 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 
 ### Related Documentation
 
-- [ADR-092: Transcript Cache Categorization Strategy](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md)
-- [sdk-cache README](../../../apps/oak-search-cli/src/adapters/sdk-cache/README.md)
+- [ADR-092: Transcript Cache Categorization Strategy](../../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md)
+- [sdk-cache README](../../../../apps/oak-search-cli/src/adapters/sdk-cache/README.md)
 
 ---
 
@@ -1866,6 +1866,6 @@ Enhance `manifest.json`:
 
 ## Related Documents
 
-- **[Data Variances](../../../../docs/data/DATA-VARIANCES.md)** — Consolidated reference for all curriculum data differences (includes summaries of issues documented here)
-- **[Curriculum Structure Analysis](../../analysis/curriculum-structure-analysis.md)** — 7 structural patterns, traversal strategies
+- **[Data Variances](../../../../docs/domain/DATA-VARIANCES.md)** — Consolidated reference for all curriculum data differences (includes summaries of issues documented here)
+- **[Curriculum Structure Analysis](../../../analysis/curriculum-structure-analysis.md)** — 7 structural patterns, traversal strategies
 - **[index.md](index.md)** — Navigation hub for all wishlist documents

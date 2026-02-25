@@ -1,9 +1,9 @@
 # Evidence Summary (25 February 2026)
 
-- Primary docs in scope: 33
-- Primary lines: 6829
-- Related outside-docs files: 35
-- Missing local links: 9
+- Primary docs in scope: 35
+- Primary lines: 7006
+- Related outside-docs files: 48
+- Missing local links: 0
 
 ## Scope selector
 
@@ -13,4 +13,8 @@ rg --files docs | rg -v '(^|/)archive(/|$)|(^|/)architectural-decisions(/|$)|(^|
 
 ## Snapshot
 
-- Captured at: 2026-02-25 12:02:44 GMT
+- Captured at: 2026-02-25 13:27:40 GMT
+
+---
+
+source	missing_target	reference_count

@@ -87,4 +87,4 @@ const { parameters, validCombinations } = extractPathParameters(schema);
 
 - [openapi-typescript documentation](https://github.com/drwpow/openapi-typescript)
 - Reference implementation: `packages/sdks/oak-curriculum-sdk/code-generation/codegen-core.ts`
-- Phase 6 Implementation Plan: `.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md`
+- Phase 6 Implementation Plan: `.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md`

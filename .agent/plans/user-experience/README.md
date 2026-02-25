@@ -51,6 +51,23 @@ Those remain in their technical collections and are referenced here.
 
 ---
 
+## UX-Owned Concepts (Implemented Elsewhere)
+
+This collection owns the user-outcome contract for concepts that are
+implemented in technical collections:
+
+1. Supported-client experience contract (host compatibility and graceful
+   fallbacks)
+2. Milestone 1 UI-surface decision gate (Claude basic branding before alpha vs
+   post-alpha)
+3. Educator journey outcomes for extension capabilities
+   (misconceptions, vocabulary, progression, coverage)
+4. Upstream API dependency risks that materially affect end-user experience
+
+Technical plans keep implementation detail and sequencing.
+
+---
+
 ## Milestone Alignment
 
 - **Milestone 1 (Public Alpha)**: educator and engineering/Ed-Tech outcomes
@@ -68,9 +85,11 @@ See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 |------------|----------------------|
 | [semantic-search/roadmap.md](../semantic-search/roadmap.md) | Search quality and retrieval behaviour directly shape user trust |
 | [sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | UI surface and host compatibility determine app usability |
+| [semantic-search/future/08-experience-surfaces-and-extensions/README.md](../semantic-search/future/08-experience-surfaces-and-extensions/README.md) | Post-alpha experience capabilities and renderer sequencing |
 | [security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md) | Safety, evidence quality, and trust boundaries for end users |
 | [architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md) | Reliability, observability, and operational quality surface as UX |
 | [developer-experience/sdk-publishing-and-versioning-plan.md](../developer-experience/sdk-publishing-and-versioning-plan.md) | Developer-facing clarity and upgrade safety affect adoption |
+| [external/ooc-api-wishlist/index.md](../external/ooc-api-wishlist/index.md) | Upstream API/schema constraints that shape UX feasibility |
 
 ---
 

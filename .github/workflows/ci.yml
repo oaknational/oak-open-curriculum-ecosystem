@@ -54,6 +54,12 @@ jobs:
       - name: Check formatting
         run: pnpm format-check:root
 
+      - name: Check markdown
+        run: pnpm markdownlint-check:root
+
+      - name: Validate sub-agents
+        run: pnpm subagents:check
+
       - name: Run linting
         run: pnpm lint
 

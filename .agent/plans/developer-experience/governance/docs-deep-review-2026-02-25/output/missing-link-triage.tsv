@@ -1,10 +1,1 @@
 source	missing_target	classification	rationale	action
-docs/README.md	../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	fix-now	SDK file moved and this is a high-traffic entrypoint	Repoint to stable current source path or package README anchor
-docs/data/DATA-VARIANCES.md	../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	fix-now	Domain evidence link is currently broken	Repoint to current codegen path for property graph data
-docs/data/README.md	../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	fix-now	Domain docs should not contain dead links to source truths	Repoint to current codegen path or package-level docs
-docs/data/DATA-VARIANCES.md	../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json	fix-now	Schema reference moved and link is broken	Repoint to current generated schema location in oak-sdk-codegen
-docs/architecture/openai-connector-deprecation.md	../../.agent/plans/oak-mcp-compatibility-hardening-plan.md	provenance-exception	Historical plan appears relocated/archived	Repoint to archive/index if retained, otherwise remove direct plan link
-docs/architecture/programmatic-tool-generation.md	../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md	provenance-exception	Historical implementation plan path no longer resolves	Replace with stable architecture doc or completed-plans index reference
-docs/architecture/programmatic-tool-generation.md	../../.agent/plans/oak-curriculum-sdk-zod-validators-2025-08-12.md	provenance-exception	Historical planning file path no longer resolves	Replace with ADR/reference docs or archive index
-docs/data/DATA-VARIANCES.md	../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md	deprecate-link	Plan file no longer present in current tree	Link to semantic-search plan index instead of a volatile leaf file
-docs/data/README.md	../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md	deprecate-link	Plan file no longer present in current tree	Link to semantic-search plan index instead of a volatile leaf file

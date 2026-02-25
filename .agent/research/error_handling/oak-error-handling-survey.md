@@ -3,9 +3,9 @@
 ## Core references
 
 - **AGENT.md** (primary grounding)
-- **docs/agent-guidance/development-practice.md**
+- **docs/governance/development-practice.md**
 - **.agent/directives/testing-strategy.md**
-- **docs/agent-guidance/typescript-practice.md**
+- **docs/governance/typescript-practice.md**
 
 ## Executive summary
 

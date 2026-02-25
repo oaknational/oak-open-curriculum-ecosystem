@@ -2,7 +2,7 @@
 
 This repository is how Oak makes its curriculum available to AI tools and the wider education technology community. It powers the infrastructure that lets AI assistants help teachers find, adapt, and use Oak's openly-licensed curriculum.
 
-> For an overview of the **impact** we aim to achieve with this repo, see [Vision](docs/VISION.md) — it explains what
+> For an overview of the **impact** we aim to achieve with this repo, see [Vision](docs/foundation/VISION.md) — it explains what
 > this repository delivers, why it matters for Oak's mission. No technical background required.
 
 SDKs, MCP (Model Context Protocol) servers, and Elasticsearch-serverless-backed semantic search, all generated from the Oak Open Curriculum OpenAPI specification and the open API and bulk-download data.
@@ -24,7 +24,7 @@ This repo has roughly three distinct audiences:
 
 ### Internal Facing
 
-This repo is designed to support [agentic or augmented product engineering practice](.agent/directives/practice.md). It has extensive guidance for AI and human contributors ([docs](docs/README.md), [process](docs/development/onboarding.md), [guidance](.agent/directives/AGENT.md), [ADRs](docs/architecture/architectural-decisions/), [memory](.agent/memory/distilled.md)), strict and comprehensive [quality gates](.agent/directives/rules.md), and feedback loops to improve both.
+This repo is designed to support [agentic or augmented product engineering practice](.agent/directives/practice.md). It has extensive guidance for AI and human contributors ([docs](docs/README.md), [process](docs/foundation/onboarding.md), [guidance](.agent/directives/AGENT.md), [ADRs](docs/architecture/architectural-decisions/), [memory](.agent/memory/distilled.md)), strict and comprehensive [quality gates](.agent/directives/rules.md), and feedback loops to improve both.
 
 It also has a large collection of repo specific agent skills, commands, sub-agents, and other tools to support the practice. While some of these are currently configured for Cursor only, the philosophy is that they should all be platform-agnostic, and we will continue to work towards that goal.
 
@@ -52,7 +52,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
    pnpm install
    ```
 
-2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) is the human contributor onboarding path (junior-to-mid-level friendly), with key READMEs, directives, and a lightweight ADR path.
+2. **Read the onboarding guide** – [docs/foundation/onboarding.md](docs/foundation/onboarding.md) is the human contributor onboarding path (junior-to-mid-level friendly), with key READMEs, directives, and a lightweight ADR path.
 
    For AI agents, onboarding starts with `start-right`:
    [command](.cursor/commands/jc-start-right.md), [prompt](.agent/prompts/start-right.prompt.md), or [skill](.agent/skills/start-right/SKILL.md), then [AGENT.md](.agent/directives/AGENT.md).
@@ -102,7 +102,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 
    `pnpm make` is the recommended first full pipeline run.
    `pnpm qg` is slower and runs UI/E2E/smoke suites that may require additional service configuration.
-   For current caveats, see [docs/development/onboarding.md](docs/development/onboarding.md).
+   For current caveats, see [docs/foundation/onboarding.md](docs/foundation/onboarding.md).
 
 6. **Choose your starting point**
 
@@ -114,9 +114,10 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
    - Start with `apps/oak-search-cli/README.md` – hybrid search, admin endpoints, telemetry
    - Requires: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`
 
-   **For MCP server contributors** (requires OAK_API_KEY minimum):
+   **For MCP server contributors** (requires `OAK_API_KEY`, `ELASTICSEARCH_URL`, and `ELASTICSEARCH_API_KEY`; HTTP auth mode also needs Clerk keys unless auth is disabled):
    - Stdio: `apps/oak-curriculum-mcp-stdio/README.md` – for Claude Desktop, Cursor
    - HTTP: `apps/oak-curriculum-mcp-streamable-http/README.md` – OAuth-enabled, Vercel-ready
+   - In both apps, stub mode swaps the retrieval implementation, but startup env validation still requires Elasticsearch variables
    - Both import generated tools from the SDK - no manual tool definitions
 
 ## Key Commands (root)
@@ -153,7 +154,7 @@ pnpm check # Build and validate EVERYTHING
 
 ## Documentation & Onboarding
 
-- [docs/development/onboarding.md](docs/development/onboarding.md) – first-stop checklist for new developers and AI assistants.
+- [docs/foundation/onboarding.md](docs/foundation/onboarding.md) – first-stop checklist for new developers and AI assistants.
 - [docs/README.md](docs/README.md) – architecture and development index.
 - Workspace READMEs (SDK + Semantic Search) explain local setup, admin workflows, and validation flow.
 
@@ -165,7 +166,7 @@ The practice operates in three layers: **philosophy** (the First Question, metac
 
 The practice has enabled a single engineer, working with AI under the practice's governance, to produce the SDK, MCP servers, semantic search, 114 ADRs, and the practice itself ([ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
-The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md). For a human-friendly explanation, see the [onboarding guide's practice section](docs/development/onboarding.md#12-the-agentic-engineering-practice).
+The entry point is [`.agent/directives/AGENT.md`](.agent/directives/AGENT.md) — follow the links from there and the practice reveals itself. For a map of the whole system, see [`.agent/directives/practice.md`](.agent/directives/practice.md). For a human-friendly explanation, see the [onboarding guide's practice section](docs/foundation/onboarding.md#12-the-agentic-engineering-practice).
 
 ## What This Is
 
@@ -231,7 +232,7 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 improve pupil outcomes and close the disadvantage gap by supporting teachers to
 teach. This repository amplifies that mission through AI-native infrastructure.
 
-See [docs/VISION.md](docs/VISION.md) for the full framing — capability staging,
+See [docs/foundation/VISION.md](docs/foundation/VISION.md) for the full framing — capability staging,
 non-goals, impact measures, evidence baselines, and the investment case.
 
 ## Contributing

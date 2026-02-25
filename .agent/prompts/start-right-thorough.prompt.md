@@ -18,7 +18,7 @@ Always ask, "what value are delivering, through what impact for which users?"
 
 Do not assume you know what the initial step should be, discuss with the user first.
 
-Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/development/build-system.md` and ADR 065.
+Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/engineering/build-system.md` and ADR 065.
 
 ```shell
 # From the repo root, one at a time, with no filters

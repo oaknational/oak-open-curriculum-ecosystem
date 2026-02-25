@@ -33,7 +33,7 @@ isProject: false
 # SDK Separation Pre-Phase-1 Decisions
 
 Decisions required before Phase 1 of the
-[canonical SDK workspace separation plan](../../active/sdk-workspace-separation.md) begins.
+[canonical SDK workspace separation plan](sdk-workspace-separation.md) begins.
 
 ## Origin
 

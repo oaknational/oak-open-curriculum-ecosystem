@@ -9,7 +9,7 @@
 
 ## Context
 
-Phase 1 established the Foundational Ground Truths system with 30 lesson ground truths (one per subject-phase), plus 2 unit, 8 thread, and 1 sequence ground truths. After the title-echoing correction ([ADR-106 refinement](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md#refinement-title-echoing-circularity-2026-02-09)), the lesson baseline is MRR=0.983, NDCG@10=0.944, P@3=0.767, R@10=1.000.
+Phase 1 established the Foundational Ground Truths system with 30 lesson ground truths (one per subject-phase), plus 2 unit, 8 thread, and 1 sequence ground truths. After the title-echoing correction ([ADR-106 refinement](../../../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md#refinement-title-echoing-circularity-2026-02-09)), the lesson baseline is MRR=0.983, NDCG@10=0.944, P@3=0.767, R@10=1.000.
 
 This plan outlines expansion opportunities for when deeper coverage is needed. Ground truth expansion should be planned ahead of major search-tuning phases wherever practical.
 

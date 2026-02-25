@@ -1,33 +1,35 @@
-docs/README.md	67	Documentation for Oak MCP Ecosystem	(none)	(none)
-docs/VISION.md	259	Vision	94:## Capability Status (Current / Next / Later)	3:> **Last updated**: 23 February 2026
-docs/agent-guidance/README.md	34	Agent Guidance Documentation	(none)	(none)
-docs/agent-guidance/ai-agent-guide.md	205	AI Agent Development Guide	(none)	(none)
-docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md	60	Curriculum Tools, Guidance and Playbooks	(none)	(none)
-docs/agent-guidance/development-practice.md	81	Development Practice	(none)	(none)
-docs/agent-guidance/logging-guidance.md	861	Logging Guidance for AI Agents	(none)	5:**Last Updated**: 2025-11-08  
-docs/agent-guidance/safety-and-security.md	207	Safety and Security	(none)	(none)
-docs/agent-guidance/typescript-practice.md	44	TypeScript Practice	(none)	(none)
-docs/agent-guidance/understanding-agent-references.md	102	Understanding Agent Reference Materials	(none)	(none)
-docs/architecture/README.md	64	Architecture	(none)	(none)
-docs/architecture/greek-ecosystem-deprecation.md	28	Greek Ecosystem (Chōrai) Deprecation	(none)	(none)
-docs/architecture/openai-connector-deprecation.md	24	OpenAI Connector Alias Removal	(none)	(none)
-docs/architecture/openapi-pipeline.md	360	The OpenAPI-First Pipeline	(none)	(none)
-docs/architecture/programmatic-tool-generation.md	356	Programmatic Tool Generation Architecture	3:**Status**: Accepted	4:**Last Updated**: 2026-02-14
-docs/architecture/provider-contracts.md	85	Provider Contracts (Core ⇄ Providers)	3:> **Status**: STALE — the `@oaknational/mcp-providers-node` package referenced	(none)
-docs/architecture/provider-system.md	36	Provider System Overview	3:> **Status**: STALE — the `@oaknational/mcp-providers-node` package referenced	(none)
-docs/curriculum-guide.md	179	Oak Curriculum Guide	(none)	(none)
-docs/data/DATA-VARIANCES.md	634	Data Variances Across Subjects and Key Stages	5:**Status**: Living document — update when new variances discovered	3:**Last Updated**: 2026-02-04
-docs/data/README.md	82	Curriculum Data Documentation	(none)	(none)
-docs/development/README.md	30	Development Documentation	(none)	(none)
-docs/development/build-system.md	317	Build System	(none)	(none)
-docs/development/ci-policy.md	28	CI Policy	(none)	(none)
-docs/development/environment-variables.md	271	Environment Variables Reference	(none)	(none)
-docs/development/extending.md	103	Extension Points	(none)	(none)
-docs/development/onboarding.md	261	Developer Onboarding	(none)	(none)
-docs/development/production-debugging-runbook.md	1050	Production Debugging Runbook	930:Name                    | Method | Status | Duration | Result	5:**Last Updated**: 2025-11-08  
-docs/development/release-and-publishing.md	209	Release and Publishing	9:| Package                       | Scope          | Registry  | Status  |	(none)
-docs/development/testing-patterns.md	74	Testing Patterns	(none)	(none)
-docs/development/tooling.md	62	Tooling	(none)	(none)
-docs/development/troubleshooting.md	108	Troubleshooting Guide	(none)	(none)
-docs/development/workflow.md	178	Development Workflow	(none)	(none)
-docs/quick-start.md	370	Quick Start Guide	(none)	(none)
+docs/README.md	78
+docs/architecture/README.md	77
+docs/architecture/greek-ecosystem-deprecation.md	28
+docs/architecture/openai-connector-deprecation.md	28
+docs/architecture/openapi-pipeline.md	363
+docs/architecture/programmatic-tool-generation.md	374
+docs/architecture/provider-contracts.md	53
+docs/architecture/provider-system.md	66
+docs/domain/DATA-VARIANCES.md	635
+docs/domain/README.md	90
+docs/domain/curriculum-guide.md	179
+docs/engineering/README.md	38
+docs/engineering/build-system.md	346
+docs/engineering/ci-policy.md	28
+docs/engineering/extending.md	103
+docs/engineering/release-and-publishing.md	209
+docs/engineering/testing-patterns.md	74
+docs/engineering/tooling.md	62
+docs/engineering/workflow.md	179
+docs/foundation/README.md	27
+docs/foundation/VISION.md	259
+docs/foundation/onboarding.md	269
+docs/foundation/quick-start.md	377
+docs/governance/README.md	42
+docs/governance/ai-agent-guide.md	205
+docs/governance/curriculum-tools-guidance-and-playbooks.md	60
+docs/governance/development-practice.md	88
+docs/governance/logging-guidance.md	861
+docs/governance/safety-and-security.md	207
+docs/governance/typescript-practice.md	44
+docs/governance/understanding-agent-references.md	102
+docs/operations/README.md	26
+docs/operations/environment-variables.md	271
+docs/operations/production-debugging-runbook.md	1050
+docs/operations/troubleshooting.md	108

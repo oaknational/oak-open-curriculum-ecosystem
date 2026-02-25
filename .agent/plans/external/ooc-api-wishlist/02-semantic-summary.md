@@ -204,9 +204,9 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 
 **ADRs**:
 
-- [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) - Dense vector code removal
-- [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER-only embedding strategy
-- [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Semantic summary generation
+- [ADR-075](../../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) - Dense vector code removal
+- [ADR-076](../../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER-only embedding strategy
+- [ADR-077](../../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Semantic summary generation
 
 **Current Embedding State**:
 

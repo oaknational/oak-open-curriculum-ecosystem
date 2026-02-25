@@ -249,8 +249,8 @@ interface OakOntology {
 
 | Document | Relationship |
 |----------|--------------|
-| [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) | Documents data quirks to capture |
+| [DATA-VARIANCES.md](../../../../docs/domain/DATA-VARIANCES.md) | Documents data quirks to capture |
 | [curriculum-ontology.md](../../../research/curriculum-ontology.md) | Research on ontology structure |
 | [ontology-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) | Current ontology implementation |
-| [knowledge-graph-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) | Current property graph |
+| [property-graph-data.ts](../../../../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) | Current property graph |
 | [00-overview-and-known-issues.md](00-overview-and-known-issues.md) | API issues to consider |

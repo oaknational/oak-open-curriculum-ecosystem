@@ -948,7 +948,7 @@ if (result.ok && result.value.transcript === '') {
 }
 ```
 
-See [ADR-092: Transcript Cache Categorization Strategy](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md).
+See [ADR-092: Transcript Cache Categorization Strategy](../../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md).
 
 **Desired state:**
 

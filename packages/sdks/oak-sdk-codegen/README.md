@@ -124,4 +124,4 @@ on generated path literals that are only available at codegen time.
 - [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 - [ADR-065: Turbo Task Dependencies](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)
 - [ADR-086: Vocab Mining and Graph Export](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md)
-- [SDK Workspace Separation Plan](../../../.agent/plans/semantic-search/active/sdk-workspace-separation.md)
+- [SDK Workspace Separation Plan](../../../.agent/plans/semantic-search/archive/completed/sdk-workspace-separation.md) (archived)

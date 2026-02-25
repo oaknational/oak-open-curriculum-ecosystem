@@ -30,7 +30,7 @@ This plan also includes re-evaluation of Level 1 fundamentals (Stage 0) and MFL-
 
 ## Stage 0: Fundamentals Re-evaluation
 
-Level 1 approaches (synonyms, phrase boosting, noise filtering) were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production and are not in question, but their measured impact needs re-baselining against the validated known-answer-first ground truths.
+Level 1 approaches (synonyms, phrase boosting, noise filtering) were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](../../../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production and are not in question, but their measured impact needs re-baselining against the validated known-answer-first ground truths.
 
 **Before any new search experiments**, run the current configuration against the full ground truth suite to establish a true baseline:
 

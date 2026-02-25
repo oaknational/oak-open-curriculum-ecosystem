@@ -64,7 +64,7 @@ first, then remove the distilled entry. Common destinations:
 
 - Rules codified in `.agent/directives/rules.md`
 - Patterns documented in ADRs
-- Tooling documented in `docs/development/build-system.md`
+- Tooling documented in `docs/engineering/build-system.md`
 - Domain knowledge documented in architecture docs
 - Workspace-specific gotchas in workspace READMEs
 

@@ -2,7 +2,7 @@
  * Suggestion pipeline — completion + bool_prefix fallback.
  */
 
-import type { Client, estypes } from '@elastic/elasticsearch';
+import type { estypes } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSuggestionItem } from '@oaknational/curriculum-sdk/public/search.js';
 
@@ -11,6 +11,54 @@ import type { SuggestionResponse, RetrievalError } from '../types/retrieval-resu
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
 import { extractStatusCode } from '../admin/es-error-guards.js';
+
+/**
+ * The subset of {@link estypes.SearchCompletionSuggestOption} the
+ * suggest pipeline actually reads. Derived via `Pick` to exclude
+ * the `any`-contaminated `fields` property in the ES client types.
+ */
+type SuggestOptionSlice = Pick<estypes.SearchCompletionSuggestOption, 'text'>;
+
+/**
+ * Narrow response shape for the suggest pipeline.
+ *
+ * Names the `suggestions` key directly rather than using a string-
+ * indexed Record, so that ESLint can narrow the inner arrays
+ * without `Array.isArray` producing `any[]`.
+ *
+ * The full ES `SearchResponse` satisfies this structurally because
+ * its `suggest` is `Record<string, SearchSuggest[]>` — a string-
+ * indexed record is assignable to a type with a named optional key.
+ */
+export interface SuggestRawResponse {
+  readonly suggest?: {
+    readonly suggestions?: readonly {
+      readonly options?: readonly SuggestOptionSlice[] | SuggestOptionSlice;
+    }[];
+  };
+}
+
+/**
+ * Minimal search-client interface for the suggest pipeline.
+ *
+ * Only the completion-search call is needed. The full
+ * `@elastic/elasticsearch` `Client` satisfies this structurally,
+ * so the production call-site passes the real client unchanged.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ */
+export interface SuggestClient {
+  search(params: {
+    readonly index: string;
+    readonly size: number;
+    readonly suggest: {
+      readonly suggestions: {
+        readonly prefix: string;
+        readonly completion: CompletionDescriptor;
+      };
+    };
+  }): Promise<SuggestRawResponse>;
+}
 
 /** Default number of suggestions when limit is not specified. */
 const DEFAULT_SUGGESTION_LIMIT = 10;
@@ -38,7 +86,7 @@ const SUGGESTION_TTL_SECONDS = 60;
  */
 export async function suggest(
   params: SuggestParams,
-  client: Client,
+  client: SuggestClient,
   resolveIndex: IndexResolverFn,
   config: SearchSdkConfig,
 ): Promise<Result<SuggestionResponse, RetrievalError>> {
@@ -140,50 +188,41 @@ interface CompletionDescriptor {
  * @returns Array of SearchSuggestionItem
  */
 function extractSuggestionItems(
-  response: estypes.SearchResponse<unknown>,
+  response: SuggestRawResponse,
   limit: number,
   scope: SuggestParams['scope'],
 ): readonly SearchSuggestionItem[] {
   const results: SearchSuggestionItem[] = [];
-  const suggestMap = response.suggest;
-  if (!suggestMap) {
+  const suggestions = response.suggest?.suggestions;
+  if (!suggestions) {
     return results;
   }
 
-  const suggestionArrays = suggestMap.suggestions;
-  if (!Array.isArray(suggestionArrays)) {
-    return results;
-  }
-
-  for (const suggestion of suggestionArrays) {
-    const options = Array.isArray(suggestion.options) ? suggestion.options : [];
-    for (const option of options) {
+  for (const suggestion of suggestions) {
+    if (!isOptionsArray(suggestion.options)) {
+      continue;
+    }
+    for (const option of suggestion.options) {
       if (results.length >= limit) {
         break;
       }
-      if (isOptionWithText(option)) {
-        results.push({
-          label: option.text,
-          scope,
-          url: '',
-          contexts: {},
-        });
-      }
+      results.push({ label: option.text, scope, url: '', contexts: {} });
     }
   }
 
   return results;
 }
 
-/** Type guard for completion option with text field. */
-function isOptionWithText(value: unknown): value is { text: string } {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('text' in value)) {
-    return false;
-  }
-  return typeof value.text === 'string';
+/**
+ * Type guard that narrows the ES suggest options union to its array form.
+ *
+ * Wraps `Array.isArray` with an explicit predicate because the ESLint
+ * type resolver narrows `Array.isArray` on union types to `any[]`.
+ */
+function isOptionsArray(
+  options: readonly SuggestOptionSlice[] | SuggestOptionSlice | undefined,
+): options is readonly SuggestOptionSlice[] {
+  return Array.isArray(options);
 }
 
 /**

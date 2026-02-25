@@ -16,7 +16,7 @@ Before reviewing any type-related changes, you MUST also read and internalise th
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/schema-first-execution.md` | Schema-first MCP execution |
-| `docs/agent-guidance/typescript-practice.md` | Type safety guidance |
+| `docs/governance/typescript-practice.md` | Type safety guidance |
 | `docs/architecture/architectural-decisions/038-compilation-time-revolution.md` | ADR-038 |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
 

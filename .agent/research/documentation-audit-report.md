@@ -38,8 +38,8 @@ directories, generated API docs
 ### Issues
 
 - **GO.md**: Still referenced in AGENT.md ("Read GO.md every 6th-ish
-  task"), `docs/README.md`, `docs/quick-start.md`,
-  `docs/development/onboarding.md`, and several `.agent/` files. The
+  task"), `docs/README.md`, `docs/foundation/quick-start.md`,
+  `docs/foundation/onboarding.md`, and several `.agent/` files. The
   GO.md grounding pattern is superseded by AGENT.md + directives.
   Decision needed: delete GO.md and remove all references, or keep
   and add a note that it complements AGENT.md.
@@ -51,8 +51,8 @@ directories, generated API docs
 | File | Purpose | Status | Action |
 | --- | --- | --- | --- |
 | `docs/README.md` | Documentation index and navigation | Partially stale | Update -- remove GO.md link |
-| `docs/onboarding.md` | Compatibility redirect to `development/onboarding.md` | Stale | **Delete** (clean break per plan directive) |
-| `docs/quick-start.md` | Fast-track developer guide | Partially stale | Update -- fix `pnpm format`, add missing quality gates, remove GO.md |
+| `docs/onboarding.md` | Compatibility redirect to `foundation/onboarding.md` | Stale | **Delete** (clean break per plan directive) |
+| `docs/foundation/quick-start.md` | Fast-track developer guide | Partially stale | Update -- fix `pnpm format`, add missing quality gates, remove GO.md |
 
 ---
 
@@ -78,10 +78,10 @@ directories, generated API docs
   Uses `pnpm format` (should be `pnpm format:root`). Links to
   non-existent `docs/development/onboarding-journey.md`,
   `docs/quick-reference.md`, and `docs/development/understanding-agent-references.md`
-  (actual: `docs/agent-guidance/understanding-agent-references.md`).
+  (actual: `docs/governance/understanding-agent-references.md`).
   Architecture layout describes Notion-specific structure. Link to
   `docs/troubleshooting.md` has wrong path (actual:
-  `docs/development/troubleshooting.md`). Requires full rewrite.
+  `docs/operations/troubleshooting.md`). Requires full rewrite.
 - **`environment-variables.md`**: Broken link to
   `docs/vercel-environment-config.md` (actual:
   `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`).
@@ -471,9 +471,9 @@ Current. Keep as-is.
 ### Theme 1: GO.md Grounding Pattern (15 non-archive files)
 
 GO.md exists at the repository root and is still referenced in
-AGENT.md, `docs/README.md`, `docs/quick-start.md`,
-`docs/development/onboarding.md`, `docs/development/README.md`,
-`docs/agent-guidance/ai-agent-guide.md`,
+AGENT.md, `docs/README.md`, `docs/foundation/quick-start.md`,
+`docs/foundation/onboarding.md`, `docs/engineering/README.md`,
+`docs/governance/ai-agent-guide.md`,
 `packages/sdks/oak-curriculum-sdk/docs/docs-pipeline.md`, and
 several `.agent/plans/` files.
 
@@ -491,11 +491,11 @@ The project was originally "Oak Notion MCP" and has evolved into a
 curriculum SDK + search + MCP ecosystem. The `apps/oak-notion-mcp/`
 workspace was deleted. Files still referencing Notion MCP:
 
-- `docs/agent-guidance/ai-agent-guide.md` (throughout)
-- `docs/agent-guidance/README.md` (line 3)
+- `docs/governance/ai-agent-guide.md` (throughout)
+- `docs/governance/README.md` (line 3)
 - `docs/usage/README.md` (throughout)
 - `docs/usage/api-reference.md` (throughout)
-- `docs/development/onboarding.md` (title and content)
+- `docs/foundation/onboarding.md` (title and content)
 - `.agent/plans/high-level-plan.md` (Item #4)
 - `.agent/research/error_handling/oak-error-handling-survey.md`
 - `.cursor/agents/architecture-reviewer.md` (example)
@@ -506,13 +506,13 @@ workspace was deleted. Files still referencing Notion MCP:
 
 `pnpm format` should be `pnpm format:root`. Found in:
 
-- `docs/development/onboarding.md`
-- `docs/agent-guidance/development-practice.md`
-- `docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md`
-- `docs/agent-guidance/ai-agent-guide.md` (`pnpm format` and
+- `docs/foundation/onboarding.md`
+- `docs/governance/development-practice.md`
+- `docs/governance/curriculum-tools-guidance-and-playbooks.md`
+- `docs/governance/ai-agent-guide.md` (`pnpm format` and
   `pnpm lint` should be `pnpm lint:fix`)
 - `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md`
-- `docs/development/build-system.md` (incorrect `pnpm check`
+- `docs/engineering/build-system.md` (incorrect `pnpm check`
   description)
 - `.claude/commands/jc-quality-gates.md` (`pnpm format`,
   `pnpm check-types`)
@@ -541,7 +541,7 @@ Major categories:
   `GROUND-TRUTH-GUIDE.md` or `ground-truth-protocol.md`)
 - **`DIAGNOSTIC-QUERIES.md`**: Referenced in 2 places; does not exist
 - **`experimental-architecture-quick-reference.md`**: Referenced in
-  `docs/agent-guidance/README.md`; does not exist
+  `docs/governance/README.md`; does not exist
 - **`oak-components-theming.md`**: Referenced in
   `apps/oak-search-cli/docs/README.md`; does not exist
 - **Archived ADR links**: 020, 021, 023 in ADR index point to main
@@ -563,13 +563,13 @@ contains MCP testing strategy content (wrong workspace).
 ### Theme 7: Removed Packages and Scripts
 
 - `@oaknational/mcp-storage`, `@oaknational/mcp-transport`:
-  Referenced in `docs/development/onboarding.md`,
-  `docs/agent-guidance/ai-agent-guide.md`
+  Referenced in `docs/foundation/onboarding.md`,
+  `docs/governance/ai-agent-guide.md`
 - `test-query-*.ts` scripts: Referenced in
   `.cursor/skills/ground-truth-design/SKILL.md`,
   `.cursor/skills/ground-truth-evaluation/SKILL.md`
 - `createAdaptiveLogger`: Referenced in
-  `docs/agent-guidance/logging-guidance.md`,
+  `docs/governance/logging-guidance.md`,
   `packages/libs/logger/README.md`
 - `test:e2e:built`: Referenced in
   `.cursor/commands/jc-start-right-thorough.md`,
@@ -589,9 +589,9 @@ contains MCP testing strategy content (wrong workspace).
 
 ### Files requiring rewrite or deletion (highest impact)
 
-1. `docs/development/onboarding.md` -- **Rewrite** (primary
+1. `docs/foundation/onboarding.md` -- **Rewrite** (primary
    onboarding path is broken)
-2. `docs/agent-guidance/ai-agent-guide.md` -- **Delete or rewrite**
+2. `docs/governance/ai-agent-guide.md` -- **Delete or rewrite**
    (deeply stale, redundant with AGENT.md)
 3. `docs/usage/README.md` -- **Delete or rewrite** (entirely about
    Notion MCP)
@@ -600,7 +600,7 @@ contains MCP testing strategy content (wrong workspace).
 5. `docs/onboarding.md` -- **Delete** (compatibility pointer)
 6. `docs/research/README.md` -- **Delete or rewrite** (references
    non-existent research target)
-7. `docs/agent-guidance/understanding-agent-references.md` --
+7. `docs/governance/understanding-agent-references.md` --
    **Rewrite** (wrong paths, Notion focus)
 8. 6 `apps/oak-search-cli/operations/` READMEs -- **Replace** (wrong
    workspace content)
@@ -614,14 +614,14 @@ contains MCP testing strategy content (wrong workspace).
 
 The audit confirms `docs/onboarding.md` is a compatibility pointer
 that must be deleted. The canonical path
-`docs/development/onboarding.md` requires a full rewrite -- it is
+`docs/foundation/onboarding.md` requires a full rewrite -- it is
 the most broken file in the onboarding path. WS1 should also decide
 the fate of GO.md.
 
 ### WS2 (Command Truth and Drift Removal)
 
 9 files contain stale `pnpm format` commands. The
-`docs/agent-guidance/ai-agent-guide.md` file is the worst offender
+`docs/governance/ai-agent-guide.md` file is the worst offender
 (multiple wrong commands). WS2 should also address
 `.cursor/commands/` and `.claude/commands/` staleness.
 
@@ -636,14 +636,14 @@ content that needs deletion or rewrite.
 
 ### WS4 (Credential, Access, and Contribution Messaging)
 
-`docs/agent-guidance/safety-and-security.md` still uses Notion-
-specific credential examples. `docs/development/environment-variables.md`
+`docs/governance/safety-and-security.md` still uses Notion-
+specific credential examples. `docs/operations/environment-variables.md`
 has a broken link to the Vercel config. Node.js 24.x is inconsistently
 referenced (5 files say 22).
 
 ### WS5 (Release Operator Onboarding)
 
-`docs/development/release-and-publishing.md` is current. No audit
+`docs/engineering/release-and-publishing.md` is current. No audit
 issues affect WS5 scope.
 
 ### WS6 (First-Day Rehearsal)
@@ -651,6 +651,6 @@ issues affect WS5 scope.
 The audit reveals that a new developer following the documented
 onboarding path would encounter: a compatibility redirect
 (`docs/onboarding.md`), an entirely Notion-focused onboarding doc
-(`docs/development/onboarding.md`), wrong commands, broken links,
+(`docs/foundation/onboarding.md`), wrong commands, broken links,
 and references to removed packages. WS6 rehearsal cannot succeed
 until WS1-WS4 are complete.

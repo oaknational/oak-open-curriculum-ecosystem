@@ -311,10 +311,10 @@ Documentation Updates:
 - Updated `packages/sdks/oak-curriculum-sdk/README.md` - Added Logging section with examples
 - Updated `apps/oak-curriculum-mcp-streamable-http/README.md` - Added Production Logging section
 - Updated `apps/oak-curriculum-mcp-stdio/README.md` - Added Log File Management section
-- Created `docs/development/production-debugging-runbook.md` - Operational debugging guide
-- Created `docs/agent-guidance/logging-guidance.md` - AI agent logging guidance
-- Updated `docs/development/README.md` - Added link to debugging runbook
-- Updated `docs/agent-guidance/README.md` - Added link to logging guidance
+- Created `docs/operations/production-debugging-runbook.md` - Operational debugging guide
+- Created `docs/governance/logging-guidance.md` - AI agent logging guidance
+- Updated `docs/engineering/README.md` - Added link to debugging runbook
+- Updated `docs/governance/README.md` - Added link to logging guidance
 
 Environment & Configuration:
 
@@ -354,5 +354,5 @@ Re-run the full suite before every hand-off and after significant changes.
 - `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` – ADR for OpenTelemetry format
 - `packages/libs/logger/README.md` – logger usage, entry points, sink configuration
 - `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance
-- `docs/development/production-debugging-runbook.md` – operational debugging guide
+- `docs/operations/production-debugging-runbook.md` – operational debugging guide
 - 📜 `.agent/plans/rescue-plan-2025-11-05.md` – Completed rescue plan (historical reference)

@@ -161,9 +161,9 @@ post-merge follow-up clean-up plan.
 |----------|---------|
 | [phase-3a-mcp-search-integration.md](../../archive/completed/phase-3a-mcp-search-integration.md) | Search tool wiring (Phase 3a) |
 | [../roadmap.md](../../roadmap.md) | Master roadmap |
-| [@oaknational/result](/packages/core/result/) | Canonical Result type |
-| [execute-tool-call.ts](/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts) | Current `ToolExecutionResult` definition |
-| [universal-tool-shared.ts](/packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts) | Current `extractExecutionData` |
+| [@oaknational/result](../../../../../packages/core/result/) | Canonical Result type |
+| [execute-tool-call.ts](../../../../../packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts) | Current `ToolExecutionResult` definition |
+| [universal-tool-shared.ts](../../../../../packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts) | Current `extractExecutionData` |
 
 ---
 

@@ -1,11 +1,22 @@
+---
+boundary: cross-boundary
+doc_role: index
+authority: docs-root-navigation
+status: active
+last_reviewed: 2026-02-25
+---
+
 # Documentation for Oak MCP Ecosystem
+
+**Last Updated**: 2026-02-25  
+**Status**: Active index
 
 ## Getting Started
 
-- **New to the repo?** → [Developer Onboarding](development/onboarding.md) — canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
-- **Quick start?** → [Quick Start Guide](quick-start.md) — Zero-setup path to productive changes
-- **Vision and strategy?** → [VISION.md](VISION.md) — why this repository exists, what it delivers, and how we measure impact
-- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](agent-guidance/ai-agent-guide.md)
+- **New to the repo?** → [Developer Onboarding](foundation/onboarding.md) — canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
+- **Quick start?** → [Quick Start Guide](foundation/quick-start.md) — Zero-setup path to productive changes
+- **Vision and strategy?** → [foundation/VISION.md](foundation/VISION.md) — why this repository exists, what it delivers, and how we measure impact
+- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then use [AI Agent Guide](governance/ai-agent-guide.md)
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 
 ## Core Documentation
@@ -22,23 +33,23 @@
 
 ### Development
 
-- [Developer Onboarding](development/onboarding.md) - First-stop checklist for new contributors
-- [Development Workflow](development/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
-- [Environment Variables](development/environment-variables.md) - Complete setup guide
-- [Extension Points](development/extending.md) - How to add new MCP tools, search indices, SDK helpers
-- [Troubleshooting](development/troubleshooting.md) - Common issues and solutions
-- [Tooling](development/tooling.md) - Development tools and versions
+- [Developer Onboarding](foundation/onboarding.md) - First-stop checklist for new contributors
+- [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
+- [Environment Variables](operations/environment-variables.md) - Complete setup guide
+- [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers
+- [Troubleshooting](operations/troubleshooting.md) - Common issues and solutions
+- [Tooling](engineering/tooling.md) - Development tools and versions
 
 ### Curriculum Data
 
-- [Curriculum Guide](curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
-- [Data Variances](data/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
+- [Curriculum Guide](domain/curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
+- [Data Variances](domain/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 - [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) - Canonical entity-relationship source used by generated tooling
 
 ### Agentic Engineering Practice
 
-- [Practice Explanation (for humans)](development/onboarding.md#12-the-agentic-engineering-practice) - What the AI sub-agents do, when they run, and what is expected of human developers
+- [Practice Explanation (for humans)](foundation/onboarding.md#12-the-agentic-engineering-practice) - What the AI sub-agents do, when they run, and what is expected of human developers
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
 - [practice.md](../.agent/directives/practice.md) - Full map of the practice system
 
@@ -46,11 +57,11 @@
 
 Comprehensive documentation for AI agents working with this codebase:
 
-- [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Primary guide for AI agents
-- [Development Practice](agent-guidance/development-practice.md) - Code standards and workflow
-- [TypeScript Practice](agent-guidance/typescript-practice.md) - Type safety guidelines
+- [AI Agent Guide](governance/ai-agent-guide.md) - Primary guide for AI agents
+- [Development Practice](governance/development-practice.md) - Code standards and workflow
+- [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines
 - [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels
-- [Safety and Security](agent-guidance/safety-and-security.md) - Security measures and privacy protection
+- [Safety and Security](governance/safety-and-security.md) - Security measures and privacy protection
 
 ## Search Application
 

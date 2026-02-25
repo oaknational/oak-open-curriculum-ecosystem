@@ -1,5 +1,25 @@
 # Napkin
 
+## Session: 2026-02-25 — Phase 7 Merge Readiness (COMPLETE)
+
+### What happened
+
+Executed Phase 7 of SDK workspace separation plan. Full 12-gate quality
+chain passed from clean. Codegen determinism verified (zero diff on re-run).
+Implemented `scripts/check-generated-drift.sh` per F16, integrated into CI
+and local gates. 8 specialist reviewers invoked — all approved. Drift check
+subsequently removed: redundant with `pnpm check` (clean+build regenerates;
+diffing after that is meaningless) and caused `pnpm check` to fail.
+
+### Patterns
+
+- **Script-based checks must fit their context**: `pnpm check` runs clean+build.
+  Running codegen again and diffing against git adds nothing — the files were
+  just regenerated. A drift check only makes sense where committed files are
+  *not* freshly regenerated (e.g. pre-commit on dirty tree). Removed entirely.
+
+---
+
 ## Session: 2026-02-25 — Consolidation (Typegen Plan, Codegen README)
 
 ### What happened

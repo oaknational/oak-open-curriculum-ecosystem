@@ -19,7 +19,7 @@ todos:
     status: completed
   - id: fix-quick-start-anchor
     content: >
-      Fix `docs/quick-start.md` links to the onboarding caveat anchor
+      Fix `docs/foundation/quick-start.md` links to the onboarding caveat anchor
       (`#known-gate-caveat`), or rename the onboarding heading to match the
       existing linked plural anchor.
     status: completed
@@ -74,8 +74,8 @@ These decisions are treated as binding direction for follow-up work.
 ### Low
 
 3. Quick-start anchor mismatch:
-   - `docs/quick-start.md` links to `#known-gate-caveats`
-   - `docs/development/onboarding.md` heading is singular:
+   - `docs/foundation/quick-start.md` links to `#known-gate-caveats`
+   - `docs/foundation/onboarding.md` heading is singular:
      `### Known Gate Caveat`
    - Result: in-page link mismatch.
 
@@ -134,8 +134,8 @@ historical snapshot with an updated current-state assessment.
 On review, 2 of 5 findings were already resolved (smoke script existed,
 ADR links already correct). The remaining 3 were confirmed and fixed:
 
-- **Anchor mismatch**: `docs/development/onboarding.md` heading changed from
-  singular to plural (`Known Gate Caveats`) to match `docs/quick-start.md` links.
+- **Anchor mismatch**: `docs/foundation/onboarding.md` heading changed from
+  singular to plural (`Known Gate Caveats`) to match `docs/foundation/quick-start.md` links.
 - **Health endpoint**: `CLERK_SKIP_PATHS` contained phantom `/health` and `/ready`
   (no routes existed for either). Replaced with `/healthz` (the actual endpoint).
   Updated TSDoc, comments in `auth-routes.ts`, and both unit and integration tests.

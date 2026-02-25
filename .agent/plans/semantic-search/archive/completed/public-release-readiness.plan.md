@@ -987,7 +987,7 @@ deliberately part of Oak's approach to AI-assisted development.
 | `.agent/directives/rules.md` | Quality standards that all changes must meet |
 | `.agent/directives/testing-strategy.md` | Test classification rules |
 | `.agent/directives/schema-first-execution.md` | Cardinal rule for type generation |
-| `docs/development/onboarding.md` | Canonical onboarding document (deep refinement in dedicated onboarding plan) |
+| `docs/foundation/onboarding.md` | Canonical onboarding document (deep refinement in dedicated onboarding plan) |
 | `active/developer-onboarding-experience.plan.md` | Dedicated onboarding refinement plan |
 | `CONTRIBUTING.md` | External contributor process (WS4b/4c) |
 | `SECURITY.md` | Security reporting process |

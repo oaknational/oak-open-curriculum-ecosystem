@@ -16,8 +16,8 @@ You MUST also read and internalise these domain-specific documents:
 | Document | Purpose |
 |----------|---------|
 | `docs/architecture/README.md` | Architecture overview and ADR index |
-| `docs/agent-guidance/typescript-practice.md` | Type safety guidance |
-| `docs/agent-guidance/development-practice.md` | Code standards |
+| `docs/governance/typescript-practice.md` | Type safety guidance |
+| `docs/governance/development-practice.md` | Code standards |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
 | `.agent/sub-agents/components/architecture/reviewer-team.md` | Architecture reviewer personas and perspectives |
 

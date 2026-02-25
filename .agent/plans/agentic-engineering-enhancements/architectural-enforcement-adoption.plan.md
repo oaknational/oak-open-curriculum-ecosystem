@@ -88,7 +88,7 @@ authoritative execution tasks for this stream live in:
 
 ### Phase 2: Boundary Definition (ESLint)
 
-- **Precursor:** The [SDK workspace separation](../semantic-search/active/sdk-workspace-separation.md)
+- **Precursor:** The [SDK workspace separation](../semantic-search/archive/completed/sdk-workspace-separation.md) (archived)
   plan implements targeted SDK boundary rules (`createSdkBoundaryRules()` in
   `boundary.ts`) enforcing the sdks DAG constraint for the generation/runtime
   split. These should integrate with the broader layer enforcement when

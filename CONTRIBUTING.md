@@ -61,14 +61,14 @@ The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 5. **Core Infrastructure** (`packages/core/`)
 6. **Infrastructure Libraries** (`packages/libs/`)
 
-For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/development/extending.md).
+For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/engineering/extending.md).
 
 ## For Oak Team Members
 
 The rest of this guide is for internal contributors.
 
 Before making changes, start with the canonical onboarding guide:
-[docs/development/onboarding.md](docs/development/onboarding.md)
+[docs/foundation/onboarding.md](docs/foundation/onboarding.md)
 
 ### Prerequisites
 
@@ -153,14 +153,14 @@ pnpm -C apps/oak-curriculum-mcp-stdio dev
 ```
 
 Get your Oak API key from: Contact Oak engineering team or see
-[Environment Variables Guide](docs/development/environment-variables.md).
+[Environment Variables Guide](docs/operations/environment-variables.md).
 
 #### Level 3: Full Stack Development (1-2 hours setup)
 
 **Requires: Multiple service credentials**
 
 For smoke testing and search functionality (E2E tests use mocks and DI — no
-real credentials needed; see [Build System](docs/development/build-system.md)):
+real credentials needed; see [Build System](docs/engineering/build-system.md)):
 
 - `OAK_API_KEY` — Curriculum API
 - `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices
@@ -171,7 +171,7 @@ See workspace READMEs for detailed setup instructions.
 
 ## Development Process
 
-For the complete development lifecycle — branching, TDD, quality gates, CI, AI review, human review, merge, and release — see the [Development Workflow](docs/development/workflow.md).
+For the complete development lifecycle — branching, TDD, quality gates, CI, AI review, human review, merge, and release — see the [Development Workflow](docs/engineering/workflow.md).
 
 ### 1. Create a Feature Branch
 

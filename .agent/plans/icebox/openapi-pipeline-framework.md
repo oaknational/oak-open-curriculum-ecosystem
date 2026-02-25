@@ -3,7 +3,7 @@
 **Status**: Icebox
 **Created**: November 2025
 **Last Reviewed**: 23 February 2026
-**ADR**: [ADR-108: SDK Workspace Decomposition](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+**ADR**: [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 
 ## Concept
 
@@ -58,5 +58,5 @@ but never moved beyond PROPOSED/DRAFT status.
 
 ## References
 
-- [ADR-108: SDK Workspace Decomposition](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
-- [SDK Workspace Separation Plan](../semantic-search/active/sdk-workspace-separation.md)
+- [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+- [SDK Workspace Separation Plan](../semantic-search/archive/completed/sdk-workspace-separation.md) (archived)

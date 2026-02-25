@@ -12,7 +12,7 @@ Strategic and tactical planning documents for the Oak MCP Ecosystem.
 
 | Collection | Purpose | Status |
 |------------|---------|--------|
-| [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Active |
+| [semantic-search/](semantic-search/) | Elasticsearch search implementation | ✅ Merge-prep complete; secrets sweep next |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
 | [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 📋 Planned |
@@ -477,5 +477,5 @@ Stream X: [Name]                                    [Annotation]
 ## References
 
 - [ADR-081: Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Experiment structure
-- [Evaluation README](../evaluations/README.md) — Experiment documentation conventions
+- [Evaluations Directory](../evaluations/) — Experiment documentation conventions
 - [high-level-plan.md](high-level-plan.md) — Strategic coordination

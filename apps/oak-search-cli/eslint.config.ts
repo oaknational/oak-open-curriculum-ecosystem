@@ -20,6 +20,7 @@ const eslintConfig = defineConfig(
     'vitest.config.ts',
     'vitest.e2e.config.ts',
     'bulk-downloads/**',
+    'scripts/**/*.mjs',
   ]),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)

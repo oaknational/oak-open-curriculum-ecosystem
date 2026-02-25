@@ -1,5 +1,8 @@
 # The OpenAPI-First Pipeline
 
+**Last Updated**: 2026-02-25  
+**Status**: Active architecture reference
+
 ## Problem Statement
 
 Traditional API integration requires:
@@ -221,7 +224,7 @@ This pattern is formalized in several ADRs:
 
 - [Programmatic Tool Generation](./programmatic-tool-generation.md) - Details on MCP tool generation
 - [SDK Documentation](../../packages/sdks/oak-curriculum-sdk/README.md) - Runtime usage of the generated SDK
-- [Development Onboarding](../development/onboarding.md) - Getting started guide
+- [Development Onboarding](../foundation/onboarding.md) - Getting started guide
 
 ## Execution Model: Schema-First Tool Invocation
 

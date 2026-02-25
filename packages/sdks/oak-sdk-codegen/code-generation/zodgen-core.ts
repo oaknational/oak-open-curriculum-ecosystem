@@ -5,6 +5,23 @@ import type { OpenAPIObject, ResponsesObject } from 'openapi3-ts/oas31';
 import { generateZodSchemasFromOpenAPI } from './adapter/index.js';
 import { ensurePathsOnSchema } from './codegen-core-helpers.js';
 
+export interface ZodgenIO {
+  readonly existsSync: (path: string) => boolean;
+  readonly mkdirSync: (path: string, options: { readonly recursive: boolean }) => void;
+  readonly writeFileSync: (path: string, data: string) => void;
+  readonly generateZodSchemasFromOpenAPI: (opts: {
+    readonly openApiDoc: OpenAPIObject;
+    readonly distPath: string;
+  }) => Promise<{ readonly output: string }>;
+}
+
+const defaultIO: ZodgenIO = {
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  generateZodSchemasFromOpenAPI,
+};
+
 /**
  * Generates Zod endpoint definitions with parameter schemas from an OpenAPI document.
  * Uses the default template to generate complete endpoint definitions including request parameters.
@@ -13,11 +30,16 @@ import { ensurePathsOnSchema } from './codegen-core-helpers.js';
  *
  * @param openApiDoc - The OpenAPI document to generate from
  * @param outDir - The output directory for generated files
+ * @param io - Injectable IO dependencies (for testing)
  * @throws TypeError - If the OpenAPI document is invalid
  */
-export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: string): Promise<void> {
-  if (!existsSync(outDir)) {
-    mkdirSync(outDir, { recursive: true });
+export async function generateZodSchemas(
+  openApiDoc: OpenAPIObject,
+  outDir: string,
+  io: ZodgenIO = defaultIO,
+): Promise<void> {
+  if (!io.existsSync(outDir)) {
+    io.mkdirSync(outDir, { recursive: true });
   }
 
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
@@ -71,8 +93,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     }
   }
 
-  // Use the adapter to generate Zod schemas - output is already Zod v4
-  const { output } = await generateZodSchemasFromOpenAPI({
+  const { output } = await io.generateZodSchemasFromOpenAPI({
     openApiDoc,
     distPath: outFile,
   });
@@ -280,5 +301,5 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
 
   console.log('📝 Writing to file: ', outFile);
 
-  writeFileSync(outFile, sanitizedContent);
+  io.writeFileSync(outFile, sanitizedContent);
 }

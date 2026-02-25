@@ -210,7 +210,7 @@ Until the upstream API provides flat fields, we implement **denormalisation at i
 3. Decorate indexed documents with arrays of all applicable values
 4. Cache all SDK requests in Redis (14-day TTL with jitter)
 
-**Documented in**: [ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
+**Documented in**: [ADR-080: KS4 Metadata Denormalisation Strategy](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 
 **Limitations**:
 

@@ -142,7 +142,7 @@ Ground truth coverage should reflect teaching priority and content volume:
 | Ground truths validated | Known-answer-first methodology | ✅ Complete (ADR-106) |
 | Measured with validated GTs | Re-evaluate with current GTs | 📋 Planned (part of enhancements) |
 
-> **Note**: Level 1 approaches were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production; re-evaluation with validated ground truths is planned as an early stage of search enhancements.
+> **Note**: Level 1 approaches were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production; re-evaluation with validated ground truths is planned as an early stage of search enhancements.
 
 ### Standard Approaches Checklist
 
@@ -232,4 +232,4 @@ pnpm benchmark:lessons -s maths -p primary --review  # Per-query review
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Metrics and decision criteria |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Level system rationale |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Data integrity |
-| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

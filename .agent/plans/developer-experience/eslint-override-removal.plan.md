@@ -213,7 +213,7 @@ pnpm test        # All tests pass
 
 **Related Plans**:
 
-- [SDK Workspace Separation](../semantic-search/active/sdk-workspace-separation.md)
+- [SDK Workspace Separation](../semantic-search/archive/completed/sdk-workspace-separation.md) (archived)
   — Phase 2 introduced these overrides in the generation workspace.
   Findings F15 (runtime wildcard exports) and F17 (ESLint override tech debt)
   in the reviewer findings registry (§13) cross-reference this plan.

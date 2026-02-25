@@ -3,20 +3,12 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
-import { generateZodSchemas } from './zodgen-core.js';
+import { generateZodSchemas, type ZodgenIO } from './zodgen-core.js';
 
-vi.mock('node:fs', async (original) => {
-  const actual = await original();
-  return Object.assign({}, actual, {
-    existsSync: vi.fn(() => true),
-    mkdirSync: vi.fn(),
-    writeFileSync: vi.fn(),
-  });
-});
+const thisDir = path.dirname(fileURLToPath(import.meta.url));
+const outDir = path.join(thisDir, '__zod-test-output');
 
-vi.mock('openapi-zod-client', () => ({
-  generateZodClientFromOpenAPI: vi.fn().mockResolvedValue(
-    `import { z } from "zod";
+const fakeZodOutput = `import { z } from "zod";
 const endpoints = ([
   {
     method: "get",
@@ -27,14 +19,32 @@ const endpoints = ([
 export const schemas = {
   changelog_changelog_200: z.object({}),
 };
-`,
-  ),
-}));
+`;
 
-const thisDir = path.dirname(fileURLToPath(import.meta.url));
-const outDir = path.join(thisDir, '__zod-test-output');
-const { existsSync, mkdirSync, writeFileSync } = await import('node:fs');
-const { generateZodClientFromOpenAPI } = await import('openapi-zod-client');
+function createFakeIO(): ZodgenIO & {
+  readonly existsSyncSpy: ReturnType<typeof vi.fn<ZodgenIO['existsSync']>>;
+  readonly mkdirSyncSpy: ReturnType<typeof vi.fn<ZodgenIO['mkdirSync']>>;
+  readonly writeFileSyncSpy: ReturnType<typeof vi.fn<ZodgenIO['writeFileSync']>>;
+  readonly generateSpy: ReturnType<typeof vi.fn<ZodgenIO['generateZodSchemasFromOpenAPI']>>;
+} {
+  const existsSyncSpy = vi.fn<ZodgenIO['existsSync']>(() => true);
+  const mkdirSyncSpy = vi.fn<ZodgenIO['mkdirSync']>();
+  const writeFileSyncSpy = vi.fn<ZodgenIO['writeFileSync']>();
+  const generateSpy = vi
+    .fn<ZodgenIO['generateZodSchemasFromOpenAPI']>()
+    .mockResolvedValue({ output: fakeZodOutput });
+
+  return {
+    existsSync: existsSyncSpy,
+    mkdirSync: mkdirSyncSpy,
+    writeFileSync: writeFileSyncSpy,
+    generateZodSchemasFromOpenAPI: generateSpy,
+    existsSyncSpy,
+    mkdirSyncSpy,
+    writeFileSyncSpy,
+    generateSpy,
+  };
+}
 
 const minimalSchema: OpenAPIObject = {
   openapi: '3.0.3',
@@ -52,45 +62,44 @@ const minimalSchema: OpenAPIObject = {
 };
 
 describe('generateZodSchemas', () => {
+  let fakeIO: ReturnType<typeof createFakeIO>;
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(existsSync).mockReturnValue(true);
+    fakeIO = createFakeIO();
   });
 
-  it('passes the schema (with paths guaranteed) to openapi-zod-client', async () => {
-    await generateZodSchemas(minimalSchema, outDir);
+  it('passes the schema (with paths guaranteed) to the adapter', async () => {
+    await generateZodSchemas(minimalSchema, outDir, fakeIO);
 
-    const calls = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
-    expect(calls).toHaveLength(1);
-    const [{ openApiDoc }] = calls[0];
+    expect(fakeIO.generateSpy).toHaveBeenCalledTimes(1);
+    const { openApiDoc } = fakeIO.generateSpy.mock.calls[0][0];
     expect(openApiDoc).toStrictEqual(minimalSchema);
   });
 
   it('creates the output directory when it does not exist', async () => {
-    vi.mocked(existsSync).mockReturnValueOnce(false);
+    fakeIO.existsSyncSpy.mockReturnValueOnce(false);
 
-    await generateZodSchemas(minimalSchema, outDir);
+    await generateZodSchemas(minimalSchema, outDir, fakeIO);
 
-    expect(mkdirSync).toHaveBeenCalledWith(outDir, { recursive: true });
+    expect(fakeIO.mkdirSyncSpy).toHaveBeenCalledWith(outDir, { recursive: true });
   });
 
   it('writes the generated file to disk', async () => {
-    await generateZodSchemas(minimalSchema, outDir);
+    await generateZodSchemas(minimalSchema, outDir, fakeIO);
 
-    expect(writeFileSync).toHaveBeenCalledWith(
+    expect(fakeIO.writeFileSyncSpy).toHaveBeenCalledWith(
       expect.stringContaining('curriculumZodSchemas.ts'),
       expect.any(String),
     );
   });
 
   it('emits endpoints before curriculumSchemas to keep ordering valid', async () => {
-    await generateZodSchemas(minimalSchema, outDir);
+    await generateZodSchemas(minimalSchema, outDir, fakeIO);
 
-    const [, content] = vi.mocked(writeFileSync).mock.lastCall ?? [];
+    const [, content] = fakeIO.writeFileSyncSpy.mock.lastCall ?? [];
     if (typeof content !== 'string') {
       throw new Error('Content is not a string');
     }
-    // After Zod v4 migration, makeApi is removed and endpoints is a typed array
     const endpointsIndex = content.indexOf('export const endpoints:');
     const curriculumIndex = content.indexOf(
       'export const curriculumSchemas = curriculumSchemaCollection',

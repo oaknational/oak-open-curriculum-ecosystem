@@ -74,4 +74,4 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-See @docs/development/build-system.md and ADR-065 for caching details.
+See @docs/engineering/build-system.md and ADR-065 for caching details.

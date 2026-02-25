@@ -50,4 +50,4 @@ pnpm test
 pnpm test:e2e
 ```
 
-See @docs/development/build-system.md and ADR-065 for caching details.
+See @docs/engineering/build-system.md and ADR-065 for caching details.

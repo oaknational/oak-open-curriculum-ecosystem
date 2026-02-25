@@ -18,7 +18,7 @@ Milestone 0: Open Source Readiness               🔄 IN PROGRESS
 
 Milestone 1: Public Alpha                        📋 NEXT
   → Teachers use AI tools to access curriculum directly
-  → Clerk production migration, mcp-ext-app UI architecture
+  → Clerk production migration, Claude basic-branding decision gate
 
 Milestone 2: Post-Alpha Enhancements             📋 PLANNED
   → Richer curriculum interactions, more tools can connect
@@ -41,8 +41,8 @@ tools on Oak's open data for the first time.
 
 **Remaining work**:
 
-1. Complete merge-blocking plans:
-   - [sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
+1. ~~Complete merge-blocking plans~~ — SDK workspace separation **complete**
+   (archived [sdk-workspace-separation.md](semantic-search/archive/completed/sdk-workspace-separation.md))
 2. Final secrets and PII sweep across the entire repository
    - Verify `pnpm secrets:scan:all` passes
    - Manual review of configuration files, environment examples,
@@ -80,6 +80,18 @@ tools on Oak's open data for the first time.
 Gemini) to access Oak's curriculum directly — asking questions about lessons,
 finding resources, and adapting content without leaving their existing tools.
 
+**Public-alpha UX baseline**:
+
+1. SDK works.
+2. Search works.
+3. MCP server works.
+4. ChatGPT key commands show basic branding.
+
+**Remaining non-UX blockers**:
+
+1. Clerk production instance migration.
+2. Basic Sentry logging verification.
+
 **Pre-alpha work**:
 
 1. **Clerk production migration**
@@ -91,19 +103,29 @@ finding resources, and adapting content without leaving their existing tools.
    - Access control strategy, edge rate limiting, operational
      security controls
    - `CLERK_AUTHORIZED_PARTIES` environment variable implementation
-2. **MCP ext-app UI architecture** — decision gate
+2. **MCP Apps extension / Claude basic branding** — UX decision gate
    - Research plan:
      [mcp-extensions-research-and-planning.md](sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
      (Domain A)
    - **Decision gate (before Milestone 1 execution starts)**:
-     - **Option X**: Migrate to mcp-ext-app before public alpha
-       (Milestone 1 includes UI migration)
-     - **Option Y**: Launch public alpha with current widget
-       architecture, migrate in Milestone 2
+     - **Option X**: support MCP Apps extension enough to show basic branding in
+       Claude before public alpha
+     - **Option Y**: launch public alpha with ChatGPT basic branding only and
+       add Claude branding support in Milestone 2
    - The decision depends on Domain A research maturity and ext-app
      standard stability. If the standard is not yet stable enough,
      Option Y is the lower-risk path.
-3. **Security and privacy baseline progression**
+3. **Basic Sentry logging verification**
+   - Tracking plan:
+     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
+   - Minimum alpha gate: runtime errors and basic operational signals visible in
+     Sentry for core services
+4. **Onboarding simulations rerun (pre-alpha gate)**
+   - Canonical plan:
+     [onboarding-simulations-public-alpha-readiness.md](developer-experience/onboarding-simulations-public-alpha-readiness.md)
+   - Run updated simulations across the 8 baseline personas and close any
+     remaining P0 blockers before Milestone 1 exit.
+5. **Security and privacy baseline progression**
    - Collection roadmap:
      [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
    - Immediate priority sequence:
@@ -112,7 +134,7 @@ finding resources, and adapting content without leaving their existing tools.
    - Lower-priority controls (sandboxing expansion and prompt-injection
      automation) tracked as deferred notes until the first two controls
      are operational.
-4. **User-experience contract for public alpha**
+6. **User-experience contract for public alpha**
    - Collection hub:
      [user-experience/README.md](user-experience/README.md)
    - Alpha readiness contract:
@@ -222,7 +244,7 @@ provides the boundary checks that quality metrics will track).
 Strategic architecture remains anchored in:
 
 - [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
-- [semantic-search/active/sdk-workspace-separation.md](semantic-search/active/sdk-workspace-separation.md)
+- [SDK workspace separation plan](semantic-search/archive/completed/sdk-workspace-separation.md) (archived, complete)
 - Pipeline framework extraction (iceboxed):
   [icebox/openapi-pipeline-framework.md](icebox/openapi-pipeline-framework.md)
 

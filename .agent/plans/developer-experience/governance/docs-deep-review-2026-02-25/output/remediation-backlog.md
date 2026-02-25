@@ -15,8 +15,8 @@
 
 - Exact file(s):
   - `docs/README.md`
-  - `docs/data/DATA-VARIANCES.md`
-  - `docs/data/README.md`
+  - `docs/domain/DATA-VARIANCES.md`
+  - `docs/domain/README.md`
 - Problem statement: links target removed paths under `packages/sdks/oak-curriculum-sdk/src/...`.
 - Evidence: `output/missing-link-summary.tsv` and findings DF-001/DF-002.
 - Target change:
@@ -58,16 +58,16 @@
 ### RB-004 (DF-008) — Standardise KS4 terminology (`ks4Options` vs pathway)
 
 - Exact file(s):
-  - `docs/quick-start.md`
-  - `docs/data/README.md`
-  - `docs/data/DATA-VARIANCES.md`
+  - `docs/foundation/quick-start.md`
+  - `docs/domain/README.md`
+  - `docs/domain/DATA-VARIANCES.md`
 - Problem statement: conflicting representation of pathway metadata.
 - Evidence: quick-start/data README use pathway language; DATA-VARIANCES states pathway never existed in API.
 - Target change:
   - Use API-accurate term (`ks4Options`) as primary term.
   - Optionally retain pathway as historical alias with explicit caveat.
 - Validation command(s):
-  - `rg -n 'pathway|ks4Options' docs/quick-start.md docs/data/README.md docs/data/DATA-VARIANCES.md`
+  - `rg -n 'pathway|ks4Options' docs/foundation/quick-start.md docs/domain/README.md docs/domain/DATA-VARIANCES.md`
 - Dependency notes: verify against SDK ontology source before merge.
 
 ## S2 (Planned)
@@ -77,8 +77,8 @@
 - Exact file(s):
   - `docs/architecture/openai-connector-deprecation.md`
   - `docs/architecture/programmatic-tool-generation.md`
-  - `docs/data/DATA-VARIANCES.md`
-  - `docs/data/README.md`
+  - `docs/domain/DATA-VARIANCES.md`
+  - `docs/domain/README.md`
 - Problem statement: active docs link to non-resolving plan leaf files.
 - Evidence: `output/missing-link-triage.tsv` classifications `provenance-exception` and `deprecate-link`.
 - Target change:
@@ -100,17 +100,17 @@
 
 ### RB-007 (DF-007) — Align structural pattern counts across summaries
 
-- Exact file(s): `docs/quick-start.md`, `docs/data/DATA-VARIANCES.md`
+- Exact file(s): `docs/foundation/quick-start.md`, `docs/domain/DATA-VARIANCES.md`
 - Problem statement: quick-start summary and domain reference disagree on pattern count.
 - Evidence: quick-start line 117 vs DATA-VARIANCES line 150.
 - Target change:
   - Set one authoritative count in domain doc and reference it from quick-start.
 - Validation command(s):
-  - `rg -n 'structural patterns|Pattern Types' docs/quick-start.md docs/data/DATA-VARIANCES.md`
+  - `rg -n 'structural patterns|Pattern Types' docs/foundation/quick-start.md docs/domain/DATA-VARIANCES.md`
 
 ### RB-008 (DF-009) — Clarify command-precedence model for quality gates
 
-- Exact file(s): `docs/development/onboarding.md`, `docs/development/workflow.md`, `docs/agent-guidance/development-practice.md`
+- Exact file(s): `docs/foundation/onboarding.md`, `docs/engineering/workflow.md`, `docs/governance/development-practice.md`
 - Problem statement: local convenience command flow can conflict with directive-level gate ordering for agent work.
 - Evidence: onboarding/workflow aggregate commands vs start-right-thorough one-gate sequence.
 - Target change:

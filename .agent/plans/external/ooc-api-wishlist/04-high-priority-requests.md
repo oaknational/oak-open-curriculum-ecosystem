@@ -856,7 +856,7 @@ All resource types that have both API and OWA representations:
 
 **Status**: 🔴 HIGH PRIORITY — Required for reliable API traversal  
 **Date**: 2025-12-28 (Updated with comprehensive 17-subject analysis)  
-**Related Analysis**: [Curriculum Structure Analysis](../../curriculum-structure-analysis.md), [ADR-080](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
+**Related Analysis**: [Curriculum Structure Analysis](../../../analysis/curriculum-structure-analysis.md), [ADR-080](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 
 **The Problem:**
 

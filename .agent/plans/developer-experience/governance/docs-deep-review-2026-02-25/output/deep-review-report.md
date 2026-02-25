@@ -1,112 +1,76 @@
 # Deep Review Report (25 February 2026)
 
-## Scope and current-state confirmation
+## Execution Mode
 
-This execution regenerated all evidence from the current repository state before analysis.
+This is the post-move update for the **Boundary Move Wave + ADR Provenance Link Remediation** (items 1 and 3).
 
-- Primary scope: 33 non-archive, non-ADR docs under `docs/`.
-- Related scope: 35 linked non-`docs/` files.
-- Missing local links: 9.
+- Scope executed: boundary move wave + ADR stale plan-link clean-up
+- Move execution: applied from `output/move-proposals.tsv`
+- Commit strategy: none (no commits created)
+- Quality suite scope: full one-gate-at-a-time suite deferred by decision
+- Provenance policy: hybrid; direct archive links where available, stable plan indexes otherwise
 
-Compared with the previous snapshot, related linked file count changed from 36 to 35, confirming documentation/link state has shifted.
+## Baseline vs Post-Move Delta
 
-## Boundary-by-boundary audit
+| Metric | Baseline | Post-move | Delta |
+| --- | --- | --- | --- |
+| Primary docs in scope | 33 | 35 | +2 |
+| Primary lines in scope | 6,829 | 7,006 | +177 |
+| Missing local links | 9 | 0 | -9 |
+| Move-map rows applied | 0 | 25 | +25 |
+| Old-path references (active surfaces) | 224 | 0 | -224 |
 
-### B0-Foundation
+Supporting artefacts:
 
-Reviewed:
+- `output/move-wave-old-path-reference-baseline.tsv`
+- `output/move-wave-old-path-reference-after.tsv`
+- `output/missing-link-summary.tsv`
+- `evidence/missing-links.tsv`
+- `evidence/evidence-summary.md`
 
-- `docs/README.md`
-- `docs/VISION.md`
-- `docs/quick-start.md`
+## Findings Status Delta
 
-Findings:
+Resolved in this wave:
 
-- Root index has a broken domain truth-source link (DF-001).
-- Root index contains stale ADR count metadata (DF-004).
-- Quick-start has domain summary drift and term drift against domain docs (DF-007, DF-008).
+- S1 resolved: `DF-001`, `DF-002`, `DF-005`, `DF-006`, `DF-008`
+- S2 resolved: `DF-003`, `DF-004`, `DF-007`, `DF-009`, `DF-011`, `DF-012`
+- S3 resolved: `DF-010` (boundary ownership now explicit via boundary directories and entrypoint metadata)
 
-### B1-Governance
+Authoritative statuses:
 
-Reviewed:
+- `output/doc-findings.tsv`
+- `output/doc-findings.md`
 
-- `docs/agent-guidance/*` and linked normative directives under `.agent/directives/*`.
+## What Changed in Docs
 
-Findings:
+1. Executed all non-retain move rows from `output/move-proposals.tsv` (25 moves).
+2. Added boundary entrypoint indices:
+   - `docs/foundation/README.md`
+   - `docs/operations/README.md`
+3. Applied boundary frontmatter metadata to boundary entrypoints and retained `docs/README.md` as cross-boundary gateway.
+4. Rewrote active references to moved paths and re-established zero missing local links.
+5. Remediated targeted ADR stale plan links using archive-completed links:
+   - `docs/architecture/architectural-decisions/026-openapi-code-generation-strategy.md`
+   - `docs/architecture/architectural-decisions/028-zod-validation-deferral.md`
+   - `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md`
 
-- Schema-first and `sdk-codegen` governance language is broadly aligned.
-- Quality-gate execution guidance in developer docs can diverge from directive precedence for agent execution (DF-009).
+## Artefacts Updated in This Pass
 
-### B2-Architecture
+- `evidence/primary-docs.txt`
+- `evidence/primary-docs-overview.tsv`
+- `evidence/related-links.tsv`
+- `evidence/related-outside-docs.txt`
+- `evidence/missing-links.tsv`
+- `evidence/evidence-summary.md`
+- `output/missing-link-summary.tsv`
+- `output/missing-link-triage.tsv`
+- `output/doc-findings.tsv`
+- `output/doc-findings.md`
+- `output/deep-review-report.md`
 
-Reviewed:
+## Reorganisation State
 
-- `docs/architecture/*` (excluding ADR directory).
+Boundary-led reorganisation is now implemented for item 1 scope, with item 3 ADR provenance remediations complete.
 
-Findings:
-
-- Provider pages are explicitly stale but still presented as active architecture entrypoints (DF-005).
-- Programmatic tool generation doc includes non-existent "current" file paths (DF-006).
-- Two architecture docs link to missing provenance plans (DF-003).
-
-### B3-Domain-Data
-
-Reviewed:
-
-- `docs/data/*`
-- `docs/curriculum-guide.md`
-- linked code truth path `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts`
-
-Findings:
-
-- Multiple broken links to moved SDK/generated artefacts (DF-002).
-- Domain terminology conflict (`pathway` vs `ks4Options`) across domain and foundation docs (DF-008).
-- Missing MFL plan links should be de-risked via stable index references (DF-003, DF-012).
-
-### B4-Engineering-Operations
-
-Reviewed:
-
-- `docs/development/*`
-
-Findings:
-
-- High-centrality docs lack consistent freshness markers (DF-011).
-- Workflow/onboarding aggregate command guidance needs explicit precedence note for directive-ordered agent execution (DF-009).
-
-### B5-Historical-Provenance
-
-Reviewed as provenance-only:
-
-- linked `.agent/plans/archive/*`, `.agent/plans/icebox/*`, `.agent/plans/external/*`, `.agent/analysis/*`, `.agent/memory/*`, `.agent/experience/*`.
-
-Findings:
-
-- Active docs link directly to volatile provenance leaf files more than is desirable (DF-012).
-
-## Cross-boundary consistency outcome
-
-Topic matrix: `output/cross-boundary-claims-matrix.md`
-
-- Onboarding path: aligned, with boundary ownership clarity opportunity.
-- Quality gates and TDD policy: partially conflicting presentation layer.
-- Schema-first contract: aligned.
-- Provider architecture status: conflicting/stale.
-- Data variances and source-truth references: conflicting and partially broken.
-- Release/publishing boundaries: aligned with current package privacy scan.
-
-## Reorganisation proposal status
-
-Boundary-led move map is fully specified in `output/move-proposals.tsv`.
-
-- Total proposals: 26 (including one explicit retain row for `docs/README.md`).
-- Split of `docs/development/*` into engineering vs operations is explicit.
-- Foundation relocation of onboarding is explicit.
-
-## Implementation readiness
-
-- Findings register: complete (`output/doc-findings.tsv` and `.md`).
-- Backlog with execution packets and validation commands: complete (`output/remediation-backlog.md`).
-- Acceptance checks: complete (`output/acceptance-checks.md`).
-
-This package is decision-complete for a follow-on implementation pass.
+- Move map source remains: `output/move-proposals.tsv`
+- Navigation continuity maintained through `docs/README.md` and boundary entrypoints

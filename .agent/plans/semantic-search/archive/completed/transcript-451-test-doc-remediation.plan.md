@@ -388,7 +388,7 @@ options is correct there (if reclassified as smoke test per
 
 ### 3a: DATA-VARIANCES.md
 
-**File**: `docs/data/DATA-VARIANCES.md` (lines 59-67)
+**File**: `docs/domain/DATA-VARIANCES.md` (lines 59-67)
 
 Currently states French returns "500 server error" and German
 returns "500 server error". Spanish shown as "404".
@@ -607,7 +607,7 @@ respective contexts, but the naming diverges.
 | [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md) | DI for testability (needs scope widening in WS3) |
 | [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result pattern governing error types |
 | [ADR-092](../../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Transcript cache categorisation (needs update in WS3) |
-| [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) | Data variance reference (needs update in WS3) |
+| [DATA-VARIANCES.md](../../../../docs/domain/DATA-VARIANCES.md) | Data variance reference (needs update in WS3) |
 | [API wishlist](../../external/ooc-api-wishlist/00-overview-and-known-issues.md) | Upstream API issues (needs update in WS3) |
 | [testing-strategy.md](../../../directives/testing-strategy.md) | E2E test rules |
 | [schema-first-execution.md](../../../directives/schema-first-execution.md) | Generator-first mandate |

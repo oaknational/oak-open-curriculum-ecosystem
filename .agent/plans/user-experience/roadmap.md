@@ -26,6 +26,31 @@ See [high-level-plan.md](../high-level-plan.md) for the full milestone map.
 
 ---
 
+## Current Readiness Position (2026-02-25)
+
+### Public-Alpha UX Baseline
+
+The intended alpha UX baseline is minimal and should currently be true:
+
+1. SDK works
+2. Search works
+3. MCP server works
+4. ChatGPT key commands show basic branding
+
+### Open UX Decision
+
+One UX decision remains:
+
+1. whether to support MCP Apps extension enough to show basic branding in Claude
+   before public alpha
+
+### Remaining Non-UX Blockers
+
+1. Clerk production instance migration
+2. Basic Sentry logging verification
+
+---
+
 ## Execution Order
 
 ```text
@@ -46,6 +71,7 @@ Phase 2: Learner discovery and safeguarding gate review    📋 PLANNED
   - user-segment outcomes are explicit and non-overlapping
   - no-go conditions for public alpha are defined
   - success signals and telemetry expectations are documented
+  - Milestone 1 UI-surface decision criteria are defined (Option X/Option Y)
   - dependencies to technical plans are linked
 - Dependencies: none
 
@@ -72,6 +98,37 @@ Phase 2: Learner discovery and safeguarding gate review    📋 PLANNED
 
 ---
 
+## Milestone 1 UI-Surface Decision Gate (UX-Owned)
+
+The UX collection is authoritative for decision criteria between:
+
+1. **Option X**: support MCP Apps extension sufficiently to show basic branding
+   in Claude before public alpha
+2. **Option Y**: launch with ChatGPT basic branding only and add Claude basic
+   branding support in Milestone 2
+
+Evidence inputs for this gate:
+
+1. Supported-client compatibility and risk evidence from
+   [../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+2. Renderer/reactivation sequencing and prerequisites from
+   [../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md)
+3. Milestone-level trade-off framing from
+   [../high-level-plan.md](../high-level-plan.md)
+
+Decision focus for this cycle:
+
+- whether Claude basic-branding support (via MCP Apps extension) is required
+  before public alpha, or can be deferred post-alpha.
+
+Decision output:
+
+- One explicit selected option, with rationale, expected user impact, and
+  rollback posture documented in
+  [public-alpha-experience-contract.md](public-alpha-experience-contract.md).
+
+---
+
 ## Cross-Collection Dependencies
 
 | Collection | Dependency |
@@ -81,3 +138,5 @@ Phase 2: Learner discovery and safeguarding gate review    📋 PLANNED
 | `security-and-privacy/` | Safety, evidence discipline, and trust boundary assurance |
 | `architecture-and-infrastructure/` | Reliability and observability that users directly feel |
 | `developer-experience/` | Integration ergonomics for developer adoption |
+| `external/ooc-api-wishlist/` | Upstream API/schema constraints that affect UX feasibility |
+| `research/auth/` | Clerk production migration decision and rollout planning |

@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 Milestone 0 — merge preparation in progress
+**Status**: 🔄 Milestone 0 — SDK workspace separation complete, secrets sweep remaining
 **Last Updated**: 2026-02-25
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -18,9 +18,7 @@ Execution detail lives in lifecycle lanes:
 - `future/` (later, deferred)
 - `archive/completed/` (done, read-only)
 
-Authoritative active execution sources:
-
-1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+Merge-blocking plan (complete): [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md)
 
 Current/future backlog sources:
 
@@ -29,6 +27,7 @@ Current/future backlog sources:
 
 Completed plans (archived):
 
+- [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md) — generation/runtime split, 11 subpath exports, boundary rules, 4 renames, Phase 7 complete ([ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md))
 - [search-results-quality.md](archive/completed/search-results-quality.md) — fuzziness + score filtering ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
 - [widget-search-rendering.md](archive/completed/widget-search-rendering.md) — Widget Phases 0-5
 - [search-snagging.md](archive/completed/search-snagging.md) — 5 SDK tool bugs, smoke-tested
@@ -45,7 +44,7 @@ Milestone 0: Open Source Readiness               🔄 THIS ROADMAP
   → Complete merge gates, secrets sweep, make repo public
 
 Milestone 1: Public Alpha                        📋 NEXT
-  → Clerk production migration, mcp-ext-app UI architecture
+  → Clerk production migration, Claude basic-branding decision gate
 
 Milestone 2: Post-Alpha Enhancements             📋 PLANNED
   → MCP extensions, architectural enforcement, search quality Phase 4
@@ -96,7 +95,7 @@ Archived plan: [search-results-quality.md](archive/completed/search-results-qual
 The branch merge remains blocked until these complete:
 
 1. ~~**3i Search results quality**~~ — ✅ COMPLETE ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
-2. **3e SDK workspace separation** (sdk-codegen/runtime split)
+2. ~~**3e SDK workspace separation**~~ — ✅ COMPLETE — all phases 0-7, 12 gates pass
 3. **Secrets and PII sweep** — final scan before making repo public
 
 Completed merge gates:
@@ -138,7 +137,7 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3g. Search dispatch type safety                   ✅ COMPLETE (archived)
   3h. Widget stabilisation (Tracks 1a + 1b)         ✅ COMPLETE
   3i. Search results quality                        ✅ COMPLETE (ADR-120)
-  3e. SDK workspace separation                      🔄 MERGE-BLOCKING
+  3e. SDK workspace separation                      ✅ COMPLETE (merge-ready)
   ── Secrets/PII sweep ──                           📋 PRE-PUBLIC
   ── Merge + make repo public ──                    📋 MILESTONE 0 EXIT
   3b. Result pattern unification                    📋 POST-MERGE
@@ -146,7 +145,7 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
         ↓
 Milestone 1: Public Alpha                           📋 PLANNED
   Clerk production migration                        📋 RESEARCH COMPLETE
-  mcp-ext-app UI architecture                       📋 DECISION GATE
+  Claude basic-branding decision gate               📋 DECISION GATE
         ↓
 Phase 4: Search Quality + Ecosystem                 📋 MILESTONE 2
 Phase 5: Extensions                                 📋 MILESTONE 2
@@ -158,7 +157,7 @@ Phase 5: Extensions                                 📋 MILESTONE 2
 
 ### 3e SDK Workspace Separation (Merge-Blocking)
 
-- Active plan: [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+- Archived plan: [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md)
 - Strategic dependency: [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 - Task-graph dependency: [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)
 - Vocab pipeline dependency: [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md)
@@ -182,7 +181,8 @@ Progress (25 Feb 2026):
   to `oak-open-data-ecosystem` (was `oak-mcp-ecosystem`). Plus Phase 5
   reviewer suggestions (S1–S3), provenance banners (F11), evaluation
   decisions (F12–F14), documentation alignment.
-- Phase 7 (CI drift check) remains. See canonical plan for detail.
+- Phase 7 complete. Full quality gate chain, determinism verification,
+  8 specialist reviews. Merge-ready.
 
 ### 3h Widget Stabilisation (Complete)
 
@@ -203,9 +203,10 @@ Research and planning for public alpha:
 1. **Clerk production migration** — research complete, decision
    pending.
    [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md)
-2. **MCP ext-app UI architecture** — decision gate before Milestone 1
-   execution. Option X: migrate before alpha. Option Y: launch with
-   current widgets, migrate in Milestone 2. See
+2. **MCP Apps extension / Claude basic branding** — decision gate before
+   Milestone 1 execution. Option X: support MCP Apps extension enough for
+   basic Claude branding before alpha. Option Y: launch with ChatGPT basic
+   branding only and add Claude basic branding support in Milestone 2. See
    [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
    (Domain A) and [high-level-plan.md](../high-level-plan.md) for
    decision criteria.

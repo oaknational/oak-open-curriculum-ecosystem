@@ -16,7 +16,7 @@ Before reviewing documentation changes or doc obligations, you MUST also read an
 | Document | Purpose |
 |----------|---------|
 | `docs/architecture/architectural-decisions/README.md` | ADR standards and lifecycle |
-| `docs/agent-guidance/development-practice.md` | Documentation and maintainability expectations |
+| `docs/governance/development-practice.md` | Documentation and maintainability expectations |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
 
 ## Core Philosophy

@@ -131,6 +131,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-117: Plan Templates and Reusable Plan Components](117-plan-templates-and-components.md)
 - [ADR-118: Elastic-Native Dense Vector Strategy](118-elastic-native-dense-vector-strategy.md) ← **Superseded** by ADR-075
 - [ADR-119: Agentic Engineering Practice](119-agentic-engineering-practice.md)
+- [ADR-120: Per-Scope Search Tuning Parameters](120-per-scope-search-tuning.md)
+- [ADR-121: Quality Gate Surfaces](121-quality-gate-surfaces.md)
 
 ## Key Architectural Decisions
 

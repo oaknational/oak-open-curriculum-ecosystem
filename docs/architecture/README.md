@@ -1,3 +1,11 @@
+---
+boundary: B2-Architecture
+doc_role: index
+authority: architecture-navigation
+status: active
+last_reviewed: 2026-02-25
+---
+
 # Architecture
 
 **Last Updated**: 2026-02-25  
@@ -32,7 +40,7 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
 - A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
 - **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
 - Provider architecture: see [Provider System](./provider-system.md) and [Provider Contracts](./provider-contracts.md)
-- Onboarding guide: see [Onboarding](../development/onboarding.md)
+- Onboarding guide: see [Onboarding](../foundation/onboarding.md)
 
 #### Rules & Relationships
 
@@ -57,9 +65,9 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
 
 ## Related Agent Guidance
 
-- [Development Practice](../agent-guidance/development-practice.md)
+- [Development Practice](../governance/development-practice.md)
 - [Testing Strategy](../../.agent/directives/testing-strategy.md)
-- [TypeScript Practice](../agent-guidance/typescript-practice.md)
+- [TypeScript Practice](../governance/typescript-practice.md)
 
 ## Implementation Plans
 

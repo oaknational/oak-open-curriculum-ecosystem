@@ -15,7 +15,7 @@ Before reviewing any changes, you MUST also read and internalise these domain-sp
 
 | Document | Purpose |
 |----------|---------|
-| `docs/agent-guidance/safety-and-security.md` | Security and privacy baseline expectations |
+| `docs/governance/safety-and-security.md` | Security and privacy baseline expectations |
 | `.agent/directives/testing-strategy.md` | Security-relevant test expectations and TDD discipline |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
 

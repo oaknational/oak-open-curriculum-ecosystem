@@ -86,10 +86,10 @@ Commands and skills may be defined in more than one location. Check both the rep
 
 ### Core Practice
 
-- [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
+- [Development Practice](../../docs/governance/development-practice.md) - Code standards
 - [Testing Strategy](testing-strategy.md) - TDD/BDD approach at all levels
-- [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
-- [Safety and Security](../../docs/agent-guidance/safety-and-security.md) - API keys, PII protection, security principles
+- [TypeScript Practice](../../docs/governance/typescript-practice.md) - Type safety
+- [Safety and Security](../../docs/governance/safety-and-security.md) - API keys, PII protection, security principles
 
 ### Architecture and Schema
 
@@ -103,11 +103,11 @@ Commands and skills may be defined in more than one location. Check both the rep
 
 ### Vision
 
-- [Vision](../../docs/VISION.md) - Why this repository exists and the impact it aims to achieve (current framing; supersedes ADR-008)
+- [Vision](../../docs/foundation/VISION.md) - Why this repository exists and the impact it aims to achieve (current framing; supersedes ADR-008)
 
 ### Domain and Context
 
-- [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
+- [Curriculum Tools, Guidance and Playbooks](../../docs/governance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
 - [Experience Recording](../experience/README.md) - Subjective experience across sessions
 
 ## Development Commands

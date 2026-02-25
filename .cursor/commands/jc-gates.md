@@ -4,6 +4,10 @@ Run the quality gates one by one from the repo root. Fix any and all issues that
 
 After each fix, **restart the quality gate sequence from the beginning**. This prevents regressions to earlier gates from later fixes.
 
+This sequence corresponds to `pnpm check` — the most comprehensive local
+surface. See [ADR-121](docs/architecture/architectural-decisions/121-quality-gate-surfaces.md)
+for how this relates to pre-commit, pre-push, CI, and `pnpm qg`.
+
 ## The Sequence
 
 Run each gate in order. If a gate fails, fix the issues before proceeding.
@@ -17,6 +21,7 @@ pnpm type-check
 pnpm doc-gen
 pnpm format:root
 pnpm markdownlint:root
+pnpm subagents:check
 pnpm lint:fix
 pnpm test
 pnpm test:e2e

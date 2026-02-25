@@ -31,7 +31,7 @@ If someone handed you this pack, would you know how to find what you want, and w
 - **Schema/validation tooling:** `20-validation-and-schema-examples.md` and `09-schemas-endpoint-rfc.md`
 - **Programme variants and identifiers:** `18-programmes-and-identifiers-examples.md` and `04-high-priority-requests.md` (Items 5-6)
 - **MFL/Languages issues:** `00-overview-and-known-issues.md` (MFL Transcript API Response Inconsistency, ER14 Multilingual Captioning)
-- **Data variances and coverage:** `00-overview-and-known-issues.md` (ER15 Category Availability, ER16 Key Stage Coverage Discovery) and [Data Variances](../../../../docs/data/DATA-VARIANCES.md)
+- **Data variances and coverage:** `00-overview-and-known-issues.md` (ER15 Category Availability, ER16 Key Stage Coverage Discovery) and [Data Variances](../../../../docs/domain/DATA-VARIANCES.md)
 - **Ground truth and evaluation:** `00-overview-and-known-issues.md` (ER17 Phase Metadata, ER18 Bulk Slug Validation, ER19 Field Availability, ER20 Bulk Version Metadata)
 
 ## File map
@@ -62,5 +62,5 @@ If someone handed you this pack, would you know how to find what you want, and w
 
 ## Related Analysis Documents
 
-- **[Data Variances](../../../../docs/data/DATA-VARIANCES.md)** — **Consolidated reference** for all curriculum data differences, transcript availability, structural patterns, API vs Bulk, integrity issues
-- **[Curriculum Structure Analysis](../../analysis/curriculum-structure-analysis.md)** — Comprehensive analysis of all 7 structural patterns, traversal strategies, and aggregation requirements (2025-12-28)
+- **[Data Variances](../../../../docs/domain/DATA-VARIANCES.md)** — **Consolidated reference** for all curriculum data differences, transcript availability, structural patterns, API vs Bulk, integrity issues
+- **[Curriculum Structure Analysis](../../../analysis/curriculum-structure-analysis.md)** — Comprehensive analysis of all 7 structural patterns, traversal strategies, and aggregation requirements (2025-12-28)

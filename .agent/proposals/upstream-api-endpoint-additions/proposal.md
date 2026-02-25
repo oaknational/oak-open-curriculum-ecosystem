@@ -185,7 +185,7 @@ The SDK maintains local versions of this data that would be **replaced by API ca
 
 ### B. Related Documents
 
-- [Data Variances](../../../../docs/data/DATA-VARIANCES.md)
+- [Data Variances](../../../../docs/domain/DATA-VARIANCES.md)
 - [Official Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary)
 - [Ontology Diagrams](https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams)
 

@@ -3,47 +3,29 @@ import path from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
-import { generateZodSchemas } from './zodgen-core.js';
+import { generateZodSchemas, type ZodgenIO } from './zodgen-core.js';
 
 let lastWrittenPath: string | undefined;
 let lastWrittenContent: string | undefined;
-const writeFileSyncSpy = vi.hoisted(() =>
-  vi.fn((path: string, data: string) => {
-    lastWrittenPath = path;
-    lastWrittenContent = data;
-  }),
-);
-const mkdirSyncSpy = vi.hoisted(() =>
-  vi.fn((dirPath: string, options?: { readonly recursive?: boolean }) => {
-    void dirPath;
-    void options;
-  }),
-);
-const existsSyncSpy = vi.hoisted(() =>
-  vi.fn((dirPath: string) => {
-    void dirPath;
-    return false;
-  }),
-);
 
-vi.mock('node:fs', () => ({
-  existsSync: existsSyncSpy,
-  mkdirSync: mkdirSyncSpy,
-  writeFileSync: writeFileSyncSpy,
-}));
-
-const generateZodClientFromOpenAPISpy = vi.hoisted(() =>
-  vi.fn().mockResolvedValue(`import { z } from "zod";
+function createFakeIO(): ZodgenIO {
+  const fakeOutput = `import { z } from "zod";
 const endpoints = ([]);
 export const schemas = {
   "getLessonTranscript_getLessonTranscript_200": {} as const,
 };
-`),
-);
+`;
 
-vi.mock('openapi-zod-client', () => ({
-  generateZodClientFromOpenAPI: generateZodClientFromOpenAPISpy,
-}));
+  return {
+    existsSync: vi.fn(() => false),
+    mkdirSync: vi.fn(),
+    writeFileSync: vi.fn((writePath: string, data: string) => {
+      lastWrittenPath = writePath;
+      lastWrittenContent = data;
+    }),
+    generateZodSchemasFromOpenAPI: vi.fn().mockResolvedValue({ output: fakeOutput }),
+  };
+}
 
 function createSchemaWithMultipleStatuses(): OpenAPIObject {
   return {
@@ -112,27 +94,23 @@ function createSchemaWithMultipleStatuses(): OpenAPIObject {
 }
 
 describe('generateZodSchemas (integration)', () => {
+  let fakeIO: ZodgenIO;
+
   beforeEach(() => {
-    writeFileSyncSpy.mockClear();
-    mkdirSyncSpy.mockClear();
-    existsSyncSpy.mockClear();
-    existsSyncSpy.mockReturnValue(false);
-    generateZodClientFromOpenAPISpy.mockClear();
     lastWrittenPath = undefined;
     lastWrittenContent = undefined;
+    fakeIO = createFakeIO();
   });
 
   it('emits curriculum schema entries for every documented response status', async () => {
     const schema = createSchemaWithMultipleStatuses();
     const outDir = '/tmp/test-zod-gen';
 
-    await generateZodSchemas(schema, outDir);
+    await generateZodSchemas(schema, outDir, fakeIO);
 
-    expect(generateZodClientFromOpenAPISpy).toHaveBeenCalled();
-
-    expect(mkdirSyncSpy).toHaveBeenCalledWith(outDir, { recursive: true });
-
-    expect(writeFileSyncSpy).toHaveBeenCalledTimes(1);
+    expect(fakeIO.generateZodSchemasFromOpenAPI).toHaveBeenCalled();
+    expect(fakeIO.mkdirSync).toHaveBeenCalledWith(outDir, { recursive: true });
+    expect(fakeIO.writeFileSync).toHaveBeenCalledTimes(1);
     expect(lastWrittenPath).toBe(path.join(outDir, 'curriculumZodSchemas.ts'));
     if (typeof lastWrittenContent !== 'string') {
       throw new Error('Expected writeFileSync to capture string content');

@@ -13,10 +13,8 @@
 ## Current Work: Merge Prep
 
 MCP search integration (Phase 3a) is complete — three tools
-wired, old REST search replaced. One merge blocker remains:
-
-1. **SDK workspace separation** (3e) — split curriculum-sdk into
-   generation and runtime workspaces
+wired, old REST search replaced. SDK workspace separation (3e) is
+**complete** — archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md).
 
 Search results quality is **COMPLETE** — documented in
 [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md).
@@ -53,7 +51,7 @@ Search dispatch type safety (3g) is complete and archived:
    3f Proxy OAuth AS for Cursor                  ✅ COMPLETE
    3g Search dispatch type safety                ✅ COMPLETE (archived)
    3h Widget stabilisation (Tracks 1a + 1b)      ✅ COMPLETE
-   3e SDK workspace separation                   🔄 MERGE-BLOCKING
+   3e SDK workspace separation                   ✅ COMPLETE (archived)
    3i Search results quality                     ✅ COMPLETE (ADR-120)
          ↓
 4. Search Quality + Ecosystem (parallel streams)
@@ -68,9 +66,8 @@ Search dispatch type safety (3g) is complete and archived:
 
 ## Active Plans
 
-| Plan | Status | Priority |
-|------|--------|----------|
-| [SDK workspace separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking | **P0** — split curriculum-sdk |
+*None.* SDK workspace separation (merge-blocking) is **complete** —
+archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md).
 
 ---
 
@@ -78,7 +75,7 @@ Search dispatch type safety (3g) is complete and archived:
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Merge-prep plans (`3e`) | 🔄 Active |
+| `active/` | In-progress plans | — (empty; 3e archived) |
 | `current/` | Next-up queued plans | 📋 Ready |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |
@@ -113,7 +110,7 @@ to the boundary structure.
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [SDK Workspace Separation](active/sdk-workspace-separation.md) | 🔄 Merge-blocking — split curriculum-sdk (self-sufficient, all decisions resolved) |
+| [SDK Workspace Separation](archive/completed/sdk-workspace-separation.md) | ✅ Complete — archived |
 | [SDK Separation Pre-Phase-1 Decisions](archive/completed/sdk-separation-pre-phase1-decisions.md) | ✅ Archived — D1-D5 decision rationale (all integrated into canonical plan) |
 | [Search Results Quality](archive/completed/search-results-quality.md) | ✅ Complete — ADR-120 |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |

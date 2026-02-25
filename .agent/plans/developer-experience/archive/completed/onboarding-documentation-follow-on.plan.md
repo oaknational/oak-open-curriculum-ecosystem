@@ -4,13 +4,13 @@
 >
 > **Date**: 23 February 2026
 >
-> **Source**: [onboarding-review-report.md](../../onboarding-review-report.md)
+> **Source**: [onboarding-simulations-public-alpha-readiness.md](../../onboarding-simulations-public-alpha-readiness.md)
 >
 > **Merge-blocking plan (complete, archived)**:
 > [onboarding.plan.md](../../../semantic-search/archive/completed/onboarding.plan.md)
 >
 > **Governance follow-on**:
-> [governance/onboarding-governance-follow-on.plan.md](../../governance/onboarding-governance-follow-on.plan.md)
+> [onboarding-simulations-public-alpha-readiness.md](../../onboarding-simulations-public-alpha-readiness.md)
 >
 > These items are **documentation fixes** that can be resolved by writing or
 > editing documentation using information already available in the repository.
@@ -27,10 +27,10 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     distinctions matter for search and discovery. Include user persona sketches
     for the three audience groups (developers, AI agents, teachers) with needs
     and journeys.
-  - Done: 23 February 2026 — created `docs/curriculum-guide.md` with
+  - Done: 23 February 2026 — created `docs/domain/curriculum-guide.md` with
     plain-language structure, KS4 complexity, search implications, user personas.
-    Cross-referenced from `docs/README.md`, `docs/development/onboarding.md`,
-    and `docs/VISION.md`.
+    Cross-referenced from `docs/README.md`, `docs/foundation/onboarding.md`,
+    and `docs/foundation/VISION.md`.
 
 - [x] **B8. Add mission framing to roadmap milestones**
   - Audiences: PO, CEO
@@ -50,7 +50,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     Limitations" section to `openapi-pipeline.md` covering Zod edge cases,
     adapter rebuild, CI mode, parameter generation, runtime type inference,
     schema validation, ADR trade-offs, and Castr migration. Cross-referenced
-    from `docs/development/extending.md`.
+    from `docs/engineering/extending.md`.
 
 - [x] **B10. Address documentation scaling and sustainability**
   - Audiences: Principal, CTO
@@ -64,7 +64,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     `practice.md` covering volume (~1,000+ files), 3 consolidation mechanisms,
     Cardinal Rule repetition trade-off (~66 files), and restructuring triggers.
     Updated ADR-119 file count from "500+" to "1,000+" and added consolidation
-    mechanism note. Cross-referenced from `docs/development/onboarding.md`.
+    mechanism note. Cross-referenced from `docs/foundation/onboarding.md`.
 
 ---
 

@@ -19,7 +19,7 @@ Use this as a fast ritual to preserve and extend continuity across sessions.
 1. Ground on primary references
    - Read: [GO.md](../../GO.md)
    - Read: [AGENT.md](../directives/AGENT.md)
-   - Skim: [rules.md](../directives/rules.md), [TypeScript practice](../../docs/agent-guidance/typescript-practice.md)
+   - Skim: [rules.md](../directives/rules.md), [TypeScript practice](../../docs/governance/typescript-practice.md)
 
 2. Sample recent experience
    - Skim 1–3 relevant files below (Highlights). Note tags, decisions, open questions.

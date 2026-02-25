@@ -1,11 +1,11 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-25 (Phases 0-6 complete, Phase 7 next — CI drift check)
+**Last Updated**: 2026-02-25 (All phases 0-7 complete — merge-ready)
 
-**Recent session (25 Feb 2026)**: type-gen→sdk-codegen rename, typegen/codegen semantic
-split (type-focused modules: `typegen-*`; orchestration: `codegen-*`), consolidation
-workflow updates, semantic search plan reorg (post-sdk→future/). See
-[active plan](../../plans/semantic-search/active/sdk-workspace-separation.md) for full context.
+**Recent session (25 Feb 2026)**: Phase 7 merge readiness — full 12-gate quality chain
+passed from clean, codegen determinism verified. 8 specialist reviewers invoked (GO WITH
+CONDITIONS → conditions resolved). SDK workspace separation is complete.
+See [archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) for full context.
 
 ---
 
@@ -28,10 +28,9 @@ Archived plan:
 
 **Pre-merge required workstreams remaining**:
 
-1. **SDK workspace separation** (3e) — split `curriculum-sdk`
-   into generation and runtime workspaces (API + bulk pipelines
-   move to generation)
-   ([plan](../../plans/semantic-search/active/sdk-workspace-separation.md))
+1. ~~**SDK workspace separation** (3e)~~ — **COMPLETE** — all phases 0-7 done,
+   12-gate quality chain passed, 8 specialist reviews completed
+   ([archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md))
 
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
@@ -41,7 +40,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 
 **Plans** (in priority order):
 
-- [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking** — split curriculum-sdk (WS5 gate satisfied)
+- [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **COMPLETE** — archived
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
 - [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence (Milestone 0/1/2)
@@ -68,7 +67,7 @@ Run this checklist at the start of the next session:
    ```
 
 3. Verify post-split repo structure (compare against
-   [baseline](../../plans/semantic-search/active/sdk-workspace-separation-baseline.json)
+   [baseline](../../plans/semantic-search/archive/completed/sdk-workspace-separation-baseline.json)
    captured pre-split at Phase 0):
 
    ```bash
@@ -105,7 +104,7 @@ Run this checklist at the start of the next session:
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 5. Read the active execution plan — it is self-sufficient:
-   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**, Phase 7 remains (CI drift check)
+   - [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **complete**, archived
 6. Treat these as complete/archive references only:
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
@@ -123,9 +122,8 @@ Run this checklist at the start of the next session:
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
-**SDK workspace separation** — Phases 0-6 are **complete**.
-Architecture review remediation (N1-N6) is **complete**.
-Phase 7 remains (CI drift check).
+**SDK workspace separation** — Phases 0-7 **complete**. Architecture
+review remediation (N1-N6) complete. Merge-ready.
 
 **Completed**:
 - Phase 0: baseline evidence committed
@@ -177,10 +175,11 @@ Phase 6 scope:
   Done.
 - **6.8**: Quality gates + specialist reviews. Done.
 
-**Next**: Phase 7 — CI drift check.
+**Phase 7 complete**: Full quality gate chain, determinism verification,
+8 specialist reviews. (F16 drift check implemented then removed —
+redundant with pnpm check clean+build.)
 
-See [canonical plan Phase 6](../../plans/semantic-search/active/
-sdk-workspace-separation.md) for full detail on every step.
+See [canonical plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) for full detail on every step.
 
 **Two-pipeline architecture** (see
 [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)):
@@ -495,7 +494,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 
 | Document | Why |
 |----------|-----|
-| [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) | **Merge-blocking** — split curriculum-sdk (WS5 gate satisfied, pre-Phase-1 decisions resolved) |
+| [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) | **Complete** — archived |
 | [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | SDK workspace decomposition (4-workspace vision, two-pipeline architecture, consumer model, boundary invariants) |
 | [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) | Turbo task dependencies and caching (split-critical for task graph rewiring) |
 | [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Vocab pipeline ownership and generated graph artefact patterns |

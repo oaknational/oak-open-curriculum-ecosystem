@@ -925,7 +925,7 @@ ENV_FILE=.env.harness.auth-disabled pnpm prod:diagnostics
 ### Related Documentation
 
 - Phase 1 instrumentation details: See "Runtime Bootstrap Diagnostics" section above
-- Production debugging workflows: See `docs/development/production-debugging-runbook.md`
+- Production debugging workflows: See `docs/operations/production-debugging-runbook.md`
 - Vercel deployment guide: See "Vercel deployment" section above
 
 ## Cursor (local STDIO) configuration

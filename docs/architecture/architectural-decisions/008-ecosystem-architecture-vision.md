@@ -10,7 +10,7 @@ This ADR is retained as historical context only.
 
 Current conceptual vision is defined in:
 
-- [docs/VISION.md](../../VISION.md)
+- [docs/foundation/VISION.md](../../foundation/VISION.md)
 - [ADR-119: Agentic Engineering Practice](119-agentic-engineering-practice.md)
 
 ## Context

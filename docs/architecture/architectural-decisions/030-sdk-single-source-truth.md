@@ -246,7 +246,7 @@ function validateLesson(lesson: string) {
 
 - [ADR-029: No Manual API Data Structures](029-no-manual-api-data.md)
 - [Programmatic Tool Generation Architecture](../programmatic-tool-generation.md)
-- [Phase 6 Implementation Plan](../../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md)
+- [Phase 6 Implementation Plan](../../../.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md)
 
 ## References
 

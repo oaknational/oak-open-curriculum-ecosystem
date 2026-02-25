@@ -174,7 +174,7 @@ points, compatibility pages, and stale routing).
 **Problem**: The onboarding story still includes a compatibility layer.
 The final state must be a clean break with one canonical path only.
 
-**WS0 audit findings**: `docs/development/onboarding.md` requires a
+**WS0 audit findings**: `docs/foundation/onboarding.md` requires a
 full rewrite — it references "Oak Notion MCP", removed packages
 (`mcp-storage`, `mcp-transport`), wrong commands, and has 5+ broken
 links. GO.md is referenced in 15 non-archive files but the grounding
@@ -186,10 +186,10 @@ pattern is superseded by AGENT.md + directives. `docs/usage/` and
 1. Review the WS0 audit to identify every file that functions as an
    onboarding entry point or compatibility pointer.
 2. Define one canonical onboarding entry document:
-   `docs/development/onboarding.md`.
+   `docs/foundation/onboarding.md`.
 3. Delete `docs/onboarding.md` and any other compatibility pointer
    pages identified in WS0. Clean break — no redirect pages.
-4. **Rewrite** `docs/development/onboarding.md` from scratch — the
+4. **Rewrite** `docs/foundation/onboarding.md` from scratch — the
    current content is entirely Notion-era and cannot be patched.
 5. Decide the fate of `GO.md`: delete and remove all 15 references
    (clean break), or formalise its complementary role alongside
@@ -223,7 +223,7 @@ drift and quantifies the cross-cutting "stale commands" theme).
 
 **Problem**: `README.md` and `CONTRIBUTING.md` commands were fixed during
 public release readiness. The remaining drift is in secondary docs,
-especially `docs/agent-guidance/ai-agent-guide.md` which still uses
+especially `docs/governance/ai-agent-guide.md` which still uses
 `pnpm format` (should be `pnpm format:root`) and other legacy patterns.
 
 **WS0 audit findings**: 9 non-archive files contain stale `pnpm format`
@@ -237,11 +237,11 @@ in pre-onboarding P6: both GT skills already use CLI commands.
 
 1. Treat root `package.json` scripts as command source of truth.
 2. Sweep all onboarding-adjacent docs for command drift:
-   `docs/development/onboarding.md`, `docs/quick-start.md`,
-   `docs/agent-guidance/ai-agent-guide.md`, and any other files
+   `docs/foundation/onboarding.md`, `docs/foundation/quick-start.md`,
+   `docs/governance/ai-agent-guide.md`, and any other files
    referencing pnpm commands.
    Remove old aliases entirely; do not preserve dual command naming.
-3. `docs/agent-guidance/ai-agent-guide.md` needs substantial
+3. `docs/governance/ai-agent-guide.md` needs substantial
    rework — it references "Oak Notion MCP", the GO.md grounding
    pattern, and stale command names. Decide: rewrite or delete.
 4. ~~Sweep `.cursor/commands/` and `.claude/commands/` for stale
@@ -265,18 +265,18 @@ in pre-onboarding P6: both GT skills already use CLI commands.
 
 **Problem**: Broken local links and missing target files exist in
 onboarding-adjacent docs. The worst offender is
-`docs/agent-guidance/ai-agent-guide.md` (2 dead links to non-existent
-files, 1 wrong-path link). `docs/development/environment-variables.md`
+`docs/governance/ai-agent-guide.md` (2 dead links to non-existent
+files, 1 wrong-path link). `docs/operations/environment-variables.md`
 also has a wrong-path link to `vercel-environment-config.md`.
 
 ### Known broken links (from WS0 audit — 20+ instances)
 
 Previously known:
 
-- `docs/agent-guidance/ai-agent-guide.md` -> `../development/onboarding-journey.md` (missing)
-- `docs/agent-guidance/ai-agent-guide.md` -> `../quick-reference.md` (missing)
-- `docs/agent-guidance/ai-agent-guide.md` -> `docs/troubleshooting.md` (wrong path; file is at `docs/development/troubleshooting.md`)
-- `docs/development/environment-variables.md` -> `docs/vercel-environment-config.md` (wrong path; file is at `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`)
+- `docs/governance/ai-agent-guide.md` -> `../development/onboarding-journey.md` (missing)
+- `docs/governance/ai-agent-guide.md` -> `../quick-reference.md` (missing)
+- `docs/governance/ai-agent-guide.md` -> `docs/troubleshooting.md` (wrong path; file is at `docs/operations/troubleshooting.md`)
+- `docs/operations/environment-variables.md` -> `docs/vercel-environment-config.md` (wrong path; file is at `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`)
 
 Discovered by WS0 audit (all resolved in pre-onboarding P2/P3):
 
@@ -289,7 +289,7 @@ Discovered by WS0 audit (all resolved in pre-onboarding P2/P3):
 
 Still remaining (onboarding-path):
 
-- `experimental-architecture-quick-reference.md` referenced in `docs/agent-guidance/README.md` (does not exist)
+- `experimental-architecture-quick-reference.md` referenced in `docs/governance/README.md` (does not exist)
 
 ### Actions
 
@@ -317,8 +317,8 @@ Still remaining (onboarding-path):
 
 **Problem**: The top-level contribution and Node.js version messaging was
 fixed during public release readiness. Remaining work is ensuring
-consistency in secondary onboarding docs (e.g. `docs/development/onboarding.md`,
-`docs/quick-start.md`, agent guidance) and clarifying the credential matrix.
+consistency in secondary onboarding docs (e.g. `docs/foundation/onboarding.md`,
+`docs/foundation/quick-start.md`, agent guidance) and clarifying the credential matrix.
 
 ### Actions
 
@@ -344,14 +344,14 @@ consistency in secondary onboarding docs (e.g. `docs/development/onboarding.md`,
 
 ## Workstream 5: Release Operator Onboarding (SDK-only)
 
-**Problem**: `docs/development/release-and-publishing.md` now documents the
+**Problem**: `docs/engineering/release-and-publishing.md` now documents the
 publishing strategy (packages, versioning, automation, npm token setup).
 What remains is expanding it into a full operator runbook with step-by-step
 dry-run, rollback, and troubleshooting guidance.
 
 ### Actions
 
-1. Expand `docs/development/release-and-publishing.md` into a full
+1. Expand `docs/engineering/release-and-publishing.md` into a full
    release operator runbook. It currently covers strategy; add
    step-by-step operator procedures.
 2. Add dry-run walkthrough with expected terminal output.
@@ -424,9 +424,9 @@ If release/onboarding scripts are changed, also run `pnpm build`,
 | `archive/completed/public-release-readiness.plan.md` | ✅ Public release blockers and npm readiness |
 | `README.md` | Primary public entry point |
 | `CONTRIBUTING.md` | Contributor policy and workflow |
-| `docs/development/onboarding.md` | Canonical onboarding path |
-| `docs/development/release-and-publishing.md` | SDK publishing strategy and automation |
-| `docs/development/environment-variables.md` | Credential setup and safety |
-| `docs/agent-guidance/ai-agent-guide.md` | ✅ Rewritten as lighter companion to AGENT.md |
+| `docs/foundation/onboarding.md` | Canonical onboarding path |
+| `docs/engineering/release-and-publishing.md` | SDK publishing strategy and automation |
+| `docs/operations/environment-variables.md` | Credential setup and safety |
+| `docs/governance/ai-agent-guide.md` | ✅ Rewritten as lighter companion to AGENT.md |
 | `.releaserc.mjs` | Release automation configuration |
 | `.github/workflows/release.yml` | CI release workflow |

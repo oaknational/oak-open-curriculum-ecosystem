@@ -30,7 +30,7 @@ isProject: false
 
 ## Context
 
-Following Phase 4.3/4.4 completion and the deep import analysis, all four architecture reviewers (Barney, Betty, Fred, Wilma) reviewed the work. Combined with the deep import investigation, this produced **6 new findings** not already tracked in the [canonical plan](packages/sdks/oak-curriculum-sdk-generation/../../.agent/plans/semantic-search/active/sdk-workspace-separation.md). All are blocking per user directive.
+Following Phase 4.3/4.4 completion and the deep import analysis, all four architecture reviewers (Barney, Betty, Fred, Wilma) reviewed the work. Combined with the deep import investigation, this produced **6 new findings** not already tracked in the [canonical plan](sdk-workspace-separation.md). All are blocking per user directive.
 
 ## Finding Summary
 

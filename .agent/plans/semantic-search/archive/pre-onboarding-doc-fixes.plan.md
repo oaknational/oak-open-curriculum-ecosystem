@@ -20,8 +20,8 @@ markdown files. These issues split cleanly into two buckets:
    decks so the onboarding workstreams can focus on the journey itself.
 
 2. **The onboarding plan (WS1-WS6)** -- fixes to files that ARE on
-   the onboarding path: `docs/development/onboarding.md`,
-   `docs/quick-start.md`, `docs/agent-guidance/ai-agent-guide.md`,
+   the onboarding path: `docs/foundation/onboarding.md`,
+   `docs/foundation/quick-start.md`, `docs/governance/ai-agent-guide.md`,
    GO.md, `docs/usage/`, `docs/research/README.md`, and all
    credential/command/link issues in onboarding-facing documents.
 
@@ -304,15 +304,15 @@ onboarding path but are consumed during ongoing work.
 
 ### Actions
 
-1. Update `docs/agent-guidance/logging-guidance.md` -- replace all
+1. Update `docs/governance/logging-guidance.md` -- replace all
    `createAdaptiveLogger` references with `UnifiedLogger` + DI
    pattern; remove `as any` from test examples.
 2. Update `docs/agent-guidance/sentry-guidance.md` -- verify Sentry
    API usage against current SDK; add version and doc links; archive
    if unused.
-3. Update `docs/development/production-debugging-runbook.md` -- remove
+3. Update `docs/operations/production-debugging-runbook.md` -- remove
    `mcp-transport` reference; verify logger package path.
-4. Update `docs/development/build-system.md` -- correct `pnpm check`
+4. Update `docs/engineering/build-system.md` -- correct `pnpm check`
    description to match `package.json`.
 5. Update `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md`
    -- fix `pnpm format` to `pnpm format:root`.
@@ -351,7 +351,7 @@ the audit are omitted.
 | --- | --- | --- |
 | `docs/README.md` | Remove GO.md link | **Onboarding WS1** |
 | `docs/onboarding.md` | Delete (compatibility pointer) | **Onboarding WS1** |
-| `docs/quick-start.md` | Fix commands, quality gates, GO.md | **Onboarding WS2** |
+| `docs/foundation/quick-start.md` | Fix commands, quality gates, GO.md | **Onboarding WS2** |
 
 ### docs/development/
 
