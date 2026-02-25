@@ -1,7 +1,7 @@
 # Programmatic Tool Generation Architecture
 
 **Status**: Accepted
-**Last Updated**: 2026-02-14
+**Last Updated**: 2026-02-25
 **Context**: MCP Tool Generation from SDK
 
 ## Overview
@@ -202,19 +202,42 @@ export async function handleToolCall(toolName: string, args: unknown) {
 ## File Structure (current)
 
 ```text
-apps/oak-curriculum-mcp-stdio/
-├── scripts/
-│   └── generate-tools.ts         # Build-time generation
-├── src/
-│   ├── tools/
-│   │   ├── generated/
-│   │   │   └── tools.generated.ts      # Auto-generated tools
-│   │   └── handlers/
-│   │       └── tool-handler.ts         # Runtime execution
-│   ├── integrations/
-│   └── app/
-│       └── server.ts                   # MCP server integration
+packages/sdks/oak-sdk-codegen/
+├── code-generation/typegen/
+│   ├── index.ts
+│   └── mcp-tools/
+│       ├── mcp-tool-generator.ts
+│       └── parts/
+│           ├── emit-index.ts
+│           ├── generate-execute-file.ts
+│           ├── generate-index-file.ts
+│           ├── generate-runtime-index-file.ts
+│           └── generate-tool-descriptor-file.ts
+└── src/types/generated/api-schema/mcp-tools/
+    ├── definitions.ts
+    ├── aliases/types.ts
+    ├── runtime/
+    │   ├── execute.ts
+    │   └── index.ts
+    └── tools/
 ```
+
+### Runtime registration surfaces (current)
+
+```text
+apps/oak-curriculum-mcp-stdio/src/tools/index.ts
+apps/oak-curriculum-mcp-streamable-http/src/handlers.ts
+```
+
+### Historical note
+
+Earlier examples that referenced:
+
+- `apps/oak-curriculum-mcp-stdio/scripts/generate-tools.ts`
+- `apps/oak-curriculum-mcp-stdio/src/tools/generated/tools.generated.ts`
+- `apps/oak-curriculum-mcp-stdio/src/tools/handlers/tool-handler.ts`
+
+describe a previous layout and are no longer current.
 
 ## Benefits
 
@@ -305,27 +328,22 @@ if (!result.ok) {
 
 ## Migration Path
 
-### Current State (Incorrect)
+### Current State
 
-- Metadata registry contains hardcoded paths
-- Manual validation functions
-- Duplicate constant definitions
+- Tool descriptors, aliases, and runtime executors are generated in
+  `oak-sdk-codegen` from OpenAPI schema inputs.
+- Runtime apps register tool handlers from generated surfaces and inject app
+  dependencies (client, search retrieval, logger/runtime config).
 
-### Target State (Correct)
+### Change Workflow (when behaviour needs to change)
 
-1. Remove all hardcoded paths from metadata
-2. Key metadata by operationId
-3. Import all constants from SDK
-4. Use SDK validation functions
-5. Generate tools programmatically
-
-### Migration Steps
-
-1. Wait for SDK Zod validators implementation
-2. Refactor metadata registry structure
-3. Implement tool generation script
-4. Remove manual validators
-5. Test automatic adaptation
+1. Update generator templates in
+   `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/`.
+2. Run `pnpm sdk-codegen`.
+3. Verify app registration surfaces (`stdio/src/tools/index.ts`,
+   `streamable-http/src/handlers.ts`) still consume generated contracts without
+   manual overrides.
+4. Run quality gates and schema-first execution checks.
 
 ## Testing Strategy
 
@@ -352,5 +370,5 @@ if (!result.ok) {
 - [ADR-029: No Manual API Data Structures](architectural-decisions/029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](architectural-decisions/030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction Pattern](architectural-decisions/031-generation-time-extraction.md)
-- [Phase 6 Implementation Plan](../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md)
-- [SDK Zod Validators Plan](../../.agent/plans/oak-curriculum-sdk-zod-validators-2025-08-12.md)
+- [Plans Index](../../.agent/plans/README.md)
+- [Completed Plans Index](../../.agent/plans/completed-plans.md)

@@ -1,5 +1,8 @@
 # Architecture
 
+**Last Updated**: 2026-02-25  
+**Status**: Active architectural index
+
 ## Start Here
 
 1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) - **Read this first** to understand the core pattern
@@ -24,11 +27,11 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
   - `packages/core/` – foundational shared code (result/env/eslint/openapi adapter)
   - `packages/libs/` – shared runtime libraries (logger)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
-- Provider injection replaces runtime auto‑detection
-- Apps compose a `CoreRuntime` and inject dependencies (DI) into servers and tools
+- Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
+- Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools
 - A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
 - **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
-- Provider system overview: see [Provider System](./provider-system.md)
+- Provider architecture: see [Provider System](./provider-system.md) and [Provider Contracts](./provider-contracts.md)
 - Onboarding guide: see [Onboarding](../development/onboarding.md)
 
 #### Rules & Relationships
@@ -40,6 +43,8 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
 ### Implementation Guides
 
 - [Programmatic Tool Generation](./programmatic-tool-generation.md) - MCP tool generation from SDK (compile‑time)
+- [Provider System](./provider-system.md) - App-local provider composition and DI boundaries
+- [Provider Contracts](./provider-contracts.md) - Runtime dependency contract surfaces
 
 ### Architectural Decisions
 
