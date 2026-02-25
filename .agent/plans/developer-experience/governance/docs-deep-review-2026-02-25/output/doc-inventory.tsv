@@ -1,0 +1,34 @@
+path	boundary	role	lines	status_marker	last_updated	refs_in	refs_out
+docs/README.md	B0-Foundation	index	67	(none)	(none)	1	33
+docs/VISION.md	B0-Foundation	source-of-truth	259	94:## Capability Status (Current / Next / Later)	3:> **Last updated**: 23 February 2026	3	6
+docs/agent-guidance/README.md	B1-Governance	index	34	(none)	(none)	0	7
+docs/agent-guidance/ai-agent-guide.md	B1-Governance	guide	205	(none)	(none)	4	15
+docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md	B1-Governance	guide	60	(none)	(none)	0	0
+docs/agent-guidance/development-practice.md	B1-Governance	guide	81	(none)	(none)	5	3
+docs/agent-guidance/logging-guidance.md	B1-Governance	guide	861	(none)	5:**Last Updated**: 2025-11-08  	0	5
+docs/agent-guidance/safety-and-security.md	B1-Governance	guide	207	(none)	(none)	3	0
+docs/agent-guidance/typescript-practice.md	B1-Governance	guide	44	(none)	(none)	4	0
+docs/agent-guidance/understanding-agent-references.md	B1-Governance	guide	102	(none)	(none)	1	0
+docs/architecture/README.md	B2-Architecture	index	64	(none)	(none)	2	18
+docs/architecture/greek-ecosystem-deprecation.md	B2-Architecture	history	28	(none)	(none)	1	0
+docs/architecture/openai-connector-deprecation.md	B2-Architecture	history	24	(none)	(none)	1	1
+docs/architecture/openapi-pipeline.md	B2-Architecture	source-of-truth	360	(none)	(none)	6	11
+docs/architecture/programmatic-tool-generation.md	B2-Architecture	source-of-truth	356	3:**Status**: Accepted	4:**Last Updated**: 2026-02-14	2	3
+docs/architecture/provider-contracts.md	B2-Architecture	history	85	3:> **Status**: STALE — the `@oaknational/mcp-providers-node` package referenced	(none)	0	0
+docs/architecture/provider-system.md	B2-Architecture	history	36	3:> **Status**: STALE — the `@oaknational/mcp-providers-node` package referenced	(none)	2	2
+docs/curriculum-guide.md	B3-Domain-Data	guide	179	(none)	(none)	3	5
+docs/data/DATA-VARIANCES.md	B3-Domain-Data	source-of-truth	634	5:**Status**: Living document — update when new variances discovered	3:**Last Updated**: 2026-02-04	5	11
+docs/data/README.md	B3-Domain-Data	index	82	(none)	(none)	0	2
+docs/development/README.md	B4-Engineering-Operations	index	30	(none)	(none)	0	9
+docs/development/build-system.md	B4-Engineering-Operations	guide	317	(none)	(none)	6	4
+docs/development/ci-policy.md	B4-Engineering-Operations	source-of-truth	28	(none)	(none)	1	0
+docs/development/environment-variables.md	B4-Engineering-Operations	source-of-truth	271	(none)	(none)	5	4
+docs/development/extending.md	B4-Engineering-Operations	guide	103	(none)	(none)	2	9
+docs/development/onboarding.md	B4-Engineering-Operations	guide	261	(none)	(none)	10	39
+docs/development/production-debugging-runbook.md	B4-Engineering-Operations	runbook	1050	930:Name                    | Method | Status | Duration | Result	5:**Last Updated**: 2025-11-08  	2	4
+docs/development/release-and-publishing.md	B4-Engineering-Operations	source-of-truth	209	9:| Package                       | Scope          | Registry  | Status  |	(none)	3	0
+docs/development/testing-patterns.md	B4-Engineering-Operations	guide	74	(none)	(none)	1	2
+docs/development/tooling.md	B4-Engineering-Operations	guide	62	(none)	(none)	4	1
+docs/development/troubleshooting.md	B4-Engineering-Operations	guide	108	(none)	(none)	4	1
+docs/development/workflow.md	B4-Engineering-Operations	guide	178	(none)	(none)	2	5
+docs/quick-start.md	B0-Foundation	guide	370	(none)	(none)	2	14

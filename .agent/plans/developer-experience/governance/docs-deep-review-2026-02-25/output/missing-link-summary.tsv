@@ -1,0 +1,10 @@
+source	missing_target	reference_count
+docs/README.md	../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	1
+docs/architecture/openai-connector-deprecation.md	../../.agent/plans/oak-mcp-compatibility-hardening-plan.md	1
+docs/architecture/programmatic-tool-generation.md	../../.agent/plans/oak-curriculum-sdk-zod-validators-2025-08-12.md	1
+docs/architecture/programmatic-tool-generation.md	../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md	1
+docs/data/DATA-VARIANCES.md	../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md	1
+docs/data/DATA-VARIANCES.md	../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	1
+docs/data/DATA-VARIANCES.md	../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json	1
+docs/data/README.md	../../.agent/plans/semantic-search/post-sdk/search-quality/mfl-multilingual-embeddings.md	1
+docs/data/README.md	../../packages/sdks/oak-curriculum-sdk/src/mcp/property-graph-data.ts	1
