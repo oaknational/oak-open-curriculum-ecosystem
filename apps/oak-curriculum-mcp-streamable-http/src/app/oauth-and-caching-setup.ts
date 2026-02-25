@@ -54,7 +54,7 @@ function isNetworkOrAbortError(err: unknown): boolean {
   if (!(err instanceof Error)) {
     return false;
   }
-  return err.name === 'AbortError' || err.name === 'TypeError' || err.message.includes('abort');
+  return err.name === 'AbortError' || err.name === 'TypeError';
 }
 
 function isTransientError(err: unknown): boolean {
@@ -87,24 +87,23 @@ async function attemptMetadataFetch(
 ): Promise<UpstreamAuthServerMetadata> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
-  let response: Awaited<ReturnType<FetchFn>>;
   try {
-    response = await fetchFn(metadataUrl, { signal: controller.signal });
+    const response = await fetchFn(metadataUrl, { signal: controller.signal });
+    if (!response.ok) {
+      const msg = `Upstream AS metadata fetch failed: ${metadataUrl} returned HTTP ${String(response.status)}`;
+      if (response.status >= 500) {
+        throw new TransientFetchError(msg);
+      }
+      throw new Error(msg);
+    }
+    const data: unknown = await response.json();
+    if (!isUpstreamAuthServerMetadata(data)) {
+      throw new Error(`Upstream AS metadata at ${metadataUrl} does not match expected shape`);
+    }
+    return data;
   } finally {
     clearTimeout(timer);
   }
-  if (!response.ok) {
-    const msg = `Upstream AS metadata fetch failed: ${metadataUrl} returned HTTP ${String(response.status)}`;
-    if (response.status >= 500) {
-      throw new TransientFetchError(msg);
-    }
-    throw new Error(msg);
-  }
-  const data: unknown = await response.json();
-  if (!isUpstreamAuthServerMetadata(data)) {
-    throw new Error(`Upstream AS metadata at ${metadataUrl} does not match expected shape`);
-  }
-  return data;
 }
 
 /**

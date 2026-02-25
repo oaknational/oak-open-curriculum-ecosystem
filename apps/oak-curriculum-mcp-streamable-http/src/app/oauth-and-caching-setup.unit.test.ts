@@ -79,6 +79,23 @@ describe('fetchUpstreamMetadata', () => {
     expect(fakeFetch).toHaveBeenCalledTimes(2);
   });
 
+  it('retries on 5xx then succeeds on subsequent attempt', async () => {
+    const fakeFetch = vi
+      .fn<FetchFn>()
+      .mockResolvedValueOnce({ ok: false, status: 503, json: () => Promise.resolve({}) })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(VALID_METADATA),
+      });
+    const result = await fetchUpstreamMetadata('https://clerk.example.com', fakeFetch, {
+      maxRetries: 2,
+      retryDelayMs: 0,
+    });
+    expect(result.issuer).toBe('https://clerk.example.com');
+    expect(fakeFetch).toHaveBeenCalledTimes(2);
+  });
+
   it('does not retry on permanent 4xx errors', async () => {
     const fakeFetch = vi.fn(createFakeFetch({ ok: false, status: 404, body: {} }));
     await expect(
@@ -93,13 +110,16 @@ describe('fetchUpstreamMetadata', () => {
   it('aborts fetch when timeout expires', async () => {
     const hangingFetch: FetchFn = (_url, init) =>
       new Promise((_resolve, reject) => {
-        init?.signal?.addEventListener('abort', () => reject(new Error('aborted')));
+        init?.signal?.addEventListener('abort', () => {
+          const abortError = new DOMException('The operation was aborted', 'AbortError');
+          reject(abortError);
+        });
       });
     await expect(
       fetchUpstreamMetadata('https://clerk.example.com', hangingFetch, {
         timeoutMs: 50,
         maxRetries: 1,
       }),
-    ).rejects.toThrow(/abort/i);
+    ).rejects.toThrow('The operation was aborted');
   });
 });

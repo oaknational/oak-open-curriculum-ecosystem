@@ -22,9 +22,6 @@
  * ```
  */
 
-// Type assertions and Record<string, unknown> are required for safe JSON parsing from unknown
-// This is the boundary where external data enters our system
-
 import { ok, err, type Result } from '@oaknational/result';
 
 // ============================================================================

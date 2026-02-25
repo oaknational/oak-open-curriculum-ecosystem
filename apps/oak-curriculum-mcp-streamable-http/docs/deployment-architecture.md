@@ -58,6 +58,7 @@ Vercel's Express framework support automatically:
 **src/index.ts** (Simplified)
 
 ```typescript
+import http from 'node:http';
 import { createApp } from './application.js';
 import { bootstrapApp } from './bootstrap-app.js';
 
@@ -67,18 +68,15 @@ const app = await bootstrapApp({
   exit: (code) => process.exit(code),
 });
 
-// Conditional listening - exactly one place that checks VERCEL
-if (!process.env.VERCEL) {
-  const port = Number(process.env.PORT ?? 3333);
-  http.createServer(app).listen(port);
-}
-
-export default app; // ✅ Export app instance for Vercel
+const port = config.env.PORT ? Number(config.env.PORT) : 3333;
+const server = http.createServer(app);
+server.listen(port);
 ```
 
 Note: `createApp` is **async** (returns `Promise<ExpressWithAppId>`) because it fetches
 OAuth upstream metadata at startup. `bootstrapApp` wraps this in structured error handling
-with log-and-exit on failure.
+with log-and-exit on failure. The entry point always starts a local HTTP server; Vercel
+deployment uses the framework adapter which imports the built module directly.
 
 ### What Vercel Does
 
@@ -214,6 +212,14 @@ The application uses a carefully ordered middleware chain that is **critical for
 │ Phase 2: Security                                           │
 │  • DNS Rebinding Protection (Host header validation)       │
 │  • CORS (with WWW-Authenticate exposed)                    │
+│  • Security Headers (CSP, X-Content-Type-Options)          │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 2.5: OAuth Metadata & Caching (async)                │
+│  • OAuth Metadata Endpoints (/.well-known/*)               │
+│  • OAuth Proxy Routes (before auth — per RFC 9728)         │
+│  • No-Cache Error Response Headers                          │
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -223,9 +229,8 @@ The application uses a carefully ordered middleware chain that is **critical for
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ Phase 4: Core Endpoints                                     │
-│  • MCP Server Initialization                                │
+│  • MCP Factory (per-request transport — ADR-112)           │
 │  • Health Check Handlers (/healthz)                         │
-│  • OAuth Metadata Endpoints (/.well-known/*)               │
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
