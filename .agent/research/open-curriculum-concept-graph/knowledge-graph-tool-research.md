@@ -349,7 +349,7 @@ The knowledge graph is **additional authored metadata** (like the ontology). It 
 1. **Ontology and graph are authored together** - we control both
 2. **Neither duplicates OpenAPI data** - endpoints come from generated tools, not the graph
 3. **Both can be validated** - ensure concept IDs are consistent between them
-4. **Can be extended at type-gen time** - if we later want to extract concept names from schemas
+4. **Can be extended at sdk-codegen time** - if we later want to extract concept names from schemas
 
 The key insight: The graph captures **domain knowledge that ISN'T in the OpenAPI schema**. Relationships like "threads link units across years" or "programmes are derived views of sequences" are curriculum knowledge, not API structure.
 

@@ -46,7 +46,7 @@ The generation code can use loose types (OpenAPI3). The runtime code uses strict
 
 ## Implementation Example
 
-### Generation Time (typegen-core.ts)
+### Generation Time (codegen-core.ts)
 
 ```typescript
 // This code runs during build and generates TypeScript
@@ -176,4 +176,4 @@ ADR-038 takes this pattern to its logical extreme by embedding ALL validation an
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 - [ADR-038: Compilation-Time Revolution](038-compilation-time-revolution.md) - Takes this to the extreme
 - [Programmatic Tool Generation Architecture](../programmatic-tool-generation.md)
-- [Reference Implementation](../../../reference/oak-curriculum-api-client/scripts/api-types/typegen.ts)
+- [Reference Implementation](../../../reference/oak-curriculum-api-client/scripts/api-types/codegen.ts)

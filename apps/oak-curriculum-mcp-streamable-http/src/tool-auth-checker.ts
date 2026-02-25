@@ -4,7 +4,7 @@
  * This pure function reads security metadata from generated tool descriptors
  * and aggregated tool definitions to determine authentication requirements.
  *
- * **Architecture**: All security metadata is generated at type-gen time or
+ * **Architecture**: All security metadata is generated at sdk-codegen time or
  * defined for aggregated tools. This function only READS that metadata—it
  * never computes or decides policy.
  *

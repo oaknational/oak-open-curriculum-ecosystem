@@ -12,7 +12,7 @@ Run these commands from the repo root to check your setup:
 node --version           # Should be 24.x
 pnpm --version           # Should be 10.x
 pnpm install             # Install dependencies
-pnpm type-gen            # Generate types from OpenAPI schema
+pnpm sdk-codegen         # Generate types from OpenAPI schema
 pnpm build               # Build all workspaces
 pnpm type-check          # Verify no type errors
 pnpm test                # Run unit and integration tests
@@ -28,21 +28,21 @@ Use `.env.example` and other docs as placeholders.
 
 ### Type Generation Fails
 
-**Symptoms**: `pnpm type-gen` fails or produces unexpected output.
+**Symptoms**: `pnpm sdk-codegen` fails or produces unexpected output.
 
 **Steps**:
 
 1. Ensure `OAK_API_KEY` is set in root `.env` (or `.env.e2e`)
 2. Check network access to `open-api.thenational.academy`
-3. Run `pnpm clean && pnpm type-gen` for a fresh generation
+3. Run `pnpm clean && pnpm sdk-codegen` for a fresh generation
 
 ### Build Fails After Type Generation
 
-**Symptoms**: `pnpm build` fails after successful `pnpm type-gen`.
+**Symptoms**: `pnpm build` fails after successful `pnpm sdk-codegen`.
 
 **Steps**:
 
-1. Run `pnpm clean` then `pnpm type-gen && pnpm build` in sequence
+1. Run `pnpm clean` then `pnpm sdk-codegen && pnpm build` in sequence
 2. Check for circular dependencies: generated types should flow from SDK to apps
 3. Verify `tsconfig.json` references are correct in the failing workspace
 
@@ -93,7 +93,7 @@ Use `.env.example` and other docs as placeholders.
 If any quality gate fails, run the full chain in order to isolate the issue:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint:fix

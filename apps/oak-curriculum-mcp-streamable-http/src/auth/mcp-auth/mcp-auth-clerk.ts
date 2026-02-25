@@ -7,7 +7,7 @@
  */
 
 import type { RequestHandler, Request } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { getAuth } from '@clerk/express';
 import { mcpAuth } from './mcp-auth.js';
 import { verifyClerkToken } from './verify-clerk-token.js';

@@ -16,7 +16,7 @@ tooling.
 - Large initiative (10-12 weeks estimated), owner TBD
 - Not referenced from any active milestone
 - No upstream schema evolution events are imminent
-- The cardinal rule (`pnpm type-gen` aligns everything) already provides
+- The cardinal rule (`pnpm sdk-codegen` aligns everything) already provides
   the core guarantee
 
 ## Reactivation Trigger

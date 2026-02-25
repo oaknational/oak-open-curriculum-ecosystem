@@ -133,7 +133,7 @@ OpenAPI Operation → description field
 ```
 
 **Phase 2: SDK Code Generation**
-Location: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/`
+Location: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/`
 
 Key File: `emit-index.ts` (lines 180-191)
 
@@ -944,7 +944,7 @@ if (!parsed.success) {
 
 ### Q: "Where do we generate the tool descriptions?"
 
-**A**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts` (lines 180-191)
+**A**: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts` (lines 180-191)
 
 - Extracted from OpenAPI `operation.description`
 - Transformed ("endpoint" → "tool")
@@ -1035,7 +1035,7 @@ if (!parsed.success) {
 
 | Rule                                                    | Status                 | Evidence                         |
 | ------------------------------------------------------- | ---------------------- | -------------------------------- |
-| Cardinal Rule: ALL types from schema at compile time    | ✅ PASS                | `pnpm type-gen` drives all types |
+| Cardinal Rule: ALL types from schema at compile time    | ✅ PASS                | `pnpm sdk-codegen` drives all types |
 | No type shortcuts (as, any, !, Record<string, unknown>) | ⚠️ PARTIAL             | One `z.any()` fallback           |
 | Preserve type information                               | ✅ PASS                | Literal types, enums preserved   |
 | Single source of truth for types                        | ✅ PASS                | OpenAPI schema                   |
@@ -1091,10 +1091,10 @@ if (!parsed.success) {
 
 **Code Generation**:
 
-- Main Generator: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`
-- Description Extraction: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
-- Schema Generation: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
-- Parameter Metadata: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/param-metadata.ts`
+- Main Generator: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`
+- Description Extraction: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts`
+- Schema Generation: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
+- Parameter Metadata: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/param-metadata.ts`
 
 **Generated Artifacts**:
 

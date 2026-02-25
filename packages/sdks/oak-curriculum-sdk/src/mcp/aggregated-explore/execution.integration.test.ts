@@ -9,9 +9,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { ok, err } from '@oaknational/result';
 import { runExploreTool } from './execution.js';
-import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type { SearchRetrievalService } from '../search-retrieval-types.js';
+import { createNullGeneratedToolRegistry } from '../test-helpers/null-generated-tool-registry.js';
 
 function createFakeRetrieval(overrides?: Partial<SearchRetrievalService>): SearchRetrievalService {
   return {
@@ -66,14 +66,7 @@ function createDeps(retrieval: SearchRetrievalService): UniversalToolExecutorDep
   return {
     executeMcpTool: () => Promise.reject(new Error('Should not call executeMcpTool')),
     searchRetrieval: retrieval,
-    generatedTools: {
-      toolNames: [],
-      getToolFromToolName: () => {
-        throw new Error('Should not call getToolFromToolName');
-      },
-      isToolName: (value: unknown): value is ToolName =>
-        typeof value === 'string' && value === '__never__',
-    },
+    generatedTools: createNullGeneratedToolRegistry(),
   };
 }
 

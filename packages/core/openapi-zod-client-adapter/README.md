@@ -19,8 +19,8 @@ transforms it into Zod v4 compatible code.
 
 ## Usage
 
-This adapter is consumed by the SDK type-gen pipeline
-(`packages/sdks/oak-curriculum-sdk/type-gen/zodgen.ts`) during `pnpm type-gen`.
+This adapter is consumed by the SDK sdk-codegen pipeline
+(`packages/sdks/oak-curriculum-sdk/code-generation/zodgen.ts`) during `pnpm sdk-codegen`.
 It is not published to npm.
 
 ## Relationship to Castr

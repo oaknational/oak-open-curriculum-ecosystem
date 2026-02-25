@@ -83,7 +83,7 @@ See [ground-truth-archive/README.md](../../../../apps/oak-search-cli/src/lib/sea
 
 ## Future Work
 
-See [ground-truth-expansion-plan.md](../post-sdk/search-quality/ground-truth-expansion-plan.md) for Phase 2 expansion opportunities:
+See [ground-truth-expansion-plan.md](../../future/09-evaluation-and-evidence/ground-truth-expansion-plan.md) for Phase 2 expansion opportunities:
 
 - Adding queries per subject-phase
 - Category diversity (typos, natural expressions, imprecise input)
@@ -112,4 +112,4 @@ See [ADR-106: Known-Answer-First Ground Truth Methodology](../../../../docs/arch
 | [ADR-106](../../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology decision |
 | [ground-truth-protocol.md](../../prompts/semantic-search/ground-truth-protocol.md) | The protocol |
 | [queries-redesigned.md](../../../../apps/oak-search-cli/docs/ground-truths/queries-redesigned.md) | Coverage matrix |
-| [ground-truth-expansion-plan.md](../post-sdk/search-quality/ground-truth-expansion-plan.md) | Future work |
+| [ground-truth-expansion-plan.md](../../future/09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Future work |

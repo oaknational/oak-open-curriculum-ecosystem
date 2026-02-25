@@ -7,7 +7,7 @@
  */
 
 import type { Express, RequestHandler } from 'express';
-import type { Logger, PhasedTimer } from '@oaknational/mcp-logger';
+import type { Logger, PhasedTimer } from '@oaknational/logger';
 
 import { createCorsMiddleware, dnsRebindingProtection } from '../security.js';
 import { createSecurityHeadersMiddleware } from '../security-headers.js';

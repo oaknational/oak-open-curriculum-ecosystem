@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import { fetchJson } from './common.js';
 import type { SmokeContext } from './types.js';

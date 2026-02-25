@@ -40,13 +40,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/libs/result"
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
+    "directory": "packages/core/result"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/libs/result#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/core/result#readme",
   "keywords": [
     "result",
     "error-handling",

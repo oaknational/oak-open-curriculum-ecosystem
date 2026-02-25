@@ -12,7 +12,7 @@ todos:
     content: "WS3 (REFACTOR): [Describe documentation, TSDoc, NL guidance, README updates]."
     status: pending
   - id: ws4-quality-gates
-    content: "WS4: Full quality gate chain (type-gen through smoke:dev:stub)."
+    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub)."
     status: pending
   - id: ws5-adversarial-review
     content: "WS5: Adversarial specialist reviews. Document findings."
@@ -123,7 +123,7 @@ All tests MUST PASS at the end of WS2.
 > See [Quality Gates component](../templates/components/quality-gates.md)
 
 ```bash
-pnpm clean && pnpm type-gen && pnpm build && pnpm type-check && \
+pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
 pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
 pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
 ```

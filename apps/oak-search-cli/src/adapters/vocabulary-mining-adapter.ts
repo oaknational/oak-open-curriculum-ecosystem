@@ -16,7 +16,7 @@ import {
   type ExtractionStats,
   generateMinedSynonyms,
   type MinedSynonymsData,
-} from '@oaknational/curriculum-sdk-generation/bulk';
+} from '@oaknational/sdk-codegen/bulk';
 
 /**
  * Statistics from vocabulary mining.
@@ -88,7 +88,7 @@ function toBulkDataInput(bulkFile: BulkDownloadFile): BulkDataInput {
  *
  * @example
  * ```typescript
- * import { readAllBulkFiles } from '@oaknational/curriculum-sdk-generation/bulk';
+ * import { readAllBulkFiles } from '@oaknational/sdk-codegen/bulk';
  * import { createVocabularyMiningAdapter } from './vocabulary-mining-adapter';
  *
  * const bulkFiles = await readAllBulkFiles('./bulk-downloads');

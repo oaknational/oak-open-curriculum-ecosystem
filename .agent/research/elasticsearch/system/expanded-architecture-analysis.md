@@ -135,10 +135,10 @@ Rationale:
 
 **Phase 1: Ontology Index Schema**
 
-Generate schema from ontology-data.ts at type-gen time:
+Generate schema from ontology-data.ts at sdk-codegen time:
 
 ```typescript
-// type-gen/typegen/search-indices/generate-ontology-index.ts
+// code-generation/typegen/search-indices/generate-ontology-index.ts
 export function generateOntologyIndexSchema(): string {
   // Parse ontologyData structure
   // Generate Zod schema + TypeScript types

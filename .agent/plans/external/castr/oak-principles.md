@@ -6,7 +6,7 @@ This document defines the type discipline principles that castr output must upho
 
 ## The Cardinal Rule
 
-> If the upstream OpenAPI schema changes, then running `pnpm type-gen` followed by a `pnpm build` MUST be sufficient to bring all workspaces into alignment with the new schema.
+> If the upstream OpenAPI schema changes, then running `pnpm sdk-codegen` followed by a `pnpm build` MUST be sufficient to bring all workspaces into alignment with the new schema.
 
 This means:
 

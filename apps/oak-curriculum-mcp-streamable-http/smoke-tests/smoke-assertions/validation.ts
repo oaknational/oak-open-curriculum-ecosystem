@@ -10,7 +10,7 @@ import {
 } from './common.js';
 import { type SmokeContext } from './types.js';
 import { createAssertionLogger, logAssertionSuccess, recordSsePayload } from './logging.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 export async function assertValidationFailures(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'validation');

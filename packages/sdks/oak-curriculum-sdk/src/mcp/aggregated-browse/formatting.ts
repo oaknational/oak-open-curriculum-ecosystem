@@ -5,7 +5,7 @@
  * returned by the Search SDK's `fetchSequenceFacets()` method.
  */
 
-import type { SearchFacets } from '@oaknational/curriculum-sdk-generation/search';
+import type { SearchFacets } from '@oaknational/sdk-codegen/search';
 import type { BrowseArgs } from './types.js';
 
 /**

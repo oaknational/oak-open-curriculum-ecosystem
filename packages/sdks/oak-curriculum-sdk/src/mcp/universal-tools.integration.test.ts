@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
+import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations.
@@ -118,7 +118,7 @@ describe('listUniversalTools annotations', () => {
  * Integration tests for OpenAI Apps SDK _meta fields across ALL tools.
  *
  * These tests verify that listUniversalTools() exposes _meta fields
- * for BOTH generated tools (from type-gen) and aggregated tools.
+ * for BOTH generated tools (from sdk-codegen) and aggregated tools.
  * This proves the integration point where both camps meet.
  */
 describe('listUniversalTools _meta integration', () => {

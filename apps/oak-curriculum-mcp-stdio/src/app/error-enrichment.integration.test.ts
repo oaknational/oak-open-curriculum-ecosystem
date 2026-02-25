@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createToolResponseHandlers } from './tool-response-handlers';
-import type { Logger, Duration } from '@oaknational/mcp-logger/node';
+import type { Logger, Duration } from '@oaknational/logger/node';
 import { createFakeLogger } from '../test-helpers/fakes.js';
 
 describe('Error Enrichment Integration', () => {

@@ -6,7 +6,7 @@ TypeScript SDK for accessing Oak National Academy's Curriculum API.
 
 This SDK implements the **OpenAPI-First Pipeline** pattern: a type-safe, compile-time approach where everything is generated from the OpenAPI schema. It provides a fully-typed, runtime-agnostic client for the Oak Curriculum API.
 
-**Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm type-gen` regenerates all types, validators, and MCP tools automatically.
+**Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm sdk-codegen` regenerates all types, validators, and MCP tools automatically.
 
 For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md)
 
@@ -16,7 +16,7 @@ Start with the [ADR index](../../../docs/architecture/architectural-decisions/),
 - [ADR-029](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
 - [ADR-030](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
 - [ADR-031](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-035](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - Unified SDK and MCP generation
+- [ADR-035](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md) - Unified SDK and MCP code generation
 - [ADR-048](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ## Architecture
@@ -57,19 +57,19 @@ This is achieved through:
 
 #### Key Components:
 
-- `type-gen/` - Build-time generation scripts that extract metadata from OpenAPI
-- `type-gen/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
+- `code-generation/` - Build-time generation scripts that extract metadata from OpenAPI
+- `code-generation/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
 - `src/types/generated/` - Generated TypeScript types and constants (do not edit manually)
 - `src/client/` - Runtime client that uses the pre-generated types
 - `src/tool-generation/` - Exports for programmatic tool generation (e.g., MCP servers)
 
 ### Canonical URL Generation
 
-This SDK automatically generates canonical URLs for all curriculum resources at type-generation time. This eliminates the need for consuming applications to implement their own URL generation logic.
+This SDK automatically generates canonical URLs for all curriculum resources at code-generation time. This eliminates the need for consuming applications to implement their own URL generation logic.
 
 #### How it works:
 
-1. **Type-Gen Time**: URL helpers are generated during `pnpm type-gen` based on the OpenAPI schema
+1. **SDK-Codegen Time**: URL helpers are generated during `pnpm sdk-codegen` based on the OpenAPI schema
 2. **Response Augmentation**: All API responses are automatically augmented with `canonicalUrl` fields
 3. **Schema Decoration**: The OpenAPI schema is decorated to include `canonicalUrl` in response types
 4. **Context-Aware**: URL generation uses response context (e.g., subject/phase for units) when available
@@ -114,7 +114,7 @@ When `searchRetrieval` is not provided, the tools return a "not configured" erro
 
 This SDK now generates all MCP (Model Context Protocol) tool types at build time, making the entire SDK+MCP system a pure function of the OpenAPI schema. The generation happens in three phases:
 
-1. **typegen.ts**: Extracts MCP tools from OpenAPI and generates basic types
+1. **codegen.ts**: Extracts MCP tools from OpenAPI and generates basic types
 2. **zodgen.ts**: Generates Zod schemas for runtime validation
 3. **mcp-toolgen.ts**: Reads the actual Zod output and creates validator mappings
 
@@ -148,26 +148,26 @@ const validated = validateToolResponse(toolName, response);
 - `parseWithCurriculumSchema`, `parseWithCurriculumSchemaInstance`, `parseEndpointParameters`, and `parseSearchResponse` delegate to `parseSchema`, covering curriculum responses, request parameter maps, and search responses.
 - `parseSearchSuggestionResponse` applies the same pattern for suggestions.
 
-Downstream consumers **must** import these helpers rather than duplicating validation logic. If the OpenAPI schema changes, rerunning `pnpm type-gen` updates the generated Zod schemas and the helpers continue to provide the correct `_input`/`_output` types.
+Downstream consumers **must** import these helpers rather than duplicating validation logic. If the OpenAPI schema changes, rerunning `pnpm sdk-codegen` updates the generated Zod schemas and the helpers continue to provide the correct `_input`/`_output` types.
 
 ### Architectural Decisions (Deep Dive)
 
 This SDK follows several important architectural patterns documented in our ADRs:
 
-- [ADR-026: OpenAPI Type Generation Strategy](../../../docs/architecture/architectural-decisions/026-openapi-type-generation-strategy.md) - How we generate types from OpenAPI
+- [ADR-026: OpenAPI Code Generation Strategy](../../../docs/architecture/architectural-decisions/026-openapi-code-generation-strategy.md) - How we generate types from OpenAPI
 - [ADR-029: No Manual API Data](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - All API data comes from the OpenAPI schema
 - [ADR-030: SDK as Single Source of Truth](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - The SDK is the authoritative source for API types
 - [ADR-031: Generation-Time Extraction](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
-- [ADR-035: Unified SDK-MCP Type Generation](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - MCP tool types flow from the SDK
-- [ADR-047: Canonical URL Generation at Type-Gen Time](../../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md) - Automatic canonical URL generation in all responses
+- [ADR-035: Unified SDK-MCP Code Generation](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md) - MCP tool types flow from the SDK
+- [ADR-047: Canonical URL Generation at Code-Gen Time](../../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md) - Automatic canonical URL generation in all responses
 - [ADR-048: Shared Parse Schema Helper](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Describes how `parseSchema` validates curriculum/search requests and responses.
 
 ### Directory Structure
 
 ```text
 oak-curriculum-sdk/
-├── type-gen/
-│   ├── typegen.ts         # Phase 1: OpenAPI type generation
+├── code-generation/
+│   ├── codegen.ts         # Phase 1: OpenAPI type generation
 │   ├── zodgen.ts          # Phase 2: Zod schema generation
 │   ├── mcp-toolgen.ts     # Phase 3: MCP validator mapping
 │   ├── operations/        # Extract and generate operation constants
@@ -235,7 +235,7 @@ const units = await client.listUnits('programme-id');
 
 ## Logging
 
-The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
+The SDK integrates seamlessly with `@oaknational/logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
 
 ```typescript
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
@@ -245,8 +245,8 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 // Create logger with explicit dependency injection
 const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');

@@ -13,7 +13,7 @@ Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mapp
 Elasticsearch mapping for the oak_sequence_facets index.
 
 Contains sequence facet data for navigation and filtering.
-Generated from SEQUENCE_FACETS_INDEX_FIELDS at type-gen time.
+Generated from SEQUENCE_FACETS_INDEX_FIELDS at sdk-codegen time.
 
 ## Type Declaration
 

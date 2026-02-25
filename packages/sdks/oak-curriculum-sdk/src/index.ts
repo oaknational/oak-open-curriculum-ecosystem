@@ -43,7 +43,7 @@ export type {
   paths as OakApiPaths,
   Subject as OakSubject,
   KeyStage as OakKeyStage,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 
 export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './types/doc-bridges.js';
 
@@ -77,14 +77,14 @@ export {
   SUBJECTS,
   ASSET_TYPES,
   VALID_PATHS_BY_PARAMETERS,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/index.js';
 export type { PathOperation, OperationId } from './types/index.js';
 
-export type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
+export type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
 
-export { schemaBase as schema } from '@oaknational/curriculum-sdk-generation/api-schema';
+export { schemaBase as schema } from '@oaknational/sdk-codegen/api-schema';
 
 // ============================================================================
 // Subject Hierarchy (ADR-101)
@@ -98,13 +98,13 @@ export {
   isKs4ScienceVariant,
   getSubjectParent,
   isAllSubject,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 export type {
   AllSubjectSlug,
   ParentSubjectSlug,
   Ks4ScienceVariant,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 // ============================================================================
 // Validation
@@ -135,7 +135,7 @@ export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 
 // ============================================================================
 // Type-Safe Object Helpers
@@ -167,7 +167,7 @@ export type {
   SdkValidationError,
   ResourceType,
   ServerErrorStatus,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 
 export {
   classifyHttpError,
@@ -175,4 +175,4 @@ export {
   validationError,
   isRecoverableError,
   formatSdkError,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';

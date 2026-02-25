@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {

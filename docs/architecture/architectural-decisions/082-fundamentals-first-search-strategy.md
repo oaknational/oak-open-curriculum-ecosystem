@@ -85,7 +85,7 @@ These artefacts are:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-See [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) for the comprehensive bulk analysis plan.
+See [bulk-data-analysis.md](../../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis/README.md) for the comprehensive bulk analysis plan.
 
 ## Problem Statement
 
@@ -284,7 +284,7 @@ Only pursue when Tiers 1-3 show diminishing returns.
 | **NC coverage map**     | ❌ Not built    | 🔜 Curriculum alignment      |
 | **Thread progressions** | ❌ Not built    | 🔜 Learning path queries     |
 
-See [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) for the vocabulary mining plan.
+See [bulk-data-analysis.md](../../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis/README.md) for the vocabulary mining plan.
 
 ## Rationale
 
@@ -348,13 +348,13 @@ Complexity spiral                     MRR 0.80+ ✓
 
 ### Experiment Tracking
 
-All experiments tracked in: `.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md`
+All experiments tracked in: `.agent/evaluations/EXPERIMENT-LOG.md`
 
 ### Current Status (2026-02-10)
 
 **✅ TIER 1 APPROACHES COMPLETE** — All standard Tier 1 approaches implemented and deployed (2025-12-24).
 
-All Tier 1 checklist items complete. Intent-based category (0.229) has documented exception (requires Tier 4 metadata/LLM solutions). See [Search Acceptance Criteria](.agent/plans/semantic-search/search-acceptance-criteria.md) for verification details.
+All Tier 1 checklist items complete. Intent-based category (0.229) has documented exception (requires Tier 4 metadata/LLM solutions). See [Search Acceptance Criteria](../../../.agent/plans/semantic-search/search-acceptance-criteria.md) for verification details.
 
 | Tier  | Status                     | MRR       | Notes                                                    |
 | ----- | -------------------------- | --------- | -------------------------------------------------------- |
@@ -459,17 +459,17 @@ AI enhancement (semantic reranking, LLM query expansion) should be re-evaluated 
 
 ### Search Strategy & Evaluation
 
-- [Search Acceptance Criteria](../../.agent/plans/semantic-search/search-acceptance-criteria.md) — **Defines "Target Met" vs "Exhausted"**
+- [Search Acceptance Criteria](../../../.agent/plans/semantic-search/search-acceptance-criteria.md) — **Defines "Target Met" vs "Exhausted"**
 - [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md) — **Ensures experiment integrity**
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics and harness
-- [E-001 Experiment](../../.agent/evaluations/experiments/semantic-reranking.experiment.md) — Semantic reranking (rejected, may need re-evaluation)
-- [ground-truth-corrections.md](../../.agent/evaluations/ground-truth-corrections.md) — The 63-slug correction incident
-- [Experiment Priorities](../../.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md) — Detailed experiment tracker
+- [E-001 Reassessment](../../../.agent/plans/archive/semantic-search-archive-dec25/archive/SEMANTIC-RERANKING-REASSESSMENT.md) — Semantic reranking reassessment context
+- [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) — Ground-truth method and baselines
+- [Experiment Log](../../../.agent/evaluations/EXPERIMENT-LOG.md) — Detailed experiment tracker
 
 ### Vocabulary Mining & Static Analysis
 
-- [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) — **Bulk data analysis plan (post-SDK)**
-- [synonym-architecture.md](../../.agent/plans/semantic-search/archive/completed/synonym-architecture.md) — Synonym architecture (completed)
+- [bulk-data-analysis.md](../../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis/README.md) — **Bulk data analysis plan (post-SDK)**
+- [synonym-architecture.md](../../../.agent/plans/semantic-search/archive/completed/synonym-architecture.md) — Synonym architecture (completed)
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md) — Synonym management
 - [ADR-100: Complete Subject Synonym Coverage](100-complete-subject-synonym-coverage.md) — All 17 subjects covered
 

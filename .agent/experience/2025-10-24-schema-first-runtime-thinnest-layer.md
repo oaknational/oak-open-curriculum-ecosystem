@@ -2,7 +2,7 @@
 
 **Date**: 2025-10-24  
 **Agent**: Codex (Current Session)  
-**Context**: Investigating SDK build failures while refactoring type-gen/runtime separation for MCP tools
+**Context**: Investigating SDK build failures while refactoring sdk-codegen/runtime separation for MCP tools
 
 ## The Journey
 
@@ -16,7 +16,7 @@ To hush the compiler, I experimented with `DescriptorInvocation<T>` tricks and `
 
 ### Realignment Through The Plan
 
-Re-reading `snagging-resolution-plan.md`, `rules.md`, and `AGENT.md` was the pivot. The plan demands that **all** intelligence lives in type-gen: the schema gives us every literal, every enum, every structural guard we need. By restoring strict, schema-derived types (required path/query fields, exact tool args) and letting runtime helpers consume them verbatim, the compiler becomes an ally again.
+Re-reading `snagging-resolution-plan.md`, `rules.md`, and `AGENT.md` was the pivot. The plan demands that **all** intelligence lives in sdk-codegen: the schema gives us every literal, every enum, every structural guard we need. By restoring strict, schema-derived types (required path/query fields, exact tool args) and letting runtime helpers consume them verbatim, the compiler becomes an ally again.
 
 ## Key Insights
 
@@ -27,4 +27,4 @@ Re-reading `snagging-resolution-plan.md`, `rules.md`, and `AGENT.md` was the piv
 
 ## Conclusion
 
-The failures weren’t caused by TypeScript being fussy; they were self-inflicted by diluting the schema-derived guarantees. The repair is to recommit to the cardinal rule: let type-gen do all the thinking, keep runtime wafer-thin, and treat the type system as the guardrail against entropy. Once we do, `pnpm type-gen` + `pnpm build` returns to being the single source of alignment.
+The failures weren’t caused by TypeScript being fussy; they were self-inflicted by diluting the schema-derived guarantees. The repair is to recommit to the cardinal rule: let sdk-codegen do all the thinking, keep runtime wafer-thin, and treat the type system as the guardrail against entropy. Once we do, `pnpm sdk-codegen` + `pnpm build` returns to being the single source of alignment.

@@ -5,7 +5,7 @@
  */
 
 import { vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
 import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
 import {

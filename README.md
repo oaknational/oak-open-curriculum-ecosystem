@@ -47,8 +47,8 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 1. **Clone & install**
 
    ```bash
-   git clone https://github.com/oaknational/oak-mcp-ecosystem.git
-   cd oak-mcp-ecosystem
+   git clone https://github.com/oaknational/oak-open-data-ecosystem.git
+   cd oak-open-data-ecosystem
    pnpm install
    ```
 
@@ -96,7 +96,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 5. **Regenerate types & run quality gates**
 
    ```bash
-   pnpm make   # install -> build (includes type-gen via Turbo deps) -> type-check -> doc-gen -> lint:fix -> subagents:check -> markdownlint:root -> format:root
+   pnpm make   # install -> build (includes sdk-codegen via Turbo deps) -> type-check -> doc-gen -> lint:fix -> subagents:check -> markdownlint:root -> format:root
    pnpm qg     # full gate: format-check:root -> markdownlint-check:root -> subagents:check -> type-check -> lint -> test suites -> smoke
    ```
 
@@ -125,7 +125,7 @@ Read [the start right workflow](.agent/prompts/start-right.prompt.md).
 # What is available
 
 pnpm install        # Install dependencies
-pnpm type-gen       # Regenerate SDK + MCP artefacts from OpenAPI
+pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 pnpm build          # Build all workspaces
 pnpm type-check     # Type-check apps and packages
 pnpm doc-gen        # Generate TypeDoc/OpenAPI/markdown/AI docs
@@ -136,7 +136,7 @@ pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests
 pnpm smoke:dev:stub # Local smoke harness for MCP servers
 pnpm subagents:check # Validate sub-agent wrapper/template standards
-pnpm make           # Full pipeline (install -> build/type-gen -> docs -> lint:fix -> subagents:check -> markdownlint:root -> format:root)
+pnpm make           # Full pipeline (install -> build/sdk-codegen -> docs -> lint:fix -> subagents:check -> markdownlint:root -> format:root)
 pnpm qg             # Quality gate (format-check:root -> markdownlint-check:root -> subagents:check -> type-check -> lint -> tests -> smoke)
 
 # What actually gets used
@@ -187,11 +187,11 @@ Everything in this repository works with the Open Curriculum API. When you see "
 Everything flows from the OpenAPI schema:
 
 1. **OpenAPI Schema** (single source of truth)
-2. **→ TypeScript SDK** (generated at `pnpm type-gen`)
+2. **→ TypeScript SDK** (generated at `pnpm sdk-codegen`)
 3. **→ MCP Tools** (generated from the same schema)
 4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
 
-**The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
+**The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm sdk-codegen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
 Start with the [ADR index](docs/architecture/architectural-decisions/), then the foundational ADRs:
@@ -218,7 +218,7 @@ Start with the [ADR index](docs/architecture/architectural-decisions/), then the
 | Directory        | Purpose                                                                                                     |
 | ---------------- | ----------------------------------------------------------------------------------------------------------- |
 | `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                                      |
-| `packages/sdks/` | Curriculum SDK (type-gen, MCP metadata) and Search SDK (ES retrieval)                                       |
+| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                |
 | `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
 | `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
 | `docs/`          | Developer documentation, onboarding guides, 114 ADRs                                                        |
@@ -252,8 +252,8 @@ commit conventions, and quality expectations.
 ## Support & Licensing
 
 - Documentation – [docs/README.md](docs/README.md)
-- Issues – <https://github.com/oaknational/oak-mcp-ecosystem/issues>
-- Discussions – <https://github.com/oaknational/oak-mcp-ecosystem/discussions>
+- Issues – <https://github.com/oaknational/oak-open-data-ecosystem/issues>
+- Discussions – <https://github.com/oaknational/oak-open-data-ecosystem/discussions>
 - Licence (code) – MIT (see [LICENSE](LICENSE))
 - Licence (curriculum data) – see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
 - Branding – see [BRANDING.md](BRANDING.md)

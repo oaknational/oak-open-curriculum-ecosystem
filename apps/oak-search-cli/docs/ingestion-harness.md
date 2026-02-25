@@ -77,7 +77,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 
 ### Logging & telemetry
 
-- Logs emitted through `@oaknational/mcp-logger` with structure:
+- Logs emitted through `@oaknational/logger` with structure:
   - `info`: summary counts per index, target, dry-run flag.
   - `debug`: detailed bulk line preview (first N lines) when `--verbose`.
   - `error`: failures with contextual metadata (target, subject, keyStage).

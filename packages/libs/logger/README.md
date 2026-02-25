@@ -1,4 +1,4 @@
-# @oaknational/mcp-logger
+# @oaknational/logger
 
 OpenTelemetry-compliant structured logging library for multi-runtime MCP (Model Context Protocol) applications.
 
@@ -10,7 +10,7 @@ This logger has been refactored to use **explicit Dependency Injection (DI)** wi
 
 - **OpenTelemetry Format**: All logs follow the OTel Logs Data Model (JSON with PascalCase fields)
 - **Pure Dependency Injection**: Sinks and configuration are explicitly injected, no hidden dependencies
-- **Node.js API Confinement**: All Node.js-specific APIs (`process.stdout`, `fs`) confined to `@oaknational/mcp-logger/node` entry point
+- **Node.js API Confinement**: All Node.js-specific APIs (`process.stdout`, `fs`) confined to `@oaknational/logger/node` entry point
 - **Child Logger Support**: Create scoped loggers with `logger.child({ correlationId })`
 - **Type-Safe Context**: All context must be `JsonObject` (no `unknown` or `any`)
 
@@ -19,7 +19,7 @@ For migration from the old API, see the examples below.
 ## Installation
 
 ```bash
-pnpm add @oaknational/mcp-logger
+pnpm add @oaknational/logger
 ```
 
 For Express middleware support, also install Express as a peer dependency:
@@ -36,8 +36,8 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 // Create logger with explicit dependency injection
 const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
@@ -116,8 +116,8 @@ import {
   buildResourceAttributes,
   createRequestLogger,
   createErrorLogger,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 import express from 'express';
 
 const app = express();
@@ -160,8 +160,8 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-} from '@oaknational/mcp-logger';
-import { createNodeFileSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeFileSink } from '@oaknational/logger/node';
 
 // Create logger with file-only sink (NEVER stdout for stdio servers)
 const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
@@ -200,8 +200,8 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/logger/node';
 
 // Create logger with both stdout and file sinks
 const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
@@ -237,8 +237,8 @@ import {
   buildResourceAttributes,
   createRequestLogger,
   createErrorLogger,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 import express from 'express';
 
 const app = express();
@@ -282,7 +282,7 @@ The request logger extracts and sanitises:
 The logger provides high-precision timing utilities for measuring operation duration:
 
 ```typescript
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 const timer = startTimer();
 
@@ -314,8 +314,8 @@ import {
   logLevelToSeverityNumber,
   buildResourceAttributes,
   startTimer,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 // Create logger
 const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
@@ -375,7 +375,7 @@ For more details on correlation IDs, see the [HTTP Server README](../../apps/oak
 The logger package provides error enrichment utilities to add debugging context (correlation IDs, timing, request details) to errors before logging. This enables better production debugging and request tracing.
 
 ```typescript
-import { enrichError, startTimer, type ErrorContext } from '@oaknational/mcp-logger';
+import { enrichError, startTimer, type ErrorContext } from '@oaknational/logger';
 
 const timer = startTimer();
 const correlationId = 'req_1699123456789_a3f2c9';
@@ -429,7 +429,7 @@ interface ErrorContext {
 **Example: Stdio server error enrichment**
 
 ```typescript
-import { enrichError, startTimer, type ErrorContext } from '@oaknational/mcp-logger/node';
+import { enrichError, startTimer, type ErrorContext } from '@oaknational/logger/node';
 
 const timer = startTimer();
 const correlationId = generateCorrelationId();
@@ -512,7 +512,7 @@ interface UnifiedLoggerOptions {
 }
 ```
 
-**Node.js Sink Factories** (`@oaknational/mcp-logger/node`):
+**Node.js Sink Factories** (`@oaknational/logger/node`):
 
 - `createNodeStdoutSink(): StdoutSink` - Creates stdout sink using `process.stdout.write`
 - `createNodeFileSink(config: FileSinkConfig): FileSinkInterface` - Creates file sink using Node.js `fs`
@@ -600,7 +600,7 @@ MCP_LOGGER_FILE_APPEND=true
 If you have custom logger implementations in your application:
 
 1. Replace custom logger creation with `new UnifiedLogger({ ... })` using explicit DI
-2. Update imports to use `@oaknational/mcp-logger` and `@oaknational/mcp-logger/node`
+2. Update imports to use `@oaknational/logger` and `@oaknational/logger/node`
 3. Configure sinks explicitly (`createNodeStdoutSink()`, `createNodeFileSink()`)
 4. Remove custom logging utilities (they're now in the shared package)
 

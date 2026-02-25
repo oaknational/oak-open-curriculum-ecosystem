@@ -63,7 +63,7 @@
 
 Effort estimates are very approximate and for orientation only. Every task needs proper sizing by the person doing the work.
 
-See `09-schemas-endpoint-rfc.md` for the detailed plan behind item 12 (validator bundle endpoint and SDK type-gen integration).
+See `09-schemas-endpoint-rfc.md` for the detailed plan behind item 12 (validator bundle endpoint and SDK sdk-codegen integration).
 
 Examples index: `10-availability-and-gating-examples.md`, `11-assets-and-transcripts-examples.md`, `12-search-and-enums-examples.md`, `13-quiz-content-examples.md`, `14-listing-and-pagination-examples.md`, `15-bulk-download-examples.md`, `16-schema-and-metadata-examples.md`, `17-ontology-and-threads-examples.md`, `18-programmes-and-identifiers-examples.md`, `19-semantic-summary-examples.md`, `20-validation-and-schema-examples.md`, `21-maths-education-enhancements.md`.
 
@@ -83,7 +83,7 @@ These enhancements can be implemented incrementally:
 
 After each schema change:
 
-1. Run `pnpm type-gen` in the MCP ecosystem
+1. Run `pnpm sdk-codegen` in the MCP ecosystem
 2. Verify generated types and tools update correctly
 3. Test AI tool discovery in ChatGPT Developer Mode
 4. Measure tool selection accuracy improvements

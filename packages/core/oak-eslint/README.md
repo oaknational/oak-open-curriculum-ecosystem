@@ -41,7 +41,7 @@ parameter (`'generation'` or `'runtime'`) determines the constraint set:
   (`@oaknational/curriculum-sdk`). The generation workspace must not depend
   on its consumer.
 - **`'runtime'`**: blocks deep imports into the generation workspace
-  (`@oaknational/curriculum-sdk-generation/*/**`) — only single-level
+  (`@oaknational/sdk-codegen/*/**`) — only single-level
   subpath exports are permitted. Also blocks `@workspace/*` aliases to
   prevent pnpm workspace aliases from bypassing the boundary rules.
 

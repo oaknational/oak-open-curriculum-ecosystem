@@ -1,5 +1,5 @@
-import { startTimer } from '@oaknational/mcp-logger';
-import type { Logger } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
 
 export type AuthSetupStep =
   | 'auth.disabled.register'

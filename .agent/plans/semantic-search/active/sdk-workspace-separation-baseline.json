@@ -6,8 +6,8 @@
   "adrReference": "docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md",
   "generationWorkspaceAbsent": true,
   "commands": {
-    "typeGenFileCount": {
-      "command": "find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l",
+    "codeGenFileCount": {
+      "command": "find packages/sdks/oak-curriculum-sdk/code-generation -type f | wc -l",
       "result": 192
     },
     "srcFileCount": {

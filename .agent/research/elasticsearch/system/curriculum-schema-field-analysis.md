@@ -461,7 +461,7 @@ The Oak Curriculum API already provides **expert-curated pedagogical metadata** 
 3. **National curriculum alignment** → Authoritative standards mapping
 4. **Thread structure** → Pre-defined curriculum coherence
 
-**All of this flows from the SDK at type-gen time** - zero external API dependencies, zero additional cost.
+**All of this flows from the SDK at sdk-codegen time** - zero external API dependencies, zero additional cost.
 
 ---
 

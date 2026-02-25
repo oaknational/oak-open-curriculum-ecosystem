@@ -6,7 +6,7 @@ import {
   readAllBulkFiles,
   type BulkDownloadFile,
   type BulkFileResult,
-} from '@oaknational/curriculum-sdk-generation/bulk';
+} from '@oaknational/sdk-codegen/bulk';
 import { type OakClient } from '../../adapters/oak-adapter';
 import { createHybridDataSource } from '../../adapters/hybrid-data-source';
 import {

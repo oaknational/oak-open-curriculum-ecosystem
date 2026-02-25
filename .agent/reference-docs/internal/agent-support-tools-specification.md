@@ -607,7 +607,7 @@ Agent support tools use `structuredContent` so the model receives the guidance. 
 Before merging changes to agent support tools/resources, run:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint -- --fix

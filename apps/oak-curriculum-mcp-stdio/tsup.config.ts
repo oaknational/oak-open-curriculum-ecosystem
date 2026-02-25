@@ -39,8 +39,8 @@ export default defineConfig({
     'events',
     'buffer',
     // Workspace packages (these are already built)
-    '@oaknational/mcp-logger',
-    '@oaknational/mcp-env',
+    '@oaknational/logger',
+    '@oaknational/env',
     '@oaknational/curriculum-sdk',
   ],
   // Mark the package as having no side effects for better tree-shaking

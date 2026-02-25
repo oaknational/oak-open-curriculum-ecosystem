@@ -20,7 +20,7 @@ Establish a production-ready publishing and versioning workflow so that:
 
 - ✅ Monorepo structure with pnpm workspaces
 - ✅ Internal workspace dependencies (`workspace:*`)
-- ✅ Type-gen generates SDK from OpenAPI spec
+- ✅ sdk-codegen generates SDK from OpenAPI spec
 - ✅ MCP servers work locally via `pnpm dev`
 
 ### What's Missing
@@ -215,7 +215,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
 
 **Session 3: Pre-publish Scripts**
 
-1. Add `prepublishOnly` script for type-gen + build
+1. Add `prepublishOnly` script for code-generation + build
 2. Add `files` field to limit published content
 3. Verify generated artifacts with `npm pack --dry-run`
 4. Test local installation with `pnpm link`
@@ -343,7 +343,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
   },
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
-    "prepublishOnly": "pnpm type-gen && pnpm build"
+    "prepublishOnly": "pnpm sdk-codegen && pnpm build"
   }
 }
 ```
@@ -407,7 +407,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm type-gen
+      - run: pnpm sdk-codegen
 
       - run: pnpm build
 
@@ -453,7 +453,7 @@ pnpm changeset
 pnpm changeset version
 
 # 3. Build everything
-pnpm type-gen && pnpm build
+pnpm sdk-codegen && pnpm build
 
 # 4. Publish (dry-run first)
 pnpm changeset publish --dry-run

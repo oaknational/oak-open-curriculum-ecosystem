@@ -90,7 +90,7 @@
 
 **Migration notes:**
 
-- Because this is a breaking change, version the API contract (OpenAPI update + `pnpm type-gen`).
+- Because this is a breaking change, version the API contract (OpenAPI update + `pnpm sdk-codegen`).
 - Update all consumers in lockstep; do not introduce dual fields or silent fallback behaviour.
 
 ## Example request shape for multi-select (proposed)

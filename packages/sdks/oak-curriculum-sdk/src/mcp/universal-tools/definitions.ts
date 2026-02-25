@@ -6,7 +6,7 @@
  *
  * @remarks Aggregated tools are separate from generated tools (which come
  * from the OpenAPI spec). They're currently defined at runtime but will
- * eventually move to type-gen time.
+ * eventually move to sdk-codegen time.
  *
  * Each aggregated tool imports its definition from its own module to
  * maintain separation of concerns and keep this file focused on the

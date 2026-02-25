@@ -8,12 +8,14 @@
 
 ## Purpose
 
-[Strategic sequence for the collection. Execution detail lives in active plans.]
+[Strategic sequence for the collection. Execution detail lives in lifecycle
+plans (`active/`, `current/`, `future/`).]
 
-Authoritative active execution sources:
+Authoritative execution sources:
 
-1. [active/plan-1.md]
-2. [active/plan-2.md]
+1. [active/plan-in-progress.md]
+2. [current/plan-next.md]
+3. [future/plan-later.md]
 
 ---
 
@@ -60,13 +62,19 @@ Phase 2: [Name]                     [Status]
 
 ### Phase 0 — [Name]
 
-- Active plan: [active/phase-0-*.md]
+- In-progress plan: [active/phase-0-*.md]
 - Done when: [definition of done]
 - Dependencies: [dependency list]
 
 ### Phase 1 — [Name]
 
-- Active plan: [active/phase-1-*.md]
+- Next-up plan: [current/phase-1-*.md]
+- Done when: [definition of done]
+- Dependencies: [dependency list]
+
+### Phase 2 — [Name]
+
+- Later plan: [future/phase-2-*.md]
 - Done when: [definition of done]
 - Dependencies: [dependency list]
 
@@ -76,7 +84,7 @@ Phase 2: [Name]                     [Status]
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root

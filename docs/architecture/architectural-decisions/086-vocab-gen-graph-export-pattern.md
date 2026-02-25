@@ -161,11 +161,11 @@ Tools return full graph data in `structuredContent` for AI agent reasoning.
 
 ### 4. Pipeline Location
 
-The `vocab-gen/` pipeline lives in the SDK alongside `type-gen/`:
+The `vocab-gen/` pipeline lives in the SDK alongside `code-generation/`:
 
 ```text
 packages/sdks/oak-curriculum-sdk/
-├── type-gen/           ← Generates types from OpenAPI
+├── code-generation/           ← Generates types from OpenAPI
 ├── vocab-gen/          ← Generates graphs from bulk data
 │   ├── extractors/     ← Pure functions, one per data type
 │   └── generators/     ← Transform extracted data to graphs
@@ -180,7 +180,7 @@ packages/sdks/oak-curriculum-sdk/
 
 2. **Multi-step pipeline** separates concerns: extractors are pure functions tested in isolation; generators transform to user-valuable output; writers handle serialization.
 
-3. **SDK location** follows the pattern of `type-gen/` - both generate static artifacts consumed by the runtime.
+3. **SDK location** follows the pattern of `code-generation/` - both generate static artifacts consumed by the runtime.
 
 4. **MCP tool integration** ensures AI agents can answer user questions about curriculum structure and prerequisites.
 

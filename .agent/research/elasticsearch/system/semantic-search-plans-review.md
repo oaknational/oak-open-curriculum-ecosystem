@@ -42,7 +42,7 @@ The original plans documented ~2,000 LOC of runtime schema definitions that need
 
 #### 2. MCP Tool Generation - COMPLETE
 
-The SDK now generates **26 MCP tools** at type-gen time with full type safety:
+The SDK now generates **26 MCP tools** at sdk-codegen time with full type safety:
 
 ```
 get-changelog, get-changelog-latest, get-key-stages, get-key-stages-subject-assets,

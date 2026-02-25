@@ -5,7 +5,7 @@
  * @see `./ingestion-error-helpers.ts` for pure helper functions
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type {
   IngestionContext,
   IngestionErrorCollector,

@@ -46,8 +46,8 @@ describe('createSdkBoundaryRules', () => {
       const patterns = getRestrictedImportPatterns(rules);
       const groups = patterns.flatMap((p) => p.group);
 
-      expect(groups).not.toContain('@oaknational/curriculum-sdk-generation');
-      expect(groups).not.toContain('@oaknational/curriculum-sdk-generation/**');
+      expect(groups).not.toContain('@oaknational/sdk-codegen');
+      expect(groups).not.toContain('@oaknational/sdk-codegen/**');
     });
 
     it('restricts @workspace/* alias imports', () => {
@@ -86,7 +86,7 @@ describe('createSdkBoundaryRules', () => {
       const patterns = getRestrictedImportPatterns(rules);
 
       const groups = patterns.flatMap((p) => p.group);
-      expect(groups).toContain('@oaknational/curriculum-sdk-generation/*/**');
+      expect(groups).toContain('@oaknational/sdk-codegen/*/**');
     });
 
     it('allows single-level subpath exports from generation', () => {
@@ -94,8 +94,8 @@ describe('createSdkBoundaryRules', () => {
       const patterns = getRestrictedImportPatterns(rules);
       const groups = patterns.flatMap((p) => p.group);
 
-      expect(groups).not.toContain('@oaknational/curriculum-sdk-generation');
-      expect(groups).not.toContain('@oaknational/curriculum-sdk-generation/**');
+      expect(groups).not.toContain('@oaknational/sdk-codegen');
+      expect(groups).not.toContain('@oaknational/sdk-codegen/**');
     });
 
     it('does not restrict its own runtime SDK package', () => {
@@ -128,14 +128,10 @@ describe('createSdkBoundaryRules', () => {
     it('provides messages referencing ADR-108', () => {
       const rules = createSdkBoundaryRules('runtime');
       const patterns = getRestrictedImportPatterns(rules);
-      const genPattern = patterns.find((p) =>
-        p.group.includes('@oaknational/curriculum-sdk-generation/*/**'),
-      );
+      const genPattern = patterns.find((p) => p.group.includes('@oaknational/sdk-codegen/*/**'));
 
       if (!genPattern) {
-        throw new Error(
-          'Expected to find a pattern restricting @oaknational/curriculum-sdk-generation/*/**',
-        );
+        throw new Error('Expected to find a pattern restricting @oaknational/sdk-codegen/*/**');
       }
       expect(genPattern.message).toContain('ADR-108');
     });

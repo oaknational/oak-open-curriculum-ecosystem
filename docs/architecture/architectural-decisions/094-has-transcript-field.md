@@ -62,7 +62,7 @@ return {
 
 1. Update SDK mapping generator to include `has_transcript: { type: 'boolean' }`
 2. Update `bulk-lesson-transformer.ts` to populate the field
-3. Run `pnpm type-gen` to regenerate types
+3. Run `pnpm sdk-codegen` to regenerate types
 4. Re-ingest with new mapping
 
 ## Related

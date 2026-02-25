@@ -7,9 +7,9 @@ import {
   UnifiedLogger,
   buildResourceAttributes,
   logLevelToSeverityNumber,
-} from '@oaknational/mcp-logger';
-import type { Logger } from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 interface MiddlewareOptions {
   readonly logger?: Logger;

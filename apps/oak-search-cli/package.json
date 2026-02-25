@@ -21,7 +21,7 @@
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:watch": "vitest",
     "bulk:download": "tsx bin/oaksearch.ts admin download",
-    "bulk:typegen": "tsx bin/oaksearch.ts eval typegen",
+    "bulk:codegen": "tsx bin/oaksearch.ts eval codegen",
     "es:setup": "tsx bin/oaksearch.ts admin setup",
     "es:reset": "tsx bin/oaksearch.ts admin setup --reset",
     "es:status": "tsx bin/oaksearch.ts admin status",
@@ -51,9 +51,9 @@
   "dependencies": {
     "@elastic/elasticsearch": "^9.3.2",
     "@oaknational/curriculum-sdk": "workspace:*",
-    "@oaknational/curriculum-sdk-generation": "workspace:*",
-    "@oaknational/mcp-env": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",
     "chalk": "^5.6.2",
@@ -82,13 +82,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
     "directory": "apps/oak-search-cli"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-search-cli#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/apps/oak-search-cli#readme",
   "keywords": [
     "oak",
     "search",

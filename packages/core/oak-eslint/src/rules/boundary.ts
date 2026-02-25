@@ -216,7 +216,7 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
  * - **generation** workspace has no knowledge of runtime concerns.
  *   It cannot import from `@oaknational/curriculum-sdk`.
  * - **runtime** workspace imports generation artefacts through barrel
- *   exports only (`@oaknational/curriculum-sdk-generation`), never via
+ *   exports only (`@oaknational/sdk-codegen`), never via
  *   deep paths into generation internals.
  *
  * @param role - Whether the calling workspace is the generation or runtime SDK
@@ -261,9 +261,9 @@ export function createSdkBoundaryRules(
       {
         patterns: [
           {
-            group: ['@oaknational/curriculum-sdk-generation/*/**'],
+            group: ['@oaknational/sdk-codegen/*/**'],
             message:
-              'Runtime must import from @oaknational/curriculum-sdk-generation subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
+              'Runtime must import from @oaknational/sdk-codegen subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
           },
           {
             group: ['@workspace/*'],

@@ -4,7 +4,7 @@ The sequence is:
 
 pnpm secrets:scan:all
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen

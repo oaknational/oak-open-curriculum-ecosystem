@@ -4,6 +4,8 @@
 
 **Collection Roadmap**: [roadmap.md](roadmap.md)  
 **Atomic Execution Plans**: [active/README.md](active/README.md)
+**Next-Up Plans**: [current/README.md](current/README.md)  
+**Later Plans**: [future/README.md](future/README.md)
 
 ## Documents
 
@@ -11,6 +13,8 @@
 |------|------|-------------|
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies |
 | `active/README.md` | Active index | Atomic executable plans mapped one-to-one to roadmap phases |
+| `current/README.md` | Current index | Next-up plans that are queued and ready |
+| `future/README.md` | Future index | Deferred/later plans and ideas |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `[plan-a].plan.md` | Strategic source plan | Policy intent, rationale, success criteria |
 | `[research-a].research.md` | Research | Evidence base and external context |
@@ -20,14 +24,18 @@
 ## Read Order
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
-2. **Atomic execution plans**: [active/README.md](active/README.md)
-3. **Strategic source plans**: `[plan-a].plan.md`, `[plan-b].plan.md`
-4. **Research evidence**: `[research-a].research.md`, `[research-b].research.md`
+2. **Now (in progress)**: [active/README.md](active/README.md)
+3. **Next (queued)**: [current/README.md](current/README.md)
+4. **Later (deferred)**: [future/README.md](future/README.md)
+5. **Strategic source plans**: `[plan-a].plan.md`, `[plan-b].plan.md`
+6. **Research evidence**: `[research-a].research.md`, `[research-b].research.md`
 
 ## Document Roles (DRY)
 
 - **Roadmap (`roadmap.md`)**: strategic phase sequence, dependencies, status.
-- **Active plans (`active/*.md`)**: authoritative executable tasks and deterministic validation.
+- **Active plans (`active/*.md`)**: in-progress execution only (NOW).
+- **Current plans (`current/*.md`)**: queued/next plans (NEXT), not yet started.
+- **Future plans (`future/*.md`)**: deferred/later plans (LATER), not yet started.
 - **Strategic source plans (`*.plan.md`)**: intent and rationale only.
 - **Research docs (`*.research.md`)**: evidence base only, not execution instructions.
 - **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`): proof of documentation propagation and evidence-backed claims.

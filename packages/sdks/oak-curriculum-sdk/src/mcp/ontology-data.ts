@@ -13,7 +13,7 @@
  */
 
 import { synonymsData } from './synonyms/index.js';
-import { threadProgressionGraph, conceptGraph } from '@oaknational/curriculum-sdk-generation/vocab';
+import { threadProgressionGraph, conceptGraph } from '@oaknational/sdk-codegen/vocab';
 import { toolGuidanceData } from './tool-guidance-data.js';
 
 /**

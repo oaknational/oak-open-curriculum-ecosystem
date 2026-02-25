@@ -1,7 +1,7 @@
 /**
  * Elasticsearch index definitions for Oak Curriculum Search.
  *
- * Index mappings are now generated at SDK type-gen time and imported from:
+ * Index mappings are now generated at SDK sdk-codegen time and imported from:
  * `@oaknational/curriculum-sdk/types/generated/search/es-mappings/`
  *
  * ## Index Inventory

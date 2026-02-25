@@ -11,8 +11,8 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   type Logger,
-} from '@oaknational/mcp-logger';
-import { createNodeFileSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeFileSink } from '@oaknational/logger/node';
 import { createStdioSinkConfig } from './config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 
@@ -90,4 +90,4 @@ export function createChildLogger(parentLogger: Logger, correlationId: string): 
 /**
  * Re-export Logger type from shared package for convenience
  */
-export type { Logger } from '@oaknational/mcp-logger';
+export type { Logger } from '@oaknational/logger';

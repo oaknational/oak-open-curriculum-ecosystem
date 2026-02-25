@@ -8,7 +8,7 @@
  * @see ../bulk-chunk-uploader.ts for Tier 1 (HTTP-level) retry
  * @see ADR-096 ES Bulk Retry Strategy
  */
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from '../bulk-operation-types';
 import { extractDocumentIds } from '../bulk-operation-types';
 import type { EsTransport } from './http-retry';

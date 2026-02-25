@@ -5,7 +5,7 @@
  * ensure a single source of truth anchored to the schema.
  */
 
-export type { ContentType } from '@oaknational/curriculum-sdk-generation/api-schema';
+export type { ContentType } from '@oaknational/sdk-codegen/api-schema';
 
 export interface UnitContext {
   subjectSlug?: string;

@@ -352,7 +352,7 @@ Rate limiting and retry involve timing, state, and edge cases. TDD ensures:
 
 All quality gates passed:
 
-- ✅ `pnpm type-gen` - Successful
+- ✅ `pnpm sdk-codegen` - Successful
 - ✅ `pnpm build` - Successful
 - ✅ `pnpm type-check` - Successful (pre-existing docs errors unrelated)
 - ✅ `pnpm lint:fix` - Successful

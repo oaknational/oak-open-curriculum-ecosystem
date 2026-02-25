@@ -17,6 +17,8 @@ placeholders, and begin.
 | [`collection-roadmap-template.md`](collection-roadmap-template.md) | Strategic roadmap for a plan collection with phase mapping |
 | [`collection-readme-template.md`](collection-readme-template.md) | Collection navigation hub with explicit document-role boundaries |
 | [`active-plan-index-template.md`](active-plan-index-template.md) | `active/README.md` index for atomic phase execution plans |
+| [`current-plan-index-template.md`](current-plan-index-template.md) | `current/README.md` index for next-up plans (queued, not started) |
+| [`future-plan-index-template.md`](future-plan-index-template.md) | `future/README.md` index for later/deferred plans |
 | [`active-atomic-implementation-plan-template.md`](active-atomic-implementation-plan-template.md) | Atomic phase execution plan with preflight, deterministic validation, and evidence hooks |
 
 ## Components
@@ -43,7 +45,7 @@ content across them.
 | Document | Purpose | Location |
 |----------|---------|----------|
 | **Session prompt** | Operational entry — "where are we now" | `.agent/prompts/` |
-| **Executable plan** | Per-workstream task list with TDD phases | `.agent/plans/*/active/` |
+| **Executable plan** | Per-workstream task list with TDD phases | `.agent/plans/*/{active,current,future}/` |
 | **Roadmap** | Strategic milestone sequence | `.agent/plans/*/roadmap.md` |
 
 **Content flows one way**: facts are authoritative in one document
@@ -52,18 +54,22 @@ and referenced (not restated) by the others. See ADR-117 for details.
 ## Plan Lifecycle
 
 ```text
-active/             → work in progress
+active/             → NOW: in-progress work only
+current/            → NEXT: queued and ready, not yet started
+future/             → LATER: deferred strategic work
 archive/completed/  → completed, read-only
 ```
 
 When archiving:
 
-1. Move the plan file to `archive/completed/`.
-2. Add an entry to the [completed plans index](../completed-plans.md)
+1. Mine completed outcomes into permanent documentation (ADRs,
+   directives, READMEs, reference docs).
+2. Move the plan file to `archive/completed/`.
+3. Add an entry to the [completed plans index](../completed-plans.md)
    (plan name, date, key outcomes, archive link).
-3. Update all cross-references to point directly to
+4. Update all cross-references to point directly to
    `archive/completed/` — clean break, no stubs.
-4. Run `/jc-consolidate-docs`.
+5. Run `/jc-consolidate-docs`.
 
 ## How to Use
 
@@ -78,6 +84,12 @@ from the feature workstream template — it is the most general.
 cp .agent/plans/templates/feature-workstream-template.md \
    .agent/plans/semantic-search/active/your-plan-name.md
 ```
+
+Use the lifecycle directory that matches the plan state:
+
+- `active/` — in progress now
+- `current/` — next-up, not started
+- `future/` — later/deferred
 
 Fill in all `[bracketed]` placeholders.
 

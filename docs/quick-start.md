@@ -29,7 +29,7 @@ This repository makes Oak's openly-licensed curriculum accessible to AI agents a
 ```text
 OpenAPI Spec (single source of truth)
          ↓
-    pnpm type-gen (compile time)
+    pnpm sdk-codegen (compile time)
          ↓
     ┌───────────────────────────────────────────────┐
     ↓                    ↓                           ↓
@@ -41,7 +41,7 @@ Runtime Apps        MCP Servers            Semantic Search
 (admin, CLI)      (stdio, HTTP)           (4-way RRF hybrid)
 ```
 
-**Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm type-gen` updates everything automatically.
+**Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm sdk-codegen` updates everything automatically.
 
 ## ADR Start Here
 
@@ -57,7 +57,7 @@ Oak team contributors can start immediately without any API keys:
 
 ```bash
 # Clone and install
-git clone <repo> && cd oak-mcp-ecosystem
+git clone <repo> && cd oak-open-data-ecosystem
 pnpm install
 
 # Run tests and quality checks (no env vars required)
@@ -88,7 +88,7 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # Full pipeline (install → build/type-gen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
+pnpm make    # Full pipeline (install → build/sdk-codegen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
 pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
 
 # 3. Start an MCP dev server (choose one)
@@ -121,16 +121,16 @@ The Oak curriculum data has significant differences across subjects and key stag
 Everything flows from the OpenAPI specification:
 
 1. **Source**: API provider hosts OpenAPI schema (e.g., Oak Curriculum API)
-2. **Generation**: `pnpm type-gen` fetches schema and generates TypeScript, Zod, MCP tools
+2. **Generation**: `pnpm sdk-codegen` fetches schema and generates TypeScript, Zod, MCP tools
 3. **Consumption**: Apps import the generated types and tools - no manual definitions
-4. **Updates**: API changes? Run `pnpm type-gen` - everything updates automatically
+4. **Updates**: API changes? Run `pnpm sdk-codegen` - everything updates automatically
 
 ### Type Generation is Critical
 
-The `pnpm type-gen` command is the heart of the system:
+The `pnpm sdk-codegen` command is the heart of the system:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 ```
 
 This command:
@@ -142,7 +142,7 @@ This command:
 - Generates URL helpers
 - Updates all consuming code
 
-**The Cardinal Rule**: If the API schema changes, `pnpm type-gen` is sufficient. No manual code changes required.
+**The Cardinal Rule**: If the API schema changes, `pnpm sdk-codegen` is sufficient. No manual code changes required.
 
 ### The Execution Model
 
@@ -185,7 +185,7 @@ This ensures types always match the API schema exactly.
 
 When you see files marked `DO NOT EDIT MANUALLY` or in `src/types/generated/` directories, this is not a suggestion:
 
-- These files are regenerated on every `pnpm type-gen` run
+- These files are regenerated on every `pnpm sdk-codegen` run
 - Manual edits would be overwritten
 - Changes must happen in the generation scripts or upstream OpenAPI schema
 
@@ -199,7 +199,7 @@ See [Schema-First Execution Directive](../.agent/directives/schema-first-executi
 
 ```bash
 # 1. Make sure types are up to date
-pnpm type-gen
+pnpm sdk-codegen
 
 # 2. Write a test first (TDD)
 # Create test in appropriate *.unit.test.ts or *.integration.test.ts
@@ -220,7 +220,7 @@ git commit -m "feat: add amazing feature"
 
 ```bash
 # 1. Regenerate from updated schema
-pnpm type-gen
+pnpm sdk-codegen
 
 # 2. Fix any type errors
 pnpm type-check
@@ -238,10 +238,10 @@ pnpm test
 
 ```bash
 # 1. Make changes to generation scripts
-# Edit files in packages/sdks/oak-curriculum-sdk/type-gen/
+# Edit files in packages/sdks/oak-curriculum-sdk/code-generation/
 
 # 2. Regenerate
-pnpm type-gen
+pnpm sdk-codegen
 
 # 3. Review generated output
 # Check src/types/generated/ for expected changes
@@ -275,7 +275,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
 
 ```bash
 # Run with verbose logging
-LOG_LEVEL=debug pnpm type-gen
+LOG_LEVEL=debug pnpm sdk-codegen
 
 # Check the generated output
 cat packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.ts | head -100
@@ -294,11 +294,11 @@ open packages/sdks/oak-curriculum-sdk/docs/index.html
 ## Repository Structure
 
 ```text
-oak-mcp-ecosystem/
+oak-open-data-ecosystem/
 ├── packages/
 │   ├── sdks/
 │   │   └── oak-curriculum-sdk/      # Generated SDK (THE SOURCE)
-│   │       ├── type-gen/             # Generation scripts
+│   │       ├── code-generation/             # Generation scripts
 │   │       └── src/
 │   │           ├── types/generated/  # Generated types (DO NOT EDIT)
 │   │           └── tool-generation/  # Generated MCP tools (DO NOT EDIT)
@@ -349,15 +349,15 @@ test('MCP server lists all generated tools', async () => {
 
 ### Troubleshooting
 
-- **Build fails**: Run `pnpm type-gen` to ensure types are current
+- **Build fails**: Run `pnpm sdk-codegen` to ensure types are current
 - **Type errors**: Generated types changed? Update your imports
 - **Tests fail**: Check if integration tests need `OAK_API_KEY`
 - **Linting errors**: Run `pnpm lint:fix` to auto-fix
 
 ### Community
 
-- **Issues**: [GitHub Issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/oaknational/oak-mcp-ecosystem/discussions)
+- **Issues**: [GitHub Issues](https://github.com/oaknational/oak-open-data-ecosystem/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/oaknational/oak-open-data-ecosystem/discussions)
 
 ## Next Steps
 

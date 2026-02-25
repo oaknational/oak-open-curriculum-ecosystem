@@ -520,7 +520,7 @@ For **exclusive** filtering ("Foundation only, not Higher"):
 | `src/lib/indexing/ks4-context-types.ts`          | Type definitions and type guards    |
 | `src/lib/indexing/ks4-context-builder.ts`        | Sequence traversal and map building |
 | `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()`        |
-| `type-gen/.../curriculum.ts`                     | Field definitions (schema source)   |
+| `code-generation/.../curriculum.ts`              | Field definitions (schema source)   |
 
 All files are in `apps/oak-search-cli/`.
 

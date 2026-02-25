@@ -11,7 +11,7 @@ The semantic search application uses Elasticsearch with multiple index types (le
 
 Initially, these mapping files were placed in `scripts/mappings/` alongside setup scripts. This ADR moved them to `src/lib/elasticsearch/definitions/` as static JSON files.
 
-**This ADR has been superseded by [ADR-067: SDK-Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)**, which moves mapping generation into the SDK's type-gen pipeline.
+**This ADR has been superseded by [ADR-067: SDK-Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)**, which moves mapping generation into the SDK's sdk-codegen pipeline.
 
 ## Original Decision (Now Superseded)
 
@@ -19,7 +19,7 @@ Elasticsearch index mapping files were stored as static JSON in `src/lib/elastic
 
 ## Current State
 
-ES mappings are now **generated at SDK type-gen time** and imported from:
+ES mappings are now **generated at SDK sdk-codegen time** and imported from:
 
 ```typescript
 import {

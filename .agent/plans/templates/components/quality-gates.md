@@ -15,7 +15,7 @@ pnpm test
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root

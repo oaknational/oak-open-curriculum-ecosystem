@@ -2,7 +2,7 @@ read @rules.md , @testing-strategy.md , and @schema-first-execution.md , and tak
 
 **Commit** to excellence in systems' architecture design, software engineering and developer experience. Choose architectural correctness over short-term expediency. This requires critical and _long-term_ thinking.
 
-The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.
+The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at sdk-codegen time.
 
 When analysing a generated file, always analyse the generator code that produced it as well, as it is the source of truth for the generated file.
 
@@ -16,7 +16,7 @@ Quality gate definitions for later. Note some of these gates will trigger earlie
 
 ```shell
 # From the repo root, one at a time, with no filters
-pnpm type-gen # Makes changes
+pnpm sdk-codegen # Makes changes
 pnpm build # Makes changes
 pnpm type-check
 pnpm lint:fix # Makes changes

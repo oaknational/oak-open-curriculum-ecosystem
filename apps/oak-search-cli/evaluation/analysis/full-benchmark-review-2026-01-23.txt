@@ -1,5 +1,5 @@
 
-> @oaknational/open-curriculum-semantic-search@0.0.0-development benchmark /Users/jim/code/oak/oak-mcp-ecosystem/apps/oak-open-curriculum-semantic-search
+> @oaknational/open-curriculum-semantic-search@0.0.0-development benchmark /Users/jim/code/oak/oak-open-data-ecosystem/apps/oak-open-curriculum-semantic-search
 > tsx evaluation/analysis/benchmark.ts --all --review --verbose
 
 [dotenv@17.2.3] injecting env (17) from .env.local -- tip: ⚙️  override existing env vars with { override: true }

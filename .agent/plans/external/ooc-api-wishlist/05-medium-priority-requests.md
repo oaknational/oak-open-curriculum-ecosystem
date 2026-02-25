@@ -477,7 +477,7 @@ SequenceUnitsResponseSchema:
 
 ### 12. Expose Zod Validators for Perfect Type Fidelity
 
-See `09-schemas-endpoint-rfc.md` for the endpoint proposal, payload shape, and SDK type-gen integration plan.
+See `09-schemas-endpoint-rfc.md` for the endpoint proposal, payload shape, and SDK code-generation integration plan.
 
 **Current state:**
 
@@ -641,7 +641,7 @@ Current workflow:
 
 ```typescript
 // 1. Fetch OpenAPI spec
-// 2. Run type-gen to regenerate Zod schemas
+// 2. Run code-generation to regenerate Zod schemas
 // 3. Use generated schemas
 import { lessonSummaryResponseSchema } from './generated/schemas';
 ```

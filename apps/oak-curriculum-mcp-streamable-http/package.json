@@ -42,8 +42,8 @@
     "@elastic/elasticsearch": "^9.3.2",
     "@modelcontextprotocol/sdk": "^1.27.0",
     "@oaknational/curriculum-sdk": "workspace:*",
-    "@oaknational/mcp-env": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",
     "commander": "^14.0.3",
@@ -77,13 +77,13 @@
   "description": "OAuth-enabled MCP server over HTTP for the Oak National Academy Curriculum API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-streamable-http"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
   "keywords": [
     "mcp",
     "oauth",

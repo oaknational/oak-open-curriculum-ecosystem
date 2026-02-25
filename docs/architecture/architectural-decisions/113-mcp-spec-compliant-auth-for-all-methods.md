@@ -137,7 +137,7 @@ Server-side logs will show nothing wrong. The flow appears to stop after the ini
 
 Two changes prevent compliant clients from requesting the `openid` scope:
 
-1. **Source of truth**: `openid` removed from `DEFAULT_AUTH_SCHEME.scopes` in `mcp-security-policy.ts`. Cascaded via `pnpm type-gen` to all generated tool security metadata.
+1. **Source of truth**: `openid` removed from `DEFAULT_AUTH_SCHEME.scopes` in `mcp-security-policy.ts`. Cascaded via `pnpm sdk-codegen` to all generated tool security metadata.
 2. **PRM**: `scopes_supported` no longer advertises `openid`, so compliant clients (RFC 9728) do not request it.
 
 The OAuth proxy is fully transparent -- it forwards all parameters (including `scope`) and all upstream AS metadata fields (including `scopes_supported`) unchanged. No filtering is applied at the proxy layer. If a non-compliant client reads `openid` from Clerk's AS metadata and requests it, Clerk will reject it with `error=invalid_scope`.
@@ -153,7 +153,7 @@ OAuth authorisation errors routed via redirect are invisible to the resource ser
 - **Implementation**:
   - `apps/oak-curriculum-mcp-streamable-http/src/mcp-router.ts`
   - `apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts`
-  - `packages/sdks/oak-curriculum-sdk/type-gen/mcp-security-policy.ts` (scope source of truth)
+  - `packages/sdks/oak-curriculum-sdk/code-generation/mcp-security-policy.ts` (scope source of truth)
   - `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts` (transparent proxy passthrough)
   - `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts` (PRM endpoint)
 

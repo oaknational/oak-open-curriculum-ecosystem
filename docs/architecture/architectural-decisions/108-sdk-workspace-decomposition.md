@@ -7,7 +7,7 @@ Accepted
 ## Context
 
 The current `@oaknational/curriculum-sdk` workspace is a
-monolith containing approximately 180 files in `type-gen/`
+monolith containing approximately 180 files in `code-generation/`
 and 80+ files in `src/`. It conflates four genuinely
 independent concerns:
 
@@ -17,7 +17,7 @@ independent concerns:
    maps, request validators. None of this code has any
    knowledge of Oak's curriculum domain.
 
-2. **Oak-specific type-gen configuration** — schema
+2. **Oak-specific sdk-codegen configuration** — schema
    decoration (canonicalUrl injection, 404 documentation),
    security policy (which tools are public), tool naming
    overrides, domain prerequisite guidance, widget URI
@@ -83,7 +83,7 @@ the data sources are separate. The two SDKs are connected
 at the MCP application layer, where aggregated tools
 orchestrate both.
 
-Both pipelines run during `pnpm type-gen` and produce
+Both pipelines run during `pnpm sdk-codegen` and produce
 compile-time artefacts. They share the generation workspace
 but are internally partitioned by directory and barrel
 export. This partition does not warrant separate packages
@@ -102,7 +102,7 @@ orthogonal axes into four workspaces:
 |                  | Generation-time       | Runtime              |
 | ---------------- | --------------------- | -------------------- |
 | **Generic**      | WS1: Generic Pipeline | WS3: Generic Runtime |
-| **Oak-specific** | WS2: Oak Type-Gen     | WS4: Oak Runtime     |
+| **Oak-specific** | WS2: Oak Code-Gen     | WS4: Oak Runtime     |
 
 ### Workspace 1: Generic OpenAPI-to-SDK Pipeline
 
@@ -138,10 +138,10 @@ what it needs; domain-specific workspaces provide
 implementations. No import from generic to domain-specific
 code ever exists.
 
-**Consumers**: Workspace 2 (Oak Type-Gen), and future
+**Consumers**: Workspace 2 (Oak Code-Gen), and future
 external users with different OpenAPI specs.
 
-### Workspace 2: Oak Type-Gen Configuration
+### Workspace 2: Oak Code-Gen Configuration
 
 Configure the generic pipeline for the Oak Curriculum API
 and add generators that produce Oak-specific artifacts.
@@ -166,7 +166,7 @@ Hosts two internally partitioned data pipelines.
 - Domain ontology (property graph data)
 - Admin/observability fixtures
 
-Both pipelines run during `pnpm type-gen`. They are
+Both pipelines run during `pnpm sdk-codegen`. They are
 partitioned by directory and barrel export within the
 workspace.
 
@@ -231,7 +231,7 @@ bulk data — this coupling is retained in Step 1).
   WS1: Generic Pipeline
         |
         v
-  WS2: Oak Type-Gen Config
+  WS2: Oak Code-Gen Config
         |
         +--[API pipeline]---generates---> API types, Zod, MCP descriptors
         |
@@ -298,8 +298,8 @@ Separating it would create an artificial boundary. The
 sub-path exports (`./client`, `./mcp`) already allow
 selective imports.
 
-**Search type-gen as a separate workspace?** Not yet. It is
-large (~60 files) but purely Oak-specific type-gen. It
+**Search sdk-codegen as a separate workspace?** Not yet. It is
+large (~60 files) but purely Oak-specific sdk-codegen. It
 belongs in workspace 2. If it develops its own consumers or
 change cadence, it can be extracted later.
 
@@ -309,7 +309,7 @@ inputs (OpenAPI spec vs. bulk JSON files), different change
 triggers (API schema changes vs. curriculum content changes),
 and largely different consumers (curriculum SDK runtime vs.
 search SDK/CLI). However, they share the generation
-infrastructure (build tooling, output paths, `pnpm type-gen`
+infrastructure (build tooling, output paths, `pnpm sdk-codegen`
 orchestration) and the bulk pipeline does import a small
 number of constants from the API pipeline (e.g. `SUBJECTS`,
 `KEY_STAGES`). The directory-level partition within
@@ -325,7 +325,7 @@ unnecessary indirection.
 
 ### Why not three or fewer?
 
-**Merge the two generic workspaces?** No. Type-gen code runs
+**Merge the two generic workspaces?** No. Code-gen code runs
 at build time with AST manipulation and file I/O
 dependencies. Runtime code runs in production with HTTP
 client and middleware dependencies. Mixing them would
@@ -341,7 +341,7 @@ have different dependencies and change triggers.
 The decomposition is implemented in phases:
 
 1. **Step 1 (2-way split)**: Extract workspace 2 (Oak
-   Type-Gen) from the current monolith, establishing the
+   Code-Gen) from the current monolith, establishing the
    generation/runtime boundary. Both data pipelines (API
    and bulk) move to the generation workspace together.
    The generation workspace becomes a shared foundation:
@@ -375,7 +375,7 @@ architecture:
 
 - Castr is a dependency of workspace 1 (Generic Pipeline)
 - Workspace 1 defines the interface; Castr satisfies it
-- Oak Type-Gen (workspace 2) never interacts with Castr
+- Oak Code-Gen (workspace 2) never interacts with Castr
   directly
 
 The existing `packages/core/openapi-zod-client-adapter/`
@@ -419,21 +419,21 @@ and are enforced by ESLint SDK boundary rules:
    generation only through declared subpath exports in
    `package.json`, never via deep imports to internal paths.
    Subpaths are one level deep only (e.g.
-   `@oaknational/curriculum-sdk-generation/api-schema`,
-   not `@oaknational/curriculum-sdk-generation/api-schema/errors`).
+   `@oaknational/sdk-codegen/api-schema`,
+   not `@oaknational/sdk-codegen/api-schema/errors`).
    Each subpath is backed by a hand-authored barrel file in
    `src/` that re-exports from generated files. The ESLint
    SDK boundary rule `createSdkBoundaryRules('runtime')` uses
-   the pattern `@oaknational/curriculum-sdk-generation/*/**`
+   the pattern `@oaknational/sdk-codegen/*/**`
    to block two-or-more-level imports while allowing single-level
    subpath exports.
-3. **Run from repo root**: `pnpm type-gen`, `pnpm build`,
+3. **Run from repo root**: `pnpm sdk-codegen`, `pnpm build`,
    and all quality gates must be run from the repo root.
    After the split, the runtime workspace does not have a
-   `type-gen` script. Turbo orchestrates cross-workspace
+   `sdk-codegen` script. Turbo orchestrates cross-workspace
    dependencies from the root per ADR-065.
 4. **File placement**: new generated files from the OpenAPI
-   spec belong in the API pipeline (`type-gen/`,
+   spec belong in the API pipeline (`code-generation/`,
    `src/types/generated/`). Files from bulk download JSON
    data belong in the bulk pipeline (`vocab-gen/`,
    `src/bulk/`, `src/generated/vocab/`). Runtime
@@ -444,7 +444,7 @@ and are enforced by ESLint SDK boundary rules:
 
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction](031-generation-time-extraction.md)
-- [ADR-035: Unified SDK-MCP Type Generation](035-unified-sdk-mcp-type-generation.md)
+- [ADR-035: Unified SDK-MCP Code Generation](035-unified-sdk-mcp-code-generation.md)
 - [ADR-038: Compilation-Time Revolution](038-compilation-time-revolution.md)
 - [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
 - [SDK Workspace Separation Plan (Canonical)](../../../.agent/plans/semantic-search/active/sdk-workspace-separation.md)

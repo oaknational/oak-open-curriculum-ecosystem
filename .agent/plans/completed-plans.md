@@ -4,6 +4,9 @@ Index of archived plans across all collections. When a plan is completed,
 move it to `archive/completed/`, add an entry here, and fix all references
 at the source (clean break — no stubs, no redirects).
 
+Before archival, mine completed outcomes into permanent documentation
+(ADRs, directives, README files, and other canonical references).
+
 ---
 
 ## Semantic Search
@@ -49,11 +52,12 @@ at the source (clean break — no stubs, no redirects).
 
 When archiving a plan:
 
-1. **Move** the plan file to `{collection}/archive/completed/`.
-2. **Add an entry** to the table above (plan name, date, key outcomes, archive link).
-3. **Fix all references** to the old `active/` path — update them to point
+1. **Mine outcomes into permanent docs** (ADRs/directives/READMEs/reference docs).
+2. **Move** the plan file to `{collection}/archive/completed/`.
+3. **Add an entry** to the table above (plan name, date, key outcomes, archive link).
+4. **Fix all references** to the old `active/`, `current/`, or `future/` path — update them to point
    directly to `archive/completed/`. Clean break, no stubs.
-4. **Run** `/jc-consolidate-docs` to verify no stale references remain.
+5. **Run** `/jc-consolidate-docs` to verify no stale references remain.
 
 ---
 

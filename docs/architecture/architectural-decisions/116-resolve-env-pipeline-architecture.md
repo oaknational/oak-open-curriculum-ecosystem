@@ -27,15 +27,15 @@ ADR-016 established dotenv for local development configuration but did not presc
 
 ### Options Considered
 
-| Option                       | Description                                                                                    | Verdict                                                |
-| ---------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| **A: resolveEnv pipeline**   | Shared `@oaknational/mcp-env` package with non-mutating parse, source hierarchy, Result return | **Accepted**                                           |
-| B: Per-app dotenv.config()   | Each app calls dotenv.config() independently                                                   | Rejected — mutates process.env, no hierarchy, no reuse |
-| C: Environment service class | Singleton service with lazy loading                                                            | Rejected — global state, testing difficulty            |
+| Option                       | Description                                                                                | Verdict                                                |
+| ---------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| **A: resolveEnv pipeline**   | Shared `@oaknational/env` package with non-mutating parse, source hierarchy, Result return | **Accepted**                                           |
+| B: Per-app dotenv.config()   | Each app calls dotenv.config() independently                                               | Rejected — mutates process.env, no hierarchy, no reuse |
+| C: Environment service class | Singleton service with lazy loading                                                        | Rejected — global state, testing difficulty            |
 
 ## Decision
 
-Implement a shared environment resolution pipeline in `@oaknational/mcp-env` with the following architecture:
+Implement a shared environment resolution pipeline in `@oaknational/env` with the following architecture:
 
 ### Source Hierarchy
 

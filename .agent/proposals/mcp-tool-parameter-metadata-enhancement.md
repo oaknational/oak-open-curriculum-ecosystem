@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Our MCP tools have rich parameter metadata (descriptions, enums, defaults) in the upstream OpenAPI schema. This metadata flows correctly through type-gen into generated JSON Schema artifacts. However, the metadata is **lost before reaching MCP clients** because of how we convert to Zod for the MCP SDK.
+Our MCP tools have rich parameter metadata (descriptions, enums, defaults) in the upstream OpenAPI schema. This metadata flows correctly through code-generation into generated JSON Schema artifacts. However, the metadata is **lost before reaching MCP clients** because of how we convert to Zod for the MCP SDK.
 
 This proposal presents two options for fixing this, with a recommendation.
 
@@ -114,7 +114,7 @@ OpenAPI Schema (source of truth)
   └─ default: 0 (for pagination params)
   │
   ▼
-Type-Gen (pnpm type-gen)
+sdk-codegen (pnpm sdk-codegen)
   │
   ├─► toolInputJsonSchema ✅ HAS descriptions, enums, defaults
   ├─► toolZodSchema ❌ MISSING .describe() calls
@@ -208,8 +208,8 @@ Actual `tools/list` response:
 
 ### 3.1 Root Causes
 
-1. **Type-gen doesn't emit `.describe()` on Zod schemas**
-   - Location: `type-gen/typegen/mcp-tools/parts/build-zod-type.ts`
+1. **sdk-codegen doesn't emit `.describe()` on Zod schemas**
+   - Location: `code-generation/typegen/mcp-tools/parts/build-zod-type.ts`
    - We generate `z.string()` instead of `z.string().describe("...")`
 
 2. **Runtime conversion loses descriptions**
@@ -239,9 +239,9 @@ Fix Zod schemas to include descriptions and proper enum types. The MCP SDK's `zo
 
 ### 4.2 Changes Required
 
-#### 4.2.1 Type-Gen Changes (Build Time)
+#### 4.2.1 Code-Gen Changes (Build Time)
 
-**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/build-zod-type.ts`
+**File**: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/parts/build-zod-type.ts`
 
 **Current**:
 
@@ -343,17 +343,17 @@ function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
 - Improves Zod validation error messages
 - Single source of truth for validation and documentation
 - Minimal architectural change
-- Schema-first compliant (changes in type-gen templates)
+- Schema-first compliant (changes in code-generation templates)
 
 ### 4.4 Cons
 
 - Requires understanding zod-to-json-schema behavior
 - Need to verify Zod 4.x compatibility
-- Two places to fix (type-gen + runtime conversion)
+- Two places to fix (code-generation + runtime conversion)
 
 ### 4.5 Effort Estimate
 
-- Type-gen changes: ~2 hours
+- Code-gen changes: ~2 hours
 - Runtime conversion changes: ~2 hours
 - Testing: ~2 hours
 - **Total: ~1 day**
@@ -442,7 +442,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
 | **Maintainability**   | Uses SDK as designed        | Works against SDK design   |
 | **Validation Errors** | ✅ Improved                 | ❌ Still poor              |
 | **Protocol Output**   | ✅ Correct (via conversion) | ✅ Correct (direct)        |
-| **Schema-First**      | ✅ Changes in type-gen      | ⚠️ Runtime workaround      |
+| **Schema-First**      | ✅ Changes in code-generation      | ⚠️ Runtime workaround      |
 | **Effort**            | ~1 day                      | ~1-2 days                  |
 
 ---
@@ -459,7 +459,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
 
 3. **Works with SDK design** - We use the SDK as intended, reducing maintenance burden.
 
-4. **Schema-first compliance** - Changes happen in type-gen templates, not runtime workarounds.
+4. **Schema-first compliance** - Changes happen in code-generation templates, not runtime workarounds.
 
 ### 7.2 Why Not Option B
 
@@ -468,7 +468,7 @@ Option B requires working against the SDK's design and doesn't fix Zod validatio
 ### 7.3 Implementation Priority
 
 1. **High-impact, low-effort**: Add `.describe()` to runtime Zod conversion
-2. **High-impact, medium-effort**: Add `.describe()` to type-gen Zod generation
+2. **High-impact, medium-effort**: Add `.describe()` to sdk-codegen Zod generation
 3. **Medium-impact, low-effort**: Use `z.enum()` instead of refine validators
 
 ---
@@ -511,7 +511,7 @@ Option B requires working against the SDK's design and doesn't fix Zod validatio
 
 | Purpose                   | File                                                                                                                               |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Type-gen Zod builder      | `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/build-zod-type.ts`                                              |
+| Code-gen Zod builder      | `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/parts/build-zod-type.ts`                                              |
 | Runtime Zod converter     | `packages/sdks/oak-curriculum-sdk/src/mcp/zod-input-schema.ts`                                                                     |
 | Tool handler registration | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`                                                                          |
 | Generated tool example    | `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/tools/get-key-stages-subject-lessons.ts` |
@@ -531,7 +531,7 @@ Option B requires working against the SDK's design and doesn't fix Zod validatio
 │  └─ default: 0                                         ✅          │
 │       │                                                             │
 │       ▼                                                             │
-│  Type-Gen (pnpm type-gen)                                          │
+│  sdk-codegen (pnpm sdk-codegen)                                          │
 │  ├─► toolInputJsonSchema (JSON Schema) ────────────────────┐       │
 │  │   ├─ description ✅                                      │      │
 │  │   ├─ enum ✅                                             │      │
@@ -567,7 +567,7 @@ Option B requires working against the SDK's design and doesn't fix Zod validatio
 │  OpenAPI Schema                                                     │
 │       │                                                             │
 │       ▼                                                             │
-│  Type-Gen (pnpm type-gen)                                          │
+│  sdk-codegen (pnpm sdk-codegen)                                          │
 │  ├─► toolInputJsonSchema (unchanged) ✅                             │
 │  └─► toolMcpFlatInputSchema (Zod)                                  │
 │      ├─ .describe("Key stage slug...") ✅ NEW                      │

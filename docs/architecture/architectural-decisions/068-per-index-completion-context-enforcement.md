@@ -99,5 +99,5 @@ title_suggest: {
 ## Related Documents
 
 - ADR-067: SDK Generated Elasticsearch Mappings
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/completion-contexts.ts`
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/completion-context-alignment.unit.test.ts`
+- `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/completion-contexts.ts`
+- `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/completion-context-alignment.unit.test.ts`

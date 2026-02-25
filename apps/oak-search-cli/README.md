@@ -2,7 +2,7 @@
 
 The operator CLI for Oak's semantic search system. Consumes `@oaknational/oak-search-sdk` to provide commands for searching, administration, evaluation, and observability. Ingests Oak Curriculum content via the official SDK, stores enriched documents across **Elasticsearch Serverless indices**, and provides **server-side RRF** (lexical + semantic) search with suggestions, facets, and observability telemetry.
 
-> **All curriculum data flows through `@oaknational/curriculum-sdk`; types and validators are generated via `pnpm type-gen` from the OpenAPI schema.** When the API changes, `pnpm type-gen` regenerates types, and this workspace automatically uses the updated definitions. No manual type definitions exist — everything imports from the generated SDK.
+> **All curriculum data flows through `@oaknational/curriculum-sdk`; types and validators are generated via `pnpm sdk-codegen` from the OpenAPI schema.** When the API changes, `pnpm sdk-codegen` regenerates types, and this workspace automatically uses the updated definitions. No manual type definitions exist — everything imports from the generated SDK.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
 Start with the [ADR index](../../docs/architecture/architectural-decisions/), then this search-focused set:
@@ -41,7 +41,7 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 | ------------------- | ------------------------------------------------------------------- | ---------------------- |
 | `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                 | `RetrievalService`     |
 | `oaksearch admin`   | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService`         |
-| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, typegen  | Pass-through           |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen  | Pass-through           |
 | `oaksearch observe` | telemetry, summary, purge                                           | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
@@ -112,7 +112,7 @@ apps/oak-search-cli/
 │  │  ├─ search/                 # oaksearch search {lessons|units|sequences|suggest|facets}
 │  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|ingest|...}
 │  │  ├─ observe/                # oaksearch observe {telemetry|summary|purge}
-│  │  └─ eval/                   # oaksearch eval {benchmark|validate|typegen}
+│  │  └─ eval/                   # oaksearch eval {benchmark|validate|codegen}
 │  ├─ lib/hybrid-search/        # RRF query builders, score normalisation, search orchestration
 │  ├─ lib/indexing/              # Enriched transforms, batching helpers
 │  ├─ lib/elasticsearch/setup/  # Index creation, synonym management
@@ -175,7 +175,7 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
 3. **Run the standard quality gates**
 
    ```bash
-   pnpm make   # install → build/type-gen → type-check → doc-gen → lint:fix → markdownlint:root → format:root
+   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → markdownlint:root → format:root
    pnpm qg     # format-check:root → markdownlint-check:root → type-check → lint → unit/int/ui tests → smoke
    ```
 
@@ -290,10 +290,10 @@ pnpm vitest run --config vitest.smoke.config.ts four-retriever-ablation
 │           (packages/sdks/oak-curriculum-sdk/schema-cache/)              │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
-                                    ▼  pnpm type-gen
+                                    ▼  pnpm sdk-codegen
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    SDK Type Generation Layer                            │
-│    (packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/)          │
+│    (packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/)          │
 │                                                                         │
 │  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │
 │  │ generate-search-  │  │ (other search     │  │ (barrel exports)  │    │

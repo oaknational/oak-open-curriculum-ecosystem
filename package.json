@@ -17,8 +17,8 @@
   ],
   "type": "module",
   "scripts": {
-    "type-gen": "turbo run --continue type-gen",
-    "vocab-gen": "pnpm --filter @oaknational/curriculum-sdk-generation vocab-gen",
+    "sdk-codegen": "turbo run --continue sdk-codegen",
+    "vocab-gen": "pnpm --filter @oaknational/sdk-codegen vocab-gen",
     "doc-gen": "turbo run --continue doc-gen",
     "build": "turbo run --continue build",
     "clean": "turbo run clean && rm -rf .turbo",
@@ -44,9 +44,9 @@
     "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
     "make": "pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && turbo run type-check lint test test:ui test:e2e smoke:dev:stub",
-    "re-build": "pnpm clean && pnpm install && pnpm type-gen && pnpm build",
+    "re-build": "pnpm clean && pnpm install && pnpm sdk-codegen && pnpm build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint:fix",
-    "check": "pnpm secrets:scan:all && pnpm clean && turbo run type-gen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root",
+    "check": "pnpm secrets:scan:all && pnpm clean && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root",
     "app:search": "pnpm run dev --filter=@oaknational/search-cli",
     "app:mcp": "pnpm run dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
     "prepare": "husky",
@@ -69,12 +69,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git"
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem#readme",
   "engines": {
     "node": "24.x"
   },

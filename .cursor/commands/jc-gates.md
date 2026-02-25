@@ -11,7 +11,7 @@ Run each gate in order. If a gate fails, fix the issues before proceeding.
 ```bash
 pnpm secrets:scan:all
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen

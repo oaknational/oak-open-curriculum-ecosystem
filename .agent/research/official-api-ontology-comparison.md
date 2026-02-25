@@ -370,7 +370,7 @@ This is more detailed than official docs which conflate the terms.
 
 Our ontology explicitly maps entities to OpenAPI schemas (lines 11-26), enabling:
 
-- Type-gen automation
+- Code-gen automation
 - Schema-first architecture
 - Automatic validation
 
@@ -451,7 +451,7 @@ This ontology is derived from and aligns with the official Oak Curriculum API do
 Where terminology or structure differs, this document provides additional context for SDK implementation.
 ```
 
-### Priority 4: Update Type-Gen Plan
+### Priority 4: Update Code-Gen Plan
 
 Ensure `.agent/plans/curriculum-ontology-resource-plan.md` references official documentation as authoritative source.
 
@@ -483,7 +483,7 @@ Ensure `.agent/plans/curriculum-ontology-resource-plan.md` references official d
 2. ✅ Update `docs/architecture/curriculum-ontology.md` with Priority 1 items (2025-11-11)
 3. ✅ Add official documentation references section (already present)
 4. ✅ Create programme factors flow diagram (2025-11-11)
-5. 🔲 Update type-gen plan to reference official docs
+5. 🔲 Update sdk-codegen plan to reference official docs
 6. 🔲 Add unit type classification to schema extractor plan
 7. ✅ Document the 8 lesson components as explicit enumeration (already present)
 8. ✅ Enhance thread prominence in main ontology document (already present)
@@ -513,7 +513,7 @@ Ensure `.agent/plans/curriculum-ontology-resource-plan.md` references official d
 ### Remaining Strength Areas 🎯
 
 - **Sequence/Programme distinction**: We provide more detailed explanation than official docs
-- **Schema mapping**: Every entity mapped to OpenAPI schema for type-gen automation
+- **Schema mapping**: Every entity mapped to OpenAPI schema for sdk-codegen automation
 - **Thread analysis depth**: 200+ threads catalogued with progression patterns
 - **Relationship diagrams**: Comprehensive ER diagrams with cardinality
 - **Implementation context**: MCP resource exposure, SDK integration patterns
@@ -522,7 +522,7 @@ Ensure `.agent/plans/curriculum-ontology-resource-plan.md` references official d
 
 The ontology is now ready for:
 
-1. Type-gen implementation (curriculum-ontology-resource-plan.md Sprint 0-4)
+1. Code-gen implementation (curriculum-ontology-resource-plan.md Sprint 0-4)
 2. MCP resource generation exposing this ontology to AI agents
 3. Guidance layer authoring for educational and tooling context
 

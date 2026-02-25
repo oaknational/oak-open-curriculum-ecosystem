@@ -7,9 +7,9 @@
  */
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
-import { KEY_STAGES, SUBJECTS } from '@oaknational/curriculum-sdk-generation/api-schema';
+import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
+import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**

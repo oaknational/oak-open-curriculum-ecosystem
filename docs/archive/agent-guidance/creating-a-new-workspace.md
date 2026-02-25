@@ -1,6 +1,6 @@
 # Creating a New Workspace
 
-This comprehensive guide explains how to create new workspaces in the oak-mcp-ecosystem monorepo, following the Moria/Histoi/Psycha architecture. This guide was created based on the experience of implementing Phase 6 (Oak Curriculum API) workspaces.
+This comprehensive guide explains how to create new workspaces in the oak-open-data-ecosystem monorepo, following the Moria/Histoi/Psycha architecture. This guide was created based on the experience of implementing Phase 6 (Oak Curriculum API) workspaces.
 
 ## Workspace Types
 

@@ -5,7 +5,7 @@
  * to guide users to call get-ontology first for domain understanding.
  *
  * @remarks
- * The generated tools use DOMAIN_PREREQUISITE_GUIDANCE from the type-gen
+ * The generated tools use DOMAIN_PREREQUISITE_GUIDANCE from the code-generation
  * module. Aggregated tools use these constants to maintain consistency
  * with generated tools while allowing customisation where needed.
  *

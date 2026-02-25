@@ -12,7 +12,7 @@ import {
   generateCanonicalUrlWithContext,
   type ContentType,
   extractSlug,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 
 describe('extractSlug', () => {
   it('should extract slug from prefixed ID', () => {

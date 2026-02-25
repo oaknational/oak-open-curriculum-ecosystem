@@ -4,7 +4,7 @@
  * Utilities for logging tool validation failures with comprehensive context.
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import {
   McpToolError,
   type ToolExecutionResult,

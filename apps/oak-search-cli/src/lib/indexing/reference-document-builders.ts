@@ -16,7 +16,7 @@ import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
  * Document type for the oak_ref_subjects index.
  *
  * This type mirrors the generated schema but is defined here to avoid
- * circular dependencies before type-gen runs.
+ * circular dependencies before sdk-codegen runs.
  */
 export interface RefSubjectIndexDoc {
   readonly subject_slug: SearchSubjectSlug;

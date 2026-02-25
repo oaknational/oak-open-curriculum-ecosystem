@@ -24,7 +24,7 @@ import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
-import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
+import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
 

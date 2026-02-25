@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { startTimer } from '@oaknational/mcp-logger';
+ * import { startTimer } from '@oaknational/logger';
  *
  * const timer = startTimer();
  *

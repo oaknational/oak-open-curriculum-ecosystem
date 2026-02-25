@@ -7,7 +7,7 @@ Use this guide when populating Elasticsearch Serverless with Oak Curriculum data
 ## Data sources
 
 - All content flows through `@oaknational/curriculum-sdk`; never perform raw HTTP requests.
-- SDK adapters must expose lesson-planning data, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm type-gen` when SDK schema changes, then rerun `pnpm make` to regenerate search validators and fixtures.
+- SDK adapters must expose lesson-planning data, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm sdk-codegen` when SDK schema changes, then rerun `pnpm make` to regenerate search validators and fixtures.
 
 ## Canonical URLs
 
@@ -20,7 +20,7 @@ Include canonical URLs in every document to aid traceability and deterministic f
 
 ## Index Schema Management
 
-All Elasticsearch index mappings, Zod schemas, and TypeScript types are defined in the SDK at type-gen time.
+All Elasticsearch index mappings, Zod schemas, and TypeScript types are defined in the SDK at sdk-codegen time.
 
 **NEVER** define mappings or document interfaces in this app. Import from SDK:
 
@@ -31,13 +31,13 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 
 **Documentation**:
 
-- **SDK Field Definitions Guide**: [`packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md`](../../../packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md)
-- **Field Definitions Source**: [`packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/`](../../../packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/)
+- **SDK Field Definitions Guide**: [`packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/README.md`](../../../packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/README.md)
+- **Field Definitions Source**: [`packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/field-definitions/`](../../../packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/field-definitions/)
 
 **Adding a field?**
 
 1. Add to field definitions in SDK
-2. Run `pnpm type-gen` from repo root
+2. Run `pnpm sdk-codegen` from repo root
 3. Reset the index
 4. Re-ingest data
 

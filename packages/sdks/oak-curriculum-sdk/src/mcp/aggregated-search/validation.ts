@@ -12,7 +12,7 @@ import {
   isKeyStage,
   type Subject,
   isSubject,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js';
 
 /**

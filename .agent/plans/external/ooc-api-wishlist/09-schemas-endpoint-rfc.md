@@ -1,8 +1,8 @@
-# Schemas Endpoint RFC: Validation Bundle for SDK Type-Gen
+# Schemas Endpoint RFC: Validation Bundle for SDK sdk-codegen
 
 ## Purpose
 
-Provide a schema bundle endpoint that exposes the API's internal Zod validators (and related metadata) so downstream tooling can reuse the exact runtime validation logic at type-generation time. This avoids OpenAPI -> Zod round-trips, enables optional validation in generated tooling (including MCP tools), and keeps the API as the source of truth.
+Provide a schema bundle endpoint that exposes the API's internal Zod validators (and related metadata) so downstream tooling can reuse the exact runtime validation logic at sdk-codegen time. This avoids OpenAPI -> Zod round-trips, enables optional validation in generated tooling (including MCP tools), and keeps the API as the source of truth.
 
 This RFC expands item 12 in `05-medium-priority-requests.md`.
 
@@ -11,7 +11,7 @@ This RFC expands item 12 in `05-medium-priority-requests.md`.
 - Publish a stable, cacheable bundle of validators for build-time consumption.
 - Keep OpenAPI as the primary contract while allowing first-class validation reuse.
 - Support optional use of validators in SDK runtime wrappers and tool generation.
-- Preserve deterministic outputs so `pnpm type-gen` can reliably regenerate code.
+- Preserve deterministic outputs so `pnpm sdk-codegen` can reliably regenerate code.
 
 **User impact:** SDK/MCP engineers can reuse exact API validators; API consumers get optional runtime checks without schema drift.
 
@@ -69,7 +69,7 @@ Bundle-only is the v1 plan. Single-schema endpoints can be added later if we pro
 - Support `ETag` and `If-None-Match` for the bundle.
 - Consider `Cache-Control: public, max-age=...` if the API deploy cadence permits.
 
-## SDK Type-Gen Integration (Proposed)
+## SDK sdk-codegen Integration (Proposed)
 
 1. Fetch OpenAPI as today.
 2. Fetch `/api/v0/schemas` if available.
@@ -93,6 +93,6 @@ Bundle-only is the v1 plan. Single-schema endpoints can be added later if we pro
 
 ## Success Criteria
 
-- `pnpm type-gen` can optionally consume `/schemas` without breaking determinism.
+- `pnpm sdk-codegen` can optionally consume `/schemas` without breaking determinism.
 - SDK consumers can opt into runtime validation with exact API behaviour.
 - Tool generators can use validators for argument/response checking when needed.

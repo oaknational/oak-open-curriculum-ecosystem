@@ -6,7 +6,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handleFetchError } from './fetch-error-handling';
 import type { FetchErrorConfig } from './fetch-error-handling';
 import type { IngestionErrorCollector } from './ingestion-error-types';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 describe('handleFetchError', () => {
   const mockErrorCollector: IngestionErrorCollector = {

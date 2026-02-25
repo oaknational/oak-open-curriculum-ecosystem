@@ -1,4 +1,4 @@
-# @oaknational/mcp-env
+# @oaknational/env
 
 Environment resolution pipeline for MCP applications.
 
@@ -26,8 +26,8 @@ processEnv     — explicit vars (e.g. KEY=val command)
 ### Usage
 
 ```typescript
-import { resolveEnv } from '@oaknational/mcp-env';
-import { OakApiKeyEnvSchema, ElasticsearchEnvSchema } from '@oaknational/mcp-env';
+import { resolveEnv } from '@oaknational/env';
+import { OakApiKeyEnvSchema, ElasticsearchEnvSchema } from '@oaknational/env';
 
 const AppSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape);
 
@@ -78,7 +78,7 @@ Contract for Oak API authentication. Required when your app calls the
 Oak Curriculum API.
 
 ```typescript
-import { OakApiKeyEnvSchema } from '@oaknational/mcp-env';
+import { OakApiKeyEnvSchema } from '@oaknational/env';
 
 const AppSchema = OakApiKeyEnvSchema.extend({ MY_VAR: z.string() });
 ```
@@ -89,7 +89,7 @@ Contract for Elasticsearch connectivity. Required when your app uses
 Elasticsearch directly.
 
 ```typescript
-import { ElasticsearchEnvSchema } from '@oaknational/mcp-env';
+import { ElasticsearchEnvSchema } from '@oaknational/env';
 
 // Required (both ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set)
 const AppSchema = ElasticsearchEnvSchema;
@@ -103,7 +103,7 @@ const AppSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.partial().sha
 Contract for logging configuration. All fields are optional.
 
 ```typescript
-import { LoggingEnvSchema } from '@oaknational/mcp-env';
+import { LoggingEnvSchema } from '@oaknational/env';
 
 const AppSchema = OakApiKeyEnvSchema.extend(LoggingEnvSchema.shape);
 ```
@@ -114,7 +114,7 @@ Fields: `LOG_LEVEL` (trace/debug/info/warn/error/fatal), `NODE_ENV`
 ### Composing schemas
 
 ```typescript
-import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/mcp-env';
+import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/env';
 import { z } from 'zod';
 
 const AppEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
@@ -134,7 +134,7 @@ Walks up from a start directory until it finds a directory containing
 `pnpm-workspace.yaml` or `.git`, then returns that path.
 
 ```typescript
-import { findRepoRoot } from '@oaknational/mcp-env';
+import { findRepoRoot } from '@oaknational/env';
 
 const root = findRepoRoot(process.cwd());
 ```

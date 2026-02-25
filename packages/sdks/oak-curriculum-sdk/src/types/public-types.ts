@@ -20,7 +20,7 @@ import type {
   Subject as GeneratedSubject,
   KeyStage as GeneratedKeyStage,
   AssetType as GeneratedAssetType,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 export type OakApiPaths = ApiPaths;
 
 /** Subject slug literal type (curated alias). */

@@ -26,7 +26,7 @@ Before diving in, pause and ask:
 
 ## Schema-First Nuance
 
-Schema-first is absolute for SDK code calling the upstream API or extracting from the OpenAPI spec. It is acceptable to add additional metadata (e.g., MCP tool descriptions) at type-gen time.
+Schema-first is absolute for SDK code calling the upstream API or extracting from the OpenAPI spec. It is acceptable to add additional metadata (e.g., MCP tool descriptions) at sdk-codegen time.
 
 When analysing generated files, always analyse the generator code that produced them — the generator is the source of truth.
 
@@ -40,7 +40,7 @@ Run after making changes. Note: some gates trigger earlier ones; caching prevent
 
 ```bash
 # From repo root, one at a time
-pnpm type-gen      # Makes changes
+pnpm sdk-codegen   # Makes changes
 pnpm build         # Makes changes
 pnpm type-check
 pnpm lint:fix      # Makes changes

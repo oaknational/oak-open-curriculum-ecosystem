@@ -11,11 +11,11 @@ The semantic search application requires Elasticsearch index mappings that defin
 
 However, this created a maintenance problem:
 
-1. **Schema drift**: The SDK generates Zod schemas for index documents at type-gen time, but ES mappings were maintained separately as static JSON
+1. **Schema drift**: The SDK generates Zod schemas for index documents at sdk-codegen time, but ES mappings were maintained separately as static JSON
 2. **Manual synchronisation**: Adding fields (like thread support) required updating both the Zod schemas AND the JSON mappings
 3. **No validation**: Nothing prevented the ES mappings from drifting out of sync with the SDK schemas
 
-This violated the cardinal rule: **All static data structures, types, and validators MUST flow from the OpenAPI schema via `pnpm type-gen`**.
+This violated the cardinal rule: **All static data structures, types, and validators MUST flow from the OpenAPI schema via `pnpm sdk-codegen`**.
 
 ## Problem Statement
 
@@ -23,13 +23,13 @@ How do we ensure Elasticsearch index mappings stay synchronised with SDK-generat
 
 ## Decision
 
-**Elasticsearch index mappings are generated at SDK type-gen time and exported as TypeScript const objects.**
+**Elasticsearch index mappings are generated at SDK sdk-codegen time and exported as TypeScript const objects.**
 
 ### Architecture
 
 ```text
 packages/sdks/oak-curriculum-sdk/
-├── type-gen/typegen/search/
+├── code-generation/typegen/search/
 │   ├── es-field-config.ts           # Core types and Zod→ES mapping functions
 │   ├── es-field-overrides.ts        # ES-specific field configurations (source)
 │   ├── es-mapping-utils.ts          # Code generation utilities
@@ -37,7 +37,7 @@ packages/sdks/oak-curriculum-sdk/
 │   ├── es-mapping-generators-minimal.ts  # Simple index generators
 │   └── generate-es-mappings.ts      # Generator orchestration
 └── src/types/generated/search/
-    └── es-mappings/                 # GENERATED at type-gen time
+    └── es-mappings/                 # GENERATED at sdk-codegen time
         ├── index.ts
         ├── oak-lessons.ts
         ├── oak-units.ts
@@ -104,10 +104,10 @@ The generator uses a two-step process:
 
 ### Positive
 
-1. **Single source of truth**: ES mappings derived from SDK schemas at type-gen time
+1. **Single source of truth**: ES mappings derived from SDK schemas at sdk-codegen time
 2. **No drift**: Adding thread fields to Zod schema automatically adds them to ES mappings
 3. **Type safety**: Mappings exported as `as const` provide compile-time type checking
-4. **Validated at build**: Generator failures surface immediately during `pnpm type-gen`
+4. **Validated at build**: Generator failures surface immediately during `pnpm sdk-codegen`
 5. **Clean search app**: No static JSON files to maintain
 
 ### Negative
@@ -127,7 +127,7 @@ The generator uses a two-step process:
 This decision is successful when:
 
 1. **No static JSON mappings**: All JSON files deleted from `definitions/`
-2. **Type-gen produces mappings**: `pnpm type-gen` generates `es-mappings/*.ts`
+2. **sdk-codegen produces mappings**: `pnpm sdk-codegen` generates `es-mappings/*.ts`
 3. **Search app imports from SDK**: `setup/index.ts` uses SDK exports
 4. **All quality gates pass**: Including build, type-check, and tests
 
@@ -136,7 +136,7 @@ This decision is successful when:
 ### SDK Generator Files (Source)
 
 ```text
-packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
+packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/
 ├── es-field-config.ts           # Types, Zod→ES mapping functions
 ├── es-field-overrides.ts        # ES-specific field configurations
 ├── es-mapping-utils.ts          # Code generation utilities
@@ -181,6 +181,6 @@ apps/oak-search-cli/src/lib/elasticsearch/
 
 ## References
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/` - Generator source
+- `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/` - Generator source
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/` - Generated output
 - `apps/oak-search-cli/src/lib/elasticsearch/setup/index.ts` - Consumer

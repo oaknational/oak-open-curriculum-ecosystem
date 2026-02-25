@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createPhasedTimer, type Logger } from '@oaknational/mcp-logger';
+import { createPhasedTimer, type Logger } from '@oaknational/logger';
 import { runAsyncBootstrapPhase, type BootstrapPhaseName } from './bootstrap-helpers.js';
 
 const TEST_PHASE: BootstrapPhaseName = 'fetchUpstreamMetadata';

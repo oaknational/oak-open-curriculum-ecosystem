@@ -116,7 +116,7 @@ finding resources, and adapting content without leaving their existing tools.
 **Post-merge, pre-alpha work** (not merge-blocking):
 
 - Result pattern unification:
-  [mcp-result-pattern-unification.md](semantic-search/post-sdk/mcp-integration/mcp-result-pattern-unification.md)
+  [mcp-result-pattern-unification.md](semantic-search/future/06-mcp-consumer-integration/mcp-result-pattern-unification.md)
 - STDIO/HTTP alignment:
   [stdio-http-server-alignment.md](architecture-and-infrastructure/stdio-http-server-alignment.md)
 - no-console ESLint enforcement (~110 files, largely mechanical):
@@ -275,7 +275,7 @@ From repo root, in order:
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root

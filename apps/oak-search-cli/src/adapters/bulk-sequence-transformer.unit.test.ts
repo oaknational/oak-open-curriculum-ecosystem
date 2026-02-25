@@ -7,7 +7,7 @@
  *
  */
 import { describe, it, expect } from 'vitest';
-import type { BulkDownloadFile } from '@oaknational/curriculum-sdk-generation/bulk';
+import type { BulkDownloadFile } from '@oaknational/sdk-codegen/bulk';
 import {
   extractSequenceParamsFromBulkFile,
   extractSequenceFacetParamsFromBulkFile,

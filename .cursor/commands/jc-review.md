@@ -21,7 +21,7 @@ fails, report it as a critical finding.
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root

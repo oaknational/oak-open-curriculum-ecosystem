@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path, { join } from 'node:path';
 import { config as dotenvConfig } from 'dotenv';
-import { findRepoRoot } from '@oaknational/mcp-env';
+import { findRepoRoot } from '@oaknational/env';
 
 import { DEFAULT_LOG_DIRECTORY } from './logging.js';
 

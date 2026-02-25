@@ -69,7 +69,7 @@ directories, generated API docs
 | `testing-patterns.md` | TDD and DI recipes | Current | Keep as-is |
 | `production-debugging-runbook.md` | Production debugging with correlation IDs | Partially stale | Update -- remove mcp-transport references |
 | `build-system.md` | Monorepo build system | Partially stale | Update -- correct `pnpm check` description |
-| `ci-policy.md` | CI type-gen policy | Current | Keep as-is |
+| `ci-policy.md` | CI sdk-codegen policy | Current | Keep as-is |
 
 ### Key issues
 
@@ -511,7 +511,7 @@ workspace was deleted. Files still referencing Notion MCP:
 - `docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md`
 - `docs/agent-guidance/ai-agent-guide.md` (`pnpm format` and
   `pnpm lint` should be `pnpm lint:fix`)
-- `docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md`
+- `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md`
 - `docs/development/build-system.md` (incorrect `pnpm check`
   description)
 - `.claude/commands/jc-quality-gates.md` (`pnpm format`,

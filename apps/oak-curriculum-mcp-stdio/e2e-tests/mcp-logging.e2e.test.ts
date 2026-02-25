@@ -3,7 +3,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { findRepoRoot } from '@oaknational/mcp-env';
+import { findRepoRoot } from '@oaknational/env';
 
 function readStartupLog(repoRoot: string): string {
   const p = join(repoRoot, '.logs', 'oak-curriculum-mcp-startup', 'startup.log');

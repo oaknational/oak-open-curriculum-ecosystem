@@ -18,7 +18,7 @@ This domain knowledge was previously scattered across application code, leading 
 2. Manual maintenance of mappings in multiple locations
 3. No type safety for the expanded subject set
 
-Following [ADR-036](./036-data-driven-type-generation.md) (Data-Driven Type Generation), we prefer generating data structures over imperative code. However, this domain knowledge cannot be derived from the OpenAPI schema.
+Following [ADR-036](./036-data-driven-code-generation.md) (Data-Driven Code Generation), we prefer generating data structures over imperative code. However, this domain knowledge cannot be derived from the OpenAPI schema.
 
 ## Decision
 
@@ -27,7 +27,7 @@ Following [ADR-036](./036-data-driven-type-generation.md) (Data-Driven Type Gene
 ### Generator Location
 
 ```text
-packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
+packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/
 └── generate-subject-hierarchy.ts   # Subject hierarchy generator
 ```
 
@@ -87,7 +87,7 @@ The OpenAPI schema may eventually include the full subject hierarchy, but:
 
 ### Relationship to ADR-036
 
-This follows [ADR-036](./036-data-driven-type-generation.md) principles:
+This follows [ADR-036](./036-data-driven-code-generation.md) principles:
 
 - Generate data structures, not imperative code
 - Types derived from data using `typeof`
@@ -125,12 +125,12 @@ When the OpenAPI schema includes subject hierarchy:
 
 ## Related Decisions
 
-- [ADR-036](./036-data-driven-type-generation.md) - Data-driven type generation pattern (parent pattern)
+- [ADR-036](./036-data-driven-code-generation.md) - Data-driven code generation pattern (parent pattern)
 - [ADR-067](./067-sdk-generated-elasticsearch-mappings.md) - SDK-generated ES mappings
 - [ADR-101](./101-subject-hierarchy-for-search-filtering.md) - Subject hierarchy for search filtering (consumer)
 
 ## Implementation
 
-- Generator: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-subject-hierarchy.ts`
+- Generator: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/generate-subject-hierarchy.ts`
 - Output: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts`
-- Tests: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-subject-hierarchy.unit.test.ts`
+- Tests: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/generate-subject-hierarchy.unit.test.ts`

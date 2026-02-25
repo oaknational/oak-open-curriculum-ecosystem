@@ -558,7 +558,7 @@ After migration, verify and delete any remaining local config utilities.
 #### 3.3 Quality Gates
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint:fix

@@ -4,19 +4,19 @@ Practical guidance for adding new capabilities to the Oak MCP Ecosystem.
 
 ## Adding New MCP Tools
 
-MCP tools are generated from the OpenAPI schema — you do not write tool definitions by hand. When a new API endpoint appears in the upstream OpenAPI specification, `pnpm type-gen` generates the corresponding MCP tool automatically.
+MCP tools are generated from the OpenAPI schema — you do not write tool definitions by hand. When a new API endpoint appears in the upstream OpenAPI specification, `pnpm sdk-codegen` generates the corresponding MCP tool automatically.
 
 ### Generated tools (from the API)
 
 1. The upstream OpenAPI schema gains a new endpoint
-2. Run `pnpm type-gen` — the generator in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/` produces tool metadata, Zod validators, input/output types, and execution helpers
+2. Run `pnpm sdk-codegen` — the generator in `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/` produces tool metadata, Zod validators, input/output types, and execution helpers
 3. The generated tools appear in `src/types/generated/api-schema/mcp-tools/`
 4. MCP servers automatically pick up the new tool from `MCP_TOOL_DESCRIPTORS`
 5. Run `pnpm build && pnpm test` to verify
 
 **Key files**:
 
-- Generator templates: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/`
+- Generator templates: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/`
 - Generated output: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/`
 - Descriptor map: `MCP_TOOL_DESCRIPTORS` in the generated output
 - Schema-first execution: see [schema-first-execution.md](../../.agent/directives/schema-first-execution.md)

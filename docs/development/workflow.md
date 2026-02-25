@@ -50,7 +50,7 @@ pnpm fix   # format:root → markdownlint:root → lint:fix
 **Full pipeline** (before committing):
 
 ```bash
-pnpm make  # install → build/type-gen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root
+pnpm make  # install → build/sdk-codegen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root
 ```
 
 **Full verification** (before pushing):

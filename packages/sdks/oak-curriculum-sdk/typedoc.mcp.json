@@ -14,7 +14,7 @@
     "e2e-tests/**",
     "test-cache/**",
     "examples/**",
-    "type-gen/**"
+    "code-generation/**"
   ],
   "excludeInternal": false,
   "excludePrivate": true,

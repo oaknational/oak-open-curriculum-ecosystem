@@ -5,7 +5,7 @@
 
 import { vi } from 'vitest';
 import type { Request, Response } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RequestWithAuthContext } from '../auth/tool-auth-context.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';

@@ -60,7 +60,7 @@ pnpm test        # Test ALL workspaces
 
 ```bash
 # Full quality gate sequence
-pnpm type-gen    # Regenerate types (SDK changes)
+pnpm sdk-codegen # Regenerate types (SDK changes)
 pnpm build       # Build ALL workspaces
 pnpm type-check  # Type check ALL workspaces
 pnpm lint        # Lint ALL workspaces
@@ -289,7 +289,7 @@ pnpm test        # Expected: exit 0, all tests pass
 
 ```bash
 # Run full quality gate after Phase 1
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint
@@ -547,7 +547,7 @@ Run these commands to verify all fixes:
 ```bash
 # Full quality gate sequence
 cd /Users/jim/code/oak/oak-mcp-ecosystem
-pnpm type-gen   # Generate types
+pnpm sdk-codegen # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check
 pnpm lint       # Lint

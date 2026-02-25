@@ -244,7 +244,7 @@ export const mathsSynonyms = {
 
 ```bash
 # From repo root
-pnpm type-gen && pnpm build
+pnpm sdk-codegen && pnpm build
 
 # Deploy synonyms to Elasticsearch (two options):
 

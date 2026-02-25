@@ -24,7 +24,8 @@ scratch each time. This created three problems:
    "adversarial review as closing phase" pattern from Phase 3a) were not
    available as starting points for subsequent plans.
 3. **Unclear document hierarchy**: The relationship between session prompts
-   (`.agent/prompts/`), executable plans (`.agent/plans/*/active/`), and
+   (`.agent/prompts/`), executable plans
+   (`.agent/plans/*/{active,current,future}/`), and
    the strategic roadmap was implicit, leading to content duplication and
    contradictory facts across documents.
 
@@ -68,11 +69,11 @@ inlined) by templates.
 
 Three document types serve distinct purposes and must not duplicate content:
 
-| Document            | Purpose                                                                                     | Location                    | Mutability                                       |
-| ------------------- | ------------------------------------------------------------------------------------------- | --------------------------- | ------------------------------------------------ |
-| **Session prompt**  | Operational entry point — "where are we now, what to read, what to do"                      | `.agent/prompts/`           | Updated every session                            |
-| **Executable plan** | Per-workstream task list with TDD phases, acceptance criteria, and deterministic validation | `.agent/plans/*/active/`    | Updated during execution, archived on completion |
-| **Roadmap**         | Strategic milestone sequence — phases, dependencies, completion status                      | `.agent/plans/*/roadmap.md` | Updated at milestone boundaries                  |
+| Document            | Purpose                                                                                     | Location                                  | Mutability                                       |
+| ------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
+| **Session prompt**  | Operational entry point — "where are we now, what to read, what to do"                      | `.agent/prompts/`                         | Updated every session                            |
+| **Executable plan** | Per-workstream task list with TDD phases, acceptance criteria, and deterministic validation | `.agent/plans/*/{active,current,future}/` | Updated during execution, archived on completion |
+| **Roadmap**         | Strategic milestone sequence — phases, dependencies, completion status                      | `.agent/plans/*/roadmap.md`               | Updated at milestone boundaries                  |
 
 **Content flows one way**: facts are authoritative in one document and
 referenced (not restated) by the others. Specifically:
@@ -87,18 +88,28 @@ referenced (not restated) by the others. Specifically:
 ### 4. Plan Lifecycle
 
 ```text
-active/         → work in progress, frontmatter todos track state
-archive/completed/ → completed, read-only historical record
+active/             → NOW: in-progress execution only (frontmatter todos track state)
+current/            → NEXT: queued/ready plans, not yet in progress
+future/             → LATER: deferred strategic plans
+archive/completed/  → completed, read-only historical record
 ```
+
+`active/` is a strict execution lane. A plan moves into `active/` only when
+work has started.
+
+Strategic backlog hubs should organise planned work between `current/` and
+`future/`, then promote an item into `active/` when execution begins.
 
 When archiving a plan:
 
-1. Move the file to `archive/completed/`.
-2. Add an entry to the [completed plans index](/.agent/plans/completed-plans.md)
+1. Mine completed outcomes into permanent documentation (ADRs, directives,
+   READMEs, reference docs) before archival.
+2. Move the file to `archive/completed/`.
+3. Add an entry to the [completed plans index](/.agent/plans/completed-plans.md)
    (plan name, date, key outcomes, archive link).
-3. Update all cross-references to point directly to
+4. Update all cross-references to point directly to
    `archive/completed/` — clean break, no stubs, no redirects.
-4. Run the consolidation flow to synchronise all documents.
+5. Run the consolidation flow to synchronise all documents.
 
 ### 5. Frontmatter Todo Tracking
 
@@ -154,8 +165,8 @@ the plan content.
 - Common patterns (quality gates, TDD phases, risk tables) are consistent
   across all plans.
 - Document hierarchy prevents content duplication and fact contradiction.
-- Plan lifecycle is explicit: active plans are work-in-progress, archived
-  plans are historical records.
+- Plan lifecycle is explicit: `active` (now), `current` (next), `future`
+  (later), and `archive/completed` (historical record).
 - Frontmatter todos provide machine-readable progress tracking.
 
 ### Trade-offs
@@ -176,8 +187,12 @@ the plan content.
   criteria (update impacted docs or record no-change rationale).
 - When facts appear in multiple documents, mark one as authoritative and
   make the others reference it.
-- Archive completed plans promptly; `active/` must contain only
-  in-progress work — no stubs, no redirects, no compatibility layers.
+- Archive completed plans promptly after mining outcomes into permanent
+  documentation.
+- `active/` must contain only in-progress work.
+- `current/` and `future/` hold not-yet-started work only — no in-progress
+  execution in these directories.
+- No stubs, no redirects, no compatibility layers.
 - Run the consolidation flow (`/jc-consolidate-docs`) after every milestone.
 
 ## References

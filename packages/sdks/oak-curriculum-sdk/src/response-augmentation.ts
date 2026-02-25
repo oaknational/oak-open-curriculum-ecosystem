@@ -4,14 +4,14 @@
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-import { generateCanonicalUrlWithContext } from '@oaknational/curriculum-sdk-generation/api-schema';
+import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import {
   UnifiedLogger,
   buildResourceAttributes,
   logLevelToSeverityNumber,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 import type { HttpMethod } from './validation/types.js';
 import {
   getContentTypeFromPath,
@@ -19,7 +19,7 @@ import {
   extractContentTypeSpecificId,
   isNonNullObject,
 } from './response-augmentation-helpers.js';
-import { rawCurriculumSchemas } from '@oaknational/curriculum-sdk-generation/zod';
+import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber('WARN'),

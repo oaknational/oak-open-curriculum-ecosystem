@@ -41,7 +41,7 @@ After downloading fresh bulk data, regenerate the types:
 pnpm bulk:download
 
 # Generate types from bulk data
-pnpm bulk:typegen
+pnpm bulk:codegen
 ```
 
 ### Validate Ground Truths
@@ -126,7 +126,7 @@ Generated files are marked with `@generated - DO NOT EDIT`:
 ## Workflow
 
 1. **Download bulk data**: `pnpm bulk:download`
-2. **Generate types**: `pnpm bulk:typegen`
+2. **Generate types**: `pnpm bulk:codegen`
 3. **Create/edit ground truths** in `src/lib/search-quality/ground-truth/`
 4. **Validate**: `pnpm ground-truth:validate`
 5. **Run benchmarks**: `pnpm benchmark`
@@ -143,7 +143,7 @@ Generated files are marked with `@generated - DO NOT EDIT`:
 
 ### "Generated types not found"
 
-Run `pnpm bulk:typegen` to create the types.
+Run `pnpm bulk:codegen` to create the types.
 
 ### "Slug not found in bulk data"
 
@@ -155,4 +155,4 @@ The slug in your ground truth doesn't exist. Either:
 
 ### Type errors after bulk data update
 
-Regenerate types: `pnpm bulk:typegen`
+Regenerate types: `pnpm bulk:codegen`

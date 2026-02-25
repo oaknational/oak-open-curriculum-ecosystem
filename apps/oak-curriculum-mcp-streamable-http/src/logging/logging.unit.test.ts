@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { UnifiedLogger } from '@oaknational/mcp-logger';
+import { UnifiedLogger } from '@oaknational/logger';
 import type { Response } from 'express';
 import { unwrap } from '@oaknational/result';
 

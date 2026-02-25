@@ -6,13 +6,13 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
-    "type-gen": {
-      "dependsOn": ["^type-gen", "^build"],
+    "sdk-codegen": {
+      "dependsOn": ["^sdk-codegen", "^build"],
       "cache": true,
       "outputs": ["**/generated/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "**/type-gen/**/*.ts",
+        "**/code-generation/**/*.ts",
         "**/vocab-gen/**/*.ts",
         "**/scripts/**/*.ts",
         "**/schema-cache/**"
@@ -20,12 +20,12 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
-      "dependsOn": ["^doc-gen", "^build", "type-gen"],
+      "dependsOn": ["^doc-gen", "^build", "sdk-codegen"],
       "cache": true,
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "**/type-gen/**/*.ts",
+        "**/code-generation/**/*.ts",
         "**/scripts/**/*.ts",
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
@@ -35,7 +35,7 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": ["dist/**", ".tsup/**"],
       "inputs": [
@@ -59,7 +59,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build", "build", "type-gen"],
+      "dependsOn": ["^build", "build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -77,7 +77,7 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^build", "build", "type-gen"],
+      "dependsOn": ["^build", "build", "sdk-codegen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -95,7 +95,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -110,7 +110,7 @@
       ]
     },
     "mutate": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -132,7 +132,7 @@
       "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:ui": {
-      "dependsOn": ["^build", "build", "type-gen"],
+      "dependsOn": ["^build", "build", "sdk-codegen"],
       "outputs": [],
       "cache": true,
       "inputs": [
@@ -145,7 +145,7 @@
       ]
     },
     "type-check": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [

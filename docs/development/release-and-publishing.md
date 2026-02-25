@@ -96,7 +96,7 @@ Before enabling real publishing, verify the tarball contents:
 
 ```bash
 # 1. Ensure the SDK builds cleanly
-pnpm type-gen && pnpm build
+pnpm sdk-codegen && pnpm build
 
 # 2. Run the dry-run publish (shows what would be published)
 pnpm -r publish --dry-run --no-git-checks

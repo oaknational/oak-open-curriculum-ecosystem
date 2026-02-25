@@ -17,7 +17,7 @@ This report details deviations from the standard "Base + Boundary" configuration
 **Deviation Level: Medium**
 
 - **Strictness**: Implements a "Hyper-Strict" set of `no-restricted-properties` rules (banning `Object.keys`, `Reflect.*`) that is unique to this package.
-- **Overrides**: Disables complexity and strict type rules for `type-gen` and `generated` directories.
+- **Overrides**: Disables complexity and strict type rules for `code-generation` and `generated` directories.
 - **Config Pattern**: Uses `projectService: true` directly, unlike the `tsconfig.lint.json` pattern used in `libs`.
 - **Recommendation**: Extract the strict rules into a shared `strict` config; standardize the project service configuration.
 

@@ -48,7 +48,7 @@ The monorepo uses Turborepo to orchestrate tasks across workspaces. Several issu
 }
 ```
 
-**Rationale**: Tests, type-checking, and linting all import from workspace dependencies. They need the built `.d.ts` declaration files from dependencies like `@oaknational/mcp-logger` and `@oaknational/curriculum-sdk`. By declaring these dependencies explicitly, turbo ensures all workspace dependencies are fully built before any verification task starts.
+**Rationale**: Tests, type-checking, and linting all import from workspace dependencies. They need the built `.d.ts` declaration files from dependencies like `@oaknational/logger` and `@oaknational/curriculum-sdk`. By declaring these dependencies explicitly, turbo ensures all workspace dependencies are fully built before any verification task starts.
 
 Without this dependency, ESLint's `import-x/no-unresolved` rule fails with "Unable to resolve path to module" errors because the SDK hasn't been built yet.
 
@@ -56,7 +56,7 @@ Without this dependency, ESLint's `import-x/no-unresolved` rule fails with "Unab
 
 ```json
 "build": {
-  "dependsOn": ["^build", "type-gen"],
+  "dependsOn": ["^build", "sdk-codegen"],
   "cache": true,
   "outputs": ["dist/**", ".tsup/**", ".next/**"],
   ...
@@ -164,12 +164,12 @@ This creates circular cache invalidation: `build` produces outputs → outputs c
        │
        ▼
 ┌─────────────┐
-│  type-gen   │  (cache: true, dependsOn: [^type-gen, ^build-adapter])
+│ sdk-codegen │  (cache: true, dependsOn: [^sdk-codegen, ^build-adapter])
 └──────┬──────┘
        │
        ▼
 ┌─────────────┐
-│    build    │  (cache: true, dependsOn: [^build, type-gen])
+│    build    │  (cache: true, dependsOn: [^build, sdk-codegen])
 └──────┬──────┘
        │
        ├────────────────┬────────────────┬────────────────┬────────────────┐

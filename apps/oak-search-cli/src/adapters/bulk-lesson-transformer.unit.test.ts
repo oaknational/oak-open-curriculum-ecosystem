@@ -9,7 +9,7 @@
  *
  */
 import { describe, it, expect } from 'vitest';
-import type { Lesson } from '@oaknational/curriculum-sdk-generation/bulk';
+import type { Lesson } from '@oaknational/sdk-codegen/bulk';
 import {
   transformBulkLessonToESDoc,
   extractLessonParamsFromBulk,

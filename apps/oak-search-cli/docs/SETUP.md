@@ -43,7 +43,7 @@ pnpm install
 From the repository root:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint:fix
@@ -108,7 +108,7 @@ pnpm benchmark
 From repository root:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint:fix

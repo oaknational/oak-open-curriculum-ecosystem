@@ -23,7 +23,7 @@
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
 import { isPublicResourceUri } from './auth/public-resources.js';
 

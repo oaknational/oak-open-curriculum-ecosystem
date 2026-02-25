@@ -40,7 +40,7 @@ TypeScript is not just a type checker -- it's a **compile-time code generator's 
 
 For each type-related change, trace the flow:
 
-- Where does the type originate? (Should be from the OpenAPI schema via `pnpm type-gen`)
+- Where does the type originate? (Should be from the OpenAPI schema via `pnpm sdk-codegen`)
 - How does it flow through the system? (Through SDK, into apps)
 - Where is type information lost? (Widening, assertions, `any`)
 
@@ -58,9 +58,9 @@ Produce the structured output below. For each violation, provide a specific reso
 
 ## The Cardinal Rule
 
-**ALL static data structures, types, type guards, Zod schemas, and validators MUST flow from the Open Curriculum OpenAPI schema in the SDK, generated at build/compile time via `pnpm type-gen`.**
+**ALL static data structures, types, type guards, Zod schemas, and validators MUST flow from the Open Curriculum OpenAPI schema in the SDK, generated at build/compile time via `pnpm sdk-codegen`.**
 
-If the upstream OpenAPI schema changes, running `pnpm type-gen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment.
+If the upstream OpenAPI schema changes, running `pnpm sdk-codegen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment.
 
 ## The Compilation-Time Revolution (ADR-038)
 

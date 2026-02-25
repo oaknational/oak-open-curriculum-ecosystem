@@ -5,7 +5,7 @@
  * scoped search result shapes plus the suggest shape. Fixtures are
  * parsed through generated Zod schemas to ensure they match the
  * real SDK types — if the ES index document schema changes,
- * `pnpm type-gen` updates the Zod schemas, and these tests catch
+ * `pnpm sdk-codegen` updates the Zod schemas, and these tests catch
  * the drift.
  *
  * @see ../../tests/widget/renderer-test-harness.ts

@@ -26,7 +26,7 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
                │ dep
                ▼
 ┌──────────────────────────────┐
-│    oak-curriculum-sdk        │  ← type-gen, then build
+│    oak-curriculum-sdk        │  ← code-generation, then build
 └──────────┬───────────────────┘
            │ dep
            ├─────────────────────────┐
@@ -44,7 +44,7 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
 ### Why This Works
 
 - **`^build`** means "run `build` in dependency packages first"
-- **`type-gen`** (no `^`) means "run `type-gen` in this package first"
+- **`sdk-codegen`** (no `^`) means "run `sdk-codegen` in this package first"
 
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 
@@ -62,7 +62,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 
 1. Install dependencies
 2. Single turbo run:
-   - `build` - compile all workspaces (triggers `type-gen` first)
+   - `build` - compile all workspaces (triggers `sdk-codegen` first)
    - `type-check` - TypeScript validation
    - `doc-gen` - generate documentation
    - `lint:fix` - auto-fix linting issues
@@ -98,7 +98,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && turbo run type-gen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites
@@ -124,7 +124,7 @@ See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/0
 ### Key relationships
 
 ```text
-type-gen → build → test
+sdk-codegen → build → test
                  ↘ test:e2e → smoke:dev:stub
                  ↘ type-check
                  ↘ lint / lint:fix
@@ -132,14 +132,14 @@ type-gen → build → test
 
 All task dependencies use `^build`:
 
-| Task                | Depends On           | Why                                                   |
-| ------------------- | -------------------- | ----------------------------------------------------- |
-| `type-gen`          | `^build`             | Core adapter must be built before SDK type generation |
-| `build`             | `^build`, `type-gen` | Dependencies build first, then local type generation  |
-| `type-check`        | `^build`, `type-gen` | Declaration files must exist for type checking        |
-| `lint` / `lint:fix` | `^build`, `type-gen` | ESLint plugin must be built before linting            |
-| `test`              | `^build`             | SDK must be built before tests run                    |
-| `doc-gen`           | `^build`             | Source must be built before doc generation            |
+| Task                | Depends On              | Why                                                   |
+| ------------------- | ----------------------- | ----------------------------------------------------- |
+| `sdk-codegen`       | `^build`                | Core adapter must be built before SDK type generation |
+| `build`             | `^build`, `sdk-codegen` | Dependencies build first, then local type generation  |
+| `type-check`        | `^build`, `sdk-codegen` | Declaration files must exist for type checking        |
+| `lint` / `lint:fix` | `^build`, `sdk-codegen` | ESLint plugin must be built before linting            |
+| `test`              | `^build`                | SDK must be built before tests run                    |
+| `doc-gen`           | `^build`                | Source must be built before doc generation            |
 
 ### Independent tasks
 
@@ -152,16 +152,16 @@ These run in parallel with no build dependency:
 
 ### Cached tasks (fast on repeat runs)
 
-| Task         | Cached | Notes                                 |
-| ------------ | ------ | ------------------------------------- |
-| `build`      | ✅     | Rebuilds only when inputs change      |
-| `type-gen`   | ✅     | Regenerates only when schema changes  |
-| `type-check` | ✅     | Re-checks only when source changes    |
-| `lint`       | ✅     | Re-lints only when source changes     |
-| `test`       | ✅     | Re-runs only when source/tests change |
-| `test:e2e`   | ✅     | Re-runs only when e2e tests change    |
-| `test:ui`    | ✅     | Re-runs only when UI tests change     |
-| `doc-gen`    | ✅     | Regenerates only when source changes  |
+| Task          | Cached | Notes                                 |
+| ------------- | ------ | ------------------------------------- |
+| `build`       | ✅     | Rebuilds only when inputs change      |
+| `sdk-codegen` | ✅     | Regenerates only when schema changes  |
+| `type-check`  | ✅     | Re-checks only when source changes    |
+| `lint`        | ✅     | Re-lints only when source changes     |
+| `test`        | ✅     | Re-runs only when source/tests change |
+| `test:e2e`    | ✅     | Re-runs only when e2e tests change    |
+| `test:ui`     | ✅     | Re-runs only when UI tests change     |
+| `doc-gen`     | ✅     | Regenerates only when source changes  |
 
 ### Uncached tasks (always run)
 
@@ -211,7 +211,7 @@ This was caused by a race condition where tests ran before SDK build completed. 
 This indicates core packages weren't built before type-check ran. Ensure:
 
 1. `oak-eslint` has a `build` script (not `build-linting`)
-2. `turbo.json` `type-check` depends on `["^build", "type-gen"]`
+2. `turbo.json` `type-check` depends on `["^build", "sdk-codegen"]`
 3. Run `pnpm clean && pnpm build`
 
 ### Slow repeated runs
@@ -226,7 +226,7 @@ Common causes:
 
 2. **Both `env` and `passThroughEnv` for same variable** - Using both causes the env var value to affect the cache hash. Use `passThroughEnv` for secrets that shouldn't affect caching.
 
-3. **Unstable generated outputs** - If type-gen produces files with timestamps or random ordering, cache will miss. Ensure generators produce deterministic output.
+3. **Unstable generated outputs** - If sdk-codegen produces files with timestamps or random ordering, cache will miss. Ensure generators produce deterministic output.
 
 To debug cache misses:
 

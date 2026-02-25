@@ -1,5 +1,5 @@
 {
-  "name": "@oaknational/mcp-env",
+  "name": "@oaknational/env",
   "version": "0.0.0-development",
   "private": true,
   "description": "Environment utilities and shared Zod schemas for MCP applications",
@@ -64,11 +64,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/libs/env"
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
+    "directory": "packages/core/env"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/libs/env#readme"
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/core/env#readme"
 }

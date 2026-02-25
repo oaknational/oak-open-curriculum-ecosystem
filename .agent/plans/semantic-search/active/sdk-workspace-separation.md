@@ -2,9 +2,10 @@
 name: SDK Workspace Separation (Canonical Merge Blocker)
 overview: >
   Execute ADR-108 Step 1 by splitting generation-time responsibilities from
-  runtime responsibilities into a dedicated
-  `@oaknational/curriculum-sdk-generation` workspace, while preserving runtime
-  behaviour and enforcing strict one-way boundaries.
+  runtime responsibilities into a dedicated codegen workspace, while preserving
+  runtime behaviour and enforcing strict one-way boundaries. Phase 6 includes
+  four package/repo renames that align naming with architectural intent, plus
+  provenance updates, evaluation decisions, and documentation alignment.
   This canonical plan is self-sufficient, ADR-anchored, and merge-blocking.
 todos:
   - id: gate-prerequisite-baseline
@@ -17,13 +18,13 @@ todos:
     content: "Capture and persist reproducible baseline metrics and command definitions before file moves."
     status: completed
   - id: turbo-task-alignment
-    content: "Update turbo.json to reflect the new cross-package task dependencies (runtime:build depends on generation:type-gen). Completed in Phase 1 — see commit 86a71125. Remaining turbo fixes (test:e2e input filename) tracked as F1 in Phase 5."
+    content: "Update turbo.json to reflect the new cross-package task dependencies (runtime:build depends on generation:sdk-codegen). Completed in Phase 1 — see commit 86a71125. Remaining turbo fixes (test:e2e input filename) tracked as F1 in Phase 5."
     status: completed
   - id: generation-workspace-scaffold
     content: "Create packages/sdks/oak-curriculum-sdk-generation with package metadata, TS/ESLint/tsup configs, scripts, and README."
     status: completed
-  - id: move-typegen-and-generated
-    content: "Move type-gen/, schema-cache/, src/types/generated/ into generation workspace with git-aware moves. Rewire runtime imports via subpath exports. Full quality gates passed."
+  - id: move-codegen-and-generated
+    content: "Move code-generation/, schema-cache/, src/types/generated/ into generation workspace with git-aware moves. Rewire runtime imports via subpath exports. Full quality gates passed."
     status: completed
   - id: move-vocab-generated-runtime-artefacts
     content: "Phase 3: Physical moves complete (vocab-gen, bulk, graph data, synonyms, property-graph-data). Barrel exports and config updated. Phase 3+4 form single RED-GREEN cycle."
@@ -34,9 +35,30 @@ todos:
   - id: tests-scripts-config-migration
     content: "Phase 5 COMPLETED. Scope guard stale entries removed (F1). Test split to integration (F4). Barrel simplification — duplicate exports removed, single canonical source via types/index.ts (F10). DI refactoring — GeneratedToolRegistry interface, ToolRegistryDescriptor (ISP), eliminated vi.mock/vi.hoisted, removed all as assertions (F18). generate:clean already documented (F8). F1–F3, F5, F6, F9 verified already resolved. All gates pass. 4 specialist reviewers approved. Phase 5 reviewer suggestions tracked in §13.6 for Phase 6 priority."
     status: completed
-  - id: docs-tsdoc-and-adr
-    content: "Phase 6: Update TSDoc, READMEs, architecture docs, ADR references, generator provenance banners. Architecture remediation N5–N6 COMPLETED (MCP tool dir flattening, generator bootstrap cycle). Evaluate barrel auto-generation, subpath granularity, OakApiPathBasedClient ownership. Reviewer findings F11–F15."
-    status: pending
+  - id: phase6-s1-s3
+    content: "Phase 6.1: Phase 5 reviewer suggestions S1-S3. Extract shared test helper (S1), split executor tests (S2), simplify _meta guard (S3)."
+    status: completed
+  - id: phase6-lib-renames
+    content: "Phase 6.2: Rename @oaknational/logger (was mcp-logger, ~101 files) and @oaknational/env (was mcp-env, ~22 files)."
+    status: completed
+  - id: phase6-workspace-rename
+    content: "Phase 6.3: Rename workspace to oak-sdk-codegen (@oaknational/sdk-codegen). git mv + bulk string replacement across all workspaces."
+    status: completed
+  - id: phase6-repo-rename
+    content: "Phase 6.4: Rename repo internal refs to oak-open-data-ecosystem (was oak-mcp-ecosystem). All package.json URLs, README, CONTRIBUTING updated."
+    status: completed
+  - id: phase6-provenance
+    content: "Phase 6.5: F11 — updated 3 generator template provenance banners to reference oak-sdk-codegen, regenerated."
+    status: completed
+  - id: phase6-decisions
+    content: "Phase 6.6: F12-F14 evaluation decisions documented in codegen SDK README. F12 barrel auto-gen: keep manual. F13 subpath granularity: keep as-is. F14 OakApiPathBasedClient: keep in codegen."
+    status: completed
+  - id: phase6-docs
+    content: "Phase 6.7: Documentation alignment. ADR-108, codegen README, prompt, plan updated with post-rename names."
+    status: completed
+  - id: phase6-gates-reviews
+    content: "Phase 6.8: Full quality gate chain (all 12 pass) + 5 specialist reviews completed. Findings actioned: as ToolName fix, AGENT.md stale names, env/result directory fields, roadmap gate chain."
+    status: completed
   - id: validation-and-evidence
     content: "Phase 7: Run full gate chain, capture evidence, add CI generated-file-drift check (F16)."
     status: pending
@@ -50,11 +72,36 @@ isProject: false
 Execute **ADR-108 Step 1** by splitting the current monolithic
 `@oaknational/curriculum-sdk` into:
 
-1. `@oaknational/curriculum-sdk-generation` (generation-time ownership)
+1. `@oaknational/sdk-codegen` (generation-time ownership)
 2. `@oaknational/curriculum-sdk` (runtime ownership)
 
 This plan is merge-blocking for semantic-search branch work and is the single
 authoritative execution source for this split.
+
+### 1a. Naming Transition (decided 25 Feb 2026)
+
+Phase 6 includes four renames that align package and repo naming with
+architectural intent. The `@oaknational` scope carries the Oak identity,
+so individual packages drop the redundant `oak-` prefix. The codegen
+workspace name reflects its role as a shared code generation foundation
+rather than being subordinate to the curriculum SDK.
+
+| What | Old | New | Scope |
+|------|-----|-----|-------|
+| **Codegen workspace dir** | `packages/sdks/oak-curriculum-sdk-generation` | `packages/sdks/oak-sdk-codegen` | ~100+ TS imports, configs, docs |
+| **Codegen npm** | `@oaknational/curriculum-sdk-generation` | `@oaknational/sdk-codegen` | same |
+| **Logger npm** | `@oaknational/mcp-logger` | `@oaknational/logger` | ~50 TS imports, 5 package.json deps |
+| **Env npm** | `@oaknational/mcp-env` | `@oaknational/env` | ~10 TS imports, 3 package.json deps |
+| **Repo** | `oak-mcp-ecosystem` | `oak-open-data-ecosystem` | package.json URLs, README, CONTRIBUTING, .git/config |
+
+Rationale: the repo is not just about MCP servers and AI agents — the
+curriculum SDK and search SDK are useful in their own right. Library
+packages (`mcp-logger`, `mcp-env`) are general-purpose utilities that
+happen to have been created in the MCP context. The `mcp-` prefix is
+misleading. Directory names for logger (`packages/libs/logger/`) and
+env (`packages/core/env/`) do not change — only npm package names.
+
+Archived plans retain old names (historical records — never updated).
 
 ## 2. Hard Gates and Non-Negotiable Decisions
 
@@ -81,7 +128,7 @@ complete — see commit `86a71125`.
 **Decision (expanded 23 Feb 2026)**: all vocab-generated artefacts AND all
 bulk data infrastructure (`src/bulk/`) move in Step 1 now; no phased partial
 ownership. The guiding principle: if something CAN be created or owned at
-type-gen time, it should be.
+code-generation time, it should be.
 
 This explicitly includes:
 
@@ -100,7 +147,7 @@ generation imports for type-only surfaces is a future refinement.
 ### D2. One-way dependency remains strict
 
 `@oaknational/curriculum-sdk` may depend on
-`@oaknational/curriculum-sdk-generation`; generation may not depend on runtime.
+`@oaknational/sdk-codegen`; codegen may not depend on runtime.
 See [ADR-108 § Boundary Invariants](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 for the full set of enforced boundary rules.
 
@@ -146,7 +193,7 @@ at Phase 0, before any file moves.
 | `packages/sdks/oak-curriculum-sdk-generation` | did not exist |
 | `packages/sdks/` workspaces | 2 (`oak-curriculum-sdk`, `oak-search-sdk`) |
 | `packages/core/` packages | 4 (`env`, `oak-eslint`, `openapi-zod-client-adapter`, `result`) |
-| Runtime SDK `type-gen/` files | 192 |
+| Runtime SDK `code-generation/` files | 192 |
 | Runtime SDK `src/` files | 303 |
 | Runtime SDK `src/types/generated/` files | 106 |
 | Runtime non-test files importing local `types/generated/` | 56 |
@@ -158,10 +205,10 @@ at Phase 0, before any file moves.
 | `packages/sdks/oak-curriculum-sdk-generation` | exists | created Phase 1 |
 | `packages/sdks/` workspaces | 3 | +1 (generation SDK) |
 | `packages/core/` packages | 5 | +1 (`type-helpers`, N3) |
-| Generation SDK `type-gen/` files | 193 | moved from runtime |
+| Generation SDK `code-generation/` files | 193 | moved from runtime |
 | Generation SDK `src/` files | 163 | moved from runtime + generated |
 | Runtime SDK `src/` files | 152 | reduced (generation code moved out) |
-| Runtime SDK `type-gen/`, `src/types/generated/`, `src/bulk/` | absent | moved to generation |
+| Runtime SDK `code-generation/`, `src/types/generated/`, `src/bulk/` | absent | moved to generation |
 | Runtime SDK `public/bulk.ts` | absent | deleted Phase 4.4 |
 | Runtime non-test files importing local `types/generated/` | 0 | all rewired to generation subpaths |
 | Generation SDK subpath exports | 11 (`.`, `/api-schema`, `/mcp-tools`, `/search`, `/zod`, `/bulk`, `/vocab`, `/query-parser`, `/observability`, `/admin`, `/widget-constants`) | — |
@@ -175,7 +222,7 @@ cat .agent/plans/semantic-search/active/sdk-workspace-separation-baseline.json
 # Verify post-split structural invariants
 ls -1 packages/sdks                                    # 3 workspaces
 ls -1 packages/core                                    # 5 packages
-test -d packages/sdks/oak-curriculum-sdk/type-gen && echo "FAIL" || echo "OK: no type-gen"
+test -d packages/sdks/oak-curriculum-sdk/code-generation && echo "FAIL" || echo "OK: no code-generation"
 test -d packages/sdks/oak-curriculum-sdk/src/bulk && echo "FAIL" || echo "OK: no bulk"
 test -f packages/sdks/oak-curriculum-sdk/src/public/bulk.ts && echo "FAIL" || echo "OK: no facade"
 
@@ -194,14 +241,14 @@ mapped to execution phases and acceptance criteria.
 | Finding | Current truth | Execution phase(s) | Acceptance criteria |
 |---|---|---|---|
 | Generation workspace is absent | `packages/sdks/oak-curriculum-sdk-generation` does not exist yet | Phase 0, Phase 1 | AC1, AC2 |
-| Turbo task graph must be split-aware | Build/type-gen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC7 |
+| Turbo task graph must be split-aware | Build/sdk-codegen dependencies must be rewired for two SDK workspaces per ADR-065 | Phase 1, Phase 5 | AC7 |
 | Vocab-generated artefacts are runtime-owned today and must move now | Runtime `src/mcp/**` still contains generated graph data and mined synonym output (`definition-synonyms.ts`); Step 1 moves these. Curated synonym lists (`src/mcp/synonyms/`, 25 files) are agent context injection, not generation-owned artefacts — they stay runtime for Step 1. Co-location of all synonym content is a follow-on refinement. | Phase 3 | AC3 |
-| Reverse dependencies must be removed | 9 files in `type-gen/` and `vocab-gen/` import from runtime `src/` (see inventory below) | Phase 4, Phase 5 | AC5, AC6 |
-| E2E tests are coupled to `type-gen` internals | Runtime tests currently import `../../type-gen/*` paths and will break after split | Phase 5 | AC8 |
+| Reverse dependencies must be removed | 9 files in `code-generation/` and `vocab-gen/` import from runtime `src/` (see inventory below) | Phase 4, Phase 5 | AC5, AC6 |
+| E2E tests are coupled to `code-generation` internals | Runtime tests currently import `../../code-generation/*` paths and will break after split | Phase 5 | AC8 |
 | Scope guard script is monolithic | `scripts/check-generator-scope.sh` allowlist assumes monolithic SDK paths | Phase 5 | AC8 |
 | Generated provenance comments/docs need split updates | Template banners and docs still assume monolithic ownership paths | Phase 6 | AC9 |
 | `src/bulk/` is generation-owned and must move | All bulk readers, extractors, generators, processing, and types move to generation | Phase 3 | AC2, AC3, AC11 |
-| Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/curriculum-sdk-generation` | Phase 4 | AC11 |
+| Search CLI imports must be rewired | 22 files in `apps/oak-search-cli/` import from `@oaknational/curriculum-sdk/public/bulk`; rewired to `@oaknational/curriculum-sdk-generation` (renamed to `@oaknational/sdk-codegen` in Phase 6.3) | Phase 4 | AC11 |
 | `public/bulk` runtime surface is removed | No thin facade — consumers import directly from generation for type infrastructure | Phase 4 | AC11 |
 | `property-graph-data.ts` is authored domain ontology | Moves to generation alongside generated graph data despite being authored, not generated | Phase 3 | AC3 |
 | Generation workspace hosts two distinct pipelines | See [ADR-108 § Two Data Pipelines](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) | All phases | AC2, AC3, AC11 |
@@ -212,19 +259,19 @@ mapped to execution phases and acceptance criteria.
 
 ### Reverse-dependency inventory (generation -> runtime imports)
 
-Files in `type-gen/` and `vocab-gen/` that import from runtime `src/`:
+Files in `code-generation/` and `vocab-gen/` that import from runtime `src/`:
 
 | File | Imports from |
 |---|---|
 | `vocab-gen/lib/index.ts` | `../../src/types/generated/bulk/index.js`, `../../src/bulk/reader.js` |
 | `vocab-gen/generators/analysis-report-generator.ts` | `../../src/types/helpers/type-helpers.js` |
-| `type-gen/generate-ai-doc.ts` | `../src/types/generated/api-schema/path-parameters.js`, `../src/types/generated/api-schema/mcp-tools/index.js` (now dynamic imports, N6) |
-| `type-gen/mcp-security-policy.unit.test.ts` | `../src/types/generated/api-schema/mcp-tools/scopes-supported.js` (flattened by N5) |
-| `type-gen/typegen/search/index-doc-exports.ts` | `../../../src/types/generated/search/index-documents.js` |
-| `type-gen/typegen/search/generate-search-response-docs.ts` | `../../../src/types/generated/search/responses.*.js`, `../../../src/types/generated/zod/curriculumZodSchemas.js` |
-| `type-gen/typegen/search/generate-subject-hierarchy.unit.test.ts` | `../../../src/types/generated/search/subject-hierarchy.js` |
-| `type-gen/typegen/search/generate-search-modules.unit.test.ts` | (string literal reference to generated path) |
-| `type-gen/typegen/error-types/classify-http-error.unit.test.ts` | `../../../src/types/generated/api-schema/error-types/sdk-error-types.js` |
+| `code-generation/generate-ai-doc.ts` | `../src/types/generated/api-schema/path-parameters.js`, `../src/types/generated/api-schema/mcp-tools/index.js` (now dynamic imports, N6) |
+| `code-generation/mcp-security-policy.unit.test.ts` | `../src/types/generated/api-schema/mcp-tools/scopes-supported.js` (flattened by N5) |
+| `code-generation/typegen/search/index-doc-exports.ts` | `../../../src/types/generated/search/index-documents.js` |
+| `code-generation/typegen/search/generate-search-response-docs.ts` | `../../../src/types/generated/search/responses.*.js`, `../../../src/types/generated/zod/curriculumZodSchemas.js` |
+| `code-generation/typegen/search/generate-subject-hierarchy.unit.test.ts` | `../../../src/types/generated/search/subject-hierarchy.js` |
+| `code-generation/typegen/search/generate-search-modules.unit.test.ts` | (string literal reference to generated path) |
+| `code-generation/typegen/error-types/classify-http-error.unit.test.ts` | `../../../src/types/generated/api-schema/error-types/sdk-error-types.js` |
 
 All of these must be resolved during Phase 4 (rewire) and Phase 5 (test migration).
 
@@ -253,8 +300,8 @@ All of these must be resolved during Phase 4 (rewire) and Phase 5 (test migratio
 ## 7. Target State
 
 ```text
-packages/sdks/oak-curriculum-sdk-generation/
-  type-gen/                              # API pipeline: OpenAPI → types, Zod, MCP descriptors
+packages/sdks/oak-sdk-codegen/            # @oaknational/sdk-codegen (renamed Phase 6.3)
+  code-generation/                              # API pipeline: OpenAPI → types, Zod, MCP descriptors
   schema-cache/                          # API pipeline: cached OpenAPI spec
   vocab-gen/                             # Bulk pipeline: vocabulary generation
   src/
@@ -264,7 +311,7 @@ packages/sdks/oak-curriculum-sdk-generation/
     mcp/property-graph-data.ts           # Bulk pipeline: authored domain ontology (mcp/ path preserved for move simplicity)
     index.ts                             # public generation exports (barrel only)
 
-packages/sdks/oak-curriculum-sdk/
+packages/sdks/oak-curriculum-sdk/         # @oaknational/curriculum-sdk
   src/
     client/**                            # API runtime: HTTP client, auth, middleware
     mcp/**                               # runtime composition/facades only
@@ -272,13 +319,13 @@ packages/sdks/oak-curriculum-sdk/
     mcp/synonym-export.ts                # synonym transform utilities (co-location follow-on)
     validation/**                        # API runtime: request/response validation
     index.ts
-  (no local type-gen/, schema-cache/, vocab-gen/, src/types/generated/,
+  (no local code-generation/, schema-cache/, vocab-gen/, src/types/generated/,
    src/bulk/, public/bulk)
 ```
 
 The generation workspace contains two pipelines:
 
-- **API pipeline** (`type-gen/`, `schema-cache/`, `src/types/generated/`):
+- **API pipeline** (`code-generation/`, `schema-cache/`, `src/types/generated/`):
   OpenAPI spec → TypeScript types, Zod schemas, MCP tool descriptors.
   Consumed by the curriculum SDK runtime and MCP server apps.
 
@@ -287,25 +334,25 @@ The generation workspace contains two pipelines:
   extractors, knowledge graphs, ES mappings, vocabulary, domain ontology.
   Consumed by the search SDK and search CLI.
 
-Both run during `pnpm type-gen`. They share the workspace but are internally
+Both run during `pnpm sdk-codegen`. They share the workspace but are internally
 partitioned — different directories, different entry points.
 
 Dependency direction (generation as shared foundation):
 
 ```text
-@oaknational/curriculum-sdk-generation  -> no dependency on runtime SDK or search SDK
-@oaknational/curriculum-sdk             -> depends on generation SDK (API pipeline output)
-@oaknational/oak-search-sdk            -> depends on runtime SDK (unchanged in Step 1)
-apps/oak-search-cli                    -> depends on generation SDK (bulk types),
-                                          search SDK, and runtime SDK
-apps/*                                 -> depend on runtime SDK and/or search SDK
+@oaknational/sdk-codegen           -> no dependency on runtime SDK or search SDK
+@oaknational/curriculum-sdk        -> depends on codegen SDK (API pipeline output)
+@oaknational/oak-search-sdk        -> depends on runtime SDK (unchanged in Step 1)
+apps/oak-search-cli                -> depends on codegen SDK (bulk types),
+                                      search SDK, and runtime SDK
+apps/*                             -> depend on runtime SDK and/or search SDK
 ```
 
 Note: `oak-search-sdk` currently imports types and functions from
 `@oaknational/curriculum-sdk/public/search.js` and `public/mcp-tools.js`.
 These include runtime functions (e.g. `buildElasticsearchSynonyms`), not just
 types. The search SDK stays on the runtime SDK for Step 1. Migration to direct
-generation imports for type-only surfaces is a future refinement.
+codegen imports for type-only surfaces is a future refinement.
 
 Note on synonyms: `buildElasticsearchSynonyms` and related synonym utilities
 currently conflate two concerns. The curated synonym lists (`src/mcp/synonyms/`)
@@ -315,8 +362,9 @@ Elasticsearch query expansion, but the authoritative source of truth for search
 synonyms is the bulk curriculum data (13,349 keywords with definitions) via a
 processing pipeline not yet built. ADR-063 will need revision when that pipeline
 exists, to distinguish agent context (curated) from search expansion
-(bulk-derived). See §16 (Synonym System Reference) for the full domain
-knowledge reference.
+(bulk-derived). See the
+[Synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+for the full domain knowledge reference.
 
 ## 8. Execution Phases (RED -> GREEN -> REFACTOR)
 
@@ -358,10 +406,10 @@ Goal: introduce first-class generation workspace before moving content.
 - REFACTOR:
   - align config shape with existing SDK workspace conventions.
 
-**Turbo target state** (per ADR-065): update `turbo.json` `type-gen` task to
+**Turbo target state** (per ADR-065): update `turbo.json` `sdk-codegen` task to
 include `**/vocab-gen/**/*.ts` in inputs. Ensure runtime workspace `build`
 depends on generation workspace completion via `^build`. Generation workspace
-`type-gen` should produce outputs consumed by runtime `build`.
+`code-generation` should produce outputs consumed by runtime `build`.
 
 **Intermediate compilation gate**: `pnpm build && pnpm type-check` must pass
 before proceeding to Phase 2.
@@ -382,16 +430,16 @@ File-level tasks:
 - `packages/core/oak-eslint/src/index.ts` (export new rules)
 - `turbo.json` (add `vocab-gen` inputs, split-aware task deps)
 
-### Phase 2 - Move Type-Gen Core and Generated API Artefacts ✅ COMPLETE (24 Feb 2026)
+### Phase 2 - Move Code-Gen Core and Generated API Artefacts ✅ COMPLETE (24 Feb 2026)
 
-Goal: move generation ownership for core type-gen pipeline and generated API
+Goal: move generation ownership for core sdk-codegen pipeline and generated API
 artefacts.
 
 - RED:
   - generation scripts fail from old runtime paths after move starts.
   - ~70 runtime SDK files fail with broken `./types/generated/` imports.
 - GREEN:
-  - move `type-gen/`, `schema-cache/`, `src/types/generated/`.
+  - move `code-generation/`, `schema-cache/`, `src/types/generated/`.
   - rewire scripts/paths to generation workspace.
   - create 10 subpath barrel files (see §8.2a below) exposing generated
     artefacts through `package.json` `exports` field.
@@ -399,14 +447,14 @@ artefacts.
     `@oaknational/curriculum-sdk-generation/<subpath>` imports.
   - update ESLint boundary rules to allow single-level subpath exports
     while blocking deeper internal paths.
-  - move E2E tests for type-gen to generation workspace.
-  - `pnpm -F @oaknational/curriculum-sdk-generation type-gen` regenerates
+  - move E2E tests for code-generation to generation workspace.
+  - `pnpm -F @oaknational/curriculum-sdk-generation code-generation` regenerates
     artefacts in generation workspace.
 - REFACTOR:
   - remove stale runtime references to moved paths.
-  - remove dead ESLint overrides from runtime SDK for `type-gen/`,
+  - remove dead ESLint overrides from runtime SDK for `code-generation/`,
     `src/types/generated/`, and `src/types/helpers.ts`.
-  - remove stale `type-gen` vitest globs from runtime SDK.
+  - remove stale `code-generation` vitest globs from runtime SDK.
   - fix stale `vi.mock` path in `universal-tools.unit.test.ts`.
   - make `client-types.ts` (`OakApiPathBasedClient`) a generated file
     to survive `generate:clean`.
@@ -422,7 +470,7 @@ code-reviewer, type-reviewer, config-reviewer, test-reviewer. Immediate
 blocking findings resolved; remaining findings integrated into Phases 5–7
 and the reviewer findings registry (§13). Full quality gate chain passed.
 
-**Intermediate compilation gate**: `pnpm type-gen && pnpm build && pnpm type-check`
+**Intermediate compilation gate**: `pnpm sdk-codegen && pnpm build && pnpm type-check`
 passed. Full gate chain (`clean` through `smoke:dev:stub`) also passed.
 
 #### 8.2a Subpath Export Architecture (decided Phase 2)
@@ -432,17 +480,17 @@ rather than a single monolithic barrel. Subpaths are one level deep only.
 
 | Subpath | Domain | Barrel |
 |---------|--------|--------|
-| `@oaknational/curriculum-sdk-generation` | curated subset | `src/index.ts` |
-| `@oaknational/curriculum-sdk-generation/api-schema` | API types, paths, routing, validation, errors | `src/api-schema.ts` |
-| `@oaknational/curriculum-sdk-generation/mcp-tools` | tool descriptors, execution, stubs, scopes | `src/mcp-tools.ts` |
-| `@oaknational/curriculum-sdk-generation/search` | index docs, scopes, facets, suggestions, ES mappings | `src/search.ts` |
-| `@oaknational/curriculum-sdk-generation/zod` | Zod schemas | `src/zod.ts` |
-| `@oaknational/curriculum-sdk-generation/bulk` | bulk pipeline APIs, schemas, types | `src/bulk.ts` |
-| `@oaknational/curriculum-sdk-generation/vocab` | static graph data, ontology, mined synonyms | `src/vocab.ts` |
-| `@oaknational/curriculum-sdk-generation/query-parser` | query parser types | `src/query-parser.ts` |
-| `@oaknational/curriculum-sdk-generation/observability` | zero-hit telemetry | `src/observability.ts` |
-| `@oaknational/curriculum-sdk-generation/admin` | admin fixtures | `src/admin.ts` |
-| `@oaknational/curriculum-sdk-generation/widget-constants` | widget URI | `src/widget-constants.ts` |
+| `@oaknational/sdk-codegen` | curated subset | `src/index.ts` |
+| `@oaknational/sdk-codegen/api-schema` | API types, paths, routing, validation, errors | `src/api-schema.ts` |
+| `@oaknational/sdk-codegen/mcp-tools` | tool descriptors, execution, stubs, scopes | `src/mcp-tools.ts` |
+| `@oaknational/sdk-codegen/search` | index docs, scopes, facets, suggestions, ES mappings | `src/search.ts` |
+| `@oaknational/sdk-codegen/zod` | Zod schemas | `src/zod.ts` |
+| `@oaknational/sdk-codegen/bulk` | bulk pipeline APIs, schemas, types | `src/bulk.ts` |
+| `@oaknational/sdk-codegen/vocab` | static graph data, ontology, mined synonyms | `src/vocab.ts` |
+| `@oaknational/sdk-codegen/query-parser` | query parser types (8 exports) | `src/query-parser.ts` |
+| `@oaknational/sdk-codegen/observability` | zero-hit telemetry (18 exports) | `src/observability.ts` |
+| `@oaknational/sdk-codegen/admin` | admin fixtures (16 exports) | `src/admin.ts` |
+| `@oaknational/sdk-codegen/widget-constants` | widget URI | `src/widget-constants.ts` |
 
 ESLint boundary rule: `createSdkBoundaryRules('runtime')` uses
 `@oaknational/curriculum-sdk-generation/*/**` to block two-or-more-level
@@ -450,13 +498,13 @@ imports while allowing single-level subpath exports.
 
 File-level tasks (all completed):
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/**` ->
-  `packages/sdks/oak-curriculum-sdk-generation/type-gen/**`
+- `packages/sdks/oak-curriculum-sdk/code-generation/**` ->
+  `packages/sdks/oak-curriculum-sdk-generation/code-generation/**`
 - `packages/sdks/oak-curriculum-sdk/schema-cache/**` ->
   `packages/sdks/oak-curriculum-sdk-generation/schema-cache/**`
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/**` ->
   `packages/sdks/oak-curriculum-sdk-generation/src/types/generated/**`
-- `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/typegen-core.e2e.test.ts` ->
+- `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/codegen-core.e2e.test.ts` ->
   `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/`
 - `packages/sdks/oak-curriculum-sdk/e2e-tests/scripts/zodgen.e2e.test.ts` ->
   `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/`
@@ -504,7 +552,7 @@ gate until Phase 4 is complete.
 **Intermediate compilation gate** (after Phase 4):
 
 ```bash
-pnpm type-gen    # explicit — Phase 3 moves vocab-gen
+pnpm sdk-codegen    # explicit — Phase 3 moves vocab-gen
 pnpm build
 pnpm type-check
 pnpm lint:fix    # Phase 4 establishes boundary compliance
@@ -654,7 +702,7 @@ Goal: migrate remaining coupling points that assume monolithic SDK layout,
 and address all test/config/resilience findings from Phase 2 specialist
 reviews.
 
-**Scope note**: E2E test migration (`typegen-core.e2e.test.ts`,
+**Scope note**: E2E test migration (`codegen-core.e2e.test.ts`,
 `zodgen.e2e.test.ts`), stale runtime vitest globs, dead runtime ESLint
 overrides, and runtime SDK config cleanup were completed in Phase 2.
 
@@ -663,7 +711,7 @@ overrides, and runtime SDK config cleanup were completed in Phase 2.
 - GREEN:
   - update remaining scripts/config for split ownership.
   - update scope guard script paths and allowlist entries (add generation
-    workspace paths: `packages/sdks/oak-curriculum-sdk-generation/type-gen/**`,
+    workspace paths: `packages/sdks/oak-curriculum-sdk-generation/code-generation/**`,
     `packages/sdks/oak-curriculum-sdk-generation/src/types/generated/**`).
   - update root `package.json` scripts: `vocab-gen` must target
     `@oaknational/curriculum-sdk-generation`, not `@oaknational/curriculum-sdk`.
@@ -674,9 +722,9 @@ overrides, and runtime SDK config cleanup were completed in Phase 2.
     (currently resolves via hoisting — fragile).
   - **[config-reviewer]** remove phantom `@next/eslint-plugin-next`
     devDependency from runtime SDK (unused).
-  - **[test-reviewer]** rename `typegen-core.test.ts` to
-    `typegen-core.unit.test.ts` (naming convention violation); extract
-    filesystem IO tests to `typegen-core-file-operations.integration.test.ts`.
+  - **[test-reviewer]** rename `codegen-core.test.ts` to
+    `codegen-core.unit.test.ts` (naming convention violation); extract
+    filesystem IO tests to `codegen-core-file-operations.integration.test.ts`.
   - **[test-reviewer]** remove vacuous `expect(true).toBe(true)` assertions
     in `zodgen.e2e.test.ts` (lines 78, 145).
   - **[test-reviewer]** remove silent error suppression in
@@ -685,10 +733,10 @@ overrides, and runtime SDK config cleanup were completed in Phase 2.
   - **[wilma]** add unit test asserting the `client-types.ts` import path
     in `generate-tool-file.ts` resolves correctly — hardcoded relative path
     `../../client-types.js` is now shallow (was `../../../../`, flattened by N5).
-  - **[N1 COMPLETED]** add `**/schema-cache/**` to turbo.json `type-gen`
+  - **[N1 COMPLETED]** add `**/schema-cache/**` to turbo.json `sdk-codegen`
     inputs — prevents stale cache when OpenAPI spec changes.
   - **[N2 COMPLETED]** extend `createSdkBoundaryRules('generation')` to cover
-    `type-gen/**/*.ts` and `vocab-gen/**/*.ts` in generation ESLint config.
+    `code-generation/**/*.ts` and `vocab-gen/**/*.ts` in generation ESLint config.
   - **[N3 COMPLETED]** extract `@oaknational/type-helpers` core package from
     duplicated `type-helpers.ts`. Both SDKs now depend on the shared package.
     Added to `LIB_PACKAGES` in boundary.ts.
@@ -705,7 +753,7 @@ overrides, and runtime SDK config cleanup were completed in Phase 2.
   - **[wilma]** make `generate:clean` resilient: add documentation or
     implement atomic write pattern (write to `src/types/generated.tmp`,
     rename to `src/types/generated` on success) to prevent broken state
-    when `type-gen` fails after `generate:clean`.
+    when `code-generation` fails after `generate:clean`.
 
 **Phase 5 intermediate compilation gate**:
 
@@ -738,101 +786,383 @@ File-level tasks (minimum):
 - `packages/sdks/oak-curriculum-sdk-generation/package.json`
 - `packages/sdks/oak-curriculum-sdk-generation/tsconfig*.json`
 - `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen-core.test.ts`
+- `packages/sdks/oak-curriculum-sdk-generation/code-generation/codegen-core.test.ts`
   (rename + split)
 - `packages/sdks/oak-curriculum-sdk-generation/e2e-tests/scripts/zodgen.e2e.test.ts`
   (fix assertions and error handling)
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/parts/generate-tool-file.ts`
+- `packages/sdks/oak-curriculum-sdk-generation/code-generation/typegen/mcp-tools/parts/generate-tool-file.ts`
   (add path resolution test)
 - `package.json` (root — update `vocab-gen` filter target)
 - `scripts/check-generator-scope.sh`
 - `turbo.json` (fix `test:e2e` input filename)
 
-### Phase 6 - Generated Provenance, TSDoc, Documentation Alignment, and
-Structural Refinements
+### Phase 6 — Renames, Provenance, Decisions, Documentation
 
-Goal: documentation and generated comments reflect the new ownership model.
-Architectural refinements identified by reviewers that don't fit earlier
-phases are completed here.
+Goal: align naming with architectural intent (four renames), update
+provenance banners, resolve evaluation decisions (F12–F14), and bring
+documentation into alignment with the post-split ownership model.
 
-- RED:
-  - documentation/typedoc checks fail when references still point to monolith
-    paths.
-- GREEN:
-  - **[fred W1]** update generator template banners/provenance paths — these
-    still reference pre-split monolith paths (e.g. `type-gen/typegen/mcp-tools/`
-    as if it were within `oak-curriculum-sdk`). Each generated file banner must
-    correctly reference its generation workspace path.
-  - add/update comprehensive TSDoc on generation public interfaces and runtime
-    facades.
-  - update READMEs and architecture docs.
-  - **[N5 COMPLETED]** flatten MCP tool generated directory structure — removed
-    `generated/data/` intermediate dirs, reducing tool file depth from 8 to 6
-    levels. Import paths shortened (e.g. `../../../../` to `../../`). 26 tool
-    files + definitions + stubs regenerated.
-  - **[N6 COMPLETED]** break generator bootstrap cycle in `generate-ai-doc.ts`
-    — static imports from generated output replaced with dynamic `import()`,
-    deferring module resolution to runtime.
-  - **[betty]** evaluate generating barrel files from the generator pipeline
-    instead of hand-authoring them — keeps exports in sync with generated
-    artefacts automatically. If adopted, implement in type-gen pipeline and
-    update the plan accordingly.
-  - **[barney]** evaluate subpath granularity: `query-parser`, `observability`,
-    and `admin` have very small surfaces (1–3 symbols each). Consider merging
-    into semantically related neighbours (e.g. `/search`, `/api-schema`) to
-    reduce public API surface area. Document decision either way.
-  - **[betty]** clarify `OakApiPathBasedClient` ownership: this type currently
-    lives in generation but depends on `openapi-fetch` (a runtime concern).
-    Evaluate whether it should be a thin re-export in the runtime SDK. Document
-    decision.
-- REFACTOR:
-  - keep progressive disclosure coherent: root -> workspace -> deep docs.
-  - **[fred W2]** audit runtime SDK wildcard exports for barrel discipline
-    consistency (cross-reference with ESLint override removal plan).
-  - ~~**[consolidation]** extract §16 synonym system domain knowledge to
-    synonyms README and ADR-063 revision note~~ — DONE (2026-02-24)
-  - ~~**[consolidation]** add subpath export table to generation SDK
-    README~~ — DONE (2026-02-24)
-  - ~~**[consolidation]** add `createSdkBoundaryRules` to ESLint plugin
-    README~~ — DONE (2026-02-24)
-  - ~~**[consolidation]** create type-helpers README~~ — DONE (2026-02-24)
+**N5 and N6 COMPLETED** in prior remediation (MCP tool dir flattening,
+generator bootstrap cycle). **Consolidation tasks** (synonyms README,
+subpath export table, ESLint plugin README, type-helpers README) DONE
+2026-02-24.
 
-File-level tasks (minimum):
+**Execution order**: S1-S3 first (small, clean commits before large
+rename diffs), then renames (lib → workspace → repo), then provenance,
+then decisions, then documentation, then gates.
 
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/parts/generate-definitions-file.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/parts/generate-execute-file.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/parts/generate-scopes-supported-file.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/generate-widget-constants.ts`
-- `packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/client-types/generate-client-types.ts`
-  (provenance banner update)
-- `packages/sdks/oak-curriculum-sdk/README.md`
-- `packages/sdks/oak-curriculum-sdk-generation/README.md`
-- `docs/architecture/openapi-pipeline.md`
-- `docs/architecture/programmatic-tool-generation.md`
-- `docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`
-  (update pipeline location paths to generation workspace)
-- `docs/development/build-system.md`
-- `.agent/plans/semantic-search/active/sdk-workspace-separation.md`
+#### Phase 6.1 — Phase 5 Reviewer Suggestions (S1–S3)
 
-**Phase 6 intermediate gate**:
+Address before Phase 6's own scope for clean git history.
+
+**S1 — Extract shared test helper (DRY)**
+
+5 copies of an identical `generatedTools` stub exist across 4 integration
+test files:
+
+- `src/mcp/aggregated-fetch.integration.test.ts` (2 copies, lines 31-38
+  and 215-222)
+- `src/mcp/aggregated-browse/execution.integration.test.ts` (lines 63-70)
+- `src/mcp/aggregated-search/execution.integration.test.ts` (lines 85-92)
+- `src/mcp/aggregated-explore/execution.integration.test.ts` (lines 69-76)
+
+All paths relative to `packages/sdks/oak-curriculum-sdk/`.
+
+Action: create `src/mcp/test-helpers/null-generated-tool-registry.ts`
+exporting `createNullGeneratedToolRegistry()` returning a
+`GeneratedToolRegistry` with empty `toolNames`, throwing
+`getToolFromToolName`, and always-false `isToolName`. Update all 5 call
+sites. TDD: write a unit test for the helper first.
+
+**S2 — Split executor tests to integration file**
+
+`universal-tools.unit.test.ts` contains `createUniversalToolExecutor`
+tests (lines 126-261) that use `vi.fn()` — per testing strategy, these
+are integration tests, not unit tests.
+
+Action: extract the `createUniversalToolExecutor` describe block to a new
+`universal-tools-executor.integration.test.ts`. Keep the 7 pure-function
+test suites (`listUniversalTools`, `isUniversalToolName`, ontology data,
+tool metadata, widgetAccessible/visibility, search/fetch descriptions,
+`ontologyData`) in the unit test file.
+
+**S3 — Simplify redundant `_meta` guard**
+
+`list-tools.ts` has redundant `'_meta' in descriptor` checks at lines 52
+and 68. Both `AggregatedToolDefinition` and `ToolRegistryDescriptor` have
+`_meta` as an optional property — the `in` check is unnecessary.
+
+Action: replace `_meta: '_meta' in def ? def._meta : undefined` with
+`_meta: def._meta` at both locations.
+
+**S4-S6 — No code changes needed**: S4 (semver — runtime SDK is
+`0.0.0-development`, no published API surface), S5 (`requiresDomainContext`
+— informational, safe default), S6 (test fixture — no action with
+single-tool fixture).
+
+#### Phase 6.2 — Library Package Renames
+
+**`@oaknational/mcp-logger` → `@oaknational/logger`**
+
+Directory stays `packages/libs/logger/` (no directory rename needed).
+
+- Update `packages/libs/logger/package.json`: `name`, `description`,
+  `keywords` (drop `mcp`).
+- Update consuming `package.json` dependencies (5 files):
+  `oak-curriculum-sdk`, `oak-search-sdk`, `oak-search-cli`,
+  `oak-curriculum-mcp-stdio`, `oak-curriculum-mcp-streamable-http`.
+- Global find-and-replace `@oaknational/mcp-logger` →
+  `@oaknational/logger` in all `.ts` files (~50 imports across
+  runtime SDK, search SDK, search CLI, both MCP servers, smoke tests).
+
+**`@oaknational/mcp-env` → `@oaknational/env`**
+
+Directory stays `packages/core/env/` (no directory rename needed).
+
+- Update `packages/core/env/package.json`: `name`, `description`,
+  `keywords` (drop `mcp`).
+- Update consuming `package.json` dependencies (3 files):
+  `oak-search-cli`, `oak-curriculum-mcp-stdio`,
+  `oak-curriculum-mcp-streamable-http`.
+- Global find-and-replace `@oaknational/mcp-env` →
+  `@oaknational/env` in all `.ts` files (~10 imports across
+  both MCP servers, search CLI, smoke tests).
+- Update `apps/oak-curriculum-mcp-stdio/tsup.config.ts` external list.
+
+**Intermediate gate**: `pnpm install && pnpm build && pnpm type-check`.
+
+#### Phase 6.3 — Codegen Workspace Rename
+
+**`@oaknational/curriculum-sdk-generation` → `@oaknational/sdk-codegen`**
+**`packages/sdks/oak-curriculum-sdk-generation` → `packages/sdks/oak-sdk-codegen`**
+
+**6.3a — Directory and package identity**
+
+```bash
+git mv packages/sdks/oak-curriculum-sdk-generation packages/sdks/oak-sdk-codegen
+```
+
+Update `packages/sdks/oak-sdk-codegen/package.json`: `name` →
+`@oaknational/sdk-codegen`, `description`, `repository.directory`,
+`homepage`, `keywords` (drop "generation", add "codegen").
+
+**6.3b — Workspace and dependency registration**
+
+- `pnpm-workspace.yaml`: update path.
+- `package.json` (root): `pnpm --filter` target in `vocab-gen` script.
+- `packages/sdks/oak-curriculum-sdk/package.json`: dependency.
+- `apps/oak-search-cli/package.json`: dependency.
+
+**6.3c — Source code imports**
+
+Global find-and-replace `@oaknational/curriculum-sdk-generation` →
+`@oaknational/sdk-codegen` in all `.ts` files. Covers:
+
+- ~50+ runtime SDK source files.
+- ~15+ runtime SDK test files.
+- ~15+ search CLI files.
+- ~10+ codegen workspace internal self-references.
+
+Subpath imports (e.g. `/api-schema`, `/mcp-tools`) naturally follow —
+the suffix doesn't change.
+
+**6.3d — ESLint boundary rules**
+
+`packages/core/oak-eslint/src/rules/boundary.ts`:
+- Line 264: `@oaknational/curriculum-sdk-generation/*/**` →
+  `@oaknational/sdk-codegen/*/**`.
+- Line 266: error message text update.
+- TSDoc references to runtime SDK name stay unchanged.
+
+`packages/core/oak-eslint/src/rules/sdk-boundary.unit.test.ts`: update
+all test import strings.
+
+**6.3e — Scripts and config**
+
+- `scripts/check-generator-scope.sh`: update paths at lines 19-20.
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts`: update comment.
+
+**6.3f — Regenerate lockfile and gate**
+
+```bash
+pnpm install
+pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm test
+```
+
+#### Phase 6.4 — Repo Rename
+
+**`oak-mcp-ecosystem` → `oak-open-data-ecosystem`**
+
+The GitHub remote is renamed by the user outside this plan. This step
+updates all internal references.
+
+- Update `repository.url`, `bugs.url`, `homepage` in all `package.json`
+  files that contain repo URLs. Use `rg 'oak-mcp-ecosystem' **/package.json`
+  to discover the full set — includes root, logger, env, codegen, runtime
+  SDK, search SDK, result, type-helpers, oak-eslint, openapi-zod-client-
+  adapter, both MCP server apps, and search CLI (13+ files).
+- Update `README.md`: clone URL, `cd` command, issue/discussion links.
+- Update `CONTRIBUTING.md`: clone URL, `cd` command.
+- Update `.git/config`: remote origin URL.
+- Generated API docs (~150 files in
+  `packages/sdks/oak-curriculum-sdk/docs/api-md/`) contain GitHub URLs
+  with `oak-mcp-ecosystem` in "Defined in" links — these are regenerated
+  by `pnpm doc-gen`, not manually updated.
+- Archived plans and napkin archives retain old name (historical records).
+
+**Intermediate gate**: `pnpm build && pnpm type-check`.
+
+#### Phase 6.5 — Provenance Banner Updates (F11)
+
+Three generator templates emit provenance comments referencing the
+pre-split monolithic path `packages/sdks/oak-curriculum-sdk/code-generation/
+typegen/`. These must reference the new workspace path.
+
+- `code-generation/typegen/mcp-tools/parts/generate-definitions-file.ts`
+  (line 4 banner).
+- `code-generation/typegen/mcp-tools/parts/generate-execute-file.ts`
+  (line 6 banner).
+- `code-generation/typegen/mcp-tools/parts/generate-types-file.ts`
+  (line 5 banner).
+
+All paths relative to `packages/sdks/oak-sdk-codegen/` after rename.
+
+Update banners to reference `packages/sdks/oak-sdk-codegen/code-generation/
+typegen/mcp-tools/parts/<filename>`. Then regenerate:
+
+```bash
+pnpm sdk-codegen
+```
+
+Verify regenerated files have correct provenance paths.
+
+#### Phase 6.6 — Evaluation Decisions (F12–F14)
+
+Each item requires analysis and a documented decision. Resolution is
+either a code change or a documented "no change" with rationale.
+
+**F12 — Barrel auto-generation (betty)**
+
+Question: should the 11 subpath barrel files be auto-generated from
+the pipeline instead of hand-authored?
+
+Assessment (25 Feb 2026): 11 barrels with ~300 total exports. The drift
+risk (new generated types not appearing in barrels) is real but manageable
+— the type-check gate catches missing exports when consumers try to use
+them. Auto-generation adds pipeline complexity and requires the generator
+to understand the barrel grouping intent (which subpath a given type
+belongs to). The grouping is a design decision, not mechanical.
+
+Proposed decision: keep hand-authored. Document the maintenance
+requirement in the codegen SDK README. Add a note to ADR-108
+Consequences. Revisit if drift becomes a recurring problem.
+
+**F13 — Subpath granularity (barney)**
+
+Question: should `query-parser` (8 exports), `observability` (18
+exports), `admin` (16 exports) be merged into semantically related
+neighbours?
+
+Assessment (25 Feb 2026): 8-18 exports is a reasonable subpath surface.
+Merging would reduce the public API entry points from 11 to 8, but at
+the cost of less precise import semantics. With the shorter package
+name (`@oaknational/sdk-codegen/admin`), the ergonomics are already
+good. Merging loses the ability for consumers to import only what they
+need.
+
+Proposed decision: keep as-is. The subpaths are semantically meaningful
+and the export counts are reasonable. Document the rationale briefly in
+the codegen SDK README.
+
+**F14 — OakApiPathBasedClient ownership (betty)**
+
+Question: should `OakApiPathBasedClient` move to runtime? It depends on
+`openapi-fetch` (a runtime concern) but is generated from the schema.
+
+Assessment (25 Feb 2026): the type is generated by
+`code-generation/typegen/client-types/generate-client-types.ts` and is
+`PathBasedClient<paths>` — a schema-derived type parameterised with the
+generated `paths` type. The `openapi-fetch` dependency is structural (it
+provides the generic `PathBasedClient` that the schema fills), not a
+runtime concern. The type exists at compile time and carries no runtime
+behaviour. Both the codegen and runtime workspaces already depend on
+`openapi-fetch`. Moving the type to runtime would break the "types flow
+from schema" principle.
+
+Proposed decision: keep in codegen. Document the rationale: it is a
+schema-derived type, not a runtime concern, even though it references
+`openapi-fetch`'s type system.
+
+**F15 — Wildcard export audit (fred W2)**
+
+Finding (25 Feb 2026): no `export *` statements exist in the runtime
+SDK. Already compliant with barrel discipline. No action needed.
+Cross-reference with ESLint override removal plan remains valid for
+future monitoring.
+
+#### Phase 6.7 — Documentation Alignment
+
+**ADR updates**:
+
+- ADR-108: update 3 references from old codegen package name to
+  `@oaknational/sdk-codegen` (lines 422, 423, 427). Update the
+  `[ws-sep]` link if it references the old directory path.
+- Check ADR-086 for path references (currently none — no update needed).
+
+**README updates**:
+
+- Codegen SDK README: update package name, all ~13 references, subpath
+  import examples.
+- ESLint plugin README: update 1 reference.
+- Search CLI adapters README: update 1 reference.
+- Root README: update repo name references.
+- Build system docs (`docs/development/build-system.md`): check for and
+  update references.
+- AGENT.md: update package name references in the architectural structure
+  section.
+
+**Plan and prompt updates**:
+
+- This plan (`sdk-workspace-separation.md`): update remaining forward-
+  looking references (§7, §8.2a, §9, §10, Phase 7) to use new names.
+- `semantic-search.prompt.md`: update all references.
+
+**§16 Synonym System Reference reduction**: §16 (~260 lines) duplicates
+content now maintained in `packages/sdks/oak-curriculum-sdk/src/mcp/
+synonyms/README.md` and `ADR-063` revision notes (extracted 2026-02-24).
+Replace §16 with a brief summary and cross-references to the permanent
+locations, reducing plan weight and drift surface.
+
+**Archived plans — DO NOT update**: per distilled rule, archive docs
+are historical records.
+
+#### Phase 6.8 — Quality Gates and Specialist Reviews
+
+**Full quality gate chain**:
 
 ```bash
 pnpm build
 pnpm type-check
 pnpm format:root
 pnpm markdownlint:root
+pnpm lint:fix
+pnpm test
+pnpm test:e2e
 ```
 
-**Phase 6 review and consolidation**:
+**Verification — zero stale references in source and config**.
 
-1. Invoke `code-reviewer` with instruction to recommend follow-on reviews.
-   Consider: `docs-adr-reviewer` (README/TSDoc/ADR completeness and drift),
-   `architecture-reviewer-barney` (subpath granularity decision),
-   `architecture-reviewer-betty` (barrel auto-generation, OakApiPathBasedClient
-   ownership).
-2. Invoke all recommended specialists.
-3. Address all blocking findings.
-4. Run `/jc-consolidate-docs`.
+Excluded from verification: archived plans/memory, lockfile, generated
+API docs, and `.agent/` planning docs (which contain old names as
+historical records in completed-phase descriptions). The verification
+targets source code, package manifests, configs, scripts, and
+non-archived documentation.
+
+```bash
+rg 'curriculum-sdk-generation' \
+  --glob '!.agent/**' --glob '!pnpm-lock.yaml' .
+rg '@oaknational/mcp-logger' \
+  --glob '!.agent/**' --glob '!pnpm-lock.yaml' .
+rg '@oaknational/mcp-env' \
+  --glob '!.agent/**' --glob '!pnpm-lock.yaml' .
+rg 'oak-mcp-ecosystem' \
+  --glob '!.agent/**' --glob '!pnpm-lock.yaml' \
+  --glob '!**/docs/api-md/**' .
+```
+
+After source/config is clean, spot-check `.agent/` planning docs
+to ensure only completed-phase historical references remain:
+
+```bash
+rg 'curriculum-sdk-generation' .agent/ \
+  --glob '!.agent/plans/**/archive/**' \
+  --glob '!.agent/memory/archive/**' | head -20
+```
+
+**Specialist reviews** (per `invoke-code-reviewers` rule):
+
+- `code-reviewer` (gateway)
+- `architecture-reviewer-barney` (structural: workspace rename,
+  boundary rule changes, subpath granularity decision)
+- `test-reviewer` (S1 shared helper, S2 test split)
+- `docs-adr-reviewer` (ADR-108 updates, README changes, documentation
+  alignment)
+- `config-reviewer` (package.json, pnpm-workspace.yaml, ESLint config
+  changes)
+
+**Consolidation**: run `/jc-consolidate-docs`.
+
+**Phase 6 risks**:
+
+- Missed rename references: mitigated by the verification grep commands
+  above after each rename step.
+- Lock file conflicts: `pnpm install` after each rename regenerates the
+  lockfile cleanly. No manual edits to `pnpm-lock.yaml`.
+- Import resolution after rename: `pnpm sdk-codegen && pnpm build`
+  validates all imports resolve correctly.
+- Boundary rule regression: ESLint boundary rule tests
+  (`sdk-boundary.unit.test.ts`) run during `pnpm test` and validate
+  the updated patterns.
 
 ### Phase 7 - Full Quality Gates, Evidence Capture, and CI Hardening
 
@@ -845,10 +1175,10 @@ established by this plan.
 - GREEN:
   - pass every gate in strict order and capture evidence.
   - **[wilma]** add CI check that generated files are unmodified after
-    `pnpm type-gen` — run `pnpm type-gen && git diff --exit-code
-    packages/sdks/oak-curriculum-sdk-generation/src/types/generated/` to
-    detect committed drift. This prevents manually-edited generated files
-    from surviving review.
+    `pnpm sdk-codegen` — run `pnpm sdk-codegen && git diff --exit-code
+    packages/sdks/oak-sdk-codegen/src/types/generated/` to detect
+    committed drift. This prevents manually-edited generated files from
+    surviving review.
 - REFACTOR:
   - simplify any brittle checks discovered during gate runs.
 
@@ -856,7 +1186,7 @@ Mandatory quality gates (root, one at a time):
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root
@@ -869,12 +1199,12 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-**Determinism verification**: re-run `pnpm type-gen` without input changes
+**Determinism verification**: re-run `pnpm sdk-codegen` without input changes
 and verify no diff:
 
 ```bash
-pnpm type-gen
-git diff --exit-code packages/sdks/oak-curriculum-sdk-generation/src/types/generated/
+pnpm sdk-codegen
+git diff --exit-code packages/sdks/oak-sdk-codegen/src/types/generated/
 ```
 
 **Phase 7 review and final consolidation**:
@@ -901,7 +1231,7 @@ git diff --exit-code packages/sdks/oak-curriculum-sdk-generation/src/types/gener
      `oak-curriculum-sdk-generation` at baseline time.
 
 2. **Ownership split physically complete**
-   - generation workspace contains moved `type-gen/`, `schema-cache/`,
+   - generation workspace contains moved `code-generation/`, `schema-cache/`,
      `vocab-gen/`, `src/types/generated/`, and `src/bulk/`.
    - runtime workspace no longer contains those directories.
 
@@ -919,18 +1249,18 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
   --glob '!**/*.test.ts'
 ```
 
-5. **No deep imports into generation internals**
-   - runtime imports only `@oaknational/curriculum-sdk-generation` barrel
+5. **No deep imports into codegen internals**
+   - runtime imports only `@oaknational/sdk-codegen` barrel
      exports, not internal paths like
-     `@oaknational/curriculum-sdk-generation/src/...`,
-     `@oaknational/curriculum-sdk-generation/type-gen/...`, or
-     `@oaknational/curriculum-sdk-generation/vocab-gen/...`.
+     `@oaknational/sdk-codegen/src/...`,
+     `@oaknational/sdk-codegen/code-generation/...`, or
+     `@oaknational/sdk-codegen/vocab-gen/...`.
 
 6. **One-way dependency enforced**
-   - runtime depends on generation package.
-   - generation package does not import runtime package internals, including
+   - runtime depends on codegen package.
+   - codegen package does not import runtime package internals, including
      removal of reverse dependency in
-     `packages/sdks/oak-curriculum-sdk-generation/vocab-gen/lib/index.ts`.
+     `packages/sdks/oak-sdk-codegen/vocab-gen/lib/index.ts`.
    - boundary linting fails illegal imports and passes legal imports.
 
 7. **Turbo graph and build dependencies are split-aware**
@@ -939,7 +1269,7 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
    - cache-relevant inputs/outputs remain valid after path moves.
 
 8. **Coupled tests/scripts/config migrated**
-   - no tests import `../../type-gen/*` from runtime package.
+   - no tests import `../../code-generation/*` from runtime package.
    - `scripts/check-generator-scope.sh` allowlist is updated for split layout.
 
 9. **Generated provenance and docs match split ownership**
@@ -950,15 +1280,15 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
 10. **Determinism and parity proven**
 
     - full quality gate sequence passes.
-    - re-running `pnpm type-gen` without input changes yields no diff.
+    - re-running `pnpm sdk-codegen` without input changes yields no diff.
     - runtime/consumer behavioural tests pass with no regression.
 
-11. **Generation as shared foundation — consumer rewiring complete**
-    - search CLI imports from `@oaknational/curriculum-sdk-generation`, not
+11. **Codegen as shared foundation — consumer rewiring complete**
+    - search CLI imports from `@oaknational/sdk-codegen`, not
       `@oaknational/curriculum-sdk/public/bulk`.
     - runtime `public/bulk.ts` re-export surface is removed.
     - `apps/oak-search-cli/package.json` lists
-      `@oaknational/curriculum-sdk-generation` as a dependency.
+      `@oaknational/sdk-codegen` as a dependency.
     - search CLI builds and tests pass with the rewired imports.
 
 12. **SDK boundary lint rules exist and are enforced**
@@ -968,6 +1298,21 @@ rg "from ['\"](\.{1,2}/)+types/generated|from ['\"]src/types/generated" \
     - `pnpm lint` fails on a generation → runtime import.
     - `pnpm lint` fails on a deep import into generation internals.
 
+13. **All renames completed with zero stale references in source/config**
+    - `rg 'curriculum-sdk-generation' --glob '!.agent/**' --glob '!pnpm-lock.yaml'`
+      returns zero matches.
+    - `rg '@oaknational/mcp-logger'` same exclusions, zero matches.
+    - `rg '@oaknational/mcp-env'` same exclusions, zero matches.
+    - `rg 'oak-mcp-ecosystem' --glob '!.agent/**' --glob '!pnpm-lock.yaml'
+      --glob '!**/docs/api-md/**'` returns zero matches.
+    - ESLint boundary rules reference `@oaknational/sdk-codegen`, not
+      `@oaknational/curriculum-sdk-generation`.
+    - All package.json `repository.url` fields reference
+      `oak-open-data-ecosystem`.
+    - `.agent/` planning docs may still contain old names in
+      completed-phase historical descriptions — this is expected and
+      correct (archive docs are historical records).
+
 ## 10. Validation Commands
 
 ```bash
@@ -976,7 +1321,7 @@ rg -n "108-sdk-workspace-decomposition|065-turbo-task-dependencies|086-vocab-gen
   .agent/plans/semantic-search/active/sdk-workspace-separation.md
 
 # baseline commands (must match section 4 exactly)
-find packages/sdks/oak-curriculum-sdk/type-gen -type f | wc -l
+find packages/sdks/oak-curriculum-sdk/code-generation -type f | wc -l
 find packages/sdks/oak-curriculum-sdk/src -type f | wc -l
 find packages/sdks/oak-curriculum-sdk/src/types/generated -type f | wc -l
 ls -1 packages/sdks
@@ -1002,12 +1347,12 @@ barrel-only imports).
   fail lint/build on generation->runtime imports and fix root causes.
 - Config/task graph breakage after split:
   update turbo/package scripts alongside moves, not afterwards.
-- Root script wiring (`pnpm vocab-gen`, `pnpm type-gen`) targets monolithic
+- Root script wiring (`pnpm vocab-gen`, `pnpm sdk-codegen`) targets monolithic
   filters: update root `package.json` and `scripts/check-generator-scope.sh`
   alongside workspace moves.
 - Documentation drift:
   treat docs/TSDoc as same-phase deliverables, not post-merge cleanup.
-- **[wilma]** `generate:clean` atomicity: if `type-gen` fails after `clean`,
+- **[wilma]** `generate:clean` atomicity: if `code-generation` fails after `clean`,
   the workspace is left without generated artefacts. Mitigated in Phase 5
   (atomic write pattern or documented recovery procedure).
 - **[wilma]** Generated file drift: manually edited generated files can
@@ -1025,6 +1370,16 @@ barrel-only imports).
 - ESLint override tech debt: see
   [eslint-override-removal.plan.md](../../developer-experience/eslint-override-removal.plan.md)
   for the phased removal strategy.
+- **Missed rename references**: mitigated by running `rg` verification
+  commands (see Phase 6.8) after each rename step. Archived plans
+  intentionally excluded.
+- **Lock file conflicts during renames**: `pnpm install` after each
+  rename regenerates cleanly. No manual `pnpm-lock.yaml` edits.
+- **Import resolution after renames**: `pnpm sdk-codegen && pnpm build`
+  validates all imports resolve correctly after each rename.
+- **Boundary rule regression after workspace rename**: ESLint boundary
+  rule tests (`sdk-boundary.unit.test.ts`) are updated alongside the
+  boundary rules and validate the new patterns during `pnpm test`.
 
 ## 12. Pre-Phase-1 Decisions (all resolved 23 Feb 2026)
 
@@ -1063,8 +1418,8 @@ Every finding is either resolved or mapped to a specific execution phase.
 | R2 | code-reviewer | Mixed `export { type ... }` / `export type { ... }` syntax in `mcp-tools.ts` | Fixed — normalised to `export type { ... }` |
 | R3 | code-reviewer | Stale TSDoc references in `elasticsearch.ts` and `widget-constants.ts` | Fixed — updated to reference generation workspace paths |
 | R4 | config-reviewer | Orphaned E2E tests not covered by generation tsconfig | Fixed — added to `include` arrays |
-| R5 | config-reviewer | Dead ESLint overrides in runtime SDK for moved paths | Fixed — removed `type-gen/`, `src/types/generated/`, `src/types/helpers.ts` overrides |
-| R6 | config-reviewer | Stale vitest globs in runtime SDK | Fixed — removed `type-gen/**` patterns |
+| R5 | config-reviewer | Dead ESLint overrides in runtime SDK for moved paths | Fixed — removed `code-generation/`, `src/types/generated/`, `src/types/helpers.ts` overrides |
+| R6 | config-reviewer | Stale vitest globs in runtime SDK | Fixed — removed `code-generation/**` patterns |
 | R7 | test-reviewer | Orphaned `vi.mock` path in `universal-tools.unit.test.ts` | Fixed — corrected path. Mock uses `vi.importActual` with runtime narrowing to preserve real `SCOPES_SUPPORTED` from schema. Underlying issue: `vi.mock` in a `.unit.test.ts` file violates testing rules (NO MOCKS in unit tests). Proper fix is DI refactoring — see F18. |
 | R8 | type-reviewer | `ToolStatusForName` not re-exported | Verified latent — no consumers exist; harmless |
 
@@ -1075,30 +1430,30 @@ Every finding is either resolved or mapped to a specific execution phase.
 | F1 | config-reviewer | Turbo `test:e2e` input filename mismatch | **Resolved** — verified `vitest.config.e2e.ts` already matches turbo pattern |
 | F2 | config-reviewer | Runtime SDK missing explicit `tsup` devDependency | **Resolved** — `tsup: ^8.5.1` already present |
 | F3 | config-reviewer | Phantom `@next/eslint-plugin-next` devDependency | **Resolved** — not present in current codebase |
-| F4 | test-reviewer | `typegen-core.test.ts` naming convention violation | **Fixed** — split IO test to `typegen-core-file-operations.integration.test.ts` |
+| F4 | test-reviewer | `codegen-core.test.ts` naming convention violation | **Fixed** — split IO test to `codegen-core-file-operations.integration.test.ts` |
 | F5 | test-reviewer | Vacuous `expect(true).toBe(true)` in `zodgen.e2e.test.ts` | **Resolved** — no vacuous assertions found |
 | F6 | test-reviewer | Silent error suppression in `zodgen.e2e.test.ts` | **Resolved** — `rmSync` called directly with `force: true`, no try/catch |
 | F7 | wilma | Hardcoded relative import in `generate-tool-file.ts` | **Resolved** — path test already implemented and passing |
-| F8 | wilma | `generate:clean` leaves workspace broken if `type-gen` fails | **Resolved** — recovery documented in generation SDK README (lines 52-58) |
+| F8 | wilma | `generate:clean` leaves workspace broken if `code-generation` fails | **Resolved** — recovery documented in generation SDK README (lines 52-58) |
 | F9 | barney/betty | `SearchFacetsSchema` dual export | **Resolved** — only exported from `/search` subpath |
 | F10 | code-reviewer | `src/types/index.ts` duplicates symbols from `src/index.ts` | **Fixed** — removed duplicates from `src/index.ts`, re-exports from `./types/index.js` |
 | F18 | rules-review | `universal-tools.unit.test.ts` uses `vi.mock`/`vi.hoisted` | **Fixed** — `GeneratedToolRegistry` DI interface + `ToolRegistryDescriptor` (ISP). Eliminated all `vi.mock`/`vi.hoisted`. Removed all `as` assertions. Updated 10 call sites. |
 
 ### 13.3 Tracked for Phase 6
 
-| # | Reviewer | Finding | Plan |
-|---|---------|---------|------|
-| F11 | fred W1 | Generator template banners reference pre-split paths | Update all provenance comments to generation workspace paths |
-| F12 | betty | Barrel files are hand-authored — risk drifting from generated artefacts | Evaluate auto-generating barrels from the pipeline |
-| F13 | barney | Subpath granularity — `query-parser`, `observability`, `admin` are very small | Evaluate merging into semantically related neighbours |
-| F14 | betty | `OakApiPathBasedClient` depends on `openapi-fetch` (runtime concern) in generation | Evaluate ownership; document decision |
-| F15 | fred W2 | Runtime SDK wildcard exports inconsistent with barrel discipline | Audit and align (cross-ref ESLint override removal plan) |
+| # | Reviewer | Finding | Plan | Assessment (25 Feb 2026) |
+|---|---------|---------|------|--------------------------|
+| F11 | fred W1 | Generator template banners reference pre-split paths | Update 3 provenance comments to codegen workspace paths | 3 files identified: `generate-definitions-file.ts`, `generate-execute-file.ts`, `generate-types-file.ts`. Other generators use `@see` with relative paths (no old path reference). |
+| F12 | betty | Barrel files are hand-authored — risk drifting from generated artefacts | Evaluate auto-generating barrels from the pipeline | 11 barrels, ~300 exports. Type-check gate catches drift. Auto-gen adds complexity. **Proposed: keep manual, document.** |
+| F13 | barney | Subpath granularity — `query-parser`, `observability`, `admin` are very small | Evaluate merging into semantically related neighbours | Actual sizes: query-parser 8 exports, observability 18, admin 16. Not trivially small. **Proposed: keep as-is, document.** |
+| F14 | betty | `OakApiPathBasedClient` depends on `openapi-fetch` (runtime concern) in generation | Evaluate ownership; document decision | Type is `PathBasedClient<paths>` — schema-derived, generated by `generate-client-types.ts`. Both workspaces depend on `openapi-fetch`. **Proposed: keep in codegen, document.** |
+| F15 | fred W2 | Runtime SDK wildcard exports inconsistent with barrel discipline | Audit and align (cross-ref ESLint override removal plan) | **Pre-resolved** — no `export *` statements found in runtime SDK (25 Feb 2026). No action needed. |
 
 ### 13.4 Tracked for Phase 7
 
 | # | Reviewer | Finding | Plan |
 |---|---------|---------|------|
-| F16 | wilma | No CI check that generated files are unmodified | Add `pnpm type-gen && git diff --exit-code` CI step |
+| F16 | wilma | No CI check that generated files are unmodified | Add `pnpm sdk-codegen && git diff --exit-code` CI step |
 
 ### 13.5 Cross-referenced to separate plans
 
@@ -1106,21 +1461,20 @@ Every finding is either resolved or mapped to a specific execution phase.
 |---|---------|---------|---------------|
 | F17 | all | ESLint override tech debt across both SDK workspaces | [eslint-override-removal.plan.md](../../developer-experience/eslint-override-removal.plan.md) |
 
-### 13.6 Phase 5 Reviewer Suggestions — Priority for Next Session
+### 13.6 Phase 5 Reviewer Suggestions — Addressed in Phase 6.1
 
 Non-blocking suggestions from the Phase 5 final review (4 specialists:
 code-reviewer, architecture-reviewer-barney, test-reviewer, type-reviewer).
-These should be addressed at the **start of Phase 6** before beginning
-Phase 6's own scope.
+Addressed at the **start of Phase 6** (Phase 6.1) before the renames.
 
-| # | Source | Suggestion | Action |
-|---|--------|-----------|--------|
-| S1 | code-reviewer, test-reviewer | Duplicated `generatedTools` stub across 4 integration test files (`aggregated-browse`, `aggregated-explore`, `aggregated-search`, `aggregated-fetch`). DRY violation — 5 copies of identical 8-line block. | Extract shared `createNullGeneratedToolRegistry()` helper into a test-utils module. |
-| S2 | test-reviewer | `universal-tools.unit.test.ts` contains `vi.fn()` mocks in `createUniversalToolExecutor` tests (lines 126-261). Per testing strategy, `vi.fn()` makes these integration tests, not unit tests. | Consider splitting executor tests to `*.integration.test.ts`, keeping pure-function tests in `*.unit.test.ts`. |
-| S3 | code-reviewer | `'_meta' in descriptor` guard in `list-tools.ts` (lines 52, 68) is redundant — `_meta` is already an optional property on `ToolRegistryDescriptor`. | Simplify to direct property access: `_meta: descriptor._meta`. |
-| S4 | architecture-reviewer-barney | `listUniversalTools`, `isUniversalToolName`, and `createUniversalToolExecutor` gained new required parameters — source-breaking change for external consumers. | Account for API surface change in next semver version bump. |
-| S5 | type-reviewer | `requiresDomainContext` is required (`boolean`) on full `ToolDescriptor` but optional (`boolean?`) on `ToolRegistryDescriptor`. Omitting it defaults to "include context hint" (`undefined !== false` is `true`). | Informational — safe default. Document the semantic difference if it becomes a concern. |
-| S6 | code-reviewer | `createFakeRegistry` in unit test ignores its argument to `getToolFromToolName` — returns same descriptor for any name. | If a second tool name is added to tests, use `Map.get` or switch. No action needed with single-tool fixture. |
+| # | Source | Suggestion | Action | Detailed Execution |
+|---|--------|-----------|--------|--------------------|
+| S1 | code-reviewer, test-reviewer | Duplicated `generatedTools` stub across 4 integration test files (`aggregated-browse`, `aggregated-explore`, `aggregated-search`, `aggregated-fetch`). DRY violation — 5 copies of identical 8-line block. | Extract shared `createNullGeneratedToolRegistry()` helper into a test-utils module. | Create `src/mcp/test-helpers/null-generated-tool-registry.ts`. Returns `GeneratedToolRegistry` with empty `toolNames`, throwing `getToolFromToolName`, always-false `isToolName`. TDD: unit test first. Update 5 call sites in 4 files. |
+| S2 | test-reviewer | `universal-tools.unit.test.ts` contains `vi.fn()` mocks in `createUniversalToolExecutor` tests (lines 126-261). Per testing strategy, `vi.fn()` makes these integration tests, not unit tests. | Split executor tests to `*.integration.test.ts`, keep pure-function tests in `*.unit.test.ts`. | Extract `createUniversalToolExecutor` describe block to `universal-tools-executor.integration.test.ts`. Keep 7 pure-function suites in unit test file. |
+| S3 | code-reviewer | `'_meta' in descriptor` guard in `list-tools.ts` (lines 52, 68) is redundant — `_meta` is already an optional property on `ToolRegistryDescriptor`. | Simplify to direct property access: `_meta: descriptor._meta`. | Replace `_meta: '_meta' in def ? def._meta : undefined` → `_meta: def._meta` at both locations. |
+| S4 | architecture-reviewer-barney | `listUniversalTools`, `isUniversalToolName`, and `createUniversalToolExecutor` gained new required parameters — source-breaking change for external consumers. | Account for API surface change in next semver version bump. Runtime SDK is `0.0.0-development` — no published API surface yet. Note for future. | No code change. |
+| S5 | type-reviewer | `requiresDomainContext` is required (`boolean`) on full `ToolDescriptor` but optional (`boolean?`) on `ToolRegistryDescriptor`. Omitting it defaults to "include context hint" (`undefined !== false` is `true`). | Informational — safe default. Document the semantic difference if it becomes a concern. | No code change. |
+| S6 | code-reviewer | `createFakeRegistry` in unit test ignores its argument to `getToolFromToolName` — returns same descriptor for any name. | If a second tool name is added to tests, use `Map.get` or switch. No action needed with single-tool fixture. | No code change. |
 
 ## 14. Relationship to ADRs
 
@@ -1148,261 +1502,18 @@ Phase 6's own scope.
 
 ## 16. Synonym System Reference
 
-This section documents the full synonym landscape to preserve domain knowledge
-through the separation and beyond.
+The synonym system serves two distinct concerns — agent context injection
+(curated vocabulary hints for AI agents via `get-ontology`) and interim
+search expansion (Elasticsearch query expansion pending a bulk-data-derived
+pipeline). These are currently conflated into a single `synonymsData`
+object. ~500 curated entries across 23 categories, plus 1 deprecated
+regex-mined file. Co-location is a follow-on target after Step 1.
 
-### 16.1 Architectural Framing: Two Distinct Concerns
+Full documentation (architecture, file layout, consumer domains,
+sensitivity handling, vocab-gen lessons, future direction):
 
-The synonym system currently serves two fundamentally different purposes that
-are conflated into a single data structure (`synonymsData`). Understanding
-this distinction is essential:
-
-**Concern 1 — Search synonym expansion** (search quality)
-
-The authoritative source of truth for what terms mean the same thing in the
-Oak curriculum is the **bulk curriculum data itself** — 13,349 keywords with
-definitions, lesson titles, unit titles, thread names. A processing pipeline
-to extract authoritative synonyms from this data does not yet exist. When it
-does, it will supersede the hand-written lists for search purposes. The
-current regex-based synonym miner (`synonym-miner.ts`) was an early experiment
-that demonstrated the need for language understanding (LLM-powered extraction)
-rather than pattern matching.
-
-**Concern 2 — Agent context injection** (MCP tool quality)
-
-The hand-written curated synonym lists are vocabulary hints injected into the
-`get-ontology` MCP tool response. They help AI agents understand how teachers
-and students talk about curriculum concepts — colloquialisms ("sohcahtoa"),
-abbreviations ("PE"), UK/US variants ("factorising" / "factoring"), and
-informal phrasings ("solving for x"). These are curated context for natural
-language interpretation, not an authoritative synonym database.
-
-**The conflation**: Currently both concerns are served by the same
-`synonymsData` object flowing to both Elasticsearch (search expansion) and
-the ontology (agent context). ADR-063 frames this as "single source of truth
-for all consumers." In reality, the curated lists are a useful interim for
-search while the bulk data pipeline does not exist, but the long-term
-architecture separates these concerns by source and intent.
-
-### 16.2 Co-location Decision
-
-All synonym-related content should be co-located in one place, organised by
-source and intent. This co-location is a **follow-on target** after the SDK
-workspace separation (ADR-108 Step 1) is complete — it is not in-scope for
-the current plan. Step 1 moves only the mined/generated synonym file
-(`definition-synonyms.ts`); the curated synonym lists remain in runtime for
-now. The natural next step after the separation is to move all synonym content
-to one location, organised as described below:
-
-| Source                                        | Intent                           | Current state                                  | Target state                                            |
-| --------------------------------------------- | -------------------------------- | ---------------------------------------------- | ------------------------------------------------------- |
-| **Curated** (hand-written, 23 files)          | Agent context injection          | Runtime SDK `src/mcp/synonyms/`                | Co-located, clearly labelled as agent vocabulary hints  |
-| **Mined** (regex-extracted, 1 file)           | Early search pipeline experiment | Generation SDK `src/generated/vocab/synonyms/` | Co-located alongside curated                            |
-| **Bulk-derived** (pipeline output)            | Authoritative search synonyms    | Does not exist yet                             | Future: co-located, clearly labelled as pipeline output |
-| **Transform utilities** (`synonym-export.ts`) | Consumer-format adapters         | Runtime SDK `src/mcp/synonym-export.ts`        | Co-located with the data they transform                 |
-| **Audit trail** (`bucket-c-analysis.ts`)      | Removed-entry documentation      | Runtime SDK `src/mcp/synonyms/`                | Co-located                                              |
-
-### 16.3 Three Current Synonym Sources
-
-**1. Curated subject-specific synonyms** (17 files, ~400 entries)
-
-Hand-authored vocabulary hints for AI agent context. Each of the 17 Oak
-subjects has a dedicated file currently in
-`packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`:
-
-| File                     | Subject             | Entries | Sensitivity | Examples                                                   |
-| ------------------------ | ------------------- | ------- | ----------- | ---------------------------------------------------------- |
-| `art.ts`                 | Art                 | ~45     | —           | watercolour ↔ watercolor, collage ↔ mixed media            |
-| `citizenship.ts`         | Citizenship         | ~35     | MEDIUM      | democracy ↔ democratic system                              |
-| `computing.ts`           | Computing           | ~15     | —           | raster ↔ bitmap, algorithm ↔ set of instructions           |
-| `cooking-nutrition.ts`   | Cooking & Nutrition | ~25     | —           | nutrition ↔ nutrients                                      |
-| `design-technology.ts`   | Design Technology   | ~40     | —           | prototype ↔ model, mechanism ↔ moving parts                |
-| `english.ts`             | English             | ~10     | —           | punctuation ↔ grammar marks                                |
-| `french.ts`              | French              | ~25     | —           | verb ↔ action word                                         |
-| `geography.ts`           | Geography           | ~10     | —           | climate change ↔ global warming                            |
-| `german.ts`              | German              | ~25     | —           | nominative case terminology                                |
-| `history.ts`             | History             | ~10     | —           | ww1 ↔ world war 1                                          |
-| `maths.ts`               | Maths               | ~40     | —           | trigonometry ↔ sohcahtoa, linear-equations ↔ solving for x |
-| `music.ts`               | Music               | ~15     | —           | semibreve ↔ whole note                                     |
-| `physical-education.ts`  | PE                  | ~45     | —           | invasion games ↔ team games, stamina ↔ endurance           |
-| `religious-education.ts` | RE                  | ~70     | HIGH        | church ↔ chapel, mosque ↔ masjid (distinct concepts)       |
-| `rshe-pshe.ts`           | RSHE/PSHE           | ~25     | HIGH        | mental health ↔ emotional wellbeing                        |
-| `science.ts`             | Science             | ~15     | —           | photosynthesis ↔ chlorophyll                               |
-| `spanish.ts`             | Spanish             | ~20     | —           | ser/estar distinction                                      |
-
-**2. Curated structural/generic synonyms** (6 files, ~100 entries)
-
-Cross-cutting educational vocabulary hints, not tied to a single subject:
-
-| File             | Category           | Entries | Examples                                     |
-| ---------------- | ------------------ | ------- | -------------------------------------------- |
-| `subjects.ts`    | Subject names      | ~13     | maths ↔ mathematics, pe ↔ physical education |
-| `key-stages.ts`  | Key stages         | ~4      | ks1 ↔ key stage 1                            |
-| `exam-boards.ts` | Exam boards        | ~5      | aqa ↔ assessment and qualifications alliance |
-| `numbers.ts`     | Number words       | ~10     | squared ↔ quadratic, one ↔ 1                 |
-| `education.ts`   | Generic + acronyms | ~15     | sen ↔ special educational needs              |
-
-Single source of truth rule: Subject names (e.g. `physical-education → pe`)
-are ONLY in `subjects.ts`, never duplicated in subject-specific files.
-
-**3. Mined definition synonyms** (1 generated file, 397 entries)
-
-Generated by `vocab-gen/generators/synonym-miner.ts` from bulk download
-keyword definitions using regex patterns ("also known as", "sometimes called",
-parenthetical abbreviations). This was an early experiment towards deriving
-synonyms from the bulk data — the intent was correct (bulk data is the
-authoritative source) but the method was insufficient (regex cannot distinguish
-synonyms from translations, phonemes, or examples).
-
-Location after Phase 3 move:
-`packages/sdks/oak-curriculum-sdk-generation/src/generated/vocab/synonyms/definition-synonyms.ts`
-
-Quality finding: ~93% of regex-mined synonyms were noise (language
-translations, phoneme patterns, examples). Only ~27 genuinely useful entries
-were manually promoted to curated files. Regex mining is deprecated. The
-future direction is LLM-powered extraction from the same bulk data source,
-which can apply language understanding to distinguish true synonyms from
-definitions, translations, and examples.
-
-**Supporting file**: `bucket-c-analysis.ts` — documents 9 MFL translation
-entries deliberately removed from French/German/Spanish synonym files (they
-were definitions, not true synonyms). Not exported to the synonym set. Exists
-for audit trail and future reference.
-
-### 16.4 Barrel and Aggregation
-
-All 23 curated categories are aggregated in `synonyms/index.ts` into a single
-`synonymsData` object (typed as `SynonymsData`). This barrel is the only
-import point for consumers. Adding a new category to `synonymsData`
-automatically propagates to all four consumer domains.
-
-### 16.5 Four Consumer Domains (Two Concerns)
-
-The four consumers map to the two architectural concerns:
-
-#### Concern 1: Agent Context Injection
-
-**Domain 1 — AI Agent Ontology** (runtime, `ontology-data.ts`)
-
-`synonymsData` is spread into the ontology returned by the `get-ontology` MCP
-tool. This is the **primary intended use** of the curated lists — giving AI
-agents vocabulary awareness for interpreting teacher queries. The synonyms
-appear under `ontologyData.synonyms` with metadata explicitly noting they are
-not exhaustive ("Use your language understanding to recognise other
-variations").
-
-Consumer chain: `synonyms/index.ts` → `ontology-data.ts` → MCP tool response
-→ AI agent
-
-#### Concern 2: Search Expansion (interim, pending bulk data pipeline)
-
-The following three consumers use the curated lists as an interim synonym
-source for search. When a bulk-data-derived synonym pipeline exists, these
-consumers should transition to pipeline output for authoritative search
-expansion, while the curated lists continue serving agent context.
-
-**Domain 2 — Elasticsearch Query Expansion** (search infrastructure)
-
-`buildElasticsearchSynonyms()` in `synonym-export.ts` transforms all
-categories into ES entries with IDs like `{categoryName}_{canonical}` and
-comma-separated synonym strings. Deployed as the `oak-syns` synonym set via
-`PUT /_synonyms/oak-syns`. The `oak_text_search` analyser applies the
-`synonym_graph` filter at query time — no reindexing needed for updates.
-
-Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
-`public/mcp-tools.ts` (re-export) → search SDK
-`admin/create-admin-service.ts` (`upsertSynonyms`) → Elasticsearch
-
-Also consumed by: search CLI `operations/utilities/generate-synonyms.ts`
-(standalone JSON export), search CLI `lib/elasticsearch/setup/index.ts` (ES
-setup command).
-
-**Domain 3 — Phrase Detection and Boosting** (search quality)
-
-`buildPhraseVocabulary()` extracts all multi-word terms (containing spaces)
-into a `Set<string>`. Critical because ES synonym filters apply after
-tokenisation — multi-word synonyms like "straight line" → "linear" cannot
-expand via the synonym filter. ~40% of current synonyms are multi-word.
-
-The phrase vocabulary feeds `detectCurriculumPhrases()` which adds
-`match_phrase` boosting to RRF retrievers for exact phrase matches. Documented
-in ADR-084.
-
-Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
-`public/mcp-tools.ts` → search SDK
-`retrieval/query-processing/detect-curriculum-phrases.ts` and search CLI
-`lib/query-processing/detect-curriculum-phrases.ts`
-
-**Domain 4 — Term Normalisation** (lookup)
-
-`buildSynonymLookup()` builds a flat `ReadonlyMap<string, string>` mapping
-alternative terms (lowercased) to canonical terms. Used for normalising user
-input before API calls.
-
-Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
-`public/mcp-tools.ts` → consumers
-
-### 16.6 Sensitivity Handling
-
-Three categories carry sensitivity notices and have undergone additional
-review:
-
-- **HIGH**: `religiousEducationConcepts` (~70 entries) — theological/cultural
-  precision, avoidance of conflating distinct faith concepts (mosque ≠ masjid
-  — these are kept as distinct for different contexts)
-- **HIGH**: `rshePsheConcepts` (~25 entries, placeholder) — mental health,
-  relationships terminology requiring inclusive and respectful handling
-- **MEDIUM**: `citizenshipConcepts` (~35 entries) — political terminology
-  handled neutrally
-
-### 16.7 Current Location After Phase 3 (Fragmented)
-
-| Workspace      | Path                                                  | Files                                                                              | Type                              |
-| -------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------- |
-| Runtime SDK    | `src/mcp/synonyms/`                                   | 25 (17 subject + 6 structural + `index.ts` + `README.md` + `bucket-c-analysis.ts`) | Curated agent context             |
-| Runtime SDK    | `src/mcp/synonym-export.ts`                           | 1                                                                                  | Transform utilities (4 functions) |
-| Generation SDK | `src/generated/vocab/synonyms/definition-synonyms.ts` | 1                                                                                  | Mined (early pipeline experiment) |
-| Generation SDK | `vocab-gen/generators/synonym-miner.ts`               | 1                                                                                  | Mining generator                  |
-
-This split is undesirable — all synonym content should be co-located and
-organised by source and intent. See §16.2.
-
-### 16.8 Governing ADRs
-
-- **ADR-063**: SDK as single source of truth for domain synonyms. Established
-  that all synonym definitions live in the SDK and flow to consumers via
-  export utilities. Note: this ADR predates the two-concern insight. It frames
-  the curated lists as "single source of truth" for all consumers, but the
-  actual source of truth for search synonyms is the bulk curriculum data via a
-  pipeline that does not yet exist. ADR-063 will need revision when that
-  pipeline is built, to distinguish agent context (curated) from search
-  expansion (bulk-derived).
-- **ADR-084**: Phrase query boosting. Documents the complementary mechanism
-  for multi-word synonym terms.
-- **ADR-030**: SDK as single source of truth (parent decision).
-
-### 16.9 Future Direction: Bulk Data Synonym Pipeline
-
-The authoritative source of truth for curriculum synonyms is the bulk download
-data: 13,349 unique keywords with definitions, lesson and unit titles, thread
-names. A processing pipeline to extract synonyms from this data does not yet
-exist. When it does:
-
-1. **LLM-powered extraction** replaces regex mining. The synonym-miner
-   experiment proved that regex finds text patterns, not semantic
-   relationships. An LLM can distinguish true same-language synonyms from
-   translations, phonemes, definitions, and examples — the exact categories
-   that produced 93% noise in the regex approach.
-2. **Pipeline output becomes the search synonym source**. The bulk-derived
-   synonyms feed Elasticsearch query expansion (Domain 2), phrase detection
-   (Domain 3), and term normalisation (Domain 4). The curated agent context
-   lists continue to serve the ontology (Domain 1) independently.
-3. **Search log analysis** supplements pipeline output. Actual failing user
-   queries reveal vocabulary gaps that the bulk data may not cover (teacher
-   colloquialisms, student slang).
-4. **Teacher feedback** provides real-world validation. Gaps reported by
-   users are the highest-signal input.
-
-The curated lists and the pipeline output may overlap but serve different
-masters: one serves AI agent understanding, the other serves search precision.
-They should be co-located but clearly separated by intent.
+- [Synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+- [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
+  (predates two-concern insight; revision needed post-pipeline)
+- [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
+  (phrase query boosting for multi-word synonyms)

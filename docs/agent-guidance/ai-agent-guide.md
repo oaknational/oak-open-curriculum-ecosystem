@@ -22,7 +22,7 @@ Active code and documentation use a conventional, intent-revealing structure:
 
 - `apps/` — runnable MCP servers and the search CLI (application wiring, startup)
 - `packages/sdks/` — SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
-- `packages/libs/` — runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
+- `packages/libs/` — runtime-adaptive libraries (`@oaknational/logger`, `@oaknational/env`, `@oaknational/result`)
 - `packages/core/` — shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/openapi-zod-client-adapter`)
 
 Key implementation principles:

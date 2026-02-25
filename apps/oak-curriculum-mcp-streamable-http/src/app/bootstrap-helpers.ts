@@ -6,7 +6,7 @@ import {
   createPhasedTimer,
   type Logger,
   type PhasedTimer,
-} from '@oaknational/mcp-logger';
+} from '@oaknational/logger';
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
 import { createEnrichedErrorLogger } from '../logging/index.js';

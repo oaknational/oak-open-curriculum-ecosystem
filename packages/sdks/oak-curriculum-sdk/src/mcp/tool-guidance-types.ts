@@ -5,12 +5,12 @@
  * documentation, separate from the curriculum ontology (domain model).
  *
  * @remarks Type hierarchy:
- * - ToolName: Generated from OpenAPI spec (type-gen output)
+ * - ToolName: Generated from OpenAPI spec (sdk-codegen output)
  * - AggregatedToolName: Derived from `AGGREGATED_TOOL_DEFS` (single source of truth)
  * - AllToolName: Union of both
  */
 
-import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
+import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName } from './universal-tools/types.js';
 
 export type { AggregatedToolName } from './universal-tools/types.js';

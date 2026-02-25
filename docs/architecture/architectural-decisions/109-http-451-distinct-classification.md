@@ -77,7 +77,7 @@ Both `not_found` and `legally_restricted` are:
 
 ## Verification
 
-Unit tests in `type-gen/typegen/error-types/classify-http-error.unit.test.ts` verify:
+Unit tests in `code-generation/typegen/error-types/classify-http-error.unit.test.ts` verify:
 
 - `classifyHttpError(404, ...)` returns `{ kind: 'not_found' }`
 - `classifyHttpError(451, ...)` returns `{ kind: 'legally_restricted' }`

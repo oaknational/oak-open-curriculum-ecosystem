@@ -18,7 +18,7 @@ import {
   type ToolName,
   type ToolResultForName,
   callTool,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+} from '@oaknational/sdk-codegen/mcp-tools';
 
 /**
  * Error types with proper cause chains

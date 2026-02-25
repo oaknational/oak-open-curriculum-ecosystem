@@ -17,7 +17,7 @@
  */
 
 import type { Result } from '@oaknational/result';
-import type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
+import type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
 import type {
   SearchScope,
   SearchLessonsIndexDoc,
@@ -26,7 +26,7 @@ import type {
   SearchThreadIndexDoc,
   SearchFacets,
   SearchSuggestionItem,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 // ---------------------------------------------------------------------------
 // Error type (structurally matches search-sdk RetrievalError)
@@ -179,7 +179,7 @@ export interface SuggestionResponse {
  * We re-export the type here so search-retrieval-types is self-contained
  * for consumers that need the full result shape.
  */
-export type { SearchUnitsIndexDoc } from '@oaknational/curriculum-sdk-generation/search';
+export type { SearchUnitsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 // ---------------------------------------------------------------------------
 // The search retrieval service interface

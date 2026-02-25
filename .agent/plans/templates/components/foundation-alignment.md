@@ -20,7 +20,7 @@ At the start of each phase, ask:
 
 ## Compliance Checklist (End of Plan)
 
-- [ ] **Cardinal Rule**: All types derive from OpenAPI schema via `pnpm type-gen`
+- [ ] **Cardinal Rule**: All types derive from OpenAPI schema via `pnpm sdk-codegen`
 - [ ] **No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>`, `!`
 - [ ] **No Compatibility Layers**: Replaced old approaches, not wrapped them
 - [ ] **Quality Gates**: All gates pass across all workspaces

@@ -5,7 +5,7 @@
 
 import { vi } from 'vitest';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { Logger } from '@oaknational/mcp-logger/node';
+import type { Logger } from '@oaknational/logger/node';
 import type {
   OakApiPathBasedClient,
   ToolName,

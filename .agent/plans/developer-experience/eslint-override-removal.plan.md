@@ -5,8 +5,8 @@ todos:
   - id: phase-0-inventory
     content: "Phase 0: Inventory all overrides, measure violation counts, classify by fix strategy."
     status: pending
-  - id: phase-1-type-gen-authored
-    content: "Phase 1: Remove overrides for type-gen/ authored code (6 rules)."
+  - id: phase-1-code-generation-authored
+    content: "Phase 1: Remove overrides for code-generation/ authored code (6 rules)."
     status: pending
   - id: phase-2-generated-output
     content: "Phase 2: Remove overrides for src/types/generated/ machine output (13 rules)."
@@ -31,7 +31,7 @@ full strict compliance.
 
 ## Context
 
-The generation workspace (`@oaknational/curriculum-sdk-generation`) has two
+The generation workspace (`@oaknational/sdk-codegen`) has two
 categories of ESLint rule overrides that were carried over from the runtime
 SDK during Phase 2 of the SDK workspace separation (ADR-108). The runtime
 SDK itself is now clean (dead overrides were removed in Phase 2). Other
@@ -53,9 +53,9 @@ independently, with quality gates verified at each step.
 
 ## Current Override Inventory
 
-### Generation workspace (`packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts`)
+### Generation workspace (`packages/sdks/oak-sdk-codegen/eslint.config.ts`)
 
-#### Category A: `type-gen/**` — Authored generator scripts (6 rules)
+#### Category A: `code-generation/**` — Authored generator scripts (6 rules)
 
 These are hand-written scripts that generate TypeScript code. The overrides
 exist because several generator functions are large and complex.
@@ -75,7 +75,7 @@ output changes.
 
 #### Category B: `src/types/generated/**` — Machine-generated output (13 rules)
 
-These are files produced by the `type-gen` pipeline. Fixing these requires
+These are files produced by the `sdk-codegen` pipeline. Fixing these requires
 changing the generators to emit code that passes these rules.
 
 | Rule | Why it fails | Fix strategy |
@@ -96,7 +96,7 @@ changing the generators to emit code that passes these rules.
 | `curly` | Missing braces in generated code | Add braces to generator templates |
 
 **Fix approach**: Update the generator templates and functions in
-`type-gen/` to emit compliant code, then regenerate. Some rules (like
+`code-generation/` to emit compliant code, then regenerate. Some rules (like
 `max-lines` for large type-definition files) may need further analysis
 to determine whether splitting is practical.
 
@@ -134,7 +134,7 @@ guards can eliminate them.
 
 ## Execution Order and Rationale
 
-### Phase 1: `type-gen/` authored code (6 rules) — Highest value
+### Phase 1: `code-generation/` authored code (6 rules) — Highest value
 
 Refactoring authored generator scripts improves code quality and
 maintainability directly. No generated output changes. No downstream
@@ -167,7 +167,7 @@ separation work and can be tackled separately.
 After removing each override:
 
 ```bash
-pnpm type-gen    # Regenerate (if generator templates changed)
+pnpm sdk-codegen # Regenerate (if generator templates changed)
 pnpm build       # Build all workspaces
 pnpm type-check  # Type-check all workspaces
 pnpm lint:fix    # Lint all workspaces (zero errors expected)
@@ -180,7 +180,7 @@ pnpm test        # All tests pass
 
 ### Phase 1
 
-- Zero ESLint overrides for `type-gen/**` in generation workspace
+- Zero ESLint overrides for `code-generation/**` in generation workspace
 - All generator functions under 50 lines, complexity under 8
 - Quality gates pass
 
@@ -188,7 +188,7 @@ pnpm test        # All tests pass
 
 - Zero ESLint overrides for `src/types/generated/**`
 - Generated code passes all strict ESLint rules
-- `pnpm type-gen` produces lint-clean output
+- `pnpm sdk-codegen` produces lint-clean output
 
 ### Phase 3
 
@@ -233,7 +233,7 @@ pnpm test        # All tests pass
 **Risk of Not Doing**:
 
 - Overrides normalise rule-disabling as acceptable practice
-- New code in `type-gen/` inherits relaxed rules by default
+- New code in `code-generation/` inherits relaxed rules by default
 - Generated code quality cannot improve while rules are disabled
 
 ### Alignment with Workspace Rules
@@ -249,7 +249,7 @@ current ESLint configuration.
 
 ## References
 
-- `packages/sdks/oak-curriculum-sdk-generation/eslint.config.ts` — primary target
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts` — primary target
 - `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts` — secondary target
 - `apps/oak-search-cli/eslint.config.ts` — secondary target
 - `.agent/directives/rules.md` — "never disable checks"

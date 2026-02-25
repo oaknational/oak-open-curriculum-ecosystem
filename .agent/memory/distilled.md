@@ -27,7 +27,7 @@ changing behaviour.
   scope
 - ADR index is the source of truth for ADR count; keep
   README in sync
-- Generator templates in `type-gen/typegen/` are the
+- Generator templates in `code-generation/typegen/` are the
   source of truth for anything in `src/types/generated/`
 - Generated doc comments need escaping at the GENERATOR
   level, not in the output
@@ -130,13 +130,6 @@ Architecture` section). Dev gotchas not covered there:
 - Generic `T extends SomeBase` constraints fail with TS7053
   weak type detection when union members don't overlap
   sufficiently. Use per-type builder functions instead.
-- `onclick` inline handlers are exploitable in HTML-embedded
-  JS: `esc()` HTML-encodes `'` to `&#39;`, but the browser
-  HTML-decodes the attribute value before evaluating as JS.
-  Use `data-oak-url` + delegated click handler instead.
-- `JSON.stringify` for ALL dynamic data injected into
-  generated JS string templates — the non-negotiable
-  standard pattern for the `WIDGET_SCRIPT`.
 - `expect.any(String)` returns `any` which triggers
   `no-unsafe-assignment`. Use `toHaveProperty` for
   structural checks on `unknown` values from `new Function`.
@@ -169,8 +162,6 @@ Architecture` section). Dev gotchas not covered there:
   use `toStrictEqual` not `toBe` for structural equality
 - NEVER reclassify a test to a weaker category to permit
   IO — refactor with DI instead
-- E2E: STDIO IO allowed, network IO forbidden. Smoke: all
-  IO allowed, NO mocks
 - Naming: `test:*` for vitest tests, `smoke:*` for
   standalone tsx scripts
 - For refactoring TDD (runtime behaviour unchanged), the
@@ -180,9 +171,6 @@ Architecture` section). Dev gotchas not covered there:
   inert unless the resulting type is consumed in a binding
   or type path — all three reviewers independently caught
   this pattern
-- Compliant `process.env` pattern:
-  `loadRuntimeConfig(testEnv)` — never mutate global
-  `process.env`
 - `max-lines-per-function` (50 lines) — extract per-command
   registration functions
 - ESLint complexity counts `??` and `?.` as branches — five
@@ -307,7 +295,7 @@ Architecture` section). Dev gotchas not covered there:
 - Stale tsup entries match nothing silently after file
   moves — remove dead entry points promptly
 - Adapter/core packages must be rebuilt (`pnpm build`)
-  before `pnpm type-gen` picks up changes — the SDK
+  before `pnpm sdk-codegen` picks up changes — the SDK
   consumes built output, not source
 
 ## Domain Knowledge
@@ -359,7 +347,7 @@ The monorepo is ESM-only (`"type": "module"`).
 - Semantic-release managed packages use
   `"version": "0.0.0-development"`
 - Never commit `.turbo/` cache files
-- Quality gates always run in order: clean → type-gen →
+- Quality gates always run in order: clean → sdk-codegen →
   build → type-check → format → markdownlint → lint →
   test → test:ui → test:e2e → smoke:dev:stub
 

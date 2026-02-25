@@ -62,7 +62,7 @@ the architectural pattern is not enforced.
    |----------|--------|---------|
    | Replace with logger | Use `UnifiedLogger` with proper DI | SDK modules, app source |
    | Legitimate CLI output | Scoped `no-console` override in workspace ESLint config | CLI commands, `output.ts` |
-   | Build/type-gen scripts | Scoped override in workspace ESLint config | `typegen.ts`, `zodgen.ts` |
+   | Build/code-generation scripts | Scoped override in workspace ESLint config | `codegen.ts`, `zodgen.ts` |
    | Smoke tests | Scoped override for smoke test globs | `smoke-tests/*.ts` |
    | Logger package internals | Already uses `process.stdout.write`, should not need console | Verify only |
 

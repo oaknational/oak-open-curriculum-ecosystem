@@ -24,7 +24,7 @@ This repository implements a pattern where a single OpenAPI specification drives
 ┌─────────────────────────────────────────────────────────────────┐
 │ 1. OpenAPI Schema (single source of truth)                     │
 │    - Hosted by API provider (e.g., Oak Curriculum API)         │
-│    - Fetched during `pnpm type-gen`                            │
+│    - Fetched during `pnpm sdk-codegen`                           │
 │    - Defines all endpoints, parameters, responses              │
 └────────────────────┬────────────────────────────────────────────┘
                      ↓
@@ -58,7 +58,7 @@ This repository implements a pattern where a single OpenAPI specification drives
 
 ### The Key Principle
 
-**If the OpenAPI schema changes, running `pnpm type-gen` is sufficient to update everything.**
+**If the OpenAPI schema changes, running `pnpm sdk-codegen` is sufficient to update everything.**
 
 No manual code changes are required. The SDK regenerates, types update, validators adjust, and all consuming applications automatically get the changes through their imports.
 
@@ -80,8 +80,8 @@ There is no drift because there's only one source.
 When the API changes:
 
 ```bash
-pnpm type-gen  # Fetch schema, regenerate everything
-pnpm build     # Type errors show what broke
+pnpm sdk-codegen  # Fetch schema, regenerate everything
+pnpm build        # Type errors show what broke
 ```
 
 TypeScript compilation failures immediately show what needs updating in consuming code. No surprises at runtime.
@@ -148,10 +148,10 @@ Oak-specific configuration.
 
 ### Type Generation Flow
 
-1. **Fetch OpenAPI Schema**: `type-gen/typegen.ts` fetches the remote schema
+1. **Fetch OpenAPI Schema**: `code-generation/codegen.ts` fetches the remote schema
 2. **Generate TypeScript Types**: Using `openapi-typescript`
 3. **Generate Zod Schemas**: Using `openapi-zod-client`
-4. **Generate MCP Tools**: Custom script `type-gen/mcp-toolgen.ts` creates tool metadata
+4. **Generate MCP Tools**: Custom script `code-generation/mcp-toolgen.ts` creates tool metadata
 5. **Generate URL Helpers**: Custom script creates canonical URL generators
 6. **Commit Artifacts**: Generated code is committed for review and CI
 
@@ -187,9 +187,9 @@ To add a new OpenAPI-based API:
 
 1. **Create SDK Package**: `packages/sdks/your-api-sdk/`
 2. **Configure Type Generation**:
-   - Add `type-gen/typegen.ts` to fetch the OpenAPI schema
+   - Add `code-generation/codegen.ts` to fetch the OpenAPI schema
    - Configure generation scripts for your API's structure
-3. **Run Generation**: `pnpm type-gen` to create artifacts
+3. **Run Generation**: `pnpm sdk-codegen` to create artifacts
 4. **Create MCP Server**: Import generated tools from your SDK
 5. **Build Applications**: Import generated types from your SDK
 
@@ -197,8 +197,8 @@ To add a new OpenAPI-based API:
 
 ```text
 packages/sdks/your-api-sdk/
-├── type-gen/
-│   ├── typegen.ts           # Fetch OpenAPI schema
+├── code-generation/
+│   ├── codegen.ts           # Fetch OpenAPI schema
 │   ├── mcp-toolgen.ts       # Generate MCP tools
 │   └── url-helpers.ts       # Generate canonical URLs
 ├── src/
@@ -268,8 +268,8 @@ This execution model ensures that:
 
 When behavior needs to change:
 
-1. ✅ Update generator templates in `type-gen/typegen/mcp-tools/`
-2. ✅ Run `pnpm type-gen` to regenerate
+1. ✅ Update generator templates in `code-generation/typegen/mcp-tools/`
+2. ✅ Run `pnpm sdk-codegen` to regenerate
 3. ❌ Never edit generated files manually
 4. ❌ Never add runtime workarounds for "missing" descriptors
 
@@ -294,16 +294,16 @@ transforms them from v3 to v4 via an adapter
 
 ### Adapter Rebuild Requirement
 
-The adapter package must be built (`pnpm build`) before `pnpm type-gen` picks
+The adapter package must be built (`pnpm build`) before `pnpm sdk-codegen` picks
 up changes. The SDK consumes the adapter's built output, not its source. If you
-modify the adapter and run `pnpm type-gen` without rebuilding first, the old
+modify the adapter and run `pnpm sdk-codegen` without rebuilding first, the old
 transformation logic will be used. Turbo's dependency graph handles this when
-using `pnpm make`, but manual `pnpm type-gen` invocations may miss it.
+using `pnpm make`, but manual `pnpm sdk-codegen` invocations may miss it.
 
 ### CI and Offline Mode
 
-CI type-gen requires a cached SDK schema. If the cached schema is missing, the
-pipeline throws an error directing you to run `pnpm type-gen` locally first to
+CI sdk-codegen requires a cached SDK schema. If the cached schema is missing, the
+pipeline throws an error directing you to run `pnpm sdk-codegen` locally first to
 populate the cache. This constraint exists because CI environments may not have
 network access to the upstream OpenAPI endpoint.
 
@@ -355,6 +355,6 @@ the [Castr plan](../../.agent/plans/external/castr/README.md).
 
 **The OpenAPI schema is the single source of truth. Everything else is generated.**
 
-When you see generated files marked "DO NOT EDIT", that's not a suggestion - it's the core principle. Manual edits would be overwritten on the next `pnpm type-gen` run, and would break the single-source-of-truth contract.
+When you see generated files marked "DO NOT EDIT", that's not a suggestion - it's the core principle. Manual edits would be overwritten on the next `pnpm sdk-codegen` run, and would break the single-source-of-truth contract.
 
 This discipline ensures type safety, prevents drift, and makes API changes automatic rather than manual.

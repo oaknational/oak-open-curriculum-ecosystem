@@ -26,7 +26,7 @@ fixtures were the last remaining place that broke this principle.
 
 ## Decision
 
-1. Generate fixture builders inside `@oaknational/curriculum-sdk` during `pnpm type-gen`.
+1. Generate fixture builders inside `@oaknational/curriculum-sdk` during `pnpm sdk-codegen`.
    - Zero-hit telemetry fixtures already follow this pattern; admin stream fixtures now do the same.
    - Builders live under `src/types/generated/**/stream-fixtures.ts` and export strongly typed
      factories that re-use the SDK’s Zod schemas.
@@ -47,7 +47,7 @@ fixtures were the last remaining place that broke this principle.
 
 ### Positive
 
-- Fixtures stay aligned with the OpenAPI contract automatically; `pnpm type-gen` regenerates them.
+- Fixtures stay aligned with the OpenAPI contract automatically; `pnpm sdk-codegen` regenerates them.
 - No divergence between search/admin fixtures and live response shapes.
 - Local onboarding is completely offline: `pnpm make`, `pnpm qg`, run fixtures.
 - Tests and demos can switch between success/empty/error modes without network state.
@@ -67,7 +67,7 @@ fixtures were the last remaining place that broke this principle.
 
 ## Implementation
 
-- SDK type-gen module (active): `packages/sdks/oak-curriculum-sdk/type-gen/typegen/admin/generate-admin-fixtures.ts`
+- SDK code-generation module (active): `packages/sdks/oak-curriculum-sdk/code-generation/typegen/admin/generate-admin-fixtures.ts`
 - Generated output (active): `packages/sdks/oak-curriculum-sdk/src/types/generated/admin/stream-fixtures.ts`
 - App wiring (removed): ~~`apps/oak-search-cli/app/lib/admin-fixtures.ts`,
   `app/lib/fixture-mode.ts`~~

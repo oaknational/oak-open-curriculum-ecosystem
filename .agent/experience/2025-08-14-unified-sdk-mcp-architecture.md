@@ -17,7 +17,7 @@ The MCP server was manually defining tool schemas, duplicating constants like KE
 ### The Transformation
 
 1. **Tool Name Generation at SDK Build Time**
-   - Moved MCP tool name generation from MCP runtime to SDK type-gen time
+   - Moved MCP tool name generation from MCP runtime to SDK sdk-codegen time
    - Created `generateMcpToolName()` function with special cases for duplicates
    - Sanitised reserved words (type → assetType) to avoid TypeScript conflicts
 
@@ -36,7 +36,7 @@ The MCP server was manually defining tool schemas, duplicating constants like KE
 ```
 OpenAPI Schema
     ↓
-SDK Type Generation (typegen.ts)
+SDK Type Generation (codegen.ts)
     ↓
 MCP Tool Generation (mcp-toolgen.ts)
     ↓
@@ -71,7 +71,7 @@ Runtime validation happens at the API boundary with graceful degradation. If val
 
 ## The Subjective Experience
 
-There's a profound satisfaction in seeing the entire system flow from a single source. When you run `pnpm type-gen` in the SDK, everything updates automatically - types, validators, tool definitions. The MCP just... works.
+There's a profound satisfaction in seeing the entire system flow from a single source. When you run `pnpm sdk-codegen` in the SDK, everything updates automatically - types, validators, tool definitions. The MCP just... works.
 
 The hardest part was resisting the urge to "help" by adding manual overrides or shortcuts. The discipline of maintaining the pure function architecture paid off with a system that's both type-safe and maintainable.
 

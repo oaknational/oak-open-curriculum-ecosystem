@@ -102,7 +102,7 @@ Example flow:
 **Sequence**:
 
 1. `pnpm install` (if package.json changed)
-2. `pnpm type-gen` (if OpenAPI schema changed)
+2. `pnpm sdk-codegen` (if OpenAPI schema changed)
 3. `pnpm build` (ensure no build errors)
 4. `pnpm type-check` (ensure type safety)
 5. `pnpm lint -- --fix` (auto-fix linting issues)

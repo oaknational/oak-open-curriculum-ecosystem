@@ -47,7 +47,7 @@ src/cli/
 ├── observe/                        # oaksearch observe {telemetry|summary|purge}
 │   ├── index.ts                    # Command registration
 │   └── handlers.ts                 # SDK observability calls
-└── eval/                           # oaksearch eval {benchmark|validate|typegen}
+└── eval/                           # oaksearch eval {benchmark|validate|codegen}
     └── index.ts                    # Pass-through to evaluation scripts
 ```
 
@@ -132,7 +132,7 @@ Lessons without transcripts can only appear in the two Structure retrievers (not
 2. Run quality gates:
 
    ```bash
-   pnpm type-gen
+   pnpm sdk-codegen
    pnpm build
    pnpm type-check
    pnpm lint:fix
@@ -156,7 +156,7 @@ Lessons without transcripts can only appear in the two Structure retrievers (not
 
 ## Dependencies & Tooling
 
-- **SDK**: All curriculum data comes from `@oaknational/curriculum-sdk`; types generated via `pnpm type-gen` uphold the Cardinal Rule.
+- **SDK**: All curriculum data comes from `@oaknational/curriculum-sdk`; types generated via `pnpm sdk-codegen` uphold the Cardinal Rule.
 - **Testing**: Unit tests cover transforms and query builders; integration suites (Vitest + fixtures/ES test doubles) validate mappings and ingestion behaviour.
 
 ---

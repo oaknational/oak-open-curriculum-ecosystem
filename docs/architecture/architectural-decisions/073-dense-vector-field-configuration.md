@@ -35,7 +35,7 @@ What Elasticsearch `dense_vector` field configuration should we use for E5 embed
 ### Field Configuration
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts
+// packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/es-field-overrides.ts
 
 export const ES_FIELD_OVERRIDES: FieldOverrides = {
   // Lesson dense vectors (full transcript embedding)
@@ -196,7 +196,7 @@ Initial testing with 100 Maths KS4 lessons:
 ### Field Configuration (Source)
 
 ```text
-packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
+packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/
 ├── field-definitions/curriculum.ts          # Field definitions
 └── es-field-overrides.ts                    # Dense vector ES config
 ```

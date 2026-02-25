@@ -39,12 +39,9 @@ export {
   type ToolResult,
   type ToolResultForOperationId,
   type RegisteredToolEntries,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+} from '@oaknational/sdk-codegen/mcp-tools';
 
-export {
-  SCOPES_SUPPORTED,
-  type ScopesSupported,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+export { SCOPES_SUPPORTED, type ScopesSupported } from '@oaknational/sdk-codegen/mcp-tools';
 
 export {
   createStubToolExecutionAdapter,
@@ -52,13 +49,13 @@ export {
   hasStubForTool,
   assertStubAvailable,
 } from '../mcp/stub-tool-executor.js';
-export type { StubbedToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
+export type { StubbedToolName } from '@oaknational/sdk-codegen/mcp-tools';
 export type {
   SecurityScheme,
   SecuritySchemeType,
   NoAuthScheme,
   OAuth2Scheme,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+} from '@oaknational/sdk-codegen/mcp-tools';
 
 export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
@@ -106,13 +103,13 @@ export { ontologyData } from '../mcp/ontology-data.js';
 export type { OntologyData } from '../mcp/ontology-data.js';
 
 // Property graph data (concept TYPE relationships)
-export { conceptGraph } from '@oaknational/curriculum-sdk-generation/vocab';
+export { conceptGraph } from '@oaknational/sdk-codegen/vocab';
 export type {
   ConceptGraph,
   ConceptId,
   ConceptCategory,
   ConceptEdge,
-} from '@oaknational/curriculum-sdk-generation/vocab';
+} from '@oaknational/sdk-codegen/vocab';
 
 // Search retrieval service interface (dependency inversion for search SDK)
 export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';

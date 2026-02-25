@@ -1,5 +1,5 @@
 import type { Express, RequestHandler } from 'express';
-import type { Logger, PhasedTimer } from '@oaknational/mcp-logger';
+import type { Logger, PhasedTimer } from '@oaknational/logger';
 import { registerPublicOAuthMetadataEndpoints } from '../auth-routes.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { runBootstrapPhase, runAsyncBootstrapPhase } from './bootstrap-helpers.js';

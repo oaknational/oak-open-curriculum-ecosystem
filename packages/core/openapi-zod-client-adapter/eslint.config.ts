@@ -65,7 +65,7 @@ const config = defineConfig(
             {
               name: 'zod',
               message:
-                "Import from 'zod/v4' instead. Only the type-gen adapter around openapi-zod-client may import from 'zod' directly.",
+                "Import from 'zod/v4' instead. Only the sdk-codegen adapter around openapi-zod-client may import from 'zod' directly.",
             },
           ],
         },

@@ -9,7 +9,7 @@
  * @see ADR-080 Comprehensive Curriculum Data Denormalisation Strategy
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { formatSdkError, type SdkFetchError } from '@oaknational/curriculum-sdk';
 import { isSequenceUnitsResponse } from '@oaknational/curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';

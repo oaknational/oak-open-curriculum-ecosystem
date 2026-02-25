@@ -176,7 +176,7 @@ Comprehensive research comparing official Oak Curriculum API documentation with 
 
 **Our ontology**: Maps every entity to OpenAPI schema references
 
-- Enables type-gen automation
+- Enables sdk-codegen automation
 - Provides schema-first architecture
 - Enables automatic validation
 
@@ -209,7 +209,7 @@ Comprehensive research comparing official Oak Curriculum API documentation with 
 
 **Our docs**: How to implement it
 
-- Type-gen generators planned
+- sdk-codegen generators planned
 - MCP resource exposure
 - Runtime vs compile-time split
 - TDD approach
@@ -252,9 +252,9 @@ Repository Ontology Documentation
 ### Near Term (When Ready to Implement)
 
 1. **Update ontology implementation plan** to reference official docs
-2. **Begin Sprint 0**: Refactor aggregated tools to type-gen
+2. **Begin Sprint 0**: Refactor aggregated tools to sdk-codegen
 3. **Begin Sprint 1**: Schema extractor with thread prominence
-4. **Add unit type classification** to type-gen schema extraction
+4. **Add unit type classification** to sdk-codegen schema extraction
 
 ### Future Enhancements
 
@@ -289,11 +289,11 @@ For reference, the authoritative sources:
 
 - ✅ Official definitions now referenced alongside implementation details
 - ✅ Clear distinction between API structure and user-facing navigation
-- ✅ Schema mapping enables type-gen automation
+- ✅ Schema mapping enables sdk-codegen automation
 
 ### For SDK Implementation
 
-- ✅ Type-gen can now extract unit types
+- ✅ sdk-codegen can now extract unit types
 - ✅ Content guidance categories can be validated
 - ✅ Thread relationships properly modeled
 - ✅ Official terminology preserved with SDK context added

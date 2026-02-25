@@ -24,7 +24,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { RetrievalService } from './retrieval.js';
 import type { AdminService } from './admin.js';
 import type { ObservabilityService } from './observability.js';

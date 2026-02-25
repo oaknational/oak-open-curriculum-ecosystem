@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 Milestone 0 — merge preparation in progress
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-02-25
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -11,12 +11,21 @@
 ## Purpose
 
 This roadmap is the strategic milestone sequence for semantic search work.
-Execution detail lives in active plans under `active/` and completed plans under
-`archive/completed/`.
+Execution detail lives in lifecycle lanes:
+
+- `active/` (now, in progress)
+- `current/` (next, queued)
+- `future/` (later, deferred)
+- `archive/completed/` (done, read-only)
 
 Authoritative active execution sources:
 
 1. [sdk-workspace-separation.md](active/sdk-workspace-separation.md)
+
+Current/future backlog sources:
+
+1. [current/README.md](current/README.md)
+2. [future/README.md](future/README.md)
 
 Completed plans (archived):
 
@@ -86,7 +95,7 @@ Archived plan: [search-results-quality.md](archive/completed/search-results-qual
 The branch merge remains blocked until these complete:
 
 1. ~~**3i Search results quality**~~ — ✅ COMPLETE ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
-2. **3e SDK workspace separation** (type-gen/runtime split)
+2. **3e SDK workspace separation** (sdk-codegen/runtime split)
 3. **Secrets and PII sweep** — final scan before making repo public
 
 Completed merge gates:
@@ -158,15 +167,21 @@ Goal:
 - Split generation-time and runtime ownership into separate SDK workspaces,
   with strict one-way dependency (runtime -> generation).
 
-Progress (24 Feb 2026):
+Progress (25 Feb 2026):
 
-- Phases 0–5 complete. Generation workspace exists with type-gen pipeline,
-  generated types, 10 subpath exports, and boundary rules. ~70 runtime files
-  rewired. Vocab-gen/bulk moved, search CLI rewired. DI refactoring for
-  universal tools (GeneratedToolRegistry). All Phase 5 reviewer findings
-  (F1–F10, F18) resolved. Architecture remediation N1–N6 complete.
-- Phases 6–7 remain (provenance/TSDoc/docs, CI drift check). Phase 5
-  reviewer suggestions (§13.6 of canonical plan) queued for Phase 6 start.
+- Phases 0–6 complete. Codegen workspace `packages/sdks/oak-sdk-codegen/`
+  (`@oaknational/sdk-codegen`) with sdk-codegen pipeline, generated types,
+  11 subpath exports, and boundary rules. ~70 runtime files rewired.
+  Vocab-gen/bulk moved, search CLI rewired. DI refactoring for universal
+  tools (GeneratedToolRegistry). All Phase 5 reviewer findings (F1–F10,
+  F18) resolved. Architecture remediation N1–N6 complete.
+- Phase 6 (25 Feb 2026): four renames executed — `@oaknational/sdk-codegen`
+  (was `curriculum-sdk-generation`), `@oaknational/logger` (was
+  `mcp-logger`), `@oaknational/env` (was `mcp-env`), repo internal refs
+  to `oak-open-data-ecosystem` (was `oak-mcp-ecosystem`). Plus Phase 5
+  reviewer suggestions (S1–S3), provenance banners (F11), evaluation
+  decisions (F12–F14), documentation alignment.
+- Phase 7 (CI drift check) remains. See canonical plan for detail.
 
 ### 3h Widget Stabilisation (Complete)
 
@@ -228,7 +243,7 @@ Research and planning for public alpha:
 
 ### 3b Result Pattern Unification
 
-- Plan: [mcp-result-pattern-unification.md](post-sdk/mcp-integration/mcp-result-pattern-unification.md)
+- Plan: [mcp-result-pattern-unification.md](future/06-mcp-consumer-integration/mcp-result-pattern-unification.md)
 
 ### 3c STDIO-HTTP Alignment
 
@@ -238,13 +253,18 @@ Research and planning for public alpha:
 
 ## Phase 4 Streams (Milestone 2)
 
-Primary stream hubs (post-alpha):
+Primary boundary hubs (post-alpha):
 
-- [post-sdk/search-quality/](post-sdk/search-quality/) — includes future reranking investigation (Level 3)
-- [post-sdk/bulk-data-analysis/](post-sdk/bulk-data-analysis/)
-- [post-sdk/sdk-api/](post-sdk/sdk-api/)
-- [post-sdk/operations/](post-sdk/operations/)
-- [post-sdk/extensions/](post-sdk/extensions/)
+- [future/04-retrieval-quality-engine/](future/04-retrieval-quality-engine/) — includes future reranking investigation (Level 3)
+- [future/03-vocabulary-and-semantic-assets/](future/03-vocabulary-and-semantic-assets/)
+- [future/05-query-policy-and-sdk-contracts/](future/05-query-policy-and-sdk-contracts/)
+- [future/07-runtime-governance-and-operations/](future/07-runtime-governance-and-operations/)
+- [future/08-experience-surfaces-and-extensions/](future/08-experience-surfaces-and-extensions/)
+
+Standalone backlog items across streams:
+
+- [move-search-domain-knowledge-to-codegen-time.md](future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md)
+- [bulk-schema-driven-code-generation.md](future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md)
 
 ### Reranking (Future — Level 3)
 
@@ -273,14 +293,14 @@ Work items:
 
 - **4a Schema-driven path-to-content-type mapping**: generate a
   static path-to-content-type allowlist from OpenAPI path
-  definitions at `pnpm type-gen` time, replacing the current
+  definitions at `pnpm sdk-codegen` time, replacing the current
   hand-written `isSingleEntityEndpoint` regex heuristic.
 - **4b Schema conformance tests**: add captured API response
-  fixtures as part of type-gen quality gates to prevent schema
+  fixtures as part of sdk-codegen quality gates to prevent schema
   drift.
 
 **Acceptance criteria**: path-to-content-type mapping is generated
-at `pnpm type-gen` time; no hand-written path heuristics remain
+at `pnpm sdk-codegen` time; no hand-written path heuristics remain
 in response augmentation.
 
 ---
@@ -291,15 +311,16 @@ Run from repo root, in order:
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root
 pnpm markdownlint:root
+pnpm subagents:check
 pnpm lint:fix
 pnpm test
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 

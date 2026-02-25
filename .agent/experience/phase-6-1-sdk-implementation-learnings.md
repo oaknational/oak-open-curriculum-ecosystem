@@ -32,7 +32,7 @@ This two-stage pipeline is elegant because:
 
 **Frustration Phase**: Trying to make my custom implementation work, fighting with TypeScript types, wondering why the reference looked so different.
 
-**Enlightenment Phase**: Reading the reference's `typegen-core.ts` closely and realising it had TWO distinct stages, not one.
+**Enlightenment Phase**: Reading the reference's `codegen-core.ts` closely and realising it had TWO distinct stages, not one.
 
 **Relief Phase**: Deleting all my custom code and copying the reference wholesale. The tests passed immediately.
 

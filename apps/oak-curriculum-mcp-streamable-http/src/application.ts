@@ -4,7 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 

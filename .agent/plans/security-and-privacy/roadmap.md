@@ -164,7 +164,7 @@ have been operationalised.
 Run from repo root, one at a time:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint:fix

@@ -15,7 +15,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk-generation/widget-constants';
+import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**

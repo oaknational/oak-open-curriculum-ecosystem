@@ -29,7 +29,7 @@ Before assessing release readiness, you MUST also read and internalise these dom
 
 ### Step 1: Gather Gate Status Evidence
 
-1. Check quality gate results (type-gen, build, type-check, lint, format, test, E2E, UI, smoke)
+1. Check quality gate results (sdk-codegen, build, type-check, lint, format, test, E2E, UI, smoke)
 2. Record pass/fail status for each gate with evidence
 3. Note any gates that were not run and why
 

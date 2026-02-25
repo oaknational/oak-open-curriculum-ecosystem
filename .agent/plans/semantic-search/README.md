@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-02-25
 
 ---
 
@@ -79,26 +79,31 @@ Search dispatch type safety (3g) is complete and archived:
 | Folder | Purpose | Status |
 |--------|---------|--------|
 | `active/` | Merge-prep plans (`3e`) | 🔄 Active |
+| `current/` | Next-up queued plans | 📋 Ready |
+| `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |
-| `post-sdk/` | Streams of post-extraction work | 📋 Ready |
 | `archive/` | Historical work | ✅ Reference only |
 
 ---
 
-## Post-SDK Streams
+## Future Boundaries
 
-After SDK extraction, work is organized into **streams** — coherent domains with their own intent and impact.
+Future work is organised by **domain boundaries** in `future/`:
 
-| Stream | Intent |
+| Boundary | Focus |
 |--------|--------|
-| [mcp-integration/](post-sdk/mcp-integration/) | Wire hybrid search into MCP tools (after SDK validation) |
-| [search-quality/](post-sdk/search-quality/) | Improve search result relevance (Levels 2-4) |
-| [bulk-data-analysis/](post-sdk/bulk-data-analysis/) | Mine vocabulary from curriculum data |
-| [sdk-api/](post-sdk/sdk-api/) | Understand and stabilise SDK API |
-| [operations/](post-sdk/operations/) | Run the system safely |
-| [extensions/](post-sdk/extensions/) | Add capabilities beyond core search |
+| [01-strategic-lifecycle-backlog](future/01-strategic-lifecycle-backlog/) | Backlog lifecycle and promotion discipline |
+| [02-schema-authority-and-codegen](future/02-schema-authority-and-codegen/) | Build-time schema and codegen authority |
+| [03-vocabulary-and-semantic-assets](future/03-vocabulary-and-semantic-assets/) | Semantic artefact mining and classification |
+| [04-retrieval-quality-engine](future/04-retrieval-quality-engine/) | Retrieval quality evolution (Levels 2-4) |
+| [05-query-policy-and-sdk-contracts](future/05-query-policy-and-sdk-contracts/) | Query decision policy and API/filter contracts |
+| [06-mcp-consumer-integration](future/06-mcp-consumer-integration/) | MCP consumer integration and result contracts |
+| [07-runtime-governance-and-operations](future/07-runtime-governance-and-operations/) | Runtime budgets, rollouts, ownership, safety |
+| [08-experience-surfaces-and-extensions](future/08-experience-surfaces-and-extensions/) | Experience surfaces and extension capabilities |
+| [09-evaluation-and-evidence](future/09-evaluation-and-evidence/) | Ground-truth and evidence expansion planning |
 
-Each stream has a README explaining domain, intent, desired impact, and any internal sequencing.
+Transferred files in `future/` are currently verbatim copies with link targets normalised
+to the boundary structure.
 
 ---
 
@@ -113,11 +118,14 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Search Results Quality](archive/completed/search-results-quality.md) | ✅ Complete — ADR-120 |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
-| [Result Pattern Unification](post-sdk/mcp-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
+| [Result Pattern Unification](future/06-mcp-consumer-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [MCP Extensions Future Work](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | 📋 Post-merge SDK/MCP enhancements governance |
-| [Widget Renderer Reactivation](post-sdk/extensions/widget-renderer-reactivation.md) | ⏸️ Post-merge — wire renderers back after MCP extensions + Apps SDK work |
+| [Widget Renderer Reactivation](future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | ⏸️ Post-merge — wire renderers back after MCP extensions + Apps SDK work |
+| [Future Boundary Hub](future/README.md) | Canonical LATER backlog structure |
+| [Post-SDK Transfer Manifest](future/TRANSFER-MANIFEST.md) | Source-to-target parity verification |
+| [Information Retention Check](future/INFORMATION-RETENTION-CHECK.md) | Pre-removal structural retention audit |
 | [Completed Plans](../completed-plans.md) | Index of all archived plans |
 
 ---

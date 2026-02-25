@@ -1,6 +1,6 @@
 /**
  * Creates synonyms set and search indexes from SDK.
- * Mappings are generated at SDK type-gen time and imported here.
+ * Mappings are generated at SDK sdk-codegen time and imported here.
  */
 import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import { CreateIndexErrorSchema, ClusterInfoSchema, CatIndicesSchema } from './schemas';

@@ -64,7 +64,7 @@ graph TD
 The SDK generation process extracts ALL metadata at build time:
 
 ```typescript
-// In typegen-core.ts (build time)
+// In codegen-core.ts (build time)
 function extractOperations(schema: OpenAPI3) {
   const operations = [];
   for (const path in schema.paths) {

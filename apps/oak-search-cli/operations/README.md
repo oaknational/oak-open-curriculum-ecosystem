@@ -30,7 +30,7 @@ operations/
 - **Complexity**: Max 8 cyclomatic complexity
 - **Function length**: Max 50 lines
 - **File length**: Max 250 lines
-- **Logging**: MUST use `@oaknational/mcp-logger`, NO `console.log` (except in utilities/)
+- **Logging**: MUST use `@oaknational/logger`, NO `console.log` (except in utilities/)
 - **Error handling**: Proper error handling with structured logging
 - **Testing**: Unit tests for complex logic
 
@@ -67,7 +67,7 @@ pnpm sandbox:ingest              # Ingest fixture data for testing
 
 1. Choose the appropriate subdirectory based on purpose
 2. Follow TDD approach where appropriate
-3. Use the proper logger from `@oaknational/mcp-logger`
+3. Use the proper logger from `@oaknational/logger`
 4. Add comprehensive JSDoc comments
 5. Update the subdirectory README
 6. Add npm script to `package.json` if it's a user-facing command

@@ -5,7 +5,7 @@
  * Verifies error containment and logger injection (DI).
  */
 import { describe, it, expect } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { createQuerySerializer, defaultBodySerializer } from 'openapi-fetch';
 import { createResponseAugmentationMiddleware } from './response-augmentation.js';
 

@@ -122,10 +122,10 @@ importers:
       '@oaknational/curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
-      '@oaknational/mcp-env':
+      '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
-      '@oaknational/mcp-logger':
+      '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
       '@oaknational/oak-search-sdk':
@@ -174,10 +174,10 @@ importers:
       '@oaknational/curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
-      '@oaknational/mcp-env':
+      '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
-      '@oaknational/mcp-logger':
+      '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
       '@oaknational/oak-search-sdk':
@@ -262,13 +262,10 @@ importers:
       '@oaknational/curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
-      '@oaknational/curriculum-sdk-generation':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-curriculum-sdk-generation
-      '@oaknational/mcp-env':
+      '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
-      '@oaknational/mcp-logger':
+      '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
       '@oaknational/oak-search-sdk':
@@ -277,6 +274,9 @@ importers:
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../packages/core/result
+      '@oaknational/sdk-codegen':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-sdk-codegen
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
@@ -519,15 +519,15 @@ importers:
 
   packages/sdks/oak-curriculum-sdk:
     dependencies:
-      '@oaknational/curriculum-sdk-generation':
-        specifier: workspace:*
-        version: link:../oak-curriculum-sdk-generation
-      '@oaknational/mcp-logger':
+      '@oaknational/logger':
         specifier: workspace:*
         version: link:../../libs/logger
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../core/result
+      '@oaknational/sdk-codegen':
+        specifier: workspace:*
+        version: link:../oak-sdk-codegen
       '@oaknational/type-helpers':
         specifier: workspace:*
         version: link:../../core/type-helpers
@@ -572,7 +572,7 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@24.10.13)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/sdks/oak-curriculum-sdk-generation:
+  packages/sdks/oak-sdk-codegen:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.27.0
@@ -623,7 +623,7 @@ importers:
 
   packages/sdks/oak-search-sdk:
     dependencies:
-      '@oaknational/mcp-logger':
+      '@oaknational/logger':
         specifier: workspace:*
         version: link:../../libs/logger
       '@oaknational/result':

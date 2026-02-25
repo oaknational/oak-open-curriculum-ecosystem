@@ -7,7 +7,7 @@ import {
   getToolFromToolName,
   isToolName,
   type ToolName,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+} from '@oaknational/sdk-codegen/mcp-tools';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { McpParameterError, McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 

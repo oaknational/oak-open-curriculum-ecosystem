@@ -291,7 +291,7 @@ export type ToolInputJsonSchema = Readonly<JSONSchema7Object>;
 1. Create `packages/sdks/oak-curriculum-sdk/src/types/json-schema.ts`
 2. Define comprehensive, readonly JSON Schema types once
 3. Import from this single location in:
-   - Generator code (`type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`)
+   - Generator code (`code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`)
    - Runtime code (`src/mcp/zod-input-schema.ts`)
    - Generated contract (`tool-descriptor.contract.ts` template)
 
@@ -709,7 +709,7 @@ Implementation:
 **Current Usage**:
 
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts`
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/zod-input-schema.ts`
 
 ---

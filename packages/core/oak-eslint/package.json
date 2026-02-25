@@ -49,13 +49,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
     "directory": "packages/core/oak-eslint"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/core/oak-eslint#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/core/oak-eslint#readme",
   "keywords": [
     "eslint",
     "eslint-plugin",

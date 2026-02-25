@@ -11,7 +11,7 @@ import {
   isKeyStage,
   type Subject,
   isSubject,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 import type { BrowseArgs } from './types.js';
 
 const BrowseObjectSchema = z

@@ -71,8 +71,8 @@ Confirmed current-state findings:
 2. Broken high-value source links:
    - `.agent/plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md` contained five 404 URLs in the ext-apps API section.
 3. OpenAI-coupled metadata emitted in generator:
-   - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts:142`
-   - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts:153`
+   - `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/parts/emit-index.ts:142`
+   - `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/parts/emit-index.ts:153`
 4. Tool descriptor contract currently defines OpenAI-specific `_meta` keys:
    - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts:134`
 5. Widget layer partially simplified (updated 2026-02-23):
@@ -86,8 +86,8 @@ Confirmed current-state findings:
    - `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts:48`
    - Code assumes `securitySchemes` exists while docs describe safe-default behaviour when missing.
 7. Widget URI generation parity drift:
-   - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/cross-domain-constants.ts:3`
-   - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/cross-domain-constants.ts:17`
+   - `packages/sdks/oak-curriculum-sdk/code-generation/typegen/cross-domain-constants.ts:3`
+   - `packages/sdks/oak-curriculum-sdk/code-generation/typegen/cross-domain-constants.ts:17`
    - Current local behaviour emits `local` hash token instead of per-run hash parity.
 
 ## Plan Split (Agreed)
@@ -239,19 +239,19 @@ Policy:
 
 | ADR | Status | Binding Rule | Evidence | Gap | Planned Action | Gate |
 | --- | --- | --- | --- | --- | --- | --- |
-| ADR-026 | Accepted | Type generation remains OpenAPI-driven | `docs/architecture/architectural-decisions/026-openapi-type-generation-strategy.md` | None confirmed | Keep generator-first changes only | Gate 2 |
+| ADR-026 | Accepted | Code generation remains OpenAPI-driven | `docs/architecture/architectural-decisions/026-openapi-code-generation-strategy.md` | None confirmed | Keep generator-first changes only | Gate 2 |
 | ADR-029 | Accepted | No manual API data in MCP | `docs/architecture/architectural-decisions/029-no-manual-api-data.md` | Risk if runtime metadata forks | Keep metadata evolution in generator templates | Gate 2 |
 | ADR-030 | Accepted | SDK is single source of truth | `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md` | None confirmed | Ensure refactor backlog references SDK source points | Gate 2 |
-| ADR-035 | Accepted | Unified SDK-MCP type generation | `docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md` | None confirmed | Preserve unified generation boundary | Gate 2 |
-| ADR-036 | Accepted | Data-driven generation pattern | `docs/architecture/architectural-decisions/036-data-driven-type-generation.md` | None confirmed | Keep contract changes data-driven | Gate 2 |
+| ADR-035 | Accepted | Unified SDK-MCP code generation | `docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md` | None confirmed | Preserve unified generation boundary | Gate 2 |
+| ADR-036 | Accepted | Data-driven generation pattern | `docs/architecture/architectural-decisions/036-data-driven-code-generation.md` | None confirmed | Keep contract changes data-driven | Gate 2 |
 | ADR-038 | Accepted | Compile-time embedded validation | `docs/architecture/architectural-decisions/038-compilation-time-revolution.md` | None confirmed | Avoid runtime contract inference layers | Gate 2 |
-| ADR-043 | Accepted | CI/build determinism for generated artefacts | `docs/architecture/architectural-decisions/043-typegen-in-build-and-ci.md` | Potential parity drift in widget URI handling | Add explicit parity check backlog item | Gate 6 |
+| ADR-043 | Accepted | CI/build determinism for generated artefacts | `docs/architecture/architectural-decisions/043-codegen-in-build-and-ci.md` | Potential parity drift in widget URI handling | Add explicit parity check backlog item | Gate 6 |
 | ADR-046 | Accepted | Single `/mcp` transport with universal tools | `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md` | None confirmed | Preserve single-surface assumption | Gate 2 |
-| ADR-047 | Accepted | Type-gen canonical URL generation | `docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md` | None confirmed | Reuse generator-time pattern for URI parity checks | Gate 5 |
+| ADR-047 | Accepted | Code-gen canonical URL generation | `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md` | None confirmed | Reuse generator-time pattern for URI parity checks | Gate 5 |
 | ADR-058 | Accepted | Model-visible context grounding design | `docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md` | Widget simplification can remove model hints if unmanaged | Keep model-facing hints outside widget payload | Gate 3 |
 | ADR-060 | Accepted | Agent support metadata single-source pattern | `docs/architecture/architectural-decisions/060-agent-support-metadata-system.md` | None confirmed | Reuse single-source approach for specialist metadata | Gate 4 |
 | ADR-061 | Superseded | Widget CTA system architecture | `docs/architecture/architectural-decisions/061-widget-cta-system.md` | CTA removed; context grounding via MCP resources and tools | Context only; do not reintroduce widget CTA pattern | Gate 5 |
-| ADR-071 | Accepted | Type-gen widget URI cache-busting simplification | `docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md` | Current local hash behaviour diverges from ADR wording | Add explicit local/prod parity decision in Domain D | Gate 5 |
+| ADR-071 | Accepted | Code-gen widget URI cache-busting simplification | `docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md` | Current local hash behaviour diverges from ADR wording | Add explicit local/prod parity decision in Domain D | Gate 5 |
 | ADR-107 | Accepted | Deterministic SDK, NL in MCP layer | `docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md` | None confirmed | Keep NL behaviour out of SDK core refactors | Gate 5 |
 | ADR-112 | Accepted | Per-request MCP transport | `docs/architecture/architectural-decisions/112-per-request-mcp-transport.md` | None confirmed | Preserve stateless per-request assumptions | Gate 2 |
 | ADR-113 | Accepted | Auth for all MCP methods except defined public routes | `docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md` | Tool auth checker defensive gap | Add Domain C auth safety fix | Gate 3 |
@@ -343,7 +343,7 @@ rg -n "securitySchemes" apps/oak-curriculum-mcp-streamable-http/src/tool-auth-ch
 
 rg -n "WIDGET_URI|BASE_WIDGET_URI|openai/outputTemplate" \
   packages/sdks/oak-curriculum-sdk/src \
-  packages/sdks/oak-curriculum-sdk/type-gen \
+  packages/sdks/oak-curriculum-sdk/code-generation \
   apps/oak-curriculum-mcp-streamable-http/src
 ```
 

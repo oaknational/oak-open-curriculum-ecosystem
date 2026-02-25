@@ -7,7 +7,7 @@ import {
   createFakeExpressRequest,
   createFakeResponse,
 } from './test-helpers/fakes.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 /**
  * Integration tests for conditional Clerk middleware.

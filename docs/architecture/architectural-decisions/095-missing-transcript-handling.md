@@ -115,7 +115,7 @@ lesson_content: lesson.transcript_sentences ?? structureSummary;
 2. Make `lesson_content` and `lesson_content_semantic` optional in search schema
 3. Add `has_transcript` field per [ADR-094](094-has-transcript-field.md)
 4. Update `bulk-lesson-transformer.ts` to conditionally include content fields
-5. Run `pnpm type-gen` to regenerate types
+5. Run `pnpm sdk-codegen` to regenerate types
 6. Re-ingest and verify MRR
 
 ## References

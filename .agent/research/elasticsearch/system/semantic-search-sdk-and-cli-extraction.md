@@ -32,7 +32,7 @@ This is a system-level simplification (fewer deployed surfaces, clearer boundari
 
 These are the foundation constraints that shape the decision:
 
-- **Schema-first** (Cardinal Rule): static types/guards/validators flow from the Open Curriculum OpenAPI schema and are generated at type-gen time (see `.agent/directives/rules.md` and `.agent/directives/schema-first-execution.md`).
+- **Schema-first** (Cardinal Rule): static types/guards/validators flow from the Open Curriculum OpenAPI schema and are generated at sdk-codegen time (see `.agent/directives/rules.md` and `.agent/directives/schema-first-execution.md`).
 - **Type discipline**: external inputs are `unknown`, validated immediately, and then **never widened** again; avoid `as`, `any`, `!`, broad `Record`, `Object.*`, `Reflect.*` patterns (see `.agent/directives/rules.md`).
 - **TDD**: behaviour-first tests, prefer pure functions; integration points accept simple injected fakes (see `.agent/directives/testing-strategy.md`).
 - **No compatibility layers**: refactor by replacing, not “supporting both”.

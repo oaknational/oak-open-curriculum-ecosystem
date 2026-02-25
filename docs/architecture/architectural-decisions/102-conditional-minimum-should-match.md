@@ -92,5 +92,5 @@ The following issues remain and are deferred to **domain term boosting** (docume
 ## References
 
 - [Elasticsearch minimum_should_match documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html)
-- [modern-es-features.md](../../.agent/plans/semantic-search/post-sdk/search-quality/modern-es-features.md) — Level 3 search quality plan
+- [modern-es-features.md](../../../.agent/plans/semantic-search/post-sdk/search-quality/modern-es-features.md) — Level 3 search quality plan
 - [ADR-099: Transcript-Aware RRF Normalisation](099-transcript-aware-rrf-normalisation.md) — Related RRF architecture

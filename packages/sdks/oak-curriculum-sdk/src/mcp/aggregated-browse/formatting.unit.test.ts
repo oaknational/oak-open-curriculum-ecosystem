@@ -7,7 +7,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { buildBrowseSummary } from './formatting.js';
-import type { SearchFacets, SequenceFacet } from '@oaknational/curriculum-sdk-generation/search';
+import type { SearchFacets, SequenceFacet } from '@oaknational/sdk-codegen/search';
 
 /**
  * Creates a minimal valid SequenceFacet for testing.

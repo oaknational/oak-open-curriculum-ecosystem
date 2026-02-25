@@ -5,7 +5,7 @@
  * _meta response generation per ADR-054.
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type {
   UniversalToolName,

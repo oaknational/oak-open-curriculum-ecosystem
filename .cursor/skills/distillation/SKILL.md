@@ -49,18 +49,27 @@ For each entry:
 - **Contradiction**: Investigate. The more recent finding
   usually wins, but verify before overwriting.
 
-### 3. Prune
+### 3. Extract and Prune
 
-Remove from `distilled.md` anything that is now captured in
-permanent repo documentation:
+The primary mechanism for keeping `distilled.md` within size
+constraints is **extracting established concepts to permanent
+documentation** (ADRs, `/docs/`, READMEs), then removing the
+entry. Permanent docs are discoverable without specialist
+knowledge; `distilled.md` is a specialist refinement flow and
+should hold only what has NOT yet matured into settled practice.
+
+For each entry, ask: has this pattern become established enough
+to belong in a permanent doc? If so, create the permanent doc
+first, then remove the distilled entry. Common destinations:
 
 - Rules codified in `.agent/directives/rules.md`
 - Patterns documented in ADRs
 - Tooling documented in `docs/development/build-system.md`
 - Domain knowledge documented in architecture docs
+- Workspace-specific gotchas in workspace READMEs
 
-The distilled file should contain only what is NOT already
-in permanent documentation.
+Also remove entries that are already captured in existing
+permanent documentation — no duplication across the two tiers.
 
 ### 4. Archive
 

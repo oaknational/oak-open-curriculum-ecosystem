@@ -12,7 +12,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { readAllBulkFiles } from '@oaknational/curriculum-sdk-generation/bulk';
+import { readAllBulkFiles } from '@oaknational/sdk-codegen/bulk';
 import { typeSafeEntries } from '@oaknational/curriculum-sdk';
 
 const __filename = fileURLToPath(import.meta.url);

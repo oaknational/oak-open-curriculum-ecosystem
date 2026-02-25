@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/mcp-env';
+import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/env';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 

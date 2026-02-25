@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';

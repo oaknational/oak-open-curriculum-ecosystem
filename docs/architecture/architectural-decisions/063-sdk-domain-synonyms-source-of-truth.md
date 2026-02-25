@@ -216,7 +216,7 @@ export const mathsSynonyms = {
 Deploy and verify:
 
 ```bash
-pnpm type-gen && pnpm build
+pnpm sdk-codegen && pnpm build
 cd apps/oak-search-cli
 pnpm es:setup   # Deploys new synonyms to ES
 pnpm vitest run -c vitest.smoke.config.ts synonym-coverage

@@ -7,7 +7,7 @@
  * to tools/list requests, the SDK internally converts Zod schemas to JSON Schema. However,
  * Zod doesn't support an `examples` property, so any examples are lost during conversion.
  *
- * We already generate complete JSON Schema with examples at type-gen time (stored in
+ * We already generate complete JSON Schema with examples at sdk-codegen time (stored in
  * tool.inputSchema). By overriding the tools/list handler, we return this pre-generated
  * JSON Schema directly, preserving the examples for AI agents.
  *

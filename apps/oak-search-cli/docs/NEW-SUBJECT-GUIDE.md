@@ -185,7 +185,7 @@ export { scienceSynonyms } from './science.js';
 
 ```bash
 # From repo root
-pnpm type-gen && pnpm build
+pnpm sdk-codegen && pnpm build
 
 # Deploy to ES
 cd apps/oak-search-cli

@@ -1,7 +1,7 @@
 import type { Express, RequestHandler } from 'express';
 import { clerkMiddleware } from '@clerk/express';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';
 

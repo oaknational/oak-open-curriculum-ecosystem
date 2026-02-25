@@ -6,7 +6,7 @@
  *
  * **Testing Procedure** (for each variant):
  * 1. Update ES_FILTER_CONFIG and ES_ANALYZER_CONFIG in es-analyzer-config.ts
- * 2. Run: pnpm type-gen && pnpm build
+ * 2. Run: pnpm sdk-codegen && pnpm build
  * 3. Run: pnpm -C apps/oak-search-cli es:setup reset
  * 4. Run: pnpm -C apps/oak-search-cli es:ingest-live
  * 5. Run: pnpm -C apps/oak-search-cli vitest run four-retriever-ablation

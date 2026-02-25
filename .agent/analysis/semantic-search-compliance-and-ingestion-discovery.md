@@ -10,7 +10,7 @@ Discovery-only review against rules/testing/schema-first for semantic search. No
 3. **Tests prove behaviour, not implementation**: Completion-context regression tests exercise behaviour (context sets and ES/Zod alignment) rather than internals; no mock-heavy or implementation-detail assertions observed in sampled tests.
 4. **Tests prove something useful**: The same completion-context tests assert alignment and guard against the original `sequence` context bug; they provide meaningful coverage. No evidence of “tests of tests” seen in the sampled area; full-suite audit not performed.
 5. **Other mismatch / upload blockers**:
-   - **Generator vs generated drift**: `generate-search-index.ts` still emits the old completion suggest export set (no per-index completion schemas, no inline lint-disables), while the generated file contains new per-index contexts plus deprecated exports. Running `pnpm type-gen` today would revert to the generator’s older shape, dropping the new per-index completion exports and reintroducing lint failures. The fixes must be applied in the generator templates (schema-first), not by editing generated output.
+   - **Generator vs generated drift**: `generate-search-index.ts` still emits the old completion suggest export set (no per-index completion schemas, no inline lint-disables), while the generated file contains new per-index contexts plus deprecated exports. Running `pnpm sdk-codegen` today would revert to the generator’s older shape, dropping the new per-index completion exports and reintroducing lint failures. The fixes must be applied in the generator templates (schema-first), not by editing generated output.
    - **Deprecated compatibility surface**: Deprecated exports in both barrels keep the lint failure active; eslint-disables are impermissible and must be removed once the generator is corrected. This blocks quality gates and therefore ingestion/reset automation.
    - **Kibana state verified**: See "Kibana Exploration Results" section below. 142 docs indexed in `oak_unit_rollup` (105) and `oak_units` (37); `oak_lessons` empty (mapping exception). Synonym set `oak-syns` has 68 rules.
 6. **TSDoc with examples**: Generated barrels (`src/types/generated/search/index.ts`, `src/types/index.ts`) contain only headers and no TSDoc/example blocks. Generator templates likewise emit no TSDoc, so coverage is not comprehensive.
@@ -25,7 +25,7 @@ Discovery-only review against rules/testing/schema-first for semantic search. No
 
 Generator still emits legacy-only exports (no per-index completion contexts):
 
-```1:67:packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-index.ts
+```1:67:packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-index.ts
 export {
   SearchCompletionSuggestPayloadSchema,
   SearchLessonsIndexDocSchema,
@@ -92,7 +92,7 @@ export type { SearchCompletionSuggestPayload } from './generated/search/index';
 
 Docs export generator also retains deprecated surface:
 
-```21:56:packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/index-doc-exports.ts
+```21:56:packages/sdks/oak-sdk-codegen/code-generation/typegen/search/index-doc-exports.ts
 export {
   SearchLessonsCompletionContextsSchema,
   SearchUnitsCompletionContextsSchema,
@@ -121,7 +121,7 @@ export {
 
 Behaviour-focused regression tests (example):
 
-```1:104:packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/completion-context-alignment.unit.test.ts
+```1:104:packages/sdks/oak-sdk-codegen/code-generation/typegen/search/completion-context-alignment.unit.test.ts
 describe('Completion Context Alignment: ES Overrides consume source of truth', () => {
   it('LESSONS_FIELD_OVERRIDES title_suggest contexts match LESSONS_COMPLETION_CONTEXTS', () => {
     const esContexts = extractEsCompletionContexts(LESSONS_FIELD_OVERRIDES);

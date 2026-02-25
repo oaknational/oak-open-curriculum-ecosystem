@@ -3,7 +3,7 @@
  * Tests progress logging and error handling during ES bulk uploads.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from './bulk-operation-types';
 import {
   dispatchBulk,

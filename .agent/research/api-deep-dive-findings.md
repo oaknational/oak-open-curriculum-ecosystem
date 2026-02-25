@@ -239,7 +239,7 @@ curl https://open-api.thenational.academy/api/v0 > api-schema-original.json
 **Step 2: Regenerate Zod schemas from OpenAPI**
 
 ```bash
-pnpm type-gen  # Runs our custom zodgen-core.ts
+pnpm sdk-codegen  # Runs our custom zodgen-core.ts
 ```
 
 **Result**: We recreate the SAME Zod schemas that already exist in the API codebase!
@@ -435,8 +435,8 @@ const doc = generator.generateDocument({
 **For us**:
 
 - ✅ We can consume 3.0.3 today (works fine)
-- ✅ Our type-gen handles 3.0.3 correctly
-- ✅ If API upgrades to 3.1.x, our type-gen can adapt (minor changes needed)
+- ✅ Our sdk-codegen handles 3.0.3 correctly
+- ✅ If API upgrades to 3.1.x, our sdk-codegen can adapt (minor changes needed)
 
 ---
 

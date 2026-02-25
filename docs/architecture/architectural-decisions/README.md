@@ -41,7 +41,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-023: Moria/Histoi/Psycha Architecture](../../archive/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) ← **Archived** (Greek ecosystem deprecated)
 - [ADR-024: Dependency Injection Pattern](024-dependency-injection-pattern.md)
 - [ADR-025: Erasable Syntax Only](025-erasable-syntax-only.md)
-- [ADR-026: OpenAPI Type Generation Strategy](026-openapi-type-generation-strategy.md)
+- [ADR-026: OpenAPI Code Generation Strategy](026-openapi-code-generation-strategy.md)
 - [ADR-027: Runtime Isolation Strategy (Updated: Node.js-only SDK)](027-runtime-isolation-strategy.md)
 - [ADR-028: Zod Validation Deferral](028-zod-validation-deferral.md)
 - [ADR-029: No Manual API Data Structures in MCP](029-no-manual-api-data.md)
@@ -50,18 +50,18 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-032: External Boundary Validation](032-external-boundary-validation.md)
 - [ADR-033: Centralised Log Level Configuration](033-centralised-log-level-configuration.md)
 - [ADR-034: System Boundaries and Type Assertions](034-system-boundaries-and-type-assertions.md)
-- [ADR-035: Unified SDK-MCP Type Generation](035-unified-sdk-mcp-type-generation.md)
-- [ADR-036: Data-Driven Type Generation](036-data-driven-type-generation.md)
+- [ADR-035: Unified SDK-MCP Code Generation](035-unified-sdk-mcp-code-generation.md)
+- [ADR-036: Data-Driven Code Generation](036-data-driven-code-generation.md)
 - [ADR-037: Embedded Tool Information](037-embedded-tool-information.md)
 - [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
 - [ADR-040: Neutral Architecture and Identity Allowlist](040-neutral-architecture-and-identity-allowlist.md)
 - [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
 - [ADR-042: Runtime Adapters Folder](042-runtime-adapters-folder.md)
-- [ADR-043: Typegen in Build and CI](043-typegen-in-build-and-ci.md)
+- [ADR-043: Codegen in Build and CI](043-codegen-in-build-and-ci.md)
 - [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
 - [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md)
-- [ADR-047: Canonical URL Generation at Type-Gen Time](047-canonical-url-generation-at-typegen-time.md)
+- [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md)
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
 - [ADR-049: SDK-Generated Deterministic Fixtures](049-sdk-generated-fixtures.md)
 - [ADR-050: MCP Tool Layering DAG](050-mcp-tool-layering-dag.md)
@@ -142,7 +142,7 @@ For understanding our API integration approach:
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
-- **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x type-gen/runtime)
+- **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
 
 For understanding authentication, authorization, and observability:
 

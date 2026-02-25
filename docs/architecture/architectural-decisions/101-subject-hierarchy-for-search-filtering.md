@@ -204,23 +204,23 @@ See: [ADR-105](./105-sdk-generated-search-constants.md) for SDK generator patter
 
 ### Phase 1: SDK Subject Hierarchy Generator
 
-| File                                                                                     | Change                                         |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-subject-hierarchy.ts` | NEW: Generator for subject hierarchy constants |
-| `packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts`       | NEW: Generated output                          |
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen.ts`                                   | Wire generator into type-gen                   |
-| `packages/sdks/oak-curriculum-sdk/src/index.ts`                                          | Export subject hierarchy from public API       |
+| File                                                                                            | Change                                         |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/generate-subject-hierarchy.ts` | NEW: Generator for subject hierarchy constants |
+| `packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts`              | NEW: Generated output                          |
+| `packages/sdks/oak-curriculum-sdk/code-generation/codegen.ts`                                   | Wire generator into code-generation            |
+| `packages/sdks/oak-curriculum-sdk/src/index.ts`                                                 | Export subject hierarchy from public API       |
 
 ### Phase 2: Correct Indexing
 
-| File                                                                                       | Change                                                      |
-| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts` | `subject_slug` uses `ALL_SUBJECT_TUPLE` (21 subjects)       |
-| `apps/oak-search-cli/src/lib/indexing/lesson-document-core.ts`                             | Accept `subjectSlug` and `subjectParent` as distinct params |
-| `apps/oak-search-cli/src/lib/indexing/unit-document-core.ts`                               | Accept `subjectSlug` and `subjectParent` as distinct params |
-| `apps/oak-search-cli/src/adapters/bulk-lesson-transformer.ts`                              | Preserve original subject, derive parent via SDK lookup     |
-| `apps/oak-search-cli/src/adapters/bulk-unit-transformer.ts`                                | Accept `subjectParent` from caller                          |
-| `apps/oak-search-cli/src/adapters/bulk-data-adapter.ts`                                    | Compute `subjectParent` using `SUBJECT_TO_PARENT`           |
+| File                                                                                              | Change                                                      |
+| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/field-definitions/curriculum.ts` | `subject_slug` uses `ALL_SUBJECT_TUPLE` (21 subjects)       |
+| `apps/oak-search-cli/src/lib/indexing/lesson-document-core.ts`                                    | Accept `subjectSlug` and `subjectParent` as distinct params |
+| `apps/oak-search-cli/src/lib/indexing/unit-document-core.ts`                                      | Accept `subjectSlug` and `subjectParent` as distinct params |
+| `apps/oak-search-cli/src/adapters/bulk-lesson-transformer.ts`                                     | Preserve original subject, derive parent via SDK lookup     |
+| `apps/oak-search-cli/src/adapters/bulk-unit-transformer.ts`                                       | Accept `subjectParent` from caller                          |
+| `apps/oak-search-cli/src/adapters/bulk-data-adapter.ts`                                           | Compute `subjectParent` using `SUBJECT_TO_PARENT`           |
 
 ### Phase 3: Smart Query Filtering
 

@@ -1,6 +1,6 @@
 # Logging Guide for SDK Consumers
 
-This guide helps you integrate the `@oaknational/mcp-logger` package with the Oak Curriculum SDK to add structured logging, request tracing, and observability to your applications.
+This guide helps you integrate the `@oaknational/logger` package with the Oak Curriculum SDK to add structured logging, request tracing, and observability to your applications.
 
 ## Why Logging Matters
 
@@ -11,7 +11,7 @@ Effective logging is crucial for:
 - **Request tracing**: Follow requests through your application stack
 - **Error investigation**: Understand failure context and patterns
 
-The Oak Curriculum SDK integrates seamlessly with the `@oaknational/mcp-logger` package, which provides:
+The Oak Curriculum SDK integrates seamlessly with the `@oaknational/logger` package, which provides:
 
 - Structured JSON logging
 - Request correlation IDs
@@ -26,14 +26,14 @@ The Oak Curriculum SDK integrates seamlessly with the `@oaknational/mcp-logger` 
 
 ```bash
 # Install both SDK and logger
-pnpm add @oaknational/curriculum-sdk @oaknational/mcp-logger
+pnpm add @oaknational/curriculum-sdk @oaknational/logger
 ```
 
 ### Basic Integration
 
 ```typescript
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 
 // Create logger
 const logger = createAdaptiveLogger({
@@ -71,7 +71,7 @@ The logger package provides two entry points to support different runtime enviro
 Use the **main entry point** for browser-safe logging:
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 
 const logger = createAdaptiveLogger({
   level: 'INFO',
@@ -94,7 +94,7 @@ const logger = createAdaptiveLogger({
 Use the **Node entry point** for full file logging support:
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger/node';
+import { createAdaptiveLogger } from '@oaknational/logger/node';
 
 const logger = createAdaptiveLogger({
   level: 'INFO',
@@ -120,7 +120,7 @@ const logger = createAdaptiveLogger({
 ### Basic API Call Logging
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({ level: 'DEBUG' });
@@ -182,7 +182,7 @@ function generateCorrelationId(): string {
 ### Using Child Loggers for Correlation
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 
 const baseLogger = createAdaptiveLogger({ level: 'INFO' });
 
@@ -207,7 +207,7 @@ async function processRequest(requestId: string) {
 
 ```typescript
 import express from 'express';
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 
 const app = express();
 const logger = createAdaptiveLogger({ level: 'INFO' });
@@ -242,7 +242,7 @@ app.get('/lessons/:slug', async (req, res) => {
 Use the timing utilities to measure SDK operation performance:
 
 ```typescript
-import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger, startTimer } from '@oaknational/logger';
 
 const logger = createAdaptiveLogger({ level: 'INFO' });
 
@@ -286,7 +286,7 @@ async function searchWithTiming(query: string) {
 ### Timing Multiple Operations
 
 ```typescript
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 async function fetchFullLessonData(lessonSlug: string) {
   const totalTimer = startTimer();
@@ -320,7 +320,7 @@ async function fetchFullLessonData(lessonSlug: string) {
 Enrich errors with debugging context before logging:
 
 ```typescript
-import { enrichError, startTimer, type ErrorContext } from '@oaknational/mcp-logger';
+import { enrichError, startTimer, type ErrorContext } from '@oaknational/logger';
 
 async function searchWithContext(query: string, correlationId: string) {
   const timer = startTimer();
@@ -457,7 +457,7 @@ if (errors.length > 0) {
 ```typescript
 // app/lib/curriculum-client.ts
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createAdaptiveLogger } from '@oaknational/logger';
 
 // Browser-safe logger (no file sink)
 export const logger = createAdaptiveLogger({
@@ -472,7 +472,7 @@ export const curriculumClient = new OakCurriculumClient({
 // app/api/lessons/[slug]/route.ts
 import { NextRequest } from 'next/server';
 import { curriculumClient, logger } from '@/lib/curriculum-client';
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
   const timer = startTimer();
@@ -512,9 +512,9 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 
 ```typescript
 // server.ts
-import { createAdaptiveLogger } from '@oaknational/mcp-logger/node';
+import { createAdaptiveLogger } from '@oaknational/logger/node';
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 // File-only logger (stdout reserved for MCP protocol)
 const logger = createAdaptiveLogger({
@@ -566,7 +566,7 @@ async function executeTool(toolName: string, args: unknown) {
 ```typescript
 #!/usr/bin/env node
 // cli.ts
-import { createAdaptiveLogger } from '@oaknational/mcp-logger/node';
+import { createAdaptiveLogger } from '@oaknational/logger/node';
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({

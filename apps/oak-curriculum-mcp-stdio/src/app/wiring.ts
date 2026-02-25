@@ -40,7 +40,7 @@ function createInMemoryStorage() {
 }
 import { resolveToolExecutors } from './stub-executors.js';
 import type { StdioEnv } from '../runtime-config.js';
-import { type Logger } from '@oaknational/mcp-logger/node';
+import { type Logger } from '@oaknational/logger/node';
 import { createStdioLogger } from '../logging/index.js';
 import { loadRuntimeConfig } from '../runtime-config.js';
 

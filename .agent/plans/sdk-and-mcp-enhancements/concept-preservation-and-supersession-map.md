@@ -19,7 +19,7 @@ discarding stale status labels, sequencing, and file-path assumptions.
 | Ontology and model grounding | Ontology as structured context primitive; model-visible vs component-only channel separation | `archive/legacy-numbered/02-*`, `10-*`, `16-*` | `mcp-extensions-research-and-planning.md` (Domains A, B, D) |
 | Public resource auth posture | Selective auth bypass for explicitly safe public resources only, constrained by ADR auth boundaries | `archive/legacy-numbered/15a-*`, `15b-*` | `mcp-extensions-research-and-planning.md` (ADR matrix) |
 | Widget safety and rollout control | Shell-first safety gate; deterministic checks before richer rendering | `archive/legacy-numbered/04-widget-*`, `11-*`, `archive/07-*` | `mcp-extensions-research-and-planning.md` (Domain D) |
-| Advanced MCP composition | Config-driven composite tools; type-gen ownership of complex primitives | `archive/legacy-numbered/03-*`, `18-*` | `mcp-extensions-research-and-planning.md` (Domains C, D) |
+| Advanced MCP composition | Config-driven composite tools; code-generation ownership of complex primitives | `archive/legacy-numbered/03-*`, `18-*` | `mcp-extensions-research-and-planning.md` (Domains C, D) |
 | Prompt and guidance ergonomics | Practical prompt/workflow lessons | `archive/legacy-numbered/04-mcp-prompts-*`, `06-*`, `08b-*` | Future scoped plan from Domain D |
 | Search quality enrichment | Synonym/query-intent enrichment | `archive/implemented/17-*` | Candidate backlog under Domain D |
 | Pipeline framework extraction | Single-pass OpenAPI-to-SDK generator replacing openapi-typescript and openapi-zod-client | Former `pipeline-enhancements/` plans | [icebox/openapi-pipeline-framework.md](../icebox/openapi-pipeline-framework.md) |
@@ -35,7 +35,7 @@ discarding stale status labels, sequencing, and file-path assumptions.
 | Selective public resource bypass | ADR-057 accepted, constrained by ADR-113 | Explicit public-resource scope only |
 | Mixed-origin OAuth for Cursor | ADR-115 accepted with ADR-052/053/113 | Same-origin proxy OAuth AS baseline |
 | Reused singleton transport/server | ADR-112 accepted | Per-request MCP server + transport |
-| Runtime widget URI cache-busting | ADR-071 accepted | Type-gen URI generation with parity checks |
+| Runtime widget URI cache-busting | ADR-071 accepted | Code-gen URI generation with parity checks |
 | Dense-vector-first search | ADR-118 superseded by ADR-075 | Two-way hybrid baseline |
 | NL interpretation in SDK core | ADR-107 accepted | SDK deterministic; NL in MCP/app boundary |
 | Layering DAG | ADR-050 proposed | Directional only; not binding until accepted |

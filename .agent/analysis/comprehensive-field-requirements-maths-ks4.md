@@ -692,7 +692,7 @@ export const TRANSCRIPT_CHUNKS_FIELDS: IndexFieldDefinitions = [
 
 1. **Decide on strategy**: Option A (all fields now) vs Hybrid (high-confidence fields now)
 2. **Update field definitions** in SDK
-3. **Run `pnpm type-gen`** to generate schemas
+3. **Run `pnpm sdk-codegen`** to generate schemas
 4. **Verify ES mappings** are generated correctly
 5. **Run quality gates**
 6. **Upload Maths KS4** with new schema
@@ -708,4 +708,4 @@ export const TRANSCRIPT_CHUNKS_FIELDS: IndexFieldDefinitions = [
 - **Graph RAG Vision**: `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`
 - **Reference Indices Plan**: `.agent/plans/semantic-search/reference-indices-plan.md`
 - **Entity Discovery Pipeline**: `.agent/plans/semantic-search/entity-discovery-pipeline.md`
-- **Current Field Definitions**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
+- **Current Field Definitions**: `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/curriculum.ts`

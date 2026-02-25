@@ -38,7 +38,7 @@ All tooling MUST use the latest versions, use `pnpm outdated` to check for updat
 TSDoc compliance is enforced at three layers:
 
 1. **Generation-time post-processing**: The `postProcessTypesSource`
-   function in `typegen-core.ts` strips non-standard tags
+   function in `codegen-core.ts` strips non-standard tags
    (`@description`, `@constant`, `@enum`) from `openapi-typescript`
    output at generation time, preventing them from entering the
    codebase.

@@ -15,10 +15,10 @@
 
 import { describe, it, expect } from 'vitest';
 import { runFetchTool } from './aggregated-fetch.js';
-import type { ToolName } from '@oaknational/curriculum-sdk-generation/mcp-tools';
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
 import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 import { createStubSearchRetrieval } from './search-retrieval-stub.js';
+import { createNullGeneratedToolRegistry } from './test-helpers/null-generated-tool-registry.js';
 
 /**
  * Creates a mock executeMcpTool that returns predefined result for any tool.
@@ -28,14 +28,7 @@ function createMockExecutor(result: ToolExecutionResult): UniversalToolExecutorD
   return {
     executeMcpTool: () => Promise.resolve(result),
     searchRetrieval: createStubSearchRetrieval(),
-    generatedTools: {
-      toolNames: [],
-      getToolFromToolName: () => {
-        throw new Error('Should not call getToolFromToolName');
-      },
-      isToolName: (value: unknown): value is ToolName =>
-        typeof value === 'string' && value === '__never__',
-    },
+    generatedTools: createNullGeneratedToolRegistry(),
   };
 }
 
@@ -212,14 +205,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
         executeMcpTool: () =>
           Promise.resolve({ error: new McpToolError('API failure', 'get-lessons-summary') }),
         searchRetrieval: createStubSearchRetrieval(),
-        generatedTools: {
-          toolNames: [],
-          getToolFromToolName: () => {
-            throw new Error('Should not call getToolFromToolName');
-          },
-          isToolName: (value: unknown): value is ToolName =>
-            typeof value === 'string' && value === '__never__',
-        },
+        generatedTools: createNullGeneratedToolRegistry(),
       };
 
       const result = await runFetchTool({ id: 'lesson:test' }, deps);

@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import { runSmokeAssertions, type SmokeContext } from './smoke-assertions/index.js';
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';

@@ -32,7 +32,7 @@
     "e2e-tests/**",
     "test-cache/**",
     "examples/**",
-    "type-gen/**",
+    "code-generation/**",
     "src/types/generated/api-schema/mcp-tools/**",
     "src/mcp/**"
   ],

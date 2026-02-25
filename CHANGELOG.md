@@ -7,5 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-First public release of `oak-mcp-ecosystem`. This is a new repository;
+First public release of `oak-open-data-ecosystem`. This is a new repository;
 prior changelog entries from `oak-notion-mcp` do not apply.

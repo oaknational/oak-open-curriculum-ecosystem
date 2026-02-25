@@ -9,7 +9,7 @@ import {
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
   SearchSuggestionResponseSchema,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 describe('validateSearchResponse', () => {
   it('validates lesson responses', () => {

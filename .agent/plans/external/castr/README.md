@@ -13,7 +13,7 @@ This document represents Oak's initial requirements. It is a starting point for 
 | Requirement | Rationale |
 |-------------|-----------|
 | **Strict object validation** | Oak's MCP tools fail fast on invalid API responses. Unknown keys indicate schema drift that must be caught immediately, not silently ignored. |
-| **Deterministic output** | Oak's CI pipeline verifies that `type-gen` produces identical output. Non-determinism causes spurious diffs and broken builds. |
+| **Deterministic output** | Oak's CI pipeline verifies that `code-generation` produces identical output. Non-determinism causes spurious diffs and broken builds. |
 | **Type preservation** | Oak's entire SDK type system depends on literal types flowing from the schema. Widening `'/api/lessons'` to `string` breaks compile-time safety for every consumer. |
 | **No invented optionality** | If the schema says required, it's required. Adding `.optional()` "for safety" masks real bugs and violates the schema contract. |
 
@@ -176,7 +176,7 @@ Oak currently uses an adapter package that wraps `openapi-zod-client`. This adap
 
 #### 1. `generateZodSchemasFromOpenAPI`
 
-**Consumed by**: `type-gen/zodgen-core.ts`
+**Consumed by**: `code-generation/zodgen-core.ts`
 **Produces**: `curriculumZodSchemas.ts`
 
 This function generates the complete Zod schemas file containing:
@@ -218,7 +218,7 @@ export type CurriculumSchemaName = keyof typeof curriculumSchemas;
 
 #### 2. `getEndpointDefinitions`
 
-**Consumed by**: `type-gen/typegen-core.ts`
+**Consumed by**: `code-generation/codegen-core.ts`
 **Produces**: Structured data for `request-parameter-map.ts`
 
 Returns endpoint metadata with **Zod code as strings** (not actual Zod objects):
@@ -536,7 +536,7 @@ castr.generate({
 
 Before castr can be integrated into Oak's type generation pipeline:
 
-1. **SDK workspace separation** — Oak's type-gen code must be extracted into a dedicated generation workspace (separate from the runtime SDK). This is Step 1 of the [4-workspace decomposition](../../semantic-search/active/sdk-workspace-separation.md) defined in [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). After separation, Castr becomes a dependency of the Generic Pipeline workspace (WS1). Pipeline framework extraction is [iceboxed](../../icebox/openapi-pipeline-framework.md).
+1. **SDK workspace separation** — Oak's code-generation code must be extracted into a dedicated generation workspace (separate from the runtime SDK). This is Step 1 of the [4-workspace decomposition](../../semantic-search/active/sdk-workspace-separation.md) defined in [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). After separation, Castr becomes a dependency of the Generic Pipeline workspace (WS1). Pipeline framework extraction is [iceboxed](../../icebox/openapi-pipeline-framework.md).
 
 2. **Side-by-side validation** — The existing `openapi-zod-client-adapter` can remain in place initially while Castr output is validated against the fixtures in this directory. This allows comparison of the two pipelines before committing to the switch.
 

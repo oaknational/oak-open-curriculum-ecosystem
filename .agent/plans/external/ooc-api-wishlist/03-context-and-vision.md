@@ -199,7 +199,7 @@ To understand why these enhancements matter, here's how our system works:
 ```plaintext
 Your OpenAPI Schema
         ↓
-   pnpm type-gen (automated)
+   pnpm sdk-codegen (automated)
         ↓
     ┌────────────────────────────┐
     │ Generated Artefacts        │

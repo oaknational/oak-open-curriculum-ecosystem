@@ -1,7 +1,7 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';

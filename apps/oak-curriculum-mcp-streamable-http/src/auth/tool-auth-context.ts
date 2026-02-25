@@ -6,7 +6,7 @@
  */
 
 import type { Request } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 /** Minimal auth shape that extractAuthContext reads (userId). */
 export interface MinimalAuthContext {

@@ -42,7 +42,7 @@ safety through the agentic engineering practice.
 
 ## What This Repository Is For
 
-The oak-mcp-ecosystem turns Oak's open curriculum data into AI-native
+The oak-open-data-ecosystem turns Oak's open curriculum data into AI-native
 infrastructure that is easy to build on.
 
 It serves three groups:
@@ -191,14 +191,14 @@ leading and outcome indicators.
 
 **Current baselines** (pre-public-release, February 2026):
 
-| Metric               | Current value | Context                                                                                                  |
-| -------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
-| Search MRR (lessons) | 0.983         | Finds the correct lesson in the top result 98% of the time                                               |
-| Search MRR (units)   | 1.000         | 2 ground truths — mechanism check                                                                        |
-| Search MRR (threads) | 0.938         | 8 ground truths across curriculum threads                                                                |
-| Ground truths        | 41            | Across 4 search indices                                                                                  |
-| ADRs                 | 114           | Architectural decisions documenting every significant design choice                                      |
-| Quality gate suite   | 11 gates      | type-gen, build, type-check, lint, format, markdownlint, test, test:ui, test:e2e, smoke, subagents:check |
+| Metric               | Current value | Context                                                                                                     |
+| -------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
+| Search MRR (lessons) | 0.983         | Finds the correct lesson in the top result 98% of the time                                                  |
+| Search MRR (units)   | 1.000         | 2 ground truths — mechanism check                                                                           |
+| Search MRR (threads) | 0.938         | 8 ground truths across curriculum threads                                                                   |
+| Ground truths        | 41            | Across 4 search indices                                                                                     |
+| ADRs                 | 114           | Architectural decisions documenting every significant design choice                                         |
+| Quality gate suite   | 11 gates      | sdk-codegen, build, type-check, lint, format, markdownlint, test, test:ui, test:e2e, smoke, subagents:check |
 
 These baselines will evolve as external adoption begins and the MCP Apps
 extension reaches public alpha. External adoption metrics (downloads, active

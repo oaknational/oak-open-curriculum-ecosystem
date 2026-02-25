@@ -6,13 +6,13 @@ This document clarifies what runs in GitHub CI and why.
 
 - CI does NOT regenerate types. CI validates that the repo builds using the committed generated artifacts.
 - Local builds may run type generation via the Turbo task graph for fast feedback.
-- If the OpenAPI schema changes, run `pnpm type-gen` locally and commit the changes.
+- If the OpenAPI schema changes, run `pnpm sdk-codegen` locally and commit the changes.
 
-See ADR-043 (`docs/architecture/architectural-decisions/043-typegen-in-build-and-ci.md`).
+See ADR-043 (`docs/architecture/architectural-decisions/043-codegen-in-build-and-ci.md`).
 
 ## Build
 
-- Local: `pnpm build` may trigger `type-gen` through the graph.
+- Local: `pnpm build` may trigger `sdk-codegen` through the graph.
 - CI: `pnpm build --only` is used to avoid regenerating types and to ensure the committed artifacts are valid.
 
 ## Tests

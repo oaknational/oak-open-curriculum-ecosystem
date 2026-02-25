@@ -6,7 +6,7 @@
  * the generated path-parameters to preserve schema-first discipline.
  */
 
-import type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
+import type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
 import type {
   LessonsSearchResult,
   UnitsSearchResult,

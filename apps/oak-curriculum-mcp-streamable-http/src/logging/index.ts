@@ -6,8 +6,8 @@ import {
   logLevelToSeverityNumber,
   type Logger,
   type ErrorContext,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 import type { Request, Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -176,4 +176,4 @@ export function createEnrichedErrorLogger(logger: Logger): ErrorRequestHandler {
   };
 }
 
-export type { Logger } from '@oaknational/mcp-logger';
+export type { Logger } from '@oaknational/logger';

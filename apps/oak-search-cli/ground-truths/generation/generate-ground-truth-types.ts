@@ -6,7 +6,7 @@
  * 1. TypeScript union types for valid lesson slugs
  * 2. Zod schemas for ground truth validation
  *
- * Run with: pnpm bulk:typegen
+ * Run with: pnpm bulk:codegen
  */
 
 /* eslint-disable max-lines, max-lines-per-function, max-statements, complexity */

@@ -1,6 +1,6 @@
 # Active Plans — [Collection Name]
 
-Executable, atomic plans for each roadmap phase.
+Executable, atomic plans that are in progress now.
 
 Strategic source plans in the collection define policy/rationale; active plans
 are the execution source of truth.
@@ -12,6 +12,9 @@ are the execution source of truth.
 | 2 | [phase-2-[name].md](phase-2-[name].md) | [Scope summary] | 📋 Planned |
 
 Strategic context: [roadmap.md](../roadmap.md)
+
+Next-up queue: [current/README.md](../current/README.md)  
+Later backlog: [future/README.md](../future/README.md)
 
 Documentation tracking for all phases:
 [documentation-sync-log.md](../documentation-sync-log.md)

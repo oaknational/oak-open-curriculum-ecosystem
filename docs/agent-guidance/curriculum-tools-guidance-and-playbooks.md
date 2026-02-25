@@ -13,7 +13,7 @@
 
 ## Cardinal Rule (Types and Validation)
 
-- All constants, types, type guards, and Zod validators MUST flow from the Open Curriculum OpenAPI schema in the SDK and be generated at compile time via `pnpm type-gen`.
+- All constants, types, type guards, and Zod validators MUST flow from the Open Curriculum OpenAPI schema in the SDK and be generated at compile time via `pnpm sdk-codegen`.
 - No compatibility layers. No `as`/`any`/`!`/broad `Record<string, unknown>` shortcuts. Prefer literal-preserving data with `as const` only for data literals.
 - Validate external inputs and authored fixtures at runtime with the generated Zod validators. Fail fast with helpful, contextual error messages.
 
@@ -57,4 +57,4 @@
 
 ## Quality Gates
 
-- After relevant changes, run from repo root: `pnpm i`, `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint:fix`, `pnpm doc-gen`, `pnpm format:root`, `pnpm markdownlint:root`, `pnpm test`, `pnpm test:e2e` (when appropriate).
+- After relevant changes, run from repo root: `pnpm i`, `pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`, `pnpm lint:fix`, `pnpm doc-gen`, `pnpm format:root`, `pnpm markdownlint:root`, `pnpm test`, `pnpm test:e2e` (when appropriate).

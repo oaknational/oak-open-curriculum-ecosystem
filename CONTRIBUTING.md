@@ -32,9 +32,9 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 **DO**:
 
 - Add new features by extending the OpenAPI schema (upstream)
-- Improve generation scripts in `packages/sdks/oak-curriculum-sdk/type-gen/`
+- Improve generation scripts in `packages/sdks/oak-curriculum-sdk/code-generation/`
 - Import types and validators from the generated SDK
-- Test that `pnpm type-gen` updates everything correctly
+- Test that `pnpm sdk-codegen` updates everything correctly
 - Use shared validation helpers (`parseSchema`, `parseWithCurriculumSchema`, etc.)
 
 **DON'T**:
@@ -55,7 +55,7 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 
 1. **OpenAPI Schema** (single source of truth, external)
-2. **SDK Generation** (`type-gen/` scripts)
+2. **SDK Generation** (`code-generation/` scripts)
 3. **Generated Artefacts** (`src/types/generated/`, `src/tool-generation/`) — DO NOT EDIT
 4. **Runtime Applications** (MCP servers, search app, admin tools)
 5. **Core Infrastructure** (`packages/core/`)
@@ -82,8 +82,8 @@ Before making changes, start with the canonical onboarding guide:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/oaknational/oak-mcp-ecosystem.git
-   cd oak-mcp-ecosystem
+   git clone https://github.com/oaknational/oak-open-data-ecosystem.git
+   cd oak-open-data-ecosystem
    ```
 
 2. Install dependencies:
@@ -125,7 +125,7 @@ You can contribute immediately by:
 - Refactoring pure functions
 - Updating documentation
 - Reviewing pull requests
-- Improving generation scripts in `type-gen/`
+- Improving generation scripts in `code-generation/`
 
 ```bash
 pnpm install

@@ -41,8 +41,8 @@
     "@elastic/elasticsearch": "^9.3.2",
     "@modelcontextprotocol/sdk": "^1.27.0",
     "@oaknational/curriculum-sdk": "workspace:*",
-    "@oaknational/mcp-env": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "dotenv": "^17.3.1",
     "zod": "^4.3.6"
@@ -56,13 +56,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-stdio"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/apps/oak-curriculum-mcp-stdio#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/apps/oak-curriculum-mcp-stdio#readme",
   "keywords": [
     "mcp",
     "ai",

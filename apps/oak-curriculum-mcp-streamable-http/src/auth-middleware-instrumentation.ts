@@ -5,7 +5,7 @@
  */
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type { Logger, JsonObject } from '@oaknational/mcp-logger';
+import type { Logger, JsonObject } from '@oaknational/logger';
 
 const PENDING_LOG_DELAY_MS = 5000;
 

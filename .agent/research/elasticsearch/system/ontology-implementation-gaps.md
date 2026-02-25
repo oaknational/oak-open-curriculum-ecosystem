@@ -60,9 +60,9 @@ type SearchScope = 'lessons' | 'units' | 'sequences' | 'threads';
 
 ### Implementation Requirements
 
-1. **Type-gen**: Add thread index document schema to `search/index-documents.ts`
-2. **Type-gen**: Add thread fields to existing document schemas
-3. **Type-gen**: Update `scopes.ts` to include 'threads'
+1. **Code-gen**: Add thread index document schema to `search/index-documents.ts`
+2. **Code-gen**: Add thread fields to existing document schemas
+3. **Code-gen**: Update `scopes.ts` to include 'threads'
 4. **ES Mappings**: Create `oak_threads` index mapping
 5. **Ingestion**: Build thread document transformer using SDK's `get-threads` API
 6. **Ingestion**: Enrich lesson/unit documents with thread metadata
@@ -118,8 +118,8 @@ interface SearchFilters {
 
 ### Implementation Requirements
 
-1. **Type-gen**: Add programme factor fields to document schemas
-2. **Type-gen**: Extend `SearchStructuredRequestSchema` with filter params
+1. **Code-gen**: Add programme factor fields to document schemas
+2. **Code-gen**: Extend `SearchStructuredRequestSchema` with filter params
 3. **ES Mappings**: Add programme factor fields to all indices
 4. **Ingestion**: Parse programme slugs during document transformation
 5. **Query Builder**: Add filter clauses for programme factors
@@ -154,8 +154,8 @@ interface UnitClassification {
 
 ### Implementation Requirements
 
-1. **Type-gen**: Add unit classification fields to unit schemas
-2. **Type-gen**: Add `unit_type` filter to request schema
+1. **Code-gen**: Add unit classification fields to unit schemas
+2. **Code-gen**: Add `unit_type` filter to request schema
 3. **Classification Logic**: Implement `classifyUnit()` function
    - Simple: Single lesson sequence, no unitOptions
    - Variant: unitOptions with different lessons
@@ -199,8 +199,8 @@ supervision_level?: 1 | 2 | 3 | 4;
 
 ### Implementation Requirements
 
-1. **Type-gen**: Define `ContentGuidanceStructured` schema
-2. **Type-gen**: Add to lesson document schema
+1. **Code-gen**: Define `ContentGuidanceStructured` schema
+2. **Code-gen**: Add to lesson document schema
 3. **Parser**: Implement `parseContentGuidance()` to categorize strings
 4. **Ingestion**: Run parser during lesson transformation
 5. **Query Builder**: Add supervision level filter
@@ -239,8 +239,8 @@ interface LessonComponentAvailability {
 
 ### Implementation Requirements
 
-1. **Type-gen**: Add component availability fields to lesson schema
-2. **Type-gen**: Add component filters to request schema
+1. **Code-gen**: Add component availability fields to lesson schema
+2. **Code-gen**: Add component filters to request schema
 3. **Detection Logic**: Implement `detectComponents()` checking lesson assets
 4. **Ingestion**: Fetch assets and set boolean flags
 5. **Query Builder**: Add bool filter for component combinations
@@ -254,7 +254,7 @@ Valuable for lesson planning but not blocking core search.
 
 ## Implementation Strategy
 
-### Recommended Approach: Incremental Type-Gen Updates
+### Recommended Approach: Incremental Code-Gen Updates
 
 Rather than a big-bang Phase 2/3 implementation, recommend incremental updates:
 
@@ -279,10 +279,10 @@ Rather than a big-bang Phase 2/3 implementation, recommend incremental updates:
 
 ### Generator Modifications Required
 
-All changes should flow through type-gen. Key files:
+All changes should flow through sdk-codegen. Key files:
 
 ```
-packages/sdks/oak-curriculum-sdk/type-gen/typegen/
+packages/sdks/oak-sdk-codegen/code-generation/typegen/
 ├── search-indices/           # Index document generators
 │   ├── generate-index-documents.ts
 │   └── ontology-field-definitions.ts  # NEW
@@ -298,7 +298,7 @@ packages/sdks/oak-curriculum-sdk/type-gen/typegen/
 After each sprint:
 
 ```bash
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint -- --fix

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { UnifiedLogger } from '@oaknational/mcp-logger';
+import { UnifiedLogger } from '@oaknational/logger';
 import { createStdioLogger, createChildLogger } from './index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
 

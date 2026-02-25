@@ -104,7 +104,7 @@ PREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology`
 first to understand key stages, subjects, entity hierarchy, and ID formats."
 ```
 
-This is generated at type-gen time via `tool-description.ts`:
+This is generated at sdk-codegen time via `tool-description.ts`:
 
 ```typescript
 export const DOMAIN_PREREQUISITE_GUIDANCE = `

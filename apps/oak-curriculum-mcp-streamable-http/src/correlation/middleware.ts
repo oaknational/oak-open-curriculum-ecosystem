@@ -4,7 +4,7 @@
  */
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import { startTimer, type Logger, type Timer } from '@oaknational/mcp-logger';
+import { startTimer, type Logger, type Timer } from '@oaknational/logger';
 
 import { generateCorrelationId } from './index.js';
 import { redactHeadersSummary } from '../logging/header-redaction.js';

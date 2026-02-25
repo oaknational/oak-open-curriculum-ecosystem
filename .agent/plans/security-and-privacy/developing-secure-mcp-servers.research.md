@@ -414,7 +414,7 @@ collection roadmap + active plans so controls are executable and testable.
 Suggested ownership mapping in this repository:
 
 - **MCP app transport/auth/policy wiring**: `apps/*mcp*/`
-- **Tool and schema contract generation flow**: `packages/sdks/` + `pnpm type-gen`
+- **Tool and schema contract generation flow**: `packages/sdks/` + `pnpm sdk-codegen`
 - **Cross-cutting directives/gates**: `.agent/directives/`, root scripts, CI workflows
 - **Evidence and rollout tracking**: `.agent/plans/security-and-privacy/` (roadmap + active plans + evidence artefacts)
 

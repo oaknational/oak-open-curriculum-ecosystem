@@ -4,7 +4,7 @@
  * Handles batch-by-batch ingestion with incremental dispatch to Elasticsearch.
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from './bulk-operation-types';
 import type { DataIntegrityReport } from './data-integrity-report';
 import { createDataIntegrityCollector } from './data-integrity-report';

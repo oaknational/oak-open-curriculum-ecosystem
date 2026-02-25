@@ -5,7 +5,7 @@ import type {
 import createClient, { wrapAsPathBasedClient } from 'openapi-fetch';
 
 import { apiUrl } from '../config/index.js';
-import type { paths as OakApiPaths } from '@oaknational/curriculum-sdk-generation/api-schema';
+import type { paths as OakApiPaths } from '@oaknational/sdk-codegen/api-schema';
 import type { RateLimitConfig } from '../config/rate-limit-config.js';
 import type { RetryConfig } from '../config/retry-config.js';
 import { DEFAULT_RATE_LIMIT_CONFIG } from '../config/rate-limit-config.js';

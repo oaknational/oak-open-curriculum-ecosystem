@@ -153,7 +153,7 @@ This ensures:
 
 3. **OpenAI Apps SDK alignment**: Following the official pattern where `structuredContent` contains data for model reasoning, `content` contains human-readable summaries, and `_meta` contains widget-only metadata.
 
-4. **Generator-driven for generated tools**: The `requiresDomainContext` flag is determined at type-gen time based on auth requirements, following the schema-first principle.
+4. **Generator-driven for generated tools**: The `requiresDomainContext` flag is determined at sdk-codegen time based on auth requirements, following the schema-first principle.
 
 5. **Automatic for aggregated tools**: Any new aggregated tool using `formatOptimizedResult()` automatically gets context grounding without per-tool changes.
 
@@ -183,7 +183,7 @@ This ensures:
 ## Related Decisions
 
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md) - Type generation principles
-- [ADR-035: Unified SDK-MCP Type Generation](035-unified-sdk-mcp-type-generation.md) - Generator architecture
+- [ADR-035: Unified SDK-MCP Code Generation](035-unified-sdk-mcp-code-generation.md) - Generator architecture
 - [ADR-037: Embedded Tool Information](037-embedded-tool-information.md) - Tool descriptor patterns
 
 ## References

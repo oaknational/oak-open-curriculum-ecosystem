@@ -7,7 +7,7 @@
 
 ## Guiding constraints
 
-- All search types, schemas, and Elasticsearch mappings are generated from the SDK OpenAPI schema (`pnpm type-gen`).
+- All search types, schemas, and Elasticsearch mappings are generated from the SDK OpenAPI schema (`pnpm sdk-codegen`).
 - This app consumes SDK-generated types and mappings; it does not define them locally.
 - Synonyms and phrase vocabulary are also sourced from the SDK (single source of truth).
 
@@ -102,7 +102,7 @@
 
 ## Key file references
 
-- SDK type generation overview: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md`
+- SDK type generation overview: `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/README.md`
 - SDK search types: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/requests.ts`
 - Index setup CLI: `apps/oak-search-cli/src/lib/elasticsearch/setup/cli.ts`
 - Ingestion CLI: `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-live.ts`

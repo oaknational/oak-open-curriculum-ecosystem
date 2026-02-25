@@ -43,7 +43,7 @@ The search app already implements:
 
 ### Future Direction
 
-Static vocabulary analysis (mining) will eventually move **upstream** to the bulk-data generation pipeline, rather than being part of type-gen. This keeps vocabulary extraction close to the source data while the SDK remains a consumer of generated artefacts.
+Static vocabulary analysis (mining) will eventually move **upstream** to the bulk-data generation pipeline, rather than being part of sdk-codegen. This keeps vocabulary extraction close to the source data while the SDK remains a consumer of generated artefacts.
 
 ---
 
@@ -238,7 +238,7 @@ If you only do one thing: **make every change traceable to a named strategy** (r
 | Component | Path | Purpose |
 |-----------|------|---------|
 | **Synonym corpus** | `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` | Curated synonym data (~580 entries) |
-| **ES analyser config** | `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-analyzer-config.ts` | `synonym_graph` filter configuration |
+| **ES analyser config** | `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-analyzer-config.ts` | `synonym_graph` filter configuration |
 | **RRF query builders** | `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts` | Four-way RRF construction |
 | **Phrase detection** | `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.ts` | Multi-word curriculum term detection |
 | **Ground truth** | `apps/oak-search-cli/src/lib/search-quality/ground-truth/` | 120 queries for MRR benchmarking |

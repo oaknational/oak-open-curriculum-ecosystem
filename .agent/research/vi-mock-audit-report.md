@@ -47,7 +47,7 @@ apps/oak-search-cli/app/api/search/nl/route.integration.test.ts
 apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-connection-timeout.e2e.test.ts
 apps/oak-curriculum-mcp-streamable-http/e2e-tests/application-routing.e2e.test.ts
 apps/oak-search-cli/app/api/observability/zero-hit/route.integration.test.ts
-packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.unit.test.ts
+packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.unit.test.ts
 apps/oak-search-cli/src/lib/observability/zero-hit.unit.test.ts
 apps/oak-search-cli/app/layout.meta.unit.test.ts
 apps/oak-search-cli/src/lib/suggestions/index.unit.test.ts
@@ -55,7 +55,7 @@ apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-call-envelope.e2e.test.ts
 apps/oak-search-cli/app/lib/theme/ThemeSystemPreference.integration.test.tsx
 apps/oak-search-cli/app/api/admin/fixtures.integration.test.ts
 apps/oak-search-cli/tests/app/layout.ssr-cookie.integration.test.tsx
-packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.integration.test.ts
+packages/sdks/oak-sdk-codegen/code-generation/zodgen-core.integration.test.ts
 apps/oak-search-cli/app/lib/registry.unit.test.tsx
 apps/oak-search-cli/app/api/search/suggest/route.integration.test.ts
 packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.unit.test.ts

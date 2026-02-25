@@ -1,5 +1,5 @@
 /**
- * `@oaknational/mcp-logger`
+ * `@oaknational/logger`
  *
  * Runtime-agnostic logging library for multi-runtime MCP applications
  * Outputs OpenTelemetry-compliant single-line JSON logs

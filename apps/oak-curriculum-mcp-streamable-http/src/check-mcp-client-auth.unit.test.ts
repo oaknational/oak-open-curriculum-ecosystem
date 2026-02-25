@@ -8,7 +8,7 @@
 /* eslint-disable max-lines-per-function -- comprehensive test coverage requires many test cases */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';

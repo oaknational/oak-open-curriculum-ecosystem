@@ -181,7 +181,7 @@ All items completed:
 ## Level 3: Modern ES Features
 
 **Priority**: 🔴 HIGHEST (research's top recommendations)  
-**Plan**: [post-sdk/search-quality/modern-es-features.md](post-sdk/search-quality/modern-es-features.md)
+**Plan**: [future/04-retrieval-quality-engine/modern-es-features.md](future/04-retrieval-quality-engine/modern-es-features.md)
 
 ### Approaches Checklist
 
@@ -197,7 +197,7 @@ All items completed:
 ## Level 4: AI Enhancement — DESTINATION
 
 **Priority**: Part of the journey (NOT optional)  
-**Plan**: [post-sdk/search-quality/ai-enhancement.md](post-sdk/search-quality/ai-enhancement.md)
+**Plan**: [future/04-retrieval-quality-engine/ai-enhancement.md](future/04-retrieval-quality-engine/ai-enhancement.md)
 
 **Level 4 is the destination, not a "nice to have".** Some query types cannot be solved without AI.
 
@@ -215,10 +215,11 @@ All items completed:
 ```bash
 cd apps/oak-search-cli
 
-pnpm benchmark --all                    # All subjects, all phases
-pnpm benchmark --subject maths          # One subject
-pnpm benchmark --phase secondary        # One phase
-pnpm benchmark -s maths -p primary --review  # Per-query review
+pnpm benchmark                          # All indexes (lessons, units, threads, sequences)
+pnpm benchmark -- --index lessons       # Lessons index only
+pnpm benchmark:lessons --subject maths  # One subject
+pnpm benchmark:lessons --phase secondary  # One phase
+pnpm benchmark:lessons -s maths -p primary --review  # Per-query review
 ```
 
 ---

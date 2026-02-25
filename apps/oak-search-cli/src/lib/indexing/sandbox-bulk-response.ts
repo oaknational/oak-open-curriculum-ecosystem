@@ -7,7 +7,7 @@
  * - create: Only creates (returns version_conflict_engine_exception if exists)
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { z } from 'zod';
 
 /**

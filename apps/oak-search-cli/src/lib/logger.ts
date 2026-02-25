@@ -19,14 +19,14 @@
  * ```
  */
 
-import { logLevelToSeverityNumber } from '@oaknational/mcp-logger';
+import { logLevelToSeverityNumber } from '@oaknational/logger';
 import {
   UnifiedLogger,
   buildResourceAttributes,
   createNodeFileSink,
   type Logger,
   type FileSinkInterface,
-} from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger/node';
 
 /** Valid log levels for the semantic search logger. */
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';

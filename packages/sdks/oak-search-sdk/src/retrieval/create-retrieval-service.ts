@@ -3,7 +3,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type {
   SearchLessonsIndexDoc,

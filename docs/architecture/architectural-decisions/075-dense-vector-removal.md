@@ -47,7 +47,7 @@ Dense vector code remains in the codebase despite providing no benefit. This dea
 
 4. **ES Index Mappings** (field definitions):
    - Remove dense_vector field definitions from SDK
-   - Run `pnpm type-gen` to regenerate mappings
+   - Run `pnpm sdk-codegen` to regenerate mappings
 
 5. **Tests**:
    - Remove tests for dense vector functionality

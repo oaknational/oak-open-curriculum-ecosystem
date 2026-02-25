@@ -15,7 +15,7 @@ import type {
   ToolDescriptorForName,
   ToolDescriptor,
   SecurityScheme,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+} from '@oaknational/sdk-codegen/mcp-tools';
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
 
 /**
@@ -54,7 +54,7 @@ export interface GeneratedToolRegistry {
  *
  * These are hand-written tools that combine multiple API calls into
  * a single operation. Currently defined at runtime but will eventually
- * move to type-gen time.
+ * move to sdk-codegen time.
  */
 export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
 
@@ -62,7 +62,7 @@ export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
  * Union of all tool names combining aggregated and generated tools.
  *
  * - Aggregated tools: search, fetch, get-ontology, get-help (hand-written)
- * - Generated tools: All tools from OpenAPI spec (from type-gen)
+ * - Generated tools: All tools from OpenAPI spec (from code-generation)
  */
 export type UniversalToolName = AggregatedToolName | ToolName;
 

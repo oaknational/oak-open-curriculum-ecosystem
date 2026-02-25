@@ -9,7 +9,7 @@ packages:
   - packages/core/type-helpers
   - packages/libs/logger
   - packages/sdks/oak-curriculum-sdk
-  - packages/sdks/oak-curriculum-sdk-generation
+  - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
 
 onlyBuiltDependencies:

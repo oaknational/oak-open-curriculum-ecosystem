@@ -6,7 +6,7 @@ and the plan architecture defined in
 
 ## Before Writing
 
-1. Read the foundation documents:
+1. Read the directives:
    - @.agent/directives/rules.md
    - @.agent/directives/testing-strategy.md
    - @.agent/directives/schema-first-execution.md
@@ -26,8 +26,14 @@ Pick the template closest to the work:
 | `feature-workstream-template.md` | New feature with TDD phases |
 | `quality-fix-plan-template.md` | Quality improvement, refactoring, tech debt |
 
-Copy the template to the appropriate `active/` directory and
+Copy the template to the appropriate lifecycle directory and
 fill in all `[bracketed]` placeholders.
+
+Lifecycle directories:
+
+- `active/` — NOW: in progress execution only
+- `current/` — NEXT: queued/ready, not started
+- `future/` — LATER: deferred backlog
 
 ## Plan Requirements
 
@@ -37,7 +43,7 @@ Every plan MUST have:
 2. **TDD phase structure** — RED (tests first, must fail), GREEN
    (minimal implementation), REFACTOR (docs, cleanup)
 3. **Quality gates** after each phase — reference the
-   [quality-gates component](/plans/templates/components/quality-gates.md)
+   [quality-gates component](/.agent/plans/templates/components/quality-gates.md)
 4. **Acceptance criteria** for every task — specific, checkable,
    with deterministic validation commands
 5. **Risk assessment** — what could go wrong and how to mitigate
@@ -51,7 +57,7 @@ Plans are one layer in a three-document hierarchy. Do not
 duplicate content across layers:
 
 - **Session prompt** (`.agent/prompts/`) — operational entry point
-- **Executable plan** (`.agent/plans/*/active/`) — this is what you are creating
+- **Executable plan** (`.agent/plans/*/{active,current,future}/`) — lifecycle-scoped work items
 - **Roadmap** (`.agent/plans/*/roadmap.md`) — strategic milestone sequence
 
 Facts are authoritative in one document and referenced by the
@@ -60,10 +66,12 @@ once and have other documents link to the plan.
 
 ## Plan Location
 
-Place plans in the relevant `active/` directory:
+Place plans in the relevant lifecycle directory:
 
 ```bash
-.agent/plans/semantic-search/active/your-plan-name.md
+.agent/plans/semantic-search/active/your-plan-name.md   # in progress
+.agent/plans/semantic-search/current/your-plan-name.md  # next
+.agent/plans/semantic-search/future/your-plan-name.md   # later
 ```
 
 ## First Question

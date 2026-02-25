@@ -74,7 +74,7 @@ export function extractRequestMetadata(
  *
  * @example
  * ```typescript
- * import { createRequestLogger } from '@oaknational/mcp-logger';
+ * import { createRequestLogger } from '@oaknational/logger';
  *
  * const logger = createAdaptiveLogger();
  * app.use(createRequestLogger(logger, { level: 'info' }));
@@ -112,7 +112,7 @@ export function createRequestLogger(
  *
  * @example
  * ```typescript
- * import { createErrorLogger } from '@oaknational/mcp-logger';
+ * import { createErrorLogger } from '@oaknational/logger';
  *
  * const logger = createAdaptiveLogger();
  * // Register after all routes

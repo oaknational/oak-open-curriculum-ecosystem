@@ -42,7 +42,7 @@ All legacy materials are archived and should not be executed directly.
 Per [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md),
 work in this area mainly touches:
 
-- WS2: Oak Type-Gen
+- WS2: Oak Code-Gen
 - WS4: Oak Runtime
 
 Generator-first and schema-first remain non-negotiable.

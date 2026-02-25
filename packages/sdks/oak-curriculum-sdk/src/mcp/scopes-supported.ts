@@ -6,7 +6,7 @@
  * definitions. If the generated file layout changes, only this
  * re-export needs updating.
  *
- * Source of truth: `type-gen/mcp-security-policy.ts`
+ * Source of truth: `code-generation/mcp-security-policy.ts`
  */
 
-export { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk-generation/mcp-tools';
+export { SCOPES_SUPPORTED } from '@oaknational/sdk-codegen/mcp-tools';

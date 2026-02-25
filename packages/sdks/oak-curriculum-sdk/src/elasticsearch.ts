@@ -18,7 +18,7 @@
  * ## Architecture
  *
  * These types are generated at compile time from field definitions in
- * `@oaknational/curriculum-sdk-generation` (see `type-gen/typegen/search/field-definitions/`).
+ * `@oaknational/sdk-codegen` (see `code-generation/typegen/search/field-definitions/`).
  * Never edit generated files directly — always update the generators.
  *
  * @see {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html}
@@ -76,7 +76,7 @@ export {
   OAK_SEQUENCE_FACETS_MAPPING,
   /** oak_threads index mapping */
   OAK_THREADS_MAPPING,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 export type {
   OakLessonsMapping,
@@ -85,7 +85,7 @@ export type {
   OakSequencesMapping,
   OakSequenceFacetsMapping,
   OakThreadsMapping,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 // ============================================================================
 // Observability Index Mappings
@@ -100,9 +100,6 @@ export {
   OAK_META_MAPPING,
   /** oak_zero_hit_telemetry index mapping - tracks zero-result searches */
   OAK_ZERO_HIT_MAPPING,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
-export type {
-  OakMetaMapping,
-  OakZeroHitMapping,
-} from '@oaknational/curriculum-sdk-generation/search';
+export type { OakMetaMapping, OakZeroHitMapping } from '@oaknational/sdk-codegen/search';

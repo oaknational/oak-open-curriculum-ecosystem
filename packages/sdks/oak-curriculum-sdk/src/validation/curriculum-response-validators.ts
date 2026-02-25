@@ -16,9 +16,9 @@ import {
   type AllowedMethodsForPath,
   type JsonBody200,
   type OperationId,
-} from '@oaknational/curriculum-sdk-generation/api-schema';
+} from '@oaknational/sdk-codegen/api-schema';
 import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
-import type { CurriculumSchemaDefinition } from '@oaknational/curriculum-sdk-generation/zod';
+import type { CurriculumSchemaDefinition } from '@oaknational/sdk-codegen/zod';
 
 /**
  * Parse and validate response data

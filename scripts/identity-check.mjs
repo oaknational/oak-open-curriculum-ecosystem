@@ -139,9 +139,9 @@ function isAllowedTokenContext(token, relFile, line) {
   const t = token.toLowerCase();
   if (t === 'ecosystem') {
     if (relFile.endsWith('package.json')) return true;
-    if (/oak-mcp-ecosystem/i.test(line)) return true; // allow repo/package name wherever present
+    if (/oak-open-data-ecosystem/i.test(line)) return true; // allow repo/package name wherever present
     if (/greek-ecosystem-deprecation/i.test(line)) return true; // allow explicit doc reference
-    if (/https?:\/\/github\.com\/oaknational\/oak-mcp-ecosystem/i.test(line)) return true;
+    if (/https?:\/\/github\.com\/oaknational\/oak-open-data-ecosystem/i.test(line)) return true;
     if (/\.git\b/i.test(line)) {
       return true;
     }

@@ -643,7 +643,7 @@ Science synonyms (37 lines) are significantly underdeveloped compared to maths:
 
 ## Appendix D: Future direction
 
-> **Note**: Static vocabulary analysis (mining) will eventually move **upstream** to the bulk-data generation pipeline (i.e., where Oak's curriculum data is assembled), rather than being part of SDK type-gen. This keeps vocabulary extraction close to the source data.
+> **Note**: Static vocabulary analysis (mining) will eventually move **upstream** to the bulk-data generation pipeline (i.e., where Oak's curriculum data is assembled), rather than being part of sdk-codegen. This keeps vocabulary extraction close to the source data.
 
 The current TypeScript synonym files in `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` are manually curated. Future mining outputs would supplement (not replace) this corpus.
 

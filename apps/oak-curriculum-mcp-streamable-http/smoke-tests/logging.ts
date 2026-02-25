@@ -6,9 +6,9 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   LOG_LEVEL_KEY,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
-import type { Logger, LogLevel } from '@oaknational/mcp-logger';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
+import type { Logger, LogLevel } from '@oaknational/logger';
 
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
 

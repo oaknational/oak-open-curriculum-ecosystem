@@ -21,7 +21,7 @@ import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
  * This is a simple passthrough that makes the widget URI
  * available to the HTTP server's resource registration.
  * The URI already includes a cache-busting hash generated
- * at type-gen time.
+ * at sdk-codegen time.
  *
  * @returns Widget URI with embedded cache-busting hash
  * @example "ui://widget/oak-json-viewer-abc12345.html"

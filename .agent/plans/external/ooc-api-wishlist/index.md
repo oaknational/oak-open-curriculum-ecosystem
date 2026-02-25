@@ -45,7 +45,7 @@ If someone handed you this pack, would you know how to find what you want, and w
 - `06-response-metadata-and-caching.md` — response examples, canonical URL patterns, and resource timestamps.
 - `07-low-priority-and-best-practices.md` — performance hints plus the OpenAPI best practices checklist sections A-G.
 - `08-summary-and-coordination.md` — summary table, implementation notes, testing impact, coordination, related docs, next steps, and contact details.
-- `09-schemas-endpoint-rfc.md` — RFC for a /schemas bundle endpoint and SDK type-gen integration for validators.
+- `09-schemas-endpoint-rfc.md` — RFC for a /schemas bundle endpoint and SDK code-generation integration for validators.
 - `10-availability-and-gating-examples.md` — examples for blocked subjects, allowlists, and availability metadata.
 - `11-assets-and-transcripts-examples.md` — examples for assets endpoints, binary responses, and transcript availability.
 - `12-search-and-enums-examples.md` — examples for search constraints and enum sources.

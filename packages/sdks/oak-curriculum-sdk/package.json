@@ -100,8 +100,8 @@
     "docs:mcp": "typedoc --options typedoc.mcp.json --skipErrorChecking"
   },
   "dependencies": {
-    "@oaknational/curriculum-sdk-generation": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
@@ -125,13 +125,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
     "directory": "packages/sdks/oak-curriculum-sdk"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-mcp-ecosystem/tree/main/packages/sdks/oak-curriculum-sdk#readme",
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/sdks/oak-curriculum-sdk#readme",
   "keywords": [
     "oak",
     "curriculum",

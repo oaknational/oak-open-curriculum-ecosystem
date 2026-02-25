@@ -48,7 +48,7 @@ Pick the path that matches your first task. If you are not sure, **start with th
 
 Before diving in, read these six points. They explain the engineering culture and why the rules exist.
 
-1. **Schema-first generation** — All types, validators, and MCP (Model Context Protocol — a standard for connecting AI tools to data sources) tool metadata are generated from the OpenAPI (a machine-readable specification describing an HTTP API) schema at compile time. Nobody writes type definitions by hand. If the upstream API changes, `pnpm type-gen` updates everything automatically.
+1. **Schema-first generation** — All types, validators, and MCP (Model Context Protocol — a standard for connecting AI tools to data sources) tool metadata are generated from the OpenAPI (a machine-readable specification describing an HTTP API) schema at compile time. Nobody writes type definitions by hand. If the upstream API changes, `pnpm sdk-codegen` updates everything automatically.
 
 2. **Strict TDD (Test-Driven Development) at all levels** — Tests are written _before_ code, at every level: unit, integration, and end-to-end. The cycle is Red (write a failing test), Green (write minimal code to pass), Refactor (improve without changing behaviour). For example, to add a new pure function in the SDK, you would first write a unit test specifying the expected behaviour, run it to confirm it fails, then implement the function, and run the test again to confirm it passes.
 
@@ -81,7 +81,7 @@ Everything flows from the OpenAPI schema through a compile-time pipeline:
 ```text
 OpenAPI Spec (single source of truth)
          |
-    pnpm type-gen (compile time)
+    pnpm sdk-codegen (compile time)
          |
     +-----------------------------------------------+
     |                    |                           |
@@ -93,7 +93,7 @@ Runtime Apps        MCP Servers            Semantic Search
 (admin, CLI)      (stdio, HTTP)           (4-way RRF hybrid)
 ```
 
-**The Cardinal Rule**: If the upstream API changes, `pnpm type-gen` is sufficient to update everything.
+**The Cardinal Rule**: If the upstream API changes, `pnpm sdk-codegen` is sufficient to update everything.
 
 Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/openapi-pipeline.md)
 
@@ -135,7 +135,7 @@ If these pass, your toolchain is working and you can start contributing to SDK/d
 **Full pipeline (may require API keys for some steps)**:
 
 ```bash
-pnpm make       # install → build (includes type-gen) → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root
+pnpm make       # install → build (includes sdk-codegen) → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root
 ```
 
 See [Build System](./build-system.md) for the single source of truth on all command definitions, caching, and gate ordering.

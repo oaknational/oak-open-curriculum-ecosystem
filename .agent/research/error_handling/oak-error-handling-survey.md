@@ -26,7 +26,7 @@ These throws surface quickly but lack typed context or structured remediation gu
 
 - **`packages/libs/storage/src/file-storage.ts`** swallows file system errors (e.g. `catch { return null; }`), making it impossible to distinguish "missing file" from "IO failure".
 - **`packages/libs/storage/src/detect-storage-options.ts`** catches and ignores module import errors, returning `null` without diagnostic data.
-- Several scripts (e.g. `packages/sdks/oak-curriculum-sdk/type-gen/*`) call `.catch(() => undefined)` or log-and-continue, obscuring root causes during automation.
+- Several scripts (e.g. `packages/sdks/oak-sdk-codegen/code-generation/*`) call `.catch(() => undefined)` or log-and-continue, obscuring root causes during automation.
 
 Silent fallbacks complicate observability and undermine fast failure principles stated in `AGENT.md`.
 

@@ -8,7 +8,7 @@ This directory contains documentation for developers working on the Oak MCP ecos
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Build System](./build-system.md) - Turborepo tasks, caching, and quality gate commands
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
-- [CI Policy](./ci-policy.md) - What runs in CI (type-gen policy, build behavior)
+- [CI Policy](./ci-policy.md) - What runs in CI (sdk-codegen policy, build behavior)
 - [Testing Patterns](./testing-patterns.md) - Reusable test recipes (E2E DI pattern, subprocess tests)
 - [Release and Publishing](./release-and-publishing.md) - npm publishing, versioning, and release automation
 - [Environment Variables](./environment-variables.md) - Configuration and environment variable management

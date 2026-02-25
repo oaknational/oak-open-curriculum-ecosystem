@@ -6,7 +6,7 @@ NEVER disable checks of any kind, ever.
 
 The quality gates must be run after all major changes, and before each commit:
 
-- `pnpm type-gen` - Type generation
+- `pnpm sdk-codegen` - Type generation
 - `pnpm build` - Build
 - `pnpm type-check` - Type checking (TypeScript strict mode)
 - `pnpm lint:fix` - Linting with auto-fix (ESLint)

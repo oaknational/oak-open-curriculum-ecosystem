@@ -3,19 +3,14 @@
  *
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type {
-  BulkDownloadFile,
-  BulkFileResult,
-  Lesson,
-  Unit,
-} from '@oaknational/curriculum-sdk-generation/bulk';
+import type { BulkDownloadFile, BulkFileResult, Lesson, Unit } from '@oaknational/sdk-codegen/bulk';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { HybridDataSource } from '../../adapters/hybrid-data-source';
 import type { VocabularyMiningAdapter } from '../../adapters/vocabulary-mining-adapter';
 import type { BulkIngestionOptions, BulkIngestionStats } from './bulk-ingestion';
 
 // Mock the dependencies
-vi.mock('@oaknational/curriculum-sdk-generation/bulk', () => ({
+vi.mock('@oaknational/sdk-codegen/bulk', () => ({
   readAllBulkFiles: vi.fn(),
 }));
 
@@ -98,7 +93,7 @@ describe('bulk-ingestion', () => {
 
     it('handles empty bulk directory', async () => {
       // Arrange
-      const { readAllBulkFiles } = await import('@oaknational/curriculum-sdk-generation/bulk');
+      const { readAllBulkFiles } = await import('@oaknational/sdk-codegen/bulk');
       const { createVocabularyMiningAdapter } =
         await import('../../adapters/vocabulary-mining-adapter');
       const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
@@ -325,7 +320,7 @@ async function setupSubjectFilterMocks(
   mathsFileResult: BulkFileResult,
   englishFileResult: BulkFileResult,
 ): Promise<void> {
-  const { readAllBulkFiles } = await import('@oaknational/curriculum-sdk-generation/bulk');
+  const { readAllBulkFiles } = await import('@oaknational/sdk-codegen/bulk');
   const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
   const { createVocabularyMiningAdapter } =
     await import('../../adapters/vocabulary-mining-adapter');
@@ -346,7 +341,7 @@ async function setupMocksWithThreads(): Promise<MockSetupResult> {
   const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
   const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
 
-  const { readAllBulkFiles } = await import('@oaknational/curriculum-sdk-generation/bulk');
+  const { readAllBulkFiles } = await import('@oaknational/sdk-codegen/bulk');
   const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
   const { createVocabularyMiningAdapter } =
     await import('../../adapters/vocabulary-mining-adapter');

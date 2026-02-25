@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-24 (Phases 0-5 complete, N1-N6 remediation complete, Phase 6 next)
+**Last Updated**: 2026-02-25 (Phases 0-6 complete, Phase 7 next — CI drift check)
 
 ---
 
@@ -67,8 +67,8 @@ Run this checklist at the start of the next session:
    captured pre-split at Phase 0):
 
    ```bash
-   # Generation workspace exists (baseline: absent)
-   ls -d packages/sdks/oak-curriculum-sdk-generation
+   # Codegen workspace exists (baseline: absent)
+   ls -d packages/sdks/oak-sdk-codegen
 
    # SDK workspaces (baseline: 2, now: 3)
    ls -1 packages/sdks
@@ -82,16 +82,16 @@ Run this checklist at the start of the next session:
      --glob '!**/types/generated/**' \
      --glob '!**/*.test.ts' | wc -l
 
-   # Runtime SDK has no type-gen, no src/types/generated,
+   # Runtime SDK has no sdk-codegen, no src/types/generated,
    # no src/bulk, no public/bulk.ts
-   test -d packages/sdks/oak-curriculum-sdk/type-gen && echo "FAIL" || echo "OK"
+   test -d packages/sdks/oak-curriculum-sdk/code-generation && echo "FAIL" || echo "OK"
    test -d packages/sdks/oak-curriculum-sdk/src/types/generated && echo "FAIL" || echo "OK"
    test -d packages/sdks/oak-curriculum-sdk/src/bulk && echo "FAIL" || echo "OK"
    test -f packages/sdks/oak-curriculum-sdk/src/public/bulk.ts && echo "FAIL" || echo "OK"
 
-   # Generation SDK subpath exports (11 total)
+   # Codegen SDK subpath exports (11 total)
    node -e "const p=JSON.parse(require('fs').readFileSync( \
-     './packages/sdks/oak-curriculum-sdk-generation/package.json','utf8')); \
+     './packages/sdks/oak-sdk-codegen/package.json','utf8')); \
      Object.keys(p.exports).forEach(k=>console.log(k))"
    ```
 
@@ -100,7 +100,7 @@ Run this checklist at the start of the next session:
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 5. Read the active execution plan — it is self-sufficient:
-   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**, Phases 5-7 remain
+   - [SDK workspace separation](../../plans/semantic-search/active/sdk-workspace-separation.md) — **merge-blocking**, Phase 7 remains (CI drift check)
 6. Treat these as complete/archive references only:
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
@@ -118,15 +118,15 @@ Run this checklist at the start of the next session:
 
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
-**SDK workspace separation** — Phases 0-4 are **complete**.
+**SDK workspace separation** — Phases 0-6 are **complete**.
 Architecture review remediation (N1-N6) is **complete**.
-Phases 5-7 remain.
+Phase 7 remains (CI drift check).
 
 **Completed**:
 - Phase 0: baseline evidence committed
 - Phase 1: generation workspace scaffold, SDK boundary rules,
   turbo vocab-gen inputs
-- Phase 2: `type-gen/`, `schema-cache/`, `src/types/generated/`
+- Phase 2: `code-generation/`, `schema-cache/`, `src/types/generated/`
   moved to generation workspace. ~70 runtime SDK files rewired
   to use 10 subpath exports. E2E tests migrated. 8 specialist
   reviews completed, all blocking findings resolved. Full
@@ -153,24 +153,35 @@ Phases 5-7 remain.
   documented (F8). All gates pass. 4 specialist reviewers approved.
   Phase 5 reviewer suggestions tracked in plan §13.6.
 
-**Next**: Phase 6 — generated provenance, TSDoc, documentation
-alignment, and structural refinements. Start with Phase 5
-reviewer suggestions (plan §13.6): shared test stub extraction
-(S1), test naming hygiene (S2), redundant `_meta` in guard (S3),
-semver for API surface change (S4). Then Phase 6 scope: provenance
-banner updates (F11), barrel auto-generation evaluation (F12),
-subpath granularity (F13), OakApiPathBasedClient ownership (F14),
-wildcard export audit (F15). Documentation extraction tasks from
-consolidation review completed: synonyms README updated with
-two-concern insight and Domain 4, ADR-063 revision note added,
-generation SDK README subpath table added, ESLint plugin README
-updated with `createSdkBoundaryRules`, type-helpers README created.
+**Phase 6 complete** (25 Feb 2026) — renames, provenance, decisions,
+documentation. Four package/repo renames executed alongside original
+Phase 6 scope:
+
+- **6.1**: Phase 5 reviewer suggestions S1-S3 (DRY test helper,
+  executor test split, `_meta` guard simplification). Done.
+- **6.2**: Library renames — `@oaknational/logger` (was `mcp-logger`),
+  `@oaknational/env` (was `mcp-env`). Done.
+- **6.3**: Workspace rename — `@oaknational/sdk-codegen` (was
+  `curriculum-sdk-generation`), dir `oak-sdk-codegen`. Done.
+- **6.4**: Repo rename — `oak-open-data-ecosystem` (was
+  `oak-mcp-ecosystem`, internal refs only). Done.
+- **6.5**: Provenance banner updates (F11). Done.
+- **6.6**: Evaluation decisions — F12-F14 documented in codegen SDK
+  README. Done.
+- **6.7**: Documentation alignment — ADR-108, READMEs, plan, prompt.
+  Done.
+- **6.8**: Quality gates + specialist reviews. Done.
+
+**Next**: Phase 7 — CI drift check.
+
+See [canonical plan Phase 6](../../plans/semantic-search/active/
+sdk-workspace-separation.md) for full detail on every step.
 
 **Two-pipeline architecture** (see
 [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)):
 generation workspace hosts API pipeline (OpenAPI → types, Zod,
 MCP descriptors) and bulk pipeline (bulk JSON → types, ES
-mappings, vocabulary, ontology). Both run during `pnpm type-gen`.
+mappings, vocabulary, ontology). Both run during `pnpm sdk-codegen`.
 
 **Non-negotiable boundaries** (enforced by ESLint SDK boundary rules,
 implemented in `createSdkBoundaryRules()` in `boundary.ts`):
@@ -179,7 +190,7 @@ implemented in `createSdkBoundaryRules()` in `boundary.ts`):
 - Runtime → generation subpath exports only (no deep imports)
 - Both roles → no `@workspace/*` alias imports
 - Runtime `public/bulk` is removed (consumers import generation directly)
-- Always run `pnpm type-gen` from repo root, not individual workspaces
+- Always run `pnpm sdk-codegen` from repo root, not individual workspaces
 
 **Post-merge work** (Milestone 0 → Milestone 1): MCP tool snagging
 (complete), widget stabilisation (complete), schema alignment
@@ -202,7 +213,7 @@ not done until the violation is corrected.
   writing code.
 - **Types flow from the schema.** The cardinal rule applies
   throughout all work — ensure types derive from the OpenAPI
-  schema via `pnpm type-gen`.
+  schema via `pnpm sdk-codegen`.
 - **We always choose long-term architectural excellence.** We do
   not put important work off until later. If reviewers find
   issues, those issues become next steps — they are not
@@ -306,7 +317,7 @@ manipulation. If tests lag behind code at any level, TDD was not
 followed.
 
 **Types from the schema.** All types derive from the OpenAPI
-schema via `pnpm type-gen`. No ad-hoc types. No `as`. No `any`.
+schema via `pnpm sdk-codegen`. No ad-hoc types. No `as`. No `any`.
 No `!`. No `Record<string, unknown>`. Preserve type information --
 never widen a literal to `string`. If the type system resists,
 the code is wrong.
@@ -317,7 +328,7 @@ all cases explicitly. Never throw. Never return null.
 **Fail fast.** Never swallow errors. Never log and continue. Fail
 immediately with a message that explains what and why.
 
-**Generator-first.** Change templates, rerun `pnpm type-gen`.
+**Generator-first.** Change templates, rerun `pnpm sdk-codegen`.
 Never edit generated files. Missing data is a generator bug.
 
 **Quality gates are blocking.** Every gate, every time. A failing
@@ -361,14 +372,14 @@ system split across six workspaces.
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Generation SDK** | `packages/sdks/oak-curriculum-sdk-generation/` | Two pipelines: API (type-gen, generated types, Zod, MCP descriptors) and bulk (vocab-gen, bulk infrastructure, graph data, mined synonyms). 11 subpath exports. Phases 0-4 + N1-N6 complete. |
+| **Codegen SDK** | `packages/sdks/oak-sdk-codegen/` | Two pipelines: API (sdk-codegen, generated types, Zod, MCP descriptors) and bulk (vocab-gen, bulk infrastructure, graph data, mined synonyms). 11 subpath exports. `@oaknational/sdk-codegen`. |
 | **Runtime SDK** | `packages/sdks/oak-curriculum-sdk/` | Runtime client, auth, validation, MCP tool composition |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
 | **MCP STDIO** | `apps/oak-curriculum-mcp-stdio/` | STDIO transport MCP server |
 | **MCP HTTP** | `apps/oak-curriculum-mcp-streamable-http/` | HTTP transport MCP server (Vercel) |
 
-The Generation SDK is the shared foundation — runtime SDK and
+The codegen SDK is the shared foundation — runtime SDK and
 search CLI import generated types through its subpath exports.
 The Search SDK imports from the runtime SDK (shared exports)
 and serves bulk-derived data exclusively. Both MCP servers
@@ -385,8 +396,9 @@ via the `get-ontology` MCP tool (primary intent), and
 bulk-data-derived synonym pipeline. The curated lists remain
 in runtime `src/mcp/synonyms/`; mined synonyms moved to
 generation in Phase 3. Co-location of all synonym content is
-a follow-on target. See ADR-063 and the canonical plan §16
-(Synonym System Reference) for full details.
+a follow-on target. See ADR-063 and the
+[Synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+for full details.
 
 ### Search Pipeline
 
@@ -433,7 +445,7 @@ Not some of them. All of them. In this order. Every time.
 
 ```bash
 pnpm clean
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm format:root

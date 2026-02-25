@@ -87,7 +87,7 @@ This enhancement is complete. Remaining work:
 2. **Subject-Specific GTs** — Add verification queries for physics/chemistry/biology/combined-science using `exam_subjects` field
 3. **Spanish GT Review** — Continue with Spanish (2 subject-phases remaining)
 
-**Future architecture work**: [subject-domain-model.md](../post-sdk/subject-domain-model.md) — Full SDK architecture for subject hierarchy (after GT review)
+**Future architecture work**: [subject-domain-model.md](../../future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md) — Full SDK architecture for subject hierarchy (after GT review)
 
 ---
 

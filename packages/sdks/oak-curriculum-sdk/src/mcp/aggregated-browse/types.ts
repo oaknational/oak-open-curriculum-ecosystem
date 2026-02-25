@@ -6,7 +6,7 @@
  * key stages, and units are available, backed by `fetchSequenceFacets()`.
  */
 
-import type { KeyStage, Subject } from '@oaknational/curriculum-sdk-generation/api-schema';
+import type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
 
 /**
  * Validated arguments for the browse-curriculum tool.

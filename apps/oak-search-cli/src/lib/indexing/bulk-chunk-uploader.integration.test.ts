@@ -14,7 +14,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { uploadAllChunks, type EsTransport, type BulkUploadConfig } from './bulk-chunk-uploader';
 import { isBulkIndexAction, type BulkOperations } from './bulk-operation-types';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkResponse } from './sandbox-bulk-response';
 
 /**

@@ -16,8 +16,8 @@ while IFS= read -r line; do
   path="${line:3}"
 case "${path}" in
     scripts/check-generator-scope.sh) ;;
-    packages/sdks/oak-curriculum-sdk-generation/type-gen/typegen/mcp-tools/*) ;;
-    packages/sdks/oak-curriculum-sdk-generation/src/types/generated/*) ;;
+    packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/*) ;;
+    packages/sdks/oak-sdk-codegen/src/types/generated/*) ;;
     *)
       echo "❌ Disallowed change detected: ${path}"
       exit 1

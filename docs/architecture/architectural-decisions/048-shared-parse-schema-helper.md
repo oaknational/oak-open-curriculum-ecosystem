@@ -37,7 +37,7 @@ If we introduce new request payloads or response types, they should extend the s
 
 - A single validation pathway eliminates duplicated helper logic.
 - Errors surface consistent `ValidationResult` objects, simplifying logging and plan reviews.
-- Future schema changes only require `pnpm type-gen`; no consumer needs to adjust type assertions or helper signatures.
+- Future schema changes only require `pnpm sdk-codegen`; no consumer needs to adjust type assertions or helper signatures.
 - Documentation now references the shared helper (root README, SDK README, onboarding guide, contributor guide).
 
 ## Implementation Notes

@@ -98,7 +98,7 @@ Included in `/ontology` response (see item 3).
 
 **Why:** Enables generated clients to construct user-facing URLs without hard-coding patterns. Teachers can click links in AI-generated lesson plans and go directly to the correct Oak website page.
 
-**Current workaround:** SDK generator adds canonical URLs at type-gen time using hard-coded patterns that attempt to match OWA structure.
+**Current workaround:** SDK generator adds canonical URLs at code-generation time using hard-coded patterns that attempt to match OWA structure.
 
 **Impact:** Single source of truth for URLs that's guaranteed to match OWA; easier updates when URL patterns change; ensures teachers always get working links.
 **User impact:** Teachers and curriculum leaders get reliable links; SDK/MCP engineers avoid hard-coded URL drift.

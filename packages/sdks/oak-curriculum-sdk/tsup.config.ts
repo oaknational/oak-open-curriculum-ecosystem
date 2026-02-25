@@ -12,7 +12,7 @@ export default defineConfig({
     'src/config/**/*.ts',
 
     // Types — hand-authored type definitions and helpers
-    // Includes src/types/generated/ (managed by pnpm type-gen)
+    // Includes src/types/generated/ (managed by pnpm sdk-codegen)
     'src/types/**/*.ts',
 
     // Public entry points — consumer-facing barrels

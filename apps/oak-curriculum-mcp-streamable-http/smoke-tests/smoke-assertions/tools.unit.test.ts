@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import { extractToolPayload } from './tools.js';
 

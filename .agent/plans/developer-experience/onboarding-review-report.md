@@ -118,7 +118,7 @@ environment-variables docs say only `OAK_API_KEY` is needed for MCP work.
 
 - **`pnpm make` suggested before env vars configured**: Onboarding step 4
   includes `pnpm make` before environment variable configuration. `pnpm make`
-  runs `type-gen` which may require network access and API keys.
+  runs `sdk-codegen` which may require network access and API keys.
 - **No gitleaks installation instruction**: The `husky` pre-push hook runs
   `gitleaks` (a binary secret scanner). First `git push` fails with a confusing
   error about a missing binary.
@@ -251,7 +251,7 @@ environment-variables docs say only `OAK_API_KEY` is needed for MCP work.
   concern.
 - **Bus factor not acknowledged in onboarding materials**: Single author, not
   documented as a risk with mitigation strategy.
-- **No documentation of type-generation pipeline failure modes**: Happy path
+- **No documentation of sdk-codegen pipeline failure modes**: Happy path
   documented but constraints, unsupported patterns, and breaking-change
   experience not covered.
 - **`pnpm qg` says "smoke" but actual command is `smoke:dev:stub`**: Precision

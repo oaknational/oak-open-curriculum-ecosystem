@@ -171,7 +171,7 @@ apps/oak-search-cli/src/lib/
 ### Field Definitions
 
 ```text
-packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
+packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/
 ├── field-definitions/curriculum.ts          # Dense vector field definitions
 └── es-field-overrides.ts                    # ES field configurations
 ```

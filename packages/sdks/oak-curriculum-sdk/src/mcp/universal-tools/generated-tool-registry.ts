@@ -6,11 +6,7 @@
  * Tests provide their own lightweight fakes instead.
  */
 
-import {
-  toolNames,
-  getToolFromToolName,
-  isToolName,
-} from '@oaknational/curriculum-sdk-generation/mcp-tools';
+import { toolNames, getToolFromToolName, isToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { GeneratedToolRegistry } from './types.js';
 
 export const generatedToolRegistry: GeneratedToolRegistry = {

@@ -7,7 +7,7 @@ This guide helps AI agents working on this codebase understand when and how to a
 
 ## Overview
 
-The Oak MCP Ecosystem uses `@oaknational/mcp-logger` for structured logging with Phase 2 observability features:
+The Oak MCP Ecosystem uses `@oaknational/logger` for structured logging with Phase 2 observability features:
 
 - **Correlation IDs**: Request tracing across the system
 - **Timing instrumentation**: Sub-millisecond precision with slow request warnings
@@ -197,7 +197,7 @@ logger.debug('Input validation completed', {
 
 ## Logger Entry Point Selection
 
-### Main Entry Point: `@oaknational/mcp-logger`
+### Main Entry Point: `@oaknational/logger`
 
 **When to use:**
 
@@ -215,8 +215,8 @@ import {
   logLevelToSeverityNumber,
   buildResourceAttributes,
   startTimer,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
 const logger = new UnifiedLogger({
@@ -231,11 +231,11 @@ const logger = new UnifiedLogger({
 **Constraints:**
 
 - NO Node.js `fs` imports in the main entry point
-- Use `createNodeStdoutSink()` from `@oaknational/mcp-logger/node` for stdout
+- Use `createNodeStdoutSink()` from `@oaknational/logger/node` for stdout
 - Dependencies injected explicitly via constructor
 - No file sink support on serverless platforms
 
-### Node Entry Point: `@oaknational/mcp-logger/node`
+### Node Entry Point: `@oaknational/logger/node`
 
 **When to use:**
 
@@ -253,8 +253,8 @@ import {
   logLevelToSeverityNumber,
   buildResourceAttributes,
   startTimer,
-} from '@oaknational/mcp-logger';
-import { createNodeFileSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeFileSink } from '@oaknational/logger/node';
 
 const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
 const logger = new UnifiedLogger({
@@ -279,10 +279,10 @@ const logger = new UnifiedLogger({
 
 ```text
 Are you working on code that might run in a browser?
-├─ YES → Use @oaknational/mcp-logger (main entry)
+├─ YES → Use @oaknational/logger (main entry)
 └─ NO → Does it need file logging?
-    ├─ YES → Use @oaknational/mcp-logger/node
-    └─ NO → Use @oaknational/mcp-logger (main entry)
+    ├─ YES → Use @oaknational/logger/node
+    └─ NO → Use @oaknational/logger (main entry)
 ```
 
 ## Correlation ID Propagation Patterns
@@ -325,7 +325,7 @@ Correlation IDs are generated per tool invocation. Pass to all operations:
 
 ```typescript
 import { generateCorrelationId, createChildLogger } from './correlation';
-import { startTimer } from '@oaknational/mcp-logger/node';
+import { startTimer } from '@oaknational/logger/node';
 
 async function executeTool(toolName: string, args: unknown, config: RuntimeConfig) {
   // Generate correlation ID for this execution
@@ -395,7 +395,7 @@ async function processRequest(request: Request): Promise<Result> {
 ### Basic Timing
 
 ```typescript
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 async function timedOperation() {
   const timer = startTimer();
@@ -501,7 +501,7 @@ logger.info('Operation completed', { duration: duration.formatted });
 ### Basic Error Enrichment
 
 ```typescript
-import { enrichError, type ErrorContext, startTimer } from '@oaknational/mcp-logger';
+import { enrichError, type ErrorContext, startTimer } from '@oaknational/logger';
 
 async function handleRequest(req: Request, res: Response) {
   const timer = startTimer();
@@ -577,7 +577,7 @@ async function executeTool(toolName: string, args: unknown) {
 
 ```typescript
 import { describe, it, expect, vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 describe('myFunction', () => {
   it('logs operation start and completion', async () => {
@@ -647,7 +647,7 @@ describe('error handling', () => {
 ### Testing Timing
 
 ```typescript
-import { startTimer } from '@oaknational/mcp-logger';
+import { startTimer } from '@oaknational/logger';
 
 describe('timing', () => {
   it('logs operation duration', async () => {
@@ -742,10 +742,10 @@ try {
 
 ```typescript
 // ❌ Importing Node entry in browser code
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node'; // ❌ Breaks in browser!
+import { createNodeStdoutSink } from '@oaknational/logger/node'; // ❌ Breaks in browser!
 
 // ✅ Use main entry for browser-compatible code
-import { UnifiedLogger } from '@oaknational/mcp-logger'; // ✅ Works everywhere
+import { UnifiedLogger } from '@oaknational/logger'; // ✅ Works everywhere
 ```
 
 ### Pitfall 4: Logging to Stdout in Stdio Server
@@ -827,10 +827,10 @@ import {
   type ErrorContext,
   type Duration,
   type Timer,
-} from '@oaknational/mcp-logger';
+} from '@oaknational/logger';
 
 // Node.js sinks (Stdio server, CLI tools)
-import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/mcp-logger/node';
+import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/logger/node';
 ```
 
 ### Log Level Guidelines

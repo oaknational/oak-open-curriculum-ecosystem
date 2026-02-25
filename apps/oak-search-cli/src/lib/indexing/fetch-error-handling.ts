@@ -3,7 +3,7 @@
  * Provides consistent patterns for handling 404 and 500-series errors.
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { IngestionContext, IngestionErrorCollector } from './ingestion-error-types';
 
 /**

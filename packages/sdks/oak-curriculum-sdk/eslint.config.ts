@@ -28,7 +28,7 @@ const config = defineConfig(
       '*.log',
       '.turbo/**',
       // Local entry shims (JS)
-      'type-gen/*.mjs',
+      'code-generation/*.mjs',
       // Examples
       'examples/**',
 

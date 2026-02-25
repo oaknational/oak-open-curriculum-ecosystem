@@ -236,7 +236,7 @@ description: |
 
 1. **Immediate** (POC): A static `get-ontology` tool serving hand-authored JSON validates the value proposition in ~2 hours. See `.agent/plans/sdk-and-mcp-enhancements/00-ontology-poc-static-tool.md`.
 
-2. **Short term** (MCP Layer): Full schema-extraction implementation that auto-generates ontology from OpenAPI at type-gen time, merged with educational guidance. See `.agent/plans/sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md`.
+2. **Short term** (MCP Layer): Full schema-extraction implementation that auto-generates ontology from OpenAPI at code-generation time, merged with educational guidance. See `.agent/plans/sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md`.
 
 3. **Medium term** (Data Platform Team): The Data Platform team is working on a proper, comprehensive curriculum ontology that will be the authoritative source of truth for curriculum structure, relationships, and metadata.
 

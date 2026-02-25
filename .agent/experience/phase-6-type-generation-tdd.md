@@ -21,7 +21,7 @@ Implemented type generation for Oak Curriculum SDK using TDD approach to create 
   - Easy to test without mocks
   - Composable and reusable
   - Clear boundaries and responsibilities
-- **Implementation**: Core transformation functions (typegen-typescript.ts, typegen-zod.ts) are pure, while I/O is handled separately (schema-fetcher.ts, generate-types.ts)
+- **Implementation**: Core transformation functions (codegen-typescript.ts, codegen-zod.ts) are pure, while I/O is handled separately (schema-fetcher.ts, generate-types.ts)
 
 ### 3. ESM Module Challenges
 
@@ -134,9 +134,9 @@ pnpm build
 ```
 packages/oak-curriculum-sdk/
 ├── scripts/
-│   ├── typegen-core.ts         # Re-exports
-│   ├── typegen-typescript.ts   # TypeScript generation
-│   ├── typegen-zod.ts          # Zod generation
+│   ├── codegen-core.ts         # Re-exports
+│   ├── codegen-typescript.ts   # TypeScript generation
+│   ├── codegen-zod.ts          # Zod generation
 │   ├── schema-fetcher.ts       # Fetch with cache
 │   └── generate-types.ts       # Main pipeline
 ├── src/
@@ -147,7 +147,7 @@ packages/oak-curriculum-sdk/
 │       └── generated.ts       # Generated Zod validators
 ├── tests/
 │   └── scripts/
-│       ├── typegen.unit.test.ts
+│       ├── codegen.unit.test.ts
 │       └── zod-gen.unit.test.ts
 ├── e2e-tests/
 │   └── scripts/

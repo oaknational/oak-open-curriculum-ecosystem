@@ -48,8 +48,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
-        // Include _meta if present (for OpenAI Apps SDK invocation status)
-        _meta: '_meta' in def ? def._meta : undefined,
+        _meta: def._meta,
       };
     },
   );
@@ -64,8 +63,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
-      // Include _meta if present (for OpenAI Apps SDK metadata)
-      _meta: '_meta' in descriptor ? descriptor._meta : undefined,
+      _meta: descriptor._meta,
     };
   });
 

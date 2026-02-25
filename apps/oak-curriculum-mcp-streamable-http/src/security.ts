@@ -1,6 +1,6 @@
 import type express from 'express';
 import cors from 'cors';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 /**
  * Extracts the hostname from a Host header value, handling IPv6 addresses.

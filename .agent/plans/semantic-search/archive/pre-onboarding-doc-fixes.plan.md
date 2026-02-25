@@ -314,7 +314,7 @@ onboarding path but are consumed during ongoing work.
    `mcp-transport` reference; verify logger package path.
 4. Update `docs/development/build-system.md` -- correct `pnpm check`
    description to match `package.json`.
-5. Update `docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md`
+5. Update `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md`
    -- fix `pnpm format` to `pnpm format:root`.
 6. Update `apps/oak-curriculum-mcp-streamable-http/README.md` -- fix
    Node.js 22 reference to 24.x.

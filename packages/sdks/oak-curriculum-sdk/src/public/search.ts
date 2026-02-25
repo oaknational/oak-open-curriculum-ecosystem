@@ -31,19 +31,19 @@ export {
   isIndexMetaDoc,
   ZeroHitDocSchema,
   isZeroHitDoc,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 export {
   QueryParserRequestSchema,
   QueryParserResponseSchema,
   isQueryParserResponse,
   QUERY_PARSER_INTENT_ENUM,
-} from '@oaknational/curriculum-sdk-generation/query-parser';
+} from '@oaknational/sdk-codegen/query-parser';
 export type {
   QueryParserRequest,
   QueryParserResponse,
   QueryParserIntent,
-} from '@oaknational/curriculum-sdk-generation/query-parser';
+} from '@oaknational/sdk-codegen/query-parser';
 
 export {
   ZERO_HIT_SCOPES,
@@ -61,7 +61,7 @@ export {
   type ZeroHitSummary,
   type ZeroHitEvent,
   type ZeroHitTelemetry,
-} from '@oaknational/curriculum-sdk-generation/observability';
+} from '@oaknational/sdk-codegen/observability';
 
 export {
   ADMIN_STREAM_ACTIONS,
@@ -78,7 +78,7 @@ export {
   type AdminStreamErrorFixture,
   type AdminStreamFixture,
   type AdminStreamFixtureMap,
-} from '@oaknational/curriculum-sdk-generation/admin';
+} from '@oaknational/sdk-codegen/admin';
 
 export type {
   SearchStructuredRequest,
@@ -116,7 +116,7 @@ export type {
   AllSubjectSlug,
   ParentSubjectSlug,
   Ks4ScienceVariant,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 export {
   SUBJECT_TO_PARENT,
@@ -126,7 +126,7 @@ export {
   isKs4ScienceVariant,
   getSubjectParent,
   isAllSubject,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';
 
 export {
   lessonSummarySchema,
@@ -154,11 +154,8 @@ export {
   isSubjectAssets,
 } from '../types/search-response-guards.js';
 
-export {
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
-} from '@oaknational/curriculum-sdk-generation/zod';
-export { SearchFacetsSchema } from '@oaknational/curriculum-sdk-generation/search';
+export { SequenceFacetUnitSchema, SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
+export { SearchFacetsSchema } from '@oaknational/sdk-codegen/search';
 
 export {
   SearchLessonsIndexDocSchema,
@@ -173,4 +170,4 @@ export {
   isSearchSequenceIndexDoc,
   isSearchSequenceFacetsIndexDoc,
   isSearchThreadIndexDoc,
-} from '@oaknational/curriculum-sdk-generation/search';
+} from '@oaknational/sdk-codegen/search';

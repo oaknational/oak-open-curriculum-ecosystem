@@ -304,7 +304,7 @@ All 32 Science queries (13 primary + 19 secondary) benchmarked. Final metrics:
 - "magnits" → "magnify/magnification" (edit distance 2) causes microscopy lessons in results
 - "plints and enimals" — fuzzy dilutes signal in short queries
 
-**Solution (deferred)**: Domain term boosting. Documented in [modern-es-features.md](../post-sdk/search-quality/modern-es-features.md).
+**Solution (deferred)**: Domain term boosting. Documented in [modern-es-features.md](../../future/04-retrieval-quality-engine/modern-es-features.md).
 
 ---
 

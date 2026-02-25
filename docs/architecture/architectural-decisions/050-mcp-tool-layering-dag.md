@@ -36,7 +36,7 @@ Previous iterations allowed the generic contract to import helper types, creatin
    - Adjust import paths to match the new structure and ensure all references respect the one-way flow.
 
 4. **Testing**
-   - Regenerate artefacts via `pnpm type-gen`.
+   - Regenerate artefacts via `pnpm sdk-codegen`.
    - Ensure `pnpm build --filter @oaknational/curriculum-sdk` succeeds after restructuring.
    - Update generator tests to load the output modules and assert behaviour instead of string snapshots.
 

@@ -13,7 +13,7 @@
  * oaksearch eval benchmark lessons --all
  * oaksearch eval benchmark lessons -s maths -p primary --review
  * oaksearch eval validate
- * oaksearch eval typegen
+ * oaksearch eval codegen
  * ```
  */
 
@@ -88,7 +88,7 @@ export function evalCommand(): Command {
   );
   registerPassThrough(
     cmd,
-    'typegen',
+    'codegen',
     'Generate ground truth types from bulk data',
     'ground-truths/generation/generate-ground-truth-types.ts',
   );

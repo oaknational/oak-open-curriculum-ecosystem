@@ -53,7 +53,7 @@ but never moved beyond PROPOSED/DRAFT status.
 ## Activation Criteria
 
 1. SDK workspace separation (ADR-108 Step 1) is complete.
-2. Current type-gen toolchain limitations create measurable pain.
+2. Current code-generation toolchain limitations create measurable pain.
 3. Team capacity exists for a multi-week framework extraction.
 
 ## References

@@ -29,7 +29,7 @@ Always apply the first question; **Ask: could it be simpler without compromising
 
 ## Cardinal Rule of This Repository
 
-ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run. If the upstream OpenAPI schema changes, then running `pnpm type-gen` MUST be sufficient to bring all workspaces into alignment with the new schema.
+ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm sdk-codegen` is run. If the upstream OpenAPI schema changes, then running `pnpm sdk-codegen` MUST be sufficient to bring all workspaces into alignment with the new schema.
 
 ## Project Context
 
@@ -117,7 +117,7 @@ From the repo root, via Turbo:
 ```bash
 pnpm install        # Setup
 pnpm clean          # Clean all build products
-pnpm type-gen       # Type generation
+pnpm sdk-codegen    # Type generation
 pnpm build          # Build
 pnpm type-check     # Type check
 pnpm format:root    # Format code
@@ -130,7 +130,7 @@ pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 
 # All in one command
-pnpm check          # secrets:scan:all, clean, type-gen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, markdownlint:root, format:root
+pnpm check          # secrets:scan:all, clean, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding
@@ -140,7 +140,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ### Structure
 
 - `apps/` – runnable apps that provide services to users
-- `packages/libs/` – libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
+- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/result`)
 - `packages/sdks/` – SDKs (e.g., `@oaknational/curriculum-sdk`)
 - `packages/core/` – Shared, low-level code
 

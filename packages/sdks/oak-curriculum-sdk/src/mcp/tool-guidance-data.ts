@@ -18,7 +18,7 @@
  * @see `./tool-guidance-types.ts` for type definitions
  */
 
-import { threadProgressionGraph } from '@oaknational/curriculum-sdk-generation/vocab';
+import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
 import { toolGuidanceWorkflows } from './tool-guidance-workflows.js';
 import type { IdFormat, ToolCategory } from './tool-guidance-types.js';
 

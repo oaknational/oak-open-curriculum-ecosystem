@@ -7,7 +7,7 @@ This document contains useful analysis but is based on an incorrect assumption t
 1. Oak API auth is handled by the SDK (not our concern)
 2. MCP OAuth 2.1 is a separate layer (our concern)
 3. Security policy is defined in configuration, not read from upstream schema
-4. Generator applies policy to all tools at type-gen time
+4. Generator applies policy to all tools at sdk-codegen time
 
 Date: 2025-11-20  
 Last Updated: 2025-11-20  
@@ -605,7 +605,7 @@ We do not filter by IP address or implement client identification.
 ### Priority 1: ChatGPT Compatibility (Required for OAuth Linking UI)
 
 1. **Add `securitySchemes` to Tool Descriptors**
-   - Generator change in `packages/sdks/oak-curriculum-sdk/type-gen`
+   - Generator change in `packages/sdks/oak-sdk-codegen/code-generation`
    - Read from OpenAPI schema `security` field
    - Emit in tool descriptor interface
    - Map to MCP format (`noauth`, `oauth2`)

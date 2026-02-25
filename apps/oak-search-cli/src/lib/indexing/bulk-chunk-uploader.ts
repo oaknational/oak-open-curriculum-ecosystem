@@ -12,7 +12,7 @@
  * @see ./retry for retry logic
  * @see ADR-070 SDK Rate Limiting and Retry
  */
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from './bulk-operation-types';
 import {
   DEFAULT_CHUNK_DELAY_MS,

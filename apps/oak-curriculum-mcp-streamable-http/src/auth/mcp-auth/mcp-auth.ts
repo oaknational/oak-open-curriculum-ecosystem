@@ -14,7 +14,7 @@
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { TokenVerifier } from './types.js';
 import { getPRMUrl } from './get-prm-url.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';

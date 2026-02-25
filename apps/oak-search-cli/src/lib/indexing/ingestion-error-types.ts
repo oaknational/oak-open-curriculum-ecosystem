@@ -3,7 +3,7 @@
  * @see `./ingestion-error-collector.ts` for the collector implementation
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
 /** Context about what was being processed when an error occurred. */

@@ -35,7 +35,7 @@
 **Schema Definition** (SDK):
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts:66
+// packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/curriculum.ts:66
 { name: 'lesson_semantic', zodType: 'string', optional: true },
 ```
 

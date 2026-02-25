@@ -83,7 +83,7 @@ export interface WidgetResourceOptions {
  * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
  * and used by ChatGPT to render tool output with Oak branding.
  *
- * The widget URI includes a cache-busting hash generated at type-gen time.
+ * The widget URI includes a cache-busting hash generated at sdk-codegen time.
  * Each build produces a new hash, ensuring ChatGPT fetches the latest
  * widget bundle instead of using a stale cached version.
  *

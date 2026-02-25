@@ -5,7 +5,7 @@ Next status: public alpha
 
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
-**Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm type-gen` updates the SDK, and this server automatically has access to new/changed tools.
+**Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm sdk-codegen` updates the SDK, and this server automatically has access to new/changed tools.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
 Start with the [ADR index](../../docs/architecture/architectural-decisions/), then this HTTP MCP-focused set:
@@ -64,7 +64,7 @@ Note: The server automatically adds the required `Accept: application/json, text
   - `BASE_URL` (recommended; if omitted we derive from request host)
   - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
 
-Environment loading uses `resolveEnv` from `@oaknational/mcp-env`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
+Environment loading uses `resolveEnv` from `@oaknational/env`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 
@@ -1001,9 +1001,9 @@ The Oak JSON viewer widget uses a **hash-based URI strategy** to ensure ChatGPT 
 
 ### How It Works
 
-Widget cache-busting happens at **type-generation time** (not runtime):
+Widget cache-busting happens at **sdk-codegen time** (not runtime):
 
-1. During `pnpm type-gen`, a SHA-256 hash is generated from the current timestamp
+1. During `pnpm sdk-codegen`, a SHA-256 hash is generated from the current timestamp
 2. The hash is embedded in the widget filename: `ui://widget/oak-json-viewer-<hash>.html`
 3. All generated tool descriptors reference this hashed URI in `_meta['openai/outputTemplate']`
 4. The widget resource is registered at the same hashed URI
@@ -1038,12 +1038,12 @@ Widget cache-busting happens at **type-generation time** (not runtime):
 
 ### Trade-offs
 
-- Every `pnpm type-gen` produces a new widget URI (even if widget content unchanged)
+- Every `pnpm sdk-codegen` produces a new widget URI (even if widget content unchanged)
 - This is an acceptable simplicity trade-off; ChatGPT handles URI changes gracefully
 
 ### Implementation Details
 
-**Hash generation** (`type-gen/typegen/cross-domain-constants.ts`):
+**Hash generation** (`code-generation/typegen/cross-domain-constants.ts`):
 
 ```typescript
 function generateWidgetUriHash(): string {

@@ -6,7 +6,7 @@
  * and accumulating results across multiple chunks.
 
  */
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from '../bulk-operation-types';
 import type { EsTransport, ChunkUploadResult } from './http-retry';
 import type { DocumentRetryConfig, RetryAttemptResult } from './types';
