@@ -97,6 +97,18 @@ describe('UserService Integration Test', () => {
 
 The key distinction: Integration tests import and test code directly. They never spawn processes, make network calls, or test deployed systems.
 
+### Stubs vs Fakes
+
+- **Runtime stubs**: plain functions that live in the SDK and are used in
+  product code stub mode (e.g. `createStubRetrievalService`). They return
+  canned data and have no test framework dependency.
+- **Test fakes**: `vi.fn()` wrappers that live in `test-helpers/` directories
+  and are used only in tests. They enable assertions on call counts, arguments,
+  and return values.
+
+Do not conflate the two. Runtime stubs are product code; test fakes are test
+infrastructure.
+
 ### Design Approaches
 
 - Test Driven Development (TDD): Write tests before writing code at ALL levels. Tests PROVE correctness and specify desired behaviour.

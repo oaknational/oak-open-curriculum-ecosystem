@@ -57,6 +57,24 @@ dependencies go through published package names.
 | `react`       | React + React Hooks rules                                                                              |
 | `next`        | Extends `react` with Next.js recommended and core-web-vitals                                           |
 
+### Restricted Type Patterns
+
+The `strict` config restricts 10 type-destroying patterns via
+`@typescript-eslint/no-restricted-types`:
+
+`Record<string, unknown>`, `Record<string, any>`,
+`Record<string, undefined>`, `Readonly<Record<string, undefined>>`,
+`Record<PropertyKey, undefined>`, `object`, `Object`, `Function`,
+`unknown[]`, `{}`
+
+The `satisfies Record<...>` pattern is acceptable because `satisfies`
+validates without widening — the inferred type stays narrow.
+
+**Flat config caveat**: ESLint flat config uses last-writer-wins for rule
+declarations. When `strict.ts` overrides a rule from `recommended.ts`, all
+entries from the recommended declaration are silently lost. The `strict`
+config must replicate all restricted type entries from `recommended`.
+
 ## Usage
 
 This plugin is consumed internally by workspaces in this monorepo via

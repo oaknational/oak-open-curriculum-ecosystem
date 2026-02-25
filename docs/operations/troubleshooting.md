@@ -96,6 +96,15 @@ As of **25 February 2026**, `pnpm qg` is known to fail in clean local runs:
 
 If `pnpm qg` fails, run the affected suite directly and check latest issues/ADRs/plans before assuming local setup problems.
 
+## Quick Fixes
+
+| Symptom                                                 | Fix                                                             |
+| ------------------------------------------------------- | --------------------------------------------------------------- |
+| `pnpm publish --dry-run` fails with uncommitted changes | Add `--no-git-checks` flag                                      |
+| `pnpm benchmark` not found                              | The command is `pnpm benchmark` (not `pnpm eval:benchmark`)     |
+| E2E `tool-examples-metadata` flaky                      | SSE payload timing issue — retry once before investigating      |
+| Test upstream API status codes                          | `curl -s -w "\n%{http_code}" <url>` to see both body and status |
+
 ## Quality Gate Failures
 
 If any quality gate fails, run the full chain in order to isolate the issue:

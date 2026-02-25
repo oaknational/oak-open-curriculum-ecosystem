@@ -218,6 +218,22 @@ These run in parallel with no build dependency:
 
 Root doesn't have a package.json workspace entry. Making root operations turbo tasks would require special configuration. The current approach is simpler and correct.
 
+## SDK Build-Before-Consume
+
+Apps import SDK packages from their built `dist/` output, not from source.
+`tsx` transpiles app source on the fly but resolves SDK imports through
+`dist/`. This has three consequences:
+
+1. **Always `pnpm build` after SDK changes** before smoke-testing or running
+   apps. Without a fresh build, apps see stale SDK output.
+2. **New SDK source files need an explicit `tsup.config.ts` `entry`
+   addition** AND `pnpm build` before consuming apps can import the new
+   module. Turbo caching can mask this — delete `dist/` and rebuild if
+   "Cannot find module" appears.
+3. **Adapter and core packages must be rebuilt** (`pnpm build`) before
+   `pnpm sdk-codegen` picks up their changes — the SDK codegen consumes
+   built output, not source.
+
 ## Troubleshooting
 
 ### Stale build artifacts

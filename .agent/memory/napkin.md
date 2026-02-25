@@ -458,3 +458,41 @@ Documentation extractions completed before distillation:
 - "Onboarding" as a document conflates process with artefact. The
   process is supported by existing docs (README → quick-start →
   AGENT.md), not a standalone instruction bucket.
+
+---
+
+## Session: Batch B Snagging (2026-02-25)
+
+### Work Done
+
+Completed all 8 Batch B items from release-plan-m1:
+- **F6**: Extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk`.
+  Both apps now delegate to it. Added 3 unit tests.
+- **F10**: Added timeout/retry to `fetchUpstreamMetadata`. Per-attempt
+  timeout (10s), exponential backoff (3 attempts), transient-only retry
+  (5xx, network, abort). Added 5 tests including 5xx retry-then-success.
+- **F20**: Archived contradictory BUILD_VERIFICATION.md and TESTING_GAP_ANALYSIS.md.
+- **F25**: Updated deployment-architecture.md for async createApp, mcpFactory,
+  correct middleware phase diagram.
+- **F28**: Removed blanket eslint-disables from 4 generation files. Replaced
+  `as Record<string, unknown>` with `in` operator narrowing in bulk-data-parser.
+  Structural exemptions moved to eslint.config.ts overrides.
+- **F29**: Fixed "core depends on nothing" wording.
+- **O5**: Added doc-gen and subagents:check to start-right quality gate lists.
+- **O10**: Added convenience commands (make/qg/fix/doc-gen) to AGENT.md.
+
+### Lessons
+
+- SDK packages consumed as built dist: after adding new files to SDK
+  source, both tsup.config.ts entry AND `pnpm build` must run before
+  apps see the new module. Turbo caching can mask this — delete dist/
+  and rebuild if "Cannot find module" appears in tests.
+- `isNetworkOrAbortError` with `message.includes('abort')` is too broad —
+  matches unrelated errors. Stick to `error.name` checks for standard
+  error classification.
+- `fetchUpstreamMetadata` timeout should cover the entire attempt including
+  `response.json()` parsing, not just the network fetch. Clerk's metadata
+  is tiny, but the principle matters for correctness.
+- Reviewer findings: deployment-architecture.md still showed VERCEL
+  conditional and default export that no longer exist in actual code.
+  Always verify doc examples against the real source file, not memory.

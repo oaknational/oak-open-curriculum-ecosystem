@@ -281,6 +281,23 @@ Include:
 - **Validate at boundaries** — Use the generated Zod schemas via the shared helpers in
   `@oaknational/curriculum-sdk` (see `parseSchema` and friends)
 
+### ESM Module System
+
+The monorepo is ESM-only (`"type": "module"` in all `package.json` files).
+
+- **File extensions mandatory**: `import { x } from './helper.js'` — use `.js`
+  even for `.ts` source files; TypeScript does not rewrite import specifiers
+- **No CommonJS**: no `require()`, no `module.exports`
+- **No `__dirname` / `__filename`**: use `import.meta.dirname` instead
+- **JSON imports**: `import data from './data.json' with { type: 'json' }`
+- **Vitest mock paths**: `vi.mock('./module.js')` — `.js` extension required
+- **Barrel exports**: `export * from` is banned by `no-restricted-syntax`;
+  always use named re-exports
+- **Common error "Cannot find module"**: check for missing `.js` extension.
+  Applies to ALL relative imports including barrel re-exports. `pnpm build` +
+  `pnpm type-check` do NOT catch this — only E2E tests against built `dist/`
+  surface the error. Run `pnpm test:e2e` before pushing.
+
 ### Functions
 
 - **Prefer pure functions** — No side effects

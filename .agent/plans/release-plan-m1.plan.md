@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-25  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 26 remaining (was 42; Batch A complete, O11 cancelled, F18 subsumed by F5; O1, O2, O3, O4, O9 resolved by parallel onboarding/docs session; ai-agent-guide.md deleted)
+**Open items**: 18 remaining (was 26; Batch B complete — F6, F10, F20, F25, F28, F29, O5, O10)
 
 ---
 
@@ -42,46 +42,56 @@ Primary strategic reference:
 1. Read this plan. It is self-contained.
 2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
-4. The plan below has all context needed. Start with Batch B.
+4. The plan below has all context needed. Start with Batch C.
 
 ### Current State
 
-- **Batch A**: Complete (8 items). All quality gates pass. Phase 1 remediation closed.
-- **Batches B–E**: Open. 32 items remain.
-- **Parallel docs session complete**: `docs/foundation/onboarding.md` removed (content integrated into quick-start.md and troubleshooting.md). `docs/governance/ai-agent-guide.md` removed (entirely redundant with start-right → AGENT.md path). Start-right commands reduced to thin pointers to prompts. ADR count updated to 116. All references updated across ~20 files.
+- **Batch A**: Complete (8 items). All quality gates pass.
+- **Batch B**: Complete (8 items — F6, F10, F20, F25, F28, F29, O5, O10). Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). All quality gates pass.
+- **Batches C–E**: Open. 18 items remain.
 - **F18 is subsumed by F5** — they share the same fix (env identity + LIB_PACKAGES cleanup).
-- **Uncommitted work**: Batch A + parallel docs changes are on the working tree. Check `git status` — if changes are present, commit them before starting Batch B.
 
-### Execution Plan
+### Next: Batch C — Medium Complexity (3 items)
 
-Execute in batches. Run quality gates after each batch. Commit after each batch.
+Each item follows: **verify** current state (may have changed since logging) → **implement** (TDD) → **validate** (quality gates).
 
-1. ~~**Batch A: Remediation + Trivial Fixes** (8 items)~~ **COMPLETE**
-   - R2, F4, F9, F26, F30, O4, O6, O7 — all done, all gates green.
-2. **Batch B: Small Architecture + Documentation** (11 items, ~1 session)
-   - **F6** (small): Extract shared retrieval bootstrap helper from `search-retrieval-factory.ts` and `wiring.ts`
-   - **F10** (small): Add timeout/retry to OAuth metadata fetch in `oauth-and-caching-setup.ts`
-   - **F20** (small): Fix/archive contradictory deployment docs (`BUILD_VERIFICATION.md`, `TESTING_GAP_ANALYSIS.md`)
-   - **F25** (small): Fix deployment-architecture.md (describes sync `createApp`, should be async)
-   - **F28** (small): Replace blanket eslint-disables in `apps/oak-search-cli/ground-truths/generation/*.ts`
-   - **F29** (small): Fix "core depends on nothing" wording in `docs/architecture/README.md`
-   - ~~**O1** (small): Resolved — commands are thin pointers to prompts; prompts have full 10-gate list~~
-   - ~~**O2** (small): Resolved — quick-start.md tree updated with packages/core/, search SDK, correct libs, current docs/ dirs~~
-   - ~~**O3** (small): Resolved — ai-agent-guide.md deleted; rules.md references AGENT.md for full listing; canonical gate sequence in start-right.prompt.md~~
-   - **O5** (small): Add `doc-gen` / `subagents:check` to start-right gate lists
-   - **O10** (small): Add convenience commands (`pnpm make`, `pnpm qg`, `pnpm fix`, `pnpm doc-gen`) to AGENT.md
-3. **Batch C: Medium Complexity** (3 items, ~1–2 sessions)
-   - **F5** (medium): Env identity + LIB_PACKAGES cleanup — decide core vs lib for `env`, remove stale `storage`/`transport` entries (subsumes F18)
-   - **F8** (medium): Env pipeline unification — migrate Search CLI and STDIO to `resolveEnv`
-   - **F27** (medium): DI for response-augmentation — `process.env` reads in SDK violate ADR-078
-   - ~~**O9** (medium): Resolved — commands reduced to thin pointers to prompts~~
+**F5** (medium): Env identity + LIB_PACKAGES cleanup (subsumes F18)
+
+- **Verify**: Confirm `packages/core/env/eslint.config.ts` uses `createLibBoundaryRules` and `LIB_PACKAGES` in `packages/core/oak-eslint/src/rules/boundary.ts` has stale `storage`/`transport` entries.
+- **Design decision required**: (a) Move `env` to `packages/libs/env` since it has runtime deps, or (b) Create `coreBoundaryRulesWithDeps` for core packages that legitimately need runtime deps. **Discuss with user before implementing.**
+- **Validate**: `rg "storage|transport" packages/core/oak-eslint/src/rules/boundary.ts` returns no stale entries; `pnpm lint && pnpm test`.
+
+**F8** (medium): Env pipeline unification
+
+- **Verify**: Confirm Search CLI (`apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`) and STDIO (`apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`) still use custom `process.env` readers.
+- **Fix**: Migrate both to `resolveEnv` with app-specific schemas. Retire legacy `loadAppEnv`/direct env readers.
+- **TDD**: Write integration tests for new env resolution first (RED), implement migration (GREEN), remove legacy code (REFACTOR).
+- **Validate**: `rg "process\.env\." apps/oak-search-cli/src/ apps/oak-curriculum-mcp-stdio/src/` shows no direct reads outside entry point; `pnpm test && pnpm test:e2e`.
+
+**F27** (medium): DI for response-augmentation logger
+
+- **Verify**: Confirm `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts` and `packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` read `process.env` at module level.
+- **Fix**: Accept logger as parameter or factory function. Consuming apps provide logger configured from entry-point env.
+- **TDD**: Write unit tests for logger injection first (RED), refactor to accept logger param (GREEN), update consuming apps (REFACTOR).
+- **Validate**: `rg "process\.env" packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` returns nothing; `pnpm type-check && pnpm test`.
+
+**Specialist reviewers for Batch C**: `code-reviewer`, `architecture-reviewer-barney` (F5 boundary changes), `architecture-reviewer-fred` (F5 boundary rules, F8 env pipeline), `config-reviewer` (F5 ESLint/boundary changes), `type-reviewer` (F27 DI type changes).
+
+### Remaining Batches
+
 4. **Batch D: Large / Architectural** (1 item, design decision required)
    - **F7** (large): Contract consolidation — `SearchRetrievalService` vs `RetrievalService`
-   - May defer to post-release if structural typing remains safe
+   - **Design review gate**: Before implementing, invoke `architecture-reviewer-barney` and `architecture-reviewer-betty` to assess whether structural typing is sufficient (defer) or shared import is needed (fix).
+   - May defer to post-release if structural typing remains safe.
 5. **Batch E: Phase 3 / Deferred** (16 items, post-release backlog)
    - R4, F11–F17, F19, F31–F35, O8, O12
-   - All P3 — none release-blocking
-   - Record disposition in snag register
+   - All P3 — none release-blocking.
+   - Record disposition in snag register.
+6. **Go/No-Go Preparation**
+   - Prepare G1–G8 evidence (see §Mandatory Check Gates below).
+   - Invoke `release-readiness-reviewer`.
+   - Verify no open P0/P1 snags remain.
+   - Record decision.
 
 ---
 
@@ -265,7 +275,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | Both `oak-curriculum-mcp-streamable-http` and `oak-curriculum-mcp-stdio` hand-roll near-identical ES-client + Search SDK bootstrap. Duplicated composition code drifts easily (flags, index target defaults, logging semantics). |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts`, `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` |
 | **Fix** | Extract one shared retrieval bootstrap helper. Keep app-specific concerns at the outer composition root. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk`. Both apps delegate to it. 3 unit tests added. |
 
 #### F7: Contract duplication — SearchRetrievalService vs RetrievalService
 
@@ -314,7 +324,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `fetchUpstreamMetadata` at startup is one-shot with no timeout or retry. Clerk outage or transient network issue prevents app from starting. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts` |
 | **Fix** | Add configurable timeout (e.g. 10s) to `fetch()`. Consider limited retry or fallback to cached metadata for resilience. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Per-attempt timeout (10s), exponential backoff (3 attempts), transient-only retry (5xx, network, abort). 5 unit tests added. |
 
 ---
 
@@ -481,25 +491,24 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 
 1. ~~R2, F4, F9, F26, F30, O4, O6, O7~~
 
-**Batch B — Small Architecture + Documentation** (11 items):
+~~**Batch B — Small Architecture + Documentation** (11 items)~~ **COMPLETE**
 
-2. **F6**, **F10**, **F20**, **F25**, **F28**, **F29** (small arch/doc fixes)
-3. **O1**, **O2**, **O3**, **O5**, **O10** (small onboarding fixes)
+2. ~~F6, F10, F20, F25, F28, F29~~ (small arch/doc fixes)
+3. ~~O1, O2, O3, O5, O10~~ (small onboarding fixes — O1/O2/O3 resolved by prior docs session)
 
-**Batch C — Medium Complexity** (4 items):
+**Batch C — Medium Complexity** (3 items) ← **NEXT**:
 
 4. **F5** (env identity + LIB_PACKAGES; subsumes F18)
 5. **F8** (env pipeline unification)
 6. **F27** (response-augmentation DI)
-7. **O9** (start-right DRY)
 
 **Batch D — Large / Architectural** (1 item):
 
-8. **F7** (contract consolidation — may defer if structural typing is safe)
+7. **F7** (contract consolidation — may defer if structural typing is safe)
 
 **Batch E — Phase 3 / Deferred** (16 items):
 
-9. **R4**, **F11–F17**, **F19**, **F31–F35**, **O8**, **O12** (P3, as capacity allows)
+8. **R4**, **F11–F17**, **F19**, **F31–F35**, **O8**, **O12** (P3, as capacity allows)
 
 ### Specialist Follow-Ups (Post-Fix)
 
@@ -528,7 +537,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | `BUILD_VERIFICATION.md` and `TESTING_GAP_ANALYSIS.md` claim `test:e2e` was removed but still instruct running `pnpm test:e2e`. Historical notes conflict with operational content. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/docs/BUILD_VERIFICATION.md`, `apps/oak-curriculum-mcp-streamable-http/docs/TESTING_GAP_ANALYSIS.md` |
 | **Fix** | Fix or archive both docs so they cannot be read as current operational truth. Remove contradictions or mark clearly as historical-only. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Both docs archived to `docs/archive/`. Cross-references updated. |
 
 #### F21: coreBoundaryRules does not block SDK imports
 
@@ -584,7 +593,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | Docs describe sync `createApp`, `coreTransport` vs `mcpFactory`, old startup `ready` pattern vs ADR-112 per-request transport. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md` |
 | **Fix** | Update for async `createApp`, `mcpFactory`, ADR-112, and current bootstrap flow. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Updated for async `createApp`, `mcpFactory` per-request pattern, corrected middleware phase diagram. |
 
 ---
 
@@ -622,7 +631,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | `bulk-data-parser.ts`, `generate-ground-truth-types.ts`, `type-emitter.ts` have file-level disables for max-lines, complexity, type-assertions, no-restricted-types. Violates never-disable-checks rule. |
 | **Files** | `apps/oak-search-cli/ground-truths/generation/*.ts` |
 | **Fix** | Refactor to comply with limits, or use narrow line-level disables with justification. Consider splitting large generators. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Removed blanket disables from 4 files. Replaced `as Record<string, unknown>` with `in` operator narrowing in `bulk-data-parser.ts`. Structural exemptions moved to centralised `eslint.config.ts` overrides. |
 
 #### F29: Boundary rule wording — "core depends on nothing"
 
@@ -633,7 +642,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | docs/architecture/README.md says "core depends on nothing", but `packages/core/env` depends on `@oaknational/result` (intra-core). Wording implies violation. |
 | **Files** | `docs/architecture/README.md` |
 | **Fix** | Clarify boundary rule to allow/disallow intra-core dependencies explicitly. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Clarified to "core has no dependencies outside core; intra-core dependencies are permitted". |
 
 #### F30: STDIO bin — redundant requireRepoRoot() call
 
@@ -769,7 +778,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | Both gates part of `pnpm make` and `pnpm check` but not in start-right canonical lists. AI agents following only start-right skip them. |
 | **Files** | `.agent/prompts/start-right.prompt.md` (commands are now thin pointers) |
 | **Fix** | Add to canonical gate list in prompt, or explicitly note they are only for specific contexts (e.g. after docs/sub-agent changes). |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Added `pnpm doc-gen` and `pnpm subagents:check` to both start-right prompt files with conditional-application comments. |
 
 #### O6: start-right-thorough.prompt.md — grammar error
 
@@ -826,7 +835,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | `pnpm make`, `pnpm qg`, `pnpm fix`, `pnpm doc-gen` in README Key Commands but not in AGENT.md Development Commands. |
 | **Files** | `.agent/directives/AGENT.md` |
 | **Fix** | Add convenience commands for reference. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Added `pnpm make`, `pnpm qg`, `pnpm fix`, `pnpm doc-gen` to AGENT.md Development Commands. |
 
 #### O11: onboarding.md step 9 — title ambiguous
 
@@ -857,7 +866,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 Onboarding items are interleaved into the main batched execution order (see §Execution Order above):
 
 - **Batch A** (trivial): O4, O6, O7 — **COMPLETE**
-- **Batch B** (small): O1, O2, O3, O5, O10 (O8 moved to Batch E — low value; O11 cancelled — target file removed)
+- **Batch B** (small): O1, O2, O3, O5, O10 — **COMPLETE** (O8 moved to Batch E — low value; O11 cancelled — target file removed)
 - **Batch C** (medium): ~~O9~~, O12 (O9 resolved — commands are thin pointers; O12 retargeted to HTTP server README)
 
 ---
@@ -926,6 +935,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.
 - **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `rules.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.
 - **2026-02-25**: Plan updated for standalone handoff. `onboarding.md` being removed by parallel agent — O11 cancelled (target file removed), O12 retargeted to HTTP server README, O8 demoted to Batch E. Next Session Checklist rewritten as self-contained entry point with Getting Started steps, Current State summary, and item-level file references. Execution Order and Onboarding Execution Order aligned. Open items: 32 remaining.
 - **2026-02-25**: **Batch A complete** (8 items: R2, F4, F9, F26, F30, O4, O6, O7). R2: extracted `bootstrapApp<T>` with DI + 3 integration tests. F4: typeSafeEntries import fixed. F9: app boundary rules added to Search CLI. F26: package locations corrected in AGENT.md and ai-agent-guide. F30: redundant `requireRepoRoot()` removed. O4: `pnpm build` added to gate list. O6: grammar fixed. O7: `onboarding-reviewer` and `config-reviewer` added to table. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e, test:ui, smoke:dev:stub).
