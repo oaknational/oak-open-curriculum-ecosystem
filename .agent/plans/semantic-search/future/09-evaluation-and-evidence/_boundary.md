@@ -8,4 +8,5 @@ It defines:
 - Evidence requirements before major retrieval-policy changes
 
 Contained source document(s):
+- `README.md`
 - `ground-truth-expansion-plan.md`

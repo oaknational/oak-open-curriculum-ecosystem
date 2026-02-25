@@ -1,6 +1,7 @@
 # Definition Retrieval
 
-**Stream**: search-quality  
+**Boundary**: retrieval-quality-engine  
+**Legacy Stream Label**: search-quality  
 **Level**: 3  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
@@ -30,6 +31,24 @@ Oak's lesson data includes keyword definitions — this is a high-value asset we
 | "what is a coefficient" | Definition | General algebra lessons | Definition + relevant lessons |
 | "define photosynthesis" | Definition | Biology lessons | Definition + relevant lessons |
 | "meaning of alliteration" | Definition | English lessons | Definition + relevant lessons |
+
+---
+
+## Boundary Contract
+
+This plan is authoritative for:
+
+- Definition data sources and schema
+- Definition index/field modelling
+- Definition retriever implementation
+- Definition response contract
+
+Query-shape semantics (what counts as DEFINITION, confidence gating, and
+allowed policy actions) are authoritative in
+[search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md).
+
+Evidence authoring and benchmark comparability are governed by
+[ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md).
 
 ---
 
@@ -88,19 +107,16 @@ A dedicated retriever for definition queries:
 }
 ```
 
-### 3. Query Rules for Definition Intent
+### 3. Routing Hook for Definition Intent (Policy-Owned Triggers)
 
-Detect definition-seeking queries and route to definition retriever:
+Use the policy boundary's DEFINITION decision to route into the definition
+profile. This plan does not redefine trigger patterns locally.
 
 ```json
 {
   "retriever": {
     "rule": {
-      "match_criteria": [
-        { "type": "prefix", "metadata": "query", "prefix": "what is" },
-        { "type": "prefix", "metadata": "query", "prefix": "define" },
-        { "type": "contains", "metadata": "query", "contains": "meaning of" }
-      ],
+      "match_criteria": [{ "type": "exact", "metadata": "query_shape", "value": "DEFINITION" }],
       "ruleset_ids": ["definition-queries"],
       "retriever": {
         "rrf": {
@@ -199,7 +215,8 @@ export function buildDefinitionRetriever(term: string): Retriever {
 
 ### Phase 4: Query Rules
 
-Deploy definition query rules to Elasticsearch:
+Deploy definition query rules to Elasticsearch. Rule triggers must be sourced
+from the query-policy boundary and not duplicated here.
 
 ```typescript
 // Create ruleset
@@ -254,6 +271,9 @@ interface DefinitionSearchResult {
 
 Add definition ground truths to validation:
 
+Ground truths must be authored and versioned using the evaluation boundary
+workflow so measurements remain comparable across plans.
+
 | Query | Expected | Notes |
 |-------|----------|-------|
 | "what is a coefficient" | Definition + maths lessons | |
@@ -281,5 +301,7 @@ Add definition ground truths to validation:
 |----------|---------|
 | [data-and-domain-vocabulary.md](../../../../research/elasticsearch/oak-data/data-and-domain-vocabulary.md) | Definition registry design |
 | [elasticsearch-approaches.md](../../../../research/elasticsearch/oak-data/elasticsearch-approaches.md) | Query rules pattern |
+| [search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md) | Authoritative DEFINITION policy and routing semantics |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Ground-truth/evidence authority |
 | [modern-es-features.md](modern-es-features.md) | Parent Level 3 plan |
 | [../roadmap.md](../../roadmap.md) | Master roadmap |

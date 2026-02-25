@@ -1,6 +1,7 @@
 # Document Relationships
 
-**Stream**: search-quality  
+**Boundary**: retrieval-quality-engine  
+**Legacy Stream Label**: search-quality  
 **Level**: 2  
 **Status**: 📋 Ready — Level 1 complete and validated  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
@@ -165,12 +166,15 @@ const prerequisiteQuery = {
 
 Before implementing Level 2 features:
 
-1. **Create ground truths** for relationship queries:
+1. Follow the evidence workflow in
+   [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md)
+   for authoring/versioning.
+2. **Create ground truths** for relationship queries:
    - "What comes before quadratics?" → Expected unit list
    - "Show me the fractions progression" → Expected thread
-2. **Baseline**: Document current MRR for these query types
-3. **After**: Measure improvement
-4. **Record**: [EXPERIMENT-LOG.md](../../../../evaluations/EXPERIMENT-LOG.md)
+3. **Baseline**: Document current MRR for these query types
+4. **After**: Measure improvement
+5. **Record**: [EXPERIMENT-LOG.md](../../../../evaluations/EXPERIMENT-LOG.md)
 
 ---
 
@@ -193,3 +197,4 @@ Before implementing Level 2 features:
 | [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md)                    | Level 2 checklist       |
 | [../roadmap.md](../../roadmap.md)                                                                | Master roadmap          |
 | [modern-es-features.md](modern-es-features.md)                                                 | Next tier               |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Ground-truth/evidence authority |

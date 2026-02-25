@@ -1,6 +1,7 @@
 # Vocabulary Mining
 
-**Stream**: bulk-data-analysis  
+**Boundary**: vocabulary-and-semantic-assets  
+**Legacy Stream Label**: bulk-data-analysis  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  

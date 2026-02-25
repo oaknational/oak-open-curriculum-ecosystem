@@ -1,6 +1,7 @@
 # Widget Renderer Reactivation
 
-**Stream**: extensions
+**Boundary**: experience-surfaces-and-extensions
+**Legacy Stream Label**: extensions
 **Status**: ⏸️ Blocked — awaiting prerequisites
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)
 **Created**: 2026-02-23

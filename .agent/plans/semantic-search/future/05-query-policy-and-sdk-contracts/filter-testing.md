@@ -1,6 +1,7 @@
 # Filter Testing
 
-**Stream**: sdk-api  
+**Boundary**: query-policy-and-sdk-contracts  
+**Legacy Stream Label**: sdk-api  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  

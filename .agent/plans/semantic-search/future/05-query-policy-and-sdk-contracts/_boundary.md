@@ -11,3 +11,4 @@ Contained source document(s):
 - `README.md`
 - `filter-testing.md`
 - `search-decision-model.md`
+- `paraphrase-policy-and-application.md`

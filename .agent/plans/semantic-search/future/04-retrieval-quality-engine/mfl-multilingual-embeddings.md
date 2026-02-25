@@ -1,6 +1,7 @@
 # MFL Multilingual Embeddings
 
-**Stream**: search-quality  
+**Boundary**: retrieval-quality-engine  
+**Legacy Stream Label**: search-quality  
 **Status**: 📋 Pending — Can run alongside Level 3  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  

@@ -1,4 +1,6 @@
-# Operations
+# Runtime Governance and Operations
+
+**Legacy Working Name**: Operations
 
 **Domain**: Running the search system safely and reliably  
 **Intent**: The system operates predictably, failures are handled, changes can be rolled back  

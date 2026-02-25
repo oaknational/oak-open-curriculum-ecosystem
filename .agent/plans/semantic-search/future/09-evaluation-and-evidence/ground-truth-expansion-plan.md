@@ -1,5 +1,6 @@
 # Ground Truth Expansion Plan
 
+**Boundary**: evaluation-and-evidence  
 **Status**: Future work (not started)  
 **Prerequisite**: Phase 1 complete (30 foundational ground truths)  
 **Last Updated**: 2026-02-10

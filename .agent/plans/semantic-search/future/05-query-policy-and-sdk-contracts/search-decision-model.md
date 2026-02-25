@@ -1,6 +1,7 @@
 # Search Decision Model
 
-**Stream**: search-quality  
+**Boundary**: query-policy-and-sdk-contracts  
+**Legacy Stream Label**: search-quality  
 **Level**: 3  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
@@ -23,6 +24,19 @@ This document establishes three core components:
 1. **Query Shape Taxonomy** — Named query types
 2. **Confidence Model** — When to apply expansions/routing
 3. **Retriever Catalogue** — Named retriever profiles
+
+---
+
+## Boundary Authority (Concept Ownership)
+
+| Concept | Authoritative Plan |
+|--------|--------------------|
+| Query shapes, confidence tiers, allowed actions, profile selection, explain contract | **This document** |
+| Definition corpus/index structure and definition retriever internals | [definition-retrieval.md](../04-retrieval-quality-engine/definition-retrieval.md) |
+| ES-native tuning mechanics (reranker parameters, RRF tuning, rule retriever placement) | [modern-es-features.md](../04-retrieval-quality-engine/modern-es-features.md) |
+| Ground-truth expansion and evidence methodology | [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) |
+
+This split keeps policy semantics stable while retrieval implementation evolves.
 
 ---
 
@@ -343,7 +357,7 @@ This enables:
 - [ ] Implement confidence derivation
 - [ ] Define all retriever profiles in code
 - [ ] Add explain logging
-- [ ] Create ground truths per query shape
+- [ ] Create ground truths per query shape via the evaluation boundary workflow
 - [ ] Benchmark each retriever profile
 - [ ] Document in ADR
 
@@ -355,5 +369,8 @@ This enables:
 |----------|---------|
 | [documentation-gap-analysis.md](../../../../research/elasticsearch/oak-data/documentation-gap-analysis.md) | Research gaps A, B, C |
 | [elasticsearch-approaches.md](../../../../research/elasticsearch/oak-data/elasticsearch-approaches.md) | Retriever patterns |
+| [definition-retrieval.md](../04-retrieval-quality-engine/definition-retrieval.md) | Definition retrieval implementation boundary |
+| [modern-es-features.md](../04-retrieval-quality-engine/modern-es-features.md) | ES-native tuning implementation boundary |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Ground-truth/evidence authority |
 | [operations/governance.md](../07-runtime-governance-and-operations/governance.md) | How the system operates |
 | [../roadmap.md](../../roadmap.md) | Master roadmap |

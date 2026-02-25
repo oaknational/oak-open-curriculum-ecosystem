@@ -1,10 +1,10 @@
-# Post-SDK Work — Streams
+# Future Work — Strategic Boundary Hub
 
 **Role**: Strategic backlog hub (not an active execution lane)  
-**Status**: 📋 Backlog maintained — promote items to collection `active/` when work starts  
+**Status**: 📋 Backlog maintained — promote strategic items to `current/`, then `active/` when work starts  
 **Parent**: [../../roadmap.md](../../roadmap.md)
 
-This folder captures post-SDK strategic backlog streams. It is the
+This folder captures post-SDK strategic backlog boundaries. It is the
 **next/later planning surface** for semantic-search work, not the
 in-progress execution source of truth.
 
@@ -19,7 +19,7 @@ executable plan in the collection lifecycle lanes (`current/` then
 ```text
 NOW (in progress): semantic-search/active/
 NEXT (queued): post-merge integration cleanup
-LATER (deferred): milestone 2 search quality/ecosystem streams
+LATER (deferred): milestone 2 search quality/ecosystem boundaries
 ```
 
 Immediate next-up backlog item from this hub:
@@ -30,7 +30,7 @@ Immediate next-up backlog item from this hub:
 
 ## Standalone Backlog Items
 
-Plans that span multiple streams or address SDK architecture.
+Plans that span multiple boundaries or address SDK architecture.
 
 | Plan | Intent | Prerequisite |
 |------|--------|--------------|
@@ -40,12 +40,12 @@ Plans that span multiple streams or address SDK architecture.
 
 ---
 
-## Streams (LATER)
+## Boundaries (LATER)
 
-Each stream is a coherent domain of work with its own README explaining intent and impact.
+Each boundary is a coherent domain of work with its own README explaining intent and impact.
 
-| Stream | Intent | First Plan |
-|--------|--------|------------|
+| Boundary | Intent | First Plan |
+|----------|--------|------------|
 | [mcp-consumer-integration/](../06-mcp-consumer-integration/) | Post-merge MCP integration follow-up | [mcp-result-pattern-unification.md](../06-mcp-consumer-integration/mcp-result-pattern-unification.md) |
 | [retrieval-quality-engine/](../04-retrieval-quality-engine/) | Improve search result relevance | Levels 2 → 3 → 4 (sequential); reranking investigation at Level 3 |
 | [vocabulary-and-semantic-assets/](../03-vocabulary-and-semantic-assets/) | Mine vocabulary from curriculum data | vocabulary-mining.md |
@@ -55,12 +55,12 @@ Each stream is a coherent domain of work with its own README explaining intent a
 
 ---
 
-## Stream Principles
+## Boundary Principles
 
-1. **Each plan belongs to exactly one stream**
-2. **Stream READMEs** explain domain, intent, desired impact, and any sequencing
-3. **Plans within a stream** may be sequential or parallel depending on dependencies
-4. **When a plan mixes concerns**, examine whether it should be split by stream
+1. **Each plan belongs to exactly one boundary**
+2. **Boundary READMEs** explain domain, intent, desired impact, and any sequencing
+3. **Plans within a boundary** may be sequential or parallel depending on dependencies
+4. **When a plan mixes concerns**, examine whether it should be split by boundary
 5. **Completed outcomes are mined into permanent documentation before archival**
 
 ---

@@ -1,4 +1,4 @@
-# MCP Integration
+# MCP Consumer Integration
 
 **Domain**: Wiring the Search SDK into MCP tools  
 **Intent**: Enable AI agents to use semantic search capabilities  
@@ -7,7 +7,7 @@
 
 ---
 
-## Why This Stream?
+## Why This Boundary?
 
 MCP integration is the **first production consumer** of the
 Search SDK. Wiring it up:

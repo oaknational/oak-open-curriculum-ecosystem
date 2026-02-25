@@ -1,6 +1,7 @@
 # Modern ES Features — HIGHEST ROI
 
-**Stream**: search-quality  
+**Boundary**: retrieval-quality-engine  
+**Legacy Stream Label**: search-quality  
 **Level**: 3  
 **Status**: 📋 Pending — After SDK extraction and MCP integration  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
@@ -14,9 +15,9 @@
 
 This plan applies ES-native features to maximize retrieval quality. **These are the highest-ROI changes** per research recommendations. Semantic reranking and query rules are NOT AI features — they are Elastic-native capabilities.
 
-This plan also includes re-evaluation of Level 1 fundamentals (Stage 0) and MFL-specific investigation, since these are tuning work that belongs in this workstream.
+This plan also includes re-evaluation of Level 1 fundamentals (Stage 0) and MFL-specific investigation, since these are tuning work that belongs in this boundary.
 
-**Prerequisite**: SDK extraction and MCP integration should complete first. [Document Relationships](document-relationships.md) is part of the same enhancements workstream.
+**Prerequisite**: SDK extraction and MCP integration should complete first. [Document Relationships](document-relationships.md) is part of the same enhancements boundary.
 
 **Exit Criteria** (from [search-acceptance-criteria.md](../../search-acceptance-criteria.md)):
 
@@ -131,6 +132,11 @@ The Rule Retriever applies deterministic rules for specific query patterns:
 - **Navigational queries**: "Year 5 fractions" → apply year filter automatically
 - **Pinning**: Specific queries → guaranteed results
 
+Policy authority note: query-shape semantics, confidence gating, and allowed
+actions are defined in
+[search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md).
+This plan owns the Elasticsearch mechanics and performance tuning only.
+
 ### Why It Matters
 
 From research ([elasticsearch-approaches.md](../../../../research/elasticsearch/oak-data/elasticsearch-approaches.md)):
@@ -159,14 +165,14 @@ From research ([elasticsearch-approaches.md](../../../../research/elasticsearch/
 }
 ```
 
-### Rule Categories to Create
+### Rule Categories to Implement (Derived from Policy Boundary)
 
-| Category | Trigger | Action |
-|----------|---------|--------|
-| Definition | "what is", "what does X mean" | Boost definition fields |
-| Year-level | "year 5", "Y5", "KS2" | Apply filter automatically |
-| Beginner | "introduction", "beginner", "first lesson" | Boost lesson_order=1 |
-| Advanced | "challenging", "extension", "advanced" | Boost later lessons in unit |
+| Category | Retrieval-Side Action |
+|----------|-----------------------|
+| Definition | Route to `definition_first` profile |
+| Navigation | Apply pre-filtered profile (`filtered_standard`) |
+| Pedagogical / exploration cases | Use designated profile from decision model |
+| Pinning / exclusions | Enforce deterministic ranking or blocking |
 
 **References**:
 - [Rule retriever](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rule-retriever)
@@ -505,6 +511,9 @@ For each Level 3 experiment:
 5. **Analyse**: Per-category breakdown
 6. **Record**: [EXPERIMENT-LOG.md](../../../../evaluations/EXPERIMENT-LOG.md)
 
+Ground-truth additions and methodology should be managed via
+[ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md).
+
 ---
 
 ## Success Criteria
@@ -526,6 +535,7 @@ At this point, Level 4 (AI Enhancement) begins.
 | [elasticsearch-approaches.md](../../../../research/elasticsearch/oak-data/elasticsearch-approaches.md) | Detailed ES patterns |
 | [uses-of-structured-domain-knowledge.md](../../../../research/elasticsearch/oak-data/uses-of-structured-domain-knowledge.md) | All vocabulary levers |
 | [definition-retrieval.md](definition-retrieval.md) | Definition capability |
-| [search-decision-model.md](search-decision-model.md) | Query shape taxonomy |
+| [search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md) | Query shape taxonomy |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Ground-truth/evidence authority |
 | [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md) | Level 3 checklist |
 | [ADR-082](../../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first |

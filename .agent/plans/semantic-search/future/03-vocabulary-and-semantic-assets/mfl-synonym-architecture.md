@@ -1,6 +1,7 @@
 # MFL Synonym Architecture
 
-**Stream**: search-quality  
+**Boundary**: vocabulary-and-semantic-assets  
+**Legacy Stream Label**: search-quality  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [vocabulary-mining.md](vocabulary-mining.md)  
 **Created**: 2026-01-24  
@@ -158,7 +159,7 @@ Foreign language words in lesson titles are matched by the indexed content, not 
 |----------|---------|
 | [vocabulary-mining.md](vocabulary-mining.md) | Synonym bucket classification |
 | [../../synonyms/README.md](../../../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) | Synonym source of truth |
-| [mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md) | MFL search quality issues |
+| [mfl-multilingual-embeddings.md](../04-retrieval-quality-engine/mfl-multilingual-embeddings.md) | MFL search quality issues |
 
 ---
 

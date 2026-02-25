@@ -1,9 +1,14 @@
 # Subject Domain Model — SDK Architecture
 
+**Boundary**: schema-authority-and-codegen  
 **Status**: 📋 Pending — After Ground Truth Review  
-**Parent**: [../roadmap.md](../roadmap.md)  
+**Parent**: [../../roadmap.md](../../roadmap.md)  
 **Origin**: Cursor plan `subject_domain_model_d08e994f`  
 **Created**: 2026-01-22
+
+**Strategic Note**: This `future/` plan preserves detailed implementation
+design from prior research. Treat it as reference context until promoted to
+`current/`/`active/`.
 
 ---
 
@@ -221,6 +226,6 @@ pnpm build
 
 | Document | Purpose |
 |----------|---------|
-| [ADR-080](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 denormalisation patterns |
-| [ADR-101](../../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | Subject hierarchy for search |
-| [subject-hierarchy-enhancement.md](../archive/completed/subject-hierarchy-enhancement.md) | Prior implementation baseline |
+| [ADR-080](../../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 denormalisation patterns |
+| [ADR-101](../../../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | Subject hierarchy for search |
+| [subject-hierarchy-enhancement.md](../../archive/completed/subject-hierarchy-enhancement.md) | Prior implementation baseline |

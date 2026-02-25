@@ -1,6 +1,7 @@
 # Advanced Features
 
-**Stream**: extensions  
+**Boundary**: experience-surfaces-and-extensions  
+**Legacy Stream Label**: extensions  
 **Status**: ⏸️ Future  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  

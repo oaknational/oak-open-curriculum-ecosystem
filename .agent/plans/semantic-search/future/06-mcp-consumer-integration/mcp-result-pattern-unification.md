@@ -1,10 +1,15 @@
 # MCP Result Pattern Unification
 
-**Stream**: mcp-integration (post-merge)
+**Boundary**: mcp-consumer-integration
+**Legacy Stream Label**: mcp-integration (post-merge)
 **Status**: 📋 Scheduled — does not block merge, starts on a new branch
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)
 **Created**: 2026-02-16
 **Last Updated**: 2026-02-19
+
+**Strategic Note**: Detailed execution phases are intentionally retained from
+research and implementation planning. In `future/`, they are reference-level
+guidance until promotion to an executable lane.
 
 ---
 

@@ -1,6 +1,6 @@
-# Search Quality
+# Retrieval Quality Engine
 
-**Domain**: Improving search result relevance  
+**Domain**: Improving search result relevance through retrieval architecture  
 **Intent**: Users find what they're looking for  
 **Impact**: Better MRR, reduced zero-hit rate, higher user satisfaction
 
@@ -30,7 +30,7 @@ Plans are **sequential** — complete one level before starting the next:
 ```
 Level 2: Document Relationships
          ↓
-Level 3: Modern ES Features (includes definition-retrieval, search-decision-model)
+Level 3: Modern ES Features (includes definition-retrieval; aligned with query policy boundary)
          ↓
 Level 4: AI Enhancement (DESTINATION, not optional)
 ```
@@ -50,7 +50,6 @@ Supporting plans can run in parallel:
 | [document-relationships.md](document-relationships.md) | 2 | 📋 Pending |
 | [modern-es-features.md](modern-es-features.md) | 3 | 📋 Pending |
 | [definition-retrieval.md](definition-retrieval.md) | 3 | 📋 Pending |
-| [search-decision-model.md](search-decision-model.md) | 3 | 📋 Pending |
 | [ai-enhancement.md](ai-enhancement.md) | 4 | 📋 Pending |
 
 ### Supporting
@@ -58,7 +57,15 @@ Supporting plans can run in parallel:
 | Plan | Description | Status |
 |------|-------------|--------|
 | [mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md) | Fix MFL search (0.19-0.29 MRR) | 📋 Pending |
-| [mfl-synonym-architecture.md](mfl-synonym-architecture.md) | DRY refactoring of MFL synonyms | 📋 Pending |
+
+## Cross-Boundary Dependencies
+
+| Boundary Plan | Why It Matters Here |
+|---------------|---------------------|
+| [search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md) | Defines query-shape routing and retriever-profile policy used by Level 3/4 retrieval |
+| [paraphrase-policy-and-application.md](../05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md) | Defines confidence-gated runtime use of Bucket B paraphrases |
+| [mfl-synonym-architecture.md](../03-vocabulary-and-semantic-assets/mfl-synonym-architecture.md) | Provides cleaned synonym artefacts that influence MFL retrieval quality outcomes |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Defines evidence and ground-truth methodology for all retrieval experiments |
 
 ### Future Investigation
 

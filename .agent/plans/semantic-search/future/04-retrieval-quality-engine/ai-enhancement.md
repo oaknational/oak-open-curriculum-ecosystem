@@ -1,6 +1,7 @@
 # AI Enhancement — DESTINATION
 
-**Stream**: search-quality  
+**Boundary**: retrieval-quality-engine  
+**Legacy Stream Label**: search-quality  
 **Level**: 4  
 **Status**: ⏸️ Blocked by Level 3  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
@@ -193,6 +194,10 @@ If LLM pre-processing fails:
 
 These queries should improve after implementation:
 
+Ground truths must be authored via
+[ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md)
+to preserve methodology and benchmark comparability.
+
 | Query                                            | Current MRR | Target MRR |
 | ------------------------------------------------ | ----------- | ---------- |
 | "challenging extension work for able mathematicians" | 0.000     | ≥ 0.80     |
@@ -242,4 +247,5 @@ Finally:   TIER 4 (this plan)
 | [ADR-082](../../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first   |
 | [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md)                    | Level 4 entry criteria |
 | [operations/governance.md](../07-runtime-governance-and-operations/governance.md)                                       | Latency budgets, fallbacks |
-| [search-decision-model.md](search-decision-model.md)                                          | Query shape taxonomy |
+| [search-decision-model.md](../05-query-policy-and-sdk-contracts/search-decision-model.md)                                          | Query shape taxonomy |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Ground-truth/evidence authority |

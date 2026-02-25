@@ -1,20 +1,22 @@
-# SDK API
+# Query Policy and SDK Contracts
 
-**Domain**: Understanding and stabilising the Search SDK interface  
-**Intent**: Make the SDK usable, well-designed, and stable for consumers  
-**Impact**: Developers can integrate easily, API surface is documented and predictable
+**Domain**: Query decision policy and Search SDK interface contracts  
+**Intent**: Make query behaviour explainable and the API surface stable for consumers  
+**Impact**: Predictable query handling, consistent retriever selection, and robust filter contracts
 
 ---
 
 ## Why Separate?
 
-This is about **API design**, not search quality. The questions here are:
+This boundary is about **policy and contracts**, not retrieval tuning mechanics. The questions here are:
 
 - What filter combinations exist across the curriculum?
 - How should the SDK expose these?
 - What happens with invalid combinations?
+- How are query shapes classified and routed?
+- Which retriever profile is allowed under each confidence level?
 
-This work informs SDK design decisions, not search relevance.
+This work defines policy and contract semantics that retrieval plans consume.
 
 ---
 
@@ -23,6 +25,18 @@ This work informs SDK design decisions, not search relevance.
 | Plan | Description | Status |
 |------|-------------|--------|
 | [filter-testing.md](filter-testing.md) | Document all filter combinations, test edge cases | 📋 Pending |
+| [search-decision-model.md](search-decision-model.md) | Query shape taxonomy, confidence model, retriever catalogue | 📋 Pending |
+| [paraphrase-policy-and-application.md](paraphrase-policy-and-application.md) | Runtime policy for applying Bucket B paraphrases by confidence/subject | 📋 Pending |
+
+---
+
+## Cross-Boundary Dependencies
+
+| Boundary Plan | Why It Matters Here |
+|---------------|---------------------|
+| [natural-language-paraphrases.md](../03-vocabulary-and-semantic-assets/natural-language-paraphrases.md) | Supplies Bucket B paraphrase artefacts consumed by policy |
+| [modern-es-features.md](../04-retrieval-quality-engine/modern-es-features.md) | Implements policy-approved profiles/rules in retrieval |
+| [ground-truth-expansion-plan.md](../09-evaluation-and-evidence/ground-truth-expansion-plan.md) | Provides measurement and evidence methodology |
 
 ---
 

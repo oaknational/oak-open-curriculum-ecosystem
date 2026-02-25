@@ -6,6 +6,10 @@
 Promote an item to `../current/` when prerequisites and sequencing are clear, then to
 `../active/` when execution starts.
 
+Strategic plans in this directory may include deep implementation detail when it
+captures validated research. In `future/`, that detail is reference context and
+not an execution commitment until promotion.
+
 ## Canonical Boundary Structure
 
 | Boundary | Focus | Location |

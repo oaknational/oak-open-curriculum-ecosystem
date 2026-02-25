@@ -1,11 +1,16 @@
 # Natural Language Paraphrases
 
-**Stream**: bulk-data-analysis  
+**Boundary**: vocabulary-and-semantic-assets  
+**Legacy Stream Label**: bulk-data-analysis  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-23  
 **Last Updated**: 2026-01-23  
 **Research**: [aliases-and-equivalances.md](../../../../research/elasticsearch/oak-data/aliases-and-equivalances.md)
+
+**Strategic Note**: Implementation-level snippets are preserved as validated
+research artefacts. Runtime policy commitments are owned by the query-policy
+boundary until promotion.
 
 ---
 
@@ -46,13 +51,27 @@ Ground truth analysis for Science identified queries where:
 | **C** | Sense-bound | Context-dependent meaning | Gated by subject filter |
 | **D** | Relationship | Related but not equivalent | Relationship channel |
 
+### Boundary Contract
+
+This plan is authoritative for:
+
+- Bucket B paraphrase corpus design
+- Subject-scoped phrase-to-term mappings
+- Curation constraints (not-synonyms, weak expansion intent)
+
+Runtime decision policy (when to apply paraphrases) and retrieval wiring
+are owned by:
+
+- [paraphrase-policy-and-application.md](../05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md)
+- [modern-es-features.md](../04-retrieval-quality-engine/modern-es-features.md)
+
 ### Location in Codebase
 
 | Component | Location |
 |-----------|----------|
 | Paraphrase data | `packages/sdks/oak-curriculum-sdk/src/mcp/paraphrases/` |
-| Query detection | `apps/oak-search-cli/src/lib/hybrid-search/paraphrase-detection.ts` |
-| Query boosting | `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts` |
+| Policy/routing authority | `future/05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md` |
+| Retrieval application authority | `future/04-retrieval-quality-engine/modern-es-features.md` |
 
 ---
 
@@ -132,7 +151,11 @@ export const scienceParaphrases = {
 } as const;
 ```
 
-### Query-Time Detection
+### Research Appendix: Query-Time Detection Candidate
+
+This design sketch is preserved from research for transfer learning.
+Authoritative runtime policy lives in
+[paraphrase-policy-and-application.md](../05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md).
 
 ```typescript
 // apps/oak-search-cli/src/lib/hybrid-search/paraphrase-detection.ts
@@ -163,7 +186,7 @@ export function detectParaphrases(
 }
 ```
 
-### Query Boosting Integration
+### Research Appendix: Query Boosting Integration Candidate
 
 Extend existing `createPhraseBoosters()` pattern:
 
@@ -201,12 +224,14 @@ export function createParaphraseBoosters(
 
 ### Phase 2: Detection Logic
 
+- [ ] Promote detection policy to `../05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md`
 - [ ] Create `paraphrase-detection.ts` in hybrid-search
 - [ ] Add unit tests for detection
 - [ ] Handle multi-word phrase matching (longest match first)
 
 ### Phase 3: Query Integration
 
+- [ ] Confirm confidence-gated application policy in query-policy boundary
 - [ ] Add `createParaphraseBoosters()` to rrf-query-helpers
 - [ ] Integrate into `buildLessonRrfRequest()`
 - [ ] Add integration tests
@@ -260,6 +285,7 @@ export function createParaphraseBoosters(
 | Document | Purpose |
 |----------|---------|
 | [vocabulary-mining.md](vocabulary-mining.md) | Parent plan |
+| [paraphrase-policy-and-application.md](../05-query-policy-and-sdk-contracts/paraphrase-policy-and-application.md) | Authoritative runtime policy for paraphrase application |
 | [aliases-and-equivalances.md](../../../../research/elasticsearch/oak-data/aliases-and-equivalances.md) | Bucket definitions |
 | [rrf-query-helpers.ts](../../../../../apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts) | Query building |
 

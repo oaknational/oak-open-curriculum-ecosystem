@@ -1,4 +1,6 @@
-# Bulk Data Analysis
+# Vocabulary and Semantic Assets
+
+**Legacy Working Name**: Bulk Data Analysis
 
 **Domain**: Mining vocabulary and patterns from Oak's curriculum data  
 **Intent**: Extract knowledge artifacts that are valuable across multiple use cases  
@@ -15,7 +17,7 @@ Bulk data analysis produces artifacts valuable **beyond just search**:
 - Entity relationships → Knowledge graph, curriculum navigation
 - Vocabulary patterns → Content generation, curriculum analysis
 
-This work feeds into multiple streams, so it lives in its own stream.
+This work feeds into multiple boundaries, so it lives in its own boundary.
 
 ---
 
@@ -25,6 +27,7 @@ This work feeds into multiple streams, so it lives in its own stream.
 |------|-------------|--------|
 | [vocabulary-mining.md](vocabulary-mining.md) | Synonym classification, science expansion, definition mining | 📋 Pending |
 | [natural-language-paraphrases.md](natural-language-paraphrases.md) | Bucket B: Query-time weak expansions for natural language | 📋 Pending |
+| [mfl-synonym-architecture.md](mfl-synonym-architecture.md) | MFL synonym data model quality and DRY refactoring | 📋 Pending |
 
 ---
 
@@ -46,4 +49,4 @@ This analysis will eventually move **upstream** to the bulk-data *generation* pi
 - [ ] Synonym bucket classification complete (~580 entries)
 - [ ] Science secondary synonyms expanded (37 → ~200 entries)
 - [ ] Definition-derived synonyms extracted
-- [ ] Artifacts usable by search-quality stream and other consumers
+- [ ] Artifacts usable by the retrieval quality boundary and other consumers

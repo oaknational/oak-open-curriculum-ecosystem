@@ -1,6 +1,7 @@
 # Governance
 
-**Stream**: operations  
+**Boundary**: runtime-governance-and-operations  
+**Legacy Stream Label**: operations  
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-17  

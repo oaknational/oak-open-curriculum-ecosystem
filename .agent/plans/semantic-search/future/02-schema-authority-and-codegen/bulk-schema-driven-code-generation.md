@@ -1,9 +1,14 @@
 # Bulk Schema-Driven Type Generation
 
+**Boundary**: schema-authority-and-codegen
 **Status**: 📋 BACKLOG
 **Priority**: Medium-High — improves type safety, eliminates hardcoded domain constants
 **Created**: 2026-02-17
-**Related**: [Config Architecture Standardisation](../../architecture-and-infrastructure/config-architecture-standardisation-plan.md), [Subject Domain Model](move-search-domain-knowledge-to-codegen-time.md)
+**Related**: [Config Architecture Standardisation](../../../architecture-and-infrastructure/config-architecture-standardisation-plan.md), [Subject Domain Model](move-search-domain-knowledge-to-codegen-time.md)
+
+**Strategic Note**: This `future/` plan keeps implementation-level research
+detail for accuracy and transfer. Treat the steps as non-binding until
+promotion to an executable lane.
 
 ---
 

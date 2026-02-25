@@ -1,4 +1,6 @@
-# Extensions
+# Experience Surfaces and Extensions
+
+**Legacy Working Name**: Extensions
 
 **Domain**: Capabilities beyond core search  
 **Intent**: Enable new use cases that build on the search foundation  
