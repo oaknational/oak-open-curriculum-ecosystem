@@ -92,7 +92,7 @@
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:e2e": "vitest run --config vitest.config.e2e.ts",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "docs:api": "typedoc --options typedoc.json --skipErrorChecking",
     "docs:api:html": "typedoc --options typedoc.ai.json --skipErrorChecking",
     "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json --skipErrorChecking",

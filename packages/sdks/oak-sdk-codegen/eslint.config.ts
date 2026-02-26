@@ -67,6 +67,10 @@ const config = defineConfig(
     },
   },
 
+  // Code generators legitimately use Object.keys/values/entries to iterate
+  // OpenAPI schema properties. 75 structural violations remain; refactoring
+  // is out of scope for M1 (F33 progressive re-enablement). New code in
+  // code-generation/ is still subject to SDK boundary rules above.
   {
     files: ['code-generation/**'],
     rules: {
@@ -79,14 +83,20 @@ const config = defineConfig(
     },
   },
 
+  // Vocab-gen serializer functions exceed structural limits (12 violations
+  // across 6 files). Tests and new code are fully checked.
   {
-    files: ['vocab-gen/**'],
+    files: [
+      'vocab-gen/generators/analysis-report-generator.ts',
+      'vocab-gen/generators/misconception-graph-generator.ts',
+      'vocab-gen/generators/nc-coverage-generator.ts',
+      'vocab-gen/generators/synonym-miner.ts',
+      'vocab-gen/generators/vocabulary-graph-generator.ts',
+      'vocab-gen/vocab-gen.ts',
+    ],
     rules: {
-      'no-restricted-properties': 'off',
-      '@typescript-eslint/no-restricted-types': 'off',
       'max-lines-per-function': 'off',
       'max-statements': 'off',
-      'max-depth': 'off',
       complexity: 'off',
     },
   },
@@ -124,7 +134,7 @@ const config = defineConfig(
   },
 
   {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],
+    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.e2e.config.ts', 'tsup.config.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,

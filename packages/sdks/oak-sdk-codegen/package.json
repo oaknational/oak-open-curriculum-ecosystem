@@ -79,7 +79,7 @@
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:e2e": "vitest run --config vitest.config.e2e.ts",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts"
   },
   "dependencies": {

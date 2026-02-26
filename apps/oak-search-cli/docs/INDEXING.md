@@ -31,8 +31,8 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 
 **Documentation**:
 
-- **SDK Field Definitions Guide**: [`packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/README.md`](../../../packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/README.md)
-- **Field Definitions Source**: [`packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/field-definitions/`](../../../packages/sdks/oak-curriculum-sdk/code-generation/typegen/search/field-definitions/)
+- **SDK Field Definitions Guide**: [`packages/sdks/oak-sdk-codegen/code-generation/typegen/search/README.md`](../../../packages/sdks/oak-sdk-codegen/code-generation/typegen/search/README.md)
+- **Field Definitions Source**: [`packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/`](../../../packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/)
 
 **Adding a field?**
 

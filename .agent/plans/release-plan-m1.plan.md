@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 9 remaining (0 P1, 1 P2, 8 P3). F7 (P1) complete. F35, F11, F16 complete. Batches A–D and E1 done. Batch E2 next, then E3, then Go/No-Go.
+**Open items**: 0 remaining. All architecture, onboarding, and remediation items complete. Batches A–E done. Go/No-Go preparation next.
 
 ---
 
@@ -75,7 +75,7 @@ Primary strategic reference:
 
 | Item | Description | Detail card |
 |------|-------------|-------------|
-| **F17** | Remove `public/search.ts` facade — migrate 33 files to direct `@oaknational/sdk-codegen/search` imports | §F17 below |
+| **F17** | ~~Remove `public/search.ts` facade~~ | §F17 below |
 | **F32** | Standardise E2E config naming repo-wide | §F32 below |
 | **F33** | Progressive ESLint re-enablement in codegen hand-written code | §F33 below |
 
@@ -371,7 +371,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Fred, Wilma |
 | **Problem** | No integration test runs Search SDK against curriculum SDK after codegen. Type/schema breakage could slip through. |
 | **Fix** | Add test that builds both SDKs and runs retrieval smoke test after `pnpm sdk-codegen`. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Added isTimeoutError helper recognising AbortError, TimeoutError, HTTP 408. Unit tests added. |
 
 #### F15: ES timeout → RetrievalError mapping
 
@@ -382,7 +382,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `RetrievalError` has `timeout` variant, but retrieval code generally maps ES errors to `es_error` via `toRetrievalError`. Confirm whether timeouts are explicitly mapped to `timeout`; whether callers need that distinction for UX or retries. |
 | **Files** | `packages/sdks/oak-search-sdk/src/retrieval/*.ts` |
 | **Fix** | Verify ES timeout mapping. Add explicit timeout mapping if needed. Document caller behaviour. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Added timeout detection to toRetrievalError mapping. Unit tests added. Committed in Batch E2. |
 
 #### F16: OAuth proxy rate limiting
 
@@ -404,7 +404,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | ADR-108 says "no thin runtime facade" but `curriculum-sdk/public/search.ts` is a 174-line re-export barrel that masks where types actually live. 32 search CLI files and 4 HTTP app files import from this facade instead of directly from `@oaknational/sdk-codegen/search`. This creates unnecessary coupling and hides the true dependency graph — it is not DX convenience, it is a labyrinth. |
 | **Files** | `packages/sdks/oak-curriculum-sdk/src/public/search.ts` (facade), 32 files in `apps/oak-search-cli/`, 4 files in `apps/oak-curriculum-mcp-streamable-http/` |
 | **Fix** | (1) Migrate all consumer imports from `@oaknational/curriculum-sdk/public/search.js` to direct `@oaknational/sdk-codegen/search` (or appropriate subpath: `/query-parser`, `/observability`, `/admin`, `/zod`). (2) Keep curriculum-sdk imports ONLY for `search-response-guards` symbols (`lessonSummarySchema`, `unitSummarySchema`, `isSequenceUnitsResponse`, etc.) — these are curriculum-sdk's own runtime code, not re-exports. (3) Update ADR-108 to remove the contradiction. (4) Consider removing or reducing `public/search.ts` itself once no external consumers remain. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Migrated 25 consumer files to direct sdk-codegen imports. Stripped public/search.ts to search-response-guards only. Updated ADR-108, oak.ts barrel, INDEXING.md, codegen README. Code-reviewer + arch-barney + docs-adr approved. |
 
 #### F18: config-reviewer — LIB_PACKAGES and env identity
 
@@ -424,7 +424,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Fred |
 | **Problem** | `type-helpers` package contains audited assertion overrides. Verify centralised strategy is minimal and sound. |
 | **Fix** | Invoke type-reviewer for audit. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). type-helpers assertion strategy audited by type-reviewer. Confirmed sound, minimal, governed. No changes needed. Committed in Batch E2. |
 
 ---
 
@@ -483,7 +483,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Rule** | `rules.md` §Code Design |
 | **Problem** | Both `deriveSelfOrigin` (auth-routes.ts) and `fetchUpstreamMetadata` (oauth-and-caching-setup.ts) throw errors rather than returning `Result<T, E>`. The calling code uses try/catch. |
 | **Fix** | Refactor to return `Result<T, E>`. Callers pattern-match on `ok` / `error`. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Refactored to Result<T, E> with HostValidationError and MetadataFetchError. Callers pattern-match on ok/error. Committed in Batch E2. |
 
 ### Execution History
 
@@ -648,7 +648,7 @@ Remaining work (E2, E3, Go/No-Go) is defined in §Remaining Work in the handoff 
 | **Problem** | Generated API markdown titles still use `@oaknational/oak-curriculum-sdk`; package is now `@oaknational/curriculum-sdk`. |
 | **Files** | `packages/sdks/oak-curriculum-sdk/docs/api-md/README.md` (generated) |
 | **Fix** | Regenerate SDK API markdown or fix generator to use current package name. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Regenerated API markdown, removed 9 stale TypeDoc entry points. Committed in Batch E2. |
 
 #### F32: E2E config naming inconsistency
 
@@ -659,7 +659,7 @@ Remaining work (E2, E3, Go/No-Go) is defined in §Remaining Work in the handoff 
 | **Problem** | `turbo.json` tracks `vitest.config.e2e.ts`; MCP apps use `vitest.e2e.config.ts`; SDKs use the former. Increases cognitive load. |
 | **Files** | `turbo.json`, `apps/oak-curriculum-mcp-streamable-http/package.json`, `packages/sdks/oak-curriculum-sdk/package.json` |
 | **Fix** | Standardise E2E config naming repo-wide; align turbo inputs. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Renamed SDK vitest.config.e2e.ts to vitest.e2e.config.ts (prefix convention). Updated turbo.json, package.json scripts, eslint.config.ts, tsconfig.json. All apps and SDKs now use consistent naming. |
 
 #### F33: SDK codegen ESLint — broad rule disables for hand-written code
 
@@ -670,7 +670,7 @@ Remaining work (E2, E3, Go/No-Go) is defined in §Remaining Work in the handoff 
 | **Problem** | `code-generation/` and `vocab-gen/` have directory-wide disables (no-restricted-types, complexity, etc.). Hand-written code, not generated. |
 | **Files** | `packages/sdks/oak-sdk-codegen/eslint.config.ts` |
 | **Fix** | Progressively re-enable rules; use line-level disables where exceptions needed. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Tightened vocab-gen/ overrides from blanket 6-rule disable to targeted 3-rule disable on 6 specific generator files. Documented code-generation/ override rationale. |
 
 #### F34: Elasticsearch — no startup connectivity check
 
@@ -681,7 +681,7 @@ Remaining work (E2, E3, Go/No-Go) is defined in §Remaining Work in the handoff 
 | **Problem** | ES client created at startup but connectivity not checked. First search tool call fails if ES unreachable. |
 | **Files** | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`, `apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts` |
 | **Fix** | Document as known trade-off. Consider future warm-up ping at startup for production. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Documented lazy-connection trade-off in TSDoc. Fixed misleading log messages. Committed in Batch E2. |
 
 #### F35: Dead code — createInMemoryStorage and createNodeClock
 

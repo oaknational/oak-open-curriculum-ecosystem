@@ -128,7 +128,7 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.config.e2e.ts"],
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
       "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:ui": {

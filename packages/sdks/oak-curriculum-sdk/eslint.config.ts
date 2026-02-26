@@ -85,7 +85,7 @@ const config = defineConfig(
   },
   // Config files
   {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],
+    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.e2e.config.ts', 'tsup.config.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,
