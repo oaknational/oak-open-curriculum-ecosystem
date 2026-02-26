@@ -1,5 +1,75 @@
 # Napkin
 
+## Session: 2026-02-26 — M1 Release: Batches E2, E3, Go/No-Go Prep
+
+### What happened
+
+Completed Batch E2 (Result pattern, timeout mapping, SDK docs, integration
+test), Batch E3 (facade removal, E2E config standardisation, ESLint
+tightening), and Go/No-Go preparation (G1-G3 complete, G4-G8 in-progress
+pending human decisions).
+
+### Changes made
+
+1. **Batch E2** (`3910fa3f`): R4 (Result pattern for deriveSelfOrigin/
+   fetchUpstreamMetadata), F14 (search SDK integration test), F15
+   (timeout mapping), F19 (type-helpers audit), F31 (SDK API markdown),
+   F34 (ES lazy-connection docs).
+2. **F17** (`ed8564e7`): Removed `public/search.ts` facade — migrated 25
+   consumer files to direct `@oaknational/sdk-codegen/search` imports.
+   Stripped facade to search-response-guards only. Updated ADR-108.
+3. **F32+F33** (`e397b72c`): Renamed SDK E2E configs to prefix convention.
+   Tightened vocab-gen/ ESLint from blanket 6-rule to targeted 3-rule on
+   6 files. Removed dead tsconfig glob.
+4. **Go/No-Go**: G1 (60 tasks green), G2 (no drift), G3 (no leaks).
+   G4-G8 require human decisions.
+
+### Mistakes and corrections
+
+- Commitlint subject-case: "F17 — description" rejected. Convention
+  requires lowercase after scope prefix. Already known from prior session
+  but repeated the mistake.
+- Python string replacement for plan updates failed silently on Unicode
+  em-dashes in markdown tables. Used context-based matching to work around.
+- Release-readiness-reviewer produced two false-positive G1 blockers:
+  (1) ingest-live.ts was 250 lines, not 251; (2) STDIO E2E passed on
+  re-run. Always re-verify reviewer findings against fresh execution.
+- Plan status updates via Python scripts can produce copy-paste errors
+  when batch-updating multiple entries with similar context patterns.
+  The F19 and F33 entries got F34's description. Caught by code-reviewer.
+
+### Lessons
+
+- When migrating facade imports, check for SECOND-LEVEL barrels. The
+  `oak.ts` barrel in search CLI re-exported from the facade, adding 24
+  hidden consumers that didn't appear in the direct grep.
+- For large mechanical migrations (30+ files), use subagents to parallelise
+  the work. Two parallel subagents processed 25 files while the main
+  thread handled the complex barrel files.
+- `*.config.ts` glob matches `vitest.e2e.config.ts` (prefix convention)
+  but NOT `vitest.config.e2e.ts` (suffix convention). This makes prefix
+  convention strictly better — tsconfig and ESLint globs work without
+  explicit additions.
+- Release-readiness-reviewer may read stale terminal output. Always
+  re-run specific gates to verify reported failures before acting.
+- Progressive ESLint re-enablement: narrowing overrides from directory-
+  wide to file-specific is the right first step. It ensures new code and
+  test files get full checking while grandfathering known violations.
+
+### Patterns that worked
+
+- F17 symbol categorisation (sdk-codegen vs search-response-guards) was
+  verified by explorer subagent before migration. Zero miscategorisations
+  caught by code-reviewer.
+- Three specialist reviewers in parallel for F17 (code, arch-barney,
+  docs-adr) caught a pre-existing broken link in INDEXING.md and a dead
+  tsconfig glob that the main agent missed.
+- Running `pnpm qg` (full 60-task chain) as final evidence before
+  Go/No-Go is the right cadence — it catches any drift from earlier
+  quality gate runs.
+
+---
+
 ## Session: 2026-02-26 — M1 Release: Batches C-2, D, E1
 
 ### What happened

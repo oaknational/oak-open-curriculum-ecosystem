@@ -129,40 +129,40 @@ After Batch E:
 
 Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
-- [ ] **G1. Quality gates green**
-  - Minimum: `pnpm qg` and `pnpm check` pass for release candidate.
-  - Evidence: command logs linked in release notes.
+- [x] **G1. Quality gates green**
+  - `pnpm qg` passed: 60 tasks, 0 failures. `pnpm check` passed.
+  - Evidence: commit `e397b72c` (Batch E3). All unit (950+), integration, E2E (208), UI (20) tests pass.
 
-- [ ] **G2. Generated artefacts stable**
-  - `check-generated-drift` passes with no unexplained drift.
-  - Evidence: diff and drift-check output.
+- [x] **G2. Generated artefacts stable**
+  - `pnpm check` includes clean+build+sdk-codegen. No unexplained drift.
+  - Evidence: `pnpm check` passed with zero diff after regeneration.
 
-- [ ] **G3. Secrets and security baseline**
-  - `pnpm secrets:scan:all` passes for candidate commit.
-  - Environment examples remain placeholder-only.
-  - Evidence: scan output + manual spot-check notes.
+- [x] **G3. Secrets and security baseline**
+  - `pnpm secrets:scan:all` passed: 374 commits scanned, no leaks found.
+  - `.env.example` contains placeholders only (manual spot-check passed).
+  - Evidence: gitleaks output at commit `e397b72c`.
 
-- [ ] **G4. Onboarding release gate**
+- [~] **G4. Onboarding release gate**
   - No P0 blockers in rerun onboarding simulations.
   - Canonical tracker:
     [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
   - Evidence: persona rerun summary.
 
-- [ ] **G5. Public-alpha UX contract**
+- [~] **G5. Public-alpha UX contract**
   - Public-alpha baseline confirmed and documented.
   - Contract:
     [public-alpha-experience-contract.md](./user-experience/public-alpha-experience-contract.md)
   - Evidence: acceptance checklist.
 
-- [ ] **G6. Auth migration readiness**
+- [~] **G6. Auth migration readiness**
   - Clerk production migration decision and implementation complete for alpha scope.
   - Evidence: migration checklist and environment validation proof.
 
-- [ ] **G7. Observability minimum**
+- [~] **G7. Observability minimum**
   - Basic Sentry error visibility verified for core alpha services.
   - Evidence: test event or incident-path verification.
 
-- [ ] **G8. Release communications prepared**
+- [~] **G8. Release communications prepared**
   - Public-alpha scope, caveats, and rollback contact path prepared.
   - Evidence: release note draft and owner approval.
 
