@@ -208,6 +208,7 @@ const client = new OakCurriculumClient({
   baseUrl: 'https://api.oak.academy',
   timeout: 5000,
   retries: 3,
+  logger, // optional: enables response augmentation diagnostics
 });
 
 // Search for lessons

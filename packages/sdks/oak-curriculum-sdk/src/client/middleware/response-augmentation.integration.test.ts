@@ -98,11 +98,6 @@ describe('createResponseAugmentationMiddleware', () => {
       const warnCalls = logger.calls.filter((c) => c.startsWith('warn:'));
       expect(warnCalls.length).toBeGreaterThan(0);
     });
-
-    it('creates middleware without logger (uses default)', () => {
-      const middleware = createResponseAugmentationMiddleware();
-      expect(middleware).toBeDefined();
-    });
   });
 
   describe('error containment', () => {

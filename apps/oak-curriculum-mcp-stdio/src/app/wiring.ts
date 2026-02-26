@@ -1,6 +1,9 @@
 /**
- * App wiring - dependency injection and composition
- * Assembles all components into a working MCP server
+ * App wiring - dependency injection and composition.
+ *
+ * Assembles all components into a working MCP server. The validated
+ * `RuntimeConfig` is threaded through from the entry point — this
+ * module does not read `process.env` directly.
  */
 
 import { createMcpToolsModule } from '../tools/index.js';
@@ -11,6 +14,10 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createSearchRetrieval as createSearchRetrievalFromCredentials } from '@oaknational/oak-search-sdk';
+import { resolveToolExecutors } from './stub-executors.js';
+import type { RuntimeConfig } from '../runtime-config.js';
+import { type Logger } from '@oaknational/logger/node';
+import { createStdioLogger } from '../logging/index.js';
 
 /**
  * Creates a simple clock provider for runtime timing needs.
@@ -37,20 +44,16 @@ function createInMemoryStorage() {
     },
   };
 }
-import { resolveToolExecutors } from './stub-executors.js';
-import type { StdioEnv } from '../runtime-config.js';
-import { type Logger } from '@oaknational/logger/node';
-import { createStdioLogger } from '../logging/index.js';
-import { loadRuntimeConfig } from '../runtime-config.js';
 
 /**
- * Configuration for the Oak Curriculum MCP server
+ * Configuration for the Oak Curriculum MCP server.
+ *
+ * All fields are derived from `RuntimeConfig` at the entry point.
+ * The `apiKey` is guaranteed present by schema validation.
  */
 export interface ServerConfig {
-  /** Log level */
-  logLevel?: 'debug' | 'info' | 'warn' | 'error';
-  /** Oak API key */
-  apiKey?: string;
+  /** Oak API key (required — validated by StdioEnvSchema) */
+  apiKey: string;
   /** Server name for MCP */
   serverName?: string;
   /** Server version */
@@ -72,28 +75,13 @@ export interface WiredDependencies {
 }
 
 /**
- * Default server configuration values
+ * Build complete server configuration with defaults.
  */
-const DEFAULT_CONFIG: Required<ServerConfig> = {
-  logLevel: 'info',
-  apiKey: process.env.OAK_API_KEY ?? '',
-  serverName: 'oak-curriculum-stdio',
-  serverVersion: '0.0.1',
-};
-
-/**
- * Build complete server configuration with defaults
- */
-function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
-  if (!config) {
-    return DEFAULT_CONFIG;
-  }
-
+function buildServerConfig(config: ServerConfig): Required<ServerConfig> {
   return {
-    logLevel: config.logLevel ?? DEFAULT_CONFIG.logLevel,
-    apiKey: config.apiKey ?? DEFAULT_CONFIG.apiKey,
-    serverName: config.serverName ?? DEFAULT_CONFIG.serverName,
-    serverVersion: config.serverVersion ?? DEFAULT_CONFIG.serverVersion,
+    apiKey: config.apiKey,
+    serverName: config.serverName ?? 'oak-curriculum-stdio',
+    serverVersion: config.serverVersion ?? '0.0.1',
   };
 }
 
@@ -104,17 +92,14 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
  * ES credentials are guaranteed present by `loadRuntimeConfig` validation.
  */
 function createSearchRetrieval(
-  env: StdioEnv,
+  runtimeConfig: RuntimeConfig,
   logger: { info: (msg: string) => void },
 ): SearchRetrievalService {
-  const retrieval = createSearchRetrievalFromCredentials(env);
+  const retrieval = createSearchRetrievalFromCredentials(runtimeConfig.env);
   logger.info('Search retrieval service configured (Elasticsearch connected)');
   return retrieval;
 }
 
-/**
- * Wire all dependencies together
- */
 /** Adapts the STDIO logger into the CoreRuntime logger shape. */
 function createCoreLogger(logger: Logger) {
   return {
@@ -139,9 +124,17 @@ function createCoreLogger(logger: Logger) {
   };
 }
 
-export function wireDependencies(config?: ServerConfig): WiredDependencies {
+/**
+ * Wire all dependencies together.
+ *
+ * @param runtimeConfig - Validated runtime configuration from resolveEnv
+ * @param config - Server-specific configuration (apiKey, serverName, etc.)
+ */
+export function wireDependencies(
+  runtimeConfig: RuntimeConfig,
+  config: ServerConfig,
+): WiredDependencies {
   const serverConfig = buildServerConfig(config);
-  const runtimeConfig = loadRuntimeConfig();
   const logger = createStdioLogger(runtimeConfig);
   const runtime = {
     logger: createCoreLogger(logger),
@@ -149,19 +142,14 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
     storage: createInMemoryStorage(),
   };
 
-  // Create SDK client via injected config
-  if (!serverConfig.apiKey) {
-    throw new Error('OAK_API_KEY is required');
-  }
-  const client = createOakPathBasedClient(serverConfig.apiKey);
+  const client = createOakPathBasedClient({ apiKey: serverConfig.apiKey, logger });
 
-  const executorOverrides = resolveToolExecutors();
+  const executorOverrides = resolveToolExecutors(runtimeConfig.useStubTools);
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
-    : createSearchRetrieval(runtimeConfig.env, logger);
+    : createSearchRetrieval(runtimeConfig, logger);
   const toolExecutors: UniversalToolExecutors = { ...executorOverrides, searchRetrieval };
 
-  // Create MCP tools module with injected client and search retrieval
   const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors });
 
   return {

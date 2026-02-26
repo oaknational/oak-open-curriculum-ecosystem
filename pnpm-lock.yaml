@@ -137,9 +137,9 @@ importers:
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
-      dotenv:
-        specifier: ^17.3.1
-        version: 17.3.1
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../packages/core/result
       zod:
         specifier: ^4.3.6
         version: 4.3.6

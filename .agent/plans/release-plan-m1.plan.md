@@ -1,9 +1,9 @@
 # Milestone 1 Release Plan (Public Alpha)
 
 **Status**: Active  
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 16 remaining (was 18; Batch C in progress — F5/F18 complete)
+**Open items**: 14 remaining (was 16; Batch C: F8-STDIO, F27, O12 complete)
 
 ---
 
@@ -42,36 +42,30 @@ Primary strategic reference:
 1. Read this plan. It is self-contained.
 2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
-4. The plan below has all context needed. Start with F8 (next item in Batch C).
+4. The plan below has all context needed. Next decision: finish F8 (Search CLI portion — needs design decision), move to Batch D (F7 contract consolidation), or proceed to Go/No-Go preparation if remaining items are acceptable as deferred.
 
 ### Current State
 
 - **Batch A**: Complete (8 items). All quality gates pass.
 - **Batch B**: Complete (8 items — F6, F10, F20, F25, F28, F29, O5, O10). Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). All quality gates pass.
-- **Batch C**: In progress. F5/F18 complete; F8, F27 remain.
+- **Batch C**: Near-complete. F5/F18, F27, O12 done. F8 partially done (STDIO migrated to `resolveEnv`; Search CLI deferred — needs design decision on `loadAppEnv` replacement strategy).
+- **Uncommitted**: Batch C session work (F8-STDIO, F27, O12) is in the working tree (22 files, `git diff --stat`). All quality gates pass. Commit before starting new work.
 - **F18 is subsumed by F5** — they share the same fix (env identity + LIB_PACKAGES cleanup).
 
-### Next: Batch C — Medium Complexity (2 remaining items)
-
-Each item follows: **verify** current state (may have changed since logging) → **implement** (TDD) → **validate** (quality gates).
+### Next: Batch C Remaining — F8 Search CLI portion
 
 **F5** ~~(medium): Env identity + LIB_PACKAGES cleanup (subsumes F18)~~ **COMPLETE** — see status below.
 
-**F8** (medium): Env pipeline unification
+**F8** (medium): Env pipeline unification — **STDIO COMPLETE, Search CLI deferred**
 
-- **Verify**: Confirm Search CLI (`apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`) and STDIO (`apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`) still use custom `process.env` readers.
-- **Fix**: Migrate both to `resolveEnv` from `@oaknational/env-resolution` with app-specific schemas from `@oaknational/env`. Retire legacy `loadAppEnv`/direct env readers.
-- **TDD**: Write integration tests for new env resolution first (RED), implement migration (GREEN), remove legacy code (REFACTOR).
-- **Validate**: `rg "process\.env\." apps/oak-search-cli/src/ apps/oak-curriculum-mcp-stdio/src/` shows no direct reads outside entry point; `pnpm test && pnpm test:e2e`.
+- STDIO app fully migrated: `StdioEnvSchema` in `src/env.ts`, `loadRuntimeConfig` returns `Result`, all `process.env` reads eliminated from `src/`. Entry point uses `resolveEnv`.
+- Search CLI (`apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`) still uses custom `process.env` readers. Needs design decision: `loadAppEnv` replacement strategy (same `resolveEnv` pattern or different approach given CLI context).
 
-**F27** (medium): DI for response-augmentation logger
+**F27** ~~(medium): DI for response-augmentation logger~~ **COMPLETE** — see status below.
 
-- **Verify**: Confirm `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts` and `packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` read `process.env` at module level.
-- **Fix**: Accept logger as parameter or factory function. Consuming apps provide logger configured from entry-point env.
-- **TDD**: Write unit tests for logger injection first (RED), refactor to accept logger param (GREEN), update consuming apps (REFACTOR).
-- **Validate**: `rg "process\.env" packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` returns nothing; `pnpm type-check && pnpm test`.
+**O12** ~~(low): OAuth bootstrap troubleshooting note~~ **COMPLETE** — see status below.
 
-**Specialist reviewers for remaining Batch C items**: `code-reviewer`, `architecture-reviewer-fred` (F8 env pipeline), `type-reviewer` (F27 DI type changes). F5 specialist reviews (arch-barney, arch-fred, config-reviewer) already completed.
+**Specialist reviewers completed for Batch C**: `code-reviewer`, `architecture-reviewer-fred`, `type-reviewer`, `test-reviewer`, `docs-adr-reviewer`. All passed (APPROVED/COMPLIANT/SAFE/PASS/GAPS FIXED).
 
 ### Remaining Batches
 
@@ -79,8 +73,8 @@ Each item follows: **verify** current state (may have changed since logging) →
    - **F7** (large): Contract consolidation — `SearchRetrievalService` vs `RetrievalService`
    - **Design review gate**: Before implementing, invoke `architecture-reviewer-barney` and `architecture-reviewer-betty` to assess whether structural typing is sufficient (defer) or shared import is needed (fix).
    - May defer to post-release if structural typing remains safe.
-5. **Batch E: Phase 3 / Deferred** (16 items, post-release backlog)
-   - R4, F11–F17, F19, F31–F35, O8, O12
+5. **Batch E: Phase 3 / Deferred** (15 items, post-release backlog)
+   - R4, F11–F17, F19, F31–F35, O8
    - All P3 — none release-blocking.
    - Record disposition in snag register.
 6. **Go/No-Go Preparation**
@@ -298,7 +292,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | HTTP app uses `resolveEnv`; stdio and Search CLI use custom `process.env` readers. `loadAppEnv` in Search CLI uses `dotenvConfig` and mutates `process.env`. Different failure semantics across apps; test isolation risk. |
 | **Files** | `apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`, `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`, `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` |
 | **Fix** | Migrate Search CLI and STDIO to `resolveEnv` with app-specific schemas. Retire legacy `readEnv`/direct env readers. Document any intentional exceptions. |
-| **Status** | [ ] Open |
+| **Status** | [~] Partially complete (2026-02-26). STDIO app fully migrated: `StdioEnvSchema` composing shared schemas via `.extend(.shape)`, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `resolveEnv` pipeline, all `process.env` reads eliminated from `src/`. 10 integration tests. Entry point handles `Result` with structured diagnostic output. Search CLI migration deferred — needs design decision on `loadAppEnv` replacement. |
 
 #### F9: oak-search-cli missing app boundary rules
 
@@ -492,11 +486,12 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 2. ~~F6, F10, F20, F25, F28, F29~~ (small arch/doc fixes)
 3. ~~O1, O2, O3, O5, O10~~ (small onboarding fixes — O1/O2/O3 resolved by prior docs session)
 
-**Batch C — Medium Complexity** (3 items, 1 complete) ← **IN PROGRESS**:
+**Batch C — Medium Complexity** (3 items + O12) ← **NEAR COMPLETE**:
 
 4. ~~**F5** (env identity + LIB_PACKAGES; subsumes F18)~~ **COMPLETE**
-5. **F8** (env pipeline unification) ← **NEXT**
-6. **F27** (response-augmentation DI)
+5. **F8** (env pipeline unification) — **STDIO COMPLETE**, Search CLI deferred
+6. ~~**F27** (response-augmentation DI)~~ **COMPLETE**
+7. ~~**O12** (OAuth bootstrap troubleshooting note)~~ **COMPLETE**
 
 **Batch D — Large / Architectural** (1 item):
 
@@ -616,7 +611,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | Module-level logger instantiation reads `process.env` inside SDK. DI violation: env must be read at entry point and passed as config. |
 | **Files** | `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts`, `packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` |
 | **Fix** | Accept logger as parameter or factory. Let consuming app provide logger configured from entry-point env. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Removed module-level logger from `response-augmentation.ts` (pure function now throws `TypeError`). `MiddlewareOptions.logger` made required. `OakClientConfig.logger` optional with `createNoopLogger()` fallback in `BaseApiClient`. SDK no longer reads `process.env` for logging. STDIO app injects its logger via `OakClientConfig`. Duplicate test removed from middleware integration tests. Specialist reviewers: code-reviewer, architecture-reviewer-fred, type-reviewer, test-reviewer. |
 
 #### F28: Blanket eslint-disable in search CLI ground-truth generation
 
@@ -853,7 +848,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | No troubleshooting guidance for OAuth metadata fetch failures at startup. Under Clerk outage, contributors may not connect startup failures to OAuth. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/README.md` (target redirected from removed `onboarding.md`) |
 | **Fix** | Add troubleshooting note to HTTP server README: "If server fails to start, ensure Clerk's `/.well-known/oauth-authorization-server` is reachable." |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-26). Added troubleshooting note covering OAuth metadata fetch timeout, DNS/firewall/Clerk diagnostics, and F10 exponential backoff cross-reference. |
 
 ---
 
@@ -863,7 +858,7 @@ Onboarding items are interleaved into the main batched execution order (see §Ex
 
 - **Batch A** (trivial): O4, O6, O7 — **COMPLETE**
 - **Batch B** (small): O1, O2, O3, O5, O10 — **COMPLETE** (O8 moved to Batch E — low value; O11 cancelled — target file removed)
-- **Batch C** (medium): ~~O9~~, O12 (O9 resolved — commands are thin pointers; O12 retargeted to HTTP server README)
+- **Batch C** (medium): ~~O9~~, ~~O12~~ (O9 resolved — commands are thin pointers; O12 complete — troubleshooting note added to HTTP server README)
 
 ---
 
@@ -931,6 +926,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-26**: **Batch C near-complete** (F8-STDIO, F27, O12 done). F8: STDIO app migrated to `resolveEnv` pipeline — `StdioEnvSchema` composing shared schemas, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `process.env` eliminated from all `src/` modules, 10 integration tests. Search CLI deferred. F27: SDK response-augmentation DI — removed module-level logger, `MiddlewareOptions.logger` required, `createNoopLogger()` fallback in `BaseApiClient`, SDK no longer reads `process.env` for logging. O12: OAuth metadata fetch timeout troubleshooting note added to HTTP server README. STDIO README updated with env pipeline docs. SDK README updated with optional `logger` parameter. Fixed `no-empty-function` lint in `oak-base-client.ts`. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e). Specialist reviewers: code-reviewer (approved), architecture-reviewer-fred (compliant), type-reviewer (safe), test-reviewer (pass), docs-adr-reviewer (gaps fixed). Open items: 14 remaining.
 - **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, rules.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
 - **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.
 - **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `rules.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.

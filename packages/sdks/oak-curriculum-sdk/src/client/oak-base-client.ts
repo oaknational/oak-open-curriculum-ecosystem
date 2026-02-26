@@ -10,6 +10,7 @@ import type { RateLimitConfig } from '../config/rate-limit-config.js';
 import type { RetryConfig } from '../config/retry-config.js';
 import { DEFAULT_RATE_LIMIT_CONFIG } from '../config/rate-limit-config.js';
 import { DEFAULT_RETRY_CONFIG } from '../config/retry-config.js';
+import type { Logger } from '@oaknational/logger';
 
 import {
   createAuthMiddleware,
@@ -19,6 +20,24 @@ import {
   createRateLimitTracker,
   type RateLimitTracker,
 } from './middleware/index.js';
+
+const noop = () => undefined;
+
+/**
+ * Creates a no-op logger for use when the consuming app does not provide one.
+ * Ensures the SDK never reads `process.env` to construct a default logger.
+ */
+function createNoopLogger(): Logger {
+  return {
+    trace: noop,
+    debug: noop,
+    info: noop,
+    warn: noop,
+    error: noop,
+    fatal: noop,
+    isLevelEnabled: () => false,
+  };
+}
 
 /**
  * Configuration for the Oak API client.
@@ -31,6 +50,14 @@ export interface OakClientConfig {
   readonly rateLimit?: Partial<RateLimitConfig>;
   /** Optional retry configuration (defaults to 3 retries with exponential backoff) */
   readonly retry?: Partial<RetryConfig>;
+  /**
+   * Logger for SDK diagnostics (e.g. response augmentation warnings).
+   *
+   * When provided, the consuming app's logger is used for middleware
+   * diagnostics so the SDK never reads `process.env` directly (ADR-078).
+   * When absent, augmentation warnings are silently discarded.
+   */
+  readonly logger?: Logger;
 }
 
 /**
@@ -74,7 +101,6 @@ export class BaseApiClient {
    * @param config - API key string (legacy) or full configuration object
    */
   constructor(config: OakClientConfig | string) {
-    // Support legacy string signature for backwards compatibility
     const apiKey = typeof config === 'string' ? config : config.apiKey;
     const rateLimitConfig =
       typeof config === 'string'
@@ -91,15 +117,13 @@ export class BaseApiClient {
 
     this._apiKey = apiKey;
 
-    // Create middleware in order:
-    // 1. Auth - adds Authorization header
-    // 2. Rate limiting - enforces minimum interval between requests
-    // 3. Rate limit tracker - monitors API rate limit headers
-    // 4. Response augmentation - adds metadata to responses
+    const sdkLogger =
+      typeof config === 'string' ? createNoopLogger() : (config.logger ?? createNoopLogger());
+
     const authMiddleware = createAuthMiddleware(this._apiKey);
     const rateLimitMiddleware = createRateLimitMiddleware(rateLimitConfig);
     const { middleware: trackerMiddleware, tracker } = createRateLimitTracker();
-    const augmentMiddleware = createResponseAugmentationMiddleware();
+    const augmentMiddleware = createResponseAugmentationMiddleware({ logger: sdkLogger });
 
     // Store tracker for external access
     this._rateLimitTracker = tracker;

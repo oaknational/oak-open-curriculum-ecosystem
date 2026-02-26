@@ -83,6 +83,12 @@ Add to your Claude Desktop configuration:
 }
 ```
 
+## Environment configuration
+
+Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against `StdioEnvSchema` (a Zod schema composing shared schemas from `@oaknational/env`), and returns `Result<RuntimeConfig, ConfigError>`. Validation failures produce structured diagnostics listing each required key and whether it was present. See `src/runtime-config.ts` and `src/env.ts`.
+
+Required variables: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`. Optional: `LOG_LEVEL`, `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`, `MCP_LOGGER_STDOUT`, `MCP_LOGGER_FILE_PATH`, `MCP_LOGGER_FILE_APPEND`.
+
 ## Testing
 
 - Run the suite with `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.

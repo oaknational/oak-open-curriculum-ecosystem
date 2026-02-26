@@ -537,3 +537,47 @@ createLibBoundaryRules despite being a core package).
 - Specialist reviewers caught 4 actionable issues that manual review
   would likely have missed (workspace:^ inconsistency, stale ADR paths,
   YAGNI external, openapi-zod-client-adapter boundary violation).
+
+## Session: 2026-02-26 (Batch C — F8-STDIO, F27, O12)
+
+### Mistakes and corrections
+
+- Integration tests for `loadRuntimeConfig` were initially non-deterministic
+  because `resolveEnv` found ambient `.env` files. Fix: use `/tmp` as
+  `isolatedStartDir` to prevent `.env` file discovery in tests.
+- `const noop = () => {};` triggers `no-empty-function` lint. Fix:
+  `const noop = () => undefined;` — non-empty expression body, equivalent
+  void semantics.
+- After removing dotenv from STDIO entry point, the e2e test
+  (`mcp-dev-runner.e2e.test.ts`) broke because the direct-run guard in
+  `src/index.ts` had been removed. Always check e2e tests that launch
+  the process directly after refactoring entry points.
+
+### Lessons
+
+- When making `MiddlewareOptions.logger` required in an SDK, the
+  `BaseApiClient` constructor must provide a fallback for callers using
+  the string-only API key overload. `createNoopLogger()` is the right
+  pattern — zero dependencies, satisfies `Logger` interface at compile
+  time via return type annotation.
+- Removing logging from pure functions (Option B) is simpler than
+  threading optional loggers (Option A). Pure functions should throw
+  or return errors; the middleware boundary handles logging.
+- Docs-adr-reviewer consistently catches README drift that other
+  reviewers miss. Always invoke it after env pipeline or DI changes
+  that affect how apps are configured.
+- `Record<string, string | undefined>` is acceptable at the
+  `process.env` entry boundary because the key space is genuinely
+  unbounded. Zod validation immediately narrows it. The type-reviewer
+  confirmed this is the correct exception to the "Record is too generic"
+  rule.
+
+### Patterns that worked
+
+- Using `/tmp` as `isolatedStartDir` for integration tests that need
+  to prevent `.env` file interference — robust, portable, deterministic.
+- `as const satisfies Record<string, string>` for test environment
+  data — narrows to literal types while validating structure.
+- Five specialist reviewers in parallel (code, arch-fred, type, test,
+  docs-adr) for final review gate — comprehensive coverage, caught
+  the `no-empty-function` lint fix and two doc gaps.

@@ -6,12 +6,6 @@
  */
 import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
-import {
-  UnifiedLogger,
-  buildResourceAttributes,
-  logLevelToSeverityNumber,
-} from '@oaknational/logger';
-import { createNodeStdoutSink } from '@oaknational/logger/node';
 import type { HttpMethod } from './validation/types.js';
 import {
   getContentTypeFromPath,
@@ -20,18 +14,6 @@ import {
   isNonNullObject,
 } from './response-augmentation-helpers.js';
 import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
-
-const logger = new UnifiedLogger({
-  minSeverity: logLevelToSeverityNumber('WARN'),
-  resourceAttributes: buildResourceAttributes(
-    process.env,
-    'response-augmentation',
-    process.env.npm_package_version ?? '0.0.0',
-  ),
-  context: {},
-  stdoutSink: createNodeStdoutSink(),
-  fileSink: null,
-});
 
 /**
  * Key stage entry schema derived from the generated SubjectResponseSchema.
@@ -234,9 +216,9 @@ function extractCanonicalUrlFields(
   }
   const id = extractIdFromResponse(response, path);
   if (!id) {
-    const message = `Could not extract ID for path: ${path} from response: ${JSON.stringify(response)}`;
-    logger.error(message);
-    throw new TypeError(message);
+    throw new TypeError(
+      `Could not extract ID for path: ${path} from response: ${JSON.stringify(response)}`,
+    );
   }
   const context = extractContextFromResponse(response);
   const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);

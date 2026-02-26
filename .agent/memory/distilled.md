@@ -94,6 +94,9 @@ changing behaviour.
   `(v: unknown): v is T => typeof v === 'string' && v === '__never__'`
 - `as const satisfies T` is the gold standard for test data
   that must be both a literal type and structurally valid
+- `const noop = () => {};` triggers `no-empty-function` lint.
+  Use `const noop = () => undefined;` — non-empty expression
+  body with equivalent void semantics
 - Interface Segregation eliminates assertion pressure: when
   test fakes can't satisfy a complex generated type without
   `as`, extract a narrowed interface with only consumed fields
@@ -171,6 +174,13 @@ Architecture` section). Dev gotchas not covered there:
   removed tests should be recreated in the destination
 - Stale vitest include globs are silent because of
   `passWithNoTests: true` — remove dead globs promptly
+- `resolveEnv` integration tests that need `.env` file
+  isolation: use `'/tmp'` as `startDir` to prevent ambient
+  `.env` files from satisfying schema requirements
+- After refactoring entry points (removing `dotenv`,
+  changing `loadRuntimeConfig` signature), check E2E tests
+  that launch the process directly — `mcp-dev-runner.e2e.test.ts`
+  broke when `src/index.ts` direct-run guard was removed
 
 ## TSDoc
 
@@ -221,7 +231,10 @@ Architecture` section). Dev gotchas not covered there:
 - **Response augmentation is best-effort**: canonical URL
   decoration must NEVER fail the API call. Wrap `augmentBody()`
   in try-catch that logs and returns unaugmented response.
-  Middleware factory should accept optional `Logger` for DI.
+  Middleware factory requires `Logger` (DI); `BaseApiClient`
+  provides `createNoopLogger()` when the consuming app doesn't
+  inject one. Pure augmentation functions should not log —
+  they throw or return errors; the middleware boundary logs.
 - **Tests that agree with code on the wrong contract are worse
   than no tests**: the snagging bugs were invisible because
   tests encoded the same wrong assumptions (e.g. `keyStageSlugs`

@@ -1,5 +1,5 @@
 /**
- * Logger factory for stdio MCP server
+ * Logger factory for stdio MCP server.
  *
  * Stdio servers must never write to stdout since it's reserved for MCP protocol frames.
  * All logging goes to a file sink only.
@@ -17,14 +17,14 @@ import { createStdioSinkConfig } from './config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 
 /**
- * Creates a Logger instance for stdio server from environment variables
+ * Creates a Logger instance for the stdio server from validated runtime config.
  *
- * Uses the following environment variables:
- * - `LOG_LEVEL` - Minimum log level (default: 'INFO')
- * - `MCP_LOGGER_FILE_PATH` - Optional file path for log output (defaults to repo-relative log file)
- * - `MCP_LOGGER_FILE_APPEND` - Append to file (default: true)
+ * Uses the validated `env` from `RuntimeConfig` for resource attributes
+ * (deployment environment, version), and the validated `logLevel` for
+ * severity filtering.
  *
- * Note: Stdio servers always use file-only logging (stdout disabled) since stdout is reserved for MCP protocol.
+ * Note: Stdio servers always use file-only logging (stdout disabled) since
+ * stdout is reserved for MCP protocol.
  *
  * @param config - Runtime configuration derived from validated environment variables
  * @returns Logger instance configured for file-only logging
@@ -35,11 +35,7 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
   const minSeverity = logLevelToSeverityNumber(level);
 
   const serviceName = 'stdio-mcp';
-  const resourceAttributes = buildResourceAttributes(
-    process.env, // App wiring owns env access
-    serviceName,
-    process.env.npm_package_version ?? '0.0.0',
-  );
+  const resourceAttributes = buildResourceAttributes(config.env, serviceName, config.version);
 
   const sinkConfig = createStdioSinkConfig(config);
   const fileSinkConfig = sinkConfig.file;
@@ -52,7 +48,7 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
     minSeverity,
     resourceAttributes,
     context: {},
-    stdoutSink: null, // No stdout (MCP protocol)
+    stdoutSink: null,
     fileSink: createNodeFileSink(fileSinkConfig),
   });
 }
@@ -78,12 +74,10 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
  * @public
  */
 export function createChildLogger(parentLogger: Logger, correlationId: string): Logger {
-  // Use parent's child() method to inherit all configuration and sinks
   if (parentLogger.child) {
     return parentLogger.child({ correlationId });
   }
 
-  // Fallback if parent doesn't support child() (shouldn't happen with UnifiedLogger)
   throw new Error('Parent logger does not support child() method');
 }
 

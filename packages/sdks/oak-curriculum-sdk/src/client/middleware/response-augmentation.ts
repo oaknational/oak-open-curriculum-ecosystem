@@ -3,16 +3,10 @@ import {
   augmentResponseWithCanonicalUrl,
   augmentArrayResponseWithCanonicalUrl,
 } from '../../response-augmentation.js';
-import {
-  UnifiedLogger,
-  buildResourceAttributes,
-  logLevelToSeverityNumber,
-} from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
-import { createNodeStdoutSink } from '@oaknational/logger/node';
 
 interface MiddlewareOptions {
-  readonly logger?: Logger;
+  readonly logger: Logger;
 }
 
 /**
@@ -24,12 +18,12 @@ interface MiddlewareOptions {
  * The augmentation is idempotent - if a response already has a
  * `canonicalUrl` field, it will be preserved.
  *
- * @param options - Optional configuration. Provide a `logger` for
- *   dependency injection; defaults to a WARN-level UnifiedLogger.
+ * @param options - Configuration with a required `logger` for
+ *   augmentation diagnostics. The consuming app provides the logger.
  * @returns OpenAPI-Fetch middleware that augments responses.
  */
-export function createResponseAugmentationMiddleware(options?: MiddlewareOptions): Middleware {
-  const log = options?.logger ?? createDefaultLogger();
+export function createResponseAugmentationMiddleware(options: MiddlewareOptions): Middleware {
+  const log = options.logger;
   return {
     async onResponse({ request, response }) {
       if (!shouldAugmentResponse(request, response)) {
@@ -76,20 +70,6 @@ async function safeParseJson(response: Response): Promise<unknown> {
 function extractApiPath(url: string): string {
   const parsed = new URL(url);
   return parsed.pathname.replace(/^\/api\/v\d+/, '');
-}
-
-function createDefaultLogger(): Logger {
-  return new UnifiedLogger({
-    minSeverity: logLevelToSeverityNumber('WARN'),
-    resourceAttributes: buildResourceAttributes(
-      process.env,
-      'response-augmentation-middleware',
-      process.env.npm_package_version ?? '0.0.0',
-    ),
-    context: {},
-    stdoutSink: createNodeStdoutSink(),
-    fileSink: null,
-  });
 }
 
 /**
