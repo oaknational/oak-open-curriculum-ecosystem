@@ -20,32 +20,6 @@ import { type Logger } from '@oaknational/logger/node';
 import { createStdioLogger } from '../logging/index.js';
 
 /**
- * Creates a simple clock provider for runtime timing needs.
- */
-function createNodeClock() {
-  return { now: () => Date.now() };
-}
-
-/**
- * Creates an in-memory key-value storage provider.
- * Suitable for session-scoped data that doesn't need persistence.
- */
-function createInMemoryStorage() {
-  const store = new Map<string, string>();
-  return {
-    get: (key: string) => Promise.resolve(store.get(key) ?? null),
-    set: (key: string, value: string) => {
-      store.set(key, value);
-      return Promise.resolve();
-    },
-    delete: (key: string) => {
-      store.delete(key);
-      return Promise.resolve();
-    },
-  };
-}
-
-/**
  * Configuration for the Oak Curriculum MCP server.
  *
  * All fields are derived from `RuntimeConfig` at the entry point.
@@ -67,10 +41,6 @@ export interface WiredDependencies {
   logger: Logger;
   mcpOrgan: McpToolsModule;
   config: Required<ServerConfig>;
-  runtime: {
-    storage: ReturnType<typeof createInMemoryStorage>;
-    clock: ReturnType<typeof createNodeClock>;
-  };
   toolExecutors: UniversalToolExecutors;
 }
 
@@ -100,30 +70,6 @@ function createSearchRetrieval(
   return retrieval;
 }
 
-/** Adapts the STDIO logger into the CoreRuntime logger shape. */
-function createCoreLogger(logger: Logger) {
-  return {
-    trace: (message: string, context?: unknown) => {
-      logger.debug(message, context);
-    },
-    debug: (message: string, context?: unknown) => {
-      logger.debug(message, context);
-    },
-    info: (message: string, context?: unknown) => {
-      logger.info(message, context);
-    },
-    warn: (message: string, context?: unknown) => {
-      logger.warn(message, context);
-    },
-    error: (message: string, context?: unknown) => {
-      logger.error(message, context);
-    },
-    fatal: (message: string, context?: unknown) => {
-      logger.error(message, context);
-    },
-  };
-}
-
 /**
  * Wire all dependencies together.
  *
@@ -136,11 +82,6 @@ export function wireDependencies(
 ): WiredDependencies {
   const serverConfig = buildServerConfig(config);
   const logger = createStdioLogger(runtimeConfig);
-  const runtime = {
-    logger: createCoreLogger(logger),
-    clock: createNodeClock(),
-    storage: createInMemoryStorage(),
-  };
 
   const client = createOakPathBasedClient({ apiKey: serverConfig.apiKey, logger });
 
@@ -156,7 +97,6 @@ export function wireDependencies(
     logger,
     mcpOrgan,
     config: serverConfig,
-    runtime,
     toolExecutors,
   };
 }

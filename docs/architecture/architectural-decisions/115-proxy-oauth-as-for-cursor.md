@@ -158,6 +158,15 @@ A community member published a [working solution using this exact pattern with M
 
 All files within `apps/oak-curriculum-mcp-streamable-http/`.
 
+## Deployment Preconditions
+
+**Rate limiting must be in place before production rollout.** The proxy
+OAuth flow exposes publicly reachable `/register` and `/token` endpoints.
+Without edge/WAF rate limiting, these are vulnerable to credential-stuffing
+and denial-of-service attacks. Configure rate limiting at the CDN/reverse
+proxy layer (e.g. Vercel Edge Middleware, Cloudflare WAF, or AWS WAF)
+before deploying to production.
+
 ## Related ADRs
 
 - [ADR-052: OAuth 2.1 for MCP HTTP Authentication](052-oauth-2.1-for-mcp-http-authentication.md)

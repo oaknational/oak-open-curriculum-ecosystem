@@ -1317,7 +1317,15 @@ Note: `@clerk/mcp-tools@0.3.1` generates path-qualified PRM URLs (e.g., `/.well-
 
 ---
 
-**Documentation Status**: Last verified 2025-01-15 against `src/application.ts`, `src/auth-routes.ts`, and deployed infrastructure.
+## Deployment Preconditions
+
+**Rate limiting**: Edge/WAF rate limiting must be configured before
+production deployment. The OAuth proxy endpoints (`/register`, `/token`)
+are publicly reachable and require rate limiting to prevent abuse. See
+[ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
+for details.
+
+**Documentation Status**: Last verified 2026-02-26 against `src/application.ts`, `src/auth-routes.ts`, and deployed infrastructure.
 
 **Related Documentation**:
 
