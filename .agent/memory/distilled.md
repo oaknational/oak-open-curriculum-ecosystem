@@ -42,8 +42,14 @@ changing behaviour.
   files — both must be updated in parallel until resolved
 - When moving files between workspaces, ESLint rule overrides
   must also move — otherwise lint errors appear silently
-- `*.config.ts` glob does NOT match `*.config.e2e.ts` —
-  add explicit glob for E2E configs in tsconfig includes
+- When migrating facade imports, check for second-level barrels
+  (e.g. `oak.ts` re-exporting from the facade) — they add
+  hidden consumers that don't appear in a direct grep for the
+  facade file
+- E2E config files use prefix convention (`vitest.e2e.config.ts`)
+  not suffix (`vitest.config.e2e.ts`) — prefix is matched by
+  `*.config.ts` globs in tsconfig and ESLint. Standardised
+  repo-wide in F32
 
 ## TypeScript and Type Safety
 
@@ -296,6 +302,10 @@ Architecture` section). Dev gotchas not covered there:
   handlers like `res.on('close')`
 - TSDoc `@see` references should point to ADRs, not plan
   files — plans are archived/deleted after completion
+- Progressive ESLint re-enablement: narrow overrides from
+  directory-wide to file-specific first. This ensures new
+  code and tests get full checking while grandfathering
+  known violations in specific files
 - TS2209 rootDir ambiguity: when `tsconfig.build.json`
   narrows `include` from a wide base, add explicit
   `rootDir: "./src"` for export map resolution
@@ -335,3 +345,4 @@ Project-specific troubleshooting is in
 |---------|-----|
 | Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching — match on surrounding text or use Python |
+| Reviewer reports G1 failures that seem wrong | Re-run specific gates (`wc -l`, `pnpm test:e2e --filter=...`) to verify — reviewers may read stale terminal output |

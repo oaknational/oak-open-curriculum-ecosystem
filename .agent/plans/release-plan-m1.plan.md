@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 0 remaining. All architecture, onboarding, and remediation items complete. Batches A–E done. Go/No-Go preparation next.
+**Open items**: 0 code items remaining. G1–G3 complete with evidence. G4–G8 pending human decisions.
 
 ---
 
@@ -37,59 +37,27 @@ Primary strategic reference:
 
 ## Next Session Checklist (Handoff)
 
-### Getting Started
+### Current State (All Code Work Complete)
 
-1. Read this plan. It is self-contained.
-2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
-3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
-4. **First action**: Complete Batch E2 (6 items: R4, F14, F15, F19, F31, F34). See §Remaining Work below. Commit together. Invoke code-reviewer + type-reviewer + test-reviewer + security-reviewer.
-5. Then: F17 (remove public/search.ts facade — migrate 33 files to direct sdk-codegen imports). Commit individually. Invoke code-reviewer + architecture-reviewer-barney + docs-adr-reviewer.
-6. Then: F32 + F33 (standardise E2E config naming, progressive ESLint re-enablement). Commit together. Invoke code-reviewer + config-reviewer.
-7. After all items: Go/No-Go preparation (G1–G8 evidence collection). Invoke release-readiness-reviewer.
+All batches (A through E3) and Go/No-Go preparation (G1–G3) are complete. There are no remaining code items.
 
-### Current State
+- **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
+- **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
+- **Go/No-Go G4–G8**: Pending human decisions (onboarding rerun, UX contract acceptance, Clerk migration, observability, release comms).
 
-- **Batch A**: Complete (8 items). All quality gates pass.
-- **Batch B**: Complete (8 items — F6, F10, F20, F25, F28, F29, O5, O10). Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). All quality gates pass.
-- **Batch C**: Complete (F5/F18, F8-STDIO, F8-Search-CLI, F27, O12). Committed in `081188a8` (C-1) + `30cf9132` (C-2). All quality gates pass.
-- **Batch D**: Complete (F7 — ADR-108 completion). Committed in `066be0af`. 6 specialist reviewers passed. All quality gates pass.
-- **Batch E1**: Complete (F35, F11, F16). Committed in `1c97d2d6`. All quality gates pass.
-- **Working tree**: Clean. No uncommitted changes.
+### Next Steps (Human Decisions Required)
 
-### Remaining Work (9 items)
+G4–G8 are product/operations decisions that require human judgement:
 
-**Batch E2 — Small** (6 items, commit together) — **NEXT**:
+| Gate | Decision needed | Owner |
+|------|----------------|-------|
+| **G4** | Rerun onboarding simulations and confirm no P0 blockers | Product owner |
+| **G5** | Accept the public-alpha experience contract | Product owner |
+| **G6** | Complete Clerk production migration for alpha scope | Engineering/ops |
+| **G7** | Verify Sentry observability for core alpha services | Engineering/ops |
+| **G8** | Prepare and approve release communications | Product owner |
 
-| Item | Description | Detail card |
-|------|-------------|-------------|
-| **R4** | Result pattern for `deriveSelfOrigin` and `fetchUpstreamMetadata` | §R4 below |
-| **F14** | Search SDK integration test (builds both SDKs after codegen, runs retrieval smoke) | §F14 below |
-| **F15** | Verify/fix ES timeout → `RetrievalError.timeout` mapping | §F15 below |
-| **F19** | type-helpers assertion strategy audit | §F19 below |
-| **F31** | Fix SDK API markdown generator for current package name | §F31 below |
-| **F34** | Document ES connectivity trade-off or add warm-up ping | §F34 below |
-
-**Reviewers after E2**: code-reviewer + type-reviewer + test-reviewer + security-reviewer.
-
-**Batch E3 — Medium** (3 items, commit individually):
-
-| Item | Description | Detail card |
-|------|-------------|-------------|
-| **F17** | ~~Remove `public/search.ts` facade~~ | §F17 below |
-| **F32** | Standardise E2E config naming repo-wide | §F32 below |
-| **F33** | Progressive ESLint re-enablement in codegen hand-written code | §F33 below |
-
-**Reviewers after F17**: code-reviewer + architecture-reviewer-barney + docs-adr-reviewer.
-**Reviewers after F32+F33**: code-reviewer + config-reviewer.
-
-### Go/No-Go Preparation
-
-After Batch E:
-
-1. Prepare G1–G8 evidence (see §Mandatory Check Gates below).
-2. Invoke `release-readiness-reviewer`.
-3. Verify no open P0/P1 snags remain.
-4. Record decision.
+Once G4–G8 are resolved, the release can proceed to R3 (Go/No-Go decision) and R4 (release execution).
 
 ---
 
