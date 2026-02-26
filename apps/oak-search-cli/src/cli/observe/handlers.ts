@@ -7,10 +7,7 @@
  */
 
 import type { Result } from '@oaknational/result';
-import type {
-  ZeroHitTelemetry,
-  ZeroHitSummary,
-} from '@oaknational/curriculum-sdk/public/search.js';
+import type { ZeroHitTelemetry, ZeroHitSummary } from '@oaknational/sdk-codegen/observability';
 import type {
   ObservabilityService,
   ObservabilityError,

@@ -288,10 +288,12 @@ generated artefacts:
   generation directly.
 
 There is no thin runtime facade that re-exports generation
-artefacts. The runtime SDK's public API covers only runtime
-concerns — not type re-exports. Consumers needing type
+artefacts. The runtime SDK's `public/search` entry point
+was stripped in F17 to export only curriculum-sdk's own
+runtime validators (search-response-guards); all sdk-codegen
+re-exports were removed. Consumers needing type
 infrastructure (types, schemas, readers, extractors) import
-from the generation package directly.
+from `@oaknational/sdk-codegen` subpaths directly.
 
 The distinction: the runtime SDK is for _accessing data_
 (API client, middleware). Generation is for information

@@ -23,7 +23,7 @@ import type {
   SequencesSearchResult,
   RetrievalError,
 } from '@oaknational/oak-search-sdk';
-import type { SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchSubjectSlug } from '@oaknational/sdk-codegen/search';
 
 /**
  * Sequence search function type for dependency injection.

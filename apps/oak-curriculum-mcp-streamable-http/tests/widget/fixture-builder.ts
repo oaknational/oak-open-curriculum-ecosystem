@@ -15,7 +15,7 @@ import type {
   SearchThreadIndexDoc,
   SearchSequenceIndexDoc,
   SearchSuggestionItem,
-} from '@oaknational/curriculum-sdk/public/search';
+} from '@oaknational/sdk-codegen/search';
 
 const OAK_CONTEXT_HINT =
   'This data comes from the Oak National Academy curriculum. ' +

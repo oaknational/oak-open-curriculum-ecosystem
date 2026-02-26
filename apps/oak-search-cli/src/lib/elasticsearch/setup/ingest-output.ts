@@ -15,7 +15,7 @@ import {
   type IndexMetaError,
 } from '../index-meta.js';
 import { ingestLogger } from '../../logger';
-import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 
 /** Ingestion result with document counts. */
 export interface IngestionResult {

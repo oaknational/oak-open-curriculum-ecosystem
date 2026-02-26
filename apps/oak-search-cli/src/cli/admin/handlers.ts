@@ -10,7 +10,7 @@
  */
 
 import { ok, type Result } from '@oaknational/result';
-import type { IndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import type {
   AdminService,
   AdminError,

@@ -9,7 +9,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { ok } from '@oaknational/result';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
-import type { SearchLessonsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 import { runQuery, type RunQueryInput } from './benchmark-query-runner-lessons.js';
 
 /** Create a minimal lesson index doc with just the slug. */

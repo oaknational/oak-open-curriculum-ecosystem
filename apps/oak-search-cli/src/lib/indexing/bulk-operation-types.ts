@@ -13,7 +13,7 @@ import type {
   SearchSequenceIndexDoc,
   SearchThreadIndexDoc,
 } from '../../types/oak';
-import type { SearchSequenceFacetsIndexDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchSequenceFacetsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 /**
  * Elasticsearch bulk index action metadata.

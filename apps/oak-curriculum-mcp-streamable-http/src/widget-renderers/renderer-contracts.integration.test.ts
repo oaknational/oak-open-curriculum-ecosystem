@@ -19,7 +19,7 @@ import {
   SearchUnitsIndexDocSchema,
   SearchThreadIndexDocSchema,
   SearchSequenceIndexDocSchema,
-} from '@oaknational/curriculum-sdk/public/search';
+} from '@oaknational/sdk-codegen/search';
 
 import { createRendererHarness } from '../../tests/widget/renderer-test-harness.js';
 import {

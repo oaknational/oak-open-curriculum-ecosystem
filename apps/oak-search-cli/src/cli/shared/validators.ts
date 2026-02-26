@@ -7,8 +7,8 @@
  */
 
 import { isSubject, isKeyStage, SUBJECTS, KEY_STAGES } from '@oaknational/curriculum-sdk';
-import { isSearchScope, SEARCH_SCOPES } from '@oaknational/curriculum-sdk/public/search.js';
-import type { SearchSubjectSlug, SearchScope } from '@oaknational/curriculum-sdk/public/search.js';
+import { isSearchScope, SEARCH_SCOPES } from '@oaknational/sdk-codegen/search';
+import type { SearchSubjectSlug, SearchScope } from '@oaknational/sdk-codegen/search';
 import type { KeyStage } from '@oaknational/curriculum-sdk';
 
 /**

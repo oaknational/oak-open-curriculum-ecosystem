@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import type { ZeroHitEvent } from './zero-hit-store';
 
-import type { ZeroHitDoc } from '@oaknational/curriculum-sdk/public/search.js';
-import { ZeroHitDocSchema } from '@oaknational/curriculum-sdk/public/search.js';
+import type { ZeroHitDoc } from '@oaknational/sdk-codegen/search';
+import { ZeroHitDocSchema } from '@oaknational/sdk-codegen/search';
 import {
   OAK_ZERO_HIT_MAPPING,
   type EsIndexBody,

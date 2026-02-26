@@ -6,7 +6,7 @@ import type { estypes } from '@elastic/elasticsearch';
 import type { ZeroHitEvent } from './zero-hit-store';
 import type { SearchScope } from '../../types/oak';
 import type { EsSearchBody, EsSearchHit } from '@oaknational/curriculum-sdk/elasticsearch.js';
-import type { ZeroHitDoc } from '@oaknational/curriculum-sdk/public/search.js';
+import type { ZeroHitDoc } from '@oaknational/sdk-codegen/search';
 
 /** Zod schema for top_hits _source containing index_version. */
 const TopHitSourceSchema = z.object({ index_version: z.string().min(1) });

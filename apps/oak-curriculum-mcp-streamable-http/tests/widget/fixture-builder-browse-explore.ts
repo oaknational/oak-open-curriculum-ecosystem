@@ -13,7 +13,7 @@ import type {
   SearchUnitsIndexDoc,
   SearchThreadIndexDoc,
   SequenceFacet,
-} from '@oaknational/curriculum-sdk/public/search';
+} from '@oaknational/sdk-codegen/search';
 
 import { type WrapperFields, buildWrapper } from './fixture-builder.js';
 

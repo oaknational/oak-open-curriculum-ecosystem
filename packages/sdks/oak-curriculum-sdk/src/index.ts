@@ -11,8 +11,10 @@
  * - **MCP Tools**: `@oaknational/curriculum-sdk/public/mcp-tools`
  *   Model Context Protocol tooling for AI integrations
  *
- * - **Search**: `@oaknational/curriculum-sdk/public/search`
- *   Semantic search schemas, validators, and types
+ * - **Search Response Guards**: `@oaknational/curriculum-sdk/public/search`
+ *   Runtime validators for Oak API search responses (lessonSummarySchema,
+ *   unitSummarySchema, etc.). For search schemas, constants, and type
+ *   guards, import from `@oaknational/sdk-codegen/search`.
  *
  * This separation improves tree-shaking and makes dependencies explicit.
  */

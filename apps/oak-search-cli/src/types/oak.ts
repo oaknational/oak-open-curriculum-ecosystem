@@ -1,6 +1,8 @@
 /**
  * All search-related types MUST come from the SDK search entry point.
  * Core types (KeyStage, Subject) come from the main SDK entry point.
+ * Search-response-guards (runtime validators for API responses) come
+ * from curriculum-sdk; everything else comes from sdk-codegen.
  */
 
 // Core types from main SDK entry point
@@ -9,13 +11,8 @@ export type { KeyStage, Subject as SearchSubjectSlug } from '@oaknational/curric
 // Subject hierarchy types for ADR-101 (KS4 science variants)
 export type { AllSubjectSlug, ParentSubjectSlug } from '@oaknational/curriculum-sdk';
 
-// Search functionality from dedicated search entry point
+// Search schemas, constants, factories, and type guards from sdk-codegen
 export {
-  isLessonSummary,
-  isUnitSummary,
-  isSubjectSequences,
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
   SearchFacetsSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
@@ -53,7 +50,9 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from '@oaknational/curriculum-sdk/public/search.js';
+} from '@oaknational/sdk-codegen/search';
+
+export { SequenceFacetUnitSchema, SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
 
 export type {
   SearchStructuredRequest,
@@ -84,6 +83,16 @@ export type {
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
   SearchThreadIndexDoc,
+} from '@oaknational/sdk-codegen/search';
+
+// Search-response-guards: curriculum-sdk's own runtime validators
+export {
+  isLessonSummary,
+  isUnitSummary,
+  isSubjectSequences,
+} from '@oaknational/curriculum-sdk/public/search.js';
+
+export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,

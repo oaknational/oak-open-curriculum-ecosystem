@@ -43,6 +43,7 @@
     "@modelcontextprotocol/sdk": "^1.27.0",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/env-resolution": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",

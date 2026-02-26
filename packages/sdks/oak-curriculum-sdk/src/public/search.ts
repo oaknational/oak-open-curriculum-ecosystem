@@ -1,132 +1,12 @@
-// Aggregated search, query parser, observability, and admin exports.
-
-export {
-  DEFAULT_INCLUDE_FACETS,
-  SearchStructuredRequestSchema,
-  isSearchStructuredRequest,
-  SearchNaturalLanguageRequestSchema,
-  isSearchNaturalLanguageRequest,
-  SearchParsedQuerySchema,
-  isSearchParsedQuery,
-  SEARCH_SCOPES,
-  SEARCH_SCOPES_WITH_ALL,
-  isSearchScope,
-  isSearchScopeWithAll,
-  DEFAULT_SUGGESTION_CACHE,
-  SearchSuggestionContextSchema,
-  SearchSuggestionItemSchema,
-  SearchSuggestionResponseSchema,
-  SearchSuggestionRequestSchema,
-  isSearchSuggestionRequest,
-  isSearchSuggestionResponse,
-  SearchLessonsResponseSchema,
-  SearchUnitsResponseSchema,
-  SearchSequencesResponseSchema,
-  SearchMultiScopeResponseSchema,
-  createSearchLessonsResponse,
-  createSearchUnitsResponse,
-  createSearchSequencesResponse,
-  createSearchMultiScopeResponse,
-  IndexMetaDocSchema,
-  isIndexMetaDoc,
-  ZeroHitDocSchema,
-  isZeroHitDoc,
-} from '@oaknational/sdk-codegen/search';
-
-export {
-  QueryParserRequestSchema,
-  QueryParserResponseSchema,
-  isQueryParserResponse,
-  QUERY_PARSER_INTENT_ENUM,
-} from '@oaknational/sdk-codegen/query-parser';
-export type {
-  QueryParserRequest,
-  QueryParserResponse,
-  QueryParserIntent,
-} from '@oaknational/sdk-codegen/query-parser';
-
-export {
-  ZERO_HIT_SCOPES,
-  ZeroHitScopeSchema,
-  ZeroHitScopeBreakdownSchema,
-  ZeroHitSummarySchema,
-  ZeroHitEventSchema,
-  ZeroHitTelemetrySchema,
-  createZeroHitEvent,
-  createZeroHitSummary,
-  createZeroHitTelemetry,
-  summariseZeroHitEvents,
-  type ZeroHitScope,
-  type ZeroHitScopeBreakdown,
-  type ZeroHitSummary,
-  type ZeroHitEvent,
-  type ZeroHitTelemetry,
-} from '@oaknational/sdk-codegen/observability';
-
-export {
-  ADMIN_STREAM_ACTIONS,
-  AdminStreamActionSchema,
-  AdminStreamSuccessSchema,
-  AdminStreamErrorSchema,
-  AdminStreamFixtureSchema,
-  createAdminStreamFixture,
-  createAdminStreamEmptyFixture,
-  createAdminStreamErrorFixture,
-  createAdminStreamFixtureMap,
-  type AdminStreamAction,
-  type AdminStreamSuccessFixture,
-  type AdminStreamErrorFixture,
-  type AdminStreamFixture,
-  type AdminStreamFixtureMap,
-} from '@oaknational/sdk-codegen/admin';
-
-export type {
-  SearchStructuredRequest,
-  SearchStructuredScope,
-  SearchNaturalLanguageRequest,
-  SearchParsedQuery,
-  SearchParsedIntent,
-  SearchScope,
-  SearchScopeWithAll,
-  SearchSuggestionItem,
-  SearchSuggestionResponse,
-  SearchSuggestionRequest,
-  SearchFacets,
-  SequenceFacet,
-  SequenceFacetUnit,
-  SearchLessonsResponse,
-  SearchUnitsResponse,
-  SearchSequencesResponse,
-  SearchLessonsSuggestions,
-  SearchLessonsSuggestionCache,
-  SearchLessonResult,
-  SearchUnitResult,
-  SearchSequenceResult,
-  SearchMultiScopeBucket,
-  SearchMultiScopeResponse,
-  SearchLessonsIndexDoc,
-  SearchUnitsIndexDoc,
-  SearchUnitRollupDoc,
-  SearchSequenceFacetsIndexDoc,
-  SearchSequenceIndexDoc,
-  SearchThreadIndexDoc,
-  IndexMetaDoc,
-  ZeroHitDoc,
-  SearchSubjectSlug,
-  AllSubjectSlug,
-  ParentSubjectSlug,
-  Ks4ScienceVariant,
-} from '@oaknational/sdk-codegen/search';
-
-export {
-  SUBJECT_TO_PARENT,
-  ALL_SUBJECTS,
-  KS4_SCIENCE_VARIANTS,
-  PARENT_TO_SUBJECTS,
-  isKs4ScienceVariant,
-  getSubjectParent,
-  isAllSubject,
-} from '@oaknational/sdk-codegen/search';
+/**
+ * Search-response-guards: curriculum-sdk's own runtime validators for
+ * Oak API search responses. These are NOT re-exports from sdk-codegen.
+ *
+ * For search schemas, constants, type guards, and factory functions,
+ * import directly from `@oaknational/sdk-codegen/search` (or the
+ * appropriate subpath: `/query-parser`, `/observability`, `/admin`,
+ * `/zod`). See ADR-108.
+ */
 
 export {
   lessonSummarySchema,
@@ -153,21 +33,3 @@ export {
   type SubjectAssets,
   isSubjectAssets,
 } from '../types/search-response-guards.js';
-
-export { SequenceFacetUnitSchema, SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
-export { SearchFacetsSchema } from '@oaknational/sdk-codegen/search';
-
-export {
-  SearchLessonsIndexDocSchema,
-  SearchUnitsIndexDocSchema,
-  SearchUnitRollupDocSchema,
-  SearchSequenceIndexDocSchema,
-  SearchSequenceFacetsIndexDocSchema,
-  SearchThreadIndexDocSchema,
-  isSearchLessonsIndexDoc,
-  isSearchUnitsIndexDoc,
-  isSearchUnitRollupDoc,
-  isSearchSequenceIndexDoc,
-  isSearchSequenceFacetsIndexDoc,
-  isSearchThreadIndexDoc,
-} from '@oaknational/sdk-codegen/search';

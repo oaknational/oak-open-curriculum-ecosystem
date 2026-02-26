@@ -11,7 +11,7 @@
 
 import { isSubject, type AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { Result } from '@oaknational/result';
-import type { SearchSubjectSlug } from '@oaknational/curriculum-sdk/public/search.js';
+import type { SearchSubjectSlug } from '@oaknational/sdk-codegen/search';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import {
   calculateMRR,

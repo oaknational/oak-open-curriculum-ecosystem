@@ -10,7 +10,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { SequenceFacetSchema } from '@oaknational/curriculum-sdk/public/search';
+import { SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
 
 import { createRendererHarness } from '../../tests/widget/renderer-test-harness.js';
 import { buildBrowseFixture } from '../../tests/widget/fixture-builder-browse-explore.js';
