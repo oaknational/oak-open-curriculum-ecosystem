@@ -1,20 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
 
-const envStub = vi.hoisted(() => ({
-  env: vi.fn(() => ({
-    ZERO_HIT_PERSISTENCE_ENABLED: true,
-    ZERO_HIT_INDEX_RETENTION_DAYS: 30,
-    SEARCH_INDEX_TARGET: 'primary',
-  })),
-  optionalEnv: vi.fn(() => ({
-    ZERO_HIT_PERSISTENCE_ENABLED: true,
-    ZERO_HIT_INDEX_RETENTION_DAYS: 30,
-    SEARCH_INDEX_TARGET: 'primary',
-  })),
-}));
-
-vi.mock('../../lib/env', () => envStub);
+const TEST_CONFIG = {
+  ZERO_HIT_PERSISTENCE_ENABLED: true,
+  ZERO_HIT_INDEX_RETENTION_DAYS: 30,
+  SEARCH_INDEX_TARGET: 'primary' as const,
+};
 
 const transportStub = vi.hoisted(() => {
   const request =
@@ -27,14 +18,6 @@ const transportStub = vi.hoisted(() => {
 vi.mock('../../lib/es-client', () => ({
   esClient: () => ({ transport: transportStub }),
 }));
-
-const targetStub = vi.hoisted(() => ({
-  currentSearchIndexTarget: vi.fn(() => 'primary' as const),
-  resolveZeroHitIndexName: vi.fn(() => 'oak_zero_hit_events'),
-  ZERO_HIT_INDEX_BASE: 'oak_zero_hit_events',
-}));
-
-vi.mock('../../lib/search-index-target', () => targetStub);
 
 import {
   __resetZeroHitPersistenceCachesForTests,
@@ -50,31 +33,15 @@ interface TransportCall {
 
 describe('zero-hit persistence', () => {
   beforeEach(() => {
-    envStub.env.mockClear();
-    envStub.optionalEnv.mockClear();
     transportStub.request.mockReset();
-    targetStub.currentSearchIndexTarget.mockReturnValue('primary');
-    targetStub.resolveZeroHitIndexName.mockReturnValue('oak_zero_hit_events');
-    const baseEnv = {
-      ZERO_HIT_PERSISTENCE_ENABLED: true,
-      ZERO_HIT_INDEX_RETENTION_DAYS: 30,
-      SEARCH_INDEX_TARGET: 'primary',
-    };
-    envStub.env.mockReturnValue(baseEnv);
-    envStub.optionalEnv.mockReturnValue(baseEnv);
     __resetZeroHitPersistenceCachesForTests();
   });
 
-  it('reports persistence toggle from the environment', () => {
-    const toggled = {
-      ZERO_HIT_PERSISTENCE_ENABLED: false,
-      ZERO_HIT_INDEX_RETENTION_DAYS: 30,
-      SEARCH_INDEX_TARGET: 'sandbox',
-    };
-    envStub.env.mockReturnValueOnce(toggled);
-    envStub.optionalEnv.mockReturnValueOnce(toggled);
-
-    expect(zeroHitPersistenceEnabled()).toBe(false);
+  it('reports persistence toggle from config', () => {
+    expect(zeroHitPersistenceEnabled({ ...TEST_CONFIG, ZERO_HIT_PERSISTENCE_ENABLED: false })).toBe(
+      false,
+    );
+    expect(zeroHitPersistenceEnabled(TEST_CONFIG)).toBe(true);
   });
 
   it('creates the ILM policy and index before persisting documents', async () => {
@@ -83,15 +50,18 @@ describe('zero-hit persistence', () => {
       .mockResolvedValueOnce({ acknowledged: true })
       .mockResolvedValueOnce({ result: 'created' });
 
-    await persistZeroHitEvent({
-      timestamp: 1_700_000_000_000,
-      scope: 'lessons',
-      text: 'fractions',
-      filters: { subject: 'maths' },
-      indexVersion: 'v1',
-      tookMs: 123,
-      timedOut: false,
-    });
+    await persistZeroHitEvent(
+      {
+        timestamp: 1_700_000_000_000,
+        scope: 'lessons',
+        text: 'fractions',
+        filters: { subject: 'maths' },
+        indexVersion: 'v1',
+        tookMs: 123,
+        timedOut: false,
+      },
+      TEST_CONFIG,
+    );
 
     const calls: TransportCall[] = transportStub.request.mock.calls.map(([params, options]) => ({
       params,
@@ -138,7 +108,7 @@ describe('zero-hit persistence', () => {
       },
     });
 
-    const telemetry = await fetchZeroHitTelemetry({ limit: 10 });
+    const telemetry = await fetchZeroHitTelemetry({ limit: 10 }, TEST_CONFIG);
 
     expect(transportStub.request).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -168,7 +138,7 @@ describe('zero-hit persistence', () => {
     } as unknown;
     transportStub.request.mockRejectedValueOnce(error);
 
-    const telemetry = await fetchZeroHitTelemetry({ limit: 10 });
+    const telemetry = await fetchZeroHitTelemetry({ limit: 10 }, TEST_CONFIG);
 
     expect(telemetry.summary.total).toBe(0);
     expect(telemetry.recent).toHaveLength(0);

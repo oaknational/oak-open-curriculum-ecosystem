@@ -8,8 +8,14 @@
 
 import type { Command } from 'commander';
 import { isIndexMetaDoc } from '@oaknational/curriculum-sdk/public/search.js';
-import { createCliSdk, printJson, printError, printSuccess, printHeader } from '../shared/index.js';
-import { env } from '../../lib/env.js';
+import {
+  createCliSdk,
+  printJson,
+  printError,
+  printSuccess,
+  printHeader,
+  type CliSdkEnv,
+} from '../shared/index.js';
 import {
   handleSetup,
   handleReset,
@@ -28,7 +34,7 @@ import {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-export function registerSetupCmd(parent: Command): void {
+export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('setup')
     .description('Create synonyms and all search indexes (idempotent)')
@@ -36,7 +42,7 @@ export function registerSetupCmd(parent: Command): void {
     .option('-v, --verbose', 'Enable verbose output')
     .action(async (opts: { reset?: boolean; verbose?: boolean }) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const options = opts.verbose ? { verbose: true } : undefined;
 
         if (opts.reset) {
@@ -78,13 +84,13 @@ export function registerSetupCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-export function registerStatusCmd(parent: Command): void {
+export function registerStatusCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('status')
     .description('Show Elasticsearch connection status and index listing')
     .action(async () => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleStatus(sdk.admin);
         if (!result.ok) {
           printError(`${result.error.type}: ${result.error.message}`);
@@ -111,13 +117,13 @@ export function registerStatusCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-export function registerSynonymsCmd(parent: Command): void {
+export function registerSynonymsCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('synonyms')
     .description('Update the synonym set in Elasticsearch')
     .action(async () => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleSynonyms(sdk.admin);
         if (!result.ok) {
           printError(`${result.error.type}: ${result.error.message}`);
@@ -144,7 +150,7 @@ export function registerSynonymsCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-export function registerMetaCmd(parent: Command): void {
+export function registerMetaCmd(parent: Command, cliEnv: CliSdkEnv): void {
   const metaCmd = parent.command('meta').description('Read or write index metadata');
 
   metaCmd
@@ -152,7 +158,7 @@ export function registerMetaCmd(parent: Command): void {
     .description('Read current index metadata from Elasticsearch')
     .action(async () => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleGetMeta(sdk.admin);
         if (!result.ok) {
           printError(`${result.error.type}: ${result.error.message}`);
@@ -172,7 +178,7 @@ export function registerMetaCmd(parent: Command): void {
     .argument('<json>', 'JSON string of metadata to write')
     .action(async (json: string) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const parsed: unknown = JSON.parse(json);
         if (!isIndexMetaDoc(parsed)) {
           throw new Error('Invalid metadata JSON: does not match IndexMetaDoc schema.');

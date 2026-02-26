@@ -16,13 +16,13 @@
 import { Command } from 'commander';
 import {
   createCliSdk,
+  type CliSdkEnv,
   printJson,
   printError,
   validateSubject,
   validateKeyStage,
   validateScope,
 } from '../shared/index.js';
-import { env } from '../../lib/env.js';
 import {
   handleSearchLessons,
   handleSearchUnits,
@@ -49,7 +49,7 @@ interface SubjectKeyStageOpts {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerLessonsCmd(parent: Command): void {
+function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('lessons')
     .description('Search lessons using hybrid BM25 + ELSER retrieval')
@@ -59,7 +59,7 @@ function registerLessonsCmd(parent: Command): void {
     .option('--size <n>', 'Maximum results to return', '25')
     .action(async (query: string, opts: SubjectKeyStageOpts) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleSearchLessons(sdk.retrieval, {
           text: query,
           subject: validateSubject(opts.subject),
@@ -85,7 +85,7 @@ function registerLessonsCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerUnitsCmd(parent: Command): void {
+function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('units')
     .description('Search units using hybrid BM25 + ELSER retrieval')
@@ -95,7 +95,7 @@ function registerUnitsCmd(parent: Command): void {
     .option('--size <n>', 'Maximum results to return', '25')
     .action(async (query: string, opts: SubjectKeyStageOpts) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleSearchUnits(sdk.retrieval, {
           text: query,
           subject: validateSubject(opts.subject),
@@ -121,7 +121,7 @@ function registerUnitsCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerSequencesCmd(parent: Command): void {
+function registerSequencesCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('sequences')
     .description('Search sequences (subject-phase programmes)')
@@ -130,7 +130,7 @@ function registerSequencesCmd(parent: Command): void {
     .option('--size <n>', 'Maximum results to return', '25')
     .action(async (query: string, opts: { subject?: string; size: string }) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleSearchSequences(sdk.retrieval, {
           text: query,
           subject: validateSubject(opts.subject),
@@ -155,7 +155,7 @@ function registerSequencesCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerSuggestCmd(parent: Command): void {
+function registerSuggestCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('suggest')
     .description('Get type-ahead suggestions')
@@ -166,7 +166,7 @@ function registerSuggestCmd(parent: Command): void {
     .action(
       async (prefix: string, opts: { scope: string; subject?: string; keyStage?: string }) => {
         try {
-          const sdk = createCliSdk(env());
+          const sdk = createCliSdk(cliEnv);
           const result = await handleSuggest(sdk.retrieval, {
             prefix,
             scope: validateScope(opts.scope),
@@ -193,7 +193,7 @@ function registerSuggestCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerFacetsCmd(parent: Command): void {
+function registerFacetsCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('facets')
     .description('Fetch sequence facets for navigation')
@@ -201,7 +201,7 @@ function registerFacetsCmd(parent: Command): void {
     .option('-k, --key-stage <keyStage>', 'Filter by key stage')
     .action(async (opts: { subject?: string; keyStage?: string }) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleFetchFacets(sdk.retrieval, {
           subject: validateSubject(opts.subject),
           keyStage: validateKeyStage(opts.keyStage),
@@ -230,17 +230,17 @@ function registerFacetsCmd(parent: Command): void {
  * program.addCommand(searchCommand());
  * ```
  */
-export function searchCommand(): Command {
+export function searchCommand(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('search').description(
     'Query lessons, units, sequences, threads, and suggestions',
   );
 
-  registerLessonsCmd(cmd);
-  registerUnitsCmd(cmd);
-  registerSequencesCmd(cmd);
-  registerThreadsCmd(cmd);
-  registerSuggestCmd(cmd);
-  registerFacetsCmd(cmd);
+  registerLessonsCmd(cmd, cliEnv);
+  registerUnitsCmd(cmd, cliEnv);
+  registerSequencesCmd(cmd, cliEnv);
+  registerThreadsCmd(cmd, cliEnv);
+  registerSuggestCmd(cmd, cliEnv);
+  registerFacetsCmd(cmd, cliEnv);
 
   return cmd;
 }

@@ -6,13 +6,7 @@
  *
  * Usage: pnpm benchmark [--index lessons|units|threads|sequences]
  */
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-
-dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env.local') });
-
 import { benchmarkLessons } from './benchmark-all-lessons.js';
 import { benchmarkUnits } from './benchmark-all-units.js';
 import { benchmarkThreads } from './benchmark-all-threads.js';

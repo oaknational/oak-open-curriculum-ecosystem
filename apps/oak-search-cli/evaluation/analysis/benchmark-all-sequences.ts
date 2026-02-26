@@ -5,8 +5,10 @@
  * the same code paths as production consumers.
  */
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import { isSubject } from '@oaknational/curriculum-sdk';
 import { runSequenceQuery } from './benchmark-query-runner-sequences.js';
 import { getSequenceGroundTruthEntries } from './benchmark-adapters.js';
@@ -15,7 +17,14 @@ import { averageMetrics } from './benchmark-all-types.js';
 
 /** Run all sequence ground truth queries and return summary metrics. */
 export async function benchmarkSequences(): Promise<IndexResult> {
-  const sdk = createCliSdk(env());
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  });
+  if (!configResult.ok) {
+    throw new Error(`Environment validation failed: ${configResult.error.message}`);
+  }
+  const sdk = createCliSdk(configResult.value.env);
   const searchFn = sdk.retrieval.searchSequences.bind(sdk.retrieval);
   const entries = getSequenceGroundTruthEntries();
   const results: BenchmarkMetrics[] = [];

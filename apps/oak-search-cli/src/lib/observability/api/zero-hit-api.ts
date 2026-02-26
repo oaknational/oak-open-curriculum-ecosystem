@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { optionalEnv } from '../../env';
 import { getZeroHitRecent, getZeroHitSummary, recordZeroHitEvent } from '../zero-hit-store';
 import {
   fetchZeroHitTelemetry,
   persistZeroHitEvent,
   zeroHitPersistenceEnabled,
+  type ZeroHitPersistenceConfig,
 } from '../zero-hit-persistence';
 import type { SearchScope } from '../../../types/oak';
 
@@ -24,19 +24,25 @@ const WebhookPayloadSchema = z.object({
 
 type WebhookPayload = z.infer<typeof WebhookPayloadSchema>;
 
-export async function handleZeroHitSummary(request: Request): Promise<Response> {
-  const envVars = optionalEnv();
+/** Config required for zero-hit API handlers. */
+export interface ZeroHitApiConfig extends ZeroHitPersistenceConfig {
+  readonly SEARCH_API_KEY?: string;
+}
 
-  if (!envVars?.SEARCH_API_KEY) {
+export async function handleZeroHitSummary(
+  request: Request,
+  config: ZeroHitApiConfig,
+): Promise<Response> {
+  if (!config.SEARCH_API_KEY) {
     return Response.json(buildDisabledTelemetryPayload());
   }
 
-  if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
+  if (!isAuthorised(request, config.SEARCH_API_KEY)) {
     return Response.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
-  if (zeroHitPersistenceEnabled()) {
-    const telemetry = await fetchZeroHitTelemetry({ limit: 50 });
+  if (zeroHitPersistenceEnabled(config)) {
+    const telemetry = await fetchZeroHitTelemetry({ limit: 50 }, config);
     return Response.json(telemetry);
   }
 
@@ -45,14 +51,15 @@ export async function handleZeroHitSummary(request: Request): Promise<Response> 
   return Response.json({ summary, recent });
 }
 
-export async function handleZeroHitWebhook(request: Request): Promise<Response> {
-  const envVars = optionalEnv();
-
-  if (!envVars?.SEARCH_API_KEY) {
+export async function handleZeroHitWebhook(
+  request: Request,
+  config: ZeroHitApiConfig,
+): Promise<Response> {
+  if (!config.SEARCH_API_KEY) {
     return Response.json({ error: 'Zero-hit telemetry disabled' }, { status: 503 });
   }
 
-  if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
+  if (!isAuthorised(request, config.SEARCH_API_KEY)) {
     return Response.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
@@ -71,8 +78,8 @@ export async function handleZeroHitWebhook(request: Request): Promise<Response> 
 
   recordZeroHitEvent(event);
 
-  if (zeroHitPersistenceEnabled()) {
-    await persistZeroHitEvent(event);
+  if (zeroHitPersistenceEnabled(config)) {
+    await persistZeroHitEvent(event, config);
   }
 
   return Response.json({ status: 'accepted' }, { status: 202 });

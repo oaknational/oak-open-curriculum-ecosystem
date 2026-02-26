@@ -35,10 +35,9 @@ const log = createStartupLogger({
 log('[START-MCP] Starting oak-curriculum-mcp...');
 log(`[START-MCP] Root directory: ${rootDir}`);
 
-// Resolve and validate environment (resolveEnv loads .env files from repo root)
 const configResult = loadRuntimeConfig({
   processEnv: process.env,
-  startDir: rootDir,
+  startDir: import.meta.dirname,
 });
 
 if (!configResult.ok) {

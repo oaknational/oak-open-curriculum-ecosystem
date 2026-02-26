@@ -22,9 +22,16 @@
 
 import { describe, it, expect } from 'vitest';
 import { Client } from '@elastic/elasticsearch';
-import { env } from '../src/lib/env';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 
-const config = env();
+const configResult = loadRuntimeConfig({
+  processEnv: process.env,
+  startDir: import.meta.dirname,
+});
+if (!configResult.ok) {
+  throw new Error(`Environment validation failed: ${configResult.error.message}`);
+}
+const config = configResult.value.env;
 
 // Initialize ES client
 const client = new Client({

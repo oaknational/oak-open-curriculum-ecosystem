@@ -274,6 +274,9 @@ importers:
       '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
+      '@oaknational/env-resolution':
+        specifier: workspace:*
+        version: link:../../packages/libs/env-resolution
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger

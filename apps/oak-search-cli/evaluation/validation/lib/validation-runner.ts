@@ -12,7 +12,7 @@ import { requireApiKey } from './api-helpers';
 import { collectSlugsFromQueries } from './slug-collectors';
 import { checkLessonExists, checkSequenceExists } from './api-checkers';
 import { validateCategory, printResults, validateQueryStructure } from './validation-helpers';
-import { env } from '../../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../../src/runtime-config.js';
 import {
   getAllGroundTruthEntries,
   DIAGNOSTIC_QUERIES,
@@ -33,7 +33,15 @@ export async function runValidation(): Promise<void> {
   console.log('Ground Truth Validation');
   console.log('========================\n');
 
-  const config = env();
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: import.meta.dirname,
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const config = configResult.value.env;
   const apiKey = requireApiKey(config.OAK_API_KEY);
   console.log('✅ API key found\n');
 

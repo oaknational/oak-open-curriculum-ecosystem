@@ -17,6 +17,9 @@ describe('search index target helpers', () => {
   it('returns the explicit target when provided', () => {
     expect(currentSearchIndexTarget('sandbox')).toBe('sandbox');
     expect(currentSearchIndexTarget('primary')).toBe('primary');
+    expect(currentSearchIndexTarget({ SEARCH_INDEX_TARGET: 'sandbox' })).toBe('sandbox');
+    expect(currentSearchIndexTarget({ SEARCH_INDEX_TARGET: 'primary' })).toBe('primary');
+    expect(currentSearchIndexTarget()).toBe('primary');
   });
 
   it('coerces search index target values', () => {

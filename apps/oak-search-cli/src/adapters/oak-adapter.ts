@@ -8,7 +8,6 @@
  */
 
 import { createOakBaseClient } from '@oaknational/curriculum-sdk';
-import { env, optionalEnv } from '../lib/env';
 import { createRedisClient, withRedisConnection } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';
 import type { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
@@ -81,8 +80,19 @@ export interface OakClient {
   disconnect: () => Promise<void>;
 }
 
+/** Environment config required to create an Oak client. */
+export interface OakClientEnv {
+  readonly OAK_API_KEY?: string;
+  readonly SEARCH_INDEX_TARGET?: 'primary' | 'sandbox';
+  readonly SDK_CACHE_ENABLED?: boolean;
+  readonly SDK_CACHE_REDIS_URL?: string;
+  readonly SDK_CACHE_TTL_DAYS?: number;
+}
+
 /** Options for creating an Oak client. */
 export interface CreateOakClientOptions {
+  /** Validated env. When omitted, client creation will fail. */
+  readonly env?: OakClientEnv;
   readonly caching?: {
     readonly ignoreCached404?: boolean;
   };
@@ -125,53 +135,70 @@ async function createClientWithCaching(
 // Public API
 // =============================================================================
 
+function requireOakApiKey(options: CreateOakClientOptions): OakClientEnv & { OAK_API_KEY: string } {
+  const envConfig = options.env;
+  if (!envConfig?.OAK_API_KEY) {
+    throw new Error(
+      'OAK_API_KEY is required. Pass env from loadRuntimeConfig: createOakClient({ env: config.env })',
+    );
+  }
+  return { ...envConfig, OAK_API_KEY: envConfig.OAK_API_KEY };
+}
+
 /**
  * Create an Oak client with optional caching.
  *
- * @param options - Optional configuration overrides
+ * @param options - Configuration; env is required (pass from loadRuntimeConfig)
  * @returns Oak client instance
  */
 export async function createOakClient(options: CreateOakClientOptions = {}): Promise<OakClient> {
-  const ignoreCached404 = options.caching?.ignoreCached404 ?? false;
+  const envConfig = requireOakApiKey(options);
+  const ignoreCached404 = resolveCacheBypass(options);
 
   if (clientSingleton && !ignoreCached404) {
     return clientSingleton;
   }
 
-  const baseClient = createOakBaseClient(buildClientConfig(env().OAK_EFFECTIVE_KEY));
-  const envConfig = optionalEnv();
+  const baseClient = createOakBaseClient(buildClientConfig(envConfig.OAK_API_KEY));
 
-  if (!envConfig?.SDK_CACHE_ENABLED) {
+  if (!envConfig.SDK_CACHE_ENABLED) {
     cacheLogger.info('SDK caching disabled');
     return setSingletonIfNotIgnoring(createUncachedClient(baseClient), ignoreCached404);
   }
 
   return createClientWithCaching(
     baseClient,
-    envConfig.SDK_CACHE_REDIS_URL,
-    envConfig.SDK_CACHE_TTL_DAYS,
+    envConfig.SDK_CACHE_REDIS_URL ?? 'redis://localhost:6379',
+    envConfig.SDK_CACHE_TTL_DAYS ?? 14,
     ignoreCached404,
   );
 }
 
+function resolveCacheBypass(options: CreateOakClientOptions): boolean {
+  return options.caching?.ignoreCached404 ?? false;
+}
+
 /** Clear all cached SDK responses from Redis. */
-export async function clearSdkCache(): Promise<number> {
-  const config = optionalEnv();
-  if (!config?.SDK_CACHE_ENABLED) {
+export async function clearSdkCache(env: OakClientEnv): Promise<number> {
+  if (!env.SDK_CACHE_ENABLED) {
     cacheLogger.info('SDK caching not enabled, nothing to clear');
     return 0;
   }
 
-  return withRedisConnection(config.SDK_CACHE_REDIS_URL, 0, async (redis) => {
-    const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
-    if (keys.length === 0) {
-      cacheLogger.info('No cached entries to clear');
-      return 0;
-    }
-    const deleted = await redis.del(...keys);
-    cacheLogger.info('Cleared cached entries', { count: deleted });
-    return deleted;
-  });
+  return withRedisConnection(
+    env.SDK_CACHE_REDIS_URL ?? 'redis://localhost:6379',
+    0,
+    async (redis) => {
+      const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
+      if (keys.length === 0) {
+        cacheLogger.info('No cached entries to clear');
+        return 0;
+      }
+      const deleted = await redis.del(...keys);
+      cacheLogger.info('Cleared cached entries', { count: deleted });
+      return deleted;
+    },
+  );
 }
 
 /**
@@ -187,14 +214,13 @@ export interface CacheStatus {
 const DISCONNECTED_STATUS: CacheStatus = { enabled: true, connected: false, keyCount: 0 };
 
 /** Check SDK cache status without creating a full client. */
-export async function getSdkCacheStatus(): Promise<CacheStatus> {
-  const config = optionalEnv();
-  if (!config?.SDK_CACHE_ENABLED) {
+export async function getSdkCacheStatus(env: OakClientEnv): Promise<CacheStatus> {
+  if (!env.SDK_CACHE_ENABLED) {
     return { enabled: false, connected: false, keyCount: 0 };
   }
 
   return withRedisConnection<CacheStatus>(
-    config.SDK_CACHE_REDIS_URL,
+    env.SDK_CACHE_REDIS_URL ?? 'redis://localhost:6379',
     DISCONNECTED_STATUS,
     async (redis) => {
       const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);

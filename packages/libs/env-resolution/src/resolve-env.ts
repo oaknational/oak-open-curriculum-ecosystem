@@ -1,34 +1,12 @@
 /**
  * Environment resolution pipeline.
  *
- * Reads `.env` and `.env.local` from the monorepo root using non-mutating
- * `dotenv.parse()`, merges them with the caller-provided `processEnv`
- * (highest precedence), validates the merged result against a Zod schema,
+ * Loads `.env` / `.env.local` from both repo root and app root, merges
+ * with `processEnv` (highest precedence), validates against a Zod schema,
  * and returns `Result<T, EnvResolutionError>`.
  *
  * The consuming app defines its requirements via a Zod schema. This
- * module owns loading, merging, validation, and diagnostics. The app
- * decides what to do with the result.
- *
- * @example
- * ```typescript
- * import { resolveEnv } from '@oaknational/env-resolution';
- * import { z } from 'zod';
- *
- * const AppSchema = z.object({ API_KEY: z.string().min(1) });
- *
- * const result = resolveEnv({
- *   schema: AppSchema,
- *   processEnv: process.env,
- *   startDir: process.cwd(),
- * });
- *
- * if (!result.ok) {
- *   console.error(result.error.message);
- *   process.exit(1);
- * }
- * console.log(result.value.API_KEY);
- * ```
+ * module owns loading, merging, validation, and diagnostics.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -36,7 +14,7 @@ import { join } from 'node:path';
 import { parse as dotenvParse } from 'dotenv';
 import type { z } from 'zod';
 import { ok, err, type Result } from '@oaknational/result';
-import { findRepoRoot } from './repo-root.js';
+import { findRepoRoot, findAppRoot } from './repo-root.js';
 
 /**
  * Options for the environment resolution pipeline.
@@ -197,13 +175,22 @@ function buildEnvResolutionError(
 }
 
 /**
- * Resolves environment variables from the standard source hierarchy,
+ * Resolves environment variables from a five-source hierarchy,
  * validates against the provided Zod schema, and returns a typed Result.
  *
  * Source precedence (lowest to highest):
- * 1. `.env` — shared defaults (committed)
- * 2. `.env.local` — local developer overrides (gitignored)
- * 3. `processEnv` — explicit env vars (e.g. `KEY=val command`)
+ * 1. Repo root `.env` — shared defaults (committed)
+ * 2. Repo root `.env.local` — local developer overrides (gitignored)
+ * 3. App root `.env` — app-specific defaults (committed)
+ * 4. App root `.env.local` — app-specific local overrides (gitignored)
+ * 5. `processEnv` — explicit env vars (e.g. `KEY=val command`)
+ *
+ * When the app root and repo root are the same directory, the app-level
+ * layer is skipped to avoid redundant double-loading.
+ *
+ * In serverless environments (Vercel, etc.) where no filesystem markers
+ * exist, both root finders return `undefined` and the hierarchy collapses
+ * to `processEnv` only.
  *
  * @typeParam TSchema - Zod schema type
  * @param options - Pipeline options: schema, processEnv, startDir
@@ -215,13 +202,20 @@ export function resolveEnv<TSchema extends z.ZodType>(
   const { schema, processEnv, startDir } = options;
 
   const repoRoot = findRepoRoot(startDir);
+  const appRoot = findAppRoot(startDir);
 
-  const dotEnvValues = repoRoot ? parseEnvFile(join(repoRoot, '.env')) : {};
-  const dotEnvLocalValues = repoRoot ? parseEnvFile(join(repoRoot, '.env.local')) : {};
+  const repoDotEnv = repoRoot ? parseEnvFile(join(repoRoot, '.env')) : {};
+  const repoDotEnvLocal = repoRoot ? parseEnvFile(join(repoRoot, '.env.local')) : {};
+
+  const appIsDistinct = appRoot !== undefined && appRoot !== repoRoot;
+  const appDotEnv = appIsDistinct ? parseEnvFile(join(appRoot, '.env')) : {};
+  const appDotEnvLocal = appIsDistinct ? parseEnvFile(join(appRoot, '.env.local')) : {};
 
   const merged: Record<string, string | undefined> = {
-    ...dotEnvValues,
-    ...dotEnvLocalValues,
+    ...repoDotEnv,
+    ...repoDotEnvLocal,
+    ...appDotEnv,
+    ...appDotEnvLocal,
     ...processEnv,
   };
 

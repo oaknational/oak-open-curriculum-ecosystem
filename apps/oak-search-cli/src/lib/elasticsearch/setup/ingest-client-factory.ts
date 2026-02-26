@@ -9,6 +9,7 @@ import {
   createOakClient,
   getSdkCacheStatus,
   type OakClient,
+  type OakClientEnv,
 } from '../../../adapters/oak-adapter.js';
 import { ingestLogger } from '../../logger';
 
@@ -22,6 +23,8 @@ export class CacheRequiredError extends Error {
 
 /** Options for creating an ingestion client. */
 export interface IngestionClientOptions {
+  /** Validated env from loadRuntimeConfig. Required. */
+  readonly env: OakClientEnv;
   /** If true, allow ingestion without cache. Default: false (cache required). */
   readonly bypassCache?: boolean;
   /**
@@ -75,19 +78,17 @@ function logCacheStatus(
  * @param options - Client creation options
  * @throws CacheRequiredError if cache is required but Redis is unavailable
  */
-export async function createIngestionClient(
-  options: IngestionClientOptions = {},
-): Promise<OakClient> {
-  const { bypassCache = false, ignoreCached404 = false } = options;
+export async function createIngestionClient(options: IngestionClientOptions): Promise<OakClient> {
+  const { env, bypassCache = false, ignoreCached404 = false } = options;
   ingestLogger.debug('Creating Oak client', { bypassCache, ignoreCached404 });
 
-  const cacheStatus = await getSdkCacheStatus();
+  const cacheStatus = await getSdkCacheStatus(env);
 
   if (!cacheStatus.connected && !bypassCache) {
     throw new CacheRequiredError(buildCacheRequiredMessage(cacheStatus.enabled));
   }
 
-  const client = await createOakClient({ caching: { ignoreCached404 } });
+  const client = await createOakClient({ env, caching: { ignoreCached404 } });
   logCacheStatus(cacheStatus.connected, cacheStatus.enabled, cacheStatus.keyCount, ignoreCached404);
 
   return client;

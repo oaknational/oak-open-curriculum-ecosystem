@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import process from 'node:process';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
-import { esClient } from '../../src/lib/es-client';
-import { env } from '../../src/lib/env';
+import { loadConfigOrExit } from '../../src/runtime-config.js';
+import { initializeEsClient, esClient } from '../../src/lib/es-client.js';
 import {
   coerceSearchIndexTarget,
   currentSearchIndexTarget,
@@ -89,14 +91,20 @@ function isForceConfirmed(force: boolean | undefined): boolean {
   return false;
 }
 
-/** Determine the effective search index target from flags or env. */
-function resolveTargetFromFlags(flags: CliFlags): SearchIndexTarget {
-  return flags.target ?? currentSearchIndexTarget();
+/** Determine the effective search index target from flags or config. */
+function resolveTargetFromFlags(
+  flags: CliFlags,
+  config: { SEARCH_INDEX_TARGET?: SearchIndexTarget },
+): SearchIndexTarget {
+  return flags.target ?? currentSearchIndexTarget(config);
 }
 
-/** Determine retention cut-off in days using flag override or env default. */
-function resolveRetentionDays(flags: CliFlags): number {
-  return flags.olderThanDays ?? env().ZERO_HIT_INDEX_RETENTION_DAYS;
+/** Determine retention cut-off in days using flag override or config default. */
+function resolveRetentionDays(
+  flags: CliFlags,
+  config: { ZERO_HIT_INDEX_RETENTION_DAYS?: number },
+): number {
+  return flags.olderThanDays ?? config.ZERO_HIT_INDEX_RETENTION_DAYS ?? 30;
 }
 
 /** Build the delete-by-query request body respecting the retention window. */
@@ -148,14 +156,19 @@ async function executePurge(
 }
 
 async function main(): Promise<void> {
+  const config = loadConfigOrExit({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  }).env;
+  initializeEsClient(config);
+
   const flags = parseFlags(process.argv.slice(2));
-  env(); // validate configuration and load defaults.
   if (!isForceConfirmed(flags.force)) {
     return;
   }
-  const target = resolveTargetFromFlags(flags);
+  const target = resolveTargetFromFlags(flags, config);
   const indexName = resolveZeroHitIndexName(target);
-  const olderThanDays = resolveRetentionDays(flags);
+  const olderThanDays = resolveRetentionDays(flags, config);
   const request = buildDeleteRequest(indexName, olderThanDays);
   await executePurge(target, indexName, olderThanDays, request);
 }

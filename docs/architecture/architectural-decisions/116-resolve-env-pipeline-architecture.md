@@ -2,16 +2,20 @@
 
 ## Status
 
-Accepted (Revised 2026-02-23)
+Accepted (Revised 2026-02-26)
 
 **Supersedes**: [ADR-016 (dotenv for configuration)](016-dotenv-for-configuration.md)
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md)
 
+> **Revision note (2026-02-26)**: Expanded to five-source hierarchy with
+> app-root discovery via `findAppRoot` (nearest `package.json`). This
+> enables workspace apps to maintain their own `.env` / `.env.local` files
+> that override repo-root defaults while being overridden by `processEnv`.
+> When app root and repo root coincide, the app-level layer is skipped.
+>
 > **Revision note (2026-02-23)**: Added serverless environment compatibility.
-> The original design unconditionally called `findRepoRoot()`, which threw
-> in Vercel's serverless runtime where no `.git` or `pnpm-workspace.yaml`
-> exists. `findRepoRoot` now returns `string | undefined`, and `resolveEnv`
+> `findRepoRoot` now returns `string | undefined`, and `resolveEnv`
 > gracefully skips `.env` file loading when no repo root is found. See
 > [Serverless Compatibility](#serverless-compatibility) below.
 
@@ -39,13 +43,17 @@ Implement a shared environment resolution pipeline in `@oaknational/env-resoluti
 
 ### Source Hierarchy
 
-Three sources, merged with increasing precedence:
+Five sources, merged with increasing precedence:
 
-1. `.env` — shared defaults (committed to version control)
-2. `.env.local` — local developer overrides (gitignored)
-3. `processEnv` — explicit environment variables (e.g. `KEY=val command`)
+1. Repo root `.env` — shared defaults (committed to version control)
+2. Repo root `.env.local` — local developer overrides (gitignored)
+3. App root `.env` — app-specific defaults (committed)
+4. App root `.env.local` — app-specific local overrides (gitignored)
+5. `processEnv` — explicit environment variables (e.g. `KEY=val command`)
 
-The pipeline uses non-mutating `dotenv.parse()` to read files without modifying `process.env`. The merge is a simple spread: `{ ...dotEnvValues, ...dotEnvLocalValues, ...processEnv }`.
+The pipeline discovers the app root via `findAppRoot` (walks up from `startDir` to nearest `package.json`) and the repo root via `findRepoRoot` (walks up to `pnpm-workspace.yaml` or `.git`). When the app root and repo root are the same directory, the app-level layer is skipped to avoid redundant double-loading. In serverless environments where neither marker exists, both finders return `undefined` and only `processEnv` is validated.
+
+The pipeline uses non-mutating `dotenv.parse()` to read files without modifying `process.env`. The merge is a simple spread: `{ ...repoDotEnv, ...repoDotEnvLocal, ...appDotEnv, ...appDotEnvLocal, ...processEnv }`.
 
 ### Result Return
 
@@ -95,7 +103,7 @@ Callers that require a repo root (STDIO server, smoke tests, build-time scripts)
 - **Schema-driven**: apps compose their own schemas from shared building blocks (`OakApiKeyEnvSchema`, `ElasticsearchEnvSchema`, `LoggingEnvSchema`), keeping the pipeline generic
 - **Fail-fast with diagnostics**: structured `EnvResolutionError` with per-key presence reporting makes misconfiguration immediately obvious
 - **Type-safe**: the discriminated union propagates auth-state knowledge through the type system, eliminating an entire class of runtime errors
-- **Monorepo-aware**: `findRepoRoot()` walks up the directory tree looking for `pnpm-workspace.yaml` or `.git`, so apps in any workspace directory find the root `.env` files automatically
+- **Monorepo-aware**: `findRepoRoot()` discovers the repo root; `findAppRoot()` discovers the nearest app root. Apps in any workspace directory find both repo and app `.env` files automatically
 - **Serverless-safe**: when no repo root exists, the pipeline degrades gracefully to validating `processEnv` only, with platform-specific error guidance when configuration is incomplete
 
 ## Consequences
@@ -112,7 +120,7 @@ Callers that require a repo root (STDIO server, smoke tests, build-time scripts)
 
 ### Negative
 
-- `findRepoRoot()` adds filesystem traversal at startup (mitigated: only called once, traversal is bounded)
+- `findRepoRoot()` and `findAppRoot()` add filesystem traversal at startup (mitigated: only called once, traversal is bounded)
 - The `superRefine` pattern for conditional keys requires Zod-specific knowledge
 - Dual `readEnv` (legacy, throws) and `resolveEnv` (new, returns Result) paths coexist during migration
 - Callers that genuinely require a repo root (STDIO server, build scripts) must check `findRepoRoot`'s return value and provide their own error handling
@@ -120,7 +128,7 @@ Callers that require a repo root (STDIO server, smoke tests, build-time scripts)
 ## Implementation
 
 - **Resolution pipeline**: `packages/libs/env-resolution/src/resolve-env.ts`
-- **Repo root finder**: `packages/libs/env-resolution/src/repo-root.ts`
+- **Root finders**: `packages/libs/env-resolution/src/repo-root.ts` (`findRepoRoot`, `findAppRoot`)
 - **Shared schemas**: `packages/core/env/src/schemas/index.ts`
 - **HTTP env schema**: `apps/oak-curriculum-mcp-streamable-http/src/env.ts`
 - **Runtime config**: `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`

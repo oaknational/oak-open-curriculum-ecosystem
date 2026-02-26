@@ -538,6 +538,57 @@ createLibBoundaryRules despite being a core package).
   would likely have missed (workspace:^ inconsistency, stale ADR paths,
   YAGNI external, openapi-zod-client-adapter boundary violation).
 
+## Session: 2026-02-26 — F7 Reframing, Plan Consolidation, and Doc Sweep
+
+### What happened
+
+1. Integrated cursor plan (Batch C-D completion) into canonical release
+   plan. Deleted cursor plan.
+2. User corrected F7 framing: the architecture reviewer recommended
+   "defer" based on cycle analysis, but that analysis accepted the
+   current dependency structure as given. The user identified that the
+   dependency (search-sdk → curriculum-sdk) IS the bug — it is unfinished
+   ADR-108 Step 1 work and intention drift. `oak-sdk-codegen` was created
+   specifically so that both SDKs import from it, not from each other.
+3. Ran `/jc-consolidate-docs`:
+   - Updated distilled.md: corrected stale entry that described the
+     structural typing workaround as a "solution"
+   - Cross-referenced F1, F2, F12 entries to F7
+   - Corrected open item count (was 14, actually 16 after thorough
+     enumeration)
+   - Added ADR-108 revision note to F7 fix steps (lines 81/222 need
+     updating when F7 is complete)
+   - Verified no documentation trapped in plans or ephemeral locations
+   - No distillation needed (napkin ~620 lines, distilled ~325 lines)
+4. User decisions (same session, after consolidation):
+   - F7: `SearchRetrievalService` STAYS — intentional ISP (consumer-side
+     interface), not a duplicate. Structural typing handles the wiring.
+     No SDK-to-SDK dependency.
+   - F17: Remove `public/search.ts` facade entirely — it masks truth and
+     creates a labyrinth. Migrate 36 files to direct sdk-codegen imports.
+   - Batch E elevated: all items fix-before-release (user rejected
+     agent-decided deferral). F12/F13 closed as obsolete.
+
+### Lessons
+
+- Architecture reviewer recommendations must be questioned against the
+  system's architectural intent, not just the current state. Barney
+  correctly identified the cycle but incorrectly concluded "defer" because
+  the analysis treated the cycle as a constraint rather than a symptom.
+- "Could it be simpler without compromising quality?" — the runtime
+  function dependency and the cycle risk collapse once the root cause
+  (wrong dependency direction) is fixed. But `SearchRetrievalService`
+  stays: ISP means the consumer defines its own contract; structural
+  typing wires them together without coupling.
+- When a reviewer recommends deferral, ask: is the thing being deferred
+  actually unfinished work from a prior architectural decision? If so,
+  completing it IS the simpler path.
+- Agents must not unilaterally defer items. Deferral is a user decision.
+- Open item counts in plans drift without regular re-enumeration. Grep
+  for `[ ]` and `[~]` to get the accurate count.
+
+---
+
 ## Session: 2026-02-26 (Batch C — F8-STDIO, F27, O12)
 
 ### Mistakes and corrections

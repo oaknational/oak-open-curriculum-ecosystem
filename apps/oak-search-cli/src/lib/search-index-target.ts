@@ -1,4 +1,3 @@
-import { optionalEnv } from './env';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 
 export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
@@ -48,22 +47,35 @@ export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
   return resolveSearchIndexName(kind, 'primary');
 }
 
+/** Config shape for resolving search index target. */
+export interface SearchIndexTargetConfig {
+  readonly SEARCH_INDEX_TARGET?: SearchIndexTarget;
+}
+
 /**
  * Return the configured search index target.
  *
- * When called without arguments, falls back to the live environment.
- * Pass a target explicitly to avoid reading `process.env` (required in tests).
+ * Pass a target explicitly, or pass config with SEARCH_INDEX_TARGET.
+ * Callers must provide one or the other — no env fallback.
  */
-export function currentSearchIndexTarget(target?: SearchIndexTarget): SearchIndexTarget {
-  if (target) {
-    return target;
+export function currentSearchIndexTarget(
+  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfig,
+): SearchIndexTarget {
+  if (targetOrConfig === 'primary' || targetOrConfig === 'sandbox') {
+    return targetOrConfig;
   }
-  return optionalEnv()?.SEARCH_INDEX_TARGET ?? 'primary';
+  if (targetOrConfig && typeof targetOrConfig === 'object' && targetOrConfig.SEARCH_INDEX_TARGET) {
+    return targetOrConfig.SEARCH_INDEX_TARGET;
+  }
+  return 'primary';
 }
 
-/** Resolve the index name for the current environment configuration. */
-export function resolveCurrentSearchIndexName(kind: SearchIndexKind): string {
-  return resolveSearchIndexName(kind, currentSearchIndexTarget());
+/** Resolve the index name for the given target or config. */
+export function resolveCurrentSearchIndexName(
+  kind: SearchIndexKind,
+  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfig,
+): string {
+  return resolveSearchIndexName(kind, currentSearchIndexTarget(targetOrConfig));
 }
 
 /** Resolve the zero-hit telemetry index name for the given target. */

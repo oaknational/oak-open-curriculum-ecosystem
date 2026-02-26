@@ -9,9 +9,8 @@
  * @example
  * ```typescript
  * import { createCliSdk } from './create-cli-sdk.js';
- * import { env } from '../../lib/env.js';
  *
- * const sdk = createCliSdk(env());
+ * const sdk = createCliSdk(config.env);
  * const results = await sdk.retrieval.searchLessons({ text: 'fractions' });
  * ```
  */
@@ -57,7 +56,7 @@ export interface CliSdkEnv {
  * SDK dependencies and configuration. All CLI handlers receive the
  * returned SDK as a parameter — they never read env directly.
  *
- * @param cliEnv - Validated environment values (from `env()` or test fixture)
+ * @param cliEnv - Validated environment values (from `loadRuntimeConfig()` or test fixture)
  * @returns A fully wired `SearchSdk` instance
  */
 export function createCliSdk(cliEnv: CliSdkEnv): SearchSdk {

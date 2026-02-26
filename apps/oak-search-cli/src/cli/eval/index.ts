@@ -18,6 +18,7 @@
  */
 
 import { Command } from 'commander';
+import type { CliSdkEnv } from '../shared/index.js';
 import { registerPassThrough } from '../shared/index.js';
 
 /**
@@ -25,7 +26,7 @@ import { registerPassThrough } from '../shared/index.js';
  *
  * @returns A Commander `Command` with benchmark subcommands registered
  */
-function createBenchmarkCmd(): Command {
+function createBenchmarkCmd(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('benchmark').description('Run search benchmarks against ground truth');
 
   registerPassThrough(
@@ -33,30 +34,35 @@ function createBenchmarkCmd(): Command {
     'all',
     'Run benchmarks for all indexes',
     'evaluation/analysis/benchmark.ts',
+    { cliEnv },
   );
   registerPassThrough(
     cmd,
     'lessons',
     'Run lesson search benchmarks',
     'evaluation/analysis/benchmark-lessons.ts',
+    { cliEnv },
   );
   registerPassThrough(
     cmd,
     'units',
     'Run unit search benchmarks',
     'evaluation/analysis/benchmark-units.ts',
+    { cliEnv },
   );
   registerPassThrough(
     cmd,
     'threads',
     'Run thread search benchmarks',
     'evaluation/analysis/benchmark-threads.ts',
+    { cliEnv },
   );
   registerPassThrough(
     cmd,
     'sequences',
     'Run sequence search benchmarks',
     'evaluation/analysis/benchmark-sequences.ts',
+    { cliEnv },
   );
 
   return cmd;
@@ -70,27 +76,29 @@ function createBenchmarkCmd(): Command {
  * @example
  * ```typescript
  * const program = new Command();
- * program.addCommand(evalCommand());
+ * program.addCommand(evalCommand(cliEnv));
  * ```
  */
-export function evalCommand(): Command {
+export function evalCommand(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('eval').description(
     'Benchmarks, ground truth validation, and type generation',
   );
 
-  cmd.addCommand(createBenchmarkCmd());
+  cmd.addCommand(createBenchmarkCmd(cliEnv));
 
   registerPassThrough(
     cmd,
     'validate',
     'Validate ground truth entries',
     'evaluation/validation/validate-ground-truth.ts',
+    { cliEnv },
   );
   registerPassThrough(
     cmd,
     'codegen',
     'Generate ground truth types from bulk data',
     'ground-truths/generation/generate-ground-truth-types.ts',
+    { cliEnv },
   );
 
   return cmd;

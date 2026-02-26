@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 14 remaining (was 16; Batch C: F8-STDIO, F27, O12 complete)
+**Open items**: 14 remaining (1 P1, 1 P2, 12 P3). F12/F13 closed (obsolete). F7 upgraded to P1, F8 fully complete. Batch E elevated: all items will be fixed before release.
 
 ---
 
@@ -42,46 +42,75 @@ Primary strategic reference:
 1. Read this plan. It is self-contained.
 2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
-4. The plan below has all context needed. Next decision: finish F8 (Search CLI portion — needs design decision), move to Batch D (F7 contract consolidation), or proceed to Go/No-Go preparation if remaining items are acceptable as deferred.
+4. **First action**: Commit Batch C-2 (F8-Search-CLI, env-resolution enhancement) — it is complete and passing all gates but uncommitted in the working tree.
+5. Then: complete F7 (ADR-108 completion — move synonym/vocabulary functions to sdk-codegen, remove search-sdk's dependency on curriculum-sdk). See §Batch D below for detailed fix steps.
+6. After F7: complete Batch E (all remaining items — elevated from deferred to fix-before-release). See §Batch E below.
+7. After Batch E: Go/No-Go preparation (G1–G8 evidence collection).
 
 ### Current State
 
 - **Batch A**: Complete (8 items). All quality gates pass.
 - **Batch B**: Complete (8 items — F6, F10, F20, F25, F28, F29, O5, O10). Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). All quality gates pass.
-- **Batch C**: Near-complete. F5/F18, F27, O12 done. F8 partially done (STDIO migrated to `resolveEnv`; Search CLI deferred — needs design decision on `loadAppEnv` replacement strategy).
-- **Uncommitted**: Batch C session work (F8-STDIO, F27, O12) is in the working tree (22 files, `git diff --stat`). All quality gates pass. Commit before starting new work.
+- **Batch C**: Complete (F5/F18, F8-STDIO, F8-Search-CLI, F27, O12). All quality gates pass. Batch C-1 committed in `081188a8`. Batch C-2 (F8-Search-CLI, env-resolution enhancement) uncommitted in working tree.
 - **F18 is subsumed by F5** — they share the same fix (env identity + LIB_PACKAGES cleanup).
 
-### Next: Batch C Remaining — F8 Search CLI portion
+### Batch C — COMPLETE
 
-**F5** ~~(medium): Env identity + LIB_PACKAGES cleanup (subsumes F18)~~ **COMPLETE** — see status below.
+All Batch C items complete: ~~F5/F18~~, ~~F8-STDIO~~, ~~F8-Search-CLI~~, ~~F27~~, ~~O12~~.
 
-**F8** (medium): Env pipeline unification — **STDIO COMPLETE, Search CLI deferred**
+**Specialist reviewers**: `code-reviewer`, `architecture-reviewer-fred`, `architecture-reviewer-barney`, `type-reviewer`, `test-reviewer`, `docs-adr-reviewer`, `config-reviewer`. All passed.
 
-- STDIO app fully migrated: `StdioEnvSchema` in `src/env.ts`, `loadRuntimeConfig` returns `Result`, all `process.env` reads eliminated from `src/`. Entry point uses `resolveEnv`.
-- Search CLI (`apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`) still uses custom `process.env` readers. Needs design decision: `loadAppEnv` replacement strategy (same `resolveEnv` pattern or different approach given CLI context).
+### Next: Batch D — F7: Complete ADR-108 (search-sdk independence)
 
-**F27** ~~(medium): DI for response-augmentation logger~~ **COMPLETE** — see status below.
+**F7** is not a trade-off decision. It is unfinished ADR-108 work and intention drift.
 
-**O12** ~~(low): OAuth bootstrap troubleshooting note~~ **COMPLETE** — see status below.
+The `oak-search-sdk` still depends on `@oaknational/curriculum-sdk` for two runtime functions (`buildPhraseVocabulary`, `buildElasticsearchSynonyms`) that were temporarily allowed per ADR-108 Step 1. `oak-sdk-codegen` was created specifically to be the shared type/schema package that both SDKs import from — neither SDK should depend on the other.
 
-**Specialist reviewers completed for Batch C**: `code-reviewer`, `architecture-reviewer-fred`, `type-reviewer`, `test-reviewer`, `docs-adr-reviewer`. All passed (APPROVED/COMPLIANT/SAFE/PASS/GAPS FIXED).
+**Decision (2026-02-26)**: `SearchRetrievalService` in curriculum-sdk stays. It is not a duplicate — it is the consumer-side interface (Interface Segregation Principle). curriculum-sdk defines the contract it needs; search-sdk implements a structurally compatible type. TypeScript structural typing handles the wiring. No SDK-to-SDK dependency in either direction.
 
-### Remaining Batches
+**Fix** (TDD):
 
-4. **Batch D: Large / Architectural** (1 item, design decision required)
-   - **F7** (large): Contract consolidation — `SearchRetrievalService` vs `RetrievalService`
-   - **Design review gate**: Before implementing, invoke `architecture-reviewer-barney` and `architecture-reviewer-betty` to assess whether structural typing is sufficient (defer) or shared import is needed (fix).
-   - May defer to post-release if structural typing remains safe.
-5. **Batch E: Phase 3 / Deferred** (15 items, post-release backlog)
-   - R4, F11–F17, F19, F31–F35, O8
-   - All P3 — none release-blocking.
-   - Record disposition in snag register.
-6. **Go/No-Go Preparation**
-   - Prepare G1–G8 evidence (see §Mandatory Check Gates below).
-   - Invoke `release-readiness-reviewer`.
-   - Verify no open P0/P1 snags remain.
-   - Record decision.
+1. Move `buildPhraseVocabulary` and `buildElasticsearchSynonyms` (+ supporting types) from `curriculum-sdk/src/mcp/synonym-export.ts` to `@oaknational/sdk-codegen`
+2. Update search-sdk imports to use `@oaknational/sdk-codegen`
+3. Remove `@oaknational/curriculum-sdk` from search-sdk's `package.json` entirely
+4. Add ESLint boundary rule: search-sdk cannot import from curriculum-sdk (tighten existing rules to block ALL subpaths including `/public/mcp-tools.js`)
+5. Update ADR-108 revision note: lines 81 and 222 describe the coupling as "retained in Step 1" — add note that F7 completed the decoupling. Add note acknowledging `SearchRetrievalService` as ISP, not duplication.
+6. Quality gates, specialist reviewers
+
+### Batch E — All Remaining Items (Elevated 2026-02-26)
+
+**All items to be fixed before release.** F12 and F13 closed as obsolete. 13 items remain.
+
+**Sub-batch E1 — Trivial** (4 items):
+
+- **F35**: Delete dead code (`createInMemoryStorage`, `createNodeClock`, `runtime` from `WiredDependencies` in STDIO `wiring.ts`)
+- **O8**: Delete empty `docs/development/` directory
+- **F11**: Document RRF parameter coupling (`DEFAULT_MIN_SCORE` and `rank_constant`)
+- **F16**: Document OAuth proxy rate limiting as deployment precondition
+
+**Sub-batch E2 — Small** (6 items):
+
+- **R4**: Result pattern for `deriveSelfOrigin` and `fetchUpstreamMetadata`
+- **F14**: Search SDK integration test (builds both SDKs after codegen, runs retrieval smoke)
+- **F15**: Verify/fix ES timeout → `RetrievalError.timeout` mapping
+- **F19**: type-helpers assertion strategy audit
+- **F31**: Fix SDK API markdown generator for current package name
+- **F34**: Document ES connectivity trade-off or add warm-up ping
+
+**Sub-batch E3 — Medium** (3 items):
+
+- **F17**: Remove `public/search.ts` facade — migrate all consumers (32 search CLI files, 4 HTTP app files) to direct `@oaknational/sdk-codegen/search` imports. Keep curriculum-sdk imports only for `search-response-guards` symbols (curriculum-sdk's own runtime code). Update ADR-108.
+- **F32**: Standardise E2E config naming repo-wide
+- **F33**: Progressive ESLint re-enablement in codegen hand-written code
+
+### Go/No-Go Preparation
+
+After Batch E:
+
+1. Prepare G1–G8 evidence (see §Mandatory Check Gates below).
+2. Invoke `release-readiness-reviewer`.
+3. Verify no open P0/P1 snags remain.
+4. Record decision.
 
 ---
 
@@ -203,7 +232,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `oak-search-sdk` imports types from `@oaknational/curriculum-sdk/public/search.js` instead of `@oaknational/sdk-codegen/search`. ADR-108 states: *"There is no thin runtime facade that re-exports generation artefacts. Consumers needing type infrastructure import from the generation package directly."* |
 | **Files** | All imports in `packages/sdks/oak-search-sdk/src/**` referencing `@oaknational/curriculum-sdk/public/search.js`, `@oaknational/curriculum-sdk/public/mcp-tools.js`, `@oaknational/curriculum-sdk/elasticsearch.js` |
 | **Fix** | Add `@oaknational/sdk-codegen` as dependency to `oak-search-sdk`. Replace all curriculum-sdk type/mapping imports with `@oaknational/sdk-codegen/search`, `@oaknational/sdk-codegen/bulk`, etc. Change peerDependency from `@oaknational/curriculum-sdk` to `@oaknational/sdk-codegen`. Replace `KeyStage`, `isKeyStage`, `isKs4ScienceVariant`, `SUBJECT_TO_PARENT` imports with `@oaknational/sdk-codegen` subpaths where applicable. |
-| **Status** | [x] Complete (2026-02-25). Two runtime function imports (`buildPhraseVocabulary`, `buildElasticsearchSynonyms`) deliberately kept in `curriculum-sdk` per ADR-108 Step 1 shared runtime allowance. |
+| **Status** | [x] Complete (2026-02-25). Two runtime function imports (`buildPhraseVocabulary`, `buildElasticsearchSynonyms`) were kept in `curriculum-sdk` per ADR-108 Step 1 shared runtime allowance — now being corrected by F7 (move to sdk-codegen, remove dependency entirely). |
 
 #### F2: Search SDK has no ESLint SDK boundary enforcement
 
@@ -215,7 +244,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `packages/sdks/oak-search-sdk/eslint.config.ts` does not call `createSdkBoundaryRules`. No `@typescript-eslint/no-restricted-imports` rules prevent imports from apps or enforce which SDK packages it can depend on. Contrast with `oak-sdk-codegen` (uses `createSdkBoundaryRules('generation')`) and `oak-curriculum-sdk` (uses `createSdkBoundaryRules('runtime')`). |
 | **Files** | `packages/sdks/oak-search-sdk/eslint.config.ts` |
 | **Fix** | Extend `createSdkBoundaryRules` to support a `'search'` role that: (a) blocks imports from `@oaknational/curriculum-sdk` (force direct `sdk-codegen` imports after F1), (b) blocks imports from apps, (c) allows imports from `@oaknational/sdk-codegen/*` subpaths. Alternatively create `createSearchSdkBoundaryRules`. Fix F1 first, then add rules to prevent regression. |
-| **Status** | [x] Complete (2026-02-25). Uses `paths` (not `patterns`) for bare `curriculum-sdk` to permit ADR-108 `public/mcp-tools.js` subpath. 6 unit tests added. |
+| **Status** | [x] Complete (2026-02-25). Uses `paths` (not `patterns`) for bare `curriculum-sdk` to permit ADR-108 `public/mcp-tools.js` subpath. 6 unit tests added. Note: F7 will tighten this to block ALL curriculum-sdk imports once the subpath dependency is eliminated. |
 
 #### F3: OAuth Host header trust — security review gate
 
@@ -267,16 +296,19 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Fix** | Extract one shared retrieval bootstrap helper. Keep app-specific concerns at the outer composition root. |
 | **Status** | [x] Complete (2026-02-25). Extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk`. Both apps delegate to it. 3 unit tests added. |
 
-#### F7: Contract duplication — SearchRetrievalService vs RetrievalService
+#### F7: Complete ADR-108 — remove search-sdk dependency on curriculum-sdk
 
 | Field | Value |
 |-------|-------|
-| **Severity** | P2 |
-| **Reviewers** | Barney |
-| **Problem** | `curriculum-sdk` defines local `SearchRetrievalService` that mirrors `oak-search-sdk`'s `RetrievalService` to avoid circular dependency. Duplicated contract surfaces increase drift risk. |
-| **Files** | `packages/sdks/oak-curriculum-sdk/src/mcp/search-retrieval-types.ts`, `packages/sdks/oak-search-sdk/src/types/retrieval.ts` |
-| **Fix** | After F1, choose one contract owner (preferably generation-derived contract exports). Both SDKs consume that. Evaluate whether structural typing can be replaced with shared import. |
-| **Status** | [ ] Open |
+| **Severity** | P1 (upgraded from P2 — architectural integrity) |
+| **Reviewers** | Barney (initial), user correction |
+| **ADR** | [ADR-108](../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) |
+| **Problem** | `oak-search-sdk` still depends on `@oaknational/curriculum-sdk` for two runtime functions (`buildPhraseVocabulary`, `buildElasticsearchSynonyms`). This was a temporary allowance per ADR-108 Step 1, not the target architecture. `oak-sdk-codegen` was created specifically to be the shared type/schema package that both SDKs import from — neither SDK should depend on the other. |
+| **Root cause** | `buildPhraseVocabulary` and `buildElasticsearchSynonyms` in `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` are schema-derived vocabulary/synonym builders. They belong in the generation package (`@oaknational/sdk-codegen`), not in the runtime curriculum SDK. |
+| **SearchRetrievalService decision** | `SearchRetrievalService` in curriculum-sdk STAYS. It is not a duplicate — it is the consumer-side interface (Interface Segregation Principle). curriculum-sdk defines the contract it needs; search-sdk implements a structurally compatible type. No SDK-to-SDK dependency. |
+| **Files** | `packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts` (imports `buildPhraseVocabulary`), `packages/sdks/oak-search-sdk/src/admin/create-admin-service.ts` (imports `buildElasticsearchSynonyms`), `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` (source) |
+| **Fix** | (1) Move `buildPhraseVocabulary` and `buildElasticsearchSynonyms` (and their supporting types) to `@oaknational/sdk-codegen`. (2) Update search-sdk imports to use `@oaknational/sdk-codegen`. (3) Remove `@oaknational/curriculum-sdk` from search-sdk's `package.json` entirely (peer and dev deps) and from `tsup.config.ts` externals. (4) Tighten ESLint boundary rules: block ALL curriculum-sdk imports including `/public/mcp-tools.js` subpath. (5) Update ADR-108 revision note: lines 81 and 222 describe the coupling as "retained in Step 1" — add note that F7 completed the decoupling. Acknowledge `SearchRetrievalService` as ISP, not duplication. (6) Quality gates, specialist reviewers. |
+| **Status** | [~] In progress (2026-02-26). Architecture review completed: Barney recommended deferral based on cycle analysis. User corrected: the cycle IS the bug — it exists because ADR-108 Step 1 work is incomplete. The functions belong in sdk-codegen, not curriculum-sdk. Reframed as architectural completion, not trade-off acceptance. |
 
 ---
 
@@ -292,7 +324,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | HTTP app uses `resolveEnv`; stdio and Search CLI use custom `process.env` readers. `loadAppEnv` in Search CLI uses `dotenvConfig` and mutates `process.env`. Different failure semantics across apps; test isolation risk. |
 | **Files** | `apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`, `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`, `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` |
 | **Fix** | Migrate Search CLI and STDIO to `resolveEnv` with app-specific schemas. Retire legacy `readEnv`/direct env readers. Document any intentional exceptions. |
-| **Status** | [~] Partially complete (2026-02-26). STDIO app fully migrated: `StdioEnvSchema` composing shared schemas via `.extend(.shape)`, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `resolveEnv` pipeline, all `process.env` reads eliminated from `src/`. 10 integration tests. Entry point handles `Result` with structured diagnostic output. Search CLI migration deferred — needs design decision on `loadAppEnv` replacement. |
+| **Status** | [x] Complete (2026-02-26). Both STDIO and Search CLI fully migrated. STDIO: `StdioEnvSchema` composing shared schemas, `loadRuntimeConfig` returns `Result`, `resolveEnv` pipeline, all `process.env` reads eliminated from `src/`, 10 integration tests. Search CLI: `SearchCliEnvSchema` composing shared schemas with stricter overrides, `loadRuntimeConfig` + `loadConfigOrExit`, `resolveEnv` five-source hierarchy (repo `.env` < repo `.env.local` < app `.env` < app `.env.local` < `processEnv`), deleted `loadAppEnv`, refactored all entry points and 29+ library files to DI pattern (ADR-078), `CliSdkEnv` interface segregation, updated ESLint `process.env` restriction for composition roots, 7 new integration tests, 950 total tests pass. `@oaknational/env-resolution` enhanced with `findAppRoot` and five-source merge. ADR-116 revised. Specialist reviewers: code-reviewer (approved), architecture-reviewer-barney (compliant), test-reviewer (pass), type-reviewer (at-risk — `OAK_API_KEY` type gap, `as unknown` pre-existing), config-reviewer (compliant). |
 
 #### F9: oak-search-cli missing app boundary rules
 
@@ -340,7 +372,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Betty |
 | **Problem** | ADR-108 Step 1 permits search-sdk coupling to curriculum-sdk for shared runtime exports (`buildElasticsearchSynonyms`, `isKeyStage`, etc.). For Step 3 (Generic Extraction), consider extracting shared domain utilities into `packages/libs/oak-domain` to fully decouple. |
 | **Fix** | Plan extraction. Not blocking M1. |
-| **Status** | [ ] Open |
+| **Status** | [x] Closed (2026-02-26). Concrete work (moving functions) is in F7. The remaining "oak-domain library" question is future architectural direction, not a current fix. |
 
 #### F13: Adoption rollout — resolveEnv and Result pattern
 
@@ -350,7 +382,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Betty |
 | **Problem** | Apps may still use legacy inline env parsing or throwing instead of Result. Two paradigms increase cognitive load. |
 | **Fix** | Create systematic adoption plan using `adoption-rollout-plan-template.md` from ADR-117. Migrate all apps to `resolveEnv` and `Result`. |
-| **Status** | [ ] Open |
+| **Status** | [x] Closed (2026-02-26). All three apps now use `resolveEnv` (F8 complete). Concrete Result pattern instances covered by R4. The "adoption plan template" is process overhead — the work is done or tracked. |
 
 #### F14: Search SDK integration test
 
@@ -384,14 +416,15 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Fix** | Confirm Vercel (or other WAF) rate limits are in place before production rollout. Document deployment precondition. |
 | **Status** | [ ] Open |
 
-#### F17: docs-adr-reviewer — ADR-108 vs facade reality
+#### F17: Remove public/search.ts facade — direct sdk-codegen imports
 
 | Field | Value |
 |-------|-------|
 | **Severity** | P3 |
 | **Reviewers** | Fred |
-| **Problem** | ADR-108 text says "no thin runtime facade" but `curriculum-sdk/public/search.ts` is exactly that. Either remove facade (consumers import from sdk-codegen) or update ADR to reflect actual pattern. |
-| **Fix** | After F1, facade should be removed or reduced. Invoke docs-adr-reviewer to align ADR text. |
+| **Problem** | ADR-108 says "no thin runtime facade" but `curriculum-sdk/public/search.ts` is a 174-line re-export barrel that masks where types actually live. 32 search CLI files and 4 HTTP app files import from this facade instead of directly from `@oaknational/sdk-codegen/search`. This creates unnecessary coupling and hides the true dependency graph — it is not DX convenience, it is a labyrinth. |
+| **Files** | `packages/sdks/oak-curriculum-sdk/src/public/search.ts` (facade), 32 files in `apps/oak-search-cli/`, 4 files in `apps/oak-curriculum-mcp-streamable-http/` |
+| **Fix** | (1) Migrate all consumer imports from `@oaknational/curriculum-sdk/public/search.js` to direct `@oaknational/sdk-codegen/search` (or appropriate subpath: `/query-parser`, `/observability`, `/admin`, `/zod`). (2) Keep curriculum-sdk imports ONLY for `search-response-guards` symbols (`lessonSummarySchema`, `unitSummarySchema`, `isSequenceUnitsResponse`, etc.) — these are curriculum-sdk's own runtime code, not re-exports. (3) Update ADR-108 to remove the contradiction. (4) Consider removing or reducing `public/search.ts` itself once no external consumers remain. |
 | **Status** | [ ] Open |
 
 #### F18: config-reviewer — LIB_PACKAGES and env identity
@@ -470,10 +503,10 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | **Severity** | P2 — rules.md prefers Result over throw |
 | **Rule** | `rules.md` §Code Design |
 | **Problem** | Both `deriveSelfOrigin` (auth-routes.ts) and `fetchUpstreamMetadata` (oauth-and-caching-setup.ts) throw errors rather than returning `Result<T, E>`. The calling code uses try/catch. |
-| **Fix** | Refactor to return `Result<T, E>`. Callers pattern-match on `ok` / `error`. Consider during Phase 2 or later — not blocking release. |
+| **Fix** | Refactor to return `Result<T, E>`. Callers pattern-match on `ok` / `error`. |
 | **Status** | [ ] Open |
 
-### Execution Order (Batched — Updated 2026-02-25)
+### Execution Order (Batched — Updated 2026-02-26)
 
 Batched by complexity for efficient execution. Run quality gates and commit after each batch.
 
@@ -486,29 +519,50 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 2. ~~F6, F10, F20, F25, F28, F29~~ (small arch/doc fixes)
 3. ~~O1, O2, O3, O5, O10~~ (small onboarding fixes — O1/O2/O3 resolved by prior docs session)
 
-**Batch C — Medium Complexity** (3 items + O12) ← **NEAR COMPLETE**:
+~~**Batch C — Medium Complexity** (3 items + O12)~~ **COMPLETE**
 
 4. ~~**F5** (env identity + LIB_PACKAGES; subsumes F18)~~ **COMPLETE**
-5. **F8** (env pipeline unification) — **STDIO COMPLETE**, Search CLI deferred
+5. ~~**F8** (env pipeline unification — STDIO + Search CLI)~~ **COMPLETE**
 6. ~~**F27** (response-augmentation DI)~~ **COMPLETE**
 7. ~~**O12** (OAuth bootstrap troubleshooting note)~~ **COMPLETE**
 
-**Batch D — Large / Architectural** (1 item):
+**Batch D — ADR-108 Completion** (1 item) ← **IN PROGRESS**:
 
-7. **F7** (contract consolidation — may defer if structural typing is safe)
+8. **F7** (complete ADR-108: move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency. `SearchRetrievalService` stays as ISP.)
 
-**Batch E — Phase 3 / Deferred** (16 items):
+**Batch E — All Remaining Items** (13 items — elevated 2026-02-26, F12/F13 closed):
 
-8. **R4**, **F11–F17**, **F19**, **F31–F35**, **O8**, **O12** (P3, as capacity allows)
+**E1 — Trivial** (commit together):
 
-### Specialist Follow-Ups (Post-Fix)
+9. **F35** (delete dead code: `createInMemoryStorage`, `createNodeClock`, `runtime` from `WiredDependencies`)
+10. **O8** (delete empty `docs/development/`)
+11. **F11** (document RRF parameter coupling)
+12. **F16** (document OAuth proxy rate limiting deployment precondition)
+
+**E2 — Small** (commit together):
+
+13. **R4** (Result pattern for `deriveSelfOrigin`/`fetchUpstreamMetadata`)
+14. **F14** (search SDK integration test after codegen)
+15. **F15** (verify/fix ES timeout → `RetrievalError.timeout` mapping)
+16. **F19** (type-helpers assertion strategy audit)
+17. **F31** (fix SDK API markdown generator for current package name)
+18. **F34** (document ES connectivity trade-off or add warm-up ping)
+
+**E3 — Medium** (commit individually):
+
+19. **F17** (remove `public/search.ts` facade — 36-file import migration + ADR-108 update)
+20. **F32** (standardise E2E config naming repo-wide)
+21. **F33** (progressive ESLint re-enablement in codegen hand-written code)
+
+### Specialist Follow-Ups (Batch E)
 
 | Finding | Reviewer | Rationale |
 |---------|----------|-----------|
 | F16 (rate limit) | security-reviewer | ADR-115 deployment preconditions |
-| F17 | docs-adr-reviewer | ADR-108 text alignment |
+| F17 (facade removal) | docs-adr-reviewer, architecture-reviewer-barney | ADR-108 alignment + import migration review |
 | F18 | config-reviewer | Subsumed by F5 — **COMPLETE** |
 | F19 | type-reviewer | type-helpers assertion audit |
+| F33 (ESLint re-enable) | config-reviewer | Progressive rule enablement in codegen |
 
 ---
 
@@ -694,15 +748,15 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Fix** | Document as known trade-off. Consider future warm-up ping at startup for production. |
 | **Status** | [ ] Open |
 
-#### F35: createInMemoryStorage and createNodeClock inlining
+#### F35: Dead code — createInMemoryStorage and createNodeClock
 
 | Field | Value |
 |-------|-------|
 | **Severity** | P3 |
 | **Reviewers** | Wilma |
-| **Problem** | Inlined from `@oaknational/mcp-providers-node`. Behaviour may differ (persistence, TTL). |
+| **Problem** | `createInMemoryStorage` and `createNodeClock` in STDIO `wiring.ts` are dead code. They are created and assigned to `runtime.clock` and `runtime.storage` on `WiredDependencies`, but nothing in the STDIO app (or any other app) ever reads them. Vestigial from the deleted `@oaknational/mcp-providers-node` package. |
 | **Files** | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` |
-| **Fix** | Confirm inlined implementations match original package behaviour. Update docs if package removed. |
+| **Fix** | Delete both functions, remove `runtime` from `WiredDependencies`, remove creation/assignment in `wireDependencies`. |
 | **Status** | [ ] Open |
 
 ---
@@ -920,12 +974,14 @@ Milestone 1 release is complete when all are true:
 2. No open P0/P1 snags.
 3. Go decision recorded.
 4. Release executed and monitored with no unresolved critical regressions.
-5. Deferred items are tracked with owner and review date.
+5. All snagging items addressed (fixed or explicitly closed with rationale).
 
 ---
 
 ## Change Log
 
+- **2026-02-26**: **Batch E elevated — all items fix-before-release.** User rejected deferral of Batch E items (agent-decided, not user-approved). Two decisions recorded: (1) F7 step 4: `SearchRetrievalService` stays in curriculum-sdk as ISP consumer-side interface — not a duplicate, structural typing handles wiring, no SDK-to-SDK dependency. (2) F17: remove `public/search.ts` facade entirely — migrate 36 files to direct `@oaknational/sdk-codegen/search` imports; the facade masks truth and creates a labyrinth. F12 closed (concrete work in F7; remaining "oak-domain" question is future architecture). F13 closed (resolveEnv adoption done via F8; Result instances covered by R4). F35 reframed as dead code deletion. F17 expanded from "ADR text alignment" to full facade removal. Batch E restructured into E1 (trivial), E2 (small), E3 (medium). Open items: 14 remaining (1 P1, 1 P2, 12 P3).
+- **2026-02-26**: **Batch C COMPLETE, F7 reframed.** F8 Search CLI fully migrated to `resolveEnv` five-source hierarchy: `SearchCliEnvSchema` composing shared schemas with stricter overrides, `loadRuntimeConfig` + `loadConfigOrExit`, deleted `loadAppEnv`, refactored 29+ files to DI pattern, 7 new integration tests, 950 total tests pass. `@oaknational/env-resolution` enhanced with `findAppRoot` and five-source merge. ADR-116 revised. F7 upgraded from P2 to P1: user identified that the contract duplication is a consequence of search-sdk depending on curriculum-sdk (unfinished ADR-108 work), not an acceptable trade-off. Architecture reviewer recommended deferral based on cycle analysis; user corrected: the cycle IS the bug, `oak-sdk-codegen` exists to solve it. F7 reframed as "complete ADR-108" — move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency entirely, delete duplicate contract. Cursor plan integrated and deleted. Open items: 16 remaining (1 P1, 1 P2, 14 P3).
 - **2026-02-26**: **Batch C near-complete** (F8-STDIO, F27, O12 done). F8: STDIO app migrated to `resolveEnv` pipeline — `StdioEnvSchema` composing shared schemas, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `process.env` eliminated from all `src/` modules, 10 integration tests. Search CLI deferred. F27: SDK response-augmentation DI — removed module-level logger, `MiddlewareOptions.logger` required, `createNoopLogger()` fallback in `BaseApiClient`, SDK no longer reads `process.env` for logging. O12: OAuth metadata fetch timeout troubleshooting note added to HTTP server README. STDIO README updated with env pipeline docs. SDK README updated with optional `logger` parameter. Fixed `no-empty-function` lint in `oak-base-client.ts`. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e). Specialist reviewers: code-reviewer (approved), architecture-reviewer-fred (compliant), type-reviewer (safe), test-reviewer (pass), docs-adr-reviewer (gaps fixed). Open items: 14 remaining.
 - **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, rules.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
 - **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.

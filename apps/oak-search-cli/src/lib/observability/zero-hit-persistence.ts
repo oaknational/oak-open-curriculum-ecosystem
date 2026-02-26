@@ -1,6 +1,5 @@
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
 import { esClient } from '../es-client';
-import { optionalEnv } from '../env';
 import {
   currentSearchIndexTarget,
   resolveZeroHitIndexName,
@@ -47,21 +46,30 @@ export interface ZeroHitTelemetry {
   recent: ZeroHitEvent[];
 }
 
-/** True when persistence is enabled through environment configuration. */
-export function zeroHitPersistenceEnabled(): boolean {
-  return optionalEnv()?.ZERO_HIT_PERSISTENCE_ENABLED ?? false;
+/** Config shape for zero-hit persistence. */
+export interface ZeroHitPersistenceConfig {
+  readonly ZERO_HIT_PERSISTENCE_ENABLED?: boolean;
+  readonly ZERO_HIT_INDEX_RETENTION_DAYS?: number;
+  readonly SEARCH_INDEX_TARGET?: 'primary' | 'sandbox';
+}
+
+/** True when persistence is enabled through configuration. */
+export function zeroHitPersistenceEnabled(config?: ZeroHitPersistenceConfig): boolean {
+  return config?.ZERO_HIT_PERSISTENCE_ENABLED ?? false;
 }
 
 /** Persist a zero-hit event to the Serverless Elasticsearch index. */
-export async function persistZeroHitEvent(event: ZeroHitEvent): Promise<void> {
-  const envVars = optionalEnv();
-  if (!envVars?.ZERO_HIT_PERSISTENCE_ENABLED) {
+export async function persistZeroHitEvent(
+  event: ZeroHitEvent,
+  config?: ZeroHitPersistenceConfig,
+): Promise<void> {
+  if (!config?.ZERO_HIT_PERSISTENCE_ENABLED) {
     return;
   }
 
-  const target = currentSearchIndexTarget();
+  const target = currentSearchIndexTarget(config);
   const indexName = resolveZeroHitIndexName(target);
-  const retentionDays = envVars.ZERO_HIT_INDEX_RETENTION_DAYS;
+  const retentionDays = config.ZERO_HIT_INDEX_RETENTION_DAYS ?? 30;
 
   await ensureZeroHitIndex(indexName, retentionDays);
   const document = createZeroHitDocument(event);
@@ -76,14 +84,13 @@ export async function persistZeroHitEvent(event: ZeroHitEvent): Promise<void> {
 }
 
 /** Fetch persisted zero-hit telemetry, falling back to empty results when absent. */
-export async function fetchZeroHitTelemetry({
-  limit,
-}: {
-  limit: number;
-}): Promise<ZeroHitTelemetry> {
-  const target = currentSearchIndexTarget();
+export async function fetchZeroHitTelemetry(
+  options: { limit: number },
+  config?: ZeroHitPersistenceConfig,
+): Promise<ZeroHitTelemetry> {
+  const target = currentSearchIndexTarget(config);
   const indexName = resolveZeroHitIndexName(target);
-  const size = normaliseLimit(limit);
+  const size = normaliseLimit(options.limit);
 
   try {
     const response = await esClient().transport.request<ZeroHitSearchResponse>(

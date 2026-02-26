@@ -20,6 +20,7 @@
  */
 
 import { Command } from 'commander';
+import type { CliSdkEnv } from '../shared/index.js';
 import {
   registerSetupCmd,
   registerStatusCmd,
@@ -43,15 +44,15 @@ import { registerOrchestrationCmds } from './admin-orchestration-commands.js';
  * program.addCommand(adminCommand());
  * ```
  */
-export function adminCommand(): Command {
+export function adminCommand(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('admin').description(
     'Elasticsearch setup, ingestion, and index management',
   );
 
-  registerSetupCmd(cmd);
-  registerStatusCmd(cmd);
-  registerSynonymsCmd(cmd);
-  registerMetaCmd(cmd);
+  registerSetupCmd(cmd, cliEnv);
+  registerStatusCmd(cmd, cliEnv);
+  registerSynonymsCmd(cmd, cliEnv);
+  registerMetaCmd(cmd, cliEnv);
   registerOrchestrationCmds(cmd);
 
   return cmd;

@@ -9,15 +9,11 @@
  * @see benchmark-query-runner-units.ts - Query runner
  * @see benchmark-adapters.ts - Ground truth adapters
  */
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-
-dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env.local') });
-
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import {
   runUnitQuery,
   type UnitSearchFunction,
@@ -144,14 +140,21 @@ function filterEntries(opts: CliOptions): readonly GroundTruthEntry[] {
 }
 
 async function runBenchmark(): Promise<void> {
-  const sdk = createCliSdk(env());
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const sdk = createCliSdk(configResult.value.env);
   const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
   const options = parseCliArgs();
   const entries = filterEntries(options);
 
   if (entries.length === 0) {
-    console.log('No unit ground truths found. Ground truths need to be created first.');
-    console.log('See: src/lib/search-quality/ground-truth/units/');
+    console.log('No unit ground truths found. See: src/lib/search-quality/ground-truth/units/');
     process.exit(0);
   }
 

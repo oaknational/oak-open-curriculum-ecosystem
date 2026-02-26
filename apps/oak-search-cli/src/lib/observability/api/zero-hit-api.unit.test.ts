@@ -3,17 +3,9 @@ import { handleZeroHitSummary, handleZeroHitWebhook } from './zero-hit-api';
 import { recordZeroHitEvent, resetZeroHitStore, getZeroHitSummary } from '../zero-hit-store';
 import type { ZeroHitTelemetry } from '../zero-hit-persistence';
 
-const envMock = vi.hoisted(() => {
-  const value = {
-    SEARCH_API_KEY: 'test-key',
-  } as const;
-  return {
-    env: vi.fn(() => value),
-    optionalEnv: vi.fn(() => value),
-  };
-});
-
-vi.mock('../../env', () => envMock);
+const TEST_CONFIG = {
+  SEARCH_API_KEY: 'test-key',
+} as const;
 
 const persistenceMocks = vi.hoisted(() => ({
   zeroHitPersistenceEnabled: vi.fn(() => false),
@@ -150,8 +142,6 @@ function makeRequest(
 
 describe('zero-hit API handlers', () => {
   beforeEach(() => {
-    envMock.env.mockClear();
-    envMock.optionalEnv.mockClear();
     resetZeroHitStore();
     persistenceMocks.zeroHitPersistenceEnabled.mockReturnValue(false);
     persistenceMocks.fetchZeroHitTelemetry.mockClear();
@@ -159,7 +149,7 @@ describe('zero-hit API handlers', () => {
   });
 
   it('rejects unauthorised summary access', async () => {
-    const response = await handleZeroHitSummary(makeRequest('GET'));
+    const response = await handleZeroHitSummary(makeRequest('GET'), TEST_CONFIG);
     expect(response.status).toBe(401);
   });
 
@@ -174,6 +164,7 @@ describe('zero-hit API handlers', () => {
 
     const response = await handleZeroHitSummary(
       makeRequest('GET', undefined, { 'x-search-api-key': 'test-key' }),
+      TEST_CONFIG,
     );
     expect(response.status).toBe(200);
     const payload: unknown = await response.json();
@@ -205,13 +196,14 @@ describe('zero-hit API handlers', () => {
 
     const response = await handleZeroHitSummary(
       makeRequest('GET', undefined, { 'x-search-api-key': 'test-key' }),
+      TEST_CONFIG,
     );
     expect(response.status).toBe(200);
     const payload: unknown = await response.json();
     assertSummaryResponse(payload);
     expect(payload.summary.total).toBe(5);
     expect(payload.recent).toEqual(telemetry.recent);
-    expect(persistenceMocks.fetchZeroHitTelemetry).toHaveBeenCalledWith({ limit: 50 });
+    expect(persistenceMocks.fetchZeroHitTelemetry).toHaveBeenCalledWith({ limit: 50 }, TEST_CONFIG);
   });
 
   it('accepts webhook events when authorised', async () => {
@@ -230,6 +222,7 @@ describe('zero-hit API handlers', () => {
         },
         { 'x-search-api-key': 'test-key' },
       ),
+      TEST_CONFIG,
     );
     expect(response.status).toBe(202);
     expect(getZeroHitSummary().total).toBe(1);
@@ -239,12 +232,14 @@ describe('zero-hit API handlers', () => {
         text: 'angles',
         indexVersion: 'v2',
       }),
+      TEST_CONFIG,
     );
   });
 
   it('rejects invalid webhook payloads', async () => {
     const response = await handleZeroHitWebhook(
       makeRequest('POST', { text: 'invalid' }, { 'x-search-api-key': 'test-key' }),
+      TEST_CONFIG,
     );
     expect(response.status).toBe(400);
     expect(getZeroHitSummary().total).toBe(0);

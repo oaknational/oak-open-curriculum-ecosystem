@@ -10,15 +10,11 @@
  * @see benchmark-query-runner-threads.ts - Query runner
  * @see benchmark-adapters.ts - Ground truth adapters
  */
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-
-dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env.local') });
-
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import {
   runThreadQuery,
   type ThreadSearchFunction,
@@ -140,12 +136,19 @@ async function runBenchmark(): Promise<void> {
   const entries = filterEntries(options);
 
   if (entries.length === 0) {
-    console.log('No thread ground truths found. Ground truths need to be created first.');
-    console.log('See: src/lib/search-quality/ground-truth/threads/');
+    console.log('No thread ground truths found. See: src/lib/search-quality/ground-truth/threads/');
     process.exit(0);
   }
 
-  const sdk = createCliSdk(env());
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const sdk = createCliSdk(configResult.value.env);
   const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
 
   console.log(`\nThread Benchmark (oak_threads index)`);

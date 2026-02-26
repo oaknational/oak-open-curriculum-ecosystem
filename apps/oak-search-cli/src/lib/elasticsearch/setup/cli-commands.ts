@@ -2,7 +2,7 @@
  * CLI command handlers for Elasticsearch setup.
  *
  * All functions accept credentials as parameters — callers (CLI entry points)
- * are responsible for reading the environment via `env()`.
+ * are responsible for loading the environment via `loadRuntimeConfig()`.
  */
 
 import { verifyConnection, listIndexes, runSetup, runReset, runSynonymsUpdate } from './index.js';

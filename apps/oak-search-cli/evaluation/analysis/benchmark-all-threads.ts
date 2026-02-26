@@ -5,8 +5,10 @@
  * the same code paths as production consumers.
  */
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import { runThreadQuery } from './benchmark-query-runner-threads.js';
 import { getThreadGroundTruthEntries } from './benchmark-adapters.js';
 import type { IndexResult, BenchmarkMetrics } from './benchmark-all-types.js';
@@ -14,7 +16,14 @@ import { averageMetrics } from './benchmark-all-types.js';
 
 /** Run all thread ground truth queries and return summary metrics. */
 export async function benchmarkThreads(): Promise<IndexResult> {
-  const sdk = createCliSdk(env());
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  });
+  if (!configResult.ok) {
+    throw new Error(`Environment validation failed: ${configResult.error.message}`);
+  }
+  const sdk = createCliSdk(configResult.value.env);
   const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
   const entries = getThreadGroundTruthEntries();
   const results: BenchmarkMetrics[] = [];

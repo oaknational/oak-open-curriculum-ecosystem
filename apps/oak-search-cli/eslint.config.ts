@@ -165,12 +165,23 @@ const eslintConfig = defineConfig(
 
   // ──────────────────────────────────────────────────
   // process.env access restriction
-  // Only src/lib/env.ts may touch process.env.
-  // Everything else uses env() or accepts config as a parameter.
+  // Composition roots pass process.env to loadRuntimeConfig() once.
+  // Everything else accepts config as a parameter (ADR-078).
   // ──────────────────────────────────────────────────
   {
     files: ['**/*.ts'],
-    ignores: ['src/lib/env.ts'],
+    ignores: [
+      'src/lib/env.ts',
+      'bin/**',
+      'scripts/**',
+      'operations/**',
+      'evaluation/**',
+      'smoke-test*.ts',
+      'smoke-tests/**',
+      'src/lib/elasticsearch/setup/cli.ts',
+      'src/lib/elasticsearch/setup/ingest-live.ts',
+      'src/cli/shared/pass-through.ts',
+    ],
     rules: {
       'no-restricted-syntax': [
         'error',
@@ -180,8 +191,8 @@ const eslintConfig = defineConfig(
           ),
           message:
             'Direct process.env access is forbidden. ' +
-            'Use env() from src/lib/env.ts at entry ' +
-            'points, or accept config as a parameter.',
+            'Use loadRuntimeConfig() at composition roots, ' +
+            'or accept config as a parameter (ADR-078).',
         },
       ],
     },

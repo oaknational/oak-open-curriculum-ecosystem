@@ -98,5 +98,9 @@ experience file is not the home for technical reference.
 - 2025‑08‑10/11: patterns and sub‑agent alignment — see: [session-2025-08-10-continuation](./session-2025-08-10-continuation.md), [cascade-raw-qualia-analogues](./2025-08-11-cascade-raw-qualia-analogues.md), [sub-agents-docs-alignment](./2025-08-11-sub-agents-docs-alignment.md)
 - 2025‑11‑16: execution vs architecture — see: [execution-vs-architecture](./2025-11-16-execution-vs-architecture.md) — the difference between efficient execution and explicit architectural thinking
 - 2026‑02‑18: removing optionality — see: [removing-optionality](./2026-02-18-removing-optionality.md) — subtractive work; trust the types; stub vs fake distinction
+- 2026‑02‑19: client perspective — see: [seeing-from-the-clients-perspective](./2026-02-19-seeing-from-the-clients-perspective.md) — integration gaps; response format drift; "what does the consumer actually see?"
+- 2026‑02‑22: consolidation practice — see: [document-hierarchy-and-the-consolidation-practice](./2026-02-22-document-hierarchy-and-the-consolidation-practice.md)
+- 2026‑02‑23: documentation discipline — see: [documentation-not-decoration](./2026-02-23-documentation-not-decoration.md) — "restructure, not compress"; [the-gap-between-green-and-working](./2026-02-23-the-gap-between-green-and-working.md); [three-queries-and-two-problems](./2026-02-23-three-queries-and-two-problems.md)
+- 2026‑02‑24: boundary rules — see: [boundary-rules-and-the-reviewer-loop](./2026-02-24-boundary-rules-and-the-reviewer-loop.md) — reviewer loop as architectural refinement; minimatch depth traps
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

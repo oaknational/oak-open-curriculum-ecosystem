@@ -4,6 +4,10 @@
  * Single entry point for all search operations. Subcommands are
  * grouped by responsibility: search, admin, eval, and observe.
  *
+ * This is a composition root: `process.env` is read here and nowhere
+ * else. The validated `SearchCliEnv` is threaded through all downstream
+ * modules via function parameters (ADR-078).
+ *
  * @example
  * ```bash
  * oaksearch search lessons "expanding brackets" --subject maths
@@ -14,19 +18,37 @@
  */
 
 import { Command } from 'commander';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { searchCommand } from '../src/cli/search/index.js';
 import { adminCommand } from '../src/cli/admin/index.js';
 import { evalCommand } from '../src/cli/eval/index.js';
 import { observeCommand } from '../src/cli/observe/index.js';
 
+const configResult = loadRuntimeConfig({
+  processEnv: process.env,
+  startDir: import.meta.dirname,
+});
+
+if (!configResult.ok) {
+  console.error('Environment validation failed:', configResult.error.message);
+  for (const d of configResult.error.diagnostics) {
+    if (!d.present) {
+      console.error(`  ${d.key}: MISSING`);
+    }
+  }
+  process.exit(1);
+}
+
+const config = configResult.value;
+
 const program = new Command()
   .name('oaksearch')
   .description('Oak National Academy — curriculum semantic search CLI')
-  .version('0.0.0-development');
+  .version(config.version);
 
-program.addCommand(searchCommand());
-program.addCommand(adminCommand());
-program.addCommand(evalCommand());
-program.addCommand(observeCommand());
+program.addCommand(searchCommand(config.env));
+program.addCommand(adminCommand(config.env));
+program.addCommand(evalCommand(config.env));
+program.addCommand(observeCommand(config.env));
 
 program.parse();

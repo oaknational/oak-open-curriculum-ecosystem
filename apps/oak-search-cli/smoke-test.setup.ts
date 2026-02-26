@@ -23,16 +23,17 @@ if (g.__WITH_FETCH_BLOCKING__ && typeof g.__ORIGINAL_FETCH__ === 'function') {
   globalThis.fetch = g.__ORIGINAL_FETCH__;
 }
 
-import { config as dotenvConfig } from 'dotenv';
-import { resolve, dirname } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadRuntimeConfig } from './src/runtime-config.js';
+import { initializeEsClient } from './src/lib/es-client.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const envLocalPath = resolve(thisDir, '.env.local');
 
-// Load .env.local first (app-specific credentials)
-dotenvConfig({ path: envLocalPath });
-
-// Then try repo root .env as fallback for any missing vars
-const repoRootEnv = resolve(thisDir, '../../.env');
-dotenvConfig({ path: repoRootEnv });
+const configResult = loadRuntimeConfig({
+  processEnv: process.env,
+  startDir: thisDir,
+});
+if (configResult.ok) {
+  initializeEsClient(configResult.value.env);
+}

@@ -1,9 +1,9 @@
 # Scripts
 
 Standalone CLI scripts that have not yet migrated to
-`operations/` or `evaluation/`. Each script reads its
-configuration via `loadAppEnv()` + `env()` from
-`src/lib/env.ts` — no direct `process.env` access.
+`operations/` or `evaluation/`. Each script loads its
+configuration via `loadRuntimeConfig()` from
+`src/runtime-config.ts` — no direct `process.env` access.
 
 ## Active Scripts
 

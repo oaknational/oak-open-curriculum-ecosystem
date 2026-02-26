@@ -12,10 +12,9 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
-import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
-import { env } from '../src/lib/env.js';
+import { loadConfigOrExit } from '../src/runtime-config.js';
 import { readAllBulkFiles } from '@oaknational/sdk-codegen/bulk';
-import { createOakClient } from '../src/adapters/oak-adapter';
+import { createOakClient, type OakClientEnv } from '../src/adapters/oak-adapter';
 import { createHybridDataSource } from '../src/adapters/hybrid-data-source';
 import {
   chunkOperations,
@@ -33,8 +32,6 @@ import type { BulkOperationEntry } from '../src/lib/indexing/bulk-operation-type
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-loadAppEnv(__dirname);
 
 const LESSONS_INDEX = 'oak_lessons';
 const UNITS_INDEX = 'oak_units';
@@ -63,11 +60,10 @@ function parseArgs(): { limit: number | undefined; subject: string | undefined }
 }
 
 /** Read validated environment config. */
-function getEsCredentials(): {
+function getEsCredentials(config: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string }): {
   esUrl: string;
   esApiKey: string;
 } {
-  const config = env();
   return {
     esUrl: config.ELASTICSEARCH_URL,
     esApiKey: config.ELASTICSEARCH_API_KEY,
@@ -86,9 +82,10 @@ async function loadBulkFiles(bulkDir: string, subjectFilter?: string) {
 /** Process bulk files and create operations. Returns ops and the client for cleanup. */
 async function prepareBulkOperations(
   files: Awaited<ReturnType<typeof readAllBulkFiles>>,
+  config: OakClientEnv,
   limit?: number,
 ): Promise<{ ops: BulkOperationEntry[]; oakClient: Awaited<ReturnType<typeof createOakClient>> }> {
-  const oakClient = await createOakClient();
+  const oakClient = await createOakClient({ env: config });
   const ops: BulkOperationEntry[] = [];
   for (const fileResult of files) {
     const source = await createHybridDataSource(fileResult.data, oakClient);
@@ -186,24 +183,27 @@ function printAndSaveReport(report: DiagnosticReport, outputDir: string): void {
 
 /** Main diagnostic function. */
 async function main(): Promise<void> {
-  const { limit, subject } = parseArgs();
-  const { esUrl, esApiKey } = getEsCredentials();
-  const esClient = new Client({ node: esUrl, auth: { apiKey: esApiKey } });
-  const bulkDir = join(__dirname, '..', 'bulk-downloads');
-  const runId = `elser-diagnostic-${Date.now()}`;
-  const startTime = new Date();
+  const config = loadConfigOrExit({
+    processEnv: process.env,
+    startDir: __dirname,
+  }).env;
 
+  const { limit, subject } = parseArgs();
+  const esCredentials = getEsCredentials(config);
+  const esClient = new Client({
+    node: esCredentials.esUrl,
+    auth: { apiKey: esCredentials.esApiKey },
+  });
+  const bulkDir = join(__dirname, '..', 'bulk-downloads');
+  const startTime = new Date();
+  const runId = `elser-diagnostic-${startTime.getTime()}`;
   console.log(`ELSER Diagnostics [${runId}] limit=${limit ?? 'none'} subject=${subject ?? 'all'}`);
 
   const files = await loadBulkFiles(bulkDir, subject);
-  console.log(`Loaded ${files.length} bulk files`);
-
-  const { ops: operations, oakClient } = await prepareBulkOperations(files, limit);
+  const { ops: operations, oakClient } = await prepareBulkOperations(files, config, limit);
   const totalDocuments = Math.floor(operations.length / 2);
-  console.log(`Prepared ${totalDocuments} documents`);
-
   const chunks = chunkOperations(operations, MAX_CHUNK_SIZE_BYTES);
-  console.log(`Split into ${chunks.length} chunks`);
+  console.log(`Loaded ${files.length} files, ${totalDocuments} documents, ${chunks.length} chunks`);
 
   try {
     const { allFailures, allSuccesses, allChunkStats } = await processAllChunks(esClient, chunks);

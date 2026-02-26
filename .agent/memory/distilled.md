@@ -258,11 +258,15 @@ Architecture` section). Dev gotchas not covered there:
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS` — adding to the map
   automatically extends the type union
-- Circular turbo dependency between curriculum-sdk and
-  search-sdk: solved via dependency inversion. Define a
-  local interface (`SearchRetrievalService`) structurally
-  compatible with the concrete type. MCP servers inject the
-  concrete implementation.
+- search-sdk must NOT depend on curriculum-sdk. The two
+  remaining runtime function imports (`buildPhraseVocabulary`,
+  `buildElasticsearchSynonyms`) are unfinished ADR-108 work —
+  they belong in `sdk-codegen`. `SearchRetrievalService` in
+  curriculum-sdk is intentional ISP (consumer-side interface),
+  not a duplicate — structural typing handles the wiring.
+  Architecture reviewer deferral recommendations must be
+  questioned against the system's architectural intent, not
+  just the current state.
 - When removing an entry from `LIB_PACKAGES`, check ALL
   packages that called `createLibBoundaryRules` with that
   name — their ESLint config may generate empty/broken zone

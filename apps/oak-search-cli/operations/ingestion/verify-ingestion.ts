@@ -4,11 +4,9 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
-import { loadAppEnv } from '../../src/lib/elasticsearch/setup/load-app-env.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
-loadAppEnv(CURRENT_DIR);
 import {
   extractLessonsFromBulkDownload,
   findMissingLessons,
@@ -182,7 +180,15 @@ async function main(): Promise<void> {
     return;
   }
 
-  const config = env();
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: CURRENT_DIR,
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const config = configResult.value.env;
   const esUrl = args.esUrlOverride || config.ELASTICSEARCH_URL;
 
   console.log(`\nVerifying ingestion for ` + `${args.subject} ${args.keystage}...\n`);

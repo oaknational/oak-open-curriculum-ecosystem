@@ -6,12 +6,9 @@
 import type Redis from 'ioredis';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadAppEnv } from '../../src/lib/elasticsearch/setup/load-app-env.js';
-import { env } from '../../src/lib/env.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import { createRedisClient } from '../../src/adapters/sdk-cache/redis-connection.js';
 import { calculateTtlWithJitter } from '../../src/adapters/sdk-cache/ttl-jitter.js';
-
-loadAppEnv(dirname(fileURLToPath(import.meta.url)));
 
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
 
@@ -63,7 +60,15 @@ async function resetCacheTtls(redisUrl: string, baseTtlDays: number): Promise<vo
 }
 
 async function main(): Promise<void> {
-  const config = env();
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: dirname(fileURLToPath(import.meta.url)),
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const config = configResult.value.env;
   console.log('SDK Cache TTL Reset (DEV TOOL)');
   console.log(`Base TTL: ${config.SDK_CACHE_TTL_DAYS} days`);
   await resetCacheTtls(config.SDK_CACHE_REDIS_URL, config.SDK_CACHE_TTL_DAYS);

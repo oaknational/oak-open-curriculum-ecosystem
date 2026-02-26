@@ -18,13 +18,10 @@ import { readdir, stat, unlink, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Extract } from 'unzipper';
-import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
-import { env } from '../src/lib/env.js';
+import { loadConfigOrExit } from '../src/runtime-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-loadAppEnv(__dirname);
 
 const BULK_API_URL = 'https://open-api.thenational.academy/api/bulk';
 
@@ -62,11 +59,6 @@ const BULK_DOWNLOAD_FILES = [
   'spanish-primary',
   'spanish-secondary',
 ] as const;
-
-function getApiKey(): string {
-  const config = env();
-  return config.OAK_EFFECTIVE_KEY;
-}
 
 async function fetchBulkZip(apiKey: string, subjects: readonly string[]): Promise<Response> {
   const response = await fetch(BULK_API_URL, {
@@ -134,7 +126,14 @@ async function writeManifest(outputDir: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const apiKey = getApiKey();
+  const env = loadConfigOrExit({
+    processEnv: process.env,
+    startDir: __dirname,
+  }).env;
+  const apiKey = env.OAK_API_KEY;
+  if (!apiKey) {
+    throw new Error('OAK_API_KEY is required — set it in .env or as an environment variable');
+  }
   const outputDir = join(__dirname, '..', 'bulk-downloads');
   const zipPath = join(outputDir, '_temp.zip');
 
@@ -150,8 +149,6 @@ async function main(): Promise<void> {
 
   console.log('Fetching ZIP from Oak API...');
   const response = await fetchBulkZip(apiKey, BULK_DOWNLOAD_FILES);
-
-  console.log('Saving ZIP...');
   await saveResponseToFile(response, zipPath);
 
   console.log('Extracting...');

@@ -4,10 +4,10 @@ Environment resolution pipeline for MCP applications.
 
 ## Purpose
 
-Provides `resolveEnv` — a single-function pipeline that reads `.env` and
-`.env.local` files from the monorepo root, merges them with the
-caller-provided `processEnv`, validates against a Zod schema, and returns
-`Result<T, EnvResolutionError>`.
+Provides `resolveEnv` — a single-function pipeline that loads `.env` and
+`.env.local` files from both the monorepo root and the nearest app root,
+merges them with the caller-provided `processEnv`, validates against a
+Zod schema, and returns `Result<T, EnvResolutionError>`.
 
 Schema contracts (`OakApiKeyEnvSchema`, `ElasticsearchEnvSchema`,
 `LoggingEnvSchema`) live in `@oaknational/env`. This package owns loading,
@@ -22,10 +22,16 @@ either validated config or a structured error.
 **Source precedence** (lowest to highest):
 
 ```text
-.env           — shared defaults (committed)
-.env.local     — local developer overrides (gitignored)
-processEnv     — explicit vars (e.g. KEY=val command)
+repo/.env           — shared repo defaults (committed)
+repo/.env.local     — local repo overrides (gitignored)
+app/.env            — app-specific defaults (committed)
+app/.env.local      — app-specific local overrides (gitignored)
+processEnv          — explicit vars (e.g. KEY=val command)
 ```
+
+When the app root and repo root are the same directory, the app-level
+layer is skipped. In serverless environments (no filesystem markers),
+only `processEnv` is validated.
 
 ### Usage
 
@@ -65,6 +71,18 @@ no repo structure exists.
 import { findRepoRoot } from '@oaknational/env-resolution';
 
 const root = findRepoRoot(process.cwd());
+```
+
+## findAppRoot
+
+Walks up from a start directory until it finds `package.json`. Returns
+`undefined` when no `package.json` is found. Used internally by
+`resolveEnv` to discover app-level `.env` files.
+
+```typescript
+import { findAppRoot } from '@oaknational/env-resolution';
+
+const appRoot = findAppRoot(import.meta.dirname);
 ```
 
 ## Development

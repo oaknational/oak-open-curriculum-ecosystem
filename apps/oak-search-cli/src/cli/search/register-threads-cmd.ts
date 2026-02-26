@@ -8,16 +8,22 @@
  */
 
 import type { Command } from 'commander';
-import { createCliSdk, printJson, printError, validateSubject } from '../shared/index.js';
-import { env } from '../../lib/env.js';
+import {
+  createCliSdk,
+  type CliSdkEnv,
+  printJson,
+  printError,
+  validateSubject,
+} from '../shared/index.js';
 import { handleSearchThreads } from './handlers.js';
 
 /**
  * Register the `search threads` subcommand.
  *
  * @param parent - The parent Commander command to register under
+ * @param cliEnv - Validated environment configuration
  */
-export function registerThreadsCmd(parent: Command): void {
+export function registerThreadsCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('threads')
     .description('Search threads (conceptual progression strands)')
@@ -26,7 +32,7 @@ export function registerThreadsCmd(parent: Command): void {
     .option('--size <n>', 'Maximum results to return', '25')
     .action(async (query: string, opts: { subject?: string; size: string }) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleSearchThreads(sdk.retrieval, {
           text: query,
           subject: validateSubject(opts.subject),

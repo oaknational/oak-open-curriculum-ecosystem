@@ -52,6 +52,7 @@
     "@elastic/elasticsearch": "^9.3.2",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
+    "@oaknational/env-resolution": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",

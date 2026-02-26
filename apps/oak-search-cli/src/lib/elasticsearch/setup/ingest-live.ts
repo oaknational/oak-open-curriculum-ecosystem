@@ -1,12 +1,9 @@
 #!/usr/bin/env npx tsx
-/**
- * Live data ingestion CLI - ingest curriculum data into Elasticsearch.
- * @see operations/ingestion/README.md
- */
-
+/** Live data ingestion CLI — ingest curriculum data into Elasticsearch. */
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadAppEnv } from './load-app-env.js';
+import { loadRuntimeConfig } from '../../../runtime-config.js';
+import { initializeEsClient } from '../../es-client.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter.js';
 import { createIngestHarness } from '../../indexing/ingest-harness.js';
 import {
@@ -29,28 +26,14 @@ import { printBulkHeader, executeBulkIngestion } from './ingest-bulk.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
-/**
- * Load environment values from app env files when present.
- *
- * If no env file exists, execution continues and runtime env validation
- * determines whether required variables are available via process env.
- */
-function initEnv(): void {
-  const envResult = loadAppEnv(CURRENT_DIR);
-  if (envResult.loaded) {
-    ingestLogger.debug('Environment loaded', { path: envResult.path });
-    return;
-  }
-  ingestLogger.debug('No app env file found; using process environment', {
-    appRoot: envResult.appRoot,
-  });
-}
-
 /** Handle cache clearing if requested. */
-async function handleCacheClearing(args: CliArgs): Promise<void> {
+async function handleCacheClearing(
+  args: CliArgs,
+  env: Parameters<typeof clearSdkCache>[0],
+): Promise<void> {
   if (args.clearCache) {
     ingestLogger.debug('Clearing SDK response cache');
-    const deleted = await clearSdkCache();
+    const deleted = await clearSdkCache(env);
     ingestLogger.debug('Cache cleared', { deletedEntries: deleted });
   }
 }
@@ -90,16 +73,19 @@ async function executeIngestion(
  *
  * @remarks
  * In dry-run mode, cache is bypassed to avoid Redis network IO.
- * This enables E2E tests to verify CLI behavior without triggering network calls.
  */
-async function runApiIngestion(args: CliArgs): Promise<void> {
+async function runApiIngestion(
+  args: CliArgs,
+  env: Parameters<typeof createIngestionClient>[0]['env'],
+): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
   configureIngestionMode(args);
-  await handleCacheClearing(args);
+  await handleCacheClearing(args, env);
 
   // In dry-run mode, bypass cache to avoid Redis network IO
   const client = await createIngestionClient({
+    env,
     bypassCache: args.bypassCache || args.dryRun,
     ignoreCached404: args.ignoreCached404,
   });
@@ -116,7 +102,7 @@ async function runApiIngestion(args: CliArgs): Promise<void> {
         keyStages: args.keyStages,
         subjects: args.subjects,
         indexes: args.indexes,
-        target: 'primary',
+        target: env.SEARCH_INDEX_TARGET ?? 'primary',
         logger: ingestLogger,
       });
       ingestLogger.debug('Harness created successfully');
@@ -149,14 +135,18 @@ async function runApiIngestion(args: CliArgs): Promise<void> {
  *
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
-async function runBulkIngestion(args: CliArgs): Promise<void> {
+async function runBulkIngestion(
+  args: CliArgs,
+  env: Parameters<typeof createIngestionClient>[0]['env'],
+): Promise<void> {
   resetIngestionErrorCollector();
   printBulkHeader(args);
   configureIngestionMode(args);
-  await handleCacheClearing(args);
+  await handleCacheClearing(args, env);
 
   // In dry-run mode, bypass cache to avoid Redis network IO
   const client = await createIngestionClient({
+    env,
     bypassCache: args.bypassCache || args.dryRun,
     ignoreCached404: args.ignoreCached404,
   });
@@ -174,11 +164,14 @@ async function runBulkIngestion(args: CliArgs): Promise<void> {
 }
 
 /** Execute the main ingestion workflow (routes to API or bulk mode). */
-async function runIngestion(args: CliArgs): Promise<void> {
+async function runIngestion(
+  args: CliArgs,
+  env: Parameters<typeof createIngestionClient>[0]['env'],
+): Promise<void> {
   if (args.bulk) {
-    await runBulkIngestion(args);
+    await runBulkIngestion(args, env);
   } else {
-    await runApiIngestion(args);
+    await runApiIngestion(args, env);
   }
 }
 
@@ -202,7 +195,16 @@ async function main(): Promise<void> {
     return;
   }
 
-  initEnv();
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: CURRENT_DIR,
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const env = configResult.value.env;
+  initializeEsClient(env);
 
   if (args.verbose) {
     setLogLevel('DEBUG');
@@ -222,7 +224,7 @@ async function main(): Promise<void> {
   }
 
   try {
-    await runIngestion(args);
+    await runIngestion(args, env);
   } finally {
     // Ensure file sink is closed and flushed
     disableFileSink();

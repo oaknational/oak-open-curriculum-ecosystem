@@ -8,8 +8,8 @@
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadAppEnv } from './load-app-env.js';
-import { env } from '../../env.js';
+import { loadRuntimeConfig } from '../../../runtime-config.js';
+import { initializeEsClient } from '../../es-client.js';
 import { ingestLogger, setLogLevel } from '../../logger';
 import { printHelp, printSetupSummary } from './cli-output.js';
 import {
@@ -59,29 +59,22 @@ function parseArgs(args: readonly string[]): CliArgs {
   return { command: 'setup', verbose };
 }
 
-/** Configure logging and log environment status. */
-function initializeEnvironment(
-  envResult: { loaded: boolean; path?: string; appRoot?: string },
-  verbose: boolean,
-): void {
+/** Configure logging level. */
+function initializeLogging(verbose: boolean): void {
   if (verbose) {
     setLogLevel('DEBUG');
-  }
-  if (envResult.loaded) {
-    ingestLogger.debug('Environment loaded', { path: envResult.path });
-  } else {
-    ingestLogger.debug('No .env.local found', { appRoot: envResult.appRoot });
   }
 }
 
 /** Execute the appropriate command and return exit code. */
-async function executeCommand(args: CliArgs): Promise<number> {
+async function executeCommand(
+  args: CliArgs,
+  config: { ELASTICSEARCH_URL: string; ELASTICSEARCH_API_KEY: string },
+): Promise<number> {
   if (args.command === 'help') {
     printHelp();
     return 0;
   }
-
-  const config = env();
   const credentials = {
     ELASTICSEARCH_URL: config.ELASTICSEARCH_URL,
     ELASTICSEARCH_API_KEY: config.ELASTICSEARCH_API_KEY,
@@ -105,10 +98,19 @@ async function executeCommand(args: CliArgs): Promise<number> {
  * Main CLI entry point.
  */
 async function main(): Promise<void> {
-  const envResult = loadAppEnv(CURRENT_DIR);
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: CURRENT_DIR,
+  });
+  if (!configResult.ok) {
+    console.error('Environment validation failed:', configResult.error.message);
+    process.exit(1);
+  }
+  const config = configResult.value.env;
+  initializeEsClient(config);
   const args = parseArgs(process.argv.slice(2));
-  initializeEnvironment(envResult, args.verbose);
-  process.exitCode = await executeCommand(args);
+  initializeLogging(args.verbose);
+  process.exitCode = await executeCommand(args, config);
 }
 
 main().catch((error: unknown) => {

@@ -9,16 +9,22 @@
  * @see benchmark-main.ts - Core logic with dependency injection
  * @see benchmark-test-harness.ts - Test version with fake
  */
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env.local') });
-
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
-import { env } from '../../src/lib/env.js';
 import { runBenchmark } from './benchmark-main.js';
 
-const sdk = createCliSdk(env());
+const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
+const configResult = loadRuntimeConfig({
+  processEnv: process.env,
+  startDir: CURRENT_DIR,
+});
+if (!configResult.ok) {
+  console.error('Environment validation failed:', configResult.error.message);
+  process.exit(1);
+}
+const sdk = createCliSdk(configResult.value.env);
 
 runBenchmark(sdk.retrieval.searchLessons.bind(sdk.retrieval)).catch((error: unknown) => {
   console.error('Benchmark failed:', error);

@@ -13,8 +13,13 @@
  */
 
 import { Command } from 'commander';
-import { createCliSdk, printJson, printError, registerPassThrough } from '../shared/index.js';
-import { env } from '../../lib/env.js';
+import {
+  createCliSdk,
+  printJson,
+  printError,
+  registerPassThrough,
+  type CliSdkEnv,
+} from '../shared/index.js';
 import { handleTelemetry, handleSummary } from './handlers.js';
 
 /**
@@ -23,14 +28,14 @@ import { handleTelemetry, handleSummary } from './handlers.js';
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerTelemetryCmd(parent: Command): void {
+function registerTelemetryCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('telemetry')
     .description('Fetch persisted zero-hit telemetry from Elasticsearch')
     .option('-l, --limit <n>', 'Maximum number of events to return', '50')
     .action(async (opts: { limit: string }) => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = await handleTelemetry(sdk.observability, {
           limit: parseInt(opts.limit, 10),
         });
@@ -53,13 +58,13 @@ function registerTelemetryCmd(parent: Command): void {
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-function registerSummaryCmd(parent: Command): void {
+function registerSummaryCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('summary')
     .description('Show aggregated zero-hit summary')
     .action(() => {
       try {
-        const sdk = createCliSdk(env());
+        const sdk = createCliSdk(cliEnv);
         const result = handleSummary(sdk.observability);
         printJson(result);
       } catch (error) {
@@ -80,18 +85,19 @@ function registerSummaryCmd(parent: Command): void {
  * program.addCommand(observeCommand());
  * ```
  */
-export function observeCommand(): Command {
+export function observeCommand(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('observe').description(
     'Zero-hit telemetry, event purging, and summaries',
   );
 
-  registerTelemetryCmd(cmd);
-  registerSummaryCmd(cmd);
+  registerTelemetryCmd(cmd, cliEnv);
+  registerSummaryCmd(cmd, cliEnv);
   registerPassThrough(
     cmd,
     'purge',
     'Delete persisted zero-hit events older than retention window',
     'operations/observability/delete-zero-hit-events.ts',
+    { cliEnv },
   );
 
   return cmd;
