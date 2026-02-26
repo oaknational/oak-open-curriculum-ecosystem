@@ -3,37 +3,44 @@ provenance:
   - index: 0
     repo: oak-mcp-ecosystem
     date: 2026-02-26
-  - index: 1
-    repo: cloudinary-icon-ingest-poc
-    date: 2026-02-26
-profile: poc
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
 fitness_ceiling: 300
 ---
 
 # Practice Lineage
 
+This is the canonical lineage document for the oak-mcp-ecosystem Practice. It serves two purposes: (1) the reference for how the plasmid exchange mechanism works, and (2) the source template for outbound propagation.
+
+When propagating the Practice to another repo, copy both files. The provenance chain in the frontmatter is already set — the receiving repo appends its own entry when it evolves the files. See §Frontmatter and §Plasmid Exchange below.
+
 ## Frontmatter
 
-Both `practice.md` and `practice-lineage.md` carry YAML frontmatter with provenance and fitness metadata. This frontmatter is essential for plasmid exchange -- without it, a receiving repo cannot tell whether incoming files carry new learnings.
+Both `practice.md` and `practice-lineage.md` **always** carry YAML frontmatter with provenance and fitness metadata — not just when travelling between repos. The files can be copied at any time by anyone (human or agent), so the frontmatter must be complete and accurate at all times.
 
 ### Provenance
 
-The `provenance` array records every repo that has evolved this file, in order. It is a chain, not a single value -- as the Practice propagates and is evolved in successive repos, each one appends itself. Index 0 is always the origin (where the Practice was first created). The highest index is the most recent evolution point.
+The `provenance` array records every repo that has evolved the file, in order. Each entry is a snapshot of one iteration:
 
-A receiving repo checks the last entry in the chain: if its `repo` field differs from the local repo name, the file has been evolved elsewhere and may carry new learnings. If the last entry matches the local repo, the file has not been evolved since it left.
+| Field | Required | Description |
+|---|---|---|
+| `index` | Yes | Position in the chain. 0 is the origin. |
+| `repo` | Yes | Repository name. |
+| `date` | Yes | Date this iteration was created or last evolved. |
+| `purpose` | Yes | Statement of local purpose — what the Practice is being used for in this repo. Not a category tag; a description that tells receiving repos what kind of work shaped this evolution. |
 
-When sending files to another repo's practice box: if the sending repo has evolved the files, append a new entry with the next index, the sending repo name, and the current date.
+The chain serves three functions:
+
+1. **Origin tracking**: index 0 is where the Practice was first created.
+2. **Evolution detection**: a receiving repo checks the last entry's `repo` — if it differs from the local repo name, the file has been evolved elsewhere and may carry new learnings.
+3. **Context for comparison**: the `purpose` field tells the receiving repo what kind of work produced the incoming learnings, helping assess relevance.
+
+When a repo evolves the files, it appends a new entry with the next index, its repo name, the current date, and its purpose.
 
 ### Other fields
 
 | Field | Purpose |
 |---|---|
-| `profile` | `poc` or `production`. Indicates the adaptation level. |
-| `fitness_ceiling` | Soft line-count ceiling for the file. See Fitness Functions section. |
-
-## Origin
-
-This repo's Practice was propagated from `oak-mcp-ecosystem` on 2026-02-26, using the **POC profile** (inlined agents, simplified gates, aggressive pruning of domain-specific content).
+| `fitness_ceiling` | Soft line-count ceiling for the file. See §Fitness Functions. |
 
 ## The Practice Blueprint
 
@@ -90,17 +97,17 @@ Each agent: states its identity, reads the directives first (AGENT.md, rules, te
 
 For a production app, expand the roster: security-reviewer, config-reviewer, architecture-reviewer(s), docs-reviewer. The POC profile keeps only the three above.
 
-A layered composition system (wrapper → template → shared components) is more maintainable at scale than inlined agents. For short-lived projects, inline. For long-lived projects, layer.
+A layered composition system (wrapper -> template -> shared components) is more maintainable at scale than inlined agents. For short-lived projects, inline. For long-lived projects, layer.
 
 ### Workflow Commands
 
 The Practice is driven by slash commands that initiate structured workflows:
 
-- **start-right** -- Ground yourself: read the directives (AGENT.md → rules → testing-strategy), understand the project context, ask the guiding questions (right problem? right layer? could it be simpler? what assumptions?), commit to the work, discuss the first step with the user.
-- **gates** -- Run quality gates in order: `type-check → lint → build → test`. All gates are blocking at all times.
+- **start-right** -- Ground yourself: read the directives (AGENT.md -> rules -> testing-strategy), understand the project context, ask the guiding questions (right problem? right layer? could it be simpler? what assumptions?), commit to the work, discuss the first step with the user.
+- **gates** -- Run quality gates in order: `type-check -> lint -> build -> test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them, consolidate findings into a single report with verdict.
 - **commit** -- Conventional commit workflow with quality gates as pre-check.
-- **consolidate-docs** -- Extract documentation from plans to permanent locations, update status markers, consider Practice evolution (apply the bar from this lineage doc).
+- **consolidate-docs** -- Extract documentation from plans to permanent locations, update status markers, check the practice box, consider Practice evolution (apply the bar from this lineage doc).
 - **think** -- Structured thinking without acting.
 - **step-back** -- Reflection on approach and assumptions.
 
@@ -126,7 +133,7 @@ These are lightweight rules that fire on every agent interaction (in Cursor, `.m
 The napkin, distillation, consolidation, and Practice evolution are not independent features. They are stages of a single feedback loop:
 
 ```text
-Work → Capture → Refine → Settle → Enforce → Apply → Work
+Work -> Capture -> Refine -> Settle -> Enforce -> Apply -> Work
 ```
 
 **Capture** (always on): The napkin (`.agent/memory/napkin.md`) records mistakes, corrections, surprises, and patterns continuously during every session. It is always active -- not triggered by a command. Read it at session start; write to it as you work. Everything that would change behaviour next session goes here.
@@ -141,7 +148,7 @@ Work → Capture → Refine → Settle → Enforce → Apply → Work
 
 The loop has two feedback properties:
 
-- **Positive**: learnings that prove valuable propagate upward (napkin → distilled → docs/rules → practice/lineage). Each stage amplifies what works.
+- **Positive**: learnings that prove valuable propagate upward (napkin -> distilled -> docs/rules -> practice/lineage). Each stage amplifies what works.
 - **Negative**: the three-part bar for Practice changes (validated? prevents recurring mistakes? stable?) acts as a governor. Speculation stays in the napkin. Only patterns that have survived real work and distillation graduate to the Practice. The pruning mechanism in distillation removes entries that have settled elsewhere, preventing duplication and drift.
 
 The loop is self-applicable: the rules that enforce the Practice are themselves subject to the same evolution process. If consolidation reveals that a rule is wrong, the rule can change -- but only if the change clears the bar.
@@ -150,15 +157,13 @@ The loop is self-applicable: the rules that enforce the Practice are themselves 
 
 **Prompts** (`.agent/prompts/`) are reusable playbooks. The `start-right` prompt is the session entry point: read directives, understand context, ask guiding questions, commit. Prompts are not part of the learning loop -- they are how the Practice is applied at the start of a session.
 
-## Profiles
+## Adaptation Levels
 
-### POC (days to weeks)
+The Practice scales to the project. The `purpose` field in each provenance entry describes the local context; these reference profiles indicate common adaptation levels:
 
-Inline agents. Simplified gates. No layered agent composition, no ADR infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-reviewer, test-reviewer, type-reviewer.
+**POC (days to weeks)**: Inline agents. Simplified gates. No layered agent composition, no ADR infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-reviewer, test-reviewer, type-reviewer.
 
-### Production (months to years)
-
-Layered agent architecture. Full specialist roster. Learning loop (napkin → distilled → rules). ADR infrastructure. Full quality gate sequence. Practice.md in full depth.
+**Production (months to years)**: Layered agent architecture. Full specialist roster. Learning loop (napkin -> distilled -> rules). ADR infrastructure. Full quality gate sequence. Practice.md in full depth.
 
 ## How the Practice Evolves
 
@@ -180,7 +185,7 @@ The Practice has negative feedback for what enters (the three-part bar), but wit
 
 | File | Ceiling | Rationale |
 |---|---|---|
-| `practice.md` | ~80 lines | Orientation doc. Scannable in under 2 minutes. |
+| `practice.md` | ~200 lines | System map. Readable in one sitting. |
 | `practice-lineage.md` | ~300 lines | Complete portable blueprint. Readable in one sitting. |
 
 These are soft ceilings, not hard limits. Exceeding them triggers tightening; it does not block work. The `jc-consolidate-docs` command checks these during every consolidation pass.
@@ -204,28 +209,31 @@ The Practice is not hierarchical. Each repo carries its own Practice instance, a
 
 Every repo with a Practice has a canonical location for incoming material: **`.agent/incoming/`** (the practice box). This directory is normally empty (with a `.gitkeep`). When Practice/Lineage pairs arrive from another repo, they are placed here.
 
-At session start (via the `start-right` workflow), the agent checks the practice box. If files are present, it alerts the user and offers to initiate the integration flow. The directory is cleared after integration, ready for the next exchange.
+The practice box is checked at two points:
+
+1. **Session start** (via the `start-right` prompt) — alert the user if files are present.
+2. **Consolidation** (via the `jc-consolidate-docs` command step 7) — perform the full integration flow.
 
 ### Integration Flow
 
-When a lineage doc arrives from another repo:
+When Practice/Lineage files appear in the practice box:
 
-1. **Check the provenance chain.** Read the `provenance` array in the frontmatter. If the last entry's `repo` differs from the local repo name, the file has been evolved elsewhere and may carry new learnings. If the last entry matches the local repo, the file has not been evolved since it left -- there is nothing new to integrate.
-2. **Read it.** Understand what they learned and why.
-3. **Compare** with the local Practice and Lineage. Identify differences.
+1. **Check the provenance chain.** Read the `provenance` array in the frontmatter. If the last entry's `repo` differs from the local repo name, the file has been evolved elsewhere and may carry new learnings. If the last entry matches the local repo, the file has not been evolved since it left — there is nothing new to integrate.
+2. **Read it.** Understand what they learned and why. The `purpose` field in each provenance entry tells you what kind of work shaped the evolution — use this to assess relevance to the local context.
+3. **Compare** with the local Practice and Lineage. Identify differences — not just in the lineage doc, but across the full Practice system (directives, rules, skills, commands, prompts). Ask: does the incoming version reveal principles that the local Practice implements implicitly but hasn't named? Does the compression reveal what's essential versus contextual?
 4. **Apply the same bar.** Does the incoming learning meet the structural-change criteria for *this* repo? (Validated by real work? Prevents recurring mistakes? Stable?)
-5. **Propose changes** to the user. Be specific: which sections of local Practice/Lineage would change and why.
-6. **On approval, apply.** Update Practice, Lineage, rules, or directives as warranted.
+5. **Propose changes** to the user. Be specific: which files across the Practice would change and why.
+6. **On approval, apply.** Update Practice, Lineage, rules, skills, commands, prompts, or directives as warranted.
 7. **Record what was taken** in the napkin (for traceability, not attribution).
 8. **Clear the practice box.** Remove the incoming files. The integration is complete.
 
-If nothing clears the bar, record that in the napkin too -- the incoming material was reviewed and found not applicable to this context. That is a valid outcome.
+If nothing clears the bar, record that in the napkin too — the incoming material was reviewed and found not applicable to this context. That is a valid outcome.
 
 This lineage doc is itself a plasmid. It can be carried to any repo. The receiving repo applies its own bar.
 
 ## Growing a Practice from This Blueprint
 
-**Effort heuristic**: in the first real migration, roughly a third of Practice files were fully portable (zero edits), a third needed selective editing (universal core with domain-specific sections to remove), and a third needed complete rewrite or deletion. The mixed tier is the most labour-intensive -- it requires line-by-line judgment about what is universal and what is local. Budget accordingly.
+**Effort heuristic**: in the first real migration, roughly a third of Practice files were fully portable (zero edits), a third needed selective editing (universal core with domain-specific sections to remove), and a third needed complete rewrite or deletion. The mixed tier is the most labour-intensive — it requires line-by-line judgment about what is universal and what is local. Budget accordingly.
 
 1. Create the directory structure described in `practice.md` (`.agent/directives/`, `.agent/plans/`, `.agent/prompts/`, `.agent/memory/`, `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`).
 2. Write `AGENT.md` as a stable structural index: project context, artefacts, rules pointer, sub-agent roster, development commands, repo structure. No mutable state.
@@ -235,22 +243,22 @@ This lineage doc is itself a plasmid. It can be carried to any repo. The receivi
 6. Write agent definitions following the Agent Pattern above. Inline for POC; layer for production.
 7. Write the workflow commands (gates, review, commit, consolidate-docs, start-right, think, step-back) adapted to local tooling and gate sequence.
 8. Create always-applied rules encoding the Always-Applied Rules above.
-9. Write a `start-right` prompt: read directives, project context, guiding questions, quality gates.
-10. Write this lineage doc with YAML frontmatter (`provenance` array starting at index 0, `profile`, `fitness_ceiling`) and initial learned principles.
+9. Write a `start-right` prompt: read directives, understand context, ask guiding questions, quality gates. Include a practice box check.
+10. Write both `practice.md` and this lineage doc with YAML frontmatter: `provenance` array (index 0 entry with `repo`, `date`, and `purpose` — a statement of what the Practice is being used for in this repo), and `fitness_ceiling`. Add initial learned principles to the lineage doc.
 11. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every agent's first-action file exists. The repo builds.
 
 ## Validation
 
-After growing or propagating the Practice, verify that nothing is **silently broken**. The most dangerous failure mode is not missing files -- it is files that look correct but whose internal references don't resolve. Agents will proceed with no review methodology, directives will point to non-existent docs, commands will invoke non-existent prompts. Nothing errors; everything quietly degrades.
+After growing or propagating the Practice, verify that nothing is **silently broken**. The most dangerous failure mode is not missing files — it is files that look correct but whose internal references don't resolve. Agents will proceed with no review methodology, directives will point to non-existent docs, commands will invoke non-existent prompts. Nothing errors; everything quietly degrades.
 
-1. **Reference check** -- every file path in directives, agents, commands, and rules resolves.
-2. **Agent check** -- each agent's first-action file reference exists.
-3. **Build check** -- `type-check`, `lint`, `build` all pass.
-4. **Stable-index check** -- `AGENT.md` and `AGENTS.md` contain no mutable session state.
+1. **Reference check** — every file path in directives, agents, commands, and rules resolves.
+2. **Agent check** — each agent's first-action file reference exists.
+3. **Build check** — `type-check`, `lint`, `build` all pass.
+4. **Stable-index check** — `AGENT.md` and `AGENTS.md` contain no mutable session state.
 
 ### Validation scripts
 
-Reference check (rough -- does not handle relative paths from referencing file's location, `@`-prefixed Cursor references, or paths inside code blocks):
+Reference check (rough — does not handle relative paths from referencing file's location, `@`-prefixed Cursor references, or paths inside code blocks):
 
 ```bash
 rg -o '\./[^\s\)]+\.md' .agent/ .cursor/ --no-filename | sort -u | while read ref; do
@@ -284,5 +292,5 @@ Principles discovered through Practice propagation and evolution. These have cle
 - **Silent degradation is the worst failure mode.** Agents, directives, and commands can all look correct while silently failing because their internal references don't resolve. An agent whose first instruction is "read a file that doesn't exist" will proceed with no review methodology and produce plausible but ungrounded output. This is worse than a hard error. Validation scripts (see above) catch this class of failure.
 - **Intentional repetition aids discoverability but hinders portability.** Repeating a rule in many files means many files to edit when porting. A single source of truth referenced from other files preserves discoverability while reducing surface.
 - **Stable indexes, mutable plans.** `AGENT.md` is a structural map. It must not carry session state. Mutable state (active plans, priorities, progress) belongs in the plans directory.
-- **If a behaviour must be automatic, it needs a rule, not just a skill.** Skills are documentation -- they describe what to do but depend on being discovered and invoked. Always-applied rules fire on every interaction. The learning loop's capture stage (napkin) must be enforced by a rule to be genuinely always-on.
+- **If a behaviour must be automatic, it needs a rule, not just a skill.** Skills are documentation — they describe what to do but depend on being discovered and invoked. Always-applied rules fire on every interaction. The learning loop's capture stage (napkin) must be enforced by a rule to be genuinely always-on.
 - **Plasmids need a provenance chain, not just an origin.** A file that only records where it was created will be rejected by its origin repo as "already mine." The provenance array records every repo that has evolved the file; the last entry tells the receiving repo whether the file has been somewhere new. Without it, the plasmid exchange mechanism silently fails.

@@ -11,6 +11,10 @@ Read and internalise these documents:
 3. @.agent/directives/testing-strategy.md — TDD at all levels
 4. @.agent/directives/schema-first-execution.md — Types flow from schema
 
+## Practice Box
+
+Check `.agent/incoming/` for Practice/Lineage files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 7).
+
 ## Guiding Questions
 
 Before diving in, pause and ask:

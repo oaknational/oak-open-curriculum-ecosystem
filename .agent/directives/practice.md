@@ -1,3 +1,12 @@
+---
+provenance:
+  - index: 0
+    repo: oak-mcp-ecosystem
+    date: 2026-02-26
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+fitness_ceiling: 200
+---
+
 # The Agentic Engineering Practice
 
 The agentic engineering practice is the self-reinforcing system of principles, structures, agents, and tooling that governs how work happens in this repository. It creates the conditions for safe, high-quality human-AI collaboration. The practice is what produces the product code (SDK, MCP servers, search system) — but it is not the product code itself.
@@ -144,7 +153,7 @@ graph TB
 
 - **Quality gates** make the system self-aware: type-check, lint, test, format, and subagent validation each observe a different dimension of structural integrity. A failure is not an inconvenience — it is the system telling you that entropy has been introduced
 - **Sub-agent reviews** provide specialist awareness — architectural drift, security risks, type-safety erosion, and test quality degradation that no single gate can detect
-- **The learning loop** converts entropy that _was_ introduced into rules that prevent its recurrence
+- **The learning loop** converts entropy that *was* introduced into rules that prevent its recurrence
 
 **Positive feedback loops** compound capability over time:
 
@@ -153,6 +162,31 @@ graph TB
 - **Consolidation** -- the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow and the subagent-architect's ecosystem consolidation procedure both extract common threads into shared, reusable structures. Each consolidation pass leaves the system simpler and more consistent
 
 These loops operate at different timescales -- quality gates within seconds, learning loops within sessions, consolidation across sessions -- but they all serve the same purpose: keeping the practice aligned with reality and continuously improving.
+
+## Plasmid Exchange
+
+The practice is not confined to a single repo. It can be propagated to other repos as a Practice/Lineage pair, adapted to local context, evolved through real work, and sent back. Each repo carries its own Practice instance — there is no hierarchy.
+
+Both this file and `practice-lineage.md` always carry YAML frontmatter with a `provenance` array (recording the chain of repos that have evolved the file, each with a `purpose` describing what the Practice is being used for there) and a `fitness_ceiling`. The frontmatter must be complete at all times — files can be copied by anyone at any moment, not only through agent-mediated propagation.
+
+The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both the reference for how exchange works and the source template for outbound propagation.
+
+### The Practice Box
+
+`.agent/incoming/` is the canonical location for incoming Practice/Lineage pairs. It is normally empty. When files arrive:
+
+- **At session start** (via start-right), agents alert the user.
+- **At consolidation** (via `/jc-consolidate-docs` step 7), agents perform the full integration flow: check the provenance chain, compare against the full local Practice system (not just `practice.md` — also rules, skills, commands, prompts, and directives), apply the three-part bar, propose specific changes, and clear the box after integration.
+
+### Meta-Principles
+
+Principles about the Practice itself, discovered through propagation and evolution. These sit above the domain-specific rules — they govern how the Practice works, not what the product code should look like.
+
+- **Separate universal from domain-specific at the file level.** When rules about TDD live in the same file as rules about a specific schema, portability requires line-by-line editing.
+- **If a behaviour must be automatic, it needs a rule, not just a skill.** Skills are documentation — they depend on being discovered and invoked. Always-applied rules fire on every interaction. The learning loop's capture stage (napkin) must be enforced by a rule to be genuinely always-on.
+- **Plasmids need a provenance chain, not just an origin.** A file that only records where it was created will be dismissed by its origin repo as "already mine." The provenance array records every repo that has evolved the file; the last entry tells the receiving repo whether the file has been somewhere new.
+
+The full set of Learned Principles, including those about silent degradation, discoverability trade-offs, and stable indexes, is maintained in [practice-lineage.md](practice-lineage.md) §Learned Principles.
 
 ## The Self-Teaching Property
 

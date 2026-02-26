@@ -37,6 +37,12 @@ Primary strategic reference:
 
 ## Next Session Checklist (Handoff)
 
+### Getting Started
+
+1. Read this plan. It is self-contained.
+2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
+3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
+
 ### Current State (All Code Work Complete)
 
 All batches (A through E3) and Go/No-Go preparation (G1–G3) are complete. There are no remaining code items.

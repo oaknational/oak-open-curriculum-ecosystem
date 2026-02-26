@@ -67,6 +67,8 @@ first, then remove the distilled entry. Common destinations:
 - Tooling documented in `docs/engineering/build-system.md`
 - Domain knowledge documented in architecture docs
 - Workspace-specific gotchas in workspace READMEs
+- Meta-principles about the Practice itself in
+  `.agent/directives/practice-lineage.md` §Learned Principles
 
 Also remove entries that are already captured in existing
 permanent documentation — no duplication across the two tiers.

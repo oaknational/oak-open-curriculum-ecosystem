@@ -1,5 +1,60 @@
 # Napkin
 
+## Session: 2026-02-26 — Plasmid Exchange Integration (First Round-Trip)
+
+### What happened
+
+First round-trip of the plasmid exchange mechanism. Practice/Lineage files
+were propagated to `cloudinary-icon-ingest-poc`, evolved there (provenance
+chain added, new Learned Principle about provenance), and returned to the
+practice box.
+
+### Integration performed
+
+Incoming material integrated across 6 Practice files:
+1. **practice-lineage.md** — created in `.agent/directives/` as canonical
+   local reference and propagation template.
+2. **practice.md** — added Plasmid Exchange section and Meta-Principles
+   subsection (3 Learned Principles not previously explicit).
+3. **jc-consolidate-docs.md** — step 7 rewritten with provenance chain
+   checking, full-Practice-system comparison scope, and meta-principle
+   graduation path.
+4. **start-right.prompt.md** — added Practice Box check at session start.
+5. **distillation/SKILL.md** — added practice-lineage.md §Learned
+   Principles as a graduation destination for meta-principles.
+6. **AGENT.md** — added reference to practice-lineage.md.
+
+### Mistakes and corrections
+
+- Initially dismissed incoming files as "same-origin, nothing to learn"
+  because the previous version had no provenance chain. Short-circuited
+  the entire integration flow at step 1. The user identified this as a
+  protocol failure — the compression and adaptation IS information, and
+  the mechanism is designed to be self-referential.
+- Thought too narrowly about "the local Practice" as practice.md the file,
+  not the system of files and processes. User corrected: integration points
+  span rules, skills, commands, prompts, and directives.
+
+### Lessons
+
+- The Practice is a system, not a file. Integration from plasmid exchange
+  must consider ALL touchpoints: directives, rules, skills, commands,
+  prompts, and agent definitions.
+- Provenance chains prevent the "already mine" dismissal. Without them,
+  the plasmid exchange mechanism silently fails at the origin repo.
+- Compression reveals essence. A condensed POC version of the Practice
+  can surface principles that the full version implements implicitly
+  but hasn't named.
+- Frontmatter must be complete at all times on both practice.md and
+  practice-lineage.md — files can be copied by anyone (human or agent)
+  at any moment, not only through agent-mediated propagation.
+- `profile` as a top-level tag (`poc`/`production`) is too coarse and
+  loses history. Moving it into the provenance array as `purpose` (a
+  statement of local context) preserves the chain of WHY each iteration
+  existed, not just WHERE it was.
+
+---
+
 ## Session: 2026-02-26 — M1 Release: Batches E2, E3, Go/No-Go Prep
 
 ### What happened
