@@ -102,5 +102,6 @@ experience file is not the home for technical reference.
 - 2026‑02‑22: consolidation practice — see: [document-hierarchy-and-the-consolidation-practice](./2026-02-22-document-hierarchy-and-the-consolidation-practice.md)
 - 2026‑02‑23: documentation discipline — see: [documentation-not-decoration](./2026-02-23-documentation-not-decoration.md) — "restructure, not compress"; [the-gap-between-green-and-working](./2026-02-23-the-gap-between-green-and-working.md); [three-queries-and-two-problems](./2026-02-23-three-queries-and-two-problems.md)
 - 2026‑02‑24: boundary rules — see: [boundary-rules-and-the-reviewer-loop](./2026-02-24-boundary-rules-and-the-reviewer-loop.md) — reviewer loop as architectural refinement; minimatch depth traps
+- 2026‑02‑26: documentation drift — see: [documentation-as-archaeology](./2026-02-26-documentation-as-archaeology.md) — documentation coupling points; reviewer-discovered drift; identity vs system grammar
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

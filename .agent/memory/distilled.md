@@ -225,6 +225,14 @@ Architecture` section). Dev gotchas not covered there:
   execution documents (what to do, in what order); they
   reference ADRs for architectural context. Extract
   permanent knowledge to ADRs before archiving a plan.
+- Commitlint enforces conventional commit `subject-case`:
+  subject line must start with lowercase type prefix
+  (e.g. `fix(scope): description`). Uppercase item
+  references like "F7 — description" are rejected. When
+  moving files between workspaces, also check that
+  relative links in README files adjust for directory
+  depth changes (e.g. `../../../docs/` may become
+  `../../../../docs/`).
 
 ## Architecture
 
@@ -258,11 +266,12 @@ Architecture` section). Dev gotchas not covered there:
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS` — adding to the map
   automatically extends the type union
-- search-sdk must NOT depend on curriculum-sdk. The two
-  remaining runtime function imports (`buildPhraseVocabulary`,
-  `buildElasticsearchSynonyms`) are unfinished ADR-108 work —
-  they belong in `sdk-codegen`. `SearchRetrievalService` in
-  curriculum-sdk is intentional ISP (consumer-side interface),
+- search-sdk must NOT depend on curriculum-sdk. This is
+  enforced by ESLint boundary rules (`createSdkBoundaryRules('search')`)
+  that block ALL `@oaknational/curriculum-sdk` imports including
+  subpaths. Shared vocabulary/synonym functions live in
+  `@oaknational/sdk-codegen/synonyms`. `SearchRetrievalService`
+  in curriculum-sdk is intentional ISP (consumer-side interface),
   not a duplicate — structural typing handles the wiring.
   Architecture reviewer deferral recommendations must be
   questioned against the system's architectural intent, not

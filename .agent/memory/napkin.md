@@ -1,5 +1,67 @@
 # Napkin
 
+## Session: 2026-02-26 — M1 Release: Batches C-2, D, E1
+
+### What happened
+
+Continued M1 release execution. Committed Batch C-2 (Search CLI env
+pipeline migration). Completed F7 (ADR-108 completion — full synonym
+system relocation to sdk-codegen). Completed Batch E1 (dead code, RRF
+docs verification, rate limiting precondition). Fixed pre-existing flaky
+timing test in curriculum-sdk.
+
+### Changes made
+
+1. **Batch C-2** (`30cf9132`): Search CLI env pipeline migration and
+   env-resolution enhancement (was complete but uncommitted from prior session)
+2. **F7** (`066be0af`): Moved 25 synonym data files + `synonym-export.ts`
+   from curriculum-sdk to sdk-codegen. Created `@oaknational/sdk-codegen/synonyms`
+   subpath. Updated all consumers. Removed curriculum-sdk from search-sdk
+   entirely. Tightened ESLint boundaries. Updated 5 ADRs + docs.
+   4 integration tests. 6 specialist reviewers — all approved.
+3. **Batch E1** (`1c97d2d6`): F35 dead code deletion (~40 lines from
+   wiring.ts). F11 verified already documented (no changes needed).
+   F16 added deployment precondition to ADR-115 and HTTP README.
+   Fixed flaky `rate-limit-config.unit.test.ts` (fake timers).
+
+### Mistakes and corrections
+
+- Commitlint rejected F7 commit because subject started with uppercase
+  "F7". Conventional commits require lowercase subject. Fixed by using
+  `fix(release-m1):` prefix.
+- Pre-existing flaky test in `rate-limit-config.unit.test.ts` caused
+  pre-commit hook failure during E1 commit. The test relied on
+  `Date.now()` without faking timers — non-deterministic in fast
+  environments. Fixed with `vi.useFakeTimers()`.
+
+### Lessons
+
+- Conventional commit linting: subject line must start with lowercase
+  type prefix. "F7 — description" is not valid; "fix(scope): description"
+  is.
+- Pre-commit hooks can surface pre-existing failures that aren't related
+  to your changes. Fix them — the rule is "all quality gate issues are
+  always blocking".
+- When verifying that documentation for a code pattern "already exists",
+  be specific about WHERE it exists and what it says. F11 was marked
+  complete because the coupling documentation was already in the source
+  files via ADR-120 cross-references — no additional documentation needed.
+- Moving files between workspaces (F7 synonym relocation): always check
+  the synonyms README for relative links that break due to directory
+  depth changes. 7 links broke because the depth went from
+  `../../../docs/` to `../../../../docs/`.
+
+### Patterns that worked
+
+- 6 specialist reviewers in parallel for F7 (code, arch-barney, arch-fred,
+  type, test, docs-adr) caught documentation drift that would have been
+  missed otherwise — stale consumer chain descriptions, broken relative
+  links, stale TSDoc in 3 files, and stale ADR code examples.
+- Batching trivial items (E1: F35+F11+F16) into a single commit reduces
+  overhead. Appropriate when items are genuinely trivial and independent.
+
+---
+
 ## Session: 2026-02-25 — Onboarding Review and Documentation Restructure
 
 ### What happened
@@ -466,6 +528,7 @@ Documentation extractions completed before distillation:
 ### Work Done
 
 Completed all 8 Batch B items from release-plan-m1:
+
 - **F6**: Extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk`.
   Both apps now delegate to it. Added 3 unit tests.
 - **F10**: Added timeout/retry to `fetchUpstreamMetadata`. Per-attempt
@@ -502,6 +565,7 @@ Completed all 8 Batch B items from release-plan-m1:
 ### What happened
 
 Executed the plan to split `@oaknational/env` into:
+
 1. `@oaknational/env` (core) — pure Zod schema contracts only
 2. `@oaknational/env-resolution` (libs) — runtime pipeline (resolveEnv, findRepoRoot)
 
@@ -515,7 +579,7 @@ createLibBoundaryRules despite being a core package).
   called `createLibBoundaryRules` with that name — their eslint config
   may now generate empty/broken zone paths. The openapi-zod-client-adapter
   was effectively unprotected after the cleanup.
-- workspace:^ vs workspace:* — this monorepo uses workspace:* everywhere.
+- workspace:^ vs workspace:\* — this monorepo uses workspace:\* everywhere.
   Don't introduce workspace:^ for private packages.
 - tsup externals: only list Node builtins actually imported (YAGNI).
   node:os was listed but never imported.
