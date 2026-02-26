@@ -3,6 +3,15 @@
  *
  * Delegates to the shared `createSearchRetrieval` in `@oaknational/oak-search-sdk`
  * and re-exports its DI types for app-local test usage.
+ *
+ * **Connectivity trade-off**: The ES client is created with credentials but no
+ * startup health check or warm-up ping is performed. The first search tool call
+ * is the first time the client contacts Elasticsearch. If ES is unreachable,
+ * the error surfaces at query time, not at startup. This is acceptable for the
+ * public alpha because: (1) Vercel cold starts benefit from fast bootstrap,
+ * (2) ES errors are already mapped to typed `RetrievalError` results, and
+ * (3) a startup ping would add complexity without improving the user-facing
+ * error path. Revisit if startup health gates are needed for production.
  */
 
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -47,6 +56,6 @@ export function createSearchRetrieval(
   const retrieval = factories
     ? createRetrievalFromCredentials(env, factories)
     : createRetrievalFromCredentials(env);
-  logger.info('Search retrieval service configured (Elasticsearch connected)');
+  logger.info('Search retrieval service configured (lazy connection — no startup ping)');
   return retrieval;
 }

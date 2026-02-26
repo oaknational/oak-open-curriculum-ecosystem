@@ -1,5 +1,6 @@
 import type { Express, RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
+import { ok, err, type Result } from '@oaknational/result';
 import { registerPublicOAuthMetadataEndpoints } from '../auth-routes.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { runBootstrapPhase, runAsyncBootstrapPhase } from './bootstrap-helpers.js';
@@ -9,6 +10,9 @@ import {
   isUpstreamAuthServerMetadata,
   type UpstreamAuthServerMetadata,
 } from '../oauth-proxy/index.js';
+import { classifyFetchError, type MetadataFetchError } from './metadata-fetch-error.js';
+
+export type { MetadataFetchError };
 
 /**
  * Creates middleware that adds no-cache headers to error responses.
@@ -50,15 +54,15 @@ class TransientFetchError extends Error {
   }
 }
 
-function isNetworkOrAbortError(err: unknown): boolean {
-  if (!(err instanceof Error)) {
+function isNetworkOrAbortError(caught: unknown): boolean {
+  if (!(caught instanceof Error)) {
     return false;
   }
-  return err.name === 'AbortError' || err.name === 'TypeError';
+  return caught.name === 'AbortError' || caught.name === 'TypeError';
 }
 
-function isTransientError(err: unknown): boolean {
-  return err instanceof TransientFetchError || isNetworkOrAbortError(err);
+function isTransientError(caught: unknown): boolean {
+  return caught instanceof TransientFetchError || isNetworkOrAbortError(caught);
 }
 
 export interface FetchUpstreamOptions {
@@ -107,6 +111,20 @@ async function attemptMetadataFetch(
 }
 
 /**
+ * Normalises a caught value to an Error instance.
+ */
+function toError(caught: unknown): Error {
+  return caught instanceof Error ? caught : new Error(String(caught));
+}
+
+/**
+ * Determines whether a failed attempt should be retried.
+ */
+function shouldRetry(caught: unknown, isLastAttempt: boolean): boolean {
+  return isTransientError(caught) && !isLastAttempt;
+}
+
+/**
  * Fetches and validates upstream AS metadata from Clerk's well-known endpoint.
  * Called once at startup; the result is cached for the process lifetime.
  *
@@ -116,32 +134,35 @@ async function attemptMetadataFetch(
  * @param upstreamBaseUrl - Base URL of the upstream authorization server
  * @param fetchFn - Fetch implementation (defaults to global `fetch`)
  * @param options - Timeout and retry configuration
+ * @returns `Ok` with validated metadata, or `Err` with a {@link MetadataFetchError}
  */
 export async function fetchUpstreamMetadata(
   upstreamBaseUrl: string,
   fetchFn: FetchFn = fetch,
   options?: FetchUpstreamOptions,
-): Promise<UpstreamAuthServerMetadata> {
+): Promise<Result<UpstreamAuthServerMetadata, MetadataFetchError>> {
   const { timeoutMs, maxRetries, retryDelayMs } = { ...FETCH_DEFAULTS, ...options };
   const metadataUrl = `${upstreamBaseUrl}/.well-known/oauth-authorization-server`;
 
   let lastError: Error | undefined;
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      return await attemptMetadataFetch(metadataUrl, fetchFn, timeoutMs);
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-      const isLastAttempt = attempt === maxRetries - 1;
-      if (isTransientError(err) && !isLastAttempt) {
+      const metadata = await attemptMetadataFetch(metadataUrl, fetchFn, timeoutMs);
+      return ok(metadata);
+    } catch (caught) {
+      lastError = toError(caught);
+      if (shouldRetry(caught, attempt === maxRetries - 1)) {
         await new Promise((resolve) => setTimeout(resolve, retryDelayMs * 2 ** attempt));
         continue;
       }
-      throw lastError;
+      return err(classifyFetchError(lastError));
     }
   }
-  throw (
-    lastError ?? new Error(`Upstream AS metadata fetch exhausted ${String(maxRetries)} retries`)
-  );
+  return err({
+    type: 'network_error',
+    message:
+      lastError?.message ?? `Upstream AS metadata fetch exhausted ${String(maxRetries)} retries`,
+  });
 }
 
 /**
@@ -184,13 +205,17 @@ export async function setupOAuthAndCaching(
       }
       upstreamBaseUrl = deriveUpstreamOAuthBaseUrl(publishableKey);
       log.info('OAuth proxy: deriving upstream', { upstreamBaseUrl });
-      upstreamMetadata = await runAsyncBootstrapPhase(
+      const metadataResult = await runAsyncBootstrapPhase(
         log,
         bootstrapTimer,
         'fetchUpstreamMetadata',
         appCounter,
         () => fetchUpstreamMetadata(upstreamBaseUrl),
       );
+      if (!metadataResult.ok) {
+        throw new Error(metadataResult.error.message);
+      }
+      upstreamMetadata = metadataResult.value;
     }
 
     runBootstrapPhase(log, bootstrapTimer, 'registerPublicOAuthMetadata', appCounter, () => {

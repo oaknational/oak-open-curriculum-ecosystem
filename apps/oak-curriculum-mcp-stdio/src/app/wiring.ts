@@ -60,13 +60,17 @@ function buildServerConfig(config: ServerConfig): Required<ServerConfig> {
  *
  * Delegates to the shared factory in `@oaknational/oak-search-sdk`.
  * ES credentials are guaranteed present by `loadRuntimeConfig` validation.
+ *
+ * No startup connectivity check is performed — the first search tool call
+ * is the first time the client contacts Elasticsearch. See the HTTP app's
+ * `search-retrieval-factory.ts` TSDoc for the full trade-off rationale.
  */
 function createSearchRetrieval(
   runtimeConfig: RuntimeConfig,
   logger: { info: (msg: string) => void },
 ): SearchRetrievalService {
   const retrieval = createSearchRetrievalFromCredentials(runtimeConfig.env);
-  logger.info('Search retrieval service configured (Elasticsearch connected)');
+  logger.info('Search retrieval service configured (lazy connection — no startup ping)');
   return retrieval;
 }
 

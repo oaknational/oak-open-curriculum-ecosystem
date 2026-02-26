@@ -12,8 +12,13 @@ import type { RuntimeConfig } from './runtime-config.js';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
-import { extractHostname } from './security.js';
-import { isAllowedHostname, isValidHostHeader } from './host-header-validation.js';
+import {
+  deriveSelfOrigin,
+  hostValidationErrorMessage,
+  type HostValidationError,
+} from './host-validation-error.js';
+
+export { deriveSelfOrigin, hostValidationErrorMessage, type HostValidationError };
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
@@ -28,47 +33,6 @@ function registerUnauthenticatedRoutes(
   app.post('/mcp', createMcpHandler(mcpFactory, log));
   log.debug('Registering GET /mcp route (auth disabled)');
   app.get('/mcp', createMcpHandler(mcpFactory, log));
-}
-
-/**
- * Returns true if the host string represents a loopback address.
- * Handles `localhost`, `127.0.0.1`, and IPv6 `[::1]` with optional port.
- */
-function isLoopbackHost(host: string): boolean {
-  const normalizedHost = host.toLowerCase();
-  if (normalizedHost.startsWith('[')) {
-    return normalizedHost.startsWith('[::1]');
-  }
-  const colonIdx = normalizedHost.indexOf(':');
-  const hostname = colonIdx >= 0 ? normalizedHost.substring(0, colonIdx) : normalizedHost;
-  return hostname === 'localhost' || hostname === '127.0.0.1';
-}
-
-/**
- * Derives the self-origin from a request's Host header after validating
- * it against the allowed hosts list.
- *
- * Uses `http` for loopback addresses, `https` for everything else.
- *
- * @throws Error if the host header is missing or not in the allowed list
- */
-export function deriveSelfOrigin(
-  req: { get(name: string): string | undefined },
-  allowedHosts: readonly string[],
-): string {
-  const host = req.get('host');
-  if (!host) {
-    throw new Error('Cannot generate OAuth metadata: missing host header');
-  }
-  if (!isValidHostHeader(host)) {
-    throw new Error(`Rejected Host header '${host}': invalid host header format`);
-  }
-  const hostname = extractHostname(host).toLowerCase();
-  if (!hostname || !isAllowedHostname(hostname, allowedHosts)) {
-    throw new Error(`Rejected Host header '${hostname}': not in allowed hosts list`);
-  }
-  const protocol = isLoopbackHost(host) ? 'http' : 'https';
-  return `${protocol}://${host}`;
 }
 
 /**
@@ -95,32 +59,33 @@ export function registerPublicOAuthMetadataEndpoints(
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
   const servePrm: RequestHandler = (req, res) => {
-    try {
-      const selfOrigin = deriveSelfOrigin(req, allowedHosts);
-      res.json({
-        resource: `${selfOrigin}/mcp`,
-        authorization_servers: [selfOrigin],
-        scopes_supported: SCOPES_SUPPORTED,
-      });
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
+    const originResult = deriveSelfOrigin(req, allowedHosts);
+    if (!originResult.ok) {
+      const msg = hostValidationErrorMessage(originResult.error);
       authLog.warn('Host validation failed for OAuth metadata', { error: msg });
       res.status(403).json({ error: 'forbidden', error_description: msg });
+      return;
     }
+    const selfOrigin = originResult.value;
+    res.json({
+      resource: `${selfOrigin}/mcp`,
+      authorization_servers: [selfOrigin],
+      scopes_supported: SCOPES_SUPPORTED,
+    });
   };
 
   app.get('/.well-known/oauth-protected-resource', servePrm);
   app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
 
   app.get('/.well-known/oauth-authorization-server', (req, res) => {
-    try {
-      const selfOrigin = deriveSelfOrigin(req, allowedHosts);
-      res.json(rewriteAuthServerMetadata(upstreamMetadata, selfOrigin));
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
+    const originResult = deriveSelfOrigin(req, allowedHosts);
+    if (!originResult.ok) {
+      const msg = hostValidationErrorMessage(originResult.error);
       authLog.warn('Host validation failed for OAuth AS metadata', { error: msg });
       res.status(403).json({ error: 'forbidden', error_description: msg });
+      return;
     }
+    res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value));
   });
 
   if (runtimeConfig.useStubTools) {

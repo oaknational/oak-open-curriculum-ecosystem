@@ -1,0 +1,13 @@
+[**@oaknational/curriculum-sdk v0.8.0**](../../../../README.md)
+
+---
+
+[@oaknational/curriculum-sdk](../../../../README.md) / [src/types/search-response-guards](../README.md) / sequenceUnitsSchema
+
+# Variable: sequenceUnitsSchema
+
+> `const` **sequenceUnitsSchema**: `ZodArray`\<`ZodUnion`\<readonly \[`ZodObject`\<\{ `canonicalUrl`: `ZodOptional`\<`ZodString`\>; `title`: `ZodOptional`\<`ZodString`\>; `units`: `ZodArray`\<`ZodUnion`\<readonly \[`ZodObject`\<\{ `categories`: `ZodOptional`\<...\>; `threads`: `ZodOptional`\<...\>; `unitOptions`: `ZodArray`\<...\>; `unitOrder`: `ZodNumber`; `unitTitle`: `ZodString`; \}, `$strict`\>, `ZodObject`\<\{ `categories`: `ZodOptional`\<...\>; `threads`: `ZodOptional`\<...\>; `unitOrder`: `ZodNumber`; `unitSlug`: `ZodString`; `unitTitle`: `ZodString`; \}, `$strict`\>\]\>\>; `year`: `ZodUnion`\<readonly \[`ZodNumber`, `ZodString`\]\>; \}, `$strict`\>, `ZodObject`\<\{ `canonicalUrl`: `ZodOptional`\<`ZodString`\>; `examSubjects`: `ZodArray`\<`ZodUnion`\<readonly \[`ZodObject`\<\{ `examSubjectSlug`: `ZodOptional`\<...\>; `examSubjectTitle`: `ZodString`; `tiers`: `ZodArray`\<...\>; \}, `$strict`\>, `ZodObject`\<\{ `examSubjectSlug`: `ZodOptional`\<...\>; `examSubjectTitle`: `ZodString`; `units`: `ZodArray`\<...\>; \}, `$strict`\>\]\>\>; `title`: `ZodOptional`\<`ZodString`\>; `year`: `ZodNumber`; \}, `$strict`\>, `ZodObject`\<\{ `canonicalUrl`: `ZodOptional`\<`ZodString`\>; `tiers`: `ZodArray`\<`ZodObject`\<\{ `tierSlug`: `ZodString`; `tierTitle`: `ZodString`; `units`: `ZodArray`\<`ZodUnion`\<readonly \[..., ...\]\>\>; \}, `$strict`\>\>; `title`: `ZodOptional`\<`ZodString`\>; `year`: `ZodNumber`; \}, `$strict`\>\]\>\> = `rawCurriculumSchemas.SequenceUnitsResponseSchema`
+
+Defined in: [sdks/oak-curriculum-sdk/src/types/search-response-guards.ts:20](https://github.com/oaknational/oak-mcp-ecosystem/blob/75b5bc735a49141f750685399d9a67677fd4a630/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L20)
+
+Schema for sequence units response derived from the OpenAPI specification.
