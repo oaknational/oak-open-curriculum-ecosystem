@@ -57,6 +57,10 @@
     "./widget-constants": {
       "types": "./dist/widget-constants.d.ts",
       "default": "./dist/widget-constants.js"
+    },
+    "./synonyms": {
+      "types": "./dist/synonyms.d.ts",
+      "default": "./dist/synonyms.js"
     }
   },
   "scripts": {

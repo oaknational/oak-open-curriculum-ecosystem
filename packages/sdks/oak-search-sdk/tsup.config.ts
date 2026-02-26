@@ -31,7 +31,7 @@ export default defineConfig({
   minify: false,
   bundle: false, // SDK should not bundle dependencies
   platform: 'neutral',
-  external: ['zod', '@elastic/elasticsearch', '@oaknational/curriculum-sdk'],
+  external: ['zod', '@elastic/elasticsearch'],
   treeshake: true,
   tsconfig: './tsconfig.build.json',
   ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],

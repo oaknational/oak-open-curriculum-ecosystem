@@ -186,13 +186,12 @@ describe('createSdkBoundaryRules', () => {
       expect(paths.some((p) => p.name === '@oaknational/curriculum-sdk')).toBe(true);
     });
 
-    it('blocks curriculum-sdk search and elasticsearch facade subpaths', () => {
+    it('blocks all curriculum-sdk subpath imports', () => {
       const rules = createSdkBoundaryRules('search');
       const patterns = getRestrictedImportPatterns(rules);
       const groups = patterns.flatMap((p) => p.group);
 
-      expect(groups).toContain('@oaknational/curriculum-sdk/public/search');
-      expect(groups).toContain('@oaknational/curriculum-sdk/elasticsearch');
+      expect(groups).toContain('@oaknational/curriculum-sdk/**');
     });
 
     it('blocks deep sdk-codegen imports', () => {

@@ -19,9 +19,9 @@
  * ## Synonyms
  *
  * Synonyms are NOT stored here. The single source of truth is:
- * `@oaknational/curriculum-sdk/mcp/ontology-data.ts` → `ontologyData.synonyms`
+ * `@oaknational/sdk-codegen/synonyms` → `synonymsData`
  *
- * Use `buildElasticsearchSynonyms()` from `@oaknational/curriculum-sdk` to
+ * Use `buildElasticsearchSynonyms()` from `@oaknational/sdk-codegen/synonyms` to
  * generate ES-compatible synonym sets.
  *
  * ## Future Indexes (planned)

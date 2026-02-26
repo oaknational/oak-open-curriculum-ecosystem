@@ -32,7 +32,7 @@ Add phrase detection at query time and boost documents with `match_phrase` queri
 
 The solution adds three components:
 
-1. **SDK Phrase Vocabulary Export** (`packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts`):
+1. **SDK Phrase Vocabulary Export** (`packages/sdks/oak-sdk-codegen/src/synonym-export.ts`):
    - New `buildPhraseVocabulary()` function extracts multi-word terms (containing spaces) from synonym data
    - Returns `ReadonlySet<string>` for efficient lookup
 
@@ -129,7 +129,7 @@ Key benefits:
 
 Files changed:
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` — Added `buildPhraseVocabulary()`
+- `packages/sdks/oak-sdk-codegen/src/synonym-export.ts` — Added `buildPhraseVocabulary()`
 - `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` — Exported new function
 - `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.ts` — NEW
 - `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.unit.test.ts` — NEW

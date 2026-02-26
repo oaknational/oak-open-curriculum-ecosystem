@@ -66,7 +66,7 @@ Fuzzy matching has inherent limitations that cannot be fixed by threshold tuning
 For known compound word variations, add synonyms:
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/maths.ts
+// packages/sdks/oak-sdk-codegen/src/synonyms/maths.ts
 'times-table': ['timetables', 'timestables', 'time tables']
 ```
 

@@ -58,7 +58,7 @@ createSearchSdk({ deps, config })
 ### Design Principles
 
 - **Dependency injection**: The consuming application supplies the Elasticsearch client, optional logger, and configuration. The SDK never reads `process.env`.
-- **Schema-first types**: Search request/response/index document types flow from `@oaknational/curriculum-sdk` generated artefacts. No manual type definitions.
+- **Schema-first types**: Search request/response/index document types flow from `@oaknational/sdk-codegen` generated artefacts. No manual type definitions.
 - **Deterministic**: NL parsing and intent extraction are the responsibility of the MCP layer, not the SDK. See [ADR-107](../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md).
 - **Evaluation belongs in the CLI, not the SDK**: Ground truths, benchmarks, validation, and experiments are operator tooling _about_ the search, not the search itself. Evaluation code lives in `apps/oak-search-cli/` and consumes SDK retrieval services via DI.
 

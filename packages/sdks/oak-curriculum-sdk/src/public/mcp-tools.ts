@@ -117,12 +117,4 @@ export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';
 // Stub search retrieval for stub mode (no real ES client)
 export { createStubSearchRetrieval } from '../mcp/search-retrieval-stub.js';
 
-// Synonym utilities (ES export, lookup, phrase detection)
-export {
-  buildElasticsearchSynonyms,
-  buildSynonymLookup,
-  buildPhraseVocabulary,
-  serialiseElasticsearchSynonyms,
-  type ElasticsearchSynonymEntry,
-  type ElasticsearchSynonymSet,
-} from '../mcp/synonym-export.js';
+// Synonym utilities moved to @oaknational/sdk-codegen/synonyms (ADR-108 F7 completion)

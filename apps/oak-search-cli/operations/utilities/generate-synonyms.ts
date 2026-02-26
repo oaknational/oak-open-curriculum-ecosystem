@@ -11,6 +11,6 @@
  * ```
  */
 
-import { serialiseElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { serialiseElasticsearchSynonyms } from '@oaknational/sdk-codegen/synonyms';
 
 console.log(serialiseElasticsearchSynonyms());

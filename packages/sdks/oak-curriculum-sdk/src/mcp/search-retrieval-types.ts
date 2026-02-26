@@ -11,9 +11,9 @@
  * TypeScript structural typing ensures compatibility at the wiring point.
  *
  * @remarks
- * All document types (SearchLessonsIndexDoc, etc.) flow from the
- * curriculum SDK's own generated types. The search SDK imports the
- * same types from curriculum-sdk, guaranteeing structural compatibility.
+ * All document types (SearchLessonsIndexDoc, etc.) flow from
+ * `@oaknational/sdk-codegen` generated types. Both curriculum-sdk and
+ * search-sdk import from sdk-codegen, guaranteeing structural compatibility.
  */
 
 import type { Result } from '@oaknational/result';

@@ -397,11 +397,10 @@ and search together.
 into one `synonymsData` object: (1) agent context injection
 via the `get-ontology` MCP tool (primary intent), and
 (2) interim Elasticsearch query expansion pending a
-bulk-data-derived synonym pipeline. The curated lists remain
-in runtime `src/mcp/synonyms/`; mined synonyms moved to
-generation in Phase 3. Co-location of all synonym content is
-a follow-on target. See ADR-063 and the
-[Synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+bulk-data-derived synonym pipeline. All curated synonym content
+and transform utilities are co-located in sdk-codegen
+(`src/synonyms/`). See ADR-063 and the
+[Synonyms README](../../../packages/sdks/oak-sdk-codegen/src/synonyms/README.md)
 for full details.
 
 ### Search Pipeline

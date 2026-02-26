@@ -6,7 +6,7 @@
  * synonym expansion for multi-word terms.
  */
 
-import { buildPhraseVocabulary } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { buildPhraseVocabulary } from '@oaknational/sdk-codegen/synonyms';
 
 /** Precompiled phrase vocabulary, loaded once at module initialisation. */
 const PHRASE_VOCABULARY: ReadonlySet<string> = buildPhraseVocabulary();

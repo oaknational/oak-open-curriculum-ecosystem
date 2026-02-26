@@ -15,7 +15,7 @@
 > keywords with definitions), not the curated lists. When a bulk pipeline is
 > built, this ADR should be revised to distinguish the two concerns by source
 > and intent. See the
-> [synonyms README](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md)
+> [synonyms README](../../../packages/sdks/oak-sdk-codegen/src/synonyms/README.md)
 > for the full architectural framing.
 
 ## Context
@@ -44,11 +44,11 @@ The SDK exports utilities to transform these synonyms into formats needed by con
 
 ```typescript
 import {
-  ontologyData, // Contains synonyms.* structures
   buildElasticsearchSynonyms, // Returns ES synonym set object
   buildSynonymLookup, // Returns term → canonical Map
   serialiseElasticsearchSynonyms, // Returns JSON string for ES API
-} from '@oaknational/curriculum-sdk/public/mcp-tools';
+  synonymsData, // Contains all curated synonym data
+} from '@oaknational/sdk-codegen/synonyms';
 ```
 
 ## Architecture
@@ -109,7 +109,7 @@ The search app consumes synonyms via a TypeScript CLI that directly calls the SD
 
 ```typescript
 // src/lib/elasticsearch/setup/index.ts
-import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { buildElasticsearchSynonyms } from '@oaknational/sdk-codegen/synonyms';
 
 async function createSynonymSet(client: Client): Promise<void> {
   const synonymSet = buildElasticsearchSynonyms();
@@ -206,7 +206,7 @@ Run test — it MUST fail before synonyms exist.
 **GREEN**: Add synonyms to SDK:
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/maths.ts
+// packages/sdks/oak-sdk-codegen/src/synonyms/maths.ts
 export const mathsSynonyms = {
   // ...existing synonyms
   'linear-equations': ['solving for x', 'find the unknown', 'solve for the variable'],
@@ -349,6 +349,6 @@ Before implementing vocab-gen synonym generation, decide:
 ## References
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` - Synonym definitions
-- `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` - Export utilities
-- `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` - Curated synonym modules
+- `packages/sdks/oak-sdk-codegen/src/synonym-export.ts` - Export utilities
+- `packages/sdks/oak-sdk-codegen/src/synonyms/` - Curated synonym modules
 - `apps/oak-search-cli/src/lib/elasticsearch/setup/index.ts` - ES setup CLI

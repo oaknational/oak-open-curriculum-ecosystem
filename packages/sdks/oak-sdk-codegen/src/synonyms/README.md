@@ -122,8 +122,8 @@ Consumer chain: `synonyms/index.ts` → `ontology-data.ts` → MCP tool response
 → AI agent
 
 ```typescript
-// ontology-data.ts
-import { synonymsData } from './synonyms/index.js';
+// ontology-data.ts (in curriculum-sdk)
+import { synonymsData } from '@oaknational/sdk-codegen/synonyms';
 
 export const ontologyData = {
   // ...
@@ -149,10 +149,10 @@ comma-separated synonym strings. Deployed as the `oak-syns` synonym set via
 `PUT /_synonyms/oak-syns`.
 
 Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
-`public/mcp-tools.ts` (re-export) → search SDK → Elasticsearch
+`@oaknational/sdk-codegen/synonyms` → search SDK → Elasticsearch
 
 ```typescript
-import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { buildElasticsearchSynonyms } from '@oaknational/sdk-codegen/synonyms';
 
 const synonymSet = buildElasticsearchSynonyms();
 // Returns: { synonyms_set: [{ id: 'subjects_maths', synonyms: 'maths, mathematics, math' }, ...] }
@@ -173,10 +173,10 @@ tokenisation — multi-word synonyms like "straight line" → "linear" cannot
 expand via the synonym filter. ~40% of current synonyms are multi-word.
 
 Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
-`public/mcp-tools.ts` → search SDK `detect-curriculum-phrases.ts`
+`@oaknational/sdk-codegen/synonyms` → search SDK `detect-curriculum-phrases.ts`
 
 ```typescript
-import { buildPhraseVocabulary } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { buildPhraseVocabulary } from '@oaknational/sdk-codegen/synonyms';
 
 const phrases = buildPhraseVocabulary();
 // Returns Set<string> of multi-word curriculum terms
@@ -193,7 +193,7 @@ Consumer chain: `synonyms/index.ts` → `synonym-export.ts` →
 `public/mcp-tools.ts` → consumers
 
 ```typescript
-import { buildSynonymLookup } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { buildSynonymLookup } from '@oaknational/sdk-codegen/synonyms';
 
 const lookup = buildSynonymLookup();
 // Returns ReadonlyMap<string, string> (alternative → canonical)
@@ -411,40 +411,29 @@ Instead of regex mining, consider:
 
 See:
 
-- [search-operations-governance.md](../../../../../../.agent/research/elasticsearch/methods/search-operations-governance.md) — Synonym lifecycle, value scoring
-- [curriculum-schema-field-analysis.md](../../../../../../.agent/research/elasticsearch/system/curriculum-schema-field-analysis.md) — Glossary and extracted vocabulary context
+- [search-operations-governance.md](../../../../../.agent/research/elasticsearch/methods/search-operations-governance.md) — Synonym lifecycle, value scoring
+- [curriculum-schema-field-analysis.md](../../../../../.agent/research/elasticsearch/system/curriculum-schema-field-analysis.md) — Glossary and extracted vocabulary context
 
 See:
 
-- [02b-vocabulary-mining.md](../../../../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Full plan
-- [ADR-063](../../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Integration decisions
+- [02b-vocabulary-mining.md](../../../../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Full plan
+- [ADR-063](../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Integration decisions
 
-## Current Location (Fragmented)
+## Current Location (Consolidated)
 
-After ADR-108 Step 1 Phase 3, synonym content is split across workspaces:
+As of F7 (2026-02-26), curated synonym content and transform utilities are
+co-located in the generation workspace (`@oaknational/sdk-codegen`):
 
-| Workspace      | Path                                                  | Type                              |
-| -------------- | ----------------------------------------------------- | --------------------------------- |
-| Runtime SDK    | `src/mcp/synonyms/` (25 files)                        | Curated agent context             |
-| Runtime SDK    | `src/mcp/synonym-export.ts`                           | Transform utilities (4 functions) |
-| Generation SDK | `src/generated/vocab/synonyms/definition-synonyms.ts` | Mined (early pipeline experiment) |
-| Generation SDK | `vocab-gen/generators/synonym-miner.ts`               | Mining generator                  |
-
-This fragmentation is a known follow-on target after the SDK workspace
-separation is complete. All synonym content should be co-located and
-organised by source and intent:
-
-| Source                                        | Intent                           | Target state                                    |
-| --------------------------------------------- | -------------------------------- | ----------------------------------------------- |
-| **Curated** (hand-written, 23 files)          | Agent context injection          | Co-located, labelled as agent vocabulary hints  |
-| **Mined** (regex-extracted, 1 file)           | Early search pipeline experiment | Co-located alongside curated                    |
-| **Bulk-derived** (pipeline output)            | Authoritative search synonyms    | Future: co-located, labelled as pipeline output |
-| **Transform utilities** (`synonym-export.ts`) | Consumer-format adapters         | Co-located with the data they transform         |
+| Location                                              | Type                              |
+| ----------------------------------------------------- | --------------------------------- |
+| `src/synonyms/` (25 files)                            | Curated agent context             |
+| `src/synonym-export.ts`                               | Transform utilities (4 functions) |
+| `src/generated/vocab/synonyms/definition-synonyms.ts` | Mined (early pipeline experiment) |
+| `vocab-gen/generators/synonym-miner.ts`               | Mining generator                  |
 
 ## Related Documents
 
-- [ADR-063: SDK Domain Synonyms Source of Truth](../../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
-- [ADR-084: Phrase Query Boosting](../../../../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
+- [ADR-063: SDK Domain Synonyms Source of Truth](../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
+- [ADR-084: Phrase Query Boosting](../../../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
 - [synonym-export.ts](../synonym-export.ts) — Export utilities
-- [ontology-data.ts](../ontology-data.ts) — Consumes synonymsData
-- [SYNONYMS.md](../../../../../../apps/oak-search-cli/docs/SYNONYMS.md) — Search app synonym documentation
+- [SYNONYMS.md](../../../../../apps/oak-search-cli/docs/SYNONYMS.md) — Search app synonym documentation

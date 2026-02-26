@@ -12,7 +12,7 @@
  * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
  */
 
-import { synonymsData } from './synonyms/index.js';
+import { synonymsData } from '@oaknational/sdk-codegen/synonyms';
 import { threadProgressionGraph, conceptGraph } from '@oaknational/sdk-codegen/vocab';
 import { toolGuidanceData } from './tool-guidance-data.js';
 

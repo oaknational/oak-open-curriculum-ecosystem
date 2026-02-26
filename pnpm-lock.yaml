@@ -664,9 +664,6 @@ importers:
       '@elastic/elasticsearch':
         specifier: ^9.3.2
         version: 9.3.2
-      '@oaknational/curriculum-sdk':
-        specifier: workspace:*
-        version: link:../oak-curriculum-sdk
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../core/oak-eslint

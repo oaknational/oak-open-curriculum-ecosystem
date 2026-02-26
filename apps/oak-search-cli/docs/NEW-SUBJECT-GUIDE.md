@@ -167,7 +167,7 @@ Run test — it MUST fail.
 Create or update the subject synonym file:
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/science.ts
+// packages/sdks/oak-sdk-codegen/src/synonyms/science.ts
 export const scienceSynonyms = {
   photosynthesis: ['how plants make food', 'plant energy', 'chlorophyll process'],
   // ... more synonyms
@@ -177,7 +177,7 @@ export const scienceSynonyms = {
 Export from index:
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/index.ts
+// packages/sdks/oak-sdk-codegen/src/synonyms/index.ts
 export { scienceSynonyms } from './science.js';
 ```
 

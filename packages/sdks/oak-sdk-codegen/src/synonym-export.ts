@@ -7,7 +7,7 @@
  * - Flat lookup maps
  */
 
-import { typeSafeEntries } from '../types/helpers/type-helpers.js';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 import { synonymsData } from './synonyms/index.js';
 
 /**
@@ -82,7 +82,7 @@ function populateLookup(group: SynonymGroup, lookup: Map<string, string>): void 
  *
  * @example
  * ```typescript
- * import { buildElasticsearchSynonyms } from '@oaknational/curriculum-sdk';
+ * import { buildElasticsearchSynonyms } from '@oaknational/sdk-codegen/synonyms';
  *
  * const synonymSet = buildElasticsearchSynonyms();
  * // Write to file or POST to ES /_synonyms/oak-syns

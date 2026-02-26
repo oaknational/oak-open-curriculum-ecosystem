@@ -5,7 +5,7 @@
 **Authors**: AI Agent + Human Review
 
 > **Implementation Note**: Complete coverage achieved 2026-01-16. All 17 subjects now have
-> domain-specific synonym files. See `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md`
+> domain-specific synonym files. See `packages/sdks/oak-sdk-codegen/src/synonyms/README.md`
 > for details.
 
 ## Context
@@ -13,7 +13,7 @@
 The semantic search system uses Elasticsearch synonyms to expand query terms, improving recall for curriculum-specific vocabulary. Synonyms are currently maintained in:
 
 ```plaintext
-packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+packages/sdks/oak-sdk-codegen/src/synonyms/
 ```
 
 ### Current State (Post-Implementation)

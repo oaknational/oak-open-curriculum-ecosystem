@@ -269,19 +269,14 @@ export function createSdkBoundaryRules(
             {
               name: '@oaknational/curriculum-sdk',
               message:
-                'Search SDK must import types from @oaknational/sdk-codegen, not @oaknational/curriculum-sdk base (ADR-108).',
+                'Search SDK must not import from @oaknational/curriculum-sdk. Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
             },
           ],
           patterns: [
             {
-              group: [
-                '@oaknational/curriculum-sdk/public/search',
-                '@oaknational/curriculum-sdk/public/search.js',
-                '@oaknational/curriculum-sdk/elasticsearch',
-                '@oaknational/curriculum-sdk/elasticsearch.js',
-              ],
+              group: ['@oaknational/curriculum-sdk/**'],
               message:
-                'Search SDK must import search types from @oaknational/sdk-codegen/search, not via curriculum-sdk facade (ADR-108).',
+                'Search SDK must not import from @oaknational/curriculum-sdk (any subpath). Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
             },
             {
               group: ['@oaknational/sdk-codegen/*/**'],

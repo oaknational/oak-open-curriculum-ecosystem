@@ -34,12 +34,10 @@
     "@oaknational/sdk-codegen": "workspace:*"
   },
   "peerDependencies": {
-    "@elastic/elasticsearch": "^9.2.0",
-    "@oaknational/curriculum-sdk": "workspace:*"
+    "@elastic/elasticsearch": "^9.2.0"
   },
   "devDependencies": {
     "@elastic/elasticsearch": "^9.3.2",
-    "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^24.10.13",
     "tsup": "^8.5.1",

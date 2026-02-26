@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 14 remaining (1 P1, 1 P2, 12 P3). F12/F13 closed (obsolete). F7 upgraded to P1, F8 fully complete. Batch E elevated: all items will be fixed before release.
+**Open items**: 13 remaining (1 P1, 1 P2, 11 P3). O8 complete (user deleted empty dirs). F12/F13 closed (obsolete). F7 upgraded to P1, F8 fully complete. Batch E elevated: all items will be fixed before release.
 
 ---
 
@@ -79,12 +79,11 @@ The `oak-search-sdk` still depends on `@oaknational/curriculum-sdk` for two runt
 
 ### Batch E — All Remaining Items (Elevated 2026-02-26)
 
-**All items to be fixed before release.** F12 and F13 closed as obsolete. 13 items remain.
+**All items to be fixed before release.** F12 and F13 closed as obsolete. O8 complete. 12 items remain.
 
-**Sub-batch E1 — Trivial** (4 items):
+**Sub-batch E1 — Trivial** (3 items):
 
 - **F35**: Delete dead code (`createInMemoryStorage`, `createNodeClock`, `runtime` from `WiredDependencies` in STDIO `wiring.ts`)
-- **O8**: Delete empty `docs/development/` directory
 - **F11**: Document RRF parameter coupling (`DEFAULT_MIN_SCORE` and `rank_constant`)
 - **F16**: Document OAuth proxy rate limiting as deployment precondition
 
@@ -462,7 +461,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 ### §R: Phase 1 Remediation (TOP PRIORITY)
 
 Release-blocking remediation items (**R1–R3**) must be completed before moving to Phase 2 fixes (F4 onwards).  
-**R4** remains explicitly deferred (non-blocking).
+**R4** moved to Batch E2 (elevated 2026-02-26 — fix before release).
 
 #### R1: Remove `as` type assertions from Phase 1 test files
 
@@ -530,29 +529,28 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 
 8. **F7** (complete ADR-108: move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency. `SearchRetrievalService` stays as ISP.)
 
-**Batch E — All Remaining Items** (13 items — elevated 2026-02-26, F12/F13 closed):
+**Batch E — All Remaining Items** (12 items — elevated 2026-02-26, F12/F13 closed, O8 complete):
 
 **E1 — Trivial** (commit together):
 
 9. **F35** (delete dead code: `createInMemoryStorage`, `createNodeClock`, `runtime` from `WiredDependencies`)
-10. **O8** (delete empty `docs/development/`)
-11. **F11** (document RRF parameter coupling)
-12. **F16** (document OAuth proxy rate limiting deployment precondition)
+10. **F11** (document RRF parameter coupling)
+11. **F16** (document OAuth proxy rate limiting deployment precondition)
 
 **E2 — Small** (commit together):
 
-13. **R4** (Result pattern for `deriveSelfOrigin`/`fetchUpstreamMetadata`)
-14. **F14** (search SDK integration test after codegen)
-15. **F15** (verify/fix ES timeout → `RetrievalError.timeout` mapping)
-16. **F19** (type-helpers assertion strategy audit)
-17. **F31** (fix SDK API markdown generator for current package name)
-18. **F34** (document ES connectivity trade-off or add warm-up ping)
+12. **R4** (Result pattern for `deriveSelfOrigin`/`fetchUpstreamMetadata`)
+13. **F14** (search SDK integration test after codegen)
+14. **F15** (verify/fix ES timeout → `RetrievalError.timeout` mapping)
+15. **F19** (type-helpers assertion strategy audit)
+16. **F31** (fix SDK API markdown generator for current package name)
+17. **F34** (document ES connectivity trade-off or add warm-up ping)
 
 **E3 — Medium** (commit individually):
 
-19. **F17** (remove `public/search.ts` facade — 36-file import migration + ADR-108 update)
-20. **F32** (standardise E2E config naming repo-wide)
-21. **F33** (progressive ESLint re-enablement in codegen hand-written code)
+18. **F17** (remove `public/search.ts` facade — 36-file import migration + ADR-108 update)
+19. **F32** (standardise E2E config naming repo-wide)
+20. **F33** (progressive ESLint re-enablement in codegen hand-written code)
 
 ### Specialist Follow-Ups (Batch E)
 
@@ -858,7 +856,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 | **Problem** | Listed in quick-start tree as "Development guides" but contains no files. |
 | **Files** | `docs/development/`, `docs/foundation/quick-start.md` |
 | **Fix** | Populate, remove directory, or correct tree reference. |
-| **Status** | [~] Partially resolved (2026-02-25). Quick-start tree updated to show current `docs/` subdirs (no longer references `docs/development/`). Empty `docs/development/` directory still exists on disk — can be deleted. |
+| **Status** | [x] Complete (2026-02-26). Quick-start tree updated to show current `docs/` subdirs (2026-02-25). Empty `docs/development/` and `docs/data/` directories deleted by user (2026-02-26). |
 
 #### O9: jc-start-right.md and start-right.prompt.md near-duplicates
 
@@ -911,7 +909,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 Onboarding items are interleaved into the main batched execution order (see §Execution Order above):
 
 - **Batch A** (trivial): O4, O6, O7 — **COMPLETE**
-- **Batch B** (small): O1, O2, O3, O5, O10 — **COMPLETE** (O8 moved to Batch E — low value; O11 cancelled — target file removed)
+- **Batch B** (small): O1, O2, O3, O5, O10 — **COMPLETE** (O8 completed in Batch E; O11 cancelled — target file removed)
 - **Batch C** (medium): ~~O9~~, ~~O12~~ (O9 resolved — commands are thin pointers; O12 complete — troubleshooting note added to HTTP server README)
 
 ---
@@ -980,8 +978,9 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-26**: **O8 complete, plan handoff preparation.** User deleted empty `docs/development/` and `docs/data/` directories. O8 marked complete. Open items: 13 remaining (1 P1, 1 P2, 11 P3). Documentation consolidation: corrected stale `SearchRetrievalService` "duplicate contract" language in `distilled.md` and `napkin.md` to reflect ISP decision. Updated experience README catalog. Fixed §R section (R4 no longer described as "deferred"). Corrected change log entry re "delete duplicate contract". Renumbered Batch E execution order.
 - **2026-02-26**: **Batch E elevated — all items fix-before-release.** User rejected deferral of Batch E items (agent-decided, not user-approved). Two decisions recorded: (1) F7 step 4: `SearchRetrievalService` stays in curriculum-sdk as ISP consumer-side interface — not a duplicate, structural typing handles wiring, no SDK-to-SDK dependency. (2) F17: remove `public/search.ts` facade entirely — migrate 36 files to direct `@oaknational/sdk-codegen/search` imports; the facade masks truth and creates a labyrinth. F12 closed (concrete work in F7; remaining "oak-domain" question is future architecture). F13 closed (resolveEnv adoption done via F8; Result instances covered by R4). F35 reframed as dead code deletion. F17 expanded from "ADR text alignment" to full facade removal. Batch E restructured into E1 (trivial), E2 (small), E3 (medium). Open items: 14 remaining (1 P1, 1 P2, 12 P3).
-- **2026-02-26**: **Batch C COMPLETE, F7 reframed.** F8 Search CLI fully migrated to `resolveEnv` five-source hierarchy: `SearchCliEnvSchema` composing shared schemas with stricter overrides, `loadRuntimeConfig` + `loadConfigOrExit`, deleted `loadAppEnv`, refactored 29+ files to DI pattern, 7 new integration tests, 950 total tests pass. `@oaknational/env-resolution` enhanced with `findAppRoot` and five-source merge. ADR-116 revised. F7 upgraded from P2 to P1: user identified that the contract duplication is a consequence of search-sdk depending on curriculum-sdk (unfinished ADR-108 work), not an acceptable trade-off. Architecture reviewer recommended deferral based on cycle analysis; user corrected: the cycle IS the bug, `oak-sdk-codegen` exists to solve it. F7 reframed as "complete ADR-108" — move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency entirely, delete duplicate contract. Cursor plan integrated and deleted. Open items: 16 remaining (1 P1, 1 P2, 14 P3).
+- **2026-02-26**: **Batch C COMPLETE, F7 reframed.** F8 Search CLI fully migrated to `resolveEnv` five-source hierarchy: `SearchCliEnvSchema` composing shared schemas with stricter overrides, `loadRuntimeConfig` + `loadConfigOrExit`, deleted `loadAppEnv`, refactored 29+ files to DI pattern, 7 new integration tests, 950 total tests pass. `@oaknational/env-resolution` enhanced with `findAppRoot` and five-source merge. ADR-116 revised. F7 upgraded from P2 to P1: user identified that the contract duplication is a consequence of search-sdk depending on curriculum-sdk (unfinished ADR-108 work), not an acceptable trade-off. Architecture reviewer recommended deferral based on cycle analysis; user corrected: the cycle IS the bug, `oak-sdk-codegen` exists to solve it. F7 reframed as "complete ADR-108" — move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency entirely. (Note: "delete duplicate contract" originally stated here was revised later in this session — `SearchRetrievalService` stays as ISP; see entry above.) Cursor plan integrated and deleted. Open items: 16 remaining (1 P1, 1 P2, 14 P3).
 - **2026-02-26**: **Batch C near-complete** (F8-STDIO, F27, O12 done). F8: STDIO app migrated to `resolveEnv` pipeline — `StdioEnvSchema` composing shared schemas, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `process.env` eliminated from all `src/` modules, 10 integration tests. Search CLI deferred. F27: SDK response-augmentation DI — removed module-level logger, `MiddlewareOptions.logger` required, `createNoopLogger()` fallback in `BaseApiClient`, SDK no longer reads `process.env` for logging. O12: OAuth metadata fetch timeout troubleshooting note added to HTTP server README. STDIO README updated with env pipeline docs. SDK README updated with optional `logger` parameter. Fixed `no-empty-function` lint in `oak-base-client.ts`. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e). Specialist reviewers: code-reviewer (approved), architecture-reviewer-fred (compliant), type-reviewer (safe), test-reviewer (pass), docs-adr-reviewer (gaps fixed). Open items: 14 remaining.
 - **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, rules.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
 - **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.

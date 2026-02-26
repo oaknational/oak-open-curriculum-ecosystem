@@ -4,7 +4,7 @@
  * Tests PURE functions only - no IO, no side effects, no mocks.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   createRateLimitConfig,
   calculateDelay,
@@ -77,57 +77,47 @@ describe('rate-limit-config', () => {
       maxRequestsPerSecond: 10,
     };
 
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     it('should return 0 when rate limiting is disabled', () => {
+      vi.useFakeTimers({ now: 1000 });
       const disabledConfig = { ...config, enabled: false };
-      const now = Date.now();
-      const delay = calculateDelay(now - 50, disabledConfig);
+      const delay = calculateDelay(950, disabledConfig);
       expect(delay).toBe(0);
     });
 
     it('should return 0 when enough time has elapsed', () => {
-      const now = Date.now();
-      const lastRequest = now - 100; // exactly minRequestInterval ago
-      const delay = calculateDelay(lastRequest, config);
+      vi.useFakeTimers({ now: 1000 });
+      const delay = calculateDelay(900, config);
       expect(delay).toBe(0);
     });
 
     it('should return 0 when more than enough time has elapsed', () => {
-      const now = Date.now();
-      const lastRequest = now - 200; // more than minRequestInterval ago
-      const delay = calculateDelay(lastRequest, config);
+      vi.useFakeTimers({ now: 1000 });
+      const delay = calculateDelay(800, config);
       expect(delay).toBe(0);
     });
 
     it('should calculate delay when not enough time has elapsed', () => {
-      const now = Date.now();
-      const lastRequest = now - 30; // only 30ms elapsed, need 100ms
-      const delay = calculateDelay(lastRequest, config);
-      expect(delay).toBeGreaterThan(60); // need at least 70ms more
-      expect(delay).toBeLessThanOrEqual(70); // but not more than 70ms
+      vi.useFakeTimers({ now: 1000 });
+      const delay = calculateDelay(970, config);
+      expect(delay).toBe(70);
     });
 
     it('should calculate delay correctly at various time points', () => {
-      const now = Date.now();
+      vi.useFakeTimers({ now: 1000 });
 
-      // Just happened - need almost full interval
-      const delay1 = calculateDelay(now - 1, config);
-      expect(delay1).toBeGreaterThanOrEqual(99);
-      expect(delay1).toBeLessThanOrEqual(100);
-
-      // Halfway through interval
-      const delay2 = calculateDelay(now - 50, config);
-      expect(delay2).toBeGreaterThanOrEqual(49);
-      expect(delay2).toBeLessThanOrEqual(51);
-
-      // Almost ready
-      const delay3 = calculateDelay(now - 99, config);
-      expect(delay3).toBeGreaterThanOrEqual(0);
-      expect(delay3).toBeLessThanOrEqual(2);
+      expect(calculateDelay(999, config)).toBe(99);
+      expect(calculateDelay(950, config)).toBe(50);
+      expect(calculateDelay(901, config)).toBe(1);
     });
 
     it('should handle lastRequestTime of 0 (no previous request)', () => {
+      vi.useFakeTimers({ now: 1000 });
       const delay = calculateDelay(0, config);
-      expect(delay).toBe(0); // elapsed time is huge, so no delay needed
+      expect(delay).toBe(0);
     });
 
     it('should respect different minRequestInterval values', () => {

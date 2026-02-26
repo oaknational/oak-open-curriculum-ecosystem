@@ -76,12 +76,22 @@ separate data pipelines:
 The search SDK never calls the Oak API — it is purely an
 Elasticsearch client whose data flows through the bulk
 pipeline. The curriculum SDK runtime handles API access
-(HTTP client, auth, MCP tools). At the package level the
-search SDK still depends on the curriculum SDK runtime for
-shared exports (e.g. `buildElasticsearchSynonyms`), but
-the data sources are separate. The two SDKs are connected
-at the MCP application layer, where aggregated tools
-orchestrate both.
+(HTTP client, auth, MCP tools). The search SDK has no
+dependency on the curriculum SDK — shared domain data
+(synonyms, vocabulary) lives in `@oaknational/sdk-codegen/synonyms`,
+which both SDKs import from. `SearchRetrievalService` in
+curriculum-sdk is an ISP consumer-side interface; search-sdk
+provides a structurally compatible implementation without
+any import dependency. The two SDKs are connected at the
+MCP application layer, where aggregated tools orchestrate
+both.
+
+> **Revision note (2026-02-26, F7)**: The Step 1 coupling
+> (`buildElasticsearchSynonyms`, `buildPhraseVocabulary`
+> imported from curriculum-sdk) has been eliminated. Synonym
+> data and builder functions moved to `@oaknational/sdk-codegen/synonyms`.
+> ESLint boundary rules now block all curriculum-sdk imports
+> from search-sdk.
 
 Both pipelines run during `pnpm sdk-codegen` and produce
 compile-time artefacts. They share the generation workspace
@@ -217,9 +227,10 @@ auth, middleware, MCP tool execution.
 - API pipeline artifacts (output of workspace 2)
 - Public API exports (./client, ./mcp, ./validation, etc.)
 
-**Consumers**: MCP server apps (stdio, streamable-http),
-Search SDK (for shared runtime exports and functions, not
-bulk data — this coupling is retained in Step 1).
+**Consumers**: MCP server apps (stdio, streamable-http).
+Search SDK no longer depends on this workspace (F7, 2026-02-26);
+shared synonym/vocabulary functions moved to the generation
+workspace (`@oaknational/sdk-codegen/synonyms`).
 
 ## Dependency Graph
 
