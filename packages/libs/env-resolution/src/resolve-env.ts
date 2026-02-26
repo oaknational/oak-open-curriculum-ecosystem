@@ -12,7 +12,7 @@
  *
  * @example
  * ```typescript
- * import { resolveEnv } from '@oaknational/env';
+ * import { resolveEnv } from '@oaknational/env-resolution';
  * import { z } from 'zod';
  *
  * const AppSchema = z.object({ API_KEY: z.string().min(1) });

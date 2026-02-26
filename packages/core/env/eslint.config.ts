@@ -1,14 +1,14 @@
 /**
- * ESLint Configuration for env library
+ * ESLint Configuration for env schema contracts
  *
- * Environment helpers for multi-runtime support
+ * Pure environment schema definitions — zero I/O, zero runtime deps beyond Zod.
  */
 
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  createLibBoundaryRules,
-  getOtherLibs,
+  coreBoundaryRules,
+  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -27,7 +27,7 @@ const config = defineConfig(
   },
   ...configs.strict,
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -49,15 +49,36 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules('env', getOtherLibs('env')),
+    rules: coreBoundaryRules,
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        projectService: false,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
+      },
+    },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: wsTsProject,
+        },
+      },
+    },
     rules: {
+      ...coreTestConfigRules,
       ...testRules,
     },
   },
-  // Config files (exclude tsup.config.ts to avoid dynamic bundling side-effects during lint)
   {
     files: ['eslint.config.ts', 'vitest.config.ts'],
     languageOptions: {

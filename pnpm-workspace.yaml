@@ -7,6 +7,7 @@ packages:
   - packages/core/env
   - packages/core/result
   - packages/core/type-helpers
+  - packages/libs/env-resolution
   - packages/libs/logger
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen

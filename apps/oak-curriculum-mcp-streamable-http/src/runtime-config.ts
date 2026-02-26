@@ -1,4 +1,4 @@
-import { resolveEnv, type EnvResolutionError } from '@oaknational/env';
+import { resolveEnv, type EnvResolutionError } from '@oaknational/env-resolution';
 import { ok, err, type Result } from '@oaknational/result';
 import { HttpEnvSchema, type Env, type AuthEnabledEnv, type AuthDisabledEnv } from './env.js';
 

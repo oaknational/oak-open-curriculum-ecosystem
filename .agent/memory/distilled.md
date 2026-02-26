@@ -200,6 +200,9 @@ Architecture` section). Dev gotchas not covered there:
   responsibility instead
 - When removing a workspace, also search TSDoc `@see`
   links for old GitHub repo URLs
+- ADR Implementation sections have file paths that go stale
+  when packages are moved. Always grep ADRs for old paths
+  after a move.
 - ADR "Accepted (Revised)" status: use for documentation
   entropy fixes where the core decision is unchanged
   (follows ADR-055 precedent). Do not supersede — it
@@ -247,6 +250,15 @@ Architecture` section). Dev gotchas not covered there:
   local interface (`SearchRetrievalService`) structurally
   compatible with the concrete type. MCP servers inject the
   concrete implementation.
+- When removing an entry from `LIB_PACKAGES`, check ALL
+  packages that called `createLibBoundaryRules` with that
+  name — their ESLint config may generate empty/broken zone
+  paths. The zone uses `../${otherLib}/**` relative paths
+  that only resolve correctly for actual sibling packages.
+- When splitting a core package that has runtime deps into
+  core + libs: schemas stay in core (`coreBoundaryRules`),
+  runtime pipeline moves to libs (`createLibBoundaryRules`).
+  No re-exports, no compatibility layer.
 - Prefer `git worktree` over `git stash` for baseline
   comparisons — stash risks lost work
 - When extracting types from a composition root to fix layer
@@ -276,8 +288,10 @@ barrel export ban) are documented in `CONTRIBUTING.md`
 
 ## Workspace and Turbo
 
-- `workspace:^` not `workspace:*` — the caret preserves
-  semver intent and is replaced with actual version on publish
+- `workspace:*` not `workspace:^` — all 14 workspaces use
+  `workspace:*`. For private packages that will never be published
+  to a registry, the runtime difference is zero, but consistency
+  matters. Do not introduce `workspace:^`
 - Turbo stops at first failure by default — use `--continue`
   to see all errors across workspaces
 - E2E tests need explicit env in `turbo.json`:

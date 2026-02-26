@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { join } from 'node:path';
 import { createClerkClient } from '@clerk/backend';
 import { config as dotenvConfig } from 'dotenv';
-import { findRepoRoot } from '@oaknational/env';
+import { findRepoRoot } from '@oaknational/env-resolution';
 import { HandshakeSnapshotSchema } from './snapshot.js';
 
 interface CleanupSnapshot {

@@ -33,7 +33,7 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
   - `packages/core/` – foundational shared code (result/env/eslint/openapi adapter)
-  - `packages/libs/` – shared runtime libraries (logger)
+  - `packages/libs/` – shared runtime libraries (logger, env-resolution)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools
@@ -46,7 +46,7 @@ Start with the [ADR index](./architectural-decisions/), then read a lightweight 
 
 - Inter‑workspace imports use `@oaknational/*` package specifiers only.
 - Intra‑package relative imports are allowed; avoid private/internal subpaths.
-- Dependencies flow: `core` has no dependencies outside `core` (intra-core dependencies are permitted, e.g. `env` depends on `result`); `libs` depend on `core`; `sdks` depend on `core`/`libs`/other `sdks` (no circular dependencies); `apps` depend on `sdks`/`libs`/`core`.
+- Dependencies flow: `core` has no dependencies outside `core` (intra-core dependencies are permitted); `libs` depend on `core` (e.g. `env-resolution` depends on `result`); `sdks` depend on `core`/`libs`/other `sdks` (no circular dependencies); `apps` depend on `sdks`/`libs`/`core`.
 
 ### Implementation Guides
 

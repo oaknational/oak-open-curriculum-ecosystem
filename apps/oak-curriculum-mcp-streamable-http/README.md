@@ -64,7 +64,7 @@ Note: The server automatically adds the required `Accept: application/json, text
   - `BASE_URL` (recommended; if omitted we derive from request host)
   - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
 
-Environment loading uses `resolveEnv` from `@oaknational/env`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
+Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 

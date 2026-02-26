@@ -323,8 +323,8 @@ oak-open-data-ecosystem/
 │   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation pipeline
 │   │   ├── oak-curriculum-sdk/       # Runtime SDK consumed by apps
 │   │   └── oak-search-sdk/           # Search SDK (ES retrieval, admin)
-│   ├── core/                          # Shared low-level code (result, env, type-helpers, ESLint plugin)
-│   └── libs/                          # Shared libraries (logger)
+│   ├── core/                          # Shared low-level code (result, env schemas, type-helpers, ESLint plugin)
+│   └── libs/                          # Shared libraries (logger, env-resolution)
 ├── apps/
 │   ├── oak-curriculum-mcp-stdio/      # MCP server for Claude Desktop, Cursor
 │   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web (Vercel)

@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { join } from 'node:path';
 import { createClerkClient } from '@clerk/backend';
 import { config as dotenvConfig } from 'dotenv';
-import { findRepoRoot } from '@oaknational/env';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 import { createAutomationIdentifier, createPkcePair, toBase64Url } from './utils.js';
 import { HandshakeSnapshotSchema, type HandshakeSnapshot } from './snapshot.js';

@@ -1,15 +1,14 @@
 /**
- * ESLint Configuration for openapi-zod-client-adapter
+ * ESLint Configuration for env-resolution library
  *
- * Build-time adapter for openapi-zod-client that enforces Zod v3/v4 boundary.
- * This is a core package (pure build-time tool, not a runtime library).
+ * Environment resolution pipeline: resolveEnv, findRepoRoot
  */
 
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  coreBoundaryRules,
-  coreTestConfigRules,
+  createLibBoundaryRules,
+  getOtherLibs,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -28,7 +27,7 @@ const config = defineConfig(
   },
   ...configs.strict,
   {
-    files: ['src/**/*.ts'],
+    files: ['**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -50,50 +49,11 @@ const config = defineConfig(
         },
       },
     },
-    rules: coreBoundaryRules,
+    rules: createLibBoundaryRules('env-resolution', getOtherLibs('env-resolution')),
   },
   {
-    files: ['src/**/*.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
     rules: {
-      '@typescript-eslint/no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'zod',
-              message:
-                "Import from 'zod/v4' instead. Only the sdk-codegen adapter around openapi-zod-client may import from 'zod' directly.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.es2021,
-      },
-      parserOptions: {
-        projectService: false,
-        project: wsTsProject,
-        tsconfigRootDir: thisDir,
-      },
-    },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
-    rules: {
-      ...coreTestConfigRules,
       ...testRules,
     },
   },

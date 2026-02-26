@@ -1,8 +1,8 @@
 {
-  "name": "@oaknational/env",
+  "name": "@oaknational/env-resolution",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Environment schema contracts for MCP applications",
+  "description": "Environment resolution pipeline for MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -30,6 +30,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@oaknational/result": "workspace:*",
+    "dotenv": "^17.3.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -43,9 +45,10 @@
     "mcp",
     "environment",
     "env",
-    "zod",
-    "schemas",
-    "contracts"
+    "config",
+    "resolution",
+    "dotenv",
+    "zod"
   ],
   "author": {
     "name": "Jim Cresswell",
@@ -63,10 +66,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
-    "directory": "packages/core/env"
+    "directory": "packages/libs/env-resolution"
   },
   "bugs": {
     "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/core/env#readme"
+  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/libs/env-resolution#readme"
 }

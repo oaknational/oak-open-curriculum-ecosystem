@@ -128,6 +128,9 @@ importers:
       '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
+      '@oaknational/env-resolution':
+        specifier: workspace:*
+        version: link:../../packages/libs/env-resolution
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
@@ -180,6 +183,9 @@ importers:
       '@oaknational/env':
         specifier: workspace:*
         version: link:../../packages/core/env
+      '@oaknational/env-resolution':
+        specifier: workspace:*
+        version: link:../../packages/libs/env-resolution
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
@@ -347,12 +353,6 @@ importers:
 
   packages/core/env:
     dependencies:
-      '@oaknational/result':
-        specifier: workspace:*
-        version: link:../result
-      dotenv:
-        specifier: ^17.3.1
-        version: 17.3.1
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -509,6 +509,25 @@ importers:
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.0)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/libs/env-resolution:
+    dependencies:
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../core/result
+      dotenv:
+        specifier: ^17.3.1
+        version: 17.3.1
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../core/oak-eslint
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/libs/logger:
     dependencies:
@@ -8112,7 +8131,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vitest: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.0)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
+      vitest: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@24.10.13)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
 
   '@vitest/utils@4.0.18':
     dependencies:

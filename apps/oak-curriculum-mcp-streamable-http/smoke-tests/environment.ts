@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { config as dotenvConfig } from 'dotenv';
-import { findRepoRoot } from '@oaknational/env';
+import { findRepoRoot } from '@oaknational/env-resolution';
 import type { Logger } from '@oaknational/logger';
 import type {
   EnvSnapshot,

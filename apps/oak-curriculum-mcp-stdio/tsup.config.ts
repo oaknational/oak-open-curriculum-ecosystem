@@ -41,6 +41,7 @@ export default defineConfig({
     // Workspace packages (these are already built)
     '@oaknational/logger',
     '@oaknational/env',
+    '@oaknational/env-resolution',
     '@oaknational/curriculum-sdk',
   ],
   // Mark the package as having no side effects for better tree-shaking

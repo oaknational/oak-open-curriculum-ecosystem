@@ -123,7 +123,7 @@ Use conventional monorepo structure in active code and docs:
 
 - `apps/` – runnable apps that provide services to users
 - `packages/sdks/` – SDKs (Curriculum SDK, Search SDK, SDK Codegen)
-- `packages/core/` – shared low-level code (ESLint plugin, type-helpers, result, env)
-- `packages/libs/` – shared libraries (logger)
+- `packages/core/` – shared low-level code (ESLint plugin, type-helpers, result, env schemas)
+- `packages/libs/` – shared libraries (logger, env-resolution)
 
 See [AGENT.md](./AGENT.md#structure) for the full package listing. Architectural boundaries are enforced by custom ESLint rules.

@@ -210,19 +210,20 @@ Start with the [ADR index](docs/architecture/architectural-decisions/), then the
 - **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
 - **`apps/oak-search-cli`** – Semantic search CLI: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline
 - **`packages/core/result`** – Canonical `Result<T, E>` type used across the codebase
-- **`packages/core/env`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
+- **`packages/core/env`** – Environment schema contracts: shared Zod schemas for API keys, Elasticsearch, logging
+- **`packages/libs/env-resolution`** – Environment resolution pipeline (`resolveEnv`): loads `.env` < `.env.local` < `process.env`, validates against Zod schemas, returns `Result`
 - **`packages/libs/logger`** – Structured logging library
 - **`docs/architecture/architectural-decisions/`** – 114 Architectural Decision Records documenting every significant design choice
 
 ## Architecture Overview
 
-| Directory        | Purpose                                                                                                     |
-| ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                                      |
-| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                |
-| `packages/core/` | Foundational packages: `result` (Result type), `env` (env resolution pipeline), ESLint configs, Zod adapter |
-| `packages/libs/` | Shared libraries: `logger` (structured logging)                                                             |
-| `docs/`          | Developer documentation, guides, 116 ADRs                                                                   |
+| Directory        | Purpose                                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                               |
+| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                         |
+| `packages/core/` | Foundational packages: `result` (Result type), `env` (schema contracts), ESLint configs, Zod adapter |
+| `packages/libs/` | Shared libraries: `env-resolution` (env pipeline), `logger` (structured logging)                     |
+| `docs/`          | Developer documentation, guides, 116 ADRs                                                            |
 
 Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 

@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-25  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 18 remaining (was 26; Batch B complete — F6, F10, F20, F25, F28, F29, O5, O10)
+**Open items**: 16 remaining (was 18; Batch C in progress — F5/F18 complete)
 
 ---
 
@@ -42,29 +42,25 @@ Primary strategic reference:
 1. Read this plan. It is self-contained.
 2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
-4. The plan below has all context needed. Start with Batch C.
+4. The plan below has all context needed. Start with F8 (next item in Batch C).
 
 ### Current State
 
 - **Batch A**: Complete (8 items). All quality gates pass.
 - **Batch B**: Complete (8 items — F6, F10, F20, F25, F28, F29, O5, O10). Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). All quality gates pass.
-- **Batches C–E**: Open. 18 items remain.
+- **Batch C**: In progress. F5/F18 complete; F8, F27 remain.
 - **F18 is subsumed by F5** — they share the same fix (env identity + LIB_PACKAGES cleanup).
 
-### Next: Batch C — Medium Complexity (3 items)
+### Next: Batch C — Medium Complexity (2 remaining items)
 
 Each item follows: **verify** current state (may have changed since logging) → **implement** (TDD) → **validate** (quality gates).
 
-**F5** (medium): Env identity + LIB_PACKAGES cleanup (subsumes F18)
-
-- **Verify**: Confirm `packages/core/env/eslint.config.ts` uses `createLibBoundaryRules` and `LIB_PACKAGES` in `packages/core/oak-eslint/src/rules/boundary.ts` has stale `storage`/`transport` entries.
-- **Design decision required**: (a) Move `env` to `packages/libs/env` since it has runtime deps, or (b) Create `coreBoundaryRulesWithDeps` for core packages that legitimately need runtime deps. **Discuss with user before implementing.**
-- **Validate**: `rg "storage|transport" packages/core/oak-eslint/src/rules/boundary.ts` returns no stale entries; `pnpm lint && pnpm test`.
+**F5** ~~(medium): Env identity + LIB_PACKAGES cleanup (subsumes F18)~~ **COMPLETE** — see status below.
 
 **F8** (medium): Env pipeline unification
 
 - **Verify**: Confirm Search CLI (`apps/oak-search-cli/src/lib/elasticsearch/setup/load-app-env.ts`) and STDIO (`apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`) still use custom `process.env` readers.
-- **Fix**: Migrate both to `resolveEnv` with app-specific schemas. Retire legacy `loadAppEnv`/direct env readers.
+- **Fix**: Migrate both to `resolveEnv` from `@oaknational/env-resolution` with app-specific schemas from `@oaknational/env`. Retire legacy `loadAppEnv`/direct env readers.
 - **TDD**: Write integration tests for new env resolution first (RED), implement migration (GREEN), remove legacy code (REFACTOR).
 - **Validate**: `rg "process\.env\." apps/oak-search-cli/src/ apps/oak-curriculum-mcp-stdio/src/` shows no direct reads outside entry point; `pnpm test && pnpm test:e2e`.
 
@@ -75,7 +71,7 @@ Each item follows: **verify** current state (may have changed since logging) →
 - **TDD**: Write unit tests for logger injection first (RED), refactor to accept logger param (GREEN), update consuming apps (REFACTOR).
 - **Validate**: `rg "process\.env" packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts` returns nothing; `pnpm type-check && pnpm test`.
 
-**Specialist reviewers for Batch C**: `code-reviewer`, `architecture-reviewer-barney` (F5 boundary changes), `architecture-reviewer-fred` (F5 boundary rules, F8 env pipeline), `config-reviewer` (F5 ESLint/boundary changes), `type-reviewer` (F27 DI type changes).
+**Specialist reviewers for remaining Batch C items**: `code-reviewer`, `architecture-reviewer-fred` (F8 env pipeline), `type-reviewer` (F27 DI type changes). F5 specialist reviews (arch-barney, arch-fred, config-reviewer) already completed.
 
 ### Remaining Batches
 
@@ -264,7 +260,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Problem** | `packages/core/env` is in `packages/core/` but ESLint uses `createLibBoundaryRules('env', getOtherLibs('env'))`. `LIB_PACKAGES` in boundary.ts lists stale entries (`storage`, `transport` no longer exist). `env` has runtime deps (`dotenv`, `node:fs`) — per docs, core is "pure abstractions with zero dependencies". |
 | **Files** | `packages/core/env/eslint.config.ts`, `packages/core/oak-eslint/src/rules/boundary.ts` |
 | **Fix** | Option (a): Move `env` to `packages/libs/env` if it legitimately has runtime behaviour. Option (b): Create `coreBoundaryRulesWithDeps` for core packages that need runtime deps. Update `LIB_PACKAGES` to remove `storage`, `transport` and correctly categorise packages in core vs libs. |
-| **Status** | [ ] Open |
+| **Status** | [x] Complete (2026-02-25). Split `@oaknational/env` into two packages: `@oaknational/env` (core, schemas only, `coreBoundaryRules`) and `@oaknational/env-resolution` (new in `packages/libs/`, runtime pipeline, `createLibBoundaryRules`). `LIB_PACKAGES` cleaned from 6 entries to `['logger', 'env-resolution']`. Also fixed `openapi-zod-client-adapter` ESLint config (was using `createLibBoundaryRules` despite being core). 9 consumer files migrated. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. |
 
 #### F6: Search retrieval wiring duplicated across MCP apps
 
@@ -412,7 +408,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 | **Reviewers** | Fred |
 | **Problem** | `LIB_PACKAGES` has stale entries. Env package identity (core vs lib) unclear. |
 | **Fix** | Invoke config-reviewer. Remove stale entries, decide core vs lib categorisation. |
-| **Status** | [ ] Subsumed by F5 — same fix (env identity + LIB_PACKAGES cleanup). Address together in Batch C. |
+| **Status** | [x] Subsumed by F5 — completed together (2026-02-25). `LIB_PACKAGES` now `['logger', 'env-resolution']`. Stale entries removed, all packages correctly categorised. |
 
 #### F19: type-reviewer — type-helpers assertion strategy
 
@@ -496,10 +492,10 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 2. ~~F6, F10, F20, F25, F28, F29~~ (small arch/doc fixes)
 3. ~~O1, O2, O3, O5, O10~~ (small onboarding fixes — O1/O2/O3 resolved by prior docs session)
 
-**Batch C — Medium Complexity** (3 items) ← **NEXT**:
+**Batch C — Medium Complexity** (3 items, 1 complete) ← **IN PROGRESS**:
 
-4. **F5** (env identity + LIB_PACKAGES; subsumes F18)
-5. **F8** (env pipeline unification)
+4. ~~**F5** (env identity + LIB_PACKAGES; subsumes F18)~~ **COMPLETE**
+5. **F8** (env pipeline unification) ← **NEXT**
 6. **F27** (response-augmentation DI)
 
 **Batch D — Large / Architectural** (1 item):
@@ -516,7 +512,7 @@ Batched by complexity for efficient execution. Run quality gates and commit afte
 |---------|----------|-----------|
 | F16 (rate limit) | security-reviewer | ADR-115 deployment preconditions |
 | F17 | docs-adr-reviewer | ADR-108 text alignment |
-| F18 | config-reviewer | Subsumed by F5 — address in Batch C |
+| F18 | config-reviewer | Subsumed by F5 — **COMPLETE** |
 | F19 | type-reviewer | type-helpers assertion audit |
 
 ---
@@ -935,6 +931,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, rules.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
 - **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.
 - **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `rules.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.
 - **2026-02-25**: Plan updated for standalone handoff. `onboarding.md` being removed by parallel agent — O11 cancelled (target file removed), O12 retargeted to HTTP server README, O8 demoted to Batch E. Next Session Checklist rewritten as self-contained entry point with Getting Started steps, Current State summary, and item-level file references. Execution Order and Onboarding Execution Order aligned. Open items: 32 remaining.

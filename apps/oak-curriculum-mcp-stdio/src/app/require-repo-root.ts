@@ -8,7 +8,7 @@
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findRepoRoot } from '@oaknational/env';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 /**
  * Resolves the monorepo root from the current module's location.

@@ -1,17 +1,11 @@
 /**
- * Environment utilities for MCP applications.
+ * Environment schema contracts for MCP applications.
  *
- * Provides an environment resolution pipeline (`resolveEnv`) and
- * shared Zod schemas for common environment variable contracts.
- *
+ * Provides shared Zod schemas for common environment variable contracts.
  * Schemas are opt-in: apps import only what they need, compose
- * them into an app-specific schema, and pass it to `resolveEnv`.
+ * them into an app-specific schema, and pass it to `resolveEnv`
+ * from `@oaknational/env-resolution`.
  */
-
-export { findRepoRoot } from './repo-root';
-
-export { resolveEnv } from './resolve-env';
-export type { ResolveEnvOptions, EnvResolutionError, EnvKeyDiagnostic } from './resolve-env';
 
 export {
   OakApiKeyEnvSchema,
@@ -19,5 +13,5 @@ export {
   LoggingEnvSchema,
   LOG_LEVELS,
   NODE_ENVS,
-} from './schemas/index';
-export type { OakApiKeyEnv, ElasticsearchEnv, LoggingEnv } from './schemas/index';
+} from './schemas/index.js';
+export type { OakApiKeyEnv, ElasticsearchEnv, LoggingEnv } from './schemas/index.js';

@@ -146,7 +146,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ### Structure
 
 - `apps/` – runnable apps that provide services to users
-- `packages/libs/` – libraries (`@oaknational/logger`)
+- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`)
 

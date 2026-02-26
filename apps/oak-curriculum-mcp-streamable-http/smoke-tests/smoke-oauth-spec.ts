@@ -24,7 +24,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { config as dotenvConfig } from 'dotenv';
-import { findRepoRoot } from '@oaknational/env';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 import { createRootLogger } from './logging.js';
 import { runSpecCompliantOAuthAssertions } from './smoke-assertions/index.js';

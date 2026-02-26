@@ -496,3 +496,44 @@ Completed all 8 Batch B items from release-plan-m1:
 - Reviewer findings: deployment-architecture.md still showed VERCEL
   conditional and default export that no longer exist in actual code.
   Always verify doc examples against the real source file, not memory.
+
+## Session: 2026-02-25 — Split env Package Concerns (F5/F18)
+
+### What happened
+
+Executed the plan to split `@oaknational/env` into:
+1. `@oaknational/env` (core) — pure Zod schema contracts only
+2. `@oaknational/env-resolution` (libs) — runtime pipeline (resolveEnv, findRepoRoot)
+
+Also cleaned `LIB_PACKAGES` from 6 entries (4 stale/miscategorised) to 2,
+and fixed `openapi-zod-client-adapter` ESLint config (was using
+createLibBoundaryRules despite being a core package).
+
+### Lessons
+
+- When removing an entry from LIB_PACKAGES, check ALL packages that
+  called `createLibBoundaryRules` with that name — their eslint config
+  may now generate empty/broken zone paths. The openapi-zod-client-adapter
+  was effectively unprotected after the cleanup.
+- workspace:^ vs workspace:* — this monorepo uses workspace:* everywhere.
+  Don't introduce workspace:^ for private packages.
+- tsup externals: only list Node builtins actually imported (YAGNI).
+  node:os was listed but never imported.
+- Stale tsconfig includes (bin/**/*.ts) should be removed when the
+  corresponding directory doesn't exist.
+- ADR implementation sections have file paths that go stale when
+  packages are moved. Always grep ADRs for old paths after a move.
+- When splitting a core package that has runtime deps into core+libs,
+  the pattern is: schemas stay in core (coreBoundaryRules), pipeline
+  moves to libs (createLibBoundaryRules). No re-exports, no compat layer.
+
+### Patterns that worked
+
+- Phase 0 verification caught that codegen.ts has its own local
+  findRepoRoot (not imported from @oaknational/env), avoiding a false
+  consumer migration.
+- Running deterministic validation greps after each phase catches
+  drift immediately.
+- Specialist reviewers caught 4 actionable issues that manual review
+  would likely have missed (workspace:^ inconsistency, stale ADR paths,
+  YAGNI external, openapi-zod-client-adapter boundary violation).

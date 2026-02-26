@@ -27,15 +27,15 @@ ADR-016 established dotenv for local development configuration but did not presc
 
 ### Options Considered
 
-| Option                       | Description                                                                                | Verdict                                                |
-| ---------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| **A: resolveEnv pipeline**   | Shared `@oaknational/env` package with non-mutating parse, source hierarchy, Result return | **Accepted**                                           |
-| B: Per-app dotenv.config()   | Each app calls dotenv.config() independently                                               | Rejected — mutates process.env, no hierarchy, no reuse |
-| C: Environment service class | Singleton service with lazy loading                                                        | Rejected — global state, testing difficulty            |
+| Option                       | Description                                                                                           | Verdict                                                |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **A: resolveEnv pipeline**   | Shared `@oaknational/env-resolution` package with non-mutating parse, source hierarchy, Result return | **Accepted**                                           |
+| B: Per-app dotenv.config()   | Each app calls dotenv.config() independently                                                          | Rejected — mutates process.env, no hierarchy, no reuse |
+| C: Environment service class | Singleton service with lazy loading                                                                   | Rejected — global state, testing difficulty            |
 
 ## Decision
 
-Implement a shared environment resolution pipeline in `@oaknational/env` with the following architecture:
+Implement a shared environment resolution pipeline in `@oaknational/env-resolution` (schemas remain in `@oaknational/env`) with the following architecture:
 
 ### Source Hierarchy
 
@@ -119,8 +119,8 @@ Callers that require a repo root (STDIO server, smoke tests, build-time scripts)
 
 ## Implementation
 
-- **Core package**: `packages/core/env/src/resolve-env.ts`
-- **Repo root finder**: `packages/core/env/src/repo-root.ts`
+- **Resolution pipeline**: `packages/libs/env-resolution/src/resolve-env.ts`
+- **Repo root finder**: `packages/libs/env-resolution/src/repo-root.ts`
 - **Shared schemas**: `packages/core/env/src/schemas/index.ts`
 - **HTTP env schema**: `apps/oak-curriculum-mcp-streamable-http/src/env.ts`
 - **Runtime config**: `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`
