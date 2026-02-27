@@ -1,5 +1,23 @@
 # Napkin
 
+## Session: 2026-02-27 — Post-remediation consolidation
+
+Ran consolidation workflow after M0 docs remediation commit.
+
+### Plan documentation extraction status
+
+- `release-plan-m1.plan.md`: Contains extractable process docs (release control model, snagging protocol, go/no-go structure). Defer extraction to M0/M1 milestone completion — plans are still active.
+- `onboarding-simulations-public-alpha-readiness.md`: Contains "why guardrails exist" philosophy and review methodology. Same deferral — plan is still active.
+- `high-level-plan.md`: Appropriate as strategic index. No extraction needed.
+- M0 docs remediation plan (`.cursor/plans/`): Pure execution document, no trapped documentation.
+
+### Other consolidation checks
+
+- Napkin: 68 lines, well under 800 limit. No rotation needed.
+- Practice box: Empty.
+- distilled.md: No new entries needed from this session — patterns are already covered.
+- Experience: Wrote `documentation-as-product.md`.
+
 ## Session: 2026-02-27 — M0 Documentation Remediation (17 items)
 
 Executed the full M0 docs remediation plan in 6 phases. All 17 R-items complete.
