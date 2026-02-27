@@ -176,7 +176,10 @@ Errors are classified and handled appropriately:
 
 ### Vulnerability Reporting
 
-Report security issues to: [security contact to be added]
+Report security issues by following the instructions in the
+[SECURITY.md](../../SECURITY.md) file at the repository root, which
+points to Oak's canonical security disclosure process at
+[www.thenational.academy/.well-known/security.txt](https://www.thenational.academy/.well-known/security.txt).
 
 Do not report security issues via public GitHub issues.
 

@@ -17,13 +17,14 @@ By participating in this project, you agree to abide by our
 
 ## Architecture Guidelines
 
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
-Start with the [ADR index](docs/architecture/architectural-decisions/), then these foundational ADRs:
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. These foundational ADRs define the constraints you must follow when contributing — all code generation, types, and validation flow from the OpenAPI schema:
 
-- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
-- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
-- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+
+See the [ADR index](docs/architecture/architectural-decisions/) for the full list.
 
 ### The Generation-First Principle
 
@@ -32,7 +33,7 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 **DO**:
 
 - Add new features by extending the OpenAPI schema (upstream)
-- Improve generation scripts in `packages/sdks/oak-curriculum-sdk/code-generation/`
+- Improve generation scripts in `packages/sdks/oak-sdk-codegen/code-generation/`
 - Import types and validators from the generated SDK
 - Test that `pnpm sdk-codegen` updates everything correctly
 - Use shared validation helpers (`parseSchema`, `parseWithCurriculumSchema`, etc.)
@@ -137,11 +138,11 @@ pnpm build          # SDK and libraries build without env vars
 
 #### Level 2: Integration Development (10-15 minutes setup)
 
-**Requires: `OAK_API_KEY` only**
+**Requires: `OAK_API_KEY`** (core curriculum tools). Search functionality additionally requires `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY`.
 
-With a single API key, you can:
+With an API key, you can:
 
-- Run MCP servers locally
+- Run MCP servers locally (core curriculum tools work with `OAK_API_KEY` alone; search tools require Elasticsearch credentials)
 - Test SDK integrations
 - Run most integration tests
 - Work on application features

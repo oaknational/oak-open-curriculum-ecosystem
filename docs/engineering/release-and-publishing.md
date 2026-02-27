@@ -51,7 +51,7 @@ The published tarball includes only:
 - `dist/` — compiled JavaScript and TypeScript declarations
 - `package.json`
 - `README.md`
-- `LICENSE` (copied from monorepo root by `prepublishOnly` script)
+- `LICENCE` (copied from monorepo root by `prepublishOnly` script)
 
 No tests, source files, `.env` files, or internal tooling are included.
 The `files` field in `packages/sdks/oak-curriculum-sdk/package.json`
@@ -114,7 +114,7 @@ npm notice   XXXkB  dist/index.d.ts
 npm notice   ...
 npm notice   XXXkB  package.json
 npm notice   XXXkB  README.md
-npm notice   XXXkB  LICENSE
+npm notice   XXXkB  LICENCE
 npm notice Tarball Details
 npm notice   name:          @oaknational/curriculum-sdk
 npm notice   version:       0.1.0
@@ -125,7 +125,7 @@ npm notice   total files:   ...
 Verify:
 
 - [ ] `dist/` files are present
-- [ ] `LICENSE` is present (copied by `prepublishOnly`)
+- [ ] `LICENCE` is present (copied by `prepublishOnly`)
 - [ ] `README.md` is present
 - [ ] No test files, `.env` files, or source files are included
 - [ ] Package name is `@oaknational/curriculum-sdk`
@@ -197,7 +197,7 @@ new releasable commits, `semantic-release` will skip publishing.
 | "No releasable commits"        | All commits since last release are `chore:` or `docs:` | Add a `fix:` or `feat:` commit                  |
 | npm publish fails with 403     | Token lacks write permission or wrong scope            | Regenerate token with correct permissions       |
 | npm publish fails with 402     | Package is scoped but missing `publishConfig.access`   | Already set to `"public"` in SDK `package.json` |
-| `LICENSE` missing from tarball | `prepublishOnly` script failed                         | Run `pnpm build` in the SDK workspace first     |
+| `LICENCE` missing from tarball | `prepublishOnly` script failed                         | Run `pnpm build` in the SDK workspace first     |
 
 ---
 

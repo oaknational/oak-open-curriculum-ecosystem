@@ -165,7 +165,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
    - Specify `engines` (Node 18+)
    - Add `publishConfig` with access level
 2. Add `README.md` to each public package
-3. Add `LICENSE` file (MIT) to repo root
+3. Add `LICENCE` file (MIT) to repo root
 
 **Session 2: Version Management**
 
@@ -341,7 +341,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
   "publishConfig": {
     "access": "public"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "README.md", "LICENCE"],
   "scripts": {
     "prepublishOnly": "pnpm sdk-codegen && pnpm build"
   }
@@ -359,7 +359,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
   "bin": {
     "oak-curriculum-mcp": "./bin/oak-curriculum-mcp.js"
   },
-  "files": ["dist", "bin", "README.md", "LICENSE"],
+  "files": ["dist", "bin", "README.md", "LICENCE"],
   "engines": {
     "node": ">=18.0.0"
   },

@@ -33,7 +33,7 @@ directories, generated API docs
 | `GEMINI.md` | Pointer to AGENT.md | Current | Keep as-is |
 | `BRANDING.md` | Trademark and branding notice | Current | Keep as-is |
 | `LICENCE-DATA.md` | Upstream data licence notice (OGL) | Current | Keep as-is |
-| `LICENSE` | MIT licence (note: no `.md` extension) | Current | Keep as-is |
+| `LICENCE` | MIT licence (note: no `.md` extension) | Current | Keep as-is |
 
 ### Issues
 

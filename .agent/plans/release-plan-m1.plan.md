@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-26  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 0 code items remaining. G1–G3 complete with evidence. G4–G8 pending human decisions.
+**Open items**: 0 code items remaining. G1–G3 complete with evidence. G4 complete (dispositions recorded). G5–G8 pending.
 
 ---
 
@@ -43,27 +43,72 @@ Primary strategic reference:
 2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
 
+### Milestone Progression
+
+Three distinct milestones, in order:
+
+| Milestone | State | Repo | HTTP Server | Key gates |
+|---|---|---|---|---|
+| **Closed private alpha** | CURRENT | Private | Private alpha | — |
+| **Open private alpha** (M0) | NEXT | Public | Private alpha | Docs remediation (17 items) |
+| **Open public alpha** (M1) | AFTER M0 | Public | Public alpha | Clerk, Sentry, rate limiting |
+
+M0 (make repo public) requires documentation fixes only. M1 (public alpha)
+additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
+
 ### Current State (All Code Work Complete)
 
 All batches (A through E3) and Go/No-Go preparation (G1–G3) are complete. There are no remaining code items.
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
-- **Go/No-Go G4–G8**: Pending human decisions (onboarding rerun, UX contract acceptance, Clerk migration, observability, release comms).
+- **G4 complete**: Onboarding rerun done (4 personas). Owner dispositions recorded for all 36 findings. No P0 blockers. See §Onboarding Snagging below.
 
-### Next Steps (Human Decisions Required)
+### Next Steps
 
-G4–G8 are product/operations decisions that require human judgement:
+**Documentation remediation (M0 — blocks making repo public)**:
 
-| Gate | Decision needed | Owner |
-|------|----------------|-------|
-| **G4** | Rerun onboarding simulations and confirm no P0 blockers | Product owner |
-| **G5** | Accept the public-alpha experience contract | Product owner |
-| **G6** | Complete Clerk production migration for alpha scope | Engineering/ops |
-| **G7** | Verify Sentry observability for core alpha services | Engineering/ops |
-| **G8** | Prepare and approve release communications | Product owner |
+The onboarding simulations identified 17 docs-only items that should be
+fixed before the repo goes public. These are predominantly editorial:
+README restructuring, jargon expansion, progressive disclosure, and
+explanatory documentation. Estimated effort: 1 focused session.
 
-Once G4–G8 are resolved, the release can proceed to R3 (Go/No-Go decision) and R4 (release execution).
+Full findings with owner dispositions:
+[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+
+All 17 documentation remediation items are now complete:
+
+1. R3 — CONTRIBUTING.md stale code-generation path: DONE
+2. R4 — status banner in README: DONE
+3. R7 — "over 100" for ADRs: DONE
+4. R18 — CHANGELOG.md cleared: DONE
+5. R33 — LICENSE renamed to LICENCE: DONE
+6. R5 + R6 + R36 — README restructure: DONE
+7. R8 — `.agent/README.md` and `.agent/experience/HUMAN.md`: DONE
+8. R12 — security contact placeholder fixed: DONE
+9. R15 — MCP server README progressive disclosure: DONE
+10. R16 — practice section reframed + internal-only frontmatter: DONE
+11. R17 + R25 — acronyms expanded, jargon replaced: DONE
+12. R19 — licence badges added: DONE
+13. R21 — CONTRIBUTING.md MCP env requirements clarified: DONE
+14. R22 — contextual framing for ADR references: DONE
+15. R23 — generated-docs note in quick-start: DONE
+16. R26 — governance orientation document: DONE
+17. R35 — SDK README reordered for appropriate audiences: DONE
+
+**Engineering/ops gates (M1 — blocks open public alpha)**:
+
+| Gate | Decision needed | Owner | Status |
+|------|----------------|-------|--------|
+| **G5** | Accept public-alpha experience contract | Product owner | Pending |
+| **G6** | Clerk production migration | Engineering/ops | Blocks M1 only |
+| **G7** | Sentry observability verification | Engineering/ops | Blocks M1 only |
+| **G8** | Release communications | Product owner | Pending |
+| **Rate limiting** | Verify active on deployment target | Engineering/ops | Blocks M1 only |
+
+Note: G6, G7, and rate limiting do NOT block M0 (open private alpha).
+The upstream curriculum API has extensive rate limiting, providing baseline
+protection.
 
 ---
 
@@ -116,11 +161,14 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
   - `.env.example` contains placeholders only (manual spot-check passed).
   - Evidence: gitleaks output at commit `e397b72c`.
 
-- [~] **G4. Onboarding release gate**
-  - No P0 blockers in rerun onboarding simulations.
+- [x] **G4. Onboarding release gate**
+  - Rerun complete (4 personas: junior dev, principal engineer, CTO, CEO).
+    No P0 blockers after owner dispositions: R1 (repo name) and R2 (missing
+    files) both resolved as reviewer false positives. 17 docs-only items
+    remain for M0 readiness, 3 engineering/ops items for M1.
   - Canonical tracker:
     [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
-  - Evidence: persona rerun summary.
+  - Evidence: owner dispositions recorded 2026-02-26.
 
 - [~] **G5. Public-alpha UX contract**
   - Public-alpha baseline confirmed and documented.
@@ -128,12 +176,14 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     [public-alpha-experience-contract.md](./user-experience/public-alpha-experience-contract.md)
   - Evidence: acceptance checklist.
 
-- [~] **G6. Auth migration readiness**
+- [~] **G6. Auth migration readiness** — Blocks M1 (open public alpha) only
   - Clerk production migration decision and implementation complete for alpha scope.
+  - Does NOT block M0 (open private alpha / making repo public).
   - Evidence: migration checklist and environment validation proof.
 
-- [~] **G7. Observability minimum**
+- [~] **G7. Observability minimum** — Blocks M1 (open public alpha) only
   - Basic Sentry error visibility verified for core alpha services.
+  - Does NOT block M0 (open private alpha / making repo public).
   - Evidence: test event or incident-path verification.
 
 - [~] **G8. Release communications prepared**
@@ -821,6 +871,41 @@ All onboarding items (O1–O12) complete. O11 cancelled (target file removed). O
 
 ---
 
+## Onboarding Snagging (G4 Findings)
+
+**Source**: Onboarding simulations rerun (2026-02-26). Owner dispositions
+recorded same day.
+
+Full detail:
+[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+
+### Summary
+
+- **36 findings** from 4-persona rerun (junior dev, principal engineer,
+  CTO, CEO).
+- **6 resolved/dismissed**: R1 (false positive — repo name correct), R2
+  (false positive — files exist), R11 (intentional for alpha), R20 (no
+  CAB needed), R28 (not an insight), R32 (correct CI behaviour).
+- **17 docs-only items** block M0 (open private alpha). Estimated effort:
+  1 focused session.
+- **3 engineering/ops items** block M1 only (open public alpha): Clerk
+  (R9/G6), Sentry (R10/G7), rate limiting (R13).
+- **2 items** block M3 (public beta): Stryker (R27), log drain (R29).
+- **5 non-blocking items**: CI expansion (R14), last-reviewed dates (R24),
+  health check checklist (R30), flaky test (R31), root config tidy (R34).
+
+### Rate Limiting Assessment
+
+Add a rate-limiting verification task before M1 (open public alpha):
+
+- [ ] **Verify rate limiting active on deployment target**
+  - ADR-115 and HTTP server README document this as a deployment
+    precondition.
+  - Upstream curriculum API has extensive rate limiting (baseline protection).
+  - Must be confirmed active on the deployment target before M1 release.
+
+---
+
 ## Go/No-Go Gate
 
 No release without an explicit recorded decision.
@@ -885,6 +970,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-26**: **G4 complete — onboarding dispositions recorded.** Onboarding rerun complete (4 personas). Owner dispositions for all 36 findings. 6 resolved/dismissed (R1, R2 false positives; R11, R20, R28, R32 dismissed). Milestone separation introduced: closed private alpha → open private alpha (M0) → open public alpha (M1). G6/G7/rate-limiting reclassified to M1 blockers only. 17 docs-only items block M0. Added §Onboarding Snagging section and rate-limiting assessment task. Next session checklist rewritten with milestone progression table and M0/M1 work items. Session transcript: `e8c8a371-93d5-4c22-9419-420134c11dad`.
 - **2026-02-26**: **Batches C-2, D, E1 complete — session handoff.** Batch C-2 committed (`30cf9132`). F7 (ADR-108 completion) committed (`066be0af`): moved 25 synonym files + `synonym-export.ts` to sdk-codegen, created `@oaknational/sdk-codegen/synonyms` subpath, removed curriculum-sdk dependency from search-sdk entirely, tightened ESLint boundaries to block ALL curriculum-sdk imports, updated 5 ADRs and multiple READMEs, 4 integration tests. Review Gate 1: 6 specialist reviewers, all findings addressed. Batch E1 committed (`1c97d2d6`): F35 dead code removal, F11 verified already documented, F16 rate limiting precondition. Also fixed pre-existing flaky timing test (`rate-limit-config.unit.test.ts` — `vi.useFakeTimers`). Open items: 9 remaining (0 P1, 1 P2, 8 P3). Working tree clean. Next: Batch E2 (6 items). Session transcript: `0103cfeb-5e37-47d5-b53f-aea7e91fbb77`.
 - **2026-02-26**: **O8 complete, plan handoff preparation.** User deleted empty `docs/development/` and `docs/data/` directories. O8 marked complete. Open items: 13 remaining (1 P1, 1 P2, 11 P3). Documentation consolidation: corrected stale `SearchRetrievalService` "duplicate contract" language in `distilled.md` and `napkin.md` to reflect ISP decision. Updated experience README catalog. Fixed §R section (R4 no longer described as "deferred"). Corrected change log entry re "delete duplicate contract". Renumbered Batch E execution order.
 - **2026-02-26**: **Batch E elevated — all items fix-before-release.** User rejected deferral of Batch E items (agent-decided, not user-approved). Two decisions recorded: (1) F7 step 4: `SearchRetrievalService` stays in curriculum-sdk as ISP consumer-side interface — not a duplicate, structural typing handles wiring, no SDK-to-SDK dependency. (2) F17: remove `public/search.ts` facade entirely — migrate 36 files to direct `@oaknational/sdk-codegen/search` imports; the facade masks truth and creates a labyrinth. F12 closed (concrete work in F7; remaining "oak-domain" question is future architecture). F13 closed (resolveEnv adoption done via F8; Result instances covered by R4). F35 reframed as dead code deletion. F17 expanded from "ADR text alignment" to full facade removal. Batch E restructured into E1 (trivial), E2 (small), E3 (medium). Open items: 14 remaining (1 P1, 1 P2, 12 P3).

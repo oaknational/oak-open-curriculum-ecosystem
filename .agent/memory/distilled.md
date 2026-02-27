@@ -19,6 +19,12 @@ changing behaviour.
 - Archive docs are historical records — never update them
 - Listen to user priorities, not document structure
 - Try it before assuming it will not work
+- Risk acceptance is a human decision. Agents classify
+  severity and describe impact; agents do not accept risks
+  or defer items on behalf of the owner
+- Commands should be thin pointers to prompts, not
+  duplicates. The prompt is the source of truth; the
+  command is a platform-specific entry point
 
 ## Repo-Specific Rules
 
@@ -40,6 +46,13 @@ changing behaviour.
 - `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved
+- Self-referencing imports within a package (e.g.
+  `import from '@oaknational/sdk-codegen/bulk'` inside
+  sdk-codegen itself) are a trap: TypeScript and tsup
+  don't catch them, only runtime does. External consumers
+  use subpath exports; internal files use relative imports
+- Turbo cache can mask latent failures for a long time —
+  package renames force cache misses that surface them
 - When moving files between workspaces, ESLint rule overrides
   must also move — otherwise lint errors appear silently
 - When migrating facade imports, check for second-level barrels
@@ -100,6 +113,10 @@ changing behaviour.
   `(v: unknown): v is T => typeof v === 'string' && v === '__never__'`
 - `as const satisfies T` is the gold standard for test data
   that must be both a literal type and structurally valid
+- `Record<string, string | undefined>` is acceptable at the
+  `process.env` entry boundary — the key space is genuinely
+  unbounded. Zod validation immediately narrows it. This is
+  the correct exception to "Record is too generic"
 - `const noop = () => {};` triggers `no-empty-function` lint.
   Use `const noop = () => undefined;` — non-empty expression
   body with equivalent void semantics
@@ -111,8 +128,7 @@ changing behaviour.
 
 Widget architecture, dispatch pattern, data shapes, sandbox
 dependencies, edge cases, and resilience hardening are
-documented in the HTTP MCP server README (`Widget Rendering
-Architecture` section). Dev gotchas not covered there:
+documented in `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`. Dev gotchas not covered there:
 
 - Zod schema fixtures must use parent-level enum values (e.g.
   `'science'` not `'biology'` for `subject_parent`) — the
@@ -145,6 +161,8 @@ Architecture` section). Dev gotchas not covered there:
 - Replace Express `_router` access in tests with HTTP
   assertions via supertest — more resilient, tests actual
   behaviour
+- For large mechanical migrations (30+ files), use
+  subagents to parallelise the work
 - Bulk operation factories should accept `startIndex`
   rather than mutating readonly `_id` after creation
 - `ensurePathsOnSchema` creates a new object (spread) —
@@ -272,16 +290,11 @@ Architecture` section). Dev gotchas not covered there:
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS` — adding to the map
   automatically extends the type union
-- search-sdk must NOT depend on curriculum-sdk. This is
-  enforced by ESLint boundary rules (`createSdkBoundaryRules('search')`)
-  that block ALL `@oaknational/curriculum-sdk` imports including
-  subpaths. Shared vocabulary/synonym functions live in
-  `@oaknational/sdk-codegen/synonyms`. `SearchRetrievalService`
-  in curriculum-sdk is intentional ISP (consumer-side interface),
-  not a duplicate — structural typing handles the wiring.
-  Architecture reviewer deferral recommendations must be
-  questioned against the system's architectural intent, not
-  just the current state.
+- search-sdk → curriculum-sdk dependency is banned (ADR-108,
+  enforced by `createSdkBoundaryRules('search')`). Shared
+  data lives in `@oaknational/sdk-codegen/synonyms`.
+  `SearchRetrievalService` in curriculum-sdk is ISP, not
+  duplication
 - When removing an entry from `LIB_PACKAGES`, check ALL
   packages that called `createLibBoundaryRules` with that
   name — their ESLint config may generate empty/broken zone
@@ -293,6 +306,9 @@ Architecture` section). Dev gotchas not covered there:
   No re-exports, no compatibility layer.
 - Prefer `git worktree` over `git stash` for baseline
   comparisons — stash risks lost work
+- Background reviewer agents that haven't returned by the
+  end of a conversation turn are lost — re-invoke in the
+  next session
 - When extracting types from a composition root to fix layer
   violations, the composition root itself may still need a
   local `import type` for its own internal usage — a

@@ -2,7 +2,7 @@
 
 ## Code vs Curriculum Content
 
-The **MIT licence** in this repository (see [LICENSE](LICENSE)) covers the
+The **MIT licence** in this repository (see [LICENCE](LICENCE)) covers the
 **source code only**. It does not cover curriculum content accessed via the
 Oak Open Curriculum API.
 

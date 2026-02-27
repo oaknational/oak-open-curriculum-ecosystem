@@ -8,34 +8,32 @@ last_reviewed: 2026-02-25
 
 # Governance Documentation
 
-This directory contains documentation for AI agents and human developers working with the Oak MCP ecosystem. The canonical agent entry point is [AGENT.md](../../.agent/directives/AGENT.md); these documents provide supplementary guidance.
+This repository contains more governance documentation than a typical codebase. That is intentional: this project is built through agentic engineering, where AI agents are primary contributors alongside human engineers. The repository is not just code — it is the project context. Rules, quality gates, testing strategy, and architectural decisions are explicit because they must be discoverable by any contributor, human or AI, without external instruction.
+
+If this is your first time here, the 5-minute reading path is:
+
+1. [Development Practice](./development-practice.md) — coding standards and workflow
+2. [TypeScript Practice](./typescript-practice.md) — type safety approach
+3. [Safety and Security](./safety-and-security.md) — security guidelines
+4. [ADR index](../architecture/architectural-decisions/) — the architectural source of truth
 
 ## Contents
 
-- [Development Practice](./development-practice.md) - Best practices for development in this project
-- [Safety and Security](./safety-and-security.md) - Critical safety guidelines and security considerations
-- [Testing Strategy](../../.agent/directives/testing-strategy.md) - **MOVED**: Comprehensive TDD approach at all levels (now in directives)
-- [TypeScript Practice](./typescript-practice.md) - TypeScript-specific guidelines and patterns
-- [Understanding Agent References](./understanding-agent-references.md) - How to interpret and use agent-specific references
-
-## Purpose
-
-These documents help AI agents and developers:
-
-- Understand the project's architectural principles
-- Follow established coding standards
-- Maintain code quality and safety
-- Make informed decisions about implementation approaches
-- Navigate the codebase effectively
+- [Development Practice](./development-practice.md) — Best practices for development in this project
+- [Safety and Security](./safety-and-security.md) — Critical safety guidelines and security considerations
+- [Testing Strategy](../../.agent/directives/testing-strategy.md) — **MOVED**: Comprehensive TDD approach at all levels (now in directives)
+- [TypeScript Practice](./typescript-practice.md) — TypeScript-specific guidelines and patterns
+- [Understanding Agent References](./understanding-agent-references.md) — How to interpret and use agent-specific references
+- [Curriculum Tools, Guidance and Playbooks](./curriculum-tools-guidance-and-playbooks.md) — Categories, tags, and domain playbooks
 
 ## Key Principles
 
-1. **Safety First** - Always prioritise security and data privacy
-2. **Pure Functions** - Maximise pure, testable functions
-3. **Clear Boundaries** - Respect architectural layers and interfaces
-4. **Type Safety** - Use TypeScript's type system effectively
-5. **Test Coverage** - Write comprehensive tests for all changes
+1. **Safety First** — Always prioritise security and data privacy
+2. **Pure Functions** — Maximise pure, testable functions
+3. **Clear Boundaries** — Respect architectural layers and interfaces
+4. **Type Safety** — Use TypeScript's type system effectively
+5. **Test Coverage** — Write comprehensive tests for all changes
 
 ## Starting Point
 
-New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first; it links to rules, testing strategy, and all directives.
+New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first; it links to rules, testing strategy, and all directives. Human contributors should start with the [root README](../../README.md) and [quick-start guide](../foundation/quick-start.md).

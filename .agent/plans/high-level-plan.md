@@ -1,24 +1,27 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-25
+**Last Updated**: 2026-02-26
 **Status**: 🔄 Active strategic index
 **Scope**: Strategic cross-collection overview for the Oak MCP ecosystem.
 
 This file is a strategic index. Execution detail belongs in collection roadmaps
-and active plans.
+and active plans. Per-milestone summaries (audience, value, progression gates):
+[milestones/](../milestones/).
 
 ---
 
 ## Milestone Sequence
 
 ```text
-Milestone 0: Open Source Readiness               🔄 IN PROGRESS
+Milestone 0: Open Private Alpha                  🔄 IN PROGRESS
   → Make the repo public — external teams can build on Oak's curriculum
-  → Secrets/PII sweep, merge branch, make repo public on GitHub
+  → Secrets/PII sweep, docs remediation, merge branch, make repo public
+  → Repo public, HTTP server still private alpha (invitation-only)
 
-Milestone 1: Public Alpha                        📋 NEXT
+Milestone 1: Open Public Alpha                   📋 NEXT
   → Teachers use AI tools to access curriculum directly
-  → Clerk production migration, Claude basic-branding decision gate
+  → Clerk production migration, Sentry verification, rate limiting
+  → Repo public, HTTP server publicly accessible with production auth
 
 Milestone 2: Post-Alpha Enhancements             📋 PLANNED
   → Richer curriculum interactions, more tools can connect
@@ -26,14 +29,26 @@ Milestone 2: Post-Alpha Enhancements             📋 PLANNED
 
 Milestone 3: Public Beta                         📋 PLANNED
   → Production-grade reliability for daily teacher use
-  → Mutation testing, observability, quality metrics, supply chain
+  → Mutation testing, observability, quality metrics, supply chain,
+    Vercel log drain verification
 ```
+
+### Milestone State Progression
+
+| State | Repo | HTTP Server | Auth | Key requirement |
+|---|---|---|---|---|
+| Closed private alpha | Private | Private alpha | Test Clerk | Current state |
+| Open private alpha (M0) | **Public** | Private alpha | Test Clerk | Docs remediation |
+| Open public alpha (M1) | Public | **Public alpha** | **Prod Clerk** | Clerk, Sentry, rate limiting |
+| Post-alpha (M2) | Public | Public alpha | Prod Clerk | MCP extensions, enforcement |
+| Public beta (M3) | Public | **Public beta** | Prod Clerk | Mutation testing, observability |
 
 ---
 
-## Milestone 0: Open Source Readiness
+## Milestone 0: Open Private Alpha
 
-**Goal**: Make the repository safe to be public on GitHub.
+**Goal**: Make the repository safe to be public on GitHub. The HTTP MCP
+server remains private alpha (invitation-only) at this stage.
 
 **User impact**: The SDK, MCP servers, and search infrastructure become publicly
 available — external developers and edtech teams can start building curriculum
@@ -43,12 +58,15 @@ tools on Oak's open data for the first time.
 
 1. ~~Complete merge-blocking plans~~ — SDK workspace separation **complete**
    (archived [sdk-workspace-separation.md](semantic-search/archive/completed/sdk-workspace-separation.md))
-2. Final secrets and PII sweep across the entire repository
+2. **Documentation remediation** — 17 docs-only items from onboarding
+   simulations (G4). Estimated: 1 focused session.
+   See [release-plan-m1.plan.md](release-plan-m1.plan.md) §Next Steps.
+3. Final secrets and PII sweep across the entire repository
    - Verify `pnpm secrets:scan:all` passes
    - Manual review of configuration files, environment examples,
      READMEs, and research documents for any sensitive information
-3. Merge `feat/semantic_search_deployment` branch
-4. Make repository public on GitHub
+4. Merge `feat/semantic_search_deployment` branch
+5. Make repository public on GitHub
 
 **Tracking**: [semantic-search/roadmap.md](semantic-search/roadmap.md)
 
@@ -72,9 +90,11 @@ tools on Oak's open data for the first time.
 
 ---
 
-## Milestone 1: Public Alpha
+## Milestone 1: Open Public Alpha
 
 **Goal**: Enable external users to authenticate and use the MCP server.
+The HTTP MCP server transitions from private alpha (invitation-only) to
+public alpha (open access with production auth).
 
 **User impact**: Teachers and developers can use AI assistants (ChatGPT, Claude,
 Gemini) to access Oak's curriculum directly — asking questions about lessons,
@@ -222,13 +242,19 @@ pedagogical standards, and supply chain controls secure the published packages.
      CI integration
    - Validates: tests actually protect behaviour, not just achieve
      coverage
+   - Note: Stryker is already a devDependency with a `pnpm mutate` turbo
+     task. Blocks public beta but not public alpha.
 2. **Observability and quality metrics**
    - Full plan:
      [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
    - Covers: structured logging, monitoring, alerting, quality metrics
      dashboards (duplication rate, complexity trends, change failure
      rate)
-3. **Supply chain controls** (if npm publishing is imminent)
+3. **Vercel log drain verification**
+   - Configure and verify a log drain for production. Vercel's default
+     log retention is 1 hour — insufficient for post-launch diagnostics.
+   - Tracked from onboarding simulation R29.
+4. **Supply chain controls** (if npm publishing is imminent)
    - Icebox stub:
      [supply-chain-controls.md](icebox/supply-chain-controls.md)
    - Covers: SBOM generation, SLSA provenance, artifact signing,

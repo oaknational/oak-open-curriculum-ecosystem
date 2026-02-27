@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
 **Status**: ✅ Phase 0 complete; Phase 1 ready to start
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-02-26
 **Session Entry**: [start-right.prompt.md](../../prompts/start-right.prompt.md)
 
 ---
@@ -152,6 +152,12 @@ Phase 5: Mutation testing execution                  📋 PLANNED
   [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
 - Source strategy:
   [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md)
+- **Milestone context**: Stryker is already a devDependency with a
+  `pnpm mutate` turbo task and config inputs. It was briefly used and now
+  needs proper integration. **Blocks public beta (M3), not public alpha
+  (M1).** However, it remains a high-impact quality gateway that is not
+  yet being used — proper integration is a priority for M3.
+  (Source: onboarding simulation R27, owner disposition 2026-02-26.)
 - Done when:
   - mutation phases 0-3 delivered (with rollout evidence and CI posture)
   - documentation sync log records updates/no-change rationale for Phase 5

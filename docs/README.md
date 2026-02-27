@@ -23,11 +23,11 @@ last_reviewed: 2026-02-25
 ### Architecture
 
 - [OpenAPI Pipeline](architecture/openapi-pipeline.md) - **THE** architecture doc: how types flow from schema
-- [Architecture Decision Records](architecture/architectural-decisions/) - Architectural source of truth
-- [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
-- [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
-- [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
+- [Architecture Decision Records](architecture/architectural-decisions/) — Architectural source of truth (the schema-first generation ADRs below underpin everything in this repo)
+- [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
+- [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
+- [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
 - [Provider System](architecture/provider-system.md) - Current app-local provider composition and DI boundaries
 
 ### Development

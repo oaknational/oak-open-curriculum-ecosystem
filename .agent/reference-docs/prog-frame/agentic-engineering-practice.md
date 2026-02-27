@@ -1,3 +1,10 @@
+---
+visibility: internal
+note: >
+  This document is for internal Oak use only. Do not link to it from
+  any public-facing file in this repository.
+---
+
 > **Canonical sources**: The concepts in this document are defined in
 > [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
 > (naming decision) and [practice.md](../../directives/practice.md)
@@ -48,7 +55,7 @@ The practice is built, operational, and evidenced through its outputs:
 - **Institutional memory** (`.agent/memory/`) — napkin (session-level log of mistakes, corrections, and what works), distilled learnings (curated rulebook extracted when the napkin grows large). The learning loop converts experience into rules: work produces mistakes, the napkin captures them, distillation extracts patterns, and rules prevent repetition.
 - **Experience records** (`.agent/experience/`) — 80+ qualitative records of shifts in understanding across sessions. Not what was done or what was achieved, but what the work was *like* — what shifted, what was surprising, what went differently from expectation. These are a form of institutional memory — a growing corpus that captures the qualitative dimension of human-AI collaboration over time, and will eventually be mined for deeper insights into how the practice evolves, what patterns recur, and where the collaboration model can improve.
 - **Platform bindings** — always-applied workspace rules (`.cursor/rules/`), entry-point files for multiple AI platforms (AGENT.md for Cursor, CLAUDE.md for Claude, AGENTS.md for Codex, GEMINI.md for Gemini). These ensure the practice is discoverable regardless of which AI tool is used.
-- **114 Architectural Decision Records** (numbered to 119) — every significant design choice documented
+- **Over 100 Architectural Decision Records** — every significant design choice documented
 
 **The end-to-end workflow**: these components connect into a structured workflow. A command initiates a session with grounding. Prompts provide domain context. Plans specify the work with test-driven phases. Implementation happens under quality gate enforcement. Sub-agent reviewers provide specialist feedback. Documentation is consolidated after completion. The napkin captures what was learned. This sequence repeats, and the practice improves with each cycle.
 
@@ -75,7 +82,7 @@ The work has been completed within approximately six months (September 2025 – 
 
 **Value delivered**:
 
-- One engineer, working with AI under the practice's governance, produced this repository containing: a curriculum SDK, a semantic search SDK, a user facing MCP server, core packages including an OpenAPI -> SDK -> MCP tool generation pipeline, 116 ADRs, and the practice itself. This demonstrates a sustainable model for high-output, high-quality engineering with small teams.
+- One engineer, working with AI under the practice's governance, produced this repository containing: a curriculum SDK, a semantic search SDK, a user facing MCP server, core packages including an OpenAPI -> SDK -> MCP tool generation pipeline, over 100 ADRs, and the practice itself. This demonstrates a sustainable model for high-output, high-quality engineering with small teams.
 - As the repository becomes public and Oak's product engineers contribute to it, the practice is the mechanism by which they will deliver safely at increased velocity using AI tools — without compromising on quality. The self-teaching property means no separate training or onboarding programme is needed; the practice teaches itself to each new contributor.
 - The practice is deliberately framed as a transferable pattern with a clear conceptual boundary. The patterns established here — the learning loop, the sub-agent review system, the command-prompt-plan workflow, the quality gate discipline — are generalisable to other repositories within Oak and to other organisations. The open-source repository makes both the practice and its products (SDK, MCP servers, search) available to the education technology sector and the wider public sector.
 - Transferability is framed as enablement, not prescription: teams can adopt the parts that create value in their context without needing to reproduce every implementation detail.

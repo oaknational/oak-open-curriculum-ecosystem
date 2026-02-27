@@ -3,6 +3,7 @@
 Strategic and tactical planning documents for the Oak MCP Ecosystem.
 
 **High-Level Coordination**: [high-level-plan.md](high-level-plan.md)
+**Milestones**: [milestones/](../milestones/) — per-milestone summaries (audience, value, gates)
 **Completed Plans**: [completed-plans.md](completed-plans.md)
 **Foundation Documents**: [.agent/directives/](../directives/)
 

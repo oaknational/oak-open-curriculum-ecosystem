@@ -7,7 +7,7 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENCE"
   ],
   "engines": {
     "node": "24.x"
@@ -84,7 +84,7 @@
     }
   },
   "scripts": {
-    "prepublishOnly": "cp ../../../LICENSE ./LICENSE",
+    "prepublishOnly": "cp ../../../LICENCE ./LICENCE",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",

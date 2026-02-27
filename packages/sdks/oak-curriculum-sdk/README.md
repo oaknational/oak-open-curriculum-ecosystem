@@ -1,196 +1,6 @@
 # Oak Curriculum SDK
 
-TypeScript SDK for accessing Oak National Academy's Curriculum API.
-
-## Overview
-
-This SDK implements the **OpenAPI-First Pipeline** pattern: a type-safe, compile-time approach where everything is generated from the OpenAPI schema. It provides a fully-typed, runtime-agnostic client for the Oak Curriculum API.
-
-**Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm sdk-codegen` regenerates all types, validators, and MCP tools automatically.
-
-For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md)
-
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
-Start with the [ADR index](../../../docs/architecture/architectural-decisions/), then this SDK-focused set:
-
-- [ADR-029](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
-- [ADR-030](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
-- [ADR-031](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-035](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md) - Unified SDK and MCP code generation
-- [ADR-048](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
-
-## Architecture
-
-### Generation-Time vs Runtime Processing
-
-This SDK implements a critical architectural principle: **all metadata extraction happens at build/generation time, not runtime**. This approach ensures maximum type safety and runtime performance.
-
-#### How it works:
-
-1. **Build Time**: The OpenAPI schema is fetched and processed to extract all metadata (paths, operations, parameters)
-2. **Code Generation**: TypeScript code is generated as string literals containing pre-computed constants
-3. **Runtime**: The SDK simply imports and uses these pre-generated, fully-typed constants
-
-This means:
-
-- Zero runtime overhead for schema processing
-- Complete type safety without runtime type assertions
-- The `as const` schema is used only for type definitions, never for runtime iteration
-- All operations metadata is available as typed constants
-
-#### ADR Compliance - The Central Contract
-
-This SDK implements the central contract that **if the API schema changes, the ONLY thing required is to rerun the SDK type generation**. All downstream consumers (like MCP servers) will automatically receive:
-
-- Updated types and interfaces
-- New/modified operations and parameters
-- Validation rules from the schema
-- All without ANY manual code changes
-
-This is achieved through:
-
-- **ADR-029**: No manual API data structures - everything flows from OpenAPI
-- **ADR-030**: SDK as the single source of truth - consumers import SDK types directly
-- **ADR-031**: Generation at build time - all transformations happen during SDK build
-
-> **This SDK demonstrates the compile-time generation pattern that works for any OpenAPI-compliant API.** The same pattern can be applied to other APIs, different versions, or custom implementations. See [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md) for how to extend this to new APIs.
-
-#### Key Components:
-
-- `code-generation/` - Build-time generation scripts that extract metadata from OpenAPI
-- `code-generation/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
-- `src/types/generated/` - Generated TypeScript types and constants (do not edit manually)
-- `src/client/` - Runtime client that uses the pre-generated types
-- `src/tool-generation/` - Exports for programmatic tool generation (e.g., MCP servers)
-
-### Canonical URL Generation
-
-This SDK automatically generates canonical URLs for all curriculum resources at code-generation time. This eliminates the need for consuming applications to implement their own URL generation logic.
-
-#### How it works:
-
-1. **SDK-Codegen Time**: URL helpers are generated during `pnpm sdk-codegen` based on the OpenAPI schema
-2. **Response Augmentation**: All API responses are automatically augmented with `canonicalUrl` fields
-3. **Schema Decoration**: The OpenAPI schema is decorated to include `canonicalUrl` in response types
-4. **Context-Aware**: URL generation uses response context (e.g., subject/phase for units) when available
-
-#### Example:
-
-```typescript
-// All responses automatically include canonical URLs
-const lesson = await client.getLessonSummary('add-two-numbers');
-console.log(lesson.canonicalUrl); // "https://www.thenational.academy/teachers/lessons/add-two-numbers"
-
-const unit = await client.getUnitSummary('place-value');
-console.log(unit.canonicalUrl); // "https://www.thenational.academy/teachers/programmes/maths-ks1/units/place-value"
-
-// Context is automatically extracted from response data
-const subject = await client.getSubject('maths');
-console.log(subject.canonicalUrl); // "https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes"
-```
-
-#### URL Generation Features:
-
-- **Fail-Fast Design**: Missing context results in warnings, not broken URLs
-- **Structured Logging**: Clear debugging information for URL generation issues
-- **Type Safety**: All URL generation is fully typed based on the OpenAPI schema
-- **Consistent Patterns**: All consuming applications generate identical canonical URLs
-
-### Search Tools (Aggregated)
-
-Three aggregated MCP tools expose the Search SDK's Elasticsearch-backed semantic search to agents and teachers:
-
-| Tool                | Purpose                                                               | SDK Methods                                                                   |
-| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `search`            | 5-scope semantic search (lessons, units, threads, sequences, suggest) | `searchLessons`, `searchUnits`, `searchThreads`, `searchSequences`, `suggest` |
-| `browse-curriculum` | Faceted navigation without a search query                             | `fetchSequenceFacets`                                                         |
-| `explore-topic`     | Compound parallel cross-scope discovery                               | `searchLessons` + `searchUnits` + `searchThreads` in parallel                 |
-
-These tools consume a `SearchRetrievalService` interface defined in `src/mcp/search-retrieval-types.ts`. This interface is structurally compatible with the Search SDK's `RetrievalService` but does not import from it, avoiding a circular dependency between curriculum-sdk and oak-search-sdk. The MCP servers inject the concrete implementation when Elasticsearch credentials are available.
-
-When `searchRetrieval` is not provided, the tools return a "not configured" error. All other tools continue to work normally.
-
-### MCP Tool Generation
-
-This SDK now generates all MCP (Model Context Protocol) tool types at build time, making the entire SDK+MCP system a pure function of the OpenAPI schema. The generation happens in three phases:
-
-1. **codegen.ts**: Extracts MCP tools from OpenAPI and generates basic types
-2. **zodgen.ts**: Generates Zod schemas for runtime validation
-3. **mcp-toolgen.ts**: Reads the actual Zod output and creates validator mappings
-
-This ensures that MCP servers can import fully-typed tool definitions directly from the SDK:
-
-```typescript
-import {
-  MCP_TOOLS_DATA,
-  type McpToolName,
-  type ToolParameters,
-  validateToolResponse,
-} from '@oaknational/curriculum-sdk';
-
-// All tool names are literal types
-const toolName: McpToolName = 'oak-get-sequences-units';
-
-// Parameters are fully typed based on the tool
-const params: ToolParameters<typeof toolName> = {
-  sequence: 'maths-primary',
-  year: '3',
-};
-
-// Runtime validation with Zod
-const response = await fetchFromAPI(/* ... */);
-const validated = validateToolResponse(toolName, response);
-```
-
-### Shared Validation Helpers
-
-- `parseSchema` wraps `schema.safeParse`, returning a typed `ValidationResult` without `any` casts.
-- `parseWithCurriculumSchema`, `parseWithCurriculumSchemaInstance`, `parseEndpointParameters`, and `parseSearchResponse` delegate to `parseSchema`, covering curriculum responses, request parameter maps, and search responses.
-- `parseSearchSuggestionResponse` applies the same pattern for suggestions.
-
-Downstream consumers **must** import these helpers rather than duplicating validation logic. If the OpenAPI schema changes, rerunning `pnpm sdk-codegen` updates the generated Zod schemas and the helpers continue to provide the correct `_input`/`_output` types.
-
-### Architectural Decisions (Deep Dive)
-
-This SDK follows several important architectural patterns documented in our ADRs:
-
-- [ADR-026: OpenAPI Code Generation Strategy](../../../docs/architecture/architectural-decisions/026-openapi-code-generation-strategy.md) - How we generate types from OpenAPI
-- [ADR-029: No Manual API Data](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) - All API data comes from the OpenAPI schema
-- [ADR-030: SDK as Single Source of Truth](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - The SDK is the authoritative source for API types
-- [ADR-031: Generation-Time Extraction](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
-- [ADR-035: Unified SDK-MCP Code Generation](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md) - MCP tool types flow from the SDK
-- [ADR-047: Canonical URL Generation at Code-Gen Time](../../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md) - Automatic canonical URL generation in all responses
-- [ADR-048: Shared Parse Schema Helper](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Describes how `parseSchema` validates curriculum/search requests and responses.
-
-### Directory Structure
-
-```text
-oak-curriculum-sdk/
-├── code-generation/
-│   ├── codegen.ts         # Phase 1: OpenAPI type generation
-│   ├── zodgen.ts          # Phase 2: Zod schema generation
-│   ├── mcp-toolgen.ts     # Phase 3: MCP validator mapping
-│   ├── operations/        # Extract and generate operation constants
-│   ├── parameters/        # Extract and generate parameter constants
-│   ├── paths/             # Extract and generate path constants
-│   ├── routing/           # Generate canonical URL helpers
-│   ├── mcp-tools/         # MCP tool type generation
-│   └── lib/               # Shared helpers for generation
-├── src/
-│   ├── client/            # Runtime API client
-│   ├── response-augmentation.ts # Automatic canonical URL augmentation
-│   ├── types/
-│   │   └── generated/     # Generated types (DO NOT EDIT)
-│   │       ├── api-schema/       # OpenAPI types and constants
-│   │       │   ├── mcp-tools.ts      # MCP tool definitions
-│   │       │   ├── mcp-parameters.ts # MCP parameter types
-│   │       │   ├── mcp-validators.ts # MCP validators
-│   │       │   └── routing/          # Canonical URL generation
-│   │       │       └── url-helpers.ts # Generated URL helper functions
-│   │       └── zod/              # Zod validation schemas
-│   └── tool-generation/   # Exports for programmatic tool generation
-└── dist/                  # Built output
-```
+TypeScript SDK for accessing Oak National Academy's Curriculum API. Generated, not hand-written — when the API schema changes, `pnpm sdk-codegen` regenerates all types, validators, and MCP tools automatically.
 
 ## Installation
 
@@ -223,20 +33,25 @@ const lesson = await client.getLesson('lesson-id');
 
 // List units in a programme
 const units = await client.listUnits('programme-id');
+
+// All responses include canonical URLs automatically
+const summary = await client.getLessonSummary('add-two-numbers');
+console.log(summary.canonicalUrl);
 ```
 
 ## Features
 
-- Type-safe API methods
-- **Automatic canonical URL generation** - All responses include canonical URLs
+- Type-safe API methods generated from the OpenAPI schema
+- Automatic canonical URL generation on all responses
 - Automatic retry with exponential backoff
 - Response caching
 - Error handling with detailed messages
 - Runtime-agnostic design
+- Shared validation helpers (`parseSchema`, `parseWithCurriculumSchema`, etc.) for safe parsing without manual assertions
 
 ## Logging
 
-The SDK integrates seamlessly with `@oaknational/logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
+The SDK integrates with `@oaknational/logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
 
 ```typescript
 import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
@@ -249,7 +64,6 @@ import {
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
 
-// Create logger with explicit dependency injection
 const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber(level),
@@ -271,32 +85,42 @@ try {
     duration: duration.formatted,
   });
 } catch (error) {
-  logger.error('Search failed', error as Error);
+  logger.error('Search failed', error instanceof Error ? error : new Error(String(error)));
 }
 ```
 
 For comprehensive logging patterns, integration examples, and best practices, see the [Logging Guide](docs/logging-guide.md).
 
+## Architecture Overview
+
+This SDK implements the **OpenAPI-First Pipeline** pattern: everything is generated from the OpenAPI schema at compile time via a three-phase pipeline (type generation, Zod schema generation, MCP validator mapping). Zero runtime overhead for schema processing.
+
+For the full architectural explanation, see [OpenAPI Pipeline Architecture](../../../docs/architecture/openapi-pipeline.md) and [SDK Architecture](docs/architecture.md).
+
+ADRs define how the system should work and are the architectural source of truth. These ADRs are particularly relevant to SDK development — they explain why the SDK is generated rather than hand-written:
+
+- [ADR-029](../../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
+- [ADR-030](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
+- [ADR-031](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-035](../../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-code-generation.md) — Unified SDK and MCP code generation
+- [ADR-048](../../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+
+See the [ADR index](../../../docs/architecture/architectural-decisions/) for the full list.
+
 ## Documentation
 
-- SDK Docs Pipeline Guide: `packages/oak-curriculum-sdk/docs/docs-pipeline.md` — how to generate, verify, and extend HTML/JSON/MD/AI docs.
+- [SDK Architecture](docs/architecture.md) — generation pipeline, canonical URLs, search tools, MCP tool generation, validation helpers, directory structure
+- [SDK Docs Pipeline Guide](docs/docs-pipeline.md) — how to generate, verify, and extend HTML/JSON/MD/AI docs
 
 ## Development
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Run tests
-pnpm test
-
-# Build
-pnpm build
-
-# Type check
-pnpm type-check
+pnpm install     # Install dependencies
+pnpm test        # Run tests
+pnpm build       # Build
+pnpm type-check  # Type check
 ```
 
-## License
+## Licence
 
 MIT

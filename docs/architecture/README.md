@@ -17,13 +17,12 @@ last_reviewed: 2026-02-25
 2. **→ Current Architecture Overview (this page)** - Standard structure and boundaries
 3. **→ Historical Context: Greek Ecosystem Deprecation** ([deprecation doc](./greek-ecosystem-deprecation.md))
 
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
-Start with the [ADR index](./architectural-decisions/), then read a lightweight foundational set:
+ADRs define how the system should work and are the architectural source of truth. Start with the [ADR index](./architectural-decisions/), then these foundational decisions that shape the entire codebase:
 
-- [ADR-029](./architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
-- [ADR-030](./architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
-- [ADR-031](./architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
-- [ADR-107](./architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) - Deterministic SDK and NL boundary
+- [ADR-029](./architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
+- [ADR-030](./architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
+- [ADR-031](./architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-107](./architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK and NL boundary
 
 ## Reference Documentation
 
