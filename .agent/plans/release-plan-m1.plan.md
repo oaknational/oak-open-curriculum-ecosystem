@@ -76,25 +76,23 @@ explanatory documentation. Estimated effort: 1 focused session.
 Full findings with owner dispositions:
 [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
 
-All 17 documentation remediation items are now complete:
+All 17 documentation remediation items are now complete (see commit `e1e83251`).
 
-1. R3 — CONTRIBUTING.md stale code-generation path: DONE
-2. R4 — status banner in README: DONE
-3. R7 — "over 100" for ADRs: DONE
-4. R18 — CHANGELOG.md cleared: DONE
-5. R33 — LICENSE renamed to LICENCE: DONE
-6. R5 + R6 + R36 — README restructure: DONE
-7. R8 — `.agent/README.md` and `.agent/experience/HUMAN.md`: DONE
-8. R12 — security contact placeholder fixed: DONE
-9. R15 — MCP server README progressive disclosure: DONE
-10. R16 — practice section reframed + internal-only frontmatter: DONE
-11. R17 + R25 — acronyms expanded, jargon replaced: DONE
-12. R19 — licence badges added: DONE
-13. R21 — CONTRIBUTING.md MCP env requirements clarified: DONE
-14. R22 — contextual framing for ADR references: DONE
-15. R23 — generated-docs note in quick-start: DONE
-16. R26 — governance orientation document: DONE
-17. R35 — SDK README reordered for appropriate audiences: DONE
+**Post-remediation onboarding validation (next session)**:
+
+Run a fresh onboarding simulation against the remediated repository state
+using 4 personas: junior dev, lead dev, engineering manager, product owner.
+This validates the remediation worked and catches any regressions or new
+issues introduced by the restructuring. See
+[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+§Post-Remediation Rerun for scope and output contract.
+
+**Remaining M0 gates after onboarding validation**:
+
+1. Final secrets and PII sweep (`pnpm secrets:scan:all`)
+2. Manual sensitive-information review (human)
+3. Merge `feat/semantic_search_deployment` to `main`
+4. Make repository public on GitHub
 
 **Engineering/ops gates (M1 — blocks open public alpha)**:
 

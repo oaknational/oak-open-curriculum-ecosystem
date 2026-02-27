@@ -1,7 +1,7 @@
 # Onboarding Simulations and Public-Alpha Readiness
 
-**Status**: 🔄 Active (owner dispositions recorded, implementation pending)  
-**Last Updated**: 2026-02-26  
+**Status**: 🔄 Active (remediation complete, post-remediation rerun pending)
+**Last Updated**: 2026-02-27  
 **Owner Boundary**: `developer-experience/`
 
 ---
@@ -862,8 +862,73 @@ Short-term (1 session):
 
 ---
 
+## Post-Remediation Rerun
+
+### Context
+
+All 17 M0-blocking documentation remediation items (R3–R36) are complete
+(commit `e1e83251`, 2026-02-27). The repository documentation has changed
+materially: root README restructured (267→145 lines), MCP server READMEs
+split into product-facing summaries + operational docs, SDK README
+reordered, new explanatory files created, acronyms expanded, ADR
+references contextually framed, licence naming standardised.
+
+A fresh onboarding simulation is required to validate these changes
+before M0 exit.
+
+### Rerun Scope
+
+Run onboarding simulations against the current repository state for
+4 personas:
+
+1. **Junior dev** — Can they clone, build, and make a first contribution
+   following only the documentation?
+2. **Lead dev** — Can they evaluate the architecture, understand the
+   quality gates, and assess the codebase for team adoption?
+3. **Engineering manager** — Can they understand the project's maturity,
+   risk posture, and engineering practice from the public-facing docs?
+4. **Product owner** — Can they understand the product value, capability
+   staging, and milestone progression without technical background?
+
+### Rerun Inputs
+
+- [README.md](../../../README.md) (restructured)
+- [CONTRIBUTING.md](../../../CONTRIBUTING.md) (updated)
+- [docs/foundation/quick-start.md](../../../docs/foundation/quick-start.md) (updated)
+- [docs/foundation/VISION.md](../../../docs/foundation/VISION.md) (updated)
+- [docs/governance/README.md](../../../docs/governance/README.md) (enhanced)
+- [.agent/README.md](../../README.md) (new)
+- [.agent/experience/HUMAN.md](../../experience/HUMAN.md) (new)
+- [packages/sdks/oak-curriculum-sdk/README.md](../../../packages/sdks/oak-curriculum-sdk/README.md) (restructured)
+- [apps/oak-curriculum-mcp-stdio/README.md](../../../apps/oak-curriculum-mcp-stdio/README.md) (split)
+- [apps/oak-curriculum-mcp-streamable-http/README.md](../../../apps/oak-curriculum-mcp-streamable-http/README.md) (split)
+
+### Rerun Output Contract
+
+For each persona, capture:
+
+1. entry-point success/failure in first 5 minutes
+2. time-to-first-success estimate
+3. blocker list (P0/P1/P2/P3)
+4. trust and clarity observations
+5. whether previously-flagged issues (R3–R36) are now resolved
+6. any new issues introduced by the restructuring
+
+### Acceptance
+
+- No P0 onboarding blockers across the 4 personas
+- No contradictory onboarding instructions in canonical entry points
+- All 17 remediated items verified as resolved from the persona's perspective
+- Any new findings classified and recorded in this document
+
+---
+
 ## Change Log
 
+- **2026-02-27**: All 17 M0-blocking remediation items (R3–R36) complete.
+  Post-remediation rerun section added for 4 personas (junior dev, lead
+  dev, engineering manager, product owner). Rerun validates the
+  restructuring and checks for regressions.
 - **2026-02-26**: **Owner dispositions recorded for all 36 findings.** Key
   outcomes: R1 resolved (repo name correct — intentional rename, reviewer
   got it backwards); R2 resolved (all 5 files exist — reviewer false
