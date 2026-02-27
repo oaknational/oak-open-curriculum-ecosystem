@@ -1,6 +1,6 @@
 # Plans
 
-Strategic and tactical planning documents for the Oak MCP Ecosystem.
+Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 
 **High-Level Coordination**: [high-level-plan.md](high-level-plan.md)
 **Milestones**: [milestones/](../milestones/) — per-milestone summaries (audience, value, gates)

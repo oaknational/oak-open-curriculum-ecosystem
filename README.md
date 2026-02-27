@@ -1,119 +1,97 @@
-# Oak MCP Ecosystem
+# Oak Open Curriculum Ecosystem
 
-Tools for building AI applications on the Oak National Academy curriculum.
+Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, and semantic search over the curriculum data powered by Elasticsearch Serverless.
 
-> **Status: Private Alpha** — This repository is under active development. APIs, tools, and documentation may change. See [milestones](.agent/milestones/) for the progression path.
+**Product and impact folks**: take a look at the [VISION.md](docs/foundation/VISION.md) for a high-level overview of the project.
+
+> **Current status: Private Alpha** — This repository is under active early development. APIs, tools, and documentation may change. Public alpha is being planned, see [milestones/m1-open-public-alpha.md](.agent/milestones/m1-open-public-alpha.md) for details.
 
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
 
-This repository is how Oak makes its curriculum available to AI tools and the wider education technology community. It powers the infrastructure that lets AI assistants like Claude and ChatGPT search Oak's curriculum, plan lessons, and access structured educational data — helping teachers find, adapt, and use Oak's openly-licensed curriculum.
+This repository is how Oak makes its openly-licensed, fully sequenced, and fully resourced curriculum available to AI systems and the wider education technology community, via SDKs, MCP servers, and semantic search. AI assistants like Claude, ChatGPT, and Gemini can search Oak's curriculum, explore lessons, units, threads, and sequences, and other structured educational content — helping teachers find, adapt, and use high-quality curriculum resources.
 
-> For the broader vision — impact, capability staging, and the investment case — see [VISION.md](docs/foundation/VISION.md). No technical background required.
+## Not a developer? Start here
 
-- **Product owners, school leaders, non-technical evaluators** — start with [VISION.md](docs/foundation/VISION.md) for what this project delivers and why, then the [Curriculum Guide](docs/domain/curriculum-guide.md) for Oak's curriculum structure in plain language
-- **Developers** — jump to [Quick Start](#quick-start) below
+**Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
+
+- [VISION.md](docs/foundation/VISION.md) — what this project delivers, why it matters, and the investment case (no technical background required)
+- [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
+
+## Developers and AI agents
+
+- **Developers** — continue to [Quick Start](#quick-start) below
 - **AI agents** — read the [start-right workflow](.agent/prompts/start-right.prompt.md), then [AGENT.md](.agent/directives/AGENT.md)
 
-## What's In This Repo
+## What This Repo Provides
 
-SDKs, MCP ([Model Context Protocol](https://modelcontextprotocol.io/) — a standard that lets AI tools like ChatGPT and Claude connect to data sources) servers, and Elasticsearch-backed semantic search — all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification.
+Three capabilities, all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification:
 
-| Package                                      | Purpose                                                                                    |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `packages/sdks/oak-curriculum-sdk`           | Generated SDK: TypeScript types, Zod validators, MCP tool metadata                         |
-| `packages/sdks/oak-search-sdk`               | Search SDK: Elasticsearch-backed retrieval with dependency injection                       |
-| `apps/oak-curriculum-mcp-stdio`              | MCP server over stdio (for Claude Desktop, Cursor)                                         |
-| `apps/oak-curriculum-mcp-streamable-http`    | MCP server over HTTP (for web clients, Vercel deployment)                                  |
-| `apps/oak-search-cli`                        | Semantic search CLI: ingestion, hybrid search, ground truth evaluation                     |
-| `packages/core/result`                       | Canonical `Result<T, E>` type                                                              |
-| `packages/core/env`                          | Environment schema contracts (shared Zod schemas)                                          |
-| `packages/libs/env-resolution`               | Environment resolution pipeline (`resolveEnv`)                                             |
-| `packages/libs/logger`                       | Structured logging library                                                                 |
-| `docs/architecture/architectural-decisions/` | Over 100 ADRs (Architectural Decision Records) documenting every significant design choice |
+| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                                                                    |
+| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (Claude Desktop, Cursor), [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (web, Vercel) |
+| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                  |
 
-### The Open Curriculum
-
-The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright. Everything in this repository works with this open data. When you see "curriculum" in the codebase, it means the open, reusable subset.
+The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
 
 ## Quick Start
 
 ### Prerequisites
 
-- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` (or `fnm use`) to activate the version in `.nvmrc`
+- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
-- **gitleaks** — required for push; `brew install gitleaks` on macOS, or install from [gitleaks releases](https://github.com/gitleaks/gitleaks/releases)
 
-### Install
+### Install and verify
 
 ```bash
-git clone https://github.com/oaknational/oak-open-data-ecosystem.git
-cd oak-open-data-ecosystem
+git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git
+cd oak-open-curriculum-ecosystem
 pnpm install
+pnpm test && pnpm type-check && pnpm lint:fix
 ```
 
-Read [docs/foundation/quick-start.md](docs/foundation/quick-start.md) for architecture, setup, key concepts, and development workflows.
+If these pass, your toolchain is working. No API keys are required for unit tests, type-checking, linting, or building.
 
-### Verify Your Setup (no API keys required)
+**Before your first push**: install [gitleaks](https://github.com/gitleaks/gitleaks/releases) (`brew install gitleaks` on macOS). The pre-push hook runs a secrets scan and will block pushes if gitleaks is not installed.
 
-```bash
-pnpm test
-pnpm type-check
-pnpm lint:fix
-```
+### Get an API key (optional)
 
-If these pass, your toolchain is working and you can start contributing immediately.
+Many tasks work without environment variables. To run dev servers, integration tests, or search workflows, you need an Oak API key:
 
-### Environment Variables (only for external services)
+1. Request a free key: <https://open-api.thenational.academy/docs/about-oaks-api/api-keys>
+2. Copy the example environment file and add your key:
 
 ```bash
 cp .env.example .env
-# populate OAK_API_KEY, ELASTICSEARCH_*, etc.
+# Edit .env: set OAK_API_KEY=your_key_here
 ```
 
-Many tasks work without environment variables (`pnpm test`, `pnpm type-check`, `pnpm lint:fix`, `pnpm build`). Variables are only required for running dev servers, E2E tests, and smoke tests. Each workspace README provides its own `.env.local` hints.
+See [environment variables guide](docs/operations/environment-variables.md) for Elasticsearch, Clerk, and other service credentials.
 
-### Run the Full Pipeline
+### Next steps
 
-```bash
-pnpm make   # Full pipeline: install, build, type-check, generate docs, lint, format
-pnpm qg     # Quality gates: format, markdownlint, type-check, lint, all test suites, smoke
-```
-
-`pnpm make` is the recommended first full pipeline run.
-`pnpm qg` is slower and runs UI/E2E/smoke suites that may require additional service configuration.
-See [Troubleshooting](docs/operations/troubleshooting.md#known-gate-caveats) for current caveats.
-
-### Choose Your Starting Point
-
-**SDK/Library work** (no env vars needed):
-Start with [packages/sdks/oak-curriculum-sdk/README.md](packages/sdks/oak-curriculum-sdk/README.md)
-
-**Search application work** (requires Elasticsearch + API keys):
-Start with [apps/oak-search-cli/README.md](apps/oak-search-cli/README.md)
-
-**MCP server work** (requires `OAK_API_KEY` + Elasticsearch credentials; HTTP auth mode also needs Clerk keys):
-
-- Stdio: [apps/oak-curriculum-mcp-stdio/README.md](apps/oak-curriculum-mcp-stdio/README.md) — for Claude Desktop, Cursor
-- HTTP: [apps/oak-curriculum-mcp-streamable-http/README.md](apps/oak-curriculum-mcp-streamable-http/README.md) — OAuth-enabled, Vercel-ready
+The full [Quick Start Guide](docs/foundation/quick-start.md) covers architecture, key concepts, and development workflows. Each workspace README provides area-specific setup (see links in the capability table above).
 
 ## Key Commands
 
+**Daily development:**
+
 ```bash
-pnpm install        # Install dependencies
-pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
-pnpm build          # Build all workspaces
-pnpm type-check     # Type-check apps and packages
-pnpm doc-gen        # Generate TypeDoc/OpenAPI/markdown/AI docs
-pnpm lint:fix       # Lint and auto-fix
 pnpm test           # Unit + integration tests
-pnpm test:ui        # Playwright suites
-pnpm test:e2e       # End-to-end tests
-pnpm smoke:dev:stub # Local smoke harness for MCP servers
-pnpm make           # Full pipeline (install, build, check, lint, format)
-pnpm qg             # Quality gates (all checks + all test suites)
-pnpm fix            # Auto-fix (format, markdownlint, lint)
-pnpm check          # Build and validate everything
+pnpm type-check     # Type-check all workspaces
+pnpm lint:fix       # Lint and auto-fix
+pnpm build          # Build all workspaces
+pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
+```
+
+**Full verification:**
+
+```bash
+pnpm make           # Full pipeline: install, build, type-check, doc-gen, lint, format
+pnpm qg             # Quality gates: all checks + all test suites (UI, E2E, smoke)
+pnpm fix            # Auto-fix: format + markdownlint + lint
+pnpm clean          # Remove build artefacts (dist/, .turbo)
 ```
 
 ## Architecture
@@ -127,36 +105,34 @@ Everything flows from the OpenAPI schema:
 
 **The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm sdk-codegen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
 
-| Directory        | Purpose                                                                      |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                       |
-| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval) |
-| `packages/core/` | Foundational packages: `result`, `env` (schema contracts), ESLint configs    |
-| `packages/libs/` | Shared libraries: `env-resolution` (env pipeline), `logger`                  |
-| `docs/`          | Developer documentation, guides, and ADRs                                    |
+Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-ADRs define how the system works and are the architectural source of truth. These three foundational ADRs define the schema-first generation approach that underpins the entire codebase:
+| Directory        | Purpose                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                         |
+| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                   |
+| `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, type helpers, ESLint configs |
+| `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |
+| `docs/`          | Developer documentation, guides, and 100+ ADRs                                                 |
+
+Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 
 - [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
-See the [ADR index](docs/architecture/architectural-decisions/) for the full list.
+See the [full ADR index](docs/architecture/architectural-decisions/) for all decisions.
 
 ## Engineering Practice
 
-This repository uses AI-assisted engineering governed by comprehensive quality gates, specialist reviewers, and over 100 architectural decision records. The approach is documented in [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md).
-
-The practice operates through [directives](.agent/directives/AGENT.md), [plans](.agent/plans/), and [platform-specific tooling](.cursor/). The `.agent/` directory contains the practice infrastructure, including session memory and experience records — see [.agent/README.md](.agent/README.md) for an explanation of what these files are and why they exist.
+This repository is optimised for AI-assisted engineering governed by quality gates, specialist reviewers, and architectural decision records — see [.agent/HUMANS.md](.agent/HUMANS.md) for more information. The approach is documented in [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md), and embodied in [the Practice](.agent/practice-core/README.md), a transferable, self-improving memetic system of principles, structures, agents, and tooling, enabling safer, human-AI collaboration and innovation without compromising on quality.
 
 ## Contributing
 
 This repository is open-source under the MIT licence. You are free to read,
 fork, and learn from the code.
 
-At this time, we are not accepting external contributions (pull requests,
-issues, or feature requests). This may change in the future; watch the
-repository for updates.
+At this time, we are not accepting external contributions (pull requests). This may change in the future; watch the repository for updates.
 
 If you find a security issue, please follow our
 [security policy](SECURITY.md).
@@ -167,9 +143,8 @@ commit conventions, and quality expectations.
 ## Support and Licensing
 
 - Documentation: [docs/README.md](docs/README.md)
-- Issues: <https://github.com/oaknational/oak-open-data-ecosystem/issues>
-- Discussions: <https://github.com/oaknational/oak-open-data-ecosystem/discussions>
+- Issues: <https://github.com/oaknational/oak-open-curriculum-ecosystem/issues>
 - Licence (code): MIT — see [LICENCE](LICENCE)
 - Licence (curriculum data): see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
-- Branding: [BRANDING.md](BRANDING.md)
+- Branding is copyright Oak National Academy: [BRANDING.md](BRANDING.md)
 - Security: [SECURITY.md](SECURITY.md)

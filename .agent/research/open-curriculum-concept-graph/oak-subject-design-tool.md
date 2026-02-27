@@ -1,7 +1,7 @@
-# Subject Design Tool for Oak MCP
+# Subject Design Tool for Oak Open Curriculum
 
 > **⚠️ FUTURE SCOPE**: This document describes a future Subject Design Tool
-> that would orchestrate existing Oak MCP tools and leverage a concept-layer
+> that would orchestrate existing Oak Open Curriculum tools and leverage a concept-layer
 > knowledge graph (see `oak-knowledge-graph-support.md`). This is separate from
 > the current `get-knowledge-graph` agent support tool being implemented.
 >
@@ -39,7 +39,7 @@ The tool is not about creating new canonical Oak subjects in the core system. In
   - Surface **conceptual spines** (threads and concepts) underpinning the subject.
   - Highlight **gaps, overlaps** and dependencies (pre‑requisites) using Oak’s existing
     sequencing.
-- Integrate naturally with existing Oak MCP tools (`get-ontology`, `search`, `get-threads`,
+- Integrate naturally with existing Oak Open Curriculum tools (`get-ontology`, `search`, `get-threads`,
   `get-key-stages-subject-units`, `get-units-summary`, etc.).
 - Be consumable both by:
   - Oak’s teacher-facing UI (e.g. “Design a new subject” wizard), and

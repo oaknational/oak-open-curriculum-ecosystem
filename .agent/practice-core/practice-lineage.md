@@ -1,7 +1,7 @@
 ---
 provenance:
   - index: 0
-    repo: oak-mcp-ecosystem
+    repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
   - index: 1
@@ -9,7 +9,7 @@ provenance:
     date: 2026-02-26
     purpose: "Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates"
   - index: 2
-    repo: oak-mcp-ecosystem
+    repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
 fitness_ceiling: 300
@@ -17,7 +17,7 @@ fitness_ceiling: 300
 
 # Practice Lineage
 
-This is the canonical lineage document for the oak-mcp-ecosystem Practice. It serves two purposes: (1) the reference for how the plasmid exchange mechanism works, and (2) the source template for outbound propagation.
+This is the canonical lineage document for the oak-open-curriculum-ecosystem Practice. It serves two purposes: (1) the reference for how the plasmid exchange mechanism works, and (2) the source template for outbound propagation.
 
 When propagating the Practice to another repo, copy the trinity: `practice.md`, this file, and `practice-bootstrap.md`. The provenance chain in the frontmatter is already set — the receiving repo appends its own entry when it evolves the files. See §Frontmatter and §Plasmid Exchange below.
 

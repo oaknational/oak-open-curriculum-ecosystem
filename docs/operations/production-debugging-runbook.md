@@ -1,6 +1,6 @@
 # Production Debugging Runbook
 
-This runbook provides step-by-step debugging workflows for the Oak MCP Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
+This runbook provides step-by-step debugging workflows for the Oak Open Curriculum Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
 
 **Last Updated**: 2025-11-08  
 **Applies To**: HTTP Server (Vercel), Stdio Server (local/Claude Desktop)

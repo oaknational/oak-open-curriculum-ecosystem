@@ -1,42 +1,40 @@
 ---
 prompt_id: onboarding-rerun
-title: "M0 Final Gates and V1-V10 Validation Findings"
+title: "M0 Final Gates — W1-W13 Fixes"
 type: handover
 status: active
 last_updated: 2026-02-27
 ---
 
-# M0 Final Gates and V1-V10 Validation Findings
+# M0 Final Gates — W1-W13 Fixes
 
 Session entry point. This prompt and the release plan together define the
 full scope of work.
 
 ## Context (completed work)
 
-N1-N21 documentation fixes and final onboarding validation are complete
-(2026-02-27). N10 generator `as` casts eliminated. Two code patterns
-extracted. Final validation with 4 personas confirmed fixes effective but
-discovered 10 new findings (V1-V10).
+V1-V10 fixes complete. Post-V-fix onboarding review complete (2026-02-27,
+4 personas: junior dev, lead dev, CTO, CEO). V fixes verified effective.
+No genuine P1 blockers. 13 new items (W1-W13) identified and dispositioned
+— all fix before M0.
 
 ## Step 1: Ground yourself
 
-1. Read [release-plan-m1.plan.md](../plans/release-plan-m1.plan.md). It
-   is self-contained. Pay particular attention to:
-   - §Next Steps (what remains for M0)
+1. Read [release-plan-m1.plan.md](../plans/release-plan-m1.plan.md). Pay
+   particular attention to:
+   - §Post-Review Documentation Fixes (W1-W13)
    - §Remaining M0 gates
 2. Read [rules.md](../directives/rules.md),
    [testing-strategy.md](../directives/testing-strategy.md), and
    [schema-first-execution.md](../directives/schema-first-execution.md).
 3. Read [distilled.md](../memory/distilled.md) and
    [napkin.md](../memory/napkin.md).
-4. Read the V1-V10 findings in
-   [onboarding-simulations-public-alpha-readiness.md](../plans/developer-experience/onboarding-simulations-public-alpha-readiness.md).
 
-## Step 2: Fix V1-V2 (P1 stale paths)
+## Step 2: Fix W1-W13
 
-V1 and V2 are P1 items — stale file paths in `extending.md` and
-`CONTRIBUTING.md` that send contributors to empty directories. Fix these
-first.
+Fix all 13 items per the descriptions in the release plan. Group by file
+for efficiency (several items touch `README.md`, `CONTRIBUTING.md`,
+`docs/operations/environment-variables.md`).
 
 After fixes:
 
@@ -44,14 +42,9 @@ After fixes:
 pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test
 ```
 
-## Step 3: Triage V3-V10 (P2 items)
+## Step 3: Remaining M0 gates
 
-Review each P2 finding. Fix what can be fixed quickly; document any that
-require broader decisions as future work in the release plan.
-
-## Step 4: Remaining M0 gates
-
-After V1-V2 are resolved:
+After W-fixes and quality gates pass:
 
 1. Final secrets and PII sweep (`pnpm secrets:scan:all`)
 2. Update M0 milestone status in
@@ -62,7 +55,7 @@ Items 3-4 below require human action:
 3. Manual sensitive-information review
 4. Merge `feat/semantic_search_deployment` to `main` and make public
 
-## Step 5: Consolidation
+## Step 4: Consolidation
 
 Run `/jc-consolidate-docs` to ensure no documentation is trapped in
 ephemeral locations.

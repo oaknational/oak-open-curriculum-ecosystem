@@ -79,13 +79,13 @@
   "description": "OAuth-enabled MCP server over HTTP for the Oak National Academy Curriculum API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-streamable-http"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
   "keywords": [
     "mcp",
     "oauth",

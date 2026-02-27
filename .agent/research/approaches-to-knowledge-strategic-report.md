@@ -515,7 +515,7 @@ ChatGPT generates a lesson that:
 
 Sarah uses it anyway because she's out of time.
 
-**With Oak MCP**:
+**With Oak Open Curriculum**:
 Sarah asks the same question. ChatGPT:
 
 1. **Discovers** Oak's curriculum server and its capabilities
@@ -553,7 +553,7 @@ An adaptive learning platform wants to incorporate high-quality curriculum conte
 **Today**:
 Negotiate licensing deals, build custom integrations, maintain synchronisation, hope content stays current.
 
-**With Oak MCP**:
+**With Oak Open Curriculum**:
 
 1. **Connect** to Oak's MCP server
 2. **Discover** available curriculum tools and resources

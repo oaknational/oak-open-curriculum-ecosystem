@@ -1,5 +1,8 @@
 # .agent/ — Agentic Engineering Practice Infrastructure
 
+> **Human developers**: this directory is AI agent infrastructure, not
+> intended for you. See [HUMANS.md](HUMANS.md) for where to go instead.
+
 This directory contains the infrastructure that supports the agentic
 engineering practice used to build and maintain this repository. For the
 formal definition, see

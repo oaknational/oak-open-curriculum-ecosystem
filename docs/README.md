@@ -6,7 +6,7 @@ status: active
 last_reviewed: 2026-02-25
 ---
 
-# Documentation for Oak MCP Ecosystem
+# Documentation for Oak Open Curriculum Ecosystem
 
 **Last Updated**: 2026-02-25  
 **Status**: Active index
@@ -47,7 +47,7 @@ last_reviewed: 2026-02-25
 - [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 - [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) - Canonical entity-relationship source used by generated tooling
 
-### Agentic Engineering Practice
+### Engineering Practice
 
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
 - [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system

@@ -5,7 +5,7 @@ import { resolveAllowedOrigins, resolveAllowedHosts, resolveCorsMode } from './s
  * Unit tests for CORS configuration resolution.
  *
  * Tests prove that three explicit CORS modes work correctly:
- * 1. 'allow_all' - permits all origins (headers, origins, everything)
+ * 1. 'dangerously_allow_all' - permits all origins (development/testing ONLY)
  * 2. 'explicit' - only allows specified origins from ALLOWED_ORIGINS
  * 3. 'automatic' - smart default (all in dev, self-only in Vercel)
  */
@@ -70,9 +70,9 @@ describe('resolveAllowedHosts', () => {
 });
 
 describe('resolveCorsMode', () => {
-  it('returns "allow_all" when CORS_MODE is "allow_all"', () => {
-    const result = resolveCorsMode('allow_all');
-    expect(result).toBe('allow_all');
+  it('returns "dangerously_allow_all" when CORS_MODE is "dangerously_allow_all"', () => {
+    const result = resolveCorsMode('dangerously_allow_all');
+    expect(result).toBe('dangerously_allow_all');
   });
 
   it('returns "explicit" when CORS_MODE is "explicit"', () => {
@@ -97,13 +97,21 @@ describe('resolveCorsMode', () => {
 });
 
 describe('resolveAllowedOrigins', () => {
-  describe('allow_all mode', () => {
-    it('returns undefined (allow_all) in all scenarios', () => {
-      expect(resolveAllowedOrigins('allow_all', undefined, [])).toBeUndefined();
-      expect(resolveAllowedOrigins('allow_all', ['https://example.com'], [])).toBeUndefined();
-      expect(resolveAllowedOrigins('allow_all', undefined, ['myapp.vercel.app'])).toBeUndefined();
+  describe('dangerously_allow_all mode', () => {
+    it('returns undefined (dangerously_allow_all) in all scenarios', () => {
+      expect(resolveAllowedOrigins('dangerously_allow_all', undefined, [])).toBeUndefined();
       expect(
-        resolveAllowedOrigins('allow_all', ['https://example.com'], ['myapp.vercel.app']),
+        resolveAllowedOrigins('dangerously_allow_all', ['https://example.com'], []),
+      ).toBeUndefined();
+      expect(
+        resolveAllowedOrigins('dangerously_allow_all', undefined, ['myapp.vercel.app']),
+      ).toBeUndefined();
+      expect(
+        resolveAllowedOrigins(
+          'dangerously_allow_all',
+          ['https://example.com'],
+          ['myapp.vercel.app'],
+        ),
       ).toBeUndefined();
     });
   });
@@ -131,7 +139,7 @@ describe('resolveAllowedOrigins', () => {
   });
 
   describe('automatic mode', () => {
-    it('returns undefined for local dev (enables allow_all CORS)', () => {
+    it('returns undefined for local dev (enables dangerously_allow_all CORS)', () => {
       const result = resolveAllowedOrigins('automatic', undefined, []);
       expect(result).toBeUndefined();
     });

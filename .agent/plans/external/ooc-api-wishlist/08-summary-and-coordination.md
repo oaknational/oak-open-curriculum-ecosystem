@@ -137,7 +137,7 @@ After each schema change:
 
 - **Live Demo**: Try the current MCP tools at `https://open-api.thenational.academy/mcp` (requires API key)
 - **Example ChatGPT Session**: [To be added - show real teacher using curriculum tools]
-- **GitHub**: [oak-mcp-ecosystem repository link - if public]
+- **GitHub**: [oak-open-curriculum-ecosystem repository link - if public]
 
 ---
 

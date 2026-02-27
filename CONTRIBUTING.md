@@ -1,14 +1,11 @@
-# Contributing to Oak MCP Ecosystem
+# Contributing to Oak Open Curriculum Ecosystem
 
-This repository is open-source under the MIT licence. You are free to read,
-fork, and learn from the code.
-
-At this time, we are not accepting external contributions (pull requests,
-issues, or feature requests). This may change in the future; watch the
-repository for updates.
-
-If you find a security issue, please follow our
-[security policy](SECURITY.md).
+This guide is for Oak team members contributing to the repository. If you
+are an external reader, you are welcome to read, fork, and learn from the
+code under the MIT licence. We are not currently accepting external
+contributions (pull requests, issues, or feature requests), but this may
+change — watch the repository for updates. If you find a security issue,
+please follow our [security policy](SECURITY.md).
 
 ## Code of Conduct
 
@@ -57,16 +54,14 @@ The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 
 1. **OpenAPI Schema** (single source of truth, external)
 2. **SDK Generation** (`code-generation/` scripts)
-3. **Generated Artefacts** (`src/types/generated/`, `src/tool-generation/`) — DO NOT EDIT
+3. **Generated Artefacts** (`src/types/generated/`) — DO NOT EDIT
 4. **Runtime Applications** (MCP servers, search app, admin tools)
 5. **Core Infrastructure** (`packages/core/`)
 6. **Infrastructure Libraries** (`packages/libs/`)
 
 For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/engineering/extending.md).
 
-## For Oak Team Members
-
-The rest of this guide is for internal contributors.
+---
 
 Before making changes, start with the quick start guide:
 [docs/foundation/quick-start.md](docs/foundation/quick-start.md)
@@ -83,8 +78,8 @@ Before making changes, start with the quick start guide:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/oaknational/oak-open-data-ecosystem.git
-   cd oak-open-data-ecosystem
+   git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git
+   cd oak-open-curriculum-ecosystem
    ```
 
 2. Install dependencies:
@@ -153,8 +148,8 @@ cp .env.example .env
 pnpm -C apps/oak-curriculum-mcp-stdio dev
 ```
 
-Get your Oak API key from: Contact Oak engineering team or see
-[Environment Variables Guide](docs/operations/environment-variables.md).
+Get your Oak API key from the public form:
+<https://open-api.thenational.academy/docs/about-oaks-api/api-keys>
 
 #### Level 3: Full Stack Development (1-2 hours setup)
 
@@ -163,12 +158,13 @@ Get your Oak API key from: Contact Oak engineering team or see
 For smoke testing and search functionality (E2E tests use mocks and DI — no
 real credentials needed; see [Build System](docs/engineering/build-system.md)):
 
-- `OAK_API_KEY` — Curriculum API
-- `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices
-- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth smoke testing
-- `SEARCH_API_KEY` — Admin endpoints
+- `OAK_API_KEY` — Curriculum API (root `.env`)
+- `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices (root `.env`)
+- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth smoke testing (root `.env`)
+- `SEARCH_API_KEY` — Search admin endpoints (`apps/oak-search-cli/.env.local`)
 
-See workspace READMEs for detailed setup instructions.
+See [environment variables guide](docs/operations/environment-variables.md) and
+workspace READMEs for detailed setup instructions.
 
 ## Development Process
 
@@ -198,12 +194,12 @@ git checkout -b fix/bug-description
 Before committing, run all quality checks:
 
 ```bash
-pnpm secrets:scan:all  # Secret scan (branches + tags + full history)
-pnpm format:root       # Format code
+pnpm build             # Build all workspaces
 pnpm type-check        # Check types
-pnpm lint:fix          # Lint code
+pnpm lint:fix          # Lint code (with auto-fix)
+pnpm format:root       # Format code
 pnpm test              # Run tests
-pnpm build             # Verify build
+pnpm secrets:scan:all  # Secret scan (branches + tags + full history)
 ```
 
 Pre-push hook also runs the secret scan; pushes are blocked if secrets are

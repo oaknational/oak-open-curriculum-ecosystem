@@ -406,7 +406,7 @@ The MCP project itself publishes security guidance and an authorization specific
 - Automated adversarial testing (prompt injection suites, tool misuse scenarios)
 - SBOM + image signing + provenance checks
 
-### 5.4 Repository operationalisation notes (`oak-mcp-ecosystem`)
+### 5.4 Repository operationalisation notes (`oak-open-curriculum-ecosystem`)
 
 Use this report as a source document, then express implementation through
 collection roadmap + active plans so controls are executable and testable.

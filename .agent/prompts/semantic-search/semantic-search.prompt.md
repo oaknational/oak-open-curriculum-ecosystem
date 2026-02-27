@@ -174,8 +174,8 @@ Phase 6 scope:
   `@oaknational/env` (was `mcp-env`). Done.
 - **6.3**: Workspace rename — `@oaknational/sdk-codegen` (was
   `curriculum-sdk-generation`), dir `oak-sdk-codegen`. Done.
-- **6.4**: Repo rename — `oak-open-data-ecosystem` (was
-  `oak-mcp-ecosystem`, internal refs only). Done.
+- **6.4**: Repo rename — `oak-open-curriculum-ecosystem` (was
+  `oak-open-curriculum-ecosystem`, internal refs only). Done.
 - **6.5**: Provenance banner updates (F11). Done.
 - **6.6**: Evaluation decisions — F12-F14 documented in codegen SDK
   README. Done.

@@ -1,4 +1,4 @@
-# Widget Design Improvements Based on Real Interaction With the Oak MCP
+# Widget Design Improvements Based on Real Interaction With the Oak Open Curriculum
 
 This document synthesises:
 

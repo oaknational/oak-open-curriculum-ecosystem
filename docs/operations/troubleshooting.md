@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide helps diagnose and resolve common issues with the Oak MCP Ecosystem. Follow the steps in order for each issue.
+This guide helps diagnose and resolve common issues with the Oak Open Curriculum Ecosystem. Follow the steps in order for each issue.
 
 ## Quick Diagnostics
 

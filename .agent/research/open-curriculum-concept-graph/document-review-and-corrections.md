@@ -132,7 +132,7 @@ Suggested header:
 
 ```markdown
 > **⚠️ FUTURE SCOPE**: This document describes a future Subject Design Tool
-> that would orchestrate existing Oak MCP tools and leverage a concept-layer
+> that would orchestrate existing Oak Open Curriculum tools and leverage a concept-layer
 > knowledge graph (see oak-knowledge-graph-support.md). This is separate from
 > the current `get-knowledge-graph` agent support tool being implemented.
 ```

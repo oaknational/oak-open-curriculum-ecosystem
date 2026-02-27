@@ -7,7 +7,7 @@ This guide helps AI agents working on this codebase understand when and how to a
 
 ## Overview
 
-The Oak MCP Ecosystem uses `@oaknational/logger` for structured logging with Phase 2 observability features:
+The Oak Open Curriculum Ecosystem uses `@oaknational/logger` for structured logging with Phase 2 observability features:
 
 - **Correlation IDs**: Request tracing across the system
 - **Timing instrumentation**: Sub-millisecond precision with slow request warnings

@@ -1,6 +1,6 @@
 # Extension Points
 
-Practical guidance for adding new capabilities to the Oak MCP Ecosystem.
+Practical guidance for adding new capabilities to the Oak Open Curriculum Ecosystem.
 
 ## Adding New MCP Tools
 
@@ -9,15 +9,15 @@ MCP tools are generated from the OpenAPI schema — you do not write tool defini
 ### Generated tools (from the API)
 
 1. The upstream OpenAPI schema gains a new endpoint
-2. Run `pnpm sdk-codegen` — the generator in `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/` produces tool metadata, Zod validators, input/output types, and execution helpers
-3. The generated tools appear in `src/types/generated/api-schema/mcp-tools/`
+2. Run `pnpm sdk-codegen` — the generator in `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/` produces tool metadata, Zod validators, input/output types, and execution helpers
+3. The generated tools appear in `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/`
 4. MCP servers automatically pick up the new tool from `MCP_TOOL_DESCRIPTORS`
 5. Run `pnpm build && pnpm test` to verify
 
 **Key files**:
 
-- Generator templates: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/mcp-tools/`
-- Generated output: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/`
+- Generator templates: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/`
+- Generated output: `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/`
 - Descriptor map: `MCP_TOOL_DESCRIPTORS` in the generated output
 - Schema-first execution: see [schema-first-execution.md](../../.agent/directives/schema-first-execution.md)
 - Pipeline constraints and edge cases: see [Known Constraints and Limitations](../architecture/openapi-pipeline.md#known-constraints-and-limitations)
@@ -81,7 +81,7 @@ Core packages live in `packages/core/` and provide foundational abstractions.
    mkdir -p packages/core/your-package/src
    ```
 
-2. **Set up `package.json`** with `workspace:^` dependencies and `"version": "0.0.0-development"` for semantic-release
+2. **Set up `package.json`** with `workspace:*` dependencies and `"version": "0.0.0-development"` for semantic-release
 3. **Add to `pnpm-workspace.yaml`** — the workspace must be listed
 4. **Configure `turbo.json`** — ensure build tasks respect the dependency graph
 5. **Set up ESLint** — import the shared ESLint config from `packages/core/oak-eslint`

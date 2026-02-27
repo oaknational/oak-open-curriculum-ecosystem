@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-Complete reference for all environment variables used across the Oak MCP Ecosystem.
+Complete reference for all environment variables used across the Oak Open Curriculum Ecosystem.
 
 ## Credential Policy
 
@@ -40,9 +40,9 @@ cp .env.example .env
 
 ### Required for Most Development
 
-| Variable      | Purpose                   | Where to Get                                               | Used By                                     |
-| ------------- | ------------------------- | ---------------------------------------------------------- | ------------------------------------------- |
-| `OAK_API_KEY` | Access Oak Curriculum API | Contact Oak National Academy team or use provided test key | SDK, MCP servers (stdio & HTTP), Search app |
+| Variable      | Purpose                   | Where to Get                                                                            | Used By                                     |
+| ------------- | ------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `OAK_API_KEY` | Access Oak Curriculum API | [Request a free key](https://open-api.thenational.academy/docs/about-oaks-api/api-keys) | SDK, MCP servers (stdio & HTTP), Search app |
 
 ### Authentication (HTTP MCP Server)
 
@@ -74,7 +74,7 @@ The search app requires its own `.env.local` file with additional variables for 
 | `ELASTICSEARCH_URL`     | Elasticsearch Serverless HTTPS endpoint | Elasticsearch Cloud console          |
 | `ELASTICSEARCH_API_KEY` | API key with manage + search privileges | Elasticsearch Cloud - Create API key |
 | `OAK_API_KEY`           | Oak Curriculum API access               | Same as root `.env`                  |
-| `SEARCH_API_KEY`        | Shared secret for admin/status routes   | Generate secure random string        |
+| `SEARCH_API_KEY`        | Shared secret for admin/status routes   | `openssl rand -hex 32`               |
 | `SEARCH_INDEX_VERSION`  | Monotonic cache/version tag             | Set manually (e.g., `v2025-03-16`)   |
 | `AI_PROVIDER`           | AI provider for natural language search | `openai` or `none`                   |
 
@@ -137,15 +137,10 @@ MCP_LOGGER_FILE_PATH=.logs/custom-path.log  # Custom log file location
 
 ### Oak API Key
 
-**For Oak team members**:
+Request a free API key from Oak's public form:
+<https://open-api.thenational.academy/docs/about-oaks-api/api-keys>
 
-1. Contact the Oak engineering team
-2. Request a development API key
-3. Use the provided key in your `.env` file
-
-**For external contributors**:
-
-Currently, external API keys are not automatically available. Please open a GitHub issue to request access for development purposes.
+Keys do not expire and are available to anyone. No approval process is required.
 
 ### Clerk (OAuth for HTTP Server)
 

@@ -27,9 +27,9 @@ note: >
 
 **Important non-goal**: define a universal "right way" that constrains other teams. The intention is to support and enable safe, high-quality human-AI collaboration through reusable patterns and guardrails, while preserving appropriate local autonomy in how teams apply them.
 
-**Action**: Design and build the practice from first principles through real product work (the Oak MCP Ecosystem — SDK, MCP servers, semantic search). Every component was created to solve a concrete problem encountered during delivery: rules to prevent repeated mistakes, sub-agents to provide specialist review, plans to organise multi-step work, institutional memory to preserve learning across sessions, quality gates to enforce standards without exception, and platform bindings to make it all discoverable through use.
+**Action**: Design and build the practice from first principles through real product work (the Oak Open Curriculum Ecosystem — SDK, MCP servers, semantic search). Every component was created to solve a concrete problem encountered during delivery: rules to prevent repeated mistakes, sub-agents to provide specialist review, plans to organise multi-step work, institutional memory to preserve learning across sessions, quality gates to enforce standards without exception, and platform bindings to make it all discoverable through use.
 
-**Result**: A self-reinforcing system that is documented (ADR-119), mapped (`.agent/practice-core/practice.md`), and operational. The practice governs all work on the oak-mcp-ecosystem repository. As the repository becomes public and Oak's product engineers begin working on it, the practice is the mechanism by which they will be enabled to deliver safely and at increased velocity using AI tools — it teaches itself to every new developer and AI agent that enters the codebase. The act of creating the practice, naming it, documenting it, and making it self-teaching *is* the act of enabling others.
+**Result**: A self-reinforcing system that is documented (ADR-119), mapped (`.agent/practice-core/practice.md`), and operational. The practice governs all work on the oak-open-curriculum-ecosystem repository. As the repository becomes public and Oak's product engineers begin working on it, the practice is the mechanism by which they will be enabled to deliver safely and at increased velocity using AI tools — it teaches itself to every new developer and AI agent that enters the codebase. The act of creating the practice, naming it, documenting it, and making it self-teaching *is* the act of enabling others.
 
 **This is a new capability, not standard Principal Engineer work.** The progression framework asks: *"If my role were hired again, would the candidate be expected to already have this skill?"* The answer is no. A Principal Engineer is expected to ensure product and process quality, set architectural direction, and maintain specialist expertise. The practice goes beyond those responsibilities:
 
@@ -62,7 +62,7 @@ The practice is built, operational, and evidenced through its outputs:
 
 **Evidence that the practice works:**
 
-- The oak-mcp-ecosystem repository was built entirely under the practice's governance: a Curriculum SDK generated from the OpenAPI schema, two MCP servers (stdio + HTTP with OAuth), a semantic search system combining four ranking methods across seven data sources, core packages, and comprehensive documentation
+- The oak-open-curriculum-ecosystem repository was built entirely under the practice's governance: a Curriculum SDK generated from the OpenAPI schema, two MCP servers (stdio + HTTP with OAuth), a semantic search system combining four ranking methods across seven data sources, core packages, and comprehensive documentation
 - The practice is self-teaching: AI agents in new sessions discover how it works by following links from AGENT.md, with no external instruction
 - The learning loop is active: mistakes captured in sessions are distilled into rules that prevent repetition in future sessions
 - The repository is public and open-source, providing a live demonstration
@@ -92,7 +92,7 @@ The work has been completed within approximately six months (September 2025 – 
 
 The impact of this work is designed to compound. The initial investment — building the practice — produces effects at three successive orders, each magnifying the leverage of the one before:
 
-1. **First order (delivered)**: the practice has enabled a single engineer, working with AI, to produce the entire oak-mcp-ecosystem safely and to a high standard. This is the direct, immediate benefit — increased velocity and quality for the person who built it.
+1. **First order (delivered)**: the practice has enabled a single engineer, working with AI, to produce the entire oak-open-curriculum-ecosystem safely and to a high standard. This is the direct, immediate benefit — increased velocity and quality for the person who built it.
 
 2. **Second order (imminent)**: as the repository becomes public and Oak's product engineers begin contributing, the practice will enable them to work safely and at increased velocity with AI tools, without compromising on quality. The self-teaching property means no separate training is needed — each new contributor is guided by the practice from their first session. Separately, as the SDK and MCP server packages are published on npm, external developers will gain typed, validated access to Oak's curriculum data, lowering the cost of building AI-powered education tools.
 

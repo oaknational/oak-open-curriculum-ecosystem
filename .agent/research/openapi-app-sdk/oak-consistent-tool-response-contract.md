@@ -1,4 +1,4 @@
-# Oak MCP Response Standardisation & Orchestration Spec
+# Oak Open Curriculum Response Standardisation & Orchestration Spec
 
 This write‑up pulls together:
 

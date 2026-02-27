@@ -40,13 +40,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
     "directory": "packages/core/type-helpers"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem/tree/main/packages/core/type-helpers#readme",
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/type-helpers#readme",
   "keywords": [
     "typescript",
     "type-safety",

@@ -25,7 +25,8 @@ manual version bumping.
 | `feat:`                             | Minor (0.x.0) |
 | `BREAKING CHANGE:` (in body/footer) | Major (x.0.0) |
 
-The current version is `0.1.0` (pre-1.0 semver).
+The current version is `0.8.0` (pre-1.0 semver; set to avoid clashes with
+earlier failed tag creation).
 
 ## Release Automation
 
@@ -107,7 +108,7 @@ Expected output (abbreviated):
 ```text
 npm warn publish Package @oaknational/curriculum-sdk not found...
 npm notice
-npm notice package: @oaknational/curriculum-sdk@0.1.0
+npm notice package: @oaknational/curriculum-sdk@0.8.0
 npm notice Tarball Contents
 npm notice   XXXkB  dist/index.js
 npm notice   XXXkB  dist/index.d.ts
@@ -117,7 +118,7 @@ npm notice   XXXkB  README.md
 npm notice   XXXkB  LICENCE
 npm notice Tarball Details
 npm notice   name:          @oaknational/curriculum-sdk
-npm notice   version:       0.1.0
+npm notice   version:       0.8.0
 npm notice   package size:  ...
 npm notice   total files:   ...
 ```

@@ -1,5 +1,89 @@
 # Napkin
 
+## Session: 2026-02-27 — Rename to Oak Open Curriculum Ecosystem
+
+### What happened
+
+User decided the project name is "Oak Open Curriculum Ecosystem" (not
+"Oak MCP Ecosystem"). GitHub repo is now `oaknational/oak-open-curriculum-ecosystem`.
+Executed a comprehensive rename:
+- Git remote updated
+- README title, clone URL, all GitHub links
+- 14 package.json files (repository/bugs/homepage URLs)
+- Root package name: `@oaknational/mcp-ecosystem` → `@oaknational/open-curriculum-ecosystem`
+- Display name "Oak MCP Ecosystem" → "Oak Open Curriculum Ecosystem" in 13+ active docs
+- Repo slug "oak-open-data-ecosystem" → "oak-open-curriculum-ecosystem" in 10+ active docs
+- Agent practice files (practice.md, lineage, bootstrap — `repo:` YAML fields)
+- .gitleaks.toml title
+- 10 research files (selective: project name refs only, not technical component refs)
+- ADR-055 (project name ref)
+
+### Boundary decisions
+
+- "Oak MCP servers" left unchanged — they ARE MCP servers, that's descriptive
+- Historical ADRs (008, 009, 022) left unchanged — `oak-mcp-core` was the package name at time of writing
+- Archive files, experience files, generated api-md docs all left as historical records
+- Vercel project name `oak-mcp-http` in runbook left unchanged (Vercel config is separate)
+
+### Quality gates
+
+All 24 tasks pass. Type-check, lint, markdownlint all green. Initial
+`pnpm test` failure was turbo cache issue, not rename-related (cleared
+on second run).
+
+## Session: 2026-02-27 — V1-V10 fixes and post-V-fix onboarding review
+
+### What happened
+
+Fixed 9 genuine V-items (V1-V10, V9 was product decision). All stale
+paths in extending.md, CONTRIBUTING.md, openapi-pipeline.md, and
+curriculum-sdk/docs/architecture.md corrected. ADR-029 implementation
+section updated to past tense. workspace:^ → workspace:* in extending.md.
+LessonSummary → real components['schemas']['KeyStageData'] pattern in
+quick-start and openapi-pipeline. Quality gates all green.
+
+Ran 4-persona non-prescriptive onboarding review (junior dev, lead dev,
+CTO, CEO). V-fixes verified effective. 13 new items (W1-W13) identified.
+User dispositioned all — no genuine P1 blockers.
+
+### Key decisions from user
+
+- Bus factor is NOT a risk for a self-sufficient, self-documenting repo
+  with 117 ADRs
+- Known quality gate failure (widget-rendering.spec.ts) is deliberate
+  and documented, not an issue
+- .agent/ directory is not for humans, needs README and HUMANS.md
+- docs/README.md YAML frontmatter is fine (short)
+- Version is 0.8.0, fix inconsistency in release-and-publishing.md
+- API keys: public form at
+  https://open-api.thenational.academy/docs/about-oaks-api/api-keys
+
+### Patterns
+
+- Reviewer false positive on repo name recurred 4th time. Pattern is now
+  well-documented in distilled.md but keeps coming back.
+- CEO persona found the audience routing (added in N2) visually
+  subordinate (blockquote). Content was right but format was wrong.
+  Lesson: for non-technical audiences, use headings and prominent
+  sections, not blockquotes.
+- CTO rated the repo as "one of the most thoroughly documented TypeScript
+  monorepos" — strong signal that the documentation work is landing.
+
+### W-fixes learnings
+
+- W11 (CORS rename) was the only code change among 13 items. Touched
+  env.ts, security-config.ts, unit tests, E2E tests, and .env.example.
+  The local .env file also had `CORS_MODE=allow_all` which broke 46 tests
+  when the enum values changed. Remember: Zod enum renames break any
+  consumer that reads from environment, including local .env files.
+- README heading levels: went h1→h3, markdownlint caught it. h2 was
+  the correct level.
+
+### What I should have done differently
+
+- Could have started the plan update and the V-fixes in parallel rather
+  than sequencing them — no dependency between them.
+
 ## Session: 2026-02-27 — Post-remediation onboarding rerun
 
 Ran discovery-based onboarding simulation with 4 personas (junior dev,
@@ -19,7 +103,7 @@ actually guides people rather than checking pre-selected files.
   VISION.md blockquote in README. Curriculum Guide (the best document for
   product people) is not linked from README at all.
 - Repo name false positive recurred for the third time. Three of four
-  personas flagged `oak-open-data-ecosystem` vs `oak-mcp-ecosystem`.
+  personas flagged `oak-open-curriculum-ecosystem` vs `oak-open-curriculum-ecosystem`.
   The rename has been executed on GitHub; local git remote is stale.
   Pattern: sub-agent reviewers consistently misread this situation.
 

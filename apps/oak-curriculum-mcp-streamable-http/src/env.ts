@@ -53,7 +53,9 @@ function deriveMcpCanonicalUri(
   return undefined;
 }
 
-const CorsModeSchema = z.enum(['allow_all', 'explicit', 'automatic']).default('automatic');
+const CorsModeSchema = z
+  .enum(['dangerously_allow_all', 'explicit', 'automatic'])
+  .default('automatic');
 
 /**
  * Base shape for the HTTP server environment.

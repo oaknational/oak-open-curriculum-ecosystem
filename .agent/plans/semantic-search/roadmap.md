@@ -178,7 +178,7 @@ Progress (25 Feb 2026):
 - Phase 6 (25 Feb 2026): four renames executed — `@oaknational/sdk-codegen`
   (was `curriculum-sdk-generation`), `@oaknational/logger` (was
   `mcp-logger`), `@oaknational/env` (was `mcp-env`), repo internal refs
-  to `oak-open-data-ecosystem` (was `oak-mcp-ecosystem`). Plus Phase 5
+  to `oak-open-curriculum-ecosystem` (was `oak-open-curriculum-ecosystem`). Plus Phase 5
   reviewer suggestions (S1–S3), provenance banners (F11), evaluation
   decisions (F12–F14), documentation alignment.
 - Phase 7 complete. Full quality gate chain, determinism verification,

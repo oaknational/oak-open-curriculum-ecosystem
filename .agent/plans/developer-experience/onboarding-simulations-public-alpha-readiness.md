@@ -340,14 +340,14 @@ No P0 blockers remain after owner dispositions.
 - [x] **R1. Repository name in clone URL and GitHub links** — RESOLVED
   (false positive)
   - Source: CEO
-  - Original claim: README references `oak-open-data-ecosystem` but actual
-    repo is `oak-mcp-ecosystem`.
+  - Original claim: README references `oak-open-curriculum-ecosystem` but actual
+    repo is `oak-open-curriculum-ecosystem`.
   - **Owner disposition**: The repo was intentionally renamed from
-    `oak-mcp-ecosystem` to `oak-open-data-ecosystem` as part of a planned
+    `oak-open-curriculum-ecosystem` to `oak-open-curriculum-ecosystem` as part of a planned
     rename (Phase 6 of SDK workspace separation). The documents referencing
-    `oak-open-data-ecosystem` are CORRECT. The local git remote still shows
-    the old name (`oak-mcp-ecosystem`) because GitHub handles the redirect.
-    The local remote should be updated to `oak-open-data-ecosystem` but this
+    `oak-open-curriculum-ecosystem` are CORRECT. The local git remote still shows
+    the old name (`oak-open-curriculum-ecosystem`) because GitHub handles the redirect.
+    The local remote should be updated to `oak-open-curriculum-ecosystem` but this
     is cosmetic, not a blocker.
   - Action: Update local git remote to new name. No document changes needed.
 
@@ -1104,7 +1104,7 @@ pattern from previous rerun (R2) noted where applicable.
     variations. Creates maintenance burden (and multiple locations for the
     repo-name string).
 
-- [x] **N16. Repository title "Oak MCP Ecosystem" assumes MCP knowledge**
+- [x] **N16. Repository title "Oak Open Curriculum Ecosystem" assumes MCP knowledge**
   - Source: Product owner
   - Recommendation: Consider a subtitle or tagline.
 
@@ -1129,16 +1129,16 @@ pattern from previous rerun (R2) noted where applicable.
 
 - [ ] **N21. GitHub Issues/Discussions links may not exist yet**
   - Source: Engineering manager
-  - Evidence: README links to `oak-open-data-ecosystem` Issues/Discussions
+  - Evidence: README links to `oak-open-curriculum-ecosystem` Issues/Discussions
     URLs. If repo is private under a different name, these 404.
 
 #### Recurring Findings (Previously Disposed)
 
-- **Repo name mismatch** (oak-open-data-ecosystem vs oak-mcp-ecosystem):
+- **Repo name mismatch** (oak-open-curriculum-ecosystem vs oak-open-curriculum-ecosystem):
   Flagged by junior dev (P1), lead dev (P2), and engineering manager (P1).
   Same as R1 from the 26 February rerun. **Owner re-confirmation
   (2026-02-27)**: The GitHub rename HAS been executed. The docs referencing
-  `oak-open-data-ecosystem` are CORRECT. The local git remote needs
+  `oak-open-curriculum-ecosystem` are CORRECT. The local git remote needs
   updating (`git remote set-url origin ...`). This is a reviewer false
   positive for the third time — adding to distilled.md as a persistent
   pattern.
@@ -1175,13 +1175,13 @@ remediation was effective. Specifically:
 | UX baseline clear | **PARTIAL** | Technical audience: clear. Non-technical audience: depends on finding VISION.md link (N2/N3) |
 | Previous remediation effective | **PASS** | No reviewer re-flagged any of the 17 remediated items |
 
-**Conclusion (updated after N10 resolution, 2026-02-27)**: All 4 P1
+**Conclusion (updated after V1-V10 resolution, 2026-02-27)**: All 4 P1
 items resolved (N1-N4). All 11 P2/P3 items resolved (N10 generator `as`
 casts eliminated 2026-02-27). Final validation (4 personas: junior dev,
 senior dev, principal engineer, product owner) confirmed the fixes are
-effective. 10 new findings (V1-V10) discovered during validation — 2 P1
-(stale paths in extending.md and CONTRIBUTING.md), 8 P2 (detailed below).
-Repo name mismatch not re-flagged.
+effective. 10 new findings (V1-V10) discovered during validation — all
+resolved (9 fixed, V9 logged as product decision). Post-V-fix onboarding
+review pending (4 personas: junior dev, lead dev, CTO, CEO).
 
 ### Post-Remediation Final Validation (2026-02-27)
 
@@ -1201,53 +1201,71 @@ Repo name mismatch not re-flagged.
 
 #### P1 — Blocks onboarding
 
-- [ ] **V1. `docs/engineering/extending.md` stale paths**
+- [x] **V1. `docs/engineering/extending.md` stale paths**
   - Source: Junior, senior, principal (all 3 technical personas)
   - Evidence: Lines 12, 18-21 reference `packages/sdks/oak-curriculum-sdk/code-generation/typegen/`
     and `packages/sdks/oak-curriculum-sdk/src/types/generated/`. Both paths are wrong — actual
     locations are in `packages/sdks/oak-sdk-codegen/`. Zero `.ts` files exist at the documented
     paths.
   - Impact: Any contributor following the extension guide finds empty directories.
+  - **Fixed** (2026-02-27): All paths updated to `oak-sdk-codegen/`.
 
-- [ ] **V2. `CONTRIBUTING.md` line 60 references nonexistent `src/tool-generation/`**
+- [x] **V2. `CONTRIBUTING.md` line 60 references nonexistent `src/tool-generation/`**
   - Source: Junior developer
   - Evidence: `src/tool-generation/` does not exist anywhere in the repository.
   - Impact: Contributors cannot find the boundary described in the layering explanation.
+  - **Fixed** (2026-02-27): Removed `src/tool-generation/` from layer diagram.
+    Also fixed in `openapi-pipeline.md` and `oak-curriculum-sdk/docs/architecture.md`.
 
 #### P2 — Causes confusion
 
-- [ ] **V3. `docs/engineering/extending.md` line 84 — `workspace:^` should be `workspace:*`**
+- [x] **V3. `docs/engineering/extending.md` line 84 — `workspace:^` should be `workspace:*`**
   - Source: Junior, senior
   - Evidence: All 44 workspace dependencies use `workspace:*`. Zero use `workspace:^`.
+  - **Fixed** (2026-02-27): Changed to `workspace:*`.
 
-- [ ] **V4. `docs/foundation/quick-start.md` lines 203-206 — `LessonSummary` type not exported**
+- [x] **V4. `docs/foundation/quick-start.md` lines 203-206 — `LessonSummary` type not exported**
   - Source: Junior developer
   - Evidence: The SDK does not export `LessonSummary` from its public API.
+  - **Fixed** (2026-02-27): Replaced with `components['schemas']['KeyStageData']`
+    pattern which reflects actual SDK usage. Also fixed in `openapi-pipeline.md`.
 
-- [ ] **V5. `docs/architecture/openapi-pipeline.md` lines 45-49 — stale artifact paths**
+- [x] **V5. `docs/architecture/openapi-pipeline.md` lines 45-49 — stale artifact paths**
   - Source: Principal engineer
   - Evidence: Lists `src/tool-generation/mcp-tools.ts` which doesn't exist.
+  - **Fixed** (2026-02-27): Updated generated artifacts diagram and example
+    structure. Also fixed stale runtime type inference limitation section
+    (N10 eliminated the cast it described).
 
-- [ ] **V6. ADR-029 implementation section in future tense for completed work**
+- [x] **V6. ADR-029 implementation section in future tense for completed work**
   - Source: Senior, principal
   - Evidence: "Phase 2: Wait for SDK (Blocked)" reads as if the pipeline doesn't exist.
+  - **Fixed** (2026-02-27): Rewritten to past tense with current state.
 
-- [ ] **V7. `CONTRIBUTING.md` lines 200-206 — quality gate order differs from `pnpm make`**
+- [x] **V7. `CONTRIBUTING.md` lines 200-206 — quality gate order differs from `pnpm make`**
   - Source: Senior developer
   - Evidence: Manual list differs in order and composition from the actual scripts.
+  - **Fixed** (2026-02-27): Reordered to build → type-check → lint → format →
+    test → secrets (canonical order).
 
-- [ ] **V8. `docs/README.md` line 51 — heading mismatch with README.md**
+- [x] **V8. `docs/README.md` line 51 — heading mismatch with README.md**
   - Source: Junior developer
   - Evidence: Uses "Agentic Engineering Practice" while README uses "Engineering Practice".
+  - **Fixed** (2026-02-27): Changed to "Engineering Practice".
 
 - [ ] **V9. Milestones have no timeline or date targets**
   - Source: Product owner
   - Impact: PO cannot answer "when will this be ready for wider use?"
+  - **Disposition**: Product decision, not a documentation defect. Milestones
+    are intentionally undated — timelines are set by the owner, not by the
+    documentation. Logged but not blocking M0.
 
-- [ ] **V10. CONTRIBUTING.md mixed signals for external evaluators**
+- [x] **V10. CONTRIBUTING.md mixed signals for external evaluators**
   - Source: Product owner
   - Evidence: Opens with "not accepting external contributions" then has 380 lines of
     internal guidance.
+  - **Fixed** (2026-02-27): Added horizontal rule and explicit note for
+    external readers before the internal guidance section.
 
 ---
 

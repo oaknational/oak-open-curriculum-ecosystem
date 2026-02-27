@@ -370,5 +370,5 @@ Project-specific troubleshooting is in
 | Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching — match on surrounding text or use Python |
 | Reviewer reports G1 failures that seem wrong | Re-run specific gates (`wc -l`, `pnpm test:e2e --filter=...`) to verify — reviewers may read stale terminal output |
-| Reviewer flags repo name mismatch (oak-open-data-ecosystem vs oak-mcp-ecosystem) | False positive — confirmed three times (2026-02-26 x2, 2026-02-27). The GitHub rename to `oak-open-data-ecosystem` HAS been executed. The local git remote is stale. Docs are correct. Always verify against the user's disposition before acting on this |
+| Reviewer flags repo name mismatch (oak-open-curriculum-ecosystem vs oak-open-curriculum-ecosystem) | False positive — confirmed three times (2026-02-26 x2, 2026-02-27). The GitHub rename to `oak-open-curriculum-ecosystem` HAS been executed. The local git remote is stale. Docs are correct. Always verify against the user's disposition before acting on this |
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` before acting — reviewers produce consistent false positives on file-existence checks (R2 from 2026-02-26 rerun: all 5 "missing" files existed) |

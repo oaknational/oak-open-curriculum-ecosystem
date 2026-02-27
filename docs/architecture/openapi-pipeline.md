@@ -42,9 +42,8 @@ This repository implements a pattern where a single OpenAPI specification drives
                      ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │ 3. Generated Artifacts (committed to repository)               │
-│    - src/types/generated/api-schema.ts                         │
-│    - src/types/generated/zod-schemas.ts                        │
-│    - src/tool-generation/mcp-tools.ts                          │
+│    - src/types/generated/api-schema/ (types, Zod schemas)      │
+│    - src/types/generated/api-schema/mcp-tools/ (tool metadata) │
 │    - src/types/generated/routing/url-helpers.ts                │
 │    - All fully typed, no runtime assertions needed             │
 └────────────────────┬────────────────────────────────────────────┘
@@ -101,19 +100,20 @@ TypeScript compilation failures immediately show what needs updating in consumin
 Traditional approach:
 
 ```typescript
-// API schema says: { name: string, age?: number }
+// API schema says: { slug: string, title?: string }
 // But someone wrote:
-interface User {
-  name: string;
-  age: number; // Forgot the optional!
+interface KeyStageInfo {
+  slug: string;
+  title: string; // Forgot the optional!
 }
 ```
 
 Our approach:
 
 ```typescript
-// Generated from schema - always correct
-import type { User } from '@oaknational/curriculum-sdk';
+// Generated from schema — always correct
+import type { components } from '@oaknational/curriculum-sdk';
+type KeyStageData = components['schemas']['KeyStageData'];
 // TypeScript enforces what the API actually returns
 ```
 
@@ -176,11 +176,13 @@ for (const tool of MCP_TOOLS) {
 Applications import generated types:
 
 ```typescript
-import type { LessonSummary } from '@oaknational/curriculum-sdk';
+import type { components } from '@oaknational/curriculum-sdk';
 import { parseWithCurriculumSchema } from '@oaknational/curriculum-sdk';
 
-// Types and validators already exist
-const result = await parseWithCurriculumSchema(response, 'LessonSummary');
+type KeyStageData = components['schemas']['KeyStageData'];
+
+// Types and validators already exist — generated from the OpenAPI schema
+const result = parseWithCurriculumSchema(response, 'KeyStageData');
 // result is fully typed, no assertions needed
 ```
 
@@ -205,8 +207,7 @@ packages/sdks/your-api-sdk/
 │   ├── mcp-toolgen.ts       # Generate MCP tools
 │   └── url-helpers.ts       # Generate canonical URLs
 ├── src/
-│   ├── types/generated/     # Generated types (DO NOT EDIT)
-│   ├── tool-generation/     # Generated MCP tools (DO NOT EDIT)
+│   ├── types/generated/     # Generated types and tools (DO NOT EDIT)
 │   └── client/              # Runtime client (hand-written)
 └── package.json
 ```
@@ -320,9 +321,10 @@ at the application layer.
 ### Runtime Type Inference Limitation
 
 Tool descriptor resolution is dynamic at runtime, so TypeScript cannot
-statically infer the output type from a descriptor name. A single controlled
-cast in `emit-index.ts` bridges the gap between the runtime-selected schema
-and the static type. This is a structural limitation, not a workaround.
+statically infer the output type from a descriptor name. Generated tool
+files use per-tool `STATUS_DISCRIMINANTS` const maps and return `unknown`
+from `invoke`, with `validateOutput` providing the type-narrowing boundary.
+No type assertions are used in generated code.
 
 ### Schema Validation Requirements
 

@@ -5,7 +5,7 @@ provenance:
     date: 2026-02-26
     purpose: "Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates"
   - index: 1
-    repo: oak-mcp-ecosystem
+    repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
 fitness_ceiling: 400

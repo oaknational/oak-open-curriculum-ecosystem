@@ -6,11 +6,11 @@ const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
 /**
  * CORS mode determines how origin access control is applied.
  *
- * - 'allow_all': Permits all origins (useful for development/testing)
+ * - 'dangerously_allow_all': Permits all origins (development/testing ONLY)
  * - 'explicit': Only allows origins from ALLOWED_ORIGINS env var
  * - 'automatic': Smart default (all origins in dev, self-only in Vercel)
  */
-export type CorsMode = 'allow_all' | 'explicit' | 'automatic';
+export type CorsMode = 'dangerously_allow_all' | 'explicit' | 'automatic';
 
 /**
  * Resolves the CORS mode from configuration, defaulting to 'automatic'.
@@ -23,7 +23,7 @@ export function resolveCorsMode(configuredMode: string | undefined): CorsMode {
     return 'automatic';
   }
   if (
-    configuredMode === 'allow_all' ||
+    configuredMode === 'dangerously_allow_all' ||
     configuredMode === 'explicit' ||
     configuredMode === 'automatic'
   ) {
@@ -59,12 +59,12 @@ export function resolveAllowedHosts(
 }
 
 /**
- * Resolves allowed origins for 'allow_all' mode.
+ * Resolves allowed origins for 'dangerously_allow_all' mode.
  * Always returns undefined to permit all origins.
  *
- * @returns undefined (enables allow_all CORS)
+ * @returns undefined (enables dangerously_allow_all CORS)
  */
-function resolveAllowAll(): undefined {
+function resolveDangerouslyAllowAll(): undefined {
   return undefined;
 }
 
@@ -108,7 +108,7 @@ function resolveAutomaticOrigins(
  * Resolves the allowed origins for CORS configuration based on the mode.
  *
  * Three modes:
- * 1. 'allow_all' - Always returns undefined (permits all origins)
+ * 1. 'dangerously_allow_all' - Always returns undefined (permits all origins)
  * 2. 'explicit' - Returns configured origins, or empty array (blocks all) if none
  * 3. 'automatic' - Smart behavior:
  *    - Uses explicit config if provided
@@ -118,7 +118,7 @@ function resolveAutomaticOrigins(
  * @param mode - The CORS mode determining behavior
  * @param configured - Explicitly configured allowed origins from env
  * @param vercelHosts - Array of all Vercel deployment URLs (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL)
- * @returns Array of allowed origins, or undefined to enable allow_all mode
+ * @returns Array of allowed origins, or undefined to enable dangerously_allow_all mode
  * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
 export function resolveAllowedOrigins(
@@ -126,8 +126,8 @@ export function resolveAllowedOrigins(
   configured: readonly string[] | undefined,
   vercelHosts: readonly string[],
 ): readonly string[] | undefined {
-  if (mode === 'allow_all') {
-    resolveAllowAll();
+  if (mode === 'dangerously_allow_all') {
+    resolveDangerouslyAllowAll();
     return undefined;
   }
   if (mode === 'explicit') {

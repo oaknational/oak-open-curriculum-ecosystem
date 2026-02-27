@@ -1,7 +1,7 @@
 ---
 provenance:
   - index: 0
-    repo: oak-mcp-ecosystem
+    repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
   - index: 1
@@ -9,7 +9,7 @@ provenance:
     date: 2026-02-26
     purpose: "Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates"
   - index: 2
-    repo: oak-mcp-ecosystem
+    repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
 fitness_ceiling: 200

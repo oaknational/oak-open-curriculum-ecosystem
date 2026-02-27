@@ -8,7 +8,7 @@ last_updated: 2026-02-27
 
 # GO GO GO
 
-A complementary grounding prompt for AI agents working in the Oak MCP
+A complementary grounding prompt for AI agents working in the Oak Open Curriculum
 Ecosystem. This prompt structures task execution and periodic
 self-assessment. It complements [AGENT.md](../directives/AGENT.md),
 which provides the canonical directives, rules, and architectural

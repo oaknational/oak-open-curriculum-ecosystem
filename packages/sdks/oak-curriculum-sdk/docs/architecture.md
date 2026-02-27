@@ -38,11 +38,14 @@ This is achieved through:
 
 ### Key Components
 
-- `code-generation/` — Build-time generation scripts that extract metadata from OpenAPI
-- `code-generation/mcp-toolgen.ts` — Post-zodgen script that maps MCP tools to actual Zod validators
-- `src/types/generated/` — Generated TypeScript types and constants (do not edit manually)
 - `src/client/` — Runtime client that uses the pre-generated types
-- `src/tool-generation/` — Exports for programmatic tool generation (e.g., MCP servers)
+- `src/types/` — Type re-exports from `@oaknational/sdk-codegen` and search response guards
+- `src/mcp/` — MCP tool aggregation and universal tools
+
+> **Note**: Code generation scripts and generated types live in
+> `packages/sdks/oak-sdk-codegen/`, not in this package. This package
+> is the runtime SDK that re-exports generated types and provides
+> runtime client functionality.
 
 ## Canonical URL Generation
 
@@ -153,17 +156,10 @@ oak-curriculum-sdk/
 │   ├── mcp-tools/         # MCP tool type generation
 │   └── lib/               # Shared helpers for generation
 ├── src/
-│   ├── client/            # Runtime API client
+│   ├── client/            # Runtime API client (createOakClient, etc.)
 │   ├── response-augmentation.ts # Automatic canonical URL augmentation
-│   ├── types/
-│   │   └── generated/     # Generated types (DO NOT EDIT)
-│   │       ├── api-schema/       # OpenAPI types and constants
-│   │       │   ├── mcp-tools.ts      # MCP tool definitions
-│   │       │   ├── mcp-parameters.ts # MCP parameter types
-│   │       │   ├── mcp-validators.ts # MCP validators
-│   │       │   └── routing/          # Canonical URL generation
-│   │       │       └── url-helpers.ts # Generated URL helper functions
-│   │       └── zod/              # Zod validation schemas
-│   └── tool-generation/   # Exports for programmatic tool generation
+│   ├── mcp/               # MCP tool aggregation and universal tools
+│   ├── public/            # Public API surface re-exports
+│   └── types/             # Type re-exports from sdk-codegen
 └── dist/                  # Built output
 ```

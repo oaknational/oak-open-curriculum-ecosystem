@@ -2,7 +2,7 @@
 
 ## Overview
 
-This research document analyses the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak MCP implementation, and proposes optimizations for both general use and Oak context grounding.
+This research document analyses the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak Open Curriculum implementation, and proposes optimizations for both general use and Oak context grounding.
 
 **Date**: December 2025  
 **Related Docs**:

@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-27  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 15 of 15 docs fixes complete. N10 generator `as` casts resolved (2026-02-27) — `toStatusDiscriminant` replaced with const map, `invoke` return changed to `unknown`. G1-G3 complete. G4 complete (post-remediation rerun done, 2026-02-27). G5-G8 pending (M1). Final onboarding validation complete.
+**Open items**: N-items, V-items, W-items all complete (2026-02-27). Post-V-fix onboarding review complete. G1-G4 complete. G5-G8 pending (M1). Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -95,18 +95,29 @@ fixes effective. 10 new findings (V1-V10) discovered — see
 
 2 P1 items (stale paths in extending.md and CONTRIBUTING.md) and 8 P2
 items discovered during final validation. These are documented in the
-onboarding simulations tracker. V1-V2 are the highest priority — they
-cause contributors following the extension guide to find empty directories.
+onboarding simulations tracker. All 10 findings verified against the
+filesystem (2026-02-27). 9 genuine fixes, 1 product decision (V9 —
+milestones have no dates, intentional).
+
+**Post-V-fix onboarding review — COMPLETE (2026-02-27)**:
+
+4-persona non-prescriptive review (junior dev, lead dev, CTO, CEO).
+V1-V10 fixes verified effective — no persona flagged any fixed issue.
+No genuine P1 blockers. Repo name false positive recurred (4th time).
+13 items identified for remediation (W1-W13) — see §Post-Review
+Documentation Fixes below.
 
 **Remaining M0 gates**:
 
 1. ~~Fix N1-N21 documentation items~~ COMPLETE
 2. ~~Final onboarding validation~~ COMPLETE
-3. V1-V2 (P1 stale paths) — agent-fixable, recommended before M0
-4. Final secrets and PII sweep (`pnpm secrets:scan:all`)
-5. Manual sensitive-information review (human)
-6. Merge `feat/semantic_search_deployment` to `main`
-7. Make repository public on GitHub
+3. ~~Fix V1-V10 documentation items (9 genuine fixes)~~ COMPLETE
+4. ~~Post-V-fix onboarding review~~ COMPLETE
+5. ~~Fix W1-W13 documentation items~~ COMPLETE
+6. Final secrets and PII sweep (`pnpm secrets:scan:all`)
+7. Manual sensitive-information review (human)
+8. Merge `feat/semantic_search_deployment` to `main`
+9. Make repository public on GitHub
 
 **Engineering/ops gates (M1 — blocks open public alpha)**:
 
@@ -475,7 +486,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
 **Specialist reviewers invoked**: `code-reviewer`, `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-wilma`, `security-reviewer`. Findings partially addressed; remaining issues captured in §R below.
 
-**Reference**: Execution details in [Phase 1 Cursor plan](/Users/jim/.cursor/plans/m1_release_fixes_phase_1_dbc6c9b8.plan.md) and [session transcript](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/a7a67403-0cc4-4567-a320-2782d16aca7e.txt).
+**Reference**: Execution details in [Phase 1 Cursor plan](/Users/jim/.cursor/plans/m1_release_fixes_phase_1_dbc6c9b8.plan.md) and [session transcript](../../.cursor/projects/Users-jim-code-oak-oak-open-curriculum-ecosystem/agent-transcripts/a7a67403-0cc4-4567-a320-2782d16aca7e.txt).
 
 ### §R: Phase 1 Remediation (TOP PRIORITY)
 
@@ -1016,7 +1027,7 @@ Each finding was verified against the filesystem. 15 are genuine fixes;
 - **N20.** Known test failure (`widget-rendering.spec.ts`). Already
   documented in troubleshooting.md. Tracked engineering item.
 - **N21.** GitHub Issues/Discussions links may 404. They point at
-  `oak-open-data-ecosystem` (correct post-rename name). Links will work
+  `oak-open-curriculum-ecosystem` (correct post-rename name). Links will work
   once the repo is public.
 
 ### Fix Groups and Execution Order
@@ -1095,13 +1106,10 @@ Also update Features list to match actual capabilities.
 
 ---
 
-## Final Onboarding Validation
+## Post-V-Fix Onboarding Review
 
-After all N1-N21 fixes are applied and quality gates pass, run a
-discovery-based onboarding simulation to confirm M0 readiness.
-
-Prompt:
-[onboarding-rerun.prompt.md](../prompts/onboarding-rerun.prompt.md).
+After all V1-V10 fixes are applied and quality gates pass, run a full
+non-prescriptive onboarding review to confirm M0 readiness.
 
 ### Method
 
@@ -1109,26 +1117,29 @@ Prompt:
 - No access to `.agent/prompts/onboarding-rerun.prompt.md` or
   `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
 - Reviewers navigate independently, following whatever links they find
+- This is the final gate before M0 — it must validate that V1-V10 fixes
+  are effective and that no new P1 issues have been introduced
 
 ### Personas (4)
 
 1. **Junior developer** — Motivated by: not looking foolish in first week.
    Anxious about complex toolchains. Wants clear, sequential instructions.
    Will follow every link that promises to help them get set up.
-2. **Senior developer** — Motivated by: evaluating whether this codebase is
-   well-engineered before investing time. Sceptical by default. Will probe
-   architecture docs, type safety, and test coverage. Judges by code
-   quality, not marketing.
-3. **Principal engineer** — Motivated by: assessing architectural fitness
-   for long-term adoption. Looks for maintainability signals: boundary
-   enforcement, dependency direction, schema-first discipline. Will read
-   ADRs and evaluate governance. Has strong opinions about what good looks
-   like.
-4. **Product owner** — Motivated by: understanding what this project
-   delivers and whether it is ready for wider use. Does not read code.
-   Evaluates by documentation clarity, roadmap visibility, and whether the
-   value proposition is intelligible. Will close the tab if the first 30
-   seconds are jargon.
+2. **Lead developer** — Motivated by: deciding whether to adopt this for
+   the team. Evaluates developer experience, onboarding friction, and
+   documentation quality. Wants to know: can my team be productive in a
+   week? Will probe setup instructions, contribution guides, and
+   architecture docs.
+3. **CTO** — Motivated by: technical due diligence for organisational
+   adoption. Evaluates architecture, security posture, dependency risk,
+   and long-term maintainability. Reads ADRs, governance docs, and
+   deployment architecture. Asks: is this production-ready? What are the
+   risks?
+4. **CEO** — Motivated by: understanding strategic value and readiness for
+   public announcement. Does not read code. Evaluates by: is the value
+   proposition clear in 30 seconds? Is the project presented
+   professionally? Would I be confident sharing this with partners? Will
+   bounce immediately if the first impression is technical jargon.
 
 ### Output
 
@@ -1141,7 +1152,7 @@ assessment for M0 readiness.
 No new P1 findings. Any new P2/P3 findings are logged but do not block
 M0.
 
-### After Validation
+### After Review
 
 1. Consolidate findings into
    [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
@@ -1149,6 +1160,97 @@ M0.
 3. Run `/jc-consolidate-docs`
 4. If clean: proceed to remaining M0 gates (secrets sweep, manual review,
    merge, make public)
+
+---
+
+## Post-Review Documentation Fixes (W1-W13)
+
+**Source**: Post-V-fix onboarding review (2026-02-27, 4 personas).
+**Owner dispositions**: Recorded 2026-02-27. All items fix before M0.
+
+Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
+
+### P2 Items (fix now)
+
+- [x] **W1. API key instructions lack public form link.**
+  Source: Junior dev (P1-1, reclassified P2). Anyone can request a key
+  at <https://open-api.thenational.academy/docs/about-oaks-api/api-keys>.
+  Add this URL to `docs/operations/environment-variables.md` and
+  `.env.example`.
+
+- [x] **W2. README audience routing too subtle.**
+  Source: CEO (P1-1/P1-3, reclassified P2). The non-technical routing
+  is a blockquote — visually subordinate. Make it a heading or prominent
+  section so CEOs and senior stakeholders can skip the technical content.
+  Content exists; visual hierarchy needs adjustment.
+
+- [x] **W3. Version string inconsistency.**
+  Source: CTO (P3-1). `docs/engineering/release-and-publishing.md` says
+  `0.1.0` in three places; `package.json` says `0.8.0`. The correct
+  version is `0.8.0` (set to avoid clashes with earlier failed tag
+  creation). Fix the three occurrences in the release doc.
+
+- [x] **W4. CONTRIBUTING.md opening discouraging for internal readers.**
+  Source: Lead dev (P2-3), CEO (P2-3). Opens with "not accepting external
+  contributions" before any useful content. Restructure so the internal
+  contributor guide is the primary framing, with the external note as
+  context rather than a gatekeeper.
+
+- [x] **W5. `.agent/` directory needs README and HUMANS.md.**
+  Source: Junior dev (P2-7), CTO (P2-5). The `.agent/` directory is not
+  for human developers — it is AI agent infrastructure. It needs a clear
+  README explaining this and a `HUMANS.md` that tells human readers what
+  they can safely ignore and where to go instead.
+
+- [x] **W6. Quick-start doc-gen path wrong.**
+  Source: Junior dev (P3-2), Lead dev (P2-4). `docs/foundation/quick-start.md`
+  line 316 references `docs/index.html` — actual path is `docs/api/index.html`.
+
+- [x] **W7. gitleaks not in setup verification.**
+  Source: Lead dev (P3-3). The "Verify Your Setup" section doesn't check
+  for gitleaks. Developers discover at push time after writing code.
+  Add `gitleaks version` or a note to Prerequisites verification.
+
+- [x] **W8. SEARCH_API_KEY generation unclear.**
+  Source: Junior dev (P3-6). `docs/operations/environment-variables.md`
+  says "Generate secure random string" without saying how. Add a command
+  example: `openssl rand -hex 32`.
+
+- [x] **W9. `pnpm clean` not in README/Quick Start.**
+  Source: Lead dev (P3-5). Recovery step referenced in troubleshooting
+  and build-system docs but missing from README Key Commands and
+  Quick Start.
+
+- [x] **W10. Contributor Covenant v1.4 outdated.**
+  Source: CTO (P3-5). `CODE_OF_CONDUCT.md` uses v1.4; current is v2.1.
+  Update to current version.
+
+- [x] **W11. CORS `allow_all` lacks danger naming.**
+  Source: CTO (P3-2). `.env.example` uses `CORS_MODE=allow_all` but the
+  auth equivalent uses `DANGEROUSLY_DISABLE_AUTH`. Rename for consistency
+  (e.g. `DANGEROUSLY_ALLOW_ALL_ORIGINS`). Check all consumers.
+
+- [x] **W12. VISION.md uses "MRR" before defining it.**
+  Source: CEO (P3-3). The capability status table uses "MRR 0.983" —
+  the definition follows but the acronym hits first. Expand on first use.
+
+- [x] **W13. Milestone M0 status reads like internal standup.**
+  Source: CEO (P2-4). Text like "All 15 documentation N-items resolved
+  (including N10 generator `as` casts)" is internal detail. Rewrite for
+  an external audience.
+
+### Disposed Findings (not fixing)
+
+- **Repo name mismatch** (Junior P1-2): False positive, 4th recurrence.
+  Rename executed on GitHub. Local remote stale.
+- **README is a developer document** (CEO P1-1): It IS a technical
+  repo README. Addressed by W2 (make audience routing prominent).
+- **Known quality gate failure** (CTO P2-4): Deliberate and documented.
+- **CI E2E gap** (CTO P2-2): Known, documented in ADR-121.
+- **Bus factor** (CTO P2-1): A self-sufficient, self-documenting repo
+  with 117 ADRs is the mitigation. Not an issue.
+- **docs/README.md YAML frontmatter** (CEO P2-2): Short, fine as is.
+- **AI-workflow dependency** (CTO P2-5): Quality gates are the fallback.
 
 ---
 
@@ -1216,7 +1318,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
-- **2026-02-27**: **N1-N21 fix plan integrated.** Evaluated all 21 post-remediation findings against the filesystem: 15 genuine fixes (4 P1, 7 P2, 4 P3), 6 non-issues (N12, N13, N15, N18, N20, N21). Organised into three fix groups: C (quick fixes, ~5 min), B (README audience routing, ~15-20 min), A (SDK README rewrite, ~20-30 min). Added final onboarding validation plan (4 personas: junior dev, senior dev, principal engineer, product owner). Cursor plans deleted; this plan and `onboarding-rerun.prompt.md` are now the sole entry point for the next session. Session transcript: [Planning session](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b8347d4-ed4b-477b-80e7-245c643579ff.txt).
+- **2026-02-27**: **N1-N21 fix plan integrated.** Evaluated all 21 post-remediation findings against the filesystem: 15 genuine fixes (4 P1, 7 P2, 4 P3), 6 non-issues (N12, N13, N15, N18, N20, N21). Organised into three fix groups: C (quick fixes, ~5 min), B (README audience routing, ~15-20 min), A (SDK README rewrite, ~20-30 min). Added final onboarding validation plan (4 personas: junior dev, senior dev, principal engineer, product owner). Cursor plans deleted; this plan and `onboarding-rerun.prompt.md` are now the sole entry point for the next session. Session transcript: [Planning session](../../.cursor/projects/Users-jim-code-oak-oak-open-curriculum-ecosystem/agent-transcripts/8b8347d4-ed4b-477b-80e7-245c643579ff.txt).
 - **2026-02-27**: **Post-remediation onboarding rerun complete.** Discovery-based simulation with 4 personas (junior dev, lead dev, engineering manager, product owner). Each started at README.md with no prescribed reading list. All 17 previous remediation items verified effective. No P0 blockers. 4 new P1 docs-only items identified (N1-N4): SDK README fabricated examples, README jargon wall, Curriculum Guide not linked, MCP unexplained for non-technical readers. Owner dispositions: all 4 block M0. Repo name mismatch confirmed as false positive for the third time (rename executed on GitHub). G4 updated with post-remediation evidence. M0 milestone updated with new gate. Remaining M0 gates: fix N1-N4, secrets sweep, manual review, merge, make public.
 - **2026-02-26**: **G4 complete — onboarding dispositions recorded.** Onboarding rerun complete (4 personas). Owner dispositions for all 36 findings. 6 resolved/dismissed (R1, R2 false positives; R11, R20, R28, R32 dismissed). Milestone separation introduced: closed private alpha → open private alpha (M0) → open public alpha (M1). G6/G7/rate-limiting reclassified to M1 blockers only. 17 docs-only items block M0. Added §Onboarding Snagging section and rate-limiting assessment task. Next session checklist rewritten with milestone progression table and M0/M1 work items. Session transcript: `e8c8a371-93d5-4c22-9419-420134c11dad`.
 - **2026-02-26**: **Batches C-2, D, E1 complete — session handoff.** Batch C-2 committed (`30cf9132`). F7 (ADR-108 completion) committed (`066be0af`): moved 25 synonym files + `synonym-export.ts` to sdk-codegen, created `@oaknational/sdk-codegen/synonyms` subpath, removed curriculum-sdk dependency from search-sdk entirely, tightened ESLint boundaries to block ALL curriculum-sdk imports, updated 5 ADRs and multiple READMEs, 4 integration tests. Review Gate 1: 6 specialist reviewers, all findings addressed. Batch E1 committed (`1c97d2d6`): F35 dead code removal, F11 verified already documented, F16 rate limiting precondition. Also fixed pre-existing flaky timing test (`rate-limit-config.unit.test.ts` — `vi.useFakeTimers`). Open items: 9 remaining (0 P1, 1 P2, 8 P3). Working tree clean. Next: Batch E2 (6 items). Session transcript: `0103cfeb-5e37-47d5-b53f-aea7e91fbb77`.

@@ -1,5 +1,5 @@
 {
-  "name": "@oaknational/mcp-ecosystem",
+  "name": "@oaknational/open-curriculum-ecosystem",
   "version": "0.8.0",
   "private": true,
   "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
@@ -70,12 +70,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oaknational/oak-open-data-ecosystem.git"
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git"
   },
   "bugs": {
-    "url": "https://github.com/oaknational/oak-open-data-ecosystem/issues"
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-data-ecosystem#readme",
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem#readme",
   "engines": {
     "node": "24.x"
   },

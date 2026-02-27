@@ -8,7 +8,7 @@ last_reviewed: 2026-02-25
 
 # Engineering Documentation
 
-This directory contains engineering workflow and implementation documentation for developers working on the Oak MCP ecosystem (SDK, MCP servers, and semantic search app).
+This directory contains engineering workflow and implementation documentation for developers working on the Oak Open Curriculum ecosystem (SDK, MCP servers, and semantic search app).
 
 ## Contents
 

@@ -1,7 +1,7 @@
 # @oaknational/eslint-plugin-standards
 
 Custom ESLint plugin for architectural boundary enforcement and code standards
-across the Oak MCP Ecosystem monorepo.
+across the Oak Open Curriculum Ecosystem monorepo.
 
 ## Purpose
 

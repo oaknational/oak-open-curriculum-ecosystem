@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-02-26
 **Status**: 🔄 Active strategic index
-**Scope**: Strategic cross-collection overview for the Oak MCP ecosystem.
+**Scope**: Strategic cross-collection overview for the Oak Open Curriculum ecosystem.
 
 This file is a strategic index. Execution detail belongs in collection roadmaps
 and active plans. Per-milestone summaries (audience, value, progression gates):

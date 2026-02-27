@@ -1,4 +1,4 @@
-# Oak MCP Ecosystem Error Handling Survey and Strategy
+# Oak Open Curriculum Ecosystem Error Handling Survey and Strategy
 
 ## Core references
 
@@ -9,7 +9,7 @@
 
 ## Executive summary
 
-The Oak MCP ecosystem currently mixes multiple error handling styles: direct exception throwing, silent fallback values (`null`, `false`), bespoke result discriminated unions, and logging without consistent propagation. This document surveys existing patterns, highlights risks, and recommends converging on an explicit `Result<T, E>` style for all fallible operations. A dedicated error-handling library workspace will anchor the shared abstractions, offer utilities for wrapping throwing dependencies, and define a structured error taxonomy. A staged adoption plan (Part 1: library design, Part 2: incremental integration) will reduce migration risk while preserving observable behaviour.
+The Oak Open Curriculum ecosystem currently mixes multiple error handling styles: direct exception throwing, silent fallback values (`null`, `false`), bespoke result discriminated unions, and logging without consistent propagation. This document surveys existing patterns, highlights risks, and recommends converging on an explicit `Result<T, E>` style for all fallible operations. A dedicated error-handling library workspace will anchor the shared abstractions, offer utilities for wrapping throwing dependencies, and define a structured error taxonomy. A staged adoption plan (Part 1: library design, Part 2: incremental integration) will reduce migration risk while preserving observable behaviour.
 
 ## Current-state survey
 
