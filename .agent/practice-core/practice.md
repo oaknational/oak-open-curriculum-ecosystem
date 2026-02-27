@@ -4,6 +4,14 @@ provenance:
     repo: oak-mcp-ecosystem
     date: 2026-02-26
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+  - index: 1
+    repo: cloudinary-icon-ingest-poc
+    date: 2026-02-26
+    purpose: "Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates"
+  - index: 2
+    repo: oak-mcp-ecosystem
+    date: 2026-02-27
+    purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
 fitness_ceiling: 200
 ---
 
@@ -11,7 +19,7 @@ fitness_ceiling: 200
 
 The agentic engineering practice is the self-reinforcing system of principles, structures, agents, and tooling that governs how work happens in this repository. It creates the conditions for safe, high-quality human-AI collaboration. The practice is what produces the product code (SDK, MCP servers, search system) — but it is not the product code itself.
 
-**See also**: [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) records the naming decision and conceptual boundary.
+**See also**: [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) records the naming decision and conceptual boundary. For the full plasmid trinity, see [index.md](index.md).
 
 ## Three Layers
 
@@ -48,11 +56,11 @@ graph TB
 
 ### Philosophy
 
-The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](metacognition.md), [experience records](../experience/README.md), and the learning loop. **Architectural enforcement** is a core philosophical commitment: preferring physical constraints (lint rules, boundary tooling) over human vigilance. This layer defines *why* the practice works.
+The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](../directives/metacognition.md), [experience records](../experience/README.md), and the learning loop. **Architectural enforcement** is a core philosophical commitment: preferring physical constraints (lint rules, boundary tooling) over human vigilance. This layer defines *why* the practice works.
 
 ### Structure
 
-The organisational patterns. [Directives](./) (this directory), [plans](../plans/) and their [templates](../plans/templates/), [ADRs](../../docs/architecture/architectural-decisions/), sub-agent [prompt architecture](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) ([ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)), quality gates, and [institutional memory](../memory/). **Cross-agent standardisation** (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to keep the practice portable and platform-agnostic. This layer defines *what* the practice consists of.
+The organisational patterns. [Directives](../directives/) (the directives directory), [plans](../plans/) and their [templates](../plans/templates/), [ADRs](../../docs/architecture/architectural-decisions/), sub-agent [prompt architecture](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) ([ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)), quality gates, and [institutional memory](../memory/). **Cross-agent standardisation** (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to keep the practice portable and platform-agnostic. This layer defines *what* the practice consists of.
 
 ### Tooling
 
@@ -80,7 +88,7 @@ graph LR
 
 ## The Review System
 
-Specialist sub-agents provide targeted review after non-trivial changes. The `invoke-code-reviewers` rule (`.cursor/rules/invoke-code-reviewers.mdc`) is the authoritative source for the full roster, invocation matrix, timing tiers, and triage checklist. The [AGENT.md](AGENT.md) "Available Sub-agents" section lists all reviewers by name.
+Specialist sub-agents provide targeted review after non-trivial changes. The `invoke-code-reviewers` rule (`.cursor/rules/invoke-code-reviewers.mdc`) is the authoritative source for the full roster, invocation matrix, timing tiers, and triage checklist. The [AGENT.md](../directives/AGENT.md) "Available Sub-agents" section lists all reviewers by name.
 
 Sub-agent prompts follow a three-layer composition architecture ([ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)): components, templates, and wrappers.
 
@@ -106,15 +114,16 @@ graph LR
   2. **Collection roadmaps** — e.g. `semantic-search/roadmap.md` milestone sequence
   3. **Active execution plans** — e.g. `semantic-search/active/<plan-name>.md` with YAML frontmatter, phased execution, and deterministic validation. Active plans live in `active/`, completed plans move to `archive/completed/` (e.g. `sdk-workspace-separation.md`)
   4. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement the lowest-level active plans with session-scoped implementation tasks, batch breakdowns, and review checkpoints. These are created per-session and track fine-grained progress that is too ephemeral for the active plan itself
-  5. **Documentation propagation** — before phase closure, propagate settled outcomes from plans into permanent docs: ADR-119, `.agent/directives/practice.md`, `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`, and any additionally impacted ADRs/docs/READMEs. Apply `.cursor/commands/jc-consolidate-docs.md`
+  5. **Documentation propagation** — before phase closure, propagate settled outcomes from plans into permanent docs: ADR-119, `.agent/practice-core/practice.md`, `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`, and any additionally impacted ADRs/docs/READMEs. Apply `.cursor/commands/jc-consolidate-docs.md`
 - **Templates** (`.agent/plans/templates/`) — reusable plan components ([ADR-117](../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md))
-- **Quality gates** — see [rules.md](rules.md) and `pnpm qg`. All gates are always blocking.
+- **Quality gates** — see [rules.md](../directives/rules.md) and `pnpm qg`. All gates are always blocking.
 
 ## Artefact Map
 
 | Location | What lives there |
 |---|---|
-| `.agent/directives/` | Principles, rules, and this practice guide |
+| `.agent/directives/` | Principles, rules, and operational directives |
+| `.agent/practice-core/` | Plasmid trinity (practice, lineage, bootstrap) and practice box |
 | `.agent/plans/` | Work planning — active, archived, and templates |
 | `.agent/memory/` | Institutional memory — napkin, distilled learnings, and code patterns |
 | `.agent/experience/` | Experiential records across sessions |
@@ -168,18 +177,18 @@ These loops operate at different timescales -- quality gates within seconds, lea
 
 ## Plasmid Exchange
 
-The practice is not confined to a single repo. It can be propagated to other repos as a Practice/Lineage pair, adapted to local context, evolved through real work, and sent back. Each repo carries its own Practice instance — there is no hierarchy.
+The practice is not confined to a single repo. It travels as a trinity of three files: this file (the **what**), [practice-lineage.md](practice-lineage.md) (the **why**), and [practice-bootstrap.md](practice-bootstrap.md) (the **how**). Each can be adapted to local context, evolved through real work, and sent back. Each repo carries its own Practice instance — there is no hierarchy.
 
-Both this file and `practice-lineage.md` always carry YAML frontmatter with a `provenance` array (recording the chain of repos that have evolved the file, each with a `purpose` describing what the Practice is being used for there) and a `fitness_ceiling`. The frontmatter must be complete at all times — files can be copied by anyone at any moment, not only through agent-mediated propagation.
+All three files always carry YAML frontmatter with a `provenance` array (recording the chain of repos that have evolved the file, each with a `purpose` describing what the Practice is being used for there) and a `fitness_ceiling`. The frontmatter must be complete at all times — files can be copied by anyone at any moment, not only through agent-mediated propagation.
 
 The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both the reference for how exchange works and the source template for outbound propagation.
 
 ### The Practice Box
 
-`.agent/incoming/` is the canonical location for incoming Practice/Lineage pairs. It is normally empty. When files arrive:
+`.agent/practice-core/incoming/` is the canonical location for incoming plasmid trinities. It is normally empty. When files arrive:
 
 - **At session start** (via start-right), agents alert the user.
-- **At consolidation** (via `/jc-consolidate-docs` step 7), agents perform the full integration flow: check the provenance chain, compare against the full local Practice system (not just `practice.md` — also rules, skills, commands, prompts, and directives), apply the three-part bar, propose specific changes, and clear the box after integration.
+- **At consolidation** (via `/jc-consolidate-docs` step 8), agents perform the full integration flow: check the provenance chain, compare against the full local Practice system (not just `practice.md` — also rules, skills, commands, prompts, and directives), apply the three-part bar, propose specific changes, and clear the box after integration.
 
 ### Meta-Principles
 
@@ -195,7 +204,7 @@ The full set of Learned Principles, including those about silent degradation, di
 
 The practice is designed to be discoverable through use. `AGENT.md` links to `rules.md`, which references `testing-strategy.md` and `schema-first-execution.md`. Commands invoke prompts, prompts reference plans, plans use templates. Sub-agents review work against the same rules that guided its creation. The napkin captures what went wrong, distillation extracts rules, and the rules prevent repetition.
 
-If you are new to this repository, start with [AGENT.md](AGENT.md). Follow the links. The practice will teach itself.
+If you are new to this repository, start with [AGENT.md](../directives/AGENT.md). Follow the links. The practice will teach itself.
 
 ## Sustainability and Scaling
 

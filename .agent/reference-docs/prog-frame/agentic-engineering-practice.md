@@ -7,7 +7,7 @@ note: >
 
 > **Canonical sources**: The concepts in this document are defined in
 > [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-> (naming decision) and [practice.md](../../directives/practice.md)
+> (naming decision) and [practice.md](../../practice-core/practice.md)
 > (operational map). Check those documents for the current definitions.
 > Active plans must propagate settled practice changes into these canonical
 > documents (plus any impacted ADRs/docs/READMEs) before closure, using the
@@ -29,7 +29,7 @@ note: >
 
 **Action**: Design and build the practice from first principles through real product work (the Oak MCP Ecosystem — SDK, MCP servers, semantic search). Every component was created to solve a concrete problem encountered during delivery: rules to prevent repeated mistakes, sub-agents to provide specialist review, plans to organise multi-step work, institutional memory to preserve learning across sessions, quality gates to enforce standards without exception, and platform bindings to make it all discoverable through use.
 
-**Result**: A self-reinforcing system that is documented (ADR-119), mapped (`.agent/directives/practice.md`), and operational. The practice governs all work on the oak-mcp-ecosystem repository. As the repository becomes public and Oak's product engineers begin working on it, the practice is the mechanism by which they will be enabled to deliver safely and at increased velocity using AI tools — it teaches itself to every new developer and AI agent that enters the codebase. The act of creating the practice, naming it, documenting it, and making it self-teaching *is* the act of enabling others.
+**Result**: A self-reinforcing system that is documented (ADR-119), mapped (`.agent/practice-core/practice.md`), and operational. The practice governs all work on the oak-mcp-ecosystem repository. As the repository becomes public and Oak's product engineers begin working on it, the practice is the mechanism by which they will be enabled to deliver safely and at increased velocity using AI tools — it teaches itself to every new developer and AI agent that enters the codebase. The act of creating the practice, naming it, documenting it, and making it self-teaching *is* the act of enabling others.
 
 **This is a new capability, not standard Principal Engineer work.** The progression framework asks: *"If my role were hired again, would the candidate be expected to already have this skill?"* The answer is no. A Principal Engineer is expected to ensure product and process quality, set architectural direction, and maintain specialist expertise. The practice goes beyond those responsibilities:
 
@@ -45,7 +45,8 @@ The practice is built, operational, and evidenced through its outputs:
 
 **System components delivered** (each with its own documentation, ADR where appropriate, and operational history):
 
-- **Directives and rules** (`.agent/directives/`) — 7 directive documents governing all work: AGENT.md (entry point), rules.md (operational rules), practice.md (system map), testing-strategy.md, schema-first-execution.md, semantic-search-architecture.md, metacognition.md
+- **Directives and rules** (`.agent/directives/`) — 6 directive documents governing all work: AGENT.md (entry point), rules.md (operational rules), testing-strategy.md, schema-first-execution.md, semantic-search-architecture.md, metacognition.md
+- **Practice core** (`.agent/practice-core/`) — the plasmid trinity (practice.md system map, practice-lineage.md principles and exchange mechanism, practice-bootstrap.md annotated templates) and the practice box for incoming cross-repo material
 - **Prompts** (`.agent/prompts/`) — 7 reusable prompt playbooks that provide domain context and operational guidance for specific types of work (e.g. semantic search sessions, grounding before a task, structuring task execution). Prompts are invoked by commands and reference plans — they are the operational layer between "start a task" and "do the work."
 - **Commands** (`.cursor/commands/`) — 10 slash commands that initiate structured workflows: starting a session with grounding, creating plans, running quality gates, invoking reviewers, committing, stepping back to reflect, and consolidating documentation after work is complete. Commands invoke prompts, which reference plans — creating a predictable sequence from initiation to completion.
 - **Specialist sub-agent reviewers** (`.cursor/agents/`, `.agent/sub-agents/`) — 13 AI reviewers (10 standard, 3 on-demand) covering code quality, 4 architecture perspectives, test quality, type safety, configuration, security, documentation, ground truth design, sub-agent design, and release readiness. Each reviewer has a definition (`.cursor/agents/`) and its prompt is built from reusable components and templates (`.agent/sub-agents/components/`, `.agent/sub-agents/templates/`) following a layered composition architecture (ADR-114).

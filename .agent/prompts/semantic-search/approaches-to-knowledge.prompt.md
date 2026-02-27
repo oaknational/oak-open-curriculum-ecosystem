@@ -1,3 +1,11 @@
+---
+prompt_id: approaches-to-knowledge
+title: "Approaches to Knowledge"
+type: handover
+status: active
+last_updated: 2026-02-27
+---
+
 # Approaches to Knowledge
 
 **Type**: Concept Exploration & Research  

@@ -1,3 +1,11 @@
+---
+prompt_id: go
+title: "GO"
+type: workflow
+status: active
+last_updated: 2026-02-27
+---
+
 # GO GO GO
 
 A complementary grounding prompt for AI agents working in the Oak MCP

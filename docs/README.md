@@ -50,7 +50,7 @@ last_reviewed: 2026-02-25
 ### Agentic Engineering Practice
 
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
-- [practice.md](../.agent/directives/practice.md) - Full map of the practice system
+- [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system
 
 ## AI Agent Guidance
 

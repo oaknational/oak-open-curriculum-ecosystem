@@ -150,7 +150,7 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 - Deterministic validation:
   - `rg -n "## Phase 1|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-  - `test -f .agent/directives/practice.md`
+  - `test -f .agent/practice-core/practice.md`
   - `test -f .agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 
 ## Done When

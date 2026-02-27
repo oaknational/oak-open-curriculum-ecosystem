@@ -225,3 +225,68 @@ entry point for the next session.
   before the fix and pass after. Clean TDD cycle.
 - Both fixes were localised to the generator template. No manual edits to
   any of the 24 generated tool files -- `pnpm sdk-codegen` propagated.
+
+## Session: Practice Core Migration (2026-02-27)
+
+### What was done
+
+- Integrated incoming Practice plasmid from cloudinary-icon-ingest-poc
+  (second round-trip). Adopted structural changes:
+  - Created `.agent/practice-core/` as dedicated home for the plasmid trinity
+  - Moved practice.md and practice-lineage.md from `.agent/directives/`
+  - Installed practice-bootstrap.md (new -- the "how" completing the trinity)
+  - Installed index.md as local landing page
+  - Relocated practice box from `.agent/incoming/` to `.agent/practice-core/incoming/`
+  - Removed `.agent/incoming/` entirely
+- Added YAML frontmatter to 7 active prompts (prompt_id, title, type,
+  status, last_updated)
+- Created `follow-the-practice.mdc` always-applied rule
+- Updated references across 10+ files (AGENT.md, start-right, consolidate-docs,
+  distillation skill, VISION.md, docs/README.md, ADR-119)
+- Added learned principle: "Documentation is concurrent, not retrospective"
+- Updated provenance chains (index 2) on practice.md, practice-lineage.md,
+  practice-bootstrap.md
+
+### What was taken from the incoming material
+
+- Trinity concept (practice + lineage + bootstrap as a unit)
+- `.agent/practice-core/` directory structure with nested `incoming/`
+- `index.md` local landing page pattern
+- `practice-bootstrap.md` annotated templates
+- `follow-the-practice.mdc` rule concept
+- Prompt frontmatter convention
+- "Documentation is concurrent, not retrospective" learned principle
+
+### What was NOT taken
+
+- Compressed 67-line practice.md (kept rich 235-line production version)
+- Two-layer model (kept three-layer model with mermaid diagrams)
+- POC-specific simplifications (kept full specialist roster, ADR infrastructure)
+
+### Patterns to Remember
+
+- When integrating incoming Practice material, always check cohesion across
+  ALL trinity files, not just the new one. The bootstrap was entirely new
+  but the lineage had four drift points against it: frontmatter scope
+  (said "both" not "all three"), fitness thresholds table (missing
+  bootstrap), always-applied rules list (missing follow-the-practice),
+  workflow commands list (missing plan and go). These were found because
+  the user explicitly asked to verify cohesion -- I would not have caught
+  them otherwise.
+- Reference sweeps after file moves must extend beyond the plan's explicit
+  list. The initial plan listed ~10 files. Grep found 22 more in plans
+  and templates. Plus 5 more found by reviewers in README, reference-docs,
+  experience. Total: ~37 files updated. Always grep the full repo.
+- distilled.md is at 374 lines (target: <200). Pre-existing overweight.
+  Needs a dedicated pruning pass in a future session.
+
+### Consolidation (2026-02-27)
+
+- No documentation trapped in plans or ephemeral locations
+- No new code patterns (structural/docs change only)
+- Napkin: 264 lines, no rotation needed
+- distilled.md: 374 lines, overweight but pre-existing, no new entries
+  from this session settled into permanent docs
+- Practice box: empty (integration completed)
+- Prompts: all 7 frontmatters up to date
+- Experience: wrote `2026-02-27-the-return-trip.md`

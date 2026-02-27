@@ -14,7 +14,7 @@ Read the [metacognitive prompt](./metacognition.md) and follow all instructions,
 
 ## The Practice
 
-This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For the full map, see [practice.md](practice.md). For cross-repo propagation and the plasmid exchange mechanism, see [practice-lineage.md](practice-lineage.md).
+This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For orientation, see [practice-core/index.md](../practice-core/index.md). For the full map, see [practice.md](../practice-core/practice.md). For cross-repo propagation and the plasmid exchange mechanism, see [practice-lineage.md](../practice-core/practice-lineage.md).
 
 Agent onboarding starts with the `start-right` workflow:
 - Cursor command: [`.cursor/commands/jc-start-right.md`](../../.cursor/commands/jc-start-right.md)

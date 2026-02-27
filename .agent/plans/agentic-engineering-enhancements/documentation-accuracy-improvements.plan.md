@@ -73,7 +73,7 @@ Related files outside the collection that are modified by this plan:
 | `docs/architecture/architectural-decisions/041-workspace-structure-option-a.md` | ADR defining workspace structure and dependency flow |
 | `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` | ADR naming and framing the agentic engineering practice |
 | `docs/architecture/README.md` | Canonical architecture documentation |
-| `.agent/directives/practice.md` | Orienting map of the agentic engineering practice |
+| `.agent/practice-core/practice.md` | Orienting map of the agentic engineering practice |
 | `.agent/sub-agents/templates/architecture-reviewer.md` | Shared template for all four architecture reviewers |
 | `.agent/reference-docs/prog-frame/agentic-engineering-practice.md` | Progression framework application (not discoverable — intentionally unreferenced) |
 
@@ -288,7 +288,7 @@ The ADR's own closing lines already state this: "The practice guide serves as th
 
 ### C2 — Enrich practice.md with missing concepts (LOW)
 
-**File**: `.agent/directives/practice.md`
+**File**: `.agent/practice-core/practice.md`
 
 Two concepts are currently unique to ADR-119 and should be mentioned in practice.md (since practice.md is the operational map):
 - "Architectural enforcement as core philosophical commitment" (ADR-119 lines 100–102) — add a brief mention under the Philosophy section
@@ -306,7 +306,7 @@ This progression framework application document reproduces core concepts (three 
 ```markdown
 > **Canonical sources**: The concepts in this document are defined in
 > [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-> (naming decision) and [practice.md](../../directives/practice.md)
+> (naming decision) and [practice.md](../../practice-core/practice.md)
 > (operational map). Check those documents for the current definitions.
 ```
 

@@ -4,6 +4,10 @@ provenance:
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
     purpose: "Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates"
+  - index: 1
+    repo: oak-mcp-ecosystem
+    date: 2026-02-27
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
 fitness_ceiling: 400
 ---
 
@@ -199,12 +203,12 @@ Command files are plain markdown. Cursor exposes them as slash commands. The `@`
 | Command | File | Core logic |
 |---|---|---|
 | start-right | `jc-start-right.md` | Read and follow the start-right prompt. |
-| gates | `jc-gates.md` | Run `type-check → lint → build → test` sequentially. All blocking. Restart from beginning after any fix. |
+| gates | `jc-gates.md` | Run `type-check -> lint -> build -> test` sequentially. All blocking. Restart from beginning after any fix. |
 | review | `jc-review.md` | Run gates, triage specialists, invoke them, consolidate into single report with verdict. |
 | commit | `jc-commit.md` | Check status, review diff, verify gates, stage selectively, conventional commit format. Safety: never force push, never amend pushed commits, never `--no-verify`. |
 | consolidate-docs | `jc-consolidate-docs.md` | Extract docs from plans to permanent locations. Update plan/prompt statuses. Write to napkin. Check practice box. Check practice fitness. Consider practice evolution. |
 | plan | `jc-plan.md` | Read directives. Create plan with YAML frontmatter, acceptance criteria, risk assessment, non-goals. |
-| think | `jc-think.md` | Structured thinking: understand → analyse → reason → synthesise → conclude. |
+| think | `jc-think.md` | Structured thinking: understand -> analyse -> reason -> synthesise -> conclude. |
 | step-back | `jc-step-back.md` | Pause. Reflect on goals, approach, alignment with rules. Apply First Question. |
 | go | `jc-go.md` | Quick grounding: read AGENT.md, read rules, check task list, proceed. |
 

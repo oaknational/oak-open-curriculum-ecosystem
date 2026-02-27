@@ -88,7 +88,7 @@ repository as the implementation baseline.
 
 Alongside product infrastructure, this repository also develops the operating
 system for delivery itself: Oak's
-[agentic engineering practice](../../.agent/directives/practice.md) and associated
+[agentic engineering practice](../../.agent/practice-core/practice.md) and associated
 guardrails, including architectural enforcement and human-AI collaboration
 improvements ([ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 

@@ -18,7 +18,8 @@ left off.
 
 | Directory | Purpose |
 | --- | --- |
-| `directives/` | Core rules, testing strategy, schema-first execution directive, and the practice map |
+| `directives/` | Core rules, testing strategy, schema-first execution directive, and operational entry point (AGENT.md) |
+| `practice-core/` | Plasmid trinity (practice, lineage, bootstrap) and the practice box for cross-repo exchange |
 | `plans/` | Executable work plans with status tracking and lifecycle management |
 | `memory/` | Session-level learning: `napkin.md` captures observations, `distilled.md` extracts durable rules |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
@@ -28,7 +29,6 @@ left off.
 | `research/` | Research proposals and analysis |
 | `evaluations/` | Experiment results and guidance |
 | `reference-docs/` | Supporting reference material (some internal-only) |
-| `incoming/` | Practice exchange inbox for cross-repo learning |
 
 ## Entry point
 

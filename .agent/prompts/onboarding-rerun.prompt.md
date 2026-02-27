@@ -1,3 +1,11 @@
+---
+prompt_id: onboarding-rerun
+title: "M0 Final Gates and V1-V10 Validation Findings"
+type: handover
+status: active
+last_updated: 2026-02-27
+---
+
 # M0 Final Gates and V1-V10 Validation Findings
 
 Session entry point. This prompt and the release plan together define the

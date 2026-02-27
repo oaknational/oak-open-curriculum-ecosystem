@@ -1,3 +1,11 @@
+---
+prompt_id: gt-review
+title: "Ground Truth Review"
+type: handover
+status: active
+last_updated: 2026-02-27
+---
+
 @.agent/prompts/semantic-search/semantic-search.prompt.md @.agent/plans/semantic-search/archive/completed/ground-truth-review-checklist.md @.agent/plans/semantic-search/templates/ground-truth-session-template.md
 
 we need to evaluate the ground truths. The template is to guide the creation of the Cursor plan. The goal is to exhaustively explore the full range of mcp tools and the bulk data, BOTH EQUALLY, to find the best possible answers to the queries, utterly independently of the current expectations or search results.

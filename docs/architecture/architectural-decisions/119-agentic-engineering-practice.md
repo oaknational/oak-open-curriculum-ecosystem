@@ -103,7 +103,7 @@ The practice operates in three layers:
 
 The plan hierarchy, workflow details, artefact map, and layer
 content are documented in the practice guide
-([practice.md](../../../.agent/directives/practice.md)), which
+([practice.md](../../../.agent/practice-core/practice.md)), which
 serves as the orienting map for day-to-day use.
 
 ### Feedback Loops and Recursive Self-Improvement
@@ -117,7 +117,7 @@ workflows) compound capability over time. This recursive
 self-improvement is what makes the practice a _practice_
 rather than a static framework.
 
-See [practice.md](../../../.agent/directives/practice.md) for
+See [practice.md](../../../.agent/practice-core/practice.md) for
 mechanism detail and diagrams.
 
 ### Self-Teaching Property
@@ -136,7 +136,7 @@ permanent documentation before phase closure.
 Minimum canonical update surfaces are:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/directives/practice.md`
+2. `.agent/practice-core/practice.md`
 3. `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 
 Additionally, update any impacted ADRs, `/docs/` pages, and README files.
@@ -210,12 +210,12 @@ three successive orders:
 - The file volume (~1,000+ files) is a consequence of the
   three-layer model and is managed through consolidation
   mechanisms (distillation, consolidate-docs, sub-agent
-  architect); see [practice.md](../../../.agent/directives/practice.md)
+  architect); see [practice.md](../../../.agent/practice-core/practice.md)
   for details
 
 ### Neutral
 
 - This ADR names and frames what already exists; it does not
   change any mechanism, structure, or workflow
-- The practice guide (`.agent/directives/practice.md`) serves as
+- The practice guide (`.agent/practice-core/practice.md`) serves as
   the orienting map; this ADR records the decision

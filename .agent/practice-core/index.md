@@ -12,7 +12,7 @@ These three files encode the Practice in a transmissible form. They live here so
 
 | File | Role |
 |---|---|
-| [practice.md](practice.md) | Orientation: artefact map, workflow, two-layer model (the **what**) |
+| [practice.md](practice.md) | Orientation: artefact map, workflow, three-layer model (the **what**) |
 | [practice-lineage.md](practice-lineage.md) | Principles, evolution rules, exchange mechanism (the **why**) |
 | [practice-bootstrap.md](practice-bootstrap.md) | Annotated templates for every artefact type (the **how**) |
 

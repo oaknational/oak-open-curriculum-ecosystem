@@ -136,7 +136,7 @@ Before beginning work and at the start of each phase:
 Before marking a phase complete:
 
 1. Update `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` if impacted
-2. Update `.agent/directives/practice.md` if impacted
+2. Update `.agent/practice-core/practice.md` if impacted
 3. Update `.agent/reference-docs/prog-frame/agentic-engineering-practice.md` if impacted
 4. Update any additionally impacted ADRs, `/docs/` pages, or README files
 5. Apply `.cursor/commands/jc-consolidate-docs.md` to ensure settled documentation is not trapped in plans

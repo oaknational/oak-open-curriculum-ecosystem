@@ -1,3 +1,11 @@
+---
+prompt_id: start-right-thorough
+title: "Start Right (Thorough)"
+type: workflow
+status: active
+last_updated: 2026-02-27
+---
+
 # Start Right (Thorough)
 
 Ground yourself rigorously before beginning significant work.
@@ -23,6 +31,10 @@ Before diving in, pause and ask:
 4. **What assumptions am I making? Are they valid?**
 
 Step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you.
+
+## Practice Box
+
+Check `.agent/practice-core/incoming/` for plasmid trinity files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
 
 ## Commit
 

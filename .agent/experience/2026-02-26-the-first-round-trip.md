@@ -23,4 +23,4 @@ The provenance chain is a small structural addition but it changes the mechanism
 
 ## Technical content
 
-Provenance chain mechanism, integration flow, and meta-principle graduation path documented in `.agent/directives/practice-lineage.md`. Protocol changes wired into 6 Practice files (see napkin for full list).
+Provenance chain mechanism, integration flow, and meta-principle graduation path documented in `.agent/practice-core/practice-lineage.md`. Protocol changes wired into 6 Practice files (see napkin for full list).

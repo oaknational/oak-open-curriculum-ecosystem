@@ -1,3 +1,11 @@
+---
+prompt_id: start-right
+title: "Start Right"
+type: workflow
+status: active
+last_updated: 2026-02-27
+---
+
 # Start Right
 
 Ground yourself before beginning work.
@@ -13,7 +21,7 @@ Read and internalise these documents:
 
 ## Practice Box
 
-Check `.agent/incoming/` for Practice/Lineage files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 7).
+Check `.agent/practice-core/incoming/` for plasmid trinity files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
 
 ## Guiding Questions
 

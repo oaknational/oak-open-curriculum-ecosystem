@@ -1,3 +1,11 @@
+---
+prompt_id: semantic-search
+title: "Semantic Search Session Entry Point"
+type: handover
+status: active
+last_updated: 2026-02-27
+---
+
 # Semantic Search — Session Entry Point
 
 **Last Updated**: 2026-02-25 (All phases 0-7 complete — merge-ready)

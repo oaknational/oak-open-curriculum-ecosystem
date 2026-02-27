@@ -56,7 +56,7 @@ reconcile the roadmap and collection README.
 No phase is complete until update handling is recorded for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/directives/practice.md`
+2. `.agent/practice-core/practice.md`
 3. `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 4. any additionally impacted ADRs, `/docs/` pages, and README files
 
