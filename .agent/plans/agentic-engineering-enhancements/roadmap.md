@@ -41,8 +41,7 @@ for:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
 2. `.agent/practice-core/practice.md`
-3. `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
-4. any additionally impacted ADRs, `/docs/` pages, or README files
+3. any additionally impacted ADRs, `/docs/` pages, or README files
 
 Each phase must either:
 

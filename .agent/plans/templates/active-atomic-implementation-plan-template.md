@@ -74,7 +74,6 @@ cp .agent/plans/[collection]/evidence-bundle.template.md \
   - `rg -n "## [Phase]|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/plans/[collection]/documentation-sync-log.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
   - `test -f .agent/practice-core/practice.md`
-  - `test -f .agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 
 ## Evidence and Claims
 

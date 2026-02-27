@@ -48,8 +48,7 @@ useful reusable templates, and ensure each journey phase in this collection has
 an executable atomic plan in `active/`.
 
 Each phase must also include documentation propagation updates (or explicit
-no-change rationale) for ADR-119, `.agent/practice-core/practice.md`,
-`.agent/reference-docs/prog-frame/agentic-engineering-practice.md`, and any
+no-change rationale) for ADR-119, `.agent/practice-core/practice.md`, and any
 additionally impacted ADRs/docs/READMEs. Apply the
 [`jc-consolidate-docs` workflow](../../../.cursor/commands/jc-consolidate-docs.md)
 before phase closure.

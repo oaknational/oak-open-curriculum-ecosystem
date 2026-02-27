@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-27  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: N-items, V-items, W-items all complete (2026-02-27). Post-V-fix onboarding review complete. G1-G4 complete. G5-G8 pending (M1). Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: N-items, V-items, W-items all complete (2026-02-27). Rename to Oak Open Curriculum Ecosystem complete (2026-02-27). Post-V-fix onboarding review complete. G1-G4 complete. G5-G8 pending (M1). Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 

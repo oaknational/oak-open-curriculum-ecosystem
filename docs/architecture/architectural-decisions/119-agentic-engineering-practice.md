@@ -137,7 +137,6 @@ Minimum canonical update surfaces are:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
 2. `.agent/practice-core/practice.md`
-3. `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 
 Additionally, update any impacted ADRs, `/docs/` pages, and README files.
 Apply the consolidation workflow in

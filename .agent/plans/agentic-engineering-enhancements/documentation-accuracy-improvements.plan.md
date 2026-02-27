@@ -75,7 +75,6 @@ Related files outside the collection that are modified by this plan:
 | `docs/architecture/README.md` | Canonical architecture documentation |
 | `.agent/practice-core/practice.md` | Orienting map of the agentic engineering practice |
 | `.agent/sub-agents/templates/architecture-reviewer.md` | Shared template for all four architecture reviewers |
-| `.agent/reference-docs/prog-frame/agentic-engineering-practice.md` | Progression framework application (not discoverable — intentionally unreferenced) |
 
 ### Key Architectural Decision: Cross-SDK Import Policy
 
@@ -295,22 +294,6 @@ Two concepts are currently unique to ADR-119 and should be mentioned in practice
 - "Cross-agent standardisation as evolving implementation direction" (ADR-119 lines 108–110) — add a brief mention under the Structure section
 
 Also: review the Workflow section (lines 75–98) for implementation-specific detail that will age. Keep it at map-level — push procedural specifics to command/guide docs.
-
-### C3 — Add canonical-source note to reference doc (MEDIUM)
-
-**File**: `.agent/reference-docs/prog-frame/agentic-engineering-practice.md`
-
-This progression framework application document reproduces core concepts (three orders of effect, feedback loops, self-teaching property). It is a third maintenance surface. It is intentionally unreferenced and should remain non-discoverable — do not add links to it from other documents.
-
-**Action**: Add a note at the top indicating which documents are canonical for the concepts it describes:
-```markdown
-> **Canonical sources**: The concepts in this document are defined in
-> [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-> (naming decision) and [practice.md](../../practice-core/practice.md)
-> (operational map). Check those documents for the current definitions.
-```
-
----
 
 ## Workstream D: Cross-Agent Plan Structure
 

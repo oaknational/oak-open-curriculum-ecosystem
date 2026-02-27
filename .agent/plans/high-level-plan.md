@@ -1,6 +1,13 @@
+---
+plan_id: high-level-plan
+title: "High-Level Plan"
+type: strategic-index
+status: active
+last_updated: 2026-02-27
+---
+
 # High-Level Plan
 
-**Last Updated**: 2026-02-26
 **Status**: 🔄 Active strategic index
 **Scope**: Strategic cross-collection overview for the Oak Open Curriculum ecosystem.
 

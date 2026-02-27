@@ -65,7 +65,8 @@ The practice is built, operational, and evidenced through its outputs:
 - The oak-open-curriculum-ecosystem repository was built entirely under the practice's governance: a Curriculum SDK generated from the OpenAPI schema, two MCP servers (stdio + HTTP with OAuth), a semantic search system combining four ranking methods across seven data sources, core packages, and comprehensive documentation
 - The practice is self-teaching: AI agents in new sessions discover how it works by following links from AGENT.md, with no external instruction
 - The learning loop is active: mistakes captured in sessions are distilled into rules that prevent repetition in future sessions
-- The repository is public and open-source, providing a live demonstration
+- The repository is being prepared for public release (M0 private alpha complete, M1 public alpha imminent), and will serve as a live demonstration
+- The practice has successfully transferred cross-repo: a compressed variant was deployed to a separate POC (cloudinary-icon-ingest-poc), evolved there, and the structural improvements (practice-core directory, plasmid trinity, bootstrap) were reintegrated — demonstrating the transferability claim
 
 **Support received**: No additional budget, staffing, or dedicated time was allocated. The practice was developed alongside and through normal product delivery work, using standard engineering tooling.
 

@@ -532,7 +532,7 @@ No P0 blockers remain after owner dispositions.
   - **Owner disposition**: The README section should be reframed for an
     external audience. Additionally, the internal progression framework
     application document
-    (`.agent/reference-docs/prog-frame/agentic-engineering-practice.md`)
+    (`.agent/practice-core/practice.md`)
     is for internal Oak use ONLY and MUST NOT be linked to from any other
     file in the repo. It should not be discoverable by external visitors.
     Add frontmatter to that document making this clear.

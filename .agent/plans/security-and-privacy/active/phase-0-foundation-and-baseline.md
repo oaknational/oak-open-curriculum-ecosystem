@@ -94,7 +94,6 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
   - `rg -n "## Phase 0|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/plans/security-and-privacy/documentation-sync-log.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
   - `test -f .agent/practice-core/practice.md`
-  - `test -f .agent/reference-docs/prog-frame/agentic-engineering-practice.md`
 
 ## Done When
 
