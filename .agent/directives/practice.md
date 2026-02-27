@@ -67,11 +67,14 @@ graph LR
     W[Work] -->|mistakes & discoveries| N[Napkin]
     N -->|accumulates ~800 lines| D[Distilled Learnings]
     D -->|high-signal patterns| R[Rules & Directives]
+    D -->|proven implementations| P[Code Patterns]
     R -->|govern| W
+    P -->|inform| W
 ```
 
 - **Napkin** (`.agent/memory/napkin.md`) — session-level log of what went wrong, what worked, and corrections received. Written continuously during every session.
 - **Distilled learnings** (`.agent/memory/distilled.md`) — curated rulebook extracted from the napkin when it grows large. Deduplicates, archives, and rotates.
+- **Code patterns** (`.agent/memory/code-patterns/`) — abstract, reusable patterns proven by implementation. Too concrete for rules, too abstract for source code. Extracted during consolidation when a pattern meets the barrier: broadly applicable, proven, prevents a recurring mistake, stable.
 - **Rules** (`.agent/directives/rules.md`, `.cursor/rules/*.mdc`) — the operational rules that govern all work. Updated when distilled learnings reveal persistent patterns.
 - **Experience** (`.agent/experience/`) — qualitative records of shifts in understanding across sessions.
 
@@ -113,7 +116,7 @@ graph LR
 |---|---|
 | `.agent/directives/` | Principles, rules, and this practice guide |
 | `.agent/plans/` | Work planning — active, archived, and templates |
-| `.agent/memory/` | Institutional memory — napkin and distilled learnings |
+| `.agent/memory/` | Institutional memory — napkin, distilled learnings, and code patterns |
 | `.agent/experience/` | Experiential records across sessions |
 | `.agent/prompts/` | Reusable prompt playbooks |
 | `.agent/sub-agents/` | Reviewer prompt architecture (components, templates) |

@@ -1,5 +1,47 @@
 # Napkin
 
+## Session: 2026-02-27 — Post-remediation onboarding rerun
+
+Ran discovery-based onboarding simulation with 4 personas (junior dev,
+lead dev, engineering manager, product owner). Key design decision:
+no prescribed reading list, start at README.md only, reviewers must NOT
+read the onboarding planning documents. This was much more effective than
+the previous prescriptive approach — it tested whether the documentation
+actually guides people rather than checking pre-selected files.
+
+### Key findings
+
+- SDK README contains fabricated code examples (`OakCurriculumClient` class
+  that does not exist in source code). This was missed by the previous
+  rerun because R35 addressed ordering, not content accuracy. The lesson:
+  reordering a README and verifying its content are different tasks.
+- Non-technical audience path is fragile — depends on noticing the
+  VISION.md blockquote in README. Curriculum Guide (the best document for
+  product people) is not linked from README at all.
+- Repo name false positive recurred for the third time. Three of four
+  personas flagged `oak-open-data-ecosystem` vs `oak-mcp-ecosystem`.
+  The rename has been executed on GitHub; local git remote is stale.
+  Pattern: sub-agent reviewers consistently misread this situation.
+
+### What worked
+
+- Discovery-based simulation (no reading list) found issues that the
+  prescriptive approach missed. The SDK README fabricated examples are
+  a much more serious trust issue than anything in the previous rerun's
+  17 items. The prescriptive approach would never have caught this because
+  the SDK README was not on the reading list for most personas.
+- Persona descriptions as motivations ("anxious about looking foolish",
+  "sceptical by default", "will bounce if jargon") produced more authentic
+  and actionable feedback than focus-area instructions.
+
+### Mistakes and corrections
+
+- Initial plan was prescriptive (10 input files, focus areas per persona).
+  User corrected: "onboarding is a journey of discovery." The correction
+  produced a materially better simulation.
+- Must add to distilled.md: sub-agent reviewers consistently produce
+  false positives on the repo name — this is now a three-time pattern.
+
 ## Session: 2026-02-27 — Post-remediation consolidation
 
 Ran consolidation workflow after M0 docs remediation commit.
@@ -83,3 +125,103 @@ description to ADR pointer. Deleted superseded Cursor plan.
   large but their size is justified — they track many items with full
   evidence chains. They will naturally shrink when archived after
   milestone completion.
+
+## Session: 2026-02-27 — N1-N21 Fix Plan Integration
+
+### What happened
+
+Evaluated all 21 post-remediation onboarding findings (N1-N21) against the
+filesystem. 15 genuine fixes, 6 non-issues. Organised fixes into three
+execution groups (C, B, A) by complexity. Integrated the full fix plan and
+a final onboarding validation plan into `release-plan-m1.plan.md`. Deleted
+all three Cursor plans. Rewrote `onboarding-rerun.prompt.md` as the session
+entry point for the next session.
+
+### Key decisions
+
+- N12 (bus factor), N13 (zero-setup heading), N15 (clone repetition),
+  N18 (milestones in .agent/), N20 (known test failure), N21 (GitHub links)
+  all evaluated as non-issues with rationale recorded in the release plan
+- Personas for final validation changed: junior dev, senior dev, principal
+  engineer, product owner (senior dev replaces lead dev; principal engineer
+  replaces engineering manager — broader coverage)
+- Entry point is now two files only: `release-plan-m1.plan.md` (the plan)
+  and `onboarding-rerun.prompt.md` (the prompt that references it)
+
+### What worked
+
+- Cursor plan as a temporary scratch space for the evaluation, then
+  integrate into the release plan and delete. Clean handoff pattern.
+- Verifying every finding against the filesystem before classifying — caught
+  N13 and N21 as non-issues that would have wasted time if taken at face
+  value
+
+## Session: N1-N21 Remediation and Final Validation (2026-02-27)
+
+### Mistakes I made
+
+- **N10: Treated generated `as` casts as a documentation exception rather than
+  a generator bug.** User corrected: "this is not a deliberate tolerance,
+  this is a problem with the generated code." The rule stands — no type
+  assertions in executed code, period. Generated code is executed within
+  the system and must comply. I added a "generated code exception" to
+  `rules.md` and `no-type-shortcuts.mdc` which I had to revert. The
+  correct action is to investigate and fix the generator (`emit-index.ts`
+  line 76, `toStatusDiscriminant` function emits `as StatusDiscriminant<T>`).
+  Tracked as generator engineering task for M1.
+
+### Key learnings
+
+- `createOakClient` is the real API, returning an `openapi-fetch` client.
+  Usage: `client.GET('/api/v0/path', { params: { path: {...} } })`. There
+  is no `OakCurriculumClient` class — that was entirely fabricated.
+- `createOakPathBasedClient` and `createOakBaseClient` also exist as
+  alternative client factories.
+- The logging guide had 15+ fabricated method calls (`searchLessons`,
+  `getLessonSummary`, `getLessonPlan`) — all replaced with real `.GET()`
+  calls.
+- Final validation discovered 10 new findings (V1-V10). V1 (extending.md
+  stale paths) was flagged by 3 of 4 personas — strong signal.
+- `docs/engineering/extending.md` references `oak-curriculum-sdk` paths
+  that should be `oak-sdk-codegen`. This is the package that contains the
+  code generators.
+- `workspace:*` is the monorepo convention, not `workspace:^`. All 44
+  workspace dependencies use `workspace:*`.
+
+### What worked
+
+- Parallel persona simulations caught real issues the N1-N21 review missed.
+  V1-V2 (stale paths) are genuine P1 blockers that would have shipped.
+- Senior dev persona verified SDK README examples against source code —
+  confirmed `createOakClient` examples are real. Trust signal validated.
+
+## Session: N10 Generator Cast Fixes and Code Patterns (2026-02-27)
+
+### Key learnings
+
+- `emit-index.ts` is a generator template that emits TypeScript code as
+  string concatenation (`lines.push()`). Changes to the template propagate
+  to all 24 generated tool files via `pnpm sdk-codegen`.
+- Cast 1 (`toStatusDiscriminant`): the generator knew all possible status
+  codes at generation time but emitted a generic runtime conversion with
+  `as`. The fix was a per-tool `STATUS_DISCRIMINANTS` const map. Pattern:
+  if all values are known at build time, use a const data structure.
+- Cast 2 (`payload as z.infer<...>`): `invoke` claimed to return `TResult`
+  but actually returned unvalidated API data. Every consumer immediately
+  passed it to `validateOutput`. The fix: return `unknown`, let
+  `validateOutput` be the type-narrowing boundary.
+- `StatusDiscriminant<T>` conditional type stays in the contract as the
+  default type parameter -- it is a legitimate type-level computation, not
+  an assertion. Generated tools no longer import or reference it directly.
+- `execute.ts` (the runtime consumer) needed no changes -- it already
+  treats `invoke` output as input to `validateOutput`.
+- The `generate-tool-file.ts` `buildImports()` function controls what each
+  generated tool file imports from the contract. Removing `StatusDiscriminant`
+  from there was sufficient to eliminate the unused import.
+
+### What worked
+
+- Writing failing tests first (RED phase) proved all 4 new assertions fail
+  before the fix and pass after. Clean TDD cycle.
+- Both fixes were localised to the generator template. No manual edits to
+  any of the 24 generated tool files -- `pnpm sdk-codegen` propagated.

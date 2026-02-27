@@ -1,73 +1,67 @@
-# Post-Remediation Onboarding Rerun
+# M0 Final Gates and V1-V10 Validation Findings
 
-Run a full onboarding simulation against the current repository state to
-validate the M0 documentation remediation.
+Session entry point. This prompt and the release plan together define the
+full scope of work.
 
-## Context
+## Context (completed work)
 
-All 17 M0-blocking documentation items (R3-R36) have been remediated.
-The root README was restructured, MCP server READMEs were split, the SDK
-README was reordered, new explanatory files were created, and acronyms
-were expanded. This rerun validates the changes and catches regressions.
+N1-N21 documentation fixes and final onboarding validation are complete
+(2026-02-27). N10 generator `as` casts eliminated. Two code patterns
+extracted. Final validation with 4 personas confirmed fixes effective but
+discovered 10 new findings (V1-V10).
 
-## Personas
+## Step 1: Ground yourself
 
-Run the `onboarding-reviewer` sub-agent for each of these 4 personas:
+1. Read [release-plan-m1.plan.md](../plans/release-plan-m1.plan.md). It
+   is self-contained. Pay particular attention to:
+   - §Next Steps (what remains for M0)
+   - §Remaining M0 gates
+2. Read [rules.md](../directives/rules.md),
+   [testing-strategy.md](../directives/testing-strategy.md), and
+   [schema-first-execution.md](../directives/schema-first-execution.md).
+3. Read [distilled.md](../memory/distilled.md) and
+   [napkin.md](../memory/napkin.md).
+4. Read the V1-V10 findings in
+   [onboarding-simulations-public-alpha-readiness.md](../plans/developer-experience/onboarding-simulations-public-alpha-readiness.md).
 
-1. **Junior dev** — First-time contributor. Can they clone, build, and
-   make a meaningful first contribution following only the documentation?
-   Focus: README clarity, quick-start path, prerequisites, environment
-   setup, "what do I do first?" experience.
+## Step 2: Fix V1-V2 (P1 stale paths)
 
-2. **Lead dev** — Evaluating the codebase for team adoption. Can they
-   understand the architecture, quality gates, and engineering practice?
-   Focus: architecture section, ADR discoverability, progressive
-   disclosure from README to workspace docs.
+V1 and V2 are P1 items — stale file paths in `extending.md` and
+`CONTRIBUTING.md` that send contributors to empty directories. Fix these
+first.
 
-3. **Engineering manager** — Assessing project maturity and risk. Can they
-   understand the engineering practice, quality posture, and milestone
-   progression from public-facing documentation?
-   Focus: governance docs, VISION.md, milestone files, CONTRIBUTING.md.
+After fixes:
 
-4. **Product owner** — Understanding product value without technical
-   background. Can they understand what this repository delivers, why it
-   matters, and what the roadmap looks like?
-   Focus: VISION.md, milestone files, README opening paragraphs.
+```bash
+pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test
+```
 
-## Inputs per persona
+## Step 3: Triage V3-V10 (P2 items)
 
-Each simulation should read these files as the persona:
+Review each P2 finding. Fix what can be fixed quickly; document any that
+require broader decisions as future work in the release plan.
 
-- `README.md`
-- `CONTRIBUTING.md`
-- `docs/foundation/quick-start.md`
-- `docs/foundation/VISION.md`
-- `docs/governance/README.md`
-- `.agent/README.md`
-- Workspace READMEs relevant to the persona's likely entry point
+## Step 4: Remaining M0 gates
 
-## Output contract
+After V1-V2 are resolved:
 
-For each persona, capture:
+1. Final secrets and PII sweep (`pnpm secrets:scan:all`)
+2. Update M0 milestone status in
+   [m0-open-private-alpha.md](../milestones/m0-open-private-alpha.md)
 
-1. Entry-point success or failure in first 5 minutes
-2. Time-to-first-success estimate
-3. Blocker list (P0/P1/P2/P3)
-4. Trust and clarity observations
-5. Whether previously flagged issues (R3-R36) are now resolved
-6. Any new issues introduced by the restructuring
+Items 3-4 below require human action:
 
-## After all 4 simulations
+3. Manual sensitive-information review
+4. Merge `feat/semantic_search_deployment` to `main` and make public
 
-1. Consolidate findings into the onboarding plan:
-   `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
-   (add results under the §Post-Remediation Rerun section)
-2. Classify any new findings using the existing P0-P3 severity model
-3. If no P0 blockers: update M0 milestone status
-4. Run `/jc-consolidate-docs` to capture learnings
+## Step 5: Consolidation
+
+Run `/jc-consolidate-docs` to ensure no documentation is trapped in
+ephemeral locations.
 
 ## Reference
 
-- Onboarding plan: `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
-- Release plan: `.agent/plans/release-plan-m1.plan.md` §Next Steps
+- Release plan: `.agent/plans/release-plan-m1.plan.md`
+- Onboarding tracker: `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
 - M0 milestone: `.agent/milestones/m0-open-private-alpha.md`
+- Code patterns: `.agent/memory/code-patterns/README.md`

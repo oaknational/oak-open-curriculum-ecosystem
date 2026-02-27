@@ -8,7 +8,7 @@ function buildImports(): string {
   return [
     "import { z } from 'zod';",
     '',
-    "import type { StatusDiscriminant, ToolDescriptor } from '../contract/tool-descriptor.contract.js';",
+    "import type { ToolDescriptor } from '../contract/tool-descriptor.contract.js';",
     "import { getResponseDescriptorsByOperationId } from '../../response-map.js';",
     "import type { OakApiPathBasedClient } from '../../client-types.js';",
   ].join('\n');

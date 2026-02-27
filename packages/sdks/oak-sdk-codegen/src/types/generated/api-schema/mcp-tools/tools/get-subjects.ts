@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { StatusDiscriminant, ToolDescriptor } from '../contract/tool-descriptor.contract.js';
+import type { ToolDescriptor } from '../contract/tool-descriptor.contract.js';
 import { getResponseDescriptorsByOperationId } from '../../response-map.js';
 import type { OakApiPathBasedClient } from '../../client-types.js';
 /**
@@ -43,7 +43,8 @@ export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatIn
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
-type DocumentedStatusDiscriminant = StatusDiscriminant<DocumentedStatus>;
+const STATUS_DISCRIMINANTS = { '200': 200 } as const;
+type DocumentedStatusDiscriminant = typeof STATUS_DISCRIMINANTS[DocumentedStatus];
 const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];
 if (!primaryResponseDescriptor) {
   throw new TypeError('Missing response descriptor for documented status 200 on getSubjects-getAllSubjects.');
@@ -61,10 +62,6 @@ const resolveDescriptorForStatus = (status: number) => {
   }
   return responseDescriptors["default"];
 };
-function toStatusDiscriminant<T extends string>(status: T): StatusDiscriminant<T> {
-  const numeric = Number(status);
-  return (Number.isNaN(numeric) ? status : numeric) as StatusDiscriminant<T>;
-}
 /**
  * Tool descriptor consumed by MCP_TOOLS.
  *
@@ -89,10 +86,7 @@ export const getSubjects = {
       throw new TypeError(`Undocumented response status ${String(status)} for getSubjects-getAllSubjects. Documented statuses: 200`);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    // Structural limitation: descriptor is dynamically resolved at runtime, so
-    // TypeScript cannot statically infer the output type. This single cast
-    // bridges the gap between the runtime-selected schema and the static type.
-    return payload as z.infer<typeof descriptorForStatus.zod>;
+    return payload;
   },
   toolZodSchema,
   toolInputJsonSchema,
@@ -134,9 +128,9 @@ export const getSubjects = {
       }
       const result = descriptor.zod.safeParse(data);
       if (result.success) {
-        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };
+        return { ok: true, data: result.data, status: STATUS_DISCRIMINANTS[statusKey] };
       }
-      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });
+      attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });
     }
     return {
       ok: false, message: 'Response does not match any documented schema for statuses: 200' ,

@@ -52,8 +52,9 @@ It serves three groups:
 - products for teachers that require strong search and retrieval over curriculum
   content
 
-For a plain-language introduction to Oak's curriculum structure, KS4 complexity,
-and user personas, see the [Curriculum Guide](../domain/curriculum-guide.md).
+> **For a plain-language introduction** to Oak's curriculum structure, KS4
+> complexity, and user personas, see the
+> **[Curriculum Guide](../domain/curriculum-guide.md)**.
 
 The central objective is leverage: reduce the cost, time, and risk of building
 high-quality curriculum tooling.
@@ -136,8 +137,9 @@ and AI systems can do with Oak curriculum data.
 
 ## Relationship With Aila
 
-[Aila](https://labs.thenational.academy/) demonstrates high-value AI curriculum
-applications already. This repository is complementary to that work.
+[Aila](https://labs.thenational.academy/) (Oak's AI lesson planning assistant)
+demonstrates high-value AI curriculum applications already. This repository is
+complementary to that work.
 
 The principle is mutual reinforcement: reuse what works, share patterns, and
 allow product-level AI applications and infrastructure-level AI tooling to

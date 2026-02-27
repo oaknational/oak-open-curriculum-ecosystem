@@ -77,6 +77,7 @@ Commands and skills may be defined in more than one location. Check both the rep
 |----------|---------|
 | `.agent/skills/*/SKILL.md` | Repo-managed skills for shared workflows |
 | `.agent/prompts/*.md` | Reusable prompt playbooks |
+| `.agent/memory/code-patterns/` | Known solutions to recurring design problems ([README](../../.agent/memory/code-patterns/README.md)) |
 | `.cursor/commands/*.md` | Additional command definitions (currently Cursor-specific) |
 | `.cursor/skills/*/` | Additional skills (currently Cursor-specific) |
 

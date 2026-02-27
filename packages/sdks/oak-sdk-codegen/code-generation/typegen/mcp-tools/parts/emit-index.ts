@@ -51,7 +51,16 @@ function buildExports({
   lines.push('const responseDescriptors = getResponseDescriptorsByOperationId(operationId);');
   lines.push(`const documentedStatuses = ${documentedStatusLiterals};`);
   lines.push('type DocumentedStatus = typeof documentedStatuses[number];');
-  lines.push('type DocumentedStatusDiscriminant = StatusDiscriminant<DocumentedStatus>;');
+
+  const statusDiscriminantEntries = documentedStatuses
+    .map((status) => {
+      const numeric = Number(status);
+      return Number.isNaN(numeric) ? `'${status}': '${status}'` : `'${status}': ${numeric}`;
+    })
+    .join(', ');
+  lines.push(`const STATUS_DISCRIMINANTS = { ${statusDiscriminantEntries} } as const;`);
+  lines.push('type DocumentedStatusDiscriminant = typeof STATUS_DISCRIMINANTS[DocumentedStatus];');
+
   lines.push('const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];');
   lines.push('if (!primaryResponseDescriptor) {');
   lines.push(
@@ -71,10 +80,6 @@ function buildExports({
   lines.push('  }');
   lines.push('  return responseDescriptors["default"];');
   lines.push('};');
-  lines.push('function toStatusDiscriminant<T extends string>(status: T): StatusDiscriminant<T> {');
-  lines.push('  const numeric = Number(status);');
-  lines.push('  return (Number.isNaN(numeric) ? status : numeric) as StatusDiscriminant<T>;');
-  lines.push('}');
   lines.push('/**');
   lines.push(' * Tool descriptor consumed by MCP_TOOLS.');
   lines.push(' *');
@@ -105,10 +110,7 @@ function buildExports({
   );
   lines.push('    }');
   lines.push('    const payload = status >= 200 && status < 300 ? response.data : response.error;');
-  lines.push('    // Structural limitation: descriptor is dynamically resolved at runtime, so');
-  lines.push('    // TypeScript cannot statically infer the output type. This single cast');
-  lines.push('    // bridges the gap between the runtime-selected schema and the static type.');
-  lines.push('    return payload as z.infer<typeof descriptorForStatus.zod>;');
+  lines.push('    return payload;');
   lines.push('  },');
   lines.push('  toolZodSchema,');
   lines.push('  toolInputJsonSchema,');
@@ -164,11 +166,11 @@ function buildExports({
   lines.push('      const result = descriptor.zod.safeParse(data);');
   lines.push('      if (result.success) {');
   lines.push(
-    '        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };',
+    '        return { ok: true, data: result.data, status: STATUS_DISCRIMINANTS[statusKey] };',
   );
   lines.push('      }');
   lines.push(
-    '      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });',
+    '      attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });',
   );
   lines.push('    }');
   lines.push('    return {');

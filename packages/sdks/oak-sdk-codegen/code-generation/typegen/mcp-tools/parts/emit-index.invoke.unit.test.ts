@@ -25,9 +25,67 @@ describe('emitIndex (invoke wrapper emission)', () => {
       'Undocumented response status ${String(status)} for operation-123. Documented statuses: 200, 404',
     );
     expect(code).toContain('toolOutputJsonSchema: primaryResponseDescriptor.json');
-    expect(code).toContain(
-      'attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues })',
+  });
+
+  it('emits STATUS_DISCRIMINANTS const map instead of toStatusDiscriminant function', () => {
+    const operation: OperationObject = {
+      responses: {
+        '200': { description: 'ok' },
+        '404': { description: 'not found' },
+      },
+    };
+    const code = emitIndex(
+      'get-lessons-transcript',
+      '/lessons/{lesson}/transcript',
+      'GET',
+      'op-1',
+      operation,
     );
+
+    expect(code).toContain("const STATUS_DISCRIMINANTS = { '200': 200, '404': 404 } as const;");
+    expect(code).not.toContain('function toStatusDiscriminant');
+    expect(code).not.toContain('as StatusDiscriminant<T>');
+    expect(code).toContain('STATUS_DISCRIMINANTS[statusKey]');
+  });
+
+  it('emits STATUS_DISCRIMINANTS for single-status tools', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-subjects', '/subjects', 'GET', 'op-2', operation);
+
+    expect(code).toContain("const STATUS_DISCRIMINANTS = { '200': 200 } as const;");
+  });
+
+  it('does not emit any type assertions in invoke (payload returned as unknown)', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-subjects', '/subjects', 'GET', 'op-3', operation);
+
+    const invokeBody = code.slice(code.indexOf('invoke:'), code.indexOf('toolZodSchema,'));
+    expect(invokeBody).not.toMatch(/\bas\b(?!\s+const)/);
+    expect(code).toContain('return payload;');
+    expect(code).not.toContain('return payload as');
+  });
+
+  it('emits zero non-const type assertions anywhere in output', () => {
+    const operation: OperationObject = {
+      responses: {
+        '200': { description: 'ok' },
+        '404': { description: 'not found' },
+      },
+    };
+    const code = emitIndex(
+      'get-lessons-transcript',
+      '/lessons/{lesson}/transcript',
+      'GET',
+      'op-4',
+      operation,
+    );
+
+    const nonConstAs = code.match(/\bas\b(?!\s+const)/g);
+    expect(nonConstAs).toBeNull();
   });
 
   it('emits securitySchemes field for protected tools', () => {

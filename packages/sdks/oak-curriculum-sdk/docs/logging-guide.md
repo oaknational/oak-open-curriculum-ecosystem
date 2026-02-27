@@ -32,7 +32,7 @@ pnpm add @oaknational/curriculum-sdk @oaknational/logger
 ### Basic Integration
 
 ```typescript
-import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 import { createAdaptiveLogger } from '@oaknational/logger';
 
 // Create logger
@@ -42,23 +42,21 @@ const logger = createAdaptiveLogger({
 });
 
 // Create SDK client
-const client = new OakCurriculumClient({
+const client = createOakClient({
   apiKey: process.env.OAK_API_KEY,
-  baseUrl: 'https://api.oak.academy',
 });
 
 // Log SDK operations
-logger.info('SDK client initialized', {
-  baseUrl: client.baseUrl,
-});
+logger.info('SDK client initialised');
 
-try {
-  const lessons = await client.searchLessons({ subject: 'maths' });
-  logger.info('Search completed', {
-    resultCount: lessons.length,
+const { data, error } = await client.GET('/api/v0/subjects');
+
+if (error) {
+  logger.error('Request failed', error instanceof Error ? error : new Error(String(error)));
+} else {
+  logger.info('Subjects fetched', {
+    count: data.length,
   });
-} catch (error) {
-  logger.error('Search failed', error);
 }
 ```
 
@@ -121,43 +119,46 @@ const logger = createAdaptiveLogger({
 
 ```typescript
 import { createAdaptiveLogger } from '@oaknational/logger';
-import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({ level: 'DEBUG' });
-const client = new OakCurriculumClient({ apiKey: process.env.OAK_API_KEY });
+const client = createOakClient({ apiKey: process.env.OAK_API_KEY });
 
-async function fetchLesson(lessonSlug: string) {
+async function fetchLesson(keyStage: string, subject: string, lessonSlug: string) {
   logger.debug('Fetching lesson', { lessonSlug });
 
-  try {
-    const lesson = await client.getLessonSummary(lessonSlug);
+  const { data, error } = await client.GET(
+    '/api/v0/key-stages/{keyStageSlug}/subjects/{subjectSlug}/lessons/{lessonSlug}/summary',
+    { params: { path: { keyStageSlug: keyStage, subjectSlug: subject, lessonSlug } } },
+  );
 
-    logger.info('Lesson fetched successfully', {
-      lessonSlug,
-      title: lesson.title,
-      subject: lesson.subjectSlug,
-    });
-
-    return lesson;
-  } catch (error) {
-    logger.error('Failed to fetch lesson', error, {
-      lessonSlug,
-    });
-    throw error;
+  if (error) {
+    logger.error(
+      'Failed to fetch lesson',
+      error instanceof Error ? error : new Error(String(error)),
+      {
+        lessonSlug,
+      },
+    );
+    throw error instanceof Error ? error : new Error(String(error));
   }
+
+  logger.info('Lesson fetched successfully', { lessonSlug });
+  return data;
 }
 ```
 
 ### Structured Error Logging
 
 ```typescript
-try {
-  const result = await client.searchLessons({ subject: 'invalid' });
-} catch (error) {
-  // Log with structured context
-  logger.error('Search operation failed', error, {
-    operation: 'searchLessons',
-    parameters: { subject: 'invalid' },
+const { data, error } = await client.GET('/api/v0/subjects/{subjectSlug}/key-stages', {
+  params: { path: { subjectSlug: 'invalid' } },
+});
+
+if (error) {
+  logger.error('Request failed', error instanceof Error ? error : new Error(String(error)), {
+    operation: 'GET /subjects/{subjectSlug}/key-stages',
+    parameters: { subjectSlug: 'invalid' },
     timestamp: new Date().toISOString(),
   });
 }
@@ -193,9 +194,12 @@ async function processRequest(requestId: string) {
   logger.info('Processing request');
 
   try {
-    const result = await client.searchLessons({ subject: 'maths' });
-    logger.info('Request completed', { resultCount: result.length });
-    return result;
+    const { data, error } = await client.GET('/api/v0/subjects');
+    if (error) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
+    logger.info('Request completed', { resultCount: data.length });
+    return data;
   } catch (error) {
     logger.error('Request failed', error);
     throw error;
@@ -227,9 +231,19 @@ app.get('/lessons/:slug', async (req, res) => {
   const requestLogger = logger.child?.({ correlationId }) ?? logger;
 
   try {
-    const lesson = await client.getLessonSummary(req.params.slug);
+    const { data, error } = await client.GET(
+      '/api/v0/key-stages/{keyStageSlug}/subjects/{subjectSlug}/lessons/{lessonSlug}/summary',
+      {
+        params: {
+          path: { keyStageSlug: 'ks3', subjectSlug: 'maths', lessonSlug: req.params.slug },
+        },
+      },
+    );
+    if (error) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
     requestLogger.info('Lesson retrieved', { slug: req.params.slug });
-    res.json(lesson);
+    res.json(data);
   } catch (error) {
     requestLogger.error('Failed to retrieve lesson', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -252,13 +266,16 @@ async function searchWithTiming(query: string) {
   logger.debug('Starting search', { query });
 
   try {
-    const results = await client.searchLessons({ query });
+    const { data, error } = await client.GET('/api/v0/subjects');
     const duration = timer.end();
+    if (error) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
 
     // Log with timing
-    logger.info('Search completed', {
+    logger.info('Subjects fetched', {
       query,
-      resultCount: results.length,
+      resultCount: data.length,
       duration: duration.formatted,
       durationMs: duration.ms,
     });
@@ -293,12 +310,18 @@ async function fetchFullLessonData(lessonSlug: string) {
 
   // Time individual operations
   const summaryTimer = startTimer();
-  const summary = await client.getLessonSummary(lessonSlug);
+  const summaryResult = await client.GET(
+    '/api/v0/key-stages/{keyStageSlug}/subjects/{subjectSlug}/lessons/{lessonSlug}/summary',
+    { params: { path: { keyStageSlug: 'ks3', subjectSlug: 'maths', lessonSlug } } },
+  );
   const summaryDuration = summaryTimer.end();
 
-  const planTimer = startTimer();
-  const plan = await client.getLessonPlan(lessonSlug);
-  const planDuration = planTimer.end();
+  const quizTimer = startTimer();
+  const quizResult = await client.GET(
+    '/api/v0/key-stages/{keyStageSlug}/subjects/{subjectSlug}/lessons/{lessonSlug}/quiz',
+    { params: { path: { keyStageSlug: 'ks3', subjectSlug: 'maths', lessonSlug } } },
+  );
+  const quizDuration = quizTimer.end();
 
   const totalDuration = totalTimer.end();
 
@@ -306,12 +329,12 @@ async function fetchFullLessonData(lessonSlug: string) {
     lessonSlug,
     timings: {
       summary: summaryDuration.formatted,
-      plan: planDuration.formatted,
+      quiz: quizDuration.formatted,
       total: totalDuration.formatted,
     },
   });
 
-  return { summary, plan };
+  return { summary: summaryResult.data, quiz: quizResult.data };
 }
 ```
 
@@ -326,7 +349,11 @@ async function searchWithContext(query: string, correlationId: string) {
   const timer = startTimer();
 
   try {
-    return await client.searchLessons({ query });
+    const { data, error } = await client.GET('/api/v0/subjects');
+    if (error) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
+    return data;
   } catch (error) {
     const duration = timer.end();
 
@@ -456,7 +483,7 @@ if (errors.length > 0) {
 
 ```typescript
 // app/lib/curriculum-client.ts
-import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 import { createAdaptiveLogger } from '@oaknational/logger';
 
 // Browser-safe logger (no file sink)
@@ -465,7 +492,7 @@ export const logger = createAdaptiveLogger({
   level: process.env.NEXT_PUBLIC_LOG_LEVEL || 'INFO',
 });
 
-export const curriculumClient = new OakCurriculumClient({
+export const curriculumClient = createOakClient({
   apiKey: process.env.OAK_API_KEY,
 });
 
@@ -483,15 +510,22 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
   try {
     requestLogger.info('Fetching lesson', { slug: params.slug });
 
-    const lesson = await curriculumClient.getLessonSummary(params.slug);
+    const { data, error } = await curriculumClient.GET(
+      '/api/v0/key-stages/{keyStageSlug}/subjects/{subjectSlug}/lessons/{lessonSlug}/summary',
+      { params: { path: { keyStageSlug: 'ks3', subjectSlug: 'maths', lessonSlug: params.slug } } },
+    );
     const duration = timer.end();
+
+    if (error) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
 
     requestLogger.info('Lesson fetched', {
       slug: params.slug,
       duration: duration.formatted,
     });
 
-    return Response.json(lesson, {
+    return Response.json(data, {
       headers: {
         'X-Correlation-ID': correlationId,
       },
@@ -513,7 +547,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 ```typescript
 // server.ts
 import { createAdaptiveLogger } from '@oaknational/logger/node';
-import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 import { startTimer } from '@oaknational/logger';
 
 // File-only logger (stdout reserved for MCP protocol)
@@ -529,35 +563,38 @@ const logger = createAdaptiveLogger({
   },
 });
 
-const client = new OakCurriculumClient({
+const client = createOakClient({
   apiKey: process.env.OAK_API_KEY,
 });
 
-async function executeTool(toolName: string, args: unknown) {
+async function fetchSubjects() {
   const correlationId = `req_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`;
   const timer = startTimer();
   const toolLogger = logger.child?.({ correlationId }) ?? logger;
 
-  toolLogger.info('Tool execution started', { toolName, args });
+  toolLogger.info('Tool execution started', { tool: 'get-subjects' });
 
-  try {
-    const result = await client[toolName](args);
-    const duration = timer.end();
+  const { data, error } = await client.GET('/api/v0/subjects');
+  const duration = timer.end();
 
-    toolLogger.info('Tool execution completed', {
-      toolName,
-      duration: duration.formatted,
-    });
-
-    return result;
-  } catch (error) {
-    const duration = timer.end();
-    toolLogger.error('Tool execution failed', error, {
-      toolName,
-      duration: duration.formatted,
-    });
-    throw error;
+  if (error) {
+    toolLogger.error(
+      'Tool execution failed',
+      error instanceof Error ? error : new Error(String(error)),
+      {
+        tool: 'get-subjects',
+        duration: duration.formatted,
+      },
+    );
+    throw error instanceof Error ? error : new Error(String(error));
   }
+
+  toolLogger.info('Tool execution completed', {
+    tool: 'get-subjects',
+    duration: duration.formatted,
+  });
+
+  return data;
 }
 ```
 
@@ -567,7 +604,7 @@ async function executeTool(toolName: string, args: unknown) {
 #!/usr/bin/env node
 // cli.ts
 import { createAdaptiveLogger } from '@oaknational/logger/node';
-import { OakCurriculumClient } from '@oaknational/curriculum-sdk';
+import { createOakClient } from '@oaknational/curriculum-sdk';
 
 const logger = createAdaptiveLogger({
   name: 'curriculum-cli',
@@ -581,7 +618,7 @@ const logger = createAdaptiveLogger({
   },
 });
 
-const client = new OakCurriculumClient({
+const client = createOakClient({
   apiKey: process.env.OAK_API_KEY,
 });
 
@@ -592,17 +629,25 @@ async function main() {
 
   try {
     switch (command) {
-      case 'search':
-        const results = await client.searchLessons({ query: args[0] });
-        console.log(JSON.stringify(results, null, 2));
-        logger.info('Search completed', { resultCount: results.length });
+      case 'subjects': {
+        const { data, error } = await client.GET('/api/v0/subjects');
+        if (error) {
+          throw error instanceof Error ? error : new Error(String(error));
+        }
+        console.log(JSON.stringify(data, null, 2));
+        logger.info('Subjects fetched', { count: data.length });
         break;
+      }
 
-      case 'get-lesson':
-        const lesson = await client.getLessonSummary(args[0]);
-        console.log(JSON.stringify(lesson, null, 2));
-        logger.info('Lesson retrieved', { slug: args[0] });
+      case 'key-stages': {
+        const { data, error } = await client.GET('/api/v0/key-stages');
+        if (error) {
+          throw error instanceof Error ? error : new Error(String(error));
+        }
+        console.log(JSON.stringify(data, null, 2));
+        logger.info('Key stages fetched');
         break;
+      }
 
       default:
         logger.error('Unknown command', { command });
@@ -610,8 +655,11 @@ async function main() {
         process.exit(1);
     }
   } catch (error) {
-    logger.error('CLI command failed', error, { command, args });
-    console.error('Error:', (error as Error).message);
+    logger.error('CLI command failed', error instanceof Error ? error : new Error(String(error)), {
+      command,
+      args,
+    });
+    console.error('Error:', error instanceof Error ? error.message : String(error));
     process.exit(1);
   }
 }

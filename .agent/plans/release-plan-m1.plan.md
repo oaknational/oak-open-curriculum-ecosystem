@@ -1,9 +1,9 @@
 # Milestone 1 Release Plan (Public Alpha)
 
 **Status**: Active  
-**Last Updated**: 2026-02-26  
+**Last Updated**: 2026-02-27  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: 0 code items remaining. G1–G3 complete with evidence. G4 complete (dispositions recorded). G5–G8 pending.
+**Open items**: 15 of 15 docs fixes complete. N10 generator `as` casts resolved (2026-02-27) — `toStatusDiscriminant` replaced with const map, `invoke` return changed to `unknown`. G1-G3 complete. G4 complete (post-remediation rerun done, 2026-02-27). G5-G8 pending (M1). Final onboarding validation complete.
 
 ---
 
@@ -66,33 +66,47 @@ All batches (A through E3) and Go/No-Go preparation (G1–G3) are complete. Ther
 
 ### Next Steps
 
-**Documentation remediation (M0 — blocks making repo public)**:
+**Previous documentation remediation (17 items) — COMPLETE**:
 
-The onboarding simulations identified 17 docs-only items that should be
-fixed before the repo goes public. These are predominantly editorial:
-README restructuring, jargon expansion, progressive disclosure, and
-explanatory documentation. Estimated effort: 1 focused session.
+All 17 documentation remediation items from the first onboarding rerun
+are complete (see commit `e1e83251`).
 
-Full findings with owner dispositions:
+**Post-remediation onboarding validation — COMPLETE (2026-02-27)**:
+
+Discovery-based onboarding rerun with 4 personas (junior dev, lead dev,
+engineering manager, product owner). Each started at README.md with no
+prescribed reading list. All 17 previous remediation items verified
+effective. No P0 blockers. 21 new findings identified (N1-N21).
+
+Full findings:
 [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+§Post-Remediation Rerun Results.
 
-All 17 documentation remediation items are now complete (see commit `e1e83251`).
+**N1-N21 documentation fixes — COMPLETE (2026-02-27)**:
 
-**Post-remediation onboarding validation (next session)**:
+All 15 genuine fixes applied. N10 generator `as` casts resolved (both
+casts in `emit-index.ts` eliminated). Two code patterns extracted to
+`.agent/memory/code-patterns/`. Final onboarding validation confirmed
+fixes effective. 10 new findings (V1-V10) discovered — see
+§Post-Remediation Final Validation in
+[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md).
 
-Run a fresh onboarding simulation against the remediated repository state
-using 4 personas: junior dev, lead dev, engineering manager, product owner.
-This validates the remediation worked and catches any regressions or new
-issues introduced by the restructuring. See
-[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
-§Post-Remediation Rerun for scope and output contract.
+**V1-V10 validation findings (from final onboarding validation)**:
 
-**Remaining M0 gates after onboarding validation**:
+2 P1 items (stale paths in extending.md and CONTRIBUTING.md) and 8 P2
+items discovered during final validation. These are documented in the
+onboarding simulations tracker. V1-V2 are the highest priority — they
+cause contributors following the extension guide to find empty directories.
 
-1. Final secrets and PII sweep (`pnpm secrets:scan:all`)
-2. Manual sensitive-information review (human)
-3. Merge `feat/semantic_search_deployment` to `main`
-4. Make repository public on GitHub
+**Remaining M0 gates**:
+
+1. ~~Fix N1-N21 documentation items~~ COMPLETE
+2. ~~Final onboarding validation~~ COMPLETE
+3. V1-V2 (P1 stale paths) — agent-fixable, recommended before M0
+4. Final secrets and PII sweep (`pnpm secrets:scan:all`)
+5. Manual sensitive-information review (human)
+6. Merge `feat/semantic_search_deployment` to `main`
+7. Make repository public on GitHub
 
 **Engineering/ops gates (M1 — blocks open public alpha)**:
 
@@ -160,13 +174,16 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
   - Evidence: gitleaks output at commit `e397b72c`.
 
 - [x] **G4. Onboarding release gate**
-  - Rerun complete (4 personas: junior dev, principal engineer, CTO, CEO).
-    No P0 blockers after owner dispositions: R1 (repo name) and R2 (missing
-    files) both resolved as reviewer false positives. 17 docs-only items
-    remain for M0 readiness, 3 engineering/ops items for M1.
+  - **First rerun** (2026-02-26, 4 personas: junior dev, principal engineer,
+    CTO, CEO). No P0 blockers. 17 docs-only items for M0. All 17 remediated.
+  - **Post-remediation rerun** (2026-02-27, 4 personas: junior dev, lead dev,
+    engineering manager, product owner). Discovery-based simulation — no
+    prescribed reading list. All 17 previous items verified effective. No P0
+    blockers. 4 new P1 docs-only items (N1-N4) block M0. Repo name mismatch
+    confirmed as false positive for the third time.
   - Canonical tracker:
     [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
-  - Evidence: owner dispositions recorded 2026-02-26.
+  - Evidence: owner dispositions recorded 2026-02-26 and 2026-02-27.
 
 - [~] **G5. Public-alpha UX contract**
   - Public-alpha baseline confirmed and documented.
@@ -904,6 +921,237 @@ Add a rate-limiting verification task before M1 (open public alpha):
 
 ---
 
+## Post-Remediation Documentation Fixes (N1-N21)
+
+**Source**: Post-remediation onboarding rerun (2026-02-27, 4 personas).
+**Canonical tracker**:
+[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+§Post-Remediation Rerun Results.
+
+Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
+
+### Finding Evaluation
+
+Each finding was verified against the filesystem. 15 are genuine fixes;
+6 are non-issues.
+
+#### Genuine Fixes (15 items)
+
+**P1 — M0 blockers (4 items, owner disposition: all block M0):**
+
+- [x] **N1. SDK README fabricated examples.** `OakCurriculumClient` class
+  does not exist. Actual API: `createOakClient(config)` returning an
+  `openapi-fetch` client. Files: `packages/sdks/oak-curriculum-sdk/README.md`,
+  `packages/sdks/oak-curriculum-sdk/docs/logging-guide.md`.
+  Complete (2026-02-27). Replaced all fabricated examples with real
+  `createOakClient` / `.GET()` pattern in both files.
+- [x] **N2. README jargon wall.** Line 14 is impenetrable for non-technical
+  readers. Need audience routing near the top.
+  Complete (2026-02-27). Added audience routing list and subtitle.
+- [x] **N3. Curriculum Guide not linked from README.**
+  `docs/domain/curriculum-guide.md` has zero inbound links from README.md.
+  Complete (2026-02-27). Linked in audience routing section.
+- [x] **N4. MCP not explained in plain English.** README links to the spec
+  site. No plain-language definition anywhere on the non-technical path.
+  Complete (2026-02-27). Added parenthetical definition.
+
+**P2 — Should fix (7 items):**
+
+- [x] **N5.** `.env.example` line 8 references
+  `docs/development/environment-variables.md`. File is at
+  `docs/operations/environment-variables.md`. One-line fix.
+  Complete (2026-02-27).
+- [x] **N6.** README line 67 mentions `SEARCH_API_KEY` alongside root
+  `.env` vars. `SEARCH_API_KEY` is app-level only. Remove or clarify.
+  Complete (2026-02-27). Removed from root env instruction.
+- [x] **N7.** gitleaks: README links to GitHub releases. `brew install
+  gitleaks` only in CONTRIBUTING.md. Add one-liner to README Prerequisites.
+  Complete (2026-02-27). Added brew install to Prerequisites.
+- [x] **N9.** ADR-030 line 255 stale link:
+  `../../ecosystem/psycha/oak-curriculum-mcp/README.md` does not exist.
+  Complete (2026-02-27). Updated to HTTP MCP server README.
+- [x] **N10.** Generated code contains `as StatusDiscriminant<T>` casts
+  (verified in 17+ tool files). **Resolved** (2026-02-27). Cast 1:
+  `toStatusDiscriminant` replaced with per-tool `STATUS_DISCRIMINANTS`
+  const map in `emit-index.ts`. Cast 2: `invoke` return type changed
+  from `TResult` to `unknown`; payload returned without cast. Both fixes
+  in generator templates, propagated via `pnpm sdk-codegen`. Zero
+  non-const `as` assertions remain in generated tool files. Two code
+  patterns extracted to `.agent/memory/code-patterns/`.
+- [x] **N11.** `docs/README.md` has no non-technical audience entry. Add a
+  "New to this project?" section.
+  Complete (2026-02-27). Added non-technical entry to Getting Started.
+- [x] **N14.** Node version-switch: README says "install via nvm or fnm"
+  but no `nvm use`/`fnm use` command. Add one-liner.
+  Complete (2026-02-27). Added nvm use / fnm use instruction.
+
+**P3 — Polish (4 items):**
+
+- [x] **N8.** No demo/screenshot. Add a brief note in README about what
+  the project looks like in practice. Full demo is out of scope for M0.
+  Complete (2026-02-27). Enhanced description with practical examples.
+- [x] **N16.** Title assumes MCP knowledge. Addressed by N2+N4 fixes.
+  Add a one-line subtitle/tagline under the H1.
+  Complete (2026-02-27). Added plain-English subtitle.
+- [x] **N17.** VISION.md introduces "Aila" at line 139 with no explanation.
+  Add "(Oak's AI lesson planning assistant)" on first use.
+  Complete (2026-02-27).
+- [x] **N19.** VISION.md Curriculum Guide link easy to miss. Make it a
+  callout or bold reference. Secondary to N3.
+  Complete (2026-02-27). Converted to blockquote callout with bold.
+
+#### Non-Issues (6 items — skip)
+
+- **N12.** Bus factor disclosure without mitigation plan. ADR-119
+  acknowledges single-engineer production. The acknowledgement IS the
+  disclosure. Organisational decision, not a documentation defect.
+- **N13.** "Zero-Setup Quick Start (0 minutes)" misleading. In
+  `quick-start.md` this means zero API keys, which is accurate.
+  Node/pnpm prereqs listed separately in README.
+- **N15.** Clone/setup steps repeated in README, quick-start, CONTRIBUTING.
+  Intentional: each serves a different audience. Repo name consistent.
+- **N18.** Milestones in `.agent/` feels internal. The `.agent/` directory
+  is explained in README and has its own README. Moving them would create
+  more confusion.
+- **N20.** Known test failure (`widget-rendering.spec.ts`). Already
+  documented in troubleshooting.md. Tracked engineering item.
+- **N21.** GitHub Issues/Discussions links may 404. They point at
+  `oak-open-data-ecosystem` (correct post-rename name). Links will work
+  once the repo is public.
+
+### Fix Groups and Execution Order
+
+#### Group C: Quick Fixes (do first, ~5 minutes)
+
+Items: N5, N9, N10, N11, N17, N19.
+
+1. **N5** — `.env.example` line 8: change
+   `docs/development/environment-variables.md` to
+   `docs/operations/environment-variables.md`
+2. **N9** — `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md`
+   line 255: fix stale link
+3. **N10** — ~~Add a note to `rules.md`~~ **Resolved**: generator `as`
+   casts eliminated in `emit-index.ts` (const map + unknown return).
+   Patterns extracted to `.agent/memory/code-patterns/`.
+4. **N11** — `docs/README.md`: add a "New to this project?" entry at the
+   top of Getting Started, linking to VISION.md and Curriculum Guide
+5. **N17** — `docs/foundation/VISION.md` line 139: add "(Oak's AI lesson
+   planning assistant)" after "Aila"
+6. **N19** — `docs/foundation/VISION.md`: make the Curriculum Guide link
+   (line 56) a callout or bold reference
+
+#### Group B: README Audience Routing (~15-20 minutes)
+
+Items: N2, N3, N4, N6, N7, N8, N14, N16. All changes to `README.md`.
+
+1. **N16** — Add a subtitle/tagline under H1 explaining what this is in
+   plain English
+2. **N2** — Add audience routing section near the top (after status banner,
+   before "What's In This Repo"):
+   - "For product owners, school leaders, and non-technical evaluators"
+     pointing to VISION.md and Curriculum Guide
+   - "For developers" pointing to Quick Start
+3. **N3** — Link to `docs/domain/curriculum-guide.md` prominently in the
+   audience routing section
+4. **N4** — Add a plain-English MCP definition in parentheses where MCP is
+   first used: "(a standard that lets AI tools like ChatGPT and Claude
+   connect to data sources)"
+5. **N6** — Fix line 67: remove `SEARCH_API_KEY` from the root env
+   instruction (it is app-specific)
+6. **N7** — Add `brew install gitleaks` (macOS) / `go install ...` to
+   Prerequisites
+7. **N8** — Add a brief sentence about what the project looks like in
+   practice, referencing VISION.md
+8. **N14** — Add `nvm use` or `fnm use` one-liner after the nvm/fnm
+   mention in Prerequisites
+
+#### Group A: SDK README Rewrite (~20-30 minutes)
+
+Item: N1. The most substantial fix.
+
+Replace fabricated `OakCurriculumClient` examples with real
+`createOakClient` usage.
+
+**Files:**
+- `packages/sdks/oak-curriculum-sdk/README.md` — rewrite Usage and Logging
+  sections
+- `packages/sdks/oak-curriculum-sdk/docs/logging-guide.md` — update any
+  `OakCurriculumClient` references
+
+**Source of truth for real API:**
+`packages/sdks/oak-curriculum-sdk/src/client/index.ts` exports
+`createOakClient(config)` returning an `openapi-fetch` client. Methods are
+`.GET('/path')`, `.POST('/path')`, not `.searchLessons()`.
+
+Also update Features list to match actual capabilities.
+
+#### After All Fixes
+
+1. Run quality gates: `pnpm build && pnpm type-check && pnpm lint:fix &&
+   pnpm format:root && pnpm markdownlint:root && pnpm test`
+2. Update status checkboxes in this section and in
+   [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+3. Proceed to §Final Onboarding Validation
+
+---
+
+## Final Onboarding Validation
+
+After all N1-N21 fixes are applied and quality gates pass, run a
+discovery-based onboarding simulation to confirm M0 readiness.
+
+Prompt:
+[onboarding-rerun.prompt.md](../prompts/onboarding-rerun.prompt.md).
+
+### Method
+
+- Non-prescriptive: each reviewer starts at `README.md`, nothing else
+- No access to `.agent/prompts/onboarding-rerun.prompt.md` or
+  `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
+- Reviewers navigate independently, following whatever links they find
+
+### Personas (4)
+
+1. **Junior developer** — Motivated by: not looking foolish in first week.
+   Anxious about complex toolchains. Wants clear, sequential instructions.
+   Will follow every link that promises to help them get set up.
+2. **Senior developer** — Motivated by: evaluating whether this codebase is
+   well-engineered before investing time. Sceptical by default. Will probe
+   architecture docs, type safety, and test coverage. Judges by code
+   quality, not marketing.
+3. **Principal engineer** — Motivated by: assessing architectural fitness
+   for long-term adoption. Looks for maintainability signals: boundary
+   enforcement, dependency direction, schema-first discipline. Will read
+   ADRs and evaluate governance. Has strong opinions about what good looks
+   like.
+4. **Product owner** — Motivated by: understanding what this project
+   delivers and whether it is ready for wider use. Does not read code.
+   Evaluates by documentation clarity, roadmap visibility, and whether the
+   value proposition is intelligible. Will close the tab if the first 30
+   seconds are jargon.
+
+### Output
+
+Each reviewer produces: what they did (navigation path), what worked,
+what didn't, and severity-rated findings. Consolidate into a final
+assessment for M0 readiness.
+
+### Success Criteria
+
+No new P1 findings. Any new P2/P3 findings are logged but do not block
+M0.
+
+### After Validation
+
+1. Consolidate findings into
+   [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+2. Update M0 milestone status
+3. Run `/jc-consolidate-docs`
+4. If clean: proceed to remaining M0 gates (secrets sweep, manual review,
+   merge, make public)
+
+---
+
 ## Go/No-Go Gate
 
 No release without an explicit recorded decision.
@@ -968,6 +1216,8 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-27**: **N1-N21 fix plan integrated.** Evaluated all 21 post-remediation findings against the filesystem: 15 genuine fixes (4 P1, 7 P2, 4 P3), 6 non-issues (N12, N13, N15, N18, N20, N21). Organised into three fix groups: C (quick fixes, ~5 min), B (README audience routing, ~15-20 min), A (SDK README rewrite, ~20-30 min). Added final onboarding validation plan (4 personas: junior dev, senior dev, principal engineer, product owner). Cursor plans deleted; this plan and `onboarding-rerun.prompt.md` are now the sole entry point for the next session. Session transcript: [Planning session](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b8347d4-ed4b-477b-80e7-245c643579ff.txt).
+- **2026-02-27**: **Post-remediation onboarding rerun complete.** Discovery-based simulation with 4 personas (junior dev, lead dev, engineering manager, product owner). Each started at README.md with no prescribed reading list. All 17 previous remediation items verified effective. No P0 blockers. 4 new P1 docs-only items identified (N1-N4): SDK README fabricated examples, README jargon wall, Curriculum Guide not linked, MCP unexplained for non-technical readers. Owner dispositions: all 4 block M0. Repo name mismatch confirmed as false positive for the third time (rename executed on GitHub). G4 updated with post-remediation evidence. M0 milestone updated with new gate. Remaining M0 gates: fix N1-N4, secrets sweep, manual review, merge, make public.
 - **2026-02-26**: **G4 complete — onboarding dispositions recorded.** Onboarding rerun complete (4 personas). Owner dispositions for all 36 findings. 6 resolved/dismissed (R1, R2 false positives; R11, R20, R28, R32 dismissed). Milestone separation introduced: closed private alpha → open private alpha (M0) → open public alpha (M1). G6/G7/rate-limiting reclassified to M1 blockers only. 17 docs-only items block M0. Added §Onboarding Snagging section and rate-limiting assessment task. Next session checklist rewritten with milestone progression table and M0/M1 work items. Session transcript: `e8c8a371-93d5-4c22-9419-420134c11dad`.
 - **2026-02-26**: **Batches C-2, D, E1 complete — session handoff.** Batch C-2 committed (`30cf9132`). F7 (ADR-108 completion) committed (`066be0af`): moved 25 synonym files + `synonym-export.ts` to sdk-codegen, created `@oaknational/sdk-codegen/synonyms` subpath, removed curriculum-sdk dependency from search-sdk entirely, tightened ESLint boundaries to block ALL curriculum-sdk imports, updated 5 ADRs and multiple READMEs, 4 integration tests. Review Gate 1: 6 specialist reviewers, all findings addressed. Batch E1 committed (`1c97d2d6`): F35 dead code removal, F11 verified already documented, F16 rate limiting precondition. Also fixed pre-existing flaky timing test (`rate-limit-config.unit.test.ts` — `vi.useFakeTimers`). Open items: 9 remaining (0 P1, 1 P2, 8 P3). Working tree clean. Next: Batch E2 (6 items). Session transcript: `0103cfeb-5e37-47d5-b53f-aea7e91fbb77`.
 - **2026-02-26**: **O8 complete, plan handoff preparation.** User deleted empty `docs/development/` and `docs/data/` directories. O8 marked complete. Open items: 13 remaining (1 P1, 1 P2, 11 P3). Documentation consolidation: corrected stale `SearchRetrievalService` "duplicate contract" language in `distilled.md` and `napkin.md` to reflect ISP decision. Updated experience README catalog. Fixed §R section (R4 no longer described as "deferred"). Corrected change log entry re "delete duplicate contract". Renumbered Batch E execution order.

@@ -156,5 +156,5 @@ export interface ToolDescriptor<
           readonly issues: readonly core.$ZodIssue[];
         }[];
       };
-  readonly invoke: (client: TClient, args: TArgs) => TResult | Promise<TResult>;
+  readonly invoke: (client: TClient, args: TArgs) => unknown | Promise<unknown>;
 }

@@ -13,6 +13,7 @@ last_reviewed: 2026-02-25
 
 ## Getting Started
 
+- **New to this project? Not a developer?** → [VISION](foundation/VISION.md) for what this project delivers and why, then the [Curriculum Guide](domain/curriculum-guide.md) for a plain-language introduction to Oak's curriculum structure
 - **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
 - **Vision and strategy?** → [foundation/VISION.md](foundation/VISION.md) — why this repository exists, what it delivers, and how we measure impact
 - **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then [AGENT.md](../.agent/directives/AGENT.md)

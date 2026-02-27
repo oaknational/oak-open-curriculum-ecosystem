@@ -1,17 +1,23 @@
 # Oak MCP Ecosystem
 
+Tools for building AI applications on the Oak National Academy curriculum.
+
 > **Status: Private Alpha** — This repository is under active development. APIs, tools, and documentation may change. See [milestones](.agent/milestones/) for the progression path.
 
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
 
-This repository is how Oak makes its curriculum available to AI tools and the wider education technology community. It powers the infrastructure that lets AI assistants help teachers find, adapt, and use Oak's openly-licensed curriculum.
+This repository is how Oak makes its curriculum available to AI tools and the wider education technology community. It powers the infrastructure that lets AI assistants like Claude and ChatGPT search Oak's curriculum, plan lessons, and access structured educational data — helping teachers find, adapt, and use Oak's openly-licensed curriculum.
 
 > For the broader vision — impact, capability staging, and the investment case — see [VISION.md](docs/foundation/VISION.md). No technical background required.
 
+- **Product owners, school leaders, non-technical evaluators** — start with [VISION.md](docs/foundation/VISION.md) for what this project delivers and why, then the [Curriculum Guide](docs/domain/curriculum-guide.md) for Oak's curriculum structure in plain language
+- **Developers** — jump to [Quick Start](#quick-start) below
+- **AI agents** — read the [start-right workflow](.agent/prompts/start-right.prompt.md), then [AGENT.md](.agent/directives/AGENT.md)
+
 ## What's In This Repo
 
-SDKs, MCP ([Model Context Protocol](https://modelcontextprotocol.io/)) servers, and Elasticsearch-backed semantic search — all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification.
+SDKs, MCP ([Model Context Protocol](https://modelcontextprotocol.io/) — a standard that lets AI tools like ChatGPT and Claude connect to data sources) servers, and Elasticsearch-backed semantic search — all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification.
 
 | Package                                      | Purpose                                                                                    |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -32,13 +38,11 @@ The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides th
 
 ## Quick Start
 
-**For AI agents**: Read [the start-right workflow](.agent/prompts/start-right.prompt.md), then [AGENT.md](.agent/directives/AGENT.md).
-
 ### Prerequisites
 
-- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm); the repo includes an `.nvmrc` file
+- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` (or `fnm use`) to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
-- **gitleaks** — required for push; install from [gitleaks releases](https://github.com/gitleaks/gitleaks/releases)
+- **gitleaks** — required for push; `brew install gitleaks` on macOS, or install from [gitleaks releases](https://github.com/gitleaks/gitleaks/releases)
 
 ### Install
 
@@ -64,7 +68,7 @@ If these pass, your toolchain is working and you can start contributing immediat
 
 ```bash
 cp .env.example .env
-# populate OAK_API_KEY, ELASTICSEARCH_*, SEARCH_API_KEY, etc.
+# populate OAK_API_KEY, ELASTICSEARCH_*, etc.
 ```
 
 Many tasks work without environment variables (`pnpm test`, `pnpm type-check`, `pnpm lint:fix`, `pnpm build`). Variables are only required for running dev servers, E2E tests, and smoke tests. Each workspace README provides its own `.env.local` hints.
