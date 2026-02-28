@@ -220,9 +220,10 @@ Objective:
 
 Feature backlog candidates:
 1. Context-grounding resource (`curriculum://context-grounding`) as a single-request convenience for clients that want ontology + help content up front (CTA removal complete, ADR-061 superseded).
-2. Standard-first MCP Apps capability expansion with optional adapters.
-3. Search UX reintroduction aligned with new search backend and hard safety controls.
-4. Host capability enhancements only where MCP-first fallback is preserved.
+2. Pedagogical context improvements (`get-started` tool, canonical glossary, MCP agent vocabulary overhaul) — extracted to [improve-pedagogical-context.plan.md](improve-pedagogical-context.plan.md). Note: this is about the agent-facing vocabulary in the MCP response, not the search synonym infrastructure.
+3. Standard-first MCP Apps capability expansion with optional adapters.
+4. Search UX reintroduction aligned with new search backend and hard safety controls.
+5. Host capability enhancements only where MCP-first fallback is preserved.
 
 Feature readiness conditions:
 

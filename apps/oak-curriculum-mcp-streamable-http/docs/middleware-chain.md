@@ -425,19 +425,10 @@ grep "bootstrap.complete" logs
 
 **Possible Causes**:
 
-1. **Origin not allowed** - Check `ALLOWED_ORIGINS` environment variable
-2. **Preflight not handled** - CORS middleware should handle OPTIONS automatically
-3. **WWW-Authenticate not exposed** - Must be in `Access-Control-Expose-Headers`
+1. **Preflight not handled** — CORS middleware should handle OPTIONS automatically
+2. **WWW-Authenticate not exposed** — Must be in `Access-Control-Expose-Headers`
 
-**Fix**:
-
-```bash
-# For development, allow all origins (insecure for production!)
-ALLOWED_ORIGINS="*" pnpm dev
-
-# For production, specify exact origins
-ALLOWED_ORIGINS="https://app.example.com,https://admin.example.com"
-```
+CORS is unconditionally permissive (all origins allowed). If you see CORS errors, the issue is likely a middleware ordering problem, not a configuration problem. Security is enforced by OAuth authentication, not by origin restrictions.
 
 ### Issue: "Invalid Host header"
 

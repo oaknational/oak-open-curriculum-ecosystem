@@ -1,5 +1,109 @@
 # Napkin
 
+## Session: 2026-02-28 — HTTP MCP env/CORS tidy-up
+
+### What was done
+
+Implemented the HTTP MCP env CORS tidy-up plan (3 phases):
+- Phase 1: Removed CORS_MODE, ALLOWED_ORIGINS, BASE_URL, MCP_CANONICAL_URI
+  from env schema. Removed dead readEnv/deriveBaseUrl/deriveMcpCanonicalUri
+  functions. Simplified createCorsMiddleware to always allow all origins
+  (origin: true). Removed CorsMode type, resolveCorsMode,
+  resolveAllowedOrigins and all helper functions from security-config.ts.
+  Updated bootstrap-security.ts call. Updated 3 harness env files, server
+  harness, .env.example, 3 docs files, README.
+- Phase 2: Fixed buildEnvResolutionError in resolve-env.ts to distinguish
+  failing keys (shown prominently) from absent-but-optional keys (shown as
+  lower-priority diagnostic line). No test changes needed — existing tests
+  check for key names in the message, not the exact prefix.
+- Phase 3: Wrote ADR-122 documenting permissive CORS rationale.
+
+### Patterns
+
+- When simplifying CORS, the key insight is: CORS adds no security for
+  Bearer-token auth because browsers don't auto-send Authorization headers
+  cross-origin. The entire three-mode system was configuration surface with
+  zero security benefit.
+- readEnv() was dead code in production — loadRuntimeConfig → resolveEnv
+  was the actual path. readEnv was only called in tests. Watch for test-only
+  code paths that masquerade as production code.
+- The stale CORS_MODE value was the original bug, but the misleading error
+  message was the real operational problem. Error messages that conflate
+  optional-absent with actually-failing keys waste operator time.
+
+## Session: 2026-02-28 — KS4 Maths Exploration and MCP Guidance
+
+### What happened
+
+Used oak-local MCP tools to explore KS4 maths resources. Found 36
+unique units across Years 10-11, 646 lessons, with foundation/higher
+tiers. User asked two follow-up questions about MCP server improvements.
+
+### Decisions made
+
+- Added future plan item (Domain D, item 2) for combining `get-help`
+  and `get-ontology` into a single `get-started` tool
+- `get-started` should include: "how to use search" section, a
+  general-to-pedagogy terms mapping table, and migrated tips content
+- Added immediate tip to `tool-guidance-data.ts` about assessment
+  terms (GCSE, SATs) vs curriculum content terms for search
+- Tip includes forward reference to future `get-started` migration
+
+### Corrections from user
+
+- EYFS is a real official designation (Early Years Foundation Stage),
+  not a colloquial term. I initially listed it alongside GCSE and SATs
+  as an example of a non-curriculum assessment term. Wrong — EYFS is
+  an official stage designation just like KS1-KS4.
+- The user (a teacher) said "KS4 maths" — precise, correct. I then
+  searched for "maths GCSE" in the threads scope. The user pointed
+  out that it was ME (the agent) who introduced "GCSE", not them.
+  Professional teachers use the correct curriculum terms. The guidance
+  is for consuming agents, not for users. Initial tip wording was
+  generic ("search text should use..."); corrected to explicitly
+  address agent behaviour ("Agent guidance: do not rewrite the user's
+  curriculum terms...").
+
+### Patterns
+
+- The distinction between filter terms and search terms is a general
+  MCP design pattern: some user vocabulary maps to API parameters
+  (filters), not to content (search text). The MCP server needs to
+  communicate this to agents explicitly.
+- When writing MCP tool guidance, identify WHO the guidance is for.
+  Users (teachers) already know the domain. Agents are the ones who
+  make mistakes by "helpfully" translating precise terms into
+  imprecise ones. Frame guidance accordingly.
+- Extracted pedagogical context work from Domain D of mcp-extensions
+  plan into its own plan: improve-pedagogical-context.plan.md. Three
+  workstreams: get-started tool (WS1), canonical vocabulary from Oak
+  glossary (WS2), MCP agent vocabulary overhaul (WS3). WS1+WS2 can
+  ship together; WS3 decouples agent vocabulary from search synonyms.
+- User corrected: the MCP "synonyms" (vocabulary hints for agents) and
+  the search synonyms (genuine curated/mined aliases for ES query
+  expansion) are fundamentally different things. I was conflating them
+  by talking about "synonym architecture overhaul" as one thing. The
+  plan is about the agent-facing vocabulary only — the search synonym
+  infrastructure is a separate, mature system and is out of scope.
+- Found significant prior work: the ontology API proposal
+  (22-ontology-and-graphs-api-proposal.md) already proposes exactly
+  the glossary structure we need. The "handling existing synonymish
+  things" research doc has the four-bucket model (alias, pedagogical
+  paraphrase, sense-bound, related concept). The "data and domain
+  vocabulary" research doc distinguishes structural/control vocabulary
+  (GCSE, KS4) from domain vocabulary (trigonometry). All three are
+  now referenced in the plan's Prior Work section.
+- The Oak official glossary
+  (https://open-api.thenational.academy/docs/about-oaks-data/glossary)
+  is the definitive list of canonical pedagogical terms. The model for
+  agent search guidance is: glossary terms are authoritative (trust
+  them), synonyms map colloquial terms to canonical ones. The rule:
+  never rewrite a glossary term into a non-glossary term. The
+  `get-started` tool should embed the glossary terms as a structured
+  canonical vocabulary section so agents can check user terms against
+  it. The ontology already has a FUTURE comment about replacing
+  synonyms with a proper glossary structure (ontology-data.ts:551).
+
 ## Session: 2026-02-27 — Rename to Oak Open Curriculum Ecosystem
 
 ### What happened
@@ -363,6 +467,23 @@ entry point for the next session.
   experience. Total: ~37 files updated. Always grep the full repo.
 - distilled.md is at 374 lines (target: <200). Pre-existing overweight.
   Needs a dedicated pruning pass in a future session.
+
+## Session: 2026-02-28 — Harness engineering vs Practice
+
+### What was done
+
+- Ran `/jc-start-right` grounding flow (AGENT, rules, testing strategy,
+  schema-first directive, practice index, distilled, napkin).
+- Read OpenAI article "Harness engineering: leveraging Codex in an
+  agent-first world" and compared it to this repository's Practice.
+
+### Patterns to remember
+
+- Strong overlap: both systems treat repository-local, versioned artefacts
+  as the system of record and enforce standards mechanically via linters/CI.
+- Key difference: this repository's Practice is stricter on quality gates
+  and TDD discipline; the OpenAI harness explicitly allows lighter blocking
+  merge gates in exchange for very high throughput and cheap follow-up fixes.
 
 ### Consolidation (2026-02-27)
 

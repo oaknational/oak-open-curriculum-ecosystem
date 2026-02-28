@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 23 February 2026
+**Last Updated**: 28 February 2026
 
 Planning hub for SDK pipeline evolution, MCP extensions, and related
 architectural work. Consolidated from the former `pipeline-enhancements/`
@@ -11,6 +11,7 @@ and `sdk-and-mcp-enhancements/` directories.
 | Document | Purpose | Status |
 |----------|---------|--------|
 | [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
+| [improve-pedagogical-context.plan.md](improve-pedagogical-context.plan.md) | `get-started` tool, canonical glossary from Oak API docs, MCP agent vocabulary overhaul (distinct from search synonyms) | Planning |
 | [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |
 
 ## Icebox (Pipeline Framework)

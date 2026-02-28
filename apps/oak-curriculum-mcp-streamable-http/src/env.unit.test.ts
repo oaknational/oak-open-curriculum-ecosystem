@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readEnv, HttpEnvSchema } from './env.js';
+import { HttpEnvSchema } from './env.js';
 
 const baseEnv = {
   OAK_API_KEY: 'test-key',
@@ -15,53 +15,69 @@ const withClerkKeys = {
 
 describe('Environment Schema', () => {
   it('requires CLERK_PUBLISHABLE_KEY when auth enabled', () => {
-    expect(() => readEnv(baseEnv)).toThrow(/Invalid environment/);
+    const result = HttpEnvSchema.safeParse(baseEnv);
+    expect(result.success).toBe(false);
   });
 
   it('requires CLERK_SECRET_KEY when auth enabled', () => {
-    const envWithoutSecret = {
+    const result = HttpEnvSchema.safeParse({
       ...baseEnv,
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-    };
-    expect(() => readEnv(envWithoutSecret)).toThrow(/Invalid environment/);
+    });
+    expect(result.success).toBe(false);
   });
 
-  it('rejects old ENABLE_LOCAL_AS variable', () => {
-    const result = readEnv({
+  it('strips unknown fields like ENABLE_LOCAL_AS', () => {
+    const result = HttpEnvSchema.safeParse({
       ...withClerkKeys,
       ENABLE_LOCAL_AS: 'true',
     });
-    expect('ENABLE_LOCAL_AS' in result).toBe(false);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect('ENABLE_LOCAL_AS' in result.data).toBe(false);
+    }
   });
 
   it('requires ELASTICSEARCH_URL', () => {
-    const envWithoutEsUrl = {
+    const result = HttpEnvSchema.safeParse({
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
       ELASTICSEARCH_API_KEY: 'test-api-key',
-    };
-    expect(() => readEnv(envWithoutEsUrl)).toThrow(/Invalid environment/);
+    });
+    expect(result.success).toBe(false);
   });
 
   it('requires ELASTICSEARCH_API_KEY', () => {
-    const envWithoutEsApiKey = {
+    const result = HttpEnvSchema.safeParse({
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
       ELASTICSEARCH_URL: 'http://localhost:9200',
-    };
-    expect(() => readEnv(envWithoutEsApiKey)).toThrow(/Invalid environment/);
+    });
+    expect(result.success).toBe(false);
   });
 
   it('accepts valid configuration with Clerk keys', () => {
-    const result = readEnv({
+    const result = HttpEnvSchema.safeParse(withClerkKeys);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.CLERK_PUBLISHABLE_KEY).toBe('pk_test_123');
+      expect(result.data.CLERK_SECRET_KEY).toBe('sk_test_123');
+    }
+  });
+
+  it('does not include CORS_MODE or ALLOWED_ORIGINS in the schema', () => {
+    const result = HttpEnvSchema.safeParse({
       ...withClerkKeys,
-      BASE_URL: 'http://localhost:3333',
-      MCP_CANONICAL_URI: 'http://localhost:3333/mcp',
+      CORS_MODE: 'automatic',
+      ALLOWED_ORIGINS: 'http://localhost:3000',
     });
-    expect(result.CLERK_PUBLISHABLE_KEY).toBe('pk_test_123');
-    expect(result.CLERK_SECRET_KEY).toBe('sk_test_123');
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect('CORS_MODE' in result.data).toBe(false);
+      expect('ALLOWED_ORIGINS' in result.data).toBe(false);
+    }
   });
 });
 

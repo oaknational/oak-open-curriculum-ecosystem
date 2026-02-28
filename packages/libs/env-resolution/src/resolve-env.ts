@@ -146,9 +146,11 @@ function extractFailingKeys(issues: readonly z.core.$ZodIssue[]): readonly strin
 /**
  * Builds a structured error for a failed environment validation.
  *
- * The Vercel guidance (when applicable) only lists keys that actually
- * failed validation — not all absent keys — so operators know exactly
- * which keys to configure.
+ * Distinguishes between keys that actually caused validation failures
+ * (shown prominently) and keys that are merely absent but optional
+ * (shown as a lower-priority diagnostic). This prevents operators from
+ * being confused by a long list of "missing" optional keys when only
+ * one key has an invalid value.
  */
 function buildEnvResolutionError(
   diagnostics: readonly EnvKeyDiagnostic[],
@@ -159,16 +161,25 @@ function buildEnvResolutionError(
   const failingKeys = extractFailingKeys(issues);
   const issueMessages = issues.map((i) => i.message);
 
+  const failingKeySet = new Set(failingKeys);
+  const absentButNotFailing = absentKeys.filter((k) => !failingKeySet.has(k));
+
   const vercelGuidance =
     isVercel && failingKeys.length > 0
-      ? `\n  This is a Vercel deployment. Configure the missing keys in your ` +
+      ? `\n  This is a Vercel deployment. Configure the failing keys in your ` +
         `Vercel project settings (Settings → Environment Variables): ${failingKeys.join(', ')}`
+      : '';
+
+  const optionalAbsentLine =
+    absentButNotFailing.length > 0
+      ? `\n  (${String(absentButNotFailing.length)} optional key${absentButNotFailing.length === 1 ? '' : 's'} not configured: ${absentButNotFailing.join(', ')})`
       : '';
 
   const message =
     `Environment validation failed.\n` +
-    `  Missing keys: ${absentKeys.length > 0 ? absentKeys.join(', ') : 'none'}\n` +
+    `  Failing keys: ${failingKeys.length > 0 ? failingKeys.join(', ') : 'none'}\n` +
     `  Validation errors: ${issueMessages.join('; ')}` +
+    optionalAbsentLine +
     vercelGuidance;
 
   return { message, diagnostics, zodIssues: issues };

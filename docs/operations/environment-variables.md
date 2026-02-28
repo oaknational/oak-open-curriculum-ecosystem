@@ -58,7 +58,6 @@ cp .env.example .env
 | `LOG_LEVEL`                | Logging verbosity (`debug`, `info`, `warn`, `error`)      | `info`                                  | All apps                                  |
 | `DANGEROUSLY_DISABLE_AUTH` | **Development only** - completely bypasses authentication | `false`                                 | HTTP MCP server (NEVER use in production) |
 | `ALLOWED_HOSTS`            | Comma-separated list of allowed hostnames                 | Auto-detected (localhost or Vercel URL) | HTTP MCP server                           |
-| `ALLOWED_ORIGINS`          | Comma-separated CORS origins                              | Auto-detected                           | HTTP MCP server                           |
 | `SMOKE_REMOTE_BASE_URL`    | Base URL for remote smoke tests                           | -                                       | Smoke tests                               |
 
 ## Workspace-Specific Variables

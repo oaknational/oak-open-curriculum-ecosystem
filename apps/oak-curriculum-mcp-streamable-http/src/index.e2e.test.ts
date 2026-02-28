@@ -5,7 +5,7 @@ import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
 /**
- * Isolated test environment without BASE_URL or MCP_CANONICAL_URI.
+ * Isolated test environment for E2E application tests.
  * No global `process.env` mutation — see ADR-078.
  */
 const testEnv: NodeJS.ProcessEnv = {

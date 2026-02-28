@@ -132,6 +132,7 @@ export const toolGuidanceData = {
     'Use get-help or get-ontology to understand Oak — great at the start of a conversation.',
     'get-ontology includes both domain definitions (what things mean) and a property graph (how concept types connect structurally).',
     'Not all lessons have all components — video, transcript, quizzes, and worksheets are OPTIONAL. Check availability before assuming they exist.',
+    'Agent guidance for search: Oak has an official glossary of pedagogical terms (https://open-api.thenational.academy/docs/about-oaks-data/glossary). When the user uses a glossary term (e.g. "KS4", "unit", "thread", "tier", "key stage", "misconception"), treat it as already correct — do not rewrite it. When the user uses a colloquial term not in the glossary (e.g. "GCSE", "SATs", "times tables"), map it to the canonical term using the synonyms in get-ontology. Never rewrite a glossary term into a non-glossary term. Search text should use curriculum topic terms (e.g. "trigonometry", "fractions"); assessment terms like "GCSE" map to keyStage filters, not search text. This guidance will move to a dedicated section in a future get-started tool.',
   ],
 
   /**

@@ -67,36 +67,25 @@ export function dnsRebindingProtection(
   };
 }
 
-export function createCorsMiddleware(
-  mode: 'stateless' | 'session',
-  allowedOrigins: readonly string[] | undefined,
-): express.RequestHandler {
-  const originSet = new Set((allowedOrigins ?? []).map((o) => o.toLowerCase()));
+/**
+ * Creates CORS middleware that permits all origins.
+ *
+ * This is the correct posture for an OAuth-protected MCP server:
+ * - Non-browser MCP clients (Claude Desktop, Cursor, VS Code) ignore CORS
+ * - Browser-based MCP clients (ChatGPT web) need permissive CORS to connect
+ * - Auth is via OAuth Bearer tokens, not cookies — CORS adds no security
+ * - Future MCP Apps render in iframes on different origins
+ *
+ * @param mode - Transport mode; 'session' exposes the Mcp-Session-Id header
+ */
+export function createCorsMiddleware(mode: 'stateless' | 'session'): express.RequestHandler {
   const isSession = mode === 'session';
   return cors({
-    origin(origin, callback) {
-      // Allow requests without Origin (e.g. server-to-server, supertest)
-      if (!origin) {
-        callback(null, true);
-        return;
-      }
-      // If no explicit allow-list provided, allow all origins
-      if (originSet.size === 0) {
-        callback(null, true);
-        return;
-      }
-      const isAllowed = originSet.has(origin.toLowerCase());
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        callback(new Error('CORS: origin not allowed'));
-      }
-    },
+    origin: true,
     credentials: false,
     allowedHeaders: isSession
       ? ['Content-Type', 'Authorization', 'mcp-protocol-version', 'mcp-session-id']
       : ['Content-Type', 'Authorization', 'mcp-protocol-version'],
-    // CRITICAL: MCP clients need WWW-Authenticate header for OAuth discovery
     exposedHeaders: isSession ? ['Mcp-Session-Id', 'WWW-Authenticate'] : ['WWW-Authenticate'],
     maxAge: 600,
     optionsSuccessStatus: 204,

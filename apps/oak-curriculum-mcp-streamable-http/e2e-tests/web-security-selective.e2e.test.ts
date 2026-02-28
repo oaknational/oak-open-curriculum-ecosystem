@@ -55,14 +55,13 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.status).toBe(200);
     });
 
-    it('applies CORS headers with different origin (dangerously_allow_all mode)', async () => {
+    it('allows any cross-origin request (permissive CORS for OAuth-protected MCP)', async () => {
       const app = await createTestApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
         .set('Origin', 'http://totally-different.com');
 
-      // dangerously_allow_all mode reflects any origin back
       expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
       expect(res.status).toBe(200);
     });
@@ -248,16 +247,15 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
   });
 
-  describe('CORS behavior - applied globally', () => {
-    it('landing page has CORS with allowed origin', async () => {
+  describe('CORS behaviour - permissive for all origins', () => {
+    it('landing page reflects any origin (permissive CORS)', async () => {
       const app = await createTestApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
-        .set('Origin', 'http://allowed-origin.com');
+        .set('Origin', 'http://any-origin.com');
 
-      // CORS allows all origins when no explicit allow-list
-      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.headers['access-control-allow-origin']).toBe('http://any-origin.com');
       expect(res.status).toBe(200);
     });
 

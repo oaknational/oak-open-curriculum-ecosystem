@@ -108,7 +108,6 @@ const configSnapshot = {
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? '[REDACTED]' : undefined,
   OAK_API_KEY: process.env.OAK_API_KEY ? '[REDACTED]' : undefined,
   ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
 };
 
 log.info('Configuration snapshot', configSnapshot);

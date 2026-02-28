@@ -18,13 +18,14 @@ import { runBootstrapPhase } from './bootstrap-helpers.js';
 /**
  * Sets up security middleware for the Express application.
  *
- * Creates and applies CORS (global), DNS rebinding protection (for landing
- * page only — returned for later use), and security headers (CSP,
- * X-Content-Type-Options, etc.).
+ * Creates and applies CORS (global, all origins), DNS rebinding protection
+ * (for landing page only — returned for later use), and security headers
+ * (CSP, X-Content-Type-Options, etc.).
  *
- * CORS is applied globally because protocol routes (MCP, OAuth proxy) need
- * it for browser-based clients. DNS rebinding protection is only needed on
- * the landing page (`/`), so it is returned for selective application.
+ * CORS is unconditionally permissive because security is enforced by OAuth
+ * authentication, not by origin restrictions. DNS rebinding protection is
+ * only needed on the landing page (`/`), so it is returned for selective
+ * application.
  *
  * @returns DNS rebinding middleware and resolved allowed hosts
  */
@@ -38,7 +39,7 @@ export function setupSecurityMiddleware(
   const securityConfig = createSecurityConfig(runtimeConfig);
 
   const corsMiddleware = runBootstrapPhase(log, timer, 'createCorsMiddleware', appId, () =>
-    createCorsMiddleware(securityConfig.mode, securityConfig.allowedOrigins),
+    createCorsMiddleware(securityConfig.mode),
   );
 
   const dnsRebindingMiddleware = runBootstrapPhase(

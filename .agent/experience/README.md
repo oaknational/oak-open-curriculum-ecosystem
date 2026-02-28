@@ -105,5 +105,6 @@ experience file is not the home for technical reference.
 - 2026‑02‑26: documentation drift — see: [documentation-as-archaeology](./2026-02-26-documentation-as-archaeology.md) — documentation coupling points; reviewer-discovered drift; identity vs system grammar
 - 2026‑02‑26: plasmid exchange — see: [the-first-round-trip](./2026-02-26-the-first-round-trip.md) — compression reveals essence; provenance chains; knowing vs applying principles
 - 2026‑02‑27: plasmid return — see: [the-return-trip](./2026-02-27-the-return-trip.md) — new artefacts from round-trips; cohesion drift; integration scope wider than expected
+- 2026‑02‑28: error clarity — see: [the-noise-in-the-signal](./2026-02-28-the-noise-in-the-signal.md) — dead code that looks alive; error messages as architecture; signal vs noise in diagnostics
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

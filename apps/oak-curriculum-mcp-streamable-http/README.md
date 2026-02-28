@@ -58,11 +58,8 @@ Note: The server automatically adds the required `Accept: application/json, text
 - Optional env:
   - `DANGEROUSLY_DISABLE_AUTH` — set to `true` to disable auth (makes Clerk keys optional)
   - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards). Applied consistently to OAuth metadata endpoints and `/mcp` auth challenge/resource URL generation.
-  - `ALLOWED_ORIGINS` for browser CORS
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
-  - `BASE_URL` (recommended; if omitted we derive from request host)
-  - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
 
 Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
 
@@ -71,7 +68,7 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 ### Smoke-test checklist (post-deploy)
 
 - Confirm Node runtime (not Edge) in project settings
-- Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS` (+ optionally `BASE_URL`, `MCP_CANONICAL_URI`)
+- Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS`
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
 - POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
 - POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
@@ -136,7 +133,6 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If using local demo AS, ensure `ENABLE_LOCAL_AS=true` and `LOCAL_AS_JWK` is present or allow the app to generate it.
 - 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint. For demo: enable `ENABLE_LOCAL_AS=true` and mint a short‑lived JWT.
-- CORS blocked: set `ALLOWED_ORIGINS` to include your origin
 - Host blocked: add host to `ALLOWED_HOSTS`
 - Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
 

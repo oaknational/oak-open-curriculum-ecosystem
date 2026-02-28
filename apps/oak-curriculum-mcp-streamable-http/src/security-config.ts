@@ -4,35 +4,6 @@ import type { RuntimeConfig } from './runtime-config.js';
 const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
 
 /**
- * CORS mode determines how origin access control is applied.
- *
- * - 'dangerously_allow_all': Permits all origins (development/testing ONLY)
- * - 'explicit': Only allows origins from ALLOWED_ORIGINS env var
- * - 'automatic': Smart default (all origins in dev, self-only in Vercel)
- */
-export type CorsMode = 'dangerously_allow_all' | 'explicit' | 'automatic';
-
-/**
- * Resolves the CORS mode from configuration, defaulting to 'automatic'.
- *
- * @param configuredMode - The CORS_MODE value from environment
- * @returns The resolved CORS mode
- */
-export function resolveCorsMode(configuredMode: string | undefined): CorsMode {
-  if (!configuredMode || configuredMode === '') {
-    return 'automatic';
-  }
-  if (
-    configuredMode === 'dangerously_allow_all' ||
-    configuredMode === 'explicit' ||
-    configuredMode === 'automatic'
-  ) {
-    return configuredMode;
-  }
-  return 'automatic';
-}
-
-/**
  * Resolves the list of allowed hostnames for DNS rebinding protection.
  *
  * Priority:
@@ -59,105 +30,23 @@ export function resolveAllowedHosts(
 }
 
 /**
- * Resolves allowed origins for 'dangerously_allow_all' mode.
- * Always returns undefined to permit all origins.
+ * Security configuration for DNS rebinding protection and transport mode.
  *
- * @returns undefined (enables dangerously_allow_all CORS)
- */
-function resolveDangerouslyAllowAll(): undefined {
-  return undefined;
-}
-
-/**
- * Resolves allowed origins for 'explicit' mode.
- * Returns configured origins, or empty array to block all if none provided.
- *
- * @param configured - Explicitly configured allowed origins from env
- * @returns Array of allowed origins, or empty array to block all
- */
-function resolveExplicitOrigins(configured: readonly string[] | undefined): readonly string[] {
-  if (configured && configured.length > 0) {
-    return configured;
-  }
-  return []; // Block all origins
-}
-
-/**
- * Resolves allowed origins for 'automatic' mode.
- * Smart behavior: uses explicit config if provided, all Vercel hosts in production,
- * or undefined in local dev (allows all).
- *
- * @param configured - Explicitly configured allowed origins from env
- * @param vercelHosts - Array of all Vercel deployment URLs (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL)
- * @returns Array of allowed origins, or undefined for local dev
- */
-function resolveAutomaticOrigins(
-  configured: readonly string[] | undefined,
-  vercelHosts: readonly string[],
-): readonly string[] | undefined {
-  if (configured && configured.length > 0) {
-    return configured;
-  }
-  if (vercelHosts.length > 0) {
-    return vercelHosts.map((host) => `https://${host}`);
-  }
-  return undefined; // Local dev - allow all
-}
-
-/**
- * Resolves the allowed origins for CORS configuration based on the mode.
- *
- * Three modes:
- * 1. 'dangerously_allow_all' - Always returns undefined (permits all origins)
- * 2. 'explicit' - Returns configured origins, or empty array (blocks all) if none
- * 3. 'automatic' - Smart behavior:
- *    - Uses explicit config if provided
- *    - Uses all Vercel hosts in production (converted to https:// origins)
- *    - Returns undefined in local dev (allows all)
- *
- * @param mode - The CORS mode determining behavior
- * @param configured - Explicitly configured allowed origins from env
- * @param vercelHosts - Array of all Vercel deployment URLs (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL)
- * @returns Array of allowed origins, or undefined to enable dangerously_allow_all mode
- * @see https://vercel.com/docs/environment-variables/system-environment-variables
- */
-export function resolveAllowedOrigins(
-  mode: CorsMode,
-  configured: readonly string[] | undefined,
-  vercelHosts: readonly string[],
-): readonly string[] | undefined {
-  if (mode === 'dangerously_allow_all') {
-    resolveDangerouslyAllowAll();
-    return undefined;
-  }
-  if (mode === 'explicit') {
-    return resolveExplicitOrigins(configured);
-  }
-  return resolveAutomaticOrigins(configured, vercelHosts);
-}
-
-/**
- * Creates security configuration for DNS rebinding protection and CORS.
- *
- * Derives allowed hosts and origins from environment configuration and Vercel
- * system environment variables. All Vercel deployment URLs are automatically
- * allowed when no explicit configuration is provided.
+ * CORS is unconditionally permissive — all origins are allowed. This is the
+ * correct posture for an OAuth-protected MCP server: security is enforced by
+ * Bearer token authentication, not by origin restrictions. Browser-based MCP
+ * clients (e.g. ChatGPT web) and future MCP Apps need cross-origin access.
  *
  * @param config - Runtime configuration with env vars and Vercel hostnames
- * @returns Security configuration with allowed hosts, origins, and CORS mode
+ * @returns Security configuration with allowed hosts and transport mode
  */
 export function createSecurityConfig(config: RuntimeConfig): {
   mode: 'stateless' | 'session';
   allowedHosts: readonly string[];
-  allowedOrigins: readonly string[] | undefined;
-  corsMode: CorsMode;
 } {
   const mode = config.env.REMOTE_MCP_MODE === 'session' ? 'session' : 'stateless';
   const configuredHosts = parseCsv(config.env.ALLOWED_HOSTS);
-  const configuredOrigins = parseCsv(config.env.ALLOWED_ORIGINS);
   const vercelHosts = config.vercelHostnames;
-  const corsMode = resolveCorsMode(config.env.CORS_MODE);
   const allowedHosts = resolveAllowedHosts(configuredHosts, vercelHosts);
-  const allowedOrigins = resolveAllowedOrigins(corsMode, configuredOrigins, vercelHosts);
-  return { mode, allowedHosts, allowedOrigins, corsMode };
+  return { mode, allowedHosts };
 }
