@@ -73,8 +73,32 @@ which are top priority for the next session.
 
 Code fix complete: `createThreadDocument` now populates `thread_semantic`
 with `"<subjects>: <title>"`. Tests pass. But the live ES instance still
-has 164 documents without the field. Run the search CLI ingest to reindex
-and verify ELSER leg is alive.
+has 164 documents without the field.
+
+Steps:
+
+1. Run the search CLI thread ingest against the live ES deployment
+2. Verify via EsCurric `platform_core_get_document_by_id` that
+   `thread_semantic` is present on at least 3 sample documents
+   (e.g. `algebra`, `geometry-and-measure`, `bq14-physics`)
+3. Run a thread search that previously returned 0 results:
+   `search(scope: 'threads', subject: 'maths')` — should now return
+   maths threads via the ELSER leg
+4. Run a text search: `search(scope: 'threads', text: 'algebra')` —
+   should return the algebra thread with improved relevance via ELSER
+5. Verify other scopes (lessons, units) are unaffected
+
+**Validation of M1-S001b/S002/S003/S005 fixes (post-reindex):**
+
+After reindex, re-test the scenarios from the original exploration:
+
+- Subject-filter guidance: `search(scope: 'threads', subject: 'maths')`
+  returns threads (tests M1-S001a + M1-S001b together)
+- Year normalisation: `get-sequences-assets` with `year: 3` and
+  `year: "3"` both work (M1-S002)
+- Scope limitations: `search(scope: 'suggest', subject: 'maths')`
+  works; `search(scope: 'suggest')` without filter gives validation
+  error with helpful message (M1-S005)
 
 **2. Remaining M0 gates**
 
@@ -87,7 +111,8 @@ and verify ELSER leg is alive.
 
 - M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)
 - M1-S006: `get-rate-limit` returns 0/0/0 on preview server (upstream)
-- M1-S008: `callTool` overloads declare nested args but impl parses flat args (type-safety debt)
+- M1-S008: `callTool` overloads declare nested args but impl parses flat args
+  (type-safety debt — separate plan: [calltool-type-alignment.plan.md](./calltool-type-alignment.plan.md))
 
 ### Remaining M0/M1 Gates
 
@@ -1414,7 +1439,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Problem** | The generated `callTool` overloads in `execute.ts` declare `rawArgs: ToolArgsForName<TName>`, which resolves to the **nested** SDK type (e.g. `{ params: { path: { sequence: string }, query?: { year?: number } } }`). But the implementation (`invokeToolByName`) parses `rawArgs` through `toolMcpFlatInputSchema.safeParse()`, which expects **flat** MCP args (e.g. `{ sequence: string, year?: string \| number }`). The overloads promise one type; the implementation expects another. This is masked by: (1) the final overload uses `rawArgs: unknown`; (2) the sole real caller (`callToolWithValidation`) always passes `unknown`; (3) nobody uses the strongly-typed overloads programmatically. Year normalisation (M1-S002) made this visible — the nested type says `year?: number` while the flat schema accepts `string \| number`. |
 | **Files** | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/aliases/types.ts` (defines `ToolArgsForName`) |
 | **Fix** | Either (a) change `ToolArgsForName` to derive from the flat input schema type, or (b) change the overloads to use `rawArgs: unknown` since the function's contract is "validate whatever you give me." Option (b) is simpler but loses type-safe overloads; option (a) preserves them correctly. Both require generator changes in `emit-index.ts` or `generate-types-file.ts`. |
-| **Status** | Open — identified by type-reviewer during M1-S002 implementation (2026-02-28). No runtime impact. |
+| **Status** | Open — identified by type-reviewer during M1-S002 implementation (2026-02-28). No runtime impact. Separate plan: [calltool-type-alignment.plan.md](./calltool-type-alignment.plan.md). |
 
 ---
 
