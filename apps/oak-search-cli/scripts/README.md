@@ -40,7 +40,7 @@ pnpm analyze:elser <report-file>
 | Script                        | Reason                                                 |
 | ----------------------------- | ------------------------------------------------------ |
 | `migrate-transcript-cache.ts` | One-off Redis migration, executed and removed Feb 2026 |
-| `ingest-all-combinations.ts`  | Replaced by `pnpm es:ingest-live --all`                |
+| `ingest-all-combinations.ts`  | Replaced by `pnpm es:ingest -- --api --all`            |
 | `check-progress.ts`           | Replaced by `pnpm es:status`                           |
 | `verify-ingestion.ts`         | Moved to `operations/ingestion/`                       |
 

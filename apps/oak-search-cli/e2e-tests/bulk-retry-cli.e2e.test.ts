@@ -37,7 +37,7 @@ function runCli(
   envOverrides: Record<string, string> = {},
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise((resolve) => {
-    const child = spawn('npx', ['tsx', 'src/lib/elasticsearch/setup/ingest-live.ts', ...args], {
+    const child = spawn('npx', ['tsx', 'src/lib/elasticsearch/setup/ingest.ts', ...args], {
       cwd: appRoot,
       env: {
         ...childProcessEnv(),
@@ -155,14 +155,7 @@ describe('Bulk Retry CLI Flags E2E', () => {
    * Expected: CLI should reject with validation error
    */
   it('validates --max-retries is numeric', async () => {
-    const { stdout, stderr, exitCode } = await runCli([
-      '--bulk',
-      '--bulk-dir',
-      './bulk-downloads',
-      '--dry-run',
-      '--max-retries',
-      'abc',
-    ]);
+    const { stdout, stderr, exitCode } = await runCli(['--dry-run', '--max-retries', 'abc']);
 
     // Should fail with validation error
     expect(exitCode).not.toBe(0);
@@ -192,14 +185,11 @@ describe('Bulk Retry CLI Flags E2E', () => {
   /**
    * Test: Dry-run with retry flags logs expected configuration.
    *
-   * Given: CLI invoked with --bulk --dry-run --max-retries 5
+   * Given: CLI invoked with --dry-run --max-retries 5 (bulk mode is default)
    * Expected: Dry-run output shows retry configuration
    */
   it('dry-run logs retry configuration', async () => {
     const { stdout, stderr } = await runCli([
-      '--bulk',
-      '--bulk-dir',
-      './bulk-downloads',
       '--dry-run',
       '--max-retries',
       '5',

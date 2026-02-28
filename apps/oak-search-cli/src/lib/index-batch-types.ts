@@ -5,6 +5,7 @@
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';
+import type { SearchIndexKind } from './search-index-target';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { SequenceFacetProcessingMetrics } from './indexing/sequence-facet-index';
 
@@ -70,6 +71,8 @@ export interface BatchGeneratorOptions {
   readonly subjects: readonly SearchSubjectSlug[];
   /** Key stages to ingest. */
   readonly keyStages: readonly KeyStage[];
+  /** Limit to specific index kinds. Empty array means all indexes. */
+  readonly indexes?: readonly SearchIndexKind[];
   /** Batch granularity. Defaults to `{ kind: 'subject-keystage' }`. */
   readonly granularity?: BatchGranularity;
   /** Optional callback for sequence facet processing metrics. */

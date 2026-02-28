@@ -341,7 +341,7 @@ Rate limiting and retry involve timing, state, and edge cases. TDD ensures:
 
 - Updated `apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts` (singleton pattern)
 - Created `apps/oak-search-cli/src/lib/rate-limit-logger.ts` (monitoring utilities)
-- Updated `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-live.ts` (integrated monitoring)
+- Updated `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest.ts` (integrated monitoring)
 - Updated `apps/oak-search-cli/scripts/README-INGEST-ALL.md`
 
 **Documentation**:

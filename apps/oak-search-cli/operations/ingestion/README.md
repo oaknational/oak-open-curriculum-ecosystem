@@ -7,20 +7,20 @@ Data loading, validation, and monitoring tools for the semantic search indices.
 The canonical way to ingest curriculum data is via the main CLI:
 
 ```bash
-# Full curriculum ingestion (all 17 subjects)
-pnpm es:ingest-live --all --verbose
+# Full curriculum ingestion (API mode; all 17 subjects)
+pnpm es:ingest -- --api --all --verbose
 
-# Specific subject
-pnpm es:ingest-live --subject maths --verbose
+# Specific subject (API mode)
+pnpm es:ingest -- --api --subject maths --verbose
 
-# Specific subject and keystage
-pnpm es:ingest-live --subject maths --key-stage ks4 --verbose
+# Specific subject and keystage (API mode)
+pnpm es:ingest -- --api --subject maths --key-stage ks4 --verbose
 
 # Dry run (preview without indexing)
-pnpm es:ingest-live --all --dry-run
+pnpm es:ingest -- --api --all --dry-run
 
 # Incremental mode (skip existing, useful for resuming)
-pnpm es:ingest-live --all --incremental
+pnpm es:ingest -- --api --all --incremental
 ```
 
 ### CLI Flags
@@ -86,8 +86,8 @@ pnpm es:setup
 # 2. Ensure Redis is running (for caching)
 pnpm redis:up
 
-# 3. Ingest all curriculum data
-pnpm es:ingest-live --all --verbose
+# 3. Ingest all curriculum data (API mode)
+pnpm es:ingest -- --api --all --verbose
 
 # 4. Validate after completion
 pnpm ingest:verify
@@ -101,7 +101,7 @@ pnpm es:status
 If ingestion is interrupted, simply re-run the same command:
 
 ```bash
-pnpm es:ingest-live --all --verbose
+pnpm es:ingest -- --api --all --verbose
 ```
 
 The default incremental mode skips already-indexed documents, allowing resumption.
@@ -112,8 +112,8 @@ The default incremental mode skips already-indexed documents, allowing resumptio
 # 1. Reset indices
 pnpm es:setup reset
 
-# 2. Re-index all data (default behavior)
-pnpm es:ingest-live --all --verbose
+# 2. Re-index all data (API mode; bulk is default)
+pnpm es:ingest -- --api --all --verbose
 ```
 
 ### Refreshing Transcripts
@@ -122,8 +122,8 @@ Many lessons legitimately have no transcript (art, PE, etc.). These 404 response
 are cached to avoid repeated API calls. To re-check for newly added transcripts:
 
 ```bash
-# Re-fetch transcripts that were previously 404
-pnpm es:ingest-live --all --ignore-cached-404 --verbose
+# Re-fetch transcripts that were previously 404 (API mode)
+pnpm es:ingest -- --api --all --ignore-cached-404 --verbose
 ```
 
 **Note**: This does NOT clear the entire cache, only bypasses cached 404s for

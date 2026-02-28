@@ -79,14 +79,14 @@ This script:
 ```bash
 cd apps/oak-search-cli
 
-# Ingest specific subject
-pnpm es:ingest-live -- --subject maths --key-stage ks4
+# Ingest specific subject (API mode)
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 
-# Ingest all subjects
-pnpm es:ingest-live -- --all
+# Ingest all subjects (API mode)
+pnpm es:ingest -- --api --all
 
-# Dry run to preview
-pnpm es:ingest-live -- --subject maths --dry-run
+# Dry run to preview (API mode)
+pnpm es:ingest -- --api --subject maths --dry-run
 ```
 
 ---

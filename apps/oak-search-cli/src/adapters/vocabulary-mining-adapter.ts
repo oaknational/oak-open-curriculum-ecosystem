@@ -35,6 +35,23 @@ export interface VocabularyMiningStats {
   readonly synonymsExtracted: number;
 }
 
+/** Returns a zero-value VocabularyMiningStats (all counts zero). */
+export function emptyVocabularyStats(): VocabularyMiningStats {
+  return {
+    filesProcessed: 0,
+    totalLessons: 0,
+    totalUnits: 0,
+    uniqueKeywords: 0,
+    totalMisconceptions: 0,
+    totalLearningPoints: 0,
+    totalTeacherTips: 0,
+    totalPriorKnowledge: 0,
+    totalNCStatements: 0,
+    uniqueThreads: 0,
+    synonymsExtracted: 0,
+  };
+}
+
 /**
  * Complete result from vocabulary mining.
  */

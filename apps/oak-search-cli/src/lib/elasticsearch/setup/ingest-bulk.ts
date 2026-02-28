@@ -1,4 +1,3 @@
-#!/usr/bin/env npx tsx
 /**
  * Bulk-first ingestion module for the CLI.
  *
@@ -12,8 +11,10 @@
 
 import type { CliArgs } from './ingest-cli-args.js';
 import type { OakClient } from '../../../adapters/oak-adapter.js';
+import type { SearchIndexKind } from '../../search-index-target.js';
 import type { IngestionResult } from './ingest-output.js';
 import { prepareBulkIngestion, type BulkIngestionStats } from '../../indexing/bulk-ingestion.js';
+import { filterOperationsByIndex } from '../../indexing/ingest-harness-filtering.js';
 import { esClient } from '../../es-client.js';
 import {
   dispatchBulk,
@@ -59,10 +60,11 @@ export function printBulkHeader(args: CliArgs): void {
 async function prepareBulkOperations(
   bulkDir: string,
   client: OakClient,
+  indexes: readonly SearchIndexKind[],
 ): Promise<{
   operations: ReturnType<typeof prepareBulkIngestion> extends Promise<infer U> ? U : never;
 }> {
-  const result = await prepareBulkIngestion({ bulkDir, client });
+  const result = await prepareBulkIngestion({ bulkDir, client, indexes });
   return { operations: result };
 }
 
@@ -148,13 +150,13 @@ export async function executeBulkIngestion(
   logIngestionStart(args);
   const startTime = Date.now();
 
-  const bulkDir = args.bulkDir;
-  if (bulkDir === undefined) {
-    throw new Error('--bulk-dir is required for bulk mode');
-  }
-
-  const { operations: prepResult } = await prepareBulkOperations(bulkDir, client);
-  const { operations, stats } = prepResult;
+  const { operations: prepResult } = await prepareBulkOperations(
+    args.bulkDir,
+    client,
+    args.indexes,
+  );
+  const { operations: rawOperations, stats } = prepResult;
+  const operations = filterOperationsByIndex(rawOperations, args.indexes);
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
   const summary = summariseOperations(operations, 'primary');
@@ -174,7 +176,7 @@ export async function executeBulkIngestion(
   const uploadResult = await dispatchOperations(operations, createUploadConfig(args));
   printBulkSummary(stats, duration);
   printCacheStats(client);
-  handleUploadComplete(uploadResult, bulkDir);
+  handleUploadComplete(uploadResult, args.bulkDir);
 
   return { stats, duration, result: createIngestionResult(operations) };
 }

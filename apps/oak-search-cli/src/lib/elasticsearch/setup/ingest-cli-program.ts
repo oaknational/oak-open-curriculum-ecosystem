@@ -1,6 +1,5 @@
 /**
  * Commander program configuration for ingestion CLI.
-
  */
 
 import { Command } from 'commander';
@@ -14,22 +13,41 @@ import {
   validatePositiveInt,
 } from './ingest-cli-validators.js';
 
+/** Default bulk download directory (relative to search CLI workspace root). */
+export const DEFAULT_BULK_DIR = './bulk-downloads';
+
 /**
- * Add subject selection options to program.
+ * Add data source options to program.
+ *
+ * @remarks
+ * Default mode is bulk (reads from local bulk-download files).
+ * Use `--api` to switch to live API fetching.
  */
-function addSubjectOptions(program: Command): void {
+function addDataSourceOptions(program: Command): void {
   program
-    .option('--subject <slug>', 'Subject to ingest (repeatable)', collectSubject, [])
-    .option('--all', 'Ingest all subjects');
+    .option('--api', 'Use live API instead of bulk download files')
+    .option(
+      '--bulk-dir <path>',
+      `Directory containing bulk JSON files (default: ${DEFAULT_BULK_DIR})`,
+    );
 }
 
 /**
- * Add bulk mode options to program.
+ * Add subject selection options to program.
+ *
+ * @remarks
+ * Subject/--all flags are only required in API mode.
+ * In bulk mode (default), all subjects are read from the bulk files.
  */
-function addBulkOptions(program: Command): void {
+function addSubjectOptions(program: Command): void {
   program
-    .option('--bulk', 'Use bulk download files instead of API')
-    .option('--bulk-dir <path>', 'Directory containing bulk JSON files');
+    .option(
+      '--subject <slug>',
+      'Subject to ingest — API mode only (repeatable)',
+      collectSubject,
+      [],
+    )
+    .option('--all', 'Ingest all subjects — API mode only');
 }
 
 /**
@@ -38,7 +56,7 @@ function addBulkOptions(program: Command): void {
 function addFilterOptions(program: Command): void {
   program
     .option('--key-stage <ks>', 'Key stage filter (repeatable)', collectKeyStage, [])
-    .option('--index <kind>', 'Index to ingest (repeatable)', collectIndex, []);
+    .option('--index <kind>', 'Limit to specific index kinds (repeatable)', collectIndex, []);
 }
 
 /**
@@ -73,7 +91,7 @@ export function createProgram(): Command {
   const program = new Command();
 
   program
-    .name('ingest-live')
+    .name('ingest')
     .description('Ingest Oak Curriculum data into Elasticsearch')
     .version('1.0.0')
     .allowExcessArguments(false)
@@ -87,6 +105,11 @@ export function createProgram(): Command {
     .addHelpText(
       'after',
       `
+${chalk.yellow('Data Source (default: bulk)')}
+  Reads from local bulk-download files by default (${DEFAULT_BULK_DIR}).
+  Run 'pnpm bulk:download' first to fetch the bulk data.
+  Use --api to switch to live API fetching (slower, rate-limited).
+
 ${chalk.yellow('Retry Configuration:')}
   --max-retries <n>     Max retry attempts for failed document operations
   --retry-delay <ms>    Base delay for exponential backoff
@@ -96,15 +119,16 @@ ${chalk.yellow('Available Subjects:')} ${ALL_SUBJECTS.join(', ')}
 ${chalk.yellow('Available Key Stages:')} ${ALL_KEY_STAGES.join(', ')}
 
 ${chalk.yellow('Examples:')}
-  $ ingest-live --subject history --key-stage ks2   # Single subject
-  $ ingest-live --all                               # Full ingestion
-  $ ingest-live --all --incremental                 # Resume failed run
-  $ ingest-live --bulk --bulk-dir ./bulk-downloads  # Bulk mode
+  $ ingest --index threads                            # Reindex threads only (bulk)
+  $ ingest                                            # Full ingestion (bulk)
+  $ ingest --api --subject history --key-stage ks2    # Single subject (API)
+  $ ingest --api --all                                # Full ingestion (API)
+  $ ingest --api --all --incremental                  # Resume failed run (API)
 `,
     );
 
+  addDataSourceOptions(program);
   addSubjectOptions(program);
-  addBulkOptions(program);
   addFilterOptions(program);
   addGeneralOptions(program);
   addRetryOptions(program);

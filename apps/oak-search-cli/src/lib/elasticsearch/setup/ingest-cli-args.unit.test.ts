@@ -6,7 +6,7 @@ import {
   validateKeyStage,
   validateIndex,
   resolveSubjects,
-  validateBulkMode,
+  validateBulkDir,
 } from './ingest-cli-validators.js';
 
 /**
@@ -28,65 +28,104 @@ describe('parseArgs', () => {
     mockExit.mockRestore();
   });
 
+  describe('default mode is bulk', () => {
+    it('defaults to bulk mode (api = false)', () => {
+      const result = parseArgs([]);
+      expect(result.api).toBe(false);
+    });
+
+    it('defaults bulkDir to ./bulk-downloads', () => {
+      const result = parseArgs([]);
+      expect(result.bulkDir).toBe('./bulk-downloads');
+    });
+
+    it('does not require --subject or --all in bulk mode', () => {
+      const result = parseArgs([]);
+      expect(result.subjects).toEqual([]);
+    });
+  });
+
+  describe('--api flag', () => {
+    it('sets api mode when --api is specified', () => {
+      const result = parseArgs(['--api', '--all']);
+      expect(result.api).toBe(true);
+    });
+
+    it('requires subjects in API mode', () => {
+      expect(() => parseArgs(['--api'])).toThrow('No subjects specified');
+    });
+
+    it('works with --subject in API mode', () => {
+      const result = parseArgs(['--api', '--subject', 'maths']);
+      expect(result.api).toBe(true);
+      expect(result.subjects).toEqual(['maths']);
+    });
+
+    it('works with --all in API mode', () => {
+      const result = parseArgs(['--api', '--all']);
+      expect(result.api).toBe(true);
+      expect(result.subjects).toEqual([...SUBJECTS]);
+    });
+  });
+
   describe('--index flag', () => {
     it('parses --index flag with valid kind', () => {
-      const result = parseArgs(['--subject', 'maths', '--index', 'lessons']);
+      const result = parseArgs(['--index', 'lessons']);
       expect(result.indexes).toEqual(['lessons']);
     });
 
     it('accepts multiple --index flags', () => {
-      const result = parseArgs(['--subject', 'maths', '--index', 'lessons', '--index', 'units']);
+      const result = parseArgs(['--index', 'lessons', '--index', 'units']);
       expect(result.indexes).toEqual(['lessons', 'units']);
     });
 
     it('defaults to empty array when --index not specified', () => {
-      const result = parseArgs(['--subject', 'maths']);
+      const result = parseArgs([]);
       expect(result.indexes).toEqual([]);
     });
 
     it('preserves other flags when --index is used', () => {
-      const result = parseArgs(['--index', 'lessons', '--subject', 'maths', '--dry-run']);
+      const result = parseArgs(['--index', 'lessons', '--dry-run']);
       expect(result.indexes).toEqual(['lessons']);
-      expect(result.subjects).toEqual(['maths']);
       expect(result.dryRun).toBe(true);
     });
   });
 
-  describe('--all flag for subjects', () => {
-    it('uses all schema-derived subjects when --all is specified', () => {
-      const result = parseArgs(['--all']);
+  describe('--all flag for subjects (API mode)', () => {
+    it('uses all schema-derived subjects when --all is specified in API mode', () => {
+      const result = parseArgs(['--api', '--all']);
       expect(result.subjects).toEqual([...SUBJECTS]);
       expect(result.subjects).toHaveLength(17);
     });
 
-    it('accepts single --subject without --all', () => {
-      const result = parseArgs(['--subject', 'maths']);
+    it('accepts single --subject without --all in API mode', () => {
+      const result = parseArgs(['--api', '--subject', 'maths']);
       expect(result.subjects).toEqual(['maths']);
     });
 
-    it('accepts multiple --subject flags without --all', () => {
-      const result = parseArgs(['--subject', 'maths', '--subject', 'english']);
+    it('accepts multiple --subject flags without --all in API mode', () => {
+      const result = parseArgs(['--api', '--subject', 'maths', '--subject', 'english']);
       expect(result.subjects).toEqual(['maths', 'english']);
     });
 
-    it('--all works with other flags', () => {
-      const result = parseArgs(['--all', '--dry-run', '--key-stage', 'ks2']);
+    it('--all works with other flags in API mode', () => {
+      const result = parseArgs(['--api', '--all', '--dry-run', '--key-stage', 'ks2']);
       expect(result.subjects).toEqual([...SUBJECTS]);
       expect(result.dryRun).toBe(true);
       expect(result.keyStages).toEqual(['ks2']);
     });
   });
 
-  describe('--subject parsing', () => {
+  describe('--subject parsing (API mode)', () => {
     it('accepts all valid subjects from schema', () => {
       for (const subject of SUBJECTS) {
-        const result = parseArgs(['--subject', subject]);
+        const result = parseArgs(['--api', '--subject', subject]);
         expect(result.subjects).toContain(subject);
       }
     });
 
-    it('--all works with --verbose', () => {
-      const result = parseArgs(['--all', '--verbose']);
+    it('--all works with --verbose in API mode', () => {
+      const result = parseArgs(['--api', '--all', '--verbose']);
       expect(result.verbose).toBe(true);
       expect(result.subjects).toHaveLength(17);
     });
@@ -94,50 +133,56 @@ describe('parseArgs', () => {
 
   describe('--incremental flag', () => {
     it('defaults to false (overwrite mode)', () => {
-      const result = parseArgs(['--subject', 'maths']);
+      const result = parseArgs([]);
       expect(result.incremental).toBe(false);
     });
 
     it('sets incremental to true when --incremental is specified', () => {
-      const result = parseArgs(['--subject', 'maths', '--incremental']);
+      const result = parseArgs(['--incremental']);
       expect(result.incremental).toBe(true);
     });
 
     it('sets incremental to true when -i is specified', () => {
-      const result = parseArgs(['--subject', 'maths', '-i']);
+      const result = parseArgs(['-i']);
       expect(result.incremental).toBe(true);
     });
 
     it('works with other flags', () => {
-      const result = parseArgs(['--all', '--incremental', '--dry-run']);
+      const result = parseArgs(['--incremental', '--dry-run']);
       expect(result.incremental).toBe(true);
       expect(result.dryRun).toBe(true);
-      expect(result.subjects).toHaveLength(17);
     });
   });
 
   describe('--ignore-cached-404 flag', () => {
     it('defaults to false', () => {
-      const result = parseArgs(['--subject', 'maths']);
+      const result = parseArgs([]);
       expect(result.ignoreCached404).toBe(false);
     });
 
     it('sets ignoreCached404 to true when --ignore-cached-404 is specified', () => {
-      const result = parseArgs(['--subject', 'maths', '--ignore-cached-404']);
+      const result = parseArgs(['--ignore-cached-404']);
       expect(result.ignoreCached404).toBe(true);
     });
 
     it('works with other flags', () => {
-      const result = parseArgs(['--all', '--ignore-cached-404', '--verbose']);
+      const result = parseArgs(['--ignore-cached-404', '--verbose']);
       expect(result.ignoreCached404).toBe(true);
       expect(result.verbose).toBe(true);
-      expect(result.subjects).toHaveLength(17);
+    });
+  });
+
+  describe('--bulk-dir override', () => {
+    it('accepts custom bulk-dir', () => {
+      const result = parseArgs(['--bulk-dir', '/tmp/my-bulk']);
+      expect(result.bulkDir).toBe('/tmp/my-bulk');
     });
   });
 
   describe('flag combinations', () => {
-    it('parses all flags together', () => {
+    it('parses all flags together in API mode', () => {
       const result = parseArgs([
+        '--api',
         '--subject',
         'maths',
         '--key-stage',
@@ -156,7 +201,7 @@ describe('parseArgs', () => {
     });
 
     it('short flags work together', () => {
-      const result = parseArgs(['--subject', 'maths', '-i', '-v']);
+      const result = parseArgs(['-i', '-v']);
       expect(result.incremental).toBe(true);
       expect(result.verbose).toBe(true);
     });
@@ -203,41 +248,43 @@ describe('validators', () => {
   });
 
   describe('resolveSubjects', () => {
-    it('returns empty array in bulk mode', () => {
-      expect(resolveSubjects(['maths'], false, true)).toEqual([]);
+    it('returns empty array in bulk mode (apiMode=false)', () => {
+      expect(resolveSubjects([], false, false)).toEqual([]);
     });
 
-    it('throws when --all combined with subjects', () => {
-      expect(() => resolveSubjects(['maths'], true, false)).toThrow(
+    it('throws when --all combined with subjects in API mode', () => {
+      expect(() => resolveSubjects(['maths'], true, true)).toThrow(
         '--all cannot be combined with --subject',
       );
     });
 
-    it('throws when no subjects and no --all', () => {
-      expect(() => resolveSubjects([], false, false)).toThrow('No subjects specified');
+    it('throws when no subjects and no --all in API mode', () => {
+      expect(() => resolveSubjects([], false, true)).toThrow('No subjects specified');
     });
 
-    it('returns all subjects when --all is true', () => {
-      const result = resolveSubjects([], true, false);
+    it('returns all subjects when --all is true in API mode', () => {
+      const result = resolveSubjects([], true, true);
       expect(result).toHaveLength(17);
     });
 
-    it('returns explicit subjects when provided', () => {
-      expect(resolveSubjects(['maths', 'english'], false, false)).toEqual(['maths', 'english']);
+    it('returns explicit subjects when provided in API mode', () => {
+      expect(resolveSubjects(['maths', 'english'], false, true)).toEqual(['maths', 'english']);
     });
   });
 
-  describe('validateBulkMode', () => {
-    it('throws when bulk mode without bulk-dir', () => {
-      expect(() => validateBulkMode(true, undefined)).toThrow('--bulk requires --bulk-dir');
+  describe('validateBulkDir', () => {
+    it('throws when directory does not exist', () => {
+      expect(() => validateBulkDir('/nonexistent/path')).toThrow(
+        'Bulk download directory not found',
+      );
     });
 
-    it('does not throw when bulk mode with bulk-dir', () => {
-      expect(() => validateBulkMode(true, './data')).not.toThrow();
+    it('throws with actionable message mentioning bulk:download', () => {
+      expect(() => validateBulkDir('/nonexistent/path')).toThrow('pnpm bulk:download');
     });
 
-    it('does not throw when not in bulk mode', () => {
-      expect(() => validateBulkMode(false, undefined)).not.toThrow();
+    it('throws with actionable message mentioning --api alternative', () => {
+      expect(() => validateBulkDir('/nonexistent/path')).toThrow('--api');
     });
   });
 });

@@ -8,7 +8,7 @@
  * 1. Update ES_FILTER_CONFIG and ES_ANALYZER_CONFIG in es-analyzer-config.ts
  * 2. Run: pnpm sdk-codegen && pnpm build
  * 3. Run: pnpm -C apps/oak-search-cli es:setup reset
- * 4. Run: pnpm -C apps/oak-search-cli es:ingest-live
+ * 4. Run: pnpm -C apps/oak-search-cli es:ingest
  * 5. Run: pnpm -C apps/oak-search-cli vitest run four-retriever-ablation
  *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`

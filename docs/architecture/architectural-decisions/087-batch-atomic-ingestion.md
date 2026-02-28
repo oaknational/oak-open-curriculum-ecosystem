@@ -58,7 +58,7 @@ We implement **batch-atomic ingestion** where data is dispatched to Elasticsearc
    - Logs progress: `BATCH N: subject/keystage | docs=X | COMMITTED | cumulative=Y`
    - Elasticsearch becomes the source of truth for progress
 
-3. **Ingest CLI** (`ingest-live.ts`)
+3. **Ingest CLI** (`ingest.ts`)
    - Single process, foreground execution
    - Logs to both stdout and timestamped file
    - Can be interrupted safely - committed batches persist
@@ -132,21 +132,21 @@ The file-based progress tracker from ADR-069 is no longer necessary for batch-le
 
 ### Key Files
 
-| File                                         | Purpose                      |
-| -------------------------------------------- | ---------------------------- |
-| `src/lib/index-batch-generator.ts`           | Async generator for batches  |
-| `src/lib/indexing/ingest-harness.ts`         | Batch consumer with dispatch |
-| `src/lib/indexing/ingest-harness-batch.ts`   | Batch processing logic       |
-| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point              |
+| File                                       | Purpose                      |
+| ------------------------------------------ | ---------------------------- |
+| `src/lib/index-batch-generator.ts`         | Async generator for batches  |
+| `src/lib/indexing/ingest-harness.ts`       | Batch consumer with dispatch |
+| `src/lib/indexing/ingest-harness-batch.ts` | Batch processing logic       |
+| `src/lib/elasticsearch/setup/ingest.ts`    | CLI entry point              |
 
 ### CLI Usage
 
 ```bash
 # Ingest all subjects with batch-atomic commits
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --all
+SDK_CACHE_ENABLED=true pnpm es:ingest -- --api --all
 
 # Single subject (4 keystage batches + threads)
-pnpm es:ingest-live -- --subject maths
+pnpm es:ingest -- --api --subject maths
 
 # Check progress via ES
 curl -s "$ES_URL/_cat/indices/oak_*?v&h=index,docs.count"

@@ -140,13 +140,13 @@ interface BulkUploadConfig {
 
 ```bash
 # Default behavior (retry enabled)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads
+pnpm es:ingest
 
 # Custom retry configuration
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --max-retries 5 --retry-delay 10000
+pnpm es:ingest --max-retries 5 --retry-delay 10000
 
 # Disable document-level retry
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
+pnpm es:ingest --no-retry
 ```
 
 ## Rationale
@@ -327,7 +327,7 @@ src/lib/indexing/retry/
 ```bash
 cd apps/oak-search-cli
 pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
+pnpm es:ingest --force --verbose
 pnpm es:status
 ```
 

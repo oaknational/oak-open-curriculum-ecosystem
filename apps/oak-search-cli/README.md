@@ -168,9 +168,9 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    | `ZERO_HIT_PERSISTENCE_ENABLED` | ➖       | `true` to persist zero-hit events to Elasticsearch                             |
 
    Runtime behaviour:
-   - `pnpm es:ingest-live` reads required values from `process.env`.
+   - `pnpm es:ingest` reads required values from `process.env`.
    - If `apps/oak-search-cli/.env.local` or `apps/oak-search-cli/.env` exists, it is loaded automatically and overrides existing process values.
-   - `pnpm es:ingest-live -- --help` exits successfully without env validation.
+   - `pnpm es:ingest -- --help` exits successfully without env validation.
 
 3. **Run the standard quality gates**
 
@@ -191,11 +191,11 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    ```bash
    cd apps/oak-search-cli
 
-   # Ingest specific subject
-   pnpm es:ingest-live -- --subject maths --key-stage ks4
+   # Ingest specific subject (API mode)
+   pnpm es:ingest -- --api --subject maths --key-stage ks4
 
-   # Ingest all subjects
-   pnpm es:ingest-live -- --all
+   # Ingest all subjects (bulk mode is default; use --api for API mode)
+   pnpm es:ingest
    ```
 
 6. **Verify search quality**
@@ -239,20 +239,20 @@ pnpm es:status
 
 ```bash
 # Preview (dry run)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --dry-run
+pnpm es:ingest -- --bulk-dir ./bulk-downloads --dry-run
 
-# Full ingestion (incremental - skips existing)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads
+# Full ingestion (bulk mode is default; incremental - skips existing)
+pnpm es:ingest
 
 # Incremental ingestion (skip existing documents - for resuming)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --incremental
+pnpm es:ingest -- --incremental
 ```
 
 ### Flags
 
 | Flag                 | Description                                                      |
 | -------------------- | ---------------------------------------------------------------- |
-| `--bulk`             | Enable bulk mode (reads from files instead of API)               |
+| `--api`              | Use API mode (fetch from Oak API) instead of bulk files          |
 | `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)    |
 | `--dry-run`          | Preview operations without executing                             |
 | `--incremental`      | Use `create` action (skip existing) instead of default overwrite |

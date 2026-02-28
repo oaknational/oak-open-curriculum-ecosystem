@@ -1,37 +1,49 @@
 ---
 prompt_id: onboarding-rerun
-title: "M1 Release — Remaining Gates"
+title: "M1 Release — Reindex and Validate"
 type: handover
 status: active
 last_updated: 2026-02-28
 ---
 
-# M1 Release — Remaining Gates
+# M1 Release — Reindex and Validate
 
 Session entry point. This prompt and the release plan together define
 the full scope of work.
 
 ## Context
 
-MCP search quality fixes (M1-S001a/b, S002, S003, S005) are code-complete
-with TDD. All quality gates green. Year normalisation implemented at
-generator level with four-layer schema synchronisation.
+MCP search quality fixes (M1-S001a/b, S002, S003, S005, S008) are
+code-complete with TDD. All quality gates green. The ingest CLI has been
+refactored: bulk mode is now the default, with per-index filtering to
+skip unnecessary processing.
 
 **M1-S001a reindex not yet done** — the code populates `thread_semantic`
 but the 164 live ES documents still lack the field. ELSER leg remains
-dead until reindex.
+dead until reindex. The reindex command is ready:
 
-M1-S008 (`callTool` overload type mismatch) identified and tracked. P3,
-no runtime impact.
+```bash
+cd apps/oak-search-cli && pnpm es:ingest -- --index threads --verbose
+```
+
+Pre-flight: confirm bulk download data exists in
+`apps/oak-search-cli/bulk-downloads/` (run `pnpm bulk:download` if not)
+and env vars are set in `apps/oak-search-cli/.env.local`.
 
 ## Top priorities for this session
 
-### 1. Reindex to populate `thread_semantic` (P1)
+### 1. Reindex threads and validate all 32 MCP tools (P1)
 
-Code fix complete. Run the search CLI ingest command against the live ES
-deployment to populate the field across all 164 thread documents. Verify
-via EsCurric `platform_core_get_document_by_id` that `thread_semantic`
-is present on sample documents.
+Full validation plan in the release plan §Top Priorities for Next Session.
+In brief:
+
+1. Run `pnpm es:ingest -- --index threads --verbose` (bulk default, fast)
+2. Verify via EsCurric that `thread_semantic` is present on all 164 docs
+3. Validate thread search and explore-topic (M1-S001a/b)
+4. Validate all other MCP tools (discovery, sequence, lesson, thread,
+   browse, fetch, changelog, search scopes)
+5. Validate M1-S002 year normalisation, M1-S003 binary warning, M1-S005
+   scope limitations
 
 ### 2. Remaining M0 gates
 
@@ -44,7 +56,6 @@ is present on sample documents.
 
 - **M1-S004**: Parameter naming inconsistency (`threadSlug` vs bare)
 - **M1-S006**: `get-rate-limit` returns 0/0/0 on preview (upstream)
-- **M1-S008**: `callTool` overloads type mismatch (type-safety debt)
 
 ## Getting started
 
@@ -56,6 +67,21 @@ is present on sample documents.
    [schema-first-execution.md](../directives/schema-first-execution.md)
 3. Read [distilled.md](../memory/distilled.md) and
    [napkin.md](../memory/napkin.md)
+
+## Ingest CLI reference
+
+The CLI defaults to bulk ingestion from `./bulk-downloads`. Key commands:
+
+| Command | Purpose |
+|---|---|
+| `pnpm bulk:download` | Download bulk curriculum data |
+| `pnpm es:ingest` | Full ingestion (all indexes, bulk default) |
+| `pnpm es:ingest -- --index threads` | Reindex threads only |
+| `pnpm es:ingest -- --api --all` | Full ingestion via live API |
+| `pnpm es:ingest -- --dry-run` | Preview without writing to ES |
+
+Flags: `--index <kind>` (repeatable), `--verbose`, `--incremental`,
+`--bulk-dir <path>`, `--api`, `--subject <slug>`, `--all`, `--key-stage <ks>`.
 
 ## EsCurric tools
 
@@ -76,5 +102,5 @@ connector that may not be configured. Use `execute_esql` instead.
 - Release plan: `.agent/plans/release-plan-m1.plan.md`
 - Onboarding tracker: `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
 - M0 milestone: `.agent/milestones/m0-open-private-alpha.md`
+- ADR-093: Bulk-first ingestion strategy (revised 2026-02-28)
 - Code patterns: `.agent/memory/code-patterns/README.md`
-- Session transcript: `.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b4b3ea0-9ca6-4b11-bbc0-4ad50bafdb00.txt`

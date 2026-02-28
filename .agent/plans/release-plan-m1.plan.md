@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-28  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: M1-S001a code complete but reindex pending. M1-S001b/S002/S003/S005/S008 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: M1-S001a code complete, ingest CLI refactored (bulk-default, index filtering), reindex pending. M1-S001b/S002/S003/S005/S008 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -69,36 +69,91 @@ which are top priority for the next session.
 
 ### Top Priorities for Next Session
 
-**1. M1-S001a — Reindex to populate `thread_semantic` (P1)**
+**1. Reindex threads and validate all MCP tools (P1)**
 
-Code fix complete: `createThreadDocument` now populates `thread_semantic`
-with `"<subjects>: <title>"`. Tests pass. But the live ES instance still
-has 164 documents without the field.
+The `thread_semantic` fix (M1-S001a) is code-complete and the ingest CLI
+has been refactored to default to bulk mode with per-index filtering (see
+change log 2026-02-28). The 164 live ES documents still lack the field.
 
-Steps:
+**Step 1 — Reindex threads:**
 
-1. Run the search CLI thread ingest against the live ES deployment
-2. Verify via EsCurric `platform_core_get_document_by_id` that
-   `thread_semantic` is present on at least 3 sample documents
-   (e.g. `algebra`, `geometry-and-measure`, `bq14-physics`)
-3. Run a thread search that previously returned 0 results:
-   `search(scope: 'threads', subject: 'maths')` — should now return
-   maths threads via the ELSER leg
-4. Run a text search: `search(scope: 'threads', text: 'algebra')` —
-   should return the algebra thread with improved relevance via ELSER
-5. Verify other scopes (lessons, units) are unaffected
+```bash
+cd apps/oak-search-cli && pnpm es:ingest -- --index threads --verbose
+```
 
-**Validation of M1-S001b/S002/S003/S005 fixes (post-reindex):**
+Pre-flight: confirm env vars in `apps/oak-search-cli/.env.local`
+(`ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`). Confirm
+bulk download data exists in `apps/oak-search-cli/bulk-downloads/`
+(run `pnpm bulk:download` if not).
 
-After reindex, re-test the scenarios from the original exploration:
+Post-ingest verification via EsCurric MCP:
 
-- Subject-filter guidance: `search(scope: 'threads', subject: 'maths')`
-  returns threads (tests M1-S001a + M1-S001b together)
-- Year normalisation: `get-sequences-assets` with `year: 3` and
-  `year: "3"` both work (M1-S002)
-- Scope limitations: `search(scope: 'suggest', subject: 'maths')`
-  works; `search(scope: 'suggest')` without filter gives validation
-  error with helpful message (M1-S005)
+- `platform_core_get_document_by_id` with `index: "oak_threads"`,
+  `id: "algebra"` — confirm `thread_semantic` field present
+- Repeat for `geometry-and-measure` and `bq14-physics`
+- `platform_core_execute_esql` with `query: "FROM oak_threads | WHERE
+  thread_semantic IS NOT NULL | STATS count=COUNT(*)"` — should be 164
+
+**Step 2 — Validate thread search and explore-topic (M1-S001a/b):**
+
+- `search` with `scope: "threads", subject: "maths", text: ""` — should
+  return maths threads via ELSER on `thread_semantic`
+- `search` with `scope: "threads", text: "algebra"` — should return the
+  algebra thread with improved relevance
+- `search` with `scope: "threads", text: "physics", subject: "science"`
+- `explore-topic` with `text: "algebra", subject: "maths"` — thread
+  section should now contain results
+- `explore-topic` with `text: "electricity", subject: "science"` — check
+  lessons + units + threads all return
+- Negative: `search` with `scope: "threads", text: "xyznonexistent"` —
+  should return 0 gracefully
+- `search` with `scope: "suggest", subject: "maths"` — should work
+  (M1-S005)
+- `search` with `scope: "suggest"` (no filter) — should give a helpful
+  validation error (M1-S005)
+
+**Step 3 — Validate all other MCP tools (32 tools total):**
+
+Systematic walkthrough using KS4 maths as primary test domain:
+
+*Discovery and structure (6):*
+`get-ontology`, `get-help`, `get-key-stages`, `get-subjects`,
+`get-subjects-key-stages` (maths), `get-subjects-years` (maths, ks4)
+
+*Sequence and unit (7):*
+`get-subjects-sequences` (maths, ks4), `get-sequences-units` (sequence
+from above, year: "10"), `get-sequences-assets` (year: 3 as number —
+validates M1-S002), `get-sequences-questions`, `get-key-stages-subject-units`
+(ks4, maths), `get-key-stages-subject-lessons`, `get-key-stages-subject-questions`
+
+*Lesson content (5):*
+`get-lessons-summary`, `get-lessons-transcript`, `get-lessons-quiz`,
+`get-lessons-assets`, `get-lessons-assets-by-type` (expect binary-response
+warning per M1-S003)
+
+*Thread and progression (4):*
+`get-threads`, `get-threads-units` (threadSlug: "algebra" — note M1-S004
+naming), `get-thread-progressions`, `get-prerequisite-graph`
+
+*Browse, fetch, and utility (5):*
+`browse-curriculum` (maths, ks4), `fetch` (lesson prefixed ID),
+`get-subject-detail` (maths), `get-key-stages-subject-assets` (ks4, maths),
+`get-rate-limit` (expect 0/0/0 on preview — known M1-S006)
+
+*Changelog (2):*
+`get-changelog`, `get-changelog-latest`
+
+*Search scopes not yet tested (2):*
+`search` (scope: "lessons", text: "fractions", subject: "maths"),
+`search` (scope: "units", text: "algebra", subject: "maths")
+
+**Success criteria:**
+
+- All 164 thread documents have `thread_semantic` populated
+- Thread search returns results where it previously returned 0
+- All 32 MCP tools return expected responses without errors
+- M1-S002 year normalisation works (both string and number input)
+- Non-thread scopes (lessons, units) unaffected by the reindex
 
 **2. Remaining M0 gates**
 
@@ -1315,7 +1370,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 
 | ID | Severity | Description | Owner | Status | Decision |
 |---|---|---|---|---|---|
-| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Code complete (2026-02-28) | Fix implemented + tested. **Reindex not yet run.** |
+| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Code complete, ingest CLI refactored (2026-02-28) | Fix implemented + tested. Ingest CLI refactored: bulk-default, per-index filtering (ADR-093 revised). **Reindex not yet run.** |
 | M1-S001b | P2 | Search/explore tool descriptions lack subject-filter guidance | Engineering | [x] Complete (2026-02-28) | Tool descriptions enhanced with subject-filter guidance |
 | M1-S002 | P2 | `year` parameter type inconsistency across sequence endpoints | Engineering (upstream) | [x] Complete (2026-02-28) | Normalised at generator level; accepts string enum + number input |
 | M1-S003 | P3 | `get-lessons-assets-by-type` description unclear on binary response | Engineering | [x] Complete (2026-02-28) | Binary-response warning added via generator enhancement |
@@ -1337,7 +1392,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
 | **Fix** | Populate `thread_semantic` at indexing time in `createThreadDocument` with subject-enriched content. For example: `"Maths: Algebra — a curriculum progression thread"` or `"${subjects.join(', ')}: ${threadTitle}"`. This gives ELSER the subject-to-thread association it needs. Reindex required after the fix. The query side (`buildThreadRetriever` in `retrieval-search-helpers.ts`) is already correct — it searches `thread_semantic` via ELSER. It just needs data. |
 | **Files** | `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (createThreadDocument — populate `thread_semantic`), `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` (bulk path adapter) |
-| **Status** | Code complete (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. **Reindex against live ES instance not yet run** — 164 documents still missing the field. |
+| **Status** | Code complete (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Command: `pnpm es:ingest -- --index threads --verbose`. **Reindex against live ES instance not yet run** — 164 documents still missing the field. |
 
 ---
 
@@ -1526,6 +1581,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-28**: **Ingest CLI refactored, validation plan integrated.** (1) Renamed `es:ingest-live` to `es:ingest`. (2) Bulk mode is now the default — no `--subject` or `--all` required, reads from `./bulk-downloads`. Use `--api` for live API mode. (3) Bulk dir validated at startup with actionable error message. (4) Per-index filtering: both bulk and API paths skip unnecessary processing when `--index` is specified (e.g. `--index threads` skips curriculum file processing). ADR-093 revised. Committed M1-S008 fix and generated file updates. Validation plan from cursor plan integrated into §Top Priorities. 961 tests pass, all quality gates green. Session: [Ingest refactor](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/249ab1cd-a1bb-4234-90f8-26de6c29ada9.txt).
 - **2026-02-28**: **M1-S008 complete.** `callTool` overload type alignment: `ToolArgsForName` now derives from `transformFlatToNestedArgs` parameter type (flat) instead of `invoke` parameter (nested). One-line generator change in `generate-types-file.ts`, verified by unit test + `satisfies` compile-time anchor. All quality gates pass.
 - **2026-02-28**: **M1 MCP quality fixes implemented.** M1-S001a (thread_semantic population), M1-S001b (subject-filter guidance), M1-S002 (year normalisation), M1-S003 (binary-response warning), M1-S005 (scope limitations) all code-complete with TDD. Full quality gate suite passed. M1-S008 (callTool type mismatch) identified by type-reviewer and registered. M1-S001a reindex against live ES not yet run. Four-layer schema sync pattern extracted to `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Session: [M1 quality fixes](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/379f5e51-f981-41f0-856d-03b025cbdd41.txt).
 - **2026-02-28**: **Next-session handoff prepared.** M1-S001 split into M1-S001a (populate `thread_semantic`, P1) and M1-S001b (enhance tool descriptions for subject filtering, P2). User decision: the query-side fix is tool guidance, not auto-inference — consuming agents should be told to pass subject as a filter via tool descriptions, not have it auto-detected in code. Next Session Checklist rewritten with prioritised work items. `onboarding-rerun.prompt.md` rewritten as standalone entry point for M1 MCP search quality fixes. EsCurric MCP tools confirmed working (`user-EsCurric` server).

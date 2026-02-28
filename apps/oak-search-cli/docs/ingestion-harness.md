@@ -54,9 +54,9 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 
 ### CLI entry points
 
-#### Live ingestion CLI
+#### Ingestion CLI
 
-- Script: `src/lib/elasticsearch/setup/ingest-live.ts`, wired via `pnpm es:ingest-live`.
+- Script: `src/lib/elasticsearch/setup/ingest.ts`, wired via `pnpm es:ingest` (use `--api` for API mode).
 - Flags:
   - `--subject <slug>` – specify subjects to ingest (repeatable).
   - `--all` – ingest all 17 subjects from the OpenAPI schema.

@@ -15,7 +15,7 @@
  * oaksearch admin status
  * oaksearch admin synonyms
  * oaksearch admin meta get
- * oaksearch admin ingest --bulk --subject maths
+ * oaksearch admin ingest --subject maths
  * ```
  */
 

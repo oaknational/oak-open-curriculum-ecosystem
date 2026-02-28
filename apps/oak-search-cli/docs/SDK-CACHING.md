@@ -6,7 +6,7 @@ This document describes the optional Redis-based caching system for Oak SDK API 
 
 ## Overview
 
-The ingestion CLI (`pnpm es:ingest-live`) makes many API calls to the Oak Curriculum API to fetch lesson and unit data. During development, repeated ingestion runs can be slow due to these API calls.
+The ingestion CLI in API mode (`pnpm es:ingest -- --api`) makes many API calls to the Oak Curriculum API to fetch lesson and unit data. During development, repeated ingestion runs can be slow due to these API calls.
 
 SDK response caching stores API responses in Redis, dramatically speeding up subsequent runs by avoiding redundant network requests.
 
@@ -49,10 +49,10 @@ SDK_CACHE_ENABLED=true
 
 ```bash
 # First run: cache miss for all requests (normal speed)
-pnpm es:ingest-live --subject maths --dry-run --verbose
+pnpm es:ingest -- --api --subject maths --dry-run --verbose
 
 # Second run: cache hits (much faster!)
-pnpm es:ingest-live --subject maths --dry-run --verbose
+pnpm es:ingest -- --api --subject maths --dry-run --verbose
 ```
 
 ## Configuration
@@ -68,8 +68,8 @@ pnpm es:ingest-live --subject maths --dry-run --verbose
 ### Clear via CLI Flag
 
 ```bash
-# Clear cache before running ingestion
-pnpm es:ingest-live --subject maths --clear-cache --dry-run
+# Clear cache before running ingestion (API mode)
+pnpm es:ingest -- --api --subject maths --clear-cache --dry-run
 ```
 
 ### Clear via Redis CLI
@@ -111,11 +111,11 @@ This is critical for achieving true 100% cache hit rates:
 
 ```bash
 # First run: 127 hits (from prior runs), 99 misses (new fetches + 404s)
-pnpm es:ingest-live --subject history --key-stage ks2 --dry-run
+pnpm es:ingest -- --api --subject history --key-stage ks2 --dry-run
 # Cache: 127 hits, 99 misses
 
 # Second run: 100% cache hits (including cached 404 fallbacks)
-pnpm es:ingest-live --subject history --key-stage ks2 --dry-run
+pnpm es:ingest -- --api --subject history --key-stage ks2 --dry-run
 # Cache: 226 hits, 0 misses
 ```
 
@@ -190,8 +190,8 @@ This means caching is enabled but Redis isn't running or isn't reachable.
 If you suspect cached data is out of date:
 
 ```bash
-# Clear cache and re-run
-pnpm es:ingest-live --subject maths --clear-cache --dry-run
+# Clear cache and re-run (API mode)
+pnpm es:ingest -- --api --subject maths --clear-cache --dry-run
 ```
 
 ## Docker Compose Reference

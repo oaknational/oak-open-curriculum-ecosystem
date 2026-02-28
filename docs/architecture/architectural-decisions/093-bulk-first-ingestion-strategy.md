@@ -1,8 +1,9 @@
 # ADR-093: Bulk-First Ingestion Strategy
 
-**Status**: Accepted  
+**Status**: Accepted (Revised)  
 **Date**: 2025-12-30  
-**Related**: ADR-083 (Complete Lesson Enumeration), ADR-091 (Video Availability Detection), ADR-092 (Transcript Cache Categorization)
+**Revised**: 2026-02-28 — CLI interface updated: bulk mode is now the default, per-index filtering added  
+**Related**: ADR-083 (Complete Lesson Enumeration), ADR-087 (Batch-Atomic Ingestion), ADR-091 (Video Availability Detection), ADR-092 (Transcript Cache Categorization)
 
 ## Context
 
@@ -262,6 +263,52 @@ Wait for Oak to complete TPC clearance (Autumn 2025).
 - [ADR-083: Complete Lesson Enumeration](083-complete-lesson-enumeration-strategy.md)
 - [ADR-091: Video Availability Detection](091-video-availability-detection-strategy.md)
 
+## Revision: CLI Interface (2026-02-28)
+
+### Change
+
+The ingest CLI (`pnpm es:ingest`) now defaults to bulk mode. Previously,
+API mode was the default and bulk mode required `--bulk --bulk-dir <path>`.
+
+| Before (2025-12-30)                                                               | After (2026-02-28)                                                  |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `pnpm es:ingest-live -- --all` (API default)                                      | `pnpm es:ingest` (bulk default)                                     |
+| `pnpm es:ingest-live -- --bulk --bulk-dir ./bulk-downloads`                       | `pnpm es:ingest` (bulk default, dir defaults to `./bulk-downloads`) |
+| `pnpm es:ingest-live -- --bulk --bulk-dir ./bulk-downloads --all --index threads` | `pnpm es:ingest -- --index threads`                                 |
+| N/A                                                                               | `pnpm es:ingest -- --api --all` (explicit API mode)                 |
+
+### Per-Index Filtering
+
+Both bulk and API paths now skip unnecessary processing when `--index` is
+specified. For example, `--index threads` skips curriculum file processing
+(lessons, units, rollups, sequences, vocabulary mining) and only extracts
+threads from the bulk files. This reduces a full-curriculum read + process
+down to thread extraction only.
+
+| `--index` value                        | Skipped processing                                                 |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| `threads` only                         | Curriculum file processing, sequence extraction, vocabulary mining |
+| `lessons`, `units`, `unit_rollup` only | Thread extraction, sequence extraction                             |
+| `sequences`, `sequence_facets` only    | Curriculum file processing, thread extraction                      |
+
+### Bulk Directory Validation
+
+The CLI validates the bulk directory at startup. If the directory does not
+exist or contains no JSON files, the CLI throws immediately with an
+actionable error directing the user to run `pnpm bulk:download` or use
+`--api` mode.
+
+### Rationale
+
+Bulk ingestion is significantly faster and more reliable than API ingestion
+(local file reads vs rate-limited HTTP calls). Making it the default
+eliminates a common source of confusion: new users running `pnpm es:ingest`
+without `--bulk` would trigger slow API-based ingestion when fast bulk
+data was available locally. The per-index filtering addresses a concrete
+problem observed during the M1-S001a reindex: even with `--index threads`,
+the CLI was fetching all curriculum data from the API before filtering —
+wasting 30+ minutes of API calls that would be discarded.
+
 ## Open Questions
 
 1. ~~**Bulk download refresh cadence**: How often should we re-download?~~ **RESOLVED**: Manual refresh every few weeks.
@@ -271,5 +318,5 @@ Wait for Oak to complete TPC clearance (Autumn 2025).
 ---
 
 **Decision Made By**: Development Team  
-**Date**: 2025-12-30  
+**Date**: 2025-12-30 (original), 2026-02-28 (CLI revision)  
 **Review Date**: 2026-03-30 (or when Oak API reaches full coverage)

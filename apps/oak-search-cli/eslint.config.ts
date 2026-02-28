@@ -179,7 +179,7 @@ const eslintConfig = defineConfig(
       'smoke-test*.ts',
       'smoke-tests/**',
       'src/lib/elasticsearch/setup/cli.ts',
-      'src/lib/elasticsearch/setup/ingest-live.ts',
+      'src/lib/elasticsearch/setup/ingest.ts',
       'src/cli/shared/pass-through.ts',
     ],
     rules: {

@@ -134,14 +134,14 @@ const result = await uploadAllChunks(es, chunks, logger, 1000, {
 The ingestion CLI supports retry configuration:
 
 ```bash
-# Default retry behavior (3 retries, 5s base delay)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads
+# Default retry behavior (bulk mode; 3 retries, 5s base delay)
+pnpm es:ingest
 
 # Custom retry configuration
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --max-retries 5 --retry-delay 10000
+pnpm es:ingest -- --bulk-dir ./bulk-downloads --max-retries 5 --retry-delay 10000
 
 # Disable document-level retry (fail fast)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
+pnpm es:ingest -- --no-retry
 ```
 
 ### Configuration Options
@@ -192,7 +192,7 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    CLI (ingest-live.ts)                     │
+│                    CLI (ingest.ts)                          │
 │                           │                                 │
 │                    ┌──────▼──────┐                         │
 │                    │ executeBulk │                         │

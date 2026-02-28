@@ -57,8 +57,8 @@ If you're onboarding a **new subject/keystage** (not just re-ingesting), see [NE
 # 1. Setup/verify ES cluster (creates indexes, synonyms)
 pnpm es:setup
 
-# 2. Re-ingest Maths KS4 only (semantic search demo)
-pnpm es:ingest-live -- --subject maths --key-stage ks4
+# 2. Re-ingest Maths KS4 only (API mode; bulk is default)
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 
 # 3. Verify ELSER is working
 pnpm es:status
@@ -71,13 +71,13 @@ pnpm test:smoke
 
 ## Available Commands
 
-| Command                        | Purpose                                      | Duration             |
-| ------------------------------ | -------------------------------------------- | -------------------- |
-| `pnpm es:setup`                | Create indexes, synonym sets, verify cluster | ~30 seconds          |
-| `pnpm es:status`               | Check index counts, ELSER status             | ~5 seconds           |
-| `pnpm es:ingest-live`          | Ingest from live Oak API (selective)         | 2-15 min per subject |
-| `pnpm es:ingest-live -- --all` | Ingest ALL subjects/keystages                | Hours                |
-| `pnpm ingest:verify`           | Verify ingestion completeness                | ~1 minute            |
+| Command                         | Purpose                                      | Duration             |
+| ------------------------------- | -------------------------------------------- | -------------------- |
+| `pnpm es:setup`                 | Create indexes, synonym sets, verify cluster | ~30 seconds          |
+| `pnpm es:status`                | Check index counts, ELSER status             | ~5 seconds           |
+| `pnpm es:ingest -- --api`       | Ingest from live Oak API (selective)         | 2-15 min per subject |
+| `pnpm es:ingest -- --api --all` | Ingest ALL subjects/keystages (API mode)     | Hours                |
+| `pnpm ingest:verify`            | Verify ingestion completeness                | ~1 minute            |
 
 ---
 
@@ -100,7 +100,7 @@ grep -E '^(ELASTICSEARCH_URL|ELASTICSEARCH_API_KEY|OAK_API_KEY|SEARCH_API_KEY)='
 cd ../.. && pnpm build && cd apps/oak-search-cli
 ```
 
-`pnpm es:ingest-live` reads required values from `process.env`. If `.env.local` or
+`pnpm es:ingest` (and `pnpm es:ingest -- --api`) reads required values from `process.env`. If `.env.local` or
 `.env` exists in `apps/oak-search-cli`, the CLI loads it automatically and those values
 override existing process values.
 
@@ -132,28 +132,28 @@ Expected output:
 #### Option A: Single Subject/KeyStage (Recommended for Testing)
 
 ```bash
-# Ingest Maths KS4 (semantic search demo data)
-pnpm es:ingest-live -- --subject maths --key-stage ks4
+# Ingest Maths KS4 (API mode; semantic search demo data)
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 
-# Ingest History KS2 (smaller, faster for testing)
-pnpm es:ingest-live -- --subject history --key-stage ks2
+# Ingest History KS2 (API mode; smaller, faster for testing)
+pnpm es:ingest -- --api --subject history --key-stage ks2
 ```
 
 #### Option B: Multiple Subjects
 
 ```bash
-# Ingest common subjects for all key stages
-pnpm es:ingest-live -- --subject maths --subject science --subject english
+# Ingest common subjects for all key stages (API mode)
+pnpm es:ingest -- --api --subject maths --subject science --subject english
 ```
 
 #### Option C: All Data
 
 ```bash
-# Ingest everything (takes hours)
-pnpm es:ingest-live -- --all
+# Ingest everything (API mode; takes hours)
+pnpm es:ingest -- --api --all
 
 # Resume after interruption (skip already-indexed documents)
-pnpm es:ingest-live -- --all --incremental
+pnpm es:ingest -- --api --all --incremental
 
 # Verify ingestion completeness
 pnpm ingest:verify
@@ -186,14 +186,15 @@ Expected output for Maths KS4:
 
 ## CLI Options Reference
 
-### `pnpm es:ingest-live`
+### `pnpm es:ingest`
 
 ```bash
-pnpm es:ingest-live -- [options]
+pnpm es:ingest -- [options]
 
 Options:
+  --api               Use API mode (fetch from Oak API); default is bulk mode
   --subject <slug>    Subject to ingest (can repeat)
-                      Required unless --all or --bulk is set
+                      Required for API mode unless --all
   --key-stage <ks>     Key stage: ks1, ks2, ks3, ks4 (can repeat)
                       Default: all key stages
   --index <kind>      Index type: lessons, units, unit_rollup, sequences, sequence_facets
@@ -204,20 +205,20 @@ Options:
   --help, -h          Show help
 
 Examples:
-  # Re-ingest Maths KS4 lessons only
-  pnpm es:ingest-live -- --subject maths --key-stage ks4 --index lessons
+  # Re-ingest Maths KS4 lessons only (API mode)
+  pnpm es:ingest -- --api --subject maths --key-stage ks4 --index lessons
 
-  # Dry run to see what would be ingested
-  pnpm es:ingest-live -- --subject maths --dry-run
+  # Dry run to see what would be ingested (API mode)
+  pnpm es:ingest -- --api --subject maths --dry-run
 
-  # Verbose output for debugging
-  pnpm es:ingest-live -- --subject maths --key-stage ks4 --verbose
+  # Verbose output for debugging (API mode)
+  pnpm es:ingest -- --api --subject maths --key-stage ks4 --verbose
 ```
 
 ### Full Ingestion with `--all`
 
 ```bash
-pnpm es:ingest-live -- --all [options]
+pnpm es:ingest -- --all [options]
 
 Options:
   --all              Ingest all subjects
@@ -231,9 +232,9 @@ Options:
   -h, --help         Display help
 
 Examples:
-  pnpm es:ingest-live -- --all                  # Full fresh ingestion
-  pnpm es:ingest-live -- --all --incremental    # Resume interrupted run
-  pnpm es:ingest-live -- --all --dry-run        # Preview what would be ingested
+  pnpm es:ingest -- --api --all                  # Full fresh ingestion (API mode)
+  pnpm es:ingest -- --api --all --incremental    # Resume interrupted run (API mode)
+  pnpm es:ingest -- --api --all --dry-run        # Preview what would be ingested (API mode)
 ```
 
 ---
@@ -299,7 +300,7 @@ pnpm test:smoke
 ```bash
 git pull
 pnpm build
-pnpm es:ingest-live -- --subject maths --key-stage ks4
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 ```
 
 ### "ELSER query returns 0 hits"
@@ -322,7 +323,7 @@ pnpm es:ingest-live -- --subject maths --key-stage ks4
 # Enable SDK caching to reduce API calls
 pnpm redis:up
 export SDK_CACHE_ENABLED=true
-pnpm es:ingest-live -- --subject maths --key-stage ks4
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 ```
 
 ### "Missing environment variables"

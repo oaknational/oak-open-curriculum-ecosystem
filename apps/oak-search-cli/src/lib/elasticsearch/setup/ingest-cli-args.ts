@@ -1,18 +1,17 @@
 #!/usr/bin/env npx tsx
 /**
- * CLI argument parsing for live data ingestion using Commander.
+ * CLI argument parsing for data ingestion using Commander.
  *
  * @remarks
- * Handles parsing of subject, key-stage, and flag arguments with validation.
+ * Default mode is bulk (reads from local bulk-download files).
+ * Use `--api` to switch to live API fetching.
  * Subject and key stage values are derived from the OpenAPI schema via the SDK.
- * Unknown flags trigger help output and exit.
-
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
-import { createProgram } from './ingest-cli-program.js';
-import { ALL_KEY_STAGES, resolveSubjects, validateBulkMode } from './ingest-cli-validators.js';
+import { createProgram, DEFAULT_BULK_DIR } from './ingest-cli-program.js';
+import { ALL_KEY_STAGES, resolveSubjects } from './ingest-cli-validators.js';
 
 /** Parsed CLI arguments for ingestion. */
 export interface CliArgs {
@@ -27,8 +26,8 @@ export interface CliArgs {
   readonly bypassCache: boolean;
   readonly incremental: boolean;
   readonly ignoreCached404: boolean;
-  readonly bulk: boolean;
-  readonly bulkDir: string | undefined;
+  readonly api: boolean;
+  readonly bulkDir: string;
   readonly maxRetries: number | undefined;
   readonly retryDelay: number | undefined;
   readonly noRetry: boolean;
@@ -38,7 +37,7 @@ export interface CliArgs {
 interface ParsedOptions {
   readonly subject: SearchSubjectSlug[];
   readonly all?: boolean;
-  readonly bulk?: boolean;
+  readonly api?: boolean;
   readonly bulkDir?: string;
   readonly keyStage: KeyStage[];
   readonly index: SearchIndexKind[];
@@ -69,8 +68,8 @@ function buildHelpArgs(): CliArgs {
     bypassCache: false,
     incremental: false,
     ignoreCached404: false,
-    bulk: false,
-    bulkDir: undefined,
+    api: false,
+    bulkDir: DEFAULT_BULK_DIR,
     maxRetries: undefined,
     retryDelay: undefined,
     noRetry: false,
@@ -95,13 +94,12 @@ function boolFlag(value: boolean | undefined): boolean {
  * Build CliArgs from parsed options.
  */
 function buildCliArgs(opts: ParsedOptions): CliArgs {
-  const bulkMode = boolFlag(opts.bulk);
+  const apiMode = boolFlag(opts.api);
   const allFlag = boolFlag(opts.all);
-
-  validateBulkMode(bulkMode, opts.bulkDir);
+  const bulkDir = opts.bulkDir ?? DEFAULT_BULK_DIR;
 
   return {
-    subjects: resolveSubjects(opts.subject, allFlag, bulkMode),
+    subjects: resolveSubjects(opts.subject, allFlag, apiMode),
     keyStages: resolveKeyStages(opts.keyStage),
     indexes: opts.index,
     dryRun: boolFlag(opts.dryRun),
@@ -112,8 +110,8 @@ function buildCliArgs(opts: ParsedOptions): CliArgs {
     bypassCache: boolFlag(opts.bypassCache),
     incremental: boolFlag(opts.incremental),
     ignoreCached404: boolFlag(opts.ignoreCached404),
-    bulk: bulkMode,
-    bulkDir: opts.bulkDir,
+    api: apiMode,
+    bulkDir,
     maxRetries: opts.maxRetries,
     retryDelay: opts.retryDelay,
     noRetry: !opts.retry,
@@ -127,7 +125,6 @@ function buildCliArgs(opts: ParsedOptions): CliArgs {
  * @returns Parsed and validated CLI arguments
  */
 export function parseArgs(args: readonly string[]): CliArgs {
-  // Check for help flag explicitly before parsing
   if (args.includes('--help') || args.includes('-h')) {
     const program = createProgram();
     program.parse([...args], { from: 'user' });

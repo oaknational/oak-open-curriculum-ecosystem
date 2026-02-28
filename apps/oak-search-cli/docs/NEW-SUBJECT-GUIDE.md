@@ -44,14 +44,14 @@ Ingest the new subject/keystage from the live Oak API:
 ```bash
 cd apps/oak-search-cli
 
-# Single subject/keystage
-pnpm es:ingest-live -- --subject science --key-stage ks3
+# Single subject/keystage (API mode)
+pnpm es:ingest -- --api --subject science --key-stage ks3
 
-# Multiple keystages
-pnpm es:ingest-live -- --subject science --key-stage ks3 --key-stage ks4
+# Multiple keystages (API mode)
+pnpm es:ingest -- --api --subject science --key-stage ks3 --key-stage ks4
 
-# Dry run to preview
-pnpm es:ingest-live -- --subject science --key-stage ks3 --dry-run
+# Dry run to preview (API mode)
+pnpm es:ingest -- --api --subject science --key-stage ks3 --dry-run
 ```
 
 **Duration**: 5-15 minutes depending on content volume.
@@ -309,7 +309,7 @@ Re-run ingestion with latest code:
 
 ```bash
 git pull && pnpm build
-pnpm es:ingest-live -- --subject [subject] --key-stage [keystage]
+pnpm es:ingest -- --api --subject [subject] --key-stage [keystage]
 ```
 
 ### Synonyms Not Working

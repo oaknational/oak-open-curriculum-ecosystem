@@ -202,6 +202,7 @@ export async function runBatchIngestion(
       client: context.client,
       subjects: context.subjects,
       keyStages: context.keyStages,
+      indexes: context.indexes,
       granularity: context.granularity,
       onSequenceFacetProcessed: metricsCollector.record,
     })) {

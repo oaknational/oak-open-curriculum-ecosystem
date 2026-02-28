@@ -10,14 +10,14 @@
 
 ## Current Approach (2026-01-07)
 
-Full ingestion is handled by the unified `es:ingest-live` CLI:
+Full ingestion is handled by the unified `es:ingest` CLI:
 
 ```bash
 # Full ingestion
-pnpm es:ingest-live -- --all
+pnpm es:ingest -- --api --all
 
 # Resume interrupted ingestion (skip existing documents)
-pnpm es:ingest-live -- --all --incremental
+pnpm es:ingest -- --api --all --incremental
 
 # Check status
 pnpm es:status

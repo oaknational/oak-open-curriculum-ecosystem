@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-The semantic search ingestion CLI (`pnpm es:ingest-live`) fetches curriculum data from the Oak Curriculum API via the SDK. A full ingestion run for a single subject (e.g., maths across all key stages) makes hundreds of API calls:
+The semantic search ingestion CLI (`pnpm es:ingest`) fetches curriculum data from the Oak Curriculum API via the SDK. A full ingestion run for a single subject (e.g., maths across all key stages) makes hundreds of API calls:
 
 - Unit summaries: ~100-200 calls
 - Lesson summaries: ~500-1000 calls
@@ -109,7 +109,7 @@ Implement **optional Redis-based caching** for SDK API responses during ingestio
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                     ingest-live.ts                          │
+│                       ingest.ts                             │
 │                    (CLI Entry Point)                        │
 └─────────────────────────────────────────────────────────────┘
                              │

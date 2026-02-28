@@ -25,7 +25,7 @@ export function registerOrchestrationCmds(parent: Command): void {
     parent,
     'ingest',
     'Ingest curriculum data into Elasticsearch',
-    'src/lib/elasticsearch/setup/ingest-live.ts',
+    'src/lib/elasticsearch/setup/ingest.ts',
   );
   registerPassThrough(
     parent,

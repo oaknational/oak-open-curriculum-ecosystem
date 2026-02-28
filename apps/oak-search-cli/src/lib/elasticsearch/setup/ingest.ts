@@ -1,5 +1,4 @@
-#!/usr/bin/env npx tsx
-/** Live data ingestion CLI — ingest curriculum data into Elasticsearch. */
+/** Ingestion CLI — ingest curriculum data into Elasticsearch. */
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadRuntimeConfig } from '../../../runtime-config.js';
@@ -23,6 +22,7 @@ import {
 } from './ingest-output.js';
 import { withRateLimitMonitoring } from '../../rate-limit-logger.js';
 import { printBulkHeader, executeBulkIngestion } from './ingest-bulk.js';
+import { validateBulkDir } from './ingest-cli-validators.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -163,27 +163,17 @@ async function runBulkIngestion(
   }
 }
 
-/** Execute the main ingestion workflow (routes to API or bulk mode). */
+/** Execute the main ingestion workflow (bulk by default, API with --api). */
 async function runIngestion(
   args: CliArgs,
   env: Parameters<typeof createIngestionClient>[0]['env'],
 ): Promise<void> {
-  if (args.bulk) {
-    await runBulkIngestion(args, env);
-  } else {
+  if (args.api) {
     await runApiIngestion(args, env);
+  } else {
+    validateBulkDir(args.bulkDir);
+    await runBulkIngestion(args, env);
   }
-}
-
-/**
- * Generates a timestamped log file path.
- *
- * @returns Log file path in format: logs/ingest-YYYYMMDD-HHMMSS.log
- */
-function generateLogFilePath(): string {
-  const now = new Date();
-  const timestamp = now.toISOString().replace(/[:.]/g, '-').replace('T', '-').slice(0, 19);
-  return `logs/ingest-${timestamp}.log`;
 }
 
 /** Main CLI entry point. */
@@ -210,16 +200,15 @@ async function main(): Promise<void> {
     setLogLevel('DEBUG');
   }
 
-  // Enable file logging for all ingestion runs
-  const logFilePath = generateLogFilePath();
-  const logPath = enableFileSink(logFilePath);
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '-').slice(0, 19);
+  const logPath = enableFileSink(`logs/ingest-${timestamp}.log`);
   if (logPath !== null) {
     ingestLogger.info('INGESTION_STARTED', {
       logFile: logPath,
-      mode: args.bulk ? 'bulk' : 'api',
-      ...(args.bulk
-        ? { bulkDir: args.bulkDir }
-        : { subjects: args.subjects.join(','), keyStages: args.keyStages.join(',') }),
+      mode: args.api ? 'api' : 'bulk',
+      ...(args.api
+        ? { subjects: args.subjects.join(','), keyStages: args.keyStages.join(',') }
+        : { bulkDir: args.bulkDir }),
     });
   }
 

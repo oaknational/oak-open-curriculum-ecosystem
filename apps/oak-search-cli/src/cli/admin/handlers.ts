@@ -5,7 +5,7 @@
  * pass-through returning the `Result` from the SDK. The `handleStatus`
  * handler combines two SDK calls and must merge their Results.
  *
- * Complex orchestration operations (ingest-live, verify, diagnostics)
+ * Complex orchestration operations (ingest, verify, diagnostics)
  * are wired separately via their existing implementation files.
  */
 

@@ -2,9 +2,9 @@
  * CLI argument validators for ingestion.
  *
  * Pure validation functions for CLI argument values.
-
  */
 
+import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError } from 'commander';
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
@@ -90,14 +90,18 @@ export function collectIndex(value: string, previous: SearchIndexKind[]): Search
 }
 
 /**
- * Resolve subjects based on --all flag and explicit --subject args.
+ * Resolve subjects based on --all flag, explicit --subject args, and mode.
+ *
+ * In bulk mode (default), subjects are resolved from the bulk files — no
+ * subject args required. In API mode, subjects must be specified via
+ * `--subject <slug>` or `--all`.
  */
 export function resolveSubjects(
   explicitSubjects: readonly SearchSubjectSlug[],
   allFlag: boolean,
-  bulkMode: boolean,
+  apiMode: boolean,
 ): SearchSubjectSlug[] {
-  if (bulkMode) {
+  if (!apiMode) {
     return [];
   }
   if (allFlag && explicitSubjects.length > 0) {
@@ -107,16 +111,31 @@ export function resolveSubjects(
     return [...ALL_SUBJECTS];
   }
   if (explicitSubjects.length === 0) {
-    throw new Error('No subjects specified. Use --subject <slug> or --all');
+    throw new Error('No subjects specified. In API mode, use --subject <slug> or --all');
   }
   return [...explicitSubjects];
 }
 
 /**
- * Validate bulk mode requirements.
+ * Validate that the bulk download directory exists and contains JSON files.
+ *
+ * @throws Error with actionable message if the directory is missing or empty
  */
-export function validateBulkMode(bulkMode: boolean, bulkDir: string | undefined): void {
-  if (bulkMode && bulkDir === undefined) {
-    throw new Error('--bulk requires --bulk-dir <path>');
+export function validateBulkDir(bulkDir: string): void {
+  if (!existsSync(bulkDir)) {
+    throw new Error(
+      `Bulk download directory not found: ${bulkDir}\n` +
+        'Run "pnpm bulk:download" first to fetch the bulk data, ' +
+        'or use "--api" to ingest from the live API instead.',
+    );
+  }
+
+  const files = readdirSync(bulkDir).filter((f) => f.endsWith('.json'));
+  if (files.length === 0) {
+    throw new Error(
+      `Bulk download directory is empty (no JSON files): ${bulkDir}\n` +
+        'Run "pnpm bulk:download" first to fetch the bulk data, ' +
+        'or use "--api" to ingest from the live API instead.',
+    );
   }
 }

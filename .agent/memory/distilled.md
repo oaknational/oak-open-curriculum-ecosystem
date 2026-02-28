@@ -191,11 +191,6 @@ documented in `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`
   inert unless the resulting type is consumed in a binding
   or type path — all three reviewers independently caught
   this pattern
-- `max-lines-per-function` (50 lines) — extract per-command
-  registration functions
-- ESLint complexity counts `??` and `?.` as branches — five
-  nullish-coalescing expressions in one function can breach the
-  limit. Fix: extract the merge logic into a named helper function
 - `tsconfig.json` `include` patterns `**/*.test.ts` and
   `**/*.spec.ts` do NOT match test utility files (harness,
   fixture builder). Add `tests/**/*.ts` to include array

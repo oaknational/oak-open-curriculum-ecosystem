@@ -240,7 +240,7 @@ After implementation:
 
 ```bash
 # Re-index with corrected source
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest -- --api --subject maths --key-stage ks4
 
 # Verify complete data
 pnpm es:status
