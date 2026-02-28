@@ -58,35 +58,23 @@ additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
 
 ### Current State
 
-All previous batches (A through E3) and Go/No-Go preparation (G1–G4) are
-complete. MCP tool exploration (2026-02-28) identified 7 snag items, 2 of
-which are top priority for the next session.
+All code work complete. Full reindex done (2026-02-28). Verification outstanding.
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
 - **G4 complete**: Onboarding rerun done (4 personas). Owner dispositions recorded for all 36 findings. No P0 blockers. See §Onboarding Snagging below.
-- **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S007). See §MCP Tool Exploration Findings below.
+- **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S008). All code-complete except M1-S004 and M1-S006 (open P3, non-blocking). See §MCP Tool Exploration Findings below.
+- **Full reindex (2026-02-28)**: 16,443 documents indexed successfully (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER failures, all recovered in single retry round. `thread_semantic` field now populated. Chunk delay increased from 7001ms to 8000ms (ADR-096 revised). Verification not yet run.
 
 ### Top Priorities for Next Session
 
-**1. Reindex threads and validate all MCP tools (P1)**
+**1. Verify reindex and validate all 32 MCP tools (P1)**
 
-The `thread_semantic` fix (M1-S001a) is code-complete and the ingest CLI
-has been refactored to default to bulk mode with per-index filtering (see
-change log 2026-02-28). The 164 live ES documents still lack the field.
+Full reindex completed 2026-02-28 (16,443 docs, 0 final failures). The
+`thread_semantic` field should now be populated on all 164 thread documents.
+Verification is the sole remaining gate before M0.
 
-**Step 1 — Reindex threads:**
-
-```bash
-cd apps/oak-search-cli && pnpm es:ingest -- --index threads --verbose
-```
-
-Pre-flight: confirm env vars in `apps/oak-search-cli/.env.local`
-(`ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`). Confirm
-bulk download data exists in `apps/oak-search-cli/bulk-downloads/`
-(run `pnpm bulk:download` if not).
-
-Post-ingest verification via EsCurric MCP:
+**Step 1 — Verify `thread_semantic` populated (EsCurric MCP):**
 
 - `platform_core_get_document_by_id` with `index: "oak_threads"`,
   `id: "algebra"` — confirm `thread_semantic` field present
@@ -1370,7 +1358,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 
 | ID | Severity | Description | Owner | Status | Decision |
 |---|---|---|---|---|---|
-| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Code complete, ingest CLI refactored (2026-02-28) | Fix implemented + tested. Ingest CLI refactored: bulk-default, per-index filtering (ADR-093 revised). **Reindex not yet run.** |
+| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Reindexed (2026-02-28) | Fix implemented + tested. Full reindex complete: 16,443 docs, 0 final failures. **Verification outstanding.** |
 | M1-S001b | P2 | Search/explore tool descriptions lack subject-filter guidance | Engineering | [x] Complete (2026-02-28) | Tool descriptions enhanced with subject-filter guidance |
 | M1-S002 | P2 | `year` parameter type inconsistency across sequence endpoints | Engineering (upstream) | [x] Complete (2026-02-28) | Normalised at generator level; accepts string enum + number input |
 | M1-S003 | P3 | `get-lessons-assets-by-type` description unclear on binary response | Engineering | [x] Complete (2026-02-28) | Binary-response warning added via generator enhancement |
@@ -1392,7 +1380,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
 | **Fix** | Populate `thread_semantic` at indexing time in `createThreadDocument` with subject-enriched content. For example: `"Maths: Algebra — a curriculum progression thread"` or `"${subjects.join(', ')}: ${threadTitle}"`. This gives ELSER the subject-to-thread association it needs. Reindex required after the fix. The query side (`buildThreadRetriever` in `retrieval-search-helpers.ts`) is already correct — it searches `thread_semantic` via ELSER. It just needs data. |
 | **Files** | `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (createThreadDocument — populate `thread_semantic`), `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` (bulk path adapter) |
-| **Status** | Code complete (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Command: `pnpm es:ingest -- --index threads --verbose`. **Reindex against live ES instance not yet run** — 164 documents still missing the field. |
+| **Status** | Reindexed (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Full bulk reindex completed: 16,443 docs across 114 chunks, 26 initial ELSER failures recovered in 1 retry round, 0 final failures. Chunk delay increased to 8000ms (ADR-096 revised). **Verification outstanding** — confirm `thread_semantic` present via EsCurric, validate thread search returns results. |
 
 ---
 
@@ -1581,6 +1569,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-28**: **Full reindex complete, chunk delay tuned.** Ran `pnpm es:ingest --verbose` from bulk data: 16,443 documents across 114 chunks (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER `inference_exception` failures (0.16%), all recovered in single Tier 2 retry round. Failures clustered in chunks 64-89 (ELSER queue saturation pattern). `DEFAULT_CHUNK_DELAY_MS` increased from 7001ms to 8000ms for headroom as dataset grows; ADR-096 revised with Run 7 data and new default. M1-S001a status updated: reindex done, verification outstanding. Log: `apps/oak-search-cli/logs/ingest-2026-02-28-19-57-52.log`.
 - **2026-02-28**: **Ingest CLI refactored, validation plan integrated.** (1) Renamed `es:ingest-live` to `es:ingest`. (2) Bulk mode is now the default — no `--subject` or `--all` required, reads from `./bulk-downloads`. Use `--api` for live API mode. (3) Bulk dir validated at startup with actionable error message. (4) Per-index filtering: both bulk and API paths skip unnecessary processing when `--index` is specified (e.g. `--index threads` skips curriculum file processing). ADR-093 revised. Committed M1-S008 fix and generated file updates. Validation plan from cursor plan integrated into §Top Priorities. 961 tests pass, all quality gates green. Session: [Ingest refactor](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/249ab1cd-a1bb-4234-90f8-26de6c29ada9.txt).
 - **2026-02-28**: **M1-S008 complete.** `callTool` overload type alignment: `ToolArgsForName` now derives from `transformFlatToNestedArgs` parameter type (flat) instead of `invoke` parameter (nested). One-line generator change in `generate-types-file.ts`, verified by unit test + `satisfies` compile-time anchor. All quality gates pass.
 - **2026-02-28**: **M1 MCP quality fixes implemented.** M1-S001a (thread_semantic population), M1-S001b (subject-filter guidance), M1-S002 (year normalisation), M1-S003 (binary-response warning), M1-S005 (scope limitations) all code-complete with TDD. Full quality gate suite passed. M1-S008 (callTool type mismatch) identified by type-reviewer and registered. M1-S001a reindex against live ES not yet run. Four-layer schema sync pattern extracted to `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Session: [M1 quality fixes](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/379f5e51-f981-41f0-856d-03b025cbdd41.txt).

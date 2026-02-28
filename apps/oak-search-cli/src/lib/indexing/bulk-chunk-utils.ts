@@ -56,13 +56,14 @@ export const HTTP_BASE_RETRY_DELAY_MS = 1000;
  * Default delay between chunks in milliseconds for document-level retries.
  *
  * @remarks
- * Set to 7001ms based on full ingestion optimisation (2026-01-02).
+ * Set to 8000ms based on full ingestion runs (2026-01-02 through 2026-02-28).
  * Allows ELSER inference queue to drain between chunk uploads, reducing
- * queue overflow errors (HTTP 429 inference_exception).
+ * queue overflow errors (HTTP 429 inference_exception). Increased from
+ * 7001ms to provide headroom as the curriculum dataset grows.
  *
- * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
+ * @see ADR-096 for optimisation history
  */
-export const DEFAULT_CHUNK_DELAY_MS = 7001;
+export const DEFAULT_CHUNK_DELAY_MS = 8000;
 
 /**
  * Represents an action-document pair in Elasticsearch bulk format.

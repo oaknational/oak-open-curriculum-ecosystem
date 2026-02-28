@@ -120,7 +120,7 @@ The module implements a two-tier retry strategy for ELSER queue overflow errors:
 import { uploadAllChunks } from './bulk-chunk-uploader';
 
 const result = await uploadAllChunks(es, chunks, logger, 1000, {
-  chunkDelayMs: 7001, // Delay between chunks to prevent queue overflow
+  chunkDelayMs: 8000, // Delay between chunks to prevent queue overflow
   documentRetryEnabled: true, // Enable Tier 2 retry
   documentMaxRetries: 4, // Retry failed docs up to 4 times
   documentRetryDelayMs: 5000, // Base delay for document retry backoff
@@ -148,18 +148,18 @@ pnpm es:ingest -- --no-retry
 
 | Option                 | CLI Flag        | Default | Description                        |
 | ---------------------- | --------------- | ------- | ---------------------------------- |
-| `chunkDelayMs`         | -               | 7001    | Delay between chunks (ms)          |
+| `chunkDelayMs`         | -               | 8000    | Delay between chunks (ms)          |
 | `maxRetries`           | -               | 3       | HTTP-level retry attempts          |
 | `documentRetryEnabled` | `--no-retry`    | true    | Enable document-level retry        |
 | `documentMaxRetries`   | `--max-retries` | 4       | Document-level retry attempts      |
 | `documentRetryDelayMs` | `--retry-delay` | 5000    | Base delay for document retry (ms) |
 
-### Optimised Constants (Verified 2026-01-02)
+### Optimised Constants (Updated 2026-02-28)
 
 | Constant                                | Value  | Purpose                                    |
 | --------------------------------------- | ------ | ------------------------------------------ |
 | `MAX_CHUNK_SIZE_BYTES`                  | 8MB    | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS`                | 7001ms | Base delay between chunk uploads           |
+| `DEFAULT_CHUNK_DELAY_MS`                | 8000ms | Base delay between chunk uploads           |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5×   | Progressive delay per retry attempt        |
 
 ## Troubleshooting

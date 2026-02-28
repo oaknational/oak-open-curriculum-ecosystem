@@ -1,48 +1,43 @@
 ---
 prompt_id: onboarding-rerun
-title: "M1 Release — Reindex and Validate"
+title: "M1 Release — Verify and Ship"
 type: handover
 status: active
 last_updated: 2026-02-28
 ---
 
-# M1 Release — Reindex and Validate
+# M1 Release — Verify and Ship
 
 Session entry point. This prompt and the release plan together define
 the full scope of work.
 
 ## Context
 
-MCP search quality fixes (M1-S001a/b, S002, S003, S005, S008) are
-code-complete with TDD. All quality gates green. The ingest CLI has been
-refactored: bulk mode is now the default, with per-index filtering to
-skip unnecessary processing.
+All M1 code work is complete. Full bulk reindex ran successfully on
+2026-02-28: 16,443 documents indexed (12,864 lessons, 1,664 units,
+164 threads, 30 sequences, 57 facets). 26 initial ELSER failures,
+all recovered in a single retry round. `thread_semantic` should now
+be populated on all 164 thread documents.
 
-**M1-S001a reindex not yet done** — the code populates `thread_semantic`
-but the 164 live ES documents still lack the field. ELSER leg remains
-dead until reindex. The reindex command is ready:
+Chunk delay increased from 7001ms to 8000ms (ADR-096 revised) for
+headroom as the dataset grows.
 
-```bash
-cd apps/oak-search-cli && pnpm es:ingest -- --index threads --verbose
-```
-
-Pre-flight: confirm bulk download data exists in
-`apps/oak-search-cli/bulk-downloads/` (run `pnpm bulk:download` if not)
-and env vars are set in `apps/oak-search-cli/.env.local`.
+**Verification not yet done** — the reindex completed but nobody has
+confirmed via EsCurric that `thread_semantic` is present or that
+thread search now returns results.
 
 ## Top priorities for this session
 
-### 1. Reindex threads and validate all 32 MCP tools (P1)
+### 1. Verify reindex and validate all 32 MCP tools (P1)
 
 Full validation plan in the release plan §Top Priorities for Next Session.
 In brief:
 
-1. Run `pnpm es:ingest -- --index threads --verbose` (bulk default, fast)
-2. Verify via EsCurric that `thread_semantic` is present on all 164 docs
-3. Validate thread search and explore-topic (M1-S001a/b)
-4. Validate all other MCP tools (discovery, sequence, lesson, thread,
+1. Verify via EsCurric that `thread_semantic` is present on all 164 docs
+2. Validate thread search and explore-topic (M1-S001a/b)
+3. Validate all other MCP tools (discovery, sequence, lesson, thread,
    browse, fetch, changelog, search scopes)
-5. Validate M1-S002 year normalisation, M1-S003 binary warning, M1-S005
+4. Validate M1-S002 year normalisation, M1-S003 binary warning, M1-S005
    scope limitations
 
 ### 2. Remaining M0 gates

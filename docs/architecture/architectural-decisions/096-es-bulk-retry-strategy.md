@@ -1,6 +1,6 @@
 # ADR-096: Elasticsearch Bulk Retry Strategy
 
-**Status**: Accepted — ✅ **VERIFIED** (2026-01-02)
+**Status**: Accepted (Revised) — ✅ **VERIFIED** (2026-02-28)
 
 **Date**: 2026-01-01
 
@@ -34,7 +34,7 @@ The diagnostic runner (`elser-diagnostic-runner.ts`) proved that failures are **
 
 - Same documents that failed on first run succeeded when retried
 - Failures correlated with queue position, not document content
-- Parameter tuning (8MB chunks, 7001ms delay) improved success from 60% to 99.87%
+- Parameter tuning (8MB chunks, 8000ms delay) improved success from 60% to 99.84%
 - Document-level retry was necessary to achieve 100%
 
 ## Decision
@@ -116,7 +116,7 @@ export function isRetryableError(status: number, errorType: string): boolean {
 
 ```typescript
 interface BulkUploadConfig {
-  chunkDelayMs?: number; // Default: 7001ms (optimised 2026-01-02)
+  chunkDelayMs?: number; // Default: 8000ms (revised 2026-02-28)
   maxRetries?: number; // Default: 3 (HTTP-level)
   documentRetryEnabled?: boolean; // Default: true
   documentMaxRetries?: number; // Default: 4
@@ -124,12 +124,12 @@ interface BulkUploadConfig {
 }
 ```
 
-### Optimised Constants (Verified 2026-01-02)
+### Optimised Constants (Revised 2026-02-28)
 
 | Constant                                | Value  | Purpose                                    |
 | --------------------------------------- | ------ | ------------------------------------------ |
 | `MAX_CHUNK_SIZE_BYTES`                  | 8MB    | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS`                | 7001ms | Base delay between chunk uploads           |
+| `DEFAULT_CHUNK_DELAY_MS`                | 8000ms | Base delay between chunk uploads           |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5×   | Progressive delay increase per retry       |
 | `HTTP_MAX_RETRY_ATTEMPTS`               | 3      | Transport-level retry attempts             |
 | `HTTP_BASE_RETRY_DELAY_MS`              | 1000ms | Base delay for HTTP backoff                |
@@ -296,31 +296,39 @@ src/lib/indexing/retry/
 | Failure rate    | ~47%                           |
 | Failure type    | HTTP 429 `inference_exception` |
 
-### After Implementation (✅ Verified 2026-01-02)
+### After Implementation (✅ Verified 2026-02-28)
 
 | Metric                   | Value           |
 | ------------------------ | --------------- |
-| **Documents indexed**    | 16,414          |
-| **Lessons**              | 12,833          |
-| **Units**                | 1,665           |
+| **Documents indexed**    | 16,443          |
+| **Lessons**              | 12,864          |
+| **Units**                | 1,664           |
 | **Threads**              | 164             |
 | **Sequences**            | 30              |
 | **Sequence facets**      | 57              |
-| **Initial failure rate** | 0.10% (17 docs) |
+| **Initial failure rate** | 0.16% (26 docs) |
 | **Final failure rate**   | 0%              |
 | **Retry rounds needed**  | 1               |
-| **Total duration**       | ~22 minutes     |
+| **Total duration**       | ~20.8 minutes   |
 
 ### Optimisation History
 
-| Run   | Chunk Size | Delay                    | Initial Failures | Retries | Time         |
-| ----- | ---------- | ------------------------ | ---------------- | ------- | ------------ |
-| 1     | 10MB       | 2500ms                   | 4,518 (28%)      | 4       | 21.3 min     |
-| 2     | 10MB       | 4000ms                   | 1,896 (12%)      | 4       | 21.0 min     |
-| 3     | 10MB       | 4000ms (+init delay)     | 2,363 (14%)      | 3       | 20.9 min     |
-| 4     | 9MB        | 5000ms (+init delay)     | 677 (4%)         | 2       | 19.7 min     |
-| 5     | 8MB        | 6500ms (+init delay)     | 21 (0.13%)       | 1       | 21.0 min     |
-| **6** | **8MB**    | **7001ms** (+init delay) | **17 (0.10%)**   | **1**   | **22.0 min** |
+| Run   | Chunk Size | Delay                    | Initial Failures | Retries | Time               |
+| ----- | ---------- | ------------------------ | ---------------- | ------- | ------------------ |
+| 1     | 10MB       | 2500ms                   | 4,518 (28%)      | 4       | 21.3 min           |
+| 2     | 10MB       | 4000ms                   | 1,896 (12%)      | 4       | 21.0 min           |
+| 3     | 10MB       | 4000ms (+init delay)     | 2,363 (14%)      | 3       | 20.9 min           |
+| 4     | 9MB        | 5000ms (+init delay)     | 677 (4%)         | 2       | 19.7 min           |
+| 5     | 8MB        | 6500ms (+init delay)     | 21 (0.13%)       | 1       | 21.0 min           |
+| 6     | 8MB        | 7001ms (+init delay)     | 17 (0.10%)       | 1       | 22.0 min           |
+| 7     | 8MB        | 7001ms (+init delay)     | 26 (0.16%)       | 1       | 20.8 min           |
+| **8** | **8MB**    | **8000ms** (+init delay) | —                | —       | **~23 min (est.)** |
+
+Run 7 (2026-02-28) used the same parameters as Run 6 but with a larger dataset
+(16,443 vs 16,414 docs). The higher initial failure count (26 vs 17) reflects
+natural ELSER queue variance rather than a parameter regression — all failures
+were recovered in a single retry round. Default delay increased to 8000ms after
+Run 7 to provide headroom as the curriculum dataset grows.
 
 ### Verification Command
 

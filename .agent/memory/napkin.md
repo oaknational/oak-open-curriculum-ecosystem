@@ -1,5 +1,42 @@
 # Napkin
 
+## Session: 2026-02-28 — Full reindex and parameter tuning
+
+### What was done
+
+1. Ran full bulk reindex: `pnpm es:ingest --verbose` from
+   `bulk-downloads/`. 16,443 docs across 114 chunks, ~20.8 min
+2. Analysed ELSER failure pattern: 26 initial failures (0.16%),
+   all recovered in single retry round. Failures clustered in
+   chunks 64-89 (ELSER queue saturation mid-run)
+3. Increased `DEFAULT_CHUNK_DELAY_MS` from 7001ms to 8000ms for
+   headroom as curriculum grows
+4. Updated ADR-096 with Run 7 data and new default
+5. Updated release plan (reindex done, verification outstanding)
+   and onboarding prompt (shifted from "Reindex and Validate" to
+   "Verify and Ship")
+
+### Learnings
+
+- When presenting cost comparisons, account for the FULL cost of
+  both alternatives. I initially said "15 seconds vs 2 minutes"
+  for retry cost vs delay increase — the user rightly pointed out
+  that worst-case retry (multiple rounds with progressive backoff)
+  is ~125s, making the comparison much closer (125s vs 114s). The
+  conclusion held but the margin was misrepresented
+- ELSER failure rate varies between runs even with identical
+  parameters (0.10% on Run 6 vs 0.16% on Run 7). The dominant
+  factor is cluster-side queue state, not client-side delay. This
+  means optimisation beyond the current range is chasing noise
+- ADR-096's optimisation history table is genuinely useful as a
+  decision record — it let us compare today's run against
+  historical baselines and make an informed parameter choice
+- The user's reasoning for the 8000ms change was about headroom
+  for future growth (more lessons, more subjects), not about
+  eliminating today's failures. Good reminder: parameter decisions
+  should account for where the system is going, not just where it
+  is now
+
 ## Session: 2026-02-28 — Ingest CLI refactor and consolidation
 
 ### What was done
