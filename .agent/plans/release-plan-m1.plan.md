@@ -1,9 +1,9 @@
 # Milestone 1 Release Plan (Public Alpha)
 
 **Status**: Active  
-**Last Updated**: 2026-02-27  
+**Last Updated**: 2026-02-28  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: N-items, V-items, W-items all complete (2026-02-27). Rename to Oak Open Curriculum Ecosystem complete (2026-02-27). Post-V-fix onboarding review complete. G1-G4 complete. G5-G8 pending (M1). Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: M1-S001a code complete but reindex pending. M1-S001b/S002/S003/S005 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. M1-S008 open (P3, type-safety debt). Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -56,15 +56,42 @@ Three distinct milestones, in order:
 M0 (make repo public) requires documentation fixes only. M1 (public alpha)
 additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
 
-### Current State (All Code Work Complete)
+### Current State
 
-All batches (A through E3) and Go/No-Go preparation (G1–G3) are complete. There are no remaining code items.
+All previous batches (A through E3) and Go/No-Go preparation (G1–G4) are
+complete. MCP tool exploration (2026-02-28) identified 7 snag items, 2 of
+which are top priority for the next session.
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
 - **G4 complete**: Onboarding rerun done (4 personas). Owner dispositions recorded for all 36 findings. No P0 blockers. See §Onboarding Snagging below.
+- **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S007). See §MCP Tool Exploration Findings below.
 
-### Next Steps
+### Top Priorities for Next Session
+
+**1. M1-S001a — Reindex to populate `thread_semantic` (P1)**
+
+Code fix complete: `createThreadDocument` now populates `thread_semantic`
+with `"<subjects>: <title>"`. Tests pass. But the live ES instance still
+has 164 documents without the field. Run the search CLI ingest to reindex
+and verify ELSER leg is alive.
+
+**2. Remaining M0 gates**
+
+- Final secrets and PII sweep (`pnpm secrets:scan:all`)
+- Manual sensitive-information review (human)
+- Merge `feat/semantic_search_deployment` to `main`
+- Make repository public on GitHub
+
+**3. Open P3 items (non-blocking)**
+
+- M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)
+- M1-S006: `get-rate-limit` returns 0/0/0 on preview server (upstream)
+- M1-S008: `callTool` overloads declare nested args but impl parses flat args (type-safety debt)
+
+### Remaining M0/M1 Gates
+
+### Next Steps (historical — all complete)
 
 **Previous documentation remediation (17 items) — COMPLETE**:
 
@@ -1254,6 +1281,163 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
 ---
 
+## MCP Tool Exploration Findings (2026-02-28)
+
+**Source**: Systematic testing of all 32 oak-remote-preview MCP tools
+using KS4 maths as the domain. Prior conversation: [KS4 maths
+exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b4b3ea0-9ca6-4b11-bbc0-4ad50bafdb00.txt).
+
+### Snag Register
+
+| ID | Severity | Description | Owner | Status | Decision |
+|---|---|---|---|---|---|
+| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Code complete (2026-02-28) | Fix implemented + tested. **Reindex not yet run.** |
+| M1-S001b | P2 | Search/explore tool descriptions lack subject-filter guidance | Engineering | [x] Complete (2026-02-28) | Tool descriptions enhanced with subject-filter guidance |
+| M1-S002 | P2 | `year` parameter type inconsistency across sequence endpoints | Engineering (upstream) | [x] Complete (2026-02-28) | Normalised at generator level; accepts string enum + number input |
+| M1-S003 | P3 | `get-lessons-assets-by-type` description unclear on binary response | Engineering | [x] Complete (2026-02-28) | Binary-response warning added via generator enhancement |
+| M1-S004 | P3 | Parameter naming inconsistency (`threadSlug` vs bare names) | Engineering | Open | Normalise at SDK accessor level |
+| M1-S005 | P3 | `search` scope limitations undocumented | Engineering | [x] Complete (2026-02-28) | Scope limitations documented in search tool description |
+| M1-S006 | P3 | `get-rate-limit` returns 0/0/0 on preview server | Upstream API team | Open | Track — ask upstream |
+| M1-S007 | P3 | Prerequisite sub-graph fetching | Engineering | Deferred | Post-merge |
+| M1-S008 | P3 | `callTool` overloads declare nested args but impl parses flat args | Engineering | Open | Type-safety debt; no runtime impact currently |
+
+---
+
+#### M1-S001a: Populate `thread_semantic` at indexing time (TOP PRIORITY)
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P1 — thread search ELSER leg is completely dead |
+| **Priority** | **TOP PRIORITY for next session** |
+| **Problem** | `createThreadDocument` in `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` builds thread documents with `thread_slug`, `thread_title`, `subject_slugs`, `unit_count`, `thread_url`, and `title_suggest` — but never sets `thread_semantic`. The mapping defines this field as `semantic_text` (ELSER inference) but every document in the index is missing it. Confirmed via EsCurric `platform_core_get_document_by_id` on three threads (algebra, geometry-and-measure, bq14-physics) — none have `thread_semantic`. The ELSER leg of the 2-way RRF retriever is completely dead across all 164 documents. |
+| **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
+| **Fix** | Populate `thread_semantic` at indexing time in `createThreadDocument` with subject-enriched content. For example: `"Maths: Algebra — a curriculum progression thread"` or `"${subjects.join(', ')}: ${threadTitle}"`. This gives ELSER the subject-to-thread association it needs. Reindex required after the fix. The query side (`buildThreadRetriever` in `retrieval-search-helpers.ts`) is already correct — it searches `thread_semantic` via ELSER. It just needs data. |
+| **Files** | `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (createThreadDocument — populate `thread_semantic`), `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` (bulk path adapter) |
+| **Status** | Code complete (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. **Reindex against live ES instance not yet run** — 164 documents still missing the field. |
+
+---
+
+#### M1-S001b: Enhance search/explore tool descriptions for subject filtering
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P2 |
+| **Priority** | Complete |
+| **Problem** | `search(scope: 'threads', text: 'maths')` and `explore-topic(text: 'maths')` return 0 thread results because BM25 only searches `thread_title` — titles like "Algebra" and "Geometry and Measure" don't contain "maths". The `subject_slugs` field holds "maths" but is only used as an optional filter parameter, not searched. When a consuming agent calls these tools with a subject name as the text, it gets nothing back. |
+| **Root cause** | This is a tool-guidance problem, not a code-inference problem. The search and explore tool descriptions don't tell consuming agents that subject-based queries should use the `subject` filter parameter rather than (or in addition to) the search text. A teacher saying "what maths threads are there?" should translate to `search(scope: 'threads', subject: 'maths')`, not `search(scope: 'threads', text: 'maths')`. The consuming agent needs to know this. |
+| **Fix** | Enhance the "how to use" metadata in the search and explore tool descriptions to guide consuming agents: (1) In the search tool definition (`tool-definition.ts`), add guidance that thread and sequence scopes work best with the `subject` filter — subject names should go in the `subject` parameter, not the `text` parameter. (2) In the explore-topic tool definition, add similar guidance: when the user mentions a subject, pass it as the `subject` parameter. (3) Add examples: `"What maths threads are there?" → { text: '', subject: 'maths', scope: 'threads' }` or `{ text: 'algebra', subject: 'maths', scope: 'threads' }`. These are text-only changes to tool descriptions — no code change needed. |
+| **Files** | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts` (search tool description), `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/tool-definition.ts` (explore tool description) |
+| **Status** | [x] Complete (2026-02-28). Subject-filter guidance added to search and explore tool descriptions. NL mapping examples added. Scope limitations (`suggest`, `sequences`) documented. |
+
+---
+
+#### M1-S002: `year` parameter type inconsistency across sequence endpoints
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P2 |
+| **Problem** | The `year` parameter type is inconsistent across the sequence endpoint family. `get-sequences-units` defines `year` as a string enum (`'1' \| '2' \| ... \| '11' \| 'all-years'`). `get-sequences-assets` and `get-sequences-questions` define `year` as `number` — yet their descriptions state *"a value of all-years can also be used"*, which is impossible with a number type. This is an upstream API schema bug: the OpenAPI spec says `number` but the runtime API can accept `"all-years"`. |
+| **Response side** | The response-map confirms this ambiguity: `"year":{"anyOf":[{"type":"number"},{"type":"string","description":"All years"}]}`. The API can *return* year as either number or string "all-years". |
+| **Enum analysis** | Checked all generated tool enums for values that cannot be represented numerically: Key stages (`ks1`–`ks4`), subjects (17 string slugs), asset types (9 string values), search scopes (5 string values), year special value (`all-years`). **EYFS, early-years, and SEND do not appear in the current OpenAPI schema** — key stages are currently limited to ks1–ks4. If these are added in future, the string-based approach handles them naturally; numeric normalisation would break. |
+| **Decision** | **Normalise on string, strictly constrained to the enum values from the OpenAPI spec.** The canonical enum (from `get-sequences-units`) is: `'1' \| '2' \| '3' \| '4' \| '5' \| '6' \| '7' \| '8' \| '9' \| '10' \| '11' \| 'all-years'`. All three sequence tools (`get-sequences-units`, `get-sequences-assets`, `get-sequences-questions`) should use this same string enum. |
+| **Where to normalise** | At SDK accessor creation time, in the code generators. The `transformFlatToNestedArgs` function in each generated tool file (emitted by `mcp-tool-generator.ts`) already transforms flat MCP arguments to nested SDK format. For `year`: the MCP flat input schema should use `z.union([z.enum([...yearValues]), z.number().transform(String)])` so that both `year: 3` and `year: "3"` are accepted from MCP clients, coerced to the strict string enum, and validated. The canonical year enum should be a shared constant in the generator so all sequence tools reference the same source. |
+| **Files** | `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`, `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts`, generated tools: `get-sequences-assets.ts`, `get-sequences-questions.ts`, `get-sequences-units.ts` |
+| **Status** | [x] Complete (2026-02-28). Generator-level fix in `build-zod-type.ts` and `emit-input-schema.ts`. Flat Zod uses `z.union([z.enum([...]), z.number().int().min(1).max(11).transform(String)])`. JSON schema uses `anyOf` for string enum + number. `transformFlatToNestedArgs` converts string back to number for SDK. Runtime `zod-input-schema.ts` updated to handle `anyOf`. All four schema layers synchronised. See code pattern: `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Known remaining issue: `callTool` overloads still declare nested args type (see M1-S008). |
+
+---
+
+#### M1-S003: `get-lessons-assets-by-type` description unclear on binary response
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 |
+| **Problem** | The MCP tool handler crashes with `"Unexpected token '%', '%PDF-1.4'"` when invoking `get-lessons-assets-by-type` because the upstream API returns the actual binary file (PDF, video, etc.), not JSON metadata. The tool description says *"This tool will stream the downloadable asset"* and *"returns a content attachment"* — but AI agents still attempt to invoke it and expect structured data back. |
+| **Owner disposition** | This is working as intended — the endpoint IS a download endpoint. The fix is to enhance the description so agents understand this returns binary content that the MCP protocol cannot transport as structured tool output. Agents should use `get-lessons-assets` (the metadata endpoint) to get download URLs, then present those URLs to the user rather than attempting to download binary content through the MCP channel. |
+| **Fix** | Update the tool description (in the OpenAPI schema or as a description override in the MCP tool registration) to explicitly state: (1) this returns binary file content (PDF/video/etc.), not JSON; (2) the MCP handler cannot transport binary responses; (3) agents should use `get-lessons-assets` for metadata/URLs instead. |
+| **Files** | Upstream OpenAPI schema (description field), or `packages/sdks/oak-curriculum-sdk/src/mcp/` tool registration if we override descriptions locally |
+| **Status** | [x] Complete (2026-02-28). Binary-response warning added via `appendToolEnhancements()` in `tool-description.ts`. Warning appended at `sdk-codegen` generation time for `get-lessons-assets-by-type`. Unit tests in `tool-description.unit.test.ts`. |
+
+---
+
+#### M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 |
+| **Problem** | `get-threads-units` uses `threadSlug` as its parameter name, while other tools use bare names (`lesson`, `unit`, `subject`, `keyStage`, `sequence`). This inconsistency trips AI agents — the previous session's agent tried `thread` twice before reading the tool descriptor to discover `threadSlug`. The convention across the API is bare entity names for path parameters; `threadSlug` is the only parameter that appends `Slug`. |
+| **Where to normalise** | At SDK accessor creation time. The code generators can emit parameter aliases or a normalisation step in `transformFlatToNestedArgs`. Alternatively, accept both `thread` and `threadSlug` in the flat input schema (with the canonical name mapped to whatever the API requires). |
+| **Files** | `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-threads-units.ts` |
+| **Status** | Open |
+
+---
+
+#### M1-S005: `search` scope limitations undocumented
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 |
+| **Problem** | Two search scope behaviours are not obvious to AI agents: (1) `scope: "suggest"` requires at least one filter (`subject` or `keyStage`) — fails with a validation error without one. (2) `scope: "sequences"` returns 0 results for topic-style queries because sequences have specific structural names (e.g. "maths-secondary") not topic names. These limitations should be documented in the search tool description so agents can select the right scope. |
+| **Fix** | Enhance the search tool definition in `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts` to document: (a) suggest scope requires subject or keyStage filter; (b) sequences scope works with structural names, not topic queries. |
+| **Files** | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts` |
+| **Status** | [x] Complete (2026-02-28). Scope limitations documented in search tool description: `suggest` requires filter, `sequences` uses structural names. |
+
+---
+
+#### M1-S006: `get-rate-limit` returns 0/0/0 on preview server
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 |
+| **Problem** | `get-rate-limit` returns `remaining: 0, limit: 0, reset: 0` on the preview server. Either rate limiting is not configured on the preview instance, or the rate-limit headers are not being returned by the upstream API at this endpoint. This is an upstream API team concern — the MCP tool correctly reads whatever headers the API returns. |
+| **Owner** | Upstream API team. Jim to raise with them. |
+| **Tracking** | This item MUST remain tracked in this repo to prevent it being forgotten. The rate-limiting verification task in §Onboarding Snagging (G4) already tracks the deployment-target verification. This snag tracks the additional concern that the preview server's rate-limit endpoint returns zero values, which may indicate a configuration gap upstream. |
+| **Status** | Open — awaiting upstream response |
+
+---
+
+#### M1-S007: Prerequisite sub-graph fetching
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 |
+| **Problem** | The prerequisite graph is 1.45MB (1,607 units, 3,452 edges). Currently the only option is fetching the entire graph. The ability to fetch sub-graphs (e.g. "give me prerequisites for this specific unit") would be valuable for AI agent workflows that need targeted prerequisite information. |
+| **Decision** | **Post-merge.** This is a feature enhancement, not a bug or inconsistency. It should be tracked in the post-M1 backlog, not as a release blocker. |
+| **Status** | Deferred to post-merge backlog |
+
+---
+
+#### M1-S008: `callTool` overloads declare nested args but impl parses flat args
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P3 — type-safety debt, no runtime impact currently |
+| **Problem** | The generated `callTool` overloads in `execute.ts` declare `rawArgs: ToolArgsForName<TName>`, which resolves to the **nested** SDK type (e.g. `{ params: { path: { sequence: string }, query?: { year?: number } } }`). But the implementation (`invokeToolByName`) parses `rawArgs` through `toolMcpFlatInputSchema.safeParse()`, which expects **flat** MCP args (e.g. `{ sequence: string, year?: string \| number }`). The overloads promise one type; the implementation expects another. This is masked by: (1) the final overload uses `rawArgs: unknown`; (2) the sole real caller (`callToolWithValidation`) always passes `unknown`; (3) nobody uses the strongly-typed overloads programmatically. Year normalisation (M1-S002) made this visible — the nested type says `year?: number` while the flat schema accepts `string \| number`. |
+| **Files** | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/aliases/types.ts` (defines `ToolArgsForName`) |
+| **Fix** | Either (a) change `ToolArgsForName` to derive from the flat input schema type, or (b) change the overloads to use `rawArgs: unknown` since the function's contract is "validate whatever you give me." Option (b) is simpler but loses type-safe overloads; option (a) preserves them correctly. Both require generator changes in `emit-index.ts` or `generate-types-file.ts`. |
+| **Status** | Open — identified by type-reviewer during M1-S002 implementation (2026-02-28). No runtime impact. |
+
+---
+
+### Additional Observations (Not Snagged)
+
+These findings from the exploration are informational and do not require
+action before release:
+
+- **`browse-curriculum` tier duplication**: Returns 66 entries for KS4
+  maths (preserving foundation/higher duplicates) vs 36 unique units from
+  `get-key-stages-subject-units`. This is the expected behaviour of a
+  faceted browse endpoint — it shows all variants. No fix needed.
+- **Large response file writes**: Ontology, thread progressions,
+  prerequisite graph, and bulk endpoints write to `agent-tools` files
+  instead of returning inline. This is correct behaviour for large
+  payloads. The file-write pattern is well-documented in tool guidance.
+- **Tool hierarchy**: The tools follow a coherent ontology-driven
+  hierarchy: discovery (search, explore, browse) → structure (subjects,
+  sequences, units) → content (lessons, quizzes, transcripts, assets) →
+  progression (threads, prerequisites). This is working as designed.
+
+---
+
 ## Go/No-Go Gate
 
 No release without an explicit recorded decision.
@@ -1318,6 +1502,9 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-28**: **M1 MCP quality fixes implemented.** M1-S001a (thread_semantic population), M1-S001b (subject-filter guidance), M1-S002 (year normalisation), M1-S003 (binary-response warning), M1-S005 (scope limitations) all code-complete with TDD. Full quality gate suite passed. M1-S008 (callTool type mismatch) identified by type-reviewer and registered. M1-S001a reindex against live ES not yet run. Four-layer schema sync pattern extracted to `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Session: [M1 quality fixes](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/379f5e51-f981-41f0-856d-03b025cbdd41.txt).
+- **2026-02-28**: **Next-session handoff prepared.** M1-S001 split into M1-S001a (populate `thread_semantic`, P1) and M1-S001b (enhance tool descriptions for subject filtering, P2). User decision: the query-side fix is tool guidance, not auto-inference — consuming agents should be told to pass subject as a filter via tool descriptions, not have it auto-detected in code. Next Session Checklist rewritten with prioritised work items. `onboarding-rerun.prompt.md` rewritten as standalone entry point for M1 MCP search quality fixes. EsCurric MCP tools confirmed working (`user-EsCurric` server).
+- **2026-02-28**: **MCP tool exploration findings triaged and refined.** Systematic testing of all 32 oak-remote-preview MCP tools using KS4 maths as domain. 7 snag items registered (M1-S001 to M1-S007). Key refined findings: (1) M1-S001 root cause is `thread_semantic` field never populated at indexing time — confirmed via EsCurric `platform_core_get_document_by_id` on three sample documents (algebra, geometry-and-measure, bq14-physics); the ELSER leg of the 2-way RRF is dead across all 164 thread documents. Fix: populate `thread_semantic` with subject-enriched content in `createThreadDocument`, reindex. (2) M1-S002: user decision — normalise `year` on string, strictly constrained to enum values from OpenAPI spec (`'1'`–`'11'` + `'all-years'`); accept both string and number input via `z.union([z.enum([...]), z.number().transform(String)])`; EYFS/early-years/SEND not in current schema. Triage: 2 quick wins (M1-S003, M1-S005 — text changes), 2 blockers (M1-S001, M1-S002 — functional gaps), 3 deferred post-merge (M1-S004, M1-S006, M1-S007). Session transcript: [KS4 maths exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b4b3ea0-9ca6-4b11-bbc0-4ad50bafdb00.txt).
 - **2026-02-27**: **N1-N21 fix plan integrated.** Evaluated all 21 post-remediation findings against the filesystem: 15 genuine fixes (4 P1, 7 P2, 4 P3), 6 non-issues (N12, N13, N15, N18, N20, N21). Organised into three fix groups: C (quick fixes, ~5 min), B (README audience routing, ~15-20 min), A (SDK README rewrite, ~20-30 min). Added final onboarding validation plan (4 personas: junior dev, senior dev, principal engineer, product owner). Cursor plans deleted; this plan and `onboarding-rerun.prompt.md` are now the sole entry point for the next session. Session transcript: [Planning session](../../.cursor/projects/Users-jim-code-oak-oak-open-curriculum-ecosystem/agent-transcripts/8b8347d4-ed4b-477b-80e7-245c643579ff.txt).
 - **2026-02-27**: **Post-remediation onboarding rerun complete.** Discovery-based simulation with 4 personas (junior dev, lead dev, engineering manager, product owner). Each started at README.md with no prescribed reading list. All 17 previous remediation items verified effective. No P0 blockers. 4 new P1 docs-only items identified (N1-N4): SDK README fabricated examples, README jargon wall, Curriculum Guide not linked, MCP unexplained for non-technical readers. Owner dispositions: all 4 block M0. Repo name mismatch confirmed as false positive for the third time (rename executed on GitHub). G4 updated with post-remediation evidence. M0 milestone updated with new gate. Remaining M0 gates: fix N1-N4, secrets sweep, manual review, merge, make public.
 - **2026-02-26**: **G4 complete — onboarding dispositions recorded.** Onboarding rerun complete (4 personas). Owner dispositions for all 36 findings. 6 resolved/dismissed (R1, R2 false positives; R11, R20, R28, R32 dismissed). Milestone separation introduced: closed private alpha → open private alpha (M0) → open public alpha (M1). G6/G7/rate-limiting reclassified to M1 blockers only. 17 docs-only items block M0. Added §Onboarding Snagging section and rate-limiting assessment task. Next session checklist rewritten with milestone progression table and M0/M1 work items. Session transcript: `e8c8a371-93d5-4c22-9419-420134c11dad`.

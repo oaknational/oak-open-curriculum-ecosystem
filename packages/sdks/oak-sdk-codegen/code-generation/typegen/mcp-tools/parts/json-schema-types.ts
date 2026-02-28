@@ -41,9 +41,14 @@ export interface JsonSchemaObject {
   readonly additionalProperties: false;
 }
 
+export interface JsonSchemaPropertyAnyOf {
+  readonly anyOf: readonly JsonSchemaProperty[];
+}
+
 export type JsonSchemaProperty =
   | JsonSchemaPropertyString
   | JsonSchemaPropertyNumber
   | JsonSchemaPropertyBoolean
   | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>
+  | JsonSchemaPropertyAnyOf
   | JsonSchemaObject;

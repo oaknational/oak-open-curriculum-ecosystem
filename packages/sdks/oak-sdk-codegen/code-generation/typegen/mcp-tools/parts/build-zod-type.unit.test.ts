@@ -100,6 +100,41 @@ describe('buildZodType', () => {
       expect(buildZodType(meta)).toBe('z.enum(["ks1", "ks2"] as const).describe("Key stage")');
     });
   });
+
+  describe('year parameter normalisation', () => {
+    it('normalises numeric year parameter to string enum union', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'number',
+        valueConstraint: false,
+        required: true,
+      };
+
+      expect(buildZodType(meta, 'year', 'flat')).toBe(
+        'z.union([z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const), z.number().int().min(1).max(11).transform(String)])',
+      );
+    });
+
+    it('keeps string-enum year parameter unchanged', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: true,
+        required: true,
+        allowedValues: ['1', '2', 'all-years'],
+      };
+
+      expect(buildZodType(meta, 'year', 'flat')).toBe('z.enum(["1", "2", "all-years"] as const)');
+    });
+
+    it('does not alter non-year numeric parameters', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'number',
+        valueConstraint: false,
+        required: true,
+      };
+
+      expect(buildZodType(meta, 'size', 'flat')).toBe('z.number()');
+    });
+  });
 });
 
 describe('buildZodFields', () => {
@@ -164,5 +199,37 @@ describe('buildZodFields', () => {
     expect(buildZodFields(entries)).toEqual([
       'unit: z.string().describe("Optional unit filter").optional()',
     ]);
+  });
+
+  it('uses year normalisation in flat context', () => {
+    const entries: [string, ParamMetadata][] = [
+      [
+        'year',
+        {
+          typePrimitive: 'number',
+          valueConstraint: false,
+          required: false,
+        },
+      ],
+    ];
+
+    expect(buildZodFields(entries, 'flat')).toEqual([
+      'year: z.union([z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const), z.number().int().min(1).max(11).transform(String)]).optional()',
+    ]);
+  });
+
+  it('does not use year normalisation in nested context', () => {
+    const entries: [string, ParamMetadata][] = [
+      [
+        'year',
+        {
+          typePrimitive: 'number',
+          valueConstraint: false,
+          required: false,
+        },
+      ],
+    ];
+
+    expect(buildZodFields(entries, 'nested')).toEqual(['year: z.number().optional()']);
   });
 });

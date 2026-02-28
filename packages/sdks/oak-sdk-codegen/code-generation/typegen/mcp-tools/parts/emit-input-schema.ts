@@ -13,6 +13,38 @@ export type {
 
 import type { JsonSchemaObject, JsonSchemaProperty } from './json-schema-types.js';
 
+const CANONICAL_YEAR_VALUES = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  'all-years',
+];
+
+function buildFlatInputProperty(name: string, meta: ParamMetadataMap[string]): JsonSchemaProperty {
+  if (name !== 'year' || meta.typePrimitive !== 'number' || meta.valueConstraint) {
+    return jsonSchemaFromPrimitive(meta);
+  }
+
+  const numberProperty = jsonSchemaFromPrimitive(meta);
+  const stringProperty: JsonSchemaProperty = {
+    type: 'string',
+    enum: CANONICAL_YEAR_VALUES,
+    ...(meta.description ? { description: meta.description } : {}),
+  };
+
+  return {
+    anyOf: [stringProperty, numberProperty],
+  };
+}
+
 /**
  * Build a flat JSON Schema object for MCP tool parameters from path/query metadata.
  *
@@ -52,7 +84,7 @@ export function buildInputSchemaObject(
   const required: string[] = [];
 
   for (const [name, meta] of allEntries) {
-    properties[name] = jsonSchemaFromPrimitive(meta);
+    properties[name] = buildFlatInputProperty(name, meta);
     if (meta.required) {
       required.push(name);
     }
@@ -82,12 +114,12 @@ export function buildZodObject(
   const paramsShape: string[] = [];
 
   if (hasPath) {
-    const fields = buildZodFields(pathEntries).join(', ');
+    const fields = buildZodFields(pathEntries, 'nested').join(', ');
     paramsShape.push(`path: z.object({ ${fields} })`);
   }
 
   if (hasQuery) {
-    const fields = buildZodFields(queryEntries).join(', ');
+    const fields = buildZodFields(queryEntries, 'nested').join(', ');
     const maybeOptional = queryEntries.some(([, meta]) => meta.required) ? '' : '.optional()';
     paramsShape.push(`query: z.object({ ${fields} })${maybeOptional}`);
   }
@@ -144,7 +176,7 @@ export function buildFlatMcpZodObject(
   // - Optional parameters (.optional())
   // - Array types
   // - Primitive types
-  const fields = buildZodFields(allEntries).join(', ');
+  const fields = buildZodFields(allEntries, 'flat').join(', ');
 
   return `z.object({ ${fields} })`;
 }

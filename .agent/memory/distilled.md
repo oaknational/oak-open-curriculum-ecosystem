@@ -163,6 +163,11 @@ documented in `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`
   unrelated errors
 - `isPlainObject` type guard satisfies both
   `IndicesIndexSettings` and `MappingTypeMapping`
+- EsCurric MCP API key needs `feature_actions.read` Kibana
+  privilege (in addition to `feature_agentBuilder.read`) for
+  the `platform_core_search` tool to work. Without it, the
+  "No connector found" error is misleading — the connector
+  exists but the key cannot see it
 
 ## Testing
 

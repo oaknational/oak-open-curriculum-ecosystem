@@ -32,8 +32,8 @@ ${AGGREGATED_PREREQUISITE_GUIDANCE}
 SCOPE SELECTION — choose the right scope for the teacher's intent:
 - "lessons": Find specific lessons on a topic. Best for "find me a lesson about X".
 - "units": Find teaching units (groups of lessons). Best for "what units cover X?".
-- "threads": Find learning progression strands across year groups. Best for "how does X build across years?".
-- "sequences": Find curriculum programme structures. Best for "show me the programme for X".
+- "threads": Find learning progression strands across year groups. Best for "how does X build across years?". If the teacher mentions a subject (for example, "maths threads"), pass it in the subject filter parameter rather than relying on text alone.
+- "sequences": Find curriculum programme structures. Best for "show me the programme for X". Sequence names are structural (for example, "maths-secondary"), so broad subject terms should be passed via subject filters.
 - "suggest": Typeahead suggestions as the user types. Best for autocomplete.
 
 Use this when you need to:
@@ -52,10 +52,14 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 - "Find KS3 science lessons about photosynthesis" → scope: 'lessons', text: 'photosynthesis', subject: 'science', keyStage: 'ks3'
 - "What units cover fractions in primary maths?" → scope: 'units', text: 'fractions', subject: 'maths', keyStage: 'ks2'
 - "What's the learning progression for algebra?" → scope: 'threads', text: 'algebra', subject: 'maths'
+- "What maths threads are there?" → scope: 'threads', text: 'threads', subject: 'maths'
 - "Show me secondary science programmes" → scope: 'sequences', text: 'science', keyStage: 'ks3'
 - "Find lessons on the Romans for Year 3" → scope: 'lessons', text: 'Romans', year: '3'
 - "KS4 higher tier maths on trigonometry" → scope: 'lessons', text: 'trigonometry', keyStage: 'ks4', tier: 'higher'
 
+SCOPE LIMITATIONS:
+- "suggest" requires at least one filter: subject or keyStage.
+- "sequences" works best with structural names (for example, "maths-secondary"), not topic words.
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
 - For prerequisites: search(scope: 'threads') → get-prerequisite-graph for dependencies

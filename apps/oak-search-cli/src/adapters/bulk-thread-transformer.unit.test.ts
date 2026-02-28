@@ -175,6 +175,19 @@ describe('bulk-thread-transformer', () => {
       });
     });
 
+    it('populates thread_semantic from subjects and title', () => {
+      const thread: BulkExtractedThread = {
+        slug: 'number-fractions',
+        title: 'Number: Fractions',
+        unitCount: 5,
+        subjectSlugs: ['maths', 'science'],
+      };
+
+      const doc = transformThreadToESDoc(thread);
+
+      expect(doc.thread_semantic).toBe('maths, science: Number: Fractions');
+    });
+
     it('produces identical output to createThreadDocument (DRY compliance)', () => {
       const thread: BulkExtractedThread = {
         slug: 'number-multiplication',

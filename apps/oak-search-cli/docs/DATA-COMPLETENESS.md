@@ -62,13 +62,14 @@
 
 ### `oak_threads` Index
 
-| Field           | Data Type | Source                          | Completeness |
-| --------------- | --------- | ------------------------------- | ------------ |
-| `thread_slug`   | Text      | API: `/threads`                 | **FULL**     |
-| `thread_title`  | Text      | API: `/threads`                 | **FULL**     |
-| `unit_count`    | Number    | Calculated from unit extraction | Derived      |
-| `subject_slugs` | Array     | Aggregated from unit summaries  | Derived      |
-| `thread_url`    | Text      | Constructed: canonical URL      | Derived      |
+| Field             | Data Type | Source                           | Completeness |
+| ----------------- | --------- | -------------------------------- | ------------ |
+| `thread_slug`     | Text      | API: `/threads`                  | **FULL**     |
+| `thread_title`    | Text      | API: `/threads`                  | **FULL**     |
+| `thread_semantic` | Text      | Derived: `${subjects}: ${title}` | Derived      |
+| `unit_count`      | Number    | Calculated from unit extraction  | Derived      |
+| `subject_slugs`   | Array     | Aggregated from unit summaries   | Derived      |
+| `thread_url`      | Text      | Constructed: canonical URL       | Derived      |
 
 ---
 

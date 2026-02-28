@@ -138,4 +138,41 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       });
     });
   });
+
+  describe('anyOf support', () => {
+    it('converts anyOf schemas into zod union and preserves alternatives', () => {
+      const inputSchema: GenericToolInputJsonSchema = {
+        type: 'object',
+        properties: {
+          year: {
+            anyOf: [
+              {
+                type: 'string',
+                enum: ['1', '2', 'all-years'],
+                description: 'Year filter',
+              },
+              {
+                type: 'number',
+                description: 'Year filter',
+              },
+            ],
+          },
+        },
+      };
+
+      const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
+
+      expect(roundTripSchema).toMatchObject({
+        properties: {
+          year: {
+            anyOf: [
+              { enum: ['1', '2', 'all-years'], description: 'Year filter' },
+              { type: 'number', description: 'Year filter' },
+            ],
+          },
+        },
+      });
+    });
+  });
 });

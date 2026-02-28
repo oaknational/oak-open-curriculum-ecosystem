@@ -3,7 +3,11 @@ import { getSecuritySchemeForTool } from '../apply-security-policy.js';
 import { NOAUTH_SCHEME_TYPE } from '../security-types.js';
 import { literalName, collectDocumentedStatuses } from './emit-index-helpers.js';
 import { kebabToTitleCase } from './kebab-to-title-case.js';
-import { toToolDescription, appendPrerequisiteGuidance } from './tool-description.js';
+import {
+  toToolDescription,
+  appendPrerequisiteGuidance,
+  appendToolEnhancements,
+} from './tool-description.js';
 import { BASE_WIDGET_URI } from '../../cross-domain-constants.js';
 
 function buildExports({
@@ -203,7 +207,8 @@ export function emitIndex(
   const requiresAuth = securitySchemes[0]?.type !== NOAUTH_SCHEME_TYPE;
 
   // Conditionally append domain prerequisite guidance
-  const description = appendPrerequisiteGuidance(baseDescription, requiresAuth);
+  const descriptionWithPrerequisites = appendPrerequisiteGuidance(baseDescription, requiresAuth);
+  const description = appendToolEnhancements(descriptionWithPrerequisites, toolName);
 
   return buildExports({
     toolName,

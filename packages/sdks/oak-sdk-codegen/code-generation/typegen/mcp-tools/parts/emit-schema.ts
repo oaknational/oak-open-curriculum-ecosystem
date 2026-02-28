@@ -167,7 +167,6 @@ function buildFlatToNestedTransform(
   const queryParamNames = Object.keys(queryParamMetadata);
   const hasPathParams = pathParamNames.length > 0;
   const hasQueryParams = queryParamNames.length > 0;
-
   const lines: string[] = [];
   lines.push('/**');
   lines.push(' * Transform flat MCP arguments to nested SDK format.');
@@ -202,9 +201,20 @@ function buildFlatToNestedTransform(
     }
 
     if (hasQueryParams) {
-      // Build query object conditionally - only include if any query params are present
       lines.push('    query: {');
       for (const paramName of queryParamNames) {
+        const queryMeta = queryParamMetadata[paramName];
+        if (
+          paramName === 'year' &&
+          queryMeta &&
+          queryMeta.typePrimitive === 'number' &&
+          !queryMeta.valueConstraint
+        ) {
+          lines.push(
+            `      ${paramName}: flatArgs.${paramName} === 'all-years' ? undefined : flatArgs.${paramName} === undefined ? undefined : Number(flatArgs.${paramName}),`,
+          );
+          continue;
+        }
         lines.push(`      ${paramName}: flatArgs.${paramName},`);
       }
       lines.push('    },');

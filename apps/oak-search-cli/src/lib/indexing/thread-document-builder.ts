@@ -91,10 +91,12 @@ export function createThreadDocument(params: CreateThreadDocumentParams): Search
   const { threadSlug, threadTitle, subjectSlugs, unitCount } = params;
 
   const threadUrl = generateThreadCanonicalUrl(threadSlug);
+  const threadSemantic = `${subjectSlugs.join(', ')}: ${threadTitle}`;
 
   return {
     thread_slug: threadSlug,
     thread_title: threadTitle,
+    thread_semantic: threadSemantic,
     subject_slugs: [...subjectSlugs],
     unit_count: unitCount,
     thread_url: threadUrl,

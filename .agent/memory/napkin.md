@@ -1,5 +1,145 @@
 # Napkin
 
+## Session: 2026-02-28 — oak-remote-preview MCP tools exploration (KS4 maths)
+
+### What was done
+
+Systematically tested all 32 oak-remote-preview MCP tools using KS4
+maths as the domain. Every tool was exercised at least once.
+
+### KS4 Maths findings
+
+- 36 unique units across Years 10 (21 units) and 11 (15 units)
+- 646 lessons total across KS4
+- Foundation and Higher tiers (no exam boards — maths is simpler than
+  science or English at KS4)
+- 6 threads: Number, Algebra, Ratio and Proportion, Geometry and
+  Measure, Statistics, Probability
+- Year 11 Higher has 15 units; Foundation has 10 — 5 Higher-only units:
+  non-right-angled trig, functions and proof, iteration, cumulative
+  frequency and histograms, transformations of graphs
+- Circle theorems is Higher-only in Year 10 (only tier difference in Y10)
+- Rich lesson content: keywords with definitions, key learning points,
+  misconceptions with teacher responses, teacher tips, quiz questions
+  with LaTeX, full transcripts, downloadable assets (8 types)
+
+### Tool quirks discovered
+
+- `get-lessons-assets-by-type` returns binary (PDF), not JSON — crashes
+  the MCP handler with "Unexpected token '%', '%PDF-1.4'" error. This
+  is a download endpoint, not a metadata endpoint. The MCP tool wrapping
+  cannot handle binary responses.
+- `get-threads-units` uses `threadSlug` parameter (not `thread`), while
+  other tools use bare names like `lesson`, `unit`, `subject`. Inconsistent.
+- `get-sequences-assets` and `get-sequences-questions` require `year`
+  as a number, but `get-sequences-units` accepts a string. Type
+  inconsistency across the same endpoint family.
+- `search` with `scope: "suggest"` requires at least one filter (subject
+  or keyStage) — returns validation error without one.
+- `search` with `scope: "sequences"` returned 0 results for topic queries
+  — sequences have specific names like "maths-secondary", not topic names.
+  This scope may only be useful with very specific queries.
+- `get-rate-limit` returns 0/0/0 on the preview server — either no rate
+  limiting or not tracked.
+- `explore-topic` searches lessons, units, and threads in parallel but
+  returns 0 threads for broad queries like "maths" — threads have
+  specific names not matched by generic subject terms.
+- `browse-curriculum` showed 66 unit entries for KS4 maths (duplicates
+  for foundation/higher tiers), while `get-key-stages-subject-units`
+  returned 36 unique units (deduped). The facets endpoint preserves
+  tier duplication.
+
+### Patterns
+
+- The tool hierarchy follows the ontology: discovery (search, explore,
+  browse) → structure (subjects, sequences, units) → content (lessons,
+  quizzes, transcripts, assets) → progression (threads, prerequisites).
+  Each layer provides IDs for the next layer's drill-down.
+- `fetch` is the universal accessor using prefixed IDs: lesson:, unit:,
+  thread:, subject:. It's equivalent to calling the specific typed
+  endpoint.
+- Large responses (ontology, thread progressions, prerequisite graph,
+  bulk assets, bulk questions) are automatically written to agent-tools
+  files instead of returned inline. The prerequisite graph alone is
+  1.45MB (1607 units, 3452 edges).
+
+## Session: 2026-02-28 — MCP tool exploration triage and release plan update
+
+### What was done
+
+Triaged all findings from the KS4 maths MCP tool exploration into the
+M1 release plan. 7 snag items registered (M1-S001 to M1-S007).
+
+### Key investigation: Thread search (refined)
+
+Confirmed via ES|QL (164 docs, 10 maths) AND document-by-ID retrieval
+(EsCurric `platform_core_get_document_by_id`) that the problem is
+twofold: (1) `thread_semantic` field is NEVER POPULATED.
+`createThreadDocument` in `thread-document-builder.ts` builds docs with
+thread_slug, thread_title, subject_slugs, unit_count, thread_url,
+title_suggest — but never sets thread_semantic. The ELSER leg of the
+2-way RRF is completely dead across all 164 documents. Confirmed on
+three sample docs (algebra, geometry-and-measure,
+bq14-physics-how-does-the-earth-fit-into-the-universe). (2) BM25 only
+searches thread_title — "maths" doesn't appear in titles like "Algebra".
+
+Fix: populate `thread_semantic` with subject-enriched content at indexing
+time (e.g. "Maths: Algebra"). No mapping change needed. Reindex required.
+
+EsCurric tools work (user-EsCurric server). The elastic-agent-builder
+(`user-elastic-agent-builder`) was a previous session's server and is no
+longer available — use `user-EsCurric` instead.
+
+### Key investigation: Year parameter normalisation
+
+The `year` parameter is genuinely broken in the upstream schema:
+`get-sequences-assets` and `get-sequences-questions` define year as
+`z.number()` but the description says "all-years can also be used" —
+impossible with a number type. The response-map confirms `anyOf[number,
+string]`. User decision: **normalise on string, strictly constrained to
+the enum values from the OpenAPI spec.** Canonical enum (from
+get-sequences-units): `'1'|'2'|...|'11'|'all-years'`. Accept both
+string and number input via `z.union([z.enum([...]), z.number().transform(String)])`.
+EYFS, early-years, and SEND do NOT exist in the current OpenAPI schema —
+key stages are ks1–ks4 only.
+
+### Patterns
+
+- The elastic-agent-builder tools work well for direct ES|QL queries.
+  The natural-language `search` tool requires an LLM connector AND the
+  API key must include `feature_actions.read` Kibana privilege (resolved
+  2026-02-28). Without the actions privilege, `platform_core_search`
+  returns "No connector found for Anthropic-Claude-Opus-4-6" +
+  "Unauthorized to get actions". Both errors disappear once the
+  privilege is added — the connector ID resolution depends on the
+  actions privilege being present.
+- When investigating search issues, always check the data layer first.
+  "0 results" could be missing data OR a query mismatch. In this case,
+  the data was fine but the semantic field was completely absent.
+- User corrections on triage:
+  - get-lessons-assets-by-type is working as intended (binary download).
+    The fix is description enhancement, not code change.
+  - Sub-graph fetching is post-merge, not M1 scope.
+  - Rate limit is upstream API team responsibility but must be tracked
+    in this repo to prevent forgetting.
+
+### Key decisions from user (follow-up)
+
+- M1-S001 split into two top priorities: (a) populate thread_semantic
+  at indexing time (P1), (b) enhance tool descriptions so consuming
+  agents know to pass subject as a filter (P2).
+- The query-side fix is NOT auto-inference in the code. It's tool
+  guidance: tell the consuming agent what to do, let it do the work.
+  The teacher already says "maths" — the consuming agent should map
+  that to the `subject` parameter, not stuff it into `text`.
+- Tool guidance > auto-inference. When a consuming agent needs to do
+  something differently for a specific scope, put that in the tool
+  description. The consuming agent is smart enough to follow
+  instructions. Don't add complex auto-detection code when clear
+  guidance solves the problem.
+- EsCurric MCP server (`user-EsCurric`) works. Use `execute_esql`
+  and `get_document_by_id` for direct index investigation.
+
 ## Session: 2026-02-28 — HTTP MCP env/CORS tidy-up
 
 ### What was done
@@ -507,6 +647,50 @@ entry point for the next session.
 - Prompts: all 7 frontmatters up to date
 - Experience: wrote `2026-02-27-the-return-trip.md`
 
+## Session: 2026-02-28 — EsCurric MCP configuration debugging
+
+### What was done
+
+Helped user debug EsCurric (Elastic Agent Builder) MCP server
+configuration issues. The `platform_core_search` tool was failing with
+two errors: "No connector found for id 'Anthropic-Claude-Opus-4-6'" and
+"Unauthorized to get actions".
+
+### Root cause
+
+The API key had `feature_agentBuilder.read` Kibana privilege (sufficient
+for ES|QL tools, listing, mappings) but was missing
+`feature_actions.read` (required for the search tool to invoke the LLM
+connector). Adding `feature_actions.read` to the applications array
+resolved both errors simultaneously.
+
+### EsCurric MCP tools working status
+
+All 11 tools now functional:
+- Direct tools (always worked): `list_indices`, `get_index_mapping`,
+  `execute_esql`, `generate_esql`, `get_document_by_id`, `index_explorer`
+- LLM-dependent tools (needed actions privilege): `search`
+- Untested this session: `create_visualization`, `cases`,
+  `product_documentation`, `get_workflow_execution_status`
+
+### oak_threads index shape
+
+7 fields: `subject_slugs` (keyword), `thread_slug` (keyword),
+`thread_title` (text with keyword + search-as-you-type sub-fields),
+`thread_url` (keyword), `thread_semantic` (semantic_text),
+`title_suggest` (completion), `unit_count` (integer). 164 documents.
+
+### Patterns
+
+- Elastic Kibana API key privileges are granular: `feature_agentBuilder.read`
+  grants agent builder functionality but NOT connector execution. The
+  `feature_actions.read` privilege is needed separately for any tool that
+  invokes an AI connector (LLM) behind the scenes.
+- The "No connector found" error is misleading — it suggests the connector
+  doesn't exist, but the actual root cause can be insufficient privileges
+  to even see connectors. The "Unauthorized to get actions" appended to
+  the message is the real diagnostic clue.
+
 ## Session: 2026-02-28 — Practice adoption plan + narrative updates
 
 ### What was done
@@ -532,3 +716,58 @@ entry point for the next session.
 
 - I first attempted line counting with `python` and hit `command not found`.
   Use `python3` in this environment.
+
+## Session: 2026-02-28 — M1 MCP search quality implementation
+
+### What was done
+
+- Implemented M1-S001a/S001b/S002/S003/S005 across search-cli, curriculum-sdk,
+  and sdk-codegen, including generator updates and regenerated tool files.
+- Ran full gate suite end-to-end: `sdk-codegen`, `build`, `type-check`,
+  `doc-gen`, `lint:fix`, `format:root`, `markdownlint:root`, `test`,
+  `test:e2e`, `test:ui`, `smoke:dev:stub`.
+
+### Mistakes made
+
+- I initially used `pnpm test --filter oak-search-cli` instead of the actual
+  package name `@oaknational/search-cli`.
+- I accidentally closed a template literal while editing
+  `aggregated-search/tool-definition.ts`, which broke parsing.
+- I introduced a line-count lint breach (`max-lines`) in `emit-schema.ts` and
+  had to reduce the file back within the 250-line limit.
+
+### Patterns to remember
+
+- For MCP guidance examples, keep examples aligned with runtime validation
+  constraints (for example, non-empty `text` fields).
+- When adding flat-schema workarounds for upstream OpenAPI inconsistencies,
+  update all four layers together: flat Zod, flat JSON schema, flat→nested
+  transform, and runtime JSON-schema-to-Zod conversion.
+  **Extracted** to code pattern: `.agent/memory/code-patterns/multi-layer-schema-sync.md`
+
+## Session: 2026-02-28 — Consolidation and type issue analysis
+
+### What was done
+
+- Consolidation: updated plan snag register (M1-S001a/b, S002, S003,
+  S005 statuses), registered M1-S008 (callTool type mismatch), updated
+  prompt to reflect remaining work, extracted multi-layer-schema-sync
+  code pattern, updated experience catalog.
+- Answered user questions: reindex not yet done; detailed the callTool
+  overload type mismatch.
+
+### callTool type mismatch summary
+
+- `callTool` overloads declare `rawArgs: ToolArgsForName<TName>` (nested)
+- Implementation parses via `toolMcpFlatInputSchema.safeParse(rawArgs)` (flat)
+- Masked by final `unknown` overload and sole caller using `unknown`
+- Year normalisation made it visible: nested says `number`, flat says
+  `string | number`
+- Tracked as M1-S008 (P3, no runtime impact)
+
+### Patterns to remember
+
+- Plans must be updated during consolidation even if they were
+  read-only during the implementation session
+- When a type-reviewer identifies a structural type lie, track it as a
+  snag with the specific mismatch documented

@@ -106,5 +106,7 @@ experience file is not the home for technical reference.
 - 2026‑02‑26: plasmid exchange — see: [the-first-round-trip](./2026-02-26-the-first-round-trip.md) — compression reveals essence; provenance chains; knowing vs applying principles
 - 2026‑02‑27: plasmid return — see: [the-return-trip](./2026-02-27-the-return-trip.md) — new artefacts from round-trips; cohesion drift; integration scope wider than expected
 - 2026‑02‑28: error clarity — see: [the-noise-in-the-signal](./2026-02-28-the-noise-in-the-signal.md) — dead code that looks alive; error messages as architecture; signal vs noise in diagnostics
+- 2026‑02‑28: investigation — see: [following-the-data](./2026-02-28-following-the-data.md) — tracing through five layers; gap between mapping and builder; silent degradation
+- 2026‑02‑28: domain expertise — see: [the-teachers-vocabulary](./2026-02-28-the-teachers-vocabulary.md) — professional users know more than agents; guidance is for agents not users; each correction sharpens the plan
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

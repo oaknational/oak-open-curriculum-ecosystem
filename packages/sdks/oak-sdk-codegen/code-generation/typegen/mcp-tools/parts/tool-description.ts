@@ -80,3 +80,39 @@ export function appendPrerequisiteGuidance(
   }
   return `${description}${DOMAIN_PREREQUISITE_GUIDANCE}`;
 }
+
+const GET_LESSONS_ASSETS_BY_TYPE_WARNING = `
+
+WARNING: This tool returns binary file content (PDF, video, etc.), not structured JSON. The MCP protocol cannot transport binary responses. Use \`get-lessons-assets\` for download URLs and metadata instead.`;
+
+function getToolDescriptionEnhancement(toolName: string): string | undefined {
+  switch (toolName) {
+    case 'get-lessons-assets-by-type':
+      return GET_LESSONS_ASSETS_BY_TYPE_WARNING;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Appends tool-specific guidance for known protocol constraints.
+ *
+ * @param description - Description after base OpenAPI and prerequisite processing
+ * @param toolName - Tool identifier used to resolve enhancement text
+ * @returns Enhanced description when an override exists, otherwise original
+ */
+export function appendToolEnhancements(
+  description: string | undefined,
+  toolName: string,
+): string | undefined {
+  if (!description) {
+    return undefined;
+  }
+
+  const enhancement = getToolDescriptionEnhancement(toolName);
+  if (!enhancement) {
+    return description;
+  }
+
+  return `${description}${enhancement}`;
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildFlatMcpZodObject } from './emit-input-schema.js';
+import { buildFlatMcpZodObject, buildInputSchemaObject } from './emit-input-schema.js';
 import type { ParamMetadataMap } from './param-metadata.js';
 
 describe('buildFlatMcpZodObject', () => {
@@ -136,6 +136,54 @@ describe('buildFlatMcpZodObject', () => {
       const result = buildFlatMcpZodObject({}, queryParams);
 
       expect(result).toContain('tags: z.array(z.string()).optional()');
+    });
+  });
+});
+
+describe('buildInputSchemaObject', () => {
+  it('uses anyOf schema for numeric year parameters in flat schema', () => {
+    const queryParams: ParamMetadataMap = {
+      year: {
+        typePrimitive: 'number',
+        required: false,
+        valueConstraint: false,
+        description: 'Year filter',
+      },
+    };
+
+    const schema = buildInputSchemaObject({}, queryParams);
+    const yearProperty = schema.properties.year;
+
+    expect(yearProperty).toEqual({
+      anyOf: [
+        {
+          type: 'string',
+          enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
+          description: 'Year filter',
+        },
+        { type: 'number', description: 'Year filter' },
+      ],
+    });
+  });
+
+  it('keeps constrained year parameters as primitive schema', () => {
+    const queryParams: ParamMetadataMap = {
+      year: {
+        typePrimitive: 'number',
+        required: false,
+        valueConstraint: true,
+        allowedValues: [1, 2, 3],
+        description: 'Constrained year filter',
+      },
+    };
+
+    const schema = buildInputSchemaObject({}, queryParams);
+    const yearProperty = schema.properties.year;
+
+    expect(yearProperty).toEqual({
+      type: 'number',
+      enum: [1, 2, 3],
+      description: 'Constrained year filter',
     });
   });
 });

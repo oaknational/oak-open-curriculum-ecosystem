@@ -31,6 +31,7 @@ Use this when:
 - The teacher says "I want to teach about electricity"
 - You need to discover what content exists before drilling down
 - The teacher's intent doesn't clearly map to one scope
+- The teacher mentions a subject and you need cross-scope results (pass the subject parameter explicitly)
 
 Do NOT use for:
 - Precise search in a single scope (use 'search' with a specific scope)
@@ -41,6 +42,7 @@ Do NOT use for:
 NATURAL LANGUAGE MAPPING EXAMPLES:
 - "What does Oak have about volcanos?" → { text: 'volcanos' }
 - "Explore fractions across the curriculum" → { text: 'fractions', subject: 'maths' }
+- "Explore maths topics" → { text: 'topics', subject: 'maths' }
 - "I want to teach about electricity in KS3" → { text: 'electricity', keyStage: 'ks3' }
 - "What can you tell me about the Romans?" → { text: 'the Romans' }
 

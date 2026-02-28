@@ -77,4 +77,20 @@ describe('createThreadDocument', () => {
       subject: ['maths', 'science'],
     });
   });
+
+  it('should populate thread_semantic with subject-enriched content', () => {
+    const doc = createThreadDocument(baseParams);
+
+    expect(doc.thread_semantic).toBe('maths: Number: Multiplication and division');
+  });
+
+  it('should include all subjects in thread_semantic', () => {
+    const doc = createThreadDocument({
+      ...baseParams,
+      subjectSlugs: ['maths', 'science'],
+      threadTitle: 'Data Handling',
+    });
+
+    expect(doc.thread_semantic).toBe('maths, science: Data Handling');
+  });
 });

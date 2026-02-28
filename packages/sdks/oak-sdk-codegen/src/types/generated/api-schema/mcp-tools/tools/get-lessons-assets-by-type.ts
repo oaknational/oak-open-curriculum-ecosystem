@@ -114,7 +114,7 @@ export const getLessonsAssetsByType = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson asset by type\n\nThis tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Lesson asset by type\n\nThis tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.\n\nWARNING: This tool returns binary file content (PDF, video, etc.), not structured JSON. The MCP protocol cannot transport binary responses. Use `get-lessons-assets` for download URLs and metadata instead.",
   path,
   method,
   documentedStatuses,

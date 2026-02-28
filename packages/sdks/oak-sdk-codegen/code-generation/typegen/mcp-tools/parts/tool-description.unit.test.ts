@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import type { OperationObject } from 'openapi3-ts/oas31';
-import { toToolDescription, appendPrerequisiteGuidance } from './tool-description.js';
+import {
+  toToolDescription,
+  appendPrerequisiteGuidance,
+  appendToolEnhancements,
+} from './tool-description.js';
 
 /**
  * Unit tests for toToolDescription pure function.
@@ -198,5 +202,26 @@ describe('appendPrerequisiteGuidance', () => {
     const result = appendPrerequisiteGuidance('Test', true);
     expect(result).toContain('key stages');
     expect(result).toContain('subjects');
+  });
+});
+
+describe('appendToolEnhancements', () => {
+  it('appends tool-specific enhancement when tool name matches', () => {
+    const result = appendToolEnhancements('Base description', 'get-lessons-assets-by-type');
+
+    expect(result).toContain('Base description');
+    expect(result).toContain('WARNING');
+    expect(result).toContain('binary file content');
+    expect(result).toContain('get-lessons-assets');
+  });
+
+  it('returns description unchanged when tool name has no enhancement', () => {
+    const result = appendToolEnhancements('Base description', 'get-key-stages');
+
+    expect(result).toBe('Base description');
+  });
+
+  it('returns undefined when description is undefined', () => {
+    expect(appendToolEnhancements(undefined, 'get-lessons-assets-by-type')).toBeUndefined();
   });
 });
