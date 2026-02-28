@@ -15,7 +15,7 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
 
 ## Steps
 
-1. **Extract documentation from plans.** Scan all active and recently completed plans for content that describes how things work (not what to do next). Move it to the appropriate permanent location. Plans should contain only: status, next steps, execution instructions, and references to permanent docs.
+1. **Verify documentation is current.** Documentation should be produced during work, not deferred to consolidation. Check that architectural decisions, system behaviour, and technical reference are already documented in their permanent locations (ADRs, `docs/`, READMEs, source TSDoc). Then scan active and recently completed plans for any remaining content that describes how things work (not what to do next) and move it to the appropriate permanent location. Plans should contain only: status, next steps, execution instructions, and references to permanent docs.
 2. Make sure all plans and prompts are fully up to date (status lines, completion markers, cross-references).
 3. Identify any content in ephemeral locations (prompts, napkin, distilled.md) that now functions as settled documentation, and move it to non-ephemeral locations such as ADRs, `/docs/`, or READMEs.
 4. Check whether `.agent/experience/` files contain applied technical patterns that have matured into settled practice — if so, extract the technical content to permanent documentation or `distilled.md`, and replace the experience file with a brief reflective stub.

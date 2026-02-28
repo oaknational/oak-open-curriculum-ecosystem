@@ -12,6 +12,10 @@ provenance:
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
+  - index: 3
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-02-28
+    purpose: "Ecosystem-agnostic hydration: labelled ecosystem-specific content, added cold-start path, aligned consolidation with concurrent documentation principle"
 fitness_ceiling: 300
 attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
@@ -88,9 +92,9 @@ This process is universal. It costs nothing and prevents shallow execution.
 - Test **behaviour**, never implementation.
 - Test to **interfaces**, not internals.
 - Each test must prove something useful about product code. Tests that test mocks, test code, or types are waste -- delete them.
-- **Unit test**: a single pure function in isolation. No mocks, no I/O. Named `*.unit.test.ts`.
-- **Integration test**: units working together as code (not a running system). Simple mocks injected as parameters only. No global state manipulation. Named `*.integration.test.ts`.
-- **Prohibited**: `process.env` mutation, `vi.stubGlobal`, `vi.doMock`, or any form of global state manipulation in tests. Pass configuration as function arguments.
+- **Unit test**: a single pure function in isolation. No mocks, no I/O. Naming convention varies by ecosystem (e.g. `*.unit.test.ts` in TypeScript, `test_*.py` in Python, `*_test.go` in Go).
+- **Integration test**: units working together as code (not a running system). Simple mocks/fakes injected as parameters only. No global state manipulation. Naming convention varies by ecosystem.
+- **Prohibited**: global state manipulation in tests -- environment variable mutation, global mock injection, module cache manipulation, or any mechanism that creates hidden coupling between tests. Pass configuration as function arguments.
 
 ### Agent Pattern
 
@@ -116,7 +120,7 @@ The Practice is driven by slash commands that initiate structured workflows:
 - **gates** -- Run quality gates in order: `type-check -> lint -> build -> test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them, consolidate findings into a single report with verdict.
 - **commit** -- Conventional commit workflow with quality gates as pre-check.
-- **consolidate-docs** -- Extract documentation from plans to permanent locations, update status markers, check the practice box, consider Practice evolution (apply the bar from this lineage doc).
+- **consolidate-docs** -- Verify documentation is current (decisions should already be in ADRs/docs from when they were made), extract any remaining plan content to permanent locations, update status markers, check the practice box, consider Practice evolution (apply the bar from this lineage doc).
 - **plan** -- Read directives. Create plan with YAML frontmatter, acceptance criteria, risk assessment, non-goals.
 - **think** -- Structured thinking without acting.
 - **step-back** -- Reflection on approach and assumptions.
@@ -152,7 +156,7 @@ Work -> Capture -> Refine -> Settle -> Enforce -> Apply -> Work
 
 **Refine** (periodic): When the napkin exceeds ~800 lines, the distillation skill extracts high-signal entries into `distilled.md` -- a curated rulebook of actionable patterns, under 200 lines. The outgoing napkin is archived and a fresh one starts. Entries in `distilled.md` that have matured into permanent documentation (rules, docs, practice) are pruned. This prevents unbounded growth: the intermediate buffer only holds what has not yet settled.
 
-**Settle** (on consolidation): The `consolidate-docs` command extracts documentation from plans to permanent locations (`docs/`, source TSDoc, READMEs), extracts reusable code patterns to `.agent/memory/code-patterns/` (abstract principles proven by implementation), and considers whether any learning warrants an update to the Practice or Lineage themselves. This is the graduation step -- where a pattern moves from "specialist refinement" to "settled practice." Code patterns occupy the middle ground: too concrete for rules, too abstract for source code.
+**Settle** (on consolidation): The `consolidate-docs` command verifies that documentation produced during work is current and complete, extracts anything remaining from plans to permanent locations (`docs/`, source TSDoc, READMEs), extracts reusable code patterns to `.agent/memory/code-patterns/` (abstract principles proven by implementation), and considers whether any learning warrants an update to the Practice or Lineage themselves. This is the graduation step -- where a pattern moves from "specialist refinement" to "settled practice." Code patterns occupy the middle ground: too concrete for rules, too abstract for source code.
 
 **Enforce** (always on): Always-applied rules (`.cursor/rules/*.mdc`) fire on every agent interaction. They encode the Practice's current state: TDD, type safety, fail fast, invoke reviewers, read directives at session start. When the Practice evolves, the rules update. Next session, agents inherit the evolved state automatically.
 
@@ -238,7 +242,8 @@ When plasmid trinity files appear in the practice box:
 5. **Propose changes** to the user. Be specific: which files across the Practice would change and why.
 6. **On approval, apply.** Update Practice, Lineage, rules, skills, commands, prompts, or directives as warranted.
 7. **Record what was taken** in the napkin (for traceability, not attribution).
-8. **Clear the practice box.** Remove the incoming files. The integration is complete.
+8. **Audit cohesion.** (a) Check that all practice-core files (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, `index.md`, `README.md`) are internally consistent -- no contradictions, no stale descriptions, no missing cross-references between them. (b) Check that broader Practice files throughout the repo (directives, rules, skills, commands, prompts) are aligned with the updated core -- no outdated wording, no missing references, no contradictions with the new content. This step catches drift that individual edits miss.
+9. **Clear the practice box.** Remove the incoming files. The integration is complete.
 
 If nothing clears the bar, record that in the napkin too — the incoming material was reviewed and found not applicable to this context. That is a valid outcome.
 
@@ -256,6 +261,7 @@ The trinity (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`) is i
 6. Follow `practice-bootstrap.md` for the remaining artefacts: agent definitions, workflow commands, always-applied rules, start-right prompt, skills (napkin, distillation), and Cursor configuration. The bootstrap file provides annotated templates and format specifications for every artefact type.
 7. Write `practice.md`, this lineage doc, and `practice-bootstrap.md` in `.agent/practice-core/` with YAML frontmatter: `provenance` array (index 0 entry with `repo`, `date`, and `purpose`), and `fitness_ceiling`. Add initial learned principles to the lineage doc.
 8. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every agent's first-action file exists. The repo builds. See the Bootstrap Checklist in `practice-bootstrap.md`.
+9. **Audit cohesion.** Check that all practice-core files are internally consistent and that all broader Practice files (directives, rules, skills, commands, prompts) are aligned with the core. Contradictions, stale descriptions, and outdated wording degrade silently -- the Practice will appear complete while subtly misdirecting.
 
 ## Validation
 
@@ -265,6 +271,7 @@ After growing or propagating the Practice, verify that nothing is **silently bro
 2. **Agent check** — each agent's first-action file reference exists.
 3. **Build check** — `type-check`, `lint`, `build` all pass.
 4. **Stable-index check** — `AGENT.md` and `AGENTS.md` contain no mutable session state.
+5. **Cohesion check** — all practice-core files are internally consistent, and broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core content. No stale descriptions, no contradictions, no outdated wording.
 
 ### Validation scripts
 
@@ -305,3 +312,4 @@ Principles discovered through Practice propagation and evolution. These have cle
 - **If a behaviour must be automatic, it needs a rule, not just a skill.** Skills are documentation — they describe what to do but depend on being discovered and invoked. Always-applied rules fire on every interaction. The learning loop's capture stage (napkin) must be enforced by a rule to be genuinely always-on.
 - **Plasmids need a provenance chain, not just an origin.** A file that only records where it was created will be rejected by its origin repo as "already mine." The provenance array records every repo that has evolved the file; the last entry tells the receiving repo whether the file has been somewhere new. Without it, the plasmid exchange mechanism silently fails.
 - **Documentation is concurrent, not retrospective.** ADRs and README updates produced during work stay accurate and contextual. Documentation deferred to consolidation loses context, goes stale, or never gets written. Consolidation should verify documentation is current, not extract it.
+- **Understand local norms before hydrating.** The Practice is ecosystem-agnostic in principle. When hydrating into a new repo, the integrating agent MUST survey the local language(s), test runners, linters, package managers, and existing quality standards BEFORE creating any Practice artefacts. The Practice enables excellence; it does not replace what has already been achieved.

@@ -219,7 +219,7 @@ Three mechanisms keep the volume manageable:
 
 1. **Distillation skill** — when the napkin exceeds ~800 lines, the [distillation skill](../../.cursor/skills/distillation/SKILL.md) extracts high-signal patterns into a curated `distilled.md` (target: <200 lines) and archives the old napkin. This prevents session-level learnings from growing unboundedly.
 
-2. **Consolidate-docs command** — the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow migrates settled knowledge from ephemeral plans to permanent documentation. It enforces the principle that plans are not documentation: once a plan's insights are proven, they belong in `docs/` or `directives/`, and the plan moves to `archive/`.
+2. **Consolidate-docs command** — the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow verifies that documentation produced during work is current and complete, then extracts any remaining content from plans to permanent documentation. It enforces the principle that plans are not documentation: once a plan's insights are proven, they belong in `docs/` or `directives/`, and the plan moves to `archive/`.
 
 3. **Sub-agent architect consolidation** — the sub-agent architect reviews the prompt ecosystem and extracts common patterns into shared templates, reducing duplication across agent definitions.
 

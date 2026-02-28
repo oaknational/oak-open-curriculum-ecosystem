@@ -1,5 +1,67 @@
 # Napkin
 
+## Session: 2026-02-28 — Practice core integration and ecosystem-agnostic hydration
+
+### What was done
+
+Integrated incoming Practice core from practice box. The trinity files
+themselves had not evolved beyond what was already integrated at index 2
+(2026-02-27). New artefact: README.md (cold-start installation guide).
+
+Applied six proposals (P1-P6) across four files, driven by two user
+requirements: (1) self-hydrating Practice (agent in a new repo must know
+what to do), (2) ecosystem agnosticism (the Practice must not assume
+TypeScript).
+
+### What was taken from the incoming material
+
+- README.md concept (cold-start installation guide) — improved with
+  ecosystem-first instructions
+- Consolidate-docs "verify-first" wording (align with "documentation is
+  concurrent" learned principle)
+
+### What was added from user requirements
+
+- New learned principle: "Understand local norms before hydrating"
+- Cold-start section in index.md (detects absent AGENT.md, redirects to
+  bootstrap)
+- Ecosystem Survey preamble in practice-bootstrap.md (mandatory survey
+  before creating artefacts)
+- Ecosystem-specific content in practice-lineage.md Testing Philosophy
+  now labelled as examples, not universal naming
+
+### Provenance updates
+
+- practice-lineage.md: index 3 (oak-open-curriculum-ecosystem, 2026-02-28)
+- practice-bootstrap.md: index 2 (oak-open-curriculum-ecosystem, 2026-02-28)
+
+### Follow-on alignment changes
+
+- practice.md line 222: consolidate-docs description updated to
+  verify-first framing.
+- jc-consolidate-docs.md step 1: same verify-first update.
+- Cohesion audit step added to three places in practice-lineage.md
+  (Integration Flow step 8, Growing a Practice step 9, Validation
+  check 5) and practice-bootstrap.md (Bootstrap Checklist item 10).
+
+### Fitness
+
+- practice-lineage.md: 315 lines (ceiling 300). Was 312, +3 from
+  cohesion audit additions. 5% over. Pre-existing overweight.
+- practice-bootstrap.md: 333 lines (ceiling 400). Well within.
+- practice.md: 244 lines (ceiling 200). Pre-existing 22% over.
+  Needs dedicated tightening session.
+
+### Patterns
+
+- The incoming README.md had already replaced our local README.md (git
+  status showed it as untracked). StrReplace failed on the expected local
+  content. Always re-read files before editing when incoming material may
+  have altered them.
+- The three-part bar correctly filtered: trinity files themselves had no
+  net-new content (already integrated), but the README and the user's
+  structural requirements all cleared the bar independently.
+
 ## Session: 2026-02-28 — oak-remote-preview MCP tools exploration (KS4 maths)
 
 ### What was done

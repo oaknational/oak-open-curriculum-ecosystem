@@ -19,3 +19,9 @@ These three files encode the Practice in a transmissible form. They live here so
 ## The Practice Box
 
 The `incoming/` directory is the practice box. When the trinity arrives from another repo, it lands here. Check it at session start (via `start-right`) and during consolidation. See the Integration Flow in `practice-lineage.md` for details.
+
+## Cold Start (New Repo)
+
+If `.agent/directives/AGENT.md` does not yet exist, you are hydrating the Practice for the first time. See [README.md](README.md) for orientation, then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md). The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications.
+
+**Critical**: before creating any artefacts, understand the local ecosystem. The Practice is ecosystem-agnostic in principle; all templates must be adapted to local tooling and conventions. The Practice enables excellence; it does not replace what has already been achieved.

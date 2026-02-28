@@ -8,6 +8,10 @@ provenance:
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+  - index: 2
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-02-28
+    purpose: "Ecosystem-agnostic hydration: added ecosystem survey preamble for agents hydrating into non-TypeScript repos"
 fitness_ceiling: 400
 attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
@@ -16,7 +20,16 @@ attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved
 
 This file completes the plasmid trinity. `practice.md` describes the system (the **what**), `practice-lineage.md` encodes the principles and evolution rules (the **why**), and this file provides annotated templates for every artefact type (the **how**).
 
-An agent reading all three files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. Platform-specific conventions (Cursor) are labelled as such.
+An agent reading all three files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. Platform-specific conventions (Cursor) are labelled as such. Ecosystem-specific conventions (TypeScript/Node.js) are used as concrete examples throughout -- substitute your ecosystem's equivalents.
+
+## Before You Begin: Ecosystem Survey
+
+The templates below use TypeScript/Node.js/Cursor conventions as concrete examples. Before creating any artefacts, the hydrating agent MUST:
+
+1. **Survey the existing repo**: language(s), test framework(s), linter(s), formatter(s), package manager, build system, and existing quality standards.
+2. **Assess alignment**: identify what the repo already has that meets or exceeds Practice principles. Existing standards that are at least as rigorous as the Practice MUST be preserved.
+3. **Adapt templates**: substitute local tooling in every template. File extensions (`*.unit.test.ts` becomes `*_test.go`, `test_*.py`, etc.), tool names (`Vitest` becomes `pytest`, `go test`, etc.), configuration formats, and platform conventions all change.
+4. **Never overwrite**: the Practice enables excellence; it does not replace what has already been achieved.
 
 ## Metacognition
 
@@ -56,7 +69,7 @@ Encode the Principles from `practice-lineage.md` as imperative rules. Sections: 
 
 ### testing-strategy.md (.agent/directives/)
 
-Encode the Testing Philosophy from `practice-lineage.md` with local tooling. Sections: **Tooling** (test runner), **Philosophy** (imperative rules), **Test Types** (unit: pure function, no mocks, `*.unit.test.ts`; integration: units as code, simple injected mocks, `*.integration.test.ts`), **What to Test** (project-specific surfaces), **Workflow** (TDD always, tests next to code).
+Encode the Testing Philosophy from `practice-lineage.md` with local tooling. Sections: **Tooling** (test runner), **Philosophy** (imperative rules), **Test Types** (unit: pure function, no mocks; integration: units as code, simple injected mocks -- naming convention adapted to local ecosystem), **What to Test** (project-specific surfaces), **Workflow** (TDD always, tests next to code).
 
 ## Always-Applied Rules (Cursor .mdc files)
 
@@ -207,7 +220,7 @@ Command files are plain markdown. Cursor exposes them as slash commands. The `@`
 | gates | `jc-gates.md` | Run `type-check -> lint -> build -> test` sequentially. All blocking. Restart from beginning after any fix. |
 | review | `jc-review.md` | Run gates, triage specialists, invoke them, consolidate into single report with verdict. |
 | commit | `jc-commit.md` | Check status, review diff, verify gates, stage selectively, conventional commit format. Safety: never force push, never amend pushed commits, never `--no-verify`. |
-| consolidate-docs | `jc-consolidate-docs.md` | Extract docs from plans to permanent locations. Update plan/prompt statuses. Write to napkin. Check practice box. Check practice fitness. Consider practice evolution. |
+| consolidate-docs | `jc-consolidate-docs.md` | Verify documentation is current. Extract any remaining plan content to permanent locations. Update plan/prompt statuses. Write to napkin. Check practice box. Check practice fitness. Consider practice evolution. |
 | plan | `jc-plan.md` | Read directives. Create plan with YAML frontmatter, acceptance criteria, risk assessment, non-goals. |
 | think | `jc-think.md` | Structured thinking: understand -> analyse -> reason -> synthesise -> conclude. |
 | step-back | `jc-step-back.md` | Pause. Reflect on goals, approach, alignment with rules. Apply First Question. |
@@ -317,3 +330,4 @@ After creating all files, validate:
 7. The napkin rule points to a napkin skill that exists.
 8. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.
 9. The project builds.
+10. **Cohesion audit**: all practice-core files are internally consistent, and all broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core. No stale descriptions, no contradictions, no outdated wording.
