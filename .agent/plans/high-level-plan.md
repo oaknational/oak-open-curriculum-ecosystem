@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-02-28
 ---
 
 # High-Level Plan
@@ -289,6 +289,7 @@ Strategic architecture remains anchored in:
 |------------|----------------|----------------|---------------|
 | `semantic-search/` | Merge-prep execution and search roadmap (search quality + SDK separation) | 🔄 Active | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
 | `agentic-engineering-enhancements/` | System-hardening: architectural constraints, AI guardrails, mutation testing | 📋 Milestone 2-3 | [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md), [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md), [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md), [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md) |
+| `the-practice/` | Practice evolution and adoption of validated agentic workflow concepts | 🔬 In Progress | [harness-concepts-adoption.plan.md](the-practice/harness-concepts-adoption.plan.md) |
 | `security-and-privacy/` | Security hardening progression with priority on hallucination guards and evidence-backed claims | 📋 Milestone 1-2 | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
 | `sdk-and-mcp-enhancements/` | MCP extensions, SDK pipeline evolution, and concept preservation | 📋 Milestone 1-2 | [sdk-and-mcp-enhancements/README.md](sdk-and-mcp-enhancements/README.md) |
 | `user-experience/` | Persona-level outcome contract for public alpha and post-alpha scope progression | 📋 Milestone 1-2 | [user-experience/README.md](user-experience/README.md), [user-experience/public-alpha-experience-contract.md](user-experience/public-alpha-experience-contract.md) |

@@ -125,7 +125,25 @@ See the [full ADR index](docs/architecture/architectural-decisions/) for all dec
 
 ## Engineering Practice
 
-This repository is optimised for AI-assisted engineering governed by quality gates, specialist reviewers, and architectural decision records — see [.agent/HUMANS.md](.agent/HUMANS.md) for more information. The approach is documented in [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md), and embodied in [the Practice](.agent/practice-core/README.md), a transferable, self-improving memetic system of principles, structures, agents, and tooling, enabling safer, human-AI collaboration and innovation without compromising on quality.
+This repository began as an exploration of what co-pilot style AI support could
+provide, but evolved rapidly into an agent-first engineering system. As of
+February 2026, for at least the previous six months, every line of code,
+configuration, and documentation has been written entirely by agents.
+
+Humans focus on system design: defining and strengthening guardrails,
+architectural constraints, quality gates, and reviewer workflows; then
+providing direction and corrective feedback.
+
+Self-assessment by agents, and iterative improvement of the Practice itself,
+are integral parts of how work is done here.
+
+See [.agent/HUMANS.md](.agent/HUMANS.md) for contributor context. The approach
+is documented in
+[ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
+and embodied in [the Practice](.agent/practice-core/README.md), a
+transferable, self-improving memetic system of principles, structures, agents,
+and tooling, enabling safer, human-AI collaboration and innovation without
+compromising on quality.
 
 ## Contributing
 

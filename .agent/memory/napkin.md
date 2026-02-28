@@ -484,6 +484,17 @@ entry point for the next session.
 - Key difference: this repository's Practice is stricter on quality gates
   and TDD discipline; the OpenAI harness explicitly allows lighter blocking
   merge gates in exchange for very high throughput and cheap follow-up fixes.
+- When adding repo-specific strategy derived from external practice, place it
+  under `.agent/plans/` and avoid linking from `.agent/practice-core/*` so
+  transferability of the Practice remains intact.
+
+### Mistake corrected
+
+- I initially added repo-specific harness-comparison content to
+  `.agent/practice-core/README.md`. That conflicts with transferability.
+  Correction: moved the comparison context into
+  `.agent/plans/the-practice/harness-concepts-adoption.plan.md` and restored
+  `practice-core/README.md` to portable guidance only.
 
 ### Consolidation (2026-02-27)
 
@@ -495,3 +506,29 @@ entry point for the next session.
 - Practice box: empty (integration completed)
 - Prompts: all 7 frontmatters up to date
 - Experience: wrote `2026-02-27-the-return-trip.md`
+
+## Session: 2026-02-28 — Practice adoption plan + narrative updates
+
+### What was done
+
+- Drafted Phase 0 execution plan:
+  `.agent/plans/the-practice/active/phase-0-baseline-metrics.plan.md`
+- Updated root `README.md` Engineering Practice section with the requested
+  agent-first evolution narrative and explicit self-assessment loop statement.
+- Updated internal progression frame doc with one-human context and a current
+  repository scale figure (~957,000 lines, rounded to nearest thousand).
+- Added `.agent/plans/the-practice/evidence/.gitkeep` and created the evidence
+  directory for Phase 0 artefacts.
+
+### Patterns to remember
+
+- Claims like "every line is agent-authored" should be time-bounded ("as of
+  <date>, for at least the previous six months") to stay truthful as the repo
+  evolves.
+- For repo-scale line counts, capture method context with the number so future
+  updates can recalculate consistently.
+
+### Mistakes made
+
+- I first attempted line counting with `python` and hit `command not found`.
+  Use `python3` in this environment.

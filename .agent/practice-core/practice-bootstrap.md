@@ -9,6 +9,7 @@ provenance:
     date: 2026-02-27
     purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
 fitness_ceiling: 400
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
 
 # Practice Bootstrap
@@ -63,7 +64,7 @@ Cursor rules live in `.cursor/rules/*.mdc`. Two formats:
 
 **Always-applied** (fires on every interaction):
 
-```
+```text
 ---
 description: {one-line description}
 alwaysApply: true
@@ -74,7 +75,7 @@ alwaysApply: true
 
 **File-scoped** (fires when matching files are open):
 
-```
+```text
 ---
 description: {one-line description}
 globs: '**/*.test.ts'
@@ -111,7 +112,7 @@ Agent files use YAML frontmatter. The `readonly: true` field prevents agents fro
 
 ### Template
 
-```
+```text
 ---
 name: {agent-name}
 description: {One-line description for Cursor's agent picker}

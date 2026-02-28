@@ -13,6 +13,7 @@ provenance:
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
 fitness_ceiling: 200
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
 
 # The Agentic Engineering Practice
