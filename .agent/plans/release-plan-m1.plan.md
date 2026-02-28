@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-28  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: M1-S001a code complete but reindex pending. M1-S001b/S002/S003/S005 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. M1-S008 open (P3, type-safety debt). Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: M1-S001a code complete but reindex pending. M1-S001b/S002/S003/S005/S008 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -111,8 +111,7 @@ After reindex, re-test the scenarios from the original exploration:
 
 - M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)
 - M1-S006: `get-rate-limit` returns 0/0/0 on preview server (upstream)
-- M1-S008: `callTool` overloads declare nested args but impl parses flat args
-  (type-safety debt — separate plan: [calltool-type-alignment.plan.md](./calltool-type-alignment.plan.md))
+- ~~M1-S008: `callTool` overloads declare nested args but impl parses flat args~~ — **Complete (2026-02-28)**
 
 ### Remaining M0/M1 Gates
 
@@ -1324,7 +1323,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | M1-S005 | P3 | `search` scope limitations undocumented | Engineering | [x] Complete (2026-02-28) | Scope limitations documented in search tool description |
 | M1-S006 | P3 | `get-rate-limit` returns 0/0/0 on preview server | Upstream API team | Open | Track — ask upstream |
 | M1-S007 | P3 | Prerequisite sub-graph fetching | Engineering | Deferred | Post-merge |
-| M1-S008 | P3 | `callTool` overloads declare nested args but impl parses flat args | Engineering | Open | Type-safety debt; no runtime impact currently |
+| M1-S008 | P3 | `callTool` overloads declare nested args but impl parses flat args | Engineering | [x] Complete (2026-02-28) | `ToolArgsForName` now derives from flat schema via `transformFlatToNestedArgs` parameter type |
 
 ---
 
@@ -1439,7 +1438,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Problem** | The generated `callTool` overloads in `execute.ts` declare `rawArgs: ToolArgsForName<TName>`, which resolves to the **nested** SDK type (e.g. `{ params: { path: { sequence: string }, query?: { year?: number } } }`). But the implementation (`invokeToolByName`) parses `rawArgs` through `toolMcpFlatInputSchema.safeParse()`, which expects **flat** MCP args (e.g. `{ sequence: string, year?: string \| number }`). The overloads promise one type; the implementation expects another. This is masked by: (1) the final overload uses `rawArgs: unknown`; (2) the sole real caller (`callToolWithValidation`) always passes `unknown`; (3) nobody uses the strongly-typed overloads programmatically. Year normalisation (M1-S002) made this visible — the nested type says `year?: number` while the flat schema accepts `string \| number`. |
 | **Files** | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/aliases/types.ts` (defines `ToolArgsForName`) |
 | **Fix** | Either (a) change `ToolArgsForName` to derive from the flat input schema type, or (b) change the overloads to use `rawArgs: unknown` since the function's contract is "validate whatever you give me." Option (b) is simpler but loses type-safe overloads; option (a) preserves them correctly. Both require generator changes in `emit-index.ts` or `generate-types-file.ts`. |
-| **Status** | Open — identified by type-reviewer during M1-S002 implementation (2026-02-28). No runtime impact. Separate plan: [calltool-type-alignment.plan.md](./calltool-type-alignment.plan.md). |
+| **Status** | [x] Complete (2026-02-28). Fixed via Option A: `ToolArgsMap` in `generate-types-file.ts` now derives from `Parameters<ToolDescriptorMap[TName]['transformFlatToNestedArgs']>[0]` (flat) instead of `ToolInvokeParametersMap[TName][1]` (nested). Generator unit test + `satisfies` compile-time anchor prevent regression. All quality gates pass. |
 
 ---
 
@@ -1527,6 +1526,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-28**: **M1-S008 complete.** `callTool` overload type alignment: `ToolArgsForName` now derives from `transformFlatToNestedArgs` parameter type (flat) instead of `invoke` parameter (nested). One-line generator change in `generate-types-file.ts`, verified by unit test + `satisfies` compile-time anchor. All quality gates pass.
 - **2026-02-28**: **M1 MCP quality fixes implemented.** M1-S001a (thread_semantic population), M1-S001b (subject-filter guidance), M1-S002 (year normalisation), M1-S003 (binary-response warning), M1-S005 (scope limitations) all code-complete with TDD. Full quality gate suite passed. M1-S008 (callTool type mismatch) identified by type-reviewer and registered. M1-S001a reindex against live ES not yet run. Four-layer schema sync pattern extracted to `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Session: [M1 quality fixes](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/379f5e51-f981-41f0-856d-03b025cbdd41.txt).
 - **2026-02-28**: **Next-session handoff prepared.** M1-S001 split into M1-S001a (populate `thread_semantic`, P1) and M1-S001b (enhance tool descriptions for subject filtering, P2). User decision: the query-side fix is tool guidance, not auto-inference — consuming agents should be told to pass subject as a filter via tool descriptions, not have it auto-detected in code. Next Session Checklist rewritten with prioritised work items. `onboarding-rerun.prompt.md` rewritten as standalone entry point for M1 MCP search quality fixes. EsCurric MCP tools confirmed working (`user-EsCurric` server).
 - **2026-02-28**: **MCP tool exploration findings triaged and refined.** Systematic testing of all 32 oak-remote-preview MCP tools using KS4 maths as domain. 7 snag items registered (M1-S001 to M1-S007). Key refined findings: (1) M1-S001 root cause is `thread_semantic` field never populated at indexing time — confirmed via EsCurric `platform_core_get_document_by_id` on three sample documents (algebra, geometry-and-measure, bq14-physics); the ELSER leg of the 2-way RRF is dead across all 164 thread documents. Fix: populate `thread_semantic` with subject-enriched content in `createThreadDocument`, reindex. (2) M1-S002: user decision — normalise `year` on string, strictly constrained to enum values from OpenAPI spec (`'1'`–`'11'` + `'all-years'`); accept both string and number input via `z.union([z.enum([...]), z.number().transform(String)])`; EYFS/early-years/SEND not in current schema. Triage: 2 quick wins (M1-S003, M1-S005 — text changes), 2 blockers (M1-S001, M1-S002 — functional gaps), 3 deferred post-merge (M1-S004, M1-S006, M1-S007). Session transcript: [KS4 maths exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/8b4b3ea0-9ca6-4b11-bbc0-4ad50bafdb00.txt).

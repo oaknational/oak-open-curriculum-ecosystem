@@ -5,7 +5,9 @@ before every session. Every entry earned its place by
 changing behaviour.
 
 **Source**: Distilled from `archive/napkin-2026-02-24.md`
-(sessions 2026-02-10 to 2026-02-24).
+(sessions 2026-02-10 to 2026-02-24) and
+`archive/napkin-2026-02-28.md` (sessions 2026-02-26 to
+2026-02-28).
 
 ---
 
@@ -41,8 +43,6 @@ changing behaviour.
   scope
 - ADR index is the source of truth for ADR count; keep
   README in sync
-- Generator templates in `code-generation/typegen/` are the
-  source of truth for anything in `src/types/generated/`
 - Generated doc comments need escaping at the GENERATOR
   level, not in the output
 - `tsdoc.json` `extends` works with `@microsoft/tsdoc-config`
@@ -183,6 +183,10 @@ documented in `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`
 - For refactoring TDD (runtime behaviour unchanged), the
   RED phase is compiler errors from signature changes, not
   runtime test failures. Update test call sites first.
+  For type-derivation fixes, use `satisfies` as a
+  compile-time anchor: `{ flat: 'value' } satisfies MyType`
+  fails type-check if the derivation is wrong, serving as
+  the RED phase alongside generator string-output tests
 - Compile-time type assertions (e.g. `AssertNoX<T>`) are
   inert unless the resulting type is consumed in a binding
   or type path — all three reviewers independently caught

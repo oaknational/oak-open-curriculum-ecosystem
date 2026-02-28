@@ -21,7 +21,7 @@ type ToolClientMap = {
   readonly [TName in ToolName]: ToolInvokeParametersMap[TName][0];
 };
 type ToolArgsMap = {
-  readonly [TName in ToolName]: ToolInvokeParametersMap[TName][1];
+  readonly [TName in ToolName]: Parameters<ToolDescriptorMap[TName]['transformFlatToNestedArgs']>[0];
 };
 type ToolValidationResult<TName extends ToolName> = ReturnType<
   ToolDescriptorMap[TName]['validateOutput']

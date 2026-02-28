@@ -1,6 +1,6 @@
 # callTool Overload Type Alignment
 
-**Status**: Not started
+**Status**: Complete (2026-02-28) — Option A implemented
 **Last Updated**: 2026-02-28
 **Origin**: M1-S008 (identified during M1-S002 year normalisation)
 **Priority**: P3 — no runtime impact, type-safety debt
