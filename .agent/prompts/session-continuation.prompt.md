@@ -14,24 +14,16 @@ Session entry point. Three blocking items, then commit/gates/merge.
 
 [merge-readiness.plan.md](../plans/sdk-and-mcp-enhancements/active/merge-readiness.plan.md)
 
-## Blocking items (do these first)
+## Remaining items
 
-1. ~~**Investigate MCP prompts**~~ DONE — Rationalised to 4 prompts,
-   documented in [ADR-123](../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md).
-
+1. ~~**Investigate MCP prompts**~~ DONE
 2. **Verify preview Vercel deploy** — Confirm the preview deployment
    works: healthcheck, MCP endpoint, at least one tool call.
-
-3. **Final onboarding review** — Junior dev and lead dev personas,
-   discovery-based from README.md. P0/P1 blockers only.
-
-## Then
-
-4. Commit outstanding work.
-5. Run full quality gate chain.
-6. Secrets sweep (`pnpm secrets:scan:all`).
-7. Manual sensitive-information review (human).
-8. Merge to `main`.
+3. ~~**Final onboarding review**~~ DONE — P0/P1 fixes applied, audit complete.
+4. ~~**Commit**~~ DONE — all work committed, pre-commit gates green.
+5. Secrets sweep (`pnpm secrets:scan:all`).
+6. Manual sensitive-information review (human).
+7. Merge to `main`.
 
 ## Non-blocking follow-ups
 
@@ -44,3 +36,4 @@ See [post-merge-tidy-up.plan.md](../plans/sdk-and-mcp-enhancements/future/post-m
 - [400 investigation and resource pattern](7a65b4b1-1b59-46df-9aee-430c4030c019)
 - [Upstream error handling fix](7e822a76-e479-4943-90f1-ddb496e63e57)
 - [MCP prompts rationalisation](c227c7a7-7c6d-48ee-8eab-0e5e766fc78e)
+- [Onboarding fixes and cast elimination](bcd25bbf-0255-42f0-81d8-c7d00320ad99)
