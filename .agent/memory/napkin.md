@@ -1,5 +1,57 @@
 # Napkin
 
+## Session: 2026-03-01 — Guidance surface audit and pedagogical context plan update
+
+### What was done
+
+1. Comprehensive audit of all 16 "how to use this service" guidance
+   surfaces across the MCP server and curriculum SDK
+2. Updated `improve-pedagogical-context.plan.md` with audit findings,
+   resolved open questions, and clarified WS1 promotion criteria
+3. Resolved all 4 open questions:
+   - Glossary source → curated list (not scraped)
+   - Payload size → ~68KB acceptable (13% of 128K context)
+   - Backwards compatibility → additive (keep get-help, get-ontology)
+   - Tool vs resource → both (MCP spec control model)
+4. Named the tool `get-curriculum-model` — "model" conveys structured
+   knowledge and authority, not just ambient context
+
+### Learnings
+
+- The guidance surface inventory revealed 16 distinct surfaces across
+  6 delivery channels. The phrase "call get-ontology first" appears
+  in 13 places across 6 channels. This is acceptable redundancy
+  (belt-and-braces for different client capabilities) not duplication.
+  The key distinction: duplication is the same CONTENT served from
+  multiple SOURCES. Redundancy is the same MESSAGE delivered through
+  multiple CHANNELS that a client may or may not support.
+- `AGENT_SUPPORT_TOOL_METADATA` is an excellent single source of truth
+  pattern — it drives SERVER_INSTRUCTIONS and OAK_CONTEXT_HINT
+  automatically. When `get-curriculum-model` is added, updating the
+  metadata propagates to both downstream surfaces.
+- The CTA prompt in `widget-cta/registry.ts` is already a workaround
+  for the two-tool problem: it tells the model to call `get-help`,
+  then "all agent support tools". `get-curriculum-model` eliminates
+  this workaround pattern.
+- **Naming**: "get-curriculum-model" is better than "get-started"
+  because it describes what you GET (a structured knowledge model),
+  not what you DO (start). "context" was the MCP spec's word but
+  the user correctly noted this is structured knowledge, not just
+  information. "model" signals authority and completeness.
+- Plan structure insight: the "what's already well-placed" section
+  is just as important as "what needs to change" — it prevents
+  over-engineering by establishing what should NOT be touched.
+- **MCP spec control models resolve the tool-vs-resource question**:
+  The spec defines three primitives with distinct controllers —
+  tools (model-controlled), resources (application-driven), prompts
+  (user-controlled). The 2025-06-18 resource annotations add
+  `priority: 1.0` ("effectively required") and
+  `audience: ["assistant"]` ("for the model"). This is the spec's
+  mechanism for essential orientation data. Answer: expose as both
+  tool AND resource with annotations. The tool is the universal
+  pragmatic path; the annotated resource is the spec-aligned ideal
+  for clients that support auto-injection.
+
 ## Session: 2026-03-01 — M1-S009 completion, ISP refactor, and dead code removal
 
 ### What was done
