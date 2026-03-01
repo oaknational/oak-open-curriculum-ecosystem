@@ -59,6 +59,32 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(toolFile).toContain('Allowed values: CourseA, CourseB');
   });
 
+  it('emits UndocumentedResponseError contract file', () => {
+    const output = generateCompleteMcpTools(schemaWithPathParams);
+    const errorFile = output.contract['undocumented-response-error.ts'];
+    expect(errorFile).toBeDefined();
+    expect(errorFile).toContain('export class UndocumentedResponseError extends Error');
+    expect(errorFile).toContain('readonly status: number');
+    expect(errorFile).toContain('readonly operationId: string');
+    expect(errorFile).toContain('readonly responseBody: unknown');
+    expect(errorFile).toContain('readonly upstreamMessage: string | undefined');
+  });
+
+  it('imports UndocumentedResponseError in generated tool files', () => {
+    const output = generateCompleteMcpTools(schemaWithPathParams);
+    const toolFile = output.data.tools['get-lessons-transcript.ts'];
+    expect(toolFile).toBeDefined();
+    expect(toolFile).toContain(
+      "import { UndocumentedResponseError } from '../contract/undocumented-response-error.js';",
+    );
+  });
+
+  it('exports UndocumentedResponseError from root index', () => {
+    const output = generateCompleteMcpTools(schemaWithPathParams);
+    expect(output.index).toContain('UndocumentedResponseError');
+    expect(output.index).toContain('undocumented-response-error');
+  });
+
   it('emits security types in generated contract', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
     const contractFile = output.contract['tool-descriptor.contract.ts'];

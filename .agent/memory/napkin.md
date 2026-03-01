@@ -1,5 +1,132 @@
 # Napkin
 
+## Session 2026-03-01f — Upstream error handling improvement
+
+### Context loaded
+- Full error path traced: generator (`emit-index.ts`) → generated `invoke` → `callTool` → `mapErrorToResult` → MCP response
+- Key issue: `resolveDescriptorForStatus(400)` returns undefined for transcript/assets endpoints (only 200/404 documented), throws TypeError, discards response body, misclassifies as `McpParameterError`
+- User wants to: (1) improve handling of unexpected error codes, (2) analyse error responses from upstream API
+
+### Actual upstream 400 response body (from user)
+```json
+{
+  "message": "Lesson not available: \"volcanoes-and-their-features\"",
+  "data": {
+    "cause": "Error: Lesson (volcanoes-and-their-features) not available, and subject (geography) and unit (mountains-and-volcanoes-what-where-and-why) are blocked for assets"
+  },
+  "code": "BAD_REQUEST"
+}
+```
+- `message` — human-readable summary
+- `data.cause` — detailed reason including subject/unit context
+- `code` — tRPC error code string
+- Pattern: "blocked for assets" in `data.cause` distinguishes content-gate from genuine bad request
+- User direction: pattern match to distinguish, always log the message, accept it's brittle
+
+### Live verification (HTTP dev server)
+- Restarted dev server with `DANGEROUSLY_DISABLE_AUTH=true LOG_LEVEL=debug`
+- **Test 1: Blocked transcript** (`get-lessons-transcript`, `volcanoes-and-their-features`)
+  - MCP response: `"Content not available (400): Transcript not available: \"volcanoes-and-their-features\""`, `isError: true`
+  - Server log: WARN, `classified: "CONTENT_NOT_AVAILABLE"`, structured attributes
+- **Test 2: Nonexistent lesson** (`get-lessons-transcript`, `some-definitely-nonexistent-lesson-slug-xyz123`)
+  - MCP response: `"Upstream API error (400): Transcript not available: ..."`
+  - Server log: WARN, `classified: "UPSTREAM_API_ERROR"` — correctly distinguished from content-blocked
+- **Test 3: Blocked assets** (`get-lessons-assets`, `volcanoes-and-their-features`)
+  - MCP response: `"Content not available (400): Lesson not available: \"volcanoes-and-their-features\""`
+  - Server log: `classified: "CONTENT_NOT_AVAILABLE"` — works across all tools, not just transcript
+- **Test 4: Non-blocked endpoint for same lesson** (`get-lessons-quiz`, `volcanoes-and-their-features`)
+  - Returned 200 with full quiz data — confirms blocking is per-endpoint/asset-type, not per-lesson
+
+### Implementation complete
+- Generated `UndocumentedResponseError` class in `contract/undocumented-response-error.ts`
+- Barrel export missing: `src/mcp-tools.ts` didn't re-export the new class → `instanceof` was `undefined` at runtime. Must always add new public exports to the barrel file, not just the generated index.
+- Complexity lint: initial `classifyUndocumentedResponse` hit complexity 9/8. Fixed by extracting `classifyUpstreamErrorCode` pure function.
+- Three error codes: `UPSTREAM_SERVER_ERROR` (5xx), `CONTENT_NOT_AVAILABLE` (400 + "blocked" in cause), `UPSTREAM_API_ERROR` (all other undocumented).
+- MISTAKE: Used `console.warn` initially — project forbids direct console calls, must use `@oaknational/logger`.
+- MISTAKE: Then injected Logger into SDK's `executeToolCall` — WRONG. The app layer already has a logger instance. SDK functions should not own logging. The app layer is responsible for observability.
+- CORRECT PATTERN: SDK returns classified errors in `ToolExecutionResult`. App layer (`validation-logger.ts` / `tool-handler-with-auth.ts`) inspects the result and logs using the existing logger. Same pattern as `logValidationFailureIfPresent`.
+- Added `logUpstreamErrorIfPresent` alongside `logValidationFailureIfPresent` in the HTTP app's tool handler.
+- Added `no-console: 'warn'` to `@oaknational/eslint-plugin-standards` recommended config. 231 pre-existing violations as warnings — separate cleanup task. Rule was not previously configured, which is why my `console.warn` slipped through lint.
+
+## Session 2026-03-01e — 400 investigation and MCP resource pattern
+
+### Investigation findings: transcript/assets 400
+
+**Root cause identified** via GitHub source review of `oaknational/oak-openapi`:
+
+- The 400 is a **third-party copyright licensing gate** in `queryGate.ts`
+- Transcript and assets use `checkLessonAllowedAsset` — an **allowlist**:
+  only `maths` is fully supported; other subjects need explicit entries in
+  `supportedUnits.json` / `supportedLessons.json` (~500KB allowlist)
+- Summary and quiz use `blockLessonForCopyrightText` / `isBlockedUnitOrSubject`
+  — a **blocklist**: only `english` and `financial-education` are blocked
+- The gate throws `TRPCError({ code: 'BAD_REQUEST' })` with a reason string
+- Originally used HTTP 451 but tRPC doesn't support it, reverted to 400
+- The `errorResponses: []` in OpenAPI metadata means 400 is undocumented
+- Prisma warnings in Vercel logs are a separate unrelated issue (appear on 200s too)
+
+**Error path traced through our SDK:**
+1. Generated `invoke` receives HTTP 400 with reason body
+2. `resolveDescriptorForStatus(400)` finds no descriptor (only 200/404 documented)
+3. Throws `TypeError('Undocumented response status 400...')` — **response body never extracted**
+4. `mapErrorToResult` catches TypeError, wraps as `McpParameterError` (wrong classification)
+5. MCP client sees: generic "Undocumented response status 400..." — no upstream reason
+
+### Key mistake this session
+- Made Vercel API request without API key → got 401. The `web_fetch_vercel_url` tool
+  handles Vercel Authentication but not the Oak API's own bearer token auth.
+
+### Patterns
+- GitHub API via `gh` is excellent for cross-repo investigation — read source code
+  from private repos without cloning
+- Vercel MCP logs truncate message bodies in table format — full bodies require
+  the Vercel dashboard
+- Tracing error paths through generated code requires reading the generator AND the
+  generated output — the generator shows the pattern, the output shows the specifics
+  (which statuses are documented for which tool)
+
+## Session 2026-03-01d — Post-completion MCP tool assessment
+
+### What was done
+
+1. Live assessment of all 30 oak-local MCP tools via `CallMcpTool` — called
+   every tool with representative parameters
+2. Verified all WS1-WS6 changes reflected in running server
+3. Identified two follow-up items: a 400 failure anomaly and a resource
+   pattern opportunity for large datasets
+4. Updated plan and prompt for next session handover
+
+### Corrections from the user
+
+- **Do not speculate about failure causes**: I attributed the 400 from
+  "volcanoes-and-their-features" to "v0.6.0 content blocking" without
+  evidence. The user asked: "v0.6 of what?" and correctly pointed out
+  that content blocked for legal reasons should return 404, not 400.
+  The right response is to investigate, not assume.
+- **Know what each tool does**: I conflated `get-lessons-assets` (returns
+  download URLs) with `get-asset-by-type` (triggers actual binary download,
+  excluded from MCP). The user corrected this: "we disabled get-asset-by-type
+  because we can't trigger a download from the remote mcp server,
+  get-lesson-assets should return urls, not assets." Getting the tool
+  semantics wrong undermines the assessment.
+- **Prerequisite graph as resource**: The user identified that the 1.4MB
+  prerequisite graph "could probably be an optional resource intended for
+  agents and humans (indirectly, via agents)". This is a design insight:
+  large, static, reference data that agents use to answer human questions
+  is a prime candidate for MCP resource exposure with appropriate annotations.
+
+### Patterns
+
+- **Systematic tool assessment via MCP calls**: Batching 4 calls per round
+  by category (discovery, browsing, fetching, progression) was efficient.
+  30 tools assessed in ~6 rounds.
+- **Resource pattern**: `curriculum://model` establishes the dual-exposure
+  pattern (tool + annotated resource). The prerequisite graph and thread
+  progressions are natural extensions of this pattern for large static data.
+- **Suggest now works**: `search(text: "frac", scope: "suggest", subject: "maths")`
+  returned 10 results. Previously noted as returning 0 in the napkin. The
+  suggest index is populated.
+
 ## Session: 2026-03-01 — Guidance surface audit and pedagogical context plan update
 
 ### What was done
@@ -496,3 +623,25 @@ All 7 specialists: code-reviewer, test-reviewer, type-reviewer, barney, fred, wi
 - E2E backfill pattern: extract helpers (`callToolsList`, `callGetCurriculumModel`) to reduce duplication, use Zod schemas for all validation
 - 54 stale references across 10 documents — docs drift is consistently the largest hidden cost of tool replacement
 - **Refactors as a diagnostic tool**: Refactoring reveals where the system is too tightly coupled (e.g. the circular dependency through `isKnownAggregatedTool` only surfaced when relocating `tool-help-lookup.ts`) and where tests are coupled to implementation rather than proving behaviour (e.g. E2E tests hardcoding `get-ontology`/`get-help` tool names instead of testing "an orientation tool exists", regex patterns with dead `|get-ontology|get-help` alternatives that would match even if old tools leaked back). If a refactor breaks many tests, the tests were testing structure not behaviour. If it reveals hidden imports, the modules had undeclared coupling. Treat refactor breakage as a signal, not just a cost.
+
+## 2026-03-01 — MCP Prompts Rationalisation
+
+### Vitest v4 CLI
+- `--testPathPattern` does NOT work in vitest v4. The vitest run command takes file paths directly as positional args: `pnpm vitest run path/to/test.ts`
+- E2E tests in the HTTP MCP app use a separate config: `pnpm vitest run --config vitest.e2e.config.ts`
+
+### max-lines-per-function lint rule
+- The outer describe callback in E2E tests is subject to `max-lines-per-function: 220`. Adding two new prompt test cases put it at 221. Fix: extract helper + `it.each` to consolidate repeated patterns.
+
+### Docs reviewer catches
+- "30 generated tools" is wrong — 23 are generated from OpenAPI, 7 are aggregated (hand-authored). "Generated" has precise meaning in this repo (ADR-029/030). Always distinguish generated vs aggregated.
+- Resource annotations (priority, audience) exist on ALL three resources, not just `curriculum://model`. The graph/progression resources have `priority: 0.5`. Omitting this from docs misrepresents the design intent.
+
+### TDD pattern for prompt removal
+- RED phase: add count assertion (expect 4), add returns-empty assertion for removed prompt. Both fail against current code (5 prompts, progression-map still returns messages).
+- GREEN phase: remove prompt from SDK + switch, add Zod schemas + registrations at app layer.
+- Clean separation: unit tests prove SDK-level removal, E2E tests prove protocol-level registration.
+
+### Template literal types vs expressions in for-of loops
+- TypeScript widens `` `${subject}:${keyStage}` `` to `string` in for-of loop bodies even when `subject` and `keyStage` are narrow literal unions from `as const` arrays. A type-safe builder function `makeKey(subject: S, keyStage: K): `${S}:${K}`` solves this cleanly — the function's return type annotation forces TypeScript to produce the template literal type.
+- Pattern: when you have a hand-written union that is really `${A}:${B}`, derive it from `as const` arrays and a builder function. Eliminates hand-written 68-member unions AND assertion casts in one move.

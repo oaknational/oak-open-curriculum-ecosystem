@@ -110,7 +110,10 @@ function buildExports({
   lines.push('    const descriptorForStatus = resolveDescriptorForStatus(status);');
   lines.push('    if (!descriptorForStatus) {');
   lines.push(
-    `      throw new TypeError(\`Undocumented response status \${String(status)} for ${operationId}. Documented statuses: ${documentedStatusesMessage}\`);`,
+    '      const responseBody = status >= 200 && status < 300 ? response.data : response.error;',
+  );
+  lines.push(
+    `      throw new UndocumentedResponseError(status, '${operationId}', documentedStatuses, responseBody);`,
   );
   lines.push('    }');
   lines.push('    const payload = status >= 200 && status < 300 ? response.data : response.error;');

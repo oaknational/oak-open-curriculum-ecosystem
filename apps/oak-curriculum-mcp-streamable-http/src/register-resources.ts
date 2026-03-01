@@ -19,6 +19,10 @@ import {
   getDocumentationContent,
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
+  PREREQUISITE_GRAPH_RESOURCE,
+  getPrerequisiteGraphJson,
+  THREAD_PROGRESSIONS_RESOURCE,
+  getThreadProgressionsJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   getToolWidgetUri,
@@ -143,7 +147,7 @@ export function registerWidgetResource(
  */
 export function registerDocumentationResources(server: ResourceRegistrar): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
-    const { name, uri, title, ...metadata } = resource;
+    const { name, uri, ...metadata } = resource;
     server.registerResource(name, uri, metadata, () => {
       const content = getDocumentationContent(uri);
       return {
@@ -151,7 +155,7 @@ export function registerDocumentationResources(server: ResourceRegistrar): void 
           {
             uri,
             mimeType: resource.mimeType,
-            text: content ?? `# ${title}\n\nContent not found.`,
+            text: content ?? `# ${resource.title}\n\nContent not found.`,
           },
         ],
       };
@@ -161,35 +165,51 @@ export function registerDocumentationResources(server: ResourceRegistrar): void 
 
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
 export function registerCurriculumModelResource(server: ResourceRegistrar): void {
-  server.registerResource(
-    CURRICULUM_MODEL_RESOURCE.name,
-    CURRICULUM_MODEL_RESOURCE.uri,
-    {
-      title: CURRICULUM_MODEL_RESOURCE.title,
-      description: CURRICULUM_MODEL_RESOURCE.description,
-      mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
-      annotations: {
-        priority: CURRICULUM_MODEL_RESOURCE.annotations.priority,
-        audience: [...CURRICULUM_MODEL_RESOURCE.annotations.audience],
+  const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+        text: getCurriculumModelJson(),
       },
-    },
-    () => ({
-      contents: [
-        {
-          uri: CURRICULUM_MODEL_RESOURCE.uri,
-          mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
-          text: getCurriculumModelJson(),
-        },
-      ],
-    }),
-  );
+    ],
+  }));
+}
+
+/** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
+export function registerPrerequisiteGraphResource(server: ResourceRegistrar): void {
+  const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: PREREQUISITE_GRAPH_RESOURCE.mimeType,
+        text: getPrerequisiteGraphJson(),
+      },
+    ],
+  }));
+}
+
+/** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
+export function registerThreadProgressionsResource(server: ResourceRegistrar): void {
+  const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: THREAD_PROGRESSIONS_RESOURCE.mimeType,
+        text: getThreadProgressionsJson(),
+      },
+    ],
+  }));
 }
 
 /**
  * Registers all static resources with the MCP server.
  *
- * Combines widget, documentation, and curriculum model resource
- * registration into a single call for cleaner server setup.
+ * Combines widget, documentation, curriculum model, prerequisite graph,
+ * and thread progressions resource registration into a single call.
  *
  * @param server - MCP server instance
  * @param options - Optional widget configuration (e.g. widgetDomain)
@@ -201,6 +221,8 @@ export function registerAllResources(
   registerWidgetResource(server, options);
   registerDocumentationResources(server);
   registerCurriculumModelResource(server);
+  registerPrerequisiteGraphResource(server);
+  registerThreadProgressionsResource(server);
 }
 
 // Re-export prompts registration for use in handlers

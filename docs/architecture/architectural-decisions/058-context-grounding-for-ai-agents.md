@@ -5,6 +5,8 @@
 Accepted (Revised)
 
 > **Update (2026-03-01):** The original two-tool model (`get-ontology` + `get-help`) has been consolidated into a single `get-curriculum-model` tool. The `curriculum://ontology` resource has been replaced by `curriculum://model`. The core architectural principle — multi-layered context grounding — is unchanged; the implementation is simplified to a single orientation tool.
+>
+> **Update (2026-03-01):** [ADR-123](123-mcp-server-primitives-strategy.md) documents the broader MCP server primitives strategy — how all three primitive types (tools, resources, prompts) work together. This ADR continues to govern the context grounding and dual-exposure pattern specifically.
 
 ## Context
 

@@ -99,39 +99,6 @@ Please provide:
 }
 
 /**
- * Generates messages for the progression-map prompt.
- *
- * @param args - User-provided arguments (concept, subject)
- * @returns Messages guiding the model to search threads and map progression
- */
-export function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
-  const concept = args.concept ?? 'the concept';
-  const subject = args.subject ?? 'the subject';
-
-  return [
-    {
-      role: 'user',
-      content: {
-        type: 'text',
-        text: `I want to understand how the concept of "${concept}" develops across years in ${subject}.
-
-Call get-curriculum-model first for domain definitions, structural relationships, and tool guidance.
-
-Please:
-1. Use search with scope "threads" to find threads related to "${concept}" in ${subject}: search({ text: "${concept}", scope: "threads", subject: "${subject}" })
-2. Use get-thread-progressions to get the full progression graph for all threads
-3. Map out the progression showing:
-   - What is taught at each stage
-   - How concepts build on previous learning
-   - Key prerequisites and dependencies
-4. Use get-prerequisite-graph for specific unit dependency details
-5. Suggest how to scaffold learning for students who need support`,
-      },
-    },
-  ];
-}
-
-/**
  * Generates messages for the explore-curriculum prompt.
  *
  * @param args - User-provided arguments (topic, optional subject)

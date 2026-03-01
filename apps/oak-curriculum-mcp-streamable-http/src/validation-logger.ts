@@ -1,12 +1,14 @@
 /**
- * Validation Failure Logging
+ * Tool Execution Logging
  *
- * Utilities for logging tool validation failures with comprehensive context.
+ * Utilities for logging tool execution diagnostics: validation failures
+ * and undocumented upstream responses.
  */
 
 import type { Logger } from '@oaknational/logger';
 import {
   McpToolError,
+  UndocumentedResponseError,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
@@ -80,6 +82,48 @@ function extractValidationCause(
   }
 
   return { error, details };
+}
+
+/**
+ * Logs undocumented upstream API response if present in execution result.
+ *
+ * When the upstream Oak API returns a status code not documented in the
+ * OpenAPI spec (e.g. 400 from the copyright gate), the SDK classifies it
+ * as an `McpToolError` with an `UndocumentedResponseError` cause.
+ *
+ * This function always logs the upstream details so that breakage in the
+ * SDK's content-blocking pattern match is visible in production logs.
+ *
+ * @param name - Tool name
+ * @param execution - Tool execution result
+ * @param logger - Logger instance
+ */
+export function logUpstreamErrorIfPresent(
+  name: string,
+  execution: ToolExecutionResult,
+  logger: Logger,
+): void {
+  if (!('error' in execution) || !execution.error) {
+    return;
+  }
+
+  const { error } = execution;
+  if (!(error instanceof McpToolError)) {
+    return;
+  }
+
+  if (!(error.cause instanceof UndocumentedResponseError)) {
+    return;
+  }
+
+  const upstream = error.cause;
+  logger.warn('Undocumented upstream response', {
+    toolName: name,
+    status: upstream.status,
+    operationId: upstream.operationId,
+    classified: error.code,
+    upstreamMessage: upstream.upstreamMessage ?? null,
+  });
 }
 
 function truncateForLog(value: unknown, maxLength = 2000): string | undefined {

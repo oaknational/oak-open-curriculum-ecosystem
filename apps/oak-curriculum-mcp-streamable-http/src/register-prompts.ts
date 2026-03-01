@@ -23,7 +23,8 @@ import { getPromptMessages } from '@oaknational/curriculum-sdk/public/mcp-tools.
 import {
   findLessonsArgsSchema,
   lessonPlanningArgsSchema,
-  progressionMapArgsSchema,
+  exploreCurriculumArgsSchema,
+  learningProgressionArgsSchema,
 } from './prompt-schemas.js';
 
 /**
@@ -84,12 +85,22 @@ export function registerPrompts(server: McpServer): void {
   );
 
   server.registerPrompt(
-    'progression-map',
+    'explore-curriculum',
     {
       description:
-        'Map how a concept develops across years in a subject, from early learning to GCSE.',
-      argsSchema: progressionMapArgsSchema,
+        'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and threads in parallel.',
+      argsSchema: exploreCurriculumArgsSchema,
     },
-    (args) => formatPromptResponse('progression-map', args),
+    (args) => formatPromptResponse('explore-curriculum', args),
+  );
+
+  server.registerPrompt(
+    'learning-progression',
+    {
+      description:
+        'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
+      argsSchema: learningProgressionArgsSchema,
+    },
+    (args) => formatPromptResponse('learning-progression', args),
   );
 }

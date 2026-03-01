@@ -23,10 +23,13 @@ todos:
 isProject: false
 ---
 
+
+<!-- Add a note to the plan to investigate the three prompts that the mcp server provides. Prompts are supposed to be invoked by users to achieve something, all of these look like they might be more appropriate as agent facing resources, and indeed mostly might be covered by the curriculum model and pre-requisite graph. Please investigate the intention, and consider what should be kept, what should be removed, and what type of mcp thing they should be @MCP . In addition to that it would be good to have one example prompt firmly aimed at users, for instance a prompt that would help a user find and adapt a lesson -- do not do anything yet, just add todo items to the plan -->
+
 # get-curriculum-model: Replace get-ontology and get-help
 
 **Last Updated**: 2026-03-01
-**Status**: Complete — All work streams (WS1-WS6) complete.
+**Status**: COMPLETE. All workstreams (WS1-WS6) and follow-up #1 (upstream error handling) done. Remaining follow-ups tracked in [merge-readiness.plan.md](merge-readiness.plan.md) and [post-merge-tidy-up.plan.md](../future/post-merge-tidy-up.plan.md).
 **Scope**: Remove `get-ontology` and `get-help` as standalone tools.
 `get-curriculum-model` is the sole agent guidance tool. Fix all known issues.
 
@@ -674,8 +677,107 @@ Before starting each phase, re-read and verify compliance with:
 
 ---
 
+## Post-Completion Assessment (2026-03-01)
+
+Live assessment of all 30 oak-local MCP tools via `CallMcpTool`.
+
+### Verified
+
+- `get-curriculum-model` present, returns ~40KB combined orientation (domain model + tool guidance)
+- `get-curriculum-model` with `tool_name: "search"` returns base orientation + tool-specific help
+- `get-curriculum-model` with unknown `tool_name` returns base orientation (no error) — confirmed WS5 decision
+- `curriculum://model` resource returns identical data to the tool
+- `get-ontology` and `get-help` absent from tool list
+- `curriculum://ontology` absent from resource list
+- SERVER_INSTRUCTIONS reference `get-curriculum-model` only
+- 28/30 tools returned 200 on representative calls
+- `search` across all scopes (lessons, units, threads, sequences, suggest) working
+- Suggest now returns results: `search(text: "frac", scope: "suggest", subject: "maths")` returned 10 suggestions
+
+### Issues Found
+
+1. **`get-lessons-transcript` and `get-lessons-assets` return 400 for many lessons** —
+   ROOT CAUSE IDENTIFIED (via GitHub source review of `oaknational/oak-openapi`).
+   The upstream API has a **third-party copyright licensing gate** in `queryGate.ts`.
+   Transcript and assets endpoints use `checkLessonAllowedAsset` which is an
+   **allowlist**: only `maths` is fully supported; other subjects require explicit
+   unit-level or lesson-level entries in `supportedUnits.json` / `supportedLessons.json`.
+   Summary and quiz endpoints use `blockLessonForCopyrightText` / `isBlockedUnitOrSubject`
+   which is a **blocklist**: only `english` and `financial-education` are blocked.
+
+   This explains why summary/quiz return 200 but transcript/assets return 400 for
+   the same lesson. `types-of-volcanoes` is in the allowlist; `volcanoes-and-their-features`
+   is not. The gate throws `TRPCError({ code: 'BAD_REQUEST' })` — the response body
+   should include a reason string (e.g. "Transcript not available: {slug}" with cause).
+
+   The upstream originally used HTTP 451 (Unavailable for Legal Reasons) but reverted
+   to 400 because tRPC does not support 451. The `errorResponses: []` in the OpenAPI
+   metadata means the 400 is undocumented in the spec.
+
+   The `prisma:warn In production, we recommend using prisma generate --no-engine`
+   warnings visible in Vercel logs are a **separate issue** — they also appear on 200
+   responses and are not related to the content gate.
+
+   **Impact on MCP server — upstream response text is LOST**: The upstream 400 body
+   includes a reason string (e.g. `"Transcript not available: \"slug\""` with cause), but
+   our generated `invoke` method in the SDK discards it. The flow:
+   1. `invoke` receives HTTP 400 from upstream (with reason text in body)
+   2. `resolveDescriptorForStatus(400)` finds no descriptor (only 200/404 are documented)
+   3. Throws `TypeError('Undocumented response status 400 ... Documented statuses: 200, 404')`
+      — **response body is never extracted** (line 101 `response.data`/`response.error` is unreachable)
+   4. `mapErrorToResult` catches the TypeError, wraps as `McpParameterError` with code `PARAMETER_ERROR`
+   5. MCP client sees: `"Undocumented response status 400 ..."` — no upstream reason
+
+   Two fixes needed:
+   - **Generated invoke**: For undocumented error statuses, extract `response.error` (or
+     `response.data`) before throwing, and include it in the error message/cause
+   - **mapErrorToResult**: Classify undocumented upstream statuses as `McpToolError`
+     (not `McpParameterError`) — the request parameters were valid, the upstream rejected
+     the content for licensing reasons
+
+   **Source**: `oaknational/oak-openapi` — `src/lib/queryGate.ts`, `src/lib/handlers/transcript/transcript.ts`, `src/lib/handlers/assets/assets.ts`. Code comment dates the gate to Oct 2024, described as "short term fix".
+
+### Observations
+
+- `get-prerequisite-graph` returns 1.4MB (1,607 units, 3,452 edges). This is a
+  large static dataset suited to being an optional MCP resource with appropriate
+  annotations, matching the `curriculum://model` pattern.
+- `get-thread-progressions` returns 179KB (164 threads). Also a candidate for
+  the same resource pattern.
+- All tool descriptions include prerequisite guidance referencing `get-curriculum-model`.
+
+### Follow-Up Items (priority order for next session)
+
+1. **Fix upstream error handling — COMPLETE (2026-03-01)**. All four changes implemented:
+   (a) Generated `invoke` now preserves upstream response body for undocumented statuses via
+   `UndocumentedResponseError` class (generated by `generate-undocumented-response-error-file.ts`,
+   exported from `sdk-codegen/mcp-tools`). Captures `status`, `operationId`, `documentedStatuses`,
+   `responseBody`, and extracted `upstreamMessage`.
+   (b) `mapErrorToResult` classifies undocumented upstream statuses as `McpToolError` with three
+   codes: `UPSTREAM_SERVER_ERROR` (5xx), `CONTENT_NOT_AVAILABLE` (400 + "blocked" in cause),
+   `UPSTREAM_API_ERROR` (all other undocumented). Copyright-blocked content gets a clear message:
+   "Resource unavailable due to copyright restrictions. The original may be viewed at
+   www.thenational.academy".
+   (c) App-layer logging via `logUpstreamErrorIfPresent` in `validation-logger.ts`, called from
+   `tool-handler-with-auth.ts`. Structured WARN log with `toolName`, `status`, `operationId`,
+   `classified`, `upstreamMessage`. `no-console: 'warn'` added to shared ESLint config.
+   (d) **Open issue on `oaknational/oak-openapi`** — NOT YET DONE. Feature request to include
+   error responses (400/4XX) in OpenAPI spec metadata. Separate task.
+
+   Live verified against dev server: 4 scenarios (blocked transcript, blocked assets, nonexistent
+   lesson, non-blocked quiz) all classified correctly.
+
+2. **Resource pattern for large datasets** — IN PROGRESS. Two new resources implemented (`curriculum://prerequisite-graph`, `curriculum://thread-progressions`) following the `curriculum://model` pattern. All resource registrations fixed to use spread metadata (no cherry-picking). Lint errors remain in quality gates — tests need architectural fix (direct source comparison instead of JSON re-parsing). See [MCP Resource Pattern plan](../../../../.cursor/plans/mcp_resource_pattern_2cd3f134.plan.md) for execution details.
+
+3. **Investigate MCP prompts** — NOT STARTED. Three prompts (`find-lessons`, `lesson-planning`, `progression-map`) may overlap with agent-facing resources. Need to assess whether they should be resources, removed, or redesigned. Consider adding a genuinely user-facing prompt (e.g. "adapt a lesson"). See [MCP Resource Pattern plan §Prompt Investigation](../../../../.cursor/plans/mcp_resource_pattern_2cd3f134.plan.md).
+
+---
+
 ## Session Provenance
 
 - Implementation: [Pedagogical context implementation](f8ef668a-57e5-41ea-83a0-5ff6936d6944)
 - Review and validation: [WS1 review and validation](46ddd53e-f696-4071-99bf-9d96ccd197e4)
 - Plan consolidation, content gap fix, restructuring, and 6-specialist review: [Plan review and hardening](eee143e8-dfde-41f7-b3e7-246013bd7418)
+- WS1-WS6 execution: [WS1 implementation](439ca3cf-a4e8-4dcd-b9b9-140e853a1d34)
+- Post-completion MCP tool assessment: [Tool assessment](7a65b4b1-1b59-46df-9aee-430c4030c019)
+- Upstream error handling fix: [Error handling](7e822a76-e479-4943-90f1-ddb496e63e57)

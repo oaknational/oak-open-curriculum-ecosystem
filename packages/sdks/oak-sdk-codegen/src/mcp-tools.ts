@@ -16,6 +16,7 @@ export {
   isToolName,
   isToolOperationId,
   listAllToolDescriptors,
+  UndocumentedResponseError,
 } from './types/generated/api-schema/mcp-tools/index.js';
 export type {
   ToolDescriptorMap,

@@ -60,77 +60,46 @@ export interface PatternConfig {
 }
 
 /**
- * Key for a subject × key stage combination.
+ * All subjects in the curriculum pattern configuration.
+ *
+ * These drive the `SubjectKeyStageKey` template literal type. Adding or
+ * removing an entry automatically updates the key union and the config
+ * exhaustiveness checks.
  */
-export type SubjectKeyStageKey =
-  | 'art:ks1'
-  | 'art:ks2'
-  | 'art:ks3'
-  | 'art:ks4'
-  | 'citizenship:ks1'
-  | 'citizenship:ks2'
-  | 'citizenship:ks3'
-  | 'citizenship:ks4'
-  | 'computing:ks1'
-  | 'computing:ks2'
-  | 'computing:ks3'
-  | 'computing:ks4'
-  | 'cooking-nutrition:ks1'
-  | 'cooking-nutrition:ks2'
-  | 'cooking-nutrition:ks3'
-  | 'cooking-nutrition:ks4'
-  | 'design-technology:ks1'
-  | 'design-technology:ks2'
-  | 'design-technology:ks3'
-  | 'design-technology:ks4'
-  | 'english:ks1'
-  | 'english:ks2'
-  | 'english:ks3'
-  | 'english:ks4'
-  | 'french:ks1'
-  | 'french:ks2'
-  | 'french:ks3'
-  | 'french:ks4'
-  | 'geography:ks1'
-  | 'geography:ks2'
-  | 'geography:ks3'
-  | 'geography:ks4'
-  | 'german:ks1'
-  | 'german:ks2'
-  | 'german:ks3'
-  | 'german:ks4'
-  | 'history:ks1'
-  | 'history:ks2'
-  | 'history:ks3'
-  | 'history:ks4'
-  | 'maths:ks1'
-  | 'maths:ks2'
-  | 'maths:ks3'
-  | 'maths:ks4'
-  | 'music:ks1'
-  | 'music:ks2'
-  | 'music:ks3'
-  | 'music:ks4'
-  | 'physical-education:ks1'
-  | 'physical-education:ks2'
-  | 'physical-education:ks3'
-  | 'physical-education:ks4'
-  | 'religious-education:ks1'
-  | 'religious-education:ks2'
-  | 'religious-education:ks3'
-  | 'religious-education:ks4'
-  | 'rshe-pshe:ks1'
-  | 'rshe-pshe:ks2'
-  | 'rshe-pshe:ks3'
-  | 'rshe-pshe:ks4'
-  | 'science:ks1'
-  | 'science:ks2'
-  | 'science:ks3'
-  | 'science:ks4'
-  | 'spanish:ks1'
-  | 'spanish:ks2'
-  | 'spanish:ks3'
-  | 'spanish:ks4';
+export const PATTERN_SUBJECTS = [
+  'art',
+  'citizenship',
+  'computing',
+  'cooking-nutrition',
+  'design-technology',
+  'english',
+  'french',
+  'geography',
+  'german',
+  'history',
+  'maths',
+  'music',
+  'physical-education',
+  'religious-education',
+  'rshe-pshe',
+  'science',
+  'spanish',
+] as const;
+
+/** All key stages in the curriculum pattern configuration. */
+export const PATTERN_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+
+/** A subject slug used in pattern configuration. */
+export type PatternSubject = (typeof PATTERN_SUBJECTS)[number];
+
+/** A key stage slug used in pattern configuration. */
+export type PatternKeyStage = (typeof PATTERN_KEY_STAGES)[number];
+
+/**
+ * Key for a subject × key stage combination, derived from the
+ * constituent subject and key stage literal types.
+ */
+export type SubjectKeyStageKey = `${PatternSubject}:${PatternKeyStage}`;
 
 /**
  * Complete pattern configuration map for all 68 subject × key stage combinations.
@@ -350,11 +319,34 @@ export const CURRICULUM_PATTERN_CONFIG: Readonly<Record<SubjectKeyStageKey, Patt
 } as const;
 
 /**
+ * Build a type-safe `SubjectKeyStageKey` from its constituent parts.
+ *
+ * Because both parameters are constrained to their literal unions,
+ * TypeScript infers the return type as the full template literal union
+ * without requiring a type assertion.
+ */
+export function makeSubjectKeyStageKey(
+  subject: PatternSubject,
+  keyStage: PatternKeyStage,
+): SubjectKeyStageKey {
+  return `${subject}:${keyStage}`;
+}
+
+/**
+ * Type guard: checks whether a string is a valid `SubjectKeyStageKey`
+ * by testing membership in the config object.
+ */
+export function isSubjectKeyStageKey(key: string): key is SubjectKeyStageKey {
+  return key in CURRICULUM_PATTERN_CONFIG;
+}
+
+/**
  * Get pattern configuration for a subject × key stage combination.
  */
 export function getPatternConfig(subject: string, keyStage: string): PatternConfig | undefined {
-  // Safe assertion: function validates against config at runtime
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const key = `${subject}:${keyStage}` as SubjectKeyStageKey;
-  return CURRICULUM_PATTERN_CONFIG[key];
+  const key = `${subject}:${keyStage}`;
+  if (isSubjectKeyStageKey(key)) {
+    return CURRICULUM_PATTERN_CONFIG[key];
+  }
+  return undefined;
 }

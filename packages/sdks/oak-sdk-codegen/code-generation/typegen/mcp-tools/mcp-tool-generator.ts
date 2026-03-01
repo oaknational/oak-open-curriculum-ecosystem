@@ -18,6 +18,7 @@ import { getParameterPrimitiveType, extractExampleValue } from './parts/param-ut
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
+import { generateUndocumentedResponseErrorFile } from './parts/generate-undocumented-response-error-file.js';
 import { generateStubModules } from './stub-modules.js';
 import { sampleSchemaObject } from './schema-sample-core.js';
 import { createSchemaResolver, resolveResponseSchemaForOperation } from './response-schema.js';
@@ -240,6 +241,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result.data['scopes-supported.ts'] = generateScopesSupportedFile();
   result.index = generateRootIndexFile();
   result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();
+  result.contract['undocumented-response-error.ts'] = generateUndocumentedResponseErrorFile();
   result.stubs = generateStubModules(toolNames, stubPayloads);
 
   return result;

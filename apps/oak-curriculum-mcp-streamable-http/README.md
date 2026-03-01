@@ -15,6 +15,21 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 - [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
 - [ADR-113](../../docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md) - MCP auth compliance
 - [ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) - OAuth authorisation server model
+- [ADR-123](../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) - MCP server primitives strategy
+
+## What This Server Provides
+
+This server exposes Oak's curriculum through the three MCP primitive types, each with a distinct control model defined by the [MCP specification](https://modelcontextprotocol.io/).
+
+**Tools** (model-controlled) — 30 curriculum tools: 23 generated from the OpenAPI schema plus 7 aggregated tools (search, browse, fetch, explore, and orientation via `get-curriculum-model`). The AI model decides when to call them. Generated tool definitions are updated automatically when the upstream API changes via `pnpm sdk-codegen`.
+
+**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prerequisite-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
+
+**Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, and `learning-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task.
+
+Together, tools give the AI autonomous access to curriculum data, resources give capable clients pre-loaded context, and prompts give users structured entry points for common tasks. The goal is to make Oak's curriculum discoverable and usable through AI assistants, helping teachers find, understand, and adapt high-quality curriculum resources.
+
+For the architectural rationale behind this primitive mapping, see [ADR-123](../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) and [ADR-058](../../docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md).
 
 ## Quick start (local)
 
@@ -150,32 +165,20 @@ Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide Elas
 
 This application has comprehensive test coverage across three testing layers:
 
-### Unit Tests (53 tests)
+### Unit Tests
 
-- **Header Redaction** (`src/logging/header-redaction.unit.test.ts`): 53 tests covering:
-  - Full redaction of sensitive headers (Authorization, Cookie, API keys, tokens)
-  - Partial redaction of IP addresses (CF-Connecting-IP, X-Forwarded-For, etc.)
-  - Preservation of non-sensitive headers
-  - Edge cases (undefined values, arrays, IPv6, case insensitivity)
-  - Both `redactHeaders()` and `redactHeadersSummary()` functions
+- **Header Redaction** (`src/logging/header-redaction.unit.test.ts`): sensitive header redaction, IP address handling, edge cases
+- **Validation Logger** (`src/validation-logger.unit.test.ts`): upstream error classification and logging
+- **Prompt Registration** (`src/register-prompts.integration.test.ts`): MCP prompt schemas and message generation
 
-### Integration Tests (20 tests)
+### Integration Tests
 
-- **Correlation Middleware** (`src/correlation/middleware.integration.test.ts`): 20 tests including:
-  - 10 new tests for header redaction in request/response logging
-  - Verification that sensitive headers are redacted in correlation middleware logs
-  - Testing mixed sensitive/non-sensitive header handling
+- **Correlation Middleware** (`src/correlation/middleware.integration.test.ts`): header redaction in request/response logging, correlation ID propagation
 
-### End-to-End Tests (63 tests)
+### End-to-End Tests
 
-- **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): 6 tests covering:
-  - Full request/response cycles with sensitive headers
-  - IP header handling
-  - Simulated Clerk OAuth scenarios
-  - Production-like header sets
-  - Auth failure responses with WWW-Authenticate
-
-**Total Test Count**: 200+ tests (137 unit/integration + 63 E2E)
+- **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
+- **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
 
 ### Running Tests
 

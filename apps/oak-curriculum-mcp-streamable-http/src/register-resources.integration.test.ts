@@ -293,3 +293,76 @@ describe('registerAllResources excludes ontology resource', () => {
     expect(uris).toContain('curriculum://model');
   });
 });
+
+describe('registerAllResources registers supplementary data resources', () => {
+  let server: ResourceRegistrar;
+  let registeredResources: Map<string, CapturedResource>;
+
+  beforeEach(() => {
+    const mock = createMockServer();
+    server = mock.server;
+    registeredResources = mock.registeredResources;
+  });
+
+  it('registers curriculum://prerequisite-graph', () => {
+    registerAllResources(server);
+
+    const uris = Array.from(registeredResources.keys());
+    expect(uris).toContain('curriculum://prerequisite-graph');
+  });
+
+  it('registers curriculum://thread-progressions', () => {
+    registerAllResources(server);
+
+    const uris = Array.from(registeredResources.keys());
+    expect(uris).toContain('curriculum://thread-progressions');
+  });
+
+  it('prerequisite graph has priority 0.5 annotations', () => {
+    registerAllResources(server);
+
+    const resource = registeredResources.get('curriculum://prerequisite-graph');
+    expect(resource).toBeDefined();
+    expect(resource?.metadata.annotations?.priority).toBe(0.5);
+    expect(resource?.metadata.annotations?.audience).toContain('assistant');
+  });
+
+  it('thread progressions has priority 0.5 annotations', () => {
+    registerAllResources(server);
+
+    const resource = registeredResources.get('curriculum://thread-progressions');
+    expect(resource).toBeDefined();
+    expect(resource?.metadata.annotations?.priority).toBe(0.5);
+    expect(resource?.metadata.annotations?.audience).toContain('assistant');
+  });
+});
+
+describe('metadata forwarding — no cherry-picking', () => {
+  let server: ResourceRegistrar;
+  let registeredResources: Map<string, CapturedResource>;
+
+  beforeEach(() => {
+    const mock = createMockServer();
+    server = mock.server;
+    registeredResources = mock.registeredResources;
+  });
+
+  it('documentation resources forward title in metadata', () => {
+    registerDocumentationResources(server);
+
+    for (const [, resource] of registeredResources) {
+      expect(resource.metadata.title).toBeDefined();
+    }
+  });
+
+  it('curriculum model forwards annotations without manual field picking', () => {
+    registerCurriculumModelResource(server);
+
+    const resource = registeredResources.get('curriculum://model');
+    expect(resource).toBeDefined();
+    expect(resource?.metadata.annotations).toBeDefined();
+    expect(resource?.metadata.annotations?.priority).toBe(1.0);
+    expect(resource?.metadata.annotations?.audience).toContain('assistant');
+    expect(resource?.metadata.title).toBeDefined();
+  });
+});

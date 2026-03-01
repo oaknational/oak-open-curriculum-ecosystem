@@ -94,6 +94,11 @@ enough for permanent documentation.
 - When moving files between workspaces, check whether
   removed tests should be recreated in the destination
 
+## Error Handling
+
+- All error handling MUST preserve the error cause chain. We must be always be able to trace the original error from the wrapped error.
+- All error handling should be done using the `Result` type. The repo has a `@oaknational/result` package that provides a `Result` type and a set of functions to work with it. There are a lot of remaining uses of `throw` and `try/catch` blocks that need to be converted to use the `Result` type over time.
+
 ## Documentation (Agent Operational)
 
 - Session prompts in `.agent/prompts/` should be updated
@@ -145,6 +150,7 @@ enough for permanent documentation.
 | Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
 | Reviewer reports G1 failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output |
+| `--testPathPattern` fails in vitest v4 | Use file paths as positional args: `pnpm vitest run path/to/test.ts` |
 | Reviewer flags repo name mismatch | False positive — confirmed three times. Always verify against user's disposition |
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |

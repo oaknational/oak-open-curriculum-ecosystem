@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import type { ToolDescriptor } from '../contract/tool-descriptor.contract.js';
+import { UndocumentedResponseError } from '../contract/undocumented-response-error.js';
 import { getResponseDescriptorsByOperationId } from '../../response-map.js';
 import type { OakApiPathBasedClient } from '../../client-types.js';
 /**
@@ -112,7 +113,8 @@ export const getSequencesAssets = {
     const status = response.response.status;
     const descriptorForStatus = resolveDescriptorForStatus(status);
     if (!descriptorForStatus) {
-      throw new TypeError(`Undocumented response status ${String(status)} for getAssets-getSequenceAssets. Documented statuses: 200`);
+      const responseBody = status >= 200 && status < 300 ? response.data : response.error;
+      throw new UndocumentedResponseError(status, 'getAssets-getSequenceAssets', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
     return payload;

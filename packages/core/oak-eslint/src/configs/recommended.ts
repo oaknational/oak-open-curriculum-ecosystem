@@ -86,6 +86,7 @@ export const recommended: Linter.Config[] = [
       'max-lines': ['error', 250],
 
       // General good practices
+      'no-console': 'warn',
       'no-debugger': 'error',
       'no-empty': 'error',
       'no-empty-function': 'error',

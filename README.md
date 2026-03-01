@@ -35,6 +35,16 @@ Three capabilities, all generated from the [Oak Open Curriculum](https://open-ap
 
 The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
 
+### MCP Server Capabilities
+
+The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
+
+- **Tools** (model-controlled): 30 curriculum tools (23 generated from the OpenAPI schema, 7 aggregated) including orientation via `get-curriculum-model`. The AI decides when to use them.
+- **Resources** (application-controlled): Curriculum model, prerequisite graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
+- **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
+
+See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md) for full detail and [ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) for the architectural rationale.
+
 ## Quick Start
 
 ### Prerequisites

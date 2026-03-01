@@ -133,6 +133,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-119: Agentic Engineering Practice](119-agentic-engineering-practice.md)
 - [ADR-120: Per-Scope Search Tuning Parameters](120-per-scope-search-tuning.md)
 - [ADR-121: Quality Gate Surfaces](121-quality-gate-surfaces.md)
+- [ADR-122: Permissive CORS for OAuth-Protected MCP](122-permissive-cors-for-oauth-protected-mcp.md)
+- [ADR-123: MCP Server Primitives Strategy](123-mcp-server-primitives-strategy.md)
 
 ## Key Architectural Decisions
 

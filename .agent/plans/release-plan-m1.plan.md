@@ -1,9 +1,9 @@
 # Milestone 1 Release Plan (Public Alpha)
 
 **Status**: Active  
-**Last Updated**: 2026-02-28  
+**Last Updated**: 2026-03-01  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: M1-S009 (complete suggest pipeline in SDK — `bool_prefix` alongside completion). M1-S003 revised (exclude binary endpoint from MCP tools). M1-S007 deferred. All other snags complete/closed. Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: M1-S009 complete. M1-S003 complete. M1-S007 deferred. Post-completion work: upstream error handling complete, resource pattern (prerequisite-graph, thread-progressions) in progress, MCP prompt investigation not started. Remaining M0 gates: quality gates on uncommitted work, secrets sweep, manual review, merge, make public.
 
 ---
 

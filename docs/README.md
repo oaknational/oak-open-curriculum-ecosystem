@@ -44,17 +44,15 @@ last_reviewed: 2026-02-25
 
 - [Curriculum Guide](domain/curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
 - [Data Variances](domain/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
-- [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
-- [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) - Canonical entity-relationship source used by generated tooling
+- [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) (TypeScript source) - Domain model and structural patterns
+- [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) (TypeScript source) - Canonical entity-relationship data used by generated tooling
 
 ### Engineering Practice
 
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
 - [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system
 
-## AI Agent Guidance
-
-Comprehensive documentation for AI agents working with this codebase:
+## Code Standards and Testing
 
 - [Development Practice](governance/development-practice.md) - Code standards and workflow
 - [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines

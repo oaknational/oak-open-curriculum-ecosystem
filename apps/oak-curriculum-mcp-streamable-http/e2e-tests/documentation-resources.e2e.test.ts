@@ -14,6 +14,10 @@ import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 import { z } from 'zod';
+import {
+  getPrerequisiteGraphJson,
+  getThreadProgressionsJson,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const ResourcesListResultSchema = z.object({
   resources: z.array(
@@ -245,6 +249,62 @@ describe('Documentation Resources E2E', () => {
     it('tools reference includes agentSupport category', async () => {
       const content = await readResource('docs://oak/tools.md');
       expect(content).toContain('Agent Support');
+    });
+  });
+});
+
+describe('Supplementary Data Resources E2E', () => {
+  describe('resources/list includes supplementary data resources', () => {
+    it('includes curriculum://prerequisite-graph in resource list', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({ jsonrpc: '2.0', id: '1', method: 'resources/list' });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const resources = parsed.data?.resources ?? [];
+      const prereqGraph = resources.find((r) => r.uri === 'curriculum://prerequisite-graph');
+      expect(prereqGraph).toBeDefined();
+      expect(prereqGraph?.mimeType).toBe('application/json');
+    });
+
+    it('includes curriculum://thread-progressions in resource list', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({ jsonrpc: '2.0', id: '1', method: 'resources/list' });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const resources = parsed.data?.resources ?? [];
+      const threadProgressions = resources.find(
+        (r) => r.uri === 'curriculum://thread-progressions',
+      );
+      expect(threadProgressions).toBeDefined();
+      expect(threadProgressions?.mimeType).toBe('application/json');
+    });
+  });
+
+  describe('resources/read returns valid data', () => {
+    it('prerequisite graph returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://prerequisite-graph');
+      expect(content).toBe(getPrerequisiteGraphJson());
+    });
+
+    it('thread progressions returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://thread-progressions');
+      expect(content).toBe(getThreadProgressionsJson());
     });
   });
 });

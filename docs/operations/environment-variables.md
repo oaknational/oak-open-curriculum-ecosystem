@@ -74,19 +74,15 @@ The search app requires its own `.env.local` file with additional variables for 
 | `ELASTICSEARCH_API_KEY` | API key with manage + search privileges | Elasticsearch Cloud - Create API key |
 | `OAK_API_KEY`           | Oak Curriculum API access               | Same as root `.env`                  |
 | `SEARCH_API_KEY`        | Shared secret for admin/status routes   | `openssl rand -hex 32`               |
-| `SEARCH_INDEX_VERSION`  | Monotonic cache/version tag             | Set manually (e.g., `v2025-03-16`)   |
-| `AI_PROVIDER`           | AI provider for natural language search | `openai` or `none`                   |
+| `SEARCH_INDEX_VERSION`  | Monotonic cache/version tag             | Set manually (e.g., `v2026-03-01`)   |
 
 #### Optional
 
-| Variable                            | Purpose                                  | Default           |
-| ----------------------------------- | ---------------------------------------- | ----------------- |
-| `OPENAI_API_KEY`                    | Required when `AI_PROVIDER=openai`       | -                 |
-| `ZERO_HIT_WEBHOOK_URL`              | Webhook for zero-hit telemetry           | `none` (disabled) |
-| `SEARCH_INDEX_TARGET`               | Index namespace                          | `primary`         |
-| `ZERO_HIT_PERSISTENCE_ENABLED`      | Persist zero-hit events to Elasticsearch | `false`           |
-| `SEMANTIC_SEARCH_USE_FIXTURES`      | Enable fixture mode for testing          | `live`            |
-| `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` | Show fixture toggle in UI                | `false`           |
+| Variable                       | Purpose                                  | Default           |
+| ------------------------------ | ---------------------------------------- | ----------------- |
+| `ZERO_HIT_WEBHOOK_URL`         | Webhook for zero-hit telemetry           | `none` (disabled) |
+| `SEARCH_INDEX_TARGET`          | Index namespace                          | `primary`         |
+| `ZERO_HIT_PERSISTENCE_ENABLED` | Persist zero-hit events to Elasticsearch | `false`           |
 
 **Complete reference**: See `apps/oak-search-cli/README.md` for detailed setup instructions.
 
@@ -162,7 +158,7 @@ Keys do not expire and are available to anyone. No approval process is required.
 
 1. Sign up for [Elasticsearch Cloud](https://cloud.elastic.co/)
 2. Create a free Serverless project
-3. Run `pnpm -C apps/oak-search-cli elastic:setup` to configure indices
+3. Run `pnpm -C apps/oak-search-cli es:setup` to configure indices
 4. Use provided credentials
 
 ### OpenAI (Natural Language Search)
@@ -188,7 +184,6 @@ Environment variables are only required for:
 
 - Running dev servers (`pnpm dev`)
 - Integration tests that call real APIs
-- E2E tests
 - Smoke tests
 
 This allows you to contribute code, tests, and documentation without needing to set up external services.
@@ -255,7 +250,7 @@ DANGEROUSLY_DISABLE_AUTH=true
 
 ```bash
 pnpm test           # Unit tests (no env vars needed)
-pnpm test:e2e       # E2E tests (requires env vars)
+pnpm test:e2e       # E2E tests (uses mocks and DI — no env vars needed)
 ```
 
 ## Related Documentation

@@ -76,6 +76,10 @@ async function injectToolOutput(
       ? { toolName: toolNameOrOptions }
       : (toolNameOrOptions ?? {});
 
+  // TODO: Replace `globalThis as any` with a typed OpenAI widget interface.
+  // The ChatGPT widget runtime injects `window.openai` with no published type
+  // definition. A shared `OpenAIWidgetGlobals` type would eliminate the `any`
+  // casts across both widget spec files.
   await page.addInitScript(
     (args: { data: object; toolName?: string; annotationsTitle?: string }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JC: Browser context injection requires any for window augmentation

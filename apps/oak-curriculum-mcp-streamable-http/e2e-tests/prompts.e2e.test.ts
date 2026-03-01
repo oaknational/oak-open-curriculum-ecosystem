@@ -45,96 +45,40 @@ const PromptsGetResultSchema = z.object({
   ),
 });
 
+async function listPrompts() {
+  const { app } = await createStubbedHttpApp();
+  const response = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Accept', STUB_ACCEPT_HEADER)
+    .send({ jsonrpc: '2.0', id: '1', method: 'prompts/list' });
+
+  const envelope = parseSseEnvelope(response.text);
+  const parsed = PromptsListResultSchema.safeParse(envelope.result);
+  return { response, parsed, prompts: parsed.data?.prompts ?? [] };
+}
+
 describe('MCP Prompts E2E', () => {
   describe('prompts/list - Client can discover workflow prompts', () => {
-    it('returns find-lessons prompt', async () => {
-      const { app } = await createStubbedHttpApp();
+    it.each(['find-lessons', 'lesson-planning', 'explore-curriculum', 'learning-progression'])(
+      'returns %s prompt',
+      async (promptName) => {
+        const { response, parsed, prompts } = await listPrompts();
 
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'prompts/list',
-        });
+        expect(response.status).toBe(200);
+        expect(parsed.success).toBe(true);
+        expect(prompts.find((p) => p.name === promptName)).toBeDefined();
+      },
+    );
 
-      expect(response.status).toBe(200);
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = PromptsListResultSchema.safeParse(envelope.result);
-      expect(parsed.success).toBe(true);
-
-      const prompts = parsed.data?.prompts ?? [];
-      const findLessons = prompts.find((p) => p.name === 'find-lessons');
-
-      expect(findLessons).toBeDefined();
-    });
-
-    it('returns lesson-planning prompt', async () => {
-      const { app } = await createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'prompts/list',
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = PromptsListResultSchema.safeParse(envelope.result);
-
-      const prompts = parsed.data?.prompts ?? [];
-      const lessonPlanning = prompts.find((p) => p.name === 'lesson-planning');
-
-      expect(lessonPlanning).toBeDefined();
-    });
-
-    it('returns progression-map prompt', async () => {
-      const { app } = await createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'prompts/list',
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = PromptsListResultSchema.safeParse(envelope.result);
-
-      const prompts = parsed.data?.prompts ?? [];
-      const progressionMap = prompts.find((p) => p.name === 'progression-map');
-
-      expect(progressionMap).toBeDefined();
+    it('returns exactly 4 prompts', async () => {
+      const { prompts } = await listPrompts();
+      expect(prompts).toHaveLength(4);
     });
 
     it('prompts include helpful descriptions', async () => {
-      const { app } = await createStubbedHttpApp();
+      const { prompts } = await listPrompts();
 
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'prompts/list',
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = PromptsListResultSchema.safeParse(envelope.result);
-
-      const prompts = parsed.data?.prompts ?? [];
-
-      // Proves: Descriptions help users choose the right prompt
       for (const prompt of prompts) {
         expect(prompt.description).toBeDefined();
         expect(prompt.description?.length).toBeGreaterThan(10);
@@ -228,7 +172,7 @@ describe('MCP Prompts E2E', () => {
       expect(allText).toContain('decimals');
     });
 
-    it('progression-map prompt guides concept tracking', async () => {
+    it('explore-curriculum prompt includes topic and references explore-topic', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -240,8 +184,8 @@ describe('MCP Prompts E2E', () => {
           id: '1',
           method: 'prompts/get',
           params: {
-            name: 'progression-map',
-            arguments: { concept: 'number', subject: 'maths' },
+            name: 'explore-curriculum',
+            arguments: { topic: 'volcanos' },
           },
         });
 
@@ -251,8 +195,34 @@ describe('MCP Prompts E2E', () => {
       const messages = parsed.data?.messages ?? [];
       const allText = messages.map((m) => m.content.text ?? '').join(' ');
 
-      // Proves: Prompt addresses progression tracking use case
-      expect(allText).toContain('number');
+      expect(allText).toContain('volcanos');
+      expect(allText).toContain('explore-topic');
+    });
+
+    it('learning-progression prompt includes concept and subject', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'prompts/get',
+          params: {
+            name: 'learning-progression',
+            arguments: { concept: 'algebra', subject: 'maths' },
+          },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = PromptsGetResultSchema.safeParse(envelope.result);
+
+      const messages = parsed.data?.messages ?? [];
+      const allText = messages.map((m) => m.content.text ?? '').join(' ');
+
+      expect(allText).toContain('algebra');
       expect(allText).toContain('maths');
     });
   });

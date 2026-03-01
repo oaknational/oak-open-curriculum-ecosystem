@@ -93,11 +93,11 @@ Before making changes, start with the quick start guide:
    pnpm install
    ```
 
-3. Set up environment:
+3. Set up environment (skip for Level 1 contributions — no env vars needed):
 
    ```bash
    cp .env.example .env
-   # Populate OAK_API_KEY, SEARCH_API_KEY, ELASTICSEARCH_* etc. as needed
+   # Populate OAK_API_KEY (see below for which variables go where)
    ```
 
    `.env` and `.env.local` are local-only, untracked files.

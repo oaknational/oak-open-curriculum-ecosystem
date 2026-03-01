@@ -31,7 +31,7 @@ export const CURRICULUM_MODEL_RESOURCE = {
   mimeType: 'application/json' as const,
   annotations: {
     priority: 1.0,
-    audience: ['assistant'] as const,
+    audience: ['assistant'] satisfies ('user' | 'assistant')[],
   },
 };
 

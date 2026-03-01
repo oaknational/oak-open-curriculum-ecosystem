@@ -14,7 +14,6 @@ import type { PromptMessage } from './mcp-prompt-messages.js';
 import {
   getFindLessonsMessages,
   getLessonPlanningMessages,
-  getProgressionMapMessages,
   getExploreCurriculumMessages,
   getLearningProgressionMessages,
 } from './mcp-prompt-messages.js';
@@ -86,23 +85,6 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     ],
   },
   {
-    name: 'progression-map',
-    description:
-      'Map how a concept develops across years in a subject, showing progression from early learning to GCSE.',
-    arguments: [
-      {
-        name: 'concept',
-        description: 'The concept thread to explore (e.g., "number", "forces", "grammar")',
-        required: true,
-      },
-      {
-        name: 'subject',
-        description: 'The subject area (e.g., "maths", "science", "english")',
-        required: true,
-      },
-    ],
-  },
-  {
     name: 'explore-curriculum',
     description:
       'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and learning threads in parallel to give a broad overview before drilling down.',
@@ -161,8 +143,6 @@ export function getPromptMessages(promptName: string, args: PromptArgs): PromptM
       return getFindLessonsMessages(args);
     case 'lesson-planning':
       return getLessonPlanningMessages(args);
-    case 'progression-map':
-      return getProgressionMapMessages(args);
     case 'explore-curriculum':
       return getExploreCurriculumMessages(args);
     case 'learning-progression':

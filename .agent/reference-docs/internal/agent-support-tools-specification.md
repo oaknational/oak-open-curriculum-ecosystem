@@ -8,9 +8,13 @@ Agent support tools are MCP primitives designed to help AI agents understand the
 
 - `get-curriculum-model` - Combined orientation: domain model + tool guidance (callOrder 0)
 
-**Current agent support resource:**
+**Current resources (context-providing tool/resource pairs):**
 
-- `curriculum://model` - JSON resource exposing combined curriculum orientation data
+| Resource | Tool | Priority | Purpose |
+|---|---|---|---|
+| `curriculum://model` | `get-curriculum-model` | 1.0 (essential) | Combined orientation: domain model + tool guidance |
+| `curriculum://prerequisite-graph` | `get-prerequisite-graph` | 0.5 (supplementary) | Unit dependencies and prior knowledge requirements |
+| `curriculum://thread-progressions` | `get-thread-progressions` | 0.5 (supplementary) | Ordered unit sequences within curriculum threads |
 
 ## Architecture Reference
 
@@ -275,22 +279,39 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/your-new-tool-resource.ts`
 
+The resource definition includes MCP spec annotations. Use `priority: 1.0` for
+essential orientation data or `priority: 0.5` for supplementary reference data.
+Use `satisfies` (not `as const`) on the `audience` array to avoid creating a
+readonly type incompatible with the MCP SDK's mutable array parameter.
+
 ```typescript
 export const YOUR_NEW_RESOURCE = {
   name: 'your-new-resource',
   uri: 'curriculum://your-new-resource',
+  title: 'Your New Resource Title',
   description: 'Description for resource listings',
   mimeType: 'application/json' as const,
-} as const;
+  annotations: {
+    priority: 0.5,
+    audience: ['assistant'] satisfies ('user' | 'assistant')[],
+  },
+};
 
 export function getYourNewResourceJson(): string {
   return JSON.stringify(yourNewToolData, null, 2);
 }
 ```
 
+URI convention: all curriculum data resources use the `curriculum://` scheme.
+
 #### 3.2 Register Resource in App
 
 **File:** `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts`
+
+Use the spread metadata pattern. The MCP spec and official SDK determine which
+fields are valid -- our registration code forwards everything, it does not
+filter. Destructure only `name` and `uri` (the positional parameters); spread
+everything else into metadata.
 
 ```typescript
 import {
@@ -298,28 +319,21 @@ import {
   getYourNewResourceJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
-export function registerYourNewResource(server: McpServer): void {
-  server.registerResource(
-    YOUR_NEW_RESOURCE.name,
-    YOUR_NEW_RESOURCE.uri,
-    {
-      description: YOUR_NEW_RESOURCE.description,
-      mimeType: YOUR_NEW_RESOURCE.mimeType,
-    },
-    () => ({
-      contents: [
-        {
-          uri: YOUR_NEW_RESOURCE.uri,
-          mimeType: YOUR_NEW_RESOURCE.mimeType,
-          text: getYourNewResourceJson(),
-        },
-      ],
-    }),
-  );
+export function registerYourNewResource(server: ResourceRegistrar): void {
+  const { name, uri, ...metadata } = YOUR_NEW_RESOURCE;
+  server.registerResource(name, uri, metadata, () => ({
+    contents: [
+      {
+        uri,
+        mimeType: YOUR_NEW_RESOURCE.mimeType,
+        text: getYourNewResourceJson(),
+      },
+    ],
+  }));
 }
 
 // Add to registerAllResources
-export function registerAllResources(server: McpServer): void {
+export function registerAllResources(server: ResourceRegistrar): void {
   // ...existing resources
   registerYourNewResource(server);
 }

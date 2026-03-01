@@ -90,4 +90,67 @@ describe('executeToolCall', () => {
     expect(result.error?.toolName).toBe('get-rate-limit');
     expect(result.error?.code).toBe('EXECUTION_ERROR');
   });
+
+  it('classifies undocumented 4xx as UPSTREAM_API_ERROR and preserves upstream message', async () => {
+    const upstreamBody = {
+      message: 'Invalid lesson slug format: "123"',
+      code: 'BAD_REQUEST',
+    };
+    const { client } = createRateLimitClient(() => ({
+      error: upstreamBody,
+      response: { status: 400 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.code).toBe('UPSTREAM_API_ERROR');
+    expect(result.error?.message).toContain('Invalid lesson slug format');
+  });
+
+  it('classifies undocumented 5xx as UPSTREAM_SERVER_ERROR', async () => {
+    const { client } = createRateLimitClient(() => ({
+      error: { message: 'Internal server error' },
+      response: { status: 502 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.code).toBe('UPSTREAM_SERVER_ERROR');
+    expect(result.error?.message).toContain('Internal server error');
+  });
+
+  it('handles undocumented status with no extractable message', async () => {
+    const { client } = createRateLimitClient(() => ({
+      error: undefined,
+      response: { status: 418 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.code).toBe('UPSTREAM_API_ERROR');
+    expect(result.error?.message).toContain('418');
+  });
+
+  it('classifies content-blocked 400 as CONTENT_NOT_AVAILABLE', async () => {
+    const contentBlockedBody = {
+      message: 'Lesson not available: "volcanoes-and-their-features"',
+      data: {
+        cause:
+          'Error: Lesson (volcanoes-and-their-features) not available, and subject (geography) and unit (mountains-and-volcanoes-what-where-and-why) are blocked for assets',
+      },
+      code: 'BAD_REQUEST',
+    };
+    const { client } = createRateLimitClient(() => ({
+      error: contentBlockedBody,
+      response: { status: 400 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.code).toBe('CONTENT_NOT_AVAILABLE');
+  });
 });

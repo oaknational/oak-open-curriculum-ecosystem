@@ -51,6 +51,8 @@ const EXCLUDED_RULES = [
 ];
 
 test.describe('Widget accessibility', () => {
+  // TODO: Replace `globalThis as any` with a typed OpenAI widget interface.
+  // See widget-rendering.spec.ts for the full rationale.
   test('neutral shell passes WCAG checks', async ({ page }) => {
     await page.addInitScript((fixture: object) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JC: Browser context injection requires any for window augmentation

@@ -42,6 +42,7 @@ export {
 } from '@oaknational/sdk-codegen/mcp-tools';
 
 export { SCOPES_SUPPORTED, type ScopesSupported } from '@oaknational/sdk-codegen/mcp-tools';
+export { UndocumentedResponseError } from '@oaknational/sdk-codegen/mcp-tools';
 
 export {
   createStubToolExecutionAdapter,
@@ -91,6 +92,16 @@ export {
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
 } from '../mcp/curriculum-model-resource.js';
+
+export {
+  PREREQUISITE_GRAPH_RESOURCE,
+  getPrerequisiteGraphJson,
+} from '../mcp/prerequisite-graph-resource.js';
+
+export {
+  THREAD_PROGRESSIONS_RESOURCE,
+  getThreadProgressionsJson,
+} from '../mcp/thread-progressions-resource.js';
 
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 

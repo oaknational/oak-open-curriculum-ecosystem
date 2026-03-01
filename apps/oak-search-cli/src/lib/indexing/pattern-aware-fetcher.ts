@@ -14,11 +14,7 @@ import { formatSdkError, type SdkFetchError } from '@oaknational/curriculum-sdk'
 import { isSequenceUnitsResponse } from '@oaknational/curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter';
-import {
-  getPatternConfig,
-  type PatternConfig,
-  type SubjectKeyStageKey,
-} from './curriculum-pattern-config';
+import { getPatternConfig, type PatternConfig } from './curriculum-pattern-config';
 import { ingestLogger } from '../logger';
 import { extractUnitsForKeyStage } from './sequence-unit-extraction';
 
@@ -59,9 +55,7 @@ export async function fetchUnitsPatternAware(
   keyStage: KeyStage,
   logger: Logger = ingestLogger,
 ): Promise<PatternFetchResult> {
-  // Safe assertion: subject and keyStage come from validated SDK types
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const key = `${subject}:${keyStage}` as SubjectKeyStageKey;
+  const key = `${subject}:${keyStage}`;
   const config = getPatternConfig(subject, keyStage);
 
   if (!config) {

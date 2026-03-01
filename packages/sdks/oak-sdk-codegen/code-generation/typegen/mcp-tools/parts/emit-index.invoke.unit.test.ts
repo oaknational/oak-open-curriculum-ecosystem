@@ -21,10 +21,40 @@ describe('emitIndex (invoke wrapper emission)', () => {
     expect(code).toContain("const documentedStatuses = ['200', '404'] as const;");
     expect(code).toContain('const resolveDescriptorForStatus = (status: number) => {');
     expect(code).toContain('const status = response.response.status;');
-    expect(code).toContain(
-      'Undocumented response status ${String(status)} for operation-123. Documented statuses: 200, 404',
-    );
     expect(code).toContain('toolOutputJsonSchema: primaryResponseDescriptor.json');
+  });
+
+  it('throws UndocumentedResponseError instead of TypeError for undocumented statuses', () => {
+    const operation: OperationObject = {
+      responses: {
+        '200': { description: 'ok' },
+        '404': { description: 'not found' },
+      },
+    };
+    const code = emitIndex(
+      'get-lessons-transcript',
+      '/lessons/{lesson}/transcript',
+      'GET',
+      'op-undoc',
+      operation,
+    );
+
+    expect(code).toContain('throw new UndocumentedResponseError(');
+    expect(code).not.toContain('throw new TypeError(`Undocumented response status');
+  });
+
+  it('extracts response body before throwing for undocumented statuses', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-subjects', '/subjects', 'GET', 'op-body', operation);
+
+    const undocumentedBlock = code.slice(
+      code.indexOf('if (!descriptorForStatus)'),
+      code.indexOf('const payload'),
+    );
+    expect(undocumentedBlock).toContain('response.error');
+    expect(undocumentedBlock).toContain('response.data');
   });
 
   it('emits STATUS_DISCRIMINANTS const map instead of toStatusDiscriminant function', () => {

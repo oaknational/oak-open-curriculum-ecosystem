@@ -16,7 +16,7 @@ import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
 import type { ToolHandlerDependencies } from './handlers.js';
-import { logValidationFailureIfPresent } from './validation-logger.js';
+import { logValidationFailureIfPresent, logUpstreamErrorIfPresent } from './validation-logger.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 /**
@@ -79,6 +79,7 @@ export async function handleToolWithAuthInterception(
       }
 
       logValidationFailureIfPresent(name, execution, logger);
+      logUpstreamErrorIfPresent(name, execution, logger);
       return execution;
     },
     searchRetrieval: deps.searchRetrieval,

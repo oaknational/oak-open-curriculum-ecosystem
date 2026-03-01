@@ -21,10 +21,8 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('plan');
   });
 
-  it('has progression-map prompt', () => {
-    const prompt = MCP_PROMPTS.find((p) => p.name === 'progression-map');
-    expect(prompt).toBeDefined();
-    expect(prompt?.description).toContain('progression');
+  it('has exactly 4 prompts', () => {
+    expect(MCP_PROMPTS).toHaveLength(4);
   });
 
   it('has explore-curriculum prompt', () => {
@@ -113,27 +111,13 @@ describe('getPromptMessages', () => {
     });
   });
 
-  describe('progression-map prompt', () => {
-    it('returns messages with concept and subject', () => {
+  describe('progression-map prompt (removed)', () => {
+    it('returns empty array because it was subsumed by learning-progression', () => {
       const messages = getPromptMessages('progression-map', {
         concept: 'number',
         subject: 'maths',
       });
-      expect(messages).toBeDefined();
-
-      const content = messages.map((m) => m.content.text).join(' ');
-
-      expect(content).toContain('number');
-      expect(content).toContain('maths');
-    });
-
-    it('includes prerequisite orientation guidance', () => {
-      const messages = getPromptMessages('progression-map', {
-        concept: 'number',
-        subject: 'maths',
-      });
-      const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-curriculum-model/);
+      expect(messages).toEqual([]);
     });
   });
 
