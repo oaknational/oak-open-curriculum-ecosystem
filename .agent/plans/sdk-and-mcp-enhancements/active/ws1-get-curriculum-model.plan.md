@@ -1,40 +1,34 @@
 ---
-name: "WS1: get-curriculum-model Tool"
-overview: "Combined agent orientation tool merging get-ontology and get-help into a single call."
+name: "get-curriculum-model: Replace get-ontology and get-help"
+overview: "Remove get-ontology and get-help as standalone tools; get-curriculum-model is the sole agent guidance tool. Fix all known issues."
 todos:
   - id: ws1-red
-    content: "WS1 (RED): Write unit, integration, and E2E tests for get-curriculum-model. Tests MUST fail."
+    content: "WS1 (RED): Tests asserting final state — old tools absent, new tool complete, annotations forwarded. Tests MUST fail."
     status: completed
-  - id: ws1-green
-    content: "WS1 (GREEN): Implement tool, resource, metadata, universal tools registration, widget renderer. All tests MUST pass."
+  - id: ws2-green
+    content: "WS2 (GREEN): Atomic removal of standalone tools, resource metadata forwarding, reference cleanup. All tests MUST pass."
     status: completed
-  - id: ws1-refactor
-    content: "WS1 (REFACTOR): Update all 16 guidance surfaces, TSDoc, documentation, README updates."
+  - id: ws3-refactor
+    content: "WS3 (REFACTOR): Fix pre-existing as assertions, dependency inversion, stale comments, idempotency timestamp, documentation."
     status: completed
-  - id: ws1-post-audit
-    content: "WS1: Post-implementation audit — fix data gaps, update guidance surfaces, fix search guidance, collapse WS2+WS3."
+  - id: ws4-quality-gates
+    content: "WS4: Full quality gate chain (sdk-codegen through smoke:dev:stub)."
     status: completed
-  - id: ws1-test-quality
-    content: "WS1: Fix string-checking tests to prove behaviour not implementation (see Outstanding Work)."
-    status: pending
-  - id: ws1-quality-gates
-    content: "WS1: Full quality gate chain (sdk-codegen through smoke:dev:stub)."
-    status: pending
-  - id: ws1-adversarial-review
-    content: "WS1: Adversarial specialist reviews. Document findings."
-    status: pending
-  - id: ws1-doc-propagation
-    content: "WS1: Propagate settled outcomes to canonical ADR/directive/reference docs and relevant READMEs."
-    status: pending
+  - id: ws5-adversarial-review
+    content: "WS5: Adversarial specialist reviews (code, architecture, test, type). Document findings."
+    status: completed
+  - id: ws6-doc-propagation
+    content: "WS6: Propagate outcomes to ADR-060, agent-support-tools-specification.md, READMEs, session prompt."
+    status: completed
 isProject: false
 ---
 
-# WS1: `get-curriculum-model` Tool
+# get-curriculum-model: Replace get-ontology and get-help
 
 **Last Updated**: 2026-03-01
-**Status**: Implementation complete. Test quality fixes and quality gates remaining.
-**Scope**: Combined agent orientation tool merging `get-ontology` and `get-help`
-into a single `get-curriculum-model` call, plus refactoring all guidance surfaces.
+**Status**: Complete — All work streams (WS1-WS6) complete.
+**Scope**: Remove `get-ontology` and `get-help` as standalone tools.
+`get-curriculum-model` is the sole agent guidance tool. Fix all known issues.
 
 ---
 
@@ -42,333 +36,646 @@ into a single `get-curriculum-model` call, plus refactoring all guidance surface
 
 ### Problem Statement
 
-Consuming AI agents must call TWO tools (`get-ontology` + `get-help`) for
-complete orientation. The CTA prompt in `widget-cta/registry.ts` works around
-this with a multi-step instruction: "Call `get-help`, then all agent support
-tools." This two-call requirement increases the chance of incomplete context
-grounding.
+Consuming AI agents had to call TWO tools (`get-ontology` + `get-help`)
+for complete orientation. The CTA prompt in `widget-cta/registry.ts`
+worked around this with a multi-step instruction. `get-curriculum-model`
+was implemented to solve this with a single call — but the standalone
+tools were never removed. Additionally:
+
+- `composeDomainModel()` was cherry-picking 14 of 20 ontology fields,
+  silently dropping 6 (fixed: now passes through all of `ontologyData`).
+- Resource annotations (`priority: 1.0`, `audience: ["assistant"]`) are
+  defined in SDK resource objects but silently dropped at the app
+  registration boundary — affecting all resources, not just curriculum
+  model.
+- ~21 pre-existing `as` assertions in test files violate the
+  no-type-shortcuts rule (verify exact count at execution start).
 
 ### Existing Capabilities
 
-- `get-ontology` — returns domain model (key stages, subjects, entity hierarchy,
-  threads, property graph, ID formats, domain vocabulary, ~60KB)
-- `get-help` — returns tool guidance (overview, tool categories, workflows,
-  tips, ~8KB) with optional `tool_name` for tool-specific help
-- `AGENT_SUPPORT_TOOL_METADATA` — single source of truth driving
-  `SERVER_INSTRUCTIONS` and `OAK_CONTEXT_HINT` automatically
-- Prerequisite guidance constants — consistent messaging across all tool
-  descriptions
-- Dual exposure pattern — `get-ontology` already exposed as both tool and
-  `curriculum://ontology` resource
+`get-curriculum-model` is fully implemented and tested:
 
-### Strategic Source
+| File | Purpose |
+|---|---|
+| `curriculum-model-data.ts` | Data composition — `ontologyData` (complete, no filtering) + `toolGuidanceData` |
+| `aggregated-curriculum-model/` | Tool definition, execution, exports |
+| `curriculum-model-resource.ts` | `curriculum://model` resource with annotations |
+| `agent-support-tool-metadata.ts` | Entry with `callOrder: 0`, `callAtStart: true` |
+| `universal-tools/definitions.ts` | Registered in `AGGREGATED_TOOL_DEFS` |
+| `universal-tools/executor.ts` | Registered in `AGGREGATED_HANDLERS` |
 
-- [improve-pedagogical-context.plan.md](../improve-pedagogical-context.plan.md)
-  — authoritative strategic brief with resolved design decisions
-- [Agent Support Tools Specification](../../../reference-docs/internal/agent-support-tools-specification.md)
-  — step-by-step integration checklist
+Quality gates passed (pre content-gap fix): `sdk-codegen`, `build`,
+`type-check`, `lint:fix`, `format:root`, `markdownlint:root`, `test`
+(24/24), `test:e2e` (19/19), `test:ui` (15/15), `smoke:dev:stub` (20/20).
+
+### Prior Work
+
+- [ADR-060](../../../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md) — Agent support metadata
+- [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — SDK domain synonyms
+- [Ontology and Graphs API Proposal](../../external/ooc-api-wishlist/22-ontology-and-graphs-api-proposal.md)
 
 ---
 
 ## Design Principles
 
-1. **One call for complete orientation** — agents call `get-curriculum-model`
-   once at conversation start and receive everything they need.
-2. **Follow the established pattern** — `aggregated-help/` is the closest
-   template (optional `tool_name` parameter). No new patterns.
-3. **Additive, not breaking** — `get-help` and `get-ontology` remain available.
-   No deprecation in this workstream.
-4. **Dual exposure** — tool (universal client support) + resource with MCP spec
-   annotations (`priority: 1.0`, `audience: ["assistant"]`) for auto-injection.
+1. **Replacement, not addition** — `get-curriculum-model` replaces both
+   `get-ontology` and `get-help`. The standalone tools are removed.
+   Previous sessions repeatedly drifted towards keeping them. The rules
+   are explicit: "NEVER create compatibility layers, no backwards
+   compatibility — replace old approaches with new approaches."
+
+2. **One call for complete orientation** — agents call
+   `get-curriculum-model` once at conversation start and receive
+   everything they need.
+
+3. **Dual exposure** — tool (universal client support) + resource
+   (`curriculum://model`) with MCP spec annotations
+   (`priority: 1.0`, `audience: ["assistant"]`) for auto-injection.
+   The redundant `curriculum://ontology` resource is removed.
+
+4. **No content filtering** — `domainModel` is typed as `OntologyData`
+   and assigned directly from `ontologyData`. No destructuring, no
+   editorialising. Synonyms were removed from `ontologyData` by the
+   owner; there is nothing to exclude.
+
+5. **Resource metadata: forward all fields** — the registration boundary
+   must forward all fields from resource definition objects. The MCP spec
+   and official SDK decide which fields are valid — our code must not
+   filter.
+
+6. **`tool_name` parameter** — migrated from `get-help`. Returns full
+   context plus tool-specific help when provided.
+
+7. **Payload size** — combined ~68KB (~17K tokens, 13% of 128K context).
+   Acceptable. No `detail` parameter needed.
 
 **Non-Goals** (YAGNI):
 
-- No glossary data (deferred to review checkpoint)
-- No vocabulary restructuring (deferred to review checkpoint)
-- No deprecation of `get-help` or `get-ontology`
-- No changes to search synonym infrastructure
-- No `detail` parameter for selective loading
-- No changes to the `synonyms` section of ontology data
+- No compatibility layer or deprecation period for `get-ontology`/`get-help`
+- No glossary expansion or vocabulary overhaul (separate future plan:
+  [WS2+WS3 Pedagogical Review Checkpoint](../future/ws2-ws3-pedagogical-review-checkpoint.plan.md))
+- No redesign of the aggregated tool dispatch system
+- No changes to non-agent-support tools (search, fetch, etc.)
 
 ---
 
-## Completed Work
+## WS1 — Test Specification (RED)
 
-### RED Phase (Test Specification) — DONE
+All new/updated tests MUST FAIL at the end of WS1.
 
-All tests written and confirmed failing before implementation.
+> See [TDD Phases component](../../templates/components/tdd-phases.md)
 
-| Test File | What It Proves |
-|---|---|
-| `curriculum-model-data.unit.test.ts` | Data composition returns `domainModel` + `toolGuidance`, handles `toolName` param, size budget |
-| `aggregated-curriculum-model/definition.unit.test.ts` | Tool schema, annotations, `_meta` fields |
-| `aggregated-curriculum-model/execution.unit.test.ts` | Tool execution with/without `tool_name`, graceful handling, idempotency |
-| `agent-support-tool-metadata.unit.test.ts` | Metadata entry with `callOrder: 0`, `callAtStart: true` |
-| `universal-tools.integration.test.ts` | Tool registration, annotation, `_meta` integration |
-| `get-curriculum-model.e2e.test.ts` | E2E: tool in `tools/list`, structured content response, resource in `resources/list` |
-| `server.e2e.test.ts` | `get-curriculum-model` in aggregated tools list |
+### 1.1: Tool list excludes removed tools
 
-### GREEN Phase (Implementation) — DONE
+**Tests**:
 
-All new files and registrations:
+- `universal-tools.unit.test.ts` — assert `AGGREGATED_TOOL_DEFS` does
+  NOT have keys `get-ontology` or `get-help`
+- `universal-tools.integration.test.ts` — assert tool dispatch rejects
+  `get-ontology` and `get-help` as unknown tools
 
-| File/Change | Purpose |
-|---|---|
-| `curriculum-model-data.ts` | `composeCurriculumModelData()` — composes `domainModel` + `toolGuidance` + optional `toolSpecificHelp` |
-| `aggregated-curriculum-model/definition.ts` | Tool definition with schema, annotations, `_meta` |
-| `aggregated-curriculum-model/execution.ts` | `runCurriculumModelTool()` — validates input, composes data, formats response |
-| `aggregated-curriculum-model/index.ts` | Re-exports |
-| `curriculum-model-resource.ts` | `curriculum://model` resource with `priority: 1.0`, `audience: ["assistant"]` |
-| `agent-support-tool-metadata.ts` | Added `get-curriculum-model` entry (`callOrder: 0`, `callAtStart: true`) |
-| `universal-tools/definitions.ts` | Added to `AGGREGATED_TOOL_DEFS` |
-| `universal-tools/executor.ts` | Added dispatch in `AGGREGATED_HANDLERS` |
-| `tool-guidance-data.ts` | Added to `agentSupport.tools` |
-| `ontology-resource.ts` | Added `priority: 1.0`, `audience: ["assistant"]` annotations |
-| `register-resources.ts` (app) | Registered `curriculum://model` resource |
-| `public/mcp-tools.ts` | Public exports |
+**Acceptance Criteria**:
 
-### REFACTOR Phase (Surface Alignment) — DONE
+1. Tests compile and run
+2. Tests fail because `get-ontology` and `get-help` still exist in
+   `AGGREGATED_TOOL_DEFS`
+3. No existing tests broken
 
-All 16 guidance surfaces updated to reference `get-curriculum-model` as
-the primary orientation tool:
+### 1.2: Resource annotations forwarded
 
-| Surface | How It Was Updated |
-|---|---|
-| 1. `SERVER_INSTRUCTIONS` | Auto-updated via metadata (`callOrder: 0`, `callAtStart: true`) |
-| 2. `oakContextHint` | Auto-updated via metadata |
-| 3-6. Prerequisite constants | `ONTOLOGY_TOOL_NAME` renamed to `PRIMARY_ORIENTATION_TOOL_NAME` → `get-curriculum-model` |
-| 7. Codegen `DOMAIN_PREREQUISITE_GUIDANCE` | Updated in `tool-description.ts` |
-| 8. `get-ontology` description | Now recommends `get-curriculum-model` for general orientation |
-| 9. `get-help` | Unchanged (backwards compatibility) |
-| 10. `curriculum://ontology` | Added `priority` and `audience` annotations |
-| 11-13. `docs://oak/*.md` | `userInteractions` workflow updated |
-| 14. MCP prompts | All 5 prompt messages reference `get-curriculum-model` |
-| 15. `WIDGET_DESCRIPTION` | References `get-curriculum-model` |
-| 16. CTA prompt | Simplified to single-step `get-curriculum-model` call |
+**Tests**:
 
-### Post-Implementation Audit — DONE
+- `register-resources.integration.test.ts` — assert that
+  `registerCurriculumModelResource` passes `annotations` to
+  `server.registerResource`
+- `register-resources.integration.test.ts` — assert that
+  `registerDocumentationResources` passes all resource fields
 
-Identified and fixed additional issues after initial implementation:
+**Acceptance Criteria**:
 
-1. **Data gaps in `composeDomainModel()`**: Added `threads`,
-   `ukEducationContext`, and `canonicalUrls` from ontology data. These were
-   present in `get-ontology` but missing from the initial
-   `get-curriculum-model` composition.
+1. Tests fail because `annotations` is not currently forwarded
+2. Pattern covers all resource registrations, not just curriculum model
 
-2. **Search guidance tip**: Updated "Agent guidance for search" tip in
-   `tool-guidance-data.ts` to reflect the current search system
-   (ELSER semantic + BM25 lexical, combined via RRF). Previously still
-   referenced the old search system.
+### 1.3: Ontology resource removed
 
-3. **Code generation files**: Updated `seeAlso` fields across all generators
-   (`thread-progression`, `prerequisite-graph`, `misconception-graph`,
-   `vocabulary-graph`, `nc-coverage`) to reference `get-curriculum-model` for
-   complete orientation.
+**Tests**:
 
-4. **Plan consolidation**: Collapsed WS2 (canonical vocabulary) and WS3
-   (pedagogical term review) into a single future review checkpoint at
-   `future/ws2-ws3-pedagogical-review-checkpoint.plan.md`. Rationale: WS1
-   already provides substantial pedagogical context (entity hierarchy, UK
-   education context, threads, canonical URLs, search guidance). The need for
-   additional structured glossary data should be evaluated empirically after
-   production usage, not speculatively.
+- `register-resources.integration.test.ts` — assert that
+  `registerAllResources` does NOT call `registerResource` with
+  `curriculum://ontology` URI
 
----
+**Acceptance Criteria**:
 
-## Outstanding Work
+1. Test fails because `registerOntologyResource` is still called
 
-### 1. Fix Test Quality Issues (BLOCKING)
+### 1.4: Metadata excludes removed tools
 
-**Problem**: Many tests check for specific tool name strings in descriptions,
-guidance, and rendered content. These tests constrain implementation rather than
-proving behaviour. Additionally, the code review identified rule violations.
+**Tests**:
 
-**Testing strategy reference**: "Test real behaviour, not implementation details
-— We should be able to change _how_ something works without breaking the test
-that proves _that_ it works."
+- `agent-support-tool-metadata.unit.test.ts` — assert
+  `AGENT_SUPPORT_TOOL_METADATA` does NOT have keys `get-ontology`
+  or `get-help`
 
-**Tests already fixed** (in this session):
+**Acceptance Criteria**:
 
-| Test File | Old Assertion | New Assertion |
-|---|---|---|
-| `tool-description.unit.test.ts` | `toContain('get-curriculum-model')` | Removed — `toContain('PREREQUISITE')` already proves the behaviour |
-| `emit-index.invoke.unit.test.ts` | `toContain('get-curriculum-model')` | Removed — `toContain('PREREQUISITE')` proves it |
-| `universal-tools.unit.test.ts` | `toContain('get-curriculum-model')` | `toBeDefined()` + length + `toContain('Do NOT use for')` (negative guidance is the behaviour) |
-| `documentation-resources.unit.test.ts` | `toContain('get-curriculum-model')` | `toMatch(/get-curriculum-model\|get-ontology\|get-help/)` (workflow references an agent support tool) |
-| `thread-progression-generator.unit.test.ts` (x2) | `toContain('get-curriculum-model')` | `toBeDefined()` + `length > 0` (cross-references exist) |
-| `agent-support-tool-metadata.unit.test.ts` | `toContain('get-help')` | `toBeDefined()` + `length > 0` (seeAlso has entries) |
+1. Test fails because metadata entries still exist
 
-**Priority 1 — Rule violations and factually broken tests**:
+### 1.5: Tool-specific help for removed tools returns error
 
-| Test File | Issue | Fix |
-|---|---|---|
-| `get-curriculum-model.e2e.test.ts:164` | Uses `as { ... }` type assertion — rule violation | Replace with Zod schema validation of the response, consistent with how `ToolsListResultSchema` and `ResourcesListResultSchema` are already used in the same file |
-| `documentation-resources.e2e.test.ts:234-238` | Checks for `get-help` and `get-ontology` in workflows — **factually broken** since workflow now references `get-curriculum-model` | Assert behavioural property: workflows markdown references agent support tools |
-| `widget-metadata.e2e.test.ts:115` | `aggregatedToolNames` array missing `get-curriculum-model` | Add to the array (also missing `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph` — pre-existing gap) |
+**Tests** (in `sdk:src/mcp/tool-help-lookup.unit.test.ts` — matches
+the WS3.2 relocation target; import path starts as
+`./aggregated-help/help-content.js`, updated to `./tool-help-lookup.js`
+in WS3.2):
 
-**Priority 2 — Remaining string-checking tests**:
+- assert `getToolSpecificHelp('get-ontology')` returns `isError: true`
+- assert `getToolSpecificHelp('get-help')` returns `isError: true`
 
-| Test File | Current String Check | What Behaviour Should Be Proved |
-|---|---|---|
-| `server.e2e.test.ts:260-261` | `toContain('get-ontology')`, `toContain('get-help')` in instructions | Server instructions contain agent guidance (not specific tool names) |
-| `register-resources.integration.test.ts:183` | `toContain('get-curriculum-model')` in widget description | Widget description includes orientation guidance |
-| `widget-cta.unit.test.ts:178-179` | `toContain('get-curriculum-model')` in CTA prompt | CTA prompt includes orientation guidance |
-| `mcp-prompts.unit.test.ts:88,112,136` (x3) | `toContain('get-curriculum-model')` in prompt messages | Prompts include prerequisite/orientation guidance |
-| `tool-guidance-data.unit.test.ts:12-14` | `toContain('get-help')`, `toContain('get-ontology')` in agentSupport.tools | Agent support category has tools (test data membership, not strings) |
-| `documentation-resources.unit.test.ts:100-101` | `toContain('get-help')`, `toContain('get-ontology')` in tools reference | Tools reference includes agent support tools |
-| `property-graph-data.unit.test.ts:25-26` | `toContain('get-ontology')` in seeOntology | Cross-reference field is populated |
-| `emit-index.invoke.unit.test.ts:157` | `not.toContain('get-ontology')` for noauth tools | Redundant — `not.toContain('PREREQUISITE')` already proves this |
+**Acceptance Criteria**:
 
-### 2. Code Review Findings (from `code-reviewer`)
+1. Tests fail because `get-ontology` and `get-help` are still in
+   `AGGREGATED_TOOL_NAMES`
 
-**Verdict**: Approved with suggestions.
+**Deterministic Validation (end of WS1)**:
 
-**Structural issues**:
+```bash
+pnpm type-check
+# Expected: exit 0
 
-- `AGGREGATED_TOOL_NAMES` in `help-content.ts` is manually maintained and
-  duplicates `AGGREGATED_TOOL_DEFS` keys. Derive from the canonical source to
-  eliminate drift risk.
-- `composeDomainModel()` explicitly destructures 12 fields from `ontologyData`,
-  deliberately excluding `synonyms`. This is correct (explicit > implicit) but
-  should have a TSDoc note: "New ontology fields must be explicitly added here."
-
-**Test-specific findings**:
-
-- `execution.unit.test.ts` idempotency test: `runCurriculumModelTool` passes
-  `timestamp: Date.now()` to `formatToolResponse`. If that timestamp lands in
-  `structuredContent`, the idempotency comparison could fail across a millisecond
-  boundary. Verify where the timestamp ends up — if in `structuredContent`,
-  either remove it from the data section or compare a subset.
-- `tool-guidance-data.unit.test.ts:12-14` checks `agentSupport.tools` contains
-  `get-help` and `get-ontology` but not `get-curriculum-model`. Coverage gap —
-  assert expected array length or all three agent support tools.
-
-**Positive findings**: Pattern consistency excellent (mirrors `aggregated-help/`
-exactly), data composition well-designed, single source of truth pattern works
-well, dual exposure correct per MCP spec, surface alignment thorough.
-
-### 3. Quality Gates — DONE
-
-All 10 quality gates pass: `sdk-codegen`, `build`, `type-check`, `lint:fix`,
-`format:root`, `markdownlint:root`, `test` (24/24), `test:e2e` (19/19),
-`test:ui` (15/15), `smoke:dev:stub` (20/20).
-
-### 4. Adversarial Review — DONE
-
-All specialist reviewers invoked and findings addressed:
-
-- `code-reviewer` — APPROVED. All findings addressed.
-- `architecture-reviewer-barney` — Noted resource metadata forwarding gap (pre-existing)
-  and `curriculum-model-data.ts` dependency on `aggregated-help/help-content.ts` (back-edge).
-- `test-reviewer` — PASS. All ~15 string-checking tests migrated to behavioural assertions.
-  Drift-detection test added. Integration test exclusion list derived from `AGGREGATED_TOOL_DEFS`.
-- `docs-adr-reviewer` — GAPS FOUND. Specification updated, plan phantom claims removed.
-- `type-reviewer` — SAFE. Added truthiness check for `structuredContent` narrowing.
-
-### 5. Documentation Propagation — DONE
-
-- Updated [agent-support-tools-specification.md](../../../reference-docs/internal/agent-support-tools-specification.md)
-  with `get-curriculum-model`, dynamic generation pattern, current tool set
-- Updated strategic brief and collection README status
-- Added TSDoc note to `composeDomainModel()` about explicit field inclusion
-- Removed phantom `curriculum-model-renderer.ts` claims from this plan
-- Updated `mcp-tools.ts` module docstring
+pnpm vitest run --reporter=verbose packages/sdks/oak-curriculum-sdk/src/mcp/ 2>&1 | grep -c 'FAIL'
+# Expected: >0 (new tests failing)
+```
 
 ---
 
-## Implementation Reference
+## WS2 — Implementation (GREEN)
 
-### Key Files Created
+All tests MUST PASS at the end of WS2. Removals are atomic — defs,
+handlers, and type expectations change together to avoid broken
+intermediate states.
 
-| File | Purpose |
-|---|---|
-| `packages/sdks/oak-curriculum-sdk/src/mcp/curriculum-model-data.ts` | Data composition function |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-curriculum-model/` | Tool definition, execution, exports |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/curriculum-model-resource.ts` | `curriculum://model` resource |
-| `apps/.../e2e-tests/get-curriculum-model.e2e.test.ts` | E2E tests |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/curriculum-model-data.unit.test.ts` | Unit tests |
+### 2.1: Atomic removal of standalone tools + dead modules
 
-### Key Files Modified
+`AggregatedToolName` derives from `keyof typeof AGGREGATED_TOOL_DEFS`.
+The handler map is typed against that union. Defs, handlers, metadata,
+imports, and now-orphaned modules must change together to avoid broken
+intermediate states and to satisfy the 2.4 deterministic validation
+(no `get-ontology|get-help` matches in non-test source).
+
+**Files** (atomic changeset):
 
 | File | Change |
 |---|---|
-| `prerequisite-guidance.ts` | `ONTOLOGY_TOOL_NAME` → `PRIMARY_ORIENTATION_TOOL_NAME` |
-| `tool-guidance-workflows.ts` | `userInteractions` step 1 → `get-curriculum-model` |
-| `tool-guidance-data.ts` | Search guidance tip updated for ELSER/BM25/RRF; added to agentSupport tools |
-| `agent-support-tool-metadata.ts` | New entry with `callOrder: 0`, `callAtStart: true` |
-| `aggregated-ontology.ts` | Description recommends `get-curriculum-model` for general orientation |
-| All tool definition files | Import `PRIMARY_ORIENTATION_TOOL_NAME` |
-| All code-generation `seeAlso` fields | Reference `get-curriculum-model` |
-| `mcp-prompt-messages.ts` | All 5 prompts reference `get-curriculum-model` |
-| `widget-cta/registry.ts` | CTA simplified to single `get-curriculum-model` call |
-| `register-resources.ts` (app) | Widget description, `curriculum://model` registration |
+| `sdk:src/mcp/universal-tools/definitions.ts` | Remove `get-ontology` and `get-help` entries + imports |
+| `sdk:src/mcp/universal-tools/executor.ts` | Remove `get-ontology` and `get-help` handler entries + imports |
+| `sdk:src/mcp/agent-support-tool-metadata.ts` | Remove both metadata entries |
+| `sdk:src/mcp/aggregated-help/help-content.ts` | Remove both from `AGGREGATED_TOOL_NAMES` list; update error message to reference `get-curriculum-model`; delete `getGeneralHelp()` (dead after removal — only consumer was `aggregated-help/execution.ts`) |
+| `sdk:src/mcp/aggregated-ontology.ts` | **Delete** — `GET_ONTOLOGY_TOOL_DEF`, `runOntologyTool()` only consumed by definitions.ts/executor.ts (removed above). `ontologyData` is imported directly by `curriculum-model-data.ts` from `ontology-data.ts`. |
+| `sdk:src/mcp/aggregated-help/definition.ts` | **Delete** — `GET_HELP_TOOL_DEF` only consumed by definitions.ts (removed above) |
+| `sdk:src/mcp/aggregated-help/execution.ts` | **Delete** — `handleHelpTool`, `validateHelpArgs` only consumed by executor.ts (removed above) |
+| `sdk:src/mcp/aggregated-help/index.ts` | **Delete** or reduce to re-export of `getToolSpecificHelp` only (pending 3.2 relocation) |
 
-### Pattern References
+> **Workspace prefix convention**: `sdk:` = `packages/sdks/oak-curriculum-sdk/`,
+> `app:` = `apps/oak-curriculum-mcp-streamable-http/`,
+> `codegen:` = `packages/sdks/oak-sdk-codegen/`.
 
-| Reference | Path |
+> **Atomic commit strategy**: WS2.1 MUST be a single commit. If
+> `type-check` fails, revert the full changeset and re-apply atomically.
+> Do not split across commits — the type union change makes any partial
+> state uncompilable.
+
+**Deterministic Validation**:
+
+```bash
+pnpm type-check
+# Expected: exit 0 (type union updated, handler map consistent, no dangling imports)
+
+pnpm vitest run packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.unit.test.ts
+# Expected: new tests pass, old get-ontology/get-help descriptor tests removed
+```
+
+### 2.2: Remove ontology resource + dead module
+
+**Files**:
+
+| File | Change |
 |---|---|
-| Strategic brief | [improve-pedagogical-context.plan.md](../improve-pedagogical-context.plan.md) |
-| Agent support tools spec | [agent-support-tools-specification.md](../../../reference-docs/internal/agent-support-tools-specification.md) |
-| Aggregated help pattern (template) | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help/` |
-| Tool metadata (single source) | `packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts` |
-| Prerequisite guidance | `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts` |
-| Universal tools registration | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/` |
+| `app:src/register-resources.ts` | Remove `registerOntologyResource` function and call, remove `ONTOLOGY_RESOURCE`/`getOntologyJson` imports |
+| `sdk:src/public/mcp-tools.ts` | Remove `ONTOLOGY_RESOURCE`/`getOntologyJson` re-exports |
+| `sdk:src/mcp/ontology-resource.ts` | **Delete** — `ONTOLOGY_RESOURCE`, `getOntologyJson` have no remaining consumers after above removals |
+
+> **Public API note**: removing `ONTOLOGY_RESOURCE`/`getOntologyJson` from
+> `mcp-tools.ts` is a breaking change to the SDK's public surface. This is
+> intentional — these are replaced by `CURRICULUM_MODEL_RESOURCE`. Record
+> in release notes.
+
+**Deterministic Validation**:
+
+```bash
+pnpm type-check
+# Expected: exit 0
+
+pnpm vitest run packages/sdks/oak-curriculum-sdk/src/mcp/register-resources
+# Expected: exit 0, no ontology resource assertions
+```
+
+### 2.3: Fix resource metadata forwarding
+
+All resource registrations must forward all fields from the resource
+definition object. The MCP spec and SDK decide field validity.
+
+Currently silently dropped: `annotations` (curriculum model resource),
+`title` (documentation resources). Both are defined in the SDK resource
+objects but cherry-picked away at the app registration boundary.
+
+**Pattern**: Use destructuring spread for forward compatibility:
+
+```typescript
+const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
+server.registerResource(name, uri, metadata, () => ...);
+```
+
+This ensures any future fields added to resource definitions flow
+through automatically.
+
+**Files**:
+
+| File | Change |
+|---|---|
+| `app:src/register-resources.ts` | Replace cherry-picked metadata with spread pattern for all resource registrations (`registerCurriculumModelResource` and `registerDocumentationResources`) |
+
+**Deterministic Validation**:
+
+```bash
+pnpm vitest run packages/sdks/oak-curriculum-sdk/src/mcp/register-resources
+# Expected: exit 0, annotation forwarding tests pass
+```
+
+### 2.4: Update all codebase references
+
+All references to `get-ontology` and `get-help` as callable tools must
+be updated or removed. Search for all instances:
+
+```bash
+rg 'get-ontology|get-help' --type ts -l 2>/dev/null
+rg 'get-ontology|get-help' --type md -l 2>/dev/null
+```
+
+**Key source files**:
+
+| File | Change |
+|---|---|
+| `sdk:src/mcp/aggregated-help/help-content.ts` | Update `toolName: 'get-help'` → `'get-curriculum-model'`, `annotationsTitle` → `'Get Curriculum Model'`, error message → reference `get-curriculum-model` |
+| `sdk:src/mcp/tool-guidance-data.ts` | Update `agentSupport` category: remove old tools, update description and `whenToUse` |
+| `sdk:src/mcp/prerequisite-guidance.ts` | Remove fallback references to standalone tools |
+| `sdk:src/mcp/mcp-prompt-messages.ts` | Remove references to standalone tools |
+| `codegen:src/mcp/property-graph-data.ts` | Update `seeOntology`, `combinedWith` cross-references |
+| `sdk:src/mcp/documentation-resources.ts` | Update workflow references |
+| `sdk:src/mcp/aggregated-thread-progressions.ts` | Update description cross-reference |
+| `app:src/register-resources.ts` widget description | Verify references only `get-curriculum-model` |
+| Codegen generators (`seeAlso` fields) | `codegen:src/bulk/generators/build-tool-definition.ts`, `codegen:src/bulk/generators/build-tool-handler.ts`, `codegen:src/bulk/generators/build-tool-input-schema.ts`, `codegen:src/vocab-gen/generators/build-vocab-tool-definition.ts`, `codegen:src/vocab-gen/generators/build-vocab-tool-handler.ts` |
+| Codegen generators (`seeAlso` in prerequisite graph) | `codegen:src/bulk/generators/prerequisite-graph-generator.ts` AND `codegen:src/vocab-gen/generators/prerequisite-graph-generator.ts` — both copies contain `'Use get-ontology for the property graph.'` in `seeAlso` builder. Both must be updated in parallel (known duplication). |
+
+**Deterministic Validation**:
+
+```bash
+rg 'get-ontology|get-help' --type ts packages/sdks/ apps/ 2>/dev/null | grep -v test | grep -v '.plan.' | grep -v archive
+# Expected: NO MATCHES in non-test source files (excluding archive/plan)
+
+rg 'get-ontology|get-help' --type md packages/sdks/ apps/ .agent/ 2>/dev/null | grep -v '.plan.' | grep -v archive | grep -v completed
+# Expected: NO MATCHES in markdown source files (including .agent/, excluding archive/plan/completed)
+
+pnpm sdk-codegen
+# Expected: exit 0, generated files updated
+```
+
+### 2.5: Update and remove tests
+
+| Test File | Change |
+|---|---|
+| `get-ontology.e2e.test.ts` | Delete — but first backfill coverage into `get-curriculum-model.e2e.test.ts`: (a) add ks2/ks3 key stage assertions, (b) add workflow content assertions (`findLessons`, `browseSubject`) |
+| `get-help-tool.e2e.test.ts` | Delete — but first backfill: (a) unknown `tool_name` error path E2E assertion into `get-curriculum-model.e2e.test.ts` |
+| `ontology-resource.unit.test.ts` | Delete |
+| `universal-tools.unit.test.ts` | Remove get-ontology/get-help descriptor tests |
+| `universal-tools.integration.test.ts` | Remove get-ontology/get-help tests |
+| `universal-tools-executor.integration.test.ts` | Remove get-ontology call |
+| `agent-support-tool-metadata.unit.test.ts` | Remove metadata tests for removed tools |
+| `documentation-resources.unit.test.ts` | Update assertions |
+| `mcp-prompts.unit.test.ts` | Update assertions |
+| `server.e2e.test.ts` | Update tool list if still references old tools |
+| `widget-metadata.e2e.test.ts` | Update aggregated tool list |
+| `aggregated-help.unit.test.ts` | **Delete** — all imports point to modules deleted in 2.1. Relocate drift-detection test (lines 161-168) to `universal-tools.unit.test.ts`: iterate `AGGREGATED_TOOL_DEFS` keys, call `getToolSpecificHelp(name)`, assert no error |
+
+**Deterministic Validation**:
+
+```bash
+pnpm vitest run packages/sdks/oak-curriculum-sdk/
+# Expected: exit 0, all SDK tests pass
+
+pnpm test:e2e
+# Expected: exit 0, all E2E tests pass
+```
 
 ---
 
-## Key Decisions Made This Session
+## WS3 — Cleanup and Quality Fixes (REFACTOR)
 
-1. **`get-curriculum-model` is now the primary orientation tool**. All guidance
-   surfaces point to it. `get-ontology` remains for detailed domain reference;
-   `get-help` remains for standalone tool guidance.
+Tests MUST remain green. No behavioural changes.
 
-2. **WS2 and WS3 collapsed** into a single future review checkpoint. The
-   original WS2 (embed ~50 Oak glossary terms) was speculative — WS1 already
-   provides entity hierarchy, UK education context, threads, canonical URLs,
-   and search guidance. Whether additional glossary data is needed should be
-   evaluated empirically after production usage, not pre-emptively implemented.
+### 3.1: Fix pre-existing `as` assertions (~21 total)
 
-3. **Search guidance updated** to reflect the current search system:
-   ELSER (semantic) + BM25 (lexical), combined via RRF. The tip in
-   `tool-guidance-data.ts` now recommends using `ukEducationContext` and
-   `entityHierarchy` from `get-curriculum-model` for colloquial term mapping.
+| File | Count | Approach |
+|---|---|---|
+| `app:e2e-tests/server.e2e.test.ts` | ~9 | Replace with **concrete** Zod schemas matching MCP protocol shapes (e.g. `z.object({ result: z.object({ tools: z.array(ToolListItemSchema) }) })`). Do NOT use `z.record(z.string(), z.unknown())` — that replicates the same type violation. Test-only Zod schemas are test infrastructure; keep them local to the test file, do not export from SDK. |
+| `app:src/register-resources.integration.test.ts` | ~12 | Root cause: `as unknown as ResourceRegistrar` double-cast at line 47. Fix by defining a `CapturedResource` interface matching what the mock stores, type the map as `Map<string, CapturedResource>`. This eliminates ~11 downstream casts. The remaining double-cast for the mock itself may need `satisfies` or a narrower fake interface matching the specific `registerResource` overload under test. |
 
-4. **Tests must prove behaviour, not check strings**. The user flagged that
-   tests checking for specific tool name strings in descriptions are fragile
-   and test implementation. Several were already fixed; more remain (see
-   Outstanding Work section above).
+> **Note**: `widget-metadata.e2e.test.ts` and `get-curriculum-model.e2e.test.ts`
+> also have `as` assertions — out of scope for this plan but noted as
+> remaining tech debt.
+
+**Deterministic Validation**:
+
+```bash
+rg ' as ' apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts 2>/dev/null | grep -v 'as const' | grep -v 'as well'
+# Expected: NO MATCHES
+
+rg ' as ' apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts 2>/dev/null | grep -v 'as const'
+# Expected: NO MATCHES
+```
+
+### 3.2: Fix dependency inversion
+
+`curriculum-model-data.ts` imports from `aggregated-help/help-content.ts`,
+creating a back-edge. The circular import prevents deriving
+`AGGREGATED_TOOL_NAMES` from the canonical source.
+
+**Decision (locked)**: Move `getToolSpecificHelp` (and its helpers:
+`findToolCategory`, `getRelatedWorkflows`, `buildBaseHelp`, etc.) to a
+new shared module at `sdk:src/mcp/tool-help-lookup.ts`. This is
+preferred over inlining because the function has ~6 helper functions —
+too much logic to inline cleanly. The new module:
+
+- Eliminates the misleading `aggregated-help/` directory name
+- Resolves the dependency direction concern
+- Keeps the function testable in isolation
+- **Must derive tool names from `AGGREGATED_TOOL_DEFS`** — import
+  `AGGREGATED_TOOL_DEFS` from `universal-tools/definitions.ts` and
+  derive names via `Object.keys()` (or `typeSafeKeys`). The manual
+  `AGGREGATED_TOOL_NAMES` array (`readonly string[]`) is deleted. This
+  eliminates the type widening and drift risk. The circular dependency
+  that previously prevented this import is broken by the relocation.
+
+After relocation, `aggregated-help/` is fully deletable (all other
+files already deleted in 2.1). Delete the directory.
+
+> **Single commit**: In one commit: (a) create `tool-help-lookup.ts`
+> with `getToolSpecificHelp` and helpers, (b) update
+> `curriculum-model-data.ts` import path, (c) update
+> `tool-help-lookup.unit.test.ts` import path, (d) delete
+> `aggregated-help/` directory. No intermediate state where
+> `curriculum-model-data.ts` imports from a deleted module.
+
+**Deterministic Validation**:
+
+```bash
+pnpm type-check
+# Expected: exit 0
+
+pnpm vitest run packages/sdks/oak-curriculum-sdk/src/mcp/curriculum-model-data.unit.test.ts
+# Expected: exit 0
+
+pnpm vitest run packages/sdks/oak-curriculum-sdk/src/mcp/tool-help-lookup.unit.test.ts
+# Expected: exit 0
+
+# Confirm aggregated-help/ directory no longer exists:
+test ! -d packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help && echo "PASS" || echo "FAIL"
+# Expected: PASS
+```
+
+### 3.3: Fix stale comments and TSDoc
+
+> Line numbers approximate — WS2 edits may shift them. Verify with `rg`
+> at execution time.
+
+| File | Line | Current | Should Be |
+|---|---|---|---|
+| `sdk:src/mcp/universal-tools/list-tools.ts` | 17 | `(search, fetch, get-ontology, get-help)` | Reflect actual tool set |
+| `sdk:src/mcp/universal-tools/types.ts` | 64 | `search, fetch, get-ontology, get-help (hand-written)` | Reflect actual tool set |
+| `sdk:src/mcp/universal-tools/executor.ts` | 199 | `(search, fetch, get-ontology, get-help)` | Reflect actual tool set |
+| `codegen:code-generation/typegen/mcp-tools/parts/emit-index.ts` | 44 | `(get-ontology, get-help)` | Reflect actual tool set or `agent-support tools` |
+| `sdk:src/mcp/tool-guidance-workflows.ts` | 6 | TSDoc: `included in...the get-help tool output` | Reference `get-curriculum-model` |
+
+### 3.4: Verify idempotency timestamp
+
+`execution.unit.test.ts` passes `timestamp: Date.now()` to
+`formatToolResponse`. Verify timestamp does not leak into
+`structuredContent` comparison. If it does, fix the boundary.
+
+### 3.5: Verify no orphaned modules remain
+
+Module deletion is now folded into WS2 (2.1 and 2.2) to resolve
+the validation conflict between 2.4's "no matches" sweep and deferred
+deletion. After 3.2 relocates `getToolSpecificHelp`, the `aggregated-help/`
+directory is fully deleted.
+
+**Surviving modules** (keep):
+
+| Module | Reason |
+|---|---|
+| `sdk:src/mcp/ontology-data.ts` | Used by `curriculum-model-data.ts` |
+| `sdk:src/mcp/tool-guidance-data.ts` | Used by `curriculum-model-data.ts` and `documentation-resources.ts` |
+| `sdk:src/mcp/tool-help-lookup.ts` | Created in 3.2; used by `curriculum-model-data.ts` |
+
+**Deterministic Validation**:
+
+```bash
+pnpm type-check
+# Expected: exit 0 (no dangling imports)
+
+# Confirm deleted modules are gone:
+test ! -f packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-ontology.ts && echo "PASS" || echo "FAIL"
+test ! -f packages/sdks/oak-curriculum-sdk/src/mcp/ontology-resource.ts && echo "PASS" || echo "FAIL"
+test ! -d packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help && echo "PASS" || echo "FAIL"
+# Expected: all PASS
+```
+
+---
+
+## WS4 — Quality Gates
+
+> See [Quality Gates component](../../templates/components/quality-gates.md)
+
+**After each task** (WS1-WS3):
+
+```bash
+pnpm type-check && pnpm lint && pnpm test
+```
+
+**After WS3 completion** (full chain):
+
+```bash
+pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
+pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
+pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+```
+
+Every gate MUST pass. There is no such thing as an acceptable failure.
+
+---
+
+## WS5 — Adversarial Review
+
+> See [Adversarial Review component](../../templates/components/adversarial-review.md)
+
+Invoke: `code-reviewer` (gateway), `architecture-reviewer-barney`,
+`architecture-reviewer-fred`, `architecture-reviewer-wilma`,
+`test-reviewer`, `type-reviewer`, `docs-adr-reviewer`.
+
+The replacement is a significant structural change: tool removal,
+resource removal, metadata forwarding fix, ~21 assertion replacements,
+SDK public API surface change, and cross-workspace boundary fix.
+
+Document findings. Create follow-up plan if BLOCKERs found.
+
+### WS5 Outcomes
+
+**All 7 specialists invoked. No blockers found. Verdicts:**
+
+| Specialist | Verdict | Key finding |
+|---|---|---|
+| `code-reviewer` | APPROVED WITH SUGGESTIONS | Pre-existing `as` casts in `widget-metadata.e2e.test.ts` (3); stale `@todo` in `universal-tools.unit.test.ts` — both addressed in WS6. Drift-detection pattern and negative testing at all levels praised. |
+| `test-reviewer` | PASS (2 improvements) | Stale `@todo` (fixed in WS6). Pre-existing `as` casts in `widget-metadata.e2e.test.ts` (follow-up). TDD cycle evidence confirmed via napkin. |
+| `type-reviewer` | SAFE | Zero `as Type` / `any` / `!` / `@ts-ignore` in changeset. Type flow from `AGGREGATED_TOOL_DEFS` via `keyof typeof` is mechanically sound. ISP pattern, readonly→mutable spread, Zod-first E2E validation all correct. |
+| `architecture-reviewer-barney` | 2 MEDIUM, 2 LOW | (1) `ontologyData` embeds workflows AND `toolGuidance` returns workflows — duplication in payload. (2) Barrel import creates broad transitive edge (accepted — see Fred ruling below). (3) Residual rename drift in docs/tests (addressed in WS6). (4) No E2E `resources/read` for `curriculum://model` (minor gap). |
+| `architecture-reviewer-fred` | ISSUES FOUND (docs only) | Runtime code COMPLIANT — all import directions correct. Barrel import ruling: KEEP for consistency across all 4 directory-based aggregated tools. All 5 ADRs with stale refs identified and prioritised (addressed in WS6). |
+| `architecture-reviewer-wilma` | ISSUES FOUND (budget + type cycle) | (1) 70KB test validates `ontologyData` alone, not combined payload — a 90KB combined test exists in `curriculum-model-data.unit.test.ts` but stale `@todo` on ontology test was misleading (removed in WS6). (2) Latent type-only cycle through `tool-guidance-types` → `universal-tools/types` → `definitions` (no runtime impact, erased at compile). (3) Unknown `tool_name` returns base orientation: CORRECT — more useful than error. |
+| `docs-adr-reviewer` | CRITICAL DRIFT | 54 stale references across 10 documents catalogued (3 P0, 3 P1, 4 P2). All addressed in WS6. |
+
+**Architectural decisions confirmed by review:**
+
+- Barrel import in `definitions.ts`: **KEEP** (Fred — consistency across all 4 barrel-based aggregated tools; tree-shaking eliminates unused `execution.ts`)
+- Unknown `tool_name` returning base orientation (not error): **CORRECT** (Wilma — agent still gets full orientation and can see available tools)
+- `isKnownAggregatedTool` removal: **SOUND** (Fred, Wilma — guidance data is the correct single source of truth; drift-detection test covers alignment)
+
+**Follow-ups identified (not blocking this plan):**
+
+1. `widget-metadata.e2e.test.ts` — 3 pre-existing `as` casts should migrate to Zod pattern (matches sibling E2E files)
+2. Latent type-only cycle: `tool-guidance-types` → `universal-tools/types` → `definitions` (no runtime impact; consider breaking if adding value imports)
+3. `ontologyData.workflows` duplication in combined payload (Barney — domain model and toolGuidance both carry workflows)
+4. No E2E `resources/read` test for `curriculum://model` (Barney — integration tests cover registration, but E2E read would fully lock contract)
+
+---
+
+## WS6 — Documentation Propagation
+
+> See [Documentation Propagation component](../../templates/components/documentation-propagation.md)
+
+| Document | Update |
+|---|---|
+| **ADRs** | |
+| ADR-058 (`context-grounding-for-ai-agents.md`) | **Structural rewrite** — foundational context-grounding ADR with 15+ refs to old tools. Decision, Rationale, Implementation, and Consequences sections all reference `get-ontology`/`get-help`. Core idea (multi-layered grounding) unchanged; implementation simplified to single tool. Mark "Accepted (Revised)". |
+| ADR-059 (`knowledge-graph-for-agent-context.md`) | Update 3 refs: Context section, comparison table, `seeOntology` code example. Knowledge graph data now lives within `get-curriculum-model` response. |
+| ADR-060 (`agent-support-metadata-system.md`) | **Structural rewrite** — code examples show three-tool metadata object, "Generated Outputs" shows three-tool instructions, "Adding a New Tool" uses old set. Pattern unchanged; tool set simplified. Mark "Accepted (Revised)". |
+| ADR-061 (`widget-cta-system.md`) | Update note at line 13 ("get-ontology and get-help remain") — factually wrong after replacement. Low impact (superseded ADR) but note was added for currency. |
+| ADR-108 (`sdk-workspace-decomposition.md`) | Update WS4 aggregated tools list at line 222. |
+| ADR-119 (`agentic-engineering-practice.md`) | No change — affects domain tooling, not practice methodology. Confirmed: no tool name refs. |
+| **Specification and reference docs** | |
+| `agent-support-tools-specification.md` | **Structural rewrite** — entire doc assumes three-tool architecture (line 9-11 tool list, metadata code block, Quick Start section, tool-guidance-data examples). Simplifies significantly with one orientation tool. |
+| **Prompts and templates** | |
+| Session prompt (`session-continuation.prompt.md`) | Update to reflect completion |
+| `.agent/prompts/semantic-search/semantic-search.prompt.md` | Update line 406: "agent context injection via the `get-ontology` MCP tool" → `get-curriculum-model` |
+| `.agent/plans/semantic-search/templates/ground-truth-session-template.md` | Update lines 50, 405: "Call `get-help`" → `get-curriculum-model` |
+| **READMEs** | |
+| Collection README | Update tool count and description |
+| `active/README.md` | Update plan status |
+| `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md` | Update grounding references to `get-curriculum-model` |
+| `packages/sdks/oak-sdk-codegen/src/synonyms/README.md` | **Framing rewrite** — "Architectural Framing" section built around synonyms injected into `get-ontology` response; consumer chain references `get-ontology` as primary consumer. Update to `get-curriculum-model` path. |
+| `apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` | Update references to `get-help` |
+| **Practice** | |
+| `.agent/practice-core/practice.md` | No change expected — confirmed: no tool name refs. |
+| **Release** | |
+| SDK release notes | Document breaking change: `ONTOLOGY_RESOURCE`/`getOntologyJson` removed from public surface, replaced by `CURRICULUM_MODEL_RESOURCE`. Include migration note: "Replace with `CURRICULUM_MODEL_RESOURCE`/`getCurriculumModelJson`." |
+| Session napkin | Record outcomes |
+
+Run `/jc-consolidate-docs` before marking complete.
 
 ---
 
 ## Risk Assessment
 
-| Risk | Status | Resolution |
-|---|---|---|
-| Payload exceeds context budget | Mitigated | ~90KB including new fields, within budget |
-| Surface alignment breaks existing E2E tests | Resolved | `documentation-resources.e2e.test.ts` fixed with behavioural assertions |
-| String-checking tests create false failures on name changes | Resolved | ~15 tests migrated to behavioural assertions across 12 files |
-| `as` type assertion in E2E test | Resolved | Replaced with Zod schema validation (`DomainModelResponseSchema`) |
-| `AGGREGATED_TOOL_NAMES` drift | Mitigated | Circular import prevents derivation; drift-detection test catches desync |
+> See [Risk Assessment component](../../templates/components/risk-assessment.md)
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| Broken intermediate state during removal | Medium | Type-check fails, CI red | Atomic changeset in 2.1: defs + handlers + type union change together |
+| Missed reference to old tool names | Medium | Stale guidance confuses agents | `rg` sweep with deterministic validation commands; codegen regeneration |
+| Resource metadata forwarding breaks clients | Low | Clients receive unexpected fields | MCP SDK validates; our change is additive (forwarding what was defined but dropped) |
+| Pre-existing `as` assertion replacement introduces bugs | Low | Test reliability degrades | Replace with Zod validation — stricter than `as`, catches more |
+| SDK public API break (removed exports) | Medium | External consumers of `ONTOLOGY_RESOURCE`/`getOntologyJson` break | Intentional replacement; document in release notes; `CURRICULUM_MODEL_RESOURCE` is the successor |
+| Payload size growth over time | Low | Ontology grows → context budget pressure | Currently ~68KB (13% of 128K). Consider adding a unit test threshold (e.g. fail if `getCurriculumModelJson().length > 100_000`) as a regression check |
+| Circular dependency resurfaces after refactor | Medium | Runtime import failure | Type-check + vitest in validation; dependency inversion fix in 3.2 |
+| Payload size increases from including all ontology fields | Low | Agent context budget pressure | Already measured at ~68KB (13% of 128K). Content gap fix adds 6 fields, marginal increase |
+
+**System-Level Thinking**:
+
+1. **Why are we doing this?** Agents get complete orientation in one
+   call; two-tool workaround eliminated.
+2. **Why does that matter?** Simpler agent integration, fewer failure
+   modes, single source of truth for curriculum guidance.
+3. **What if we don't?** Three tools doing overlapping work, guidance
+   drift between them, agents confused about which to call.
 
 ---
 
-## Related Plans
+## Dependencies
 
-- [WS2+WS3: Pedagogical Review Checkpoint](../future/ws2-ws3-pedagogical-review-checkpoint.plan.md) —
-  future review after production usage of `get-curriculum-model`
-- [Vocabulary and Semantic Assets](../../semantic-search/future/03-vocabulary-and-semantic-assets/) —
-  separate search infrastructure concern (ES query expansion, not agent context)
+**Blocking** (must be done before WS2):
+
+- None — `get-curriculum-model` is fully implemented and tested.
+
+**Ordering constraints within WS2**:
+
+- 2.1 (atomic removal) must precede 2.4 (reference updates) and 2.5
+  (test updates) — type union change affects what compiles.
+- 2.2 and 2.3 both modify `app:src/register-resources.ts` — conceptually
+  independent but practically serial to avoid merge conflicts.
+- 2.3 (metadata forwarding) is independent of tool removal.
+- 2.4 and 2.5 both touch shared files — practically serial after 2.1.
+
+**Related Plans**:
+
+- [WS2+WS3: Pedagogical Review Checkpoint](../future/ws2-ws3-pedagogical-review-checkpoint.plan.md) — future vocabulary review, depends on production usage data from this plan's completion.
 
 ---
 
 ## Foundation Alignment
 
-- [rules.md](../../../directives/rules.md) — TDD, quality gates, no type shortcuts
-- [testing-strategy.md](../../../directives/testing-strategy.md) — TDD at all levels, test behaviour not implementation
-- [schema-first-execution.md](../../../directives/schema-first-execution.md) — types from schema
+Before starting each phase, re-read and verify compliance with:
+
+- [rules.md](../../../directives/rules.md) — TDD, quality gates, no
+  type shortcuts, no compatibility layers, replace old with new
+- [testing-strategy.md](../../../directives/testing-strategy.md) — test
+  behaviour not implementation, no complex mocks, no skipped tests
+- [schema-first-execution.md](../../../directives/schema-first-execution.md) — types from schema, validate at boundaries
+
+**Per-phase checklist**:
+
+- [ ] WS1: Do new tests assert behaviour, not implementation details?
+- [ ] WS2: Are removals atomic? Does type-check pass at every commit?
+- [ ] WS3: Do refactored tests use Zod validation, not `as` assertions?
+- [ ] WS4: Did every gate pass? Were any run with `--force`?
+
+**Compliance checklist (end of plan)**:
+
+- [ ] Cardinal Rule: All types derive from schema via `pnpm sdk-codegen`
+- [ ] No Compatibility Layers: Old tools replaced, not wrapped
+- [ ] No Type Shortcuts: Zero `as` assertions (except `as const`)
+- [ ] Simple Mocks: Fakes injected as arguments, no complex mock frameworks
+- [ ] Generator First: Changes made in templates, not generated output
 
 ---
 
 ## Session Provenance
 
-Implementation transcript: [Pedagogical context implementation](f8ef668a-57e5-41ea-83a0-5ff6936d6944)
+- Implementation: [Pedagogical context implementation](f8ef668a-57e5-41ea-83a0-5ff6936d6944)
+- Review and validation: [WS1 review and validation](46ddd53e-f696-4071-99bf-9d96ccd197e4)
+- Plan consolidation, content gap fix, restructuring, and 6-specialist review: [Plan review and hardening](eee143e8-dfde-41f7-b3e7-246013bd7418)

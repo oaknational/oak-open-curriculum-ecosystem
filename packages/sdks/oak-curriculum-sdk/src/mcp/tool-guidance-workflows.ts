@@ -3,7 +3,7 @@
  *
  * Common multi-step workflows showing how to combine tools for
  * typical teacher tasks. These workflows are included in agent tool
- * responses (structuredContent) and in the get-help tool output.
+ * responses (structuredContent) and in the get-curriculum-model tool output.
  *
  * @remarks Extracted from tool-guidance-data.ts to keep file sizes
  * within ESLint max-lines limits. All content is static and added

@@ -374,6 +374,30 @@
 - **CRITICAL**: When updating string-checking tests, I was swapping one tool name string for another (`get-ontology` → `get-curriculum-model`). The user caught this: "tests should prove useful behaviour, not constrain implementation, and certainly not check for strings!" The fix is to assert the BEHAVIOUR (e.g. "prerequisite guidance is present", "cross-references exist", "description is non-empty and includes negative guidance") not the specific string content. Every `toContain('get-some-tool-name')` in a test is a red flag — it will break on every rename.
 - When collapsing plans (WS2+WS3 → review checkpoint), the key insight was: don't implement speculatively. WS1 already provides substantial pedagogical context. Whether additional glossary data is needed should be evaluated empirically, not pre-emptively built.
 
+## Session: Plan Consolidation and Correction (2026-03-01)
+
+### Critical correction
+- **get-ontology and get-help must be REPLACED, not kept alongside.** The previous
+  implementation treated `get-curriculum-model` as additive (design principle 3:
+  "Additive, not breaking"). The user corrected this: the standalone tools are to
+  be removed. `get-curriculum-model` subsumes both entirely. This was captured as
+  a non-goal ("No deprecation of get-help or get-ontology") — that non-goal was
+  wrong. The consolidated plan now reflects replacement as the design intent.
+- The strategic brief (`improve-pedagogical-context.plan.md`) has been archived.
+  Its content is folded into the consolidated active plan.
+- When an agent incorrectly reports "no remnants" of old tools because the tools
+  are "still active", challenge the premise: are they supposed to be active? The
+  question was about incomplete work, not about live tools.
+
+### What was done
+1. Consolidated WS1 plan and strategic brief into a single plan
+2. Updated design decisions: replacement, not addition
+3. Added ALL reviewer issues to the plan (not just critical/high)
+4. Archived strategic brief, deleted completed Cursor plans
+5. Updated onboarding prompt, collection READMEs
+6. Extracted drift-detection test code pattern
+7. Checked fitness functions (CONTRIBUTING.md at 401/400 ceiling)
+
 ## Session: WS1 Review and Validation (2026-03-01)
 
 ### Mistakes / corrections
@@ -391,3 +415,84 @@
 - `Set<string>` from narrow literal types bridges the `includes()` type compatibility gap cleanly.
 - Drift-detection test pattern: import canonical source in test file, iterate its keys, verify the system works for each. This catches both directions of drift.
 - agent-support-tools-specification.md was extensively stale — referencing a removed tool (`get-knowledge-graph`). Reference docs must be updated when the system they describe changes.
+
+## Session: Plan Review — 6 Specialists (2026-03-01)
+
+### Findings integrated
+- Barney BLOCKER: 2.4 validation conflicts with 3.5 ordering → folded module deletion into WS2
+- Barney BLOCKER: 3.2 non-deterministic → locked in "move to shared module" design
+- Fred W1: help-content.ts has runtime `toolName: 'get-help'` output (not just comments)
+- Fred W2: getGeneralHelp() becomes dead code after WS2
+- Fred W5: WS6 omits required canonical docs from documentation-propagation component
+- Type BLOCKER-1: AGGREGATED_TOOL_NAMES must derive from AGGREGATED_TOOL_DEFS after 3.2 relocation
+- Type BLOCKER-2: Zod replacements must use concrete protocol shapes, not z.record(z.string(), z.unknown())
+- Test B1: aggregated-help.unit.test.ts must be DELETED not updated (all imports point to deleted modules)
+- Test B2: WS1.5 test file must be tool-help-lookup.unit.test.ts (survives all phases)
+- Wilma BLOCKER: WS3.2 must be single commit (create, update import, delete directory)
+- Docs BLOCKER: ADR-058 (context grounding) missing — 15+ stale refs, foundational ADR
+- Docs BLOCKER: ADR-059 (knowledge graph), ADR-108 (workspace decomposition) missing
+- Docs BLOCKER: prerequisite-graph-generator.ts (both copies) generates stale seeAlso into runtime output
+- Docs WARNING: ADR-060 needs "Accepted (Revised)" structural rewrite, not just count fix
+- Docs WARNING: semantic-search.prompt.md, ground-truth-session-template.md missing from WS6
+
+### Patterns observed
+- Docs reviewer found the most BLOCKERs (4) — documentation drift is the biggest hidden risk in tool replacement plans. The rg sweep only catches TS files; ADRs and .agent/ prompts are easily missed.
+- Running reviewers in groups with plan updates between groups means later reviewers review a better plan. Group 3 found issues Group 1 would have also caught, but the plan was already fixed.
+- Folding module deletion into the same phase as tool removal resolves validation conflicts — deferred deletion creates contradictory acceptance criteria.
+- "As unknown as X" double-cast in test mocks is a root cause, not a symptom. Fixing downstream as assertions without fixing the mock just moves the problem.
+
+## Session 2026-03-01b — WS1 RED + WS2 GREEN execution
+
+### Learnings
+- `as const` on `audience: ['assistant']` creates `readonly ['assistant']` which is NOT assignable to MCP SDK's `("user" | "assistant")[]`. Fix: spread into mutable array `[...audience]`. This is a genuine readonly-vs-mutable boundary, not a hack.
+- Generated vocab files at `src/generated/vocab/` are NOT regenerated by `pnpm sdk-codegen`. They need `pnpm vocab-gen` or manual update. Both the bulk generators AND the vocab-gen generators must be updated for full coverage.
+- `AGGREGATED_TOOL_DEFS` `as const` + `keyof typeof` means removing a key from the object automatically narrows the type union — no separate type declarations needed. The `Record<AggregatedToolName, AggregatedHandler>` pattern enforces exhaustiveness at compile time.
+- Atomic removal needs to include test files that import from deleted modules (e.g. `aggregated-help.unit.test.ts`). Type-check catches this immediately — deletion of source + test in same commit.
+- tool-guidance-data.ts `tools: []` array is typed via `AllToolName`, so removing tools from AGGREGATED_TOOL_DEFS immediately causes type errors in the guidance data. Good — forces cleanup.
+
+### Files deleted this session
+- `aggregated-ontology.ts`, `aggregated-help/definition.ts`, `aggregated-help/execution.ts`, `aggregated-help/index.ts`
+- `ontology-resource.ts`, `ontology-resource.unit.test.ts`
+- `aggregated-help.unit.test.ts`
+
+### Review findings to track
+- E2E tests still reference removed tools — FIXED in WS4
+- Dead export `HELP_PREREQUISITE_GUIDANCE` in `prerequisite-guidance.ts` — FIXED in WS3
+- Stale docs: widget-rendering.md, GROUND-TRUTH-GUIDE.md, synonyms/README.md — for WS6
+
+## Session 2026-03-01c — WS4 Quality Gates + WS5 Adversarial Review
+
+### WS4 E2E fixes
+- Deleted `get-ontology.e2e.test.ts` and `get-help-tool.e2e.test.ts` after backfilling coverage into `get-curriculum-model.e2e.test.ts`
+- Backfill included: tool annotations, domain model structure (subjects, propertyGraph, workflows), all 4 key stages, toolGuidance fields, tool-specific help fields, unknown tool_name behaviour
+- Fixed `widget-metadata.e2e.test.ts` tool name arrays
+- Removed "Ontology Resource E2E" block from `documentation-resources.e2e.test.ts`
+- All 11 quality gates green: clean, sdk-codegen, build, type-check, format, markdownlint, lint, test (693), E2E (185), UI, smoke
+
+### WS5 Adversarial review findings
+All 7 specialists: code-reviewer, test-reviewer, type-reviewer, barney, fred, wilma, docs-adr-reviewer
+
+**Actionable (for WS6):**
+- ADR-058: 17 stale references, structural rewrite needed (P0)
+- ADR-060: 12+ stale references, structural rewrite needed (P0)
+- agent-support-tools-specification.md: 10+ stale references, full rewrite (P0)
+- ADR-108: 3 tool list corrections (P1)
+- ADR-061: factual error in superseded note (P1)
+- ADR-059: 5 references + update note (P1)
+- 4 P2 docs (trivial string replacements): semantic-search.prompt.md, widget-rendering.md, ground-truth-session-template.md, GROUND-TRUTH-GUIDE.md
+
+**Actionable (improvement, not blocking):**
+- `widget-metadata.e2e.test.ts` still has 3 pre-existing `as` casts (follow-up, not WS scope)
+- `universal-tools.unit.test.ts:176` stale @todo about validating get-curriculum-model content, not ontologyData
+- `conditional-clerk-middleware` tests use `curriculum://ontology` URI as example (cosmetic)
+- Dead regex alternatives in `documentation-resources.unit.test.ts` and `mcp-prompts.unit.test.ts`
+
+**Architecture decisions confirmed:**
+- Barrel import in definitions.ts: KEEP (Fred ruling — consistency across all 4 directory-based aggregated tools)
+- Unknown tool_name returning base orientation (not error): CORRECT (Wilma — more useful than error)
+- Type flow: SAFE (type-reviewer)
+
+### Patterns
+- E2E backfill pattern: extract helpers (`callToolsList`, `callGetCurriculumModel`) to reduce duplication, use Zod schemas for all validation
+- 54 stale references across 10 documents — docs drift is consistently the largest hidden cost of tool replacement
+- **Refactors as a diagnostic tool**: Refactoring reveals where the system is too tightly coupled (e.g. the circular dependency through `isKnownAggregatedTool` only surfaced when relocating `tool-help-lookup.ts`) and where tests are coupled to implementation rather than proving behaviour (e.g. E2E tests hardcoding `get-ontology`/`get-help` tool names instead of testing "an orientation tool exists", regex patterns with dead `|get-ontology|get-help` alternatives that would match even if old tools leaked back). If a refactor breaks many tests, the tests were testing structure not behaviour. If it reveals hidden imports, the modules had undeclared coupling. Treat refactor breakage as a signal, not just a cost.

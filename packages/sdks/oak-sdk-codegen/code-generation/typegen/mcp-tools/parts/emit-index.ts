@@ -41,7 +41,7 @@ function buildExports({
     })
     .join(', ')}]`;
 
-  // Determine if tool benefits from domain context (get-ontology, get-help)
+  // Determine if tool benefits from domain context (get-curriculum-model)
   // Utility tools (noauth) like get-rate-limit don't need domain context
   const requiresDomainContext = securitySchemes[0]?.type !== NOAUTH_SCHEME_TYPE;
 

@@ -32,8 +32,9 @@ independent concerns:
 
 4. **Oak-specific runtime** — Oak API URL and key
    configuration, canonical URL response augmentation,
-   aggregated tools (search, fetch, ontology, knowledge
-   graph, synonyms), domain features, agent support.
+   aggregated tools (search, fetch, get-curriculum-model,
+   browse-curriculum, explore-topic, get-thread-progressions,
+   get-prerequisite-graph), domain features, agent support.
 
 These concerns are currently interleaved. Oak-specific
 constants (`PUBLIC_TOOLS`, `THREAD_SCHEMA_NAMES`,
@@ -219,10 +220,10 @@ auth, middleware, MCP tool execution.
 
 - Oak client configuration (API URL, API key, rate limits)
 - Response augmentation (canonical URL injection)
-- Aggregated tools (search, fetch, get-ontology, get-help,
-  get-knowledge-graph, get-thread-progressions,
-  get-prerequisite-graph)
-- Domain features (ontology, knowledge graph, synonyms)
+- Aggregated tools (search, fetch, get-curriculum-model,
+  get-thread-progressions, get-prerequisite-graph,
+  browse-curriculum, explore-topic)
+- Domain features (curriculum model, synonyms)
 - Agent support (documentation resources, getting-started)
 - API pipeline artifacts (output of workspace 2)
 - Public API exports (./client, ./mcp, ./validation, etc.)

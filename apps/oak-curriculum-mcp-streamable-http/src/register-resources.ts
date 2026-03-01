@@ -17,8 +17,6 @@ export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
 import {
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
-  ONTOLOGY_RESOURCE,
-  getOntologyJson,
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -145,58 +143,20 @@ export function registerWidgetResource(
  */
 export function registerDocumentationResources(server: ResourceRegistrar): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
-    server.registerResource(
-      resource.name,
-      resource.uri,
-      {
-        description: resource.description,
-        mimeType: resource.mimeType,
-      },
-      () => {
-        const content = getDocumentationContent(resource.uri);
-        return {
-          contents: [
-            {
-              uri: resource.uri,
-              mimeType: resource.mimeType,
-              text: content ?? `# ${resource.title}\n\nContent not found.`,
-            },
-          ],
-        };
-      },
-    );
+    const { name, uri, title, ...metadata } = resource;
+    server.registerResource(name, uri, metadata, () => {
+      const content = getDocumentationContent(uri);
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: resource.mimeType,
+            text: content ?? `# ${title}\n\nContent not found.`,
+          },
+        ],
+      };
+    });
   }
-}
-
-/**
- * Registers the curriculum ontology as an MCP resource.
- *
- * This resource exposes the complete curriculum domain model as JSON,
- * complementing the `get-ontology` tool. While the tool is model-controlled,
- * this resource allows application-controlled context injection for MCP
- * clients that support pre-fetching resources.
- *
- * @param server - MCP server instance
- * @see ADR-058 for the dual exposure pattern
- */
-export function registerOntologyResource(server: ResourceRegistrar): void {
-  server.registerResource(
-    ONTOLOGY_RESOURCE.name,
-    ONTOLOGY_RESOURCE.uri,
-    {
-      description: ONTOLOGY_RESOURCE.description,
-      mimeType: ONTOLOGY_RESOURCE.mimeType,
-    },
-    () => ({
-      contents: [
-        {
-          uri: ONTOLOGY_RESOURCE.uri,
-          mimeType: ONTOLOGY_RESOURCE.mimeType,
-          text: getOntologyJson(),
-        },
-      ],
-    }),
-  );
 }
 
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
@@ -205,8 +165,13 @@ export function registerCurriculumModelResource(server: ResourceRegistrar): void
     CURRICULUM_MODEL_RESOURCE.name,
     CURRICULUM_MODEL_RESOURCE.uri,
     {
+      title: CURRICULUM_MODEL_RESOURCE.title,
       description: CURRICULUM_MODEL_RESOURCE.description,
       mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+      annotations: {
+        priority: CURRICULUM_MODEL_RESOURCE.annotations.priority,
+        audience: [...CURRICULUM_MODEL_RESOURCE.annotations.audience],
+      },
     },
     () => ({
       contents: [
@@ -223,8 +188,8 @@ export function registerCurriculumModelResource(server: ResourceRegistrar): void
 /**
  * Registers all static resources with the MCP server.
  *
- * Combines widget, documentation, ontology, and curriculum model
- * resource registration into a single call for cleaner server setup.
+ * Combines widget, documentation, and curriculum model resource
+ * registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
  * @param options - Optional widget configuration (e.g. widgetDomain)
@@ -235,7 +200,6 @@ export function registerAllResources(
 ): void {
   registerWidgetResource(server, options);
   registerDocumentationResources(server);
-  registerOntologyResource(server);
   registerCurriculumModelResource(server);
 }
 

@@ -56877,5 +56877,5 @@ export const ncCoverageGraph: NCCoverageGraph = {
     },
   ],
 
-  seeAlso: 'Use get-ontology for curriculum structure context',
+  seeAlso: 'Use get-curriculum-model for curriculum structure context',
 };

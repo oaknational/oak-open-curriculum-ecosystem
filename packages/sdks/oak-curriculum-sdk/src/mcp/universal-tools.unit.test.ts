@@ -14,6 +14,20 @@ import type {
 
 const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 
+describe('AGGREGATED_TOOL_DEFS excludes replaced tools', () => {
+  it('does not contain get-ontology (replaced by get-curriculum-model)', () => {
+    expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).not.toContain('get-ontology');
+  });
+
+  it('does not contain get-help (replaced by get-curriculum-model)', () => {
+    expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).not.toContain('get-help');
+  });
+
+  it('contains get-curriculum-model as the sole orientation tool', () => {
+    expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).toContain('get-curriculum-model');
+  });
+});
+
 const sampleMcpToolName = 'get-key-stages-subject-lessons' as const satisfies ToolName;
 
 const sampleDescriptor: ToolRegistryDescriptor = {
@@ -88,8 +102,6 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('search', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('fetch', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-curriculum-model', registry.isToolName)).toBe(true);
-    expect(isUniversalToolName('get-ontology', registry.isToolName)).toBe(true);
-    expect(isUniversalToolName('get-help', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-thread-progressions', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-prerequisite-graph', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('browse-curriculum', registry.isToolName)).toBe(true);
@@ -102,60 +114,6 @@ describe('isUniversalToolName', () => {
 
   it('rejects unknown names', () => {
     expect(isUniversalToolName('unknown-tool', registry.isToolName)).toBe(false);
-  });
-});
-
-describe('get-ontology tool descriptor', () => {
-  it('appears in listUniversalTools', () => {
-    const tools = listUniversalTools(registry);
-    const names = tools.map((tool) => tool.name);
-    expect(names).toContain('get-ontology');
-  });
-
-  it('has readOnlyHint annotation set to true', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.annotations?.readOnlyHint).toBe(true);
-  });
-
-  it('has idempotentHint annotation set to true', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.annotations?.idempotentHint).toBe(true);
-  });
-
-  it('has title annotation', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.annotations?.title).toBe('Get Curriculum Ontology');
-  });
-
-  it('has _meta with openai/toolInvocation fields', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?._meta).toBeDefined();
-    expect(ontologyTool?._meta?.['openai/toolInvocation/invoking']).toBe(
-      'Loading curriculum model…',
-    );
-    expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
-  });
-
-  it('has description with positive and negative usage guidance', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.description).toBeDefined();
-    expect(ontologyTool?.description?.length).toBeGreaterThan(50);
-    expect(ontologyTool?.description).toContain('Do NOT use for');
-  });
-
-  it('has empty input schema (no parameters)', () => {
-    const tools = listUniversalTools(registry);
-    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.inputSchema).toEqual({
-      type: 'object',
-      properties: {},
-      additionalProperties: false,
-    });
   });
 });
 
@@ -214,15 +172,6 @@ describe('search and fetch descriptions', () => {
 });
 
 describe('ontologyData', () => {
-  it('includes synonyms section with subjects and keyStages', async () => {
-    const { ontologyData } = await import('./ontology-data.js');
-    expect(ontologyData.synonyms).toBeDefined();
-    expect(ontologyData.synonyms.subjects).toBeDefined();
-    expect(ontologyData.synonyms.keyStages).toBeDefined();
-    expect(ontologyData.synonyms.subjects.maths).toContain('mathematics');
-    expect(ontologyData.synonyms.keyStages.ks4).toContain('gcse');
-  });
-
   it('fits context budget (<70KB) for LLM tool-calling', async () => {
     const { ontologyData } = await import('./ontology-data.js');
     const ontologySize = JSON.stringify(ontologyData).length;

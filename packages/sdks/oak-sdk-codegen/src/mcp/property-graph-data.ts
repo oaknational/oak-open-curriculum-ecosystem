@@ -6,7 +6,7 @@
  * This is a static data structure — not searchable, not instance-level.
  *
  * This property graph is embedded in ontology-data.ts as the `propertyGraph`
- * field, so calling `get-ontology` delivers both rich definitions AND the
+ * field, so calling `get-curriculum-model` delivers both rich definitions AND the
  * structural graph in a single response.
  *
  * What the graph provides:
@@ -28,7 +28,7 @@ export const conceptGraph = {
     howToUse:
       'Nodes represent entity TYPES (not instances). Edges show how types relate. Inferred edges (marked inferred: true) are domain knowledge not explicit in the API.',
     combinedWith:
-      'This property graph is included in the get-ontology response alongside rich definitions, enumerated values, workflow guidance, and structural patterns.',
+      'This property graph is included in the get-curriculum-model response alongside rich definitions, enumerated values, workflow guidance, and structural patterns.',
   },
   statistics: {
     conceptNodes:
@@ -295,10 +295,10 @@ export const conceptGraph = {
    * This property graph defines entity TYPES and relationship TYPES.
    * For structural patterns (how to traverse the API for different subjects/keystages),
    * see the ontology's `structuralPatterns` section. Both are delivered together
-   * in the get-ontology response.
+   * in the get-curriculum-model response.
    */
   seeOntology:
-    'This property graph is part of the get-ontology response. See structuralPatterns for API traversal guidance.',
+    'This property graph is part of the get-curriculum-model response. See structuralPatterns for API traversal guidance.',
 } as const;
 
 /**

@@ -6,7 +6,7 @@
  *
  * Content is used by:
  * - Documentation resources (markdown docs exposed via resources/list)
- * - Help tool (get-help returning structured guidance)
+ * - get-curriculum-model (returning structured guidance including tool help)
  * - Prompts (workflow templates)
  *
  * @remarks All content is static and added at SDK compile time,
@@ -102,11 +102,11 @@ export const toolGuidanceData = {
     } satisfies ToolCategory,
 
     agentSupport: {
-      tools: ['get-curriculum-model', 'get-help', 'get-ontology'],
+      tools: ['get-curriculum-model'],
       description:
-        'Tools for understanding the Oak Curriculum system and how to use the tools. get-curriculum-model combines domain model and tool guidance in a single call. get-ontology includes the property graph of concept relationships.',
+        'Agent orientation tool. get-curriculum-model provides the complete domain model (key stages, subjects, entity hierarchy, property graph) and tool usage guidance in a single call.',
       whenToUse:
-        'At conversation start, call get-curriculum-model for complete orientation. Use get-ontology or get-help individually if you need only domain model or tool guidance.',
+        'At conversation start, call get-curriculum-model for complete orientation before using search, fetch, or browsing tools.',
       isAgentSupport: true,
     } satisfies ToolCategory,
   },

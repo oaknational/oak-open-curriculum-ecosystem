@@ -57,7 +57,7 @@ Use this to answer questions like:
 
 ${ONTOLOGY_RECOMMENDED_FIRST_STEP}
 
-Complements get-ontology (which includes the schema-level property graph) with actual progression data.`,
+Complements get-curriculum-model (which includes the schema-level property graph) with actual progression data.`,
 
   inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
 

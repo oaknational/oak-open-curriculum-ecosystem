@@ -113229,5 +113229,5 @@ export const vocabularyGraph: VocabularyGraph = {
     },
   ],
 
-  seeAlso: 'Use get-ontology for curriculum structure context',
+  seeAlso: 'Use get-curriculum-model for curriculum structure context',
 };

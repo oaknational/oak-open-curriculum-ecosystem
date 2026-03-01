@@ -18,7 +18,7 @@ currently conflated into a single data structure (`synonymsData`):
 **Concern 1 — Agent context injection** (primary use of curated lists)
 
 The hand-written curated synonym lists are vocabulary hints injected into
-the `get-ontology` MCP tool response. They help AI agents understand how
+the `get-curriculum-model` MCP tool response. They help AI agents understand how
 teachers and students talk about curriculum concepts — colloquialisms
 ("sohcahtoa"), abbreviations ("PE"), UK/US variants ("factorising" /
 "factoring"), and informal phrasings ("solving for x"). These are curated
@@ -114,12 +114,12 @@ automatically propagates to all four consumer domains.
 
 #### Domain 1 — AI Agent Ontology (runtime, `ontology-data.ts`)
 
-`synonymsData` is spread into the ontology returned by the `get-ontology` MCP
-tool. This is the **primary intended use** of the curated lists — giving AI
+`synonymsData` is spread into the ontology returned by the `get-curriculum-model`
+MCP tool. This is the **primary intended use** of the curated lists — giving AI
 agents vocabulary awareness for interpreting teacher queries.
 
-Consumer chain: `synonyms/index.ts` → `ontology-data.ts` → MCP tool response
-→ AI agent
+Consumer chain: `synonyms/index.ts` → `ontology-data.ts` → `curriculum-model-data.ts`
+→ MCP tool response → AI agent
 
 ```typescript
 // ontology-data.ts (in curriculum-sdk)

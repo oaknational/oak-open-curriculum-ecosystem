@@ -66,7 +66,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
-        params: { uri: 'curriculum://ontology' },
+        params: { uri: 'curriculum://model' },
       });
 
       conditionalMw(req, mockRes, mockNext);

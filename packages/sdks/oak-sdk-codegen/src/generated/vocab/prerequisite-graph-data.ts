@@ -46316,5 +46316,5 @@ export const prerequisiteGraph: PrerequisiteGraph = {
   ],
 
   seeAlso:
-    'Use get-thread-progressions for learning paths. Use get-ontology for schema-level relationships (includes property graph).',
+    'Use get-thread-progressions for learning paths. Use get-curriculum-model for schema-level relationships (includes property graph).',
 };

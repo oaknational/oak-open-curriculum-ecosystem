@@ -89,7 +89,7 @@ describe('shouldSkipClerkMiddleware', () => {
     it('returns false for resources/read method', () => {
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
-        params: { uri: 'curriculum://ontology' },
+        params: { uri: 'curriculum://model' },
       });
       expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });

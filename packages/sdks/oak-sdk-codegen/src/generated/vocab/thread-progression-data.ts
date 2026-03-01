@@ -5310,7 +5310,7 @@ export const threadProgressionGraph = {
   ],
 
   seeAlso:
-    'Use get-ontology for schema-level relationships (includes property graph). Use get-prerequisite-graph for unit dependencies.',
+    'Use get-curriculum-model for schema-level relationships (includes property graph). Use get-prerequisite-graph for unit dependencies.',
 } as const;
 
 /**

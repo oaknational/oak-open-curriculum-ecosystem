@@ -88,12 +88,6 @@ export {
 } from '../mcp/documentation-resources.js';
 
 export {
-  ONTOLOGY_RESOURCE,
-  getOntologyJson,
-  type OntologyResource,
-} from '../mcp/ontology-resource.js';
-
-export {
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
 } from '../mcp/curriculum-model-resource.js';

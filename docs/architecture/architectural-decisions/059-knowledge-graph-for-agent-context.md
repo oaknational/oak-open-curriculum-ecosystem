@@ -4,9 +4,16 @@
 
 Accepted
 
+> **Update (March 2026)**: The standalone `get-knowledge-graph` tool was first merged into
+> `get-ontology`, and then both `get-ontology` and `get-help` were consolidated into
+> `get-curriculum-model`. The knowledge graph data (property graph of concepts and edges)
+> now lives in the `domainModel.propertyGraph` section of the `get-curriculum-model`
+> response. The architectural principle — complementary data enriching the domain model —
+> remains valid.
+
 ## Context
 
-AI agents using the Oak MCP server benefit from understanding the curriculum domain model before using other tools. ADR-058 established the context grounding pattern with `get-ontology` providing rich definitions, enumerated values, and workflow guidance.
+AI agents using the Oak MCP server benefit from understanding the curriculum domain model before using other tools. ADR-058 established the context grounding pattern (now via `get-curriculum-model`) providing rich definitions, enumerated values, and workflow guidance.
 
 However, agents also need to understand **how curriculum concepts relate to each other** — the structural relationships that are implicit in the domain but not explicit in the API schema or the prose definitions of the ontology.
 
@@ -72,7 +79,7 @@ export const conceptGraph = {
   version: '1.0.0',
   concepts: [...],
   edges: [...],
-  seeOntology: 'Call get-ontology for rich definitions...',
+  seeOntology: 'This property graph is part of the get-curriculum-model response. See structuralPatterns for API traversal guidance.',
 } as const;
 ```
 

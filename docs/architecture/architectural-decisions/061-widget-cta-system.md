@@ -10,8 +10,8 @@ Superseded
 > code pending cleanup.
 >
 > The original problem (context grounding) is now addressed through MCP's native
-> resource primitive rather than widget buttons. The `get-ontology` and `get-help`
-> tools remain for model-controlled context loading.
+> resource primitive rather than widget buttons. Context loading is handled by
+> the `get-curriculum-model` tool.
 >
 > **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool was
 > removed and merged into `get-ontology` (property graph data now lives in

@@ -112,7 +112,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
   /**
    * Aggregated tool names that should have widget metadata.
    */
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
+  const aggregatedToolNames = ['search', 'fetch', 'get-curriculum-model'] as const;
 
   describe('openai/outputTemplate', () => {
     it.each(aggregatedToolNames)(
@@ -186,8 +186,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     const allToolNames = [
       'search',
       'fetch',
-      'get-ontology',
-      'get-help',
+      'get-curriculum-model',
       'get-subjects',
       'get-key-stages',
     ] as const;

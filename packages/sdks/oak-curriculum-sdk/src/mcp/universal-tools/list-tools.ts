@@ -14,7 +14,7 @@ import { extractZodShape } from './zod-utils.js';
 /**
  * Lists all available MCP tools with their metadata.
  *
- * Returns both aggregated tools (search, fetch, get-ontology, get-help)
+ * Returns both aggregated tools (search, fetch, get-curriculum-model)
  * and generated tools from the OpenAPI schema, all with proper MCP
  * annotations and metadata.
  *

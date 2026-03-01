@@ -97,7 +97,7 @@ describe('getToolsReferenceMarkdown', () => {
   it('includes agentSupport category with agent support tools', () => {
     const markdown = getToolsReferenceMarkdown();
     expect(markdown).toContain('Agent Support');
-    expect(markdown).toMatch(/get-curriculum-model|get-ontology|get-help/);
+    expect(markdown).toMatch(/get-curriculum-model/);
   });
 });
 
@@ -134,7 +134,7 @@ describe('getWorkflowsMarkdown', () => {
 
   it('userInteractions workflow includes an agent support tool reference', () => {
     const markdown = getWorkflowsMarkdown();
-    expect(markdown).toMatch(/get-curriculum-model|get-ontology|get-help/);
+    expect(markdown).toMatch(/get-curriculum-model/);
   });
 
   it('includes returns field for workflow steps', () => {

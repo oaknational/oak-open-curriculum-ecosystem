@@ -11,7 +11,7 @@
  * - Resources (curriculum://model): For clients that pre-inject context
  *
  * @see ./curriculum-model-data.ts for the composition function
- * @see ./ontology-resource.ts for the analogous ontology resource
+ * @see ADR-058 for the context grounding strategy
  */
 
 import { composeCurriculumModelData } from './curriculum-model-data.js';

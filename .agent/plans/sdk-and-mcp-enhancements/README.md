@@ -10,7 +10,7 @@ and `sdk-and-mcp-enhancements/` directories.
 
 | Lane | Directory | Contents |
 |------|-----------|----------|
-| **Active** (now) | [active/](active/) | [WS1: get-curriculum-model](active/ws1-get-curriculum-model.plan.md) — review and validation complete, all quality gates pass |
+| **Active** (now) | [active/](active/) | [get-curriculum-model: Replace get-ontology and get-help](active/ws1-get-curriculum-model.plan.md) — In Progress, WS1 (RED) not started. 6-specialist reviewed. |
 | **Current** (next) | [current/](current/) | _(empty — WS2+WS3 collapsed to future review checkpoint)_ |
 | **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md) |
 
@@ -18,7 +18,7 @@ and `sdk-and-mcp-enhancements/` directories.
 
 | Document | Purpose | Status |
 |----------|---------|--------|
-| [improve-pedagogical-context.plan.md](improve-pedagogical-context.plan.md) | Strategic brief: `get-curriculum-model` tool, canonical glossary, pedagogical term disambiguation | Strategic (source for WS1-WS3) |
+| [improve-pedagogical-context.plan.md](archive/completed/improve-pedagogical-context.plan.md) | Strategic brief: `get-curriculum-model` tool, canonical glossary, pedagogical term disambiguation | Archived (content consolidated into active WS1 plan) |
 | [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
 | [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |
 

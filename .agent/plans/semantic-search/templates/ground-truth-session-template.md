@@ -47,7 +47,7 @@ source .env.local
 
 | Tool | Verification | Status |
 |------|--------------|--------|
-| MCP server | Call `get-help` | ☐ Working |
+| MCP server | Call `get-curriculum-model` | ☐ Working |
 | Bulk data | `ls bulk-downloads/SUBJECT-PHASE.json` | ☐ Present |
 | Benchmark | `pnpm benchmark --help` | ☐ Working |
 
@@ -402,7 +402,7 @@ jq -r '.sequence[] | select(.unitSlug == "UNIT") | .unitLessons[] |
 
 - `get-lessons-summary`: Get lesson keywords and key learning
 - `get-units-summary`: Get unit structure and lesson ordering
-- `get-help`: Reference for all available tools
+- `get-curriculum-model`: Combined orientation — domain model + tool guidance
 
 ### Validation Commands
 

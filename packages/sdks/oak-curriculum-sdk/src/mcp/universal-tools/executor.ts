@@ -17,8 +17,6 @@ import {
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
-import { runOntologyTool } from '../aggregated-ontology.js';
-import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
 import {
   validateCurriculumModelArgs,
   runCurriculumModelTool,
@@ -65,36 +63,6 @@ function mapExecutionResult(
     toolName,
     annotationsTitle: title,
   });
-}
-
-/**
- * Executes an aggregated tool by name.
- *
- * Aggregated tools combine multiple API calls into a single operation.
- * Each tool has its own validation and execution logic. This function
- * dispatches to the appropriate handler based on the tool name.
- *
- * @param name - The aggregated tool name (already validated via type guard)
- * @param input - Raw input from tool invocation (will be validated)
- * @param deps - Dependencies for tool execution (API client, etc.)
- * @returns CallToolResult from the aggregated tool
- *
- * @example
- * ```typescript
- * if (isAggregatedToolName(name)) {
- *   return executeAggregatedTool(name, input, deps);
- * }
- * ```
- */
-/**
- * Handles help tool validation and execution.
- */
-function handleHelpTool(input: unknown): CallToolResult {
-  const validation = validateHelpArgs(input);
-  if (!validation.ok) {
-    return formatError(validation.message);
-  }
-  return runHelpTool(validation.value);
 }
 
 /**
@@ -175,8 +143,6 @@ type AggregatedHandler = (
 const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
   search: handleSearchTool,
   'get-curriculum-model': (input) => Promise.resolve(handleCurriculumModelTool(input)),
-  'get-ontology': () => Promise.resolve(runOntologyTool()),
-  'get-help': (input) => Promise.resolve(handleHelpTool(input)),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
   fetch: handleFetchTool,
@@ -196,7 +162,7 @@ function executeAggregatedTool(
 /**
  * Creates a universal tool executor for MCP tool invocations.
  *
- * The executor handles both aggregated tools (search, fetch, get-ontology, get-help)
+ * The executor handles both aggregated tools (search, fetch, get-curriculum-model, etc.)
  * and generated tools from the OpenAPI schema. It performs
  * the following steps:
  *

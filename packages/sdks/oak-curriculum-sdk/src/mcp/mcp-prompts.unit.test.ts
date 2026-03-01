@@ -85,7 +85,7 @@ describe('getPromptMessages', () => {
     it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('find-lessons', { topic: 'fractions' });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
+      expect(content).toMatch(/get-curriculum-model/);
     });
   });
 
@@ -109,7 +109,7 @@ describe('getPromptMessages', () => {
         yearGroup: 'Year 4',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
+      expect(content).toMatch(/get-curriculum-model/);
     });
   });
 
@@ -133,7 +133,7 @@ describe('getPromptMessages', () => {
         subject: 'maths',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
+      expect(content).toMatch(/get-curriculum-model/);
     });
   });
 

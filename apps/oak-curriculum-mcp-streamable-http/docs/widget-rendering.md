@@ -81,7 +81,7 @@ The widget header is a compact single line containing the Oak logo, the "Oak Nat
 
 The header is only shown on major tools (`search`, `browse-curriculum`, `explore-topic`, `fetch`). All other tools render without branding. Visibility is controlled by the `HEADER_TOOLS` set in `widget-script.ts`, which sets `display` on the `#hdr` element at render time.
 
-> **Historical note**: The widget previously included a CTA button system (documented in [ADR-061](../../../docs/architecture/architectural-decisions/061-widget-cta-system.md), now superseded). CTA buttons have been removed from the widget output. Context grounding is handled through MCP resources and tools (`get-ontology`, `get-help`) rather than widget buttons.
+> **Historical note**: The widget previously included a CTA button system (documented in [ADR-061](../../../docs/architecture/architectural-decisions/061-widget-cta-system.md), now superseded). CTA buttons have been removed from the widget output. Context grounding is handled through MCP resources and tools (`get-curriculum-model`) rather than widget buttons.
 
 ## Widget Rendering Architecture
 

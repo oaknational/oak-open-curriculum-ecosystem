@@ -236,8 +236,7 @@ export function generatePrerequisiteGraphData(
     nodes,
     edges,
     seeAlso:
-      'Use get-curriculum-model for complete orientation. ' +
-      'Use get-thread-progressions for learning paths. ' +
-      'Use get-ontology for the property graph.',
+      'Use get-curriculum-model for complete orientation (includes property graph). ' +
+      'Use get-thread-progressions for learning paths.',
   };
 }

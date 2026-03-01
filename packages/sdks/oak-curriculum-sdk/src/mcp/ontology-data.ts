@@ -3,8 +3,8 @@
  * Static curriculum ontology data for the POC.
  *
  * This module exports the pre-authored curriculum domain model as a constant.
- * It's imported by the aggregated-ontology tool to provide curriculum context
- * to AI agents.
+ * It's consumed by the curriculum-model-data module to compose the combined
+ * orientation response for the get-curriculum-model tool.
  *
  * @remarks This is a POC implementation. For historical planning provenance,
  * see `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`.
@@ -12,7 +12,6 @@
  * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
  */
 
-import { synonymsData } from '@oaknational/sdk-codegen/synonyms';
 import { threadProgressionGraph, conceptGraph } from '@oaknational/sdk-codegen/vocab';
 import { toolGuidanceData } from './tool-guidance-data.js';
 
@@ -493,11 +492,11 @@ export const ontologyData = {
       'Year 1 = age 5-6 (first year of primary school)',
       'Year 6 = age 10-11 (final year of primary, SATs exams)',
       'Year 7 = age 11-12 (first year of secondary school)',
-      'Year 11 = age 15-16 (final year of secondary, GCSE exams)',
+      'Year 11 = age 15-16 (final year of secondary, GCSE exams on KS4 content)',
       'Primary = Years 1-6 (KS1 + KS2)',
       'Secondary = Years 7-11 (KS3 + KS4)',
       'Oak lessons align with the National Curriculum for England',
-      'GCSE = General Certificate of Secondary Education (KS4 qualification)',
+      'GCSE = General Certificate of Secondary Education (KS4 qualification). Note:  GCSE is not a pedagogical sequence term, the proper term is "KS4"',
     ],
     yearToAge: {
       year1: '5-6',
@@ -556,11 +555,12 @@ export const ontologyData = {
    * @see 22-ontology-and-graphs-api-proposal.md for planned refactoring
    * @remarks Use `buildElasticsearchSynonyms()` to export ES-compatible format for search app.
    */
-  synonyms: {
-    description: 'Alternative terms users might use. Map to canonical slugs when calling tools.',
-    note: 'This is not exhaustive - just examples and suggestions. Use your language understanding to recognise other variations, abbreviations, and natural phrasings.',
-    ...synonymsData,
-  },
+  // Removing until review.
+  // synonyms: {
+  //   description: 'Alternative terms users might use. Map to canonical slugs when calling tools.',
+  //   note: 'This is not exhaustive - just examples and suggestions. Use your language understanding to recognise other variations, abbreviations, and natural phrasings.',
+  //   ...synonymsData,
+  // },
 
   /**
    * Property graph of curriculum concept TYPE relationships.

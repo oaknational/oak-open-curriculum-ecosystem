@@ -4,16 +4,13 @@
 
 Agent support tools are MCP primitives designed to help AI agents understand the Oak curriculum domain model before using other tools. They provide context grounding that reduces errors, improves tool selection, and enables more effective interactions.
 
-**Current agent support tools:**
+**Current agent support tool:**
 
-- `get-curriculum-model` - Combined orientation: domain model + tool guidance (primary, callOrder 0)
-- `get-ontology` - Returns curriculum structure, entity hierarchy, and domain model definitions
-- `get-help` - Returns server overview, tool categories, workflows, and tips
+- `get-curriculum-model` - Combined orientation: domain model + tool guidance (callOrder 0)
 
-**Current agent support resources:**
+**Current agent support resource:**
 
 - `curriculum://model` - JSON resource exposing combined curriculum orientation data
-- `curriculum://ontology` - JSON resource exposing the same ontology data as `get-ontology`
 
 ## Architecture Reference
 
@@ -46,11 +43,9 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
     provides: ['key stages', 'subjects', 'entity hierarchy', 'tool categories', 'workflows', 'tips'],
     purpose: 'complete orientation — understand the domain AND how to use the tools',
     callOrder: 0,
-    complementsTools: ['get-ontology', 'get-help'],
-    seeAlso: 'get-ontology for domain model only, get-help for tool guidance only',
+    complementsTools: [],
     callAtStart: true,
   },
-  // ... other tools (get-ontology at callOrder 1, get-help at callOrder 2)
 } as const;
 ```
 
@@ -145,7 +140,7 @@ text: `You may want to call get-curriculum-model for complete orientation (domai
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts`
 
-The tips array returned by `get-help` should mention all agent support tools:
+The tips array returned by `get-curriculum-model` should mention the orientation tool:
 
 ```typescript
 tips: [
@@ -156,7 +151,7 @@ tips: [
 
 ### 6. Cross-References Between Tools
 
-Each agent support tool should reference the others via `AGENT_SUPPORT_TOOL_METADATA.complementsTools` and `seeAlso` fields. Cross-references are maintained in the metadata and propagated automatically.
+Agent support tool cross-references are maintained via `AGENT_SUPPORT_TOOL_METADATA.complementsTools` and `seeAlso` fields and propagated automatically. With a single agent support tool, `complementsTools` is empty.
 
 ---
 
@@ -174,7 +169,7 @@ Add the tool to `toolCategories.agentSupport`:
 
 ```typescript
 agentSupport: {
-  tools: ['get-curriculum-model', 'get-ontology', 'get-help', 'your-new-tool'],
+  tools: ['get-curriculum-model', 'your-new-tool'],
   description: 'Tools for understanding Oak Curriculum system and how to use the tools.',
   // ...
 },
@@ -207,7 +202,7 @@ Define the tool with appropriate annotations and \_meta:
 
 ```typescript
 export const YOUR_NEW_TOOL_DEF = {
-  description: `Your tool description.\n\n${ONTOLOGY_RECOMMENDED_FIRST_STEP}`,
+  description: `Your tool description.\n\n${AGGREGATED_PREREQUISITE_GUIDANCE}`,
   inputSchema: YOUR_NEW_TOOL_INPUT_SCHEMA,
   annotations: {
     readOnlyHint: true,
@@ -344,7 +339,7 @@ Update prompt messages to reference orientation guidance (typically via `PRIMARY
 
 #### 4.3 Cross-References (Automatic)
 
-Cross-references between tools are maintained via `complementsTools` and `seeAlso` in `AGENT_SUPPORT_TOOL_METADATA`. Update these fields for the new tool and any affected existing tools.
+Cross-references between tools are maintained via `complementsTools` and `seeAlso` in `AGENT_SUPPORT_TOOL_METADATA`. Update these fields for the new tool and update `complementsTools` on existing tools to reference it.
 
 ### Phase 5: Public API and Build
 

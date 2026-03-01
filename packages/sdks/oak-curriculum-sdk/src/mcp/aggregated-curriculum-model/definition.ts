@@ -13,7 +13,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 /**
  * Input schema for get-curriculum-model tool.
  *
- * Defines the optional tool_name parameter inherited from get-help,
+ * Defines the optional tool_name parameter for tool-specific help inclusion,
  * allowing agents to include tool-specific help in the response.
  */
 export const GET_CURRICULUM_MODEL_INPUT_SCHEMA = {

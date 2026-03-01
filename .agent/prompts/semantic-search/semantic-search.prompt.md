@@ -403,7 +403,7 @@ and search together.
 **Synonym system**: ~500 curated vocabulary entries across
 23 categories serve two distinct concerns currently conflated
 into one `synonymsData` object: (1) agent context injection
-via the `get-ontology` MCP tool (primary intent), and
+via the `get-curriculum-model` MCP tool (primary intent), and
 (2) interim Elasticsearch query expansion pending a
 bulk-data-derived synonym pipeline. All curated synonym content
 and transform utilities are co-located in sdk-codegen

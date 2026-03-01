@@ -196,7 +196,13 @@ describe('createUniversalToolExecutor', () => {
     expect(result.content[0]).toEqual({ type: 'text', text: 'Execution failed' });
   });
 
-  it('returns curriculum ontology with domain model structure', async () => {
+  /**
+   * After WS2, 'get-ontology' and 'get-help' are removed from the
+   * UniversalToolName union. The casts below are necessary to test
+   * that the runtime executor rejects these values — the type system
+   * will correctly prevent passing them without a cast.
+   */
+  it('rejects get-ontology as unknown tool (replaced by get-curriculum-model)', async () => {
     const executeMcpTool = vi.fn();
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
@@ -204,19 +210,21 @@ describe('createUniversalToolExecutor', () => {
       generatedTools: registry,
     });
 
-    const result = await callUniversalTool('get-ontology', {});
+    const result = await callUniversalTool('get-ontology' as UniversalToolName, {});
 
-    expect(result.isError).toBeUndefined();
+    expect(result.isError).toBe(true);
+  });
 
-    const firstContent = result.content[0];
-    expect(firstContent.type).toBe('text');
-    if ('text' in firstContent) {
-      expect(firstContent.text).toContain('Curriculum');
-    }
+  it('rejects get-help as unknown tool (replaced by get-curriculum-model)', async () => {
+    const executeMcpTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
+    });
 
-    expect(result.structuredContent).toBeDefined();
-    expect(result.structuredContent).toHaveProperty('version');
-    expect(result.structuredContent).toHaveProperty('curriculumStructure');
-    expect(result.structuredContent).toHaveProperty('workflows');
+    const result = await callUniversalTool('get-help' as UniversalToolName, {});
+
+    expect(result.isError).toBe(true);
   });
 });

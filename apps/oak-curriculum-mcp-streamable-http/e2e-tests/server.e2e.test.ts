@@ -1,10 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
+import { z } from 'zod';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { parseSseEnvelope } from './helpers/sse.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
@@ -63,38 +65,29 @@ const authEnforcedEnv: NodeJS.ProcessEnv = {
   ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
-interface JsonRpcEnvelope {
-  jsonrpc?: string;
-  id?: string | number;
-  result?: unknown;
-  error?: unknown;
-}
+const ToolListItemSchema = z.looseObject({ name: z.string() });
 
-function parseFirstSseData(raw: string): JsonRpcEnvelope {
-  const line = raw
-    .split('\n')
-    .map((l) => l.trim())
-    .find((l) => l.startsWith('data: '));
-  if (!line) {
-    throw new Error('No data line found in SSE payload');
-  }
-  const json = line.replace(/^data: /, '');
-  const parsed: unknown = JSON.parse(json);
-  if (parsed && typeof parsed === 'object') {
-    return parsed as JsonRpcEnvelope;
-  }
-  throw new Error('Invalid SSE JSON');
-}
+const ToolListResultSchema = z.object({
+  tools: z.array(ToolListItemSchema),
+});
 
-function toolNamesFromResult(value: unknown): string[] {
-  const tools = (value as { result?: { tools?: unknown[] } }).result?.tools;
-  if (!Array.isArray(tools)) {
-    return [];
-  }
-  return tools
-    .map((t) => (t && typeof t === 'object' ? (t as { name?: unknown }).name : undefined))
-    .filter((n): n is string => typeof n === 'string');
-}
+const InitCapabilitiesResultSchema = z.object({
+  capabilities: z.object({
+    tools: z.object({ listChanged: z.boolean() }),
+  }),
+});
+
+const InitInstructionsResultSchema = z.object({
+  instructions: z.string(),
+});
+
+const JsonRpcErrorSchema = z.object({
+  message: z.string().optional(),
+});
+
+const ResultWithErrorSchema = z.object({
+  isError: z.literal(true),
+});
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
@@ -137,13 +130,10 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(200);
 
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText);
-    const names = toolNamesFromResult(payload);
-    const toolObjects = (payload.result as { tools?: unknown[] } | undefined)?.tools ?? [];
-    const containsMethodField = toolObjects.some(
-      (tool) => tool && typeof tool === 'object' && 'method' in (tool as Record<string, unknown>),
-    );
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const names = toolListResult.tools.map((t) => t.name);
+    const containsMethodField = toolListResult.tools.some((t) => 'method' in t);
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
     const aggregatedTools = [
@@ -151,8 +141,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'explore-topic',
       'fetch',
       'get-curriculum-model',
-      'get-help',
-      'get-ontology',
       'get-prerequisite-graph',
       'get-thread-progressions',
       'search',
@@ -197,10 +185,10 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const error = payload.error as { message?: string } | undefined;
-    expect(error).toBeDefined();
-    expect(error?.message ?? '').toContain('clientInfo');
+    const envelope = parseSseEnvelope(res.text);
+    const error = JsonRpcErrorSchema.parse(envelope.error);
+    expect(error.message).toBeDefined();
+    expect(error.message ?? '').toContain('clientInfo');
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
@@ -224,11 +212,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const initResult = payload.result as
-      | { capabilities?: { tools?: { listChanged?: boolean } } }
-      | undefined;
-    expect(initResult?.capabilities?.tools?.listChanged).toBe(true);
+    const envelope = parseSseEnvelope(res.text);
+    const initResult = InitCapabilitiesResultSchema.parse(envelope.result);
+    expect(initResult.capabilities.tools.listChanged).toBe(true);
   });
 
   it('initialize response includes server instructions for agent guidance', async () => {
@@ -252,13 +238,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const initResult = payload.result as { instructions?: string } | undefined;
+    const envelope = parseSseEnvelope(res.text);
+    const initResult = InitInstructionsResultSchema.parse(envelope.result);
 
-    // Verify instructions field exists and contains agent guidance
-    expect(initResult?.instructions).toBeDefined();
-    expect(initResult?.instructions?.length).toBeGreaterThan(0);
-    expect(initResult?.instructions).toMatch(/orientation|domain model/i);
+    expect(initResult.instructions.length).toBeGreaterThan(0);
+    expect(initResult.instructions).toMatch(/orientation|domain model/i);
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {
@@ -278,14 +262,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         params: { name: 'non-existent-tool', arguments: {} },
       });
     expect(res.status).toBe(200);
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText) as {
-      error?: { message?: string };
-      result?: { isError?: boolean; content?: { text?: string }[] };
-    };
-    // MCP SDK returns either a JSON-RPC error or a result with isError: true
-    const hasJsonRpcError = typeof payload.error !== 'undefined';
-    const hasResultError = payload.result?.isError === true;
+    const envelope = parseSseEnvelope(res.text);
+    const hasJsonRpcError = envelope.error !== undefined;
+    const hasResultError = ResultWithErrorSchema.safeParse(envelope.result).success;
     expect(hasJsonRpcError || hasResultError).toBe(true);
   });
 

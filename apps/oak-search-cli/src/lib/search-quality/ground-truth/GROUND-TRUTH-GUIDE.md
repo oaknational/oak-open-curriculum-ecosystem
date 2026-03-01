@@ -396,7 +396,7 @@ source .env.local
 
 | Tool       | Verification                                                 |
 | ---------- | ------------------------------------------------------------ |
-| MCP server | Call `get-help`                                              |
+| MCP server | Call `get-curriculum-model`                                  |
 | Bulk data  | `jq '.sequence \| length' bulk-downloads/SUBJECT-PHASE.json` |
 | Benchmark  | `pnpm benchmark:lessons --help`                              |
 

@@ -61,7 +61,7 @@ export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
 /**
  * Union of all tool names combining aggregated and generated tools.
  *
- * - Aggregated tools: search, fetch, get-ontology, get-help (hand-written)
+ * - Aggregated tools: search, fetch, get-curriculum-model (hand-written)
  * - Generated tools: All tools from OpenAPI spec (from code-generation)
  */
 export type UniversalToolName = AggregatedToolName | ToolName;

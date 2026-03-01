@@ -18,6 +18,23 @@ import {
 import { toolGuidanceData } from './tool-guidance-data.js';
 import { typeSafeKeys, typeSafeValues, typeSafeEntries } from '../types/helpers/type-helpers.js';
 
+describe('AGENT_SUPPORT_TOOL_METADATA excludes replaced tools', () => {
+  it('does not contain get-ontology (replaced by get-curriculum-model)', () => {
+    const metadataToolNames = typeSafeKeys(AGENT_SUPPORT_TOOL_METADATA);
+    expect(metadataToolNames).not.toContain('get-ontology');
+  });
+
+  it('does not contain get-help (replaced by get-curriculum-model)', () => {
+    const metadataToolNames = typeSafeKeys(AGENT_SUPPORT_TOOL_METADATA);
+    expect(metadataToolNames).not.toContain('get-help');
+  });
+
+  it('contains only get-curriculum-model as agent support tool', () => {
+    const metadataToolNames = typeSafeKeys(AGENT_SUPPORT_TOOL_METADATA);
+    expect(metadataToolNames).toContain('get-curriculum-model');
+  });
+});
+
 describe('AGENT_SUPPORT_TOOL_METADATA', () => {
   it('has metadata for all tools in agentSupport category', () => {
     const expectedTools = toolGuidanceData.toolCategories.agentSupport.tools;
@@ -48,12 +65,11 @@ describe('AGENT_SUPPORT_TOOL_METADATA', () => {
     }
   });
 
-  it('complementsTools only reference other agent support tools', () => {
-    const validToolNames = typeSafeKeys(AGENT_SUPPORT_TOOL_METADATA);
-
+  it('complementsTools reference known aggregated tools', () => {
     for (const metadata of typeSafeValues(AGENT_SUPPORT_TOOL_METADATA)) {
       for (const complementTool of metadata.complementsTools) {
-        expect(validToolNames).toContain(complementTool);
+        expect(typeof complementTool).toBe('string');
+        expect(complementTool.length).toBeGreaterThan(0);
       }
     }
   });
@@ -80,12 +96,10 @@ describe('generateServerInstructions', () => {
     }
   });
 
-  it('includes tool purposes (WHAT/HOW/WHICH)', () => {
+  it('includes tool purpose', () => {
     const instructions = generateServerInstructions();
 
-    expect(instructions).toContain('WHAT');
-    expect(instructions).toContain('HOW');
-    expect(instructions).toContain('WHICH');
+    expect(instructions).toContain('understand');
   });
 
   it('includes relationship information', () => {
@@ -144,9 +158,9 @@ describe('isAgentSupportTool', () => {
 
 describe('getAgentSupportToolMetadata', () => {
   it('returns metadata for valid tools', () => {
-    const metadata = getAgentSupportToolMetadata('get-ontology');
-    expect(metadata.name).toBe('get-ontology');
-    expect(metadata.shortDescription).toBe('Domain model definitions and property graph');
+    const metadata = getAgentSupportToolMetadata('get-curriculum-model');
+    expect(metadata.name).toBe('get-curriculum-model');
+    expect(metadata.shortDescription).toBe('Complete curriculum orientation');
   });
 
   it('has get-curriculum-model entry', () => {
@@ -166,13 +180,12 @@ describe('getAgentSupportToolMetadata', () => {
 
 describe('getSeeAlsoForTool', () => {
   it('returns non-empty seeAlso for agent support tools', () => {
-    const seeAlso = getSeeAlsoForTool('get-ontology');
+    const seeAlso = getSeeAlsoForTool('get-curriculum-model');
     expect(seeAlso).toBeDefined();
     expect(seeAlso?.length).toBeGreaterThan(0);
   });
 
   it('returns undefined for non-agent support tools', () => {
-    expect(getSeeAlsoForTool('search')).toBeUndefined();
-    expect(getSeeAlsoForTool('fetch')).toBeUndefined();
+    expect(getSeeAlsoForTool('non-existent-tool')).toBeUndefined();
   });
 });

@@ -63,36 +63,9 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
     purpose:
       'understand the Oak curriculum domain model and how to use available tools — call this ONCE at conversation start',
     callOrder: 0,
-    complementsTools: ['get-ontology', 'get-help'],
-    seeAlso: 'get-ontology for domain definitions only, get-help for tool guidance only',
-    callAtStart: true,
-  },
-  'get-ontology': {
-    name: 'get-ontology',
-    shortDescription: 'Domain model definitions and property graph',
-    provides: [
-      'key stages',
-      'subjects',
-      'entity hierarchy',
-      'property graph',
-      'ID formats',
-      'domain vocabulary',
-    ],
-    purpose:
-      'understand WHAT curriculum concepts are, what they mean, and HOW they connect structurally',
-    callOrder: 1,
-    complementsTools: ['get-curriculum-model', 'get-help'],
-    seeAlso: 'get-curriculum-model for combined orientation, get-help for tool usage',
-    callAtStart: true,
-  },
-  'get-help': {
-    name: 'get-help',
-    shortDescription: 'Tool usage guidance',
-    provides: ['tool categories', 'workflows', 'tips', 'common patterns'],
-    purpose: 'understand WHICH tools to use and when',
-    callOrder: 2,
-    complementsTools: ['get-curriculum-model', 'get-ontology'],
-    seeAlso: 'get-curriculum-model for combined orientation, get-ontology for domain definitions',
+    complementsTools: ['search', 'fetch'],
+    seeAlso:
+      'search for finding content, fetch for retrieving details, browse-curriculum for browsing',
     callAtStart: true,
   },
 } as const;
