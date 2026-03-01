@@ -1,4 +1,5 @@
 import type { ParamMetadataMap } from './param-metadata.js';
+import { normaliseParamName } from './param-metadata.js';
 import { buildZodFields } from './build-zod-type.js';
 import { jsonSchemaFromPrimitive } from './build-json-schema-property.js';
 
@@ -84,9 +85,10 @@ export function buildInputSchemaObject(
   const required: string[] = [];
 
   for (const [name, meta] of allEntries) {
-    properties[name] = buildFlatInputProperty(name, meta);
+    const mcpName = normaliseParamName(name);
+    properties[mcpName] = buildFlatInputProperty(mcpName, meta);
     if (meta.required) {
-      required.push(name);
+      required.push(mcpName);
     }
   }
 
@@ -171,12 +173,12 @@ export function buildFlatMcpZodObject(
     return 'z.object({})';
   }
 
-  // Reuse existing buildZodFields which handles all type generation logic:
-  // - Enum unions (z.literal values)
-  // - Optional parameters (.optional())
-  // - Array types
-  // - Primitive types
-  const fields = buildZodFields(allEntries, 'flat').join(', ');
+  const normalisedEntries: [string, ParamMetadataMap[string]][] = allEntries.map(([name, meta]) => [
+    normaliseParamName(name),
+    meta,
+  ]);
+
+  const fields = buildZodFields(normalisedEntries, 'flat').join(', ');
 
   return `z.object({ ${fields} })`;
 }

@@ -1,3 +1,8 @@
+---
+fitness_ceiling: 200
+split_strategy: 'Extract workspace-specific troubleshooting to workspace READMEs'
+---
+
 # Troubleshooting Guide
 
 ## Overview
@@ -123,3 +128,35 @@ pnpm smoke:dev:stub
 ```
 
 Each gate may fix issues for subsequent gates (e.g. `format:root` fixes formatting that `lint:fix` then passes).
+
+## File Move and Refactoring Issues
+
+### ESLint Rule Overrides After File Moves
+
+When moving files between workspaces, ESLint rule overrides must also move — otherwise lint errors appear silently in the destination. Also check that relative links in README files adjust for directory depth changes (e.g. `../../../docs/` may become `../../../../docs/`).
+
+### Stale tsup Entry Points
+
+Stale tsup entries match nothing silently after file moves — remove dead entry points promptly.
+
+### Stale ADR File Paths
+
+ADR Implementation sections have file paths that go stale when packages are moved. Always grep ADRs for old paths after a move. Similarly, check TSDoc `@see` links for old GitHub repo URLs when removing a workspace.
+
+### Second-Level Barrels
+
+When migrating facade imports, check for second-level barrels (e.g. `oak.ts` re-exporting from the facade) — they add hidden consumers that do not appear in a direct grep for the facade file.
+
+### TS2209 rootDir Ambiguity
+
+When `tsconfig.build.json` narrows `include` from a wide base, add explicit `rootDir: "./src"` for export map resolution.
+
+## TSDoc Issues
+
+- `{@link ./path}` is NOT valid TSDoc — use backtick references for module paths.
+- Braces `{ }` in TSDoc trigger malformed inline tag errors.
+- `>` in TSDoc examples needs backslash escape.
+- Never use `\x00` in regex — use string-based placeholders (e.g. `___TSDOC_SAFE_N___`).
+- `openapiTS` emits `@constant` as both single-line (`/** @constant */`) and multi-line — regex must handle both forms.
+- ESLint plugins using dynamic file resolution (`@microsoft/tsdoc-config`) must be marked `external` in tsup bundles.
+- `tsdoc.json` `extends` works with `@microsoft/tsdoc-config` 0.18.0; `TSDocConfigFile.findConfigPathForFolder` stops at `package.json`/`tsconfig.json` boundaries — each workspace needs its own `tsdoc.json` with `extends`.

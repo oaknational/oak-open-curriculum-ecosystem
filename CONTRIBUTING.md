@@ -1,3 +1,8 @@
+---
+fitness_ceiling: 400
+split_strategy: 'Extract detailed sections to docs/engineering/ or governance docs; keep contributor workflow here'
+---
+
 # Contributing to Oak Open Curriculum Ecosystem
 
 This guide is for Oak team members contributing to the repository. If you
@@ -294,6 +299,25 @@ The monorepo is ESM-only (`"type": "module"` in all `package.json` files).
   Applies to ALL relative imports including barrel re-exports. `pnpm build` +
   `pnpm type-check` do NOT catch this — only E2E tests against built `dist/`
   surface the error. Run `pnpm test:e2e` before pushing.
+
+### Workspace and Turbo
+
+- `pnpm-workspace.yaml` must list only existing package directories — a missing directory causes confusing turbo scope errors.
+- `workspace:*` not `workspace:^` — all workspaces use `workspace:*`. For private packages that will never be published to a registry, the runtime difference is zero, but consistency matters.
+- Turbo cache can mask latent failures for a long time — package renames force cache misses that surface them.
+- Turbo stops at first failure by default — use `--continue` to see all errors across workspaces.
+- Semantic-release managed packages use `"version": "0.0.0-development"`.
+- Never commit `.turbo/` cache files.
+- E2E tests need explicit env in `turbo.json`: `"env": ["OAK_API_KEY"]`.
+- E2E config files use prefix convention (`vitest.e2e.config.ts`) not suffix (`vitest.config.e2e.ts`) — prefix is matched by `*.config.ts` globs in tsconfig and ESLint.
+
+### Self-Referencing Imports
+
+Self-referencing imports within a package (e.g. `import from '@oaknational/sdk-codegen/bulk'` inside sdk-codegen itself) are a trap: TypeScript and tsup do not catch them, only runtime does. External consumers use subpath exports; internal files use relative imports.
+
+### Commit Messages
+
+Commitlint enforces conventional commit `subject-case`: the subject line must start with a lowercase type prefix (e.g. `fix(scope): description`). Uppercase item references like "F7 — description" are rejected.
 
 ### Functions
 

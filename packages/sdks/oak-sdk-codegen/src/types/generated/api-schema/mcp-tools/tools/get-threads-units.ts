@@ -29,11 +29,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"threadSlug":{"type":"string","examples":["number-multiplication-and-division"]}} as const, additionalProperties: false as const, required: ["threadSlug"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"thread":{"type":"string","examples":["number-multiplication-and-division"]}} as const, additionalProperties: false as const, required: ["thread"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ threadSlug: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ threadSlug: z.string() });
+export const toolMcpFlatInputSchema = z.object({ thread: z.string() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"threadSlug":{"type":"string","examples":["number-multiplication-and-division"]}},"additionalProperties":false,"required":["threadSlug"]}\nRequired: threadSlug';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"thread":{"type":"string","examples":["number-multiplication-and-division"]}},"additionalProperties":false,"required":["thread"]}\nRequired: thread';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -47,7 +47,7 @@ export const describeToolArgs = () => toolArgsDescription;
 export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
   const params: ToolParams = {
     path: {
-      threadSlug: flatArgs.threadSlug,
+      threadSlug: flatArgs.thread,
     },
   };
   return { params };

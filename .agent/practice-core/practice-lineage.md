@@ -16,7 +16,7 @@ provenance:
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-28
     purpose: "Ecosystem-agnostic hydration: labelled ecosystem-specific content, added cold-start path, aligned consolidation with concurrent documentation principle"
-fitness_ceiling: 300
+fitness_ceiling: 320
 attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
 
@@ -144,30 +144,17 @@ These are lightweight rules that fire on every agent interaction (in Cursor, `.m
 - No global state in tests
 - Invoke code reviewers after non-trivial changes
 
-### The Learning Loop
+### The Knowledge Flow
 
-The napkin, distillation, consolidation, and Practice evolution are not independent features. They are stages of a single feedback loop:
+The knowledge flow is the Practice's central mechanism. See [practice.md §The Knowledge Flow](practice.md#the-knowledge-flow) for the full treatment: the cycle diagram, three-audience model, fitness functions at every stage, and feedback properties.
 
-```text
-Work -> Capture -> Refine -> Settle -> Enforce -> Apply -> Work
-```
+The condensed cycle: **Capture** (napkin, always on) → **Refine** (distilled, periodic) → **Graduate** (permanent docs, on consolidation) → **Enforce** (rules & directives, always on) → **Apply** (work) → repeat. Each stage serves a broader audience: the napkin serves the current session, distilled serves future agents, permanent docs serve everyone. Each transition raises the bar.
 
-**Capture** (always on): The napkin (`.agent/memory/napkin.md`) records mistakes, corrections, surprises, and patterns continuously during every session. It is always active -- not triggered by a command. Read it at session start; write to it as you work. Everything that would change behaviour next session goes here.
+The flow has two critical properties for propagation:
 
-**Refine** (periodic): When the napkin exceeds ~800 lines, the distillation skill extracts high-signal entries into `distilled.md` -- a curated rulebook of actionable patterns, under 200 lines. The outgoing napkin is archived and a fresh one starts. Entries in `distilled.md` that have matured into permanent documentation (rules, docs, practice) are pruned. This prevents unbounded growth: the intermediate buffer only holds what has not yet settled.
+1. **Self-replicating**: the knowledge flow is part of the Practice, which travels via plasmid exchange. A receiving repo inherits the mechanism that produces rules, not just the rules themselves. This means every repo that adopts the Practice immediately has a working learning loop — it doesn't need to invent one.
 
-**Settle** (on consolidation): The `consolidate-docs` command verifies that documentation produced during work is current and complete, extracts anything remaining from plans to permanent locations (`docs/`, source TSDoc, READMEs), extracts reusable code patterns to `.agent/memory/code-patterns/` (abstract principles proven by implementation), and considers whether any learning warrants an update to the Practice or Lineage themselves. This is the graduation step -- where a pattern moves from "specialist refinement" to "settled practice." Code patterns occupy the middle ground: too concrete for rules, too abstract for source code.
-
-**Enforce** (always on): Always-applied rules (`.cursor/rules/*.mdc`) fire on every agent interaction. They encode the Practice's current state: TDD, type safety, fail fast, invoke reviewers, read directives at session start. When the Practice evolves, the rules update. Next session, agents inherit the evolved state automatically.
-
-**Apply**: Agents read the directives at session start (because the `read-agent-md` rule fires), apply the rules, use the workflow commands, and do work. That work produces new learnings, and the loop repeats.
-
-The loop has two feedback properties:
-
-- **Positive**: learnings that prove valuable propagate upward (napkin -> distilled -> docs/rules -> practice/lineage). Each stage amplifies what works.
-- **Negative**: the three-part bar for Practice changes (validated? prevents recurring mistakes? stable?) acts as a governor. Speculation stays in the napkin. Only patterns that have survived real work and distillation graduate to the Practice. The pruning mechanism in distillation removes entries that have settled elsewhere, preventing duplication and drift.
-
-The loop is self-applicable: the rules that enforce the Practice are themselves subject to the same evolution process. If consolidation reveals that a rule is wrong, the rule can change -- but only if the change clears the bar.
+2. **Self-applicable**: the rules that enforce the Practice are themselves subject to the same evolution process. If consolidation reveals that a rule is wrong, the rule can change — but only if the change clears the three-part bar. The Practice is a ratchet, not a pendulum.
 
 ### Prompts
 
@@ -201,11 +188,15 @@ The Practice has negative feedback for what enters (the three-part bar), but wit
 
 | File | Ceiling | Rationale |
 |---|---|---|
-| `practice.md` | ~200 lines | System map. Readable in one sitting. |
-| `practice-lineage.md` | ~300 lines | Complete portable blueprint. Readable in one sitting. |
+| `practice.md` | ~250 lines | System map including the knowledge flow. Readable in one sitting. |
+| `practice-lineage.md` | ~320 lines | Complete portable blueprint with transmission dimension. Readable in one sitting. |
 | `practice-bootstrap.md` | ~400 lines | Annotated templates for every artefact type. Comprehensive but still one sitting. |
 
 These are soft ceilings, not hard limits. Exceeding them triggers tightening; it does not block work. The `jc-consolidate-docs` command checks these during every consolidation pass.
+
+### Beyond the Trinity
+
+Fitness functions extend to all key documents in the knowledge flow cycle. Agent-facing documents (directives, memory files) and contributor-facing documents (governance, troubleshooting, CONTRIBUTING) carry `fitness_ceiling` and `split_strategy` in their YAML frontmatter. Only shallow-browsing entry points (root README, quickstart, VISION) are exempt — to avoid scaring casual browsers. The consolidation command (step 8) checks all ceilings alongside the trinity.
 
 ### Tightening Process
 
@@ -313,3 +304,4 @@ Principles discovered through Practice propagation and evolution. These have cle
 - **Plasmids need a provenance chain, not just an origin.** A file that only records where it was created will be rejected by its origin repo as "already mine." The provenance array records every repo that has evolved the file; the last entry tells the receiving repo whether the file has been somewhere new. Without it, the plasmid exchange mechanism silently fails.
 - **Documentation is concurrent, not retrospective.** ADRs and README updates produced during work stay accurate and contextual. Documentation deferred to consolidation loses context, goes stale, or never gets written. Consolidation should verify documentation is current, not extract it.
 - **Understand local norms before hydrating.** The Practice is ecosystem-agnostic in principle. When hydrating into a new repo, the integrating agent MUST survey the local language(s), test runners, linters, package managers, and existing quality standards BEFORE creating any Practice artefacts. The Practice enables excellence; it does not replace what has already been achieved.
+- **Fitness functions at every stage of knowledge flow.** Ephemeral memory (napkin, distilled) has size constraints, but so must permanent docs. Without ceilings, the consolidation cycle simply moves unbounded growth downstream. Documents in the knowledge flow carry `fitness_ceiling` and `split_strategy` in YAML frontmatter — only shallow-browsing entry points (root README, quickstart, VISION) are exempt. The response to hitting a ceiling is splitting by responsibility, not compression — the goal is discoverability, not density.

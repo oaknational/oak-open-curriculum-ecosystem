@@ -1,6 +1,11 @@
+---
+fitness_ceiling: 150
+split_strategy: 'Extract growing sections to dedicated governance docs by responsibility'
+---
+
 # Development Practice
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-02-28  
 **Status**: Active guidance
 
 NEVER disable checks of any kind, ever.
@@ -49,6 +54,8 @@ NEVER disable any quality gates or Git hooks.
 - **Preserve cause chains** - All errors must preserve the cause chain
 - **No "sensible defaults"** - If a required argument is missing, throw an error
 - **Explicitly handle both success and error cases** - All functions must handle both success and error cases, i.e. use the Result type.
+- **`void promise` swallows rejections** - Use `.catch(logger.error)` for cleanup promises in event handlers like `res.on('close')`
+- **Distinct HTTP semantics** - NEVER collapse distinct HTTP status codes into a single error kind (e.g. 404 and 451 have different meanings). Per-service error types are cleaner than a unified error type — each service has different failure modes.
 
 ### Architecture Level
 
@@ -67,6 +74,10 @@ NEVER disable any quality gates or Git hooks.
 - **Question architecture** - If DIP causes complexity, the architecture may need refactoring
 - **Single source of truth** - One responsibility, one reason to change, one place for each concept
 
+### Validation After Rewrites
+
+After any major rewrite or re-architecture, validation against the real system is non-negotiable before wiring into consumers.
+
 ## Git Workflow
 
 ### Branching Strategy
@@ -74,12 +85,21 @@ NEVER disable any quality gates or Git hooks.
 - [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) - feature branches merge to main
 - All changes via pull requests
 - Main branch must always be deployable
+- Prefer `git worktree` over `git stash` for baseline comparisons — stash risks lost work
 
 ### Commit Messages
 
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format
 - Enforced by `commitlint` pre-commit hook
 - Examples: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
+
+## Documentation Practice
+
+- Plans are execution documents (what to do, in what order). Permanently useful information belongs in ADRs, not plans. Extract permanent knowledge to ADRs before archiving a plan.
+- ADR "Accepted (Revised)" status: use for documentation entropy fixes where the core decision is unchanged. Do not supersede — it adds overhead for no structural benefit.
+- ADR Consequences sections should use past tense for completed actions — stale future tense creates a false impression of outstanding work.
+- Fenced code blocks without language specifier fail markdownlint MD040.
+- NEVER compress docs to meet line limits — split files by responsibility instead.
 
 ## Related Documentation
 

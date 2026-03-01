@@ -28,6 +28,40 @@ import { toRetrievalError } from './retrieval-error.js';
 import { THREAD_SOURCE_EXCLUDES } from './source-excludes.js';
 
 /**
+ * Build the ES request for thread search, branching on whether text is
+ * provided.  When text is present, uses the two-way RRF retriever
+ * (BM25 + ELSER).  When text is absent, falls back to a simple
+ * filter + sort by `unit_count` descending.
+ */
+function buildThreadRequest(
+  params: SearchParamsBase,
+  resolveIndex: (kind: 'threads') => string,
+): EsSearchRequest {
+  const size = clampSize(params.size);
+  const from = clampFrom(params.from);
+  const filters: estypes.QueryDslQueryContainer[] = [];
+  if (params.subject) {
+    filters.push({ term: { subject_slugs: params.subject } });
+  }
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  const base = {
+    index: resolveIndex('threads'),
+    size,
+    from: from > 0 ? from : undefined,
+    _source: THREAD_SOURCE_EXCLUDES,
+  };
+
+  if (params.text.length > 0) {
+    return { ...base, retriever: buildThreadRetriever(params.text, filterClause) };
+  }
+  return {
+    ...base,
+    query: filterClause ?? { match_all: {} },
+    sort: [{ unit_count: { order: 'desc' } }],
+  };
+}
+
+/**
  * Execute thread search with two-way RRF (BM25 + semantic).
  *
  * Threads are conceptual progression strands, not sequences or programmes.
@@ -47,23 +81,8 @@ export async function searchThreads(
   logger?: Logger,
 ): Promise<Result<ThreadsSearchResult, RetrievalError>> {
   try {
-    const size = clampSize(params.size);
-    const from = clampFrom(params.from);
-    const filters: estypes.QueryDslQueryContainer[] = [];
-    if (params.subject) {
-      filters.push({ term: { subject_slugs: params.subject } });
-    }
-
-    const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-    const request: EsSearchRequest = {
-      index: resolveIndex('threads'),
-      size,
-      retriever: buildThreadRetriever(params.text, filterClause),
-      from: from > 0 ? from : undefined,
-      _source: THREAD_SOURCE_EXCLUDES,
-    };
-
-    logger?.debug('searchThreads', { text: params.text, size, from });
+    const request = buildThreadRequest(params, resolveIndex);
+    logger?.debug('searchThreads', { text: params.text, size: request.size, from: request.from });
     const res = await search<SearchThreadIndexDoc>(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,

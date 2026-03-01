@@ -3,7 +3,7 @@
 **Status**: Active  
 **Last Updated**: 2026-02-28  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: M1-S001a code complete, ingest CLI refactored (bulk-default, index filtering), reindex pending. M1-S001b/S002/S003/S005/S008 complete. M1-S004 open (P3). M1-S006 open (upstream). M1-S007 deferred. Remaining M0 gates: secrets sweep, manual review, merge, make public.
+**Open items**: M1-S009 (complete suggest pipeline in SDK — `bool_prefix` alongside completion). M1-S003 revised (exclude binary endpoint from MCP tools). M1-S007 deferred. All other snags complete/closed. Remaining M0 gates: secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -58,103 +58,58 @@ additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
 
 ### Current State
 
-All code work complete. Full reindex done (2026-02-28). Verification outstanding.
+All code work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).**
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
 - **G4 complete**: Onboarding rerun done (4 personas). Owner dispositions recorded for all 36 findings. No P0 blockers. See §Onboarding Snagging below.
-- **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S008). All code-complete except M1-S004 and M1-S006 (open P3, non-blocking). See §MCP Tool Exploration Findings below.
-- **Full reindex (2026-02-28)**: 16,443 documents indexed successfully (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER failures, all recovered in single retry round. `thread_semantic` field now populated. Chunk delay increased from 7001ms to 8000ms (ADR-096 revised). Verification not yet run.
+- **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S008). All code-complete. M1-S003 revised: exclude binary endpoint from tools. M1-S004 complete. M1-S006 closed. See §MCP Tool Exploration Findings below.
+- **Full reindex (2026-02-28)**: 16,443 documents indexed successfully (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER failures, all recovered in single retry round. `thread_semantic` field now populated. Chunk delay increased from 7001ms to 8000ms (ADR-096 revised).
+- **MCP tool validation (2026-02-28)**: All 32 oak-local MCP tools validated. 164/164 thread docs have `thread_semantic`. Thread search returns results via ELSER (was 0 before reindex). `explore-topic` returns threads in unified response. M1-S002 year normalisation confirmed (number input accepted). M1-S003 binary warning in place. M1-S005 suggest filter requirement works. M1-S006 rate-limit 0/0/0 confirmed on preview. No new P0/P1 snags. Two observations: (1) `search(scope: threads, text: "")` rejected — empty text not allowed; (2) `search(scope: suggest, text: "frac", subject: "maths")` returns 0 suggestions — may be a data/prefix issue in the suggest index.
 
 ### Top Priorities for Next Session
 
-**1. Verify reindex and validate all 32 MCP tools (P1)**
+**Verification complete (2026-02-28).** All 32 MCP tools validated. 164/164 thread docs have `thread_semantic`. Thread search and explore-topic fully functional.
 
-Full reindex completed 2026-02-28 (16,443 docs, 0 final failures). The
-`thread_semantic` field should now be populated on all 164 thread documents.
-Verification is the sole remaining gate before M0.
+**Post-validation quality fixes (2026-02-28):** M1-S004 (param normalisation) complete. M1-S006 (rate-limit) closed. Text-less thread search enabled.
 
-**Step 1 — Verify `thread_semantic` populated (EsCurric MCP):**
+**1. Complete the suggest pipeline in the search SDK (M1-S009)**
 
-- `platform_core_get_document_by_id` with `index: "oak_threads"`,
-  `id: "algebra"` — confirm `thread_semantic` field present
-- Repeat for `geometry-and-measure` and `bq14-physics`
-- `platform_core_execute_esql` with `query: "FROM oak_threads | WHERE
-  thread_semantic IS NOT NULL | STATS count=COUNT(*)"` — should be 164
+The SDK's `suggest()` function currently uses only the ES completion suggester, which only matches from the start of each indexed input. `"frac"` does not match `"Adding fractions"`. This is not a limitation to accept — it is an incomplete implementation. The CLI already solves this correctly with a dual-query approach (completion + `bool_prefix` on `search_as_you_type` fields). The fix is to complete the SDK suggest pipeline so both CLI and MCP consume the same logic.
 
-**Step 2 — Validate thread search and explore-topic (M1-S001a/b):**
+**Principle**: search logic belongs in the SDK. CLI and MCP are consumers. Do not duplicate search behaviour in consumers.
 
-- `search` with `scope: "threads", subject: "maths", text: ""` — should
-  return maths threads via ELSER on `thread_semantic`
-- `search` with `scope: "threads", text: "algebra"` — should return the
-  algebra thread with improved relevance
-- `search` with `scope: "threads", text: "physics", subject: "science"`
-- `explore-topic` with `text: "algebra", subject: "maths"` — thread
-  section should now contain results
-- `explore-topic` with `text: "electricity", subject: "science"` — check
-  lessons + units + threads all return
-- Negative: `search` with `scope: "threads", text: "xyznonexistent"` —
-  should return 0 gracefully
-- `search` with `scope: "suggest", subject: "maths"` — should work
-  (M1-S005)
-- `search` with `scope: "suggest"` (no filter) — should give a helpful
-  validation error (M1-S005)
+- Extend `suggest()` in `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` to run `bool_prefix` on `search_as_you_type` sub-fields (e.g. `lesson_title.sa`, `._2gram`, `._3gram`) alongside the completion query
+- The CLI's `scope-config.ts` already defines `boolPrefixFields` and `buildFilters` per scope — extract the proven logic, don't reinvent it
+- Merge and deduplicate results from both queries
+- Once the SDK pipeline is complete, refactor the CLI to consume `suggest()` from the SDK instead of its local implementation
+- The `SuggestClient` interface may need extending to accept both completion and regular search requests
 
-**Step 3 — Validate all other MCP tools (32 tools total):**
+**2. Exclude `get-lessons-assets-by-type` from MCP tools (M1-S003)**
 
-Systematic walkthrough using KS4 maths as primary test domain:
+The remote MCP server (Vercel) cannot trigger client-side file downloads. `get-lessons-assets` already provides download URLs. The endpoint should be excluded from tool generation, not worked around.
 
-*Discovery and structure (6):*
-`get-ontology`, `get-help`, `get-key-stages`, `get-subjects`,
-`get-subjects-key-stages` (maths), `get-subjects-years` (maths, ks4)
+- Add `/lessons/{lesson}/assets/{type}` to `SKIPPED_PATHS` in `mcp-tool-generator.ts`
+- Remove the `GET_LESSONS_ASSETS_BY_TYPE_WARNING` from `tool-description.ts`
+- Run `pnpm sdk-codegen` to regenerate (tool count drops from 32 to 31)
+- Run tests to verify
 
-*Sequence and unit (7):*
-`get-subjects-sequences` (maths, ks4), `get-sequences-units` (sequence
-from above, year: "10"), `get-sequences-assets` (year: 3 as number —
-validates M1-S002), `get-sequences-questions`, `get-key-stages-subject-units`
-(ks4, maths), `get-key-stages-subject-lessons`, `get-key-stages-subject-questions`
-
-*Lesson content (5):*
-`get-lessons-summary`, `get-lessons-transcript`, `get-lessons-quiz`,
-`get-lessons-assets`, `get-lessons-assets-by-type` (expect binary-response
-warning per M1-S003)
-
-*Thread and progression (4):*
-`get-threads`, `get-threads-units` (threadSlug: "algebra" — note M1-S004
-naming), `get-thread-progressions`, `get-prerequisite-graph`
-
-*Browse, fetch, and utility (5):*
-`browse-curriculum` (maths, ks4), `fetch` (lesson prefixed ID),
-`get-subject-detail` (maths), `get-key-stages-subject-assets` (ks4, maths),
-`get-rate-limit` (expect 0/0/0 on preview — known M1-S006)
-
-*Changelog (2):*
-`get-changelog`, `get-changelog-latest`
-
-*Search scopes not yet tested (2):*
-`search` (scope: "lessons", text: "fractions", subject: "maths"),
-`search` (scope: "units", text: "algebra", subject: "maths")
-
-**Success criteria:**
-
-- All 164 thread documents have `thread_semantic` populated
-- Thread search returns results where it previously returned 0
-- All 32 MCP tools return expected responses without errors
-- M1-S002 year normalisation works (both string and number input)
-- Non-thread scopes (lessons, units) unaffected by the reindex
-
-**2. Remaining M0 gates**
+**3. Remaining M0 gates**
 
 - Final secrets and PII sweep (`pnpm secrets:scan:all`)
 - Manual sensitive-information review (human)
 - Merge `feat/semantic_search_deployment` to `main`
 - Make repository public on GitHub
 
-**3. Open P3 items (non-blocking)**
+**4. Completed P3 items (for reference)**
 
-- M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)
-- M1-S006: `get-rate-limit` returns 0/0/0 on preview server (upstream)
+- ~~M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)~~ — **Complete (2026-02-28)**. `normaliseParamName()` strips `Slug` suffix.
+- ~~M1-S006: `get-rate-limit` returns 0/0/0 on preview server~~ — **Closed (2026-02-28)**. 0/0/0 = unlimited key.
 - ~~M1-S008: `callTool` overloads declare nested args but impl parses flat args~~ — **Complete (2026-02-28)**
+
+**5. Known limitations (not bugs)**
+
+- M1-S007 (prerequisite sub-graph fetching) remains deferred.
 
 ### Remaining M0/M1 Gates
 
@@ -1358,15 +1313,16 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 
 | ID | Severity | Description | Owner | Status | Decision |
 |---|---|---|---|---|---|
-| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | Reindexed (2026-02-28) | Fix implemented + tested. Full reindex complete: 16,443 docs, 0 final failures. **Verification outstanding.** |
+| M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | [x] Verified (2026-02-28) | Fix implemented, reindexed, **verified**. 164/164 thread docs have `thread_semantic`. Thread search returns results via ELSER. `explore-topic` returns threads. All 32 MCP tools validated. |
 | M1-S001b | P2 | Search/explore tool descriptions lack subject-filter guidance | Engineering | [x] Complete (2026-02-28) | Tool descriptions enhanced with subject-filter guidance |
 | M1-S002 | P2 | `year` parameter type inconsistency across sequence endpoints | Engineering (upstream) | [x] Complete (2026-02-28) | Normalised at generator level; accepts string enum + number input |
-| M1-S003 | P3 | `get-lessons-assets-by-type` description unclear on binary response | Engineering | [x] Complete (2026-02-28) | Binary-response warning added via generator enhancement |
-| M1-S004 | P3 | Parameter naming inconsistency (`threadSlug` vs bare names) | Engineering | Open | Normalise at SDK accessor level |
+| M1-S003 | P3 | `get-lessons-assets-by-type` returns binary content, not JSON | Engineering | Open | **Revised decision (2026-02-28):** Exclude endpoint from MCP tool generation. `get-lessons-assets` provides download URLs. MCP (remote HTTP server) cannot trigger client-side downloads; hacking around it violates "no fallbacks" principle. |
+| M1-S004 | P3 | Parameter naming inconsistency (`threadSlug` vs bare names) | Engineering | [x] Complete (2026-02-28) | `normaliseParamName()` strips `Slug` suffix in flat MCP schemas; canonical name preserved in SDK internals. `threadSlug` → `thread` in MCP input. |
 | M1-S005 | P3 | `search` scope limitations undocumented | Engineering | [x] Complete (2026-02-28) | Scope limitations documented in search tool description |
-| M1-S006 | P3 | `get-rate-limit` returns 0/0/0 on preview server | Upstream API team | Open | Track — ask upstream |
+| M1-S006 | P3 | `get-rate-limit` returns 0/0/0 on preview server | Upstream API team | [x] Closed (2026-02-28) | 0/0/0 = unlimited key (confirmed by user). Tool description updated with semantics note. |
 | M1-S007 | P3 | Prerequisite sub-graph fetching | Engineering | Deferred | Post-merge |
 | M1-S008 | P3 | `callTool` overloads declare nested args but impl parses flat args | Engineering | [x] Complete (2026-02-28) | `ToolArgsForName` now derives from flat schema via `transformFlatToNestedArgs` parameter type |
+| M1-S009 | P2 | Suggest pipeline incomplete — only completion, no `bool_prefix` | Engineering | Open | Complete SDK suggest with dual-query (completion + `bool_prefix`). CLI to consume SDK. |
 
 ---
 
@@ -1380,7 +1336,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
 | **Fix** | Populate `thread_semantic` at indexing time in `createThreadDocument` with subject-enriched content. For example: `"Maths: Algebra — a curriculum progression thread"` or `"${subjects.join(', ')}: ${threadTitle}"`. This gives ELSER the subject-to-thread association it needs. Reindex required after the fix. The query side (`buildThreadRetriever` in `retrieval-search-helpers.ts`) is already correct — it searches `thread_semantic` via ELSER. It just needs data. |
 | **Files** | `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (createThreadDocument — populate `thread_semantic`), `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` (bulk path adapter) |
-| **Status** | Reindexed (2026-02-28). `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Full bulk reindex completed: 16,443 docs across 114 chunks, 26 initial ELSER failures recovered in 1 retry round, 0 final failures. Chunk delay increased to 8000ms (ADR-096 revised). **Verification outstanding** — confirm `thread_semantic` present via EsCurric, validate thread search returns results. |
+| **Status** | [x] **Verified (2026-02-28).** `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Full bulk reindex completed: 16,443 docs across 114 chunks, 26 initial ELSER failures recovered in 1 retry round, 0 final failures. Chunk delay increased to 8000ms (ADR-096 revised). **Verification evidence:** EsCurric spot-check: algebra (`"maths: Algebra"`), geometry-and-measure (`"maths: Geometry and Measure"`), bq14-physics full slug (`"science: BQ14 Physics: ..."`). ES|QL count: 164/164. MCP thread search: `search(scope: threads, text: "algebra")` → 25 results, Algebra #1. `explore-topic(text: "algebra", subject: "maths")` → 5 lessons, 5 units, 5 threads. All 32 oak-local MCP tools validated. |
 
 ---
 
@@ -1422,7 +1378,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Owner disposition** | This is working as intended — the endpoint IS a download endpoint. The fix is to enhance the description so agents understand this returns binary content that the MCP protocol cannot transport as structured tool output. Agents should use `get-lessons-assets` (the metadata endpoint) to get download URLs, then present those URLs to the user rather than attempting to download binary content through the MCP channel. |
 | **Fix** | Update the tool description (in the OpenAPI schema or as a description override in the MCP tool registration) to explicitly state: (1) this returns binary file content (PDF/video/etc.), not JSON; (2) the MCP handler cannot transport binary responses; (3) agents should use `get-lessons-assets` for metadata/URLs instead. |
 | **Files** | Upstream OpenAPI schema (description field), or `packages/sdks/oak-curriculum-sdk/src/mcp/` tool registration if we override descriptions locally |
-| **Status** | [x] Complete (2026-02-28). Binary-response warning added via `appendToolEnhancements()` in `tool-description.ts`. Warning appended at `sdk-codegen` generation time for `get-lessons-assets-by-type`. Unit tests in `tool-description.unit.test.ts`. |
+| **Status** | **Revised (2026-02-28).** Previous: binary-response warning added. New decision: exclude `/lessons/{lesson}/assets/{type}` from MCP tool generation entirely. Add to `SKIPPED_PATHS` in `mcp-tool-generator.ts`, remove the warning from `tool-description.ts`, regenerate. `get-lessons-assets` (the metadata endpoint) provides download URLs — agents present those to users. The remote MCP server (Vercel) cannot trigger client-side file downloads; workarounds violate the "no fallbacks" principle (rules.md). |
 
 ---
 
@@ -1434,7 +1390,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Problem** | `get-threads-units` uses `threadSlug` as its parameter name, while other tools use bare names (`lesson`, `unit`, `subject`, `keyStage`, `sequence`). This inconsistency trips AI agents — the previous session's agent tried `thread` twice before reading the tool descriptor to discover `threadSlug`. The convention across the API is bare entity names for path parameters; `threadSlug` is the only parameter that appends `Slug`. |
 | **Where to normalise** | At SDK accessor creation time. The code generators can emit parameter aliases or a normalisation step in `transformFlatToNestedArgs`. Alternatively, accept both `thread` and `threadSlug` in the flat input schema (with the canonical name mapped to whatever the API requires). |
 | **Files** | `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-threads-units.ts` |
-| **Status** | Open |
+| **Status** | [x] Complete (2026-02-28). `normaliseParamName()` added to `param-metadata.ts`. Applied in `emit-input-schema.ts` (flat JSON Schema + flat Zod) and `emit-schema.ts` (flat-to-nested transform). Canonical names preserved in `ToolPathParams` and nested Zod. Unit tests added for normalisation. All 773 codegen tests pass. |
 
 ---
 
@@ -1482,6 +1438,19 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Files** | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`, `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/aliases/types.ts` (defines `ToolArgsForName`) |
 | **Fix** | Either (a) change `ToolArgsForName` to derive from the flat input schema type, or (b) change the overloads to use `rawArgs: unknown` since the function's contract is "validate whatever you give me." Option (b) is simpler but loses type-safe overloads; option (a) preserves them correctly. Both require generator changes in `emit-index.ts` or `generate-types-file.ts`. |
 | **Status** | [x] Complete (2026-02-28). Fixed via Option A: `ToolArgsMap` in `generate-types-file.ts` now derives from `Parameters<ToolDescriptorMap[TName]['transformFlatToNestedArgs']>[0]` (flat) instead of `ToolInvokeParametersMap[TName][1]` (nested). Generator unit test + `satisfies` compile-time anchor prevent regression. All quality gates pass. |
+
+---
+
+#### M1-S009: Suggest pipeline incomplete — only completion, no `bool_prefix`
+
+| Field | Value |
+|-------|-------|
+| **Severity** | P2 — functional gap, affects all suggest consumers |
+| **Problem** | The SDK's `suggest()` in `suggestions.ts` uses only the ES completion suggester, which matches prefixes from the start of each indexed input only. `"frac"` does not match `"Adding fractions"` because the input is the full title and `"frac"` is not a prefix of `"Adding"`. The CLI already solves this with a dual-query approach: completion first, then `bool_prefix` on `search_as_you_type` sub-fields (`lesson_title.sa`, `._2gram`, `._3gram`). The SDK is missing this second query leg. |
+| **Root cause** | The suggest pipeline was implemented with completion only. The `bool_prefix` logic was built independently in the CLI (`apps/oak-search-cli/src/lib/suggestions/index.ts` and `scope-config.ts`) and never consolidated into the SDK. This violates the architectural principle that search logic belongs in the SDK; consumers (CLI, MCP) should not duplicate it. |
+| **Fix** | (1) Extend `suggest()` in `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` to run `bool_prefix` alongside completion. The `SuggestClient` interface needs extending to support regular `search()` calls in addition to completion. (2) Extract scope-specific `boolPrefixFields` and filter-building from CLI's `scope-config.ts` into the SDK. (3) Merge and deduplicate results. (4) Refactor CLI to consume the SDK's `suggest()` instead of its local pipeline. |
+| **Key files** | `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` (SDK suggest — extend), `apps/oak-search-cli/src/lib/suggestions/index.ts` (CLI suggest — reference, then replace), `apps/oak-search-cli/src/lib/suggestions/scope-config.ts` (CLI scope config — extract to SDK) |
+| **Status** | Open |
 
 ---
 
@@ -1569,6 +1538,8 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-02-28**: **Post-validation quality fixes and consolidation.** M1-S004 complete: `normaliseParamName()` strips `Slug` suffix in flat MCP schemas, preserves canonical name in SDK internals. M1-S006 closed with tool description update (0/0/0 = unlimited). Text-less thread search enabled: `text` optional for `threads` scope when `subject` or `keyStage` filter provided; uses `match_all` + filter + sort by `unit_count` when no text. User decisions: (1) M1-S009 registered — suggest pipeline incomplete, `bool_prefix` is the correct ES feature for mid-word matching (not a fallback). Fix at source: complete the SDK suggest pipeline, CLI consumes SDK. (2) M1-S003 revised — exclude `get-lessons-assets-by-type` from MCP tools entirely; `get-lessons-assets` provides download URLs; remote MCP server cannot trigger client-side downloads. Cursor plan (`mcp_tool_quality_fixes_53320e67`) integrated and deleted. Session: [Quality fixes & consolidation](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/31a97388-65c6-4ac7-9841-fee538e3e860.txt).
+- **2026-02-28**: **M1-S001a verification complete — all 32 MCP tools validated.** Phase 0: EsCurric spot-check confirmed `thread_semantic` on algebra, geometry-and-measure, bq14-physics; ES|QL count: 164/164. Phase 1: Thread search returns results (was 0 before reindex). `search(scope: threads, text: "algebra")` → 25 results, Algebra #1 (score 0.049). `explore-topic` returns threads in all 4 test cases. Phase 2: All 32 tools validated systematically — discovery (6), sequence (7), lesson (5), thread/progression (4), browse/fetch/utility (5), changelog (2), search scopes (3), units-summary (1). Confirmed: M1-S002 year normalisation (number accepted), M1-S003 binary warning (PK parse error as expected), M1-S005 suggest filter works, M1-S006 rate-limit 0/0/0 on preview. Observations: empty-text thread search rejected; suggest returns 0 for "frac"+maths (possible prefix data issue). No new P0/P1 snags. Session: [Validate MCP tools](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/31a97388-65c6-4ac7-9841-fee538e3e860.txt).
 - **2026-02-28**: **Full reindex complete, chunk delay tuned.** Ran `pnpm es:ingest --verbose` from bulk data: 16,443 documents across 114 chunks (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER `inference_exception` failures (0.16%), all recovered in single Tier 2 retry round. Failures clustered in chunks 64-89 (ELSER queue saturation pattern). `DEFAULT_CHUNK_DELAY_MS` increased from 7001ms to 8000ms for headroom as dataset grows; ADR-096 revised with Run 7 data and new default. M1-S001a status updated: reindex done, verification outstanding. Log: `apps/oak-search-cli/logs/ingest-2026-02-28-19-57-52.log`.
 - **2026-02-28**: **Ingest CLI refactored, validation plan integrated.** (1) Renamed `es:ingest-live` to `es:ingest`. (2) Bulk mode is now the default — no `--subject` or `--all` required, reads from `./bulk-downloads`. Use `--api` for live API mode. (3) Bulk dir validated at startup with actionable error message. (4) Per-index filtering: both bulk and API paths skip unnecessary processing when `--index` is specified (e.g. `--index threads` skips curriculum file processing). ADR-093 revised. Committed M1-S008 fix and generated file updates. Validation plan from cursor plan integrated into §Top Priorities. 961 tests pass, all quality gates green. Session: [Ingest refactor](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/249ab1cd-a1bb-4234-90f8-26de6c29ada9.txt).
 - **2026-02-28**: **M1-S008 complete.** `callTool` overload type alignment: `ToolArgsForName` now derives from `transformFlatToNestedArgs` parameter type (flat) instead of `invoke` parameter (nested). One-line generator change in `generate-types-file.ts`, verified by unit test + `satisfies` compile-time anchor. All quality gates pass.

@@ -6,10 +6,7 @@ import {
 } from './emit-input-schema.js';
 import { emitErrorDescription } from './emit-error-description.js';
 import type { ParamMetadata, ParamMetadataMap } from './param-metadata.js';
-
-function hasEntries(meta: ParamMetadataMap): boolean {
-  return Object.keys(meta).length > 0;
-}
+import { normaliseParamName } from './param-metadata.js';
 
 function literalUnion(meta: ParamMetadata): string | undefined {
   if (!Array.isArray(meta.allowedValues) || meta.allowedValues.length === 0) {
@@ -82,7 +79,7 @@ function buildInterface(
   interfaceName: string,
   description: string,
 ): string | undefined {
-  if (!hasEntries(meta)) {
+  if (Object.keys(meta).length === 0) {
     return undefined;
   }
   const lines: string[] = [];
@@ -195,7 +192,8 @@ function buildFlatToNestedTransform(
     if (hasPathParams) {
       lines.push('    path: {');
       for (const paramName of pathParamNames) {
-        lines.push(`      ${paramName}: flatArgs.${paramName},`);
+        const mcpName = normaliseParamName(paramName);
+        lines.push(`      ${paramName}: flatArgs.${mcpName},`);
       }
       lines.push('    },');
     }
@@ -203,6 +201,7 @@ function buildFlatToNestedTransform(
     if (hasQueryParams) {
       lines.push('    query: {');
       for (const paramName of queryParamNames) {
+        const mcpName = normaliseParamName(paramName);
         const queryMeta = queryParamMetadata[paramName];
         if (
           paramName === 'year' &&
@@ -211,11 +210,11 @@ function buildFlatToNestedTransform(
           !queryMeta.valueConstraint
         ) {
           lines.push(
-            `      ${paramName}: flatArgs.${paramName} === 'all-years' ? undefined : flatArgs.${paramName} === undefined ? undefined : Number(flatArgs.${paramName}),`,
+            `      ${paramName}: flatArgs.${mcpName} === 'all-years' ? undefined : flatArgs.${mcpName} === undefined ? undefined : Number(flatArgs.${mcpName}),`,
           );
           continue;
         }
-        lines.push(`      ${paramName}: flatArgs.${paramName},`);
+        lines.push(`      ${paramName}: flatArgs.${mcpName},`);
       }
       lines.push('    },');
     }

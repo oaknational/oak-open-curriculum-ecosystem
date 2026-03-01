@@ -1,3 +1,8 @@
+---
+fitness_ceiling: 100
+split_strategy: "This is a focused directive; if it grows, extract implementation details to the SDK README"
+---
+
 # Schema-First MCP Execution Directive
 
 > **Status**: Mandatory. Applies to all code paths that deal with MCP tool registration, argument validation, invocation, and response handling.

@@ -188,3 +188,9 @@ All critical and important resilience gaps from architecture reviews have been f
 - **Delegated click handling**: All external links use `data-oak-url` attributes with a single delegated `click` listener in `widget-script.ts`. No inline `onclick` handlers. A regression test in `renderer-contracts.integration.test.ts` enforces this invariant.
 - **Tool renderer map**: `JSON.stringify(TOOL_RENDERER_MAP)` for safe serialisation.
 - **Four-way sync enforcement**: Unit tests verify the full TOOL_RENDERER_MAP → RENDERER_IDS → RENDERERS → render functions chain.
+
+## Development Gotchas
+
+- **Zod schema fixtures**: Must use parent-level enum values (e.g. `'science'` not `'biology'` for `subject_parent`) — the generated `SUBJECTS` enum only contains top-level subjects.
+- **Generic constraints and TS7053**: Generic `T extends SomeBase` constraints fail with TS7053 weak type detection when union members do not overlap sufficiently. Use per-type builder functions instead.
+- **`expect.any(String)` returns `any`**: This triggers `no-unsafe-assignment`. Use `toHaveProperty` for structural checks on `unknown` values from `new Function()` sandbox execution.

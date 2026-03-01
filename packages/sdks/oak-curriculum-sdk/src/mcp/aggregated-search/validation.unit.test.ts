@@ -219,6 +219,69 @@ describe('validateSearchSdkArgs', () => {
     });
   });
 
+  describe('text-less thread search', () => {
+    it('accepts empty text for threads scope with subject filter', () => {
+      const result = validateSearchSdkArgs({
+        text: '',
+        scope: 'threads',
+        subject: 'maths',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.text).toBe('');
+        expect(result.value.scope).toBe('threads');
+        expect(result.value.subject).toBe('maths');
+      }
+    });
+
+    it('accepts missing text for threads scope with keyStage filter', () => {
+      const result = validateSearchSdkArgs({
+        scope: 'threads',
+        keyStage: 'ks3',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.text).toBe('');
+        expect(result.value.scope).toBe('threads');
+        expect(result.value.keyStage).toBe('ks3');
+      }
+    });
+
+    it('accepts empty text for threads scope with both subject and keyStage', () => {
+      const result = validateSearchSdkArgs({
+        text: '',
+        scope: 'threads',
+        subject: 'maths',
+        keyStage: 'ks3',
+      });
+
+      expect(result.ok).toBe(true);
+    });
+
+    it('rejects empty text for threads scope with no filter', () => {
+      const result = validateSearchSdkArgs({
+        text: '',
+        scope: 'threads',
+      });
+
+      expect(result.ok).toBe(false);
+    });
+
+    it('still rejects empty text for non-thread scopes', () => {
+      for (const scope of ['lessons', 'units', 'sequences', 'suggest']) {
+        const result = validateSearchSdkArgs({
+          text: '',
+          scope,
+          subject: 'maths',
+        });
+
+        expect(result.ok).toBe(false);
+      }
+    });
+  });
+
   describe('all key stages accepted', () => {
     it.each([['ks1'], ['ks2'], ['ks3'], ['ks4']] as const)('accepts keyStage "%s"', (keyStage) => {
       const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', keyStage });

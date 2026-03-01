@@ -215,6 +215,14 @@ describe('appendToolEnhancements', () => {
     expect(result).toContain('get-lessons-assets');
   });
 
+  it('appends rate-limit semantics note for get-rate-limit', () => {
+    const result = appendToolEnhancements('Base description', 'get-rate-limit');
+
+    expect(result).toContain('Base description');
+    expect(result).toContain('limit=0');
+    expect(result).toContain('unlimited');
+  });
+
   it('returns description unchanged when tool name has no enhancement', () => {
     const result = appendToolEnhancements('Base description', 'get-key-stages');
 

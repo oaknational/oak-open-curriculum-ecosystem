@@ -1,3 +1,8 @@
+---
+fitness_ceiling: 400
+split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
+---
+
 # Testing and Development Strategy
 
 ## Tooling
@@ -361,3 +366,28 @@ it('produces correct result', () => {
 - Then refactor internals (REFACTOR phase, tests stay green)
 
 This ensures tests remain specifications, not just regression checks.
+
+## Refactoring TDD
+
+For refactoring that does not change public API (runtime behaviour unchanged), the RED phase is compiler errors from signature changes, not runtime test failures. Update test call sites first. Existing tests ARE the safety net — run them before and after the split, no new tests needed for internal restructuring.
+
+For type-derivation fixes, use `satisfies` as a compile-time anchor: `{ flat: 'value' } satisfies MyType` fails type-check if the derivation is wrong, serving as the RED phase alongside generator string-output tests.
+
+## Test Configuration Gotchas
+
+- `tsconfig.json` `include` patterns `**/*.test.ts` and `**/*.spec.ts` do NOT match test utility files (harness, fixture builder). Add `tests/**/*.ts` to the include array when creating non-test utilities in test directories.
+- ESLint `projectService: true` uses the nearest `tsconfig.json`, not `tsconfig.lint.json`. Files must be included in both for linting to work.
+- Stale vitest include globs are silent because of `passWithNoTests: true` — remove dead globs promptly after file moves.
+- `resolveEnv` integration tests that need `.env` file isolation: use `'/tmp'` as `startDir` to prevent ambient `.env` files from satisfying schema requirements.
+- After refactoring entry points (removing `dotenv`, changing `loadRuntimeConfig` signature), check E2E tests that launch the process directly — they break when the entry point contract changes.
+
+## Test Data Anchoring
+
+Tests that agree with code on the wrong contract are worse than no tests. The snagging bugs that this repo encountered were invisible because tests encoded the same wrong assumptions (e.g. `keyStageSlugs` instead of the API's `keyStages`). Anchor test fixtures to the schema or captured API responses, not to code assumptions. Use `as const satisfies SDKType` to couple test data to SDK type evolution.
+
+## Test Isolation
+
+- Replace Express `_router` access in tests with HTTP assertions via supertest — more resilient, tests actual behaviour.
+- Repeated multi-line test setup → extract scoped helper inside `describe` block (e.g. `registerWithOverrides`, `baseEnv`).
+- For large mechanical migrations (30+ files), use subagents to parallelise the work.
+- Bulk operation factories should accept `startIndex` rather than mutating readonly `_id` after creation.

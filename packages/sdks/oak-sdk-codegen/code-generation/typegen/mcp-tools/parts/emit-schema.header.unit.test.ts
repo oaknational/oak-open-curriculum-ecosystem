@@ -69,4 +69,14 @@ describe('emitSchema header', () => {
     expect(code).toContain('export interface ToolParams');
     expect(code).toContain('readonly __noParams?: never;');
   });
+
+  it('preserves canonical path param name in ToolPathParams but normalises in flat transform', () => {
+    const pathMeta: Record<string, ParamMetadata> = {
+      threadSlug: { typePrimitive: 'string', valueConstraint: false, required: true },
+    };
+    const code = emitSchema(op(), pathMeta, {});
+
+    expect(code).toContain('readonly threadSlug: string;');
+    expect(code).toContain('threadSlug: flatArgs.thread,');
+  });
 });

@@ -109,5 +109,6 @@ experience file is not the home for technical reference.
 - 2026‑02‑28: investigation — see: [following-the-data](./2026-02-28-following-the-data.md) — tracing through five layers; gap between mapping and builder; silent degradation
 - 2026‑02‑28: domain expertise — see: [the-teachers-vocabulary](./2026-02-28-the-teachers-vocabulary.md) — professional users know more than agents; guidance is for agents not users; each correction sharpens the plan
 - 2026‑02‑28: type-system TDD — see: [the-one-line-truth](./2026-02-28-the-one-line-truth.md) — one line fixes 24 overloads; `satisfies` asks a question, `as` makes a claim; the type checker is the test framework
+- 2026‑02‑28: knowledge consolidation — see: [closing-the-loop](./2026-02-28-closing-the-loop.md) — extraction to permanent docs; the gap between accumulation and extraction; three audiences (session, agent, everyone)
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

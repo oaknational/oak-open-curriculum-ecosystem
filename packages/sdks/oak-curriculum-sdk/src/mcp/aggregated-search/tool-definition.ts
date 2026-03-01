@@ -52,7 +52,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 - "Find KS3 science lessons about photosynthesis" → scope: 'lessons', text: 'photosynthesis', subject: 'science', keyStage: 'ks3'
 - "What units cover fractions in primary maths?" → scope: 'units', text: 'fractions', subject: 'maths', keyStage: 'ks2'
 - "What's the learning progression for algebra?" → scope: 'threads', text: 'algebra', subject: 'maths'
-- "What maths threads are there?" → scope: 'threads', text: 'threads', subject: 'maths'
+- "What maths threads are there?" → scope: 'threads', subject: 'maths' (no text needed — returns all maths threads sorted by size)
 - "Show me secondary science programmes" → scope: 'sequences', text: 'science', keyStage: 'ks3'
 - "Find lessons on the Romans for Year 3" → scope: 'lessons', text: 'Romans', year: '3'
 - "KS4 higher tier maths on trigonometry" → scope: 'lessons', text: 'trigonometry', keyStage: 'ks4', tier: 'higher'
@@ -60,6 +60,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 SCOPE LIMITATIONS:
 - "suggest" requires at least one filter: subject or keyStage.
 - "sequences" works best with structural names (for example, "maths-secondary"), not topic words.
+- "threads" can omit text when subject or keyStage is provided, returning all matching threads sorted by unit count.
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
 - For prerequisites: search(scope: 'threads') → get-prerequisite-graph for dependencies
@@ -90,13 +91,13 @@ CROSS-TOOL WORKFLOWS:
  */
 export const SEARCH_INPUT_SCHEMA = {
   type: 'object',
-  required: ['text', 'scope'],
+  required: ['scope'],
   additionalProperties: false,
   properties: {
     text: {
       type: 'string',
       description:
-        'Search query text. Use descriptive terms the teacher would use, e.g. "photosynthesis", "adding fractions", "the Romans".',
+        'Search query text. Required for all scopes except threads — for threads scope, omit text and provide subject or keyStage to browse all threads matching the filter.',
       examples: ['photosynthesis', 'adding fractions', 'the Romans', 'electricity and circuits'],
     },
     scope: {

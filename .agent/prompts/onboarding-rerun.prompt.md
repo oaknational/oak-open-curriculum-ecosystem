@@ -1,62 +1,73 @@
 ---
 prompt_id: onboarding-rerun
-title: "M1 Release — Verify and Ship"
+title: "M1 Release — Suggest Pipeline and Final Gates"
 type: handover
 status: active
 last_updated: 2026-02-28
 ---
 
-# M1 Release — Verify and Ship
+# M1 Release — Suggest Pipeline and Final Gates
 
 Session entry point. This prompt and the release plan together define
 the full scope of work.
 
 ## Context
 
-All M1 code work is complete. Full bulk reindex ran successfully on
-2026-02-28: 16,443 documents indexed (12,864 lessons, 1,664 units,
-164 threads, 30 sequences, 57 facets). 26 initial ELSER failures,
-all recovered in a single retry round. `thread_semantic` should now
-be populated on all 164 thread documents.
-
-Chunk delay increased from 7001ms to 8000ms (ADR-096 revised) for
-headroom as the dataset grows.
-
-**Verification not yet done** — the reindex completed but nobody has
-confirmed via EsCurric that `thread_semantic` is present or that
-thread search now returns results.
+All M1 code work is complete except M1-S009 (suggest pipeline). All 32
+MCP tools validated (2026-02-28). Post-validation quality fixes done:
+M1-S004 (param normalisation), M1-S006 (rate-limit docs), text-less
+thread search.
 
 ## Top priorities for this session
 
-### 1. Verify reindex and validate all 32 MCP tools (P1)
+### 1. Complete the suggest pipeline in the search SDK (M1-S009)
 
-Full validation plan in the release plan §Top Priorities for Next Session.
-In brief:
+The SDK's `suggest()` uses only ES completion (matches from start of
+each input). `"frac"` does not match `"Adding fractions"`. This is an
+incomplete implementation — the CLI already solves it with `bool_prefix`
+on `search_as_you_type` fields. Fix at source: complete the SDK, then
+refactor CLI to consume it.
 
-1. Verify via EsCurric that `thread_semantic` is present on all 164 docs
-2. Validate thread search and explore-topic (M1-S001a/b)
-3. Validate all other MCP tools (discovery, sequence, lesson, thread,
-   browse, fetch, changelog, search scopes)
-4. Validate M1-S002 year normalisation, M1-S003 binary warning, M1-S005
-   scope limitations
+**Principle**: search logic belongs in the SDK. CLI and MCP are consumers.
+Do not duplicate search behaviour in consumers.
 
-### 2. Remaining M0 gates
+- Extend `suggest()` in `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts`
+  to run `bool_prefix` on `.sa`, `._2gram`, `._3gram` sub-fields
+- Extract scope-specific `boolPrefixFields` and filter-building from
+  CLI's `scope-config.ts` into the SDK
+- Merge and deduplicate results from completion + `bool_prefix`
+- `SuggestClient` interface may need extending for regular search calls
+- Refactor CLI (`apps/oak-search-cli/src/lib/suggestions/`) to consume
+  the SDK's `suggest()` instead of its local pipeline
+- Reference: CLI implementation in `apps/oak-search-cli/src/lib/suggestions/index.ts`
+
+### 2. Exclude `get-lessons-assets-by-type` from MCP tools (M1-S003)
+
+Remote MCP server cannot trigger client-side downloads.
+`get-lessons-assets` provides download URLs.
+
+- Add `/lessons/{lesson}/assets/{type}` to `SKIPPED_PATHS` in
+  `mcp-tool-generator.ts`
+- Remove `GET_LESSONS_ASSETS_BY_TYPE_WARNING` from `tool-description.ts`
+- Run `pnpm sdk-codegen` to regenerate (32 → 31 tools)
+- Run tests to verify
+
+### 3. Remaining M0 gates
 
 - Final secrets and PII sweep (`pnpm secrets:scan:all`)
 - Manual sensitive-information review (human)
 - Merge `feat/semantic_search_deployment` to `main`
 - Make repository public on GitHub
 
-### 3. Open P3 items (non-blocking)
+### 4. Known limitations (not bugs)
 
-- **M1-S004**: Parameter naming inconsistency (`threadSlug` vs bare)
-- **M1-S006**: `get-rate-limit` returns 0/0/0 on preview (upstream)
+- M1-S007 (prerequisite sub-graphs) deferred post-merge.
 
 ## Getting started
 
 1. Read the release plan:
    [release-plan-m1.plan.md](../plans/release-plan-m1.plan.md)
-   — §Top Priorities for Next Session and §MCP Tool Exploration Findings
+   — §Top Priorities for Next Session and §M1-S009 detail
 2. Read [rules.md](../directives/rules.md),
    [testing-strategy.md](../directives/testing-strategy.md), and
    [schema-first-execution.md](../directives/schema-first-execution.md)

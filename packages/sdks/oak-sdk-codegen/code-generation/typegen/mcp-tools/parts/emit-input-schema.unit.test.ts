@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildFlatMcpZodObject, buildInputSchemaObject } from './emit-input-schema.js';
 import type { ParamMetadataMap } from './param-metadata.js';
+import { normaliseParamName } from './param-metadata.js';
 
 describe('buildFlatMcpZodObject', () => {
   describe('flattening path and query parameters', () => {
@@ -84,6 +85,21 @@ describe('buildFlatMcpZodObject', () => {
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
       expect(result).toBe('z.object({})');
+    });
+
+    it('normalises Slug-suffixed path params in flat Zod schema', () => {
+      const pathParams: ParamMetadataMap = {
+        threadSlug: {
+          typePrimitive: 'string',
+          required: true,
+          valueConstraint: false,
+        },
+      };
+
+      const result = buildFlatMcpZodObject(pathParams, {});
+
+      expect(result).toContain('thread: z.string()');
+      expect(result).not.toContain('threadSlug');
     });
   });
 
@@ -185,5 +201,38 @@ describe('buildInputSchemaObject', () => {
       enum: [1, 2, 3],
       description: 'Constrained year filter',
     });
+  });
+
+  it('normalises Slug-suffixed path params in flat JSON Schema', () => {
+    const pathParams: ParamMetadataMap = {
+      threadSlug: {
+        typePrimitive: 'string',
+        required: true,
+        valueConstraint: false,
+      },
+    };
+
+    const schema = buildInputSchemaObject(pathParams, {});
+
+    expect(schema.properties).toHaveProperty('thread');
+    expect(schema.properties).not.toHaveProperty('threadSlug');
+    expect(schema.required).toContain('thread');
+    expect(schema.required).not.toContain('threadSlug');
+  });
+});
+
+describe('normaliseParamName', () => {
+  it('strips Slug suffix from parameter names', () => {
+    expect(normaliseParamName('threadSlug')).toBe('thread');
+  });
+
+  it('leaves names without Slug suffix unchanged', () => {
+    expect(normaliseParamName('lesson')).toBe('lesson');
+    expect(normaliseParamName('subject')).toBe('subject');
+    expect(normaliseParamName('keyStage')).toBe('keyStage');
+  });
+
+  it('is case-sensitive — does not strip lowercase slug', () => {
+    expect(normaliseParamName('threadslug')).toBe('threadslug');
   });
 });

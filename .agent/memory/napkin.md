@@ -1,5 +1,171 @@
 # Napkin
 
+## Session: 2026-02-28 — Post-validation quality fixes and consolidation
+
+### What was done
+
+1. M1-S004 complete: `normaliseParamName()` strips `Slug` suffix in flat
+   MCP schemas. Canonical name preserved in SDK internals (`ToolPathParams`,
+   nested Zod). Applied in `emit-input-schema.ts` and `emit-schema.ts`.
+2. M1-S006 closed: tool description updated via `appendToolEnhancements()`
+   for `get-rate-limit` (0/0/0 = unlimited)
+3. Text-less thread search: `text` made optional for `threads` scope when
+   `subject` or `keyStage` filter provided. Uses `match_all` + filter +
+   sort by `unit_count desc` when no text (no RRF retriever)
+4. User decisions applied: (a) M1-S009 registered — `bool_prefix` is
+   the correct ES feature for mid-word matching, not a fallback. Fix at
+   source: complete the SDK suggest pipeline, CLI consumes SDK;
+   (b) M1-S003 revised — exclude binary endpoint from MCP tools entirely,
+   `get-lessons-assets` provides download URLs
+5. Cursor plans deleted, release plan updated, prompt updated as entry point
+
+### Learnings
+
+- **Framing error corrected**: I initially called `bool_prefix` a "fallback"
+  and cancelled it under the "no fallbacks" rule. The user challenged this:
+  `bool_prefix` on `search_as_you_type` fields IS the correct ES feature for
+  mid-word matching. Completion is an optimisation for start-of-input. Using
+  both is not a fallback pattern — it's a complete implementation. The "no
+  fallbacks" rule means don't paper over failures; it doesn't mean don't use
+  the right tool for the job
+- **Fix at source**: when MCP exposes functionality and there's an issue,
+  fix it in the SDK, not in the consumer. Search logic belongs in the SDK;
+  CLI and MCP are consumers. Duplicating suggest logic in the CLI violates
+  DRY — the CLI should consume the SDK's suggest pipeline
+- When an MCP tool returns binary content that the protocol can't transport,
+  the answer is exclusion (remove the tool) not compensation (try to hack
+  a download). The metadata endpoint already exists and provides URLs
+- Context budget awareness: the user correctly identified when context was
+  full and redirected from implementation to consolidation. Plan and prompt
+  updates are higher-value than another partial implementation that would
+  need re-reading next session
+
+## Session: 2026-02-28 — M1-S001a verification: all 32 MCP tools validated
+
+### Key findings
+
+1. `thread_semantic` confirmed populated: 164/164 via ES|QL count, spot-checked algebra, geometry-and-measure, bq14-physics (full slug: `bq14-physics-how-does-the-earth-fit-into-the-universe`, not abbreviated `bq14-physics` used in release plan)
+2. Thread search fully functional via ELSER: `search(scope: threads, text: "algebra")` returns 25 results with Algebra #1 (score 0.049). "electricity" returns BQ13 electricity/magnetism thread #1. Previously returned 0.
+3. `explore-topic` returns threads in unified response — tested algebra+maths, electricity+science, volcanos (cross-subject), the Romans+history. All return 5 lessons, 5 units, 5 threads.
+4. All 32 oak-local MCP tools pass systematic validation including known snags (M1-S002 year normalisation, M1-S003 binary warning, M1-S005 suggest filter, M1-S006 rate-limit 0/0/0)
+
+### Observations (not blocking)
+
+- `search(scope: threads, text: "")` rejects empty text — documented in tool description ("text is required"). Workaround: use non-empty text like "threads" or the subject name.
+- Nonexistent query ("xyznonexistent") returns 25 results with uniform low scores (~0.024) — this is RRF BM25 fallback. ELSER leg returns nothing but BM25 leg still returns. Expected search engine behaviour.
+- `search(scope: suggest, text: "frac", subject: "maths")` returns 0 suggestions. May be a prefix-matching data issue in the suggest index. Not a regression — suggest was previously untested.
+- `bq14-physics` as used in release plan is an abbreviated slug; the actual ES document ID is `bq14-physics-how-does-the-earth-fit-into-the-universe`. The release plan referenced the abbreviated form — a minor documentation inaccuracy, not a data gap.
+
+### Patterns that worked
+
+- Batching parallel MCP tool calls (4-6 at a time) made the 32-tool sweep efficient
+- Phased approach (verify ES data first, then MCP layer) caught the abbreviated slug issue early without it being misdiagnosed as a data gap
+
+## Session: 2026-02-28 — Knowledge flow and Practice evolution
+
+### What was done (continued from consolidation session)
+
+1. Refined frontmatter rule: all docs carry `fitness_ceiling` frontmatter
+   EXCEPT shallow-browsing entry points (README.md, quick-start.md, VISION.md).
+   "The geeks will love it" — deeper contributors appreciate metadata
+2. Rewrote practice.md §The Knowledge Flow: merged the old "Learning Loop"
+   and "Feedback Loops" sections into a single unified treatment. Added:
+   - Full cycle diagram (Capture → Refine → Graduate → Enforce → Apply)
+   - Three-audience model (session → agents → everyone)
+   - Fitness functions at every stage
+   - Feedback properties (negative + positive, compressed)
+   - The transmission dimension (the flow is self-replicating via plasmid)
+   - Artefact locations
+3. Compressed Sustainability section in practice.md (35 lines → 12 lines)
+4. Raised practice.md ceiling 200 → 250 (the knowledge flow is the heart)
+5. Rewrote practice-lineage.md §The Learning Loop → §The Knowledge Flow:
+   references practice.md for the full treatment, adds the two critical
+   propagation properties (self-replicating, self-applicable)
+6. Raised practice-lineage.md ceiling 300 → 320
+7. Updated consolidation command step 8 with frontmatter rule
+8. Updated Learned Principle and "Beyond the Trinity" section for
+   frontmatter scope (exempt: README, quickstart, VISION)
+
+### Learnings
+
+- "The Learning Loop" was a good name for the capture-refine-enforce cycle
+  but it missed the graduation step (permanent docs). "The Knowledge Flow"
+  names the full cycle including graduation. The renaming wasn't cosmetic —
+  it changed what the concept includes
+- The three-audience model (session → agents → everyone) is genuinely the
+  reason the stages exist, not just a property of them. Each stage exists
+  because a new audience needs to find the knowledge. This insight reframes
+  the entire learning loop from "how knowledge accumulates" to "how
+  knowledge becomes discoverable"
+- Merging Feedback Loops into Knowledge Flow was the right structural move.
+  The feedback properties are characteristics of the flow, not a separate
+  system. Separate sections created the false impression of two independent
+  mechanisms
+- The frontmatter exemption rule is elegant: only 3 files (README,
+  quickstart, VISION) are exempt. These are the "shop window" — everything
+  behind the window is for people who've already decided to come inside
+
+## Session: 2026-02-28 — Knowledge consolidation and fitness functions
+
+### What was done
+
+1. Ran /jc-start-right + /jc-consolidate-docs + /perspective/metacognition
+2. Analysed distilled.md (378 lines) and napkin (100 lines) for mature
+   content suitable for permanent documentation
+3. Extracted settled patterns to 7 permanent documentation targets:
+   - `docs/governance/typescript-practice.md` — Zod v4, `as const satisfies`,
+     interface segregation, spread widening, indexed access, compile-time
+     validation, common type gotchas
+   - `.agent/directives/testing-strategy.md` — refactoring TDD, test config
+     gotchas, test data anchoring, test isolation patterns
+   - `CONTRIBUTING.md` — workspace/turbo protocol, self-referencing imports,
+     commitlint conventions
+   - `apps/.../docs/widget-rendering.md` — 3 dev gotchas
+   - `docs/operations/troubleshooting.md` — file move issues, TSDoc issues,
+     rootDir ambiguity, second-level barrels
+   - `docs/governance/development-practice.md` — error handling (void promise,
+     HTTP semantics), validation after rewrites, git worktree, documentation
+     practice
+   - `.agent/memory/code-patterns/interface-segregation-for-test-fakes.md` —
+     new code pattern
+4. Pruned distilled.md from 378 to 145 lines (62% reduction, target <200)
+5. Practice box: empty (checked)
+6. Added `fitness_ceiling` and `split_strategy` frontmatter to 9 key documents:
+   AGENT.md (200), rules.md (200), testing-strategy.md (400),
+   schema-first-execution.md (100), typescript-practice.md (150),
+   development-practice.md (150), troubleshooting.md (200),
+   CONTRIBUTING.md (400), distilled.md (200)
+7. Updated consolidation command (step 8) to check fitness functions
+8. Added "Fitness functions at every stage" as a Learned Principle in
+   practice-lineage.md
+9. Extended practice-lineage.md §Fitness Functions with "Beyond the Trinity"
+
+### Learnings
+
+- The primary mechanism for reducing distilled.md is extraction to permanent
+  docs, not compression or deletion. Every entry that has settled belongs
+  somewhere discoverable by humans navigating the docs hierarchy, not just
+  agents reading distilled.md at session start
+- TypeScript Practice was the thinnest permanent doc (45 lines) despite being
+  the area with the most accumulated learnings in distilled — the gap between
+  accumulation rate and extraction rate was largest there
+- Some entries don't have a natural permanent home: Elasticsearch operational
+  gotchas are too specific for general docs but too important to delete. They
+  stay in distilled until the search CLI grows a dedicated operational guide
+- Agent-specific troubleshooting (StrReplace Unicode issues, reviewer false
+  positives) is a distinct category — it's permanent knowledge but only for
+  agents, not for the codebase docs. distilled.md is the right home for these
+- The consolidation command's step ordering matters: extract THEN prune. Writing
+  the pruned distilled.md required knowing exactly what was extracted where,
+  which meant the permanent doc edits had to come first
+- Fitness functions at every stage: the user spotted that the consolidation
+  cycle moves unbounded growth from ephemeral to permanent without constraint.
+  Every document in the knowledge flow needs a ceiling and a split strategy.
+  The response to hitting a ceiling is splitting by responsibility, not
+  compression — discoverability matters more than density
+- practice-lineage.md is now 320/300 — the fitness function additions pushed it
+  over its own ceiling. Meta-irony noted. Tightening pass needed next session
+
 ## Session: 2026-02-28 — Full reindex and parameter tuning
 
 ### What was done

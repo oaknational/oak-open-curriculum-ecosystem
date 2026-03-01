@@ -26,3 +26,15 @@ export function createMutableParamMetadata(metadata: ParamMetadata): ParamMetada
     example: metadata.example,
   };
 }
+
+/**
+ * Normalise an OpenAPI parameter name for MCP-facing schemas.
+ *
+ * Strips the `Slug` suffix so AI agents see cleaner parameter names
+ * (e.g. `threadSlug` becomes `thread`). The canonical OpenAPI name is
+ * preserved in internal SDK types and the flat-to-nested transform
+ * maps back from the normalised name to the canonical one.
+ */
+export function normaliseParamName(openApiName: string): string {
+  return openApiName.endsWith('Slug') ? openApiName.slice(0, -4) : openApiName;
+}

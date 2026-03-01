@@ -12,7 +12,7 @@ provenance:
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
-fitness_ceiling: 200
+fitness_ceiling: 250
 attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
 ---
 
@@ -32,7 +32,7 @@ graph TB
         FQ["First Question<br/><i>Could it be simpler?</i>"]
         MC[Metacognition]
         EX[Experience Records]
-        LL[Learning Loop]
+        KF[Knowledge Flow]
     end
 
     subgraph Structure ["Structure — what it consists of"]
@@ -57,7 +57,7 @@ graph TB
 
 ### Philosophy
 
-The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](../directives/metacognition.md), [experience records](../experience/README.md), and the learning loop. **Architectural enforcement** is a core philosophical commitment: preferring physical constraints (lint rules, boundary tooling) over human vigilance. This layer defines *why* the practice works.
+The principles and learning mechanisms. The First Question ("could it be simpler?"), [metacognition](../directives/metacognition.md), [experience records](../experience/README.md), and the knowledge flow. **Architectural enforcement** is a core philosophical commitment: preferring physical constraints (lint rules, boundary tooling) over human vigilance. This layer defines *why* the practice works.
 
 ### Structure
 
@@ -67,25 +67,61 @@ The organisational patterns. [Directives](../directives/) (the directives direct
 
 Platform-specific implementations. `.cursor/rules/` (always-applied workspace rules), `.cursor/commands/` (slash commands), `.cursor/agents/` (sub-agent definitions), `.cursor/skills/` (specialised capabilities), and entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`). This layer defines *how* the practice is used in a specific environment.
 
-## The Learning Loop
+## The Knowledge Flow
 
-The practice improves through use. Mistakes, corrections, and discoveries flow through a cycle that converts experience into rules.
+The knowledge flow is the Practice's central mechanism. It converts raw experience into settled knowledge through a progression of stages, each serving a broader audience and demanding a stricter bar for entry.
+
+### The Cycle
 
 ```mermaid
 graph LR
-    W[Work] -->|mistakes & discoveries| N[Napkin]
-    N -->|accumulates ~800 lines| D[Distilled Learnings]
-    D -->|high-signal patterns| R[Rules & Directives]
-    D -->|proven implementations| P[Code Patterns]
-    R -->|govern| W
-    P -->|inform| W
+    W[Work] -->|"mistakes &<br/>discoveries"| C["Capture<br/><i>napkin</i>"]
+    C -->|"~800 lines"| R["Refine<br/><i>distilled</i>"]
+    R -->|"settled patterns"| G["Graduate<br/><i>permanent docs</i>"]
+    R -->|"proven abstractions"| P[Code Patterns]
+    G -->|"update"| E["Enforce<br/><i>rules & directives</i>"]
+    E -->|"govern"| W
+    P -->|"inform"| W
 ```
 
-- **Napkin** (`.agent/memory/napkin.md`) — session-level log of what went wrong, what worked, and corrections received. Written continuously during every session.
-- **Distilled learnings** (`.agent/memory/distilled.md`) — curated rulebook extracted from the napkin when it grows large. Deduplicates, archives, and rotates.
-- **Code patterns** (`.agent/memory/code-patterns/`) — abstract, reusable patterns proven by implementation. Too concrete for rules, too abstract for source code. Extracted during consolidation when a pattern meets the barrier: broadly applicable, proven, prevents a recurring mistake, stable.
-- **Rules** (`.agent/directives/rules.md`, `.cursor/rules/*.mdc`) — the operational rules that govern all work. Updated when distilled learnings reveal persistent patterns.
-- **Experience** (`.agent/experience/`) — qualitative records of shifts in understanding across sessions.
+### Three Audiences
+
+Each stage exists because it serves a different audience. The progression from capture to graduation is a progression from narrow to broad.
+
+| Stage | Artefact | Audience | Fitness governor |
+|---|---|---|---|
+| **Capture** | Napkin | Current session | ~800 lines → distillation |
+| **Refine** | Distilled learnings | Future agents | ~200 lines → extraction to permanent docs |
+| **Graduate** | ADRs, governance docs, READMEs, TSDoc | Everyone — humans and agents | `fitness_ceiling` frontmatter → split by responsibility |
+| **Enforce** | Rules, directives, always-applied rules | All agents, automatically | `fitness_ceiling` frontmatter on directives |
+| **Inform** | Code patterns | Engineers facing a recognised situation | Barrier: broadly applicable, proven, recurring, stable |
+
+Not everything in the napkin survives distillation, and not everything distilled graduates to permanent documentation. Each transition raises the bar. The [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) command drives the graduation step — it checks which distilled entries have settled into permanent practice and moves them to their discoverable permanent home.
+
+### Fitness Functions
+
+Every stage has a governor that prevents unbounded growth. Without these, the knowledge flow simply moves the accumulation problem downstream.
+
+- **Napkin** → ~800 lines triggers [distillation](../../.cursor/skills/distillation/SKILL.md): extract high-signal patterns, archive the rest
+- **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled entries to permanent docs, not compression
+- **Permanent docs** → each carries a `fitness_ceiling` in YAML frontmatter with a `split_strategy`; exceeding the ceiling triggers splitting by responsibility
+- **Practice-core** → the trinity files carry their own ceilings; exceeding triggers tightening (the same ideas, expressed more concisely)
+
+### Feedback Properties
+
+The knowledge flow is stabilised by interlocking feedback. Quality gates, sub-agent reviews, and the learning loop detect entropy and convert it into corrective knowledge (negative feedback). Agents improve agents, the self-teaching property improves documentation, and consolidation extracts common threads into simpler structures (positive feedback). These operate at different timescales — gates within seconds, learning within sessions, consolidation across sessions — but all keep the Practice aligned with reality.
+
+### The Transmission Dimension
+
+The knowledge flow is itself part of the Practice, and the Practice travels via [plasmid exchange](#plasmid-exchange). The knowledge flow pattern is therefore self-replicating: a receiving repo inherits not just current rules but the mechanism that produced them. Each repo's learning loop runs locally, producing learnings shaped by local context. When the Practice returns to its origin via the practice box, it may carry patterns that the origin's own loop hadn't surfaced — different work, different mistakes, different discoveries.
+
+### Artefact Locations
+
+- **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
+- **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
+- **Code patterns** — `.agent/memory/code-patterns/` — abstract proven patterns
+- **Rules** — `.agent/directives/rules.md` + `.cursor/rules/*.mdc`
+- **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
 
 ## The Review System
 
@@ -139,43 +175,6 @@ graph LR
 | `.cursor/skills/` | Skills (Cursor-specific) |
 | `docs/architecture/architectural-decisions/` | Permanent architectural decision records |
 
-## Feedback Loops and Recursive Self-Improvement
-
-The practice is stabilised by interlocking feedback loops — the same mechanism that stabilises any complex system. Each loop is a cycle where outputs feed back to improve inputs.
-
-The checks and quality gates are the system's self-awareness. They detect variance from intended structure, surface it immediately, and prevent entropy from accumulating. Without them, each contribution — human or AI — would introduce small deviations that compound into structural decay. The gates do not merely catch errors; they are the mechanism by which the system maintains awareness of its own state and actively resists degradation. Stability is not a default — it is an emergent property of these feedback loops running continuously.
-
-```mermaid
-graph TB
-    subgraph negative ["Negative Feedback Loops — entropy detection and reduction"]
-        QG["Quality Gates<br/>system self-awareness"]
-        SAR["Sub-agent Reviews<br/>specialist awareness"]
-        LL2["Learning Loop<br/>napkin → distilled → rules"]
-    end
-
-    subgraph positive ["Positive Feedback Loops — capability growth"]
-        AIA["Agents improve agents<br/>architect → templates → better reviews"]
-        STP["Self-teaching property<br/>use → discovery → fluency"]
-        CONSOL["Consolidation<br/>extract common threads → simpler system"]
-    end
-
-    negative --> positive
-```
-
-**Negative feedback loops** act against entropy — they detect variance, surface it, and correct it before it compounds:
-
-- **Quality gates** make the system self-aware: type-check, lint, test, format, and subagent validation each observe a different dimension of structural integrity. A failure is not an inconvenience — it is the system telling you that entropy has been introduced
-- **Sub-agent reviews** provide specialist awareness — architectural drift, security risks, type-safety erosion, and test quality degradation that no single gate can detect
-- **The learning loop** converts entropy that *was* introduced into rules that prevent its recurrence
-
-**Positive feedback loops** compound capability over time:
-
-- **Agents improve agents** -- the subagent-architect reviews and upgrades other agents, which then produce better reviews, which improve code quality, which raises the bar for what agents must understand. This recursive self-improvement is analogous to how a mature engineering team raises its own standards through retrospectives and practice refinement
-- **Self-teaching** -- each new user (human or AI) who follows the practice from `AGENT.md` discovers the system through use, and their questions and mistakes feed back into documentation improvements
-- **Consolidation** -- the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow and the subagent-architect's ecosystem consolidation procedure both extract common threads into shared, reusable structures. Each consolidation pass leaves the system simpler and more consistent
-
-These loops operate at different timescales -- quality gates within seconds, learning loops within sessions, consolidation across sessions -- but they all serve the same purpose: keeping the practice aligned with reality and continuously improving.
-
 ## Plasmid Exchange
 
 The practice is not confined to a single repo. It travels as a trinity of three files: this file (the **what**), [practice-lineage.md](practice-lineage.md) (the **why**), and [practice-bootstrap.md](practice-bootstrap.md) (the **how**). Each can be adapted to local context, evolved through real work, and sent back. Each repo carries its own Practice instance — there is no hierarchy.
@@ -209,36 +208,8 @@ If you are new to this repository, start with [AGENT.md](../directives/AGENT.md)
 
 ## Sustainability and Scaling
 
-### Current Volume
+The Practice spans ~1,000+ files. This volume is managed, not accidental — each layer generates files with distinct lifecycles (directives are stable, plans are ephemeral, generated artefacts are rebuilt on demand). Three mechanisms keep volume manageable: the knowledge flow's fitness functions (§The Knowledge Flow above), the consolidate-docs command (which graduates plan content to permanent docs then archives the plan), and sub-agent architect consolidation (which extracts common prompt patterns into shared templates).
 
-The practice spans ~1,000+ files across `.agent/`, `.cursor/`, and `docs/`. This volume is a consequence of the three-layer model (philosophy, structure, tooling) and is managed, not accidental. Each layer generates files with distinct lifecycles: directives are stable, plans are ephemeral, and generated artifacts are rebuilt on demand.
+Intentional repetition is a conscious trade-off: the Cardinal Rule appears in ~66 files so that any contributor encounters it within their first few documents. DRY matters for code; discoverability matters for onboarding. The risk is formulation drift, mitigated by the consolidation command.
 
-### Consolidation Mechanisms
-
-Three mechanisms keep the volume manageable:
-
-1. **Distillation skill** — when the napkin exceeds ~800 lines, the [distillation skill](../../.cursor/skills/distillation/SKILL.md) extracts high-signal patterns into a curated `distilled.md` (target: <200 lines) and archives the old napkin. This prevents session-level learnings from growing unboundedly.
-
-2. **Consolidate-docs command** — the [`/jc-consolidate-docs`](../../.cursor/commands/jc-consolidate-docs.md) workflow verifies that documentation produced during work is current and complete, then extracts any remaining content from plans to permanent documentation. It enforces the principle that plans are not documentation: once a plan's insights are proven, they belong in `docs/` or `directives/`, and the plan moves to `archive/`.
-
-3. **Sub-agent architect consolidation** — the sub-agent architect reviews the prompt ecosystem and extracts common patterns into shared templates, reducing duplication across agent definitions.
-
-### Intentional Repetition Trade-Off
-
-The Cardinal Rule ("Types Flow From The Schema") appears in ~66 files. This is a conscious trade-off: a contributor can start anywhere in the repository and encounter the foundational rules within their first few documents. DRY is important for code; for onboarding documentation, discoverability outweighs deduplication. The risk is formulation drift — mitigated by the consolidate-docs command, which checks for consistency across repetitions.
-
-### Scaling Constraints
-
-High file volume has mechanical costs beyond human perception. Semantic search degrades when a core concept returns many equally-weighted hits across duplicated files, and AI agents exhaust finite context windows reading overlapping content. The consolidation mechanisms above address volume growth, but search signal quality and context efficiency are independent constraints that must also be monitored.
-
-### When This Needs Restructuring
-
-The practice should be restructured if:
-
-- Consolidation mechanisms cannot keep pace with new file creation
-- The distillation cycle takes longer than a single session
-- New contributors report that the volume is intimidating rather than helpful
-- Semantic search for a core concept (e.g. the Cardinal Rule) returns more than 5 equally-weighted hits, indicating that centralisation has degraded
-- AI agents consistently exhaust context windows reading overlapping plans or directives
-
-The first three are trailing indicators — by the time they trigger, structural debt may already be deep. The last two are leading mechanical indicators that can be measured before human perception catches up. The onboarding review process (8 audience-specific reviews) is itself a monitoring mechanism for these thresholds. See [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) for the formal architectural decision that names and frames this practice.
+The Practice should be restructured if: consolidation cannot keep pace with file creation, the distillation cycle takes longer than one session, semantic search for a core concept returns more than 5 equally-weighted hits, or AI agents consistently exhaust context windows reading overlapping content. The last two are leading mechanical indicators measurable before human perception catches up. See [ADR-119](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md).

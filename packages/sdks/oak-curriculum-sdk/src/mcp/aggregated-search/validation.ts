@@ -23,10 +23,7 @@ import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js'
  */
 const SearchSdkObjectSchema = z
   .object({
-    text: z
-      .string({ error: 'search requires a non-empty text field' })
-      .trim()
-      .min(1, { message: 'search requires a non-empty text field' }),
+    text: z.string().trim().optional().default(''),
     scope: z.string({ error: 'scope is required' }),
     subject: z.string().optional(),
     keyStage: z.string().optional(),
@@ -43,7 +40,22 @@ const SearchSdkObjectSchema = z
     category: z.string().optional(),
     limit: z.number().int().min(1).max(50).optional(),
   })
-  .strict();
+  .strict()
+  .refine(
+    (data) => {
+      if (data.text.length > 0) {
+        return true;
+      }
+      return (
+        data.scope === 'threads' && (data.subject !== undefined || data.keyStage !== undefined)
+      );
+    },
+    {
+      message:
+        'search requires a non-empty text field (threads scope can omit text when subject or keyStage filter is provided)',
+      path: ['text'],
+    },
+  );
 
 /**
  * Validates and narrows a key stage string to the KeyStage type.

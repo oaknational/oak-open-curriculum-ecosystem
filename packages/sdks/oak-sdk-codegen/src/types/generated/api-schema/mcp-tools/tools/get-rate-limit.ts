@@ -98,7 +98,7 @@ export const getRateLimit = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Check your current rate limit status (note that your rate limit is also included in the headers of every response). This specific endpoint does not cost any requests.",
+  description: "Check your current rate limit status (note that your rate limit is also included in the headers of every response). This specific endpoint does not cost any requests.\n\nNOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key with no rate cap.",
   path,
   method,
   documentedStatuses,
