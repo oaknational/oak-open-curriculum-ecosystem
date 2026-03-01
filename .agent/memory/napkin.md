@@ -1,5 +1,44 @@
 # Napkin
 
+## Session: 2026-03-01 — M1-S009 completion, ISP refactor, and dead code removal
+
+### What was done
+
+1. Completed M1-S009 GREEN: dual-query suggest pipeline in SDK
+   (`suggestions.ts` + `suggest-completion.ts` + `suggest-bool-prefix.ts`)
+2. Completed M1-S009 REFACTOR: deleted dead CLI suggest code
+   (`apps/oak-search-cli/src/lib/suggestions/` — 4 files, ~23KB)
+3. Completed M1-S003: binary endpoint exclusion (from prior session)
+4. Fixed lint: split `suggestions.ts` (397→128 lines) into three files
+5. Fixed lint: eliminated all `unsafe-assignment` errors via ISP refactor
+6. Full quality gates pass: sdk-codegen, build, type-check, lint,
+   format, tests (all workspaces), e2e tests
+7. Secrets scan clean
+
+### Learnings
+
+- **Interface Segregation eliminates `any` in test fakes**: `EsSearchFn`
+  is generic (`<T>(body) => Promise<EsSearchResponse<T>>`). You can't
+  create a typed fake for a generic function without a type assertion —
+  the generic T means "for all T" but a fake returns a specific type.
+  The fix: define `BoolPrefixSearchFn` (non-generic, concrete
+  `TitleSourceDoc`) at the boundary. The generic `EsSearchFn` IS
+  assignable to the specific type (instantiation), so production wiring
+  works unchanged. Tests use the narrow type and get full type safety
+  with zero assertions
+- **Capturing calls in a typed array beats `vi.fn().mock.calls`**:
+  `vi.fn()` without a type parameter leaks `any` from `.mock.calls`.
+  Instead: `const calls: EsSearchRequest[] = []` inside the fake, push
+  on each call, assert against `calls[0]?.query?.bool`. Fully typed,
+  no spy needed for call inspection
+- When deleting dead code, verify the FULL import chain: the CLI's
+  `SuggestionItem` type was also defined in `openapi.schemas.ts` and
+  `types/oak.ts` as separate types from the SDK. Only the local
+  `suggestions/types.ts` versions were dead
+- The test file (`index.unit.test.ts`) used `vi.mock('../es-client')`
+  and `vi.mock('../logger')` — global mocks that violate the testing
+  strategy. Deleting the dead code also eliminated the anti-pattern
+
 ## Session: 2026-02-28 — Post-validation quality fixes and consolidation
 
 ### What was done

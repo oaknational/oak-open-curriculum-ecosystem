@@ -4,25 +4,25 @@ overview: "Complete the three remaining work items blocking M1 release: commit o
 todos:
   - id: commit-consolidation
     content: Commit 33 outstanding consolidation files from 2026-02-28 sessions
-    status: in_progress
+    status: completed
   - id: m1-s003
     content: "Exclude binary endpoint: add to SKIPPED_PATHS, remove warning, regenerate (32 to 31 tools)"
-    status: pending
+    status: completed
   - id: m1-s009-red
     content: "RED: Write failing integration tests for dual-query suggest (bool_prefix + merge/dedup)"
-    status: pending
+    status: completed
   - id: m1-s009-green
     content: "GREEN: Extend SuggestClient, add per-scope config, implement dual-query in suggest()"
-    status: pending
+    status: completed
   - id: m1-s009-refactor
     content: "REFACTOR: Clean up dead CLI suggest code (runSuggestions, scope-config if unused)"
-    status: pending
+    status: completed
   - id: quality-gates
     content: Run full quality gate suite (sdk-codegen, build, type-check, lint, format, test, e2e)
-    status: pending
+    status: completed
   - id: m0-gates
     content: Run secrets scan, then human decisions (manual review, merge to main, make public)
-    status: pending
+    status: completed
 isProject: false
 ---
 
