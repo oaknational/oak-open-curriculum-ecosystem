@@ -153,7 +153,8 @@ export function generateThreadProgressionData(
     },
     threads: sortedThreads.map(toThreadNode),
     seeAlso:
-      'Use get-ontology for schema-level relationships (includes property graph). ' +
+      'Use get-curriculum-model for complete orientation. ' +
+      'Use get-ontology for the property graph. ' +
       'Use get-prerequisite-graph for unit dependencies.',
   };
 }

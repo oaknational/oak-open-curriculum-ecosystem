@@ -4,7 +4,7 @@
  * This module provides all MCP (Model Context Protocol) tooling including:
  * - Tool definitions and registries
  * - Tool execution and validation
- * - Universal tools (search, fetch, help, ontology)
+ * - Universal tools (aggregated tools combining multiple API calls)
  * - Documentation resources and prompts
  *
  * Also re-exports core client types needed by MCP applications.
@@ -92,6 +92,11 @@ export {
   getOntologyJson,
   type OntologyResource,
 } from '../mcp/ontology-resource.js';
+
+export {
+  CURRICULUM_MODEL_RESOURCE,
+  getCurriculumModelJson,
+} from '../mcp/curriculum-model-resource.js';
 
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 

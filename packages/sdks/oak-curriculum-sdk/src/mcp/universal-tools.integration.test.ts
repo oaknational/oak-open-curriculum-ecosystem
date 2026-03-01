@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
+import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
+import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 
 /**
@@ -112,6 +114,29 @@ describe('listUniversalTools annotations', () => {
     );
     expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
   });
+
+  it('get-curriculum-model tool has correct annotations', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const modelTool = tools.find(findToolByName('get-curriculum-model'));
+
+    expect(modelTool).toBeDefined();
+    const annotations = modelTool?.annotations;
+    expect(annotations?.readOnlyHint).toBe(true);
+    expect(annotations?.destructiveHint).toBe(false);
+    expect(annotations?.idempotentHint).toBe(true);
+    expect(annotations?.openWorldHint).toBe(false);
+    expect(annotations?.title).toBeDefined();
+  });
+
+  it('get-curriculum-model tool has OpenAI _meta fields', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const modelTool = tools.find(findToolByName('get-curriculum-model'));
+
+    expect(modelTool).toBeDefined();
+    expect(modelTool?._meta).toBeDefined();
+    expect(modelTool?._meta?.['openai/outputTemplate']).toBeDefined();
+    expect(modelTool?._meta?.['openai/widgetAccessible']).toBe(true);
+  });
 });
 
 /**
@@ -176,11 +201,11 @@ describe('listUniversalTools _meta integration', () => {
  * This catches the bug where listUniversalTools() didn't include _meta for generated tools.
  */
 describe('generated tools _meta integration', () => {
-  const aggregatedNames = ['search', 'fetch', 'get-ontology', 'get-help'];
+  const aggregatedNameSet = new Set<string>(typeSafeKeys(AGGREGATED_TOOL_DEFS));
 
   it('generated tools (non-aggregated) have _meta defined', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
+    const generatedTools = tools.filter((t) => !aggregatedNameSet.has(t.name));
 
     expect(generatedTools.length).toBeGreaterThan(0);
 
@@ -191,7 +216,7 @@ describe('generated tools _meta integration', () => {
 
   it('at least one generated tool has complete _meta with all fields', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
+    const generatedTools = tools.filter((t) => !aggregatedNameSet.has(t.name));
     const sampleTool = generatedTools[0];
 
     expect(sampleTool).toBeDefined();

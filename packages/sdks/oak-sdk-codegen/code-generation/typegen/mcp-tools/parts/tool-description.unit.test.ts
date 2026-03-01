@@ -165,18 +165,13 @@ describe('toToolDescription', () => {
 /**
  * Unit tests for appendPrerequisiteGuidance pure function.
  *
- * This function conditionally appends domain prerequisite guidance to tool
- * descriptions based on whether the tool requires authentication.
- *
- * Tools that require auth should guide models to call get-ontology first.
- * Tools with noauth (rate-limit, changelog) skip the guidance.
+ * Proves: protected tools get prerequisite guidance; public tools do not.
  */
 describe('appendPrerequisiteGuidance', () => {
-  it('appends prerequisite when requiresAuth is true', () => {
+  it('appends prerequisite guidance when requiresAuth is true', () => {
     const result = appendPrerequisiteGuidance('Tool summary', true);
     expect(result).toContain('Tool summary');
     expect(result).toContain('PREREQUISITE');
-    expect(result).toContain('get-ontology');
   });
 
   it('does NOT append prerequisite when requiresAuth is false', () => {

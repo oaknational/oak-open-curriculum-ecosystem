@@ -82,11 +82,11 @@ inclusion/exclusion examples for `doc drift finding` and `entropy cleanup`.
 
 Store artefacts in:
 
-- `.agent/plans/the-practice/evidence/`
+- `.agent/plans/agentic-engineering-enhancements/evidence/`
 
 Naming convention:
 
-- `YYYY-MM-DD-the-practice-phase-0-baseline-<run-id>.evidence.md`
+- `YYYY-MM-DD-harness-concepts-phase-0-baseline-<run-id>.evidence.md`
 
 Each artefact must include:
 
@@ -115,6 +115,6 @@ Each artefact must include:
 ## 8. Next Actions
 
 1. Create the first baseline evidence file under
-   `.agent/plans/the-practice/evidence/`.
+   `.agent/plans/agentic-engineering-enhancements/evidence/`.
 2. Validate a second run against the same window.
 3. Update parent plan status once baseline is accepted.

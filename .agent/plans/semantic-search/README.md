@@ -66,8 +66,7 @@ Search dispatch type safety (3g) is complete and archived:
 
 ## Active Plans
 
-*None.* SDK workspace separation (merge-blocking) is **complete** —
-archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md).
+- [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 
 ---
 
@@ -75,7 +74,7 @@ archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separatio
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | — (empty; 3e archived) |
+| `active/` | In-progress plans | 🟢 search-args extraction |
 | `current/` | Next-up queued plans | 📋 Ready |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `sdk-extraction/` | SDK extraction context | ✅ Complete |

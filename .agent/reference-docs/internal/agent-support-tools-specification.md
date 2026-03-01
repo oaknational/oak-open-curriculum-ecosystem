@@ -6,14 +6,14 @@ Agent support tools are MCP primitives designed to help AI agents understand the
 
 **Current agent support tools:**
 
-- `get-help` - Returns server overview, tool categories, workflows, and tips
+- `get-curriculum-model` - Combined orientation: domain model + tool guidance (primary, callOrder 0)
 - `get-ontology` - Returns curriculum structure, entity hierarchy, and domain model definitions
-- `get-knowledge-graph` - Returns concept TYPE relationships and domain structure graph
+- `get-help` - Returns server overview, tool categories, workflows, and tips
 
 **Current agent support resources:**
 
+- `curriculum://model` - JSON resource exposing combined curriculum orientation data
 - `curriculum://ontology` - JSON resource exposing the same ontology data as `get-ontology`
-- `curriculum://knowledge-graph` - JSON resource exposing the same graph data as `get-knowledge-graph`
 
 ## Architecture Reference
 
@@ -40,17 +40,17 @@ This metadata drives:
 
 ```typescript
 export const AGENT_SUPPORT_TOOL_METADATA = {
-  'get-ontology': {
-    name: 'get-ontology',
-    shortDescription: 'Domain model definitions',
-    provides: ['key stages', 'subjects', 'entity hierarchy', 'ID formats'],
-    purpose: 'understand WHAT curriculum concepts are and what they mean',
-    callOrder: 1,
-    complementsTools: ['get-knowledge-graph', 'get-help'],
-    seeAlso: 'get-knowledge-graph for structural relationships, get-help for tool usage',
+  'get-curriculum-model': {
+    name: 'get-curriculum-model',
+    shortDescription: 'Combined orientation: domain model + tool guidance',
+    provides: ['key stages', 'subjects', 'entity hierarchy', 'tool categories', 'workflows', 'tips'],
+    purpose: 'complete orientation — understand the domain AND how to use the tools',
+    callOrder: 0,
+    complementsTools: ['get-ontology', 'get-help'],
+    seeAlso: 'get-ontology for domain model only, get-help for tool guidance only',
     callAtStart: true,
   },
-  // ... other tools
+  // ... other tools (get-ontology at callOrder 1, get-help at callOrder 2)
 } as const;
 ```
 
@@ -83,22 +83,16 @@ Agent support tools need to be discoverable through multiple channels to ensure 
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
 
-The `SERVER_INSTRUCTIONS` constant is sent in the MCP `initialize` response. This is the **highest priority** guidance because:
+Server instructions are **dynamically generated** from `AGENT_SUPPORT_TOOL_METADATA` via `generateServerInstructions()`. This ensures they stay in sync with the metadata — adding a tool to the metadata automatically updates instructions.
+
+The instructions are sent in the MCP `initialize` response. This is the **highest priority** guidance because:
 
 - It's delivered ONCE at connection time before any tool calls
 - It's always visible to the model (unlike tool descriptions which may be truncated)
 - It sets expectations for the entire conversation
 
 ```typescript
-export const SERVER_INSTRUCTIONS = `Oak Curriculum MCP Server - AI Agent Guidance
-
-For optimal results, call these agent support tools at conversation start:
-
-1. get-ontology - Domain model definitions: key stages, subjects, entity hierarchy, ID formats
-2. get-knowledge-graph - Concept TYPE relationships: how curriculum entities connect structurally  
-3. get-help - Tool usage guidance: categories, workflows, tips
-
-These tools are read-only and idempotent. Call them first to reduce errors when using search, fetch, and browsing tools.` as const;
+export const SERVER_INSTRUCTIONS = generateServerInstructions();
 ```
 
 **App Integration:** `apps/oak-curriculum-mcp-streamable-http/src/application.ts`
@@ -116,11 +110,10 @@ const server = new McpServer(
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
 
-The `OAK_CONTEXT_HINT` is included in `structuredContent` of every tool response, reinforcing guidance after each tool call:
+The `OAK_CONTEXT_HINT` is **dynamically generated** from `AGENT_SUPPORT_TOOL_METADATA` via `generateContextHint()` and included in `structuredContent` of every tool response, reinforcing guidance after each tool call:
 
 ```typescript
-export const OAK_CONTEXT_HINT =
-  'For optimal results with Oak curriculum tools, call get-ontology for domain definitions, get-knowledge-graph for concept relationships, and get-help for usage guidance.' as const;
+export const OAK_CONTEXT_HINT = generateContextHint();
 ```
 
 ### 3. Tool Descriptions (Prerequisite Guidance)
@@ -129,9 +122,13 @@ export const OAK_CONTEXT_HINT =
 
 Each tool description should include prerequisite guidance directing to relevant agent support tools:
 
+Prerequisite guidance is defined using `PRIMARY_ORIENTATION_TOOL_NAME` (currently `get-curriculum-model`) so that all tool descriptions reference the same orientation tool:
+
 ```typescript
+export const PRIMARY_ORIENTATION_TOOL_NAME = 'get-curriculum-model';
+
 export const AGGREGATED_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-ontology\` first to understand key stages, subjects, entity hierarchy, and ID formats.` as const;
+  `PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first for complete orientation.` as const;
 ```
 
 ### 4. MCP Prompts
@@ -141,7 +138,7 @@ export const AGGREGATED_PREREQUISITE_GUIDANCE =
 User-initiated prompts should suggest calling agent support tools:
 
 ```typescript
-text: `You may want to call get-ontology for domain definitions, get-knowledge-graph for concept relationships, and get-help for tool usage guidance.`;
+text: `You may want to call get-curriculum-model for complete orientation (domain model + tool guidance).`;
 ```
 
 ### 5. Tool Guidance Data (Tips)
@@ -152,17 +149,14 @@ The tips array returned by `get-help` should mention all agent support tools:
 
 ```typescript
 tips: [
-  'Use get-ontology for domain understanding (what things mean), get-knowledge-graph for structure (how things connect).',
+  'Start with get-curriculum-model for complete orientation (domain model + tool guidance).',
   // ...
 ],
 ```
 
 ### 6. Cross-References Between Tools
 
-Each agent support tool should reference the others:
-
-- **ontology-data.ts**: `seeAlso: 'Call get-knowledge-graph for concept TYPE relationships'`
-- **knowledge-graph-data.ts**: `seeOntology: 'Call get-ontology for rich definitions and guidance'`
+Each agent support tool should reference the others via `AGENT_SUPPORT_TOOL_METADATA.complementsTools` and `seeAlso` fields. Cross-references are maintained in the metadata and propagated automatically.
 
 ---
 
@@ -180,27 +174,15 @@ Add the tool to `toolCategories.agentSupport`:
 
 ```typescript
 agentSupport: {
-  tools: ['get-help', 'get-ontology', 'get-knowledge-graph', 'your-new-tool'],
+  tools: ['get-curriculum-model', 'get-ontology', 'get-help', 'your-new-tool'],
   description: 'Tools for understanding Oak Curriculum system and how to use the tools.',
   // ...
 },
 ```
 
-#### 1.2 Tool Guidance Types
+#### 1.2 Type Derivation (Automatic)
 
-**File:** `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-types.ts`
-
-Add the tool name to the `AggregatedToolName` union:
-
-```typescript
-export type AggregatedToolName =
-  | 'search'
-  | 'fetch'
-  | 'get-ontology'
-  | 'get-help'
-  | 'get-knowledge-graph'
-  | 'your-new-tool';
-```
+`AggregatedToolName` is **derived from `AGGREGATED_TOOL_DEFS` keys** at compile time. Adding a tool to `AGGREGATED_TOOL_DEFS` (Phase 2.1) automatically extends the type union and the `isAggregatedToolName` type guard. No manual type updates needed.
 
 #### 1.3 Create Tool Data File
 
@@ -271,40 +253,25 @@ export const AGGREGATED_TOOL_DEFS = {
 } as const;
 ```
 
-#### 2.2 Universal Tools Type Guards
+#### 2.2 Universal Tools Type Guards (Automatic)
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/type-guards.ts`
 
-**CRITICAL:** Add the tool name to `isAggregatedToolName`:
-
-```typescript
-export function isAggregatedToolName(value: string): value is AggregatedToolName {
-  return (
-    value === 'search' ||
-    value === 'fetch' ||
-    value === 'get-ontology' ||
-    value === 'get-help' ||
-    value === 'get-knowledge-graph' ||
-    value === 'your-new-tool' // <-- ADD THIS
-  );
-}
-```
-
-> **Why this is critical:** The executor dispatches to aggregated tools based on this type guard. If the tool name is not included, the executor will not recognize it and the tool will fail with an error.
+`isAggregatedToolName` is **derived from `AGGREGATED_TOOL_DEFS` keys**. Adding a tool to `AGGREGATED_TOOL_DEFS` automatically extends the type guard. No manual updates needed.
 
 #### 2.3 Universal Tools Executor
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`
 
-Add dispatch logic for the new tool:
+Add dispatch handler to the `AGGREGATED_HANDLERS` map:
 
 ```typescript
-import { runYourNewTool } from '../aggregated-your-new-tool.js';
+import { runYourNewTool } from '../aggregated-your-new-tool/execution.js';
 
-// In executeAggregatedTool function:
-if (name === 'your-new-tool') {
-  return runYourNewTool();
-}
+const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
+  // ...existing handlers
+  'your-new-tool': () => Promise.resolve(runYourNewTool()),
+};
 ```
 
 ### Phase 3: Resource (If Applicable)
@@ -365,40 +332,19 @@ export function registerAllResources(server: McpServer): void {
 
 ### Phase 4: Discoverability Updates
 
-#### 4.1 Update Server Instructions
+#### 4.1 Server Instructions and Context Hints (Automatic)
 
-**File:** `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
+Server instructions (`SERVER_INSTRUCTIONS`) and context hints (`OAK_CONTEXT_HINT`) are **dynamically generated** from `AGENT_SUPPORT_TOOL_METADATA`. Adding a tool to the metadata with `callAtStart: true` automatically includes it in instructions. No manual updates needed.
 
-Add your tool to `SERVER_INSTRUCTIONS`:
-
-```typescript
-export const SERVER_INSTRUCTIONS = `...
-1. get-ontology - ...
-2. get-knowledge-graph - ...
-3. get-help - ...
-4. your-new-tool - Description of what it provides
-...` as const;
-```
-
-#### 4.2 Update Context Hint
-
-**File:** `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
-
-Update `OAK_CONTEXT_HINT` to mention your tool:
-
-```typescript
-export const OAK_CONTEXT_HINT = 'For optimal results..., and your-new-tool for X.' as const;
-```
-
-#### 4.3 Update MCP Prompts
+#### 4.2 Update MCP Prompts
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts`
 
-Update prompt messages to suggest calling your tool.
+Update prompt messages to reference orientation guidance (typically via `PRIMARY_ORIENTATION_TOOL_NAME`).
 
-#### 4.4 Add Cross-References
+#### 4.3 Cross-References (Automatic)
 
-Update existing agent support tools to reference your new tool where appropriate.
+Cross-references between tools are maintained via `complementsTools` and `seeAlso` in `AGENT_SUPPORT_TOOL_METADATA`. Update these fields for the new tool and any affected existing tools.
 
 ### Phase 5: Public API and Build
 
@@ -516,24 +462,10 @@ it('returns identical data on repeated calls (idempotent)', () => {
 
 Required assertions:
 
-```typescript
-// Update the aggregatedNames array
-const aggregatedNames = [
-  'search',
-  'fetch',
-  'get-ontology',
-  'get-help',
-  'get-knowledge-graph',
-  'your-new-tool',
-];
+The `aggregatedNames` array is now **derived from `AGGREGATED_TOOL_DEFS`** via `typeSafeKeys()`. Adding a tool to `AGGREGATED_TOOL_DEFS` automatically includes it in integration tests.
 
-// Add annotation tests
-it('your-new-tool has correct annotations', () => {
-  /* ... */
-});
-it('your-new-tool has OpenAI _meta fields', () => {
-  /* ... */
-});
+```typescript
+const aggregatedNames = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 ```
 
 ### E2E Tests (App)
@@ -610,12 +542,11 @@ Before merging changes to agent support tools/resources, run:
 pnpm sdk-codegen
 pnpm build
 pnpm type-check
-pnpm lint -- --fix
+pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm test:ui
 pnpm smoke:dev:stub
 ```

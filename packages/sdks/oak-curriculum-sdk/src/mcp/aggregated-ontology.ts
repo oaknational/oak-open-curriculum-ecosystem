@@ -14,7 +14,6 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
-import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
@@ -34,22 +33,17 @@ export const GET_ONTOLOGY_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_ONTOLOGY_TOOL_DEF = {
-  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, property graph of concept relationships, and tool usage guidance. Use this to understand Oak - it's the foundation for effective curriculum exploration.
+  description: `Returns the full Oak Curriculum domain model including key stages, subjects, entity hierarchy, property graph of concept relationships, synonyms, and detailed structural patterns. This is the comprehensive domain reference.
 
-${ONTOLOGY_RECOMMENDED_FIRST_STEP}
-
-Use this when you need to understand:
-- How the curriculum is structured (key stages KS1-KS4, years, subjects)
-- How entities relate (subject → unit → lesson) — see entityHierarchy and propertyGraph
-- Which tools to use for different workflows
-- How to interpret ID formats for the 'fetch' tool (e.g., "lesson:slug", "unit:slug")
-- How concept types connect structurally (propertyGraph with ~28 concepts, ~45 edges)
+For complete orientation (domain model + tool guidance), prefer 'get-curriculum-model' which combines both in one call. Use this tool when you specifically need:
+- The full property graph of concept relationships (~28 concepts, ~45 edges)
+- Synonym/alias mappings for curriculum terminology
+- Detailed structural patterns for API traversal (KS4 complexity, exam boards, tiers)
 
 Do NOT use for:
 - Fetching actual curriculum content (use 'search' or 'fetch')
 - Looking up specific lessons, units, or resources
-
-This tool provides the foundation for effective use of all other curriculum tools.`,
+- General orientation (use 'get-curriculum-model' instead)`,
   inputSchema: GET_ONTOLOGY_INPUT_SCHEMA,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {

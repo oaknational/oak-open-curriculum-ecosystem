@@ -102,10 +102,11 @@ export const toolGuidanceData = {
     } satisfies ToolCategory,
 
     agentSupport: {
-      tools: ['get-help', 'get-ontology'],
+      tools: ['get-curriculum-model', 'get-help', 'get-ontology'],
       description:
-        'Tools for understanding the Oak Curriculum system and how to use the tools. get-ontology includes the property graph of concept relationships.',
-      whenToUse: 'At conversation start, when user asks to "understand Oak", or to get context.',
+        'Tools for understanding the Oak Curriculum system and how to use the tools. get-curriculum-model combines domain model and tool guidance in a single call. get-ontology includes the property graph of concept relationships.',
+      whenToUse:
+        'At conversation start, call get-curriculum-model for complete orientation. Use get-ontology or get-help individually if you need only domain model or tool guidance.',
       isAgentSupport: true,
     } satisfies ToolCategory,
   },
@@ -129,10 +130,10 @@ export const toolGuidanceData = {
     'Get lesson transcript for detailed content understanding; get quiz for assessment ideas.',
     'Threads show how concepts build across years — great for finding prerequisites or extensions.',
     'Key Stage 4 (GCSE) has additional complexity: tiers (foundation/higher) and exam boards.',
-    'Use get-help or get-ontology to understand Oak — great at the start of a conversation.',
-    'get-ontology includes both domain definitions (what things mean) and a property graph (how concept types connect structurally).',
+    'Use get-curriculum-model at the start of a conversation for complete orientation — it combines the domain model and tool guidance in one call.',
+    'get-curriculum-model includes domain definitions, entity hierarchy, property graph, tool categories, workflows, and tips.',
     'Not all lessons have all components — video, transcript, quizzes, and worksheets are OPTIONAL. Check availability before assuming they exist.',
-    'Agent guidance for search: Oak has an official glossary of pedagogical terms (https://open-api.thenational.academy/docs/about-oaks-data/glossary). When the user uses a glossary term (e.g. "KS4", "unit", "thread", "tier", "key stage", "misconception"), treat it as already correct — do not rewrite it. When the user uses a colloquial term not in the glossary (e.g. "GCSE", "SATs", "times tables"), map it to the canonical term using the synonyms in get-ontology. Never rewrite a glossary term into a non-glossary term. Search text should use curriculum topic terms (e.g. "trigonometry", "fractions"); assessment terms like "GCSE" map to keyStage filters, not search text. This guidance will move to a dedicated section in a future get-started tool.',
+    'Agent guidance for search: Oak search uses semantic search (ELSER) combined with lexical search (BM25) via Reciprocal Rank Fusion. Search text should be curriculum topic terms (e.g. "trigonometry", "photosynthesis", "the Romans") — the semantic search handles linguistic variation naturally. Assessment terms like "GCSE" or "SATs" map to keyStage filters (ks4, ks2), not search text. When the user uses an Oak glossary term (e.g. "KS4", "unit", "thread", "tier", "key stage"), treat it as already correct — do not rewrite it. When the user uses a colloquial term (e.g. "GCSE", "SATs", "times tables"), map it to the canonical term using the ukEducationContext and entityHierarchy in get-curriculum-model. Never rewrite a glossary term into a non-glossary term. See: https://open-api.thenational.academy/docs/about-oaks-data/glossary',
   ],
 
   /**

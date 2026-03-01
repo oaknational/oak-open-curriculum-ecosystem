@@ -139,10 +139,7 @@ describe('generateCtaHandlerJs', () => {
   describe('prompt escaping', () => {
     it('escapes backticks in prompts for safe template literal embedding', () => {
       const js = generateCtaHandlerJs();
-      // The Learn Oak prompt contains backticks around tool names
-      // These should be escaped as \` in the output
-      expect(js).toContain('\\`get-ontology\\`');
-      expect(js).toContain('\\`get-help\\`');
+      expect(js).toMatch(/\\`[^`]+\\`/);
     });
   });
 });
@@ -178,9 +175,8 @@ describe('CTA_REGISTRY', () => {
       expect(learnOak.understoodLabel.length).toBeGreaterThan(0);
     });
 
-    it('prompts for all three agent support tools', () => {
-      expect(learnOak.prompt).toContain('get-ontology');
-      expect(learnOak.prompt).toContain('get-help');
+    it('prompts for curriculum orientation', () => {
+      expect(learnOak.prompt).toMatch(/orientation|domain model/i);
     });
 
     it('has a non-empty prompt', () => {

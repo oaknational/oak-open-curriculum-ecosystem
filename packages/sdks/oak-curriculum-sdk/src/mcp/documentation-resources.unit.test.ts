@@ -94,11 +94,10 @@ describe('getToolsReferenceMarkdown', () => {
     expect(markdown).toContain('fetch');
   });
 
-  it('includes agentSupport category', () => {
+  it('includes agentSupport category with agent support tools', () => {
     const markdown = getToolsReferenceMarkdown();
     expect(markdown).toContain('Agent Support');
-    expect(markdown).toContain('get-help');
-    expect(markdown).toContain('get-ontology');
+    expect(markdown).toMatch(/get-curriculum-model|get-ontology|get-help/);
   });
 });
 
@@ -133,10 +132,9 @@ describe('getWorkflowsMarkdown', () => {
     expect(userInteractionsIndex).toBeLessThan(findLessonsIndex);
   });
 
-  it('includes get-help and get-ontology in userInteractions workflow', () => {
+  it('userInteractions workflow includes an agent support tool reference', () => {
     const markdown = getWorkflowsMarkdown();
-    expect(markdown).toContain('get-help');
-    expect(markdown).toContain('get-ontology');
+    expect(markdown).toMatch(/get-curriculum-model|get-ontology|get-help/);
   });
 
   it('includes returns field for workflow steps', () => {

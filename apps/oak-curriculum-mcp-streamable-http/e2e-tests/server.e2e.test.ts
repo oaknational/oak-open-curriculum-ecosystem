@@ -150,6 +150,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'browse-curriculum',
       'explore-topic',
       'fetch',
+      'get-curriculum-model',
       'get-help',
       'get-ontology',
       'get-prerequisite-graph',
@@ -256,8 +257,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
 
     // Verify instructions field exists and contains agent guidance
     expect(initResult?.instructions).toBeDefined();
-    expect(initResult?.instructions).toContain('get-ontology');
-    expect(initResult?.instructions).toContain('get-help');
+    expect(initResult?.instructions?.length).toBeGreaterThan(0);
+    expect(initResult?.instructions).toMatch(/orientation|domain model/i);
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {

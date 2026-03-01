@@ -29,25 +29,19 @@ export const toolGuidanceWorkflows = {
     steps: [
       {
         step: 1,
-        action: 'Use the get-help tool to understand the Oak context',
-        tool: 'get-help',
-        example: 'get-help()',
-        returns: 'An introduction to the Oak curriculum and how to use the tools.',
+        action:
+          'Call get-curriculum-model for complete orientation: domain model, tool guidance, and workflows',
+        tool: 'get-curriculum-model',
+        example: 'get-curriculum-model()',
+        returns:
+          'Complete curriculum orientation including key stages, subjects, entity hierarchy, tool categories, workflows, and tips.',
       },
       {
         step: 2,
-        action: 'Use the get-ontology tool to understand the Oak curriculum',
-        tool: 'get-ontology',
-        example: 'get-ontology()',
-        returns:
-          'A detailed overview of the Oak curriculum including key stages, subjects, units, and lessons.',
-      },
-      {
-        step: 3,
         action: 'Use the discovery and browsing tools to explore the Oak curriculum',
       },
       {
-        step: 4,
+        step: 3,
         action: 'Use the fetching tools to find curriculum content and resources',
       },
     ],

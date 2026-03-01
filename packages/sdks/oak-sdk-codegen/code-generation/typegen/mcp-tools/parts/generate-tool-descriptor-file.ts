@@ -100,7 +100,7 @@ export interface ToolDescriptor<
   /**
    * Indicates whether the tool benefits from domain context grounding.
    *
-   * When true, the model should ideally call get-ontology and get-help
+   * When true, the model should ideally call get-curriculum-model
    * before using this tool to understand the Oak curriculum structure.
    *
    * Curriculum content tools (require auth) have this set to true.

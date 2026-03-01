@@ -111,7 +111,7 @@ export const getSubjectsYears = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Year groups for a given subject\n\nThis tool returns an array of years that are currently available for a given subject.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Year groups for a given subject\n\nThis tool returns an array of years that are currently available for a given subject.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

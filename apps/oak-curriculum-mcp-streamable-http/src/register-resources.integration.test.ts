@@ -170,7 +170,7 @@ describe('registerWidgetResource', () => {
       expect(description).toMatch(/oak|curriculum|lesson/i);
     });
 
-    it('widgetDescription includes context grounding guidance to call get-ontology', () => {
+    it('widgetDescription includes orientation guidance', () => {
       registerWidgetResource(server);
 
       const widgetUri = getWidgetUri(registeredResources);
@@ -180,7 +180,7 @@ describe('registerWidgetResource', () => {
       const description = resource.contents[0]?._meta?.['openai/widgetDescription'];
 
       expect(description).toBeDefined();
-      expect(description).toContain('get-ontology');
+      expect(description).toMatch(/orientation|domain model/i);
     });
 
     it('includes openai/widgetDomain when widgetDomain option is provided', () => {

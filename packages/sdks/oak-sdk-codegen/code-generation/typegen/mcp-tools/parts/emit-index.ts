@@ -134,7 +134,7 @@ function buildExports({
   lines.push('  documentedStatuses,');
   lines.push(`  securitySchemes: ${securitySchemesLiteral},`);
   // requiresDomainContext indicates if the tool benefits from context grounding
-  // (calling get-ontology/get-help first). Utility tools (noauth) don't need this.
+  // (calling get-curriculum-model first). Utility tools (noauth) don't need this.
   lines.push(`  requiresDomainContext: ${requiresDomainContext ? 'true' : 'false'},`);
   // MCP annotations: all Oak tools are read-only, non-destructive, idempotent GET operations
   const humanReadableTitle = kebabToTitleCase(toolName);

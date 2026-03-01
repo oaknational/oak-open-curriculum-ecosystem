@@ -111,7 +111,7 @@ export const getLessonsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson summary\n\nThis tool returns a summary for a given lesson\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Lesson summary\n\nThis tool returns a summary for a given lesson\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

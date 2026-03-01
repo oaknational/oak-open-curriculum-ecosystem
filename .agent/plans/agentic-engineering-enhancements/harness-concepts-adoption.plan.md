@@ -211,6 +211,6 @@ include:
 ## 11. Next Actions
 
 1. Execute Phase 0 baseline work using
-   `.agent/plans/the-practice/active/phase-0-baseline-metrics.plan.md`.
+   `.agent/plans/agentic-engineering-enhancements/active/phase-0-baseline-metrics.plan.md`.
 2. Implement Phase 1 safe-track items in smallest viable increments.
 3. Schedule a review checkpoint after two cycles before Phase 2 starts.

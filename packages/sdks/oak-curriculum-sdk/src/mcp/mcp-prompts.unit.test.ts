@@ -82,10 +82,10 @@ describe('getPromptMessages', () => {
       expect(hasKeyStage).toBe(true);
     });
 
-    it('suggests calling get-ontology first', () => {
+    it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('find-lessons', { topic: 'fractions' });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toContain('get-ontology');
+      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
     });
   });
 
@@ -103,13 +103,13 @@ describe('getPromptMessages', () => {
       expect(content).toContain('Year 4');
     });
 
-    it('suggests calling context tools first', () => {
+    it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('lesson-planning', {
         topic: 'fractions',
         yearGroup: 'Year 4',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-help|get-ontology/);
+      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
     });
   });
 
@@ -127,13 +127,13 @@ describe('getPromptMessages', () => {
       expect(content).toContain('maths');
     });
 
-    it('suggests calling context tools first', () => {
+    it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('progression-map', {
         concept: 'number',
         subject: 'maths',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-help|get-ontology/);
+      expect(content).toMatch(/get-curriculum-model|get-ontology|orientation/i);
     });
   });
 

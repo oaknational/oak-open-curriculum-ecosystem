@@ -51,10 +51,18 @@ function getRelatedWorkflows(toolName: string): string[] {
     .map(([workflowName]) => workflowName);
 }
 
-/** Known aggregated tool names for help lookup */
+/**
+ * Known aggregated tool names for help lookup.
+ *
+ * This list must match the keys of AGGREGATED_TOOL_DEFS in
+ * universal-tools/definitions.ts. A direct import would create a
+ * circular dependency (definitions imports GET_HELP_TOOL_DEF from
+ * this module). Drift is caught by the unit test.
+ */
 const AGGREGATED_TOOL_NAMES: readonly string[] = [
   'search',
   'fetch',
+  'get-curriculum-model',
   'get-ontology',
   'get-help',
   'get-thread-progressions',

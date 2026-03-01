@@ -8,7 +8,10 @@
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
-import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import {
+  AGGREGATED_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
@@ -37,7 +40,7 @@ Do NOT use for:
 - Precise search in a single scope (use 'search' with a specific scope)
 - Browsing without a topic (use 'browse-curriculum')
 - Fetching known content by ID (use 'fetch')
-- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
+- Understanding the curriculum structure (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 
 NATURAL LANGUAGE MAPPING EXAMPLES:
 - "What does Oak have about volcanos?" → { text: 'volcanos' }

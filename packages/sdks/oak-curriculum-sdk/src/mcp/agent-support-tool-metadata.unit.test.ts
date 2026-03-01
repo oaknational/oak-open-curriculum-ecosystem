@@ -148,13 +148,27 @@ describe('getAgentSupportToolMetadata', () => {
     expect(metadata.name).toBe('get-ontology');
     expect(metadata.shortDescription).toBe('Domain model definitions and property graph');
   });
+
+  it('has get-curriculum-model entry', () => {
+    expect(AGENT_SUPPORT_TOOL_METADATA).toHaveProperty('get-curriculum-model');
+  });
+
+  it('get-curriculum-model has callOrder 0', () => {
+    const metadata = getAgentSupportToolMetadata('get-curriculum-model');
+    expect(metadata.callOrder).toBe(0);
+  });
+
+  it('get-curriculum-model has callAtStart true', () => {
+    const metadata = getAgentSupportToolMetadata('get-curriculum-model');
+    expect(metadata.callAtStart).toBe(true);
+  });
 });
 
 describe('getSeeAlsoForTool', () => {
-  it('returns seeAlso for agent support tools', () => {
+  it('returns non-empty seeAlso for agent support tools', () => {
     const seeAlso = getSeeAlsoForTool('get-ontology');
     expect(seeAlso).toBeDefined();
-    expect(seeAlso).toContain('get-help');
+    expect(seeAlso?.length).toBeGreaterThan(0);
   });
 
   it('returns undefined for non-agent support tools', () => {

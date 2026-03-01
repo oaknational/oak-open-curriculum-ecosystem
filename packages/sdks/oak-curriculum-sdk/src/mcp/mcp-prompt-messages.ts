@@ -47,7 +47,7 @@ export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I want to find lessons about "${topic}".${keyStageNote}
 
-Before searching, you may want to call get-ontology to understand domain definitions (key stages, subjects, units) and how curriculum concepts relate to each other.
+Before searching, call get-curriculum-model for a complete understanding of the curriculum domain model and available tools.
 
 Please:
 1. Use search with scope "lessons" to find lessons matching this topic: search({ text: "${topic}", scope: "lessons"${keyStageParam} })
@@ -77,7 +77,7 @@ export function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I'm planning a lesson on "${topic}" for ${yearGroup}. Please help me gather materials.
 
-You may want to call get-ontology for domain definitions and concept relationships, and get-help for tool usage guidance.
+Call get-curriculum-model first for domain definitions, concept relationships, and tool usage guidance.
 
 Steps:
 1. Use search with scope "lessons" to search for lessons on "${topic}" appropriate for ${yearGroup}
@@ -115,7 +115,7 @@ export function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I want to understand how the concept of "${concept}" develops across years in ${subject}.
 
-You may want to call get-ontology for domain definitions and structural relationships, and get-help for tool guidance.
+Call get-curriculum-model first for domain definitions, structural relationships, and tool guidance.
 
 Please:
 1. Use search with scope "threads" to find threads related to "${concept}" in ${subject}: search({ text: "${concept}", scope: "threads", subject: "${subject}" })
@@ -150,7 +150,7 @@ export function getExploreCurriculumMessages(args: PromptArgs): PromptMessage[] 
         type: 'text',
         text: `I want to explore what Oak has about "${topic}".
 
-You may want to call get-ontology for domain definitions first.
+Call get-curriculum-model first for domain definitions and tool guidance.
 
 Please:
 1. Use explore-topic to search across lessons, units, and threads in parallel: explore-topic({ text: "${topic}"${subjectParam} })
@@ -180,7 +180,7 @@ export function getLearningProgressionMessages(args: PromptArgs): PromptMessage[
         type: 'text',
         text: `I want to understand how "${concept}" builds across year groups in ${subject}.
 
-You may want to call get-ontology for domain definitions first.
+Call get-curriculum-model first for domain definitions and tool guidance.
 
 Please:
 1. Use search with scope "threads" to find progression threads: search({ text: "${concept}", scope: "threads", subject: "${subject}" })

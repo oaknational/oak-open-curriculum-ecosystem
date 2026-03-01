@@ -19,6 +19,10 @@ import {
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
 import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
+import {
+  validateCurriculumModelArgs,
+  runCurriculumModelTool,
+} from '../aggregated-curriculum-model/index.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
@@ -94,6 +98,17 @@ function handleHelpTool(input: unknown): CallToolResult {
 }
 
 /**
+ * Handles curriculum model tool validation and execution.
+ */
+function handleCurriculumModelTool(input: unknown): CallToolResult {
+  const validation = validateCurriculumModelArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runCurriculumModelTool(validation.value);
+}
+
+/**
  * Handles fetch tool validation and execution.
  */
 async function handleFetchTool(
@@ -159,6 +174,7 @@ type AggregatedHandler = (
 
 const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
   search: handleSearchTool,
+  'get-curriculum-model': (input) => Promise.resolve(handleCurriculumModelTool(input)),
   'get-ontology': () => Promise.resolve(runOntologyTool()),
   'get-help': (input) => Promise.resolve(handleHelpTool(input)),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),

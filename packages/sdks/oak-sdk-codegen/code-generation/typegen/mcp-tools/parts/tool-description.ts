@@ -35,8 +35,8 @@ export function toToolDescription(operation: OperationObject): string | undefine
 /**
  * Domain prerequisite guidance appended to authenticated tool descriptions.
  *
- * Encourages models to call get-ontology first to understand the curriculum
- * domain before using API tools. Brief to minimize context window impact.
+ * Encourages models to call get-curriculum-model first to understand the
+ * curriculum domain before using API tools. Brief to minimise context window impact.
  *
  * @remarks
  * This guidance is only appended to tools that require authentication.
@@ -45,13 +45,13 @@ export function toToolDescription(operation: OperationObject): string | undefine
  */
 export const DOMAIN_PREREQUISITE_GUIDANCE = `
 
-PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-ontology\` first to understand key stages, subjects, entity hierarchy, and ID formats.`;
+PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-curriculum-model\` first to understand key stages, subjects, entity hierarchy, and ID formats.`;
 
 /**
  * Conditionally appends domain prerequisite guidance to tool descriptions.
  *
- * Pure function that adds guidance nudging models to call get-ontology first
- * when they haven't loaded the curriculum domain model.
+ * Adds guidance nudging models to call get-curriculum-model first when they
+ * haven't loaded the curriculum domain model.
  *
  * @param description - Base tool description from OpenAPI spec
  * @param requiresAuth - Whether the tool requires OAuth authentication

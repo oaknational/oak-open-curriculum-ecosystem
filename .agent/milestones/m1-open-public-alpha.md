@@ -30,7 +30,7 @@ curriculum information through natural language.
 All must be true before M1 exit:
 
 - [ ] Clerk authentication integrated and tested
-- [ ] Sentry error monitoring live
+- [ ] Sentry error monitoring live and useful
 - [ ] Rate limiting configured and enforced
 - [ ] HTTP MCP server deployed as public alpha (no invitation required)
 - [ ] Quality gates green (`pnpm qg`)

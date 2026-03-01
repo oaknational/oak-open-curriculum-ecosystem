@@ -111,7 +111,7 @@ export const getLessonsQuiz = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

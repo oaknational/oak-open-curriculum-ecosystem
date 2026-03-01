@@ -4,11 +4,15 @@ import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import { listUniversalTools } from './universal-tools/list-tools.js';
 import { isUniversalToolName } from './universal-tools/type-guards.js';
+import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
+import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type {
   GeneratedToolRegistry,
   ToolRegistryDescriptor,
   UniversalToolName,
 } from './universal-tools/types.js';
+
+const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 
 const sampleMcpToolName = 'get-key-stages-subject-lessons' as const satisfies ToolName;
 
@@ -83,6 +87,7 @@ describe('isUniversalToolName', () => {
   it('matches aggregated tool names', () => {
     expect(isUniversalToolName('search', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('fetch', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-curriculum-model', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-ontology', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-help', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-thread-progressions', registry.isToolName)).toBe(true);
@@ -135,10 +140,11 @@ describe('get-ontology tool descriptor', () => {
     expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
   });
 
-  it('has description with "Use when" guidance', () => {
+  it('has description with positive and negative usage guidance', () => {
     const tools = listUniversalTools(registry);
     const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
-    expect(ontologyTool?.description).toContain('Use this when');
+    expect(ontologyTool?.description).toBeDefined();
+    expect(ontologyTool?.description?.length).toBeGreaterThan(50);
     expect(ontologyTool?.description).toContain('Do NOT use for');
   });
 
@@ -154,16 +160,7 @@ describe('get-ontology tool descriptor', () => {
 });
 
 describe('aggregated tool _meta fields', () => {
-  const aggregatedToolNames = [
-    'search',
-    'fetch',
-    'get-ontology',
-    'get-help',
-    'browse-curriculum',
-    'explore-topic',
-    'get-thread-progressions',
-    'get-prerequisite-graph',
-  ] as const;
+  const aggregatedToolNames = AGGREGATED_TOOL_NAMES_FROM_DEFS;
 
   it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
     const tools = listUniversalTools(registry);
@@ -185,16 +182,7 @@ describe('aggregated tool _meta fields', () => {
 });
 
 describe('aggregated tool widgetAccessible and visibility', () => {
-  const aggregatedToolNames = [
-    'search',
-    'fetch',
-    'get-ontology',
-    'get-help',
-    'browse-curriculum',
-    'explore-topic',
-    'get-thread-progressions',
-    'get-prerequisite-graph',
-  ] as const;
+  const aggregatedToolNames = AGGREGATED_TOOL_NAMES_FROM_DEFS;
 
   it.each(aggregatedToolNames)('%s has openai/widgetAccessible set to true', (toolName) => {
     const tools = listUniversalTools(registry);

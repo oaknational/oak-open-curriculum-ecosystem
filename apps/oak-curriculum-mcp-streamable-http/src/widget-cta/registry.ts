@@ -27,8 +27,8 @@ export const CTA_REGISTRY = {
   /**
    * Learn About Oak CTA.
    *
-   * Prompts the model to call agent support tools:
-   * `get-ontology` and `get-help`.
+   * Prompts the model to call `get-curriculum-model` for complete
+   * orientation in a single call (domain model + tool guidance).
    *
    * After 10 seconds, shows "Oak Understood" to indicate the agent
    * has had time to process the curriculum information.
@@ -40,13 +40,9 @@ export const CTA_REGISTRY = {
     understoodLabel: 'Oak Understood',
     prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum, covering from EYFS to KS4.
 
-The following tools will help you understand the context, and provide better support to the user.
+Call \`get-curriculum-model\` now to understand the curriculum domain model and available tools.
 
-Call the \`get-help\` tool for a resources and tools overview.
-
-The response includes "agent support" tools, such as \`get-ontology\`. Call **all** agent support tools now.
-
-Reflect on the agent support tools information. Do not show the user, use it to understand the Oak curriculum and the education context.
+Reflect on the information. Do not show the user, use it to understand the Oak curriculum and the education context.
 
 Tell the user that you are ready to help them use the Oak Open Curriculum resources.`,
   },

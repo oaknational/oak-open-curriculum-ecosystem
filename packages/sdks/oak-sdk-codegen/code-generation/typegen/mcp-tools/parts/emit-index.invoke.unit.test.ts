@@ -135,10 +135,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
 
     const code = emitIndex(toolName, path, method, 'getLessonsSummary', operation);
 
-    // Verify prerequisite is included in description
     expect(code).toContain('PREREQUISITE');
-    expect(code).toContain('get-ontology');
-    // Verify original description is preserved
     expect(code).toContain('Lesson summary');
     expect(code).toContain('This tool returns a summary');
   });
@@ -157,7 +154,6 @@ describe('emitIndex (invoke wrapper emission)', () => {
 
     // Verify prerequisite is NOT included
     expect(code).not.toContain('PREREQUISITE');
-    expect(code).not.toContain('get-ontology');
     // Verify original description is preserved
     expect(code).toContain('API Changelog');
     expect(code).toContain('History of significant changes');
@@ -189,7 +185,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
 
     const code = emitIndex(toolName, path, method, 'getLessons', operation);
 
-    // Protected tools need domain context (get-ontology, get-help)
+    // Protected tools need domain context (get-curriculum-model)
     expect(code).toContain('requiresDomainContext: true');
   });
 

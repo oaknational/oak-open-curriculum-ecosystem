@@ -98,7 +98,7 @@ export const getKeyStages = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Key stages\n\nThis tool returns all the key stages (titles and slugs) that are currently available on Oak\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Key stages\n\nThis tool returns all the key stages (titles and slugs) that are currently available on Oak\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

@@ -14,7 +14,10 @@ import {
   type ContentType,
 } from '@oaknational/sdk-codegen/api-schema';
 import { extractContextFromResponse } from '../response-augmentation.js';
-import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
+import {
+  FETCH_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from './prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
@@ -37,7 +40,7 @@ Use this when you need to:
 
 Do NOT use for:
 - Finding content when you don't have the ID (use 'search')
-- Understanding ID formats (use '${ONTOLOGY_TOOL_NAME}' first)
+- Understanding ID formats (use '${PRIMARY_ORIENTATION_TOOL_NAME}' first)
 
 Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,

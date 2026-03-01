@@ -7,11 +7,13 @@
 
 import { describe, it, expect } from 'vitest';
 import { toolGuidanceData } from './tool-guidance-data.js';
+import { AGENT_SUPPORT_TOOL_NAMES } from './agent-support-tool-metadata.js';
 
 describe('toolGuidanceData content quality', () => {
-  it('agentSupport category includes get-help and get-ontology tools', () => {
-    expect(toolGuidanceData.toolCategories.agentSupport.tools).toContain('get-help');
-    expect(toolGuidanceData.toolCategories.agentSupport.tools).toContain('get-ontology');
+  it('agentSupport category includes all agent support tools', () => {
+    for (const name of AGENT_SUPPORT_TOOL_NAMES) {
+      expect(toolGuidanceData.toolCategories.agentSupport.tools).toContain(name);
+    }
   });
 
   it('agentSupport category has isAgentSupport flag set to true', () => {
@@ -44,8 +46,10 @@ describe('toolGuidanceData content quality', () => {
     expect(hasFetchTip).toBe(true);
   });
 
-  it('tips include "understand Oak" guidance', () => {
-    const hasUnderstandOakTip = toolGuidanceData.tips.some((tip) => /understand oak/i.test(tip));
-    expect(hasUnderstandOakTip).toBe(true);
+  it('tips include orientation guidance referencing get-curriculum-model', () => {
+    const hasOrientationTip = toolGuidanceData.tips.some((tip) =>
+      tip.includes('get-curriculum-model'),
+    );
+    expect(hasOrientationTip).toBe(true);
   });
 });

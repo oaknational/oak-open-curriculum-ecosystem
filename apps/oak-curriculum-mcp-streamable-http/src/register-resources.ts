@@ -19,6 +19,8 @@ import {
   getDocumentationContent,
   ONTOLOGY_RESOURCE,
   getOntologyJson,
+  CURRICULUM_MODEL_RESOURCE,
+  getCurriculumModelJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   getToolWidgetUri,
@@ -48,17 +50,16 @@ const WIDGET_CSP = {
 
 /**
  * Human-readable description for the widget, shown to the model.
- * Includes context grounding guidance to call get-ontology first.
  *
  * @remarks
  * - Must be ≤200 characters per OpenAI guidance
  * - Model sees this when widget loads, reducing redundant narration
- * - Guides model to call get-ontology for domain understanding
+ * - Guides model to call get-curriculum-model for domain understanding
  *
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 const WIDGET_DESCRIPTION =
-  'Oak curriculum explorer. For best results, call get-ontology and get-help first to understand the curriculum domain model.';
+  'Oak curriculum explorer. For best results, call get-curriculum-model first to understand the curriculum domain model and tools.';
 
 /**
  * Options for widget resource registration.
@@ -198,11 +199,32 @@ export function registerOntologyResource(server: ResourceRegistrar): void {
   );
 }
 
+/** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
+export function registerCurriculumModelResource(server: ResourceRegistrar): void {
+  server.registerResource(
+    CURRICULUM_MODEL_RESOURCE.name,
+    CURRICULUM_MODEL_RESOURCE.uri,
+    {
+      description: CURRICULUM_MODEL_RESOURCE.description,
+      mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+    },
+    () => ({
+      contents: [
+        {
+          uri: CURRICULUM_MODEL_RESOURCE.uri,
+          mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+          text: getCurriculumModelJson(),
+        },
+      ],
+    }),
+  );
+}
+
 /**
  * Registers all static resources with the MCP server.
  *
- * Combines widget, documentation, and ontology resource
- * registration into a single call for cleaner server setup.
+ * Combines widget, documentation, ontology, and curriculum model
+ * resource registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
  * @param options - Optional widget configuration (e.g. widgetDomain)
@@ -214,6 +236,7 @@ export function registerAllResources(
   registerWidgetResource(server, options);
   registerDocumentationResources(server);
   registerOntologyResource(server);
+  registerCurriculumModelResource(server);
 }
 
 // Re-export prompts registration for use in handlers

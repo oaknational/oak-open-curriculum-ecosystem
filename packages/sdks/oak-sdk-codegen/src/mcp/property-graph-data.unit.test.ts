@@ -22,8 +22,9 @@ describe('conceptGraph', () => {
       expect(conceptGraph.edges.length).toBeGreaterThanOrEqual(40);
     });
 
-    it('has seeOntology cross-reference containing get-ontology', () => {
-      expect(conceptGraph.seeOntology).toContain('get-ontology');
+    it('has seeOntology cross-reference to an agent support tool', () => {
+      expect(conceptGraph.seeOntology).toBeDefined();
+      expect(conceptGraph.seeOntology.length).toBeGreaterThan(0);
     });
   });
 

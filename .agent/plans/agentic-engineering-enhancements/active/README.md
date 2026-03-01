@@ -12,6 +12,7 @@ of truth.
 | 3 | [phase-3-architectural-enforcement-execution.md](phase-3-architectural-enforcement-execution.md) | Architectural enforcement phases 0-5 execution | 📋 Planned |
 | 4 | [phase-4-cross-agent-standardisation-execution.md](phase-4-cross-agent-standardisation-execution.md) | Committed cross-agent standardisation tasks and trigger handling | 📋 Planned |
 | 5 | [phase-5-mutation-testing-execution.md](phase-5-mutation-testing-execution.md) | Mutation testing phases 0-3 execution | 📋 Planned |
+| HC-0 | [phase-0-baseline-metrics.plan.md](phase-0-baseline-metrics.plan.md) | Harness concepts: baseline metrics capture | 📋 Planned |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

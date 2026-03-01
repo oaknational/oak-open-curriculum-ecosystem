@@ -355,3 +355,39 @@
 - For a refactoring TDD cycle that doesn't change public API, the
   existing tests ARE the safety net — run them before and after the
   split, no new tests needed for internal restructuring
+
+## 2026-03-01: WS1 get-curriculum-model implementation
+
+### Patterns that worked
+- RED phase: import from non-existent modules, tests fail at import resolution
+- Followed aggregated-help/ pattern exactly (definition.ts, execution.ts, index.ts)
+- AGGREGATED_HANDLERS map in executor.ts is the single dispatch table — no type-guard updates needed since `isAggregatedToolName` derives from `AGGREGATED_TOOL_DEFS` keys
+- agent-support-tool-metadata.ts drives surfaces 1-2 automatically via `generateServerInstructions()` and `generateContextHint()`
+
+### Mistakes / corrections
+- E2E resources/list test: used `parseJsonRpcResult` which types for tool results — resources responses need `parseSseEnvelope` + direct Zod parse of `envelope.result`
+- `composeCurriculumModelData` needed explicit return type for ESLint `explicit-module-boundary-types` rule
+- Updating prompt/tip text broke 6+ existing tests that checked for old tool names — need to search for ALL references to old tool names in test files during REFACTOR
+- max-lines limit (250) is tight — adding a new metadata entry pushed agent-support-tool-metadata.ts over; trimmed TSDoc to fix
+- `pnpm test` with turbo cache can serve stale results — use `--force` to confirm actual state
+- Case sensitivity: test checked for lowercase "curriculum" but summary had uppercase "Curriculum" — use regex match instead of `.toContain()`
+- **CRITICAL**: When updating string-checking tests, I was swapping one tool name string for another (`get-ontology` → `get-curriculum-model`). The user caught this: "tests should prove useful behaviour, not constrain implementation, and certainly not check for strings!" The fix is to assert the BEHAVIOUR (e.g. "prerequisite guidance is present", "cross-references exist", "description is non-empty and includes negative guidance") not the specific string content. Every `toContain('get-some-tool-name')` in a test is a red flag — it will break on every rename.
+- When collapsing plans (WS2+WS3 → review checkpoint), the key insight was: don't implement speculatively. WS1 already provides substantial pedagogical context. Whether additional glossary data is needed should be evaluated empirically, not pre-emptively built.
+
+## Session: WS1 Review and Validation (2026-03-01)
+
+### Mistakes / corrections
+- Used `Object.keys()` instead of `typeSafeKeys()` — ESLint `no-restricted-properties` catches this. Always use `typeSafeKeys<T>()` from type-helpers for typed keys.
+- Zod `.passthrough()` is deprecated in Zod v4 — use `.loose()` instead. ESLint `@typescript-eslint/no-deprecated` catches this.
+- `typeSafeKeys(AGGREGATED_TOOL_DEFS)` returns narrow literal types. Using `.includes(t.name)` where `t.name` is a wider type fails type-check. Fix: `new Set<string>(typeSafeKeys(AGGREGATED_TOOL_DEFS))` then `.has()`.
+- Circular imports: `help-content.ts` cannot import from `universal-tools/definitions.ts` because definitions imports `GET_HELP_TOOL_DEF` from the help module. The error manifests at runtime as `Cannot convert undefined or null to object`. Solution: keep the manual list with TSDoc explaining the constraint, add a drift-detection test in a separate test file.
+- `/curriculum/i` in regex for orientation guidance is vacuously true in a curriculum MCP server — everything mentions "curriculum". Tightened to `/orientation|domain model/i` for genuine discriminating power.
+- Turbo cache can mask failures — first `pnpm lint:fix` run failed, second (with `--force`) passed. Similarly `pnpm smoke:dev:stub` failed from root but passed from app directory. The `--force` flag is essential for final verification.
+
+### Patterns that worked
+- Running triage (E2E + unit/integration tests) before fixing anything provides clear baseline of actual failures vs. phantom claims.
+- Code reviewer as gateway reviewer at each phase transition (triage → fixes → gates → final) catches issues early.
+- Regex alternation pattern `toMatch(/get-curriculum-model|get-ontology|get-help/)` tests "references an agent support tool" without coupling to a specific one.
+- `Set<string>` from narrow literal types bridges the `includes()` type compatibility gap cleanly.
+- Drift-detection test pattern: import canonical source in test file, iterate its keys, verify the system works for each. This catches both directions of drift.
+- agent-support-tools-specification.md was extensively stale — referencing a removed tool (`get-knowledge-graph`). Reference docs must be updated when the system they describe changes.

@@ -8,7 +8,10 @@
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
-import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import {
+  AGGREGATED_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
@@ -34,7 +37,7 @@ Use this when:
 Do NOT use for:
 - Searching for specific content (use 'search' with a text query)
 - Getting full lesson details (use 'fetch')
-- Understanding the domain model (use '${ONTOLOGY_TOOL_NAME}')
+- Understanding the domain model (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 
 NATURAL LANGUAGE MAPPING EXAMPLES:
 - "What subjects are available?" → no arguments (returns all facets)

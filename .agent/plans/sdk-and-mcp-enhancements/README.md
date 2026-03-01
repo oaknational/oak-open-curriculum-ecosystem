@@ -1,17 +1,25 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 28 February 2026
+**Last Updated**: 1 March 2026
 
 Planning hub for SDK pipeline evolution, MCP extensions, and related
 architectural work. Consolidated from the former `pipeline-enhancements/`
 and `sdk-and-mcp-enhancements/` directories.
 
-## Active Documents
+## Lifecycle Plans
+
+| Lane | Directory | Contents |
+|------|-----------|----------|
+| **Active** (now) | [active/](active/) | [WS1: get-curriculum-model](active/ws1-get-curriculum-model.plan.md) — review and validation complete, all quality gates pass |
+| **Current** (next) | [current/](current/) | _(empty — WS2+WS3 collapsed to future review checkpoint)_ |
+| **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md) |
+
+## Strategic and Reference Documents
 
 | Document | Purpose | Status |
 |----------|---------|--------|
+| [improve-pedagogical-context.plan.md](improve-pedagogical-context.plan.md) | Strategic brief: `get-curriculum-model` tool, canonical glossary, pedagogical term disambiguation | Strategic (source for WS1-WS3) |
 | [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
-| [improve-pedagogical-context.plan.md](improve-pedagogical-context.plan.md) | `get-started` tool, canonical glossary from Oak API docs, MCP agent vocabulary overhaul (distinct from search synonyms) | Planning |
 | [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |
 
 ## Icebox (Pipeline Framework)

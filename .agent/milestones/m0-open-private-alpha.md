@@ -36,6 +36,7 @@ All must be true before M0 exit:
   validation, and post-fix review)
 - [x] All documentation defects from onboarding simulations resolved
 - [x] Quality gates green (`pnpm qg`)
+- [ ] All agent guidance tooling in the MCP tools is folded into the gat-curriculum-model tool
 - [ ] Final secrets and PII sweep passes (`pnpm secrets:scan:all`)
 - [ ] Manual review of configuration files, environment examples, READMEs,
   and research documents for sensitive information

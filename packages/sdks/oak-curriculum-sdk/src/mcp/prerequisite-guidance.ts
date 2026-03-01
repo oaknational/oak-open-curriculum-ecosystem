@@ -2,7 +2,7 @@
  * Shared prerequisite guidance constants for aggregated tool descriptions.
  *
  * These constants ensure consistent messaging across all tools that need
- * to guide users to call get-ontology first for domain understanding.
+ * to guide agents to call get-curriculum-model first for domain understanding.
  *
  * @remarks
  * The generated tools use DOMAIN_PREREQUISITE_GUIDANCE from the code-generation
@@ -21,12 +21,12 @@ import {
 } from './agent-support-tool-metadata.js';
 
 /**
- * The name of the ontology tool that provides domain understanding.
+ * The name of the primary orientation tool that provides complete domain understanding.
  *
  * Used consistently across all tool descriptions to reference the
- * recommended first-call tool.
+ * recommended first-call tool for full curriculum orientation.
  */
-export const ONTOLOGY_TOOL_NAME = 'get-ontology' as const;
+export const PRIMARY_ORIENTATION_TOOL_NAME = 'get-curriculum-model' as const;
 
 /**
  * Standard prerequisite guidance for tools requiring curriculum domain knowledge.
@@ -40,7 +40,7 @@ export const ONTOLOGY_TOOL_NAME = 'get-ontology' as const;
  * ```
  */
 export const AGGREGATED_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`${ONTOLOGY_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and ID formats.` as const;
+  `PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and ID formats.` as const;
 
 /**
  * Fetch-specific prerequisite guidance emphasizing ID formats.
@@ -49,22 +49,22 @@ export const AGGREGATED_PREREQUISITE_GUIDANCE =
  * so this variant adds that context.
  */
 export const FETCH_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: If unfamiliar with Oak's curriculum structure or ID formats, call \`${ONTOLOGY_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and the "type:slug" pattern.` as const;
+  `PREREQUISITE: If unfamiliar with Oak's curriculum structure or ID formats, call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and the "type:slug" pattern.` as const;
 
 /**
- * Help tool prerequisite guidance distinguishing it from ontology.
+ * Help tool prerequisite guidance distinguishing it from the combined model.
  *
- * The help tool provides tool usage guidance, not curriculum structure,
- * so this variant clarifies the distinction.
+ * The help tool provides tool usage guidance only, whereas get-curriculum-model
+ * provides both domain model and tool guidance in one call.
  */
 export const HELP_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: For curriculum domain understanding (key stages, subjects, entity hierarchy), use \`${ONTOLOGY_TOOL_NAME}\` instead. This tool provides tool usage guidance, not curriculum structure.` as const;
+  `PREREQUISITE: For complete orientation (domain model + tool guidance), use \`${PRIMARY_ORIENTATION_TOOL_NAME}\` instead. This tool provides tool usage guidance only.` as const;
 
 /**
- * Ontology tool emphasis that it IS the recommended starting point.
+ * Recommended first step text for agent support tools.
  *
- * Unlike other tools, ontology doesn't need a prerequisite - it IS the prerequisite.
- * This text emphasizes calling it first.
+ * Used in tool descriptions for get-curriculum-model and get-ontology to
+ * emphasise calling them early in the conversation.
  */
 export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
   'RECOMMENDED FIRST STEP: Call this tool before using other curriculum tools to understand the domain model.' as const;

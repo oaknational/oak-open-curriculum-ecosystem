@@ -125,7 +125,7 @@ export function generateNCCoverageGraphData(
     sourceVersion,
     stats: calculateStats(statements),
     nodes: statements.map(toNode),
-    seeAlso: 'Use get-ontology for curriculum structure context',
+    seeAlso: 'Use get-curriculum-model for complete orientation including curriculum structure',
   };
 }
 

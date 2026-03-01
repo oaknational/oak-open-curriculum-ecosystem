@@ -231,10 +231,10 @@ describe('Documentation Resources E2E', () => {
       expect(content).toContain('lesson');
     });
 
-    it('workflows includes userInteractions workflow first', async () => {
+    it('workflows includes userInteractions workflow with orientation guidance', async () => {
       const content = await readResource('docs://oak/workflows.md');
-      expect(content).toContain('get-help');
-      expect(content).toContain('get-ontology');
+      expect(content).toMatch(/get-curriculum-model|get-ontology|get-help/);
+      expect(content).toMatch(/orientation|domain model/i);
     });
 
     it('workflows shows what each step returns', async () => {

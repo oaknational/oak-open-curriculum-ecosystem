@@ -8,6 +8,8 @@
 import { describe, it, expect } from 'vitest';
 import { GET_HELP_TOOL_DEF, GET_HELP_INPUT_SCHEMA, runHelpTool } from './aggregated-help/index.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
+import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 
 describe('GET_HELP_TOOL_DEF', () => {
   it('has description with usage guidance', () => {
@@ -154,6 +156,14 @@ describe('runHelpTool', () => {
         throw new TypeError('Test: Expected text content, got blob');
       }
       expect(content.text).toContain('Unknown tool');
+    });
+
+    it('returns help for every aggregated tool (drift detection)', () => {
+      const toolNames = typeSafeKeys(AGGREGATED_TOOL_DEFS);
+      for (const name of toolNames) {
+        const result = runHelpTool({ tool_name: name });
+        expect(result.isError).toBeUndefined();
+      }
     });
   });
 });

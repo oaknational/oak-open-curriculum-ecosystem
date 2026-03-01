@@ -5,7 +5,10 @@
  * separate from the execution logic.
  */
 
-import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import {
+  HELP_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
@@ -45,7 +48,7 @@ Use this when you need to understand:
 - Best practices and tips for effective tool usage
 
 Do NOT use for:
-- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
+- Understanding the curriculum domain model (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 - Fetching actual curriculum content (use 'search' or 'fetch')
 
 Optionally provide a tool_name to get specific help for that tool.`,

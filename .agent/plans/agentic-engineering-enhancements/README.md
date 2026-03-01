@@ -19,6 +19,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
 | `documentation-accuracy-improvements.plan.md` | Plan | Fix documentation inaccuracies and structural issues (prerequisite for enforcement) — **COMPLETE** |
+| `harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
 | `2026-02-21-cross-agent-standardisation-landscape.research.md` | Research | Landscape of cross-agent standards (AGENTS.md, Skills, MCP, A2A) |
 | `augmented-engineering-practices.research.md` | Research | Industry evidence base for AI-augmented engineering |
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |

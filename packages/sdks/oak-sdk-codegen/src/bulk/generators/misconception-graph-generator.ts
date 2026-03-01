@@ -125,7 +125,7 @@ export function generateMisconceptionGraphData(
     sourceVersion,
     stats: calculateStats(misconceptions),
     nodes: toNodes(misconceptions),
-    seeAlso: 'Use get-ontology for curriculum structure context',
+    seeAlso: 'Use get-curriculum-model for complete orientation including curriculum structure',
   };
 }
 

@@ -12,7 +12,10 @@
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
-import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import {
+  AGGREGATED_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 import { SEARCH_SCOPES } from './types.js';
@@ -44,7 +47,7 @@ Use this when you need to:
 
 Do NOT use for:
 - Fetching known content by ID (use 'fetch')
-- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
+- Understanding the curriculum structure (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 - Browsing what's available without a search query (use 'browse-curriculum')
 - Exploring a topic across multiple indexes at once (use 'explore-topic')
 

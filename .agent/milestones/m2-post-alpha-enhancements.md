@@ -30,6 +30,9 @@ codebase grows, and expands what curriculum data is accessible.
 
 All must be true before M2 exit:
 
+- [ ] UI library begun and in use
+- [ ] Search functionality consolidated in search SDK
+- [ ] Search UI demo built and deployed
 - [ ] MCP server extensions delivered (scope TBD based on alpha feedback)
 - [ ] Architectural enforcement strengthened (type-flow discipline,
   boundary checks)

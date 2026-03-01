@@ -1,6 +1,6 @@
 # Improve Pedagogical Context
 
-**Status**: Strategic (future) — WS1 ready for promotion to `current/`
+**Status**: WS1 implemented. WS2+WS3 collapsed to future review checkpoint.
 **Last Updated**: 2026-03-01
 **Provenance**: Extracted from Domain D items 1-2 of
 [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md).
@@ -433,42 +433,32 @@ isGlossaryTerm: true
 ## Dependency Order
 
 ```text
-WS1 (get-curriculum-model)  — can proceed independently, READY NOW
-WS2 (canonical vocabulary)  — depends on WS1 for delivery surface
-WS3 (MCP vocabulary overhaul) — depends on WS2 for glossary term list
+WS1 (get-curriculum-model)  — IMPLEMENTED (2026-03-01)
+WS2+WS3 (review checkpoint) — DEFERRED to future, pending production usage data
 ```
 
-WS1 is self-contained. WS2 and WS3 build on WS1's delivery surface.
-WS2 adds the glossary; WS3 replaces the synonym spread with a curated
-agent vocabulary that includes glossary terms.
+WS1 is complete. The original WS2 (canonical vocabulary) and WS3
+(pedagogical term review) have been collapsed into a single future
+review checkpoint. Rationale: WS1 already provides substantial
+pedagogical context (entity hierarchy, UK education context, threads,
+canonical URLs, search guidance). The need for additional structured
+glossary data should be evaluated empirically after production usage.
+
+See [WS2+WS3 Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md)
+and [WS1 Active Plan](active/ws1-get-curriculum-model.plan.md).
 
 ---
 
-## Plan Type and Promotion
+## Plan Type and Current State
 
-This document is a **strategic brief** — it captures the problem,
-research, design decisions, and implementation guidance for the
-`get-curriculum-model` tool and related workstreams. It is NOT an executable
-plan with TDD phases.
+This document is the **strategic brief** — it captures the problem,
+research, design decisions, and implementation guidance. The executable
+plan is at [active/ws1-get-curriculum-model.plan.md](active/ws1-get-curriculum-model.plan.md).
 
-**To implement WS1**, a future session should:
-
-1. Read this plan as the authoritative context document
-2. Read the [Agent Support Tools Specification](../../reference-docs/internal/agent-support-tools-specification.md)
-   for the step-by-step implementation checklist
-3. Study the existing aggregated tool pattern (see "Implementation
-   pattern" section above)
-4. Create an executable plan in
-   `.agent/plans/sdk-and-mcp-enhancements/current/` using the
-   [feature-workstream template](../templates/feature-workstream-template.md),
-   with TDD phases (RED/GREEN/REFACTOR) for `get-curriculum-model`
-5. Implement following TDD at all levels
-
-**Promotion criteria** — WS1 is ready for promotion to `current/` when:
-
-1. A session is available with sufficient context budget (~3-4 hours)
-2. No higher-priority items remain (M1 is currently complete)
-3. This strategic brief has been reviewed and approved (done: 2026-03-01)
+**WS1 implementation status** (2026-03-01): RED, GREEN, and REFACTOR
+phases complete. Outstanding: test quality fixes (string-checking tests),
+quality gates, adversarial review, documentation propagation. See the
+active plan for full details and remaining todos.
 
 ---
 
