@@ -7,7 +7,6 @@ import { stubGetKeyStagesSubjectLessonsResponse } from './get-key-stages-subject
 import { stubGetKeyStagesSubjectQuestionsResponse } from './get-key-stages-subject-questions.js';
 import { stubGetKeyStagesSubjectUnitsResponse } from './get-key-stages-subject-units.js';
 import { stubGetLessonsAssetsResponse } from './get-lessons-assets.js';
-import { stubGetLessonsAssetsByTypeResponse } from './get-lessons-assets-by-type.js';
 import { stubGetLessonsQuizResponse } from './get-lessons-quiz.js';
 import { stubGetLessonsSummaryResponse } from './get-lessons-summary.js';
 import { stubGetLessonsTranscriptResponse } from './get-lessons-transcript.js';
@@ -33,7 +32,6 @@ export const stubbedToolResponses = {
   'get-key-stages-subject-questions': () => stubGetKeyStagesSubjectQuestionsResponse,
   'get-key-stages-subject-units': () => stubGetKeyStagesSubjectUnitsResponse,
   'get-lessons-assets': () => stubGetLessonsAssetsResponse,
-  'get-lessons-assets-by-type': () => stubGetLessonsAssetsByTypeResponse,
   'get-lessons-quiz': () => stubGetLessonsQuizResponse,
   'get-lessons-summary': () => stubGetLessonsSummaryResponse,
   'get-lessons-transcript': () => stubGetLessonsTranscriptResponse,

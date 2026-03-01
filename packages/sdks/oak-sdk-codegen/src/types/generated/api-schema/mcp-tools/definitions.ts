@@ -21,7 +21,6 @@ import { getKeyStagesSubjectLessons } from './tools/get-key-stages-subject-lesso
 import { getKeyStagesSubjectQuestions } from './tools/get-key-stages-subject-questions.js';
 import { getKeyStagesSubjectUnits } from './tools/get-key-stages-subject-units.js';
 import { getLessonsAssets } from './tools/get-lessons-assets.js';
-import { getLessonsAssetsByType } from './tools/get-lessons-assets-by-type.js';
 import { getLessonsQuiz } from './tools/get-lessons-quiz.js';
 import { getLessonsSummary } from './tools/get-lessons-summary.js';
 import { getLessonsTranscript } from './tools/get-lessons-transcript.js';
@@ -47,7 +46,6 @@ export const MCP_TOOL_ENTRIES = [
   { name: 'get-key-stages-subject-questions', descriptor: getKeyStagesSubjectQuestions, operationId: 'getQuestions-getQuestionsForKeyStageAndSubject' },
   { name: 'get-key-stages-subject-units', descriptor: getKeyStagesSubjectUnits, operationId: 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits' },
   { name: 'get-lessons-assets', descriptor: getLessonsAssets, operationId: 'getAssets-getLessonAssets' },
-  { name: 'get-lessons-assets-by-type', descriptor: getLessonsAssetsByType, operationId: 'getAssets-getLessonAsset' },
   { name: 'get-lessons-quiz', descriptor: getLessonsQuiz, operationId: 'getQuestions-getQuestionsForLessons' },
   { name: 'get-lessons-summary', descriptor: getLessonsSummary, operationId: 'getLessons-getLesson' },
   { name: 'get-lessons-transcript', descriptor: getLessonsTranscript, operationId: 'getLessonTranscript-getLessonTranscript' },
@@ -74,22 +72,21 @@ const TOOL_ENTRY_BY_NAME = {
   'get-key-stages-subject-questions': MCP_TOOL_ENTRIES[5],
   'get-key-stages-subject-units': MCP_TOOL_ENTRIES[6],
   'get-lessons-assets': MCP_TOOL_ENTRIES[7],
-  'get-lessons-assets-by-type': MCP_TOOL_ENTRIES[8],
-  'get-lessons-quiz': MCP_TOOL_ENTRIES[9],
-  'get-lessons-summary': MCP_TOOL_ENTRIES[10],
-  'get-lessons-transcript': MCP_TOOL_ENTRIES[11],
-  'get-rate-limit': MCP_TOOL_ENTRIES[12],
-  'get-sequences-assets': MCP_TOOL_ENTRIES[13],
-  'get-sequences-questions': MCP_TOOL_ENTRIES[14],
-  'get-sequences-units': MCP_TOOL_ENTRIES[15],
-  'get-subject-detail': MCP_TOOL_ENTRIES[16],
-  'get-subjects': MCP_TOOL_ENTRIES[17],
-  'get-subjects-key-stages': MCP_TOOL_ENTRIES[18],
-  'get-subjects-sequences': MCP_TOOL_ENTRIES[19],
-  'get-subjects-years': MCP_TOOL_ENTRIES[20],
-  'get-threads': MCP_TOOL_ENTRIES[21],
-  'get-threads-units': MCP_TOOL_ENTRIES[22],
-  'get-units-summary': MCP_TOOL_ENTRIES[23],
+  'get-lessons-quiz': MCP_TOOL_ENTRIES[8],
+  'get-lessons-summary': MCP_TOOL_ENTRIES[9],
+  'get-lessons-transcript': MCP_TOOL_ENTRIES[10],
+  'get-rate-limit': MCP_TOOL_ENTRIES[11],
+  'get-sequences-assets': MCP_TOOL_ENTRIES[12],
+  'get-sequences-questions': MCP_TOOL_ENTRIES[13],
+  'get-sequences-units': MCP_TOOL_ENTRIES[14],
+  'get-subject-detail': MCP_TOOL_ENTRIES[15],
+  'get-subjects': MCP_TOOL_ENTRIES[16],
+  'get-subjects-key-stages': MCP_TOOL_ENTRIES[17],
+  'get-subjects-sequences': MCP_TOOL_ENTRIES[18],
+  'get-subjects-years': MCP_TOOL_ENTRIES[19],
+  'get-threads': MCP_TOOL_ENTRIES[20],
+  'get-threads-units': MCP_TOOL_ENTRIES[21],
+  'get-units-summary': MCP_TOOL_ENTRIES[22],
 } as const;
 
 type ToolEntryByNameMap = typeof TOOL_ENTRY_BY_NAME;
@@ -114,7 +111,6 @@ export const MCP_TOOL_DESCRIPTORS = {
   'get-key-stages-subject-questions': getKeyStagesSubjectQuestions,
   'get-key-stages-subject-units': getKeyStagesSubjectUnits,
   'get-lessons-assets': getLessonsAssets,
-  'get-lessons-assets-by-type': getLessonsAssetsByType,
   'get-lessons-quiz': getLessonsQuiz,
   'get-lessons-summary': getLessonsSummary,
   'get-lessons-transcript': getLessonsTranscript,
@@ -157,7 +153,6 @@ const OPERATION_ID_TO_TOOL_NAME = {
   'getAssets-getSequenceAssets': 'get-sequences-assets',
   'getAssets-getSubjectAssets': 'get-key-stages-subject-assets',
   'getAssets-getLessonAssets': 'get-lessons-assets',
-  'getAssets-getLessonAsset': 'get-lessons-assets-by-type',
   'getSubjects-getAllSubjects': 'get-subjects',
   'getSubjects-getSubject': 'get-subject-detail',
   'getSubjects-getSubjectSequence': 'get-subjects-sequences',
@@ -204,7 +199,6 @@ const TOOL_NAME_TO_OPERATION_ID = {
   'get-sequences-assets': 'getAssets-getSequenceAssets',
   'get-key-stages-subject-assets': 'getAssets-getSubjectAssets',
   'get-lessons-assets': 'getAssets-getLessonAssets',
-  'get-lessons-assets-by-type': 'getAssets-getLessonAsset',
   'get-subjects': 'getSubjects-getAllSubjects',
   'get-subject-detail': 'getSubjects-getSubject',
   'get-subjects-sequences': 'getSubjects-getSubjectSequence',

@@ -206,15 +206,6 @@ describe('appendPrerequisiteGuidance', () => {
 });
 
 describe('appendToolEnhancements', () => {
-  it('appends tool-specific enhancement when tool name matches', () => {
-    const result = appendToolEnhancements('Base description', 'get-lessons-assets-by-type');
-
-    expect(result).toContain('Base description');
-    expect(result).toContain('WARNING');
-    expect(result).toContain('binary file content');
-    expect(result).toContain('get-lessons-assets');
-  });
-
   it('appends rate-limit semantics note for get-rate-limit', () => {
     const result = appendToolEnhancements('Base description', 'get-rate-limit');
 
@@ -230,6 +221,6 @@ describe('appendToolEnhancements', () => {
   });
 
   it('returns undefined when description is undefined', () => {
-    expect(appendToolEnhancements(undefined, 'get-lessons-assets-by-type')).toBeUndefined();
+    expect(appendToolEnhancements(undefined, 'get-rate-limit')).toBeUndefined();
   });
 });

@@ -81,18 +81,12 @@ export function appendPrerequisiteGuidance(
   return `${description}${DOMAIN_PREREQUISITE_GUIDANCE}`;
 }
 
-const GET_LESSONS_ASSETS_BY_TYPE_WARNING = `
-
-WARNING: This tool returns binary file content (PDF, video, etc.), not structured JSON. The MCP protocol cannot transport binary responses. Use \`get-lessons-assets\` for download URLs and metadata instead.`;
-
 const GET_RATE_LIMIT_NOTE = `
 
 NOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key with no rate cap.`;
 
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {
-    case 'get-lessons-assets-by-type':
-      return GET_LESSONS_ASSETS_BY_TYPE_WARNING;
     case 'get-rate-limit':
       return GET_RATE_LIMIT_NOTE;
     default:

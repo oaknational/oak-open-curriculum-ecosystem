@@ -32,8 +32,12 @@ export type PrimitiveTypeLabel =
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
-/** API paths excluded from MCP tool generation (superseded by Elasticsearch search tools). */
-const SKIPPED_PATHS: readonly string[] = ['/search/lessons', '/search/transcripts'];
+/** Paths excluded from MCP tool generation — superseded by ES search or non-transportable. */
+const SKIPPED_PATHS: readonly string[] = [
+  '/search/lessons',
+  '/search/transcripts',
+  '/lessons/{lesson}/assets/{type}',
+];
 
 function isPathItemObject(value: unknown): value is PathItemObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value) && !('$ref' in value);
@@ -114,15 +118,10 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
     .filter((value): value is string | number | boolean => value !== undefined);
   const hasAllowedValues = Array.isArray(primitiveEnumValues) && primitiveEnumValues.length > 0;
 
-  // Check both parameter-level and schema-level descriptions
-  // Parameter-level (param.description) is preferred as it's more common in OpenAPI specs
+  // Parameter-level description/example takes precedence over schema-level
   const paramDescription = typeof param.description === 'string' ? param.description : undefined;
   const schemaDescription =
     typeof schema?.description === 'string' ? schema.description : undefined;
-
-  // Extract example from parameter level or schema level
-  // Parameter-level (param.example) takes precedence over schema-level (param.schema.example)
-  // OpenAPI example field can be string, number, boolean, or more complex objects
   const paramExample = extractExampleValue(param);
   const schemaExample = schema ? extractExampleValue(schema) : undefined;
 

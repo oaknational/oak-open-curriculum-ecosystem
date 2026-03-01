@@ -166,24 +166,6 @@ async function invokeToolByName<TName extends ToolName>(
       }
       return { status: validation.status, data: validation.data };
     }
-    case 'get-lessons-assets-by-type': {
-      const entry = getToolEntryFromToolName('get-lessons-assets-by-type');
-      const descriptor: ToolDescriptorForName<'get-lessons-assets-by-type'> = entry.descriptor;
-      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-      if (!parsed.success) {
-        throw new TypeError(descriptor.describeToolArgs());
-      }
-      const flatArgs = parsed.data;
-      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
-      if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
-        });
-      }
-      return { status: validation.status, data: validation.data };
-    }
     case 'get-lessons-quiz': {
       const entry = getToolEntryFromToolName('get-lessons-quiz');
       const descriptor: ToolDescriptorForName<'get-lessons-quiz'> = entry.descriptor;
@@ -499,11 +481,6 @@ export function callTool(
   client: ToolClientForName<'get-lessons-assets'>,
   rawArgs: ToolArgsForName<'get-lessons-assets'>,
 ): Promise<ToolResultForName<'get-lessons-assets'>>;
-export function callTool(
-  name: 'get-lessons-assets-by-type',
-  client: ToolClientForName<'get-lessons-assets-by-type'>,
-  rawArgs: ToolArgsForName<'get-lessons-assets-by-type'>,
-): Promise<ToolResultForName<'get-lessons-assets-by-type'>>;
 export function callTool(
   name: 'get-lessons-quiz',
   client: ToolClientForName<'get-lessons-quiz'>,
