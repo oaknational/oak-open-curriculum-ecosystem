@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^9.3.2",
-    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
     "@oaknational/env-resolution": "workspace:*",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^24.10.13",
+    "@types/node": "^25.3.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
