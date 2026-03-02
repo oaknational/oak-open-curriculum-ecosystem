@@ -1,39 +1,31 @@
 ---
 prompt_id: session-continuation
-title: "ESLint OOM Fix → Merge"
+title: "M1 Merge — Final Gates"
 type: handover
 status: active
 last_updated: 2026-03-02
 ---
 
-# ESLint OOM Fix → Merge
+# M1 Merge — Final Gates
 
-Session entry point. Two small tasks to unblock CI, then gates and merge.
+Session entry point. ESLint OOM is fixed. Remaining: verify CI, gates, merge.
 
 ## Plan
 
-[release-plan-m1.plan.md](../plans/release-plan-m1.plan.md) — §ESLint OOM Fix
+[release-plan-m1.plan.md](../plans/release-plan-m1.plan.md) — §Top Priorities
 
-## Primary task: ESLint OOM fix (2 tasks)
+## Completed: ESLint OOM fix
 
-CI is blocked by ESLint OOM in `sdk-codegen` — ~688K lines of generated
-graph data (including duplicated copies) are being parsed.
+Resolved 2026-03-02. Graph data deduplicated, vocab/vocab-data subpath
+split, `tsconfig.lint.json` excludes break the import chain. No
+`NODE_OPTIONS`. Committed and pushed.
 
-**Task 1**: Remove `NODE_OPTIONS=--max-old-space-size=4096` from
-`packages/sdks/oak-sdk-codegen/package.json` lint scripts (lines 78-79).
+## Remaining tasks
 
-**Task 2**: Add the large generated data files at their current locations
-to ESLint `ignores` in `packages/sdks/oak-sdk-codegen/eslint.config.ts`.
-These are serialised data structures (5K-122K lines each), not code. All
-other generated code (types, Zod schemas, barrels) remains fully linted.
-
-See the release plan for the full file list and validation commands.
-
-## After the fix
-
-1. Secrets sweep (`pnpm secrets:scan:all`)
-2. Manual sensitive-information review (human)
-3. Merge `feat/semantic_search_deployment` → `main`
+1. Verify CI lint passes on PR (the OOM was the blocker)
+2. Secrets sweep (`pnpm secrets:scan:all`)
+3. Manual sensitive-information review (human)
+4. Merge `feat/semantic_search_deployment` → `main`
 
 ## Deferred architectural work
 
@@ -56,3 +48,4 @@ See [post-merge-tidy-up.plan.md](../plans/sdk-and-mcp-enhancements/future/post-m
 - [Onboarding fixes and cast elimination](bcd25bbf-0255-42f0-81d8-c7d00320ad99)
 - [MCP validation and graphs redesign](fa8f4abf-9c53-4823-9d01-8b61b0cb2e38)
 - [Architecture analysis and plan creation](5f65d714-5b8c-4319-aee1-a493352d8127)
+- [Graph dedup and OOM fix](c44fd504-0166-474a-a117-58bf217b1b22)

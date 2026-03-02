@@ -46,15 +46,21 @@ workspace causes:
 4. **Subpath exports that serve two unrelated purposes** through the same
    package
 
-### Current State (M1 Merge)
+### Current State (M1 Merge — complete)
 
-For M1 merge, the ESLint OOM is resolved by:
+The ESLint OOM was resolved structurally during M1:
 
-1. Removing `NODE_OPTIONS=--max-old-space-size=4096` from lint scripts
-2. Adding large generated data files to ESLint `ignores` at their current
-   locations
+1. `NODE_OPTIONS=--max-old-space-size=4096` removed from lint scripts
+2. vocab-gen output redirected from `src/mcp/` to `src/generated/vocab/`
+   (single canonical location)
+3. Six orphaned duplicate data files deleted from `src/mcp/`
+4. `src/vocab.ts` split: `./vocab` exports types + concept graph only;
+   new `./vocab-data` exports runtime graph data
+5. `src/generated/vocab/**` and `src/vocab-data.ts` excluded from
+   `tsconfig.lint.json` and ESLint ignores
 
-This is a pragmatic, minimal fix. The architectural debt remains and is the
+The data duplication is eliminated. The remaining architectural debt
+(generator duplication, extractor overlap, workspace decomposition) is the
 subject of this plan.
 
 ---

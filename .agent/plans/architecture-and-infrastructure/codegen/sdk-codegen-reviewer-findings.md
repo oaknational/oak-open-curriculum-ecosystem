@@ -42,6 +42,12 @@ generated output. The fix must be:
 2. Disable linting only for the specific large graph data files
 3. All other generated code remains fully linted
 
+> **Resolved (M1)**: All three points addressed. vocab-gen writes to
+> `src/generated/vocab/` (single copy), duplicates deleted, and the vocab
+> barrel split (`./vocab` types-only, `./vocab-data` runtime data) breaks
+> the import chain so TypeScript's project service never loads the large
+> files during linting.
+
 ### Correction 2: Generated files outside `src/` is correct
 
 Betty called it "a dangerous coupling risk" to keep generated output outside

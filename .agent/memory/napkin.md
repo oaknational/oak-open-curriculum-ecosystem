@@ -35,3 +35,27 @@ distilled.md: 158 → ~175 lines (ceiling 200).
 Persistent ceilings: CONTRIBUTING.md (401/400, 1 over) and
 practice-lineage.md (321/320, 1 over). Both noted in prior sessions.
 practice-bootstrap.md grew with the practice-index template addition.
+
+## Session 2026-03-02h — Post-dedup consolidation
+
+### What happened
+Updated codegen architecture plans (README, analysis, decomposition,
+reviewer findings) to reflect the M1 graph data dedup work. Updated
+release plan current state and top priorities — ESLint OOM is done,
+remaining gates are next. Updated session-continuation prompt title and
+content. Deleted three completed cursor plans (onboarding fixes, MCP
+prompts cleanup, graph dedup OOM) after verifying no documentation
+needed extraction — all permanent docs were created during
+implementation.
+
+### Plan deletion assessment
+All three plans were pure execution instructions. The onboarding plan's
+eslint-disable audit (P2-9) is a point-in-time snapshot, not permanent
+docs. The MCP prompts plan already created ADR-123 and updated READMEs
+in Phase 4. The graph dedup plan's architecture is captured in the
+codegen architecture plans.
+
+### Fitness function status (unchanged)
+Same as session 2026-03-02g. CONTRIBUTING.md (401/400) and
+practice-lineage.md (321/320) remain 1 over ceiling. distilled.md at
+176/200.

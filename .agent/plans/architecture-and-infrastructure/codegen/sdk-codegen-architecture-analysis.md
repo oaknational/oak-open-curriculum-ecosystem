@@ -5,6 +5,15 @@
 **Purpose**: Inform the curriculum graphs architecture redesign and the broader
 separation of concerns within the codegen workspace.
 
+> **M1 Update (2026-03-02)**: The graph data duplication described in §2, §3.2,
+> and §4.1 has been resolved. vocab-gen now writes directly to
+> `src/generated/vocab/`, the six duplicate files in `src/mcp/` have been
+> deleted, and `src/vocab.ts` has been split into `./vocab` (types + concept
+> graph) and `./vocab-data` (runtime graph data). The workspace now has 13
+> subpath exports. The analysis below reflects the pre-fix state; the remaining
+> issues (generator duplication §4.2, extractor overlap §4.3, workspace
+> decomposition §7) are still applicable.
+
 ---
 
 ## 1. What This Workspace Does

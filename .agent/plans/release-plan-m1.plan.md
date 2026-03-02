@@ -58,7 +58,7 @@ additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
 
 ### Current State
 
-All feature work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).** CI blocked by OOM — root cause identified as generated graph data duplication. Pragmatic ESLint fix planned (see §ESLint OOM Fix below); broader architecture work deferred to post-merge (see [codegen architecture plans](architecture-and-infrastructure/codegen/)).
+All feature work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).** **ESLint OOM fixed (2026-03-02)** — graph data deduplicated, vocab/vocab-data subpath split, six orphaned files deleted. CI lint should now pass without `NODE_OPTIONS`. Broader architecture work (workspace decomposition) deferred to post-merge (see [codegen architecture plans](architecture-and-infrastructure/codegen/)).
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
@@ -67,21 +67,18 @@ All feature work complete. Full reindex done (2026-02-28). **Verification comple
 - **Full reindex (2026-02-28)**: 16,443 documents indexed successfully (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER failures, all recovered in single retry round. `thread_semantic` field now populated. Chunk delay increased from 7001ms to 8000ms (ADR-096 revised).
 - **MCP tool validation (2026-02-28)**: All 32 oak-local MCP tools validated. 164/164 thread docs have `thread_semantic`. Thread search returns results via ELSER (was 0 before reindex). `explore-topic` returns threads in unified response. M1-S002 year normalisation confirmed (number input accepted). M1-S003 binary warning in place. M1-S005 suggest filter requirement works. M1-S006 rate-limit 0/0/0 confirmed on preview. No new P0/P1 snags. Two observations: (1) `search(scope: threads, text: "")` rejected — empty text not allowed; (2) `search(scope: suggest, text: "frac", subject: "maths")` returns 0 suggestions — may be a data/prefix issue in the suggest index.
 - **MCP server validation (2026-03-02)**: 30 tools, 7 resources, 4 prompts validated against oak-remote-preview. Year parameter normalisation confirmed working (`year: 10` → `"10"` coercion). Fetch tool `thread:` prefix bug fixed. See §MCP Tool Exploration Findings.
-- **CI OOM diagnosed (2026-03-02)**: ESLint OOM in `sdk-codegen` caused by ~688K lines of generated graph data (including duplicates). Pragmatic fix: remove `NODE_OPTIONS` from lint scripts and add large data files to ESLint `ignores`. Broader architectural work (workspace decomposition) deferred to post-merge. See [codegen architecture plans](architecture-and-infrastructure/codegen/).
+- **CI OOM fixed (2026-03-02)**: ESLint OOM in `sdk-codegen` resolved structurally. vocab-gen output redirected to `src/generated/vocab/` (single canonical location), six orphaned duplicate data files deleted from `src/mcp/`, `src/vocab.ts` split into `./vocab` (types + concept graph) and `./vocab-data` (runtime data), `tsconfig.lint.json` excludes prevent TypeScript project service from loading the large files. No `NODE_OPTIONS` used. See [codegen architecture plans](architecture-and-infrastructure/codegen/).
 
 ### Top Priorities for Next Session
 
-**1. ESLint OOM fix (CI blocker)**
+**1. ~~ESLint OOM fix~~ (DONE)**
 
-CI is blocked by ESLint OOM in `sdk-codegen`, caused by ~688K lines of generated graph data (including duplicates). Two pragmatic fixes unblock CI:
-
-1. Remove `NODE_OPTIONS=--max-old-space-size=4096` from `packages/sdks/oak-sdk-codegen/package.json` lint scripts (lines 78-79)
-2. Add the large generated data files at their current locations to ESLint `ignores` in `packages/sdks/oak-sdk-codegen/eslint.config.ts`
-
-The broader architectural debt (generator duplication, naming, workspace decomposition) is deferred to post-merge. See [codegen architecture plans](architecture-and-infrastructure/codegen/).
+Resolved 2026-03-02: graph data deduplicated, vocab/vocab-data split,
+`tsconfig.lint.json` excludes. Committed and pushed.
 
 **2. Remaining M0 gates**
 
+- Verify CI lint passes on PR (OOM fix was the blocker)
 - Final secrets and PII sweep (`pnpm secrets:scan:all`)
 - Manual sensitive-information review (human)
 - Merge `feat/semantic_search_deployment` to `main`

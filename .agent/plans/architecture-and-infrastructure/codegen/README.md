@@ -11,11 +11,22 @@ Plans and analysis for the `oak-sdk-codegen` workspace architecture.
 
 `packages/sdks/oak-sdk-codegen` conflates two distinct data lineages — the
 OpenAPI API schema and bulk curriculum data — in a single workspace. This
-causes ESLint OOM from ~688K lines of duplicated generated data, duplicated
-generators, and unclear boundaries.
+causes duplicated generators and unclear boundaries.
 
-For M1 merge, the OOM is resolved pragmatically (ESLint ignores for large
-data files). The deeper architectural work is captured here.
+The ESLint OOM (caused by ~688K lines of generated graph data) has been
+resolved structurally:
+
+1. **Deduplicated graph data** — vocab-gen now writes to `src/generated/vocab/`
+   (single canonical location). Six orphaned duplicate files deleted from
+   `src/mcp/`.
+2. **Split the `vocab` subpath** — `./vocab` exports types + concept graph
+   only; new `./vocab-data` exports runtime graph data. No linted file
+   transitively imports the large data.
+3. **Excluded from lint program** — `src/generated/vocab/**` and
+   `src/vocab-data.ts` are in `tsconfig.lint.json` exclude and ESLint ignores.
+
+The remaining architectural debt (generator duplication, naming, workspace
+decomposition) is captured here.
 
 ## Documents
 
@@ -38,6 +49,6 @@ analysis.
 
 ## Milestone Alignment
 
-- **M1** (current): Pragmatic ESLint fix only (remove `NODE_OPTIONS`, add
-  ignores for large data files)
+- **M1** (complete): Graph data deduplication, `vocab`/`vocab-data` subpath
+  split, ESLint OOM fixed structurally (no `NODE_OPTIONS`)
 - **Post-M1**: Workspace decomposition per the strategic plan
