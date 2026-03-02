@@ -111,4 +111,6 @@ experience file is not the home for technical reference.
 - 2026‑02‑28: type-system TDD — see: [the-one-line-truth](./2026-02-28-the-one-line-truth.md) — one line fixes 24 overloads; `satisfies` asks a question, `as` makes a claim; the type checker is the test framework
 - 2026‑02‑28: knowledge consolidation — see: [closing-the-loop](./2026-02-28-closing-the-loop.md) — extraction to permanent docs; the gap between accumulation and extraction; three audiences (session, agent, everyone)
 
+- 2026‑03‑02: portability — see: [the-travelling-practice](./2026-03-02-the-travelling-practice.md) — self-containment as portability; documentation adapter pattern; five-file seed with local root system
+
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

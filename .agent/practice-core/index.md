@@ -4,24 +4,42 @@ The Practice is not a single file. It is the entire system of principles, struct
 
 ## For Day-to-Day Work
 
-Follow [AGENT.md](../directives/AGENT.md) and [rules.md](../directives/rules.md). That is all you need for normal operations.
+Follow `.agent/directives/AGENT.md` and `.agent/directives/rules.md`. That is all you need for normal operations.
 
-## The Plasmid Trinity
+## The Practice-Core Files
 
-These three files encode the Practice in a transmissible form. They live here so they can travel between repos as a unit. For day-to-day work you do not need to read them -- they are the blueprint, not the building.
+The Practice travels between repos as a package of five files. The three **plasmid trinity** files encode the blueprint; the two **entry points** provide orientation for humans and agents receiving the Practice.
 
 | File | Role |
 |---|---|
-| [practice.md](practice.md) | Orientation: artefact map, workflow, three-layer model (the **what**) |
-| [practice-lineage.md](practice-lineage.md) | Principles, evolution rules, exchange mechanism (the **why**) |
-| [practice-bootstrap.md](practice-bootstrap.md) | Annotated templates for every artefact type (the **how**) |
+| [practice.md](practice.md) | Blueprint: artefact map, workflow, three-layer model (the **what**) |
+| [practice-lineage.md](practice-lineage.md) | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
+| [practice-bootstrap.md](practice-bootstrap.md) | Blueprint: annotated templates for every artefact type (the **how**) |
+| [README.md](README.md) | Entry point for humans: context and hydration how-to |
+| [index.md](index.md) | Entry point for agents: operational orientation (this file) |
+
+The trinity files carry provenance frontmatter and evolve between repos. For day-to-day work you do not need to read any of these -- they are the blueprint, not the building.
+
+## Boundary Contract
+
+The practice-core files are **portable** — they travel between repos and must be self-contained. The one permitted external link is to `../practice-index.md`, a **local** bridge file that each repo creates during hydration. All other external paths appear as code-formatted text only.
+
+| | Portable (travels) | Local (stays) |
+|---|---|---|
+| **Files** | The five practice-core files | `.agent/practice-index.md` |
+| **Links** | Only to each other + the bridge | To the repo's actual artefacts |
+| **Created by** | Origin repo or prior propagation | Hydration step 8 |
 
 ## The Practice Box
 
-The `incoming/` directory is the practice box. When the trinity arrives from another repo, it lands here. Check it at session start (via `start-right`) and during consolidation. See the Integration Flow in `practice-lineage.md` for details.
+The `incoming/` directory is the practice box. When practice-core files arrive from another repo, they land here. Check it at session start (via `start-right`) and during consolidation. See the Integration Flow in `practice-lineage.md` for details.
 
-## Cold Start (New Repo)
+## Cold Start -- Hydrating a New Repo
 
-If `.agent/directives/AGENT.md` does not yet exist, you are hydrating the Practice for the first time. See [README.md](README.md) for orientation, then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md). The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications.
+If `.agent/directives/AGENT.md` does not yet exist, you are hydrating the Practice for the first time.
 
-**Critical**: before creating any artefacts, understand the local ecosystem. The Practice is ecosystem-agnostic in principle; all templates must be adapted to local tooling and conventions. The Practice enables excellence; it does not replace what has already been achieved.
+**The key first step is to understand the repo.** Before creating any Practice artefacts, survey the existing repository: its intent, language(s), test framework, linter, formatter, package manager, build system, established norms, and existing quality standards. The Practice enables excellence; it does not replace what has already been achieved. Only once you understand the local ecosystem should you begin adapting the Practice to it.
+
+If the practice-core files have been placed somewhere other than `.agent/practice-core/` (e.g. the repo root, a random directory), move them to `.agent/practice-core/` first -- create the directory and an `incoming/.gitkeep` within it if needed.
+
+Then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md). The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications -- adapt ALL templates to local tooling and conventions. The templates use TypeScript/Node.js as concrete examples; substitute your ecosystem's equivalents. As part of hydration, create `.agent/practice-index.md` -- the bridge file that carries navigable links to the local repo's artefacts (see the template in [practice-bootstrap.md](practice-bootstrap.md)). See the Bootstrap Checklist in [practice-bootstrap.md](practice-bootstrap.md) for validation.

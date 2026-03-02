@@ -1,23 +1,22 @@
 # The Practice
 
-The Practice is a system of principles, quality requirements, rules, commands, sub-agents, skills, prompts, and a self-teaching learning loop -- working together to ensure quality, reverse entropy, and support innovation.
+The Practice is a system of principles, quality requirements, rules, commands, sub-agents, skills, prompts, and a self-teaching learning loop -- working together to ensure quality, reverse entropy, and support innovation. It is ecosystem-agnostic: the principles are universal, the templates use TypeScript/Node.js as concrete examples but can be adapted to any ecosystem, and are expected to evolve over time in new contexts.
 
-## For Agents in This Repo
+## For Humans
 
-Follow [index.md](index.md). It will orient you to the full Practice system.
+> **Bringing the Practice to a New Repo**
 
-## For Visitors
+The Practice travels as a set of files: three core blueprints (the "plasmid trinity") plus two entry points (this README and an agent-facing index). To hydrate it into a new repository:
 
-The Practice travels between repositories as a "plasmid trinity" of three files. See [index.md](index.md) for the map, and [practice-lineage.md](practice-lineage.md) for how propagation works.
+1. Create a directory: `.agent/practice-core/` (or `practice_core` if you prefer underscores).
+2. Drop these files into it.
+3. Ask your agent to read and understand all the files in the directory, explain what it is all about, and tell you what should happen next.
 
-## For a New Repo
+The agent will survey your repo's existing tooling, standards, and norms, then adapt the Practice to fit -- the Practice enables excellence; it does not replace what you already have. See [practice-lineage.md](practice-lineage.md) for the full story of how the Practice propagates and evolves.
 
-If you have received the Practice and want to hydrate it into a new repository:
+## For Agents
 
-1. **Understand your local ecosystem first.** Survey the existing repo: language(s), test framework, linter, formatter, package manager, build system, and existing quality standards. The Practice enables excellence; it does not replace what has already been achieved.
-2. Read [index.md](index.md) for orientation, then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md) and the templates in [practice-bootstrap.md](practice-bootstrap.md).
-3. Adapt ALL templates to local tooling. The templates use TypeScript/Node.js conventions as examples -- substitute your ecosystem's equivalents.
-4. Validate: every file reference resolves, the project builds, and the Practice teaches itself from `AGENT.md` onward. See the Bootstrap Checklist in [practice-bootstrap.md](practice-bootstrap.md).
+Follow [index.md](index.md). It will orient you to the full Practice system and handle any situation you find yourself in -- day-to-day work, cold-start hydration, incoming plasmids, or files that have landed in the wrong place.
 
 ## Origin
 

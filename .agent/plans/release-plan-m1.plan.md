@@ -1,9 +1,9 @@
 # Milestone 1 Release Plan (Public Alpha)
 
 **Status**: Active  
-**Last Updated**: 2026-03-01  
+**Last Updated**: 2026-03-02  
 **Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: M1-S009 complete. M1-S003 complete. M1-S007 deferred. Post-completion work: upstream error handling complete, resource pattern (prerequisite-graph, thread-progressions) in progress, MCP prompt investigation not started. Remaining M0 gates: quality gates on uncommitted work, secrets sweep, manual review, merge, make public.
+**Open items**: Curriculum graphs architecture redesign (pre-merge, blocks CI). Year parameter normalisation complete. Fetch tool thread: bug fixed. M1-S009 complete. M1-S003 complete. M1-S007 deferred. Remaining M0 gates: quality gates, secrets sweep, manual review, merge, make public.
 
 ---
 
@@ -58,7 +58,7 @@ additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
 
 ### Current State
 
-All code work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).**
+All feature work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).** CI blocked by OOM — root cause identified as generated graph data duplication. Pragmatic ESLint fix planned (see §ESLint OOM Fix below); broader architecture work deferred to post-merge (see [codegen architecture plans](architecture-and-infrastructure/codegen/)).
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
@@ -66,48 +66,36 @@ All code work complete. Full reindex done (2026-02-28). **Verification complete 
 - **MCP tool exploration (2026-02-28)**: 7 snag items triaged (M1-S001a through M1-S008). All code-complete. M1-S003 revised: exclude binary endpoint from tools. M1-S004 complete. M1-S006 closed. See §MCP Tool Exploration Findings below.
 - **Full reindex (2026-02-28)**: 16,443 documents indexed successfully (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER failures, all recovered in single retry round. `thread_semantic` field now populated. Chunk delay increased from 7001ms to 8000ms (ADR-096 revised).
 - **MCP tool validation (2026-02-28)**: All 32 oak-local MCP tools validated. 164/164 thread docs have `thread_semantic`. Thread search returns results via ELSER (was 0 before reindex). `explore-topic` returns threads in unified response. M1-S002 year normalisation confirmed (number input accepted). M1-S003 binary warning in place. M1-S005 suggest filter requirement works. M1-S006 rate-limit 0/0/0 confirmed on preview. No new P0/P1 snags. Two observations: (1) `search(scope: threads, text: "")` rejected — empty text not allowed; (2) `search(scope: suggest, text: "frac", subject: "maths")` returns 0 suggestions — may be a data/prefix issue in the suggest index.
+- **MCP server validation (2026-03-02)**: 30 tools, 7 resources, 4 prompts validated against oak-remote-preview. Year parameter normalisation confirmed working (`year: 10` → `"10"` coercion). Fetch tool `thread:` prefix bug fixed. See §MCP Tool Exploration Findings.
+- **CI OOM diagnosed (2026-03-02)**: ESLint OOM in `sdk-codegen` caused by ~688K lines of generated graph data (including duplicates). Pragmatic fix: remove `NODE_OPTIONS` from lint scripts and add large data files to ESLint `ignores`. Broader architectural work (workspace decomposition) deferred to post-merge. See [codegen architecture plans](architecture-and-infrastructure/codegen/).
 
 ### Top Priorities for Next Session
 
-**Verification complete (2026-02-28).** All 32 MCP tools validated. 164/164 thread docs have `thread_semantic`. Thread search and explore-topic fully functional.
+**1. ESLint OOM fix (CI blocker)**
 
-**Post-validation quality fixes (2026-02-28):** M1-S004 (param normalisation) complete. M1-S006 (rate-limit) closed. Text-less thread search enabled.
+CI is blocked by ESLint OOM in `sdk-codegen`, caused by ~688K lines of generated graph data (including duplicates). Two pragmatic fixes unblock CI:
 
-**1. Complete the suggest pipeline in the search SDK (M1-S009)**
+1. Remove `NODE_OPTIONS=--max-old-space-size=4096` from `packages/sdks/oak-sdk-codegen/package.json` lint scripts (lines 78-79)
+2. Add the large generated data files at their current locations to ESLint `ignores` in `packages/sdks/oak-sdk-codegen/eslint.config.ts`
 
-The SDK's `suggest()` function currently uses only the ES completion suggester, which only matches from the start of each indexed input. `"frac"` does not match `"Adding fractions"`. This is not a limitation to accept — it is an incomplete implementation. The CLI already solves this correctly with a dual-query approach (completion + `bool_prefix` on `search_as_you_type` fields). The fix is to complete the SDK suggest pipeline so both CLI and MCP consume the same logic.
+The broader architectural debt (generator duplication, naming, workspace decomposition) is deferred to post-merge. See [codegen architecture plans](architecture-and-infrastructure/codegen/).
 
-**Principle**: search logic belongs in the SDK. CLI and MCP are consumers. Do not duplicate search behaviour in consumers.
-
-- Extend `suggest()` in `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` to run `bool_prefix` on `search_as_you_type` sub-fields (e.g. `lesson_title.sa`, `._2gram`, `._3gram`) alongside the completion query
-- The CLI's `scope-config.ts` already defines `boolPrefixFields` and `buildFilters` per scope — extract the proven logic, don't reinvent it
-- Merge and deduplicate results from both queries
-- Once the SDK pipeline is complete, refactor the CLI to consume `suggest()` from the SDK instead of its local implementation
-- The `SuggestClient` interface may need extending to accept both completion and regular search requests
-
-**2. Exclude `get-lessons-assets-by-type` from MCP tools (M1-S003)**
-
-The remote MCP server (Vercel) cannot trigger client-side file downloads. `get-lessons-assets` already provides download URLs. The endpoint should be excluded from tool generation, not worked around.
-
-- Add `/lessons/{lesson}/assets/{type}` to `SKIPPED_PATHS` in `mcp-tool-generator.ts`
-- Remove the `GET_LESSONS_ASSETS_BY_TYPE_WARNING` from `tool-description.ts`
-- Run `pnpm sdk-codegen` to regenerate (tool count drops from 32 to 31)
-- Run tests to verify
-
-**3. Remaining M0 gates**
+**2. Remaining M0 gates**
 
 - Final secrets and PII sweep (`pnpm secrets:scan:all`)
 - Manual sensitive-information review (human)
 - Merge `feat/semantic_search_deployment` to `main`
 - Make repository public on GitHub
 
-**4. Completed P3 items (for reference)**
+**3. Recently completed (for reference)**
 
-- ~~M1-S004: Parameter naming inconsistency (`threadSlug` vs bare names)~~ — **Complete (2026-02-28)**. `normaliseParamName()` strips `Slug` suffix.
-- ~~M1-S006: `get-rate-limit` returns 0/0/0 on preview server~~ — **Closed (2026-02-28)**. 0/0/0 = unlimited key.
-- ~~M1-S008: `callTool` overloads declare nested args but impl parses flat args~~ — **Complete (2026-02-28)**
+- ~~Year parameter normalisation~~ — **Complete (2026-03-02)**. `z.preprocess()` coerces `year: 10` to `"10"` in `search`, `get-sequences-units`, `get-sequences-questions`, `get-sequences-assets`.
+- ~~Fetch tool `thread:` prefix bug~~ — **Complete (2026-03-02)**. `aggregated-fetch.ts` passed `threadSlug` instead of `thread`.
+- ~~M1-S004: Parameter naming~~ — **Complete (2026-02-28)**. `normaliseParamName()` strips `Slug` suffix.
+- ~~M1-S006: `get-rate-limit` 0/0/0~~ — **Closed (2026-02-28)**. Unlimited key.
+- ~~M1-S008: `callTool` type alignment~~ — **Complete (2026-02-28)**.
 
-**5. Known limitations (not bugs)**
+**4. Known limitations (not bugs)**
 
 - M1-S007 (prerequisite sub-graph fetching) remains deferred.
 
@@ -1316,13 +1304,13 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | M1-S001a | P1 | `thread_semantic` never populated — ELSER leg dead | Engineering | [x] Verified (2026-02-28) | Fix implemented, reindexed, **verified**. 164/164 thread docs have `thread_semantic`. Thread search returns results via ELSER. `explore-topic` returns threads. All 32 MCP tools validated. |
 | M1-S001b | P2 | Search/explore tool descriptions lack subject-filter guidance | Engineering | [x] Complete (2026-02-28) | Tool descriptions enhanced with subject-filter guidance |
 | M1-S002 | P2 | `year` parameter type inconsistency across sequence endpoints | Engineering (upstream) | [x] Complete (2026-02-28) | Normalised at generator level; accepts string enum + number input |
-| M1-S003 | P3 | `get-lessons-assets-by-type` returns binary content, not JSON | Engineering | Open | **Revised decision (2026-02-28):** Exclude endpoint from MCP tool generation. `get-lessons-assets` provides download URLs. MCP (remote HTTP server) cannot trigger client-side downloads; hacking around it violates "no fallbacks" principle. |
+| M1-S003 | P3 | `get-lessons-assets-by-type` returns binary content, not JSON | Engineering | [x] Complete (2026-03-01) | Endpoint excluded from MCP tool generation via `SKIPPED_PATHS`. `get-lessons-assets` provides download URLs. |
 | M1-S004 | P3 | Parameter naming inconsistency (`threadSlug` vs bare names) | Engineering | [x] Complete (2026-02-28) | `normaliseParamName()` strips `Slug` suffix in flat MCP schemas; canonical name preserved in SDK internals. `threadSlug` → `thread` in MCP input. |
 | M1-S005 | P3 | `search` scope limitations undocumented | Engineering | [x] Complete (2026-02-28) | Scope limitations documented in search tool description |
 | M1-S006 | P3 | `get-rate-limit` returns 0/0/0 on preview server | Upstream API team | [x] Closed (2026-02-28) | 0/0/0 = unlimited key (confirmed by user). Tool description updated with semantics note. |
 | M1-S007 | P3 | Prerequisite sub-graph fetching | Engineering | Deferred | Post-merge |
 | M1-S008 | P3 | `callTool` overloads declare nested args but impl parses flat args | Engineering | [x] Complete (2026-02-28) | `ToolArgsForName` now derives from flat schema via `transformFlatToNestedArgs` parameter type |
-| M1-S009 | P2 | Suggest pipeline incomplete — only completion, no `bool_prefix` | Engineering | Open | Complete SDK suggest with dual-query (completion + `bool_prefix`). CLI to consume SDK. |
+| M1-S009 | P2 | Suggest pipeline incomplete — only completion, no `bool_prefix` | Engineering | [x] Complete (2026-03-01) | Dual-query suggest pipeline in SDK (`suggestions.ts` + `suggest-completion.ts` + `suggest-bool-prefix.ts`). Dead CLI suggest code deleted. |
 
 ---
 
@@ -1365,7 +1353,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Decision** | **Normalise on string, strictly constrained to the enum values from the OpenAPI spec.** The canonical enum (from `get-sequences-units`) is: `'1' \| '2' \| '3' \| '4' \| '5' \| '6' \| '7' \| '8' \| '9' \| '10' \| '11' \| 'all-years'`. All three sequence tools (`get-sequences-units`, `get-sequences-assets`, `get-sequences-questions`) should use this same string enum. |
 | **Where to normalise** | At SDK accessor creation time, in the code generators. The `transformFlatToNestedArgs` function in each generated tool file (emitted by `mcp-tool-generator.ts`) already transforms flat MCP arguments to nested SDK format. For `year`: the MCP flat input schema should use `z.union([z.enum([...yearValues]), z.number().transform(String)])` so that both `year: 3` and `year: "3"` are accepted from MCP clients, coerced to the strict string enum, and validated. The canonical year enum should be a shared constant in the generator so all sequence tools reference the same source. |
 | **Files** | `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`, `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts`, generated tools: `get-sequences-assets.ts`, `get-sequences-questions.ts`, `get-sequences-units.ts` |
-| **Status** | [x] Complete (2026-02-28). Generator-level fix in `build-zod-type.ts` and `emit-input-schema.ts`. Flat Zod uses `z.union([z.enum([...]), z.number().int().min(1).max(11).transform(String)])`. JSON schema uses `anyOf` for string enum + number. `transformFlatToNestedArgs` converts string back to number for SDK. Runtime `zod-input-schema.ts` updated to handle `anyOf`. All four schema layers synchronised. See code pattern: `.agent/memory/code-patterns/multi-layer-schema-sync.md`. Known remaining issue: `callTool` overloads still declare nested args type (see M1-S008). |
+| **Status** | [x] Complete (2026-02-28, updated 2026-03-02). Generator-level fix in `build-zod-type.ts` and `emit-input-schema.ts`. Initial implementation used `z.union` but this widened the output type, breaking `transformFlatToNestedArgs` assignments. **Revised to `z.preprocess()`** (2026-03-02): coerces numeric input before validation, preserving the precise string literal union output type. Shared logic extracted to `year-normalisation.ts` (`CANONICAL_YEAR_VALUES`, `isYearParameterRequiringNormalisation`). Also applied to `search` tool's hand-authored validation (`aggregated-search/validation.ts`). JSON schema uses `anyOf` for string enum + number. M1-S008 (callTool type alignment) also complete. See code pattern: `.agent/memory/code-patterns/preprocess-for-type-preserving-coercion.md`. |
 
 ---
 
@@ -1378,7 +1366,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Owner disposition** | This is working as intended — the endpoint IS a download endpoint. The fix is to enhance the description so agents understand this returns binary content that the MCP protocol cannot transport as structured tool output. Agents should use `get-lessons-assets` (the metadata endpoint) to get download URLs, then present those URLs to the user rather than attempting to download binary content through the MCP channel. |
 | **Fix** | Update the tool description (in the OpenAPI schema or as a description override in the MCP tool registration) to explicitly state: (1) this returns binary file content (PDF/video/etc.), not JSON; (2) the MCP handler cannot transport binary responses; (3) agents should use `get-lessons-assets` for metadata/URLs instead. |
 | **Files** | Upstream OpenAPI schema (description field), or `packages/sdks/oak-curriculum-sdk/src/mcp/` tool registration if we override descriptions locally |
-| **Status** | **Revised (2026-02-28).** Previous: binary-response warning added. New decision: exclude `/lessons/{lesson}/assets/{type}` from MCP tool generation entirely. Add to `SKIPPED_PATHS` in `mcp-tool-generator.ts`, remove the warning from `tool-description.ts`, regenerate. `get-lessons-assets` (the metadata endpoint) provides download URLs — agents present those to users. The remote MCP server (Vercel) cannot trigger client-side file downloads; workarounds violate the "no fallbacks" principle (rules.md). |
+| **Status** | [x] **Complete (2026-03-01).** `/lessons/{lesson}/assets/{type}` added to `SKIPPED_PATHS` in `mcp-tool-generator.ts`. Binary-response warning removed from `tool-description.ts`. `get-lessons-assets` provides download URLs. Tool count dropped from 32 to 30 (also removed get-ontology/get-help). |
 
 ---
 
@@ -1414,7 +1402,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Problem** | `get-rate-limit` returns `remaining: 0, limit: 0, reset: 0` on the preview server. Either rate limiting is not configured on the preview instance, or the rate-limit headers are not being returned by the upstream API at this endpoint. This is an upstream API team concern — the MCP tool correctly reads whatever headers the API returns. |
 | **Owner** | Upstream API team. Jim to raise with them. |
 | **Tracking** | This item MUST remain tracked in this repo to prevent it being forgotten. The rate-limiting verification task in §Onboarding Snagging (G4) already tracks the deployment-target verification. This snag tracks the additional concern that the preview server's rate-limit endpoint returns zero values, which may indicate a configuration gap upstream. |
-| **Status** | Open — awaiting upstream response |
+| **Status** | [x] Closed (2026-02-28). 0/0/0 = unlimited key (confirmed by user). Tool description updated with semantics note. |
 
 ---
 
@@ -1450,7 +1438,7 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Root cause** | The suggest pipeline was implemented with completion only. The `bool_prefix` logic was built independently in the CLI (`apps/oak-search-cli/src/lib/suggestions/index.ts` and `scope-config.ts`) and never consolidated into the SDK. This violates the architectural principle that search logic belongs in the SDK; consumers (CLI, MCP) should not duplicate it. |
 | **Fix** | (1) Extend `suggest()` in `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` to run `bool_prefix` alongside completion. The `SuggestClient` interface needs extending to support regular `search()` calls in addition to completion. (2) Extract scope-specific `boolPrefixFields` and filter-building from CLI's `scope-config.ts` into the SDK. (3) Merge and deduplicate results. (4) Refactor CLI to consume the SDK's `suggest()` instead of its local pipeline. |
 | **Key files** | `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts` (SDK suggest — extend), `apps/oak-search-cli/src/lib/suggestions/index.ts` (CLI suggest — reference, then replace), `apps/oak-search-cli/src/lib/suggestions/scope-config.ts` (CLI scope config — extract to SDK) |
-| **Status** | Open |
+| **Status** | [x] **Complete (2026-03-01).** Dual-query suggest pipeline implemented in SDK: `suggestions.ts` (orchestration) + `suggest-completion.ts` (completion suggester) + `suggest-bool-prefix.ts` (`bool_prefix` on `search_as_you_type` fields). `SuggestClient` extended with `BoolPrefixSearchFn` (ISP — non-generic concrete type for test fakes). Results merged and deduplicated. Dead CLI suggest code deleted (`apps/oak-search-cli/src/lib/suggestions/` — 4 files, ~23KB). Lint fix: `suggestions.ts` split (397→128 lines). All `unsafe-assignment` errors eliminated via ISP refactor. Quality gates pass across all workspaces. |
 
 ---
 
@@ -1471,6 +1459,74 @@ action before release:
   hierarchy: discovery (search, explore, browse) → structure (subjects,
   sequences, units) → content (lessons, quizzes, transcripts, assets) →
   progression (threads, prerequisites). This is working as designed.
+
+---
+
+## ESLint OOM Fix
+
+**Status**: Pending — 2 tasks.
+**Priority**: P1 (blocks CI, blocks merge).
+**Scope**: `packages/sdks/oak-sdk-codegen/package.json` and `eslint.config.ts`.
+
+### Problem
+
+ESLint runs out of memory linting `sdk-codegen` because ~688K lines of
+generated graph data files (including duplicated copies) are being parsed.
+A temporary `NODE_OPTIONS=--max-old-space-size=4096` was added to lint
+scripts — this is the wrong fix at the wrong level.
+
+### Fix
+
+Two changes unblock CI:
+
+#### Task 1: Remove NODE_OPTIONS from lint scripts
+
+In `packages/sdks/oak-sdk-codegen/package.json`, remove the
+`NODE_OPTIONS=--max-old-space-size=4096` prefix from both lint scripts
+(lines 78-79):
+
+```json
+"lint": "eslint .",
+"lint:fix": "eslint --fix .",
+```
+
+#### Task 2: Add large generated data files to ESLint ignores
+
+In `packages/sdks/oak-sdk-codegen/eslint.config.ts`, add the large
+generated data files at their current locations to the `ignores` array.
+These are serialised data structures (5K-122K lines each), not code —
+the narrow exception from rules.md applies.
+
+Files to ignore (both copies):
+
+- `src/generated/vocab/vocabulary-graph-data.ts` (113K lines)
+- `src/generated/vocab/misconception-graph-data.ts` (122K lines)
+- `src/generated/vocab/nc-coverage-graph-data.ts` (57K lines)
+- `src/generated/vocab/prerequisite-graph-data.ts` (46K lines)
+- `src/generated/vocab/thread-progression-data.ts` (5K lines)
+- `src/mcp/vocabulary-graph-data.ts` (113K lines)
+- `src/mcp/misconception-graph-data.ts` (122K lines)
+- `src/mcp/nc-coverage-graph-data.ts` (57K lines)
+- `src/mcp/prerequisite-graph-data.ts` (46K lines)
+- `src/mcp/thread-progression-data.ts` (5K lines)
+
+All other generated code (types, Zod schemas, barrel indices, the small
+`definition-synonyms.ts`, the hand-authored `property-graph-data.ts`)
+remains fully linted.
+
+### Validation
+
+```bash
+pnpm lint --filter @oaknational/sdk-codegen  # Must exit 0 without NODE_OPTIONS
+pnpm lint                                     # Must exit 0 across all workspaces
+```
+
+### Architectural debt (post-merge)
+
+The broader issues — generator duplication, naming (vocab → curriculum-graphs),
+two-source separation of concerns, workspace decomposition — are captured in
+a separate strategic plan:
+[codegen architecture plans](architecture-and-infrastructure/codegen/).
 
 ---
 
@@ -1538,6 +1594,7 @@ Milestone 1 release is complete when all are true:
 
 ## Change Log
 
+- **2026-03-02**: **ESLint OOM fix simplified; architecture work deferred.** Diagnosed CI OOM root cause: ~688K lines of generated graph data in `sdk-codegen`. Original 8-phase architecture redesign replaced with 2-task pragmatic fix (remove `NODE_OPTIONS`, add ESLint ignores for large data files). Full architectural analysis, reviewer findings, and workspace decomposition plan moved to [codegen architecture plans](architecture-and-infrastructure/codegen/). Year parameter normalisation complete across 4 tools (`z.preprocess()` pattern). Fetch tool `thread:` prefix bug fixed. MCP server re-validated on oak-remote-preview. PR #48 description updated. Session: [MCP validation and graphs redesign](fa8f4abf-9c53-4823-9d01-8b61b0cb2e38), [Architecture analysis and plan creation](5f65d714-5b8c-4319-aee1-a493352d8127).
 - **2026-02-28**: **Post-validation quality fixes and consolidation.** M1-S004 complete: `normaliseParamName()` strips `Slug` suffix in flat MCP schemas, preserves canonical name in SDK internals. M1-S006 closed with tool description update (0/0/0 = unlimited). Text-less thread search enabled: `text` optional for `threads` scope when `subject` or `keyStage` filter provided; uses `match_all` + filter + sort by `unit_count` when no text. User decisions: (1) M1-S009 registered — suggest pipeline incomplete, `bool_prefix` is the correct ES feature for mid-word matching (not a fallback). Fix at source: complete the SDK suggest pipeline, CLI consumes SDK. (2) M1-S003 revised — exclude `get-lessons-assets-by-type` from MCP tools entirely; `get-lessons-assets` provides download URLs; remote MCP server cannot trigger client-side downloads. Cursor plan (`mcp_tool_quality_fixes_53320e67`) integrated and deleted. Session: [Quality fixes & consolidation](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/31a97388-65c6-4ac7-9841-fee538e3e860.txt).
 - **2026-02-28**: **M1-S001a verification complete — all 32 MCP tools validated.** Phase 0: EsCurric spot-check confirmed `thread_semantic` on algebra, geometry-and-measure, bq14-physics; ES|QL count: 164/164. Phase 1: Thread search returns results (was 0 before reindex). `search(scope: threads, text: "algebra")` → 25 results, Algebra #1 (score 0.049). `explore-topic` returns threads in all 4 test cases. Phase 2: All 32 tools validated systematically — discovery (6), sequence (7), lesson (5), thread/progression (4), browse/fetch/utility (5), changelog (2), search scopes (3), units-summary (1). Confirmed: M1-S002 year normalisation (number accepted), M1-S003 binary warning (PK parse error as expected), M1-S005 suggest filter works, M1-S006 rate-limit 0/0/0 on preview. Observations: empty-text thread search rejected; suggest returns 0 for "frac"+maths (possible prefix data issue). No new P0/P1 snags. Session: [Validate MCP tools](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-transcripts/31a97388-65c6-4ac7-9841-fee538e3e860.txt).
 - **2026-02-28**: **Full reindex complete, chunk delay tuned.** Ran `pnpm es:ingest --verbose` from bulk data: 16,443 documents across 114 chunks (12,864 lessons, 1,664 units, 164 threads, 30 sequences, 57 facets). 26 initial ELSER `inference_exception` failures (0.16%), all recovered in single Tier 2 retry round. Failures clustered in chunks 64-89 (ELSER queue saturation pattern). `DEFAULT_CHUNK_DELAY_MS` increased from 7001ms to 8000ms for headroom as dataset grows; ADR-096 revised with Run 7 data and new default. M1-S001a status updated: reindex done, verification outstanding. Log: `apps/oak-search-cli/logs/ingest-2026-02-28-19-57-52.log`.

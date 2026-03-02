@@ -21,7 +21,24 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 
 const config = defineConfig(
   {
-    ignores: [...ignores, 'dist/**', 'coverage/**', '*.log', '.turbo/**', 'test-cache/**'],
+    ignores: [
+      ...ignores,
+      'dist/**',
+      'coverage/**',
+      '*.log',
+      '.turbo/**',
+      'test-cache/**',
+      'src/generated/vocab/vocabulary-graph-data.ts',
+      'src/generated/vocab/misconception-graph-data.ts',
+      'src/generated/vocab/nc-coverage-graph-data.ts',
+      'src/generated/vocab/prerequisite-graph-data.ts',
+      'src/generated/vocab/thread-progression-data.ts',
+      'src/mcp/vocabulary-graph-data.ts',
+      'src/mcp/misconception-graph-data.ts',
+      'src/mcp/nc-coverage-graph-data.ts',
+      'src/mcp/prerequisite-graph-data.ts',
+      'src/mcp/thread-progression-data.ts',
+    ],
   },
 
   ...(oakStandards.configs!.strict as Linter.Config[]),

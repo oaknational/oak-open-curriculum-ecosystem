@@ -34,7 +34,7 @@ Step back and consider if work is delivering value through impact at the system 
 
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for plasmid trinity files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
+Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
 
 ## Commit
 

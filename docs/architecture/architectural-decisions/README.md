@@ -135,6 +135,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-121: Quality Gate Surfaces](121-quality-gate-surfaces.md)
 - [ADR-122: Permissive CORS for OAuth-Protected MCP](122-permissive-cors-for-oauth-protected-mcp.md)
 - [ADR-123: MCP Server Primitives Strategy](123-mcp-server-primitives-strategy.md)
+- [ADR-124: Practice Propagation Model](124-practice-propagation-model.md)
 
 ## Key Architectural Decisions
 
@@ -161,6 +162,7 @@ For understanding the agentic engineering practice:
 - **[ADR-114](114-layered-sub-agent-prompt-composition-architecture.md)** - Layered prompt composition architecture (components -> templates -> wrappers)
 - **[ADR-117](117-plan-templates-and-components.md)** - Plan templates and reusable plan components (document hierarchy, lifecycle, TDD phases)
 - **[ADR-119](119-agentic-engineering-practice.md)** - Practice naming, boundary, three-layer model, and self-teaching property
+- **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

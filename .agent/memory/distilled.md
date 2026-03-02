@@ -10,9 +10,10 @@ before every session. Every entry earned its place by
 changing behaviour.
 
 **Source**: Distilled from `archive/napkin-2026-02-24.md`
-(sessions 2026-02-10 to 2026-02-24) and
+(sessions 2026-02-10 to 2026-02-24),
 `archive/napkin-2026-02-28.md` (sessions 2026-02-26 to
-2026-02-28).
+2026-02-28), and `archive/napkin-2026-03-02.md` (sessions
+2026-02-28 to 2026-03-02).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -31,6 +32,8 @@ enough for permanent documentation.
 - Plans must be **actionable** (status tracking tables,
   completion checklists, resolved open questions)
 - Archive docs are historical records — never update them
+- When a plan is blocking a merge, simplify ruthlessly —
+  do minimum to unblock CI, capture rest as future work
 - Listen to user priorities, not document structure
 - Try it before assuming it will not work
 - Risk acceptance is a human decision. Agents classify
@@ -53,7 +56,17 @@ enough for permanent documentation.
   `../../../` not `../../`
 - `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
-  files — both must be updated in parallel until resolved
+  files — both must be updated in parallel until resolved.
+  Post-merge plan: decompose `sdk-codegen` into two workspaces
+  (see `.agent/plans/architecture-and-infrastructure/codegen/`)
+- Always add new public exports to the barrel file
+  (`src/mcp-tools.ts`) — missing barrel exports cause
+  `undefined` at runtime for `instanceof` checks
+- Generated vocab files at `src/generated/vocab/` need
+  `pnpm vocab-gen`, not `pnpm sdk-codegen`
+- 23 MCP tools are generated from OpenAPI; 7 are aggregated
+  (hand-authored). Always distinguish — "generated" has
+  precise meaning (ADR-029/030)
 
 ## TypeScript (Domain-Specific)
 
@@ -66,6 +79,7 @@ enough for permanent documentation.
   sub-path coverage
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
+- Zod `.passthrough()` deprecated in Zod v4 — use `.loose()`
 
 ## Elasticsearch
 
@@ -93,6 +107,8 @@ enough for permanent documentation.
   list — must be updated when adding new aggregated tools
 - When moving files between workspaces, check whether
   removed tests should be recreated in the destination
+- Capturing calls in a typed array (`const calls: T[] = []`)
+  beats `vi.fn().mock.calls` which leaks `any`
 
 ## Error Handling
 
@@ -123,6 +139,9 @@ enough for permanent documentation.
   — they do NOT go through `ToolExecutionResult`
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS`
+- SDK functions should not own logging. The app layer is
+  responsible for observability — SDK returns classified
+  results, app inspects and logs via its own logger instance
 - search-sdk → curriculum-sdk dependency is banned (ADR-108).
   Shared data lives in `@oaknational/sdk-codegen/synonyms`.
   `SearchRetrievalService` in curriculum-sdk is ISP, not
@@ -154,3 +173,4 @@ enough for permanent documentation.
 | Reviewer flags repo name mismatch | False positive — confirmed three times. Always verify against user's disposition |
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
+| MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |

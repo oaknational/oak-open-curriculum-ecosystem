@@ -7,7 +7,9 @@ note: >
 
 > **Canonical sources**: The concepts in this document are defined in
 > [ADR-119](../../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
-> (naming decision) and [practice.md](../../practice-core/practice.md)
+> (naming decision),
+> [ADR-124](../../../docs/architecture/architectural-decisions/124-practice-propagation-model.md)
+> (propagation model), and [practice.md](../../practice-core/practice.md)
 > (operational map). Check those documents for the current definitions.
 > Active plans must propagate settled practice changes into these canonical
 > documents (plus any impacted ADRs/docs/READMEs) before closure, using the
@@ -46,7 +48,7 @@ The practice is built, operational, and evidenced through its outputs:
 **System components delivered** (each with its own documentation, ADR where appropriate, and operational history):
 
 - **Directives and rules** (`.agent/directives/`) — 6 directive documents governing all work: AGENT.md (entry point), rules.md (operational rules), testing-strategy.md, schema-first-execution.md, semantic-search-architecture.md, metacognition.md
-- **Practice core** (`.agent/practice-core/`) — the plasmid trinity (practice.md system map, practice-lineage.md principles and exchange mechanism, practice-bootstrap.md annotated templates) and the practice box for incoming cross-repo material
+- **Practice core** (`.agent/practice-core/`) — five practice-core files: the plasmid trinity (practice.md system map, practice-lineage.md principles and exchange mechanism, practice-bootstrap.md annotated templates) plus entry points (README.md for humans, index.md for agents), and the practice box for incoming cross-repo material
 - **Prompts** (`.agent/prompts/`) — 5 reusable prompt playbooks that provide domain context and operational guidance for specific types of work (e.g. semantic search sessions, grounding before a task, structuring task execution). Prompts are invoked by commands and reference plans — they are the operational layer between "start a task" and "do the work."
 - **Commands** (`.cursor/commands/`) — 10 slash commands that initiate structured workflows: starting a session with grounding, creating plans, running quality gates, invoking reviewers, committing, stepping back to reflect, and consolidating documentation after work is complete. Commands invoke prompts, which reference plans — creating a predictable sequence from initiation to completion.
 - **Specialist sub-agent reviewers** (`.cursor/agents/`, `.agent/sub-agents/`) — 14 AI reviewers (10 standard, 4 on-demand) covering code quality, 4 architecture perspectives, test quality, type safety, configuration, security, documentation, ground truth design, sub-agent design, release readiness, and onboarding quality. Each reviewer has a definition (`.cursor/agents/`) and its prompt is built from reusable components and templates (`.agent/sub-agents/components/`, `.agent/sub-agents/templates/`) following a layered composition architecture (ADR-114).
@@ -66,7 +68,7 @@ The practice is built, operational, and evidenced through its outputs:
 - The practice is self-teaching: AI agents in new sessions discover how it works by following links from AGENT.md, with no external instruction
 - The learning loop is active: mistakes captured in sessions are distilled into rules that prevent repetition in future sessions
 - The repository is being prepared for public release (M0 open private alpha in progress, M1 open public alpha next), and will serve as a live demonstration
-- The practice has successfully transferred cross-repo: a compressed variant was deployed to a separate POC (cloudinary-icon-ingest-poc), evolved there, and the structural improvements (practice-core directory, plasmid trinity, bootstrap) were reintegrated — demonstrating the transferability claim
+- The practice has successfully transferred cross-repo: a compressed variant was deployed to a separate POC (cloudinary-icon-ingest-poc), evolved there, and the structural improvements (practice-core directory, plasmid trinity, bootstrap) were reintegrated — demonstrating the transferability claim. The propagation model was subsequently refined (ADR-124): practice-core files are now self-contained (no navigable links to files outside the directory), a bridge file (practice-index) adapts the portable core to each repo's local artefacts, and the travelling package expanded from three to five files
 
 **Support received**: No additional budget, staffing, or dedicated time was allocated. The practice was developed alongside and through normal product delivery work, using standard engineering tooling.
 

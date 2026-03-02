@@ -18,9 +18,9 @@ attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved
 
 # Practice Bootstrap
 
-This file completes the plasmid trinity. `practice.md` describes the system (the **what**), `practice-lineage.md` encodes the principles and evolution rules (the **why**), and this file provides annotated templates for every artefact type (the **how**).
+This file completes the plasmid trinity. `practice.md` describes the system (the **what**), `practice-lineage.md` encodes the principles and evolution rules (the **why**), and this file provides annotated templates for every artefact type (the **how**). Two entry points travel with the trinity: `README.md` (for humans) and `index.md` (for agents).
 
-An agent reading all three files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. Platform-specific conventions (Cursor) are labelled as such. Ecosystem-specific conventions (TypeScript/Node.js) are used as concrete examples throughout -- substitute your ecosystem's equivalents.
+An agent reading all five practice-core files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. Platform-specific conventions (Cursor) are labelled as such. Ecosystem-specific conventions (TypeScript/Node.js) are used as concrete examples throughout -- substitute your ecosystem's equivalents.
 
 ## Before You Begin: Ecosystem Survey
 
@@ -40,6 +40,63 @@ Reflect on what you are about to do -- those are your thoughts. Think about thos
 This process costs nothing and prevents shallow execution. Apply it before every plan, every architectural decision, and every non-trivial implementation choice.
 
 Create this as `.agent/directives/metacognition.md` (it is universal -- no project-specific content).
+
+## The Practice Index (.agent/practice-index.md)
+
+The practice-index is the bridge between the portable practice-core and the local repo. It is **not** part of the travelling package — it is created during hydration and stays in the repo. Practice-core files link to it via `../practice-index.md`; it carries the navigable links to the repo's actual artefacts.
+
+### Required sections
+
+| Section | Content |
+|---|---|
+| **Directives** | Table of directive files with paths and purposes |
+| **Architectural Decisions** | Table of ADRs referenced by practice.md, with links |
+| **Tools and Workflows** | Table of key commands, skills, and rules with links |
+| **Artefact Directories** | Table of `.agent/` and `.cursor/` directories with links |
+
+### Template
+
+```markdown
+# Practice Index
+
+This file bridges the portable practice-core files and this repo's local
+artefacts. It is **not** part of the travelling practice-core package — it is
+created during hydration and stays in the repo. The format is specified by
+`practice-core/practice-bootstrap.md`.
+
+For the practice-core files and their roles, see
+[practice-core/index.md](practice-core/index.md).
+
+## Directives
+
+| Directive | Purpose |
+|---|---|
+| [AGENT.md](directives/AGENT.md) | Operational entry point for agents |
+| [rules.md](directives/rules.md) | Authoritative rules |
+| [{additional directives}](directives/{filename}) | {purpose} |
+
+## Architectural Decisions
+
+| ADR | Subject |
+|---|---|
+| [ADR-{nnn}](../docs/architecture/architectural-decisions/{filename}) | {subject} |
+
+## Tools and Workflows
+
+| Tool | Purpose |
+|---|---|
+| [{command name}](../.cursor/commands/{filename}) | {purpose} |
+| [{skill name}](../.cursor/skills/{dirname}/SKILL.md) | {purpose} |
+
+## Artefact Directories
+
+| Location | What lives there |
+|---|---|
+| [`.agent/directives/`](directives/) | Principles, rules, and operational directives |
+| [`.agent/plans/`](plans/) | Work planning — active, archived, and templates |
+| [`.agent/memory/`](memory/) | Institutional memory — napkin, distilled, code patterns |
+| {additional directories as needed} |
+```
 
 ## Entry Points
 
@@ -321,13 +378,14 @@ Enable plugins as needed for the project (e.g. Vercel, Sentry).
 
 After creating all files, validate:
 
-1. `.agent/practice-core/` contains `index.md` (local), `practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, and `incoming/.gitkeep`.
-2. `AGENT.md` links to `.agent/practice-core/index.md`.
-3. Every file path referenced in AGENT.md, rules, commands, and agents resolves.
-4. Every agent's reading requirements point to files that exist.
-5. `AGENTS.md` links to `AGENT.md`, which links to `rules.md` and `testing-strategy.md`.
-6. The `start-right` prompt references all foundation documents.
-7. The napkin rule points to a napkin skill that exists.
-8. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.
-9. The project builds.
-10. **Cohesion audit**: all practice-core files are internally consistent, and all broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core. No stale descriptions, no contradictions, no outdated wording.
+1. `.agent/practice-core/` contains all five practice-core files (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, `README.md`, `index.md`) and `incoming/.gitkeep`.
+2. `.agent/practice-index.md` exists, all its links resolve, and its sections match the format specified above.
+3. `AGENT.md` links to `.agent/practice-core/index.md`.
+4. Every file path referenced in AGENT.md, rules, commands, and agents resolves.
+5. Every agent's reading requirements point to files that exist.
+6. `AGENTS.md` links to `AGENT.md`, which links to `rules.md` and `testing-strategy.md`.
+7. The `start-right` prompt references all foundation documents.
+8. The napkin rule points to a napkin skill that exists.
+9. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.
+10. The project builds.
+11. **Cohesion audit**: all practice-core files are internally consistent, practice-index.md links resolve, and all broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core. No stale descriptions, no contradictions, no outdated wording.

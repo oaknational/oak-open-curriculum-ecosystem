@@ -24,7 +24,7 @@ attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved
 
 This is the canonical lineage document for the oak-open-curriculum-ecosystem Practice. It serves two purposes: (1) the reference for how the plasmid exchange mechanism works, and (2) the source template for outbound propagation.
 
-When propagating the Practice to another repo, copy the trinity: `practice.md`, this file, and `practice-bootstrap.md`. The provenance chain in the frontmatter is already set — the receiving repo appends its own entry when it evolves the files. See §Frontmatter and §Plasmid Exchange below.
+When propagating the Practice to another repo, copy all five practice-core files: the trinity (`practice.md`, this file, and `practice-bootstrap.md`) plus the entry points (`README.md` and `index.md`). The provenance chain in the trinity frontmatter is already set — the receiving repo appends its own entry when it evolves the files. See §Frontmatter and §Plasmid Exchange below.
 
 ## Frontmatter
 
@@ -211,11 +211,11 @@ This is the same intellectual discipline as distillation, applied at a different
 
 ## Plasmid Exchange
 
-The Practice is not hierarchical. Each repo carries its own Practice instance, adapted to its own context. The Practice travels as a trinity: `practice.md` (the what), `practice-lineage.md` (the why), and `practice-bootstrap.md` (the how). All three files travel together.
+The Practice is not hierarchical. Each repo carries its own Practice instance, adapted to its own context. The Practice travels as a package of five files: the plasmid trinity — `practice.md` (the what), `practice-lineage.md` (the why), and `practice-bootstrap.md` (the how) — plus two entry points: `README.md` (for humans) and `index.md` (for agents). All five files travel together.
 
 ### The Practice Box
 
-Every repo with a Practice has a canonical location for incoming material: **`.agent/practice-core/incoming/`** (the practice box). This directory is normally empty (with a `.gitkeep`). When the plasmid trinity arrives from another repo, it is placed here.
+Every repo with a Practice has a canonical location for incoming material: **`.agent/practice-core/incoming/`** (the practice box). This directory is normally empty (with a `.gitkeep`). When practice-core files arrive from another repo, they are placed here.
 
 The practice box is checked at two points:
 
@@ -224,7 +224,7 @@ The practice box is checked at two points:
 
 ### Integration Flow
 
-When plasmid trinity files appear in the practice box:
+When practice-core files appear in the practice box:
 
 1. **Check the provenance chain.** Read the `provenance` array in the frontmatter. If the last entry's `repo` differs from the local repo name, the file has been evolved elsewhere and may carry new learnings. If the last entry matches the local repo, the file has not been evolved since it left — there is nothing new to integrate.
 2. **Read it.** Understand what they learned and why. The `purpose` field in each provenance entry tells you what kind of work shaped the evolution — use this to assess relevance to the local context.
@@ -233,36 +233,38 @@ When plasmid trinity files appear in the practice box:
 5. **Propose changes** to the user. Be specific: which files across the Practice would change and why.
 6. **On approval, apply.** Update Practice, Lineage, rules, skills, commands, prompts, or directives as warranted.
 7. **Record what was taken** in the napkin (for traceability, not attribution).
-8. **Audit cohesion.** (a) Check that all practice-core files (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, `index.md`, `README.md`) are internally consistent -- no contradictions, no stale descriptions, no missing cross-references between them. (b) Check that broader Practice files throughout the repo (directives, rules, skills, commands, prompts) are aligned with the updated core -- no outdated wording, no missing references, no contradictions with the new content. This step catches drift that individual edits miss.
+8. **Audit cohesion.** (a) Check that all practice-core files (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, `index.md`, `README.md`) are internally consistent -- no contradictions, no stale descriptions, no missing cross-references between them. (b) Check that `.agent/practice-index.md` links resolve and are consistent with the updated core. (c) Check that broader Practice files throughout the repo (directives, rules, skills, commands, prompts) are aligned with the updated core -- no outdated wording, no missing references, no contradictions with the new content. This step catches drift that individual edits miss.
 9. **Clear the practice box.** Remove the incoming files. The integration is complete.
 
 If nothing clears the bar, record that in the napkin too — the incoming material was reviewed and found not applicable to this context. That is a valid outcome.
 
-The trinity (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`) is itself a plasmid. It can be carried to any repo. The receiving repo applies its own bar.
+The practice-core package (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`, `README.md`, `index.md`) is itself a plasmid. It can be carried to any repo. The receiving repo applies its own bar.
 
 ## Growing a Practice from This Blueprint
 
 **Effort heuristic**: in the first real migration, roughly a third of Practice files were fully portable (zero edits), a third needed selective editing (universal core with domain-specific sections to remove), and a third needed complete rewrite or deletion. The mixed tier is the most labour-intensive — it requires line-by-line judgment about what is universal and what is local. Budget accordingly.
 
-1. Create the directory structure: `.agent/directives/`, `.agent/practice-core/` (with `incoming/.gitkeep`), `.agent/plans/`, `.agent/prompts/`, `.agent/memory/`, `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`. Create `index.md` in `practice-core/` as the local landing page.
+1. Create the directory structure: `.agent/directives/`, `.agent/practice-core/` (with `incoming/.gitkeep`), `.agent/plans/`, `.agent/prompts/`, `.agent/memory/`, `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`. If the practice-core files were received from another repo, they should already include `index.md` and `README.md` alongside the trinity; if building from scratch, create them (see `practice-bootstrap.md` for templates).
 2. Write `AGENT.md` in `.agent/directives/` as a stable structural index: project context, artefacts, rules pointer, sub-agent roster, development commands, repo structure. Link to `.agent/practice-core/index.md` for the full Practice. No mutable state.
 3. Write `rules.md` encoding the Principles above, adapted to local tooling.
 4. Write `testing-strategy.md` encoding the Testing Philosophy above, with local test targets.
 5. Write `metacognition.md` from the condensed version in `practice-bootstrap.md` (it is universal).
 6. Follow `practice-bootstrap.md` for the remaining artefacts: agent definitions, workflow commands, always-applied rules, start-right prompt, skills (napkin, distillation), and Cursor configuration. The bootstrap file provides annotated templates and format specifications for every artefact type.
-7. Write `practice.md`, this lineage doc, and `practice-bootstrap.md` in `.agent/practice-core/` with YAML frontmatter: `provenance` array (index 0 entry with `repo`, `date`, and `purpose`), and `fitness_ceiling`. Add initial learned principles to the lineage doc.
-8. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every agent's first-action file exists. The repo builds. See the Bootstrap Checklist in `practice-bootstrap.md`.
-9. **Audit cohesion.** Check that all practice-core files are internally consistent and that all broader Practice files (directives, rules, skills, commands, prompts) are aligned with the core. Contradictions, stale descriptions, and outdated wording degrade silently -- the Practice will appear complete while subtly misdirecting.
+7. **Practice-core files.** If building from scratch: write all five files in `.agent/practice-core/` — the trinity (`practice.md`, this lineage doc, `practice-bootstrap.md`) each with YAML frontmatter (`provenance` array with index 0 entry, `fitness_ceiling`), plus `README.md` (human entry point) and `index.md` (agent entry point). Add initial learned principles to the lineage doc. If received from another repo: the five files already exist — append a new provenance entry to each trinity file with the new repo name, date, and purpose. The README and index are generic and should not need changes.
+8. **Create `.agent/practice-index.md`** — the bridge file that carries navigable links from practice-core to the local repo's artefacts. Practice-core references it via `../practice-index.md`. Use the template in `practice-bootstrap.md`, populating every section with the local repo's actual directives, ADRs, commands, skills, and directories. This file is NOT part of the travelling package — it stays in the repo.
+9. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every agent's first-action file exists. The repo builds. See the Bootstrap Checklist in `practice-bootstrap.md`.
+10. **Audit cohesion.** Check that all practice-core files are internally consistent, that `.agent/practice-index.md` links resolve, and that all broader Practice files (directives, rules, skills, commands, prompts) are aligned with the core. Contradictions, stale descriptions, and outdated wording degrade silently -- the Practice will appear complete while subtly misdirecting.
 
 ## Validation
 
 After growing or propagating the Practice, verify that nothing is **silently broken**. The most dangerous failure mode is not missing files — it is files that look correct but whose internal references don't resolve. Agents will proceed with no review methodology, directives will point to non-existent docs, commands will invoke non-existent prompts. Nothing errors; everything quietly degrades.
 
 1. **Reference check** — every file path in directives, agents, commands, and rules resolves.
-2. **Agent check** — each agent's first-action file reference exists.
-3. **Build check** — `type-check`, `lint`, `build` all pass.
-4. **Stable-index check** — `AGENT.md` and `AGENTS.md` contain no mutable session state.
-5. **Cohesion check** — all practice-core files are internally consistent, and broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core content. No stale descriptions, no contradictions, no outdated wording.
+2. **Practice-index check** — `.agent/practice-index.md` exists, all its links resolve, and its sections match the format in `practice-bootstrap.md`.
+3. **Agent check** — each agent's first-action file reference exists.
+4. **Build check** — `type-check`, `lint`, `build` all pass.
+5. **Stable-index check** — `AGENT.md` and `AGENTS.md` contain no mutable session state.
+6. **Cohesion check** — all practice-core files are internally consistent, practice-index.md links resolve, and broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core content. No stale descriptions, no contradictions, no outdated wording.
 
 ### Validation scripts
 
@@ -274,6 +276,17 @@ rg -o '\./[^\s\)]+\.md' .agent/ .cursor/ --no-filename | sort -u | while read re
   if [ ! -f "$path" ]; then
     echo "BROKEN: $ref"
   fi
+done
+```
+
+Self-containment check (verifies practice-core has no external links except the permitted bridge to `../practice-index.md`; strips code-fenced blocks first to avoid false positives from templates):
+
+```bash
+for f in .agent/practice-core/*.md; do
+  awk '/^```/{skip=!skip; next} !skip{print}' "$f" \
+    | rg -n '\]\(\.\.\/' \
+    | rg -v 'practice-index\.md' \
+    && echo "VIOLATION: $f has external links outside code fences"
 done
 ```
 
@@ -305,3 +318,4 @@ Principles discovered through Practice propagation and evolution. These have cle
 - **Documentation is concurrent, not retrospective.** ADRs and README updates produced during work stay accurate and contextual. Documentation deferred to consolidation loses context, goes stale, or never gets written. Consolidation should verify documentation is current, not extract it.
 - **Understand local norms before hydrating.** The Practice is ecosystem-agnostic in principle. When hydrating into a new repo, the integrating agent MUST survey the local language(s), test runners, linters, package managers, and existing quality standards BEFORE creating any Practice artefacts. The Practice enables excellence; it does not replace what has already been achieved.
 - **Fitness functions at every stage of knowledge flow.** Ephemeral memory (napkin, distilled) has size constraints, but so must permanent docs. Without ceilings, the consolidation cycle simply moves unbounded growth downstream. Documents in the knowledge flow carry `fitness_ceiling` and `split_strategy` in YAML frontmatter — only shallow-browsing entry points (root README, quickstart, VISION) are exempt. The response to hitting a ceiling is splitting by responsibility, not compression — the goal is discoverability, not density.
+- **Practice-core files must be self-contained.** The five practice-core files may reference each other freely, but must not contain navigable markdown links to files outside `practice-core/` — with one exception: `../practice-index.md`, the bridge file that practice-core specifies and the hydration process creates. All other external paths appear as code-formatted text (e.g. `.agent/directives/AGENT.md`) to describe what should exist or where artefacts live. Links like `[AGENT.md](../directives/AGENT.md)` break when the files travel. The practice-index is local to each repo and carries the navigable links to that repo's artefacts.

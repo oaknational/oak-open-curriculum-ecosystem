@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 📋 Planned
-**Last Updated**: 2026-02-24
+**Last Updated**: 2026-03-02
 
 ---
 
@@ -11,6 +11,7 @@ Cross-cutting architecture, system quality, and observability plans.
 
 | File | Milestone | Description |
 |------|-----------|-------------|
+| `codegen/` | Post-M1 | SDK codegen workspace decomposition (strategic plan + research) |
 | `stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
 | `config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
 | `no-console-enforcement.plan.md` | M1 | Replace ~110 `console.*` calls with structured logger |
@@ -20,6 +21,7 @@ Cross-cutting architecture, system quality, and observability plans.
 
 - **Milestone 1** (post-merge, pre-alpha): server alignment,
   config standardisation, no-console enforcement
+- **Post-M1**: SDK codegen workspace decomposition
 - **Milestone 3** (pre-beta): observability and quality metrics
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic

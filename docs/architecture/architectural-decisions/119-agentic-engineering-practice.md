@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-02-22
-**Related**: [Vision](../../VISION.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-117 (Plan Templates and Components)](117-plan-templates-and-components.md)
+**Related**: [Vision](../../VISION.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-117 (Plan Templates and Components)](117-plan-templates-and-components.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md)
 
 ## Context
 
@@ -86,7 +86,9 @@ system, applications) — those are what the practice produces, not
 what the practice is. The boundary is drawn deliberately: the
 practice is conceived as a transferable pattern that can be adopted
 in other repositories, both within Oak and beyond. The product code
-is specific to Oak's curriculum; the practice is generalisable.
+is specific to Oak's curriculum; the practice is generalisable. The
+propagation mechanism — how the practice travels between repos and
+adapts to each one — is specified in [ADR-124](124-practice-propagation-model.md).
 
 ### Three Layers
 
@@ -136,7 +138,8 @@ permanent documentation before phase closure.
 Minimum canonical update surfaces are:
 
 1. `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-2. `.agent/practice-core/practice.md`
+2. `docs/architecture/architectural-decisions/124-practice-propagation-model.md`
+3. `.agent/practice-core/practice.md`
 
 Additionally, update any impacted ADRs, `/docs/` pages, and README files.
 Apply the consolidation workflow in
