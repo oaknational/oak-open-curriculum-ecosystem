@@ -203,6 +203,32 @@ describe('buildInputSchemaObject', () => {
     });
   });
 
+  it('uses anyOf schema for string-enum year parameters in flat schema', () => {
+    const queryParams: ParamMetadataMap = {
+      year: {
+        typePrimitive: 'string',
+        required: false,
+        valueConstraint: true,
+        allowedValues: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
+        description: 'Year group filter',
+      },
+    };
+
+    const schema = buildInputSchemaObject({}, queryParams);
+    const yearProperty = schema.properties.year;
+
+    expect(yearProperty).toEqual({
+      anyOf: [
+        {
+          type: 'string',
+          enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
+          description: 'Year group filter',
+        },
+        { type: 'number', description: 'Year group filter' },
+      ],
+    });
+  });
+
   it('normalises Slug-suffixed path params in flat JSON Schema', () => {
     const pathParams: ParamMetadataMap = {
       threadSlug: {

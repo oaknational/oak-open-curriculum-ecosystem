@@ -75,6 +75,33 @@ describe('validateSearchSdkArgs', () => {
       }
     });
 
+    it('normalises numeric year to string', () => {
+      const result = validateSearchSdkArgs({
+        text: 'algebra',
+        scope: 'lessons',
+        year: 7,
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.year).toBe('7');
+      }
+    });
+
+    it('normalises year boundary values (1 and 11)', () => {
+      const low = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 1 });
+      const high = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 11 });
+
+      expect(low.ok).toBe(true);
+      if (low.ok) {
+        expect(low.value.year).toBe('1');
+      }
+      expect(high.ok).toBe(true);
+      if (high.ok) {
+        expect(high.value.year).toBe('11');
+      }
+    });
+
     it('accepts unit-specific filters', () => {
       const result = validateSearchSdkArgs({
         text: 'fractions',
@@ -206,6 +233,21 @@ describe('validateSearchSdkArgs', () => {
 
     it('rejects negative from', () => {
       const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', from: -1 });
+      expect(result.ok).toBe(false);
+    });
+
+    it('rejects year number below minimum (0)', () => {
+      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 0 });
+      expect(result.ok).toBe(false);
+    });
+
+    it('rejects year number above maximum (12)', () => {
+      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 12 });
+      expect(result.ok).toBe(false);
+    });
+
+    it('rejects non-integer year number', () => {
+      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 3.5 });
       expect(result.ok).toBe(false);
     });
 

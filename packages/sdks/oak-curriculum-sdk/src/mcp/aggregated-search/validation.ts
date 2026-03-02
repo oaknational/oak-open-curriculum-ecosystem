@@ -32,7 +32,7 @@ const SearchSdkObjectSchema = z
     unitSlug: z.string().optional(),
     tier: z.string().optional(),
     examBoard: z.string().optional(),
-    year: z.string().optional(),
+    year: z.union([z.string(), z.number().int().min(1).max(11).transform(String)]).optional(),
     threadSlug: z.string().optional(),
     highlight: z.boolean().optional(),
     minLessons: z.number().int().min(1).optional(),

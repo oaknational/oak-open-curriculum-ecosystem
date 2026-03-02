@@ -191,6 +191,28 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
   });
 
+  describe('parameter mapping for content types', () => {
+    it('passes correct flat parameter name for thread: prefix', async () => {
+      let capturedToolName: string | undefined;
+      let capturedArgs: unknown;
+      const deps: UniversalToolExecutorDependencies = {
+        executeMcpTool: (toolName, args) => {
+          capturedToolName = toolName;
+          capturedArgs = args;
+          return Promise.resolve({ status: 200, data: { threadTitle: 'Algebra' } });
+        },
+        searchRetrieval: createStubSearchRetrieval(),
+        generatedTools: createNullGeneratedToolRegistry(),
+      };
+
+      await runFetchTool({ id: 'thread:algebra' }, deps);
+
+      expect(capturedToolName).toBe('get-threads-units');
+      expect(capturedArgs).toHaveProperty('thread', 'algebra');
+      expect(capturedArgs).not.toHaveProperty('threadSlug');
+    });
+  });
+
   describe('error handling', () => {
     it('returns error for unsupported id prefix', async () => {
       const deps = createMockExecutor({ status: 200, data: {} });

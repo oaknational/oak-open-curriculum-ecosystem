@@ -146,9 +146,11 @@ export const SEARCH_INPUT_SCHEMA = {
       examples: ['aqa', 'edexcel', 'ocr'],
     },
     year: {
-      type: 'string',
-      description: 'Filter by year group number. Lessons scope only.',
-      examples: ['3', '7', '10'],
+      anyOf: [
+        { type: 'string', description: 'Filter by year group number. Lessons scope only.' },
+        { type: 'number', description: 'Filter by year group number. Lessons scope only.' },
+      ],
+      examples: ['3', '7', 10],
     },
     threadSlug: {
       type: 'string',

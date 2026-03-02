@@ -2,6 +2,10 @@ import type { ParamMetadataMap } from './param-metadata.js';
 import { normaliseParamName } from './param-metadata.js';
 import { buildZodFields } from './build-zod-type.js';
 import { jsonSchemaFromPrimitive } from './build-json-schema-property.js';
+import {
+  CANONICAL_YEAR_VALUES,
+  isYearParameterRequiringNormalisation,
+} from './year-normalisation.js';
 
 export type {
   JsonSchemaProperty,
@@ -14,30 +18,18 @@ export type {
 
 import type { JsonSchemaObject, JsonSchemaProperty } from './json-schema-types.js';
 
-const CANONICAL_YEAR_VALUES = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  'all-years',
-];
-
 function buildFlatInputProperty(name: string, meta: ParamMetadataMap[string]): JsonSchemaProperty {
-  if (name !== 'year' || meta.typePrimitive !== 'number' || meta.valueConstraint) {
+  if (name !== 'year' || !isYearParameterRequiringNormalisation(meta)) {
     return jsonSchemaFromPrimitive(meta);
   }
 
-  const numberProperty = jsonSchemaFromPrimitive(meta);
   const stringProperty: JsonSchemaProperty = {
     type: 'string',
     enum: CANONICAL_YEAR_VALUES,
+    ...(meta.description ? { description: meta.description } : {}),
+  };
+  const numberProperty: JsonSchemaProperty = {
+    type: 'number',
     ...(meta.description ? { description: meta.description } : {}),
   };
 

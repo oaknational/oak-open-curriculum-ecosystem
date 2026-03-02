@@ -1,5 +1,128 @@
 # Napkin
 
+## Session 2026-03-02b — Year parameter normalisation
+
+### What was done
+
+Added year parameter normalisation across all MCP tools. Agents can now pass
+`year: 10` (number) and it gets converted to `"10"` (string). Four tools have
+year params: `search`, `get-sequences-units`, `get-sequences-questions`,
+`get-sequences-assets`.
+
+### Key pattern: z.preprocess vs z.union for type-preserving coercion
+
+Initially used `z.union([z.enum([...]), z.number().transform(String)])` but this
+widens the output type to `string` (the transform branch returns `string`, which
+absorbs literal types). The generated `transformFlatToNestedArgs` then fails to
+assign to the specific enum type.
+
+Solution: `z.preprocess()` converts the value BEFORE validation, so the output
+type remains the precise enum literal union. This avoids type assertions entirely.
+
+```
+z.preprocess(
+  (val) => typeof val === 'number' && Number.isInteger(val) && val >= 1 && val <= 11
+    ? String(val) : val,
+  z.enum(["1", "2", ..., "all-years"] as const)
+)
+```
+
+### Mistake: started with z.union, had to pivot
+
+The initial implementation passed unit tests but broke the SDK build because the
+generated transform code assigned `string` to a specific string union type.
+Should have thought through the output type implications before implementing.
+The preprocess approach is strictly better for this use case.
+
+### DRY extraction
+
+Reviewers correctly flagged `CANONICAL_YEAR_VALUES` and `isYearParameterRequiringNormalisation`
+duplicated in two codegen files. Extracted to shared `year-normalisation.ts`.
+
+### Fetch tool thread: bug fixed
+
+`fetch(id: "thread:algebra")` failed because `aggregated-fetch.ts` passed
+`{ threadSlug: slug }` but the MCP flat schema for `get-threads-units` expects
+`{ thread: slug }` (normaliseParamName strips the Slug suffix). Every other
+content type case (lesson, unit, subject, sequence) used the normalised name
+correctly — thread was the only one using the OpenAPI name. One-line fix.
+
+### Flat-to-nested entropy noted
+
+The `transformFlatToNestedArgs` layer is pure entropy — it exists only because
+the OpenAPI client expects nested params while MCP sends flat. Added to
+post-merge tidy-up plan as medium priority. Research Option B in
+`mcp-sdk-type-reuse-investigation.md` covers the approach.
+
+---
+
+## Session 2026-03-02a — Remote preview MCP server validation
+
+### What was done
+
+Full discovery-based validation of the oak-remote-preview MCP server. No code
+inspection — all validation through MCP tool calls, resource fetches, and prompt
+descriptor reads, simulating genuine agent discovery.
+
+### Validation summary: 30 tools, 7 resources, 4 prompts
+
+**All 30 tools tested and returning data:**
+
+| Category | Tools | Status |
+|----------|-------|--------|
+| Agent Support | get-curriculum-model | PASS — 40KB structured JSON with domain model, property graph, workflows, tips |
+| Discovery | search (5 scopes), explore-topic, browse-curriculum, get-subjects, get-key-stages | PASS — semantic search, suggest, parallel topic exploration all working |
+| Browsing | get-key-stages-subject-units, -lessons, -questions, -assets, get-subjects-sequences, -years, -key-stages, get-subject-detail, get-sequences-units | PASS — all return structured data with canonical URLs |
+| Fetching | fetch (lesson:, unit:, subject:, sequence: prefixes), get-lessons-summary, -transcript, -quiz, -assets, get-units-summary | PASS with one bug (see below) |
+| Progression | get-threads, get-threads-units, get-thread-progressions, get-prerequisite-graph | PASS — 164 threads, 1607 units, 3452 edges |
+| Operational | get-rate-limit, get-changelog, get-changelog-latest | PASS — rate limit 0/0/0 (unlimited), changelog v0.1.0–v0.6.0 |
+
+**7 resources validated:**
+- `curriculum://model`, `curriculum://thread-progressions`, `curriculum://prerequisite-graph` — data resources
+- `docs://oak/getting-started.md`, `docs://oak/workflows.md`, `docs://oak/tools.md` — documentation
+- `ui://widget/oak-json-viewer-9f55671a.html` — widget
+
+**4 prompts registered:** find-lessons, lesson-planning, explore-curriculum, learning-progression
+
+### Bugs found
+
+1. **`fetch(id: "thread:algebra")` fails** — returns schema validation error
+   ("Required: thread"). The routing correctly identifies the `thread:` prefix
+   but appears to fail when passing the extracted slug to the underlying
+   `get-threads-units` tool. Direct call to `get-threads-units(thread: "algebra")`
+   works perfectly. The fetch tool descriptor documents `thread:` as a valid
+   prefix with example `thread:number-multiplication-and-division`.
+
+### Observations (not bugs, for awareness)
+
+- `get-sequences-units` `year` parameter is typed as `string` with enum
+  `"1"..."11"|"all-years"`. Schema is clear (`type: "string"`, example `"1"`).
+  I passed a number anyway — an agent discipline issue, not a server issue.
+  Always read tool descriptors before calling.
+- `get-curriculum-model(tool_name: "nonexistent-tool")` returns the base model
+  gracefully — by design per Wilma's WS5 ruling.
+- Suggest now returns 10 results for `search(text: "frac", scope: "suggest",
+  subject: "maths")` — previously documented as returning 0. Suggest index
+  is populated.
+- Copyright-blocked content correctly classified: "Resource unavailable due to
+  copyright restrictions" for transcript/assets, quiz returns 200 for same
+  lesson. Error distinction working: blocked vs nonexistent vs genuine error.
+- Prerequisite graph is 1.4MB — large but functional as MCP tool output.
+- Thread progressions is 178KB — 164 threads across 16 subjects.
+- `get-subjects-years` only takes `subject`, no `sequence` filtering — returns
+  all years for the subject across all sequences. Not a bug, just not obvious.
+
+### Patterns
+
+- **Batching MCP calls by category** (4 per round) is efficient for systematic
+  validation. 30 tools validated in ~7 rounds.
+- **The get-curriculum-model response is genuinely useful** — following its
+  workflows section led to correct tool usage for every category. The domain
+  model, structural patterns, and ID format guidance prevented wrong calls.
+- **Documentation resources mirror the model** — getting-started.md,
+  workflows.md, and tools.md are consistent with the tool responses and the
+  curriculum model data.
+
 ## Session 2026-03-01f — Upstream error handling improvement
 
 ### Context loaded

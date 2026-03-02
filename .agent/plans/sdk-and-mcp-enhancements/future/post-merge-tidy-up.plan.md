@@ -38,6 +38,9 @@ todos:
   - id: max-lines-extraction
     content: "Extract 3 max-lines search CLI modules: index-oak-helpers, index-batch-helpers, cache-wrapper"
     status: pending
+  - id: eliminate-flat-to-nested
+    content: "Evaluate eliminating the flat-to-nested transform by making the SDK use flat args directly (remove path/query nesting)"
+    status: pending
 isProject: false
 ---
 
@@ -129,9 +132,26 @@ isProject: false
     `index-batch-helpers.ts`, `cache-wrapper.ts` in the search CLI. Split
     by responsibility.
 
+### Flat-to-nested transform elimination (medium priority)
+
+20. **Evaluate eliminating `transformFlatToNestedArgs`** — The SDK currently
+    maintains two schema layers: flat (MCP-facing) and nested (`params.path` /
+    `params.query`). Every generated tool has a `transformFlatToNestedArgs`
+    function bridging them. The nested structure exists because the OpenAPI
+    client (`openapi-fetch`) uses `{ params: { path, query } }`, but MCP
+    clients naturally send flat args. The transform is pure entropy: it adds
+    code to generate, maintain, and type-check. Research doc
+    `mcp-sdk-type-reuse-investigation.md` Option B flagged this. The fix
+    would be to make the SDK invoke layer accept flat args directly and
+    perform path/query splitting internally (or switch to a flat-native
+    HTTP client). This is a significant refactor touching the generated
+    tool pipeline, but removes an entire layer of generated code and the
+    type-widening bugs it causes (e.g. the `z.union` → `z.preprocess`
+    migration for year parameters).
+
 ### Deferred snags
 
-20. **M1-S007**: Prerequisite sub-graph fetching — deferred.
+21. **M1-S007**: Prerequisite sub-graph fetching — deferred.
 
 ---
 
@@ -143,3 +163,4 @@ Collected from:
 - [release-plan-m1.plan.md](../../release-plan-m1.plan.md) — M1 gates
 - Session: [Error handling](7e822a76-e479-4943-90f1-ddb496e63e57)
 - Session: [MCP prompts rationalisation](c227c7a7-7c6d-48ee-8eab-0e5e766fc78e)
+- Session: [MCP server validation](fa8f4abf-9c53-4823-9d01-8b61b0cb2e38) — flat-to-nested entropy, year normalisation

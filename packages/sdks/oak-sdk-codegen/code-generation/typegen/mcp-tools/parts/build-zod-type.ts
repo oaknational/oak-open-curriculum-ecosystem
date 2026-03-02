@@ -1,36 +1,12 @@
 import type { ParamMetadata } from './param-metadata.js';
+import {
+  CANONICAL_YEAR_VALUES,
+  isYearParameterRequiringNormalisation,
+} from './year-normalisation.js';
 
-const CANONICAL_YEAR_VALUES = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  'all-years',
-];
-
-function buildCanonicalYearUnion(): string {
+function buildCanonicalYearPreprocess(): string {
   const enumValues = CANONICAL_YEAR_VALUES.map((value) => JSON.stringify(value)).join(', ');
-  return `z.union([z.enum([${enumValues}] as const), z.number().int().min(1).max(11).transform(String)])`;
-}
-
-function isNumericYearParameter(
-  meta: ParamMetadata,
-  paramName: string | undefined,
-  context: 'nested' | 'flat',
-): boolean {
-  return (
-    context === 'flat' &&
-    paramName === 'year' &&
-    meta.typePrimitive === 'number' &&
-    !meta.valueConstraint
-  );
+  return `z.preprocess((val) => typeof val === 'number' && Number.isInteger(val) && val >= 1 && val <= 11 ? String(val) : val, z.enum([${enumValues}] as const))`;
 }
 
 /**
@@ -54,8 +30,8 @@ export function buildZodType(
 ): string {
   let base: string;
 
-  if (isNumericYearParameter(meta, paramName, context)) {
-    base = buildCanonicalYearUnion();
+  if (context === 'flat' && paramName === 'year' && isYearParameterRequiringNormalisation(meta)) {
+    base = buildCanonicalYearPreprocess();
   } else if (meta.allowedValues && meta.allowedValues.length > 0) {
     // Use z.enum() for proper JSON Schema conversion via zodToJsonSchema
     const values = meta.allowedValues.map((v) => JSON.stringify(v)).join(', ');

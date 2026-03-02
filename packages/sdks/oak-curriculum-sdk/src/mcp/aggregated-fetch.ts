@@ -232,7 +232,7 @@ async function executeFetchByType(
     case 'thread': {
       return extractExecutionData(
         await deps.executeMcpTool('get-threads-units', {
-          threadSlug: slug,
+          thread: slug,
         }),
       );
     }

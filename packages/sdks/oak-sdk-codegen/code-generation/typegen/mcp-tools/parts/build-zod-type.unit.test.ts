@@ -102,7 +102,7 @@ describe('buildZodType', () => {
   });
 
   describe('year parameter normalisation', () => {
-    it('normalises numeric year parameter to string enum union', () => {
+    it('normalises numeric year parameter with preprocess in flat context', () => {
       const meta: ParamMetadata = {
         typePrimitive: 'number',
         valueConstraint: false,
@@ -110,19 +110,61 @@ describe('buildZodType', () => {
       };
 
       expect(buildZodType(meta, 'year', 'flat')).toBe(
-        'z.union([z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const), z.number().int().min(1).max(11).transform(String)])',
+        'z.preprocess((val) => typeof val === \'number\' && Number.isInteger(val) && val >= 1 && val <= 11 ? String(val) : val, z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const))',
       );
     });
 
-    it('keeps string-enum year parameter unchanged', () => {
+    it('normalises string-enum year parameter with preprocess in flat context', () => {
       const meta: ParamMetadata = {
         typePrimitive: 'string',
         valueConstraint: true,
         required: true,
-        allowedValues: ['1', '2', 'all-years'],
+        allowedValues: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
       };
 
-      expect(buildZodType(meta, 'year', 'flat')).toBe('z.enum(["1", "2", "all-years"] as const)');
+      expect(buildZodType(meta, 'year', 'flat')).toBe(
+        'z.preprocess((val) => typeof val === \'number\' && Number.isInteger(val) && val >= 1 && val <= 11 ? String(val) : val, z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const))',
+      );
+    });
+
+    it('does not normalise non-year string-enum in flat context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: true,
+        required: true,
+        allowedValues: ['ks1', 'ks2', 'ks3', 'ks4'],
+      };
+
+      expect(buildZodType(meta, 'keyStage', 'flat')).toBe(
+        'z.enum(["ks1", "ks2", "ks3", "ks4"] as const)',
+      );
+    });
+
+    it('does not normalise string-enum year in nested context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: true,
+        required: true,
+        allowedValues: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
+      };
+
+      expect(buildZodType(meta, 'year', 'nested')).toBe(
+        'z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const)',
+      );
+    });
+
+    it('normalises year parameter and preserves description', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'number',
+        valueConstraint: false,
+        required: true,
+        description: 'Year group filter',
+      };
+
+      const result = buildZodType(meta, 'year', 'flat');
+
+      expect(result).toContain('z.preprocess(');
+      expect(result).toContain('.describe("Year group filter")');
     });
 
     it('does not alter non-year numeric parameters', () => {
@@ -214,7 +256,7 @@ describe('buildZodFields', () => {
     ];
 
     expect(buildZodFields(entries, 'flat')).toEqual([
-      'year: z.union([z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const), z.number().int().min(1).max(11).transform(String)]).optional()',
+      'year: z.preprocess((val) => typeof val === \'number\' && Number.isInteger(val) && val >= 1 && val <= 11 ? String(val) : val, z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"] as const)).optional()',
     ]);
   });
 
