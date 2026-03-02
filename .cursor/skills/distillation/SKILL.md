@@ -14,7 +14,7 @@ Extract actionable rules, patterns, and troubleshooting from
 the session napkin into a compact, curated reference. This
 skill complements the [napkin skill](../napkin/SKILL.md).
 
-**Trigger**: When `.agent/memory/napkin.md` exceeds ~1,200
+**Trigger**: When `.agent/memory/napkin.md` exceeds ~800
 lines, or when the user requests distillation.
 
 ## File Layout

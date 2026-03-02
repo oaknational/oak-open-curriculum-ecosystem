@@ -1,5 +1,33 @@
 # Napkin
 
+## Session 2026-03-02c — Consolidation and commit
+
+### Commit gate issues fixed during commit
+Three issues surfaced during pre-commit hooks:
+1. **`CANONICAL_YEAR_VALUES.includes(String(v))`** — `as const` makes the tuple
+   readonly with literal types, so `.includes()` expects the exact literal union,
+   not `string`. Fix: `new Set<string>(CANONICAL_YEAR_VALUES)` then `.has()`.
+2. **Mock function parameter type mismatch** — `executeMcpTool` signature has
+   `args: unknown`, not `args: Record<string, unknown>`. Function params are
+   contravariant. Fix: let TypeScript infer from the interface by omitting
+   explicit parameter types in the lambda.
+3. **Curly braces lint** — inline `if (x) expr;` violates the `curly` ESLint
+   rule. Fix: always use braces.
+
+### Pattern: `as const` arrays + `.includes()` type mismatch
+When an `as const` array (readonly tuple with literal types) needs runtime
+`.includes(someString)`, the string argument must match the literal union. Two
+clean solutions:
+- `new Set<string>(array)` then `.has()` — widens at lookup, not at definition
+- A standalone type guard: `(s: string): s is Element => array.includes(s as Element)`
+
+The Set approach is preferable when you only need membership testing.
+
+### Code pattern extracted
+z.preprocess vs z.union for type-preserving coercion → `.agent/memory/code-patterns/preprocess-for-type-preserving-coercion.md`
+
+---
+
 ## Session 2026-03-02b — Year parameter normalisation
 
 ### What was done

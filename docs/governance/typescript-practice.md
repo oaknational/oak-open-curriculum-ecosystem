@@ -40,6 +40,10 @@ function isAllowedColor(color: string): color is AllowedColor {
   const stringAllowedColors: readonly string[] = ALLOWED_COLORS;
   return stringAllowedColors.includes(color);
 }
+
+// Alternative for pure membership testing (no type guard needed):
+const ALLOWED_COLOR_SET = new Set<string>(ALLOWED_COLORS);
+ALLOWED_COLOR_SET.has(someString); // widens at lookup, not at definition
 ```
 
 ## Our Type Validation at External Boundaries
