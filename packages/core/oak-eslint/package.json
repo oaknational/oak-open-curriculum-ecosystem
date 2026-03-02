@@ -29,7 +29,7 @@
     "eslint-plugin-sonarjs": "^3.0.5",
     "eslint-plugin-tsdoc": "^0.5.0",
     "globals": "^16.5.0",
-    "minimatch": "^10.2.2",
+    "minimatch": "^10.2.3",
     "typescript-eslint": "^8.56.1"
   },
   "devDependencies": {
