@@ -79,6 +79,20 @@ I claimed a test was "pre-existing on the base branch" without properly verifyin
 it was actually part of the test suite. Should have checked vitest config
 include/exclude patterns FIRST.
 
+### Test audit findings (applied)
+- Orphaned test at wrong location (`src/index.e2e.test.ts`) was excluded from
+  both vitest configs — dead code providing false confidence
+- 10 header-redaction tests in middleware integration test duplicated 53 unit
+  tests at the wrong level — collapsed to 1 proving integration only
+- 5 logging-shape tests inspecting `mock.calls` with silent `if` guards were
+  testing implementation (log format) not behaviour (HTTP response). Silent
+  conditional assertions (`if (call?.[1])`) can pass while proving nothing
+- Type-only test violated "Do not test types"
+- Nested vitest asymmetric matchers (`expect.objectContaining` with inner
+  `expect.stringMatching`) trigger `no-unsafe-assignment` — restructure to
+  explicit type guards on captured call arguments
+- `slowRequestThresholdMs` now injectable to eliminate 2.1s real delay in tests
+
 ## Session 2026-03-02i — Context hint audit
 
 ### Investigation: do aggregated tool responses hint at get-curriculum-model?
