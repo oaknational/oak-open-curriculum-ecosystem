@@ -12,6 +12,10 @@ jobs:
       issues: write
       pull-requests: write
 
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,8 +36,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build SDK
-        run: pnpm -C packages/sdks/oak-curriculum-sdk build
+      - name: Build
+        run: pnpm build
 
       - name: Create Release
         run: pnpm exec semantic-release

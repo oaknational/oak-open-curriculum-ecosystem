@@ -185,7 +185,7 @@ describe('registerWidgetResource', () => {
       const description = resource?.contents[0]?._meta?.['openai/widgetDescription'];
 
       expect(description).toBeDefined();
-      expect(description).toMatch(/orientation|domain model/i);
+      expect(description).toMatch(/get-curriculum-model/i);
     });
 
     it('includes openai/widgetDomain when widgetDomain option is provided', () => {
