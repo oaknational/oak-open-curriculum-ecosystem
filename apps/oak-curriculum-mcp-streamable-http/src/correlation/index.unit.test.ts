@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateCorrelationId, type CorrelationContext } from './index.js';
+import { generateCorrelationId } from './index.js';
 
 describe('generateCorrelationId', () => {
   it('generates ID with correct format', () => {
@@ -58,15 +58,5 @@ describe('generateCorrelationId', () => {
     expect(parts[1]).toMatch(/^\d+$/); // timestamp
     expect(parts[2]).toMatch(/^[a-f0-9]{6}$/); // 6-char hex
     expect(parts[2]?.length).toBe(6);
-  });
-});
-
-describe('CorrelationContext', () => {
-  it('type check: CorrelationContext has correlationId property', () => {
-    const context: CorrelationContext = {
-      correlationId: 'req_1699123456789_a3f2c9',
-    };
-
-    expect(context.correlationId).toBe('req_1699123456789_a3f2c9');
   });
 });
