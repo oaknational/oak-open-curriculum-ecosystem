@@ -6,9 +6,9 @@ This prompt guides the implementation of a new agent support tool: `get-knowledg
 
 **Before starting any work**, read and re-commit to the foundation documents:
 
-- `.agent/directives-and-memory/rules.md` — Core rules, First Question, TDD, type safety
-- `.agent/directives-and-memory/schema-first-execution.md` — Schema-first principles
-- `.agent/directives-and-memory/testing-strategy.md` — Testing philosophy and TDD at all levels
+- `.agent/directives/rules.md` — Core rules, First Question, TDD, type safety
+- `.agent/directives/schema-first-execution.md` — Schema-first principles
+- `.agent/directives/testing-strategy.md` — Testing philosophy and TDD at all levels
 
 ---
 
@@ -382,9 +382,9 @@ The implementation is complete when:
 
 Before starting implementation, re-read:
 
-1. `.agent/directives-and-memory/rules.md`
-2. `.agent/directives-and-memory/schema-first-execution.md`
-3. `.agent/directives-and-memory/testing-strategy.md`
+1. `.agent/directives/rules.md`
+2. `.agent/directives/schema-first-execution.md`
+3. `.agent/directives/testing-strategy.md`
 
 During implementation, periodically re-read these to ensure alignment.
 

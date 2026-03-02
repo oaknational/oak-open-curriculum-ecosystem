@@ -1,7 +1,6 @@
 /**
  * Unit tests for Oak logo SVG.
  *
- * @module oak-logo-svg.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

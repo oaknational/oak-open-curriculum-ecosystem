@@ -2,81 +2,84 @@
 
 ## Status
 
-Accepted
+Accepted (Revised)
+
+> **Update (20 February 2026)**: The standalone `get-knowledge-graph` tool has since
+> been removed and merged into `get-ontology` (property graph data is now embedded in
+> ontology responses). This ADR remains a historical record of the metadata-system
+> pattern; references to `get-knowledge-graph` below reflect the accepted-state context.
+>
+> **Update (1 March 2026)**: Subsequently, `get-ontology` and `get-help` were
+> consolidated into `get-curriculum-model` — now the sole agent support tool. The
+> metadata-system pattern (single source of truth driving generated instructions) is
+> unchanged; only the tool set has simplified from three to one.
 
 ## Context
 
-Agent support tools (`get-ontology`, `get-knowledge-graph`, `get-help`) help AI agents understand the Oak curriculum domain model before using other tools. These tools need to be discoverable through multiple channels:
+The `get-curriculum-model` agent support tool helps AI agents understand the Oak curriculum domain model before using other tools. This tool needs to be discoverable through multiple channels:
 
-1. **Server instructions** - Delivered in MCP `initialize` response
-2. **Context hints** - Included in `structuredContent` of every tool response
-3. **Tool descriptions** - Prerequisite guidance in tool descriptions
-4. **MCP prompts** - User-initiated workflow templates
-5. **Cross-references** - Tools referencing each other
+1. **Server instructions** — Delivered in MCP `initialize` response
+2. **Context hints** — Included in `structuredContent` of every tool response
+3. **Tool descriptions** — Prerequisite guidance in tool descriptions
+4. **MCP prompts** — User-initiated workflow templates
+5. **Cross-references** — Tool referencing related search/fetch tools
 
-Previously, each channel maintained its own hardcoded list of tools:
+Without a metadata system, each channel would maintain its own hardcoded description:
 
 ```typescript
 // prerequisite-guidance.ts (hardcoded)
 export const SERVER_INSTRUCTIONS = `...
-1. get-ontology - ...
-2. get-knowledge-graph - ...
-3. get-help - ...`;
+0. get-curriculum-model - Complete curriculum orientation...`;
 
 // tool-guidance-data.ts (separate list)
 agentSupport: {
-  tools: ['get-help', 'get-ontology', 'get-knowledge-graph'],
+  tools: ['get-curriculum-model'],
 }
 ```
 
-This created several problems:
-
-- **Drift risk**: Adding a new tool required updating multiple files
-- **Inconsistent relationships**: No formal encoding of how tools relate
-- **Missing context**: Models didn't understand why tools complement each other
-- **Manual synchronization**: Tool order, descriptions, and relationships manually maintained
+This creates drift risk: updating the tool's description or purpose requires touching multiple files. The metadata system eliminates this by generating all downstream surfaces from a single definition.
 
 ## Decision
 
 Implement a **single source of truth metadata system** for agent support tools that:
 
 1. Defines all tool metadata in one place (`agent-support-tool-metadata.ts`)
-2. Explicitly encodes tool relationships and complementary nature
-3. Generates server instructions and context hints from the metadata
-4. Provides type-safe access to tool information
+2. Generates server instructions and context hints from the metadata
+3. Provides type-safe access to tool information
+4. Scales to additional tools if the tool set grows in future
 
 ### Metadata Structure
 
 ```typescript
 export const AGENT_SUPPORT_TOOL_METADATA = {
-  'get-ontology': {
-    name: 'get-ontology',
-    shortDescription: 'Domain model definitions',
-    provides: ['key stages', 'subjects', 'entity hierarchy', 'ID formats'],
-    purpose: 'understand WHAT curriculum concepts are and what they mean',
-    callOrder: 1,
-    complementsTools: ['get-knowledge-graph', 'get-help'],
-    seeAlso: 'get-knowledge-graph for structural relationships, get-help for tool usage',
+  'get-curriculum-model': {
+    name: 'get-curriculum-model',
+    shortDescription: 'Complete curriculum orientation',
+    provides: ['domain model', 'tool guidance', 'key stages', 'subjects', 'entity hierarchy'],
+    purpose: 'understand the Oak curriculum domain model and how to use available tools',
+    callOrder: 0,
+    complementsTools: [],
+    invocationTrigger: 'At session start or when the agent needs curriculum orientation',
+    contextHint: 'Call get-curriculum-model for the complete domain model and tool guidance',
     callAtStart: true,
   },
-  // ... other tools
 } as const;
 ```
 
-### Relationship Encoding
+### Field Descriptions
 
-| Field              | Purpose                                              |
-| ------------------ | ---------------------------------------------------- |
-| `complementsTools` | Array of tools that work well together with this one |
-| `seeAlso`          | Human-readable guidance on when to use related tools |
-| `purpose`          | Uses WHAT/HOW/WHICH verbs to distinguish tool roles  |
-| `callOrder`        | Recommended sequence for calling tools               |
-| `provides`         | Specific data/guidance each tool returns             |
+| Field               | Purpose                                                        |
+| ------------------- | -------------------------------------------------------------- |
+| `callOrder`         | Recommended sequence (0-based; reserved for future multi-tool) |
+| `complementsTools`  | Other agent support tools that work alongside this one         |
+| `invocationTrigger` | When an agent should call this tool                            |
+| `contextHint`       | Brief sentence reinforced in every tool response               |
+| `provides`          | Specific data categories the tool returns                      |
+| `purpose`           | Why an agent should call this tool                             |
 
 ### Generated Outputs
 
 ```typescript
-// Generated from metadata - always includes all tools
 export const SERVER_INSTRUCTIONS = generateServerInstructions();
 export const OAK_CONTEXT_HINT = generateContextHint();
 ```
@@ -86,32 +89,24 @@ Sample generated instructions:
 ```markdown
 Oak Curriculum MCP Server - AI Agent Guidance
 
-For optimal results, call these agent support tools at conversation start:
+For optimal results, call this agent support tool at conversation start:
 
-1. get-ontology - Domain model definitions: key stages, subjects, entity hierarchy, ID formats
-2. get-knowledge-graph - Concept TYPE relationships: domain structure graph, entity relationships
-3. get-help - Tool usage guidance: tool categories, workflows, tips
+0. get-curriculum-model - Complete curriculum orientation: domain model, tool guidance,
+   key stages, subjects, entity hierarchy
 
-These tools are read-only and idempotent. They complement each other:
+This tool is read-only and idempotent.
 
-- get-ontology: understand WHAT curriculum concepts are. See also: get-knowledge-graph for structure
-- get-knowledge-graph: understand HOW concepts connect. See also: get-ontology for definitions
-- get-help: understand WHICH tools to use. See also: get-ontology for domain understanding
+- get-curriculum-model: understand the Oak curriculum domain model and how to use
+  available tools.
+
+Call this tool first to reduce errors when using search, fetch, and browsing tools.
 ```
 
 ## Rationale
 
 ### Single Source of Truth
 
-The metadata object is the canonical definition of agent support tools. The `toolGuidanceData.toolCategories.agentSupport.tools` array should match the keys of this object, verified by unit tests.
-
-### Explicit Relationship Encoding
-
-By encoding relationships in structured data:
-
-- Models can understand tool complementarity
-- Cross-references are automatically consistent
-- Relationship information appears in multiple channels
+The metadata object is the canonical definition of agent support tools. The `toolGuidanceData.toolCategories.agentSupport.tools` array must match the keys of this object, verified by unit tests.
 
 ### Type Safety
 
@@ -123,28 +118,26 @@ Using `as const` and derived types ensures:
 
 ### Automatic Propagation
 
-When adding a new agent support tool:
+When modifying the agent support tool or adding a new one:
 
-1. Add metadata to `AGENT_SUPPORT_TOOL_METADATA`
-2. Add tool name to `toolCategories.agentSupport.tools`
+1. Update metadata in `AGENT_SUPPORT_TOOL_METADATA`
+2. Update `tool-guidance-data.ts` tool list
 3. Run tests to verify consistency
-4. All downstream artifacts update automatically
+4. All downstream artefacts update automatically
 
 ## Consequences
 
 ### Positive
 
-- **No drift**: Single source of truth prevents inconsistencies
-- **Rich relationships**: Tools explicitly reference each other
-- **Self-documenting**: Metadata describes tool purposes and relationships
+- **No drift**: Single source of truth prevents inconsistencies across channels
+- **Self-documenting**: Metadata describes tool purpose and invocation triggers
 - **Testable**: Unit tests verify metadata-tool list consistency
-- **Extensible**: Adding new tools is a single-location change
+- **Extensible**: Adding future tools is a single-location change
 
 ### Negative
 
 - **Indirection**: Generated strings are less readable in source
 - **Learning curve**: Developers must understand the metadata system
-- **Verification delay**: Tests must run to catch missing metadata
 
 ### Neutral
 
@@ -155,17 +148,16 @@ When adding a new agent support tool:
 
 ### Files Changed
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts` - New file
-- `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts` - Now imports and uses generated values
-- `packages/sdks/oak-curriculum-sdk/tsup.config.ts` - Added new entry
+- `packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts` — Metadata definition and generators
+- `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts` — Imports and uses generated values
 
 ### Test Coverage
 
-18 unit tests verify:
+Unit tests verify:
 
 - Metadata entries match `agentSupport.tools` array
 - All required fields present
-- `complementsTools` only references valid tools
+- `complementsTools` references valid tools only
 - No tool complements itself
 - Call orders are unique
 - Generated instructions include all tools
@@ -181,10 +173,11 @@ When adding a new agent support tool:
   shortDescription: 'Curriculum terminology',
   provides: ['definitions', 'synonyms', 'related terms'],
   purpose: 'understand terminology and jargon',
-  callOrder: 4,
-  complementsTools: ['get-ontology', 'get-help'],
-  seeAlso: 'get-ontology for domain structure',
-  callAtStart: true,
+  callOrder: 1,
+  complementsTools: ['get-curriculum-model'],
+  invocationTrigger: 'When the agent encounters unfamiliar curriculum terminology',
+  contextHint: 'Call get-glossary for curriculum term definitions',
+  callAtStart: false,
 }
 ```
 
@@ -192,7 +185,7 @@ When adding a new agent support tool:
 
 ```typescript
 agentSupport: {
-  tools: ['get-help', 'get-ontology', 'get-knowledge-graph', 'get-glossary'],
+  tools: ['get-curriculum-model', 'get-glossary'],
 }
 ```
 

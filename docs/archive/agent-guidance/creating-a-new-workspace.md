@@ -1,6 +1,6 @@
 # Creating a New Workspace
 
-This comprehensive guide explains how to create new workspaces in the oak-mcp-ecosystem monorepo, following the Moria/Histoi/Psycha architecture. This guide was created based on the experience of implementing Phase 6 (Oak Curriculum API) workspaces.
+This comprehensive guide explains how to create new workspaces in the oak-open-data-ecosystem monorepo, following the Moria/Histoi/Psycha architecture. This guide was created based on the experience of implementing Phase 6 (Oak Curriculum API) workspaces.
 
 ## Workspace Types
 
@@ -84,7 +84,7 @@ Every workspace needs these files:
     // Add workspace and external dependencies
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "24",
     "tsx": "^4.20.5", // Only for MCP servers with dev scripts
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
@@ -184,13 +184,26 @@ export default defineConfig({
 });
 ```
 
-For **SDKs/libraries** (don't bundle):
+For **SDKs/libraries** (don't bundle — use grouped annotated globs):
 
 ```typescript
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/**/*.ts'],
+  entry: [
+    // Root-level modules
+    'src/*.ts',
+
+    // Each module area gets its own annotated glob.
+    // New files within a group are included automatically.
+    // Only add a new glob when adding a new top-level module area.
+    'src/types/**/*.ts',
+    'src/client/**/*.ts',
+
+    // Exclude tests from all groups
+    '!src/**/*.test.ts',
+    '!src/**/*.spec.ts',
+  ],
   format: ['esm'],
   dts: false,
   splitting: false,

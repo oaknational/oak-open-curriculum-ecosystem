@@ -44,7 +44,7 @@ The Oak Notion MCP Server implements a **Complete Biological Architecture** - a 
 
 ### For AI Agents
 
-1. **Read AGENT.md**: `.agent/directives-and-memory/AGENT.md` contains your primary directives
+1. **Read AGENT.md**: `.agent/directives/AGENT.md` contains your primary directives
 2. **Understand Boundaries**: Systems flow everywhere, organa have clear boundaries
 3. **Follow Patterns**: Use tissue/organ examples as templates
 4. **Check Phase 3 Plan**: Current implementation in `.agent/plans/phase-3-biological-architecture-implementation-plan.md`
@@ -588,7 +588,7 @@ See [Phase 4 Plan](../../.agent/plans/phase-4-oak-mcp-core-implementation-plan.m
    - Detailed roadmap
    - Success metrics
 
-7. **[AGENT.md](../../.agent/directives-and-memory/AGENT.md)**
+7. **[AGENT.md](../../.agent/directives/AGENT.md)**
    - AI agent guidance
    - Biological scales reference
    - Implementation principles

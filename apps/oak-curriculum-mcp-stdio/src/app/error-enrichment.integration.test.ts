@@ -1,17 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createToolResponseHandlers } from './tool-response-handlers';
-import type { Logger, Duration } from '@oaknational/mcp-logger/node';
+import type { Logger, Duration } from '@oaknational/logger/node';
+import { createFakeLogger } from '../test-helpers/fakes.js';
 
 describe('Error Enrichment Integration', () => {
   let logger: Logger;
-  let logSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    logSpy = vi.fn();
-    logger = {
-      info: vi.fn(),
-      error: logSpy,
-    } as unknown as Logger;
+    logger = createFakeLogger();
   });
 
   it('logs execution errors with correlation ID and timing', () => {
@@ -37,8 +33,13 @@ describe('Error Enrichment Integration', () => {
 
     handlers.handleExecutionError({ input: 'test' }, new Error('Test error'), errorContext);
 
-    expect(logSpy).toHaveBeenCalled();
-    const logCall = logSpy.mock.calls[0];
+    expect(vi.mocked(logger.error)).toHaveBeenCalled();
+    const logCalls = vi.mocked(logger.error).mock.calls;
+    expect(logCalls.length).toBeGreaterThan(0);
+    const logCall = logCalls[0];
+    if (!logCall) {
+      throw new Error('Expected at least one log call');
+    }
     expect(logCall[0]).toBe('Tool execution failed');
     expect(logCall[1]).toMatchObject({
       correlationId: 'req_1699123456789_a3f2c9',
@@ -78,8 +79,13 @@ describe('Error Enrichment Integration', () => {
       errorContext,
     );
 
-    expect(logSpy).toHaveBeenCalled();
-    const logCall = logSpy.mock.calls[0];
+    expect(vi.mocked(logger.error)).toHaveBeenCalled();
+    const logCalls = vi.mocked(logger.error).mock.calls;
+    expect(logCalls.length).toBeGreaterThan(0);
+    const logCall = logCalls[0];
+    if (!logCall) {
+      throw new Error('Expected at least one log call');
+    }
     expect(logCall[0]).toBe('Tool output validation failed');
     expect(logCall[1]).toMatchObject({
       correlationId: 'req_1699123456790_b4e3d0',
@@ -102,8 +108,13 @@ describe('Error Enrichment Integration', () => {
     // Call without errorContext (backward compatibility)
     handlers.handleExecutionError({ input: 'test' }, new Error('Test error'));
 
-    expect(logSpy).toHaveBeenCalled();
-    const logCall = logSpy.mock.calls[0];
+    expect(vi.mocked(logger.error)).toHaveBeenCalled();
+    const logCalls = vi.mocked(logger.error).mock.calls;
+    expect(logCalls.length).toBeGreaterThan(0);
+    const logCall = logCalls[0];
+    if (!logCall) {
+      throw new Error('Expected at least one log call');
+    }
     // Should still log, just without enrichment
     expect(logCall[0]).toContain('Tool execution failed');
   });
@@ -131,8 +142,13 @@ describe('Error Enrichment Integration', () => {
 
     handlers.handleExecutionError({ query: 'test' }, new Error('Search failed'), errorContext);
 
-    expect(logSpy).toHaveBeenCalled();
-    const logCall = logSpy.mock.calls[0];
+    expect(vi.mocked(logger.error)).toHaveBeenCalled();
+    const logCalls = vi.mocked(logger.error).mock.calls;
+    expect(logCalls.length).toBeGreaterThan(0);
+    const logCall = logCalls[0];
+    if (!logCall) {
+      throw new Error('Expected at least one log call');
+    }
     expect(logCall[1]).toMatchObject({
       correlationId: 'req_1699999999999_ffffff',
       duration: '523ms',
@@ -165,7 +181,7 @@ describe('Error Enrichment Integration', () => {
     handlers.handleExecutionError({ input: 'test' }, new Error('Test error'), errorContext);
 
     // Verify logger.error was called (which goes to file, not stdout)
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(vi.mocked(logger.error)).toHaveBeenCalledWith(
       'Tool execution failed',
       expect.objectContaining({
         correlationId: 'req_test_123',

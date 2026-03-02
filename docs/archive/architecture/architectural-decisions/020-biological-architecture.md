@@ -1,3 +1,5 @@
+> **ARCHIVED**: This ADR describes the deprecated Greek/biological naming convention. The architecture has moved to neutral naming (see [ADR-040](../../../architecture/architectural-decisions/040-neutral-architecture-and-identity-allowlist.md) and [Greek Ecosystem Deprecation](../../../architecture/greek-ecosystem-deprecation.md)).
+
 # ADR-020: Biological Architecture Pattern
 
 > 🗺️ **Related**: [Architecture Map](../../ARCHITECTURE_MAP.md) | [Architecture Overview](../../architecture-overview.md) | [Biological Philosophy](../biological-philosophy.md)

@@ -28,14 +28,14 @@ Create a minimal Playwright test that:
 - Verifies the landing page loads and contains key content
 - Runs axe-core accessibility checks
 - Lives at `apps/oak-curriculum-mcp-streamable-http/tests/visual/landing-page.spec.ts` (or update existing)
-- Follows TDD approach per `.agent/directives-and-memory/testing-strategy.md`
+- Follows TDD approach per `.agent/directives/testing-strategy.md`
 
 ## Rules
 
 Read and follow these before implementation:
 
-- `.agent/directives-and-memory/rules.md` - Core development rules
-- `.agent/directives-and-memory/testing-strategy.md` - TDD approach, test types, no complex mocks
+- `.agent/directives/rules.md` - Core development rules
+- `.agent/directives/testing-strategy.md` - TDD approach, test types, no complex mocks
 
 Key points:
 

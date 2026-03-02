@@ -5,8 +5,6 @@
  * It encapsulates all Zod v3 artefacts and provides a clean Zod v4-compatible interface.
  *
  * The adapter enforces the Zod version boundary documented in ADR-055.
- *
- * @packageDocumentation
  */
 
 export {

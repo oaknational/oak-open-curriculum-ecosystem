@@ -1,48 +1,74 @@
-# Documentation for Oak Notion MCP
+---
+boundary: cross-boundary
+doc_role: index
+authority: docs-root-navigation
+status: active
+last_reviewed: 2026-02-25
+---
 
-## 🚀 Getting Started
+# Documentation for Oak Open Curriculum Ecosystem
 
-- **New to the repo?** → [Developer Onboarding](development/onboarding.md) – first-stop checklist covering GO.md cadence, shared parsing helpers, and workspace walkthroughs
-- **Experienced?** → [Quick Reference](quick-reference.md) - Jump right in with code examples
-- **Working with AI?** → [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Essential GO.md patterns and practices
+**Last Updated**: 2026-02-25  
+**Status**: Active index
+
+## Getting Started
+
+- **New to this project? Not a developer?** → [VISION](foundation/VISION.md) for what this project delivers and why, then the [Curriculum Guide](domain/curriculum-guide.md) for a plain-language introduction to Oak's curriculum structure
+- **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
+- **Vision and strategy?** → [foundation/VISION.md](foundation/VISION.md) — why this repository exists, what it delivers, and how we measure impact
+- **Working with AI?** → Start with [`start-right` command](../.cursor/commands/jc-start-right.md), [`start-right` prompt](../.agent/prompts/start-right.prompt.md), or [`start-right` skill](../.agent/skills/start-right/SKILL.md), then [AGENT.md](../.agent/directives/AGENT.md)
+- **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 
 ## Core Documentation
 
-- [Architecture Map](ARCHITECTURE_MAP.md) - 🗺️ Visual guide to finding what you need
-- [Architecture Overview](architecture-overview.md) - High-level system overview
-- [API Reference](usage/api-reference.md) - Complete reference for all resources and tools
-
-## Detailed Documentation
-
 ### Architecture
 
-- [High Level Architecture](architecture/high-level-architecture.md) - Detailed system design, layers, and components
-- [Module Interface Patterns](architecture/README.md) - Multi-scale interface patterns
-- [Architecture Decision Records](architecture/architectural-decisions/) - All architectural decisions
+- [OpenAPI Pipeline](architecture/openapi-pipeline.md) - **THE** architecture doc: how types flow from schema
+- [Architecture Decision Records](architecture/architectural-decisions/) — Architectural source of truth (the schema-first generation ADRs below underpin everything in this repo)
+- [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
+- [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
+- [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-048](architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+- [Provider System](architecture/provider-system.md) - Current app-local provider composition and DI boundaries
 
 ### Development
 
-- [Onboarding](development/onboarding.md) - Quick start guide for new developers and AI assistants
-- [Tooling](development/tooling.md) - Development tools and versions
-- [Troubleshooting](development/troubleshooting.md) - Common issues and solutions
+- [Quick Start Guide](foundation/quick-start.md) - Architecture, setup, and development workflows for new contributors
+- [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
+- [Environment Variables](operations/environment-variables.md) - Complete setup guide
+- [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers
+- [Troubleshooting](operations/troubleshooting.md) - Common issues and solutions
+- [Tooling](engineering/tooling.md) - Development tools and versions
 
-### Usage
+### Curriculum Data
 
-- [API Reference](usage/api-reference.md) - Resources, tools, and prompts reference
+- [Curriculum Guide](domain/curriculum-guide.md) - **Start here** if you're new to Oak's curriculum: plain-language structure, KS4 complexity, user personas
+- [Data Variances](domain/DATA-VARIANCES.md) - **Essential**: Subject/key stage differences, transcript availability, structural patterns
+- [Ontology Data](../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) (TypeScript source) - Domain model and structural patterns
+- [Knowledge Graph](../packages/sdks/oak-sdk-codegen/src/mcp/property-graph-data.ts) (TypeScript source) - Canonical entity-relationship data used by generated tooling
 
-### AI Agent Guidance
+### Engineering Practice
 
-Comprehensive documentation for AI agents working with this codebase:
+- [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
+- [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system
 
-- [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Primary guide for AI agents
-- [Experimental Architecture Quick Reference](agent-guidance/experimental-architecture-quick-reference.md) - Concrete examples of our approach
-- [Development Practice](agent-guidance/development-practice.md) - Code standards and workflow
-- [TypeScript Practice](agent-guidance/typescript-practice.md) - Type safety guidelines
-- [Testing Strategy](../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
-- [Safety and Security](agent-guidance/safety-and-security.md) - Security measures and privacy protection
-- [Understanding Agent References](agent-guidance/understanding-agent-references.md) - How to use curated docs
+## Code Standards and Testing
+
+- [Development Practice](governance/development-practice.md) - Code standards and workflow
+- [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines
+- [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels
+- [Safety and Security](governance/safety-and-security.md) - Security measures and privacy protection
+
+## Search Application
+
+For semantic search specific documentation:
+
+- [Search App README](../apps/oak-search-cli/README.md) - Search application overview
+- [Search Architecture](../apps/oak-search-cli/docs/ARCHITECTURE.md) - Search pipeline architecture
+- [Ground Truth Protocol](../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) - Baselines and GT process
+- [Search Plans](../.agent/plans/semantic-search/) - Roadmap, acceptance criteria, experiments
 
 ## Additional Resources
 
-- [GO.md](../GO.md) - Grounding document for maintaining focus and quality (AI agents: read every 3rd task)
-- [SDK Docs Pipeline Guide](../packages/oak-curriculum-sdk/docs/docs-pipeline.md) - Generate, verify, and extend the SDK docs (HTML/JSON/MD/AI)
+- [GO.md](../.agent/prompts/GO.md) - Grounding prompt for structured task execution (ACTION/REVIEW cadence)
+- [SDK README](../packages/sdks/oak-curriculum-sdk/README.md) - SDK generation and exports

@@ -1,0 +1,24 @@
+---
+description: Tests MUST NOT mutate global state. No process.env mutations, no vi.stubGlobal, no vi.doMock. Pass configuration as parameters.
+globs: '**/*.test.ts'
+---
+
+# No Global State Manipulation in Tests
+
+Tests MUST NOT mutate global state.
+
+## Prohibited
+
+- `process.env.X = 'value'` - mutates global state, causes race conditions
+- `vi.stubGlobal('fetch', ...)` - mutates global objects
+- `vi.doMock('module', ...)` - manipulates module cache, subtle race conditions
+
+## Required Pattern
+
+Pass configuration as explicit function parameters. Simple fakes injected as constructor arguments, not complex mocks.
+
+If a function needs configuration, refactor it to accept config as a parameter.
+
+## Reference
+
+@docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md

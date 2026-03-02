@@ -1,33 +1,15 @@
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { typeSafeEntries, typeSafeFromEntries } from '../types/helpers/type-helpers.js';
-import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import {
+  typeSafeEntries,
+  typeSafeFromEntries,
+  typeSafeKeys,
+} from '../types/helpers/type-helpers.js';
+import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
 import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
-
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- JC: Sometimes we really do need to deal with unknown records at incoming system boundaries
-type UnknownRecord = Record<string, unknown>;
-
-/**
- * Type guard to check if a value is a non-null object (UnknownRecord).
- *
- * @param value - The value to check
- * @returns True if the value is a non-null, non-array object with at least one key-value pair where the key is a string and the value is not undefined
- */
-function isUnknownRecord(value: unknown): value is UnknownRecord {
-  const isProbablyObject = typeof value === 'object' && value !== null && !Array.isArray(value);
-  if (!isProbablyObject) {
-    return false;
-  }
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const hasKeys = Object.keys(value).length > 0;
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const hasValues = Object.values(value).length > 0;
-  // eslint-disable-next-line no-restricted-properties -- JC: genuine unknown record at incoming system boundary
-  const firstKey = Object.keys(value)[0];
-  const hasStringKey = typeof firstKey === 'string' && firstKey !== '';
-  return hasKeys && hasValues && hasStringKey;
-}
+import type { SearchRetrievalService } from './search-retrieval-types.js';
+import type { GeneratedToolRegistry } from './universal-tools/types.js';
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
@@ -35,18 +17,44 @@ function isUnknownRecord(value: unknown): value is UnknownRecord {
  */
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
 
-/**
- * Type guard to check if a value is a valid structured content object.
- * StructuredContent must be a non-null, non-array object with string keys.
- */
+/** Type for _meta field, derived from the MCP SDK's CallToolResult. Widget-only data. */
+type WidgetMeta = NonNullable<CallToolResult['_meta']>;
 
+/**
+ * Type guard: checks if a value is a non-null, non-array object with at least
+ * one string key — the minimal shape for StructuredContent.
+ */
 function isStructuredContent(value: unknown): value is StructuredContent {
-  // StructuredContent must be a non-null, non-array object with string keys.
-  return isUnknownRecord(value);
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  const keys = typeSafeKeys(value);
+  return keys.length > 0 && typeof keys[0] === 'string' && keys[0] !== '';
 }
 
 export interface UniversalToolExecutorDependencies {
   readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
+
+  /**
+   * Search retrieval service for SDK-backed search tools.
+   *
+   * Used by search, browse-curriculum, and explore-topic tools
+   * to query Elasticsearch directly via the Search SDK. The type is
+   * structurally compatible with Search SDK's RetrievalService.
+   *
+   * Provided by the MCP server wiring: real ES service in production,
+   * stub service (`createStubSearchRetrieval`) in stub mode.
+   */
+  readonly searchRetrieval: SearchRetrievalService;
+
+  /**
+   * Generated tool registry for DI of generation SDK functions.
+   *
+   * Provides `getToolFromToolName`, `isToolName`, and `toolNames`
+   * without hardcoding imports from the generation package. This
+   * enables tests to inject lightweight fakes.
+   */
+  readonly generatedTools: GeneratedToolRegistry;
 }
 
 export function formatError(message: string): CallToolResult {
@@ -84,48 +92,32 @@ export function formatData(data: unknown): CallToolResult {
 }
 
 /**
- * Formats data for generated tools, optionally including context hint.
+ * Input options for the unified formatToolResponse function.
  *
- * @param options - Options including status, data, and includeContextHint flag
- * @returns CallToolResult with optional context hint in structuredContent
- */
-export function formatDataWithContext(options: {
-  readonly status: number | string;
-  readonly data: unknown;
-  readonly includeContextHint: boolean;
-}): CallToolResult {
-  const { status, data, includeContextHint } = options;
-  const normalised = serialiseArg({ status, data });
-  const content: TextContent = { type: 'text', text: JSON.stringify(normalised) };
-  const baseContent = isStructuredContent(normalised) ? normalised : { data: normalised };
-  const structuredContent: StructuredContent = includeContextHint
-    ? { ...baseContent, oakContextHint: OAK_CONTEXT_HINT }
-    : baseContent;
-  return { content: [content], structuredContent };
-}
-
-/**
- * Input options for formatOptimizedResult.
+ * All tools — generated and aggregated — use this single interface.
+ * Per MCP spec, the content array can contain multiple items:
+ * - content[0]: human-readable summary for conversation display
+ * - content[1]: JSON-serialised full data for backwards compatibility
  *
- * Per OpenAI Apps SDK reference:
- * - Full data goes to structuredContent (model + widget see this)
- * - Summary goes to content (human-readable for conversation)
- * - Widget metadata goes to _meta (widget-only)
+ * This ensures every MCP client (Cursor, OpenAI Apps SDK, etc.) sees
+ * both the summary AND the full data regardless of how it reads responses.
  */
-export interface OptimizedResultOptions {
-  /** Human-readable summary for content (conversation display) */
+export interface ToolResponseOptions {
+  /** Human-readable summary for content[0] (conversation display) */
   readonly summary: string;
-  /** Full data for structuredContent (model reasoning + widget display) */
-  readonly fullData: unknown;
+  /** Full data — serialised to content[1] and spread into structuredContent */
+  readonly data: unknown;
+  /** Whether to include oakContextHint in structuredContent */
+  readonly includeContextHint?: boolean;
   /** Optional query string for widget context */
   readonly query?: string;
   /** Optional timestamp for widget context */
   readonly timestamp?: number;
   /** Optional status indicator */
   readonly status?: string;
-  /** Tool name for widget routing (e.g., 'get-search-lessons') */
+  /** Tool name for widget routing (e.g., 'search') */
   readonly toolName?: string;
-  /** Human-readable tool title from annotations (e.g., 'Search Lessons') */
+  /** Human-readable tool title from annotations (e.g., 'Search Curriculum') */
   readonly annotationsTitle?: string;
 }
 
@@ -141,57 +133,42 @@ export interface OptimizedResultOptions {
  */
 
 /** Builds _meta object for widget-only data. Model never sees _meta. */
-function buildMeta(options: OptimizedResultOptions): UnknownRecord {
+function buildMeta(options: ToolResponseOptions): WidgetMeta {
   const { toolName, annotationsTitle, query, timestamp } = options;
-  const meta: UnknownRecord = {};
-  if (toolName !== undefined) {
-    meta.toolName = toolName;
-  }
-  if (annotationsTitle !== undefined) {
-    meta['annotations/title'] = annotationsTitle;
-  }
-  if (query !== undefined) {
-    meta.query = query;
-  }
-  if (timestamp !== undefined) {
-    meta.timestamp = timestamp;
-  }
-  return meta;
+  return {
+    ...(toolName !== undefined ? { toolName } : {}),
+    ...(annotationsTitle !== undefined ? { 'annotations/title': annotationsTitle } : {}),
+    ...(query !== undefined ? { query } : {}),
+    ...(timestamp !== undefined ? { timestamp } : {}),
+  };
 }
 
 /**
- * Builds structuredContent with FULL data for model reasoning.
+ * Unified tool response formatter for all MCP tools.
  *
- * Per OpenAI Apps SDK: structuredContent is "Surfaced to the model and the component".
- * This is where the model gets the data it needs to reason over.
+ * Produces a 2-item content array (summary + JSON data), structuredContent
+ * for the OpenAI Apps SDK, and _meta for widget routing. This ensures
+ * every MCP client sees both the human-readable summary AND the full data.
+ *
+ * Per MCP spec: "For backwards compatibility, a tool that returns structured
+ * content SHOULD also return the serialized JSON in a TextContent block."
+ *
+ * @param options - Response formatting options
+ * @returns CallToolResult with unified response shape
  */
-function buildStructuredContent(
-  options: OptimizedResultOptions,
-  serialisedFullData: unknown,
-): UnknownRecord {
-  const { summary, status } = options;
-  // Full data goes here - model needs this for reasoning
-  const base = isUnknownRecord(serialisedFullData)
-    ? serialisedFullData
-    : { data: serialisedFullData };
-  const structuredContent: UnknownRecord = {
-    ...base,
-    summary,
-    oakContextHint: OAK_CONTEXT_HINT,
-  };
-  if (status !== undefined) {
-    structuredContent.status = status;
-  }
-  return structuredContent;
-}
-
-export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {
-  const serialisedFullData = serialiseArg(options.fullData);
+export function formatToolResponse(options: ToolResponseOptions): CallToolResult {
+  const serialisedData = serialiseArg(options.data);
   const meta = buildMeta(options);
-  const structuredContent = buildStructuredContent(options, serialisedFullData);
-  // Human-readable summary for conversation display
-  const content: TextContent = { type: 'text', text: options.summary };
-  return { content: [content], structuredContent, _meta: meta };
+  const base = isStructuredContent(serialisedData) ? serialisedData : { data: serialisedData };
+  const structuredContent: StructuredContent = {
+    ...base,
+    summary: options.summary,
+    ...(options.includeContextHint !== false ? { oakContextHint: OAK_CONTEXT_HINT } : {}),
+    ...(options.status !== undefined ? { status: options.status } : {}),
+  };
+  const summaryContent: TextContent = { type: 'text', text: options.summary };
+  const jsonContent: TextContent = { type: 'text', text: JSON.stringify(serialisedData) };
+  return { content: [summaryContent, jsonContent], structuredContent, _meta: meta };
 }
 
 export function formatUnknownTool(value: unknown): CallToolResult {

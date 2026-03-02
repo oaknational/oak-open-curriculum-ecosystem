@@ -1,11 +1,11 @@
 /**
- * Types for response augmentation with canonical URLs
+ * Types for response augmentation with canonical URLs.
+ *
+ * `ContentType` is re-exported from the generated `url-helpers.ts` to
+ * ensure a single source of truth anchored to the schema.
  */
 
-export interface ResponseWithCanonicalUrl {
-  canonicalUrl?: string;
-  [key: string]: unknown;
-}
+export type { ContentType } from '@oaknational/sdk-codegen/api-schema';
 
 export interface UnitContext {
   subjectSlug?: string;
@@ -20,5 +20,3 @@ export interface ResponseContext {
   unit?: UnitContext;
   subject?: SubjectContext;
 }
-
-export type ContentType = 'lesson' | 'unit' | 'subject' | 'sequence' | 'thread';

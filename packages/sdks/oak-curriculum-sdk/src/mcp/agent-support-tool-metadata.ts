@@ -1,79 +1,17 @@
 /**
  * Agent Support Tool Metadata - Single Source of Truth
  *
- * This module defines metadata for all agent support tools, including their
- * relationships and complementary nature. This data drives:
+ * Defines metadata for all agent support tools driving:
  * - Server instructions in the MCP initialize response
  * - Context hints in tool responses (structuredContent.oakContextHint)
  * - Cross-references between tools (seeAlso fields)
  *
- * ## Architecture
+ * Adding a new tool:
+ * 1. Add metadata to AGENT_SUPPORT_TOOL_METADATA
+ * 2. Add to `toolCategories.agentSupport.tools` in `tool-guidance-data.ts`
+ * 3. Run `pnpm test agent-support-tool-metadata` to verify consistency
  *
- * The agent support tool metadata system ensures that:
- * 1. All agent support tools are consistently documented
- * 2. Relationships between tools are explicitly encoded
- * 3. Server instructions and context hints are always up-to-date
- * 4. Adding a new tool automatically updates all downstream artifacts
- *
- * See ADR-060 for the architectural decision behind this pattern.
- *
- * ## Adding a New Agent Support Tool
- *
- * To add a new agent support tool:
- *
- * 1. Add metadata to {@link AGENT_SUPPORT_TOOL_METADATA}:
- *    ```typescript
- *    'get-glossary': {
- *      name: 'get-glossary',
- *      shortDescription: 'Curriculum terminology',
- *      provides: ['definitions', 'synonyms', 'related terms'],
- *      purpose: 'understand terminology and jargon',
- *      callOrder: 4, // Next available number
- *      complementsTools: ['get-ontology', 'get-help'],
- *      seeAlso: 'get-ontology for domain structure',
- *      callAtStart: true,
- *    }
- *    ```
- *
- * 2. Add the tool to `toolCategories.agentSupport.tools` in `tool-guidance-data.ts`
- *
- * 3. Run tests to verify consistency:
- *    ```bash
- *    pnpm test agent-support-tool-metadata
- *    ```
- *
- * The tests verify that metadata entries match the tools array, ensuring
- * the single source of truth is maintained.
- *
- * ## Relationship Encoding
- *
- * Tool relationships are encoded through:
- * - `complementsTools`: Array of tools that complement this one
- * - `seeAlso`: Human-readable guidance on when to use related tools
- * - `purpose`: Uses WHAT/HOW/WHICH verbs to distinguish tool roles
- * - `callOrder`: Recommended sequence for calling tools
- *
- * @example
- * ```typescript
- * import {
- *   generateServerInstructions,
- *   generateContextHint,
- *   AGENT_SUPPORT_TOOL_NAMES,
- * } from './agent-support-tool-metadata.js';
- *
- * // Get server instructions for MCP initialize response
- * const instructions = generateServerInstructions();
- *
- * // Get context hint for tool responses
- * const hint = generateContextHint();
- *
- * // Check all tool names (in call order)
- * console.log(AGENT_SUPPORT_TOOL_NAMES);
- * // ['get-ontology', 'get-knowledge-graph', 'get-help']
- * ```
- *
- * @module mcp/agent-support-tool-metadata
- * @see {@link ../../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md | ADR-060}
+ * @see ADR-060 for the architectural decision behind this pattern
  */
 
 import { typeSafeValues } from '../types/helpers/type-helpers.js';
@@ -108,39 +46,26 @@ export interface AgentSupportToolMetadata {
  * match the keys of this object.
  */
 export const AGENT_SUPPORT_TOOL_METADATA = {
-  'get-ontology': {
-    name: 'get-ontology',
-    shortDescription: 'Domain model definitions',
-    provides: ['key stages', 'subjects', 'entity hierarchy', 'ID formats', 'domain vocabulary'],
-    purpose: 'understand WHAT curriculum concepts are and what they mean',
-    callOrder: 1,
-    complementsTools: ['get-knowledge-graph', 'get-help'],
-    seeAlso: 'get-knowledge-graph for structural relationships, get-help for tool usage',
-    callAtStart: true,
-  },
-  'get-knowledge-graph': {
-    name: 'get-knowledge-graph',
-    shortDescription: 'Concept TYPE relationships',
+  'get-curriculum-model': {
+    name: 'get-curriculum-model',
+    shortDescription: 'Complete curriculum orientation',
     provides: [
-      'domain structure graph',
-      'entity relationships',
-      'hierarchy paths',
-      'taxonomy connections',
+      'domain model',
+      'tool guidance',
+      'key stages',
+      'subjects',
+      'entity hierarchy',
+      'ID formats',
+      'tool categories',
+      'workflows',
+      'tips',
     ],
-    purpose: 'understand HOW curriculum concept types connect structurally',
-    callOrder: 2,
-    complementsTools: ['get-ontology', 'get-help'],
-    seeAlso: 'get-ontology for rich definitions, get-help for tool guidance',
-    callAtStart: true,
-  },
-  'get-help': {
-    name: 'get-help',
-    shortDescription: 'Tool usage guidance',
-    provides: ['tool categories', 'workflows', 'tips', 'common patterns'],
-    purpose: 'understand WHICH tools to use and when',
-    callOrder: 3,
-    complementsTools: ['get-ontology', 'get-knowledge-graph'],
-    seeAlso: 'get-ontology for domain definitions, get-knowledge-graph for structure',
+    purpose:
+      'understand the Oak curriculum domain model and how to use available tools — call this ONCE at conversation start',
+    callOrder: 0,
+    complementsTools: ['search', 'fetch'],
+    seeAlso:
+      'search for finding content, fetch for retrieving details, browse-curriculum for browsing',
     callAtStart: true,
   },
 } as const;

@@ -1,5 +1,8 @@
 # OpenAI Connector Alias Removal
 
+**Last Updated**: 2026-02-25  
+**Status**: Historical note (active reference)
+
 2025-10-23 – The Streamable HTTP server now exposes a single `/mcp` surface. The legacy alias was removed after confirming parity between `/mcp` and the OpenAI-compatible toolset (`search`, `fetch`). This note records the rationale and the completed migration steps.
 
 ## Rationale
@@ -19,6 +22,7 @@ All clients must call `/mcp`. If you previously targeted the alias, update your 
 ## Related documents
 
 - [ADR-046](./architectural-decisions/046-openai-connector-facades-in-streamable-http.md) – describes the universal tool executor and now notes the completed alias removal.
-- [Oak MCP Hardening Plan](../../.agent/plans/oak-mcp-compatibility-hardening-plan.md) – earlier tracking for smoke refactors that preceded the removal.
+- [Plans Index](../../.agent/plans/README.md) – stable planning index for historical/provenance context.
+- [Completed Plans](../../.agent/plans/completed-plans.md) – archive entry point for completed hardening work.
 
 The Streamable HTTP deployment now presents a single, standards-compliant entry point with the complete tool catalogue.

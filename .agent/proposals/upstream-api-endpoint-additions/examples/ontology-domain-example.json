@@ -1,0 +1,51 @@
+{
+  "_comment": "Example: Domain knowledge that belongs in ontology, not OpenAPI",
+  
+  "keyStages": [
+    {
+      "slug": "ks1",
+      "title": "Key Stage 1",
+      "ageRange": "5-7",
+      "years": [1, 2],
+      "phase": "primary",
+      "description": "Foundation stage covering basic literacy and numeracy"
+    },
+    {
+      "slug": "ks4",
+      "title": "Key Stage 4",
+      "ageRange": "14-16",
+      "years": [10, 11],
+      "phase": "secondary",
+      "description": "GCSE preparation years, content split by tier and exam board"
+    }
+  ],
+  
+  "ukEducationContext": [
+    "Key Stages are UK-specific age groupings defined by the National Curriculum",
+    "Year 6 = age 10-11 (final year of primary, SATs exams)",
+    "Year 11 = age 15-16 (final year of secondary, GCSE exams)"
+  ],
+  
+  "ks4Complexity": {
+    "tier": {
+      "appliesTo": ["maths", "science"],
+      "description": "Difficulty level for GCSE courses"
+    },
+    "examSubject": {
+      "appliesTo": ["science"],
+      "values": ["biology", "chemistry", "physics", "combined-science"]
+    }
+  },
+  
+  "examBoardsBySubject": {
+    "english": ["aqa", "edexcel", "eduqas"],
+    "science": ["aqa", "edexcel", "ocr"],
+    "geography": ["aqa", "edexcelb"]
+  },
+  
+  "keyStageGaps": [
+    { "subjects": ["french", "spanish"], "gap": "No KS1 (start at Year 3)" },
+    { "subjects": ["german", "citizenship"], "gap": "No primary content" },
+    { "subjects": ["cooking-nutrition"], "gap": "No KS4 content" }
+  ]
+}

@@ -4,7 +4,7 @@
  * This sink writes pre-formatted log strings directly to stdout
  * without any additional formatting or processing.
  *
- * For Node.js implementation, import createNodeStdoutSink from @oaknational/mcp-logger/node
+ * For Node.js implementation, import createNodeStdoutSink from `@oaknational/logger/node`
  */
 
 /**

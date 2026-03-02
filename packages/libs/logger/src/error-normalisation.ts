@@ -1,8 +1,16 @@
 /**
  * Error normalisation utilities
+ *
+ * These functions convert arbitrary thrown values into proper Error objects.
+ * The `object` type is used because JavaScript allows throwing any value,
+ * including arbitrary objects that don't extend Error.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+/**
+ * Attempts to serialise an object to JSON string.
+ * The `object` type accepts any reference type that could be thrown.
+ */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
 function trySerialiseObject(value: object): string | null {
   try {
     const serialised = JSON.stringify(value);
@@ -19,7 +27,11 @@ function isToStringFunction(fn: unknown): fn is (...args: never[]) => string {
   return typeof fn === 'function' && fn !== Object.prototype.toString;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+/**
+ * Gets a custom toString method from an object, checking both own and inherited properties.
+ * Uses Reflect.get to safely access inherited toString on the prototype chain.
+ */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
 function getCustomToString(value: object): (() => string) | null {
   const ownDescriptor = Object.getOwnPropertyDescriptor(value, 'toString');
   if (ownDescriptor) {
@@ -35,8 +47,11 @@ function getCustomToString(value: object): (() => string) | null {
     return null;
   }
 
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const inherited: unknown = Reflect.get(prototype, 'toString');
+  const protoDescriptor = Object.getOwnPropertyDescriptor(prototype, 'toString');
+  if (!protoDescriptor) {
+    return null;
+  }
+  const inherited: unknown = protoDescriptor.value;
   if (isToStringFunction(inherited)) {
     return () => inherited.call(value);
   }
@@ -44,7 +59,7 @@ function getCustomToString(value: object): (() => string) | null {
   return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
 function trySerialiseViaToString(value: object): string | null {
   const customToString = getCustomToString(value);
   if (!customToString) {
@@ -59,7 +74,10 @@ function trySerialiseViaToString(value: object): string | null {
   return JSON.stringify(stringValue);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+/**
+ * Converts an arbitrary thrown object into an Error with a meaningful message.
+ */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
 function normaliseObjectError(value: object): Error {
   const serialised = trySerialiseObject(value);
   if (serialised) {

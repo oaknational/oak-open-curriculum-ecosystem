@@ -1,6 +1,5 @@
 /**
  * ChatGPT environment emulation HTML wrapper for widget preview.
- * @module scripts/chatgpt-emulation-wrapper
  */
 
 /**

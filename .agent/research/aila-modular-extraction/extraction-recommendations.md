@@ -15,7 +15,7 @@ This research has extracted substantial domain knowledge from the Oak AI Lesson 
 
 The primary recommendation is to extract this knowledge as **pure data structures** and **validation functions** that can be:
 
-- Generated at type-gen time where appropriate
+- Generated at sdk-codegen time where appropriate
 - Used to inform MCP tool metadata
 - Applied as post-generation validation
 - Embedded in prompt templates

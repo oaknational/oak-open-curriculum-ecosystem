@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPointStrategy": "Expand",
-  "entryPoints": ["docs/_typedoc_src/types/generated/api-schema/mcp-tools"],
+  "entryPoints": ["src/types/generated/api-schema/mcp-tools"],
   "out": "docs/mcp-api",
   "tsconfig": "./tsconfig.json",
   "readme": "none",
@@ -14,7 +14,7 @@
     "e2e-tests/**",
     "test-cache/**",
     "examples/**",
-    "type-gen/**"
+    "code-generation/**"
   ],
   "excludeInternal": false,
   "excludePrivate": true,

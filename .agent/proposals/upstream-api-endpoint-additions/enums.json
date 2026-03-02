@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-02-04T00:00:00Z",
+  "description": "Curriculum enum values for type construction and ES lookups. Values extracted from OpenAPI schema where available, supplemented with observed values where not.",
+
+  "subjects": ["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"],
+  
+  "examSubjects": ["biology", "chemistry", "physics", "combined-science"],
+  
+  "keyStages": ["ks1", "ks2", "ks3", "ks4"],
+  
+  "years": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
+  
+  "phases": ["primary", "secondary"],
+  
+  "tiers": ["foundation", "higher"],
+  
+  "examBoards": ["aqa", "edexcel", "edexcelb", "eduqas", "ocr"],
+  
+  "assetTypes": ["slideDeck", "exitQuiz", "exitQuizAnswers", "starterQuiz", "starterQuizAnswers", "supplementaryResource", "video", "worksheet", "worksheetAnswers"],
+
+  "_sources": {
+    "fromOpenApiSchema": ["subjects", "keyStages", "years", "assetTypes"],
+    "observedNotInSchema": ["examSubjects", "phases", "tiers", "examBoards"]
+  },
+
+  "_missingFromUpstreamSchema": {
+    "description": "These values appear in API responses but are not defined as enums in the OpenAPI schema",
+    "items": [
+      { "field": "tiers", "where": "SequenceUnitsResponseSchema (KS4 maths/science)", "request": "Add tier enum to schema" },
+      { "field": "examBoards", "where": "LessonSearchResponseSchema.examBoardTitle", "request": "Add examBoard enum to schema" },
+      { "field": "examSubjects", "where": "SequenceUnitsResponseSchema (KS4 science)", "request": "Add examSubject enum to schema" },
+      { "field": "phases", "where": "SubjectSequenceResponseSchema.phaseSlug", "request": "Add phase enum to schema" }
+    ]
+  },
+
+  "_notes": {
+    "pathways": "The 'pathway' concept does not exist as a distinct field. Values like 'core' and 'gcse' are ks4Options.slug values for certain subjects (citizenship, computing, PE). See DATA-VARIANCES.md."
+  }
+}

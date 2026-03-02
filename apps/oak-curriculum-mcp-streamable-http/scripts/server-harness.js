@@ -108,7 +108,6 @@ const configSnapshot = {
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? '[REDACTED]' : undefined,
   OAK_API_KEY: process.env.OAK_API_KEY ? '[REDACTED]' : undefined,
   ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
 };
 
 log.info('Configuration snapshot', configSnapshot);
@@ -121,7 +120,8 @@ log.info('Importing production bundle', {
 });
 
 try {
-  const { createApp } = await import(`${rootDir}/dist/src/index.js`);
+  const { createApp } = await import(`${rootDir}/dist/src/application.js`);
+  const { loadRuntimeConfig } = await import(`${rootDir}/dist/src/runtime-config.js`);
 
   if (typeof createApp !== 'function') {
     throw new Error('createApp is not a function in production bundle');
@@ -132,9 +132,23 @@ try {
     loadTimeMs: Date.now() - startTime,
   });
 
-  // Create Express app
+  // Load runtime config from process.env (loaded from ENV_FILE above)
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: rootDir,
+  });
+
+  if (!configResult.ok) {
+    log.error('Failed to load runtime config', {
+      message: configResult.error.message,
+      diagnostics: configResult.error.diagnostics,
+    });
+    process.exit(1);
+  }
+
+  // Create Express app (async — fetches upstream metadata when auth is enabled)
   const appCreationStart = Date.now();
-  const app = await createApp();
+  const app = await createApp({ runtimeConfig: configResult.value });
   const appCreationTime = Date.now() - appCreationStart;
 
   log.info('Express app created', {

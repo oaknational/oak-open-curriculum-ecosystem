@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import { runSmokeAssertions, type SmokeContext } from './smoke-assertions/index.js';
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
@@ -16,18 +16,12 @@ export async function runSmokeSuite(options: SmokeSuiteOptions): Promise<void> {
   const snapshot = captureEnvSnapshot();
   const logConfig = resolveLogConfig();
   const rootLogger = createRootLogger(options.mode);
-  const port = options.port ?? DEFAULT_PORT;
 
   let prepared: PreparedEnvironment | undefined;
   let modeLogger = rootLogger;
 
   try {
-    prepared = await prepareEnvironment({
-      mode: options.mode,
-      port,
-      remoteBaseUrl: options.remoteBaseUrl,
-      remoteDevToken: options.remoteDevToken,
-    });
+    prepared = await prepareEnvironmentWithPortFallback(options, snapshot, rootLogger);
 
     modeLogger = createModeLogger(rootLogger, options.mode, prepared.baseUrl);
     logPreparation(options.mode, prepared, modeLogger, logConfig);
@@ -51,6 +45,40 @@ export async function runSmokeSuite(options: SmokeSuiteOptions): Promise<void> {
     await teardownEnvironment(prepared, modeLogger, options.mode);
     restoreEnv(snapshot);
   }
+}
+
+async function prepareEnvironmentWithPortFallback(
+  options: SmokeSuiteOptions,
+  snapshot: ReturnType<typeof captureEnvSnapshot>,
+  logger: Logger,
+): Promise<PreparedEnvironment> {
+  const preferredPort = options.port ?? DEFAULT_PORT;
+  const allowFallback = options.port === undefined;
+
+  const attempt = async (port: number): Promise<PreparedEnvironment> =>
+    prepareEnvironment({
+      mode: options.mode,
+      port,
+      remoteBaseUrl: options.remoteBaseUrl,
+      remoteDevToken: options.remoteDevToken,
+    });
+
+  try {
+    return await attempt(preferredPort);
+  } catch (error) {
+    if (allowFallback && isPortInUseError(error)) {
+      logger.warn('Smoke port already in use, retrying with an ephemeral port', {
+        preferredPort,
+      });
+      restoreEnv(snapshot);
+      return await attempt(0);
+    }
+    throw error;
+  }
+}
+
+function isPortInUseError(error: unknown): boolean {
+  return error instanceof Error && error.message.startsWith('PORT CONFLICT: Port ');
 }
 
 function logPreparation(

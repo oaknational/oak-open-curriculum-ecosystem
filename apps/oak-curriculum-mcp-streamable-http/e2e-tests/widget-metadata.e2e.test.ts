@@ -15,21 +15,27 @@
  * @see widget-resource.e2e.test.ts for widget resource availability
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 const ACCEPT = 'application/json, text/event-stream';
 
 /**
- * Configure environment for auth bypass in E2E tests.
+ * Isolated test environment with auth bypassed.
+ * No global `process.env` mutation — see ADR-078.
  */
-function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-}
+const testEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+};
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
@@ -82,8 +88,17 @@ function findToolByName(tools: McpToolWithMeta[], name: string): McpToolWithMeta
   return tools.find((t) => t.name === name);
 }
 
+async function createTestApp() {
+  const result = loadRuntimeConfig({
+    processEnv: testEnv,
+    startDir: process.cwd(),
+  });
+  const runtimeConfig = unwrap(result);
+  return await createApp({ runtimeConfig });
+}
+
 async function callToolsList(
-  app: ReturnType<typeof createApp>,
+  app: Awaited<ReturnType<typeof createApp>>,
 ): Promise<{ tools: McpToolWithMeta[]; status: number }> {
   const res = await request(app)
     .post('/mcp')
@@ -94,23 +109,16 @@ async function callToolsList(
 }
 
 describe('ChatGPT Widget Metadata E2E', () => {
-  beforeEach(() => {
-    enableAuthBypass();
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    delete process.env.ALLOWED_ORIGINS;
-  });
-
   /**
    * Aggregated tool names that should have widget metadata.
    */
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
+  const aggregatedToolNames = ['search', 'fetch', 'get-curriculum-model'] as const;
 
   describe('openai/outputTemplate', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns _meta with openai/outputTemplate in tools/list',
       async (toolName) => {
-        const app = createApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -122,16 +130,15 @@ describe('ChatGPT Widget Metadata E2E', () => {
     );
 
     it('outputTemplate URI matches a registered resource', async () => {
-      const app = createApp();
-
       // Get the outputTemplate URI from tools/list
-      const { tools } = await callToolsList(app);
+      const toolsApp = await createTestApp();
+      const { tools } = await callToolsList(toolsApp);
       const searchTool = findToolByName(tools, 'search');
       const templateUri = searchTool?._meta?.['openai/outputTemplate'];
       expect(templateUri).toBeDefined();
 
-      // Verify this URI exists in resources/list
-      const resourcesRes = await request(app)
+      // Verify this URI exists in resources/list (same app, per-request transport)
+      const resourcesRes = await request(toolsApp)
         .post('/mcp')
         .set('Accept', ACCEPT)
         .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });
@@ -149,7 +156,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns invoking status text in tools/list',
       async (toolName) => {
-        const app = createApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -163,7 +170,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(aggregatedToolNames)(
       '%s tool returns invoked status text in tools/list',
       async (toolName) => {
-        const app = createApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -179,8 +186,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     const allToolNames = [
       'search',
       'fetch',
-      'get-ontology',
-      'get-help',
+      'get-curriculum-model',
       'get-subjects',
       'get-key-stages',
     ] as const;
@@ -188,7 +194,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(allToolNames)(
       '%s tool has widgetAccessible set to true in tools/list',
       async (toolName) => {
-        const app = createApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 
@@ -198,7 +204,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     );
 
     it('ALL tools have widgetAccessible (universal coverage)', async () => {
-      const app = createApp();
+      const app = await createTestApp();
       const { tools, status } = await callToolsList(app);
       expect(status).toBe(200);
 
@@ -210,7 +216,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
 
   describe('openai/visibility (tool visibility control)', () => {
     it('ALL tools have visibility set to public', async () => {
-      const app = createApp();
+      const app = await createTestApp();
       const { tools, status } = await callToolsList(app);
       expect(status).toBe(200);
 
@@ -226,7 +232,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
     it.each(generatedToolNames)(
       'generated tool %s has complete _meta in tools/list',
       async (toolName) => {
-        const app = createApp();
+        const app = await createTestApp();
         const { tools, status } = await callToolsList(app);
         expect(status).toBe(200);
 

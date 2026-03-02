@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect, beforeEach } from 'vitest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 import type { Express } from 'express';
@@ -13,18 +14,21 @@ import type { Express } from 'express';
 describe('Security Headers (Integration)', () => {
   let app: Express;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const testEnv: NodeJS.ProcessEnv = {
       NODE_ENV: 'test',
       DANGEROUSLY_DISABLE_AUTH: 'true',
       ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
       OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      // Required Clerk keys (not used when auth is disabled, but validated by env schema)
-      CLERK_PUBLISHABLE_KEY: 'REDACTED',
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key',
     };
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    const result = loadRuntimeConfig({
+      processEnv: testEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(result);
+    app = await createApp({ runtimeConfig });
   });
 
   describe('Landing page (/) - HTML endpoint', () => {

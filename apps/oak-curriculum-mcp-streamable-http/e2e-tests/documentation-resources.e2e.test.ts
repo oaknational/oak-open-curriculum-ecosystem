@@ -14,6 +14,10 @@ import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 import { z } from 'zod';
+import {
+  getPrerequisiteGraphJson,
+  getThreadProgressionsJson,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const ResourcesListResultSchema = z.object({
   resources: z.array(
@@ -38,7 +42,7 @@ const ResourcesReadResultSchema = z.object({
 
 /** Reads a resource and returns its text content */
 async function readResource(uri: string): Promise<string> {
-  const { app } = createStubbedHttpApp();
+  const { app } = await createStubbedHttpApp();
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
@@ -52,7 +56,7 @@ async function readResource(uri: string): Promise<string> {
 describe('Documentation Resources E2E', () => {
   describe('resources/list - Client can discover documentation', () => {
     it('returns getting-started documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -78,7 +82,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('returns tools reference documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -101,7 +105,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('returns workflows documentation resource', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -126,7 +130,7 @@ describe('Documentation Resources E2E', () => {
 
   describe('resources/read - Client can read helpful content', () => {
     it('getting-started explains how to authenticate', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -153,7 +157,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('getting-started explains how to start using tools', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -176,7 +180,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('tools reference explains tool categories', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -199,7 +203,7 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('tools reference explains when to use each category', async () => {
-      const { app } = createStubbedHttpApp();
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -231,10 +235,10 @@ describe('Documentation Resources E2E', () => {
       expect(content).toContain('lesson');
     });
 
-    it('workflows includes userInteractions workflow first', async () => {
+    it('workflows includes userInteractions workflow with orientation guidance', async () => {
       const content = await readResource('docs://oak/workflows.md');
-      expect(content).toContain('get-help');
-      expect(content).toContain('get-ontology');
+      expect(content).toMatch(/get-curriculum-model/);
+      expect(content).toMatch(/orientation|domain model/i);
     });
 
     it('workflows shows what each step returns', async () => {
@@ -249,112 +253,58 @@ describe('Documentation Resources E2E', () => {
   });
 });
 
-describe('Ontology Resource E2E', () => {
-  describe('resources/list - Client can discover ontology', () => {
-    it('returns curriculum://ontology resource', async () => {
-      const { app } = createStubbedHttpApp();
+describe('Supplementary Data Resources E2E', () => {
+  describe('resources/list includes supplementary data resources', () => {
+    it('includes curriculum://prerequisite-graph in resource list', async () => {
+      const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/list',
-        });
-
-      expect(response.status).toBe(200);
+        .send({ jsonrpc: '2.0', id: '1', method: 'resources/list' });
 
       const envelope = parseSseEnvelope(response.text);
       const parsed = ResourcesListResultSchema.safeParse(envelope.result);
       expect(parsed.success).toBe(true);
 
       const resources = parsed.data?.resources ?? [];
-      const ontology = resources.find((r) => r.uri === 'curriculum://ontology');
+      const prereqGraph = resources.find((r) => r.uri === 'curriculum://prerequisite-graph');
+      expect(prereqGraph).toBeDefined();
+      expect(prereqGraph?.mimeType).toBe('application/json');
+    });
 
-      expect(ontology).toBeDefined();
-      expect(ontology?.mimeType).toBe('application/json');
+    it('includes curriculum://thread-progressions in resource list', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({ jsonrpc: '2.0', id: '1', method: 'resources/list' });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const resources = parsed.data?.resources ?? [];
+      const threadProgressions = resources.find(
+        (r) => r.uri === 'curriculum://thread-progressions',
+      );
+      expect(threadProgressions).toBeDefined();
+      expect(threadProgressions?.mimeType).toBe('application/json');
     });
   });
 
-  describe('resources/read - Client can read ontology', () => {
-    it('curriculum://ontology returns valid JSON', async () => {
-      const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'curriculum://ontology' },
-        });
-
-      expect(response.status).toBe(200);
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      expect(parsed.success).toBe(true);
-
-      const content = parsed.data?.contents[0]?.text ?? '';
-      expect(content).toBeDefined();
-
-      // Proves: Returns valid JSON
-      expect(() => {
-        JSON.parse(content);
-      }).not.toThrow();
+  describe('resources/read returns valid data', () => {
+    it('prerequisite graph returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://prerequisite-graph');
+      expect(content).toBe(getPrerequisiteGraphJson());
     });
 
-    it('curriculum://ontology includes curriculum structure', async () => {
-      const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'curriculum://ontology' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.contents[0]?.text ?? '';
-      const data = JSON.parse(content) as {
-        curriculumStructure?: { keyStages?: unknown };
-      };
-
-      // Proves: Contains curriculum domain model
-      expect(data.curriculumStructure).toBeDefined();
-      expect(data.curriculumStructure?.keyStages).toBeDefined();
-    });
-
-    it('curriculum://ontology includes workflows', async () => {
-      const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'curriculum://ontology' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.contents[0]?.text ?? '';
-      const data = JSON.parse(content) as { workflows?: unknown };
-
-      // Proves: Contains tool workflow guidance
-      expect(data.workflows).toBeDefined();
+    it('thread progressions returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://thread-progressions');
+      expect(content).toBe(getThreadProgressionsJson());
     });
   });
 });

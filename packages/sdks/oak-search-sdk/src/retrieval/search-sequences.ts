@@ -1,0 +1,79 @@
+/**
+ * Sequence search implementation — two-way RRF (BM25 + ELSER).
+ *
+ * Sequences are API data structures for curriculum retrieval, not
+ * user-facing programmes. One sequence generates many programme views.
+ *
+ * Extracted from `create-retrieval-service.ts` to keep that file within
+ * the max-lines limit. Follows the same pattern as `search-threads.ts`.
+ */
+
+import type { estypes } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
+import { ok, err, type Result } from '@oaknational/result';
+import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
+
+import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
+import type { SearchSequencesParams } from '../types/retrieval-params.js';
+import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
+import { clampSize, clampFrom } from './rrf-score-processing.js';
+import { buildSequenceRetriever } from './retrieval-search-helpers.js';
+import { toRetrievalError } from './retrieval-error.js';
+import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
+
+/**
+ * Execute sequence search with two-way RRF (BM25 + semantic).
+ *
+ * Sequences are API data structures for curriculum retrieval, not
+ * user-facing programmes. One sequence generates many programme views.
+ *
+ * @param params - Search sequences parameters (text, optional subject/phaseSlug/size/from)
+ * @param search - ES search function
+ * @param resolveIndex - Index name resolver
+ * @param logger - Optional logger
+ * @returns Result with sequences or retrieval error
+ */
+export async function searchSequences(
+  params: SearchSequencesParams,
+  search: EsSearchFn,
+  resolveIndex: (kind: 'sequences') => string,
+  logger?: Logger,
+): Promise<Result<SequencesSearchResult, RetrievalError>> {
+  try {
+    const size = clampSize(params.size);
+    const from = clampFrom(params.from);
+    const filters: estypes.QueryDslQueryContainer[] = [];
+    if (params.subject) {
+      filters.push({ term: { subject_slug: params.subject } });
+    }
+    if (params.phaseSlug) {
+      filters.push({ term: { phase_slug: params.phaseSlug } });
+    }
+
+    const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+    const request: EsSearchRequest = {
+      index: resolveIndex('sequences'),
+      size,
+      retriever: buildSequenceRetriever(params.text, filterClause),
+      from: from > 0 ? from : undefined,
+      _source: SEQUENCE_SOURCE_EXCLUDES,
+    };
+
+    logger?.debug('searchSequences', { text: params.text, size, from });
+    const res = await search<SearchSequenceIndexDoc>(request);
+    const results = res.hits.hits.map((hit) => ({
+      id: hit._id,
+      rankScore: hit._score ?? 0,
+      sequence: hit._source,
+    }));
+    return ok({
+      scope: 'sequences',
+      results,
+      total: results.length,
+      took: res.took,
+      timedOut: res.timed_out,
+    });
+  } catch (error: unknown) {
+    return err(toRetrievalError(error));
+  }
+}

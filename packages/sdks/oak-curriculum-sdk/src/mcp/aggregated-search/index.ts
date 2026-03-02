@@ -1,38 +1,37 @@
 /**
- * Aggregated search tool for searching Oak curriculum content.
+ * SDK-backed search tool for semantic curriculum search.
  *
- * This module provides the search aggregated tool which combines
- * get-search-lessons and get-search-transcripts into a single operation.
+ * This module provides the search tool backed by the Search SDK,
+ * offering 4-way RRF semantic search across all four Elasticsearch
+ * indexes (lessons, units, threads, sequences) plus typeahead suggestions.
  *
  * ## Directory Structure
  *
- * - `tool-definition.ts` - MCP tool metadata and input schema
- * - `types.ts` - SearchArgs interface
- * - `validation.ts` - Input validation with Zod and type guards
- * - `execution.ts` - Tool execution logic
+ * - `tool-definition.ts` - MCP tool metadata, input schema, NL guidance
+ * - `types.ts` - SearchSdkScope, SearchSdkArgs, dispatch union types
+ * - `validation.ts` - Input validation with Zod and generated type guards
+ * - `execution.ts` - Scope-based dispatch to Search SDK retrieval methods
+ * - `formatting.ts` - Per-scope result formatting for humans and agents
  *
- * ## Usage
- *
+ * @example
  * ```typescript
  * import {
  *   SEARCH_TOOL_DEF,
  *   SEARCH_INPUT_SCHEMA,
- *   validateSearchArgs,
- *   runSearchTool,
+ *   validateSearchSdkArgs,
+ *   runSearchSdkTool,
  * } from './aggregated-search/index.js';
  * ```
- *
- * @module aggregated-search
  */
 
-// Tool definition and schema
 export { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from './tool-definition.js';
-
-// Types
-export type { SearchArgs } from './types.js';
-
-// Validation
-export { validateSearchArgs } from './validation.js';
-
-// Execution
-export { runSearchTool } from './execution.js';
+export type {
+  SearchSdkArgs,
+  SearchSdkScope,
+  ScopedSearchResult,
+  SearchDispatchResult,
+} from './types.js';
+export { SEARCH_SCOPES, isSearchSdkScope } from './types.js';
+export { validateSearchSdkArgs } from './validation.js';
+export { runSearchSdkTool } from './execution.js';
+export { formatSearchResults } from './formatting.js';

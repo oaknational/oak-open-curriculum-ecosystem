@@ -1,3 +1,3 @@
 # Copilot Instructions
 
-Read [AGENT.md](../.agent/directives-and-memory/AGENT.md)
+Read [AGENT.md](../.agent/directives/AGENT.md)

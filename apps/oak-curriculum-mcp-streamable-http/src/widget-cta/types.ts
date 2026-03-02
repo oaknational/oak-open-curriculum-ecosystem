@@ -2,7 +2,6 @@
  * CTA configuration types.
  *
  * @see index.ts - Public API
- * @module widget-cta/types
  */
 
 /**

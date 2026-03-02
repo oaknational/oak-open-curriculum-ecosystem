@@ -18,22 +18,23 @@ This reference lists the environment variables and platform settings required to
 
 ## Optional Environment Variables
 
-| Variable                   | Default Behaviour                                                                                              | Usage                                                                                    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ALLOWED_HOSTS`            | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present              | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
-| `ALLOWED_ORIGINS`          | Localhost origins, or all Vercel deployment URLs (as `https://` origins) + localhost if any Vercel URL present | Override to expand the CORS allow-list                                                   |
-| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                                                      | See "MCP Transport Modes" section below for detailed explanation                         |
-| `LOG_LEVEL`                | `info`                                                                                                         | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
-| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                                                  | Local development only; never enable in Vercel environments                              |
+| Variable                   | Default Behaviour                                                                                 | Usage                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`            | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
+| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
+| `LOG_LEVEL`                | `info`                                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
+| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                                     | Local development only; never enable in Vercel environments                              |
+
+CORS is unconditionally permissive (all origins allowed). Security is enforced by OAuth authentication, not by origin restrictions. There are no CORS-related environment variables to configure.
 
 ## Preview vs Production Notes
 
-- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist. If you rely on the automatic defaults, Vercel automatically supplies three deployment URLs (`VERCEL_URL`, `VERCEL_BRANCH_URL`, `VERCEL_PROJECT_PRODUCTION_URL`), and all of them become allow-listed hosts/origins.
-- **Production Deployment**: Mirrors the preview configuration. All three Vercel deployment URLs are automatically allow-listed. Provide explicit `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` only when you need to extend beyond or replace the defaults derived from Vercel's system environment variables.
+- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist.
+- **Production Deployment**: Mirrors the preview configuration. Provide explicit `ALLOWED_HOSTS` only when you need to extend beyond or replace the defaults derived from Vercel's system environment variables.
 
 ## Vercel Deployment URLs
 
-Vercel provides three system environment variables for deployment URLs. When deployed on Vercel, all three URLs are automatically included in the allowed hosts for DNS rebinding protection and CORS origins (in automatic mode):
+Vercel provides three system environment variables for deployment URLs. When deployed on Vercel, all three URLs are automatically included in the allowed hosts for DNS rebinding protection:
 
 | Variable                        | Description                                                | Example                           |
 | ------------------------------- | ---------------------------------------------------------- | --------------------------------- |
@@ -45,7 +46,7 @@ This ensures that:
 
 - Preview deployments work via their unique deployment URL and branch URL
 - Production deployments are accessible via the unique deployment URL, production URL, and any custom domains
-- You don't need to manually configure `ALLOWED_HOSTS` or `ALLOWED_ORIGINS` for standard Vercel deployments
+- You don't need to manually configure `ALLOWED_HOSTS` for standard Vercel deployments
 
 For more information, see [Vercel's System Environment Variables documentation](https://vercel.com/docs/environment-variables/system-environment-variables).
 
@@ -121,16 +122,22 @@ Exposed Headers: Mcp-Session-Id, WWW-Authenticate
 
 ### Current Implementation
 
-The HTTP server is **always initialized in stateless mode** regardless of the `REMOTE_MCP_MODE` setting:
+The HTTP server uses the **per-request transport pattern**: each incoming request creates a fresh `McpServer` and `StreamableHTTPServerTransport`. This matches the MCP SDK's canonical stateless example and works correctly on Vercel (both cold starts and warm instances).
 
 ```typescript
-// From src/index.ts
-const transport = new StreamableHTTPServerTransport({
-  sessionIdGenerator: undefined, // Always stateless
-});
+// Per-request factory (from src/application.ts)
+const mcpFactory: McpServerFactory = () => {
+  const server = new McpServer(
+    { name: 'oak-curriculum-http', version: '0.1.0' },
+    { instructions: SERVER_INSTRUCTIONS },
+  );
+  registerHandlers(server, handlerOptions);
+  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  return { server, transport };
+};
 ```
 
-The `REMOTE_MCP_MODE` environment variable currently **only affects CORS headers**, not the actual transport behavior. This allows for future session support if needed, but the transport itself remains stateless.
+Shared dependencies (Elasticsearch client, runtime configuration) are created once at startup. The `REMOTE_MCP_MODE` environment variable affects which CORS headers are exposed (session mode additionally exposes `Mcp-Session-Id`), not the actual transport behaviour.
 
 ### Recommendation
 

@@ -9,6 +9,11 @@ export const baseTestConfig = defineConfig({
     globals: true,
     environment: 'node',
     passWithNoTests: true,
+    // Force process isolation to prevent global state pollution between tests
+    // Many tests mutate process.env which causes race conditions in parallel execution
+    // TODO: Refactor tests to use dependency injection instead of process.env mutation
+    isolate: true,
+    pool: 'forks',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

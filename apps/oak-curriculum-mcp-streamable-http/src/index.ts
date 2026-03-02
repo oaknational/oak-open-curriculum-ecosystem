@@ -1,25 +1,55 @@
-import { loadRootEnv } from '@oaknational/mcp-env';
+import http from 'node:http';
+
 import { createApp } from './application.js';
+import { bootstrapApp } from './bootstrap-app.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
-// Load .env from repo root if required environment variables are missing
-/* eslint-disable no-restricted-syntax -- App entry point loads .env file, legitimate use */
-loadRootEnv({
-  requiredKeys: ['OAK_API_KEY', 'CLERK_PUBLISHABLE_KEY', 'CLERK_SECRET_KEY'],
+const result = loadRuntimeConfig({
+  processEnv: process.env,
   startDir: process.cwd(),
-  env: process.env,
 });
-/* eslint-enable no-restricted-syntax */
 
-const config = loadRuntimeConfig();
-const app = createApp({ runtimeConfig: config });
+if (!result.ok) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+const config = result.value;
 const bootstrapLog = createHttpLogger(config, { name: 'streamable-http:bootstrap' });
+
+const app = await bootstrapApp({
+  startApp: () => createApp({ runtimeConfig: config }),
+  logger: bootstrapLog,
+  exit: (code) => process.exit(code),
+});
 
 const port = config.env.PORT ? Number(config.env.PORT) : 3333;
 bootstrapLog.debug(`Running locally, starting server on port ${String(port)}`);
 
-app.listen(port, () => {
+/**
+ * Express 5's app.listen() wraps the callback with once() and registers it
+ * for both 'listening' and 'error' events. This means EADDRINUSE fires the
+ * callback without the error argument, the server never binds, and the
+ * process exits silently. Using http.createServer directly lets us handle
+ * startup errors explicitly.
+ */
+const server = http.createServer(app);
+
+server.on('error', (err: NodeJS.ErrnoException) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n  Port ${String(port)} is already in use.`);
+    console.error(`  A previous dev server may still be running.`);
+    console.error(`\n  To fix: kill the process holding the port, then retry:`);
+    console.error(`    lsof -i :${String(port)}`);
+    console.error(`    kill <PID>\n`);
+  } else {
+    console.error(`\n  Server failed to start: ${err.message}\n`);
+  }
+  process.exit(1);
+});
+
+server.listen(port, () => {
   console.log(`🚀 Oak Curriculum MCP Server listening on port ${String(port)}`);
   console.log(`   MCP endpoint: http://localhost:${String(port)}/mcp`);
   if (config.dangerouslyDisableAuth) {

@@ -3,16 +3,14 @@
  *
  * Tests the preventive authentication layer that checks MCP client auth
  * BEFORE SDK execution. This is separate from upstream API auth (ADR-054).
- *
- * @module
  */
 
 /* eslint-disable max-lines-per-function -- comprehensive test coverage requires many test cases */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
-import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
-import type { RuntimeConfig } from './runtime-config.js';
+import type { Logger } from '@oaknational/logger';
+import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 // Mock dependencies
@@ -28,37 +26,13 @@ import { toolRequiresAuth } from './tool-auth-checker.js';
 import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
 import { validateResourceParameter } from './resource-parameter-validator.js';
 import { getAuth } from '@clerk/express';
+import { createFakeMachineAuthObject, createFakeExpressRequest } from './test-helpers/fakes.js';
 
 /**
- * Creates a mock MachineAuthObject for testing.
- * Uses explicit typing to avoid Vitest/Clerk type inference conflicts.
- */
-function createMockAuthObject(
-  overrides: Partial<{
-    isAuthenticated: boolean;
-    userId: string | null;
-    clientId: string | null;
-    scopes: readonly string[] | null;
-  }>,
-): MachineAuthObject<'oauth_token'> {
-  const base = {
-    tokenType: 'oauth_token' as const,
-    id: overrides.isAuthenticated ? 'auth_123' : null,
-    subject: overrides.userId ?? null,
-    getToken: () => Promise.resolve(overrides.isAuthenticated ? 'token' : null),
-    has: () => overrides.isAuthenticated ?? false,
-    debug: () => (overrides.isAuthenticated ? { userId: overrides.userId } : {}),
-    ...overrides,
-  };
-  return base as MachineAuthObject<'oauth_token'>;
-}
-
-/**
- * Type-safe mock setter for getAuth.
- * Works around Vitest/Clerk overload inference issues by using unknown intermediate.
+ * Sets getAuth mock return value. Clerk's getAuth is overloaded and returns SessionAuthObject;
+ * tests use MachineAuthObject fakes. This bridge is the single cast for Clerk/Vitest typing.
  */
 function mockGetAuthReturnValue(authObject: MachineAuthObject<'oauth_token'>): void {
-  // Use unknown as intermediate to avoid SessionAuthObject inference
   vi.mocked(getAuth).mockReturnValue(authObject as unknown as ReturnType<typeof getAuth>);
 }
 
@@ -75,13 +49,34 @@ describe('checkMcpClientAuth', () => {
   const resourceUrl = 'https://example.com/mcp';
   const toolName: UniversalToolName = 'get-key-stages';
 
-  const createMockConfig = (dangerouslyDisableAuth: boolean): RuntimeConfig => ({
-    env: {} as RuntimeConfig['env'],
-    dangerouslyDisableAuth,
-    useStubTools: false,
-    version: '1.0.0',
-    vercelHostnames: [],
-  });
+  const createMockConfig = (
+    dangerouslyDisableAuth: boolean,
+  ): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig =>
+    dangerouslyDisableAuth
+      ? ({
+          env: {
+            OAK_API_KEY: 'test',
+            ELASTICSEARCH_URL: 'http://fake:9200',
+            ELASTICSEARCH_API_KEY: 'fake-key',
+          },
+          dangerouslyDisableAuth: true,
+          useStubTools: false,
+          version: '1.0.0',
+          vercelHostnames: [],
+        } satisfies AuthDisabledRuntimeConfig)
+      : ({
+          env: {
+            OAK_API_KEY: 'test',
+            CLERK_PUBLISHABLE_KEY: 'pk_test',
+            CLERK_SECRET_KEY: 'sk_test',
+            ELASTICSEARCH_URL: 'http://fake:9200',
+            ELASTICSEARCH_API_KEY: 'fake-key',
+          },
+          dangerouslyDisableAuth: false,
+          useStubTools: false,
+          version: '1.0.0',
+          vercelHostnames: [],
+        } satisfies AuthEnabledRuntimeConfig);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -162,14 +157,14 @@ describe('checkMcpClientAuth', () => {
 
     it('should return auth error when token verification fails', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Bearer invalid-token' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
       mockGetAuthReturnValue(
-        createMockAuthObject({
+        createFakeMachineAuthObject({
           isAuthenticated: false,
           userId: null,
           clientId: null,
@@ -189,24 +184,24 @@ describe('checkMcpClientAuth', () => {
 
     it('should return auth error when resource validation fails', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Bearer valid-token' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
       mockGetAuthReturnValue(
-        createMockAuthObject({
+        createFakeMachineAuthObject({
           isAuthenticated: true,
           userId: 'user_123',
           clientId: 'client_123',
-          scopes: ['openid', 'email'],
+          scopes: ['email'],
         }),
       );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
-        scopes: ['openid', 'email'],
+        scopes: ['email'],
         extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({
@@ -226,24 +221,24 @@ describe('checkMcpClientAuth', () => {
 
     it('should return undefined when all auth checks pass', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Bearer valid-token' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
       mockGetAuthReturnValue(
-        createMockAuthObject({
+        createFakeMachineAuthObject({
           isAuthenticated: true,
           userId: 'user_123',
           clientId: 'client_123',
-          scopes: ['openid', 'email'],
+          scopes: ['email'],
         }),
       );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
-        scopes: ['openid', 'email'],
+        scopes: ['email'],
         extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({
@@ -263,14 +258,14 @@ describe('checkMcpClientAuth', () => {
   describe('OAuth bearer token without req.auth', () => {
     it('should verify bearer token and extract userId from verified claims', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Bearer valid-jwt-token' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
       mockGetAuthReturnValue(
-        createMockAuthObject({
+        createFakeMachineAuthObject({
           isAuthenticated: true,
           userId: 'user_from_jwt',
           clientId: 'client_123',
@@ -299,12 +294,10 @@ describe('checkMcpClientAuth', () => {
 
     it('should return auth error when no Authorization header', () => {
       const config = createMockConfig(false);
-      const mockReq = {
-        headers: {}, // No Authorization header
-      };
+      const mockReq = createFakeExpressRequest({ headers: {} });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
 
       const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
 
@@ -319,12 +312,12 @@ describe('checkMcpClientAuth', () => {
 
     it('should return auth error when Authorization header is not Bearer', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Basic credentials' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
 
       const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
 
@@ -339,14 +332,14 @@ describe('checkMcpClientAuth', () => {
 
     it('should return auth error when bearer token verification fails', () => {
       const config = createMockConfig(false);
-      const mockReq = {
+      const mockReq = createFakeExpressRequest({
         headers: { authorization: 'Bearer invalid-jwt-token' },
-      };
+      });
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
-      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq);
       mockGetAuthReturnValue(
-        createMockAuthObject({
+        createFakeMachineAuthObject({
           isAuthenticated: false,
           userId: null,
           clientId: null,

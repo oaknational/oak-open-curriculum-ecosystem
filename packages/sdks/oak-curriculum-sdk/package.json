@@ -1,12 +1,13 @@
 {
-  "name": "@oaknational/oak-curriculum-sdk",
-  "version": "0.0.0-development",
+  "name": "@oaknational/curriculum-sdk",
+  "version": "0.8.0",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENCE"
   ],
   "engines": {
     "node": "24.x"
@@ -72,59 +73,65 @@
     "./public/mcp-tools.js": {
       "types": "./dist/public/mcp-tools.d.ts",
       "default": "./dist/public/mcp-tools.js"
+    },
+    "./elasticsearch": {
+      "types": "./dist/elasticsearch.d.ts",
+      "default": "./dist/elasticsearch.js"
+    },
+    "./elasticsearch.js": {
+      "types": "./dist/elasticsearch.d.ts",
+      "default": "./dist/elasticsearch.js"
     }
   },
   "scripts": {
-    "type-gen": "pnpm generate:types",
-    "posttype-gen": "pnpm -w format:root",
+    "prepublishOnly": "cp ../../../LICENCE ./LICENCE",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "clean": "rm -rf dist .turbo src/types/generated",
-    "pregenerate:types": "pnpm generate:clean",
-    "generate:types": "pnpm generate:openapi && pnpm generate:zod",
-    "generate:openapi": "tsx type-gen/typegen.ts",
-    "generate:zod": "tsx type-gen/zodgen.ts",
-    "generate:clean": "rm -rf src/types/generated",
+    "clean": "rm -rf dist .turbo",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:e2e": "vitest run --config vitest.config.e2e.ts",
-    "docs:prepare": "tsx type-gen/sanitize-docs.ts",
-    "docs:api": "pnpm -s docs:prepare && typedoc --options typedoc.json --skipErrorChecking",
-    "docs:api:html": "pnpm -s docs:prepare && typedoc --options typedoc.ai.json --skipErrorChecking",
-    "docs:api:json": "pnpm -s docs:prepare && typedoc --options typedoc.json --json docs/api/typedoc.json --skipErrorChecking",
-    "docs:api:json:ai": "pnpm -s docs:prepare && typedoc --options typedoc.ai.json --json docs/api/typedoc.json --skipErrorChecking",
-    "docs:mcp": "pnpm -s docs:prepare && typedoc --options typedoc.mcp.json --skipErrorChecking",
-    "docs:ai": "pnpm -s docs:api:json:ai && tsx type-gen/generate-ai-doc.ts",
-    "docs:api:md": "tsx type-gen/generate-markdown-docs.ts",
-    "docs:verify": "tsx type-gen/verify-docs.ts",
-    "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:ai && pnpm -s docs:api:md && pnpm -s docs:verify"
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "docs:api": "typedoc --options typedoc.json --skipErrorChecking",
+    "docs:api:html": "typedoc --options typedoc.ai.json --skipErrorChecking",
+    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json --skipErrorChecking",
+    "docs:api:json:ai": "typedoc --options typedoc.ai.json --json docs/api/typedoc.json --skipErrorChecking",
+    "docs:mcp": "typedoc --options typedoc.mcp.json --skipErrorChecking"
   },
   "dependencies": {
-    "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/openapi-zod-client-adapter": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
-    "zod": "^4.1.13"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.2",
-    "@next/eslint-plugin-next": "^16.0.7",
-    "@types/node": "^24.10.1",
-    "dotenv": "^17.2.3",
-    "openapi-typescript": "^7.10.1",
-    "openapi3-ts": "^4.5.0",
+    "@elastic/elasticsearch": "^9.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24.10.13",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "typedoc": "^0.28.15",
-    "typedoc-plugin-markdown": "^4.9.0",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-markdown": "^4.10.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.18"
+  },
+  "publishConfig": {
+    "access": "restricted"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/oak-curriculum-sdk"
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/sdks/oak-curriculum-sdk"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/sdks/oak-curriculum-sdk#readme",
   "keywords": [
     "oak",
     "curriculum",
@@ -133,6 +140,17 @@
     "education",
     "typescript"
   ],
-  "author": "Oak National Academy",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "license": "MIT"
 }

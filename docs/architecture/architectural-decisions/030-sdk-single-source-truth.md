@@ -110,7 +110,7 @@ export {
 
 ```typescript
 // MCP server example
-import { KEY_STAGES, validation, toolGeneration } from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES, validation, toolGeneration } from '@oaknational/curriculum-sdk';
 
 // ONLY import from SDK, never define locally
 const tools = toolGeneration.PATH_OPERATIONS.map((op) => ({
@@ -159,7 +159,7 @@ This decision is successful when:
 ### ✅ Correct: Import from SDK
 
 ```typescript
-import { KEY_STAGES } from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES } from '@oaknational/curriculum-sdk';
 
 function validateKeyStage(value: string) {
   return KEY_STAGES.includes(value);
@@ -180,7 +180,7 @@ function validateKeyStage(value: string) {
 ### ✅ Correct: Use SDK Validation
 
 ```typescript
-import { validation } from '@oaknational/oak-curriculum-sdk';
+import { validation } from '@oaknational/curriculum-sdk';
 
 async function handleRequest(path: string, method: string, args: unknown) {
   const result = validation.validateRequest(path, method, args);
@@ -246,10 +246,10 @@ function validateLesson(lesson: string) {
 
 - [ADR-029: No Manual API Data Structures](029-no-manual-api-data.md)
 - [Programmatic Tool Generation Architecture](../programmatic-tool-generation.md)
-- [Phase 6 Implementation Plan](../../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md)
+- [Phase 6 Implementation Plan](../../../.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md)
 
 ## References
 
 - [OpenAPI Specification](https://www.openapis.org/)
-- [Oak Curriculum SDK](../../../packages/oak-curriculum-sdk/README.md)
-- [MCP Server](../../../ecosystem/psycha/oak-curriculum-mcp/README.md)
+- [Oak Curriculum SDK](../../../packages/sdks/oak-curriculum-sdk/README.md)
+- [MCP Server](../../../apps/oak-curriculum-mcp-streamable-http/README.md)

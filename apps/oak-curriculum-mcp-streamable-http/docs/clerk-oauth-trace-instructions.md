@@ -153,5 +153,5 @@ If you need to capture traces manually (e.g., for debugging the automation scrip
 ## Follow-up
 
 - The captured artefacts inform automation work (Playwright flow or device-code implementation).
-- Update the automation plan (`.agent/plans/mcp-oauth-implementation-plan.md`) if the provider flow changes (e.g. new consent screen, extra redirect).
+- Update the automation plan (`.agent/plans/archive/completed/mcp-oauth-implementation-plan.md`) if the provider flow changes (e.g. new consent screen, extra redirect).
 - Artifacts are stored in `temp-secrets/` which is git-ignored for security.

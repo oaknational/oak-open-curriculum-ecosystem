@@ -7,7 +7,7 @@
  * to tools/list requests, the SDK internally converts Zod schemas to JSON Schema. However,
  * Zod doesn't support an `examples` property, so any examples are lost during conversion.
  *
- * We already generate complete JSON Schema with examples at type-gen time (stored in
+ * We already generate complete JSON Schema with examples at sdk-codegen time (stored in
  * tool.inputSchema). By overriding the tools/list handler, we return this pre-generated
  * JSON Schema directly, preserving the examples for AI agents.
  *
@@ -29,7 +29,10 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import {
+  listUniversalTools,
+  generatedToolRegistry,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Overrides the tools/list handler on an McpServer to return our pre-generated
@@ -39,7 +42,7 @@ import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-t
  */
 export function overrideToolsListHandler(server: McpServer): void {
   server.server.setRequestHandler(ListToolsRequestSchema, () => {
-    const tools = listUniversalTools();
+    const tools = listUniversalTools(generatedToolRegistry);
     return Promise.resolve({
       tools: tools.map((tool) => ({
         name: tool.name,

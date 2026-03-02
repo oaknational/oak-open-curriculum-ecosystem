@@ -1,70 +1,90 @@
 /**
- * Runtime configuration for stdio MCP server
+ * Runtime configuration for the STDIO MCP server.
  *
- * Centralizes environment variable parsing and validation.
- * All application code should consume this config rather than reading process.env directly.
+ * Loads environment variables via `resolveEnv` from `@oaknational/env-resolution`,
+ * validates against `StdioEnvSchema`, and returns a typed `Result`. Callers
+ * handle the error case — this module does not exit or throw.
+ *
+ * @see StdioEnvSchema in `./env.ts`
+ * @see resolveEnv in `@oaknational/env-resolution`
  */
 
-/**
- * Environment variables used by the stdio server
- */
-export interface StdioEnv {
-  readonly LOG_LEVEL?: string;
-  readonly ENVIRONMENT_OVERRIDE?: string;
-  readonly MCP_LOGGER_STDOUT?: string;
-  readonly MCP_LOGGER_FILE_PATH?: string;
-  readonly MCP_LOGGER_FILE_APPEND?: string;
-  readonly OAK_API_KEY?: string;
-  readonly OAK_CURRICULUM_MCP_USE_STUB_TOOLS?: string;
-}
+import { resolveEnv, type EnvResolutionError } from '@oaknational/env-resolution';
+import { ok, err, type Result } from '@oaknational/result';
+import type { LOG_LEVELS } from '@oaknational/env';
+import { StdioEnvSchema, type StdioEnv } from './env.js';
+
+type LogLevel = (typeof LOG_LEVELS)[number];
 
 /**
- * Runtime configuration derived from environment variables
+ * Runtime configuration derived from validated environment variables.
+ *
+ * All fields are guaranteed valid by Zod schema validation in `resolveEnv`.
  */
 export interface RuntimeConfig {
-  readonly logLevel: string;
+  /** Validated environment variables */
   readonly env: StdioEnv;
+  /** Validated log level (defaults to `'info'` when absent) */
+  readonly logLevel: LogLevel;
+  /** Whether to use stub tool executors instead of real API calls */
   readonly useStubTools: boolean;
-}
-
-const VALID_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
-type ValidLogLevel = (typeof VALID_LOG_LEVELS)[number];
-
-function isValidLogLevel(value: unknown): value is ValidLogLevel {
-  if (typeof value !== 'string') {
-    return false;
-  }
-  const validLevels: readonly string[] = VALID_LOG_LEVELS;
-  return validLevels.includes(value);
-}
-
-function toBooleanFlag(value: string | undefined): boolean {
-  return value === 'true';
+  /** Application version from `npm_package_version` (defaults to `'0.0.0'`) */
+  readonly version: string;
 }
 
 /**
- * Load and parse runtime configuration from environment variables
+ * Structured error from the configuration pipeline.
  *
- * @param source - Environment variable source (defaults to process.env)
- * @returns Validated runtime configuration
+ * Wraps the underlying `EnvResolutionError` with a human-readable message
+ * and per-key diagnostics.
  */
-export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): RuntimeConfig {
-  const rawLogLevel = source.LOG_LEVEL?.toLowerCase();
-  const logLevel = isValidLogLevel(rawLogLevel) ? rawLogLevel : 'info';
+export interface ConfigError {
+  readonly message: string;
+  readonly diagnostics: EnvResolutionError['diagnostics'];
+}
 
-  const env: StdioEnv = {
-    LOG_LEVEL: source.LOG_LEVEL,
-    ENVIRONMENT_OVERRIDE: source.ENVIRONMENT_OVERRIDE,
-    MCP_LOGGER_STDOUT: source.MCP_LOGGER_STDOUT,
-    MCP_LOGGER_FILE_PATH: source.MCP_LOGGER_FILE_PATH,
-    MCP_LOGGER_FILE_APPEND: source.MCP_LOGGER_FILE_APPEND,
-    OAK_API_KEY: source.OAK_API_KEY,
-    OAK_CURRICULUM_MCP_USE_STUB_TOOLS: source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
-  };
+/**
+ * Options for loading runtime configuration.
+ */
+export interface LoadRuntimeConfigOptions {
+  /** The process environment object (typically `process.env`) */
+  readonly processEnv: Readonly<Record<string, string | undefined>>;
+  /** Directory from which to begin searching for the monorepo root */
+  readonly startDir: string;
+}
 
-  return {
-    logLevel,
+/**
+ * Loads runtime configuration from the environment resolution pipeline.
+ *
+ * Calls `resolveEnv` to load `.env` and `.env.local` files from both the
+ * app root and monorepo root, merge with `processEnv`, and validate against
+ * `StdioEnvSchema`. Returns a typed `Result` — callers handle the error case.
+ *
+ * @param options - processEnv and startDir for the env resolution pipeline
+ * @returns `Ok<RuntimeConfig>` or `Err<ConfigError>`
+ */
+export function loadRuntimeConfig(
+  options: LoadRuntimeConfigOptions,
+): Result<RuntimeConfig, ConfigError> {
+  const envResult = resolveEnv({
+    schema: StdioEnvSchema,
+    processEnv: options.processEnv,
+    startDir: options.startDir,
+  });
+
+  if (!envResult.ok) {
+    return err({
+      message: envResult.error.message,
+      diagnostics: envResult.error.diagnostics,
+    });
+  }
+
+  const env = envResult.value;
+
+  return ok({
     env,
-    useStubTools: toBooleanFlag(source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
-  };
+    logLevel: env.LOG_LEVEL ?? 'info',
+    useStubTools: env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS === 'true',
+    version: options.processEnv.npm_package_version ?? '0.0.0',
+  });
 }

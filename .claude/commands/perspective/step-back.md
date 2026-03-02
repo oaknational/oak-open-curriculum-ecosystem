@@ -4,7 +4,7 @@ What are we trying to achieve? Why? How are we going about it?
 
 Is that approach the simplest way we can do it? Could we make any of this simpler? Reflect on this.
 
-Does everything we have done fully align with the rules and guides linked to from .agent/directives-and-memory/AGENT.md?
+Does everything we have done fully align with the rules and guides linked to from .agent/directives/AGENT.md?
 
 What do type-check and lint say?
 

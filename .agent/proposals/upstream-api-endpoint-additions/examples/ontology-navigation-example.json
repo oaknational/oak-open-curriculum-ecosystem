@@ -1,0 +1,29 @@
+{
+  "_comment": "Example: Navigation guidance that belongs in ontology",
+  
+  "structuralPatterns": [
+    {
+      "id": "exam-subject-split",
+      "description": "Science KS4 splits into Biology/Chemistry/Physics/Combined",
+      "appliesTo": ["science KS4"],
+      "critical": "/key-stages/ks4/subject/science/lessons returns EMPTY. Use sequences endpoint."
+    }
+  ],
+  
+  "traversalGuidance": {
+    "simpleFlatRoute": {
+      "pattern": "GET /key-stages/{ks}/subject/{subject}/lessons",
+      "useWhen": "KS1-KS3 content with simple structure"
+    },
+    "sequenceRoute": {
+      "pattern": "GET /sequences/{sequence}/units?year={year}",
+      "useWhen": "KS4 content requiring tier/exam board context"
+    }
+  },
+  
+  "relationships": [
+    { "from": "phase", "to": "keystage", "rel": "includesKeyStages" },
+    { "from": "keystage", "to": "yeargroup", "rel": "includesYears" },
+    { "from": "sequence", "to": "examsubject", "rel": "branchesInto", "note": "Science KS4 only" }
+  ]
+}

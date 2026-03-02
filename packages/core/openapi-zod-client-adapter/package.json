@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/openapi-zod-client-adapter",
   "version": "0.0.0-development",
+  "private": true,
   "description": "Adapter for openapi-zod-client that enforces Zod v3/v4 boundary",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,12 +18,13 @@
     "dist"
   ],
   "scripts": {
-    "build-adapter": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
@@ -33,6 +35,7 @@
     "openapi3-ts": "^4.5.0"
   },
   "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
     "openapi3-ts": "^4.5.0",
     "typescript": "^5.9.3"
   },
@@ -41,14 +44,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "packages/libs/openapi-zod-client-adapter"
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/core/openapi-zod-client-adapter"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/openapi-zod-client-adapter#readme",
   "keywords": [
     "openapi",
     "zod",
     "adapter",
     "code-generation"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
   ],
   "license": "MIT"
 }

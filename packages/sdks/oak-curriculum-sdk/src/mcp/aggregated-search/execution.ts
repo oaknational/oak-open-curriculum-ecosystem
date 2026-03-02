@@ -1,141 +1,169 @@
 /**
- * Execution logic for the aggregated search tool.
+ * Execution logic for the SDK-backed search tool.
  *
- * This module provides the runSearchTool function which executes
- * parallel searches across lessons and transcripts endpoints.
- *
- * @module aggregated-search/execution
+ * Dispatches validated search arguments to the appropriate Search SDK
+ * retrieval method based on the scope. Maps `Result<T, RetrievalError>`
+ * from the Search SDK to MCP `CallToolResult`.
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import {
-  formatError,
-  formatOptimizedResult,
-  toErrorMessage,
-  extractExecutionData,
-} from '../universal-tool-shared.js';
-import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
-import type { SearchArgs } from './types.js';
-import { augmentArrayResponseWithCanonicalUrl } from '../../response-augmentation.js';
+import type { Result } from '@oaknational/result';
+import { formatError, type UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
+import type {
+  SearchRetrievalService,
+  SearchLessonsParams,
+  SearchUnitsParams,
+  SearchSequencesParams,
+  SearchParamsBase,
+  SuggestParams,
+  SearchRetrievalError,
+} from '../search-retrieval-types.js';
+import type { SearchSdkArgs, SearchDispatchResult } from './types.js';
+import { formatSearchResults } from './formatting.js';
 
 /**
- * Builds search arguments for the lessons endpoint.
+ * Builds SearchLessonsParams from validated SearchSdkArgs.
  */
-function buildLessonsArgs(args: SearchArgs) {
+function buildLessonsParams(args: SearchSdkArgs): SearchLessonsParams {
   return {
-    q: args.q,
-    ...(args.keyStage !== undefined ? { keyStage: args.keyStage } : {}),
-    ...(args.subject !== undefined ? { subject: args.subject } : {}),
-    ...(args.unit !== undefined ? { unit: args.unit } : {}),
+    text: args.text,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+    from: args.from,
+    unitSlug: args.unitSlug,
+    tier: args.tier,
+    examBoard: args.examBoard,
+    year: args.year,
+    threadSlug: args.threadSlug,
+    highlight: args.highlight,
   };
 }
 
 /**
- * Formats successful search results into an optimized CallToolResult.
+ * Builds SearchUnitsParams from validated SearchSdkArgs.
  */
-function formatSearchSuccess(
-  args: SearchArgs,
-  lessons: readonly unknown[],
-  transcripts: readonly unknown[],
-  lessonsStatus: number | string,
-  transcriptsStatus: number | string,
-): CallToolResult {
-  const summary = buildSearchSummary(lessons.length, transcripts.length, args.q);
-
-  return formatOptimizedResult({
-    summary,
-    fullData: {
-      q: args.q,
-      keyStage: args.keyStage,
-      subject: args.subject,
-      unit: args.unit,
-      lessonsStatus,
-      lessons,
-      transcriptsStatus,
-      transcripts,
-    },
-    query: args.q,
-    timestamp: Date.now(),
-    status: 'success',
-    toolName: 'search',
-    annotationsTitle: 'Search Curriculum',
-  });
+function buildUnitsParams(args: SearchSdkArgs): SearchUnitsParams {
+  return {
+    text: args.text,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+    from: args.from,
+    highlight: args.highlight,
+    minLessons: args.minLessons,
+  };
 }
 
 /**
- * Executes the search aggregated tool.
- *
- * Runs get-search-lessons and get-search-transcripts in parallel,
- * combining results into a single response.
- *
- * @param args - Validated search arguments
- * @param deps - Dependencies including the MCP tool executor
- * @returns CallToolResult with combined search results or error
+ * Builds SearchParamsBase for threads from validated SearchSdkArgs.
  */
-export async function runSearchTool(
-  args: SearchArgs,
+function buildThreadsParams(args: SearchSdkArgs): SearchParamsBase {
+  return {
+    text: args.text,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+    from: args.from,
+  };
+}
+
+/**
+ * Builds SearchSequencesParams from validated SearchSdkArgs.
+ */
+function buildSequencesParams(args: SearchSdkArgs): SearchSequencesParams {
+  return {
+    text: args.text,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+    from: args.from,
+    phaseSlug: args.phaseSlug,
+    category: args.category,
+  };
+}
+
+/**
+ * Builds SuggestParams from validated SearchSdkArgs.
+ * Maps `text` to `prefix` and defaults scope to 'lessons'.
+ */
+function buildSuggestParams(args: SearchSdkArgs): SuggestParams {
+  return {
+    prefix: args.text,
+    scope: 'lessons',
+    subject: args.subject,
+    keyStage: args.keyStage,
+    limit: args.limit,
+  };
+}
+
+/** Formats a SearchRetrievalError into a human-readable error message. */
+function formatRetrievalError(error: SearchRetrievalError): string {
+  if (error.type === 'es_error') {
+    const suffix = error.statusCode !== undefined ? ` (status ${String(error.statusCode)})` : '';
+    return `Elasticsearch error: ${error.message}${suffix}`;
+  }
+  if (error.type === 'timeout') {
+    return `Search timed out: ${error.message}`;
+  }
+  if (error.type === 'validation_error') {
+    return `Invalid search parameters: ${error.message}`;
+  }
+  return `Unexpected search error: ${error.message}`;
+}
+
+/**
+ * Dispatches a search request to the appropriate SDK retrieval method.
+ *
+ * Uses a `switch` on `args.scope` to preserve per-scope return types
+ * through the `SearchDispatchResult` union. The `default: never` guard
+ * ensures exhaustiveness at compile time.
+ */
+async function dispatchByScope(
+  args: SearchSdkArgs,
+  retrieval: SearchRetrievalService,
+): Promise<Result<SearchDispatchResult, SearchRetrievalError>> {
+  switch (args.scope) {
+    case 'lessons':
+      return retrieval.searchLessons(buildLessonsParams(args));
+    case 'units':
+      return retrieval.searchUnits(buildUnitsParams(args));
+    case 'threads':
+      return retrieval.searchThreads(buildThreadsParams(args));
+    case 'sequences':
+      return retrieval.searchSequences(buildSequencesParams(args));
+    case 'suggest':
+      return retrieval.suggest(buildSuggestParams(args));
+    default: {
+      const exhaustive: never = args.scope;
+      throw new Error(`Unhandled search scope: ${String(exhaustive)}`);
+    }
+  }
+}
+
+/**
+ * Executes the SDK-backed search tool.
+ *
+ * Dispatches to the appropriate Search SDK retrieval method based on scope:
+ * - `lessons`   maps to `retrieval.searchLessons()`
+ * - `units`     maps to `retrieval.searchUnits()`
+ * - `threads`   maps to `retrieval.searchThreads()`
+ * - `sequences` maps to `retrieval.searchSequences()`
+ * - `suggest`   maps to `retrieval.suggest()`
+ *
+ * @param args - Validated search arguments with scope and filters
+ * @param deps - Dependencies including searchRetrieval service
+ * @returns CallToolResult with formatted search results or error
+ */
+export async function runSearchSdkTool(
+  args: SearchSdkArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  const lessonsArgs = buildLessonsArgs(args);
-  const transcriptsArgs = { q: args.q };
+  const result = await dispatchByScope(args, deps.searchRetrieval);
 
-  // Execute both searches
-  const lessonsResult = await deps.executeMcpTool('get-search-lessons', lessonsArgs);
-  const transcriptsResult = await deps.executeMcpTool('get-search-transcripts', transcriptsArgs);
-
-  // Extract and validate results
-  const lessonsData = extractExecutionData(lessonsResult);
-  if (!lessonsData.ok) {
-    return formatError(toErrorMessage(lessonsData.error));
+  if (!result.ok) {
+    return formatError(formatRetrievalError(result.error));
   }
 
-  const transcriptsData = extractExecutionData(transcriptsResult);
-  if (!transcriptsData.ok) {
-    return formatError(toErrorMessage(transcriptsData.error));
-  }
-
-  // Extract arrays and augment with canonical URLs
-  const lessonsRaw = Array.isArray(lessonsData.data) ? lessonsData.data : [];
-  const transcriptsRaw = Array.isArray(transcriptsData.data) ? transcriptsData.data : [];
-  const lessons = augmentArrayResponseWithCanonicalUrl(lessonsRaw, '/search/lessons', 'get');
-  const transcripts = augmentArrayResponseWithCanonicalUrl(
-    transcriptsRaw,
-    '/search/transcripts',
-    'get',
-  );
-
-  return formatSearchSuccess(
-    args,
-    lessons,
-    transcripts,
-    lessonsData.status,
-    transcriptsData.status,
-  );
-}
-
-/**
- * Builds a human-readable summary of search results.
- *
- * @param lessonCount - Number of lessons found
- * @param transcriptCount - Number of transcripts found
- * @param query - The search query
- * @returns Human-readable summary string
- */
-function buildSearchSummary(lessonCount: number, transcriptCount: number, query: string): string {
-  const lessonWord = lessonCount === 1 ? 'lesson' : 'lessons';
-  const transcriptWord = transcriptCount === 1 ? 'transcript' : 'transcripts';
-
-  if (lessonCount === 0 && transcriptCount === 0) {
-    return `No results found for "${query}"`;
-  }
-
-  const parts: string[] = [];
-  if (lessonCount > 0) {
-    parts.push(`${String(lessonCount)} ${lessonWord}`);
-  }
-  if (transcriptCount > 0) {
-    parts.push(`${String(transcriptCount)} ${transcriptWord}`);
-  }
-
-  return `Found ${parts.join(' and ')} matching "${query}"`;
+  return formatSearchResults(result.value, args.text);
 }

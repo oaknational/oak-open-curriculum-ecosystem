@@ -1,3 +1,18 @@
+---
+name: "[Plan Title]"
+overview: "[One-line scope description]"
+todos:
+  - id: phase-0-foundation
+    content: "Phase 0: Verify foundation assumptions."
+    status: pending
+  - id: phase-1-resolution
+    content: "Phase 1: Implement and validate fixes."
+    status: pending
+  - id: phase-2-hardening
+    content: "Phase 2: Quality gates, documentation, and follow-up hardening."
+    status: pending
+---
+
 # [Plan Title: Brief, Action-Oriented Name]
 
 **Last Updated**: [YYYY-MM-DD]  
@@ -45,7 +60,7 @@ pnpm test        # Test ALL workspaces
 
 ```bash
 # Full quality gate sequence
-pnpm type-gen    # Regenerate types (SDK changes)
+pnpm sdk-codegen # Regenerate types (SDK changes)
 pnpm build       # Build ALL workspaces
 pnpm type-check  # Type check ALL workspaces
 pnpm lint        # Lint ALL workspaces
@@ -108,11 +123,25 @@ Answer: [YES/NO - explain why]
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives-and-memory/rules.md` - Core principles
-2. **Re-read** `.agent/directives-and-memory/testing-strategy.md` - Testing philosophy
-3. **Re-read** `.agent/directives-and-memory/schema-first-execution.md` - Type generation flow
+1. **Re-read** `.agent/directives/rules.md` - Core principles
+2. **Re-read** `.agent/directives/testing-strategy.md` - Testing philosophy
+3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
 5. **Verify**: No compatibility layers, no type shortcuts, no disabled checks
+
+---
+
+## Documentation Propagation Commitment
+
+Before marking a phase complete:
+
+1. Update `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` if impacted
+2. Update `.agent/practice-core/practice.md` if impacted
+
+3. Update any additionally impacted ADRs, `/docs/` pages, or README files
+4. Apply `.cursor/commands/jc-consolidate-docs.md` to ensure settled documentation is not trapped in plans
+
+If no update is needed for a required surface, record an explicit no-change rationale.
 
 ---
 
@@ -260,7 +289,7 @@ pnpm test        # Expected: exit 0, all tests pass
 
 ```bash
 # Run full quality gate after Phase 1
-pnpm type-gen
+pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm lint
@@ -482,9 +511,9 @@ done
 
 - [Product code reference]: [File path or description]
 - Foundation documents:
-  - `.agent/directives-and-memory/rules.md`
-  - `.agent/directives-and-memory/testing-strategy.md`
-  - `.agent/directives-and-memory/schema-first-execution.md`
+  - `.agent/directives/rules.md`
+  - `.agent/directives/testing-strategy.md`
+  - `.agent/directives/schema-first-execution.md`
 
 ---
 
@@ -517,8 +546,8 @@ Run these commands to verify all fixes:
 
 ```bash
 # Full quality gate sequence
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
-pnpm type-gen   # Generate types
+cd /Users/jim/code/oak/oak-open-curriculum-ecosystem
+pnpm sdk-codegen # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check
 pnpm lint       # Lint

@@ -1,20 +1,24 @@
-# OAuth Proxy Removal - Validation Results
+# OAuth Discovery - Validation Results
 
 ## Summary
 
-✅ **All curl tests PASSED** - The OAuth discovery chain works correctly without the proxy endpoint.
+✅ **All curl tests PASSED** - The OAuth discovery chain works correctly.
+
+**Update (2026-02-20)**: The AS metadata endpoint was restored for backward compatibility
+with Cursor v2.5.17 and other clients implementing the older MCP spec (2025-03-26). See
+ADR-113 amendment.
 
 ## Test Results
 
-### Test 1: Proxy Endpoint Removed (✅ PASS)
+### Test 1: Authorization Server Metadata (✅ PASS)
 
 ```bash
 curl -i http://localhost:3333/.well-known/oauth-authorization-server
 ```
 
-**Result**: `HTTP/1.1 404 Not Found`
+**Result**: `HTTP/1.1 200 OK` (AS metadata derived locally from publishable key)
 
-✅ **Proves**: The unnecessary proxy endpoint has been successfully removed.
+✅ **Proves**: Backward-compatible clients can discover token_endpoint from the resource server.
 
 ---
 
@@ -83,21 +87,17 @@ curl -I http://localhost:3333/.well-known/oauth-protected-resource
 
 ---
 
-## Inspector CLI Test Result
+## MCP Inspector (UI) Validation
 
 ```bash
-pnpm smoke:oauth-inspector
+# Terminal 1 (auth enabled, stub tools)
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev:auth:stub
+
+# Terminal 2 (launch Inspector UI)
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http inspect:oauth
 ```
 
-**Result**: `HTTP/1.1 401 Unauthorized`
-
-```text
-Failed to connect to MCP server: Error POSTing to endpoint (HTTP 401): {"error":"Unauthorized"}
-```
-
-✅ **This is CORRECT behavior** - The server properly challenges clients with OAuth.
-
-**Note**: The MCP Inspector CLI does not automatically complete the OAuth flow (which requires browser interaction). The 401 response with `WWW-Authenticate` header proves OAuth enforcement is working. The curl tests above already prove the OAuth discovery chain works.
+✅ **Expected behaviour**: the Inspector can complete OAuth (browser interaction) and then call a protected tool successfully (for example `get-key-stages`), without requiring live Oak API calls.
 
 ---
 
@@ -132,7 +132,7 @@ The OAuth discovery chain works correctly without the Authorization Server Metad
 
 ## Related Documentation
 
-- Implementation Plan: `.agent/plans/remove-oauth-proxy-endpoint.md`
+- Implementation Plan: `.agent/plans/archive/completed/remove-oauth-proxy-endpoint.md`
 - E2E Tests: `e2e-tests/auth-enforcement.e2e.test.ts`
 - MCP Spec: <https://modelcontextprotocol.io/specification/2025-03-26/basic/authorization>
 - RFC 9728 (Protected Resource Metadata): <https://datatracker.ietf.org/doc/html/rfc9728>

@@ -852,7 +852,7 @@ updateSelection.transition();
 
 ---
 
-## Applicability to Oak MCP Widget Renderers
+## Applicability to Oak Open Curriculum Widget Renderers
 
 These patterns could inform the knowledge graph and other widget SVG renderers:
 

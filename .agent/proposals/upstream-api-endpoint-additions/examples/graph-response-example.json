@@ -1,0 +1,35 @@
+{
+  "_comment": "Example: Foundation graph response format",
+  
+  "vocabulary": {
+    "version": "1.0.0",
+    "generatedAt": "2026-02-04T00:00:00Z",
+    "stats": {
+      "totalTerms": 13349,
+      "crossSubjectTermCount": 2340,
+      "subjectsCovered": ["maths", "english", "science"]
+    },
+    "nodes": [
+      {
+        "term": "denominator",
+        "definition": "The bottom number in a fraction",
+        "frequency": 47,
+        "subjects": ["maths"],
+        "firstYear": 3
+      }
+    ]
+  },
+  
+  "prerequisites": {
+    "version": "1.0.0",
+    "stats": { "totalUnits": 1601, "totalEdges": 3408 },
+    "edges": [
+      {
+        "from": "fractions-year-3",
+        "to": "fractions-year-4",
+        "relationship": "prerequisite",
+        "strength": "strong"
+      }
+    ]
+  }
+}

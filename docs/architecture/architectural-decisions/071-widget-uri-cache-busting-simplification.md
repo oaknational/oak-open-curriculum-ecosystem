@@ -23,12 +23,12 @@ OpenAI's best practice states: "When you change your widget's HTML/JS/CSS in a b
 
 ## Decision
 
-**Generate a unique widget URI at type-generation time** by embedding a hash in the filename.
+**Generate a unique widget URI at sdk-codegen time** by embedding a hash in the filename.
 
 - **Format**: `ui://widget/oak-json-viewer-<hash>.html`
 - **Hash source**: SHA-256 of `Date.now()` (first 8 chars)
-- **When generated**: During `pnpm type-gen`
-- **Where defined**: `type-gen/typegen/cross-domain-constants.ts`
+- **When generated**: During `pnpm sdk-codegen`
+- **Where defined**: `code-generation/typegen/cross-domain-constants.ts`
 
 All generated tools reference this hashed URI in `_meta['openai/outputTemplate']`. The widget resource is registered at the same URI. No runtime modification needed.
 
@@ -45,7 +45,7 @@ All generated tools reference this hashed URI in `_meta['openai/outputTemplate']
 
 ### Trade-offs
 
-- ⚠️ **Frequent local changes**: Every `pnpm type-gen` creates a new URI
+- ⚠️ **Frequent local changes**: Every `pnpm sdk-codegen` creates a new URI
   - Mitigation: This is actually beneficial for local dev testing
 - ⚠️ **URI changes on every build**: Even if widget content unchanged
   - Mitigation: Acceptable trade-off for simplicity; ChatGPT handles this gracefully
@@ -57,9 +57,9 @@ All generated tools reference this hashed URI in `_meta['openai/outputTemplate']
 
 ## Implementation
 
-### Type-Gen Layer (Generator Code)
+### Code-Generation Layer (Generator Code)
 
-**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/cross-domain-constants.ts`
+**File**: `packages/sdks/oak-curriculum-sdk/code-generation/typegen/cross-domain-constants.ts`
 
 ```typescript
 import { createHash } from 'node:crypto';

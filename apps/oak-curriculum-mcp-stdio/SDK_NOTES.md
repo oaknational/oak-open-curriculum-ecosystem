@@ -1,25 +1,14 @@
-# SDK Changes Needed
+# SDK Notes
 
-The following changes are needed in the oak-curriculum-sdk package:
+> **Status**: Complete (2026-02-14)
+>
+> The ESM `.js` extension changes described below have been implemented.
+> The SDK uses ESM throughout and all relative imports include `.js`
+> extensions. This file is preserved for historical context.
 
-## 1. Add .js extensions to all relative imports
+## Historical: ESM Import Extensions
 
-For ESM compatibility, all relative imports need to have .js extensions.
-
-### Files to update:
-
-- `src/index.ts` - all relative imports need .js extension
-- `src/client/index.ts` - all relative imports need .js extension
-- All other TypeScript files with relative imports
-
-### Example change needed:
-
-```typescript
-// Before
-import { createOakClient } from './client/index';
-
-// After
-import { createOakClient } from './client/index.js';
-```
-
-This is required for the MCP server to work correctly in ESM mode.
+For ESM compatibility, all relative imports in the SDK needed `.js`
+extensions. This was required for the MCP server to work correctly in
+ESM mode. The change has been applied to all TypeScript files with
+relative imports.

@@ -7,23 +7,19 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
-import type { RuntimeConfig } from './runtime-config.js';
+import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
+import { createFakeLogger, createFakeSearchRetrieval } from './test-helpers/fakes.js';
 
 /**
- * Test logger that captures log calls
+ * Test logger that captures log calls. Uses shared fake so no type assertion is needed.
  */
 function createTestLogger(): Logger {
-  return {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  } as unknown as Logger;
+  return createFakeLogger();
 }
 
 /**
@@ -54,22 +50,53 @@ function createMockDependencies(
       }),
     ),
     getResourceUrl: vi.fn(() => 'http://localhost:3333/mcp'),
+    searchRetrieval: createFakeSearchRetrieval(),
     ...overrides,
   };
 }
 
+const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
+  OAK_API_KEY: 'test',
+  CLERK_PUBLISHABLE_KEY: 'pk_test',
+  CLERK_SECRET_KEY: 'sk_test',
+  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_API_KEY: 'fake-key',
+};
+
+const baseAuthDisabledEnv: AuthDisabledRuntimeConfig['env'] = {
+  OAK_API_KEY: 'test',
+  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_API_KEY: 'fake-key',
+};
+
 /**
- * Creates a mock RuntimeConfig for testing
+ * Creates a mock RuntimeConfig for testing.
+ * When overrides.dangerouslyDisableAuth is true, returns AuthDisabledRuntimeConfig.
  */
-function createMockRuntimeConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
+function createMockRuntimeConfig(
+  overrides?:
+    | Partial<AuthEnabledRuntimeConfig>
+    | (Partial<AuthDisabledRuntimeConfig> & { dangerouslyDisableAuth: true }),
+): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
+  if (overrides?.dangerouslyDisableAuth === true) {
+    const { env: envOverrides } = overrides;
+    return {
+      env: envOverrides ? { ...baseAuthDisabledEnv, ...envOverrides } : baseAuthDisabledEnv,
+      dangerouslyDisableAuth: true,
+      useStubTools: false,
+      version: '1.0.0-test',
+      vercelHostnames: [],
+    } satisfies AuthDisabledRuntimeConfig;
+  }
+  const { env: envOverrides } = overrides ?? {};
+  const mergedEnv = envOverrides ? { ...baseAuthEnabledEnv, ...envOverrides } : baseAuthEnabledEnv;
   return {
-    env: {} as RuntimeConfig['env'],
+    env: mergedEnv,
     dangerouslyDisableAuth: false,
     useStubTools: false,
     version: '1.0.0-test',
     vercelHostnames: [],
-    ...overrides,
-  };
+  } satisfies AuthEnabledRuntimeConfig;
 }
 
 describe('Tool Handler with Auth Integration', () => {

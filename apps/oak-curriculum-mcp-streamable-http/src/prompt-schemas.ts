@@ -11,7 +11,6 @@
  * @see {@link MCP_PROMPTS} - Prompt definitions in SDK
  * @see https://modelcontextprotocol.io/specification/draft/server/prompts
  *
- * @module prompt-schemas
  */
 
 import { z } from 'zod';
@@ -46,14 +45,29 @@ export const lessonPlanningArgsSchema = {
 };
 
 /**
- * Schema for progression-map prompt arguments.
+ * Schema for explore-curriculum prompt arguments.
  *
- * Used when mapping how a concept develops across years in a subject.
+ * Used when exploring what Oak has on a topic across the whole curriculum.
  */
-export const progressionMapArgsSchema = {
+export const exploreCurriculumArgsSchema = {
+  topic: z
+    .string()
+    .describe('The topic to explore (e.g., "volcanos", "electricity", "the Romans")'),
+  subject: z
+    .string()
+    .optional()
+    .describe('Optional: Narrow to a specific subject (e.g., "science", "history")'),
+};
+
+/**
+ * Schema for learning-progression prompt arguments.
+ *
+ * Used when tracing how a concept builds across year groups.
+ */
+export const learningProgressionArgsSchema = {
   concept: z
     .string()
-    .describe('The concept thread to explore (e.g., "number", "forces", "grammar")'),
+    .describe('The concept to trace (e.g., "algebra", "cells", "narrative writing")'),
   subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
 };
 
@@ -66,7 +80,8 @@ export const progressionMapArgsSchema = {
 export const PROMPT_SCHEMAS = {
   'find-lessons': findLessonsArgsSchema,
   'lesson-planning': lessonPlanningArgsSchema,
-  'progression-map': progressionMapArgsSchema,
+  'explore-curriculum': exploreCurriculumArgsSchema,
+  'learning-progression': learningProgressionArgsSchema,
 } as const;
 
 /**

@@ -4,7 +4,7 @@
  * This pure function reads security metadata from generated tool descriptors
  * and aggregated tool definitions to determine authentication requirements.
  *
- * **Architecture**: All security metadata is generated at type-gen time or
+ * **Architecture**: All security metadata is generated at sdk-codegen time or
  * defined for aggregated tools. This function only READS that metadata—it
  * never computes or decides policy.
  *
@@ -30,7 +30,6 @@
  * ```
  *
  * @see Sub-Phase 2.3 of schema-first-security-implementation.md
- * @see isDiscoveryMethod for MCP protocol method classification
  * @public
  */
 
@@ -39,7 +38,7 @@ import {
   isAggregatedToolName,
   AGGREGATED_TOOL_DEFS,
   getToolFromToolName,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 export function toolRequiresAuth(toolName: UniversalToolName): boolean {
   const schemes = isAggregatedToolName(toolName)

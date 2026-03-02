@@ -15,6 +15,7 @@ import {
   generateCtaContainerHtml,
   generateCtaHandlerJs,
   CTA_REGISTRY,
+  CTA_LIST,
   CTA_UNDERSTOOD_DELAY_MS,
   type CtaConfig,
 } from './widget-cta/index.js';
@@ -81,11 +82,8 @@ describe('generateCtaContainerHtml', () => {
 
   it('includes a button for each CTA in the registry', () => {
     const html = generateCtaContainerHtml();
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    const registryKeys = Object.keys(CTA_REGISTRY);
 
-    for (const key of registryKeys) {
-      const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
+    for (const cta of CTA_LIST) {
       expect(html).toContain(`id="${cta.id}-btn"`);
     }
   });
@@ -93,7 +91,6 @@ describe('generateCtaContainerHtml', () => {
   it('includes a button for the learnOak CTA with correct id', () => {
     const html = generateCtaContainerHtml();
     expect(html).toContain('id="learn-oak-btn"');
-    // The label text can change - we just verify the button exists
     expect(html).toContain(CTA_REGISTRY.learnOak.label);
   });
 });
@@ -111,12 +108,9 @@ describe('generateCtaHandlerJs', () => {
 
   it('includes config entries for each CTA in the registry', () => {
     const js = generateCtaHandlerJs();
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    const registryKeys = Object.keys(CTA_REGISTRY);
 
-    for (const key of registryKeys) {
-      const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
-      expect(js).toContain(`id: '${cta.id}'`);
+    for (const cta of CTA_LIST) {
+      expect(js).toContain(`id: ${JSON.stringify(cta.id)}`);
     }
   });
 
@@ -145,11 +139,7 @@ describe('generateCtaHandlerJs', () => {
   describe('prompt escaping', () => {
     it('escapes backticks in prompts for safe template literal embedding', () => {
       const js = generateCtaHandlerJs();
-      // The Learn Oak prompt contains backticks around tool names
-      // These should be escaped as \` in the output
-      expect(js).toContain('\\`get-ontology\\`');
-      expect(js).toContain('\\`get-knowledge-graph\\`');
-      expect(js).toContain('\\`get-help\\`');
+      expect(js).toMatch(/\\`[^`]+\\`/);
     });
   });
 });
@@ -185,10 +175,8 @@ describe('CTA_REGISTRY', () => {
       expect(learnOak.understoodLabel.length).toBeGreaterThan(0);
     });
 
-    it('prompts for all three agent support tools', () => {
-      expect(learnOak.prompt).toContain('get-ontology');
-      expect(learnOak.prompt).toContain('get-knowledge-graph');
-      expect(learnOak.prompt).toContain('get-help');
+    it('prompts for curriculum orientation', () => {
+      expect(learnOak.prompt).toMatch(/orientation|domain model/i);
     });
 
     it('has a non-empty prompt', () => {

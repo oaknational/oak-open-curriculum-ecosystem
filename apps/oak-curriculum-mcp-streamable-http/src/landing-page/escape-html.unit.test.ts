@@ -1,5 +1,5 @@
 /**
- * @fileoverview Unit tests for HTML escaping utility.
+ * Unit tests for HTML escaping utility.
  *
  * Tests verify that special HTML characters are properly escaped
  * to prevent XSS vulnerabilities.

@@ -1,8 +1,17 @@
-# ADR-008: Ecosystem Architecture Vision
+# ADR-008: Ecosystem Architecture Vision (Historical)
 
 ## Status
 
-Accepted (Future Vision)
+Deprecated (Historical context only)
+
+## Supersession
+
+This ADR is retained as historical context only.
+
+Current conceptual vision is defined in:
+
+- [docs/foundation/VISION.md](../../foundation/VISION.md)
+- [ADR-119: Agentic Engineering Practice](119-agentic-engineering-practice.md)
 
 ## Context
 

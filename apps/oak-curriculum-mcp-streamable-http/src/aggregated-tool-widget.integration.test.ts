@@ -6,7 +6,6 @@
  * 2. Script escaping (widget-script-escaping.ts)
  * 3. Emulation wrapper (chatgpt-emulation-wrapper.ts)
  *
- * @module aggregated-tool-widget.integration.test
  */
 
 import { describe, it, expect } from 'vitest';

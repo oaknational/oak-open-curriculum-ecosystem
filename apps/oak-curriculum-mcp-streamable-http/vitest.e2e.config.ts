@@ -4,7 +4,6 @@ import { baseE2EConfig } from '../../vitest.e2e.config.base';
 export default mergeConfig(baseE2EConfig, {
   test: {
     include: ['e2e-tests/**/*.e2e.test.ts'],
-    exclude: ['e2e-tests/built-server.e2e.test.ts'],
     isolate: true,
     pool: 'forks',
     poolOptions: {
@@ -12,6 +11,6 @@ export default mergeConfig(baseE2EConfig, {
         singleFork: true,
       },
     },
-    // Do NOT include src/test.setup.ts here: e2e tests may allow network IO
+    // Network IO is forbidden in E2E tests; blocking is configured in vitest.e2e.config.base.ts.
   },
 });

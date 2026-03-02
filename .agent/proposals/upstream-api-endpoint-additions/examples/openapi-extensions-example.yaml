@@ -1,0 +1,39 @@
+# Example: x-oak-* specification extensions
+# OpenAPI 3.1 supports arbitrary x-* fields for custom metadata
+
+# On operations - guidance for when to use this endpoint
+paths:
+  /key-stages/{keyStage}/subject/{subject}/lessons:
+    get:
+      summary: "Lessons"
+      description: "Returns lessons for a given subject and key stage"
+      x-oak-use-when: |
+        Use this endpoint for KS1-KS3 content where structure is simple.
+        For KS4, prefer /sequences/{sequence}/units to access tier and exam board variants.
+      x-oak-see-also:
+        - "/sequences/{sequence}/units"
+        - "/subjects/{subject}/sequences"
+      x-oak-common-pitfalls:
+        - "KS4 science returns EMPTY — use sequences endpoint instead"
+        - "Results are grouped by unit, not paginated"
+
+# On parameters - contextual guidance
+parameters:
+  - name: keyStage
+    in: path
+    schema:
+      type: string
+      enum: [ks1, ks2, ks3, ks4]
+    x-oak-guidance: |
+      KS4 has additional complexity. For science, the /key-stages/ks4/subject/science/lessons
+      endpoint returns empty — use /sequences instead.
+
+# On schemas - applicability and usage hints
+components:
+  schemas:
+    TierSlug:
+      type: string
+      enum: [foundation, higher]
+      description: "GCSE difficulty tier"
+      x-oak-applies-to: [maths, science]
+      x-oak-use-when: "Filtering KS4 maths or science content by difficulty level"

@@ -21,7 +21,7 @@ From the SDK docs, you can locate the endpoint’s types and then relate them to
 
 ### Response handling
 
-- Response descriptors are generated for **every documented status code**. At type‑gen time we emit a frozen map keyed by operation id → status → `{ zod, json }` descriptor.
+- Response descriptors are generated for **every documented status code**. At sdk-codegen time we emit a frozen map keyed by operation id → status → `{ zod, json }` descriptor.
 - The generated executor imports that map, determines the actual HTTP status returned by `openapi-fetch`, and then:
   - selects the matching descriptor (`2xx` maps to `.data`, everything else uses `.error`),
   - fails fast if the status wasn’t documented, pointing to the operation id and the known statuses,
@@ -39,13 +39,13 @@ Keeping MCP internals out of the main API docs preserves a clear, stable public 
 
 ## Security and Authentication
 
-MCP tools in this SDK include OAuth 2.1 security metadata to enable ChatGPT compatibility. Security policy is centrally defined and applied at type-generation time.
+MCP tools in this SDK include OAuth 2.1 security metadata to enable ChatGPT compatibility. Security policy is centrally defined and applied at sdk-codegen time.
 
 ### Security Policy Configuration
 
 Security policy is defined in:
 
-- `type-gen/mcp-security-policy.ts`
+- `code-generation/mcp-security-policy.ts`
 
 The policy specifies:
 
@@ -62,7 +62,7 @@ Current configuration:
 
 To make a tool publicly accessible without authentication:
 
-1. Edit `type-gen/mcp-security-policy.ts`
+1. Edit `code-generation/mcp-security-policy.ts`
 2. Add the tool name to the `PUBLIC_TOOLS` array:
 
 ```typescript
@@ -74,7 +74,7 @@ export const PUBLIC_TOOLS = [
 ] as const;
 ```
 
-3. Run `pnpm type-gen` to regenerate tool descriptors
+3. Run `pnpm sdk-codegen` to regenerate tool descriptors
 4. Verify the tool now has `securitySchemes: [{ type: 'noauth' }]`
 
 ### Security Metadata in Tool Descriptors

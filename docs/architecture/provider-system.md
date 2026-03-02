@@ -1,44 +1,66 @@
 # Provider System Overview
 
-This document explains how providers integrate with the lib packages, how apps compose a runtime, and how dependencies are injected. For a broader context, see the [Architecture index](./README.md) and onboarding in [docs/onboarding.md](../onboarding.md).
+**Last Updated**: 2026-02-25  
+**Status**: Active guidance  
+**Scope**: Runtime provider composition for MCP applications
 
-## Concepts
+This document describes the current provider architecture after removal of the
+old shared provider package. Providers are composed per app, in each app's
+composition root, then injected into tool/runtime modules.
 
-- Lib packages: interfaces and utilities for logger, storage, transport, and environment. No provider imports.
-- Providers (e.g., `@oaknational/mcp-providers-node`): implement `CoreProviders` (logger, clock, storage, etc.).
-- Apps: read config, select provider set, call `createRuntime`, pass runtime into tools/integrations.
+## Composition Roots (Current)
 
-## Composition
+- STDIO server composition root:
+  [`apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`](../../apps/oak-curriculum-mcp-stdio/src/app/wiring.ts)
+- STDIO runtime configuration loader:
+  [`apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`](../../apps/oak-curriculum-mcp-stdio/src/runtime-config.ts)
+- Streamable HTTP composition root:
+  [`apps/oak-curriculum-mcp-streamable-http/src/application.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/application.ts)
+- Streamable HTTP runtime configuration loader:
+  [`apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts)
 
-```ts
-// Runtime composition is now handled locally in each app
-import { createNodeClock } from '@oaknational/mcp-providers-node';
-import { createInMemoryStorage } from '@oaknational/mcp-providers-node';
+## Provider Model
 
-const runtime = createRuntime({
-  logger: /* bridge your app logger to CoreLogger shape */,
-  clock: createNodeClock(),
-  storage: createInMemoryStorage(),
-});
-// Pass runtime to app wiring and tool registration
-```
+### App-local composition
+
+Each app composes its own runtime dependencies, including:
+
+- logger
+- clock
+- storage
+- API client
+- search retrieval service
+
+No shared provider implementation package is used. This keeps runtime assembly
+close to transport concerns while preserving strict dependency injection.
+
+### Injection boundaries
+
+1. Runtime config is loaded once at entry/composition boundary.
+2. Providers are constructed in composition roots.
+3. Tool modules and handlers receive dependencies via parameters.
+4. Runtime modules do not discover providers dynamically at call-time.
+
+## Runtime Separation
+
+- **Transport/runtime layer**: server startup, route/middleware wiring, request
+  lifecycle.
+- **Tool execution layer**: generated MCP tool registry + executor wiring from
+  SDK surfaces.
+- **Provider layer**: app-composed logger/clock/storage/search dependencies.
+
+This separation keeps transport logic independent from provider implementation
+details while preserving schema-first execution through generated SDK tooling.
 
 ## Design Rules
 
-- Inter‑workspace via `@oaknational/*` package imports.
-- Intra‑package relatives allowed; avoid private/internal subpaths.
-- Core stays pure (no provider imports).
+- Compose providers in app roots, not shared global singletons.
+- Read environment once, then pass typed config through the call stack.
+- Keep Core and generated SDK contracts provider-agnostic.
+- Prefer behaviour-level interfaces and injected fakes in tests.
 
-## Cloudflare (Workers) Considerations
+## Related Documentation
 
-- Target web APIs only; avoid Node built‑ins in provider code.
-- Validate with a Workers build target and contract tests.
-
-## Testing
-
-- Contract tests live in core (`testing/provider-contract`).
-- Providers run the shared suite to ensure parity.
-
-## Next
-
-- Adopted naming: `packages/runtime-adapters/` for runtime adapter implementations; document boundaries.
+- [Provider Contracts](./provider-contracts.md)
+- [OpenAPI Pipeline](./openapi-pipeline.md)
+- [Programmatic Tool Generation](./programmatic-tool-generation.md)

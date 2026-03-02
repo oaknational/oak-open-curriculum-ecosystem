@@ -15,13 +15,9 @@
  * Data-fetching tools (tools/call) still require authentication.
  *
  * @see ADR-057: Selective Authentication for MCP Resources
- * @module
  */
 
-import {
-  WIDGET_URI,
-  DOCUMENTATION_RESOURCES,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI, DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Resource URIs that are publicly accessible without authentication.

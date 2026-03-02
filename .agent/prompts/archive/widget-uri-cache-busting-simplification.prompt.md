@@ -412,7 +412,7 @@ See ADR-071 for architectural details.
 
 This solution strictly adheres to all foundation documents:
 
-### @[.agent/directives-and-memory/rules.md]
+### @[.agent/directives/rules.md]
 
 - ✅ **KISS**: Simplest solution - generate hash once at build time
 - ✅ **No compatibility layers**: Removes runtime transformation logic
@@ -420,14 +420,14 @@ This solution strictly adheres to all foundation documents:
 - ✅ **Compiler-time types**: Hash baked into generated constants
 - ✅ **Single source of truth**: `cross-domain-constants.ts`
 
-### @[.agent/directives-and-memory/schema-first-execution.md]
+### @[.agent/directives/schema-first-execution.md]
 
 - ✅ **Cardinal Rule**: All tool behavior driven by generated artifacts
 - ✅ **No hand-authoring**: Widget URI generated, not manually set
 - ✅ **No runtime modification**: Tools use exactly what was generated
 - ✅ **Generator-first mindset**: Hash generation happens in type-gen
 
-### @[.agent/directives-and-memory/testing-strategy.md]
+### @[.agent/directives/testing-strategy.md]
 
 - ✅ **TDD at all levels**: Unit tests for hash generation, integration tests for resource registration
 - ✅ **Test behavior**: Verify new builds produce new URIs (cache-busting works)

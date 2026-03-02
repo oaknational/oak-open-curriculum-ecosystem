@@ -8,9 +8,9 @@ Before merging the OAuth implementation, we need to ensure all MCP tools have pr
 
 Read and follow these directives:
 
-- `.agent/directives-and-memory/rules.md` - TDD, no type shortcuts, fail fast
-- `.agent/directives-and-memory/testing-strategy.md` - TDD at ALL levels
-- `.agent/directives-and-memory/schema-first-execution.md` - Generated artifacts drive runtime
+- `.agent/directives/rules.md` - TDD, no type shortcuts, fail fast
+- `.agent/directives/testing-strategy.md` - TDD at ALL levels
+- `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 
 ## Reference Documents
 
@@ -226,7 +226,7 @@ interface Tool {
 
 ### Schema-First Compliance
 
-Per `.agent/directives-and-memory/schema-first-execution.md`:
+Per `.agent/directives/schema-first-execution.md`:
 
 > "Every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts"
 
@@ -240,7 +240,7 @@ The annotations for generated tools MUST be added at type-gen time, not manually
 
 ### TDD Reminder
 
-Per `.agent/directives-and-memory/testing-strategy.md`:
+Per `.agent/directives/testing-strategy.md`:
 
 > "Write tests **FIRST**. Red → Green → Refactor"
 

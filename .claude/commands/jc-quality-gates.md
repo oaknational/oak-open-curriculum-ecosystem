@@ -2,8 +2,16 @@ please run the quality gates one by one in the repo root. Fix any and all issues
 
 The sequence is:
 
-pnpm format
+pnpm secrets:scan:all
+pnpm clean
+pnpm sdk-codegen
+pnpm build
+pnpm type-check
+pnpm doc-gen
+pnpm format:root
+pnpm markdownlint:root
 pnpm lint:fix
-pnpm check-types
 pnpm test
 pnpm test:e2e
+pnpm test:ui
+pnpm smoke:dev:stub

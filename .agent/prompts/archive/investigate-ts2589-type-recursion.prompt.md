@@ -16,9 +16,9 @@ server.registerTool(tool.name, config, async (params: unknown) => { ... });
 
 Read the foundation documents first:
 
-- @.agent/directives-and-memory/rules.md
-- @.agent/directives-and-memory/schema-first-execution.md
-- @.agent/directives-and-memory/testing-strategy.md
+- @.agent/directives/rules.md
+- @.agent/directives/schema-first-execution.md
+- @.agent/directives/testing-strategy.md
 
 ### What the Code Does
 

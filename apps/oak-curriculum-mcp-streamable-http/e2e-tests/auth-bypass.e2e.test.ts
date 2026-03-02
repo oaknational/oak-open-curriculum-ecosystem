@@ -11,27 +11,32 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     // Create isolated env with auth DISABLED (DX helper validation)
     const testEnv: NodeJS.ProcessEnv = {
       NODE_ENV: 'test',
       // Configure for auth bypass – this suite proves the DX helper works.
       // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
       DANGEROUSLY_DISABLE_AUTH: 'true',
-      CLERK_PUBLISHABLE_KEY: 'REDACTED',
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
       OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1', // Allow localhost for DNS rebinding protection
+      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     };
 
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    const result = loadRuntimeConfig({
+      processEnv: testEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(result);
+    app = await createApp({ runtimeConfig });
   });
 
   it('allows /mcp POST without Authorization when bypass enabled', async () => {
@@ -58,17 +63,11 @@ describe('Auth Bypass for Development (E2E)', () => {
   // Note: GET endpoint test removed - SSE connections stay open causing timeouts
   // POST test above already proves auth bypass works
 
-  it('does not expose OAuth discovery endpoints when auth disabled', () => {
-    const router = (
-      app as unknown as {
-        _router?: { stack?: { route?: { path?: string } }[] };
-      }
-    )._router;
+  it('does not expose OAuth discovery endpoints when auth disabled', async () => {
+    const authServer = await request(app).get('/.well-known/oauth-authorization-server');
+    expect(authServer.status).toBe(404);
 
-    const stack = router?.stack ?? [];
-    const hasRoute = (path: string) => stack.some((layer) => (layer.route?.path ?? null) === path);
-
-    expect(hasRoute('/.well-known/oauth-authorization-server')).toBe(false);
-    expect(hasRoute('/.well-known/oauth-protected-resource')).toBe(false);
+    const protectedResource = await request(app).get('/.well-known/oauth-protected-resource');
+    expect(protectedResource.status).toBe(404);
   });
 });

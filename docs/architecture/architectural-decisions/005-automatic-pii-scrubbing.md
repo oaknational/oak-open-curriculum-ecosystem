@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-When exposing Notion workspace data through MCP, we may inadvertently expose personally identifiable information (PII) such as email addresses. This could:
+When exposing data through MCP, we may inadvertently expose personally identifiable information (PII) such as email addresses. This could:
 
 - Violate privacy regulations (GDPR, CCPA)
 - Expose sensitive user information

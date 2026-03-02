@@ -1,70 +1,102 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { z } from 'zod';
 import request from 'supertest';
+import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
+import { parseSseEnvelope } from './helpers/sse.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
 const ACCEPT = 'application/json, text/event-stream';
 
+// E2E tests MUST be network-free and must not depend on Clerk key validity.
+// Manual OAuth validation is covered by `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`.
+vi.mock('@clerk/mcp-tools/server', () => ({
+  generateClerkProtectedResourceMetadata: ({
+    resourceUrl,
+    properties,
+  }: {
+    resourceUrl: string;
+    properties?: { scopes_supported?: string[] };
+  }) => ({
+    resource: resourceUrl,
+    authorization_servers: ['https://example.clerk.accounts.dev'],
+    scopes_supported: properties?.scopes_supported ?? [],
+  }),
+}));
+
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
+
 /**
- * Configure environment for auth bypass in E2E tests.
- * These scenarios target protocol behaviour; auth enforcement is asserted in
- * auth-enforcement.e2e.test.ts and the smoke-dev-auth run.
+ * Isolated test environment with auth bypassed.
+ * No global `process.env` mutation — see ADR-078.
  */
-function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-}
+const authBypassedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+};
 
-interface JsonRpcEnvelope {
-  jsonrpc?: string;
-  id?: string | number;
-  result?: unknown;
-  error?: unknown;
-}
+/**
+ * Isolated test environment with auth enforced.
+ * No `DANGEROUSLY_DISABLE_AUTH` — Clerk middleware is active.
+ */
+const authEnforcedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+  CLERK_SECRET_KEY: 'sk_test_123',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+};
 
-function parseFirstSseData(raw: string): JsonRpcEnvelope {
-  const line = raw
-    .split('\n')
-    .map((l) => l.trim())
-    .find((l) => l.startsWith('data: '));
-  if (!line) {
-    throw new Error('No data line found in SSE payload');
-  }
-  const json = line.replace(/^data: /, '');
-  const parsed: unknown = JSON.parse(json);
-  if (parsed && typeof parsed === 'object') {
-    return parsed as JsonRpcEnvelope;
-  }
-  throw new Error('Invalid SSE JSON');
-}
+const ToolListItemSchema = z.looseObject({ name: z.string() });
 
-function toolNamesFromResult(value: unknown): string[] {
-  const tools = (value as { result?: { tools?: unknown[] } }).result?.tools;
-  if (!Array.isArray(tools)) {
-    return [];
-  }
-  return tools
-    .map((t) => (t && typeof t === 'object' ? (t as { name?: unknown }).name : undefined))
-    .filter((n): n is string => typeof n === 'string');
-}
+const ToolListResultSchema = z.object({
+  tools: z.array(ToolListItemSchema),
+});
+
+const InitCapabilitiesResultSchema = z.object({
+  capabilities: z.object({
+    tools: z.object({ listChanged: z.boolean() }),
+  }),
+});
+
+const InitInstructionsResultSchema = z.object({
+  instructions: z.string(),
+});
+
+const JsonRpcErrorSchema = z.object({
+  message: z.string().optional(),
+});
+
+const ResultWithErrorSchema = z.object({
+  isError: z.literal(true),
+});
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
-  beforeEach(() => {
-    // Default: enable auth bypass; individual tests re-enable auth when required.
-    enableAuthBypass();
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    delete process.env.ALLOWED_ORIGINS;
-  });
-
   it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
-    // Override: enable auth enforcement for this test
-    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
-
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authEnforcedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig, upstreamMetadata: TEST_UPSTREAM_METADATA });
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
@@ -76,7 +108,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         params: { name: 'get-key-stages', arguments: {} },
       });
 
-    // HTTP 401 per MCP spec for protected tools without auth
     expect(res.status).toBe(401);
 
     // WWW-Authenticate header per RFC 6750
@@ -87,29 +118,44 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(200);
 
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText);
-    const names = toolNamesFromResult(payload);
-    const toolObjects = (payload.result as { tools?: unknown[] } | undefined)?.tools ?? [];
-    const containsMethodField = toolObjects.some(
-      (tool) => tool && typeof tool === 'object' && 'method' in (tool as Record<string, unknown>),
-    );
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const names = toolListResult.tools.map((t) => t.name);
+    const containsMethodField = toolListResult.tools.some((t) => 'method' in t);
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
-    const aggregatedTools = ['fetch', 'get-help', 'get-knowledge-graph', 'get-ontology', 'search'];
+    const aggregatedTools = [
+      'browse-curriculum',
+      'explore-topic',
+      'fetch',
+      'get-curriculum-model',
+      'get-prerequisite-graph',
+      'get-thread-progressions',
+      'search',
+    ];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());
   });
 
   it('rejects missing Accept header with 406', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -120,7 +166,12 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects initialize without clientInfo', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -134,14 +185,19 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const error = payload.error as { message?: string } | undefined;
-    expect(error).toBeDefined();
-    expect(error?.message ?? '').toContain('clientInfo');
+    const envelope = parseSseEnvelope(res.text);
+    const error = JsonRpcErrorSchema.parse(envelope.error);
+    expect(error.message).toBeDefined();
+    expect(error.message ?? '').toContain('clientInfo');
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -156,15 +212,18 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const result = payload.result as
-      | { capabilities?: { tools?: { listChanged?: boolean } } }
-      | undefined;
-    expect(result?.capabilities?.tools?.listChanged).toBe(true);
+    const envelope = parseSseEnvelope(res.text);
+    const initResult = InitCapabilitiesResultSchema.parse(envelope.result);
+    expect(initResult.capabilities.tools.listChanged).toBe(true);
   });
 
   it('initialize response includes server instructions for agent guidance', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -179,18 +238,20 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         },
       });
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(res.text);
-    const result = payload.result as { instructions?: string } | undefined;
+    const envelope = parseSseEnvelope(res.text);
+    const initResult = InitInstructionsResultSchema.parse(envelope.result);
 
-    // Verify instructions field exists and contains agent guidance
-    expect(result?.instructions).toBeDefined();
-    expect(result?.instructions).toContain('get-ontology');
-    expect(result?.instructions).toContain('get-knowledge-graph');
-    expect(result?.instructions).toContain('get-help');
+    expect(initResult.instructions.length).toBeGreaterThan(0);
+    expect(initResult.instructions).toMatch(/orientation|domain model/i);
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {
-    const app = createApp();
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const app = await createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -201,19 +262,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         params: { name: 'non-existent-tool', arguments: {} },
       });
     expect(res.status).toBe(200);
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText) as {
-      error?: { message?: string };
-      result?: { isError?: boolean; content?: { text?: string }[] };
-    };
-    // MCP SDK returns either a JSON-RPC error or a result with isError: true
-    const hasJsonRpcError = typeof payload.error !== 'undefined';
-    const hasResultError = payload.result?.isError === true;
+    const envelope = parseSseEnvelope(res.text);
+    const hasJsonRpcError = envelope.error !== undefined;
+    const hasResultError = ResultWithErrorSchema.safeParse(envelope.result).success;
     expect(hasJsonRpcError || hasResultError).toBe(true);
   });
 
   // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)
-
-  // TODO: Add E2E test with real Clerk token once automated flow is available.
-  // Requires: OAuth Device / programmatic flow support from Clerk.
 });

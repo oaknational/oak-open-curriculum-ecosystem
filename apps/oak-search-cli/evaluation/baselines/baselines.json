@@ -1,0 +1,313 @@
+{
+  "_metadata": {
+    "description": "Search quality baselines and reference values",
+    "lastUpdated": "2026-01-13",
+    "documentation": "See IR-METRICS.md for metric definitions",
+    "note": "RRF normalisation (ADR-099) now applied - MFL/PE subjects can compete fairly"
+  },
+  "referenceValues": {
+    "_description": "Industry-standard targets. Used for comparison, not regression testing.",
+    "mrr": {
+      "excellent": 0.9,
+      "good": 0.7,
+      "fair": 0.5,
+      "target": 0.7
+    },
+    "ndcg10": {
+      "excellent": 0.85,
+      "good": 0.75,
+      "fair": 0.6,
+      "target": 0.75
+    },
+    "zeroHitRate": {
+      "excellent": 0.05,
+      "good": 0.1,
+      "fair": 0.2,
+      "target": 0.1
+    },
+    "precision3": {
+      "excellent": 0.8,
+      "good": 0.6,
+      "fair": 0.4,
+      "target": 0.5
+    },
+    "recall10": {
+      "excellent": 0.8,
+      "good": 0.6,
+      "fair": 0.4,
+      "target": 0.6
+    },
+    "p95LatencyMs": {
+      "excellent": 100,
+      "good": 300,
+      "fair": 500,
+      "target": 300
+    }
+  },
+  "measuredBaselines": {
+    "_description": "Measured values with RRF normalisation (ADR-099) applied.",
+    "_lastMeasured": "2026-01-13",
+    "_measurementScope": "Ground truth metrics measure expected slug position, not user satisfaction.",
+    "entries": {
+      "art-primary": {
+        "mrr": 0.875,
+        "ndcg": 0.74,
+        "p3": 0.417,
+        "r10": 0.75,
+        "zero": 0.0,
+        "p95ms": 834
+      },
+      "art-secondary": {
+        "mrr": 0.469,
+        "ndcg": 0.488,
+        "p3": 0.25,
+        "r10": 0.625,
+        "zero": 0.0,
+        "p95ms": 549
+      },
+      "citizenship-secondary": {
+        "mrr": 0.317,
+        "ndcg": 0.281,
+        "p3": 0.167,
+        "r10": 0.5,
+        "zero": 0.25,
+        "p95ms": 528
+      },
+      "computing-primary": {
+        "mrr": 0.458,
+        "ndcg": 0.499,
+        "p3": 0.25,
+        "r10": 0.75,
+        "zero": 0.0,
+        "p95ms": 576
+      },
+      "computing-secondary": {
+        "mrr": 0.525,
+        "ndcg": 0.482,
+        "p3": 0.25,
+        "r10": 0.458,
+        "zero": 0.25,
+        "p95ms": 695
+      },
+      "cooking-nutrition-primary": {
+        "mrr": 0.394,
+        "ndcg": 0.517,
+        "p3": 0.167,
+        "r10": 0.917,
+        "zero": 0.0,
+        "p95ms": 454
+      },
+      "cooking-nutrition-secondary": {
+        "mrr": 0.75,
+        "ndcg": 0.718,
+        "p3": 0.417,
+        "r10": 0.75,
+        "zero": 0.25,
+        "p95ms": 535
+      },
+      "design-technology-primary": {
+        "mrr": 0.479,
+        "ndcg": 0.427,
+        "p3": 0.167,
+        "r10": 0.75,
+        "zero": 0.0,
+        "p95ms": 463
+      },
+      "design-technology-secondary": {
+        "mrr": 0.5,
+        "ndcg": 0.386,
+        "p3": 0.25,
+        "r10": 0.375,
+        "zero": 0.25,
+        "p95ms": 674
+      },
+      "english-primary": {
+        "mrr": 0.792,
+        "ndcg": 0.729,
+        "p3": 0.5,
+        "r10": 0.667,
+        "zero": 0.0,
+        "p95ms": 964
+      },
+      "english-secondary": {
+        "mrr": 0.65,
+        "ndcg": 0.518,
+        "p3": 0.333,
+        "r10": 0.583,
+        "zero": 0.0,
+        "p95ms": 803
+      },
+      "french-primary": {
+        "mrr": 0.25,
+        "ndcg": 0.203,
+        "p3": 0.167,
+        "r10": 0.167,
+        "zero": 0.75,
+        "p95ms": 398
+      },
+      "french-secondary": {
+        "mrr": 0.25,
+        "ndcg": 0.192,
+        "p3": 0.083,
+        "r10": 0.167,
+        "zero": 0.75,
+        "p95ms": 537
+      },
+      "geography-primary": {
+        "mrr": 0.875,
+        "ndcg": 0.614,
+        "p3": 0.417,
+        "r10": 0.625,
+        "zero": 0.0,
+        "p95ms": 414
+      },
+      "geography-secondary": {
+        "mrr": 0.508,
+        "ndcg": 0.506,
+        "p3": 0.417,
+        "r10": 0.667,
+        "zero": 0.0,
+        "p95ms": 414
+      },
+      "german-secondary": {
+        "mrr": 0.063,
+        "ndcg": 0.113,
+        "p3": 0.0,
+        "r10": 0.208,
+        "zero": 0.5,
+        "p95ms": 436
+      },
+      "history-primary": {
+        "mrr": 0.625,
+        "ndcg": 0.562,
+        "p3": 0.333,
+        "r10": 0.542,
+        "zero": 0.25,
+        "p95ms": 478
+      },
+      "history-secondary": {
+        "mrr": 1.0,
+        "ndcg": 0.847,
+        "p3": 0.667,
+        "r10": 1.0,
+        "zero": 0.0,
+        "p95ms": 599
+      },
+      "maths-primary": {
+        "mrr": 0.675,
+        "ndcg": 0.422,
+        "p3": 0.25,
+        "r10": 0.417,
+        "zero": 0.0,
+        "p95ms": 576
+      },
+      "maths-secondary": {
+        "mrr": 0.833,
+        "ndcg": 0.726,
+        "p3": 0.5,
+        "r10": 0.625,
+        "zero": 0.0,
+        "p95ms": 584
+      },
+      "music-primary": {
+        "mrr": 0.5,
+        "ndcg": 0.433,
+        "p3": 0.333,
+        "r10": 0.5,
+        "zero": 0.5,
+        "p95ms": 515
+      },
+      "music-secondary": {
+        "mrr": 0.75,
+        "ndcg": 0.713,
+        "p3": 0.417,
+        "r10": 0.75,
+        "zero": 0.25,
+        "p95ms": 474
+      },
+      "physical-education-primary": {
+        "mrr": 0.188,
+        "ndcg": 0.204,
+        "p3": 0.167,
+        "r10": 0.375,
+        "zero": 0.5,
+        "p95ms": 412
+      },
+      "physical-education-secondary": {
+        "mrr": 0.0,
+        "ndcg": 0.0,
+        "p3": 0.0,
+        "r10": 0.0,
+        "zero": 1.0,
+        "p95ms": 627
+      },
+      "religious-education-primary": {
+        "mrr": 0.281,
+        "ndcg": 0.291,
+        "p3": 0.083,
+        "r10": 0.375,
+        "zero": 0.5,
+        "p95ms": 394
+      },
+      "religious-education-secondary": {
+        "mrr": 0.192,
+        "ndcg": 0.144,
+        "p3": 0.083,
+        "r10": 0.292,
+        "zero": 0.25,
+        "p95ms": 575
+      },
+      "science-primary": {
+        "mrr": 0.646,
+        "ndcg": 0.664,
+        "p3": 0.417,
+        "r10": 0.75,
+        "zero": 0.0,
+        "p95ms": 646
+      },
+      "science-secondary": {
+        "mrr": 1.0,
+        "ndcg": 0.848,
+        "p3": 0.583,
+        "r10": 0.833,
+        "zero": 0.0,
+        "p95ms": 647
+      },
+      "spanish-primary": {
+        "mrr": 0.292,
+        "ndcg": 0.351,
+        "p3": 0.167,
+        "r10": 0.5,
+        "zero": 0.25,
+        "p95ms": 364
+      },
+      "spanish-secondary": {
+        "mrr": 0.25,
+        "ndcg": 0.183,
+        "p3": 0.167,
+        "r10": 0.25,
+        "zero": 0.75,
+        "p95ms": 469
+      }
+    },
+    "overall": {
+      "queries": 120,
+      "mrr": 0.513,
+      "ndcg": 0.46,
+      "p3": 0.281,
+      "r10": 0.539,
+      "zeroHitRate": 0.242,
+      "p95ms": 647
+    },
+    "filtered": {
+      "_description": "Excluding natural-expression category",
+      "queries": 90,
+      "mrr": 0.506,
+      "ndcg": 0.471,
+      "p3": 0.281,
+      "r10": 0.561,
+      "zeroHitRate": 0.233,
+      "p95ms": 647
+    }
+  }
+}

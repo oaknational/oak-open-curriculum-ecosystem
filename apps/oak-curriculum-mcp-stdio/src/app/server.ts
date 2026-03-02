@@ -1,6 +1,9 @@
 /**
- * MCP Server implementation for Oak Curriculum API
- * The living whole that integrates all organs
+ * MCP Server implementation for Oak Curriculum API.
+ *
+ * Receives validated `RuntimeConfig` from the entry point and
+ * delegates to `wireDependencies` for composition. Does not
+ * read `process.env` directly.
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -11,15 +14,16 @@ import {
   type ToolDescriptorForName,
   executeToolCall,
   createOakPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import { startTimer, type Logger, type ErrorContext } from '@oaknational/mcp-logger/node';
+import { startTimer, type Logger, type ErrorContext } from '@oaknational/logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
 import { generateCorrelationId } from '../correlation/index.js';
 import { createChildLogger } from '../logging/index.js';
+import type { RuntimeConfig } from '../runtime-config.js';
 
 /**
  * Threshold in milliseconds for slow operation warnings.
@@ -42,23 +46,26 @@ function setupShutdownHandler(server: { close: () => Promise<void> }, logger: Lo
 }
 
 /**
- * Creates and starts the Oak Curriculum MCP server
+ * Creates and starts the Oak Curriculum MCP server.
+ *
+ * @param runtimeConfig - Validated runtime configuration from resolveEnv
+ * @param config - Server-specific configuration (apiKey, serverName, etc.)
  */
-export async function createServer(config?: ServerConfig): Promise<void> {
-  // Wire dependencies
-  const { logger, config: serverConfig, toolExecutors } = wireDependencies(config);
+export async function createServer(
+  runtimeConfig: RuntimeConfig,
+  config: ServerConfig,
+): Promise<void> {
+  const { logger, config: serverConfig, toolExecutors } = wireDependencies(runtimeConfig, config);
 
   logToolDiscovery(logger);
 
-  // Create McpServer and register tools with Zod validation and SDK execution
   const server = new McpServer({
     name: serverConfig.serverName,
     version: serverConfig.serverVersion,
   });
-  const client = createOakPathBasedClient(serverConfig.apiKey);
+  const client = createOakPathBasedClient({ apiKey: serverConfig.apiKey, logger });
   registerMcpTools(server, client, logger, toolExecutors);
 
-  // Create transport and connect
   const transport = new StdioServerTransport();
   logger.debug('Connecting STDIO transport...');
   await server.connect(transport);
@@ -69,36 +76,7 @@ export async function createServer(config?: ServerConfig): Promise<void> {
     version: serverConfig.serverVersion,
   });
 
-  // Setup shutdown handler
   setupShutdownHandler(server, logger);
-}
-
-/**
- * Start server if run directly
- */
-if (import.meta.url === `file://${process.argv[1]}`) {
-  // Parse log level from environment
-  const logLevel = process.env.LOG_LEVEL;
-  const validLogLevels = ['debug', 'info', 'warn', 'error'] as const;
-  type ValidLogLevel = (typeof validLogLevels)[number];
-
-  function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') {
-      return false;
-    }
-    const stringValidLogLevels: readonly string[] = validLogLevels;
-    return stringValidLogLevels.includes(value);
-  }
-
-  const parsedLogLevel = isValidLogLevel(logLevel) ? logLevel : 'info';
-
-  createServer({
-    apiKey: process.env.OAK_API_KEY,
-    logLevel: parsedLogLevel,
-  }).catch((error: unknown) => {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  });
 }
 
 function logToolDiscovery(logger: Logger): void {
@@ -182,7 +160,6 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
 
     const duration = timer.end();
 
-    // Build error context for enrichment
     const errorContext: ErrorContext = {
       correlationId,
       duration,

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 /**
  * Creates Express middleware that ensures MCP Accept headers are present.

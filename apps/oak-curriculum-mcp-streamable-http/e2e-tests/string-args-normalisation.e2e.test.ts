@@ -55,7 +55,7 @@ describe('HTTP boundary argument validation', () => {
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -65,7 +65,7 @@ describe('HTTP boundary argument validation', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-search-lessons', arguments: 'trees' },
+        params: { name: 'get-lessons-quiz', arguments: 'trees' },
       });
 
     expect(res.status).toBe(200);
@@ -75,7 +75,7 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -85,7 +85,7 @@ describe('HTTP boundary argument validation', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-search-lessons', arguments: JSON.stringify({ q: 'trees' }) },
+        params: { name: 'get-lessons-quiz', arguments: JSON.stringify({ lesson: 'some-lesson' }) },
       });
 
     expect(res.status).toBe(200);
@@ -95,7 +95,7 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
-    const app = createApp({
+    const app = await createApp({
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
     const res = await request(app)
@@ -138,7 +138,7 @@ describe('HTTP boundary argument validation', () => {
           ],
         }),
     };
-    const app = createApp({
+    const app = await createApp({
       toolHandlerOverrides: overrides,
       runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     });
@@ -151,8 +151,8 @@ describe('HTTP boundary argument validation', () => {
         id: 'structured-success',
         method: 'tools/call',
         params: {
-          name: 'get-search-lessons',
-          arguments: { q: 'trees' },
+          name: 'get-lessons-quiz',
+          arguments: { lesson: 'some-lesson' },
         },
       });
 

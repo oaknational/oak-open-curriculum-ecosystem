@@ -18,8 +18,8 @@ Currently there are no automated tests for the widget rendering logic. This task
 
 Before starting, read these files to understand the context:
 
-1. `.agent/directives-and-memory/rules.md` - Development rules (TDD, type safety, etc.)
-2. `.agent/directives-and-memory/testing-strategy.md` - Testing approach
+1. `.agent/directives/rules.md` - Development rules (TDD, type safety, etc.)
+2. `.agent/directives/testing-strategy.md` - Testing approach
 3. `.agent/plans/sdk-and-mcp-enhancements/07-widget-playwright-tests-plan.md` - The detailed implementation plan
 4. `apps/oak-curriculum-mcp-streamable-http/src/aggregated-tool-widget.ts` - The widget being tested
 5. `apps/oak-curriculum-mcp-streamable-http/playwright.config.ts` - Existing Playwright config

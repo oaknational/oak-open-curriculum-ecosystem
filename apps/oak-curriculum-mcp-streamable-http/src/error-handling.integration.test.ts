@@ -7,8 +7,8 @@ import {
   buildResourceAttributes,
   logLevelToSeverityNumber,
   type Logger,
-} from '@oaknational/mcp-logger';
-import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 import { createEnrichedErrorLogger } from './logging/index';
 import { createCorrelationMiddleware } from './correlation/middleware';
 

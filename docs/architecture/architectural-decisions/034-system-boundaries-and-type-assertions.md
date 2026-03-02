@@ -11,12 +11,12 @@ Through deep analysis of both our implementation and the reference Oak curriculu
 ## The Central Contract
 
 ```text
-API Schema → SDK Type-Gen → Everything Else Works Automatically
+API Schema → SDK sdk-codegen → Everything Else Works Automatically
 ```
 
 When the Oak API changes:
 
-1. **ONLY ACTION NEEDED**: Re-run SDK type-gen
+1. **ONLY ACTION NEEDED**: Re-run SDK sdk-codegen
 2. **SDK UPDATES**: New types, paths, methods flow from schema
 3. **MCP AUTOMATICALLY WORKS**: Because it uses SDK types directly
 
@@ -30,7 +30,7 @@ When the Oak API changes:
 
 ### Layer 2: SDK (Generated Bridge)
 
-- **Location**: `packages/oak-curriculum-sdk`
+- **Location**: `packages/sdks/oak-curriculum-sdk`
 - **Components**:
   - Generated types (`api-paths-types.ts`)
   - Generated schemas (`api-schema.ts`)

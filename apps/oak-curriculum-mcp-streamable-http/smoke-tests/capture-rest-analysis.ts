@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
-import path from 'node:path';
-
-import { loadRootEnv } from '@oaknational/mcp-env';
+import path, { join } from 'node:path';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 import { DEFAULT_LOG_DIRECTORY } from './logging.js';
 
@@ -36,7 +36,12 @@ const TARGETS: RestCaptureTarget[] = [
 
 function ensureApiKey(): string {
   if (!process.env.OAK_API_KEY) {
-    loadRootEnv({ requiredKeys: ['OAK_API_KEY'], startDir: process.cwd(), env: process.env });
+    const root = findRepoRoot(process.cwd());
+    if (root === undefined) {
+      throw new Error('Smoke tests must run inside the monorepo');
+    }
+    dotenvConfig({ path: join(root, '.env.local') });
+    dotenvConfig({ path: join(root, '.env') });
   }
   const apiKey = process.env.OAK_API_KEY;
   if (!apiKey) {

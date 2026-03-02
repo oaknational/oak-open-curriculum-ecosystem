@@ -4,7 +4,13 @@ Date: 2025-09-15
 
 ## Status
 
-Accepted
+Superseded — Next.js UI layer removed
+
+> The entire Next.js UI layer, including React, styled-components, Oak Components, and all
+> referenced code (`app/lib/theme/*`, `app/lib/Providers.tsx`, `app/layout.tsx`), was removed in
+> February 2026. The semantic search workspace is now a pure TypeScript library with no UI surface.
+> Supporting documentation (`docs/oak-components-theming.md`) has also been deleted. This decision
+> is no longer applicable to the current codebase but is preserved below for historical context.
 
 ## Context
 
@@ -136,8 +142,8 @@ Suggested files (illustrative):
 
 ## References
 
-- Guide: `apps/oak-open-curriculum-semantic-search/docs/oak-components-theming.md`
+- Guide: `apps/oak-search-cli/docs/oak-components-theming.md`
 - Plan: `.agent/plans/semantic-search/semantic-search-responsive-layout-architecture.md`
 - Plan: `.agent/plans/semantic-search/semantic-theme-inventory.md`
-- Code: `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`, `app/lib/Providers.tsx`, `app/lib/theme/ThemeBridgeProvider.tsx`, `app/layout.tsx`
+- Code: `apps/oak-search-cli/app/lib/theme/ThemeContext.tsx`, `app/lib/Providers.tsx`, `app/lib/theme/ThemeBridgeProvider.tsx`, `app/layout.tsx`
 - Related ADR: `044-nl-delegates-to-structured-search-and-caching-ownership.md`

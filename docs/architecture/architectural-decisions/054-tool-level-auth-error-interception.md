@@ -43,7 +43,7 @@ The SDK follows best practices with Result<T, E> pattern and error cause chains.
 
 ### Architectural Constraint: Schema-First
 
-Per [schema-first directive](../../../.agent/directives-and-memory/schema-first-execution.md), the SDK's types and error handling flow from the OpenAPI schema. We cannot modify the SDK to add MCP-specific metadata to `ToolExecutionResult` or `CallToolResult` - that would violate schema-first.
+Per [schema-first directive](../../../.agent/directives/schema-first-execution.md), the SDK's types and error handling flow from the OpenAPI schema. We cannot modify the SDK to add MCP-specific metadata to `ToolExecutionResult` or `CallToolResult` - that would violate schema-first.
 
 The MCP server layer (apps) is where MCP protocol-specific concerns belong.
 
@@ -207,7 +207,7 @@ if ('error' in result) {
 - ✅ SDK types unchanged (flow from OpenAPI schema)
 - ✅ MCP-specific logic in MCP server layer (apps)
 - ✅ No coupling between SDK and MCP protocol
-- ✅ Running `pnpm type-gen && pnpm build` still brings everything into alignment
+- ✅ Running `pnpm sdk-codegen && pnpm build` still brings everything into alignment
 
 ### Testability
 
@@ -283,7 +283,7 @@ This ADR clarifies an important boundary:
 - **MCP Protocol Metadata** (like `_meta` field) belongs in the MCP server layer, not the SDK
 - Adding `_meta` to error responses is correct - it's MCP protocol-specific, not schema-derived
 
-Running `pnpm type-gen && pnpm build` brings SDK into alignment with schema. It doesn't generate MCP protocol metadata - that's the apps layer's job.
+Running `pnpm sdk-codegen && pnpm build` brings SDK into alignment with schema. It doesn't generate MCP protocol metadata - that's the apps layer's job.
 
 ### TDD at Integration Level
 

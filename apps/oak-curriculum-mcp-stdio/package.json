@@ -1,6 +1,7 @@
 {
   "name": "@oaknational/oak-curriculum-mcp-stdio",
   "version": "0.0.0-development",
+  "private": true,
   "description": "MCP server for the Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/src/index.js",
@@ -27,7 +28,8 @@
     "clean": "rm -rf dist .turbo",
     "deps": "pnpm outdated -r",
     "dev": "tsx watch src/index.ts",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -36,26 +38,32 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.2",
-    "@oaknational/mcp-env": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/mcp-storage": "workspace:*",
-    "@oaknational/mcp-transport": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
-    "dotenv": "^17.2.3",
-    "zod": "^4.1.13"
+    "@elastic/elasticsearch": "^9.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@oaknational/curriculum-sdk": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/env-resolution": "workspace:*",
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/oak-search-sdk": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24.10.13",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.18"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-stdio"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-stdio#readme",
   "keywords": [
     "mcp",
     "ai",
@@ -63,6 +71,17 @@
     "curriculum",
     "education"
   ],
-  "author": "Oak National Academy",
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
   "license": "MIT"
 }

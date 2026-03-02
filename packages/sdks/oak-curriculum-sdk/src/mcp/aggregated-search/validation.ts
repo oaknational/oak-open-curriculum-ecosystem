@@ -1,11 +1,9 @@
 /**
- * Validation logic for search tool arguments.
+ * Validation logic for SDK-backed search tool arguments.
  *
- * This module provides the validateSearchArgs function which validates and
- * normalises raw input into strongly-typed SearchArgs. Uses Zod for schema
- * validation and the generated type guards for enum validation.
- *
- * @module aggregated-search/validation
+ * Validates and normalises raw MCP input into strongly-typed SearchSdkArgs.
+ * Uses Zod for structural validation and generated type guards for enum
+ * narrowing (KeyStage, Subject, SearchSdkScope).
  */
 
 import { z } from 'zod';
@@ -14,58 +12,56 @@ import {
   isKeyStage,
   type Subject,
   isSubject,
-} from '../../types/generated/api-schema/path-parameters.js';
-import type { SearchArgs } from './types.js';
-
-/** Error message for missing or invalid search query. */
-const SEARCH_QUERY_ERROR_MESSAGE = 'search requires a non-empty query string ("query" or "q")';
+} from '@oaknational/sdk-codegen/api-schema';
+import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js';
 
 /**
- * Zod schema for string-only search input.
+ * Zod schema for the search tool's object input.
  *
- * Allows users to pass just a query string instead of an object.
+ * Validates structural shape only. Type narrowing for enums (scope,
+ * keyStage, subject) happens after Zod validation using generated guards.
  */
-const SearchStringSchema = z.string().trim().min(1, { message: SEARCH_QUERY_ERROR_MESSAGE });
-
-/**
- * Zod schema for object-based search input.
- *
- * Validates the shape of the input object before type narrowing.
- */
-const SearchObjectShape = z
+const SearchSdkObjectSchema = z
   .object({
-    query: z
-      .string({ error: SEARCH_QUERY_ERROR_MESSAGE })
-      .trim()
-      .min(1, { message: SEARCH_QUERY_ERROR_MESSAGE })
-      .optional(),
-    q: z
-      .string({ error: SEARCH_QUERY_ERROR_MESSAGE })
-      .trim()
-      .min(1, { message: SEARCH_QUERY_ERROR_MESSAGE })
-      .optional(),
-    keyStage: z.string({ error: 'keyStage must be one of ks1, ks2, ks3, ks4' }).optional(),
-    subject: z.string({ error: 'subject must be a string' }).optional(),
-    unit: z.string({ error: 'unit must be a string' }).optional(),
+    text: z.string().trim().optional().default(''),
+    scope: z.string({ error: 'scope is required' }),
+    subject: z.string().optional(),
+    keyStage: z.string().optional(),
+    size: z.number().int().min(1).max(100).optional(),
+    from: z.number().int().min(0).optional(),
+    unitSlug: z.string().optional(),
+    tier: z.string().optional(),
+    examBoard: z.string().optional(),
+    year: z.union([z.string(), z.number().int().min(1).max(11).transform(String)]).optional(),
+    threadSlug: z.string().optional(),
+    highlight: z.boolean().optional(),
+    minLessons: z.number().int().min(1).optional(),
+    phaseSlug: z.string().optional(),
+    category: z.string().optional(),
+    limit: z.number().int().min(1).max(50).optional(),
   })
-  .strict();
-
-/** Inferred type from the Zod object schema. */
-type SearchObjectInput = z.infer<typeof SearchObjectShape>;
-
-/**
- * Combined Zod schema accepting either string or object input.
- */
-const SearchArgsSchema = z.union([SearchStringSchema, SearchObjectShape]);
+  .strict()
+  .refine(
+    (data) => {
+      if (data.text.length > 0) {
+        return true;
+      }
+      return (
+        data.scope === 'threads' && (data.subject !== undefined || data.keyStage !== undefined)
+      );
+    },
+    {
+      message:
+        'search requires a non-empty text field (threads scope can omit text when subject or keyStage filter is provided)',
+      path: ['text'],
+    },
+  );
 
 /**
  * Validates and narrows a key stage string to the KeyStage type.
  *
- * Uses the generated isKeyStage type guard from path-parameters.ts
- * to ensure the value matches the upstream API schema.
- *
  * @param value - Raw key stage string from input
- * @returns Result object with narrowed KeyStage or error message
+ * @returns Result with narrowed KeyStage or error message
  */
 function normaliseKeyStage(
   value: string | undefined,
@@ -82,11 +78,8 @@ function normaliseKeyStage(
 /**
  * Validates and narrows a subject string to the Subject type.
  *
- * Uses the generated isSubject type guard from path-parameters.ts
- * to ensure the value matches the upstream API schema.
- *
  * @param value - Raw subject string from input
- * @returns Result object with narrowed Subject or error message
+ * @returns Result with narrowed Subject or error message
  */
 function normaliseSubject(
   value: string | undefined,
@@ -101,99 +94,71 @@ function normaliseSubject(
 }
 
 /**
- * Normalises a unit slug value by trimming whitespace.
- *
- * @param value - Raw unit string from input
- * @returns Trimmed unit slug or undefined if empty
+ * Structurally validates and narrows scope, keyStage, and subject from parsed data.
  */
-function normaliseUnit(value: string | undefined): string | undefined {
-  if (!value) {
-    return undefined;
-  }
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : undefined;
-}
+function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
+  | {
+      ok: true;
+      value: SearchSdkArgs;
+    }
+  | { ok: false; message: string } {
+  const { scope, keyStage, subject, ...rest } = parsed;
 
-/**
- * Maps a validated object input to SearchArgs.
- *
- * Applies normalisation to each field and returns a Result type.
- *
- * @param value - Zod-validated object input
- * @returns Result object with SearchArgs or error message
- */
-function mapSearchObject(
-  value: SearchObjectInput,
-): { ok: true; value: SearchArgs } | { ok: false; message: string } {
-  const query = value.q ?? value.query;
-  if (query === undefined) {
-    return { ok: false, message: SEARCH_QUERY_ERROR_MESSAGE };
+  if (!isSearchSdkScope(scope)) {
+    return { ok: false, message: `scope must be one of: ${SEARCH_SCOPES.join(', ')}` };
   }
 
-  const keyStageOutcome = normaliseKeyStage(value.keyStage);
-  if (!keyStageOutcome.ok) {
-    return keyStageOutcome;
+  const keyStageResult = normaliseKeyStage(keyStage);
+  if (!keyStageResult.ok) {
+    return keyStageResult;
   }
 
-  const subjectOutcome = normaliseSubject(value.subject);
-  if (!subjectOutcome.ok) {
-    return subjectOutcome;
+  const subjectResult = normaliseSubject(subject);
+  if (!subjectResult.ok) {
+    return subjectResult;
   }
-
-  const unit = normaliseUnit(value.unit);
 
   return {
     ok: true,
-    value: {
-      q: query,
-      keyStage: keyStageOutcome.value,
-      subject: subjectOutcome.value,
-      unit,
-    },
+    value: { ...rest, scope, keyStage: keyStageResult.value, subject: subjectResult.value },
   };
 }
 
 /**
- * Validates and normalises raw search input to strongly-typed SearchArgs.
+ * Validates and normalises raw MCP input to strongly-typed SearchSdkArgs.
  *
- * Accepts either a plain string (used as the query) or an object with
- * query, keyStage, subject, and unit fields. Returns a Result type
- * with either the validated SearchArgs or an error message.
+ * Accepts an object with `text`, `scope`, and optional filter fields.
+ * Validates structural shape with Zod, then narrows enums using generated
+ * type guards.
  *
  * @param input - Raw input from MCP tool call (unknown type)
- * @returns Result object with validated SearchArgs or error message
+ * @returns Result with validated SearchSdkArgs or error message
  *
  * @example
  * ```typescript
- * // String input
- * const result1 = validateSearchArgs('photosynthesis');
- * // { ok: true, value: { q: 'photosynthesis' } }
- *
- * // Object input
- * const result2 = validateSearchArgs({ q: 'fractions', keyStage: 'ks2' });
- * // { ok: true, value: { q: 'fractions', keyStage: 'ks2' } }
- *
- * // Invalid input
- * const result3 = validateSearchArgs({ keyStage: 'invalid' });
- * // { ok: false, message: 'search requires a non-empty query string...' }
+ * const result = validateSearchSdkArgs({
+ *   text: 'photosynthesis',
+ *   scope: 'lessons',
+ *   keyStage: 'ks3',
+ *   subject: 'science',
+ * });
+ * if (result.ok) {
+ *   // result.value is SearchSdkArgs with narrowed types
+ * }
  * ```
  */
-export function validateSearchArgs(
+export function validateSearchSdkArgs(
   input: unknown,
-): { ok: true; value: SearchArgs } | { ok: false; message: string } {
-  if (typeof input !== 'string' && (typeof input !== 'object' || input === null)) {
-    return { ok: false, message: 'search expects a string or object input' };
+): { ok: true; value: SearchSdkArgs } | { ok: false; message: string } {
+  if (typeof input !== 'object' || input === null) {
+    return { ok: false, message: 'search expects an object input with text and scope fields' };
   }
 
-  const result = SearchArgsSchema.safeParse(input);
-  if (!result.success) {
-    const firstIssue = result.error.issues[0];
-    return { ok: false, message: firstIssue.message };
+  const parsed = SearchSdkObjectSchema.safeParse(input);
+  if (!parsed.success) {
+    const firstIssue = parsed.error.issues[0];
+    return { ok: false, message: firstIssue?.message ?? 'Invalid search input' };
   }
 
-  if (typeof result.data === 'string') {
-    return { ok: true, value: { q: result.data } };
-  }
-
-  return mapSearchObject(result.data);
+  return narrowEnums(parsed.data);
 }

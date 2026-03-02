@@ -13,24 +13,56 @@ import type { z } from 'zod';
 import type {
   ToolName,
   ToolDescriptorForName,
-} from '../../types/generated/api-schema/mcp-tools/index.js';
-import type { SecurityScheme } from '../../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+  ToolDescriptor,
+  SecurityScheme,
+} from '@oaknational/sdk-codegen/mcp-tools';
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
+
+/**
+ * Subset of ToolDescriptor fields that the universal-tools layer accesses.
+ *
+ * Narrowed from the full `ToolDescriptorForName<TName>` via Interface
+ * Segregation: consumers only need listing metadata and domain-context
+ * hints, not invoke functions or Zod schemas.
+ */
+export interface ToolRegistryDescriptor {
+  readonly description?: string;
+  readonly inputSchema: GeneratedToolInputSchema;
+  readonly toolMcpFlatInputSchema?: z.ZodType;
+  readonly securitySchemes?: readonly SecurityScheme[];
+  readonly annotations?: ToolAnnotations;
+  readonly _meta?: ToolMeta;
+  readonly requiresDomainContext?: boolean;
+}
+
+/**
+ * Dependency interface for generated tool functions from the generation SDK.
+ *
+ * Abstracts the generation SDK's runtime exports behind an interface,
+ * enabling dependency injection in both product code and tests.
+ * The default implementation wires the real generation SDK functions;
+ * tests inject lightweight fakes.
+ */
+export interface GeneratedToolRegistry {
+  readonly toolNames: readonly ToolName[];
+  readonly getToolFromToolName: (name: ToolName) => ToolRegistryDescriptor;
+  readonly isToolName: (value: unknown) => value is ToolName;
+}
 
 /**
  * Aggregated tool names derived from the aggregated tool definitions.
  *
  * These are hand-written tools that combine multiple API calls into
  * a single operation. Currently defined at runtime but will eventually
- * move to type-gen time.
+ * move to sdk-codegen time.
  */
 export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
 
 /**
  * Union of all tool names combining aggregated and generated tools.
  *
- * - Aggregated tools: search, fetch, get-ontology, get-help (hand-written)
- * - Generated tools: All tools from OpenAPI spec (from type-gen)
+ * - Aggregated tools: search, fetch, get-curriculum-model (hand-written)
+ * - Generated tools: All tools from OpenAPI spec (from code-generation)
  */
 export type UniversalToolName = AggregatedToolName | ToolName;
 
@@ -50,58 +82,29 @@ type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolNam
 export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
 
 /**
- * MCP tool annotations providing hints about tool behavior.
+ * Contract-level ToolDescriptor with non-parametric properties.
  *
- * These annotations help MCP clients understand tool characteristics
- * for better UX decisions, such as whether a tool is safe to auto-invoke
- * or requires user confirmation.
- *
- * All annotation fields are explicitly enumerated per MCP specification.
- * No index signature - every field must be known at compile time.
+ * `annotations` and `_meta` on ToolDescriptor don't depend on any type
+ * parameter — they define the structural shape that ALL tools (generated
+ * and aggregated) conform to. We extract from the contract, not from
+ * concrete instances, so we get `title?: string` rather than a union
+ * of specific literal titles.
+ */
+type ContractDescriptor = ToolDescriptor<string, never, never, never, never, string>;
+
+/**
+ * MCP tool annotations — derived from the generated ToolDescriptor contract.
  *
  * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
  */
-export interface ToolAnnotations {
-  /** Whether the tool only reads data and doesn't modify state */
-  readonly readOnlyHint?: boolean;
-  /** Whether the tool might cause destructive/irreversible changes */
-  readonly destructiveHint?: boolean;
-  /** Whether repeated calls with same args produce same result */
-  readonly idempotentHint?: boolean;
-  /** Whether the tool interacts with external systems beyond the MCP server */
-  readonly openWorldHint?: boolean;
-  /** Human-readable title for the tool */
-  readonly title?: string;
-}
+export type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>;
 
 /**
- * OpenAI Apps SDK metadata for tool descriptors.
- *
- * These fields are used by ChatGPT to display status during tool invocation
- * and to render output using a custom widget.
- *
- * All known OpenAI _meta fields are explicitly enumerated per project rules.
- * No index signature - every field must be known at compile time.
+ * OpenAI Apps SDK metadata — derived from the generated ToolDescriptor contract.
  *
  * @see https://developers.openai.com/apps-sdk/reference
  */
-export interface ToolMeta {
-  /**
-   * URI of widget resource to render tool output.
-   * Widget must serve content with text/html+skybridge MIME type.
-   */
-  readonly 'openai/outputTemplate'?: string;
-  /** Status text shown while tool is running (max 64 characters) */
-  readonly 'openai/toolInvocation/invoking'?: string;
-  /** Status text shown after tool completes (max 64 characters) */
-  readonly 'openai/toolInvocation/invoked'?: string;
-  /** Allow widget to call this tool via window.openai.callTool() */
-  readonly 'openai/widgetAccessible'?: boolean;
-  /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
-  readonly 'openai/visibility'?: 'public' | 'private';
-  /** Mirror securitySchemes for clients that only read _meta */
-  readonly securitySchemes?: readonly SecurityScheme[];
-}
+export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
 
 /**
  * Entry in the universal tools list for MCP registration.

@@ -5,11 +5,9 @@
   },
   "include": [
     "src/**/*.ts",
-    "type-gen/**/*.ts",
     "tests/**/*.ts",
     "**/*.test.ts",
     "*.config.ts",
-    "vitest.config.e2e.ts",
     "docs/_typedoc_src/**/*.ts"
   ],
   "exclude": ["node_modules", "dist", "test-cache"]

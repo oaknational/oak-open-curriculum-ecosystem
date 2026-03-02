@@ -2,11 +2,10 @@
  * HTML generators for CTA buttons.
  *
  * @see index.ts - Public API
- * @module widget-cta/html-generators
  */
 
 import type { CtaConfig } from './types.js';
-import { CTA_REGISTRY } from './registry.js';
+import { CTA_LIST } from './registry.js';
 
 /**
  * Generates HTML for a single CTA button.
@@ -28,12 +27,12 @@ export function generateCtaButtonHtml(cta: CtaConfig): string {
  * @returns HTML container string
  */
 export function generateCtaContainerHtml(): string {
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const buttons = Object.values(CTA_REGISTRY)
-    .map((cta) => generateCtaButtonHtml(cta))
-    .join('\n      ');
+  const buttons: string[] = [];
+  for (const cta of CTA_LIST) {
+    buttons.push(generateCtaButtonHtml(cta));
+  }
 
   return `<div id="cta-container" class="cta-container" style="display:none">
-      ${buttons}
+      ${buttons.join('\n      ')}
     </div>`;
 }

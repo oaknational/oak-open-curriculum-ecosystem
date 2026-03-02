@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /**
  * Application-Level E2E Tests for Method-Aware Auth Routing
  *
@@ -19,11 +18,12 @@
  * Part of Phase 2, Sub-Phase 2.5
  */
 
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 
@@ -42,37 +42,44 @@ vi.mock('@clerk/express', () => ({
 }));
 // E2E tests don't block fetch, so no restoration needed
 
-describe('Application-Level Method-Aware Auth', () => {
-  let app: Express;
-
-  // Create app once for all tests (like E2E tests do)
-  beforeAll(() => {
-    app = createApp({
-      runtimeConfig: createMockRuntimeConfig({
-        // Auth enabled by default in mock config
-        env: {
-          OAK_API_KEY: 'test-api-key',
-          CLERK_PUBLISHABLE_KEY: 'REDACTED',
-          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-          NODE_ENV: 'test',
-        },
-      }),
-    });
+/**
+ * Creates a fresh app instance for auth-enabled tests.
+ *
+ * Each test creates its own app for isolation.
+ */
+async function createAuthEnabledApp(): Promise<Express> {
+  return await createApp({
+    runtimeConfig: createMockRuntimeConfig({
+      env: {
+        OAK_API_KEY: 'test-api-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+        CLERK_SECRET_KEY: 'sk_test_123',
+        NODE_ENV: 'test',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+      },
+    }),
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
   });
+}
 
-  describe('Discovery methods (no auth required)', () => {
-    it('allows tools/list without Bearer token', async () => {
-      const response = await request(app).post('/mcp').set('Accept', ACCEPT_HEADER).send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/list',
-      });
+describe('Application-Level Method-Aware Auth', () => {
+  describe('Discovery methods (auth required per MCP 2025-11-25)', () => {
+    it('returns HTTP 401 for tools/list without Bearer token', async () => {
+      const response = await request(await createAuthEnabledApp())
+        .post('/mcp')
+        .set('Accept', ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/list',
+        });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
 
-    it('allows initialize without Bearer token', async () => {
-      const response = await request(app)
+    it('returns HTTP 401 for initialize without Bearer token', async () => {
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -86,11 +93,11 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/list with Bearer token (does not break)', async () => {
-      const response = await request(app)
+    it('returns HTTP 401 for tools/list with fake Bearer token', async () => {
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .set('Authorization', 'Bearer fake-token-for-discovery')
@@ -100,14 +107,13 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/list',
         });
 
-      // Discovery methods should work regardless of token presence
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
     });
   });
 
-  describe('Public generated tools (no auth required)', () => {
-    it('allows tools/call get-changelog without token', async () => {
-      const response = await request(app)
+  describe('All tools require HTTP auth (noauth = no scope check, not no token)', () => {
+    it('returns HTTP 401 for get-changelog without token', async () => {
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -119,12 +125,11 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/call get-changelog-latest without token', async () => {
-      const response = await request(app)
+    it('returns HTTP 401 for get-changelog-latest without token', async () => {
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -136,12 +141,11 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
 
-    it('allows tools/call get-rate-limit without token', async () => {
-      const response = await request(app)
+    it('returns HTTP 401 for get-rate-limit without token', async () => {
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -153,8 +157,7 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         });
 
-      // Public tool should not require auth - either 200 (success) or tool-level error (not 401)
-      expect(response.status).not.toBe(401);
+      expect(response.status).toBe(401);
     });
   });
 
@@ -162,9 +165,10 @@ describe('Application-Level Method-Aware Auth', () => {
     /**
      * Per MCP spec and OpenAI Apps docs, protected tools without token
      * return HTTP 401 with WWW-Authenticate header to trigger OAuth discovery.
+     * Auth middleware rejects before MCP transport, so fresh app per test is optional.
      */
     it('returns HTTP 401 with WWW-Authenticate for get-key-stages without token', async () => {
-      const response = await request(app)
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -188,7 +192,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 with WWW-Authenticate for get-subjects without token', async () => {
-      const response = await request(app)
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -212,7 +216,7 @@ describe('Application-Level Method-Aware Auth', () => {
 
   describe('Aggregated tools (require auth)', () => {
     it('returns HTTP 401 with WWW-Authenticate for search without token', async () => {
-      const response = await request(app)
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -234,7 +238,7 @@ describe('Application-Level Method-Aware Auth', () => {
     });
 
     it('returns HTTP 401 with WWW-Authenticate for fetch without token', async () => {
-      const response = await request(app)
+      const response = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -257,25 +261,26 @@ describe('Application-Level Method-Aware Auth', () => {
   });
 
   describe('DANGEROUSLY_DISABLE_AUTH compatibility', () => {
-    let bypassApp: Express;
-
-    beforeAll(() => {
-      bypassApp = createApp({
+    /**
+     * Creates a fresh app with auth disabled.
+     * Each test creates its own app for isolation.
+     */
+    async function createBypassApp(): Promise<Express> {
+      return await createApp({
         runtimeConfig: createMockRuntimeConfig({
           dangerouslyDisableAuth: true,
           env: {
             OAK_API_KEY: 'test-api-key',
-            CLERK_PUBLISHABLE_KEY: 'REDACTED',
-            CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
             NODE_ENV: 'development',
+            ELASTICSEARCH_URL: 'http://fake-es:9200',
+            ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
           },
         }),
       });
-    });
+    }
 
-    it('allows all methods without token when flag is true', async () => {
-      // Test discovery method
-      const discoveryResponse = await request(bypassApp)
+    it('allows discovery methods without token when flag is true', async () => {
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -284,15 +289,16 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/list',
         });
 
-      expect(discoveryResponse.status).toBe(200);
+      expect(response.status).toBe(200);
+    });
 
-      // Test auth-required tool
-      const protectedToolResponse = await request(bypassApp)
+    it('allows auth-required tool without token when flag is true', async () => {
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
           jsonrpc: '2.0',
-          id: '2',
+          id: '1',
           method: 'tools/call',
           params: {
             name: 'get-key-stages',
@@ -300,12 +306,11 @@ describe('Application-Level Method-Aware Auth', () => {
         });
 
       // Should be 200 - auth is disabled
-      expect(protectedToolResponse.status).toBe(200);
+      expect(response.status).toBe(200);
     });
 
     it('bypasses all auth checks when flag is true', async () => {
-      // Test aggregated tool that normally requires auth
-      const searchResponse = await request(bypassApp)
+      const response = await request(await createBypassApp())
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
         .send({
@@ -318,7 +323,7 @@ describe('Application-Level Method-Aware Auth', () => {
         });
 
       // Should be 200 - auth is disabled
-      expect(searchResponse.status).toBe(200);
+      expect(response.status).toBe(200);
     });
   });
 });

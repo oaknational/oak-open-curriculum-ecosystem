@@ -10,6 +10,8 @@ import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import { assertAuthenticatedToolCall } from './authenticated.js';
+import { assertOAuthDiscoveryChain } from './oauth-discovery.js';
+import { assertSpecCompliantOAuthFlow } from './oauth-spec-e2e.js';
 import type { SmokeContext } from './types.js';
 
 export { type SmokeContext } from './types.js';
@@ -30,36 +32,54 @@ export async function runSmokeAssertions(context: SmokeContext): Promise<void> {
   context.logger.info('Finished smoke assertions', { mode: context.mode });
 }
 
+/**
+ * Runs local smoke assertions against a single server instance.
+ *
+ * Per-request transport creates a fresh McpServer + transport per request,
+ * so all assertions can share the same server without conflicts.
+ */
 async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
-  // local-stub and local-live modes have auth bypass enabled
-  // so we skip auth enforcement assertions
+  // ── HTTP-level assertions ─────────────────────────────────────────
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  // Auth bypass enabled - skip assertAuthRequired
+
+  // ── MCP protocol assertions ───────────────────────────────────────
+  // Per-request transport: each request gets a fresh McpServer + transport.
+  // All assertions share the same server instance.
+  // Auth bypass is enabled — skip assertAuthRequired.
   await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context, { expectedMinimum: 6 }); // Stub mode has limited tools
+  await assertToolCatalogue(context, { expectedMinimum: 6 });
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);
 }
 
 async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<void> {
-  // For auth enforcement mode, we only test auth and discovery
-  // MCP protocol tests would fail without a real Clerk token
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
   await assertAuthRequired(context);
+  await assertOAuthDiscoveryChain(context);
   await assertAuthenticatedToolCall(context);
-  // TODO: Add OAuth discovery assertions
-  // Skip MCP protocol tests - they require real Clerk token
+}
+
+/**
+ * Validates the full spec-compliant OAuth path end-to-end: discovery
+ * chain, programmatic token acquisition, and authenticated MCP calls.
+ * Requires real Clerk credentials in the environment.
+ */
+export async function runSpecCompliantOAuthAssertions(context: SmokeContext): Promise<void> {
+  await assertHealthEndpoints(context);
+  await assertSpecCompliantOAuthFlow(context);
 }
 
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
+  // Remote assertions run against a deployed server where each request
+  // may hit a different Vercel function instance.
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  await assertClerkJwksAccessible(context); // Verify Clerk JWKS is reachable (if OAuth configured)
+  await assertClerkJwksAccessible(context);
   await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context, { expectedMinimum: 28 }); // Remote has all 28 tools
+  await assertToolCatalogue(context, { expectedMinimum: 28 });
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);

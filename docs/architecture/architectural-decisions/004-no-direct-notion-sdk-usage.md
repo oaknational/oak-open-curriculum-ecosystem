@@ -2,54 +2,36 @@
 
 ## Status
 
-Accepted
+**Deprecated** — The `oak-notion-mcp` workspace has been removed.
+The Notion MCP server originally existed to force generalisation
+of the codebase for multiple MCP servers. That architectural
+forcing function is now obsolete: the ecosystem supports multiple
+MCP servers natively (`oak-curriculum-mcp-stdio`,
+`oak-curriculum-mcp-streamable-http`). See Item #4 in the
+[high-level plan](../../../.agent/plans/high-level-plan.md).
 
-## Context
+## Historical Context
 
-The Notion SDK is a third-party dependency that:
+The Notion SDK was a third-party dependency used in the
+`oak-notion-mcp` workspace. This ADR established the principle
+of wrapping third-party SDKs behind interfaces — an
+anti-corruption layer pattern. While the Notion-specific
+implementation no longer exists, the underlying principle
+(abstract external dependencies behind domain interfaces)
+remains valid and is applied elsewhere in the codebase (e.g.
+the Oak API SDK wraps the Open Curriculum API).
 
-- May change its API in breaking ways
-- Couples our code directly to Notion's implementation details
-- Makes testing difficult without mocking the entire SDK
-- Could be replaced with a different implementation in the future
+## Original Decision
 
-We need to decide whether to use the SDK directly throughout our codebase or abstract it behind an interface.
+Wrap the Notion SDK behind a `NotionClientWrapper` interface.
+No direct SDK usage outside of the adapter layer.
 
-## Decision
+## Enduring Principles
 
-Wrap the Notion SDK behind a `NotionClientWrapper` interface. No direct SDK usage outside of the adapter layer.
+The following principles from this ADR remain relevant across
+the codebase:
 
-## Rationale
-
-- **Isolation**: API changes are isolated to a single location
-- **Testability**: Can test with simple implementations of the interface
-- **Flexibility**: Can swap implementations (e.g., for testing, caching, or alternative clients)
-- **Domain Language**: Interface uses our domain language, not Notion's
-- **Upgrade Path**: SDK upgrades only require changes in one place
-- **Anti-Corruption Layer**: Prevents Notion-specific concepts from leaking into business logic
-
-## Consequences
-
-### Positive
-
-- Business logic is decoupled from Notion SDK specifics
-- Easier to test components that use Notion data
-- Can add features like caching, retry logic, and rate limiting transparently
-- Clear boundary between our domain and Notion's domain
-- Simplified mocking for integration tests
-
-### Negative
-
-- Additional abstraction layer to maintain
-- Need to map between SDK types and our domain types
-- Some SDK features might be harder to expose through the interface
-- Initial development takes longer
-
-## Implementation
-
-- Create `NotionClientWrapper` interface with domain-specific methods
-- Implement interface using the actual Notion SDK
-- Use factory pattern to create instances
-- Map SDK types to domain types at the boundary
-- Keep all SDK imports within the adapter layer
-- Use dependency injection to provide the wrapper to consumers
+- **Isolation**: External API changes are isolated to adapter layers
+- **Testability**: Test with simple implementations of interfaces
+- **Domain Language**: Interfaces use our domain language, not the vendor's
+- **Anti-Corruption Layer**: Prevents vendor-specific concepts from leaking into business logic

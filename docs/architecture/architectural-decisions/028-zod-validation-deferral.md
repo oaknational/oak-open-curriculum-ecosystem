@@ -110,7 +110,7 @@ export function validateLesson(data: unknown): Lesson {
 
 ## References
 
-- Investigation notes: `.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md#6.1.4`
+- Investigation notes: `.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md#6.1.4`
 - Future Refinements: `.agent/plans/high-level-plan.md#future-refinements`
 - [Zod Documentation](https://github.com/colinhacks/zod)
 - [ts-to-zod](https://github.com/fabien0102/ts-to-zod)

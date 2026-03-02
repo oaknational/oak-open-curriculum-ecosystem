@@ -7,8 +7,6 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
-
 // Type for MCP content messages
 type McpContent = { type: string; text?: string }[];
 
@@ -44,10 +42,7 @@ describe('MCP Protocol E2E', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    const apiKey = process.env.OAK_API_KEY;
-    if (!apiKey) {
-      throw new Error('OAK_API_KEY is not set');
-    }
+    const apiKey = 'test-api-key';
 
     // Create client transport pointing to built server
     transport = new StdioClientTransport({
@@ -55,8 +50,11 @@ describe('MCP Protocol E2E', () => {
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
+        OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     });
 
@@ -92,7 +90,7 @@ describe('MCP Protocol E2E', () => {
       const toolNames = toolsResponse.tools.map((t) => t.name);
       expect(toolNames).toContain('get-subjects');
       expect(toolNames).toContain('get-key-stages');
-      expect(toolNames).toContain('get-search-lessons');
+      expect(toolNames).toContain('get-lessons-quiz');
 
       // Verify tool structure
       const firstTool = toolsResponse.tools[0];
@@ -118,13 +116,13 @@ describe('MCP Protocol E2E', () => {
     it('should execute tool with parameters', async () => {
       const payload = expectSuccessfulResult(
         await client.callTool({
-          name: 'get-search-lessons',
+          name: 'get-subject-detail',
           arguments: {
-            q: 'fractions',
+            subject: 'maths',
           },
         }),
       );
-      expect(Array.isArray(extractDataArray(payload))).toBe(true);
+      expect(payload).toBeTruthy();
     });
 
     it('should handle optional parameters correctly', async () => {
@@ -168,14 +166,14 @@ describe('MCP Protocol E2E', () => {
 
     it('should handle missing required parameters', async () => {
       // MCP SDK returns isError: true instead of rejecting
-      const result = await client.callTool({ name: 'get-search-lessons', arguments: {} });
+      const result = await client.callTool({ name: 'get-lessons-quiz', arguments: {} });
       expect(result.isError).toBe(true);
       const contentList = result.content as McpContent | undefined;
       const content = contentList?.[0];
       if (!content || !('text' in content)) {
         throw new TypeError('Test: Expected text content');
       }
-      expect(content.text).toMatch(/Invalid arguments.*get-search-lessons/);
+      expect(content.text).toMatch(/Invalid arguments.*get-lessons-quiz/);
     });
 
     it('should handle invalid parameter values', async () => {

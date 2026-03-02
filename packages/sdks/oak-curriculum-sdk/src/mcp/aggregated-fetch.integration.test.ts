@@ -17,6 +17,8 @@ import { describe, it, expect } from 'vitest';
 import { runFetchTool } from './aggregated-fetch.js';
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
 import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
+import { createStubSearchRetrieval } from './search-retrieval-stub.js';
+import { createNullGeneratedToolRegistry } from './test-helpers/null-generated-tool-registry.js';
 
 /**
  * Creates a mock executeMcpTool that returns predefined result for any tool.
@@ -25,6 +27,8 @@ import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 function createMockExecutor(result: ToolExecutionResult): UniversalToolExecutorDependencies {
   return {
     executeMcpTool: () => Promise.resolve(result),
+    searchRetrieval: createStubSearchRetrieval(),
+    generatedTools: createNullGeneratedToolRegistry(),
   };
 }
 
@@ -36,9 +40,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { httpStatus?: number; status?: string };
-      expect(structured.httpStatus).toBe(200);
-      expect(structured.status).toBe('success');
+      expect(result.structuredContent).toHaveProperty('httpStatus', 200);
+      expect(result.structuredContent).toHaveProperty('status', 'success');
     });
 
     it('includes FULL data for model reasoning', async () => {
@@ -52,8 +55,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:photosynthesis-basics' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { data?: typeof lessonData };
-      expect(structured.data).toEqual(lessonData);
+      expect(result.structuredContent).toHaveProperty('data', lessonData);
     });
 
     it('includes id and type in structuredContent', async () => {
@@ -62,9 +64,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { id?: string; type?: string };
-      expect(structured.id).toBe('unit:fractions');
-      expect(structured.type).toBe('unit');
+      expect(result.structuredContent).toHaveProperty('id', 'unit:fractions');
+      expect(result.structuredContent).toHaveProperty('type', 'unit');
     });
 
     it('includes canonicalUrl in structuredContent', async () => {
@@ -73,9 +74,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { canonicalUrl?: string };
-      expect(structured.canonicalUrl).toBeDefined();
-      expect(typeof structured.canonicalUrl).toBe('string');
+      expect(result.structuredContent).toHaveProperty('canonicalUrl', expect.any(String));
     });
 
     it('includes oakContextHint for model context grounding', async () => {
@@ -94,7 +93,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
-      expect(result.content).toHaveLength(1);
+      expect(result.content).toHaveLength(2);
       const firstContent = result.content[0];
       expect(firstContent).toHaveProperty('type', 'text');
       if ('text' in firstContent) {
@@ -131,6 +130,89 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
   });
 
+  describe('canonicalUrl for context-dependent types', () => {
+    it('includes non-null canonicalUrl for subject fetch', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          subjectTitle: 'Maths',
+          subjectSlug: 'maths',
+          keyStages: [
+            { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+            { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+          ],
+          sequenceSlugs: [],
+          years: [],
+        },
+      });
+
+      const result = await runFetchTool({ id: 'subject:maths' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
+      );
+    });
+
+    it('includes non-null canonicalUrl for unit fetch', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          unitTitle: 'Fractions',
+          unitSlug: 'fractions',
+          subjectSlug: 'maths',
+          phaseSlug: 'primary',
+        },
+      });
+
+      const result = await runFetchTool({ id: 'unit:fractions' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions',
+      );
+    });
+
+    it('returns null canonicalUrl gracefully when context is insufficient', async () => {
+      const deps = createMockExecutor({
+        status: 200,
+        data: {
+          subjectTitle: 'Maths',
+          subjectSlug: 'maths',
+        },
+      });
+
+      const result = await runFetchTool({ id: 'subject:maths' }, deps);
+
+      expect(result.isError).toBeUndefined();
+      expect(result.structuredContent).toHaveProperty('canonicalUrl', null);
+    });
+  });
+
+  describe('parameter mapping for content types', () => {
+    it('passes correct flat parameter name for thread: prefix', async () => {
+      let capturedToolName: string | undefined;
+      let capturedArgs: unknown;
+      const deps: UniversalToolExecutorDependencies = {
+        executeMcpTool: (toolName, args) => {
+          capturedToolName = toolName;
+          capturedArgs = args;
+          return Promise.resolve({ status: 200, data: { threadTitle: 'Algebra' } });
+        },
+        searchRetrieval: createStubSearchRetrieval(),
+        generatedTools: createNullGeneratedToolRegistry(),
+      };
+
+      await runFetchTool({ id: 'thread:algebra' }, deps);
+
+      expect(capturedToolName).toBe('get-threads-units');
+      expect(capturedArgs).toHaveProperty('thread', 'algebra');
+      expect(capturedArgs).not.toHaveProperty('threadSlug');
+    });
+  });
+
   describe('error handling', () => {
     it('returns error for unsupported id prefix', async () => {
       const deps = createMockExecutor({ status: 200, data: {} });
@@ -144,6 +226,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const deps: UniversalToolExecutorDependencies = {
         executeMcpTool: () =>
           Promise.resolve({ error: new McpToolError('API failure', 'get-lessons-summary') }),
+        searchRetrieval: createStubSearchRetrieval(),
+        generatedTools: createNullGeneratedToolRegistry(),
       };
 
       const result = await runFetchTool({ id: 'lesson:test' }, deps);

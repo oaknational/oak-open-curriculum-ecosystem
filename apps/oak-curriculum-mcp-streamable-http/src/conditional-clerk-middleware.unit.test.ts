@@ -4,8 +4,8 @@ import { testShouldSkipClerkMiddleware } from './conditional-clerk-middleware.js
 /**
  * Unit tests for conditional Clerk middleware pure functions.
  *
- * These tests verify the skip logic for MCP discovery methods and public paths.
- * Per ADR-056: Discovery methods must skip Clerk auth context setup to reduce latency.
+ * These tests verify the skip logic for public paths and resources.
+ * Per MCP 2025-11-25: All MCP methods require auth including discovery.
  */
 describe('shouldSkipClerkMiddleware', () => {
   describe('public paths', () => {
@@ -14,51 +14,66 @@ describe('shouldSkipClerkMiddleware', () => {
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
+    it('returns true for path-qualified PRM (RFC 9728 Section 3.1)', () => {
+      const req = createMockRequest('/.well-known/oauth-protected-resource/mcp', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
     it('returns true for OIDC discovery path', () => {
       const req = createMockRequest('/.well-known/openid-configuration', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
-    it('returns true for health check path', () => {
-      const req = createMockRequest('/health', undefined);
+    it('returns true for healthz check path', () => {
+      const req = createMockRequest('/healthz', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
-    it('returns true for ready check path', () => {
-      const req = createMockRequest('/ready', undefined);
+    it('returns true for OAuth proxy authorize path', () => {
+      const req = createMockRequest('/oauth/authorize', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns true for OAuth proxy token path', () => {
+      const req = createMockRequest('/oauth/token', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns true for OAuth proxy register path', () => {
+      const req = createMockRequest('/oauth/register', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
   });
 
-  describe('MCP discovery methods', () => {
-    it('returns true for initialize method', () => {
+  describe('MCP discovery methods (auth required per MCP 2025-11-25)', () => {
+    it('returns false for initialize method', () => {
       const req = createMockRequest('/mcp', { method: 'initialize' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
-    it('returns true for tools/list method', () => {
+    it('returns false for tools/list method', () => {
       const req = createMockRequest('/mcp', { method: 'tools/list' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
-    it('returns true for resources/list method', () => {
+    it('returns false for resources/list method', () => {
       const req = createMockRequest('/mcp', { method: 'resources/list' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
-    it('returns true for prompts/list method', () => {
+    it('returns false for prompts/list method', () => {
       const req = createMockRequest('/mcp', { method: 'prompts/list' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
-    it('returns true for resources/templates/list method', () => {
+    it('returns false for resources/templates/list method', () => {
       const req = createMockRequest('/mcp', { method: 'resources/templates/list' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
-    it('returns true for notifications/initialized method', () => {
+    it('returns false for notifications/initialized method', () => {
       const req = createMockRequest('/mcp', { method: 'notifications/initialized' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
   });
 
@@ -74,7 +89,7 @@ describe('shouldSkipClerkMiddleware', () => {
     it('returns false for resources/read method', () => {
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
-        params: { uri: 'curriculum://ontology' },
+        params: { uri: 'curriculum://model' },
       });
       expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
@@ -121,9 +136,9 @@ describe('shouldSkipClerkMiddleware', () => {
   });
 
   describe('path variations', () => {
-    it('returns true for /mcp subpaths with discovery method', () => {
+    it('returns false for /mcp subpaths with discovery method', () => {
       const req = createMockRequest('/mcp/v1', { method: 'tools/list' });
-      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
     });
 
     it('returns false for paths that start with /mcp prefix but are different', () => {

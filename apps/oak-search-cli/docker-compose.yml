@@ -1,0 +1,29 @@
+# Docker Compose for local development services
+# Used primarily for SDK response caching during ingestion development
+#
+# Usage:
+#   docker compose up -d    # Start services
+#   docker compose down     # Stop services
+#   docker compose down -v  # Stop and remove volumes (clears all cached data)
+#
+# See docs/SDK-CACHING.md for full documentation.
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: oak-search-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+    driver: local

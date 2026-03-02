@@ -1,0 +1,25 @@
+---
+description: Use the Result<T, E> pattern for error handling. Never throw exceptions. Handle all cases explicitly.
+globs: '**/*.{ts,tsx,mts}'
+---
+
+# Use Result Pattern
+
+Use the `Result<T, E>` pattern for error handling. Never throw exceptions. Handle all cases explicitly.
+
+## The Pattern
+
+```typescript
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+```
+
+## Why
+
+- **Explicit** - Errors are part of the type signature
+- **Composable** - Results can be chained and transformed
+- **Exhaustive** - The compiler ensures all cases are handled
+- **No surprises** - Errors don't propagate invisibly up the stack
+
+## Reference
+
+@docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md

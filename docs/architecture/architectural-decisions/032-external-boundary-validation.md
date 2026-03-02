@@ -200,7 +200,7 @@ Use `any` for external data.
 
 ## Related
 
-- [TypeScript Practice Guide](../../agent-guidance/typescript-practice.md)
+- [TypeScript Practice Guide](../../governance/typescript-practice.md)
 - [ADR-003: Zod for Validation](003-zod-for-validation.md)
 - [ADR-023: Moria-Histoi-Psycha Architecture](023-moria-histoi-psycha-architecture.md)
 - [Moria Runtime Boundary Implementation](../../../ecosystem/moria/moria-mcp/src/types/runtime-boundary.ts)

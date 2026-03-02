@@ -1,170 +1,338 @@
 /**
- * Integration tests for aggregated search tool execution.
+ * Integration tests for SDK-backed search tool execution.
  *
- * Tests that the search tool returns results per OpenAI Apps SDK reference:
- * - `structuredContent`: Model AND widget see this (FULL data for reasoning)
- * - `content`: Model AND widget see this (human-readable summary)
- * - `_meta`: Widget ONLY sees this (additional widget metadata)
+ * Tests that runSearchSdkTool correctly dispatches to the appropriate
+ * Search SDK retrieval method based on scope, passes through filters,
+ * and formats results into MCP CallToolResult.
  *
- * @see https://developers.openai.com/apps-sdk/reference#tool-results
- *
- * @remarks
- * These are integration tests because they test how the execution function
- * integrates with dependencies (executeMcpTool) using simple mocks.
+ * Uses a fake SearchRetrievalService injected via deps.searchRetrieval.
  */
 
-import { describe, it, expect } from 'vitest';
-import { runSearchTool } from './execution.js';
+import { describe, it, expect, vi } from 'vitest';
+import { ok, err } from '@oaknational/result';
+import { runSearchSdkTool } from './execution.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
-import type { ToolExecutionResult } from '../execute-tool-call.js';
+import { createNullGeneratedToolRegistry } from '../test-helpers/null-generated-tool-registry.js';
+import type {
+  SearchRetrievalService,
+  LessonsSearchResult,
+  UnitsSearchResult,
+  ThreadsSearchResult,
+  SequencesSearchResult,
+  SuggestionResponse,
+} from '../search-retrieval-types.js';
+import type { SearchSdkArgs } from './types.js';
 
 /**
- * Creates a mock executeMcpTool that returns predefined results.
- * Simple mock injected as argument - no complex logic.
+ * Creates a fake retrieval service with configurable responses.
  */
-function createMockExecutor(
-  lessonsResult: ToolExecutionResult,
-  transcriptsResult: ToolExecutionResult,
-): UniversalToolExecutorDependencies {
+function createFakeRetrieval(overrides?: Partial<SearchRetrievalService>): SearchRetrievalService {
+  const lessonsResult: LessonsSearchResult = {
+    scope: 'lessons',
+    total: 2,
+    took: 42,
+    timedOut: false,
+    results: [],
+  };
+  const unitsResult: UnitsSearchResult = {
+    scope: 'units',
+    total: 1,
+    took: 30,
+    timedOut: false,
+    results: [],
+  };
+  const threadsResult: ThreadsSearchResult = {
+    scope: 'threads',
+    total: 1,
+    took: 25,
+    timedOut: false,
+    results: [],
+  };
+  const sequencesResult: SequencesSearchResult = {
+    scope: 'sequences',
+    total: 1,
+    took: 20,
+    timedOut: false,
+    results: [],
+  };
+  const suggestResult: SuggestionResponse = {
+    suggestions: [
+      {
+        label: 'photosynthesis',
+        scope: 'lessons',
+        url: '/lessons/photosynthesis',
+        contexts: {},
+      },
+    ],
+    cache: { version: 'v1', ttlSeconds: 300 },
+  };
+
   return {
-    executeMcpTool: (name) => {
-      if (name === 'get-search-lessons') {
-        return Promise.resolve(lessonsResult);
-      }
-      if (name === 'get-search-transcripts') {
-        return Promise.resolve(transcriptsResult);
-      }
-      return Promise.reject(new Error(`Unexpected tool: ${name}`));
-    },
+    searchLessons: vi.fn().mockResolvedValue(ok(lessonsResult)),
+    searchUnits: vi.fn().mockResolvedValue(ok(unitsResult)),
+    searchThreads: vi.fn().mockResolvedValue(ok(threadsResult)),
+    searchSequences: vi.fn().mockResolvedValue(ok(sequencesResult)),
+    suggest: vi.fn().mockResolvedValue(ok(suggestResult)),
+    fetchSequenceFacets: vi.fn().mockResolvedValue(ok({ sequences: [] })),
+    ...overrides,
   };
 }
 
-describe('runSearchTool result structure per OpenAI Apps SDK', () => {
-  describe('structuredContent (model sees this for reasoning)', () => {
-    it('includes FULL lessons data for model reasoning', async () => {
-      const lessons = [
-        { lessonSlug: 'lesson-1', lessonTitle: 'Photosynthesis Basics', extra: 'full data...' },
-        { lessonSlug: 'lesson-2', lessonTitle: 'Light Reactions', extra: 'more data...' },
-        { lessonSlug: 'lesson-3', lessonTitle: 'Dark Reactions', extra: 'even more...' },
-      ];
+function createDeps(retrieval: SearchRetrievalService): UniversalToolExecutorDependencies {
+  return {
+    executeMcpTool: () => Promise.reject(new Error('Should not call executeMcpTool')),
+    searchRetrieval: retrieval,
+    generatedTools: createNullGeneratedToolRegistry(),
+  };
+}
 
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+describe('runSearchSdkTool', () => {
+  describe('scope dispatch', () => {
+    it('returns a result for lessons scope', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'photosynthesis', scope: 'lessons' };
 
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
+      const result = await runSearchSdkTool(args, deps);
 
-      expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { lessons?: unknown[] };
-      expect(structured.lessons).toHaveLength(3);
+      expect(result.isError).toBeUndefined();
+      expect(result.content).toBeDefined();
+      expect(retrieval.searchLessons).toHaveBeenCalledOnce();
     });
 
-    it('includes FULL transcripts data for model reasoning', async () => {
-      const transcripts = [
-        { lessonSlug: 'lesson-1', transcript: 'Full transcript content here...' },
-        { lessonSlug: 'lesson-2', transcript: 'Another full transcript...' },
-      ];
+    it('returns a result for units scope', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'fractions', scope: 'units' };
 
-      const deps = createMockExecutor(
-        { status: 200, data: [] },
-        { status: 200, data: transcripts },
-      );
+      const result = await runSearchSdkTool(args, deps);
 
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
-
-      expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { transcripts?: unknown[] };
-      expect(structured.transcripts).toHaveLength(2);
+      expect(result.isError).toBeUndefined();
+      expect(retrieval.searchUnits).toHaveBeenCalledOnce();
     });
 
-    it('includes ALL items (no artificial limit) for model reasoning', async () => {
-      const lessons = Array.from({ length: 100 }, (_, i) => ({
-        lessonSlug: `lesson-${String(i + 1)}`,
-        lessonTitle: `Lesson ${String(i + 1)}`,
-      }));
+    it('returns a result for threads scope', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'algebra', scope: 'threads' };
 
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+      const result = await runSearchSdkTool(args, deps);
 
-      const result = await runSearchTool({ q: 'test' }, deps);
-
-      expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent as { lessons?: unknown[] };
-      expect(structured.lessons).toHaveLength(100);
+      expect(result.isError).toBeUndefined();
+      expect(retrieval.searchThreads).toHaveBeenCalledOnce();
     });
 
-    it('includes summary in structuredContent', async () => {
-      const lessons = [{ lessonSlug: 'lesson-1', lessonTitle: 'Test Lesson' }];
+    it('returns a result for sequences scope', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'science', scope: 'sequences' };
 
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+      const result = await runSearchSdkTool(args, deps);
 
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
-
-      expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent).toHaveProperty('summary');
-      const structured = result.structuredContent as { summary?: string };
-      expect(structured.summary).toContain('1');
+      expect(result.isError).toBeUndefined();
+      expect(retrieval.searchSequences).toHaveBeenCalledOnce();
     });
 
-    it('includes oakContextHint for model context grounding', async () => {
-      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
+    it('returns a result for suggest scope', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'photo', scope: 'suggest' };
 
-      const result = await runSearchTool({ q: 'test' }, deps);
+      const result = await runSearchSdkTool(args, deps);
 
-      expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent).toHaveProperty('oakContextHint');
+      expect(result.isError).toBeUndefined();
+      expect(retrieval.suggest).toHaveBeenCalledOnce();
     });
   });
 
-  describe('_meta (widget-only metadata)', () => {
-    it('includes query in _meta', async () => {
-      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
+  describe('result formatting', () => {
+    it('includes human-readable summary in content', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'photosynthesis', scope: 'lessons' };
 
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
+      const result = await runSearchSdkTool(args, deps);
 
-      expect(result._meta).toBeDefined();
-      expect(result._meta).toEqual(expect.objectContaining({ query: 'photosynthesis' }));
-    });
-
-    it('includes timestamp in _meta', async () => {
-      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
-
-      const beforeTime = Date.now();
-      const result = await runSearchTool({ q: 'test' }, deps);
-      const afterTime = Date.now();
-
-      expect(result._meta).toBeDefined();
-      const meta = result._meta;
-      if (meta && 'timestamp' in meta) {
-        expect(typeof meta.timestamp).toBe('number');
-        expect(meta.timestamp).toBeGreaterThanOrEqual(beforeTime);
-        expect(meta.timestamp).toBeLessThanOrEqual(afterTime);
-      }
-    });
-
-    it('includes toolName in _meta', async () => {
-      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
-
-      const result = await runSearchTool({ q: 'test' }, deps);
-
-      expect(result._meta).toBeDefined();
-      expect(result._meta).toHaveProperty('toolName', 'search');
-    });
-  });
-
-  describe('content (human-readable summary for conversation)', () => {
-    it('returns human-readable summary text', async () => {
-      const lessons = [{ lessonSlug: 'lesson-1', lessonTitle: 'Photosynthesis' }];
-
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
-
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
-
-      expect(result.content).toHaveLength(1);
+      expect(result.content).toHaveLength(2);
       const firstContent = result.content[0];
       expect(firstContent).toHaveProperty('type', 'text');
-      if ('text' in firstContent) {
-        // Content is human-readable summary (not JSON)
-        expect(firstContent.text).toContain('lesson');
-        expect(firstContent.text).toContain('photosynthesis');
-      }
+    });
+
+    it('includes structuredContent for model reasoning', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'photosynthesis',
+        scope: 'lessons',
+        subject: 'science',
+        keyStage: 'ks3',
+      };
+
+      const result = await runSearchSdkTool(args, deps);
+      expect(result.structuredContent).toBeDefined();
+    });
+
+    it('includes _meta for widget routing', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'test', scope: 'lessons' };
+
+      const result = await runSearchSdkTool(args, deps);
+      expect(result._meta).toBeDefined();
+    });
+  });
+
+  describe('filter passthrough', () => {
+    it('passes common filters to lessons search', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'fractions',
+        scope: 'lessons',
+        subject: 'maths',
+        keyStage: 'ks2',
+        size: 10,
+        from: 5,
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.searchLessons).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text: 'fractions',
+          subject: 'maths',
+          keyStage: 'ks2',
+          size: 10,
+          from: 5,
+        }),
+      );
+    });
+
+    it('passes lesson-specific filters', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'trigonometry',
+        scope: 'lessons',
+        unitSlug: 'trig-unit',
+        tier: 'higher',
+        examBoard: 'aqa',
+        year: '10',
+        threadSlug: 'maths-thread',
+        highlight: true,
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.searchLessons).toHaveBeenCalledWith(
+        expect.objectContaining({
+          unitSlug: 'trig-unit',
+          tier: 'higher',
+          examBoard: 'aqa',
+          year: '10',
+          threadSlug: 'maths-thread',
+          highlight: true,
+        }),
+      );
+    });
+
+    it('passes unit-specific filters', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'fractions',
+        scope: 'units',
+        minLessons: 5,
+        highlight: true,
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.searchUnits).toHaveBeenCalledWith(
+        expect.objectContaining({
+          minLessons: 5,
+          highlight: true,
+        }),
+      );
+    });
+
+    it('passes sequence-specific filters', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'science',
+        scope: 'sequences',
+        phaseSlug: 'secondary',
+        category: 'science',
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.searchSequences).toHaveBeenCalledWith(
+        expect.objectContaining({
+          phaseSlug: 'secondary',
+          category: 'science',
+        }),
+      );
+    });
+
+    it('passes suggest-specific filters', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'photo',
+        scope: 'suggest',
+        limit: 10,
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.suggest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: 'photo',
+          limit: 10,
+        }),
+      );
+    });
+
+    it('passes subject and keyStage to suggest call (Snag 1)', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        text: 'photo',
+        scope: 'suggest',
+        subject: 'science',
+        keyStage: 'ks3',
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.suggest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          prefix: 'photo',
+          scope: 'lessons',
+          subject: 'science',
+          keyStage: 'ks3',
+        }),
+      );
+    });
+  });
+
+  describe('error handling', () => {
+    it('returns error when retrieval returns an error result', async () => {
+      const retrieval = createFakeRetrieval({
+        searchLessons: vi
+          .fn()
+          .mockResolvedValue(
+            err({ type: 'es_error', message: 'Connection refused', statusCode: 502 }),
+          ),
+      });
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = { text: 'test', scope: 'lessons' };
+
+      const result = await runSearchSdkTool(args, deps);
+
+      expect(result.isError).toBe(true);
     });
   });
 });

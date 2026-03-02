@@ -41,7 +41,7 @@ Each decoration added semantic richness without violating the SDK's authority. T
 
 The profound insight came when the user explained the final architecture:
 
-> "If the API schema changes, the only thing we need to do to make both the SDK and the MCP server work properly is to run type-gen for the SDK."
+> "If the API schema changes, the only thing we need to do to make both the SDK and the MCP server work properly is to run sdk-codegen for the SDK."
 
 This wasn't just good design—it was elimination of an entire category of maintenance work. The architecture had achieved something like biological elegance, where changes propagate naturally through the system.
 

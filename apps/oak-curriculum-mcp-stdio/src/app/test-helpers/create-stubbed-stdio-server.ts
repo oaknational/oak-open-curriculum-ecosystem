@@ -4,10 +4,11 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 import {
   createStubToolExecutionAdapter,
+  createStubSearchRetrieval,
   McpToolError,
   createOakPathBasedClient,
   type ToolName,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { registerMcpTools } from '../server.js';
 import type { UniversalToolExecutors } from '../../tools/index.js';
@@ -134,6 +135,7 @@ function createNoopLogger(): NoopLogger {
 function buildToolExecutors(missingTools: ReadonlySet<ToolName>): UniversalToolExecutors {
   const stubExecutor = createStubToolExecutionAdapter();
   return {
+    searchRetrieval: createStubSearchRetrieval(),
     executeMcpTool: (name, args) => {
       if (missingTools.has(name)) {
         return Promise.resolve({

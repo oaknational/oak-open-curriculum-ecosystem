@@ -1,5 +1,5 @@
 /**
- * @fileoverview HTTP security headers middleware using helmet.
+ * HTTP security headers middleware using helmet.
  *
  * Provides comprehensive security headers for the MCP server:
  * - Content Security Policy (CSP) tailored for the landing page
@@ -11,7 +11,6 @@
  * These headers are safe to apply globally - they protect HTML responses
  * and are harmless for JSON responses consumed by MCP clients.
  *
- * @module security-headers
  */
 
 import helmet from 'helmet';

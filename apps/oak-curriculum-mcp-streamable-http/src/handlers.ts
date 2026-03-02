@@ -1,10 +1,10 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import type { RuntimeConfig } from './runtime-config.js';
+import type { McpServerFactory } from './mcp-request-context.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
 import { setRequestContext } from './request-context.js';
 import {
@@ -14,7 +14,9 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+  generatedToolRegistry,
+  type SearchRetrievalService,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
 
@@ -23,6 +25,7 @@ export interface ToolHandlerDependencies {
   readonly executeMcpTool: typeof executeToolCall;
   readonly createExecutor: typeof createUniversalToolExecutor;
   readonly getResourceUrl: () => string;
+  readonly searchRetrieval: SearchRetrievalService;
 }
 
 export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;
@@ -32,6 +35,8 @@ export interface RegisterHandlersOptions {
   readonly runtimeConfig: RuntimeConfig;
   readonly logger: Logger;
   readonly resourceUrl?: string;
+  /** Pre-created search retrieval service (shared across per-request servers). */
+  readonly searchRetrieval: SearchRetrievalService;
 }
 
 /**
@@ -40,28 +45,35 @@ export interface RegisterHandlersOptions {
  */
 export type ToolRegistrationServer = McpServer;
 
-/**
- * Build dependencies for tool handlers, merging defaults with overrides.
- *
- * @param resourceUrl - Base URL for resources
- * @param overrides - Optional dependency overrides
- * @returns Complete dependencies for tool handlers
- */
+function mergeOverrides(
+  defaults: ToolHandlerDependencies,
+  overrides: ToolHandlerOverrides,
+): ToolHandlerDependencies {
+  return {
+    createClient: overrides.createClient ?? defaults.createClient,
+    executeMcpTool: overrides.executeMcpTool ?? defaults.executeMcpTool,
+    createExecutor: overrides.createExecutor ?? defaults.createExecutor,
+    getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
+    searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
+  };
+}
+
 function buildToolHandlerDependencies(
   resourceUrl: string,
   overrides: ToolHandlerOverrides | undefined,
+  searchRetrieval: SearchRetrievalService,
 ): ToolHandlerDependencies {
-  const defaultDependencies: ToolHandlerDependencies = {
+  const defaults: ToolHandlerDependencies = {
     createClient: createOakPathBasedClient,
     executeMcpTool: executeToolCall,
     createExecutor: createUniversalToolExecutor,
     getResourceUrl: () => resourceUrl,
+    searchRetrieval,
   };
-
-  return {
-    ...defaultDependencies,
-    ...(overrides ?? {}),
-  };
+  return overrides ? mergeOverrides(defaults, overrides) : defaults;
+}
+function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
+  return config.displayHostname ? `https://${config.displayHostname}` : undefined;
 }
 
 /**
@@ -75,12 +87,16 @@ function buildToolHandlerDependencies(
  */
 export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
-  const deps = buildToolHandlerDependencies(resourceUrl, options.overrides);
+  const deps = buildToolHandlerDependencies(
+    resourceUrl,
+    options.overrides,
+    options.searchRetrieval,
+  );
   const stubExecutor = options.runtimeConfig.useStubTools
     ? createStubToolExecutionAdapter()
     : undefined;
 
-  for (const tool of listUniversalTools()) {
+  for (const tool of listUniversalTools(generatedToolRegistry)) {
     // Use generated Zod schema directly when available (includes .describe() for MCP clients).
     // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
     const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
@@ -104,19 +120,10 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     });
   }
 
-  registerAllResources(server);
+  registerAllResources(server, { widgetDomain: deriveWidgetDomain(options.runtimeConfig) });
   registerPrompts(server);
 }
 
-/**
- * Creates an MCP request handler with correlation ID support.
- *
- * @param transport - MCP server transport
- * @param logger - Base logger instance
- * @returns Express request handler for MCP protocol
- *
- * @public
- */
 /**
  * Adapts Express Request for MCP SDK transport by omitting Clerk's auth property.
  *
@@ -196,42 +203,40 @@ function extractMcpMethod(body: unknown): string | undefined {
   return undefined;
 }
 
+/**
+ * Express handler using per-request MCP server + transport (stateless pattern).
+ *
+ * @see ADR-112, MCP SDK simpleStatelessStreamableHttp.ts
+ */
 export function createMcpHandler(
-  transport: StreamableHTTPServerTransport,
+  mcpFactory: McpServerFactory,
   logger?: Logger,
 ): (req: express.Request, res: express.Response) => Promise<void> {
   return async (req: express.Request, res: express.Response) => {
-    // Extract correlation ID and create correlated logger if available
     const correlationId = extractCorrelationId(res);
+    const log = logger && correlationId ? createChildLogger(logger, correlationId) : undefined;
     const mcpMethod = extractMcpMethod(req.body);
+    log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
 
-    if (logger && correlationId) {
-      const correlatedLogger = createChildLogger(logger, correlationId);
-      correlatedLogger.debug('MCP request received', {
-        method: req.method,
-        path: req.path,
-        mcpMethod,
-      });
-    }
-
-    // Adapt Express Request to IncomingMessage, omitting Clerk's auth property
-    // to avoid type conflict with MCP SDK's AuthInfo type. We use AsyncLocalStorage
-    // for our auth flow, so the auth property is not needed by the MCP SDK.
+    // Create fresh server + transport for this request (stateless mode)
+    const { server, transport } = mcpFactory();
+    await server.connect(transport);
     const mcpRequest = createMcpRequest(req);
 
-    // Wrap transport.handleRequest with setRequestContext to propagate Express request
-    // to tool handlers via AsyncLocalStorage. This enables getRequestContext() to work
-    // in checkMcpClientAuth for tool-level authentication.
     await setRequestContext(req, async () => {
       await transport.handleRequest(mcpRequest, res, req.body);
     });
 
-    if (logger && correlationId) {
-      const correlatedLogger = createChildLogger(logger, correlationId);
-      correlatedLogger.debug('MCP request completed', {
-        statusCode: res.statusCode,
-        mcpMethod,
-      });
-    }
+    // Clean up per-request resources after the response completes
+    res.on('close', () => {
+      Promise.resolve()
+        .then(() => transport.close())
+        .then(() => server.close())
+        .catch((err: unknown) => {
+          logger?.error('MCP per-request cleanup failed', { error: err });
+        });
+    });
+
+    log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });
   };
 }

@@ -1,0 +1,16 @@
+# Example: Tag descriptions for OpenAPI
+# Currently tags have names only, no descriptions
+
+tags:
+  - name: "units"
+    description: "Access curriculum units — topics of study containing ordered lessons"
+  - name: "lessons"
+    description: "Access individual lessons with content, quizzes, and resources"
+  - name: "assets"
+    description: "Download lesson resources (slides, worksheets, videos). Note: TPC licensing restricts some non-maths assets"
+  - name: "sequences"
+    description: "Navigate curriculum structure. Use for KS4 content which requires tier/exam board context"
+  - name: "search"
+    description: "Search lessons by content or transcript"
+  - name: "questions"
+    description: "Access quiz questions and answers with distractor logic"

@@ -6,7 +6,6 @@
  * - Attribute values
  * - Script content embedded in HTML
  *
- * @module html-encoding
  */
 
 /**

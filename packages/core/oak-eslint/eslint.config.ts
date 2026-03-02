@@ -1,7 +1,8 @@
 import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: ['dist', 'node_modules', '**/*.d.ts'],
   },
@@ -9,14 +10,6 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: [
-            '*.js',
-            '*.mjs',
-            '*.cjs',
-            '*.config.ts',
-            'src/rules/*.test.ts',
-            'src/configs/*.test.ts',
-          ],
           defaultProject: 'tsconfig.eslint.json',
         },
         tsconfigRootDir: import.meta.dirname,
@@ -28,8 +21,14 @@ export default tseslint.config(
   ...tseslint.configs.stylistic,
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': ['error'],
       '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'never',
+        },
+      ],
     },
   },
 );

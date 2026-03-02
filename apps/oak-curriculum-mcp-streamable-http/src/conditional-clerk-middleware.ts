@@ -1,51 +1,31 @@
 /**
- * Conditional Clerk middleware that skips auth context setup for MCP discovery methods.
+ * Conditional Clerk middleware that skips auth context setup for non-MCP routes.
  *
  * ## Why This Exists
  *
- * The standard `clerkMiddleware()` runs on every request to set up auth context (~170ms overhead).
- * Discovery methods (initialize, tools/list, resources/list, prompts/list) don't need auth,
- * but the overhead adds up when ChatGPT makes ~28 requests on refresh.
+ * The standard `clerkMiddleware()` runs on every request to set up auth context.
+ * Non-MCP routes (health checks, OAuth metadata) and public resource reads
+ * (widget HTML, documentation) do not need Clerk auth context.
  *
- * This middleware only runs clerkMiddleware for requests that might need auth,
- * reducing latency for discovery methods from ~175ms to ~5ms.
+ * ## What Skips Clerk
  *
- * ## MCP Discovery Methods
+ * - **Path-based**: `/.well-known/*`, `/healthz` (RFC 9728, health checks)
+ * - **Public resources**: `resources/read` for widget HTML and documentation URIs
  *
- * Per MCP spec and OpenAI Apps docs, these methods must work without authentication:
- * - `initialize` - Server capability negotiation
- * - `tools/list` - Tool catalog discovery
- * - `resources/list` - Resource discovery
- * - `prompts/list` - Prompt discovery
+ * ## What Does NOT Skip Clerk
  *
- * ## Security
+ * Per MCP 2025-11-25: "Authorization MUST be included in every HTTP request
+ * from client to server." All MCP methods including discovery (initialize,
+ * tools/list) go through Clerk. If latency becomes a concern, cache JWKS --
+ * do not skip auth.
  *
- * This is safe because:
- * 1. Discovery methods return public metadata, not protected data
- * 2. Tool execution (tools/call) still requires auth via createMcpAuthClerk
- * 3. The MCP router applies full auth checks for non-discovery methods
- *
- * @see https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
+ * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
-import { isDiscoveryMethod } from './mcp-method-classifier.js';
+import type { Logger } from '@oaknational/logger';
 import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
 import { isPublicResourceUri } from './auth/public-resources.js';
-
-/**
- * MCP methods that can skip clerkMiddleware entirely.
- * These are discovery/metadata methods that don't access protected resources.
- */
-const CLERK_SKIP_METHODS: ReadonlySet<string> = new Set([
-  'initialize',
-  'tools/list',
-  'resources/list',
-  'prompts/list',
-  'resources/templates/list',
-  'notifications/initialized', // Client notification, no auth needed
-]);
 
 /**
  * Paths that should always skip clerkMiddleware.
@@ -53,9 +33,13 @@ const CLERK_SKIP_METHODS: ReadonlySet<string> = new Set([
  */
 const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource',
+  '/.well-known/oauth-protected-resource/mcp',
+  '/.well-known/oauth-authorization-server',
   '/.well-known/openid-configuration',
-  '/health',
-  '/ready',
+  '/healthz',
+  '/oauth/authorize',
+  '/oauth/token',
+  '/oauth/register',
 ]);
 
 /**
@@ -87,20 +71,14 @@ interface SkipCheckRequest {
 /**
  * Checks if an MCP method should skip Clerk authentication.
  *
+ * Only public resource reads skip Clerk. All other MCP methods
+ * require auth per MCP 2025-11-25.
+ *
  * @param mcpMethod - The MCP method from request body
- * @param body - Request body for extracting additional params
+ * @param body - Request body for extracting resource URI
  * @returns true if the method should skip auth
  */
 function shouldMcpMethodSkipClerk(mcpMethod: string, body: unknown): boolean {
-  // Discovery/metadata methods don't need auth
-  if (CLERK_SKIP_METHODS.has(mcpMethod)) {
-    return true;
-  }
-  // Also check using the discovery method classifier
-  if (isDiscoveryMethod(mcpMethod)) {
-    return true;
-  }
-  // Public resource reads (widget HTML, documentation) don't need auth
   if (mcpMethod === 'resources/read') {
     const uri = getResourceUriFromBody(body);
     if (uri && isPublicResourceUri(uri)) {

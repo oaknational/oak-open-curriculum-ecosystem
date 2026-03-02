@@ -1,20 +1,31 @@
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import net from 'node:net';
-import { spawnSync } from 'node:child_process';
+import { describeExistingListeners } from './process-info.js';
 
 const LOOPBACK_HOST = '127.0.0.1';
 const PORT_CHECK_TIMEOUT_MS = 250;
+const EPHEMERAL_PORT = 0;
 
 /**
  * Starts the streamable HTTP app on the requested port for smoke tests.
  */
 export async function startSmokeServer(port: number): Promise<Server> {
-  await assertPortAvailable(port);
-  console.log(`[TRACE] startSmokeServer: importing createApp`);
+  if (port !== EPHEMERAL_PORT) {
+    await assertPortAvailable(port);
+  }
+  console.log(`[TRACE] startSmokeServer: importing createApp and loadRuntimeConfig`);
   const { createApp } = await import('../src/application.js');
+  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: process.cwd(),
+  });
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
+  }
   console.log(`[TRACE] startSmokeServer: calling createApp()`);
-  const app = createApp();
+  const app = await createApp({ runtimeConfig: configResult.value });
   const appId = app.__appId;
   console.log(
     `[TRACE] startSmokeServer: got app #${String(appId)}, starting server on port ${String(port)}`,
@@ -42,6 +53,17 @@ export async function startSmokeServer(port: number): Promise<Server> {
       reject(error);
     });
   });
+}
+
+export function getServerPort(server: Server): number {
+  const address = server.address();
+  if (!isAddressInfo(address)) {
+    if (!address) {
+      throw new Error('Smoke server is listening but has no address information');
+    }
+    throw new Error(`Smoke server returned an unexpected string address: ${address}`);
+  }
+  return address.port;
 }
 
 /**
@@ -123,28 +145,54 @@ function isValidAddress(
   address: string | AddressInfo | null,
   expectedPort: number,
 ): address is AddressInfo {
-  return Boolean(
-    address &&
-    typeof address !== 'string' &&
-    typeof address.address === 'string' &&
-    address.port === expectedPort,
-  );
+  if (!isAddressInfo(address)) {
+    return false;
+  }
+  if (expectedPort === EPHEMERAL_PORT) {
+    return address.port > 0;
+  }
+  return address.port === expectedPort;
+}
+
+function isAddressInfo(address: string | AddressInfo | null): address is AddressInfo {
+  if (!address) {
+    return false;
+  }
+  if (typeof address === 'string') {
+    return false;
+  }
+  if (typeof address.address !== 'string') {
+    return false;
+  }
+  if (typeof address.port !== 'number') {
+    return false;
+  }
+  return true;
 }
 
 function buildInvalidAddressMessage(port: number, address: string | AddressInfo | null): string {
   const serialised = typeof address === 'string' ? address : JSON.stringify(address);
+  if (port === EPHEMERAL_PORT) {
+    return `Smoke server failed to confirm binding to an ephemeral port. Reported address: ${serialised}.`;
+  }
   return `Smoke server failed to confirm binding to port ${String(
     port,
   )}. Reported address: ${serialised}.`;
 }
 
 function buildPortInUseError(port: number): Error {
-  const existing = describeExistingListeners(port);
-  const hint = existing ? `\nExisting listeners:\n${existing}` : '';
+  const processInfo = describeExistingListeners(port);
+  const header = `PORT CONFLICT: Port ${String(port)} is already in use`;
+
+  if (!processInfo) {
+    return new Error(
+      `${header}.\n\nCannot determine which process is using the port.\nStop the conflicting process or run with: --port <different-port>`,
+    );
+  }
+
+  const { summary, fullOutput } = processInfo;
   return new Error(
-    `Smoke test server could not bind to ${LOOPBACK_HOST}:${String(
-      port,
-    )} because the port is already in use.${hint}\nStop the other process or run the smoke suite with a different --port.`,
+    `${header}\n\n${summary}\n\nFull lsof output:\n${fullOutput}\n\nTo resolve:\n  1. Stop the process: kill ${processInfo.pid ?? '<pid>'}\n  2. Or use a different port: --port <different-port>`,
   );
 }
 
@@ -156,17 +204,40 @@ function buildPortCheckTimeoutError(port: number): Error {
   );
 }
 
-function describeExistingListeners(port: number): string | undefined {
-  const result = spawnSync('lsof', ['-nP', '-i', `TCP:${String(port)}`, '-sTCP:LISTEN'], {
-    encoding: 'utf8',
+/**
+ * Creates a fresh application instance, starts it on an ephemeral port,
+ * runs a callback with the base URL, and tears down the server.
+ *
+ * Useful for testing scenarios that need an isolated server (e.g. auth
+ * enforcement tests, custom configurations). For standard smoke assertions,
+ * all MCP requests can share the main server since per-request transport
+ * creates a fresh McpServer + transport per request.
+ */
+export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>): Promise<T> {
+  const { createApp } = await import('../src/application.js');
+  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
+  const configResult = loadRuntimeConfig({
+    processEnv: process.env,
+    startDir: process.cwd(),
   });
-  if (result.status === 0) {
-    const trimmed = result.stdout.trim();
-    if (trimmed.length > 0) {
-      return trimmed;
-    }
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
   }
-  return undefined;
+  const app = await createApp({ runtimeConfig: configResult.value });
+
+  const server = await new Promise<Server>((resolve, reject) => {
+    const instance = app.listen(EPHEMERAL_PORT, LOOPBACK_HOST, () => {
+      resolve(instance);
+    });
+    instance.on('error', reject);
+  });
+
+  try {
+    const port = getServerPort(server);
+    return await fn(`http://${LOOPBACK_HOST}:${String(port)}`);
+  } finally {
+    await closeSmokeServer(server);
+  }
 }
 
 function isServerNotRunningError(error: unknown): error is NodeJS.ErrnoException {

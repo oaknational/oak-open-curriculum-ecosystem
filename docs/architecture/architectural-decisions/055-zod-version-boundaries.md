@@ -6,9 +6,9 @@
 
 ## Context
 
-The Oak MCP ecosystem involves three layers that use Zod for runtime validation:
+The Oak Open Curriculum ecosystem involves three layers that use Zod for runtime validation:
 
-1. **Oak Curriculum SDK** (`@oaknational/oak-curriculum-sdk`) - Generates types from the upstream OpenAPI schema
+1. **Oak Curriculum SDK** (`@oaknational/curriculum-sdk`) - Generates types from the upstream OpenAPI schema
 2. **MCP SDK** (`@modelcontextprotocol/sdk`) - Provides MCP protocol implementation
 3. **Apps** (e.g., `oak-curriculum-mcp-streamable-http`) - Consume both SDKs
 
@@ -81,7 +81,7 @@ interface OpenApiZodAdapter {
 }
 ```
 
-If we ever replace `openapi-zod-client`, the replacement must satisfy this interface
+If we ever replace `openapi-zod-client` (and `openapi3-ts`), the replacement must satisfy this interface. Castr (`@engraph/castr`) is the planned replacement for both libraries — see [ADR-108](108-sdk-workspace-decomposition.md). The adapter can remain in place initially while Castr output is validated side-by-side.
 
 ### Boundary Rules
 
@@ -93,7 +93,7 @@ If we ever replace `openapi-zod-client`, the replacement must satisfy this inter
 
 ### Key Principle
 
-**The SDK exports Zod v4 schemas, generated at type-gen time.**
+**The SDK exports Zod v4 schemas, generated at code-generation time.**
 
 The SDK exports:
 
@@ -121,7 +121,7 @@ import { z as z3 } from 'zod';
 import { z as z4 } from 'zod/v4';
 ```
 
-At type-gen time, the generator:
+At code-generation time, the generator:
 
 1. Produces Zod v3 schemas from `openapi-zod-client`
 2. Generates equivalent Zod v4 schemas using `zod/v4`
@@ -133,7 +133,7 @@ Apps import Zod v4 schemas directly from the SDK:
 
 ```typescript
 // app/src/handlers.ts
-import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { listUniversalTools } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 for (const tool of listUniversalTools()) {
   // tool.flatZodSchema is a Zod v4 ZodRawShape
@@ -171,7 +171,7 @@ This is NOT a compatibility layer because:
 
 1. We are not supporting both Zod v3 and v4 exports simultaneously
 2. We are not creating adapters or wrappers for runtime conversion
-3. The conversion happens at **type-gen time**, not runtime
+3. The conversion happens at **code-generation time**, not runtime
 4. Consumers only ever see Zod v4 (the new approach)
 
 The Zod v3 usage is purely an internal implementation detail of the generator.
@@ -188,22 +188,22 @@ The Zod v3 usage is purely an internal implementation detail of the generator.
 
 ### Negative
 
-1. **Generator complexity**: Type-gen must produce both Zod v3 (internal) and v4 (export)
+1. **Generator complexity**: Code-gen must produce both Zod v3 (internal) and v4 (export)
 2. **Dual Zod usage in SDK**: SDK workspace uses both `zod` and `zod/v4` imports
 3. **Redundancy**: JSON Schema and Zod schema exports have overlapping information
 
 ### Mitigations
 
-1. **Generator complexity**: Encapsulated in type-gen templates; apps don't see this
+1. **Generator complexity**: Encapsulated in code-generation templates; apps don't see this
 2. **Dual usage**: Clear separation—v3 for generated code, v4 for exports
 3. **Redundancy**: Address in a future phase (consolidate or document the relationship)
 
 ## Implementation Guidelines
 
-### For SDK Development (Type-Gen)
+### For SDK Development (Code-Gen)
 
 1. Generate Zod v3 schemas using `openapi-zod-client`
-2. In the same type-gen pass, generate Zod v4 equivalents using `zod/v4`
+2. In the same code-generation pass, generate Zod v4 equivalents using `zod/v4`
 3. Export only Zod v4 schemas in public API surfaces
 4. Ensure `.describe()` calls are preserved for MCP parameter descriptions
 
@@ -216,7 +216,7 @@ The Zod v3 usage is purely an internal implementation detail of the generator.
 ### Code Example
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/type-gen/generate-tool.ts
+// packages/sdks/oak-curriculum-sdk/code-generation/generate-tool.ts
 import { z as z3 } from 'zod'; // For openapi-zod-client output
 import { z as z4 } from 'zod/v4'; // For exports
 
@@ -235,7 +235,7 @@ export const toolMcpFlatInputSchema = z4.object({
 
 ### Phase 1: Implement Zod v4 Exports
 
-1. Update type-gen templates to produce Zod v4 schemas alongside v3
+1. Update code-generation templates to produce Zod v4 schemas alongside v3
 2. Export Zod v4 schemas from SDK public API
 3. Update apps to use SDK-provided Zod schemas
 
@@ -269,14 +269,14 @@ Address the overlap between JSON Schema and Zod exports:
 ### Alternative 3: Runtime Conversion
 
 - Convert Zod v3 to v4 at runtime
-- **Rejected**: Adds runtime cost; harder to debug; violates type-gen-time principle
+- **Rejected**: Adds runtime cost; harder to debug; violates code-generation-time principle
 
 ## Related Documents
 
 - [ADR-003: Zod for Runtime Validation](003-zod-for-validation.md)
 - [ADR-028: Deferring Zod Validation](028-zod-validation-deferral.md)
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
-- [Schema-First Execution Directive](../../../.agent/directives-and-memory/schema-first-execution.md)
+- [Schema-First Execution Directive](../../../.agent/directives/schema-first-execution.md)
 - [Implementation Plan](../../../.agent/plans/sdk-and-mcp-enhancements/05-zod-v4-export-implementation-plan.md)
 
 ## References
@@ -284,3 +284,4 @@ Address the overlap between JSON Schema and Zod exports:
 - Zod package: `zod/v4` export path in Zod 3.25+
 - MCP TypeScript SDK: Zod v4 compatibility
 - `openapi-zod-client` Zod version requirements
+- [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md) — Castr replaces both `openapi-zod-client` and `openapi3-ts`

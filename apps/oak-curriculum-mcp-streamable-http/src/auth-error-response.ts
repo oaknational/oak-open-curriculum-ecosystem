@@ -66,8 +66,8 @@ export function createAuthErrorResponse(
   description: string,
   resourceUrl: string,
 ): AuthErrorResponse {
-  // Generate resource metadata URL from resource URL
-  // E.g., "https://example.com/mcp" → "https://example.com/.well-known/oauth-protected-resource"
+  // Generate resource metadata URL from resource URL (RFC 9728 Section 3.1)
+  // E.g., "https://example.com/mcp" → "https://example.com/.well-known/oauth-protected-resource/mcp"
   const metadataUrl = generateMetadataUrl(resourceUrl);
 
   // Format WWW-Authenticate header per RFC 6750 Section 3
@@ -90,12 +90,13 @@ export function createAuthErrorResponse(
 }
 
 /**
- * Generates OAuth protected resource metadata URL from MCP resource URL.
+ * Generates path-qualified OAuth Protected Resource Metadata URL per RFC 9728.
  *
- * Converts resource URL to the well-known metadata endpoint per RFC 9728.
+ * Converts resource URL to the well-known metadata endpoint by appending the
+ * resource pathname to the well-known prefix per RFC 9728 Section 3.1.
  *
  * @param resourceUrl - MCP resource URL (e.g., "https://example.com/mcp")
- * @returns Metadata URL (e.g., "https://example.com/.well-known/oauth-protected-resource")
+ * @returns Metadata URL (e.g., "https://example.com/.well-known/oauth-protected-resource/mcp")
  *
  * @internal
  */
@@ -105,6 +106,6 @@ function generateMetadataUrl(resourceUrl: string): string {
   const protocol = url.protocol; // "http:" or "https:"
   const host = url.host; // "example.com" or "localhost:3000"
 
-  // RFC 9728: metadata URL is at /.well-known/oauth-protected-resource
-  return `${protocol}//${host}/.well-known/oauth-protected-resource`;
+  // RFC 9728 Section 3.1: path-qualified PRM URL includes resource pathname
+  return `${protocol}//${host}/.well-known/oauth-protected-resource${url.pathname}`;
 }

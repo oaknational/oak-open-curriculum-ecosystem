@@ -1,0 +1,20 @@
+---
+description: Never disable any quality gates, type checks, linting, formatting, tests, or git hooks. Fix the root cause instead.
+alwaysApply: true
+---
+
+# Never Disable Checks
+
+Never disable any quality gates. This includes:
+
+- Type checks (`// @ts-ignore`, `// @ts-expect-error`, `// @ts-nocheck`)
+- Linting (`// eslint-disable`, `/* eslint-disable */`)
+- Formatting (prettier-ignore)
+- Tests (skipping, commenting out)
+- Git hooks (`--no-verify`)
+
+## The Only Response to a Failing Check
+
+Fix the root cause. Never work around it.
+
+If a check is failing, the check is doing its job. The code needs to change, not the check.

@@ -4,7 +4,7 @@
 
 ## Summary
 
-The Redoc OpenAPI documentation renderer (`/api/docs` page in `oak-open-curriculum-semantic-search`) has inherent accessibility violations that cannot be fixed through configuration or CSS overrides alone.
+The Redoc OpenAPI documentation renderer (`/api/docs` page in `oak-search-cli`) has inherent accessibility violations that cannot be fixed through configuration or CSS overrides alone.
 
 ## Known Violations
 
@@ -26,7 +26,7 @@ Detected by Axe accessibility testing:
 
 The Redoc wrapper element (`.redoc-wrap`) is excluded from Axe accessibility analysis in the UI tests. This is documented and intentional - we're not disabling accessibility testing, we're acknowledging that a specific third-party component has known issues outside our control.
 
-See: `apps/oak-open-curriculum-semantic-search/tests/visual/responsive-baseline.spec.ts`
+See: `apps/oak-search-cli/tests/visual/responsive-baseline.spec.ts`
 
 ## Potential Solutions (Future)
 

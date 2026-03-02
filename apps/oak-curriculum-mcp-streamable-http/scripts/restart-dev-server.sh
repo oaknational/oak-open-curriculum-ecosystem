@@ -21,16 +21,16 @@ MODE=${1:-dev}
 echo "🔍 Checking for existing processes on port $PORT..."
 
 # Kill any existing process on the port
-if lsof -ti:$PORT >/dev/null 2>&1; then
+if lsof -ti:"$PORT" >/dev/null 2>&1; then
   echo "⚠️  Found process on port $PORT, killing it..."
-  lsof -ti:$PORT | xargs kill -9 2>/dev/null || true
+  lsof -ti:"$PORT" | xargs kill -9 2>/dev/null || true
   sleep 1
 else
   echo "✅ Port $PORT is free"
 fi
 
 # Verify port is free
-if lsof -i:$PORT >/dev/null 2>&1; then
+if lsof -i:"$PORT" >/dev/null 2>&1; then
   echo "❌ ERROR: Failed to free port $PORT"
   echo "   Please manually kill the process and try again:"
   echo "   lsof -i:$PORT"

@@ -11,14 +11,14 @@ import {
   isValidPath,
   isAllowedMethod,
   isValidResponseCode,
+  getResponseSchemaByOperationIdAndStatus,
   type ValidPath,
   type AllowedMethodsForPath,
   type JsonBody200,
   type OperationId,
-} from '../types/generated/api-schema/path-parameters.js';
-import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map.js';
+} from '@oaknational/sdk-codegen/api-schema';
 import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
-import type { CurriculumSchemaDefinition } from '../types/generated/zod/curriculumZodSchemas.js';
+import type { CurriculumSchemaDefinition } from '@oaknational/sdk-codegen/zod';
 
 /**
  * Parse and validate response data
@@ -76,7 +76,7 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
 
 /**
  * Validates response data for an API operation
- * @param path - The API path template (e.g., '/lessons/{lesson}/transcript')
+ * @param path - The API path template (e.g., '/lessons/\{lesson\}/transcript')
  * @param method - The HTTP method
  * @param statusCode - The HTTP response status code
  * @param response - The response data to validate

@@ -1,25 +1,24 @@
-# Oak MCP Ecosystem Error Handling Survey and Strategy
+# Oak Open Curriculum Ecosystem Error Handling Survey and Strategy
 
 ## Core references
 
-- **GO.md** (primary grounding)
-- **AGENT.md**
-- **docs/agent-guidance/development-practice.md**
-- **.agent/directives-and-memory/testing-strategy.md**
-- **docs/agent-guidance/typescript-practice.md**
+- **AGENT.md** (primary grounding)
+- **docs/governance/development-practice.md**
+- **.agent/directives/testing-strategy.md**
+- **docs/governance/typescript-practice.md**
 
 ## Executive summary
 
-The Oak MCP ecosystem currently mixes multiple error handling styles: direct exception throwing, silent fallback values (`null`, `false`), bespoke result discriminated unions, and logging without consistent propagation. This document surveys existing patterns, highlights risks, and recommends converging on an explicit `Result<T, E>` style for all fallible operations. A dedicated error-handling library workspace will anchor the shared abstractions, offer utilities for wrapping throwing dependencies, and define a structured error taxonomy. A staged adoption plan (Part 1: library design, Part 2: incremental integration) will reduce migration risk while preserving observable behaviour.
+The Oak Open Curriculum ecosystem currently mixes multiple error handling styles: direct exception throwing, silent fallback values (`null`, `false`), bespoke result discriminated unions, and logging without consistent propagation. This document surveys existing patterns, highlights risks, and recommends converging on an explicit `Result<T, E>` style for all fallible operations. A dedicated error-handling library workspace will anchor the shared abstractions, offer utilities for wrapping throwing dependencies, and define a structured error taxonomy. A staged adoption plan (Part 1: library design, Part 2: incremental integration) will reduce migration risk while preserving observable behaviour.
 
 ## Current-state survey
 
 ### Explicit throws with generic `Error`
 
-- **`apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts`** throws plain `Error`s for shape mismatches after calling generated SDK methods.
-- **`apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-helpers.ts`** raises `Error` on validation failures (e.g. missing canonical URL).
+- **`apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts`** throws plain `Error`s for shape mismatches after calling generated SDK methods.
+- **`apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts`** raises `Error` on validation failures (e.g. missing canonical URL).
 - **`packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts`** throws `TypeError` when routing metadata is invalid.
-- **`apps/oak-notion-mcp/src/tools/resources/handlers/read-resource.ts`** throws `Error` for URI validation failures and unsupported resource types.
+- ~~**`apps/oak-notion-mcp/src/tools/resources/handlers/read-resource.ts`** throws `Error` for URI validation failures and unsupported resource types.~~ *(workspace removed)*
 
 These throws surface quickly but lack typed context or structured remediation guidance. Downstream code often rethrows or converts to plain strings, limiting introspection.
 
@@ -27,7 +26,7 @@ These throws surface quickly but lack typed context or structured remediation gu
 
 - **`packages/libs/storage/src/file-storage.ts`** swallows file system errors (e.g. `catch { return null; }`), making it impossible to distinguish "missing file" from "IO failure".
 - **`packages/libs/storage/src/detect-storage-options.ts`** catches and ignores module import errors, returning `null` without diagnostic data.
-- Several scripts (e.g. `packages/sdks/oak-curriculum-sdk/type-gen/*`) call `.catch(() => undefined)` or log-and-continue, obscuring root causes during automation.
+- Several scripts (e.g. `packages/sdks/oak-sdk-codegen/code-generation/*`) call `.catch(() => undefined)` or log-and-continue, obscuring root causes during automation.
 
 Silent fallbacks complicate observability and undermine fast failure principles stated in `AGENT.md`.
 
@@ -50,9 +49,9 @@ These unions improve clarity locally but differ in naming, shape, helper functio
 the ecosystem relies on libraries that throw:
 
 - **`jose`** via `verifyAccessToken()` in `apps/oak-curriculum-mcp-streamable-http/src/auth-jwt.ts`.
-- **`@elastic/elasticsearch`** in `apps/oak-open-curriculum-semantic-search/src/lib/elastic-http.ts`.
+- **`@elastic/elasticsearch`** in `apps/oak-search-cli/src/lib/elastic-http.ts`.
 - Node built-ins (`fs`, `path`) throughout `packages/libs/storage/`.
-- Notion SDK in `apps/oak-notion-mcp/` handlers.
+- ~~Notion SDK in `apps/oak-notion-mcp/` handlers.~~ *(workspace removed)*
 - Generated SDK clients throw inside fetch implementations when network errors occur.
 
 Currently, throwing dependencies are wrapped inconsistently—some rethrow, some swallow, others wrap in ad-hoc unions.
@@ -139,7 +138,7 @@ Recommendation: build a bespoke thin wrapper inspired by `neverthrow`, tailored 
 - **Node.js modules** (`fs`, `path`): define adapters (`readJsonFile(path): Result<unknown, OakError>`) that classify `ENOENT` vs other IO errors.
 - **HTTP/Fetch**: wrap `fetch` responses via `Result` to distinguish transport errors, HTTP status failures, and decoding issues.
 - **Elasticsearch client**: wrap `esClient().search` and `transport.request` to capture response metadata and error codes.
-- **Notion SDK**: use `fromPromise` helper to convert API rejects into `Result`, classify rate limiting vs validation.
+- ~~**Notion SDK**: use `fromPromise` helper to convert API rejects into `Result`, classify rate limiting vs validation.~~ *(workspace removed)*
 - **`jose` JWT verification**: convert thrown `JOSEError` into `AuthError` with contextual env details, feeding consistent responses in `auth.ts`.
 
 For libraries that only throw, create adapter modules (e.g. `packages/libs/result/adapters/jose.ts`) exporting safe wrappers so application code never touches raw throws.
@@ -171,6 +170,6 @@ For libraries that only throw, create adapter modules (e.g. `packages/libs/resul
 - **Author** architecture RFC for `@oaknational/result`, referencing this survey.
 - **Prototype** helper set (`fromPromise`, `combine`) and validate against `index-bulk-helpers.ts` use cases.
 - **Draft** codemod or lint rules to flag `catch {}` with empty bodies and `throw new Error` without classification.
-- **Plan** staged migration per application (MCP stdio, streamable HTTP, Notion MCP, semantic search) with clear success metrics (e.g. `% of functions returning `Result`).
+- **Plan** staged migration per application (MCP stdio, streamable HTTP, semantic search) with clear success metrics (e.g. `% of functions returning `Result`).
 
 This strategy aligns with the Prime Directive (“could it be simpler without compromising quality”) by consolidating error handling into a single Chōra of patterns while preserving developer ergonomics and observability.

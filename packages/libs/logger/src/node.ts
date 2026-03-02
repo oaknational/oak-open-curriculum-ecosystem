@@ -1,5 +1,5 @@
 /**
- * Node.js entry point for `@oaknational/mcp-logger`.
+ * Node.js entry point for `@oaknational/logger`.
  *
  * @remarks
  * Use this subpath export when running inside a Node.js environment that has

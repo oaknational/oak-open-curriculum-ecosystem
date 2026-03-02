@@ -2,18 +2,16 @@
  * Test Helpers: Auth Error Integration Tests
  *
  * Shared test utilities for auth error interception testing.
- *
- * @module
  */
 
 import { vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-logger';
-import type { RuntimeConfig } from '../runtime-config.js';
+import type { Logger } from '@oaknational/logger';
+import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
 import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
 import {
   McpToolError,
   type ToolExecutionResult,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Notification, ServerRequest } from '@modelcontextprotocol/sdk/types.js';
 
 /**
@@ -46,8 +44,8 @@ interface Params {
  * the MCP SDK's signature while capturing handlers for test assertions.
  *
  * Type Safety Note:
- * - The MCP SDK's registerTool has complex generics: <InputArgs extends ZodRawShape, OutputArgs extends ZodRawShape>
- * - Our mock needs to capture handlers as (params: Params) => Promise<unknown> for test assertions
+ * - The MCP SDK's registerTool has complex generics: `<InputArgs extends ZodRawShape, OutputArgs extends ZodRawShape>`
+ * - Our mock needs to capture handlers as `(params: Params) => Promise<unknown>` for test assertions
  * - We bridge this gap by:
  *   1. Creating a generic implementation that accepts any handler signature
  *   2. Internally wrapping to our test Params type
@@ -120,17 +118,16 @@ export function createMockLogger(): Pick<
 /**
  * Creates a mock runtime config for testing.
  *
- * @returns Partial runtime config with required fields
+ * @returns AuthEnabledRuntimeConfig with required fields
  */
-export function createMockRuntimeConfig(): Pick<
-  RuntimeConfig,
-  'env' | 'useStubTools' | 'dangerouslyDisableAuth' | 'version' | 'vercelHostnames'
-> {
+export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
   return {
     env: {
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
       CLERK_SECRET_KEY: 'test-clerk-secret',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key',
     },
     useStubTools: false,
     dangerouslyDisableAuth: false,

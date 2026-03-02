@@ -3,9 +3,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { findRepoRoot } from '@oaknational/mcp-env';
-
-process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 function readStartupLog(repoRoot: string): string {
   const p = join(repoRoot, '.logs', 'oak-curriculum-mcp-startup', 'startup.log');
@@ -24,18 +22,18 @@ describe('MCP Startup logging', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
-    const apiKey = process.env.OAK_API_KEY;
-    if (!apiKey) {
-      throw new Error('OAK_API_KEY is not set');
-    }
+    const apiKey = 'test-api-key';
 
     transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
+        OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'debug',
+        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
       },
     });
     client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });
@@ -52,6 +50,9 @@ describe('MCP Startup logging', () => {
     const tools = await client.listTools();
     expect(Array.isArray(tools.tools)).toBe(true);
     const repoRoot = findRepoRoot(process.cwd());
+    if (repoRoot === undefined) {
+      throw new Error('E2E tests must run inside the monorepo');
+    }
     const log = readStartupLog(repoRoot);
     // Expect at least one of these diagnostics to appear once implemented
     expect(log.toLowerCase()).toContain('tool count');

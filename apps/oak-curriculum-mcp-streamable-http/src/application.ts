@@ -4,18 +4,19 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
+import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page/index.js';
-import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
-import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';
-import { SERVER_INSTRUCTIONS } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import {
+  SERVER_INSTRUCTIONS,
+  createStubSearchRetrieval,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createHttpLogger } from './logging/index.js';
-import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
-import { createSecurityConfig } from './security-config.js';
+import type { RuntimeConfig } from './runtime-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
@@ -27,13 +28,25 @@ import {
   initializeAppInstance,
   type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
+import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
+import { createSearchRetrieval } from './search-retrieval-factory.js';
+
+import type { McpServerFactory } from './mcp-request-context.js';
+export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 
 export interface CreateAppOptions {
+  readonly runtimeConfig: RuntimeConfig;
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
-  readonly runtimeConfig?: RuntimeConfig;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
+  /**
+   * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
+   * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
+   * and uses this value directly. Required for tests; production callers
+   * omit this so the metadata is fetched at startup.
+   */
+  readonly upstreamMetadata?: UpstreamAuthServerMetadata;
 }
 
 let appCounter = 0;
@@ -56,10 +69,10 @@ let appCounter = 0;
  * @returns Configured Express application instance
  */
 
-export function createApp(options?: CreateAppOptions): ExpressWithAppId {
-  const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
+export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
+  const { runtimeConfig } = options;
   const log =
-    options?.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
+    options.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
 
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
@@ -72,29 +85,27 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // Phase 2: Security - Create CORS and DNS rebinding protection middleware
   // CORS: Applied globally to ALL routes (protocol routes need it for browser clients)
   // DNS rebinding: Only applied to browser-accessible routes (landing page)
-  const securityConfig = createSecurityConfig(runtimeConfig);
-  const corsMiddleware = runBootstrapPhase(log, bootstrapTimer, 'createCorsMiddleware', appId, () =>
-    createCorsMiddleware(securityConfig.mode, securityConfig.allowedOrigins),
-  );
-  const dnsRebindingMiddleware = runBootstrapPhase(
+  // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
+  const { dnsRebindingMiddleware, allowedHosts } = setupSecurityMiddleware(
+    app,
+    runtimeConfig,
     log,
     bootstrapTimer,
-    'createDnsRebindingMiddleware',
     appId,
-    () => dnsRebindingProtection(log, securityConfig.allowedHosts),
   );
 
-  // Apply CORS globally to ALL routes
-  app.use(corsMiddleware);
-  // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
-  runBootstrapPhase(log, bootstrapTimer, 'createSecurityHeaders', appId, () => {
-    app.use(createSecurityHeadersMiddleware());
-  });
-
-  // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
-  // These endpoints MUST be publicly accessible without authentication per RFC 9470.
+  // Phase 2.5 & 2.6: OAuth metadata endpoints, proxy routes, and error caching prevention.
+  // These endpoints MUST be publicly accessible without authentication per RFC 9728.
   // Registering them before clerkMiddleware ensures they never go through auth checks.
-  setupOAuthAndCaching(app, runtimeConfig, log, bootstrapTimer, appId);
+  await setupOAuthAndCaching(
+    app,
+    runtimeConfig,
+    log,
+    bootstrapTimer,
+    appId,
+    allowedHosts,
+    options.upstreamMetadata,
+  );
 
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.
@@ -104,9 +115,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     setupGlobalAuthContext(app, runtimeConfig, log);
   });
 
-  // Phase 4: Core endpoints (MCP server init, health checks, OAuth metadata discovery)
-  // Health checks have NO web security middleware
-  const { transport: coreTransport, ready } = runBootstrapPhase(
+  // Phase 4: Core endpoints (MCP factory, health checks)
+  // The factory creates a fresh McpServer + transport per request (stateless mode).
+  // Health checks have NO web security middleware.
+  const { mcpFactory, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
@@ -124,10 +136,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // This runs AFTER clerkMiddleware, so auth context is available here.
   app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
-  // Phase 7: Auth routes (OAuth metadata endpoints, protected /mcp route handlers)
-  // Needs coreTransport, so must run after initializeCoreEndpoints.
+  // Phase 7: Auth routes (protected /mcp route handlers)
+  // Needs mcpFactory, so must run after initializeCoreEndpoints.
   runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appId, () => {
-    setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+    setupAuthRoutes(app, mcpFactory, runtimeConfig, log, allowedHosts);
   });
 
   const routes = listRoutes(app);
@@ -137,54 +149,45 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   return app;
 }
 
+/** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
 function initializeCoreEndpoints(
   app: Express,
-  options: CreateAppOptions | undefined,
+  options: CreateAppOptions,
   runtimeConfig: RuntimeConfig,
   log: Logger,
-): { transport: StreamableHTTPServerTransport; ready: Promise<void> } {
-  const { transport, server } = initializeCoreMcpServer();
-  registerHandlers(server, {
+): { mcpFactory: McpServerFactory; ready: Promise<void> } {
+  // Create shared dependencies ONCE at startup (not per request)
+  const searchRetrieval = runtimeConfig.useStubTools
+    ? createStubSearchRetrieval()
+    : createSearchRetrieval(runtimeConfig.env, log);
+  const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
+  const handlerOptions = {
     overrides: options?.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
-    resourceUrl: options?.resourceUrl,
-  });
-  overrideToolsListHandler(server);
-  log.debug('bootstrap.mcp.tools-list-override.registered');
-
-  log.debug('bootstrap.mcp.transport.connect.start');
-  const connectionTimer = startTimer();
-  let connectionDuration: Duration | undefined;
-  const ensureConnectionDuration = (): Duration => {
-    connectionDuration ??= connectionTimer.end();
-    return connectionDuration;
+    resourceUrl,
+    searchRetrieval,
   };
-  const serverReady = server.connect(transport).then(
-    () => {
-      const duration = ensureConnectionDuration();
-      log.info('bootstrap.mcp.transport.connect.finish', {
-        duration: duration.formatted,
-        durationMs: duration.ms,
-      });
-    },
-    (error: unknown) => {
-      const duration = ensureConnectionDuration();
-      const errorAsError =
-        error instanceof Error
-          ? error
-          : new Error(`MCP transport connect failed with non-error value: ${String(error)}`);
-      log.error('bootstrap.mcp.transport.connect.error', errorAsError, {
-        duration: duration.formatted,
-        durationMs: duration.ms,
-      });
-      throw error;
-    },
-  );
+
+  log.debug('bootstrap.mcp.factory.created');
+
+  // Factory creates a fresh McpServer + transport per request
+  const mcpFactory: McpServerFactory = () => {
+    const server = new McpServer(
+      { name: 'oak-curriculum-http', version: '0.1.0' },
+      { instructions: SERVER_INSTRUCTIONS },
+    );
+    registerHandlers(server, handlerOptions);
+    overrideToolsListHandler(server);
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    return { server, transport };
+  };
 
   addHealthEndpoints(app, log);
 
-  return { transport, ready: serverReady };
+  // No startup-time server.connect() needed — connection happens per request.
+  // Ready resolves immediately once the factory and shared deps are configured.
+  return { mcpFactory, ready: Promise.resolve() };
 }
 
 function addHealthEndpoints(app: Express, log: Logger): void {
@@ -235,15 +238,4 @@ function mountStaticAssets(app: Express): void {
   if (chosen) {
     app.use(expressStatic(chosen, { etag: true, maxAge: '1d' }));
   }
-}
-function initializeCoreMcpServer(): {
-  server: McpServer;
-  transport: StreamableHTTPServerTransport;
-} {
-  const server = new McpServer(
-    { name: 'oak-curriculum-http', version: '0.1.0' },
-    { instructions: SERVER_INSTRUCTIONS },
-  );
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  return { server, transport };
 }

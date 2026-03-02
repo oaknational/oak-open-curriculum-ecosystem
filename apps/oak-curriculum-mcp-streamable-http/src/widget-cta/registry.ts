@@ -2,7 +2,6 @@
  * CTA registry - single source of truth for all CTA definitions.
  *
  * @see index.ts - Public API
- * @module widget-cta/registry
  */
 
 import type { CtaConfig } from './types.js';
@@ -28,8 +27,8 @@ export const CTA_REGISTRY = {
   /**
    * Learn About Oak CTA.
    *
-   * Prompts the model to call all three agent support tools:
-   * `get-ontology`, `get-knowledge-graph`, `get-help`.
+   * Prompts the model to call `get-curriculum-model` for complete
+   * orientation in a single call (domain model + tool guidance).
    *
    * After 10 seconds, shows "Oak Understood" to indicate the agent
    * has had time to process the curriculum information.
@@ -41,13 +40,9 @@ export const CTA_REGISTRY = {
     understoodLabel: 'Oak Understood',
     prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum, covering from EYFS to KS4.
 
-The following tools will help you understand the context, and provide better support to the user.
+Call \`get-curriculum-model\` now to understand the curriculum domain model and available tools.
 
-Call the \`get-help\` tool for a resources and tools overview.
-
-The response includes "agent support" tools, such as \`get-ontology\` and \`get-knowledge-graph\`. Call **all** agent support tools now.
-
-Reflect on the agent support tools information. Do not show the user, use it to understand the Oak curriculum and the education context.
+Reflect on the information. Do not show the user, use it to understand the Oak curriculum and the education context.
 
 Tell the user that you are ready to help them use the Oak Open Curriculum resources.`,
   },
@@ -55,3 +50,18 @@ Tell the user that you are ready to help them use the Oak Open Curriculum resour
 
 /** Type-safe CTA names from the registry */
 export type CtaName = keyof typeof CTA_REGISTRY;
+
+function isCtaName(key: string): key is CtaName {
+  return key in CTA_REGISTRY;
+}
+
+/** Pre-built typed list of all CTA configs for iteration without type plumbing. */
+export const CTA_LIST: readonly CtaConfig[] = (() => {
+  const list: CtaConfig[] = [];
+  for (const key in CTA_REGISTRY) {
+    if (isCtaName(key)) {
+      list.push(CTA_REGISTRY[key]);
+    }
+  }
+  return list;
+})();

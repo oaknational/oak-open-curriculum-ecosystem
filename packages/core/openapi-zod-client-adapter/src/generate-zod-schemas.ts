@@ -4,13 +4,16 @@
  * This module wraps the upstream generator and transforms output to Zod v4.
  * All Zod v3 artefacts are contained within this boundary and never escape.
  *
- * @packageDocumentation
+ * **Strict Mode**: Generated schemas use `.strict()` to enforce that unknown
+ * properties cause validation errors, following the "fail fast" principle.
+ * Unknown keys are never silently ignored.
  */
 
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
-import type { OpenAPIObject, PathsObject } from 'openapi3-ts/oas31';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import { ensurePathsPresent } from './ensure-paths-present.js';
 import { transformZodV3ToV4 } from './zod-v3-to-v4-transform.js';
 
 /**
@@ -62,12 +65,9 @@ export async function generateZodSchemasFromOpenAPI(
   const ozcPkgDir = path.dirname(require.resolve('openapi-zod-client/package.json'));
   const templatePath = path.join(ozcPkgDir, 'src/templates/default.hbs');
 
-  // openapi-zod-client uses an outdated PathsObject definition
-  const openApiDocWithPaths: Parameters<typeof generateZodClientFromOpenAPI>[0]['openApiDoc'] =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition
-    openApiDoc as OpenAPIObject & { paths: PathsObject };
+  const openApiDocWithPaths = ensurePathsPresent(openApiDoc);
 
-  // Call openapi-zod-client - this generates Zod v3 code
+  // Call openapi-zod-client - this generates Zod v3 code with strict schemas
   const zodV3Output = await generateZodClientFromOpenAPI({
     openApiDoc: openApiDocWithPaths,
     templatePath,
@@ -77,6 +77,10 @@ export async function generateZodSchemasFromOpenAPI(
       shouldExportAllTypes: true,
       groupStrategy: 'none',
       withAlias: false,
+      // Enforce strict object validation: unknown properties cause errors (fail fast)
+      strictObjects: true,
+      // Disable .passthrough() - we want strict validation, not loose parsing
+      additionalPropertiesDefaultValue: false,
     },
   });
 

@@ -1,0 +1,78 @@
+{
+  "name": "@oaknational/oak-search-sdk",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "TypeScript SDK for Oak semantic search — retrieval, admin, and observability services",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*"
+  },
+  "peerDependencies": {
+    "@elastic/elasticsearch": "^9.2.0"
+  },
+  "devDependencies": {
+    "@elastic/elasticsearch": "^9.3.2",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24.10.13",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/sdks/oak-search-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/sdks/oak-search-sdk#readme",
+  "keywords": [
+    "oak",
+    "search",
+    "semantic",
+    "elasticsearch",
+    "sdk",
+    "education",
+    "typescript"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

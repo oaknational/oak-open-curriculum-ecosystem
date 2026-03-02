@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*.ts",
+    "code-generation/**/*.ts",
+    "vocab-gen/**/*.ts",
+    "docs/**/*.ts",
+    "**/*.test.ts",
+    "*.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "test-cache"]
+}

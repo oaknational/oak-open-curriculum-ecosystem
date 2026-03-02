@@ -9,8 +9,12 @@
     "build": "tsup",
     "clean": "rm -rf dist .turbo",
     "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
+    "dev:auth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
+    "dev:auth:stub": "LOG_LEVEL=debug OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true OAK_API_KEY=stub-api-key DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
     "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
     "dev:observe:noauth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-noauth-$(date +%Y%m%d-%H%M%S).log",
+    "inspect:oauth": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
+    "trace:oauth": "tsx smoke-tests/auth/capture-browser-trace.ts",
     "widget:preview": "tsx scripts/widget-preview-server.ts",
     "start": "node dist/src/index.js",
     "prod:harness": "node scripts/server-harness.js",
@@ -21,52 +25,86 @@
     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
     "smoke:oauth-inspector": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
     "smoke:oauth-curl": "./smoke-tests/OAUTH-CURL-TESTS.sh",
+    "smoke:oauth:spec": "tsx smoke-tests/smoke-oauth-spec.ts",
     "smoke:remote": "tsx smoke-tests/smoke-remote.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:e2e:built": "vitest run --config vitest.e2e.built.config.ts",
     "test:ui": "playwright test"
   },
   "dependencies": {
-    "@clerk/express": "^1.7.54",
+    "@clerk/backend": "^2.32.1",
+    "@clerk/express": "^1.7.74",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.24.2",
-    "@oaknational/mcp-env": "workspace:*",
-    "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/mcp-providers-node": "workspace:*",
-    "@oaknational/oak-curriculum-sdk": "workspace:*",
-    "commander": "^14.0.2",
-    "cors": "^2.8.5",
+    "@elastic/elasticsearch": "^9.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@oaknational/curriculum-sdk": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/env-resolution": "workspace:*",
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/oak-search-sdk": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "commander": "^14.0.3",
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-list-routes": "^1.3.2",
     "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "zod": "^4.1.13"
+    "jsonwebtoken": "^9.0.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.0",
-    "@playwright/test": "^1.57.0",
+    "@axe-core/playwright": "^4.11.1",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@playwright/test": "^1.58.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24",
+    "@types/node": "^24.10.13",
     "chokidar": "^5.0.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9.39.1",
-    "prettier": "^3.7.4",
-    "supertest": "^7.1.4",
+    "prettier": "^3.8.1",
+    "supertest": "^7.2.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": "24.x"
   },
+  "description": "OAuth-enabled MCP server over HTTP for the Oak National Academy Curriculum API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
     "directory": "apps/oak-curriculum-mcp-streamable-http"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http#readme",
+  "keywords": [
+    "mcp",
+    "oauth",
+    "http",
+    "oak",
+    "curriculum",
+    "education"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
 }

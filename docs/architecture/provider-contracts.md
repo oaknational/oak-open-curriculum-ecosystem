@@ -1,81 +1,53 @@
-# Provider Contracts (Core ⇄ Providers)
+# Provider Contracts (Runtime Boundaries)
 
-Purpose: Define a small, behaviour‑level contract that all runtime providers must satisfy to ensure parity and prevent feature drift.
+**Last Updated**: 2026-02-25  
+**Status**: Active guidance  
+**Scope**: Behaviour contracts between app-composed providers and MCP runtime modules
 
-## What the contracts are
+Purpose: define the minimal behaviour-level contracts that provider
+implementations must satisfy, independent of any specific runtime package.
 
-A compact set of behavioural checks for core runtime capabilities:
+## Current Contract Surfaces
 
-- Clock: `now()` returns a non‑decreasing number.
-- Logger: accepts `debug/info/warn/error` calls without throwing.
-- Storage: `set/get/delete` performs a round‑trip and delete clears the value.
+| Surface          | Behaviour contract                                                 | Current composition locations                                                                                     |
+| ---------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Clock            | `now(): number` returns current epoch milliseconds                 | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`                                                                 |
+| Logger           | accepts `trace/debug/info/warn/error/fatal` calls without throwing | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`, `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts` |
+| Storage          | async `get/set/delete` semantics for request/session-scoped state  | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`                                                                 |
+| Search retrieval | satisfies SDK `SearchRetrievalService` interface                   | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`, `apps/oak-curriculum-mcp-streamable-http/src/application.ts`   |
 
-These are not implementation tests. They verify behaviours that consumers rely on.
+## Where Contracts Are Bound
 
-## What they prove
+- STDIO binds runtime dependencies in:
+  [`apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`](../../apps/oak-curriculum-mcp-stdio/src/app/wiring.ts)
+- Streamable HTTP binds handler dependencies in:
+  [`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/handlers.ts)
+- Runtime configuration is loaded at app entry via:
+  [`runtime-config.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts) and
+  [`runtime-config.ts`](../../apps/oak-curriculum-mcp-stdio/src/runtime-config.ts)
 
-- All providers obey the same minimal semantics.
-- Servers can be composed via configuration without changing behaviour.
-- Core stays provider‑agnostic; providers only implement contracts.
+## Contract Rules
 
-## How they work
+1. Compose dependencies in app roots only.
+2. Inject dependencies through function/module boundaries.
+3. Do not read environment variables from deep runtime modules.
+4. Keep contract checks behaviour-focused (no provider implementation coupling).
+5. Keep generated SDK execution surfaces authoritative for tool schema/runtime contracts.
 
-- Core exposes a testing helper:
-  - Local testing helpers → `defineProviderContract(factory)`
-  - You pass creators for `logger`, `clock`, and `storage`.
-  - The helper returns sync/async checks you run in your test suite.
+## Testing Guidance
 
-- Providers import this helper and run it against their implementations.
+- Validate provider behaviour through integration tests at composition boundaries.
+- Use simple injected fakes for logger/clock/storage/search dependencies.
+- Avoid network/filesystem side effects in contract-level checks.
+- Keep tests deterministic and fast.
 
-```ts
-// providers-node example (integration test)
-// Testing helpers are now defined locally in each package
-import {
-  createConsoleLogger,
-  createInMemoryStorage,
-  createNodeClock,
-} from '@oaknational/mcp-providers-node';
+## Relationship to Schema-First Execution
 
-const contract = defineProviderContract({
-  createLogger: () => createConsoleLogger('test'),
-  createClock: () => createNodeClock(),
-  createStorage: () => createInMemoryStorage(),
-});
+Provider contracts govern runtime dependencies (logging, time, storage, search
+retrieval), while MCP tool contracts (names, args, results, validation) remain
+schema-first and generated from SDK artefacts.
 
-contract.clockBehavesMonotonically();
-contract.loggerAcceptsMessages();
-await contract.storageRoundtrip();
-```
+See:
 
-## Design principles
-
-- Behaviour‑only (no internal details or types).
-- No network or filesystem IO in tests; simple fakes only.
-- Deterministic and fast.
-- Portable across environments (Node, Cloudflare, etc.).
-
-## Guidance for new providers
-
-1. Implement the minimal Core contracts
-
-- `CoreClock.now(): number`
-- `CoreLogger.{debug,info,warn,error}(message: string, context?: unknown)`
-- `CoreStorage.{get,set,delete}(key: string, value?: unknown): Promise<...>`
-
-2. Add tests using the contract helper
-
-- Create a `{provider}/src/index.integration.test.ts` and invoke all checks.
-- Avoid side effects; spy on console if needed.
-
-3. Keep scope minimal
-
-- If you add more provider features, extend tests in provider package, not the core contract. Core contract stays minimal.
-
-## FAQs
-
-- Why not test more behaviours?
-  - The contract is a safety net, not a full conformance suite. Keep it small to avoid coupling and friction.
-- Where are these used?
-  - In every provider package. CI runs them as part of the monorepo test gate.
-- How do these relate to server DI?
-  - Servers depend on the core contracts. Providers supply implementations; the contract ensures they behave equivalently.
+- [Provider System](./provider-system.md)
+- [OpenAPI Pipeline](./openapi-pipeline.md#execution-model-schema-first-tool-invocation)

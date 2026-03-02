@@ -16,7 +16,7 @@ Originally we hosted these tools on a separate `/openai_connector` transport. Th
 
 ## Decision
 
-1. Generate OpenAI-compatible tool facades in the SDK at type-gen time and expose them through a universal MCP translation module. The module normalises inputs/outputs using schema-derived Zod validators—no type assertions, fail fast.
+1. Generate OpenAI-compatible tool facades in the SDK at sdk-codegen time and expose them through a universal MCP translation module. The module normalises inputs/outputs using schema-derived Zod validators—no type assertions, fail fast.
 2. Register every tool (curriculum + OpenAI facades) on the same `McpServer` instance behind `/mcp`, driven by the universal executor.
 3. (Completed 2025-10-23) Remove the temporary alias so `/mcp` is the sole HTTP surface.
 4. Share all security, logging, and Accept-header enforcement middleware across the `/mcp` transport, returning HTTP 406 whenever the `Accept` header omits `application/json` or `text/event-stream`.
@@ -44,7 +44,7 @@ Originally we hosted these tools on a separate `/openai_connector` transport. Th
   - Surface `/healthz` (HEAD + GET) as the only unauthenticated probe endpoint; keep MCP transports dedicated to protocol traffic.
 
 - SDK universal layer:
-  - Generate type-safe tool metadata and executors at `pnpm type-gen` time and expose helpers (`listUniversalTools`, `createUniversalToolExecutor`, `executeOpenAiToolCall`) consumed by the `/mcp` transport.
+  - Generate type-safe tool metadata and executors at `pnpm sdk-codegen` time and expose helpers (`listUniversalTools`, `createUniversalToolExecutor`, `executeOpenAiToolCall`) consumed by the `/mcp` transport.
 
 - OpenAI `search` (generated in SDK):
   - Aggregates `get-search-lessons` and `get-search-transcripts`

@@ -1,14 +1,14 @@
 # MCP SDK Type Reuse Investigation
 
 **Date**: November 18, 2024  
-**Scope**: Using `@modelcontextprotocol/sdk` types in `@oaknational/oak-curriculum-sdk`  
+**Scope**: Using `@modelcontextprotocol/sdk` types in `@oaknational/curriculum-sdk`  
 **Status**: Investigation Complete - Recommendations Provided
 
 ---
 
 ## EXECUTIVE SUMMARY
 
-This investigation examines whether `@oaknational/oak-curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly wherever possible" from `rules.md`.
+This investigation examines whether `@oaknational/curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly wherever possible" from `rules.md`.
 
 **Key Finding**: We ARE already using some MCP SDK types (`Tool`, `CallToolResult`, `TextContent`, etc.), but there are opportunities to use more upstream types, particularly around input schemas and tool list responses. However, some duplication is justified by our schema-first architecture and the MCP SDK's limited type exports.
 
@@ -291,7 +291,7 @@ export type ToolInputJsonSchema = Readonly<JSONSchema7Object>;
 1. Create `packages/sdks/oak-curriculum-sdk/src/types/json-schema.ts`
 2. Define comprehensive, readonly JSON Schema types once
 3. Import from this single location in:
-   - Generator code (`type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`)
+   - Generator code (`code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`)
    - Runtime code (`src/mcp/zod-input-schema.ts`)
    - Generated contract (`tool-descriptor.contract.ts` template)
 
@@ -693,8 +693,8 @@ Implementation:
 
 **Project Rules**:
 
-- `.agent/directives-and-memory/rules.md` - "Use library types directly where possible"
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first architecture
+- `.agent/directives/rules.md` - "Use library types directly where possible"
+- `.agent/directives/schema-first-execution.md` - Schema-first architecture
 
 **MCP Documentation**:
 
@@ -709,7 +709,7 @@ Implementation:
 **Current Usage**:
 
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts`
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/zod-input-schema.ts`
 
 ---

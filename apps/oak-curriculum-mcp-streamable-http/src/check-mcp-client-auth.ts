@@ -3,13 +3,11 @@
  *
  * Preventive authentication for MCP clients (e.g., ChatGPT) before SDK execution.
  * This is separate from upstream API auth (ADR-054).
- *
- * @module
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { getAuth } from '@clerk/express';
 import { getRequestContext } from './request-context.js';

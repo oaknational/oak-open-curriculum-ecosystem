@@ -5,14 +5,13 @@
  * based on MCP method and resource/tool security metadata.
  *
  * Uses simple mocks injected as arguments - no complex mock setup.
- *
- * @module
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { createFakeExpressRequest, createFakeResponse } from './test-helpers/fakes.js';
 
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;
@@ -26,42 +25,39 @@ describe('createMcpRouter (Integration)', () => {
       next();
     });
     mockNext = vi.fn();
-    mockRes = {} as Response;
+    mockRes = createFakeResponse();
   });
 
   function createMockRequest(body: unknown): Request {
-    return { body } as Request;
+    return createFakeExpressRequest({ body });
   }
 
-  describe('discovery methods (no auth required)', () => {
-    it('skips auth for tools/list', () => {
+  describe('discovery methods (auth required per MCP 2025-11-25)', () => {
+    it('requires auth for tools/list', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'tools/list' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
 
-    it('skips auth for initialize', () => {
+    it('requires auth for initialize', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'initialize' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
 
-    it('skips auth for resources/list', () => {
+    it('requires auth for resources/list', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({ method: 'resources/list' });
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
+      expect(mockAuthMw).toHaveBeenCalled();
     });
   });
 

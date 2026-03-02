@@ -316,11 +316,26 @@ Implement access control:
 - Log all operations with `userId` for audit trail
 - Future: Add role-based restrictions
 
+## Amendment: Proxy OAuth AS Role (2026-02-21)
+
+The MCP server now also acts as a **proxy OAuth Authorisation Server**, transparently forwarding DCR, authorise, and token exchange requests to Clerk. This was introduced to work around a confirmed Cursor client-side bug ([ADR-115](115-proxy-oauth-as-for-cursor.md)).
+
+Key changes from the original decision:
+
+1. **Server role**: No longer "Resource Server only". The server presents itself as its own AS via rewritten metadata, while Clerk remains the real AS behind the proxy.
+2. **Token type**: Clerk issues opaque tokens (`oat_...`) for OAuth access tokens, not JWTs. The proxy relies on this — there is no `iss` claim to validate against AS metadata.
+3. **DCR**: MCP clients (Cursor, Claude) register dynamically with Clerk via the proxy's `/oauth/register` endpoint. This was not anticipated in the original decision.
+4. **Discovery**: AS metadata is fetched from Clerk at startup, validated via Zod, and served with endpoint URLs rewritten to self-origin. The simple `fetch(CLERK_OIDC_DISCOVERY_URL)` pattern in the original Implementation section is superseded.
+
+The proxy is always-on, transparent, and stateless. See [ADR-115](115-proxy-oauth-as-for-cursor.md) for the full decision.
+
 ## Related Decisions
 
 - **ADR-052**: OAuth 2.1 for MCP HTTP Authentication - Why OAuth (not Clerk-specific)
 - **ADR-040**: Neutral Architecture - Overall system architecture
 - **ADR-024**: Dependency Injection Pattern - How Clerk SDK is injected
+- **ADR-113**: MCP Spec-Compliant Auth - All MCP methods require HTTP auth
+- **ADR-115**: Proxy OAuth AS for Cursor - Transparent proxy to Clerk
 
 ## References
 

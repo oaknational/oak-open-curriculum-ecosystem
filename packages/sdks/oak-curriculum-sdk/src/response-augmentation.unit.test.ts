@@ -5,17 +5,13 @@
  * focusing on what the function does, not how it does it.
  */
 
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   augmentResponseWithCanonicalUrl,
   augmentArrayResponseWithCanonicalUrl,
 } from './response-augmentation.js';
 
 describe('augmentResponseWithCanonicalUrl', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('lesson responses', () => {
     it('should add canonicalUrl field to lesson responses', () => {
       const response = { slug: 'add-two-numbers', title: 'Add Two Numbers' };
@@ -78,23 +74,31 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
 
-    it('should omit canonicalUrl when unit context is missing', () => {
+    it('should throw when unit context is missing (fail fast)', () => {
       const response = { slug: 'place-value', title: 'Place Value' };
-      const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(/Missing required context for unit/);
     });
 
-    it('should omit canonicalUrl when unit context is partial', () => {
+    it('should throw when unit context is partial (fail fast)', () => {
       const response = {
         slug: 'place-value',
         title: 'Place Value',
         subjectSlug: 'maths',
         // missing phaseSlug
       };
-      const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(/Missing required context for unit/);
     });
   });
 
@@ -103,7 +107,10 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const response = {
         slug: 'maths',
         title: 'Maths',
-        keyStageSlugs: ['ks1', 'ks2'],
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
       };
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
@@ -113,20 +120,92 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
 
-    it('should omit canonicalUrl when subject context is missing', () => {
+    it('should throw when subject context is missing (fail fast)', () => {
       const response = { slug: 'maths', title: 'Maths' };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+
+    it('should throw when subject context is empty (fail fast)', () => {
+      const response = {
+        slug: 'maths',
+        title: 'Maths',
+        keyStages: [],
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+  });
+
+  describe('subject responses with keyStages objects (actual API shape)', () => {
+    it('extracts canonicalUrl from real API response shape', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
+        sequenceSlugs: [],
+        years: [1, 2, 3, 4, 5, 6],
+      };
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
+      );
+    });
+
+    it('handles keyStages with non-string slugs gracefully', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [{ keyStageSlug: 123 }],
+        sequenceSlugs: [],
+        years: [],
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+
+    it('handles empty keyStages array', () => {
+      const response = {
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStages: [],
+        sequenceSlugs: [],
+        years: [],
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
+    });
+  });
+
+  describe('sub-resource paths under /subjects/ (Snags 3/4)', () => {
+    it('does not augment /subjects/{s}/key-stages response', () => {
+      const response = { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths/key-stages', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
     });
 
-    it('should omit canonicalUrl when subject context is empty', () => {
-      const response = {
-        slug: 'maths',
-        title: 'Maths',
-        keyStageSlugs: [],
-      };
-      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+    it('does not augment /subjects/{s}/years response', () => {
+      const response = { years: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths/years', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
     });
@@ -158,11 +237,15 @@ describe('augmentResponseWithCanonicalUrl', () => {
   });
 
   describe('error handling', () => {
-    it('should warn when ID cannot be extracted', () => {
+    it('should throw when ID cannot be extracted (fail fast)', () => {
       const response = { title: 'Some Content' };
-      const result = augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
+      }).toThrow(/Could not extract ID/);
     });
   });
 
@@ -220,6 +303,21 @@ describe('augmentResponseWithCanonicalUrl', () => {
         'https://www.thenational.academy/teachers/programmes/maths-primary/units/ks-unit',
       );
     });
+
+    it('should recognise /subjects/{subject}/sequences as sequence content type', () => {
+      const response = [{ slug: 'maths-ks4', title: 'Maths KS4 Programme' }];
+      const result = augmentArrayResponseWithCanonicalUrl(
+        response,
+        '/subjects/maths/sequences',
+        'get',
+      );
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/programmes/maths-ks4/units',
+      );
+    });
   });
 
   describe('array response augmentation', () => {
@@ -273,10 +371,25 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('should skip items without extractable slug in arrays', () => {
+    it('should throw when array item lacks extractable slug (fail fast)', () => {
       const response = [
         { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
-        { lessonTitle: 'No Slug Lesson' }, // Missing lessonSlug
+        { lessonTitle: 'No Slug Lesson' }, // Missing lessonSlug - invalid data
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+
+      expect(() => {
+        augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+      }).toThrow(/Could not extract ID/);
+    });
+
+    it('should augment all items when all have valid slugs', () => {
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2' },
         { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
       ];
       const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
@@ -284,7 +397,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(3);
       expect(result[0]).toHaveProperty('canonicalUrl');
-      expect(result[1]).not.toHaveProperty('canonicalUrl');
+      expect(result[1]).toHaveProperty('canonicalUrl');
       expect(result[2]).toHaveProperty('canonicalUrl');
     });
   });
@@ -319,7 +432,10 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const response = {
         subjectSlug: 'science',
         subjectTitle: 'Science',
-        keyStageSlugs: ['ks3', 'ks4'],
+        keyStages: [
+          { keyStageSlug: 'ks3', keyStageTitle: 'Key Stage 3' },
+          { keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' },
+        ],
       };
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/science', 'get');
 
@@ -350,6 +466,34 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(result).toHaveProperty('canonicalUrl');
       expect(result.canonicalUrl).toBe(
         'https://www.thenational.academy/teachers/lessons/generic-slug',
+      );
+    });
+  });
+
+  describe('idempotency', () => {
+    it('should preserve existing canonicalUrl on single object', () => {
+      const existingUrl = 'https://custom.example.com/preserved-url';
+      const response = { slug: 'test-lesson', title: 'Test', canonicalUrl: existingUrl };
+      const result = augmentResponseWithCanonicalUrl(response, '/lessons/test-lesson', 'get');
+
+      expect(result.canonicalUrl).toBe(existingUrl);
+    });
+
+    it('should preserve existing canonicalUrl on array items', () => {
+      const existingUrl = 'https://custom.example.com/preserved-url';
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', canonicalUrl: existingUrl },
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(result[0]?.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/lesson-1',
+      );
+      expect(result[1]?.canonicalUrl).toBe(existingUrl);
+      expect(result[2]?.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/lesson-3',
       );
     });
   });

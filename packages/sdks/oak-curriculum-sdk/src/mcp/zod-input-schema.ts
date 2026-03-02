@@ -38,12 +38,16 @@ interface JsonSchemaPropertyObject {
   readonly default?: unknown;
   readonly examples?: readonly unknown[];
 }
+interface JsonSchemaPropertyAnyOf {
+  readonly anyOf: readonly JsonSchemaProperty[];
+}
 type JsonSchemaProperty =
   | JsonSchemaPropertyString
   | JsonSchemaPropertyNumber
   | JsonSchemaPropertyBoolean
   | JsonSchemaPropertyArray
-  | JsonSchemaPropertyObject;
+  | JsonSchemaPropertyObject
+  | JsonSchemaPropertyAnyOf;
 
 export interface GenericToolInputJsonSchema {
   readonly type: 'object';
@@ -89,11 +93,38 @@ function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodType {
   return prop.additionalProperties === false ? objectSchema.strict() : objectSchema;
 }
 
+function buildAnyOfSchema(prop: JsonSchemaPropertyAnyOf): z.ZodType {
+  const [firstProperty, ...restProperties] = prop.anyOf;
+  if (!firstProperty) {
+    return z.never();
+  }
+
+  let schema = zodForProperty(firstProperty);
+  for (const property of restProperties) {
+    schema = schema.or(zodForProperty(property));
+  }
+  return schema;
+}
+
 function withDescription(schema: z.ZodType, description: string | undefined): z.ZodType {
   return description ? schema.describe(description) : schema;
 }
 
-function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodType {
+function getPropertyDescription(prop: JsonSchemaProperty): string | undefined {
+  if ('description' in prop) {
+    return prop.description;
+  }
+  return undefined;
+}
+
+function zodBaseForTypedProperty(
+  prop:
+    | JsonSchemaPropertyString
+    | JsonSchemaPropertyNumber
+    | JsonSchemaPropertyBoolean
+    | JsonSchemaPropertyArray
+    | JsonSchemaPropertyObject,
+): z.ZodType {
   switch (prop.type) {
     case 'string':
       return Array.isArray(prop.enum) ? buildEnumStringSchema(prop.enum) : z.string();
@@ -110,8 +141,15 @@ function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodType {
   }
 }
 
+function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodType {
+  if ('anyOf' in prop) {
+    return buildAnyOfSchema(prop);
+  }
+  return zodBaseForTypedProperty(prop);
+}
+
 function zodForProperty(prop: JsonSchemaProperty): z.ZodType {
-  return withDescription(zodBaseForProperty(prop), prop.description);
+  return withDescription(zodBaseForProperty(prop), getPropertyDescription(prop));
 }
 
 /**

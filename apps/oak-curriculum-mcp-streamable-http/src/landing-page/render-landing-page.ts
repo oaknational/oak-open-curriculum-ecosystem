@@ -1,5 +1,5 @@
 /**
- * @fileoverview Main landing page renderer.
+ * Main landing page renderer.
  *
  * Composes the complete landing page HTML by combining the HTML head,
  * hero section, connection instructions, and collapsible sections for

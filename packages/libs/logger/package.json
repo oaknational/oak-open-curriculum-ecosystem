@@ -1,6 +1,7 @@
 {
-  "name": "@oaknational/mcp-logger",
+  "name": "@oaknational/logger",
   "version": "0.0.0-development",
+  "private": true,
   "description": "Adaptive logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -27,13 +28,15 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "clean": "rm -rf dist .turbo"
   },
   "peerDependencies": {
     "express": "^5"
   },
   "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
     "typescript": "^5.9.3"
   },
   "engines": {
@@ -41,14 +44,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
     "directory": "packages/libs/logger"
   },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/logger#readme",
   "keywords": [
     "mcp",
     "logging",
     "adaptive",
     "multi-runtime"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
   ],
   "license": "MIT"
 }

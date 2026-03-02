@@ -1,6 +1,0 @@
-{
-  "provider": "node",
-  "logLevel": "INFO",
-  "serverName": "oak-notion-mcp",
-  "serverVersion": "0.0.0-development"
-}

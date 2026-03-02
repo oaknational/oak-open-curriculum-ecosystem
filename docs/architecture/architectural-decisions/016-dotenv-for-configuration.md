@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-116 (resolveEnv pipeline)](116-resolve-env-pipeline-architecture.md)
 
 ## Context
 
@@ -53,3 +53,22 @@ Use dotenv for local development configuration, with direct environment variable
 - Load dotenv only in development
 - Validate environment variables with Zod
 - Document all variables in .env.example
+
+## Operational Security Policy
+
+Real credentials are expected only in untracked local environment files:
+
+- Root workspace `.env`
+- Workspace `.env.local` files
+
+Tracked files, including `.env.example`, must contain placeholders only.
+Exceptions for secret-like examples are limited to `.agent/reference-docs/**`
+via tooling allowlist, with line-specific allowlisting used elsewhere only when
+strictly necessary.
+
+Current enforcement:
+
+- `pnpm secrets:scan:all`
+- `pnpm secrets:scan:all-refs`
+- CI secret scan step in `.github/workflows/ci.yml`
+- `pnpm check` includes the scan step and is required for quality gates

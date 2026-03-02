@@ -8,9 +8,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   formatData,
-  formatDataWithContext,
   formatError,
-  formatOptimizedResult,
+  formatToolResponse,
   formatUnknownTool,
   serialiseArg,
   toErrorMessage,
@@ -74,56 +73,6 @@ describe('formatData', () => {
 
   it('does not set isError flag', () => {
     const result = formatData({ ok: true });
-
-    expect(result.isError).toBeUndefined();
-  });
-});
-
-describe('formatDataWithContext', () => {
-  it('includes oakContextHint in structuredContent when includeContextHint is true', () => {
-    const result = formatDataWithContext({
-      status: 200,
-      data: { items: [] },
-      includeContextHint: true,
-    });
-
-    expect(result.structuredContent).toBeDefined();
-    const hint = (result.structuredContent as { oakContextHint?: string }).oakContextHint;
-    expect(hint).toContain('get-ontology');
-    expect(hint).toContain('get-help');
-  });
-
-  it('does NOT include oakContextHint when includeContextHint is false', () => {
-    const result = formatDataWithContext({
-      status: 200,
-      data: { items: [] },
-      includeContextHint: false,
-    });
-
-    expect(result.structuredContent).toBeDefined();
-    expect(result.structuredContent).not.toHaveProperty('oakContextHint');
-  });
-
-  it('returns content with JSON data like formatData', () => {
-    const result = formatDataWithContext({
-      status: 200,
-      data: { name: 'test' },
-      includeContextHint: true,
-    });
-
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0]).toEqual({
-      type: 'text',
-      text: JSON.stringify({ status: 200, data: { name: 'test' } }),
-    });
-  });
-
-  it('does not set isError flag', () => {
-    const result = formatDataWithContext({
-      status: 200,
-      data: {},
-      includeContextHint: true,
-    });
 
     expect(result.isError).toBeUndefined();
   });
@@ -232,165 +181,164 @@ describe('toErrorMessage', () => {
   });
 });
 
-/**
- * Tests for formatOptimizedResult - per OpenAI Apps SDK reference:
- * - structuredContent: Model AND widget see this (FULL data for reasoning)
- * - content: Model AND widget see this (human-readable summary for conversation)
- * - _meta: Widget ONLY sees this (additional computed data like lookups)
- *
- * @see https://developers.openai.com/apps-sdk/reference#tool-results
- */
-describe('formatOptimizedResult', () => {
-  describe('structuredContent (model sees this for reasoning)', () => {
-    it('includes FULL data in structuredContent for model reasoning', () => {
-      const fullData = {
-        lessons: [
-          { id: '1', title: 'Lesson 1' },
-          { id: '2', title: 'Lesson 2' },
-          { id: '3', title: 'Lesson 3' },
-        ],
-        totalCount: 3,
-      };
-
-      const result = formatOptimizedResult({
-        summary: 'Found 3 lessons',
-        fullData,
+describe('formatToolResponse', () => {
+  describe('content array', () => {
+    it('returns exactly 2 TextContent items', () => {
+      const result = formatToolResponse({
+        summary: 'Found 5 lessons',
+        data: { lessons: [{ id: 1 }] },
       });
 
-      expect(result.structuredContent).toBeDefined();
-      // Full data is present (not just a preview)
-      const structured = result.structuredContent as { lessons?: unknown[]; totalCount?: number };
-      expect(structured.lessons).toHaveLength(3);
-      expect(structured.totalCount).toBe(3);
+      expect(result.content).toHaveLength(2);
     });
 
-    it('includes ALL items in structuredContent (no artificial limit)', () => {
-      const items = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1) }));
-      const fullData = { items };
-
-      const result = formatOptimizedResult({
-        summary: 'Found 100 items',
-        fullData,
+    it('content[0] is the human-readable summary', () => {
+      const result = formatToolResponse({
+        summary: 'Found 5 lessons matching "photosynthesis"',
+        data: { lessons: [] },
       });
 
-      const structured = result.structuredContent as { items?: unknown[] };
-      expect(structured.items).toHaveLength(100);
+      expect(result.content[0]).toEqual({
+        type: 'text',
+        text: 'Found 5 lessons matching "photosynthesis"',
+      });
     });
 
-    it('includes summary in structuredContent', () => {
-      const result = formatOptimizedResult({
-        summary: 'Found 10 lessons matching your query',
-        fullData: { lessons: [] },
+    it('content[1] is JSON.stringify of the data', () => {
+      const data = { status: 200, items: [{ slug: 'ks1' }] };
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data,
       });
 
-      expect(result.structuredContent).toHaveProperty(
-        'summary',
-        'Found 10 lessons matching your query',
-      );
+      expect(result.content[1]).toEqual({
+        type: 'text',
+        text: JSON.stringify(data),
+      });
     });
 
-    it('includes oakContextHint in structuredContent for model context grounding', () => {
-      const result = formatOptimizedResult({
-        summary: 'Test result',
-        fullData: {},
+    it('serialises bigint values in the JSON content', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { count: BigInt(42) },
+      });
+
+      expect(result.content[1]).toEqual({
+        type: 'text',
+        text: '{"count":"42"}',
+      });
+    });
+  });
+
+  describe('structuredContent', () => {
+    it('contains the data for object inputs', () => {
+      const data = { lessons: [{ id: 1 }], total: 5 };
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data,
+      });
+
+      expect(result.structuredContent).toHaveProperty('lessons');
+      expect(result.structuredContent).toHaveProperty('total', 5);
+    });
+
+    it('includes oakContextHint by default', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
       });
 
       expect(result.structuredContent).toHaveProperty('oakContextHint');
-      const hint = (result.structuredContent as { oakContextHint?: string }).oakContextHint;
-      expect(hint).toContain('get-ontology');
-      expect(hint).toContain('get-help');
     });
 
-    it('includes status in structuredContent when provided', () => {
-      const result = formatOptimizedResult({
-        summary: 'Success',
-        fullData: {},
-        status: 'success',
+    it('includes oakContextHint when includeContextHint is true', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+        includeContextHint: true,
       });
 
-      expect(result.structuredContent).toHaveProperty('status', 'success');
+      expect(result.structuredContent).toHaveProperty('oakContextHint');
     });
 
-    it('wraps non-object fullData in data property', () => {
-      const result = formatOptimizedResult({
-        summary: 'Array result',
-        fullData: [1, 2, 3],
+    it('does NOT include oakContextHint when includeContextHint is false', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+        includeContextHint: false,
       });
 
-      const structured = result.structuredContent as { data?: unknown };
-      expect(structured.data).toEqual([1, 2, 3]);
-    });
-  });
-
-  describe('content (human-readable summary for conversation)', () => {
-    it('returns content array with human-readable summary', () => {
-      const result = formatOptimizedResult({
-        summary: 'Found 5 lessons on photosynthesis',
-        fullData: { lessons: [] },
-      });
-
-      expect(result.content).toHaveLength(1);
-      expect(result.content[0]).toEqual({
-        type: 'text',
-        text: 'Found 5 lessons on photosynthesis',
-      });
-    });
-  });
-
-  describe('_meta (widget-only metadata)', () => {
-    it('includes widget metadata (toolName, annotationsTitle, query, timestamp)', () => {
-      const result = formatOptimizedResult({
-        summary: 'Found lessons',
-        fullData: { lessons: [] },
-        toolName: 'get-search-lessons',
-        annotationsTitle: 'Search Lessons',
-        query: 'cats',
-        timestamp: 1700000000000,
-      });
-
-      expect(result._meta).toEqual({
-        toolName: 'get-search-lessons',
-        'annotations/title': 'Search Lessons',
-        query: 'cats',
-        timestamp: 1700000000000,
-      });
+      expect(result.structuredContent).not.toHaveProperty('oakContextHint');
     });
 
-    it('does NOT include context field (model never sees _meta)', () => {
-      const result = formatOptimizedResult({
-        summary: 'Basic result',
-        fullData: {},
+    it('includes summary in structuredContent', () => {
+      const result = formatToolResponse({
+        summary: 'Found 5 lessons',
+        data: { items: [] },
       });
 
-      expect(result._meta).not.toHaveProperty('context');
+      expect(result.structuredContent).toHaveProperty('summary', 'Found 5 lessons');
     });
 
-    it('returns empty _meta when no metadata provided', () => {
-      const result = formatOptimizedResult({
-        summary: 'Basic result',
-        fullData: { data: 'test' },
+    it('wraps non-object data in a data envelope', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: 'primitive-value',
       });
 
-      expect(result._meta).toEqual({});
+      expect(result.structuredContent).toHaveProperty('data', 'primitive-value');
     });
   });
 
-  describe('serialisation', () => {
-    it('serialises bigint values in fullData', () => {
-      const result = formatOptimizedResult({
-        summary: 'Data with bigint',
-        fullData: { count: BigInt(999) },
+  describe('_meta', () => {
+    it('includes toolName when provided', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+        toolName: 'search',
       });
 
-      const structured = result.structuredContent as { count?: string };
-      expect(structured.count).toBe('999');
+      expect(result._meta).toHaveProperty('toolName', 'search');
+    });
+
+    it('includes annotations/title when provided', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+        annotationsTitle: 'Search Curriculum',
+      });
+
+      expect(result._meta).toHaveProperty('annotations/title', 'Search Curriculum');
+    });
+
+    it('includes query and timestamp when provided', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+        query: 'photosynthesis',
+        timestamp: 1000,
+      });
+
+      expect(result._meta).toHaveProperty('query', 'photosynthesis');
+      expect(result._meta).toHaveProperty('timestamp', 1000);
+    });
+
+    it('omits optional fields when not provided', () => {
+      const result = formatToolResponse({
+        summary: 'Summary',
+        data: { items: [] },
+      });
+
+      expect(result._meta).toBeDefined();
+      expect(result._meta).not.toHaveProperty('toolName');
+      expect(result._meta).not.toHaveProperty('query');
     });
   });
 
   it('does not set isError flag', () => {
-    const result = formatOptimizedResult({
-      summary: 'OK',
-      fullData: {},
+    const result = formatToolResponse({
+      summary: 'Summary',
+      data: { ok: true },
     });
 
     expect(result.isError).toBeUndefined();

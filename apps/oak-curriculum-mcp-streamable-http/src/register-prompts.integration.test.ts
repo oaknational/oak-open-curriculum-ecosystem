@@ -7,7 +7,6 @@
  * This is a proof-of-concept test per the plan to verify the MCP SDK
  * behavior before refactoring the production code.
  *
- * @module register-prompts.integration.test
  */
 
 import { describe, it, expect } from 'vitest';
@@ -54,9 +53,7 @@ function createMcpTestRequest(req: express.Request): IncomingMessage {
     },
   });
 
-  // Type assertion: Proxy<Request> → IncomingMessage
-  // Safe at runtime because Express Request extends IncomingMessage
-  // and we only omit the conflicting auth property
+  // Type assertion: Proxy<Request> → IncomingMessage (architectural bridge; mirrors handlers.ts createMcpRequest)
 
   return proxy as unknown as IncomingMessage;
 }

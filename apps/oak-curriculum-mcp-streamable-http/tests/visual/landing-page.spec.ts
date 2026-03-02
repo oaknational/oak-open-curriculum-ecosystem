@@ -1,5 +1,5 @@
 /**
- * @fileoverview Playwright tests for the MCP server landing page.
+ * Playwright tests for the MCP server landing page.
  *
  * Tests verify content rendering and WCAG accessibility compliance.
  * Focuses on structural assertions (sections present) rather than content.

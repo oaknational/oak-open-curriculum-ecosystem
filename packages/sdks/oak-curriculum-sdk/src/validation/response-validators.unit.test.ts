@@ -5,7 +5,6 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateCurriculumResponse } from './curriculum-response-validators.js';
-import type { ValidPath } from '../types/generated/api-schema/path-parameters.js';
 
 describe('validateCurriculumResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
@@ -62,20 +61,21 @@ describe('validateCurriculumResponse', () => {
       }
     });
 
-    it('should allow additional fields with passthrough', () => {
+    it('should reject additional fields with strict validation (fail fast)', () => {
       const response = {
         transcript: 'Transcript text',
         vtt: 'WEBVTT content',
-        extraField: 'This is allowed',
+        extraField: 'This should be rejected',
       };
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
 
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        const d = Object.getOwnPropertyDescriptor(result.value as object, 'extraField');
-        expect(typeof d?.value === 'string').toBe(true);
-        expect(d?.value).toBe('This is allowed');
+      // Strict validation rejects unknown keys - fail fast, never silently ignore
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.issues.length).toBeGreaterThan(0);
+        // Zod v4 reports unrecognized_keys error
+        expect(result.issues[0].message).toContain('extraField');
       }
     });
   });
@@ -170,10 +170,11 @@ describe('validateCurriculumResponse', () => {
 
   describe('for unknown operations', () => {
     it('should throw for invalid path (fail-fast)', () => {
+      // Use string overload to test runtime fail-fast when path is invalid
+      const invalidPath = '/unknown/path';
+      const method = 'get';
       expect(() => {
-        // simulate pre-validation: product code would call isValidPath and throw earlier
-        // we explicitly call the validator with an invalid path to assert fail-fast
-        validateCurriculumResponse('/unknown/path' as ValidPath, 'get' as never, 200, {});
+        validateCurriculumResponse(invalidPath, method, 200, {});
       }).toThrow();
     });
 

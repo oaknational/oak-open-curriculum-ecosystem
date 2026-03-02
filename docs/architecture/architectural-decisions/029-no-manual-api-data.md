@@ -88,7 +88,7 @@ All API-related information must be imported from the SDK, which is automaticall
 
    ```typescript
    // ALLOWED
-   import { KEY_STAGES, SUBJECTS, validation } from '@oaknational/oak-curriculum-sdk';
+   import { KEY_STAGES, SUBJECTS, validation } from '@oaknational/curriculum-sdk';
    ```
 
 3. **Generate from SDK data**
@@ -124,23 +124,24 @@ All API-related information must be imported from the SDK, which is automaticall
 
 ## Implementation
 
-### Phase 1: Clean Up (Immediate)
+All phases are complete.
 
-- Remove hardcoded paths from metadata registry
-- Delete manual validation functions
-- Remove duplicate constant definitions
+### Phase 1: Clean Up
 
-### Phase 2: Wait for SDK (Blocked)
+- Removed hardcoded paths from metadata registry
+- Deleted manual validation functions
+- Removed duplicate constant definitions
 
-- SDK team implements required exports
-- SDK provides validation namespace
-- SDK provides tool generation helpers
+### Phase 2: SDK Exports
 
-### Phase 3: Implement Generation (After SDK)
+- SDK exports all required types, validators, and tool generation helpers
+- SDK provides validation namespace via generated Zod schemas
 
-- Create build-time generation script
-- Refactor metadata to use operationIds
-- Implement runtime validation using SDK
+### Phase 3: Generation Pipeline
+
+- Build-time generation script implemented (`pnpm sdk-codegen`)
+- All tool metadata generated from OpenAPI schema via `MCP_TOOL_DESCRIPTORS`
+- Runtime validation uses generated Zod schemas exclusively
 
 ## Validation
 
@@ -178,5 +179,5 @@ We will know this decision is successful when:
 
 ## References
 
-- [Phase 6 Implementation Plan](../../../.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md)
-- [Oak Curriculum SDK](../../../packages/oak-curriculum-sdk/README.md)
+- [Phase 6 Implementation Plan](../../../.agent/plans/archive/completed/phase-6-oak-curriculum-api-implementation-plan.md)
+- [Oak Curriculum SDK](../../../packages/sdks/oak-curriculum-sdk/README.md)

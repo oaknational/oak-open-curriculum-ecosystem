@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { UnifiedLogger } from '@oaknational/mcp-logger';
+import { UnifiedLogger } from '@oaknational/logger';
 import type { Response } from 'express';
+import { unwrap } from '@oaknational/result';
 
 import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
@@ -10,8 +11,14 @@ function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeCon
     OAK_API_KEY: 'test-key',
     CLERK_PUBLISHABLE_KEY: 'pk_test_value',
     CLERK_SECRET_KEY: 'sk_test_value',
+    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_API_KEY: 'fake-api-key',
   };
-  return loadRuntimeConfig({ ...baseEnv, ...overrides });
+  const result = loadRuntimeConfig({
+    processEnv: { ...baseEnv, ...overrides },
+    startDir: process.cwd(),
+  });
+  return unwrap(result);
 }
 
 describe('createHttpLogger', () => {
@@ -24,10 +31,6 @@ describe('createHttpLogger', () => {
     const logger = createHttpLogger(runtimeConfig);
 
     expect(logger).toBeInstanceOf(UnifiedLogger);
-    expect(typeof logger.debug).toBe('function');
-    expect(typeof logger.info).toBe('function');
-    expect(typeof logger.warn).toBe('function');
-    expect(typeof logger.error).toBe('function');
   });
 
   it('creates logger with stdout sink only (no file logging)', () => {
@@ -66,8 +69,6 @@ describe('createChildLogger', () => {
 
     const childLogger = createChildLogger(parentLogger, correlationId);
 
-    expect(childLogger).toBeDefined();
-    expect(typeof childLogger.info).toBe('function');
     expect(childLogger).toBeInstanceOf(UnifiedLogger);
   });
 

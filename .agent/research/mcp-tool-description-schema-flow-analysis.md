@@ -14,8 +14,8 @@ This report provides a deep analysis of how MCP tool descriptions, input schemas
 
 **Alignment with Directives**:
 
-- ✅ Follows `.agent/directives-and-memory/schema-first-execution.md` - All tool metadata generated at compile time
-- ✅ Follows `.agent/directives-and-memory/rules.md` - No type shortcuts, schema-first architecture
+- ✅ Follows `.agent/directives/schema-first-execution.md` - All tool metadata generated at compile time
+- ✅ Follows `.agent/directives/rules.md` - No type shortcuts, schema-first architecture
 - ⚠️ Partial alignment with type reuse principle - we could leverage more upstream SDK types
 
 ---
@@ -133,7 +133,7 @@ OpenAPI Operation → description field
 ```
 
 **Phase 2: SDK Code Generation**
-Location: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/`
+Location: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/`
 
 Key File: `emit-index.ts` (lines 180-191)
 
@@ -944,7 +944,7 @@ if (!parsed.success) {
 
 ### Q: "Where do we generate the tool descriptions?"
 
-**A**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts` (lines 180-191)
+**A**: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts` (lines 180-191)
 
 - Extracted from OpenAPI `operation.description`
 - Transformed ("endpoint" → "tool")
@@ -1014,7 +1014,7 @@ if (!parsed.success) {
 
 ### 7.1 Schema-First Execution Directive
 
-**Reference**: `.agent/directives-and-memory/schema-first-execution.md`
+**Reference**: `.agent/directives/schema-first-execution.md`
 
 | Requirement                                        | Status     | Evidence                           |
 | -------------------------------------------------- | ---------- | ---------------------------------- |
@@ -1031,11 +1031,11 @@ if (!parsed.success) {
 
 ### 7.2 Core Rules
 
-**Reference**: `.agent/directives-and-memory/rules.md`
+**Reference**: `.agent/directives/rules.md`
 
 | Rule                                                    | Status                 | Evidence                         |
 | ------------------------------------------------------- | ---------------------- | -------------------------------- |
-| Cardinal Rule: ALL types from schema at compile time    | ✅ PASS                | `pnpm type-gen` drives all types |
+| Cardinal Rule: ALL types from schema at compile time    | ✅ PASS                | `pnpm sdk-codegen` drives all types |
 | No type shortcuts (as, any, !, Record<string, unknown>) | ⚠️ PARTIAL             | One `z.any()` fallback           |
 | Preserve type information                               | ✅ PASS                | Literal types, enums preserved   |
 | Single source of truth for types                        | ✅ PASS                | OpenAPI schema                   |
@@ -1047,7 +1047,7 @@ if (!parsed.success) {
 
 ### 7.3 Testing Strategy
 
-**Reference**: `.agent/directives-and-memory/testing-strategy.md`
+**Reference**: `.agent/directives/testing-strategy.md`
 
 | Principle                               | Status                | Evidence                        |
 | --------------------------------------- | --------------------- | ------------------------------- |
@@ -1091,10 +1091,10 @@ if (!parsed.success) {
 
 **Code Generation**:
 
-- Main Generator: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`
-- Description Extraction: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
-- Schema Generation: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
-- Parameter Metadata: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/param-metadata.ts`
+- Main Generator: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts`
+- Description Extraction: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts`
+- Schema Generation: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
+- Parameter Metadata: `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/param-metadata.ts`
 
 **Generated Artifacts**:
 

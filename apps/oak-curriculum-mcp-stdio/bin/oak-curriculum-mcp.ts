@@ -1,10 +1,17 @@
 #!/usr/bin/env tsx
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-// Updated path after mechanical renaming: app wiring centralised under src/app
-import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
-import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
+
+/**
+ * Entry point for the Oak Curriculum STDIO MCP server.
+ *
+ * This is a composition root: `process.env` is read here and nowhere
+ * else. The validated `RuntimeConfig` is threaded through all downstream
+ * modules via function parameters (ADR-078).
+ */
+
+import { createStartupLogger, createDefaultStartupLoggerDeps } from '../src/app/startup.js';
+import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+
 function safeStringify(value: unknown): string {
   try {
     return JSON.stringify(value);
@@ -13,16 +20,12 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const thisDir = dirname(fileURLToPath(import.meta.url));
-// Resolve repo root reliably
-const rootDir = findRepoRoot(thisDir);
+const startupDeps = createDefaultStartupLoggerDeps();
+const rootDir = startupDeps.rootDir;
 
-// Create logger with ROOT directory for logs
-// Override console to only write to stderr to keep stdout clean for MCP protocol
 console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
 const log = createStartupLogger({
-  ...defaultStartupLoggerDeps,
-  rootDir: rootDir, // Override to use repo root
+  ...startupDeps,
   console: {
     log: (msg: string) => process.stderr.write(msg + '\n'),
     error: (msg: string) => process.stderr.write(msg + '\n'),
@@ -32,19 +35,26 @@ const log = createStartupLogger({
 log('[START-MCP] Starting oak-curriculum-mcp...');
 log(`[START-MCP] Root directory: ${rootDir}`);
 
-// Load environment variables from repo root (.env.local then .env) if needed
-const loaded = loadRootEnv({
-  requiredKeys: ['OAK_API_KEY'],
-  startDir: rootDir,
-  env: { ...process.env },
+const configResult = loadRuntimeConfig({
+  processEnv: process.env,
+  startDir: import.meta.dirname,
 });
-if (loaded.loaded && loaded.path) {
-  log(`[START-MCP] Loaded env from: ${loaded.path}`);
+
+if (!configResult.ok) {
+  log(`[START-MCP ERROR] Environment validation failed: ${configResult.error.message}`, true);
+  for (const d of configResult.error.diagnostics) {
+    log(`[START-MCP]   ${d.key}: ${d.present ? 'present' : 'MISSING'}`, !d.present);
+  }
+  console.error('Environment validation failed:', configResult.error.message);
+  process.exit(1);
 }
-const hasApiKey = typeof process.env.OAK_API_KEY === 'string' && process.env.OAK_API_KEY.length > 0;
-const logLevelValue = typeof process.env.LOG_LEVEL === 'string' ? process.env.LOG_LEVEL : 'not set';
-log(`[START-MCP] OAK_API_KEY present: ${hasApiKey ? 'true' : 'false'}`);
-log(`[START-MCP] LOG_LEVEL: ${logLevelValue}`);
+
+const runtimeConfig = configResult.value;
+
+log(
+  `[START-MCP] OAK_API_KEY present: ${runtimeConfig.env.OAK_API_KEY.length > 0 ? 'true' : 'false'}`,
+);
+log(`[START-MCP] LOG_LEVEL: ${runtimeConfig.logLevel}`);
 
 // Emit tool diagnostics early so issues are visible even if startup fails later
 try {
@@ -66,44 +76,25 @@ try {
   const { createServer } = await import('../src/index.js');
   log('[START-MCP] Server module imported successfully');
 
-  // Parse log level from environment
-  const logLevel = process.env.LOG_LEVEL;
-  const validLogLevels = ['debug', 'info', 'warn', 'error'] as const;
-  type ValidLogLevel = (typeof validLogLevels)[number];
+  log(`[START-MCP] Starting server with log level: ${runtimeConfig.logLevel}`);
 
-  function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') {
-      return false;
-    }
-    const stringValidLogLevels: readonly string[] = validLogLevels;
-    return stringValidLogLevels.includes(value);
-  }
-
-  const parsedLogLevel = isValidLogLevel(logLevel) ? logLevel : 'info';
-
-  log(`[START-MCP] Starting server with log level: ${parsedLogLevel}`);
-
-  await createServer({
-    apiKey: process.env.OAK_API_KEY,
-    logLevel: parsedLogLevel,
+  await createServer(runtimeConfig, {
+    apiKey: runtimeConfig.env.OAK_API_KEY,
   });
 
   log('[START-MCP] Server started successfully');
 } catch (error: unknown) {
   log(`[START-MCP ERROR] Failed to start server: ${String(error)}`, true);
 
-  // Log full error details including stack trace to startup log
   if (error instanceof Error) {
     log(`[START-MCP ERROR] Stack trace: ${String(error.stack)}`, true);
     logCauseChain(error);
   }
 
-  // Also output to stderr for immediate visibility
   console.error('Server error details:', error);
   process.exit(1);
 }
 
-// helper added by lint refactor
 function logCauseChain(err: Error): void {
   let currentCause = err.cause;
   for (let i = 0; i < 3 && currentCause; i += 1) {

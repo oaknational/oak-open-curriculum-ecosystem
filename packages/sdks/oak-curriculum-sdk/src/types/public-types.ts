@@ -15,14 +15,13 @@
  * All client operations and request/response types are resolved from this map.
  * It is generated from the API schema at build time.
  */
-import type { paths as ApiPaths } from './generated/api-schema/api-paths-types';
-export type OakApiPaths = ApiPaths;
-
 import type {
+  paths as ApiPaths,
   Subject as GeneratedSubject,
   KeyStage as GeneratedKeyStage,
   AssetType as GeneratedAssetType,
-} from './generated/api-schema/path-parameters';
+} from '@oaknational/sdk-codegen/api-schema';
+export type OakApiPaths = ApiPaths;
 
 /** Subject slug literal type (curated alias). */
 export type OakSubject = GeneratedSubject;

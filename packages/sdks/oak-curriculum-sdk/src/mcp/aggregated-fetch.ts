@@ -2,7 +2,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import {
   formatError,
-  formatOptimizedResult,
+  formatToolResponse,
   toErrorMessage,
   extractExecutionData,
 } from './universal-tool-shared.js';
@@ -12,9 +12,14 @@ import {
   generateCanonicalUrlWithContext,
   extractSlug,
   type ContentType,
-} from '../types/generated/api-schema/routing/url-helpers.js';
-import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '../types/generated/widget-constants.js';
+} from '@oaknational/sdk-codegen/api-schema';
+import { extractContextFromResponse } from '../response-augmentation.js';
+import {
+  FETCH_PREREQUISITE_GUIDANCE,
+  PRIMARY_ORIENTATION_TOOL_NAME,
+} from './prerequisite-guidance.js';
+import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
  * Fetch tool definition with full MCP metadata.
@@ -35,10 +40,10 @@ Use this when you need to:
 
 Do NOT use for:
 - Finding content when you don't have the ID (use 'search')
-- Understanding ID formats (use '${ONTOLOGY_TOOL_NAME}' first)
+- Understanding ID formats (use '${PRIMARY_ORIENTATION_TOOL_NAME}' first)
 
 Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
-  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,
@@ -133,12 +138,22 @@ export async function runFetchTool(
   if (!result.ok) {
     return formatError(toErrorMessage(result.error));
   }
-  const canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
+
+  // Extract context from the API response and pass to canonical URL generation.
+  // Units and subjects require context (subjectSlug/phaseSlug for units,
+  // keyStages for subjects) to generate the correct canonical URL.
+  const context = extractContextFromResponse(result.data);
+  let canonicalUrl: string | null;
+  try {
+    canonicalUrl = generateCanonicalUrlWithContext(type, args.id, context);
+  } catch {
+    canonicalUrl = null;
+  }
   const summary = buildFetchSummary(type, slug, canonicalUrl);
 
-  return formatOptimizedResult({
+  return formatToolResponse({
     summary,
-    fullData: {
+    data: {
       id: args.id,
       type,
       canonicalUrl,
@@ -155,11 +170,7 @@ export async function runFetchTool(
 /**
  * Builds a human-readable summary of the fetch result.
  */
-function buildFetchSummary(
-  type: ContentType,
-  slug: string,
-  canonicalUrl: string | undefined,
-): string {
+function buildFetchSummary(type: ContentType, slug: string, canonicalUrl: string | null): string {
   const typeName = type.charAt(0).toUpperCase() + type.slice(1);
   const urlPart = canonicalUrl ? ` (${canonicalUrl})` : '';
   return `Fetched ${typeName}: ${slug}${urlPart}`;
@@ -221,7 +232,7 @@ async function executeFetchByType(
     case 'thread': {
       return extractExecutionData(
         await deps.executeMcpTool('get-threads-units', {
-          threadSlug: slug,
+          thread: slug,
         }),
       );
     }

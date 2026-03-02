@@ -21,8 +21,18 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('plan');
   });
 
-  it('has progression-map prompt', () => {
-    const prompt = MCP_PROMPTS.find((p) => p.name === 'progression-map');
+  it('has exactly 4 prompts', () => {
+    expect(MCP_PROMPTS).toHaveLength(4);
+  });
+
+  it('has explore-curriculum prompt', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'explore-curriculum');
+    expect(prompt).toBeDefined();
+    expect(prompt?.description).toContain('Explore');
+  });
+
+  it('has learning-progression prompt', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'learning-progression');
     expect(prompt).toBeDefined();
     expect(prompt?.description).toContain('progression');
   });
@@ -70,10 +80,10 @@ describe('getPromptMessages', () => {
       expect(hasKeyStage).toBe(true);
     });
 
-    it('suggests calling get-ontology first', () => {
+    it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('find-lessons', { topic: 'fractions' });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toContain('get-ontology');
+      expect(content).toMatch(/get-curriculum-model/);
     });
   });
 
@@ -91,37 +101,84 @@ describe('getPromptMessages', () => {
       expect(content).toContain('Year 4');
     });
 
-    it('suggests calling context tools first', () => {
+    it('includes prerequisite orientation guidance', () => {
       const messages = getPromptMessages('lesson-planning', {
         topic: 'fractions',
         yearGroup: 'Year 4',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-help|get-ontology/);
+      expect(content).toMatch(/get-curriculum-model/);
     });
   });
 
-  describe('progression-map prompt', () => {
-    it('returns messages with concept and subject', () => {
+  describe('progression-map prompt (removed)', () => {
+    it('returns empty array because it was subsumed by learning-progression', () => {
       const messages = getPromptMessages('progression-map', {
         concept: 'number',
+        subject: 'maths',
+      });
+      expect(messages).toEqual([]);
+    });
+  });
+
+  describe('explore-curriculum prompt', () => {
+    it('returns messages with topic in content', () => {
+      const messages = getPromptMessages('explore-curriculum', { topic: 'volcanos' });
+      expect(messages).toBeDefined();
+      expect(messages.length).toBeGreaterThan(0);
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('volcanos');
+    });
+
+    it('includes subject when provided', () => {
+      const messages = getPromptMessages('explore-curriculum', {
+        topic: 'volcanos',
+        subject: 'geography',
+      });
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('geography');
+    });
+
+    it('references explore-topic tool', () => {
+      const messages = getPromptMessages('explore-curriculum', { topic: 'volcanos' });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('explore-topic');
+    });
+  });
+
+  describe('learning-progression prompt', () => {
+    it('returns messages with concept and subject', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
         subject: 'maths',
       });
       expect(messages).toBeDefined();
 
       const content = messages.map((m) => m.content.text).join(' ');
-
-      expect(content).toContain('number');
+      expect(content).toContain('algebra');
       expect(content).toContain('maths');
     });
 
-    it('suggests calling context tools first', () => {
-      const messages = getPromptMessages('progression-map', {
-        concept: 'number',
+    it('references search with threads scope', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
         subject: 'maths',
       });
       const content = messages.map((m) => m.content.text).join(' ');
-      expect(content).toMatch(/get-help|get-ontology/);
+      expect(content).toContain('search');
+      expect(content).toContain('threads');
+    });
+
+    it('references get-thread-progressions and get-prerequisite-graph', () => {
+      const messages = getPromptMessages('learning-progression', {
+        concept: 'algebra',
+        subject: 'maths',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('get-thread-progressions');
+      expect(content).toContain('get-prerequisite-graph');
     });
   });
 

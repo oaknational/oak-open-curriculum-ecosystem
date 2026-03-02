@@ -2,7 +2,7 @@
 
 ## Overview
 
-This research document analyses the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak MCP implementation, and proposes optimizations for both general use and Oak context grounding.
+This research document analyses the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak Open Curriculum implementation, and proposes optimizations for both general use and Oak context grounding.
 
 **Date**: December 2025  
 **Related Docs**:
@@ -104,7 +104,7 @@ PREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology`
 first to understand key stages, subjects, entity hierarchy, and ID formats."
 ```
 
-This is generated at type-gen time via `tool-description.ts`:
+This is generated at sdk-codegen time via `tool-description.ts`:
 
 ```typescript
 export const DOMAIN_PREREQUISITE_GUIDANCE = `

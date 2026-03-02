@@ -12,7 +12,7 @@ import {
   generateCanonicalUrlWithContext,
   type ContentType,
   extractSlug,
-} from '../generated/api-schema/routing/url-helpers';
+} from '@oaknational/sdk-codegen/api-schema';
 
 describe('extractSlug', () => {
   it('should extract slug from prefixed ID', () => {
@@ -63,13 +63,9 @@ describe('generateCanonicalUrl', () => {
     expect(url).toBeUndefined();
   });
 
-  it('should throw TypeError for unsupported content type (thread)', () => {
-    expect(() => {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    }).toThrow(TypeError);
-    expect(() => {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    }).toThrow('Unsupported content type: thread');
+  it('should return undefined for thread (threads are data concepts without canonical URLs)', () => {
+    const url = generateCanonicalUrl('thread', 'thread:number-multiplication-division');
+    expect(url).toBeUndefined();
   });
 });
 
@@ -93,9 +89,11 @@ describe('generateCanonicalUrlWithContext', () => {
     );
   });
 
-  it('should return undefined for unit without context', () => {
-    const url = generateCanonicalUrlWithContext('unit', 'unit:fractions-1');
-    expect(url).toBeUndefined();
+  it('should throw for unit without context (fail fast)', () => {
+    expect(() => generateCanonicalUrlWithContext('unit', 'unit:fractions-1')).toThrow(TypeError);
+    expect(() => generateCanonicalUrlWithContext('unit', 'unit:fractions-1')).toThrow(
+      /Missing required context for unit/,
+    );
   });
 
   it('should generate URL for subject with key stage', () => {
@@ -107,73 +105,37 @@ describe('generateCanonicalUrlWithContext', () => {
     );
   });
 
-  it('should return undefined for subject without key stage', () => {
-    const url = generateCanonicalUrlWithContext('subject', 'subject:maths');
-    expect(url).toBeUndefined();
+  it('should throw for subject without key stage (fail fast)', () => {
+    expect(() => generateCanonicalUrlWithContext('subject', 'subject:maths')).toThrow(TypeError);
+    expect(() => generateCanonicalUrlWithContext('subject', 'subject:maths')).toThrow(
+      /Missing required context for subject/,
+    );
   });
 
-  it('should throw TypeError for unsupported content type (thread)', () => {
-    expect(() => {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    }).toThrow(TypeError);
-    expect(() => {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    }).toThrow('Unsupported content type: thread');
+  it('should return null for thread (threads are data concepts without canonical URLs)', () => {
+    const url = generateCanonicalUrlWithContext('thread', 'thread:number-multiplication-division');
+    expect(url).toBeNull();
   });
 });
 
 describe('Behavioral consistency between functions', () => {
-  const unsupportedTypes: ContentType[] = ['thread'];
+  it('both functions indicate threads have no URLs (undefined vs null)', () => {
+    // generateCanonicalUrl returns undefined (can't generate = undefined)
+    const url1 = generateCanonicalUrl('thread', 'thread:algebra');
+    // generateCanonicalUrlWithContext returns null (explicitly no URL for this type)
+    const url2 = generateCanonicalUrlWithContext('thread', 'thread:algebra');
 
-  unsupportedTypes.forEach((type) => {
-    it(`both functions should throw TypeError for unsupported type: ${type}`, () => {
-      // generateCanonicalUrl should throw
-      expect(() => {
-        generateCanonicalUrl(type, `${type}:123`);
-      }).toThrow(TypeError);
-
-      // generateCanonicalUrlWithContext should throw (SAME BEHAVIOR)
-      expect(() => {
-        generateCanonicalUrlWithContext(type, `${type}:123`);
-      }).toThrow(TypeError);
-    });
-  });
-
-  it('both functions should have identical error messages for unsupported types', () => {
-    let error1: Error | undefined;
-    let error2: Error | undefined;
-
-    try {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    } catch (e) {
-      error1 = e as Error;
-    }
-
-    try {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    } catch (e) {
-      error2 = e as Error;
-    }
-
-    expect(error1).toBeDefined();
-    expect(error2).toBeDefined();
-    expect(error1?.message).toBe(error2?.message);
-    expect(error1?.constructor).toBe(TypeError);
-    expect(error2?.constructor).toBe(TypeError);
+    expect(url1).toBeUndefined();
+    expect(url2).toBeNull();
   });
 });
 
 describe('CONTENT_TYPE_PREFIXES coverage', () => {
-  it('should document which content types are supported vs unsupported', () => {
+  it('generateCanonicalUrl: all content types return valid URL or undefined (no throws for known types)', () => {
     const allTypes: ContentType[] = ['lesson', 'sequence', 'unit', 'subject', 'thread'];
-    const supportedTypes: ContentType[] = ['lesson', 'sequence', 'unit', 'subject'];
-    const unsupportedTypes: ContentType[] = ['thread'];
 
-    // Verify our lists cover all types
-    expect([...supportedTypes, ...unsupportedTypes].sort()).toEqual(allTypes.sort());
-
-    // Verify supported types work - they don't throw
-    supportedTypes.forEach((type) => {
+    // All known content types should not throw - they either return a URL or undefined
+    allTypes.forEach((type) => {
       expect(() => {
         generateCanonicalUrl(type, `${type}:test-123`, {
           unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
@@ -181,12 +143,44 @@ describe('CONTENT_TYPE_PREFIXES coverage', () => {
         });
       }).not.toThrow();
     });
+  });
 
-    // Verify unsupported types throw
-    unsupportedTypes.forEach((type) => {
-      expect(() => {
-        generateCanonicalUrl(type, `${type}:test-123`);
-      }).toThrow(TypeError);
-    });
+  it('generateCanonicalUrl: types with required context return undefined when context is missing', () => {
+    // These types need context to generate a URL
+    expect(generateCanonicalUrl('unit', 'unit:test-123')).toBeUndefined();
+    expect(generateCanonicalUrl('subject', 'subject:test-123')).toBeUndefined();
+    // Threads never have URLs regardless of context
+    expect(generateCanonicalUrl('thread', 'thread:test-123')).toBeUndefined();
+  });
+
+  it('generateCanonicalUrlWithContext: all content types work with valid context (or throw for missing)', () => {
+    // With full context, all types work
+    expect(() => {
+      generateCanonicalUrlWithContext('lesson', 'lesson:test-123');
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('sequence', 'sequence:test-123');
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('unit', 'unit:test-123', {
+        unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+      });
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('subject', 'subject:test-123', {
+        subject: { keyStageSlugs: ['ks1'] },
+      });
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('thread', 'thread:test-123');
+    }).not.toThrow();
+
+    // Missing context throws for types that require it
+    expect(() => {
+      generateCanonicalUrlWithContext('unit', 'unit:test-123');
+    }).toThrow(TypeError);
+    expect(() => {
+      generateCanonicalUrlWithContext('subject', 'subject:test-123');
+    }).toThrow(TypeError);
   });
 });

@@ -8,8 +8,8 @@ import {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from '../types/generated/search/fixtures';
-import { SearchSuggestionResponseSchema } from '../types/generated/search/index';
+  SearchSuggestionResponseSchema,
+} from '@oaknational/sdk-codegen/search';
 
 describe('validateSearchResponse', () => {
   it('validates lesson responses', () => {

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Canonical URL resolution for MCP endpoint.
+ * Canonical URL resolution for MCP endpoint.
  *
  * Provides a pure function for resolving the canonical URL of the MCP endpoint
  * based on the deployment environment (Vercel vs local development).

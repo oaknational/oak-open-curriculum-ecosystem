@@ -41,9 +41,11 @@ By the end of this journey, you'll understand:
 # Clone, install, and run
 git clone <repo>
 pnpm install
-cp .env.example .env  # Add a Notion API key
+cp .env.example .env  # Add required local credentials from your team
 pnpm dev
 ```
+
+Keep real credentials in local `.env` only; this file is gitignored.
 
 **Try**: Use with Claude Desktop (if available) or review the [API Reference](../usage/api-reference.md)
 
@@ -118,7 +120,7 @@ pnpm dev
 
 #### 1. Testing Philosophy
 
-**Read**: [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)
+**Read**: [Testing Strategy](../../../.agent/directives/testing-strategy.md)
 
 - Focus on: Test pyramid and TDD approach
 - Key insight: Pure functions enable comprehensive testing

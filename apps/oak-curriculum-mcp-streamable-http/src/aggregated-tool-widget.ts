@@ -11,10 +11,9 @@
  */
 
 import { OAK_LOGO_SVG } from './oak-logo-svg.js';
-import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
-import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Returns the widget URI from the SDK.
@@ -22,7 +21,7 @@ import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
  * This is a simple passthrough that makes the widget URI
  * available to the HTTP server's resource registration.
  * The URI already includes a cache-busting hash generated
- * at type-gen time.
+ * at sdk-codegen time.
  *
  * @returns Widget URI with embedded cache-busting hash
  * @example "ui://widget/oak-json-viewer-abc12345.html"
@@ -73,13 +72,12 @@ export function generateWidgetHtml(): string {
 <body>
 <div id="root">
   <main id="content-container">
-    <header class="hdr">
-      <div class="logo">${OAK_LOGO_SVG}</div>
-      <div class="hdr-text">
+    <header class="hdr" id="hdr" style="display:none">
+      <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="hdr-link">
+        <div class="logo">${OAK_LOGO_SVG}</div>
         <h1 class="ttl">Oak National Academy</h1>
-        <p class="sub-ttl" id="tool-name"></p>
-      </div>
-      ${generateCtaContainerHtml()}
+      </a>
+      <span class="sub-ttl" id="tool-name"></span>
     </header>
     <div id="c"></div>
     <footer class="ftr">

@@ -8,7 +8,7 @@ Read this WHOLE document _before_ taking action.
 This is the request:
 
 ```text
-Please perform a slow, deep, COMPREHENSIVE review of the **entire** codebase: go slowly, take your time, get it right. I do not expect this process to be quick, I do expect it to be both thorough and accurate. As you go compare the code to the rules .agent/directives-and-memory/rules.md and other guidance .agent/directives-and-memory/AGENT.md , and make notes of any discrepancies. The review MUST use all sub-agents, the code-reviewer, the architecture-reviewer, the test-auditor, and the config-auditor, invoke them as needed, as many times as needed, use their reports to inform your review.
+Please perform a slow, deep, COMPREHENSIVE review of the **entire** codebase: go slowly, take your time, get it right. I do not expect this process to be quick, I do expect it to be both thorough and accurate. As you go compare the code to the rules .agent/directives/rules.md and other guidance .agent/directives/AGENT.md , and make notes of any discrepancies. The review MUST use all sub-agents, the code-reviewer, the architecture-reviewer, the test-auditor, and the config-auditor, invoke them as needed, as many times as needed, use their reports to inform your review.
 
 If a plan was provided, consider feedback in that context, make sure that sub-agents are aware of the details relevant to their role.
 

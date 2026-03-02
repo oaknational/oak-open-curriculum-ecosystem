@@ -1,112 +1,12 @@
-// Aggregated search, query parser, observability, and admin exports.
-
-export {
-  DEFAULT_INCLUDE_FACETS,
-  SearchStructuredRequestSchema,
-  isSearchStructuredRequest,
-  SearchNaturalLanguageRequestSchema,
-  isSearchNaturalLanguageRequest,
-  SearchParsedQuerySchema,
-  isSearchParsedQuery,
-  SEARCH_SCOPES,
-  SEARCH_SCOPES_WITH_ALL,
-  isSearchScope,
-  isSearchScopeWithAll,
-  DEFAULT_SUGGESTION_CACHE,
-  SearchSuggestionContextSchema,
-  SearchSuggestionItemSchema,
-  SearchSuggestionResponseSchema,
-  SearchSuggestionRequestSchema,
-  isSearchSuggestionRequest,
-  isSearchSuggestionResponse,
-  SearchLessonsResponseSchema,
-  SearchUnitsResponseSchema,
-  SearchSequencesResponseSchema,
-  SearchMultiScopeResponseSchema,
-  createSearchLessonsResponse,
-  createSearchUnitsResponse,
-  createSearchSequencesResponse,
-  createSearchMultiScopeResponse,
-} from '../types/generated/search/index.js';
-
-export {
-  QueryParserRequestSchema,
-  QueryParserResponseSchema,
-  isQueryParserResponse,
-  QUERY_PARSER_INTENT_ENUM,
-} from '../types/generated/query-parser/index.js';
-export type {
-  QueryParserRequest,
-  QueryParserResponse,
-  QueryParserIntent,
-} from '../types/generated/query-parser/index.js';
-
-export {
-  ZERO_HIT_SCOPES,
-  ZeroHitScopeSchema,
-  ZeroHitScopeBreakdownSchema,
-  ZeroHitSummarySchema,
-  ZeroHitEventSchema,
-  ZeroHitTelemetrySchema,
-  createZeroHitEvent,
-  createZeroHitSummary,
-  createZeroHitTelemetry,
-  summariseZeroHitEvents,
-  type ZeroHitScope,
-  type ZeroHitScopeBreakdown,
-  type ZeroHitSummary,
-  type ZeroHitEvent,
-  type ZeroHitTelemetry,
-} from '../types/generated/observability/index.js';
-
-export {
-  ADMIN_STREAM_ACTIONS,
-  AdminStreamActionSchema,
-  AdminStreamSuccessSchema,
-  AdminStreamErrorSchema,
-  AdminStreamFixtureSchema,
-  createAdminStreamFixture,
-  createAdminStreamEmptyFixture,
-  createAdminStreamErrorFixture,
-  createAdminStreamFixtureMap,
-  type AdminStreamAction,
-  type AdminStreamSuccessFixture,
-  type AdminStreamErrorFixture,
-  type AdminStreamFixture,
-  type AdminStreamFixtureMap,
-} from '../types/generated/admin/index.js';
-
-export type {
-  SearchStructuredRequest,
-  SearchStructuredScope,
-  SearchNaturalLanguageRequest,
-  SearchParsedQuery,
-  SearchParsedIntent,
-  SearchScope,
-  SearchScopeWithAll,
-  SearchSuggestionItem,
-  SearchSuggestionResponse,
-  SearchSuggestionRequest,
-  SearchFacets,
-  SequenceFacet,
-  SequenceFacetUnit,
-  SearchLessonsResponse,
-  SearchUnitsResponse,
-  SearchSequencesResponse,
-  SearchLessonsSuggestions,
-  SearchLessonsSuggestionCache,
-  SearchLessonResult,
-  SearchUnitResult,
-  SearchSequenceResult,
-  SearchMultiScopeBucket,
-  SearchMultiScopeResponse,
-  SearchCompletionSuggestPayload,
-  SearchLessonsIndexDoc,
-  SearchUnitsIndexDoc,
-  SearchUnitRollupDoc,
-  SearchSequenceIndexDoc,
-  SearchSubjectSlug,
-} from '../types/generated/search/index.js';
+/**
+ * Search-response-guards: curriculum-sdk's own runtime validators for
+ * Oak API search responses. These are NOT re-exports from sdk-codegen.
+ *
+ * For search schemas, constants, type guards, and factory functions,
+ * import directly from `@oaknational/sdk-codegen/search` (or the
+ * appropriate subpath: `/query-parser`, `/observability`, `/admin`,
+ * `/zod`). See ADR-108.
+ */
 
 export {
   lessonSummarySchema,
@@ -124,23 +24,12 @@ export {
   type SearchLessonSummary,
   type SearchUnitSummary,
   type SearchSubjectSequences,
+  sequenceUnitsSchema,
+  type SequenceUnitsResponseSchema,
+  type SequenceUnitsResponse,
+  isSequenceUnitsResponse,
+  subjectAssetsSchema,
+  type SubjectAssetsResponseSchema,
+  type SubjectAssets,
+  isSubjectAssets,
 } from '../types/search-response-guards.js';
-
-export {
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
-  SearchFacetsSchema,
-} from '../types/generated/zod/search/output/index.js';
-
-export {
-  SearchCompletionSuggestPayloadSchema,
-  SearchLessonsIndexDocSchema,
-  SearchUnitsIndexDocSchema,
-  SearchUnitRollupDocSchema,
-  SearchSequenceIndexDocSchema,
-  isSearchCompletionSuggestPayload,
-  isSearchLessonsIndexDoc,
-  isSearchUnitsIndexDoc,
-  isSearchUnitRollupDoc,
-  isSearchSequenceIndexDoc,
-} from '../types/generated/search/index.js';

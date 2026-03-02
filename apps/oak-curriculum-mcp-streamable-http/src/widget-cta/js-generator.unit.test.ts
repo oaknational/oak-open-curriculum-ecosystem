@@ -1,11 +1,14 @@
 /**
- * Unit tests for CTA JavaScript generator, specifically template literal escaping.
+ * Unit tests for CTA JavaScript generator.
  *
- * @module widget-cta/js-generator.unit.test
+ * Covers template literal escaping and safe JS generation
+ * for CTA config entries with special characters.
+ *
+ * @see ./js-generator.ts
  */
 
 import { describe, it, expect } from 'vitest';
-import { escapeForTemplateLiteral } from './js-generator.js';
+import { escapeForTemplateLiteral, generateCtaHandlerJs } from './js-generator.js';
 
 describe('escapeForTemplateLiteral', () => {
   it('should escape backticks', () => {
@@ -63,14 +66,13 @@ describe('escapeForTemplateLiteral', () => {
 
   it('should handle the actual CTA prompt with multiple backticks', () => {
     const input = `First, call the \`get-help\` tool to get an overview of the resources.
-The response should include \`get-ontology\` and \`get-knowledge-graph\`. Call those tools now.`;
+The response should include \`get-ontology\`. Call those tools now.`;
 
     const output = escapeForTemplateLiteral(input);
 
     // All backticks should be escaped
     expect(output).toContain('\\`get-help\\`');
     expect(output).toContain('\\`get-ontology\\`');
-    expect(output).toContain('\\`get-knowledge-graph\\`');
 
     // Verify no unescaped backticks remain
     const unescapedBacktickPattern = /(?<!\\)`/g;
@@ -108,5 +110,37 @@ Line 2 with \${var}`;
 
     expect(output).toContain('\n');
     expect(output).toBe('Line 1 with \\`backtick\\`\nLine 2 with \\${var}');
+  });
+});
+
+describe('generateCtaHandlerJs', () => {
+  const domStubs = [
+    'const document = { readyState: "complete", getElementById: () => null, addEventListener: () => {} };',
+    'const window = { openai: null };',
+  ].join('\n');
+
+  function evalCtaJs(js: string): unknown {
+    const factory = new Function(`${domStubs}\n${js}\nreturn CTA_CONFIGS;`);
+    return factory();
+  }
+
+  it('generates parseable JavaScript', () => {
+    const js = generateCtaHandlerJs();
+    expect(() => new Function(`${domStubs}\n${js}`)).not.toThrow();
+  });
+
+  it('generates CTA_CONFIGS array that is valid JavaScript', () => {
+    const configs = evalCtaJs(generateCtaHandlerJs());
+    expect(Array.isArray(configs)).toBe(true);
+  });
+
+  it('returns a non-empty CTA_CONFIGS array with required string fields', () => {
+    const configs = evalCtaJs(generateCtaHandlerJs());
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs).toHaveProperty('length');
+    expect(configs).toHaveProperty('[0].id');
+    expect(configs).toHaveProperty('[0].buttonText');
+    expect(configs).toHaveProperty('[0].loadingText');
+    expect(configs).toHaveProperty('[0].understoodText');
   });
 });

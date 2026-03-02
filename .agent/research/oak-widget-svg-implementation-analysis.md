@@ -2,7 +2,7 @@
 
 > **Companion to**: [world-bank-graphing-demo-svg-patterns.md](./world-bank-graphing-demo-svg-patterns.md)
 > **ADR Reference**: [ADR-062: Knowledge Graph SVG Visualization Architecture](../../docs/architecture/architectural-decisions/062-knowledge-graph-svg-visualization.md)
-> **Purpose**: Deep dive into the current Oak MCP knowledge graph widget implementation, comparing patterns with the world-bank-graphing-demo reference.
+> **Purpose**: Deep dive into the current Oak Open Curriculum knowledge graph widget implementation, comparing patterns with the world-bank-graphing-demo reference.
 
 ## Overview
 

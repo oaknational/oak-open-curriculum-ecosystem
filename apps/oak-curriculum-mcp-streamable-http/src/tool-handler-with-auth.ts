@@ -3,21 +3,20 @@
  *
  * Implements tool execution with auth error detection and MCP-compliant
  * _meta response generation per ADR-054.
- *
- * @module
  */
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type {
   UniversalToolName,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { generatedToolRegistry } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
 import type { ToolHandlerDependencies } from './handlers.js';
-import { logValidationFailureIfPresent } from './validation-logger.js';
+import { logValidationFailureIfPresent, logUpstreamErrorIfPresent } from './validation-logger.js';
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 /**
@@ -80,8 +79,11 @@ export async function handleToolWithAuthInterception(
       }
 
       logValidationFailureIfPresent(name, execution, logger);
+      logUpstreamErrorIfPresent(name, execution, logger);
       return execution;
     },
+    searchRetrieval: deps.searchRetrieval,
+    generatedTools: generatedToolRegistry,
   });
 
   const result = await executor(tool.name, params ?? {});

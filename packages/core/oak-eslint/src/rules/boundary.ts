@@ -30,6 +30,11 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
           from: '../../../apps/**',
           message: 'Core cannot import from apps. Core must remain pure with zero dependencies.',
         },
+        {
+          target: './src/**',
+          from: '../../../packages/sdks/**',
+          message: 'Core cannot import from SDKs. Core must remain domain-agnostic.',
+        },
       ],
     },
   ],
@@ -84,7 +89,7 @@ export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
  * @param otherLibs - Array of other library names to prevent imports from
  */
 export function createLibBoundaryRules(
-  _libName: string,
+  libName: string,
   otherLibs: string[],
 ): Partial<Linter.RulesRecord> {
   const zones = [
@@ -92,8 +97,7 @@ export function createLibBoundaryRules(
     ...otherLibs.map((otherLib) => ({
       target: './src/**' as const,
       from: `../${otherLib}/**` as const,
-      message:
-        'Libraries cannot depend on each other. Each library must be independently reusable.',
+      message: `Library '${libName}' cannot depend on '${otherLib}'. Each library must be independently reusable.`,
     })),
     // Cannot import from apps
     {
@@ -155,7 +159,7 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
       zones: [
         {
           target: './src/**',
-          from: '../!(oak-notion-mcp)/**',
+          from: '../*/**',
           message: 'Apps cannot import from other apps. Each app is independent.',
         },
       ],
@@ -209,16 +213,126 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
+ * SDK boundary rules for the generation/runtime workspace split.
+ *
+ * Enforces the one-way dependency direction defined in
+ * {@link ../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md | ADR-108}:
+ *
+ * - **generation** workspace has no knowledge of runtime concerns.
+ *   It cannot import from `@oaknational/curriculum-sdk`.
+ * - **runtime** workspace imports generation artefacts through barrel
+ *   exports only (`@oaknational/sdk-codegen`), never via
+ *   deep paths into generation internals.
+ *
+ * @param role - Whether the calling workspace is the generation or runtime SDK
+ *
+ * @example
+ * ```typescript
+ * // In generation workspace eslint.config.ts:
+ * { files: ['src/**\/*.ts'], rules: { ...createSdkBoundaryRules('generation') } }
+ *
+ * // In runtime workspace eslint.config.ts:
+ * { files: ['src/**\/*.ts'], rules: { ...createSdkBoundaryRules('runtime') } }
+ * ```
+ */
+export function createSdkBoundaryRules(
+  role: 'generation' | 'runtime' | 'search',
+): Partial<Linter.RulesRecord> {
+  if (role === 'generation') {
+    return {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@oaknational/curriculum-sdk', '@oaknational/curriculum-sdk/**'],
+              message:
+                'Generation cannot import from runtime SDK. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
+            },
+            {
+              group: ['@workspace/*'],
+              message:
+                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  if (role === 'search') {
+    return {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@oaknational/curriculum-sdk',
+              message:
+                'Search SDK must not import from @oaknational/curriculum-sdk. Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@oaknational/curriculum-sdk/**'],
+              message:
+                'Search SDK must not import from @oaknational/curriculum-sdk (any subpath). Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
+            },
+            {
+              group: ['@oaknational/sdk-codegen/*/**'],
+              message:
+                'Search SDK must import from @oaknational/sdk-codegen subpath exports only (e.g. /search, /observability), not deep internal paths (ADR-108).',
+            },
+            {
+              group: ['@workspace/*'],
+              message:
+                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            },
+          ],
+        },
+      ],
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: './src/**',
+              from: '../../../apps/**',
+              message:
+                'SDKs cannot import from apps. SDKs must remain reusable across applications.',
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  return {
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@oaknational/sdk-codegen/*/**'],
+            message:
+              'Runtime must import from @oaknational/sdk-codegen subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
+          },
+          {
+            group: ['@workspace/*'],
+            message:
+              'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+          },
+        ],
+      },
+    ],
+  };
+}
+
+/**
  * List of all libraries for reference
  * Update this list when adding new libraries
  */
-export const LIB_PACKAGES = [
-  'logger',
-  'storage',
-  'env',
-  'transport',
-  'openapi-zod-client-adapter',
-] as const;
+export const LIB_PACKAGES = ['logger', 'env-resolution'] as const;
 
 /**
  * Get all other libraries (excluding the current one)

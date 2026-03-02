@@ -1,0 +1,93 @@
+/**
+ * ESLint Configuration for env schema contracts
+ *
+ * Pure environment schema definitions — zero I/O, zero runtime deps beyond Zod.
+ */
+
+import { defineConfig } from 'eslint/config';
+import {
+  configs,
+  coreBoundaryRules,
+  coreTestConfigRules,
+  commonSettings,
+  ignores as globalIgnores,
+  testRules,
+} from '@oaknational/eslint-plugin-standards';
+import globals from 'globals';
+
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+const thisDir = dirname(fileURLToPath(import.meta.url));
+const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
+
+const config = defineConfig(
+  {
+    ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
+  },
+  ...configs.strict,
+  {
+    files: ['src/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        projectService: false,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
+      },
+    },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: wsTsProject,
+        },
+      },
+    },
+    rules: coreBoundaryRules,
+  },
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        projectService: false,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
+      },
+    },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: wsTsProject,
+        },
+      },
+    },
+    rules: {
+      ...coreTestConfigRules,
+      ...testRules,
+    },
+  },
+  {
+    files: ['eslint.config.ts', 'vitest.config.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: thisDir,
+      },
+    },
+  },
+);
+
+export default config;

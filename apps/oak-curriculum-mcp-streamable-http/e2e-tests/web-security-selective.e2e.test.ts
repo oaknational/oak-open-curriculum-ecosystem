@@ -2,6 +2,7 @@ import request from 'supertest';
 import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
+import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 // Mock Clerk middleware to avoid network IO and requirement for valid keys
 vi.mock('@clerk/express', () => ({
@@ -15,6 +16,8 @@ const mockRuntimeConfig: RuntimeConfig = {
     OAK_API_KEY: 'mock-oak-key',
     CLERK_PUBLISHABLE_KEY: 'pk_test_mock',
     CLERK_SECRET_KEY: 'sk_test_mock',
+    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     LOG_LEVEL: 'error',
     NODE_ENV: 'test',
   },
@@ -24,20 +27,23 @@ const mockRuntimeConfig: RuntimeConfig = {
   vercelHostnames: [],
 };
 
-function createTestApp() {
-  return createApp({ runtimeConfig: mockRuntimeConfig });
+async function createTestApp() {
+  return await createApp({
+    runtimeConfig: mockRuntimeConfig,
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
+  });
 }
 
 /**
  * E2E tests for selective web security application.
  *
- * Tests that web security (CORS + DNS rebinding protection) is applied
- * ONLY to the landing page (/) and NOT to protocol routes.
+ * CORS is applied globally for browser compatibility.
+ * DNS rebinding protection is selective by route.
  */
 describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
   describe('Landing page (/) - HAS web security', () => {
     it('applies CORS headers to landing page', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
@@ -49,20 +55,19 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.status).toBe(200);
     });
 
-    it('applies CORS headers with different origin (allow_all mode)', async () => {
-      const app = createTestApp();
+    it('allows any cross-origin request (permissive CORS for OAuth-protected MCP)', async () => {
+      const app = await createTestApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
         .set('Origin', 'http://totally-different.com');
 
-      // allow_all mode reflects any origin back
       expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
       expect(res.status).toBe(200);
     });
 
     it('blocks requests with invalid Host header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'evil.com');
 
       // Should be blocked by DNS rebinding protection
@@ -72,8 +77,24 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.body.error).toContain('host not allowed');
     });
 
+    it('blocks malformed Host header with userinfo-like syntax', async () => {
+      const app = await createTestApp();
+      const res = await request(app).get('/').set('Host', 'localhost:3333@evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
+    });
+
+    it('blocks malformed bracketed Host header', async () => {
+      const app = await createTestApp();
+      const res = await request(app).get('/').set('Host', '[::1]evil');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
+    });
+
     it('allows requests with valid Host header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
 
       // Should not be blocked (valid host)
@@ -82,7 +103,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('allows requests with localhost:port Host header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost:3333');
 
       expect(res.status).toBe(200);
@@ -90,7 +111,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('allows requests with 127.0.0.1:port Host header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', '127.0.0.1:3333');
 
       expect(res.status).toBe(200);
@@ -98,7 +119,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('allows requests with IPv6 [::1]:port Host header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', '[::1]:3333');
 
       expect(res.status).toBe(200);
@@ -106,7 +127,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('allows requests with IPv6 [::1] Host header (no port)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', '[::1]');
 
       expect(res.status).toBe(200);
@@ -116,7 +137,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
 
   describe('Protocol routes - CORS enabled for browser clients', () => {
     it('/healthz has CORS headers for browser access', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
 
       // CORS is applied globally to all routes (protocol routes need it for browser clients)
@@ -125,7 +146,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('/healthz HEAD has CORS headers for browser access', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).head('/healthz').set('Origin', 'http://example.com');
 
       // CORS is applied globally to all routes (protocol routes need it for browser clients)
@@ -134,7 +155,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
 
     it('/.well-known/oauth-protected-resource has CORS headers for browser access', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
         .set('Origin', 'http://example.com');
@@ -145,27 +166,17 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
   });
 
-  describe('DNS rebinding protection - ONLY on landing page', () => {
-    it('landing page blocks evil.com Host header', async () => {
-      const app = createTestApp();
-      const res = await request(app).get('/').set('Host', 'evil.com');
-
-      expect(res.status).toBe(403);
-      expect(res.body).toHaveProperty('error');
-
-      expect(res.body.error).toContain('host not allowed');
-    });
-
+  describe('DNS rebinding protection - selective by route', () => {
     it('/healthz allows any Host header (no DNS protection)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/healthz').set('Host', 'evil.com');
 
       // Should NOT be blocked - no DNS rebinding protection on health checks
       expect(res.status).toBe(200);
     });
 
-    it('/mcp allows any Host header (no DNS protection)', async () => {
-      const app = createTestApp();
+    it('/mcp rejects disallowed Host header in auth challenge generation', async () => {
+      const app = await createTestApp();
       const res = await request(app)
         .post('/mcp')
         .set('Host', 'evil.com')
@@ -173,37 +184,83 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
         .set('Content-Type', 'application/json')
         .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
 
-      // Should NOT be blocked - protocol routes need to work from any host
-      // Auth will handle security (401), but not DNS rebinding (403)
-      expect(res.status).not.toBe(403);
+      expect(res.status).toBe(403);
     });
 
-    it('OAuth metadata allows any Host header (no DNS protection)', async () => {
-      const app = createTestApp();
+    it('/mcp rejects malformed Host header in auth challenge generation', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .post('/mcp')
+        .set('Host', 'example.com:443@evil.com')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Content-Type', 'application/json')
+        .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth protected resource metadata rejects disallowed Host header', async () => {
+      const app = await createTestApp();
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
         .set('Host', 'evil.com');
 
-      // Should NOT be blocked - no DNS rebinding protection on OAuth metadata
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error', 'forbidden');
+    });
+
+    it('OAuth authorization server metadata rejects disallowed Host header', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error', 'forbidden');
+    });
+
+    it('OAuth metadata rejects malformed Host with userinfo-like syntax', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'example.com:443@evil.com');
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth metadata rejects malformed bracketed Host value', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', '[::1]evil');
+
+      expect(res.status).toBe(403);
+    });
+
+    it('OAuth authorization-server metadata rejects malformed Host value', async () => {
+      const app = await createTestApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Host', 'example.com:443@evil.com');
+
+      expect(res.status).toBe(403);
     });
   });
 
-  describe('CORS behavior - ONLY on landing page', () => {
-    it('landing page has CORS with allowed origin', async () => {
-      const app = createTestApp();
+  describe('CORS behaviour - permissive for all origins', () => {
+    it('landing page reflects any origin (permissive CORS)', async () => {
+      const app = await createTestApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
-        .set('Origin', 'http://allowed-origin.com');
+        .set('Origin', 'http://any-origin.com');
 
-      // CORS allows all origins when no explicit allow-list
-      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.headers['access-control-allow-origin']).toBe('http://any-origin.com');
       expect(res.status).toBe(200);
     });
 
     it('/healthz has CORS headers (global CORS policy)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
 
       expect(res.headers['access-control-allow-origin']).toBeDefined();
@@ -220,7 +277,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
 describe('Security Headers (Helmet) - Applied Globally', () => {
   describe('Landing page (/) - HTML response', () => {
     it('has Content-Security-Policy header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
 
       expect(res.headers['content-security-policy']).toBeDefined();
@@ -228,7 +285,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('CSP allows Google Fonts for landing page styling', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
@@ -237,7 +294,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('CSP allows images from same origin', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
@@ -246,7 +303,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('CSP allows connections to same origin', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
@@ -255,7 +312,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
@@ -264,21 +321,21 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('has X-Content-Type-Options: nosniff', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
 
       expect(res.headers['x-content-type-options']).toBe('nosniff');
     });
 
     it('has X-Frame-Options: SAMEORIGIN', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
 
       expect(res.headers['x-frame-options']).toBe('SAMEORIGIN');
     });
 
     it('has Strict-Transport-Security header', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const hsts = res.headers['strict-transport-security'];
 
@@ -289,7 +346,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
   describe('/healthz - JSON response', () => {
     it('has security headers (harmless for JSON)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/healthz');
 
       expect(res.headers['x-content-type-options']).toBe('nosniff');
@@ -297,7 +354,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
     });
 
     it('still returns valid JSON', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app).get('/healthz');
 
       expect(res.status).toBe(200);
@@ -308,7 +365,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
   describe('/mcp - MCP protocol endpoint', () => {
     it('has Cross-Origin-Resource-Policy: cross-origin (for MCP clients)', async () => {
-      const app = createTestApp();
+      const app = await createTestApp();
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -318,16 +375,17 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(res.headers['cross-origin-resource-policy']).toBe('cross-origin');
     });
 
-    it('MCP requests still work with security headers', async () => {
-      const app = createTestApp();
+    it('MCP requests reach auth layer through security headers', async () => {
+      const app = await createTestApp();
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
         .set('Content-Type', 'application/json')
         .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
 
-      // Should not be a 4xx/5xx error from security headers
-      expect(res.status).toBeLessThan(400);
+      // 401 confirms security headers did not block the request --
+      // it reached the auth layer, which correctly requires a token
+      expect(res.status).toBe(401);
     });
   });
 });

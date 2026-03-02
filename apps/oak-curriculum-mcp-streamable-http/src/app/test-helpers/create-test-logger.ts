@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 type TestLogLevelName = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 

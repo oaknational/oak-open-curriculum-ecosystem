@@ -3,44 +3,62 @@
  */
 
 // Re-export generated types
-export type { paths } from './generated/api-schema/api-paths-types';
-export type { components } from './generated/api-schema/api-paths-types';
+export type { paths, components } from '@oaknational/sdk-codegen/api-schema';
 
 // Re-export path operations - Note: PATH_OPERATIONS is the const, PathOperation is the type
-export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './generated/api-schema/path-parameters';
-export type { PathOperation, OperationId } from './generated/api-schema/path-parameters';
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from '@oaknational/sdk-codegen/api-schema';
+export type { PathOperation, OperationId } from '@oaknational/sdk-codegen/api-schema';
 
-// Export the helpers
-
-// Hybrid search index types and guards
+// Hybrid search index types and guards (per-index completion schemas)
 export {
-  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsCompletionContextsSchema,
+  SearchUnitsCompletionContextsSchema,
+  SearchUnitRollupCompletionContextsSchema,
+  SearchSequenceCompletionContextsSchema,
+  SearchThreadCompletionContextsSchema,
+  SearchLessonsCompletionPayloadSchema,
+  SearchUnitsCompletionPayloadSchema,
+  SearchUnitRollupCompletionPayloadSchema,
+  SearchSequenceCompletionPayloadSchema,
+  SearchThreadCompletionPayloadSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
-  isSearchCompletionSuggestPayload,
+  SearchThreadIndexDocSchema,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
-} from './generated/search/index';
+  isSearchThreadIndexDoc,
+} from '@oaknational/sdk-codegen/search';
 export type {
-  SearchCompletionSuggestPayload,
+  SearchLessonsCompletionContexts,
+  SearchUnitsCompletionContexts,
+  SearchUnitRollupCompletionContexts,
+  SearchSequenceCompletionContexts,
+  SearchThreadCompletionContexts,
+  SearchLessonsCompletionPayload,
+  SearchUnitsCompletionPayload,
+  SearchUnitRollupCompletionPayload,
+  SearchSequenceCompletionPayload,
+  SearchThreadCompletionPayload,
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
+  SearchThreadIndexDoc,
   SearchSubjectSlug,
-} from './generated/search/index';
+} from '@oaknational/sdk-codegen/search';
 
 // Hybrid search facet types and schemas
-export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index';
-export {
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
-  SearchFacetsSchema,
-} from './generated/zod/search/output/index';
+export type {
+  SequenceFacetUnit,
+  SequenceFacet,
+  SearchFacets,
+} from '@oaknational/sdk-codegen/search';
+export { SequenceFacetUnitSchema, SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
+export { SearchFacetsSchema } from '@oaknational/sdk-codegen/search';
 
 // Response-shape type guards for search-related endpoints
 export {
@@ -50,9 +68,12 @@ export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
-} from './search-response-guards';
+  sequenceUnitsSchema,
+  isSequenceUnitsResponse,
+} from './search-response-guards.js';
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
-} from './search-response-guards';
+  SequenceUnitsResponse,
+} from './search-response-guards.js';

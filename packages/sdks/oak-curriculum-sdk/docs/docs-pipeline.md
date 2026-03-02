@@ -26,7 +26,7 @@ The pipeline is plugin-free for the Markdown generation steps and uses small, pu
 
 ## Prerequisites
 
-- Node.js >= 22
+- Node.js 24.x
 - pnpm
 
 ## Commands
@@ -35,22 +35,22 @@ From the repo root:
 
 ```bash
 # Generate HTML docs (TypeDoc UI)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:html
+pnpm -F @oaknational/curriculum-sdk -s docs:api:html
 
 # Generate TypeDoc JSON only
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:json
+pnpm -F @oaknational/curriculum-sdk -s docs:api:json
 
 # Generate AI-focused single-file reference from JSON + generated artifacts
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:ai
+pnpm -F @oaknational/curriculum-sdk -s docs:ai
 
 # Generate Markdown API docs (multi-file) from JSON
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:md
+pnpm -F @oaknational/curriculum-sdk -s docs:api:md
 
 # Verify outputs (HTML index, JSON, AI doc, and Markdown files)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:verify
+pnpm -F @oaknational/curriculum-sdk -s docs:verify
 
 # Run the full pipeline (HTML + AI + MD + verify)
-pnpm -F @oaknational/oak-curriculum-sdk -s docs:all
+pnpm -F @oaknational/curriculum-sdk -s docs:all
 ```
 
 ## Output Map
@@ -98,12 +98,12 @@ export type ValidationResult = …
 
 ## Extending the renderer
 
-- JSON schemas and types: `type-gen/lib/ai-doc-types.ts`
-- Type formatting helpers: `type-gen/lib/type-format.ts` (exports `typeToString()`)
-- Markdown rendering helpers: `type-gen/lib/ai-doc-render.ts`
-- Multi-file Markdown generator: `type-gen/generate-markdown-docs.ts`
-- AI single-file generator: `type-gen/generate-ai-doc.ts`
-- Verification: `type-gen/verify-docs.ts`
+- JSON schemas and types: `code-generation/lib/ai-doc-types.ts`
+- Type formatting helpers: `code-generation/lib/type-format.ts` (exports `typeToString()`)
+- Markdown rendering helpers: `code-generation/lib/ai-doc-render.ts`
+- Multi-file Markdown generator: `code-generation/generate-markdown-docs.ts`
+- AI single-file generator: `code-generation/generate-ai-doc.ts`
+- Verification: `code-generation/verify-docs.ts`
 
 Add support for additional TypeDoc node kinds in `type-format.ts` if needed. Avoid broad assertions; prefer small type guards.
 
@@ -120,8 +120,7 @@ A CI workflow runs `docs:all` and fails PRs if verification fails or content cha
 
 ## References
 
-- GO.md: `/.agent/directives-and-memory/GO.md`
-- AGENT.md: `/.agent/directives-and-memory/AGENT.md`
+- AGENT.md: `/.agent/directives/AGENT.md`
 - TypeDoc: <https://typedoc.org/>
 
 ## FAQ
@@ -129,4 +128,4 @@ A CI workflow runs `docs:all` and fails PRs if verification fails or content cha
 - Q: Where do I see the improved Type alias rendering?
   - A: `docs/api-md/types.md` and the AI reference contain the formatted output with source links.
 - Q: Can I add new sections to AI reference?
-  - A: Edit `type-gen/generate-ai-doc.ts` to include additional groupings or summaries.
+  - A: Edit `code-generation/generate-ai-doc.ts` to include additional groupings or summaries.

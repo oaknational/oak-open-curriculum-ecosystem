@@ -1,48 +1,21 @@
 /**
- * OAuth Discovery Smoke Test via MCP Inspector CLI
+ * OAuth Validation Workflow via MCP Inspector
  *
- * PURPOSE: Proves that MCP clients successfully connect using OAuth discovery
- * WITHOUT the Authorization Server Metadata proxy endpoint.
+ * PURPOSE: Launch the MCP Inspector against a running dev server with auth enabled
+ * so a human can complete the real OAuth flow (browser interaction required).
  *
- * This validates the architectural decision to remove the proxy, as per:
- * - MCP spec (2025-06-18): Clients fetch AS metadata directly from Clerk
- * - @clerk/mcp-tools README: "should not be necessary"
- * - MCP SDK: discoverAuthorizationServerMetadata() takes authorizationServerUrl
- *
- * TEST BOUNDARIES:
- * - This is a SMOKE test (manual, external I/O allowed)
- * - NOT run in CI (requires dev server + Clerk)
- * - Provides repeatable validation for architectural changes
+ * BOUNDARIES:
+ * - Manual workflow (not CI)
+ * - Network IO allowed (Clerk)
  *
  * USAGE:
- *   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-inspector
+ *   pnpm -F `@oaknational/oak-curriculum-mcp-streamable-http` inspect:oauth
  */
 
 import { spawn } from 'node:child_process';
 import { setTimeout } from 'node:timers/promises';
 
 const DEV_SERVER_URL = process.env.DEV_SERVER_URL ?? 'http://localhost:3333/mcp';
-const INSPECTOR_TIMEOUT_MS = 30000;
-
-interface TestResult {
-  success: boolean;
-  output: string;
-  error?: string;
-  duration: number;
-}
-
-interface InspectorToolsResponse {
-  tools: { name: string }[];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-function hasToolsArray(obj: object): obj is { tools: unknown } {
-  return 'tools' in obj;
-}
-
-function isInspectorToolsResponse(obj: unknown): obj is InspectorToolsResponse {
-  return typeof obj === 'object' && obj !== null && hasToolsArray(obj) && Array.isArray(obj.tools);
-}
 
 async function waitForServer(url: string, maxAttempts = 10): Promise<boolean> {
   const baseUrl = url.replace(/\/mcp$/, '');
@@ -63,142 +36,32 @@ async function waitForServer(url: string, maxAttempts = 10): Promise<boolean> {
   return false;
 }
 
-function createErrorMessage(code: number | null, stderr: string): string {
-  return stderr || `Process exited with code ${code !== null ? String(code) : 'unknown'}`;
-}
-
-function spawnInspector() {
-  console.log('🔍 Running MCP Inspector CLI...');
-  console.log(
-    `   Command: npx @modelcontextprotocol/inspector --cli ${DEV_SERVER_URL} --transport http --method tools/list\n`,
-  );
-  return spawn(
-    'npx',
-    [
-      '@modelcontextprotocol/inspector',
-      '--cli',
-      DEV_SERVER_URL,
-      '--transport',
-      'http',
-      '--method',
-      'tools/list',
-    ],
-    { stdio: ['ignore', 'pipe', 'pipe'], timeout: INSPECTOR_TIMEOUT_MS },
-  );
-}
-
-function runInspectorCLI(): Promise<TestResult> {
-  return new Promise((resolve) => {
-    const startTime = Date.now();
-    let stdout = '';
-    let stderr = '';
-    const inspector = spawnInspector();
-
-    inspector.stdout.on('data', (data: Buffer) => {
-      stdout += data.toString();
-    });
-    inspector.stderr.on('data', (data: Buffer) => {
-      stderr += data.toString();
-    });
-
-    inspector.on('close', (code) => {
-      const duration = Date.now() - startTime;
-      if (code === 0) {
-        resolve({ success: true, output: stdout, duration });
-      } else {
-        resolve({
-          success: false,
-          output: stdout,
-          error: createErrorMessage(code, stderr),
-          duration,
-        });
-      }
-    });
-
-    inspector.on('error', (err: Error) => {
-      resolve({
-        success: false,
-        output: stdout,
-        error: err.message,
-        duration: Date.now() - startTime,
-      });
-    });
+async function assertOAuthMetadataAvailable(url: string): Promise<void> {
+  const baseUrl = url.replace(/\/mcp$/, '');
+  const res = await fetch(`${baseUrl}/.well-known/oauth-protected-resource`, {
+    signal: AbortSignal.timeout(5000),
   });
-}
-
-function validateOutput(output: string): { valid: boolean; message: string } {
-  if (!output.includes('tools') || output.trim().length === 0) {
-    return { valid: false, message: 'Output does not contain tools list' };
+  if (!res.ok) {
+    throw new Error(
+      `Expected OAuth metadata to be available (HTTP ${String(res.status)}). Start the server with auth enabled.`,
+    );
   }
-
-  try {
-    const parsed: unknown = JSON.parse(output);
-    if (isInspectorToolsResponse(parsed)) {
-      return { valid: true, message: `Found ${String(parsed.tools.length)} tools` };
-    }
-  } catch {
-    if (output.includes('get-') || output.includes('Tool:')) {
-      return { valid: true, message: 'Tools list found in text format' };
-    }
-  }
-
-  return { valid: false, message: 'Could not parse tools from output' };
 }
 
 function printHeader(): void {
   console.log('═══════════════════════════════════════════════════════');
-  console.log('🔬 OAuth Discovery Smoke Test (MCP Inspector CLI)');
+  console.log('🔬 OAuth Validation (MCP Inspector)');
   console.log('═══════════════════════════════════════════════════════\n');
-  console.log('📋 Test Configuration:');
-  console.log(`   Server URL: ${DEV_SERVER_URL}`);
-  console.log('   Transport: Streamable HTTP');
-  console.log(`   Timeout: ${String(INSPECTOR_TIMEOUT_MS)}ms\n`);
+  console.log('📋 Configuration:');
+  console.log(`   MCP URL: ${DEV_SERVER_URL}`);
+  console.log('   Transport: http (Streamable HTTP)\n');
 }
 
 function exitServerNotReady(): never {
   console.error('❌ FAILED: Dev server not responding at', DEV_SERVER_URL);
   console.error('\n💡 Start the dev server first:');
-  console.error('   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev\n');
+  console.error('   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev:auth:stub\n');
   process.exit(1);
-}
-
-function printResults(result: TestResult): void {
-  console.log('─────────────────────────────────────────────────────');
-  console.log('📊 Test Results:');
-  console.log(`   Duration: ${String(result.duration)}ms`);
-  console.log(`   Exit Code: ${result.success ? '0 (success)' : 'non-zero (failure)'}\n`);
-}
-
-function exitInspectorFailed(result: TestResult): never {
-  console.error('❌ FAILED: Inspector CLI exited with error');
-  if (result.error) {
-    console.error('\n🔴 Error Output:');
-    console.error(result.error);
-  }
-  if (result.output) {
-    console.error('\n📄 Stdout:');
-    console.error(result.output);
-  }
-  console.error('\n');
-  process.exit(1);
-}
-
-function exitValidationFailed(message: string): never {
-  console.error('❌ FAILED: Output validation failed');
-  console.error(`   ${message}\n`);
-  process.exit(1);
-}
-
-function printSuccess(msg: string): void {
-  console.log('═══════════════════════════════════════════════════════');
-  console.log('✅ PASSED: OAuth discovery working correctly!');
-  console.log('═══════════════════════════════════════════════════════\n');
-  console.log('✓ MCP Inspector successfully connected');
-  console.log('✓ OAuth discovery completed without proxy');
-  console.log('✓ Tools retrieved from server');
-  console.log(`✓ ${msg}\n`);
-  console.log('🎉 The Authorization Server Metadata proxy is NOT needed!');
-  console.log('   Clients fetch AS metadata directly from Clerk.\n');
 }
 
 async function main(): Promise<void> {
@@ -208,23 +71,39 @@ async function main(): Promise<void> {
     exitServerNotReady();
   }
 
-  const result = await runInspectorCLI();
-  printResults(result);
-
-  if (!result.success) {
-    exitInspectorFailed(result);
+  try {
+    await assertOAuthMetadataAvailable(DEV_SERVER_URL);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`❌ FAILED: ${message}`);
+    console.error('\n💡 Start the dev server with auth enabled:');
+    console.error('   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev:auth:stub\n');
+    process.exit(1);
   }
 
-  const validation = validateOutput(result.output);
-  console.log('📤 Inspector Output:');
-  console.log(result.output);
-  console.log('');
+  console.log('🔍 Launching MCP Inspector...');
+  console.log(
+    `   Command: npx @modelcontextprotocol/inspector --transport http --server-url ${DEV_SERVER_URL}\n`,
+  );
 
-  if (!validation.valid) {
-    exitValidationFailed(validation.message);
-  }
+  const inspector = spawn(
+    'npx',
+    ['@modelcontextprotocol/inspector', '--transport', 'http', '--server-url', DEV_SERVER_URL],
+    { stdio: 'inherit' },
+  );
 
-  printSuccess(validation.message);
+  await new Promise<void>((resolve, reject) => {
+    inspector.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+      reject(new Error(`Inspector exited with code ${String(code)}`));
+    });
+    inspector.on('error', (err) => {
+      reject(err);
+    });
+  });
 }
 
 main().catch((err: unknown) => {

@@ -4,7 +4,6 @@
  * When embedding HTML strings inside `<script>` tags, special care must be taken
  * to escape sequences that could prematurely close the script tag.
  *
- * @module widget-script-escaping
  */
 
 /**

@@ -111,7 +111,7 @@ Each milestone requires GO.md ACTION/REVIEW pairs, grounding every third task, a
 ## Workflow & references
 
 - Follow GO.md for every change (ACTION → REVIEW, regular grounding).
-- Reference `.agent/directives-and-memory/rules.md`, `.agent/directives-and-memory/testing-strategy.md`, and `semantic-search-target-alignment-plan.md` before planning features.
+- Reference `.agent/directives/rules.md`, `.agent/directives/testing-strategy.md`, and `semantic-search-target-alignment-plan.md` before planning features.
 - Coordinate with caching and documentation plans to ensure UI hints match back-end behaviour.
 - Keep `semantic-search-ui-continuation-prompt.md` updated after each milestone to reflect current state and next steps.
 

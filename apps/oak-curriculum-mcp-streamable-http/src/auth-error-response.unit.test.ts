@@ -26,7 +26,7 @@ describe('createAuthErrorResponse', () => {
     it('creates response for insufficient_scope error', () => {
       const response = createAuthErrorResponse(
         'insufficient_scope',
-        'Required scopes: openid, email',
+        'Required scopes: email',
         'https://example.com/mcp',
       );
 
@@ -64,7 +64,7 @@ describe('createAuthErrorResponse', () => {
 
       const authHeader = response._meta['mcp/www_authenticate'][0];
       expect(authHeader).toContain(
-        `resource_metadata="https://example.com/.well-known/oauth-protected-resource"`,
+        `resource_metadata="https://example.com/.well-known/oauth-protected-resource/mcp"`,
       );
     });
 
@@ -166,7 +166,7 @@ describe('createAuthErrorResponse', () => {
 
       const authHeader = response._meta['mcp/www_authenticate'][0];
       expect(authHeader).toContain(
-        'resource_metadata="http://localhost:3000/.well-known/oauth-protected-resource"',
+        'resource_metadata="http://localhost:3000/.well-known/oauth-protected-resource/mcp"',
       );
     });
 
@@ -179,7 +179,7 @@ describe('createAuthErrorResponse', () => {
 
       const authHeader = response._meta['mcp/www_authenticate'][0];
       expect(authHeader).toContain(
-        'resource_metadata="https://api.example.com/.well-known/oauth-protected-resource"',
+        'resource_metadata="https://api.example.com/.well-known/oauth-protected-resource/mcp"',
       );
     });
 
@@ -192,10 +192,10 @@ describe('createAuthErrorResponse', () => {
       );
 
       expect(httpResponse._meta['mcp/www_authenticate'][0]).toContain(
-        'http://localhost/.well-known/oauth-protected-resource',
+        'http://localhost/.well-known/oauth-protected-resource/mcp',
       );
       expect(httpsResponse._meta['mcp/www_authenticate'][0]).toContain(
-        'https://example.com/.well-known/oauth-protected-resource',
+        'https://example.com/.well-known/oauth-protected-resource/mcp',
       );
     });
   });

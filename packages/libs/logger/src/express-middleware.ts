@@ -30,8 +30,7 @@ export interface RequestLoggerOptions {
  * Safely extracts JSON-safe metadata from an Express Request
  * Handles undefined values and ParsedQs types from query parameters
  * @param req - Express Request object
- * @param options - Optional configuration
- * @param options.redactHeaders - Optional function to redact sensitive headers
+ * @param options - Optional configuration with optional `redactHeaders` function to redact sensitive headers
  * @returns JSON-safe metadata object
  *
  * @example
@@ -75,7 +74,7 @@ export function extractRequestMetadata(
  *
  * @example
  * ```typescript
- * import { createRequestLogger } from '@oaknational/mcp-logger';
+ * import { createRequestLogger } from '@oaknational/logger';
  *
  * const logger = createAdaptiveLogger();
  * app.use(createRequestLogger(logger, { level: 'info' }));
@@ -113,7 +112,7 @@ export function createRequestLogger(
  *
  * @example
  * ```typescript
- * import { createErrorLogger } from '@oaknational/mcp-logger';
+ * import { createErrorLogger } from '@oaknational/logger';
  *
  * const logger = createAdaptiveLogger();
  * // Register after all routes

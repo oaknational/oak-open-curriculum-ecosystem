@@ -6,19 +6,15 @@
  * and generated tools (from OpenAPI spec).
  */
 
-import {
-  toolNames,
-  getToolFromToolName,
-} from '../../types/generated/api-schema/mcp-tools/index.js';
 import { typeSafeKeys } from '../../types/helpers/type-helpers.js';
 import { AGGREGATED_TOOL_DEFS } from './definitions.js';
-import type { UniversalToolListEntry } from './types.js';
+import type { GeneratedToolRegistry, UniversalToolListEntry } from './types.js';
 import { extractZodShape } from './zod-utils.js';
 
 /**
  * Lists all available MCP tools with their metadata.
  *
- * Returns both aggregated tools (search, fetch, get-ontology, get-help)
+ * Returns both aggregated tools (search, fetch, get-curriculum-model)
  * and generated tools from the OpenAPI schema, all with proper MCP
  * annotations and metadata.
  *
@@ -31,7 +27,7 @@ import { extractZodShape } from './zod-utils.js';
  *
  * @example
  * ```typescript
- * const tools = listUniversalTools();
+ * const tools = listUniversalTools(registry);
  * for (const tool of tools) {
  *   if (tool.flatZodSchema) {
  *     server.registerTool(tool.name, tool.flatZodSchema, handler);
@@ -41,7 +37,7 @@ import { extractZodShape } from './zod-utils.js';
  * }
  * ```
  */
-export function listUniversalTools(): UniversalToolListEntry[] {
+export function listUniversalTools(registry: GeneratedToolRegistry): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
     (name) => {
       const def = AGGREGATED_TOOL_DEFS[name];
@@ -52,14 +48,13 @@ export function listUniversalTools(): UniversalToolListEntry[] {
         // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
-        // Include _meta if present (for OpenAI Apps SDK invocation status)
-        _meta: '_meta' in def ? def._meta : undefined,
+        _meta: def._meta,
       };
     },
   );
 
-  const generatedEntries: UniversalToolListEntry[] = toolNames.map((name) => {
-    const descriptor = getToolFromToolName(name);
+  const generatedEntries: UniversalToolListEntry[] = registry.toolNames.map((name) => {
+    const descriptor = registry.getToolFromToolName(name);
     return {
       name,
       description: descriptor.description,
@@ -68,8 +63,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
-      // Include _meta if present (for OpenAI Apps SDK metadata)
-      _meta: '_meta' in descriptor ? descriptor._meta : undefined,
+      _meta: descriptor._meta,
     };
   });
 

@@ -8,7 +8,7 @@
  *
  * This smoke test requires REAL Clerk credentials that actually enforce authentication.
  * Dummy/test Clerk credentials (pk_test_*, sk_test_dummy) do NOT enforce auth - the
- * @clerk/mcp-tools middleware allows all requests through with test keys.
+ * `@clerk/mcp-tools` middleware allows all requests through with test keys.
  *
  * Use this test to manually validate auth enforcement before deployment:
  * 1. Obtain real Clerk production keys from Clerk Dashboard

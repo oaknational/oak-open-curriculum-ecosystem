@@ -411,7 +411,7 @@ The `isUsingStructuredOutput` branching is OpenAI-specific implementation.
 
 ### Phase 1: Data Structures
 
-Extract voice system, timing constraints, and section dependencies as typed `as const` objects. These can be generated at type-gen time if appropriate.
+Extract voice system, timing constraints, and section dependencies as typed `as const` objects. These can be generated at sdk-codegen time if appropriate.
 
 ### Phase 2: Validation Rules
 

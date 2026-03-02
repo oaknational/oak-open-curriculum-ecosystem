@@ -4,12 +4,10 @@
  * This module provides all MCP (Model Context Protocol) tooling including:
  * - Tool definitions and registries
  * - Tool execution and validation
- * - Universal tools (search, fetch, help, ontology)
+ * - Universal tools (aggregated tools combining multiple API calls)
  * - Documentation resources and prompts
  *
  * Also re-exports core client types needed by MCP applications.
- *
- * @module @oaknational/oak-curriculum-sdk/public/mcp-tools
  */
 
 // Re-export core client types needed by MCP apps
@@ -41,12 +39,10 @@ export {
   type ToolResult,
   type ToolResultForOperationId,
   type RegisteredToolEntries,
-} from '../types/generated/api-schema/mcp-tools/index.js';
+} from '@oaknational/sdk-codegen/mcp-tools';
 
-export {
-  SCOPES_SUPPORTED,
-  type ScopesSupported,
-} from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+export { SCOPES_SUPPORTED, type ScopesSupported } from '@oaknational/sdk-codegen/mcp-tools';
+export { UndocumentedResponseError } from '@oaknational/sdk-codegen/mcp-tools';
 
 export {
   createStubToolExecutionAdapter,
@@ -54,13 +50,13 @@ export {
   hasStubForTool,
   assertStubAvailable,
 } from '../mcp/stub-tool-executor.js';
-export type { StubbedToolName } from '../types/generated/api-schema/mcp-tools/generated/stubs/index.js';
+export type { StubbedToolName } from '@oaknational/sdk-codegen/mcp-tools';
 export type {
   SecurityScheme,
   SecuritySchemeType,
   NoAuthScheme,
   OAuth2Scheme,
-} from '../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+} from '@oaknational/sdk-codegen/mcp-tools';
 
 export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
@@ -75,7 +71,9 @@ export {
   isUniversalToolName,
   isAggregatedToolName,
   createUniversalToolExecutor,
+  generatedToolRegistry,
   AGGREGATED_TOOL_DEFS,
+  type GeneratedToolRegistry,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
@@ -91,18 +89,42 @@ export {
 } from '../mcp/documentation-resources.js';
 
 export {
-  ONTOLOGY_RESOURCE,
-  getOntologyJson,
-  type OntologyResource,
-} from '../mcp/ontology-resource.js';
+  CURRICULUM_MODEL_RESOURCE,
+  getCurriculumModelJson,
+} from '../mcp/curriculum-model-resource.js';
 
 export {
-  KNOWLEDGE_GRAPH_RESOURCE,
-  getKnowledgeGraphJson,
-} from '../mcp/knowledge-graph-resource.js';
+  PREREQUISITE_GRAPH_RESOURCE,
+  getPrerequisiteGraphJson,
+} from '../mcp/prerequisite-graph-resource.js';
+
+export {
+  THREAD_PROGRESSIONS_RESOURCE,
+  getThreadProgressionsJson,
+} from '../mcp/thread-progressions-resource.js';
 
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 
 export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';
 
 export { WIDGET_URI } from '../mcp/widget-constants.js';
+// Ontology data (single source of truth for domain knowledge)
+export { ontologyData } from '../mcp/ontology-data.js';
+export type { OntologyData } from '../mcp/ontology-data.js';
+
+// Property graph data (concept TYPE relationships)
+export { conceptGraph } from '@oaknational/sdk-codegen/vocab';
+export type {
+  ConceptGraph,
+  ConceptId,
+  ConceptCategory,
+  ConceptEdge,
+} from '@oaknational/sdk-codegen/vocab';
+
+// Search retrieval service interface (dependency inversion for search SDK)
+export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';
+
+// Stub search retrieval for stub mode (no real ES client)
+export { createStubSearchRetrieval } from '../mcp/search-retrieval-stub.js';
+
+// Synonym utilities moved to @oaknational/sdk-codegen/synonyms (ADR-108 F7 completion)

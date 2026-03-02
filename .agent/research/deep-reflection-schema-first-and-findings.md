@@ -97,7 +97,7 @@ keyStage: z.union([z.literal("ks1"), z.literal("ks2"), z.literal("ks3"), z.liter
 
 **What We Found**:
 
-- Definition 1: `type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+- Definition 1: `code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
 - Definition 2: `src/mcp/zod-input-schema.ts`
 - Definition 3: `contract/tool-descriptor.contract.ts`
 
@@ -713,7 +713,7 @@ function emitZodProperty(meta: ParamMetadata): string {
  *
  * Single source of truth for JSON Schema structure used in:
  * - Generated tool descriptors (contract)
- * - Generator code (type-gen)
+ * - Generator code (sdk-codegen)
  * - Runtime conversion (zod-input-schema)
  *
  * Defined locally because @modelcontextprotocol/sdk does not export
@@ -726,7 +726,7 @@ export type JsonSchemaProperty = /* ... */;
 
 Import in all 3 locations:
 
-- `type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+- `code-generation/typegen/mcp-tools/parts/emit-input-schema.ts`
 - `src/mcp/zod-input-schema.ts`
 - `contract/tool-descriptor.contract.ts` generation template
 

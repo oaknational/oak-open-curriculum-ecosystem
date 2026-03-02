@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 import {
   ensureArray,
@@ -8,7 +8,7 @@ import {
   ensureRecord,
   fetchJson,
   parseFirstSsePayload,
-  extractFirstText,
+  extractJsonText,
   createToolHeaders,
 } from './common.js';
 import { type SmokeContext } from './types.js';
@@ -60,7 +60,7 @@ export async function assertSynonymCanonicalisation(context: SmokeContext): Prom
     result.isError === undefined ? false : ensureBoolean(result.isError, 'tool isError');
   assert.equal(isError, false, 'Tool call should not be flagged as error');
   const content = ensureArray(result.content ?? [], 'tool content array');
-  parseToolPayload(extractFirstText(content, 'tool content'), logger);
+  parseToolPayload(extractJsonText(content, 'tool content'), logger);
   logAssertionSuccess(logger, 'Tool invocation completed without errors');
 }
 

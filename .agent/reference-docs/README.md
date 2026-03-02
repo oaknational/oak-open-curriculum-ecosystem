@@ -12,16 +12,12 @@ These documents are intended to help AI agents understand the tools and services
 - [MCP TypeScript SDK Documentation](mcp-typescript-sdk-readme.md)
   - [website](https://github.com/modelcontextprotocol/typescript-sdk)
 
-## Notion Integration
+## Notion Integration (Archived)
 
-- [Notion TypeScript SDK Documentation](notion-sdk-readme.md)
-  - [website](https://github.com/makenotion/notion-sdk-js)
-- [Notion API Overview](notion-api-overview.md)
-  - [website](https://developers.notion.com/docs/getting-started)
+- [Notion TypeScript SDK Documentation](archive/notion-sdk-readme.md) — archived, workspace removed
+- [Notion API Overview](archive/notion-api-overview.md) — archived, workspace removed
 
 ## Usage in Claude Code for Validation
 
-- [Claude Configuration Docs](claude-configuration-docs.md)
-  - [website](https://docs.anthropic.com/en/docs/claude-code/settings)
-- [Claude MCP Documentation](claude-mcp-docs.md)
-  - [website](https://docs.anthropic.com/en/docs/claude-code/mcp)
+- [Claude Configuration Docs](https://docs.anthropic.com/en/docs/claude-code/settings)
+- [Claude MCP Documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)

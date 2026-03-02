@@ -3,22 +3,16 @@ import path from 'node:path';
 import { minimatch } from 'minimatch';
 import type { Rule } from 'eslint';
 
-type Options = [
-  {
-    /** Glob for files to count (relative to each directory). Defaults to "*" */
-    pattern?: string;
-    /** Maximum allowed files in a directory. Defaults to 8 */
-    maxFiles?: number;
-    /**
-     * Directory patterns to ignore (match against path relative to cwd).
-     * Defaults include node_modules, dist, build, coverage, .git.
-     */
-    ignoreDirs?: string[];
-  },
-];
-
 function toPosix(p: string) {
   return p.split(path.sep).join('/');
+}
+
+/**
+ * Type guard for string arrays.
+ * An empty array is valid - it means no ignore patterns are configured.
+ */
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string');
 }
 
 const rule: Rule.RuleModule = {
@@ -45,14 +39,24 @@ const rule: Rule.RuleModule = {
   },
 
   create(context) {
-    const [{ pattern = '*', maxFiles = 8, ignoreDirs = [] } = {}] = context.options as Options;
+    const [{ pattern = '*', maxFiles = 8, ignoreDirs = [] }] = context.options;
+
+    if (typeof pattern !== 'string') {
+      throw new Error('pattern must be a string');
+    }
+    if (typeof maxFiles !== 'number') {
+      throw new Error('maxFiles must be a number');
+    }
+    if (!isStringArray(ignoreDirs)) {
+      throw new Error('ignoreDirs must be an array of strings');
+    }
 
     // Prefer physical path when processors might change virtual filenames
-    const filePath = (context as any).physicalFilename ?? context.filename;
+    const filePath = context.physicalFilename ?? context.filename;
     if (!filePath) return {};
 
     const dirPath = path.dirname(filePath);
-    const cwd = (context as any).cwd ?? process.cwd();
+    const cwd = context.cwd ?? process.cwd();
     const relDir = toPosix(path.relative(cwd, dirPath)) || '.';
 
     // Ignore configured directories (match against repo-relative dir path)

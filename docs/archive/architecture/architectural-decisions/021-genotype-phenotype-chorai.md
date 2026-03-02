@@ -1,3 +1,5 @@
+> **ARCHIVED**: This ADR describes the deprecated Greek/biological naming convention. The architecture has moved to neutral naming (see [ADR-040](../../../architecture/architectural-decisions/040-neutral-architecture-and-identity-allowlist.md) and [Greek Ecosystem Deprecation](../../../architecture/greek-ecosystem-deprecation.md)).
+
 # ADR-021: Genotype and Phenotype Chorai Pattern
 
 > 🗺️ **Related**: [ADR-020: Biological Architecture](./020-biological-architecture.md) | [Architecture Overview](../../architecture-overview.md) | [Phase 4 Plan](../../../.agent/plans/phase-4-oak-mcp-core-implementation-plan.md)

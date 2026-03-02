@@ -10,7 +10,7 @@ import {
   parseSinkConfigFromEnv,
   type LoggerSinkConfig,
   type LoggerSinkEnvironment,
-} from '@oaknational/mcp-logger/node';
+} from '@oaknational/logger/node';
 import type { RuntimeConfig } from '../runtime-config.js';
 
 /**

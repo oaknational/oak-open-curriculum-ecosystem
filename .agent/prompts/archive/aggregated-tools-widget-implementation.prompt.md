@@ -4,9 +4,9 @@ Implement a ChatGPT UI widget for Oak curriculum tools. This enables branded out
 
 ## Required Reading (In Order)
 
-1. `.agent/directives-and-memory/AGENT.md` - Core agent directives
-2. `.agent/directives-and-memory/rules.md` - TDD, no type shortcuts, schema-first principles
-3. `.agent/directives-and-memory/testing-strategy.md` - Test first (Red → Green → Refactor)
+1. `.agent/directives/AGENT.md` - Core agent directives
+2. `.agent/directives/rules.md` - TDD, no type shortcuts, schema-first principles
+3. `.agent/directives/testing-strategy.md` - Test first (Red → Green → Refactor)
 4. **`.agent/plans/sdk-and-mcp-enhancements/01-aggregated-tools-widget-metadata.md`** - The implementation plan (READ THIS CAREFULLY)
 5. `.agent/plans/sdk-and-mcp-enhancements/00-ontology-poc-static-tool.md` - Completed POC (reference for patterns)
 6. `.agent/reference-docs/openai-apps-sdk-reference.md` - OpenAI Apps SDK `_meta` fields

@@ -8,7 +8,7 @@
  */
 
 import { decode as jwtDecode, type JwtPayload } from 'jsonwebtoken';
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger } from '@oaknational/logger';
 
 /**
  * Result of resource parameter validation.

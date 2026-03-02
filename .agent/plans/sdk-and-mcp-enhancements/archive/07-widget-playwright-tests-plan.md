@@ -721,4 +721,4 @@ Following TDD at the E2E level:
 - `.agent/reference-docs/openai-apps-build-ui.md` - OpenAI Apps SDK UI docs
 - `apps/oak-curriculum-mcp-streamable-http/src/aggregated-tool-widget.ts` - Widget implementation
 - `apps/oak-curriculum-mcp-streamable-http/tests/visual/` - Existing Playwright tests
-- `.agent/directives-and-memory/testing-strategy.md` - TDD approach
+- `.agent/directives/testing-strategy.md` - TDD approach

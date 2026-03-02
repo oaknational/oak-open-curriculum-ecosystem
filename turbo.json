@@ -6,73 +6,48 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
-    "build-adapter": {
-      "cache": true,
-      "outputs": ["dist/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "tsconfig.json",
-        "tsconfig.build.json",
-        "tsup.config.ts"
-      ]
-    },
-    "build-linting": {
-      "cache": true,
-      "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "tsconfig.json", "tsup.config.ts"]
-    },
-    "type-gen": {
-      "dependsOn": ["^type-gen", "^build-adapter"],
+    "sdk-codegen": {
+      "dependsOn": ["^sdk-codegen", "^build"],
       "cache": true,
       "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
-      "env": ["OAK_API_KEY"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/code-generation/**/*.ts",
+        "**/vocab-gen/**/*.ts",
+        "**/scripts/**/*.ts",
+        "**/schema-cache/**"
+      ],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
-      "dependsOn": ["^doc-gen", "type-gen"],
+      "dependsOn": ["^doc-gen", "^build", "sdk-codegen"],
       "cache": true,
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "**/type-gen/**/*.ts",
+        "**/code-generation/**/*.ts",
         "**/scripts/**/*.ts",
-        "next.config.ts",
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ]
     },
     "build": {
-      "dependsOn": ["^build", "type-gen", "build-adapter", "build-linting"],
-      "cache": false,
-      "outputs": ["dist/**", ".tsup/**", ".next/**"],
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": true,
+      "outputs": ["dist/**", ".tsup/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/core/oak-eslint",
-        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "$TURBO_ROOT$/tsconfig.base.json",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
-        "next.config.ts",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ],
-      "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "clean": {
@@ -81,11 +56,10 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build-linting"],
+      "dependsOn": ["^build", "build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -93,13 +67,24 @@
         "$TURBO_ROOT$/eslint.config.ts",
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/core/oak-eslint",
-        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "smoke-tests/**/*.ts",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
+    },
+    "lint:fix": {
+      "dependsOn": ["^build", "build", "sdk-codegen"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/eslint.config.base.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
         "eslint.config.ts",
         "tsconfig.lint.json",
         "src/**/*.ts",
@@ -110,7 +95,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -118,8 +103,6 @@
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
@@ -127,13 +110,12 @@
       ]
     },
     "mutate": {
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": false,
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
@@ -143,36 +125,14 @@
       ]
     },
     "test:e2e": {
+      "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "e2e-tests/**/*.ts",
-        "vitest.e2e.config.ts",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport"
-      ],
-      "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
-      "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
-    },
-    "test:e2e:built": {
-      "dependsOn": ["^build"],
-      "outputs": [],
-      "cache": false,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "e2e-tests/built-server.e2e.test.ts",
-        "dist/**/*.js",
-        "dist/**/*.d.ts"
-      ],
-      "env": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"],
-      "passThroughEnv": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"]
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
+      "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:ui": {
-      "dependsOn": ["type-gen"],
+      "dependsOn": ["^build", "build", "sdk-codegen"],
       "outputs": [],
       "cache": true,
       "inputs": [
@@ -180,31 +140,21 @@
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
-        "next.config.ts",
         "playwright.config.ts"
       ]
     },
     "type-check": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsconfig.lint.json",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "smoke-tests/**/*.ts",
         "**/*.d.ts",
         "src/types/generated/**/*.ts",
@@ -212,7 +162,7 @@
       ]
     },
     "smoke:dev:stub": {
-      "dependsOn": ["^smoke:dev:stub", "^type-gen"],
+      "dependsOn": ["^smoke:dev:stub", "^build", "test:e2e"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -220,14 +170,12 @@
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ],
-      "env": ["LOG_LEVEL"],
       "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
-      "dependsOn": ["^smoke:dev:live", "^type-gen"],
+      "dependsOn": ["^smoke:dev:live", "^build", "build"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -236,10 +184,9 @@
       ]
     },
     "smoke:dev:live:auth": {
-      "dependsOn": ["^smoke:dev:live:auth", "^type-gen"],
+      "dependsOn": ["^smoke:dev:live:auth", "^build", "build"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -248,7 +195,7 @@
       ]
     },
     "smoke:remote": {
-      "dependsOn": ["^smoke:remote", "^type-gen"],
+      "dependsOn": ["^smoke:remote", "^build", "build"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -256,7 +203,6 @@
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ],
-      "env": ["LOG_LEVEL"],
       "passThroughEnv": ["LOG_LEVEL"]
     }
   }

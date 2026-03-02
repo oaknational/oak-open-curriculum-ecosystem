@@ -325,5 +325,5 @@ This architecture is based on:
 
 - [ADR-023: Moria/Histoi/Psycha Architecture](../architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md)
 - [Phase 5: Moria/Histoi/Psycha Evolution](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md)
-- [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)
+- [Testing Strategy](../../../.agent/directives/testing-strategy.md)
 - [Workspace ESLint Rules](../architecture/workspace-eslint-rules.md)

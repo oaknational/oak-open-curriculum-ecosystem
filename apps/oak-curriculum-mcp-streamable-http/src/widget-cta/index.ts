@@ -41,12 +41,9 @@
  *
  * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui#send-conversational-follow-ups
  * @see ADR-061 - Widget Call-to-Action System
- *
- * @packageDocumentation
- * @module widget-cta
  */
 
 export type { CtaConfig } from './types.js';
-export { CTA_REGISTRY, type CtaName } from './registry.js';
+export { CTA_REGISTRY, CTA_LIST, type CtaName } from './registry.js';
 export { generateCtaButtonHtml, generateCtaContainerHtml } from './html-generators.js';
 export { generateCtaHandlerJs, CTA_UNDERSTOOD_DELAY_MS } from './js-generator.js';

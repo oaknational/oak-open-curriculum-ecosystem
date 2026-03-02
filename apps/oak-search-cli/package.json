@@ -1,0 +1,115 @@
+{
+  "name": "@oaknational/search-cli",
+  "version": "0.0.0-development",
+  "private": true,
+  "type": "module",
+  "main": "dist/bin/oaksearch.js",
+  "bin": {
+    "oaksearch": "./dist/bin/oaksearch.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist .turbo",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "NODE_OPTIONS='--max-old-space-size=6144' vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "test:smoke": "vitest run --config vitest.smoke.config.ts",
+    "test:watch": "vitest",
+    "bulk:download": "tsx bin/oaksearch.ts admin download",
+    "bulk:codegen": "tsx bin/oaksearch.ts eval codegen",
+    "es:setup": "tsx bin/oaksearch.ts admin setup",
+    "es:reset": "tsx bin/oaksearch.ts admin setup --reset",
+    "es:status": "tsx bin/oaksearch.ts admin status",
+    "es:ingest": "tsx bin/oaksearch.ts admin ingest",
+    "diagnose:elser": "tsx bin/oaksearch.ts admin diagnose-elser",
+    "analyze:elser": "tsx bin/oaksearch.ts admin analyze-elser",
+    "ingest:verify": "tsx bin/oaksearch.ts admin verify",
+    "benchmark": "tsx bin/oaksearch.ts eval benchmark all",
+    "benchmark:lessons": "tsx bin/oaksearch.ts eval benchmark lessons",
+    "benchmark:units": "tsx bin/oaksearch.ts eval benchmark units",
+    "benchmark:threads": "tsx bin/oaksearch.ts eval benchmark threads",
+    "benchmark:sequences": "tsx bin/oaksearch.ts eval benchmark sequences",
+    "ground-truth:validate": "tsx bin/oaksearch.ts eval validate",
+    "redis:up": "docker compose up -d",
+    "redis:down": "docker compose down",
+    "redis:reset": "docker compose down -v",
+    "redis:status": "docker compose ps",
+    "cache:reset-ttls": "tsx bin/oaksearch.ts admin cache-reset",
+    "elastic:alias-swap": "tsx bin/oaksearch.ts admin alias-swap",
+    "sandbox:ingest": "tsx bin/oaksearch.ts admin sandbox-ingest",
+    "zero-hit:purge": "tsx bin/oaksearch.ts observe purge",
+    "docs:api:html": "typedoc --options typedoc.json",
+    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
+    "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",
+    "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^9.3.2",
+    "@oaknational/curriculum-sdk": "workspace:*",
+    "@oaknational/env": "workspace:*",
+    "@oaknational/env-resolution": "workspace:*",
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/oak-search-sdk": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "dotenv": "^17.3.1",
+    "ioredis": "^5.9.3",
+    "zod": "^4.3.6"
+  },
+  "description": "Semantic search CLI for Oak curriculum — ingestion, hybrid search, ground truth evaluation",
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.4.1",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/unzipper": "^0.10.11",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "@vitest/ui": "^4.0.18",
+    "eslint": "^9.39.1",
+    "prettier": "^3.8.1",
+    "tsup": "^8.5.1",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-markdown": "^4.10.0",
+    "typescript": "^5.9.3",
+    "unzipper": "^0.12.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "apps/oak-search-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-search-cli#readme",
+  "keywords": [
+    "oak",
+    "search",
+    "semantic",
+    "elasticsearch",
+    "cli",
+    "education"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

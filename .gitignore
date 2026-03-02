@@ -31,11 +31,12 @@ reference
 *.log
 .logs/*
 !.logs/.gitignore
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-tmp/smoke-logs/
+tmp/
 apps/oak-curriculum-mcp-streamable-http/tmp/
 .tmp/
 # Vercel logs
@@ -185,4 +186,4 @@ vite.config.ts.timestamp-*
 .stryker-tmp
 
 # Documentation helpers
-packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md
+packages/sdks/oak-sdk-codegen/code-generation/utils/ingest-pipeline.md

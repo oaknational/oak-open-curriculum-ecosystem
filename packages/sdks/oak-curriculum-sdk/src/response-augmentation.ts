@@ -4,102 +4,89 @@
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-/* eslint-disable complexity */ // REFACTOR
-import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
+import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
-import {
-  UnifiedLogger,
-  buildResourceAttributes,
-  logLevelToSeverityNumber,
-} from '@oaknational/mcp-logger';
 import type { HttpMethod } from './validation/types.js';
+import {
+  getContentTypeFromPath,
+  extractGenericId,
+  extractContentTypeSpecificId,
+  isNonNullObject,
+} from './response-augmentation-helpers.js';
+import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 
-// Module-level logger for warnings (browser-compatible)
-const logger = new UnifiedLogger({
-  minSeverity: logLevelToSeverityNumber('WARN'),
-  resourceAttributes: buildResourceAttributes({}, 'response-augmentation', '1.0.0'),
-  context: {},
-  stdoutSink: {
-    write: (line: string) => {
-      console.log(line);
-    },
-  },
-  fileSink: null,
-});
+/**
+ * Key stage entry schema derived from the generated SubjectResponseSchema.
+ * Uses `.shape.keyStages` to anchor validation to the schema, ensuring
+ * property names stay in sync with the upstream API contract.
+ */
+const keyStagesSchema = rawCurriculumSchemas.SubjectResponseSchema.shape.keyStages;
 
-function isReadonlyStringArray(value: unknown): value is readonly string[] {
-  return Array.isArray(value) && value.every((v) => typeof v === 'string');
+interface UnitContext {
+  readonly subjectSlug?: string;
+  readonly phaseSlug?: string;
+}
+
+interface SubjectContext {
+  readonly keyStageSlugs: readonly string[];
 }
 
 /**
- * Extracts context from response data for units and subjects
+ * Extracts unit context from response data
  */
-function extractContextFromResponse(response: unknown): ResponseContext {
+function extractUnitContext(response: unknown): UnitContext | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
+  if ('subjectSlug' in response && 'phaseSlug' in response) {
+    return {
+      subjectSlug: typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined,
+      phaseSlug: typeof response.phaseSlug === 'string' ? response.phaseSlug : undefined,
+    };
+  }
+  return undefined;
+}
+
+/**
+ * Extracts subject context from response data.
+ *
+ * Validates the `keyStages` field against the schema derived from the
+ * generated `SubjectResponseSchema`, then maps to slug strings.
+ */
+function extractSubjectContext(response: unknown): SubjectContext | undefined {
+  if (!isNonNullObject(response) || !('keyStages' in response)) {
+    return undefined;
+  }
+  const parsed = keyStagesSchema.safeParse(response.keyStages);
+  if (!parsed.success || parsed.data.length === 0) {
+    return undefined;
+  }
+  return { keyStageSlugs: parsed.data.map((ks) => ks.keyStageSlug) };
+}
+
+/**
+ * Extracts context from response data for units and subjects.
+ * Exported for shared use by the response augmentation middleware
+ * and `runFetchTool` in `aggregated-fetch.ts`.
+ */
+export function extractContextFromResponse(response: unknown): ResponseContext {
   if (!response || typeof response !== 'object' || Array.isArray(response)) {
     return {};
   }
 
   const context: ResponseContext = {};
 
-  // Extract unit context from response data
-  if ('subjectSlug' in response && 'phaseSlug' in response) {
-    context.unit = {
-      subjectSlug: typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined,
-      phaseSlug: typeof response.phaseSlug === 'string' ? response.phaseSlug : undefined,
-    };
+  const unit = extractUnitContext(response);
+  if (unit) {
+    context.unit = unit;
   }
 
-  // Extract subject context from response data
-  if ('keyStageSlugs' in response && isReadonlyStringArray(response.keyStageSlugs)) {
-    context.subject = {
-      keyStageSlugs: response.keyStageSlugs,
-    };
+  const subject = extractSubjectContext(response);
+  if (subject) {
+    context.subject = subject;
   }
 
   return context;
-}
-
-/**
- * Determines content type from API path
- *
- * Recognises paths for:
- * - Single entity endpoints (e.g., /lessons/{lesson}/summary)
- * - Search endpoints (e.g., /search/lessons, /search/transcripts)
- * - Key-stage scoped endpoints (e.g., /key-stages/{ks}/subjects/{subj}/lessons)
- */
-function getContentTypeFromPath(path: string): ContentType | undefined {
-  // Search endpoints - must check before /subjects/ to avoid false matches
-  if (path === '/search/lessons' || path === '/search/transcripts') {
-    return 'lesson';
-  }
-
-  // Key-stage scoped endpoints - check the suffix to determine content type
-  if (path.includes('/key-stages/') && path.includes('/subjects/')) {
-    if (path.endsWith('/lessons')) {
-      return 'lesson';
-    }
-    if (path.endsWith('/units')) {
-      return 'unit';
-    }
-  }
-
-  // Single entity endpoints
-  if (path.includes('/lessons/')) {
-    return 'lesson';
-  }
-  if (path.includes('/units/')) {
-    return 'unit';
-  }
-  if (path.includes('/subjects/')) {
-    return 'subject';
-  }
-  if (path.includes('/sequences/')) {
-    return 'sequence';
-  }
-  if (path.includes('/threads/')) {
-    return 'thread';
-  }
-  return undefined;
 }
 
 /**
@@ -146,35 +133,11 @@ function extractIdFromResponseData(
   response: unknown,
   contentType: ContentType | undefined,
 ): string | undefined {
-  if (response && typeof response === 'object' && !Array.isArray(response)) {
-    // Generic fields take priority
-    if ('slug' in response && typeof response.slug === 'string') {
-      return response.slug;
-    }
-    if ('id' in response && typeof response.id === 'string') {
-      return response.id;
-    }
-    // Content-type-specific slug fields
-    if (contentType === 'lesson') {
-      const v = 'lessonSlug' in response ? response.lessonSlug : undefined;
-      if (typeof v === 'string') {
-        return v;
-      }
-    }
-    if (contentType === 'unit') {
-      const v = 'unitSlug' in response ? response.unitSlug : undefined;
-      if (typeof v === 'string') {
-        return v;
-      }
-    }
-    if (contentType === 'sequence') {
-      const v = 'sequenceSlug' in response ? response.sequenceSlug : undefined;
-      if (typeof v === 'string') {
-        return v;
-      }
-    }
+  if (!response || typeof response !== 'object' || Array.isArray(response)) {
+    return undefined;
   }
-  return undefined;
+
+  return extractGenericId(response) ?? extractContentTypeSpecificId(response, contentType);
 }
 
 /**
@@ -192,12 +155,12 @@ function extractIdFromPath(response: unknown, path: string): string | undefined 
 }
 
 /** Augments an array response with canonical URL on each item */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
 export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   response: TItem[],
   path: string,
   method: HttpMethod,
-): (TItem & { canonicalUrl?: string })[] {
+): (TItem & { canonicalUrl?: string | null })[] {
   if (method !== 'get') {
     return response;
   }
@@ -205,19 +168,18 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   if (!contentType) {
     return response;
   }
-  return response.map((item) => ({
-    ...item,
-    ...extractCanonicalUrlFields(item, path, contentType),
-  }));
+  return response.map((item) => {
+    return { ...item, ...extractCanonicalUrlFields(item, path, contentType) };
+  });
 }
 
 /** Augments a single object response with canonical URL */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
 export function augmentResponseWithCanonicalUrl<T extends object>(
   response: T,
   path: string,
   method: HttpMethod,
-): T & { canonicalUrl?: string } {
+): T & { canonicalUrl?: string | null } {
   if (method !== 'get') {
     return response;
   }
@@ -228,22 +190,37 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   return Object.assign({}, response, extractCanonicalUrlFields(response, path, contentType));
 }
 
+/**
+ * Extracts canonical URL fields from a response
+ * @param response - The response to extract canonical URL fields from
+ * @param path - The path to extract canonical URL fields from
+ * @param contentType - The content type to extract canonical URL fields from
+ * @returns The canonical URL fields for the response, which is null for threads (no website equivalent)
+ * @throws An error if the content type is unsupported or no result is generated
+ *
+ * @remarks
+ * TODO: Refactor to return a Result\<string, Error\> instead of throwing errors
+ */
 function extractCanonicalUrlFields(
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-  response: object,
+  response: unknown,
   path: string,
   contentType: ContentType,
-): { canonicalUrl?: string } {
+): { canonicalUrl: string | null } {
+  // Idempotent: preserve existing canonicalUrl
+  if (
+    isNonNullObject(response) &&
+    'canonicalUrl' in response &&
+    typeof response.canonicalUrl === 'string'
+  ) {
+    return { canonicalUrl: response.canonicalUrl };
+  }
   const id = extractIdFromResponse(response, path);
   if (!id) {
-    logger.warn(`Could not extract ID from response`, { path, contentType });
-    return {};
+    throw new TypeError(
+      `Could not extract ID for path: ${path} from response: ${JSON.stringify(response)}`,
+    );
   }
   const context = extractContextFromResponse(response);
   const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);
-  if (!canonicalUrl) {
-    logger.warn(`Could not generate canonical URL`, { contentType, id, context });
-    return {};
-  }
   return { canonicalUrl };
 }

@@ -2,7 +2,6 @@
  * Widget Preview Server with ChatGPT environment emulation
  * Watch `src/widget-renderers/*.ts` - save and refresh to see changes.
  * Run: pnpm widget:preview, then visit http://localhost:4580/widget
- * @module scripts/widget-preview-server
  */
 
 import { watch } from 'chokidar';
@@ -34,41 +33,64 @@ const WIDGET_SRC_PATH = resolve(__dirname, '../src');
 const PORT = 4580;
 
 /**
- * Mock data for widget preview - represents typical "get-help" tool output.
+ * Mock data for widget preview — represents typical search tool output.
+ *
+ * After Track 1a, only the search renderer exists. Browse and explore
+ * mock data will be added in Phases 2-3.
  */
 const MOCK_TOOL_OUTPUT = {
-  serverOverview: {
-    name: 'Oak Curriculum MCP Server',
-    version: '1.0.0',
-    aboutOak:
-      "Oak National Academy is the UK's national curriculum body, providing free, high-quality, fully-resourced curriculum resources for teachers and students.",
-    oakWebsite: 'https://www.thenational.academy',
-    description:
-      'Access Oak National Academy curriculum resources including lessons, units, quizzes, transcripts, and teaching materials.',
-  },
-  toolCategories: {
-    discovery: {
-      description: 'Find curriculum content by searching or listing.',
-      tools: ['search', 'get-subjects', 'get-key-stages'],
+  scope: 'lessons',
+  total: 3,
+  took: 42,
+  results: [
+    {
+      id: 'lesson-photosynthesis',
+      rankScore: 0.95,
+      lesson: {
+        lesson_title: 'Introduction to Photosynthesis',
+        lesson_slug: 'introduction-to-photosynthesis',
+        subject_slug: 'science',
+        subject_title: 'Science',
+        key_stage: 'ks3',
+        key_stage_title: 'KS3',
+        lesson_url: 'https://teachers.thenational.academy/lessons/introduction-to-photosynthesis',
+      },
+      highlights: [],
     },
-    browsing: {
-      description: 'Explore curriculum structure systematically.',
-      tools: ['get-key-stages-subject-units', 'get-key-stages-subject-lessons'],
+    {
+      id: 'lesson-light-dependent',
+      rankScore: 0.88,
+      lesson: {
+        lesson_title: 'The Light-Dependent Reactions',
+        lesson_slug: 'the-light-dependent-reactions',
+        subject_slug: 'biology',
+        subject_title: 'Biology',
+        key_stage: 'ks4',
+        key_stage_title: 'KS4',
+        lesson_url: 'https://teachers.thenational.academy/lessons/the-light-dependent-reactions',
+      },
+      highlights: [],
     },
-    fetching: {
-      description: 'Get detailed content for specific lessons or units.',
-      tools: ['fetch', 'get-lessons-summary', 'get-lessons-transcript'],
+    {
+      id: 'lesson-factors-photosynthesis',
+      rankScore: 0.82,
+      lesson: {
+        lesson_title: 'Factors Affecting Photosynthesis',
+        lesson_slug: 'factors-affecting-photosynthesis',
+        subject_slug: 'science',
+        subject_title: 'Science',
+        key_stage: 'ks3',
+        key_stage_title: 'KS3',
+        lesson_url: 'https://teachers.thenational.academy/lessons/factors-affecting-photosynthesis',
+      },
+      highlights: [],
     },
-  },
-  tips: [
-    'Use "search" for free-text queries; use browsing tools for structured exploration.',
-    'The "fetch" tool uses prefixed IDs: lesson:slug, unit:slug, thread:slug.',
-    'Get lesson transcript for detailed content understanding.',
   ],
 };
 
 const MOCK_METADATA = {
-  'annotations/title': 'Get Help',
+  toolName: 'search',
+  'annotations/title': 'Search Curriculum',
 };
 
 /** Generates the widget HTML file with mock data */

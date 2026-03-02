@@ -12,8 +12,9 @@ import {
 } from './helpers/sse.js';
 import {
   listUniversalTools,
+  generatedToolRegistry,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 const ToolEntrySchema = z.object({
   name: z.string(),
@@ -93,18 +94,18 @@ async function assertFetchLessonResponse(
 
 describe('Streamable HTTP server (stub mode)', () => {
   it('returns the full roster from listUniversalTools()', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', STUB_ACCEPT_HEADER)
       .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
 
     expect(response.status).toBe(200);
-    assertToolRoster(response.text, listUniversalTools());
+    assertToolRoster(response.text, listUniversalTools(generatedToolRegistry));
   });
 
   it('serialises stubbed fetch results with canonicalUrl', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';
     const lessonSlug = 'four-types-of-simple-sentence';
     const response = await request(app)
@@ -125,7 +126,7 @@ describe('Streamable HTTP server (stub mode)', () => {
   });
 
   it('reports parameter validation failures from stub executor', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', STUB_ACCEPT_HEADER)
@@ -151,7 +152,7 @@ describe('Streamable HTTP server (stub mode)', () => {
   // Stub mode uses auth bypass for convenience
 
   it('rejects requests missing text/event-stream in Accept header', async () => {
-    const { app } = createStubbedHttpApp();
+    const { app } = await createStubbedHttpApp();
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json')

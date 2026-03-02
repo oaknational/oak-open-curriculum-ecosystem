@@ -6,7 +6,7 @@
 ## What changed
 
 - Updated `code-reviewer.md`, `architecture-reviewer.md`, `config-auditor.md`, `test-auditor.md`, `type-reviewer.md`:
-  - Added `.agent/directives-and-memory/AGENT.md` to Core References (GO.md already present).
+  - Added `.agent/directives/AGENT.md` to Core References (GO.md already present).
   - Added/standardised Immediate Context Gathering and Success Metrics.
   - Added “What to pass” under Delegation Decision Flow.
   - Added/confirmed quality gate order where relevant.

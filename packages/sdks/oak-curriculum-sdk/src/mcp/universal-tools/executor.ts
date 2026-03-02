@@ -9,24 +9,26 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
 import {
-  formatDataWithContext,
+  formatToolResponse,
   formatError,
   formatUnknownTool,
   extractExecutionData,
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
-import { validateSearchArgs, runSearchTool } from '../aggregated-search/index.js';
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
-import { runOntologyTool } from '../aggregated-ontology.js';
-import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
-import { runKnowledgeGraphTool } from '../aggregated-knowledge-graph.js';
+import {
+  validateCurriculumModelArgs,
+  runCurriculumModelTool,
+} from '../aggregated-curriculum-model/index.js';
+import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
+import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
+import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
+import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
+import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
+import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
-import {
-  getToolFromToolName,
-  type ToolName,
-} from '../../types/generated/api-schema/mcp-tools/index.js';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.
@@ -41,72 +43,46 @@ import {
  * @param toolName - Name of the tool (to look up requiresDomainContext)
  * @returns Formatted CallToolResult for MCP
  */
-function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): CallToolResult {
+function mapExecutionResult(
+  result: ToolExecutionResult,
+  toolName: ToolName,
+  deps: UniversalToolExecutorDependencies,
+): CallToolResult {
   const outcome = extractExecutionData(result);
   if (!outcome.ok) {
     return formatError(toErrorMessage(outcome.error));
   }
 
-  // Look up requiresDomainContext from the tool descriptor
-  const descriptor = getToolFromToolName(toolName);
-  const includeContextHint = descriptor.requiresDomainContext;
+  const descriptor = deps.generatedTools.getToolFromToolName(toolName);
+  const title = descriptor.annotations?.title ?? toolName;
 
-  return formatDataWithContext({
-    status: outcome.status,
-    data: outcome.data,
-    includeContextHint,
+  return formatToolResponse({
+    summary: `${title}: ${String(outcome.status)}`,
+    data: { status: outcome.status, data: outcome.data },
+    includeContextHint: descriptor.requiresDomainContext,
+    toolName,
+    annotationsTitle: title,
   });
 }
 
 /**
- * Executes an aggregated tool by name.
- *
- * Aggregated tools combine multiple API calls into a single operation.
- * Each tool has its own validation and execution logic. This function
- * dispatches to the appropriate handler based on the tool name.
- *
- * @param name - The aggregated tool name (already validated via type guard)
- * @param input - Raw input from tool invocation (will be validated)
- * @param deps - Dependencies for tool execution (API client, etc.)
- * @returns CallToolResult from the aggregated tool
- *
- * @example
- * ```typescript
- * if (isAggregatedToolName(name)) {
- *   return executeAggregatedTool(name, input, deps);
- * }
- * ```
+ * Handles curriculum model tool validation and execution.
  */
-async function executeAggregatedTool(
-  name: AggregatedToolName,
+function handleCurriculumModelTool(input: unknown): CallToolResult {
+  const validation = validateCurriculumModelArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runCurriculumModelTool(validation.value);
+}
+
+/**
+ * Handles fetch tool validation and execution.
+ */
+async function handleFetchTool(
   input: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  if (name === 'search') {
-    const validation = validateSearchArgs(input);
-    if (!validation.ok) {
-      return formatError(validation.message);
-    }
-    return runSearchTool(validation.value, deps);
-  }
-
-  if (name === 'get-ontology') {
-    return runOntologyTool();
-  }
-
-  if (name === 'get-help') {
-    const validation = validateHelpArgs(input);
-    if (!validation.ok) {
-      return formatError(validation.message);
-    }
-    return runHelpTool(validation.value);
-  }
-
-  if (name === 'get-knowledge-graph') {
-    return runKnowledgeGraphTool();
-  }
-
-  // name === 'fetch' (exhaustive handling - TypeScript knows this is the only remaining case)
   const validation = validateFetchArgs(input);
   if (!validation.ok) {
     return formatError(validation.message);
@@ -115,10 +91,79 @@ async function executeAggregatedTool(
 }
 
 /**
+ * Handles search tool validation and execution via the Search SDK.
+ *
+ * Dispatches by scope to Elasticsearch-backed retrieval methods
+ * (lessons, units, threads, sequences, suggest).
+ */
+async function handleSearchTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateSearchSdkArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runSearchSdkTool(validation.value, deps);
+}
+
+/**
+ * Handles browse-curriculum tool validation and execution.
+ */
+async function handleBrowseTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateBrowseArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runBrowseTool(validation.value, deps);
+}
+
+/**
+ * Handles explore-topic tool validation and execution.
+ */
+async function handleExploreTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const validation = validateExploreArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
+  }
+  return runExploreTool(validation.value, deps);
+}
+
+type AggregatedHandler = (
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+) => Promise<CallToolResult>;
+
+const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
+  search: handleSearchTool,
+  'get-curriculum-model': (input) => Promise.resolve(handleCurriculumModelTool(input)),
+  'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
+  'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
+  fetch: handleFetchTool,
+  'browse-curriculum': handleBrowseTool,
+  'explore-topic': handleExploreTool,
+};
+
+function executeAggregatedTool(
+  name: AggregatedToolName,
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  const handler = AGGREGATED_HANDLERS[name];
+  return handler(input, deps);
+}
+
+/**
  * Creates a universal tool executor for MCP tool invocations.
  *
- * The executor handles both aggregated tools (search, fetch, get-ontology, get-help,
- * get-knowledge-graph) and generated tools from the OpenAPI schema. It performs
+ * The executor handles both aggregated tools (search, fetch, get-curriculum-model, etc.)
+ * and generated tools from the OpenAPI schema. It performs
  * the following steps:
  *
  * 1. Validates the tool name is known
@@ -144,7 +189,7 @@ export function createUniversalToolExecutor(
   deps: UniversalToolExecutorDependencies,
 ): (name: UniversalToolName, args: unknown) => Promise<CallToolResult> {
   return async (name: UniversalToolName, args: unknown): Promise<CallToolResult> => {
-    if (!isUniversalToolName(name)) {
+    if (!isUniversalToolName(name, deps.generatedTools.isToolName)) {
       return formatUnknownTool(name);
     }
 
@@ -154,10 +199,8 @@ export function createUniversalToolExecutor(
       return executeAggregatedTool(name, input, deps);
     }
 
-    // Generated tool - dispatch to the MCP tool executor
-    // The name is already validated as a ToolName at this point
     const result = await deps.executeMcpTool(name, input);
-    return mapExecutionResult(result, name);
+    return mapExecutionResult(result, name, deps);
   };
 }
 

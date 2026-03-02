@@ -4,12 +4,10 @@ import {
   createStubToolExecutor as createCallToolStubExecutor,
   stubbedToolResponses,
   type StubbedToolName,
-} from '../types/generated/api-schema/mcp-tools/generated/stubs/index.js';
-import {
   getToolFromToolName,
   isToolName,
   type ToolName,
-} from '../types/generated/api-schema/mcp-tools/index.js';
+} from '@oaknational/sdk-codegen/mcp-tools';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { McpParameterError, McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 

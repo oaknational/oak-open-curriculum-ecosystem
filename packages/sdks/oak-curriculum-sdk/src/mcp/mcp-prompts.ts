@@ -6,7 +6,17 @@
  * in MCP clients.
  *
  * @remarks Static content per schema-first principles.
+ * Message generators are in `./mcp-prompt-messages.ts` to keep this
+ * file within ESLint max-lines limits.
  */
+
+import type { PromptMessage } from './mcp-prompt-messages.js';
+import {
+  getFindLessonsMessages,
+  getLessonPlanningMessages,
+  getExploreCurriculumMessages,
+  getLearningProgressionMessages,
+} from './mcp-prompt-messages.js';
 
 /**
  * Prompt argument definition for MCP registration.
@@ -33,22 +43,6 @@ export interface McpPrompt {
 }
 
 /**
- * Message content for prompt responses.
- */
-interface PromptMessageContent {
-  readonly type: 'text';
-  readonly text: string;
-}
-
-/**
- * Message in a prompt response.
- */
-interface PromptMessage {
-  readonly role: 'user' | 'assistant';
-  readonly content: PromptMessageContent;
-}
-
-/**
  * MCP prompts for common curriculum workflows.
  *
  * These prompts provide guided interactions for teachers using
@@ -58,7 +52,7 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
   {
     name: 'find-lessons',
     description:
-      'Find curriculum lessons on a specific topic. Searches across all subjects and key stages to find relevant lessons.',
+      'Find curriculum lessons on a specific topic using semantic search. Searches across all subjects and key stages to find relevant lessons.',
     arguments: [
       {
         name: 'topic',
@@ -91,13 +85,30 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     ],
   },
   {
-    name: 'progression-map',
+    name: 'explore-curriculum',
     description:
-      'Map how a concept develops across years in a subject, showing progression from early learning to GCSE.',
+      'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and learning threads in parallel to give a broad overview before drilling down.',
+    arguments: [
+      {
+        name: 'topic',
+        description: 'The topic to explore (e.g., "volcanos", "electricity", "the Romans")',
+        required: true,
+      },
+      {
+        name: 'subject',
+        description: 'Optional: Narrow to a specific subject (e.g., "science", "history")',
+        required: false,
+      },
+    ],
+  },
+  {
+    name: 'learning-progression',
+    description:
+      'Understand how a concept builds across year groups by searching learning progression threads and mapping unit dependencies.',
     arguments: [
       {
         name: 'concept',
-        description: 'The concept thread to explore (e.g., "number", "forces", "grammar")',
+        description: 'The concept to trace (e.g., "algebra", "cells", "narrative writing")',
         required: true,
       },
       {
@@ -132,102 +143,11 @@ export function getPromptMessages(promptName: string, args: PromptArgs): PromptM
       return getFindLessonsMessages(args);
     case 'lesson-planning':
       return getLessonPlanningMessages(args);
-    case 'progression-map':
-      return getProgressionMapMessages(args);
+    case 'explore-curriculum':
+      return getExploreCurriculumMessages(args);
+    case 'learning-progression':
+      return getLearningProgressionMessages(args);
     default:
       return [];
   }
-}
-
-/**
- * Generates messages for the find-lessons prompt.
- */
-function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
-  const topic = args.topic ?? 'the topic';
-  const keyStage = args.keyStage;
-
-  const keyStageNote = keyStage ? ` Focus on ${keyStage} content.` : '';
-
-  return [
-    {
-      role: 'user',
-      content: {
-        type: 'text',
-        text: `I want to find lessons about "${topic}".${keyStageNote}
-
-Before searching, you may want to call get-ontology to understand domain definitions (key stages, subjects, units) and get-knowledge-graph to understand how curriculum concepts relate to each other.
-
-Please:
-1. Use the search tool to find lessons matching this topic${keyStage ? ` with keyStage: "${keyStage}"` : ''}
-2. Review the results and identify the most relevant lessons
-3. For the top 3-5 lessons, provide a brief summary of what each covers
-4. Suggest which lesson might be best for different learning objectives`,
-      },
-    },
-  ];
-}
-
-/**
- * Generates messages for the lesson-planning prompt.
- */
-function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
-  const topic = args.topic ?? 'the topic';
-  const yearGroup = args.yearGroup ?? 'the year group';
-
-  return [
-    {
-      role: 'user',
-      content: {
-        type: 'text',
-        text: `I'm planning a lesson on "${topic}" for ${yearGroup}. Please help me gather materials.
-
-You may want to call get-ontology for domain definitions, get-knowledge-graph for concept relationships, and get-help for tool usage guidance.
-
-Steps:
-1. Search for lessons on "${topic}" that are appropriate for ${yearGroup}
-2. Select the most relevant lesson
-3. Get the lesson summary for learning objectives and keywords
-4. Get the lesson transcript to understand the content delivery
-5. Get quiz questions for assessment ideas
-6. Get available assets (slides, worksheets)
-
-Please provide:
-- Learning objectives from the lesson
-- Key vocabulary/keywords
-- A summary of the lesson structure
-- Quiz questions that could be used for assessment
-- Links to any downloadable resources`,
-      },
-    },
-  ];
-}
-
-/**
- * Generates messages for the progression-map prompt.
- */
-function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
-  const concept = args.concept ?? 'the concept';
-  const subject = args.subject ?? 'the subject';
-
-  return [
-    {
-      role: 'user',
-      content: {
-        type: 'text',
-        text: `I want to understand how the concept of "${concept}" develops across years in ${subject}.
-
-You may want to call get-ontology for domain definitions, get-knowledge-graph to understand how threads and units relate structurally, and get-help for tool guidance.
-
-Please:
-1. Use get-threads to find threads related to "${concept}" in ${subject}
-2. Use get-threads-units to get the units in the relevant thread
-3. Map out the progression showing:
-   - What is taught at each stage
-   - How concepts build on previous learning
-   - Key prerequisites and dependencies
-4. Identify any gaps or jumps in the progression
-5. Suggest how to scaffold learning for students who need support`,
-      },
-    },
-  ];
 }

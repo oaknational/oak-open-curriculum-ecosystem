@@ -1,6 +1,7 @@
 node_modules
 dist
 coverage
+tmp
 **/node_modules
 **/dist
 **/coverage
@@ -9,6 +10,8 @@ pnpm-lock.yaml
 **/.pnpm-store
 CHANGELOG.md
 reference
+scratch
+.cursor
 
 # Generated files (DO NOT FORMAT)
 *.generated.ts
@@ -31,6 +34,9 @@ packages/oak-curriculum-sdk/src/validation/generated/
 apps/oak-curriculum-mcp/src/tools/generated/
 apps/oak-curriculum-mcp/src/tools/generation/
 apps/oak-curriculum-mcp/src/test/mocks/generated/
+
+# Bulk downloads data
+apps/oak-search-cli/bulk-downloads/**
 
 # API schema files
 **/*.api.json
@@ -62,6 +68,7 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 **/temp-secrets/
 
 # Agent artifacts
+.agent/
 .agent/cache/
 .agent/artifacts/
 .agent/reference-docs/replaced-http-auth-model/

@@ -1,7 +1,5 @@
 /**
  * Correlation ID support for stdio server request tracing.
- *
- * @module correlation
  */
 
 /**

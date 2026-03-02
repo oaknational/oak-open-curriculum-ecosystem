@@ -4,8 +4,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { findRepoRoot } from '@oaknational/mcp-env';
+import { requireRepoRoot } from './require-repo-root.js';
 
 export interface StartupLoggerDependencies {
   console: Pick<Console, 'log' | 'error'>;
@@ -21,8 +20,9 @@ export interface StartupLoggerDependencies {
 }
 
 /**
- * Creates a logger for early startup logging
- * Pure function that returns a logging function
+ * Creates a logger for early startup logging.
+ *
+ * Pure function that returns a logging function.
  */
 export function createStartupLogger(
   deps: StartupLoggerDependencies,
@@ -31,14 +31,12 @@ export function createStartupLogger(
     const timestamp = new Date().toISOString();
     const logMessage = `${timestamp}: [${isError ? 'ERROR' : 'INFO'}] ${message}\n`;
 
-    // Always log to console for immediate visibility
     if (isError) {
       deps.console.error(logMessage);
     } else {
       deps.console.log(logMessage);
     }
 
-    // Try to write to a file for persistence
     try {
       const logDir = deps.path.join(deps.rootDir, '.logs', 'oak-curriculum-mcp-startup');
       deps.console.log(`Attempting to write startup log to: ${logDir}`);
@@ -54,25 +52,23 @@ export function createStartupLogger(
 }
 
 /**
- * Get the root directory for the repository
+ * Creates default dependencies for production use.
+ *
+ * This is a factory function rather than a module-level constant so that
+ * `requireRepoRoot()` is called lazily. Callers (e.g. the bin script)
+ * can provide their own guard and error handling before this is invoked.
  */
-export function getRootDir(): string {
-  const thisDir = dirname(fileURLToPath(import.meta.url));
-  return findRepoRoot(thisDir);
+export function createDefaultStartupLoggerDeps(): StartupLoggerDependencies {
+  return {
+    console,
+    fs: {
+      writeFileSync,
+      mkdirSync,
+    },
+    path: {
+      join,
+      dirname,
+    },
+    rootDir: requireRepoRoot(),
+  };
 }
-
-/**
- * Default dependencies for production use
- */
-export const defaultStartupLoggerDeps: StartupLoggerDependencies = {
-  console,
-  fs: {
-    writeFileSync,
-    mkdirSync,
-  },
-  path: {
-    join,
-    dirname,
-  },
-  rootDir: getRootDir(),
-};

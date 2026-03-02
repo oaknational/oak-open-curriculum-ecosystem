@@ -6,7 +6,7 @@
  */
 
 import type { PrepareEnvironmentOptions, PreparedEnvironment, LoadedEnvResult } from '../types.js';
-import { startSmokeServer } from '../local-server.js';
+import { getServerPort, startSmokeServer } from '../local-server.js';
 
 /**
  * Validates Oak API key is present
@@ -16,8 +16,8 @@ function validateApiKey(envLoad: LoadedEnvResult): void {
   if (!apiKey || apiKey.trim().length === 0) {
     const sourceHint =
       envLoad.loaded && envLoad.path
-        ? `loadRootEnv loaded ${envLoad.path}`
-        : 'loadRootEnv did not load a .env file';
+        ? `Loaded env from ${envLoad.path}`
+        : 'No .env file was loaded';
     throw new Error(
       `OAK_API_KEY is required for live smoke tests. ${sourceHint}. Repository root: ${envLoad.repoRoot}`,
     );
@@ -73,11 +73,14 @@ export async function prepareLocalLiveAuthEnvironment(
     CLERK_SECRET_KEY_SET: !!process.env.CLERK_SECRET_KEY,
   });
 
+  const server = await startSmokeServer(options.port);
+  const port = getServerPort(server);
+
   return {
-    baseUrl: `http://localhost:${String(options.port)}`,
+    baseUrl: `http://localhost:${String(port)}`,
     devToken: undefined, // No bypass token - auth is enforced
     envLoad,
-    server: await startSmokeServer(options.port),
+    server,
     devTokenSource: 'not-required', // Auth enforcement mode
   };
 }

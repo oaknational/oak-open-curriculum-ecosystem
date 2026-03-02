@@ -6,25 +6,30 @@
  *
  * ## Additional Entry Points
  *
- * For specialized functionality, import from dedicated entry points:
+ * For specialised functionality, import from dedicated entry points:
  *
- * - **MCP Tools**: `@oaknational/oak-curriculum-sdk/public/mcp-tools`
+ * - **MCP Tools**: `@oaknational/curriculum-sdk/public/mcp-tools`
  *   Model Context Protocol tooling for AI integrations
  *
- * - **Search**: `@oaknational/oak-curriculum-sdk/public/search`
- *   Semantic search schemas, validators, and types
+ * - **Search Response Guards**: `@oaknational/curriculum-sdk/public/search`
+ *   Runtime validators for Oak API search responses (lessonSummarySchema,
+ *   unitSummarySchema, etc.). For search schemas, constants, and type
+ *   guards, import from `@oaknational/sdk-codegen/search`.
  *
  * This separation improves tree-shaking and makes dependencies explicit.
- *
- * @module @oaknational/oak-curriculum-sdk
  */
 
 // ============================================================================
 // Client Factories
 // ============================================================================
 
-export { createOakClient, createOakPathBasedClient } from './client/index.js';
-export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
+export {
+  createOakClient,
+  createOakPathBasedClient,
+  createOakBaseClient,
+  BaseApiClient,
+} from './client/index.js';
+export type { OakApiClient, OakApiPathBasedClient, OakClientConfig } from './client/index.js';
 
 /** @deprecated Use createOakClient instead */
 export { createOakClient as createApiClient } from './client/index.js';
@@ -33,15 +38,14 @@ export { createOakClient as createApiClient } from './client/index.js';
 // Generated Types from OpenAPI Schema
 // ============================================================================
 
-export type { paths } from './types/generated/api-schema/api-paths-types.js';
-export type { components } from './types/generated/api-schema/api-paths-types.js';
+export type { paths, components } from './types/index.js';
 
 /** Public aliases for documentation clarity */
-export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types.js';
 export type {
+  paths as OakApiPaths,
   Subject as OakSubject,
   KeyStage as OakKeyStage,
-} from './types/generated/api-schema/path-parameters.js';
+} from '@oaknational/sdk-codegen/api-schema';
 
 export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './types/doc-bridges.js';
 
@@ -50,6 +54,13 @@ export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './typ
 // ============================================================================
 
 export { apiUrl, apiSchemaUrl } from './config/index.js';
+
+// Rate limiting and retry configuration
+export type { RateLimitConfig } from './config/rate-limit-config.js';
+export type { RetryConfig, StatusCodeMaxRetries } from './config/retry-config.js';
+export type { RateLimitTracker, RateLimitInfo } from './client/middleware/rate-limit-tracker.js';
+export { DEFAULT_RATE_LIMIT_CONFIG } from './config/rate-limit-config.js';
+export { DEFAULT_RETRY_CONFIG } from './config/retry-config.js';
 
 // ============================================================================
 // Path Parameters and Type Guards
@@ -68,18 +79,34 @@ export {
   SUBJECTS,
   ASSET_TYPES,
   VALID_PATHS_BY_PARAMETERS,
-  PATH_OPERATIONS,
-  OPERATIONS_BY_ID,
-} from './types/generated/api-schema/path-parameters.js';
+} from '@oaknational/sdk-codegen/api-schema';
+
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/index.js';
+export type { PathOperation, OperationId } from './types/index.js';
+
+export type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
+
+export { schemaBase as schema } from '@oaknational/sdk-codegen/api-schema';
+
+// ============================================================================
+// Subject Hierarchy (ADR-101)
+// ============================================================================
+
+export {
+  SUBJECT_TO_PARENT,
+  ALL_SUBJECTS,
+  KS4_SCIENCE_VARIANTS,
+  PARENT_TO_SUBJECTS,
+  isKs4ScienceVariant,
+  getSubjectParent,
+  isAllSubject,
+} from '@oaknational/sdk-codegen/search';
 
 export type {
-  PathOperation,
-  OperationId,
-  KeyStage,
-  Subject,
-} from './types/generated/api-schema/path-parameters.js';
-
-export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
+  AllSubjectSlug,
+  ParentSubjectSlug,
+  Ks4ScienceVariant,
+} from '@oaknational/sdk-codegen/search';
 
 // ============================================================================
 // Validation
@@ -110,4 +137,44 @@ export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,
-} from './types/generated/api-schema/routing/url-helpers.js';
+} from '@oaknational/sdk-codegen/api-schema';
+
+// ============================================================================
+// Type-Safe Object Helpers
+// ============================================================================
+
+export {
+  typeSafeKeys,
+  typeSafeValues,
+  typeSafeEntries,
+  typeSafeFromEntries,
+  typeSafeGet,
+  typeSafeSet,
+  typeSafeHas,
+  typeSafeHasOwn,
+  typeSafeOwnKeys,
+} from './types/helpers/type-helpers.js';
+
+// ============================================================================
+// SDK Error Types (ADR-088: Result Pattern)
+// ============================================================================
+
+export type {
+  SdkFetchError,
+  SdkNotFoundError,
+  SdkLegallyRestrictedError,
+  SdkServerError,
+  SdkRateLimitError,
+  SdkNetworkError,
+  SdkValidationError,
+  ResourceType,
+  ServerErrorStatus,
+} from '@oaknational/sdk-codegen/api-schema';
+
+export {
+  classifyHttpError,
+  classifyException,
+  validationError,
+  isRecoverableError,
+  formatSdkError,
+} from '@oaknational/sdk-codegen/api-schema';

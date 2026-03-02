@@ -1,0 +1,7 @@
+# Bulk download JSON files - downloaded via scripts/download-bulk.ts
+# Re-download every few weeks to get fresh data
+
+*.json
+manifest.json
+!.gitkeep
+

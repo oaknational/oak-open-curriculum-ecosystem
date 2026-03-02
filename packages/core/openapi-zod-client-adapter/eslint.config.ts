@@ -1,14 +1,15 @@
 /**
- * ESLint Configuration for openapi-zod-client-adapter library
+ * ESLint Configuration for openapi-zod-client-adapter
  *
- * Adapter for openapi-zod-client that enforces Zod v3/v4 boundary
+ * Build-time adapter for openapi-zod-client that enforces Zod v3/v4 boundary.
+ * This is a core package (pure build-time tool, not a runtime library).
  */
 
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  createLibBoundaryRules,
-  getOtherLibs,
+  coreBoundaryRules,
+  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -27,7 +28,7 @@ const config = defineConfig(
   },
   ...configs.strict,
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -49,14 +50,10 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules(
-      'openapi-zod-client-adapter',
-      getOtherLibs('openapi-zod-client-adapter'),
-    ),
+    rules: coreBoundaryRules,
   },
-  // Enforce Zod v4 usage, we don't want to allow Zod 3 code or types to propagate outside of this workspace.
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     rules: {
       '@typescript-eslint/no-restricted-imports': [
         'error',
@@ -65,7 +62,7 @@ const config = defineConfig(
             {
               name: 'zod',
               message:
-                "Import from 'zod/v4' instead. Only the type-gen adapter around openapi-zod-client may import from 'zod' directly.",
+                "Import from 'zod/v4' instead. Only the sdk-codegen adapter around openapi-zod-client may import from 'zod' directly.",
             },
           ],
         },
@@ -73,12 +70,33 @@ const config = defineConfig(
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        projectService: false,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
+      },
+    },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: wsTsProject,
+        },
+      },
+    },
     rules: {
+      ...coreTestConfigRules,
       ...testRules,
     },
   },
-  // Config files
   {
     files: ['eslint.config.ts', 'vitest.config.ts', 'tsup.config.ts'],
     languageOptions: {

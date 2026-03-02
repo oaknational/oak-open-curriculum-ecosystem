@@ -121,7 +121,7 @@ Create the “adapter” workspace:
     "openapi3-ts": "^4.0.0",
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^24",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "eslint": "^9.0.0",
@@ -418,6 +418,7 @@ In the `openapi-zod-runtime` workspace:
    ```
 
 2. **Build the runtime package**:
+
    ```bash
    pnpm --filter @your-scope/openapi-zod-runtime run build
    ```
@@ -453,6 +454,7 @@ In your CI configuration (e.g. GitHub Actions, GitLab CI, etc.), ensure:
    ```
 
 4. Run tests:
+
    ```bash
    pnpm -r test
    ```

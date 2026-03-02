@@ -1,11 +1,11 @@
 /**
- * @fileoverview Renders the prompts section for the landing page.
+ * Renders the prompts section for the landing page.
  *
  * Generates an HTML collapsible section listing all available MCP prompts
  * from the Oak Curriculum SDK.
  */
 
-import { MCP_PROMPTS } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { MCP_PROMPTS } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { escapeHtml } from './escape-html.js';
 

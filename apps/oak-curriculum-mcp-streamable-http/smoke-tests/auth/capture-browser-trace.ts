@@ -4,7 +4,8 @@ import { resolve, dirname } from 'node:path';
 import { URL, URLSearchParams } from 'node:url';
 
 import { createClerkClient } from '@clerk/backend';
-import { loadRootEnv } from '@oaknational/mcp-env';
+import { config as dotenvConfig } from 'dotenv';
+import { findRepoRoot } from '@oaknational/env-resolution';
 
 import { HandshakeSnapshotSchema, type HandshakeSnapshot } from './snapshot.js';
 
@@ -86,7 +87,12 @@ function parseArgs(): {
 }
 
 async function captureBrowserTrace(): Promise<void> {
-  loadRootEnv({ startDir: process.cwd(), env: process.env });
+  const root = findRepoRoot(process.cwd());
+  if (root === undefined) {
+    throw new Error('Smoke tests must run inside the monorepo');
+  }
+  dotenvConfig({ path: join(root, '.env.local') });
+  dotenvConfig({ path: join(root, '.env') });
 
   const { secretKey, publishableKey } = requireClerkKeys(process.env);
   const snapshotPath = resolve('.tmp/clerk-handshake.json');
@@ -755,73 +761,99 @@ async function prepareHandshakeSnapshot(
   publishableKey: string,
   snapshotPath: string,
 ): Promise<HandshakeSnapshot> {
-  // Reuse logic from prepare-browser-handshake.ts
   const { randomBytes } = await import('node:crypto');
   const { createAutomationIdentifier, createPkcePair, toBase64Url } = await import('./utils.js');
 
   const clerk = createClerkClient({ secretKey, publishableKey });
 
-  const email = `${createAutomationIdentifier('mcp-handshake', 4)}@example.com`;
-  const user = await clerk.users.createUser({
-    emailAddress: [email],
-    firstName: 'MCP',
-    lastName: 'Handshake',
-    skipPasswordRequirement: true,
-  });
+  const createdResourceIds: { userId?: string; sessionId?: string; appId?: string } = {};
 
-  const session = await clerk.sessions.createSession({ userId: user.id });
-  const [sessionToken, testingToken] = await Promise.all([
-    clerk.sessions.getToken(session.id),
-    clerk.testingTokens.createTestingToken(),
-  ]);
-
-  const redirectUri = getCallbackUri();
-  const app = await clerk.oauthApplications.create({
-    name: createAutomationIdentifier('mcp-handshake-app'),
-    redirectUris: [redirectUri],
-    scopes: 'email profile',
-    public: true,
-  });
-
-  const pkce = createPkcePair();
-  const state = toBase64Url(randomBytes(16));
-
-  const params = new URLSearchParams({
-    response_type: 'code',
-    client_id: app.clientId,
-    redirect_uri: redirectUri,
-    scope: app.scopes,
-    code_challenge: pkce.challenge,
-    code_challenge_method: 'S256',
-    state,
-  });
-
-  const authorizeRequestUrl = `${app.authorizeUrl}?${params.toString()}`;
-
-  const snapshot: HandshakeSnapshot = {
-    userId: user.id,
-    sessionId: session.id,
-    sessionJwt: sessionToken.jwt,
-    clientId: session.clientId,
-    devBrowserToken: testingToken.token,
-    oauthApplication: {
-      id: app.id,
-      clientId: app.clientId,
-      authorizeUrl: app.authorizeUrl,
-      tokenFetchUrl: app.tokenFetchUrl,
-      redirectUri,
-      scopes: app.scopes,
-    },
-    pkce,
-    state,
-    authorizeRequestUrl,
-    createdAt: new Date().toISOString(),
+  const cleanupOnFailure = async (): Promise<void> => {
+    const deletions: Promise<unknown>[] = [];
+    if (createdResourceIds.sessionId) {
+      deletions.push(clerk.sessions.revokeSession(createdResourceIds.sessionId));
+    }
+    if (createdResourceIds.userId) {
+      deletions.push(clerk.users.deleteUser(createdResourceIds.userId));
+    }
+    if (createdResourceIds.appId) {
+      deletions.push(clerk.oauthApplications.delete(createdResourceIds.appId));
+    }
+    if (deletions.length > 0) {
+      await Promise.allSettled(deletions);
+    }
   };
 
-  mkdirSync(dirname(snapshotPath), { recursive: true });
-  writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`, { encoding: 'utf-8' });
+  try {
+    const email = `${createAutomationIdentifier('mcp-handshake', 4)}@example.com`;
+    const user = await clerk.users.createUser({
+      emailAddress: [email],
+      firstName: 'MCP',
+      lastName: 'Handshake',
+      skipPasswordRequirement: true,
+    });
+    createdResourceIds.userId = user.id;
 
-  return snapshot;
+    const session = await clerk.sessions.createSession({ userId: user.id });
+    createdResourceIds.sessionId = session.id;
+
+    const [sessionToken, testingToken] = await Promise.all([
+      clerk.sessions.getToken(session.id),
+      clerk.testingTokens.createTestingToken(),
+    ]);
+
+    const redirectUri = getCallbackUri();
+    const app = await clerk.oauthApplications.create({
+      name: createAutomationIdentifier('mcp-handshake-app'),
+      redirectUris: [redirectUri],
+      scopes: 'email profile',
+      public: true,
+    });
+    createdResourceIds.appId = app.id;
+
+    const pkce = createPkcePair();
+    const state = toBase64Url(randomBytes(16));
+
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: app.clientId,
+      redirect_uri: redirectUri,
+      scope: app.scopes,
+      code_challenge: pkce.challenge,
+      code_challenge_method: 'S256',
+      state,
+    });
+
+    const authorizeRequestUrl = `${app.authorizeUrl}?${params.toString()}`;
+
+    const snapshot: HandshakeSnapshot = {
+      userId: user.id,
+      sessionId: session.id,
+      sessionJwt: sessionToken.jwt,
+      clientId: session.clientId,
+      devBrowserToken: testingToken.token,
+      oauthApplication: {
+        id: app.id,
+        clientId: app.clientId,
+        authorizeUrl: app.authorizeUrl,
+        tokenFetchUrl: app.tokenFetchUrl,
+        redirectUri,
+        scopes: app.scopes,
+      },
+      pkce,
+      state,
+      authorizeRequestUrl,
+      createdAt: new Date().toISOString(),
+    };
+
+    mkdirSync(dirname(snapshotPath), { recursive: true });
+    writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`, { encoding: 'utf-8' });
+
+    return snapshot;
+  } catch (error) {
+    await cleanupOnFailure();
+    throw error;
+  }
 }
 
 async function cleanupHandshake(

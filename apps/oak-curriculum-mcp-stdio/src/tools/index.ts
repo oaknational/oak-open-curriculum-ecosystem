@@ -10,10 +10,12 @@ import {
   executeToolCall,
   createUniversalToolExecutor,
   isUniversalToolName,
+  generatedToolRegistry,
   type ToolExecutionResult,
   type ToolName,
   type OakApiPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+  type SearchRetrievalService,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 export interface McpToolsModule {
   handleTool: (name: string, args: unknown) => Promise<CallToolResult>;
@@ -21,7 +23,16 @@ export interface McpToolsModule {
 
 export interface UniversalToolExecutors {
   readonly executeMcpTool?: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
+  readonly searchRetrieval: SearchRetrievalService;
 }
+
+/**
+ * Subset of UniversalToolExecutors for executor overrides only.
+ *
+ * Used by `resolveToolExecutors` which only provides `executeMcpTool`
+ * overrides — `searchRetrieval` is constructed separately in wiring.
+ */
+export type ToolExecutorOverrides = Pick<UniversalToolExecutors, 'executeMcpTool'>;
 
 function formatError(message: string): CallToolResult {
   const content: TextContent = { type: 'text', text: `Error: ${message}` };
@@ -37,11 +48,13 @@ export function createMcpToolsModule(
 
   const executor = createUniversalToolExecutor({
     executeMcpTool,
+    searchRetrieval: deps.searchRetrieval,
+    generatedTools: generatedToolRegistry,
   });
 
   return {
     handleTool: async (name: string, args: unknown) => {
-      if (!isUniversalToolName(name)) {
+      if (!isUniversalToolName(name, generatedToolRegistry.isToolName)) {
         return formatError(`Unknown tool: ${name}`);
       }
       try {

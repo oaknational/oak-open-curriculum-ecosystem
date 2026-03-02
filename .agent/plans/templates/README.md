@@ -1,193 +1,119 @@
-# Plan Templates
+# Plan Templates and Components
 
-This directory contains templates for creating high-quality, foundation-aligned plans for architectural work, refactoring, and quality improvements.
+Reusable building blocks for creating high-quality, foundation-aligned
+plans. See [ADR-117](/docs/architecture/architectural-decisions/117-plan-templates-and-components.md)
+for the architectural decision and rationale.
 
-## Available Templates
+## Templates
 
-### `quality-fix-plan-template.md`
+Templates are complete plan scaffolds. Copy one, fill in the bracketed
+placeholders, and begin.
 
-A comprehensive template for quality improvement work, derived from the excellent `e2e-test-isolation-via-di.md` plan.
+| Template | Use When |
+|----------|----------|
+| [`quality-fix-plan-template.md`](quality-fix-plan-template.md) | Quality improvement, refactoring, technical debt |
+| [`feature-workstream-template.md`](feature-workstream-template.md) | New feature delivery with TDD phases (RED/GREEN/REFACTOR) |
+| [`adoption-rollout-plan-template.md`](adoption-rollout-plan-template.md) | Policy/process/tooling adoption across existing workflows |
+| [`collection-roadmap-template.md`](collection-roadmap-template.md) | Strategic roadmap for a plan collection with phase mapping |
+| [`collection-readme-template.md`](collection-readme-template.md) | Collection navigation hub with explicit document-role boundaries |
+| [`active-plan-index-template.md`](active-plan-index-template.md) | `active/README.md` index for atomic phase execution plans |
+| [`current-plan-index-template.md`](current-plan-index-template.md) | `current/README.md` index for next-up plans (queued, not started) |
+| [`future-plan-index-template.md`](future-plan-index-template.md) | `future/README.md` index for later/deferred plans |
+| [`active-atomic-implementation-plan-template.md`](active-atomic-implementation-plan-template.md) | Atomic phase execution plan with preflight, deterministic validation, and evidence hooks |
 
-**Use this template for:**
+## Components
 
-- E2E test fixes and improvements
-- Refactoring for better architecture
-- Eliminating technical debt
-- Improving code quality and maintainability
-- Any multi-phase work requiring careful validation
+Components are reusable building blocks referenced by templates.
+They live in `components/` and provide guidance for common plan
+sections.
 
-**Key features:**
+| Component | Purpose |
+|-----------|---------|
+| [`quality-gates.md`](components/quality-gates.md) | Standard quality gate sequence and rationale |
+| [`tdd-phases.md`](components/tdd-phases.md) | RED/GREEN/REFACTOR phase structure with acceptance criteria |
+| [`foundation-alignment.md`](components/foundation-alignment.md) | Foundation document commitment checklist |
+| [`risk-assessment.md`](components/risk-assessment.md) | Risk/mitigation table structure |
+| [`adversarial-review.md`](components/adversarial-review.md) | Post-implementation specialist review phase |
+| [`evidence-and-claims.md`](components/evidence-and-claims.md) | Claim classification and evidence/verification requirements |
+| [`documentation-propagation.md`](components/documentation-propagation.md) | Required ADR/directive/reference-doc and README update propagation |
 
-- Foundation document commitment at each phase
-- Deterministic validation commands with expected outputs
-- Clear acceptance criteria for each task
-- System-level impact analysis
-- Quality gates after every change
-- Compliance checklist for foundation documents
+## Document Hierarchy
 
-## How to Use a Template
+Three document types serve distinct purposes. Do not duplicate
+content across them.
 
-### 1. Copy the Template
+| Document | Purpose | Location |
+|----------|---------|----------|
+| **Session prompt** | Operational entry — "where are we now" | `.agent/prompts/` |
+| **Executable plan** | Per-workstream task list with TDD phases | `.agent/plans/*/{active,current,future}/` |
+| **Roadmap** | Strategic milestone sequence | `.agent/plans/*/roadmap.md` |
 
-```bash
-cp .agent/plans/templates/quality-fix-plan-template.md \
-   .agent/plans/your-plan-name.md
+**Content flows one way**: facts are authoritative in one document
+and referenced (not restated) by the others. See ADR-117 for details.
+
+## Plan Lifecycle
+
+```text
+active/             → NOW: in-progress work only
+current/            → NEXT: queued and ready, not yet started
+future/             → LATER: deferred strategic work
+archive/completed/  → completed, read-only
 ```
 
-### 2. Fill in All Bracketed Sections
+When archiving:
 
-Search for `[` in your new plan and replace all bracketed placeholders:
+1. Mine completed outcomes into permanent documentation (ADRs,
+   directives, READMEs, reference docs).
+2. Move the plan file to `archive/completed/`.
+3. Add an entry to the [completed plans index](../completed-plans.md)
+   (plan name, date, key outcomes, archive link).
+4. Update all cross-references to point directly to
+   `archive/completed/` — clean break, no stubs.
+5. Run `/jc-consolidate-docs`.
 
-- `[Plan Title]` → Actual descriptive title
-- `[YYYY-MM-DD]` → Current date
-- `[Estimated Time]` → Realistic time estimate
-- `[Issue Name]` → Specific issue descriptions
-- All other bracketed sections
+## How to Use
 
-### 3. Customize to Your Context
+### 1. Choose a template
 
-**Keep:**
+Pick the template closest to your work type. If none fits, start
+from the feature workstream template — it is the most general.
 
-- Foundation document commitment structure
-- Deterministic validation pattern
-- Acceptance criteria approach
-- Quality gate strategy
-- System-level impact analysis
-
-**Adapt:**
-
-- Number of phases (add/remove as needed)
-- Number of tasks per phase
-- Specific validation commands
-- Testing strategy details
-- Dependencies and references
-
-### 4. Before Starting Implementation
-
-**Read all three foundation documents:**
-
-1. `.agent/directives-and-memory/rules.md`
-2. `.agent/directives-and-memory/testing-strategy.md`
-3. `.agent/directives-and-memory/schema-first-execution.md`
-
-**Ask the first question:**
-
-> "Could it be simpler without compromising quality?"
-
-**Verify your plan:**
-
-- No compatibility layers
-- No type shortcuts
-- Uses existing capabilities where possible
-- Delivers system-level value
-- Includes quality gates after each change
-
-### 5. During Implementation
-
-**At the start of each phase:**
-
-- Re-read relevant sections from foundation documents
-- Review the "Foundation Check-In" for that phase
-- Verify the "Key Principle" guides your work
-
-**After each task:**
-
-- Run deterministic validation commands
-- Check all acceptance criteria
-- Only proceed when ALL criteria met
-
-**After each phase:**
-
-- Run full quality gate sequence
-- Verify no regressions introduced
-
-## Template Philosophy
-
-### Deterministic Validation
-
-Every task includes **shell commands with expected outputs**:
+### 2. Copy and customise
 
 ```bash
-# Good example
-grep "pattern" file.ts
-# Expected: NO MATCHES (exit code 1)
+cp .agent/plans/templates/feature-workstream-template.md \
+   .agent/plans/semantic-search/active/your-plan-name.md
 ```
 
-This makes validation:
+Use the lifecycle directory that matches the plan state:
 
-- Reproducible
-- Unambiguous
-- Automatable
-- Self-documenting
+- `active/` — in progress now
+- `current/` — next-up, not started
+- `future/` — later/deferred
 
-### Foundation Alignment
+Fill in all `[bracketed]` placeholders.
 
-Every plan must align with:
+### 3. Reference components
 
-- **rules.md**: Core principles (simplicity, no type shortcuts, quality gates)
-- **testing-strategy.md**: Testing philosophy (behavior not implementation, TDD)
-- **schema-first-execution.md**: Type generation flow (generator is source of truth)
+Templates reference components for guidance. Read the relevant
+components before writing each section. Do not mechanically
+inline them — adapt the guidance to your specific context.
 
-### System-Level Thinking
+### 4. Follow foundation documents
 
-Every plan must answer:
+Before starting and at the start of each phase, read:
 
-1. **Why are we doing this?** (Immediate value)
-2. **Why does that matter?** (System-level impact)
-3. **What if we don't?** (Risk analysis)
+1. `.agent/directives/rules.md`
+2. `.agent/directives/testing-strategy.md`
+3. `.agent/directives/schema-first-execution.md`
 
-## Quality Checklist
+Ask: "Could it be simpler without compromising quality?"
 
-Before considering a plan complete, verify:
+## Adding New Templates or Components
 
-- [ ] All bracketed placeholders replaced with actual content
-- [ ] Foundation document commitment present at each phase
-- [ ] Every task has acceptance criteria
-- [ ] Every task has deterministic validation commands
-- [ ] Quality gate strategy defined
-- [ ] System-level impact analysis included
-- [ ] Foundation document compliance checklist included
-- [ ] "Why This Matters" section completed
-- [ ] All three foundation documents read and understood
-- [ ] First question asked: "Could it be simpler?"
-
-## Examples
-
-### Excellent Example
-
-See `.agent/plans/e2e-test-isolation-via-di.md` for a real-world example that:
-
-- Uses existing DI capabilities (no new abstractions)
-- Has clear deterministic validation at each step
-- Includes system-level impact analysis
-- Demonstrates foundation document alignment
-- Shows courage (deletes boundary-violating tests)
-- Investigates meta-level issues (Task 3.4: why didn't TypeScript catch this?)
-
-### What Makes a Plan Excellent
-
-1. **Uses existing capabilities** - No new abstractions unless truly needed
-2. **Root cause over symptom** - Fixes underlying issues, not just symptoms
-3. **Deterministic validation** - Clear pass/fail criteria
-4. **System-level impact** - Explains value beyond immediate fix
-5. **Foundation alignment** - Explicitly references and follows principles
-6. **Quality gates** - Runs full gates after each change
-7. **Minimal risk** - Incremental, reversible changes
-8. **Clear completion** - Unambiguous "done" criteria
-
-## Contributing
-
-When you create a plan that proves particularly effective, consider:
-
-1. **Documenting what worked** - Add notes about successful patterns
-2. **Updating templates** - Incorporate learnings into templates
-3. **Creating new templates** - If your plan solves a new category of problem
-
-## Questions?
-
-If uncertain about how to use a template or structure a plan:
-
-1. Read the foundation documents (rules.md, testing-strategy.md, schema-first-execution.md)
-2. Review `e2e-test-isolation-via-di.md` as a reference example
-3. Ask: "Could this be simpler?"
-4. Focus on system-level value, not just immediate fixes
+- Add a **template** when a new category of work recurs (three or
+  more plans of the same type).
+- Add a **component** when the same building block appears across
+  three or more plan types.
+- Keep components as guidance references, not mandatory inclusions.
+- Update this README when adding templates or components.

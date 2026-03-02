@@ -6,7 +6,7 @@
  *
  * ## Architecture
  *
- * The module is organized into single-responsibility files:
+ * The module is organised into single-responsibility files:
  *
  * - `definitions.ts` - Aggregated tool definition map
  * - `types.ts` - Type definitions and interfaces
@@ -22,19 +22,22 @@
  *   listUniversalTools,
  *   createUniversalToolExecutor,
  *   isUniversalToolName,
+ *   generatedToolRegistry,
  * } from './universal-tools/index.js';
  *
  * // List all tools for registration
- * const tools = listUniversalTools();
+ * const tools = listUniversalTools(generatedToolRegistry);
  *
  * // Create executor for tool invocations
- * const executor = createUniversalToolExecutor({ executeMcpTool });
+ * const executor = createUniversalToolExecutor({
+ *   executeMcpTool,
+ *   searchRetrieval,
+ *   generatedTools: generatedToolRegistry,
+ * });
  *
  * // Execute a tool
  * const result = await executor('search', { query: 'fractions' });
  * ```
- *
- * @module universal-tools
  */
 
 // Aggregated tool definitions
@@ -48,7 +51,11 @@ export type {
   ToolAnnotations,
   ToolMeta,
   UniversalToolListEntry,
+  GeneratedToolRegistry,
 } from './types.js';
+
+// Default registry wired to real generation SDK
+export { generatedToolRegistry } from './generated-tool-registry.js';
 
 // Type guards
 export { isAggregatedToolName, isUniversalToolName } from './type-guards.js';

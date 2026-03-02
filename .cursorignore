@@ -1,3 +1,5 @@
 !.agent
 !.env.example
 !vercel_logs
+!apps/oak-search-cli/bulk-downloads
+!apps/oak-search-cli/bulk-downloads/**

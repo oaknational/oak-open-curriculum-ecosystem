@@ -54,7 +54,7 @@ For any incoming HTTP request, middleware executes in this order:
    9a. Custom OAuth metadata handler (publicly accessible)
    ↓
    [For GET /.well-known/oauth-authorization-server:]
-   9a. authServerMetadataHandlerClerk (publicly accessible)
+   9a. Locally-derived AS metadata handler (publicly accessible)
    ↓
    [For GET /:]
    9a. Landing Page Handler
@@ -226,24 +226,24 @@ Response (200 OK + HTML)
 
 ## Middleware Responsibilities
 
-| Middleware                     | Layer    | Purpose                              | Terminates?      | Modifies            |
-| ------------------------------ | -------- | ------------------------------------ | ---------------- | ------------------- |
-| Request Entry Log              | Base     | Records incoming request             | No               | res.locals          |
-| JSON Body Parser               | Base     | Parses JSON request bodies           | No               | req.body            |
-| Correlation Middleware         | Base     | Assigns unique request ID            | No               | res.locals, headers |
-| Request Logger                 | Base     | Logs request details (debug)         | No               | -                   |
-| Error Logger                   | Base     | Logs errors with context             | No               | -                   |
-| DNS Rebinding Protection       | Security | Validates Host header                | Yes (if invalid) | -                   |
-| CORS                           | Security | Sets CORS headers, handles preflight | Yes (preflight)  | headers             |
-| clerkMiddleware                | Auth     | Provides auth context                | No               | req.auth            |
-| Accept Header Validation       | MCP      | Ensures correct Accept header        | Yes (if invalid) | -                   |
-| MCP Readiness Check            | MCP      | Waits for server ready               | Yes (timeout)    | -                   |
-| mcpAuthClerk                   | Auth     | Validates OAuth tokens               | Yes (if invalid) | req.auth            |
-| Custom OAuth metadata handler  | OAuth    | Returns OAuth metadata with /mcp URI | Yes              | -                   |
-| authServerMetadataHandlerClerk | OAuth    | Returns OAuth server metadata        | Yes              | -                   |
-| streamableHttpHandlerClerk     | MCP      | Handles MCP requests                 | Yes              | -                   |
-| Health Check Handler           | Health   | Returns health status                | Yes              | -                   |
-| Landing Page Handler           | UI       | Returns landing page HTML            | Yes              | -                   |
+| Middleware                    | Layer    | Purpose                              | Terminates?      | Modifies            |
+| ----------------------------- | -------- | ------------------------------------ | ---------------- | ------------------- |
+| Request Entry Log             | Base     | Records incoming request             | No               | res.locals          |
+| JSON Body Parser              | Base     | Parses JSON request bodies           | No               | req.body            |
+| Correlation Middleware        | Base     | Assigns unique request ID            | No               | res.locals, headers |
+| Request Logger                | Base     | Logs request details (debug)         | No               | -                   |
+| Error Logger                  | Base     | Logs errors with context             | No               | -                   |
+| DNS Rebinding Protection      | Security | Validates Host header                | Yes (if invalid) | -                   |
+| CORS                          | Security | Sets CORS headers, handles preflight | Yes (preflight)  | headers             |
+| clerkMiddleware               | Auth     | Provides auth context                | No               | req.auth            |
+| Accept Header Validation      | MCP      | Ensures correct Accept header        | Yes (if invalid) | -                   |
+| MCP Readiness Check           | MCP      | Waits for server ready               | Yes (timeout)    | -                   |
+| mcpAuthClerk                  | Auth     | Validates OAuth tokens               | Yes (if invalid) | req.auth            |
+| Custom OAuth metadata handler | OAuth    | Returns OAuth metadata with /mcp URI | Yes              | -                   |
+| AS metadata handler (local)   | OAuth    | Returns OAuth server metadata        | Yes              | -                   |
+| streamableHttpHandlerClerk    | MCP      | Handles MCP requests                 | Yes              | -                   |
+| Health Check Handler          | Health   | Returns health status                | Yes              | -                   |
+| Landing Page Handler          | UI       | Returns landing page HTML            | Yes              | -                   |
 
 **Terminates?** = Whether the middleware sends a response and ends the request lifecycle
 
@@ -425,19 +425,10 @@ grep "bootstrap.complete" logs
 
 **Possible Causes**:
 
-1. **Origin not allowed** - Check `ALLOWED_ORIGINS` environment variable
-2. **Preflight not handled** - CORS middleware should handle OPTIONS automatically
-3. **WWW-Authenticate not exposed** - Must be in `Access-Control-Expose-Headers`
+1. **Preflight not handled** — CORS middleware should handle OPTIONS automatically
+2. **WWW-Authenticate not exposed** — Must be in `Access-Control-Expose-Headers`
 
-**Fix**:
-
-```bash
-# For development, allow all origins (insecure for production!)
-ALLOWED_ORIGINS="*" pnpm dev
-
-# For production, specify exact origins
-ALLOWED_ORIGINS="https://app.example.com,https://admin.example.com"
-```
+CORS is unconditionally permissive (all origins allowed). If you see CORS errors, the issue is likely a middleware ordering problem, not a configuration problem. Security is enforced by OAuth authentication, not by origin restrictions.
 
 ### Issue: "Invalid Host header"
 
@@ -489,7 +480,7 @@ echo $CLERK_SECRET_KEY
 
 - [deployment-architecture.md](./deployment-architecture.md) - High-level architecture overview
 - [clerk-oauth-trace-instructions.md](./clerk-oauth-trace-instructions.md) - Tracing OAuth flows
-- [headless-oauth-automation.md](./headless-oauth-automation.md) - Automated OAuth testing
+- [headless-oauth-automation.md](./archive/headless-oauth-automation.md) - Automated OAuth testing (archived)
 - [vercel-environment-config.md](./vercel-environment-config.md) - Vercel deployment configuration
 
 ## Last Updated

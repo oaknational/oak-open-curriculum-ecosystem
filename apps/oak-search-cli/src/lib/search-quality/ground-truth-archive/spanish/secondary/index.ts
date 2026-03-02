@@ -1,0 +1,46 @@
+/**
+ * Secondary ground truth queries - 4 queries, 1 per category.
+ *
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
+ */
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
+
+// Import query definitions
+import { SPANISH_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { SPANISH_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { SPANISH_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { SPANISH_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+
+// Import expected relevance
+import { SPANISH_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { SPANISH_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { SPANISH_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+
+/** All queries for this subject/phase */
+export const SPANISH_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  combineGroundTruth(
+    SPANISH_SECONDARY_PRECISE_TOPIC_QUERY,
+    SPANISH_SECONDARY_PRECISE_TOPIC_EXPECTED,
+  ),
+  combineGroundTruth(
+    SPANISH_SECONDARY_NATURAL_EXPRESSION_QUERY,
+    SPANISH_SECONDARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    SPANISH_SECONDARY_IMPRECISE_INPUT_QUERY,
+    SPANISH_SECONDARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(SPANISH_SECONDARY_CROSS_TOPIC_QUERY, SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED),
+] as const;
+
+// Re-export query definitions and expected relevance
+export { SPANISH_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { SPANISH_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { SPANISH_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { SPANISH_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { SPANISH_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { SPANISH_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { SPANISH_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

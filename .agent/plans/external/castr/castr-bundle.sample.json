@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "castr-bundle/1",
+  "source": {
+    "kind": "openapi",
+    "id": "oak-open-curriculum-sdk",
+    "hash": "sha256:REPLACE_WITH_INPUT_HASH",
+    "version": "REPLACE_WITH_INFO_VERSION"
+  },
+  "schemas": "schemas.json",
+  "endpoints": "endpoints.json",
+  "emit": {
+    "zod": "zod.ts",
+    "typescript": "types.ts",
+    "openapi": "openapi.normalised.json",
+    "jsonSchema": "json-schema.normalised.json"
+  }
+}

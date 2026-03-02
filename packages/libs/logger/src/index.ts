@@ -1,5 +1,5 @@
 /**
- * @oaknational/mcp-logger
+ * `@oaknational/logger`
  *
  * Runtime-agnostic logging library for multi-runtime MCP applications
  * Outputs OpenTelemetry-compliant single-line JSON logs
@@ -31,6 +31,7 @@ export { isLevelEnabled } from './pure-functions';
 export type { LoggerOptions } from './types';
 export type { Logger } from './types';
 export type { JsonObject } from './types';
+export type { LogContext } from './types';
 export {
   DEFAULT_HTTP_SINK_CONFIG,
   parseSinkConfigFromEnv,

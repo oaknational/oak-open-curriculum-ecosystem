@@ -18,7 +18,7 @@ function createAuthMiddleware(apiKey: string): Middleware {
      * adding the header only when necessary.
      *
      * @param request - Request to modify.
-     * @throws {TypeError} If the API key is not set.
+     * @throws TypeError - If the API key is not set.
      */
     onRequest({ request }) {
       // This should never happen, the key is set in the constructor.
