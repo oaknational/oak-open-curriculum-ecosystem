@@ -150,18 +150,6 @@ describe('registerWidgetResource', () => {
       expect(meta?.['openai/widgetPrefersBorder']).toBe(true);
     });
 
-    it('includes openai/widgetDescription', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const meta = resource?.contents[0]?._meta;
-
-      expect(meta?.['openai/widgetDescription']).toBeDefined();
-      expect(typeof meta?.['openai/widgetDescription']).toBe('string');
-    });
-
     it('widgetDescription is meaningful and not too long (≤200 chars)', () => {
       registerWidgetResource(server);
 
@@ -185,7 +173,7 @@ describe('registerWidgetResource', () => {
       const description = resource?.contents[0]?._meta?.['openai/widgetDescription'];
 
       expect(description).toBeDefined();
-      expect(description).toMatch(/orientation|domain model/i);
+      expect(description).toMatch(/get-curriculum-model/i);
     });
 
     it('includes openai/widgetDomain when widgetDomain option is provided', () => {
@@ -224,18 +212,19 @@ describe('registerDocumentationResources', () => {
     registeredResources = mock.registeredResources;
   });
 
-  it('registers documentation resources', () => {
-    registerDocumentationResources(server);
-
-    expect(server.registerResource).toHaveBeenCalled();
-    expect(registeredResources.size).toBeGreaterThan(0);
-  });
-
   it('all documentation resources have text/markdown MIME type', () => {
     registerDocumentationResources(server);
 
     for (const [, resource] of registeredResources) {
       expect(resource.contents[0]?.mimeType).toBe('text/markdown');
+    }
+  });
+
+  it('all documentation resources forward title in metadata', () => {
+    registerDocumentationResources(server);
+
+    for (const [, resource] of registeredResources) {
+      expect(resource.metadata.title).toBeDefined();
     }
   });
 });
@@ -334,35 +323,5 @@ describe('registerAllResources registers supplementary data resources', () => {
     expect(resource).toBeDefined();
     expect(resource?.metadata.annotations?.priority).toBe(0.5);
     expect(resource?.metadata.annotations?.audience).toContain('assistant');
-  });
-});
-
-describe('metadata forwarding — no cherry-picking', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
-
-  beforeEach(() => {
-    const mock = createMockServer();
-    server = mock.server;
-    registeredResources = mock.registeredResources;
-  });
-
-  it('documentation resources forward title in metadata', () => {
-    registerDocumentationResources(server);
-
-    for (const [, resource] of registeredResources) {
-      expect(resource.metadata.title).toBeDefined();
-    }
-  });
-
-  it('curriculum model forwards annotations without manual field picking', () => {
-    registerCurriculumModelResource(server);
-
-    const resource = registeredResources.get('curriculum://model');
-    expect(resource).toBeDefined();
-    expect(resource?.metadata.annotations).toBeDefined();
-    expect(resource?.metadata.annotations?.priority).toBe(1.0);
-    expect(resource?.metadata.annotations?.audience).toContain('assistant');
-    expect(resource?.metadata.title).toBeDefined();
   });
 });

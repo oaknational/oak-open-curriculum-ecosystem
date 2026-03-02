@@ -130,11 +130,11 @@ Call these tools first to reduce errors when using search, fetch, and browsing t
  * @returns Context hint string
  */
 export function generateContextHint(): string {
-  const toolPurposes = typeSafeValues(AGENT_SUPPORT_TOOL_METADATA)
+  const toolNames = typeSafeValues(AGENT_SUPPORT_TOOL_METADATA)
     .sort((a, b) => a.callOrder - b.callOrder)
-    .map((t) => `${t.name} for ${t.provides.slice(0, 2).join('/')}`);
+    .map((t) => t.name);
 
-  return `For optimal results with Oak curriculum tools, call ${toolPurposes.join(', ')}.`;
+  return `If you have not called ${toolNames.join(' or ')} yet, do so before your next tool call — it provides the domain model and tool guidance needed for accurate results.`;
 }
 
 /**

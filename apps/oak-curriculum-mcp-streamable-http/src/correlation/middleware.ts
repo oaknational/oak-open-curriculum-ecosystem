@@ -17,12 +17,25 @@ import { redactHeadersSummary } from '../logging/header-redaction.js';
 export const CORRELATION_ID_HEADER = 'X-Correlation-ID';
 
 /**
- * Threshold in milliseconds for slow request warnings.
+ * Default threshold in milliseconds for slow request warnings.
  * Requests exceeding this duration will be logged at WARN level.
  *
  * @internal
  */
-const SLOW_REQUEST_THRESHOLD_MS = 2000;
+const DEFAULT_SLOW_REQUEST_THRESHOLD_MS = 2000;
+
+/**
+ * Options for correlation middleware behaviour.
+ *
+ * @public
+ */
+export interface CorrelationMiddlewareOptions {
+  /**
+   * Threshold in milliseconds above which requests are logged at WARN level.
+   * Defaults to 2000ms.
+   */
+  readonly slowRequestThresholdMs?: number;
+}
 
 /**
  * Augment Express Response.locals to include correlation ID and timer.
@@ -51,6 +64,7 @@ declare module 'express-serve-static-core' {
  * - Logs request start with correlation ID at DEBUG level
  *
  * @param logger - Logger instance for logging request start with correlation ID
+ * @param options - Optional configuration for middleware behaviour
  * @returns Express request handler middleware
  *
  * @example
@@ -66,7 +80,12 @@ declare module 'express-serve-static-core' {
  *
  * @public
  */
-export function createCorrelationMiddleware(logger: Logger): RequestHandler {
+export function createCorrelationMiddleware(
+  logger: Logger,
+  options?: CorrelationMiddlewareOptions,
+): RequestHandler {
+  const slowRequestThresholdMs =
+    options?.slowRequestThresholdMs ?? DEFAULT_SLOW_REQUEST_THRESHOLD_MS;
   return (req: Request, res: Response, next: NextFunction): void => {
     // Start timing the request
     const timer = startTimer();
@@ -96,7 +115,7 @@ export function createCorrelationMiddleware(logger: Logger): RequestHandler {
     // Log request completion with timing when response finishes
     res.on('finish', () => {
       const duration = timer.end();
-      const isSlowRequest = duration.ms > SLOW_REQUEST_THRESHOLD_MS;
+      const isSlowRequest = duration.ms > slowRequestThresholdMs;
 
       const logMethod = isSlowRequest ? 'warn' : 'debug';
       const logData = {

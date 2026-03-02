@@ -12,7 +12,7 @@ and `sdk-and-mcp-enhancements/` directories.
 |------|-----------|----------|
 | **Active** (now) | [active/](active/) | [get-curriculum-model: Replace get-ontology and get-help](active/ws1-get-curriculum-model.plan.md) — In Progress, WS1 (RED) not started. 6-specialist reviewed. |
 | **Current** (next) | [current/](current/) | _(empty — WS2+WS3 collapsed to future review checkpoint)_ |
-| **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md) |
+| **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md), [Output Schemas for MCP Tools](future/output-schemas-for-mcp-tools.plan.md) |
 
 ## Strategic and Reference Documents
 

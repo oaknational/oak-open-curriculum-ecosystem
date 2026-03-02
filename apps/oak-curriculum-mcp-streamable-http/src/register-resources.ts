@@ -61,7 +61,7 @@ const WIDGET_CSP = {
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 const WIDGET_DESCRIPTION =
-  'Oak curriculum explorer. For best results, call get-curriculum-model first to understand the curriculum domain model and tools.';
+  'Oak Open Curriculum: you MUST use the get-curriculum-model tool before calling other tools in order to give relevant responses.';
 
 /**
  * Options for widget resource registration.
