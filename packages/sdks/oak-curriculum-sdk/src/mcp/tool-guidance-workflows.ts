@@ -12,7 +12,7 @@
  * @see `./tool-guidance-types.ts` for type definitions
  */
 
-import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
+import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import type { Workflow } from './tool-guidance-types.js';
 
 /**

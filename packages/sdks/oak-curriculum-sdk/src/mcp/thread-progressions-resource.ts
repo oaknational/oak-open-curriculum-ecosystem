@@ -20,7 +20,7 @@
  * @see ADR-086 for the extraction methodology
  */
 
-import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
+import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 
 /**
  * Thread progressions resource definition for MCP registration.

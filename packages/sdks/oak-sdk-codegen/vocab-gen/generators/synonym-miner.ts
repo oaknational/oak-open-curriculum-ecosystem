@@ -267,11 +267,10 @@ export async function writeMinedSynonymsFile(
   data: MinedSynonymsData,
   outputDir: string,
 ): Promise<string> {
-  const generatedDir = join(outputDir, 'generated');
-  await mkdir(generatedDir, { recursive: true });
+  await mkdir(outputDir, { recursive: true });
 
   const fileName = 'definition-synonyms.ts';
-  const filePath = join(generatedDir, fileName);
+  const filePath = join(outputDir, fileName);
   const content = serializeMinedSynonyms(data);
 
   await writeFile(filePath, content, 'utf-8');

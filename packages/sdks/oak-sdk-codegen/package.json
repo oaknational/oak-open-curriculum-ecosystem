@@ -42,6 +42,10 @@
       "types": "./dist/vocab.d.ts",
       "default": "./dist/vocab.js"
     },
+    "./vocab-data": {
+      "types": "./dist/vocab-data.d.ts",
+      "default": "./dist/vocab-data.js"
+    },
     "./query-parser": {
       "types": "./dist/query-parser.d.ts",
       "default": "./dist/query-parser.js"

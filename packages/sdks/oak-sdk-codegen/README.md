@@ -49,7 +49,8 @@ single monolithic barrel. Subpaths are one level deep only.
 | `@oaknational/sdk-codegen/search`           | index docs, scopes, facets, suggestions, ES mappings | `src/search.ts`           |
 | `@oaknational/sdk-codegen/zod`              | Zod schemas                                          | `src/zod.ts`              |
 | `@oaknational/sdk-codegen/bulk`             | bulk pipeline APIs, schemas, types                   | `src/bulk.ts`             |
-| `@oaknational/sdk-codegen/vocab`            | static graph data, ontology, mined synonyms          | `src/vocab.ts`            |
+| `@oaknational/sdk-codegen/vocab`            | types, concept graph ontology                        | `src/vocab.ts`            |
+| `@oaknational/sdk-codegen/vocab-data`       | runtime graph data (large generated structures)      | `src/vocab-data.ts`       |
 | `@oaknational/sdk-codegen/query-parser`     | query parser types                                   | `src/query-parser.ts`     |
 | `@oaknational/sdk-codegen/observability`    | zero-hit telemetry                                   | `src/observability.ts`    |
 | `@oaknational/sdk-codegen/admin`            | admin fixtures                                       | `src/admin.ts`            |

@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
+import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import {
   THREAD_PROGRESSIONS_RESOURCE,
   getThreadProgressionsJson,

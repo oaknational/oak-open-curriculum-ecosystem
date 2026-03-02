@@ -20,7 +20,7 @@
  * @see ADR-086 for the extraction methodology
  */
 
-import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab';
+import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
 
 /**
  * Prerequisite graph resource definition for MCP registration.

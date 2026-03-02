@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab';
+import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
 import {
   PREREQUISITE_GRAPH_RESOURCE,
   getPrerequisiteGraphJson,

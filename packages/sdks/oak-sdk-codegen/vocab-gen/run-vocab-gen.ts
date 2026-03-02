@@ -39,11 +39,11 @@ const DEFAULT_BULK_DATA_PATH = 'apps/oak-search-cli/bulk-downloads';
 /**
  * Default output path relative to SDK root.
  */
-const DEFAULT_OUTPUT_PATH = 'src/mcp';
+const DEFAULT_OUTPUT_PATH = 'src/generated/vocab';
 
 /**
  * Resolves path relative to repo root.
- * vocab-gen is at packages/sdks/oak-curriculum-sdk/vocab-gen/
+ * vocab-gen is at packages/sdks/oak-sdk-codegen/vocab-gen/
  */
 function fromRepoRoot(relativePath: string): string {
   return join(__dirname, '..', '..', '..', '..', relativePath);
@@ -51,7 +51,7 @@ function fromRepoRoot(relativePath: string): string {
 
 /**
  * Resolves path relative to SDK root.
- * vocab-gen is at packages/sdks/oak-curriculum-sdk/vocab-gen/
+ * vocab-gen is at packages/sdks/oak-sdk-codegen/vocab-gen/
  */
 function fromSdkRoot(relativePath: string): string {
   return join(__dirname, '..', relativePath);

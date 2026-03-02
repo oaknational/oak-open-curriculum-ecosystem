@@ -206,11 +206,10 @@ async function generateOutputFiles(
   const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir);
   outputFiles.push(`reports/${basename(analysisFilePath)}`);
 
-  // Generate mined synonyms (written to src/mcp/synonyms/generated)
   const minedSynonyms = generateMinedSynonyms(result.extractedData.keywords);
   const synonymsDir = join(config.outputPath, 'synonyms');
   const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir);
-  outputFiles.push(`synonyms/generated/${basename(synonymsFilePath)}`);
+  outputFiles.push(`synonyms/${basename(synonymsFilePath)}`);
 
   // Generate misconception graph
   const misconceptionGraph = generateMisconceptionGraphData(

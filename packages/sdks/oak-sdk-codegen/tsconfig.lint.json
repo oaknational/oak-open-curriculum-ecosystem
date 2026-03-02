@@ -13,5 +13,5 @@
     "**/*.spec.ts",
     "*.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "test-cache"]
+  "exclude": ["node_modules", "dist", "test-cache", "src/generated/vocab/**", "src/vocab-data.ts"]
 }

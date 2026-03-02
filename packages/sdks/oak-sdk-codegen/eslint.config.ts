@@ -28,16 +28,8 @@ const config = defineConfig(
       '*.log',
       '.turbo/**',
       'test-cache/**',
-      'src/generated/vocab/vocabulary-graph-data.ts',
-      'src/generated/vocab/misconception-graph-data.ts',
-      'src/generated/vocab/nc-coverage-graph-data.ts',
-      'src/generated/vocab/prerequisite-graph-data.ts',
-      'src/generated/vocab/thread-progression-data.ts',
-      'src/mcp/vocabulary-graph-data.ts',
-      'src/mcp/misconception-graph-data.ts',
-      'src/mcp/nc-coverage-graph-data.ts',
-      'src/mcp/prerequisite-graph-data.ts',
-      'src/mcp/thread-progression-data.ts',
+      'src/generated/vocab/**',
+      'src/vocab-data.ts',
     ],
   },
 
@@ -115,14 +107,6 @@ const config = defineConfig(
       'max-lines-per-function': 'off',
       'max-statements': 'off',
       complexity: 'off',
-    },
-  },
-
-  {
-    files: ['src/generated/vocab/**'],
-    rules: {
-      'max-lines': 'off',
-      'max-lines-per-function': 'off',
     },
   },
 

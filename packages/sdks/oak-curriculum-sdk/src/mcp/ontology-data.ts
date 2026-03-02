@@ -12,7 +12,8 @@
  * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
  */
 
-import { threadProgressionGraph, conceptGraph } from '@oaknational/sdk-codegen/vocab';
+import { conceptGraph } from '@oaknational/sdk-codegen/vocab';
+import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { toolGuidanceData } from './tool-guidance-data.js';
 
 /**
