@@ -13,25 +13,26 @@ Strategic context: [high-level-plan.md](../plans/high-level-plan.md).
 
 | Milestone | Name | Summary |
 |---|---|---|
-| M0 | [Open private alpha](m0-open-private-alpha.md) | Make the repo public so external teams can start building |
-| M1 | [Open public alpha](m1-open-public-alpha.md) | Let teachers use AI tools to access curriculum directly |
-| M2 | [Post-alpha enhancements](m2-post-alpha-enhancements.md) | Richer interactions, more tools can connect |
-| M3 | [Public beta](m3-public-beta.md) | Production-grade reliability for daily teacher use |
+| M0 | [Open private alpha](m0-open-private-alpha.md) | ✅ Make the repo public so external teams can start building |
+| M1 | [Invite-only alpha](m1-invite-only-alpha.md) | 🔄 Oak staff and invited users access MCP server via dev Clerk allowlist |
+| M2 | [Open public alpha](m2-extension-surfaces.md) | Production Clerk, social providers, public sign-up |
+| M3 | [Public beta](m3-tech-debt-and-hardening.md) | Operational hardening, extension surfaces, observability, tech debt |
 
-Current state: **closed private alpha** (repo private, HTTP server private
-alpha).
+Current state: **invite-only alpha** (M1 active — repo public,
+server live at `curriculum-mcp-alpha.oaknational.dev`, access via
+Oak emails + explicit Clerk invitations).
 
 ---
 
 ## State Progression
 
-| State | Repo | HTTP Server | Key requirement |
-|---|---|---|---|
-| Closed private alpha | Private | Private alpha | Current state |
-| Open private alpha (M0) | **Public** | Private alpha | Docs remediation |
-| Open public alpha (M1) | Public | **Public alpha** | Clerk, Sentry, rate limiting |
-| Post-alpha (M2) | Public | Public alpha | MCP extensions, enforcement |
-| Public beta (M3) | Public | **Public beta** | Mutation testing, observability |
+| State | Repo | HTTP Server | Auth | Key requirement |
+|---|---|---|---|---|
+| Closed private alpha | Private | Private alpha | Test Clerk | — |
+| Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
+| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | 🔄 Active |
+| Open public alpha (M2) | Public | **Open public alpha** | **Prod Clerk** | Clerk prod migration |
+| Public beta (M3) | Public | **Public beta** | Prod Clerk | Operational hardening |
 
 ---
 
@@ -66,6 +67,10 @@ Their purpose is to:
 
 Use: `.agent/plans/release-plan-m{n}.plan.md`
 
-### Active Release Plans
+### Release Plans
 
-- Milestone 1: [release-plan-m1.plan.md](../plans/release-plan-m1.plan.md)
+- Milestone 1: [release-plan-m1.plan.md](../plans/archive/completed/release-plan-m1.plan.md) (archived)
+- No active release plan at present.
+
+Release control model, snagging protocol, and go/no-go templates:
+[docs/engineering/milestone-release-runbook.md](../../docs/engineering/milestone-release-runbook.md).

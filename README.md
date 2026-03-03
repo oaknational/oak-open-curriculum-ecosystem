@@ -4,7 +4,7 @@ Tools for building AI applications on the [Oak National Academy Open Curriculum]
 
 **Product and impact folks**: take a look at the [VISION.md](docs/foundation/VISION.md) for a high-level overview of the project.
 
-> **Current status: Private Alpha** — This repository is under active early development. APIs, tools, and documentation may change. Public alpha is being planned, see [milestones/m1-open-public-alpha.md](.agent/milestones/m1-open-public-alpha.md) for details.
+> **Current status: Private Alpha** — This repository is under active early development. APIs, tools, and documentation may change. Invite-only alpha is next, see [milestones/m1-invite-only-alpha.md](.agent/milestones/m1-invite-only-alpha.md) for details.
 
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)

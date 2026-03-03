@@ -584,7 +584,7 @@ Document findings. Create follow-up plan if BLOCKERs found.
 | **Specification and reference docs** | |
 | `agent-support-tools-specification.md` | **Structural rewrite** — entire doc assumes three-tool architecture (line 9-11 tool list, metadata code block, Quick Start section, tool-guidance-data examples). Simplifies significantly with one orientation tool. |
 | **Prompts and templates** | |
-| Session prompt (`session-continuation.prompt.md`) | Update to reflect completion |
+| Session prompt (`archive/session-continuation.prompt.md`) | Archived after release completion |
 | `.agent/prompts/semantic-search/semantic-search.prompt.md` | Update line 406: "agent context injection via the `get-ontology` MCP tool" → `get-curriculum-model` |
 | `.agent/plans/semantic-search/templates/ground-truth-session-template.md` | Update lines 50, 405: "Call `get-help`" → `get-curriculum-model` |
 | **READMEs** | |

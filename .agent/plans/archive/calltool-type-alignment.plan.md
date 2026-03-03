@@ -138,7 +138,7 @@ should reflect reality. The function accepts flat args, so
 
 ## References
 
-- Release plan M1-S008: `.agent/plans/release-plan-m1.plan.md`
+- Release plan M1-S008: `.agent/plans/archive/completed/release-plan-m1.plan.md`
 - Generated execute.ts: `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/runtime/execute.ts`
 - Type aliases: `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/aliases/types.ts`
 - Code pattern: `.agent/memory/code-patterns/multi-layer-schema-sync.md`

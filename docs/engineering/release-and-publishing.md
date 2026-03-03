@@ -1,5 +1,9 @@
 # Release and Publishing
 
+For milestone/service release controls (gate model, snagging protocol,
+go/no-go, rollout safety), see
+[Milestone Release Runbook](./milestone-release-runbook.md).
+
 ## Published Packages
 
 Only `@oaknational/curriculum-sdk` is published to npm. All other

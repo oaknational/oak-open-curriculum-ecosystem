@@ -19,6 +19,7 @@ This directory contains engineering workflow and implementation documentation fo
 - [CI Policy](./ci-policy.md) - What runs in CI (sdk-codegen policy, build behavior)
 - [Testing Patterns](./testing-patterns.md) - Reusable test recipes (E2E DI pattern, subprocess tests)
 - [Release and Publishing](./release-and-publishing.md) - npm publishing, versioning, and release automation
+- [Milestone Release Runbook](./milestone-release-runbook.md) - Gate model, snagging protocol, and go/no-go controls for milestone releases
 - [Environment Variables](../operations/environment-variables.md) - Runtime configuration and environment variable management
 - [Production Debugging Runbook](../operations/production-debugging-runbook.md) - Production diagnostics and incident workflows
 

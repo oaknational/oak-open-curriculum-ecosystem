@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 Milestone 0 — SDK workspace separation complete, secrets sweep remaining
-**Last Updated**: 2026-02-25
+**Status**: ✅ Milestone 0 complete — branch merged, search quality in M3 backlog
+**Last Updated**: 2026-03-02
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -40,14 +40,17 @@ Completed plans (archived):
 This roadmap sits within the high-level milestone sequence:
 
 ```text
-Milestone 0: Open Source Readiness               🔄 THIS ROADMAP
-  → Complete merge gates, secrets sweep, make repo public
+Milestone 0: Open Private Alpha                  ✅ COMPLETE
+  → Branch merged, repo ready to go public
 
-Milestone 1: Public Alpha                        📋 NEXT
-  → Clerk production migration, Claude basic-branding decision gate
+Milestone 1: Invite-Only Alpha                   📋 NEXT
+  → Production Clerk, Oak emails + explicit invites
 
-Milestone 2: Post-Alpha Enhancements             📋 PLANNED
-  → MCP extensions, architectural enforcement, search quality Phase 4
+Milestone 2: Extension Surfaces                  📋 PLANNED
+  → MCP-app extension, then OpenAPI app extension
+
+Milestone 3: Tech Debt & Hardening               📋 PLANNED
+  → Search quality Phase 4, architectural enforcement, observability
 ```
 
 See [high-level-plan.md](../high-level-plan.md) for full milestone definitions.
@@ -143,12 +146,15 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3b. Result pattern unification                    📋 POST-MERGE
   3c. STDIO-HTTP alignment                          📋 POST-MERGE
         ↓
-Milestone 1: Public Alpha                           📋 PLANNED
+Milestone 1: Invite-Only Alpha                      📋 NEXT
   Clerk production migration                        📋 RESEARCH COMPLETE
-  Claude basic-branding decision gate               📋 DECISION GATE
         ↓
-Phase 4: Search Quality + Ecosystem                 📋 MILESTONE 2
-Phase 5: Extensions                                 📋 MILESTONE 2
+Milestone 2: Extension Surfaces                     📋 PLANNED
+  MCP-app extension, then OpenAPI app extension
+        ↓
+Milestone 3: Tech Debt & Hardening                  📋 PLANNED
+  Phase 4: Search Quality + Ecosystem
+  Phase 5: Extensions
 ```
 
 ---
@@ -196,9 +202,9 @@ All phases (0-5) complete:
 
 ---
 
-## Milestone 1: Public Alpha
+## Milestone 1: Invite-Only Alpha
 
-Research and planning for public alpha:
+Research and planning for invite-only alpha:
 
 1. **Clerk production migration** — research complete, decision
    pending.

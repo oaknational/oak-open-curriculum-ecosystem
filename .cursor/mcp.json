@@ -12,7 +12,7 @@
         "LOG_LEVEL": "debug"
       }
     },
-    "oak-remote-prod": {
+    "oak-prod": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
     },

@@ -1,9 +1,15 @@
-# Milestone 1 Release Plan (Public Alpha)
+# Milestone 1 Release Plan (Invite-Only Alpha)
 
-**Status**: Active  
+> Archived historical execution record. Some in-document links reflect the
+> original pre-archive path and are preserved for provenance. Use
+> [completed-plans.md](../../completed-plans.md) and
+> [milestone-release-runbook.md](../../../../docs/engineering/milestone-release-runbook.md)
+> for canonical, maintained references.
+
+**Status**: Complete  
 **Last Updated**: 2026-03-02  
-**Milestone**: Milestone 1 (Public Alpha)  
-**Open items**: Curriculum graphs architecture redesign (pre-merge, blocks CI). Year parameter normalisation complete. Fetch tool thread: bug fixed. M1-S009 complete. M1-S003 complete. M1-S007 deferred. Remaining M0 gates: quality gates, secrets sweep, manual review, merge, make public.
+**Milestone**: Milestone 1 (Invite-Only Alpha)  
+**Current state**: Release controls and milestone re-baselining complete. Durable release control guidance extracted to [docs/engineering/milestone-release-runbook.md](../../../../docs/engineering/milestone-release-runbook.md). This file is archived as historical execution record.
 
 ---
 
@@ -24,9 +30,9 @@ They are not for opening new feature scope.
 
 ## Objective
 
-Get Milestone 1 across the line safely:
+Get Milestone 1 (invite-only alpha) across the line safely:
 
-- checks complete,
+- production Clerk instance with restricted access (Oak emails + explicit invites),
 - release snags closed or explicitly accepted,
 - release executed with controlled risk and rollback readiness.
 
@@ -40,25 +46,30 @@ Primary strategic reference:
 ### Getting Started
 
 1. Read this plan. It is self-contained.
-2. Read [rules.md](../directives/rules.md), [testing-strategy.md](../directives/testing-strategy.md), and [schema-first-execution.md](../directives/schema-first-execution.md).
-3. Read [distilled.md](../memory/distilled.md) and [napkin.md](../memory/napkin.md).
+2. Read [rules.md](../../../directives/rules.md), [testing-strategy.md](../../../directives/testing-strategy.md), and [schema-first-execution.md](../../../directives/schema-first-execution.md).
+3. Read [distilled.md](../../../memory/distilled.md) and [napkin.md](../../../memory/napkin.md).
 
 ### Milestone Progression
 
-Three distinct milestones, in order:
-
 | Milestone | State | Repo | HTTP Server | Key gates |
 |---|---|---|---|---|
-| **Closed private alpha** | CURRENT | Private | Private alpha | — |
-| **Open private alpha** (M0) | NEXT | Public | Private alpha | Docs remediation (17 items) |
-| **Open public alpha** (M1) | AFTER M0 | Public | Public alpha | Clerk, Sentry, rate limiting |
+| **Open private alpha** (M0) | ✅ COMPLETE | Public | Private alpha | Branch merged |
+| **Invite-only alpha** (M1) | NEXT | Public | Invite-only alpha | Prod Clerk |
+| **Extension surfaces** (M2) | AFTER M1 | Public | Invite-only alpha | MCP-app extension |
+| **Tech debt & hardening** (M3) | AFTER M2 | Public | Alpha | Enforcement, observability |
 
-M0 (make repo public) requires documentation fixes only. M1 (public alpha)
-additionally requires engineering/ops gates (Clerk, Sentry, rate limiting).
+M0 complete — `feat/semantic_search_deployment` merged to `main` (2026-03-02).
+M1 (invite-only alpha) requires production Clerk with access restricted to
+Oak emails and explicitly invited users. Does not require full Sentry
+configuration.
 
 ### Current State
 
-All feature work complete. Full reindex done (2026-02-28). **Verification complete (2026-02-28).** **ESLint OOM fixed (2026-03-02)** — graph data deduplicated, vocab/vocab-data subpath split, six orphaned files deleted. CI lint should now pass without `NODE_OPTIONS`. Broader architecture work (workspace decomposition) deferred to post-merge (see [codegen architecture plans](architecture-and-infrastructure/codegen/)).
+**M0 COMPLETE** (2026-03-02). `feat/semantic_search_deployment` merged to `main`.
+All feature work complete. Full reindex done (2026-02-28). ESLint OOM fixed
+(graph data dedup, vocab/vocab-data split). Broader architecture work
+(workspace decomposition) deferred to post-merge
+(see [codegen architecture plans](../../architecture-and-infrastructure/codegen/)).
 
 - **Batches A–E3**: All 35 architecture fixes (F1–F35), 4 remediation items (R1–R4), and 12 onboarding items (O1–O12) are complete. Quality gates green across all workspaces.
 - **Go/No-Go G1–G3**: Complete with evidence (see §Mandatory Check Gates below).
@@ -76,13 +87,19 @@ All feature work complete. Full reindex done (2026-02-28). **Verification comple
 Resolved 2026-03-02: graph data deduplicated, vocab/vocab-data split,
 `tsconfig.lint.json` excludes. Committed and pushed.
 
-**2. Remaining M0 gates**
+**2. ~~M0 gates~~ (DONE)**
 
-- Verify CI lint passes on PR (OOM fix was the blocker)
-- Final secrets and PII sweep (`pnpm secrets:scan:all`)
-- Manual sensitive-information review (human)
-- Merge `feat/semantic_search_deployment` to `main`
-- Make repository public on GitHub
+Branch merged 2026-03-02. Remaining: make repository public on GitHub
+(human decision).
+
+**3. M1 gates (invite-only alpha)**
+
+- Clerk production instance migration (blocking)
+  - Research complete:
+    [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
+  - Blocking decision: shared vs independent Clerk instance
+  - Access control: Oak email domain + explicit Clerk invitations
+- Make repository public on GitHub (if not already done)
 
 **3. Recently completed (for reference)**
 
@@ -141,31 +158,32 @@ No genuine P1 blockers. Repo name false positive recurred (4th time).
 13 items identified for remediation (W1-W13) — see §Post-Review
 Documentation Fixes below.
 
-**Remaining M0 gates**:
+**M0 gates** (all complete except repo public):
 
 1. ~~Fix N1-N21 documentation items~~ COMPLETE
 2. ~~Final onboarding validation~~ COMPLETE
 3. ~~Fix V1-V10 documentation items (9 genuine fixes)~~ COMPLETE
 4. ~~Post-V-fix onboarding review~~ COMPLETE
 5. ~~Fix W1-W13 documentation items~~ COMPLETE
-6. Final secrets and PII sweep (`pnpm secrets:scan:all`)
-7. Manual sensitive-information review (human)
-8. Merge `feat/semantic_search_deployment` to `main`
-9. Make repository public on GitHub
+6. ~~Final secrets and PII sweep~~ COMPLETE
+7. ~~Manual sensitive-information review~~ COMPLETE
+8. ~~Merge `feat/semantic_search_deployment` to `main`~~ COMPLETE (2026-03-02)
+9. Make repository public on GitHub (human decision)
 
-**Engineering/ops gates (M1 — blocks open public alpha)**:
+**Engineering/ops gates (M1 — blocks invite-only alpha)**:
 
 | Gate | Decision needed | Owner | Status |
 |------|----------------|-------|--------|
-| **G5** | Accept public-alpha experience contract | Product owner | Pending |
-| **G6** | Clerk production migration | Engineering/ops | Blocks M1 only |
-| **G7** | Sentry observability verification | Engineering/ops | Blocks M1 only |
+| **G5** | Accept invite-only alpha experience contract | Product owner | Pending |
+| **G6** | Clerk production migration (Oak emails + explicit invites) | Engineering/ops | Blocks M1 |
 | **G8** | Release communications | Product owner | Pending |
-| **Rate limiting** | Verify active on deployment target | Engineering/ops | Blocks M1 only |
 
-Note: G6, G7, and rate limiting do NOT block M0 (open private alpha).
-The upstream curriculum API has extensive rate limiting, providing baseline
-protection.
+**Deferred to later milestones** (not required for invite-only alpha):
+
+| Gate | Deferred to | Rationale |
+|------|-------------|-----------|
+| **G7** | Sentry observability verification | M3 (tech debt & hardening) |
+| **Rate limiting** | M3 | Upstream API has extensive rate limiting |
 
 ---
 
@@ -1118,6 +1136,7 @@ Replace fabricated `OakCurriculumClient` examples with real
 `createOakClient` usage.
 
 **Files:**
+
 - `packages/sdks/oak-curriculum-sdk/README.md` — rewrite Usage and Logging
   sections
 - `packages/sdks/oak-curriculum-sdk/docs/logging-guide.md` — update any
@@ -1318,10 +1337,10 @@ exploration](../../.cursor/projects/Users-jim-code-oak-oak-mcp-ecosystem/agent-t
 | **Severity** | P1 — thread search ELSER leg is completely dead |
 | **Priority** | **TOP PRIORITY for next session** |
 | **Problem** | `createThreadDocument` in `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` builds thread documents with `thread_slug`, `thread_title`, `subject_slugs`, `unit_count`, `thread_url`, and `title_suggest` — but never sets `thread_semantic`. The mapping defines this field as `semantic_text` (ELSER inference) but every document in the index is missing it. Confirmed via EsCurric `platform_core_get_document_by_id` on three threads (algebra, geometry-and-measure, bq14-physics) — none have `thread_semantic`. The ELSER leg of the 2-way RRF retriever is completely dead across all 164 documents. |
-| **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
+| **ES investigation** | `oak_threads` index: 164 documents. 10 maths threads confirmed via ES\|QL. Document-by-ID retrieval confirmed `thread_semantic` field absent on all sampled documents. The mapping has `thread_semantic: semantic_text` — no mapping change needed. |
 | **Fix** | Populate `thread_semantic` at indexing time in `createThreadDocument` with subject-enriched content. For example: `"Maths: Algebra — a curriculum progression thread"` or `"${subjects.join(', ')}: ${threadTitle}"`. This gives ELSER the subject-to-thread association it needs. Reindex required after the fix. The query side (`buildThreadRetriever` in `retrieval-search-helpers.ts`) is already correct — it searches `thread_semantic` via ELSER. It just needs data. |
 | **Files** | `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (createThreadDocument — populate `thread_semantic`), `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` (bulk path adapter) |
-| **Status** | [x] **Verified (2026-02-28).** `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Full bulk reindex completed: 16,443 docs across 114 chunks, 26 initial ELSER failures recovered in 1 retry round, 0 final failures. Chunk delay increased to 8000ms (ADR-096 revised). **Verification evidence:** EsCurric spot-check: algebra (`"maths: Algebra"`), geometry-and-measure (`"maths: Geometry and Measure"`), bq14-physics full slug (`"science: BQ14 Physics: ..."`). ES|QL count: 164/164. MCP thread search: `search(scope: threads, text: "algebra")` → 25 results, Algebra #1. `explore-topic(text: "algebra", subject: "maths")` → 5 lessons, 5 units, 5 threads. All 32 oak-local MCP tools validated. |
+| **Status** | [x] **Verified (2026-02-28).** `thread_semantic` populated with subject-enriched content in `createThreadDocument`. Unit tests in `thread-document-builder.unit.test.ts` and `bulk-thread-transformer.unit.test.ts`. `DATA-COMPLETENESS.md` updated. Ingest CLI refactored: `es:ingest-live` renamed to `es:ingest`, bulk mode is now default, per-index filtering skips unnecessary processing (ADR-093 revised). Full bulk reindex completed: 16,443 docs across 114 chunks, 26 initial ELSER failures recovered in 1 retry round, 0 final failures. Chunk delay increased to 8000ms (ADR-096 revised). **Verification evidence:** EsCurric spot-check: algebra (`"maths: Algebra"`), geometry-and-measure (`"maths: Geometry and Measure"`), bq14-physics full slug (`"science: BQ14 Physics: ..."`). ES\|QL count: 164/164. MCP thread search: `search(scope: threads, text: "algebra")` → 25 results, Algebra #1. `explore-topic(text: "algebra", subject: "maths")` → 5 lessons, 5 units, 5 threads. All 32 oak-local MCP tools validated. |
 
 ---
 

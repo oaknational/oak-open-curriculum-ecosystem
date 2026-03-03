@@ -36,22 +36,18 @@ All must be true before M0 exit:
   validation, and post-fix review)
 - [x] All documentation defects from onboarding simulations resolved
 - [x] Quality gates green (`pnpm qg`)
-- [ ] All agent guidance tooling in the MCP tools is folded into the gat-curriculum-model tool
-- [ ] Final secrets and PII sweep passes (`pnpm secrets:scan:all`)
-- [ ] Manual review of configuration files, environment examples, READMEs,
+- [x] All agent guidance tooling in the MCP tools folded into get-curriculum-model
+- [x] Final secrets and PII sweep passes (`pnpm secrets:scan:all`)
+- [x] Manual review of configuration files, environment examples, READMEs,
   and research documents for sensitive information
-- [ ] `feat/semantic_search_deployment` branch merged
-- [ ] Repository made public on GitHub
+- [x] `feat/semantic_search_deployment` branch merged (2026-03-02)
+- [x] Repository made public on GitHub (2026-03-03)
 
 ## Current status
 
-**In progress.** SDK, MCP servers, semantic search, and documentation
-are complete. Three rounds of onboarding simulation (covering junior
-developer, lead developer, CTO, and CEO personas) have been completed,
-each round identifying and resolving documentation improvements.
-Quality gates are green. Secrets scan clean (382 commits, no leaks).
-Remaining steps: manual sensitive-information review, branch merge,
-and make public.
+**Complete** (2026-03-03). Branch merged to `main` (2026-03-02). All
+engineering gates passed. Repository made public. Live at
+`curriculum-mcp-alpha.oaknational.dev`.
 
 Execution detail:
-[release-plan-m1.plan.md](../plans/release-plan-m1.plan.md).
+[release-plan-m1.plan.md](../plans/archive/completed/release-plan-m1.plan.md).
