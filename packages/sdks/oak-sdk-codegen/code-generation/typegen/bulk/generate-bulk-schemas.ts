@@ -17,6 +17,7 @@
 
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
+import type { Logger } from '@oaknational/logger';
 
 import {
   HEADER_TEMPLATE,
@@ -57,7 +58,7 @@ function generateBulkSchemasContent(): string {
  *
  * @param outDir - Output directory for generated files
  */
-export function generateBulkSchemas(outDir: string): void {
+export function generateBulkSchemas(outDir: string, logger: Logger): void {
   if (!existsSync(outDir)) {
     mkdirSync(outDir, { recursive: true });
   }
@@ -68,8 +69,8 @@ export function generateBulkSchemas(outDir: string): void {
   const schemasContent = generateBulkSchemasContent();
 
   writeFileSync(schemasFile, schemasContent);
-  console.log(`📝 Generated bulk schemas: ${schemasFile}`);
+  logger.info('Generated bulk schemas', { path: schemasFile });
 
   writeFileSync(indexFile, INDEX_TEMPLATE);
-  console.log(`📝 Generated bulk index: ${indexFile}`);
+  logger.info('Generated bulk index', { path: indexFile });
 }

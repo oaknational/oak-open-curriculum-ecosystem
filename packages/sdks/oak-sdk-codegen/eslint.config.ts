@@ -76,10 +76,7 @@ const config = defineConfig(
     },
   },
 
-  // Code generators legitimately use Object.keys/values/entries to iterate
-  // OpenAPI schema properties. 75 structural violations remain; refactoring
-  // is out of scope for M1 (F33 progressive re-enablement). New code in
-  // code-generation/ is still subject to SDK boundary rules above.
+  // All of these exceptions need removing now that the codegen workspace is separate
   {
     files: ['code-generation/**'],
     rules: {
@@ -131,6 +128,13 @@ const config = defineConfig(
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       'no-irregular-whitespace': 'off',
       curly: 'off',
+    },
+  },
+
+  {
+    files: ['e2e-tests/**/*.ts'],
+    rules: {
+      'no-console': 'off',
     },
   },
 

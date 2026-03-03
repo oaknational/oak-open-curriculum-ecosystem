@@ -190,7 +190,7 @@ async function main(): Promise<void> {
     startDir: CURRENT_DIR,
   });
   if (!configResult.ok) {
-    console.error('Environment validation failed:', configResult.error.message);
+    process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
     process.exit(1);
   }
   const env = configResult.value.env;
@@ -221,19 +221,15 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  // Provide clear message for cache requirement errors
   if (error instanceof CacheRequiredError) {
-    ingestLogger.error('CACHE REQUIRED - Ingestion cannot proceed', {
-      error: error.message,
+    ingestLogger.error('CACHE REQUIRED - Ingestion cannot proceed', error, {
       hint: 'Start Redis with: docker compose up -d, or use --bypass-cache',
     });
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
-  ingestLogger.error('FATAL ERROR - Ingestion terminated', {
-    error: error instanceof Error ? error.message : String(error),
-    stack: error instanceof Error ? error.stack : undefined,
-    phase: 'main',
-  });
-  process.exit(1);
+  const fatalError = error instanceof Error ? error : new Error(String(error), { cause: error });
+  ingestLogger.error('FATAL ERROR - Ingestion terminated', fatalError, { phase: 'main' });
+  process.exitCode = 1;
 });

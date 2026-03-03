@@ -25,12 +25,12 @@ Milestone 0: Open Private Alpha                  ✅ COMPLETE
   → Secrets/PII sweep, docs remediation, merge branch, make repo public
   → Repo public, HTTP server still private alpha (invitation-only)
 
-Milestone 1: Invite-Only Alpha                   🔄 ACTIVE
+Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
   → Oak staff and invited users access the MCP server via dev Clerk allowlist
   → Oak email domain + explicit Clerk invitations, no prod Clerk needed
-  → Repo public, server live at curriculum-mcp-alpha.oaknational.dev
+  → Repo public, server live at curriculum-mcp-alpha.oaknational.dev, v1.0.0
 
-Milestone 2: Open Public Alpha                   📋 NEXT
+Milestone 2: Open Public Alpha                   🔄 NEXT
   → Production Clerk, social providers, public sign-up
   → Edge rate limiting on OAuth proxy endpoints
   → Anyone can sign up and use Oak's curriculum tools
@@ -47,7 +47,7 @@ Milestone 3: Public Beta                         📋 PLANNED
 |---|---|---|---|---|
 | Closed private alpha | Private | Private alpha | Test Clerk | — |
 | Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
-| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | 🔄 Active |
+| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
 | Open public alpha (M2) | Public | **Open public alpha** | **Prod Clerk** | Clerk prod migration |
 | Public beta (M3) | Public | **Public beta** | Prod Clerk | Operational hardening |
 
@@ -100,13 +100,8 @@ real-world validation with a controlled user base before broader release.
 4. ChatGPT key commands show basic branding.
 5. Dev Clerk with allowlist access control (Oak emails + explicit invites).
 
-**Status**: Active. Server live at `curriculum-mcp-alpha.oaknational.dev`.
-Access managed via Clerk Dashboard allowlist.
-
-**Remaining work**:
-
-- Quality gates green (`pnpm qg`)
-- Snagging pass: no severity-1 or severity-2 items open
+**Status**: Complete (2026-03-03). All gates satisfied. Server live at
+`curriculum-mcp-alpha.oaknational.dev`. v1.0.0 released.
 
 **Not required for this milestone** (deferred to M2 or M3):
 

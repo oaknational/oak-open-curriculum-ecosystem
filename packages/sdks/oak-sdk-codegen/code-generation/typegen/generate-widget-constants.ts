@@ -8,6 +8,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { BASE_WIDGET_URI } from './cross-domain-constants.js';
+import type { Logger } from '@oaknational/logger';
 
 const OUTPUT_PATH = resolve(import.meta.dirname, '../../src/types/generated/widget-constants.ts');
 
@@ -40,12 +41,12 @@ export const WIDGET_URI = ${JSON.stringify(BASE_WIDGET_URI)} as const;
 `;
 }
 
-export function generateWidgetConstants(): void {
+export function generateWidgetConstants(logger: Logger): void {
   const outputDir = dirname(OUTPUT_PATH);
   mkdirSync(outputDir, { recursive: true });
 
   const content = generateWidgetConstantsFile();
   writeFileSync(OUTPUT_PATH, content, 'utf-8');
 
-  console.log(`✅ Generated widget constants: ${OUTPUT_PATH}`);
+  logger.info('Generated widget constants', { path: OUTPUT_PATH });
 }

@@ -2,6 +2,7 @@
 import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import type { OpenAPIObject, ResponsesObject } from 'openapi3-ts/oas31';
+import type { Logger } from '@oaknational/logger';
 import { generateZodSchemasFromOpenAPI } from './adapter/index.js';
 import { ensurePathsOnSchema } from './codegen-core-helpers.js';
 
@@ -36,6 +37,7 @@ const defaultIO: ZodgenIO = {
 export async function generateZodSchemas(
   openApiDoc: OpenAPIObject,
   outDir: string,
+  logger: Logger,
   io: ZodgenIO = defaultIO,
 ): Promise<void> {
   if (!io.existsSync(outDir)) {
@@ -97,7 +99,7 @@ export async function generateZodSchemas(
     openApiDoc,
     distPath: outFile,
   });
-  console.log('✅ Zod schemas generated');
+  logger.info('Zod schemas generated');
 
   const operationIdMapEntries = Array.from(methodAndPathToOperationId.entries())
     .map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)},`)
@@ -219,7 +221,7 @@ export async function generateZodSchemas(
 
   // Modify the generated file to export the schemas
   // The adapter has already converted code to Zod v4 compatible and removed makeApi
-  console.log('🔍 Modifying file to export the endpoints');
+  logger.info('Modifying file to export the endpoints');
   // The adapter converts "const endpoints = makeApi([" to "const endpoints = (["
   const withExportedEndpoints = output.replace(
     /const endpoints = \(/g,
@@ -299,7 +301,7 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
     helpersBlock,
   );
 
-  console.log('📝 Writing to file: ', outFile);
+  logger.info('Writing to file', { path: outFile });
 
   io.writeFileSync(outFile, sanitizedContent);
 }

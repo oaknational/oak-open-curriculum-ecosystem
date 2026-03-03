@@ -30,10 +30,10 @@ const configResult = loadRuntimeConfig({
 });
 
 if (!configResult.ok) {
-  console.error('Environment validation failed:', configResult.error.message);
+  process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
   for (const d of configResult.error.diagnostics) {
     if (!d.present) {
-      console.error(`  ${d.key}: MISSING`);
+      process.stderr.write(`  ${d.key}: MISSING\n`);
     }
   }
   process.exit(1);

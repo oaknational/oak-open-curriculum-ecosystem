@@ -17,7 +17,7 @@ async function run(): Promise<number> {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
       if (line) {
-        console.log(line);
+        process.stdout.write(line + '\n');
       }
     }
   });
@@ -26,14 +26,17 @@ async function run(): Promise<number> {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
       if (line) {
-        console.error(line);
+        process.stderr.write(line + '\n');
       }
     }
   });
 
   return await new Promise<number>((resolve) => {
     child.on('close', (code) => resolve(code ?? 0));
-    child.on('error', () => resolve(1));
+    child.on('error', (err) => {
+      process.stderr.write(`typedoc spawn error: ${err.message}\n`);
+      resolve(1);
+    });
   });
 }
 

@@ -98,7 +98,7 @@ export function createProgram(): Command {
     .allowUnknownOption(false)
     .configureOutput({
       writeErr: (str) => {
-        console.error(chalk.red(str));
+        process.stderr.write(chalk.red(str));
       },
     })
     .showHelpAfterError(true)

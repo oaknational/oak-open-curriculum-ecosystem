@@ -4,6 +4,9 @@ import path from 'node:path';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 import { generateZodSchemas, type ZodgenIO } from './zodgen-core.js';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('zodgen-unit-test');
 
 const thisDir = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.join(thisDir, '__zod-test-output');
@@ -69,7 +72,7 @@ describe('generateZodSchemas', () => {
   });
 
   it('passes the schema (with paths guaranteed) to the adapter', async () => {
-    await generateZodSchemas(minimalSchema, outDir, fakeIO);
+    await generateZodSchemas(minimalSchema, outDir, logger, fakeIO);
 
     expect(fakeIO.generateSpy).toHaveBeenCalledTimes(1);
     const { openApiDoc } = fakeIO.generateSpy.mock.calls[0][0];
@@ -79,13 +82,13 @@ describe('generateZodSchemas', () => {
   it('creates the output directory when it does not exist', async () => {
     fakeIO.existsSyncSpy.mockReturnValueOnce(false);
 
-    await generateZodSchemas(minimalSchema, outDir, fakeIO);
+    await generateZodSchemas(minimalSchema, outDir, logger, fakeIO);
 
     expect(fakeIO.mkdirSyncSpy).toHaveBeenCalledWith(outDir, { recursive: true });
   });
 
   it('writes the generated file to disk', async () => {
-    await generateZodSchemas(minimalSchema, outDir, fakeIO);
+    await generateZodSchemas(minimalSchema, outDir, logger, fakeIO);
 
     expect(fakeIO.writeFileSyncSpy).toHaveBeenCalledWith(
       expect.stringContaining('curriculumZodSchemas.ts'),
@@ -94,7 +97,7 @@ describe('generateZodSchemas', () => {
   });
 
   it('emits endpoints before curriculumSchemas to keep ordering valid', async () => {
-    await generateZodSchemas(minimalSchema, outDir, fakeIO);
+    await generateZodSchemas(minimalSchema, outDir, logger, fakeIO);
 
     const [, content] = fakeIO.writeFileSyncSpy.mock.lastCall ?? [];
     if (typeof content !== 'string') {

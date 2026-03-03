@@ -14,6 +14,9 @@
 import { promises as fs } from 'node:fs';
 import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('verify-docs');
 
 async function fileSize(path: string): Promise<number> {
   const st = await fs.stat(path);
@@ -111,11 +114,11 @@ async function main(): Promise<void> {
   async function guard(label: string, f: () => Promise<void>): Promise<void> {
     try {
       await f();
-      console.log('OK  ', label);
+      logger.info(`OK   ${label}`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       failures.push(label + ': ' + msg);
-      console.error('FAIL', label, '-', msg);
+      logger.error(`FAIL ${label} - ${msg}`, err);
     }
   }
 
@@ -136,6 +139,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((err: unknown) => {
-  console.error(err instanceof Error ? err.message : String(err));
+  const message = err instanceof Error ? err.message : String(err);
+  logger.error(message, err);
   process.exitCode = 1;
 });

@@ -67,19 +67,8 @@ describe('generateWidgetHtml', () => {
     if (scriptMatch) {
       const scriptContent = scriptMatch[1];
 
-      // Check for properly nested template literals
-      // This is a heuristic check - backticks should be balanced
-      const backticks = scriptContent.match(/`/g) || [];
-
-      // Should have even number of backticks (they come in pairs for template literals)
-      // OR if odd, they should all be escaped
       const unescapedBackticks = scriptContent.match(/(?<!\\\\)`/g) || [];
 
-      // Log for debugging
-      console.log('Total backticks:', backticks.length);
-      console.log('Unescaped backticks:', unescapedBackticks.length);
-
-      // Unescaped backticks should be even (template literal pairs)
       expect(unescapedBackticks.length % 2).toBe(0);
     }
   });

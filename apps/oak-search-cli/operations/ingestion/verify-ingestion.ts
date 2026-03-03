@@ -75,13 +75,13 @@ function parseArgs(args: string[]): CliArgs {
 }
 
 function printHelp(): void {
-  console.log(
+  process.stdout.write(
     'Usage: pnpm ingest:verify [options]\n' +
       '  --subject <slug>       (default: maths)\n' +
       '  --key-stage <ks>       (default: ks4)\n' +
       '  --bulk-download <path>\n' +
       '  --es-url <url>\n' +
-      '  --help, -h',
+      '  --help, -h\n',
   );
 }
 
@@ -110,7 +110,7 @@ async function loadBulkDownload(args: CliArgs): Promise<BulkDownloadData> {
       DEFAULT_BULK_DOWNLOAD_PATH,
       args.subject === 'maths' ? 'maths-secondary.json' : `${args.subject}.json`,
     );
-  console.log(`Loading bulk download from: ${filePath}`);
+  process.stdout.write(`Loading bulk download from: ${filePath}\n`);
   const parsed: unknown = JSON.parse(await readFile(filePath, 'utf8'));
   if (!isBulkDownloadData(parsed)) {
     throw new Error('Invalid bulk download data structure');
@@ -128,7 +128,7 @@ async function getIndexedLessons(
     auth: { apiKey },
   });
 
-  console.log(`Querying Elasticsearch at: ${esUrl}`);
+  process.stdout.write(`Querying Elasticsearch at: ${esUrl}\n`);
   const response = await client.search({
     index: 'oak_lessons',
     size: 10000, // Get all lessons
@@ -156,10 +156,10 @@ async function getIndexedLessons(
 async function runVerification(args: CliArgs, esUrl: string, apiKey: string): Promise<boolean> {
   const bulkData = await loadBulkDownload(args);
   const expected = extractLessonsFromBulkDownload(bulkData, args.keystage);
-  console.log(`Found ${expected.length} lessons ` + `in bulk download for ${args.keystage}`);
+  process.stdout.write(`Found ${expected.length} lessons in bulk download for ${args.keystage}\n`);
 
   const indexed = await getIndexedLessons(esUrl, apiKey, args.keystage);
-  console.log(`Found ${indexed.length} lessons ` + `in Elasticsearch for ${args.keystage}`);
+  process.stdout.write(`Found ${indexed.length} lessons in Elasticsearch for ${args.keystage}\n`);
 
   const missing = findMissingLessons(expected, indexed);
   const report = generateVerificationReport({
@@ -169,7 +169,7 @@ async function runVerification(args: CliArgs, esUrl: string, apiKey: string): Pr
     indexedCount: indexed.length,
     missingLessons: missing,
   });
-  console.log(report);
+  process.stdout.write(report + '\n');
   return missing.length === 0;
 }
 
@@ -185,13 +185,13 @@ async function main(): Promise<void> {
     startDir: CURRENT_DIR,
   });
   if (!configResult.ok) {
-    console.error('Environment validation failed:', configResult.error.message);
+    process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
     process.exit(1);
   }
   const config = configResult.value.env;
   const esUrl = args.esUrlOverride || config.ELASTICSEARCH_URL;
 
-  console.log(`\nVerifying ingestion for ` + `${args.subject} ${args.keystage}...\n`);
+  process.stdout.write(`\nVerifying ingestion for ${args.subject} ${args.keystage}...\n\n`);
 
   try {
     const ok = await runVerification(args, esUrl, config.ELASTICSEARCH_API_KEY);
@@ -200,12 +200,13 @@ async function main(): Promise<void> {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error(`\nVerification failed: ${message}`);
+    process.stderr.write(`\nVerification failed: ${message}\n`);
     process.exitCode = 1;
   }
 }
 
 main().catch((error: unknown) => {
-  console.error('Fatal error:', error);
+  const message = error instanceof Error ? error.message : String(error);
+  process.stderr.write(`Fatal error: ${message}\n`);
   process.exitCode = 1;
 });

@@ -8,11 +8,9 @@ import { ingestLogger } from '../../logger';
 
 /**
  * Prints CLI help text.
- *
- * Uses console.log as this is program output, not logging.
  */
 export function printHelp(): void {
-  console.log(`
+  process.stdout.write(`
 Elasticsearch Setup CLI
 
 Usage:

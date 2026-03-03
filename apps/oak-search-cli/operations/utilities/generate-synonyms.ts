@@ -13,4 +13,4 @@
 
 import { serialiseElasticsearchSynonyms } from '@oaknational/sdk-codegen/synonyms';
 
-console.log(serialiseElasticsearchSynonyms());
+process.stdout.write(serialiseElasticsearchSynonyms() + '\n');

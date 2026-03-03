@@ -15,7 +15,7 @@ import chalk from 'chalk';
  * @returns void
  */
 export function printSuccess(message: string): void {
-  console.log(chalk.green(`✓ ${message}`));
+  process.stdout.write(chalk.green(`✓ ${message}`) + '\n');
 }
 
 /**
@@ -25,7 +25,7 @@ export function printSuccess(message: string): void {
  * @returns void
  */
 export function printError(message: string): void {
-  console.error(chalk.red(`✗ ${message}`));
+  process.stderr.write(chalk.red(`✗ ${message}`) + '\n');
 }
 
 /**
@@ -35,7 +35,7 @@ export function printError(message: string): void {
  * @returns void
  */
 export function printInfo(message: string): void {
-  console.log(chalk.blue(`ℹ ${message}`));
+  process.stdout.write(chalk.blue(`ℹ ${message}`) + '\n');
 }
 
 /**
@@ -45,7 +45,7 @@ export function printInfo(message: string): void {
  * @returns void
  */
 export function printWarning(message: string): void {
-  console.error(chalk.yellow(`⚠ ${message}`));
+  process.stderr.write(chalk.yellow(`⚠ ${message}`) + '\n');
 }
 
 /**
@@ -55,7 +55,7 @@ export function printWarning(message: string): void {
  * @returns void
  */
 export function printJson(data: unknown): void {
-  console.log(JSON.stringify(data, null, 2));
+  process.stdout.write(JSON.stringify(data, null, 2) + '\n');
 }
 
 /**
@@ -65,6 +65,6 @@ export function printJson(data: unknown): void {
  * @returns void
  */
 export function printHeader(title: string): void {
-  console.log(`\n${chalk.bold(title)}`);
-  console.log(chalk.dim('─'.repeat(title.length)));
+  process.stdout.write(`\n${chalk.bold(title)}\n`);
+  process.stdout.write(chalk.dim('─'.repeat(title.length)) + '\n');
 }

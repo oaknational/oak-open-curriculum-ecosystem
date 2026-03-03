@@ -11,6 +11,7 @@
 import { createStartupLogger, createDefaultStartupLoggerDeps } from '../src/app/startup.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { createStdioLogger } from '../src/logging/index.js';
 
 function safeStringify(value: unknown): string {
   try {
@@ -20,20 +21,9 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const startupDeps = createDefaultStartupLoggerDeps();
-const rootDir = startupDeps.rootDir;
-
-console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
-const log = createStartupLogger({
-  ...startupDeps,
-  console: {
-    log: (msg: string) => process.stderr.write(msg + '\n'),
-    error: (msg: string) => process.stderr.write(msg + '\n'),
-  },
-});
-
-log('[START-MCP] Starting oak-curriculum-mcp...');
-log(`[START-MCP] Root directory: ${rootDir}`);
+function writeStderrLine(message: string): void {
+  process.stderr.write(`${message}\n`);
+}
 
 const configResult = loadRuntimeConfig({
   processEnv: process.env,
@@ -41,15 +31,24 @@ const configResult = loadRuntimeConfig({
 });
 
 if (!configResult.ok) {
-  log(`[START-MCP ERROR] Environment validation failed: ${configResult.error.message}`, true);
+  writeStderrLine(`[START-MCP ERROR] Environment validation failed: ${configResult.error.message}`);
   for (const d of configResult.error.diagnostics) {
-    log(`[START-MCP]   ${d.key}: ${d.present ? 'present' : 'MISSING'}`, !d.present);
+    const detail = `[START-MCP]   ${d.key}: ${d.present ? 'present' : 'MISSING'}`;
+    if (d.present) {
+      writeStderrLine(detail);
+    } else {
+      writeStderrLine(`[START-MCP ERROR] ${detail}`);
+    }
   }
-  console.error('Environment validation failed:', configResult.error.message);
   process.exit(1);
 }
 
 const runtimeConfig = configResult.value;
+const startupDeps = createDefaultStartupLoggerDeps(createStdioLogger(runtimeConfig));
+const log = createStartupLogger(startupDeps);
+
+log('[START-MCP] Starting oak-curriculum-mcp...');
+log(`[START-MCP] Root directory: ${startupDeps.rootDir}`);
 
 log(
   `[START-MCP] OAK_API_KEY present: ${runtimeConfig.env.OAK_API_KEY.length > 0 ? 'true' : 'false'}`,
@@ -88,21 +87,21 @@ try {
 
   if (error instanceof Error) {
     log(`[START-MCP ERROR] Stack trace: ${String(error.stack)}`, true);
-    logCauseChain(error);
+    logCauseChain(error, log);
   }
 
-  console.error('Server error details:', error);
+  log(`[START-MCP ERROR] Server error details: ${String(error)}`, true);
   process.exit(1);
 }
 
-function logCauseChain(err: Error): void {
+function logCauseChain(err: Error, log: (message: string, isError?: boolean) => void): void {
   let currentCause = err.cause;
   for (let i = 0; i < 3 && currentCause; i += 1) {
     if (currentCause instanceof Error) {
-      console.error(`[START-MCP ERROR] Caused by: ${currentCause.message}`);
+      log(`[START-MCP ERROR] Caused by: ${currentCause.message}`, true);
       currentCause = currentCause.cause;
     } else {
-      console.error(`[START-MCP ERROR] Caused by: ${safeStringify(currentCause)}`);
+      log(`[START-MCP ERROR] Caused by: ${safeStringify(currentCause)}`, true);
       break;
     }
   }

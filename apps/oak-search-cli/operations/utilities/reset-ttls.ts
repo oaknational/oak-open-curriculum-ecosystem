@@ -43,16 +43,16 @@ async function resetCacheTtls(redisUrl: string, baseTtlDays: number): Promise<vo
   try {
     const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
     if (keys.length === 0) {
-      console.log('No cached entries found');
+      process.stdout.write('No cached entries found\n');
       return;
     }
-    console.log(`Found ${keys.length} cached entries`);
+    process.stdout.write(`Found ${keys.length} cached entries\n`);
     const r = await updateAllKeyTtls(redis, keys, baseTtlDays);
-    console.log(`Updated: ${r.updated}  Failed: ${r.failed}`);
+    process.stdout.write(`Updated: ${r.updated}  Failed: ${r.failed}\n`);
     if (r.updated > 0) {
       const fmtMin = (r.min / 86400).toFixed(1);
       const fmtMax = (r.max / 86400).toFixed(1);
-      console.log(`TTL range: ${fmtMin}d - ${fmtMax}d`);
+      process.stdout.write(`TTL range: ${fmtMin}d - ${fmtMax}d\n`);
     }
   } finally {
     await redis.quit();
@@ -65,16 +65,17 @@ async function main(): Promise<void> {
     startDir: dirname(fileURLToPath(import.meta.url)),
   });
   if (!configResult.ok) {
-    console.error('Environment validation failed:', configResult.error.message);
+    process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
     process.exit(1);
   }
   const config = configResult.value.env;
-  console.log('SDK Cache TTL Reset (DEV TOOL)');
-  console.log(`Base TTL: ${config.SDK_CACHE_TTL_DAYS} days`);
+  process.stdout.write('SDK Cache TTL Reset (DEV TOOL)\n');
+  process.stdout.write(`Base TTL: ${config.SDK_CACHE_TTL_DAYS} days\n`);
   await resetCacheTtls(config.SDK_CACHE_REDIS_URL, config.SDK_CACHE_TTL_DAYS);
 }
 
 main().catch((err: unknown) => {
-  console.error('Failed to reset cache TTLs:', err);
+  const message = err instanceof Error ? err.message : String(err);
+  process.stderr.write(`Failed to reset cache TTLs: ${message}\n`);
   process.exitCode = 1;
 });

@@ -14,13 +14,13 @@ Strategic context: [high-level-plan.md](../plans/high-level-plan.md).
 | Milestone | Name | Summary |
 |---|---|---|
 | M0 | [Open private alpha](m0-open-private-alpha.md) | ✅ Make the repo public so external teams can start building |
-| M1 | [Invite-only alpha](m1-invite-only-alpha.md) | 🔄 Oak staff and invited users access MCP server via dev Clerk allowlist |
+| M1 | [Invite-only alpha](m1-invite-only-alpha.md) | ✅ Oak staff and invited users access MCP server via dev Clerk allowlist |
 | M2 | [Open public alpha](m2-extension-surfaces.md) | Production Clerk, social providers, public sign-up |
 | M3 | [Public beta](m3-tech-debt-and-hardening.md) | Operational hardening, extension surfaces, observability, tech debt |
 
-Current state: **invite-only alpha** (M1 active — repo public,
-server live at `curriculum-mcp-alpha.oaknational.dev`, access via
-Oak emails + explicit Clerk invitations).
+Current state: **invite-only alpha** (M1 complete 2026-03-03 — repo
+public, server live at `curriculum-mcp-alpha.oaknational.dev`, v1.0.0
+released, access via Oak emails + explicit Clerk invitations).
 
 ---
 
@@ -30,7 +30,7 @@ Oak emails + explicit Clerk invitations).
 |---|---|---|---|---|
 | Closed private alpha | Private | Private alpha | Test Clerk | — |
 | Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
-| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | 🔄 Active |
+| Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
 | Open public alpha (M2) | Public | **Open public alpha** | **Prod Clerk** | Clerk prod migration |
 | Public beta (M3) | Public | **Public beta** | Prod Clerk | Operational hardening |
 

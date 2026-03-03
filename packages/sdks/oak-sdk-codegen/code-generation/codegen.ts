@@ -22,6 +22,9 @@ import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separatio
 import { validateOpenApiDocument } from './schema-validator.js';
 import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('codegen');
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
 function findRepoRoot(startDir: string): string {
@@ -81,14 +84,14 @@ async function readCachedSchemaOrThrow(): Promise<OpenAPIObject> {
         `the cache and commit the result.`,
     );
   }
-  console.log('🧰 Using cached original OpenAPI schema:', schemaCacheFilePath);
+  logger.info('Using cached original OpenAPI schema', { path: schemaCacheFilePath });
   const raw = await readFile(schemaCacheFilePath, 'utf8');
   const parsed: unknown = JSON.parse(raw);
   return validateOpenApiDocument(parsed);
 }
 
 async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<object | null> {
-  console.log('🔄 Fetching OpenAPI schema from:', url);
+  logger.info('Fetching OpenAPI schema', { url });
   try {
     const headers = new Headers();
     headers.set('Accept', 'application/json');
@@ -97,17 +100,17 @@ async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<obj
     if (!response.ok) {
       const status = String(response.status);
       const statusText = response.statusText;
-      console.error(`❌ Error fetching API schema from ${url}: HTTP ${status} ${statusText}`);
+      logger.error(`Error fetching API schema: HTTP ${status} ${statusText}`, undefined, { url });
       return null;
     }
     const parsedJson = await response.json();
     if (parsedJson === null || typeof parsedJson !== 'object') {
-      console.error('❌ Schema response was not an object');
+      logger.error('Schema response was not an object');
       return null;
     }
     return parsedJson;
   } catch (error: unknown) {
-    console.error(`❌ Error fetching API schema from ${url}:`, error);
+    logger.error(`Error fetching API schema from ${url}`, error);
     return null;
   }
 }
@@ -135,7 +138,7 @@ async function loadSchema(): Promise<LoadedSchema> {
     const live = await fetchValidatedSchema(apiSchemaUrl, apiKey);
     if (live) {
       await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
-      console.log('✅ Schema fetched successfully');
+      logger.info('Schema fetched successfully');
       return createOpenCurriculumSchema(live);
     }
   }
@@ -149,25 +152,25 @@ async function loadSchema(): Promise<LoadedSchema> {
   const validated = await readCachedSchemaOrThrow();
   return createOpenCurriculumSchema(validated);
 }
-console.log('🔨 Generating type artifacts...');
+logger.info('Generating type artifacts...');
 
 const { original: originalSchema, validated: validatedSchema, sdk: sdkSchema } = await loadSchema();
 
 // Save the original schema
 const originalSchemaPath = path.resolve(outDirectory, 'api-schema-original.json');
 saveSchemaToFile(originalSchema, originalSchemaPath);
-console.log(`💾 Original schema saved to: ${path.relative(process.cwd(), originalSchemaPath)}`);
+logger.info('Original schema saved', { path: path.relative(process.cwd(), originalSchemaPath) });
 
-console.log('🎨 Creating SDK schema with canonicalUrl fields...');
+logger.info('Creating SDK schema with canonicalUrl fields...');
 
 // Use the SDK schema for generation
 await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory);
 
-console.log('🎨 Generating widget constants...');
-generateWidgetConstants();
+logger.info('Generating widget constants...');
+generateWidgetConstants(logger);
 
-console.log('🎨 Generating subject hierarchy...');
-generateSubjectHierarchy();
+logger.info('Generating subject hierarchy...');
+generateSubjectHierarchy(logger);
 
-console.log('✅ Type generation complete!');
-console.log('✅ MCP tools generated from schema!');
+logger.info('Type generation complete!');
+logger.info('MCP tools generated from schema!');

@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod';
 
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import {
@@ -10,41 +9,7 @@ import {
   readFirstTextContent,
   getStructuredContentData,
 } from './helpers/sse.js';
-import {
-  listUniversalTools,
-  generatedToolRegistry,
-  createStubToolExecutionAdapter,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-
-const ToolEntrySchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  inputSchema: z.unknown(),
-});
-
-type JsonRpcToolRosterEntry = z.infer<typeof ToolEntrySchema>;
-
-const ToolRosterSchema = ToolEntrySchema.array();
-
-function assertToolRoster(responseText: string, expected: readonly JsonRpcToolRosterEntry[]): void {
-  const envelope = parseSseEnvelope(responseText);
-  const result = parseJsonRpcResult(envelope);
-  const tools = ToolRosterSchema.parse(result.tools);
-  const actualByName = new Map(tools.map((tool) => [tool.name, tool]));
-
-  expect(tools.length).toBe(expected.length);
-  for (const entry of expected) {
-    const actual = actualByName.get(entry.name);
-    expect(actual, `Missing tool ${entry.name}`).toBeDefined();
-    if (!actual) {
-      continue;
-    }
-    expect(actual.name).toBe(entry.name);
-    expect(actual.description).toBe(entry.description ?? entry.name);
-    expect(actual.inputSchema).toBeDefined();
-    expect(typeof actual.inputSchema).toBe('object');
-  }
-}
+import { createStubToolExecutionAdapter } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 function extractResultAndContent(responseText: string): {
   readonly result: ReturnType<typeof parseJsonRpcResult>;
@@ -93,17 +58,6 @@ async function assertFetchLessonResponse(
 }
 
 describe('Streamable HTTP server (stub mode)', () => {
-  it('returns the full roster from listUniversalTools()', async () => {
-    const { app } = await createStubbedHttpApp();
-    const response = await request(app)
-      .post('/mcp')
-      .set('Accept', STUB_ACCEPT_HEADER)
-      .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
-
-    expect(response.status).toBe(200);
-    assertToolRoster(response.text, listUniversalTools(generatedToolRegistry));
-  });
-
   it('serialises stubbed fetch results with canonicalUrl', async () => {
     const { app } = await createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';

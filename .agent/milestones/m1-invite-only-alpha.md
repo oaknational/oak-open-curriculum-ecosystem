@@ -34,15 +34,16 @@ All must be true before M1 exit:
 - [x] HTTP MCP server deployed at `curriculum-mcp-alpha.oaknational.dev`
 - [x] Access restricted to Oak email domain + explicit Clerk invitations
   (allowlist on development instance)
-- [ ] Quality gates green (`pnpm qg`)
-- [ ] No severity-1 or severity-2 snagging items open
+- [x] Quality gates green (`pnpm qg`) — verified 2026-03-03
+- [x] No severity-1 or severity-2 snagging items open — all M1-S00x
+  items completed or closed; M1-S007 deferred (P3)
 
 ## Current status
 
-**Active.** Repository is public (2026-03-03). Server is live at
-`curriculum-mcp-alpha.oaknational.dev` with OAuth 2.1 authentication.
-Access control uses the development Clerk instance's allowlist
-(Oak emails + explicit invitations managed via Clerk Dashboard).
+**Complete** (2026-03-03). All progression gates satisfied. Repository
+public, server live at `curriculum-mcp-alpha.oaknational.dev` with
+OAuth 2.1 authentication and dev Clerk allowlist. Release v1.0.0
+published via semantic-release.
 
 Production Clerk migration is deferred to M2 (Open Public Alpha).
 

@@ -54,11 +54,7 @@ describe('createMcpHandler (Integration)', () => {
     });
 
     it('context is unavailable outside handler execution', async () => {
-      const { factory } = createFakeMcpServerFactory(
-        vi.fn(async (something: unknown) => {
-          console.log(`something in a test: ${something}`);
-        }),
-      );
+      const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
 
       const handler = createMcpHandler(factory);
       const mockReq = createMockRequest({ method: 'tools/list' });
