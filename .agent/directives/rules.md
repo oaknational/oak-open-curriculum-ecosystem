@@ -96,10 +96,11 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 
 **Environment variables MUST be read once at the entry point**, then passed as configuration through the call stack. Product code MUST NOT read `process.env` directly—it must accept configuration as parameters.
 
-**Prohibited in unit/integration tests**:
+**Prohibited in ALL tests (unit, integration, AND E2E)**:
 
 - `process.env.X = 'value'` - mutates global state, causes race conditions
 - `vi.stubGlobal('fetch', ...)` - mutates global objects
+- `vi.mock('module', ...)` - manipulates module cache at the module level, leaks between test files
 - `vi.doMock('module', ...)` - manipulates module cache, subtle race conditions
 
 **Required pattern**: Pass configuration as explicit function parameters. Simple fakes injected as constructor arguments, not complex mocks.

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
@@ -7,36 +7,11 @@ import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { parseSseEnvelope } from './helpers/sse.js';
+import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
 const ACCEPT = 'application/json, text/event-stream';
-
-// E2E tests MUST be network-free and must not depend on Clerk key validity.
-// Manual OAuth validation is covered by `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`.
-vi.mock('@clerk/mcp-tools/server', () => ({
-  generateClerkProtectedResourceMetadata: ({
-    resourceUrl,
-    properties,
-  }: {
-    resourceUrl: string;
-    properties?: { scopes_supported?: string[] };
-  }) => ({
-    resource: resourceUrl,
-    authorization_servers: ['https://example.clerk.accounts.dev'],
-    scopes_supported: properties?.scopes_supported ?? [],
-  }),
-}));
-
-vi.mock('@clerk/express', () => ({
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  getAuth: () => ({
-    isAuthenticated: false,
-    toAuth: () => ({}),
-  }),
-}));
 
 /**
  * Isolated test environment with auth bypassed.
@@ -96,7 +71,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig, upstreamMetadata: TEST_UPSTREAM_METADATA });
+    const app = await createApp({
+      runtimeConfig,
+      upstreamMetadata: TEST_UPSTREAM_METADATA,
+      clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')

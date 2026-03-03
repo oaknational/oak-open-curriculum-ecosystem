@@ -116,11 +116,17 @@ function registerAuthenticatedRoutes(
 /**
  * Installs global Clerk middleware early in the chain. MUST be called before
  * path-specific middleware. Actual auth enforcement happens via createMcpAuthClerk.
+ *
+ * @param clerkMiddlewareFactory - Optional factory for creating the Clerk middleware.
+ *   When provided (tests), replaces the hard import from `@clerk/express`.
+ *   When absent (production), uses the real `clerkMiddleware` with runtime config keys.
+ * @see ADR-078 for the dependency injection rationale
  */
 export function setupGlobalAuthContext(
   app: Express,
   runtimeConfig: RuntimeConfig,
   log: Logger,
+  clerkMiddlewareFactory?: () => RequestHandler,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
@@ -136,12 +142,12 @@ export function setupGlobalAuthContext(
   authLog.info('🔒 OAuth enforcement enabled via Clerk');
   authLog.debug('Creating and installing global clerkMiddleware');
   const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
-    clerkMiddleware({
-      // Avoid hidden coupling to process.env so apps/tests can inject RuntimeConfig deterministically.
-      // Clerk options are still the source-of-truth for request authentication behaviour.
-      publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
-      secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
-    }),
+    clerkMiddlewareFactory
+      ? clerkMiddlewareFactory()
+      : clerkMiddleware({
+          publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
+          secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
+        }),
   );
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 

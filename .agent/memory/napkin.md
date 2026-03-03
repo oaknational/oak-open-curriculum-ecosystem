@@ -1,5 +1,67 @@
 # Napkin
 
+## Session 2026-03-03g — Remove vi.mock from E2E tests (ADR-078)
+
+### What was done
+- Deleted `mcp-connection-timeout.e2e.test.ts` — test reviewer confirmed it tests
+  reimplemented code (hand-built Express apps), not product code. The hanging-connection
+  scenario it simulates is structurally impossible: `createApp()` returns
+  `ready: Promise.resolve()`. Health/landing tests are redundant with 3+ other E2E files.
+- Removed redundant `vi.mock('@clerk/express')` from 4 Tier 1 files that already use
+  `dangerouslyDisableAuth: true` (mock was dead code — `setupGlobalAuthContext` returns
+  early before touching `clerkMiddleware`).
+- Added `clerkMiddlewareFactory` DI seam to `CreateAppOptions` + `setupGlobalAuthContext`
+  in `auth-routes.ts`. Optional parameter, defaults to real `clerkMiddleware`.
+- Created `createNoOpClerkMiddleware()` in `e2e-tests/helpers/test-config.ts`. Sets
+  `req.auth` as a callable function matching Clerk's runtime contract.
+- Updated 7 Tier 2 auth-enabled test files to use DI instead of `vi.mock`.
+- Removed `vi.mock('@clerk/mcp-tools/server')` from 2 files — unnecessary because
+  `upstreamMetadata` DI injection in `CreateAppOptions` skips `deriveUpstreamOAuthBaseUrl`.
+- Result: zero `vi.mock` calls in `e2e-tests/`. 22 files, 183 tests, all passing.
+
+### Mistake: left code in broken intermediate state
+Removed `vi.mock` blocks from 3 files without simultaneously adding the
+`clerkMiddlewareFactory` DI parameter to their `createApp` calls. User correctly
+called this out. Never leave files in a broken state between edits — complete each
+file atomically, or at minimum ensure the suite passes before moving on.
+
+### Mistake: dismissed issues as "pre-existing"
+Reviewers flagged type assertions, Object.assign, inline ESLint overrides, and
+global type declaration mismatches. I repeatedly labelled them "pre-existing" and
+moved on. The rule is unambiguous: "All quality gate issues are blocking at all
+times, regardless of location, cause, or context." Pre-existing is not an
+exemption. When a reviewer flags something, fix it or track it as a blocking item.
+
+### Mistake: assumed green gates meant rules were enforced
+The `testRules` in `oak-eslint` had `consistent-type-assertions: 'off'` and
+`no-restricted-types: 'off'` for test files. This silently exempted all tests
+from the no-type-shortcuts rule. Also, `Object.assign` was not restricted and
+`vi.mock` had no ESLint enforcement. Green gates can be liars if the rules
+don't match the documented policy. Always verify what the gates actually check.
+
+### Mistake: applied reviewer suggestion without running type-check
+Changed `Object.assign(req, { auth: ... })` to `req.auth = ...` per code
+reviewer's suggestion. This failed type-check because the global `Request.auth`
+type declaration is wrong (declares MachineAuthObject, Clerk sets a callable
+function). Should have run `pnpm type-check` BEFORE considering the fix done.
+
+### Patterns to remember
+- Clerk Express v1.7.74: `getAuth(req)` checks `"auth" in req` (returns boolean),
+  then calls `req.auth(options)` as a function. The `requestHasAuthObject` guard is
+  simply `"auth" in req`. So DI middleware must set `req.auth` to a FUNCTION, not a
+  plain object.
+- Clerk's `clerkMiddleware` sets `req.auth` via `Object.assign(request, { auth })` where
+  `auth` is a `Proxy(authHandler, { get trap })`. The handler is
+  `(opts) => requestState.toAuth(opts)`.
+- `mcpAuth` middleware (mcp-auth.ts) short-circuits at `!req.headers.authorization` →
+  returns 401 immediately without calling `getAuth`. So `getAuth` is only invoked when
+  a Bearer token is present.
+- `@clerk/mcp-tools/server` mock is unnecessary when `upstreamMetadata` is injected —
+  `setupOAuthAndCaching` skips `deriveUpstreamOAuthBaseUrl` when `injectedMetadata`
+  is provided (line 198). Module import doesn't cause side effects.
+- When removing mocks: complete each file atomically. Remove mock + add DI in one
+  edit, then verify. Don't batch "remove all mocks" followed by "add all DI".
+
 ## Session 2026-03-03f — E2E test cleanup (streamable-http)
 
 ### What was done

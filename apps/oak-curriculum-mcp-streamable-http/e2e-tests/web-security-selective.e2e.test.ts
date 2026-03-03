@@ -1,15 +1,9 @@
 import request from 'supertest';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
-
-// Mock Clerk middleware to avoid network IO and requirement for valid keys
-vi.mock('@clerk/express', () => ({
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-}));
+import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
 const mockRuntimeConfig: RuntimeConfig = {
   env: {
@@ -31,6 +25,7 @@ async function createTestApp() {
   return await createApp({
     runtimeConfig: mockRuntimeConfig,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
+    clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
 }
 

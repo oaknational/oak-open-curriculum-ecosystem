@@ -1,148 +1,252 @@
 ---
-name: "Remove vi.mock('@clerk/express') from E2E tests"
-overview: "Eliminate all vi.mock usage in streamable-http E2E tests by leveraging existing DI (dangerouslyDisableAuth) and adding a small DI seam for Clerk middleware injection. Fixes ADR-078 violations and removes a source of intermittent test coupling."
+name: "Remove vi.mock from tests and enforce type safety in test code"
+overview: "Eliminate all vi.mock usage across the monorepo, remove type assertions from test code, and ban Object.assign — bringing tests into full compliance with ADR-078, rules.md, and the testing strategy."
 todos:
   - id: tier-1-remove-redundant
-    content: "Tier 1: Remove redundant vi.mock from 4 files that already use dangerouslyDisableAuth: true."
-    status: pending
+    content: "Tier 1: Remove redundant vi.mock from 4 E2E files that already use dangerouslyDisableAuth: true."
+    status: done
   - id: tier-2-di-seam
     content: "Tier 2: Add clerkMiddlewareFactory DI seam to CreateAppOptions and setupGlobalAuthContext."
-    status: pending
+    status: done
   - id: tier-2-update-tests
-    content: "Tier 2: Update 7 auth-enabled test files to inject no-op middleware via DI instead of vi.mock."
-    status: pending
+    content: "Tier 2: Update 7 auth-enabled E2E test files to inject no-op middleware via DI instead of vi.mock. (mcp-connection-timeout.e2e.test.ts deleted — tested reimplemented code, not product code.)"
+    status: done
   - id: tier-2-mcp-tools-mock
-    content: "Tier 2: Investigate and remove vi.mock('@clerk/mcp-tools/server') from 2 files (server, header-redaction)."
+    content: "Tier 2: Removed vi.mock('@clerk/mcp-tools/server') from 2 E2E files — upstreamMetadata DI injection already skips the code path."
+    status: done
+  - id: verify-e2e
+    content: "Run full E2E suite and quality gates to confirm zero regressions from vi.mock removal."
+    status: done
+  - id: rules-docs
+    content: "Update rules.md and testing-strategy.md to explicitly ban vi.mock."
+    status: done
+  - id: eslint-type-assertions-warn
+    content: "Set consistent-type-assertions to 'warn' in testRules (was 'off')."
+    status: done
+  - id: promote-type-assertions-error
+    content: "Promote consistent-type-assertions from 'warn' to 'error' in testRules by fixing all ~218 type assertion warnings across 6 workspaces."
     status: pending
-  - id: verify
-    content: "Run full E2E suite and quality gates to confirm zero regressions."
+  - id: promote-restricted-types
+    content: "Promote no-restricted-types from 'off' to 'warn' then 'error' in testRules."
+    status: pending
+  - id: add-vi-mock-ban
+    content: "Add vi.mock/doMock/stubGlobal ESLint ban (no-restricted-syntax) and fix all 21 violations across 3 workspaces."
+    status: pending
+  - id: add-object-assign-ban
+    content: "Add Object.assign ESLint restriction and fix all ~8 violations across 4 workspaces."
+    status: pending
+  - id: fix-global-req-auth-type
+    content: "Fix global Request.auth type declaration in types.ts — currently MachineAuthObject but Clerk sets it as a callable function."
+    status: pending
+  - id: fix-inline-override
+    content: "Remove /* eslint max-lines-per-function */ inline override from server.e2e.test.ts."
+    status: pending
+  - id: verify-all-gates
+    content: "All quality gates green with zero warnings across the full monorepo."
     status: pending
 ---
 
-# Remove vi.mock('@clerk/express') from E2E tests
+# Remove vi.mock from tests and enforce type safety in test code
 
 **Created**: 2026-03-03
-**Status**: PENDING
-**Scope**: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`
-**Prerequisite**: None — self-contained within one workspace.
+**Last Updated**: 2026-03-03
+**Status**: IN PROGRESS — E2E vi.mock removal complete, ESLint warnings enabled, promotion to errors pending
+**Scope**: All test files across the monorepo
+**Prerequisite**: None — self-contained.
 
 ---
 
 ## Problem
 
-11 of 23 E2E test files in the streamable-http app use `vi.mock('@clerk/express')` —
-module-level global state manipulation that violates ADR-078 and the testing strategy.
-2 files also mock `@clerk/mcp-tools/server`.
+The workspace rules (`rules.md`, `testing-strategy.md`, ADR-078) explicitly
+prohibit `vi.mock`, type assertions (`as`), broad types (`Record<string, unknown>`),
+and `Object.*` methods. The ESLint configuration did not enforce these rules in
+test files — `testRules` in `oak-eslint` set `consistent-type-assertions: 'off'`
+and `no-restricted-types: 'off'`, `Object.assign` was not restricted, and there
+was no ban on `vi.mock`.
 
-This caused intermittent test coupling failures (investigated 2026-03-03, see napkin
-session 2026-03-03f). The immediate failures were resolved by deleting redundant tests
-and removing `singleFork: true`, but the `vi.mock` violations remain as tech debt.
-
----
-
-## Inventory
-
-### Tier 1 — Redundant mocks (mock + `dangerouslyDisableAuth: true`)
-
-These files disable auth via DI, so the mock is dead code — `setupGlobalAuthContext`
-returns early without ever calling `clerkMiddleware`.
-
-| File | Mock |
-|------|------|
-| `string-args-normalisation.e2e.test.ts` | `@clerk/express` |
-| `tool-call-success.e2e.test.ts` | `@clerk/express` |
-| `enum-validation-failure.e2e.test.ts` | `@clerk/express` |
-| `validation-failure.e2e.test.ts` | `@clerk/express` |
-
-**Fix**: Delete the `vi.mock` block and remove `vi` from the vitest import if unused.
-
-### Tier 2 — Auth-enabled tests (mock is currently necessary)
-
-These files test with auth *enabled* (`dangerouslyDisableAuth` is `false` or absent).
-`setupGlobalAuthContext` hard-imports `clerkMiddleware` from `@clerk/express`, which
-would make network calls to Clerk without the mock.
-
-| File | `@clerk/express` | `@clerk/mcp-tools/server` | Notes |
-|------|:-:|:-:|-------|
-| `server.e2e.test.ts` | ✓ | ✓ | Mixed: some tests auth-enabled, some bypassed |
-| `header-redaction.e2e.test.ts` | ✓ | ✓ | Mixed |
-| `auth-enforcement.e2e.test.ts` | ✓ | | All auth-enabled |
-| `public-resource-auth-bypass.e2e.test.ts` | ✓ | | All auth-enabled |
-| `web-security-selective.e2e.test.ts` | ✓ | | All auth-enabled, `dangerouslyDisableAuth: false` |
-| `application-routing.e2e.test.ts` | ✓ | | Mixed |
-| `mcp-connection-timeout.e2e.test.ts` | ✓ | | No auth bypass at all |
-
-**Fix**: Add a DI seam to product code so tests can inject a no-op middleware.
+This meant test code could silently violate the rules with green gates.
 
 ---
 
-## Implementation
+## What is done
 
-### Tier 1: Remove redundant mocks (~5 min)
+### E2E vi.mock removal (streamable-http) — COMPLETE
 
-For each of the 4 files:
+All `vi.mock` calls removed from `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`.
 
-1. Delete the `vi.mock('@clerk/express', ...)` block.
-2. Remove `vi` from the vitest import if no longer used.
-3. Run the individual test file to confirm it passes.
+| Change | Status |
+|--------|--------|
+| Deleted `mcp-connection-timeout.e2e.test.ts` (tested reimplemented code, not product code) | Done |
+| Removed dead `vi.mock('@clerk/express')` from 4 Tier 1 files using `dangerouslyDisableAuth: true` | Done |
+| Added `clerkMiddlewareFactory?: () => RequestHandler` DI seam to `CreateAppOptions` and `setupGlobalAuthContext` | Done |
+| Created `createNoOpClerkMiddleware()` in `e2e-tests/helpers/test-config.ts` | Done |
+| Migrated 7 Tier 2 auth-enabled test files to use DI instead of `vi.mock` | Done |
+| Removed `vi.mock('@clerk/mcp-tools/server')` from 2 files — `upstreamMetadata` DI already skips that path | Done |
+| 22 E2E test files, 183 tests, all passing | Done |
 
-### Tier 2: DI seam for Clerk middleware (~30 min)
+### Documentation — COMPLETE
 
-#### Step 1: Product code change
+| Change | Status |
+|--------|--------|
+| `rules.md`: added `vi.mock` to the explicit banned list | Done |
+| `testing-strategy.md`: added `vi.mock` to both banned-pattern lists | Done |
 
-Add an optional `clerkMiddlewareFactory` to `CreateAppOptions`:
+### ESLint warning — COMPLETE
 
-```typescript
-// In application.ts / CreateAppOptions
-readonly clerkMiddlewareFactory?: () => RequestHandler;
-```
+| Change | Status |
+|--------|--------|
+| `testRules`: set `consistent-type-assertions` to `'warn'` (was `'off'`) | Done |
 
-Thread it through `createApp` → `setupGlobalAuthContext`. When provided, use it
-instead of importing `clerkMiddleware` from `@clerk/express`. When absent (production),
-use the real import as today.
-
-The same pattern applies to `@clerk/mcp-tools/server` if the existing
-`upstreamMetadata` injection point on `setupOAuthAndCaching` is insufficient.
-Check whether the 2 files that mock `@clerk/mcp-tools/server` could instead
-use `upstreamMetadata` injection (already supported by `CreateAppOptions`).
-
-#### Step 2: Update test files
-
-For each of the 7 files:
-
-1. Delete the `vi.mock('@clerk/express', ...)` block.
-2. Pass a no-op middleware via the new DI parameter.
-3. Remove `vi` from the vitest import if no longer used.
-4. Run the individual test file to confirm it passes.
-
-#### Step 3: Verify
-
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`
-- `pnpm type-check`
-- `pnpm lint:fix`
+This surfaces **218 warnings across 6 workspaces** — all type assertion
+violations that were previously invisible. Zero errors, gates green.
 
 ---
 
-## Success Criteria
+## What is NOT done
 
-- Zero `vi.mock` calls in `e2e-tests/**/*.e2e.test.ts`.
-- All 23 E2E test files pass.
-- No new ESLint overrides or `@ts-ignore` comments.
-- Product code change is minimal: one optional parameter with a default.
+### Current warning inventory (218 warnings)
+
+| Workspace | Warnings | Primary violations |
+|-----------|-------:|-------------------|
+| `oak-curriculum-mcp-streamable-http` | 110 | Type assertions in test files |
+| `curriculum-sdk` | 37 | Type assertions in test files |
+| `oak-curriculum-mcp-stdio` | 27 | Type assertions in test files |
+| `search-cli` | 20 | Type assertions in test files |
+| `logger` | 13 | Type assertions in test files |
+| `sdk-codegen` | 11 | Type assertions in test files |
+| **Total** | **218** | |
+
+### Rules not yet enforced by ESLint
+
+These rules are documented in `rules.md` and `testing-strategy.md` but have
+no ESLint enforcement yet. Each requires both adding the rule AND fixing the
+existing violations before the gate can enforce it.
+
+| Rule | Violations | Blocker |
+|------|-----------|---------|
+| `no-restricted-types` in tests (ban `Record<string, unknown>` etc.) | ~25 across monorepo | Currently `'off'` in `testRules`. Cannot set to `'warn'` without duplicating the types config from the parent. Needs architecture decision on how to share the config. |
+| `vi.mock` / `vi.doMock` / `vi.stubGlobal` ban | 21 calls across 8 files in 3 workspaces | Cannot mix severity in `no-restricted-syntax` (ExportAllDeclaration is already `'error'`). Needs either a separate rule or fixing all violations first so it can go straight to `'error'`. |
+| `Object.assign` ban | ~8 calls across 4 workspaces (product + test code) | Cannot add to `no-restricted-properties` at `'warn'` (other entries are `'error'`). Needs a separate enforcement mechanism or fixing all violations first. |
+| Inline ESLint overrides | 1 in `server.e2e.test.ts` | No `noInlineConfig` in linter options. |
+
+### Blocking issues requiring sequenced fixes
+
+1. **Global `Request.auth` type declaration** (`types.ts:45`) — declares
+   `req.auth` as `MachineAuthObject<'oauth_token'>` but Clerk sets it as a
+   callable function `(options?) => SignedInAuthObject | SignedOutAuthObject`.
+   This blocks fixing `Object.assign` in `test-config.ts` because direct
+   property assignment fails type-check against the wrong declared type.
+   **Fix sequence**: correct the global type, then replace `Object.assign`
+   with explicit assignment, then the lint violation resolves.
+
+2. **`check-mcp-client-auth.unit.test.ts`** — uses 5 `vi.mock()` calls for
+   module-level mocking. Requires refactoring the product code
+   (`check-mcp-client-auth.ts`) to accept dependencies as parameters.
+
+3. **`tool-auth-context.ts:60-63`** — `getValidUserId` checks
+   `typeof auth !== 'object'` but at runtime `req.auth` is a function
+   (typeof returns `'function'`). Related to issue #1 above. Dead code
+   or unreachable in current flow.
 
 ---
 
-## Risks
+## Promotion schedule
 
-| Risk | Mitigation |
-|------|------------|
-| Auth-enabled tests may rely on subtle mock behaviour (e.g. `getAuth()` return shape) | The no-op middleware just calls `next()` — same as the current mock. Auth enforcement is tested by checking HTTP status codes, not by inspecting Clerk internals. |
-| `@clerk/mcp-tools/server` mock may not be replaceable by `upstreamMetadata` injection | Investigate before implementing. If not, add a second small DI seam. |
+Each phase fixes violations and promotes rules from `'warn'` (or `'off'`) to
+`'error'`. Gates must be green at the end of each phase.
+
+### Phase 1: Fix type assertions (promote `consistent-type-assertions` to `'error'`)
+
+Fix 218 warnings across 6 workspaces. Strategy per file:
+
+- Replace `as SomeType` with Zod `parse()`, type guards, or `satisfies`
+- For response parsing in E2E tests, create Zod schemas for response shapes
+- For test helper type coercion, use properly typed factory functions
+
+Priority order (most violations first):
+
+| Workspace | Warnings | Key files |
+|-----------|-------:|-----------|
+| `oak-curriculum-mcp-streamable-http` | 110 | `tool-handler-with-auth.integration.test.ts` (18), `sdk-client-stub.e2e.test.ts` (10), `web-security-selective.e2e.test.ts` (10) |
+| `curriculum-sdk` | 37 | `rate-limit.integration.test.ts` (16), `retry.integration.test.ts` (13) |
+| `oak-curriculum-mcp-stdio` | 27 | `mcp-protocol.e2e.test.ts` (4) |
+| `search-cli` | 20 | `ingestion-validation.smoke.test.ts` (3) |
+| `logger` | 13 | `error-context.unit.test.ts` (9) |
+| `sdk-codegen` | 11 | Various unit tests |
+
+### Phase 2: Fix `no-restricted-types` (promote from `'off'` to `'error'`)
+
+~25 violations. Decide on config architecture (how to share the restricted
+types list between parent config and testRules at different severity levels),
+fix the violations, then set to `'error'`.
+
+### Phase 3: Fix `vi.mock` (add ban at `'error'`)
+
+21 calls in 8 files across 3 workspaces. Each requires DI refactoring of the
+product code the test file exercises. This is the most labour-intensive phase
+because it changes product code, not just test code.
+
+| Workspace | Files | `vi.mock` calls |
+|-----------|------:|-------:|
+| `search-cli` | 5 | 14 |
+| `streamable-http` | 1 | 5 |
+| `stdio` | 1 | 1 |
+| `eslint-plugin` (test infra) | 1 | 1 |
+
+Add the `vi.mock` / `vi.doMock` / `vi.stubGlobal` selectors to
+`no-restricted-syntax` in `testRules` once all violations are fixed.
+Since `ExportAllDeclaration` is already `'error'` in that rule, the vi.mock
+selectors will also be `'error'` — which is the desired end state.
+
+### Phase 4: Fix `Object.assign` (add ban)
+
+~8 calls across 4 workspaces. Fix the global `Request.auth` type declaration
+first (blocker), then replace all `Object.assign` calls with spread syntax
+or explicit typed assignment. Add to `no-restricted-properties` in the
+strict config.
+
+### Phase 5: Inline ESLint override prevention
+
+Remove the `/* eslint max-lines-per-function */` override in
+`server.e2e.test.ts` by splitting or restructuring the file. Consider adding
+`linterOptions: { noInlineConfig: true }` to workspace configs (tracked in
+the [eslint-override-removal plan](./eslint-override-removal.plan.md)).
+
+---
+
+## Cross-references
+
+- **[eslint-override-removal.plan.md](./eslint-override-removal.plan.md)** —
+  the broader plan for removing all ESLint overrides. Phase 4 of that plan
+  covers the streamable-http and search-cli workspaces. The `testRules`
+  changes here are complementary — they close gaps in the shared config.
+
+- **ADR-078** — dependency injection for testability. The rationale for
+  banning `vi.mock`, `vi.doMock`, and `vi.stubGlobal`.
+
+- **Napkin session 2026-03-03g** — documents the E2E vi.mock removal work,
+  the Clerk middleware DI pattern, and lessons learned.
+
+---
+
+## Success criteria
+
+- Zero `vi.mock`, `vi.doMock`, `vi.stubGlobal` calls in ALL test files
+- Zero type assertions (`as`) in ALL test files
+- Zero `Record<string, unknown>` in ALL test files
+- Zero `Object.assign` in ALL source files
+- Zero inline ESLint overrides in test files
+- Global `Request.auth` type matches Clerk's callable-function contract
+- `pnpm lint` passes with zero errors AND zero warnings across ALL workspaces
+- All other quality gates remain green
 
 ---
 
 ## References
 
 - ADR-078: Dependency injection for testability
-- Testing strategy: no global state manipulation (`vi.mock`, `vi.stubGlobal`, `vi.doMock`)
+- `.agent/directives/rules.md` — "No type shortcuts", "Never disable checks"
+- `.agent/directives/testing-strategy.md` — "No global state manipulation"
 - Napkin session 2026-03-03f: root cause analysis of intermittent E2E failures
+- Napkin session 2026-03-03g: E2E vi.mock removal and Clerk DI pattern
