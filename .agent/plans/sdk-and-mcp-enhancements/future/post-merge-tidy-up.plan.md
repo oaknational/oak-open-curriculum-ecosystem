@@ -97,13 +97,16 @@ isProject: false
 8. **E2E `resources/read` for `curriculum://model`** — Integration tests
    cover registration, but an E2E read test would fully lock the contract.
 
-### M1 gates (block open public alpha, not M0)
+### M1 gates (invite-only alpha)
 
-9. **G5**: Accept public-alpha experience contract (product owner).
+9. **G5**: Accept invite-only alpha experience contract (product owner).
 10. **G6**: Clerk production migration (engineering/ops).
-11. **G7**: Sentry observability verification (engineering/ops).
-12. **G8**: Release communications (product owner).
-13. **Rate limiting**: Verify active on deployment target.
+11. **G8**: Release communications (product owner).
+
+Deferred to later milestones:
+
+12. **G7**: Sentry observability verification (M3 tech debt and hardening).
+13. **Rate limiting**: Verify active on deployment target (M3).
 
 ### From MCP prompts rationalisation
 
@@ -158,9 +161,10 @@ isProject: false
 ## Provenance
 
 Collected from:
+
 - [ws1-get-curriculum-model.plan.md](../active/ws1-get-curriculum-model.plan.md) — WS5 review follow-ups
-- [merge-readiness.plan.md](../active/merge-readiness.plan.md) — post-gate items
-- [release-plan-m1.plan.md](../../release-plan-m1.plan.md) — M1 gates
+- [merge-readiness.plan.md](../archive/completed/merge-readiness.plan.md) — post-gate items
+- [release-plan-m1.plan.md](../../archive/completed/release-plan-m1.plan.md) — M1 gates
 - Session: [Error handling](7e822a76-e479-4943-90f1-ddb496e63e57)
 - Session: [MCP prompts rationalisation](c227c7a7-7c6d-48ee-8eab-0e5e766fc78e)
 - Session: [MCP server validation](fa8f4abf-9c53-4823-9d01-8b61b0cb2e38) — flat-to-nested entropy, year normalisation

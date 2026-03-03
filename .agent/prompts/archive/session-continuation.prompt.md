@@ -1,18 +1,18 @@
 ---
 prompt_id: session-continuation
-title: "M1 Merge — Final Gates"
+title: "M1 Merge — Final Gates (Archived)"
 type: handover
-status: active
+status: complete
 last_updated: 2026-03-02
 ---
 
-# M1 Merge — Final Gates
+# M1 Merge — Final Gates (Archived)
 
 Session entry point. ESLint OOM is fixed. Remaining: verify CI, gates, merge.
 
 ## Plan
 
-[release-plan-m1.plan.md](../plans/release-plan-m1.plan.md) — §Top Priorities
+[release-plan-m1.plan.md](../../plans/archive/completed/release-plan-m1.plan.md) — §Top Priorities
 
 ## Completed: ESLint OOM fix
 
@@ -32,11 +32,11 @@ split, `tsconfig.lint.json` excludes break the import chain. No
 The broader codegen architecture issues (generator duplication, naming,
 two-source separation of concerns, workspace decomposition) are captured
 in a separate strategic plan:
-[codegen architecture plans](../plans/architecture-and-infrastructure/codegen/).
+[codegen architecture plans](../../plans/architecture-and-infrastructure/codegen/).
 
 ## Non-blocking follow-ups
 
-See [post-merge-tidy-up.plan.md](../plans/sdk-and-mcp-enhancements/future/post-merge-tidy-up.plan.md).
+See [post-merge-tidy-up.plan.md](../../plans/sdk-and-mcp-enhancements/future/post-merge-tidy-up.plan.md).
 
 ## Session provenance
 

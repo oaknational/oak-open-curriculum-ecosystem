@@ -411,6 +411,6 @@ These corrections change the plan direction:
 ## References
 
 - [Architecture analysis](sdk-codegen-architecture-analysis.md)
-- [Release Plan M1](../../release-plan-m1.plan.md) — §ESLint OOM Fix
-- [Session Continuation](../../../prompts/session-continuation.prompt.md)
+- [Release Plan M1](../../archive/completed/release-plan-m1.plan.md) — §ESLint OOM Fix
+- [Session Continuation](../../../prompts/archive/session-continuation.prompt.md)
 - [Rules](../../../directives/rules.md) — never disable checks

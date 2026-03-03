@@ -326,7 +326,7 @@ naturally into the workspace split.
 
 - [Architecture analysis](../sdk-codegen-architecture-analysis.md)
 - [Reviewer findings](../sdk-codegen-reviewer-findings.md)
-- [Release Plan M1](../../release-plan-m1.plan.md)
-- [Rules](../../../directives/rules.md)
-- [Schema-First Execution](../../../directives/schema-first-execution.md)
-- [ADR-108: Workspace Decomposition](../../../../docs/architecture/architectural-decisions/108-workspace-decomposition.md)
+- [Release Plan M1](../../../archive/completed/release-plan-m1.plan.md)
+- [Rules](../../../../directives/rules.md)
+- [Schema-First Execution](../../../../directives/schema-first-execution.md)
+- [ADR-108: Workspace Decomposition](../../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)

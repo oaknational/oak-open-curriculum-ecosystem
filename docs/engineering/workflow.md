@@ -165,7 +165,9 @@ Releases are automated via [semantic-release](https://semantic-release.gitbook.i
 3. A GitHub release is created automatically
 4. npm packages are published for public packages
 
-See [Release and Publishing](./release-and-publishing.md) for the operator runbook and rollback procedures.
+See [Release and Publishing](./release-and-publishing.md) for npm package
+publishing, and [Milestone Release Runbook](./milestone-release-runbook.md)
+for milestone/service release gates, snagging, and go/no-go controls.
 
 ## What Does Good Look Like?
 

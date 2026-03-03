@@ -1,5 +1,109 @@
 # Napkin
 
+## Session 2026-03-03a — Milestone restructuring and repo public
+
+### What was done
+- Located the MCP HTTP app front page implementation (TypeScript, not
+  standalone HTML).
+- Updated landing page title from "Internal Alpha" to "Invite Only
+  Public Alpha".
+- Restructured all milestones after user confirmed:
+  - Repo is now public at `curriculum-mcp-alpha.oaknational.dev`
+  - Access control is Option E (Oak emails + explicit allowlist on dev
+    Clerk instance) — production Clerk deferred to M2
+  - M0: Open Private Alpha — marked COMPLETE
+  - M1: Invite-Only Alpha — now ACTIVE (dev Clerk + allowlist)
+  - M2: renamed from "Extension Surfaces" to "Open Public Alpha"
+    (prod Clerk, social providers, public sign-up, edge rate limiting)
+  - M3: renamed from "Tech Debt & Hardening" to "Public Beta"
+    (operational hardening, extension surfaces, observability, tech debt)
+- Updated M0, M1, M2, M3 milestone files, milestones README, and
+  high-level plan.
+
+### Key decisions
+- Production Clerk is deferred to M2 (Open Public Alpha) because the
+  dev Clerk allowlist is sufficient for invite-only access and adding
+  users via the Clerk Dashboard UI is straightforward.
+- Operational gates (monitoring, alerting, incident response, canonical
+  host enforcement) pushed to M3 (Public Beta). Only edge rate limiting
+  on OAuth proxy endpoints kept for M2 — unauthenticated endpoints need
+  protection before public sign-up.
+- Extension surfaces (MCP-app extension, OpenAPI app extension) moved
+  from M2 to M3 (Public Beta).
+
+### Patterns to remember
+- Landing page HTML is composed in TypeScript under
+  `apps/oak-curriculum-mcp-streamable-http/src/landing-page/` and served
+  from the root route `/`.
+- Milestone files live at `.agent/milestones/m{n}-*.md` but the filenames
+  do not always match the milestone name after renames (e.g.
+  `m2-extension-surfaces.md` now contains "Open Public Alpha"). This is
+  acceptable — the file is the canonical content, not the filename.
+
+## Session 2026-03-02m — Consolidate and archive release artefacts
+
+### What changed
+User confirmed release completion and requested `/jc-consolidate-docs` for:
+- `release-plan-m1.plan.md`
+- `session-continuation.prompt.md`
+
+Both files were archived. Durable release-governance content was extracted from
+the release plan into permanent engineering documentation:
+- `docs/engineering/milestone-release-runbook.md` (new)
+
+### Permanent documentation extraction
+The extracted runbook captures settled, reusable structure:
+- release control model (R0-R5)
+- mandatory gate template (G1-G8)
+- snagging protocol and severity model (P0-P3)
+- go/no-go inputs and decision record template
+- controlled rollout and rollback controls
+- exit-criteria template
+
+### Cross-reference repairs
+Updated active docs to point at archived release artefacts:
+- milestones docs
+- high-level plan
+- codegen architecture docs
+- post-merge tidy-up plan
+- completed-plans index
+
+### Caution
+Archive docs are historical. When archiving files, fix references from active
+docs, but avoid rewriting older archive narratives unless needed to prevent
+broken links in the newly archived artefact.
+
+## Session 2026-03-02l — Strategic plan restructuring
+
+### What changed
+Semantic search branch merged. User restructured milestone sequence:
+- M0 (Open Private Alpha): COMPLETE — branch merged, repo ready to go public
+- M1: renamed from "Open Public Alpha" to "Invite-Only Alpha" — production
+  Clerk with Oak emails + explicit invites, Sentry NOT required
+- M2: "Extension Surfaces" — MCP-app extension first, then OpenAPI app
+  extension in addition (was previously part of old M2 "Post-Alpha Enhancements")
+- M3: "Tech Debt & Hardening" — absorbs old M2 (enforcement, guards) and
+  old M3 (mutation testing, observability, supply chain)
+
+### Files updated
+- `high-level-plan.md` — full milestone rewrite
+- `release-plan-m1.plan.md` — M1 redefined, M0 marked complete, gates updated
+- `merge-readiness.plan.md` — archived to `sdk-and-mcp-enhancements/archive/completed/`
+- `completed-plans.md` — merge-readiness entry added
+- `sdk-and-mcp-enhancements/active/README.md` — removed merge-readiness reference
+
+### Key distinction: invite-only vs public alpha
+The invite-only alpha has the same functional requirements as the old public
+alpha EXCEPT: (1) access is restricted to Oak emails + explicit Clerk invites
+instead of anyone with an email, and (2) Sentry does not need to be fully
+configured. The production Clerk migration IS required.
+
+### Extension surfaces sequence
+User was explicit about order: MCP-app extension FIRST (native MCP for
+Claude etc.), THEN OpenAPI app extension IN ADDITION (not replacing). This
+is a shift from the previous plan which had the extension work as one stream
+in a broader "post-alpha enhancements" milestone.
+
 ## Session 2026-03-02j — Release workflow fix
 
 ### Root cause: release workflow never worked

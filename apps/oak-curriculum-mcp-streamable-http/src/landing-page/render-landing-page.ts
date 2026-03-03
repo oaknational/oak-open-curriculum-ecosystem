@@ -47,7 +47,7 @@ export function renderLandingPageHtml(vercelHost?: string): string {
   <body>
     <main class="wrap" aria-labelledby="title">
       <img class="logo" src="/oak-national-academy-logo-512.png" alt="Oak National Academy logo" width="120" height="120" />
-      <h1 id="title">Oak Curriculum MCP - Internal Alpha</h1>
+      <h1 id="title">Oak Curriculum MCP - Invite Only Public Alpha</h1>
       <p class="hero">Designed for educators, this service connects your AI assistant to Oak's high quality, free, and <a target="_blank" rel="noopener noreferrer" href="https://open-api.thenational.academy/docs/about-oaks-api/terms">openly licensed</a> curriculum resources — thousands of lessons, units, and assets across subjects and key stages.</p>
       <p class="meta">Status: ok • Route: <code>/mcp</code> • Auth: OAuth 2.1</p>
 

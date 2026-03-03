@@ -70,9 +70,11 @@ Technical plans keep implementation detail and sequencing.
 
 ## Milestone Alignment
 
-- **Milestone 1 (Public Alpha)**: educator and engineering/Ed-Tech outcomes
-  must be credible and measurable.
-- **Milestone 2 (Post-Alpha)**: learner-facing scope discovery can promote from
+- **Milestone 1 (Invite-Only Alpha)**: educator and engineering/Ed-Tech outcomes
+  must be credible and measurable with a controlled user base.
+- **Milestone 2 (Extension Surfaces)**: broader host compatibility through
+  MCP-app and OpenAPI app extensions.
+- **Later milestones**: learner-facing scope discovery can promote from
   deferred status when safeguarding and moderation prerequisites are in place.
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.

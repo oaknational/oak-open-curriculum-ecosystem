@@ -7,7 +7,7 @@ todos:
     status: done
   - id: verify-preview
     content: "Verify the preview branch Vercel deploy works end-to-end"
-    status: pending
+    status: done
   - id: onboarding-review
     content: "Final onboarding review: junior dev and lead dev personas"
     status: done
@@ -16,14 +16,14 @@ todos:
     status: done
   - id: merge
     content: "Merge feat/semantic_search_deployment to main"
-    status: pending
+    status: done
 isProject: false
 ---
 
 # Merge Readiness: `feat/semantic_search_deployment` → `main`
 
-**Last Updated**: 2026-03-01
-**Status**: Verify deploy and merge remaining. Prompts, onboarding, and commit done.
+**Last Updated**: 2026-03-02
+**Status**: COMPLETE. Branch merged to main.
 **Branch**: `feat/semantic_search_deployment`
 
 ---
@@ -67,6 +67,7 @@ Committed as single combined commit. Pre-commit hooks ran full quality gate
 chain (type-check, lint, test across 13 packages). All gates green.
 
 Remaining:
+
 - `pnpm secrets:scan:all` — final secrets sweep (human decision).
 - Manual sensitive-information review (human decision).
 
@@ -79,6 +80,6 @@ Remaining:
 
 ## References
 
-- [ws1 plan](ws1-get-curriculum-model.plan.md) — completed, follow-ups tracked here and in post-merge plan
-- [Release plan](../../release-plan-m1.plan.md) — M0/M1 gates and full history
-- [Post-merge plan](../future/post-merge-tidy-up.plan.md) — non-blocking follow-ups
+- [ws1 plan](../../active/ws1-get-curriculum-model.plan.md) — completed, follow-ups tracked here and in post-merge plan
+- [Release plan](../../../archive/completed/release-plan-m1.plan.md) — M0/M1 gates and full history
+- [Post-merge plan](../../future/post-merge-tidy-up.plan.md) — non-blocking follow-ups

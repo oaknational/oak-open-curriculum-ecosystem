@@ -34,7 +34,16 @@ Before archival, mine completed outcomes into permanent documentation
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| Merge Readiness | 2026-03-02 | `feat/semantic_search_deployment` merged to `main`. MCP prompts investigated (ADR-123), onboarding review complete, quality gates green, secrets sweep done. | [archived plan](sdk-and-mcp-enhancements/archive/completed/merge-readiness.plan.md) |
 | Folder Modernisation Meta Plan | 2026-02-22 | Legacy numbered plans archived under collection archive classes, disposition ledger established, governance docs normalised, and ADR-071 collision resolved by retaining widget URI ADR as 071 and renumbering dense-vector ADR to 118. | [archived plan](sdk-and-mcp-enhancements/archive/completed/folder-modernisation-meta-plan.md) |
+
+---
+
+## Release Plans
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| Milestone 1 Release Plan | 2026-03-02 | M0 release complete and milestone sequence re-baselined (Invite-Only Alpha → Extension Surfaces → Tech Debt & Hardening). Durable release governance extracted to `docs/engineering/milestone-release-runbook.md`. | [archived plan](archive/completed/release-plan-m1.plan.md) |
 
 ---
 
