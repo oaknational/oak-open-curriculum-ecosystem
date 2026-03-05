@@ -52,7 +52,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
 - [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence (Milestone 0/1/2)
-- [MCP Extensions Future Work](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — post-merge only
+- [MCP Extensions Roadmap](../../plans/sdk-and-mcp-enhancements/roadmap.md) — post-merge only
 
 ---
 
@@ -122,7 +122,7 @@ Run this checklist at the start of the next session:
    - [search-dispatch-type-safety.md](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)
    - [phase-3a-mcp-search-integration.md](../../plans/semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
 7. Keep post-merge MCP extension work separate:
-   - [mcp-extensions-research-and-planning.md](../../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   - [../../plans/sdk-and-mcp-enhancements/roadmap.md](../../plans/sdk-and-mcp-enhancements/roadmap.md)
 
 ---
 

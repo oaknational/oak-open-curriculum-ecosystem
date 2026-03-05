@@ -1,6 +1,6 @@
 ---
-description: Use the Result<T, E> pattern for error handling. Never throw exceptions. Handle all cases explicitly.
-globs: '**/*.{ts,tsx,mts}'
+paths:
+  - '**/*.{ts,tsx,mts}'
 ---
 
 # Use Result Pattern

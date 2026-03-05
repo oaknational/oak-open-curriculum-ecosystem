@@ -44,7 +44,7 @@ Engineering and Ed-Tech users rely on a clear host-compatibility contract:
 |------------|-------------------------------------|
 | [../../semantic-search/archive/completed/sdk-workspace-separation.md](../../semantic-search/archive/completed/sdk-workspace-separation.md) | SDK decomposition and ownership boundaries (archived) |
 | [../../semantic-search/roadmap.md](../../semantic-search/roadmap.md) | Establishes search capability sequencing and contract changes |
-| [../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | Host compatibility and metadata portability research |
+| [../../sdk-and-mcp-enhancements/roadmap.md](../../sdk-and-mcp-enhancements/roadmap.md) | Host compatibility and metadata portability research |
 | [../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | Renderer/fallback sequencing for user-facing behaviour |
 | [../../architecture-and-infrastructure/README.md](../../architecture-and-infrastructure/README.md) | Reliability and infrastructure consistency across servers |
 | [../../developer-experience/sdk-publishing-and-versioning-plan.md](../../developer-experience/sdk-publishing-and-versioning-plan.md) | Versioning and adoption ergonomics for consumers |

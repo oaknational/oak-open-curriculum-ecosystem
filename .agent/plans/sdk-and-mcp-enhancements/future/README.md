@@ -2,8 +2,6 @@
 
 Strategic briefs and review checkpoints for later work.
 
-Strategic source: [improve-pedagogical-context.plan.md](../improve-pedagogical-context.plan.md)
-
 | Plan | Scope | Status | Blocked By |
 |---|---|---|---|
 | [post-merge-tidy-up.plan.md](post-merge-tidy-up.plan.md) | Non-blocking follow-ups from ws1, error handling, resource pattern, and review work | Not started | Merge to main |
@@ -11,3 +9,4 @@ Strategic source: [improve-pedagogical-context.plan.md](../improve-pedagogical-c
 
 Active work: [active/README.md](../active/README.md)
 Next-up queue: [current/README.md](../current/README.md)
+Collection roadmap: [roadmap.md](../roadmap.md)

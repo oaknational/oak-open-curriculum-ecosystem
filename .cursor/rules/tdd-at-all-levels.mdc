@@ -5,26 +5,7 @@ alwaysApply: true
 
 # TDD at All Levels
 
-ALWAYS use TDD at ALL levels—unit, integration, AND E2E. Write tests **FIRST**.
+ALWAYS use TDD at ALL levels — unit, integration, AND E2E. Write tests FIRST.
+Red → Green → Refactor is mandatory. If tests lag behind code at ANY level, TDD was not followed.
 
-## The Cycle: Red → Green → Refactor
-
-1. **RED**: Write a test that specifies desired behaviour. Run the test. It MUST fail.
-2. **GREEN**: Write the minimal implementation to make the test pass. Run the test. It MUST pass.
-3. **REFACTOR**: Improve the implementation without changing behaviour. Tests MUST remain green.
-
-## Level-Specific Application
-
-| Test Level | What It Specifies | When to Write | RED Phase |
-|------------|-------------------|---------------|-----------|
-| **Unit** | Pure function behaviour | Before function exists | No function → test fails |
-| **Integration** | How units work together | Before integration exists | Units not wired → test fails |
-| **E2E** | System behaviour | Before system behaviour changes | Old behaviour → test fails |
-
-## Critical Rule
-
-If tests lag behind code at ANY level, TDD was not followed at that level. When changing system behaviour, update E2E tests FIRST, before changing implementation.
-
-## Reference
-
-@.agent/directives/testing-strategy.md
+See `.agent/directives/testing-strategy.md` for the full testing strategy.

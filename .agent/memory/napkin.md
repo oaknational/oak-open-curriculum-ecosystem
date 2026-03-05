@@ -1,5 +1,66 @@
 # Napkin
 
+## Session 2026-03-05h — Practice Core README review
+
+### What was done
+- Reviewed user's changes to `.agent/practice-core/README.md` (expanded from single dense
+  paragraph to multi-paragraph narrative with Core/Practice distinction, sharing mechanism,
+  plasmid/memotype analogy, ecosystem-agnostic note).
+- Found: comma splice (line 9), subject-verb disagreement (line 11), "memotype" neologism
+  (stylistic, user's call).
+- Self-containment check: passes. Alignment with index.md and practice-lineage.md: consistent.
+
+## Session 2026-03-05g — Roadmap policy alignment (MCP-only, specialist creation, ADR-115 binding)
+
+### What was done
+- Updated `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` to apply owner decisions:
+  - MCP Apps migration is now explicitly single-path MCP-standard only
+    (no fallback metadata keys, no dual MIME/runtime path, no host adapters).
+  - Gate 4 now requires creating and trialling `mcp-extensions-expert`
+    as a low-cost specialist experiment.
+  - ADR-115 added to the ADR compliance matrix as a binding constraint
+    with explicit preservation action for `/oauth/*` proxy behaviour.
+- Removed unresolved inline review comments from Domain C/D sections and
+  replaced them with normative plan language.
+- Repaired the roadmap’s link-health command to correctly parse markdown
+  autolinks (`<https://...>`) by trimming trailing punctuation/`>`.
+- Ran the corrected link-health check: `OK: 24 urls validated`.
+
+### Patterns to remember
+- If the owner decides “no fallbacks, no dual paths”, reflect that rule in
+  all layers of the roadmap: objectives, backlog items, risk mitigations,
+  gates, ADR matrix rows, and exit criteria.
+- Validation snippets in plans should avoid clever one-liners when parsing
+  markdown URLs; a two-step `rawUrls -> urls` form is clearer and safer.
+
+## Session 2026-03-05f — Consolidate & restructure sdk-and-mcp-enhancements
+
+### Restructuring
+- `active/mcp-apps-standard-migration.plan.md` → `roadmap.md` (collection root)
+  — the file was a "strategic planning anchor, not a task-level executable plan",
+  which is exactly the roadmap role per ADR-117 templates
+- `active/auth-safety-correction.plan.md` stays as the one active executable plan
+- `future/output-schemas-for-mcp-tools.plan.md` → `current/`
+- `claude.feedback.md` → `archive/` (all 10 recommendations applied)
+- `concept-preservation-and-supersession-map.md` → `archive/` (all concept
+  homes point to the roadmap; ADR crosswalk duplicates matrix in roadmap)
+- `mcp-extensions-research-and-planning.metaplan.md` → `archive/` (fully applied)
+- `mcp-apps-support.research.md` stays at root (evidence base, not archived)
+- Updated ~20 cross-references across the repo (high-level-plan, milestones,
+  semantic-search, user-experience, prompts)
+
+### Evaluation decisions
+- concept-preservation-map: historical provenance only, no current navigation
+  value — all "Current Home" entries pointed to the same plan
+- metaplan: all 6 checklist items [x], content absorbed into roadmap
+- research doc: kept as evidence base — recognized `*.research.md` doc type
+
+### Fitness ceiling alerts (from initial consolidation pass)
+- CONTRIBUTING.md: 405/400 (+5 over)
+- practice-lineage.md: 321/320 (+1 over)
+- testing-strategy.md: 393/400 (98%) — watch
+- practice-bootstrap.md: 391/400 (98%) — watch
+
 ## Session 2026-03-05e — Remove brittle stub-coupled e2e tests
 
 ### What was done
@@ -20,6 +81,31 @@
   internally uses; this is tautological and brittle to contract-shape changes.
 - Prefer proving transport/system invariants in e2e and tool-contract details in
   unit/integration tests.
+
+## Session 2026-03-05f — Artefact portability hardening Phases 0–4, 5.3, Claude rules
+
+### What was done
+
+- Phases 0–4 and 5.3 of artefact-portability-hardening complete.
+- Trigger Content Contract added to ADR-125: ≤10 content lines, must reference canonical source.
+- All 9 Pattern B `.mdc` files reduced to 4 content lines each (was 11–18).
+- `quality-gates.md` renamed to `gates.md` to match adapter naming (`jc-gates`).
+- Created `scripts/validate-portability.mjs` (7 checks) wired into `qg`, `make`, `check`.
+- Created 6 path-scoped Claude Code rules in `.claude/rules/` with `paths` frontmatter.
+- ADR-125 updated: Claude rules layer, Known Limitations, forward ref from ADR-114.
+- Consolidate-docs updated: include non-repo plans + platform-specific memory in distillation pass.
+
+### Claude Code path-scoped rules
+
+Claude Code supports `.claude/rules/*.md` with `paths` frontmatter (equivalent to Cursor's `globs`).
+Rules without `paths` load always-on (session start); with `paths` load only when matching files open.
+Only create Claude rules for glob-scoped triggers — always-on triggers are already in the
+`CLAUDE.md` → `AGENT.md` → `rules.md` chain (duplicating them loads context twice).
+
+### Validation script catch
+
+The `no-absolute-paths.mdc` trigger lacked a canonical source reference — `validate-portability.mjs`
+caught it on first run (Check 5), confirming the rule-reference check works as designed.
 
 ## Session 2026-03-04d — Plan readiness check for artefact-portability-hardening
 

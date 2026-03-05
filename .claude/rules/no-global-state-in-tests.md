@@ -1,6 +1,6 @@
 ---
-description: Tests MUST NOT mutate global state. No process.env mutations, no vi.stubGlobal, no vi.doMock. Pass configuration as parameters.
-globs: '**/*.test.ts'
+paths:
+  - '**/*.test.ts'
 ---
 
 # No Global State Manipulation in Tests

@@ -49,7 +49,7 @@ Keep and modernise in root:
 
 1. `.agent/plans/sdk-and-mcp-enhancements/README.md`
 2. `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`
-3. `.agent/plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md`
+3. `.../../active/mcp-apps-standard-migration.plan.md`
 4. `.agent/plans/sdk-and-mcp-enhancements/folder-disposition-ledger.md`
 
 Completed governance record:
@@ -186,7 +186,7 @@ const files=[
 '.agent/plans/sdk-and-mcp-enhancements/archive/completed/folder-modernisation-meta-plan.md',
 '.agent/plans/sdk-and-mcp-enhancements/folder-disposition-ledger.md',
 '.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md',
-'.agent/plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md'
+'.../../active/mcp-apps-standard-migration.plan.md'
 ];
 let bad=[];
 for(const f of files){

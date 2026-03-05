@@ -64,6 +64,7 @@ NEVER disable any quality gates or Git hooks.
 - **Strict boundaries** - Clear interfaces between modules, no leaky abstractions
 - **Single responsibility** - Each module/class/function does one thing well
 - **TypeScript best practices** - See [TypeScript Practice](./typescript-practice.md)
+- **SDKs do not own logging** - SDK functions return classified results; the app layer is responsible for observability. SDKs must not instantiate loggers or log internally. Pass results up; the app inspects and logs via its own logger instance.
 
 ## Refactoring Principles
 

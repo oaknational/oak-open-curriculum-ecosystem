@@ -53,6 +53,7 @@ Each platform has thin wrappers that reference canonical content. All command ad
 | Location                   | Format                                                                                                        | Count |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
 | `.claude/commands/jc-*.md` | Markdown with YAML frontmatter (`description`, `allowed-tools`, `argument-hint`, `model`)                     | 9     |
+| `.claude/rules/*.md`       | Markdown with `paths` frontmatter for glob-scoped activation                                                  | 6     |
 | `.claude/agents/*.md`      | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`) | 14    |
 
 #### Gemini CLI
@@ -137,7 +138,9 @@ Some triggers activate policies from `rules.md` (e.g., `tdd-at-all-levels.mdc`).
 | File-scoped    | `globs: "**/*.test.ts"` | `no-skipped-tests.mdc`, `no-global-state-in-tests.mdc` |
 | Agent-selected | `description: "..."`    | Agent decides based on relevance                       |
 
-**Claude Code, Gemini CLI, Codex** receive policies via the entry-point chain: `CLAUDE.md` / `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/rules.md`. There is no glob-scoped equivalent; all policies are effectively always-on via the entry point. Cursor's granular activation is the only platform with conditional policy surfacing.
+**Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `rules.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
+
+**Gemini CLI, Codex** receive policies via the entry-point chain only: `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/rules.md`. All policies are effectively always-on via the entry point.
 
 **Triggers that activate skills:**
 
@@ -148,6 +151,22 @@ Some triggers activate policies from `rules.md` (e.g., `tdd-at-all-levels.mdc`).
 | `follow-the-practice`    | Practice reading, which leads to skills                                                   |
 | `invoke-code-reviewers`  | Sub-agent reviewers (14 agents) via `.agent/directives/invoke-code-reviewers.md`          |
 | `lint-after-edit`        | Lint checking (file-scoped to `*.ts`)                                                     |
+
+#### Trigger Content Contract
+
+A trigger file (`.cursor/rules/*.mdc`) MUST:
+
+- Include `alwaysApply`/`globs`/`description` frontmatter (activation metadata)
+- Include a reference to its canonical source (`.agent/directives/*.md`, `.agent/skills/*/SKILL.md`, an ADR, or `docs/`)
+
+A trigger file MAY:
+
+- Include a concise summary (max 5 lines) for immediate LLM context
+
+A trigger file MUST NOT:
+
+- Contain the full canonical policy — the canonical source is authoritative
+- Exceed 10 content lines (excluding frontmatter) without review — if exceeded, consider whether the content belongs in the canonical source instead
 
 ### Skills Structure Contract
 
@@ -214,6 +233,19 @@ Claude Code natively supports read-only permission modes. Using `permissionMode:
 - Codex uses `.agents/skills/` (plural) for discovery, while our canonical path is `.agent/skills/` (singular). Thin wrappers in `.agents/skills/` bridge the gap, consistent with the pattern used for all other platforms.
 - Cursor is the only platform with granular rule activation (globs, agent-selected). Other platforms receive all rules at session start, which increases context consumption but ensures nothing is missed.
 - Gemini CLI lacks native sub-agent spawning; review commands serve as the user-invoked equivalent but lack automatic delegation.
+
+## Known Limitations
+
+### Agent comprehension of thin wrappers
+
+Agents may not follow "Read and follow X" instructions in thin wrappers, skipping the canonical content entirely. Mitigations vary by platform:
+
+- **Cursor**: `@` file injection forces content loading — the most reliable mechanism.
+- **Claude Code / Gemini CLI / Codex**: canonical content should include guards ("If you have not read X, stop and read it now"). Minimal fallback context (up to 5 lines) in wrappers helps when the agent skips the read.
+
+### Plugin and external content in adapter directories
+
+Platform adapter directories may contain externally installed content (e.g., Clerk skills) alongside canonical wrappers. Validation scripts must exclude non-canonical content to avoid false positives.
 
 ## References
 

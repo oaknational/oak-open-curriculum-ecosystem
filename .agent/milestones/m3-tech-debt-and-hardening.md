@@ -24,8 +24,9 @@ diagnosis, and mutation testing ensures the test suite catches real bugs.
 - Full operational security controls: monitoring, alerting, incident
   response procedures, and canonical host enforcement.
 - Sentry observability gives clear visibility into production behaviour.
-- Extension surfaces (MCP-app extension for Claude and other MCP-native
-  hosts, OpenAPI app extension alongside) broaden platform reach.
+- Extension surfaces (MCP Apps standard migration: one MCP server, optional
+  host adapters) broaden platform reach across ChatGPT, Claude, Cursor,
+  and generic MCP hosts.
 - Architectural enforcement (ESLint boundary rules, dependency-cruiser,
   knip) prevents regression as the codebase grows.
 - Mutation testing validates that the test suite catches real bugs.
@@ -43,8 +44,7 @@ All must be true before M3 exit:
 - [ ] Canonical host enforcement verified on Vercel
 - [ ] Incident response procedures documented
 - [ ] Sentry observability configured and verified
-- [ ] MCP-app extension implemented and working in MCP-native hosts
-- [ ] OpenAPI app extension maintained alongside MCP-app extension
+- [ ] MCP Apps standard migration complete: adapter pattern, platform detection, widget/MIME/metadata migration (see [roadmap.md](../plans/sdk-and-mcp-enhancements/roadmap.md))
 - [ ] Architectural enforcement strengthened (boundary checks, dead code
   detection)
 - [ ] Mutation testing integrated and passing
@@ -56,8 +56,8 @@ All must be true before M3 exit:
 
 **Planned.** Detailed plans exist across multiple collections:
 
-- Extension surfaces:
-  [mcp-extensions-research-and-planning.md](../plans/sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+- Extension surfaces (MCP Apps standard migration):
+  [roadmap.md](../plans/sdk-and-mcp-enhancements/roadmap.md)
 - Agentic engineering:
   [agentic-engineering-enhancements/](../plans/agentic-engineering-enhancements/)
 - Architecture and infrastructure:

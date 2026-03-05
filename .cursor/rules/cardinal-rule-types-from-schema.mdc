@@ -5,17 +5,7 @@ alwaysApply: true
 
 # Cardinal Rule: Types Flow From The Schema
 
-ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm sdk-codegen` is run. If the upstream OpenAPI schema changes, then running `pnpm sdk-codegen` MUST be sufficient to bring all workspaces into alignment with the new schema.
+ALL types, type guards, Zod schemas, and validators MUST flow from the OpenAPI schema via `pnpm sdk-codegen`.
+No ad-hoc types. No broad `Record<string, unknown>`. Missing types = generator bug.
 
-## The Type Flow Discipline
-
-1. When data enters our system it is genuinely `unknown`.
-2. We immediately put it through validation.
-3. From that point on we know _exactly_ what types we are dealing with. All data MUST have a specific and exact type at all times.
-4. Any code that broadens the type after that MUST be removed, right now, it is destroying information, it is self-created entropy and it has NO PLACE in our system. This rule ALWAYS applies.
-5. All types and type related information MUST flow from the curriculum schema at SDK compile time (pnpm sdk-codegen).
-6. We must not create any ad-hoc types or type related information outside of the SDK compile time. Where ad-hoc type-related data exists it must be removed, now.
-7. At SDK compile time we know ALL possible types that we will ever need in any of the apps consuming the curriculum SDK. ALL OF THEM.
-8. When we define a type based on the curriculum schema, we must use the data structure to type and type-guard pattern, and where appropriate also create Zod schemas and validation. Both the data structures and the Zod MUST flow directly from the API schema.
-9. We define types well, and we define them ONCE.
-10. "Record" is too generic unless there are strict types on both sides. A Record using broad types like `string` or `unknown` or `number` or any primitive type is too generic and is NOT ALLOWED.
+See "Cardinal Rule" in `.agent/directives/rules.md` and `.agent/directives/schema-first-execution.md`.

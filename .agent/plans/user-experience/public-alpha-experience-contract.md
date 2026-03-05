@@ -79,7 +79,7 @@ Required evidence for decision:
 
 1. Host compatibility, metadata portability, and security boundary analysis
    from
-   [../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md)
 2. Widget reactivation prerequisites and sequencing from
    [../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md)
 3. Milestone sequencing and risk trade-offs from
@@ -153,7 +153,7 @@ All non-trivial claims in alpha readiness updates should reference:
 Primary evidence sources:
 
 - [../semantic-search/roadmap.md](../semantic-search/roadmap.md)
-- [../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+- [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md)
 - [../semantic-search/future/08-experience-surfaces-and-extensions/README.md](../semantic-search/future/08-experience-surfaces-and-extensions/README.md)
 - [../security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md)
 - [../architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md)
@@ -178,7 +178,7 @@ These remain owned in `external/`, but are UX-significant constraints.
 | User Promise Area | Primary Plan Dependencies |
 |-------------------|---------------------------|
 | Relevance and retrieval quality | [../semantic-search/roadmap.md](../semantic-search/roadmap.md) |
-| UI host/surface behaviour | [../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) |
+| UI host/surface behaviour | [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md) |
 | Safety and trust boundaries | [../security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md) |
 | Runtime reliability | [../architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md) |
 | Integration ergonomics | [../developer-experience/sdk-publishing-and-versioning-plan.md](../developer-experience/sdk-publishing-and-versioning-plan.md) |

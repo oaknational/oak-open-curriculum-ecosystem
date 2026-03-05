@@ -3,7 +3,7 @@
 **Status**: WS1 implemented. WS2+WS3 collapsed to future review checkpoint.
 **Last Updated**: 2026-03-01
 **Provenance**: Extracted from Domain D items 1-2 of
-[mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md).
+[../../roadmap.md](../../roadmap.md).
 Originated from a live session where the consuming agent (not the user)
 introduced "GCSE" as a search term instead of preserving the user's
 correct "KS4 maths" — demonstrating the need for authoritative

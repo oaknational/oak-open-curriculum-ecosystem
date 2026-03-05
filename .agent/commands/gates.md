@@ -22,6 +22,7 @@ pnpm doc-gen
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
+pnpm portability:check
 pnpm lint:fix
 pnpm test
 pnpm test:e2e

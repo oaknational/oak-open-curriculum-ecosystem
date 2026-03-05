@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-02-21
-**Related**: [ADR-060 (Agent Support Metadata System)](060-agent-support-metadata-system.md), [ADR-065 (Turbo Task Dependencies)](065-turbo-task-dependencies.md)
+**Related**: [ADR-060 (Agent Support Metadata System)](060-agent-support-metadata-system.md), [ADR-065 (Turbo Task Dependencies)](065-turbo-task-dependencies.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md) — extends this model to all artefact types
 
 ## Context
 
