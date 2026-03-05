@@ -1,23 +1,9 @@
 import request from 'supertest';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
-
-// Mock Clerk middleware to avoid network IO and requirement for valid keys
-vi.mock('@clerk/express', () => ({
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  getAuth: () => ({
-    isAuthenticated: false,
-    toAuth: () => ({}),
-  }),
-}));
 
 function parseFirstSseData(raw: string): unknown {
   const line = raw

@@ -153,11 +153,8 @@ export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLo
   const timestamp = now.toISOString();
 
   // Build attributes by combining context with error info if present
-  const attributes: JsonObject = { ...context };
-  if (error !== undefined) {
-    const errorAttrs = extractErrorAttributes(error);
-    Object.assign(attributes, errorAttrs);
-  }
+  const attributes: JsonObject =
+    error === undefined ? { ...context } : { ...context, ...extractErrorAttributes(error) };
 
   // Extract correlationId if present
   const correlationId =

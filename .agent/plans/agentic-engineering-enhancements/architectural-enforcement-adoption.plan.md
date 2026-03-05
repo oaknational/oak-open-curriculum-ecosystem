@@ -3,16 +3,17 @@ name: Architectural Enforcement Adoption
 overview: >
   Apply the Architectural Enforcement Playbook to the repository to prevent
   monolith decay and enforce domain boundaries using ESLint constraints,
-  dependency-cruiser, and knip.
+  dependency-cruiser, and knip. ESLint-centric convergence work is partially
+  delegated to the canonical developer-experience strictness plan.
 todos:
   - id: eslint-strict-completion
     content: "Complete ESLint strict enforcement (Phase 0): resolve remaining lint errors."
     status: pending
   - id: baseline-lint-rules
-    content: "Export and wire existing 'max-files-per-dir' rule; set threshold to 10."
+    content: "Export and wire existing 'max-files-per-dir' rule; set threshold to 10. (Deferred: disruptive in current window.)"
     status: pending
   - id: boundary-configuration
-    content: "Configure 'eslint-plugin-boundaries' per the canonical import matrix (ADR-041)."
+    content: "Configure boundary enforcement per the canonical import matrix (ADR-041). (Execution delegated to devx strictness convergence.)"
     status: pending
   - id: depcruise-lockdown
     content: "Initialize .dependency-cruiser.cjs with mandatory index.ts barrel enforcement."
@@ -24,7 +25,7 @@ todos:
     content: "Update turbo.json and root package.json to include 'pnpm qg' as a combined task."
     status: pending
   - id: agent-directive-grounding
-    content: "Create .agent/directives/architectural-enforcement.md and ground all agents."
+    content: "Create .agent/directives/architectural-enforcement.md and ground all agents. (Split-guidance subset delegated to devx strictness convergence.)"
     status: pending
 ---
 
@@ -59,6 +60,20 @@ authoritative execution tasks for this stream live in:
 
 - [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
 
+### Convergence Update (2026-03-04)
+
+ESLint-focused enforcement work is now split by disruption profile:
+
+1. **Integrated in canonical strictness plan**:
+   - `no-console` convergence
+   - boundary/separation lint consistency work
+   - agent split-guidance updates for large functions/files/directories
+   - canonical execution: [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
+2. **Deferred in this stream**:
+   - `max-files-per-dir` activation (explicitly deferred due disruption risk)
+3. **Still owned here**:
+   - dependency-cruiser, knip, and qg-level enforcement integration
+
 ## 2. Phases
 
 ### Phase 0: ESLint Strict Enforcement Completion (Prerequisite)
@@ -73,7 +88,7 @@ authoritative execution tasks for this stream live in:
   `semantic-search`. Verify `pnpm lint` passes cleanly across the
   monorepo.
 
-### Phase 1: Physical Modularity (ESLint)
+### Phase 1: Physical Modularity (ESLint, deferred)
 
 - **Goal:** Break up "God Folders."
 - **Current state:** The `max-files-per-dir` rule already exists at
@@ -85,6 +100,7 @@ authoritative execution tasks for this stream live in:
   config, audit existing directories for threshold breaches, and resolve
   violations by structural refactoring.
 - **Target:** Root `eslint.config.ts` to apply this rule to all workspaces.
+- **Execution status:** Deferred from current convergence window.
 
 ### Phase 2: Boundary Definition (ESLint)
 
@@ -94,7 +110,8 @@ authoritative execution tasks for this stream live in:
   split. These should integrate with the broader layer enforcement when
   `eslint-plugin-boundaries` is adopted.
 - **Goal:** Define semantic layers and enforce unidirectional flow.
-- **Task:** Configure `eslint-plugin-boundaries` using the canonical import matrix:
+- **Task:** Configure boundary constraints using the canonical import matrix.
+- **Execution status:** Implementation delegated to canonical strictness convergence plan; this plan remains the strategic source.
 
 | Importer | core | libs | sdks | apps | Constraint |
 |----------|------|------|------|------|------------|
@@ -120,6 +137,7 @@ authoritative execution tasks for this stream live in:
 - **Task:** Create `.agent/directives/architectural-enforcement.md` and update `AGENT.md` to reference it.
 - **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The `qg` script must be updated to include `depcruise` and `knip` as each phase lands.
 - **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](evidence-bundle.template.md).
+- **Execution status:** split-guidance/rules updates delegated to canonical strictness convergence; depcruise/knip/qg grounding remains in this stream.
 
 ## 3. Documentation Propagation Requirement
 

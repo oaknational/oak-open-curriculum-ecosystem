@@ -112,7 +112,7 @@ export const getThreadsUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Units belonging to a given thread\n\nThis tool returns all of the units that belong to a given thread.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Units belonging to a given thread\n\nThis tool returns all of the units that belong to a given thread.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

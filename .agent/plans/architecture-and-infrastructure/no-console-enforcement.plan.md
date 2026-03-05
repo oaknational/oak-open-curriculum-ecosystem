@@ -5,6 +5,9 @@ overview: >
   all `console.*` usage across the codebase, replacing with proper
   UnifiedLogger or legitimate exemptions. Largely mechanical with
   nuanced exceptions for CLI output, smoke tests, and build scripts.
+status: "superseded"
+superseded_on: 2026-03-04
+superseded_by: "../developer-experience/active/devx-strictness-convergence.plan.md"
 todos:
   - id: add-rule
     content: "Add `no-console: 'error'` to recommended config in oak-eslint"
@@ -29,16 +32,21 @@ isProject: false
 
 # no-console ESLint Enforcement
 
-**Last Updated**: 2026-02-22
-**Status**: PLANNED
-**Priority**: Post-public-repo, pre-public-alpha (Milestone 0 exit
-→ Milestone 1)
+> Superseded on 2026-03-04. Execute from:
+> `../developer-experience/active/devx-strictness-convergence.plan.md`.
+
+**Last Updated**: 2026-03-04
+**Status**: SUPERSEDED (scope folded into canonical strictness convergence plan)
+**Priority**: Milestone 2 hardening follow-through
 **Origin**: Logger architectural bug found during search snagging
 session ([search-snagging.md](../semantic-search/archive/completed/search-snagging.md))
 
 ---
 
 ## Context
+
+Historical context below reflects the pre-convergence state before this plan
+was folded into the canonical strictness plan.
 
 The shared ESLint config (`packages/core/oak-eslint`) has no
 `no-console` rule. The old backlog explicitly called for it:

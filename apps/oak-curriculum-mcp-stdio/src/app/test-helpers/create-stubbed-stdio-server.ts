@@ -9,6 +9,7 @@ import {
   createOakPathBasedClient,
   type ToolName,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { err } from '@oaknational/result';
 
 import { registerMcpTools } from '../server.js';
 import type { UniversalToolExecutors } from '../../tools/index.js';
@@ -138,11 +139,13 @@ function buildToolExecutors(missingTools: ReadonlySet<ToolName>): UniversalToolE
     searchRetrieval: createStubSearchRetrieval(),
     executeMcpTool: (name, args) => {
       if (missingTools.has(name)) {
-        return Promise.resolve({
-          error: new McpToolError(`Stub payload not available for tool: ${name}`, name, {
-            code: 'STUB_NOT_FOUND',
-          }),
-        });
+        return Promise.resolve(
+          err(
+            new McpToolError(`Stub payload not available for tool: ${name}`, name, {
+              code: 'STUB_NOT_FOUND',
+            }),
+          ),
+        );
       }
       return stubExecutor(name, args);
     },

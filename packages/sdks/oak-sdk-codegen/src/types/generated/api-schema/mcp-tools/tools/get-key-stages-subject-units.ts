@@ -116,7 +116,7 @@ export const getKeyStagesSubjectUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Units\n\nThis tool returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this tool.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Units\n\nThis tool returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this tool.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

@@ -1,0 +1,2 @@
+description = "Perform a code review with specialist sub-agents"
+prompt = "Read and follow the instructions in .agent/commands/review.md"

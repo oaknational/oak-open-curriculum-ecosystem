@@ -483,7 +483,7 @@ This task is complete when:
 
 ```bash
 # Navigate to repository root
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 
 # Run unit tests only
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test

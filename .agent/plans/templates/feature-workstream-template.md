@@ -96,6 +96,16 @@ All tests MUST PASS at the end of WS2.
 - [Specific change 1]
 - [Specific change 2]
 
+**Code Sketch** (include when the approach is known):
+
+```typescript
+// Current (path/to/file.ts:42):
+[problematic code]
+
+// Target:
+[desired code]
+```
+
 **Deterministic Validation**:
 
 ```bash

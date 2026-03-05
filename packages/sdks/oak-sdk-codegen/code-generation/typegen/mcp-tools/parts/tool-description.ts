@@ -45,7 +45,7 @@ export function toToolDescription(operation: OperationObject): string | undefine
  */
 export const DOMAIN_PREREQUISITE_GUIDANCE = `
 
-PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-curriculum-model\` first to understand key stages, subjects, entity hierarchy, and ID formats.`;
+PREREQUISITE: You MUST call the \`get-curriculum-model\` tool first to understand the curriculum domain.`;
 
 /**
  * Conditionally appends domain prerequisite guidance to tool descriptions.
@@ -55,6 +55,7 @@ PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-curricul
  *
  * @param description - Base tool description from OpenAPI spec
  * @param requiresAuth - Whether the tool requires OAuth authentication
+ * @param prerequisiteGuidance - Guidance text to append for authenticated tools
  * @returns Description with prerequisite appended (if auth required), or original
  *
  * @example
@@ -71,6 +72,7 @@ PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-curricul
 export function appendPrerequisiteGuidance(
   description: string | undefined,
   requiresAuth: boolean,
+  prerequisiteGuidance: string = DOMAIN_PREREQUISITE_GUIDANCE,
 ): string | undefined {
   if (!description) {
     return undefined;
@@ -78,7 +80,7 @@ export function appendPrerequisiteGuidance(
   if (!requiresAuth) {
     return description;
   }
-  return `${description}${DOMAIN_PREREQUISITE_GUIDANCE}`;
+  return `${description}${prerequisiteGuidance}`;
 }
 
 const GET_RATE_LIMIT_NOTE = `

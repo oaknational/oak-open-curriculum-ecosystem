@@ -18,29 +18,14 @@
  * Part of Phase 2, Sub-Phase 2.5
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockRuntimeConfig, createNoOpClerkMiddleware } from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
-
-// Mock Clerk middleware to avoid network IO and requirement for valid keys
-vi.mock('@clerk/express', () => ({
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  getAuth: () => ({
-    isAuthenticated: false,
-    toAuth: () => ({}),
-  }),
-}));
-// E2E tests don't block fetch, so no restoration needed
 
 /**
  * Creates a fresh app instance for auth-enabled tests.
@@ -60,6 +45,7 @@ async function createAuthEnabledApp(): Promise<Express> {
       },
     }),
     upstreamMetadata: TEST_UPSTREAM_METADATA,
+    clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
 }
 

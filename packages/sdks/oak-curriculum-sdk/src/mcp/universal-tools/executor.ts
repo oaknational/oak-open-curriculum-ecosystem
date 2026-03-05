@@ -12,7 +12,6 @@ import {
   formatToolResponse,
   formatError,
   formatUnknownTool,
-  extractExecutionData,
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
@@ -48,17 +47,16 @@ function mapExecutionResult(
   toolName: ToolName,
   deps: UniversalToolExecutorDependencies,
 ): CallToolResult {
-  const outcome = extractExecutionData(result);
-  if (!outcome.ok) {
-    return formatError(toErrorMessage(outcome.error));
+  if (!result.ok) {
+    return formatError(toErrorMessage(result.error));
   }
 
   const descriptor = deps.generatedTools.getToolFromToolName(toolName);
   const title = descriptor.annotations?.title ?? toolName;
 
   return formatToolResponse({
-    summary: `${title}: ${String(outcome.status)}`,
-    data: { status: outcome.status, data: outcome.data },
+    summary: `${title}: ${String(result.value.status)}`,
+    data: { status: result.value.status, data: result.value.data },
     includeContextHint: descriptor.requiresDomainContext,
     toolName,
     annotationsTitle: title,

@@ -1,0 +1,85 @@
+# Invoke Specialist Reviewers
+
+After non-trivial changes, invoke `code-reviewer` plus all specialist reviewers required by the change profile.
+
+## Quick Triage (First 2 Minutes)
+
+Before starting any non-trivial task, answer these questions to identify which specialists you will need:
+
+1. Does this touch auth, secrets, PII, or OAuth? -> `security-reviewer`
+2. Does this change module boundaries, imports, or public APIs? -> architecture reviewer(s)
+3. Does this add or modify tests? -> `test-reviewer`
+4. Does this change types, generics, or schema flow? -> `type-reviewer`
+5. Does this change tooling configs or quality gates? -> `config-reviewer`
+6. Does this change onboarding flows (human or AI), start-right entrypoints, or ADR discoverability? -> `onboarding-reviewer` (situational)
+
+Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
+
+## When to Invoke
+
+Non-trivial changes include:
+
+- Completing a feature or user story
+- Fixing a non-trivial bug
+- Refactoring (especially structural changes)
+- Adding or modifying public APIs
+- Changes touching multiple files
+- Architectural modifications
+
+Minor changes (single typo/comment-only edits with no behaviour impact) may use lighter review, but still require explicit rationale.
+
+## Timing Tiers
+
+| Tier | When | What to invoke |
+|---|---|---|
+| Immediately after change | After each non-trivial code change | `code-reviewer` plus all specialists matching the change profile |
+| Before merge | Before the branch merges | Any applicable specialists not yet invoked during implementation |
+| Situational trigger | When the specific context arises | On-demand agents (see below) -- not tied to every change |
+
+## Required Reviewer Matrix
+
+Always invoke:
+
+- `code-reviewer` (gateway -- also responsible for flagging when specialists are missing)
+
+Invoke additional specialists when applicable:
+
+| Change Category | Required Specialist(s) |
+|---|---|
+| Structural/boundary changes | `architecture-reviewer-barney` and/or `architecture-reviewer-fred` and/or `architecture-reviewer-betty` and/or `architecture-reviewer-wilma` |
+| Test changes or TDD concerns | `test-reviewer` |
+| Type-system complexity or assertion pressure | `type-reviewer` |
+| Tooling/config quality-gate changes | `config-reviewer` |
+| Auth/authz, OAuth, secrets, PII, injection, security-sensitive logic | `security-reviewer` |
+| README/TSDoc/ADR/docs updates or expected documentation drift | `docs-adr-reviewer` |
+
+Specialist on-demand (not standard roster -- situational trigger only):
+
+- `release-readiness-reviewer` for release go/no-go checks at release boundaries
+- `ground-truth-designer` for semantic-search ground-truth design/review work
+- `subagent-architect` for sub-agent definition design/migration work
+- `onboarding-reviewer` for onboarding-path audits (accuracy, efficacy, readability, consistency, stale info, and gap detection)
+
+## Worked Examples
+
+**Auth/OAuth/secrets change**: Invoke `code-reviewer` + `security-reviewer` immediately. If the change is also structural (new middleware, route reorganisation), add the relevant architecture reviewer(s).
+
+**Architecture refactor**: Invoke `code-reviewer` + relevant architecture reviewer(s) immediately. Add `type-reviewer` if generics or schema flow are affected. Add `docs-adr-reviewer` if boundaries or ADRs change.
+
+**Test-only change**: Invoke `code-reviewer` + `test-reviewer` immediately.
+
+**Docs/ADR update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately.
+
+**Onboarding docs/path update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately. Add `onboarding-reviewer` when the change affects onboarding journeys (human and/or AI), `start-right` discoverability, or ADR progressive disclosure.
+
+**Release go/no-go**: Invoke `release-readiness-reviewer` (on-demand, situational trigger).
+
+## Invocation
+
+Invoke each specialist as a read-only sub-agent, giving it specific context about what changed and what to focus on.
+
+## Reporting Requirement
+
+- Report which required specialists were invoked.
+- For any not invoked, explicitly state `N/A` with justification.
+- Do not claim "comprehensive review" if required specialists were skipped without rationale.

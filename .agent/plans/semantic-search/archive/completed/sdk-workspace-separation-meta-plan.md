@@ -6,7 +6,7 @@
 
 **Status**: Archived historical snapshot (superseded)  
 **Date**: 20 February 2026  
-**Repo**: `/Users/jim/code/oak/oak-mcp-ecosystem`  
+**Repo**: `./`  
 **Purpose**: historical findings log preserved for record only
 
 ---

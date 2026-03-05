@@ -9,9 +9,12 @@ describe('createStubToolExecutionAdapter', () => {
     // Test a simple tool that requires no params
     const result = await executeStubTool('get-key-stages', {});
 
-    expect(result.error).toBeUndefined();
-    expect(result.data).toBeDefined();
-    expect(result.status).toBe(200);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw new Error('Expected successful result');
+    }
+    expect(result.value.data).toBeDefined();
+    expect(result.value.status).toBe(200);
   });
 
   it('successfully executes tools with required parameters when valid args provided', async () => {
@@ -22,9 +25,12 @@ describe('createStubToolExecutionAdapter', () => {
       lesson: 'test-lesson-slug',
     });
 
-    expect(result.error).toBeUndefined();
-    expect(result.data).toBeDefined();
-    expect(result.status).toBe(200);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw new Error('Expected successful result');
+    }
+    expect(result.value.data).toBeDefined();
+    expect(result.value.status).toBe(200);
   });
 
   it('returns parameter validation errors when arguments do not match the schema', async () => {
@@ -36,8 +42,11 @@ describe('createStubToolExecutionAdapter', () => {
       subject: true,
     });
 
-    expect(result.error).toBeDefined();
-    expect(result.error?.message).toContain('Invalid request parameters');
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected parameter validation error');
+    }
+    expect(result.error.message).toContain('Invalid request parameters');
   });
 
   it('returns parameter validation errors when required parameters are missing', async () => {
@@ -46,7 +55,23 @@ describe('createStubToolExecutionAdapter', () => {
     // Test with missing required params
     const result = await executeStubTool('get-lessons-transcript', {});
 
-    expect(result.error).toBeDefined();
-    expect(result.error?.message).toContain('Invalid request parameters');
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected parameter validation error');
+    }
+    expect(result.error.message).toContain('Invalid request parameters');
+  });
+
+  it('accepts optional params objects for generated tools', async () => {
+    const executeStubTool = createStubToolExecutionAdapter();
+
+    const result = await executeStubTool('get-subjects', { params: {} });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw new Error('Expected successful result');
+    }
+    expect(Array.isArray(result.value.data)).toBe(true);
+    expect(result.value.status).toBe(200);
   });
 });

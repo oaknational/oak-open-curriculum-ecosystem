@@ -13,7 +13,7 @@ provenance:
     date: 2026-02-28
     purpose: "Ecosystem-agnostic hydration: added ecosystem survey preamble for agents hydrating into non-TypeScript repos"
 fitness_ceiling: 400
-attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many people and agents in many repos"
 ---
 
 # Practice Bootstrap
@@ -273,7 +273,7 @@ Command files are plain markdown. Cursor exposes them as slash commands. The `@`
 
 | Command | File | Core logic |
 |---|---|---|
-| start-right | `jc-start-right.md` | Read and follow the start-right prompt. |
+| start-right | `jc-start-right-quick.md` | Read and follow the start-right prompt. |
 | gates | `jc-gates.md` | Run `type-check -> lint -> build -> test` sequentially. All blocking. Restart from beginning after any fix. |
 | review | `jc-review.md` | Run gates, triage specialists, invoke them, consolidate into single report with verdict. |
 | commit | `jc-commit.md` | Check status, review diff, verify gates, stage selectively, conventional commit format. Safety: never force push, never amend pushed commits, never `--no-verify`. |
@@ -310,9 +310,9 @@ Completed prompts move to `archive/` within the prompts directory. The frontmatt
 
 The session entry point. Sections: **Foundation Documents** (read AGENT.md, rules.md, testing-strategy.md), **Project Context** (brief description plus key doc links), **Guiding Questions** (right problem? right layer? simpler? assumptions?), **Practice Box** (check `.agent/practice-core/incoming/` for plasmids), **Process** (discuss first step with user), **Quality Gates** (list the gate commands).
 
-## Skills (.cursor/skills/)
+## Skills (.agent/skills/)
 
-### Napkin (.cursor/skills/napkin/SKILL.md)
+### Napkin (.agent/skills/napkin/SKILL.md)
 
 The napkin is the capture stage of the learning loop. It is always active.
 
@@ -336,7 +336,7 @@ Add `### Mistakes Made` or `### Corrections` subsections as needed.
 
 **Rotation**: When the napkin exceeds ~800 lines, follow the distillation skill.
 
-### Distillation (.cursor/skills/distillation/SKILL.md)
+### Distillation (.agent/skills/distillation/SKILL.md)
 
 Distillation extracts high-signal patterns from the napkin into a curated `distilled.md` rulebook.
 

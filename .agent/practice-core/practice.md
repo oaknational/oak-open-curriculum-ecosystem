@@ -13,7 +13,7 @@ provenance:
     date: 2026-02-27
     purpose: "Production SDK ecosystem: adopted practice-core structure, trinity concept, and bootstrap from round-trip"
 fitness_ceiling: 250
-attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many people and agents in many repos"
 ---
 
 # The Agentic Engineering Practice
@@ -45,11 +45,9 @@ graph TB
     end
 
     subgraph Tooling ["Tooling — how it is used"]
-        RULES[".cursor/rules/"]
-        CMDS[".cursor/commands/"]
-        AGENTS[".cursor/agents/"]
-        SKILLS[".cursor/skills/"]
-        ENTRY["Entry points<br/>AGENT.md · CLAUDE.md · AGENTS.md"]
+        CANON["Canonical content<br/>.agent/skills · .agent/commands<br/>.agent/sub-agents"]
+        ADAPT["Platform adapters<br/>.cursor · .claude · .gemini · .agents"]
+        ENTRY["Entry points<br/>AGENT.md · CLAUDE.md · AGENTS.md · GEMINI.md"]
     end
 
     Philosophy --> Structure --> Tooling
@@ -65,7 +63,7 @@ The organisational patterns. Directives (`.agent/directives/`), plans (`.agent/p
 
 ### Tooling
 
-Platform-specific implementations. `.cursor/rules/` (always-applied workspace rules), `.cursor/commands/` (slash commands), `.cursor/agents/` (sub-agent definitions), `.cursor/skills/` (specialised capabilities), and entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`). This layer defines *how* the practice is used in a specific environment.
+Platform-specific implementations following a three-layer model (ADR-125): canonical content in `.agent/` (skills, commands, sub-agent templates, directives), thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, and entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). Rules have a distinct two-part structure: authoritative policies in `.agent/directives/rules.md` and activation triggers in `.cursor/rules/*.mdc` that control when policies surface. This layer defines *how* the practice is used in a specific environment.
 
 ## The Knowledge Flow
 
@@ -120,7 +118,7 @@ The knowledge flow is itself part of the Practice, and the Practice travels via 
 - **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
 - **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
 - **Code patterns** — `.agent/memory/code-patterns/` — abstract proven patterns
-- **Rules** — `.agent/directives/rules.md` + `.cursor/rules/*.mdc`
+- **Rules** — `.agent/directives/rules.md` (authoritative policies) + `.cursor/rules/*.mdc` (activation triggers)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
 
 ## The Review System
@@ -144,7 +142,7 @@ graph LR
     REVIEW --> CONSOL[Documentation Consolidation]
 ```
 
-- **Commands** (`.cursor/commands/`) — slash commands that initiate structured workflows
+- **Commands** (`.agent/commands/`, with platform adapters in `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`, `.agents/skills/jc-*/`) — slash commands that initiate structured workflows
 - **Prompts** (`.agent/prompts/`) — reusable playbooks that provide domain context and operational guidance. Session entry points (e.g. `semantic-search.prompt.md`) combine grounding, context, and a pointer to the active execution plan
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — `high-level-plan.md` cross-collection overview
@@ -166,13 +164,11 @@ graph LR
 | `.agent/experience/` | Experiential records across sessions |
 | `.agent/prompts/` | Reusable prompt playbooks |
 | `.agent/sub-agents/` | Reviewer prompt architecture (components, templates) |
-| `.agent/skills/` | Repo-managed skills for shared workflows |
+| `.agent/skills/` | Canonical skills (platform-agnostic) |
+| `.agent/commands/` | Canonical commands (platform-agnostic) |
 | `.agent/research/` | Research documents and analysis |
 | `.agent/reference-docs/` | Supporting reference material |
-| `.cursor/rules/` | Always-applied workspace rules |
-| `.cursor/commands/` | Slash commands |
-| `.cursor/agents/` | Sub-agent definitions (Cursor-specific) |
-| `.cursor/skills/` | Skills (Cursor-specific) |
+| `.cursor/`, `.claude/`, `.gemini/`, `.agents/` | Platform adapters: thin wrappers referencing canonical content (ADR-125) |
 | `docs/architecture/architectural-decisions/` | Permanent architectural decision records |
 
 ## Plasmid Exchange

@@ -1,0 +1,8 @@
+---
+description: All filesystem paths must be relative (repo root or file-relative). No absolute paths.
+alwaysApply: true
+---
+
+# No Absolute Paths
+
+See "No absolute paths" in `.agent/directives/rules.md`.

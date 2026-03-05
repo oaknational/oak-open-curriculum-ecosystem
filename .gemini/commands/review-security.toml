@@ -1,0 +1,6 @@
+description = "Security and privacy review for auth/authz, OAuth, secrets, PII, and injection risks"
+prompt = """You are a security reviewer. Read and follow `.agent/sub-agents/templates/security-reviewer.md` as your canonical review methodology.
+
+Review the codebase changes for security and privacy issues. Do not modify code.
+
+{{args}}"""

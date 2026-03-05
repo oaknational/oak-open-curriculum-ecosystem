@@ -193,10 +193,13 @@ describe('appendPrerequisiteGuidance', () => {
     expect(result).toContain('PREREQUISITE');
   });
 
-  it('includes key curriculum concepts in prerequisite text', () => {
-    const result = appendPrerequisiteGuidance('Test', true);
-    expect(result).toContain('key stages');
-    expect(result).toContain('subjects');
+  it('appends the injected prerequisite guidance for authenticated tools', () => {
+    const customGuidance = '\n\nPREREQUISITE: call custom-orientation-tool first.';
+
+    const result = appendPrerequisiteGuidance('Test', true, customGuidance);
+
+    expect(result).toContain('Test');
+    expect(result).toContain(customGuidance);
   });
 });
 

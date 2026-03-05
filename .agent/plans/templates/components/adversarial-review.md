@@ -11,6 +11,12 @@ invoke specialist reviewers for an adversarial sweep.
 
 ## Review Protocol
 
+0. **Verify plan compliance** (always — before any specialist review):
+   Check that every acceptance criterion from the plan is met and every
+   deterministic validation command produces its expected output. If any
+   criterion is unmet or any command fails, stop and fix before proceeding
+   to specialist reviews. This prevents reviewing code that doesn't match
+   the plan's specification.
 1. **Invoke `code-reviewer`** (always — gateway reviewer)
 2. **Invoke domain-specific specialists** based on change profile:
 

@@ -3,14 +3,14 @@
   "plans": [
     {
       "name": "oak-curriculum-mcp",
-      "root": "/Users/jim/code/oak/ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-curriculum-mcp",
+      "root": "ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-curriculum-mcp",
       "moves": [],
       "collisions": [],
       "importRewriteEstimate": 0
     },
     {
       "name": "oak-notion-mcp",
-      "root": "/Users/jim/code/oak/ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-notion-mcp",
+      "root": "ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-notion-mcp",
       "moves": [
         {
           "from": "src/chorai/phaneron",

@@ -9,8 +9,8 @@ of truth.
 | 0 | [phase-0-templates-and-components-foundation.md](phase-0-templates-and-components-foundation.md) | Template/component system hardening | ✅ Complete |
 | 1 | [phase-1-hallucination-guarding-execution.md](phase-1-hallucination-guarding-execution.md) | Hallucination guard policy and workflow integration | 📋 Planned |
 | 2 | [phase-2-evidence-based-claims-execution.md](phase-2-evidence-based-claims-execution.md) | Evidence bundle adoption and merge-readiness evidence checks | 📋 Planned |
-| 3 | [phase-3-architectural-enforcement-execution.md](phase-3-architectural-enforcement-execution.md) | Architectural enforcement phases 0-5 execution | 📋 Planned |
-| 4 | [phase-4-cross-agent-standardisation-execution.md](phase-4-cross-agent-standardisation-execution.md) | Committed cross-agent standardisation tasks and trigger handling | 📋 Planned |
+| 3 | [phase-3-architectural-enforcement-execution.md](phase-3-architectural-enforcement-execution.md) | Architectural enforcement execution (with ESLint convergence tasks partially delegated to devx strictness plan) | 📋 Planned |
+| 4 | [phase-4-cross-agent-standardisation-execution.md](phase-4-cross-agent-standardisation-execution.md) | ~~Cross-agent standardisation~~ **Superseded** by [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) | ⛔ Superseded |
 | 5 | [phase-5-mutation-testing-execution.md](phase-5-mutation-testing-execution.md) | Mutation testing phases 0-3 execution | 📋 Planned |
 | HC-0 | [phase-0-baseline-metrics.plan.md](phase-0-baseline-metrics.plan.md) | Harness concepts: baseline metrics capture | 📋 Planned |
 

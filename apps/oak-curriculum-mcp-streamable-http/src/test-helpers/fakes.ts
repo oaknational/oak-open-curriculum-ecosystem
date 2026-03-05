@@ -198,7 +198,9 @@ export function createFakeMachineAuthObject(
  * Express Request has many required members.
  */
 export function createFakeExpressRequest(
-  overrides: Partial<Pick<Request, 'headers' | 'method' | 'path' | 'body'>> = {},
+  overrides: Partial<Pick<Request, 'headers' | 'method' | 'path' | 'body'>> & {
+    auth?: Request['auth'] | { readonly userId: string };
+  } = {},
 ): Request {
   const req = {
     headers: overrides.headers ?? {},
@@ -206,6 +208,7 @@ export function createFakeExpressRequest(
     path: overrides.path ?? '/mcp',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Express Request body is broadly typed; test fake accepts minimal shape
     body: overrides.body ?? {},
+    ...(overrides.auth === undefined ? {} : { auth: overrides.auth }),
   };
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request has many required members; minimal fake for auth tests
   return req as unknown as Request;

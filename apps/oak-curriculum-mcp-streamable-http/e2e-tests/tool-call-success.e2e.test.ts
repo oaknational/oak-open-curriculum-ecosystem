@@ -1,8 +1,9 @@
 import request from 'supertest';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolExecutionResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
+import { ok } from '@oaknational/result';
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
@@ -13,20 +14,6 @@ import {
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
-
-// Mock Clerk middleware to avoid network IO and requirement for valid keys
-vi.mock('@clerk/express', () => ({
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
-    next();
-  },
-  getAuth: () => ({
-    isAuthenticated: false,
-    toAuth: () => ({}),
-  }),
-}));
 
 interface CapturedCall {
   readonly tool: unknown;
@@ -50,7 +37,7 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
           canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
         },
       ];
-      const result: ToolExecutionResult = { status: 200, data };
+      const result: ToolExecutionResult = ok({ status: 200, data });
       return Promise.resolve(result);
     },
   };

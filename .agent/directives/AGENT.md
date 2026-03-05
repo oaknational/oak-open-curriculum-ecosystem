@@ -21,11 +21,13 @@ Read the [metacognitive prompt](./metacognition.md) and follow all instructions,
 
 This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For orientation, see [practice-core/index.md](../practice-core/index.md). For the full map, see [practice.md](../practice-core/practice.md). For cross-repo propagation and the plasmid exchange mechanism, see [practice-lineage.md](../practice-core/practice-lineage.md).
 
-Agent onboarding starts with the `start-right` workflow:
+Agent onboarding starts with the `start-right-quick` workflow:
 
-- Cursor command: [`.cursor/commands/jc-start-right.md`](../../.cursor/commands/jc-start-right.md)
-- Prompt: [`.agent/prompts/start-right.prompt.md`](../prompts/start-right.prompt.md)
-- Skill: [`.agent/skills/start-right/SKILL.md`](../skills/start-right/SKILL.md)
+- Cursor commands: [`.cursor/commands/jc-start-right-quick.md`](../../.cursor/commands/jc-start-right-quick.md)
+- Shared workflow: [`.agent/skills/start-right-quick/shared/start-right.md`](../skills/start-right-quick/shared/start-right.md)
+- Thorough shared workflow: [`.agent/skills/start-right-thorough/shared/start-right-thorough.md`](../skills/start-right-thorough/shared/start-right-thorough.md)
+- Codex skills: [`.agent/skills/start-right-quick/SKILL.md`](../skills/start-right-quick/SKILL.md), [`.agent/skills/start-right-thorough/SKILL.md`](../skills/start-right-thorough/SKILL.md)
+- Cursor skills: [`.cursor/skills/start-right-quick/SKILL.md`](../../.cursor/skills/start-right-quick/SKILL.md), [`.cursor/skills/start-right-thorough/SKILL.md`](../../.cursor/skills/start-right-thorough/SKILL.md)
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Start with the [ADR index](../../docs/architecture/architectural-decisions/).
 
@@ -55,7 +57,7 @@ Always apply your own critical thinking to your work, and then use the sub-agent
 
 ### Available Sub-agents
 
-Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance. For the full invocation matrix, timing guidance, triage checklist, and worked examples, see the `invoke-code-reviewers` rule (`.cursor/rules/invoke-code-reviewers.mdc`, always applied).
+Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance. For the full invocation matrix, timing guidance, triage checklist, and worked examples, see the [invoke-code-reviewers directive](./invoke-code-reviewers.md).
 
 #### Standard Quality Roster
 
@@ -67,25 +69,9 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
-### Cursor Configuration
+### Agent Artefact Architecture (ADR-125)
 
-| Location | Purpose |
-|----------|---------|
-| `.cursor/agents/*.md` | Sub-agent definitions |
-| `.cursor/commands/*.md` | Slash commands (`/jc-review`, `/jc-gates`, etc.) |
-| `.cursor/rules/*.mdc` | Always-applied rules |
-
-### Skills and Commands
-
-Commands and skills may be defined in more than one location. Check both the repo-native and Cursor-specific paths.
-
-| Location | Purpose |
-|----------|---------|
-| `.agent/skills/*/SKILL.md` | Repo-managed skills for shared workflows |
-| `.agent/prompts/*.md` | Reusable prompt playbooks |
-| `.agent/memory/code-patterns/` | Known solutions to recurring design problems ([README](../../.agent/memory/code-patterns/README.md)) |
-| `.cursor/commands/*.md` | Additional command definitions (currently Cursor-specific) |
-| `.cursor/skills/*/` | Additional skills (currently Cursor-specific) |
+All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
 
 ## Essential Links
 
@@ -159,7 +145,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 ## Remember
 
-1. Periodically re-ground using [GO.md](../prompts/GO.md) — a complementary prompt that structures task execution with ACTION/REVIEW/GROUNDING cadence and invokes the [start-right prompt](../prompts/start-right.prompt.md)
+1. Periodically re-ground using [GO.md](../prompts/GO.md) — a complementary prompt that structures task execution with ACTION/REVIEW/GROUNDING cadence and invokes the [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md)
 2. When in doubt, **make it simpler**
 3. Think in layers: functions → modules → packages (`core`, `libs`, `apps`)
 4. Take the time to step back and reflect if the current approach is the simplest and best way to achieve the goals.

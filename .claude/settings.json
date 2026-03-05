@@ -22,10 +22,11 @@
       "Bash(head:*)",
       "Bash(touch:*)",
       "Bash(node:*)",
-      "Bash(gh pr edit:*)"
+      "Bash(gh pr edit:*)",
+      "Bash(wc:*)"
     ],
     "deny": []
   },
-  "enabledMcpjsonServers": ["notion-dev"],
-  "enableAllProjectMcpServers": true
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["notion-dev"]
 }

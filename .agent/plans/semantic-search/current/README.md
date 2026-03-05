@@ -1,6 +1,6 @@
 # Semantic Search — Current (Next Up)
 
-Queued work that is next to execute once active merge-blockers are clear.
+Queued work that is next to execute in post-merge sequencing.
 
 When work starts, promote the selected plan into `../active/`.
 
@@ -8,7 +8,7 @@ When work starts, promote the selected plan into `../active/`.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| P1 | [mcp-result-pattern-unification.md](../future/06-mcp-consumer-integration/mcp-result-pattern-unification.md) | Unify MCP execution on `Result<T, E>` | 📋 Ready post-merge |
+| P0 | [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md) | Canonical blocker execution for production Clerk migration + OAuth proxy edge rate limits | 📋 Ready |
 
 Strategic source backlog: [future/README.md](../future/README.md)  
-In-progress execution: [active/](../active/)
+In-progress execution: [active/README.md](../active/README.md)

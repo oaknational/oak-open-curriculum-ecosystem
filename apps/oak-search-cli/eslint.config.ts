@@ -124,8 +124,6 @@ const eslintConfig = defineConfig(
       'max-statements': ['error', 20],
       'max-lines-per-function': ['error', 50],
       'max-lines': ['error', 250],
-      // Allow console.log for CLI output
-      'no-console': 'off',
     },
   },
 
@@ -144,8 +142,6 @@ const eslintConfig = defineConfig(
       complexity: ['error', { max: 8 }],
       'max-lines-per-function': ['error', 50],
       'max-lines': ['error', 100],
-      // Allow console.log for simple utilities
-      'no-console': 'off',
     },
   },
 
@@ -159,6 +155,13 @@ const eslintConfig = defineConfig(
       'max-lines-per-function': 'off',
       'max-statements': 'off',
       complexity: 'off',
+      'no-console': 'off',
+    },
+  },
+
+  {
+    files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
+    rules: {
       'no-console': 'off',
     },
   },

@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestone 0 complete — branch merged, search quality in M3 backlog
-**Last Updated**: 2026-03-02
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`
+**Last Updated**: 2026-03-04
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -20,10 +20,11 @@ Execution detail lives in lifecycle lanes:
 
 Merge-blocking plan (complete): [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md)
 
-Current/future backlog sources:
+Execution lane indexes:
 
 1. [current/README.md](current/README.md)
-2. [future/README.md](future/README.md)
+2. [active/README.md](active/README.md)
+3. [future/README.md](future/README.md)
 
 Completed plans (archived):
 
@@ -43,11 +44,12 @@ This roadmap sits within the high-level milestone sequence:
 Milestone 0: Open Private Alpha                  ✅ COMPLETE
   → Branch merged, repo ready to go public
 
-Milestone 1: Invite-Only Alpha                   📋 NEXT
-  → Production Clerk, Oak emails + explicit invites
+Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
+  → Invite-only alpha baseline complete and released
 
-Milestone 2: Extension Surfaces                  📋 PLANNED
-  → MCP-app extension, then OpenAPI app extension
+Milestone 2: Open Public Alpha                   🔄 NEXT
+  → Production Clerk, social providers, public sign-up
+  → Edge rate limiting on OAuth proxy endpoints
 
 Milestone 3: Tech Debt & Hardening               📋 PLANNED
   → Search quality Phase 4, architectural enforcement, observability
@@ -93,13 +95,13 @@ Archived plan: [search-results-quality.md](archive/completed/search-results-qual
 
 ---
 
-## Milestone 0 — Merge Gates (Current)
+## Milestone 0 — Merge Gates (Historical, complete)
 
-The branch merge remains blocked until these complete:
+Milestone 0 merge gates were completed before the 2026-03-03 public release:
 
 1. ~~**3i Search results quality**~~ — ✅ COMPLETE ([ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md))
 2. ~~**3e SDK workspace separation**~~ — ✅ COMPLETE — all phases 0-7, 12 gates pass
-3. **Secrets and PII sweep** — final scan before making repo public
+3. **Secrets and PII sweep** — completed as final pre-public check
 
 Completed merge gates:
 
@@ -113,12 +115,13 @@ Completed merge gates:
 - Archived plan: [search-results-quality.md](archive/completed/search-results-quality.md)
 - ADR: [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md)
 
-### Post-merge, pre-Milestone-1 work
+### Post-merge work now active in Milestone 2+ sequencing
 
-These are not merge-blocking but should complete before public alpha:
+These are no longer merge-blocking and remain in the execution backlog:
 
 - 3b Result pattern unification
 - 3c STDIO-HTTP alignment
+- Milestone 2 auth/rate-limit blockers: [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 
 ---
 
@@ -132,7 +135,7 @@ Phase 2f: Public Release Readiness                  ✅ COMPLETE
 Phase 2g: Developer Onboarding                      ✅ COMPLETE
 Phase 2h: Code Quality Remediation                  ✅ COMPLETE
         ↓
-Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
+Phase 3: MCP Integration + Merge Preparation        ✅ COMPLETE (historical)
   3a. MCP search integration                        ✅ COMPLETE (archived)
   3d. OAuth spec compliance                         ✅ COMPLETE
   3e-auth. OAuth validation/Cursor investigation     ✅ COMPLETE (archived)
@@ -140,17 +143,18 @@ Phase 3: MCP Integration + Merge Preparation        🔄 IN PROGRESS
   3g. Search dispatch type safety                   ✅ COMPLETE (archived)
   3h. Widget stabilisation (Tracks 1a + 1b)         ✅ COMPLETE
   3i. Search results quality                        ✅ COMPLETE (ADR-120)
-  3e. SDK workspace separation                      ✅ COMPLETE (merge-ready)
-  ── Secrets/PII sweep ──                           📋 PRE-PUBLIC
-  ── Merge + make repo public ──                    📋 MILESTONE 0 EXIT
-  3b. Result pattern unification                    📋 POST-MERGE
+  3e. SDK workspace separation                      ✅ COMPLETE (archived)
+  ── Secrets/PII sweep ──                           ✅ COMPLETE
+  ── Merge + make repo public ──                    ✅ COMPLETE (Milestone 0 exit)
+  3b. Result pattern unification                    🟢 ACTIVE
   3c. STDIO-HTTP alignment                          📋 POST-MERGE
         ↓
-Milestone 1: Invite-Only Alpha                      📋 NEXT
-  Clerk production migration                        📋 RESEARCH COMPLETE
+Milestone 1: Invite-Only Alpha                      ✅ COMPLETE
+  Baseline delivered and in production
         ↓
-Milestone 2: Extension Surfaces                     📋 PLANNED
-  MCP-app extension, then OpenAPI app extension
+Milestone 2: Open Public Alpha                      🔄 NEXT
+  Clerk production migration + edge rate limiting
+  Canonical blocker plan: current/m2-public-alpha-auth-rate-limits.execution.plan.md
         ↓
 Milestone 3: Tech Debt & Hardening                  📋 PLANNED
   Phase 4: Search Quality + Ecosystem
@@ -204,18 +208,12 @@ All phases (0-5) complete:
 
 ## Milestone 1: Invite-Only Alpha
 
-Research and planning for invite-only alpha:
+Milestone 1 is complete. Remaining auth/public access work was reclassified
+to Milestone 2 blockers.
 
-1. **Clerk production migration** — research complete, decision
-   pending.
-   [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md)
-2. **MCP Apps extension / Claude basic branding** — decision gate before
-   Milestone 1 execution. Option X: support MCP Apps extension enough for
-   basic Claude branding before alpha. Option Y: launch with ChatGPT basic
-   branding only and add Claude basic branding support in Milestone 2. See
-   [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
-   (Domain A) and [high-level-plan.md](../high-level-plan.md) for
-   decision criteria.
+Canonical next plan:
+
+- [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 
 ---
 
@@ -244,14 +242,15 @@ Research and planning for invite-only alpha:
 
 ### no-console ESLint Enforcement
 
-- Plan: [no-console-enforcement.plan.md](../architecture-and-infrastructure/no-console-enforcement.plan.md)
-- Add `no-console: 'error'` to shared ESLint config, eliminate all
-  `console.*` usage (~110 files, largely mechanical)
+- Canonical plan (folded scope):
+  [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
+- Add `no-console: 'error'` to shared ESLint config and converge
+  `console.*` usage/allowlists under the canonical strictness track
 - Origin: logger architectural bug found during snagging session
 
 ### 3b Result Pattern Unification
 
-- Plan: [mcp-result-pattern-unification.md](future/06-mcp-consumer-integration/mcp-result-pattern-unification.md)
+- Active plan: [mcp-result-pattern-unification.execution.plan.md](active/mcp-result-pattern-unification.execution.plan.md)
 
 ### 3c STDIO-HTTP Alignment
 
@@ -342,7 +341,7 @@ pnpm smoke:dev:stub
 4. [completed-plans.md](../completed-plans.md)
 5. [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 6. [search-acceptance-criteria.md](search-acceptance-criteria.md)
-7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 1 research
+7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 2 blocker research
 8. [mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Milestone 1-2 plan
 9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md) — Milestone 2 plan
 10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/cross-agent-standardisation.plan.md) — Milestone 2 plan

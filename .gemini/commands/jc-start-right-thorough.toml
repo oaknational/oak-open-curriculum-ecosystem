@@ -1,0 +1,2 @@
+description = "Thorough grounding at session start for complex work"
+prompt = "Read and follow the instructions in .agent/commands/start-right-thorough.md"

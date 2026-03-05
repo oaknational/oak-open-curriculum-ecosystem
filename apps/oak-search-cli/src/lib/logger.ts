@@ -68,11 +68,11 @@ function getLoggers(): NonNullable<typeof loggerCache> {
     return loggerCache;
   }
 
-  // Use process.stdout.write in Node.js, fallback to console.log for browser/edge
+  // Use process.stdout.write in Node.js, fallback to no-op outside Node.
   const writeLine =
     typeof process !== 'undefined' && typeof process.stdout?.write === 'function'
       ? (line: string) => process.stdout.write(line + '\n')
-      : (line: string) => console.log(line);
+      : () => undefined;
 
   // Create file sink if path is configured
   if (currentFilePath !== null && activeFileSink === null) {

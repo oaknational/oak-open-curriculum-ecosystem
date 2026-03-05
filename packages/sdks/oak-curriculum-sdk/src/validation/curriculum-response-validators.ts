@@ -112,7 +112,6 @@ export function validateCurriculumResponse<P extends ValidPath, M extends Allowe
   const parsed = parseResponseOrThrow(context.schema, response, context);
 
   if (isValidationFailure(parsed)) {
-    logValidationFailure(context, response);
     return withTrace(parsed, {
       path: context.path,
       method: context.method,
@@ -197,17 +196,6 @@ function parseResponseOrThrow<P extends ValidPath, M extends AllowedMethodsForPa
       { cause: error },
     );
   }
-}
-
-function logValidationFailure<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
-  context: OperationContext<P, M>,
-  response: unknown,
-): void {
-  console.error(
-    `Validation failed for ${context.operationId} ${context.method} ${context.path} ${String(
-      context.statusCode,
-    )}, with response ${safeJson(response)}`,
-  );
 }
 
 function safeJson(value: unknown): string {

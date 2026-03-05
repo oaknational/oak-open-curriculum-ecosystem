@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Right (Quick)"
+  short_description: "Load start-right-quick skill workflow into current session"
+  default_prompt: "Use $start-right-quick to load and apply .agent/skills/start-right-quick/shared/start-right.md in this session."

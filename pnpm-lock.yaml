@@ -624,6 +624,9 @@ importers:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../core/oak-eslint
+      '@oaknational/logger':
+        specifier: workspace:^
+        version: link:../../libs/logger
       '@oaknational/openapi-zod-client-adapter':
         specifier: workspace:*
         version: link:../../core/openapi-zod-client-adapter

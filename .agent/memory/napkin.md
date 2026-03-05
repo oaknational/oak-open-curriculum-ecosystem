@@ -1,5 +1,387 @@
 # Napkin
 
+## Session 2026-03-05e — Remove brittle stub-coupled e2e tests
+
+### What was done
+- Deleted `apps/oak-curriculum-mcp-streamable-http/e2e-tests/sdk-client-stub.e2e.test.ts`.
+- Refactored `stub-mode.e2e.test.ts` to assert stable system invariants for `fetch`
+  output (`id`, `type`, canonical URL, structured data presence) instead of
+  comparing server output to a second call into the SDK stub adapter.
+- Added a unit test in `packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts`
+  proving `createStubToolExecutionAdapter` accepts optional `params` envelopes
+  (`get-subjects` with `{ params: {} }`) and returns a successful `Result`.
+- Ran targeted and full suites:
+  - `pnpm --filter @oaknational/curriculum-sdk test -- src/mcp/stub-tool-executor.unit.test.ts`
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http exec vitest run --config vitest.e2e.config.ts e2e-tests/stub-mode.e2e.test.ts`
+  - `pnpm test:e2e` (green)
+
+### Patterns to remember
+- Do not compare system output to the same runtime stub adapter that the system
+  internally uses; this is tautological and brittle to contract-shape changes.
+- Prefer proving transport/system invariants in e2e and tool-contract details in
+  unit/integration tests.
+
+## Session 2026-03-04d — Plan readiness check for artefact-portability-hardening
+
+### What was done
+- Verified artefact-portability-hardening.plan.md as standalone entry point for next session.
+- Found and fixed 4 broken relative paths: plan is in `current/` (4 levels deep), but 3 links
+  used only `../../../` (3 levels). Fixed to `../../../../` for repo-root targets.
+- Fixed `future/hooks-portability.plan.md` → `../future/hooks-portability.plan.md` (sibling dir).
+- Verified all 9 cross-referenced files exist (ADR-125, ADR-114, predecessor plan, hooks plan,
+  validate-subagents.mjs, 3 foundation docs, devx plan).
+- Confirmed current inventory: 17 .mdc files, 10 active canonical commands, 2 experiment commands,
+  9 adapters per platform (Cursor/Claude/Gemini/Codex), experience.md has no adapters (documented gap).
+- README already had the plan entry from prior session.
+- Markdownlint: 0 errors.
+
+### Patterns to remember
+- Plans in `current/` or `active/` are 4 levels deep from repo root, not 3. Always count from
+  the plan file's actual directory, not from `.agent/plans/`.
+
+## Session 2026-03-04c — Planning system improvements and deep codebase review
+
+### What was done
+- Deep codebase review against devx-strictness-convergence plan: dispatched 5 parallel
+  agents scanning ESLint config, violation baselines, DI/test patterns, console/logger
+  topology, and type assertion landscape.
+- Updated devx-strictness-convergence.plan.md with: exception governance (owner-only
+  approval), deep review metric drift findings, revised Phase 3 execution order
+  (search-cli first — heaviest vi.mock user), DI refactoring scope table, approved
+  exceptions register, 3 new risks.
+- Compared external planning skills (superpowers: writing-plans, executing-plans,
+  brainstorming, subagent-driven-development) to internal jc-plan system. Identified
+  6 adoptable lessons.
+- Updated 6 files incorporating lessons: atomic template (blocked protocol, step-level
+  decomposition, fresh sub-agent guidance), adversarial-review component (plan compliance
+  gate as Step 0), jc-plan command (design gate via metacognition), feature-workstream
+  template (code sketches), quality-fix template (approach-known qualifier),
+  phase-2-evidence-based-claims execution plan (full rewrite with preflight, blocked
+  protocol, step decomposition for all 6 tasks).
+- Consolidation pass: all plan metadata accurate, no extractable content needs moving,
+  fitness functions checked (CONTRIBUTING.md 401/400 and practice-lineage.md 321/320
+  remain 1 over — persistent, known).
+
+### Key concepts
+- **Structural vs operational completeness**: internal system had better structure
+  (lifecycle lanes, YAML, components); external had better operational detail (what to
+  do when blocked, step granularity, review ordering).
+- **Design gate**: metacognition exploration before committing to plan structure prevents
+  wasted effort on wrong approaches.
+- **Plan compliance before quality review**: adversarial reviewers should first verify the
+  plan's own acceptance criteria are met, then assess code quality.
+- **Blocked protocol**: stop, document, present to owner, don't guess. Universal pattern
+  now in the atomic template — every plan inherits it.
+- **Exception governance**: only the project owner can approve exceptions to rules. Agents
+  must classify severity and present — never accept risk on behalf of the owner.
+
+### Patterns to remember
+- Phase 3 execution order should tackle heaviest vi.mock user first (search-cli: 14 calls)
+  to unblock vitest isolation workaround removal earliest.
+- Type assertion target is "zero unjustified" not "zero" — ~5,570 of 218 tracked warnings
+  are in generated code (excluded). Only ~35-50 are realistically fixable.
+- Baseline metrics drift between plan creation and execution — always re-verify before
+  starting a new phase.
+
+## Session 2026-03-04b — Agent artefact portability: rules distinction, hooks plan, consolidation
+
+### What was done
+- Clarified conceptual separation in ADR-125 between authoritative policies
+  (`.agent/directives/rules.md`) and activation triggers (`.cursor/rules/*.mdc`).
+  These are distinct artefact types: policies define what must be followed,
+  triggers define when and how policies surface on a specific platform.
+- Created hooks portability plan at
+  `.agent/plans/agentic-engineering-enhancements/future/hooks-portability.plan.md`.
+  Researched hooks across Claude Code (17 events, 4 hook types), Cursor (8+ events),
+  Gemini CLI (11 events), and Codex (not yet supported).
+- Updated practice.md to reflect the multi-platform artefact architecture:
+  Tooling layer now references all four platform adapter directories,
+  Artefact Map consolidated, Rules entry clarified as policies + triggers.
+- Graduated "commands should be thin pointers" from distilled.md to ADR-125
+  (already captured in Thin Wrapper Contract section).
+- Deep `/jc-consolidate-docs` pass: fitness functions checked, no new breaches,
+  practice box empty, napkin under threshold.
+
+### Key concepts
+- **Policies vs triggers**: `rules.md` is the authoritative policy document.
+  `.mdc` files are activation triggers — metadata that controls when policies
+  surface. A trigger may activate a rule from `rules.md`, a standalone directive,
+  or a skill. These are different artefact types.
+- **Hooks as a fifth artefact type**: Not yet in the three-layer model, but the
+  same canonical-content + thin-adapter pattern applies. Canonical scripts in
+  `.agent/hooks/scripts/`, platform config in `.cursor/hooks.json`,
+  `.claude/settings.json`, `.gemini/settings.json`.
+- **Codex hook gap**: Codex CLI does not support hooks yet (openai/codex#7396).
+  The hooks plan is designed to be Codex-ready when upstream ships the feature.
+
+### Patterns to remember
+- Claude Code hooks support 4 types: command, HTTP, prompt, agent. Cursor and
+  Gemini only support command hooks. This means Claude Code's prompt/agent hooks
+  are inherently platform-specific and should stay in `.claude/settings.json`.
+- Hook stdin schemas differ slightly between platforms. Scripts should be
+  schema-tolerant (extract only needed fields, ignore the rest).
+
+## Session 2026-03-04a — Landing page missing aggregated tools
+
+### What was done
+- Landing page `renderToolsSection()` called `listAllToolDescriptors()` which only
+  returns the 23 generated tools from the OpenAPI schema. The 7 aggregated tools
+  (search, fetch, get-curriculum-model, get-thread-progressions, get-prerequisite-graph,
+  browse-curriculum, explore-topic) were missing from the tool list.
+- Wrote `render-tools-section.unit.test.ts` (RED) verifying aggregated tool names
+  appear in the HTML and total count is 30.
+- Changed import from `listAllToolDescriptors` to `listUniversalTools` +
+  `generatedToolRegistry` from the SDK public API. Added `?? ''` fallback for
+  optional `description` field on `UniversalToolListEntry`.
+- All 692 tests pass, type-check clean, lint clean.
+
+### Patterns to remember
+- `listAllToolDescriptors()` returns ONLY generated tools (23). Use
+  `listUniversalTools(generatedToolRegistry)` for the full roster (30).
+- `UniversalToolListEntry.description` is optional — handle with `?? ''` when
+  passing to functions that require `string`.
+
+## Session 2026-03-03g — Remove vi.mock from E2E tests (ADR-078)
+
+### What was done
+- Deleted `mcp-connection-timeout.e2e.test.ts` — test reviewer confirmed it tests
+  reimplemented code (hand-built Express apps), not product code. The hanging-connection
+  scenario it simulates is structurally impossible: `createApp()` returns
+  `ready: Promise.resolve()`. Health/landing tests are redundant with 3+ other E2E files.
+- Removed redundant `vi.mock('@clerk/express')` from 4 Tier 1 files that already use
+  `dangerouslyDisableAuth: true` (mock was dead code — `setupGlobalAuthContext` returns
+  early before touching `clerkMiddleware`).
+- Added `clerkMiddlewareFactory` DI seam to `CreateAppOptions` + `setupGlobalAuthContext`
+  in `auth-routes.ts`. Optional parameter, defaults to real `clerkMiddleware`.
+- Created `createNoOpClerkMiddleware()` in `e2e-tests/helpers/test-config.ts`. Sets
+  `req.auth` as a callable function matching Clerk's runtime contract.
+- Updated 7 Tier 2 auth-enabled test files to use DI instead of `vi.mock`.
+- Removed `vi.mock('@clerk/mcp-tools/server')` from 2 files — unnecessary because
+  `upstreamMetadata` DI injection in `CreateAppOptions` skips `deriveUpstreamOAuthBaseUrl`.
+- Result: zero `vi.mock` calls in `e2e-tests/`. 22 files, 183 tests, all passing.
+
+### Mistake: left code in broken intermediate state
+Removed `vi.mock` blocks from 3 files without simultaneously adding the
+`clerkMiddlewareFactory` DI parameter to their `createApp` calls. User correctly
+called this out. Never leave files in a broken state between edits — complete each
+file atomically, or at minimum ensure the suite passes before moving on.
+
+### Mistake: dismissed issues as "pre-existing"
+Reviewers flagged type assertions, Object.assign, inline ESLint overrides, and
+global type declaration mismatches. I repeatedly labelled them "pre-existing" and
+moved on. The rule is unambiguous: "All quality gate issues are blocking at all
+times, regardless of location, cause, or context." Pre-existing is not an
+exemption. When a reviewer flags something, fix it or track it as a blocking item.
+
+### Mistake: assumed green gates meant rules were enforced
+The `testRules` in `oak-eslint` had `consistent-type-assertions: 'off'` and
+`no-restricted-types: 'off'` for test files. This silently exempted all tests
+from the no-type-shortcuts rule. Also, `Object.assign` was not restricted and
+`vi.mock` had no ESLint enforcement. Green gates can be liars if the rules
+don't match the documented policy. Always verify what the gates actually check.
+
+### Mistake: applied reviewer suggestion without running type-check
+Changed `Object.assign(req, { auth: ... })` to `req.auth = ...` per code
+reviewer's suggestion. This failed type-check because the global `Request.auth`
+type declaration is wrong (declares MachineAuthObject, Clerk sets a callable
+function). Should have run `pnpm type-check` BEFORE considering the fix done.
+
+### Patterns to remember
+- Clerk Express v1.7.74: `getAuth(req)` checks `"auth" in req` (returns boolean),
+  then calls `req.auth(options)` as a function. The `requestHasAuthObject` guard is
+  simply `"auth" in req`. So DI middleware must set `req.auth` to a FUNCTION, not a
+  plain object.
+- Clerk's `clerkMiddleware` sets `req.auth` via `Object.assign(request, { auth })` where
+  `auth` is a `Proxy(authHandler, { get trap })`. The handler is
+  `(opts) => requestState.toAuth(opts)`.
+- `mcpAuth` middleware (mcp-auth.ts) short-circuits at `!req.headers.authorization` →
+  returns 401 immediately without calling `getAuth`. So `getAuth` is only invoked when
+  a Bearer token is present.
+- `@clerk/mcp-tools/server` mock is unnecessary when `upstreamMetadata` is injected —
+  `setupOAuthAndCaching` skips `deriveUpstreamOAuthBaseUrl` when `injectedMetadata`
+  is provided (line 198). Module import doesn't cause side effects.
+- When removing mocks: complete each file atomically. Remove mock + add DI in one
+  edit, then verify. Don't batch "remove all mocks" followed by "add all DI".
+
+## Session 2026-03-03f — E2E test cleanup (streamable-http)
+
+### What was done
+- Investigated intermittent e2e failures in `pnpm check`: `stub-mode.e2e.test.ts`
+  (404) and `tool-call-envelope.e2e.test.ts` (401).
+- Root cause: `vitest.e2e.config.ts` used `pool: 'forks'` with `singleFork: true`,
+  forcing all 24 test files into one process. 12 files used `vi.mock('@clerk/express')`
+  — module-level global state that leaks between files in a shared fork.
+- Deleted `tool-call-envelope.e2e.test.ts` — fully redundant with
+  `tool-call-success.e2e.test.ts` which proves the same behaviour more thoroughly.
+  Also used `vi.mock` and tested MCP SDK transport, not product code.
+- Removed "returns the full roster from listUniversalTools()" from
+  `stub-mode.e2e.test.ts` — duplicate proof covered by `server.e2e.test.ts`
+  (line 120) and SDK unit/integration tests. The assertion was a tautology:
+  comparing server output against the same function the server uses internally.
+- Removed `singleFork: true` / `pool: 'forks'` / `isolate: true` from
+  `vitest.e2e.config.ts`, inheriting sane defaults from the base config.
+- All 190 remaining tests pass across 23 files.
+
+### Patterns to remember
+- `singleFork: true` + `vi.mock` across multiple files = shared-state coupling.
+  Module mocks leak between files in a single fork despite `isolate: true`.
+- Before fixing a failing test, ask: (1) is the behaviour already proven elsewhere?
+  (2) could a unit test prove this with a pure function? (3) are we testing our
+  product code or a dependency's transport layer?
+- Comparing server output against the same function the server uses internally is
+  a tautology — if both have the same bug, the test still passes. Hardcoded
+  expected values or schema-anchored fixtures are better.
+- 12 of 24 e2e test files use `vi.mock('@clerk/express')` despite
+  `dangerouslyDisableAuth: true` being available via DI. The mock is redundant
+  when DI is used. This is tech debt for future cleanup.
+
+## Session 2026-03-03e — Execute codegen logger replacement
+
+### What was done
+- Executed the codegen-logger-replacement plan: replaced all 49 console.* calls
+  across 12 files in code-generation/ and vocab-gen/ with @oaknational/logger.
+- Created `create-codegen-logger.ts` factory in code-generation/ (7 entry points).
+- vocab-gen/run-vocab-gen.ts creates its own logger inline (single file, different dir).
+- Added @oaknational/logger as devDependency in sdk-codegen package.json.
+- Updated zodgen e2e test + unit test + integration test to pass logger argument.
+- Ran `pnpm lint` — found 43 MORE errors in two other workspaces:
+  - oak-curriculum-mcp-stdio: 8 errors, 3 files
+  - search-cli: 35 errors, 11 files
+- Updated plan to cover full monorepo scope (Phase 3 added for remaining work).
+
+### Mistake: assumed work was confined to one workspace
+The plan was scoped to sdk-codegen only. The user correctly pointed out that
+no-console violations exist across the entire codebase. Always run `pnpm lint`
+(not workspace-scoped lint) to find ALL violations. Quality gate issues are
+blocking regardless of location.
+
+### Review findings and fixes
+- Mid-point code review: error objects must be preserved in catch blocks — fixed
+  all catch handlers to pass error as 2nd arg to logger.error().
+- Barney caught: zodgen-core.ts unit/integration tests still passed fakeIO as 3rd
+  arg after logger was inserted as 3rd param. Would have caused runtime type error
+  at test time. Fixed immediately.
+- Code reviewer: verify-docs.ts guard function was inconsistent with rest of
+  changeset (not passing err to logger.error). Fixed.
+- Cleaned up vocab-gen printHeader to not emit empty-string log lines (structured
+  logger generates full JSON envelope for each call).
+- Added error logging to run-typedoc.ts child.on('error') handler (was swallowed).
+
+### Patterns to remember
+- When inserting a required parameter before an existing optional parameter, ALL
+  callers must be updated — including test files that may not be in the target
+  directory. Always grep for the function name across the entire workspace.
+- Logger.error(message, error?, context?) — 2nd arg is for Error objects (stack
+  trace extraction), NOT for plain strings. Use context or inline in message for
+  string error details.
+- Empty-string log messages (`logger.info('')`) are wasteful with structured loggers
+  — each generates a full JSON envelope. Combine or remove.
+- **Always run monorepo-wide `pnpm lint`, not workspace-scoped, to find all
+  violations.** Quality gates are blocking regardless of workspace.
+
+## Session 2026-03-03d — Implementation plan for codegen logger replacement
+
+### What was done
+- Traced all console.* call chains in code-generation/ and vocab-gen/ to build
+  a detailed implementation plan for the codegen-logger-replacement plan.
+- Original inventory was ~35 calls across ~10 files; actual is 49 calls across
+  12 files. Five files were missed: zodgen-core.ts (3), bulkgen.ts (2),
+  generate-ai-doc.ts (1), run-typedoc.ts (2), generate-widget-constants.ts (1).
+- Updated plan with: exact inventory table, call chain map, logger decision per
+  file, 6 ordered implementation tasks (1.0–1.5) grouped by call chain, updated
+  risk assessment, expanded references.
+- Phase 0 marked complete (inventory verified, call chains traced, approach decided).
+- No existing logger instances anywhere in the chain — all 8 entry points need
+  new instances, 4 callees receive logger via DI.
+
+### Key decisions
+- Shared factory `createCodegenLogger(toolName)` in code-generation/ for the 7
+  code-generation entry points. Avoids repeating 5 import + 6 constructor lines
+  in each file.
+- vocab-gen creates its own logger inline (single file, not worth cross-directory
+  import).
+- @oaknational/logger goes in devDependencies (build-time scripts, not SDK output).
+- Logger interface: `Logger` from `@oaknational/logger`, with `info`, `error`,
+  `warn` methods. `UnifiedLogger` constructor needs `minSeverity`,
+  `resourceAttributes`, `context`, `stdoutSink`, `fileSink`.
+
+### Patterns to remember
+- Logger type is `import type { Logger } from '@oaknational/logger'` — use for
+  DI parameter typing in callees.
+- `parseLogLevel(env, 'INFO')` provides safe default when LOG_LEVEL unset.
+- No vi.spyOn(console) anywhere in sdk-codegen tests — only zodgen.e2e.test.ts
+  calls generateZodSchemas directly and needs signature update.
+- String-literal console references (in template strings, JSDoc @example) are NOT
+  flagged by ESLint no-console — only AST CallExpression nodes.
+
+## Session 2026-03-03c — Plan creation for no-console and ESLint overrides
+
+### What was done
+- Created `codegen-logger-replacement.plan.md` in `.agent/plans/developer-experience/`
+  from the Cursor plan `.cursor/plans/no-console_eslint_enforcement_d15f0835.plan.md`.
+  Covers replacing ~35 console calls in code-generation/ and vocab-gen/ with
+  @oaknational/logger instances.
+- Updated `eslint-override-removal.plan.md` to reflect current state:
+  - Added Session Update (2026-03-03) context
+  - Added Category A2 for vocab-gen file-specific structural overrides (3 rules, 6 files)
+  - Added Phase 0 (logger replacement) as prerequisite for Phases 1/1b
+  - Added Phase 1b for vocab-gen structural overrides
+  - Updated "Other workspaces" inventory with current streamable-http, search-cli,
+    logger, and root eslint config overrides
+  - Added search-cli ground-truths/generation structural overrides
+  - Added search-cli `testRules` type cast (eslint-disable comment) as an override
+  - Added section documenting legitimate no-console overrides (not targeted for removal)
+  - Cross-referenced the new codegen-logger-replacement plan
+  - Updated todos, success criteria, and dependencies
+
+### Patterns to remember
+- The developer-experience plan directory has no lifecycle subdirectories (active/,
+  current/, future/) — plans sit at the top level alongside archive/.
+- The eslint-override-removal plan is strategic (Phase 0–4) while the
+  codegen-logger-replacement plan is tactical (blocking quality gates now).
+
+## Session 2026-03-03b — no-console ESLint enforcement
+
+### What was done
+- Promoted `no-console` from `'warn'` to `'error'` in shared ESLint config
+  (`packages/core/oak-eslint/src/configs/recommended.ts` line 89).
+- Added scoped `no-console: 'off'` overrides in 7 eslint configs:
+  root, sdk-codegen (code-generation/, vocab-gen/, e2e-tests/),
+  HTTP app (scripts/, smoke-tests/), STDIO app (bin/, entry points, fallback files),
+  search CLI (scripts/, bin/, smoke-tests/, CLI output helpers, logger fallback),
+  logger (file-sink.ts).
+- Replaced console calls with logger in HTTP app `src/index.ts` (pre-logger
+  uses `process.stderr.write`, post-logger uses `bootstrapLog`).
+- Removed `console.warn` from SDK `request-validators.ts` — redundant with
+  returned `ValidationResult`.
+- Removed `logValidationFailure` from SDK `curriculum-response-validators.ts` —
+  SDK should not own logging (distilled.md). Validation failures carry trace info;
+  app layer is responsible for observability.
+- Removed debug `console.log` from 3 test files (handlers.integration.test.ts,
+  response-validation.integration.test.ts, aggregated-tool-widget.unit.test.ts).
+- All 60 quality gates pass.
+
+### Mistake: misclassifying codegen as non-product-code
+I added `no-console: 'off'` overrides for `code-generation/` and `vocab-gen/`
+in the sdk-codegen workspace, treating them as "build scripts". The user
+corrected this: these directories contain the code that **builds the SDK** —
+they are product code and should use a logger, not console overrides. The user
+removed the overrides. Remaining work: replace ~35 console calls in these
+directories with a build-time logger.
+
+### Patterns to remember
+- `console.error(...)` inside JS template literal strings (e.g.
+  `widget-cta/js-generator.ts`) is NOT flagged by ESLint's `no-console` —
+  only AST CallExpression nodes are detected.
+- JSDoc `@example` blocks containing `console.log` are NOT flagged either.
+- search-cli had 3 additional files needing overrides beyond the plan: `cli.ts`,
+  `ingest-cli-program.ts`, and `logger.ts` (fallback console in src/lib/).
+- Removing debug `console.log` from tests may leave unused variables (e.g.
+  `backticks` in widget test) — always check for orphaned declarations.
+- **Code that generates code is product code.** Do not classify codegen
+  directories as "build scripts" deserving blanket ESLint overrides. They
+  need the same quality standards as any other product code.
+
 ## Session 2026-03-03a — Milestone restructuring and repo public
 
 ### What was done
@@ -39,6 +421,16 @@
   do not always match the milestone name after renames (e.g.
   `m2-extension-surfaces.md` now contains "Open Public Alpha"). This is
   acceptable — the file is the canonical content, not the filename.
+- GitHub App ("Oak Release Bot") + `actions/create-github-app-token@v1`
+  is the pattern for semantic-release pushing to protected branches.
+  Secrets: `RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY`. The app is
+  added as a bypass actor in the `main` branch ruleset. Confirmed
+  working 2026-03-03.
+- `persist-credentials: false` on `actions/checkout` is essential when
+  using a custom token — otherwise git uses the default `GITHUB_TOKEN`
+  which cannot bypass branch protection.
+- Rate limiting for unauthenticated OAuth proxy endpoints will be done
+  in Cloudflare (traffic control layer), not in application code.
 
 ## Session 2026-03-02m — Consolidate and archive release artefacts
 
@@ -257,3 +649,55 @@ codegen architecture plans.
 Same as session 2026-03-02g. CONTRIBUTING.md (401/400) and
 practice-lineage.md (321/320) remain 1 over ceiling. distilled.md at
 176/200.
+
+## Session 2026-03-03b — Codegen logger replacement Phase 3
+
+### Mistake: wrote unit tests with vi.mock and incomplete Logger mock
+Created `file-reporter.unit.test.ts` using `vi.mock('node:fs')` — directly
+violates ADR-078. Also created `startup.unit.test.ts` with a `loggerMock`
+that only had `info`/`error` — `Logger` interface requires 6 methods.
+Both files were also misnamed as `.unit.test.ts` when they test IO
+integration points.
+
+**Lesson**: Before writing ANY test, check:
+1. Is the function under test pure? If no → integration test, not unit.
+2. Does the test need `vi.mock`? If yes → refactor product code for DI.
+3. Does the mock satisfy the FULL interface? Use `satisfies Type` to verify.
+
+### Pattern: createLoggerMock with satisfies
+```typescript
+function createLoggerMock() {
+  return {
+    trace: vi.fn(), debug: vi.fn(), info: vi.fn(),
+    warn: vi.fn(), error: vi.fn(), fatal: vi.fn(),
+  } satisfies Logger;
+}
+```
+This catches missing methods at compile time.
+
+### Pattern: DI for IO functions
+`appendToLogFile` needed `AppendToLogFileDeps` interface with
+production defaults — same pattern as `StartupLoggerDependencies`.
+Default param keeps production callers clean, tests inject fakes.
+
+### Error chain preservation
+- `logger.error(msg, error)` — pass `error` directly, even for unknown.
+  Logger.error accepts `unknown` as 2nd param. Don't filter with
+  `error instanceof Error ? error : undefined` — that discards info.
+- `new Error(String(error))` — always add `{ cause: error }` to preserve
+  the original thrown value in the cause chain.
+
+### Don't double-timestamp structured logger messages
+When writing to both a structured logger AND a plain-text file, keep
+them separate: pass raw `message` to logger (it adds its own timestamp),
+pass manually-timestamped `fileLogLine` to file write only.
+
+### Pre-config errors go to stderr, not logger
+Before RuntimeConfig is validated, no logger is available (or the logger
+may route to stdout). Always use `process.stderr.write` for pre-config
+failures — consistent across oaksearch.ts, cli.ts, ingest.ts.
+
+### Phase 3.2 approach: process.stdout.write for CLI output
+For CLI user-facing output functions, using `process.stdout.write` /
+`process.stderr.write` is cleaner than wrapping in a structured logger.
+Preserves exact behavior, no JSON/timestamp added to terminal output.

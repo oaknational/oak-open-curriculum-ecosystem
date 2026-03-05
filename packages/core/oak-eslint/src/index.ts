@@ -89,16 +89,24 @@ export const ignores = [
 
 /**
  * Common rules for test files.
- * Loosens some strictness for testing contexts (e.g., assertions, magic numbers).
- * Uses `as const satisfies` to preserve tuple types for rule configs.
+ *
+ * Structural limits (max-lines, max-lines-per-function) are relaxed for
+ * test files because describe blocks legitimately grow.
+ *
+ * Type-safety and global-state rules are set to 'warn' pending promotion
+ * to 'error'. See e2e-vi-mock-clerk-removal.plan.md for the phased
+ * promotion schedule.
+ *
+ * @see ADR-078 for the dependency injection rationale behind the vi.mock ban
+ * @see rules.md "No type shortcuts" — applies to test code equally
  */
 export const testRules = {
   'max-lines': ['error', 700],
   'max-lines-per-function': ['error', 1000],
   '@typescript-eslint/consistent-type-assertions': [
-    'off',
+    'warn',
     {
-      assertionStyle: 'as',
+      assertionStyle: 'never',
     },
   ],
   '@typescript-eslint/consistent-indexed-object-style': 'off',

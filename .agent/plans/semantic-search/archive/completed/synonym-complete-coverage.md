@@ -109,7 +109,7 @@ The following has already been done:
 ### Prerequisites
 
 ```bash
-cd /Users/jim/code/oak/oak-mcp-ecosystem
+cd ./
 ```
 
 ### File Template
@@ -761,7 +761,7 @@ Add entry points for new synonym files:
 ### 4.1 Build and Push
 
 ```bash
-cd /Users/jim/code/oak/oak-mcp-ecosystem
+cd ./
 pnpm -C packages/sdks/oak-curriculum-sdk build
 pnpm -C apps/oak-search-cli es:setup
 ```

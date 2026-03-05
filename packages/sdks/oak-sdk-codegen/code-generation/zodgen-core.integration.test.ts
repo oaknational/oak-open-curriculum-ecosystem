@@ -4,6 +4,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 import { generateZodSchemas, type ZodgenIO } from './zodgen-core.js';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('zodgen-integration-test');
 
 let lastWrittenPath: string | undefined;
 let lastWrittenContent: string | undefined;
@@ -106,7 +109,7 @@ describe('generateZodSchemas (integration)', () => {
     const schema = createSchemaWithMultipleStatuses();
     const outDir = '/tmp/test-zod-gen';
 
-    await generateZodSchemas(schema, outDir, fakeIO);
+    await generateZodSchemas(schema, outDir, logger, fakeIO);
 
     expect(fakeIO.generateZodSchemasFromOpenAPI).toHaveBeenCalled();
     expect(fakeIO.mkdirSync).toHaveBeenCalledWith(outDir, { recursive: true });

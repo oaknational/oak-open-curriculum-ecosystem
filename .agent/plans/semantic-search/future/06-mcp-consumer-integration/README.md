@@ -27,7 +27,7 @@ correct results across all indexes.
 | Plan | Description | Status |
 |------|-------------|--------|
 | [phase-3a-mcp-search-integration.md](../../archive/completed/phase-3a-mcp-search-integration.md) | MCP search tools delivered and archived | ✅ Complete |
-| [mcp-result-pattern-unification.md](mcp-result-pattern-unification.md) | Migrate MCP tool execution to `Result<T, E>` pattern | 📋 Next-up (post-merge) |
+| [mcp-result-pattern-unification.md](mcp-result-pattern-unification.md) | Strategic source for Result-pattern convergence | ✅ Promoted to active execution plan |
 
 ---
 
@@ -52,4 +52,4 @@ correct results across all indexes.
 - [x] NL guidance, documentation, TSDoc (WS3)
 - [x] Integration tests for search-retrieval-factory and browse formatting (WS4 follow-up)
 - [x] Compare SDK search vs REST API search; replacement complete (archived in Phase 3a)
-- [ ] Result pattern unification — `ToolExecutionResult` → `Result<T, E>` (post-merge)
+- [ ] Result pattern unification closure tracked in `../../active/mcp-result-pattern-unification.execution.plan.md`

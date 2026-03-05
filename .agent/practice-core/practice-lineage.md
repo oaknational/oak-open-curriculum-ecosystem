@@ -17,7 +17,7 @@ provenance:
     date: 2026-02-28
     purpose: "Ecosystem-agnostic hydration: labelled ecosystem-specific content, added cold-start path, aligned consolidation with concurrent documentation principle"
 fitness_ceiling: 320
-attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many people and agents in many repos"
 ---
 
 # Practice Lineage

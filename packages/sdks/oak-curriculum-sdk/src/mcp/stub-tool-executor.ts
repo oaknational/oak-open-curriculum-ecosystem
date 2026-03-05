@@ -10,6 +10,7 @@ import {
 } from '@oaknational/sdk-codegen/mcp-tools';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { McpParameterError, McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
+import { err, ok } from '@oaknational/result';
 
 function extractFirstText(result: CallToolResult): TextContent | undefined {
   if (result.content.length === 0) {
@@ -55,31 +56,31 @@ export function createStubToolExecutionAdapter(): (
     const descriptor = getToolFromToolName(name);
     const validation = descriptor.toolMcpFlatInputSchema.safeParse(args ?? {});
     if (!validation.success) {
-      return {
-        error: new McpParameterError(descriptor.describeToolArgs(), name, undefined, undefined, {
+      return err(
+        new McpParameterError(descriptor.describeToolArgs(), name, undefined, undefined, {
           code: 'PARAMETER_ERROR',
         }),
-      };
+      );
     }
 
     const result = await executeStubTool(name);
     if (result.isError) {
-      return {
-        error: new McpToolError(deriveErrorMessage(result), name, {
+      return err(
+        new McpToolError(deriveErrorMessage(result), name, {
           code: 'STUB_EXECUTION_ERROR',
         }),
-      };
+      );
     }
     const rawData = decodeStubPayload(result, name);
     const outputValidation = descriptor.validateOutput(rawData);
     if (!outputValidation.ok) {
-      return {
-        error: new McpToolError('Execution failed: ' + outputValidation.message, name, {
+      return err(
+        new McpToolError('Execution failed: ' + outputValidation.message, name, {
           code: 'OUTPUT_VALIDATION_ERROR',
         }),
-      };
+      );
     }
-    return { status: outputValidation.status, data: outputValidation.data };
+    return ok({ status: outputValidation.status, data: outputValidation.data });
   };
 }
 

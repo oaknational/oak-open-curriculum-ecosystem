@@ -52,6 +52,12 @@ const config = defineConfig(
     rules: createLibBoundaryRules('logger', getOtherLibs('logger')),
   },
   {
+    files: ['src/file-sink.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
     rules: {
       ...testRules,

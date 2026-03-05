@@ -31,7 +31,7 @@ describe('resolveToolExecutors', () => {
 
     expect(result).toBeDefined();
     if (result) {
-      expect('status' in result || 'error' in result).toBe(true);
+      expect('ok' in result).toBe(true);
     }
   });
 });

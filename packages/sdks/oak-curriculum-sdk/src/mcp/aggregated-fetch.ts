@@ -1,12 +1,9 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import {
-  formatError,
-  formatToolResponse,
-  toErrorMessage,
-  extractExecutionData,
-} from './universal-tool-shared.js';
+import { formatError, formatToolResponse, toErrorMessage } from './universal-tool-shared.js';
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
+import { McpParameterError, type ToolExecutionResult } from './execute-tool-call.js';
+import { err } from '@oaknational/result';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import {
   generateCanonicalUrlWithContext,
@@ -142,7 +139,7 @@ export async function runFetchTool(
   // Extract context from the API response and pass to canonical URL generation.
   // Units and subjects require context (subjectSlug/phaseSlug for units,
   // keyStages for subjects) to generate the correct canonical URL.
-  const context = extractContextFromResponse(result.data);
+  const context = extractContextFromResponse(result.value.data);
   let canonicalUrl: string | null;
   try {
     canonicalUrl = generateCanonicalUrlWithContext(type, args.id, context);
@@ -157,8 +154,8 @@ export async function runFetchTool(
       id: args.id,
       type,
       canonicalUrl,
-      httpStatus: result.status,
-      data: result.data,
+      httpStatus: result.value.status,
+      data: result.value.data,
     },
     status: 'success',
     timestamp: Date.now(),
@@ -199,44 +196,33 @@ async function executeFetchByType(
   type: ContentType,
   slug: string,
   deps: UniversalToolExecutorDependencies,
-): Promise<{ ok: true; status: number | string; data: unknown } | { ok: false; error: unknown }> {
+): Promise<ToolExecutionResult> {
   switch (type) {
     case 'lesson': {
-      return extractExecutionData(
-        await deps.executeMcpTool('get-lessons-summary', {
-          lesson: slug,
-        }),
-      );
+      return deps.executeMcpTool('get-lessons-summary', {
+        lesson: slug,
+      });
     }
     case 'unit': {
-      return extractExecutionData(
-        await deps.executeMcpTool('get-units-summary', {
-          unit: slug,
-        }),
-      );
+      return deps.executeMcpTool('get-units-summary', {
+        unit: slug,
+      });
     }
     case 'subject': {
-      return extractExecutionData(
-        await deps.executeMcpTool('get-subject-detail', {
-          subject: slug,
-        }),
-      );
+      return deps.executeMcpTool('get-subject-detail', {
+        subject: slug,
+      });
     }
     case 'sequence': {
-      return extractExecutionData(
-        await deps.executeMcpTool('get-sequences-units', {
-          sequence: slug,
-        }),
-      );
+      return deps.executeMcpTool('get-sequences-units', {
+        sequence: slug,
+      });
     }
     case 'thread': {
-      return extractExecutionData(
-        await deps.executeMcpTool('get-threads-units', {
-          thread: slug,
-        }),
-      );
+      return deps.executeMcpTool('get-threads-units', {
+        thread: slug,
+      });
     }
-    default:
-      return { ok: false, error: new TypeError(`Unsupported content type: ${String(type)}`) };
   }
+  return err(new McpParameterError('fetch', `Unsupported content type: ${String(type)}`));
 }

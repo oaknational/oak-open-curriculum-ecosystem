@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
 **Status**: ✅ Phase 0 complete; Phase 1 ready to start
-**Last Updated**: 2026-02-26
+**Last Updated**: 2026-03-04
 **Session Entry**: [start-right.prompt.md](../../prompts/start-right.prompt.md)
 
 ---
@@ -21,7 +21,7 @@ Authoritative active execution sources:
 2. [phase-1-hallucination-guarding-execution.md](active/phase-1-hallucination-guarding-execution.md)
 3. [phase-2-evidence-based-claims-execution.md](active/phase-2-evidence-based-claims-execution.md)
 4. [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
-5. [phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)
+5. ~~[phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)~~ **Superseded** by Agent Artefact Portability plan (ADR-125)
 6. [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
 
 ---
@@ -74,7 +74,7 @@ Phase 0: Planning system and template hardening      ✅ COMPLETE
 Phase 1: Hallucination guarding rollout              📋 PLANNED
 Phase 2: Evidence-based claims rollout               📋 PLANNED
 Phase 3: Architectural enforcement execution         📋 PLANNED
-Phase 4: Cross-agent standardisation execution       📋 PLANNED
+Phase 4: Cross-agent standardisation execution       ⛔ SUPERSEDED (ADR-125)
 Phase 5: Mutation testing execution                  📋 PLANNED
 ```
 
@@ -125,6 +125,11 @@ Phase 5: Mutation testing execution                  📋 PLANNED
   [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
 - Source strategy:
   [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md)
+- Convergence update (2026-03-04):
+  - ESLint convergence tasks (`no-console`, boundary/separation lint alignment, split-guidance updates) are executed in
+    [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
+  - `max-files-per-dir` rollout is explicitly deferred in the current window
+  - depcruise/knip/qg integration remains owned by this phase
 - Done when:
   - enforcement phases 0-5 are delivered with deterministic validation
   - evidence-backed claims exist for enforcement outcomes
@@ -135,15 +140,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 ### Phase 4 — Cross-Agent Standardisation Execution
 
-- Active plan:
-  [phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)
-- Source strategy:
-  [cross-agent-standardisation.plan.md](cross-agent-standardisation.plan.md)
-- Done when:
-  - committed tasks complete
-  - conditional tasks have explicit trigger monitors and follow-up mechanism
-  - documentation sync log records updates/no-change rationale for Phase 4
-- Dependencies: Phase 0 complete
+> **SUPERSEDED**: All cross-agent standardisation work has been absorbed into the [Agent Artefact Portability plan](../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ### Phase 5 — Mutation Testing Execution
 

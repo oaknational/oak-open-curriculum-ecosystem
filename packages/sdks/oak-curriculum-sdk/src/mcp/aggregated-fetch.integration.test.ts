@@ -19,6 +19,7 @@ import type { UniversalToolExecutorDependencies } from './universal-tool-shared.
 import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
 import { createStubSearchRetrieval } from './search-retrieval-stub.js';
 import { createNullGeneratedToolRegistry } from './test-helpers/null-generated-tool-registry.js';
+import { err, ok } from '@oaknational/result';
 
 /**
  * Creates a mock executeMcpTool that returns predefined result for any tool.
@@ -35,7 +36,7 @@ function createMockExecutor(result: ToolExecutionResult): UniversalToolExecutorD
 describe('runFetchTool result structure per OpenAI Apps SDK', () => {
   describe('structuredContent (model sees this for reasoning)', () => {
     it('includes httpStatus (HTTP code) and status (success indicator) as distinct properties', async () => {
-      const deps = createMockExecutor({ status: 200, data: { lessonTitle: 'Test Lesson' } });
+      const deps = createMockExecutor(ok({ status: 200, data: { lessonTitle: 'Test Lesson' } }));
 
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
@@ -50,7 +51,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
         learningObjectives: ['Understand light reactions', 'Understand dark reactions'],
         keywords: ['chlorophyll', 'ATP', 'glucose'],
       };
-      const deps = createMockExecutor({ status: 200, data: lessonData });
+      const deps = createMockExecutor(ok({ status: 200, data: lessonData }));
 
       const result = await runFetchTool({ id: 'lesson:photosynthesis-basics' }, deps);
 
@@ -59,7 +60,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('includes id and type in structuredContent', async () => {
-      const deps = createMockExecutor({ status: 200, data: { unitTitle: 'Fractions' } });
+      const deps = createMockExecutor(ok({ status: 200, data: { unitTitle: 'Fractions' } }));
 
       const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
@@ -69,7 +70,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('includes canonicalUrl in structuredContent', async () => {
-      const deps = createMockExecutor({ status: 200, data: { lessonTitle: 'Test' } });
+      const deps = createMockExecutor(ok({ status: 200, data: { lessonTitle: 'Test' } }));
 
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
@@ -78,7 +79,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('includes oakContextHint for model context grounding', async () => {
-      const deps = createMockExecutor({ status: 200, data: {} });
+      const deps = createMockExecutor(ok({ status: 200, data: {} }));
 
       const result = await runFetchTool({ id: 'lesson:test' }, deps);
 
@@ -89,7 +90,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
   describe('content (human-readable summary for conversation)', () => {
     it('returns human-readable summary text', async () => {
-      const deps = createMockExecutor({ status: 200, data: { lessonTitle: 'Test' } });
+      const deps = createMockExecutor(ok({ status: 200, data: { lessonTitle: 'Test' } }));
 
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
@@ -105,7 +106,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
   describe('_meta (widget-only metadata)', () => {
     it('includes toolName in _meta', async () => {
-      const deps = createMockExecutor({ status: 200, data: {} });
+      const deps = createMockExecutor(ok({ status: 200, data: {} }));
 
       const result = await runFetchTool({ id: 'lesson:test' }, deps);
 
@@ -114,7 +115,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('includes timestamp in _meta', async () => {
-      const deps = createMockExecutor({ status: 200, data: {} });
+      const deps = createMockExecutor(ok({ status: 200, data: {} }));
 
       const beforeTime = Date.now();
       const result = await runFetchTool({ id: 'lesson:test' }, deps);
@@ -132,19 +133,21 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
   describe('canonicalUrl for context-dependent types', () => {
     it('includes non-null canonicalUrl for subject fetch', async () => {
-      const deps = createMockExecutor({
-        status: 200,
-        data: {
-          subjectTitle: 'Maths',
-          subjectSlug: 'maths',
-          keyStages: [
-            { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
-            { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
-          ],
-          sequenceSlugs: [],
-          years: [],
-        },
-      });
+      const deps = createMockExecutor(
+        ok({
+          status: 200,
+          data: {
+            subjectTitle: 'Maths',
+            subjectSlug: 'maths',
+            keyStages: [
+              { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+              { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+            ],
+            sequenceSlugs: [],
+            years: [],
+          },
+        }),
+      );
 
       const result = await runFetchTool({ id: 'subject:maths' }, deps);
 
@@ -156,15 +159,17 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('includes non-null canonicalUrl for unit fetch', async () => {
-      const deps = createMockExecutor({
-        status: 200,
-        data: {
-          unitTitle: 'Fractions',
-          unitSlug: 'fractions',
-          subjectSlug: 'maths',
-          phaseSlug: 'primary',
-        },
-      });
+      const deps = createMockExecutor(
+        ok({
+          status: 200,
+          data: {
+            unitTitle: 'Fractions',
+            unitSlug: 'fractions',
+            subjectSlug: 'maths',
+            phaseSlug: 'primary',
+          },
+        }),
+      );
 
       const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
@@ -176,13 +181,15 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
 
     it('returns null canonicalUrl gracefully when context is insufficient', async () => {
-      const deps = createMockExecutor({
-        status: 200,
-        data: {
-          subjectTitle: 'Maths',
-          subjectSlug: 'maths',
-        },
-      });
+      const deps = createMockExecutor(
+        ok({
+          status: 200,
+          data: {
+            subjectTitle: 'Maths',
+            subjectSlug: 'maths',
+          },
+        }),
+      );
 
       const result = await runFetchTool({ id: 'subject:maths' }, deps);
 
@@ -199,7 +206,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
         executeMcpTool: (toolName, args) => {
           capturedToolName = toolName;
           capturedArgs = args;
-          return Promise.resolve({ status: 200, data: { threadTitle: 'Algebra' } });
+          return Promise.resolve(ok({ status: 200, data: { threadTitle: 'Algebra' } }));
         },
         searchRetrieval: createStubSearchRetrieval(),
         generatedTools: createNullGeneratedToolRegistry(),
@@ -215,7 +222,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
   describe('error handling', () => {
     it('returns error for unsupported id prefix', async () => {
-      const deps = createMockExecutor({ status: 200, data: {} });
+      const deps = createMockExecutor(ok({ status: 200, data: {} }));
 
       const result = await runFetchTool({ id: 'invalid:test' }, deps);
 
@@ -225,7 +232,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     it('returns error when executor fails', async () => {
       const deps: UniversalToolExecutorDependencies = {
         executeMcpTool: () =>
-          Promise.resolve({ error: new McpToolError('API failure', 'get-lessons-summary') }),
+          Promise.resolve(err(new McpToolError('API failure', 'get-lessons-summary'))),
         searchRetrieval: createStubSearchRetrieval(),
         generatedTools: createNullGeneratedToolRegistry(),
       };

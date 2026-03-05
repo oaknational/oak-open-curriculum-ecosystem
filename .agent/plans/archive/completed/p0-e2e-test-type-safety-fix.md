@@ -382,7 +382,7 @@ pnpm test src/index.unit.test.ts
 #### Step 3.3: Run Full Quality Gates
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 pnpm type-gen
 pnpm build
 pnpm type-check

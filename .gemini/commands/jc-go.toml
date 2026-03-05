@@ -1,0 +1,2 @@
+description = "Read GO.md and follow execution instructions"
+prompt = "Read and follow the instructions in .agent/commands/go.md"

@@ -112,5 +112,6 @@ experience file is not the home for technical reference.
 - 2026‑02‑28: knowledge consolidation — see: [closing-the-loop](./2026-02-28-closing-the-loop.md) — extraction to permanent docs; the gap between accumulation and extraction; three audiences (session, agent, everyone)
 
 - 2026‑03‑02: portability — see: [the-travelling-practice](./2026-03-02-the-travelling-practice.md) — self-containment as portability; documentation adapter pattern; five-file seed with local root system
+- 2026‑03‑04: planning — see: [learning-from-the-neighbours](./2026-03-04-learning-from-the-neighbours.md) — comparing external and internal planning systems; structural vs operational completeness; blocked protocol as universal pattern
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

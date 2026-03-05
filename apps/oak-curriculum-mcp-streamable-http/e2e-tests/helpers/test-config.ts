@@ -1,8 +1,42 @@
+import type { RequestHandler } from 'express';
 import type {
   AuthDisabledRuntimeConfig,
   AuthEnabledRuntimeConfig,
   RuntimeConfig,
 } from '../../src/runtime-config.js';
+
+/**
+ * Creates a no-op Clerk middleware factory for E2E tests.
+ *
+ * Replaces the real `clerkMiddleware` from `@clerk/express` via dependency
+ * injection ({@link CreateAppOptions.clerkMiddlewareFactory}), avoiding
+ * `vi.mock` and the ADR-078 violation it entails.
+ *
+ * The returned middleware sets `req.auth` as a callable function matching
+ * Clerk's runtime contract: `getAuth(req)` checks `"auth" in req` then
+ * calls `req.auth(options)`. Setting `isAuthenticated: false` ensures
+ * auth-enforcement middleware correctly rejects unauthenticated requests.
+ *
+ * @see ADR-078 for the dependency injection rationale
+ */
+export function createNoOpClerkMiddleware(): () => RequestHandler {
+  return () => (req, res, next) => {
+    void res;
+    req.auth = () => ({
+      id: null,
+      subject: null,
+      scopes: null,
+      userId: null,
+      clientId: null,
+      getToken: async () => null,
+      has: () => false,
+      debug: () => ({}),
+      tokenType: 'oauth_token',
+      isAuthenticated: false,
+    });
+    next();
+  };
+}
 
 /**
  * Creates a mock RuntimeConfig for E2E tests.

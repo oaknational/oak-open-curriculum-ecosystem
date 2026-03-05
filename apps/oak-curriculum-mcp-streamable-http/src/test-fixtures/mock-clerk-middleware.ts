@@ -49,8 +49,7 @@ export function createMockClerkMiddleware(
     const token = authHeader.replace(/^Bearer\s+/i, '');
     if (validTokens.includes(token)) {
       // Simulate authenticated state with Clerk's auth object structure
-      const reqWithAuth = req;
-      reqWithAuth.auth = {
+      req.auth = () => ({
         userId: 'test-user-123',
         clientId: 'test-client-456',
         getToken: () => Promise.resolve(token),
@@ -59,9 +58,9 @@ export function createMockClerkMiddleware(
         scopes: [],
         has: () => false,
         debug: () => ({}),
-        tokenType: 'oauth_token' as const,
+        tokenType: 'oauth_token',
         isAuthenticated: true,
-      };
+      });
     }
 
     next();
@@ -76,13 +75,13 @@ export function createMockClerkMiddleware(
  */
 export function createMockMcpAuthClerk(): RequestHandler {
   return (req, res, next) => {
-    // Check if req.auth is present (Clerk's auth object)
-    const reqWithAuth = req;
-    const auth = reqWithAuth.auth;
-
-    // Check if auth is present with userId (Clerk's auth object)
-
-    if (!auth?.userId) {
+    const resolvedAuth = req.auth?.();
+    if (
+      !resolvedAuth ||
+      !('userId' in resolvedAuth) ||
+      typeof resolvedAuth.userId !== 'string' ||
+      resolvedAuth.userId.length === 0
+    ) {
       res.setHeader(
         'WWW-Authenticate',
         'Bearer resource_metadata="/.well-known/oauth-protected-resource"',

@@ -29,10 +29,11 @@ We achieve this by ensuring that ALL static data structures, types, type guards,
 - **Consistent Naming** - Use consistent naming conventions for files, modules, functions, data structures, classes, constants, type information and CONCEPTS. For instance, if we use `keyStage` then that is the label, not `keyStageSlug` or `keyStageId`. If you need to add nuance, use TSDoc to provide context, links, and examples.
 - **Build up through scales** - Functions → Modules → Packages (`core`, `libs`, `apps`)
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
-- **Fail FAST** - Fail fast with helpful error messages, never silently. NEVER IGNORE ERRORS.
+- **Fail FAST** - Fail fast with helpful error messages, never silently. NEVER IGNORE ERRORS. Detect problems early (validate at entry points, not deep in the call stack), fail immediately (don't continue with invalid state), be specific (error messages must explain what went wrong and why), and guide resolution (where possible, indicate how to fix the problem). Anti-patterns: swallowing exceptions with empty catch blocks, logging errors but continuing execution, returning `null` or `undefined` to indicate failure, generic error messages ("An error occurred").
 - **Handle All Cases Explicitly** - Don't throw, use the result pattern `Result<T, E>`, handle all cases explicitly.
 - **Document Everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have exhaustive, comprehensive TSDoc annotations that can be compiled by `typedoc`. All public API surfaces MUST be documented with examples and usage patterns. All major engineering or architectural decisions MUST be documented with ADRs. All use cases, public APIs, CLIs, troubleshooting and other concerns must be covered in authored markdown documentation in the appropriate directories, default to the README.md for the current workspace. Observe progressive disclosure, starting with the most general information and working towards the most specific. DO NOT create summary documents of each piece of work.
 - **Onboarding** - We must have a clear onboarding path for new developers and AI agents, from the root README.md, to detailed documentation in the appropriate directories, to specialised documentation in the docs/ directory, to TSDoc annotations and ADRs. Observe progressive disclosure, starting with the most general information and working towards the most specific.
+- **No absolute paths** - The repo is used on many machines. ALL filesystem paths in the repo (documentation, plans, config, frontmatter, comments, example commands) MUST be relative: either relative to the repo root or relative to the file containing the path. NO absolute paths (e.g. `/Users/...`, `C:\...`). Absolute paths expose usernames and local directory structure and do not resolve for other contributors or in CI.
 
 ### Refactoring
 
@@ -64,7 +65,7 @@ Use the right tool for the job:
 - **NEVER disable checks** - Never disable any quality gates, never disable type checks, never disable any linting, never disable any formatting, never disable any tests, never disable Git hooks (`--no-verify`)
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript. ALWAYS fix the root cause, never work around it.
 - **Fix things** - All quality gates are blocking at all times, regardless of location, cause, or context.
-- **Never prefix variables with an underscore** - This is a hack, AND IT DOES NOT WORK. Either use the variable, or delete it.
+- **Never prefix variables with an underscore** - This is a hack, AND IT DOES NOT WORK. Figure out why the variable is unused and fix the root cause. Either use the variable, or delete it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
 
@@ -96,10 +97,11 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 
 **Environment variables MUST be read once at the entry point**, then passed as configuration through the call stack. Product code MUST NOT read `process.env` directly—it must accept configuration as parameters.
 
-**Prohibited in unit/integration tests**:
+**Prohibited in ALL tests (unit, integration, AND E2E)**:
 
 - `process.env.X = 'value'` - mutates global state, causes race conditions
 - `vi.stubGlobal('fetch', ...)` - mutates global objects
+- `vi.mock('module', ...)` - manipulates module cache at the module level, leaks between test files
 - `vi.doMock('module', ...)` - manipulates module cache, subtle race conditions
 
 **Required pattern**: Pass configuration as explicit function parameters. Simple fakes injected as constructor arguments, not complex mocks.

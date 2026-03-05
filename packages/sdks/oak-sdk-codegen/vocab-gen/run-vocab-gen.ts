@@ -21,6 +21,22 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { createPipelineConfig, formatPipelineResult, runPipeline } from './vocab-gen.js';
+import {
+  logLevelToSeverityNumber,
+  parseLogLevel,
+  buildResourceAttributes,
+} from '@oaknational/logger';
+import { UnifiedLogger, createNodeStdoutSink } from '@oaknational/logger/node';
+import type { Logger } from '@oaknational/logger';
+
+const level = parseLogLevel(process.env['LOG_LEVEL'], 'INFO');
+const logger: Logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes({}, 'sdk-codegen', '0.0.0'),
+  context: { tool: 'vocab-gen' },
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
 
 /**
  * Get the directory name in ES modules context.
@@ -79,24 +95,14 @@ function parseArgs(args: readonly string[]): CliArgs {
  * Prints the header banner.
  */
 function printHeader(args: CliArgs): void {
-  console.log('═══════════════════════════════════════════════════════════════');
-  console.log(' Oak Vocabulary Mining Pipeline');
-  console.log('═══════════════════════════════════════════════════════════════');
-  console.log('');
-  if (args.dryRun) {
-    console.log('Mode: DRY RUN (no files will be written)');
-    console.log('');
-  }
+  logger.info('Oak Vocabulary Mining Pipeline', { dryRun: args.dryRun });
 }
 
 /**
  * Prints verbose configuration info.
  */
 function printVerboseConfig(bulkDataPath: string, outputPath: string): void {
-  console.log('Configuration:');
-  console.log(`  Bulk data: ${bulkDataPath}`);
-  console.log(`  Output:    ${outputPath}`);
-  console.log('');
+  logger.info('Configuration:', { bulkDataPath, outputPath });
 }
 
 /**
@@ -117,20 +123,21 @@ async function main(): Promise<void> {
     printVerboseConfig(config.bulkDataPath, config.outputPath);
   }
 
-  console.log('Processing bulk download files...\n');
+  logger.info('Processing bulk download files...');
 
   const result = await runPipeline(config);
-  console.log(formatPipelineResult(result));
+  logger.info(formatPipelineResult(result));
 
   if (!result.success) {
-    console.error('Pipeline failed:', result.error);
+    logger.error(`Pipeline failed: ${result.error ?? 'unknown'}`);
     process.exit(1);
   }
 
-  console.log('\nPipeline completed successfully.');
+  logger.info('Pipeline completed successfully.');
 }
 
 main().catch((err: unknown) => {
-  console.error('Fatal error:', err);
+  const message = err instanceof Error ? err.message : String(err);
+  logger.error(`Fatal error: ${message}`, err);
   process.exit(1);
 });

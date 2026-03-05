@@ -16,6 +16,9 @@ import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
 import { ZodError } from 'zod';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('ai-doc');
 
 /** Type for Zod validation issues (derived from ZodError to avoid deprecated ZodIssue import) */
 type ZodIssueType = ZodError['issues'][number];
@@ -346,6 +349,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((err: unknown) => {
-  console.error(err instanceof Error ? err.message : String(err));
+  const message = err instanceof Error ? err.message : String(err);
+  logger.error(message, err);
   process.exitCode = 1;
 });

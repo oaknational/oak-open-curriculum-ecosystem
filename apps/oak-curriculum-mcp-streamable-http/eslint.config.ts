@@ -107,6 +107,12 @@ const config = defineConfig(
       },
     },
     {
+      files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
+      rules: {
+        'no-console': 'off',
+      },
+    },
+    {
       files: [
         '**/*.config.ts',
         'eslint.config.ts',

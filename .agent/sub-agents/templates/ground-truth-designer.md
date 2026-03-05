@@ -17,7 +17,7 @@ Before designing or reviewing ground truths, you MUST also read and internalise 
 |----------|---------|
 | `.agent/directives/semantic-search-architecture.md` | Semantic-search structure and design constraints |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails for scope and complexity |
-| `.cursor/skills/ground-truth-design/SKILL.md` | Ground-truth workflow and query-design methodology |
+| `.agent/skills/ground-truth-design/SKILL.md` | Ground-truth workflow and query-design methodology |
 | `apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` | Ground-truth data model, scoring, and execution details |
 
 ## Core Philosophy
@@ -244,7 +244,7 @@ A successful ground truth design or review:
 
 ## Reference Documents
 
-- `.cursor/skills/ground-truth-design/SKILL.md` - Full methodology
+- `.agent/skills/ground-truth-design/SKILL.md` - Full methodology
 - `apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` - Complete guide
 - `.agent/plans/semantic-search/archive/completed/ground-truth-redesign-plan.md` - Archived redesign plan (completed reference)
 

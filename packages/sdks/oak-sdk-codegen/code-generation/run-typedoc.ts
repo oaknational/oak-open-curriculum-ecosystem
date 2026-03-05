@@ -1,4 +1,7 @@
 import { spawn } from 'node:child_process';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('typedoc');
 
 // Allowed warning symbol fragments we plan to address long-term.
 // See: .agent/plans/generated-document-enhancements-plan.md
@@ -57,7 +60,7 @@ async function run(): Promise<number> {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
       if (line) {
-        console.log(line);
+        logger.info(line);
       }
     }
   });
@@ -66,7 +69,7 @@ async function run(): Promise<number> {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
       if (line) {
-        console.error(line);
+        logger.error(line);
       }
     }
   });
@@ -75,7 +78,8 @@ async function run(): Promise<number> {
     child.on('close', (code: number | null) => {
       resolve(code ?? 0);
     });
-    child.on('error', () => {
+    child.on('error', (err: Error) => {
+      logger.error('typedoc spawn failed', err);
       resolve(1);
     });
   });

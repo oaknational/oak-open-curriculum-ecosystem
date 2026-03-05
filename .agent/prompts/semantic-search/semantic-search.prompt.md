@@ -61,7 +61,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 Run this checklist at the start of the next session:
 
 1. Re-ground via:
-   - [start-right-thorough.prompt.md](../start-right-thorough.prompt.md)
+   - [start-right-thorough.md](../../skills/start-right-thorough/shared/start-right-thorough.md)
    - [AGENT.md](../../directives/AGENT.md)
    - [rules.md](../../directives/rules.md)
    - [testing-strategy.md](../../directives/testing-strategy.md)

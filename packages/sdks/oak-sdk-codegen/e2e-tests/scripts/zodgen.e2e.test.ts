@@ -5,6 +5,9 @@ import { execSync } from 'child_process';
 
 import { generateZodSchemas } from '../../code-generation/zodgen-core';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import { createCodegenLogger } from '../../code-generation/create-codegen-logger';
+
+const logger = createCodegenLogger('zodgen-test');
 
 // Minimal OpenAPI v3 doc with a single component schema to keep the test light
 const minimalOpenApi: OpenAPIObject = {
@@ -37,13 +40,13 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates a schemas.ts file', async () => {
-    await generateZodSchemas(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir, logger);
 
     expect(existsSync(outFile)).toBe(true);
   });
 
   it('generates valid TypeScript that imports zod', async () => {
-    await generateZodSchemas(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir, logger);
 
     const content = readFileSync(outFile, 'utf-8');
 
@@ -76,7 +79,7 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates schemas for components', async () => {
-    await generateZodSchemas(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir, logger);
 
     const content = readFileSync(outFile, 'utf-8');
 
@@ -89,7 +92,7 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates importable and usable Zod schemas', async () => {
-    await generateZodSchemas(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir, logger);
 
     // Create a test file that imports and uses the generated schemas
     const testContent = `

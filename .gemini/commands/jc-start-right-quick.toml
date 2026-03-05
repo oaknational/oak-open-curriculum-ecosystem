@@ -1,0 +1,2 @@
+description = "Quick grounding at session start"
+prompt = "Read and follow the instructions in .agent/commands/start-right-quick.md"

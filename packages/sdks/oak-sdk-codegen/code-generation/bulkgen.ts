@@ -16,14 +16,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { generateBulkSchemas } from './typegen/bulk/index.js';
+import { createCodegenLogger } from './create-codegen-logger.js';
+
+const logger = createCodegenLogger('bulkgen');
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');
 const outPathFromRoot = 'src/types/generated/bulk';
 const outDirectory = path.resolve(rootDirectory, outPathFromRoot);
 
-console.log('🔨 Generating bulk download Zod schemas...');
+logger.info('Generating bulk download Zod schemas...');
 
-generateBulkSchemas(outDirectory);
+generateBulkSchemas(outDirectory, logger);
 
-console.log('✅ Bulk schema generation complete!');
+logger.info('Bulk schema generation complete!');

@@ -18,7 +18,7 @@ Read ALL of this document, then carry out the [Action](#action).
 
 ## Ground Yourself
 
-Read [start-right.prompt.md](./start-right.prompt.md) and follow all
+Read [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md) and follow all
 instructions in that file and in the files it leads to (rules, testing
 strategy, schema-first execution).
 
@@ -48,7 +48,7 @@ strategy, schema-first execution).
   items should be prefixed with `QUALITY-GATE:` and happen reasonably
   often.
 - Periodically include a `GROUNDING:` task to re-read this document
-  and the [start-right prompt](./start-right.prompt.md), ensuring your
+  and the [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md), ensuring your
   todo list stays relevant and aligned with the plan.
 - Every fourth `REVIEW:` should be a **holistic review** invoking
   multiple sub-agents to assess overall coherence.

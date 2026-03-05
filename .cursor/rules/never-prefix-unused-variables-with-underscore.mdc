@@ -3,4 +3,6 @@ description: Never prefix unused variables with an underscore.
 alwaysApply: true
 ---
 
-Never prefix unused variables with an underscore. Figure out why the variable is unused and fix it, or, if it is not needed, delete it.
+# No Underscore Prefix
+
+See "Never prefix variables with an underscore" in `.agent/directives/rules.md`.

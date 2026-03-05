@@ -1,0 +1,2 @@
+description = "Run all quality gates and fix issues"
+prompt = "Read and follow the instructions in .agent/commands/quality-gates.md"

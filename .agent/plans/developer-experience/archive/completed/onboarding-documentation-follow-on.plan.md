@@ -4,13 +4,13 @@
 >
 > **Date**: 23 February 2026
 >
-> **Source**: [onboarding-simulations-public-alpha-readiness.md](../../onboarding-simulations-public-alpha-readiness.md)
+> **Source**: [onboarding-simulations-public-alpha-readiness.md](../../active/onboarding-simulations-public-alpha-readiness.md)
 >
 > **Merge-blocking plan (complete, archived)**:
 > [onboarding.plan.md](../../../semantic-search/archive/completed/onboarding.plan.md)
 >
 > **Governance follow-on**:
-> [onboarding-simulations-public-alpha-readiness.md](../../onboarding-simulations-public-alpha-readiness.md)
+> [onboarding-simulations-public-alpha-readiness.md](../../active/onboarding-simulations-public-alpha-readiness.md)
 >
 > These items are **documentation fixes** that can be resolved by writing or
 > editing documentation using information already available in the repository.

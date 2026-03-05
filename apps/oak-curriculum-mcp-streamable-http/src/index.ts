@@ -11,7 +11,7 @@ const result = loadRuntimeConfig({
 });
 
 if (!result.ok) {
-  console.error(result.error.message);
+  process.stderr.write(result.error.message + '\n');
   process.exit(1);
 }
 
@@ -38,23 +38,23 @@ const server = http.createServer(app);
 
 server.on('error', (err: NodeJS.ErrnoException) => {
   if (err.code === 'EADDRINUSE') {
-    console.error(`\n  Port ${String(port)} is already in use.`);
-    console.error(`  A previous dev server may still be running.`);
-    console.error(`\n  To fix: kill the process holding the port, then retry:`);
-    console.error(`    lsof -i :${String(port)}`);
-    console.error(`    kill <PID>\n`);
+    bootstrapLog.error(
+      `Port ${String(port)} is already in use. ` +
+        `A previous dev server may still be running. ` +
+        `To fix: lsof -i :${String(port)}, then kill <PID>.`,
+    );
   } else {
-    console.error(`\n  Server failed to start: ${err.message}\n`);
+    bootstrapLog.error(`Server failed to start: ${err.message}`);
   }
   process.exit(1);
 });
 
 server.listen(port, () => {
-  console.log(`🚀 Oak Curriculum MCP Server listening on port ${String(port)}`);
-  console.log(`   MCP endpoint: http://localhost:${String(port)}/mcp`);
+  bootstrapLog.info(`Oak Curriculum MCP Server listening on port ${String(port)}`);
+  bootstrapLog.info(`MCP endpoint: http://localhost:${String(port)}/mcp`);
   if (config.dangerouslyDisableAuth) {
-    console.log(`   ⚠️  AUTH DISABLED (DANGEROUSLY_DISABLE_AUTH=true)`);
+    bootstrapLog.warn('AUTH DISABLED (DANGEROUSLY_DISABLE_AUTH=true)');
   } else {
-    console.log(`   🔒 OAuth enforced via Clerk`);
+    bootstrapLog.info('OAuth enforced via Clerk');
   }
 });

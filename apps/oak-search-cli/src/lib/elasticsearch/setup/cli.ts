@@ -103,7 +103,7 @@ async function main(): Promise<void> {
     startDir: CURRENT_DIR,
   });
   if (!configResult.ok) {
-    console.error('Environment validation failed:', configResult.error.message);
+    process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
     process.exit(1);
   }
   const config = configResult.value.env;
@@ -114,8 +114,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  ingestLogger.error('Fatal error', error instanceof Error ? error : undefined, {
-    message: error instanceof Error ? error.message : String(error),
-  });
+  const fatalError = error instanceof Error ? error : new Error(String(error), { cause: error });
+  ingestLogger.error('Fatal error', fatalError);
   process.exitCode = 1;
 });

@@ -46,10 +46,10 @@ export const HTML_HEAD = `<!doctype html>
       .hero { font-size: 1.35rem; line-height: 1.7; margin: 0.5rem 0 1.5rem; }
       .card { background: rgba(255,255,255,0.75); color: #000; border: 2px solid #111; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
       .expandable { cursor: pointer; }
-      .expandable summary { display: flex; align-items: center; gap: 0.75rem; list-style: none; }
-      .expandable summary::-webkit-details-marker { display: none; }
-      .expandable summary::before { content: '▶'; font-size: 0.8rem; transition: transform 0.2s; }
-      .expandable[open] summary::before { transform: rotate(90deg); }
+      .expandable > summary { display: flex; align-items: center; gap: 0.75rem; list-style: none; }
+      .expandable > summary::-webkit-details-marker { display: none; }
+      .expandable > summary::before { content: '▶'; display: inline-block; font-size: 0.8rem; transition: transform 0.2s; }
+      .expandable[open] > summary::before { transform: rotate(90deg); }
       .expand-hint { font-size: 0.9rem; opacity: 0.6; margin-left: auto; }
       .expandable[open] .expand-hint { display: none; }
       .expandable p { margin-top: 1rem; }
@@ -59,20 +59,38 @@ export const HTML_HEAD = `<!doctype html>
       .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
       a { color: #064e3b; }
       .meta { font-size: 1rem; opacity: 0.9; }
-      .tool-list { list-style: none; padding: 0; margin: 0.5rem 0 0; }
-      .tool-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
-      .tool-list li:last-child { border-bottom: none; }
+      .tool-list { margin: 0.5rem 0 0; }
+      div.tool-list { padding: 0; }
+      ul.tool-list, ol.tool-list { padding: 0 0 0 2rem; }
+      ul.tool-list li, ol.tool-list li { margin-bottom: 1rem; padding-left: 0.5rem; }
+      ul.tool-list li:last-child, ol.tool-list li:last-child { margin-bottom: 0; }
+      .tool-list .tool-item { margin-bottom: 0.5rem; }
+      .tool-list .tool-item:last-child { margin-bottom: 0; }
+      .tool-list .tool-item > summary { cursor: pointer; list-style: none; display: flex; align-items: center; }
+      .tool-list .tool-item > summary::-webkit-details-marker { display: none; }
+      .tool-list .tool-item > summary::before { content: '▶'; display: inline-block; font-size: 0.7rem; margin-right: 0.35rem; transition: transform 0.2s; }
+      .tool-list .tool-item[open] > summary::before { transform: rotate(90deg); }
       .tool-list code { background: rgba(0,0,0,0.08); padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; }
-      .tool-desc { display: block; font-size: 1rem; opacity: 0.85; margin-top: 0.25rem; }
+      .tool-desc { font-size: 1rem; opacity: 0.85; margin-top: 0.5rem; margin-left: 1rem; }
+      .tool-how-to-use { margin-top: 0.5rem; }
+      .tool-how-to-use > summary { font-size: 0.95rem; opacity: 0.8; cursor: pointer; list-style: none; display: flex; align-items: center; }
+      .tool-how-to-use > summary::-webkit-details-marker { display: none; }
+      .tool-how-to-use > summary::before { content: '▶'; display: inline-block; font-size: 0.65rem; margin-right: 0.3rem; transition: transform 0.2s; }
+      .tool-how-to-use[open] > summary::before { transform: rotate(90deg); }
+      .tool-how-to-use-body { margin-top: 0.25rem; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; }
       .resource-title { display: block; font-weight: 600; margin-top: 0.25rem; }
       .prompt-args { display: block; font-size: 0.9rem; opacity: 0.7; margin-top: 0.25rem; }
+      .tool-group-label { font-size: 1.1rem; margin: 1.25rem 0 0; display: block; }
+      .tool-group-label.muted { opacity: 0.55; }
+      .tool-group-hint { font-size: 0.95rem; opacity: 0.55; margin: 0.15rem 0 0.25rem; }
+      .tool-divider { border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 1.25rem 0; }
       @media (prefers-color-scheme: dark) {
         body { background: #0b1021; color: #e6edf3; }
         .card { background: #111827; color: #f9fafb; border-color: #334155; }
         pre { background: #0b1021; color: #e6edf3; border: 1px solid #334155; }
         a { color: #93c5fd; }
-        .tool-list li { border-bottom-color: rgba(255,255,255,0.1); }
         .tool-list code { background: rgba(255,255,255,0.1); }
+        .tool-divider { border-top-color: rgba(255,255,255,0.1); }
       }
     </style>
   </head>`;

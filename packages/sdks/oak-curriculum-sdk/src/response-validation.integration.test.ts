@@ -6,24 +6,10 @@
  * not implementation details.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { Mock } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { validateCurriculumResponse } from './validation/curriculum-response-validators.js';
-// Note: precise response types are inferred via validateResponse overloads
 
 describe('SDK response pipeline integration', () => {
-  let consoleWarnSpy: Mock<typeof console.warn>;
-
-  beforeEach(() => {
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {
-      // Mock implementation
-    });
-  });
-
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
   describe('lesson API responses', () => {
     it('should include canonical URLs automatically for lesson transcript responses', () => {
       const response = {
@@ -38,7 +24,6 @@ describe('SDK response pipeline integration', () => {
         response,
       );
 
-      console.log('Debug result:', JSON.stringify(result, null, 2));
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect('canonicalUrl' in result.value).toBe(true);
@@ -67,7 +52,6 @@ describe('SDK response pipeline integration', () => {
 
       const result = validateCurriculumResponse('/lessons/{lesson}/summary', 'get', 200, response);
 
-      console.log('Debug lesson summary result:', JSON.stringify(result, null, 2));
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect('canonicalUrl' in result.value).toBe(true);

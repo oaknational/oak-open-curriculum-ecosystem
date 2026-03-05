@@ -26,6 +26,8 @@ todos:
 
 # Cross-Agent Standardisation
 
+> **SUPERSEDED**: All tasks from this plan have been absorbed into the [Agent Artefact Portability plan](../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan is archived for historical reference only.
+
 ## 1. Intent
 
 Ensure portability of the agentic engineering practice across Cursor, Claude Code, Gemini CLI, and other platforms by aligning agent artefacts with emerging cross-agent standards. Reduce maintenance entropy caused by platform-specific duplication.

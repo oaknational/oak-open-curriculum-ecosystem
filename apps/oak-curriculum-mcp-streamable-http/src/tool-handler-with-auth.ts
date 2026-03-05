@@ -22,7 +22,7 @@ import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 /**
  * Handles tool execution with authentication error interception.
  *
- * Per ADR-054, this function intercepts auth errors at the ToolExecutionResult
+ * Per ADR-054, this function intercepts auth errors at the tool execution result
  * level (the last layer where structured error objects are accessible) and
  * returns MCP-compliant responses with _meta field for ChatGPT OAuth linking.
  *
@@ -57,7 +57,7 @@ export async function handleToolWithAuthInterception(
   // This is ADR-054 - we do NOT modify this
   const client = deps.createClient(apiKey);
 
-  // Closure variable to capture auth errors from ToolExecutionResult callback
+  // Closure variable to capture auth errors from Result callback
   let capturedAuthError: unknown = undefined;
 
   const executor = deps.createExecutor({
@@ -67,9 +67,9 @@ export async function handleToolWithAuthInterception(
         : deps.executeMcpTool(name, args, client));
 
       // CRITICAL INTERCEPTION POINT (per ADR-054):
-      // Here we have ToolExecutionResult with structured error objects.
+      // Here we still have structured error objects from the Result error branch.
       // This is the last layer where error cause chains are accessible.
-      if ('error' in execution && execution.error) {
+      if (!execution.ok) {
         const authCheckTarget = execution.error.cause ?? execution.error;
 
         if (isAuthError(authCheckTarget)) {

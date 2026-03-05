@@ -1382,7 +1382,7 @@ barrel-only imports).
   patterns (e.g. wrong E2E config filename) cause false cache hits.
   Mitigated in Phase 5 (fix turbo input patterns).
 - ESLint override tech debt: see
-  [eslint-override-removal.plan.md](../../developer-experience/eslint-override-removal.plan.md)
+  [devx-strictness-convergence.plan.md](../../developer-experience/active/devx-strictness-convergence.plan.md)
   for the phased removal strategy.
 - **Missed rename references**: mitigated by running `rg` verification
   commands (see Phase 6.8) after each rename step. Archived plans
@@ -1473,7 +1473,7 @@ Every finding is either resolved or mapped to a specific execution phase.
 
 | # | Reviewer | Finding | Plan Reference |
 |---|---------|---------|---------------|
-| F17 | all | ESLint override tech debt across both SDK workspaces | [eslint-override-removal.plan.md](../../developer-experience/eslint-override-removal.plan.md) |
+| F17 | all | ESLint override tech debt across both SDK workspaces | [devx-strictness-convergence.plan.md](../../developer-experience/active/devx-strictness-convergence.plan.md) |
 
 ### 13.6 Phase 5 Reviewer Suggestions — Addressed in Phase 6.1
 
@@ -1505,7 +1505,7 @@ Addressed at the **start of Phase 6** (Phase 6.1) before the renames.
 
 ## 15. Related Plans
 
-- [ESLint Override Removal](../../developer-experience/eslint-override-removal.plan.md)
+- [Developer Experience Strictness Convergence](../../developer-experience/active/devx-strictness-convergence.plan.md)
   — phased removal of all ESLint overrides across both SDK workspaces.
   Cross-referenced by findings F15 and F17.
 - [Architectural Enforcement Adoption](../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md)

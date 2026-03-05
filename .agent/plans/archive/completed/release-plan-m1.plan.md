@@ -130,7 +130,7 @@ prescribed reading list. All 17 previous remediation items verified
 effective. No P0 blockers. 21 new findings identified (N1-N21).
 
 Full findings:
-[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+[onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 §Post-Remediation Rerun Results.
 
 **N1-N21 documentation fixes — COMPLETE (2026-02-27)**:
@@ -140,7 +140,7 @@ casts in `emit-index.ts` eliminated). Two code patterns extracted to
 `.agent/memory/code-patterns/`. Final onboarding validation confirmed
 fixes effective. 10 new findings (V1-V10) discovered — see
 §Post-Remediation Final Validation in
-[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md).
+[onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md).
 
 **V1-V10 validation findings (from final onboarding validation)**:
 
@@ -245,7 +245,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
     blockers. 4 new P1 docs-only items (N1-N4) block M0. Repo name mismatch
     confirmed as false positive for the third time.
   - Canonical tracker:
-    [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+    [onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
   - Evidence: owner dispositions recorded 2026-02-26 and 2026-02-27.
 
 - [~] **G5. Public-alpha UX contract**
@@ -955,7 +955,7 @@ All onboarding items (O1–O12) complete. O11 cancelled (target file removed). O
 recorded same day.
 
 Full detail:
-[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+[onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 
 ### Summary
 
@@ -988,7 +988,7 @@ Add a rate-limiting verification task before M1 (open public alpha):
 
 **Source**: Post-remediation onboarding rerun (2026-02-27, 4 personas).
 **Canonical tracker**:
-[onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+[onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 §Post-Remediation Rerun Results.
 
 Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
@@ -1154,7 +1154,7 @@ Also update Features list to match actual capabilities.
 1. Run quality gates: `pnpm build && pnpm type-check && pnpm lint:fix &&
    pnpm format:root && pnpm markdownlint:root && pnpm test`
 2. Update status checkboxes in this section and in
-   [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+   [onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 3. Proceed to §Final Onboarding Validation
 
 ---
@@ -1168,7 +1168,7 @@ non-prescriptive onboarding review to confirm M0 readiness.
 
 - Non-prescriptive: each reviewer starts at `README.md`, nothing else
 - No access to `.agent/prompts/onboarding-rerun.prompt.md` or
-  `.agent/plans/developer-experience/onboarding-simulations-public-alpha-readiness.md`
+  `.agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md`
 - Reviewers navigate independently, following whatever links they find
 - This is the final gate before M0 — it must validate that V1-V10 fixes
   are effective and that no new P1 issues have been introduced
@@ -1208,7 +1208,7 @@ M0.
 ### After Review
 
 1. Consolidate findings into
-   [onboarding-simulations-public-alpha-readiness.md](./developer-experience/onboarding-simulations-public-alpha-readiness.md)
+   [onboarding-simulations-public-alpha-readiness.md](../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 2. Update M0 milestone status
 3. Run `/jc-consolidate-docs`
 4. If clean: proceed to remaining M0 gates (secrets sweep, manual review,

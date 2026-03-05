@@ -228,13 +228,13 @@ Proceed directly to Phase 1.
 
 #### Task 1.1: [Task Name]
 
-**Current Implementation** (line [N]):
+**Current Implementation** (line [N]) — expected when the approach is known:
 
 ```typescript
 // Show current problematic code
 ```
 
-**Target Implementation**:
+**Target Implementation** — expected when the approach is known:
 
 ```typescript
 // Show desired code after fix
@@ -546,7 +546,7 @@ Run these commands to verify all fixes:
 
 ```bash
 # Full quality gate sequence
-cd /Users/jim/code/oak/oak-open-curriculum-ecosystem
+cd oak-open-curriculum-ecosystem
 pnpm sdk-codegen # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check

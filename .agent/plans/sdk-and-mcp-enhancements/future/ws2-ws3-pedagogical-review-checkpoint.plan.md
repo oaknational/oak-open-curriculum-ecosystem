@@ -78,7 +78,7 @@ This checkpoint should be evaluated when:
 
 ## Related Plans
 
-- [WS1: get-curriculum-model](../active/ws1-get-curriculum-model.plan.md) —
+- [WS1: get-curriculum-model](../archive/completed/ws1-get-curriculum-model.plan.md) —
   provides the domain model and entity definitions
 - [03-vocabulary-and-semantic-assets](../../semantic-search/future/03-vocabulary-and-semantic-assets/) —
   separate search infrastructure concern

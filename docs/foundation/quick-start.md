@@ -9,7 +9,7 @@ Fast-track guide for developers who want to understand and contribute to infrast
 >
 > **Audience**: junior-to-mid-level human developers.
 >
-> **AI agents**: start with the `start-right` workflow first (command, prompt, or skill), then continue with [AGENT.md](../../.agent/directives/AGENT.md).
+> **AI agents**: start with the `start-right-quick` workflow first (command, shared workflow, or skill), then continue with [AGENT.md](../../.agent/directives/AGENT.md).
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Understanding these decisions helps you navigate the codebase — they explain why things are structured the way they are:
 
@@ -115,7 +115,7 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
 
 For AI agent execution order, directives are normative: run quality gates one at
 a time as specified in
-[`start-right-thorough.prompt.md`](../../.agent/prompts/start-right-thorough.prompt.md).
+[`start-right-thorough.md`](../../.agent/skills/start-right-thorough/shared/start-right-thorough.md).
 `pnpm make` and `pnpm qg` remain convenience commands for human local workflows.
 
 See [environment variables guide](../operations/environment-variables.md) for complete setup details.

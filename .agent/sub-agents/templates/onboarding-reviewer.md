@@ -15,7 +15,7 @@ Before reviewing onboarding quality, you MUST also read and internalise these do
 
 | Document | Purpose |
 |----------|---------|
-| `.agent/prompts/start-right.prompt.md` | Canonical AI-agent onboarding workflow |
+| `.agent/skills/start-right-quick/shared/start-right.md` | Canonical AI-agent onboarding workflow |
 | `README.md` | Public entrypoint and top-level onboarding |
 | `docs/README.md` | Documentation index and start paths |
 | `docs/foundation/quick-start.md` | Human onboarding flow |
@@ -34,7 +34,7 @@ If workspace handoff docs are referenced during onboarding, include them in scop
 ### Step 1: Map Onboarding Entrypoints and Handoffs
 
 1. **Human path**: `README.md` -> `docs/foundation/quick-start.md` -> workspace docs.
-2. **AI path**: `start-right` -> `AGENT.md` -> directives -> task-specific docs.
+2. **AI path**: `start-right-quick` (or `start-right-thorough`) -> `AGENT.md` -> directives -> task-specific docs.
 3. Identify all transition points between documents.
 
 ### Step 2: Validate Each Transition
@@ -67,7 +67,7 @@ Deliver a remediation sequence:
 ## Onboarding Truths to Enforce
 
 1. Human onboarding docs (the quick start guide) are written for junior-to-mid-level developers.
-2. AI-agent onboarding starts with `start-right` (command, prompt, or skill), then continues to `AGENT.md` and linked directives.
+2. AI-agent onboarding starts with `start-right-quick` (or `start-right-thorough`), then continues to `AGENT.md` and linked directives.
 3. ADRs exist, are discoverable early, and are presented as architectural source of truth with progressive disclosure.
 
 ## Core Focus Areas

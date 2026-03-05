@@ -14,6 +14,8 @@ For the practice-core files and their roles, see [practice-core/index.md](practi
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema |
 | [metacognition.md](directives/metacognition.md) | Reflective thinking before planning |
 | [semantic-search-architecture.md](directives/semantic-search-architecture.md) | Structure is the foundation, transcripts are a bonus |
+| [invoke-code-reviewers.md](directives/invoke-code-reviewers.md) | Specialist reviewer invocation matrix and timing guidance |
+| [lint-after-edit.md](directives/lint-after-edit.md) | Post-edit lint check guidance |
 
 ## Architectural Decisions
 
@@ -25,15 +27,19 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | [ADR-117](../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates and components |
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) | Agentic engineering practice — naming and conceptual boundary |
 | [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md) | Practice propagation — five-file package, self-containment, practice-index bridge |
+| [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md) | Agent artefact portability — three-layer model for skills, commands, and rules |
 
 ## Tools and Workflows
 
-| Tool | Purpose |
-|---|---|
-| [/jc-consolidate-docs](../.cursor/commands/jc-consolidate-docs.md) | Graduation step: verify docs, extract plan content, check practice box |
-| [/jc-start-right](../.cursor/commands/jc-start-right.md) | Session grounding: read directives, check practice box |
-| [distillation skill](../.cursor/skills/distillation/SKILL.md) | Extract high-signal patterns from the napkin |
-| [invoke-code-reviewers rule](../.cursor/rules/invoke-code-reviewers.mdc) | Full roster, invocation matrix, timing tiers, triage checklist |
+| Tool | Canonical Location | Purpose |
+|---|---|---|
+| consolidate-docs | [`.agent/commands/consolidate-docs.md`](commands/consolidate-docs.md) | Graduation step: verify docs, extract plan content, check practice box |
+| start-right-quick | [`.agent/commands/start-right-quick.md`](commands/start-right-quick.md) | Session grounding: read directives, check practice box |
+| distillation skill | [`.agent/skills/distillation/SKILL.md`](skills/distillation/SKILL.md) | Extract high-signal patterns from the napkin |
+| napkin skill | [`.agent/skills/napkin/SKILL.md`](skills/napkin/SKILL.md) | Always-active session-to-session learning log |
+| code-patterns skill | [`.agent/skills/code-patterns/SKILL.md`](skills/code-patterns/SKILL.md) | Known solutions to recurring design problems |
+| ground-truth-design | [`.agent/skills/ground-truth-design/SKILL.md`](skills/ground-truth-design/SKILL.md) | Design ground truth queries for semantic search |
+| ground-truth-evaluation | [`.agent/skills/ground-truth-evaluation/SKILL.md`](skills/ground-truth-evaluation/SKILL.md) | Evaluate and validate ground truth queries |
 
 ## Artefact Directories
 
@@ -45,11 +51,11 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | [`.agent/experience/`](experience/) | Experiential records across sessions |
 | [`.agent/prompts/`](prompts/) | Reusable prompt playbooks |
 | [`.agent/sub-agents/`](sub-agents/) | Reviewer prompt architecture (components, templates) |
-| [`.agent/skills/`](skills/) | Repo-managed skills for shared workflows |
+| [`.agent/skills/`](skills/) | Canonical skills (platform-agnostic) |
+| [`.agent/commands/`](commands/) | Canonical commands (platform-agnostic) |
 | [`.agent/research/`](research/) | Research documents and analysis |
 | [`.agent/reference-docs/`](reference-docs/) | Supporting reference material |
-| [`.cursor/rules/`](../.cursor/rules/) | Always-applied workspace rules |
-| [`.cursor/commands/`](../.cursor/commands/) | Slash commands |
-| [`.cursor/agents/`](../.cursor/agents/) | Sub-agent definitions (Cursor-specific) |
-| [`.cursor/skills/`](../.cursor/skills/) | Skills (Cursor-specific) |
+| [`.cursor/`](../.cursor/) | Cursor platform adapters (thin wrappers) |
+| [`.claude/`](../.claude/) | Claude Code platform adapters (thin wrappers) |
+| [`.gemini/`](../.gemini/) | Gemini CLI platform adapters (thin wrappers) |
 | [`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/) | Permanent architectural decision records |

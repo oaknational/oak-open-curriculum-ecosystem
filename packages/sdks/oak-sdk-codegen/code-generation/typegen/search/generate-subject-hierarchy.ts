@@ -18,6 +18,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
+import type { Logger } from '@oaknational/logger';
 
 const OUTPUT_PATH = resolve(
   import.meta.dirname,
@@ -250,12 +251,12 @@ export function isAllSubject(value: string): value is AllSubjectSlug {
  *
  * Called from codegen.ts alongside other generators.
  */
-export function generateSubjectHierarchy(): void {
+export function generateSubjectHierarchy(logger: Logger): void {
   const outputDir = dirname(OUTPUT_PATH);
   mkdirSync(outputDir, { recursive: true });
 
   const content = generateSubjectHierarchyFile();
   writeFileSync(OUTPUT_PATH, content, 'utf-8');
 
-  console.log(`✅ Generated subject hierarchy: ${OUTPUT_PATH}`);
+  logger.info('Generated subject hierarchy', { path: OUTPUT_PATH });
 }

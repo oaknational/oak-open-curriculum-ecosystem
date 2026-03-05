@@ -38,7 +38,6 @@ function makeUnsupportedMethod(
   method: HttpMethod,
   normalizedPath: string,
 ): ValidationResult<unknown> {
-  console.warn(`Unsupported method ${method} for path ${normalizedPath}`);
   return {
     ok: false,
     issues: [
@@ -52,7 +51,6 @@ function makeUnsupportedMethod(
 }
 
 function makeUnknownOperation(key: string): ValidationResult<unknown> {
-  console.warn(`Unknown operation ${key}`);
   return {
     ok: false,
     issues: [

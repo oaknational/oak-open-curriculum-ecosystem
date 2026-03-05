@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod';
 
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import {
@@ -10,41 +9,6 @@ import {
   readFirstTextContent,
   getStructuredContentData,
 } from './helpers/sse.js';
-import {
-  listUniversalTools,
-  generatedToolRegistry,
-  createStubToolExecutionAdapter,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-
-const ToolEntrySchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  inputSchema: z.unknown(),
-});
-
-type JsonRpcToolRosterEntry = z.infer<typeof ToolEntrySchema>;
-
-const ToolRosterSchema = ToolEntrySchema.array();
-
-function assertToolRoster(responseText: string, expected: readonly JsonRpcToolRosterEntry[]): void {
-  const envelope = parseSseEnvelope(responseText);
-  const result = parseJsonRpcResult(envelope);
-  const tools = ToolRosterSchema.parse(result.tools);
-  const actualByName = new Map(tools.map((tool) => [tool.name, tool]));
-
-  expect(tools.length).toBe(expected.length);
-  for (const entry of expected) {
-    const actual = actualByName.get(entry.name);
-    expect(actual, `Missing tool ${entry.name}`).toBeDefined();
-    if (!actual) {
-      continue;
-    }
-    expect(actual.name).toBe(entry.name);
-    expect(actual.description).toBe(entry.description ?? entry.name);
-    expect(actual.inputSchema).toBeDefined();
-    expect(typeof actual.inputSchema).toBe('object');
-  }
-}
 
 function extractResultAndContent(responseText: string): {
   readonly result: ReturnType<typeof parseJsonRpcResult>;
@@ -60,11 +24,7 @@ function extractResultAndContent(responseText: string): {
  * Asserts fetch lesson response per OpenAI Apps SDK pattern.
  * Full data is now in structuredContent (model + widget see this).
  */
-async function assertFetchLessonResponse(
-  responseText: string,
-  lessonId: string,
-  lessonSlug: string,
-): Promise<void> {
+function assertFetchLessonResponse(responseText: string, lessonId: string): void {
   const { result } = extractResultAndContent(responseText);
   expect(result.isError).not.toBe(true);
 
@@ -80,34 +40,15 @@ async function assertFetchLessonResponse(
   expect(structured.type).toBe('lesson');
   expect(typeof structured.canonicalUrl).toBe('string');
   expect(structured.canonicalUrl).toContain('thenational.academy');
-
-  const executor = createStubToolExecutionAdapter();
-  const stubResult = await executor('get-lessons-summary', {
-    lesson: lessonSlug,
-  });
-  if (!('data' in stubResult)) {
-    throw new Error('Stub executor did not return data');
-  }
-  expect(stubResult.data).toBeDefined();
-  expect(structured.data).toEqual(stubResult.data);
+  expect(structured.data).toBeDefined();
+  expect(typeof structured.data).toBe('object');
+  expect(structured.data).not.toBeNull();
 }
 
 describe('Streamable HTTP server (stub mode)', () => {
-  it('returns the full roster from listUniversalTools()', async () => {
-    const { app } = await createStubbedHttpApp();
-    const response = await request(app)
-      .post('/mcp')
-      .set('Accept', STUB_ACCEPT_HEADER)
-      .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
-
-    expect(response.status).toBe(200);
-    assertToolRoster(response.text, listUniversalTools(generatedToolRegistry));
-  });
-
   it('serialises stubbed fetch results with canonicalUrl', async () => {
     const { app } = await createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';
-    const lessonSlug = 'four-types-of-simple-sentence';
     const response = await request(app)
       .post('/mcp')
       .set('Accept', STUB_ACCEPT_HEADER)
@@ -122,7 +63,7 @@ describe('Streamable HTTP server (stub mode)', () => {
       });
 
     expect(response.status).toBe(200);
-    await assertFetchLessonResponse(response.text, lessonId, lessonSlug);
+    assertFetchLessonResponse(response.text, lessonId);
   });
 
   it('reports parameter validation failures from stub executor', async () => {

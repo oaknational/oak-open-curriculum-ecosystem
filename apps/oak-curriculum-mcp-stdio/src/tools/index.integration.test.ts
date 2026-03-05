@@ -6,6 +6,7 @@ import {
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
+import { err, ok } from '@oaknational/result';
 
 import { createMcpToolsModule, type UniversalToolExecutors } from './index.js';
 import { createFakeOakPathBasedClient } from '../test-helpers/fakes.js';
@@ -47,7 +48,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
   }
 
   it('presents documented non-200 responses as successful tool outputs', async () => {
-    const transcript404 = {
+    const transcript404 = ok({
       status: 404,
       data: {
         message: 'Transcript not available for this query',
@@ -59,7 +60,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
           zodError: null,
         },
       },
-    } as const satisfies ToolExecutionResult & { readonly status: number };
+    } as const) satisfies ToolExecutionResult;
     const executeMcpToolImplementation: NonNullable<
       UniversalToolExecutors['executeMcpTool']
     > = () => Promise.resolve(transcript404);
@@ -78,14 +79,20 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
     expect(executeMcpTool).toHaveBeenCalledWith('get-lessons-transcript', lessonArgs);
     expect(output.isError).not.toBe(true);
     const decoded: unknown = JSON.parse(readJsonPayload(output));
-    expect(decoded).toEqual({ status: transcript404.status, data: transcript404.data });
+    if (!transcript404.ok) {
+      throw new Error('Expected successful transcript result');
+    }
+    expect(decoded).toEqual({
+      status: transcript404.value.status,
+      data: transcript404.value.data,
+    });
   });
 
   it('passes through executor errors as MCP error responses', async () => {
     const error = new McpToolError('Execution failed', 'get-lessons-transcript');
     const executeMcpToolImplementation: NonNullable<
       UniversalToolExecutors['executeMcpTool']
-    > = () => Promise.resolve({ error } satisfies ToolExecutionResult);
+    > = () => Promise.resolve(err(error) satisfies ToolExecutionResult);
     const executeMcpTool = vi.fn(executeMcpToolImplementation);
 
     const module = createMcpToolsModule({
@@ -105,8 +112,7 @@ describe('createMcpToolsModule.handleTool (integration)', () => {
   it('formats unknown tool names as errors before hitting the executor', async () => {
     const executeMcpToolImplementation: NonNullable<
       UniversalToolExecutors['executeMcpTool']
-    > = () =>
-      Promise.resolve({ status: 200, data: {} } satisfies ToolExecutionResult & { status: number });
+    > = () => Promise.resolve(ok({ status: 200, data: {} }) satisfies ToolExecutionResult);
     const executeMcpTool = vi.fn(executeMcpToolImplementation);
 
     const module = createMcpToolsModule({

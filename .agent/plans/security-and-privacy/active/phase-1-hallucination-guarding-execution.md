@@ -64,11 +64,11 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
 ### Task 1.2: Prompt and Reviewer Integration
 
 - Target surfaces:
-  - `.agent/prompts/start-right.prompt.md`
-  - `.agent/prompts/start-right-thorough.prompt.md`
+  - `.agent/skills/start-right-quick/shared/start-right.md`
+  - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
   - `.agent/sub-agents/templates/*reviewer*.md`
 - Deterministic validation:
-  - `rg -n "non-trivial claim|unsupported claim|evidence" .agent/prompts/start-right*.prompt.md .agent/sub-agents/templates/*reviewer*.md`
+  - `rg -n "non-trivial claim|unsupported claim|evidence" .agent/skills/start-right-quick/shared/start-right.md .agent/skills/start-right-thorough/shared/start-right-thorough.md .agent/sub-agents/templates/*reviewer*.md`
 
 ### Task 1.3: Pilot Baseline and Calibration
 

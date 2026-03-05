@@ -24,5 +24,11 @@ const config = defineConfig(
       },
     },
   },
+  {
+    files: ['scripts/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
 );
 export default config;

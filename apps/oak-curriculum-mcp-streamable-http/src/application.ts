@@ -47,6 +47,15 @@ export interface CreateAppOptions {
    * omit this so the metadata is fetched at startup.
    */
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
+  /**
+   * Factory for creating the global Clerk authentication middleware.
+   * When provided, replaces the hard import of `clerkMiddleware` from
+   * `@clerk/express`, enabling tests to inject a no-op middleware
+   * without `vi.mock`. Production callers omit this.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   */
+  readonly clerkMiddlewareFactory?: () => RequestHandler;
 }
 
 let appCounter = 0;
@@ -112,7 +121,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
   // Actual enforcement happens later via createMcpAuthClerk on specific routes.
   runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appId, () => {
-    setupGlobalAuthContext(app, runtimeConfig, log);
+    setupGlobalAuthContext(app, runtimeConfig, log, options.clerkMiddlewareFactory);
   });
 
   // Phase 4: Core endpoints (MCP factory, health checks)
