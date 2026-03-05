@@ -13,7 +13,7 @@ provenance:
     date: 2026-02-28
     purpose: "Ecosystem-agnostic hydration: added ecosystem survey preamble for agents hydrating into non-TypeScript repos"
 fitness_ceiling: 400
-attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos"
+attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many people and agents in many repos"
 ---
 
 # Practice Bootstrap

@@ -17,7 +17,3 @@ The agent will survey your repo's existing tooling, standards, and norms, then a
 ## For Agents
 
 Follow [index.md](index.md). It will orient you to the full Practice system and handle any situation you find yourself in -- day-to-day work, cold-start hydration, incoming plasmids, or files that have landed in the wrong place.
-
-## Origin
-
-> Created by [Jim Cresswell](https://www.jimcresswell.net/), evolved by many agents in many repos

@@ -12,6 +12,9 @@ import { renderPromptsSection } from './render-prompts-section.js';
 import { renderResourcesSection } from './render-resources-section.js';
 import { renderToolsSection } from './render-tools-section.js';
 
+const WORKSPACE_GITHUB_URL =
+  'https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http';
+
 /**
  * Renders the complete landing page HTML.
  *
@@ -65,6 +68,7 @@ export function renderLandingPageHtml(vercelHost?: string): string {
       <section class="card">
         <h2>Documentation</h2>
         <p>For details about the underlying curriculum data, see the <a href="https://open-api.thenational.academy/docs/about-oaks-api/api-overview">Oak Curriculum API documentation</a>.</p>
+        <p>Browse the MCP server implementation: <a target="_blank" rel="noopener noreferrer" href="${WORKSPACE_GITHUB_URL}">Code on GitHub</a>.</p>
       </section>
     </main>
   </body>
