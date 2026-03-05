@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.0.0...v1.0.1) (2026-03-05)
+
+
+### Bug Fixes
+
+* resolve 22 Dependabot alerts, 47 CodeQL dismissals, and 29 outdated deps ([#58](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/58)) ([23dd6b5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/23dd6b5a39b5bc54a4a93c79f112451943dda7b7))
+
 # 1.0.0 (2026-03-03)
 
 
