@@ -153,15 +153,12 @@ function sampleFromCombinators(schema: SchemaObject, state: SamplerState): Sampl
   if (Array.isArray(schema.allOf) && schema.allOf.length > 0) {
     return sampleAllOf(schema, state);
   }
-
   if (Array.isArray(schema.oneOf) && schema.oneOf.length > 0) {
     return sampleOneOrAnyOf(schema, schema.oneOf, state);
   }
-
   if (Array.isArray(schema.anyOf) && schema.anyOf.length > 0) {
     return sampleOneOrAnyOf(schema, schema.anyOf, state);
   }
-
   return undefined;
 }
 
@@ -171,12 +168,10 @@ function sampleAllOf(schema: SchemaObject, state: SamplerState): SampleValue | u
   if (own) {
     samples.push(own);
   }
-
   for (const part of schema.allOf ?? []) {
     const sampled = sampleFromReferenceOrSchema(part, state);
     samples.push(sampled);
   }
-
   return materializeSamples(samples);
 }
 
@@ -190,10 +185,8 @@ function sampleOneOrAnyOf(
   if (own) {
     samples.push(own);
   }
-
   const sampled = sampleFromReferenceOrSchema(variants[0], state);
   samples.push(sampled);
-
   return materializeSamples(samples);
 }
 function sampleOwnObjectProperties(
@@ -208,11 +201,9 @@ function sampleOwnObjectProperties(
   for (const [name, propertySchema] of Object.entries(schema.properties)) {
     entries.push([name, sampleFromReferenceOrSchema(propertySchema, state)]);
   }
-
   if (entries.length === 0) {
     return undefined;
   }
-
   return buildSampleObject(entries);
 }
 
@@ -226,15 +217,17 @@ function materializeSamples(samples: SampleValue[]): SampleValue | undefined {
 
   for (const sample of samples) {
     if (isPlainObject(sample)) {
-      Object.assign(merged, sample);
+      for (const key in sample) {
+        if (Object.prototype.hasOwnProperty.call(sample, key)) {
+          merged[key] = sample[key];
+        }
+      }
       mergedAny = true;
     }
   }
-
   if (mergedAny) {
     return merged;
   }
-
   return samples[samples.length - 1];
 }
 

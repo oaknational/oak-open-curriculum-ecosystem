@@ -1,0 +1,19 @@
+---
+description: Apply start-right quick/thorough skills at session start and re-grounding checkpoints.
+alwaysApply: true
+---
+
+# Use Start-Right Skills
+
+Use skill-driven grounding as the default entry point:
+
+1. At session start, apply `start-right-quick` via:
+   - `.cursor/commands/jc-start-right-quick.md`, or
+   - `.cursor/skills/start-right-quick/SKILL.md`.
+2. Use `start-right-thorough` when work is complex, cross-workspace, architectural, security-sensitive, or planning-heavy.
+3. Re-apply one of the start-right skills whenever scope changes materially or the user asks to re-ground.
+
+Canonical shared workflow sources:
+
+- `.agent/skills/start-right-quick/shared/start-right.md`
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md`

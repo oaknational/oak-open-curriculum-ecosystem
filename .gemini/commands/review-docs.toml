@@ -1,0 +1,6 @@
+description = "Review documentation and ADR completeness, accuracy, and drift"
+prompt = """You are a documentation and ADR reviewer. Read and follow `.agent/sub-agents/templates/docs-adr-reviewer.md` as your canonical review methodology.
+
+Review the documentation changes and provide a structured review report. Do not modify code.
+
+{{args}}"""

@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-25
+**Last Updated**: 2026-03-03
 
 ---
 
@@ -10,7 +10,7 @@
 
 ---
 
-## Current Work: Merge Prep
+## Current Work: Post-Merge Execution
 
 MCP search integration (Phase 3a) is complete — three tools
 wired, old REST search replaced. SDK workspace separation (3e) is
@@ -26,6 +26,9 @@ Widget stabilisation (3h) is **COMPLETE** (all phases 0-5).
 
 Search dispatch type safety (3g) is complete and archived:
 [search-dispatch-type-safety.md](archive/completed/search-dispatch-type-safety.md).
+
+Milestone 2 blocker execution is now queued in
+[current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md).
 
 ---
 
@@ -45,7 +48,7 @@ Search dispatch type safety (3g) is complete and archived:
 2g. Developer Onboarding                         ✅ COMPLETE
 2h. Code Quality Remediation                     ✅ COMPLETE
          ↓
-3. MCP Integration + Merge Preparation           🔄 IN PROGRESS
+3. MCP Integration + Merge Preparation           ✅ COMPLETE
    3a MCP search integration                     ✅ COMPLETE (archived)
    3d OAuth spec compliance                      ✅ COMPLETE
    3f Proxy OAuth AS for Cursor                  ✅ COMPLETE
@@ -66,6 +69,7 @@ Search dispatch type safety (3g) is complete and archived:
 
 ## Active Plans
 
+- [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md) — converge MCP execution to `Result<T, E>` across SDK + MCP consumers
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 
 ---
@@ -74,10 +78,10 @@ Search dispatch type safety (3g) is complete and archived:
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 search-args extraction |
+| `active/` | In-progress plans | 🟢 result unification + search-args extraction |
 | `current/` | Next-up queued plans | 📋 Ready |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
-| `sdk-extraction/` | SDK extraction context | ✅ Complete |
+| `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
 | `archive/` | Historical work | ✅ Reference only |
 
 ---
@@ -114,7 +118,8 @@ to the boundary structure.
 | [Search Results Quality](archive/completed/search-results-quality.md) | ✅ Complete — ADR-120 |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
-| [Result Pattern Unification](future/06-mcp-consumer-integration/mcp-result-pattern-unification.md) | 📋 Post-merge — `Result<T, E>` migration |
+| [Result Pattern Unification](active/mcp-result-pattern-unification.execution.plan.md) | 🟢 In progress — `Result<T, E>` migration |
+| [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [MCP Extensions Future Work](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | 📋 Post-merge SDK/MCP enhancements governance |

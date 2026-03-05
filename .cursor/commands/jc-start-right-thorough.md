@@ -1,3 +1,3 @@
 # Start Right (Thorough)
 
-Read and follow @.agent/prompts/start-right-thorough.prompt.md.
+Read and follow @.agent/commands/start-right-thorough.md

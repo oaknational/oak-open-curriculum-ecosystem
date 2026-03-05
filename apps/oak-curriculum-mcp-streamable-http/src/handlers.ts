@@ -130,7 +130,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
  * ## Type System Conflict
  *
  * We're bridging two incompatible library type systems:
- * - Clerk middleware adds `auth: MachineAuthObject` to Express Request (globally)
+ * - Clerk middleware adds callable `auth(options?)` to Express Request (globally)
  * - MCP SDK transport expects `IncomingMessage & { auth?: AuthInfo }`
  *
  * These `auth` property types are incompatible and neither library is under our control.

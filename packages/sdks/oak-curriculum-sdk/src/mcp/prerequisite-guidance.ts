@@ -40,7 +40,7 @@ export const PRIMARY_ORIENTATION_TOOL_NAME = 'get-curriculum-model' as const;
  * ```
  */
 export const AGGREGATED_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and ID formats.` as const;
+  `PREREQUISITE: You MUST call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand the curriculum domain.` as const;
 
 /**
  * Fetch-specific prerequisite guidance emphasizing ID formats.
@@ -49,7 +49,7 @@ export const AGGREGATED_PREREQUISITE_GUIDANCE =
  * so this variant adds that context.
  */
 export const FETCH_PREREQUISITE_GUIDANCE =
-  `PREREQUISITE: If unfamiliar with Oak's curriculum structure or ID formats, call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand key stages, subjects, entity hierarchy, and the "type:slug" pattern.` as const;
+  `PREREQUISITE: You MUST call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand the curriculum domain before using the fetch tool.` as const;
 
 /**
  * Recommended first step text for agent support tools.
@@ -58,7 +58,7 @@ export const FETCH_PREREQUISITE_GUIDANCE =
  * emphasise calling them early in the conversation.
  */
 export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
-  'RECOMMENDED FIRST STEP: Call this tool before using other curriculum tools to understand the domain model.' as const;
+  'You MUST call this tool before using other curriculum tools.' as const;
 
 /**
  * Context hint included in structuredContent for model guidance.

@@ -187,7 +187,7 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   if (!contentType) {
     return response;
   }
-  return Object.assign({}, response, extractCanonicalUrlFields(response, path, contentType));
+  return { ...response, ...extractCanonicalUrlFields(response, path, contentType) };
 }
 
 /**

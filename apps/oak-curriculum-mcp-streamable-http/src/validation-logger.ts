@@ -61,7 +61,7 @@ function isValidationDetails(value: unknown): value is ValidationDetails {
 function extractValidationCause(
   execution: ToolExecutionResult,
 ): { readonly error: McpToolError; readonly details: ValidationDetails } | undefined {
-  if (!('error' in execution) || !execution.error) {
+  if (execution.ok) {
     return undefined;
   }
 
@@ -103,7 +103,7 @@ export function logUpstreamErrorIfPresent(
   execution: ToolExecutionResult,
   logger: Logger,
 ): void {
-  if (!('error' in execution) || !execution.error) {
+  if (execution.ok) {
     return;
   }
 

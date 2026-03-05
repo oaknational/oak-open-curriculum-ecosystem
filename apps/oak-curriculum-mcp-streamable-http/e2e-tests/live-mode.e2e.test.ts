@@ -16,6 +16,7 @@ import {
   McpToolError,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { err, ok } from '@oaknational/result';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -42,7 +43,7 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
             canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
           },
         ];
-        const result: ToolExecutionResult = { status: 200, data };
+        const result: ToolExecutionResult = ok({ status: 200, data });
         return Promise.resolve(result);
       },
     },
@@ -55,9 +56,9 @@ function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
       executeMcpTool: (name, args, client) => {
         void args;
         void client;
-        return Promise.resolve({
-          error: new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' }),
-        });
+        return Promise.resolve(
+          err(new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' })),
+        );
       },
     },
   };

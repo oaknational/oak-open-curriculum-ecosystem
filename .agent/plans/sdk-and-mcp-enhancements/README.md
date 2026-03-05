@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 1 March 2026
+**Last Updated**: 3 March 2026
 
 Planning hub for SDK pipeline evolution, MCP extensions, and related
 architectural work. Consolidated from the former `pipeline-enhancements/`
@@ -10,7 +10,7 @@ and `sdk-and-mcp-enhancements/` directories.
 
 | Lane | Directory | Contents |
 |------|-----------|----------|
-| **Active** (now) | [active/](active/) | [get-curriculum-model: Replace get-ontology and get-help](active/ws1-get-curriculum-model.plan.md) — In Progress, WS1 (RED) not started. 6-specialist reviewed. |
+| **Active** (now) | [active/](active/) | _(no active plans)_ |
 | **Current** (next) | [current/](current/) | _(empty — WS2+WS3 collapsed to future review checkpoint)_ |
 | **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md), [Output Schemas for MCP Tools](future/output-schemas-for-mcp-tools.plan.md) |
 
@@ -18,6 +18,7 @@ and `sdk-and-mcp-enhancements/` directories.
 
 | Document | Purpose | Status |
 |----------|---------|--------|
+| [ws1-get-curriculum-model.plan.md](archive/completed/ws1-get-curriculum-model.plan.md) | Executed WS1 replacement plan (`get-curriculum-model`) | Archived complete |
 | [improve-pedagogical-context.plan.md](archive/completed/improve-pedagogical-context.plan.md) | Strategic brief: `get-curriculum-model` tool, canonical glossary, pedagogical term disambiguation | Archived (content consolidated into active WS1 plan) |
 | [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
 | [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |

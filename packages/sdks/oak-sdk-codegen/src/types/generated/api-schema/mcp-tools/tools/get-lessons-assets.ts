@@ -124,7 +124,7 @@ export const getLessonsAssets = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Downloadable lesson assets\n\nThis tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-curriculum-model` first to understand key stages, subjects, entity hierarchy, and ID formats.",
+  description: "Downloadable lesson assets\n\nThis tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

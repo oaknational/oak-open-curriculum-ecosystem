@@ -1,17 +1,10 @@
 ---
-description: After editing TypeScript files, check lint for file/function length violations
+description: After editing TypeScript files, check lint for file/function length violations.
 globs: "*.ts"
 ---
 
-After modifying TypeScript files, run `ReadLints` on the changed files or run `pnpm lint:fix` to check for violations. The ESLint thresholds that most commonly bite during refactoring:
+# Lint After Edit
 
-- `max-lines`: 250 lines per file
-- `max-lines-per-function`: 50 lines per function
-- `complexity`: ESLint counts `??` and `?.` as branches
+Read and follow `.agent/directives/lint-after-edit.md`.
 
-When a violation appears, follow the refactoring rules in `.agent/directives/rules.md`:
-
-- **File somewhat too long**: split by groupings of responsibility into separate files
-- **File very long**: turn the file into a directory, with an index.ts file that functions as an integration point and which exports a well defined, well integration-tested public API. Split the original code by groupings of responsibility into well unit-tested separate files of pure functions.
-- **Function too long**: extract named helpers in the form of pure functions with unit tests.
-- **Too complex**: extract merge logic or branch-heavy expressions into helpers in the form of pure functions with unit tests.
+In Cursor, use `ReadLints` on the changed files or run `pnpm lint:fix`.

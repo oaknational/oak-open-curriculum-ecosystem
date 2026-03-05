@@ -1,3 +1,3 @@
-# go
+# Go
 
-Read @.agent/prompts/GO.md and follow all instructions in that file
+Read and follow @.agent/commands/go.md

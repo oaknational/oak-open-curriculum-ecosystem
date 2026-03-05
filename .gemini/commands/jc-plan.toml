@@ -1,0 +1,2 @@
+description = "Create or promote a plan following the plan architecture"
+prompt = "Read and follow the instructions in .agent/commands/plan.md. Context: {{args}}"

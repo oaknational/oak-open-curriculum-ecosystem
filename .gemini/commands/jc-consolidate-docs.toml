@@ -1,0 +1,2 @@
+description = "Extract documentation from plans to permanent locations"
+prompt = "Read and follow the instructions in .agent/commands/consolidate-docs.md"

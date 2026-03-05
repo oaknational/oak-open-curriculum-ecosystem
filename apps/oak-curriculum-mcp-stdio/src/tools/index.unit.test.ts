@@ -7,6 +7,7 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import { createMcpToolsModule } from './index.js';
+import { err, ok } from '@oaknational/result';
 
 const TEST_TOOL_NAME = 'get-key-stages-subject-lessons';
 
@@ -44,7 +45,7 @@ describe('createMcpToolsModule', () => {
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
-      .mockResolvedValue({ status: 200, data: { status: 'ok' } });
+      .mockResolvedValue(ok({ status: 200, data: { status: 'ok' } }));
 
     const module = createMcpToolsModule({
       client: createFakeClient(),
@@ -71,7 +72,7 @@ describe('createMcpToolsModule', () => {
   it('propagates executor errors as structured MCP results', async () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
-      .mockResolvedValue({ error: new Error('boom') });
+      .mockResolvedValue(err(new Error('boom')));
 
     const module = createMcpToolsModule({
       client: createFakeClient(),

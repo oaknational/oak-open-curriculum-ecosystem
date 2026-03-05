@@ -34,8 +34,8 @@ in `agentic-engineering-enhancements`.
 
 ## Prompt/Reviewer Integration Targets
 
-- `.agent/prompts/start-right.prompt.md`
-- `.agent/prompts/start-right-thorough.prompt.md`
+- `.agent/skills/start-right-quick/shared/start-right.md`
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
 - `.agent/sub-agents/templates/*reviewer*.md`
 
 ## Validation Checklist

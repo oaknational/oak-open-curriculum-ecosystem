@@ -21,7 +21,7 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 ## Developers and AI agents
 
 - **Developers** — continue to [Quick Start](#quick-start) below
-- **AI agents** — read the [start-right workflow](.agent/prompts/start-right.prompt.md), then [AGENT.md](.agent/directives/AGENT.md)
+- **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md)
 
 ## What This Repo Provides
 

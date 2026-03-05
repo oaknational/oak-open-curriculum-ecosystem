@@ -1,5 +1,146 @@
 # Napkin
 
+## Session 2026-03-05e — Remove brittle stub-coupled e2e tests
+
+### What was done
+- Deleted `apps/oak-curriculum-mcp-streamable-http/e2e-tests/sdk-client-stub.e2e.test.ts`.
+- Refactored `stub-mode.e2e.test.ts` to assert stable system invariants for `fetch`
+  output (`id`, `type`, canonical URL, structured data presence) instead of
+  comparing server output to a second call into the SDK stub adapter.
+- Added a unit test in `packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts`
+  proving `createStubToolExecutionAdapter` accepts optional `params` envelopes
+  (`get-subjects` with `{ params: {} }`) and returns a successful `Result`.
+- Ran targeted and full suites:
+  - `pnpm --filter @oaknational/curriculum-sdk test -- src/mcp/stub-tool-executor.unit.test.ts`
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http exec vitest run --config vitest.e2e.config.ts e2e-tests/stub-mode.e2e.test.ts`
+  - `pnpm test:e2e` (green)
+
+### Patterns to remember
+- Do not compare system output to the same runtime stub adapter that the system
+  internally uses; this is tautological and brittle to contract-shape changes.
+- Prefer proving transport/system invariants in e2e and tool-contract details in
+  unit/integration tests.
+
+## Session 2026-03-04d — Plan readiness check for artefact-portability-hardening
+
+### What was done
+- Verified artefact-portability-hardening.plan.md as standalone entry point for next session.
+- Found and fixed 4 broken relative paths: plan is in `current/` (4 levels deep), but 3 links
+  used only `../../../` (3 levels). Fixed to `../../../../` for repo-root targets.
+- Fixed `future/hooks-portability.plan.md` → `../future/hooks-portability.plan.md` (sibling dir).
+- Verified all 9 cross-referenced files exist (ADR-125, ADR-114, predecessor plan, hooks plan,
+  validate-subagents.mjs, 3 foundation docs, devx plan).
+- Confirmed current inventory: 17 .mdc files, 10 active canonical commands, 2 experiment commands,
+  9 adapters per platform (Cursor/Claude/Gemini/Codex), experience.md has no adapters (documented gap).
+- README already had the plan entry from prior session.
+- Markdownlint: 0 errors.
+
+### Patterns to remember
+- Plans in `current/` or `active/` are 4 levels deep from repo root, not 3. Always count from
+  the plan file's actual directory, not from `.agent/plans/`.
+
+## Session 2026-03-04c — Planning system improvements and deep codebase review
+
+### What was done
+- Deep codebase review against devx-strictness-convergence plan: dispatched 5 parallel
+  agents scanning ESLint config, violation baselines, DI/test patterns, console/logger
+  topology, and type assertion landscape.
+- Updated devx-strictness-convergence.plan.md with: exception governance (owner-only
+  approval), deep review metric drift findings, revised Phase 3 execution order
+  (search-cli first — heaviest vi.mock user), DI refactoring scope table, approved
+  exceptions register, 3 new risks.
+- Compared external planning skills (superpowers: writing-plans, executing-plans,
+  brainstorming, subagent-driven-development) to internal jc-plan system. Identified
+  6 adoptable lessons.
+- Updated 6 files incorporating lessons: atomic template (blocked protocol, step-level
+  decomposition, fresh sub-agent guidance), adversarial-review component (plan compliance
+  gate as Step 0), jc-plan command (design gate via metacognition), feature-workstream
+  template (code sketches), quality-fix template (approach-known qualifier),
+  phase-2-evidence-based-claims execution plan (full rewrite with preflight, blocked
+  protocol, step decomposition for all 6 tasks).
+- Consolidation pass: all plan metadata accurate, no extractable content needs moving,
+  fitness functions checked (CONTRIBUTING.md 401/400 and practice-lineage.md 321/320
+  remain 1 over — persistent, known).
+
+### Key concepts
+- **Structural vs operational completeness**: internal system had better structure
+  (lifecycle lanes, YAML, components); external had better operational detail (what to
+  do when blocked, step granularity, review ordering).
+- **Design gate**: metacognition exploration before committing to plan structure prevents
+  wasted effort on wrong approaches.
+- **Plan compliance before quality review**: adversarial reviewers should first verify the
+  plan's own acceptance criteria are met, then assess code quality.
+- **Blocked protocol**: stop, document, present to owner, don't guess. Universal pattern
+  now in the atomic template — every plan inherits it.
+- **Exception governance**: only the project owner can approve exceptions to rules. Agents
+  must classify severity and present — never accept risk on behalf of the owner.
+
+### Patterns to remember
+- Phase 3 execution order should tackle heaviest vi.mock user first (search-cli: 14 calls)
+  to unblock vitest isolation workaround removal earliest.
+- Type assertion target is "zero unjustified" not "zero" — ~5,570 of 218 tracked warnings
+  are in generated code (excluded). Only ~35-50 are realistically fixable.
+- Baseline metrics drift between plan creation and execution — always re-verify before
+  starting a new phase.
+
+## Session 2026-03-04b — Agent artefact portability: rules distinction, hooks plan, consolidation
+
+### What was done
+- Clarified conceptual separation in ADR-125 between authoritative policies
+  (`.agent/directives/rules.md`) and activation triggers (`.cursor/rules/*.mdc`).
+  These are distinct artefact types: policies define what must be followed,
+  triggers define when and how policies surface on a specific platform.
+- Created hooks portability plan at
+  `.agent/plans/agentic-engineering-enhancements/future/hooks-portability.plan.md`.
+  Researched hooks across Claude Code (17 events, 4 hook types), Cursor (8+ events),
+  Gemini CLI (11 events), and Codex (not yet supported).
+- Updated practice.md to reflect the multi-platform artefact architecture:
+  Tooling layer now references all four platform adapter directories,
+  Artefact Map consolidated, Rules entry clarified as policies + triggers.
+- Graduated "commands should be thin pointers" from distilled.md to ADR-125
+  (already captured in Thin Wrapper Contract section).
+- Deep `/jc-consolidate-docs` pass: fitness functions checked, no new breaches,
+  practice box empty, napkin under threshold.
+
+### Key concepts
+- **Policies vs triggers**: `rules.md` is the authoritative policy document.
+  `.mdc` files are activation triggers — metadata that controls when policies
+  surface. A trigger may activate a rule from `rules.md`, a standalone directive,
+  or a skill. These are different artefact types.
+- **Hooks as a fifth artefact type**: Not yet in the three-layer model, but the
+  same canonical-content + thin-adapter pattern applies. Canonical scripts in
+  `.agent/hooks/scripts/`, platform config in `.cursor/hooks.json`,
+  `.claude/settings.json`, `.gemini/settings.json`.
+- **Codex hook gap**: Codex CLI does not support hooks yet (openai/codex#7396).
+  The hooks plan is designed to be Codex-ready when upstream ships the feature.
+
+### Patterns to remember
+- Claude Code hooks support 4 types: command, HTTP, prompt, agent. Cursor and
+  Gemini only support command hooks. This means Claude Code's prompt/agent hooks
+  are inherently platform-specific and should stay in `.claude/settings.json`.
+- Hook stdin schemas differ slightly between platforms. Scripts should be
+  schema-tolerant (extract only needed fields, ignore the rest).
+
+## Session 2026-03-04a — Landing page missing aggregated tools
+
+### What was done
+- Landing page `renderToolsSection()` called `listAllToolDescriptors()` which only
+  returns the 23 generated tools from the OpenAPI schema. The 7 aggregated tools
+  (search, fetch, get-curriculum-model, get-thread-progressions, get-prerequisite-graph,
+  browse-curriculum, explore-topic) were missing from the tool list.
+- Wrote `render-tools-section.unit.test.ts` (RED) verifying aggregated tool names
+  appear in the HTML and total count is 30.
+- Changed import from `listAllToolDescriptors` to `listUniversalTools` +
+  `generatedToolRegistry` from the SDK public API. Added `?? ''` fallback for
+  optional `description` field on `UniversalToolListEntry`.
+- All 692 tests pass, type-check clean, lint clean.
+
+### Patterns to remember
+- `listAllToolDescriptors()` returns ONLY generated tools (23). Use
+  `listUniversalTools(generatedToolRegistry)` for the full roster (30).
+- `UniversalToolListEntry.description` is optional — handle with `?? ''` when
+  passing to functions that require `string`.
+
 ## Session 2026-03-03g — Remove vi.mock from E2E tests (ADR-078)
 
 ### What was done

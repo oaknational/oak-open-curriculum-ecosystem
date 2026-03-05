@@ -1,7 +1,7 @@
 # Config Architecture Standardisation Plan
 
 **Status**: 📋 READY TO START (Analysis Complete)  
-**Priority**: Medium — post-merge, pre-alpha work  
+**Priority**: Medium — Milestone 2 execution track  
 **Estimated Effort**: 8-12 hours  
 **Created**: 2025-12-16  
 **Updated**: 2026-02-23

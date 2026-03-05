@@ -12,7 +12,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies for this collection |
 | `active/README.md` | Active Index | Atomic executable plans mapped one-to-one to roadmap phases |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
-| `architectural-enforcement-adoption.plan.md` | Plan | ESLint boundaries (incl. strict completion and max-files-per-dir), dependency-cruiser, knip — physical enforcement |
+| `architectural-enforcement-adoption.plan.md` | Plan | Physical enforcement strategy; ESLint convergence is partially delegated to `developer-experience/active/devx-strictness-convergence.plan.md`, with `max-files-per-dir` deferred |
 | `cross-agent-standardisation.plan.md` | Plan | Cross-platform portability (skills, commands, sub-agent wrappers) |
 | `mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
 | `hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
@@ -23,6 +23,8 @@ Plans and research for hardening the agentic engineering practice through physic
 | `2026-02-21-cross-agent-standardisation-landscape.research.md` | Research | Landscape of cross-agent standards (AGENTS.md, Skills, MCP, A2A) |
 | `augmented-engineering-practices.research.md` | Research | Industry evidence base for AI-augmented engineering |
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
+| `current/artefact-portability-hardening.plan.md` | Plan (Current) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
+| `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 
 ## Read Order
 

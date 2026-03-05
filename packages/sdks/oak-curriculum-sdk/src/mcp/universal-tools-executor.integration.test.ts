@@ -10,7 +10,7 @@ import { describe, it, expect, vi } from 'vitest';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { McpToolError } from './execute-tool-call.js';
-import { ok } from '@oaknational/result';
+import { err, ok } from '@oaknational/result';
 import { createUniversalToolExecutor } from './universal-tools/executor.js';
 import type {
   GeneratedToolRegistry,
@@ -132,9 +132,9 @@ describe('createUniversalToolExecutor', () => {
   it('aggregates fetch results using the MCP executor', async () => {
     const executeMcpTool = vi.fn().mockImplementation((name: string) => {
       if (name === 'get-lessons-summary') {
-        return Promise.resolve({ status: 200, data: { lesson: { id: 'lesson-slug' } } });
+        return Promise.resolve(ok({ status: 200, data: { lesson: { id: 'lesson-slug' } } }));
       }
-      return Promise.resolve({ status: 200, data: null });
+      return Promise.resolve(ok({ status: 200, data: null }));
     });
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
@@ -161,7 +161,7 @@ describe('createUniversalToolExecutor', () => {
   });
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ status: 200, data: { status: 'ok' } });
+    const executeMcpTool = vi.fn().mockResolvedValue(ok({ status: 200, data: { status: 'ok' } }));
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
@@ -183,7 +183,7 @@ describe('createUniversalToolExecutor', () => {
   it('maps executor errors to CallToolResult', async () => {
     const executeMcpTool = vi
       .fn()
-      .mockResolvedValue({ error: new McpToolError('Execution failed', SAMPLE_MCP_TOOL_NAME) });
+      .mockResolvedValue(err(new McpToolError('Execution failed', SAMPLE_MCP_TOOL_NAME)));
     const callUniversalTool = createUniversalToolExecutor({
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),

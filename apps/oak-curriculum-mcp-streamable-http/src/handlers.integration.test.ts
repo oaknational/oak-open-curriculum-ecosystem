@@ -100,8 +100,8 @@ describe('createMcpHandler (Integration)', () => {
       const mockReq = createFakeExpressRequest({
         body: { method: 'tools/list' },
         headers: {},
+        auth: { userId: 'test-user' },
       });
-      Object.assign(mockReq, { auth: { userId: 'test-user' } });
       const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);

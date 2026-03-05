@@ -2,8 +2,8 @@
 
 Cross-cutting architecture, system quality, and observability plans.
 
-**Status**: 📋 Planned
-**Last Updated**: 2026-03-02
+**Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
+**Last Updated**: 2026-03-04
 
 ---
 
@@ -14,14 +14,14 @@ Cross-cutting architecture, system quality, and observability plans.
 | `codegen/` | Post-M1 | SDK codegen workspace decomposition (strategic plan + research) |
 | `stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
 | `config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
-| `no-console-enforcement.plan.md` | M1 | Replace ~110 `console.*` calls with structured logger |
+| `no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
 | `observability-and-quality-metrics.plan.md` | M3 | Structured logging, monitoring, alerting, quality dashboards |
 
 ## Milestone Alignment
 
-- **Milestone 1** (post-merge, pre-alpha): server alignment,
-  config standardisation, no-console enforcement
-- **Post-M1**: SDK codegen workspace decomposition
+- **Milestone 2** (open public alpha): server alignment,
+  config standardisation, and public-alpha hardening dependencies
+- **Post-M2**: SDK codegen workspace decomposition
 - **Milestone 3** (pre-beta): observability and quality metrics
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic

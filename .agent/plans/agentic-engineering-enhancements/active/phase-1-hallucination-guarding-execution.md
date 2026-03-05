@@ -48,8 +48,8 @@ then reviewer templates, then pilot evidence.
 
 ```bash
 rg -n "non-trivial claim|verified|partially verified|unverified|claim-to-evidence|abstain|unsupported claim|No evidence for non-trivial claim" \
-  .agent/prompts/start-right.prompt.md \
-  .agent/prompts/start-right-thorough.prompt.md \
+  .agent/skills/start-right-quick/shared/start-right.md \
+  .agent/skills/start-right-thorough/shared/start-right-thorough.md \
   .agent/prompts/gt-review.md \
   .agent/sub-agents/templates/code-reviewer.md \
   .agent/sub-agents/templates/architecture-reviewer.md \
@@ -69,8 +69,8 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 ### File-by-File Edit Order (Phase 1 implementation)
 
 1. Policy contract first:
-   - `.agent/prompts/start-right.prompt.md`
-   - `.agent/prompts/start-right-thorough.prompt.md`
+   - `.agent/skills/start-right-quick/shared/start-right.md`
+   - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
    - `.agent/prompts/gt-review.md`
 2. Reviewer template integration second:
    - `.agent/sub-agents/templates/code-reviewer.md`
@@ -111,11 +111,11 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 ### Task 1.2: Prompt Integration
 
 - Target files:
-  - `.agent/prompts/start-right.prompt.md`
-  - `.agent/prompts/start-right-thorough.prompt.md`
+  - `.agent/skills/start-right-quick/shared/start-right.md`
+  - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
   - `.agent/prompts/gt-review.md`
 - Deterministic validation:
-  - `rg -n "claim|evidence|abstain" .agent/prompts/start-right*.prompt.md .agent/prompts/gt-review.md`
+  - `rg -n "claim|evidence|abstain" .agent/skills/start-right-quick/shared/start-right.md .agent/skills/start-right-thorough/shared/start-right-thorough.md .agent/prompts/gt-review.md`
 
 ### Task 1.3: Reviewer Template Integration
 

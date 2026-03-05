@@ -125,14 +125,19 @@ function handleToolResult(
   handlers: ReturnType<typeof createToolResponseHandlers>,
   errorContext?: ErrorContext,
 ): ReturnType<ReturnType<typeof createToolResponseHandlers>['handleSuccess']> {
-  if (execResult.error) {
+  if (!execResult.ok) {
     return handlers.handleExecutionError(params, execResult.error, errorContext);
   }
-  const validation = validateOutput(descriptor, execResult);
+  const validation = validateOutput(descriptor, execResult.value);
   if (!validation.ok) {
-    return handlers.handleValidationError(params, execResult, validation.message, errorContext);
+    return handlers.handleValidationError(
+      params,
+      execResult.value,
+      validation.message,
+      errorContext,
+    );
   }
-  return handlers.handleSuccess(execResult);
+  return handlers.handleSuccess(execResult.value);
 }
 
 // eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
@@ -169,9 +174,9 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
     const result = handleToolResult(execResult, params, descriptor, handlers, errorContext);
     const isSlowOperation = duration.ms > SLOW_OPERATION_THRESHOLD_MS;
 
-    const status = execResult.error
+    const status = !execResult.ok
       ? 'with error'
-      : validateOutput(descriptor, execResult).ok
+      : validateOutput(descriptor, execResult.value).ok
         ? 'success'
         : 'with validation error';
 

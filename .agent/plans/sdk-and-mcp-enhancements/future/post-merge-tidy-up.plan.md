@@ -162,7 +162,7 @@ Deferred to later milestones:
 
 Collected from:
 
-- [ws1-get-curriculum-model.plan.md](../active/ws1-get-curriculum-model.plan.md) — WS5 review follow-ups
+- [ws1-get-curriculum-model.plan.md](../archive/completed/ws1-get-curriculum-model.plan.md) — WS5 review follow-ups
 - [merge-readiness.plan.md](../archive/completed/merge-readiness.plan.md) — post-gate items
 - [release-plan-m1.plan.md](../../archive/completed/release-plan-m1.plan.md) — M1 gates
 - Session: [Error handling](7e822a76-e479-4943-90f1-ddb496e63e57)

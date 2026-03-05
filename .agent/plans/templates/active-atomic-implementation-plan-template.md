@@ -64,6 +64,76 @@ cp .agent/plans/[collection]/evidence-bundle.template.md \
 - Deterministic validation:
   - `[command]`
 
+### Step-Level Decomposition (When Needed)
+
+For tasks where the implementation approach is known, decompose into
+executable micro-steps. Each step is one action (2–5 minutes). This
+is optional for simple tasks but expected for complex or multi-file
+changes.
+
+```markdown
+#### Steps for Task N
+
+1. **Write the failing test**
+   - File: `[exact/path/to/test.ts]`
+   - What it asserts: [behaviour]
+
+2. **Run test to verify it fails**
+   - Run: `[exact command]`
+   - Expected: FAIL with "[reason]"
+
+3. **Write minimal implementation**
+   - File: `[exact/path/to/file.ts]`
+   - Changes: [specific changes]
+
+4. **Run test to verify it passes**
+   - Run: `[exact command]`
+   - Expected: PASS
+
+5. **Run quality gates**
+   - Run: `pnpm type-check && pnpm lint && pnpm test`
+   - Expected: exit 0
+
+6. **Commit**
+   - `git add [files] && git commit -m "[message]"`
+```
+
+When the approach is known (e.g., from a deep review or prior phase),
+include before/after code sketches:
+
+```markdown
+**Current** (`path/to/file.ts:42`):
+// problematic code
+
+**Target**:
+// desired code
+```
+
+### Blocked Protocol
+
+If any validation command fails or produces unexpected output during
+task execution:
+
+1. **Stop** — do not proceed to the next step or task
+2. **Document** the failure: command, actual output, expected output
+3. **Present** the failure to the project owner before continuing
+4. **Do not guess** a workaround — ask for clarification
+
+This applies equally to AI agents and human implementers.
+
+### Fresh Sub-Agent Guidance
+
+For phases with 3+ independent workspace-scoped tasks, consider
+dispatching a fresh sub-agent per task. Benefits:
+
+- No context pollution between tasks
+- Enables parallelism for independent workspaces
+- Each agent gets full attention on one task
+
+Provide each sub-agent with: the specific task text, the canonical
+pattern to follow, the deterministic validation commands, and the
+blocked protocol above.
+
 ### Task 3: Documentation Synchronisation
 
 - Output:
@@ -91,3 +161,4 @@ cp .agent/plans/[collection]/evidence-bundle.template.md \
 1. All atomic tasks complete with deterministic validation output.
 2. Evidence bundle exists and covers non-trivial claims.
 3. Documentation sync entry is complete for this phase.
+4. No blocked-protocol items remain unresolved (all failures presented to owner and addressed).

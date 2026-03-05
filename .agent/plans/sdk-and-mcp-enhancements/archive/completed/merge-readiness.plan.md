@@ -80,6 +80,6 @@ Remaining:
 
 ## References
 
-- [ws1 plan](../../active/ws1-get-curriculum-model.plan.md) — completed, follow-ups tracked here and in post-merge plan
+- [ws1 plan](./ws1-get-curriculum-model.plan.md) — completed, follow-ups tracked here and in post-merge plan
 - [Release plan](../../../archive/completed/release-plan-m1.plan.md) — M0/M1 gates and full history
 - [Post-merge plan](../../future/post-merge-tidy-up.plan.md) — non-blocking follow-ups

@@ -1,6 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { toRetrievalError } from './retrieval-error.js';
 
+class StatusCodeError extends Error {
+  readonly statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 describe('toRetrievalError', () => {
   it('maps a regular Error to es_error with message', () => {
     const error = new Error('search phase execution exception');
@@ -14,7 +23,7 @@ describe('toRetrievalError', () => {
   });
 
   it('maps an Error with statusCode property to es_error with status', () => {
-    const error = Object.assign(new Error('index_not_found_exception'), { statusCode: 404 });
+    const error = new StatusCodeError('index_not_found_exception', 404);
     const result = toRetrievalError(error);
 
     expect(result).toStrictEqual({
@@ -46,7 +55,7 @@ describe('toRetrievalError', () => {
   });
 
   it('maps an Error with 408 status code to timeout', () => {
-    const error = Object.assign(new Error('Request Timeout'), { statusCode: 408 });
+    const error = new StatusCodeError('Request Timeout', 408);
     const result = toRetrievalError(error);
 
     expect(result).toStrictEqual({

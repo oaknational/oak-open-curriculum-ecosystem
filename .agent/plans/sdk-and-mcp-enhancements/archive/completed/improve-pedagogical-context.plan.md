@@ -445,7 +445,7 @@ canonical URLs, search guidance). The need for additional structured
 glossary data should be evaluated empirically after production usage.
 
 See [WS2+WS3 Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md)
-and [WS1 Active Plan](active/ws1-get-curriculum-model.plan.md).
+and [WS1 execution plan](ws1-get-curriculum-model.plan.md).
 
 ---
 
@@ -453,7 +453,7 @@ and [WS1 Active Plan](active/ws1-get-curriculum-model.plan.md).
 
 This document is the **strategic brief** — it captures the problem,
 research, design decisions, and implementation guidance. The executable
-plan is at [active/ws1-get-curriculum-model.plan.md](active/ws1-get-curriculum-model.plan.md).
+plan is at [ws1-get-curriculum-model.plan.md](ws1-get-curriculum-model.plan.md).
 
 **WS1 implementation status** (2026-03-01): RED, GREEN, and REFACTOR
 phases complete. Outstanding: test quality fixes (string-checking tests),

@@ -7,16 +7,22 @@
 
 import type { Request } from 'express';
 import type { Logger } from '@oaknational/logger';
+import type { PendingSessionOptions } from '@clerk/types';
 
 /** Minimal auth shape that extractAuthContext reads (userId). */
 export interface MinimalAuthContext {
   readonly userId?: string | null;
 }
 
+/** Clerk callable auth accessor contract used by getAuth(req). */
+export type AuthContextAccessor = (
+  options?: PendingSessionOptions,
+) => MinimalAuthContext | undefined;
+
 /** Minimal request shape needed for auth context extraction. Express Request satisfies this. */
 export interface RequestWithAuthContext {
   readonly headers: Request['headers'];
-  readonly auth?: MinimalAuthContext;
+  readonly auth?: MinimalAuthContext | AuthContextAccessor;
 }
 
 /**
@@ -58,10 +64,26 @@ function parseBearerToken(authHeader: string): string | undefined {
  */
 function getValidUserId(req: Request | RequestWithAuthContext): string | undefined {
   const auth = req.auth;
-  if (!auth || typeof auth !== 'object' || !('userId' in auth)) {
+  if (!auth) {
     return undefined;
   }
-  const userId = auth.userId;
+
+  const resolvedAuth =
+    typeof auth === 'function'
+      ? (() => {
+          try {
+            return auth();
+          } catch {
+            return undefined;
+          }
+        })()
+      : auth;
+
+  if (!resolvedAuth || typeof resolvedAuth !== 'object' || !('userId' in resolvedAuth)) {
+    return undefined;
+  }
+
+  const userId = resolvedAuth.userId;
   if (typeof userId !== 'string' || userId.length === 0) {
     return undefined;
   }

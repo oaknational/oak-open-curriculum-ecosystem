@@ -14,6 +14,7 @@ import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runt
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
 import { createFakeLogger, createFakeSearchRetrieval } from './test-helpers/fakes.js';
+import { ok } from '@oaknational/result';
 
 /**
  * Test logger that captures log calls. Uses shared fake so no type assertion is needed.
@@ -44,10 +45,12 @@ function createMockDependencies(
       };
     }),
     executeMcpTool: vi.fn(() =>
-      Promise.resolve({
-        status: 200 as const,
-        data: { result: 'success' },
-      }),
+      Promise.resolve(
+        ok({
+          status: 200 as const,
+          data: { result: 'success' },
+        }),
+      ),
     ),
     getResourceUrl: vi.fn(() => 'http://localhost:3333/mcp'),
     searchRetrieval: createFakeSearchRetrieval(),

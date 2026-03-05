@@ -4,14 +4,14 @@
 >
 > **Date**: 23 February 2026
 >
-> **Source**: [onboarding-simulations-public-alpha-readiness.md](../../../developer-experience/onboarding-simulations-public-alpha-readiness.md)
+> **Source**: [onboarding-simulations-public-alpha-readiness.md](../../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 > — 8 independent onboarding reviews across junior devs, mid-level devs, lead
 > devs, principal engineers, engineering managers, product owners, CTOs, and CEOs
 >
 > **Documentation follow-on (complete, archived)**: [onboarding-documentation-follow-on.plan.md](../../../developer-experience/archive/completed/onboarding-documentation-follow-on.plan.md)
 > (B7-B10 docs, all resolved 23 February 2026)
 >
-> **Governance follow-on**: [onboarding-simulations-public-alpha-readiness.md](../../../developer-experience/onboarding-simulations-public-alpha-readiness.md)
+> **Governance follow-on**: [onboarding-simulations-public-alpha-readiness.md](../../../developer-experience/active/onboarding-simulations-public-alpha-readiness.md)
 > (B1-B6 governance, requires leadership input)
 >
 > **Reviewed by**: `architecture-reviewer-barney` — restructured per

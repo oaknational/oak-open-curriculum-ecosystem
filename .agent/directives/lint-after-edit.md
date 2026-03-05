@@ -1,0 +1,14 @@
+# Lint After Edit
+
+After modifying TypeScript files, check for lint violations. The ESLint thresholds that most commonly bite during refactoring:
+
+- `max-lines`: 250 lines per file
+- `max-lines-per-function`: 50 lines per function
+- `complexity`: ESLint counts `??` and `?.` as branches
+
+When a violation appears, follow the refactoring rules in `.agent/directives/rules.md`:
+
+- **File somewhat too long**: split by groupings of responsibility into separate files
+- **File very long**: turn the file into a directory, with an index.ts file that functions as an integration point and which exports a well defined, well integration-tested public API. Split the original code by groupings of responsibility into well unit-tested separate files of pure functions.
+- **Function too long**: extract named helpers in the form of pure functions with unit tests.
+- **Too complex**: extract merge logic or branch-heavy expressions into helpers in the form of pure functions with unit tests.

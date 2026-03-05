@@ -7,8 +7,8 @@
  * - Direct property access avoids dynamic dispatch
  * - ZERO type assertions - perfect type flow
  *
- * @remarks Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
- * threading the OpenAPI-derived response types through the executor layer along with Zod validators.
+ * @remarks Specialise the success `value` shape per tool by threading the
+ * OpenAPI-derived response types through the executor layer along with Zod validators.
  * @remarks make it clearer where and how the tool responses are validated and narrowed to the specific tool response type.
  */
 
@@ -20,6 +20,7 @@ import {
   type ToolResultForName,
   callTool,
 } from '@oaknational/sdk-codegen/mcp-tools';
+import { err, ok, type Result } from '@oaknational/result';
 
 /**
  * Error types with proper cause chains
@@ -61,20 +62,12 @@ export class McpParameterError extends Error {
 /**
  * Result type for tool execution.
  *
- * @remarks Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
- * threading the OpenAPI-derived response types through the executor layer along with Zod validators.
+ * @remarks Specialise the `value` shape per tool by threading the OpenAPI-derived
+ * response types through the executor layer along with Zod validators.
  */
-export type ToolExecutionSuccess<TName extends ToolName = ToolName> = ToolResultForName<TName> & {
-  readonly error?: never;
-};
+export type ToolExecutionSuccess<TName extends ToolName = ToolName> = ToolResultForName<TName>;
 
-export type ToolExecutionResult =
-  | ToolExecutionSuccess
-  | {
-      readonly status?: never;
-      readonly data?: never;
-      readonly error: McpToolError | McpParameterError;
-    };
+export type ToolExecutionResult = Result<ToolExecutionSuccess, McpToolError | McpParameterError>;
 
 /**
  * Detect upstream content-blocking responses (third-party copyright gate).
@@ -153,41 +146,41 @@ function classifyUndocumentedResponse(
  */
 function mapErrorToResult(error: unknown, toolName: ToolName): ToolExecutionResult {
   if (error instanceof McpParameterError || error instanceof McpToolError) {
-    return { error };
+    return err(error);
   }
   if (error instanceof UndocumentedResponseError) {
-    return { error: classifyUndocumentedResponse(error, toolName) };
+    return err(classifyUndocumentedResponse(error, toolName));
   }
   if (error instanceof TypeError) {
     if (error.message.startsWith('Output validation error: ')) {
       const message = error.message.replace('Output validation error: ', '');
-      return {
-        error: new McpToolError('Execution failed: ' + message, toolName, {
+      return err(
+        new McpToolError('Execution failed: ' + message, toolName, {
           code: 'OUTPUT_VALIDATION_ERROR',
           cause: error,
         }),
-      };
+      );
     }
-    return {
-      error: new McpParameterError(error.message, toolName, undefined, undefined, {
+    return err(
+      new McpParameterError(error.message, toolName, undefined, undefined, {
         cause: error,
         code: 'PARAMETER_ERROR',
       }),
-    };
+    );
   }
   if (error instanceof Error) {
-    return {
-      error: new McpToolError(`Execution failed: ${error.message}`, toolName, {
+    return err(
+      new McpToolError(`Execution failed: ${error.message}`, toolName, {
         cause: error,
         code: 'EXECUTION_ERROR',
       }),
-    };
+    );
   }
-  return {
-    error: new McpToolError(`Execution failed: UNKNOWN ERROR: ${String(error)}`, toolName, {
+  return err(
+    new McpToolError(`Execution failed: UNKNOWN ERROR: ${String(error)}`, toolName, {
       code: 'EXECUTION_ERROR',
     }),
-  };
+  );
 }
 
 export async function executeToolCall(
@@ -196,17 +189,17 @@ export async function executeToolCall(
   client: OakApiPathBasedClient,
 ): Promise<ToolExecutionResult> {
   if (!isToolName(maybeToolName)) {
-    return {
-      error: new McpToolError(`Unknown tool: ${String(maybeToolName)}`, String(maybeToolName), {
+    return err(
+      new McpToolError(`Unknown tool: ${String(maybeToolName)}`, String(maybeToolName), {
         code: 'UNKNOWN_TOOL',
       }),
-    };
+    );
   }
 
   const toolName: ToolName = maybeToolName;
   try {
     const result = await callTool(toolName, client, maybeParams);
-    return result;
+    return ok(result);
   } catch (error) {
     return mapErrorToResult(error, toolName);
   }

@@ -18,13 +18,13 @@ executable plan in the collection lifecycle lanes (`current/` then
 
 ```text
 NOW (in progress): semantic-search/active/
-NEXT (queued): post-merge integration cleanup
+NEXT (queued): Milestone 2 blocker execution in semantic-search/current/
 LATER (deferred): milestone 2 search quality/ecosystem boundaries
 ```
 
-Immediate next-up backlog item from this hub:
+Most recently promoted from this hub:
 
-1. `../06-mcp-consumer-integration/mcp-result-pattern-unification.md`
+1. `../06-mcp-consumer-integration/mcp-result-pattern-unification.md` -> `../../active/mcp-result-pattern-unification.execution.plan.md`
 
 ---
 
@@ -36,7 +36,7 @@ Plans that span multiple boundaries or address SDK architecture.
 |------|--------|--------------|
 | [subject-domain-model.md](../02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md) | Oak API SDK sdk-codegen: subject hierarchy, KS4 patterns, curriculum config | SDK extraction complete ✅ |
 | [bulk-schema-driven-code-generation.md](../02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md) | Replace template-based bulk sdk-codegen with schema-driven generator | SDK extraction complete ✅ |
-| [mcp-result-pattern-unification.md](../06-mcp-consumer-integration/mcp-result-pattern-unification.md) | Migrate MCP `ToolExecutionResult` to `Result<T, E>` — post-merge work | Phase 3a complete ✅ |
+| [mcp-result-pattern-unification.md](../06-mcp-consumer-integration/mcp-result-pattern-unification.md) | Strategic source for MCP `Result<T, E>` convergence | ✅ Promoted to active execution |
 
 ---
 
@@ -70,4 +70,4 @@ Each boundary is a coherent domain of work with its own README explaining intent
 | Prerequisite | Status | Location |
 |--------------|--------|----------|
 | Ground truth foundation | ✅ Complete | [../../archive/completed/](../../archive/completed/) |
-| SDK extraction | ✅ Complete | [../../sdk-extraction/](../../sdk-extraction/) |
+| SDK extraction | ✅ Complete | [../../archive/completed/sdk-workspace-separation.md](../../archive/completed/sdk-workspace-separation.md) |

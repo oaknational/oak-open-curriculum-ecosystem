@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolExecutionResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
+import { ok } from '@oaknational/result';
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
@@ -36,7 +37,7 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
           canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
         },
       ];
-      const result: ToolExecutionResult = { status: 200, data };
+      const result: ToolExecutionResult = ok({ status: 200, data });
       return Promise.resolve(result);
     },
   };

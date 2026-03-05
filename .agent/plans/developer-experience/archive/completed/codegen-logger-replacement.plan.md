@@ -383,7 +383,7 @@ tests.
 
 **Related Plans**:
 
-- [ESLint Override Removal](./eslint-override-removal.plan.md) — broader plan
+- [Developer Experience Strictness Convergence](../../active/devx-strictness-convergence.plan.md) — canonical strictness plan
   to remove all ESLint overrides. The structural overrides in `code-generation/`
   and `vocab-gen/` (complexity, max-lines, etc.) are separate work tracked there.
 

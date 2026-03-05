@@ -1,0 +1,10 @@
+# Documentation Sync Log
+
+| Date | Plan/Phase | Change | Follow-up Docs Required | Status |
+|---|---|---|---|---|
+| 2026-03-03 | Collection migration | Introduced ADR-117 lifecycle structure and canonical strictness plan | Cross-reference updates in superseded plans and collection indexes | ✅ Done |
+| 2026-03-03 | Strictness convergence (phase 0) | Baseline inventories recomputed; no drift against locked metrics | Keep baseline metrics authoritative in canonical strictness plan only | ✅ Done |
+| 2026-03-03 | Strictness convergence (phase 1) | Streamable HTTP Clerk auth type/runtime alignment executed; blocked `Object.assign` removed in E2E helper | Track remaining test/e2e gate constraints and phase hand-off in canonical strictness plan notes | ✅ Done |
+| 2026-03-03 | Lane promotion | Canonical strictness plan promoted from `current/` to `active/` after execution started | Update supersession headers and all collection index links to `active/` path | ✅ Done |
+| 2026-03-04 | Scope expansion (phase 2 planning) | Folded `no-console` plan and delegated non-disruptive architectural ESLint convergence tasks (boundary/separation + split-guidance) into canonical strictness plan; `max-files-per-dir` explicitly deferred | Update source plans/indexes with supersession/delegation notes and refresh cross-collection links | ✅ Done |
+| 2026-03-04 | Phase 2 skills-first integration | Moved start-right quick/thorough shared workflows into skill-owned paths (`.agent/skills/start-right-quick/shared/`, `.agent/skills/start-right-thorough/shared/`), added Codex/Cursor skill adapters and Cursor invocation rule, and updated canonical strictness plan phase-2 scope + standalone session entrypoint | Keep live strictness execution surfaces free of `.agent/prompts/start-right*.prompt.md` references | ✅ Done |

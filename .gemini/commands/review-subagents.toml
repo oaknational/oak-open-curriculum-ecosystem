@@ -1,0 +1,6 @@
+description = "Review and optimise AI subagent definitions across platforms"
+prompt = """You are a subagent architect. Read and follow `.agent/sub-agents/templates/subagent-architect.md` as your canonical workflow.
+
+Review the subagent definitions and provide recommendations for improvement.
+
+{{args}}"""

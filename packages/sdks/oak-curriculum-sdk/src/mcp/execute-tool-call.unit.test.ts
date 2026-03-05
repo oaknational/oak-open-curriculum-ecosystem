@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { McpParameterError, McpToolError, executeToolCall } from './execute-tool-call';
 import { createFakeOakApiPathBasedClient } from '../test-helpers/fakes.js';
 import type { OakApiPathBasedClient } from '../client/index.js';
+import { ok } from '@oaknational/result';
 
 interface RateLimitArgs {
   readonly params: Record<string, never>;
@@ -31,6 +32,10 @@ describe('executeToolCall', () => {
   it('returns an error when the tool name is unknown', async () => {
     const result = await executeToolCall('not-a-tool', {}, createFakeOakApiPathBasedClient({}));
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected an error result');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
     expect(result.error).toMatchObject({
       toolName: 'not-a-tool',
@@ -51,8 +56,12 @@ describe('executeToolCall', () => {
     const result = await executeToolCall('get-rate-limit', undefined, client);
 
     expect(handler).not.toHaveBeenCalled();
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected a parameter error');
+    }
     expect(result.error).toBeInstanceOf(McpParameterError);
-    expect(result.error?.message).toContain('Invalid request parameters');
+    expect(result.error.message).toContain('Invalid request parameters');
   });
 
   it('invokes generated executors for zero-parameter tools', async () => {
@@ -65,7 +74,7 @@ describe('executeToolCall', () => {
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
     expect(handler).toHaveBeenCalledOnce();
-    expect(result).toEqual({ status: 200, data: expected });
+    expect(result).toEqual(ok({ status: 200, data: expected }));
   });
 
   it('maps output validation failures to McpToolError with a helpful message', async () => {
@@ -73,9 +82,13 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected output validation error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.code).toBe('OUTPUT_VALIDATION_ERROR');
-    expect(result.error?.message).toContain('Response does not match any documented schema');
+    expect(result.error.code).toBe('OUTPUT_VALIDATION_ERROR');
+    expect(result.error.message).toContain('Response does not match any documented schema');
   });
 
   it('propagates execution errors with context', async () => {
@@ -85,10 +98,14 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected execution error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.message).toBe('Execution failed: boom');
-    expect(result.error?.toolName).toBe('get-rate-limit');
-    expect(result.error?.code).toBe('EXECUTION_ERROR');
+    expect(result.error.message).toBe('Execution failed: boom');
+    expect(result.error.toolName).toBe('get-rate-limit');
+    expect(result.error.code).toBe('EXECUTION_ERROR');
   });
 
   it('classifies undocumented 4xx as UPSTREAM_API_ERROR and preserves upstream message', async () => {
@@ -103,9 +120,13 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected upstream API error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.code).toBe('UPSTREAM_API_ERROR');
-    expect(result.error?.message).toContain('Invalid lesson slug format');
+    expect(result.error.code).toBe('UPSTREAM_API_ERROR');
+    expect(result.error.message).toContain('Invalid lesson slug format');
   });
 
   it('classifies undocumented 5xx as UPSTREAM_SERVER_ERROR', async () => {
@@ -116,9 +137,13 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected upstream server error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.code).toBe('UPSTREAM_SERVER_ERROR');
-    expect(result.error?.message).toContain('Internal server error');
+    expect(result.error.code).toBe('UPSTREAM_SERVER_ERROR');
+    expect(result.error.message).toContain('Internal server error');
   });
 
   it('handles undocumented status with no extractable message', async () => {
@@ -129,9 +154,13 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected upstream API error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.code).toBe('UPSTREAM_API_ERROR');
-    expect(result.error?.message).toContain('418');
+    expect(result.error.code).toBe('UPSTREAM_API_ERROR');
+    expect(result.error.message).toContain('418');
   });
 
   it('classifies content-blocked 400 as CONTENT_NOT_AVAILABLE', async () => {
@@ -150,7 +179,11 @@ describe('executeToolCall', () => {
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected content not available error');
+    }
     expect(result.error).toBeInstanceOf(McpToolError);
-    expect(result.error?.code).toBe('CONTENT_NOT_AVAILABLE');
+    expect(result.error.code).toBe('CONTENT_NOT_AVAILABLE');
   });
 });

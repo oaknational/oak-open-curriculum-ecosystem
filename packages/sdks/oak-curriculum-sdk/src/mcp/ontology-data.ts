@@ -6,10 +6,7 @@
  * It's consumed by the curriculum-model-data module to compose the combined
  * orientation response for the get-curriculum-model tool.
  *
- * @remarks This is a POC implementation. For historical planning provenance,
- * see `.agent/plans/sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md`.
- * The original ontology plan is archived at
- * `.agent/plans/sdk-and-mcp-enhancements/archive/legacy-numbered/02-curriculum-ontology-resource-plan.md`.
+ * @remarks This is a simple ontology for the public API data specifically. For the complete, official Oak ontology see https://github.com/oaknational/oak-curriculum-ontology
  */
 
 import { conceptGraph } from '@oaknational/sdk-codegen/vocab';

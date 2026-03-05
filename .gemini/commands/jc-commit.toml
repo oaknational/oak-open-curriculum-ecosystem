@@ -1,0 +1,2 @@
+description = "Create a well-formed commit for current changes"
+prompt = "Read and follow the instructions in .agent/commands/commit.md"

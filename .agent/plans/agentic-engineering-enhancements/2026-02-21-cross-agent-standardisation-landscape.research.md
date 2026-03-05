@@ -396,7 +396,7 @@ metadata:
 | Metacognition | — | `perspective/metacognition.md` |
 | Collaboration | — | `drafts/collaborate.md` |
 | Consolidate docs | `jc-consolidate-docs.md` | — |
-| Start right | `jc-start-right.md`, `jc-start-right-thorough.md` | — |
+| Start right | `jc-start-right-quick.md`, `jc-start-right-thorough.md` | — |
 | Go | `jc-go.md` | — |
 
 The structured Cursor commands and the minimal Claude commands often encode the same intent with different levels of detail. The Cursor versions are generally more comprehensive.

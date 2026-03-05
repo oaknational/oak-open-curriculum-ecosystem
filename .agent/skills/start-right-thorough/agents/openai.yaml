@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Right (Thorough)"
+  short_description: "Load thorough start-right skill workflow into current session"
+  default_prompt: "Use $start-right-thorough to load and apply .agent/skills/start-right-thorough/shared/start-right-thorough.md in this session."

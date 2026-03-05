@@ -39,9 +39,6 @@ enough for permanent documentation.
 - Risk acceptance is a human decision. Agents classify
   severity and describe impact; agents do not accept risks
   or defer items on behalf of the owner
-- Commands should be thin pointers to prompts, not
-  duplicates. The prompt is the source of truth; the
-  command is a platform-specific entry point
 - Onboarding simulations must be discovery-based: start at
   README.md only, no prescribed reading list, no access to
   the onboarding planning documents. Describe personas by

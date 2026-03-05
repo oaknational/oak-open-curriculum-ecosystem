@@ -22,8 +22,17 @@ import type {
 export function createNoOpClerkMiddleware(): () => RequestHandler {
   return () => (req, res, next) => {
     void res;
-    Object.assign(req, {
-      auth: () => ({ userId: null, sessionId: null, isAuthenticated: false }),
+    req.auth = () => ({
+      id: null,
+      subject: null,
+      scopes: null,
+      userId: null,
+      clientId: null,
+      getToken: async () => null,
+      has: () => false,
+      debug: () => ({}),
+      tokenType: 'oauth_token',
+      isAuthenticated: false,
     });
     next();
   };

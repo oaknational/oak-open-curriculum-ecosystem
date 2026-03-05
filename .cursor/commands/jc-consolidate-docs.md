@@ -1,27 +1,3 @@
-# consolidate-docs
+# Consolidate Docs
 
-## Cardinal Rule: Plans Are Not Documentation
-
-**A completed plan MUST be safe to delete at any point.** Plans are execution instructions — they describe what to do and track progress. They are NOT permanent documentation.
-
-Before marking a plan as complete or archiving it, extract ALL documentation content to permanent locations:
-
-- **Architectural decisions** → ADRs in `docs/architecture/architectural-decisions/`
-- **System behaviour documentation** → READMEs in the relevant workspace
-- **Technical reference** (data shapes, APIs, edge cases) → TSDoc in source files or workspace READMEs
-- **Patterns and gotchas** → `distilled.md` (if not already in permanent docs)
-
-If documentation exists ONLY in a plan, it is at risk. Extract it first, then mark the plan complete.
-
-## Steps
-
-1. **Verify documentation is current.** Documentation should be produced during work, not deferred to consolidation. Check that architectural decisions, system behaviour, and technical reference are already documented in their permanent locations (ADRs, `docs/`, READMEs, source TSDoc). Then scan active and recently completed plans for any remaining content that describes how things work (not what to do next) and move it to the appropriate permanent location. Plans should contain only: status, next steps, execution instructions, and references to permanent docs.
-2. Make sure all plans and prompts are fully up to date (status lines, completion markers, cross-references).
-3. Identify any content in ephemeral locations (prompts, napkin, distilled.md) that now functions as settled documentation, and move it to non-ephemeral locations such as ADRs, `/docs/`, or READMEs.
-4. Check whether `.agent/experience/` files contain applied technical patterns that have matured into settled practice — if so, extract the technical content to permanent documentation or `distilled.md`, and replace the experience file with a brief reflective stub.
-5. **Extract code patterns.** Review completed work for reusable patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. Extract qualifying patterns to `.agent/memory/code-patterns/` (one pattern per file, markdown with frontmatter). Patterns are abstract — they describe the principle and anti-pattern, not the domain-specific implementation. See the [code-patterns README](/.agent/memory/code-patterns/README.md) for the frontmatter schema and barrier criteria.
-6. If the napkin exceeds ~800 lines, follow the [distillation skill](/.cursor/skills/distillation/SKILL.md) to rotate it.
-7. **Keep `distilled.md` within size constraints** detailed in the distillation skill. The primary mechanism is **extracting established, well-defined concepts to permanent documentation** (ADRs, `/docs/`, READMEs). Permanent docs are discoverable without specialist knowledge; `distilled.md` is part of a specialist knowledge refinement flow and should contain only what has NOT yet matured into permanent documentation. When an entry represents settled practice rather than a fresh gotcha, create the permanent doc first, then remove the entry from `distilled.md`. This is important, this **closes the loop** on the knowledge gained from sessions.
-8. **Check fitness functions.** Key documents in the knowledge flow carry `fitness_ceiling` in their YAML frontmatter. Check line counts against ceilings. Files at or over ceiling need attention — follow the `split_strategy` in their frontmatter. This is not blocking; it is a signal. Report the status table. **Frontmatter rule**: all documents in the knowledge flow carry frontmatter EXCEPT shallow-browsing entry points (`README.md`, `docs/foundation/quick-start.md`, `docs/foundation/VISION.md`). Key documents to check: `.agent/directives/AGENT.md`, `.agent/directives/rules.md`, `.agent/directives/testing-strategy.md`, `.agent/directives/schema-first-execution.md`, `docs/governance/typescript-practice.md`, `docs/governance/development-practice.md`, `docs/operations/troubleshooting.md`, `CONTRIBUTING.md`, `.agent/memory/distilled.md`. The practice trinity files (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`) also carry ceilings — see [practice-lineage.md §Fitness Functions](/.agent/practice-core/practice-lineage.md).
-9. **Check the practice box.** If [`.agent/practice-core/incoming/`](/.agent/practice-core/incoming/) contains files, follow the integration flow in [practice-lineage.md](/.agent/practice-core/practice-lineage.md) §Integration Flow. Key steps: (a) **check the provenance chain** in the YAML frontmatter — if the last entry's `repo` differs from this repo, the files have been evolved elsewhere and carry potential learnings; (b) **compare across the full Practice system**, not just `practice.md` — also check rules, skills, commands, prompts, and directives for integration points; (c) **apply the three-part bar** (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box after integration. If distilled.md entries have matured into meta-principles about the Practice itself (not domain-specific gotchas), they may graduate to the Learned Principles section in [practice-lineage.md](/.agent/practice-core/practice-lineage.md).
-10. _(Optional)_ If the session involved meaningful work — not just routine tasks — consider recording a brief experience in `.agent/experience/`. This should be about what the work was like, not what was done or what it achieved. What shifted? What was surprising? What went differently from expectation? Reading the [metacognition prompt](/.agent/directives/metacognition.md) before writing can help surface patterns below the immediate interaction. Follow the [experience template](/.agent/experience/README.md).
+Read and follow @.agent/commands/consolidate-docs.md

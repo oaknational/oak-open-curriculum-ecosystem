@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-03-02
+last_updated: 2026-03-04
 ---
 
 # High-Level Plan
@@ -114,11 +114,11 @@ real-world validation with a controlled user base before broader release.
 **Post-merge work** (not blocking but valuable):
 
 - Result pattern unification:
-  [mcp-result-pattern-unification.md](semantic-search/future/06-mcp-consumer-integration/mcp-result-pattern-unification.md)
+  [mcp-result-pattern-unification.execution.plan.md](semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
 - STDIO/HTTP alignment:
   [stdio-http-server-alignment.md](architecture-and-infrastructure/stdio-http-server-alignment.md)
-- no-console ESLint enforcement (~110 files, largely mechanical):
-  [no-console-enforcement.plan.md](architecture-and-infrastructure/no-console-enforcement.plan.md)
+- no-console + strictness convergence (includes ESLint override removal and boundary/separation lint integration):
+  [devx-strictness-convergence.plan.md](developer-experience/active/devx-strictness-convergence.plan.md)
 
 ---
 
@@ -145,6 +145,8 @@ AI assistants. Production-grade authentication with social providers.
 2. **Edge rate limiting on OAuth proxy endpoints**
    - `/oauth/register`, `/oauth/authorize`, `/oauth/token`
    - Required before unauthenticated endpoints are exposed to the public
+   - Canonical execution plan:
+     [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 
 ---
 
@@ -202,7 +204,7 @@ platform reach.
      [supply-chain-controls.md](icebox/supply-chain-controls.md)
 10. **Search quality stream progression** via semantic-search roadmap
 11. **Developer experience** — TSDoc overhaul, SDK publishing,
-    ESLint override removal
+    strictness convergence (`vi.mock`/assertions/no-console/override removal) plus delegated boundary/separation lint hardening
 
 ---
 
@@ -227,7 +229,7 @@ Strategic architecture remains anchored in:
 | `security-and-privacy/` | Security hardening, hallucination guards, evidence-backed claims | 📋 M3 Public Beta | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
 | `architecture-and-infrastructure/` | Cross-cutting architecture, observability, system quality | 📋 M3 Public Beta | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `user-experience/` | Persona-level outcome contracts | 📋 M1-M2 | [user-experience/README.md](user-experience/README.md) |
-| `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M3 Public Beta | [onboarding-simulations-public-alpha-readiness.md](developer-experience/onboarding-simulations-public-alpha-readiness.md) |
+| `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |
 | `external/` | Upstream and external dependency requirements | 📋 Reference | [ooc-api-wishlist/index.md](external/ooc-api-wishlist/index.md) |
 | `archive/` | Historical completed/superseded plans | ✅ Reference | [archive/](archive/) |
 

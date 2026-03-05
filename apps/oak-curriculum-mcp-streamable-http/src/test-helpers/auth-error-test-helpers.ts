@@ -13,6 +13,7 @@ import {
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Notification, ServerRequest } from '@modelcontextprotocol/sdk/types.js';
+import { err } from '@oaknational/result';
 
 /**
  * Creates mock dependencies for tool handler testing.
@@ -144,13 +145,12 @@ export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
  * @returns ToolExecutionResult with error
  */
 export function createAuthErrorResult(status: number, message: string): ToolExecutionResult {
-  const error = Object.assign(new Error(message), { status });
-  const result: ToolExecutionResult = {
-    error: new McpToolError(`Execution failed: ${message}`, 'test-tool', {
+  const error = createStatusError(status, message);
+  return err(
+    new McpToolError(`Execution failed: ${message}`, 'test-tool', {
       cause: error,
     }),
-  };
-  return result;
+  );
 }
 
 /**
@@ -161,12 +161,11 @@ export function createAuthErrorResult(status: number, message: string): ToolExec
  */
 export function createClerkErrorResult(message: string): ToolExecutionResult {
   const clerkError = new Error(message);
-  const result: ToolExecutionResult = {
-    error: new McpToolError('Execution failed', 'test-tool', {
+  return err(
+    new McpToolError('Execution failed', 'test-tool', {
       cause: clerkError,
     }),
-  };
-  return result;
+  );
 }
 
 /**
@@ -177,12 +176,24 @@ export function createClerkErrorResult(message: string): ToolExecutionResult {
  */
 export function createNonAuthErrorResult(message: string): ToolExecutionResult {
   const error = new Error(message);
-  const result: ToolExecutionResult = {
-    error: new McpToolError('Execution failed', 'test-tool', {
+  return err(
+    new McpToolError('Execution failed', 'test-tool', {
       cause: error,
     }),
-  };
-  return result;
+  );
+}
+
+class StatusError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
+
+function createStatusError(status: number, message: string): Error {
+  return new StatusError(status, message);
 }
 
 /**

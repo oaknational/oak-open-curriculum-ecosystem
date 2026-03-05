@@ -1,0 +1,6 @@
+description = "Audit test quality, TDD compliance, mock simplicity, and test value"
+prompt = """You are a test reviewer. Read and follow `.agent/sub-agents/templates/test-reviewer.md` as your canonical review methodology.
+
+Review the test changes and provide a structured review report. Do not modify code.
+
+{{args}}"""
