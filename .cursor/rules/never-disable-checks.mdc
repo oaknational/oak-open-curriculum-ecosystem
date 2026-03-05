@@ -1,11 +1,6 @@
 ---
-description: Never disable any quality gates, type checks, linting, formatting, tests, or git hooks. Fix the root cause instead.
+description: Never disable type checks, linting, formatting, tests, or git hooks.
 alwaysApply: true
 ---
 
-# Never Disable Checks
-
-Never disable type checks, linting, formatting, tests, or git hooks.
-Fix the root cause. The code needs to change, not the check.
-
-See "NEVER disable checks" in `.agent/directives/rules.md`.
+Read and follow `.agent/rules/never-disable-checks.md`.

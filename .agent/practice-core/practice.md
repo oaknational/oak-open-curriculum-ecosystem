@@ -63,7 +63,7 @@ The organisational patterns. Directives (`.agent/directives/`), plans (`.agent/p
 
 ### Tooling
 
-Platform-specific implementations following a three-layer model (ADR-125): canonical content in `.agent/` (skills, commands, sub-agent templates, directives), thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, and entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). Rules have a distinct two-part structure: authoritative policies in `.agent/directives/rules.md` and activation triggers in `.cursor/rules/*.mdc` that control when policies surface. This layer defines *how* the practice is used in a specific environment.
+Platform-specific implementations following a canonical-first model (ADR-125): skills, commands, sub-agent templates, and rule policies all live in `.agent/` (platform-agnostic). Thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/` reference canonical content without duplicating it. Entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) direct each platform to the canonical practice. Plans and sub-agent templates need no adapters — they are consumed directly. Rules have two layers: authoritative policies in `.agent/directives/rules.md` and platform-specific activation triggers (Cursor `.cursor/rules/*.mdc`, Claude Code `.claude/rules/*.md`, or the entry-point chain for Gemini/Codex). This layer defines *how* the practice is used in a specific environment.
 
 ## The Knowledge Flow
 

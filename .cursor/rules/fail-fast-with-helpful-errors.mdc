@@ -1,8 +1,6 @@
 ---
-description: Fail FAST with helpful error messages. Never fail silently. Never ignore errors.
+description: Fail FAST with helpful error messages. Never fail silently.
 alwaysApply: true
 ---
 
-# Fail Fast With Helpful Errors
-
-See "Fail FAST" in `.agent/directives/rules.md`.
+Read and follow `.agent/rules/fail-fast-with-helpful-errors.md`.

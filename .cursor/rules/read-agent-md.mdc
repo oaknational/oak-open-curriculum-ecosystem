@@ -1,6 +1,6 @@
 ---
-description: Always read .agent/directives/AGENT.md and .agent/directives/rules.md (both relative to repo root) to understand the project and the agent's role.
+description: Read AGENT.md and rules.md at session start.
 alwaysApply: true
 ---
 
-Read .agent/directives/AGENT.md and .agent/directives/rules.md files (both relative to repo root) to understand the project and the agent's role.
+Read and follow `.agent/rules/read-agent-md.md`.

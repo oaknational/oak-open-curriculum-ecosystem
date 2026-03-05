@@ -371,7 +371,7 @@ the standards and produce work that must be rejected.
 2. [rules.md](../../directives/rules.md) -- Core rules: TDD, strictness, types, quality, architecture
 3. [testing-strategy.md](../../directives/testing-strategy.md) -- TDD at ALL levels, test definitions, violations
 4. [schema-first-execution.md](../../directives/schema-first-execution.md) -- Generator is source of truth, prohibited practices
-5. [semantic-search-architecture.md](../../directives/semantic-search-architecture.md) -- Structure is the foundation, correct framing
+5. [semantic-search-architecture.md](../../../docs/agent-guidance/semantic-search-architecture.md) -- Structure is the foundation, correct framing
 6. [metacognition.md](../../directives/metacognition.md) -- Think about your thoughts, reflect, gain insights
 7. [roadmap.md](../../plans/semantic-search/roadmap.md) -- Authoritative milestone sequence
 

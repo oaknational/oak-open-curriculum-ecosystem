@@ -128,7 +128,7 @@ The Practice is driven by slash commands that initiate structured workflows:
 
 ### Always-Applied Rules
 
-These are lightweight rules that fire on every agent interaction (in Cursor, `.mdc` files with `alwaysApply: true`):
+These are lightweight rules that fire on every agent interaction. The activation mechanism is platform-specific — see `practice-bootstrap.md` §Rules for the canonical-first model and platform adapter formats:
 
 - Read AGENT.md at session start
 - Read the Practice index at session start
@@ -249,7 +249,7 @@ The practice-core package (`practice.md`, `practice-lineage.md`, `practice-boots
 3. Write `rules.md` encoding the Principles above, adapted to local tooling.
 4. Write `testing-strategy.md` encoding the Testing Philosophy above, with local test targets.
 5. Write `metacognition.md` from the condensed version in `practice-bootstrap.md` (it is universal).
-6. Follow `practice-bootstrap.md` for the remaining artefacts: agent definitions, workflow commands, always-applied rules, start-right prompt, skills (napkin, distillation), and Cursor configuration. The bootstrap file provides annotated templates and format specifications for every artefact type.
+6. Follow `practice-bootstrap.md` for the remaining artefacts: sub-agent definitions, workflow commands, rules, start-right prompt, and skills (napkin, distillation). For each artefact type, create the canonical content in `.agent/` first, then add thin platform adapters. The bootstrap file provides annotated templates and format specifications for every artefact type.
 7. **Practice-core files.** If building from scratch: write all five files in `.agent/practice-core/` — the trinity (`practice.md`, this lineage doc, `practice-bootstrap.md`) each with YAML frontmatter (`provenance` array with index 0 entry, `fitness_ceiling`), plus `README.md` (human entry point) and `index.md` (agent entry point). Add initial learned principles to the lineage doc. If received from another repo: the five files already exist — append a new provenance entry to each trinity file with the new repo name, date, and purpose. The README and index are generic and should not need changes.
 8. **Create `.agent/practice-index.md`** — the bridge file that carries navigable links from practice-core to the local repo's artefacts. Practice-core references it via `../practice-index.md`. Use the template in `practice-bootstrap.md`, populating every section with the local repo's actual directives, ADRs, commands, skills, and directories. This file is NOT part of the travelling package — it stays in the repo.
 9. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every agent's first-action file exists. The repo builds. See the Bootstrap Checklist in `practice-bootstrap.md`.

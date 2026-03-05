@@ -3,8 +3,6 @@ description: After editing TypeScript files, check lint for file/function length
 globs: "*.ts"
 ---
 
-# Lint After Edit
-
-Read and follow `.agent/directives/lint-after-edit.md`.
+Read and follow `.agent/rules/lint-after-edit.md`.
 
 In Cursor, use `ReadLints` on the changed files or run `pnpm lint:fix`.

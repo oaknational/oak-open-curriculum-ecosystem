@@ -1,7 +1,6 @@
 ---
+description: All quality gate issues are always blocking.
 alwaysApply: true
 ---
 
-All quality gate issues are always blocking, regardless of the location, cause, or context. There is no such thing as an acceptable failure. There is no such thing as "someone else's problem".
-
-See "Fix things" in `.agent/directives/rules.md`.
+Read and follow `.agent/rules/all-quality-gate-issues-are-always-blocking.md`.

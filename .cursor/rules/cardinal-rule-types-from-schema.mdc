@@ -1,11 +1,6 @@
 ---
-description: ALL types, type guards, Zod schemas, and type-related information MUST flow from the Open Curriculum OpenAPI schema via pnpm sdk-codegen. This is the cardinal rule of this repository.
+description: ALL types flow from the OpenAPI schema via pnpm sdk-codegen. Cardinal rule.
 alwaysApply: true
 ---
 
-# Cardinal Rule: Types Flow From The Schema
-
-ALL types, type guards, Zod schemas, and validators MUST flow from the OpenAPI schema via `pnpm sdk-codegen`.
-No ad-hoc types. No broad `Record<string, unknown>`. Missing types = generator bug.
-
-See "Cardinal Rule" in `.agent/directives/rules.md` and `.agent/directives/schema-first-execution.md`.
+Read and follow `.agent/rules/cardinal-rule-types-from-schema.md`.

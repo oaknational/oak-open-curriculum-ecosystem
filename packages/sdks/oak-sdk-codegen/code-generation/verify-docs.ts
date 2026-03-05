@@ -34,7 +34,7 @@ async function mustExistNonEmpty(path: string): Promise<void> {
     }
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`Missing or empty: ${path} — ${msg}`);
+    throw new Error(`Missing or empty: ${path} — ${msg}`, { cause: err });
   }
 }
 
@@ -77,14 +77,14 @@ async function verifyTypedocJson(path: string): Promise<void> {
     raw = await fs.readFile(path, 'utf8');
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`Cannot read typedoc.json at ${path} — ${msg}`);
+    throw new Error(`Cannot read typedoc.json at ${path} — ${msg}`, { cause: err });
   }
   let json: unknown;
   try {
     json = JSON.parse(raw);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`typedoc.json is not valid JSON — ${msg}`);
+    throw new Error(`typedoc.json is not valid JSON — ${msg}`, { cause: err });
   }
   if (!hasChildren(json) || !Array.isArray(json.children) || json.children.length === 0) {
     throw new Error('typedoc.json has no top-level children');

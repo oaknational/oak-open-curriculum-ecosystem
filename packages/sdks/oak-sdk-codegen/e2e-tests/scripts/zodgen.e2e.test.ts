@@ -74,7 +74,7 @@ describe('zod generator - functionality tests', () => {
       execSync('npx tsc', { cwd: outDir, stdio: 'pipe' });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Generated Zod schemas failed to compile: ${errorMessage}`);
+      throw new Error(`Generated Zod schemas failed to compile: ${errorMessage}`, { cause: error });
     }
   });
 
@@ -140,7 +140,7 @@ describe('zod generator - functionality tests', () => {
       execSync('npx tsc', { cwd: outDir, stdio: 'pipe' });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Generated Zod schemas are not usable: ${errorMessage}`);
+      throw new Error(`Generated Zod schemas are not usable: ${errorMessage}`, { cause: error });
     }
   });
 });

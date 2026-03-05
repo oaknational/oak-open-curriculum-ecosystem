@@ -1,11 +1,6 @@
 ---
-description: Apply start-right quick/thorough skills at session start and re-grounding checkpoints.
+description: Apply start-right skills at session start and re-grounding checkpoints.
 alwaysApply: true
 ---
 
-# Use Start-Right Skills
-
-At session start, apply `start-right-quick`. Use `start-right-thorough` for complex or architectural work.
-Re-apply when scope changes materially.
-
-See `.agent/skills/start-right-quick/SKILL.md` and `.agent/skills/start-right-thorough/SKILL.md`.
+Read and follow `.agent/skills/start-right-quick/SKILL.md`. For complex or architectural work, use `.agent/skills/start-right-thorough/SKILL.md` instead.

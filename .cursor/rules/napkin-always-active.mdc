@@ -1,10 +1,6 @@
 ---
-description: Read the napkin at session start and write to it continuously throughout the session.
+description: Read the napkin at session start and write to it continuously.
 alwaysApply: true
 ---
 
-# Napkin: Always Active
-
-At session start, read `.agent/memory/distilled.md` then `.agent/memory/napkin.md` (if they exist). If `napkin.md` does not exist, create it with a session heading.
-
-Write to the napkin as you work: mistakes you make, corrections the user gives you, surprises, patterns that work or don't. See `.agent/skills/napkin/SKILL.md` for full guidance.
+Read and follow `.agent/skills/napkin/SKILL.md`.

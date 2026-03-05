@@ -65,7 +65,7 @@ export function makeGetAllThreads(client: Pick<OakApiClient, 'GET'>): GetAllThre
       data.map((thread) => ({
         slug: thread.slug,
         title: thread.title,
-        canonicalUrl: thread.canonicalUrl,
+        canonicalUrl: null,
       })),
     );
   };
@@ -91,7 +91,7 @@ export function makeGetThreadUnits(client: Pick<OakApiClient, 'GET'>): GetThread
         unitSlug: unit.unitSlug,
         unitTitle: unit.unitTitle,
         unitOrder: unit.unitOrder,
-        canonicalUrl: unit.canonicalUrl,
+        canonicalUrl: null,
       })),
     );
   };

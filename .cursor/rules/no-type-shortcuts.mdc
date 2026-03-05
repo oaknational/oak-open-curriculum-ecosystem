@@ -1,9 +1,7 @@
 ---
-description: Never use type assertions like `as`, or any other type shortcut. Exceptions: `as const` and `satisfies` are permitted.
+description: No type assertions (as), any, !. Exceptions: as const, satisfies.
 globs: '**/*.{ts,tsx,mts}'
 alwaysApply: true
 ---
 
-# No Type Shortcuts
-
-See "No type shortcuts" in `.agent/directives/rules.md`.
+Read and follow `.agent/rules/no-type-shortcuts.md`.
