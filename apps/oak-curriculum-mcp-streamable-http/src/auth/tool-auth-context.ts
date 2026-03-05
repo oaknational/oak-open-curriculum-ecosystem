@@ -7,7 +7,7 @@
 
 import type { Request } from 'express';
 import type { Logger } from '@oaknational/logger';
-import type { PendingSessionOptions } from '@clerk/types';
+import type { PendingSessionOptions } from '@clerk/shared/types';
 
 /** Minimal auth shape that extractAuthContext reads (userId). */
 export interface MinimalAuthContext {

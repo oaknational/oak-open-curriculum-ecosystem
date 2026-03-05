@@ -131,7 +131,7 @@ async function readTypedocProject(typedocJsonPath: string): Promise<TDProject> {
   } catch (err: unknown) {
     if (err instanceof ZodError) {
       const details = formatZodIssues(err.issues);
-      throw new Error('TypeDoc JSON validation failed:\n' + details);
+      throw new Error('TypeDoc JSON validation failed:\n' + details, { cause: err });
     }
     throw err instanceof Error ? err : new Error(String(err));
   }

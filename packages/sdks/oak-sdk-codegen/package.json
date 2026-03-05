@@ -87,19 +87,20 @@
     "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@modelcontextprotocol/ext-apps": "^1.1.2",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
-    "openapi-fetch": "^0.15.0",
+    "openapi-fetch": "^0.17.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/logger": "workspace:^",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
-    "@types/node": "^24.10.13",
+    "@types/node": "^25.3.3",
     "dotenv": "^17.3.1",
-    "openapi-typescript": "^7.10.1",
+    "openapi-typescript": "^7.13.0",
     "openapi3-ts": "^4.5.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",

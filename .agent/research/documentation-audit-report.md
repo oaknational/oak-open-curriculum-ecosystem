@@ -331,7 +331,7 @@ file is redundant and misleading.
 | `rules.md` | Authoritative rules | Current | Keep as-is |
 | `testing-strategy.md` | TDD at all levels | Current | Keep as-is |
 | `schema-first-execution.md` | Schema-first MCP execution | Current | Keep as-is |
-| `semantic-search-architecture.md` | Search architecture directive | Current | Keep as-is |
+| `semantic-search-architecture.md` | Moved to `docs/agent-guidance/` | Relocated | Domain-specific, not a directive |
 | `metacognition.md` | Reflective prompt | Current | Keep as-is |
 
 ---

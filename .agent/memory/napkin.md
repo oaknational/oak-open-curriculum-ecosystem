@@ -1,789 +1,187 @@
-# Napkin
-
-## Session 2026-03-05h — Practice Core README review
-
-### What was done
-- Reviewed user's changes to `.agent/practice-core/README.md` (expanded from single dense
-  paragraph to multi-paragraph narrative with Core/Practice distinction, sharing mechanism,
-  plasmid/memotype analogy, ecosystem-agnostic note).
-- Found: comma splice (line 9), subject-verb disagreement (line 11), "memotype" neologism
-  (stylistic, user's call).
-- Self-containment check: passes. Alignment with index.md and practice-lineage.md: consistent.
-
-## Session 2026-03-05g — Roadmap policy alignment (MCP-only, specialist creation, ADR-115 binding)
-
-### What was done
-- Updated `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` to apply owner decisions:
-  - MCP Apps migration is now explicitly single-path MCP-standard only
-    (no fallback metadata keys, no dual MIME/runtime path, no host adapters).
-  - Gate 4 now requires creating and trialling `mcp-extensions-expert`
-    as a low-cost specialist experiment.
-  - ADR-115 added to the ADR compliance matrix as a binding constraint
-    with explicit preservation action for `/oauth/*` proxy behaviour.
-- Removed unresolved inline review comments from Domain C/D sections and
-  replaced them with normative plan language.
-- Repaired the roadmap’s link-health command to correctly parse markdown
-  autolinks (`<https://...>`) by trimming trailing punctuation/`>`.
-- Ran the corrected link-health check: `OK: 24 urls validated`.
-
-### Patterns to remember
-- If the owner decides “no fallbacks, no dual paths”, reflect that rule in
-  all layers of the roadmap: objectives, backlog items, risk mitigations,
-  gates, ADR matrix rows, and exit criteria.
-- Validation snippets in plans should avoid clever one-liners when parsing
-  markdown URLs; a two-step `rawUrls -> urls` form is clearer and safer.
-
-## Session 2026-03-05f — Consolidate & restructure sdk-and-mcp-enhancements
-
-### Restructuring
-- `active/mcp-apps-standard-migration.plan.md` → `roadmap.md` (collection root)
-  — the file was a "strategic planning anchor, not a task-level executable plan",
-  which is exactly the roadmap role per ADR-117 templates
-- `active/auth-safety-correction.plan.md` stays as the one active executable plan
-- `future/output-schemas-for-mcp-tools.plan.md` → `current/`
-- `claude.feedback.md` → `archive/` (all 10 recommendations applied)
-- `concept-preservation-and-supersession-map.md` → `archive/` (all concept
-  homes point to the roadmap; ADR crosswalk duplicates matrix in roadmap)
-- `mcp-extensions-research-and-planning.metaplan.md` → `archive/` (fully applied)
-- `mcp-apps-support.research.md` stays at root (evidence base, not archived)
-- Updated ~20 cross-references across the repo (high-level-plan, milestones,
-  semantic-search, user-experience, prompts)
-
-### Evaluation decisions
-- concept-preservation-map: historical provenance only, no current navigation
-  value — all "Current Home" entries pointed to the same plan
-- metaplan: all 6 checklist items [x], content absorbed into roadmap
-- research doc: kept as evidence base — recognized `*.research.md` doc type
-
-### Fitness ceiling alerts (from initial consolidation pass)
-- CONTRIBUTING.md: 405/400 (+5 over)
-- practice-lineage.md: 321/320 (+1 over)
-- testing-strategy.md: 393/400 (98%) — watch
-- practice-bootstrap.md: 391/400 (98%) — watch
-
-## Session 2026-03-05e — Remove brittle stub-coupled e2e tests
-
-### What was done
-- Deleted `apps/oak-curriculum-mcp-streamable-http/e2e-tests/sdk-client-stub.e2e.test.ts`.
-- Refactored `stub-mode.e2e.test.ts` to assert stable system invariants for `fetch`
-  output (`id`, `type`, canonical URL, structured data presence) instead of
-  comparing server output to a second call into the SDK stub adapter.
-- Added a unit test in `packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts`
-  proving `createStubToolExecutionAdapter` accepts optional `params` envelopes
-  (`get-subjects` with `{ params: {} }`) and returns a successful `Result`.
-- Ran targeted and full suites:
-  - `pnpm --filter @oaknational/curriculum-sdk test -- src/mcp/stub-tool-executor.unit.test.ts`
-  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http exec vitest run --config vitest.e2e.config.ts e2e-tests/stub-mode.e2e.test.ts`
-  - `pnpm test:e2e` (green)
-
-### Patterns to remember
-- Do not compare system output to the same runtime stub adapter that the system
-  internally uses; this is tautological and brittle to contract-shape changes.
-- Prefer proving transport/system invariants in e2e and tool-contract details in
-  unit/integration tests.
-
-## Session 2026-03-05f — Artefact portability hardening Phases 0–4, 5.3, Claude rules
-
-### What was done
-
-- Phases 0–4 and 5.3 of artefact-portability-hardening complete.
-- Trigger Content Contract added to ADR-125: ≤10 content lines, must reference canonical source.
-- All 9 Pattern B `.mdc` files reduced to 4 content lines each (was 11–18).
-- `quality-gates.md` renamed to `gates.md` to match adapter naming (`jc-gates`).
-- Created `scripts/validate-portability.mjs` (7 checks) wired into `qg`, `make`, `check`.
-- Created 6 path-scoped Claude Code rules in `.claude/rules/` with `paths` frontmatter.
-- ADR-125 updated: Claude rules layer, Known Limitations, forward ref from ADR-114.
-- Consolidate-docs updated: include non-repo plans + platform-specific memory in distillation pass.
-
-### Claude Code path-scoped rules
-
-Claude Code supports `.claude/rules/*.md` with `paths` frontmatter (equivalent to Cursor's `globs`).
-Rules without `paths` load always-on (session start); with `paths` load only when matching files open.
-Only create Claude rules for glob-scoped triggers — always-on triggers are already in the
-`CLAUDE.md` → `AGENT.md` → `rules.md` chain (duplicating them loads context twice).
-
-### Validation script catch
-
-The `no-absolute-paths.mdc` trigger lacked a canonical source reference — `validate-portability.mjs`
-caught it on first run (Check 5), confirming the rule-reference check works as designed.
-
-## Session 2026-03-04d — Plan readiness check for artefact-portability-hardening
-
-### What was done
-- Verified artefact-portability-hardening.plan.md as standalone entry point for next session.
-- Found and fixed 4 broken relative paths: plan is in `current/` (4 levels deep), but 3 links
-  used only `../../../` (3 levels). Fixed to `../../../../` for repo-root targets.
-- Fixed `future/hooks-portability.plan.md` → `../future/hooks-portability.plan.md` (sibling dir).
-- Verified all 9 cross-referenced files exist (ADR-125, ADR-114, predecessor plan, hooks plan,
-  validate-subagents.mjs, 3 foundation docs, devx plan).
-- Confirmed current inventory: 17 .mdc files, 10 active canonical commands, 2 experiment commands,
-  9 adapters per platform (Cursor/Claude/Gemini/Codex), experience.md has no adapters (documented gap).
-- README already had the plan entry from prior session.
-- Markdownlint: 0 errors.
-
-### Patterns to remember
-- Plans in `current/` or `active/` are 4 levels deep from repo root, not 3. Always count from
-  the plan file's actual directory, not from `.agent/plans/`.
-
-## Session 2026-03-04c — Planning system improvements and deep codebase review
-
-### What was done
-- Deep codebase review against devx-strictness-convergence plan: dispatched 5 parallel
-  agents scanning ESLint config, violation baselines, DI/test patterns, console/logger
-  topology, and type assertion landscape.
-- Updated devx-strictness-convergence.plan.md with: exception governance (owner-only
-  approval), deep review metric drift findings, revised Phase 3 execution order
-  (search-cli first — heaviest vi.mock user), DI refactoring scope table, approved
-  exceptions register, 3 new risks.
-- Compared external planning skills (superpowers: writing-plans, executing-plans,
-  brainstorming, subagent-driven-development) to internal jc-plan system. Identified
-  6 adoptable lessons.
-- Updated 6 files incorporating lessons: atomic template (blocked protocol, step-level
-  decomposition, fresh sub-agent guidance), adversarial-review component (plan compliance
-  gate as Step 0), jc-plan command (design gate via metacognition), feature-workstream
-  template (code sketches), quality-fix template (approach-known qualifier),
-  phase-2-evidence-based-claims execution plan (full rewrite with preflight, blocked
-  protocol, step decomposition for all 6 tasks).
-- Consolidation pass: all plan metadata accurate, no extractable content needs moving,
-  fitness functions checked (CONTRIBUTING.md 401/400 and practice-lineage.md 321/320
-  remain 1 over — persistent, known).
-
-### Key concepts
-- **Structural vs operational completeness**: internal system had better structure
-  (lifecycle lanes, YAML, components); external had better operational detail (what to
-  do when blocked, step granularity, review ordering).
-- **Design gate**: metacognition exploration before committing to plan structure prevents
-  wasted effort on wrong approaches.
-- **Plan compliance before quality review**: adversarial reviewers should first verify the
-  plan's own acceptance criteria are met, then assess code quality.
-- **Blocked protocol**: stop, document, present to owner, don't guess. Universal pattern
-  now in the atomic template — every plan inherits it.
-- **Exception governance**: only the project owner can approve exceptions to rules. Agents
-  must classify severity and present — never accept risk on behalf of the owner.
-
-### Patterns to remember
-- Phase 3 execution order should tackle heaviest vi.mock user first (search-cli: 14 calls)
-  to unblock vitest isolation workaround removal earliest.
-- Type assertion target is "zero unjustified" not "zero" — ~5,570 of 218 tracked warnings
-  are in generated code (excluded). Only ~35-50 are realistically fixable.
-- Baseline metrics drift between plan creation and execution — always re-verify before
-  starting a new phase.
-
-## Session 2026-03-04b — Agent artefact portability: rules distinction, hooks plan, consolidation
-
-### What was done
-- Clarified conceptual separation in ADR-125 between authoritative policies
-  (`.agent/directives/rules.md`) and activation triggers (`.cursor/rules/*.mdc`).
-  These are distinct artefact types: policies define what must be followed,
-  triggers define when and how policies surface on a specific platform.
-- Created hooks portability plan at
-  `.agent/plans/agentic-engineering-enhancements/future/hooks-portability.plan.md`.
-  Researched hooks across Claude Code (17 events, 4 hook types), Cursor (8+ events),
-  Gemini CLI (11 events), and Codex (not yet supported).
-- Updated practice.md to reflect the multi-platform artefact architecture:
-  Tooling layer now references all four platform adapter directories,
-  Artefact Map consolidated, Rules entry clarified as policies + triggers.
-- Graduated "commands should be thin pointers" from distilled.md to ADR-125
-  (already captured in Thin Wrapper Contract section).
-- Deep `/jc-consolidate-docs` pass: fitness functions checked, no new breaches,
-  practice box empty, napkin under threshold.
-
-### Key concepts
-- **Policies vs triggers**: `rules.md` is the authoritative policy document.
-  `.mdc` files are activation triggers — metadata that controls when policies
-  surface. A trigger may activate a rule from `rules.md`, a standalone directive,
-  or a skill. These are different artefact types.
-- **Hooks as a fifth artefact type**: Not yet in the three-layer model, but the
-  same canonical-content + thin-adapter pattern applies. Canonical scripts in
-  `.agent/hooks/scripts/`, platform config in `.cursor/hooks.json`,
-  `.claude/settings.json`, `.gemini/settings.json`.
-- **Codex hook gap**: Codex CLI does not support hooks yet (openai/codex#7396).
-  The hooks plan is designed to be Codex-ready when upstream ships the feature.
-
-### Patterns to remember
-- Claude Code hooks support 4 types: command, HTTP, prompt, agent. Cursor and
-  Gemini only support command hooks. This means Claude Code's prompt/agent hooks
-  are inherently platform-specific and should stay in `.claude/settings.json`.
-- Hook stdin schemas differ slightly between platforms. Scripts should be
-  schema-tolerant (extract only needed fields, ignore the rest).
-
-## Session 2026-03-04a — Landing page missing aggregated tools
-
-### What was done
-- Landing page `renderToolsSection()` called `listAllToolDescriptors()` which only
-  returns the 23 generated tools from the OpenAPI schema. The 7 aggregated tools
-  (search, fetch, get-curriculum-model, get-thread-progressions, get-prerequisite-graph,
-  browse-curriculum, explore-topic) were missing from the tool list.
-- Wrote `render-tools-section.unit.test.ts` (RED) verifying aggregated tool names
-  appear in the HTML and total count is 30.
-- Changed import from `listAllToolDescriptors` to `listUniversalTools` +
-  `generatedToolRegistry` from the SDK public API. Added `?? ''` fallback for
-  optional `description` field on `UniversalToolListEntry`.
-- All 692 tests pass, type-check clean, lint clean.
-
-### Patterns to remember
-- `listAllToolDescriptors()` returns ONLY generated tools (23). Use
-  `listUniversalTools(generatedToolRegistry)` for the full roster (30).
-- `UniversalToolListEntry.description` is optional — handle with `?? ''` when
-  passing to functions that require `string`.
-
-## Session 2026-03-03g — Remove vi.mock from E2E tests (ADR-078)
-
-### What was done
-- Deleted `mcp-connection-timeout.e2e.test.ts` — test reviewer confirmed it tests
-  reimplemented code (hand-built Express apps), not product code. The hanging-connection
-  scenario it simulates is structurally impossible: `createApp()` returns
-  `ready: Promise.resolve()`. Health/landing tests are redundant with 3+ other E2E files.
-- Removed redundant `vi.mock('@clerk/express')` from 4 Tier 1 files that already use
-  `dangerouslyDisableAuth: true` (mock was dead code — `setupGlobalAuthContext` returns
-  early before touching `clerkMiddleware`).
-- Added `clerkMiddlewareFactory` DI seam to `CreateAppOptions` + `setupGlobalAuthContext`
-  in `auth-routes.ts`. Optional parameter, defaults to real `clerkMiddleware`.
-- Created `createNoOpClerkMiddleware()` in `e2e-tests/helpers/test-config.ts`. Sets
-  `req.auth` as a callable function matching Clerk's runtime contract.
-- Updated 7 Tier 2 auth-enabled test files to use DI instead of `vi.mock`.
-- Removed `vi.mock('@clerk/mcp-tools/server')` from 2 files — unnecessary because
-  `upstreamMetadata` DI injection in `CreateAppOptions` skips `deriveUpstreamOAuthBaseUrl`.
-- Result: zero `vi.mock` calls in `e2e-tests/`. 22 files, 183 tests, all passing.
-
-### Mistake: left code in broken intermediate state
-Removed `vi.mock` blocks from 3 files without simultaneously adding the
-`clerkMiddlewareFactory` DI parameter to their `createApp` calls. User correctly
-called this out. Never leave files in a broken state between edits — complete each
-file atomically, or at minimum ensure the suite passes before moving on.
-
-### Mistake: dismissed issues as "pre-existing"
-Reviewers flagged type assertions, Object.assign, inline ESLint overrides, and
-global type declaration mismatches. I repeatedly labelled them "pre-existing" and
-moved on. The rule is unambiguous: "All quality gate issues are blocking at all
-times, regardless of location, cause, or context." Pre-existing is not an
-exemption. When a reviewer flags something, fix it or track it as a blocking item.
-
-### Mistake: assumed green gates meant rules were enforced
-The `testRules` in `oak-eslint` had `consistent-type-assertions: 'off'` and
-`no-restricted-types: 'off'` for test files. This silently exempted all tests
-from the no-type-shortcuts rule. Also, `Object.assign` was not restricted and
-`vi.mock` had no ESLint enforcement. Green gates can be liars if the rules
-don't match the documented policy. Always verify what the gates actually check.
-
-### Mistake: applied reviewer suggestion without running type-check
-Changed `Object.assign(req, { auth: ... })` to `req.auth = ...` per code
-reviewer's suggestion. This failed type-check because the global `Request.auth`
-type declaration is wrong (declares MachineAuthObject, Clerk sets a callable
-function). Should have run `pnpm type-check` BEFORE considering the fix done.
-
-### Patterns to remember
-- Clerk Express v1.7.74: `getAuth(req)` checks `"auth" in req` (returns boolean),
-  then calls `req.auth(options)` as a function. The `requestHasAuthObject` guard is
-  simply `"auth" in req`. So DI middleware must set `req.auth` to a FUNCTION, not a
-  plain object.
-- Clerk's `clerkMiddleware` sets `req.auth` via `Object.assign(request, { auth })` where
-  `auth` is a `Proxy(authHandler, { get trap })`. The handler is
-  `(opts) => requestState.toAuth(opts)`.
-- `mcpAuth` middleware (mcp-auth.ts) short-circuits at `!req.headers.authorization` →
-  returns 401 immediately without calling `getAuth`. So `getAuth` is only invoked when
-  a Bearer token is present.
-- `@clerk/mcp-tools/server` mock is unnecessary when `upstreamMetadata` is injected —
-  `setupOAuthAndCaching` skips `deriveUpstreamOAuthBaseUrl` when `injectedMetadata`
-  is provided (line 198). Module import doesn't cause side effects.
-- When removing mocks: complete each file atomically. Remove mock + add DI in one
-  edit, then verify. Don't batch "remove all mocks" followed by "add all DI".
-
-## Session 2026-03-03f — E2E test cleanup (streamable-http)
-
-### What was done
-- Investigated intermittent e2e failures in `pnpm check`: `stub-mode.e2e.test.ts`
-  (404) and `tool-call-envelope.e2e.test.ts` (401).
-- Root cause: `vitest.e2e.config.ts` used `pool: 'forks'` with `singleFork: true`,
-  forcing all 24 test files into one process. 12 files used `vi.mock('@clerk/express')`
-  — module-level global state that leaks between files in a shared fork.
-- Deleted `tool-call-envelope.e2e.test.ts` — fully redundant with
-  `tool-call-success.e2e.test.ts` which proves the same behaviour more thoroughly.
-  Also used `vi.mock` and tested MCP SDK transport, not product code.
-- Removed "returns the full roster from listUniversalTools()" from
-  `stub-mode.e2e.test.ts` — duplicate proof covered by `server.e2e.test.ts`
-  (line 120) and SDK unit/integration tests. The assertion was a tautology:
-  comparing server output against the same function the server uses internally.
-- Removed `singleFork: true` / `pool: 'forks'` / `isolate: true` from
-  `vitest.e2e.config.ts`, inheriting sane defaults from the base config.
-- All 190 remaining tests pass across 23 files.
-
-### Patterns to remember
-- `singleFork: true` + `vi.mock` across multiple files = shared-state coupling.
-  Module mocks leak between files in a single fork despite `isolate: true`.
-- Before fixing a failing test, ask: (1) is the behaviour already proven elsewhere?
-  (2) could a unit test prove this with a pure function? (3) are we testing our
-  product code or a dependency's transport layer?
-- Comparing server output against the same function the server uses internally is
-  a tautology — if both have the same bug, the test still passes. Hardcoded
-  expected values or schema-anchored fixtures are better.
-- 12 of 24 e2e test files use `vi.mock('@clerk/express')` despite
-  `dangerouslyDisableAuth: true` being available via DI. The mock is redundant
-  when DI is used. This is tech debt for future cleanup.
-
-## Session 2026-03-03e — Execute codegen logger replacement
-
-### What was done
-- Executed the codegen-logger-replacement plan: replaced all 49 console.* calls
-  across 12 files in code-generation/ and vocab-gen/ with @oaknational/logger.
-- Created `create-codegen-logger.ts` factory in code-generation/ (7 entry points).
-- vocab-gen/run-vocab-gen.ts creates its own logger inline (single file, different dir).
-- Added @oaknational/logger as devDependency in sdk-codegen package.json.
-- Updated zodgen e2e test + unit test + integration test to pass logger argument.
-- Ran `pnpm lint` — found 43 MORE errors in two other workspaces:
-  - oak-curriculum-mcp-stdio: 8 errors, 3 files
-  - search-cli: 35 errors, 11 files
-- Updated plan to cover full monorepo scope (Phase 3 added for remaining work).
-
-### Mistake: assumed work was confined to one workspace
-The plan was scoped to sdk-codegen only. The user correctly pointed out that
-no-console violations exist across the entire codebase. Always run `pnpm lint`
-(not workspace-scoped lint) to find ALL violations. Quality gate issues are
-blocking regardless of location.
-
-### Review findings and fixes
-- Mid-point code review: error objects must be preserved in catch blocks — fixed
-  all catch handlers to pass error as 2nd arg to logger.error().
-- Barney caught: zodgen-core.ts unit/integration tests still passed fakeIO as 3rd
-  arg after logger was inserted as 3rd param. Would have caused runtime type error
-  at test time. Fixed immediately.
-- Code reviewer: verify-docs.ts guard function was inconsistent with rest of
-  changeset (not passing err to logger.error). Fixed.
-- Cleaned up vocab-gen printHeader to not emit empty-string log lines (structured
-  logger generates full JSON envelope for each call).
-- Added error logging to run-typedoc.ts child.on('error') handler (was swallowed).
-
-### Patterns to remember
-- When inserting a required parameter before an existing optional parameter, ALL
-  callers must be updated — including test files that may not be in the target
-  directory. Always grep for the function name across the entire workspace.
-- Logger.error(message, error?, context?) — 2nd arg is for Error objects (stack
-  trace extraction), NOT for plain strings. Use context or inline in message for
-  string error details.
-- Empty-string log messages (`logger.info('')`) are wasteful with structured loggers
-  — each generates a full JSON envelope. Combine or remove.
-- **Always run monorepo-wide `pnpm lint`, not workspace-scoped, to find all
-  violations.** Quality gates are blocking regardless of workspace.
-
-## Session 2026-03-03d — Implementation plan for codegen logger replacement
-
-### What was done
-- Traced all console.* call chains in code-generation/ and vocab-gen/ to build
-  a detailed implementation plan for the codegen-logger-replacement plan.
-- Original inventory was ~35 calls across ~10 files; actual is 49 calls across
-  12 files. Five files were missed: zodgen-core.ts (3), bulkgen.ts (2),
-  generate-ai-doc.ts (1), run-typedoc.ts (2), generate-widget-constants.ts (1).
-- Updated plan with: exact inventory table, call chain map, logger decision per
-  file, 6 ordered implementation tasks (1.0–1.5) grouped by call chain, updated
-  risk assessment, expanded references.
-- Phase 0 marked complete (inventory verified, call chains traced, approach decided).
-- No existing logger instances anywhere in the chain — all 8 entry points need
-  new instances, 4 callees receive logger via DI.
-
-### Key decisions
-- Shared factory `createCodegenLogger(toolName)` in code-generation/ for the 7
-  code-generation entry points. Avoids repeating 5 import + 6 constructor lines
-  in each file.
-- vocab-gen creates its own logger inline (single file, not worth cross-directory
-  import).
-- @oaknational/logger goes in devDependencies (build-time scripts, not SDK output).
-- Logger interface: `Logger` from `@oaknational/logger`, with `info`, `error`,
-  `warn` methods. `UnifiedLogger` constructor needs `minSeverity`,
-  `resourceAttributes`, `context`, `stdoutSink`, `fileSink`.
-
-### Patterns to remember
-- Logger type is `import type { Logger } from '@oaknational/logger'` — use for
-  DI parameter typing in callees.
-- `parseLogLevel(env, 'INFO')` provides safe default when LOG_LEVEL unset.
-- No vi.spyOn(console) anywhere in sdk-codegen tests — only zodgen.e2e.test.ts
-  calls generateZodSchemas directly and needs signature update.
-- String-literal console references (in template strings, JSDoc @example) are NOT
-  flagged by ESLint no-console — only AST CallExpression nodes.
-
-## Session 2026-03-03c — Plan creation for no-console and ESLint overrides
-
-### What was done
-- Created `codegen-logger-replacement.plan.md` in `.agent/plans/developer-experience/`
-  from the Cursor plan `.cursor/plans/no-console_eslint_enforcement_d15f0835.plan.md`.
-  Covers replacing ~35 console calls in code-generation/ and vocab-gen/ with
-  @oaknational/logger instances.
-- Updated `eslint-override-removal.plan.md` to reflect current state:
-  - Added Session Update (2026-03-03) context
-  - Added Category A2 for vocab-gen file-specific structural overrides (3 rules, 6 files)
-  - Added Phase 0 (logger replacement) as prerequisite for Phases 1/1b
-  - Added Phase 1b for vocab-gen structural overrides
-  - Updated "Other workspaces" inventory with current streamable-http, search-cli,
-    logger, and root eslint config overrides
-  - Added search-cli ground-truths/generation structural overrides
-  - Added search-cli `testRules` type cast (eslint-disable comment) as an override
-  - Added section documenting legitimate no-console overrides (not targeted for removal)
-  - Cross-referenced the new codegen-logger-replacement plan
-  - Updated todos, success criteria, and dependencies
-
-### Patterns to remember
-- The developer-experience plan directory has no lifecycle subdirectories (active/,
-  current/, future/) — plans sit at the top level alongside archive/.
-- The eslint-override-removal plan is strategic (Phase 0–4) while the
-  codegen-logger-replacement plan is tactical (blocking quality gates now).
-
-## Session 2026-03-03b — no-console ESLint enforcement
-
-### What was done
-- Promoted `no-console` from `'warn'` to `'error'` in shared ESLint config
-  (`packages/core/oak-eslint/src/configs/recommended.ts` line 89).
-- Added scoped `no-console: 'off'` overrides in 7 eslint configs:
-  root, sdk-codegen (code-generation/, vocab-gen/, e2e-tests/),
-  HTTP app (scripts/, smoke-tests/), STDIO app (bin/, entry points, fallback files),
-  search CLI (scripts/, bin/, smoke-tests/, CLI output helpers, logger fallback),
-  logger (file-sink.ts).
-- Replaced console calls with logger in HTTP app `src/index.ts` (pre-logger
-  uses `process.stderr.write`, post-logger uses `bootstrapLog`).
-- Removed `console.warn` from SDK `request-validators.ts` — redundant with
-  returned `ValidationResult`.
-- Removed `logValidationFailure` from SDK `curriculum-response-validators.ts` —
-  SDK should not own logging (distilled.md). Validation failures carry trace info;
-  app layer is responsible for observability.
-- Removed debug `console.log` from 3 test files (handlers.integration.test.ts,
-  response-validation.integration.test.ts, aggregated-tool-widget.unit.test.ts).
-- All 60 quality gates pass.
-
-### Mistake: misclassifying codegen as non-product-code
-I added `no-console: 'off'` overrides for `code-generation/` and `vocab-gen/`
-in the sdk-codegen workspace, treating them as "build scripts". The user
-corrected this: these directories contain the code that **builds the SDK** —
-they are product code and should use a logger, not console overrides. The user
-removed the overrides. Remaining work: replace ~35 console calls in these
-directories with a build-time logger.
-
-### Patterns to remember
-- `console.error(...)` inside JS template literal strings (e.g.
-  `widget-cta/js-generator.ts`) is NOT flagged by ESLint's `no-console` —
-  only AST CallExpression nodes are detected.
-- JSDoc `@example` blocks containing `console.log` are NOT flagged either.
-- search-cli had 3 additional files needing overrides beyond the plan: `cli.ts`,
-  `ingest-cli-program.ts`, and `logger.ts` (fallback console in src/lib/).
-- Removing debug `console.log` from tests may leave unused variables (e.g.
-  `backticks` in widget test) — always check for orphaned declarations.
-- **Code that generates code is product code.** Do not classify codegen
-  directories as "build scripts" deserving blanket ESLint overrides. They
-  need the same quality standards as any other product code.
-
-## Session 2026-03-03a — Milestone restructuring and repo public
-
-### What was done
-- Located the MCP HTTP app front page implementation (TypeScript, not
-  standalone HTML).
-- Updated landing page title from "Internal Alpha" to "Invite Only
-  Public Alpha".
-- Restructured all milestones after user confirmed:
-  - Repo is now public at `curriculum-mcp-alpha.oaknational.dev`
-  - Access control is Option E (Oak emails + explicit allowlist on dev
-    Clerk instance) — production Clerk deferred to M2
-  - M0: Open Private Alpha — marked COMPLETE
-  - M1: Invite-Only Alpha — now ACTIVE (dev Clerk + allowlist)
-  - M2: renamed from "Extension Surfaces" to "Open Public Alpha"
-    (prod Clerk, social providers, public sign-up, edge rate limiting)
-  - M3: renamed from "Tech Debt & Hardening" to "Public Beta"
-    (operational hardening, extension surfaces, observability, tech debt)
-- Updated M0, M1, M2, M3 milestone files, milestones README, and
-  high-level plan.
-
-### Key decisions
-- Production Clerk is deferred to M2 (Open Public Alpha) because the
-  dev Clerk allowlist is sufficient for invite-only access and adding
-  users via the Clerk Dashboard UI is straightforward.
-- Operational gates (monitoring, alerting, incident response, canonical
-  host enforcement) pushed to M3 (Public Beta). Only edge rate limiting
-  on OAuth proxy endpoints kept for M2 — unauthenticated endpoints need
-  protection before public sign-up.
-- Extension surfaces (MCP-app extension, OpenAPI app extension) moved
-  from M2 to M3 (Public Beta).
-
-### Patterns to remember
-- Landing page HTML is composed in TypeScript under
-  `apps/oak-curriculum-mcp-streamable-http/src/landing-page/` and served
-  from the root route `/`.
-- Milestone files live at `.agent/milestones/m{n}-*.md` but the filenames
-  do not always match the milestone name after renames (e.g.
-  `m2-extension-surfaces.md` now contains "Open Public Alpha"). This is
-  acceptable — the file is the canonical content, not the filename.
-- GitHub App ("Oak Release Bot") + `actions/create-github-app-token@v1`
-  is the pattern for semantic-release pushing to protected branches.
-  Secrets: `RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY`. The app is
-  added as a bypass actor in the `main` branch ruleset. Confirmed
-  working 2026-03-03.
-- `persist-credentials: false` on `actions/checkout` is essential when
-  using a custom token — otherwise git uses the default `GITHUB_TOKEN`
-  which cannot bypass branch protection.
-- Rate limiting for unauthenticated OAuth proxy endpoints will be done
-  in Cloudflare (traffic control layer), not in application code.
-
-## Session 2026-03-02m — Consolidate and archive release artefacts
-
-### What changed
-User confirmed release completion and requested `/jc-consolidate-docs` for:
-- `release-plan-m1.plan.md`
-- `session-continuation.prompt.md`
-
-Both files were archived. Durable release-governance content was extracted from
-the release plan into permanent engineering documentation:
-- `docs/engineering/milestone-release-runbook.md` (new)
-
-### Permanent documentation extraction
-The extracted runbook captures settled, reusable structure:
-- release control model (R0-R5)
-- mandatory gate template (G1-G8)
-- snagging protocol and severity model (P0-P3)
-- go/no-go inputs and decision record template
-- controlled rollout and rollback controls
-- exit-criteria template
-
-### Cross-reference repairs
-Updated active docs to point at archived release artefacts:
-- milestones docs
-- high-level plan
-- codegen architecture docs
-- post-merge tidy-up plan
-- completed-plans index
-
-### Caution
-Archive docs are historical. When archiving files, fix references from active
-docs, but avoid rewriting older archive narratives unless needed to prevent
-broken links in the newly archived artefact.
-
-## Session 2026-03-02l — Strategic plan restructuring
-
-### What changed
-Semantic search branch merged. User restructured milestone sequence:
-- M0 (Open Private Alpha): COMPLETE — branch merged, repo ready to go public
-- M1: renamed from "Open Public Alpha" to "Invite-Only Alpha" — production
-  Clerk with Oak emails + explicit invites, Sentry NOT required
-- M2: "Extension Surfaces" — MCP-app extension first, then OpenAPI app
-  extension in addition (was previously part of old M2 "Post-Alpha Enhancements")
-- M3: "Tech Debt & Hardening" — absorbs old M2 (enforcement, guards) and
-  old M3 (mutation testing, observability, supply chain)
-
-### Files updated
-- `high-level-plan.md` — full milestone rewrite
-- `release-plan-m1.plan.md` — M1 redefined, M0 marked complete, gates updated
-- `merge-readiness.plan.md` — archived to `sdk-and-mcp-enhancements/archive/completed/`
-- `completed-plans.md` — merge-readiness entry added
-- `sdk-and-mcp-enhancements/active/README.md` — removed merge-readiness reference
-
-### Key distinction: invite-only vs public alpha
-The invite-only alpha has the same functional requirements as the old public
-alpha EXCEPT: (1) access is restricted to Oak emails + explicit Clerk invites
-instead of anyone with an email, and (2) Sentry does not need to be fully
-configured. The production Clerk migration IS required.
-
-### Extension surfaces sequence
-User was explicit about order: MCP-app extension FIRST (native MCP for
-Claude etc.), THEN OpenAPI app extension IN ADDITION (not replacing). This
-is a shift from the previous plan which had the extension work as one stream
-in a broader "post-alpha enhancements" milestone.
-
-## Session 2026-03-02j — Release workflow fix
-
-### Root cause: release workflow never worked
-The `release.yml` workflow has failed on every single run since creation (~20+
-runs). Root cause: `pnpm -C packages/sdks/oak-curriculum-sdk build` bypasses
-Turborepo entirely, building only the SDK without its workspace dependencies.
-The `tsup` step succeeds (esbuild resolves source files directly) but
-`tsc --emitDeclarationOnly` fails because `.d.ts` files from dependencies
-(`sdk-codegen`, `result`, `logger`, `type-helpers`) don't exist yet.
-
-### Fix applied
-- Changed to `pnpm build` — builds entire repo via Turbo in dependency order,
-  consistent with CI workflow and with repo-level versioning
-- Added `TURBO_TOKEN`/`TURBO_TEAM` env vars for remote cache (CI already had
-  these; both workflows trigger on push to main)
-
-### Pattern: never bypass Turborepo in CI
-`pnpm -C <path> <script>` runs a script directly in one workspace, skipping
-Turbo's `dependsOn` graph. In a monorepo where packages depend on each other's
-build artefacts, always use `pnpm turbo <task>` (optionally with `--filter`)
-to ensure the dependency graph is respected.
-
-## Session 2026-03-02g — Consolidation
-
-### Distillation performed
-Archived `napkin-2026-03-02.md` (943 lines, sessions 2026-02-28 through
-2026-03-02). Extracted 10 new entries to distilled.md:
-- Barrel export requirement (runtime `undefined` from missing exports)
-- `pnpm vocab-gen` vs `pnpm sdk-codegen` distinction
-- 23 generated vs 7 aggregated MCP tools (always distinguish)
-- Zod `.passthrough()` → `.loose()` deprecation
-- Typed call arrays beat `vi.fn().mock.calls`
-- SDK should not own logging (app layer observability)
-- Simplify ruthlessly when blocking a merge
-- Read MCP tool descriptors before calling
-
-distilled.md: 158 → ~175 lines (ceiling 200).
-
-### Fitness function status
-| Document | Lines | Ceiling | Status |
-|---|---|---|---|
-| AGENT.md | 165 | 200 | OK (83%) |
-| rules.md | 134 | 200 | OK (67%) |
-| testing-strategy.md | 393 | 400 | Near (98%) |
-| schema-first-execution.md | 39 | 100 | OK (39%) |
-| typescript-practice.md | 113 | 150 | OK (75%) |
-| development-practice.md | 108 | 150 | OK (72%) |
-| troubleshooting.md | 162 | 200 | OK (81%) |
-| CONTRIBUTING.md | 401 | 400 | Over (100%) |
-| distilled.md | ~175 | 200 | OK (88%) |
-| practice.md | 216 | 250 | OK (86%) |
-| practice-lineage.md | 321 | 320 | Over (100%) |
-| practice-bootstrap.md | 391 | 400 | Near (98%) |
-
-Persistent ceilings: CONTRIBUTING.md (401/400, 1 over) and
-practice-lineage.md (321/320, 1 over). Both noted in prior sessions.
-practice-bootstrap.md grew with the practice-index template addition.
-
-## Session 2026-03-02k — Test isolation investigation
-
-### Correlation middleware transient failure
-`correlation/middleware.integration.test.ts` test #3 ("includes X-Correlation-ID
-in response headers") failed in the full suite but passes in isolation and on
-re-run. Root cause: vitest.config.ts for unit/integration tests uses default
-thread pool without `isolate: true`. Intermittent, not reproducible.
-
-### Orphaned E2E test at src/index.e2e.test.ts
-`src/index.e2e.test.ts` is excluded from BOTH vitest configs:
-- `vitest.config.ts` excludes `src/**/*.e2e.test.ts`
-- `vitest.e2e.config.ts` only includes `e2e-tests/**/*.e2e.test.ts`
-Never ran in CI or `pnpm test`. My earlier claim it was "pre-existing failure"
-was wrong — it was never part of the suite. File calls `createApp()` which
-could attempt network IO — should not exist in `src/` as an E2E test.
-
-### Mistake: diagnosing without evidence
-I claimed a test was "pre-existing on the base branch" without properly verifying
-it was actually part of the test suite. Should have checked vitest config
-include/exclude patterns FIRST.
-
-### Test audit findings (applied)
-- Orphaned test at wrong location (`src/index.e2e.test.ts`) was excluded from
-  both vitest configs — dead code providing false confidence
-- 10 header-redaction tests in middleware integration test duplicated 53 unit
-  tests at the wrong level — collapsed to 1 proving integration only
-- 5 logging-shape tests inspecting `mock.calls` with silent `if` guards were
-  testing implementation (log format) not behaviour (HTTP response). Silent
-  conditional assertions (`if (call?.[1])`) can pass while proving nothing
-- Type-only test violated "Do not test types"
-- Nested vitest asymmetric matchers (`expect.objectContaining` with inner
-  `expect.stringMatching`) trigger `no-unsafe-assignment` — restructure to
-  explicit type guards on captured call arguments
-- `slowRequestThresholdMs` now injectable to eliminate 2.1s real delay in tests
-
-## Session 2026-03-02i — Context hint audit
-
-### Investigation: do aggregated tool responses hint at get-curriculum-model?
-Traced the full hint propagation chain. Five reinforcing layers exist:
-1. Tool descriptions (tools/list) — all aggregated tools reference get-curriculum-model
-2. Tool responses (structuredContent.oakContextHint) — via formatToolResponse default
-3. Server instructions (MCP initialize) — SERVER_INSTRUCTIONS mentions it
-4. Generated tool descriptions — PREREQUISITE text
-5. Generated tool responses — conditional on requiresDomainContext
-
-Key finding: hints all reference the **tool** (get-curriculum-model), not the
-**resource** (curriculum://model). The resource exists as dual exposure but
-is not referenced in any hint text.
-
-### ChatGPT doesn't support Resources or Prompts
-ChatGPT supports: Tools, DCR, Apps. NOT Resources, NOT Prompts.
-- curriculum://model resource (priority 1.0, audience assistant) is invisible to ChatGPT
-- All 4 MCP prompts are invisible to ChatGPT
-- Claude Desktop/Claude.ai support both
-
-### Widget-side levers rejected
-Widget is created per tool call (many times), not once per session. So
-widget-initiated callTool or ui/update-model-context on load would fire
-repeatedly and be wasteful/noisy. Widget-side levers need session-level
-gating to be viable.
-
-### outputSchema gap
-MCP SDK 1.27.0 supports outputSchema (type: "object" only) but ZERO tools
-in the codebase use it. Created future plan at
-`.agent/plans/sdk-and-mcp-enhancements/future/output-schemas-for-mcp-tools.plan.md`.
-SDK restriction to `type: "object"` is a known issue (modelcontextprotocol#1906).
-
-### Strengthened oakContextHint wording
-Changed from passive "For optimal results..." to directive "If you have not
-called get-curriculum-model yet, do so before your next tool call..." —
-model reads structuredContent verbatim per OpenAI Apps SDK reference.
-
-## Session 2026-03-02h — Post-dedup consolidation
-
-### What happened
-Updated codegen architecture plans (README, analysis, decomposition,
-reviewer findings) to reflect the M1 graph data dedup work. Updated
-release plan current state and top priorities — ESLint OOM is done,
-remaining gates are next. Updated session-continuation prompt title and
-content. Deleted three completed cursor plans (onboarding fixes, MCP
-prompts cleanup, graph dedup OOM) after verifying no documentation
-needed extraction — all permanent docs were created during
-implementation.
-
-### Plan deletion assessment
-All three plans were pure execution instructions. The onboarding plan's
-eslint-disable audit (P2-9) is a point-in-time snapshot, not permanent
-docs. The MCP prompts plan already created ADR-123 and updated READMEs
-in Phase 4. The graph dedup plan's architecture is captured in the
-codegen architecture plans.
-
-### Fitness function status (unchanged)
-Same as session 2026-03-02g. CONTRIBUTING.md (401/400) and
-practice-lineage.md (321/320) remain 1 over ceiling. distilled.md at
-176/200.
-
-## Session 2026-03-03b — Codegen logger replacement Phase 3
-
-### Mistake: wrote unit tests with vi.mock and incomplete Logger mock
-Created `file-reporter.unit.test.ts` using `vi.mock('node:fs')` — directly
-violates ADR-078. Also created `startup.unit.test.ts` with a `loggerMock`
-that only had `info`/`error` — `Logger` interface requires 6 methods.
-Both files were also misnamed as `.unit.test.ts` when they test IO
-integration points.
-
-**Lesson**: Before writing ANY test, check:
-1. Is the function under test pure? If no → integration test, not unit.
-2. Does the test need `vi.mock`? If yes → refactor product code for DI.
-3. Does the mock satisfy the FULL interface? Use `satisfies Type` to verify.
-
-### Pattern: createLoggerMock with satisfies
-```typescript
-function createLoggerMock() {
-  return {
-    trace: vi.fn(), debug: vi.fn(), info: vi.fn(),
-    warn: vi.fn(), error: vi.fn(), fatal: vi.fn(),
-  } satisfies Logger;
-}
-```
-This catches missing methods at compile time.
-
-### Pattern: DI for IO functions
-`appendToLogFile` needed `AppendToLogFileDeps` interface with
-production defaults — same pattern as `StartupLoggerDependencies`.
-Default param keeps production callers clean, tests inject fakes.
-
-### Error chain preservation
-- `logger.error(msg, error)` — pass `error` directly, even for unknown.
-  Logger.error accepts `unknown` as 2nd param. Don't filter with
-  `error instanceof Error ? error : undefined` — that discards info.
-- `new Error(String(error))` — always add `{ cause: error }` to preserve
-  the original thrown value in the cause chain.
-
-### Don't double-timestamp structured logger messages
-When writing to both a structured logger AND a plain-text file, keep
-them separate: pass raw `message` to logger (it adds its own timestamp),
-pass manually-timestamped `fileLogLine` to file write only.
-
-### Pre-config errors go to stderr, not logger
-Before RuntimeConfig is validated, no logger is available (or the logger
-may route to stdout). Always use `process.stderr.write` for pre-config
-failures — consistent across oaksearch.ts, cli.ts, ingest.ts.
-
-### Phase 3.2 approach: process.stdout.write for CLI output
-For CLI user-facing output functions, using `process.stdout.write` /
-`process.stderr.write` is cleaner than wrapping in a structured logger.
-Preserves exact behavior, no JSON/timestamp added to terminal output.
+## Session 2026-03-05 — Canonical Rules Migration and Practice Core Platform Agnosticism
+
+### What Was Done
+
+- Created `.agent/rules/` directory with 16 canonical operational rule files — short imperative reinforcements of policy directives.
+- Rewrote all 18 `.cursor/rules/*.mdc` files as thin wrappers pointing at `.agent/rules/*.md` or `.agent/skills/*/SKILL.md`.
+- Rewrote all 6 `.claude/rules/*.md` files as thin wrappers pointing at canonical rules.
+- Updated practice-core trinity to properly encode platform-agnostic artefact model:
+  - `practice-bootstrap.md`: Added Artefact Model table, canonical rule format, trigger wrapper formats, removed Cursor-specific content.
+  - `practice-lineage.md`: Updated §Always-Applied Rules and §Growing a Practice to be platform-agnostic.
+  - `practice.md`: Updated Tooling section to name all four platforms.
+- Moved `.agent/directives/lint-after-edit.md` content into `.agent/rules/lint-after-edit.md` (operational, not policy).
+- Moved `.agent/directives/semantic-search-architecture.md` to `docs/agent-guidance/` (domain-specific, not a directive). Updated 7 cross-references.
+- Updated `artefact-inventory.md` to include `.agent/rules/` as Layer 1 canonical content.
+- Updated `validate-portability.mjs` to check triggers reference `.agent/rules/` or `.agent/skills/` (not directives directly).
+- Portability check passes: 16 canonical rules, 18 Cursor triggers, 6 Claude rules.
+
+### Patterns to Remember
+
+- **Three-layer rules model**: Directives (policy) → Canonical rules (operational reinforcement) → Platform triggers (thin activation wrappers). No double indirection.
+- **Boundary: rules vs skills**: Rules are short imperatives ("do this every time"). Skills are procedural workflows ("here's how"). Wrappers point at one or the other, never both.
+- **Write tool cache expiry**: When batch-rewriting files, the Write tool's "file has been read" cache can expire between parallel reads and writes. Use bash `cat > file << 'ENDFILE'` as a reliable alternative for bulk file creation.
+- **Directives are policy, not operations**: `.agent/directives/` should contain only authoritative policy documents. Operational guidance (lint-after-edit) belongs in `.agent/rules/`. Domain-specific architecture (semantic-search-architecture) belongs in `docs/agent-guidance/`.
+
+### Mistakes Made
+
+- Attempted to use Write tool on files whose Read cache had expired — failed on 8 files. Switched to bash heredoc approach.
+- Initially conflated "Rules" with "Directives" in the Artefact Model table, implying directives = rule policies. User correctly identified that directives are the broader policy category.
+
+---
+
+## Session 2026-03-05 — MCP App Skills and Roadmap Hygiene
+
+### What Was Done
+
+- Created 4 Oak-specific MCP App skill variants in `.agent/skills/`: `mcp-create-app`, `mcp-migrate-oai`, `mcp-add-ui`, `mcp-convert-web`.
+- Created Cursor and Codex platform adapters for each (12 new files total). Portability check passes at 16 skills.
+- Updated roadmap Non-Goals with item 6 (stdio server explicitly out of scope).
+- Updated Domain C "Deployment mode assumption" with explicit app scope note.
+- Assessed Practice Core platform agnosticism (see findings below).
+- Assessed `mcp-ui` library (see findings below).
+
+### Key Findings
+
+- **Practice Core**: Philosophy/structure layers are properly platform-agnostic. However, `practice-bootstrap.md` leaks Cursor-specific details (`.mdc` frontmatter, `alwaysApply: true`, `@` prefix syntax, Cursor YAML agent definitions) without a "these are examples; adapt to your platform" framing. `practice.md` line 66 also mentions `.mdc` specifically. Fix: add a platform-examples preamble to `practice-bootstrap.md`.
+- **`mcp-ui` library** (`MCP-UI-Org/mcp-ui`): pioneered MCP Apps pattern; influenced the official spec. For Oak (server-only): `@mcp-ui/server` (`createUIResource`) is redundant — `ext-apps/server` is the canonical SDK. `@mcp-ui/client` is for host renderers (not Oak's use case). Worth monitoring for C3 widget migration patterns (async `connect()`, `ontoolresult` patterns) but should NOT be added as a dependency.
+- **ext-apps skills inventory**: four upstream skills — `create-mcp-app`, `migrate-oai-app`, `add-app-to-server`, `convert-web-app`. All four now have Oak-specific canonical skills.
+- **Portability check**: 16 canonical skills (previously 12), 10 commands, 36 command adapters, all passing.
+
+### Open Follow-ups
+
+- `practice-bootstrap.md` platform-agnosticism fix: add preamble "Examples use Cursor syntax; adapt to your platform" before the Cursor-specific sections.
+- Fitness signals still above ceiling (non-blocking): `CONTRIBUTING.md` (405/400), `practice-lineage.md` (321/320).
+
+## Session 2026-03-05 — MCP Apps Roadmap Deep Review
+
+### What Was Done
+
+- Reviewed `mcp-apps-standard-migration.plan.md` (active, since promoted to roadmap by other agent).
+- Deep-reviewed `roadmap.md` after other agent incorporated initial feedback.
+- Read `mcp-apps-support.research.md` — already answers both Domain A validation questions.
+- Read `@modelcontextprotocol/ext-apps/server` type declarations — v1.1.2 installed across all
+  workspaces. `registerAppTool`/`registerAppResource`/`getUiCapability`/`RESOURCE_MIME_TYPE` are
+  the canonical migration vehicle for Domain C items C4/C5/C6.
+- Rewrote `roadmap.md` to template compliance: Status, Execution Order, Phase Details,
+  Documentation Sync, Gate-to-Domain mapping, Related Documents. Trimmed 20-item exit criteria
+  to 6 phase-level conditions. Removed 23-URL source list (superseded by research artefact).
+
+### Key Findings
+
+- Domain A is complete — `chatgpt-mcp-acceptance-validation` and `domain-a-source-refresh` now
+  marked done in frontmatter. Domain C items C1/C2/C5 are unblocked.
+- `_meta.ui.domain` only required if widget makes direct cross-origin `fetch()` from iframe.
+  If all data flows through the MCP bridge, omit it — no host-specific derivation needed.
+- `reframing-adr` added as the first concrete pending deliverable (blocks Domain C).
+- Archived `auth-safety-correction.plan.md` (call-time deny-by-default) correctly superseded
+  by C8 (startup fail-fast invariant). User confirmed archived plan was overkill.
+
+### Open Signals
+
+- `CONTRIBUTING.md` at 405/400 (non-blocking, third session in a row).
+- `practice-lineage.md` at 321/320 (non-blocking, carried).
+- `distilled.md` ESM bullet graduated to permanent docs; now 195/200.
+
+## Session 2026-03-05 — Distillation Rotation
+
+### What Was Done
+- Ran `jc-consolidate-docs` workflow across plans, prompts, memory, and practice-core.
+- Rotated napkin at 816 lines to archive: `.agent/memory/archive/napkin-2026-03-05.md`.
+- Carried forward new high-signal operational patterns into `.agent/memory/distilled.md`.
+- Verified practice-box inbox is clear (`.agent/practice-core/incoming/` contains only `.gitkeep`).
+
+### Patterns to Remember
+- After moving or archiving plan files, run repo-wide reference sweeps to remove stale links immediately.
+- For fail-fast security work, enforce invariants at startup boundaries and terminate on invalid metadata with actionable remediation.
+- Keep E2E assertions focused on system invariants; keep adapter/stub semantic proofs in SDK unit/integration tests.
+
+### Open Follow-ups
+- Fitness signals still above ceiling (non-blocking): `CONTRIBUTING.md` (405/400), `practice-lineage.md` (321/320).
+
+## Session 2026-03-05 — Security Alert Triage
+
+### Context
+- Reviewed Dependabot (22 open) + CodeQL (52 open) alerts for `oaknational/oak-open-curriculum-ecosystem`.
+- WebFetch returns 404 for GitHub security pages (auth required) — use `gh api` instead.
+- `pnpm why` returns empty for phantom lockfile entries — always cross-check with `grep` on `pnpm-lock.yaml`.
+- `qs` has TWO resolved versions (6.14.0 vulnerable, 6.15.0 patched) — the Dependabot alert is NOT a false positive.
+- `hono`/`@hono/node-server` are transitive deps of `@modelcontextprotocol/sdk@1.27.0`, not direct deps in any workspace.
+- `axios` override at `pnpm.overrides.axios` in root `package.json`, not a direct dependency.
+
+### Key Finding
+- Most CodeQL HIGH alerts are false positives (test regex assertions, codegen escaping, standard auth middleware).
+- True positives: unpinned GitHub Actions (supply chain), missing app-level rate limiting (mitigated by Vercel).
+- All Dependabot runtime alerts are patchable via overrides or parent bumps.
+
+### Dismissals
+- Dismissed 45 CodeQL false positives via `gh api` PATCH with `state: "dismissed"`, `dismissed_reason`, and `dismissed_comment`.
+- 7 remain open intentionally: 5 missing-rate-limiting (#4–#8), 2 unpinned-action-tag (#1, #2).
+- 48 total dismissed (45 this session + 3 previously dismissed).
+- API format: `gh api repos/OWNER/REPO/code-scanning/alerts/NUM -X PATCH --input -` with JSON body.
+
+## Session 2026-03-05 — Batch 1 Security Deps Execution
+
+### Key Discoveries
+- MCP SDK 1.27.1 still resolves to `hono@4.11.9` — lockfile keeps existing compatible versions. Need explicit `pnpm.overrides` to force patched transitive deps.
+- `pnpm install --no-frozen-lockfile` required when overrides change.
+- Security overrides should use `>=` (not `^`) to match existing pattern and avoid major-resolution conflicts.
+- `docker manifest inspect` hangs in this environment — use version tag pinning as fallback.
+- `release.yml` on `push: [main]` can publish even when CI fails — fixed with `workflow_run` + `if: conclusion == 'success'`.
+- `pnpm sdk-codegen` rerun required after any `openapi-typescript` bump per ADR-031 — confirmed no drift here.
+
+### Follow-ups (not blocking)
+- Centralise `@elastic/elasticsearch` version policy via root override.
+- `@oaknational/curriculum-sdk` exports elasticsearch surface but has it only as devDependency.
+- Remove transitive overrides (`rollup`, `qs`, `hono`, `@hono/node-server`) once upstream ships patched versions.
+
+## Session 2026-03-05 — SDK Fixes and Batch 2 Execution
+
+### Key Discoveries
+- ESLint 10 drops `@eslint/eslintrc` — removes minimatch@3 + ajv@6 (resolves 13 Dependabot alerts at source).
+- New `preserve-caught-error` rule (eslint-plugin-sonarjs@4) — `throw new Error(msg)` in catch blocks must include `{ cause: caughtVar }`. 7 fixes in sdk-codegen codegen/e2e scripts.
+- `eslint-plugin-import`, `eslint-plugin-import-x`, `eslint-plugin-react`, `eslint-plugin-react-hooks` all have stale peer dep ranges (declare up to `^9`). Fix: add `pnpm.peerDependencyRules.allowedVersions` entries in root `package.json`.
+- openapi-fetch 0.17 wraps response types through `Readable<T>` from openapi-typescript-helpers@0.1.0. `Readable<T>` strips `?:null` properties (because `NonNullable<null>` = `never`, and `never extends $Write<any>` is vacuously true). `canonicalUrl?: null` on `/threads` and `/threads/{threadSlug}/units` responses were stripped — fix: use literal `null` instead of reading from response object.
+- openapi-fetch 0.17 adds `pathSerializer: PathSerializer` as required field in `MergedOptions`. Tests constructing `MergedOptions` directly need `defaultPathSerializer`.
+- Clerk Core 3 released 2026-03-03. `@clerk/backend` v3, `@clerk/express` v2. Key change for this codebase: `@clerk/types` moved to `@clerk/shared/types` — `PendingSessionOptions` import path updated in 2 files.
+- `req.auth` in Core 3 Express is still a callable function (confirmed from @clerk/express v2 source). `getAuth(req)` calls `req.auth(options)` internally. "Object-access removed" means `req.auth.userId` direct access, not the callable pattern.
+
+### Follow-ups (not blocking)
+- `extractAuthContext` in `tool-auth-context.ts` is dead code (only used in unit tests, not production). Could be removed or switched to `getAuth(req)` pattern in a future cleanup.
+- Four bare `catch {}` blocks in `generate-ai-doc.ts` and `generate-markdown-docs.ts` discard original error without `cause` — `preserve-caught-error` doesn't fire because the variable isn't bound. Future hardening opportunity.
+- `generate-ai-doc.ts` has `eslint-disable max-lines` — violates Never Disable Checks. Pre-existing.
+
+## Session 2026-03-05 — Canonical URL Inconsistency Discovery
+
+### Key Finding
+Two canonical URL generators in the codebase disagree about threads:
+1. `oak-search-cli/src/lib/indexing/canonical-url-generator.ts` constructs `/teachers/curriculum/threads/{threadSlug}` — treats threads as having canonical URLs.
+2. `packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/generate-url-helpers.ts` returns `null` for threads — "data concepts without canonical URLs".
+
+The SDK codegen drives the response augmentation middleware, so the enhanced API schema ends up with `canonicalUrl: null` for threads. This is inconsistent with the search indexing layer.
+
+### Architecture Reminder (from user)
+- Upstream API does NOT include canonical URLs for everything.
+- Where the website has pages, URLs are **constructed** from available data.
+- This is why there are TWO copies of the spec: as-served and enhanced (with decorations like canonical URLs).
+- "Just because the upstream API returns null does not mean the resource has no URL on the website."
+
+### Resolved Questions (confirmed against OWA source `src/pages/teachers/` and live site)
+- **Threads**: No pages at all. Zero thread routes in OWA. Thread highlighting is client-side within `[subjectPhaseSlug]/[...slugs].tsx` catch-all. SDK codegen returning `null` is correct.
+- **Lessons**: True canonical page at `/teachers/lessons/[lessonSlug].tsx`. Codegen correct.
+- **Sequences**: Have pages at `/teachers/curriculum/{sequenceSlug}/units`. **BUG**: codegen `urlForSequence` generates `/teachers/programmes/{slug}/units` which **404s**. Correct path is `/teachers/curriculum/{slug}/units`. Same bug in search-cli `generateSequenceCanonicalUrl`.
+- **Units**: Have pages within the curriculum context at `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}` (handled by OWA catch-all `[subjectPhaseSlug]/[...slugs].tsx`). No standalone `/teachers/units/{unitSlug}`. Codegen currently generates `/teachers/programmes/{subject}-{phase}/units/{unitSlug}` which also **404s** — wrong base path.
+- `oak-search-cli/src/lib/indexing/canonical-url-generator.ts` `generateThreadCanonicalUrl` generates dead URLs (`/teachers/curriculum/threads/{threadSlug}` 404, no OWA route). Bug.
+
+### Plan Created
+- Wrote executable plan: `.agent/plans/sdk-and-mcp-enhancements/active/sitemap-driven-canonical-urls.plan.md`
+- Updated active README to list it
+- Plan is self-contained with all investigation context for next-session pickup
+
+### URL Pattern Summary (verified)
+| Content Type | Pattern | Status |
+|---|---|---|
+| Lesson | `/teachers/lessons/{lessonSlug}` | Correct in codegen |
+| Sequence | `/teachers/curriculum/{sequenceSlug}/units` | **BUG**: codegen uses `/programmes/` |
+| Unit (in curriculum) | `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}` | **BUG**: codegen uses `/programmes/{subject}-{phase}/units/{unitSlug}` |
+| Unit (in programme) | `/teachers/programmes/{programmeSlug}/units/{unitSlug}/lessons` | Exists on OWA, not generated |
+| Thread | None | Correct (`null` in codegen) |

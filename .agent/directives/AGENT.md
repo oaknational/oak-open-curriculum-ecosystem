@@ -92,7 +92,7 @@ All agent artefacts follow a three-layer model: canonical content in `.agent/`, 
 - [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
 - [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
 - [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
-- [Semantic Search Architecture](./semantic-search-architecture.md) - Structure is the foundation, transcripts are a bonus
+- [Semantic Search Architecture](../../docs/agent-guidance/semantic-search-architecture.md) - Structure is the foundation, transcripts are a bonus
 
 ### Vision
 

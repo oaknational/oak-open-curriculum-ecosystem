@@ -54,7 +54,9 @@ async function readProject(jsonPath: string): Promise<TDProject> {
     return parseTDProject(json);
   } catch (err: unknown) {
     if (err instanceof ZodError) {
-      throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(err.issues));
+      throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(err.issues), {
+        cause: err,
+      });
     }
     throw err instanceof Error ? err : new Error(String(err));
   }

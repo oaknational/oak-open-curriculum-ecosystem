@@ -1,11 +1,6 @@
 ---
-description: TDD applies to unit, integration, AND E2E tests. Write tests FIRST at ALL levels. Red-Green-Refactor is mandatory.
+description: TDD at unit, integration, AND E2E. Write tests FIRST. Red-Green-Refactor.
 alwaysApply: true
 ---
 
-# TDD at All Levels
-
-ALWAYS use TDD at ALL levels — unit, integration, AND E2E. Write tests FIRST.
-Red → Green → Refactor is mandatory. If tests lag behind code at ANY level, TDD was not followed.
-
-See `.agent/directives/testing-strategy.md` for the full testing strategy.
+Read and follow `.agent/rules/tdd-at-all-levels.md`.

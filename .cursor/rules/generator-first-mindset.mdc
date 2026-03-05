@@ -1,11 +1,6 @@
 ---
-description: When behaviour needs to change, update the generator templates and rerun pnpm sdk-codegen. The generator is the single source of truth.
+description: Update generator templates and rerun pnpm sdk-codegen. Generator is source of truth.
 globs: '**/*.{ts,tsx,mts}'
 ---
 
-# Generator-First Mindset
-
-Every byte of runtime behaviour for MCP tool execution must be driven by generated artefacts from the OpenAPI schema.
-Update generator templates and rerun `pnpm sdk-codegen`. Missing data is a generator bug — fail fast.
-
-See `.agent/directives/schema-first-execution.md` for the full policy.
+Read and follow `.agent/rules/generator-first-mindset.md`.

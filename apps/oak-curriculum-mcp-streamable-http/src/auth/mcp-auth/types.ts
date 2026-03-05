@@ -9,7 +9,7 @@
 
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { AuthObject } from '@clerk/backend';
-import type { PendingSessionOptions } from '@clerk/types';
+import type { PendingSessionOptions } from '@clerk/shared/types';
 import type { Request } from 'express';
 
 /**

@@ -13,9 +13,19 @@ For the practice-core files and their roles, see [practice-core/index.md](practi
 | [testing-strategy.md](directives/testing-strategy.md) | TDD at all levels |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema |
 | [metacognition.md](directives/metacognition.md) | Reflective thinking before planning |
-| [semantic-search-architecture.md](directives/semantic-search-architecture.md) | Structure is the foundation, transcripts are a bonus |
 | [invoke-code-reviewers.md](directives/invoke-code-reviewers.md) | Specialist reviewer invocation matrix and timing guidance |
-| [lint-after-edit.md](directives/lint-after-edit.md) | Post-edit lint check guidance |
+
+### Architecture Guidance (docs/agent-guidance/)
+
+| Document | Purpose |
+|---|---|
+| [semantic-search-architecture.md](../docs/agent-guidance/semantic-search-architecture.md) | Structure is the foundation, transcripts are a bonus |
+
+### Canonical Rules (.agent/rules/)
+
+| Document | Purpose |
+|---|---|
+| [lint-after-edit.md](rules/lint-after-edit.md) | Post-edit lint check guidance |
 
 ## Architectural Decisions
 

@@ -6,7 +6,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
-import { createQuerySerializer, defaultBodySerializer } from 'openapi-fetch';
+import { createQuerySerializer, defaultBodySerializer, defaultPathSerializer } from 'openapi-fetch';
 import { createResponseAugmentationMiddleware } from './response-augmentation.js';
 
 function createFakeLogger(): Logger & { calls: string[] } {
@@ -66,6 +66,7 @@ async function invokeOnResponse(
       parseAs: 'json',
       querySerializer: createQuerySerializer(),
       bodySerializer: defaultBodySerializer,
+      pathSerializer: defaultPathSerializer,
       fetch: globalThis.fetch,
     },
   });

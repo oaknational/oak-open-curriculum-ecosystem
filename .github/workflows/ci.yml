@@ -17,17 +17,17 @@ jobs:
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c # v4
         name: Install pnpm
         with:
           run_install: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -44,7 +44,7 @@ jobs:
             docker run --rm \
               -v "${{ github.workspace }}:/src" \
               -w /src \
-              zricethezav/gitleaks:latest \
+              zricethezav/gitleaks:v8.30.0 \
               detect --redact=100 --source /src --config /src/.gitleaks.toml --log-opts="--branches --tags --full-history"
           fi
 

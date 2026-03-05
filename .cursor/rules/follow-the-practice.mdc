@@ -1,6 +1,6 @@
 ---
-description: Read the Practice index at session start
+description: Read the Practice index at session start.
 alwaysApply: true
 ---
 
-Read `.agent/practice-core/index.md` at session start. The Practice is the entire system of principles, structure, and tooling -- not a single file. See the index for orientation and the plasmid trinity for the full blueprint.
+Read and follow `.agent/rules/follow-the-practice.md`.

@@ -20,7 +20,7 @@ attribution: "created by [Jim Cresswell](https://www.jimcresswell.net/), evolved
 
 This file completes the plasmid trinity. `practice.md` describes the system (the **what**), `practice-lineage.md` encodes the principles and evolution rules (the **why**), and this file provides annotated templates for every artefact type (the **how**). Two entry points travel with the trinity: `README.md` (for humans) and `index.md` (for agents).
 
-An agent reading all five practice-core files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. Platform-specific conventions (Cursor) are labelled as such. Ecosystem-specific conventions (TypeScript/Node.js) are used as concrete examples throughout -- substitute your ecosystem's equivalents.
+An agent reading all five practice-core files has enough information to build a working Practice system from scratch. Templates use `{placeholders}` for project-specific content. The Practice uses a **canonical-first artefact model**: all substantive content lives in `.agent/` (platform-agnostic), and thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/` reference canonical content without duplicating it. Sections below use Cursor as the concrete platform example -- adapt adapter formats to local platforms. Ecosystem conventions use TypeScript/Node.js as examples -- substitute your ecosystem's equivalents.
 
 ## Before You Begin: Ecosystem Survey
 
@@ -30,6 +30,26 @@ The templates below use TypeScript/Node.js/Cursor conventions as concrete exampl
 2. **Assess alignment**: identify what the repo already has that meets or exceeds Practice principles. Existing standards that are at least as rigorous as the Practice MUST be preserved.
 3. **Adapt templates**: substitute local tooling in every template. File extensions (`*.unit.test.ts` becomes `*_test.go`, `test_*.py`, etc.), tool names (`Vitest` becomes `pytest`, `go test`, etc.), configuration formats, and platform conventions all change.
 4. **Never overwrite**: the Practice enables excellence; it does not replace what has already been achieved.
+
+## The Artefact Model
+
+Four artefact types follow the canonical-first model. Canonical content in `.agent/` is the single source of truth; thin platform adapters contain only activation metadata and a pointer to the canonical source.
+
+| Type | Canonical | Platform adapters |
+|---|---|---|
+| **Skills** | `.agent/skills/*/SKILL.md` | `.cursor/skills/*/SKILL.md`, `.agents/skills/*/SKILL.md` |
+| **Rules** | `.agent/rules/*.md` | `.cursor/rules/*.mdc`, `.claude/rules/*.md` (activation triggers only) |
+| **Commands** (`jc-*` prefix) | `.agent/commands/*.md` | `.cursor/commands/jc-*.md`, `.claude/commands/jc-*.md`, `.gemini/commands/jc-*.toml`, `.agents/skills/jc-*/SKILL.md` |
+| **Sub-agent templates** | `.agent/sub-agents/templates/*.md` | `.cursor/agents/`, `.claude/agents/`, `.gemini/commands/review-*.toml`, `.agents/skills/` |
+
+Canonical rules are short operational reinforcements of policy. Each platform trigger wrapper points at either `.agent/rules/*.md` or `.agent/skills/*/SKILL.md` — never both, and never at a directive directly.
+
+Two types need no adapters — consumed directly by all platforms:
+
+- **Directives** (`.agent/directives/`) — policy documents (AGENT.md, rules.md, testing-strategy.md, metacognition.md). Platform-agnostic by nature. Canonical rules operationalise aspects of these policies; the directives are the authoritative source.
+- **Plans** (`.agent/plans/`) — all platforms read plans from the same canonical location.
+
+A thin wrapper MUST NOT contain substantive instructions or logic not in the canonical source. Add a portability validation script to the quality gates to enforce this (see ADR-125).
 
 ## Metacognition
 
@@ -128,57 +148,59 @@ Encode the Principles from `practice-lineage.md` as imperative rules. Sections: 
 
 Encode the Testing Philosophy from `practice-lineage.md` with local tooling. Sections: **Tooling** (test runner), **Philosophy** (imperative rules), **Test Types** (unit: pure function, no mocks; integration: units as code, simple injected mocks -- naming convention adapted to local ecosystem), **What to Test** (project-specific surfaces), **Workflow** (TDD always, tests next to code).
 
-## Always-Applied Rules (Cursor .mdc files)
+## Rules: Canonical Rules and Platform Triggers
 
-Cursor rules live in `.cursor/rules/*.mdc`. Two formats:
+The rules system has three layers:
 
-**Always-applied** (fires on every interaction):
+1. **Policy** — `.agent/directives/` (rules.md, testing-strategy.md, etc.). Authoritative, comprehensive.
+2. **Canonical rules** — `.agent/rules/*.md`. Short operational reinforcements of policy. Each stands alone — enough to act on without reading the full directive.
+3. **Platform triggers** — `.cursor/rules/*.mdc`, `.claude/rules/*.md`, etc. Thin wrappers that point at a canonical rule or skill.
+
+A trigger MUST point at either `.agent/rules/*.md` or `.agent/skills/*/SKILL.md` — never at a directive directly, and never both. No double indirection.
+
+### Canonical Rule Format
+
+```text
+# {Rule Title}
+
+{2-8 lines of imperative instruction — enough to act on standalone}
+
+See `{directive-or-ADR-path}` for the full policy.
+```
+
+### Trigger Wrapper Formats
+
+**Cursor** (`.cursor/rules/*.mdc`):
 
 ```text
 ---
-description: {one-line description}
-alwaysApply: true
+description: {one-line}
+alwaysApply: true  # or globs: '**/*.test.ts'
 ---
 
-{Rule content -- can be a single sentence or a structured document}
+Read and follow `.agent/rules/{name}.md`.
 ```
 
-**File-scoped** (fires when matching files are open):
+**Claude Code** (`.claude/rules/*.md`) — path-scoped only; `alwaysApply` rules are enforced via the entry-point chain:
 
 ```text
 ---
-description: {one-line description}
-globs: '**/*.test.ts'
+paths:
+  - '**/*.test.ts'
 ---
 
-{Rule content}
+Read and follow `.agent/rules/{name}.md`.
 ```
 
-### Required Rules
+Platform-specific notes (e.g. "In Cursor, use `ReadLints`") may appear in the trigger — they are activation metadata, not policy.
 
-Create one `.mdc` file for each. The `description` field is shown to the agent before the rule content, so make it count.
+## Sub-agents: Templates and Platform Adapters
 
-| Filename | alwaysApply | globs | Content |
-|---|---|---|---|
-| `read-agent-md.mdc` | true | -- | Read `.agent/directives/AGENT.md` and `.agent/directives/rules.md` at session start. |
-| `napkin-always-active.mdc` | true | -- | Read `.agent/memory/distilled.md` then `.agent/memory/napkin.md` at session start. Write to napkin continuously. See napkin skill for full guidance. |
-| `tdd-at-all-levels.mdc` | true | -- | TDD at all levels: unit, integration. Red-Green-Refactor is mandatory. Reference testing-strategy.md. |
-| `no-type-shortcuts.mdc` | true | `**/*.{ts,tsx,mts}` | No `as` (except `as const`), `any`, `!`, `Record<string, unknown>`. Preserve type information. |
-| `fail-fast-with-helpful-errors.mdc` | true | -- | Fail fast with helpful errors. Never silently. Never ignore errors. |
-| `never-disable-checks.mdc` | true | -- | Never disable type checks, linting, formatting, tests, or git hooks. Fix the root cause. |
-| `no-skipped-tests.mdc` | -- | `**/*.test.ts` | No `it.skip`, `describe.skip`, or any skipping mechanism. Fix or delete. |
-| `never-prefix-unused-variables-with-underscore.mdc` | true | -- | Never prefix unused variables with underscore. Fix or delete. |
-| `all-quality-gate-issues-are-always-blocking.mdc` | true | -- | All quality gate issues are blocking. No exceptions. |
-| `use-result-pattern.mdc` | -- | `**/*.{ts,tsx,mts}` | Use `Result<T, E>` pattern. Never throw for expected failures. Handle all cases explicitly. |
-| `no-global-state-in-tests.mdc` | -- | `**/*.test.ts` | No `process.env` mutation, `vi.stubGlobal`, `vi.doMock`. Pass config as parameters. |
-| `invoke-code-reviewers.mdc` | true | -- | After non-trivial changes, invoke `code-reviewer` plus relevant specialists. Include triage checklist and invocation pattern. |
-| `follow-the-practice.mdc` | true | -- | Read `.agent/practice-core/index.md` at session start. The Practice is the entire system, not a single file. |
+Canonical sub-agent prompts live in `.agent/sub-agents/templates/*.md` (platform-agnostic). For a production app, use the three-layer composition system (ADR-114): shared components → canonical templates → thin platform adapters.
 
-Rules with both `alwaysApply: true` and `globs` will fire on every interaction but the description helps the agent understand the scope.
+Platform adapters contain only activation metadata and a pointer to the canonical template: Cursor `.cursor/agents/*.md`, Claude Code `.claude/agents/*.md`, Gemini CLI `review-*.toml` commands, Codex instructional skills.
 
-## Agent Definitions (Cursor .cursor/agents/)
-
-Agent files use YAML frontmatter. The `readonly: true` field prevents agents from modifying code during review.
+Cursor adapter format (`readonly: true` enforces read-only review at the platform level):
 
 ### Template
 
@@ -250,24 +272,34 @@ Categorise by severity: Critical (must fix), Important (should fix), Suggestions
 | `test-reviewer` | Test quality and TDD compliance | Test classification (unit/integration), naming conventions, mock simplicity, test value, TDD evidence. Recommends deletion for tests that test mocks or types. |
 | `type-reviewer` | TypeScript type safety | Type flow tracing, type widening detection, assertion usage, external boundary validation. Core principle: "why solve at runtime what you can embed at compile time?" |
 
-## Commands (Cursor .cursor/commands/)
+## Commands: Canonical and Platform Adapters
 
-Command files are plain markdown. Cursor exposes them as slash commands. The `@` prefix creates a file reference that Cursor resolves.
+Canonical commands in `.agent/commands/*.md` contain the substantive workflow instructions. Platform adapters use the `jc-*` prefix consistently across all platforms and contain only a pointer to the canonical command.
 
-### Template
+### Canonical Format (.agent/commands/)
 
 ```markdown
 # {Command Name}
 
-{What this command does in 1-2 sentences.}
+{Workflow instructions — the substantive content.}
 
-## Process
+## Steps
 
 1. {Step 1}
 2. {Step 2}
-
-@.agent/directives/rules.md
 ```
+
+### Platform Adapter Formats
+
+Cursor (`.cursor/commands/jc-*.md`) — uses `@` file injection:
+
+```markdown
+# {Command Name}
+
+Read and follow @.agent/commands/{command-name}.md
+```
+
+Claude Code (`.claude/commands/jc-*.md`) — YAML frontmatter with `description`, `allowed-tools`, `argument-hint`; body references canonical path with `$ARGUMENTS`. Gemini (`.gemini/commands/jc-*.toml`) — TOML with `description` and `prompt` fields; uses `{{args}}` for argument injection. Codex (`.agents/skills/jc-*/SKILL.md`) — YAML frontmatter with `name`, `description`; body reads canonical path.
 
 ### Required Commands
 
@@ -312,6 +344,28 @@ The session entry point. Sections: **Foundation Documents** (read AGENT.md, rule
 
 ## Skills (.agent/skills/)
 
+### SKILL.md Format
+
+Canonical skills use YAML frontmatter. Platform adapters in `.cursor/skills/` and `.agents/skills/` are thin wrappers.
+
+```yaml
+---
+name: {skill-name}
+classification: active | passive
+description: {When to invoke this skill — one sentence trigger condition}
+---
+
+# {Skill Title}
+
+## Goal
+{What the skill achieves}
+
+## Workflow
+1. {Step 1}
+```
+
+Cursor adapter (`.cursor/skills/{name}/SKILL.md`): `name`/`description` frontmatter + `Read and follow @.agent/skills/{name}/SKILL.md`. Codex adapter (`.agents/skills/{name}/SKILL.md`): `name`/`description` frontmatter + reads canonical path without `@`.
+
 ### Napkin (.agent/skills/napkin/SKILL.md)
 
 The napkin is the capture stage of the learning loop. It is always active.
@@ -354,25 +408,9 @@ Distillation extracts high-signal patterns from the napkin into a curated `disti
 
 **Quality**: Entries must be specific, actionable, non-obvious, and terse (1-2 lines).
 
-## Cursor Configuration
+## Platform Configuration
 
-### .cursor/environment.json
-
-```json
-{
-  "agentCanUpdateSnapshot": true
-}
-```
-
-### .cursor/settings.json
-
-```json
-{
-  "plugins": {}
-}
-```
-
-Enable plugins as needed for the project (e.g. Vercel, Sentry).
+Each platform requires configuration files (e.g. Cursor's `.cursor/environment.json` with `agentCanUpdateSnapshot: true`, and `.cursor/settings.json` for plugins). These are platform-specific -- consult each platform's documentation and ADR-125 for the full adapter location reference.
 
 ## Bootstrap Checklist
 
@@ -388,4 +426,5 @@ After creating all files, validate:
 8. The napkin rule points to a napkin skill that exists.
 9. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.
 10. The project builds.
-11. **Cohesion audit**: all practice-core files are internally consistent, practice-index.md links resolve, and all broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core. No stale descriptions, no contradictions, no outdated wording.
+11. **Artefact portability**: canonical skills and commands in `.agent/` contain no platform-specific syntax. All platform adapters are thin wrappers. Run `pnpm portability:check` or equivalent to validate adapter-to-canonical consistency (see ADR-125).
+12. **Cohesion audit**: all practice-core files are internally consistent, practice-index.md links resolve, and all broader Practice files (directives, rules, commands, prompts, skills) are aligned with the core. No stale descriptions, no contradictions, no outdated wording.

@@ -2,7 +2,7 @@
 
 Executable plans that are in progress now.
 
-- None currently.
+- [sitemap-driven-canonical-urls.plan.md](sitemap-driven-canonical-urls.plan.md) — Fix incorrect canonical URL patterns by using OWA sitemaps as the authoritative source of truth at codegen time.
 
 Completed and archived:
 

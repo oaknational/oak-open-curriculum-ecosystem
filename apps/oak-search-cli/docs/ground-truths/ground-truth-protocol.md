@@ -303,6 +303,6 @@ jq -r '.sequences[]? | "\(.sequenceSlug): \(.sequenceTitle)"' \
 | -------------------------------------------------------------------------------------------------------- | --------------------------- |
 | [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology                 |
 | [ADR-110](/docs/architecture/architectural-decisions/110-thread-search-architecture.md)                  | Thread search architecture  |
-| [Semantic Search Architecture](/.agent/directives/semantic-search-architecture.md)                       | Structure is the foundation |
+| [Semantic Search Architecture](/docs/agent-guidance/semantic-search-architecture.md)                     | Structure is the foundation |
 | [queries-redesigned.md](./queries-redesigned.md)                                                         | Lessons coverage matrix     |
 | [GROUND-TRUTH-GUIDE.md](/apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md)  | Design principles           |

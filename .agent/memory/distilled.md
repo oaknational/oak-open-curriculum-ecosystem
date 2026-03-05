@@ -13,7 +13,9 @@ changing behaviour.
 (sessions 2026-02-10 to 2026-02-24),
 `archive/napkin-2026-02-28.md` (sessions 2026-02-26 to
 2026-02-28), and `archive/napkin-2026-03-02.md` (sessions
-2026-02-28 to 2026-03-02).
+2026-02-28 to 2026-03-02), and
+`archive/napkin-2026-03-05.md` (sessions 2026-03-02 to
+2026-03-05).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -114,6 +116,9 @@ Validation: `pnpm portability:check`.
   removed tests should be recreated in the destination
 - Capturing calls in a typed array (`const calls: T[] = []`)
   beats `vi.fn().mock.calls` which leaks `any`
+- Keep E2E assertions on system/transport invariants; prove
+  runtime stub semantics in SDK unit/integration tests, not
+  by asserting server output against the same stub path
 
 ## Documentation (Agent Operational)
 
@@ -122,6 +127,26 @@ Validation: `pnpm portability:check`.
 - `process.env.X = value` with trailing space in backticks
   triggers MD038
 - Blank line between two blockquotes triggers MD028
+- After moving/archiving plan files, run a repo-wide
+  reference sweep (`rg`) immediately to remove stale links
+
+## MCP Apps (Domain-Specific)
+
+- `@modelcontextprotocol/ext-apps/server` exports `registerAppTool`,
+  `registerAppResource`, `getUiCapability`, and `RESOURCE_MIME_TYPE`
+  — use these as the canonical migration vehicle for all C4/C5/C6
+  items. `registerAppResource` defaults to `text/html;profile=mcp-app`
+  automatically; `registerAppTool` normalises `_meta.ui.resourceUri`
+  for host compatibility. Installed at v1.1.2 across all workspaces.
+- `_meta.ui.domain` is only required if the widget makes direct
+  cross-origin `fetch()` calls from inside the iframe. If all data
+  flows through the MCP bridge (`tools/call`, `ui/notifications/*`),
+  omit the field — no host-specific domain derivation needed.
+- Research file: `mcp-apps-support.research.md` is the Domain A
+  artefact. ChatGPT accepts `_meta.ui.resourceUri` as primary;
+  `openai/outputTemplate` is a legacy alias. Claude derives sandbox
+  domain as `{sha256(serverUrl)[:32]}.claudemcpcontent.com` (only
+  relevant if direct cross-origin calls are made from the iframe).
 
 ## Architecture (Domain-Specific)
 
@@ -153,11 +178,8 @@ Validation: `pnpm portability:check`.
   directory-wide to file-specific first
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
-
-## ESM (Remaining)
-
-- tsup ESM config: `format: ['esm']`, `platform: 'node'`,
-  `target: 'node22'`
+- For security metadata, enforce invariants at startup/load
+  boundaries and fail hard with remediation guidance
 
 ## Troubleshooting (Agent-Specific)
 

@@ -1,11 +1,8 @@
 ---
-description: After non-trivial changes, invoke the required specialist reviewers and capture findings explicitly.
+description: After non-trivial changes, invoke specialist reviewers.
 alwaysApply: true
 ---
 
-# Invoke Specialist Reviewers
+Read and follow `.agent/rules/invoke-code-reviewers.md`.
 
-After non-trivial changes, invoke specialist reviewers. In Cursor, use the Task tool with
-`readonly: true` and the appropriate `subagent_type` (e.g., `"code-reviewer"`).
-
-See `.agent/directives/invoke-code-reviewers.md` for the full policy and reviewer catalogue.
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

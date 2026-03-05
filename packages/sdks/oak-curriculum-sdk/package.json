@@ -99,20 +99,24 @@
     "docs:api:json:ai": "typedoc --options typedoc.ai.json --json docs/api/typedoc.json --skipErrorChecking",
     "docs:mcp": "typedoc --options typedoc.mcp.json --skipErrorChecking"
   },
+  "peerDependencies": {
+    "@elastic/elasticsearch": "^9.3.4"
+  },
   "dependencies": {
     "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
-    "openapi-fetch": "^0.15.0",
+    "openapi-fetch": "^0.17.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@elastic/elasticsearch": "^9.3.2",
-    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@elastic/elasticsearch": "^9.3.4",
+    "@modelcontextprotocol/ext-apps": "^1.1.2",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^24.10.13",
+    "@types/node": "^25.3.3",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.17",

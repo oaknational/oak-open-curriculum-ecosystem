@@ -207,16 +207,16 @@ for (const skillDir of canonicalSkillDirs) {
   }
 }
 
-// --- Check 5: Rule triggers reference a canonical source ---
+// --- Check 5: Rule triggers reference a canonical rule or skill ---
 
-const CANONICAL_SOURCE_PATTERN = /\.agent\/|docs\/architecture|docs\/governance/;
+const CANONICAL_RULE_OR_SKILL_PATTERN = /\.agent\/rules\/|\.agent\/skills\//;
 
 const cursorRules = await listFiles('.cursor/rules', '.mdc');
 for (const ruleFile of cursorRules) {
   const content = await readText(ruleFile);
-  if (!CANONICAL_SOURCE_PATTERN.test(content)) {
+  if (!CANONICAL_RULE_OR_SKILL_PATTERN.test(content)) {
     addIssue(
-      `${ruleFile}: trigger does not reference a canonical source (.agent/, docs/architecture/, or docs/governance/)`,
+      `${ruleFile}: trigger does not reference a canonical rule (.agent/rules/) or skill (.agent/skills/)`,
     );
   }
 }
@@ -224,9 +224,9 @@ for (const ruleFile of cursorRules) {
 const claudeRules = await listFiles('.claude/rules', '.md');
 for (const ruleFile of claudeRules) {
   const content = await readText(ruleFile);
-  if (!CANONICAL_SOURCE_PATTERN.test(content)) {
+  if (!CANONICAL_RULE_OR_SKILL_PATTERN.test(content)) {
     addIssue(
-      `${ruleFile}: trigger does not reference a canonical source (.agent/, docs/architecture/, or docs/governance/)`,
+      `${ruleFile}: trigger does not reference a canonical rule (.agent/rules/) or skill (.agent/skills/)`,
     );
   }
 }
@@ -297,9 +297,12 @@ if (issues.length > 0) {
   process.exit(1);
 }
 
+const canonicalRules = await listFiles('.agent/rules', '.md');
+
 const stats = [
   `${canonicalCommands.length} canonical commands`,
   `${canonicalSkillDirs.length} canonical skills`,
+  `${canonicalRules.length} canonical rules`,
   `${cursorRules.length} Cursor triggers`,
   `${claudeRules.length} Claude rules`,
   `${Object.values(adapterCountsByPlatform).reduce((a, b) => a + b, 0)} command adapters across ${platformCounts.length} platforms`,

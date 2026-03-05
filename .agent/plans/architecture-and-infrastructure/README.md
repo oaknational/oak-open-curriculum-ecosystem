@@ -16,6 +16,7 @@ Cross-cutting architecture, system quality, and observability plans.
 | `config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
 | `no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
 | `observability-and-quality-metrics.plan.md` | M3 | Structured logging, monitoring, alerting, quality dashboards |
+| `security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
 
 ## Milestone Alignment
 
