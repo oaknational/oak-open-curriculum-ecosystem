@@ -170,10 +170,10 @@ platform reach.
    - Incident response procedures documented
    - Vercel log drain verification (tracked from onboarding simulation R29)
 2. **Extension surfaces**
-   - MCP-app extension for Claude and other MCP-native hosts
-   - OpenAPI app extension alongside MCP-app extension
-   - Research plan:
-     [mcp-extensions-research-and-planning.md](sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   - MCP Apps standard migration: adapter pattern, platform detection, widget/MIME/metadata migration
+   - One MCP server serving ChatGPT, Claude, Cursor, and generic MCP hosts via MCP Apps standard
+   - Migration plan:
+     [roadmap.md](sdk-and-mcp-enhancements/roadmap.md)
    - Supporting:
      [concept-preservation-and-supersession-map.md](sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md)
 3. **Observability and quality metrics**

@@ -45,6 +45,14 @@ enough for permanent documentation.
   their motivations ("anxious about looking foolish",
   "sceptical by default"), not by focus areas
 
+## Agent Artefact Architecture
+
+See ADR-125 for the full model. Key operational gotcha:
+Claude Code path-scoped rules (`.claude/rules/*.md` with `paths`) load only when
+matching files open. Create them ONLY for glob-scoped triggers — never duplicate
+always-on triggers (already in `CLAUDE.md` → `AGENT.md` → `rules.md` chain).
+Validation: `pnpm portability:check`.
+
 ## Repo-Specific Rules
 
 - ADR index is the source of truth for ADR count; keep
@@ -107,11 +115,6 @@ enough for permanent documentation.
 - Capturing calls in a typed array (`const calls: T[] = []`)
   beats `vi.fn().mock.calls` which leaks `any`
 
-## Error Handling
-
-- All error handling MUST preserve the error cause chain. We must be always be able to trace the original error from the wrapped error.
-- All error handling should be done using the `Result` type. The repo has a `@oaknational/result` package that provides a `Result` type and a set of functions to work with it. There are a lot of remaining uses of `throw` and `try/catch` blocks that need to be converted to use the `Result` type over time.
-
 ## Documentation (Agent Operational)
 
 - Session prompts in `.agent/prompts/` should be updated
@@ -136,9 +139,6 @@ enough for permanent documentation.
   — they do NOT go through `ToolExecutionResult`
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS`
-- SDK functions should not own logging. The app layer is
-  responsible for observability — SDK returns classified
-  results, app inspects and logs via its own logger instance
 - search-sdk → curriculum-sdk dependency is banned (ADR-108).
   Shared data lives in `@oaknational/sdk-codegen/synonyms`.
   `SearchRetrievalService` in curriculum-sdk is ISP, not

@@ -55,7 +55,7 @@ Implementation sequencing remains in semantic-search and SDK/MCP plans.
 |------------|-----------------------------|
 | [../../semantic-search/roadmap.md](../../semantic-search/roadmap.md) | Relevance quality and explainability of results |
 | [../../semantic-search/future/08-experience-surfaces-and-extensions/advanced-features.md](../../semantic-search/future/08-experience-surfaces-and-extensions/advanced-features.md) | Defines extension-capability journeys that map to educator outcomes |
-| [../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | App surface/host compatibility for user-facing UI |
+| [../../sdk-and-mcp-enhancements/roadmap.md](../../sdk-and-mcp-enhancements/roadmap.md) | App surface/host compatibility for user-facing UI |
 | [../../security-and-privacy/roadmap.md](../../security-and-privacy/roadmap.md) | Safety and trust signals in educational usage contexts |
 | [../../external/ooc-api-wishlist/index.md](../../external/ooc-api-wishlist/index.md) | Upstream API constraints that can block or degrade educator journeys |
 | [../public-alpha-experience-contract.md](../public-alpha-experience-contract.md) | Shared alpha promise and no-go criteria |

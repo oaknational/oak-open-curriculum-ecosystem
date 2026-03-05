@@ -1,6 +1,6 @@
 ---
-description: No skipped tests. Never use it.skip, describe.skip, it.skipIf, or any other skipping mechanism. Fix it or delete it.
-globs: '**/*.test.ts'
+paths:
+  - '**/*.test.ts'
 ---
 
 # No Skipped Tests

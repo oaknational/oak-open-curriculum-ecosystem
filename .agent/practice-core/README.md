@@ -1,10 +1,22 @@
 # The Practice
 
-The Practice is a system of principles, quality requirements, rules, commands, sub-agents, skills, prompts, and a self-teaching learning loop -- working together to ensure quality, reverse entropy, and support innovation. It is ecosystem-agnostic: the principles are universal, the templates use TypeScript/Node.js as concrete examples but can be adapted to any ecosystem, and are expected to evolve over time in new contexts.
+The Practice is a system of principles, guardrails, skills, and a self-teaching learning loop -- working together to ensure quality, reverse entropy, and support innovation.
+
+This directory is the Practice Core, the self-contained heart of the system. The Core is transferable to other repos, see below. The Core integrates into a specific repo via a stable link to the `practice-index.md` file.
+
+The Practice is the application of the Core within a specific repo, and the Core-informed quality gates, rules, commands, sub-agents, skills, prompts, etc. that are used to enforce the principles and guardrails.
+
+The Practice will naturally evolve over time; using it will cause it to adapt to suit the context of its current repo.
+
+In order for the improvements to the Practice to be shared, the Core has a simple mechanism for integrating learnings from other repos. The `practice-core` directory from the sharing repo is copied into the `practice-core/incoming` directory of the receiving repo; the instructions for integrating what is useful and leaving the rest are integral to the Core — just ask your agent to do it.
+
+This was inspired by the concept of [genetic plasmid exchange](https://en.wikipedia.org/wiki/Bacterial_conjugation), intra-generational evolution -- this is memetic capability exchange. In essence, the Core is the memotype, the Practice is the applied phenotype.
+
+> **Note**: The Core is stack- and ecosystem-agnostic: the principles are universal, the templates use TypeScript/Node.js as concrete examples but can be adapted to any toolset or language, and are expected to evolve over time in new contexts.
 
 ## For Humans
 
-> **Bringing the Practice to a New Repo**
+### Bringing the Practice to a New Repo
 
 The Practice travels as a set of files: three core blueprints (the "plasmid trinity") plus two entry points (this README and an agent-facing index). To hydrate it into a new repository:
 

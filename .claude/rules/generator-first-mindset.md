@@ -1,6 +1,6 @@
 ---
-description: When behaviour needs to change, update the generator templates and rerun pnpm sdk-codegen. The generator is the single source of truth.
-globs: '**/*.{ts,tsx,mts}'
+paths:
+  - '**/*.{ts,tsx,mts}'
 ---
 
 # Generator-First Mindset

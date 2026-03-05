@@ -2,9 +2,10 @@
 
 Executable plans queued and ready, not yet started.
 
-Strategic source: [improve-pedagogical-context.plan.md](../archive/completed/improve-pedagogical-context.plan.md)
-
-_No current plans. WS2 and WS3 have been collapsed into a future review checkpoint._
+| Plan | Scope | Blocked By |
+|---|---|---|
+| [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add `outputSchema` to all 30 MCP tools for improved model reasoning and spec compliance | None (can start any time) |
 
 Active work: [active/README.md](../active/README.md)
 Later backlog: [future/README.md](../future/README.md)
+Collection roadmap: [roadmap.md](../roadmap.md)

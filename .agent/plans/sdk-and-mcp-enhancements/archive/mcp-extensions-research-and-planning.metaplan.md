@@ -1,7 +1,8 @@
 # Metaplan: Updates to MCP Extensions Research and Planning
 
-**Target plan**: [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md)  
-**Created**: 2026-03-05  
+**Target plan**: [roadmap.md](../roadmap.md) (renamed and moved from `mcp-extensions-research-and-planning.md`; promoted to collection-root roadmap)
+**Created**: 2026-03-05
+**Applied**: 2026-03-05 — all checklist items applied (see Section 4). Target plan is now active at the new path above.
 **Purpose**: Define changes to apply to the target plan. This metaplan is not an edit of the plan itself; it is the specification for a future edit.
 
 ---
@@ -95,20 +96,19 @@ When editing the plan, add or extend as follows:
 
 ## 4. Summary of Edits to Apply (Checklist)
 
-When updating [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md), the author should:
+Applied to [roadmap.md](../roadmap.md) on 2026-03-05:
 
-- [ ] **Storage / host behaviour**: Add requirement for adapter pattern (core code host-agnostic; platform-specific behaviour in adapters). Place in Domain C and/or Domain D as appropriate.
-- [ ] **Platform detection**: Add requirement for platform detection at app startup and exposure via config mechanism. Reference existing config/bootstrap and ADR-116.
-- [ ] **Research**: Add Domain A (or equivalent) task to validate ChatGPT acceptance of MCP-only tool metadata (`_meta.ui.resourceUri`) and MCP-only resource MIME (`text/html;profile=mcp-app`). Add confidence log entry.
-- [ ] **Refactor backlog**: After research, add or adjust Domain C item to either “migrate to MCP-only” or “retain dual via adapters” based on research outcome.
-- [ ] **Clarify relationship**: Add brief “OpenAI app vs MCP app” / “one app, one standard, optional adapters” wording so the plan explicitly states that a single set of metadata may suffice if ChatGPT support is confirmed.
-- [ ] **Link this metaplan**: In the updated plan, add a one-line reference to this metaplan (e.g. in a “Changelog” or “Plan updates” note) so provenance is clear.
-
+- [x] **Storage / host behaviour**: Added in Domain C item 1 (adapter boundary) and Domain D item 3 (adapter-first feature expansion).
+- [x] **Platform detection**: Added in Domain C item 2; references `runtime-config.ts`, `bootstrap-app.ts`, and ADR-116.
+- [x] **Research**: Added as mandatory new deliverable in Domain A (ChatGPT MCP Apps acceptance validation task with confidence log requirement).
+- [x] **Refactor backlog**: Domain C items 3–6 cover the conditional migration (MCP-only if validated, dual via adapters if not).
+- [x] **Clarify relationship**: Added "OpenAI App vs MCP App: The Reframing" section plus non-negotiable: "MCP Apps standard is primary; OpenAI-specific surface is a compatibility alias or thin adapter only."
+- [x] **Link this metaplan**: Linked in the Changelog section of the updated plan.
 ---
 
 ## 5. References
 
-- Target plan: [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md)
+- Target plan: [roadmap.md](../roadmap.md)
 - OpenAI: [MCP Apps compatibility in ChatGPT](https://developers.openai.com/apps-sdk/mcp-apps-in-chatgpt)
 - MCP Apps migration: [Migrate_OpenAI_App](https://modelcontextprotocol.github.io/ext-apps/api/documents/Migrate_OpenAI_App.html)
 - Config/bootstrap: `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`, `bootstrap-app.ts`

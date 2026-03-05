@@ -4,19 +4,19 @@ overview: "Address architectural review findings from Betty, Wilma, Fred, and Ba
 todos:
   - id: phase-0-audit
     content: "Phase 0: Audit current state — verify .mdc content patterns, command counts, link integrity, and ADR cross-references"
-    status: pending
+    status: complete
   - id: phase-1-contracts
     content: "Phase 1: ADR and contract updates — add trigger content contract to ADR-125, add ADR-114 forward reference, fix naming inconsistency, document agent comprehension failure modes"
-    status: pending
+    status: complete
   - id: phase-2-trigger-compliance
-    content: "Phase 2: Bring 7 Pattern B .mdc rule triggers into compliance with the new trigger content contract"
-    status: pending
+    content: "Phase 2: Bring 9 Pattern B .mdc rule triggers into compliance with the new trigger content contract; create 6 Claude Code path-scoped rules"
+    status: complete
   - id: phase-3-validation
-    content: "Phase 3: Build validate-portability script covering commands, skills, and rules — extend the sub-agent validation pattern"
-    status: pending
+    content: "Phase 3: Build validate-portability script covering commands, skills, rules, and classification — extend the sub-agent validation pattern"
+    status: complete
   - id: phase-4-cleanup
     content: "Phase 4: Fix platform leakage in canonical content, resolve experience command gap, acknowledge plugin namespace in ADR-125"
-    status: pending
+    status: complete
   - id: phase-5-skill-taxonomy
     content: "Phase 5: Skill taxonomy — add classification frontmatter to ADR-125 and all SKILL.md files"
     status: complete
@@ -31,13 +31,13 @@ todos:
     status: complete
   - id: phase-9-documentation-sync
     content: "Phase 9: Documentation sync — update counts, verify entry-point chains, run consolidation"
-    status: in-progress
+    status: complete
 ---
 
 # Artefact Portability Hardening
 
 **Last Updated**: 2026-03-05
-**Status**: 🟡 IN PROGRESS (Phases 5–8 complete, Phases 0–4 and 9 pending)
+**Status**: 🟢 COMPLETE (All phases 0–9 done)
 **Scope**: Address all critical and important findings from the four-reviewer architectural review of ADR-125 and the agent artefact portability system.
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 **Predecessor**: [Agent Artefact Portability (execution plan, completed)](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)
@@ -468,8 +468,13 @@ Extracted artefact inventory tables (Layer 1 + Layer 2) from AGENT.md to `.agent
 ### Phase 9: Documentation Sync
 
 - [ ] Verify entry-point chains resolve (CLAUDE.md → AGENT.md → rules.md, AGENT.md → artefact-inventory.md)
-- [ ] Run `/jc-consolidate-docs`
+- [ ] Run `/jc-consolidate-docs` (includes non-repo plan check and platform-specific memory scan per updated workflow)
 - [ ] Full quality gate pass
+
+**Consolidation workflow update**: The `consolidate-docs.md` command now includes:
+
+- Step 1 addition: check platform-specific plan locations (e.g., `~/.claude/plans/`) for non-repo plans with valuable content
+- Step 3 addition: check platform-specific memory locations (e.g., `~/.claude/projects/<project>/memory/`) as additional distillation sources alongside the canonical napkin
 
 ---
 

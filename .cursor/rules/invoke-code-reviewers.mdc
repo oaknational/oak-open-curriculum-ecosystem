@@ -5,13 +5,7 @@ alwaysApply: true
 
 # Invoke Specialist Reviewers
 
-Read and follow `.agent/directives/invoke-code-reviewers.md`.
+After non-trivial changes, invoke specialist reviewers. In Cursor, use the Task tool with
+`readonly: true` and the appropriate `subagent_type` (e.g., `"code-reviewer"`).
 
-When invoking specialists in Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`:
-
-```yaml
-Task tool:
-  subagent_type: "code-reviewer"
-  readonly: true
-  prompt: "Review the recent changes for quality, security, and maintainability."
-```
+See `.agent/directives/invoke-code-reviewers.md` for the full policy and reviewer catalogue.

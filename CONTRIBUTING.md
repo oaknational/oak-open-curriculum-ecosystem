@@ -275,6 +275,10 @@ Include:
 
 ## Code Standards
 
+### Language and Style
+
+- **British English** — Use British spelling, grammar, and date formats throughout: documentation, comments, commit messages, and PR descriptions (e.g., "behaviour" not "behavior", "colour" not "color", `DD/MM/YYYY` date format). Where that is not possible due to external APIs or keywords, stiff upper lip and plough on.
+
 ### TypeScript
 
 - **No `any` types** — Data entering the system is genuinely `unknown`; validate immediately with generated Zod schemas so it has a specific type from that point on

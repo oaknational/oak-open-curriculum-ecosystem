@@ -29,6 +29,7 @@ For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/
 | `.cursor/rules/*.mdc` | Cursor activation metadata -> `.agent/directives/` |
 | `.cursor/agents/*.md` | Cursor sub-agent wrappers -> `.agent/sub-agents/templates/` |
 | `.claude/commands/*.md` | Claude Code command wrappers -> `.agent/commands/` |
+| `.claude/rules/*.md` | Claude Code path-scoped rule triggers (with `paths` frontmatter) |
 | `.claude/agents/*.md` | Claude Code sub-agent wrappers -> `.agent/sub-agents/templates/` |
 | `.gemini/commands/*.toml` | Gemini CLI command and review wrappers -> `.agent/commands/` and `.agent/sub-agents/templates/` |
 | `.agents/skills/*/SKILL.md` | Codex skill and sub-agent wrappers -> `.agent/skills/` and `.agent/sub-agents/templates/` |

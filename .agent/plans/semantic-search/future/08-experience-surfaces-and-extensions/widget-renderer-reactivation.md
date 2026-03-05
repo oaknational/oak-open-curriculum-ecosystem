@@ -43,7 +43,7 @@ All paths are relative to `apps/oak-curriculum-mcp-streamable-http/`.
 ## Prerequisites (All Must Be Satisfied)
 
 1. **MCP extensions research complete**
-   [mcp-extensions-research-and-planning.md](../../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   [../../../sdk-and-mcp-enhancements/roadmap.md](../../../sdk-and-mcp-enhancements/roadmap.md)
    Domains A-C (research, specialist spec, refactoring backlog).
    Needed to confirm the widget metadata contract is host-neutral
    and the renderer stack aligns with the MCP Apps standard.
@@ -105,7 +105,7 @@ reactivation.
 
 | Document | Purpose |
 |----------|---------|
-| [MCP extensions plan](../../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) | Prerequisite research and refactoring |
+| [MCP extensions roadmap](../../../sdk-and-mcp-enhancements/roadmap.md) | Prerequisite research and refactoring |
 | [Widget search rendering (archived)](../../archive/completed/widget-search-rendering.md) | Historical context — Phases 0-5 |
 | [advanced-features.md](advanced-features.md) | Other extension capabilities |
 | [search-results-quality.md](../../archive/completed/search-results-quality.md) | Search quality baseline — feeds into result rendering |

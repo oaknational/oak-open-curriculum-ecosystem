@@ -283,7 +283,7 @@ documented permanently in the HTTP MCP server README:
 
 ## Related Plans
 
-- [mcp-extensions-research-and-planning.md](../../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md) — Track 2 research and post-merge extensions
+- [../../../sdk-and-mcp-enhancements/roadmap.md](../../../sdk-and-mcp-enhancements/roadmap.md) — Track 2 research and post-merge extensions
 - [search-dispatch-type-safety.md](../archive/completed/search-dispatch-type-safety.md) — SDK-level B1+W1 (complete)
 - [Phase 3a (archived)](../archive/completed/phase-3a-mcp-search-integration.md) — source of adversarial findings
 

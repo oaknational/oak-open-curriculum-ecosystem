@@ -1,27 +1,33 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 3 March 2026
+**Last Updated**: 5 March 2026
 
 Planning hub for SDK pipeline evolution, MCP extensions, and related
 architectural work. Consolidated from the former `pipeline-enhancements/`
 and `sdk-and-mcp-enhancements/` directories.
 
-## Lifecycle Plans
+**Collection Roadmap**: [roadmap.md](roadmap.md)
+**Active Plans**: [active/README.md](active/README.md)
+**Next-Up Plans**: [current/README.md](current/README.md)
+**Later Plans**: [future/README.md](future/README.md)
 
-| Lane | Directory | Contents |
-|------|-----------|----------|
-| **Active** (now) | [active/](active/) | _(no active plans)_ |
-| **Current** (next) | [current/](current/) | _(empty — WS2+WS3 collapsed to future review checkpoint)_ |
-| **Future** (later) | [future/](future/) | [WS2+WS3: Pedagogical Review Checkpoint](future/ws2-ws3-pedagogical-review-checkpoint.plan.md), [Output Schemas for MCP Tools](future/output-schemas-for-mcp-tools.plan.md) |
+## Documents
 
-## Strategic and Reference Documents
+| File | Type | Description |
+|------|------|-------------|
+| [roadmap.md](roadmap.md) | Roadmap | MCP Apps standard migration: reframing rationale, coupling inventory, ADR matrix, domain ordering |
+| [active/README.md](active/README.md) | Active index | In-progress executable plans |
+| [current/README.md](current/README.md) | Current index | Next-up plans queued and ready |
+| [future/README.md](future/README.md) | Future index | Deferred/later plans |
+| [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | MCP Apps standard evidence base: ChatGPT support, SEP-1865, capability matrix |
 
-| Document | Purpose | Status |
-|----------|---------|--------|
-| [ws1-get-curriculum-model.plan.md](archive/completed/ws1-get-curriculum-model.plan.md) | Executed WS1 replacement plan (`get-curriculum-model`) | Archived complete |
-| [improve-pedagogical-context.plan.md](archive/completed/improve-pedagogical-context.plan.md) | Strategic brief: `get-curriculum-model` tool, canonical glossary, pedagogical term disambiguation | Archived (content consolidated into active WS1 plan) |
-| [mcp-extensions-research-and-planning.md](mcp-extensions-research-and-planning.md) | Post-merge MCP extensions: research, specialist specification, refactoring and feature backlogs | Blocked (Gate 3) |
-| [concept-preservation-and-supersession-map.md](concept-preservation-and-supersession-map.md) | ADR crosswalk and concept provenance for legacy plans | Reference |
+## Read Order
+
+1. **Roadmap first**: [roadmap.md](roadmap.md)
+2. **Now (in progress)**: [active/README.md](active/README.md)
+3. **Next (queued)**: [current/README.md](current/README.md)
+4. **Later (deferred)**: [future/README.md](future/README.md)
+5. **Research evidence**: [mcp-apps-support.research.md](mcp-apps-support.research.md)
 
 ## Icebox (Pipeline Framework)
 
@@ -45,7 +51,7 @@ All legacy materials are archived and should not be executed directly.
 | [archive/legacy-numbered/](archive/legacy-numbered/) | Legacy numbered plans (01–18) |
 | [archive/implemented/](archive/implemented/) | Historically implemented references |
 | [archive/completed/](archive/completed/) | Completed plans with provenance |
-| [archive/](archive/) | Historical notes, data artefacts |
+| [archive/](archive/) | Historical notes, data artefacts, applied metaplans |
 
 ## Workspace Context
 

@@ -1,3 +1,3 @@
 # Quality Gates
 
-Read and follow @.agent/commands/quality-gates.md
+Read and follow @.agent/commands/gates.md

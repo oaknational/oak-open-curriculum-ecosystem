@@ -1,6 +1,6 @@
 # SDK and MCP Concept Preservation and Supersession Map
 
-**Last Updated**: 23 February 2026
+**Last Updated**: 5 March 2026
 **Purpose**: Preserve useful engineering concepts from older plans while
 preventing execution drift from stale plan mechanics.
 
@@ -15,11 +15,11 @@ discarding stale status labels, sequencing, and file-path assumptions.
 
 | Concept Domain | Preserved Idea | Archived Concept Sources | Current Home |
 |---|---|---|---|
-| Host-neutral tool metadata | Generator-first descriptor enrichment; separate canonical metadata from host-specific projections | `archive/legacy-numbered/01-*` | `mcp-extensions-research-and-planning.md` (Domain C) |
-| Ontology and model grounding | Ontology as structured context primitive; model-visible vs component-only channel separation | `archive/legacy-numbered/02-*`, `10-*`, `16-*` | `mcp-extensions-research-and-planning.md` (Domains A, B, D) |
-| Public resource auth posture | Selective auth bypass for explicitly safe public resources only, constrained by ADR auth boundaries | `archive/legacy-numbered/15a-*`, `15b-*` | `mcp-extensions-research-and-planning.md` (ADR matrix) |
-| Widget safety and rollout control | Shell-first safety gate; deterministic checks before richer rendering | `archive/legacy-numbered/04-widget-*`, `11-*`, `archive/07-*` | `mcp-extensions-research-and-planning.md` (Domain D) |
-| Advanced MCP composition | Config-driven composite tools; code-generation ownership of complex primitives | `archive/legacy-numbered/03-*`, `18-*` | `mcp-extensions-research-and-planning.md` (Domains C, D) |
+| Host-neutral tool metadata | Generator-first descriptor enrichment; separate canonical metadata from host-specific projections | `archive/legacy-numbered/01-*` | [roadmap.md](../roadmap.md) (Domain C) |
+| Ontology and model grounding | Ontology as structured context primitive; model-visible vs component-only channel separation | `archive/legacy-numbered/02-*`, `10-*`, `16-*` | [roadmap.md](../roadmap.md) (Domains A, B, D) |
+| Public resource auth posture | Selective auth bypass for explicitly safe public resources only, constrained by ADR auth boundaries | `archive/legacy-numbered/15a-*`, `15b-*` | [roadmap.md](../roadmap.md) (ADR matrix) |
+| Widget safety and rollout control | Shell-first safety gate; deterministic checks before richer rendering | `archive/legacy-numbered/04-widget-*`, `11-*`, `archive/07-*` | [roadmap.md](../roadmap.md) (Domain D) |
+| Advanced MCP composition | Config-driven composite tools; code-generation ownership of complex primitives | `archive/legacy-numbered/03-*`, `18-*` | [roadmap.md](../roadmap.md) (Domains C, D) |
 | Prompt and guidance ergonomics | Practical prompt/workflow lessons | `archive/legacy-numbered/04-mcp-prompts-*`, `06-*`, `08b-*` | Future scoped plan from Domain D |
 | Search quality enrichment | Synonym/query-intent enrichment | `archive/implemented/17-*` | Candidate backlog under Domain D |
 | Pipeline framework extraction | Single-pass OpenAPI-to-SDK generator replacing openapi-typescript and openapi-zod-client | Former `pipeline-enhancements/` plans | [icebox/openapi-pipeline-framework.md](../icebox/openapi-pipeline-framework.md) |

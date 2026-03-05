@@ -110,7 +110,7 @@ The UX collection is authoritative for decision criteria between:
 Evidence inputs for this gate:
 
 1. Supported-client compatibility and risk evidence from
-   [../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md](../sdk-and-mcp-enhancements/mcp-extensions-research-and-planning.md)
+   [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md)
 2. Renderer/reactivation sequencing and prerequisites from
    [../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md)
 3. Milestone-level trade-off framing from
