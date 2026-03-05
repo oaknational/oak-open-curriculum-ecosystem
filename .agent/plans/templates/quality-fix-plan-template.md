@@ -546,7 +546,7 @@ Run these commands to verify all fixes:
 
 ```bash
 # Full quality gate sequence
-cd /Users/jim/code/oak/oak-open-curriculum-ecosystem
+cd oak-open-curriculum-ecosystem
 pnpm sdk-codegen # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check

@@ -3,7 +3,7 @@ name: "Remove vi.mock from tests and enforce type safety in test code"
 overview: "Eliminate all vi.mock usage across the monorepo, remove type assertions from test code, and ban Object.assign — bringing tests into full compliance with ADR-078, rules.md, and the testing strategy."
 status: "superseded"
 superseded_on: 2026-03-03
-superseded_by: "/Users/jim/code/oak/oak-mcp-ecosystem/.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
+superseded_by: ".//.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
 todos:
   - id: tier-1-remove-redundant
     content: "Tier 1: Remove redundant vi.mock from 4 E2E files that already use dangerouslyDisableAuth: true."

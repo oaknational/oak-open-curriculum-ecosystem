@@ -503,7 +503,7 @@ pnpm test:e2e
 #### Task 5.1: Run All E2E Tests
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 
 # Run all E2E tests
 pnpm test:e2e
@@ -518,7 +518,7 @@ for i in {1..10}; do
   echo "Run $i/10"
   cd apps/oak-curriculum-mcp-streamable-http
   pnpm test:e2e auth-enforcement.e2e.test.ts || break
-  cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+  cd ai_experiments/oak-notion-mcp
 done
 # Expected: 10/10 passes
 ```

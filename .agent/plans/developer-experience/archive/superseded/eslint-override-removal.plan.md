@@ -3,7 +3,7 @@ name: "Phased Removal of ESLint Overrides"
 overview: "Progressively remove all ESLint rule overrides from generation and runtime SDK workspaces, bringing all code to full strict compliance."
 status: "superseded"
 superseded_on: 2026-03-03
-superseded_by: "/Users/jim/code/oak/oak-mcp-ecosystem/.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
+superseded_by: ".//.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
 todos:
   - id: phase-0-logger
     content: "Phase 0: Replace console.* with logger in code-generation/ and vocab-gen/ (tracked in codegen-logger-replacement.plan.md)."

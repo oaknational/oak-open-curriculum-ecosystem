@@ -7,7 +7,7 @@ overview: >
   nuanced exceptions for CLI output, smoke tests, and build scripts.
 status: "superseded"
 superseded_on: 2026-03-04
-superseded_by: "/Users/jim/code/oak/oak-mcp-ecosystem/.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
+superseded_by: "../developer-experience/active/devx-strictness-convergence.plan.md"
 todos:
   - id: add-rule
     content: "Add `no-console: 'error'` to recommended config in oak-eslint"

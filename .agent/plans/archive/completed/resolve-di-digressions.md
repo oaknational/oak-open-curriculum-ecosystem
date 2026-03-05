@@ -1489,7 +1489,7 @@ pnpm markdownlint:root packages/libs/env/README.md
 
 ```bash
 # Run full quality gate after Phase 0.5
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 
 # 1. Verify NO process.env bypasses remain
 violations=$(grep -r "process\.env\." apps/oak-curriculum-mcp-*/src/ \
@@ -2112,7 +2112,7 @@ pnpm test:e2e 2>&1 | grep "passed"
 # Expected: "12 passed" visible in output
 
 # 4. Return to repo root
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 ```
 
 **Task Complete When**: All 4 acceptance criteria checked AND test suite passes.
@@ -2214,12 +2214,12 @@ pnpm test:e2e
 
 # 2. Verify stdio test count
 cd apps/oak-curriculum-mcp-stdio && pnpm test:e2e 2>&1 | grep "passed"
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 # Expected: "12 passed"
 
 # 3. Verify streamable-http test count
 cd apps/oak-curriculum-mcp-streamable-http && pnpm test:e2e 2>&1 | grep "passed"
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 # Expected: "75 passed"
 
 # 4. Run auth-enforcement test 10 times (test isolation)
@@ -2227,7 +2227,7 @@ for i in {1..10}; do
   echo "Run $i/10"
   cd apps/oak-curriculum-mcp-streamable-http
   pnpm test:e2e auth-enforcement.e2e.test.ts || break
-  cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+  cd ai_experiments/oak-notion-mcp
 done
 # Expected: 10/10 passes (no race conditions)
 
@@ -2572,7 +2572,7 @@ Run these commands to verify all fixes:
 
 ```bash
 # Full quality gate sequence
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 pnpm type-gen   # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check

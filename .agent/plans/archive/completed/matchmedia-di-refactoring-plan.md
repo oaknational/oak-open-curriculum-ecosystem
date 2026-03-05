@@ -405,6 +405,7 @@ vi.mock('./theme-utils', async () => {
 #### Task 3.4: Delete mock-match-media files
 
 **Files to delete**:
+
 - `apps/oak-search-cli/app/ui/search/mock-match-media.ts`
 - `apps/oak-search-cli/app/ui/search/mock-match-media-registries.ts`
 
@@ -446,7 +447,7 @@ Expected: No matches (or only in deleted/archive files).
 Run all quality gates from repo root:
 
 ```bash
-cd /Users/jim/code/oak/oak-mcp-ecosystem
+cd ./
 pnpm type-gen
 pnpm build
 pnpm type-check
@@ -478,6 +479,7 @@ All must pass (exit code 0).
 ## Foundation Documents
 
 Before implementing, re-read:
+
 - `.agent/directives/rules.md`
 - `.agent/directives/testing-strategy.md`
 
@@ -508,6 +510,7 @@ Key principle: Tests MUST NOT manipulate global state. Product code must accept 
 ## Notes
 
 This refactoring establishes a pattern for handling browser APIs in React:
+
 1. Define interface for the API
 2. Create context provider that wraps real browser API
 3. Create hook to access the API
@@ -515,5 +518,3 @@ This refactoring establishes a pattern for handling browser APIs in React:
 5. Tests inject mock implementation via provider
 
 This pattern should be documented in an ADR and applied to other browser APIs (localStorage, fetch, etc.) in future work.
-
-

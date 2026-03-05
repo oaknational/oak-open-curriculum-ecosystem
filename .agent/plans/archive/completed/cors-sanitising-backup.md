@@ -634,7 +634,7 @@ pnpm build       # ✅
 **Repository-level**:
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 pnpm i           # ✅
 pnpm type-gen    # ✅
 pnpm build       # ✅
@@ -721,7 +721,7 @@ pnpm build
 **Repository-level**:
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 pnpm i
 pnpm type-gen
 pnpm build

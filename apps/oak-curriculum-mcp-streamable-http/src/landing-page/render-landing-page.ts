@@ -68,7 +68,7 @@ export function renderLandingPageHtml(vercelHost?: string): string {
       <section class="card">
         <h2>Documentation</h2>
         <p>For details about the underlying curriculum data, see the <a href="https://open-api.thenational.academy/docs/about-oaks-api/api-overview">Oak Curriculum API documentation</a>.</p>
-        <p>Browse the MCP server implementation: <a target="_blank" rel="noopener noreferrer" href="${WORKSPACE_GITHUB_URL}">Code on GitHub</a>.</p>
+        <p>Browse the MCP server implementation: <a target="_blank" rel="noopener noreferrer" href="${WORKSPACE_GITHUB_URL}">code on GitHub</a>.</p>
       </section>
     </main>
   </body>

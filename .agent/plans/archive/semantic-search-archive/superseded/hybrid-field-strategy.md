@@ -297,7 +297,7 @@ threads_available: { type: 'keyword' },
 ### 3. Run Type Generation
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd ai_experiments/oak-notion-mcp
 pnpm type-gen
 ```
 

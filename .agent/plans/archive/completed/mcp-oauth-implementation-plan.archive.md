@@ -488,7 +488,7 @@ Per `README.md` line 133:
 5. **Create Feature Branch** (5 min)
    - [ ] Ensure you're on latest `main`:
      ```bash
-     cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+     cd ai_experiments/oak-notion-mcp
      git checkout main
      git pull origin main
      ```

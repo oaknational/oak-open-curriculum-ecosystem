@@ -544,7 +544,7 @@ Before castr can be integrated into Oak's type generation pipeline:
 
 ## Local castr checkout
 
-Target path for local development: `~/code/personal/castr` (repo: `git@github.com:EngraphCode/castr.git`).
+Ask the user if and where to clone the castr repository for local development.
 
 ## Refresh guidance
 
