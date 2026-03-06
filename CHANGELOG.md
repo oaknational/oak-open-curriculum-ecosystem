@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.0.1...v1.1.0) (2026-03-06)
+
+
+### Features
+
+* asset download proxy, canonical URL fixes, and Vitest 4 cleanup ([#60](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/60)) ([978ae86](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/978ae86b88ba2de8fac512b039b8c8536799c0f4))
+
 ## [1.0.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.0.0...v1.0.1) (2026-03-05)
 
 
