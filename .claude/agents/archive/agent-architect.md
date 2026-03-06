@@ -73,6 +73,7 @@ Every whenToUse field must:
 - Start with "Use this agent when..."
 - Define precise triggering conditions
 - Include 2-3 concrete examples using this exact structure:
+
   ```
   <example>
   Context: [situation description]
@@ -83,6 +84,7 @@ Every whenToUse field must:
   </commentary>
   </example>
   ```
+
 - Show the assistant using the Agent tool, never responding directly to the task
 - Cover both proactive and reactive use cases when applicable
 
@@ -134,7 +136,7 @@ Examples of what to record:
 
 # Persistent Agent Memory
 
-You have a persistent Persistent Agent Memory directory at `/Users/jim/code/oak/oak-mcp-ecosystem/.claude/agent-memory/agent-architect/`. Its contents persist across conversations.
+You have a persistent Persistent Agent Memory directory at `.claude/agent-memory/agent-architect/`. Its contents persist across conversations.
 
 As you work, consult your memory files to build on previous experience. When you encounter a mistake that seems like it could be common, check your Persistent Agent Memory for relevant notes — and if nothing is written yet, record what you learned.
 
@@ -174,13 +176,13 @@ When looking for past context:
 1. Search topic files in your memory directory:
 
 ```
-Grep with pattern="<search term>" path="/Users/jim/code/oak/oak-mcp-ecosystem/.claude/agent-memory/agent-architect/" glob="*.md"
+Grep with pattern="<search term>" path=".claude/agent-memory/agent-architect/" glob="*.md"
 ```
 
 2. Session transcript logs (last resort — large files, slow):
 
 ```
-Grep with pattern="<search term>" path="/Users/jim/.claude/projects/-Users-jim-code-oak-oak-mcp-ecosystem/" glob="*.jsonl"
+Grep with pattern="<search term>" path=".claude/projects/-Users-jim-code-oak-oak-mcp-ecosystem/" glob="*.jsonl"
 ```
 
 Use narrow search terms (error messages, file paths, function names) rather than broad keywords.

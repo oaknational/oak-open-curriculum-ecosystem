@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "openapi-zod-client": "^1.18.3",
-    "zod": "^3"
+    "zod": "^3.25.76"
   },
   "peerDependencies": {
     "openapi3-ts": "^4.5.0"

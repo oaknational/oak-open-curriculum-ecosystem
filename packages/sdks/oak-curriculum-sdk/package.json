@@ -103,9 +103,9 @@
     "@elastic/elasticsearch": "^9.3.4"
   },
   "dependencies": {
-    "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
+    "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.17.0",
@@ -113,10 +113,10 @@
   },
   "devDependencies": {
     "@elastic/elasticsearch": "^9.3.4",
-    "@modelcontextprotocol/ext-apps": "^1.1.2",
+    "@modelcontextprotocol/ext-apps": "^1.2.0",
     "@modelcontextprotocol/sdk": "^1.27.1",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.3.5",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.17",

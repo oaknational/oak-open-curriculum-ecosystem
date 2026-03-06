@@ -33,7 +33,7 @@
       "Bash(python3 -c \":*)",
       "Bash(lsof -ti:3333)",
       "Bash(xargs kill -9)",
-      "Read(//Users/jim/.claude/plans/**)",
+      "Read(/.claude/plans/**)",
       "Bash(git status -u)"
     ],
     "deny": [],

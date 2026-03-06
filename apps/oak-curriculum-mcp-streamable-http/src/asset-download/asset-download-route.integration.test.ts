@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { createAssetDownloadRoute, type AssetDownloadRouteDeps } from './asset-download-route.js';
 
 const VALID_HEX_SIG = 'a'.repeat(64);
@@ -39,7 +39,8 @@ function createMockReqRes(params: Record<string, string>, query: Record<string, 
     on: vi.fn(),
     destroy: vi.fn(),
   } as unknown as Response;
-  return { req, res };
+  const next: NextFunction = vi.fn();
+  return { req, res, next };
 }
 function createUpstreamResponse(
   status: number,
@@ -74,63 +75,63 @@ function createUpstreamResponse(
 describe('createAssetDownloadRoute — parameter validation', () => {
   it('returns 400 for missing lesson parameter', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes({}, { sig: VALID_HEX_SIG, exp: '999999999999' });
-    await handler(req, res, vi.fn());
+    const { req, res, next } = createMockReqRes({}, { sig: VALID_HEX_SIG, exp: '999999999999' });
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Missing lesson parameter' });
   });
 
   it('returns 400 for invalid asset type', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'invalidType' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid asset type' });
   });
 
   it('returns 400 for missing sig parameter', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid sig parameter' });
   });
 
   it('returns 400 for non-hex sig parameter', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: 'not-hex-and-wrong-length', exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid sig parameter' });
   });
 
   it('returns 400 for invalid exp parameter', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: 'not-a-number' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid exp parameter' });
   });
 
   it('returns 400 for missing exp parameter', async () => {
     const handler = createAssetDownloadRoute(createStubDeps());
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid exp parameter' });
   });
@@ -141,11 +142,11 @@ describe('createAssetDownloadRoute — signature validation', () => {
       validateSignature: () => ({ valid: false, reason: 'Download link has expired' }),
     });
     const handler = createAssetDownloadRoute(deps);
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({ error: 'Download link has expired' });
   });
@@ -157,11 +158,11 @@ describe('createAssetDownloadRoute — signature validation', () => {
       logger: logger as unknown as AssetDownloadRouteDeps['logger'],
     });
     const handler = createAssetDownloadRoute(deps);
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(logger.warn).toHaveBeenCalledWith(
       'asset-download.signature.invalid',
       expect.objectContaining({
@@ -182,11 +183,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
       }),
     );
     const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(stubFetch).toHaveBeenCalledWith(
       'https://test-api.example.com/api/v0/lessons/my-lesson/assets/worksheet',
       expect.objectContaining({
@@ -200,16 +201,32 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
       'attachment; filename="lesson.pdf"',
     );
     expect(res.setHeader).toHaveBeenCalledWith('Content-Length', '12');
+    expect(res.setHeader).toHaveBeenCalledWith('X-Content-Type-Options', 'nosniff');
+  });
+
+  it('never calls next (handler is terminal)', async () => {
+    const stubFetch = vi.fn().mockResolvedValue(
+      createUpstreamResponse(200, 'file-content', {
+        'content-type': 'application/pdf',
+      }),
+    );
+    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
+    const { req, res, next } = createMockReqRes(
+      { lesson: 'my-lesson', type: 'worksheet' },
+      { sig: VALID_HEX_SIG, exp: '999999999999' },
+    );
+    await handler(req, res, next);
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('maps non-2xx upstream responses to 502', async () => {
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(404, null));
     const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Upstream error' });
   });
@@ -217,11 +234,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
   it('returns 502 when upstream fetch throws', async () => {
     const stubFetch = vi.fn().mockRejectedValue(new Error('network failure'));
     const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Proxy error' });
   });
@@ -229,11 +246,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
   it('returns 502 when upstream response has no body', async () => {
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(200, null));
     const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Upstream response has no body' });
   });
@@ -246,11 +263,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
       logger: logger as unknown as AssetDownloadRouteDeps['logger'],
     });
     const handler = createAssetDownloadRoute(deps);
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(logger.error).toHaveBeenCalledWith(
       'asset-download.auth-error',
       expect.objectContaining({ status: 401 }),
@@ -265,11 +282,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
       logger: logger as unknown as AssetDownloadRouteDeps['logger'],
     });
     const handler = createAssetDownloadRoute(deps);
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(logger.warn).toHaveBeenCalledWith(
       'asset-download.upstream-service-error',
       expect.objectContaining({ status: 500 }),
@@ -279,11 +296,11 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
   it('URL-encodes lesson and type in upstream request', async () => {
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(200, null));
     const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
-    const { req, res } = createMockReqRes(
+    const { req, res, next } = createMockReqRes(
       { lesson: 'lesson/with spaces', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
     );
-    await handler(req, res, vi.fn());
+    await handler(req, res, next);
     expect(stubFetch).toHaveBeenCalledWith(
       expect.stringContaining('lesson%2Fwith%20spaces'),
       expect.anything(),
