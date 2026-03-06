@@ -20,12 +20,7 @@ export default mergeConfig(baseE2EConfig, {
     setupFiles: ['./smoke-test.setup.ts'],
     include: ['smoke-tests/**/*.smoke.test.ts'],
     isolate: true,
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    maxWorkers: 1,
     // Smoke tests hit live servers, so longer timeout
     testTimeout: 60000,
     hookTimeout: 60000,

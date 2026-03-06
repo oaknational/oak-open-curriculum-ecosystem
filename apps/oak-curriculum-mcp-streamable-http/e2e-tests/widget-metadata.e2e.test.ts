@@ -203,12 +203,15 @@ describe('ChatGPT Widget Metadata E2E', () => {
       },
     );
 
-    it('ALL tools have widgetAccessible (universal coverage)', async () => {
+    const NON_WIDGET_TOOLS = new Set(['download-asset']);
+
+    it('widget tools have widgetAccessible (universal coverage)', async () => {
       const app = await createTestApp();
       const { tools, status } = await callToolsList(app);
       expect(status).toBe(200);
 
-      for (const tool of tools) {
+      const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
+      for (const tool of widgetTools) {
         expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
       }
     });

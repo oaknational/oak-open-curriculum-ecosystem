@@ -83,7 +83,7 @@ export function runDownloadAssetTool(
   const url = deps.createAssetDownloadUrl(args.lesson, args.type);
 
   return formatToolResponse({
-    summary: `Download link (valid for 5 minutes): ${url}\n\nTip: Our resources work best if you install the Google Fonts Lexend and Kalam — https://support.thenational.academy/how-to-install-the-google-fonts-lexend-and-kalan`,
+    summary: `Download link (valid for 5 minutes): ${url}`,
     data: { downloadUrl: url, lesson: args.lesson, type: args.type },
     toolName: 'download-asset',
     annotationsTitle: 'Download Asset',

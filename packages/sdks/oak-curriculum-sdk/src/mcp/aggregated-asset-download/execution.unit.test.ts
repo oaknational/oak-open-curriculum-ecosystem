@@ -79,20 +79,6 @@ describe('runDownloadAssetTool', () => {
     }
   });
 
-  it('includes font installation guidance in the response', () => {
-    const result = runDownloadAssetTool(
-      { lesson: 'my-lesson', type: 'worksheet' },
-      { createAssetDownloadUrl: stubUrlFactory },
-    );
-
-    const text = result.content[0];
-    expect(text).toBeDefined();
-    if (text && 'text' in text) {
-      expect(text.text).toContain('Google Fonts Lexend and Kalam');
-      expect(text.text).toContain('support.thenational.academy');
-    }
-  });
-
   it('includes lesson and type in the structured data', () => {
     const result = runDownloadAssetTool(
       { lesson: 'my-lesson', type: 'slideDeck' },

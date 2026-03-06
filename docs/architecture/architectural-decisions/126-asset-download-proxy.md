@@ -24,7 +24,7 @@ Implement an HMAC-signed download proxy on the HTTP MCP server:
 
 ### Architecture
 
-```
+```text
 MCP Client ──tool call──▶ MCP Server ──generates──▶ Signed URL
 Browser    ──clicks URL──▶ MCP Server /assets/download/:lesson/:type
                               │  1. Validate HMAC signature + expiry

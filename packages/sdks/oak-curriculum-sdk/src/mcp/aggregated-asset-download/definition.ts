@@ -26,6 +26,10 @@ Use this when:
 - The user wants to download a slide deck, worksheet, quiz, or video
 - You have the lesson slug and asset type from a previous get-lessons-assets call
 
+IMPORTANT: When presenting download links to the user, always include this tip
+(once, not per-link): "Our resources work best if you install the Google Fonts
+Lexend and Kalam — https://support.thenational.academy/how-to-install-the-google-fonts-lexend-and-kalan"
+
 Do NOT use for:
 - Browsing available assets (use 'get-lessons-assets' first)
 - Getting lesson content or metadata (use 'fetch')`,

@@ -13,12 +13,7 @@ export default mergeConfig(baseE2EConfig, {
   test: {
     include: ['**/*.e2e.test.ts'],
     isolate: true,
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    maxWorkers: 1,
     // E2E tests spawn real processes; allow a bit more headroom.
     testTimeout: 60000,
     hookTimeout: 60000,
