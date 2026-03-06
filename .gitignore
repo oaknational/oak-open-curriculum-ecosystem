@@ -10,6 +10,9 @@ dist
 # Agent Interactions
 collaboration.txt
 
+# Local MCP server config
+.mcp.json
+
 # Generated docs
 **/docs/api
 **/docs/api-md/index.md

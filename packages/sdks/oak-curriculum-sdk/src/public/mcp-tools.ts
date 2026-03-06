@@ -127,4 +127,14 @@ export type { SearchRetrievalService } from '../mcp/search-retrieval-types.js';
 // Stub search retrieval for stub mode (no real ES client)
 export { createStubSearchRetrieval } from '../mcp/search-retrieval-stub.js';
 
+// Asset download proxy — HMAC token signing for secure download URLs
+export {
+  createDownloadSignature,
+  validateDownloadSignature,
+  deriveSigningSecret,
+} from '../mcp/aggregated-asset-download/index.js';
+
+// Re-export schema-derived asset type guard for app-layer validation (ADR-030)
+export { isAssetType } from '@oaknational/sdk-codegen/api-schema';
+
 // Synonym utilities moved to @oaknational/sdk-codegen/synonyms (ADR-108 F7 completion)

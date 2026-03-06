@@ -143,6 +143,10 @@ Stale tsup entries match nothing silently after file moves — remove dead entry
 
 ADR Implementation sections have file paths that go stale when packages are moved. Always grep ADRs for old paths after a move. Similarly, check TSDoc `@see` links for old GitHub repo URLs when removing a workspace.
 
+### Cross-Package Function Moves
+
+After moving functions between packages (e.g. from `search-cli` to `curriculum-sdk`), rebuild the source package (`pnpm --filter <pkg> build`) before downstream tests will see the new exports via `dist/`. Turborepo cache may hide the issue until a clean build.
+
 ### Second-Level Barrels
 
 When migrating facade imports, check for second-level barrels (e.g. `oak.ts` re-exporting from the facade) — they add hidden consumers that do not appear in a direct grep for the facade file.

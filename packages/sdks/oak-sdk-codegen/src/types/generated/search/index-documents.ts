@@ -97,7 +97,7 @@ export const SearchThreadIndexDocSchema = z
     unit_count: z.number().int().nonnegative(),
     subject_slugs: z.array(z.string().min(1)).optional(),
     thread_semantic: z.string().min(1).optional(),
-    thread_url: z.string().min(1),
+    thread_url: z.string().min(1).optional(),
     title_suggest: SearchThreadCompletionPayloadSchema.optional(),
   })
   .strict();

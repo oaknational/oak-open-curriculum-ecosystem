@@ -25,6 +25,10 @@ import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
+import {
+  validateDownloadAssetArgs,
+  runDownloadAssetTool,
+} from '../aggregated-asset-download/index.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
@@ -133,6 +137,29 @@ async function handleExploreTool(
   return runExploreTool(validation.value, deps);
 }
 
+/**
+ * Handles download-asset tool validation and execution.
+ */
+function handleDownloadAssetTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  if (!deps.createAssetDownloadUrl) {
+    return Promise.resolve(
+      formatError('download-asset is not available in this transport (HTTP-only)'),
+    );
+  }
+  const validation = validateDownloadAssetArgs(input);
+  if (!validation.ok) {
+    return Promise.resolve(formatError(validation.message));
+  }
+  return Promise.resolve(
+    runDownloadAssetTool(validation.value, {
+      createAssetDownloadUrl: deps.createAssetDownloadUrl,
+    }),
+  );
+}
+
 type AggregatedHandler = (
   input: unknown,
   deps: UniversalToolExecutorDependencies,
@@ -146,6 +173,7 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   fetch: handleFetchTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,
+  'download-asset': handleDownloadAssetTool,
 };
 
 function executeAggregatedTool(

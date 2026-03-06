@@ -119,15 +119,14 @@ describe('Tool Handler with Auth Integration', () => {
 
       // For this test, we expect the handler to check auth BEFORE executing
       // Since auth context is missing (not implemented yet), expect error
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Expected behavior (not yet implemented):
       // - Check if tool requires auth (search does)
@@ -155,15 +154,14 @@ describe('Tool Handler with Auth Integration', () => {
 
       // For this test, assume we have invalid auth context
       // (Not yet implemented - will need to pass auth context to handler)
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Expected behavior (when auth validation is implemented):
       // - Check if tool requires auth (get-key-stages does)
@@ -182,15 +180,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = {};
       const config = createMockRuntimeConfig();
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Expected behavior:
       // - Check if tool requires auth (get-changelog does not)
@@ -206,15 +203,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Expected behavior:
       // - Auth bypass should prevent auth error
@@ -238,15 +234,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = {};
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Should execute without auth error
       expect(result.isError).toBeUndefined();
@@ -264,15 +259,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: false });
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Should return auth error (no auth context available in test)
       expect(result.isError).toBe(true);
@@ -292,15 +286,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
-      await handleToolWithAuthInterception(
+      await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       // Expected: logger.warn called with auth/context missing message
       expect(logger.warn).toHaveBeenCalled();
@@ -325,15 +318,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       const meta = result._meta as Record<string, unknown>;
       expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('resource_metadata=');
@@ -348,15 +340,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       const meta = result._meta as Record<string, unknown>;
       expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('error_description=');
@@ -367,15 +358,14 @@ describe('Tool Handler with Auth Integration', () => {
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
-      const result = await handleToolWithAuthInterception(
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        undefined,
         logger,
-        'test-api-key',
-        config,
-      );
+        apiKey: 'test-api-key',
+        runtimeConfig: config,
+      });
 
       expect(result.content).toBeDefined();
       expect(result.content[0].type).toBe('text');

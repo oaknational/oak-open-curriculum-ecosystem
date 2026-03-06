@@ -174,7 +174,7 @@ Process using port 3333:
   PID:     3712
   Command: node
   User:    jim
-  Details: /Users/jim/.nvm/versions/node/v24.11.1/bin/node --require ai_experiments/oak-notion-mcp/node_modu...
+  Details: .nvm/versions/node/v24.11.1/bin/node --require ai_experiments/oak-notion-mcp/node_modu...
 
 Full lsof output:
 COMMAND  PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME

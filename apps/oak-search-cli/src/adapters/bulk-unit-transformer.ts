@@ -18,10 +18,11 @@
  */
 
 import type { Unit } from '@oaknational/sdk-codegen/bulk';
+import { deriveSequenceSlug } from '@oaknational/curriculum-sdk';
 import type { SearchUnitsIndexDoc, AllSubjectSlug, ParentSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {
-  generateUnitUrl,
+  generateUnitUrlFromSequence,
   normaliseYearsFromUnit,
   getKeyStageTitle,
 } from './bulk-transform-helpers.js';
@@ -41,6 +42,11 @@ export interface BulkToESUnitParams {
   readonly subjectParent: ParentSubjectSlug;
   readonly subjectTitle: string;
   readonly subjectProgrammesUrl: string;
+  /**
+   * Optional explicit sequence slug from bulk file metadata.
+   * When provided, this takes precedence over local derivation.
+   */
+  readonly sequenceSlug?: string;
   /**
    * Optional category map for enriching units with category data.
    * Built from API sequences/units endpoint.
@@ -97,7 +103,7 @@ export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUni
         throw new Error(`Invalid key stage: ${unit.keyStageSlug}`);
       })();
 
-  const phaseSlug = keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
+  const resolvedSequenceSlug = params.sequenceSlug ?? deriveSequenceSlug(subjectSlug, keyStage);
   const unitTopics = resolveUnitTopics(unit.unitSlug, categoryMap);
 
   return {
@@ -110,7 +116,7 @@ export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUni
     keyStageTitle: getKeyStageTitle(keyStage),
     years: normaliseYearsFromUnit(unit.year, unit.yearSlug),
     lessonIds: unit.unitLessons.map((l) => l.lessonSlug),
-    unitUrl: generateUnitUrl(unit.unitSlug, subjectSlug, phaseSlug),
+    unitUrl: generateUnitUrlFromSequence(unit.unitSlug, resolvedSequenceSlug),
     subjectProgrammesUrl,
     threadInfo: extractThreadInfoFromBulk(unit),
     enrichment: {

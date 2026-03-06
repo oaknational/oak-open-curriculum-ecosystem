@@ -13,7 +13,7 @@ import { dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { readAllBulkFiles } from '@oaknational/sdk-codegen/bulk';
-import { typeSafeEntries } from '@oaknational/curriculum-sdk';
+import { deriveSubjectSlugFromSequence, typeSafeEntries } from '@oaknational/curriculum-sdk';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,7 +57,7 @@ async function buildLookup(bulkDir: string): Promise<Map<string, DocChars>> {
   const lookup = new Map<string, DocChars>();
   const files = await readAllBulkFiles(bulkDir);
   for (const file of files) {
-    const subject = file.data.sequenceSlug.split('-')[0] ?? 'unknown';
+    const subject = deriveSubjectSlugFromSequence(file.data.sequenceSlug);
     for (const lesson of file.data.lessons) {
       const raw = lesson.transcript_sentences ?? '';
       const len = raw.length;

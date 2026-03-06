@@ -9,6 +9,7 @@
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
 import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/bulk';
+import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { BulkOperationEntry } from './bulk-operation-types';
 import type { SearchIndexKind } from '../search-index-target';
@@ -46,8 +47,8 @@ function filterBySubject(
   }
   const filterSet = new Set(subjectFilter);
   return files.filter((file) => {
-    const subject = file.data.sequenceSlug.split('-')[0];
-    return subject !== undefined && filterSet.has(subject);
+    const subject = deriveSubjectSlugFromSequence(file.data.sequenceSlug);
+    return filterSet.has(subject);
   });
 }
 

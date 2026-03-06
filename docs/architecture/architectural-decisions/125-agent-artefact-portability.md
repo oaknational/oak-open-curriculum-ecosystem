@@ -50,11 +50,12 @@ Each platform has thin wrappers that reference canonical content. All command ad
 
 #### Claude Code
 
-| Location                   | Format                                                                                                        | Count |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
-| `.claude/commands/jc-*.md` | Markdown with YAML frontmatter (`description`, `allowed-tools`, `argument-hint`, `model`)                     | 9     |
-| `.claude/rules/*.md`       | Markdown with `paths` frontmatter for glob-scoped activation                                                  | 6     |
-| `.claude/agents/*.md`      | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`) | 14    |
+| Location                      | Format                                                                                                                                                                                                                           | Count |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `.claude/commands/jc-*.md`    | Markdown with YAML frontmatter (`description`, `allowed-tools`, `argument-hint`, `model`)                                                                                                                                        | 9     |
+| `.claude/rules/*.md`          | Markdown with `paths` frontmatter for glob-scoped activation                                                                                                                                                                     | 6     |
+| `.claude/agents/*.md`         | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`). All wrappers require: explicit `model` field, `color` field, and ≥2 `<example>` blocks in `description`. | 13    |
+| `.claude/agents/archive/*.md` | Archived wrappers — superseded or retired agents. Preserved for reference. Not validated by `pnpm subagents:check`.                                                                                                              | —     |
 
 #### Gemini CLI
 
@@ -111,12 +112,12 @@ All command adapters use the `jc-` prefix across every platform. This ensures a 
 
 Each platform uses its native mechanism for sub-agent-equivalent functionality:
 
-| Platform    | Mechanism                        | Key fields                                                                   |
-| ----------- | -------------------------------- | ---------------------------------------------------------------------------- |
-| Cursor      | `.cursor/agents/*.md`            | `name`, `description`, `model`, `tools`, `readonly`                          |
-| Claude Code | `.claude/agents/*.md`            | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode` |
-| Gemini CLI  | `.gemini/commands/review-*.toml` | `description`, `prompt` (user-invoked review commands)                       |
-| Codex       | `.agents/skills/*/SKILL.md`      | `name`, `description` (skills as the sub-agent mechanism)                    |
+| Platform    | Mechanism                        | Key fields                                                                            |
+| ----------- | -------------------------------- | ------------------------------------------------------------------------------------- |
+| Cursor      | `.cursor/agents/*.md`            | `name`, `description`, `model`, `tools`, `readonly`                                   |
+| Claude Code | `.claude/agents/*.md`            | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
+| Gemini CLI  | `.gemini/commands/review-*.toml` | `description`, `prompt` (user-invoked review commands)                                |
+| Codex       | `.agents/skills/*/SKILL.md`      | `name`, `description` (skills as the sub-agent mechanism)                             |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
 

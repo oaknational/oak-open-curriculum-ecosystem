@@ -89,14 +89,19 @@ function shouldMcpMethodSkipClerk(mcpMethod: string, body: unknown): boolean {
 }
 
 /**
- * Determines if a request should skip clerkMiddleware.
- *
- * @param req - Request with path and body properties
- * @returns true if the request doesn't need auth context
+ * Path prefixes that should skip clerkMiddleware.
+ * Asset download routes are self-authenticating via HMAC signature (ADR-126).
  */
+const CLERK_SKIP_PREFIXES: readonly string[] = ['/assets/download/'];
+
 function shouldSkipClerkMiddleware(req: SkipCheckRequest): boolean {
   // Skip for known public paths
   if (CLERK_SKIP_PATHS.has(req.path)) {
+    return true;
+  }
+
+  // Skip for prefix-matched paths (parameterised routes)
+  if (CLERK_SKIP_PREFIXES.some((prefix) => req.path.startsWith(prefix))) {
     return true;
   }
 

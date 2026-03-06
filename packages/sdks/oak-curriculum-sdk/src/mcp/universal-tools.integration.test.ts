@@ -114,35 +114,21 @@ describe('listUniversalTools annotations', () => {
   });
 });
 
+/** Non-widget tools have _meta for visibility/invocation but no outputTemplate. */
+const NON_WIDGET_TOOLS = new Set(['download-asset']);
+
 /**
- * Integration tests for OpenAI Apps SDK _meta fields across ALL tools.
+ * Integration tests for OpenAI Apps SDK _meta fields.
  *
- * These tests verify that listUniversalTools() exposes _meta fields
- * for BOTH generated tools (from sdk-codegen) and aggregated tools.
- * This proves the integration point where both camps meet.
+ * Verifies that listUniversalTools() exposes _meta fields for BOTH
+ * generated tools (from sdk-codegen) and aggregated tools.
  */
 describe('listUniversalTools _meta integration', () => {
-  it('ALL tools (generated + aggregated) have _meta defined', () => {
+  it('ALL tools have _meta defined', () => {
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
       expect(tool._meta).toBeDefined();
-    }
-  });
-
-  it('ALL tools have openai/outputTemplate pointing to widget', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-    }
-  });
-
-  it('ALL tools have openai/widgetAccessible set to true', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
     }
   });
 
@@ -167,6 +153,24 @@ describe('listUniversalTools _meta integration', () => {
 
     for (const tool of tools) {
       expect(tool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
+    }
+  });
+
+  it('widget tools have openai/outputTemplate pointing to widget', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
+
+    for (const tool of widgetTools) {
+      expect(tool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
+    }
+  });
+
+  it('widget tools have openai/widgetAccessible set to true', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
+
+    for (const tool of widgetTools) {
+      expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
     }
   });
 });

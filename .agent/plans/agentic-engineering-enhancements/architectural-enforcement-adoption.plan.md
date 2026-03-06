@@ -112,6 +112,7 @@ ESLint-focused enforcement work is now split by disruption profile:
 - **Goal:** Define semantic layers and enforce unidirectional flow.
 - **Task:** Configure boundary constraints using the canonical import matrix.
 - **Execution status:** Implementation delegated to canonical strictness convergence plan; this plan remains the strategic source.
+- **Follow-up (from canonical URL work):** Route search-CLI SDK imports through a curriculum-sdk facade instead of importing directly from `@oaknational/sdk-codegen/api-schema`. Currently `apps/oak-search-cli` imports `generateCanonicalUrlWithContext` from `sdk-codegen` directly, bypassing the curriculum-sdk domain layer. Betty flagged this as a boundary hygiene concern during the canonical URL architecture review.
 
 | Importer | core | libs | sdks | apps | Constraint |
 |----------|------|------|------|------|------------|

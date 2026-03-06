@@ -366,14 +366,12 @@ async function setupMocksWithThreads(): Promise<MockSetupResult> {
       thread_slug: 'number',
       thread_title: 'Number',
       unit_count: 2,
-      thread_url: 'https://test/number',
     },
     { index: { _index: 'oak_threads', _id: 'algebra' } },
     {
       thread_slug: 'algebra',
       thread_title: 'Algebra',
       unit_count: 1,
-      thread_url: 'https://test/algebra',
     },
   ]);
 

@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
 import { loadConfigOrExit } from '../src/runtime-config.js';
 import { readAllBulkFiles } from '@oaknational/sdk-codegen/bulk';
+import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import { createOakClient, type OakClientEnv } from '../src/adapters/oak-adapter';
 import { createHybridDataSource } from '../src/adapters/hybrid-data-source';
 import {
@@ -76,7 +77,9 @@ async function loadBulkFiles(bulkDir: string, subjectFilter?: string) {
   if (!subjectFilter) {
     return allFiles;
   }
-  return allFiles.filter((f) => f.data.sequenceSlug.split('-')[0] === subjectFilter);
+  return allFiles.filter(
+    (f) => deriveSubjectSlugFromSequence(f.data.sequenceSlug) === subjectFilter,
+  );
 }
 
 /** Process bulk files and create operations. Returns ops and the client for cleanup. */

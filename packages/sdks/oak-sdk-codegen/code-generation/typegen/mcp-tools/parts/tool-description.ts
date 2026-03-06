@@ -87,10 +87,25 @@ const GET_RATE_LIMIT_NOTE = `
 
 NOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key with no rate cap.`;
 
+/**
+ * Guidance appended to asset tool descriptions.
+ *
+ * Asset `url` fields are authenticated API endpoints that cannot be opened
+ * directly in a browser. All lesson assets are freely downloadable on the
+ * Oak website, so the LLM should direct users to the lesson page instead.
+ */
+const ASSET_DOWNLOAD_NOTE = `
+
+NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. All lesson assets (slide decks, worksheets, quizzes, videos) are freely downloadable on the Oak website. Direct users to the lesson page on the Oak website for downloads — use the lesson's \`canonicalUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
+
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {
     case 'get-rate-limit':
       return GET_RATE_LIMIT_NOTE;
+    case 'get-lessons-assets':
+    case 'get-key-stages-subject-assets':
+    case 'get-sequences-assets':
+      return ASSET_DOWNLOAD_NOTE;
     default:
       return undefined;
   }

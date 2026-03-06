@@ -44,6 +44,21 @@ describe('augmentResponseWithCanonicalUrl', () => {
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
+
+    it('should ignore invalid unit context fields when augmenting lessons', () => {
+      const response = {
+        lessonSlug: 'add-two-numbers',
+        lessonTitle: 'Add Two Numbers',
+        subjectSlug: 'maths',
+        phaseSlug: 'upper-primary',
+      };
+
+      const result = augmentResponseWithCanonicalUrl(response, '/lessons/add-two-numbers', 'get');
+
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      );
+    });
   });
 
   describe('sequence responses', () => {
@@ -53,7 +68,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
 
       expect(result).toHaveProperty('canonicalUrl');
       expect(result.canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-ks1/units',
+        'https://www.thenational.academy/teachers/curriculum/maths-ks1/units',
       );
     });
   });
@@ -70,7 +85,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
 
       expect(result).toHaveProperty('canonicalUrl');
       expect(result.canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-ks1/units/place-value',
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/place-value',
       );
     });
 
@@ -99,6 +114,19 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(() => {
         augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
       }).toThrow(/Missing required context for unit/);
+    });
+
+    it('should throw when unit phaseSlug is unsupported', () => {
+      const response = {
+        slug: 'place-value',
+        title: 'Place Value',
+        subjectSlug: 'maths',
+        phaseSlug: 'upper-primary',
+      };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(/Unsupported phase slug/);
     });
   });
 
@@ -300,7 +328,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result[0]).toHaveProperty('canonicalUrl');
       expect(result[0].canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-primary/units/ks-unit',
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/ks-unit',
       );
     });
 
@@ -315,8 +343,16 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result[0]).toHaveProperty('canonicalUrl');
       expect(result[0].canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-ks4/units',
+        'https://www.thenational.academy/teachers/curriculum/maths-ks4/units',
       );
+    });
+
+    it('should throw for /subjects/{subject}/sequences items without sequence slug', () => {
+      const response = [{ title: 'Sequence without slug' }];
+
+      expect(() => {
+        augmentArrayResponseWithCanonicalUrl(response, '/subjects/maths/sequences', 'get');
+      }).toThrow(/Could not extract ID/);
     });
   });
 
@@ -424,7 +460,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
 
       expect(result).toHaveProperty('canonicalUrl');
       expect(result.canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/english-secondary/units/my-unit',
+        'https://www.thenational.academy/teachers/curriculum/english-secondary/units/my-unit',
       );
     });
 
@@ -455,7 +491,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
 
       expect(result).toHaveProperty('canonicalUrl');
       expect(result.canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-primary/units',
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units',
       );
     });
 

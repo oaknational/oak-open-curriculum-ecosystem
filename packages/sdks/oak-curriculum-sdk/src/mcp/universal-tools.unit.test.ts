@@ -14,6 +14,12 @@ import type {
 
 const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 
+/** Tools that don't have widget _meta fields (no outputTemplate). */
+const NON_WIDGET_TOOLS: readonly string[] = ['download-asset'];
+const WIDGET_TOOL_NAMES = AGGREGATED_TOOL_NAMES_FROM_DEFS.filter(
+  (name) => !NON_WIDGET_TOOLS.includes(name),
+);
+
 describe('AGGREGATED_TOOL_DEFS excludes replaced tools', () => {
   it('does not contain get-ontology (replaced by get-curriculum-model)', () => {
     expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).not.toContain('get-ontology');
@@ -89,6 +95,12 @@ describe('listUniversalTools', () => {
     expect(names).toContain(SAMPLE_MCP_TOOL_NAME);
   });
 
+  it('always includes download-asset', () => {
+    const tools = listUniversalTools(registry);
+    const names = tools.map((tool) => tool.name);
+    expect(names).toContain('download-asset');
+  });
+
   it('preserves aggregator schema metadata', () => {
     const tools = listUniversalTools(registry);
     const searchTool = tools.find((tool) => tool.name === 'search');
@@ -106,6 +118,7 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('get-prerequisite-graph', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('browse-curriculum', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('explore-topic', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('download-asset', registry.isToolName)).toBe(true);
   });
 
   it('matches curriculum tool names', () => {
@@ -117,40 +130,44 @@ describe('isUniversalToolName', () => {
   });
 });
 
-describe('aggregated tool _meta fields', () => {
-  const aggregatedToolNames = AGGREGATED_TOOL_NAMES_FROM_DEFS;
-
-  it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
+describe('aggregated tool _meta fields (widget tools)', () => {
+  it.each(WIDGET_TOOL_NAMES)('%s has openai/outputTemplate', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
   });
 
-  it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoking', (toolName) => {
+  it.each(WIDGET_TOOL_NAMES)('%s has openai/toolInvocation/invoking', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
   });
 
-  it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoked', (toolName) => {
+  it.each(WIDGET_TOOL_NAMES)('%s has openai/toolInvocation/invoked', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
   });
 });
 
-describe('aggregated tool widgetAccessible and visibility', () => {
-  const aggregatedToolNames = AGGREGATED_TOOL_NAMES_FROM_DEFS;
-
-  it.each(aggregatedToolNames)('%s has openai/widgetAccessible set to true', (toolName) => {
+describe('aggregated tool widgetAccessible and visibility (widget tools)', () => {
+  it.each(WIDGET_TOOL_NAMES)('%s has openai/widgetAccessible set to true', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
   });
 
-  it.each(aggregatedToolNames)('%s has openai/visibility set to public', (toolName) => {
+  it.each(WIDGET_TOOL_NAMES)('%s has openai/visibility set to public', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/visibility']).toBe('public');
+  });
+});
+
+describe('download-asset _meta', () => {
+  it('has openai/visibility set to public', () => {
+    const tools = listUniversalTools(registry);
+    const tool = tools.find((t) => t.name === 'download-asset');
     expect(tool?._meta?.['openai/visibility']).toBe('public');
   });
 });

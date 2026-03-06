@@ -132,21 +132,12 @@ Validation: `pnpm portability:check`.
 
 ## MCP Apps (Domain-Specific)
 
-- `@modelcontextprotocol/ext-apps/server` exports `registerAppTool`,
-  `registerAppResource`, `getUiCapability`, and `RESOURCE_MIME_TYPE`
-  — use these as the canonical migration vehicle for all C4/C5/C6
-  items. `registerAppResource` defaults to `text/html;profile=mcp-app`
-  automatically; `registerAppTool` normalises `_meta.ui.resourceUri`
-  for host compatibility. Installed at v1.1.2 across all workspaces.
-- `_meta.ui.domain` is only required if the widget makes direct
-  cross-origin `fetch()` calls from inside the iframe. If all data
-  flows through the MCP bridge (`tools/call`, `ui/notifications/*`),
-  omit the field — no host-specific domain derivation needed.
-- Research file: `mcp-apps-support.research.md` is the Domain A
-  artefact. ChatGPT accepts `_meta.ui.resourceUri` as primary;
-  `openai/outputTemplate` is a legacy alias. Claude derives sandbox
-  domain as `{sha256(serverUrl)[:32]}.claudemcpcontent.com` (only
-  relevant if direct cross-origin calls are made from the iframe).
+- `@modelcontextprotocol/ext-apps/server` v1.1.2 is the canonical
+  migration vehicle for C4/C5/C6. See
+  `.agent/research/mcp-apps-support.research.md` for host-specific
+  behaviour (ChatGPT, Claude sandbox domains, `_meta.ui.domain`).
+- `_meta.ui.domain` only needed for direct cross-origin `fetch()`
+  from the iframe; omit if data flows through MCP bridge.
 
 ## Architecture (Domain-Specific)
 

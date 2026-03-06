@@ -121,13 +121,37 @@ describe('bulk-rollup-builder', () => {
       expect(summary.unitLessons[0]?.lessonSlug).toBe('lesson-1');
     });
 
-    it('generates canonical URL from unit slug', () => {
+    it('generates canonical URL from unit slug and sequence context', () => {
+      const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
+
+      expect(summary.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
+      );
+    });
+
+    it('uses the explicit sequenceSlug, not subjectSlug+phase derivation (exam-board sequences)', () => {
+      // This verifies the sequenceSlug is passed through, not re-derived from subjectSlug+keyStage.
+      // For exam-board sequences, the derived slug ('science-secondary') would be wrong;
+      // the explicit sequenceSlug ('science-secondary-aqa') must be used.
+      const bulkUnit = createMinimalUnit({ unitSlug: 'atomic-structure' });
+      const summary = transformBulkUnitToSummary(
+        bulkUnit,
+        'science',
+        'ks4',
+        'science-secondary-aqa',
+      );
+
+      expect(summary.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
+      );
+    });
+
+    it('generates undefined canonical URL when no sequence context', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
       const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
 
-      expect(summary.canonicalUrl).toBe(
-        'https://www.thenational.academy/teachers/units/fractions-year-4',
-      );
+      expect(summary.canonicalUrl).toBeUndefined();
     });
 
     it('maps priorKnowledgeRequirements', () => {

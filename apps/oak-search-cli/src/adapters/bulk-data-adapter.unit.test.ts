@@ -402,6 +402,24 @@ describe('transformBulkUnitToESDoc', () => {
 
     expect(doc.years).toEqual(['all-years']);
   });
+
+  it('uses explicit sequenceSlug when provided', () => {
+    const unit = createMockUnit({ unitSlug: 'place-value', keyStageSlug: 'ks4' });
+    const params: BulkToESUnitParams = {
+      unit,
+      subjectSlug: 'maths',
+      subjectParent: 'maths',
+      subjectTitle: 'Maths',
+      subjectProgrammesUrl: 'https://example.com/programmes/maths',
+      sequenceSlug: 'maths-primary',
+    };
+
+    const doc = transformBulkUnitToESDoc(params);
+
+    expect(doc.unit_url).toBe(
+      'https://www.thenational.academy/teachers/curriculum/maths-primary/units/place-value',
+    );
+  });
 });
 
 // ============================================================================
@@ -481,6 +499,34 @@ describe('BulkDataAdapter', () => {
       expect(docs).toHaveLength(1);
       expect(docs[0].unit_slug).toBe('test-unit');
       expect(docs[0].doc_type).toBe('unit');
+    });
+
+    it('preserves explicit bulk sequenceSlug in unit and lesson canonical URLs', () => {
+      const bulkFile: BulkDownloadFile = {
+        sequenceSlug: 'science-secondary-aqa',
+        subjectTitle: 'Science',
+        sequence: [createMockUnit({ unitSlug: 'atomic-structure', keyStageSlug: 'ks4' })],
+        lessons: [
+          createMockLesson({
+            unitSlug: 'atomic-structure',
+            subjectSlug: 'science',
+            subjectTitle: 'Science',
+            keyStageSlug: 'ks4',
+            keyStageTitle: 'Key Stage 4',
+          }),
+        ],
+      };
+      const adapter = createBulkDataAdapter(bulkFile);
+
+      const unitDocs = adapter.transformUnitsToES();
+      const lessonDocs = adapter.transformLessonsToES();
+
+      expect(unitDocs[0].unit_url).toBe(
+        'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
+      );
+      expect(lessonDocs[0]?.unit_urls).toEqual([
+        'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
+      ]);
     });
   });
 

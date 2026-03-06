@@ -5,11 +5,6 @@ export default mergeConfig(baseE2EConfig, {
   test: {
     include: ['e2e-tests/**/*.e2e.test.ts'],
     isolate: true,
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    maxWorkers: 1,
   },
 });

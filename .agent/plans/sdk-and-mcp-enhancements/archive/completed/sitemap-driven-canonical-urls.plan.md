@@ -4,25 +4,25 @@ overview: "Fix incorrect canonical URL patterns by using OWA sitemaps as the aut
 todos:
   - id: phase-0-verify
     content: "Phase 0: Verify foundation assumptions and document all URL bugs."
-    status: pending
+    status: complete
   - id: phase-1-scanner
     content: "Phase 1: Enhance sitemap scanner to capture all URL pattern categories."
-    status: pending
+    status: complete
   - id: phase-2-codegen
     content: "Phase 2: Integrate sitemap data into sdk-codegen URL helper generation."
-    status: pending
+    status: complete
   - id: phase-3-consumers
     content: "Phase 3: Fix search-cli canonical-url-generator and response augmentation."
-    status: pending
+    status: complete
   - id: phase-4-validation
     content: "Phase 4: Quality gates, documentation, and foundation compliance."
-    status: pending
+    status: complete
 ---
 
 # Sitemap-Driven Canonical URL Generation
 
-**Last Updated**: 2026-03-05
-**Status**: 🟡 PLANNING
+**Last Updated**: 2026-03-06
+**Status**: ✅ COMPLETE
 **Scope**: Fix incorrect canonical URL patterns across the SDK codegen and search-cli by using the Oak website sitemaps as the authoritative source of truth.
 
 ---

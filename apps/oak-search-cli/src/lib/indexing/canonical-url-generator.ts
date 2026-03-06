@@ -2,21 +2,24 @@
  * Canonical URL generation for Oak curriculum content.
  *
  * This module is the **single source of truth** for generating canonical URLs
- * across all content types. All document builders should use these functions
- * to ensure consistent URL patterns.
+ * across all content types in search-CLI. All document builders should use
+ * these functions to ensure consistent URL patterns.
  *
  * @remarks
- * All URLs follow the pattern: `https://www.thenational.academy/teachers/...`
+ * URL helpers delegate to the SDK's generated `generateCanonicalUrlWithContext`
+ * to ensure a single source of truth and avoid pattern drift.
  *
- * URL patterns:
+ * URL patterns (confirmed against OWA source and live site 2026-03-05):
  * - Lessons: `/teachers/lessons/{lessonSlug}`
- * - Units: `/teachers/programmes/{subjectSlug}-{phaseSlug}/units/{unitSlug}`
- * - Sequences: `/teachers/programmes/{sequenceSlug}/units`
- * - Threads: `/teachers/curriculum/threads/{threadSlug}`
+ * - Units: `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}`
+ * - Sequences: `/teachers/curriculum/{sequenceSlug}/units`
+ * - Threads: no OWA page, returns `null`
  * - Subject programmes: `/teachers/key-stages/{keyStageSlug}/subjects/{subjectSlug}/programmes`
  *
- * @see ADR-xxx Canonical URL Generation (if applicable)
+ * @see ADR-047 Canonical URL Generation at Codegen Time
  */
+import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
+import { deriveSequenceSlug } from '@oaknational/curriculum-sdk';
 
 /**
  * Base URL for all Oak curriculum teacher-facing content.
@@ -45,7 +48,10 @@ export function generateLessonCanonicalUrl(lessonSlug: string): string {
 }
 
 /**
- * Generates the canonical URL for a unit.
+ * Generates the canonical URL for a unit within its curriculum context.
+ *
+ * The `sequenceSlug` is the combined subject+phase identifier (e.g. `maths-primary`).
+ * It is derived from `subjectSlug + '-' + phaseSlug` by the caller.
  *
  * @param unitSlug - The unit's slug identifier
  * @param subjectSlug - The subject slug (e.g., 'maths', 'design-technology')
@@ -55,7 +61,7 @@ export function generateLessonCanonicalUrl(lessonSlug: string): string {
  * @example
  * ```typescript
  * const url = generateUnitCanonicalUrl('fractions-year-5', 'maths', 'primary');
- * // => 'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions-year-5'
+ * // => 'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-5'
  * ```
  */
 export function generateUnitCanonicalUrl(
@@ -63,7 +69,27 @@ export function generateUnitCanonicalUrl(
   subjectSlug: string,
   phaseSlug: string,
 ): string {
-  return `${OAK_BASE_URL}/programmes/${subjectSlug}-${phaseSlug}/units/${unitSlug}`;
+  const sequenceSlug = deriveSequenceSlug(subjectSlug, phaseSlug);
+  return generateUnitCanonicalUrlFromSequence(unitSlug, sequenceSlug);
+}
+
+/**
+ * Generates the canonical URL for a unit when the full sequence slug is known.
+ *
+ * Use this helper for bulk/indexing flows where `sequenceSlug` is already
+ * available on the source payload (including exam-board variants).
+ */
+export function generateUnitCanonicalUrlFromSequence(
+  unitSlug: string,
+  sequenceSlug: string,
+): string {
+  const url = generateCanonicalUrlWithContext('unit', unitSlug, { unit: { sequenceSlug } });
+  if (url === null) {
+    throw new TypeError(
+      `generateUnitCanonicalUrl: expected non-null URL for unit "${unitSlug}" with sequenceSlug "${sequenceSlug}"`,
+    );
+  }
+  return url;
 }
 
 /**
@@ -75,27 +101,33 @@ export function generateUnitCanonicalUrl(
  * @example
  * ```typescript
  * const url = generateSequenceCanonicalUrl('maths-primary');
- * // => 'https://www.thenational.academy/teachers/programmes/maths-primary/units'
+ * // => 'https://www.thenational.academy/teachers/curriculum/maths-primary/units'
  * ```
  */
 export function generateSequenceCanonicalUrl(sequenceSlug: string): string {
-  return `${OAK_BASE_URL}/programmes/${sequenceSlug}/units`;
+  const url = generateCanonicalUrlWithContext('sequence', sequenceSlug);
+  if (url === null) {
+    throw new TypeError(
+      `generateSequenceCanonicalUrl: expected non-null URL for sequence "${sequenceSlug}"`,
+    );
+  }
+  return url;
 }
 
 /**
- * Generates the canonical URL for a curriculum thread.
+ * Threads have no pages on the Oak website.
  *
- * @param threadSlug - The thread's slug identifier
- * @returns Fully qualified canonical URL for the thread
+ * Thread "highlighting" is client-side within programme/unit pages.
+ * This function always returns `null` to signal no canonical URL exists.
  *
- * @example
- * ```typescript
- * const url = generateThreadCanonicalUrl('number-multiplication-and-division');
- * // => 'https://www.thenational.academy/teachers/curriculum/threads/number-multiplication-and-division'
- * ```
+ * The `threadSlug` parameter is retained for API compatibility with callers
+ * that may still pass a slug; its value is not used.
+ *
+ * @returns `null` — threads have no OWA canonical page
  */
-export function generateThreadCanonicalUrl(threadSlug: string): string {
-  return `${OAK_BASE_URL}/curriculum/threads/${threadSlug}`;
+export function generateThreadCanonicalUrl(threadSlug: string): null {
+  void threadSlug;
+  return null;
 }
 
 /**

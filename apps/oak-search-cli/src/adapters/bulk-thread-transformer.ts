@@ -49,9 +49,6 @@ interface ThreadAccumulator {
   subjectSlugs: Set<string>;
 }
 
-// Note: deriveSubjectFromSequence is now imported from bulk-transform-helpers
-// which re-exports from lib/indexing/slug-derivation for DRY compliance
-
 /**
  * Processes a single unit's threads into the accumulator map.
  */

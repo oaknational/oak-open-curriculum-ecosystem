@@ -75,7 +75,6 @@ const EXPLORE_FIXTURE = buildExploreFixture(
               thread_slug: 'evolution-and-inheritance',
               subject_slugs: ['biology', 'science'],
               unit_count: 8,
-              thread_url: 'https://teachers.thenational.academy/threads/evolution-and-inheritance',
             },
             highlights: [],
           },

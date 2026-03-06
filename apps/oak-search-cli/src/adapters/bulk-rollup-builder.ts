@@ -18,12 +18,9 @@ import type {
 import type { UnitContextMap } from '../lib/indexing/ks4-context-builder';
 import { createRollupDocument } from '../lib/indexing/document-transforms';
 import { isKeyStage } from './sdk-guards';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-const UNIT_BASE_URL = 'https://www.thenational.academy/teachers/units';
+import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
+import { normalisePhaseSlug, derivePhaseSlugFromSequence } from '@oaknational/curriculum-sdk';
+import { generateSubjectProgrammesUrl } from '../lib/indexing/canonical-url-generator';
 
 /** Valid lesson state values */
 type LessonState = 'published' | 'new';
@@ -43,18 +40,7 @@ function validateLessonState(state: string): LessonState {
   if (state === 'published' || state === 'new') {
     return state;
   }
-  // Default to 'published' for unrecognized states
   return 'published';
-}
-
-/**
- * Generates canonical URL for a unit.
- *
- * @param unitSlug - The unit's slug identifier
- * @returns The canonical URL for the unit
- */
-function generateUnitCanonicalUrl(unitSlug: string): string {
-  return `${UNIT_BASE_URL}/${unitSlug}`;
 }
 
 /**
@@ -67,25 +53,35 @@ function generateUnitCanonicalUrl(unitSlug: string): string {
  * Field differences between bulk Unit and SearchUnitSummary:
  * - Bulk `year` accepts `number | "All years"`, API `year` accepts `number | string`
  * - Bulk has no `subjectSlug` or `keyStageSlug` - must be passed as parameters
- * - Bulk has no `canonicalUrl` - generated from unitSlug
+ * - Bulk has no `canonicalUrl` - generated from unitSlug + sequenceSlug if available
  * - Bulk has no `categories`, `notes`, `phaseSlug` - set to undefined
  *
  * @param unit - The bulk Unit to transform
  * @param subjectSlug - The subject slug (derived from sequence)
  * @param keyStageSlug - The key stage slug
+ * @param sequenceSlug - The sequence slug for canonical URL generation (optional)
  * @returns A SearchUnitSummary compatible with rollup document generation
  */
 export function transformBulkUnitToSummary(
   unit: Unit,
   subjectSlug: SearchSubjectSlug,
   keyStageSlug: KeyStage,
+  sequenceSlug?: string,
 ): SearchUnitSummary {
+  const phaseSlug = normalisePhaseSlug(keyStageSlug);
+  // Use the explicit sequenceSlug when available; this correctly handles exam-board
+  // sequences like 'science-secondary-aqa' which cannot be derived from keyStageSlug alone.
+  const canonicalUrl = sequenceSlug
+    ? (generateCanonicalUrlWithContext('unit', unit.unitSlug, { unit: { sequenceSlug } }) ??
+      undefined)
+    : undefined;
+
   return {
     unitSlug: unit.unitSlug,
     unitTitle: unit.unitTitle,
     yearSlug: unit.yearSlug,
     year: unit.year,
-    phaseSlug: keyStageSlug.includes('1') || keyStageSlug.includes('2') ? 'primary' : 'secondary',
+    phaseSlug,
     subjectSlug,
     keyStageSlug,
     description: unit.description,
@@ -99,7 +95,7 @@ export function transformBulkUnitToSummary(
       state: validateLessonState(l.state),
     })),
     whyThisWhyNow: unit.whyThisWhyNow,
-    canonicalUrl: generateUnitCanonicalUrl(unit.unitSlug),
+    canonicalUrl,
     // Fields not present in bulk data - API-only fields
     notes: undefined,
     categories: undefined,
@@ -142,18 +138,18 @@ export function collectLessonSnippets(lessons: readonly Lesson[]): Map<string, s
 // Rollup Document Generation
 // ============================================================================
 
-const SUBJECT_PROGRAMMES_BASE_URL = 'https://www.thenational.academy/teachers/programmes';
-
 /**
  * Generates the subject programmes URL based on subject and key stage.
  *
+ * Delegates to `generateSubjectProgrammesUrl` from the canonical URL generator
+ * for a single source of truth.
+ *
  * @param subjectSlug - The subject slug
- * @param keyStage - The key stage slug
+ * @param keyStage - The key stage slug (e.g., 'ks2', 'ks3')
  * @returns The subject programmes URL
  */
 export function getSubjectProgrammesUrl(subjectSlug: string, keyStage: string): string {
-  const phase = keyStage.includes('1') || keyStage.includes('2') ? 'primary' : 'secondary';
-  return `${SUBJECT_PROGRAMMES_BASE_URL}/${subjectSlug}-${phase}`;
+  return generateSubjectProgrammesUrl(subjectSlug, keyStage);
 }
 
 /**
@@ -163,7 +159,7 @@ export function getSubjectProgrammesUrl(subjectSlug: string, keyStage: string): 
  * @returns A valid KeyStage
  */
 export function deriveKeyStageFromSequence(sequenceSlug: string): KeyStage {
-  const phase = sequenceSlug.split('-').pop();
+  const phase = derivePhaseSlugFromSequence(sequenceSlug);
   const defaultKs = phase === 'primary' ? 'ks2' : 'ks3';
   return isKeyStage(defaultKs) ? defaultKs : 'ks2';
 }
@@ -200,7 +196,7 @@ export function buildRollupDocs(
     const keyStage = isKeyStage(unit.keyStageSlug)
       ? unit.keyStageSlug
       : deriveKeyStageFromSequence(sequenceSlug);
-    const summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage);
+    const summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage, sequenceSlug);
     const snippets = lessonSnippets.get(unit.unitSlug) ?? [];
     const subjectProgrammesUrl = getSubjectProgrammesUrl(subjectSlug, keyStage);
 

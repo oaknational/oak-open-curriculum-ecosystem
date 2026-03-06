@@ -15,6 +15,7 @@ import {
   SERVER_INSTRUCTIONS,
   createStubSearchRetrieval,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { mountAssetDownloadProxy } from './asset-download/asset-download-route.js';
 import { createHttpLogger } from './logging/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
@@ -103,9 +104,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
   );
 
-  // Phase 2.5 & 2.6: OAuth metadata endpoints, proxy routes, and error caching prevention.
-  // These endpoints MUST be publicly accessible without authentication per RFC 9728.
-  // Registering them before clerkMiddleware ensures they never go through auth checks.
+  // Phase 2.5 & 2.6: OAuth metadata (public, before auth) per RFC 9728
   await setupOAuthAndCaching(
     app,
     runtimeConfig,
@@ -116,17 +115,12 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     options.upstreamMetadata,
   );
 
-  // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
-  // CRITICAL: This must run early so auth context is available to all subsequent middleware.
-  // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
-  // Actual enforcement happens later via createMcpAuthClerk on specific routes.
+  // Phase 3: Global auth context (before path-specific middleware)
   runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appId, () => {
     setupGlobalAuthContext(app, runtimeConfig, log, options.clerkMiddlewareFactory);
   });
 
   // Phase 4: Core endpoints (MCP factory, health checks)
-  // The factory creates a fresh McpServer + transport per request (stateless mode).
-  // Health checks have NO web security middleware.
   const { mcpFactory, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
@@ -135,18 +129,13 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     () => initializeCoreEndpoints(app, options, runtimeConfig, log),
   );
 
-  // Phase 5: Static assets and landing page
-  // DNS rebinding protection applied ONLY to landing page (/)
-  // CORS is already applied globally in Phase 2
-  // Pass display hostname for landing page (prefers custom domain in production)
+  // Phase 5: Static assets and landing page (DNS rebinding on landing page only)
   mountStaticContentRoutes(app, dnsRebindingMiddleware, log, runtimeConfig.displayHostname);
 
-  // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
-  // This runs AFTER clerkMiddleware, so auth context is available here.
+  // Phase 6: /mcp middleware (Accept header validation, readiness check)
   app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
-  // Phase 7: Auth routes (protected /mcp route handlers)
-  // Needs mcpFactory, so must run after initializeCoreEndpoints.
+  // Phase 7: Auth routes (protected /mcp handlers, after mcpFactory)
   runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appId, () => {
     setupAuthRoutes(app, mcpFactory, runtimeConfig, log, allowedHosts);
   });
@@ -165,17 +154,28 @@ function initializeCoreEndpoints(
   runtimeConfig: RuntimeConfig,
   log: Logger,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  // Create shared dependencies ONCE at startup (not per request)
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
     : createSearchRetrieval(runtimeConfig.env, log);
   const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
+  const assetBaseUrl = runtimeConfig.displayHostname
+    ? `https://${runtimeConfig.displayHostname}`
+    : new URL(resourceUrl).origin;
+  const createAssetDownloadUrl = mountAssetDownloadProxy(
+    app,
+    assetBaseUrl,
+    runtimeConfig.env.OAK_API_KEY,
+    log,
+    runtimeConfig.env.OAK_API_BASE_URL ?? 'https://open-api.thenational.academy/api/v0',
+  );
+
   const handlerOptions = {
     overrides: options?.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
     resourceUrl,
     searchRetrieval,
+    createAssetDownloadUrl,
   };
 
   log.debug('bootstrap.mcp.factory.created');
@@ -194,8 +194,6 @@ function initializeCoreEndpoints(
 
   addHealthEndpoints(app, log);
 
-  // No startup-time server.connect() needed — connection happens per request.
-  // Ready resolves immediately once the factory and shared deps are configured.
   return { mcpFactory, ready: Promise.resolve() };
 }
 

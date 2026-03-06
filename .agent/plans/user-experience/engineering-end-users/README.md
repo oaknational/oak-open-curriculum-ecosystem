@@ -5,6 +5,8 @@
 Internal and external engineers integrating with Oak SDKs, MCP servers, and
 supporting tooling.
 
+**Current Executable Plans**: [current/README.md](current/README.md)
+
 ## Ed-Tech Product End Users
 
 Product teams using the curriculum SDK and MCP interfaces to explore Oak
@@ -47,7 +49,7 @@ Engineering and Ed-Tech users rely on a clear host-compatibility contract:
 | [../../sdk-and-mcp-enhancements/roadmap.md](../../sdk-and-mcp-enhancements/roadmap.md) | Host compatibility and metadata portability research |
 | [../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md](../../semantic-search/future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | Renderer/fallback sequencing for user-facing behaviour |
 | [../../architecture-and-infrastructure/README.md](../../architecture-and-infrastructure/README.md) | Reliability and infrastructure consistency across servers |
-| [../../developer-experience/sdk-publishing-and-versioning-plan.md](../../developer-experience/sdk-publishing-and-versioning-plan.md) | Versioning and adoption ergonomics for consumers |
+| [../../developer-experience/future/sdk-publishing-and-versioning-plan.md](../../developer-experience/future/sdk-publishing-and-versioning-plan.md) | Versioning and adoption ergonomics for consumers |
 | [../../external/ooc-api-wishlist/index.md](../../external/ooc-api-wishlist/index.md) | Upstream schema/API assumptions that affect integration UX |
 | [../public-alpha-experience-contract.md](../public-alpha-experience-contract.md) | Shared alpha promise and no-go criteria |
 
@@ -69,6 +71,14 @@ For Option X vs Option Y decisioning, engineering-facing evidence should include
 2. Common failures are diagnosable from logs/explain metadata
 3. Upgrade paths between alpha versions are clear and low-risk
 4. Supported-client compatibility expectations are documented and verifiable
+
+---
+
+## Current Execution Focus
+
+| Priority | Plan | Why It Matters |
+|------------|------|----------------|
+| P0 | [current/search-sdk-github-release-asset-distribution.execution.plan.md](current/search-sdk-github-release-asset-distribution.execution.plan.md) | Enables external API consumers to use a self-contained Search SDK bundle via semantic-release GitHub assets |
 
 ---
 

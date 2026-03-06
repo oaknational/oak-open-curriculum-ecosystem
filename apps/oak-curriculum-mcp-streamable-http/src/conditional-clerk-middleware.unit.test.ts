@@ -135,6 +135,23 @@ describe('shouldSkipClerkMiddleware', () => {
     });
   });
 
+  describe('asset download bypass (HMAC-authenticated, no Clerk needed)', () => {
+    it('returns true for an asset download path', () => {
+      const req = createMockRequest('/assets/download/my-lesson/worksheet', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns true for URL-encoded lesson slugs in asset download path', () => {
+      const req = createMockRequest('/assets/download/lesson%2Fwith%20spaces/worksheet', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
+    it('returns false for /assets path without download subpath', () => {
+      const req = createMockRequest('/assets/other', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(false);
+    });
+  });
+
   describe('path variations', () => {
     it('returns false for /mcp subpaths with discovery method', () => {
       const req = createMockRequest('/mcp/v1', { method: 'tools/list' });

@@ -178,13 +178,17 @@ describe('THREADS_INDEX_FIELDS', () => {
     expect(fieldNames).toContain('title_suggest');
   });
 
-  it('has 4 required and 3 optional fields', () => {
+  it('has 3 required and 4 optional fields', () => {
     const required = THREADS_INDEX_FIELDS.filter((f) => !f.optional);
     const optional = THREADS_INDEX_FIELDS.filter((f) => f.optional);
-    // Required: thread_slug, thread_title, unit_count, thread_url
-    expect(required).toHaveLength(4);
-    // Optional: subject_slugs, thread_semantic, title_suggest
-    expect(optional).toHaveLength(3);
+    expect(required).toHaveLength(3);
+    expect(optional).toHaveLength(4);
+  });
+
+  it('marks thread_url as optional (threads have no OWA page)', () => {
+    const field = THREADS_INDEX_FIELDS.find((f) => f.name === 'thread_url');
+    expect(field).toBeDefined();
+    expect(field?.optional).toBe(true);
   });
 });
 

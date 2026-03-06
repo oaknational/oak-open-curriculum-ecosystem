@@ -23,7 +23,8 @@ describe('createThreadDocument', () => {
     expect(doc.thread_title).toBe('Number: Multiplication and division');
     expect(doc.subject_slugs).toEqual(['maths']);
     expect(doc.unit_count).toBe(15);
-    expect(doc.thread_url).toContain('number-multiplication-and-division');
+    // Threads have no OWA page, so thread_url is absent/undefined
+    expect(doc.thread_url).toBeUndefined();
   });
 
   it('should handle threads spanning multiple subjects', () => {
@@ -47,14 +48,6 @@ describe('createThreadDocument', () => {
     });
 
     expect(doc.unit_count).toBe(0);
-  });
-
-  it('should generate a valid thread URL', () => {
-    const doc = createThreadDocument(baseParams);
-
-    expect(doc.thread_url).toBe(
-      'https://www.thenational.academy/teachers/curriculum/threads/number-multiplication-and-division',
-    );
   });
 
   it('should include title_suggest with correct contexts', () => {

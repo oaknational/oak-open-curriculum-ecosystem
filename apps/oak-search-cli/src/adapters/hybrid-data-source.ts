@@ -28,6 +28,7 @@ import {
   subjectHasKs4Tiers,
   type Ks4SupplementationContext,
 } from './api-supplementation';
+import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import { isSubject } from './sdk-guards';
 import { buildRollupDocs } from './bulk-rollup-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
@@ -87,15 +88,9 @@ const DEFAULT_CONFIG: HybridDataSourceConfig = {
 // Helpers
 // ============================================================================
 
-/** Derive subject slug from sequence slug */
 function deriveSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
-  const parts = sequenceSlug.split('-');
-  const phase = parts[parts.length - 1];
-  const subjectPart = parts.slice(0, -1).join('-');
-
-  const candidate = phase === 'primary' || phase === 'secondary' ? subjectPart : parts[0];
-
-  if (!candidate || !isSubject(candidate)) {
+  const candidate = deriveSubjectSlugFromSequence(sequenceSlug);
+  if (!isSubject(candidate)) {
     throw new Error(`Cannot derive valid subject from sequence: ${sequenceSlug}`);
   }
   return candidate;

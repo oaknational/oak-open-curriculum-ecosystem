@@ -20,6 +20,10 @@ import { GET_PREREQUISITE_GRAPH_TOOL_DEF } from '../aggregated-prerequisite-grap
 import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index.js';
 import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
 import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
+import {
+  DOWNLOAD_ASSET_TOOL_DEF,
+  DOWNLOAD_ASSET_INPUT_SCHEMA,
+} from '../aggregated-asset-download/index.js';
 
 /**
  * Map of aggregated tool definitions with full MCP metadata.
@@ -44,4 +48,5 @@ export const AGGREGATED_TOOL_DEFS = {
   'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
   'browse-curriculum': { ...BROWSE_TOOL_DEF, inputSchema: BROWSE_INPUT_SCHEMA },
   'explore-topic': { ...EXPLORE_TOOL_DEF, inputSchema: EXPLORE_INPUT_SCHEMA },
+  'download-asset': { ...DOWNLOAD_ASSET_TOOL_DEF, inputSchema: DOWNLOAD_ASSET_INPUT_SCHEMA },
 } as const;

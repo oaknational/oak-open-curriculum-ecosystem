@@ -37,6 +37,8 @@ export interface RegisterHandlersOptions {
   readonly resourceUrl?: string;
   /** Pre-created search retrieval service (shared across per-request servers). */
   readonly searchRetrieval: SearchRetrievalService;
+  /** Factory for generating signed asset download URLs (HTTP-only). */
+  readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
 }
 
 /**
@@ -108,15 +110,16 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
       annotations: tool.annotations,
     };
     server.registerTool(tool.name, config, async (params: unknown) => {
-      return handleToolWithAuthInterception(
+      return handleToolWithAuthInterception({
         tool,
         params,
         deps,
         stubExecutor,
-        options.logger,
-        options.runtimeConfig.env.OAK_API_KEY,
-        options.runtimeConfig,
-      );
+        logger: options.logger,
+        apiKey: options.runtimeConfig.env.OAK_API_KEY,
+        runtimeConfig: options.runtimeConfig,
+        createAssetDownloadUrl: options.createAssetDownloadUrl,
+      });
     });
   }
 
