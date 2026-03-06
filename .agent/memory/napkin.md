@@ -1,3 +1,63 @@
+## Session 2026-03-06 — Asset Download Proxy Review & Remediation
+
+### What Was Done
+
+- Thorough adversarial review of asset-download-proxy plan using 7 agents (3 codebase explorers + security, wilma, fred, test-reviewer)
+- Implemented all 18 remediations across 6 phases (A: DI fixes, B: security hardening, C: streaming resilience, D: schema compliance, E: test quality, F: options object refactor)
+- Key changes: `fetch`/`clock`/`oakApiBaseUrl` injected into `AssetDownloadRouteDeps` (ADR-078), HMAC key separation via `deriveSigningSecret()`, JSON canonical form for HMAC payload, `AbortSignal.timeout(30_000)` + `AbortSignal.any()` for upstream timeout, upstream errors mapped to 502, `X-Content-Type-Options: nosniff`, `HandleToolOptions` interface replacing 8 positional params
+- Second round of 6 in-repo specialist reviews (`.claude/agents/`): security (LOW RISK), wilma (COMPLIANT), fred (COMPLIANT), ADR reviewer (gaps fixed), test reviewer (no real duplicate), code reviewer (APPROVED)
+- Wrote ADR-126: HMAC-Signed Asset Download Proxy — full security analysis, threat model, boundary design
+- Moved `deriveSigningSecret` from app layer to SDK layer (code reviewer finding — crypto primitives belong with HMAC functions in download-token.ts)
+- Added 3 Clerk skip path tests for `/assets/download/` bypass
+- Fixed stale TSDoc, ADR cross-references, double JSDoc comment block
+- All quality gates pass: build 14/14, type-check 24/24, lint 0 errors, 715 tests
+- Archived plan to `archive/completed/`
+
+### Patterns to Remember
+
+- `AbortSignal.any()` composes multiple abort signals (client disconnect + upstream timeout) — correct pattern for streaming proxies
+- HMAC key separation: derive signing secret via `HMAC-SHA256(apiKey, label)` rather than using API key directly — if upstream logs capture Bearer header, signing secret remains safe
+- Crypto primitives (`deriveSigningSecret`, `createDownloadSignature`, `validateDownloadSignature`) belong in the SDK layer alongside each other, not scattered across app and SDK
+- `z.string().url()` is deprecated in Zod — use `z.url()` instead
+- When multiple review agents flag the same boundary issue (Fred + code-reviewer both flagged `deriveSigningSecret` placement), it's a strong signal — fix it
+
+### Reviewer Invocations
+
+- Round 1 (generic agents): security-reviewer, architecture-reviewer-wilma, architecture-reviewer-fred, test-reviewer, 3 × Explore agents
+- Round 2 (in-repo agents): security-reviewer, architecture-reviewer-wilma, architecture-reviewer-fred, code-reviewer, test-reviewer, docs-adr-reviewer
+
+---
+
+## Session 2026-03-06 — Commit and Consolidate Docs
+
+### What Was Done
+
+- Committed all changes from the unified sequenceSlug derivation work (90 files, 2125 insertions, 430 deletions). Pre-commit quality gates all passed.
+- Ran full consolidate-docs workflow:
+  - Archived completed `sitemap-driven-canonical-urls.plan.md` to `archive/completed/`
+  - Updated plan statuses and cross-references (4 plans updated, 2 stale links fixed)
+  - Graduated "cross-package function moves" troubleshooting entry from napkin to `docs/operations/troubleshooting.md`
+  - Slimmed MCP Apps section in `distilled.md` (195 → 186 lines, freed headroom)
+  - Checked practice box (empty), experience files (technical content already in permanent docs), code patterns (no new patterns meet barrier)
+  - Napkin at 317 lines (no rotation needed)
+
+### Fitness Ceiling Status
+
+| File | Lines | Ceiling | Status |
+|------|-------|---------|--------|
+| `CONTRIBUTING.md` | 405 | 400 | OVER (+5) |
+| `practice-lineage.md` | 321 | 320 | OVER (+1) |
+| `practice-bootstrap.md` | 430 | 400 | OVER (+30) |
+| `testing-strategy.md` | 393 | 400 | WARNING |
+| `distilled.md` | 186 | 200 | OK (was 195) |
+
+### Patterns to Remember
+
+- When archiving plans, run `rg` sweep for all cross-references immediately — Cursor plan files had stale paths
+- Consolidation is most efficient when sub-agents gather inventory (plans, fitness, experience, practice-box) in parallel at the start
+
+---
+
 ## Session 2026-03-06 — Unified sequenceSlug Derivation (Phases 4 + 6)
 
 ### What Was Done

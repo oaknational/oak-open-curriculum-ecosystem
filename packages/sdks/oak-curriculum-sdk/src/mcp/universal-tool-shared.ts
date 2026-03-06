@@ -55,6 +55,15 @@ export interface UniversalToolExecutorDependencies {
    * enables tests to inject lightweight fakes.
    */
   readonly generatedTools: GeneratedToolRegistry;
+
+  /**
+   * Factory for generating signed asset download URLs. HTTP-only.
+   *
+   * When provided, the `download-asset` tool is available and generates
+   * short-lived, HMAC-signed URLs pointing to the download proxy route.
+   * Omitted for stdio transport where no HTTP route exists.
+   */
+  readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
 }
 
 export function formatError(message: string): CallToolResult {

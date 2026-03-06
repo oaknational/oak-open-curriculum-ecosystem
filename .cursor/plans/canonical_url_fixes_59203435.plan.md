@@ -11,7 +11,7 @@ isProject: false
 
 **Thorough start-right active.** Foundation documents internalised. Reviewer invocation discipline enforced. British spelling.
 
-**Source plan**: [sitemap-driven-canonical-urls.plan.md](.agent/plans/sdk-and-mcp-enhancements/active/sitemap-driven-canonical-urls.plan.md)
+**Source plan**: [sitemap-driven-canonical-urls.plan.md](.agent/plans/sdk-and-mcp-enhancements/archive/completed/sitemap-driven-canonical-urls.plan.md)
 
 ---
 

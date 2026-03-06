@@ -20,44 +20,53 @@ import { logValidationFailureIfPresent, logUpstreamErrorIfPresent } from './vali
 import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 /**
+ * Options for {@link handleToolWithAuthInterception}.
+ *
+ * Consolidates the previous 8 positional parameters into a single
+ * options object for readability and maintenance safety.
+ */
+export interface HandleToolOptions {
+  readonly tool: { readonly name: UniversalToolName };
+  readonly params: unknown;
+  readonly deps: ToolHandlerDependencies;
+  readonly stubExecutor?: ReturnType<typeof createStubToolExecutionAdapter>;
+  readonly logger: Logger;
+  readonly apiKey: string;
+  readonly runtimeConfig: RuntimeConfig;
+  readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
+}
+
+/**
  * Handles tool execution with authentication error interception.
  *
  * Per ADR-054, this function intercepts auth errors at the tool execution result
  * level (the last layer where structured error objects are accessible) and
  * returns MCP-compliant responses with _meta field for ChatGPT OAuth linking.
  *
- * @param tool - Tool descriptor with UniversalToolName
- * @param params - Tool invocation parameters
- * @param deps - Tool handler dependencies (client, executor, etc.)
- * @param stubExecutor - Optional stub executor for testing
- * @param logger - Logger for observability
- * @param apiKey - API key for upstream client
- * @param runtimeConfig - Runtime configuration including auth bypass flag
+ * @param options - Tool execution options
  * @returns Tool execution result or auth error response with _meta
  *
  * @public
  */
 export async function handleToolWithAuthInterception(
-  tool: { readonly name: UniversalToolName },
-  params: unknown,
-  deps: ToolHandlerDependencies,
-  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
-  logger: Logger,
-  apiKey: string,
-  runtimeConfig: RuntimeConfig,
+  options: HandleToolOptions,
 ): Promise<CallToolResult> {
-  // Preventive MCP client auth checking (BEFORE SDK execution)
-  // This is MCP OAuth (ChatGPT → us), NOT upstream API auth (us → Oak API)
+  const {
+    tool,
+    params,
+    deps,
+    stubExecutor,
+    logger,
+    apiKey,
+    runtimeConfig,
+    createAssetDownloadUrl,
+  } = options;
   const authError = checkMcpClientAuth(tool.name, deps.getResourceUrl(), logger, runtimeConfig);
   if (authError) {
     return authError;
   }
 
-  // EXISTING: Upstream API auth error interception (AFTER SDK execution)
-  // This is ADR-054 - we do NOT modify this
   const client = deps.createClient(apiKey);
-
-  // Closure variable to capture auth errors from Result callback
   let capturedAuthError: unknown = undefined;
 
   const executor = deps.createExecutor({
@@ -65,44 +74,31 @@ export async function handleToolWithAuthInterception(
       const execution = await (stubExecutor
         ? stubExecutor(name, args ?? {})
         : deps.executeMcpTool(name, args, client));
-
-      // CRITICAL INTERCEPTION POINT (per ADR-054):
-      // Here we still have structured error objects from the Result error branch.
-      // This is the last layer where error cause chains are accessible.
+      // ADR-054 interception: capture structured auth errors before they're lost
       if (!execution.ok) {
-        const authCheckTarget = execution.error.cause ?? execution.error;
-
-        if (isAuthError(authCheckTarget)) {
-          // Capture auth error for post-executor handling
-          capturedAuthError = authCheckTarget;
+        const target = execution.error.cause ?? execution.error;
+        if (isAuthError(target)) {
+          capturedAuthError = target;
         }
       }
-
       logValidationFailureIfPresent(name, execution, logger);
       logUpstreamErrorIfPresent(name, execution, logger);
       return execution;
     },
     searchRetrieval: deps.searchRetrieval,
     generatedTools: generatedToolRegistry,
+    createAssetDownloadUrl,
   });
 
   const result = await executor(tool.name, params ?? {});
 
-  // After executor returns, check if we captured an auth error
   if (capturedAuthError !== undefined) {
     const resourceUrl = deps.getResourceUrl();
     const errorType = getAuthErrorType(capturedAuthError);
     const description = getAuthErrorDescription(capturedAuthError);
-
-    logger.warn('Tool execution auth error', {
-      toolName: tool.name,
-      errorType,
-      description,
-    });
-
+    logger.warn('Tool execution auth error', { toolName: tool.name, errorType, description });
     return createAuthErrorResponse(errorType, description, resourceUrl);
   }
 
-  // No auth error, return normal result
   return result;
 }

@@ -83,11 +83,14 @@ export const toolGuidanceData = {
         'get-lessons-quiz',
         'get-lessons-assets',
         'get-units-summary',
+        'download-asset',
       ],
       description:
-        'Get detailed content for specific lessons, units, or resources you have already identified.',
+        'Get detailed content for specific lessons, units, or resources you have already identified. ' +
+        'download-asset generates a short-lived, secure download link for lesson assets (HTTP transport only).',
       whenToUse:
-        'When you have a lesson or unit slug/ID and need to retrieve its full content, transcript, quiz questions, or downloadable assets.',
+        'When you have a lesson or unit slug/ID and need to retrieve its full content, transcript, quiz questions, or downloadable assets. ' +
+        'Use download-asset after get-lessons-assets to generate a clickable download link.',
     } satisfies ToolCategory,
 
     progression: {

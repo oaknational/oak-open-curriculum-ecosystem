@@ -4,7 +4,7 @@ overview: Fix the dual derivation bug where the API path produces invalid sequen
 todos:
   - id: phase-0-barney-review
     content: "Phase 0: Architecture review (Barney) — validate placement of shared utility, dependency direction, and slug consolidation scope before coding"
-    status: pending
+    status: completed
   - id: phase-1-shared-utility
     content: "Phase 1: Create shared normalisePhaseSlug + deriveSequenceSlug utility in curriculum-sdk (TDD) + code-reviewer + test-reviewer"
     status: completed
@@ -32,7 +32,7 @@ isProject: false
 
 Phases 1-5 of the canonical URL fixes are complete. The code reviewer identified a design concern: two code paths derive `sequenceSlug` differently, producing inconsistent URLs for the same content.
 
-**Source plan**: [sitemap-driven-canonical-urls.plan.md](.agent/plans/sdk-and-mcp-enhancements/active/sitemap-driven-canonical-urls.plan.md)
+**Source plan**: [sitemap-driven-canonical-urls.plan.md](.agent/plans/sdk-and-mcp-enhancements/archive/completed/sitemap-driven-canonical-urls.plan.md)
 **Previous Cursor plan**: [canonical_url_fixes_59203435.plan.md](.cursor/plans/canonical_url_fixes_59203435.plan.md)
 
 ---

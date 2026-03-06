@@ -137,6 +137,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-123: MCP Server Primitives Strategy](123-mcp-server-primitives-strategy.md)
 - [ADR-124: Practice Propagation Model](124-practice-propagation-model.md)
 - [ADR-125: Agent Artefact Portability](125-agent-artefact-portability.md)
+- [ADR-126: HMAC-Signed Asset Download Proxy](126-asset-download-proxy.md)
 
 ## Key Architectural Decisions
 

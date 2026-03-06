@@ -14,9 +14,13 @@ import { extractZodShape } from './zod-utils.js';
 /**
  * Lists all available MCP tools with their metadata.
  *
- * Returns both aggregated tools (search, fetch, get-curriculum-model)
+ * Returns both aggregated tools (search, fetch, get-curriculum-model, download-asset)
  * and generated tools from the OpenAPI schema, all with proper MCP
  * annotations and metadata.
+ *
+ * All tools are always listed. If a tool cannot function on a given transport
+ * (e.g. download-asset on stdio), its handler fails fast with a clear error
+ * rather than silently hiding the tool.
  *
  * Generated tools include `flatZodSchema` which contains .describe() calls
  * that preserve parameter descriptions through the MCP SDK's zodToJsonSchema
@@ -45,7 +49,6 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         name,
         description: def.description,
         inputSchema: def.inputSchema,
-        // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
         _meta: def._meta,
@@ -59,7 +62,6 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
       name,
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
-      // Use generated Zod schema which includes .describe() for parameter descriptions
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,

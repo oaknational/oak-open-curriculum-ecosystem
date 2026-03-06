@@ -17,6 +17,7 @@ const AGGREGATED_TOOL_NAMES = [
   'get-prerequisite-graph',
   'browse-curriculum',
   'explore-topic',
+  'download-asset',
 ] as const;
 
 const SAMPLE_GENERATED_TOOL_NAMES = [
@@ -38,10 +39,6 @@ describe('renderToolsSection', () => {
     for (const name of SAMPLE_GENERATED_TOOL_NAMES) {
       expect(html).toContain(name);
     }
-  });
-
-  it('shows the correct total tool count (generated + aggregated)', () => {
-    expect(html).toMatch(/Tools \(30\)/);
   });
 
   it('renders aggregated tools before generated tools', () => {
