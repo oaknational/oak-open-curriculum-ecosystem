@@ -64,7 +64,7 @@ export type {
  * const { retrieval } = createSearchSdk({ deps, config });
  *
  * const result = await retrieval.searchLessons({
- *   text: 'photosynthesis',
+ *   query: 'photosynthesis',
  *   subject: 'science',
  *   keyStage: 'ks3',
  * });

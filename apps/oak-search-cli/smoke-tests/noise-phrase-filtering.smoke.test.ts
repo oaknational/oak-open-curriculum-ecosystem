@@ -23,7 +23,7 @@ import type { SearchLessonsIndexDoc } from '../src/types/oak.js';
  */
 async function searchLessons(query: string): Promise<readonly string[]> {
   const request = buildLessonRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',

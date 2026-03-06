@@ -2,7 +2,7 @@
 
 **Status**: Future (not started)
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-**Related**: [Agent Artefact Portability Plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)
+**Related**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 
 ## Context
 

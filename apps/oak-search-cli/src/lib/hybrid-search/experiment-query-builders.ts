@@ -40,7 +40,7 @@ export {
 
 /** Common parameters for lesson search requests. */
 export interface LessonSearchParams {
-  text: string;
+  query: string;
   size: number;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
@@ -59,7 +59,7 @@ export interface LessonSearchParams {
  */
 export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     subject,
     keyStage,
@@ -72,7 +72,7 @@ export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearch
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonBm25ContentRetriever(text, filterClause),
+    retriever: createLessonBm25ContentRetriever(query, filterClause),
   };
 
   if (includeHighlights) {
@@ -95,7 +95,7 @@ export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearch
  */
 export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     subject,
     keyStage,
@@ -108,7 +108,7 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonElserContentRetriever(text, filterClause),
+    retriever: createLessonElserContentRetriever(query, filterClause),
   };
 
   if (includeHighlights) {
@@ -123,7 +123,7 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
 
 /** Common parameters for unit search requests. */
 export interface UnitSearchParams {
-  text: string;
+  query: string;
   size: number;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
@@ -142,7 +142,7 @@ export interface UnitSearchParams {
  */
 export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     subject,
     keyStage,
@@ -155,7 +155,7 @@ export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequ
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitBm25ContentRetriever(text, filterClause),
+    retriever: createUnitBm25ContentRetriever(query, filterClause),
   };
 
   if (includeHighlights) {
@@ -178,7 +178,7 @@ export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequ
  */
 export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     subject,
     keyStage,
@@ -191,7 +191,7 @@ export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchReq
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitElserContentRetriever(text, filterClause),
+    retriever: createUnitElserContentRetriever(query, filterClause),
   };
 
   if (includeHighlights) {

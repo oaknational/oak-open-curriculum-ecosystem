@@ -138,6 +138,12 @@ Validation: `pnpm portability:check`.
   behaviour (ChatGPT, Claude sandbox domains, `_meta.ui.domain`).
 - `_meta.ui.domain` only needed for direct cross-origin `fetch()`
   from the iframe; omit if data flows through MCP bridge.
+- **Four MCP guidance surfaces must agree** when a
+  multi-tool workflow changes: tool `description`, workflow
+  data (flows to `get-curriculum-model` + resources), doc
+  resources, and prompt messages. Tool descriptions are
+  highest leverage — per MCP spec, tools are model-controlled
+  via `description`.
 
 ## Architecture (Domain-Specific)
 

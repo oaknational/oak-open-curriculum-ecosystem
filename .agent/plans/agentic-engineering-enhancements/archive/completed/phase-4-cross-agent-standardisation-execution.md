@@ -23,7 +23,7 @@ todos:
 
 # Phase 4 - Cross-Agent Standardisation Execution
 
-> **SUPERSEDED**: All tasks from this execution plan have been absorbed into the [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan is archived for historical reference only.
+> **SUPERSEDED**: All tasks from this execution plan have been absorbed into [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan is archived for historical reference only.
 
 ## Source Strategy
 

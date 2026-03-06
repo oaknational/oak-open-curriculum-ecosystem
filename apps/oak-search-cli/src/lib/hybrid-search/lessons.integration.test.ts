@@ -94,7 +94,7 @@ describe('runLessonsSearch integration', () => {
       });
 
       const result = await runLessonsSearch(
-        { scope: 'lessons', text: 'test query' },
+        { scope: 'lessons', query: 'test query' },
         10,
         0,
         false,
@@ -132,7 +132,7 @@ describe('runLessonsSearch integration', () => {
       });
 
       const result = await runLessonsSearch(
-        { scope: 'lessons', text: 'test query' },
+        { scope: 'lessons', query: 'test query' },
         10,
         0,
         false,
@@ -182,7 +182,7 @@ describe('runLessonsSearch integration', () => {
       });
 
       const result = await runLessonsSearch(
-        { scope: 'lessons', text: 'test query' },
+        { scope: 'lessons', query: 'test query' },
         10,
         0,
         false,
@@ -245,7 +245,7 @@ describe('runLessonsSearch integration', () => {
       });
 
       const result = await runLessonsSearch(
-        { scope: 'lessons', text: 'test query' },
+        { scope: 'lessons', query: 'test query' },
         10,
         0,
         false,
@@ -298,9 +298,15 @@ describe('runLessonsSearch integration', () => {
         timed_out: false,
       });
 
-      const result = await runLessonsSearch({ scope: 'lessons', text: 'test query' }, 10, 0, true, {
-        search: fakeSearch,
-      });
+      const result = await runLessonsSearch(
+        { scope: 'lessons', query: 'test query' },
+        10,
+        0,
+        true,
+        {
+          search: fakeSearch,
+        },
+      );
 
       expect(result.scope).toBe('lessons');
       expect(result.total).toBe(1);
@@ -339,7 +345,7 @@ describe('runLessonsSearch integration', () => {
       });
 
       const result = await runLessonsSearch(
-        { scope: 'lessons', text: 'test query' },
+        { scope: 'lessons', query: 'test query' },
         10,
         0,
         false,

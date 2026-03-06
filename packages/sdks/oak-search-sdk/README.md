@@ -20,14 +20,14 @@ const sdk = createSearchSdk({
 
 // Search lessons (4-way RRF: BM25 + ELSER on Content and Structure)
 const results = await sdk.retrieval.searchLessons({
-  text: 'expanding brackets',
+  query: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
 });
 
 // Search threads (2-way RRF: BM25 on thread_title + ELSER on thread_semantic)
 const threads = await sdk.retrieval.searchThreads({
-  text: 'algebra equations progression',
+  query: 'algebra equations progression',
   subject: 'maths',
 });
 // threads.ok → { scope: 'threads', results: ThreadResult[], total, took, timedOut }
@@ -37,7 +37,7 @@ await sdk.admin.setup();
 const status = await sdk.admin.verifyConnection();
 
 // Observability
-sdk.observability.recordZeroHit({ scope: 'lessons', text: 'xyz' });
+sdk.observability.recordZeroHit({ scope: 'lessons', query: 'xyz' });
 ```
 
 ## Architecture

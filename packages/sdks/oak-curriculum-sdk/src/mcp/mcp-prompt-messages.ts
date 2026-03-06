@@ -50,7 +50,7 @@ export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
 Before searching, call get-curriculum-model for a complete understanding of the curriculum domain model and available tools.
 
 Please:
-1. Use search with scope "lessons" to find lessons matching this topic: search({ text: "${topic}", scope: "lessons"${keyStageParam} })
+1. Use search with scope "lessons" to find lessons matching this topic: search({ query: "${topic}", scope: "lessons"${keyStageParam} })
 2. Review the results and identify the most relevant lessons
 3. For the top 3-5 lessons, provide a brief summary of what each covers
 4. Suggest which lesson might be best for different learning objectives
@@ -86,13 +86,14 @@ Steps:
 4. Get the lesson transcript to understand the content delivery
 5. Get quiz questions for assessment ideas
 6. Get available assets (slides, worksheets)
+7. Use download-asset to generate clickable download links for any assets the user wants
 
 Please provide:
 - Learning objectives from the lesson
 - Key vocabulary/keywords
 - A summary of the lesson structure
 - Quiz questions that could be used for assessment
-- Links to any downloadable resources`,
+- Clickable download links for requested resources (use download-asset)`,
       },
     },
   ];
@@ -120,7 +121,7 @@ export function getExploreCurriculumMessages(args: PromptArgs): PromptMessage[] 
 Call get-curriculum-model first for domain definitions and tool guidance.
 
 Please:
-1. Use explore-topic to search across lessons, units, and threads in parallel: explore-topic({ text: "${topic}"${subjectParam} })
+1. Use explore-topic to search across lessons, units, and threads in parallel: explore-topic({ query: "${topic}"${subjectParam} })
 2. Review the topic map and summarise what is available
 3. For the most relevant results, drill down using search with a specific scope
 4. If there are learning threads, note how the topic develops across year groups
@@ -150,7 +151,7 @@ export function getLearningProgressionMessages(args: PromptArgs): PromptMessage[
 Call get-curriculum-model first for domain definitions and tool guidance.
 
 Please:
-1. Use search with scope "threads" to find progression threads: search({ text: "${concept}", scope: "threads", subject: "${subject}" })
+1. Use search with scope "threads" to find progression threads: search({ query: "${concept}", scope: "threads", subject: "${subject}" })
 2. Use get-thread-progressions for the full progression graph
 3. Use get-prerequisite-graph for unit-level dependencies
 4. Map out:

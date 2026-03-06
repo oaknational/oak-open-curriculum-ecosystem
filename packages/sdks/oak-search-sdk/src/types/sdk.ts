@@ -16,7 +16,7 @@
  * });
  *
  * const results = await sdk.retrieval.searchLessons({
- *   text: 'expanding brackets',
+ *   query: 'expanding brackets',
  *   subject: 'maths',
  *   keyStage: 'ks3',
  * });

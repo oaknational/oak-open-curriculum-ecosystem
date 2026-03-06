@@ -32,10 +32,12 @@ export const SEARCH_TOOL_DEF = {
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
 
+Required parameters: \`scope\` (which index to search) and \`query\` (your search query). For \`threads\` scope, \`query\` may be omitted if \`subject\` or \`keyStage\` is provided.
+
 SCOPE SELECTION — choose the right scope for the teacher's intent:
 - "lessons": Find specific lessons on a topic. Best for "find me a lesson about X".
 - "units": Find teaching units (groups of lessons). Best for "what units cover X?".
-- "threads": Find learning progression strands across year groups. Best for "how does X build across years?". If the teacher mentions a subject (for example, "maths threads"), pass it in the subject filter parameter rather than relying on text alone.
+- "threads": Find learning progression strands across year groups. Best for "how does X build across years?". If the teacher mentions a subject (for example, "maths threads"), pass it in the subject filter parameter rather than relying on the query alone.
 - "sequences": Find curriculum programme structures. Best for "show me the programme for X". Sequence names are structural (for example, "maths-secondary"), so broad subject terms should be passed via subject filters.
 - "suggest": Typeahead suggestions as the user types. Best for autocomplete.
 
@@ -52,18 +54,18 @@ Do NOT use for:
 - Exploring a topic across multiple indexes at once (use 'explore-topic')
 
 NATURAL LANGUAGE MAPPING EXAMPLES:
-- "Find KS3 science lessons about photosynthesis" → scope: 'lessons', text: 'photosynthesis', subject: 'science', keyStage: 'ks3'
-- "What units cover fractions in primary maths?" → scope: 'units', text: 'fractions', subject: 'maths', keyStage: 'ks2'
-- "What's the learning progression for algebra?" → scope: 'threads', text: 'algebra', subject: 'maths'
-- "What maths threads are there?" → scope: 'threads', subject: 'maths' (no text needed — returns all maths threads sorted by size)
-- "Show me secondary science programmes" → scope: 'sequences', text: 'science', keyStage: 'ks3'
-- "Find lessons on the Romans for Year 3" → scope: 'lessons', text: 'Romans', year: '3'
-- "KS4 higher tier maths on trigonometry" → scope: 'lessons', text: 'trigonometry', keyStage: 'ks4', tier: 'higher'
+- "Find KS3 science lessons about photosynthesis" → scope: 'lessons', query: 'photosynthesis', subject: 'science', keyStage: 'ks3'
+- "What units cover fractions in primary maths?" → scope: 'units', query: 'fractions', subject: 'maths', keyStage: 'ks2'
+- "What's the learning progression for algebra?" → scope: 'threads', query: 'algebra', subject: 'maths'
+- "What maths threads are there?" → scope: 'threads', subject: 'maths' (no query needed — returns all maths threads sorted by size)
+- "Show me secondary science programmes" → scope: 'sequences', query: 'science', keyStage: 'ks3'
+- "Find lessons on the Romans for Year 3" → scope: 'lessons', query: 'Romans', year: '3'
+- "KS4 higher tier maths on trigonometry" → scope: 'lessons', query: 'trigonometry', keyStage: 'ks4', tier: 'higher'
 
 SCOPE LIMITATIONS:
 - "suggest" requires at least one filter: subject or keyStage.
 - "sequences" works best with structural names (for example, "maths-secondary"), not topic words.
-- "threads" can omit text when subject or keyStage is provided, returning all matching threads sorted by unit count.
+- "threads" can omit query when subject or keyStage is provided, returning all matching threads sorted by unit count.
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
 - For prerequisites: search(scope: 'threads') → get-prerequisite-graph for dependencies
@@ -88,7 +90,8 @@ CROSS-TOOL WORKFLOWS:
 /**
  * JSON Schema for the SDK-backed search tool inputs.
  *
- * Required fields: `text` and `scope`. Common filters apply to all scopes.
+ * Required field: `scope`. `query` is required for all scopes except `threads`
+ * (which can filter by subject/keyStage alone). Common filters apply to all scopes.
  * Scope-specific filters are optional and validated in the handler to keep
  * the schema simple for agents.
  */
@@ -97,10 +100,10 @@ export const SEARCH_INPUT_SCHEMA = {
   required: ['scope'],
   additionalProperties: false,
   properties: {
-    text: {
+    query: {
       type: 'string',
       description:
-        'Search query text. Required for all scopes except threads — for threads scope, omit text and provide subject or keyStage to browse all threads matching the filter.',
+        'Search query. Required for all scopes except threads — for threads scope, omit query and provide subject or keyStage to browse all threads matching the filter.',
       examples: ['photosynthesis', 'adding fractions', 'the Romans', 'electricity and circuits'],
     },
     scope: {

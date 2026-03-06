@@ -48,7 +48,7 @@ export type ThreadSearchFunction = (
  * multiple key stages.
  */
 export interface RunThreadQueryInput {
-  /** The search query text. */
+  /** The search query. */
   readonly query: string;
   /** Map of thread slug to expected relevance score. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
@@ -101,7 +101,7 @@ export async function runThreadQuery(
   const subject: SearchSubjectSlug = isSubject(input.subject) ? input.subject : 'science';
 
   const sdkParams: SearchParamsBase = {
-    text: input.query,
+    query: input.query,
     subject,
     size: 10,
   };

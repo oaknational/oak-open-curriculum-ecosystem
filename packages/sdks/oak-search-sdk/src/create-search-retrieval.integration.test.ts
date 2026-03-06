@@ -48,7 +48,7 @@ describe('createSearchRetrieval contract (sdk-codegen → search-sdk)', () => {
 
   it('searchLessons returns ok Result with correct structure for empty results', async () => {
     const retrieval = createMockedRetrieval();
-    const result = await retrieval.searchLessons({ text: 'test query' });
+    const result = await retrieval.searchLessons({ query: 'test query' });
 
     expect(result.ok).toBe(true);
     if (result.ok) {

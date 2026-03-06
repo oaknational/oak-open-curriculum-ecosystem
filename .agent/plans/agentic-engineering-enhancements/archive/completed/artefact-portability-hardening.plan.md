@@ -40,7 +40,7 @@ todos:
 **Status**: 🟢 COMPLETE (All phases 0–9 done)
 **Scope**: Address all critical and important findings from the four-reviewer architectural review of ADR-125 and the agent artefact portability system.
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-**Predecessor**: [Agent Artefact Portability (execution plan, completed)](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)
+**Predecessor**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 
 ---
 
@@ -550,7 +550,7 @@ Extracted artefact inventory tables (Layer 1 + Layer 2) from AGENT.md to `.agent
 
 **Related Plans**:
 
-- [Agent Artefact Portability (execution plan, completed)](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) — predecessor
+- [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md) — predecessor
 - [Hooks Portability (future)](../future/hooks-portability.plan.md) — extends the same model to hooks
 - [DevX Strictness Convergence](../../developer-experience/active/devx-strictness-convergence.plan.md) — ESLint work, separate concern
 

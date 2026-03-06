@@ -34,7 +34,9 @@
       "Bash(lsof -ti:3333)",
       "Bash(xargs kill -9)",
       "Read(/.claude/plans/**)",
-      "Bash(git status -u)"
+      "Bash(git status -u)",
+      "Skill(jc-start-right-thorough)",
+      "Skill(jc-start-right-thorough:*)"
     ],
     "deny": [],
     "additionalDirectories": ["/tmp"]

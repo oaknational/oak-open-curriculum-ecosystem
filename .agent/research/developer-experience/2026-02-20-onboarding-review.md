@@ -102,16 +102,16 @@ The updated docs now correctly frame `pnpm qg` as a “when ready” gate, but c
 
 ## Comparison to `ontology-knowledge-graph-tidy-up.md`
 
-Compared against `.agent/plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md`:
+Compared against `.agent/plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md`:
 
 - The plan diagnosis matches observed evidence exactly.
-- Plan calls out dangling `knowledgeGraph: renderKnowledgeGraph` in `widget-script.ts` (`.agent/plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md:14`).
+- Plan calls out dangling `knowledgeGraph: renderKnowledgeGraph` in `widget-script.ts` (`.agent/plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md:14`).
 - Current code still contains that line (`apps/oak-curriculum-mcp-streamable-http/src/widget-script.ts:72`).
 - Playwright traces confirm runtime `ReferenceError` and global render failure.
 - The plan’s “registry cleanup” item also matches current state.
-- Plan says remove `'knowledgeGraph'` from `RENDERER_IDS` (`.agent/plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md:18`).
+- Plan says remove `'knowledgeGraph'` from `RENDERER_IDS` (`.agent/plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md:18`).
 - Current code still includes it (`apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts:29`).
-- The plan states `widget-renderers/index.ts` should not change and already has no knowledge-graph renderer (`.agent/plans/semantic-search/active/ontology-knowledge-graph-tidy-up.md:123`).
+- The plan states `widget-renderers/index.ts` should not change and already has no knowledge-graph renderer (`.agent/plans/semantic-search/archive/completed/ontology-knowledge-graph-tidy-up.md:123`).
 - This matches current code (`apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/index.ts:43`).
 
 Conclusion:

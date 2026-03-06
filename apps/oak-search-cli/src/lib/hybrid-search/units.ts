@@ -19,7 +19,7 @@ export interface RunUnitsSearchOptions {
  * retrieval for optimal search quality. Searches the `oak_unit_rollup` index
  * which contains aggregated lesson content for richer semantic matching.
  *
- * @param q - Structured query with text and optional filters
+ * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return
  * @param from - Offset for pagination
  * @param doHighlight - Whether to include rollup text highlights
@@ -38,7 +38,7 @@ export async function runUnitsSearch(
 ): Promise<HybridSearchResult> {
   const search = options.search ?? esSearch;
   const request = buildUnitRrfRequest({
-    text: q.text,
+    query: q.query,
     size,
     subject: q.subject,
     keyStage: q.keyStage,

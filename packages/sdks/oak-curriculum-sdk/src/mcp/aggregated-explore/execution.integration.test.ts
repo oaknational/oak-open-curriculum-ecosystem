@@ -76,7 +76,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'volcanos' }, deps);
+      const result = await runExploreTool({ query: 'volcanos' }, deps);
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -86,7 +86,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'fractions', subject: 'maths' }, deps);
+      const result = await runExploreTool({ query: 'fractions', subject: 'maths' }, deps);
       expect(result.isError).toBeUndefined();
     });
 
@@ -95,7 +95,7 @@ describe('runExploreTool', () => {
       const deps = createDeps(retrieval);
 
       const result = await runExploreTool(
-        { text: 'photosynthesis', subject: 'science', keyStage: 'ks3' },
+        { query: 'photosynthesis', subject: 'science', keyStage: 'ks3' },
         deps,
       );
       expect(result.isError).toBeUndefined();
@@ -107,7 +107,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'volcanos' }, deps);
+      const result = await runExploreTool({ query: 'volcanos' }, deps);
 
       expect(result.content).toHaveLength(2);
       const firstContent = result.content[0];
@@ -118,7 +118,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'volcanos' }, deps);
+      const result = await runExploreTool({ query: 'volcanos' }, deps);
       expect(result.structuredContent).toBeDefined();
     });
 
@@ -126,7 +126,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'volcanos' }, deps);
+      const result = await runExploreTool({ query: 'volcanos' }, deps);
       expect(result._meta).toBeDefined();
     });
   });
@@ -136,7 +136,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      await runExploreTool({ text: 'electricity' }, deps);
+      await runExploreTool({ query: 'electricity' }, deps);
 
       expect(retrieval.searchLessons).toHaveBeenCalledOnce();
       expect(retrieval.searchUnits).toHaveBeenCalledOnce();
@@ -147,7 +147,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      await runExploreTool({ text: 'electricity', subject: 'science' }, deps);
+      await runExploreTool({ query: 'electricity', subject: 'science' }, deps);
 
       expect(retrieval.searchLessons).toHaveBeenCalledWith(
         expect.objectContaining({ subject: 'science' }),
@@ -164,7 +164,7 @@ describe('runExploreTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
 
-      await runExploreTool({ text: 'electricity', keyStage: 'ks3' }, deps);
+      await runExploreTool({ query: 'electricity', keyStage: 'ks3' }, deps);
 
       expect(retrieval.searchLessons).toHaveBeenCalledWith(
         expect.objectContaining({ keyStage: 'ks3' }),
@@ -187,7 +187,7 @@ describe('runExploreTool', () => {
       });
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'volcanos' }, deps);
+      const result = await runExploreTool({ query: 'volcanos' }, deps);
 
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
@@ -201,7 +201,7 @@ describe('runExploreTool', () => {
       });
       const deps = createDeps(retrieval);
 
-      const result = await runExploreTool({ text: 'test' }, deps);
+      const result = await runExploreTool({ query: 'test' }, deps);
       expect(result.isError).toBe(true);
     });
   });

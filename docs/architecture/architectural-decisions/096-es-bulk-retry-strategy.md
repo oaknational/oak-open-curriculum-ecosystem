@@ -342,6 +342,6 @@ pnpm es:status
 ## References
 
 - Diagnostic analysis: `diagnostics/elser-diagnostic-*.json`
-- Plan document: `.agent/plans/semantic-search/active/elser-retry-robustness.md`
+- Plan document: `.agent/plans/semantic-search/archive/completed/elser-retry-robustness.md`
 - Module documentation: `src/lib/indexing/README.md`
 - Integration tests: `src/lib/indexing/bulk-chunk-uploader.integration.test.ts`

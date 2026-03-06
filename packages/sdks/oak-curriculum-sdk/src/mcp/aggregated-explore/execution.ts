@@ -61,7 +61,7 @@ async function parallelSearch(
   threads: ScopeOutcome;
 }> {
   const baseParams = {
-    text: args.text,
+    query: args.query,
     subject: args.subject,
     keyStage: args.keyStage,
     size: EXPLORE_PAGE_SIZE,
@@ -133,7 +133,7 @@ function computeTotals(outcomes: {
 /**
  * Executes the explore-topic compound tool.
  *
- * @param args - Validated explore arguments (text, optional subject/keyStage)
+ * @param args - Validated explore arguments (query, optional subject/keyStage)
  * @param deps - Dependencies including searchRetrieval service
  * @returns CallToolResult with unified topic map or error
  */
@@ -153,5 +153,5 @@ export async function runExploreTool(
 
   const totals = computeTotals(outcomes);
 
-  return formatTopicMap(args.text, outcomes, totals);
+  return formatTopicMap(args.query, outcomes, totals);
 }

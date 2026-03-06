@@ -130,7 +130,7 @@ The mining process should identify:
 
 ## Implementation
 
-See: `.agent/plans/semantic-search/active/synonym-complete-coverage.md`
+See: `.agent/plans/semantic-search/archive/completed/synonym-complete-coverage.md`
 
 ## Related
 

@@ -12,7 +12,7 @@ import type { estypes } from '@elastic/elasticsearch';
 
 export interface StructuredQuery {
   scope: SearchScope;
-  text: string;
+  query: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
   minLessons?: number;

@@ -1,3 +1,81 @@
+## Session 2026-03-06 — Consolidate Docs
+
+### What Was Done
+
+- Archived 3 completed plans to `agentic-engineering-enhancements/archive/completed/`: `artefact-portability-hardening.plan.md` (all phases 0-9 done), `phase-4-cross-agent-standardisation-execution.md` (superseded by ADR-125), `phase-0-templates-and-components-foundation.md` (completed 2026-02-24).
+- Fixed 6 stale cross-references in README, active/README, roadmap, and cross-agent-standardisation plan.
+- Updated `search-tool-text-to-query-rename.plan.md` — Phases 3-4 now COMPLETE (reviewer invoked and findings addressed).
+- Fitness ceilings: 3 files over (CONTRIBUTING +5, practice-lineage +1, practice-bootstrap +30) — carried from prior sessions.
+- Napkin 443 lines, distilled 192/200, practice box empty.
+
+---
+
+## Session 2026-03-06 — Branch Diff Review (text→query rename)
+
+### What Was Done
+
+- Generated full unfiltered diff of `feat/search_qol_fixes` vs `main` (4,785 lines, 106 files, +1019/-599). All changes are uncommitted — no commits ahead of main.
+- Wrote diff to `feat-search-qol-fixes-vs-main.diff` at repo root.
+- Code reviewer sub-agent reviewed the full diff. Verdict: APPROVED WITH SUGGESTIONS.
+
+### Findings from Review
+
+- 4 private functions in `rrf-query-builders.ts` (lines 187-330) still use `text` as parameter name — missed in Phase 2 corrections
+- 3 stale `@param q` TSDoc descriptions in `lessons.ts`, `units.ts`, `sequences.ts` say "with text"
+- All other changes are correct — schema-first compliance confirmed, destructuring aliases removed, observability chain fully renamed
+
+### Patterns to Remember
+
+- When generating diffs for review, include ALL files — don't filter based on assumptions about what's "important"
+- The `rrf-query-builders.ts` private functions were missed because the plan listed `rrf-query-helpers.ts` (11 functions) but not `rrf-query-builders.ts` (4 functions) — always verify by searching the full codebase, not just the plan inventory
+
+---
+
+## Session 2026-03-06 — Stale Reference Sweep
+
+### What Was Done
+
+- Swept all non-archive markdown files for stale cross-references. Found 39 stale references across ~25 files; 18 were in non-archive files (the rest are in archive directories — historical records, not updated per policy).
+- **Category A** (10 files): Updated `semantic-search/active/X` → `semantic-search/archive/completed/X` for plans that had been archived but whose referencing files were never updated. Affected 4 ADRs (092, 096, 100, 111), 2 app docs (IR-METRICS, GROUND-TRUTH-GUIDE), and 4 agent files (experience, research, analysis).
+- **Category B** (7 files): Replaced dead links to ephemeral `.cursor/plans/agent_artefact_portability_2c71274b.plan.md` (deleted Cursor plan) with canonical [ADR-125](docs/architecture/architectural-decisions/125-agent-artefact-portability.md). Affected agentic-engineering plans, devx plan, and roadmap.
+- Verified remaining `semantic-search/active/` references are all legitimate (2 genuinely active plans, template examples, convention descriptions) or in archive files.
+
+### Patterns to Remember
+
+- Stale reference sweeps should check TWO patterns: (1) `active/` plans that moved to `archive/completed/`, and (2) deleted `.cursor/plans/` ephemeral plans.
+- When a Cursor plan is completed and deleted, its references should be updated to the permanent record (usually the ADR it delivered).
+
+---
+
+## Session 2026-03-06 — download-asset Cross-Reference Guidance Fix
+
+### What Was Done
+
+- Diagnosed why agents consistently fail to use `download-asset` when users ask for download links: the `get-lessons-assets` tool description actively steers agents to the Oak website, never mentioning `download-asset`
+- Planned and implemented cross-references across all four MCP guidance surfaces:
+  1. **Tool description** (`ASSET_DOWNLOAD_NOTE` in `tool-description.ts`): primary action is now `download-asset`, website is stdio fallback
+  2. **Workflow** (`lessonPlanning` in `tool-guidance-workflows.ts`): added step 6 for `download-asset`
+  3. **Quick Start** (`getGettingStartedMarkdown()` in `documentation-resources.ts`): added step 4
+  4. **Prompt** (`getLessonPlanningMessages()` in `mcp-prompt-messages.ts`): added step 7 and updated output bullets
+- Regenerated tool definitions via `pnpm sdk-codegen`; verified cross-reference appears in all three generated asset tool files
+- Quality gates: build, type-check, lint, format, 42 tests in affected modules all pass (40 failures elsewhere from another agent's in-flight `text`-to-`query` rename)
+- Three specialist reviews (mcp-reviewer, code-reviewer, docs-adr-reviewer): all APPROVED, one WARNING remediated (added stdio fallback to workflow step note)
+
+### Patterns to Remember
+
+- **Four MCP guidance surfaces**: tool `description`, workflow data (flows to `get-curriculum-model` + `docs://oak/workflows.md`), documentation resources (`docs://oak/getting-started.md`), and prompt messages. All four must agree when a multi-tool workflow changes.
+- **Tool descriptions are the highest leverage**: per MCP spec, tools are model-controlled via their `description` field. If a description actively directs the agent away from a companion tool, the model cannot discover the intended workflow — even if the companion tool's own description is perfect.
+- **Cross-tool references should be bidirectional**: `download-asset` already pointed back to `get-lessons-assets` ("from a previous get-lessons-assets call"), but the reverse link was missing. Both directions are now connected.
+- **`getWorkflowsMarkdown()` omits 2 of 7 workflows** (`exploreTopic`, `discoverCurriculum`): pre-existing gap — the `docs://oak/workflows.md` resource shows fewer workflows than `get-curriculum-model`. Worth a future fix.
+
+### Reviewer Invocations
+
+- mcp-reviewer: WARNING (stdio fallback consistency) — remediated
+- code-reviewer: APPROVED
+- docs-adr-reviewer: APPROVED with WARNING (same stdio note) — remediated
+
+---
+
 ## Session 2026-03-06 — Asset Download Proxy Review & Remediation
 
 ### What Was Done

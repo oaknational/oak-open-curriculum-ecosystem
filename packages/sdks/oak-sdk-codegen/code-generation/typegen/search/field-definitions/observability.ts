@@ -61,7 +61,7 @@ export const META_INDEX_FIELDS: IndexFieldDefinitions = [
  * Contains 9 fields (5 required, 4 optional):
  * - `@timestamp`: When the zero-hit search occurred (ES date field)
  * - search_scope: Which index was searched (lessons, units, sequences, etc.)
- * - query: The search text that returned no results
+ * - query: The search query that returned no results
  * - filters: Applied filters (key stages, subjects, years) as flattened object
  * - index_version: Which data version was searched against
  * - request_id: Optional correlation ID for distributed tracing

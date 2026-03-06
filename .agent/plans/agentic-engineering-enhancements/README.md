@@ -23,7 +23,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `2026-02-21-cross-agent-standardisation-landscape.research.md` | Research | Landscape of cross-agent standards (AGENTS.md, Skills, MCP, A2A) |
 | `augmented-engineering-practices.research.md` | Research | Industry evidence base for AI-augmented engineering |
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
-| `current/artefact-portability-hardening.plan.md` | Plan (Current) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
+| `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 
 ## Read Order

@@ -11,7 +11,7 @@
  * import { createCliSdk } from './create-cli-sdk.js';
  *
  * const sdk = createCliSdk(config.env);
- * const results = await sdk.retrieval.searchLessons({ text: 'fractions' });
+ * const results = await sdk.retrieval.searchLessons({ query: 'fractions' });
  * ```
  */
 

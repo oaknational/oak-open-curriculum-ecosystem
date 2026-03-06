@@ -2,7 +2,7 @@
 
 **Date**: 2026-02-14
 **Produced by**: WS0 of the
-[Developer Onboarding Experience Plan](../plans/semantic-search/active/developer-onboarding-experience.plan.md)
+[Developer Onboarding Experience Plan](../plans/semantic-search/archive/completed/developer-onboarding-experience.plan.md)
 
 ---
 
@@ -341,7 +341,7 @@ file is redundant and misleading.
 | File | Purpose | Status | Action |
 | --- | --- | --- | --- |
 | `high-level-plan.md` | Strategic overview | Stale | Update -- Item #4 "Notion MCP Workspace Removal" should be marked complete |
-| `semantic-search/active/developer-onboarding-experience.plan.md` | This plan | Current | Keep as-is |
+| `semantic-search/archive/completed/developer-onboarding-experience.plan.md` | This plan | Completed | Archived |
 | `semantic-search/README.md` | Semantic search navigation | Current | Keep as-is |
 | `semantic-search/roadmap.md` | Search roadmap | Current | Keep as-is |
 | `semantic-search/search-acceptance-criteria.md` | GT categories and criteria | Current | Keep as-is |

@@ -46,7 +46,7 @@ export type UnitSearchFunction = (
  * Uses AllSubjectSlug to support KS4 science variants.
  */
 export interface RunUnitQueryInput {
-  /** The search query text. */
+  /** The search query. */
   readonly query: string;
   /** Map of unit slug to expected relevance score. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
@@ -131,7 +131,7 @@ export async function runUnitQuery(
   const start = performance.now();
 
   const sdkParams: SearchUnitsParams = {
-    text: input.query,
+    query: input.query,
     subject: toSearchSubject(input.subject),
     keyStage: input.queryKeyStage,
     size: 10,

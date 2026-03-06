@@ -43,7 +43,7 @@ export type SequenceSearchFunction = (
  * Input parameters for running a single sequence benchmark query.
  */
 export interface RunSequenceQueryInput {
-  /** The search query text. */
+  /** The search query. */
   readonly query: string;
   /** Map of sequence slug to expected relevance score. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
@@ -93,7 +93,7 @@ export async function runSequenceQuery(
 
   // Build SDK params from benchmark input
   const sdkParams: SearchSequencesParams = {
-    text: input.query,
+    query: input.query,
     subject: input.subject,
     phaseSlug: input.phase,
     size: 10,

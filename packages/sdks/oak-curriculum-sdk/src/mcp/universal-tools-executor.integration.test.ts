@@ -106,7 +106,7 @@ describe('createUniversalToolExecutor', () => {
     });
 
     const result = await callUniversalTool('search', {
-      text: 'photosynthesis',
+      query: 'photosynthesis',
       scope: 'lessons',
     });
 

@@ -48,7 +48,7 @@ const MAX_EVENTS = 200;
  * @example
  * ```typescript
  * const observe = createObservabilityService(esClient, config, logger);
- * await observe.recordZeroHit({ scope: 'lessons', text: 'query' });
+ * await observe.recordZeroHit({ scope: 'lessons', query: 'test search' });
  * const summary = observe.getZeroHitSummary();
  * ```
  */
@@ -78,7 +78,7 @@ export function createObservabilityService(
 /**
  * Record a zero-hit event in memory and optionally persist to Elasticsearch.
  *
- * @param payload - Zero-hit payload (scope, text, filters, etc.)
+ * @param payload - Zero-hit payload (scope, query, filters, etc.)
  * @param events - Mutable in-memory event store
  * @param zeroHitConfig - Zero-hit configuration (persistence)
  * @param client - Elasticsearch client
@@ -97,7 +97,7 @@ async function recordZeroHit(
   const event: ZeroHitEvent = {
     timestamp: payload.timestamp ?? Date.now(),
     scope: payload.scope,
-    text: payload.text,
+    query: payload.query,
     filters: { ...payload.filters },
     indexVersion: payload.indexVersion,
   };
@@ -107,7 +107,7 @@ async function recordZeroHit(
     events.length = MAX_EVENTS;
   }
 
-  logger?.debug('Zero-hit event recorded', { scope: payload.scope, text: payload.text });
+  logger?.debug('Zero-hit event recorded', { scope: payload.scope, query: payload.query });
 
   if (zeroHitConfig.persistenceEnabled) {
     try {
@@ -204,7 +204,7 @@ async function indexEvent(event: ZeroHitEvent, client: Client, indexName: string
   const doc = {
     '@timestamp': new Date(event.timestamp).toISOString(),
     search_scope: event.scope,
-    text: event.text,
+    query: event.query,
     filters: event.filters,
     index_version: event.indexVersion,
   };

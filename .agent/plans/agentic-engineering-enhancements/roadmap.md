@@ -17,11 +17,11 @@ are authoritative for execution tasks.
 
 Authoritative active execution sources:
 
-1. [phase-0-templates-and-components-foundation.md](active/phase-0-templates-and-components-foundation.md)
+1. ~~phase-0-templates-and-components-foundation.md~~ (archived)
 2. [phase-1-hallucination-guarding-execution.md](active/phase-1-hallucination-guarding-execution.md)
 3. [phase-2-evidence-based-claims-execution.md](active/phase-2-evidence-based-claims-execution.md)
 4. [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
-5. ~~[phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)~~ **Superseded** by Agent Artefact Portability plan (ADR-125)
+5. ~~phase-4-cross-agent-standardisation-execution.md~~ **Superseded** by Agent Artefact Portability plan (ADR-125) (archived)
 6. [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
 
 ---
@@ -84,8 +84,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 ### Phase 0 — Planning System and Template Hardening
 
-- Active plan:
-  [phase-0-templates-and-components-foundation.md](active/phase-0-templates-and-components-foundation.md)
+- Active plan: ~~phase-0-templates-and-components-foundation.md~~ (archived)
 - Status: ✅ Complete (2026-02-24)
 - Done when:
   - templates/components inventory is intentionally structured and documented
@@ -140,7 +139,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 ### Phase 4 — Cross-Agent Standardisation Execution
 
-> **SUPERSEDED**: All cross-agent standardisation work has been absorbed into the [Agent Artefact Portability plan](../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+> **SUPERSEDED**: All cross-agent standardisation work has been absorbed into [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ### Phase 5 — Mutation Testing Execution
 

@@ -35,7 +35,7 @@ async function searchUnits(query: string): Promise<{
   const start = performance.now();
 
   const request = buildUnitRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',

@@ -28,7 +28,7 @@ export async function searchLessonsWithMode(
   query: string,
   mode: RetrievalMode,
 ): Promise<readonly string[]> {
-  const params = { ...BASE_PARAMS, text: query };
+  const params = { ...BASE_PARAMS, query };
 
   let request;
   switch (mode) {
@@ -52,7 +52,7 @@ export async function searchUnitsWithMode(
   query: string,
   mode: RetrievalMode,
 ): Promise<readonly string[]> {
-  const params = { ...BASE_PARAMS, text: query };
+  const params = { ...BASE_PARAMS, query };
 
   let request;
   switch (mode) {

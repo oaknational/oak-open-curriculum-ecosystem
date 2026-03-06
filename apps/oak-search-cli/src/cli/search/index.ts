@@ -61,7 +61,7 @@ function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       try {
         const sdk = createCliSdk(cliEnv);
         const result = await handleSearchLessons(sdk.retrieval, {
-          text: query,
+          query,
           subject: validateSubject(opts.subject),
           keyStage: validateKeyStage(opts.keyStage),
           size: parseInt(opts.size, 10),
@@ -97,7 +97,7 @@ function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       try {
         const sdk = createCliSdk(cliEnv);
         const result = await handleSearchUnits(sdk.retrieval, {
-          text: query,
+          query,
           subject: validateSubject(opts.subject),
           keyStage: validateKeyStage(opts.keyStage),
           size: parseInt(opts.size, 10),
@@ -132,7 +132,7 @@ function registerSequencesCmd(parent: Command, cliEnv: CliSdkEnv): void {
       try {
         const sdk = createCliSdk(cliEnv);
         const result = await handleSearchSequences(sdk.retrieval, {
-          text: query,
+          query,
           subject: validateSubject(opts.subject),
           size: parseInt(opts.size, 10),
         });

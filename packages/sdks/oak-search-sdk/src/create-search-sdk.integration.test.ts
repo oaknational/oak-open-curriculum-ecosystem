@@ -221,7 +221,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'expanding brackets',
+        query: 'expanding brackets',
         subject: 'maths',
         keyStage: 'ks3',
       });
@@ -240,7 +240,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'fractions',
+        query: 'fractions',
         size: 5,
         from: 10,
       });
@@ -255,7 +255,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'organic chemistry',
+        query: 'organic chemistry',
         subject: 'science',
         keyStage: 'ks4',
         tier: 'higher',
@@ -271,7 +271,7 @@ describe('RetrievalService', () => {
     it('excludes scoring-only fields from _source to reduce payload size', async () => {
       const deps = createTestDeps();
       const sdk = createSearchSdk({ deps, config: createTestConfig() });
-      await sdk.retrieval.searchLessons({ text: 'photosynthesis' });
+      await sdk.retrieval.searchLessons({ query: 'photosynthesis' });
 
       const excludes = extractSourceExcludes(deps.esClient);
       expect(excludes).toContain('lesson_content');
@@ -286,7 +286,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchUnits({
-        text: 'fractions',
+        query: 'fractions',
         subject: 'maths',
         keyStage: 'ks2',
       });
@@ -305,7 +305,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchSequences({
-        text: 'secondary maths',
+        query: 'secondary maths',
         phaseSlug: 'secondary',
       });
 
@@ -321,7 +321,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchSequences({
-        text: 'science',
+        query: 'science',
         includeFacets: true,
       });
 
@@ -337,7 +337,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchThreads({
-        text: 'algebra equations progression',
+        query: 'algebra equations progression',
         subject: 'maths',
       });
 
@@ -355,7 +355,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchThreads({
-        text: 'geometry shapes',
+        query: 'geometry shapes',
       });
 
       expect(result.ok).toBe(true);
@@ -554,7 +554,7 @@ describe('ObservabilityService', () => {
 
       const result = await observability.recordZeroHit({
         scope: 'lessons',
-        text: 'quantum computing ks2',
+        query: 'quantum computing ks2',
         filters: { subject: 'science', keyStage: 'ks2' },
         indexVersion: 'v-test',
       });
@@ -594,7 +594,7 @@ describe('ObservabilityService', () => {
       const result = await observability.persistZeroHitEvent({
         timestamp: Date.now(),
         scope: 'lessons',
-        text: 'test query',
+        query: 'test query',
         filters: { subject: 'maths' },
         indexVersion: 'v-test',
       });

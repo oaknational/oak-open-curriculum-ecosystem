@@ -54,7 +54,7 @@ describe('zero-hit persistence', () => {
       {
         timestamp: 1_700_000_000_000,
         scope: 'lessons',
-        text: 'fractions',
+        query: 'fractions',
         filters: { subject: 'maths' },
         indexVersion: 'v1',
         tookMs: 123,
@@ -122,7 +122,7 @@ describe('zero-hit persistence', () => {
     expect(telemetry.summary.latestIndexVersion).toBe('v5');
     expect(telemetry.recent[0]).toMatchObject({
       scope: 'units',
-      text: 'angles',
+      query: 'angles',
       indexVersion: 'v5',
     });
   });

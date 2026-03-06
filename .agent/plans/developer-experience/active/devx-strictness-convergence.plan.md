@@ -50,7 +50,7 @@ Delegated/partially folded architectural-enforcement sources:
 - `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 
-Skills/commands/rules portability: **Superseded** — all skills-first architecture, command unification, and rules consolidation work has moved to the [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and [ADR-125](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+Skills/commands/rules portability: **Superseded** — all skills-first architecture, command unification, and rules consolidation work has moved to [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ### Scope Expansion (2026-03-04)
 
@@ -68,7 +68,7 @@ Explicit deferral:
 
 ### Phase 2 Scope Addendum (2026-03-04)
 
-The skills-first architecture, skill structure contract, and command/rules portability work that was originally scoped here has been **extracted to the [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)** and implemented under [ADR-125](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan retains only the ESLint strictness concerns.
+The skills-first architecture, skill structure contract, and command/rules portability work that was originally scoped here has been **extracted to [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)**. This plan retains only the ESLint strictness concerns.
 
 ---
 

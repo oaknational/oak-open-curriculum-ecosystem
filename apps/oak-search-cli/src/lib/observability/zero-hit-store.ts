@@ -11,7 +11,7 @@ type ZeroHitScope = SearchScope;
 export interface ZeroHitEvent {
   timestamp: number;
   scope: ZeroHitScope;
-  text: string;
+  query: string;
   filters: Record<string, string>;
   indexVersion: string;
   tookMs?: number;
@@ -32,7 +32,7 @@ export function recordZeroHitEvent(
   const entry: ZeroHitEvent = {
     timestamp: event.timestamp ?? Date.now(),
     scope: event.scope,
-    text: event.text,
+    query: event.query,
     filters: event.filters,
     indexVersion: event.indexVersion,
     tookMs: event.tookMs,

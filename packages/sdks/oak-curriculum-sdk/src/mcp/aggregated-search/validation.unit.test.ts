@@ -11,12 +11,12 @@ import { validateSearchSdkArgs } from './validation.js';
 
 describe('validateSearchSdkArgs', () => {
   describe('valid inputs', () => {
-    it('accepts minimal input with text and scope', () => {
-      const result = validateSearchSdkArgs({ text: 'photosynthesis', scope: 'lessons' });
+    it('accepts minimal input with query and scope', () => {
+      const result = validateSearchSdkArgs({ query: 'photosynthesis', scope: 'lessons' });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.text).toBe('photosynthesis');
+        expect(result.value.query).toBe('photosynthesis');
         expect(result.value.scope).toBe('lessons');
       }
     });
@@ -24,7 +24,7 @@ describe('validateSearchSdkArgs', () => {
     it.each([['lessons'], ['units'], ['threads'], ['sequences'], ['suggest']] as const)(
       'accepts scope "%s"',
       (scope) => {
-        const result = validateSearchSdkArgs({ text: 'test', scope });
+        const result = validateSearchSdkArgs({ query: 'test', scope });
 
         expect(result.ok).toBe(true);
         if (result.ok) {
@@ -35,7 +35,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('accepts common filters (subject, keyStage, size, from)', () => {
       const result = validateSearchSdkArgs({
-        text: 'fractions',
+        query: 'fractions',
         scope: 'lessons',
         subject: 'maths',
         keyStage: 'ks2',
@@ -54,7 +54,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('accepts lesson-specific filters', () => {
       const result = validateSearchSdkArgs({
-        text: 'trigonometry',
+        query: 'trigonometry',
         scope: 'lessons',
         unitSlug: 'trigonometry-unit',
         tier: 'higher',
@@ -77,7 +77,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('normalises numeric year to string', () => {
       const result = validateSearchSdkArgs({
-        text: 'algebra',
+        query: 'algebra',
         scope: 'lessons',
         year: 7,
       });
@@ -89,8 +89,8 @@ describe('validateSearchSdkArgs', () => {
     });
 
     it('normalises year boundary values (1 and 11)', () => {
-      const low = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 1 });
-      const high = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 11 });
+      const low = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year: 1 });
+      const high = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year: 11 });
 
       expect(low.ok).toBe(true);
       if (low.ok) {
@@ -104,7 +104,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('accepts unit-specific filters', () => {
       const result = validateSearchSdkArgs({
-        text: 'fractions',
+        query: 'fractions',
         scope: 'units',
         minLessons: 5,
         highlight: true,
@@ -119,7 +119,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('accepts sequence-specific filters', () => {
       const result = validateSearchSdkArgs({
-        text: 'science',
+        query: 'science',
         scope: 'sequences',
         phaseSlug: 'secondary',
         category: 'science',
@@ -134,7 +134,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('accepts suggest-specific filters', () => {
       const result = validateSearchSdkArgs({
-        text: 'photo',
+        query: 'photo',
         scope: 'suggest',
         limit: 10,
       });
@@ -145,12 +145,12 @@ describe('validateSearchSdkArgs', () => {
       }
     });
 
-    it('trims whitespace from text', () => {
-      const result = validateSearchSdkArgs({ text: '  photosynthesis  ', scope: 'lessons' });
+    it('trims whitespace from query', () => {
+      const result = validateSearchSdkArgs({ query: '  photosynthesis  ', scope: 'lessons' });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.text).toBe('photosynthesis');
+        expect(result.value.query).toBe('photosynthesis');
       }
     });
   });
@@ -166,28 +166,28 @@ describe('validateSearchSdkArgs', () => {
       expect(result.ok).toBe(false);
     });
 
-    it('rejects missing text', () => {
+    it('rejects missing query', () => {
       const result = validateSearchSdkArgs({ scope: 'lessons' });
       expect(result.ok).toBe(false);
     });
 
-    it('rejects empty text', () => {
-      const result = validateSearchSdkArgs({ text: '', scope: 'lessons' });
+    it('rejects empty query', () => {
+      const result = validateSearchSdkArgs({ query: '', scope: 'lessons' });
       expect(result.ok).toBe(false);
     });
 
-    it('rejects whitespace-only text', () => {
-      const result = validateSearchSdkArgs({ text: '   ', scope: 'lessons' });
+    it('rejects whitespace-only query', () => {
+      const result = validateSearchSdkArgs({ query: '   ', scope: 'lessons' });
       expect(result.ok).toBe(false);
     });
 
     it('rejects missing scope', () => {
-      const result = validateSearchSdkArgs({ text: 'test' });
+      const result = validateSearchSdkArgs({ query: 'test' });
       expect(result.ok).toBe(false);
     });
 
     it('rejects invalid scope', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'invalid' });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'invalid' });
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -197,7 +197,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('rejects invalid keyStage', () => {
       const result = validateSearchSdkArgs({
-        text: 'test',
+        query: 'test',
         scope: 'lessons',
         keyStage: 'ks5',
       });
@@ -210,7 +210,7 @@ describe('validateSearchSdkArgs', () => {
 
     it('rejects invalid subject', () => {
       const result = validateSearchSdkArgs({
-        text: 'test',
+        query: 'test',
         scope: 'lessons',
         subject: 'not-a-subject',
       });
@@ -222,38 +222,38 @@ describe('validateSearchSdkArgs', () => {
     });
 
     it('rejects size below minimum', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', size: 0 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', size: 0 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects size above maximum', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', size: 101 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', size: 101 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects negative from', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', from: -1 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', from: -1 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects year number below minimum (0)', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 0 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year: 0 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects year number above maximum (12)', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 12 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year: 12 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects non-integer year number', () => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', year: 3.5 });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year: 3.5 });
       expect(result.ok).toBe(false);
     });
 
     it('rejects unknown properties', () => {
       const result = validateSearchSdkArgs({
-        text: 'test',
+        query: 'test',
         scope: 'lessons',
         unknownProp: 'value',
       });
@@ -261,23 +261,23 @@ describe('validateSearchSdkArgs', () => {
     });
   });
 
-  describe('text-less thread search', () => {
-    it('accepts empty text for threads scope with subject filter', () => {
+  describe('query-less thread search', () => {
+    it('accepts empty query for threads scope with subject filter', () => {
       const result = validateSearchSdkArgs({
-        text: '',
+        query: '',
         scope: 'threads',
         subject: 'maths',
       });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.text).toBe('');
+        expect(result.value.query).toBe('');
         expect(result.value.scope).toBe('threads');
         expect(result.value.subject).toBe('maths');
       }
     });
 
-    it('accepts missing text for threads scope with keyStage filter', () => {
+    it('accepts missing query for threads scope with keyStage filter', () => {
       const result = validateSearchSdkArgs({
         scope: 'threads',
         keyStage: 'ks3',
@@ -285,15 +285,15 @@ describe('validateSearchSdkArgs', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.text).toBe('');
+        expect(result.value.query).toBe('');
         expect(result.value.scope).toBe('threads');
         expect(result.value.keyStage).toBe('ks3');
       }
     });
 
-    it('accepts empty text for threads scope with both subject and keyStage', () => {
+    it('accepts empty query for threads scope with both subject and keyStage', () => {
       const result = validateSearchSdkArgs({
-        text: '',
+        query: '',
         scope: 'threads',
         subject: 'maths',
         keyStage: 'ks3',
@@ -302,19 +302,19 @@ describe('validateSearchSdkArgs', () => {
       expect(result.ok).toBe(true);
     });
 
-    it('rejects empty text for threads scope with no filter', () => {
+    it('rejects empty query for threads scope with no filter', () => {
       const result = validateSearchSdkArgs({
-        text: '',
+        query: '',
         scope: 'threads',
       });
 
       expect(result.ok).toBe(false);
     });
 
-    it('still rejects empty text for non-thread scopes', () => {
+    it('still rejects empty query for non-thread scopes', () => {
       for (const scope of ['lessons', 'units', 'sequences', 'suggest']) {
         const result = validateSearchSdkArgs({
-          text: '',
+          query: '',
           scope,
           subject: 'maths',
         });
@@ -326,7 +326,7 @@ describe('validateSearchSdkArgs', () => {
 
   describe('all key stages accepted', () => {
     it.each([['ks1'], ['ks2'], ['ks3'], ['ks4']] as const)('accepts keyStage "%s"', (keyStage) => {
-      const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', keyStage });
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', keyStage });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -339,7 +339,7 @@ describe('validateSearchSdkArgs', () => {
     it.each([['maths'], ['science'], ['english'], ['history'], ['geography']] as const)(
       'accepts subject "%s"',
       (subject) => {
-        const result = validateSearchSdkArgs({ text: 'test', scope: 'lessons', subject });
+        const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', subject });
 
         expect(result.ok).toBe(true);
         if (result.ok) {
