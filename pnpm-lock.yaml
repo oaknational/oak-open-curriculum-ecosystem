@@ -453,8 +453,8 @@ importers:
         specifier: ^1.18.3
         version: 1.18.3(react@19.2.3)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
