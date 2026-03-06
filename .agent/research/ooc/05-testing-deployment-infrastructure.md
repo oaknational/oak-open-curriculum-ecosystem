@@ -399,7 +399,7 @@ pnpm load-test
 
 ```hcl
 module "vercel" {
-  source                           = "github.com/oaknational/oak-terraform-modules//modules/vercel_project?ref=v1.3.4"
+  source                           = "github.com/oaknational/oak-terraform-modules//modules/vercel_project?ref=v1.6.0"
   build_command                    = "pnpm build"
   build_type                       = "website"
   cloudflare_zone_domain           = var.cloudflare_zone_domain
@@ -995,24 +995,3 @@ export async function GET() {
    - Move from serverless to Kubernetes
    - Better control over resources
    - Custom runtime optimization
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
