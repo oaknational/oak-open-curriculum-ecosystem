@@ -36,7 +36,7 @@ The indexing pipeline processes curriculum data from bulk download files and the
 ### Shared Utilities
 
 - **`canonical-url-generator.ts`** - Single source of truth for all canonical URL patterns
-- **`slug-derivation.ts`** - Extracting subject/phase from sequence slugs
+- Slug derivation (subject/phase extraction from sequence slugs) lives in `@oaknational/curriculum-sdk` (`sequence-slug-derivation.ts`)
 
 ## DRY Pattern for Document Builders
 
@@ -235,7 +235,6 @@ pnpm es:ingest -- --no-retry
 | `sequence-document-builder.ts` | Creates sequence index documents                |
 | `sequence-facets.ts`           | Creates sequence facet documents                |
 | `canonical-url-generator.ts`   | Single source of truth for URL patterns         |
-| `slug-derivation.ts`           | Extracting subject/phase from sequence slugs    |
 
 ## Related Documentation
 

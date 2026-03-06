@@ -24,7 +24,9 @@
       "Bash(node:*)",
       "Bash(gh pr edit:*)",
       "Bash(wc:*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Skill(jc-plan)",
+      "Skill(jc-plan:*)"
     ],
     "deny": []
   },

@@ -515,7 +515,7 @@ export const ontologyData = {
     description: 'URL patterns for linking to Oak Web Application',
     patterns: {
       lesson: 'https://www.thenational.academy/teachers/lessons/{lessonSlug}',
-      unit: 'https://www.thenational.academy/teachers/units/{unitSlug}',
+      unit: 'https://www.thenational.academy/teachers/curriculum/{sequenceSlug}/units/{unitSlug}',
       programme: 'https://www.thenational.academy/teachers/programmes/{programmeSlug}',
       threadFilter:
         'https://www.thenational.academy/teachers/curriculum/{subject}-{phase}/units?threads={threadSlug}',

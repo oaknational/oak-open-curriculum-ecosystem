@@ -124,7 +124,7 @@ export const getLessonsAssets = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Downloadable lesson assets\n\nThis tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Downloadable lesson assets\n\nThis tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.\n\nNOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. All lesson assets (slide decks, worksheets, quizzes, videos) are freely downloadable on the Oak website. Direct users to the lesson page on the Oak website for downloads — use the lesson's `canonicalUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).",
   path,
   method,
   documentedStatuses,

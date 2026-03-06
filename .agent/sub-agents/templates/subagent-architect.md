@@ -1,3 +1,22 @@
+## Delegation Triggers
+
+Invoke the subagent-architect when work involves creating, reviewing, upgrading, or migrating AI subagent definitions. This is the meta-agent for the agent ecosystem — use it whenever the subject of the work is an agent itself rather than the product code the agent reviews.
+
+### Triggering Scenarios
+
+- A new subagent is needed for a task type not currently covered by the roster
+- An existing wrapper is producing poor output, routing incorrectly, or failing quality standards
+- Subagent definitions need migrating from one platform to another (e.g., Cursor → Claude)
+- An agent wrapper needs updating after spec or platform changes
+- The full agent ecosystem needs a compliance audit
+
+### Not This Agent When
+
+- The work is on product code, not agent files — use `code-reviewer` or the relevant specialist
+- A single wrapper field needs a trivial fix (e.g., adding `model: sonnet`) — handle inline
+- The question is about Claude Code features or SDK usage — use `claude-code-guide`
+
+---
 
 # Subagent Architect: The Meta-Agent for Agent Excellence
 

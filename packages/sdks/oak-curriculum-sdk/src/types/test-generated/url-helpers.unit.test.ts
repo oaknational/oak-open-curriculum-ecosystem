@@ -32,15 +32,15 @@ describe('generateCanonicalUrl', () => {
 
   it('should generate URL for sequence', () => {
     const url = generateCanonicalUrl('sequence', 'sequence:maths-ks2');
-    expect(url).toBe('https://www.thenational.academy/teachers/programmes/maths-ks2/units');
+    expect(url).toBe('https://www.thenational.academy/teachers/curriculum/maths-ks2/units');
   });
 
   it('should generate URL for unit with context', () => {
     const url = generateCanonicalUrl('unit', 'unit:fractions-1', {
-      unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+      unit: { sequenceSlug: 'maths-primary' },
     });
     expect(url).toBe(
-      'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions-1',
+      'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-1',
     );
   });
 
@@ -77,15 +77,15 @@ describe('generateCanonicalUrlWithContext', () => {
 
   it('should generate URL for sequence', () => {
     const url = generateCanonicalUrlWithContext('sequence', 'sequence:maths-ks2');
-    expect(url).toBe('https://www.thenational.academy/teachers/programmes/maths-ks2/units');
+    expect(url).toBe('https://www.thenational.academy/teachers/curriculum/maths-ks2/units');
   });
 
   it('should generate URL for unit with context', () => {
     const url = generateCanonicalUrlWithContext('unit', 'unit:fractions-1', {
-      unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+      unit: { sequenceSlug: 'maths-primary' },
     });
     expect(url).toBe(
-      'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions-1',
+      'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-1',
     );
   });
 
@@ -138,7 +138,7 @@ describe('CONTENT_TYPE_PREFIXES coverage', () => {
     allTypes.forEach((type) => {
       expect(() => {
         generateCanonicalUrl(type, `${type}:test-123`, {
-          unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+          unit: { sequenceSlug: 'maths-primary' },
           subject: { keyStageSlugs: ['ks1'] },
         });
       }).not.toThrow();
@@ -163,7 +163,7 @@ describe('CONTENT_TYPE_PREFIXES coverage', () => {
     }).not.toThrow();
     expect(() => {
       generateCanonicalUrlWithContext('unit', 'unit:test-123', {
-        unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+        unit: { sequenceSlug: 'maths-primary' },
       });
     }).not.toThrow();
     expect(() => {

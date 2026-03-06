@@ -1,6 +1,12 @@
 /**
  * Unit tests for canonical URL generation.
  *
+ * These tests specify the CORRECT URL patterns (post-fix).
+ * URL patterns confirmed against OWA source and live site on 2026-03-05:
+ * - Sequences: `/teachers/curriculum/{sequenceSlug}/units`
+ * - Units: `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}`
+ * - Threads: no OWA page, return `null`
+ *
  * @see canonical-url-generator.ts
  */
 
@@ -9,6 +15,7 @@ import {
   OAK_BASE_URL,
   generateLessonCanonicalUrl,
   generateUnitCanonicalUrl,
+  generateUnitCanonicalUrlFromSequence,
   generateSequenceCanonicalUrl,
   generateThreadCanonicalUrl,
   generateSubjectProgrammesUrl,
@@ -41,21 +48,37 @@ describe('canonical-url-generator', () => {
     it('generates the correct URL for a primary unit', () => {
       const url = generateUnitCanonicalUrl('fractions-year-5', 'maths', 'primary');
       expect(url).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions-year-5',
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-5',
       );
     });
 
     it('generates the correct URL for a secondary unit', () => {
       const url = generateUnitCanonicalUrl('algebra-basics', 'maths', 'secondary');
       expect(url).toBe(
-        'https://www.thenational.academy/teachers/programmes/maths-secondary/units/algebra-basics',
+        'https://www.thenational.academy/teachers/curriculum/maths-secondary/units/algebra-basics',
       );
     });
 
     it('handles subjects with hyphens', () => {
       const url = generateUnitCanonicalUrl('knife-skills', 'cooking-nutrition', 'secondary');
       expect(url).toBe(
-        'https://www.thenational.academy/teachers/programmes/cooking-nutrition-secondary/units/knife-skills',
+        'https://www.thenational.academy/teachers/curriculum/cooking-nutrition-secondary/units/knife-skills',
+      );
+    });
+
+    it('normalises key-stage style phase slugs via shared helper', () => {
+      const url = generateUnitCanonicalUrl('fractions-year-2', 'maths', 'ks1');
+      expect(url).toBe(
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-2',
+      );
+    });
+  });
+
+  describe('generateUnitCanonicalUrlFromSequence', () => {
+    it('uses explicit sequenceSlug for exam-board sequences', () => {
+      const url = generateUnitCanonicalUrlFromSequence('atomic-structure', 'science-secondary-aqa');
+      expect(url).toBe(
+        'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
       );
     });
   });
@@ -63,35 +86,33 @@ describe('canonical-url-generator', () => {
   describe('generateSequenceCanonicalUrl', () => {
     it('generates the correct URL for a primary sequence', () => {
       const url = generateSequenceCanonicalUrl('maths-primary');
-      expect(url).toBe('https://www.thenational.academy/teachers/programmes/maths-primary/units');
+      expect(url).toBe('https://www.thenational.academy/teachers/curriculum/maths-primary/units');
     });
 
     it('generates the correct URL for a secondary sequence', () => {
       const url = generateSequenceCanonicalUrl('english-secondary');
       expect(url).toBe(
-        'https://www.thenational.academy/teachers/programmes/english-secondary/units',
+        'https://www.thenational.academy/teachers/curriculum/english-secondary/units',
       );
     });
 
     it('handles subjects with hyphens in sequence slug', () => {
       const url = generateSequenceCanonicalUrl('design-technology-secondary');
       expect(url).toBe(
-        'https://www.thenational.academy/teachers/programmes/design-technology-secondary/units',
+        'https://www.thenational.academy/teachers/curriculum/design-technology-secondary/units',
       );
     });
   });
 
   describe('generateThreadCanonicalUrl', () => {
-    it('generates the correct URL for a thread', () => {
+    it('returns null for a thread (threads have no OWA page)', () => {
       const url = generateThreadCanonicalUrl('number-multiplication-and-division');
-      expect(url).toBe(
-        'https://www.thenational.academy/teachers/curriculum/threads/number-multiplication-and-division',
-      );
+      expect(url).toBeNull();
     });
 
-    it('handles simple thread slugs', () => {
+    it('returns null for any thread slug', () => {
       const url = generateThreadCanonicalUrl('algebra');
-      expect(url).toBe('https://www.thenational.academy/teachers/curriculum/threads/algebra');
+      expect(url).toBeNull();
     });
   });
 

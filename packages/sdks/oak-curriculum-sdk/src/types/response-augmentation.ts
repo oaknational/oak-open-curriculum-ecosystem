@@ -7,9 +7,15 @@
 
 export type { ContentType } from '@oaknational/sdk-codegen/api-schema';
 
+/**
+ * Unit context for canonical URL generation.
+ *
+ * The `sequenceSlug` is derived from the unit's `subjectSlug` and `phaseSlug`
+ * fields in the API response (e.g. `maths-primary`), normalising legacy phase
+ * values like `ks1`, `ks2`, `ks3`, and `ks4` into canonical URL-safe phases.
+ */
 export interface UnitContext {
-  subjectSlug?: string;
-  phaseSlug?: string;
+  sequenceSlug?: string;
 }
 
 export interface SubjectContext {

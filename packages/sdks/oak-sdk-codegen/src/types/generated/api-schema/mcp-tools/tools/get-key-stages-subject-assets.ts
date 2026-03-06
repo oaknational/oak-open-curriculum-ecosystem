@@ -130,7 +130,7 @@ export const getKeyStagesSubjectAssets = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Assets\n\nThis tool returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Assets\n\nThis tool returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.\n\nNOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. All lesson assets (slide decks, worksheets, quizzes, videos) are freely downloadable on the Oak website. Direct users to the lesson page on the Oak website for downloads — use the lesson's `canonicalUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).",
   path,
   method,
   documentedStatuses,

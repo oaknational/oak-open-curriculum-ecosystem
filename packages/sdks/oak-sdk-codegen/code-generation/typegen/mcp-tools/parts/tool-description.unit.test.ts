@@ -221,4 +221,34 @@ describe('appendToolEnhancements', () => {
   it('returns undefined when description is undefined', () => {
     expect(appendToolEnhancements(undefined, 'get-rate-limit')).toBeUndefined();
   });
+
+  describe('asset download guidance', () => {
+    it('appends download guidance for get-lessons-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-lessons-assets');
+
+      expect(result).toContain('Base description');
+      expect(result).toContain('thenational.academy');
+      expect(result).toContain('canonicalUrl');
+    });
+
+    it('appends download guidance for get-key-stages-subject-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-key-stages-subject-assets');
+
+      expect(result).toContain('thenational.academy');
+      expect(result).toContain('canonicalUrl');
+    });
+
+    it('appends download guidance for get-sequences-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-sequences-assets');
+
+      expect(result).toContain('thenational.academy');
+      expect(result).toContain('canonicalUrl');
+    });
+
+    it('does not append asset guidance to unrelated tools', () => {
+      const result = appendToolEnhancements('Base description', 'get-lessons-summary');
+
+      expect(result).toBe('Base description');
+    });
+  });
 });

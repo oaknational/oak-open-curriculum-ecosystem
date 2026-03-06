@@ -80,6 +80,8 @@ Phase 2: Learner discovery and safeguarding gate review    📋 PLANNED
 - Segment briefs:
   - [educator-end-users/README.md](educator-end-users/README.md)
   - [engineering-end-users/README.md](engineering-end-users/README.md)
+- Executable plans (current):
+  - [engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md](engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md)
 - Done when:
   - educator core journeys are stable enough for alpha usage
   - engineering/Ed-Tech consumers have predictable contracts and diagnostics

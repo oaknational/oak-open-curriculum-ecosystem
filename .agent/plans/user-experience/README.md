@@ -29,6 +29,7 @@ This collection closes that gap by defining:
 | `public-alpha-experience-contract.md` | Contract | Must-have user outcomes and no-go conditions for alpha |
 | `educator-end-users/README.md` | Boundary brief | Teacher-focused goals, dependencies, and success signals |
 | `engineering-end-users/README.md` | Boundary brief | SDK/MCP consumer goals for developers and Ed-Tech teams |
+| `engineering-end-users/current/README.md` | Executable index | Current queued plans for engineering and Ed-Tech end users |
 | `learner-end-users/README.md` | Boundary brief | Deferred learner scope, safeguards, and promotion triggers |
 
 ---
@@ -90,7 +91,7 @@ See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 | [semantic-search/future/08-experience-surfaces-and-extensions/README.md](../semantic-search/future/08-experience-surfaces-and-extensions/README.md) | Post-alpha experience capabilities and renderer sequencing |
 | [security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md) | Safety, evidence quality, and trust boundaries for end users |
 | [architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md) | Reliability, observability, and operational quality surface as UX |
-| [developer-experience/sdk-publishing-and-versioning-plan.md](../developer-experience/sdk-publishing-and-versioning-plan.md) | Developer-facing clarity and upgrade safety affect adoption |
+| [developer-experience/future/sdk-publishing-and-versioning-plan.md](../developer-experience/future/sdk-publishing-and-versioning-plan.md) | Developer-facing clarity and upgrade safety affect adoption |
 | [external/ooc-api-wishlist/index.md](../external/ooc-api-wishlist/index.md) | Upstream API/schema constraints that shape UX feasibility |
 
 ---

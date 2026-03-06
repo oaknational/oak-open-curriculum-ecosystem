@@ -110,7 +110,7 @@ export function buildUnitsSearchFixture(
 /** Threads use `subject_slugs` (plural array), not `subject_slug`. */
 type RendererThreadFields = Pick<
   SearchThreadIndexDoc,
-  'thread_title' | 'thread_slug' | 'thread_url' | 'unit_count' | 'subject_slugs'
+  'thread_title' | 'thread_slug' | 'unit_count' | 'subject_slugs'
 >;
 
 interface ThreadFixtureResult {

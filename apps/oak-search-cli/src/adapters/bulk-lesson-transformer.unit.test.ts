@@ -49,7 +49,8 @@ function createMinimalUnitInfo(overrides?: Partial<LessonUnitInfo>): LessonUnitI
   return {
     unitSlug: 'test-unit',
     unitTitle: 'Test Unit',
-    canonicalUrl: 'https://www.thenational.academy/teachers/units/test-unit',
+    canonicalUrl:
+      'https://www.thenational.academy/teachers/curriculum/maths-primary/units/test-unit',
     ...overrides,
   };
 }
@@ -265,7 +266,8 @@ describe('bulk-lesson-transformer', () => {
         const unitInfo = createMinimalUnitInfo({
           unitSlug: 'fractions-year-4',
           unitTitle: 'Fractions Year 4',
-          canonicalUrl: 'https://www.thenational.academy/teachers/units/fractions-year-4',
+          canonicalUrl:
+            'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
         });
 
         const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
@@ -273,7 +275,7 @@ describe('bulk-lesson-transformer', () => {
         expect(doc.unit_ids).toEqual(['fractions-year-4']);
         expect(doc.unit_titles).toEqual(['Fractions Year 4']);
         expect(doc.unit_urls).toEqual([
-          'https://www.thenational.academy/teachers/units/fractions-year-4',
+          'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
         ]);
       });
 

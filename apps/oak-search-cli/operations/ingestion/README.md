@@ -40,8 +40,8 @@ pnpm es:ingest -- --api --all --incremental
 
 ### Incremental vs Force Mode
 
-- **Incremental (default)**: Uses ES `create` action. Skips existing documents.
-  Enables resumable ingestion if interrupted.
+- **Incremental**: Uses ES `create` action and skips existing documents.
+  Enable with `--incremental` for resumable ingestion.
 - **Overwrite (default)**: Uses ES `index` action. Overwrites existing documents.
   Use for full re-index or schema changes.
 
@@ -101,10 +101,10 @@ pnpm es:status
 If ingestion is interrupted, simply re-run the same command:
 
 ```bash
-pnpm es:ingest -- --api --all --verbose
+pnpm es:ingest -- --api --all --incremental --verbose
 ```
 
-The default incremental mode skips already-indexed documents, allowing resumption.
+With `--incremental`, the CLI skips already-indexed documents, allowing resumption.
 
 ### Re-indexing After Schema Changes
 
@@ -115,6 +115,26 @@ pnpm es:setup reset
 # 2. Re-index all data (API mode; bulk is default)
 pnpm es:ingest -- --api --all --verbose
 ```
+
+### Stale `thread_url` Cleanup
+
+When `thread_url` is made optional in thread index documents, existing
+`oak_threads` records may still contain old values from previous ingestions.
+Re-index threads to refresh documents without stale `thread_url` values:
+
+```bash
+# Re-index only threads (bulk ingestion mode)
+pnpm es:ingest -- --index threads --verbose
+```
+
+Notes:
+
+- Requires bulk download files in `./bulk-downloads` (run `pnpm bulk:download` first).
+- Existing thread documents keep old `thread_url` values until they are re-indexed.
+- Do not add `--incremental`; overwrite mode (default) is required for cleanup.
+- This is safe because `thread_url` is optional in the schema.
+- Re-indexing threads rewrites documents from current source data. Thread builders
+  never emit `thread_url`, so stale values are removed on overwrite.
 
 ### Refreshing Transcripts
 
@@ -169,4 +189,4 @@ the 7 different curriculum structural patterns:
 - [ADR-080](../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) - Curriculum patterns
 - [ADR-083](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) - Lesson enumeration strategy
 - [ADR-087](../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) - Batch-atomic ingestion
-- [current-state.md](../../../.agent/plans/semantic-search/current-state.md) - Current system metrics
+- [current-state.md](../../../.agent/plans/archive/semantic-search-archive-dec25/current-state.md) - Archived system snapshot

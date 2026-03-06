@@ -152,9 +152,8 @@ describe('bulk-thread-transformer', () => {
       expect(doc.thread_title).toBe('Number: Fractions');
       expect(doc.unit_count).toBe(5);
       expect(doc.subject_slugs).toEqual(['maths']);
-      expect(doc.thread_url).toBe(
-        'https://www.thenational.academy/teachers/curriculum/threads/number-fractions',
-      );
+      // Threads have no OWA page, so thread_url is absent/undefined
+      expect(doc.thread_url).toBeUndefined();
     });
 
     it('includes title_suggest for autocomplete', () => {

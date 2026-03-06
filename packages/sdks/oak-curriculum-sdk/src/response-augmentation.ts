@@ -13,6 +13,7 @@ import {
   extractContentTypeSpecificId,
   isNonNullObject,
 } from './response-augmentation-helpers.js';
+import { deriveSequenceSlug } from './sequence-slug-derivation.js';
 import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 
 /**
@@ -22,27 +23,26 @@ import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
  */
 const keyStagesSchema = rawCurriculumSchemas.SubjectResponseSchema.shape.keyStages;
 
-interface UnitContext {
-  readonly subjectSlug?: string;
-  readonly phaseSlug?: string;
-}
-
 interface SubjectContext {
   readonly keyStageSlugs: readonly string[];
 }
 
 /**
- * Extracts unit context from response data
+ * Extracts unit context from response data.
+ *
+ * Derives `sequenceSlug` from unit context by normalising `phaseSlug` and
+ * combining it with `subjectSlug` (e.g. `maths` + `ks1` → `maths-primary`).
  */
-function extractUnitContext(response: unknown): UnitContext | undefined {
+function extractUnitContext(response: unknown): { readonly sequenceSlug?: string } | undefined {
   if (!isNonNullObject(response)) {
     return undefined;
   }
   if ('subjectSlug' in response && 'phaseSlug' in response) {
-    return {
-      subjectSlug: typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined,
-      phaseSlug: typeof response.phaseSlug === 'string' ? response.phaseSlug : undefined,
-    };
+    const subjectSlug = typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined;
+    const phaseSlug = typeof response.phaseSlug === 'string' ? response.phaseSlug : undefined;
+    if (subjectSlug && phaseSlug) {
+      return { sequenceSlug: deriveSequenceSlug(subjectSlug, phaseSlug) };
+    }
   }
   return undefined;
 }
@@ -64,26 +64,31 @@ function extractSubjectContext(response: unknown): SubjectContext | undefined {
   return { keyStageSlugs: parsed.data.map((ks) => ks.keyStageSlug) };
 }
 
+function shouldExtract(targetType: ContentType, contentType: ContentType | undefined): boolean {
+  return contentType === undefined || contentType === targetType;
+}
+
 /**
  * Extracts context from response data for units and subjects.
  * Exported for shared use by the response augmentation middleware
  * and `runFetchTool` in `aggregated-fetch.ts`.
  */
-export function extractContextFromResponse(response: unknown): ResponseContext {
-  if (!response || typeof response !== 'object' || Array.isArray(response)) {
+export function extractContextFromResponse(
+  response: unknown,
+  contentType?: ContentType,
+): ResponseContext {
+  if (!isNonNullObject(response)) {
     return {};
   }
 
   const context: ResponseContext = {};
 
-  const unit = extractUnitContext(response);
-  if (unit) {
-    context.unit = unit;
+  if (shouldExtract('unit', contentType)) {
+    context.unit = extractUnitContext(response);
   }
 
-  const subject = extractSubjectContext(response);
-  if (subject) {
-    context.subject = subject;
+  if (shouldExtract('subject', contentType)) {
+    context.subject = extractSubjectContext(response);
   }
 
   return context;
@@ -96,6 +101,7 @@ function isArrayEndpointPath(path: string): boolean {
   return (
     path === '/search/lessons' ||
     path === '/search/transcripts' ||
+    path.endsWith('/sequences') ||
     (path.includes('/key-stages/') && (path.endsWith('/lessons') || path.endsWith('/units')))
   );
 }
@@ -220,7 +226,7 @@ function extractCanonicalUrlFields(
       `Could not extract ID for path: ${path} from response: ${JSON.stringify(response)}`,
     );
   }
-  const context = extractContextFromResponse(response);
+  const context = extractContextFromResponse(response, contentType);
   const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);
   return { canonicalUrl };
 }

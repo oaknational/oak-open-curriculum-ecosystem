@@ -11,6 +11,7 @@ import {
   type ContentType,
 } from '@oaknational/sdk-codegen/api-schema';
 import { extractContextFromResponse } from '../response-augmentation.js';
+import type { ResponseContext } from '../types/response-augmentation.js';
 import {
   FETCH_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
@@ -137,9 +138,15 @@ export async function runFetchTool(
   }
 
   // Extract context from the API response and pass to canonical URL generation.
-  // Units and subjects require context (subjectSlug/phaseSlug for units,
+  // Units and subjects require context (sequenceSlug derived from subjectSlug/phaseSlug,
   // keyStages for subjects) to generate the correct canonical URL.
-  const context = extractContextFromResponse(result.value.data);
+  let context: ResponseContext;
+  try {
+    context = extractContextFromResponse(result.value.data, type);
+  } catch {
+    context = {};
+  }
+
   let canonicalUrl: string | null;
   try {
     canonicalUrl = generateCanonicalUrlWithContext(type, args.id, context);

@@ -32,5 +32,6 @@ For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/
 | `.claude/commands/*.md` | Claude Code command wrappers -> `.agent/commands/` |
 | `.claude/rules/*.md` | Claude Code path-scoped triggers -> `.agent/rules/` or `.agent/skills/` |
 | `.claude/agents/*.md` | Claude Code sub-agent wrappers -> `.agent/sub-agents/templates/` |
+| `.claude/agents/archive/` | Archived Claude Code sub-agent wrappers (superseded or retired) |
 | `.gemini/commands/*.toml` | Gemini CLI command and review wrappers -> `.agent/commands/` and `.agent/sub-agents/templates/` |
 | `.agents/skills/*/SKILL.md` | Codex skill and sub-agent wrappers -> `.agent/skills/` and `.agent/sub-agents/templates/` |

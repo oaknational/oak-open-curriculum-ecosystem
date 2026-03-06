@@ -80,7 +80,7 @@ describe('createSequenceDocument', () => {
     const doc = createSequenceDocument(baseParams);
 
     expect(doc.sequence_url).toBe(
-      'https://www.thenational.academy/teachers/programmes/maths-secondary/units',
+      'https://www.thenational.academy/teachers/curriculum/maths-secondary/units',
     );
   });
 

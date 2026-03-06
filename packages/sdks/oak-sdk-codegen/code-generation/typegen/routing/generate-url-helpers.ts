@@ -4,6 +4,12 @@
  * This codegen does not read the schema for routes (the OpenAPI does not contain them),
  * but we keep it in code-generation to align with the project rule: helpers and types flow
  * from generation, not ad-hoc runtime code in apps.
+ *
+ * URL patterns confirmed against OWA source (`src/pages/teachers/`) and live site:
+ * - Sequences: `/teachers/curriculum/{sequenceSlug}/units`
+ * - Units: `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}`
+ * - Lessons: `/teachers/lessons/{lessonSlug}`
+ * - Threads: no OWA page, returns `null`
  */
 
 function headerSection(): string {
@@ -11,6 +17,9 @@ function headerSection(): string {
 * GENERATED FILE - DO NOT EDIT
 *
 * Canonical URL helpers for teachers-site resources (deterministic, no network).
+*
+* URL patterns sourced from OWA routing (src/pages/teachers/) and verified against
+* the live site. Sequences and units live under /teachers/curriculum/, not /teachers/programmes/.
 */
 `;
 }
@@ -38,15 +47,27 @@ function helpersSection(): string {
   return 'https://www.thenational.academy/teachers/lessons/' + slug;
 }
 
+/**
+ * Generates the canonical URL for a sequence (curriculum view).
+ *
+ * Pattern: /teachers/curriculum/\\{sequenceSlug\\}/units
+ * Example: art-secondary → https://www.thenational.academy/teachers/curriculum/art-secondary/units
+ */
 function urlForSequence(slug: string): string {
-  return 'https://www.thenational.academy/teachers/programmes/' + slug + '/units';
+  return 'https://www.thenational.academy/teachers/curriculum/' + slug + '/units';
 }
 
-function urlForUnit(slug: string, context?: { subjectSlug?: string; phaseSlug?: string }): string | undefined {
-  const subj = context?.subjectSlug;
-  const phase = context?.phaseSlug;
-  if (subj && phase) {
-    return 'https://www.thenational.academy/teachers/programmes/' + subj + '-' + phase + '/units/' + slug;
+/**
+ * Generates the canonical URL for a unit within its curriculum context.
+ *
+ * Pattern: /teachers/curriculum/\\{sequenceSlug\\}/units/\\{unitSlug\\}
+ * Requires sequenceSlug in context. The sequenceSlug is derived from the unit's
+ * subject and phase (e.g. 'maths-primary') by the response augmentation layer.
+ */
+function urlForUnit(slug: string, context?: { sequenceSlug?: string }): string | undefined {
+  const seq = context?.sequenceSlug;
+  if (seq) {
+    return 'https://www.thenational.academy/teachers/curriculum/' + seq + '/units/' + slug;
   }
   return undefined;
 }
@@ -68,20 +89,23 @@ function dispatcherSection(): string {
  *
  * @param type - The content type ('lesson', 'sequence', 'unit', 'subject', or 'thread')
  * @param id - The ID of the resource
- * @param context - Context for unit (subjectSlug, phaseSlug) or subject (keyStageSlugs)
+ * @param context - Context for unit (sequenceSlug) or subject (keyStageSlugs)
  * @returns The canonical URL, or \`null\` for threads (no website equivalent)
  * @throws TypeError if content type is unsupported or required context is missing
  *
  * Return semantics:
  * - \`string\`: Valid canonical URL
- * - \`null\`: Entity type has no canonical URL (e.g., threads)
+ * - \`null\`: Entity type has no canonical URL (threads have no OWA page)
  * - Throws: Invalid type or missing required context (fail fast)
+ *
+ * Unit context: the caller is responsible for deriving \`sequenceSlug\` from
+ * available data (typically \`subjectSlug + '-' + phaseSlug\` from the API response).
  */
 export function generateCanonicalUrlWithContext(
   type: ContentType,
   id: string,
   context?: {
-    unit?: { subjectSlug?: string; phaseSlug?: string };
+    unit?: { sequenceSlug?: string };
     subject?: { keyStageSlugs?: readonly string[] };
   },
 ): string | null {
@@ -127,7 +151,7 @@ export function generateUrlHelpers(): string {
   type: ContentType,
   id: string,
   context?: {
-    unit?: { subjectSlug?: string; phaseSlug?: string };
+    unit?: { sequenceSlug?: string };
     subject?: { keyStageSlugs?: readonly string[] };
   },
 ): string | undefined {

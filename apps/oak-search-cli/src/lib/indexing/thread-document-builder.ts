@@ -8,16 +8,12 @@
  * This module is the **single source of truth** for thread document creation,
  * used by both API and bulk ingestion paths (DRY compliance).
  *
- * Uses shared canonical URL generator for DRY compliance.
- *
  * @see SearchThreadIndexDoc - The Zod-validated type this produces
  * @see THREADS_INDEX_FIELDS - Field definitions in SDK
  * @see transformThreadToESDoc - Bulk path adapter that delegates here
- * @see generateThreadCanonicalUrl - URL generation (single source of truth)
  */
 
 import type { SearchThreadIndexDoc } from '../../types/oak';
-import { generateThreadCanonicalUrl } from './canonical-url-generator';
 
 /**
  * Input-agnostic parameters for creating a thread document.
@@ -90,16 +86,15 @@ export interface CreateThreadDocumentParams {
 export function createThreadDocument(params: CreateThreadDocumentParams): SearchThreadIndexDoc {
   const { threadSlug, threadTitle, subjectSlugs, unitCount } = params;
 
-  const threadUrl = generateThreadCanonicalUrl(threadSlug);
   const threadSemantic = `${subjectSlugs.join(', ')}: ${threadTitle}`;
 
+  // Threads have no OWA page; thread_url is omitted (field is optional in schema).
   return {
     thread_slug: threadSlug,
     thread_title: threadTitle,
     thread_semantic: threadSemantic,
     subject_slugs: [...subjectSlugs],
     unit_count: unitCount,
-    thread_url: threadUrl,
     title_suggest: {
       input: [threadTitle],
       contexts: {

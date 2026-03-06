@@ -20,7 +20,10 @@ export const THREADS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_count', zodType: 'number', optional: false },
   { name: 'subject_slugs', zodType: 'array-string', optional: true },
   { name: 'thread_semantic', zodType: 'string', optional: true },
-  { name: 'thread_url', zodType: 'string', optional: false },
+  // Threads have no OWA page; thread_url is always absent. The field remains in the
+  // schema as optional for backwards compatibility with existing ES indices that may
+  // have documents with the field populated during a transition window.
+  { name: 'thread_url', zodType: 'string', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
 ] as const;
 

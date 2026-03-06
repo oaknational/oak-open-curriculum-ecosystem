@@ -181,4 +181,4 @@ These remain owned in `external/`, but are UX-significant constraints.
 | UI host/surface behaviour | [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md) |
 | Safety and trust boundaries | [../security-and-privacy/roadmap.md](../security-and-privacy/roadmap.md) |
 | Runtime reliability | [../architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md) |
-| Integration ergonomics | [../developer-experience/sdk-publishing-and-versioning-plan.md](../developer-experience/sdk-publishing-and-versioning-plan.md) |
+| Integration ergonomics | [../developer-experience/future/sdk-publishing-and-versioning-plan.md](../developer-experience/future/sdk-publishing-and-versioning-plan.md) |

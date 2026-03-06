@@ -139,6 +139,13 @@ export {
   type ContentType,
 } from '@oaknational/sdk-codegen/api-schema';
 
+export {
+  normalisePhaseSlug,
+  deriveSequenceSlug,
+  deriveSubjectSlugFromSequence,
+  derivePhaseSlugFromSequence,
+} from './sequence-slug-derivation.js';
+
 // ============================================================================
 // Type-Safe Object Helpers
 // ============================================================================

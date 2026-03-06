@@ -8,7 +8,7 @@
  * for backwards compatibility.
  *
  * @see canonical-url-generator.ts - Shared URL generation (single source of truth)
- * @see slug-derivation.ts - Shared slug derivation (single source of truth)
+ * @see @oaknational/curriculum-sdk sequence-slug-derivation.ts - Shared slug derivation
  */
 
 import type { Lesson, Unit } from '@oaknational/sdk-codegen/bulk';
@@ -22,6 +22,7 @@ export {
   OAK_BASE_URL as BASE_URL,
   generateLessonCanonicalUrl as generateLessonUrl,
   generateUnitCanonicalUrl as generateUnitUrl,
+  generateUnitCanonicalUrlFromSequence as generateUnitUrlFromSequence,
   generateSubjectProgrammesUrl,
   generateSequenceCanonicalUrl,
   generateThreadCanonicalUrl,
@@ -30,7 +31,7 @@ export {
 export {
   deriveSubjectSlugFromSequence,
   derivePhaseSlugFromSequence,
-} from '../lib/indexing/slug-derivation';
+} from '@oaknational/curriculum-sdk';
 
 // ============================================================================
 // Field Extraction Helpers
@@ -90,9 +91,7 @@ export function normaliseSupervisionLevel(level: Lesson['supervisionLevel']): st
   return level;
 }
 
-// Note: derivePhaseSlug is now re-exported as derivePhaseSlugFromSequence from slug-derivation.ts
-// Keeping alias for backwards compatibility
-export { derivePhaseSlugFromSequence as derivePhaseSlug } from '../lib/indexing/slug-derivation';
+export { derivePhaseSlugFromSequence as derivePhaseSlug } from '@oaknational/curriculum-sdk';
 
 /** Normalise years from unit year value */
 export function normaliseYearsFromUnit(year: Unit['year'], yearSlug: Unit['yearSlug']): string[] {

@@ -112,13 +112,6 @@ describe('renderer contract: threads scope', () => {
     }
   });
 
-  it('renders thread URLs from Zod-validated fixtures', () => {
-    const html = renderSearch(THREADS_SEARCH_OUTPUT_FIXTURE);
-    for (const result of THREADS_SEARCH_OUTPUT_FIXTURE.results) {
-      expect(html).toContain(result.thread.thread_url);
-    }
-  });
-
   it('renders subject_slugs array as joined text', () => {
     const html = renderSearch(THREADS_SEARCH_OUTPUT_FIXTURE);
     expect(html).toContain('biology');

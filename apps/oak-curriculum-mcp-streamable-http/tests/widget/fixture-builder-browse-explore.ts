@@ -72,7 +72,7 @@ type UnitHit = ExploreHit<{
 type ThreadHit = ExploreHit<{
   readonly thread: Pick<
     SearchThreadIndexDoc,
-    'thread_title' | 'thread_slug' | 'subject_slugs' | 'unit_count' | 'thread_url'
+    'thread_title' | 'thread_slug' | 'subject_slugs' | 'unit_count'
   >;
 }>;
 

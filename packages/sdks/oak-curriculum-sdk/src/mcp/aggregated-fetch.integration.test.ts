@@ -176,7 +176,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent).toHaveProperty(
         'canonicalUrl',
-        'https://www.thenational.academy/teachers/programmes/maths-primary/units/fractions',
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions',
       );
     });
 
@@ -192,6 +192,25 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       );
 
       const result = await runFetchTool({ id: 'subject:maths' }, deps);
+
+      expect(result.isError).toBeUndefined();
+      expect(result.structuredContent).toHaveProperty('canonicalUrl', null);
+    });
+
+    it('returns null canonicalUrl when context derivation throws', async () => {
+      const deps = createMockExecutor(
+        ok({
+          status: 200,
+          data: {
+            unitTitle: 'Fractions',
+            unitSlug: 'fractions',
+            subjectSlug: 'maths',
+            phaseSlug: 'upper-primary',
+          },
+        }),
+      );
+
+      const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
       expect(result.isError).toBeUndefined();
       expect(result.structuredContent).toHaveProperty('canonicalUrl', null);

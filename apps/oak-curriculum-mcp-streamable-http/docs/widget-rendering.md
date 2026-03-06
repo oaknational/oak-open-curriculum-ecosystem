@@ -134,13 +134,13 @@ Field-extraction helpers handle scope-specific field access:
 
 The search renderer handles five distinct data shapes:
 
-| Scope       | Nested Property    | Title            | Subject                 | Key Stage              | URL            | Highlights |
-| ----------- | ------------------ | ---------------- | ----------------------- | ---------------------- | -------------- | ---------- |
-| `lessons`   | `.lesson`          | `lesson_title`   | `subject_slug`          | `key_stage`            | `lesson_url`   | Yes        |
-| `units`     | `.unit` (nullable) | `unit_title`     | `subject_slug`          | `key_stage`            | `unit_url`     | Yes        |
-| `threads`   | `.thread`          | `thread_title`   | `subject_slugs` (array) | —                      | `thread_url`   | Yes        |
-| `sequences` | `.sequence`        | `sequence_title` | `subject_slug`          | `key_stages` (array)   | `sequence_url` | No         |
-| `suggest`   | —                  | `label`          | `subject` (camelCase)   | `keyStage` (camelCase) | `url`          | No         |
+| Scope       | Nested Property    | Title            | Subject                 | Key Stage              | URL             | Highlights |
+| ----------- | ------------------ | ---------------- | ----------------------- | ---------------------- | --------------- | ---------- |
+| `lessons`   | `.lesson`          | `lesson_title`   | `subject_slug`          | `key_stage`            | `lesson_url`    | Yes        |
+| `units`     | `.unit` (nullable) | `unit_title`     | `subject_slug`          | `key_stage`            | `unit_url`      | Yes        |
+| `threads`   | `.thread`          | `thread_title`   | `subject_slugs` (array) | —                      | — (no OWA page) | Yes        |
+| `sequences` | `.sequence`        | `sequence_title` | `subject_slug`          | `key_stages` (array)   | `sequence_url`  | No         |
+| `suggest`   | —                  | `label`          | `subject` (camelCase)   | `keyStage` (camelCase) | `url`           | No         |
 
 Key gotchas:
 
