@@ -257,7 +257,26 @@ for (const skillDir of canonicalSkillDirs) {
   }
 }
 
-// --- Check 7: Trigger content contract (≤10 content lines) ---
+// --- Check 7: Rule orphan detection — canonical rule with no platform adapters ---
+
+const canonicalRules = await listFiles('.agent/rules', '.md');
+for (const ruleFile of canonicalRules) {
+  const ruleName = path.basename(ruleFile, '.md');
+  const hasClaudeWrapper = await exists(`.claude/rules/${ruleName}.md`);
+  const hasCursorTrigger = await exists(`.cursor/rules/${ruleName}.mdc`);
+
+  if (!hasClaudeWrapper && !hasCursorTrigger) {
+    addIssue(
+      `.agent/rules/${ruleName}.md: canonical rule has no platform adapters (missing both .claude/rules/ and .cursor/rules/)`,
+    );
+  } else if (!hasClaudeWrapper) {
+    addIssue(`.agent/rules/${ruleName}.md: missing .claude/rules/${ruleName}.md wrapper`);
+  } else if (!hasCursorTrigger) {
+    addIssue(`.agent/rules/${ruleName}.md: missing .cursor/rules/${ruleName}.mdc trigger`);
+  }
+}
+
+// --- Check 8: Trigger content contract (≤10 content lines) ---
 
 for (const ruleFile of cursorRules) {
   const content = await readText(ruleFile);
@@ -296,8 +315,6 @@ if (issues.length > 0) {
   }
   process.exit(1);
 }
-
-const canonicalRules = await listFiles('.agent/rules', '.md');
 
 const stats = [
   `${canonicalCommands.length} canonical commands`,

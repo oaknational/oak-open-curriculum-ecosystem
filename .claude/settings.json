@@ -36,10 +36,17 @@
       "Read(/.claude/plans/**)",
       "Bash(git status -u)",
       "Skill(jc-start-right-thorough)",
-      "Skill(jc-start-right-thorough:*)"
+      "Skill(jc-start-right-thorough:*)",
+      "Bash(for f in invoke-code-reviewers tdd-at-all-levels no-compatibility-layers cardinal-rule-types-from-schema fail-fast-with-helpful-errors follow-the-practice never-disable-checks no-absolute-paths read-agent-md all-quality-gate-issues-are-always-blocking)",
+      "Bash(do)",
+      "Bash(if grep -q \"paths:\" \".claude/rules/$f.md\")",
+      "Bash(then)",
+      "Bash(echo \"ERROR: .claude/rules/$f.md has paths: but should be always-on\")",
+      "Bash(done)",
+      "Bash(xargs -I{} basename {})"
     ],
     "deny": [],
-    "additionalDirectories": ["/tmp"]
+    "additionalDirectories": ["/tmp", "/Users/jim/code/oak/oak-mcp-ecosystem"]
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": ["notion-dev"]
