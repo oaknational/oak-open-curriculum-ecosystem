@@ -49,6 +49,9 @@ export async function searchSequences(
     if (params.phaseSlug) {
       filters.push({ term: { phase_slug: params.phaseSlug } });
     }
+    if (params.keyStage) {
+      filters.push({ term: { key_stages: params.keyStage } });
+    }
 
     const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
     const request: EsSearchRequest = {

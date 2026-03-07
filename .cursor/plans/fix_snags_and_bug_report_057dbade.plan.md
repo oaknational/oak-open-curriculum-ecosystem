@@ -4,22 +4,22 @@ overview: Fix the two code defects found during the oak-preview smoke test (sequ
 todos:
   - id: defect-a-red
     content: "TDD RED: Write search-sequences.unit.test.ts asserting keyStage filter is included in ES query"
-    status: pending
+    status: completed
   - id: defect-a-green
     content: "TDD GREEN: Add keyStage filter to searchSequences() and verify in CLI rrf-query-builders if applicable"
-    status: pending
+    status: completed
   - id: defect-b-red
     content: "TDD RED: Write/update test asserting suggestion items validate against SearchSuggestionItemSchema"
-    status: pending
+    status: completed
   - id: defect-b-green
     content: "TDD GREEN: Fix codegen source for suggestions.ts to allow empty url; verify suggest-completion.ts and suggest-bool-prefix.ts comply"
-    status: pending
+    status: completed
   - id: quality-gates
     content: Run pnpm type-check, lint, test across all workspaces to confirm no regressions
-    status: pending
+    status: completed
   - id: bug-report
     content: Write .agent/reports/oak-openapi-bug-report-2026-03-07.md with three upstream issues, reproduction steps, and suggested fixes
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -121,4 +121,3 @@ Write a markdown file at `.agent/reports/oak-openapi-bug-report-2026-03-07.md` d
 - Thread canonical URL changes (threads have no web page -- this is by design)
 - Thread search relevance improvements (threads are structural, not topical -- expected behaviour)
 - Changes to the CLI `rrf-query-builders.ts` beyond the keyStage filter alignment
-

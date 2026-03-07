@@ -29,7 +29,7 @@ export const SearchSuggestionItemSchema = z
   .object({
     label: z.string().min(1),
     scope: z.enum(SEARCH_SCOPES),
-    url: z.string().min(1),
+    url: z.string().optional().default(''),
     subject: z.enum(SUBJECTS).optional(),
     keyStage: z.enum(KEY_STAGES).optional(),
     contexts: SearchSuggestionContextSchema,

@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 345] -- Phrase boosting added in B.5, threads added for multi-index GTs; defer re-org to ADR-086 */
+/* eslint max-lines: [error, 355] -- Phrase boosting added in B.5, threads added for multi-index GTs, keyStage filter added for sequences; defer re-org to ADR-086 */
 /**
  * Four-way RRF query builders for hybrid search.
  *
@@ -17,7 +17,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { removeNoisePhrases, detectCurriculumPhrases } from '../query-processing';
 import {
   createLessonFilters,
@@ -45,6 +45,7 @@ export interface SequenceRrfParams {
   size: number;
   subject?: SearchSubjectSlug;
   phaseSlug?: string;
+  keyStage?: KeyStage;
 }
 
 /** Parameters for thread RRF search. */
@@ -148,8 +149,8 @@ export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
  * and implement `createSequenceFacets()` following the lesson/unit pattern.
  */
 export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequest {
-  const { query, size, subject, phaseSlug } = params;
-  const filters = createSequenceFilters(subject, phaseSlug);
+  const { query, size, subject, phaseSlug, keyStage } = params;
+  const filters = createSequenceFilters(subject, phaseSlug, keyStage);
   return {
     index: resolveCurrentSearchIndexName('sequences'),
     size,
@@ -276,13 +277,20 @@ function createSequenceRetriever(
   };
 }
 
-function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string): QueryContainer[] {
+function createSequenceFilters(
+  subject?: SearchSubjectSlug,
+  phaseSlug?: string,
+  keyStage?: KeyStage,
+): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (subject) {
     filters.push({ term: { subject_slug: subject } });
   }
   if (phaseSlug) {
     filters.push({ term: { phase_slug: phaseSlug } });
+  }
+  if (keyStage) {
+    filters.push({ term: { key_stages: keyStage } });
   }
   return filters;
 }

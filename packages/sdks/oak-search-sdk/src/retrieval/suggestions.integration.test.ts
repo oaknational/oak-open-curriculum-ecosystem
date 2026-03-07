@@ -7,6 +7,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { SearchSuggestionItemSchema } from '@oaknational/sdk-codegen/search';
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import type { BoolPrefixSearchFn, TitleSourceDoc } from './suggest-bool-prefix.js';
@@ -340,6 +341,29 @@ describe('suggest', () => {
           { term: { key_stage: 'ks3' } },
         ]),
       );
+    });
+  });
+
+  describe('schema compliance', () => {
+    it('suggestion items pass SearchSuggestionItemSchema validation', async () => {
+      const { client } = createFakeClient();
+      const { docSearch } = createFakeDocSearch();
+
+      const result = await suggest(
+        { prefix: 'photo', scope: 'lessons', subject: 'science' },
+        client,
+        docSearch,
+        stubIndexResolver,
+        testConfig,
+      );
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        for (const item of result.value.suggestions) {
+          const parsed = SearchSuggestionItemSchema.safeParse(item);
+          expect(parsed.success).toBe(true);
+        }
+      }
     });
   });
 });
