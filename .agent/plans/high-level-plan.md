@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-03-04
+last_updated: 2026-03-07
 ---
 
 # High-Level Plan
@@ -50,6 +50,30 @@ Milestone 3: Public Beta                         📋 PLANNED
 | Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
 | Open public alpha (M2) | Public | **Open public alpha** | **Prod Clerk** | Clerk prod migration |
 | Public beta (M3) | Public | **Public beta** | Prod Clerk | Operational hardening |
+
+---
+
+## Immediate Next Intentions
+
+The next execution sequence is currently:
+
+1. Implement
+   [oak-preview-mcp-snagging.execution.plan.md](sdk-and-mcp-enhancements/active/oak-preview-mcp-snagging.execution.plan.md)
+   and deploy the resulting fixes.
+2. After that deploy, re-download the bulk data, re-process it, re-index the
+   Elasticsearch instance, and validate that stale search/index issues have
+   cleared.
+3. Implement
+   [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
+   and deploy that migration work.
+4. The first graph-enablement slice has now been promoted into
+   [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md).
+   Use its outputs to decide whether the next graph promotion is separate Neo4j
+   provisioning, Elasticsearch projection work, or explanation-first graph
+   augmentation.
+
+This sequence reflects current user priority ahead of broader Milestone 2 and
+Milestone 3 backlog items.
 
 ---
 
@@ -266,6 +290,7 @@ pnpm build
 pnpm type-check
 pnpm format:root
 pnpm markdownlint:root
+pnpm subagents:check
 pnpm lint:fix
 pnpm test
 pnpm test:ui

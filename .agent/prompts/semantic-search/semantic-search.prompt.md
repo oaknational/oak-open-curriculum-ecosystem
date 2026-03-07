@@ -8,12 +8,12 @@ last_updated: 2026-03-07
 
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-03-07 (bulk metadata quick wins promoted to active with standalone session bootstrap)
+**Last Updated**: 2026-03-07 (active graph alignment-audit lane and cross-collection sequencing refreshed)
 
-**Recent session (25 Feb 2026)**: Phase 7 merge readiness — full 12-gate quality chain
-passed from clean, codegen determinism verified. 8 specialist reviewers invoked (GO WITH
-CONDITIONS → conditions resolved). SDK workspace separation is complete.
-See [archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) for full context.
+**Recent session (7 Mar 2026)**: Graph-enablement planning was promoted from
+strategy into a queued parent quick-win plan and then into the active
+`kg-alignment-audit` slice. The semantic-search navigation surfaces now reflect
+that active/queued hierarchy explicitly.
 
 ---
 
@@ -45,9 +45,9 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 - [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **COMPLETE** — archived
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
-- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence (Milestone 0/1/2)
-- [Active Plans](../../plans/semantic-search/active/README.md) — includes bulk metadata quick wins as the active Boundary 03 execution plan
-- [Current Queue](../../plans/semantic-search/current/README.md) — includes P0 blocker plus the remaining keyword definition and thread/sequence follow-on plans
+- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence through Milestone 3 / Public Beta
+- [Active Plans](../../plans/semantic-search/active/README.md) — includes the active Boundary 03 lane and the active graph-enablement alignment-audit lane
+- [Current Queue](../../plans/semantic-search/current/README.md) — includes the P0 blocker, the keyword/thread-sequence follow-ons, and the parent queued graph quick-win plan
 - [Research Index](../../plans/semantic-search/research-index.md) — cross-cutting research pack for the Phase 4 queue
 - [MCP Extensions Roadmap](../../plans/sdk-and-mcp-enhancements/roadmap.md) — post-merge only
 
@@ -55,6 +55,16 @@ Important: the active bulk metadata quick-win stream can progress without
 waiting for the public-release blocker to close. Treat Milestone 2 blocker work
 and Boundary 03 search-quality work as separate streams unless a session
 explicitly chooses the release track.
+
+Also note the current cross-collection ordering in
+[high-level-plan.md](../../plans/high-level-plan.md): `oak-preview`
+snagging/deploy comes first, then post-deploy bulk-data re-download and
+Elasticsearch reindex validation, then MCP Apps infrastructure migration, then
+the graph follow-on decisions informed by the active alignment audit. Treat
+[kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md)
+as the active graph lane and
+[kg-integration-quick-wins.plan.md](../../plans/semantic-search/current/kg-integration-quick-wins.plan.md)
+as the parent queued plan for the remaining ontology/Neo4j quick wins.
 
 ---
 
@@ -88,6 +98,7 @@ Run this checklist at the start of the next session:
    - [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active Boundary 03 execution plan
    - [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
    - [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
+   - [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active graph-enablement execution plan
 6. Treat these as complete/archive references only:
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
@@ -108,12 +119,14 @@ Active now:
 1. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
 2. [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
 3. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
+4. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane
 
 Queued:
 
 1. [m2-public-alpha-auth-rate-limits.execution.plan.md](../../plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md) — P0 blocker in a separate Milestone 2 release-readiness stream
 2. [keyword-definition-assets.execution.plan.md](../../plans/semantic-search/current/keyword-definition-assets.execution.plan.md) — P1 follow-on after bulk metadata quick wins
 3. [thread-sequence-semantic-surfaces.execution.plan.md](../../plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md) — P2 follow-on
+4. [kg-integration-quick-wins.plan.md](../../plans/semantic-search/current/kg-integration-quick-wins.plan.md) — parent queued graph quick-win plan after the active alignment audit
 
 ---
 
@@ -227,8 +240,9 @@ not done until the violation is corrected.
   code under test.
 - **Ground truths before AND after configuration changes.** Always
   run baseline benchmarks before and after any search configuration
-  change. The existing 33 lesson ground truths (30 per-subject +
-  3 cross-subject, MRR 0.962) must not regress.
+  change. The existing lesson ground truths and their documented
+  baselines must not regress; use the Ground Truth Protocol and
+  roadmap tables as the authority for the current benchmark figures.
 - **Never make files shorter by removing documentation.** The
   point is to improve developer experience, not make it worse.
   If a file is too long, split it into smaller files with clear
@@ -425,7 +439,7 @@ score normalisation.
 | Index | GTs | MRR | NDCG@10 |
 |-------|-----|-----|---------|
 | Lessons (all 33) | 33 | 0.962 | 0.912 |
-| Units | 2 | 1.000 | 0.852 |
+| Units | 2 | 1.000 | 0.923 |
 | Threads | 8 | 0.938 | 0.902 |
 | Sequences | 1 | 1.000 | 1.000* |
 
@@ -454,8 +468,8 @@ pnpm markdownlint:root
 pnpm subagents:check
 pnpm lint:fix
 pnpm test
-pnpm test:e2e
 pnpm test:ui
+pnpm test:e2e
 pnpm smoke:dev:stub
 ```
 
@@ -496,7 +510,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) | Turbo task dependencies and caching (split-critical for task graph rewiring) |
 | [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Vocab pipeline ownership and generated graph artefact patterns |
 | [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md) | Per-scope search tuning decisions (fuzziness, score filtering, total semantics) |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence (Milestone 0/1/2) — start here for "what's next" |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence through Milestone 3 / Public Beta — start here for "what's next" |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 | [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
 | [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK domain synonyms source of truth (predates two-concern insight; revision needed post-pipeline) |

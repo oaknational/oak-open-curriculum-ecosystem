@@ -13,20 +13,21 @@ todos:
     status: completed
   - id: phase-2-reindex-boundary
     content: "Phase 2: Verify current indexing code emits the correct lesson, unit, sequence, and thread URL behaviour; define the exact post-deploy bulk re-download, reprocessing, and re-index steps needed to clear stale search/index data without blocking merge readiness."
-    status: pending
+    status: completed
   - id: phase-3-guidance-tightening
     content: "Phase 3: Remove contradictory 'you MUST call this first' wording from non-orientation tools, tighten MCP tool schemas/docs, and align tool/prerequisite guidance with the intended workflow."
-    status: pending
+    status: completed
   - id: phase-4-review-and-validate
     content: "Phase 4: Run the relevant reviewer set, perform focused MCP smoke checks that prove deploy-ready behaviour, and then carry out or explicitly stage the post-deploy bulk re-download, reprocessing, and re-index execution owned by this plan."
-    status: pending
+    status: completed
 ---
 
 # Oak Preview MCP Snagging
 
 **Last Updated**: 2026-03-07
-**Status**: Active — Phase 1 complete, resume at Phase 2
-**Priority**: High — prepares the current PR for deployment and owns the post-deploy reindex cutover needed to clear stale search data
+**Status**: All phases complete — deploy-safe code is ready; post-deploy reindex checklist documented in `docs/operations/troubleshooting.md`
+**Priority**: Post-deploy reindex execution is the only remaining operational step
+**Branch**: `feat/search_qol_fixes`
 
 ---
 
@@ -47,35 +48,35 @@ Important sequencing context:
 
 ## Current State Snapshot
 
-This active plan is now a standalone session entry point.
+All four phases are complete. The branch is deploy-ready.
 
-What is already done:
+What was done:
 
-1. **Phase 0 complete**: the preview smoke-pass findings have been classified into
-   non-issues, real code defects, and reindex-boundary items.
-2. **Phase 1 complete**: the lesson-detail canonical URL defect has been fixed in
-   the SDK runtime augmentation path.
-3. **Validation complete for Phase 1**:
-   - lesson `summary`, `transcript`, `quiz`, and `assets` routes now resolve to
-     the lesson slug, not the trailing path segment
-   - augmentation now fails fast on template paths instead of guessing
-   - `validateCurriculumResponse()` remains validation-only; it does not invent
-     or derive `canonicalUrl`
-4. **Docs updated for the boundary**:
-   - `packages/sdks/oak-curriculum-sdk/docs/architecture.md`
-   - `docs/architecture/architectural-decisions/047-canonical-url-generation-at-codegen-time.md`
+1. **Phase 0 complete**: preview smoke-pass findings classified into non-issues,
+   real code defects, and reindex-boundary items.
+2. **Phase 1 complete**: lesson-detail canonical URL defect fixed in SDK runtime
+   augmentation path. Lesson `summary`, `transcript`, `quiz`, and `assets`
+   routes now resolve to the lesson slug, not the trailing path segment.
+3. **Phase 2 complete**: deploy-vs-reindex boundary documented in
+   `docs/operations/troubleshooting.md` under `## Search Reindex Boundary`.
+   Includes deploy-safe code correctness table, stale index evidence
+   explanation, and complete post-deploy reindex command checklist.
+4. **Phase 3 complete**: contradictory prerequisite guidance fixed.
+   `get-thread-progressions` and `get-prerequisite-graph` now use
+   `AGGREGATED_PREREQUISITE_GUIDANCE` (which names `get-curriculum-model`
+   explicitly) instead of `ONTOLOGY_RECOMMENDED_FIRST_STEP` (which used
+   ambiguous "this tool" phrasing). Regression tests added.
+5. **Phase 4 complete**: code-reviewer, docs-adr-reviewer, and mcp-reviewer
+   all passed. Quality gates green. File name corrections applied to the
+   troubleshooting table per docs-adr-reviewer findings.
 
-What remains to do:
+What remains:
 
-1. **Phase 2**: lock the deploy-vs-reindex boundary for search/index URLs
-2. **Phase 3**: tighten contradictory prerequisite guidance and descriptor/schema
-   drift
-3. **Phase 4**: run the reviewer set, complete the focused live smoke pass, and
-   then execute or explicitly hand off the post-deploy re-download/reprocess/
-   re-index run once deploy-safe code is live
-
-If starting a fresh session, begin at **Phase 2**. Do not reopen Phase 1 unless a
-new regression is discovered.
+1. **Post-deploy reindex execution** — the only remaining operational step.
+   Run the command sequence in `docs/operations/troubleshooting.md` §
+   "Post-deploy reindex validation" after deploying the branch.
+   The authoritative ingestion reference is
+   `apps/oak-search-cli/operations/ingestion/README.md`.
 
 ## Why This Plan Exists
 
@@ -166,63 +167,32 @@ bulk-data reindex cutover that refreshes stale search data.
 
 Use this section to start a fresh session from this plan alone.
 
-### Re-ground
+### If All Phases Are Complete
 
-Read:
+If the frontmatter todos all show `status: completed`, the only remaining work
+is the **post-deploy reindex execution**. Follow the command sequence in
+`docs/operations/troubleshooting.md` § "Post-deploy reindex validation". The
+authoritative ingestion reference is
+`apps/oak-search-cli/operations/ingestion/README.md`.
 
-1. `.agent/directives/AGENT.md`
-2. `.agent/directives/principles.md`
-3. `.agent/directives/testing-strategy.md`
-4. `.agent/directives/schema-first-execution.md`
-5. `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
-6. `.agent/plans/sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md`
+After reindex, verify:
 
-### Verify Current State
+1. `pnpm ingest:verify` — all subjects report expected counts
+2. `pnpm es:status` — all indices green
+3. Spot-check search results: `thread_url` absent from thread docs,
+   `lesson_url`/`unit_url`/`sequence_url` use current canonical format
 
-Run:
+Then archive this plan to `../archive/`.
 
-```bash
-git status --short
-git branch --show-current
-ls -1 .agent/plans/sdk-and-mcp-enhancements/active
-```
+### If Reopening for Regression
 
-Then confirm:
+If a new regression is discovered after deploy:
 
-1. this file still lives in `active/` and remains the active entry point for the
-   snagging workstream
-2. `oak-preview` still points at the intended preview deployment in
-   `.cursor/mcp.json`
-3. the Phase 1 lesson-detail canonical URL fix is already present in the branch
-4. the preview server still exposes the curriculum surface you expect by:
-   - reading the local generated descriptors under
-     `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/`
-   - then re-running `get-curriculum-model` before any other live smoke call
-
-### Read These Code Paths First
-
-Read these before touching code:
-
-1. `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts`
-2. `packages/sdks/oak-curriculum-sdk/src/response-augmentation-helpers.ts`
-3. `packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.integration.test.ts`
-4. `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts`
-5. `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/curriculum.ts`
-6. `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
-7. `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
-8. `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/`
-
-### First Session Goal
-
-If you are picking this up fresh, do **Phase 2 only first**:
-
-1. confirm which URL anomalies are already fixed in code
-2. confirm which anomalies are stale indexed data and therefore reindex-boundary
-   items
-3. write down the exact deploy-vs-reindex expectation before touching Phase 3
-
-Do not start the descriptor/guidance sweep until the reindex boundary is written
-down clearly.
+1. Read `.agent/directives/AGENT.md` and `.agent/directives/principles.md`
+2. Check `docs/operations/troubleshooting.md` § "Search Reindex Boundary"
+3. Determine whether the regression is stale index data (reindex fixes it) or
+   a code defect (new phase needed)
+4. If code defect: add a new phase to this plan before fixing
 
 ## Execution Phases
 
@@ -299,6 +269,8 @@ Tasks:
      `sequence_url`
 3. Confirm whether any stale URL fields are present only because existing
    indexed documents predate the current canonical URL logic.
+   Current expectation from repo inspection: stale `thread_url` values are
+   legacy index data, not a fresh document-builder bug.
 4. Write down the exact post-deploy reindex expectation:
    - what should improve immediately on deploy
    - what should improve only after reindex
@@ -306,6 +278,9 @@ Tasks:
    - re-download bulk data
    - reprocess the bulk payloads with the deployed code
    - run the re-index against the target indices
+   Start from the existing command surfaces already documented in:
+   - `apps/oak-search-cli/package.json`
+   - `apps/oak-search-cli/operations/ingestion/README.md`
 6. Keep the branch deploy-ready even if the stale data cannot be fully proven
    clean until the reindex completes.
 7. Promote the resulting deploy-vs-reindex boundary note into a durable
@@ -356,13 +331,15 @@ Concrete targets:
 
 1. `search` conditional requirements and error guidance
 2. `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`
-3. `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
-4. generated descriptor files that still claim hard prerequisite status too
+3. `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts`
+4. `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prerequisite-graph.ts`
+5. `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
+6. generated descriptor files that still claim hard prerequisite status too
    broadly
-5. verify and tighten any remaining descriptor-schema offenders that materially
+7. verify and tighten any remaining descriptor-schema offenders that materially
    affect agent calls
-6. fetch/tool docs that have drifted from the supported ID/workflow surface
-7. small guidance quality issues such as typos or misleading fallback wording
+8. fetch/tool docs that have drifted from the supported ID/workflow surface
+9. small guidance quality issues such as typos or misleading fallback wording
 
 Stop line:
 
@@ -447,6 +424,11 @@ rg -n "PREREQUISITE: You MUST call the `get-curriculum-model` tool first" \
 ```
 
 ```bash
+rg -n "ONTOLOGY_RECOMMENDED_FIRST_STEP" \
+  packages/sdks/oak-curriculum-sdk/src/mcp
+```
+
+```bash
 rg -n "teachers/lessons/(summary|transcript|quiz|assets)" \
   packages/sdks/oak-curriculum-sdk
 ```
@@ -463,10 +445,41 @@ Live smoke checks after fixes:
 
 Post-deploy operational step owned by this plan:
 
-1. re-download the bulk data set
-2. reprocess it with the deployed code path
-3. run the re-index / refresh
-4. repeat the representative `search` checks after the reindex completes
+1. `pnpm redis:status` then `pnpm redis:up` — check if Redis is running, start if not
+2. `pnpm bulk:download` — re-download bulk data from upstream API
+3. `pnpm bulk:codegen` — regenerate codegen artefacts from fresh bulk data
+4. `pnpm es:setup reset` — reset indices and re-create mappings
+5. `pnpm es:ingest -- --api --all --verbose` — full re-ingest
+6. `pnpm ingest:verify` — verify document counts
+7. `pnpm es:status` — check index health
+8. repeat the representative `search` checks after the reindex completes
+
+See `apps/oak-search-cli/operations/ingestion/README.md` for the full reference.
+
+## Lessons Learned
+
+1. **Always source operational commands from `package.json` and the ingestion
+   README directly.** The Phase 2 post-deploy checklist was initially written
+   from exploration agent summaries rather than from the authoritative source
+   (`apps/oak-search-cli/operations/ingestion/README.md` and
+   `apps/oak-search-cli/package.json`). This caused missing commands
+   (`bulk:codegen`, `redis:up`, `es:status`). The fix was to add an explicit
+   "Authoritative source" callout in the troubleshooting section and to
+   transcribe the complete command sequence from the primary source.
+
+2. **Cross-reference file names against the actual filesystem.** The deploy-safe
+   code correctness table initially listed `unit-document-builder.ts` and
+   `lesson-document-builder.ts` for fields that are actually set in
+   `unit-document-core.ts` and `lesson-document-core.ts`. The docs-adr-reviewer
+   caught this, but it should have been verified by reading the actual files
+   before writing the table.
+
+3. **Regression tests anchor guidance changes.** The Phase 3 guidance fix
+   (switching from `ONTOLOGY_RECOMMENDED_FIRST_STEP` to
+   `AGGREGATED_PREREQUISITE_GUIDANCE`) was initially shipped without regression
+   tests. The code-reviewer flagged this. Tests now assert both the positive
+   case ("contains `get-curriculum-model` first") and the negative case
+   ("does not contain `this tool before`").
 
 ## Related Documents
 

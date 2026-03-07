@@ -1,6 +1,6 @@
 # Semantic Search Research Index
 
-**Last Updated**: 6 March 2026
+**Last Updated**: 7 March 2026
 
 ---
 
@@ -18,16 +18,18 @@ Use this index when you need to understand:
 - where richer vocabulary, glossary, and synonym surfaces could come from
 - how thread and sequence documents could become more useful search targets
 - how graph-like curriculum assets could be operationalised in Elasticsearch
+- how the Oak ontology in Neo4j should complement Elasticsearch search surfaces
 
 ---
 
 ## Reading Order
 
 1. [Curriculum Asset Opportunity Map](curriculum-asset-opportunity-map.research.md)
-2. [Bulk Metadata Opportunities](future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md)
-3. [Vocabulary, Glossary, and Mining Surfaces](future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md)
-4. [Thread and Sequence Derived Surfaces](future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md)
-5. [Learning Graph Surfaces](future/04-retrieval-quality-engine/learning-graph-surfaces.research.md)
+2. [Elasticsearch, Neo4j, and Oak Ontology Synthesis](elasticsearch-neo4j-oak-ontology-synthesis.research.md)
+3. [Bulk Metadata Opportunities](future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md)
+4. [Vocabulary, Glossary, and Mining Surfaces](future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md)
+5. [Thread and Sequence Derived Surfaces](future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md)
+6. [Learning Graph Surfaces](future/04-retrieval-quality-engine/learning-graph-surfaces.research.md)
 
 ---
 
@@ -36,6 +38,7 @@ Use this index when you need to understand:
 | Document | Boundary | Focus | Feeds |
 |----------|----------|-------|-------|
 | [curriculum-asset-opportunity-map.research.md](curriculum-asset-opportunity-map.research.md) | Cross-cutting | Executive synthesis, priority stack, boundary map | Roadmap and promotion decisions |
+| [elasticsearch-neo4j-oak-ontology-synthesis.research.md](elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Cross-cutting | Canonical synthesis of Elasticsearch, Neo4j, and ontology opportunities with real links | [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md), graph-related promotion decisions |
 | [bulk-metadata-opportunities.research.md](future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md) | 03 vocabulary and semantic assets | Lesson/unit signal audit, bulk ingestion call chain, unused fields | [vocabulary-mining.md](future/03-vocabulary-and-semantic-assets/vocabulary-mining.md), [definition-retrieval.md](future/04-retrieval-quality-engine/definition-retrieval.md), [document-relationships.md](future/04-retrieval-quality-engine/document-relationships.md) |
 | [vocabulary-glossary-and-mining-surfaces.research.md](future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | 03 vocabulary and semantic assets | Domain vocabulary, glossary surfaces, synonyms, keyword identity | [vocabulary-mining.md](future/03-vocabulary-and-semantic-assets/vocabulary-mining.md), [natural-language-paraphrases.md](future/03-vocabulary-and-semantic-assets/natural-language-paraphrases.md), [definition-retrieval.md](future/04-retrieval-quality-engine/definition-retrieval.md) |
 | [thread-sequence-derived-surfaces.research.md](future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md) | 04 retrieval quality engine | Derived thread/sequence signals, summaries, suggestions, small-index constraints | [document-relationships.md](future/04-retrieval-quality-engine/document-relationships.md), [modern-es-features.md](future/04-retrieval-quality-engine/modern-es-features.md) |
@@ -47,6 +50,7 @@ Use this index when you need to understand:
 
 | Theme | Primary Document | Important Companion |
 |-------|------------------|---------------------|
+| Elasticsearch and Neo4j working together around the Oak ontology | [Elasticsearch, Neo4j, and Oak Ontology Synthesis](elasticsearch-neo4j-oak-ontology-synthesis.research.md) | [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md) |
 | Bulk lesson and unit metadata not yet fully used | [Bulk Metadata Opportunities](future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md) | [ADR-089](../../../docs/architecture/architectural-decisions/089-index-everything-principle.md) |
 | Richer domain vocabulary and glossary assets | [Vocabulary, Glossary, and Mining Surfaces](future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) |
 | Thread and sequence search becoming more than title search | [Thread and Sequence Derived Surfaces](future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md) | [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) |

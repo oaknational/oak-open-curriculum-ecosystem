@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-06
+**Last Updated**: 2026-03-07
 
 ---
 
@@ -13,6 +13,35 @@
 ---
 
 ## Current Work: Post-Merge Execution
+
+Active execution now includes:
+
+- [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md)
+- [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
+- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
+- [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
+
+Prepared next-up queue:
+
+- [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+- [Keyword Definition Assets](current/keyword-definition-assets.execution.plan.md)
+- [Thread and Sequence Semantic Surfaces](current/thread-sequence-semantic-surfaces.execution.plan.md)
+- [KG Integration Quick Wins](current/kg-integration-quick-wins.plan.md)
+
+Cross-collection sequencing note:
+
+- [high-level-plan.md](../high-level-plan.md) currently sequences:
+  `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
+  Elasticsearch reindex validation, then MCP Apps infrastructure migration,
+  then graph work from the active alignment-audit slice.
+- Within this collection, `bulk-metadata-quick-wins` remains the active
+  Boundary 03 execution lane and
+  [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md)
+  is the active graph-enablement lane.
+- Keep
+  [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+  as the parent queued plan for the remaining graph quick wins after the active
+  audit produces evidence.
 
 MCP search integration (Phase 3a) is complete — three tools
 wired, old REST search replaced. SDK workspace separation (3e) is
@@ -34,15 +63,6 @@ Milestone 2 blocker execution is now queued in
 
 That blocker is a separate public-release-readiness stream. It does **not**
 prevent Boundary 03 bulk metadata work from progressing.
-
-Active boundary-local execution now includes:
-
-- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
-
-Prepared next-up queue behind the active quick-win stream:
-
-- [Keyword Definition Assets](current/keyword-definition-assets.execution.plan.md)
-- [Thread and Sequence Semantic Surfaces](current/thread-sequence-semantic-surfaces.execution.plan.md)
 
 ---
 
@@ -83,9 +103,13 @@ Prepared next-up queue behind the active quick-win stream:
 
 ## Active Plans
 
+For the full at-a-glance state including cross-collection sequencing, see
+[Current Work](#current-work-post-merge-execution) above.
+
 - [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md) — converge MCP execution to `Result<T, E>` across SDK + MCP consumers
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
+- [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
 
 ---
 
@@ -93,8 +117,8 @@ Prepared next-up queue behind the active quick-win stream:
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 result unification + search-args extraction + bulk metadata quick wins |
-| `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons) |
+| `active/` | In-progress plans | 🟢 result unification + search-args extraction + bulk metadata quick wins + KG alignment audit |
+| `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
 | `archive/` | Historical work | ✅ Reference only |
@@ -103,14 +127,17 @@ Prepared next-up queue behind the active quick-win stream:
 
 ## Research Model
 
-Semantic-search research now lives in **boundary-local** `*.research.md`
-documents inside `future/`. These files are evidence and analysis for the
-backlog boundaries; they are not execution plans.
+Most boundary-local semantic-search research now lives in `future/` as
+`*.research.md` documents. Cross-cutting synthesis and strategy notes may remain
+at the collection root when they span multiple boundaries or act as promotion
+inputs for later execution plans.
 
 Use:
 
 - [research-index.md](research-index.md) for navigation
 - [curriculum-asset-opportunity-map.research.md](curriculum-asset-opportunity-map.research.md) for the cross-cutting synthesis
+- [elasticsearch-neo4j-oak-ontology-synthesis.research.md](elasticsearch-neo4j-oak-ontology-synthesis.research.md) for the canonical graph, Neo4j, and ontology synthesis
+- [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md) for the current Oak-specific direction of travel that now feeds the active alignment audit and the parent graph quick-win plan
 
 ---
 
@@ -142,6 +169,10 @@ to the boundary structure.
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Research Index](research-index.md) | Navigation for boundary-local research companions |
 | [Curriculum Asset Opportunity Map](curriculum-asset-opportunity-map.research.md) | Cross-cutting synthesis of bulk-signal, vocabulary, and graph opportunities |
+| [Elasticsearch, Neo4j, and Oak Ontology Synthesis](elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Canonical synthesis of graph-platform research with real links |
+| [Oak Ontology Graph Opportunities Strategy](oak-ontology-graph-opportunities.strategy.md) | Oak-specific strategy for ontology-backed search and graph augmentation |
+| [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) | Active execution plan to measure ontology/search overlap and drive the next graph promotion decision |
+| [KG Integration Quick Wins](current/kg-integration-quick-wins.plan.md) | Parent quick-win plan for separate Neo4j provisioning, ontology load, Elasticsearch projections, and bounded graph augmentation |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [SDK Workspace Separation](archive/completed/sdk-workspace-separation.md) | ✅ Complete — archived |
 | [SDK Separation Pre-Phase-1 Decisions](archive/completed/sdk-separation-pre-phase1-decisions.md) | ✅ Archived — D1-D5 decision rationale (all integrated into canonical plan) |

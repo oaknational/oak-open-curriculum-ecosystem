@@ -172,6 +172,14 @@ For each finding, provide:
 - [ ] Bulk operations follow current retry and error-handling guidance
 - [ ] Observability approach uses current Elastic-native capabilities
 
+### Data Pipeline
+
+Bulk curriculum data changes over time as Oak updates its curriculum. The full pipeline is: **redownload → reprocess → reindex**. Reviews touching indexing or data processing should consider:
+
+- [ ] Pipeline handles full reindex from fresh bulk data (not incremental patches on stale data)
+- [ ] Mapping or analyser changes are validated against a fresh reindex cycle
+- [ ] Processing steps are idempotent and repeatable from a clean download
+
 ## Boundaries
 
 This agent reviews Elasticsearch platform correctness, best practice, and Serverless applicability. It does NOT:

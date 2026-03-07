@@ -1,3 +1,69 @@
+## Session 2026-03-07 — Consolidate Docs Reconciliation Pass
+
+### What Was Done
+
+- Re-ran `jc-consolidate-docs` after the graph-planning surfaces stabilised and
+  treated the newly added graph plans as canonical.
+- Aligned `.agent/plans/high-level-plan.md`,
+  `.agent/plans/semantic-search/README.md`,
+  `.agent/plans/semantic-search/roadmap.md`, and
+  `.agent/prompts/semantic-search/semantic-search.prompt.md` to the settled
+  graph hierarchy:
+  `kg-alignment-audit.execution.plan.md` active,
+  `kg-integration-quick-wins.plan.md` queued as the parent follow-on plan.
+- Brought milestone naming and quality-gate order back into sync across the
+  touched planning surfaces, including restoring `pnpm subagents:check` to the
+  high-level plan's gate list.
+- Fixed the parent graph quick-win plan so its dependency and Phase 2 text now
+  reflect the promoted alignment-audit child plan instead of pretending that
+  audit work is still only queued in the parent.
+- Removed absolute local-machine paths from
+  `.agent/plans/semantic-search/active/kg-alignment-audit.execution.plan.md`
+  by replacing them with repo URLs.
+- Corrected the semantic-search prompt's stale unit NDCG figure and removed a
+  hard-coded lesson benchmark sentence in favour of the Ground Truth Protocol
+  and roadmap as the metrics authority.
+
+### Patterns to Remember
+
+- When a queued parent plan promotes one slice into `active/`, update all three
+  layers together: frontmatter todo status, body phase descriptions, and the
+  collection navigation surfaces.
+- For cross-repo references inside committed docs, prefer stable URLs or
+  relative repo notes over machine-specific absolute paths.
+- If benchmark figures appear in more than one planning surface, designate one
+  authority doc and make the others point to it instead of restating numbers.
+
+## Session 2026-03-07 — High-Level Plan Reprioritisation
+
+### What Was Done
+
+- Updated `.agent/plans/high-level-plan.md` with an `Immediate Next Intentions`
+  section reflecting the current user-priority sequence:
+  snagging/deploy, post-deploy bulk-data re-download and reindex validation,
+  MCP Apps migration work, then an ontology quick win.
+- Tightened step 4 so the high-level plan points to promoting a quick win from
+  `oak-ontology-graph-opportunities.strategy.md` into a dedicated execution
+  plan, rather than treating the strategy note itself as the executable artefact.
+- Updated `.agent/plans/semantic-search/oak-ontology-graph-opportunities.strategy.md`
+  so the first quick-win framing explicitly includes provisioning a separate
+  Neo4j instance for this repo, while preserving the alignment audit as the key
+  architectural precursor.
+- Updated
+  `.agent/plans/semantic-search/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+  so it now describes a Neo4j export/deployment path rather than implying this
+  workstream already has a usable shared graph instance.
+
+### Patterns to Remember
+
+- If a strategic index points at near-term work from a `*.strategy.md` note,
+  phrase it as promotion into a dedicated execution plan to avoid plan-type
+  drift.
+- For ontology/graph work, distinguish clearly between "the ontology project has
+  a Neo4j path" and "this repo has access to a usable experiment environment".
+- When introducing a delivery prerequisite, keep it separate from the main
+  architectural precursor so sequencing logic stays legible.
+
 ## Session 2026-03-07 — Napkin Distillation
 
 ### What Was Done
@@ -42,14 +108,36 @@
   once the same guidance exists in a canonical command, ADR, README, or docs
   page.
 
+## Session 2026-03-07 — Elasticsearch Specialist Capability Rollout
+
+### What Was Done
+
+- Executed the full elasticsearch-specialist-capability plan (Phases 0–4).
+- Created canonical triplet: reviewer template, active-workflow skill, situational rule.
+- Created platform adapters across Cursor, Claude, Gemini, and Codex.
+- Updated coordination docs (AGENT.md roster, invoke-code-reviewers.md triage/examples).
+- Updated stale counts in ADR-129, artefact-inventory, and practice-core provenance.
+- Self-review by the elasticsearch-reviewer caught real issues: broken Serverless URL (404), stale ES Guide URL (301 redirect), wrong `.agent/research/` paths.
+
+### Patterns to Remember
+
+- Self-review validates doctrine: having the reviewer review itself is a practical smoke test for the live-docs-first workflow.
+- Elastic documentation has migrated from `elastic.co/guide/...` to `elastic.co/docs/...` — old URLs redirect or 404. Always verify URLs with WebFetch before encoding them in templates.
+- `research/` paths in this repo are under `.agent/research/`, not at the repo root.
+- Bulk curriculum data changes over time; a full pipeline is redownload → reprocess → reindex.
+
 ## Session 2026-03-07 — Oak Ontology Opportunity Note
 
 ### What Was Done
 
-- Added `.agent/plans/semantic-search/oak-ontology-graph-opportunities.md`
-  beside the external graph research notes.
-- Captured Oak-specific opportunities from the Elasticsearch/Neo4j research
-  without assuming the ontology and current repo structures fully overlap.
+- Added an Oak-specific opportunity note beside the external graph research
+  notes, then later promoted that work into
+  `.agent/plans/semantic-search/oak-ontology-graph-opportunities.strategy.md`.
+- Added
+  `.agent/plans/semantic-search/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+  as the canonical synthesis with real links.
+- Archived the superseded graph research notes with unstable inline citation
+  markers under `.agent/plans/semantic-search/archive/`.
 
 ### Patterns to Remember
 
@@ -58,3 +146,73 @@
   realities.
 - For ontology integration, treat mismatch explicitly as a first-class design
   concern rather than assuming direct one-to-one joins.
+- When the ontology source repo becomes available, replace generic
+  \"triples in Neo4j\" language with the ontology's own concrete model:
+  RDF/OWL/SKOS/SHACL, programme-unit-unit-variant-lesson-thread structures, and
+  early-release volatility.
+- The ontology repo also distinguishes source RDF shape from the operational
+  Neo4j shape via an export transformation pipeline; research and strategy docs
+  should not blur those two contracts.
+
+## Session 2026-03-07 — KG Integration Quick-Wins Plan
+
+### What Was Done
+
+- Added `.agent/plans/semantic-search/current/kg-integration-quick-wins.plan.md`
+  as the first dedicated queued plan promoted from the ontology graph strategy.
+- Made the plan answer the runtime-shape question directly: keep flat RDF
+  distributions for provenance and rebuilds, but use the exported Neo4j graph
+  plus selected Elasticsearch projections for operational quick wins.
+- Updated semantic-search navigation and the high-level plan so the new graph
+  quick-win plan is now part of the discoverability chain.
+
+### Patterns to Remember
+
+- For ontology-backed search work, flat files are best treated as canonical
+  release artefacts and rebuild inputs, not as the primary runtime query
+  surface.
+- The first Elasticsearch/Neo4j integration step should be application-layer
+  orchestration and batch projection, not brittle live cross-engine joins.
+- The safest early graph wins are overlap auditing, explanation surfaces,
+  small projection indices, and offline graph-derived features.
+
+## Session 2026-03-07 — Alignment Audit Promotion
+
+### What Was Done
+
+- Promoted the alignment-audit slice from the parent graph quick-win plan into
+  `.agent/plans/semantic-search/active/kg-alignment-audit.execution.plan.md`.
+- Made the promoted plan explicit about two things that were previously too
+  implicit: the exact outputs it must produce, and the specific docs/plans that
+  must be updated once those outputs exist.
+- Updated semantic-search active/current/navigation docs and the high-level
+  plan to reflect that graph work now has an active evidence-first lane.
+
+### Patterns to Remember
+
+- When promoting a research-backed quick win into active execution, the plan
+  should name not only the work to do but the repo artefacts that completion
+  must update afterwards.
+- Alignment audits need both machine-rerunnable implementation and a
+  human-readable canonical report; raw script output alone is not enough.
+
+## Session 2026-03-07 — Consolidate Docs Recheck
+
+### What Was Done
+
+- Re-ran the `jc-consolidate-docs` checks against the newly promoted graph
+  planning surfaces.
+- Removed the last stale semantic-search README wording that still described
+  the ontology strategy as feeding only a future graph quick-win plan.
+- Reconfirmed that the practice inbox is empty and that the semantic-search
+  roadmap and prompt already reference the active alignment-audit plan and the
+  queued parent quick-win plan consistently.
+
+### Patterns to Remember
+
+- After plan promotion, stale wording often survives in explanatory sections
+  even when tables and queues are already correct; sweep narrative paragraphs as
+  well as status tables.
+- Fitness ceilings are signals, not blockers: `CONTRIBUTING.md`,
+  `practice-lineage.md`, and `practice-bootstrap.md` remain slightly over and
+  should be treated as future consolidation candidates.
