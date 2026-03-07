@@ -47,14 +47,6 @@ enough for permanent documentation.
   their motivations ("anxious about looking foolish",
   "sceptical by default"), not by focus areas
 
-## Agent Artefact Architecture
-
-See ADR-125 for the full model. Key operational gotcha:
-Claude Code path-scoped rules (`.claude/rules/*.md` with `paths`) load only when
-matching files open. Create them ONLY for glob-scoped triggers — never duplicate
-always-on triggers (already in `CLAUDE.md` → `AGENT.md` → `principles.md` chain).
-Validation: `pnpm portability:check`.
-
 ## Repo-Specific Rules
 
 - ADR index is the source of truth for ADR count; keep

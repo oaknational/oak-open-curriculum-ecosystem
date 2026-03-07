@@ -13,7 +13,7 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 
 | Collection | Purpose | Status |
 |------------|---------|--------|
-| [semantic-search/](semantic-search/) | Elasticsearch search implementation | ✅ Merge-prep complete; secrets sweep next |
+| [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Post-merge execution active; Milestone 2 blocker queued alongside independent search-quality streams |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
 | [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 📋 Planned |

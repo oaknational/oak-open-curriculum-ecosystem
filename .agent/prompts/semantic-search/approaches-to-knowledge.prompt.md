@@ -68,7 +68,7 @@ Taking API content, ontologies, knowledge graphs, semantic search, and atomic co
 
 **The Quality Pipeline**:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │  HIGH-QUALITY FOUNDATION                                    │
 │  • Oak's expert-curated curriculum                          │
@@ -108,7 +108,7 @@ Taking API content, ontologies, knowledge graphs, semantic search, and atomic co
 │  • Traceable to authoritative sources                       │
 │  • Safe and appropriate for educational context             │
 └─────────────────────────────────────────────────────────────┘
-```
+```text
 
 **Key Insight**: MCP isn't just about exposing data. It's about **ensuring quality propagates through the entire AI interaction** - from curated foundation, through input moderation, structured traversal, output validation, to trustworthy results.
 
@@ -255,7 +255,7 @@ Potential Atomic Concepts might include:
     filters: "object?",
   }
 }
-```
+```text
 
 **What MCP enables**:
 
@@ -273,7 +273,7 @@ Potential Atomic Concepts might include:
   description: "Hierarchical structure of subjects and their relationships",
   mimeType: "application/json+ld"
 }
-```
+```text
 
 **What MCP enables**:
 
@@ -302,7 +302,7 @@ Potential Atomic Concepts might include:
   description: "Graph of learning dependencies",
   mimeType: "application/vnd.graph+json"
 }
-```
+```text
 
 **What MCP enables**:
 
@@ -340,7 +340,7 @@ Potential Atomic Concepts might include:
     minMatch: "number?"
   }
 }
-```
+```text
 
 **What MCP enables**:
 
@@ -383,7 +383,7 @@ Potential Atomic Concepts might include:
    - Discoverable (agent found the tools)
    - Composable (agent chained them)
    - Self-documenting (agent understood parameters)
-```
+```text
 
 ### MCP Enables Contextual Reasoning
 
@@ -683,7 +683,7 @@ if (graphTool) {
 
 ### Data Layer
 
-```
+```text
 Atomic Concept Ontology (Graph Database)
 ├── Concepts (nodes)
 │   ├── Properties: id, type, definition, domain
@@ -708,7 +708,7 @@ Resource Atomic Signatures (Elasticsearch)
 
 ### Search Layer
 
-```
+```text
 Hybrid Search with Atomic Concepts
 ├── BM25: Lexical match on atomic concept names
 ├── ELSER: Semantic match on atomic concept descriptions
@@ -719,7 +719,7 @@ Hybrid Search with Atomic Concepts
 
 ### MCP Layer
 
-```
+```text
 MCP Server: Atomic Concepts
 ├── Tools
 │   ├── discover-atomic-concepts(resource_id)
@@ -916,7 +916,7 @@ Refine the atomic concept framework by:
 
 ## References
 
-- `.agent/plans/semantic-search/maths-ks4-implementation-plan.md` - Current search implementation
+- `.agent/plans/semantic-search/README.md` - Current semantic-search navigation, active plans, and roadmap entry points
 - `.agent/research/elasticsearch/curriculum-schema-field-analysis.md` - Available API fields
 - ADR-072: Three-Way Hybrid Search Architecture
 - ADR-077: Graph API for Curriculum Relationships (future)

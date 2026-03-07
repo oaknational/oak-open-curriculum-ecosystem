@@ -19,7 +19,7 @@ See [archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-
 
 ## Immediate Context
 
-**Branch target**: `feat/semantic_search_deployment` (verify current checkout, do not assume)
+**Branch context**: use the current checkout and verify it explicitly; do not assume a named target branch
 
 **Phase 3a** (MCP search integration) is **complete** — all five
 workstreams done, all quality gates pass. The old REST-based

@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`, with the next three search-quality plans prepared behind P0
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`, bulk metadata quick wins active in `active/`, with two search-quality follow-ons queued behind that active stream
 **Last Updated**: 2026-03-06
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -124,7 +124,7 @@ These are no longer merge-blocking and remain in the execution backlog:
 - Milestone 2 auth/rate-limit blockers: [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 - Independent semantic-search stream already active:
   [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md)
-- Remaining follow-on queue: see [Phase 4 Streams](#phase-4-streams-milestone-3-work-that-can-progress-during-milestone-2).
+- Remaining follow-on queue: see [Phase 4 Streams](#phase-4-streams-independent-search-quality-streams-alongside-milestone-2).
 
 ---
 
@@ -261,7 +261,7 @@ Canonical next plan:
 
 ---
 
-## Phase 4 Streams (Milestone 3 work that can progress during Milestone 2)
+## Phase 4 Streams (Independent search-quality streams alongside Milestone 2)
 
 Primary boundary hubs (post-alpha):
 

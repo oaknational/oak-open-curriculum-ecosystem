@@ -338,9 +338,9 @@ Completed prompts move to `archive/` within the prompts directory. The frontmatt
 
 **Handover prompts** describe the context for a specific implementation session. Each references its parent plan via `parent_plan`. When the work completes, the prompt is marked `status: completed` and archived. A new handover is written for the next slice.
 
-### start-right.prompt.md
+### start-right-quick.md
 
-The session entry point. Sections: **Foundation Documents** (read AGENT.md, principles.md, testing-strategy.md), **Project Context** (brief description plus key doc links), **Guiding Questions** (right problem? right layer? simpler? assumptions?), **Practice Box** (check `.agent/practice-core/incoming/` for plasmids), **Process** (discuss first step with user), **Quality Gates** (list the gate commands).
+The session entry point command. Sections: **Foundation Documents** (read AGENT.md, principles.md, testing-strategy.md), **Project Context** (brief description plus key doc links), **Guiding Questions** (right problem? right layer? simpler? assumptions?), **Practice Box** (check `.agent/practice-core/incoming/` for plasmids), **Process** (discuss first step with user), **Quality Gates** (list the gate commands).
 
 ## Skills (.agent/skills/)
 
