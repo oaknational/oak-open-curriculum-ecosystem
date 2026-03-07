@@ -7,7 +7,6 @@ source_research:
   - "../future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md"
   - "../future/04-retrieval-quality-engine/definition-retrieval.md"
 depends_on:
-  - "./m2-public-alpha-auth-rate-limits.execution.plan.md"
   - "../active/bulk-metadata-quick-wins.execution.plan.md"
 todos:
   - id: phase-0-decision-lock
@@ -74,11 +73,16 @@ At the end of this plan:
 
 ## Prerequisites
 
-- [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md)
 - [bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md)
 
-P2 assumes P1 has widened the raw bulk outputs. P2 then promotes that preserved
-data into a canonical, deduplicated, provenance-aware asset surface.
+This queue item depends on the active bulk-metadata widening work, not on the
+separate
+[M2 Public Alpha Blockers](./m2-public-alpha-auth-rate-limits.execution.plan.md)
+plan.
+
+The keyword-definition-assets plan assumes `bulk-metadata-quick-wins` has
+widened the raw bulk outputs. This plan then promotes that preserved data into
+a canonical, deduplicated, provenance-aware asset surface.
 
 ---
 

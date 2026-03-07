@@ -3,29 +3,29 @@ name: Architectural Enforcement Adoption
 overview: >
   Apply the Architectural Enforcement Playbook to the repository to prevent
   monolith decay and enforce domain boundaries using ESLint constraints,
-  dependency-cruiser, and knip. ESLint-centric convergence work is partially
-  delegated to the canonical developer-experience strictness plan.
+  dependency-cruiser, and knip. Directory-complexity-related execution now
+  lives in the canonical developer-experience enablement plan.
 todos:
   - id: eslint-strict-completion
     content: "Complete ESLint strict enforcement (Phase 0): resolve remaining lint errors."
     status: pending
   - id: baseline-lint-rules
-    content: "Export and wire existing 'max-files-per-dir' rule; set threshold to 10. (Deferred: disruptive in current window.)"
+    content: "Export and wire existing 'max-files-per-dir' rule with a calibrated threshold. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
   - id: boundary-configuration
     content: "Configure boundary enforcement per the canonical import matrix (ADR-041). (Execution delegated to devx strictness convergence.)"
     status: pending
   - id: depcruise-lockdown
-    content: "Initialize .dependency-cruiser.cjs with mandatory index.ts barrel enforcement."
+    content: "Initialize .dependency-cruiser.cjs with mandatory index.ts barrel enforcement. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
   - id: knip-integration
-    content: "Configure knip to detect dead code and unused exports across workspaces."
+    content: "Configure knip to detect dead code and unused exports across workspaces. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
   - id: turbo-qg-unification
-    content: "Update turbo.json and root package.json to include 'pnpm qg' as a combined task."
+    content: "Update turbo.json and root package.json to include 'pnpm qg' as a combined task. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
   - id: agent-directive-grounding
-    content: "Create .agent/directives/architectural-enforcement.md and ground all agents. (Split-guidance subset delegated to devx strictness convergence.)"
+    content: "Create .agent/directives/architectural-enforcement.md and ground all agents. (Strictness subset delegated to devx strictness; directory-complexity subset delegated to the canonical directory-complexity plan.)"
     status: pending
 ---
 
@@ -62,17 +62,20 @@ authoritative execution tasks for this stream live in:
 
 ### Convergence Update (2026-03-04)
 
-ESLint-focused enforcement work is now split by disruption profile:
+Directory-complexity-related enforcement work is now split by disruption profile:
 
 1. **Integrated in canonical strictness plan**:
    - `no-console` convergence
-   - boundary/separation lint consistency work
-   - agent split-guidance updates for large functions/files/directories
    - canonical execution: [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
-2. **Deferred in this stream**:
-   - `max-files-per-dir` activation (explicitly deferred due disruption risk)
-3. **Still owned here**:
-   - dependency-cruiser, knip, and qg-level enforcement integration
+2. **Canonicalised in the queued directory-complexity plan**:
+   - remediation SOP for directory-complexity breaches
+   - structural guardrails required before `max-files-per-dir`
+   - depcruise, knip, and qg-level integration for this workstream
+   - staged `max-files-per-dir` activation
+   - canonical execution: [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+3. **Retained here as strategic intent only**:
+   - rationale for physical constraints and success metrics
+   - phase design context for the wider architectural-enforcement stream
 
 ## 2. Phases
 
@@ -91,16 +94,8 @@ ESLint-focused enforcement work is now split by disruption profile:
 ### Phase 1: Physical Modularity (ESLint, deferred)
 
 - **Goal:** Break up "God Folders."
-- **Current state:** The `max-files-per-dir` rule already exists at
-  `packages/core/oak-eslint/src/rules/max-files-per-dir.ts` with tests,
-  but is NOT exported from the plugin index and NOT included in any
-  config. The plugin index currently exports only
-  `no-export-trivial-type-aliases`.
-- **Task:** Export the rule from the plugin, include it in the `strict`
-  config, audit existing directories for threshold breaches, and resolve
-  violations by structural refactoring.
-- **Target:** Root `eslint.config.ts` to apply this rule to all workspaces.
-- **Execution status:** Deferred from current convergence window.
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Status:** queued there as the canonical execution source of truth.
 
 ### Phase 2: Boundary Definition (ESLint)
 
@@ -110,8 +105,8 @@ ESLint-focused enforcement work is now split by disruption profile:
   split. These should integrate with the broader layer enforcement when
   `eslint-plugin-boundaries` is adopted.
 - **Goal:** Define semantic layers and enforce unidirectional flow.
-- **Task:** Configure boundary constraints using the canonical import matrix.
-- **Execution status:** Implementation delegated to canonical strictness convergence plan; this plan remains the strategic source.
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution status:** implementation detail now lives in the canonical queued plan so the supporting-constraint bundle is described once.
 - **Follow-up (from canonical URL work):** Route search-CLI SDK imports through a curriculum-sdk facade instead of importing directly from `@oaknational/sdk-codegen/api-schema`. Currently `apps/oak-search-cli` imports `generateCanonicalUrlWithContext` from `sdk-codegen` directly, bypassing the curriculum-sdk domain layer. Betty flagged this as a boundary hygiene concern during the canonical URL architecture review.
 
 | Importer | core | libs | sdks | apps | Constraint |
@@ -124,19 +119,19 @@ ESLint-focused enforcement work is now split by disruption profile:
 ### Phase 3: Physics Lockdown (Dependency-Cruiser)
 
 - **Goal:** Enforce barrel-file (index.ts) encapsulation.
-- **Task:** Configure `dependency-cruiser` at the root and for key packages.
-- **Rule:** Disallow importing internals of a sibling directory; all traffic must traverse `index.ts`.
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Rule intent:** Disallow importing internals of a sibling directory; all traffic must traverse `index.ts`.
 
 ### Phase 4: Hygiene and Dead Code (Knip)
 
 - **Goal:** Keep the "surface area" of the SDK and MCP servers minimal.
-- **Task:** Add `knip` to the CI pipeline and root quality gate.
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 
 ### Phase 5: Agentic Grounding
 
 - **Goal:** Make the "First Question" mechanical for AI agents.
-- **Task:** Create `.agent/directives/architectural-enforcement.md` and update `AGENT.md` to reference it.
-- **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The `qg` script must be updated to include `depcruise` and `knip` as each phase lands.
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The qg path should include the selected structural checks as that plan lands them.
 - **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](evidence-bundle.template.md).
 - **Execution status:** split-guidance/rules updates delegated to canonical strictness convergence; depcruise/knip/qg grounding remains in this stream.
 
@@ -149,7 +144,7 @@ Apply the shared documentation-propagation contract:
 
 ## 4. Success Metrics
 
-- Zero circular dependencies (via `madge` and `depcruise`).
+- Zero circular dependencies (via the structural graph check(s) selected in the canonical directory-complexity plan).
 - No source directory contains more than the configured threshold of files (excluding tests).
 - All inter-package and inter-domain imports are routed through `index.ts`.
 - `knip` reports zero unused exports.

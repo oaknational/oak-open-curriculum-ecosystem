@@ -12,7 +12,7 @@ describe('validateCurriculumResponse', () => {
     const method = 'get';
     const statusCode = 200;
 
-    it('should validate valid transcript response', () => {
+    it('should validate valid transcript response without augmenting it', () => {
       const response = {
         transcript: 'This is the lesson transcript text',
         vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
@@ -22,10 +22,8 @@ describe('validateCurriculumResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual({
-          ...response,
-          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/transcript',
-        });
+        expect(result.value).toEqual(response);
+        expect(result.value).not.toHaveProperty('canonicalUrl');
       }
     });
 
@@ -78,6 +76,21 @@ describe('validateCurriculumResponse', () => {
         expect(result.issues[0].message).toContain('extraField');
       }
     });
+
+    it('should preserve canonicalUrl when it is already present in transcript payloads', () => {
+      const response = {
+        transcript: 'Transcript text',
+        vtt: 'WEBVTT content',
+        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      };
+
+      const result = validateCurriculumResponse(path, method, statusCode, response);
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(response);
+      }
+    });
   });
 
   describe('for GET /lessons/{lesson}/summary response', () => {
@@ -85,7 +98,7 @@ describe('validateCurriculumResponse', () => {
     const method = 'get';
     const statusCode = 200;
 
-    it('should validate valid lesson summary response', () => {
+    it('should validate valid lesson summary response without augmenting it', () => {
       const response = {
         lessonTitle: 'Introduction to Algebra',
         unitSlug: 'algebra-basics',
@@ -109,10 +122,8 @@ describe('validateCurriculumResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual({
-          ...response,
-          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/summary',
-        });
+        expect(result.value).toEqual(response);
+        expect(result.value).not.toHaveProperty('canonicalUrl');
       }
     });
 
@@ -164,6 +175,33 @@ describe('validateCurriculumResponse', () => {
       if (!result.ok) {
         expect(result.issues.length).toBeGreaterThan(0);
         expect(result.issues[0].path).toContain('lessonKeywords');
+      }
+    });
+
+    it('should preserve canonicalUrl when it is already present in summary payloads', () => {
+      const response = {
+        lessonTitle: 'Introduction to Algebra',
+        unitSlug: 'algebra-basics',
+        unitTitle: 'Algebra Basics',
+        subjectSlug: 'maths',
+        subjectTitle: 'Mathematics',
+        keyStageSlug: 'ks3',
+        keyStageTitle: 'Key Stage 3',
+        lessonKeywords: [],
+        keyLearningPoints: [],
+        misconceptionsAndCommonMistakes: [],
+        teacherTips: [],
+        contentGuidance: null,
+        supervisionLevel: null,
+        downloadsAvailable: true,
+        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/introduction-to-algebra',
+      };
+
+      const result = validateCurriculumResponse(path, method, statusCode, response);
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(response);
       }
     });
   });

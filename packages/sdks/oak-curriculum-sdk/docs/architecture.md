@@ -54,9 +54,9 @@ This SDK automatically generates canonical URLs for all curriculum resources at 
 ### How it works
 
 1. **SDK-Codegen Time**: URL helpers are generated during `pnpm sdk-codegen` based on the OpenAPI schema
-2. **Response Augmentation**: All API responses are automatically augmented with `canonicalUrl` fields
+2. **Response Augmentation**: SDK client responses are augmented with `canonicalUrl` fields via response middleware when a concrete request URL is available; schema validation alone does not derive the URL
 3. **Schema Decoration**: The OpenAPI schema is decorated to include `canonicalUrl` in response types
-4. **Context-Aware**: URL generation uses response context (e.g., subject/phase for units) when available
+4. **Context-Aware**: URL generation uses response context (e.g., derived `sequenceSlug` for units) when available
 
 ### Example
 
@@ -65,7 +65,7 @@ const lesson = await client.getLessonSummary('add-two-numbers');
 console.log(lesson.canonicalUrl); // "https://www.thenational.academy/teachers/lessons/add-two-numbers"
 
 const unit = await client.getUnitSummary('place-value');
-console.log(unit.canonicalUrl); // "https://www.thenational.academy/teachers/programmes/maths-ks1/units/place-value"
+console.log(unit.canonicalUrl); // "https://www.thenational.academy/teachers/curriculum/maths-primary/units/place-value"
 
 const subject = await client.getSubject('maths');
 console.log(subject.canonicalUrl); // "https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes"
@@ -145,21 +145,12 @@ This SDK follows several important architectural patterns documented in our ADRs
 
 ```text
 oak-curriculum-sdk/
-├── code-generation/
-│   ├── codegen.ts         # Phase 1: OpenAPI type generation
-│   ├── zodgen.ts          # Phase 2: Zod schema generation
-│   ├── mcp-toolgen.ts     # Phase 3: MCP validator mapping
-│   ├── operations/        # Extract and generate operation constants
-│   ├── parameters/        # Extract and generate parameter constants
-│   ├── paths/             # Extract and generate path constants
-│   ├── routing/           # Generate canonical URL helpers
-│   ├── mcp-tools/         # MCP tool type generation
-│   └── lib/               # Shared helpers for generation
 ├── src/
 │   ├── client/            # Runtime API client (createOakClient, etc.)
 │   ├── response-augmentation.ts # Automatic canonical URL augmentation
 │   ├── mcp/               # MCP tool aggregation and universal tools
 │   ├── public/            # Public API surface re-exports
 │   └── types/             # Type re-exports from sdk-codegen
+├── docs/                  # Authored and generated package documentation
 └── dist/                  # Built output
 ```

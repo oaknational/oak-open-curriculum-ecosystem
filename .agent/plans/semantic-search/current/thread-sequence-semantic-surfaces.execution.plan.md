@@ -8,9 +8,7 @@ source_research:
   - "../future/04-retrieval-quality-engine/learning-graph-surfaces.research.md"
   - "../future/04-retrieval-quality-engine/document-relationships.md"
 depends_on:
-  - "./m2-public-alpha-auth-rate-limits.execution.plan.md"
   - "../active/bulk-metadata-quick-wins.execution.plan.md"
-  - "./keyword-definition-assets.execution.plan.md"
 todos:
   - id: phase-0-scope-lock
     content: "Phase 0: Lock the exact derived fields and summary surfaces for threads and sequences, keeping small-index constraints explicit."
@@ -72,14 +70,19 @@ At the end of this plan:
 
 ## Prerequisites
 
-- [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md)
 - [bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md)
-- [keyword-definition-assets.execution.plan.md](./keyword-definition-assets.execution.plan.md)
 
-P3 depends directly on P1 for widened upstream signals. Its dependency on P2 is
-primarily sequencing and consistency: if canonical keyword-definition assets are
-available by then, P3 may consume them, but P3 should not block on inventing
-its own competing term surface.
+This queue item follows the active bulk-metadata stream and the queued
+keyword-definition asset plan. The separate
+[M2 Public Alpha Blockers](./m2-public-alpha-auth-rate-limits.execution.plan.md)
+plan remains important, but it does not gate this Boundary 04 stream.
+
+The thread-sequence-semantic-surfaces plan depends directly on
+`bulk-metadata-quick-wins` for widened upstream signals. Its dependency on
+`keyword-definition-assets` is primarily sequencing and consistency: if
+canonical keyword-definition assets are available by then, this plan may
+consume them, but it should not block on inventing its own competing term
+surface.
 
 ---
 

@@ -3,7 +3,7 @@ prompt_id: go
 title: "GO"
 type: workflow
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-03-07
 ---
 
 # GO GO GO
@@ -21,6 +21,15 @@ Read ALL of this document, then carry out the [Action](#action).
 Read [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md) and follow all
 instructions in that file and in the files it leads to (rules, testing
 strategy, schema-first execution).
+
+If your current task is driven by a plan collection, also read the relevant
+collection `README.md` and `roadmap.md`, then:
+
+- read `current/README.md` when selecting queued work
+- read `active/README.md` when executing in-progress work
+
+before executing the next step so both queued and in-progress work stay
+discoverable.
 
 ## Intent
 

@@ -11,8 +11,8 @@ For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/
 
 | Location | Purpose |
 |----------|---------|
-| `.agent/skills/*/SKILL.md` | Canonical skills (16: 6 active, 10 passive) |
-| `.agent/rules/*.md` | Canonical operational rules (16) — reinforcements of policy |
+| `.agent/skills/*/SKILL.md` | Canonical skills (18: 7 active, 11 passive) |
+| `.agent/rules/*.md` | Canonical operational rules (21) — reinforcements of policy |
 | `.agent/commands/*.md` | Canonical commands (10 active, 3 experiments) |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, testing-strategy.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |

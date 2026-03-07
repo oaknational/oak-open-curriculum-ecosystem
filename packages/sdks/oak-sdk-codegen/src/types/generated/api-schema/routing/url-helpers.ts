@@ -8,11 +8,11 @@
 */
 
 export const CONTENT_TYPE_PREFIXES = {
-  lesson: { prefix: 'lesson:', contentType: 'lesson' },
-  unit: { prefix: 'unit:', contentType: 'unit' },
-  subject: { prefix: 'subject:', contentType: 'subject' },
-  sequence: { prefix: 'sequence:', contentType: 'sequence' },
-  thread: { prefix: 'thread:', contentType: 'thread' },
+  lesson: { prefix: 'lesson:', contentType: 'lesson', pathSegment: 'lessons' },
+  unit: { prefix: 'unit:', contentType: 'unit', pathSegment: 'units' },
+  subject: { prefix: 'subject:', contentType: 'subject', pathSegment: 'subjects' },
+  sequence: { prefix: 'sequence:', contentType: 'sequence', pathSegment: 'sequences' },
+  thread: { prefix: 'thread:', contentType: 'thread', pathSegment: 'threads' },
 } as const;
 
 export type ContentType = keyof typeof CONTENT_TYPE_PREFIXES;

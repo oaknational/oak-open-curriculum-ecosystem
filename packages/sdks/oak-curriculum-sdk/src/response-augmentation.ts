@@ -4,11 +4,15 @@
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-import { generateCanonicalUrlWithContext } from '@oaknational/sdk-codegen/api-schema';
+import {
+  CONTENT_TYPE_PREFIXES,
+  generateCanonicalUrlWithContext,
+} from '@oaknational/sdk-codegen/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import type { HttpMethod } from './validation/types.js';
 import {
   getContentTypeFromPath,
+  extractEntityIdFromPath,
   extractGenericId,
   extractContentTypeSpecificId,
   isNonNullObject,
@@ -25,6 +29,10 @@ const keyStagesSchema = rawCurriculumSchemas.SubjectResponseSchema.shape.keyStag
 
 interface SubjectContext {
   readonly keyStageSlugs: readonly string[];
+}
+
+function endsWithEntityCollection(path: string, contentType: ContentType): boolean {
+  return path.endsWith(`/${CONTENT_TYPE_PREFIXES[contentType].pathSegment}`);
 }
 
 /**
@@ -101,8 +109,9 @@ function isArrayEndpointPath(path: string): boolean {
   return (
     path === '/search/lessons' ||
     path === '/search/transcripts' ||
-    path.endsWith('/sequences') ||
-    (path.includes('/key-stages/') && (path.endsWith('/lessons') || path.endsWith('/units')))
+    endsWithEntityCollection(path, 'sequence') ||
+    (path.includes('/key-stages/') &&
+      (endsWithEntityCollection(path, 'lesson') || endsWithEntityCollection(path, 'unit')))
   );
 }
 
@@ -110,7 +119,8 @@ function isArrayEndpointPath(path: string): boolean {
  * Extracts ID from response data or path
  *
  * For array endpoints, only extracts from response data (each item must have its own slug).
- * For single-entity endpoints, falls back to path extraction if response data lacks ID.
+ * For single-entity endpoints, uses the concrete entity segment from the request path
+ * if the response body does not carry its own slug.
  */
 function extractIdFromResponse(response: unknown, path: string): string | undefined {
   const contentType = getContentTypeFromPath(path);
@@ -125,8 +135,7 @@ function extractIdFromResponse(response: unknown, path: string): string | undefi
     return undefined;
   }
 
-  // Fallback to path extraction for single-entity endpoints
-  return extractIdFromPath(response, path);
+  return extractIdFromPath(path);
 }
 
 /**
@@ -147,17 +156,11 @@ function extractIdFromResponseData(
 }
 
 /**
- * Extracts ID from path as fallback
+ * Extracts an entity ID from a concrete single-entity path.
  */
-function extractIdFromPath(response: unknown, path: string): string | undefined {
-  if (response && typeof response === 'object' && !Array.isArray(response)) {
-    const pathParts = path.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    if (lastPart && lastPart !== '') {
-      return lastPart;
-    }
-  }
-  return undefined;
+function extractIdFromPath(path: string): string | undefined {
+  const contentType = getContentTypeFromPath(path);
+  return extractEntityIdFromPath(path, contentType);
 }
 
 /** Augments an array response with canonical URL on each item */

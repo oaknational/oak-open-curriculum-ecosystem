@@ -7,7 +7,7 @@ provenance:
   - index: 1
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
-    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 14 specialist reviewers, full learning loop"
   - index: 2
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-28

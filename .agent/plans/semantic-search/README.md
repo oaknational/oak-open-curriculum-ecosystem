@@ -152,6 +152,7 @@ to the boundary structure.
 | [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Review Sessions 1-5 Log](archive/completed/ground-truth-review-sessions-1-5-log.md) | Historical session log retained for search-review provenance and lessons learned |
 | [MCP Extensions Roadmap](../sdk-and-mcp-enhancements/roadmap.md) | 📋 Post-merge SDK/MCP enhancements governance |
 | [Widget Renderer Reactivation](future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | ⏸️ Post-merge — wire renderers back after MCP extensions + Apps SDK work |
 | [Future Boundary Hub](future/README.md) | Canonical LATER backlog structure |

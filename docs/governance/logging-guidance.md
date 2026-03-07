@@ -2,7 +2,7 @@
 
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
-**Last Updated**: 2025-11-08  
+**Last Updated**: 2026-03-07  
 **Phase**: Phase 2 Complete (Observability instrumentation delivered)
 
 ## Overview
@@ -857,5 +857,5 @@ logger.fatal('Database connection lost', error); // FATAL: critical failures
 - [Logger Package README](../../packages/libs/logger/README.md) - Complete API documentation
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - How to test logging code
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP logging patterns
-- [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Stdio logging patterns
+- [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Legacy stdio logging patterns (workspace no longer actively maintained)
 - [Production Debugging Runbook](../operations/production-debugging-runbook.md) - Using logs for debugging

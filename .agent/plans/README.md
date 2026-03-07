@@ -16,10 +16,9 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Post-merge execution active; Milestone 2 blocker queued alongside independent search-quality streams |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
-| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 📋 Planned |
-| [the-practice/](the-practice/) | Practice evolution and adoption of validated agentic workflow concepts | 🔬 In Progress |
-| [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 📋 Planned |
-| [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 📋 Planned |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 🔄 Active + queued execution |
+| [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
+| [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |

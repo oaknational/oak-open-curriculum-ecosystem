@@ -27,11 +27,11 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 Three capabilities, all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification:
 
-| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                                                                    |
-| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (Claude Desktop, Cursor), [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (web, Vercel) |
-| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                  |
+| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                                                                                                                         |
+| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel), [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (legacy stdio workspace, not actively maintained) |
+| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                                                                       |
 
 The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
 
@@ -39,11 +39,16 @@ The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides th
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
-- **Tools** (model-controlled): 30 curriculum tools (23 generated from the OpenAPI schema, 7 aggregated) including orientation via `get-curriculum-model`. The AI decides when to use them.
+- **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
 - **Resources** (application-controlled): Curriculum model, prerequisite graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
-See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md) for full detail and [ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) for the architectural rationale.
+The standalone stdio workspace is now a legacy transitional surface. Future
+stdio support should come from a separate stdio entry point generalised from the
+HTTP MCP server workspace rather than from continued parallel maintenance of the
+standalone stdio app. See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
+[ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md),
+and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
 
 ## Quick Start
 
@@ -119,7 +124,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Directory        | Purpose                                                                                        |
 | ---------------- | ---------------------------------------------------------------------------------------------- |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                         |
+| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI     |
 | `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                   |
 | `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, type helpers, ESLint configs |
 | `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |

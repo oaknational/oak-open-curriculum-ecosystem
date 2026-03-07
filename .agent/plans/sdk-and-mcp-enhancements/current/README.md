@@ -1,10 +1,10 @@
 # Current Plans — SDK and MCP Enhancements
 
-Executable plans queued and ready, not yet started.
+Executable plans queued and ready to start.
 
-| Plan | Scope | Blocked By |
+| Plan | Scope | Status / Blocked By |
 |---|---|---|
-| [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add `outputSchema` to all 30 MCP tools for improved model reasoning and spec compliance | None (can start any time) |
+| [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add truthful `outputSchema` metadata to all 31 MCP tools while preserving generated upstream-response validation and aligning transport contracts | Not started; none |
 
 Recently completed:
 

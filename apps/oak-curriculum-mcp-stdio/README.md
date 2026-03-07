@@ -2,6 +2,13 @@
 
 MCP server that provides AI assistants with access to Oak National Academy's curriculum content.
 
+> **Status: legacy workspace**. Active development and routine maintenance are
+> halted for `apps/oak-curriculum-mcp-stdio`. Do not treat this workspace as the
+> long-term Oak MCP server surface. The intended direction is to generalise
+> `apps/oak-curriculum-mcp-streamable-http` so it can provide a separate stdio
+> entry point while sharing the canonical server composition. See
+> [ADR-128](../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+
 **Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm sdk-codegen` updates the SDK, and this server automatically has access to new/changed tools.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
@@ -19,7 +26,9 @@ pnpm -C apps/oak-curriculum-mcp-stdio build
 OAK_API_KEY=your_oak_api_key_here
 ```
 
-Use with MCP clients that support STDIO (e.g. Claude Desktop, Cursor). See `.mcp.json` or `.cursor/mcp.json` for local configuration examples.
+Use this only where an existing local MCP client setup still requires the legacy
+stdio workspace. See `.mcp.json` or `.cursor/mcp.json` for current local
+configuration examples.
 
 ## Architecture
 
@@ -41,7 +50,9 @@ This application follows the standard structure:
 
 ## Tool surface
 
-- Tools are generated from the SDK OpenAPI schema. Use Inspector or `tools/list` to discover available tools. The set matches the HTTP `/mcp` endpoint.
+- This legacy workspace currently exposes the generated SDK tools only. It does
+  not define the future canonical MCP surface.
+- Use Inspector or `tools/list` to discover the currently registered tool set.
 - Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide semantic search across all four curriculum indexes (lessons, units, threads, sequences) plus typeahead suggestions and faceted browsing.
 
 ### Search tools
@@ -56,6 +67,10 @@ This application follows the standard structure:
 
 ## Installation
 
+This installation path is for the legacy stdio workspace only. For the
+canonical Oak MCP server surface, see
+`apps/oak-curriculum-mcp-streamable-http/README.md`.
+
 ```bash
 # Install via npx (when published)
 npx @oaknational/oak-curriculum-mcp
@@ -66,6 +81,9 @@ pnpm build
 ```
 
 ## Configuration
+
+This configuration also targets the legacy stdio workspace rather than the
+canonical HTTP MCP server workspace.
 
 Add to your Claude Desktop configuration:
 
@@ -94,7 +112,7 @@ Required variables: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`.
 - Run the suite with `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
 - Tests spin up an in-memory STDIO transport using the generated stub executor (`src/app/test-helpers/create-stubbed-stdio-server.ts`), covering initialise/list, success, validation, and missing stub flows without additional configuration.
 
-## Development
+## Legacy development and support
 
 ```bash
 # Install dependencies
@@ -112,6 +130,10 @@ pnpm test
 # Build for production
 pnpm build
 ```
+
+No new feature work should be planned against this workspace. Limit changes here
+to transitional maintenance that is strictly necessary until the stdio entry
+point is consolidated into the HTTP workspace.
 
 ## How it works
 
