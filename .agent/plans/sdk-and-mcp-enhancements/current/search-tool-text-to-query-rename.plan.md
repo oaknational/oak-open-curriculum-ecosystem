@@ -1,6 +1,6 @@
 ---
 name: "Rename search/explore-topic `text` parameter to `query` — full stack"
-overview: "Full-stack rename of `text` → `query` across all workspaces. Phases 1–4 COMPLETE. Phase 5 (commit) and Phase 6 (rules audit) PENDING."
+overview: "Full-stack rename of `text` → `query` across all workspaces. ALL PHASES COMPLETE."
 todos:
   - id: phase-1-rename
     content: "Phase 1: Original full-stack rename (72 files) — COMPLETE"
@@ -15,18 +15,18 @@ todos:
     content: "Phase 4: Address reviewer findings (4 private fn renames, 3 TSDoc fixes, 1 suggestion) — COMPLETE"
     status: complete
   - id: phase-5-commit
-    content: "Phase 5: Create commit with all rename changes"
-    status: pending
+    content: "Phase 5: Create commit with all rename changes — COMPLETE"
+    status: complete
   - id: phase-6-rules-audit
-    content: "Phase 6: Create always-on .claude/rules/ wrappers + 2 new canonical rules"
-    status: pending
+    content: "Phase 6: Create always-on .claude/rules/ wrappers + 2 new canonical rules — COMPLETE"
+    status: complete
 isProject: false
 ---
 
 # Rename `text` → `query` — Full Stack Plan
 
 **Last Updated**: 2026-03-06
-**Status**: Phases 1–4 COMPLETE. Phases 5–6 PENDING.
+**Status**: ALL PHASES COMPLETE.
 **Branch**: `feat/search_qol_fixes`
 
 ---
