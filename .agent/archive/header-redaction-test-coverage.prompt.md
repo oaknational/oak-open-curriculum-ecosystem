@@ -28,7 +28,7 @@ This is a **security-critical** feature that MUST be thoroughly tested before de
 1. `@.agent/context/HANDOFF.md` - Big picture orientation and current status
 2. `@.agent/context/continuation.prompt.md` - Complete technical context and historical decisions
 3. `@.agent/context/context.md` - Recent changes and immediate next steps
-4. `@.agent/directives/rules.md` - Cardinal rules (MUST follow)
+4. `@.agent/directives/principles.md` - Cardinal rules (MUST follow)
 5. `@.agent/directives/testing-strategy.md` - TDD workflow (Red → Green → Refactor)
 6. `@apps/oak-curriculum-mcp-streamable-http/src/logging/header-redaction.ts` - Module under test
 7. `@apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.ts` - Integration point
@@ -515,7 +515,7 @@ Please read these files to understand the context:
 @.agent/context/HANDOFF.md
 @.agent/context/continuation.prompt.md
 @.agent/context/context.md
-@.agent/directives/rules.md
+@.agent/directives/principles.md
 @.agent/directives/testing-strategy.md
 @.agent/prompts/header-redaction-test-coverage.prompt.md (this file)
 

@@ -177,6 +177,6 @@ ELSER queue overflow causes document-level failures:
 
 Before implementation, re-read:
 
-1. [rules.md](../../../directives/rules.md) — First Question, TDD, no type shortcuts
+1. [principles.md](../../../directives/principles.md) — First Question, TDD, no type shortcuts
 2. [testing-strategy.md](../../../directives/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../../directives/schema-first-execution.md) — Generator is source of truth

@@ -70,19 +70,19 @@ interface FanOutResponse {
     {
       "id": "task-1",
       "name": "Fix unused imports",
-      "prompt": "Fix all unused import linting errors in the following files. Follow @rules.md. Make only the minimal changes needed to fix imports. Do not make any other changes.",
+      "prompt": "Fix all unused import linting errors in the following files. Follow @principles.md. Make only the minimal changes needed to fix imports. Do not make any other changes.",
       "files": ["src/auth.ts", "src/middleware.ts", "src/security.ts"],
       "constraints": [
         "Only modify specified files",
         "Only fix unused imports",
-        "Follow rules.md",
+        "Follow principles.md",
         "Self-contained fix (no dependencies on other tasks)"
       ]
     },
     {
       "id": "task-2",
       "name": "Fix type assertions",
-      "prompt": "Remove all 'as' type assertions in the following files. Replace with proper type guards. Follow @rules.md and @typescript-practice.md.",
+      "prompt": "Remove all 'as' type assertions in the following files. Replace with proper type guards. Follow @principles.md and @typescript-practice.md.",
       "files": ["src/handlers.ts", "src/validation.ts"],
       "constraints": [
         "Only modify specified files",

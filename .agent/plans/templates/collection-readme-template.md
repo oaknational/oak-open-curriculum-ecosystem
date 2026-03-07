@@ -63,7 +63,7 @@ See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
 ## Foundation Documents (Mandatory Re-read)
 
-1. [rules.md](../../directives/rules.md)
+1. [principles.md](../../directives/principles.md)
 2. [testing-strategy.md](../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../directives/schema-first-execution.md)
 

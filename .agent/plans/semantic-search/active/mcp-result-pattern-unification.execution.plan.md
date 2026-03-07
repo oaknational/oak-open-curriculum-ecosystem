@@ -33,7 +33,7 @@ todos:
 
 ## Foundation Alignment
 
-Before each workstream: re-read `rules.md`, `testing-strategy.md`, and `schema-first-execution.md`.
+Before each workstream: re-read `principles.md`, `testing-strategy.md`, and `schema-first-execution.md`.
 
 First question: **Could it be simpler without compromising quality?**
 

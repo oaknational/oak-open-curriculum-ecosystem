@@ -322,7 +322,7 @@ The cost of adding a new platform is one line of markdown.
 
 | Category | Agent-agnostic (.agent/) | Cursor (.cursor/) | Claude (.claude/) | Other |
 |---|---|---|---|---|
-| Directives | `directives/AGENT.md`, `rules.md`, etc. | — | — | — |
+| Directives | `directives/AGENT.md`, `principles.md`, etc. | — | — | — |
 | Sub-agent templates | 11 in `sub-agents/templates/` | — | — | — |
 | Sub-agent components | 3 in `sub-agents/components/` | — | — | — |
 | Sub-agent wrappers | — | 14 in `agents/` | — | — |

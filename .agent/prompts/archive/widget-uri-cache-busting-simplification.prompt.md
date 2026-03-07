@@ -412,7 +412,7 @@ See ADR-071 for architectural details.
 
 This solution strictly adheres to all foundation documents:
 
-### @[.agent/directives/rules.md]
+### @[.agent/directives/principles.md]
 
 - ✅ **KISS**: Simplest solution - generate hash once at build time
 - ✅ **No compatibility layers**: Removes runtime transformation logic

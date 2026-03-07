@@ -1,7 +1,7 @@
 /**
  * Thread-related API client functions.
  *
- * Separated from `../../adapters/oak-adapter.ts` to keep file size manageable per rules.md.
+ * Separated from `../../adapters/oak-adapter.ts` to keep file size manageable per principles.md.
  * All methods return `Result<T, SdkFetchError>` per ADR-088.
  *
  * @remarks

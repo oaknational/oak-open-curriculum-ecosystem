@@ -14,7 +14,7 @@ defined in ADR-117 (`docs/architecture/architectural-decisions/117-plan-template
    Do not skip this step for non-trivial work.
 
 2. Read the directives:
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 
@@ -75,7 +75,7 @@ Every executable plan MUST have:
 4. **Acceptance criteria** for every task — specific, checkable,
    with deterministic validation commands
 5. **Risk assessment** — what could go wrong and how to mitigate
-6. **Foundation alignment** — explicit references to rules.md,
+6. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md
 7. **Non-goals** — what we are explicitly NOT doing (YAGNI)
 

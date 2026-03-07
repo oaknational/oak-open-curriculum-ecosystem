@@ -279,7 +279,7 @@ pnpm smoke:dev:stub
 
 Before starting any plan execution phase:
 
-1. [rules.md](../directives/rules.md)
+1. [principles.md](../directives/principles.md)
 2. [testing-strategy.md](../directives/testing-strategy.md)
 3. [schema-first-execution.md](../directives/schema-first-execution.md)
 

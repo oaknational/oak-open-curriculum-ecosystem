@@ -98,7 +98,7 @@ export const ignores = [
  * promotion schedule.
  *
  * @see ADR-078 for the dependency injection rationale behind the vi.mock ban
- * @see rules.md "No type shortcuts" — applies to test code equally
+ * @see principles.md "No type shortcuts" — applies to test code equally
  */
 export const testRules = {
   'max-lines': ['error', 700],

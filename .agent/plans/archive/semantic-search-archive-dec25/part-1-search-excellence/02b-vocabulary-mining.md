@@ -1304,7 +1304,7 @@ For each new generator, follow this sequence:
 After completing each generator:
 
 1. Run all quality gates
-2. Re-read `rules.md`, `testing-strategy.md`, `schema-first-execution.md`
+2. Re-read `principles.md`, `testing-strategy.md`, `schema-first-execution.md`
 3. Confirm TDD was followed (tests written FIRST)
 4. Verify user value is measurable
 

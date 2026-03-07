@@ -218,7 +218,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 - [ ] **D1. Entry-point cognitive load remains high for junior contributors**
   - Evidence:
     - onboarding Step 2 requires reading multiple heavy directives before first
-      implementation work (`onboarding.md`, `AGENT.md`, `rules.md`).
+      implementation work (`onboarding.md`, `AGENT.md`, `principles.md`).
     - root README transitions quickly into practice internals for users who may
       still be orienting.
   - Impact:

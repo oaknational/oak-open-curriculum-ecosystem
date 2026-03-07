@@ -222,7 +222,7 @@ export const testRules = {
 ### Mandatory Session Workflow (do this every time)
 
 - Re-read and re-commit to:
-  - `.agent/directives/rules.md`
+  - `.agent/directives/principles.md`
   - `.agent/directives/testing-strategy.md`
 - Pick a **small slice** (preferably one file at a time).
 - Make the change.
@@ -728,7 +728,7 @@ Negative assertions:                 ~385 instances (mixed)
 
 ## References
 
-- Foundation: `.agent/directives/rules.md`
+- Foundation: `.agent/directives/principles.md`
 - Testing: `.agent/directives/testing-strategy.md`
 - Audit: `.agent/research/vi-mock-audit-report.md`
 - Original analysis: `.agent/plans/archive/completed/resolve-di-digressions.md`

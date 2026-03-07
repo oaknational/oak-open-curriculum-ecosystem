@@ -35,7 +35,7 @@ When resuming work, read these documents in order:
 2. **This file (`continuation.prompt.md`)** – Complete technical context and history
 3. **`.agent/context/context.md`** – Recent changes and current status
 4. **`.agent/plans/mcp-oauth-implementation-plan.md`** – Detailed Phase 2 sessions with acceptance criteria
-5. **`.agent/directives/rules.md`** – Cardinal rules (MUST follow)
+5. **`.agent/directives/principles.md`** – Cardinal rules (MUST follow)
 6. **`.agent/directives/testing-strategy.md`** – TDD workflow (Red → Green → Refactor)
 
 **Before starting work**:
@@ -1652,7 +1652,7 @@ interface MyLessonType {
    - This file → complete context
    - context.md → recent changes
    - Plan document → session details
-   - Rules.md → standards
+   - principles.md → standards
 
 2. **Verify environment**:
 
@@ -2003,7 +2003,7 @@ pnpm qg                       ✅ (Runs all above)
 | **Plan**         | `.agent/plans/mcp-oauth-implementation-plan.md`     | Phase 2 sessions with acceptance criteria |
 | **Context**      | `.agent/context/context.md`                         | Recent changes and current status         |
 | **Handoff**      | `.agent/context/HANDOFF.md`                         | Big picture orientation                   |
-| **Rules**        | `.agent/directives/rules.md`             | Cardinal rules (MUST follow)              |
+| **Rules**        | `.agent/directives/principles.md`             | Cardinal rules (MUST follow)              |
 | **Testing**      | `.agent/directives/testing-strategy.md`  | TDD workflow                              |
 | **Logger**       | `packages/libs/logger/README.md`                    | Logger API and usage                      |
 | **HTTP Server**  | `apps/oak-curriculum-mcp-streamable-http/README.md` | HTTP server docs                          |

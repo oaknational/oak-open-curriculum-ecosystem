@@ -33,7 +33,7 @@ Before finalising changes to templates or wrappers:
 
 - [ ] Mandatory reading requirements are explicit where needed for quality and consistency.
 - [ ] Templates include the shared identity declaration component (`.agent/sub-agents/components/behaviours/subagent-identity.md`).
-- [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/rules.md`).
+- [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/principles.md`).
 - [ ] Domain-specific references are explicit and all paths resolve.
 - [ ] Legacy generic agent names are not used in active guidance (for example, `architecture-reviewer`).
 - [ ] Architecture reviewer wrapper descriptions are distinct and lens-specific.

@@ -295,6 +295,6 @@ export function createParaphraseBoosters(
 
 Before starting work, re-read:
 
-1. [rules.md](../../../../directives/rules.md) — TDD, quality gates, no type shortcuts
+1. [principles.md](../../../../directives/principles.md) — TDD, quality gates, no type shortcuts
 2. [testing-strategy.md](../../../../directives/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../../../directives/schema-first-execution.md) — Generator is source of truth

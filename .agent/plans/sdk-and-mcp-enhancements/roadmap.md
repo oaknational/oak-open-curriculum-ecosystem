@@ -131,7 +131,7 @@ Prior to this update the plan treated OpenAI-specific surface (metadata keys, MI
 
 Before any domain starts, re-read and recommit to:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 
@@ -346,7 +346,7 @@ C8. **Auth metadata invariant hardening** (small task; no standalone active plan
 - **Fail-fast invariant**: validate auth metadata at the earliest boundary (descriptor load/bootstrap), before tool handler registration.
   - `securitySchemes` must be present, array-shaped, and semantically valid for every generated and aggregated tool descriptor.
   - Any missing/empty/malformed `securitySchemes` or descriptor lookup failure MUST terminate startup immediately (no fallback path, no permissive continuation).
-- **Fail fast, early and hard with helpful errors** (per [rules.md](../../directives/rules.md)):
+- **Fail fast, early and hard with helpful errors** (per [principles.md](../../directives/principles.md)):
   - Error must name the failing tool, the invalid field/value shape, and why startup was blocked.
   - Error must include remediation guidance (for example: run `pnpm sdk-codegen`; verify generated descriptor contract; fix aggregated definition source).
 - **Testing-strategy alignment**:

@@ -3,7 +3,7 @@
 **Date**: 2025-12-08  
 **Status**: ACTIVE - Enhanced Strategic Plan  
 **Priority**: HIGH  
-**Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
+**Foundation Alignment**: ✅ principles.md | schema-first-execution.md | testing-strategy.md
 
 ---
 
@@ -819,7 +819,7 @@ describe('Aspect-Based Vector Search', () => {
 
 ### Pre-Implementation Checklist
 
-- [ ] Foundation documents re-read (rules.md, schema-first, testing-strategy)
+- [ ] Foundation documents re-read (principles.md, schema-first, testing-strategy)
 - [ ] TDD approach planned (RED → GREEN → REFACTOR)
 - [ ] Unit tests written FIRST
 - [ ] Integration tests planned
@@ -942,7 +942,7 @@ describe('Aspect-Based Vector Search', () => {
 
 ### Foundation Documents (MUST RE-READ REGULARLY)
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/directives/testing-strategy.md`
 

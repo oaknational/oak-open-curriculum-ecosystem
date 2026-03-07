@@ -122,7 +122,7 @@ Before ANY code changes, read and internalize these documents:
 
 ```bash
 # These define what "correct" means - read them FIRST
-cat .agent/directives/rules.md
+cat .agent/directives/principles.md
 cat .agent/directives/schema-first-execution.md
 cat .agent/directives/testing-strategy.md
 
@@ -406,7 +406,7 @@ Every `eslint-disable` is entropy. Every `as` destroys type information. Every `
 
 Before any work, re-read and commit to:
 
-1. **`.agent/directives/rules.md`** — TDD, quality gates, no type shortcuts
+1. **`.agent/directives/principles.md`** — TDD, quality gates, no type shortcuts
 2. **`.agent/directives/schema-first-execution.md`** — All types from schema at type-gen time
 3. **`.agent/directives/testing-strategy.md`** — Test types and TDD approach
 
@@ -553,7 +553,7 @@ import type {
 
 ### Foundation Documents
 
-- `.agent/directives/rules.md` — Core rules
+- `.agent/directives/principles.md` — Core rules
 - `.agent/directives/schema-first-execution.md` — Schema-first approach
 - `.agent/directives/testing-strategy.md` — TDD at all levels
 

@@ -163,7 +163,7 @@ environment-variables docs say only `OAK_API_KEY` is needed for MCP work.
 #### P1 (High friction)
 
 - **Human onboarding sends devs to agent-facing documents too early**: Step 2
-  directs to `.agent/directives/AGENT.md`, `rules.md`, and `practice.md`
+  directs to `.agent/directives/AGENT.md`, `principles.md`, and `practice.md`
   without human framing. Uses meta-language ("metacognition", "napkin",
   "self-teaching property") without context.
 - **`pnpm make` and `pnpm qg` definitions stale in `build-system.md`**: Both
@@ -262,7 +262,7 @@ environment-variables docs say only `OAK_API_KEY` is needed for MCP work.
 #### P3 (Polish)
 
 - `as const` exception to "no type assertions" rule should be explicit in
-  `rules.md`.
+  `principles.md`.
 - Mutation testing (Stryker) listed as tooling but not documented.
 - `CONTRIBUTING.md` references `OPENAI_API_KEY` without explaining its role.
 - Several Cursor-specific paths in supposedly platform-agnostic documents.

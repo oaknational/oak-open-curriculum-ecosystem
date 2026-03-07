@@ -4,7 +4,7 @@
 
 Before starting work, read and commit to these foundation documents:
 
-- `.agent/directives/rules.md` - Core rules and architectural principles
+- `.agent/directives/principles.md` - Core rules and architectural principles
 - `.agent/directives/testing-strategy.md` - TDD at all levels
 - `.agent/directives/schema-first-execution.md` - Schema-first approach
 

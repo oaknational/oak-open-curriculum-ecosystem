@@ -4,4 +4,4 @@ Fail fast with helpful error messages. Never fail silently. Never ignore errors.
 
 Anti-patterns: swallowing exceptions with empty catch blocks, logging errors but continuing execution, returning `null`/`undefined` to indicate failure, generic "An error occurred" messages.
 
-See `.agent/directives/rules.md` §Fail FAST for the full policy.
+See `.agent/directives/principles.md` §Fail FAST for the full policy.

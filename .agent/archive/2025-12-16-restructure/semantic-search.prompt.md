@@ -145,7 +145,7 @@ Create a production-ready demo proving Elasticsearch Serverless as the **definit
 
 **Foundation documents** (MUST read before any work):
 
-1. `.agent/directives/rules.md` - TDD, quality gates, no type shortcuts
+1. `.agent/directives/principles.md` - TDD, quality gates, no type shortcuts
 2. `.agent/directives/schema-first-execution.md` - All types from field definitions
 3. `.agent/directives/testing-strategy.md` - Test types and TDD approach
 

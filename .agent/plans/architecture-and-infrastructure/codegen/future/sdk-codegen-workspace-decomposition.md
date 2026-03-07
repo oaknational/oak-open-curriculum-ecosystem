@@ -185,7 +185,7 @@ Option 1 is simpler and aligns with the cardinal rule.
   functions; only import paths change
 - **No new features** — this is pure structural refactoring
 - **No deprecation periods** — replace old imports with new imports in a
-  single commit per phase (per rules.md: no compatibility layers)
+  single commit per phase (per principles.md: no compatibility layers)
 - **No new ESLint rules** — existing rules apply; the split naturally
   resolves the OOM by separating code from data
 
@@ -327,6 +327,6 @@ naturally into the workspace split.
 - [Architecture analysis](../sdk-codegen-architecture-analysis.md)
 - [Reviewer findings](../sdk-codegen-reviewer-findings.md)
 - [Release Plan M1](../../../archive/completed/release-plan-m1.plan.md)
-- [Rules](../../../../directives/rules.md)
+- [Rules](../../../../directives/principles.md)
 - [Schema-First Execution](../../../../directives/schema-first-execution.md)
 - [ADR-108: Workspace Decomposition](../../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)

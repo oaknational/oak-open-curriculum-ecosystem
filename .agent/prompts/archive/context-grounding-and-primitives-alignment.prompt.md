@@ -8,7 +8,7 @@ Complete the alignment of all MCP primitives (tools, resources, prompts) with th
 
 Before starting, read and commit to:
 
-- `.agent/directives/rules.md` - Cardinal rules and TDD approach
+- `.agent/directives/principles.md` - Cardinal rules and TDD approach
 - `.agent/directives/schema-first-execution.md` - Type-gen sufficiency
 - `.agent/directives/testing-strategy.md` - TDD at all levels
 - `docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md` - Current context grounding strategy

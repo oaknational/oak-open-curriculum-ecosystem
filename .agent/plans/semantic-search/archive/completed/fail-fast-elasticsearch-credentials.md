@@ -808,7 +808,7 @@ identified and corrected:
 | [Phase 3a Plan](phase-3a-mcp-search-integration.md) | Parent plan for MCP search integration |
 | [ADR-112](/docs/architecture/architectural-decisions/112-per-request-mcp-transport.md) | Per-request transport (recently completed) |
 | [STDIO-HTTP Alignment](../../../architecture-and-infrastructure/stdio-http-server-alignment.md) | Future: shared Zod validation for STDIO |
-| [rules.md](../../../directives/rules.md) | Fail FAST, keep it strict |
+| [principles.md](../../../directives/principles.md) | Fail FAST, keep it strict |
 | [testing-strategy.md](../../../directives/testing-strategy.md) | TDD at ALL levels |
 | [roadmap.md](../roadmap.md) | Semantic search roadmap |
 | [session prompt](../../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
@@ -818,7 +818,7 @@ identified and corrected:
 ## Mandatory Reading Before Starting
 
 1. [AGENT.md](../../../directives/AGENT.md)
-2. [rules.md](../../../directives/rules.md) — especially "Fail FAST" and "Keep it strict"
+2. [principles.md](../../../directives/principles.md) — especially "Fail FAST" and "Keep it strict"
 3. [testing-strategy.md](../../../directives/testing-strategy.md)
 4. [distilled.md](../../../memory/distilled.md)
 5. [napkin.md](../../../memory/napkin.md)

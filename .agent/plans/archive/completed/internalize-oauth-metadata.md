@@ -87,7 +87,7 @@ apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/
 
 ### Design Principles
 
-From `@rules.md`:
+From `@principles.md`:
 
 - ✅ **TDD**: Write tests FIRST (Red → Green → Refactor)
 - ✅ **Keep it simple**: KISS, YAGNI, DRY
@@ -558,7 +558,7 @@ This is simple work with clear steps. 35 minutes is realistic.
 
 ### Type Safety
 
-From `@rules.md`:
+From `@principles.md`:
 
 - Use `readonly` for all data structures
 - Never use `any`, `as`, `!`, `Record<string, unknown>`
@@ -615,7 +615,7 @@ Every exported function needs JSDoc:
 
 ### Project Standards
 
-- `.agent/directives/rules.md` - Code quality rules
+- `.agent/directives/principles.md` - Code quality rules
 - `.agent/directives/testing-strategy.md` - Testing approach
 - `.agent/experience/2025-11-16-execution-vs-architecture.md` - "Could it be simpler?" principle
 

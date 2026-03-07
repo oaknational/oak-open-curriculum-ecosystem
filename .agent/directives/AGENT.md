@@ -47,7 +47,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 ## **RULES**
 
-Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
+Read [the rules](./principles.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
 ## Use Sub-agents
 

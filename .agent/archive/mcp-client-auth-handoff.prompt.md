@@ -26,7 +26,7 @@ We need to implement **MCP client authentication** - allowing ChatGPT to authent
 
 **Foundation documents** (read these first):
 
-- `.agent/directives/rules.md` - Core rules, TDD, quality gates
+- `.agent/directives/principles.md` - Core rules, TDD, quality gates
 - `.agent/directives/testing-strategy.md` - TDD at all levels, test types
 - `.agent/directives/schema-first-execution.md` - Schema-first for SDK
 
@@ -45,7 +45,7 @@ We need to implement **MCP client authentication** - allowing ChatGPT to authent
 
 ## Core Principles from Foundation Docs
 
-From `rules.md`:
+From `principles.md`:
 
 - TDD at ALL levels - tests FIRST, always RED → GREEN → REFACTOR
 - ALL quality gate failures are BLOCKING (no exceptions)

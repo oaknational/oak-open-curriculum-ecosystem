@@ -52,7 +52,7 @@ enough for permanent documentation.
 See ADR-125 for the full model. Key operational gotcha:
 Claude Code path-scoped rules (`.claude/rules/*.md` with `paths`) load only when
 matching files open. Create them ONLY for glob-scoped triggers — never duplicate
-always-on triggers (already in `CLAUDE.md` → `AGENT.md` → `rules.md` chain).
+always-on triggers (already in `CLAUDE.md` → `AGENT.md` → `principles.md` chain).
 Validation: `pnpm portability:check`.
 
 ## Repo-Specific Rules

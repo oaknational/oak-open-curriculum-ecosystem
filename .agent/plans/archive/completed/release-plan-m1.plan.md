@@ -46,7 +46,7 @@ Primary strategic reference:
 ### Getting Started
 
 1. Read this plan. It is self-contained.
-2. Read [rules.md](../../../directives/rules.md), [testing-strategy.md](../../../directives/testing-strategy.md), and [schema-first-execution.md](../../../directives/schema-first-execution.md).
+2. Read [principles.md](../../../directives/principles.md), [testing-strategy.md](../../../directives/testing-strategy.md), and [schema-first-execution.md](../../../directives/schema-first-execution.md).
 3. Read [distilled.md](../../../memory/distilled.md) and [napkin.md](../../../memory/napkin.md).
 
 ### Milestone Progression
@@ -550,7 +550,7 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 | Field | Value |
 |-------|-------|
 | **Severity** | P1 — violates cardinal no-type-shortcuts rule |
-| **Rule** | `no-type-shortcuts.mdc`, `rules.md` §Compiler-Time Types |
+| **Rule** | `no-type-shortcuts.mdc`, `principles.md` §Compiler-Time Types |
 | **Problem** | Phase 1 introduced `as` type assertions in test files, violating no-type-shortcuts discipline. |
 | **Files** | `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts`, `packages/core/oak-eslint/src/rules/sdk-boundary.unit.test.ts`, `packages/core/oak-eslint/src/rules/core-boundary.unit.test.ts` |
 | **Fix** | Replaced assertion-based access with explicit runtime-safe extraction/assertions in integration and boundary tests. Removed remaining `as` shortcuts in affected files. |
@@ -581,8 +581,8 @@ Release-blocking remediation items (**R1–R3**) must be completed before moving
 
 | Field | Value |
 |-------|-------|
-| **Severity** | P2 — rules.md prefers Result over throw |
-| **Rule** | `rules.md` §Code Design |
+| **Severity** | P2 — principles.md prefers Result over throw |
+| **Rule** | `principles.md` §Code Design |
 | **Problem** | Both `deriveSelfOrigin` (auth-routes.ts) and `fetchUpstreamMetadata` (oauth-and-caching-setup.ts) throw errors rather than returning `Result<T, E>`. The calling code uses try/catch. |
 | **Fix** | Refactor to return `Result<T, E>`. Callers pattern-match on `ok` / `error`. |
 | **Status** | [x] Complete (2026-02-26). Refactored to Result<T, E> with HostValidationError and MetadataFetchError. Callers pattern-match on ok/error. Committed in Batch E2. |
@@ -835,10 +835,10 @@ Remaining work (E2, E3, Go/No-Go) is defined in §Remaining Work in the handoff 
 |-------|-------|
 | **Severity** | P2 |
 | **Reviewers** | Onboarding-reviewer |
-| **Problem** | `rules.md` and `ai-agent-guide.md` give different gate orderings without stating they are iteration-time subsets. (Previously also `onboarding.md`, now removed.) |
-| **Files** | `.agent/directives/rules.md`, `docs/governance/ai-agent-guide.md` |
+| **Problem** | `principles.md` and `ai-agent-guide.md` give different gate orderings without stating they are iteration-time subsets. (Previously also `onboarding.md`, now removed.) |
+| **Files** | `.agent/directives/principles.md`, `docs/governance/ai-agent-guide.md` |
 | **Fix** | Add brief note indicating subsets and pointer to full sequence in `start-right.prompt.md` or `docs/engineering/build-system.md`. |
-| **Status** | [x] Complete (2026-02-25). `ai-agent-guide.md` deleted (entirely redundant). `rules.md` now cross-references AGENT.md. Canonical gate sequence lives in `start-right.prompt.md`. No divergent subset lists remain. |
+| **Status** | [x] Complete (2026-02-25). `ai-agent-guide.md` deleted (entirely redundant). `principles.md` now cross-references AGENT.md. Canonical gate sequence lives in `start-right.prompt.md`. No divergent subset lists remain. |
 
 #### O4: ai-agent-guide.md — pnpm build omitted from development gates
 
@@ -1093,7 +1093,7 @@ Items: N5, N9, N10, N11, N17, N19.
    `docs/operations/environment-variables.md`
 2. **N9** — `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md`
    line 255: fix stale link
-3. **N10** — ~~Add a note to `rules.md`~~ **Resolved**: generator `as`
+3. **N10** — ~~Add a note to `principles.md`~~ **Resolved**: generator `as`
    casts eliminated in `emit-index.ts` (const map + unknown return).
    Patterns extracted to `.agent/memory/code-patterns/`.
 4. **N11** — `docs/README.md`: add a "New to this project?" entry at the
@@ -1511,7 +1511,7 @@ In `packages/sdks/oak-sdk-codegen/package.json`, remove the
 In `packages/sdks/oak-sdk-codegen/eslint.config.ts`, add the large
 generated data files at their current locations to the `ignores` array.
 These are serialised data structures (5K-122K lines each), not code —
-the narrow exception from rules.md applies.
+the narrow exception from principles.md applies.
 
 Files to ignore (both copies):
 
@@ -1627,9 +1627,9 @@ Milestone 1 release is complete when all are true:
 - **2026-02-26**: **Batch E elevated — all items fix-before-release.** User rejected deferral of Batch E items (agent-decided, not user-approved). Two decisions recorded: (1) F7 step 4: `SearchRetrievalService` stays in curriculum-sdk as ISP consumer-side interface — not a duplicate, structural typing handles wiring, no SDK-to-SDK dependency. (2) F17: remove `public/search.ts` facade entirely — migrate 36 files to direct `@oaknational/sdk-codegen/search` imports; the facade masks truth and creates a labyrinth. F12 closed (concrete work in F7; remaining "oak-domain" question is future architecture). F13 closed (resolveEnv adoption done via F8; Result instances covered by R4). F35 reframed as dead code deletion. F17 expanded from "ADR text alignment" to full facade removal. Batch E restructured into E1 (trivial), E2 (small), E3 (medium). Open items: 14 remaining (1 P1, 1 P2, 12 P3).
 - **2026-02-26**: **Batch C COMPLETE, F7 reframed.** F8 Search CLI fully migrated to `resolveEnv` five-source hierarchy: `SearchCliEnvSchema` composing shared schemas with stricter overrides, `loadRuntimeConfig` + `loadConfigOrExit`, deleted `loadAppEnv`, refactored 29+ files to DI pattern, 7 new integration tests, 950 total tests pass. `@oaknational/env-resolution` enhanced with `findAppRoot` and five-source merge. ADR-116 revised. F7 upgraded from P2 to P1: user identified that the contract duplication is a consequence of search-sdk depending on curriculum-sdk (unfinished ADR-108 work), not an acceptable trade-off. Architecture reviewer recommended deferral based on cycle analysis; user corrected: the cycle IS the bug, `oak-sdk-codegen` exists to solve it. F7 reframed as "complete ADR-108" — move synonym/vocab functions to sdk-codegen, remove search-sdk→curriculum-sdk dependency entirely. (Note: "delete duplicate contract" originally stated here was revised later in this session — `SearchRetrievalService` stays as ISP; see entry above.) Cursor plan integrated and deleted. Open items: 16 remaining (1 P1, 1 P2, 14 P3).
 - **2026-02-26**: **Batch C near-complete** (F8-STDIO, F27, O12 done). F8: STDIO app migrated to `resolveEnv` pipeline — `StdioEnvSchema` composing shared schemas, `loadRuntimeConfig` returns `Result<RuntimeConfig, ConfigError>`, `process.env` eliminated from all `src/` modules, 10 integration tests. Search CLI deferred. F27: SDK response-augmentation DI — removed module-level logger, `MiddlewareOptions.logger` required, `createNoopLogger()` fallback in `BaseApiClient`, SDK no longer reads `process.env` for logging. O12: OAuth metadata fetch timeout troubleshooting note added to HTTP server README. STDIO README updated with env pipeline docs. SDK README updated with optional `logger` parameter. Fixed `no-empty-function` lint in `oak-base-client.ts`. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e). Specialist reviewers: code-reviewer (approved), architecture-reviewer-fred (compliant), type-reviewer (safe), test-reviewer (pass), docs-adr-reviewer (gaps fixed). Open items: 14 remaining.
-- **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, rules.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
+- **2026-02-25**: **F5/F18 complete** (Batch C, 1 of 3). Split `@oaknational/env` into pure schema contracts (core) and `@oaknational/env-resolution` runtime pipeline (libs). `LIB_PACKAGES` cleaned to `['logger', 'env-resolution']`. Fixed `openapi-zod-client-adapter` ESLint config (was `createLibBoundaryRules`, now `coreBoundaryRules`). 9 consumer files migrated. Updated ADR-116, architecture README, AGENT.md, principles.md, quick-start, root README. All quality gates pass. Specialist reviewers: code-reviewer, arch-barney, arch-fred, config-reviewer. Open items: 16 remaining.
 - **2026-02-25**: **Batch B complete** (8 items: F6, F10, F20, F25, F28, F29, O5, O10). F6: extracted `createSearchRetrieval` to `@oaknational/oak-search-sdk` (3 unit tests). F10: per-attempt timeout + exponential backoff retry (5 unit tests). F20: archived contradictory docs. F25: updated deployment-architecture.md. F28: removed blanket eslint-disables, centralised overrides. F29: fixed "core depends on nothing" wording. O5: added `doc-gen`/`subagents:check` to start-right gates. O10: added convenience commands to AGENT.md. All quality gates pass. Committed in `b85c44ec` + `9ad2d66a` (reviewer fixes). Cursor implementation plan integrated and deleted. Open items: 18 remaining.
-- **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `rules.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.
+- **2026-02-25**: Parallel docs/onboarding session complete. Resolved 6 items: O1 (commands→pointers, gates aligned), O2 (quick-start tree fixed), O3 (ai-agent-guide deleted, no divergent gate subsets), O4 (annotated re deletion), O8 (partially — tree fixed, empty dir remains), O9 (DRY — commands are pointers). Updated F26 note. Corrected file references for O5 (commands are now pointers). ADR count updated to 116 across 3 files. `CONTRIBUTING.md` type-safety wording improved. `principles.md` architectural model corrected and cross-referenced to AGENT.md. Open items: 26 remaining.
 - **2026-02-25**: Plan updated for standalone handoff. `onboarding.md` being removed by parallel agent — O11 cancelled (target file removed), O12 retargeted to HTTP server README, O8 demoted to Batch E. Next Session Checklist rewritten as self-contained entry point with Getting Started steps, Current State summary, and item-level file references. Execution Order and Onboarding Execution Order aligned. Open items: 32 remaining.
 - **2026-02-25**: **Batch A complete** (8 items: R2, F4, F9, F26, F30, O4, O6, O7). R2: extracted `bootstrapApp<T>` with DI + 3 integration tests. F4: typeSafeEntries import fixed. F9: app boundary rules added to Search CLI. F26: package locations corrected in AGENT.md and ai-agent-guide. F30: redundant `requireRepoRoot()` removed. O4: `pnpm build` added to gate list. O6: grammar fixed. O7: `onboarding-reviewer` and `config-reviewer` added to table. All quality gates pass (build, type-check, lint:fix, format, markdownlint, test, test:e2e, test:ui, smoke:dev:stub).
 - **2026-02-25**: Full codebase verification of all 42 open items — every problem confirmed still present. Replaced linear execution order with batched approach (A–E) grouped by complexity for efficient execution. F18 marked as subsumed by F5. Updated Next Session Checklist with batch definitions and item-level complexity estimates.

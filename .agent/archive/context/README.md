@@ -150,7 +150,7 @@ I'm continuing development on openapi-zod-client. Please read these documents:
 @continuation.prompt.md
 @context.md
 @PHASE-2-MCP-ENHANCEMENTS.md
-@RULES.md
+@principles.md
 
 Once you've read them, please:
 1. Summarize the current state
@@ -161,7 +161,7 @@ Once you've read them, please:
    - Validation steps to confirm completion
    - Estimated effort per task
 
-Follow all standards in @RULES.md including TDD, type safety, and comprehensive TSDoc.
+Follow all standards in @principles.md including TDD, type safety, and comprehensive TSDoc.
 ```
 
 **What happens:**
@@ -170,7 +170,7 @@ Follow all standards in @RULES.md including TDD, type safety, and comprehensive 
 - AI reads `continuation.prompt.md` → understands full technical context with history
 - AI reads `context.md` → knows recent changes and current status
 - AI reads plan document → knows session objectives and acceptance criteria
-- AI reads `RULES.md` → knows quality standards (TDD, TSDoc, etc.)
+- AI reads `principles.md` → knows quality standards (TDD, TSDoc, etc.)
 - AI creates detailed implementation plan for the session
 - AI can begin work immediately with full context
 
@@ -252,7 +252,7 @@ I want to add [NEW FEATURE]. Please:
    @HANDOFF.md
    @continuation.prompt.md
    @context.md
-   @RULES.md
+   @principles.md
 
 2. Analyze the feature requirements
 3. Create a detailed plan document in .agent/plans/
@@ -268,7 +268,7 @@ I want to add [NEW FEATURE]. Please:
 - AI reads `HANDOFF.md` → understands current project state and deliverables
 - AI reads `continuation.prompt.md` → understands existing architecture and patterns
 - AI reads `context.md` → knows recent work and current status
-- AI reads `RULES.md` → knows quality standards to follow
+- AI reads `principles.md` → knows quality standards to follow
 - AI creates new plan document following established format
 - Plan is integrated into documentation system
 - `HANDOFF.md` updated with new phase
@@ -429,7 +429,7 @@ I want to add [NEW FEATURE]. Please:
 │   ├── SCALAR-PIPELINE.md           ← Architecture docs
 │   ├── OPENAPI-3.1-MIGRATION.md
 │   └── [other-arch-docs].md
-└── RULES.md                         ← Coding standards
+└── principles.md                         ← Coding standards
 ```
 
 ---
@@ -503,7 +503,7 @@ Before completing a session, verify:
 
 ### AI creates poor implementation plans
 
-**Solution:** Review plan document format and ensure RULES.md is referenced
+**Solution:** Review plan document format and ensure principles.md is referenced
 
 ### Documentation feels stale
 
@@ -517,7 +517,7 @@ Before completing a session, verify:
 
 ## 📚 Additional Resources
 
-- **Coding Standards:** `.agent/RULES.md`
+- **Coding Standards:** `.agent/principles.md`
 - **Architecture Docs:** `.agent/architecture/`
 - **Plan Documents:** `.agent/plans/`
 - **Project README:** `../README.md`

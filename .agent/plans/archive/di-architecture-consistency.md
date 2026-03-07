@@ -448,7 +448,7 @@ pnpm test:e2e
 
 ### Alignment with Foundation Documents
 
-**From rules.md**:
+**From principles.md**:
 
 - ✅ "No global state" - DI eliminates global state mutation
 - ✅ "Single source of truth" - Config flows from one place
@@ -494,5 +494,5 @@ pnpm test:e2e
 
 - Investigation: `.agent/plans/archive/resolve-di-digressions.md`
 - Immediate fixes: `.agent/plans/fix-e2e-test-isolation.md`
-- Foundation: `.agent/directives/rules.md`
+- Foundation: `.agent/directives/principles.md`
 - Testing: `.agent/directives/testing-strategy.md`

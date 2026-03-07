@@ -11,6 +11,9 @@ This directory is for method-focused research: approaches, processes, and featur
 - Start with `methods/README.md` for reusable approaches and capability notes.
 - Use `features/` for multi-view architecture and the Elastic + Neo4j future-state (derived subjects, C4 diagrams).
 - Use `system/` for current system notes and decisions (CLI/SDK-only, ingestion status).
+- Use `.agent/plans/semantic-search/research-index.md` for
+  boundary-local semantic-search research companions that directly feed the
+  search backlog and promotion flow.
 
 ## Phasing: ES-only now, Neo4j later
 

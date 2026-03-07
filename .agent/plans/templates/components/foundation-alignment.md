@@ -5,7 +5,7 @@ the foundation documents. They are the authority.
 
 ## Foundation Documents
 
-1. `.agent/directives/rules.md` — Core principles
+1. `.agent/directives/principles.md` — Core principles
 2. `.agent/directives/testing-strategy.md` — TDD at ALL levels
 3. `.agent/directives/schema-first-execution.md` — Generator is source of truth
 

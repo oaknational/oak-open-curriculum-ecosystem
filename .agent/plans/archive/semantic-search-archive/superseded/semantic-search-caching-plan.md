@@ -174,7 +174,7 @@ export async function POST() {
 
 ## References
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
 - `.agent/plans/semantic-search/semantic-search-api-plan.md`

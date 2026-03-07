@@ -71,7 +71,7 @@ artefacts. Practice-core links to it via `../practice-index.md`.
 
 The practice-index carries navigable links to the local repo's:
 
-- **Directives** — `AGENT.md`, `rules.md`, etc.
+- **Directives** — `AGENT.md`, `principles.md`, etc.
 - **Architectural decisions** — ADRs referenced by `practice.md`
 - **Tools and workflows** — commands, skills, rules
 - **Artefact directories** — `.agent/`, `.cursor/`, `docs/`

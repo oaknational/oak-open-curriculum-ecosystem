@@ -35,7 +35,7 @@ isProject: false
 
 When an LLM agent calls the `search` MCP tool for the first time, it consistently guesses `query` as the parameter name. The actual parameter was `text`, causing validation failures. `query` is the industry standard name (Google, Elasticsearch, OpenAI all use it). The tool description itself said "Search query text" 8+ times while the parameter was named `text`.
 
-**Decision**: Option B — full stack rename, no compatibility layers, no naming seams. Per rules.md: "NEVER create compatibility layers" and "Use consistent naming conventions."
+**Decision**: Option B — full stack rename, no compatibility layers, no naming seams. Per principles.md: "NEVER create compatibility layers" and "Use consistent naming conventions."
 
 ---
 
@@ -65,7 +65,7 @@ pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markd
 
 Before each phase and at session start:
 
-1. **Re-read** `.agent/directives/rules.md` — core principles
+1. **Re-read** `.agent/directives/principles.md` — core principles
 2. **Re-read** `.agent/directives/testing-strategy.md` — TDD at all levels
 3. **Re-read** `.agent/directives/invoke-code-reviewers.md` — reviewer catalogue
 4. **Ask**: "Could it be simpler without compromising quality?"
@@ -229,7 +229,7 @@ This phase addresses the root cause of Phase 1 governance failures.
 
 NEVER create compatibility layers, shims, aliases, or destructuring renames (e.g., `{ query: text }`). When renaming, rename EVERYWHERE — interfaces, private functions, variable names, log keys, TSDoc. One concept = one name.
 
-See `.agent/directives/rules.md`.
+See `.agent/directives/principles.md`.
 ```
 
 **`.agent/rules/tdd-for-refactoring.md`** (NEW):
@@ -306,7 +306,7 @@ in the text→query rename: the invoke-code-reviewers directive was
 invisible to Claude Code because it had no .claude/rules/ wrapper.
 
 Also creates 2 new canonical rules:
-- no-compatibility-layers (from rules.md extraction)
+- no-compatibility-layers (from principles.md extraction)
 - tdd-for-refactoring (from testing-strategy.md extraction)
 
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
@@ -326,7 +326,7 @@ EOF
 
 2. **No reviewer invocation**: The `invoke-code-reviewers` directive requires invoking the code-reviewer agent after all non-trivial changes. **Zero reviewers were invoked during Phase 1.** Caught by the user.
 
-3. **Compatibility layers created**: Destructuring aliases like `{ query: text, ...rest }` in 4 files (18 occurrences). Violates rules.md: "NEVER create compatibility layers."
+3. **Compatibility layers created**: Destructuring aliases like `{ query: text, ...rest }` in 4 files (18 occurrences). Violates principles.md: "NEVER create compatibility layers."
 
 4. **Items wrongly excluded as "non-goals"**:
    - WebhookPayloadSchema.text kept as "external API" — but no external consumers exist
@@ -371,11 +371,11 @@ Rules not loaded into context. `.agent/directives/` files require explicit readi
 
 ## Foundation Alignment Checklist
 
-- [ ] `rules.md` — Cardinal Rule: schema-first maintained (codegen generator edited)
-- [ ] `rules.md` — No Type Shortcuts: no `as`, `any`, `!` added
-- [ ] `rules.md` — No Compatibility Layers: all aliases removed, new rule created
-- [ ] `rules.md` — Consistent Naming: `query` everywhere, no `text` remnants
-- [ ] `rules.md` — Quality Gates: all gates pass
+- [ ] `principles.md` — Cardinal Rule: schema-first maintained (codegen generator edited)
+- [ ] `principles.md` — No Type Shortcuts: no `as`, `any`, `!` added
+- [ ] `principles.md` — No Compatibility Layers: all aliases removed, new rule created
+- [ ] `principles.md` — Consistent Naming: `query` everywhere, no `text` remnants
+- [ ] `principles.md` — Quality Gates: all gates pass
 - [ ] `testing-strategy.md` — TDD applied to corrections
 - [ ] `invoke-code-reviewers.md` — All specialists invoked
 - [ ] `schema-first-execution.md` — Generator edited for ZeroHitEvent

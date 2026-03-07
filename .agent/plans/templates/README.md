@@ -103,7 +103,7 @@ inline them — adapt the guidance to your specific context.
 
 Before starting and at the start of each phase, read:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 

@@ -38,7 +38,7 @@ E2E tests in stdio app pass arguments in old nested format (`params.path.lesson`
 
 **Status**: ✅ **FIXED** - Deleted problematic tests that violated workspace boundaries
 
-**Tests Deleted** (violations of @rules.md and @testing-strategy.md):
+**Tests Deleted** (violations of @principles.md and @testing-strategy.md):
 
 - `apps/oak-curriculum-mcp-streamable-http/src/handlers.unit.test.ts` - Imported SDK types, used complex mocks
 - `apps/oak-curriculum-mcp-streamable-http/src/oauth-metadata-clerk.integration.test.ts` - Tested almost nothing useful
@@ -78,7 +78,7 @@ pnpm test        # Test ALL workspaces
 pnpm test:e2e    # E2E tests for ALL apps
 ```
 
-**Rationale** (from @rules.md):
+**Rationale** (from @principles.md):
 
 > "Run quality gates frequently to catch issues early"
 > "If a change breaks something, you want to know immediately, not after 10 more changes"
@@ -124,7 +124,7 @@ Therefore, quality gates MUST run across the entire monorepo.
 
 ## Solution Architecture
 
-### Principle (from @rules.md and @testing-strategy.md)
+### Principle (from @principles.md and @testing-strategy.md)
 
 > "Tests should not have complex setup/teardown - that's a signal to simplify"
 > "Mutating global state creates coupling"
@@ -134,7 +134,7 @@ Therefore, quality gates MUST run across the entire monorepo.
 
 **The product code ALREADY solves this problem.** We don't need new abstractions - we need to USE the existing DI capabilities (`loadRuntimeConfig(source)`, `createApp({ runtimeConfig })`) instead of fighting against them with global state mutation.
 
-This exemplifies the first question from rules.md: **"Could it be simpler?"**
+This exemplifies the first question from principles.md: **"Could it be simpler?"**
 
 Answer: YES - use what exists, don't add more.
 
@@ -155,7 +155,7 @@ Answer: YES - use what exists, don't add more.
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives/rules.md` - Core principles
+1. **Re-read** `.agent/directives/principles.md` - Core principles
 2. **Re-read** `.agent/directives/testing-strategy.md` - Testing philosophy
 3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
@@ -187,7 +187,7 @@ Each task has:
 
 ### Phase 0: Verify Foundation Assumptions (15 minutes)
 
-**Foundation Check-In**: Re-read rules.md section on "No Global State" and testing-strategy.md on "Test Isolation".
+**Foundation Check-In**: Re-read principles.md section on "No Global State" and testing-strategy.md on "Test Isolation".
 
 **Key Principle**: Before implementing the DI-based isolation fix, we must verify that the product code doesn't bypass the DI system by reading `process.env` directly in places other than the config loading layer.
 
@@ -267,7 +267,7 @@ Proceed directly to Phase 1.
 
 ### Phase 0.5: Complete Product Code DI Implementation (3-4 hours)
 
-**Foundation Check-In**: Re-read rules.md sections on "Pure functions first", "No global state", "Single source of truth for types", and testing-strategy.md on "Pure functions and dependency injection".
+**Foundation Check-In**: Re-read principles.md sections on "Pure functions first", "No global state", "Single source of truth for types", and testing-strategy.md on "Pure functions and dependency injection".
 
 **Key Principle**: All configuration MUST flow through the DI system. No `process.env` access outside of the configuration loading layer. This ensures testability, maintainability, and architectural consistency.
 
@@ -1025,7 +1025,7 @@ Allow `process.env` for "harmless" values like package version.
 
 ## References
 
-- `.agent/directives/rules.md` - "No global state", "Pure functions first"
+- `.agent/directives/principles.md` - "No global state", "Pure functions first"
 - `.agent/directives/testing-strategy.md` - "Use dependency injection with pure functions"
 - `.agent/plans/resolve-di-digressions.md` - Phase 0 validation findings
 - Martin Fowler: "Inversion of Control Containers and the Dependency Injection pattern"
@@ -1037,7 +1037,7 @@ Allow `process.env` for "harmless" values like package version.
 
 ---
 
-**Compliance**: This decision aligns with rules.md principles on "No global state", "Pure functions first", and "Single source of truth for types".
+**Compliance**: This decision aligns with principles.md principles on "No global state", "Pure functions first", and "Single source of truth for types".
 ```
 
 **Acceptance Criteria**:
@@ -1050,7 +1050,7 @@ Allow `process.env` for "harmless" values like package version.
 6. ✅ Alternatives considered and rejection rationale provided
 7. ✅ Implementation plan included
 8. ✅ References to foundation documents included
-9. ✅ Compliance with rules.md explicitly stated
+9. ✅ Compliance with principles.md explicitly stated
 
 **Deterministic Validation**:
 
@@ -1067,7 +1067,7 @@ grep "## Alternatives Considered" docs/architecture/architectural-decisions/0001
 # Expected: MATCH FOUND for each (exit code 0)
 
 # 3. Verify references to foundation documents
-grep "rules.md" docs/architecture/architectural-decisions/0001-dependency-injection-for-configuration.md
+grep "principles.md" docs/architecture/architectural-decisions/0001-dependency-injection-for-configuration.md
 grep "testing-strategy.md" docs/architecture/architectural-decisions/0001-dependency-injection-for-configuration.md
 # Expected: MATCH FOUND for each (exit code 0)
 
@@ -1322,7 +1322,7 @@ const config = createTestConfig({ apiKey: 'custom-key' });
 
 - [ADR 078: Dependency Injection for Testability](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
 - [Testing Strategy](../../directives/testing-strategy.md)
-- [Rules: No Global State](.agent/directives/rules.md)
+- [Rules: No Global State](.agent/directives/principles.md)
 
 **Acceptance Criteria**:
 
@@ -1530,9 +1530,9 @@ pnpm markdownlint:root docs/development/dependency-injection-guide.md
 
 Before proceeding to Phase 1, verify:
 
-- ✅ **rules.md - No Global State**: All process.env access eliminated from product code
-- ✅ **rules.md - Single Source of Truth**: All config flows through RuntimeConfig interface
-- ✅ **rules.md - Inline docs everywhere**: Exhaustive TSDoc on all config functions
+- ✅ **principles.md - No Global State**: All process.env access eliminated from product code
+- ✅ **principles.md - Single Source of Truth**: All config flows through RuntimeConfig interface
+- ✅ **principles.md - Inline docs everywhere**: Exhaustive TSDoc on all config functions
 - ✅ **testing-strategy.md - Pure Functions**: Config functions are pure, testable
 - ✅ **schema-first-execution.md**: Config structure flows from interface definition
 
@@ -1540,7 +1540,7 @@ Before proceeding to Phase 1, verify:
 
 ### Phase 1: Update Test Helpers (2 hours)
 
-**Foundation Check-In**: Re-read rules.md sections on "Pure functions first", "No global state", and testing-strategy.md on "E2E tests".
+**Foundation Check-In**: Re-read principles.md sections on "Pure functions first", "No global state", and testing-strategy.md on "E2E tests".
 
 **Key Principle**: We are NOT adding new capabilities. The product code ALREADY supports DI perfectly via `loadRuntimeConfig(source)` and `createApp({ runtimeConfig })`. This is about USING existing architecture, not creating new abstractions. (YAGNI, KISS)
 
@@ -1772,7 +1772,7 @@ pnpm test
 
 ### Phase 2: Update E2E Tests (1 hour)
 
-**Foundation Check-In**: Re-read testing-strategy.md on "E2E tests" and rules.md on "Test to interfaces, not internals".
+**Foundation Check-In**: Re-read testing-strategy.md on "E2E tests" and principles.md on "Test to interfaces, not internals".
 
 #### Task 2.1: Update `auth-enforcement.e2e.test.ts`
 
@@ -1962,7 +1962,7 @@ pnpm test:e2e  # E2E tests for ALL apps
 
 **Schema-First Context**: The nested → flat argument change flows from the P0 OpenAPI schema fix. When the schema changed, `pnpm type-gen` regenerated tool descriptors with flat argument structures. These tests simply weren't updated at that time. This phase aligns test data with generated types.
 
-**Type Safety Validation**: After fixing arguments, we must verify TypeScript would catch similar issues in the future. If types are too loose (e.g., `Record<string, unknown>`), we've violated rules.md principle: "No type shortcuts".
+**Type Safety Validation**: After fixing arguments, we must verify TypeScript would catch similar issues in the future. If types are too loose (e.g., `Record<string, unknown>`), we've violated principles.md principle: "No type shortcuts".
 
 #### Task 3.1: Update `multi-status-handling.e2e.test.ts`
 
@@ -2133,7 +2133,7 @@ cd ai_experiments/oak-notion-mcp
    ```
 
 2. Check if arguments are typed as `unknown`, `any`, or `Record<string, unknown>`
-   - If YES: This violates rules.md - we've lost type information
+   - If YES: This violates principles.md - we've lost type information
    - If NO: TypeScript should have caught the error - investigate why it didn't
 
 3. Verify generated tool descriptors provide strong types:
@@ -2171,7 +2171,7 @@ grep "ToolArgsForName\|ToolArgs" packages/sdks/oak-curriculum-sdk/src/types/gene
 
 **Task Complete When**: All 4 acceptance criteria checked AND follow-up actions taken if needed.
 
-**Foundation Alignment**: This validates rules.md principle: "Preserve type information - NEVER widen types"
+**Foundation Alignment**: This validates principles.md principle: "Preserve type information - NEVER widen types"
 
 ---
 
@@ -2193,7 +2193,7 @@ pnpm test:e2e  # E2E tests for ALL apps
 
 ### Phase 4: Validation (30 minutes)
 
-**Foundation Check-In**: Re-read all three foundation documents (rules.md, testing-strategy.md, schema-first-execution.md). Verify all principles followed throughout implementation.
+**Foundation Check-In**: Re-read all three foundation documents (principles.md, testing-strategy.md, schema-first-execution.md). Verify all principles followed throughout implementation.
 
 #### Task 4.1: Run E2E Tests Sequentially
 
@@ -2336,11 +2336,11 @@ echo $?  # Expected: 0 (last command successful)
 
 **Final verification against foundation documents**:
 
-- [ ] **rules.md - Cardinal Rule**: No changes to type generation. `pnpm type-gen` output unchanged (Phase 3 uses existing generated types)
-- [ ] **rules.md - No Type Shortcuts**: Verified no `as`, `any`, `Record<string, unknown>` added (Task 3.4)
-- [ ] **rules.md - No Global State**: Verified no `process.env` mutations (Task 4.2)
-- [ ] **rules.md - No Compatibility Layers**: We replaced old approach, not wrapped it (Phases 1-2)
-- [ ] **rules.md - Quality Gates**: All gates pass across all workspaces (Task 4.3)
+- [ ] **principles.md - Cardinal Rule**: No changes to type generation. `pnpm type-gen` output unchanged (Phase 3 uses existing generated types)
+- [ ] **principles.md - No Type Shortcuts**: Verified no `as`, `any`, `Record<string, unknown>` added (Task 3.4)
+- [ ] **principles.md - No Global State**: Verified no `process.env` mutations (Task 4.2)
+- [ ] **principles.md - No Compatibility Layers**: We replaced old approach, not wrapped it (Phases 1-2)
+- [ ] **principles.md - Quality Gates**: All gates pass across all workspaces (Task 4.3)
 - [ ] **testing-strategy.md - Test Behavior**: Tests validate auth enforcement behavior, not implementation
 - [ ] **testing-strategy.md - E2E Definition**: Tests validate running systems in separate processes ✅
 - [ ] **testing-strategy.md - Simple Mocks**: No complex mocks added (used existing DI)
@@ -2510,7 +2510,7 @@ No new unit tests required - existing unit tests for `loadRuntimeConfig` already
 - **Developer friction**: Flaky tests reduce trust, slow development
 - **Hidden bugs**: Race conditions mask real issues
 
-### Alignment with @rules.md and @testing-strategy.md
+### Alignment with @principles.md and @testing-strategy.md
 
 **From testing-strategy.md**:
 
@@ -2518,7 +2518,7 @@ No new unit tests required - existing unit tests for `loadRuntimeConfig` already
 > "Integration tests: simple injected mocks, no actual I/O"
 > "E2E tests: full stack, but isolated test data"
 
-**From rules.md**:
+**From principles.md**:
 
 > "Avoid complex setup/teardown - signal to simplify"
 > "Use pure functions with dependency injection"
@@ -2540,7 +2540,7 @@ No new unit tests required - existing unit tests for `loadRuntimeConfig` already
 - Test helpers: `e2e-tests/helpers/create-*-http-app.ts`
 - Failing test: `e2e-tests/auth-enforcement.e2e.test.ts`
 - Testing strategy: `.agent/directives/testing-strategy.md`
-- Rules: `.agent/directives/rules.md`
+- Rules: `.agent/directives/principles.md`
 - Vitest config: `apps/oak-curriculum-mcp-streamable-http/vitest.e2e.config.ts`
 
 ---

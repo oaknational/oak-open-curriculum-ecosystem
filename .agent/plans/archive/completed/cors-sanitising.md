@@ -106,7 +106,7 @@ All other tests should **PASS**.
 - No dependencies (no mocks needed, no DI complexity)
 - Just call it and assert the result ✨
 
-**Per @rules.md**: "TDD - ALWAYS use TDD, prefer pure functions and unit tests. Write tests FIRST."
+**Per @principles.md**: "TDD - ALWAYS use TDD, prefer pure functions and unit tests. Write tests FIRST."
 
 **Per @testing-strategy.md**: "Prefer pure functions and unit tests. Always use TDD."
 
@@ -228,7 +228,7 @@ it('should add CORS headers when Origin is present and no allow-list', () => {
 
 This unit test proves a scenario that doesn't exist, giving false confidence.
 
-## Standards & Principles (@rules.md, @testing-strategy.md)
+## Standards & Principles (@principles.md, @testing-strategy.md)
 
 ### TDD Rules
 
@@ -797,7 +797,7 @@ curl -v http://localhost:3333/healthz -H "Origin: http://example.com"
 
 ## Key Principles Applied
 
-Following @rules.md and @testing-strategy.md:
+Following @principles.md and @testing-strategy.md:
 
 1. ✅ **TDD**: Write tests FIRST, prove they fail, fix code, prove they pass
 2. ✅ **Pure functions first**: Test pure `resolveAllowedOrigins()` in isolation (no mocks needed)

@@ -50,7 +50,7 @@ The agent artefact portability system (ADR-125) was implemented across four plat
 
 ### Issue 1: Rule triggers have no content contract (Fred C1, Barney C1)
 
-ADR-125 correctly identifies `.mdc` triggers as a separate artefact type from thin wrappers but provides no contract for what a trigger should contain. The result: 7 of 17 `.mdc` files contain full substantive content (20-30 lines each) duplicating canonical sources like `rules.md`, `testing-strategy.md`, and various ADRs. Only 5 are pointer-only.
+ADR-125 correctly identifies `.mdc` triggers as a separate artefact type from thin wrappers but provides no contract for what a trigger should contain. The result: 7 of 17 `.mdc` files contain full substantive content (20-30 lines each) duplicating canonical sources like `principles.md`, `testing-strategy.md`, and various ADRs. Only 5 are pointer-only.
 
 **Evidence**: `tdd-at-all-levels.mdc` (30 lines of TDD cycle), `cardinal-rule-types-from-schema.mdc` (22 lines of the 10-point Type Flow Discipline), `never-disable-checks.mdc` (21 lines, no canonical pointer at all).
 
@@ -102,7 +102,7 @@ node scripts/validate-portability.mjs  # Created in Phase 3
 
 The sub-agent validation script (`scripts/validate-subagents.mjs`) already solves the "canonical ↔ wrapper integrity" problem for one artefact type. Generalising this pattern to commands, skills, and rules eliminates the drift risk identified by all four reviewers without inventing new infrastructure.
 
-This exemplifies the first question from rules.md: **"Could it be simpler?"**
+This exemplifies the first question from principles.md: **"Could it be simpler?"**
 
 Answer: YES — reuse the existing validation pattern rather than building a separate system.
 
@@ -125,7 +125,7 @@ Answer: YES — reuse the existing validation pattern rather than building a sep
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives/rules.md` — Core principles
+1. **Re-read** `.agent/directives/principles.md` — Core principles
 2. **Re-read** `.agent/directives/testing-strategy.md` — Testing philosophy
 3. **Re-read** `.agent/directives/schema-first-execution.md` — Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
@@ -216,7 +216,7 @@ Verify that every wrapper references an existing canonical file.
 
 ### Phase 1: ADR and Contract Updates
 
-**Foundation Check-In**: Re-read `rules.md` §"Define types well and define them ONCE".
+**Foundation Check-In**: Re-read `principles.md` §"Define types well and define them ONCE".
 
 #### Task 1.1: Add trigger content contract to ADR-125
 
@@ -284,13 +284,13 @@ For each of the 7 Pattern B `.mdc` files, reduce to: frontmatter + pointer + opt
 
 | File | Substantive lines | Canonical source |
 |------|------------------|------------------|
-| `cardinal-rule-types-from-schema.mdc` | 22 | `.agent/directives/rules.md` §Cardinal Rule, `.agent/directives/schema-first-execution.md` |
+| `cardinal-rule-types-from-schema.mdc` | 22 | `.agent/directives/principles.md` §Cardinal Rule, `.agent/directives/schema-first-execution.md` |
 | `tdd-at-all-levels.mdc` | 30 | `.agent/directives/testing-strategy.md` |
-| `never-disable-checks.mdc` | 21 | `.agent/directives/rules.md` §Never Disable Checks |
+| `never-disable-checks.mdc` | 21 | `.agent/directives/principles.md` §Never Disable Checks |
 | `generator-first-mindset.mdc` | 28 | `.agent/directives/schema-first-execution.md` |
 | `use-result-pattern.mdc` | 26 | ADR-088 |
 | `no-global-state-in-tests.mdc` | 24 | ADR-078 |
-| `no-skipped-tests.mdc` | 23 | `.agent/directives/rules.md` |
+| `no-skipped-tests.mdc` | 23 | `.agent/directives/principles.md` |
 
 **For each file**:
 
@@ -416,7 +416,7 @@ Add a brief note to ADR-125 §Trade-offs acknowledging that platform directories
 
 #### Task 4.4: Foundation compliance checklist
 
-- [ ] **rules.md**: No type shortcuts, no disabled checks, no compatibility layers
+- [ ] **principles.md**: No type shortcuts, no disabled checks, no compatibility layers
 - [ ] **ADR-125**: All sections accurate and self-consistent after updates
 - [ ] **ADR-114**: Forward reference added, no other changes needed
 - [ ] **AGENT.md**: Artefact tables accurate after command count changes
@@ -467,7 +467,7 @@ Extracted artefact inventory tables (Layer 1 + Layer 2) from AGENT.md to `.agent
 
 ### Phase 9: Documentation Sync
 
-- [ ] Verify entry-point chains resolve (CLAUDE.md → AGENT.md → rules.md, AGENT.md → artefact-inventory.md)
+- [ ] Verify entry-point chains resolve (CLAUDE.md → AGENT.md → principles.md, AGENT.md → artefact-inventory.md)
 - [ ] Run `/jc-consolidate-docs` (includes non-repo plan check and platform-specific memory scan per updated workflow)
 - [ ] Full quality gate pass
 
@@ -607,7 +607,7 @@ This plan addresses findings from four architectural reviewers:
 - ADR-114: `docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md`
 - Validation pattern: `scripts/validate-subagents.mjs`
 - Foundation documents:
-  - `.agent/directives/rules.md`
+  - `.agent/directives/principles.md`
   - `.agent/directives/testing-strategy.md`
   - `.agent/directives/schema-first-execution.md`
 

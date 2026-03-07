@@ -72,7 +72,7 @@ registerTool<InputArgs extends ZodRawShape = ZodRawShape>(
 
 This aligns with:
 
-- **@rules.md**: Fail fast, no type shortcuts, TDD, **First Question: "Could it be simpler?"**
+- **@principles.md**: Fail fast, no type shortcuts, TDD, **First Question: "Could it be simpler?"**
 - **@schema-first-execution.md**: Generator-first mindset, fail at generation/build time
 - **@testing-strategy.md**: Test behavior, not implementation
 
@@ -623,7 +623,7 @@ Per `@testing-strategy.md`:
 
 **Note**: This is a SHORT-TERM fix. Long-term, generator should produce flat schema directly.
 
-### Core Rules (@rules.md)
+### Core Rules (@principles.md)
 
 | Rule                                     | How We Align                                                          |
 | ---------------------------------------- | --------------------------------------------------------------------- |
@@ -744,7 +744,7 @@ readonly toolMcpFlatZodSchema: z.ZodRawShape & FlatMcpInputSchema
 **Project Directives**:
 
 - `.agent/directives/schema-first-execution.md`
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 
 **Research Documents**:

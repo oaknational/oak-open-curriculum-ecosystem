@@ -37,7 +37,7 @@ The Oak AI Lesson Assistant repository (`reference/oak-ai-lesson-assistant/`) co
 
 Before beginning any research task, and at the start of each working session, re-read and recommit to:
 
-1. `.agent/directives/rules.md` - Our development principles
+1. `.agent/directives/principles.md` - Our development principles
 2. `.agent/directives/testing-strategy.md` - Our testing philosophy
 3. `.agent/directives/schema-first-execution.md` - Our type generation mandate
 
@@ -493,7 +493,7 @@ packages/teaching-materials/src/
 ### Phase 1: Survey and Foundation (4-6 hours)
 
 - Complete file inventory for all research areas
-- Read foundational documents (rules.md, testing-strategy.md, schema-first-execution.md)
+- Read foundational documents (principles.md, testing-strategy.md, schema-first-execution.md)
 - Establish documentation structure
 - **Checkpoint**: Research structure in place, all files identified
 
@@ -554,7 +554,7 @@ The `extraction-recommendations.md` deliverable will provide specific guidance f
 
 ## References
 
-- `.agent/directives/rules.md` - Development principles
+- `.agent/directives/principles.md` - Development principles
 - `.agent/directives/testing-strategy.md` - Testing philosophy
 - `.agent/directives/schema-first-execution.md` - Type generation mandate
 - `reference/oak-ai-lesson-assistant/` - Research target repository

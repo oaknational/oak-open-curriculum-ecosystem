@@ -6,7 +6,7 @@ This prompt guides the implementation of a new agent support tool: `get-knowledg
 
 **Before starting any work**, read and re-commit to the foundation documents:
 
-- `.agent/directives/rules.md` — Core rules, First Question, TDD, type safety
+- `.agent/directives/principles.md` — Core rules, First Question, TDD, type safety
 - `.agent/directives/schema-first-execution.md` — Schema-first principles
 - `.agent/directives/testing-strategy.md` — Testing philosophy and TDD at all levels
 
@@ -14,11 +14,11 @@ This prompt guides the implementation of a new agent support tool: `get-knowledg
 
 ## Foundation Document Compliance
 
-### First Question (from rules.md)
+### First Question (from principles.md)
 
 Before each decision, ask: **"Could it be simpler without compromising quality?"**
 
-### Cardinal Rule (from rules.md)
+### Cardinal Rule (from principles.md)
 
 > If the upstream OpenAPI schema changes, then running `pnpm type-gen` followed by a `pnpm build` MUST be sufficient to bring all workspaces into alignment.
 
@@ -34,7 +34,7 @@ All implementation MUST follow TDD:
 
 This applies at unit, integration, AND E2E levels.
 
-### Type Safety (from rules.md)
+### Type Safety (from principles.md)
 
 - Use `as const` to preserve literal types
 - No type shortcuts (`as`, `any`, `!`, `Record<string, unknown>`)
@@ -382,7 +382,7 @@ The implementation is complete when:
 
 Before starting implementation, re-read:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/schema-first-execution.md`
 3. `.agent/directives/testing-strategy.md`
 

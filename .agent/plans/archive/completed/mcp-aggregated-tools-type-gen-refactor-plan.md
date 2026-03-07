@@ -6,7 +6,7 @@ Refactor aggregated MCP tools (`search`, `fetch`) from hand-written runtime code
 
 ## Context and References
 
-- Aligns with `.agent/directives/rules.md` (Cardinal rule: type-gen sufficiency)
+- Aligns with `.agent/directives/principles.md` (Cardinal rule: type-gen sufficiency)
 - Follows `.agent/directives/schema-first-execution.md` (all complexity at type-gen time)
 - Prerequisite for `.agent/plans/curriculum-ontology-resource-plan.md` Sprint 0
 - Prerequisite for `.agent/plans/high-level-plan.md` Item #6 (semantic search MCP integration)
@@ -480,7 +480,7 @@ After each phase:
 
 ### Implementation Directives
 
-- `.agent/directives/rules.md` - Cardinal rule: type-gen sufficiency
+- `.agent/directives/principles.md` - Cardinal rule: type-gen sufficiency
 - `.agent/directives/schema-first-execution.md` - Schema-first execution directive
 - `.agent/directives/testing-strategy.md` - TDD approach
 

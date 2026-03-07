@@ -151,7 +151,7 @@ These plans are documented but not yet prioritized for implementation:
 ## Key Documents
 
 - **High-Level Plan**: `.agent/plans/high-level-plan.md` - Strategic overview
-- **Rules**: `.agent/directives/rules.md` - Cardinal Rule, TDD, type safety
+- **Rules**: `.agent/directives/principles.md` - Cardinal Rule, TDD, type safety
 - **Schema-First**: `.agent/directives/schema-first-execution.md` - Generator-first architecture
 - **Testing Strategy**: `.agent/directives/testing-strategy.md` - TDD approach
 - **Curriculum Ontology**: `docs/architecture/curriculum-ontology.md` - Domain model

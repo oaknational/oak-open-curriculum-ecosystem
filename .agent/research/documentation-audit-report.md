@@ -328,7 +328,7 @@ file is redundant and misleading.
 | File | Purpose | Status | Action |
 | --- | --- | --- | --- |
 | `AGENT.md` | Core agent directives and entry point | Partially stale | Update -- "Read GO.md every 6th-ish task" (stale pattern); `pnpm check` description understates what it runs |
-| `rules.md` | Authoritative rules | Current | Keep as-is |
+| `principles.md` | Authoritative rules | Current | Keep as-is |
 | `testing-strategy.md` | TDD at all levels | Current | Keep as-is |
 | `schema-first-execution.md` | Schema-first MCP execution | Current | Keep as-is |
 | `semantic-search-architecture.md` | Moved to `docs/agent-guidance/` | Relocated | Domain-specific, not a directive |
@@ -478,7 +478,7 @@ AGENT.md, `docs/README.md`, `docs/foundation/quick-start.md`,
 several `.agent/plans/` files.
 
 The current agent entry point is `.agent/directives/AGENT.md` which
-links to `rules.md`, `testing-strategy.md`, and
+links to `principles.md`, `testing-strategy.md`, and
 `schema-first-execution.md`. The GO.md grounding pattern (read
 every 3rd/6th task) is superseded by the directives-based approach.
 

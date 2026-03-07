@@ -76,7 +76,7 @@ The skills-first architecture, skill structure contract, and command/rules porta
 
 Before each phase starts:
 
-1. Re-read `.agent/directives/rules.md`
+1. Re-read `.agent/directives/principles.md`
 2. Re-read `.agent/directives/testing-strategy.md`
 3. Re-read `.agent/directives/schema-first-execution.md`
 4. Ask: **Could it be simpler without compromising quality?**
@@ -90,7 +90,7 @@ Non-negotiables for this plan:
 
 ### Exception Governance
 
-**Only the project owner (Jim) can approve exceptions to the rules defined in `.agent/directives/rules.md`.** AI agents, sub-agents, and reviewers MUST NOT:
+**Only the project owner (Jim) can approve exceptions to the rules defined in `.agent/directives/principles.md`.** AI agents, sub-agents, and reviewers MUST NOT:
 
 - Approve, create, or ratify exceptions to any rule on their own authority
 - Classify a rule violation as "legitimate" or "necessary" without explicit owner approval
@@ -729,7 +729,7 @@ pnpm markdownlint-check:root
 
 ## Approved Exceptions Register
 
-Exceptions to the rules in `.agent/directives/rules.md` that have been explicitly approved by the project owner. Each entry is scoped to the specific case described — it does not generalise.
+Exceptions to the rules in `.agent/directives/principles.md` that have been explicitly approved by the project owner. Each entry is scoped to the specific case described — it does not generalise.
 
 | Date | Rule | Location | Rationale | Owner Decision |
 |---|---|---|---|---|
@@ -785,7 +785,7 @@ The 218-warning burn-down target requires nuanced handling:
 
 ## Cross-References
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/skills/start-right-quick/shared/start-right.md`
@@ -814,7 +814,7 @@ Use this section to start the next execution session without external context.
    - Cursor command: `@.cursor/commands/jc-start-right-quick.md` (default) or `@.cursor/commands/jc-start-right-thorough.md` (complex/cross-workspace work).
    - Skill sources: `.agent/skills/start-right-quick/shared/start-right.md` and `.agent/skills/start-right-thorough/shared/start-right-thorough.md`.
 2. Re-read canonical foundation rules:
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 3. Reconfirm active phase state from this file front matter (`todos`) and `Execution Notes`.

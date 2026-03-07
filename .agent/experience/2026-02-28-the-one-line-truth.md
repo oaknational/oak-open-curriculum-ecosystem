@@ -21,6 +21,6 @@ The dual-RED pattern: string-output test for the generator's behaviour (did it e
 
 ## Technical content
 
-- `satisfies` classification extracted to permanent rules (`no-type-shortcuts.mdc`, `rules.md`)
+- `satisfies` classification extracted to permanent rules (`no-type-shortcuts.mdc`, `principles.md`)
 - `satisfies` as compile-time anchor entry added to `distilled.md` Testing section
 - "satisfies as compile-time regression anchor" pattern assessed against code-patterns barrier — 3/4 criteria met (not yet recurring). Stays in distilled for now.

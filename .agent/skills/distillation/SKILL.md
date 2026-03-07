@@ -61,7 +61,7 @@ For each entry, ask: has this pattern become established enough
 to belong in a permanent doc? If so, create the permanent doc
 first, then remove the distilled entry. Common destinations:
 
-- Rules codified in `.agent/directives/rules.md`
+- Rules codified in `.agent/directives/principles.md`
 - Patterns documented in ADRs
 - Tooling documented in `docs/engineering/build-system.md`
 - Domain knowledge documented in architecture docs

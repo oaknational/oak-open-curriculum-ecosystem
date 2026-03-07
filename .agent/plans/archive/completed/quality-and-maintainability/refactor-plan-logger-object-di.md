@@ -22,7 +22,7 @@
 Before ANY work, read and internalize:
 
 ```bash
-cat .agent/directives/rules.md
+cat .agent/directives/principles.md
 cat .agent/directives/testing-strategy.md
 cat .agent/directives/schema-first-execution.md
 ```
@@ -403,7 +403,7 @@ pnpm check:turbo  # Runs all gates with --concurrency=2
 - **Don't over-engineer**: Some `object` uses (like `WeakSet<object>`) are legitimate
 - **Document exceptions**: If an `eslint-disable` must stay, add comprehensive explanation
 - **Test incrementally**: Run quality gates after each file change
-- **Follow foundation docs**: All changes must align with rules.md and testing-strategy.md
+- **Follow foundation docs**: All changes must align with principles.md and testing-strategy.md
 
 ---
 
@@ -411,7 +411,7 @@ pnpm check:turbo  # Runs all gates with --concurrency=2
 
 ### Foundation Documents
 
-- `.agent/directives/rules.md` — Core rules (TDD, no type shortcuts, quality gates blocking)
+- `.agent/directives/principles.md` — Core rules (TDD, no type shortcuts, quality gates blocking)
 - `.agent/directives/testing-strategy.md` — Test types, no complex mocks, DI pattern
 - `.agent/directives/schema-first-execution.md` — Schema-first approach
 

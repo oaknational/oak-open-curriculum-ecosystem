@@ -74,5 +74,5 @@ Status: MVP scope expanded — REQUIRED items now include migration to the `McpS
 - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md`
 - ADR: `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md`
 - Standards: `.agent/reference-docs/openai-connector-standards.md`
-- Rules: `.agent/directives/rules.md`
+- Rules: `.agent/directives/principles.md`
 - Testing: `.agent/directives/testing-strategy.md`

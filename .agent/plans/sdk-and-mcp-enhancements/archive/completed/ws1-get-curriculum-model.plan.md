@@ -654,7 +654,7 @@ Run `/jc-consolidate-docs` before marking complete.
 
 Before starting each phase, re-read and verify compliance with:
 
-- [rules.md](../../../directives/rules.md) — TDD, quality gates, no
+- [principles.md](../../../directives/principles.md) — TDD, quality gates, no
   type shortcuts, no compatibility layers, replace old with new
 - [testing-strategy.md](../../../directives/testing-strategy.md) — test
   behaviour not implementation, no complex mocks, no skipped tests

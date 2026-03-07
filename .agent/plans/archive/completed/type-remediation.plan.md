@@ -65,7 +65,7 @@ None. ADR-087 was deemed unnecessary — this plan document already thoroughly d
 
 ### Rule Violations
 
-From `rules.md`:
+From `principles.md`:
 
 > "NEVER disable checks — Never disable any quality gates, never disable type checks, never disable any linting"
 
@@ -335,7 +335,7 @@ pnpm test:ui
 pnpm smoke:dev:stub
 
 # Zero violations
-grep -r "Record<string, unknown>" --include="*.ts" | grep -v "rules.md" | grep -v "node_modules"
+grep -r "Record<string, unknown>" --include="*.ts" | grep -v "principles.md" | grep -v "node_modules"
 grep -r "eslint-disable.*type" --include="*.ts" | grep -v "node_modules"
 grep -r " as " --include="*.ts" src/mcp/format-optimized-result.ts
 ```
@@ -420,7 +420,7 @@ The rules apply to ALL code. "Vetted" is not an exception.
 
 Before starting, read:
 
-1. **[rules.md](../directives/rules.md)** — "No type shortcuts", "NEVER disable checks"
+1. **[principles.md](../directives/principles.md)** — "No type shortcuts", "NEVER disable checks"
 2. **[testing-strategy.md](../directives/testing-strategy.md)** — TDD at all levels
 3. **[schema-first-execution.md](../directives/schema-first-execution.md)** — Types flow from source
 
@@ -437,7 +437,7 @@ Key quotes to internalise:
 ## Fresh Chat Checklist
 
 1. Read [type-remediation.prompt.md](../prompts/type-remediation.prompt.md) fully
-2. Re-read `rules.md` — internalise "NEVER"
+2. Re-read `principles.md` — internalise "NEVER"
 3. Read current `format-optimized-result.ts`
 4. Identify each violation (eslint-disable, type assertions)
 5. For EACH violation, design a restructure that eliminates it

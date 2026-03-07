@@ -156,7 +156,7 @@
 1. Read: .agent/prompts/semantic-search/semantic-search.prompt.md
    ↓ (THE entry point, has everything)
 
-2. Read: .agent/directives/rules.md (15 min)
+2. Read: .agent/directives/principles.md (15 min)
    Read: .agent/directives/schema-first-execution.md (5 min)
    Read: .agent/directives/testing-strategy.md (5 min)
    ↓ (Foundation principles)
@@ -217,7 +217,7 @@
 
 ## Alignment with Rules
 
-### Git Versioning (rules.md) ✅
+### Git Versioning (principles.md) ✅
 
 - **Before**: Documents had dates in headers
 - **After**: All use "See `git log` for commit history"
@@ -246,7 +246,7 @@
 - `start-implementation-guide.md` - Still essential for practical implementation
 - `data-completeness-policy.md` - Still relevant reference
 - `es-serverless-feature-matrix.md` - Still used for tracking
-- Foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)
+- Foundation documents (principles.md, schema-first-execution.md, testing-strategy.md)
 - ADRs (067-070)
 
 ### Archive Structure
@@ -329,7 +329,7 @@ This consolidation transformed **11 overlapping planning documents** into:
 
 **Fresh chats have everything needed** to start Phase 1A immediately.
 
-**All work aligns** with foundation documents (rules.md, schema-first-execution.md, testing-strategy.md).
+**All work aligns** with foundation documents (principles.md, schema-first-execution.md, testing-strategy.md).
 
 ---
 

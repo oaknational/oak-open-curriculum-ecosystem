@@ -39,7 +39,7 @@ the largest workstream. WS4 must run after all code changes.
 Before starting, and again at each workstream boundary, re-read
 and explicitly re-commit to:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 
@@ -174,7 +174,7 @@ From `testing-strategy.md`:
 > system, locally or deployed. Smoke tests CAN trigger all IO
 > types, DO have side effects, and DO NOT contain mocks.
 
-From `rules.md`:
+From `principles.md`:
 
 > Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`,
 > or use `vi.doMock`.
@@ -437,7 +437,7 @@ The bug report documents 500 for French/German, 404 for Spanish.
 The prohibited patterns table (line 129) scopes the
 `process.env` prohibition to "unit and integration tests"
 only. The acceptance criteria (lines 148-153) also only
-mention "unit tests". However, `rules.md` line 37 says:
+mention "unit tests". However, `principles.md` line 37 says:
 
 > Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`,
 > or use `vi.doMock`.
@@ -454,7 +454,7 @@ directly) from subprocess-spawned ones.
 **Update**:
 
 - Widen the prohibited patterns table scope from "unit and
-  integration tests" to "all tests" (matching `rules.md`)
+  integration tests" to "all tests" (matching `principles.md`)
 - Clarify the Neutral section: subprocess-spawned tests may
   pass env via spawn options (process isolation). In-process
   E2E tests must use DI via `loadRuntimeConfig(isolatedEnv)`
@@ -517,7 +517,7 @@ it still exists, audit it against the testing strategy.
 
 After workstreams 1-3, run a sweep to confirm:
 
-### rules.md
+### principles.md
 
 - **Fail fast with helpful errors**: 451 now classified
   correctly as `legally_restricted`, not silently misclassified
@@ -611,7 +611,7 @@ respective contexts, but the naming diverges.
 | [API wishlist](../../external/ooc-api-wishlist/00-overview-and-known-issues.md) | Upstream API issues (needs update in WS3) |
 | [testing-strategy.md](../../../directives/testing-strategy.md) | E2E test rules |
 | [schema-first-execution.md](../../../directives/schema-first-execution.md) | Generator-first mandate |
-| [rules.md](../../../directives/rules.md) | Fail fast, no type shortcuts, no `process.env` mutation |
+| [principles.md](../../../directives/principles.md) | Fail fast, no type shortcuts, no `process.env` mutation |
 | [generate-error-types.ts](../../../../packages/sdks/oak-curriculum-sdk/type-gen/typegen/error-types/generate-error-types.ts) | Generator template for error types |
 | [high-level-plan.md](../../high-level-plan.md) | Notion workspace removal (Item #4) |
 | [runtime-config.ts](../../../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts) | `RuntimeConfig` interface (target pattern for WS2c) |

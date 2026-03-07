@@ -37,7 +37,7 @@ Key references for this task:
   from these directories are referenced at milestone level
 - `.agent/plans/completed-plans.md` — canonical completion index
 - `.agent/plans/README.md` — plan collection standards
-- `.agent/directives/rules.md` — the rules
+- `.agent/directives/principles.md` — the rules
 
 ## Directories to Analyse
 

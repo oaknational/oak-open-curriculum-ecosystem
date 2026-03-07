@@ -16,7 +16,7 @@ Oak-specific variant of the upstream `create-mcp-app` skill from `modelcontextpr
 
 - Confirm Domain C critical items are complete and the reframing ADR is accepted.
 - See `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` (Domain D prerequisites).
-- Read `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`.
+- Read `.agent/directives/principles.md` and `.agent/directives/testing-strategy.md`.
 
 ## SDK (already installed)
 

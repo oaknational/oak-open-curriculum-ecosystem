@@ -109,4 +109,4 @@ Threads represent curriculum progression. The Thread index should include:
 ## Related Documents
 
 - [phase-10-reference-indices.md](../phase-10-reference-indices.md) - Original detailed plan
-- [Cardinal Rule](../../../directives/rules.md) - All types from schema at compile time
+- [Cardinal Rule](../../../directives/principles.md) - All types from schema at compile time

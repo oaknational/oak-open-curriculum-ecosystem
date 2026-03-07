@@ -46,7 +46,7 @@ Canonical rules are short operational reinforcements of policy. Each platform tr
 
 Two types need no adapters — consumed directly by all platforms:
 
-- **Directives** (`.agent/directives/`) — policy documents (AGENT.md, rules.md, testing-strategy.md, metacognition.md). Platform-agnostic by nature. Canonical rules operationalise aspects of these policies; the directives are the authoritative source.
+- **Directives** (`.agent/directives/`) — policy documents (AGENT.md, principles.md, testing-strategy.md, metacognition.md). Platform-agnostic by nature. Canonical rules operationalise aspects of these policies; the directives are the authoritative source.
 - **Plans** (`.agent/plans/`) — all platforms read plans from the same canonical location.
 
 A thin wrapper MUST NOT contain substantive instructions or logic not in the canonical source. Add a portability validation script to the quality gates to enforce this (see ADR-125).
@@ -92,7 +92,7 @@ For the practice-core files and their roles, see
 | Directive | Purpose |
 |---|---|
 | [AGENT.md](directives/AGENT.md) | Operational entry point for agents |
-| [rules.md](directives/rules.md) | Authoritative rules |
+| [principles.md](directives/principles.md) | Authoritative rules |
 | [{additional directives}](directives/{filename}) | {purpose} |
 
 ## Architectural Decisions
@@ -134,13 +134,13 @@ Read [AGENT.md](.agent/directives/AGENT.md)
 
 ### AGENT.md (.agent/directives/)
 
-The operational entry point. Sections (in order): **Grounding** (spelling, date format, link to metacognition), **The Practice** (link to `.agent/practice-core/index.md` and start-right), **First Question**, **Project Context** (what, package manager, framework, scope, key artefacts), **RULES** (link to rules.md), **Sub-agents** (roster, Cursor config table), **Development Commands** (project-specific), **Structure** (directory tree).
+The operational entry point. Sections (in order): **Grounding** (spelling, date format, link to metacognition), **The Practice** (link to `.agent/practice-core/index.md` and start-right), **First Question**, **Project Context** (what, package manager, framework, scope, key artefacts), **RULES** (link to principles.md), **Sub-agents** (roster, Cursor config table), **Development Commands** (project-specific), **Structure** (directory tree).
 
 Keep it stable -- no mutable session state. Mutable state belongs in plans.
 
 ## Directives
 
-### rules.md (.agent/directives/)
+### principles.md (.agent/directives/)
 
 Encode the Principles from `practice-lineage.md` as imperative rules. Sections: **First Question**, **Core Rules** (code design, domain-specific, refactoring, tooling, code quality, types, testing summary, developer experience). Each rule is stated as a command, not a suggestion. Link to `testing-strategy.md` from the testing section.
 
@@ -152,7 +152,7 @@ Encode the Testing Philosophy from `practice-lineage.md` with local tooling. Sec
 
 The rules system has three layers:
 
-1. **Policy** — `.agent/directives/` (rules.md, testing-strategy.md, etc.). Authoritative, comprehensive.
+1. **Policy** — `.agent/directives/` (principles.md, testing-strategy.md, etc.). Authoritative, comprehensive.
 2. **Canonical rules** — `.agent/rules/*.md`. Short operational reinforcements of policy. Each stands alone — enough to act on without reading the full directive.
 3. **Platform triggers** — `.cursor/rules/*.mdc`, `.claude/rules/*.md`, etc. Thin wrappers that point at a canonical rule or skill.
 
@@ -232,7 +232,7 @@ Before reviewing, read and internalise:
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/AGENT.md` | Core directives |
-| `.agent/directives/rules.md` | Authoritative rules |
+| `.agent/directives/principles.md` | Authoritative rules |
 | `.agent/directives/testing-strategy.md` | TDD expectations |
 
 ## Core Philosophy
@@ -340,7 +340,7 @@ Completed prompts move to `archive/` within the prompts directory. The frontmatt
 
 ### start-right.prompt.md
 
-The session entry point. Sections: **Foundation Documents** (read AGENT.md, rules.md, testing-strategy.md), **Project Context** (brief description plus key doc links), **Guiding Questions** (right problem? right layer? simpler? assumptions?), **Practice Box** (check `.agent/practice-core/incoming/` for plasmids), **Process** (discuss first step with user), **Quality Gates** (list the gate commands).
+The session entry point. Sections: **Foundation Documents** (read AGENT.md, principles.md, testing-strategy.md), **Project Context** (brief description plus key doc links), **Guiding Questions** (right problem? right layer? simpler? assumptions?), **Practice Box** (check `.agent/practice-core/incoming/` for plasmids), **Process** (discuss first step with user), **Quality Gates** (list the gate commands).
 
 ## Skills (.agent/skills/)
 
@@ -421,7 +421,7 @@ After creating all files, validate:
 3. `AGENT.md` links to `.agent/practice-core/index.md`.
 4. Every file path referenced in AGENT.md, rules, commands, and agents resolves.
 5. Every agent's reading requirements point to files that exist.
-6. `AGENTS.md` links to `AGENT.md`, which links to `rules.md` and `testing-strategy.md`.
+6. `AGENTS.md` links to `AGENT.md`, which links to `principles.md` and `testing-strategy.md`.
 7. The `start-right` prompt references all foundation documents.
 8. The napkin rule points to a napkin skill that exists.
 9. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.

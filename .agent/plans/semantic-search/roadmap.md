@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`
-**Last Updated**: 2026-03-04
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`, with the next three search-quality plans prepared behind P0
+**Last Updated**: 2026-03-06
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -122,6 +122,9 @@ These are no longer merge-blocking and remain in the execution backlog:
 - 3b Result pattern unification
 - 3c STDIO-HTTP alignment
 - Milestone 2 auth/rate-limit blockers: [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+- Independent semantic-search stream already active:
+  [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md)
+- Remaining follow-on queue: see [Phase 4 Streams](#phase-4-streams-milestone-3-work-that-can-progress-during-milestone-2).
 
 ---
 
@@ -258,7 +261,7 @@ Canonical next plan:
 
 ---
 
-## Phase 4 Streams (Milestone 2)
+## Phase 4 Streams (Milestone 3 work that can progress during Milestone 2)
 
 Primary boundary hubs (post-alpha):
 
@@ -272,6 +275,16 @@ Standalone backlog items across streams:
 
 - [move-search-domain-knowledge-to-codegen-time.md](future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md)
 - [bulk-schema-driven-code-generation.md](future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md)
+
+These plans are part of the Milestone 3 search-quality stream, but the Boundary
+03 quick-win work can progress before the Milestone 2 public-release blocker is
+closed.
+
+Current active and queued execution plans:
+
+- [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
+- [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
+- [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data
 
 ### Reranking (Future — Level 3)
 
@@ -352,7 +365,7 @@ pnpm smoke:dev:stub
 
 Before each execution phase, re-read:
 
-1. [rules.md](../../directives/rules.md)
+1. [principles.md](../../directives/principles.md)
 2. [testing-strategy.md](../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../directives/schema-first-execution.md)
 

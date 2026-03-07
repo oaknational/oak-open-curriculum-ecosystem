@@ -510,7 +510,7 @@ This plan implements per-tool OAuth 2.1 security metadata for MCP tools to enabl
 
 This plan MUST be executed in strict compliance with:
 
-- [`.agent/directives/rules.md`](../directives/rules.md) - Core rules, ALWAYS followed
+- [`.agent/directives/principles.md`](../directives/principles.md) - Core rules, ALWAYS followed
 - [`.agent/directives/schema-first-execution.md`](../directives/schema-first-execution.md) - Non-negotiable generator/runtime contract
 - [`.agent/directives/testing-strategy.md`](../../.agent/directives/testing-strategy.md) - TDD approach
 
@@ -2416,7 +2416,7 @@ app.get('/.well-known/oauth-protected-resource', (req, res) => {
 
 **Task 2.7.10: Alignment Checkpoint** ⏳ NOT STARTED
 
-- Re-read `rules.md` and `testing-strategy.md`
+- Re-read `principles.md` and `testing-strategy.md`
 - Verify TDD used, pure functions, comprehensive observability
 - Verify `_meta` format matches OpenAI spec
 - Verify all code follows project rules (no type assertions, etc.)

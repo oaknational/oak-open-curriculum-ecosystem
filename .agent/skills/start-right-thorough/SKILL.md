@@ -15,7 +15,7 @@ Load `.agent/skills/start-right-thorough/shared/start-right-thorough.md` and enf
 1. Read `.agent/skills/start-right-thorough/shared/start-right-thorough.md`.
 2. Resolve and read the files referenced by the workflow:
    - `.agent/directives/AGENT.md`
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 3. Convert the workflow content into active commitments for this session:

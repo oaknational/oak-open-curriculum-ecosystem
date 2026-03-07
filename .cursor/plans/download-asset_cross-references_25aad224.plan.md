@@ -208,6 +208,6 @@ Address any blocking findings from reviewers. Re-run quality gates if changes ar
 
 ## Foundation Alignment
 
-- **rules.md**: Document Everywhere — all four MCP guidance surfaces updated consistently
+- **principles.md**: Document Everywhere — all four MCP guidance surfaces updated consistently
 - **schema-first-execution.md**: All content is static, added at SDK compile time; no runtime changes
 - **testing-strategy.md**: No new runtime logic introduced; changes are to static description strings

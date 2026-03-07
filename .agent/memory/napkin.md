@@ -453,3 +453,41 @@ The SDK codegen drives the response augmentation middleware, so the enhanced API
 - Attach artefacts to semantic-release GitHub releases.
 - Provide retrieval-focused import guidance while keeping full surface export;
   enforce operational access with Elasticsearch API-key scopes.
+
+---
+
+## Session 2026-03-06 — Semantic Search Research Pack
+
+### What Was Done
+
+- Audited the bulk-download processing path end-to-end, including the runtime
+  call chain from `pnpm es:ingest` through bulk readers, hybrid data source,
+  per-resource transformers, mining, and ES bulk dispatch.
+- Verified that lesson keywords are extracted and used, but keyword
+  definitions, misconception responses, structured content-guidance detail,
+  `transcript_vtt`, and several unit sequencing/KS4 signals are still
+  under-used or dropped in active retrieval surfaces.
+- Created a boundary-local semantic-search research pack under
+  `.agent/plans/semantic-search/`:
+  - `research-index.md`
+  - `curriculum-asset-opportunity-map.research.md`
+  - `future/03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md`
+  - `future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md`
+  - `future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md`
+  - `future/04-retrieval-quality-engine/learning-graph-surfaces.research.md`
+- Updated semantic-search READMEs, boundary READMEs, boundary manifests, and
+  key future plans (`vocabulary-mining.md`, `definition-retrieval.md`,
+  `document-relationships.md`) to cross-reference the new research.
+- Used reviewer agents before and after drafting:
+  docs-adr-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma,
+  architecture-reviewer-fred.
+
+### Patterns to Remember
+
+- If the user asks for research docs inside a plan tree, avoid creating a
+  competing research home. Put `*.research.md` files inside the owning boundary
+  folders and add a single top-level index.
+- Boundary manifests (`_boundary.md`) must be updated when new research
+  companions are added, not just the `README.md` files.
+- Research docs need explicit “this is evidence, not execution” language, or
+  they drift into backlog territory quickly.

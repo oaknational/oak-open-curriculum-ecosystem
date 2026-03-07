@@ -16,7 +16,7 @@ Oak-specific variant of the upstream `migrate-oai-app` skill from `modelcontextp
 
 - Read `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` to identify the specific Domain C item(s) in scope.
 - Confirm the reframing ADR is accepted (Gate 2).
-- Read `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`.
+- Read `.agent/directives/principles.md` and `.agent/directives/testing-strategy.md`.
 
 ## Domain C Internal Dependency Ordering
 

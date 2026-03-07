@@ -312,7 +312,7 @@ Multiple specialized MCP organisms coexisting:
 
 ## 🛠️ Development Principles
 
-### Core Rules (from rules.md)
+### Core Rules (from principles.md)
 
 1. **Simplicity First**: Could it be simpler without compromising quality?
 2. **Pure Functions First**: TDD design, no side effects in core logic
@@ -379,7 +379,7 @@ Multiple specialized MCP organisms coexisting:
 
 - [Architecture Guide](../../docs/agent-guidance/architecture.md) - Authoritative biological architecture reference
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - TDD/BDD approach
-- [Rules](../directives/rules.md) - Core development principles
+- [Rules](../directives/principles.md) - Core development principles
 - [Phase 6 Plan](phase-6-oak-curriculum-api.md) - Detailed implementation plan
 
 ---

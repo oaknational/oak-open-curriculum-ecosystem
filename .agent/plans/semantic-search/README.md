@@ -1,12 +1,14 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-03
+**Last Updated**: 2026-03-06
 
 ---
 
 ## Quick Start
 
 **Start here**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+
+**Research index**: [research-index.md](research-index.md)
 
 ---
 
@@ -29,6 +31,18 @@ Search dispatch type safety (3g) is complete and archived:
 
 Milestone 2 blocker execution is now queued in
 [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md).
+
+That blocker is a separate public-release-readiness stream. It does **not**
+prevent Boundary 03 bulk metadata work from progressing.
+
+Active boundary-local execution now includes:
+
+- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
+
+Prepared next-up queue behind the active quick-win stream:
+
+- [Keyword Definition Assets](current/keyword-definition-assets.execution.plan.md)
+- [Thread and Sequence Semantic Surfaces](current/thread-sequence-semantic-surfaces.execution.plan.md)
 
 ---
 
@@ -71,6 +85,7 @@ Milestone 2 blocker execution is now queued in
 
 - [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md) — converge MCP execution to `Result<T, E>` across SDK + MCP consumers
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
+- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 
 ---
 
@@ -78,11 +93,24 @@ Milestone 2 blocker execution is now queued in
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 result unification + search-args extraction |
-| `current/` | Next-up queued plans | 📋 Ready |
+| `active/` | In-progress plans | 🟢 result unification + search-args extraction + bulk metadata quick wins |
+| `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
 | `archive/` | Historical work | ✅ Reference only |
+
+---
+
+## Research Model
+
+Semantic-search research now lives in **boundary-local** `*.research.md`
+documents inside `future/`. These files are evidence and analysis for the
+backlog boundaries; they are not execution plans.
+
+Use:
+
+- [research-index.md](research-index.md) for navigation
+- [curriculum-asset-opportunity-map.research.md](curriculum-asset-opportunity-map.research.md) for the cross-cutting synthesis
 
 ---
 
@@ -112,6 +140,8 @@ to the boundary structure.
 | Document | Purpose |
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
+| [Research Index](research-index.md) | Navigation for boundary-local research companions |
+| [Curriculum Asset Opportunity Map](curriculum-asset-opportunity-map.research.md) | Cross-cutting synthesis of bulk-signal, vocabulary, and graph opportunities |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [SDK Workspace Separation](archive/completed/sdk-workspace-separation.md) | ✅ Complete — archived |
 | [SDK Separation Pre-Phase-1 Decisions](archive/completed/sdk-separation-pre-phase1-decisions.md) | ✅ Archived — D1-D5 decision rationale (all integrated into canonical plan) |
@@ -144,6 +174,6 @@ Historical work from previous phases. **Metrics and details are stale** — for 
 
 ## Foundation Documents (MANDATORY)
 
-1. [rules.md](../../directives/rules.md)
+1. [principles.md](../../directives/principles.md)
 2. [testing-strategy.md](../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../directives/schema-first-execution.md)

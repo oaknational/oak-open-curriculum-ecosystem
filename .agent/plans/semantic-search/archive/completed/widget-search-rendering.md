@@ -42,7 +42,7 @@ gates, mandatory reading). Start there, then return here for
 execution.
 
 1. Re-read foundation directives before code changes:
-   - [rules.md](../../../directives/rules.md)
+   - [principles.md](../../../directives/principles.md)
    - [testing-strategy.md](../../../directives/testing-strategy.md)
    - [schema-first-execution.md](../../../directives/schema-first-execution.md)
 2. Confirm current working context:

@@ -380,5 +380,5 @@ current ESLint configuration.
 - `packages/sdks/oak-sdk-codegen/eslint.config.ts` — primary target
 - `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts` — secondary target
 - `apps/oak-search-cli/eslint.config.ts` — secondary target
-- `.agent/directives/rules.md` — "never disable checks"
+- `.agent/directives/principles.md` — "never disable checks"
 - `.cursor/rules/never-disable-checks.mdc` — workspace rule

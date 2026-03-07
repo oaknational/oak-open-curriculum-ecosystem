@@ -414,7 +414,7 @@ From `.agent/directives/testing-strategy.md`:
 > - Line 32: No useless tests - Each test must prove something useful
 > - Line 37: No global state manipulation
 
-From `.agent/directives/rules.md`:
+From `.agent/directives/principles.md`:
 
 > - Line 82: Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
 

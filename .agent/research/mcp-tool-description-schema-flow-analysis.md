@@ -15,7 +15,7 @@ This report provides a deep analysis of how MCP tool descriptions, input schemas
 **Alignment with Directives**:
 
 - ✅ Follows `.agent/directives/schema-first-execution.md` - All tool metadata generated at compile time
-- ✅ Follows `.agent/directives/rules.md` - No type shortcuts, schema-first architecture
+- ✅ Follows `.agent/directives/principles.md` - No type shortcuts, schema-first architecture
 - ⚠️ Partial alignment with type reuse principle - we could leverage more upstream SDK types
 
 ---
@@ -392,7 +392,7 @@ Evidence:
 - Enums preserved: `z.union([z.literal('value1'), z.literal('value2')])`
 - Parameter types stay specific: `string`, `number`, not `unknown`
 
-**ALIGNMENT**: ✅ Fully complies with rules.md type preservation requirements
+**ALIGNMENT**: ✅ Fully complies with principles.md type preservation requirements
 
 ### 3.2 Type Narrowing in Conversion
 
@@ -420,7 +420,7 @@ function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
 3. "Fail fast and hard with helpful errors" - this fails silently
 
 **RECOMMENDATION**: Throw TypeError with helpful message
-**ALIGNMENT**: ❌ Triple violation of rules.md core principles
+**ALIGNMENT**: ❌ Triple violation of principles.md core principles
 
 ### 3.3 Information Loss in Zod Conversion
 
@@ -747,7 +747,7 @@ server.registerTool(name, { title: name, description, inputSchema: flatInput }, 
 **Why This Is Better**:
 
 - ✅ Simpler (answered First Question)
-- ✅ Fully compliant with @rules.md (no type assertions, no `Object.assign`)
+- ✅ Fully compliant with @principles.md (no type assertions, no `Object.assign`)
 - ✅ Uses standard TypeScript type predicates (`is`)
 - ✅ Spread operator preserves types exactly
 
@@ -888,7 +888,7 @@ default:
   );
 ```
 
-**Alignment**: ✅ Follows rules.md prohibition on type shortcuts, fallbacks, and silent failures
+**Alignment**: ✅ Follows principles.md prohibition on type shortcuts, fallbacks, and silent failures
 **Note**: This is a triple violation fix - critical priority
 
 ### 5.6 MEDIUM PRIORITY: Improve Error Message Formatting
@@ -969,7 +969,7 @@ if (!parsed.success) {
 - Parameter types stay specific
 - ⚠️ ONE ISSUE: Zod conversion has `z.any()` fallback (should throw instead)
 
-**ALIGNMENT**: ⚠️ Mostly complies with rules.md, one violation
+**ALIGNMENT**: ⚠️ Mostly complies with principles.md, one violation
 
 ### Q: "Are we using correct formats and metadata fields?"
 
@@ -1031,7 +1031,7 @@ if (!parsed.success) {
 
 ### 7.2 Core Rules
 
-**Reference**: `.agent/directives/rules.md`
+**Reference**: `.agent/directives/principles.md`
 
 | Rule                                                    | Status                 | Evidence                         |
 | ------------------------------------------------------- | ---------------------- | -------------------------------- |

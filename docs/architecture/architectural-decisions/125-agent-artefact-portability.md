@@ -125,11 +125,11 @@ Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedToo
 
 Rules have two conceptually distinct layers:
 
-1. **Authoritative policies** (`.agent/directives/rules.md`) — the canonical rules document defining what must be followed: TDD, no type shortcuts, fail fast, code quality standards, architectural model. This is substantive content. It is the single source of truth for the rules themselves.
+1. **Authoritative policies** (`.agent/directives/principles.md`) — the canonical rules document defining what must be followed: TDD, no type shortcuts, fail fast, code quality standards, architectural model. This is substantive content. It is the single source of truth for the rules themselves.
 
-2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `rules.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
+2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `rules.md` (e.g., `tdd-at-all-levels.mdc`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/directives/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` (e.g., `tdd-at-all-levels.mdc`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/directives/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 **Cursor** has granular activation via `.cursor/rules/*.mdc` frontmatter:
 
@@ -139,9 +139,9 @@ Some triggers activate policies from `rules.md` (e.g., `tdd-at-all-levels.mdc`).
 | File-scoped    | `globs: "**/*.test.ts"` | `no-skipped-tests.mdc`, `no-global-state-in-tests.mdc` |
 | Agent-selected | `description: "..."`    | Agent decides based on relevance                       |
 
-**Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `rules.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
+**Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `principles.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
 
-**Gemini CLI, Codex** receive policies via the entry-point chain only: `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/rules.md`. All policies are effectively always-on via the entry point.
+**Gemini CLI, Codex** receive policies via the entry-point chain only: `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/principles.md`. All policies are effectively always-on via the entry point.
 
 **Triggers that activate skills:**
 
@@ -208,9 +208,9 @@ Four platforms are now active: Cursor, Claude Code, Gemini CLI, and Codex. Maint
 
 Different names for the same command (`jc-full-review` vs `/review` vs `jc-review`) created cognitive load when switching between platforms. A single name per command reduces confusion and makes the system easier to document and discover.
 
-### Why rules.md is separate from activation triggers
+### Why principles.md is separate from activation triggers
 
-`rules.md` is the authoritative policy document — substantive content that defines what must be done. The `.mdc` trigger files are a platform-specific activation mechanism — metadata that controls when and how policies surface. These are different artefact types serving different purposes. A trigger may activate a rule from `rules.md`, a standalone directive, or a skill. Conflating them would either force all rules into individual files (losing the coherent policy document) or force all triggers into one file (losing granular activation control). Keeping them distinct preserves both values.
+`principles.md` is the authoritative policy document — substantive content that defines what must be done. The `.mdc` trigger files are a platform-specific activation mechanism — metadata that controls when and how policies surface. These are different artefact types serving different purposes. A trigger may activate a rule from `principles.md`, a standalone directive, or a skill. Conflating them would either force all rules into individual files (losing the coherent policy document) or force all triggers into one file (losing granular activation control). Keeping them distinct preserves both values.
 
 ### Why `permissionMode: plan` for Claude Code reviewers
 

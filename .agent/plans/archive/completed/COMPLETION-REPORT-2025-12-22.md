@@ -187,7 +187,7 @@ Documented the API bug in `.agent/plans/external/ooc-api-wishlist/00-overview-an
 ### Rule Violations Acknowledged
 
 The user correctly identified violations of:
-- **rules.md**: "All quality gate issues are always blocking" - I dismissed failing smoke tests
+- **principles.md**: "All quality gate issues are always blocking" - I dismissed failing smoke tests
 - **testing-strategy.md**: "TDD at all levels" - I didn't write proper integration tests first
 
 ---
