@@ -4,7 +4,11 @@ Tools for building AI applications on the [Oak National Academy Open Curriculum]
 
 **Product and impact folks**: take a look at the [VISION.md](docs/foundation/VISION.md) for a high-level overview of the project.
 
-> **Current status: Private Alpha** — This repository is under active early development. APIs, tools, and documentation may change. Invite-only alpha is next, see [milestones/m1-invite-only-alpha.md](.agent/milestones/m1-invite-only-alpha.md) for details.
+---
+
+> **Current status: Invite Only Private Alpha** — This repository is under active early development. APIs, tools, and documentation may change. Public alpha is next, see [milestones/m1.5-public-alpha.md](.agent/milestones/m1.5-public-alpha.md) for details.
+
+---
 
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
@@ -150,14 +154,21 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 **Core and Libraries:**
 
-| Workspace                                                           | Purpose                                                                       |
-| ------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [`result`](packages/core/result/)                                   | `Result<T, E>` type for explicit error handling without exceptions            |
-| [`env`](packages/core/env/)                                         | Env schema contracts — Zod-based validation for environment variables         |
-| [`type-helpers`](packages/core/type-helpers/)                       | Shared type-level utilities                                                   |
-| [`eslint-plugin-standards`](packages/core/eslint-plugin-standards/) | Custom ESLint rules enforcing architectural boundaries                        |
-| [`oak-mcp-logger`](packages/libs/oak-mcp-logger/)                   | Structured logger with Pino backend                                           |
-| [`env-resolution`](packages/libs/env-resolution/)                   | Environment resolution pipeline — `.env` discovery, validation, and injection |
+**Core packages:**
+
+| Workspace                                              | Purpose                                                               |
+| ------------------------------------------------------ | --------------------------------------------------------------------- |
+| [`result`](packages/core/result/README.md)             | `Result<T, E>` type for explicit error handling without exceptions    |
+| [`env`](packages/core/env/README.md)                   | Env schema contracts — Zod-based validation for environment variables |
+| [`type-helpers`](packages/core/type-helpers/README.md) | Shared type-level utilities                                           |
+| [`oak-eslint`](packages/core/oak-eslint/README.md)     | Custom ESLint rules enforcing architectural boundaries                |
+
+**Libraries:**
+
+| Workspace                                                               | Purpose                                                                       |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`@oaknational/logger`](packages/libs/logger/README.md)                 | Structured logger with Pino backend                                           |
+| [`@oaknational/env-resolution`](packages/libs/env-resolution/README.md) | Environment resolution pipeline — `.env` discovery, validation, and injection |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 

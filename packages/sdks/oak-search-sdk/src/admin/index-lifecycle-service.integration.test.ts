@@ -251,15 +251,32 @@ describe('IndexLifecycleService', () => {
     it('swaps aliases back to previous version from metadata', async () => {
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
       const currentTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-07-143022' },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022' },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v2026-03-07-143022' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v2026-03-07-143022' },
+        lessons: {
+          isAlias: true,
+          targetIndex: 'oak_lessons_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
+        unit_rollup: {
+          isAlias: true,
+          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        sequences: {
+          isAlias: true,
+          targetIndex: 'oak_sequences_v2026-03-07-143022',
+          isBareIndex: false,
+        },
         sequence_facets: {
           isAlias: true,
           targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
+          isBareIndex: false,
         },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-07-143022' },
+        threads: {
+          isAlias: true,
+          targetIndex: 'oak_threads_v2026-03-07-143022',
+          isBareIndex: false,
+        },
       };
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
@@ -336,15 +353,32 @@ describe('IndexLifecycleService', () => {
     it('attempts alias reversal when writeIndexMeta fails during rollback', async () => {
       const writeError: AdminError = { type: 'es_error', message: 'meta write failed' };
       const currentTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-07-143022' },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022' },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v2026-03-07-143022' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v2026-03-07-143022' },
+        lessons: {
+          isAlias: true,
+          targetIndex: 'oak_lessons_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
+        unit_rollup: {
+          isAlias: true,
+          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        sequences: {
+          isAlias: true,
+          targetIndex: 'oak_sequences_v2026-03-07-143022',
+          isBareIndex: false,
+        },
         sequence_facets: {
           isAlias: true,
           targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
+          isBareIndex: false,
         },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-07-143022' },
+        threads: {
+          isAlias: true,
+          targetIndex: 'oak_threads_v2026-03-07-143022',
+          isBareIndex: false,
+        },
       };
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
       const deps = createFakeDeps({
@@ -378,15 +412,32 @@ describe('IndexLifecycleService', () => {
       const writeError: AdminError = { type: 'es_error', message: 'meta write failed' };
       const reversalError: AdminError = { type: 'es_error', message: 'reversal swap failed' };
       const currentTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-07-143022' },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022' },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v2026-03-07-143022' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v2026-03-07-143022' },
+        lessons: {
+          isAlias: true,
+          targetIndex: 'oak_lessons_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
+        unit_rollup: {
+          isAlias: true,
+          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        sequences: {
+          isAlias: true,
+          targetIndex: 'oak_sequences_v2026-03-07-143022',
+          isBareIndex: false,
+        },
         sequence_facets: {
           isAlias: true,
           targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
+          isBareIndex: false,
         },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-07-143022' },
+        threads: {
+          isAlias: true,
+          targetIndex: 'oak_threads_v2026-03-07-143022',
+          isBareIndex: false,
+        },
       };
       const atomicAliasSwap = vi
         .fn()
@@ -421,17 +472,34 @@ describe('IndexLifecycleService', () => {
       expect(atomicAliasSwap).toHaveBeenCalledTimes(2);
     });
 
-    it('returns err when an alias is a bare index during rollback', async () => {
-      const bareIndexTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-07-143022' },
-        units: { isAlias: false, targetIndex: null },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v2026-03-07-143022' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v2026-03-07-143022' },
+    it('returns err when an alias has no target during rollback', async () => {
+      const missingAliasTargets = {
+        lessons: {
+          isAlias: true,
+          targetIndex: 'oak_lessons_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        units: { isAlias: false, targetIndex: null, isBareIndex: false },
+        unit_rollup: {
+          isAlias: true,
+          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
+          isBareIndex: false,
+        },
+        sequences: {
+          isAlias: true,
+          targetIndex: 'oak_sequences_v2026-03-07-143022',
+          isBareIndex: false,
+        },
         sequence_facets: {
           isAlias: true,
           targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
+          isBareIndex: false,
         },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-07-143022' },
+        threads: {
+          isAlias: true,
+          targetIndex: 'oak_threads_v2026-03-07-143022',
+          isBareIndex: false,
+        },
       };
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
@@ -445,7 +513,7 @@ describe('IndexLifecycleService', () => {
             previous_version: 'v2026-03-01-120000',
           }),
         ),
-        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(bareIndexTargets)),
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(missingAliasTargets)),
       });
       const service = createIndexLifecycleService(deps);
 
@@ -510,12 +578,16 @@ describe('IndexLifecycleService', () => {
   describe('validateAliases', () => {
     it('returns allHealthy true when all aliases point to valid indexes', async () => {
       const healthyTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v1' },
-        units: { isAlias: true, targetIndex: 'oak_units_v1' },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v1' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v1' },
-        sequence_facets: { isAlias: true, targetIndex: 'oak_sequence_facets_v1' },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v1' },
+        lessons: { isAlias: true, targetIndex: 'oak_lessons_v1', isBareIndex: false },
+        units: { isAlias: true, targetIndex: 'oak_units_v1', isBareIndex: false },
+        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v1', isBareIndex: false },
+        sequences: { isAlias: true, targetIndex: 'oak_sequences_v1', isBareIndex: false },
+        sequence_facets: {
+          isAlias: true,
+          targetIndex: 'oak_sequence_facets_v1',
+          isBareIndex: false,
+        },
+        threads: { isAlias: true, targetIndex: 'oak_threads_v1', isBareIndex: false },
       };
       const deps = createFakeDeps({
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(healthyTargets)),
@@ -533,12 +605,16 @@ describe('IndexLifecycleService', () => {
 
     it('returns allHealthy false when an alias is missing', async () => {
       const mixedTargets = {
-        lessons: { isAlias: true, targetIndex: 'oak_lessons_v1' },
-        units: { isAlias: false, targetIndex: null },
-        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v1' },
-        sequences: { isAlias: true, targetIndex: 'oak_sequences_v1' },
-        sequence_facets: { isAlias: true, targetIndex: 'oak_sequence_facets_v1' },
-        threads: { isAlias: true, targetIndex: 'oak_threads_v1' },
+        lessons: { isAlias: true, targetIndex: 'oak_lessons_v1', isBareIndex: false },
+        units: { isAlias: false, targetIndex: null, isBareIndex: false },
+        unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v1', isBareIndex: false },
+        sequences: { isAlias: true, targetIndex: 'oak_sequences_v1', isBareIndex: false },
+        sequence_facets: {
+          isAlias: true,
+          targetIndex: 'oak_sequence_facets_v1',
+          isBareIndex: false,
+        },
+        threads: { isAlias: true, targetIndex: 'oak_threads_v1', isBareIndex: false },
       };
       const deps = createFakeDeps({
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(mixedTargets)),

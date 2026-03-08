@@ -33,6 +33,7 @@ function createFakeClient(
     getAlias?: ReturnType<typeof vi.fn>;
     get?: ReturnType<typeof vi.fn>;
     deleteIndex?: ReturnType<typeof vi.fn>;
+    exists?: ReturnType<typeof vi.fn>;
   } = {},
 ) {
   return {
@@ -41,6 +42,7 @@ function createFakeClient(
       getAlias: overrides.getAlias ?? vi.fn().mockRejectedValue(create404Error()),
       get: overrides.get ?? vi.fn().mockRejectedValue(create404Error()),
       delete: overrides.deleteIndex ?? vi.fn().mockResolvedValue({ acknowledged: true }),
+      exists: overrides.exists ?? vi.fn().mockResolvedValue(false),
     },
   } as unknown as Client;
 }
@@ -101,6 +103,57 @@ describe('atomicAliasSwap', () => {
       expect(result.error.type).toBe('es_error');
     }
   });
+
+  it('includes remove_index action for bare index migration', async () => {
+    const updateAliases = vi.fn().mockResolvedValue({ acknowledged: true });
+    const client = createFakeClient({ updateAliases });
+
+    const swaps: readonly AliasSwap[] = [
+      {
+        fromIndex: null,
+        toIndex: 'oak_lessons_v1',
+        alias: 'oak_lessons',
+        bareIndexToRemove: 'oak_lessons',
+      },
+    ];
+
+    const result = await atomicAliasSwap(client, swaps);
+
+    expect(result.ok).toBe(true);
+    expect(updateAliases).toHaveBeenCalledWith({
+      actions: [
+        { remove_index: { index: 'oak_lessons' } },
+        { add: { index: 'oak_lessons_v1', alias: 'oak_lessons' } },
+      ],
+    });
+  });
+
+  it('generates correct actions for mixed bare and alias swaps', async () => {
+    const updateAliases = vi.fn().mockResolvedValue({ acknowledged: true });
+    const client = createFakeClient({ updateAliases });
+
+    const swaps: readonly AliasSwap[] = [
+      {
+        fromIndex: null,
+        toIndex: 'oak_lessons_v1',
+        alias: 'oak_lessons',
+        bareIndexToRemove: 'oak_lessons',
+      },
+      { fromIndex: 'oak_units_v1', toIndex: 'oak_units_v2', alias: 'oak_units' },
+    ];
+
+    const result = await atomicAliasSwap(client, swaps);
+
+    expect(result.ok).toBe(true);
+    expect(updateAliases).toHaveBeenCalledWith({
+      actions: [
+        { remove_index: { index: 'oak_lessons' } },
+        { add: { index: 'oak_lessons_v1', alias: 'oak_lessons' } },
+        { remove: { index: 'oak_units_v1', alias: 'oak_units' } },
+        { add: { index: 'oak_units_v2', alias: 'oak_units' } },
+      ],
+    });
+  });
 });
 
 describe('resolveCurrentAliasTargets', () => {
@@ -116,6 +169,7 @@ describe('resolveCurrentAliasTargets', () => {
     if (result.ok) {
       expect(result.value.lessons.isAlias).toBe(true);
       expect(result.value.lessons.targetIndex).toBe('oak_lessons_v1');
+      expect(result.value.lessons.isBareIndex).toBe(false);
       expect(result.value.units.isAlias).toBe(true);
       expect(result.value.threads.isAlias).toBe(true);
     }
@@ -130,6 +184,7 @@ describe('resolveCurrentAliasTargets', () => {
     if (result.ok) {
       expect(result.value.lessons.isAlias).toBe(false);
       expect(result.value.lessons.targetIndex).toBeNull();
+      expect(result.value.lessons.isBareIndex).toBe(false);
     }
   });
 
@@ -152,7 +207,8 @@ describe('resolveCurrentAliasTargets', () => {
 
   it('returns isAlias false when getAlias returns empty object (CR-1)', async () => {
     const getAlias = vi.fn().mockResolvedValue({});
-    const client = createFakeClient({ getAlias });
+    const exists = vi.fn().mockResolvedValue(false);
+    const client = createFakeClient({ getAlias, exists });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -160,7 +216,9 @@ describe('resolveCurrentAliasTargets', () => {
     if (result.ok) {
       expect(result.value.lessons.isAlias).toBe(false);
       expect(result.value.lessons.targetIndex).toBeNull();
+      expect(result.value.lessons.isBareIndex).toBe(false);
     }
+    expect(exists).toHaveBeenCalled();
   });
 
   it('returns err when ES throws non-404 error', async () => {
@@ -172,6 +230,35 @@ describe('resolveCurrentAliasTargets', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.type).toBe('es_error');
+    }
+  });
+
+  it('sets isBareIndex true when concrete index exists but no alias', async () => {
+    const getAlias = vi.fn().mockRejectedValue(create404Error());
+    const exists = vi.fn().mockResolvedValue(true);
+    const client = createFakeClient({ getAlias, exists });
+
+    const result = await resolveCurrentAliasTargets(client, 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.lessons.isAlias).toBe(false);
+      expect(result.value.lessons.isBareIndex).toBe(true);
+      expect(result.value.lessons.targetIndex).toBeNull();
+    }
+  });
+
+  it('sets isBareIndex false when name does not exist at all', async () => {
+    const getAlias = vi.fn().mockRejectedValue(create404Error());
+    const exists = vi.fn().mockResolvedValue(false);
+    const client = createFakeClient({ getAlias, exists });
+
+    const result = await resolveCurrentAliasTargets(client, 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.lessons.isAlias).toBe(false);
+      expect(result.value.lessons.isBareIndex).toBe(false);
     }
   });
 });

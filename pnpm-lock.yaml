@@ -682,6 +682,9 @@ importers:
       '@oaknational/sdk-codegen':
         specifier: workspace:*
         version: link:../oak-sdk-codegen
+      '@oaknational/type-helpers':
+        specifier: workspace:*
+        version: link:../../core/type-helpers
     devDependencies:
       '@elastic/elasticsearch':
         specifier: ^9.3.4

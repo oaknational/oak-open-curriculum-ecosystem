@@ -96,10 +96,11 @@ Run this checklist at the start of the next session:
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 5. Read the active execution plan you are working from — it should be self-sufficient:
    - [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active Boundary 03 execution plan
-   - [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
+   - [blue-green-reindex.execution.plan.md](../../plans/semantic-search/active/blue-green-reindex.execution.plan.md) — first live reindex with alias migration (ADR-130)
    - [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
    - [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active graph-enablement execution plan
 6. Treat these as complete/archive references only:
+   - [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md) — `Result<T, E>` migration (complete)
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
    - [search-results-quality.md](../../plans/semantic-search/archive/completed/search-results-quality.md) — search quality (ADR-120)
@@ -116,8 +117,8 @@ Run this checklist at the start of the next session:
 
 Active now:
 
-1. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
-2. [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
+1. [blue-green-reindex.execution.plan.md](../../plans/semantic-search/active/blue-green-reindex.execution.plan.md) — first live reindex with bare-index-to-alias migration (ADR-130)
+2. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
 3. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
 4. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane
 

@@ -8,17 +8,19 @@
 import type { Result } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
-
 import type { AdminError, IngestOptions, IngestResult } from './admin-types.js';
 import type { SearchIndexTarget, SearchIndexKind } from '../internal/index.js';
 
-// ---------------------------------------------------------------------------
-// Alias operation types — canonical definitions for the lifecycle layer
-// ---------------------------------------------------------------------------
+// --- Alias operation types — canonical definitions for the lifecycle layer ---
 
 /**
  * A single alias swap action. When `fromIndex` is `null`, the alias is being
  * created for the first time (no `remove` action needed).
+ *
+ * When `bareIndexToRemove` is set, a bare concrete index with that name must
+ * be atomically removed via `remove_index` before the alias can be created.
+ * This handles the first-run migration from bare indexes to alias-backed
+ * versioned indexes (ADR-130).
  */
 export interface AliasSwap {
   /** Physical index to remove the alias from, or `null` for first-time setup. */
@@ -27,24 +29,24 @@ export interface AliasSwap {
   readonly toIndex: string;
   /** The alias name (e.g. `'oak_lessons'`). */
   readonly alias: string;
+  /** Bare concrete index to atomically delete before creating the alias. First-run migration only. */
+  readonly bareIndexToRemove?: string;
 }
 
 /**
- * Information about the current state of an alias name in Elasticsearch.
+ * Current state of an alias name in Elasticsearch. Discriminated union on `isAlias`:
+ * `true` — alias pointing to `targetIndex`; `isBareIndex` is always `false`.
+ * `false` — not an alias; `isBareIndex` distinguishes a bare concrete index
+ * blocking alias creation from a non-existent name (ADR-130).
  */
-export interface AliasTargetInfo {
-  /** Whether the name is an alias (true) or a concrete index / non-existent (false). */
-  readonly isAlias: boolean;
-  /** The physical index the alias points to, or `null` if not an alias. */
-  readonly targetIndex: string | null;
-}
+export type AliasTargetInfo =
+  | { readonly isAlias: true; readonly targetIndex: string; readonly isBareIndex: false }
+  | { readonly isAlias: false; readonly targetIndex: null; readonly isBareIndex: boolean };
 
 /** Strict map from each {@link SearchIndexKind} to its alias target info. */
 export type AliasTargetMap = Readonly<Record<SearchIndexKind, AliasTargetInfo>>;
 
-// ---------------------------------------------------------------------------
-// Versioned ingest
-// ---------------------------------------------------------------------------
+// --- Versioned ingest ---
 
 /** Options for a versioned ingest cycle (also used by stage). */
 export interface VersionedIngestOptions {

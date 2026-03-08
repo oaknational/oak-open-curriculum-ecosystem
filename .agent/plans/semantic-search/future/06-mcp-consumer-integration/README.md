@@ -52,4 +52,4 @@ correct results across all indexes.
 - [x] NL guidance, documentation, TSDoc (WS3)
 - [x] Integration tests for search-retrieval-factory and browse formatting (WS4 follow-up)
 - [x] Compare SDK search vs REST API search; replacement complete (archived in Phase 3a)
-- [ ] Result pattern unification closure tracked in `../../active/mcp-result-pattern-unification.execution.plan.md`
+- [x] Result pattern unification — ✅ complete, archived at `../../archive/completed/mcp-result-pattern-unification.execution.plan.md`

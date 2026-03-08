@@ -8,7 +8,7 @@
 import { vi } from 'vitest';
 import { ok } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
-import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
+import type { AliasTargetMap, IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
 import type { IngestResult } from '../types/admin-types.js';
 
 /** Minimal ingest result for test stubs. */
@@ -24,23 +24,45 @@ export const STUB_INGEST_RESULT: IngestResult = {
 
 /** Default alias targets keyed by SearchIndexKind (existing alias state). */
 export const DEFAULT_ALIAS_TARGETS = {
-  lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-01-120000' },
-  units: { isAlias: true, targetIndex: 'oak_units_v2026-03-01-120000' },
-  unit_rollup: { isAlias: true, targetIndex: 'oak_unit_rollup_v2026-03-01-120000' },
-  sequences: { isAlias: true, targetIndex: 'oak_sequences_v2026-03-01-120000' },
-  sequence_facets: { isAlias: true, targetIndex: 'oak_sequence_facets_v2026-03-01-120000' },
-  threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-01-120000' },
-};
+  lessons: { isAlias: true, targetIndex: 'oak_lessons_v2026-03-01-120000', isBareIndex: false },
+  units: { isAlias: true, targetIndex: 'oak_units_v2026-03-01-120000', isBareIndex: false },
+  unit_rollup: {
+    isAlias: true,
+    targetIndex: 'oak_unit_rollup_v2026-03-01-120000',
+    isBareIndex: false,
+  },
+  sequences: {
+    isAlias: true,
+    targetIndex: 'oak_sequences_v2026-03-01-120000',
+    isBareIndex: false,
+  },
+  sequence_facets: {
+    isAlias: true,
+    targetIndex: 'oak_sequence_facets_v2026-03-01-120000',
+    isBareIndex: false,
+  },
+  threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-01-120000', isBareIndex: false },
+} satisfies AliasTargetMap;
 
 /** Alias targets with null targetIndex (no existing aliases — first run). */
 export const NO_ALIAS_TARGETS = {
-  lessons: { isAlias: false, targetIndex: null },
-  units: { isAlias: false, targetIndex: null },
-  unit_rollup: { isAlias: false, targetIndex: null },
-  sequences: { isAlias: false, targetIndex: null },
-  sequence_facets: { isAlias: false, targetIndex: null },
-  threads: { isAlias: false, targetIndex: null },
-};
+  lessons: { isAlias: false, targetIndex: null, isBareIndex: false },
+  units: { isAlias: false, targetIndex: null, isBareIndex: false },
+  unit_rollup: { isAlias: false, targetIndex: null, isBareIndex: false },
+  sequences: { isAlias: false, targetIndex: null, isBareIndex: false },
+  sequence_facets: { isAlias: false, targetIndex: null, isBareIndex: false },
+  threads: { isAlias: false, targetIndex: null, isBareIndex: false },
+} satisfies AliasTargetMap;
+
+/** Alias targets where names are bare concrete indexes (first-run migration). */
+export const BARE_INDEX_TARGETS = {
+  lessons: { isAlias: false, targetIndex: null, isBareIndex: true },
+  units: { isAlias: false, targetIndex: null, isBareIndex: true },
+  unit_rollup: { isAlias: false, targetIndex: null, isBareIndex: true },
+  sequences: { isAlias: false, targetIndex: null, isBareIndex: true },
+  sequence_facets: { isAlias: false, targetIndex: null, isBareIndex: true },
+  threads: { isAlias: false, targetIndex: null, isBareIndex: true },
+} satisfies AliasTargetMap;
 
 /** Fake logger for tests that need to assert on log calls. */
 export function createFakeLogger(): Logger {

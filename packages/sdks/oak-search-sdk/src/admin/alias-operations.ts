@@ -16,6 +16,7 @@ import type { AdminError } from '../types/admin-types.js';
 import type { AliasSwap, AliasTargetInfo, AliasTargetMap } from '../types/index-lifecycle-types.js';
 import type { SearchIndexKind, SearchIndexTarget } from '../internal/index.js';
 import { BASE_INDEX_NAMES, TARGET_SUFFIXES, resolveAliasName } from '../internal/index.js';
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { isNotFoundError } from './es-error-guards.js';
 
 // ---------------------------------------------------------------------------
@@ -28,6 +29,11 @@ import { isNotFoundError } from './es-error-guards.js';
  * Uses `POST /_aliases` with multiple actions — either all succeed or
  * none do. When `fromIndex` is `null` in a swap entry, the `remove`
  * action is omitted (first-run case per Wilma finding #3).
+ *
+ * When `bareIndexToRemove` is set, a `remove_index` action is emitted
+ * to atomically delete the bare concrete index before creating the
+ * alias. This handles first-run migration from bare indexes to
+ * alias-backed versioned indexes (ADR-130).
  *
  * `is_write_index` is intentionally omitted — each alias points to
  * exactly one index, making it unnecessary (ES reviewer finding #1).
@@ -43,9 +49,13 @@ export async function atomicAliasSwap(
   const actions: (
     | { remove: { index: string; alias: string } }
     | { add: { index: string; alias: string } }
+    | { remove_index: { index: string } }
   )[] = [];
 
-  for (const { fromIndex, toIndex, alias } of swaps) {
+  for (const { fromIndex, toIndex, alias, bareIndexToRemove } of swaps) {
+    if (bareIndexToRemove !== undefined) {
+      actions.push({ remove_index: { index: bareIndexToRemove } });
+    }
     if (fromIndex !== null) {
       actions.push({ remove: { index: fromIndex, alias } });
     }
@@ -123,45 +133,34 @@ async function resolveAllAliases(
 /**
  * Resolve a single alias name to its target info.
  *
- * Uses a single `getAlias` call with 404 catch (E1), replacing the
- * previous two-call `existsAlias` + `getAlias` pattern to halve
- * HTTP calls per alias.
- *
- * An empty response (no keys) is treated as not-found (CR-1).
- * Multiple backing indexes are treated as alias corruption — each
- * alias must point to exactly one physical index.
- *
- * @param client - Elasticsearch client
- * @param aliasName - The alias name to check
- * @returns AliasTargetInfo for this name
+ * Single `getAlias` call with 404 catch (E1). Empty response = not-found (CR-1).
+ * Multiple backing indexes = alias corruption. When no alias exists, checks
+ * `indices.exists` to detect bare concrete indexes blocking alias creation
+ * (one extra HTTP call per alias on first run only).
  */
 async function resolveOneAlias(client: Client, aliasName: string): Promise<AliasTargetInfo> {
   try {
     const aliasResponse = await client.indices.getAlias({ name: aliasName });
-    let count = 0;
-    let target: string | null = null;
-    for (const key in aliasResponse) {
-      count++;
-      if (count === 1) {
-        target = key;
-      }
-      if (count > 1) {
-        throw new Error(
-          `Alias '${aliasName}' points to multiple physical indexes (expected exactly 1). ` +
-            `This indicates alias corruption — run validate-aliases for details.`,
-        );
-      }
+    const keys = typeSafeKeys(aliasResponse);
+    if (keys.length > 1) {
+      throw new Error(
+        `Alias '${aliasName}' points to multiple physical indexes (expected exactly 1). ` +
+          `This indicates alias corruption — run validate-aliases for details.`,
+      );
     }
-    if (target === null) {
-      return { isAlias: false, targetIndex: null };
+    if (keys[0] !== undefined) {
+      return { isAlias: true, targetIndex: keys[0], isBareIndex: false };
     }
-    return { isAlias: true, targetIndex: target };
+    // Empty response (CR-1) — fall through to bare-index check
   } catch (error) {
-    if (isNotFoundError(error)) {
-      return { isAlias: false, targetIndex: null };
+    if (!isNotFoundError(error)) {
+      throw error;
     }
-    throw error;
+    // 404 — fall through to bare-index check
   }
+  // Both empty-response and 404 paths converge here
+  const isBareIndex = await client.indices.exists({ index: aliasName });
+  return { isAlias: false, targetIndex: null, isBareIndex };
 }
 
 // ---------------------------------------------------------------------------
@@ -197,12 +196,7 @@ export async function listVersionedIndexes(
 
   try {
     const response = await client.indices.get({ index: `${prefix}*` });
-    const names: string[] = [];
-    for (const key in response) {
-      names.push(key);
-    }
-    names.sort();
-    return ok(names);
+    return ok(typeSafeKeys(response).sort());
   } catch (error) {
     if (isNotFoundError(error)) {
       return ok([]);

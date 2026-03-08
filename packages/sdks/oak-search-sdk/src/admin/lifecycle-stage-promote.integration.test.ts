@@ -13,6 +13,7 @@ import type { AdminError } from '../types/admin-types.js';
 import {
   STUB_INGEST_RESULT,
   DEFAULT_ALIAS_TARGETS,
+  BARE_INDEX_TARGETS,
   createFakeDeps,
 } from './lifecycle-test-helpers.js';
 
@@ -199,6 +200,26 @@ describe('IndexLifecycleService — stage and promote', () => {
       if (result.ok) {
         expect(result.value.indexesCleanedUp).toBeGreaterThan(0);
       }
+    });
+
+    it('passes bareIndexToRemove when promoting with bare indexes', async () => {
+      const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(BARE_INDEX_TARGETS)),
+        atomicAliasSwap,
+      });
+
+      const service = createIndexLifecycleService(deps);
+      const result = await service.promote('v2026-03-08-100000');
+
+      expect(result.ok).toBe(true);
+      expect(atomicAliasSwap).toHaveBeenCalledOnce();
+      expect(atomicAliasSwap).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({ alias: 'oak_lessons', bareIndexToRemove: 'oak_lessons' }),
+          expect.objectContaining({ alias: 'oak_threads', bareIndexToRemove: 'oak_threads' }),
+        ]),
+      );
     });
   });
 });

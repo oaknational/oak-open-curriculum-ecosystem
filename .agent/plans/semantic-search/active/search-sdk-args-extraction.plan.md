@@ -391,7 +391,7 @@ Document findings. Create follow-up plan if BLOCKERs found.
 
 **Related Plans**:
 
-- [MCP Result Pattern Unification](../../semantic-search/active/mcp-result-pattern-unification.execution.plan.md) — the `Result<T, E>` migration may affect error formatting; coordinate execution sequencing
+- [MCP Result Pattern Unification](../../semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete; `Result<T, E>` migration landed, no execution sequencing concern
 - Demo Search UI (future plan) — this extraction is the prerequisite; the UI plan will be created after WS3
 
 **Prerequisites**:

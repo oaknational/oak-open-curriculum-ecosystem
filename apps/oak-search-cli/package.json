@@ -21,6 +21,7 @@
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:watch": "vitest",
     "bulk:download": "tsx bin/oaksearch.ts admin download",
+    "postbulk:download": "pnpm bulk:codegen",
     "bulk:codegen": "tsx bin/oaksearch.ts eval codegen",
     "es:setup": "tsx bin/oaksearch.ts admin setup",
     "es:reset": "tsx bin/oaksearch.ts admin setup --reset",

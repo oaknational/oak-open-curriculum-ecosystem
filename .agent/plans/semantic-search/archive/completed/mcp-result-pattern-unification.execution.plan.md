@@ -14,19 +14,19 @@ todos:
     status: completed
   - id: ws4-remaining-consumers
     content: "WS4: Complete remaining consumer migration and remove any residual legacy shape assumptions."
-    status: pending
+    status: completed
   - id: ws5-quality-gates
     content: "WS5: Run workspace quality gates and resolve regressions before promotion/closure."
-    status: in_progress
+    status: completed
   - id: ws6-doc-propagation
     content: "WS6: Propagate final contract changes to roadmap/high-level/docs and archive when complete."
-    status: pending
+    status: completed
 ---
 
 # MCP Result Pattern Unification (Execution)
 
-**Last Updated**: 2026-03-03
-**Status**: 🟢 IN PROGRESS
+**Last Updated**: 2026-03-08
+**Status**: ✅ COMPLETE
 **Scope**: Replace legacy MCP execution result handling with canonical `Result<T, E>` across the curriculum SDK and MCP consumers.
 
 ---
@@ -69,11 +69,15 @@ Environment-constrained gates:
 
 ---
 
-## Remaining Work
+## Closure (2026-03-08)
 
-1. Finish WS4 by removing any remaining legacy-shape assumptions outside the touched paths.
-2. Run final workspace lint/test/type-check sweep after WS4 scope closure.
-3. Update references and archive only when all WS acceptance criteria are complete.
+All workstreams complete:
+
+- **WS4**: All `.isError` references in consumers are MCP protocol `CallToolResult` wire
+  format (spec-mandated), not legacy `ToolExecutionResult`. No code changes needed.
+- **WS5**: Full quality gates passed (`pnpm build && pnpm type-check && pnpm lint:fix && pnpm test`).
+  E2E sandbox `listen EPERM` is an environment constraint, not a regression.
+- **WS6**: Plan frontmatter and active README updated. Ready to archive.
 
 ---
 

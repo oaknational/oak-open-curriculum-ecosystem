@@ -266,9 +266,9 @@ Canonical next plan:
   `console.*` usage/allowlists under the canonical strictness track
 - Origin: logger architectural bug found during snagging session
 
-### 3b Result Pattern Unification
+### 3b Result Pattern Unification — ✅ COMPLETE
 
-- Active plan: [mcp-result-pattern-unification.execution.plan.md](active/mcp-result-pattern-unification.execution.plan.md)
+- Archived plan: [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md)
 
 ### 3c STDIO-HTTP Alignment
 
@@ -297,7 +297,8 @@ closed.
 
 Current active and queued execution plans:
 
-- [mcp-result-pattern-unification.execution.plan.md](active/mcp-result-pattern-unification.execution.plan.md) — cross-cutting active MCP execution convergence work
+- [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
+- [blue-green-reindex.execution.plan.md](active/blue-green-reindex.execution.plan.md) — first live reindex with alias migration (ADR-130)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
 - [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win

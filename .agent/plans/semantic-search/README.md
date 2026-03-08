@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-07
+**Last Updated**: 2026-03-08
 
 ---
 
@@ -16,7 +16,7 @@
 
 Active execution now includes:
 
-- [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md)
+- [Blue/Green Reindex — First Live Run](active/blue-green-reindex.execution.plan.md)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
@@ -44,7 +44,9 @@ Cross-collection sequencing note:
   audit produces evidence.
 
 MCP search integration (Phase 3a) is complete — three tools
-wired, old REST search replaced. SDK workspace separation (3e) is
+wired, old REST search replaced. MCP Result Pattern Unification is **COMPLETE** —
+archived [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md).
+SDK workspace separation (3e) is
 **complete** — archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md).
 
 Search results quality is **COMPLETE** — documented in
@@ -106,7 +108,7 @@ prevent Boundary 03 bulk metadata work from progressing.
 For the full at-a-glance state including cross-collection sequencing, see
 [Current Work](#current-work-post-merge-execution) above.
 
-- [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md) — converge MCP execution to `Result<T, E>` across SDK + MCP consumers
+- [Blue/Green Reindex — First Live Run](active/blue-green-reindex.execution.plan.md) — first live blue/green reindex: stage, validate, promote (ADR-130 migration fix complete, reviewer fixes pending)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
@@ -117,7 +119,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 result unification + search-args extraction + bulk metadata quick wins + KG alignment audit |
+| `active/` | In-progress plans | 🟢 blue-green reindex + search-args extraction + bulk metadata quick wins + KG alignment audit |
 | `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
@@ -179,7 +181,8 @@ to the boundary structure.
 | [Search Results Quality](archive/completed/search-results-quality.md) | ✅ Complete — ADR-120 |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
-| [Result Pattern Unification](active/mcp-result-pattern-unification.execution.plan.md) | 🟢 In progress — `Result<T, E>` migration |
+| [Result Pattern Unification](archive/completed/mcp-result-pattern-unification.execution.plan.md) | ✅ Complete — `Result<T, E>` migration across SDK + MCP consumers |
+| [Blue/Green Reindex](active/blue-green-reindex.execution.plan.md) | 🟢 Active — first live reindex with alias migration (ADR-130) |
 | [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

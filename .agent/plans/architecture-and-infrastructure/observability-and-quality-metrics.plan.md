@@ -53,17 +53,24 @@ Research: [Augmented Engineering Practices](../agentic-engineering-enhancements/
 | Change failure rate | Catches "fast but fragile" dynamics | CI failure rate tracking |
 | Security findings trend | Ensures risk doesn't silently rise | Dependency scanning trends |
 
-### Current State
+### Current State (verified 2026-03-08)
 
-- Sentry is configured for runtime error tracking and performance monitoring
-- Structured logging exists via `@oaknational/mcp-logger`
+- **No Sentry SDK** is installed in any workspace — Sentry is not yet integrated
+- Structured logging exists via `@oaknational/logger` (OTel-compliant, ADR-051)
+- Logger has sink-based DI architecture ready for Sentry sink addition
 - Header redaction is implemented for sensitive HTTP headers
 - No systematic quality metrics dashboards exist
 - No alerting thresholds are defined
 
+### Sentry Integration
+
+Sentry integration has its own execution plan, promoted from icebox:
+[sentry-otel-integration.execution.plan.md](current/sentry-otel-integration.execution.plan.md)
+— **M3 blocker**. Reference implementation exists in `starter-app-spike`.
+
 ## Phases (to be detailed when promoted to active)
 
-1. **Audit**: Catalogue existing observability capabilities, identify gaps
+1. **Sentry integration**: See [sentry-otel-integration.execution.plan.md](current/sentry-otel-integration.execution.plan.md)
 2. **Logging standards**: Formalise and enforce structured logging across all services
 3. **Quality metrics pipeline**: Implement CI-based metrics collection and trend tracking
 4. **Alerting**: Define thresholds and wire notifications

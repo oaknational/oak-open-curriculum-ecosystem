@@ -48,7 +48,9 @@ function extractFromIndex(info: AliasTargetInfo | undefined): string | null {
  * Build alias swap actions from current alias state to new versioned indexes.
  *
  * When an alias is already pointing to a versioned index, include a remove action.
- * When no alias exists (first-run), include only add (Wilma finding #3).
+ * When no alias exists (first-run on a fresh cluster), include only add.
+ * When a bare concrete index blocks alias creation (first-run migration),
+ * set `bareIndexToRemove` to trigger a `remove_index` action (ADR-130).
  */
 export function buildSwapActions(
   currentTargets: AliasTargetMap,
@@ -59,7 +61,11 @@ export function buildSwapActions(
     const base = BASE_INDEX_NAMES[kind];
     const alias = resolveAliasName(base, target);
     const toIndex = resolveVersionedIndexName(base, target, version);
-    const fromIndex = extractFromIndex(currentTargets[kind]);
+    const info = currentTargets[kind];
+    const fromIndex = extractFromIndex(info);
+    if (info.isBareIndex) {
+      return { fromIndex, toIndex, alias, bareIndexToRemove: alias };
+    }
     return { fromIndex, toIndex, alias };
   });
 }
@@ -143,9 +149,6 @@ export function assessAliasHealth(
       targetIndex: null,
       issue: 'Name is a bare index, not an alias',
     };
-  }
-  if (info.targetIndex === null) {
-    return { alias, healthy: false, targetIndex: null, issue: 'Alias exists but has no target' };
   }
   return { alias, healthy: true, targetIndex: info.targetIndex };
 }

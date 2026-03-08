@@ -137,8 +137,8 @@ real-world validation with a controlled user base before broader release.
 
 **Post-merge work** (not blocking but valuable):
 
-- Result pattern unification:
-  [mcp-result-pattern-unification.execution.plan.md](semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
+- Result pattern unification: ✅ COMPLETE —
+  [mcp-result-pattern-unification.execution.plan.md](semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md)
 - STDIO/HTTP alignment:
   [stdio-http-server-alignment.md](architecture-and-infrastructure/stdio-http-server-alignment.md)
 - no-console + strictness convergence (includes ESLint override removal and boundary/separation lint integration):
@@ -205,6 +205,9 @@ platform reach.
      [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
    - Covers: Sentry configuration, structured logging, monitoring,
      alerting, quality metrics dashboards
+   - **Sentry integration (M3 blocker)**: Execution plan queued at
+     [sentry-otel-integration.execution.plan.md](architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
+     — reference implementation exists in `starter-app-spike`
 4. **Architectural enforcement adoption**
    - Full plan:
      [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md)
