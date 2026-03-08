@@ -170,25 +170,55 @@ See the [full ADR index](docs/architecture/architectural-decisions/) for all dec
 ## Engineering Practice
 
 This repository began as an exploration of what co-pilot style AI support could
-provide, but evolved rapidly into an agent-first engineering system, we call
-this [the Practice](.agent/practice-core/README.md). As of
+provide, but evolved rapidly into an agent-first engineering system. As of
 February 2026, for at least the previous six months, every line of code,
-configuration, and documentation has been written entirely by agents.
+configuration, and documentation has been written entirely by agents. Humans
+focus on system design: defining guardrails, architectural constraints, quality
+gates, and reviewer workflows; then providing direction and corrective feedback.
 
-Humans focus on system design: defining and strengthening guardrails,
-architectural constraints, quality gates, and reviewer workflows; then
-providing direction and corrective feedback.
+The result of this approach is **[the Practice](.agent/practice-core/README.md)**
+— a transferable, self-improving system of principles, structures, specialist
+agents, and tooling that governs how work happens. The Practice is not a static
+rulebook; it contains a [**self-reinforcing improvement loop**](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) that learns from
+every session and evolves its own governance. The core cycle:
 
-Self-assessment by agents, and the [learning loop of iterative improvement](.agent/commands/consolidate-docs.md)
-of the Practice _by the Practice itself_, are integral parts of how work is done here.
+1. **Capture** — agents continuously log mistakes, corrections, and patterns to
+   a session napkin
+2. **Refine** — periodic distillation extracts high-signal entries into a
+   curated reference
+3. **Graduate** — the consolidation workflow moves settled patterns into
+   permanent documentation (ADRs, governance docs, READMEs)
+4. **Enforce** — permanent docs become rules and directives that govern the
+   next session's work
 
-See [.agent/HUMANS.md](.agent/HUMANS.md) for contributor context. The approach
-is documented in
-[ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
-and embodied in [the Practice](.agent/practice-core/README.md), a
-transferable, self-improving memetic system of principles, structures, agents,
-and tooling, enabling safer, human-AI collaboration and innovation without
-compromising on quality.
+The loop is self-referential: it improves not just the product code but the
+Practice itself. Rules about rule creation, patterns about distillation quality,
+and insights about consolidation all flow through the same cycle.
+
+The Practice also travels between repositories via a
+[plasmid exchange mechanism](docs/architecture/architectural-decisions/124-practice-propagation-model.md)
+— a package of five portable files that carry the improvement loop to new
+contexts. Different repos stress-test the Practice against different work,
+surfacing learnings that travel back to the origin. If a repo already has
+a Practice, then the income Practice is analysed and the best parts are
+integrated into the incumbent Practice. This allows the benefits
+of the learning loop to be compounded through multiple repos, while allowing
+the Practice to adapt itself to suit the context of each project.
+
+The impact of these systems is to enable **agentic engineering speed and
+optionality without sacrificing quality**, while minimising the loss of
+visibility that comes from delegating work to agents. Quality gates, specialist
+reviewers, and the learning loop provide assurance comparable to manual code
+review, while the Practice's self-improving nature means governance strengthens
+over time rather than eroding.
+
+**Further reading:**
+
+- [The Practice](.agent/practice-core/README.md) — human-friendly introduction
+- [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) — naming, boundary, and three-layer model
+- [ADR-131](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) — the improvement loop, interaction map, and self-referential property
+- [ADR-124](docs/architecture/architectural-decisions/124-practice-propagation-model.md) — how the Practice travels between repos
+- [.agent/HUMANS.md](.agent/HUMANS.md) — contributor context
 
 ## Contributing
 

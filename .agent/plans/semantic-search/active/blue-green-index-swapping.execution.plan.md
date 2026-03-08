@@ -39,7 +39,7 @@ todos:
     status: done
   - id: phase-8d-max-lines-extraction
     content: "Phase 8d: Extract rollback/validate to lifecycle-rollback.ts (max-lines fix)"
-    status: pending
+    status: done
   - id: phase-8-gates-review
     content: "Phase 8b: Full quality gates + final reviewer pass"
     status: pending
@@ -75,57 +75,27 @@ Read:
 pnpm build && pnpm type-check && pnpm lint:fix && pnpm test
 ```
 
-**WARNING**: `pnpm lint:fix` currently FAILS — `index-lifecycle-service.ts` is 302 lines (limit 250). This is the first thing to fix in the next session (Phase 8d).
+All quality gates pass. Commit `bf23cefc`.
 
 ### What to do next (session 7)
 
-One blocking lint issue remains, then quality gates and re-review.
+Final specialist review pass, then archive.
 
-#### Step 1: Extract rollback/validate to `lifecycle-rollback.ts` (Phase 8d)
-
-`index-lifecycle-service.ts` is 302 lines (limit 250). The fix is to extract 4 functions to a new `lifecycle-rollback.ts`:
-
-**Functions to extract** (lines 221-302 of `index-lifecycle-service.ts`):
-
-- `rollback()` — exported
-- `executeRollbackSwap()` — private
-- `writeRollbackMeta()` — private
-- `validateAliases()` — exported
-
-**Update `index-lifecycle-service.ts`**:
-
-- Remove the 4 extracted functions
-- Remove unused imports: `IndexMetaDoc`, `RollbackResult`, `AliasValidationResult`, `SEARCH_INDEX_KINDS`, `BASE_INDEX_NAMES`, `resolveAliasName`, `buildVersionSwapActions`, `assessAliasHealth`, `validateRollbackMeta`
-- Add: `import { rollback, validateAliases } from './lifecycle-rollback.js';`
-- Update module TSDoc to reference the new file
-
-**Create `lifecycle-rollback.ts`** with:
-
-- The 4 extracted functions
-- All necessary imports (`Result`, `ok`, `err`, `IndexMetaDoc`, `AdminError`, `AliasValidationResult`, `IndexLifecycleDeps`, `RollbackResult`, `SEARCH_INDEX_KINDS`, `BASE_INDEX_NAMES`, `resolveAliasName`, `buildVersionSwapActions`, `assessAliasHealth`, `validateRollbackMeta`)
-- Module TSDoc header
-
-**Tests**: No test changes needed — the integration test calls through `createIndexLifecycleService` which wires `rollback` and `validateAliases` regardless of where they're defined.
-
-After this extraction, run `pnpm lint:fix` to confirm the max-lines error is resolved.
-
-#### Step 2: Full quality gates
-
-```bash
-pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm format:root && pnpm markdownlint:root
-```
-
-#### Step 3: Invoke final specialist reviewers
+#### Step 1: Invoke final specialist reviewers (Phase 8b)
 
 Invoke at minimum: code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, plus 2 architecture reviewers (fred + wilma).
 
-#### Step 4: Address any new findings, archive plan
+#### Step 2: Address any new findings
+
+#### Step 3: Archive plan
+
+Move from `active/` to `archive/`.
 
 ### Context Summary
 
-WS0–WS4 of ADR-130 are complete. Two rounds of specialist review have been done: the first (session 4) produced ~30 findings across 6 reviewers; the second (session 5-6) produced ~25 findings across 6 reviewers (code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma). All findings have been addressed in code, tests, and documentation.
+WS0–WS4 of ADR-130 are complete. Two rounds of specialist review have been done: the first (session 4) produced ~30 findings across 6 reviewers; the second (session 5-6) produced ~25 findings across 6 reviewers (code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma). All findings have been addressed in code, tests, and documentation. Phase 8d (max-lines extraction of lifecycle-rollback.ts) is complete. All quality gates pass.
 
-**Progress as of 2026-03-08 (session 6)**: All code and documentation changes DONE except the max-lines extraction (Phase 8d). 142 search SDK tests passing (13 test files), 22 lifecycle integration tests. Build and type-check pass. Lint fails only on the 302-line file.
+**Progress as of 2026-03-08 (session 6-7)**: All code, tests, and documentation changes complete. 142 search SDK tests passing (13 test files), 22 lifecycle integration tests. All quality gates pass. Ready for final reviewer pass (Phase 8b).
 
 **What was completed in session 5-6** (Phase 8c — second-round reviewer findings):
 
