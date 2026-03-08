@@ -28,6 +28,11 @@ import {
   registerMetaCmd,
 } from './admin-sdk-commands.js';
 import { registerOrchestrationCmds } from './admin-orchestration-commands.js';
+import {
+  registerVersionedIngestCmd,
+  registerRollbackCmd,
+  registerValidateAliasesCmd,
+} from './admin-lifecycle-commands.js';
 
 /**
  * Create the `admin` subcommand group.
@@ -54,6 +59,9 @@ export function adminCommand(cliEnv: CliSdkEnv): Command {
   registerSynonymsCmd(cmd, cliEnv);
   registerMetaCmd(cmd, cliEnv);
   registerOrchestrationCmds(cmd);
+  registerVersionedIngestCmd(cmd, cliEnv);
+  registerRollbackCmd(cmd, cliEnv);
+  registerValidateAliasesCmd(cmd, cliEnv);
 
   return cmd;
 }

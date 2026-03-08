@@ -86,7 +86,9 @@ export function buildRollbackSwaps(
     if (toIndex === null) {
       return err({
         type: 'validation_error',
-        message: `Cannot rollback: alias '${alias}' has no known previous target index`,
+        message:
+          `Cannot rollback: alias '${alias}' currently has no target index ` +
+          `in Elasticsearch (alias may be corrupted or missing)`,
       });
     }
     swaps.push({ fromIndex, toIndex, alias });
@@ -125,6 +127,7 @@ export function validateRollbackMeta(
   }
   return ok({ currentVersion: meta.version, previousVersion: meta.previous_version });
 }
+
 /** Assess the health of a single alias. */
 export function assessAliasHealth(
   alias: string,

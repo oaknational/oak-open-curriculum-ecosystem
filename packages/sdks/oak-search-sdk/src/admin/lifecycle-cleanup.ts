@@ -12,21 +12,33 @@ import { BASE_INDEX_NAMES, SEARCH_INDEX_KINDS } from '../internal/index.js';
 /** Maximum number of index generations to retain (including current). */
 const MAX_GENERATIONS = 2;
 
+/** Result of a cleanup operation, tracking both successes and failures. */
+export interface CleanupResult {
+  readonly deleted: number;
+  readonly failed: number;
+}
+
 /** Delete old versioned indexes exceeding the generation limit. */
-export async function cleanupOldGenerations(deps: IndexLifecycleDeps): Promise<number> {
+export async function cleanupOldGenerations(deps: IndexLifecycleDeps): Promise<CleanupResult> {
   let deleted = 0;
+  let failed = 0;
   for (const kind of SEARCH_INDEX_KINDS) {
-    deleted += await cleanupKindGenerations(deps, BASE_INDEX_NAMES[kind]);
+    const result = await cleanupKindGenerations(deps, BASE_INDEX_NAMES[kind]);
+    deleted += result.deleted;
+    failed += result.failed;
   }
-  return deleted;
+  return { deleted, failed };
 }
 
 /** Cleanup old generations for a single index kind. */
-async function cleanupKindGenerations(deps: IndexLifecycleDeps, baseName: string): Promise<number> {
+async function cleanupKindGenerations(
+  deps: IndexLifecycleDeps,
+  baseName: string,
+): Promise<CleanupResult> {
   const listResult = await deps.listVersionedIndexes(baseName, deps.target);
   if (!listResult.ok) {
     deps.logger?.warn('Failed to list versioned indexes for cleanup', { baseName });
-    return 0;
+    return { deleted: 0, failed: 0 };
   }
   // Version strings are fixed-width (vYYYY-MM-DD-HHmmss), so lexicographic sort equals chronological sort.
   // With MAX_GENERATIONS=2 and cleanup running after the swap, the retained indexes are the current
@@ -35,13 +47,15 @@ async function cleanupKindGenerations(deps: IndexLifecycleDeps, baseName: string
   const sorted = [...listResult.value].sort();
   const toDelete = sorted.slice(0, Math.max(0, sorted.length - MAX_GENERATIONS));
   let deleted = 0;
+  let failed = 0;
   for (const indexName of toDelete) {
     const deleteResult = await deps.deleteVersionedIndex(indexName);
     if (deleteResult.ok) {
       deleted++;
     } else {
+      failed++;
       deps.logger?.warn('Failed to delete old versioned index', { indexName });
     }
   }
-  return deleted;
+  return { deleted, failed };
 }

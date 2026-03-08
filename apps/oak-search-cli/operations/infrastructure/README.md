@@ -2,46 +2,43 @@
 
 System management and deployment utilities for Elasticsearch indices.
 
-## Scripts
+## Blue/Green Index Lifecycle (ADR-130)
 
-### `alias-swap.sh`
+Index lifecycle management is handled by the SDK's `IndexLifecycleService`, exposed through CLI commands registered in [`admin-lifecycle-commands.ts`](../../src/cli/admin/admin-lifecycle-commands.ts).
 
-Performs blue/green deployment by swapping Elasticsearch index aliases.
-
-**Usage**:
+### CLI Commands
 
 ```bash
-pnpm elastic:alias-swap
+# Full blue/green ingest cycle: create versioned indexes, ingest, verify, swap aliases, clean up
+oak-search admin versioned-ingest --bulk-dir <path> [--subject-filter <subjects...>] [--version <version>] [--min-doc-count <count>] [-v]
+
+# Roll back to the previous index version recorded in metadata
+oak-search admin rollback
+
+# Check health of all curriculum aliases
+oak-search admin validate-aliases
 ```
 
-**Purpose**: Zero-downtime index updates by swapping aliases from old to new indices.
+### Blue/Green Deployment Pattern
 
-**What it does**:
+1. **Blue** (current): Active versioned indices serving live traffic via aliases
+2. **Green** (new): New versioned indices created, populated, and verified offline
+3. **Swap**: Atomic `POST /_aliases` update across all six curriculum indexes
+4. **Cleanup**: Old generations beyond `MAX_GENERATIONS` are deleted
 
-- Creates new timestamped indices
-- Reindexes data from current indices
-- Atomically swaps aliases to point to new indices
-- Cleans up old indices
-
-**Blue/Green Deployment Pattern**:
-
-1. **Blue** (current): Active indices serving live traffic
-2. **Green** (new): New indices being prepared
-3. **Swap**: Atomic alias update from Blue to Green
-4. **Cleanup**: Old Blue indices can be safely deleted
-
-**Index Naming Convention**:
+### Index Naming Convention
 
 ```text
-oak_lessons_v2025-12-23-154730  # Timestamped versioned index
+oak_lessons_v2026-03-07-143022  # Timestamped versioned index
 oak_lessons                      # Alias pointing to latest version
 ```
 
-**Safety Features**:
+### Safety Features
 
-- Validation of new indices before swap
-- Atomic alias operations (no downtime)
-- Rollback capability (keep old indices temporarily)
+- Pre-swap validation of document counts per index
+- Atomic alias operations (no downtime window)
+- Single-level rollback via `previous_version` metadata
+- Metadata write as commit point — alias rolled back on metadata failure
 
 ## Adding New Infrastructure Tools
 
@@ -53,17 +50,8 @@ When adding new infrastructure scripts:
 4. **Validate preconditions** before operations
 5. **Provide clear success/failure messages**
 
-## Future Infrastructure Tools
-
-Potential additions:
-
-- Index backup/restore utilities
-- Index optimization scripts
-- Mapping migration tools
-- Index monitoring and alerting
-- Performance tuning scripts
-
 ## Related Documentation
 
-- [Elasticsearch Aliases](https://www.elastic.co/guide/en/elasticsearch/reference/current/aliases.html) - Official ES alias documentation
-- [Blue/Green Deployments](https://docs.aws.amazon.com/wellarchitected/latest/management-and-governance-lens/blue-green-deployments.html) - Deployment pattern overview
+- [ADR-130: Blue/Green Index Swapping](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)
+- [Indexing Playbook](../../docs/INDEXING.md)
+- [Elasticsearch Aliases](https://www.elastic.co/guide/en/elasticsearch/reference/current/aliases.html) — Official ES alias documentation

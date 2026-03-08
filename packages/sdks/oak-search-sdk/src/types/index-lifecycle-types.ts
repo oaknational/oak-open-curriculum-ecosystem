@@ -100,6 +100,9 @@ export interface VersionedIngestResult {
 
   /** Number of old index generations deleted during cleanup. */
   readonly indexesCleanedUp: number;
+
+  /** Number of old index generations that failed to delete during cleanup. */
+  readonly cleanupFailures: number;
 }
 
 // ---------------------------------------------------------------------------

@@ -12,24 +12,36 @@ todos:
     status: done
   - id: phase-3-es-performance
     content: "Phase 3: ES performance improvements (E1–E3) from elasticsearch-reviewer"
-    status: pending
+    status: done
   - id: phase-4-tests
     content: "Phase 4: Test fixes and coverage gaps (T1–T4) from test-reviewer"
-    status: pending
+    status: done
   - id: phase-5-adr-drift
-    content: "Phase 5: ADR-130 drift fixes (D1–D5) from docs-adr-reviewer"
-    status: pending
+    content: "Phase 5: ADR-130 drift fixes (D1–D5) — D1/D2/D4 done early; D3/D5 code done, docs remaining"
+    status: done
   - id: phase-6-minor
-    content: "Phase 6: Minor/TSDoc fixes (M1–M4)"
-    status: pending
+    content: "Phase 6: Minor/TSDoc fixes (M1–M4) — M1/M3/M4 done; M2 deferred (cosmetic)"
+    status: done
   - id: phase-7-ws5-cli
-    content: "Phase 7 (WS5): CLI commands, alias-swap.sh deletion"
-    status: pending
+    content: "Phase 7 (WS5): CLI commands wired, alias-swap.sh deleted, bash pass-through + script removed"
+    status: done
+  - id: phase-7-docs
+    content: "Phase 7 docs: Update infrastructure README, INDEXING.md, and ADR-130 CLI section (D3/D5)"
+    status: done
   - id: phase-7b-docs
-    content: "Phase 7b: Documentation — update ADR-130, search SDK README, root README (blue-green as search CLI feature)"
+    content: "Phase 7b: Documentation — search SDK README (lifecycle section), root README (workspace summaries)"
+    status: done
+  - id: phase-8-reviewer-fixes
+    content: "Phase 8a: Address reviewer findings (CR-1–3, ES-1–2, TR-1–3) — code + tests"
+    status: done
+  - id: phase-8c-second-reviewer-fixes
+    content: "Phase 8c: Address second-round reviewer findings (W-7, W-1, CR-1, W-5, W-6, W-8, etc.) — code + tests + docs"
+    status: done
+  - id: phase-8d-max-lines-extraction
+    content: "Phase 8d: Extract rollback/validate to lifecycle-rollback.ts (max-lines fix)"
     status: pending
   - id: phase-8-gates-review
-    content: "Phase 8: Quality gates + final reviewer pass"
+    content: "Phase 8b: Full quality gates + final reviewer pass"
     status: pending
 isProject: false
 ---
@@ -63,15 +75,95 @@ Read:
 pnpm build && pnpm type-check && pnpm lint:fix && pnpm test
 ```
 
-All gates must pass before starting any phase. They passed as of 2026-03-08 (43 admin tests, 132 total search SDK tests, full monorepo green).
+**WARNING**: `pnpm lint:fix` currently FAILS — `index-lifecycle-service.ts` is 302 lines (limit 250). This is the first thing to fix in the next session (Phase 8d).
+
+### What to do next (session 7)
+
+One blocking lint issue remains, then quality gates and re-review.
+
+#### Step 1: Extract rollback/validate to `lifecycle-rollback.ts` (Phase 8d)
+
+`index-lifecycle-service.ts` is 302 lines (limit 250). The fix is to extract 4 functions to a new `lifecycle-rollback.ts`:
+
+**Functions to extract** (lines 221-302 of `index-lifecycle-service.ts`):
+
+- `rollback()` — exported
+- `executeRollbackSwap()` — private
+- `writeRollbackMeta()` — private
+- `validateAliases()` — exported
+
+**Update `index-lifecycle-service.ts`**:
+
+- Remove the 4 extracted functions
+- Remove unused imports: `IndexMetaDoc`, `RollbackResult`, `AliasValidationResult`, `SEARCH_INDEX_KINDS`, `BASE_INDEX_NAMES`, `resolveAliasName`, `buildVersionSwapActions`, `assessAliasHealth`, `validateRollbackMeta`
+- Add: `import { rollback, validateAliases } from './lifecycle-rollback.js';`
+- Update module TSDoc to reference the new file
+
+**Create `lifecycle-rollback.ts`** with:
+
+- The 4 extracted functions
+- All necessary imports (`Result`, `ok`, `err`, `IndexMetaDoc`, `AdminError`, `AliasValidationResult`, `IndexLifecycleDeps`, `RollbackResult`, `SEARCH_INDEX_KINDS`, `BASE_INDEX_NAMES`, `resolveAliasName`, `buildVersionSwapActions`, `assessAliasHealth`, `validateRollbackMeta`)
+- Module TSDoc header
+
+**Tests**: No test changes needed — the integration test calls through `createIndexLifecycleService` which wires `rollback` and `validateAliases` regardless of where they're defined.
+
+After this extraction, run `pnpm lint:fix` to confirm the max-lines error is resolved.
+
+#### Step 2: Full quality gates
+
+```bash
+pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm format:root && pnpm markdownlint:root
+```
+
+#### Step 3: Invoke final specialist reviewers
+
+Invoke at minimum: code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, plus 2 architecture reviewers (fred + wilma).
+
+#### Step 4: Address any new findings, archive plan
 
 ### Context Summary
 
-WS0–WS4 of ADR-130 are complete. Six specialist reviewers were invoked (code-reviewer, elasticsearch-reviewer, test-reviewer, type-reviewer, architecture-reviewer-betty, docs-adr-reviewer). Their unified findings produced ~30 action items, organised below into 8 phases.
+WS0–WS4 of ADR-130 are complete. Two rounds of specialist review have been done: the first (session 4) produced ~30 findings across 6 reviewers; the second (session 5-6) produced ~25 findings across 6 reviewers (code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma). All findings have been addressed in code, tests, and documentation.
 
-**Progress as of 2026-03-08**: Phases 1–2 DONE. Several items from Phases 5–6 also completed early (D1, D2, D4, M1, M3, M4). Next up: Phase 3 (ES performance). D3, D5, M2 remain pending. All quality gates green (0 lint errors, 43 admin tests, 132 SDK tests).
+**Progress as of 2026-03-08 (session 6)**: All code and documentation changes DONE except the max-lines extraction (Phase 8d). 142 search SDK tests passing (13 test files), 22 lifecycle integration tests. Build and type-check pass. Lint fails only on the 302-line file.
 
-**Key files**:
+**What was completed in session 5-6** (Phase 8c — second-round reviewer findings):
+
+Second-round reviewers (code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma) produced a plan with 9 steps. All steps 1-8 completed:
+
+- **Step 1 (T-CR1)**: Renamed `index-lifecycle-service.unit.test.ts` → `.integration.test.ts`
+- **Step 2 (W-7, W-1, CR-1)**: Safety fixes — compound failure propagation from `attemptMetaFailureRollback` now returns `Result`; rollback version existence check via `verifyDocCounts`; `durationMs` timing fix (pass `startTime`, compute inside `swapAndCommit`)
+- **Step 3 (W-5)**: `CleanupResult` type with `deleted`/`failed` counts; `cleanupFailures` added to `VersionedIngestResult`
+- **Step 4 (W-6, W-8)**: Improved rollback error message clarity; aggregated all index creation errors in `hasSetupError`
+- **Step 5 (T-IMP2/3/4, CR-2)**: Test improvements — removed positive-path `toHaveBeenCalledOnce` assertions; replaced inline `.every()` with `toHaveLength`; used `AliasSwap` type; added compound error tests for W-7, W-1, W-5
+- **Step 6 (F-W1, F-W2)**: Extracted `createEsClient` shared helper; reduced admin barrel exports to consumer-facing APIs only; renamed `createLifecycleService` → `buildLifecycleService`
+- **Step 7 (D-CR2)**: Deleted dead `registerBashPassThrough` function
+- **Step 8 (D-CR1, D-IMP1, D-IMP3, CR-4)**: Documentation fixes — replaced stale `pnpm elastic:alias-swap` with CLI commands; marked migration steps as not-yet-implemented; removed `alias-swap.sh` reference from `alias-operations.ts` TSDoc; added blank line before `assessAliasHealth` docblock; updated SDK README test count (142 tests, 13 files); updated `.agent/analysis/repo-search-deep-dive.md`
+
+**Deferred items (not in scope)**: concurrency guard (ADR-130 Phase 3), post-swap alias verification, transient ES error retry, parallel `client.count`, `SEARCH_INDEX_VERSION` env step, YAGNI query-pattern tests
+
+**What was completed in session 4** (Phases 7d, 7b, 8a):
+
+- **Phase 7d docs**: Rewrote `operations/infrastructure/README.md`; updated `docs/INDEXING.md`; updated ADR-130
+- **Phase 7b docs**: Added lifecycle section to SDK README; added workspace summaries to root README
+- **Phase 8a reviewer fixes** (8 findings): CR-1 empty getAlias, CR-2 TARGET_SUFFIXES, CR-3 cross-contamination tests, ES-1/ES-2 TSDoc, TR-1/TR-2/TR-3 test improvements
+  - **TR-2**: Rollback swap test now asserts both `toIndex` and `fromIndex` values
+  - **TR-3**: Renamed `getIndices` fake client key to `get` to match ES client method name
+
+**What was completed in session 3** (Phases 3–7 code):
+
+- **Phase 3 (E1–E3)**: `resolveOneAlias` rewritten to single `getAlias` + 404 catch; `resolveAllAliases` parallelised with `Promise.all`; `listVersionedIndexes` rewritten from `cat.indices` to `indices.get` + 404 catch
+- **Phase 4 (T1–T4)**: Deleted 4 redundant versioned-index-resolver tests (kept 2); added 7 coverage gap tests (2 alias-ops, 5 lifecycle-service); renamed `alias-operations.unit.test.ts` → `.integration.test.ts`
+- **Phase 7 code**: Created `build-lifecycle-deps.ts` (factory wiring `IndexLifecycleDeps` from ES client); created `admin-lifecycle-commands.ts` (3 Commander commands); registered in admin/index.ts; deleted `alias-swap.sh`; removed bash pass-through registration; removed `elastic:alias-swap` package.json script
+
+**New files created in session 3**:
+
+| File | Purpose |
+|------|---------|
+| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts` | Factory: `buildLifecycleDeps(client, target, logger?)` → `IndexLifecycleDeps` |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` | CLI: `versioned-ingest`, `rollback`, `validate-aliases` commands |
+
+**Key files** (all phases):
 
 | File | Purpose |
 |------|---------|
@@ -80,12 +172,14 @@ WS0–WS4 of ADR-130 are complete. Six specialist reviewers were invoked (code-r
 | `packages/sdks/oak-search-sdk/src/admin/versioned-index-resolver.ts` | Versioned index name factory (uses shared helpers) |
 | `packages/sdks/oak-search-sdk/src/admin/lifecycle-swap-builders.ts` | Pure functions for building swap action arrays |
 | `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts` | Old generation cleanup |
-| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts` | Orchestration service |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-rollback.ts` | Rollback and alias validation (to be created in Phase 8d) |
+| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts` | Orchestration service (ingest + swap) |
+| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts` | DI factory for lifecycle deps |
 | `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts` | DI interface, service types |
 | `packages/sdks/oak-search-sdk/src/admin/index.ts` | Admin barrel exports |
 | `packages/sdks/oak-search-sdk/src/index.ts` | SDK root barrel |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` | CLI: versioned-ingest, rollback, validate-aliases |
 | `apps/oak-search-cli/src/cli/admin/admin-orchestration-commands.ts` | CLI admin commands (bash pass-throughs) |
-| `apps/oak-search-cli/operations/infrastructure/alias-swap.sh` | Bash alias swap (TO BE DELETED) |
 
 ---
 
@@ -265,9 +359,19 @@ Option (b) is simpler and correct given the current single-level rollback constr
 
 ---
 
-## Phase 3: ES Performance Improvements (E1–E3)
+## Phase 3: ES Performance Improvements (E1–E3) — DONE
 
 **Source**: elasticsearch-reviewer
+**Completed**: 2026-03-08 (session 3)
+
+All 3 items resolved:
+
+- E1: `resolveOneAlias` rewritten — single `getAlias` + `isNotFoundError` 404 catch (halves HTTP calls from 12→6)
+- E2: `resolveAllAliases` parallelised with `Promise.all` (6 concurrent calls instead of sequential)
+- E3: `listVersionedIndexes` rewritten from `cat.indices` to `indices.get` with 404 catch for no-match case
+- Fake client in tests updated: removed `existsAlias` and `cat.indices` mocks, added `create404Error` helper
+- Default `getAlias` mock now throws 404; default `indices.get` mock now throws 404
+- 15 alias-operations integration tests passing
 
 ### E1: Single `getAlias` with 404 catch (halves HTTP calls)
 
@@ -315,9 +419,17 @@ async function resolveOneAlias(client: Client, aliasName: string): Promise<Alias
 
 ---
 
-## Phase 4: Test Fixes and Coverage Gaps (T1–T4)
+## Phase 4: Test Fixes and Coverage Gaps (T1–T4) — DONE
 
 **Source**: test-reviewer
+**Completed**: 2026-03-08 (session 3)
+
+All 4 items resolved:
+
+- T1+T2: Deleted 4 redundant tests from `versioned-index-resolver.unit.test.ts` (kept 2 comprehensive tests: primary and sandbox, all 6 kinds each)
+- T3: Added 7 coverage gap tests — 2 in `alias-operations.integration.test.ts` (full kind-keyed resolve, alias-exists-no-target) and 5 in `index-lifecycle-service.unit.test.ts` (ingest failure, swap failure, rollback swap shape, rollback alias-resolution failure, validateAliases ES error)
+- T4: Renamed `alias-operations.unit.test.ts` → `alias-operations.integration.test.ts`
+- Test counts: 2 versioned-index-resolver, 15 alias-operations, 11 lifecycle-swap-builders, 19 lifecycle-service = 47 admin tests
 
 ### T1: Delete `typeof` test in versioned-index-resolver
 
@@ -353,9 +465,10 @@ Add tests for:
 
 ---
 
-## Phase 5: ADR-130 Drift Fixes (D1–D5)
+## Phase 5: ADR-130 Drift Fixes (D1–D5) — DONE (code); docs remaining in Phase 7d
 
 **Source**: docs-adr-reviewer
+**Code fixes completed**: D1, D2, D4 in Phase 2; D5 code (alias-swap.sh deletion) in Phase 7. D3 and D5 doc updates deferred to Phase 7d remaining docs.
 
 ### D1: ADR claims `migrateToAliases()` exists — it doesn't — DONE (completed in Phase 2 A3)
 
@@ -409,92 +522,92 @@ Migration mention already removed from `IndexLifecycleService` TSDoc.
 
 ---
 
-## Phase 7 (WS5): CLI Commands + Alias-Swap Deletion
+## Phase 7 (WS5): CLI Commands + Alias-Swap Deletion — CODE DONE
 
-### 7a: Wire `admin versioned-ingest` CLI command
+**Completed**: 2026-03-08 (session 3)
 
-**File**: `apps/oak-search-cli/src/cli/admin/admin-sdk-commands.ts`
+Code work complete. New files:
 
-Register a new Commander command that:
-1. Accepts `--bulk-dir`, `--subject-filter`, `--version`, `--min-doc-count`, `--verbose`
-2. Creates `IndexLifecycleDeps` by wiring existing admin service methods
-3. Calls `createIndexLifecycleService(deps).versionedIngest(options)`
-4. Prints result or error
+- `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts` — factory `buildLifecycleDeps(client, target, logger?)` that creates `IndexLifecycleDeps` by partially applying existing SDK functions with the ES client
+- `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` — 3 Commander commands (`versioned-ingest`, `rollback`, `validate-aliases`) using shared `createLifecycleService(cliEnv)` helper
 
-### 7b: Wire `admin rollback` CLI command
+Key implementation decisions:
 
-Same file. No arguments needed. Calls `service.rollback()`.
+- Used `buildLifecycleDeps` factory approach (partial application of SDK exports) rather than extending `SearchSdk`
+- `versioned-ingest` options: `--bulk-dir` (required), `--subject-filter`, `--version`, `--min-doc-count`, `-v/--verbose`
+- `buildLifecycleDeps` handles: `generateTimestampVersion`, `hasSetupError` wrapper for `createAllIndexes`, try/catch wrapper for `runIngest`, `client.count()` for `verifyDocCounts`
+- Exported `buildLifecycleDeps` from SDK root (`src/index.ts`) and lifecycle types (`IndexLifecycleDeps`, `IndexLifecycleService`, `VersionedIngestOptions`, etc.)
 
-### 7c: Wire `admin validate-aliases` CLI command
+Deletions:
 
-Same file. No arguments. Calls `service.validateAliases()`. Prints health table.
+- `alias-swap.sh` deleted via `git rm`
+- Bash pass-through registration removed from `admin-orchestration-commands.ts`
+- `elastic:alias-swap` script removed from `package.json`
 
-### 7d: Delete `alias-swap.sh` and all references
+### 7d remaining docs — DONE (session 4)
 
-Delete:
-- `apps/oak-search-cli/operations/infrastructure/alias-swap.sh`
-- Registration in `admin-orchestration-commands.ts:68-70`
-- `package.json` `elastic:alias-swap` script
-- References in `operations/infrastructure/README.md`
-- References in `docs/INDEXING.md`
+All 3 documentation files updated in session 4:
 
-### 7e: Update ADR-130 CLI section
-
-After implementing 7a-7c, update ADR-130 lines 127-132 to reflect the implemented commands (removing `migrate-aliases` for now).
+1. **`apps/oak-search-cli/operations/infrastructure/README.md`**: Rewritten — removed alias-swap.sh, added CLI commands, blue/green pattern, safety features
+2. **`apps/oak-search-cli/docs/INDEXING.md`**: Replaced 2 alias-swap.sh references with CLI commands, added ADR-130 to related ADRs table
+3. **ADR-130 CLI section (D3)**: Status → Accepted, CLI section corrected, key files table expanded
 
 ---
 
-## Phase 7b: Documentation
+## Phase 7b: Documentation — DONE (session 4)
 
-### 7b-1: Update ADR-130
+All 3 items completed:
 
-Ensure ADR-130 accurately reflects the final implementation after all code phases. This overlaps with D1–D5 but is the final pass.
-
-### 7b-2: Update search SDK README
-
-Add a section covering blue-green index lifecycle management: what it is, how to use `createIndexLifecycleService`, and the `versionedIngest` / `rollback` / `validateAliases` API.
-
-### 7b-3: Update root README — workspace summaries and feature callout
-
-Restructure the root README to include:
-
-- **One-line summary** per workspace in a table or list
-- **A few lines** per `apps/` workspace describing purpose and key features:
-  - `oak-curriculum-mcp-streamable-http` — main MCP server (Streamable HTTP transport)
-  - `oak-curriculum-mcp-stdio` — **DEPRECATED**: mark as deprecated, to be replaced with stdio adapter in main MCP server
-  - `oak-search-cli` — search CLI with admin, ingest, and blue-green lifecycle commands
-- **A few lines** per `packages/sdks/` workspace:
-  - `oak-curriculum-sdk` — curriculum API SDK
-  - `oak-search-sdk` — search SDK with retrieval, admin, observability, and blue-green index lifecycle
-  - `oak-sdk-codegen` — schema-driven type generation from OpenAPI + ES mappings
-- Call out blue-green index swapping as a feature of the search SDK and CLI
+- **7b-1**: ADR-130 updated (status → Accepted, CLI section, key files table)
+- **7b-2**: Search SDK README — added "Blue/Green Index Lifecycle" section with `buildLifecycleDeps` + `createIndexLifecycleService` usage example
+- **7b-3**: Root README — added "Workspace Summaries" section with tables for apps, SDKs, core, and libs
 
 ---
 
 ## Phase 8: Quality Gates + Final Reviewer Pass
 
-### 8a: Run full quality gates
+### 8a: Address first-round reviewer findings (CR-1–3, ES-1–2, TR-1–3) — DONE (session 4)
+
+All 8 session-3 reviewer findings addressed. See session 4 summary above for details.
+
+### 8c: Address second-round reviewer findings — DONE (sessions 5-6)
+
+Second round invoked 6 reviewers: code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma. All findings addressed (see Context Summary above). Key changes:
+
+- Compound failure propagation (W-7), rollback existence check (W-1), durationMs timing (CR-1)
+- CleanupResult type with failed count (W-5)
+- Error message improvements (W-6, W-8)
+- Test reclassification and improvements (T-CR1, T-IMP2/3/4, CR-2)
+- Boundary fixes: `createEsClient` extraction (F-W1), admin barrel reduction (F-W2)
+- Dead code removal: `registerBashPassThrough` (D-CR2)
+- Documentation: stale references, migration steps, TSDoc, SDK README test count
+
+### 8d: Extract rollback/validate (max-lines fix) — PENDING
+
+`index-lifecycle-service.ts` grew to 302 lines (limit 250) from the W-7/W-1/CR-1 changes. Extract `rollback`, `executeRollbackSwap`, `writeRollbackMeta`, `validateAliases` to `lifecycle-rollback.ts`. See "What to do next" for full instructions.
+
+### 8b: Run full quality gates + invoke reviewers — PENDING
 
 ```bash
 pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm format:root && pnpm markdownlint:root
 ```
 
-### 8b: Invoke specialist reviewers
+Then invoke at minimum:
 
-At minimum re-invoke:
-- `code-reviewer` — verify C1–C7 resolved
-- `test-reviewer` — verify T1–T4 resolved
-- `elasticsearch-reviewer` — verify E1–E3 resolved
+- `code-reviewer` — gateway review of all changes
+- `test-reviewer` — verify test changes (142 tests, 13 files)
+- `elasticsearch-reviewer` — verify ES-related changes
+- `docs-adr-reviewer` — verify all documentation updates
+- `architecture-reviewer-fred` + `architecture-reviewer-wilma` — structural review
 
 ---
 
 ## Execution Order Notes
 
-- **Phases 1–6** can be done in a single session. They are fixes to existing code and don't introduce new features.
-- **Phase 7** (WS5) is the remaining feature work. It depends on C6 (factory export) being done first.
-- **Phase 8** must be last.
-- Within each phase, tasks are independent unless noted. Work top-to-bottom.
-- After each phase, run `pnpm type-check && pnpm --filter @oaknational/oak-search-sdk lint:fix && pnpm vitest run packages/sdks/oak-search-sdk/src/admin/` to catch regressions early.
+- **Phases 1–7 code**: DONE across sessions 1–3. All quality gates green.
+- **Phases 7d, 7b docs + Phase 8a fixes**: DONE in session 4. 50 admin tests passing.
+- **Phase 8c (second-round findings)**: DONE in sessions 5-6. 142 search SDK tests passing.
+- **Next session (7)**: Fix max-lines (8d), run quality gates (8b), invoke reviewers, archive plan.
 
 ---
 
@@ -520,9 +633,21 @@ These are hard-won lessons from the implementation session that will save time:
 
 ## Done When
 
-1. All phases 1–8 complete with quality gates green.
-2. All 30+ reviewer findings addressed.
-3. `alias-swap.sh` deleted from the codebase.
-4. ADR-130 accurately reflects the implementation (no drift).
-5. CLI commands `versioned-ingest`, `rollback`, `validate-aliases` registered and working.
-6. Final reviewer pass produces no new critical or important findings.
+1. ~~All phases 1–8 complete with quality gates green.~~ **Phases 1–8c: DONE**
+2. ~~All 55+ reviewer findings addressed (2 rounds).~~ **All findings addressed (sessions 1–6)**
+3. ~~`alias-swap.sh` deleted from the codebase.~~ **DONE**
+4. ~~ADR-130 accurately reflects the implementation (no drift).~~ **DONE — session 4**
+5. ~~CLI commands `versioned-ingest`, `rollback`, `validate-aliases` registered and working.~~ **DONE**
+6. `index-lifecycle-service.ts` under 250-line limit. **PENDING — Phase 8d**
+7. Final reviewer pass produces no new critical or important findings. **PENDING — Phase 8b**
+
+### Remaining work (2 items)
+
+**Phase 8d** (session 7): Extract rollback/validate to `lifecycle-rollback.ts` — see "What to do next" for full instructions.
+
+**Phase 8b** (session 7):
+
+1. Run full quality gates: `pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm format:root && pnpm markdownlint:root`
+2. Invoke final reviewers: code-reviewer, test-reviewer, elasticsearch-reviewer, docs-adr-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma
+3. Address any new findings
+4. Archive plan

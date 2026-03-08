@@ -1,6 +1,6 @@
 # Indexing Playbook
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-03-08
 
 Use this guide when populating Elasticsearch Serverless with Oak Curriculum data.
 
@@ -78,7 +78,7 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 - **Retry strategy**: exponential backoff (e.g., 1s, 2s, 4s, 8s) with jitter; abort after configurable max attempts and log failure.
 - **Idempotence**: carry progress markers (key stage + subject + offset) so reruns continue from the last successful chunk.
 - **Logging**: emit structured logs per batch with doc counts, duration, and error summaries; correlate with zero-hit thresholds in dashboards.
-- **Alias strategy**: index to versioned write indices (`oak_lessons_v2025-03-16`) then call `pnpm -C apps/oak-search-cli elastic:alias-swap` (wraps `scripts/alias-swap.sh`) once ingestion succeeds.
+- **Alias strategy**: index to versioned write indices (`oak_lessons_v2026-03-07-143022`) using the blue/green lifecycle service. Use `oak-search admin versioned-ingest` to orchestrate the full cycle (create, ingest, verify, swap, clean up). See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
 
 Example helper (simplified):
 
@@ -124,7 +124,7 @@ async function indexDocuments({
 
 ## Post-ingestion steps
 
-1. Swap aliases via `pnpm -C apps/oak-search-cli elastic:alias-swap` (shell wrapper around `scripts/alias-swap.sh`) so read aliases point at the fresh indices.
+1. Swap aliases via `oak-search admin versioned-ingest` (or manually via `oak-search admin validate-aliases` then the SDK lifecycle service) so read aliases point at the fresh versioned indices. See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
 2. Increment and persist `SEARCH_INDEX_VERSION` (environment variable or config store) – the app will not mutate this automatically.
 3. Call `revalidateTag` for the new version to flush cached search/suggestion results.
 4. Trigger rollup rebuild (`GET /api/rebuild-rollup`) if not already part of the ingest run.
@@ -148,3 +148,4 @@ async function indexDocuments({
 | [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion                   |
 | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy            |
 | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy                   |
+| [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)            | Blue/Green Index Swapping                |

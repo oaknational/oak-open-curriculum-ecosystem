@@ -10,16 +10,6 @@ import { createVersionedIndexResolver } from './versioned-index-resolver.js';
 describe('createVersionedIndexResolver', () => {
   const version = 'v2026-03-07-143022';
 
-  it('appends version to primary base name', () => {
-    const resolve = createVersionedIndexResolver(version);
-    expect(resolve('lessons')).toBe('oak_lessons_v2026-03-07-143022');
-  });
-
-  it('defaults to primary target when target omitted', () => {
-    const resolve = createVersionedIndexResolver(version);
-    expect(resolve('units')).toBe('oak_units_v2026-03-07-143022');
-  });
-
   it('appends version to primary base name for all 6 index kinds', () => {
     const resolve = createVersionedIndexResolver(version);
     expect(resolve('lessons')).toBe('oak_lessons_v2026-03-07-143022');
@@ -30,11 +20,6 @@ describe('createVersionedIndexResolver', () => {
     expect(resolve('threads')).toBe('oak_threads_v2026-03-07-143022');
   });
 
-  it('appends version to sandbox base name', () => {
-    const resolve = createVersionedIndexResolver(version, 'sandbox');
-    expect(resolve('lessons')).toBe('oak_lessons_sandbox_v2026-03-07-143022');
-  });
-
   it('appends version to sandbox base name for all 6 index kinds', () => {
     const resolve = createVersionedIndexResolver(version, 'sandbox');
     expect(resolve('lessons')).toBe('oak_lessons_sandbox_v2026-03-07-143022');
@@ -43,13 +28,5 @@ describe('createVersionedIndexResolver', () => {
     expect(resolve('sequences')).toBe('oak_sequences_sandbox_v2026-03-07-143022');
     expect(resolve('sequence_facets')).toBe('oak_sequence_facets_sandbox_v2026-03-07-143022');
     expect(resolve('threads')).toBe('oak_threads_sandbox_v2026-03-07-143022');
-  });
-
-  it('returns the IndexResolverFn type (callable with SearchIndexKind)', () => {
-    const resolve = createVersionedIndexResolver(version);
-    // The result should be a function
-    expect(typeof resolve).toBe('function');
-    // And it should return a string
-    expect(typeof resolve('lessons')).toBe('string');
   });
 });

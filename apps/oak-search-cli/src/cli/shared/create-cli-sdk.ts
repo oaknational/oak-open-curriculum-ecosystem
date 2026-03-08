@@ -59,11 +59,24 @@ export interface CliSdkEnv {
  * @param cliEnv - Validated environment values (from `loadRuntimeConfig()` or test fixture)
  * @returns A fully wired `SearchSdk` instance
  */
-export function createCliSdk(cliEnv: CliSdkEnv): SearchSdk {
-  const esClient = new Client({
+/**
+ * Create an Elasticsearch client from CLI environment configuration.
+ *
+ * Extracted so that both `createCliSdk` and the lifecycle service
+ * use a single, consistent client construction path.
+ *
+ * @param cliEnv - Validated environment values with ES connection details
+ * @returns A configured Elasticsearch `Client` instance
+ */
+export function createEsClient(cliEnv: CliSdkEnv): Client {
+  return new Client({
     node: cliEnv.ELASTICSEARCH_URL,
     auth: { apiKey: cliEnv.ELASTICSEARCH_API_KEY },
   });
+}
+
+export function createCliSdk(cliEnv: CliSdkEnv): SearchSdk {
+  const esClient = createEsClient(cliEnv);
 
   const webhookUrl =
     cliEnv.ZERO_HIT_WEBHOOK_URL && cliEnv.ZERO_HIT_WEBHOOK_URL !== 'none'

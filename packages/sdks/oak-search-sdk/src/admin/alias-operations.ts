@@ -4,8 +4,8 @@
  * Pure TypeScript wrappers over the ES `/_aliases` API. All functions
  * accept an injected ES client and return `Result<T, AdminError>`.
  *
- * Replaces the previous `alias-swap.sh` bash script with a testable,
- * multi-alias-atomic TypeScript implementation.
+ * Multi-alias-atomic TypeScript implementation — all six curriculum
+ * aliases are swapped in a single `POST /_aliases` request.
  *
  * @see {@link ../types/admin-types.ts} for `AdminError` definition
  */
@@ -15,7 +15,7 @@ import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import type { AliasSwap, AliasTargetInfo, AliasTargetMap } from '../types/index-lifecycle-types.js';
 import type { SearchIndexKind, SearchIndexTarget } from '../internal/index.js';
-import { BASE_INDEX_NAMES, resolveAliasName } from '../internal/index.js';
+import { BASE_INDEX_NAMES, TARGET_SUFFIXES, resolveAliasName } from '../internal/index.js';
 import { isNotFoundError } from './es-error-guards.js';
 
 // ---------------------------------------------------------------------------
@@ -90,37 +90,65 @@ export async function resolveCurrentAliasTargets(
   }
 }
 
-/** Resolve all curriculum alias names for a target and return a strict map. */
+/**
+ * Resolve all curriculum alias names for a target and return a strict map.
+ *
+ * All 6 alias resolutions run concurrently via `Promise.all` (E2),
+ * halving the total HTTP round-trips compared to sequential resolution.
+ */
 async function resolveAllAliases(
   client: Client,
   target: SearchIndexTarget,
 ): Promise<AliasTargetMap> {
   const resolve = (kind: SearchIndexKind) =>
     resolveOneAlias(client, resolveAliasName(BASE_INDEX_NAMES[kind], target));
+  const [lessons, unitRollup, units, sequences, sequenceFacets, threads] = await Promise.all([
+    resolve('lessons'),
+    resolve('unit_rollup'),
+    resolve('units'),
+    resolve('sequences'),
+    resolve('sequence_facets'),
+    resolve('threads'),
+  ]);
   return {
-    lessons: await resolve('lessons'),
-    unit_rollup: await resolve('unit_rollup'),
-    units: await resolve('units'),
-    sequences: await resolve('sequences'),
-    sequence_facets: await resolve('sequence_facets'),
-    threads: await resolve('threads'),
+    lessons,
+    unit_rollup: unitRollup,
+    units,
+    sequences,
+    sequence_facets: sequenceFacets,
+    threads,
   };
 }
 
 /**
  * Resolve a single alias name to its target info.
  *
+ * Uses a single `getAlias` call with 404 catch (E1), replacing the
+ * previous two-call `existsAlias` + `getAlias` pattern to halve
+ * HTTP calls per alias.
+ *
+ * An empty response (no keys) is treated as not-found (CR-1) —
+ * this can occur if ES returns a successful response with no backing
+ * index for the alias.
+ *
  * @param client - Elasticsearch client
  * @param aliasName - The alias name to check
  * @returns AliasTargetInfo for this name
  */
 async function resolveOneAlias(client: Client, aliasName: string): Promise<AliasTargetInfo> {
-  const exists = await client.indices.existsAlias({ name: aliasName });
-  if (!exists) {
-    return { isAlias: false, targetIndex: null };
+  try {
+    const aliasResponse = await client.indices.getAlias({ name: aliasName });
+    const target = firstKey(aliasResponse);
+    if (target === null) {
+      return { isAlias: false, targetIndex: null };
+    }
+    return { isAlias: true, targetIndex: target };
+  } catch (error) {
+    if (isNotFoundError(error)) {
+      return { isAlias: false, targetIndex: null };
+    }
+    throw error;
   }
-  const aliasResponse = await client.indices.getAlias({ name: aliasName });
-  return { isAlias: true, targetIndex: firstKey(aliasResponse) };
 }
 
 /**
@@ -147,6 +175,14 @@ function firstKey<T>(record: Readonly<Record<string, T>>): string | null {
  * (Wilma finding #5). For primary, matches `oak_lessons_v*` but NOT
  * `oak_lessons_sandbox_v*`. For sandbox, matches `oak_lessons_sandbox_v*`.
  *
+ * Uses `indices.get` with a wildcard pattern. On ES Serverless,
+ * `allow_no_indices` defaults to `true`, so a no-match returns an
+ * empty object rather than a 404 — the 404 catch is retained as a
+ * safety net for non-default ES configurations (ES-1). The response
+ * includes full index metadata; a lighter API like `resolveIndex`
+ * could reduce payload size but is deferred given the small generation
+ * count (ES-2).
+ *
  * @param client - Elasticsearch client
  * @param baseName - Base index name (e.g. `'oak_lessons'`)
  * @param target - Index target (`'primary'` or `'sandbox'`)
@@ -157,26 +193,20 @@ export async function listVersionedIndexes(
   baseName: string,
   target: SearchIndexTarget,
 ): Promise<Result<readonly string[], AdminError>> {
-  const prefix = target === 'primary' ? `${baseName}_v` : `${baseName}_sandbox_v`;
+  const prefix = `${baseName}${TARGET_SUFFIXES[target]}_v`;
 
   try {
-    const indices = await client.cat.indices({ format: 'json' });
-    const indexArray = Array.isArray(indices) ? indices : [];
-
-    const matching = indexArray
-      .filter(
-        (entry): entry is { index: string } =>
-          typeof entry === 'object' &&
-          entry !== null &&
-          'index' in entry &&
-          typeof entry.index === 'string' &&
-          entry.index.startsWith(prefix),
-      )
-      .map((entry) => entry.index)
-      .sort();
-
-    return ok(matching);
+    const response = await client.indices.get({ index: `${prefix}*` });
+    const names: string[] = [];
+    for (const key in response) {
+      names.push(key);
+    }
+    names.sort();
+    return ok(names);
   } catch (error) {
+    if (isNotFoundError(error)) {
+      return ok([]);
+    }
     const message = error instanceof Error ? error.message : String(error);
     return err({ type: 'es_error', message: `Failed to list versioned indexes: ${message}` });
   }

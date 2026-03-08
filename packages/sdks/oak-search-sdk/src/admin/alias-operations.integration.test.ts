@@ -1,8 +1,9 @@
 /**
- * Unit tests for Elasticsearch alias operations (ADR-130).
+ * Integration tests for Elasticsearch alias operations (ADR-130).
  *
- * Tests use simple fake ES client objects injected as arguments —
- * no vi.mock, no vi.stubGlobal (ADR-078).
+ * These test async IO functions with injected ES client fakes —
+ * integration level per the project testing taxonomy (T4).
+ * No vi.mock, no vi.stubGlobal (ADR-078).
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -15,25 +16,31 @@ import {
 import type { AliasSwap } from '../types/index-lifecycle-types.js';
 import type { Client } from '@elastic/elasticsearch';
 
+/**
+ * Create a 404 error matching the ES client pattern.
+ * Used for alias-not-found and index-not-found cases (E1/E3).
+ */
+function create404Error(message = 'index_not_found_exception'): Error {
+  const error = new Error(message);
+  Object.assign(error, { statusCode: 404 });
+  return error;
+}
+
 /** Create a minimal fake ES client with the methods alias-operations uses. */
 function createFakeClient(
   overrides: {
     updateAliases?: ReturnType<typeof vi.fn>;
-    existsAlias?: ReturnType<typeof vi.fn>;
     getAlias?: ReturnType<typeof vi.fn>;
-    catIndices?: ReturnType<typeof vi.fn>;
+    get?: ReturnType<typeof vi.fn>;
     deleteIndex?: ReturnType<typeof vi.fn>;
   } = {},
 ) {
   return {
     indices: {
       updateAliases: overrides.updateAliases ?? vi.fn().mockResolvedValue({ acknowledged: true }),
-      existsAlias: overrides.existsAlias ?? vi.fn().mockResolvedValue(false),
-      getAlias: overrides.getAlias ?? vi.fn().mockResolvedValue({}),
+      getAlias: overrides.getAlias ?? vi.fn().mockRejectedValue(create404Error()),
+      get: overrides.get ?? vi.fn().mockRejectedValue(create404Error()),
       delete: overrides.deleteIndex ?? vi.fn().mockResolvedValue({ acknowledged: true }),
-    },
-    cat: {
-      indices: overrides.catIndices ?? vi.fn().mockResolvedValue([]),
     },
   } as unknown as Client;
 }
@@ -98,11 +105,10 @@ describe('atomicAliasSwap', () => {
 
 describe('resolveCurrentAliasTargets', () => {
   it('returns kind-keyed map with isAlias true for existing aliases', async () => {
-    const existsAlias = vi.fn().mockResolvedValue(true);
     const getAlias = vi.fn().mockImplementation(({ name }: { name: string }) => {
       return Promise.resolve({ [`${name}_v1`]: { aliases: { [name]: {} } } });
     });
-    const client = createFakeClient({ existsAlias, getAlias });
+    const client = createFakeClient({ getAlias });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -115,9 +121,8 @@ describe('resolveCurrentAliasTargets', () => {
     }
   });
 
-  it('returns isAlias false when names are not aliases', async () => {
-    const existsAlias = vi.fn().mockResolvedValue(false);
-    const client = createFakeClient({ existsAlias });
+  it('returns isAlias false when getAlias throws 404', async () => {
+    const client = createFakeClient();
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -128,9 +133,39 @@ describe('resolveCurrentAliasTargets', () => {
     }
   });
 
-  it('returns err when ES throws', async () => {
-    const existsAlias = vi.fn().mockRejectedValue(new Error('network error'));
-    const client = createFakeClient({ existsAlias });
+  it('returns all 6 kind keys in the result map', async () => {
+    const getAlias = vi.fn().mockImplementation(({ name }: { name: string }) => {
+      return Promise.resolve({ [`${name}_v1`]: { aliases: { [name]: {} } } });
+    });
+    const client = createFakeClient({ getAlias });
+
+    const result = await resolveCurrentAliasTargets(client, 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      const kinds = ['lessons', 'units', 'unit_rollup', 'sequences', 'sequence_facets', 'threads'];
+      for (const kind of kinds) {
+        expect(result.value).toHaveProperty(kind);
+      }
+    }
+  });
+
+  it('returns isAlias false when getAlias returns empty object (CR-1)', async () => {
+    const getAlias = vi.fn().mockResolvedValue({});
+    const client = createFakeClient({ getAlias });
+
+    const result = await resolveCurrentAliasTargets(client, 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.lessons.isAlias).toBe(false);
+      expect(result.value.lessons.targetIndex).toBeNull();
+    }
+  });
+
+  it('returns err when ES throws non-404 error', async () => {
+    const getAlias = vi.fn().mockRejectedValue(new Error('network error'));
+    const client = createFakeClient({ getAlias });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -143,14 +178,11 @@ describe('resolveCurrentAliasTargets', () => {
 
 describe('listVersionedIndexes', () => {
   it('returns matching versioned indexes for primary target', async () => {
-    const catIndices = vi
-      .fn()
-      .mockResolvedValue([
-        { index: 'oak_lessons_v2026-03-01-120000' },
-        { index: 'oak_lessons_v2026-03-07-143022' },
-        { index: 'oak_lessons_sandbox_v2026-03-07-143022' },
-      ]);
-    const client = createFakeClient({ catIndices });
+    const get = vi.fn().mockResolvedValue({
+      'oak_lessons_v2026-03-01-120000': {},
+      'oak_lessons_v2026-03-07-143022': {},
+    });
+    const client = createFakeClient({ get });
 
     const result = await listVersionedIndexes(client, 'oak_lessons', 'primary');
 
@@ -164,13 +196,10 @@ describe('listVersionedIndexes', () => {
   });
 
   it('returns matching versioned indexes for sandbox target', async () => {
-    const catIndices = vi
-      .fn()
-      .mockResolvedValue([
-        { index: 'oak_lessons_v2026-03-07-143022' },
-        { index: 'oak_lessons_sandbox_v2026-03-07-143022' },
-      ]);
-    const client = createFakeClient({ catIndices });
+    const get = vi.fn().mockResolvedValue({
+      'oak_lessons_sandbox_v2026-03-07-143022': {},
+    });
+    const client = createFakeClient({ get });
 
     const result = await listVersionedIndexes(client, 'oak_lessons', 'sandbox');
 
@@ -180,9 +209,50 @@ describe('listVersionedIndexes', () => {
     }
   });
 
-  it('returns err when ES throws', async () => {
-    const catIndices = vi.fn().mockRejectedValue(new Error('timeout'));
-    const client = createFakeClient({ catIndices });
+  it('returns empty array when no indexes match (404)', async () => {
+    const client = createFakeClient();
+
+    const result = await listVersionedIndexes(client, 'oak_lessons', 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual([]);
+    }
+  });
+
+  it('returns empty array when indices.get returns empty object (ES-1)', async () => {
+    const get = vi.fn().mockResolvedValue({});
+    const client = createFakeClient({ get });
+
+    const result = await listVersionedIndexes(client, 'oak_lessons', 'primary');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual([]);
+    }
+  });
+
+  it('primary query uses prefix that excludes sandbox indexes (CR-3)', async () => {
+    const get = vi.fn().mockResolvedValue({});
+    const client = createFakeClient({ get });
+
+    await listVersionedIndexes(client, 'oak_lessons', 'primary');
+
+    expect(get).toHaveBeenCalledWith({ index: 'oak_lessons_v*' });
+  });
+
+  it('sandbox query uses prefix that excludes primary indexes (CR-3)', async () => {
+    const get = vi.fn().mockResolvedValue({});
+    const client = createFakeClient({ get });
+
+    await listVersionedIndexes(client, 'oak_lessons', 'sandbox');
+
+    expect(get).toHaveBeenCalledWith({ index: 'oak_lessons_sandbox_v*' });
+  });
+
+  it('returns err when ES throws non-404 error', async () => {
+    const get = vi.fn().mockRejectedValue(new Error('timeout'));
+    const client = createFakeClient({ get });
 
     const result = await listVersionedIndexes(client, 'oak_lessons', 'primary');
 
@@ -202,9 +272,7 @@ describe('deleteVersionedIndex', () => {
   });
 
   it('treats 404 as success (index already deleted)', async () => {
-    const error = new Error('index_not_found_exception');
-    Object.assign(error, { statusCode: 404 });
-    const deleteIndex = vi.fn().mockRejectedValue(error);
+    const deleteIndex = vi.fn().mockRejectedValue(create404Error());
     const client = createFakeClient({ deleteIndex });
 
     const result = await deleteVersionedIndex(client, 'oak_lessons_v_old');

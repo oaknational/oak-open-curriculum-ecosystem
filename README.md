@@ -130,6 +130,35 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |
 | `docs/`          | Developer documentation, guides, and 100+ ADRs                                                 |
 
+### Workspace Summaries
+
+**Apps:**
+
+| Workspace                                                                        | Purpose                                                                                                                                                                                                                                           |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, and prompts                                                                                                                                  |
+| [`oak-curriculum-mcp-stdio`](apps/oak-curriculum-mcp-stdio/)                     | **Legacy** stdio MCP workspace — not actively maintained; future stdio support will be generalised from the HTTP server ([ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)) |
+| [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking                                      |
+
+**SDKs:**
+
+| Workspace                                                 | Purpose                                                                                                                                                               |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/) | Curriculum API SDK — generated types, Zod validators, MCP tool metadata, all flowing from the OpenAPI schema                                                          |
+| [`oak-search-sdk`](packages/sdks/oak-search-sdk/)         | Search SDK — hybrid lexical (BM25) + semantic (ELSER) retrieval, admin services, observability, and blue/green index lifecycle management (zero downtime index swaps) |
+| [`oak-sdk-codegen`](packages/sdks/oak-sdk-codegen/)       | Schema-driven code generation — OpenAPI → TypeScript types, Zod schemas, ES mappings, MCP tool definitions                                                            |
+
+**Core and Libraries:**
+
+| Workspace                                                           | Purpose                                                                       |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`result`](packages/core/result/)                                   | `Result<T, E>` type for explicit error handling without exceptions            |
+| [`env`](packages/core/env/)                                         | Env schema contracts — Zod-based validation for environment variables         |
+| [`type-helpers`](packages/core/type-helpers/)                       | Shared type-level utilities                                                   |
+| [`eslint-plugin-standards`](packages/core/eslint-plugin-standards/) | Custom ESLint rules enforcing architectural boundaries                        |
+| [`oak-mcp-logger`](packages/libs/oak-mcp-logger/)                   | Structured logger with Pino backend                                           |
+| [`env-resolution`](packages/libs/env-resolution/)                   | Environment resolution pipeline — `.env` discovery, validation, and injection |
+
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 
 - [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
@@ -141,7 +170,8 @@ See the [full ADR index](docs/architecture/architectural-decisions/) for all dec
 ## Engineering Practice
 
 This repository began as an exploration of what co-pilot style AI support could
-provide, but evolved rapidly into an agent-first engineering system. As of
+provide, but evolved rapidly into an agent-first engineering system, we call
+this [the Practice](.agent/practice-core/README.md). As of
 February 2026, for at least the previous six months, every line of code,
 configuration, and documentation has been written entirely by agents.
 
@@ -149,8 +179,8 @@ Humans focus on system design: defining and strengthening guardrails,
 architectural constraints, quality gates, and reviewer workflows; then
 providing direction and corrective feedback.
 
-Self-assessment by agents, and iterative improvement of the Practice itself,
-are integral parts of how work is done here.
+Self-assessment by agents, and the [learning loop of iterative improvement](.agent/commands/consolidate-docs.md)
+of the Practice _by the Practice itself_, are integral parts of how work is done here.
 
 See [.agent/HUMANS.md](.agent/HUMANS.md) for contributor context. The approach
 is documented in

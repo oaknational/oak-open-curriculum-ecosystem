@@ -41,7 +41,7 @@ export type { SearchRetrievalFactories, EsClientConfig } from './create-search-r
 // Index lifecycle service (ADR-130) — blue/green index management
 // ---------------------------------------------------------------------------
 
-export { createIndexLifecycleService } from './admin/index.js';
+export { createIndexLifecycleService, buildLifecycleDeps } from './admin/index.js';
 
 // ---------------------------------------------------------------------------
 // Index resolution — constants and pure functions for Elasticsearch index naming
@@ -100,6 +100,14 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
+  // Index lifecycle service types (ADR-130)
+  IndexLifecycleDeps,
+  IndexLifecycleService,
+  VersionedIngestOptions,
+  VersionedIngestResult,
+  RollbackResult,
+  AliasValidationResult,
+  AliasHealthEntry,
   // Observability service interface and types
   ObservabilityService,
   ObservabilityError,

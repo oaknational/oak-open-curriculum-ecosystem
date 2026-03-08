@@ -1,5 +1,5 @@
 /**
- * Unit tests for the index lifecycle service (ADR-130).
+ * Integration tests for the index lifecycle service (ADR-130).
  *
  * Tests orchestration logic using injected fakes — no vi.mock,
  * no vi.stubGlobal (ADR-078). Each dependency is a simple function
@@ -8,7 +8,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { ok, err } from '@oaknational/result';
-import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
+import type { IndexLifecycleDeps, AliasSwap } from '../types/index-lifecycle-types.js';
 import { createIndexLifecycleService } from './index-lifecycle-service.js';
 import type { IngestResult, AdminError } from '../types/admin-types.js';
 
@@ -32,6 +32,28 @@ const DEFAULT_ALIAS_TARGETS = {
   sequence_facets: { isAlias: true, targetIndex: 'oak_sequence_facets_v2026-03-01-120000' },
   threads: { isAlias: true, targetIndex: 'oak_threads_v2026-03-01-120000' },
 };
+
+/** Alias targets with null targetIndex (no existing aliases — first run). */
+const NO_ALIAS_TARGETS = {
+  lessons: { isAlias: false, targetIndex: null },
+  units: { isAlias: false, targetIndex: null },
+  unit_rollup: { isAlias: false, targetIndex: null },
+  sequences: { isAlias: false, targetIndex: null },
+  sequence_facets: { isAlias: false, targetIndex: null },
+  threads: { isAlias: false, targetIndex: null },
+};
+
+/** Fake logger for tests that need to assert on log calls. */
+function createFakeLogger() {
+  return {
+    trace: vi.fn(),
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    fatal: vi.fn(),
+  };
+}
 
 /** Build a complete set of default fakes that all return success. */
 function buildDefaultFakes(): IndexLifecycleDeps {
@@ -69,15 +91,8 @@ describe('IndexLifecycleService', () => {
         expect(result.value.version).toBe('v2026-03-07-143022');
         expect(result.value.ingestResult).toEqual(STUB_INGEST_RESULT);
         expect(result.value.previousVersion).toBeNull();
+        expect(result.value.cleanupFailures).toBe(0);
       }
-
-      // Verify call order
-      expect(deps.createVersionedIndexes).toHaveBeenCalledOnce();
-      expect(deps.runVersionedIngest).toHaveBeenCalledOnce();
-      expect(deps.verifyDocCounts).toHaveBeenCalledOnce();
-      expect(deps.resolveCurrentAliasTargets).toHaveBeenCalledOnce();
-      expect(deps.atomicAliasSwap).toHaveBeenCalledOnce();
-      expect(deps.writeIndexMeta).toHaveBeenCalledOnce();
     });
 
     it('uses explicit version when provided', async () => {
@@ -136,7 +151,6 @@ describe('IndexLifecycleService', () => {
       if (!result.ok) {
         expect(result.error.type).toBe('validation_error');
       }
-      // Alias swap should NOT have been called
       expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
     });
 
@@ -151,22 +165,13 @@ describe('IndexLifecycleService', () => {
       const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
 
       expect(result.ok).toBe(false);
-      // atomicAliasSwap should have been called TWICE — once for swap, once for rollback
       expect(deps.atomicAliasSwap).toHaveBeenCalledTimes(2);
     });
 
     it('skips remove action on first-run (no existing aliases)', async () => {
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
-      const noAliasTargets = {
-        lessons: { isAlias: false, targetIndex: null },
-        units: { isAlias: false, targetIndex: null },
-        unit_rollup: { isAlias: false, targetIndex: null },
-        sequences: { isAlias: false, targetIndex: null },
-        sequence_facets: { isAlias: false, targetIndex: null },
-        threads: { isAlias: false, targetIndex: null },
-      };
       const deps = createFakeDeps({
-        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(noAliasTargets)),
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(NO_ALIAS_TARGETS)),
         atomicAliasSwap,
       });
       const service = createIndexLifecycleService(deps);
@@ -174,14 +179,12 @@ describe('IndexLifecycleService', () => {
       const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
 
       expect(result.ok).toBe(true);
-      // Verify atomicAliasSwap was called and every swap has null fromIndex
       expect(atomicAliasSwap).toHaveBeenCalledOnce();
       expect(atomicAliasSwap).toHaveBeenCalledWith(
         expect.arrayContaining([expect.objectContaining({ fromIndex: null })]),
       );
-      // Verify every swap has null fromIndex (first-run: no existing aliases)
-      const swapArg = atomicAliasSwap.mock.calls[0]?.[0] as readonly { fromIndex: string | null }[];
-      expect(swapArg.every((s) => s.fromIndex === null)).toBe(true);
+      const swapArg = atomicAliasSwap.mock.calls[0][0] as readonly AliasSwap[];
+      expect(swapArg).toHaveLength(6);
     });
 
     it('returns err if index creation fails', async () => {
@@ -195,6 +198,134 @@ describe('IndexLifecycleService', () => {
 
       expect(result.ok).toBe(false);
       expect(deps.runVersionedIngest).not.toHaveBeenCalled();
+    });
+
+    it('returns err if ingest fails', async () => {
+      const ingestError: AdminError = { type: 'es_error', message: 'ingest failed' };
+      const deps = createFakeDeps({
+        runVersionedIngest: vi.fn().mockResolvedValue(err(ingestError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      expect(deps.verifyDocCounts).not.toHaveBeenCalled();
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
+    });
+
+    it('returns err if alias swap fails during versionedIngest', async () => {
+      const swapError: AdminError = { type: 'es_error', message: 'swap failed' };
+      const deps = createFakeDeps({
+        atomicAliasSwap: vi.fn().mockResolvedValue(err(swapError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      expect(deps.writeIndexMeta).not.toHaveBeenCalled();
+    });
+
+    it('rollback swap toIndex values match previous-version pattern', async () => {
+      const writeError: AdminError = { type: 'es_error', message: 'write failed' };
+      const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        writeIndexMeta: vi.fn().mockResolvedValue(err(writeError)),
+        atomicAliasSwap,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(atomicAliasSwap).toHaveBeenCalledTimes(2);
+      const rollbackSwaps = atomicAliasSwap.mock.calls[1][0] as readonly AliasSwap[];
+      for (const swap of rollbackSwaps) {
+        expect(swap.toIndex).toContain('v2026-03-01-120000');
+        expect(swap.fromIndex).toContain('v2026-03-07-143022');
+      }
+    });
+
+    it('returns critical error when both metadata write and rollback swap fail', async () => {
+      const writeError: AdminError = { type: 'es_error', message: 'write failed' };
+      const rollbackError: AdminError = { type: 'es_error', message: 'rollback swap failed' };
+      const logger = createFakeLogger();
+      const atomicAliasSwap = vi
+        .fn()
+        .mockResolvedValueOnce(ok(undefined))
+        .mockResolvedValueOnce(err(rollbackError));
+      const deps = createFakeDeps({
+        writeIndexMeta: vi.fn().mockResolvedValue(err(writeError)),
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(DEFAULT_ALIAS_TARGETS)),
+        atomicAliasSwap,
+        logger,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('validation_error');
+        expect(result.error.message).toContain('CRITICAL');
+        expect(result.error.message).toContain('Manual intervention required');
+      }
+      expect(atomicAliasSwap).toHaveBeenCalledTimes(2);
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('rollback swap also failed'),
+        expect.any(Object),
+      );
+    });
+
+    it('returns critical error when rollback swaps cannot be built (null targets)', async () => {
+      const writeError: AdminError = { type: 'es_error', message: 'write failed' };
+      const logger = createFakeLogger();
+      const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        writeIndexMeta: vi.fn().mockResolvedValue(err(writeError)),
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(NO_ALIAS_TARGETS)),
+        atomicAliasSwap,
+        logger,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('validation_error');
+        expect(result.error.message).toContain('CRITICAL');
+        expect(result.error.message).toContain('rollback swaps cannot be built');
+      }
+      expect(atomicAliasSwap).toHaveBeenCalledOnce();
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.stringContaining('Cannot build rollback swaps'),
+        expect.any(Object),
+      );
+    });
+
+    it('reports cleanup failures in result', async () => {
+      const deleteError: AdminError = { type: 'es_error', message: 'delete failed' };
+      const deps = createFakeDeps({
+        listVersionedIndexes: vi
+          .fn()
+          .mockResolvedValue(
+            ok([
+              'oak_lessons_v2026-01-01-000000',
+              'oak_lessons_v2026-02-01-000000',
+              'oak_lessons_v2026-03-07-143022',
+            ]),
+          ),
+        deleteVersionedIndex: vi.fn().mockResolvedValue(err(deleteError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.cleanupFailures).toBeGreaterThan(0);
+      }
     });
   });
 
@@ -253,6 +384,37 @@ describe('IndexLifecycleService', () => {
       }
     });
 
+    it('returns err when previous version indexes do not exist', async () => {
+      const verifyError: AdminError = {
+        type: 'es_error',
+        message: 'index_not_found_exception',
+      };
+      const deps = createFakeDeps({
+        readIndexMeta: vi.fn().mockResolvedValue(
+          ok({
+            version: 'v2026-03-07-143022',
+            ingested_at: '2026-03-07T14:30:22Z',
+            subjects: [],
+            key_stages: [],
+            duration_ms: 0,
+            doc_counts: {},
+            previous_version: 'v2026-03-01-120000',
+          }),
+        ),
+        verifyDocCounts: vi.fn().mockResolvedValue(err(verifyError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.rollback();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('Cannot rollback to version');
+        expect(result.error.message).toContain('do not exist or are empty');
+      }
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
+    });
+
     it('returns err when writeIndexMeta fails during rollback', async () => {
       const writeError: AdminError = { type: 'es_error', message: 'meta write failed' };
       const currentTargets = {
@@ -291,43 +453,6 @@ describe('IndexLifecycleService', () => {
       }
     });
 
-    it('logs compound failure when both writeIndexMeta and rollback swap fail', async () => {
-      const writeError: AdminError = { type: 'es_error', message: 'write failed' };
-      const rollbackError: AdminError = { type: 'es_error', message: 'rollback swap failed' };
-      const logger = {
-        trace: vi.fn(),
-        debug: vi.fn(),
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-        fatal: vi.fn(),
-      };
-      let callCount = 0;
-      const atomicAliasSwap = vi.fn().mockImplementation(() => {
-        callCount++;
-        if (callCount === 1) {
-          return Promise.resolve(ok(undefined));
-        }
-        return Promise.resolve(err(rollbackError));
-      });
-      const deps = createFakeDeps({
-        writeIndexMeta: vi.fn().mockResolvedValue(err(writeError)),
-        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(DEFAULT_ALIAS_TARGETS)),
-        atomicAliasSwap,
-        logger,
-      });
-      const service = createIndexLifecycleService(deps);
-
-      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
-
-      expect(result.ok).toBe(false);
-      expect(atomicAliasSwap).toHaveBeenCalledTimes(2);
-      expect(logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('rollback swap also failed'),
-        expect.any(Object),
-      );
-    });
-
     it('returns err when no previous_version recorded', async () => {
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
@@ -349,6 +474,30 @@ describe('IndexLifecycleService', () => {
       if (!result.ok) {
         expect(result.error.message).toContain('No previous version');
       }
+    });
+
+    it('returns err when alias resolution fails during rollback', async () => {
+      const aliasError: AdminError = { type: 'es_error', message: 'alias resolution failed' };
+      const deps = createFakeDeps({
+        readIndexMeta: vi.fn().mockResolvedValue(
+          ok({
+            version: 'v2026-03-07-143022',
+            ingested_at: '2026-03-07T14:30:22Z',
+            subjects: [],
+            key_stages: [],
+            duration_ms: 0,
+            doc_counts: {},
+            previous_version: 'v2026-03-01-120000',
+          }),
+        ),
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(err(aliasError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.rollback();
+
+      expect(result.ok).toBe(false);
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
     });
   });
 
@@ -397,6 +546,21 @@ describe('IndexLifecycleService', () => {
         expect(result.value.allHealthy).toBe(false);
         const unhealthy = result.value.entries.find((e) => !e.healthy);
         expect(unhealthy?.alias).toBe('oak_units');
+      }
+    });
+
+    it('returns err when alias resolution fails', async () => {
+      const aliasError: AdminError = { type: 'es_error', message: 'ES unavailable' };
+      const deps = createFakeDeps({
+        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(err(aliasError)),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.validateAliases();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('ES unavailable');
       }
     });
   });

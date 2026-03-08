@@ -8,14 +8,14 @@
  */
 
 import type { Command } from 'commander';
-import { registerPassThrough, registerBashPassThrough } from '../shared/index.js';
+import { registerPassThrough } from '../shared/index.js';
 
 /**
  * Register all pass-through orchestration commands on the admin group.
  *
- * Each command delegates to a TypeScript or Bash script via
- * `registerPassThrough` / `registerBashPassThrough`, which spawns
- * a child process inheriting the current environment.
+ * Each command delegates to a TypeScript script via
+ * `registerPassThrough`, which spawns a child process inheriting
+ * the current environment.
  *
  * @param parent - The parent Commander command to register under
  * @returns void
@@ -62,11 +62,5 @@ export function registerOrchestrationCmds(parent: Command): void {
     'analyze-elser',
     'Analyse ELSER diagnostic reports',
     'scripts/analyze-elser-failures.ts',
-  );
-  registerBashPassThrough(
-    parent,
-    'alias-swap',
-    'Swap Elasticsearch index alias',
-    'operations/infrastructure/alias-swap.sh',
   );
 }
