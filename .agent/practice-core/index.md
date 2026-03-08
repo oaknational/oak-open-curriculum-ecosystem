@@ -4,7 +4,7 @@ The Practice is not a single file. It is the entire system of principles, struct
 
 ## For Day-to-Day Work
 
-Follow `.agent/directives/AGENT.md` and `.agent/directives/rules.md`. That is all you need for normal operations.
+Follow `.agent/directives/AGENT.md` and `.agent/directives/principles.md`. That is all you need for normal operations.
 
 ## The Practice-Core Files
 

@@ -11,20 +11,20 @@
  * ```typescript
  * // Phase-based filtering (expands to all key stages in phase)
  * buildBenchmarkRequestParams({
- *   text: 'quadratic equations',
+ *   query: 'quadratic equations',
  *   subject: 'maths',
  *   phase: 'secondary',
  * });
- * // Returns: { text: '...', size: 10, subject: 'maths', phase: 'secondary' }
+ * // Returns: { query: '...', size: 10, subject: 'maths', phase: 'secondary' }
  *
  * // KeyStage-specific filtering (for KS4-specific queries)
  * buildBenchmarkRequestParams({
- *   text: 'completing the square higher',
+ *   query: 'completing the square higher',
  *   subject: 'maths',
  *   phase: 'secondary',
  *   queryKeyStage: 'ks4',
  * });
- * // Returns: { text: '...', size: 10, subject: 'maths', keyStage: 'ks4' }
+ * // Returns: { query: '...', size: 10, subject: 'maths', keyStage: 'ks4' }
  * ```
  *
  * @see benchmark.ts
@@ -39,7 +39,7 @@ import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/re
  * Uses AllSubjectSlug to support KS4 science variants (physics, chemistry, biology, combined-science).
  */
 export interface BuildBenchmarkRequestInput {
-  readonly text: string;
+  readonly query: string;
   readonly subject: AllSubjectSlug;
   readonly phase: Phase;
   readonly queryKeyStage?: KeyStage;
@@ -47,7 +47,7 @@ export interface BuildBenchmarkRequestInput {
 
 /** Request params with phase filter (expands to ks1+ks2 or ks3+ks4). */
 interface PhaseFilterParams {
-  readonly text: string;
+  readonly query: string;
   readonly size: 10;
   readonly subject: AllSubjectSlug;
   readonly phase: Phase;
@@ -55,7 +55,7 @@ interface PhaseFilterParams {
 
 /** Request params with specific keyStage filter. */
 interface KeyStageFilterParams {
-  readonly text: string;
+  readonly query: string;
   readonly size: 10;
   readonly subject: AllSubjectSlug;
   readonly keyStage: KeyStage;
@@ -73,17 +73,17 @@ export type BenchmarkRequestParams = PhaseFilterParams | KeyStageFilterParams;
  *   - 'primary' → ks1 + ks2
  *   - 'secondary' → ks3 + ks4
  *
- * @param input - Query configuration including text, subject, phase, and optional keyStage
+ * @param input - Query configuration including query, subject, phase, and optional keyStage
  * @returns Request parameters ready for buildLessonRrfRequest
  */
 export function buildBenchmarkRequestParams(
   input: BuildBenchmarkRequestInput,
 ): BenchmarkRequestParams {
-  const { text, subject, phase, queryKeyStage } = input;
+  const { query, subject, phase, queryKeyStage } = input;
 
   if (queryKeyStage) {
     return {
-      text,
+      query,
       size: 10,
       subject,
       keyStage: queryKeyStage,
@@ -91,7 +91,7 @@ export function buildBenchmarkRequestParams(
   }
 
   return {
-    text,
+    query,
     size: 10,
     subject,
     phase,

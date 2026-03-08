@@ -3,7 +3,7 @@
 **Git Version**: See `git log` for commit history  
 **Status**: ⚠️ PAUSED FOR CRITICAL REVIEW | Phase 1C Infrastructure Built | Next Steps TBD  
 **Priority**: HIGH - Review Required  
-**Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
+**Foundation Alignment**: ✅ principles.md | schema-first-execution.md | testing-strategy.md
 
 ---
 
@@ -317,7 +317,7 @@ pathways_available: { type: 'keyword' },
 - ✅ Issue 5.3: Fuzzy matching - added `fuzziness: 'AUTO'` to BM25 queries (TDD)
 - ✅ Issue 5.4: Thread canonical URL - generator returns `null`, throws for missing context
 - ✅ Issue 5.5: Sequence canonical URL - fixed `isSingleEntityEndpoint()` in SDK
-- ✅ All tests updated to expect fail-fast behavior (per rules.md)
+- ✅ All tests updated to expect fail-fast behavior (per principles.md)
 - ✅ ES indices reset and re-ingested with complete lessons
 - ✅ Verified: 314 lessons from all 36 units indexed
 - ✅ All quality gates passing (1,300+ tests)
@@ -386,7 +386,7 @@ Start with two-way hybrid (BM25 + ELSER) instead of immediately implementing thr
 
 #### Phase 1A Prerequisites ✅ Complete
 
-- [x] Re-read foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)
+- [x] Re-read foundation documents (principles.md, schema-first-execution.md, testing-strategy.md)
 - [x] Elasticsearch Serverless running with ELSER configured
 - [x] Two-way RRF query builders implemented (needs API update for ES 8.11+)
 - [x] Tier, exam_board, pathway field extraction implemented
@@ -3017,7 +3017,7 @@ lesson_dense_vector: {
 
 ### Foundation Documents (Re-read Regularly)
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/directives/testing-strategy.md`
 

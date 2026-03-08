@@ -8,7 +8,7 @@
 
 ## Prep
 
-Make sure the [Cardinal Rule of the repository](../../directives/rules.md) is applied. Specifically the types in apps/oak-search-cli/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
+Make sure the [Cardinal Rule of the repository](../../directives/principles.md) is applied. Specifically the types in apps/oak-search-cli/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
 
 ## Phase Focus – Service Hardening & Operations
 

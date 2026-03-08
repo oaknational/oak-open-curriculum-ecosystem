@@ -8,9 +8,7 @@ useDefault = true
 # example tokens/keys that look like secrets; we intentionally ignore it.
 [[allowlists]]
 description = "Ignore third-party reference docs (.agent/reference-docs/**)"
-paths = [
-  '''^\.agent/reference-docs/''',
-]
+paths = ['''^\.agent/reference-docs/''']
 
 # Clerk publishable keys (`pk_test_...`, `pk_live_...`) are designed to be
 # public — they are embedded in client-side code per Clerk's security model.
@@ -18,10 +16,7 @@ paths = [
 [[allowlists]]
 description = "Clerk publishable keys are public by design"
 regexTarget = "match"
-regexes = [
-  '''pk_test_[A-Za-z0-9]+''',
-  '''pk_live_[A-Za-z0-9]+''',
-]
+regexes = ['''pk_test_[A-Za-z0-9]+''', '''pk_live_[A-Za-z0-9]+''']
 
 [[rules]]
 id = "oak-api-key-uuid"

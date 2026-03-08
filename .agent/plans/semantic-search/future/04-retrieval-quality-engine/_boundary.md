@@ -14,3 +14,5 @@ Contained source document(s):
 - `definition-retrieval.md`
 - `mfl-multilingual-embeddings.md`
 - `ai-enhancement.md`
+- `thread-sequence-derived-surfaces.research.md`
+- `learning-graph-surfaces.research.md`

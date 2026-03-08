@@ -7,7 +7,7 @@ _Tags: technical-wisdom | tdd | collaboration | metacognition | intent-first_
 
 **What changed:** Security testing work in `oak-curriculum-mcp-streamable-http` - converted manual security tests to E2E tests, discovered and fixed IPv6 parsing bug.
 
-**Why now:** User requested encoding manual tests into the test suite, then reminded agent to re-read `@rules.md` and `@testing-strategy.md` with focus on "stepping back and considering system-level architectural excellence."
+**Why now:** User requested encoding manual tests into the test suite, then reminded agent to re-read `@principles.md` and `@testing-strategy.md` with focus on "stepping back and considering system-level architectural excellence."
 
 **Key realization:** The work was executed efficiently and correctly, but the **architectural thinking process was not shown explicitly**.
 
@@ -15,7 +15,7 @@ _Tags: technical-wisdom | tdd | collaboration | metacognition | intent-first_
 
 ### First Question: "Could it be simpler?"
 
-From `rules.md`:
+From `principles.md`:
 
 > Always apply the first question; **Ask: could it be simpler without compromising quality?**
 
@@ -117,7 +117,7 @@ This was **correct TDD**. The discipline held.
 
 ## Architectural Principles Reinforced
 
-From `rules.md`:
+From `principles.md`:
 
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID
 - **Never create compatibility layers** - replace old approaches

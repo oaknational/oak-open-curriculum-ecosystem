@@ -138,6 +138,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-124: Practice Propagation Model](124-practice-propagation-model.md)
 - [ADR-125: Agent Artefact Portability](125-agent-artefact-portability.md)
 - [ADR-126: HMAC-Signed Asset Download Proxy](126-asset-download-proxy.md)
+- [ADR-127: Documentation as Foundational Infrastructure](127-documentation-as-foundational-infrastructure.md)
+- [ADR-128: Retire the Standalone STDIO Workspace and Consolidate MCP Server Evolution in the HTTP Workspace](128-stdio-workspace-retirement-and-http-transport-consolidation.md)
+- [ADR-129: Domain Specialist Capability Pattern](129-domain-specialist-capability-pattern.md)
+- [ADR-130: Zero-Downtime Blue/Green Elasticsearch Index Swapping](130-blue-green-index-swapping.md)
+- [ADR-131: Self-Reinforcing Improvement Loop](131-self-reinforcing-improvement-loop.md)
 
 ## Key Architectural Decisions
 
@@ -166,6 +171,8 @@ For understanding the agentic engineering practice:
 - **[ADR-119](119-agentic-engineering-practice.md)** - Practice naming, boundary, three-layer model, and self-teaching property
 - **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
 - **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
+- **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
+- **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 
 For understanding semantic search and Elastic-native AI/ML approach:
 
@@ -195,6 +202,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-106](106-known-answer-first-ground-truth-methodology.md)** - Known-answer-first ground truth methodology
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
+- **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

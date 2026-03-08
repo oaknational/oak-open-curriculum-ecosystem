@@ -259,7 +259,7 @@ Per @testing-strategy.md and [[memory:8343826]], this is **manual validation onl
 
 ### Phase 3: Update Tests FIRST (TDD Red) - 15 minutes
 
-**Per @rules.md and @testing-strategy.md: Tests BEFORE implementation**
+**Per @principles.md and @testing-strategy.md: Tests BEFORE implementation**
 
 This is the RED phase of Red → Green → Refactor.
 
@@ -396,7 +396,7 @@ We're still using it for `protectedResourceHandlerClerk`.
 
 ### Phase 5: Quality Gates - 15 minutes
 
-Run all quality gates per @rules.md [[memory:8755655]]:
+Run all quality gates per @principles.md [[memory:8755655]]:
 
 ```bash
 # From repository root
@@ -436,7 +436,7 @@ Per [[memory:8755641]], run the FULL quality gate sequence, don't skip any steps
 
 ### Where TDD Applies (We Follow It)
 
-Per @rules.md lines 19, 27, 32, 56, 89:
+Per @principles.md lines 19, 27, 32, 56, 89:
 
 > **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor
 
@@ -537,7 +537,7 @@ This would enable:
 - [ ] No network calls to external services in automated tests
 - [ ] All quality gates pass
 - [ ] Follows TDD: tests first, then implementation
-- [ ] Respects @rules.md and @testing-strategy.md
+- [ ] Respects @principles.md and @testing-strategy.md
 
 ---
 
@@ -630,7 +630,7 @@ npx @modelcontextprotocol/inspector --cli http://localhost:3333 \
 
 ### Project Standards
 
-- `.agent/directives/rules.md` - Code quality, TDD, testing
+- `.agent/directives/principles.md` - Code quality, TDD, testing
 - `.agent/directives/testing-strategy.md` - Test types and boundaries
 
 ### Tools

@@ -53,8 +53,8 @@ const RRF_PARAMS = {
 
 /** Parameters for lesson reranking search. */
 export interface LessonRerankingParams extends SearchFilterOptions {
-  /** The search query text. */
-  readonly text: string;
+  /** The search query. */
+  readonly query: string;
   /** Number of results to return. */
   readonly size: number;
   /** Rerank window size (default 50). */
@@ -65,8 +65,8 @@ export interface LessonRerankingParams extends SearchFilterOptions {
 
 /** Parameters for unit reranking search. */
 export interface UnitRerankingParams extends SearchFilterOptions {
-  /** The search query text. */
-  readonly text: string;
+  /** The search query. */
+  readonly query: string;
   /** Number of results to return. */
   readonly size: number;
   /** Rerank window size (default 50). */
@@ -82,13 +82,13 @@ export interface UnitRerankingParams extends SearchFilterOptions {
  * in a `text_similarity_reranker` that uses the `.rerank-v1-elasticsearch`
  * cross-encoder model to re-score results.
  *
- * @param params - Search parameters including query text and filters
+ * @param params - Search parameters including query and filters
  * @returns Elasticsearch search request with reranking retriever
  *
  * @example
  * ```typescript
  * const request = buildLessonRerankingRrfRequest({
- *   text: 'that sohcahtoa stuff for triangles',
+ *   query: 'that sohcahtoa stuff for triangles',
  *   size: 10,
  *   subject: 'maths',
  *   keyStage: 'ks4',
@@ -98,7 +98,7 @@ export interface UnitRerankingParams extends SearchFilterOptions {
  */
 export function buildLessonRerankingRrfRequest(params: LessonRerankingParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     rerankWindowSize = DEFAULT_RERANK_WINDOW_SIZE,
     includeHighlights = true,
@@ -106,14 +106,14 @@ export function buildLessonRerankingRrfRequest(params: LessonRerankingParams): E
   } = params;
 
   const filters = createLessonFilters(filterOptions);
-  const innerRrfRetriever = createLessonRrfRetriever(text, filters);
+  const innerRrfRetriever = createLessonRrfRetriever(query, filters);
 
   const retriever: estypes.RetrieverContainer = {
     text_similarity_reranker: {
       retriever: innerRrfRetriever,
       field: 'lesson_structure',
       inference_id: RERANK_INFERENCE_ID,
-      inference_text: text,
+      inference_text: query,
       rank_window_size: rerankWindowSize,
     },
   };
@@ -134,12 +134,12 @@ export function buildLessonRerankingRrfRequest(params: LessonRerankingParams): E
 /**
  * Builds a unit search request with 4-way RRF + semantic reranking.
  *
- * @param params - Search parameters including query text and filters
+ * @param params - Search parameters including query and filters
  * @returns Elasticsearch search request with reranking retriever
  */
 export function buildUnitRerankingRrfRequest(params: UnitRerankingParams): EsSearchRequest {
   const {
-    text,
+    query,
     size,
     rerankWindowSize = DEFAULT_RERANK_WINDOW_SIZE,
     includeHighlights = true,
@@ -147,14 +147,14 @@ export function buildUnitRerankingRrfRequest(params: UnitRerankingParams): EsSea
   } = params;
 
   const filters = createUnitFilters(filterOptions);
-  const innerRrfRetriever = createUnitRrfRetriever(text, filters);
+  const innerRrfRetriever = createUnitRrfRetriever(query, filters);
 
   const retriever: estypes.RetrieverContainer = {
     text_similarity_reranker: {
       retriever: innerRrfRetriever,
       field: 'unit_structure',
       inference_id: RERANK_INFERENCE_ID,
-      inference_text: text,
+      inference_text: query,
       rank_window_size: rerankWindowSize,
     },
   };
@@ -177,17 +177,17 @@ export function buildUnitRerankingRrfRequest(params: UnitRerankingParams): EsSea
  * Combines BM25 + ELSER on both content and structure fields.
  */
 function createLessonRrfRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
 ): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
     rrf: {
       retrievers: [
-        createLessonBm25ContentRetriever(text, filterClause),
-        createLessonElserContentRetriever(text, filterClause),
-        createLessonBm25StructureRetriever(text, filterClause),
-        createLessonElserStructureRetriever(text, filterClause),
+        createLessonBm25ContentRetriever(query, filterClause),
+        createLessonElserContentRetriever(query, filterClause),
+        createLessonBm25StructureRetriever(query, filterClause),
+        createLessonElserStructureRetriever(query, filterClause),
       ],
       ...RRF_PARAMS,
     },
@@ -199,17 +199,17 @@ function createLessonRrfRetriever(
  * Combines BM25 + ELSER on both content and structure fields.
  */
 function createUnitRrfRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
 ): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
     rrf: {
       retrievers: [
-        createUnitBm25ContentRetriever(text, filterClause),
-        createUnitElserContentRetriever(text, filterClause),
-        createUnitBm25StructureRetriever(text, filterClause),
-        createUnitElserStructureRetriever(text, filterClause),
+        createUnitBm25ContentRetriever(query, filterClause),
+        createUnitElserContentRetriever(query, filterClause),
+        createUnitBm25StructureRetriever(query, filterClause),
+        createUnitElserStructureRetriever(query, filterClause),
       ],
       ...RRF_PARAMS,
     },

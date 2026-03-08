@@ -11,7 +11,7 @@
 For new implementation sessions, read in this order:
 
 1. **Foundation Documents** (MUST READ FIRST)
-   - `.agent/directives/rules.md` - TDD, quality gates, no type shortcuts
+   - `.agent/directives/principles.md` - TDD, quality gates, no type shortcuts
    - `.agent/directives/schema-first-execution.md` - All types from field definitions
    - `.agent/directives/testing-strategy.md` - Test types and TDD approach
 

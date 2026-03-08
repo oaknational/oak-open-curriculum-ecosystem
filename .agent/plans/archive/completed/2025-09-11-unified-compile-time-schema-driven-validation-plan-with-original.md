@@ -84,7 +84,7 @@ Owner: Engineering (MCP/Oak SDK)
 ## Core References
 
 - GO.md (root)
-- .agent/directives/rules.md
+- .agent/directives/principles.md
 - .agent/directives/testing-strategy.md
 - docs/agent-guidance/typescript-practice.md
 - docs/agent-guidance/development-practice.md

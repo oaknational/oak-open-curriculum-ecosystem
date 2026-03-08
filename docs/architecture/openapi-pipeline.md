@@ -1,6 +1,6 @@
 # The OpenAPI-First Pipeline
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-03-07  
 **Status**: Active architecture reference
 
 ## Problem Statement
@@ -133,8 +133,8 @@ The primary implementation uses the Oak National Academy Curriculum API:
 - **OpenAPI Schema**: `https://open-api.thenational.academy/api/v0/openapi.json`
 - **Generated SDK**: `@oaknational/curriculum-sdk`
 - **MCP Servers**:
-  - `apps/oak-curriculum-mcp-stdio` (for Claude Desktop, Cursor)
-  - `apps/oak-curriculum-mcp-streamable-http` (for web clients, Vercel)
+  - `apps/oak-curriculum-mcp-streamable-http` (canonical MCP server workspace)
+  - `apps/oak-curriculum-mcp-stdio` (legacy standalone stdio workspace)
 - **Applications**:
   - `apps/oak-search-cli` (hybrid search)
   - Admin tools, status pages, telemetry

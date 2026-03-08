@@ -9,7 +9,7 @@ Implement the `get-ontology` aggregated tool as specified in the POC plan. This 
 Before starting, read these documents in order:
 
 1. **Foundation Documents** (mandatory):
-   - `.agent/directives/rules.md` - TDD, no type shortcuts, schema-first
+   - `.agent/directives/principles.md` - TDD, no type shortcuts, schema-first
    - `.agent/directives/testing-strategy.md` - Red → Green → Refactor
    - `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 

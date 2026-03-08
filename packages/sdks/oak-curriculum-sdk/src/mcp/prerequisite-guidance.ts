@@ -52,10 +52,14 @@ export const FETCH_PREREQUISITE_GUIDANCE =
   `PREREQUISITE: You MUST call \`${PRIMARY_ORIENTATION_TOOL_NAME}\` first to understand the curriculum domain before using the fetch tool.` as const;
 
 /**
- * Recommended first step text for agent support tools.
+ * Recommended first step text for the get-curriculum-model tool description.
  *
- * Used in tool descriptions for get-curriculum-model to
- * emphasise calling them early in the conversation.
+ * Used **only** in the get-curriculum-model tool definition, where "this tool"
+ * correctly refers to get-curriculum-model itself. Other aggregated tools
+ * (get-thread-progressions, get-prerequisite-graph) should use
+ * {@link AGGREGATED_PREREQUISITE_GUIDANCE} instead, which explicitly names
+ * get-curriculum-model as the prerequisite rather than claiming the current
+ * tool is a mandatory first call.
  */
 export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
   'You MUST call this tool before using other curriculum tools.' as const;

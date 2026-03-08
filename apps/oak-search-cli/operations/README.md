@@ -56,8 +56,10 @@ pnpm es:status                   # Check index counts
 # Observability
 pnpm zero-hit:purge              # Clean up zero-hit analytics events
 
-# Infrastructure
-pnpm elastic:alias-swap          # Swap ES index aliases (blue/green deployment)
+# Infrastructure (ADR-130 blue/green lifecycle)
+oak-search admin versioned-ingest --bulk-dir <path>  # Full blue/green ingest cycle
+oak-search admin rollback                            # Roll back to previous version
+oak-search admin validate-aliases                    # Check alias health
 
 # Development
 pnpm sandbox:ingest              # Ingest fixture data for testing

@@ -2,7 +2,7 @@
 
 **Date**: 2026-02-14
 **Produced by**: WS0 of the
-[Developer Onboarding Experience Plan](../plans/semantic-search/active/developer-onboarding-experience.plan.md)
+[Developer Onboarding Experience Plan](../plans/semantic-search/archive/completed/developer-onboarding-experience.plan.md)
 
 ---
 
@@ -328,7 +328,7 @@ file is redundant and misleading.
 | File | Purpose | Status | Action |
 | --- | --- | --- | --- |
 | `AGENT.md` | Core agent directives and entry point | Partially stale | Update -- "Read GO.md every 6th-ish task" (stale pattern); `pnpm check` description understates what it runs |
-| `rules.md` | Authoritative rules | Current | Keep as-is |
+| `principles.md` | Authoritative rules | Current | Keep as-is |
 | `testing-strategy.md` | TDD at all levels | Current | Keep as-is |
 | `schema-first-execution.md` | Schema-first MCP execution | Current | Keep as-is |
 | `semantic-search-architecture.md` | Moved to `docs/agent-guidance/` | Relocated | Domain-specific, not a directive |
@@ -341,7 +341,7 @@ file is redundant and misleading.
 | File | Purpose | Status | Action |
 | --- | --- | --- | --- |
 | `high-level-plan.md` | Strategic overview | Stale | Update -- Item #4 "Notion MCP Workspace Removal" should be marked complete |
-| `semantic-search/active/developer-onboarding-experience.plan.md` | This plan | Current | Keep as-is |
+| `semantic-search/archive/completed/developer-onboarding-experience.plan.md` | This plan | Completed | Archived |
 | `semantic-search/README.md` | Semantic search navigation | Current | Keep as-is |
 | `semantic-search/roadmap.md` | Search roadmap | Current | Keep as-is |
 | `semantic-search/search-acceptance-criteria.md` | GT categories and criteria | Current | Keep as-is |
@@ -478,7 +478,7 @@ AGENT.md, `docs/README.md`, `docs/foundation/quick-start.md`,
 several `.agent/plans/` files.
 
 The current agent entry point is `.agent/directives/AGENT.md` which
-links to `rules.md`, `testing-strategy.md`, and
+links to `principles.md`, `testing-strategy.md`, and
 `schema-first-execution.md`. The GO.md grounding pattern (read
 every 3rd/6th task) is superseded by the directives-based approach.
 

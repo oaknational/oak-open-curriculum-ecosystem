@@ -2,7 +2,8 @@
 
 Executable plans that are in progress now.
 
-_(No active plans)_
+- [oak-preview-mcp-snagging.execution.plan.md](oak-preview-mcp-snagging.execution.plan.md) — active standalone execution entry point for the deploy-safe oak-preview MCP snagging pass; resume at Phase 2
+- [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) — active documentation and execution entry point for the OpenAI App to MCP Apps infrastructure replacement series
 
 Completed and archived:
 

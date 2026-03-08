@@ -31,7 +31,7 @@
 - Setup and status:
   - `pnpm ... es:setup` (create synonyms + indices)
   - `pnpm ... es:status` (cluster and index health)
-  - `pnpm ... elastic:alias-swap` (swap index aliases after ingestion)
+  - `oak-search admin versioned-ingest` / `rollback` / `validate-aliases` (ADR-130 blue/green lifecycle)
 - Data sources:
   - API mode uses the SDK to fetch lessons, units, sequences, and metadata.
   - Bulk mode uses bulk download files with API supplementation for KS4 enrichment.

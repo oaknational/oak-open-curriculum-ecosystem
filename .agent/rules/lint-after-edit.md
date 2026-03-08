@@ -8,7 +8,7 @@ Key ESLint thresholds that bite during refactoring:
 - `max-lines-per-function`: 50 lines per function
 - `complexity`: ESLint counts `??` and `?.` as branches
 
-When a violation appears, follow the refactoring rules in `.agent/directives/rules.md`:
+When a violation appears, follow the refactoring rules in `.agent/directives/principles.md`:
 
 - **File too long**: split by groupings of responsibility; for very long files, turn into a directory with an index.ts integration point.
 - **Function too long**: extract named helpers as pure functions with unit tests.

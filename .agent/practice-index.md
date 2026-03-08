@@ -9,7 +9,7 @@ For the practice-core files and their roles, see [practice-core/index.md](practi
 | Directive | Purpose |
 |---|---|
 | [AGENT.md](directives/AGENT.md) | Operational entry point for agents |
-| [rules.md](directives/rules.md) | Authoritative rules — must be followed at all times |
+| [principles.md](directives/principles.md) | Authoritative rules — must be followed at all times |
 | [testing-strategy.md](directives/testing-strategy.md) | TDD at all levels |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema |
 | [metacognition.md](directives/metacognition.md) | Reflective thinking before planning |

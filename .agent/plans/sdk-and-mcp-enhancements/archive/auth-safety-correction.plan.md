@@ -4,7 +4,7 @@ overview: "Fix the defensive gap in tool-auth-checker.ts: apply deny-by-default 
 lastValidatedDate: 2026-03-05
 todos:
   - id: phase-0-foundation
-    content: "Re-read rules.md, testing-strategy.md, schema-first-execution.md. Confirm deny-by-default is the correct security stance (check ADR-113). Record recommitment."
+    content: "Re-read principles.md, testing-strategy.md, schema-first-execution.md. Confirm deny-by-default is the correct security stance (check ADR-113). Record recommitment."
     status: pending
   - id: phase-1-red-missing-schemes
     content: "RED: Write failing test for absent securitySchemes on a generated tool — toolRequiresAuth should return true."
@@ -78,7 +78,7 @@ Rationale: any ambiguity about auth requirements MUST resolve to requiring auth.
 
 Before any change, re-read and recommit to:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. ADR-113: `docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md`
 

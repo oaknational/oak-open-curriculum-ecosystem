@@ -35,7 +35,7 @@ This plan prioritises:
 
 ## Foundation Documents (Re-read Before Starting)
 
-- [rules.md](../../directives/rules.md) - No compatibility layers, clean breaks
+- [principles.md](../../directives/principles.md) - No compatibility layers, clean breaks
 - [testing-strategy.md](../../directives/testing-strategy.md) - DI for testability
 - [schema-first-execution.md](../../directives/schema-first-execution.md) - Generator is source of truth
 
@@ -638,7 +638,7 @@ After this work completes:
 
 ## References
 
-- Foundation: `.agent/directives/rules.md`
+- Foundation: `.agent/directives/principles.md`
 - Testing: `.agent/directives/testing-strategy.md`
 - ADR: `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md`
 - Canonical example: `apps/oak-curriculum-mcp-streamable-http/src/env.ts`

@@ -12,3 +12,5 @@ Contained source document(s):
 - `vocabulary-mining.md`
 - `natural-language-paraphrases.md`
 - `mfl-synonym-architecture.md`
+- `bulk-metadata-opportunities.research.md`
+- `vocabulary-glossary-and-mining-surfaces.research.md`

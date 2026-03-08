@@ -14,6 +14,12 @@
 
 This plan exploits document relationships (threads, sequences, prerequisites) to improve search relevance through cross-referencing and relationship scoring.
 
+Research companions:
+
+- [thread-sequence-derived-surfaces.research.md](thread-sequence-derived-surfaces.research.md)
+- [learning-graph-surfaces.research.md](learning-graph-surfaces.research.md)
+- [../03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md](../03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md)
+
 **Prerequisite**: Level 1 validated (ground truth review complete).
 
 **Exit Criteria** (from [search-acceptance-criteria.md](../../search-acceptance-criteria.md)):
@@ -193,6 +199,8 @@ Before implementing Level 2 features:
 
 | Document                                                                                      | Purpose                 |
 | --------------------------------------------------------------------------------------------- | ----------------------- |
+| [thread-sequence-derived-surfaces.research.md](thread-sequence-derived-surfaces.research.md) | Derived thread/sequence signal audit |
+| [learning-graph-surfaces.research.md](learning-graph-surfaces.research.md) | Graph-adjacent relationship surfaces |
 | [ADR-097](../../../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context enrichment      |
 | [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md)                    | Level 2 checklist       |
 | [../roadmap.md](../../roadmap.md)                                                                | Master roadmap          |

@@ -140,7 +140,7 @@ export async function runQuery(
   // (physics, chemistry, biology, combined-science) map to parent 'science'
   // because the SDK subject filter accepts canonical subjects only.
   const sdkParams: SearchLessonsParams = {
-    text: input.query,
+    query: input.query,
     keyStage: input.queryKeyStage,
     size: 10,
     ...(input.subject !== undefined && {

@@ -1,0 +1,6 @@
+---
+description: For signature-changing refactors, update test call sites FIRST. Compiler errors are RED phase.
+globs: '**/*.{ts,tsx,mts}'
+---
+
+Read and follow `.agent/rules/tdd-for-refactoring.md`.

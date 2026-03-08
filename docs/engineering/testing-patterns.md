@@ -11,7 +11,7 @@ Reusable testing recipes referenced by the
 E2E tests that create the application in-process (via `createApp()`)
 must configure it through dependency injection, never by mutating
 `process.env`. This rule applies to **all** tests — unit,
-integration, and E2E (see `rules.md`).
+integration, and E2E (see `principles.md`).
 
 ### The Pattern
 

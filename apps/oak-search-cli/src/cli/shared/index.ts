@@ -4,7 +4,7 @@
  *
  * Re-exports from create-cli-sdk, output, validators, and pass-through modules.
  */
-export { createCliSdk } from './create-cli-sdk.js';
+export { createCliSdk, createEsClient } from './create-cli-sdk.js';
 export type { CliSdkEnv } from './create-cli-sdk.js';
 export {
   printSuccess,
@@ -15,4 +15,4 @@ export {
   printHeader,
 } from './output.js';
 export { validateSubject, validateKeyStage, validateScope } from './validators.js';
-export { APP_ROOT, registerPassThrough, registerBashPassThrough } from './pass-through.js';
+export { APP_ROOT, registerPassThrough } from './pass-through.js';

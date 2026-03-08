@@ -83,6 +83,7 @@ ${serverOverview.authentication}
 1. **Search for lessons**: Use the \`search\` tool to find lessons by topic
 2. **Browse curriculum**: Use \`get-subjects\` and browsing tools to explore structure
 3. **Fetch content**: Use \`fetch\` or specific tools to get detailed lesson content
+4. **Download assets**: Use \`get-lessons-assets\` then \`download-asset\` for clickable download links
 
 ## Tips
 

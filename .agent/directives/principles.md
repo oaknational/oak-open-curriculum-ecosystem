@@ -1,11 +1,11 @@
 ---
 fitness_ceiling: 200
-split_strategy: "Extract elaborated guidance to governance docs; this file is authoritative rules"
+split_strategy: "Extract elaborated guidance to governance docs; this file is authoritative principles"
 ---
 
-# Rules
+# Principles
 
-All of these rules MUST be followed at all times.
+All of these principles MUST be followed at all times.
 
 ## First Question
 

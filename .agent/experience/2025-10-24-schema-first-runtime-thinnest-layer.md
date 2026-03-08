@@ -16,7 +16,7 @@ To hush the compiler, I experimented with `DescriptorInvocation<T>` tricks and `
 
 ### Realignment Through The Plan
 
-Re-reading `snagging-resolution-plan.md`, `rules.md`, and `AGENT.md` was the pivot. The plan demands that **all** intelligence lives in sdk-codegen: the schema gives us every literal, every enum, every structural guard we need. By restoring strict, schema-derived types (required path/query fields, exact tool args) and letting runtime helpers consume them verbatim, the compiler becomes an ally again.
+Re-reading `snagging-resolution-plan.md`, `principles.md`, and `AGENT.md` was the pivot. The plan demands that **all** intelligence lives in sdk-codegen: the schema gives us every literal, every enum, every structural guard we need. By restoring strict, schema-derived types (required path/query fields, exact tool args) and letting runtime helpers consume them verbatim, the compiler becomes an ally again.
 
 ## Key Insights
 

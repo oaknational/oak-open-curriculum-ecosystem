@@ -4,7 +4,7 @@ This report reviews the following documents for internal consistency, cross-cons
 
 - `.agent/plans/phase-6-oak-curriculum-api.md`
 - `.agent/plans/high-level-plan.md`
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - Other guidance under `docs/agent-guidance/` (notably `architecture.md`, `development-practice.md`, `typescript-practice.md`, `safety-and-security.md`, `ai-agent-guide.md`)
 
@@ -87,7 +87,7 @@ Each issue below includes concrete, minimal edits to make in the plans.
 ### 5) Type-Only Imports
 
 - Evidence
-  - `rules.md`/`typescript-practice.md`: “Type imports must be labelled with `type`”.
+  - `principles.md`/`typescript-practice.md`: “Type imports must be labelled with `type`”.
   - Phase 6 examples don’t highlight `import type` usage.
 - Impact
   - Missed opportunity to reinforce required practice in new code.
@@ -226,7 +226,7 @@ Apply the following minimal edits to the plans (no code changes):
 
 - `/.agent/plans/phase-6-oak-curriculum-api.md`
 - `/.agent/plans/high-level-plan.md`
-- `/.agent/directives/rules.md`
+- `/.agent/directives/principles.md`
 - `/.agent/directives/testing-strategy.md`
 - `/docs/agent-guidance/architecture.md`
 - `/docs/agent-guidance/development-practice.md`

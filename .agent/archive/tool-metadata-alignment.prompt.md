@@ -8,7 +8,7 @@ Before merging the OAuth implementation, we need to ensure all MCP tools have pr
 
 Read and follow these directives:
 
-- `.agent/directives/rules.md` - TDD, no type shortcuts, fail fast
+- `.agent/directives/principles.md` - TDD, no type shortcuts, fail fast
 - `.agent/directives/testing-strategy.md` - TDD at ALL levels
 - `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 

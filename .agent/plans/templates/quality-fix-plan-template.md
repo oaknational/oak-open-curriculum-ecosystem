@@ -68,7 +68,7 @@ pnpm test        # Test ALL workspaces
 pnpm test:e2e    # E2E tests for ALL apps (if applicable)
 ```
 
-**Rationale** (from @rules.md):
+**Rationale** (from @principles.md):
 
 > "Run quality gates frequently to catch issues early"
 > "If a change breaks something, you want to know immediately, not after 10 more changes"
@@ -95,7 +95,7 @@ pnpm test:e2e    # E2E tests for ALL apps (if applicable)
 
 ## Solution Architecture
 
-### Principle (from @rules.md and @testing-strategy.md)
+### Principle (from @principles.md and @testing-strategy.md)
 
 > "[Quote relevant principle from foundation documents]"
 
@@ -103,7 +103,7 @@ pnpm test:e2e    # E2E tests for ALL apps (if applicable)
 
 [What is the core realization that makes the solution elegant/simple?]
 
-This exemplifies the first question from rules.md: **"Could it be simpler?"**
+This exemplifies the first question from principles.md: **"Could it be simpler?"**
 
 Answer: [YES/NO - explain why]
 
@@ -123,7 +123,7 @@ Answer: [YES/NO - explain why]
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives/rules.md` - Core principles
+1. **Re-read** `.agent/directives/principles.md` - Core principles
 2. **Re-read** `.agent/directives/testing-strategy.md` - Testing philosophy
 3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
@@ -310,7 +310,7 @@ pnpm test
 
 ### Phase N: Validation ([Estimated Time])
 
-**Foundation Check-In**: Re-read all three foundation documents (rules.md, testing-strategy.md, schema-first-execution.md). Verify all principles followed throughout implementation.
+**Foundation Check-In**: Re-read all three foundation documents (principles.md, testing-strategy.md, schema-first-execution.md). Verify all principles followed throughout implementation.
 
 #### Task N.1: [Primary Validation Task]
 
@@ -348,11 +348,11 @@ done
 
 **Final verification against foundation documents**:
 
-- [ ] **rules.md - Cardinal Rule**: [Verify schema-first principle maintained]
-- [ ] **rules.md - No Type Shortcuts**: Verified no `as`, `any`, `Record<string, unknown>` added
-- [ ] **rules.md - No Global State**: [Verification relevant to this plan]
-- [ ] **rules.md - No Compatibility Layers**: We replaced old approach, not wrapped it
-- [ ] **rules.md - Quality Gates**: All gates pass across all workspaces
+- [ ] **principles.md - Cardinal Rule**: [Verify schema-first principle maintained]
+- [ ] **principles.md - No Type Shortcuts**: Verified no `as`, `any`, `Record<string, unknown>` added
+- [ ] **principles.md - No Global State**: [Verification relevant to this plan]
+- [ ] **principles.md - No Compatibility Layers**: We replaced old approach, not wrapped it
+- [ ] **principles.md - Quality Gates**: All gates pass across all workspaces
 - [ ] **testing-strategy.md - Test Behavior**: Tests validate behavior, not implementation
 - [ ] **testing-strategy.md - [Relevant Test Type]**: [Specific validation for this plan]
 - [ ] **testing-strategy.md - Simple Mocks**: [Verification relevant to this plan]
@@ -488,13 +488,13 @@ done
 - **[Risk]**: [Another risk]
 - **[Risk]**: [Final risk]
 
-### Alignment with @rules.md and @testing-strategy.md
+### Alignment with @principles.md and @testing-strategy.md
 
 **From testing-strategy.md**:
 
 > "[Relevant quote]"
 
-**From rules.md**:
+**From principles.md**:
 
 > "[Relevant quote]"
 
@@ -511,7 +511,7 @@ done
 
 - [Product code reference]: [File path or description]
 - Foundation documents:
-  - `.agent/directives/rules.md`
+  - `.agent/directives/principles.md`
   - `.agent/directives/testing-strategy.md`
   - `.agent/directives/schema-first-execution.md`
 

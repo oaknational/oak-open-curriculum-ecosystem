@@ -27,12 +27,12 @@ type QueryContainer = estypes.QueryDslQueryContainer;
  * filtering is applied — 2-way RRF max score ≈ 0.049 means any
  * meaningful threshold would eliminate legitimate results.
  *
- * @param text - User search query
+ * @param query - User search query
  * @param filter - Optional Elasticsearch filter (e.g. subject constraint)
  * @returns RRF retriever container for the Elasticsearch search API
  */
 export function buildSequenceRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
   return {
@@ -42,7 +42,7 @@ export function buildSequenceRetriever(
           standard: {
             query: {
               multi_match: {
-                query: text,
+                query,
                 type: 'best_fields',
                 fuzziness: 'AUTO',
                 fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
@@ -51,7 +51,7 @@ export function buildSequenceRetriever(
             filter,
           },
         },
-        { standard: { query: { semantic: { field: 'sequence_semantic', query: text } }, filter } },
+        { standard: { query: { semantic: { field: 'sequence_semantic', query } }, filter } },
       ],
       rank_window_size: 40,
       rank_constant: 40,
@@ -73,12 +73,12 @@ export function buildSequenceRetriever(
  * is minimal. No post-RRF score filtering — 2-way RRF max score ≈ 0.049,
  * and the correct "mountain" thread result scores only 0.024.
  *
- * @param text - User search query
+ * @param query - User search query
  * @param filter - Optional Elasticsearch filter (e.g. subject constraint)
  * @returns RRF retriever container for the Elasticsearch search API
  */
 export function buildThreadRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
   return {
@@ -88,7 +88,7 @@ export function buildThreadRetriever(
           standard: {
             query: {
               multi_match: {
-                query: text,
+                query,
                 type: 'best_fields',
                 fuzziness: 'AUTO',
                 fields: ['thread_title^2'],
@@ -97,7 +97,7 @@ export function buildThreadRetriever(
             filter,
           },
         },
-        { standard: { query: { semantic: { field: 'thread_semantic', query: text } }, filter } },
+        { standard: { query: { semantic: { field: 'thread_semantic', query } }, filter } },
       ],
       rank_window_size: 40,
       rank_constant: 40,

@@ -15,8 +15,8 @@ import type { SearchScope, SearchSubjectSlug } from '@oaknational/sdk-codegen/se
  * parameter naming and semantics.
  */
 export interface SearchParamsBase {
-  /** The search query text. Must be non-empty. */
-  readonly text: string;
+  /** The search query. Must be non-empty. */
+  readonly query: string;
 
   /** Filter by subject slug. */
   readonly subject?: SearchSubjectSlug;
@@ -40,7 +40,7 @@ export interface SearchParamsBase {
  * @example
  * ```typescript
  * sdk.retrieval.searchLessons({
- *   text: 'expanding brackets',
+ *   query: 'expanding brackets',
  *   subject: 'maths',
  *   keyStage: 'ks3',
  *   size: 10,
@@ -79,7 +79,7 @@ export interface SearchLessonsParams extends SearchParamsBase {
  * @example
  * ```typescript
  * sdk.retrieval.searchUnits({
- *   text: 'fractions',
+ *   query: 'fractions',
  *   subject: 'maths',
  *   keyStage: 'ks2',
  * });
@@ -102,7 +102,7 @@ export interface SearchUnitsParams extends SearchParamsBase {
  * @example
  * ```typescript
  * sdk.retrieval.searchSequences({
- *   text: 'secondary maths',
+ *   query: 'secondary maths',
  *   phaseSlug: 'secondary',
  * });
  * ```

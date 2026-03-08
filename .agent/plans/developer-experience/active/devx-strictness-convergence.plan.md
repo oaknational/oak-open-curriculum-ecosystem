@@ -1,6 +1,6 @@
 ---
 name: "Developer Experience Strictness Convergence"
-overview: "Canonical phased plan to converge test discipline, ESLint override removal, no-console enforcement, and non-disruptive boundary/separation constraints into one executable track."
+overview: "Canonical phased plan to converge test discipline, ESLint override removal, no-console enforcement, and the remaining strictness-specific lint promotion work into one executable track."
 todos:
   - id: phase-0-baseline-lock
     content: "Phase 0: Recompute and lock enforcement baseline with exact commands and dated evidence."
@@ -9,7 +9,7 @@ todos:
     content: "Phase 1: Align Clerk request auth typing/runtime checks and remove blocked Object.assign usage in streamable-http E2E helper."
     status: completed
   - id: phase-2-shared-eslint-architecture
-    content: "Phase 2: Tighten shared oak-eslint architecture for deterministic promotion of test/repo restrictions, no-console policy, boundary constraints, and skills-first split-guidance enforcement (excluding max-files-per-dir)."
+    content: "Phase 2: Tighten shared oak-eslint architecture for deterministic promotion of test/repo restrictions, no-console policy, and strictness-specific config behaviour."
     status: pending
   - id: phase-3-remediate-violations
     content: "Phase 3: Remove existing violations before promotion (type assertions, vi.mock family, Object.assign, inline directives in tests, no-console in enforced scopes)."
@@ -28,10 +28,10 @@ todos:
 # Developer Experience Strictness Convergence
 
 **Created**: 2026-03-03
-**Last Updated**: 2026-03-04
+**Last Updated**: 2026-03-07
 **Status**: 🟢 IN PROGRESS (`active/`)
 **Owner**: Jim (project owner — sole authority for exception approvals)
-**Scope**: Merge and execute overlapping strictness work previously split across E2E test-discipline enforcement, ESLint override-removal, no-console enforcement, and architectural boundary/separation lint hardening.
+**Scope**: Merge and execute overlapping strictness work previously split across E2E test-discipline enforcement, ESLint override-removal, and no-console enforcement, while delegating directory-complexity-specific architectural work to its own canonical plan.
 
 ---
 
@@ -45,30 +45,30 @@ Superseded source plans:
 - `../archive/superseded/eslint-override-removal.plan.md`
 - `../../architecture-and-infrastructure/no-console-enforcement.plan.md` (folded into this canonical plan on 2026-03-04)
 
-Delegated/partially folded architectural-enforcement sources:
+Related architectural-enforcement sources:
 
 - `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
+- `../current/directory-complexity-enablement.execution.plan.md`
 
-Skills/commands/rules portability: **Superseded** — all skills-first architecture, command unification, and rules consolidation work has moved to the [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and [ADR-125](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+Skills/commands/rules portability: **Superseded** — all skills-first architecture, command unification, and rules consolidation work has moved to [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ### Scope Expansion (2026-03-04)
 
-This canonical plan now also executes:
+This canonical plan executes:
 
 1. `no-console` policy convergence and violation remediation.
-2. Non-disruptive architectural lint constraints that make future directory-splitting enforcement viable:
-   - boundary and dependency-direction enforcement in ESLint configs
-   - separation-of-concern guardrails (`max-lines`, `max-lines-per-function`, complexity limits) with explicit split guidance
-   - agent grounding updates for how to split large functions/files/directories safely
+2. Strictness-specific ESLint convergence work needed for shared config promotion.
 
-Explicit deferral:
+Extracted to the canonical directory-complexity plan:
 
-- `max-files-per-dir` rollout is deferred (too disruptive for the current execution window).
+- `../current/directory-complexity-enablement.execution.plan.md`
+- supporting structural guardrails required before `max-files-per-dir`
+- staged activation of `max-files-per-dir` itself
 
 ### Phase 2 Scope Addendum (2026-03-04)
 
-The skills-first architecture, skill structure contract, and command/rules portability work that was originally scoped here has been **extracted to the [Agent Artefact Portability plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)** and implemented under [ADR-125](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan retains only the ESLint strictness concerns.
+The skills-first architecture, skill structure contract, and command/rules portability work that was originally scoped here has been **extracted to [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)**. Directory-complexity-specific architectural work is now executed from [directory-complexity-enablement.execution.plan.md](../current/directory-complexity-enablement.execution.plan.md). This plan retains only the remaining ESLint strictness concerns.
 
 ---
 
@@ -76,7 +76,7 @@ The skills-first architecture, skill structure contract, and command/rules porta
 
 Before each phase starts:
 
-1. Re-read `.agent/directives/rules.md`
+1. Re-read `.agent/directives/principles.md`
 2. Re-read `.agent/directives/testing-strategy.md`
 3. Re-read `.agent/directives/schema-first-execution.md`
 4. Ask: **Could it be simpler without compromising quality?**
@@ -90,7 +90,7 @@ Non-negotiables for this plan:
 
 ### Exception Governance
 
-**Only the project owner (Jim) can approve exceptions to the rules defined in `.agent/directives/rules.md`.** AI agents, sub-agents, and reviewers MUST NOT:
+**Only the project owner (Jim) can approve exceptions to the rules defined in `.agent/directives/principles.md`.** AI agents, sub-agents, and reviewers MUST NOT:
 
 - Approve, create, or ratify exceptions to any rule on their own authority
 - Classify a rule violation as "legitimate" or "necessary" without explicit owner approval
@@ -443,7 +443,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
 Goal:
 
-- Make promotion of restrictions deterministic and centrally controlled, including no-console and boundary/separation constraints, with skills-first split guidance.
+- Make promotion of restrictions deterministic and centrally controlled for the remaining strictness-specific config work, while leaving directory-complexity preconditions to their canonical plan.
 
 Primary targets:
 
@@ -456,7 +456,7 @@ RED (tests/evidence first):
 
 1. Add/adjust ESLint config tests where present to fail under current policy gaps.
 2. Demonstrate current inability to promote targeted rules without ambiguity.
-3. Prove baseline for `no-console` override drift and boundary-rule inconsistency across workspace configs.
+3. Prove baseline for `no-console` override drift and the remaining shared-config inconsistency across workspace configs.
 
 GREEN (minimal implementation):
 
@@ -465,7 +465,7 @@ GREEN (minimal implementation):
 3. Implement strict restriction for `Object.assign`.
 4. Define and encode inline-config strategy (`noInlineConfig` rollout and/or narrow allowlist).
 5. Converge `no-console` policy into explicit allowlisted scopes only (scripts/smoke/evaluation/operational CLI).
-6. Integrate boundary/separation rule architecture from app/sdk custom rules and validate against the canonical import matrix.
+6. Record the hand-off boundary to `../current/directory-complexity-enablement.execution.plan.md` so directory-complexity support work is not duplicated here.
 
 REFACTOR (cleanup/documentation):
 
@@ -480,7 +480,7 @@ Acceptance criteria:
 3. `Object.assign` restriction exists in strict rule-set with explicit message.
 4. Inline-config policy is explicit and enforceable.
 5. `no-console` scope is explicit: default enforcement with a narrow, documented allowlist.
-6. Boundary/separation constraints are encoded consistently across workspace ESLint configs.
+6. The directory-complexity hand-off is explicit and points to the canonical queued plan.
 7. `@.cursor/commands/jc-consolidate-docs.md` has been run at Phase 2 completion and documentation extraction outcomes are recorded.
 
 Deterministic validation:
@@ -491,7 +491,7 @@ pnpm --filter @oaknational/eslint-plugin-standards lint
 pnpm --filter @oaknational/search-cli lint
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
 rg --line-number "'no-console': 'off'" eslint.config.ts apps/*/eslint.config.ts packages/*/*/eslint.config.ts
-rg --line-number "appBoundaryRules|appArchitectureRules|createSdkBoundaryRules|eslint-plugin-boundaries" eslint.config.ts apps/*/eslint.config.ts packages/*/*/eslint.config.ts
+rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans/developer-experience .agent/plans/agentic-engineering-enhancements
 # Phase 2 closeout (required):
 # run @.cursor/commands/jc-consolidate-docs.md and record extracted documentation outputs.
 ```
@@ -500,7 +500,7 @@ Non-goals in this phase:
 
 - Do not attempt full violation burn-down yet.
 - Do not remove workspace override blocks yet.
-- Do not activate `max-files-per-dir` in this phase (explicitly deferred).
+- Do not duplicate directory-complexity supporting constraints from the canonical queued plan.
 - Skills/commands/rules architecture and migration are handled by the Agent Artefact Portability plan.
 
 ---
@@ -729,7 +729,7 @@ pnpm markdownlint-check:root
 
 ## Approved Exceptions Register
 
-Exceptions to the rules in `.agent/directives/rules.md` that have been explicitly approved by the project owner. Each entry is scoped to the specific case described — it does not generalise.
+Exceptions to the rules in `.agent/directives/principles.md` that have been explicitly approved by the project owner. Each entry is scoped to the specific case described — it does not generalise.
 
 | Date | Rule | Location | Rationale | Owner Decision |
 |---|---|---|---|---|
@@ -785,7 +785,7 @@ The 218-warning burn-down target requires nuanced handling:
 
 ## Cross-References
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/skills/start-right-quick/shared/start-right.md`
@@ -814,7 +814,7 @@ Use this section to start the next execution session without external context.
    - Cursor command: `@.cursor/commands/jc-start-right-quick.md` (default) or `@.cursor/commands/jc-start-right-thorough.md` (complex/cross-workspace work).
    - Skill sources: `.agent/skills/start-right-quick/shared/start-right.md` and `.agent/skills/start-right-thorough/shared/start-right-thorough.md`.
 2. Re-read canonical foundation rules:
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 3. Reconfirm active phase state from this file front matter (`todos`) and `Execution Notes`.

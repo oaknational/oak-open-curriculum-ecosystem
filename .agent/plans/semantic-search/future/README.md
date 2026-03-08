@@ -10,6 +10,10 @@ Strategic plans in this directory may include deep implementation detail when it
 captures validated research. In `future/`, that detail is reference context and
 not an execution commitment until promotion.
 
+Boundary-local `*.research.md` files now provide the durable evidence layer for
+this backlog. Future plans should stay promotable and point at research rather
+than absorbing all analysis themselves.
+
 ## Canonical Boundary Structure
 
 | Boundary | Focus | Location |
@@ -39,3 +43,14 @@ Boundary definitions align with:
 
 - Elastic retrieval architecture and retriever composition: <https://www.elastic.co/docs>
 - MCP architecture and host/client/server separation: <https://modelcontextprotocol.io/docs/getting-started/intro>
+
+## Research Companions
+
+The preferred research entry points are:
+
+- [../research-index.md](../research-index.md) — navigation for all semantic-search research companions
+- [../curriculum-asset-opportunity-map.research.md](../curriculum-asset-opportunity-map.research.md) — cross-cutting synthesis
+- [03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md](03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md)
+- [03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md](03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md)
+- [04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md](04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md)
+- [04-retrieval-quality-engine/learning-graph-surfaces.research.md](04-retrieval-quality-engine/learning-graph-surfaces.research.md)

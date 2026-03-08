@@ -1,8 +1,8 @@
 ---
-name: config-reviewer
-description: Expert at reviewing tooling configurations (ESLint, TypeScript, Vitest, Prettier, Turbo). Use proactively when changing configs, adding workspaces, or auditing quality gates. Invoke immediately after config file modifications.
-model: auto
 tools: Read, Glob, Grep, LS, Shell, ReadLints
+name: config-reviewer
+model: default
+description: Expert at reviewing tooling configurations (ESLint, TypeScript, Vitest, Prettier, Turbo). Use proactively when changing configs, adding workspaces, or auditing quality gates. Invoke immediately after config file modifications.
 readonly: true
 ---
 

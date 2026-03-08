@@ -3,7 +3,7 @@ provenance:
   - index: 0
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
-    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 14 specialist reviewers, full learning loop"
   - index: 1
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
@@ -246,7 +246,7 @@ The practice-core package (`practice.md`, `practice-lineage.md`, `practice-boots
 
 1. Create the directory structure: `.agent/directives/`, `.agent/practice-core/` (with `incoming/.gitkeep`), `.agent/plans/`, `.agent/prompts/`, `.agent/memory/`, `.cursor/rules/`, `.cursor/commands/`, `.cursor/agents/`. If the practice-core files were received from another repo, they should already include `index.md` and `README.md` alongside the trinity; if building from scratch, create them (see `practice-bootstrap.md` for templates).
 2. Write `AGENT.md` in `.agent/directives/` as a stable structural index: project context, artefacts, rules pointer, sub-agent roster, development commands, repo structure. Link to `.agent/practice-core/index.md` for the full Practice. No mutable state.
-3. Write `rules.md` encoding the Principles above, adapted to local tooling.
+3. Write `principles.md` encoding the Principles above, adapted to local tooling.
 4. Write `testing-strategy.md` encoding the Testing Philosophy above, with local test targets.
 5. Write `metacognition.md` from the condensed version in `practice-bootstrap.md` (it is universal).
 6. Follow `practice-bootstrap.md` for the remaining artefacts: sub-agent definitions, workflow commands, rules, start-right prompt, and skills (napkin, distillation). For each artefact type, create the canonical content in `.agent/` first, then add thin platform adapters. The bootstrap file provides annotated templates and format specifications for every artefact type.

@@ -35,7 +35,7 @@ This plan strictly adheres to:
    - ✅ Integration tests for document transforms
    - ✅ No type-only tests
 
-3. **Quality Standards** (`.agent/directives/rules.md`):
+3. **Quality Standards** (`.agent/directives/principles.md`):
    - ✅ No type shortcuts (`as`, `any`, `!`)
    - ✅ Pure extraction functions with unit tests
    - ✅ Functions ≤8 complexity

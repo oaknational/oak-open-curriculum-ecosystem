@@ -39,7 +39,7 @@ E2E tests pass arguments in old nested format (`{ params: { path: { lesson: 'x' 
 
 **The product code already provides everything we need.** We just need to use the existing DI capabilities (`loadRuntimeConfig(source)`, `createApp({ runtimeConfig })`) instead of mutating global state.
 
-### Principle (from @rules.md)
+### Principle (from @principles.md)
 
 > "Could it be simpler?"
 
@@ -648,7 +648,7 @@ pnpm test:e2e    # Expected: exit 0
 
 ### Alignment with Foundation Documents
 
-**From rules.md**:
+**From principles.md**:
 
 - ✅ "Could it be simpler?" - YES, use existing DI
 - ✅ "No global state" - Isolated env objects
@@ -911,6 +911,6 @@ Replace `buildInputSchemaObject()` function (lines 20-84 in `packages/sdks/oak-c
 
 - Investigation: `.agent/plans/archive/resolve-di-digressions.md`
 - Future work: `.agent/plans/quality-and-maintainability/di-architecture-consistency.md`
-- Foundation: `.agent/directives/rules.md`
+- Foundation: `.agent/directives/principles.md`
 - Testing: `.agent/directives/testing-strategy.md`
 - Schema-first: `.agent/directives/schema-first-execution.md`

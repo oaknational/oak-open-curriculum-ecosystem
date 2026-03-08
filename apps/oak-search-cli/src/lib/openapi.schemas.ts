@@ -52,7 +52,7 @@ export const SequenceDoc = z
 export const StructuredQuerySchema = z
   .object({
     scope: z.enum(NARROW_SCOPE_TUPLE),
-    text: z.string().min(1),
+    query: z.string().min(1),
     subject: Subject.optional(),
     keyStage: KeyStage.optional(),
     phaseSlug: z.string().optional(),

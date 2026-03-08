@@ -32,7 +32,7 @@ The repository employs a **modern, flat configuration (`eslint.config.ts`)** arc
 
 ## Architectural Enforcement
 
-The system explicitly codifies the "Architectural Model" from `@rules.md` using `import-x/no-restricted-paths`:
+The system explicitly codifies the "Architectural Model" from `@principles.md` using `import-x/no-restricted-paths`:
 
 | Scope             | Mechanism                | Intent                                                                                                                     |
 | :---------------- | :----------------------- | :------------------------------------------------------------------------------------------------------------------------- |

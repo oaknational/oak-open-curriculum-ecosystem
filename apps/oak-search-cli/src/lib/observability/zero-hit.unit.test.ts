@@ -52,7 +52,7 @@ describe('logZeroHit', () => {
     await logZeroHit({
       total: 0,
       scope: 'units',
-      text: 'mountain formation',
+      query: 'mountain formation',
       subject: 'geography',
       keyStage: 'ks4',
       indexVersion: 'v2025-03-16',
@@ -62,7 +62,7 @@ describe('logZeroHit', () => {
 
     expect(info).toHaveBeenCalledWith('semantic-search.zero-hit', {
       scope: 'units',
-      text: 'mountain formation',
+      query: 'mountain formation',
       filters: { subject: 'geography', keyStage: 'ks4' },
       indexVersion: 'v2025-03-16',
     });
@@ -72,7 +72,7 @@ describe('logZeroHit', () => {
       body: JSON.stringify({
         event: 'semantic-search.zero-hit',
         scope: 'units',
-        text: 'mountain formation',
+        query: 'mountain formation',
         filters: { subject: 'geography', keyStage: 'ks4' },
         indexVersion: 'v2025-03-16',
       }),
@@ -87,7 +87,7 @@ describe('logZeroHit', () => {
     await logZeroHit({
       total: 3,
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       indexVersion: 'v2025-03-16',
     });
 
@@ -103,7 +103,7 @@ describe('logZeroHit', () => {
     await logZeroHit({
       total: 0,
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       indexVersion: 'v2025-03-16',
       webhookUrl: 'none',
       took: 123,
@@ -114,7 +114,7 @@ describe('logZeroHit', () => {
     expect(persistZeroHitEvent).toHaveBeenCalledWith(
       expect.objectContaining({
         scope: 'lessons',
-        text: 'fractions',
+        query: 'fractions',
         indexVersion: 'v2025-03-16',
         tookMs: 123,
         timedOut: false,
@@ -129,7 +129,7 @@ describe('logZeroHit', () => {
     await logZeroHit({
       total: 0,
       scope: 'lessons',
-      text: 'fixture zero hit',
+      query: 'fixture zero hit',
       indexVersion: 'v-fixture',
       webhookUrl: 'https://hooks.example.com/zero-hit',
       fetchImpl: fetchMock,

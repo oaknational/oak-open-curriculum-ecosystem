@@ -126,7 +126,9 @@ describe('runQuery', () => {
       await runQuery(input, mockSearch);
 
       expect(mockSearch).toHaveBeenCalledOnce();
-      expect(mockSearch).toHaveBeenCalledWith(expect.objectContaining({ text: 'apple', size: 10 }));
+      expect(mockSearch).toHaveBeenCalledWith(
+        expect.objectContaining({ query: 'apple', size: 10 }),
+      );
     });
 
     it('should calculate metrics correctly for cross-subject queries', async () => {

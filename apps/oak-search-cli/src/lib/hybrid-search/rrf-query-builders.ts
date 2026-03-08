@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 345] -- Phrase boosting added in B.5, threads added for multi-index GTs; defer re-org to ADR-086 */
+/* eslint max-lines: [error, 355] -- Phrase boosting added in B.5, threads added for multi-index GTs, keyStage filter added for sequences; defer re-org to ADR-086 */
 /**
  * Four-way RRF query builders for hybrid search.
  *
@@ -17,7 +17,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { removeNoisePhrases, detectCurriculumPhrases } from '../query-processing';
 import {
   createLessonFilters,
@@ -41,22 +41,23 @@ type QueryContainer = estypes.QueryDslQueryContainer;
 
 /** Parameters for sequence RRF search. */
 export interface SequenceRrfParams {
-  text: string;
+  query: string;
   size: number;
   subject?: SearchSubjectSlug;
   phaseSlug?: string;
+  keyStage?: KeyStage;
 }
 
 /** Parameters for thread RRF search. */
 export interface ThreadRrfParams {
-  text: string;
+  query: string;
   size: number;
   subjectSlug?: string;
 }
 
 /** Parameters for lesson RRF search including KS4 metadata filters. */
 export interface LessonRrfParams extends SearchFilterOptions {
-  text: string;
+  query: string;
   size: number;
   includeHighlights?: boolean;
   includeFacets?: boolean;
@@ -64,7 +65,7 @@ export interface LessonRrfParams extends SearchFilterOptions {
 
 /** Parameters for unit RRF search including KS4 metadata filters. */
 export interface UnitRrfParams extends SearchFilterOptions {
-  text: string;
+  query: string;
   size: number;
   includeHighlights?: boolean;
   includeFacets?: boolean;
@@ -78,10 +79,10 @@ export interface UnitRrfParams extends SearchFilterOptions {
  * 2. Detect curriculum phrases (B.5): "straight line" → phrase boost
  */
 export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest {
-  const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+  const { query, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
 
   // Preprocess query: remove noise phrases (Phase B.4)
-  const cleanedText = removeNoisePhrases(text);
+  const cleanedText = removeNoisePhrases(query);
 
   // Detect multi-word curriculum phrases for phrase boosting (Phase B.5)
   const detectedPhrases = detectCurriculumPhrases(cleanedText);
@@ -111,10 +112,10 @@ export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest 
  * 2. Detect curriculum phrases (B.5): "straight line" → phrase boost
  */
 export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
-  const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+  const { query, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
 
   // Preprocess query: remove noise phrases (Phase B.4)
-  const cleanedText = removeNoisePhrases(text);
+  const cleanedText = removeNoisePhrases(query);
 
   // Detect multi-word curriculum phrases for phrase boosting (Phase B.5)
   const detectedPhrases = detectCurriculumPhrases(cleanedText);
@@ -148,12 +149,12 @@ export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
  * and implement `createSequenceFacets()` following the lesson/unit pattern.
  */
 export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequest {
-  const { text, size, subject, phaseSlug } = params;
-  const filters = createSequenceFilters(subject, phaseSlug);
+  const { query, size, subject, phaseSlug, keyStage } = params;
+  const filters = createSequenceFilters(subject, phaseSlug, keyStage);
   return {
     index: resolveCurrentSearchIndexName('sequences'),
     size,
-    retriever: createSequenceRetriever(text, filters),
+    retriever: createSequenceRetriever(query, filters),
   };
 }
 
@@ -170,12 +171,12 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
  * This is appropriate given the small index size and simple document structure.
  */
 export function buildThreadRrfRequest(params: ThreadRrfParams): EsSearchRequest {
-  const { text, size, subjectSlug } = params;
+  const { query, size, subjectSlug } = params;
   const filters = createThreadFilters(subjectSlug);
   return {
     index: resolveCurrentSearchIndexName('threads'),
     size,
-    retriever: createThreadRetriever(text, filters),
+    retriever: createThreadRetriever(query, filters),
   };
 }
 
@@ -185,7 +186,7 @@ export function buildThreadRrfRequest(params: ThreadRrfParams): EsSearchRequest 
  * BM25 retrievers include phrase boosting for detected curriculum phrases.
  */
 function createLessonRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
@@ -193,10 +194,10 @@ function createLessonRetriever(
   return {
     rrf: {
       retrievers: [
-        createLessonBm25ContentRetriever(text, filterClause, phrases),
-        createLessonElserContentRetriever(text, filterClause),
-        createLessonBm25StructureRetriever(text, filterClause, phrases),
-        createLessonElserStructureRetriever(text, filterClause),
+        createLessonBm25ContentRetriever(query, filterClause, phrases),
+        createLessonElserContentRetriever(query, filterClause),
+        createLessonBm25StructureRetriever(query, filterClause, phrases),
+        createLessonElserStructureRetriever(query, filterClause),
       ],
       rank_window_size: 80,
       rank_constant: 60,
@@ -210,7 +211,7 @@ function createLessonRetriever(
  * BM25 retrievers include phrase boosting for detected curriculum phrases.
  */
 function createUnitRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
@@ -218,10 +219,10 @@ function createUnitRetriever(
   return {
     rrf: {
       retrievers: [
-        createUnitBm25ContentRetriever(text, filterClause, phrases),
-        createUnitElserContentRetriever(text, filterClause),
-        createUnitBm25StructureRetriever(text, filterClause, phrases),
-        createUnitElserStructureRetriever(text, filterClause),
+        createUnitBm25ContentRetriever(query, filterClause, phrases),
+        createUnitElserContentRetriever(query, filterClause),
+        createUnitBm25StructureRetriever(query, filterClause, phrases),
+        createUnitElserStructureRetriever(query, filterClause),
       ],
       rank_window_size: 80,
       rank_constant: 60,
@@ -243,7 +244,7 @@ const SEQUENCE_BM25_FIELDS = [
  * Includes `fuzziness: 'AUTO'` for typo tolerance.
  */
 function createSequenceRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
 ): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -254,7 +255,7 @@ function createSequenceRetriever(
           standard: {
             query: {
               multi_match: {
-                query: text,
+                query,
                 type: 'best_fields',
                 fuzziness: 'AUTO',
                 fields: SEQUENCE_BM25_FIELDS,
@@ -265,7 +266,7 @@ function createSequenceRetriever(
         },
         {
           standard: {
-            query: { semantic: { field: 'sequence_semantic', query: text } },
+            query: { semantic: { field: 'sequence_semantic', query } },
             filter: filterClause,
           },
         },
@@ -276,13 +277,20 @@ function createSequenceRetriever(
   };
 }
 
-function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string): QueryContainer[] {
+function createSequenceFilters(
+  subject?: SearchSubjectSlug,
+  phaseSlug?: string,
+  keyStage?: KeyStage,
+): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (subject) {
     filters.push({ term: { subject_slug: subject } });
   }
   if (phaseSlug) {
     filters.push({ term: { phase_slug: phaseSlug } });
+  }
+  if (keyStage) {
+    filters.push({ term: { key_stages: keyStage } });
   }
   return filters;
 }
@@ -296,7 +304,7 @@ const THREAD_BM25_FIELDS = ['thread_title^2'];
  * Includes `fuzziness: 'AUTO'` for typo tolerance.
  */
 function createThreadRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
 ): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -307,7 +315,7 @@ function createThreadRetriever(
           standard: {
             query: {
               multi_match: {
-                query: text,
+                query,
                 type: 'best_fields',
                 fuzziness: 'AUTO',
                 fields: THREAD_BM25_FIELDS,
@@ -318,7 +326,7 @@ function createThreadRetriever(
         },
         {
           standard: {
-            query: { semantic: { field: 'thread_semantic', query: text } },
+            query: { semantic: { field: 'thread_semantic', query } },
             filter: filterClause,
           },
         },

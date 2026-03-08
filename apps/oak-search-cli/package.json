@@ -40,7 +40,6 @@
     "redis:reset": "docker compose down -v",
     "redis:status": "docker compose ps",
     "cache:reset-ttls": "tsx bin/oaksearch.ts admin cache-reset",
-    "elastic:alias-swap": "tsx bin/oaksearch.ts admin alias-swap",
     "sandbox:ingest": "tsx bin/oaksearch.ts admin sandbox-ingest",
     "zero-hit:purge": "tsx bin/oaksearch.ts observe purge",
     "docs:api:html": "typedoc --options typedoc.json",

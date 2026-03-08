@@ -19,7 +19,7 @@ Create pure function `toolRequiresAuth(toolName: string): boolean` that reads se
 3. **All quality gates must pass**: format, type-check, lint, test, build
 4. **Schema-first architecture**: Security metadata flows from generated descriptors (already in place from Phase 1)
 5. **Pure functions only**: No side effects, no I/O, deterministic
-6. **Follow project rules**: `@.agent/directives/rules.md` and `@.agent/directives/testing-strategy.md`
+6. **Follow project rules**: `@.agent/directives/principles.md` and `@.agent/directives/testing-strategy.md`
 
 ## Starting Point
 

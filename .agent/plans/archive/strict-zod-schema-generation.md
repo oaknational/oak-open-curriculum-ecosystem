@@ -2,7 +2,7 @@
 
 > **Status**: ✅ Complete (2025-12-16)  
 > **Priority**: High (affects type safety across entire codebase)  
-> **Foundation Alignment**: [rules.md](../../directives/rules.md), [schema-first-execution.md](../../directives/schema-first-execution.md), [testing-strategy.md](../../directives/testing-strategy.md)
+> **Foundation Alignment**: [principles.md](../../directives/principles.md), [schema-first-execution.md](../../directives/schema-first-execution.md), [testing-strategy.md](../../directives/testing-strategy.md)
 
 ## Strategic Intent
 
@@ -44,7 +44,7 @@ In `schema-enhancement-404.ts`, we have:
 
 1. If we know the properties, why use `additionalProperties: true`?
 2. `additionalProperties: true` is equivalent to adding `any` to the codebase
-3. Violates rules.md: "No type shortcuts"
+3. Violates principles.md: "No type shortcuts"
 
 ### Issue 3: Zod v3 → v4 Migration Confusion
 
@@ -183,7 +183,7 @@ pnpm test
 
 ### Why `strictObjects: true` + `additionalPropertiesDefaultValue: false`?
 
-Per rules.md "Fail FAST":
+Per principles.md "Fail FAST":
 
 > Fail fast with helpful error messages, never silently. NEVER SWALLOW ERRORS.
 
@@ -191,7 +191,7 @@ Unknown keys being silently ignored is swallowing errors.
 
 ### Why no `additionalProperties: true`?
 
-Per rules.md "No type shortcuts":
+Per principles.md "No type shortcuts":
 
 > Never use `as`, `any`, `!`, or `Record<string, unknown>` [...] they ALL disable the type system
 

@@ -1,8 +1,10 @@
 # Current Plans — Developer Experience
 
-Queued plans ready for next execution.
+Queued executable plans ready for next execution.
 
-_No queued plans currently. Strictness convergence has started and is tracked in `active/`._
+| Phase | Current Plan | Scope | Status |
+|---|---|---|---|
+| C0 | [directory-complexity-enablement.execution.plan.md](./directory-complexity-enablement.execution.plan.md) | Canonical supporting-constraint bundle and staged activation path required before Oak enables `max-files-per-dir` | 🟡 Planning |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

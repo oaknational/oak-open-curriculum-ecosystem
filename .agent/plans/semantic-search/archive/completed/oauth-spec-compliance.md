@@ -333,7 +333,7 @@ Observations addressed in plan update:
 
 ### Directives Review (2026-02-19)
 
-Reviewed against `AGENT.md`, `rules.md`, `testing-strategy.md`,
+Reviewed against `AGENT.md`, `principles.md`, `testing-strategy.md`,
 `schema-first-execution.md`.
 
 Critical finding: TDD ordering. The `testing-strategy.md` directive says

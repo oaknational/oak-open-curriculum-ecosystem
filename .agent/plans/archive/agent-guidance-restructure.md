@@ -4,7 +4,7 @@ Role: Restructure the core guidance documentation to create a cohesive, scannabl
 
 ## Problem Statement
 
-The current `rules.md` file (109 lines) is too long for some agents to read in a single action, which breaks the mandatory reading requirement. However, the repetition of TDD principles throughout the document is intentional pedagogical reinforcement—it creates resonance and helps agents internalize critical practices. Simply condensing for length would sacrifice this essential grounding mechanism.
+The current `principles.md` file (109 lines) is too long for some agents to read in a single action, which breaks the mandatory reading requirement. However, the repetition of TDD principles throughout the document is intentional pedagogical reinforcement—it creates resonance and helps agents internalize critical practices. Simply condensing for length would sacrifice this essential grounding mechanism.
 
 ## Objectives
 
@@ -25,13 +25,13 @@ The current `rules.md` file (109 lines) is too long for some agents to read in a
 
 **Enhancements**:
 
-- Add explicit "MANDATORY RULES" section listing both rules.md and testing-strategy.md
+- Add explicit "MANDATORY RULES" section listing both principles.md and testing-strategy.md
 - Add explicit "MANDATORY PRACTICES" section for development-practice.md, typescript-practice.md
 - Clarify "REFERENCE GUIDANCE" section for curriculum tools, architecture docs
 - Make the Kairos recursion explicit and visible
 - Emphasise that testing-strategy.md is non-negotiable
 
-### 2. rules.md (Core Repository Laws)
+### 2. principles.md (Core Repository Laws)
 
 **Current**: 109 lines  
 **Target**: ~60-65 lines
@@ -64,8 +64,8 @@ The current `rules.md` file (109 lines) is too long for some agents to read in a
 **Enhancements**:
 
 - Add prominent header marking it as MANDATORY RULES DOCUMENT
-- Add ⚡ checkpoints to key sections for consistency with rules.md
-- Clarify in AGENT.md that this is equal in importance to rules.md
+- Add ⚡ checkpoints to key sections for consistency with principles.md
+- Clarify in AGENT.md that this is equal in importance to principles.md
 - Keep comprehensive examples and anti-patterns (these are valuable)
 
 ### 4. GO.md (Kairos Recursion Anchor)
@@ -84,7 +84,7 @@ The current `rules.md` file (109 lines) is too long for some agents to read in a
   - During refactoring: Is the test proving behaviour stays correct?
   - During quality checking: TDD IS the quality gate
   - During interface design: The test is your first client
-- **Mandatory Rules**: Return and re-read links to rules.md and testing-strategy.md
+- **Mandatory Rules**: Return and re-read links to principles.md and testing-strategy.md
 - **Remember**: British spelling, substrate-agnostic language, Chōra/Chōrai conventions
 - **The Recursion**: Explicit loop back to AGENT.md
 
@@ -95,7 +95,7 @@ Session Start
     ↓
 AGENT.md (Entry Point)
     ├─→ MANDATORY RULES (Read Now)
-    │   ├─ rules.md (Core repository laws)
+    │   ├─ principles.md (Core repository laws)
     │   └─ testing-strategy.md (Testing is non-negotiable)
     │
     ├─→ MANDATORY PRACTICES (Read Now)
@@ -121,7 +121,7 @@ AGENT.md (Entry Point)
 
 Used consistently across all documents to create visual and cognitive speed bumps:
 
-- **rules.md**: ⚡ TDD CHECKPOINT, ⚡ TYPE CHECKPOINT
+- **principles.md**: ⚡ TDD CHECKPOINT, ⚡ TYPE CHECKPOINT
 - **GO.md**: ⚡ TDD checkpoints with different facets
 - **testing-strategy.md**: ⚡ checkpoints at key sections
 
@@ -153,7 +153,7 @@ The Kairos recursion creates a negative feedback loop:
 - Make Kairos recursion explicit
 - Test readability and scannability
 
-### Phase 2: Restructure rules.md
+### Phase 2: Restructure principles.md
 
 - Condense to ~60-65 lines through strategic extraction
 - Add opening mantra and checkpoints
@@ -164,7 +164,7 @@ The Kairos recursion creates a negative feedback loop:
 ### Phase 3: Enhance AGENT.md
 
 - Add explicit MANDATORY RULES section
-- Elevate testing-strategy.md to equal status with rules.md
+- Elevate testing-strategy.md to equal status with principles.md
 - Clarify MANDATORY PRACTICES vs REFERENCE GUIDANCE
 - Make Kairos recursion visible and explicit
 
@@ -183,7 +183,7 @@ The Kairos recursion creates a negative feedback loop:
 
 ## Success Criteria
 
-- ✅ rules.md readable in single agent action (~60-65 lines)
+- ✅ principles.md readable in single agent action (~60-65 lines)
 - ✅ TDD resonance maintained through varied repetition and checkpoints
 - ✅ testing-strategy.md clearly marked as mandatory rules
 - ✅ Kairos recursion (AGENT.md ↔ GO.md) explicit and functional
@@ -196,7 +196,7 @@ The Kairos recursion creates a negative feedback loop:
 
 ## Risks & Mitigations
 
-**Risk**: Condensing rules.md loses critical information  
+**Risk**: Condensing principles.md loses critical information  
 **Mitigation**: Extract to testing-strategy.md (elevated to mandatory) and GO.md (periodic reading), not to optional guidance
 
 **Risk**: TDD resonance weakened by reducing repetition  
@@ -205,8 +205,8 @@ The Kairos recursion creates a negative feedback loop:
 **Risk**: Kairos recursion not followed by agents  
 **Mitigation**: Make it explicit and visible in both AGENT.md and GO.md; use clear cadence ("every 6th task")
 
-**Risk**: Testing-strategy.md becomes optional by moving from rules.md  
-**Mitigation**: Explicitly list it as MANDATORY RULES in AGENT.md alongside rules.md
+**Risk**: Testing-strategy.md becomes optional by moving from principles.md  
+**Mitigation**: Explicitly list it as MANDATORY RULES in AGENT.md alongside principles.md
 
 ## Related Work
 

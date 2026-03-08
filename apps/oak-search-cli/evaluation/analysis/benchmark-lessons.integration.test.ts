@@ -156,7 +156,7 @@ describe('runQuery', () => {
       );
 
       expect(mockSearch).toHaveBeenCalledWith({
-        text: 'quadratic equations',
+        query: 'quadratic equations',
         subject: 'maths',
         keyStage: undefined,
         size: 10,
@@ -179,7 +179,7 @@ describe('runQuery', () => {
       );
 
       expect(mockSearch).toHaveBeenCalledWith({
-        text: 'completing the square higher',
+        query: 'completing the square higher',
         subject: 'maths',
         keyStage: 'ks4',
         size: 10,

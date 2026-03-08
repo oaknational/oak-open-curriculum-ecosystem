@@ -1,7 +1,7 @@
 /**
  * Validation logic for explore-topic tool arguments.
  *
- * Validates required text field and optional subject/keyStage filters.
+ * Validates required query field and optional subject/keyStage filters.
  */
 
 import { z } from 'zod';
@@ -15,10 +15,10 @@ import type { ExploreArgs } from './types.js';
 
 const ExploreObjectSchema = z
   .object({
-    text: z
-      .string({ error: 'explore-topic requires a non-empty text field' })
+    query: z
+      .string({ error: 'explore-topic requires a non-empty query' })
       .trim()
-      .min(1, { message: 'explore-topic requires a non-empty text field' }),
+      .min(1, { message: 'explore-topic requires a non-empty query' }),
     subject: z.string().optional(),
     keyStage: z.string().optional(),
   })
@@ -56,7 +56,7 @@ export function validateExploreArgs(
   input: unknown,
 ): { ok: true; value: ExploreArgs } | { ok: false; message: string } {
   if (typeof input !== 'object' || input === null) {
-    return { ok: false, message: 'explore-topic expects an object input with a text field' };
+    return { ok: false, message: 'explore-topic expects an object input with a query field' };
   }
 
   const parsed = ExploreObjectSchema.safeParse(input);
@@ -73,5 +73,5 @@ export function validateExploreArgs(
     return sub;
   }
 
-  return { ok: true, value: { text: parsed.data.text, subject: sub.value, keyStage: ks.value } };
+  return { ok: true, value: { query: parsed.data.query, subject: sub.value, keyStage: ks.value } };
 }

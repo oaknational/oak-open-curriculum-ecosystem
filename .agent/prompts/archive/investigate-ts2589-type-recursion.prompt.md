@@ -16,7 +16,7 @@ server.registerTool(tool.name, config, async (params: unknown) => { ... });
 
 Read the foundation documents first:
 
-- @.agent/directives/rules.md
+- @.agent/directives/principles.md
 - @.agent/directives/schema-first-execution.md
 - @.agent/directives/testing-strategy.md
 
@@ -76,7 +76,7 @@ const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inpu
 
 ## Constraints from Foundation Docs
 
-From `rules.md`:
+From `principles.md`:
 
 - **No type shortcuts**: We cannot use `as`, `any`, `!` to work around this
 - **Preserve type information**: We cannot widen types to escape the issue

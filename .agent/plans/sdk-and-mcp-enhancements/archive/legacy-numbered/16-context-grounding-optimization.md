@@ -16,7 +16,7 @@
 
 Before each phase of work, re-read and re-commit to:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 

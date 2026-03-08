@@ -54,8 +54,8 @@ export function isSearchSdkScope(value: string): value is SearchSdkScope {
  * Raw input arrives as strings and is normalised via type guards.
  */
 export interface SearchSdkArgs {
-  /** The search query text (required, non-empty). */
-  readonly text: string;
+  /** The search query (required, non-empty). */
+  readonly query: string;
 
   /** Which search scope to query (required). */
   readonly scope: SearchSdkScope;

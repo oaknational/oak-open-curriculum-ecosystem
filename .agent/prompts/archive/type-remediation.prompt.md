@@ -32,7 +32,7 @@ This prompt guides fixing those violations properly.
 
 ## The Cardinal Rules (Zero Exceptions)
 
-From `rules.md`:
+From `principles.md`:
 
 > "Never use `as`, `any`, `!`, or `Record<string, unknown>` — they ALL disable the type system"
 
@@ -50,7 +50,7 @@ If you find yourself thinking "in this case it's justified" — STOP. That is ex
 
 Before ANY work:
 
-1. **[rules.md](../directives/rules.md)** — Especially "No type shortcuts" and "NEVER disable checks"
+1. **[principles.md](../directives/principles.md)** — Especially "No type shortcuts" and "NEVER disable checks"
 2. **[testing-strategy.md](../directives/testing-strategy.md)** — TDD at all levels
 3. **[schema-first-execution.md](../directives/schema-first-execution.md)** — Types flow from source
 
@@ -183,7 +183,7 @@ Wait for ALL gates to complete. Analyse in aggregate.
 |-----------|--------------|
 | 0 uses of `as` in format-optimized-result.ts | Manual inspection |
 | 0 `eslint-disable` for type rules | `grep -r "eslint-disable.*type" src/` returns 0 |
-| 0 `Record<string, unknown>` (except rules.md) | `grep -r "Record<string, unknown>"` returns 0 |
+| 0 `Record<string, unknown>` (except principles.md) | `grep -r "Record<string, unknown>"` returns 0 |
 | Tests compile without assertions | Code review |
 | All 11 quality gates pass | Full gate run |
 | ADR documented | File exists at specified path |
@@ -209,7 +209,7 @@ Document:
 ## First Steps for Fresh Chat
 
 1. Read this prompt fully
-2. Read `rules.md` — internalise "NEVER disable checks"
+2. Read `principles.md` — internalise "NEVER disable checks"
 3. Read current `format-optimized-result.ts`
 4. Identify each type assertion and eslint-disable
 5. For EACH violation, ask: "How can I restructure to avoid this?"

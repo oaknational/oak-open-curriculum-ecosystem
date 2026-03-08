@@ -107,7 +107,7 @@ function extractRecentEvents(hits: readonly { _source?: unknown }[]): ZeroHitEve
     events.push({
       timestamp: new Date(hit._source['@timestamp']).getTime(),
       scope: hit._source.search_scope,
-      text: hit._source.text,
+      query: hit._source.query,
       filters: hit._source.filters ?? {},
       indexVersion: hit._source.index_version,
     });
@@ -119,7 +119,7 @@ function extractRecentEvents(hits: readonly { _source?: unknown }[]): ZeroHitEve
 interface ZeroHitDoc {
   readonly '@timestamp': string;
   readonly search_scope: ZeroHitScope;
-  readonly text: string;
+  readonly query: string;
   readonly filters?: Record<string, string>;
   readonly index_version: string;
 }
@@ -135,7 +135,7 @@ function isZeroHitDoc(value: unknown): value is ZeroHitDoc {
     return false;
   }
   return (
-    '@timestamp' in value && 'search_scope' in value && 'text' in value && 'index_version' in value
+    '@timestamp' in value && 'search_scope' in value && 'query' in value && 'index_version' in value
   );
 }
 

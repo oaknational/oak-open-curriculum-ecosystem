@@ -15,7 +15,7 @@ describe('zero-hit store', () => {
     for (let i = 0; i < 205; i += 1) {
       recordZeroHitEvent({
         scope: i % 2 === 0 ? 'lessons' : 'units',
-        text: `query-${i}`,
+        query: `query-${i}`,
         filters: { subject: 'maths' },
         indexVersion: 'v-test',
       });
@@ -23,21 +23,21 @@ describe('zero-hit store', () => {
 
     const recent = getZeroHitRecent(250);
     expect(recent).toHaveLength(200);
-    expect(recent[0].text).toBe('query-204');
-    expect(recent[recent.length - 1]?.text).toBe('query-5');
+    expect(recent[0].query).toBe('query-204');
+    expect(recent[recent.length - 1]?.query).toBe('query-5');
   });
 
   it('returns summary grouped by scope', () => {
     recordZeroHitEvent({
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       filters: {},
       indexVersion: 'v-1',
       timestamp: 100,
     });
     recordZeroHitEvent({
       scope: 'units',
-      text: 'fractions',
+      query: 'fractions',
       filters: {},
       indexVersion: 'v-2',
       timestamp: 200,

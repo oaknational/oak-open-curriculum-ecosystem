@@ -35,7 +35,7 @@ Use this when:
 - You need to understand curriculum structure before searching
 
 Do NOT use for:
-- Searching for specific content (use 'search' with a text query)
+- Searching for specific content (use 'search' with a query)
 - Getting full lesson details (use 'fetch')
 - Understanding the domain model (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 

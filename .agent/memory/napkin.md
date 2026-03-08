@@ -1,377 +1,322 @@
-## Session 2026-03-06 — Asset Download Proxy Review & Remediation
+## Session 2026-03-08 — Stage/Promote Split
 
 ### What Was Done
 
-- Thorough adversarial review of asset-download-proxy plan using 7 agents (3 codebase explorers + security, wilma, fred, test-reviewer)
-- Implemented all 18 remediations across 6 phases (A: DI fixes, B: security hardening, C: streaming resilience, D: schema compliance, E: test quality, F: options object refactor)
-- Key changes: `fetch`/`clock`/`oakApiBaseUrl` injected into `AssetDownloadRouteDeps` (ADR-078), HMAC key separation via `deriveSigningSecret()`, JSON canonical form for HMAC payload, `AbortSignal.timeout(30_000)` + `AbortSignal.any()` for upstream timeout, upstream errors mapped to 502, `X-Content-Type-Options: nosniff`, `HandleToolOptions` interface replacing 8 positional params
-- Second round of 6 in-repo specialist reviews (`.claude/agents/`): security (LOW RISK), wilma (COMPLIANT), fred (COMPLIANT), ADR reviewer (gaps fixed), test reviewer (no real duplicate), code reviewer (APPROVED)
-- Wrote ADR-126: HMAC-Signed Asset Download Proxy — full security analysis, threat model, boundary design
-- Moved `deriveSigningSecret` from app layer to SDK layer (code reviewer finding — crypto primitives belong with HMAC functions in download-token.ts)
-- Added 3 Clerk skip path tests for `/assets/download/` bypass
-- Fixed stale TSDoc, ADR cross-references, double JSDoc comment block
-- All quality gates pass: build 14/14, type-check 24/24, lint 0 errors, 715 tests
-- Archived plan to `archive/completed/`
+- Added `stage()` and `promote(version)` to `IndexLifecycleService` (ADR-130),
+  splitting the existing `versionedIngest` flow into two independent phases:
+  stage (create, ingest, verify) and promote (swap aliases, write metadata,
+  cleanup).
+- `versionedIngest` remains as the all-in-one convenience.
+- Extracted `promote` into `lifecycle-promote.ts` (lint max-lines/complexity).
+- Extracted shared test helpers into `lifecycle-test-helpers.ts` and split the
+  integration test file into two (main + stage/promote).
+- Added `buildPromoteMeta` pure function + unit tests.
+- Registered `admin stage` and `admin promote --version <v>` CLI commands.
+- Updated ADR-130 and SDK README to document the new operations.
+- 166 tests across 15 files, all quality gates green.
 
 ### Patterns to Remember
 
-- `AbortSignal.any()` composes multiple abort signals (client disconnect + upstream timeout) — correct pattern for streaming proxies
-- HMAC key separation: derive signing secret via `HMAC-SHA256(apiKey, label)` rather than using API key directly — if upstream logs capture Bearer header, signing secret remains safe
-- Crypto primitives (`deriveSigningSecret`, `createDownloadSignature`, `validateDownloadSignature`) belong in the SDK layer alongside each other, not scattered across app and SDK
-- `z.string().url()` is deprecated in Zod — use `z.url()` instead
-- When multiple review agents flag the same boundary issue (Fred + code-reviewer both flagged `deriveSigningSecret` placement), it's a strong signal — fix it
+- When extracting a function to satisfy lint max-lines, decompose it into
+  smaller helpers in the new file rather than moving the monolith — the
+  complexity/statements limits will still fire otherwise.
+- Shared test fixtures in lifecycle tests now live in `lifecycle-test-helpers.ts`
+  to avoid duplication across the split test files.
 
-### Reviewer Invocations
-
-- Round 1 (generic agents): security-reviewer, architecture-reviewer-wilma, architecture-reviewer-fred, test-reviewer, 3 × Explore agents
-- Round 2 (in-repo agents): security-reviewer, architecture-reviewer-wilma, architecture-reviewer-fred, code-reviewer, test-reviewer, docs-adr-reviewer
-
----
-
-## Session 2026-03-06 — Commit and Consolidate Docs
+## Session 2026-03-08 — Phase 8d Completion and Commit
 
 ### What Was Done
 
-- Committed all changes from the unified sequenceSlug derivation work (90 files, 2125 insertions, 430 deletions). Pre-commit quality gates all passed.
-- Ran full consolidate-docs workflow:
-  - Archived completed `sitemap-driven-canonical-urls.plan.md` to `archive/completed/`
-  - Updated plan statuses and cross-references (4 plans updated, 2 stale links fixed)
-  - Graduated "cross-package function moves" troubleshooting entry from napkin to `docs/operations/troubleshooting.md`
-  - Slimmed MCP Apps section in `distilled.md` (195 → 186 lines, freed headroom)
-  - Checked practice box (empty), experience files (technical content already in permanent docs), code patterns (no new patterns meet barrier)
-  - Napkin at 317 lines (no rotation needed)
-
-### Fitness Ceiling Status
-
-| File | Lines | Ceiling | Status |
-|------|-------|---------|--------|
-| `CONTRIBUTING.md` | 405 | 400 | OVER (+5) |
-| `practice-lineage.md` | 321 | 320 | OVER (+1) |
-| `practice-bootstrap.md` | 430 | 400 | OVER (+30) |
-| `testing-strategy.md` | 393 | 400 | WARNING |
-| `distilled.md` | 186 | 200 | OK (was 195) |
+- Completed the max-lines extraction (Phase 8d): `lifecycle-rollback.ts` created
+  in a prior session, commit was pending due to pre-commit hook timeout.
+- Fixed commitlint failure: `ADR-130` in subject triggered sentence-case check;
+  rewrote subject line to lowercase.
+- Committed `bf23cefc` (31 files, +1496/-482) — all quality gates pass.
+- Updated execution plan: marked Phase 8d done, revised "What to do next" for
+  Phase 8b (final reviewer pass).
+- Ran consolidation pass: no documentation drift, no patterns meeting extraction
+  barrier, no ephemeral content needing promotion.
 
 ### Patterns to Remember
 
-- When archiving plans, run `rg` sweep for all cross-references immediately — Cursor plan files had stale paths
-- Consolidation is most efficient when sub-agents gather inventory (plans, fitness, experience, practice-box) in parallel at the start
+- Commitlint's `subject-case` rule rejects uppercase acronyms like `ADR-130` in
+  the subject line. Use lowercase descriptions instead: "complete blue/green
+  lifecycle" not "ADR-130 Phases 3-8d".
+- When pre-commit hooks produce large output (turbo replays all cached logs),
+  redirect to a file to see the actual error at the end.
 
----
-
-## Session 2026-03-06 — Unified sequenceSlug Derivation (Phases 4 + 6)
+## Session 2026-03-08 — Blue/Green Consolidation Pass
 
 ### What Was Done
 
-- **Phase 4**: Moved `deriveSubjectSlugFromSequence` and `derivePhaseSlugFromSequence` from search-cli `slug-derivation.ts` into curriculum-sdk `sequence-slug-derivation.ts`. Updated all callers in search-cli to import from SDK. Fixed 5 inline slug derivation bugs (compound subjects in `hybrid-data-source.ts`, `bulk-ingestion.ts`, `bulk-rollup-builder.ts`, and 2 diagnostic scripts). Deleted local `slug-derivation.ts` and test file.
-- **Phase 6**: Removed stale `thread_url` from 6 widget fixture/test locations. Cleaned up duplicate test. Updated widget-rendering.md docs. Ran full quality gate sweep (14/14 build, 24/24 type-check, 27/27 lint, 24/24 test).
-- **Additional fixes**: Resolved pre-existing `no-useless-assignment` lint error in `aggregated-fetch.ts`, reduced `extractContextFromResponse` complexity in `response-augmentation.ts` with `shouldExtract` helper, fixed TSDoc escaping.
+- Ran `jc-consolidate-docs` after the ADR-130 blue/green implementation
+  (WS0–WS4) and specialist reviewer pass completed.
+- Verified ADR-130, execution plan, and all cross-references are current.
+- Confirmed no blue-green content stranded in ephemeral locations (napkin,
+  auto-memory, platform plans) — the execution plan is the standalone
+  session entry point.
+- No code patterns met the extraction barrier.
+- Practice inbox empty; fitness ceiling overages unchanged from prior pass
+  (CONTRIBUTING.md +9, practice-lineage.md +1, practice-bootstrap.md +30).
 
 ### Patterns to Remember
 
-- After moving functions between packages, must rebuild the source package (`pnpm --filter <pkg> build`) before downstream tests will see the new exports via the dist output
-- `let x: T = defaultValue` followed by `try { x = compute(); } catch { x = defaultValue; }` triggers `no-useless-assignment` — use `let x: T;` without initial assignment instead
-- When removing a field from test fixtures, check ALL Pick types that reference it — TypeScript won't error if an optional field is removed from a Pick, but it will leave stale type surface
-- Diagnostic scripts in `scripts/` folder are easy to miss during consolidation sweeps — always search them too
-- `extractContextFromResponse` has a cyclomatic complexity ceiling of 8 — extracting a `shouldExtract(targetType, contentType)` helper reduces branching
+- The execution plan's "Implementation Notes" section is the right home for
+  hard-won session lessons that are execution instructions rather than
+  permanent documentation. They'll be useful for the next session but don't
+  belong in ADRs or distilled.md.
+- When a plan is the standalone entry point for a future session, verify it
+  during consolidation even if no new work was done in this session — drift
+  accumulates between sessions.
 
-### Reviewer Invocations
-
-- Phase 4: code-reviewer + test-reviewer + architecture-reviewer-barney
-- Phase 6: code-reviewer + architecture-reviewer-betty (final)
-
----
-
-## Session 2026-03-06 — Canonical URL Generation Fixes (Phases 1-5)
+## Session 2026-03-07 — Consolidate Docs Reconciliation Pass
 
 ### What Was Done
 
-- **Phase 1**: Fixed SDK codegen `urlForSequence` and `urlForUnit` to use `/teachers/curriculum/` instead of `/teachers/programmes/`. Unit context changed from `{ subjectSlug, phaseSlug }` to `{ sequenceSlug }`. New generator test file with null-guard assertions.
-- **Phase 2**: Updated response augmentation `extractUnitContext` to derive `sequenceSlug` from `subjectSlug + '-' + phaseSlug`. Updated `UnitContext` type. All 639 curriculum-sdk tests pass.
-- **Phase 3**: Consolidated search-CLI onto SDK URL helpers. `canonical-url-generator.ts` now delegates to SDK. Removed broken `UNIT_BASE_URL` from `bulk-rollup-builder.ts`. Made `thread_url` optional in schema. Threads no longer generate dead URLs.
-- **Phase 4**: Enhanced sitemap scanner to capture `/curriculum/` URLs. Documented as CI validation tooling, not build dependency.
-- **Phase 5**: All quality gates green (build 14/14, type-check 24/24, all tests pass). Architecture and code reviews completed.
-
-### Architecture Review Findings (Betty + Code Reviewer)
-
-- DRY chain `SDK codegen → curriculum-sdk → search-CLI` is correct dependency direction
-- search-CLI importing directly from `@oaknational/sdk-codegen/api-schema` is a minor boundary concern (Betty suggests routing through curriculum-sdk facade) — follow-up item
-- `sequenceSlug` derivation (`subjectSlug + '-' + phaseSlug`) duplicated in response-augmentation.ts and canonical-url-generator.ts — should be centralised in a shared utility in a follow-up
-- `thread_url` soft-deprecation (optional, not removed) is correct for live ES index backwards compatibility
-- Pre-existing: bare `catch {}` in `aggregated-fetch.ts:146` silently swallows canonical URL errors — should bind error variable and log
+- Re-ran `jc-consolidate-docs` after the graph-planning surfaces stabilised and
+  treated the newly added graph plans as canonical.
+- Aligned `.agent/plans/high-level-plan.md`,
+  `.agent/plans/semantic-search/README.md`,
+  `.agent/plans/semantic-search/roadmap.md`, and
+  `.agent/prompts/semantic-search/semantic-search.prompt.md` to the settled
+  graph hierarchy:
+  `kg-alignment-audit.execution.plan.md` active,
+  `kg-integration-quick-wins.plan.md` queued as the parent follow-on plan.
+- Brought milestone naming and quality-gate order back into sync across the
+  touched planning surfaces, including restoring `pnpm subagents:check` to the
+  high-level plan's gate list.
+- Fixed the parent graph quick-win plan so its dependency and Phase 2 text now
+  reflect the promoted alignment-audit child plan instead of pretending that
+  audit work is still only queued in the parent.
+- Removed absolute local-machine paths from
+  `.agent/plans/semantic-search/active/kg-alignment-audit.execution.plan.md`
+  by replacing them with repo URLs.
+- Corrected the semantic-search prompt's stale unit NDCG figure and removed a
+  hard-coded lesson benchmark sentence in favour of the Ground Truth Protocol
+  and roadmap as the metrics authority.
 
 ### Patterns to Remember
 
-- TSDoc braces (`{sequenceSlug}`) must be escaped as `\{sequenceSlug\}` in generated output to avoid tsdoc/syntax lint warnings
-- When testing code generators, regex-matched assertions MUST have `expect(match).not.toBeNull()` guards to prevent silent passes
-- Turborepo cache can be stale after cross-package changes — re-run affected workspace tests directly when the full `pnpm test` shows cached failures
-- `as string` assertions violate project rules even when "obviously safe" — use null-guard + throw instead
+- When a queued parent plan promotes one slice into `active/`, update all three
+  layers together: frontmatter todo status, body phase descriptions, and the
+  collection navigation surfaces.
+- For cross-repo references inside committed docs, prefer stable URLs or
+  relative repo notes over machine-specific absolute paths.
+- If benchmark figures appear in more than one planning surface, designate one
+  authority doc and make the others point to it instead of restating numbers.
 
-### Reviewer Invocations
-
-- Phase 2: code-reviewer + test-reviewer
-- Phase 3: code-reviewer + test-reviewer
-- Phase 5: architecture-reviewer-betty + code-reviewer (final)
-
-### Open Follow-ups
-
-- Route search-CLI SDK imports through curriculum-sdk facade (boundary hygiene)
-- Centralise `deriveSequenceSlug(subjectSlug, phaseSlug)` as a shared SDK utility
-- Upstream API wishlist: expose `sequenceSlug` directly for exam-board sequences
-- Add debug-level logging to `aggregated-fetch.ts` catch block for canonical URL errors
-- Run `scan-teacher-sitemaps.mjs` in CI as periodic URL pattern drift check
-
----
-
-## Session 2026-03-05 — Canonical Rules Migration and Practice Core Platform Agnosticism
+## Session 2026-03-07 — High-Level Plan Reprioritisation
 
 ### What Was Done
 
-- Created `.agent/rules/` directory with 16 canonical operational rule files — short imperative reinforcements of policy directives.
-- Rewrote all 18 `.cursor/rules/*.mdc` files as thin wrappers pointing at `.agent/rules/*.md` or `.agent/skills/*/SKILL.md`.
-- Rewrote all 6 `.claude/rules/*.md` files as thin wrappers pointing at canonical rules.
-- Updated practice-core trinity to properly encode platform-agnostic artefact model:
-  - `practice-bootstrap.md`: Added Artefact Model table, canonical rule format, trigger wrapper formats, removed Cursor-specific content.
-  - `practice-lineage.md`: Updated §Always-Applied Rules and §Growing a Practice to be platform-agnostic.
-  - `practice.md`: Updated Tooling section to name all four platforms.
-- Moved `.agent/directives/lint-after-edit.md` content into `.agent/rules/lint-after-edit.md` (operational, not policy).
-- Moved `.agent/directives/semantic-search-architecture.md` to `docs/agent-guidance/` (domain-specific, not a directive). Updated 7 cross-references.
-- Updated `artefact-inventory.md` to include `.agent/rules/` as Layer 1 canonical content.
-- Updated `validate-portability.mjs` to check triggers reference `.agent/rules/` or `.agent/skills/` (not directives directly).
-- Portability check passes: 16 canonical rules, 18 Cursor triggers, 6 Claude rules.
+- Updated `.agent/plans/high-level-plan.md` with an `Immediate Next Intentions`
+  section reflecting the current user-priority sequence:
+  snagging/deploy, post-deploy bulk-data re-download and reindex validation,
+  MCP Apps migration work, then an ontology quick win.
+- Tightened step 4 so the high-level plan points to promoting a quick win from
+  `oak-ontology-graph-opportunities.strategy.md` into a dedicated execution
+  plan, rather than treating the strategy note itself as the executable artefact.
+- Updated `.agent/plans/semantic-search/oak-ontology-graph-opportunities.strategy.md`
+  so the first quick-win framing explicitly includes provisioning a separate
+  Neo4j instance for this repo, while preserving the alignment audit as the key
+  architectural precursor.
+- Updated
+  `.agent/plans/semantic-search/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+  so it now describes a Neo4j export/deployment path rather than implying this
+  workstream already has a usable shared graph instance.
 
 ### Patterns to Remember
 
-- **Three-layer rules model**: Directives (policy) → Canonical rules (operational reinforcement) → Platform triggers (thin activation wrappers). No double indirection.
-- **Boundary: rules vs skills**: Rules are short imperatives ("do this every time"). Skills are procedural workflows ("here's how"). Wrappers point at one or the other, never both.
-- **Write tool cache expiry**: When batch-rewriting files, the Write tool's "file has been read" cache can expire between parallel reads and writes. Use bash `cat > file << 'ENDFILE'` as a reliable alternative for bulk file creation.
-- **Directives are policy, not operations**: `.agent/directives/` should contain only authoritative policy documents. Operational guidance (lint-after-edit) belongs in `.agent/rules/`. Domain-specific architecture (semantic-search-architecture) belongs in `docs/agent-guidance/`.
+- If a strategic index points at near-term work from a `*.strategy.md` note,
+  phrase it as promotion into a dedicated execution plan to avoid plan-type
+  drift.
+- For ontology/graph work, distinguish clearly between "the ontology project has
+  a Neo4j path" and "this repo has access to a usable experiment environment".
+- When introducing a delivery prerequisite, keep it separate from the main
+  architectural precursor so sequencing logic stays legible.
 
-### Mistakes Made
-
-- Attempted to use Write tool on files whose Read cache had expired — failed on 8 files. Switched to bash heredoc approach.
-- Initially conflated "Rules" with "Directives" in the Artefact Model table, implying directives = rule policies. User correctly identified that directives are the broader policy category.
-
----
-
-## Session 2026-03-05 — MCP App Skills and Roadmap Hygiene
+## Session 2026-03-07 — Napkin Distillation
 
 ### What Was Done
 
-- Created 4 Oak-specific MCP App skill variants in `.agent/skills/`: `mcp-create-app`, `mcp-migrate-oai`, `mcp-add-ui`, `mcp-convert-web`.
-- Created Cursor and Codex platform adapters for each (12 new files total). Portability check passes at 16 skills.
-- Updated roadmap Non-Goals with item 6 (stdio server explicitly out of scope).
-- Updated Domain C "Deployment mode assumption" with explicit app scope note.
-- Assessed Practice Core platform agnosticism (see findings below).
-- Assessed `mcp-ui` library (see findings below).
+- Archived the outgoing napkin to `.agent/memory/archive/napkin-2026-03-07.md` after the consolidation pass.
+- Refined `distilled.md` with two durable reminders: rebuild the source package after cross-package moves, and sweep the live napkin when plan paths move.
+- Reset the working napkin for subsequent sessions.
 
-### Key Findings
+### Current State
 
-- **Practice Core**: Philosophy/structure layers are properly platform-agnostic. However, `practice-bootstrap.md` leaks Cursor-specific details (`.mdc` frontmatter, `alwaysApply: true`, `@` prefix syntax, Cursor YAML agent definitions) without a "these are examples; adapt to your platform" framing. `practice.md` line 66 also mentions `.mdc` specifically. Fix: add a platform-examples preamble to `practice-bootstrap.md`.
-- **`mcp-ui` library** (`MCP-UI-Org/mcp-ui`): pioneered MCP Apps pattern; influenced the official spec. For Oak (server-only): `@mcp-ui/server` (`createUIResource`) is redundant — `ext-apps/server` is the canonical SDK. `@mcp-ui/client` is for host renderers (not Oak's use case). Worth monitoring for C3 widget migration patterns (async `connect()`, `ontoolresult` patterns) but should NOT be added as a dependency.
-- **ext-apps skills inventory**: four upstream skills — `create-mcp-app`, `migrate-oai-app`, `add-app-to-server`, `convert-web-app`. All four now have Oak-specific canonical skills.
-- **Portability check**: 16 canonical skills (previously 12), 10 commands, 36 command adapters, all passing.
+- Practice inbox: empty (`.gitkeep` only).
+- No additional durable content was found in Claude-side memory during this rotation.
+- Remaining fitness overages to watch: `CONTRIBUTING.md` (+9), `practice-lineage.md` (+1), `practice-bootstrap.md` (+30).
 
-### Open Follow-ups
-
-- `practice-bootstrap.md` platform-agnosticism fix: add preamble "Examples use Cursor syntax; adapt to your platform" before the Cursor-specific sections.
-- Fitness signals still above ceiling (non-blocking): `CONTRIBUTING.md` (405/400), `practice-lineage.md` (321/320).
-
-## Session 2026-03-05 — MCP Apps Roadmap Deep Review
+## Session 2026-03-07 — Consolidate Docs Follow-Through
 
 ### What Was Done
 
-- Reviewed `mcp-apps-standard-migration.plan.md` (active, since promoted to roadmap by other agent).
-- Deep-reviewed `roadmap.md` after other agent incorporated initial feedback.
-- Read `mcp-apps-support.research.md` — already answers both Domain A validation questions.
-- Read `@modelcontextprotocol/ext-apps/server` type declarations — v1.1.2 installed across all
-  workspaces. `registerAppTool`/`registerAppResource`/`getUiCapability`/`RESOURCE_MIME_TYPE` are
-  the canonical migration vehicle for Domain C items C4/C5/C6.
-- Rewrote `roadmap.md` to template compliance: Status, Execution Order, Phase Details,
-  Documentation Sync, Gate-to-Domain mapping, Related Documents. Trimmed 20-item exit criteria
-  to 6 phase-level conditions. Removed 23-URL source list (superseded by research artefact).
-
-### Key Findings
-
-- Domain A is complete — `chatgpt-mcp-acceptance-validation` and `domain-a-source-refresh` now
-  marked done in frontmatter. Domain C items C1/C2/C5 are unblocked.
-- `_meta.ui.domain` only required if widget makes direct cross-origin `fetch()` from iframe.
-  If all data flows through the MCP bridge, omit it — no host-specific derivation needed.
-- `reframing-adr` added as the first concrete pending deliverable (blocks Domain C).
-- Archived `auth-safety-correction.plan.md` (call-time deny-by-default) correctly superseded
-  by C8 (startup fail-fast invariant). User confirmed archived plan was overkill.
-
-### Open Signals
-
-- `CONTRIBUTING.md` at 405/400 (non-blocking, third session in a row).
-- `practice-lineage.md` at 321/320 (non-blocking, carried).
-- `distilled.md` ESM bullet graduated to permanent docs; now 195/200.
-
-## Session 2026-03-05 — Distillation Rotation
-
-### What Was Done
-- Ran `jc-consolidate-docs` workflow across plans, prompts, memory, and practice-core.
-- Rotated napkin at 816 lines to archive: `.agent/memory/archive/napkin-2026-03-05.md`.
-- Carried forward new high-signal operational patterns into `.agent/memory/distilled.md`.
-- Verified practice-box inbox is clear (`.agent/practice-core/incoming/` contains only `.gitkeep`).
+- Ran the `jc-consolidate-docs` workflow against this session's live planning
+  surfaces.
+- Fixed top-level collection status drift in `.agent/plans/README.md` so
+  agentic-engineering, developer-experience, and security-and-privacy no longer
+  present as merely planned.
+- Removed the accidental Milestone 2 blocker dependency from the queued
+  semantic-search execution plans while keeping the real dependency on the
+  active bulk-metadata stream explicit.
+- Moved the superseded semantic-search sessions 1-5 log into
+  `archive/completed/`, updated the collection README to point at the committed
+  path, and fixed the remaining stale historical path in that record.
+- Trimmed stale content from `distilled.md`: updated MCP tool counts from
+  `23 + 7` to `23 + 8` and removed a stale-link-sweep reminder now codified in
+  `.agent/commands/consolidate-docs.md`.
 
 ### Patterns to Remember
-- After moving or archiving plan files, run repo-wide reference sweeps to remove stale links immediately.
-- For fail-fast security work, enforce invariants at startup boundaries and terminate on invalid metadata with actionable remediation.
-- Keep E2E assertions focused on system invariants; keep adapter/stub semantic proofs in SDK unit/integration tests.
 
-### Open Follow-ups
-- Fitness signals still above ceiling (non-blocking): `CONTRIBUTING.md` (405/400), `practice-lineage.md` (321/320).
+- Queue numbering (`P0`, `P1`, `P2`) belongs in navigation surfaces only unless
+  the plan bodies use the exact same scheme; otherwise prefer plan names inside
+  the plan text.
+- Historical logs that stay live outside `archive/` need at least one README
+  link, or they silently fall out of the discoverability chain.
+- During consolidation, stale knowledge should be removed from `distilled.md`
+  once the same guidance exists in a canonical command, ADR, README, or docs
+  page.
 
-## Session 2026-03-05 — Security Alert Triage
-
-### Context
-- Reviewed Dependabot (22 open) + CodeQL (52 open) alerts for `oaknational/oak-open-curriculum-ecosystem`.
-- WebFetch returns 404 for GitHub security pages (auth required) — use `gh api` instead.
-- `pnpm why` returns empty for phantom lockfile entries — always cross-check with `grep` on `pnpm-lock.yaml`.
-- `qs` has TWO resolved versions (6.14.0 vulnerable, 6.15.0 patched) — the Dependabot alert is NOT a false positive.
-- `hono`/`@hono/node-server` are transitive deps of `@modelcontextprotocol/sdk@1.27.0`, not direct deps in any workspace.
-- `axios` override at `pnpm.overrides.axios` in root `package.json`, not a direct dependency.
-
-### Key Finding
-- Most CodeQL HIGH alerts are false positives (test regex assertions, codegen escaping, standard auth middleware).
-- True positives: unpinned GitHub Actions (supply chain), missing app-level rate limiting (mitigated by Vercel).
-- All Dependabot runtime alerts are patchable via overrides or parent bumps.
-
-### Dismissals
-- Dismissed 45 CodeQL false positives via `gh api` PATCH with `state: "dismissed"`, `dismissed_reason`, and `dismissed_comment`.
-- 7 remain open intentionally: 5 missing-rate-limiting (#4–#8), 2 unpinned-action-tag (#1, #2).
-- 48 total dismissed (45 this session + 3 previously dismissed).
-- API format: `gh api repos/OWNER/REPO/code-scanning/alerts/NUM -X PATCH --input -` with JSON body.
-
-## Session 2026-03-05 — Batch 1 Security Deps Execution
-
-### Key Discoveries
-- MCP SDK 1.27.1 still resolves to `hono@4.11.9` — lockfile keeps existing compatible versions. Need explicit `pnpm.overrides` to force patched transitive deps.
-- `pnpm install --no-frozen-lockfile` required when overrides change.
-- Security overrides should use `>=` (not `^`) to match existing pattern and avoid major-resolution conflicts.
-- `docker manifest inspect` hangs in this environment — use version tag pinning as fallback.
-- `release.yml` on `push: [main]` can publish even when CI fails — fixed with `workflow_run` + `if: conclusion == 'success'`.
-- `pnpm sdk-codegen` rerun required after any `openapi-typescript` bump per ADR-031 — confirmed no drift here.
-
-### Follow-ups (not blocking)
-- Centralise `@elastic/elasticsearch` version policy via root override.
-- `@oaknational/curriculum-sdk` exports elasticsearch surface but has it only as devDependency.
-- Remove transitive overrides (`rollup`, `qs`, `hono`, `@hono/node-server`) once upstream ships patched versions.
-
-## Session 2026-03-05 — SDK Fixes and Batch 2 Execution
-
-### Key Discoveries
-- ESLint 10 drops `@eslint/eslintrc` — removes minimatch@3 + ajv@6 (resolves 13 Dependabot alerts at source).
-- New `preserve-caught-error` rule (eslint-plugin-sonarjs@4) — `throw new Error(msg)` in catch blocks must include `{ cause: caughtVar }`. 7 fixes in sdk-codegen codegen/e2e scripts.
-- `eslint-plugin-import`, `eslint-plugin-import-x`, `eslint-plugin-react`, `eslint-plugin-react-hooks` all have stale peer dep ranges (declare up to `^9`). Fix: add `pnpm.peerDependencyRules.allowedVersions` entries in root `package.json`.
-- openapi-fetch 0.17 wraps response types through `Readable<T>` from openapi-typescript-helpers@0.1.0. `Readable<T>` strips `?:null` properties (because `NonNullable<null>` = `never`, and `never extends $Write<any>` is vacuously true). `canonicalUrl?: null` on `/threads` and `/threads/{threadSlug}/units` responses were stripped — fix: use literal `null` instead of reading from response object.
-- openapi-fetch 0.17 adds `pathSerializer: PathSerializer` as required field in `MergedOptions`. Tests constructing `MergedOptions` directly need `defaultPathSerializer`.
-- Clerk Core 3 released 2026-03-03. `@clerk/backend` v3, `@clerk/express` v2. Key change for this codebase: `@clerk/types` moved to `@clerk/shared/types` — `PendingSessionOptions` import path updated in 2 files.
-- `req.auth` in Core 3 Express is still a callable function (confirmed from @clerk/express v2 source). `getAuth(req)` calls `req.auth(options)` internally. "Object-access removed" means `req.auth.userId` direct access, not the callable pattern.
-
-### Follow-ups (not blocking)
-- `extractAuthContext` in `tool-auth-context.ts` is dead code (only used in unit tests, not production). Could be removed or switched to `getAuth(req)` pattern in a future cleanup.
-- Four bare `catch {}` blocks in `generate-ai-doc.ts` and `generate-markdown-docs.ts` discard original error without `cause` — `preserve-caught-error` doesn't fire because the variable isn't bound. Future hardening opportunity.
-- `generate-ai-doc.ts` has `eslint-disable max-lines` — violates Never Disable Checks. Pre-existing.
-
-## Session 2026-03-06 — Canonical URL Generation Fixes (Completed)
-
-### What Was Done
-- Fixed 5 broken canonical URL patterns across 4 locations in the monorepo
-- **SDK codegen generator** (`generate-url-helpers.ts`): fixed `urlForSequence` (`/programmes/` → `/curriculum/`) and `urlForUnit` (changed context from `{subjectSlug, phaseSlug}` to `{sequenceSlug}`)
-- **Response augmentation** (`response-augmentation.ts`): updated `extractUnitContext` to derive `sequenceSlug = subjectSlug + '-' + phaseSlug` (derivation belongs in augmentation layer, keeping URL helper pure)
-- **Search-CLI** (`canonical-url-generator.ts`): delegated all URL generation to SDK helpers; `generateThreadCanonicalUrl` now returns `null` (threads have no OWA page)
-- **Search-CLI** (`bulk-rollup-builder.ts`): removed local `UNIT_BASE_URL` constant; `transformBulkUnitToSummary` now accepts explicit `sequenceSlug` parameter and passes it directly to `generateCanonicalUrlWithContext` (not re-derived from `subjectSlug+phaseSlug`)
-- **Thread schema** (`field-definitions/curriculum.ts`): changed `thread_url` from `optional: false` to `optional: true`; removed `thread_url` from `thread-document-builder.ts` output
-- **Sitemap scanner**: enhanced to capture `/teachers/curriculum/` URLs; added `--validate` mode for CI use
-- All quality gates pass: 24/24 workspaces, 971 tests in search-CLI
-
-### Key Patterns
-- **sequenceSlug derivation**: Response augmentation layer derives `sequenceSlug` from API fields; URL helper is a pure function that just constructs the URL. Bulk pipeline passes `sequenceSlug` explicitly.
-- **Code reviewer caught a bug**: `transformBulkUnitToSummary` was using `sequenceSlug` as a boolean gate but re-deriving the slug from `subjectSlug+phase` internally. Fixed to pass `sequenceSlug` directly to `generateCanonicalUrlWithContext`.
-- **Exam-board sequences**: Test added for `science-secondary-aqa` to verify explicit `sequenceSlug` is used, not derived. Derived approach would silently produce wrong URL for these.
-- **`void` for unused-but-required params**: Used `void threadSlug` in `generateThreadCanonicalUrl` to consume the parameter for API compatibility without underscore prefix or disabling ESLint.
-
-### Remaining Follow-ups (non-blocking)
-- ES re-index of `oak_threads` to clear stale `thread_url` values from existing documents
-- API wishlist: upstream API to expose `sequenceSlug` directly on unit responses (removes derivation ambiguity)
-
-## Session 2026-03-05 — Canonical URL Inconsistency Discovery
-
-### Key Finding
-Two canonical URL generators in the codebase disagree about threads:
-1. `oak-search-cli/src/lib/indexing/canonical-url-generator.ts` constructs `/teachers/curriculum/threads/{threadSlug}` — treats threads as having canonical URLs.
-2. `packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/generate-url-helpers.ts` returns `null` for threads — "data concepts without canonical URLs".
-
-The SDK codegen drives the response augmentation middleware, so the enhanced API schema ends up with `canonicalUrl: null` for threads. This is inconsistent with the search indexing layer.
-
-### Architecture Reminder (from user)
-- Upstream API does NOT include canonical URLs for everything.
-- Where the website has pages, URLs are **constructed** from available data.
-- This is why there are TWO copies of the spec: as-served and enhanced (with decorations like canonical URLs).
-- "Just because the upstream API returns null does not mean the resource has no URL on the website."
-
-### Resolved Questions (confirmed against OWA source `src/pages/teachers/` and live site)
-- **Threads**: No pages at all. Zero thread routes in OWA. Thread highlighting is client-side within `[subjectPhaseSlug]/[...slugs].tsx` catch-all. SDK codegen returning `null` is correct.
-- **Lessons**: True canonical page at `/teachers/lessons/[lessonSlug].tsx`. Codegen correct.
-- **Sequences**: Have pages at `/teachers/curriculum/{sequenceSlug}/units`. **BUG**: codegen `urlForSequence` generates `/teachers/programmes/{slug}/units` which **404s**. Correct path is `/teachers/curriculum/{slug}/units`. Same bug in search-cli `generateSequenceCanonicalUrl`.
-- **Units**: Have pages within the curriculum context at `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}` (handled by OWA catch-all `[subjectPhaseSlug]/[...slugs].tsx`). No standalone `/teachers/units/{unitSlug}`. Codegen currently generates `/teachers/programmes/{subject}-{phase}/units/{unitSlug}` which also **404s** — wrong base path.
-- `oak-search-cli/src/lib/indexing/canonical-url-generator.ts` `generateThreadCanonicalUrl` generates dead URLs (`/teachers/curriculum/threads/{threadSlug}` 404, no OWA route). Bug.
-
-### Plan Created
-- Wrote executable plan: `.agent/plans/sdk-and-mcp-enhancements/active/sitemap-driven-canonical-urls.plan.md`
-- Updated active README to list it
-- Plan is self-contained with all investigation context for next-session pickup
-
-### URL Pattern Summary (verified)
-| Content Type | Pattern | Status |
-|---|---|---|
-| Lesson | `/teachers/lessons/{lessonSlug}` | Correct in codegen |
-| Sequence | `/teachers/curriculum/{sequenceSlug}/units` | **BUG**: codegen uses `/programmes/` |
-| Unit (in curriculum) | `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}` | **BUG**: codegen uses `/programmes/{subject}-{phase}/units/{unitSlug}` |
-| Unit (in programme) | `/teachers/programmes/{programmeSlug}/units/{unitSlug}/lessons` | Exists on OWA, not generated |
-| Thread | None | Correct (`null` in codegen) |
-
-## Session 2026-03-05 — Search SDK GitHub Release Asset Planning (Engineering End Users)
+## Session 2026-03-07 — Elasticsearch Specialist Capability Rollout
 
 ### What Was Done
 
-- Applied `jc-start-right-quick` grounding and `jc-plan` workflow for this
-  planning task.
-- Investigated current Search SDK packaging and release automation:
-  - `packages/sdks/oak-search-sdk/package.json`
-  - `packages/sdks/oak-search-sdk/tsup.config.ts`
-  - `.github/workflows/release.yml`
-  - `.releaserc.mjs`
-- Confirmed current Search SDK build is unbundled and not self-contained for
-  external consumers.
-- Created executable plan:
-  `.agent/plans/user-experience/engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md`
-- Added discoverability links:
-  - `.agent/plans/user-experience/engineering-end-users/current/README.md` (new)
-  - `.agent/plans/user-experience/engineering-end-users/README.md`
-  - `.agent/plans/user-experience/roadmap.md`
-  - `.agent/plans/user-experience/README.md`
+- Executed the full elasticsearch-specialist-capability plan (Phases 0–4).
+- Created canonical triplet: reviewer template, active-workflow skill, situational rule.
+- Created platform adapters across Cursor, Claude, Gemini, and Codex.
+- Updated coordination docs (AGENT.md roster, invoke-code-reviewers.md triage/examples).
+- Updated stale counts in ADR-129, artefact-inventory, and practice-core provenance.
+- Self-review by the elasticsearch-reviewer caught real issues: broken Serverless URL (404), stale ES Guide URL (301 redirect), wrong `.agent/research/` paths.
 
-### Key Findings
+### Patterns to Remember
 
-- The current `oak-search-sdk` build (`bundle: false`) leaves runtime imports to
-  internal workspace packages (`@oaknational/result`,
-  `@oaknational/sdk-codegen`, `@oaknational/logger`), so `dist/` cannot be used
-  directly in another repo.
-- semantic-release is already the canonical release orchestrator; adding release
-  assets via `@semantic-release/github` is the idiomatic extension path.
-- `@semantic-release/github` supports templated asset names/labels using
-  `${nextRelease.gitTag}`, so artefacts can be built with stable local paths and
-  uploaded with versioned release names.
-- `pnpm pack` on the current package yields an archive but does not solve
-  self-containment by itself because internal runtime imports remain.
+- Self-review validates doctrine: having the reviewer review itself is a practical smoke test for the live-docs-first workflow.
+- Elastic documentation has migrated from `elastic.co/guide/...` to `elastic.co/docs/...` — old URLs redirect or 404. Always verify URLs with WebFetch before encoding them in templates.
+- `research/` paths in this repo are under `.agent/research/`, not at the repo root.
+- Bulk curriculum data changes over time; a full pipeline is redownload → reprocess → reindex.
 
-### Planned Direction
+## Session 2026-03-07 — Oak Ontology Opportunity Note
 
-- Keep existing unbundled workspace build for monorepo development.
-- Add a release-only bundled lane that emits a self-contained ESM tarball and
-  checksum.
-- Attach artefacts to semantic-release GitHub releases.
-- Provide retrieval-focused import guidance while keeping full surface export;
-  enforce operational access with Elasticsearch API-key scopes.
+### What Was Done
+
+- Added an Oak-specific opportunity note beside the external graph research
+  notes, then later promoted that work into
+  `.agent/plans/semantic-search/oak-ontology-graph-opportunities.strategy.md`.
+- Added
+  `.agent/plans/semantic-search/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+  as the canonical synthesis with real links.
+- Archived the superseded graph research notes with unstable inline citation
+  markers under `.agent/plans/semantic-search/archive/`.
+
+### Patterns to Remember
+
+- When external research is broad and citations are unstable, preserve the
+  durable architectural conclusions in a local note tied to current repo
+  realities.
+- For ontology integration, treat mismatch explicitly as a first-class design
+  concern rather than assuming direct one-to-one joins.
+- When the ontology source repo becomes available, replace generic
+  \"triples in Neo4j\" language with the ontology's own concrete model:
+  RDF/OWL/SKOS/SHACL, programme-unit-unit-variant-lesson-thread structures, and
+  early-release volatility.
+- The ontology repo also distinguishes source RDF shape from the operational
+  Neo4j shape via an export transformation pipeline; research and strategy docs
+  should not blur those two contracts.
+
+## Session 2026-03-07 — KG Integration Quick-Wins Plan
+
+### What Was Done
+
+- Added `.agent/plans/semantic-search/current/kg-integration-quick-wins.plan.md`
+  as the first dedicated queued plan promoted from the ontology graph strategy.
+- Made the plan answer the runtime-shape question directly: keep flat RDF
+  distributions for provenance and rebuilds, but use the exported Neo4j graph
+  plus selected Elasticsearch projections for operational quick wins.
+- Updated semantic-search navigation and the high-level plan so the new graph
+  quick-win plan is now part of the discoverability chain.
+
+### Patterns to Remember
+
+- For ontology-backed search work, flat files are best treated as canonical
+  release artefacts and rebuild inputs, not as the primary runtime query
+  surface.
+- The first Elasticsearch/Neo4j integration step should be application-layer
+  orchestration and batch projection, not brittle live cross-engine joins.
+- The safest early graph wins are overlap auditing, explanation surfaces,
+  small projection indices, and offline graph-derived features.
+
+## Session 2026-03-07 — Alignment Audit Promotion
+
+### What Was Done
+
+- Promoted the alignment-audit slice from the parent graph quick-win plan into
+  `.agent/plans/semantic-search/active/kg-alignment-audit.execution.plan.md`.
+- Made the promoted plan explicit about two things that were previously too
+  implicit: the exact outputs it must produce, and the specific docs/plans that
+  must be updated once those outputs exist.
+- Updated semantic-search active/current/navigation docs and the high-level
+  plan to reflect that graph work now has an active evidence-first lane.
+
+### Patterns to Remember
+
+- When promoting a research-backed quick win into active execution, the plan
+  should name not only the work to do but the repo artefacts that completion
+  must update afterwards.
+- Alignment audits need both machine-rerunnable implementation and a
+  human-readable canonical report; raw script output alone is not enough.
+
+## Session 2026-03-07 — Consolidate Docs Recheck
+
+### What Was Done
+
+- Re-ran the `jc-consolidate-docs` checks against the newly promoted graph
+  planning surfaces.
+- Removed the last stale semantic-search README wording that still described
+  the ontology strategy as feeding only a future graph quick-win plan.
+- Reconfirmed that the practice inbox is empty and that the semantic-search
+  roadmap and prompt already reference the active alignment-audit plan and the
+  queued parent quick-win plan consistently.
+
+### Patterns to Remember
+
+- After plan promotion, stale wording often survives in explanatory sections
+  even when tables and queues are already correct; sweep narrative paragraphs as
+  well as status tables.
+- Fitness ceilings are signals, not blockers: `CONTRIBUTING.md`,
+  `practice-lineage.md`, and `practice-bootstrap.md` remain slightly over and
+  should be treated as future consolidation candidates.
+
+## Session 2026-03-07 — Live MCP Smoke Test and Upstream Bug Report
+
+### What Was Done
+
+- Conducted a systematic black-box smoke test of the deployed `oak-preview` MCP
+  server, then classified findings by ownership: our code, upstream API, stale
+  ES data.
+- Fixed two code defects using TDD:
+  1. `searchSequences` and the CLI `rrf-query-builders.ts` now apply a
+     `key_stages` term filter when `keyStage` is provided (was silently dropped).
+  2. Codegen source for `SearchSuggestionItemSchema` relaxed `url` from
+     `z.string().min(1)` to `z.string().optional().default('')`.
+- Wrote a precision bug report at `.agent/reports/oak-openapi-bug-report-2026-03-07.md`
+  documenting three upstream `oak-openapi` issues with exact file/line references
+  from the upstream source code.
+- Fixed `.gitignore` so `.agent/reports/` is not excluded by the broad
+  `**/reports/` Node.js diagnostic pattern.
+- Updated the snagging plan to acknowledge the additional fixes committed on the
+  same branch.
+
+### Patterns to Remember
+
+- When smoke-testing a live service, classify findings by ownership before
+  fixing: our code, upstream API, stale data. This prevents wasted effort fixing
+  the wrong thing.
+- The `**/reports/` gitignore pattern catches `.agent/reports/` — always check
+  that new directories are not accidentally ignored.
+- Cross-repo bug reports are far more actionable with precise file/line
+  references from the upstream source. If you have access to the code, cite it.
+- Codegen-emitted Zod schemas must match what the runtime actually produces, not
+  what the upstream ideally provides. The runtime emits `url: ''` for
+  suggestions; the schema must allow it.

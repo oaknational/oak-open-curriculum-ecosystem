@@ -27,11 +27,11 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 Three capabilities, all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification:
 
-| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                                                                    |
-| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (Claude Desktop, Cursor), [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (web, Vercel) |
-| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                  |
+| Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Curriculum SDK**  | Typed TypeScript access to Oak's curriculum API — types, Zod validators, and MCP tool metadata, all generated from the OpenAPI schema                                                                         | [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/)                                                                                                                                         |
+| **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel), [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (legacy stdio workspace, not actively maintained) |
+| **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                                                                       |
 
 The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
 
@@ -39,11 +39,16 @@ The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides th
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
-- **Tools** (model-controlled): 30 curriculum tools (23 generated from the OpenAPI schema, 7 aggregated) including orientation via `get-curriculum-model`. The AI decides when to use them.
+- **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
 - **Resources** (application-controlled): Curriculum model, prerequisite graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
-See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md) for full detail and [ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md) for the architectural rationale.
+The standalone stdio workspace is now a legacy transitional surface. Future
+stdio support should come from a separate stdio entry point generalised from the
+HTTP MCP server workspace rather than from continued parallel maintenance of the
+standalone stdio app. See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
+[ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md),
+and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
 
 ## Quick Start
 
@@ -119,11 +124,40 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Directory        | Purpose                                                                                        |
 | ---------------- | ---------------------------------------------------------------------------------------------- |
-| `apps/`          | MCP servers (stdio + HTTP) and the semantic search CLI                                         |
+| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI     |
 | `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                   |
 | `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, type helpers, ESLint configs |
 | `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |
 | `docs/`          | Developer documentation, guides, and 100+ ADRs                                                 |
+
+### Workspace Summaries
+
+**Apps:**
+
+| Workspace                                                                        | Purpose                                                                                                                                                                                                                                           |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, and prompts                                                                                                                                  |
+| [`oak-curriculum-mcp-stdio`](apps/oak-curriculum-mcp-stdio/)                     | **Legacy** stdio MCP workspace — not actively maintained; future stdio support will be generalised from the HTTP server ([ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)) |
+| [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking                                      |
+
+**SDKs:**
+
+| Workspace                                                 | Purpose                                                                                                                                                               |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/) | Curriculum API SDK — generated types, Zod validators, MCP tool metadata, all flowing from the OpenAPI schema                                                          |
+| [`oak-search-sdk`](packages/sdks/oak-search-sdk/)         | Search SDK — hybrid lexical (BM25) + semantic (ELSER) retrieval, admin services, observability, and blue/green index lifecycle management (zero downtime index swaps) |
+| [`oak-sdk-codegen`](packages/sdks/oak-sdk-codegen/)       | Schema-driven code generation — OpenAPI → TypeScript types, Zod schemas, ES mappings, MCP tool definitions                                                            |
+
+**Core and Libraries:**
+
+| Workspace                                                           | Purpose                                                                       |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`result`](packages/core/result/)                                   | `Result<T, E>` type for explicit error handling without exceptions            |
+| [`env`](packages/core/env/)                                         | Env schema contracts — Zod-based validation for environment variables         |
+| [`type-helpers`](packages/core/type-helpers/)                       | Shared type-level utilities                                                   |
+| [`eslint-plugin-standards`](packages/core/eslint-plugin-standards/) | Custom ESLint rules enforcing architectural boundaries                        |
+| [`oak-mcp-logger`](packages/libs/oak-mcp-logger/)                   | Structured logger with Pino backend                                           |
+| [`env-resolution`](packages/libs/env-resolution/)                   | Environment resolution pipeline — `.env` discovery, validation, and injection |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 
@@ -138,22 +172,53 @@ See the [full ADR index](docs/architecture/architectural-decisions/) for all dec
 This repository began as an exploration of what co-pilot style AI support could
 provide, but evolved rapidly into an agent-first engineering system. As of
 February 2026, for at least the previous six months, every line of code,
-configuration, and documentation has been written entirely by agents.
+configuration, and documentation has been written entirely by agents. Humans
+focus on system design: defining guardrails, architectural constraints, quality
+gates, and reviewer workflows; then providing direction and corrective feedback.
 
-Humans focus on system design: defining and strengthening guardrails,
-architectural constraints, quality gates, and reviewer workflows; then
-providing direction and corrective feedback.
+The result of this approach is **[the Practice](.agent/practice-core/README.md)**
+— a transferable, self-improving system of principles, structures, specialist
+agents, and tooling that governs how work happens. The Practice is not a static
+rulebook; it contains a [**self-reinforcing improvement loop**](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) that learns from
+every session and evolves its own governance. The core cycle:
 
-Self-assessment by agents, and iterative improvement of the Practice itself,
-are integral parts of how work is done here.
+1. **Capture** — agents continuously log mistakes, corrections, and patterns to
+   a session napkin
+2. **Refine** — periodic distillation extracts high-signal entries into a
+   curated reference
+3. **Graduate** — the consolidation workflow moves settled patterns into
+   permanent documentation (ADRs, governance docs, READMEs)
+4. **Enforce** — permanent docs become rules and directives that govern the
+   next session's work
 
-See [.agent/HUMANS.md](.agent/HUMANS.md) for contributor context. The approach
-is documented in
-[ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
-and embodied in [the Practice](.agent/practice-core/README.md), a
-transferable, self-improving memetic system of principles, structures, agents,
-and tooling, enabling safer, human-AI collaboration and innovation without
-compromising on quality.
+The loop is self-referential: it improves not just the product code but the
+Practice itself. Rules about rule creation, patterns about distillation quality,
+and insights about consolidation all flow through the same cycle.
+
+The Practice also travels between repositories via a
+[plasmid exchange mechanism](docs/architecture/architectural-decisions/124-practice-propagation-model.md)
+— a package of five portable files that carry the improvement loop to new
+contexts. Different repos stress-test the Practice against different work,
+surfacing learnings that travel back to the origin. If a repo already has
+a Practice, then the income Practice is analysed and the best parts are
+integrated into the incumbent Practice. This allows the benefits
+of the learning loop to be compounded through multiple repos, while allowing
+the Practice to adapt itself to suit the context of each project.
+
+The impact of these systems is to enable **agentic engineering speed and
+optionality without sacrificing quality**, while minimising the loss of
+visibility that comes from delegating work to agents. Quality gates, specialist
+reviewers, and the learning loop provide assurance comparable to manual code
+review, while the Practice's self-improving nature means governance strengthens
+over time rather than eroding.
+
+**Further reading:**
+
+- [The Practice](.agent/practice-core/README.md) — human-friendly introduction
+- [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) — naming, boundary, and three-layer model
+- [ADR-131](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) — the improvement loop, interaction map, and self-referential property
+- [ADR-124](docs/architecture/architectural-decisions/124-practice-propagation-model.md) — how the Practice travels between repos
+- [.agent/HUMANS.md](.agent/HUMANS.md) — contributor context
 
 ## Contributing
 

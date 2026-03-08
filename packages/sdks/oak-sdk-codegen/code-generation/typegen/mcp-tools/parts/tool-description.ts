@@ -91,12 +91,13 @@ NOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key
  * Guidance appended to asset tool descriptions.
  *
  * Asset `url` fields are authenticated API endpoints that cannot be opened
- * directly in a browser. All lesson assets are freely downloadable on the
- * Oak website, so the LLM should direct users to the lesson page instead.
+ * directly in a browser. The primary action is to call `download-asset` to
+ * generate a short-lived clickable link. The Oak website is a fallback for
+ * transports where `download-asset` is unavailable (e.g. stdio).
  */
 const ASSET_DOWNLOAD_NOTE = `
 
-NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. All lesson assets (slide decks, worksheets, quizzes, videos) are freely downloadable on the Oak website. Direct users to the lesson page on the Oak website for downloads — use the lesson's \`canonicalUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
+NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the \`download-asset\` tool with the lesson slug and asset type. If \`download-asset\` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson's \`canonicalUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
 
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {

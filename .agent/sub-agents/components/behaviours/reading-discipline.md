@@ -9,7 +9,7 @@ Every agent MUST read and internalise these documents before performing any revi
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/AGENT.md` | Core directives, documentation index, and sub-agent roster |
-| `.agent/directives/rules.md` | Authoritative project rules and quality expectations |
+| `.agent/directives/principles.md` | Authoritative project rules and quality expectations |
 
 These are in addition to any domain-specific documents listed in each template's Reading Requirements table.
 

@@ -1,8 +1,8 @@
 ---
-tools: Read, Glob, Grep, LS, Shell, ReadLints, Fetch
+tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: mcp-reviewer
-model: gpt-5.3-codex-xhigh
-description: MCP protocol specification and implementation expert. Use for MCP spec compliance reviews, tool definition validation, transport/session pattern checks, and protocol questions.
+model: gpt-5.4-xhigh
+description: MCP protocol specification and implementation expert. Use for MCP spec compliance reviews, tool or resource or prompt definition validation, transport/session pattern checks, MCP best-practice assessments, protocol questions, and OpenAI App to MCP Apps migration planning/review.
 readonly: true
 ---
 

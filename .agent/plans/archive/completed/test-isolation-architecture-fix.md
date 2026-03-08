@@ -479,7 +479,7 @@ apps/oak-search-cli/app/api/rebuild-rollup/route.ts ✅
 
 **MUST re-read before starting work:**
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 
@@ -488,8 +488,8 @@ Key principles:
 1. **First Question**: "Could it be simpler without compromising quality?"
 2. **No global state** (testing-strategy.md line 25): Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`, or use `vi.doMock`
 3. **Test behavior not implementation** (testing-strategy.md line 13): Don't test types, don't test how it works, test what it does
-4. **All quality gates blocking** (rules.md line 61): Fix everything, no exceptions
-5. **TDD always** (rules.md line 19): Write tests first, red-green-refactor at all levels
+4. **All quality gates blocking** (principles.md line 61): Fix everything, no exceptions
+5. **TDD always** (principles.md line 19): Write tests first, red-green-refactor at all levels
 
 ## Related Documents
 

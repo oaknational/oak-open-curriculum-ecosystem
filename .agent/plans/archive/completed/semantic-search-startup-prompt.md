@@ -10,7 +10,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 ## Essential Reading (MANDATORY — in order)
 
 1. **Repository Rules & Standards**
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
 2. **Plans & Context**
    - `.agent/plans/semantic-search/semantic-search-api-plan.md`
@@ -67,7 +67,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 
 ## Development Rules (always)
 
-- Honour `.agent/directives/rules.md` and the testing strategy; apply TDD (Red → Green → Refactor).
+- Honour `.agent/directives/principles.md` and the testing strategy; apply TDD (Red → Green → Refactor).
 - No skipping quality gates. The sequence: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-search-cli doc-gen`.
 - No unsafe assertions (`as`, `!`) or bypassing type guards; prefer pure functions.
 - British spelling required; mention “REMINDER: Use british spelling” in todo lists.

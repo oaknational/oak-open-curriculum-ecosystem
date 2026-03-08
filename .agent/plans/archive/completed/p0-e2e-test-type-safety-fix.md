@@ -8,7 +8,7 @@
 
 ## Purpose
 
-Fix type safety violations and workspace boundary violations in E2E tests discovered during P0 flat schema implementation, ensuring full compliance with @rules.md, @schema-first-execution.md, and @testing-strategy.md.
+Fix type safety violations and workspace boundary violations in E2E tests discovered during P0 flat schema implementation, ensuring full compliance with @principles.md, @schema-first-execution.md, and @testing-strategy.md.
 
 ## Context
 
@@ -20,7 +20,7 @@ During implementation of P0 (flat schema generator fix), we discovered that E2E 
 
 ## Related Documents
 
-- `.agent/directives/rules.md` - Type safety requirements, workspace boundaries
+- `.agent/directives/principles.md` - Type safety requirements, workspace boundaries
 - `.agent/directives/schema-first-execution.md` - Schema-first architecture
 - `.agent/directives/testing-strategy.md` - Test type definitions and boundaries
 - `.agent/plans/p0-mcp-flat-schema-generator-fix.md` - Completed P0 work
@@ -34,7 +34,7 @@ During implementation of P0 (flat schema generator fix), we discovered that E2E 
 **Violations**:
 
 ```typescript
-// Line 22 - PROHIBITED per @rules.md
+// Line 22 - PROHIBITED per @principles.md
 type ToolArguments = Record<string, unknown>;
 
 // Line 35 - PROHIBITED
@@ -44,7 +44,7 @@ readonly sequenceSlugs?: readonly Record<string, unknown>[];
 readonly [key: string]: unknown;
 ```
 
-**@rules.md states**:
+**@principles.md states**:
 
 > "Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }` - they ALL disable the type system."
 
@@ -67,7 +67,7 @@ async function executeStubTool(name: ToolName, args: ToolArguments): Promise<unk
 }
 ```
 
-**@rules.md states**:
+**@principles.md states**:
 
 > "Each workspace unit tests its own code ONLY"
 
@@ -426,8 +426,8 @@ pnpm test:e2e
 
 | Directive                  | Requirement                      | Status             |
 | -------------------------- | -------------------------------- | ------------------ |
-| @rules.md                  | No `Record<string, unknown>`     | ✅ After Session 1 |
-| @rules.md                  | Each workspace tests own code    | ✅ After Session 2 |
+| @principles.md                  | No `Record<string, unknown>`     | ✅ After Session 1 |
+| @principles.md                  | Each workspace tests own code    | ✅ After Session 2 |
 | @schema-first-execution.md | Types from generated artifacts   | ✅ After Session 1 |
 | @testing-strategy.md       | E2E tests verify running systems | ✅ After Session 2 |
 

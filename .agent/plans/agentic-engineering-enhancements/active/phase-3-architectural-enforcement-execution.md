@@ -3,26 +3,26 @@ name: "Phase 3 - Architectural Enforcement Execution"
 overview: >
   Execute architectural enforcement phases 0-5 with atomic, validated tasks
   and evidence-backed completion claims, with ESLint convergence tasks
-  delegated where canonical ownership moved to devx strictness convergence.
+  delegated where canonical ownership moved to developer-experience plans.
 todos:
   - id: p3-phase0-lint-baseline
     content: "Phase 0: Complete ESLint strict baseline."
     status: pending
   - id: p3-phase1-max-files
-    content: "Phase 1: Wire max-files-per-dir rule and resolve violations. (Deferred for current window.)"
-    status: pending
+    content: "Phase 1: Record canonical delegation for the max-files-per-dir workstream."
+    status: completed
   - id: p3-phase2-boundaries
-    content: "Phase 2: Boundary-rule implementation delegated to devx strictness convergence; keep strategic oversight here."
-    status: pending
+    content: "Phase 2: Record canonical delegation for developer-experience execution owners."
+    status: completed
   - id: p3-phase3-depcruise
-    content: "Phase 3: Land dependency-cruiser barrel and boundary checks."
-    status: pending
+    content: "Phase 3: Delegate dependency-cruiser execution to the canonical directory-complexity plan."
+    status: completed
   - id: p3-phase4-knip
-    content: "Phase 4: Integrate knip dead-code detection into workflow."
-    status: pending
+    content: "Phase 4: Delegate knip execution to the canonical directory-complexity plan."
+    status: completed
   - id: p3-phase5-grounding
-    content: "Phase 5: Add architectural enforcement grounding and qg updates; split-guidance subset delegated to devx strictness convergence."
-    status: pending
+    content: "Phase 5: Delegate directory-complexity grounding and qg integration while retaining collection-level oversight."
+    status: completed
   - id: p3-doc-sync
     content: "Update documentation sync log with ADR/directive/reference-doc/README impact for Phase 3."
     status: pending
@@ -39,14 +39,16 @@ todos:
 Execution ownership changed for part of this stream:
 
 1. Delegated to [devx-strictness-convergence.plan.md](../../developer-experience/active/devx-strictness-convergence.plan.md):
-   - boundary/separation ESLint convergence
    - no-console convergence
-   - split-guidance updates for large functions/files/directories
-2. Retained in this plan:
-   - depcruise, knip, qg integration
+   - strictness-specific shared-config promotion work
+2. Delegated to [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md):
+   - remediation SOP for directory-complexity breaches
+   - boundary/public-API support bundle
+   - depcruise, knip, qg integration for this workstream
+   - staged `max-files-per-dir` activation
+3. Retained in this plan:
    - evidence bundling for non-trivial enforcement claims
-3. Explicitly deferred:
-   - `max-files-per-dir` rollout
+   - collection-level architectural-enforcement status tracking
 
 ## Atomic Tasks
 
@@ -60,38 +62,37 @@ Execution ownership changed for part of this stream:
 ### Task 3.1 (Source Phase 1): Physical Modularity Rule
 
 - Output:
-  - deferred decision recorded with rationale and re-entry gate
+  - canonical execution link to the queued directory-complexity plan is present
 - Deterministic validation:
-  - `rg -n "max-files-per-dir|Deferred" ../architectural-enforcement-adoption.plan.md`
+  - `rg -n "directory-complexity-enablement\\.execution\\.plan\\.md|max-files-per-dir" ../architectural-enforcement-adoption.plan.md`
 
 ### Task 3.2 (Source Phase 2): Layer Boundary Rules
 
 - Output:
-  - delegated execution link to canonical strictness plan is present
+  - delegated execution links to the canonical developer-experience plans are present
 - Deterministic validation:
-  - `rg -n "devx-strictness-convergence\\.plan\\.md" ../architectural-enforcement-adoption.plan.md ../../developer-experience/active/devx-strictness-convergence.plan.md`
+  - `rg -n "devx-strictness-convergence\\.plan\\.md|directory-complexity-enablement\\.execution\\.plan\\.md" ../architectural-enforcement-adoption.plan.md ../../developer-experience/active/devx-strictness-convergence.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
 
 ### Task 3.3 (Source Phase 3): Dependency-Cruiser Lockdown
 
 - Output:
-  - dependency-cruiser rules enforce index.ts boundary policy
+  - canonical execution ownership is delegated and this file no longer duplicates the task breakdown
 - Deterministic validation:
-  - `test -f .dependency-cruiser.cjs`
-  - `rg -n "index\\.ts|forbidden|dependency-cruiser" .dependency-cruiser.cjs`
+  - `rg -n "directory-complexity-enablement\\.execution\\.plan\\.md|dependency-cruiser" ../architectural-enforcement-adoption.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
 
 ### Task 3.4 (Source Phase 4): Knip Integration
 
 - Output:
-  - knip integrated into validation workflow
+  - canonical execution ownership is delegated and referenced consistently
 - Deterministic validation:
-  - `rg -n "knip" package.json turbo.json .github .agent 2>/dev/null`
+  - `rg -n "directory-complexity-enablement\\.execution\\.plan\\.md|knip" ../architectural-enforcement-adoption.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
 
 ### Task 3.5 (Source Phase 5): Agentic Grounding
 
 - Output:
-  - delegated split-guidance ownership is documented; retained grounding scope is explicit
+  - delegated directory-complexity ownership is documented; retained collection scope is explicit
 - Deterministic validation:
-  - `rg -n "split-guidance|delegated|devx-strictness-convergence\\.plan\\.md" ../architectural-enforcement-adoption.plan.md ../../developer-experience/active/devx-strictness-convergence.plan.md`
+  - `rg -n "delegated|devx-strictness-convergence\\.plan\\.md|directory-complexity-enablement\\.execution\\.plan\\.md" ../architectural-enforcement-adoption.plan.md ../../developer-experience/active/devx-strictness-convergence.plan.md ../../developer-experience/current/directory-complexity-enablement.execution.plan.md`
 
 ### Task 3.6: Evidence Bundle for Enforcement Claims
 

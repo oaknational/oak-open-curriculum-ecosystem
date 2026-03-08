@@ -1,0 +1,7 @@
+---
+description: Treat the standalone stdio workspace as legacy and reject new feature work there.
+globs: apps/oak-curriculum-mcp-stdio/**
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/legacy-stdio-workspace.md`.

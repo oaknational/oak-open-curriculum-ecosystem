@@ -243,14 +243,14 @@ export function createPhraseBoosters(
  * Optionally includes phrase boosters for multi-word curriculum terms.
  */
 function createLessonBm25Retriever(
-  text: string,
+  query: string,
   fields: string[],
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
   const primaryQuery: QueryContainer = {
     multi_match: {
-      query: text,
+      query,
       type: 'best_fields',
       tie_breaker: 0.2,
       fuzziness: 'AUTO',
@@ -284,14 +284,14 @@ function createLessonBm25Retriever(
  * Optionally includes phrase boosters for multi-word curriculum terms.
  */
 function createUnitBm25Retriever(
-  text: string,
+  query: string,
   fields: string[],
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
   const primaryQuery: QueryContainer = {
     multi_match: {
-      query: text,
+      query,
       type: 'best_fields',
       tie_breaker: 0.2,
       fuzziness: 'AUTO:3,6',
@@ -323,11 +323,11 @@ function createUnitBm25Retriever(
 
 /** Creates an ELSER semantic retriever. */
 function createElserRetriever(
-  text: string,
+  query: string,
   field: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return { standard: { query: { semantic: { field, query: text } }, filter } };
+  return { standard: { query: { semantic: { field, query } }, filter } };
 }
 
 /**
@@ -335,11 +335,11 @@ function createElserRetriever(
  * Includes phrase boosters for detected curriculum phrases.
  */
 export function createLessonBm25ContentRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createLessonBm25Retriever(text, LESSON_BM25_CONTENT, filter, phrases);
+  return createLessonBm25Retriever(query, LESSON_BM25_CONTENT, filter, phrases);
 }
 
 /**
@@ -347,27 +347,27 @@ export function createLessonBm25ContentRetriever(
  * Includes phrase boosters for detected curriculum phrases.
  */
 export function createLessonBm25StructureRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createLessonBm25Retriever(text, LESSON_BM25_STRUCTURE, filter, phrases);
+  return createLessonBm25Retriever(query, LESSON_BM25_STRUCTURE, filter, phrases);
 }
 
 /** Creates ELSER content retriever for lessons. */
 export function createLessonElserContentRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createElserRetriever(text, 'lesson_content_semantic', filter);
+  return createElserRetriever(query, 'lesson_content_semantic', filter);
 }
 
 /** Creates ELSER structure retriever for lessons. */
 export function createLessonElserStructureRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createElserRetriever(text, 'lesson_structure_semantic', filter);
+  return createElserRetriever(query, 'lesson_structure_semantic', filter);
 }
 
 /**
@@ -375,11 +375,11 @@ export function createLessonElserStructureRetriever(
  * Includes phrase boosters for detected curriculum phrases.
  */
 export function createUnitBm25ContentRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createUnitBm25Retriever(text, UNIT_BM25_CONTENT, filter, phrases);
+  return createUnitBm25Retriever(query, UNIT_BM25_CONTENT, filter, phrases);
 }
 
 /**
@@ -387,25 +387,25 @@ export function createUnitBm25ContentRetriever(
  * Includes phrase boosters for detected curriculum phrases.
  */
 export function createUnitBm25StructureRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
   phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createUnitBm25Retriever(text, UNIT_BM25_STRUCTURE, filter, phrases);
+  return createUnitBm25Retriever(query, UNIT_BM25_STRUCTURE, filter, phrases);
 }
 
 /** Creates ELSER content retriever for units. */
 export function createUnitElserContentRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createElserRetriever(text, 'unit_content_semantic', filter);
+  return createElserRetriever(query, 'unit_content_semantic', filter);
 }
 
 /** Creates ELSER structure retriever for units. */
 export function createUnitElserStructureRetriever(
-  text: string,
+  query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createElserRetriever(text, 'unit_structure_semantic', filter);
+  return createElserRetriever(query, 'unit_structure_semantic', filter);
 }

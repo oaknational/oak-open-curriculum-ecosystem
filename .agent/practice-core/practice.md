@@ -3,7 +3,7 @@ provenance:
   - index: 0
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
-    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop"
+    purpose: "Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 14 specialist reviewers, full learning loop"
   - index: 1
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
@@ -63,7 +63,7 @@ The organisational patterns. Directives (`.agent/directives/`), plans (`.agent/p
 
 ### Tooling
 
-Platform-specific implementations following a canonical-first model (ADR-125): skills, commands, sub-agent templates, and rule policies all live in `.agent/` (platform-agnostic). Thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/` reference canonical content without duplicating it. Entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) direct each platform to the canonical practice. Plans and sub-agent templates need no adapters — they are consumed directly. Rules have two layers: authoritative policies in `.agent/directives/rules.md` and platform-specific activation triggers (Cursor `.cursor/rules/*.mdc`, Claude Code `.claude/rules/*.md`, or the entry-point chain for Gemini/Codex). This layer defines *how* the practice is used in a specific environment.
+Platform-specific implementations following a canonical-first model (ADR-125): skills, commands, sub-agent templates, and rule policies all live in `.agent/` (platform-agnostic). Thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.agents/` reference canonical content without duplicating it. Entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) direct each platform to the canonical practice. Plans and sub-agent templates need no adapters — they are consumed directly. Rules have two layers: authoritative policies in `.agent/directives/principles.md` and platform-specific activation triggers (Cursor `.cursor/rules/*.mdc`, Claude Code `.claude/rules/*.md`, or the entry-point chain for Gemini/Codex). This layer defines *how* the practice is used in a specific environment.
 
 ## The Knowledge Flow
 
@@ -118,7 +118,7 @@ The knowledge flow is itself part of the Practice, and the Practice travels via 
 - **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
 - **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
 - **Code patterns** — `.agent/memory/code-patterns/` — abstract proven patterns
-- **Rules** — `.agent/directives/rules.md` (authoritative policies) + `.cursor/rules/*.mdc` (activation triggers)
+- **Rules** — `.agent/directives/principles.md` (authoritative policies) + `.cursor/rules/*.mdc` (activation triggers)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
 
 ## The Review System
@@ -151,7 +151,7 @@ graph LR
   4. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement the lowest-level active plans with session-scoped implementation tasks, batch breakdowns, and review checkpoints. These are created per-session and track fine-grained progress that is too ephemeral for the active plan itself
   5. **Documentation propagation** — before phase closure, propagate settled outcomes from plans into permanent docs: ADR-119, ADR-124, `.agent/practice-core/practice.md`, and any additionally impacted ADRs/docs/READMEs. Apply `.cursor/commands/jc-consolidate-docs.md`
 - **Templates** (`.agent/plans/templates/`) — reusable plan components (ADR-117)
-- **Quality gates** — see `.agent/directives/rules.md` and `pnpm qg`. All gates are always blocking.
+- **Quality gates** — see `.agent/directives/principles.md` and `pnpm qg`. All gates are always blocking.
 
 ## Artefact Map
 
@@ -199,7 +199,7 @@ The full set of Learned Principles, including those about silent degradation, di
 
 ## The Self-Teaching Property
 
-The practice is designed to be discoverable through use. `AGENT.md` links to `rules.md`, which references `testing-strategy.md` and `schema-first-execution.md`. Commands invoke prompts, prompts reference plans, plans use templates. Sub-agents review work against the same rules that guided its creation. The napkin captures what went wrong, distillation extracts rules, and the rules prevent repetition.
+The practice is designed to be discoverable through use. `AGENT.md` links to `principles.md`, which references `testing-strategy.md` and `schema-first-execution.md`. Commands invoke prompts, prompts reference plans, plans use templates. Sub-agents review work against the same rules that guided its creation. The napkin captures what went wrong, distillation extracts rules, and the rules prevent repetition.
 
 If you are new to this repository, start with `.agent/directives/AGENT.md`. Follow the links. The practice will teach itself.
 

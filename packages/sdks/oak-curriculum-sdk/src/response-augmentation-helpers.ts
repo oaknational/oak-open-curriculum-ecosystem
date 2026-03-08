@@ -1,5 +1,6 @@
 /** Helper functions for response augmentation - ID and path extraction. */
 
+import { CONTENT_TYPE_PREFIXES } from '@oaknational/sdk-codegen/api-schema';
 import type { ContentType } from './types/response-augmentation.js';
 
 /**
@@ -9,6 +10,18 @@ import type { ContentType } from './types/response-augmentation.js';
  */
 interface ObjectResponse {
   readonly [Symbol.toStringTag]?: string;
+}
+
+const subjectCollectionPattern = new RegExp(
+  `/${CONTENT_TYPE_PREFIXES.subject.pathSegment}(/[^/]+)?$`,
+);
+
+function includesEntityCollection(path: string, contentType: ContentType): boolean {
+  return path.includes(`/${CONTENT_TYPE_PREFIXES[contentType].pathSegment}/`);
+}
+
+function endsWithEntityCollection(path: string, contentType: ContentType): boolean {
+  return path.endsWith(`/${CONTENT_TYPE_PREFIXES[contentType].pathSegment}`);
 }
 
 /**
@@ -36,10 +49,10 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
   if (!path.includes('/key-stages/') || !path.includes('/subjects/')) {
     return undefined;
   }
-  if (path.endsWith('/lessons')) {
+  if (endsWithEntityCollection(path, 'lesson')) {
     return 'lesson';
   }
-  if (path.endsWith('/units')) {
+  if (endsWithEntityCollection(path, 'unit')) {
     return 'unit';
   }
   return undefined;
@@ -59,22 +72,22 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
  * `/lessons/\{l\}/summary`, `/units/\{u\}/summary`).
  */
 export function isSingleEntityEndpoint(path: string): ContentType | undefined {
-  if (path.includes('/lessons/')) {
+  if (includesEntityCollection(path, 'lesson')) {
     return 'lesson';
   }
-  if (path.includes('/units/')) {
+  if (includesEntityCollection(path, 'unit')) {
     return 'unit';
   }
-  if (path.includes('/sequences/')) {
+  if (includesEntityCollection(path, 'sequence')) {
     return 'sequence';
   }
-  if (path.endsWith('/sequences')) {
+  if (endsWithEntityCollection(path, 'sequence')) {
     return 'sequence';
   }
-  if (/\/subjects(\/[^/]+)?$/.test(path)) {
+  if (subjectCollectionPattern.test(path)) {
     return 'subject';
   }
-  if (path.includes('/threads/')) {
+  if (includesEntityCollection(path, 'thread')) {
     return 'thread';
   }
   return undefined;
@@ -90,6 +103,38 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
  */
 export function getContentTypeFromPath(path: string): ContentType | undefined {
   return isSearchEndpoint(path) ?? isKeyStageScopedEndpoint(path) ?? isSingleEntityEndpoint(path);
+}
+
+function isPathTemplateSegment(segment: string): boolean {
+  return segment.startsWith('{') && segment.endsWith('}');
+}
+
+/**
+ * Extracts the entity identifier that immediately follows the entity collection
+ * segment in a concrete API path.
+ *
+ * For example, `/lessons/add-fractions/summary` resolves to `add-fractions`.
+ * OpenAPI template placeholders such as `\{lesson\}` are intentionally ignored
+ * because they are not usable website slugs.
+ */
+export function extractEntityIdFromPath(
+  path: string,
+  contentType: ContentType | undefined,
+): string | undefined {
+  if (contentType === undefined) {
+    return undefined;
+  }
+
+  const entityPathSegment = CONTENT_TYPE_PREFIXES[contentType].pathSegment;
+  const pathSegments = path.split('/');
+  const entityPathIndex = pathSegments.indexOf(entityPathSegment);
+  const candidateId = pathSegments[entityPathIndex + 1];
+
+  if (candidateId === undefined || candidateId.length === 0 || isPathTemplateSegment(candidateId)) {
+    return undefined;
+  }
+
+  return candidateId;
 }
 
 /**

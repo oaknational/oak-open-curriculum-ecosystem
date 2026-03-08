@@ -286,13 +286,14 @@ AI coding assistants are highly effective at implementation but naturally prone 
 
 ### 1. The Directives
 
-You must instantiate explicit markdown directives that the agent reads automatically. Example: `.agent/directives/RULES.md`
+You must instantiate explicit markdown directives that the agent reads automatically. Example: `.agent/directives/principles.md`
 
 > **Rule:** Maximize signal. Do not disable linters. If a file is too large, use the 'Extract -> Test -> Compose' pattern to break it apart.
 
 ### 2. Refactoring Momentum: Cohesive Extraction
 
 When the `max-files-per-dir` rule triggers, do not perform a "minimal split" by moving a single file. This creates "orphaned" files and fragmented domains. Instead:
+
 - Identify the most cohesive sub-group (e.g., all files related to "Search Response") and move them as a unit.
 - Ensure the new directory has its own `index.ts` public API immediately.
 - Update all internal imports to be relative and all external imports to use the new barrel.
@@ -300,6 +301,7 @@ When the `max-files-per-dir` rule triggers, do not perform a "minimal split" by 
 ### 3. Turbo Task Dependencies: The "Unbeatable" Gate
 
 For monorepos, ensure the `qg` (Quality Gate) command is integrated into `turbo.json`. This ensures that:
+
 - Linting (including `max-files-per-dir`) is cached.
 - Boundary checks (`depcruise`) are part of the global build pipeline.
 - If a package violates a boundary, the root `pnpm build` or `pnpm qg` fails instantly.

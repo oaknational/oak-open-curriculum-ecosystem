@@ -38,7 +38,7 @@ async function searchLessons(
   } = {},
 ) {
   const request = buildLessonRrfRequest({
-    text: query,
+    query,
     size: options.size ?? 20,
     subject: (options.subject ?? 'maths') as 'maths',
     keyStage: (options.keyStage ?? 'ks4') as 'ks4',
@@ -67,7 +67,7 @@ async function searchUnits(
   } = {},
 ) {
   const request = buildUnitRrfRequest({
-    text: query,
+    query,
     size: options.size ?? 10,
     subject: (options.subject ?? 'maths') as 'maths',
     keyStage: (options.keyStage ?? 'ks4') as 'ks4',

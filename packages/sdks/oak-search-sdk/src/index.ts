@@ -22,7 +22,7 @@
  * });
  *
  * const results = await sdk.retrieval.searchLessons({
- *   text: 'expanding brackets',
+ *   query: 'expanding brackets',
  *   subject: 'maths',
  *   keyStage: 'ks3',
  * });
@@ -36,6 +36,27 @@
 export { createSearchSdk } from './create-search-sdk.js';
 export { createSearchRetrieval } from './create-search-retrieval.js';
 export type { SearchRetrievalFactories, EsClientConfig } from './create-search-retrieval.js';
+
+// ---------------------------------------------------------------------------
+// Index lifecycle service (ADR-130) — blue/green index management
+// ---------------------------------------------------------------------------
+
+export { createIndexLifecycleService, buildLifecycleDeps } from './admin/index.js';
+
+// ---------------------------------------------------------------------------
+// Index resolution — constants and pure functions for Elasticsearch index naming
+// ---------------------------------------------------------------------------
+
+export {
+  SEARCH_INDEX_TARGETS,
+  SEARCH_INDEX_KINDS,
+  ZERO_HIT_INDEX_BASE,
+  BASE_INDEX_NAMES,
+  resolveSearchIndexName,
+  resolveZeroHitIndexName,
+} from './internal/index.js';
+
+export type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from './internal/index.js';
 
 // ---------------------------------------------------------------------------
 // All public types
@@ -79,6 +100,16 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
+  // Index lifecycle service types (ADR-130)
+  IndexLifecycleDeps,
+  IndexLifecycleService,
+  VersionedIngestOptions,
+  VersionedIngestResult,
+  StageResult,
+  PromoteResult,
+  RollbackResult,
+  AliasValidationResult,
+  AliasHealthEntry,
   // Observability service interface and types
   ObservabilityService,
   ObservabilityError,

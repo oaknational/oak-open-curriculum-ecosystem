@@ -1,0 +1,8 @@
+---
+description: Invoke elasticsearch-reviewer when changes touch Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, or Elastic Serverless capabilities.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-elasticsearch-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and `subagent_type: elasticsearch-reviewer`.

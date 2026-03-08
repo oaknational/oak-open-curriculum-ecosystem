@@ -34,7 +34,7 @@ Create a minimal Playwright test that:
 
 Read and follow these before implementation:
 
-- `.agent/directives/rules.md` - Core development rules
+- `.agent/directives/principles.md` - Core development rules
 - `.agent/directives/testing-strategy.md` - TDD approach, test types, no complex mocks
 
 Key points:

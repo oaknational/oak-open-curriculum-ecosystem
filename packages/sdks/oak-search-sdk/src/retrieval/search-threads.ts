@@ -28,9 +28,9 @@ import { toRetrievalError } from './retrieval-error.js';
 import { THREAD_SOURCE_EXCLUDES } from './source-excludes.js';
 
 /**
- * Build the ES request for thread search, branching on whether text is
- * provided.  When text is present, uses the two-way RRF retriever
- * (BM25 + ELSER).  When text is absent, falls back to a simple
+ * Build the ES request for thread search, branching on whether query is
+ * provided.  When query is present, uses the two-way RRF retriever
+ * (BM25 + ELSER).  When query is absent, falls back to a simple
  * filter + sort by `unit_count` descending.
  */
 function buildThreadRequest(
@@ -51,8 +51,8 @@ function buildThreadRequest(
     _source: THREAD_SOURCE_EXCLUDES,
   };
 
-  if (params.text.length > 0) {
-    return { ...base, retriever: buildThreadRetriever(params.text, filterClause) };
+  if (params.query.length > 0) {
+    return { ...base, retriever: buildThreadRetriever(params.query, filterClause) };
   }
   return {
     ...base,
@@ -68,7 +68,7 @@ function buildThreadRequest(
  * The `subject` filter maps to the `subject_slugs` array field in the
  * thread index (term queries work on array fields in Elasticsearch).
  *
- * @param params - Search parameters (text, optional subject/keyStage/size/from)
+ * @param params - Search parameters (query, optional subject/keyStage/size/from)
  * @param search - ES search function
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
@@ -82,7 +82,7 @@ export async function searchThreads(
 ): Promise<Result<ThreadsSearchResult, RetrievalError>> {
   try {
     const request = buildThreadRequest(params, resolveIndex);
-    logger?.debug('searchThreads', { text: params.text, size: request.size, from: request.from });
+    logger?.debug('searchThreads', { query: params.query, size: request.size, from: request.from });
     const res = await search<SearchThreadIndexDoc>(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,

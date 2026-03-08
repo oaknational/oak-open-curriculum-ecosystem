@@ -3,23 +3,23 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-02-27
+last_updated: 2026-03-07
 ---
 
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-25 (All phases 0-7 complete — merge-ready)
+**Last Updated**: 2026-03-07 (active graph alignment-audit lane and cross-collection sequencing refreshed)
 
-**Recent session (25 Feb 2026)**: Phase 7 merge readiness — full 12-gate quality chain
-passed from clean, codegen determinism verified. 8 specialist reviewers invoked (GO WITH
-CONDITIONS → conditions resolved). SDK workspace separation is complete.
-See [archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) for full context.
+**Recent session (7 Mar 2026)**: Graph-enablement planning was promoted from
+strategy into a queued parent quick-win plan and then into the active
+`kg-alignment-audit` slice. The semantic-search navigation surfaces now reflect
+that active/queued hierarchy explicitly.
 
 ---
 
 ## Immediate Context
 
-**Branch target**: `feat/semantic_search_deployment` (verify current checkout, do not assume)
+**Branch context**: use the current checkout and verify it explicitly; do not assume a named target branch
 
 **Phase 3a** (MCP search integration) is **complete** — all five
 workstreams done, all quality gates pass. The old REST-based
@@ -34,12 +34,6 @@ architecture reviewers invoked. Decisions documented in
 Archived plan:
 [search-results-quality.md](../../plans/semantic-search/archive/completed/search-results-quality.md)
 
-**Pre-merge required workstreams remaining**:
-
-1. ~~**SDK workspace separation** (3e)~~ — **COMPLETE** — all phases 0-7 done,
-   12-gate quality chain passed, 8 specialist reviews completed
-   ([archived plan](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md))
-
 **Search dispatch type safety** (3g) is now **complete**
 ([archived plan](../../plans/semantic-search/archive/completed/search-dispatch-type-safety.md)).
 
@@ -51,8 +45,26 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 - [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **COMPLETE** — archived
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
-- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence (Milestone 0/1/2)
+- [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence through Milestone 3 / Public Beta
+- [Active Plans](../../plans/semantic-search/active/README.md) — includes the active Boundary 03 lane and the active graph-enablement alignment-audit lane
+- [Current Queue](../../plans/semantic-search/current/README.md) — includes the P0 blocker, the keyword/thread-sequence follow-ons, and the parent queued graph quick-win plan
+- [Research Index](../../plans/semantic-search/research-index.md) — cross-cutting research pack for the Phase 4 queue
 - [MCP Extensions Roadmap](../../plans/sdk-and-mcp-enhancements/roadmap.md) — post-merge only
+
+Important: the active bulk metadata quick-win stream can progress without
+waiting for the public-release blocker to close. Treat Milestone 2 blocker work
+and Boundary 03 search-quality work as separate streams unless a session
+explicitly chooses the release track.
+
+Also note the current cross-collection ordering in
+[high-level-plan.md](../../plans/high-level-plan.md): `oak-preview`
+snagging/deploy comes first, then post-deploy bulk-data re-download and
+Elasticsearch reindex validation, then MCP Apps infrastructure migration, then
+the graph follow-on decisions informed by the active alignment audit. Treat
+[kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md)
+as the active graph lane and
+[kg-integration-quick-wins.plan.md](../../plans/semantic-search/current/kg-integration-quick-wins.plan.md)
+as the parent queued plan for the remaining ontology/Neo4j quick wins.
 
 ---
 
@@ -63,7 +75,7 @@ Run this checklist at the start of the next session:
 1. Re-ground via:
    - [start-right-thorough.md](../../skills/start-right-thorough/shared/start-right-thorough.md)
    - [AGENT.md](../../directives/AGENT.md)
-   - [rules.md](../../directives/rules.md)
+   - [principles.md](../../directives/principles.md)
    - [testing-strategy.md](../../directives/testing-strategy.md)
    - [schema-first-execution.md](../../directives/schema-first-execution.md)
 2. Verify current state before planning or coding:
@@ -74,45 +86,19 @@ Run this checklist at the start of the next session:
    ls -1 .agent/plans/semantic-search/active
    ```
 
-3. Verify post-split repo structure (compare against
-   [baseline](../../plans/semantic-search/archive/completed/sdk-workspace-separation-baseline.json)
-   captured pre-split at Phase 0):
-
-   ```bash
-   # Codegen workspace exists (baseline: absent)
-   ls -d packages/sdks/oak-sdk-codegen
-
-   # SDK workspaces (baseline: 2, now: 3)
-   ls -1 packages/sdks
-
-   # Core packages (baseline: 4, now: 5 — type-helpers added in N3)
-   ls -1 packages/core
-
-   # Runtime SDK has NO local generated imports (baseline: 56, now: 0)
-   rg -l "from ['\"](\.{1,2}/)+types/generated" \
-     packages/sdks/oak-curriculum-sdk/src \
-     --glob '!**/types/generated/**' \
-     --glob '!**/*.test.ts' | wc -l
-
-   # Runtime SDK has no sdk-codegen, no src/types/generated,
-   # no src/bulk, no public/bulk.ts
-   test -d packages/sdks/oak-curriculum-sdk/code-generation && echo "FAIL" || echo "OK"
-   test -d packages/sdks/oak-curriculum-sdk/src/types/generated && echo "FAIL" || echo "OK"
-   test -d packages/sdks/oak-curriculum-sdk/src/bulk && echo "FAIL" || echo "OK"
-   test -f packages/sdks/oak-curriculum-sdk/src/public/bulk.ts && echo "FAIL" || echo "OK"
-
-   # Codegen SDK subpath exports (11 total)
-   node -e "const p=JSON.parse(require('fs').readFileSync( \
-     './packages/sdks/oak-sdk-codegen/package.json','utf8')); \
-     Object.keys(p.exports).forEach(k=>console.log(k))"
-   ```
+3. If the session touches historical SDK workspace separation concerns, use the
+   archived plan and baseline files directly rather than replaying the old split
+   verification by default.
 
 4. Read split-critical ADRs:
    - [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture, consumer model, boundary invariants, 4-workspace vision
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
-5. Read the active execution plan — it is self-sufficient:
-   - [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **complete**, archived
+5. Read the active execution plan you are working from — it should be self-sufficient:
+   - [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active Boundary 03 execution plan
+   - [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
+   - [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
+   - [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active graph-enablement execution plan
 6. Treat these as complete/archive references only:
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
@@ -128,12 +114,29 @@ Run this checklist at the start of the next session:
 
 ## Next Execution Targets
 
+Active now:
+
+1. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
+2. [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/active/mcp-result-pattern-unification.execution.plan.md)
+3. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
+4. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane
+
+Queued:
+
+1. [m2-public-alpha-auth-rate-limits.execution.plan.md](../../plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md) — P0 blocker in a separate Milestone 2 release-readiness stream
+2. [keyword-definition-assets.execution.plan.md](../../plans/semantic-search/current/keyword-definition-assets.execution.plan.md) — P1 follow-on after bulk metadata quick wins
+3. [thread-sequence-semantic-surfaces.execution.plan.md](../../plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md) — P2 follow-on
+4. [kg-integration-quick-wins.plan.md](../../plans/semantic-search/current/kg-integration-quick-wins.plan.md) — parent queued graph quick-win plan after the active alignment audit
+
+---
+
 **Merge blocker — SDK workspace separation** (Milestone 0):
 
 **SDK workspace separation** — Phases 0-7 **complete**. Architecture
 review remediation (N1-N6) complete. Merge-ready.
 
 **Completed**:
+
 - Phase 0: baseline evidence committed
 - Phase 1: generation workspace scaffold, SDK boundary rules,
   turbo vocab-gen inputs
@@ -159,7 +162,7 @@ review remediation (N1-N6) complete. Merge-ready.
   6 implemented). Scope guard stale entries removed. Test split
   to integration (F4). Barrel simplification — duplicate exports
   removed (F10). DI refactoring — `GeneratedToolRegistry` interface
-  + `ToolRegistryDescriptor` (ISP), eliminated `vi.mock`/`vi.hoisted`,
+  and `ToolRegistryDescriptor` (ISP), eliminated `vi.mock`/`vi.hoisted`,
   removed all `as` assertions (F18). `generate:clean` recovery
   documented (F8). All gates pass. 4 specialist reviewers approved.
   Phase 5 reviewer suggestions tracked in plan §13.6.
@@ -237,8 +240,9 @@ not done until the violation is corrected.
   code under test.
 - **Ground truths before AND after configuration changes.** Always
   run baseline benchmarks before and after any search configuration
-  change. The existing 33 lesson ground truths (30 per-subject +
-  3 cross-subject, MRR 0.962) must not regress.
+  change. The existing lesson ground truths and their documented
+  baselines must not regress; use the Ground Truth Protocol and
+  roadmap tables as the authority for the current benchmark figures.
 - **Never make files shorter by removing documentation.** The
   point is to improve developer experience, not make it worse.
   If a file is too long, split it into smaller files with clear
@@ -368,7 +372,7 @@ what is expected, and why. If you skip them, you will violate
 the standards and produce work that must be rejected.
 
 1. [AGENT.md](../../directives/AGENT.md) -- Cardinal rule, first question, essential links
-2. [rules.md](../../directives/rules.md) -- Core rules: TDD, strictness, types, quality, architecture
+2. [principles.md](../../directives/principles.md) -- Core rules: TDD, strictness, types, quality, architecture
 3. [testing-strategy.md](../../directives/testing-strategy.md) -- TDD at ALL levels, test definitions, violations
 4. [schema-first-execution.md](../../directives/schema-first-execution.md) -- Generator is source of truth, prohibited practices
 5. [semantic-search-architecture.md](../../../docs/agent-guidance/semantic-search-architecture.md) -- Structure is the foundation, correct framing
@@ -435,7 +439,7 @@ score normalisation.
 | Index | GTs | MRR | NDCG@10 |
 |-------|-----|-----|---------|
 | Lessons (all 33) | 33 | 0.962 | 0.912 |
-| Units | 2 | 1.000 | 0.852 |
+| Units | 2 | 1.000 | 0.923 |
 | Threads | 8 | 0.938 | 0.902 |
 | Sequences | 1 | 1.000 | 1.000* |
 
@@ -464,8 +468,8 @@ pnpm markdownlint:root
 pnpm subagents:check
 pnpm lint:fix
 pnpm test
-pnpm test:e2e
 pnpm test:ui
+pnpm test:e2e
 pnpm smoke:dev:stub
 ```
 
@@ -506,7 +510,7 @@ All archived plans: `.agent/plans/semantic-search/archive/completed/`
 | [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) | Turbo task dependencies and caching (split-critical for task graph rewiring) |
 | [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Vocab pipeline ownership and generated graph artefact patterns |
 | [ADR-120](../../../docs/architecture/architectural-decisions/120-per-scope-search-tuning.md) | Per-scope search tuning decisions (fuzziness, score filtering, total semantics) |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence (Milestone 0/1/2) — start here for "what's next" |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Overall milestone sequence through Milestone 3 / Public Beta — start here for "what's next" |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary (governs tool descriptions) |
 | [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates, components, and document hierarchy |
 | [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK domain synonyms source of truth (predates two-concern insight; revision needed post-pipeline) |

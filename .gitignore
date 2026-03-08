@@ -13,6 +13,10 @@ collaboration.txt
 # Local MCP server config
 .mcp.json
 
+# Per-user Claude Code settings (contains absolute paths and local permissions)
+.claude/settings.json
+.claude/settings.local.json
+
 # Generated docs
 **/docs/api
 **/docs/api-md/index.md
@@ -59,6 +63,7 @@ pids
 **/test-artifacts/
 **/test-cache/
 **/reports/
+!.agent/reports/
 **/temp-secrets/
 **/lib-cov/
 **/coverage/

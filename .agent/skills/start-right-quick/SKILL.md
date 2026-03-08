@@ -14,7 +14,7 @@ Load `.agent/skills/start-right-quick/shared/start-right.md` and enforce its dir
 
 1. Read `.agent/skills/start-right-quick/shared/start-right.md`.
 2. Resolve and read the files referenced by the prompt:
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 3. Convert the prompt content into active commitments for this session:

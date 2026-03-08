@@ -12,7 +12,7 @@ This prompt guides the implementation of the `get-knowledge-graph` agent support
 
 Before ANY implementation work, read and internalise these foundation documents:
 
-1. **`.agent/directives/rules.md`**
+1. **`.agent/directives/principles.md`**
    - First Question: "Could it be simpler without compromising quality?"
    - Cardinal Rule: `pnpm type-gen` + `pnpm build` must align all workspaces
    - TDD at ALL levels (unit, integration, E2E)
@@ -888,7 +888,7 @@ The implementation is complete when:
 
 ## Quick Reference: Key Rules
 
-From `rules.md`:
+From `principles.md`:
 
 - **TDD**: Write tests FIRST — RED → GREEN → REFACTOR
 - **No type shortcuts**: No `as`, `any`, `!`, `Record<string, unknown>`

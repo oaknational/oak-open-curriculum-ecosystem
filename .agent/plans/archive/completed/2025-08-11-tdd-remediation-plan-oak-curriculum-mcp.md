@@ -5,7 +5,7 @@ Grounded on `GO.md` and `.agent/directives/AGENT.md`. Follows strict TS rules: n
 ## Core references
 
 - `GO.md`
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/AGENT.md`
 - `docs/agent-guidance/typescript-practice.md`
 - `docs/architecture/workspace-eslint-rules.md`

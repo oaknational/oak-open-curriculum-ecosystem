@@ -58,7 +58,7 @@ Introduce secrets scanning as a mandatory quality gate across local workflow and
 - Document policy and workflow in README, CONTRIBUTING, agent security guidance,
   and environment documentation.
 - Update WS1 in
-  `.agent/plans/semantic-search/active/public-release-readiness.plan.md`.
+  `.agent/plans/semantic-search/archive/completed/public-release-readiness.plan.md`.
 
 ## Related Decisions
 

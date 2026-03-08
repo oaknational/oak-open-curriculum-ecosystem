@@ -984,7 +984,7 @@ deliberately part of Oak's approach to AI-assisted development.
 
 | Document | Relevance |
 | --- | --- |
-| `.agent/directives/rules.md` | Quality standards that all changes must meet |
+| `.agent/directives/principles.md` | Quality standards that all changes must meet |
 | `.agent/directives/testing-strategy.md` | Test classification rules |
 | `.agent/directives/schema-first-execution.md` | Cardinal rule for type generation |
 | `docs/foundation/onboarding.md` | Canonical onboarding document (deep refinement in dedicated onboarding plan) |

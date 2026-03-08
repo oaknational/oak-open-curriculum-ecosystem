@@ -1,6 +1,6 @@
 # Provider Contracts (Runtime Boundaries)
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-03-07  
 **Status**: Active guidance  
 **Scope**: Behaviour contracts between app-composed providers and MCP runtime modules
 
@@ -9,22 +9,26 @@ implementations must satisfy, independent of any specific runtime package.
 
 ## Current Contract Surfaces
 
-| Surface          | Behaviour contract                                                 | Current composition locations                                                                                     |
-| ---------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Clock            | `now(): number` returns current epoch milliseconds                 | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`                                                                 |
-| Logger           | accepts `trace/debug/info/warn/error/fatal` calls without throwing | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`, `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts` |
-| Storage          | async `get/set/delete` semantics for request/session-scoped state  | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`                                                                 |
-| Search retrieval | satisfies SDK `SearchRetrievalService` interface                   | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`, `apps/oak-curriculum-mcp-streamable-http/src/application.ts`   |
+| Surface          | Behaviour contract                                                 | Current composition locations                                                                                                              |
+| ---------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Clock            | `now(): number` returns current epoch milliseconds                 | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` (legacy stdio workspace)                                                                 |
+| Logger           | accepts `trace/debug/info/warn/error/fatal` calls without throwing | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` (legacy stdio workspace), `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts` |
+| Storage          | async `get/set/delete` semantics for request/session-scoped state  | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` (legacy stdio workspace)                                                                 |
+| Search retrieval | satisfies SDK `SearchRetrievalService` interface                   | `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` (legacy stdio workspace), `apps/oak-curriculum-mcp-streamable-http/src/application.ts`   |
 
 ## Where Contracts Are Bound
 
-- STDIO binds runtime dependencies in:
+- Legacy stdio binds runtime dependencies in:
   [`apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`](../../apps/oak-curriculum-mcp-stdio/src/app/wiring.ts)
 - Streamable HTTP binds handler dependencies in:
   [`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/handlers.ts)
 - Runtime configuration is loaded at app entry via:
   [`runtime-config.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts) and
   [`runtime-config.ts`](../../apps/oak-curriculum-mcp-stdio/src/runtime-config.ts)
+
+The stdio binding locations remain documented because the legacy workspace still
+exists, but active MCP server evolution should now happen in the HTTP workspace.
+See [ADR-128](./architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
 
 ## Contract Rules
 

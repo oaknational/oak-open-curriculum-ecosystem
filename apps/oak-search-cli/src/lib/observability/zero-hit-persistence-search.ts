@@ -99,7 +99,7 @@ function normaliseHit(hit: EsSearchHit<ZeroHitDoc>): ZeroHitEvent | null {
   return {
     timestamp,
     scope: normaliseScope(source.search_scope),
-    text: source.query,
+    query: source.query,
     filters: normaliseFilters(source.filters),
     indexVersion: source.index_version,
     tookMs: source.took_ms,

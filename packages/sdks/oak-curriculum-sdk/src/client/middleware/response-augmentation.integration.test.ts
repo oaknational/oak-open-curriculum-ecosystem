@@ -76,6 +76,21 @@ async function invokeOnResponse(
   return result;
 }
 
+async function expectLessonCanonicalUrl(path: string, body: unknown): Promise<void> {
+  const logger = createFakeLogger();
+  const middleware = createResponseAugmentationMiddleware({ logger });
+  const request = buildGetRequest(path);
+  const response = buildJsonResponse(body);
+
+  const result = await invokeOnResponse(middleware, request, response);
+  const resultBody: unknown = await result.json();
+
+  expect(resultBody).toHaveProperty(
+    'canonicalUrl',
+    'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+  );
+}
+
 describe('createResponseAugmentationMiddleware', () => {
   describe('logger injection', () => {
     it('accepts an injected logger', () => {
@@ -115,6 +130,47 @@ describe('createResponseAugmentationMiddleware', () => {
       expect(result.status).toBe(200);
       const resultBody: unknown = await result.json();
       expect(resultBody).toHaveProperty('subjectSlug', 'maths');
+    });
+  });
+
+  describe('lesson sub-resource paths', () => {
+    it('uses the lesson path segment for lesson summary responses', async () => {
+      await expectLessonCanonicalUrl('/lessons/add-two-numbers/summary', {
+        lessonTitle: 'Add Two Numbers',
+        unitSlug: 'place-value',
+        unitTitle: 'Place Value',
+        subjectSlug: 'maths',
+        subjectTitle: 'Maths',
+        keyStageSlug: 'ks1',
+        keyStageTitle: 'Key Stage 1',
+        lessonKeywords: [],
+        keyLearningPoints: [],
+        misconceptionsAndCommonMistakes: [],
+        teacherTips: [],
+        contentGuidance: null,
+        supervisionLevel: null,
+        downloadsAvailable: true,
+      });
+    });
+
+    it('uses the lesson path segment for lesson transcript responses', async () => {
+      await expectLessonCanonicalUrl('/lessons/add-two-numbers/transcript', {
+        transcript: 'This is the lesson transcript text',
+        vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
+      });
+    });
+
+    it('uses the lesson path segment for lesson quiz responses', async () => {
+      await expectLessonCanonicalUrl('/lessons/add-two-numbers/quiz', {
+        starterQuiz: [],
+        exitQuiz: [],
+      });
+    });
+
+    it('uses the lesson path segment for lesson asset responses', async () => {
+      await expectLessonCanonicalUrl('/lessons/add-two-numbers/assets', {
+        assets: [],
+      });
     });
   });
 });

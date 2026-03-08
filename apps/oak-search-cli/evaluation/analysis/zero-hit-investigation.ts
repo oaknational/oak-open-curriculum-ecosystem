@@ -39,7 +39,7 @@ interface ZeroHitQuery {
 
 /** Run a search and return actual results. */
 async function runSearch(q: string, subject: SearchSubjectSlug, phase: Phase): Promise<string[]> {
-  const params = buildBenchmarkRequestParams({ text: q, subject, phase });
+  const params = buildBenchmarkRequestParams({ query: q, subject, phase });
   const request = buildLessonRrfRequest(params);
   const response = await esSearch<SearchLessonsIndexDoc>(request);
   return response.hits.hits.map((hit) => hit._source.lesson_slug);

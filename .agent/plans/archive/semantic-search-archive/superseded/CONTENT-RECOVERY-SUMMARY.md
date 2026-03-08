@@ -149,7 +149,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 
 **Source**: All archived documents had "Date: 2025-12-XX" headers
 
-**Reason**: Violates rules.md requirement to use git versioning instead of dates
+**Reason**: Violates principles.md requirement to use git versioning instead of dates
 
 **Replacement**: All documents now use "Git Version: See `git log` for commit history"
 

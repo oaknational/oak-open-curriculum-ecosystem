@@ -74,8 +74,8 @@ export interface ZeroHitPayload {
   /** The search scope that returned zero results. */
   readonly scope: ZeroHitScope;
 
-  /** The search query text that produced no results. */
-  readonly text: string;
+  /** The search query that produced no results. */
+  readonly query: string;
 
   /** The filters that were active when the query was made. */
   readonly filters: Readonly<Record<string, string>>;
@@ -121,7 +121,7 @@ export interface TelemetryFetchOptions {
  * // Record a zero-hit event
  * const recordResult = await observability.recordZeroHit({
  *   scope: 'lessons',
- *   text: 'quantum computing ks2',
+ *   query: 'quantum computing ks2',
  *   filters: { subject: 'science', keyStage: 'ks2' },
  *   indexVersion: 'v2024.01.0',
  * });

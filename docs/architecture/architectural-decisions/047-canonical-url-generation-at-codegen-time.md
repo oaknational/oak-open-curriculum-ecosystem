@@ -17,17 +17,17 @@ The Oak Curriculum SDK serves multiple consuming applications (HTTP MCP server, 
 The canonical URL generation logic was scattered across:
 
 - HTTP MCP server (`apps/http-mcp-server/src/url-helpers.ts`)
-- OpenAI connector (`packages/sdks/oak-curriculum-sdk/src/openai-connector/index.ts`)
+- Former OpenAI connector surface (directory subsequently removed; see `docs/architecture/openai-connector-deprecation.md`)
 - Various test files
 
 ## Decision
 
-**Generate canonical URL helpers at code-generation time and automatically augment all API responses with canonical URLs.**
+**Generate canonical URL helpers at code-generation time and automatically augment SDK client responses with canonical URLs when a concrete request URL is available.**
 
 ### Implementation Strategy
 
 1. **sdk-codegen Time Generation**: URL helpers are generated during the SDK's type generation pipeline (`pnpm sdk-codegen`)
-2. **Response Augmentation**: All API responses are automatically augmented with `canonicalUrl` fields
+2. **Response Augmentation**: SDK client responses are automatically augmented with `canonicalUrl` fields at the middleware boundary
 3. **Schema Decoration**: The OpenAPI schema is decorated to include `canonicalUrl` fields in response types
 4. **Centralized Logic**: All URL generation logic lives in the SDK core, not in consuming applications
 5. **Fail-Fast Design**: URL generation requires complete context; partial context results in warnings, not broken URLs
@@ -36,7 +36,7 @@ The canonical URL generation logic was scattered across:
 
 #### URL Helper Generation
 
-- Generated in `packages/sdks/oak-curriculum-sdk/code-generation/routing/generate-url-helpers.ts`
+- Generated in `packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/generate-url-helpers.ts`
 - Creates typed URL generation functions for each content type (lesson, unit, subject, sequence, thread)
 - Includes context-aware URL generation for resources that require additional metadata
 - Uses structured logging for debugging URL generation issues
@@ -46,7 +46,8 @@ The canonical URL generation logic was scattered across:
 - Implemented in `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts`
 - Automatically extracts context from response data
 - Generates canonical URLs using the generated URL helpers
-- Integrates with the `validateResponse` function to augment all API responses
+- Applied via `createResponseAugmentationMiddleware` at the SDK client boundary
+- Schema validation and response augmentation are independent concerns: validation does not derive `canonicalUrl`, while augmentation requires the concrete request URL available at the middleware boundary
 
 #### Schema Decoration
 
@@ -99,7 +100,7 @@ The canonical URL generation logic was scattered across:
 ### Migration Impact
 
 - **HTTP MCP Server**: Removed manual URL generation, now uses SDK-augmented responses
-- **OpenAI Connector**: Removed manual URL generation, now uses SDK-augmented responses
+- **OpenAI Connector Migration**: Manual URL generation was removed before the connector surface was later retired
 - **E2E Tests**: Updated to expect canonical URLs in all responses
 - **Type Definitions**: All response types now include `canonicalUrl` fields
 
@@ -110,18 +111,18 @@ The canonical URL generation logic was scattered across:
 #### Core Implementation
 
 - `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts` - Response augmentation logic
-- `packages/sdks/oak-curriculum-sdk/code-generation/routing/generate-url-helpers.ts` - URL helper generator
-- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/routing/url-helpers.ts` - Generated URL helpers
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/generate-url-helpers.ts` - URL helper generator
+- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/routing/url-helpers.ts` - Generated URL helpers
 
 #### Schema Integration
 
-- `packages/sdks/oak-curriculum-sdk/code-generation/schema-decoration-core.ts` - Schema decoration logic
+- `packages/sdks/oak-sdk-codegen/code-generation/schema-decoration-core.ts` - Schema decoration logic
 - Integration with type generation pipeline to decorate OpenAPI schema
 
 #### Application Updates
 
 - `apps/http-mcp-server/src/url-helpers.ts` - Removed (replaced by SDK)
-- `packages/sdks/oak-curriculum-sdk/src/openai-connector/index.ts` - Removed manual URL generation
+- Former `packages/sdks/oak-curriculum-sdk/src/openai-connector/index.ts` - manual URL generation removed before the directory was later retired
 - Various test files updated to expect canonical URLs
 
 ### Quality Gates
@@ -136,8 +137,8 @@ All changes pass the complete quality gate sequence:
 6. `pnpm -F @oaknational/curriculum-sdk docs:all` - Documentation generated
 7. `pnpm format:root` - Code formatting applied
 8. `pnpm markdownlint` - Markdown linting passed
-9. `pnpm test` - All tests passing (173/173)
-10. `pnpm test:e2e` - All E2E tests passing (24/24)
+9. `pnpm test` - All tests passing
+10. `pnpm test:e2e` - All E2E tests passing
 
 ## Related ADRs
 
@@ -145,6 +146,7 @@ All changes pass the complete quality gate sequence:
 - [ADR-031: Generation-Time Extraction](031-generation-time-extraction.md) - Build-time processing approach
 - [ADR-026: OpenAPI Code Generation Strategy](026-openapi-code-generation-strategy.md) - Code generation from OpenAPI
 - [ADR-033: Centralised Log Level Configuration](033-centralised-log-level-configuration.md) - Structured logging approach
+- [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md) - Explains the later move of code-generation artefacts into `oak-sdk-codegen`
 
 ## Success Criteria
 

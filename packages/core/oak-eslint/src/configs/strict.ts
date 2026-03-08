@@ -89,13 +89,13 @@ export const strict: Linter.Config[] = [
               message:
                 'FORBIDDEN: Record<string, unknown> destroys type information. ' +
                 'Use a specific type, Zod schema, or generic parameter. ' +
-                'See rules.md "No type shortcuts".',
+                'See principles.md "No type shortcuts".',
             },
             'Record<string, any>': {
               message:
                 'FORBIDDEN: Record<string, any> destroys type information. ' +
                 'Use a specific type, Zod schema, or generic parameter. ' +
-                'See rules.md "No type shortcuts".',
+                'See principles.md "No type shortcuts".',
             },
             object: {
               message:

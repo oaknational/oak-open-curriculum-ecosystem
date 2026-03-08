@@ -44,7 +44,7 @@ Implement a schema-derived curriculum ontology exposed as an MCP resource, enabl
 
 Read and follow:
 
-- `.agent/directives/rules.md` - Cardinal rule: type-gen sufficiency; TDD approach
+- `.agent/directives/principles.md` - Cardinal rule: type-gen sufficiency; TDD approach
 - `.agent/directives/schema-first-execution.md` - All complexity at type-gen time
 - `.agent/directives/testing-strategy.md` - TDD-first, unit → integration → E2E
 

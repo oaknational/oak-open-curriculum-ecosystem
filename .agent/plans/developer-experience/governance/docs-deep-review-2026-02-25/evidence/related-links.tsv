@@ -207,7 +207,7 @@ docs/foundation/onboarding.md	../architecture/architectural-decisions/030-sdk-si
 docs/foundation/onboarding.md	../architecture/architectural-decisions/031-generation-time-extraction.md	../architecture/architectural-decisions/031-generation-time-extraction.md	file	.//docs/architecture/architectural-decisions/031-generation-time-extraction.md
 docs/foundation/onboarding.md	../architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes	../architecture/architectural-decisions/README.md	file	.//docs/architecture/architectural-decisions/README.md
 docs/foundation/onboarding.md	../../.agent/directives/AGENT.md	../../.agent/directives/AGENT.md	file	.//.agent/directives/AGENT.md
-docs/foundation/onboarding.md	../../.agent/directives/rules.md	../../.agent/directives/rules.md	file	.//.agent/directives/rules.md
+docs/foundation/onboarding.md	../../.agent/directives/principles.md	../../.agent/directives/principles.md	file	.//.agent/directives/principles.md
 docs/foundation/onboarding.md	../../.agent/directives/practice.md	../../.agent/directives/practice.md	file	.//.agent/directives/practice.md
 docs/foundation/onboarding.md	../../README.md	../../README.md	file	.//README.md
 docs/foundation/onboarding.md	../../packages/sdks/oak-sdk-codegen/README.md	../../packages/sdks/oak-sdk-codegen/README.md	file	.//packages/sdks/oak-sdk-codegen/README.md
@@ -233,7 +233,7 @@ docs/foundation/onboarding.md	../domain/curriculum-guide.md	../domain/curriculum
 docs/foundation/onboarding.md	../domain/DATA-VARIANCES.md	../domain/DATA-VARIANCES.md	file	.//docs/domain/DATA-VARIANCES.md
 docs/foundation/onboarding.md	../engineering/workflow.md	../engineering/workflow.md	file	.//docs/engineering/workflow.md
 docs/foundation/onboarding.md	../../.agent/directives/practice.md#sustainability-and-scaling	../../.agent/directives/practice.md	file	.//.agent/directives/practice.md
-docs/foundation/onboarding.md	../../.agent/directives/rules.md	../../.agent/directives/rules.md	file	.//.agent/directives/rules.md
+docs/foundation/onboarding.md	../../.agent/directives/principles.md	../../.agent/directives/principles.md	file	.//.agent/directives/principles.md
 docs/foundation/onboarding.md	../engineering/workflow.md	../engineering/workflow.md	file	.//docs/engineering/workflow.md
 docs/foundation/onboarding.md	../architecture/architectural-decisions/119-agentic-engineering-practice.md	../architecture/architectural-decisions/119-agentic-engineering-practice.md	file	.//docs/architecture/architectural-decisions/119-agentic-engineering-practice.md
 docs/foundation/onboarding.md	../../.agent/directives/practice.md	../../.agent/directives/practice.md	file	.//.agent/directives/practice.md
@@ -286,7 +286,7 @@ docs/governance/ai-agent-guide.md	../../.cursor/commands/jc-start-right.md	../..
 docs/governance/ai-agent-guide.md	../../.agent/prompts/start-right.prompt.md	../../.agent/prompts/start-right.prompt.md	file	.//.agent/prompts/start-right.prompt.md
 docs/governance/ai-agent-guide.md	../../.agent/skills/start-right/SKILL.md	../../.agent/skills/start-right/SKILL.md	file	.//.agent/skills/start-right/SKILL.md
 docs/governance/ai-agent-guide.md	../../.agent/directives/AGENT.md	../../.agent/directives/AGENT.md	file	.//.agent/directives/AGENT.md
-docs/governance/ai-agent-guide.md	../../.agent/directives/rules.md	../../.agent/directives/rules.md	file	.//.agent/directives/rules.md
+docs/governance/ai-agent-guide.md	../../.agent/directives/principles.md	../../.agent/directives/principles.md	file	.//.agent/directives/principles.md
 docs/governance/ai-agent-guide.md	../architecture/architectural-decisions/	../architecture/architectural-decisions/	dir	.//docs/architecture/architectural-decisions
 docs/governance/ai-agent-guide.md	../../.agent/memory/distilled.md	../../.agent/memory/distilled.md	file	.//.agent/memory/distilled.md
 docs/governance/ai-agent-guide.md	../../.agent/directives/testing-strategy.md	../../.agent/directives/testing-strategy.md	file	.//.agent/directives/testing-strategy.md

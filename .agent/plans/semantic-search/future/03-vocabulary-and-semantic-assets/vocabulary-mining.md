@@ -6,7 +6,7 @@
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  
 **Last Updated**: 2026-01-17  
-**Research**: [aliases-and-equivalances.md](../../../../research/elasticsearch/oak-data/aliases-and-equivalances.md)
+**Research**: [aliases-and-equivalances.md](../../../../research/elasticsearch/oak-data/aliases-and-equivalances.md), [bulk-metadata-opportunities.research.md](bulk-metadata-opportunities.research.md), [vocabulary-glossary-and-mining-surfaces.research.md](vocabulary-glossary-and-mining-surfaces.research.md)
 
 ---
 
@@ -229,6 +229,8 @@ The 2025-12-26 experiment showed:
 
 | Document                                                                                      | Purpose              |
 | --------------------------------------------------------------------------------------------- | -------------------- |
+| [bulk-metadata-opportunities.research.md](bulk-metadata-opportunities.research.md) | Lesson/unit signal audit |
+| [vocabulary-glossary-and-mining-surfaces.research.md](vocabulary-glossary-and-mining-surfaces.research.md) | Vocabulary and glossary asset model |
 | [vocab-gen/](../../../../../packages/sdks/oak-sdk-codegen/vocab-gen/) | Pipeline code |
 | [ADR-086](../../../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Graph export pattern |
 | [aliases-and-equivalances.md](../../../../research/elasticsearch/oak-data/aliases-and-equivalances.md) | Synonym classification |
@@ -242,6 +244,6 @@ The 2025-12-26 experiment showed:
 
 Before starting work, re-read:
 
-1. [rules.md](../../../../directives/rules.md) — TDD, quality gates, no type shortcuts
+1. [principles.md](../../../../directives/principles.md) — TDD, quality gates, no type shortcuts
 2. [testing-strategy.md](../../../../directives/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../../../directives/schema-first-execution.md) — Generator is source of truth

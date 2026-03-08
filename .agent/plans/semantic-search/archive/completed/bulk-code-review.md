@@ -13,7 +13,7 @@
 
 ## Foundation Documents (Re-commit before continuing)
 
-1. **[rules.md](../../../directives/rules.md)** — TDD at ALL levels
+1. **[principles.md](../../../directives/principles.md)** — TDD at ALL levels
 2. **[testing-strategy.md](../../../directives/testing-strategy.md)** — Red → Green → Refactor
 3. **[schema-first-execution.md](../../../directives/schema-first-execution.md)** — Generator is source of truth
 4. **[ADR-088: Result Pattern](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)** — No try/catch, use Result pattern

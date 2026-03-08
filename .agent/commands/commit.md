@@ -49,4 +49,4 @@ If any of these would be helpful, **MUST discuss with the user first**. When in 
 
 Fix them **properly**. No shortcuts, no disabling checks, no bypassing hooks.
 
-Reference: `.agent/directives/rules.md`, `.agent/directives/testing-strategy.md`
+Reference: `.agent/directives/principles.md`, `.agent/directives/testing-strategy.md`

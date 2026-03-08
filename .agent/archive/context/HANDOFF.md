@@ -94,7 +94,7 @@ Start here, then dive deeper as needed:
 
 ### Supporting Documents
 
-6. **`.agent/directives/rules.md`**
+6. **`.agent/directives/principles.md`**
    - Cardinal rules (MUST follow)
    - Type safety requirements
    - TDD workflow
@@ -122,7 +122,7 @@ I'm continuing work on the Oak MCP Ecosystem. Please read:
 @.agent/context/context.md
 @.agent/plans/mcp-oauth-implementation-plan.md
 @.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md
-@.agent/directives/rules.md
+@.agent/directives/principles.md
 @docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md
 
 Once ready:
@@ -405,7 +405,7 @@ export function doX() {
 | "What changed recently?"             | `.agent/context/context.md`                     |
 | "What's the full technical context?" | `.agent/context/continuation.prompt.md`         |
 | "What are the detailed tasks?"       | `.agent/plans/mcp-oauth-implementation-plan.md` |
-| "What are the rules?"                | `.agent/directives/rules.md`         |
+| "What are the rules?"                | `.agent/directives/principles.md`         |
 
 ### When to Update What
 
@@ -413,7 +413,7 @@ export function doX() {
 | ------------------------- | ------------------------------------------------ |
 | Every session             | `context.md`, `continuation.prompt.md`, plan doc |
 | At milestones             | This file (HANDOFF.md)                           |
-| When rules change         | `rules.md`                                       |
+| When rules change         | `principles.md`                                       |
 | When architecture changes | This file + `continuation.prompt.md`             |
 
 ---
@@ -485,7 +485,7 @@ If you're confused or stuck:
 1. **Check `context.md`** for recent changes
 2. **Check `continuation.prompt.md`** for architectural decisions
 3. **Check plan document** for detailed task breakdown
-4. **Check `rules.md`** for coding standards
+4. **Check `principles.md`** for coding standards
 5. **Review test files** for examples of expected patterns
 
 ---

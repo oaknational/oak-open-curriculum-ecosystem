@@ -1,0 +1,6 @@
+---
+description: Never create compatibility layers, shims, or aliases. One concept = one name.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-compatibility-layers.md`.

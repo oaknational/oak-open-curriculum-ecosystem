@@ -16,11 +16,13 @@ Oak-specific variant of the upstream `convert-web-app` skill from `modelcontextp
 
 - Confirm Domain C critical items are complete and the reframing ADR is accepted.
 - See `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` (Domain D prerequisites).
-- Read `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`.
+- Read `.agent/directives/principles.md` and `.agent/directives/testing-strategy.md`.
 
 ## SDK (already installed)
 
-`@modelcontextprotocol/ext-apps/server` v1.1.2:
+Installable package: `@modelcontextprotocol/ext-apps` `^1.2.0`
+
+Server helpers imported from `@modelcontextprotocol/ext-apps/server`:
 
 - `registerAppResource` — registers the converted HTML with `text/html;profile=mcp-app` MIME automatically.
 - `registerAppTool` — links the parent tool to the resource URI.
@@ -31,16 +33,16 @@ Oak-specific variant of the upstream `convert-web-app` skill from `modelcontextp
 
 - **Sandboxed iframe**: no access to the parent page; all external requests require explicit CSP declaration via `_meta.ui.csp`.
 - **No same-origin server**: HTML is served as an MCP resource, not from an HTTP server. There is no `fetch('/api/...')`.
-- **Data via MCP bridge**: use the MCP Apps SDK `App` class and JSON-RPC bridge (`ui/initialize`, `ui/notifications/tool-input`, `ui/notifications/tool-result`) instead of direct API calls.
+- **Prefer data via MCP bridge**: use the MCP Apps SDK `App` class and JSON-RPC bridge (`ui/initialize`, `ui/notifications/tool-input`, `ui/notifications/tool-result`) by default. Direct cross-origin `fetch()` is acceptable only when explicitly justified and declared via `_meta.ui.csp` and, if needed, `_meta.ui.domain`.
 - **`connect()` is async**: widget render MUST NOT run before `connect()` resolves and tool data is delivered via `app.ontoolresult`.
 - **`_meta.ui.domain`**: only required for direct cross-origin `fetch()` from the iframe. If data flows through the MCP bridge, omit it.
 
 ## Workflow
 
-1. Read the upstream skill at https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/convert-web-app for the generic conversion guide.
+1. Read the upstream skill at [modelcontextprotocol/ext-apps convert-web-app](https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/convert-web-app) for the generic conversion guide.
 2. Read `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` for the CSP model and compatibility matrix.
 3. Audit the existing web component for:
-   - Direct API calls → must become MCP bridge calls or be removed entirely.
+   - Direct API calls → must become MCP bridge calls, or be replaced with explicitly justified direct cross-origin `fetch()` plus `_meta.ui.csp` (and `_meta.ui.domain` if needed).
    - External resource origins → must be declared in `_meta.ui.csp` (`connectDomains`, `resourceDomains`, `frameDomains`).
    - State management → replace with in-memory or `sessionStorage`; never use `localStorage` for auth tokens, session data, tool result payloads, or PII.
 4. Convert per the upstream guide, applying Oak's SDK surface above.

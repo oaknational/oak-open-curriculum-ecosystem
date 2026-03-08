@@ -219,7 +219,7 @@ This is a **sector-transformative opportunity**. See [02b-vocabulary-mining.md](
 
 ### Foundation Documents (MANDATORY)
 
-- [rules.md](../../directives/rules.md) — TDD, quality gates
+- [principles.md](../../directives/principles.md) — TDD, quality gates
 - [testing-strategy.md](../../directives/testing-strategy.md) — Test types
 - [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator-first
 

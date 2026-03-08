@@ -16,7 +16,7 @@ path	boundary	reference_count	classification
 .//README.md	B0/B4-Cross-Boundary	2	supporting-context
 .//.agent/prompts/GO.md	B1-Governance	2	normative-or-truth-source
 .//.agent/plans/high-level-plan.md	B5-Historical-Provenance	2	provenance-only
-.//.agent/directives/rules.md	B1-Governance	2	normative-or-truth-source
+.//.agent/directives/principles.md	B1-Governance	2	normative-or-truth-source
 .//LICENCE-DATA.md	B0/B4-Cross-Boundary	1	supporting-context
 .//.cursor/skills/napkin/SKILL.md	B1-Governance	1	normative-or-truth-source
 .//.cursor/skills/distillation/SKILL.md	B1-Governance	1	normative-or-truth-source

@@ -50,5 +50,5 @@ A structured approach to diagnosing and fixing defects. Follow these steps in or
 
 ## References
 
-- `.agent/directives/rules.md` — TDD discipline, fail-fast principles
+- `.agent/directives/principles.md` — TDD discipline, fail-fast principles
 - `.agent/directives/testing-strategy.md` — test pyramid, isolation requirements

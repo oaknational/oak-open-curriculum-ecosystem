@@ -10,6 +10,7 @@ import {
   isSearchEndpoint,
   isKeyStageScopedEndpoint,
   getContentTypeFromPath,
+  extractEntityIdFromPath,
   extractGenericId,
   extractSubjectSlug,
   extractLessonSlug,
@@ -144,6 +145,38 @@ describe('getContentTypeFromPath', () => {
 
   it('returns sequence for /subjects/{s}/sequences', () => {
     expect(getContentTypeFromPath('/subjects/maths/sequences')).toBe('sequence');
+  });
+});
+
+describe('extractEntityIdFromPath', () => {
+  it('extracts lesson slug from lesson sub-resource paths', () => {
+    expect(extractEntityIdFromPath('/lessons/add-fractions/summary', 'lesson')).toBe(
+      'add-fractions',
+    );
+  });
+
+  it('extracts unit slug from unit sub-resource paths', () => {
+    expect(extractEntityIdFromPath('/units/fractions/summary', 'unit')).toBe('fractions');
+  });
+
+  it('extracts subject slug from subject paths', () => {
+    expect(extractEntityIdFromPath('/subjects/maths', 'subject')).toBe('maths');
+  });
+
+  it('extracts sequence slug from sequence paths', () => {
+    expect(extractEntityIdFromPath('/sequences/maths-ks1', 'sequence')).toBe('maths-ks1');
+  });
+
+  it('extracts thread slug from thread paths', () => {
+    expect(extractEntityIdFromPath('/threads/algebra', 'thread')).toBe('algebra');
+  });
+
+  it('returns undefined for OpenAPI template placeholders', () => {
+    expect(extractEntityIdFromPath('/lessons/{lesson}/summary', 'lesson')).toBeUndefined();
+  });
+
+  it('returns undefined when the path does not match the content type', () => {
+    expect(extractEntityIdFromPath('/subjects/maths', 'lesson')).toBeUndefined();
   });
 });
 

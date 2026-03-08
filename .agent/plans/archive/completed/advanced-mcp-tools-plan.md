@@ -19,7 +19,7 @@ This plan defines advanced MCP tooling beyond simple API endpoint facades, inclu
 
 ### Alignment with Core Directives
 
-- **.agent/directives/rules.md** – Cardinal Rule, TDD, type safety, no shortcuts
+- **.agent/directives/principles.md** – Cardinal Rule, TDD, type safety, no shortcuts
 - **.agent/directives/schema-first-execution.md** – All runtime behaviour driven by generated artefacts
 - **.agent/directives/testing-strategy.md** – TDD-first, unit → integration → E2E
 - **.agent/plans/high-level-plan.md** – Strategic roadmap (Items #1-3 are prerequisites)
@@ -648,7 +648,7 @@ pnpm test:e2e      # E2E tests pass
 
 ### Implementation Directives
 
-- `.agent/directives/rules.md` - Cardinal rule, TDD, type safety
+- `.agent/directives/principles.md` - Cardinal rule, TDD, type safety
 - `.agent/directives/schema-first-execution.md` - Generator-first mindset
 - `.agent/directives/testing-strategy.md` - Unit → integration → E2E
 

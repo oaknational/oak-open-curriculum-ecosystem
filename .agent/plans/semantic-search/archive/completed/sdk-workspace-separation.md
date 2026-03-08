@@ -173,7 +173,7 @@ ADRs only.
 
 Re-read and recommit before Phase 0, and at each phase transition:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 

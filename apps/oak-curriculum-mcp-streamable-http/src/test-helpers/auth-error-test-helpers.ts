@@ -52,7 +52,7 @@ interface Params {
  *   2. Internally wrapping to our test Params type
  *   3. Type assertion to satisfy ToolRegistrationServer (library type from MCP SDK)
  *
- * This is test infrastructure code that enables DI-based integration testing per rules.md.
+ * This is test infrastructure code that enables DI-based integration testing per principles.md.
  * Alternative approaches (replicating MCP SDK's entire type system) are disproportionate effort.
  *
  * @param capturedHandlers - Map to store handlers by tool name

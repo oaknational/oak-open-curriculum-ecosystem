@@ -1,9 +1,9 @@
 /**
  * Generate deterministic URL helper library for teachers-site canonical URLs.
  *
- * This codegen does not read the schema for routes (the OpenAPI does not contain them),
- * but we keep it in code-generation to align with the project rule: helpers and types flow
- * from generation, not ad-hoc runtime code in apps.
+ * The generated helpers centralise both website routing patterns and the API-facing
+ * content-type metadata needed by response augmentation. This keeps route knowledge in
+ * generated artefacts rather than handwritten SDK runtime code.
  *
  * URL patterns confirmed against OWA source (`src/pages/teachers/`) and live site:
  * - Sequences: `/teachers/curriculum/{sequenceSlug}/units`
@@ -26,11 +26,11 @@ function headerSection(): string {
 
 function typesSection(): string {
   return `export const CONTENT_TYPE_PREFIXES = {
-  lesson: { prefix: 'lesson:', contentType: 'lesson' },
-  unit: { prefix: 'unit:', contentType: 'unit' },
-  subject: { prefix: 'subject:', contentType: 'subject' },
-  sequence: { prefix: 'sequence:', contentType: 'sequence' },
-  thread: { prefix: 'thread:', contentType: 'thread' },
+  lesson: { prefix: 'lesson:', contentType: 'lesson', pathSegment: 'lessons' },
+  unit: { prefix: 'unit:', contentType: 'unit', pathSegment: 'units' },
+  subject: { prefix: 'subject:', contentType: 'subject', pathSegment: 'subjects' },
+  sequence: { prefix: 'sequence:', contentType: 'sequence', pathSegment: 'sequences' },
+  thread: { prefix: 'thread:', contentType: 'thread', pathSegment: 'threads' },
 } as const;
 
 export type ContentType = keyof typeof CONTENT_TYPE_PREFIXES;

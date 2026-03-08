@@ -176,7 +176,7 @@ apps/oak-search-cli/src/lib/elasticsearch/
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
 - [ADR-064: Elasticsearch Mapping Organization](064-elasticsearch-mapping-organization.md) (superseded)
 - [ADR-105: SDK-Generated Search Constants](105-sdk-generated-search-constants.md) — Subject hierarchy generator
-- Cardinal rule: `.agent/directives/rules.md`
+- Cardinal rule: `.agent/directives/principles.md`
 - Schema-first execution: `.agent/directives/schema-first-execution.md`
 
 ## References

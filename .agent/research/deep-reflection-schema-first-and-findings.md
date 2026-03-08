@@ -8,7 +8,7 @@
 
 ## THE FUNDAMENTAL RELATIONSHIP
 
-### Cardinal Rule (rules.md)
+### Cardinal Rule (principles.md)
 
 > "ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information _MUST_ be generated at compile time ONLY, and so flow from the Open Curriculum OpenAPI schema."
 

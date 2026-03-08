@@ -1,6 +1,6 @@
 ## Delegation Triggers
 
-Invoke this agent when work touches the MCP protocol, MCP tool definitions, MCP server transport or session patterns, MCP Apps Extension widgets, or any MCP-related implementation. The mcp-reviewer assesses implementations against the **canonical MCP specification and best possible practice**, not merely against what this repo happens to have built so far.
+Invoke this agent when work touches the MCP protocol, MCP tool definitions, MCP server transport or session patterns, MCP Apps Extension widgets, MCP Apps migration planning, or any MCP-related implementation. The mcp-reviewer assesses implementations against the **canonical MCP specification and best possible practice**, not merely against what this repo happens to have built so far.
 
 ### Triggering Scenarios
 
@@ -8,6 +8,7 @@ Invoke this agent when work touches the MCP protocol, MCP tool definitions, MCP 
 - Validating MCP server transport or session management patterns
 - Answering questions about the MCP specification (tools, resources, prompts, sampling, transports, auth)
 - Reviewing MCP Apps Extension widgets, resources, or capability negotiation
+- Reviewing OpenAI App to MCP Apps migration plans, split plans, or migration readiness
 - Assessing whether an implementation follows MCP best practice (even if it currently works)
 - Reviewing MCP prompt or resource definitions for correctness
 
@@ -55,10 +56,6 @@ These are the primary standards. Always consult the live documentation — the s
 
 | Source | Use for |
 |--------|---------|
-| `.agent/skills/mcp-add-ui/SKILL.md` | Oak-specific pattern for adding UI to existing tools |
-| `.agent/skills/mcp-create-app/SKILL.md` | Oak-specific pattern for creating new MCP Apps |
-| `.agent/skills/mcp-convert-web/SKILL.md` | Oak-specific pattern for converting web components to MCP Apps |
-| `.agent/skills/mcp-migrate-oai/SKILL.md` | Migration from OpenAI Apps SDK to MCP Apps standard |
 | `.agent/research/mcp-*.md` (all four files) | Investigation findings on auth, inspector, SDK types, schema flow |
 
 Use WebFetch or WebSearch to consult the live documentation above. The URLs are starting points — follow links within them for specific protocol areas.
@@ -85,6 +82,18 @@ Before reviewing any changes, you MUST also read and internalise these repo-spec
 | `docs/architecture/architectural-decisions/122-permissive-cors-for-oauth-protected-mcp.md` | Unconditionally permissive CORS design |
 | `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` | Tools, resources, and prompts strategy |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
+
+When the task concerns the OpenAI App to MCP Apps migration, also read:
+
+| Document | Purpose |
+|----------|---------|
+| `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` | Migration sequencing, Domain C ordering, and non-goals |
+| `.agent/plans/sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md` | Current execution entry point and reviewer/skill chain |
+| `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` | MCP Apps standards evidence and host compatibility findings |
+| `.agent/skills/mcp-migrate-oai/SKILL.md` | Primary Oak migration workflow |
+| `.agent/skills/mcp-create-app/SKILL.md` | Post-migration additive app creation path |
+| `.agent/skills/mcp-add-ui/SKILL.md` | Post-migration additive tool-UI path |
+| `.agent/skills/mcp-convert-web/SKILL.md` | Post-migration web-to-MCP-App conversion path |
 
 ## Core Philosophy
 
@@ -157,7 +166,8 @@ This repo's decisions (ADR-035, ADR-050):
 
 ### MCP Apps Extension
 
-This repo uses `@modelcontextprotocol/ext-apps` v1.1.2:
+This repo currently declares `@modelcontextprotocol/ext-apps` `^1.2.0` in the
+relevant workspaces:
 
 - `registerAppTool` — links tool to `_meta.ui.resourceUri`
 - `registerAppResource` — registers HTML resource with `text/html;profile=mcp-app` MIME

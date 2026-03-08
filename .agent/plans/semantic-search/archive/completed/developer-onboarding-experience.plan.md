@@ -25,7 +25,7 @@ landscape: what exists, what is stale, what is redundant, what is
 missing, and what entire areas are no longer relevant. WS0 produces
 this audit. All subsequent workstreams consume its output.
 
-**Directive lock (rules.md)**: no backwards compatibility layers.
+**Directive lock (principles.md)**: no backwards compatibility layers.
 Onboarding migrations must be clean breaks. Do not keep compatibility
 pages, aliases, or fallback routes once the canonical path is set.
 

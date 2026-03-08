@@ -128,7 +128,7 @@ Move canonical URL generation from consuming applications into the SDK core, ens
 
 10. Self-review and finalize:
 
-- Verify adherence to `.agent/directives/rules.md` (no assertions, schema-driven types).
+- Verify adherence to `.agent/directives/principles.md` (no assertions, schema-driven types).
 - Commit and push without bypassing checks.
 
 ## Success Criteria
@@ -212,6 +212,6 @@ Tasks:
 
 Rules:
 
-- Follow `.agent/directives/rules.md` and `GO.md` (self-reviews, no runtime-defined types, no assertions).
+- Follow `.agent/directives/principles.md` and `GO.md` (self-reviews, no runtime-defined types, no assertions).
 - Tests must prove behaviour, not implementation.
 - Absolutely do not use `as`, non-null assertions, or type-widening shortcuts. Prefer generated type guards and overloads to obtain narrowing. Handle OpenAPI `$ref` via proper type guards and union-safe processing.

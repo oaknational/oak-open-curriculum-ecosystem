@@ -63,7 +63,7 @@ interface UnitResult {
 
 async function searchLessonsHybrid(query: string): Promise<LessonResult[]> {
   const request = buildLessonRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',
@@ -79,7 +79,7 @@ async function searchLessonsHybrid(query: string): Promise<LessonResult[]> {
 
 async function searchUnitsHybrid(query: string): Promise<UnitResult[]> {
   const request = buildUnitRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',

@@ -10,7 +10,7 @@ This task implements **tool-name-routed renderers** with **generic renderer patt
 
 Before starting ANY work, read and internalise these foundational documents:
 
-1. **Rules**: `.agent/directives/rules.md`
+1. **Rules**: `.agent/directives/principles.md`
    - TDD at ALL levels (unit, integration, E2E)
    - Pure functions first
    - No type shortcuts (`as`, `any`, `!`)

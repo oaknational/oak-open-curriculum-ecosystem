@@ -1,0 +1,64 @@
+/**
+ * Index generation cleanup for blue/green lifecycle (ADR-130).
+ *
+ * Retains at most MAX_GENERATIONS versioned indexes per kind,
+ * deleting the oldest surplus. Extracted to keep the main
+ * lifecycle service within the max-lines limit.
+ */
+
+import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
+import { BASE_INDEX_NAMES, SEARCH_INDEX_KINDS } from '../internal/index.js';
+
+/** Maximum number of index generations to retain (including current). */
+const MAX_GENERATIONS = 2;
+
+/** Result of a cleanup operation, tracking both successes and failures. */
+export interface CleanupResult {
+  readonly deleted: number;
+  readonly failed: number;
+}
+
+/** Delete old versioned indexes exceeding the generation limit. */
+export async function cleanupOldGenerations(deps: IndexLifecycleDeps): Promise<CleanupResult> {
+  let deleted = 0;
+  let failed = 0;
+  for (const kind of SEARCH_INDEX_KINDS) {
+    const result = await cleanupKindGenerations(deps, BASE_INDEX_NAMES[kind]);
+    deleted += result.deleted;
+    failed += result.failed;
+  }
+  return { deleted, failed };
+}
+
+/** Cleanup old generations for a single index kind. */
+async function cleanupKindGenerations(
+  deps: IndexLifecycleDeps,
+  baseName: string,
+): Promise<CleanupResult> {
+  const listResult = await deps.listVersionedIndexes(baseName, deps.target);
+  if (!listResult.ok) {
+    // Listing failure: skip this kind silently — cleanup is best-effort and
+    // the ingest already committed. Not counted as a `failed` deletion because
+    // no deletion was attempted.
+    deps.logger?.warn('Failed to list versioned indexes for cleanup', { baseName });
+    return { deleted: 0, failed: 0 };
+  }
+  // Version strings are fixed-width (vYYYY-MM-DD-HHmmss), so lexicographic sort equals chronological sort.
+  // With MAX_GENERATIONS=2 and cleanup running after the swap, the retained indexes are the current
+  // version (n) and previous version (n-1). The rollback target is always n-1, which is naturally
+  // protected without consulting metadata.
+  const sorted = [...listResult.value].sort();
+  const toDelete = sorted.slice(0, Math.max(0, sorted.length - MAX_GENERATIONS));
+  let deleted = 0;
+  let failed = 0;
+  for (const indexName of toDelete) {
+    const deleteResult = await deps.deleteVersionedIndex(indexName);
+    if (deleteResult.ok) {
+      deleted++;
+    } else {
+      failed++;
+      deps.logger?.warn('Failed to delete old versioned index', { indexName });
+    }
+  }
+  return { deleted, failed };
+}

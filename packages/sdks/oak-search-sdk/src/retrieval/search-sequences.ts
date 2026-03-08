@@ -27,7 +27,7 @@ import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
  * Sequences are API data structures for curriculum retrieval, not
  * user-facing programmes. One sequence generates many programme views.
  *
- * @param params - Search sequences parameters (text, optional subject/phaseSlug/size/from)
+ * @param params - Search sequences parameters (query, optional subject/phaseSlug/size/from)
  * @param search - ES search function
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
@@ -49,17 +49,20 @@ export async function searchSequences(
     if (params.phaseSlug) {
       filters.push({ term: { phase_slug: params.phaseSlug } });
     }
+    if (params.keyStage) {
+      filters.push({ term: { key_stages: params.keyStage } });
+    }
 
     const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
     const request: EsSearchRequest = {
       index: resolveIndex('sequences'),
       size,
-      retriever: buildSequenceRetriever(params.text, filterClause),
+      retriever: buildSequenceRetriever(params.query, filterClause),
       from: from > 0 ? from : undefined,
       _source: SEQUENCE_SOURCE_EXCLUDES,
     };
 
-    logger?.debug('searchSequences', { text: params.text, size, from });
+    logger?.debug('searchSequences', { query: params.query, size, from });
     const res = await search<SearchSequenceIndexDoc>(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,

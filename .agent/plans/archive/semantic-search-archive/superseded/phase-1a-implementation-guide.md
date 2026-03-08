@@ -26,7 +26,7 @@
 
 ### Prerequisites
 
-- [x] Re-read foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)
+- [x] Re-read foundation documents (principles.md, schema-first-execution.md, testing-strategy.md)
 - [x] Elasticsearch Serverless running with ELSER configured
 - [x] E5 endpoint verified (`.multilingual-e5-small-elasticsearch` PRECONFIGURED)
 - [x] Dense vector field definitions added (384-dim)

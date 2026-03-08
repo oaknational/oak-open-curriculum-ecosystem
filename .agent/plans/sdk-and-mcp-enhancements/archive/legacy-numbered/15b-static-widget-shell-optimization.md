@@ -14,7 +14,7 @@
 
 **Re-read these before starting work:**
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 
@@ -31,7 +31,7 @@ Plan 15a (auth bypass) may achieve acceptable latency on its own. Measure before
 - If latency is <2s after 15a → this plan may be unnecessary
 - If latency is still >2s → proceed with this plan
 
-This aligns with YAGNI principle from rules.md.
+This aligns with YAGNI principle from principles.md.
 
 ---
 
@@ -646,7 +646,7 @@ ALL must pass before considering work complete.
 
 Per project rules, regularly re-read during implementation:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 
 Ask at each phase: **Could it be simpler without compromising quality?**

@@ -27,13 +27,13 @@ This plan implements 5 user experience enhancements to the Oak Knowledge Graph w
 
 Before beginning any implementation, read and internalise these documents:
 
-1. **[rules.md](../../directives/rules.md)** — Core development rules, TDD requirements, type safety
+1. **[principles.md](../../directives/principles.md)** — Core development rules, TDD requirements, type safety
 2. **[testing-strategy.md](../../directives/testing-strategy.md)** — Test types, TDD at all levels, when to write tests
 3. **[schema-first-execution.md](../../directives/schema-first-execution.md)** — Generator-first mindset (applies to M2 if extended later)
 
 ### Key Principles to Apply
 
-From **rules.md**:
+From **principles.md**:
 
 - **TDD**: Write tests FIRST. Red → Green → Refactor
 - **Pure functions first**: All SVG component functions are pure

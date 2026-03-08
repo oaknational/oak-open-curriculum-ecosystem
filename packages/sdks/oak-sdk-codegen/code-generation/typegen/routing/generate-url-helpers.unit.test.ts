@@ -22,6 +22,27 @@ describe('generateUrlHelpers', () => {
     expect(output.length).toBeGreaterThan(0);
   });
 
+  describe('CONTENT_TYPE_PREFIXES', () => {
+    it('includes generated path segments for every content type', () => {
+      const output = generateUrlHelpers();
+      expect(output).toContain(
+        "lesson: { prefix: 'lesson:', contentType: 'lesson', pathSegment: 'lessons' }",
+      );
+      expect(output).toContain(
+        "unit: { prefix: 'unit:', contentType: 'unit', pathSegment: 'units' }",
+      );
+      expect(output).toContain(
+        "subject: { prefix: 'subject:', contentType: 'subject', pathSegment: 'subjects' }",
+      );
+      expect(output).toContain(
+        "sequence: { prefix: 'sequence:', contentType: 'sequence', pathSegment: 'sequences' }",
+      );
+      expect(output).toContain(
+        "thread: { prefix: 'thread:', contentType: 'thread', pathSegment: 'threads' }",
+      );
+    });
+  });
+
   describe('urlForSequence', () => {
     it('generates /teachers/curriculum/{slug}/units (not /programmes/)', () => {
       const output = generateUrlHelpers();

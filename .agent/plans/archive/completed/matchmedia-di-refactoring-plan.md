@@ -480,7 +480,7 @@ All must pass (exit code 0).
 
 Before implementing, re-read:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 
 Key principle: Tests MUST NOT manipulate global state. Product code must accept dependencies as parameters.

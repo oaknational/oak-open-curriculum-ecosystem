@@ -1,6 +1,6 @@
 ---
 name: "Remove vi.mock from tests and enforce type safety in test code"
-overview: "Eliminate all vi.mock usage across the monorepo, remove type assertions from test code, and ban Object.assign — bringing tests into full compliance with ADR-078, rules.md, and the testing strategy."
+overview: "Eliminate all vi.mock usage across the monorepo, remove type assertions from test code, and ban Object.assign — bringing tests into full compliance with ADR-078, principles.md, and the testing strategy."
 status: "superseded"
 superseded_on: 2026-03-03
 superseded_by: ".//.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md"
@@ -21,7 +21,7 @@ todos:
     content: "Run full E2E suite and quality gates to confirm zero regressions from vi.mock removal."
     status: done
   - id: rules-docs
-    content: "Update rules.md and testing-strategy.md to explicitly ban vi.mock."
+    content: "Update principles.md and testing-strategy.md to explicitly ban vi.mock."
     status: done
   - id: eslint-type-assertions-warn
     content: "Set consistent-type-assertions to 'warn' in testRules (was 'off')."
@@ -64,7 +64,7 @@ todos:
 
 ## Problem
 
-The workspace rules (`rules.md`, `testing-strategy.md`, ADR-078) explicitly
+The workspace rules (`principles.md`, `testing-strategy.md`, ADR-078) explicitly
 prohibit `vi.mock`, type assertions (`as`), broad types (`Record<string, unknown>`),
 and `Object.*` methods. The ESLint configuration did not enforce these rules in
 test files — `testRules` in `oak-eslint` set `consistent-type-assertions: 'off'`
@@ -95,7 +95,7 @@ All `vi.mock` calls removed from `apps/oak-curriculum-mcp-streamable-http/e2e-te
 
 | Change | Status |
 |--------|--------|
-| `rules.md`: added `vi.mock` to the explicit banned list | Done |
+| `principles.md`: added `vi.mock` to the explicit banned list | Done |
 | `testing-strategy.md`: added `vi.mock` to both banned-pattern lists | Done |
 
 ### ESLint warning — COMPLETE
@@ -125,7 +125,7 @@ violations that were previously invisible. Zero errors, gates green.
 
 ### Rules not yet enforced by ESLint
 
-These rules are documented in `rules.md` and `testing-strategy.md` but have
+These rules are documented in `principles.md` and `testing-strategy.md` but have
 no ESLint enforcement yet. Each requires both adding the rule AND fixing the
 existing violations before the gate can enforce it.
 
@@ -252,7 +252,7 @@ the [eslint-override-removal plan](./eslint-override-removal.plan.md)).
 ## References
 
 - ADR-078: Dependency injection for testability
-- `.agent/directives/rules.md` — "No type shortcuts", "Never disable checks"
+- `.agent/directives/principles.md` — "No type shortcuts", "Never disable checks"
 - `.agent/directives/testing-strategy.md` — "No global state manipulation"
 - Napkin session 2026-03-03f: root cause analysis of intermittent E2E failures
 - Napkin session 2026-03-03g: E2E vi.mock removal and Clerk DI pattern

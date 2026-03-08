@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, Milestone 2 blockers queued in `current/`
-**Last Updated**: 2026-03-04
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, four plans active in `active/`, Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Last Updated**: 2026-03-07
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -51,7 +51,7 @@ Milestone 2: Open Public Alpha                   🔄 NEXT
   → Production Clerk, social providers, public sign-up
   → Edge rate limiting on OAuth proxy endpoints
 
-Milestone 3: Tech Debt & Hardening               📋 PLANNED
+Milestone 3: Public Beta                         📋 PLANNED
   → Search quality Phase 4, architectural enforcement, observability
 ```
 
@@ -60,6 +60,21 @@ See [high-level-plan.md](../high-level-plan.md) for full milestone definitions.
 ---
 
 ## Current State
+
+Cross-collection sequencing note:
+
+- [high-level-plan.md](../high-level-plan.md) currently sequences:
+  `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
+  Elasticsearch reindex validation, then MCP Apps infrastructure migration,
+  then graph follow-on work from the active alignment audit.
+- Semantic-search currently has four active plans in `active/`:
+  `mcp-result-pattern-unification`, `search-sdk-args-extraction`,
+  `bulk-metadata-quick-wins`, and `kg-alignment-audit`.
+- The graph lane now has its first evidence-first slice promoted into
+  [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md),
+  though its phases remain pending, while
+  [kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+  remains the parent queued plan for the remaining quick wins.
 
 Phase 3a MCP search integration is complete and archived:
 
@@ -122,6 +137,9 @@ These are no longer merge-blocking and remain in the execution backlog:
 - 3b Result pattern unification
 - 3c STDIO-HTTP alignment
 - Milestone 2 auth/rate-limit blockers: [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+- Independent semantic-search stream already active:
+  [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md)
+- Remaining follow-on queue: see [Phase 4 Streams](#phase-4-streams-independent-search-quality-streams-alongside-milestone-2).
 
 ---
 
@@ -156,7 +174,7 @@ Milestone 2: Open Public Alpha                      🔄 NEXT
   Clerk production migration + edge rate limiting
   Canonical blocker plan: current/m2-public-alpha-auth-rate-limits.execution.plan.md
         ↓
-Milestone 3: Tech Debt & Hardening                  📋 PLANNED
+Milestone 3: Public Beta                            📋 PLANNED
   Phase 4: Search Quality + Ecosystem
   Phase 5: Extensions
 ```
@@ -258,7 +276,7 @@ Canonical next plan:
 
 ---
 
-## Phase 4 Streams (Milestone 2)
+## Phase 4 Streams (Independent search-quality streams alongside Milestone 2)
 
 Primary boundary hubs (post-alpha):
 
@@ -272,6 +290,20 @@ Standalone backlog items across streams:
 
 - [move-search-domain-knowledge-to-codegen-time.md](future/02-schema-authority-and-codegen/move-search-domain-knowledge-to-codegen-time.md)
 - [bulk-schema-driven-code-generation.md](future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md)
+
+These plans are part of the Milestone 3 search-quality stream, but the Boundary
+03 quick-win work can progress before the Milestone 2 public-release blocker is
+closed.
+
+Current active and queued execution plans:
+
+- [mcp-result-pattern-unification.execution.plan.md](active/mcp-result-pattern-unification.execution.plan.md) — cross-cutting active MCP execution convergence work
+- [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
+- [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
+- [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win
+- [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
+- [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data
+- [kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) — parent queued graph quick-win plan for separate Neo4j provisioning, Elasticsearch projections, and bounded graph augmentation after the active audit
 
 ### Reranking (Future — Level 3)
 
@@ -326,8 +358,8 @@ pnpm markdownlint:root
 pnpm subagents:check
 pnpm lint:fix
 pnpm test
-pnpm test:e2e
 pnpm test:ui
+pnpm test:e2e
 pnpm smoke:dev:stub
 ```
 
@@ -343,8 +375,8 @@ pnpm smoke:dev:stub
 6. [search-acceptance-criteria.md](search-acceptance-criteria.md)
 7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 2 blocker research
 8. [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md) — Milestone 1-2 roadmap
-9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md) — Milestone 2 plan
-10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/cross-agent-standardisation.plan.md) — Milestone 2 plan
+9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md) — Milestone 3 / Public Beta plan
+10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/cross-agent-standardisation.plan.md) — Milestone 3 / Public Beta plan
 
 ---
 
@@ -352,7 +384,7 @@ pnpm smoke:dev:stub
 
 Before each execution phase, re-read:
 
-1. [rules.md](../../directives/rules.md)
+1. [principles.md](../../directives/principles.md)
 2. [testing-strategy.md](../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../directives/schema-first-execution.md)
 
