@@ -141,6 +141,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-127: Documentation as Foundational Infrastructure](127-documentation-as-foundational-infrastructure.md)
 - [ADR-128: Retire the Standalone STDIO Workspace and Consolidate MCP Server Evolution in the HTTP Workspace](128-stdio-workspace-retirement-and-http-transport-consolidation.md)
 - [ADR-129: Domain Specialist Capability Pattern](129-domain-specialist-capability-pattern.md)
+- [ADR-130: Zero-Downtime Blue/Green Elasticsearch Index Swapping](130-blue-green-index-swapping.md)
 
 ## Key Architectural Decisions
 
@@ -199,6 +200,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-106](106-known-answer-first-ground-truth-methodology.md)** - Known-answer-first ground truth methodology
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
+- **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

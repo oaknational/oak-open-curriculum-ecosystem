@@ -34,6 +34,10 @@ export const OAK_META_MAPPING = {
         type: 'object',
         enabled: false,
       },
+      previous_version: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
     },
   },
 } as const;

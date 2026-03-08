@@ -46,15 +46,26 @@ export const INDEX_VERSION_DOC_ID = 'index_version';
 /**
  * Mapping from search index kind to base Elasticsearch index name.
  *
- * Used internally by resolveSearchIndexName.
+ * Exported for use by admin operations and CLI tooling that need
+ * to construct versioned or rewritten index names.
  */
-const BASE_INDEX_NAMES: Readonly<Record<SearchIndexKind, string>> = {
+export const BASE_INDEX_NAMES: Readonly<Record<SearchIndexKind, string>> = {
   lessons: 'oak_lessons',
   unit_rollup: 'oak_unit_rollup',
   units: 'oak_units',
   sequences: 'oak_sequences',
   sequence_facets: 'oak_sequence_facets',
   threads: 'oak_threads',
+};
+
+/**
+ * Lookup table for target suffixes. Uses a `Record` keyed by
+ * {@link SearchIndexTarget} so the type-checker enforces exhaustiveness
+ * if a third target is ever added.
+ */
+export const TARGET_SUFFIXES: Readonly<Record<SearchIndexTarget, string>> = {
+  primary: '',
+  sandbox: '_sandbox',
 };
 
 /**
@@ -72,7 +83,45 @@ const BASE_INDEX_NAMES: Readonly<Record<SearchIndexKind, string>> = {
  */
 export function resolveSearchIndexName(kind: SearchIndexKind, target: SearchIndexTarget): string {
   const baseName = BASE_INDEX_NAMES[kind];
-  return target === 'primary' ? baseName : `${baseName}_sandbox`;
+  return `${baseName}${TARGET_SUFFIXES[target]}`;
+}
+
+/**
+ * Resolve the alias name for a given base index name and target.
+ *
+ * Primary aliases use the base name directly (e.g. `'oak_lessons'`).
+ * Sandbox aliases append `'_sandbox'` (e.g. `'oak_lessons_sandbox'`).
+ *
+ * @param base - Base index name (e.g. `'oak_lessons'`)
+ * @param target - The index target (`'primary'` or `'sandbox'`)
+ * @returns The alias name
+ */
+export function resolveAliasName(base: string, target: SearchIndexTarget): string {
+  return `${base}${TARGET_SUFFIXES[target]}`;
+}
+
+/**
+ * Resolve the versioned physical index name for a given base, target, and version.
+ *
+ * @param base - Base index name (e.g. `'oak_lessons'`)
+ * @param target - The index target (`'primary'` or `'sandbox'`)
+ * @param version - Version string (e.g. `'v2026-03-07-143022'`)
+ * @returns The versioned index name
+ *
+ * @example
+ * ```typescript
+ * resolveVersionedIndexName('oak_lessons', 'primary', 'v2026-03-07-143022')
+ *   // 'oak_lessons_v2026-03-07-143022'
+ * resolveVersionedIndexName('oak_lessons', 'sandbox', 'v2026-03-07-143022')
+ *   // 'oak_lessons_sandbox_v2026-03-07-143022'
+ * ```
+ */
+export function resolveVersionedIndexName(
+  base: string,
+  target: SearchIndexTarget,
+  version: string,
+): string {
+  return `${base}${TARGET_SUFFIXES[target]}_${version}`;
 }
 
 /**

@@ -38,6 +38,27 @@ export { createSearchRetrieval } from './create-search-retrieval.js';
 export type { SearchRetrievalFactories, EsClientConfig } from './create-search-retrieval.js';
 
 // ---------------------------------------------------------------------------
+// Index lifecycle service (ADR-130) — blue/green index management
+// ---------------------------------------------------------------------------
+
+export { createIndexLifecycleService } from './admin/index.js';
+
+// ---------------------------------------------------------------------------
+// Index resolution — constants and pure functions for Elasticsearch index naming
+// ---------------------------------------------------------------------------
+
+export {
+  SEARCH_INDEX_TARGETS,
+  SEARCH_INDEX_KINDS,
+  ZERO_HIT_INDEX_BASE,
+  BASE_INDEX_NAMES,
+  resolveSearchIndexName,
+  resolveZeroHitIndexName,
+} from './internal/index.js';
+
+export type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from './internal/index.js';
+
+// ---------------------------------------------------------------------------
 // All public types
 // ---------------------------------------------------------------------------
 

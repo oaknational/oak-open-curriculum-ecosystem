@@ -47,6 +47,7 @@ export const META_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'key_stages', zodType: 'array-string', optional: false },
   { name: 'duration_ms', zodType: 'number', optional: false },
   { name: 'doc_counts', zodType: 'object', optional: false },
+  { name: 'previous_version', zodType: 'string', optional: true },
 ] as const;
 
 /**
