@@ -63,6 +63,7 @@ pids
 **/test-artifacts/
 **/test-cache/
 **/reports/
+!.agent/reports/
 **/temp-secrets/
 **/lib-cov/
 **/coverage/

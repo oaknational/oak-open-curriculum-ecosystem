@@ -55,7 +55,7 @@ export function renderLandingPageHtml(vercelHost?: string): string {
       <p class="meta">Status: ok • Route: <code>/mcp</code> • Auth: OAuth 2.1</p>
 
       <section class="card" aria-labelledby="connect-title">
-        <h2 id="connect-title">Connecting as an MCP server</h2>
+        <h2 id="connect-title">Connect the Oak Curriculum MCP to your AI assistant</h2>
         <p>Add this to your MCP client configuration:</p>
         <pre aria-label="JSON configuration snippet"><code>{${createSnippet(vercelHost)}}</code></pre>
         <p>This server uses <a href="/.well-known/oauth-protected-resource">OAuth 2.1 authorization</a>. You will be prompted to log in. Access is currently for internal staff or by invitation.</p>

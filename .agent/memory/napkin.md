@@ -1,3 +1,27 @@
+## Session 2026-03-08 — Blue/Green Consolidation Pass
+
+### What Was Done
+
+- Ran `jc-consolidate-docs` after the ADR-130 blue/green implementation
+  (WS0–WS4) and specialist reviewer pass completed.
+- Verified ADR-130, execution plan, and all cross-references are current.
+- Confirmed no blue-green content stranded in ephemeral locations (napkin,
+  auto-memory, platform plans) — the execution plan is the standalone
+  session entry point.
+- No code patterns met the extraction barrier.
+- Practice inbox empty; fitness ceiling overages unchanged from prior pass
+  (CONTRIBUTING.md +9, practice-lineage.md +1, practice-bootstrap.md +30).
+
+### Patterns to Remember
+
+- The execution plan's "Implementation Notes" section is the right home for
+  hard-won session lessons that are execution instructions rather than
+  permanent documentation. They'll be useful for the next session but don't
+  belong in ADRs or distilled.md.
+- When a plan is the standalone entry point for a future session, verify it
+  during consolidation even if no new work was done in this session — drift
+  accumulates between sessions.
+
 ## Session 2026-03-07 — Consolidate Docs Reconciliation Pass
 
 ### What Was Done
@@ -216,3 +240,36 @@
 - Fitness ceilings are signals, not blockers: `CONTRIBUTING.md`,
   `practice-lineage.md`, and `practice-bootstrap.md` remain slightly over and
   should be treated as future consolidation candidates.
+
+## Session 2026-03-07 — Live MCP Smoke Test and Upstream Bug Report
+
+### What Was Done
+
+- Conducted a systematic black-box smoke test of the deployed `oak-preview` MCP
+  server, then classified findings by ownership: our code, upstream API, stale
+  ES data.
+- Fixed two code defects using TDD:
+  1. `searchSequences` and the CLI `rrf-query-builders.ts` now apply a
+     `key_stages` term filter when `keyStage` is provided (was silently dropped).
+  2. Codegen source for `SearchSuggestionItemSchema` relaxed `url` from
+     `z.string().min(1)` to `z.string().optional().default('')`.
+- Wrote a precision bug report at `.agent/reports/oak-openapi-bug-report-2026-03-07.md`
+  documenting three upstream `oak-openapi` issues with exact file/line references
+  from the upstream source code.
+- Fixed `.gitignore` so `.agent/reports/` is not excluded by the broad
+  `**/reports/` Node.js diagnostic pattern.
+- Updated the snagging plan to acknowledge the additional fixes committed on the
+  same branch.
+
+### Patterns to Remember
+
+- When smoke-testing a live service, classify findings by ownership before
+  fixing: our code, upstream API, stale data. This prevents wasted effort fixing
+  the wrong thing.
+- The `**/reports/` gitignore pattern catches `.agent/reports/` — always check
+  that new directories are not accidentally ignored.
+- Cross-repo bug reports are far more actionable with precise file/line
+  references from the upstream source. If you have access to the code, cite it.
+- Codegen-emitted Zod schemas must match what the runtime actually produces, not
+  what the upstream ideally provides. The runtime emits `url: ''` for
+  suggestions; the schema must allow it.

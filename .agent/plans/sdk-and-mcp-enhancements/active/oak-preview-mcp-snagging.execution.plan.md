@@ -70,6 +70,19 @@ What was done:
    all passed. Quality gates green. File name corrections applied to the
    troubleshooting table per docs-adr-reviewer findings.
 
+Additional fixes committed on the same branch after Phases 0-4 completed:
+
+6. **Sequence keyStage filter fix**: `searchSequences` and the CLI
+   `rrf-query-builders.ts` now apply a `key_stages` term filter when
+   `keyStage` is provided (was silently dropped). Unit tests added.
+7. **Suggestion URL schema fix**: codegen source for
+   `SearchSuggestionItemSchema` relaxed `url` from `z.string().min(1)` to
+   `z.string().optional().default('')` so suggestion items without a URL pass
+   validation. Integration test added.
+8. **Upstream bug report**: three upstream `oak-openapi` issues documented with
+   precise source references at
+   `.agent/reports/oak-openapi-bug-report-2026-03-07.md`.
+
 What remains:
 
 1. **Post-deploy reindex execution** — the only remaining operational step.
