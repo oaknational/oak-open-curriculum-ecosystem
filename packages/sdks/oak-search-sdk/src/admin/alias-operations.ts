@@ -127,9 +127,9 @@ async function resolveAllAliases(
  * previous two-call `existsAlias` + `getAlias` pattern to halve
  * HTTP calls per alias.
  *
- * An empty response (no keys) is treated as not-found (CR-1) —
- * this can occur if ES returns a successful response with no backing
- * index for the alias.
+ * An empty response (no keys) is treated as not-found (CR-1).
+ * Multiple backing indexes are treated as alias corruption — each
+ * alias must point to exactly one physical index.
  *
  * @param client - Elasticsearch client
  * @param aliasName - The alias name to check
@@ -138,7 +138,20 @@ async function resolveAllAliases(
 async function resolveOneAlias(client: Client, aliasName: string): Promise<AliasTargetInfo> {
   try {
     const aliasResponse = await client.indices.getAlias({ name: aliasName });
-    const target = firstKey(aliasResponse);
+    let count = 0;
+    let target: string | null = null;
+    for (const key in aliasResponse) {
+      count++;
+      if (count === 1) {
+        target = key;
+      }
+      if (count > 1) {
+        throw new Error(
+          `Alias '${aliasName}' points to multiple physical indexes (expected exactly 1). ` +
+            `This indicates alias corruption — run validate-aliases for details.`,
+        );
+      }
+    }
     if (target === null) {
       return { isAlias: false, targetIndex: null };
     }
@@ -149,19 +162,6 @@ async function resolveOneAlias(client: Client, aliasName: string): Promise<Alias
     }
     throw error;
   }
-}
-
-/**
- * Extract the first key from a record, or null if empty.
- *
- * @param record - The record to extract from
- * @returns The first key, or null
- */
-function firstKey<T>(record: Readonly<Record<string, T>>): string | null {
-  for (const key in record) {
-    return key;
-  }
-  return null;
 }
 
 // ---------------------------------------------------------------------------

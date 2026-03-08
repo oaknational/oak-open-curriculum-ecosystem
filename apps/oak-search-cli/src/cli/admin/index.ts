@@ -32,6 +32,8 @@ import {
   registerVersionedIngestCmd,
   registerRollbackCmd,
   registerValidateAliasesCmd,
+  registerStageCmd,
+  registerPromoteCmd,
 } from './admin-lifecycle-commands.js';
 
 /**
@@ -60,6 +62,8 @@ export function adminCommand(cliEnv: CliSdkEnv): Command {
   registerMetaCmd(cmd, cliEnv);
   registerOrchestrationCmds(cmd);
   registerVersionedIngestCmd(cmd, cliEnv);
+  registerStageCmd(cmd, cliEnv);
+  registerPromoteCmd(cmd, cliEnv);
   registerRollbackCmd(cmd, cliEnv);
   registerValidateAliasesCmd(cmd, cliEnv);
 

@@ -57,6 +57,8 @@ export type {
   IndexLifecycleService,
   VersionedIngestOptions,
   VersionedIngestResult,
+  StageResult,
+  PromoteResult,
   RollbackResult,
   AliasValidationResult,
   AliasHealthEntry,

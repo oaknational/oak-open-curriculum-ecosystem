@@ -3,9 +3,11 @@
  *
  * Orchestrates versioned index creation, alias swapping, and cleanup.
  * Rollback and alias validation are in `lifecycle-rollback.ts`.
+ * Promote is in `lifecycle-promote.ts`.
  * All IO operations are injected via `IndexLifecycleDeps` for
  * testability (ADR-078).
  *
+ * @see {@link ./lifecycle-promote.ts} for promote
  * @see {@link ./lifecycle-rollback.ts} for rollback and alias validation
  * @see {@link ./lifecycle-swap-builders.ts} for pure swap-building helpers
  */
@@ -17,6 +19,7 @@ import type {
   AliasTargetMap,
   IndexLifecycleDeps,
   IndexLifecycleService,
+  StageResult,
   VersionedIngestOptions,
   VersionedIngestResult,
 } from '../types/index-lifecycle-types.js';
@@ -27,6 +30,7 @@ import {
 } from './lifecycle-swap-builders.js';
 import { cleanupOldGenerations } from './lifecycle-cleanup.js';
 import { rollback, validateAliases } from './lifecycle-rollback.js';
+import { promote } from './lifecycle-promote.js';
 
 const DEFAULT_MIN_DOC_COUNT = 1;
 
@@ -34,6 +38,8 @@ const DEFAULT_MIN_DOC_COUNT = 1;
 export function createIndexLifecycleService(deps: IndexLifecycleDeps): IndexLifecycleService {
   return {
     versionedIngest: (options) => versionedIngest(deps, options),
+    stage: (options) => stage(deps, options),
+    promote: (version) => promote(deps, version),
     rollback: () => rollback(deps),
     validateAliases: () => validateAliases(deps),
   };
@@ -54,7 +60,7 @@ async function prepareVersionedIndexes(
     return metaResult;
   }
   const previousVersion = metaResult.value?.version ?? null;
-  const version = options.version ?? deps.generateVersion();
+  const version = deps.generateVersion();
   deps.logger?.info('Starting versioned ingest', { version, previousVersion });
 
   const createResult = await deps.createVersionedIndexes(version);
@@ -89,6 +95,25 @@ async function runIngestAndVerify(
     return verifyResult;
   }
   return ok(ingestResult.value);
+}
+
+/** Stage versioned indexes without promoting: create, ingest, verify. */
+async function stage(
+  deps: IndexLifecycleDeps,
+  options: VersionedIngestOptions,
+): Promise<Result<StageResult, AdminError>> {
+  const prepared = await prepareVersionedIndexes(deps, options);
+  if (!prepared.ok) {
+    return prepared;
+  }
+  deps.logger?.info('Stage complete — indexes ready for promotion', {
+    version: prepared.value.version,
+  });
+  return ok({
+    version: prepared.value.version,
+    ingestResult: prepared.value.ingestResult,
+    previousVersion: prepared.value.previousVersion,
+  });
 }
 
 /** Swap phase: resolve aliases, swap, write metadata. Rolls back on metadata failure. */

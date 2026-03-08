@@ -1,8 +1,8 @@
 /**
  * CLI commands for the index lifecycle service (ADR-130).
  *
- * Provides versioned-ingest, rollback, and validate-aliases commands
- * that delegate to the SDK lifecycle service.
+ * Provides versioned-ingest, stage, promote, rollback, and validate-aliases
+ * commands that delegate to the SDK lifecycle service.
  */
 
 import type { Command } from 'commander';
@@ -47,14 +47,12 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): 
     .description('Run a versioned blue/green ingest cycle (ADR-130)')
     .requiredOption('--bulk-dir <path>', 'Path to bulk download data directory')
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
-    .option('--version <version>', 'Explicit version string override')
     .option('--min-doc-count <count>', 'Minimum docs per index', parseInt)
     .option('-v, --verbose', 'Enable verbose output')
     .action(
       async (opts: {
         bulkDir: string;
         subjectFilter?: string[];
-        version?: string;
         minDocCount?: number;
         verbose?: boolean;
       }) => {
@@ -63,7 +61,6 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): 
           const result = await service.versionedIngest({
             bulkDir: opts.bulkDir,
             subjectFilter: opts.subjectFilter,
-            version: opts.version,
             minDocCount: opts.minDocCount,
             verbose: opts.verbose,
           });
@@ -80,6 +77,88 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): 
         }
       },
     );
+}
+
+/**
+ * Register the `admin stage` subcommand.
+ *
+ * Creates and populates versioned indexes without swapping aliases.
+ * The returned version can later be promoted via `admin promote`.
+ *
+ * @param parent - The parent Commander command to register under
+ * @param cliEnv - Validated CLI environment values
+ */
+export function registerStageCmd(parent: Command, cliEnv: CliSdkEnv): void {
+  parent
+    .command('stage')
+    .description('Stage versioned indexes without promoting (create, ingest, verify)')
+    .requiredOption('--bulk-dir <path>', 'Path to bulk download data directory')
+    .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
+    .option('--min-doc-count <count>', 'Minimum docs per index', parseInt)
+    .option('-v, --verbose', 'Enable verbose output')
+    .action(
+      async (opts: {
+        bulkDir: string;
+        subjectFilter?: string[];
+        minDocCount?: number;
+        verbose?: boolean;
+      }) => {
+        try {
+          const service = buildLifecycleService(cliEnv);
+          const result = await service.stage({
+            bulkDir: opts.bulkDir,
+            subjectFilter: opts.subjectFilter,
+            minDocCount: opts.minDocCount,
+            verbose: opts.verbose,
+          });
+          if (!result.ok) {
+            printError(`${result.error.type}: ${result.error.message}`);
+            process.exitCode = 1;
+            return;
+          }
+          printSuccess(
+            `Staged version ${result.value.version}. ` +
+              `Promote with: admin promote --version ${result.value.version}`,
+          );
+          printJson(result.value);
+        } catch (error) {
+          printError(error instanceof Error ? error.message : String(error));
+          process.exitCode = 1;
+        }
+      },
+    );
+}
+
+/**
+ * Register the `admin promote` subcommand.
+ *
+ * Promotes a previously staged version by swapping aliases,
+ * writing metadata, and cleaning up old index generations.
+ *
+ * @param parent - The parent Commander command to register under
+ * @param cliEnv - Validated CLI environment values
+ */
+export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
+  parent
+    .command('promote')
+    .description('Promote a staged version by swapping aliases to it')
+    .requiredOption('--version <version>', 'Version string to promote (from stage output)')
+    .action(async (opts: { version: string }) => {
+      try {
+        const service = buildLifecycleService(cliEnv);
+        const result = await service.promote(opts.version);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printSuccess(`Promoted version ${result.value.version}`);
+        printJson(result.value);
+      } catch (error) {
+        printError(error instanceof Error ? error.message : String(error));
+        process.exitCode = 1;
+      }
+    });
 }
 
 /**

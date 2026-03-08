@@ -1,3 +1,50 @@
+## Session 2026-03-08 — Stage/Promote Split
+
+### What Was Done
+
+- Added `stage()` and `promote(version)` to `IndexLifecycleService` (ADR-130),
+  splitting the existing `versionedIngest` flow into two independent phases:
+  stage (create, ingest, verify) and promote (swap aliases, write metadata,
+  cleanup).
+- `versionedIngest` remains as the all-in-one convenience.
+- Extracted `promote` into `lifecycle-promote.ts` (lint max-lines/complexity).
+- Extracted shared test helpers into `lifecycle-test-helpers.ts` and split the
+  integration test file into two (main + stage/promote).
+- Added `buildPromoteMeta` pure function + unit tests.
+- Registered `admin stage` and `admin promote --version <v>` CLI commands.
+- Updated ADR-130 and SDK README to document the new operations.
+- 166 tests across 15 files, all quality gates green.
+
+### Patterns to Remember
+
+- When extracting a function to satisfy lint max-lines, decompose it into
+  smaller helpers in the new file rather than moving the monolith — the
+  complexity/statements limits will still fire otherwise.
+- Shared test fixtures in lifecycle tests now live in `lifecycle-test-helpers.ts`
+  to avoid duplication across the split test files.
+
+## Session 2026-03-08 — Phase 8d Completion and Commit
+
+### What Was Done
+
+- Completed the max-lines extraction (Phase 8d): `lifecycle-rollback.ts` created
+  in a prior session, commit was pending due to pre-commit hook timeout.
+- Fixed commitlint failure: `ADR-130` in subject triggered sentence-case check;
+  rewrote subject line to lowercase.
+- Committed `bf23cefc` (31 files, +1496/-482) — all quality gates pass.
+- Updated execution plan: marked Phase 8d done, revised "What to do next" for
+  Phase 8b (final reviewer pass).
+- Ran consolidation pass: no documentation drift, no patterns meeting extraction
+  barrier, no ephemeral content needing promotion.
+
+### Patterns to Remember
+
+- Commitlint's `subject-case` rule rejects uppercase acronyms like `ADR-130` in
+  the subject line. Use lowercase descriptions instead: "complete blue/green
+  lifecycle" not "ADR-130 Phases 3-8d".
+- When pre-commit hooks produce large output (turbo replays all cached logs),
+  redirect to a file to see the actual error at the end.
+
 ## Session 2026-03-08 — Blue/Green Consolidation Pass
 
 ### What Was Done

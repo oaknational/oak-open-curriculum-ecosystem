@@ -38,9 +38,10 @@ The retrieval service, `SearchSdkConfig`, MCP servers, and all consumers continu
 A new service, separate from `AdminService`, provides the blue/green lifecycle as composable, testable functions:
 
 - `versionedIngest()` — full blue/green cycle: create versioned indexes, ingest, verify, swap aliases, update metadata
+- `stage()` — create and populate versioned indexes without swapping aliases; returns a version string for later promotion
+- `promote(version)` — swap aliases to a previously staged version, write metadata, clean up old generations
 - `rollback()` — swap aliases back to the previous version recorded in `IndexMetaDoc`
 - `validateAliases()` — check alias health across all curriculum indexes
-- `migrateToAliases()` — _(planned, not yet implemented)_ one-time conversion from bare indexes to alias-backed model
 
 ### Alias swap mechanics
 
@@ -118,17 +119,19 @@ The curriculum indexes contain `semantic_text` fields with ELSER inference pipel
 
 ### Key Files
 
-| File                                                                 | Purpose                                                     |
-| -------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `packages/sdks/oak-search-sdk/src/admin/versioned-index-resolver.ts` | Versioned resolver factory (admin-layer only)               |
-| `packages/sdks/oak-search-sdk/src/admin/alias-operations.ts`         | TypeScript wrappers over ES `/_aliases` API                 |
-| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts`  | Blue/green orchestrator                                     |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-swap-builders.ts`  | Pure swap-building helpers                                  |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts`        | Generation cleanup                                          |
-| `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts`    | Service types and alias types                               |
-| `packages/sdks/oak-search-sdk/src/internal/index-resolver.ts`        | Shared name resolution helpers                              |
-| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts`     | DI factory for lifecycle deps                               |
-| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`      | CLI commands (versioned-ingest, rollback, validate-aliases) |
+| File                                                                 | Purpose                                                                     |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `packages/sdks/oak-search-sdk/src/admin/versioned-index-resolver.ts` | Versioned resolver factory (admin-layer only)                               |
+| `packages/sdks/oak-search-sdk/src/admin/alias-operations.ts`         | TypeScript wrappers over ES `/_aliases` API                                 |
+| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts`  | Blue/green orchestrator                                                     |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-swap-builders.ts`  | Pure swap-building helpers                                                  |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts`        | Generation cleanup                                                          |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-promote.ts`        | Promote orchestration (stage→live swap)                                     |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-rollback.ts`       | Rollback and alias validation operations                                    |
+| `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts`    | Service types and alias types                                               |
+| `packages/sdks/oak-search-sdk/src/internal/index-resolver.ts`        | Shared name resolution helpers                                              |
+| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts`     | DI factory for lifecycle deps                                               |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`      | CLI commands (versioned-ingest, stage, promote, rollback, validate-aliases) |
 
 ### CLI Commands
 
@@ -136,21 +139,11 @@ Registered in `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`:
 
 ```bash
 oak-search admin versioned-ingest --bulk-dir <path> [options]  # Full blue/green cycle
+oak-search admin stage --bulk-dir <path> [options]              # Stage without promoting
+oak-search admin promote --version <version>                    # Promote a staged version
 oak-search admin rollback                                       # Swap back to previous_version
 oak-search admin validate-aliases                                # Check alias health
 ```
-
-`migrate-aliases` is planned but not yet implemented — see [Migration](#migration) below.
-
-## Migration
-
-Before the first blue/green cycle, bare indexes must become aliases. _Not yet implemented:_
-
-1. Run `admin migrate-aliases` — for each curriculum index, creates a versioned physical index, runs full bulk ingest, creates alias, deletes bare index
-2. Run `admin validate-aliases` — confirms all six curriculum index names resolve as aliases
-3. Run `admin versioned-ingest` — first blue/green cycle, creating the rollback baseline
-
-The migration does not require downtime — reads continue from the original index until the alias is atomically created. The migration is idempotent: if partially completed, re-running resumes from where it left off.
 
 ## Alternatives Considered
 

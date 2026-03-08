@@ -12,6 +12,9 @@ import {
   buildRollbackSwaps,
   buildVersionSwapActions,
   assessAliasHealth,
+  validateRollbackMeta,
+  buildIngestMeta,
+  buildPromoteMeta,
 } from './lifecycle-swap-builders.js';
 
 describe('resolveAliasNames', () => {
@@ -154,5 +157,89 @@ describe('assessAliasHealth', () => {
     const entry = assessAliasHealth('oak_lessons', info);
     expect(entry.healthy).toBe(false);
     expect(entry.issue).toContain('no target');
+  });
+});
+
+describe('validateRollbackMeta', () => {
+  it('returns ok with currentVersion and previousVersion when previous_version exists', () => {
+    const meta = {
+      version: 'v2026-03-07-143022',
+      ingested_at: '2026-03-07T14:30:22Z',
+      subjects: [],
+      key_stages: [],
+      duration_ms: 120000,
+      doc_counts: {},
+      previous_version: 'v2026-03-01-120000',
+    };
+
+    const result = validateRollbackMeta(meta);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.currentVersion).toBe('v2026-03-07-143022');
+      expect(result.value.previousVersion).toBe('v2026-03-01-120000');
+    }
+  });
+
+  it('returns err when previous_version is undefined', () => {
+    const meta = {
+      version: 'v2026-03-07-143022',
+      ingested_at: '2026-03-07T14:30:22Z',
+      subjects: [],
+      key_stages: [],
+      duration_ms: 120000,
+      doc_counts: {},
+    };
+
+    const result = validateRollbackMeta(meta);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('not_found');
+      expect(result.error.message).toContain('No previous version');
+    }
+  });
+});
+
+describe('buildIngestMeta', () => {
+  it('includes previous_version when previousVersion is non-null', () => {
+    const meta = buildIngestMeta('v2026-03-07-143022', 'v2026-03-01-120000', undefined, 5000);
+
+    expect(meta.version).toBe('v2026-03-07-143022');
+    expect(meta.previous_version).toBe('v2026-03-01-120000');
+    expect(meta.duration_ms).toBe(5000);
+    expect(meta.subjects).toEqual([]);
+  });
+
+  it('omits previous_version when previousVersion is null (first run)', () => {
+    const meta = buildIngestMeta('v2026-03-07-143022', null, undefined, 3000);
+
+    expect(meta.version).toBe('v2026-03-07-143022');
+    expect(meta.previous_version).toBeUndefined();
+    expect(meta.duration_ms).toBe(3000);
+  });
+
+  it('includes subject filter when provided', () => {
+    const meta = buildIngestMeta('v2026-03-07-143022', null, ['maths', 'science'], 1000);
+
+    expect(meta.subjects).toEqual(['maths', 'science']);
+  });
+});
+
+describe('buildPromoteMeta', () => {
+  it('includes previous_version when previousVersion is non-null', () => {
+    const meta = buildPromoteMeta('v2026-03-07-143022', 'v2026-03-01-120000');
+
+    expect(meta.version).toBe('v2026-03-07-143022');
+    expect(meta.previous_version).toBe('v2026-03-01-120000');
+    expect(meta.duration_ms).toBe(0);
+    expect(meta.subjects).toEqual([]);
+  });
+
+  it('omits previous_version when previousVersion is null (first run)', () => {
+    const meta = buildPromoteMeta('v2026-03-07-143022', null);
+
+    expect(meta.version).toBe('v2026-03-07-143022');
+    expect(meta.previous_version).toBeUndefined();
   });
 });

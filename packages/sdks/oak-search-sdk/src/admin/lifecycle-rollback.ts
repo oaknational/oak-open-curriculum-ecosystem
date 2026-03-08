@@ -14,6 +14,7 @@ import { ok, err } from '@oaknational/result';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import type { AdminError } from '../types/admin-types.js';
 import type {
+  AliasTargetMap,
   AliasValidationResult,
   IndexLifecycleDeps,
   RollbackResult,
@@ -52,7 +53,7 @@ export async function rollback(
 
   const metaWriteResult = await writeRollbackMeta(deps, meta, currentVersion, previousVersion);
   if (!metaWriteResult.ok) {
-    return metaWriteResult;
+    return attemptRollbackReversal(deps, currentVersion, metaWriteResult.error.message);
   }
   deps.logger?.info('Rollback complete', { from: currentVersion, to: previousVersion });
   return ok({ rolledBackToVersion: previousVersion, rolledBackFromVersion: currentVersion });
@@ -75,6 +76,10 @@ async function executeRollbackSwap(
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return aliasResult;
+  }
+  const validationError = validateAliasState(aliasResult.value);
+  if (!validationError.ok) {
+    return validationError;
   }
   const swaps = buildVersionSwapActions(aliasResult.value, toVersion, deps.target);
   return deps.atomicAliasSwap(swaps);
@@ -108,4 +113,74 @@ export async function validateAliases(
     return assessAliasHealth(alias, aliasResult.value[kind]);
   });
   return ok({ allHealthy: entries.every((e) => e.healthy), entries });
+}
+
+/**
+ * Validate that all aliases are in a consistent state for rollback.
+ *
+ * Each alias must exist (isAlias=true) and point to a physical index.
+ * Bare indexes or null targets indicate corruption that prevents
+ * a safe rollback — fail fast with a clear error.
+ */
+function validateAliasState(targets: AliasTargetMap): Result<void, AdminError> {
+  for (const kind of SEARCH_INDEX_KINDS) {
+    const info = targets[kind];
+    if (!info.isAlias) {
+      return err({
+        type: 'validation_error',
+        message:
+          `Cannot rollback: '${kind}' is a bare index, not an alias. ` +
+          `Run validate-aliases for details.`,
+      });
+    }
+    if (info.targetIndex === null) {
+      return err({
+        type: 'validation_error',
+        message:
+          `Cannot rollback: alias for '${kind}' has no target index. ` +
+          `Run validate-aliases for details.`,
+      });
+    }
+  }
+  return ok(undefined);
+}
+
+/**
+ * Attempt to reverse the alias swap after a rollback metadata write failure.
+ *
+ * Symmetric with `attemptMetaFailureRollback` in `index-lifecycle-service.ts`.
+ * If the reversal also fails, returns a CRITICAL error.
+ */
+async function attemptRollbackReversal(
+  deps: IndexLifecycleDeps,
+  currentVersion: string,
+  metaErrorMessage: string,
+): Promise<Result<RollbackResult, AdminError>> {
+  deps.logger?.error('Rollback metadata write failed, reversing alias swap', { currentVersion });
+  const aliasResult = await deps.resolveCurrentAliasTargets();
+  if (!aliasResult.ok) {
+    return err({
+      type: 'validation_error',
+      message:
+        `CRITICAL: Rollback metadata write failed and alias state cannot be read. ` +
+        `Manual intervention required. Meta error: ${metaErrorMessage}`,
+    });
+  }
+  const swaps = buildVersionSwapActions(aliasResult.value, currentVersion, deps.target);
+  const reversalResult = await deps.atomicAliasSwap(swaps);
+  if (!reversalResult.ok) {
+    return err({
+      type: 'validation_error',
+      message:
+        `CRITICAL: Rollback metadata write failed and alias reversal also failed. ` +
+        `Manual intervention required. ` +
+        `Meta error: ${metaErrorMessage}. Reversal error: ${reversalResult.error.message}`,
+    });
+  }
+  return err({
+    type: 'es_error',
+    message:
+      `Rollback metadata write failed. Aliases were reversed back to ${currentVersion}. ` +
+      `Original error: ${metaErrorMessage}`,
+  });
 }

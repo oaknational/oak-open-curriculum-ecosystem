@@ -175,3 +175,25 @@ export function buildIngestMeta(
     ...(previousVersion !== null ? { previous_version: previousVersion } : {}),
   };
 }
+
+/**
+ * Build the metadata document for a promote operation.
+ *
+ * Unlike {@link buildIngestMeta}, promote metadata does not record
+ * subject filter or ingest duration since those belong to the staging phase.
+ *
+ * @param version - Version being promoted to live
+ * @param previousVersion - Previous live version, or null if first run
+ * @returns A {@link IndexMetaDoc} for the promoted version
+ */
+export function buildPromoteMeta(version: string, previousVersion: string | null): IndexMetaDoc {
+  return {
+    version,
+    ingested_at: new Date().toISOString(),
+    subjects: [],
+    key_stages: [],
+    duration_ms: 0,
+    doc_counts: {},
+    ...(previousVersion !== null ? { previous_version: previousVersion } : {}),
+  };
+}

@@ -70,6 +70,12 @@ const lifecycle = createIndexLifecycleService(deps);
 // Full blue/green cycle: create versioned indexes → ingest → verify → swap aliases → clean up
 const result = await lifecycle.versionedIngest({ bulkDir: '/path/to/bulk', verbose: true });
 
+// Or stage and promote separately — inspect before going live
+const staged = await lifecycle.stage({ bulkDir: '/path/to/bulk', verbose: true });
+if (staged.ok) {
+  const promoted = await lifecycle.promote(staged.value.version);
+}
+
 // Roll back to previous version
 const rollback = await lifecycle.rollback();
 
@@ -104,7 +110,7 @@ Key properties:
 pnpm build        # Build with tsup + dts
 pnpm type-check   # Type check
 pnpm lint:fix     # Lint
-pnpm test         # Run tests (142 across 13 test files)
+pnpm test         # Run tests (across 15 test files)
 ```
 
 ## Related

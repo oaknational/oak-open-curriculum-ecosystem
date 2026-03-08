@@ -17,11 +17,8 @@ import type { SearchIndexTarget, SearchIndexKind } from '../internal/index.js';
 // ---------------------------------------------------------------------------
 
 /**
- * Describes a single alias swap action: move an alias from one physical
- * index to another.
- *
- * When `fromIndex` is `null`, the alias is being created for the first time
- * (no `remove` action is needed). This handles the first-run and migration cases.
+ * A single alias swap action. When `fromIndex` is `null`, the alias is being
+ * created for the first time (no `remove` action needed).
  */
 export interface AliasSwap {
   /** Physical index to remove the alias from, or `null` for first-time setup. */
@@ -42,46 +39,22 @@ export interface AliasTargetInfo {
   readonly targetIndex: string | null;
 }
 
-/**
- * Strict map from each SearchIndexKind to its alias target info.
- *
- * Replaces `Record<string, AliasTargetInfo>` throughout the lifecycle layer
- * to prevent loose string keys from propagating entropy. Every key is a
- * known member of the `SearchIndexKind` union.
- */
+/** Strict map from each {@link SearchIndexKind} to its alias target info. */
 export type AliasTargetMap = Readonly<Record<SearchIndexKind, AliasTargetInfo>>;
 
 // ---------------------------------------------------------------------------
 // Versioned ingest
 // ---------------------------------------------------------------------------
 
-/**
- * Options for a versioned ingest cycle.
- *
- * A versioned ingest creates new physical indexes, populates them,
- * verifies document counts, then atomically swaps aliases.
- */
+/** Options for a versioned ingest cycle (also used by stage). */
 export interface VersionedIngestOptions {
   /** Path to the directory containing bulk download data. */
   readonly bulkDir: string;
-
   /** Optional filter to ingest only specific subjects. */
   readonly subjectFilter?: readonly string[];
-
   /** Whether to emit verbose progress output. */
   readonly verbose?: boolean;
-
-  /**
-   * Explicit version string override.
-   * When omitted, a timestamp-based version is generated automatically.
-   */
-  readonly version?: string;
-
-  /**
-   * Minimum expected document count per curriculum index.
-   * Verification fails if any index has fewer docs than this threshold.
-   * Defaults to 1 (at least one doc per index).
-   */
+  /** Minimum expected doc count per index. Defaults to 1. */
   readonly minDocCount?: number;
 }
 
@@ -91,16 +64,44 @@ export interface VersionedIngestOptions {
 export interface VersionedIngestResult {
   /** The version string used for the new indexes. */
   readonly version: string;
-
   /** Ingest statistics from the bulk load. */
   readonly ingestResult: IngestResult;
-
   /** Previous version that was live before the swap, or null if first run. */
   readonly previousVersion: string | null;
-
   /** Number of old index generations deleted during cleanup. */
   readonly indexesCleanedUp: number;
+  /** Number of old index generations that failed to delete during cleanup. */
+  readonly cleanupFailures: number;
+}
 
+// ---------------------------------------------------------------------------
+// Stage and promote
+// ---------------------------------------------------------------------------
+
+/**
+ * Result of a successful stage operation. The returned version can later be
+ * passed to {@link IndexLifecycleService.promote}.
+ */
+export interface StageResult {
+  /** The version string for the newly staged indexes. */
+  readonly version: string;
+  /** Ingest statistics from the bulk load. */
+  readonly ingestResult: IngestResult;
+  /** The version currently live (from metadata), or null if first run. */
+  readonly previousVersion: string | null;
+}
+
+/**
+ * Result of a successful promote operation. Promotion swaps aliases to a
+ * previously staged version, writes metadata, and cleans up old generations.
+ */
+export interface PromoteResult {
+  /** The version that is now live. */
+  readonly version: string;
+  /** The version that was live before promotion, or null if first run. */
+  readonly previousVersion: string | null;
+  /** Number of old index generations deleted during cleanup. */
+  readonly indexesCleanedUp: number;
   /** Number of old index generations that failed to delete during cleanup. */
   readonly cleanupFailures: number;
 }
@@ -115,7 +116,6 @@ export interface VersionedIngestResult {
 export interface RollbackResult {
   /** The version that is now live after rollback. */
   readonly rolledBackToVersion: string;
-
   /** The version that was removed from live duty. */
   readonly rolledBackFromVersion: string;
 }
@@ -130,13 +130,10 @@ export interface RollbackResult {
 export interface AliasHealthEntry {
   /** The alias name. */
   readonly alias: string;
-
   /** Whether the alias exists and points to a valid index. */
   readonly healthy: boolean;
-
   /** The physical index the alias points to, or null if unhealthy. */
   readonly targetIndex: string | null;
-
   /** Human-readable description of any issue. */
   readonly issue?: string;
 }
@@ -147,7 +144,6 @@ export interface AliasHealthEntry {
 export interface AliasValidationResult {
   /** Whether all aliases are healthy. */
   readonly allHealthy: boolean;
-
   /** Per-alias health entries. */
   readonly entries: readonly AliasHealthEntry[];
 }
@@ -216,6 +212,22 @@ export interface IndexLifecycleService {
   readonly versionedIngest: (
     options: VersionedIngestOptions,
   ) => Promise<Result<VersionedIngestResult, AdminError>>;
+
+  /**
+   * Stage new versioned indexes without promoting them.
+   *
+   * Creates indexes, ingests data, and verifies doc counts — but does NOT
+   * swap aliases. The returned version can be promoted later via {@link promote}.
+   */
+  readonly stage: (options: VersionedIngestOptions) => Promise<Result<StageResult, AdminError>>;
+
+  /**
+   * Promote a previously staged version by swapping aliases to it.
+   *
+   * Verifies the staged indexes exist, atomically swaps aliases,
+   * writes metadata, and cleans up old index generations.
+   */
+  readonly promote: (version: string) => Promise<Result<PromoteResult, AdminError>>;
 
   /**
    * Roll back to the previous version recorded in index metadata.

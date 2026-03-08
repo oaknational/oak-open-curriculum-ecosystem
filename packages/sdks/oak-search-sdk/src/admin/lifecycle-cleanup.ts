@@ -37,6 +37,9 @@ async function cleanupKindGenerations(
 ): Promise<CleanupResult> {
   const listResult = await deps.listVersionedIndexes(baseName, deps.target);
   if (!listResult.ok) {
+    // Listing failure: skip this kind silently — cleanup is best-effort and
+    // the ingest already committed. Not counted as a `failed` deletion because
+    // no deletion was attempted.
     deps.logger?.warn('Failed to list versioned indexes for cleanup', { baseName });
     return { deleted: 0, failed: 0 };
   }
