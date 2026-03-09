@@ -7,7 +7,11 @@
  */
 
 import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
-import { BASE_INDEX_NAMES, SEARCH_INDEX_KINDS } from '../internal/index.js';
+import {
+  BASE_INDEX_NAMES,
+  SEARCH_INDEX_KINDS,
+  resolveVersionedIndexName,
+} from '../internal/index.js';
 
 /** Maximum number of index generations to retain (including current). */
 const MAX_GENERATIONS = 2;
@@ -61,4 +65,25 @@ async function cleanupKindGenerations(
     }
   }
   return { deleted, failed };
+}
+
+/**
+ * Delete all 6 versioned indexes for a given version. Best-effort: cleanup
+ * failures are logged as warnings but never mask the original error.
+ */
+export async function cleanupOrphanedIndexes(
+  deps: IndexLifecycleDeps,
+  version: string,
+): Promise<void> {
+  for (const kind of SEARCH_INDEX_KINDS) {
+    const indexName = resolveVersionedIndexName(BASE_INDEX_NAMES[kind], deps.target, version);
+    const deleteResult = await deps.deleteVersionedIndex(indexName);
+    if (!deleteResult.ok) {
+      deps.logger?.warn('Failed to clean up orphaned versioned index', {
+        indexName,
+        version,
+        error: deleteResult.error.message,
+      });
+    }
+  }
 }

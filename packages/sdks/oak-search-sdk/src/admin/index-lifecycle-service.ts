@@ -2,14 +2,10 @@
  * Index lifecycle service for blue/green index management (ADR-130).
  *
  * Orchestrates versioned index creation, alias swapping, and cleanup.
- * Rollback and alias validation are in `lifecycle-rollback.ts`.
- * Promote is in `lifecycle-promote.ts`.
- * All IO operations are injected via `IndexLifecycleDeps` for
- * testability (ADR-078).
+ * IO operations are injected via `IndexLifecycleDeps` (ADR-078).
  *
  * @see {@link ./lifecycle-promote.ts} for promote
  * @see {@link ./lifecycle-rollback.ts} for rollback and alias validation
- * @see {@link ./lifecycle-swap-builders.ts} for pure swap-building helpers
  */
 
 import type { Result } from '@oaknational/result';
@@ -28,7 +24,7 @@ import {
   buildRollbackSwaps,
   buildIngestMeta,
 } from './lifecycle-swap-builders.js';
-import { cleanupOldGenerations } from './lifecycle-cleanup.js';
+import { cleanupOldGenerations, cleanupOrphanedIndexes } from './lifecycle-cleanup.js';
 import { rollback, validateAliases } from './lifecycle-rollback.js';
 import { promote } from './lifecycle-promote.js';
 
@@ -97,22 +93,41 @@ async function runIngestAndVerify(
   return ok(ingestResult.value);
 }
 
-/** Stage versioned indexes without promoting: create, ingest, verify. */
+/**
+ * Stage versioned indexes without promoting: create, ingest, verify.
+ *
+ * When ingest or verification fails after index creation succeeds,
+ * the orphaned versioned indexes are cleaned up. Cleanup failures
+ * are logged as warnings but the original error is always preserved.
+ */
 async function stage(
   deps: IndexLifecycleDeps,
   options: VersionedIngestOptions,
 ): Promise<Result<StageResult, AdminError>> {
-  const prepared = await prepareVersionedIndexes(deps, options);
-  if (!prepared.ok) {
-    return prepared;
+  const metaResult = await deps.readIndexMeta();
+  if (!metaResult.ok) {
+    return metaResult;
   }
-  deps.logger?.info('Stage complete — indexes ready for promotion', {
-    version: prepared.value.version,
-  });
+  const previousVersion = metaResult.value?.version ?? null;
+  const version = deps.generateVersion();
+  deps.logger?.info('Starting staged ingest', { version, previousVersion });
+
+  const createResult = await deps.createVersionedIndexes(version);
+  if (!createResult.ok) {
+    return createResult;
+  }
+
+  const ingestResult = await runIngestAndVerify(deps, version, options);
+  if (!ingestResult.ok) {
+    await cleanupOrphanedIndexes(deps, version);
+    return ingestResult;
+  }
+
+  deps.logger?.info('Stage complete — indexes ready for promotion', { version });
   return ok({
-    version: prepared.value.version,
-    ingestResult: prepared.value.ingestResult,
-    previousVersion: prepared.value.previousVersion,
+    version,
+    ingestResult: ingestResult.value,
+    previousVersion,
   });
 }
 
@@ -153,12 +168,7 @@ async function swapAndCommit(
   return ok(undefined);
 }
 
-/**
- * Attempt to roll back aliases after a metadata write failure.
- *
- * Returns `ok` if rollback succeeds, `err` with a critical compound error
- * if rollback also fails (aliases stuck pointing to the new version).
- */
+/** Attempt to roll back aliases after a metadata write failure. */
 async function attemptMetaFailureRollback(
   deps: IndexLifecycleDeps,
   originalTargets: AliasTargetMap,

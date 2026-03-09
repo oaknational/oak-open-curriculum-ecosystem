@@ -16,7 +16,12 @@ import {
   type BulkUploadResult,
 } from './bulk-chunk-uploader';
 
-export type { EsTransport, BulkUploadConfig, BulkUploadResult } from './bulk-chunk-uploader';
+export type {
+  EsTransport,
+  BulkUploadConfig,
+  BulkUploadResult,
+  IndexOperationCounts,
+} from './bulk-chunk-uploader';
 export { createNdjson } from './bulk-chunk-utils';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([

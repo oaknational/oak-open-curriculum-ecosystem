@@ -123,6 +123,54 @@ describe('dispatchBulk', () => {
     expect(mockLogger.error).toHaveBeenCalled();
   });
 
+  it('returns per-index counts distinguishing indexed vs failed', async () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: '1' } },
+      { title: 'Lesson 1' },
+      { index: { _index: 'oak_lessons', _id: '2' } },
+      { title: 'Lesson 2' },
+      { index: { _index: 'oak_units', _id: '3' } },
+      { title: 'Unit 1' },
+    ] as BulkOperations;
+
+    mockRequestFn.mockResolvedValue({
+      errors: true,
+      items: [
+        { index: { _index: 'oak_lessons', status: 201 } },
+        {
+          index: {
+            _index: 'oak_lessons',
+            status: 400,
+            error: { type: 'mapper_parsing_exception', reason: 'bad field' },
+          },
+        },
+        { index: { _index: 'oak_units', status: 201 } },
+      ],
+    });
+
+    const result = await dispatchBulk(mockEs, operations, mockLogger);
+
+    expect(result.indexCounts).toBeDefined();
+    expect(result.indexCounts).toEqual({
+      oak_lessons: { indexed: 1, failed: 1 },
+      oak_units: { indexed: 1, failed: 0 },
+    });
+  });
+
+  it('returns empty indexCounts when no operations are dispatched', async () => {
+    const operations = [] as unknown as BulkOperations;
+
+    mockRequestFn.mockResolvedValue({
+      errors: false,
+      items: [],
+    });
+
+    const result = await dispatchBulk(mockEs, operations, mockLogger);
+
+    expect(result.indexCounts).toBeDefined();
+    expect(result.indexCounts).toEqual({});
+  });
+
   it('calculates document count correctly from operations', async () => {
     const operations = [
       { index: { _index: 'oak_lessons', _id: '1' } },
