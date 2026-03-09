@@ -17,6 +17,9 @@ collaboration.txt
 .claude/settings.json
 .claude/settings.local.json
 
+# Claude agent worktrees (transient, machine-local)
+.claude/worktrees/
+
 # Generated docs
 **/docs/api
 **/docs/api-md/index.md

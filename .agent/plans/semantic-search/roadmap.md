@@ -68,7 +68,7 @@ Cross-collection sequencing note:
   Elasticsearch reindex validation, then MCP Apps infrastructure migration,
   then graph follow-on work from the active alignment audit.
 - Semantic-search currently has four active plans in `active/`:
-  `mcp-result-pattern-unification`, `search-sdk-args-extraction`,
+  `unified-versioned-ingestion`, `search-sdk-args-extraction`,
   `bulk-metadata-quick-wins`, and `kg-alignment-audit`.
 - The graph lane now has its first evidence-first slice promoted into
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md),

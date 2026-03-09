@@ -453,9 +453,24 @@ describe the root cause accurately as a format mismatch.
 
 **Process observations for next session:**
 
-- Worktree agents cannot `git push` due to pre-existing e2e test (`bulk-retry-cli.e2e.test.ts`) that requires local bulk download data. Cherry-pick from worktree branches was the workaround.
-- Some agent file changes leaked from worktrees into the main working tree. The `claude-agent-ops` CLI was built to help track this.
-- Sub-agents attempted to modify plan files — a new rule (`subagent-practice-core-protection`) now prevents this.
+- **Pre-flight gates are mandatory.** Run `.agent/tools/claude-agent-ops preflight` before
+  launching parallel agents. Quality gates must pass BEFORE sub-agents are spawned —
+  a failing gate in the base tree causes every worktree agent to fail at push time.
+- **Worktree cleanup is mandatory after parallel work.** Run `.agent/tools/claude-agent-ops cleanup`
+  to remove finished worktrees, prune dead references, and delete orphaned branches.
+  `.claude/worktrees/` is now gitignored to prevent index leakage.
+- **`bulk-retry-cli.e2e.test.ts` blocks all pushes** in environments without the local
+  `bulk-downloads/` directory. Root cause: the ingest CLI reads the filesystem BEFORE
+  checking `dryRun` — an architectural flaw, not just a test issue. This e2e test
+  depends on ambient filesystem state (bulk download data), violating the testing
+  strategy's isolation requirements. Fix options: (a) skip the FS-dependent test in
+  the pre-push hook, (b) refactor `executeBulkIngestion` to check dry-run before
+  reading files, or (c) provide a minimal test fixture. This is pre-existing and
+  outside the scope of this plan.
+- Worktree file changes can leak into the main working tree. The `claude-agent-ops`
+  CLI tracks this via `commit-ready` and `diff` commands.
+- Sub-agents attempted to modify plan files — a new rule
+  (`subagent-practice-core-protection`) now prevents this.
 
 ---
 

@@ -321,6 +321,142 @@ cmd_commit_ready() {
   done
 }
 
+cmd_preflight() {
+  printf "\n"
+  bold "Pre-flight Check for Parallel Agent Work"
+  printf "\n\n"
+
+  local all_ok=true
+
+  # 1. Working tree clean?
+  local changes
+  changes=$(git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$changes" -gt 0 ]]; then
+    red "FAIL"
+    printf " Working tree has %s uncommitted changes\n" "$changes"
+    git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | head -5 | sed 's/^/       /'
+    all_ok=false
+  else
+    green "PASS"
+    printf " Working tree is clean\n"
+  fi
+
+  # 2. Existing worktrees?
+  local wt_count
+  wt_count=$(find "$WORKTREE_DIR" -maxdepth 1 -type d -name "agent-*" 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$wt_count" -gt 0 ]]; then
+    red "FAIL"
+    printf " %s leftover agent worktrees found (run 'claude-agent-ops cleanup')\n" "$wt_count"
+    all_ok=false
+  else
+    green "PASS"
+    printf " No leftover agent worktrees\n"
+  fi
+
+  # 3. Worktree branches?
+  local wt_branches
+  wt_branches=$(git branch 2>/dev/null | grep -c "worktree-agent-" || true)
+  if [[ "$wt_branches" -gt 0 ]]; then
+    yellow "WARN"
+    printf " %s orphaned worktree branches found (run 'claude-agent-ops cleanup')\n" "$wt_branches"
+    all_ok=false
+  else
+    green "PASS"
+    printf " No orphaned worktree branches\n"
+  fi
+
+  # 4. Quality gates?
+  printf "  ..."
+  printf "\r"
+  if pnpm build > /dev/null 2>&1 && pnpm type-check > /dev/null 2>&1; then
+    green "PASS"
+    printf " Build and type-check succeed\n"
+  else
+    red "FAIL"
+    printf " Build or type-check failed — fix before launching agents\n"
+    all_ok=false
+  fi
+
+  if pnpm test > /dev/null 2>&1; then
+    green "PASS"
+    printf " Tests pass\n"
+  else
+    red "FAIL"
+    printf " Tests failing — fix before launching agents\n"
+    all_ok=false
+  fi
+
+  printf "\n"
+  if [[ "$all_ok" == true ]]; then
+    green "ALL CHECKS PASSED"
+    printf " — safe to launch parallel agents\n"
+  else
+    red "PRE-FLIGHT FAILED"
+    printf " — resolve issues before launching agents\n"
+  fi
+  printf "\n"
+}
+
+cmd_cleanup() {
+  printf "\n"
+  bold "Cleaning Up Agent Worktrees"
+  printf "\n\n"
+
+  local cleaned=0
+
+  # Remove agent worktrees
+  for wt_dir in "${WORKTREE_DIR}"/agent-*; do
+    [[ -d "$wt_dir" ]] || continue
+    local wt_name
+    wt_name=$(basename "$wt_dir")
+    local changes
+    changes=$(git -C "$wt_dir" status --short 2>/dev/null | wc -l | tr -d ' ')
+
+    if [[ "$changes" -gt 0 ]]; then
+      yellow "SKIP"
+      printf " %s — has %s uncommitted changes\n" "$wt_name" "$changes"
+      printf "       Use 'claude-agent-ops diff %s' to inspect, then 'git worktree remove --force %s'\n" \
+        "${wt_name#agent-}" "$wt_dir"
+    else
+      git worktree remove "$wt_dir" --force 2>/dev/null
+      printf "  Removed worktree: %s\n" "$wt_name"
+      cleaned=$((cleaned + 1))
+    fi
+  done
+
+  # Remove worktrees tracked in git index
+  local cached
+  cached=$(git ls-files --cached .claude/worktrees/ 2>/dev/null)
+  if [[ -n "$cached" ]]; then
+    git rm --cached -r .claude/worktrees/ > /dev/null 2>&1
+    printf "  Removed .claude/worktrees/ from git index\n"
+    cleaned=$((cleaned + 1))
+  fi
+
+  # Prune dead worktree references
+  git worktree prune 2>/dev/null
+  printf "  Pruned stale worktree references\n"
+
+  # Delete orphaned worktree branches
+  local branch_count=0
+  while IFS= read -r branch; do
+    branch=$(echo "$branch" | tr -d ' *')
+    [[ -z "$branch" ]] && continue
+    git branch -D "$branch" 2>/dev/null
+    printf "  Deleted branch: %s\n" "$branch"
+    branch_count=$((branch_count + 1))
+  done < <(git branch 2>/dev/null | grep "worktree-agent-")
+
+  printf "\n"
+  if [[ $cleaned -eq 0 && $branch_count -eq 0 ]]; then
+    dim "Nothing to clean up."
+  else
+    green "Cleaned"
+    printf " %s worktrees, %s branches\n" "$cleaned" "$branch_count"
+  fi
+  printf "\n"
+}
+
 cmd_help() {
   cat <<'HELP'
 claude-agent-ops — CLI for monitoring and managing Claude background agents
@@ -331,12 +467,16 @@ Commands:
   log <id>        Show recent activity log for a specific agent (supports partial ID)
   diff [id]       Show uncommitted changes (main tree if no ID, or specific worktree)
   commit-ready    List all locations with uncommitted agent changes
+  preflight       Run pre-flight checks before launching parallel agents
+  cleanup         Remove completed worktrees, prune dead references, delete orphan branches
   help            Show this help message
 
 Examples:
+  claude-agent-ops preflight                 # Check gates before batch work
   claude-agent-ops status                    # Dashboard of all agents
   claude-agent-ops log ae5ee7b               # Last 20 messages from agent ae5ee7b...
   claude-agent-ops worktrees                 # See which worktrees have changes
+  claude-agent-ops cleanup                   # Remove finished worktrees and branches
   claude-agent-ops commit-ready              # Find what needs committing
 
 Environment Variables:
@@ -357,6 +497,8 @@ main() {
     log)          cmd_log "$@";;
     diff)         cmd_diff "$@";;
     commit-ready) cmd_commit_ready "$@";;
+    preflight)    cmd_preflight "$@";;
+    cleanup)      cmd_cleanup "$@";;
     help|--help|-h) cmd_help;;
     *)
       echo "Unknown command: $cmd"
