@@ -32,6 +32,9 @@ import {
  */
 function buildLifecycleServiceBasic(cliEnv: CliSdkEnv): IndexLifecycleService {
   const client = createEsClient(cliEnv);
+  // Guard: alias-only commands never invoke ingest. validation_error is
+  // semantically correct — calling ingest here IS invalid input to the
+  // lifecycle service from this command context.
   const noOpIngest: IndexLifecycleDeps['runVersionedIngest'] = () =>
     Promise.resolve(
       err({

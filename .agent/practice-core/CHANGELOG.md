@@ -1,13 +1,21 @@
-# Practice-Core Changelog
+# Practice Core Changelog
 
-Changes to the practice-core files, newest first. Each entry records the repo
+Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
-practice-core package.
+Practice Core package.
+
+## [castr] 2026-03-09
+
+- Integrated portable Practice Core into a mature local repo Practice rather than a blank-slate hydration
+- Confirmed `principles.md` as the authoritative doctrine name and aligned the local canonical-first structure around that distinction
+- Added the structural learning that paused workstreams are distinct from `future/` backlog in mature repos
+- Clarified that the portable agent architecture is installable in stages: the Core should distinguish canonical reviewer/domain-expert structure from a repo's current installation status
+- Added provenance entries for Castr to the travelling trinity files
 
 ## [oak-open-curriculum-ecosystem] 2026-03-09
 
 - Integrated new-cv round-trip: adopted Codex model, value traceability, six-file package, practice-context adjunct, napkin threshold 800→500
-- Added `.codex/` to platform adapter lists throughout practice.md and practice-bootstrap.md
+- Added `.codex/` to platform adapter lists throughout `practice.md` and `practice-bootstrap.md`
 - Updated artefact map and review system to include Codex reviewer registration model
 - Adopted value traceability as plan workflow point 5
 - Replaced templates as required infrastructure with optional supporting artefacts
@@ -15,8 +23,8 @@ practice-core package.
 - Removed repo-specific ADR references from portable files (routed via practice-index)
 - Updated ADR directory path to generic "Repo's ADR directory" with practice-index reference
 - Adopted expanded learned principles: documentation concurrent, value traceability, local norms, fitness everywhere, self-containment with practice-context
-- Added Adaptation Levels, Restructuring path, Validation scripts sections to practice-lineage
-- Adopted CHANGELOG.md as the sixth practice-core file
+- Added Adaptation Levels, Restructuring path, and Validation scripts sections to `practice-lineage.md`
+- Adopted `CHANGELOG.md` as the sixth Practice Core file
 - Adopted practice-context adjunct pattern references
 
 ## [new-cv] 2026-03-09
@@ -42,16 +50,16 @@ practice-core package.
 - Added routine cohesion audit to consolidation command specification
 - Reframed underscore-prefix rule as ecosystem-agnostic principle
 - Added this changelog
-- Updated all "five files" references to "six files" across practice-core
+- Updated all "five files" references to "six files" across the Practice Core
 - Removed vestigial ADR numbers (114, 117, 119, 124, 125) from practice.md and practice-bootstrap.md — concepts already described inline
 - Fixed broken references: `schema-first-execution.md`, `invoke-code-reviewers`, `pnpm qg`
-- Made non-canonical paths generic: ADR directory paths removed from practice-core (routed via practice-index)
+- Made non-canonical paths generic: ADR directory paths removed from the Practice Core (routed via `practice-index.md`)
 - Aligned distillation threshold to ~500 lines across practice.md and practice-bootstrap.md
 - Made portability check step ecosystem-agnostic in practice-bootstrap.md
 
 ## [new-cv] 2026-03-05
 
-- First restructuring hydration: adopted practice-core into a repo with mature platform-locked practice
+- First restructuring hydration: adopted the Practice Core into a repo with a mature platform-locked Practice
 - Added provenance entries for new-cv to all three trinity files
 
 ## [oak-open-curriculum-ecosystem] 2026-02-28
@@ -62,12 +70,12 @@ practice-core package.
 
 ## [oak-open-curriculum-ecosystem] 2026-02-27
 
-- Adopted practice-core structure, trinity concept, and bootstrap from round-trip
+- Adopted Practice Core structure, trinity concept, and bootstrap from round-trip
 
 ## [cloudinary-icon-ingest-poc] 2026-02-26
 
-- Origin: initial practice-core files created for short-lived POC
+- Origin: initial Practice Core files created for short-lived POC
 
 ## [oak-open-curriculum-ecosystem] 2026-02-26
 
-- Origin: initial practice-lineage created for production SDK ecosystem
+- Origin: initial Practice lineage created for production SDK ecosystem

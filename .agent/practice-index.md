@@ -1,8 +1,8 @@
 # Practice Index
 
-This file bridges the portable practice-core files and this repo's local artefacts. It is **not** part of the travelling practice-core package — it is created during hydration and stays in the repo. The format is specified by `practice-core/practice-bootstrap.md`.
+This file bridges the portable Practice Core files and this repo's local artefacts. It is **not** part of the travelling Practice Core package — it is created during hydration and stays in the repo. The format is specified by `practice-core/practice-bootstrap.md`.
 
-For the practice-core files and their roles, see [practice-core/index.md](practice-core/index.md).
+For the Practice Core files and their roles, see [practice-core/index.md](practice-core/index.md).
 
 ## Directives
 
@@ -29,7 +29,7 @@ For the practice-core files and their roles, see [practice-core/index.md](practi
 
 ## Architectural Decisions
 
-ADRs referenced by the practice-core files. The full index is at `docs/architecture/architectural-decisions/`.
+ADRs referenced by the Practice Core files. The full index is at `docs/architecture/architectural-decisions/`.
 
 | ADR | Subject |
 |---|---|
@@ -43,8 +43,8 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 
 | Tool | Canonical Location | Purpose |
 |---|---|---|
-| consolidate-docs | [`.agent/commands/consolidate-docs.md`](commands/consolidate-docs.md) | Graduation step: verify docs, extract plan content, check practice box |
-| start-right-quick | [`.agent/commands/start-right-quick.md`](commands/start-right-quick.md) | Session grounding: read directives, check practice box |
+| consolidate-docs | [`.agent/commands/consolidate-docs.md`](commands/consolidate-docs.md) | Graduation step: verify docs, extract plan content, check Practice Box |
+| start-right-quick | [`.agent/commands/start-right-quick.md`](commands/start-right-quick.md) | Session grounding: read directives, check Practice Box |
 | distillation skill | [`.agent/skills/distillation/SKILL.md`](skills/distillation/SKILL.md) | Extract high-signal patterns from the napkin |
 | napkin skill | [`.agent/skills/napkin/SKILL.md`](skills/napkin/SKILL.md) | Always-active session-to-session learning log |
 | code-patterns skill | [`.agent/skills/code-patterns/SKILL.md`](skills/code-patterns/SKILL.md) | Known solutions to recurring design problems |
@@ -56,7 +56,7 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | Location | What lives there |
 |---|---|
 | [`.agent/directives/`](directives/) | Principles, rules, and operational directives |
-| [`.agent/plans/`](plans/) | Work planning — active, archived, and optional supporting templates |
+| [`.agent/plans/`](plans/) | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/) | Institutional memory — napkin, distilled learnings, and code patterns |
 | [`.agent/experience/`](experience/) | Experiential records across sessions |
 | [`.agent/prompts/`](prompts/) | Reusable prompt playbooks |

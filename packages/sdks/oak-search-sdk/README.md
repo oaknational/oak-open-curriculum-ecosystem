@@ -52,7 +52,7 @@ createSearchSdk({ deps, config })
 | Service                  | Purpose                                                                                                                                                                                                                                           |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **RetrievalService**     | Hybrid BM25 + ELSER search (lessons, units, sequences, threads), suggestions, facets. Lessons/units use 4-way RRF; threads/sequences use 2-way RRF ([ADR-110](../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)) |
-| **AdminService**         | ES setup, connection, synonyms, index metadata, bulk ingestion                                                                                                                                                                                    |
+| **AdminService**         | ES setup, connection, synonyms, index metadata                                                                                                                                                                                                    |
 | **ObservabilityService** | Zero-hit event recording, ES persistence, telemetry queries                                                                                                                                                                                       |
 
 ### Blue/Green Index Lifecycle (ADR-130)
@@ -64,7 +64,12 @@ import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oa
 import { Client } from '@elastic/elasticsearch';
 
 const client = new Client({ node: esUrl, auth: { apiKey } });
-const deps = buildLifecycleDeps(client, 'primary');
+const runVersionedIngest = createRunVersionedIngest({
+  oakClient,
+  esTransport: client,
+  target: 'primary',
+});
+const deps = buildLifecycleDeps(client, 'primary', runVersionedIngest);
 const lifecycle = createIndexLifecycleService(deps);
 
 // Full blue/green cycle: create versioned indexes → ingest → verify → swap aliases → clean up

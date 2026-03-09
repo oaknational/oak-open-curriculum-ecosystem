@@ -4,7 +4,7 @@ The Practice is a system of principles, guardrails, skills, and a self-teaching 
 
 This directory is the Practice Core, the self-contained heart of the system. The Core is transferable to other repos, see below. The Core integrates into a specific repo via a stable link to the `practice-index.md` file.
 
-The Practice is the application of the Core within a specific repo, and the Core-informed quality gates, rules, commands, sub-agents, skills, prompts, etc. that are used to enforce the principles and guardrails.
+The Practice is the integrated local application of the Core within a specific repo, and the Core-informed quality gates, rules, commands, optional reviewer/domain-expert agents, skills, prompts, and other artefacts that are used to enforce the principles and guardrails.
 
 The Practice will naturally evolve over time; using it will cause it to adapt to suit the context of its current repo.
 
@@ -18,7 +18,7 @@ This was inspired by the concept of [genetic plasmid exchange](https://en.wikipe
 
 ### Bringing the Practice to a New Repo
 
-The Practice travels as a set of six required files: three core blueprints (the "plasmid trinity"), two entry points (this README and an agent-facing index), and a changelog. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core. `outgoing/` is sender-maintained support material; copy relevant files into the receiving repo's `incoming/`, use them during integration, then clear `incoming/`. To hydrate it into a new repository:
+To bring the Practice to a new repo, transfer the Practice Core: three core blueprints (the "plasmid trinity"), two entry points (this README and an agent-facing index), and a changelog. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core. `outgoing/` is sender-maintained support material; copy relevant files into the receiving repo's `incoming/`, use them during integration, then clear `incoming/`. To hydrate it into a new repository:
 
 1. Create a directory: `.agent/practice-core/` (or `practice_core` if you prefer underscores).
 2. Drop these files into it.

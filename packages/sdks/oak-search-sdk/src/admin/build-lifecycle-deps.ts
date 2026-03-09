@@ -120,7 +120,7 @@ async function buildVerifyDocCounts(
  *
  * The caller supplies `runVersionedIngest` — typically the CLI-layer
  * closure from `createRunVersionedIngest` which uses the proven bulk
- * pipeline. This removes the SDK's dependency on the broken `ingest.ts`.
+ * pipeline.
  *
  * @param client - Elasticsearch client instance
  * @param target - Which index alias set to target (`'primary'` or `'sandbox'`)

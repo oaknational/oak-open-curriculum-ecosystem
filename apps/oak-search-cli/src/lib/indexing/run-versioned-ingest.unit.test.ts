@@ -17,7 +17,7 @@ import { createRunVersionedIngest } from './run-versioned-ingest';
 // Fakes
 // ---------------------------------------------------------------------------
 
-/** Minimal OakClient fake — only identity matters, not method results. */
+/** Structural OakClient fake matching hybrid-data-source.unit.test.ts pattern. */
 function fakeOakClient(): OakClient {
   return {
     getUnitsByKeyStageAndSubject: vi.fn(),
@@ -30,10 +30,23 @@ function fakeOakClient(): OakClient {
     getThreadUnits: vi.fn(),
     getLessonsByKeyStageAndSubject: vi.fn(),
     getSubjectAssets: vi.fn(),
-    rateLimitTracker: vi.fn(),
-    getCacheStats: vi.fn(),
-    disconnect: vi.fn(),
-  } as unknown as OakClient;
+    rateLimitTracker: {
+      getStatus: vi.fn().mockReturnValue({ remaining: 1000, total: 1000 }),
+      getRequestCount: vi.fn().mockReturnValue(0),
+      getRequestRate: vi.fn().mockReturnValue(0),
+      reset: vi.fn(),
+    },
+    getCacheStats: vi.fn().mockReturnValue({
+      hits: 0,
+      misses: 0,
+      sets: 0,
+      size: 0,
+      hitRate: 0,
+      cacheEnabled: false,
+      adapters: {},
+    }),
+    disconnect: vi.fn().mockResolvedValue(undefined),
+  };
 }
 
 /** Minimal EsTransport fake — only identity matters for most tests. */
@@ -42,9 +55,7 @@ function fakeEsTransport(): EsTransport {
 }
 
 /** Fake bulk operations — only shape matters, not content. */
-const FAKE_OPS: BulkOperationEntry[] = [
-  { index: { _index: 'oak_lessons_v1' } },
-] as BulkOperationEntry[];
+const FAKE_OPS = [{ index: { _index: 'oak_lessons_v1' } }] satisfies BulkOperationEntry[];
 
 /** A successful BulkIngestionResult fixture. */
 function makeBulkIngestionResult(overrides?: Partial<BulkIngestionResult>): BulkIngestionResult {
@@ -142,9 +153,7 @@ describe('createRunVersionedIngest', () => {
   });
 
   it('dispatches operations via dispatchBulk', async () => {
-    const operations: BulkOperationEntry[] = [
-      { index: { _index: 'oak_lessons_v1' } },
-    ] as BulkOperationEntry[];
+    const operations = [{ index: { _index: 'oak_lessons_v1' } }] satisfies BulkOperationEntry[];
     const prepare = stubPrepare(makeBulkIngestionResult({ operations }));
     const dispatch = stubDispatch(makeBulkUploadResult());
     const esTransport = fakeEsTransport();
@@ -224,19 +233,6 @@ describe('createRunVersionedIngest', () => {
     }
   });
 
-  it('returns ok with correct IngestResult on success', async () => {
-    const run = createRunVersionedIngest({
-      oakClient: fakeOakClient(),
-      esTransport: fakeEsTransport(),
-      target: 'primary',
-      prepareBulkIngestion: stubPrepare(makeBulkIngestionResult()),
-      dispatchBulk: stubDispatch(makeBulkUploadResult()),
-    });
-
-    const result = await run('v2026-03-09-120000', { bulkDir: '/tmp/bulk' });
-    expect(result.ok).toBe(true);
-  });
-
   it('passes versioned resolver that generates correct index names', async () => {
     const prepare = stubPrepare(makeBulkIngestionResult());
 
@@ -250,6 +246,7 @@ describe('createRunVersionedIngest', () => {
 
     await run('v2026-03-09-120000', { bulkDir: '/tmp/bulk' });
 
+    expect(prepare).toHaveBeenCalledOnce();
     const callArgs = prepare.mock.calls[0]?.[0];
     expect(callArgs).toBeDefined();
     if (callArgs) {

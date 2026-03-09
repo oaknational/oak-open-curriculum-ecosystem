@@ -1,3 +1,31 @@
+## Session 2026-03-09 — Consolidation + Castr Practice-Core Integration
+
+### What Was Done
+
+- Full consolidation pass (`/jc-consolidate-docs`). Documentation confirmed
+  current. Napkin 388 lines (under 500), distilled 184 lines (under 200).
+- Integrated Practice Core incoming from `castr` repo (provenance index 7,
+  2026-03-09). All six Practice Core files adopted wholesale.
+- Changes adopted: capitalisation consistency (`Practice Core`, `Practice Box`,
+  `Practice Index`), stageable reviewer layer wording, paused workstreams in
+  plan hierarchy, "Paused is not future" learned principle, title simplification
+  ("The Practice"), table formatting.
+- Fixed stale "via skills" Codex agent references in outgoing practice-context
+  files (`platform-adapter-reference.md`, `reviewer-system-guide.md`) — Codex
+  reviewers use `.codex/` project-agent config, not skills.
+- Cleared both incoming directories (practice-core box + practice-context).
+- Fitness check: 3 files slightly over ceiling (practice-lineage +10,
+  practice-bootstrap +8, CONTRIBUTING +9) — flagged, not blocking.
+
+### Patterns to Remember
+
+- The Castr round-trip validated that the Core files handle mature-repo
+  integration well — no blank-slate assumptions, stageable agent architecture.
+- Practice-context outgoing files drift silently: the Codex model changed but
+  the support docs weren't updated until Castr noticed.
+
+---
+
 ## Session 2026-03-09 — Practice-Core Integration (new-cv round-trip)
 
 ### What Was Done

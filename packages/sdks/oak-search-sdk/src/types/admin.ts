@@ -42,7 +42,7 @@ export type {
 } from '../admin/verify-doc-counts.js';
 
 /**
- * Admin service — Elasticsearch setup, ingestion, and index management.
+ * Admin service — Elasticsearch setup and index management.
  *
  * Provides the write-path operations needed by operators and CLI tools.
  * The retrieval service handles read-path operations.

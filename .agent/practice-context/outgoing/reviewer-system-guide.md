@@ -255,8 +255,8 @@ report. Do not modify code.
 {{args}}"""
 ```
 
-**Codex** — Uses SKILL.md format or is invoked via the Agent tool in
-Claude Code with `subagent_type: "code-reviewer"`.
+**Codex** — Reviewer roles are configured through project-agent support
+in `.codex/`, not modelled as skills. Commands use `.agents/skills/` adapters.
 
 ### Dependency Rules (Critical)
 

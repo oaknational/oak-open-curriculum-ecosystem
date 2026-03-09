@@ -12,7 +12,7 @@ This is a companion to [reviewer-system-guide.md](reviewer-system-guide.md).
 | Claude Code | `.claude/rules/*.md` | `.claude/agents/*.md` | `.claude/commands/*.md` | Proven, production use |
 | Cursor | `.cursor/rules/*.mdc` | `.cursor/agents/*.md` | `.cursor/commands/*.md` | Proven, production use |
 | Gemini CLI | (via commands) | (via commands) | `.gemini/commands/*.toml` | Proven, production use |
-| OpenAI Codex | (via skills) | (via skills) | `.agents/skills/*/SKILL.md` | Proven, production use |
+| OpenAI Codex | (via entry-point chain) | `.codex/` project-agent config | `.agents/skills/*/SKILL.md` | Proven, production use |
 | Anthropic Antigravity | TBD | TBD | TBD | Not yet investigated |
 
 ---
@@ -348,8 +348,8 @@ When adding a new artefact, ensure all platforms are covered:
 
 | Artefact Type | Claude | Cursor | Gemini | Codex |
 |---------------|--------|--------|--------|-------|
-| Rule | `.claude/rules/{name}.md` | `.cursor/rules/{name}.mdc` | (via commands) | (via skills) |
-| Agent/Reviewer | `.claude/agents/{name}.md` | `.cursor/agents/{name}.md` | `.gemini/commands/review-{name}.toml` | (via skills) |
+| Rule | `.claude/rules/{name}.md` | `.cursor/rules/{name}.mdc` | (via commands) | (via entry-point chain) |
+| Agent/Reviewer | `.claude/agents/{name}.md` | `.cursor/agents/{name}.md` | `.gemini/commands/review-{name}.toml` | `.codex/` project-agent config |
 | Command | `.claude/commands/jc-{name}.md` | `.cursor/commands/jc-{name}.md` | `.gemini/commands/jc-{name}.toml` | `.agents/skills/jc-{name}/SKILL.md` |
 
 Run `pnpm portability:check` after every addition to catch gaps.
