@@ -339,9 +339,25 @@ in `buildRunVersionedIngest()` catches it, but the error type is
 misleadingly `es_error`. **Addressed**: Task 2.7 — wrap in explicit Result
 pattern with a specific `data_source_error` kind.
 
+### Late-Arriving Findings (Barney, Background Review)
+
+**10. `AdminService.ingest()` is a second consumer of `ingest.ts`** (Barney)
+— `create-admin-service.ts` imports `runIngest` from the broken `ingest.ts`
+and exposes it as `AdminService.ingest()`. Deleting `ingest.ts` breaks this
+second consumer. **Addressed**: Task 0.7 (enumerate all consumers), Task 2.3
+updated to handle `AdminService.ingest()`.
+
+**11. `rewriteBulkOperations` becomes a competing index-name pattern** (Barney)
+— The non-versioned pipeline has `rewriteBulkOperations` in
+`search-index-target.ts` that post-hoc rewrites `_index` values in bulk
+operations (used by the sandbox target). Once the versioned path uses an
+upfront `IndexResolverFn`, two competing patterns exist for index name
+resolution: post-hoc rewriting (non-versioned) and upfront resolution
+(versioned). **Addressed**: Task 2.8 — unify both paths to use the resolver.
+
 ### Process Refinements (Addressed in Phase 4)
 
-**9. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
+**12. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
 **format mismatch** (SDK expects flat `{doc_type}` arrays, bulk files
 are `BulkDownloadFile` objects), not merely an `unknown[]` type issue.
 **Addressed**: Task 4.2 item 5 — commit messages and documentation must
@@ -436,7 +452,27 @@ would fail with versioned names like `oak_lessons_v2026-03-09-120000`.
 harness layer → `inferKindFromIndex()` must be updated to handle versioned
 names, or the harness must be bypassed. Update this plan before proceeding.
 
-**Phase 0 Complete When**: All 6 assumptions validated. Document any
+#### Task 0.7: Enumerate All Consumers of `runIngest` / `ingest.ts`
+
+**Assumption**: `buildLifecycleDeps()` is the only consumer of the broken
+`ingest.ts`. This was found to be **wrong** by Barney's background review.
+
+**Validation**:
+
+1. Search for all imports from `ingest.ts` or `ingest.js` in the SDK
+2. Search for all references to `runIngest` across the codebase
+3. Document each consumer and its usage pattern
+4. For each consumer, determine whether it must be replaced or can be
+   deleted alongside `ingest.ts`
+
+**Known consumers** (from Barney's review):
+
+- `build-lifecycle-deps.ts` — lifecycle factory default (planned for removal)
+- `create-admin-service.ts` — `AdminService.ingest()` method (must be addressed)
+
+**If additional consumers exist**: Update Task 2.3 to handle each one.
+
+**Phase 0 Complete When**: All 7 assumptions validated. Document any
 corrections to the plan.
 
 ---
@@ -573,7 +609,20 @@ parameter (preferred — makes the dependency explicit).
 2. `admin versioned-ingest` command does the same (stage + promote)
 3. No code path calls the old SDK `runIngest`
 
-#### Task 2.3: Delete SDK `ingest.ts`
+#### Task 2.3: Delete SDK `ingest.ts` and Handle All Consumers
+
+**Consumers to address** (from Phase 0, Task 0.7):
+
+1. `build-lifecycle-deps.ts` — remove the default `runVersionedIngest`.
+   Make it a required parameter (the CLI provides it).
+2. `create-admin-service.ts` — `AdminService.ingest()` also calls
+   `runIngest`. Either:
+   - (a) Make `AdminService` accept an injected ingest function (DI,
+     consistent with `IndexLifecycleDeps`), or
+   - (b) Remove `AdminService.ingest()` if it is unused / dead code, or
+   - (c) Have `AdminService` delegate to the lifecycle service's stage
+     flow for versioned ingest
+   — Decide during Phase 0 based on actual usage of `AdminService.ingest()`.
 
 **Changes**:
 
@@ -581,8 +630,8 @@ parameter (preferred — makes the dependency explicit).
 2. Remove the import from `build-lifecycle-deps.ts`
 3. Remove the default `runVersionedIngest` from `buildLifecycleDeps()`
 4. Make `runVersionedIngest` a required parameter of `buildLifecycleDeps()`
-   (or remove it from the factory entirely — the CLI provides it)
-5. Update any re-exports from `index.ts` files
+5. Address `AdminService.ingest()` per the chosen approach above
+6. Update any re-exports from `index.ts` files
 
 **Acceptance Criteria**:
 
@@ -590,7 +639,8 @@ parameter (preferred — makes the dependency explicit).
 2. No `unknown[]` processing anywhere in the ingestion path
 3. No silent failure paths (`return []`) anywhere in the ingestion path
 4. `buildLifecycleDeps()` does not provide a default ingest implementation
-5. All quality gates pass
+5. `AdminService.ingest()` either removed or uses injected implementation
+6. All quality gates pass
 
 #### Task 2.4: Per-Index Count Verification in Dispatch (Resilience)
 
@@ -684,6 +734,34 @@ that distinguishes them from Elasticsearch errors.
 1. `createHybridDataSource` returns `Result` instead of throwing
 2. Error kind is `data_source_error`, not `es_error`
 3. Callers handle the Result (no unhandled exceptions in the pipeline)
+
+#### Task 2.8: Unify Index Name Resolution (Eliminate Competing Patterns)
+
+**Problem**: The non-versioned pipeline (`admin ingest`) uses
+`rewriteBulkOperations` in `search-index-target.ts` to post-hoc
+rewrite `_index` values in bulk operations (e.g. for sandbox targets).
+The versioned pipeline will use an upfront `IndexResolverFn` to generate
+correct index names from the start. Two competing patterns for the same
+concern creates future confusion.
+
+**Target**: Both the versioned and non-versioned pipelines use the same
+`IndexResolverFn` mechanism. `rewriteBulkOperations` is deleted or
+relegated to a compatibility path with a clear deprecation note.
+
+**TDD Sequence**:
+
+1. **RED**: Write test — `admin ingest` with sandbox target uses
+   `IndexResolverFn` instead of `rewriteBulkOperations`. Run → FAILS.
+2. **GREEN**: Thread the resolver through the non-versioned `admin ingest`
+   path. Remove `rewriteBulkOperations` from the hot path. Run → PASSES.
+3. **REFACTOR**: Delete `rewriteBulkOperations` if no longer needed.
+   Update `search-index-target.ts` and its tests.
+
+**Acceptance Criteria**:
+
+1. One pattern for index name resolution across all ingestion paths
+2. `rewriteBulkOperations` deleted or explicitly deprecated
+3. `admin ingest` behaviour unchanged (existing tests pass)
 
 **Phase 2 Quality Gates**:
 
@@ -874,18 +952,20 @@ This atomically swaps aliases back to the previous version (recorded in
 9. `verifyDocCounts()` reports all failures, not just the first
 10. `createHybridDataSource()` returns `Result`, does not throw
 11. Failed `stage` cleans up orphaned versioned indexes
+12. `AdminService.ingest()` either removed or uses injected implementation
+13. One index-name resolution pattern across all ingestion paths (`rewriteBulkOperations` eliminated)
 
 ### Documentation
 
-12. ADR-130 documents `remove_index` alias action
-13. ADR-093 notes versioned ingestion support via `IndexResolverFn`
-14. INDEXING.md describes versioned vs bare ingestion flow
-15. TSDoc present on all changed function signatures
+14. ADR-130 documents `remove_index` alias action
+15. ADR-093 notes versioned ingestion support via `IndexResolverFn`
+16. INDEXING.md describes versioned vs bare ingestion flow
+17. TSDoc present on all changed function signatures
 
 ### Quality
 
-16. All quality gates pass across all workspaces
-17. All mandatory reviewers have been invoked and findings addressed
+18. All quality gates pass across all workspaces
+19. All mandatory reviewers have been invoked and findings addressed
 
 ---
 
@@ -922,15 +1002,16 @@ This atomically swaps aliases back to the previous version (recorded in
 | `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts` | `prepareBulkIngestion` — gains resolver param (Phase 1) |
 | `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` | Wires CLI ingest into lifecycle deps (Phase 2) |
 | `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts` | Removes default ingest (Phase 2) |
-| `packages/sdks/oak-search-sdk/src/admin/ingest.ts` | DELETED (Phase 2) |
+| `packages/sdks/oak-search-sdk/src/admin/ingest.ts` | DELETED (Phase 2, Task 2.3) |
+| `packages/sdks/oak-search-sdk/src/admin/create-admin-service.ts` | `AdminService.ingest()` — second consumer of `ingest.ts` (Phase 2, Task 2.3) |
+| `apps/oak-search-cli/src/lib/search-index-target.ts` | `rewriteBulkOperations` — competing pattern, eliminated (Phase 2, Task 2.8) |
 | `packages/sdks/oak-sdk-codegen/src/bulk/reader.ts` | Typed bulk file reader (`parseBulkFile`, `readAllBulkFiles`) — unchanged |
 | `packages/sdks/oak-sdk-codegen/src/types/generated/bulk/` | Generated Zod schemas (`bulkDownloadFileSchema`) — unchanged |
 | `apps/oak-search-cli/bulk-downloads/schema.json` | Bulk data format schema — unchanged |
 | `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-bulk.ts` | `dispatchBulk` gains per-index counts (Phase 2, Task 2.4) |
 | `apps/oak-search-cli/src/lib/indexing/ingest-harness-ops.ts` | Not modified — versioned path bypasses this (Phase 0, Task 0.6 confirms) |
-| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts` | Stage cleanup-on-failure (Phase 2, Task 2.5), verify all failures (Task 2.6) |
+| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts` | Stage cleanup-on-failure + verify all failures (Phase 2, Tasks 2.5-2.6) |
 | `apps/oak-search-cli/src/adapters/hybrid-data-source.ts` | Returns Result instead of throwing (Phase 2, Task 2.7) |
 | `apps/oak-search-cli/src/adapters/bulk-thread-transformer.ts` | Unchanged — already parameterised |
 | `apps/oak-search-cli/src/adapters/bulk-sequence-transformer.ts` | Unchanged — already parameterised |
-| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts` | Unchanged — orchestration is sound |
 | `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts` | `IndexLifecycleDeps` interface — may gain required param |
