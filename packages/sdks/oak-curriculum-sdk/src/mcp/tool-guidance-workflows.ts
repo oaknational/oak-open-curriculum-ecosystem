@@ -56,7 +56,7 @@ export const toolGuidanceWorkflows = {
         action: 'Search for lessons matching your topic using semantic search',
         tool: 'search',
         example:
-          'search({ text: "photosynthesis", scope: "lessons", subject: "science", keyStage: "ks3" })',
+          'search({ query: "photosynthesis", scope: "lessons", subject: "science", keyStage: "ks3" })',
         returns: 'Ranked list of matching lessons with titles, subjects, and relevance scores',
       },
       {
@@ -83,7 +83,7 @@ export const toolGuidanceWorkflows = {
         action: 'Find a relevant lesson using semantic search',
         tool: 'search',
         example:
-          'search({ text: "adding fractions", scope: "lessons", subject: "maths", keyStage: "ks2" })',
+          'search({ query: "adding fractions", scope: "lessons", subject: "maths", keyStage: "ks2" })',
         returns: 'Lessons matching your criteria with relevance ranking',
       },
       {
@@ -112,7 +112,15 @@ export const toolGuidanceWorkflows = {
         action: 'Get downloadable assets (slides, worksheets)',
         tool: 'get-lessons-assets',
         example: 'get-lessons-assets({ lesson: "adding-fractions" })',
-        returns: 'Download URLs for slides, worksheets, and other resources',
+        returns: 'Available asset types and metadata for the lesson',
+      },
+      {
+        step: 6,
+        action: 'Generate clickable download links for the user',
+        tool: 'download-asset',
+        example: 'download-asset({ lesson: "adding-fractions", type: "slideDeck" })',
+        returns: 'Short-lived download URL the user can click to save the asset directly',
+        note: 'HTTP transport only. On stdio, direct users to the lesson page via canonicalUrl instead. Call once per asset type.',
       },
     ],
   } satisfies Workflow,
@@ -153,7 +161,7 @@ export const toolGuidanceWorkflows = {
         step: 1,
         action: 'Search for learning progression threads on the concept',
         tool: 'search',
-        example: 'search({ text: "algebra", scope: "threads", subject: "maths" })',
+        example: 'search({ query: "algebra", scope: "threads", subject: "maths" })',
         returns: 'Matching threads with relevance ranking',
       },
       {
@@ -181,14 +189,14 @@ export const toolGuidanceWorkflows = {
         step: 1,
         action: 'Explore the topic across all content types in parallel',
         tool: 'explore-topic',
-        example: 'explore-topic({ text: "volcanos", subject: "geography" })',
+        example: 'explore-topic({ query: "volcanos", subject: "geography" })',
         returns: 'Unified topic map: top lessons, units, and threads found across the curriculum',
       },
       {
         step: 2,
         action: 'Drill down into the most relevant scope',
         tool: 'search',
-        example: 'search({ text: "volcanos", scope: "lessons", subject: "geography" })',
+        example: 'search({ query: "volcanos", scope: "lessons", subject: "geography" })',
         returns: 'Full ranked results for the chosen scope',
       },
       {
@@ -217,7 +225,7 @@ export const toolGuidanceWorkflows = {
         step: 2,
         action: 'Explore a specific topic within the subject to find relevant content',
         tool: 'explore-topic',
-        example: 'explore-topic({ text: "cells", subject: "science", keyStage: "ks3" })',
+        example: 'explore-topic({ query: "cells", subject: "science", keyStage: "ks3" })',
         returns: 'Topic map with lessons, units, and threads',
       },
     ],

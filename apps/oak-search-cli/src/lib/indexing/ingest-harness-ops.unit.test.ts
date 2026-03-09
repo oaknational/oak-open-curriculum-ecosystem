@@ -8,9 +8,11 @@ import type { BulkOperations } from './bulk-operation-types';
 import {
   dispatchBulk,
   summariseOperations,
+  resolveOperationIndexes,
   createNdjson,
   type EsTransport,
 } from './ingest-harness-ops.js';
+import { createIndexResolver } from '../search-index-target';
 
 /**
  * Create a mock EsTransport for testing.
@@ -123,6 +125,54 @@ describe('dispatchBulk', () => {
     expect(mockLogger.error).toHaveBeenCalled();
   });
 
+  it('returns per-index counts distinguishing indexed vs failed', async () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: '1' } },
+      { title: 'Lesson 1' },
+      { index: { _index: 'oak_lessons', _id: '2' } },
+      { title: 'Lesson 2' },
+      { index: { _index: 'oak_units', _id: '3' } },
+      { title: 'Unit 1' },
+    ] as BulkOperations;
+
+    mockRequestFn.mockResolvedValue({
+      errors: true,
+      items: [
+        { index: { _index: 'oak_lessons', status: 201 } },
+        {
+          index: {
+            _index: 'oak_lessons',
+            status: 400,
+            error: { type: 'mapper_parsing_exception', reason: 'bad field' },
+          },
+        },
+        { index: { _index: 'oak_units', status: 201 } },
+      ],
+    });
+
+    const result = await dispatchBulk(mockEs, operations, mockLogger);
+
+    expect(result.indexCounts).toBeDefined();
+    expect(result.indexCounts).toEqual({
+      oak_lessons: { indexed: 1, failed: 1 },
+      oak_units: { indexed: 1, failed: 0 },
+    });
+  });
+
+  it('returns empty indexCounts when no operations are dispatched', async () => {
+    const operations = [] as unknown as BulkOperations;
+
+    mockRequestFn.mockResolvedValue({
+      errors: false,
+      items: [],
+    });
+
+    const result = await dispatchBulk(mockEs, operations, mockLogger);
+
+    expect(result.indexCounts).toBeDefined();
+    expect(result.indexCounts).toEqual({});
+  });
+
   it('calculates document count correctly from operations', async () => {
     const operations = [
       { index: { _index: 'oak_lessons', _id: '1' } },
@@ -179,6 +229,53 @@ describe('summariseOperations', () => {
     expect(summary.totalDocs).toBe(0);
     expect(summary.counts.lessons).toBe(0);
     expect(summary.counts.units).toBe(0);
+  });
+});
+
+describe('resolveOperationIndexes', () => {
+  it('rewrites primary index names to sandbox when given a sandbox resolver', () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: 'lesson-1' } },
+      { data: 'lesson1' },
+      { index: { _index: 'oak_unit_rollup', _id: 'unit-1' } },
+      { data: 'rollup1' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('sandbox');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'oak_lessons_sandbox', _id: 'lesson-1' } });
+    expect(resolved[1]).toEqual({ data: 'lesson1' });
+    expect(resolved[2]).toEqual({
+      index: { _index: 'oak_unit_rollup_sandbox', _id: 'unit-1' },
+    });
+    expect(resolved[3]).toEqual({ data: 'rollup1' });
+  });
+
+  it('passes operations through unchanged when given a primary resolver', () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: 'lesson-1' } },
+      { data: 'lesson1' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('primary');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'oak_lessons', _id: 'lesson-1' } });
+    expect(resolved[1]).toEqual({ data: 'lesson1' });
+  });
+
+  it('leaves unrecognised index names unchanged', () => {
+    const operations = [
+      { index: { _index: 'other_index', _id: '123' } },
+      { data: 'doc' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('sandbox');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'other_index', _id: '123' } });
+    expect(resolved[1]).toEqual({ data: 'doc' });
   });
 });
 

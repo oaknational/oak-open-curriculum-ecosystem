@@ -42,7 +42,7 @@ The SDK accepts structured, validated parameters:
 ```typescript
 // SDK: deterministic, no NL interpretation
 sdk.retrieval.searchLessons({
-  text: 'expanding brackets',
+  query: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
   size: 10,
@@ -58,7 +58,7 @@ The MCP server owns the mapping from agent intent to SDK calls:
 // Agent says: "Find KS3 maths lessons about expanding brackets in algebra"
 // MCP maps to:
 sdk.retrieval.searchLessons({
-  text: 'expanding brackets',
+  query: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
 });
@@ -75,7 +75,7 @@ No SDK function may:
 - Reformulate queries based on inferred meaning
 - Accept unstructured natural language as a primary input
 
-The SDK's query processing (noise phrase removal, curriculum phrase detection) operates on the structured `text` parameter using deterministic rules, not NL understanding. These are lexical transformations, not intent extraction.
+The SDK's query processing (noise phrase removal, curriculum phrase detection) operates on the structured `query` parameter using deterministic rules, not NL understanding. These are lexical transformations, not intent extraction.
 
 ## Consequences
 

@@ -33,7 +33,7 @@ This directory contains research documentation capturing domain knowledge extrac
 
 Before reading or contributing to this research, review:
 
-1. `.agent/directives/rules.md` - Development principles
+1. `.agent/directives/principles.md` - Development principles
 2. `.agent/directives/testing-strategy.md` - Testing philosophy
 3. `.agent/directives/schema-first-execution.md` - Type generation mandate
 

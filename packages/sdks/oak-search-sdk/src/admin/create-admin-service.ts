@@ -15,15 +15,13 @@ import type {
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
-  IngestOptions,
-  IngestResult,
 } from '../types/admin-types.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
 import { createIndexResolver } from '../internal/index-resolver.js';
-import { runIngest } from './ingest.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
 import { createAllIndexes, deleteAllIndexes } from './admin-index-operations.js';
+import { verifyDocCounts } from './verify-doc-counts.js';
 
 /**
  * Convert an unknown caught error into an `AdminError`.
@@ -45,7 +43,7 @@ const SYNONYM_SET_ID = 'oak-syns';
  * @param esClient - Elasticsearch client for all admin operations
  * @param config - SDK configuration (index target, version, etc.)
  * @param logger - Optional structured logger for debug/info output
- * @returns AdminService with setup, reset, verifyConnection, listIndexes, updateSynonyms, ingest, getIndexMeta, setIndexMeta
+ * @returns AdminService with setup, reset, verifyConnection, listIndexes, updateSynonyms, getIndexMeta, setIndexMeta, verifyDocCounts
  *
  * @example
  * ```typescript
@@ -66,9 +64,9 @@ export function createAdminService(
     verifyConnection: () => verifyConnection(esClient),
     listIndexes: () => listIndexes(esClient),
     updateSynonyms: () => upsertSynonyms(esClient, logger),
-    ingest: (options) => runIngestWrapped(esClient, resolveIndex, logger, options),
     getIndexMeta: () => readIndexMeta(esClient),
     setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
+    verifyDocCounts: (expectations) => verifyDocCounts(esClient, resolveIndex, expectations),
   };
 }
 
@@ -190,29 +188,6 @@ async function upsertSynonyms(
       count: synonymSet.synonyms_set.length,
     });
     return ok({ count: synonymSet.synonyms_set.length });
-  } catch (error: unknown) {
-    return err(toAdminError(error));
-  }
-}
-
-/**
- * Run bulk ingest, wrapping any thrown errors in AdminError.
- *
- * @param client - Elasticsearch client
- * @param resolveIndex - Index name resolver
- * @param logger - Optional logger
- * @param options - Ingest options (bulkDir, dryRun, subjectFilter)
- * @returns Result with ingest counts
- */
-async function runIngestWrapped(
-  client: Client,
-  resolveIndex: IndexResolverFn,
-  logger: Logger | undefined,
-  options: IngestOptions,
-): Promise<Result<IngestResult, AdminError>> {
-  try {
-    const result = await runIngest(client, resolveIndex, logger, options);
-    return ok(result);
   } catch (error: unknown) {
     return err(toAdminError(error));
   }

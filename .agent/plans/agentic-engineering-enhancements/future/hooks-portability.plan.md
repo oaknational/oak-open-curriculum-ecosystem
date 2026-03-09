@@ -2,7 +2,7 @@
 
 **Status**: Future (not started)
 **Parent**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-**Related**: [Agent Artefact Portability Plan](../../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md)
+**Related**: [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 
 ## Context
 
@@ -136,7 +136,7 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 |---|---|---|---|
 | Auto-format after edit | PostToolUse (Edit/Write) | Run `pnpm prettier --write` on changed file | Development practice |
 | Lint after edit | PostToolUse (Edit/Write) | Run `pnpm lint:fix` on changed file | `.agent/rules/lint-after-edit.md` |
-| Block destructive commands | PreToolUse (Bash/Shell) | Reject `rm -rf /`, `git push --force main`, `--no-verify` | `.agent/directives/rules.md` (never disable checks) |
+| Block destructive commands | PreToolUse (Bash/Shell) | Reject `rm -rf /`, `git push --force main`, `--no-verify` | `.agent/directives/principles.md` (never disable checks) |
 | Session context injection | SessionStart | Inject git status, branch, recent changes | Start-right workflow |
 | Secrets scan | PreToolUse (Write/Edit) | Scan written content for API keys, tokens | Safety and security policy |
 

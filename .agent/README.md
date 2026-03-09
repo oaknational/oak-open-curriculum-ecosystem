@@ -1,4 +1,4 @@
-# .agent/ — Agentic Engineering Practice Infrastructure
+# .agent/ — The Practice Infrastructure
 
 > **Human developers**: this directory is AI agent infrastructure, not
 > intended for you. See [HUMANS.md](HUMANS.md) for where to go instead.
@@ -22,7 +22,7 @@ left off.
 | Directory | Purpose |
 | --- | --- |
 | `directives/` | Core rules, testing strategy, schema-first execution directive, and operational entry point (AGENT.md) |
-| `practice-core/` | Plasmid trinity (practice, lineage, bootstrap) and the practice box for cross-repo exchange |
+| `practice-core/` | Plasmid trinity (practice, lineage, bootstrap) and the Practice Box for cross-repo exchange |
 | `plans/` | Executable work plans with status tracking and lifecycle management |
 | `memory/` | Session-level learning: `napkin.md` captures observations, `distilled.md` extracts durable rules |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
@@ -31,6 +31,7 @@ left off.
 | `skills/` | Specialised capabilities that encode domain knowledge |
 | `research/` | Research proposals and analysis |
 | `evaluations/` | Experiment results and guidance |
+| `tools/` | CLI tools for monitoring and managing agent workflows (`claude-agent-ops`) |
 | `reference-docs/` | Supporting reference material (some internal-only) |
 
 ## Entry point

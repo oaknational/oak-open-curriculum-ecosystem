@@ -20,14 +20,14 @@ const sdk = createSearchSdk({
 
 // Search lessons (4-way RRF: BM25 + ELSER on Content and Structure)
 const results = await sdk.retrieval.searchLessons({
-  text: 'expanding brackets',
+  query: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
 });
 
 // Search threads (2-way RRF: BM25 on thread_title + ELSER on thread_semantic)
 const threads = await sdk.retrieval.searchThreads({
-  text: 'algebra equations progression',
+  query: 'algebra equations progression',
   subject: 'maths',
 });
 // threads.ok → { scope: 'threads', results: ThreadResult[], total, took, timedOut }
@@ -37,7 +37,7 @@ await sdk.admin.setup();
 const status = await sdk.admin.verifyConnection();
 
 // Observability
-sdk.observability.recordZeroHit({ scope: 'lessons', text: 'xyz' });
+sdk.observability.recordZeroHit({ scope: 'lessons', query: 'xyz' });
 ```
 
 ## Architecture
@@ -52,8 +52,48 @@ createSearchSdk({ deps, config })
 | Service                  | Purpose                                                                                                                                                                                                                                           |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **RetrievalService**     | Hybrid BM25 + ELSER search (lessons, units, sequences, threads), suggestions, facets. Lessons/units use 4-way RRF; threads/sequences use 2-way RRF ([ADR-110](../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)) |
-| **AdminService**         | ES setup, connection, synonyms, index metadata, bulk ingestion                                                                                                                                                                                    |
+| **AdminService**         | ES setup, connection, synonyms, index metadata                                                                                                                                                                                                    |
 | **ObservabilityService** | Zero-hit event recording, ES persistence, telemetry queries                                                                                                                                                                                       |
+
+### Blue/Green Index Lifecycle (ADR-130)
+
+A separate `IndexLifecycleService` provides zero-downtime index management:
+
+```typescript
+import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oak-search-sdk';
+import { Client } from '@elastic/elasticsearch';
+
+const client = new Client({ node: esUrl, auth: { apiKey } });
+const runVersionedIngest = createRunVersionedIngest({
+  oakClient,
+  esTransport: client,
+  target: 'primary',
+});
+const deps = buildLifecycleDeps(client, 'primary', runVersionedIngest);
+const lifecycle = createIndexLifecycleService(deps);
+
+// Full blue/green cycle: create versioned indexes → ingest → verify → swap aliases → clean up
+const result = await lifecycle.versionedIngest({ bulkDir: '/path/to/bulk', verbose: true });
+
+// Or stage and promote separately — inspect before going live
+const staged = await lifecycle.stage({ bulkDir: '/path/to/bulk', verbose: true });
+if (staged.ok) {
+  const promoted = await lifecycle.promote(staged.value.version);
+}
+
+// Roll back to previous version
+const rollback = await lifecycle.rollback();
+
+// Check alias health
+const validation = await lifecycle.validateAliases();
+```
+
+Key properties:
+
+- **Atomic swap**: All six curriculum aliases swapped in a single `POST /_aliases` request
+- **Single-level rollback**: `previous_version` metadata enables instant revert
+- **Admin-layer only**: Retrieval consumers are unaffected — they query alias names as before
+- **DI-based**: `buildLifecycleDeps` wires SDK functions into an `IndexLifecycleDeps` interface for testability
 
 ### Design Principles
 
@@ -75,7 +115,7 @@ createSearchSdk({ deps, config })
 pnpm build        # Build with tsup + dts
 pnpm type-check   # Type check
 pnpm lint:fix     # Lint
-pnpm test         # Run tests (36 integration + unit)
+pnpm test         # Run tests (across 15 test files)
 ```
 
 ## Related
@@ -84,4 +124,5 @@ pnpm test         # Run tests (36 integration + unit)
 - [Search CLI Architecture](../../apps/oak-search-cli/docs/ARCHITECTURE.md)
 - [ADR-110: Thread Search Architecture](../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)
 - [ADR-107: Deterministic SDK / NL-in-MCP Boundary](../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)
+- [ADR-130: Blue/Green Index Swapping](../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)
 - [SDK + CLI Plan](../../.agent/plans/semantic-search/archive/completed/search-sdk-cli.plan.md)

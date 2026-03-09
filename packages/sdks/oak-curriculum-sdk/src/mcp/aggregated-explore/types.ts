@@ -11,12 +11,12 @@ import type { KeyStage, Subject } from '@oaknational/sdk-codegen/api-schema';
 /**
  * Validated arguments for the explore-topic tool.
  *
- * Requires a search text. Optional subject and keyStage narrow all
+ * Requires a search query. Optional subject and keyStage narrow all
  * three parallel searches (lessons, units, threads).
  */
 export interface ExploreArgs {
   /** The topic to explore across the curriculum (required, non-empty). */
-  readonly text: string;
+  readonly query: string;
 
   /** Filter by subject slug across all scopes. */
   readonly subject?: Subject;

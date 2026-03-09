@@ -8,7 +8,7 @@ You are implementing Phase 8a of the OpenAI Apps SDK feature adoption for the Oa
 
 Read these foundational documents in order:
 
-1. `.agent/directives/rules.md` - Cardinal rules including schema-first types, TDD, no type shortcuts
+1. `.agent/directives/principles.md` - Cardinal rules including schema-first types, TDD, no type shortcuts
 2. `.agent/directives/schema-first-execution.md` - Type-gen drives all MCP tool behaviour
 3. `.agent/directives/testing-strategy.md` - TDD at all levels, test definitions
 4. `.agent/plans/sdk-and-mcp-enhancements/08a-openai-apps-sdk-part-1.md` - The implementation plan

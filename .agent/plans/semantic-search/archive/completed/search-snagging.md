@@ -48,7 +48,7 @@ provides broader context (architecture, search landscape, quality gates).
 **Before starting any fix**, re-read:
 
 - [AGENT.md](../../../directives/AGENT.md) — project directives
-- [rules.md](../../../directives/rules.md) — core rules
+- [principles.md](../../../directives/principles.md) — core rules
 - [testing-strategy.md](../../../directives/testing-strategy.md) — TDD
   requirements
 

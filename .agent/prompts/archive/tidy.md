@@ -1,6 +1,6 @@
-0. Are we following the rules, no fallbacks, no compatibility layers, clean breaks, fail fast with helpful error messages? @.agent/directives/rules.md
+0. Are we following the rules, no fallbacks, no compatibility layers, clean breaks, fail fast with helpful error messages? @.agent/directives/principles.md
 1. Do we have any dead code?
-2. Are we versioning with Git rather than names? @.agent/directives/rules.md
+2. Are we versioning with Git rather than names? @.agent/directives/principles.md
 3. Do all test prove behaviour rather than implementation? @.agent/directives/testing-strategy.md
 4. Do all tests prove something useful about product code, not just about test code?
 5. Are there any other potential sources of mismatch, or other issues, that could potential prevent an upload from occurring?

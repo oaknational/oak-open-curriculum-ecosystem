@@ -19,7 +19,7 @@ import type { QueryResult } from './benchmark-query-runner-lessons.js';
 // Re-export the type for convenience
 export type { ReviewQueryResult } from './benchmark-entry-runner.js';
 
-/** Print query header with category, query text, and description. */
+/** Print query header with category, query string, and description. */
 function printQueryHeader(query: GroundTruthQuery): void {
   console.log(`\n${'='.repeat(100)}`);
   console.log(`CATEGORY: ${query.category}`);
@@ -127,7 +127,7 @@ function formatSummaryRow(
   result: QueryResult,
   refs: ReferenceValues,
 ): string {
-  // Mark future-intent queries as excluded in the query text display
+  // Mark future-intent queries as excluded in the query display
   const isFutureIntent = query.category === 'future-intent';
   const suffix = isFutureIntent ? ' (excl)' : '';
   const maxLen = isFutureIntent ? 41 : 47; // Shorter to accommodate suffix

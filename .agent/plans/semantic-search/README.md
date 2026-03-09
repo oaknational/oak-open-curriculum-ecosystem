@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-03
+**Last Updated**: 2026-03-09
 
 ---
 
@@ -8,12 +8,45 @@
 
 **Start here**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
+**Research index**: [research-index.md](research-index.md)
+
 ---
 
 ## Current Work: Post-Merge Execution
 
+Active execution now includes:
+
+- [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md)
+- [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
+- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
+- [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
+
+Prepared next-up queue:
+
+- [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+- [Keyword Definition Assets](current/keyword-definition-assets.execution.plan.md)
+- [Thread and Sequence Semantic Surfaces](current/thread-sequence-semantic-surfaces.execution.plan.md)
+- [KG Integration Quick Wins](current/kg-integration-quick-wins.plan.md)
+
+Cross-collection sequencing note:
+
+- [high-level-plan.md](../high-level-plan.md) currently sequences:
+  `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
+  Elasticsearch reindex validation, then MCP Apps infrastructure migration,
+  then graph work from the active alignment-audit slice.
+- Within this collection, `bulk-metadata-quick-wins` remains the active
+  Boundary 03 execution lane and
+  [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md)
+  is the active graph-enablement lane.
+- Keep
+  [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+  as the parent queued plan for the remaining graph quick wins after the active
+  audit produces evidence.
+
 MCP search integration (Phase 3a) is complete — three tools
-wired, old REST search replaced. SDK workspace separation (3e) is
+wired, old REST search replaced. MCP Result Pattern Unification is **COMPLETE** —
+archived [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md).
+SDK workspace separation (3e) is
 **complete** — archived [sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md).
 
 Search results quality is **COMPLETE** — documented in
@@ -29,6 +62,9 @@ Search dispatch type safety (3g) is complete and archived:
 
 Milestone 2 blocker execution is now queued in
 [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md).
+
+That blocker is a separate public-release-readiness stream. It does **not**
+prevent Boundary 03 bulk metadata work from progressing.
 
 ---
 
@@ -69,8 +105,13 @@ Milestone 2 blocker execution is now queued in
 
 ## Active Plans
 
-- [MCP Result Pattern Unification (Execution)](active/mcp-result-pattern-unification.execution.plan.md) — converge MCP execution to `Result<T, E>` across SDK + MCP consumers
+For the full at-a-glance state including cross-collection sequencing, see
+[Current Work](#current-work-post-merge-execution) above.
+
+- [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
+- [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
+- [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
 
 ---
 
@@ -78,11 +119,27 @@ Milestone 2 blocker execution is now queued in
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 result unification + search-args extraction |
-| `current/` | Next-up queued plans | 📋 Ready |
+| `active/` | In-progress plans | 🟢 unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit |
+| `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
 | `archive/` | Historical work | ✅ Reference only |
+
+---
+
+## Research Model
+
+Most boundary-local semantic-search research now lives in `future/` as
+`*.research.md` documents. Cross-cutting synthesis and strategy notes may remain
+at the collection root when they span multiple boundaries or act as promotion
+inputs for later execution plans.
+
+Use:
+
+- [research-index.md](research-index.md) for navigation
+- [curriculum-asset-opportunity-map.research.md](curriculum-asset-opportunity-map.research.md) for the cross-cutting synthesis
+- [elasticsearch-neo4j-oak-ontology-synthesis.research.md](elasticsearch-neo4j-oak-ontology-synthesis.research.md) for the canonical graph, Neo4j, and ontology synthesis
+- [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md) for the current Oak-specific direction of travel that now feeds the active alignment audit and the parent graph quick-win plan
 
 ---
 
@@ -112,16 +169,24 @@ to the boundary structure.
 | Document | Purpose |
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
+| [Research Index](research-index.md) | Navigation for boundary-local research companions |
+| [Curriculum Asset Opportunity Map](curriculum-asset-opportunity-map.research.md) | Cross-cutting synthesis of bulk-signal, vocabulary, and graph opportunities |
+| [Elasticsearch, Neo4j, and Oak Ontology Synthesis](elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Canonical synthesis of graph-platform research with real links |
+| [Oak Ontology Graph Opportunities Strategy](oak-ontology-graph-opportunities.strategy.md) | Oak-specific strategy for ontology-backed search and graph augmentation |
+| [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) | Active execution plan to measure ontology/search overlap and drive the next graph promotion decision |
+| [KG Integration Quick Wins](current/kg-integration-quick-wins.plan.md) | Parent quick-win plan for separate Neo4j provisioning, ontology load, Elasticsearch projections, and bounded graph augmentation |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [SDK Workspace Separation](archive/completed/sdk-workspace-separation.md) | ✅ Complete — archived |
 | [SDK Separation Pre-Phase-1 Decisions](archive/completed/sdk-separation-pre-phase1-decisions.md) | ✅ Archived — D1-D5 decision rationale (all integrated into canonical plan) |
 | [Search Results Quality](archive/completed/search-results-quality.md) | ✅ Complete — ADR-120 |
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
-| [Result Pattern Unification](active/mcp-result-pattern-unification.execution.plan.md) | 🟢 In progress — `Result<T, E>` migration |
+| [Result Pattern Unification](archive/completed/mcp-result-pattern-unification.execution.plan.md) | ✅ Complete — `Result<T, E>` migration across SDK + MCP consumers |
+| [Blue/Green Reindex](archive/completed/blue-green-reindex.execution.plan.md) | ✅ Superseded — archived; succeeded by [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) |
 | [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Review Sessions 1-5 Log](archive/completed/ground-truth-review-sessions-1-5-log.md) | Historical session log retained for search-review provenance and lessons learned |
 | [MCP Extensions Roadmap](../sdk-and-mcp-enhancements/roadmap.md) | 📋 Post-merge SDK/MCP enhancements governance |
 | [Widget Renderer Reactivation](future/08-experience-surfaces-and-extensions/widget-renderer-reactivation.md) | ⏸️ Post-merge — wire renderers back after MCP extensions + Apps SDK work |
 | [Future Boundary Hub](future/README.md) | Canonical LATER backlog structure |
@@ -144,6 +209,6 @@ Historical work from previous phases. **Metrics and details are stale** — for 
 
 ## Foundation Documents (MANDATORY)
 
-1. [rules.md](../../directives/rules.md)
+1. [principles.md](../../directives/principles.md)
 2. [testing-strategy.md](../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../directives/schema-first-execution.md)

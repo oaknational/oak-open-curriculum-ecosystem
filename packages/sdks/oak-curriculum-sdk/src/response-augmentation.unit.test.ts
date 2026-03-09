@@ -45,6 +45,76 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
 
+    it('should use the lesson segment for lesson sub-resource paths', () => {
+      const response = { lessonTitle: 'Add Two Numbers' };
+      const result = augmentResponseWithCanonicalUrl(
+        response,
+        '/lessons/add-two-numbers/summary',
+        'get',
+      );
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      );
+    });
+
+    it('should use the lesson segment for lesson transcript paths', () => {
+      const response = {
+        transcript: 'This is the lesson transcript text',
+        vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
+      };
+      const result = augmentResponseWithCanonicalUrl(
+        response,
+        '/lessons/add-two-numbers/transcript',
+        'get',
+      );
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      );
+    });
+
+    it('should use the lesson segment for lesson quiz paths', () => {
+      const response = { starterQuiz: [], exitQuiz: [] };
+      const result = augmentResponseWithCanonicalUrl(
+        response,
+        '/lessons/add-two-numbers/quiz',
+        'get',
+      );
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      );
+    });
+
+    it('should use the lesson segment for lesson asset paths', () => {
+      const response = { assets: [] };
+      const result = augmentResponseWithCanonicalUrl(
+        response,
+        '/lessons/add-two-numbers/assets',
+        'get',
+      );
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+      );
+    });
+
+    it('should throw for OpenAPI template lesson sub-resource paths', () => {
+      const response = { lessonTitle: 'Add Two Numbers' };
+
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/{lesson}/summary', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/{lesson}/summary', 'get');
+      }).toThrow(/Could not extract ID/);
+    });
+
     it('should ignore invalid unit context fields when augmenting lessons', () => {
       const response = {
         lessonSlug: 'add-two-numbers',

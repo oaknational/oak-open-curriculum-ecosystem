@@ -34,7 +34,7 @@ export function registerThreadsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       try {
         const sdk = createCliSdk(cliEnv);
         const result = await handleSearchThreads(sdk.retrieval, {
-          text: query,
+          query,
           subject: validateSubject(opts.subject),
           size: parseInt(opts.size, 10),
         });

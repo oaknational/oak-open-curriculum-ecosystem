@@ -49,7 +49,7 @@ type QueryContainer = estypes.QueryDslQueryContainer;
 
 /** Search parameters for lessons */
 export interface LessonSearchParams {
-  readonly text: string;
+  readonly query: string;
   readonly size: number;
   readonly subject: 'maths';
   readonly keyStage: 'ks4';
@@ -59,7 +59,7 @@ export interface LessonSearchParams {
 
 /** Search parameters for units */
 export interface UnitSearchParams {
-  readonly text: string;
+  readonly query: string;
   readonly size: number;
   readonly subject: 'maths';
   readonly keyStage: 'ks4';
@@ -77,7 +77,7 @@ export function buildConfigurableLessonRrfRequest(
   params: LessonSearchParams,
   bm25Config: Bm25Config,
 ): EsSearchRequest {
-  const { text, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
+  const { query, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
   const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause: QueryContainer | undefined =
     filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -86,13 +86,13 @@ export function buildConfigurableLessonRrfRequest(
     rrf: {
       retrievers: [
         // BM25 on content (configurable)
-        createConfigurableBm25Retriever(text, LESSON_BM25_CONTENT, filterClause, bm25Config),
+        createConfigurableBm25Retriever(query, LESSON_BM25_CONTENT, filterClause, bm25Config),
         // BM25 on structure (configurable)
-        createConfigurableBm25Retriever(text, LESSON_BM25_STRUCTURE, filterClause, bm25Config),
+        createConfigurableBm25Retriever(query, LESSON_BM25_STRUCTURE, filterClause, bm25Config),
         // ELSER on content (fixed)
-        createLessonElserContentRetriever(text, filterClause),
+        createLessonElserContentRetriever(query, filterClause),
         // ELSER on structure (fixed)
-        createLessonElserStructureRetriever(text, filterClause),
+        createLessonElserStructureRetriever(query, filterClause),
       ],
       ...FOUR_WAY_RRF_PARAMS,
     },
@@ -118,7 +118,7 @@ export function buildConfigurableUnitRrfRequest(
   params: UnitSearchParams,
   bm25Config: Bm25Config,
 ): EsSearchRequest {
-  const { text, size, subject, keyStage, minLessons, includeHighlights = true } = params;
+  const { query, size, subject, keyStage, minLessons, includeHighlights = true } = params;
   const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause: QueryContainer | undefined =
     filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -127,13 +127,13 @@ export function buildConfigurableUnitRrfRequest(
     rrf: {
       retrievers: [
         // BM25 on content (configurable)
-        createConfigurableBm25Retriever(text, UNIT_BM25_CONTENT, filterClause, bm25Config),
+        createConfigurableBm25Retriever(query, UNIT_BM25_CONTENT, filterClause, bm25Config),
         // BM25 on structure (configurable)
-        createConfigurableBm25Retriever(text, UNIT_BM25_STRUCTURE, filterClause, bm25Config),
+        createConfigurableBm25Retriever(query, UNIT_BM25_STRUCTURE, filterClause, bm25Config),
         // ELSER on content (fixed)
-        createUnitElserContentRetriever(text, filterClause),
+        createUnitElserContentRetriever(query, filterClause),
         // ELSER on structure (fixed)
-        createUnitElserStructureRetriever(text, filterClause),
+        createUnitElserStructureRetriever(query, filterClause),
       ],
       ...FOUR_WAY_RRF_PARAMS,
     },
@@ -160,7 +160,7 @@ export function buildConfigurableLessonBm25OnlyRequest(
   params: LessonSearchParams,
   bm25Config: Bm25Config,
 ): EsSearchRequest {
-  const { text, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
+  const { query, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
   const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause: QueryContainer | undefined =
     filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -168,7 +168,12 @@ export function buildConfigurableLessonBm25OnlyRequest(
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createConfigurableBm25Retriever(text, LESSON_BM25_CONTENT, filterClause, bm25Config),
+    retriever: createConfigurableBm25Retriever(
+      query,
+      LESSON_BM25_CONTENT,
+      filterClause,
+      bm25Config,
+    ),
   };
 
   if (includeHighlights) {
@@ -185,7 +190,7 @@ export function buildConfigurableUnitBm25OnlyRequest(
   params: UnitSearchParams,
   bm25Config: Bm25Config,
 ): EsSearchRequest {
-  const { text, size, subject, keyStage, minLessons, includeHighlights = true } = params;
+  const { query, size, subject, keyStage, minLessons, includeHighlights = true } = params;
   const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause: QueryContainer | undefined =
     filters.length > 0 ? { bool: { filter: filters } } : undefined;
@@ -193,7 +198,7 @@ export function buildConfigurableUnitBm25OnlyRequest(
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createConfigurableBm25Retriever(text, UNIT_BM25_CONTENT, filterClause, bm25Config),
+    retriever: createConfigurableBm25Retriever(query, UNIT_BM25_CONTENT, filterClause, bm25Config),
   };
 
   if (includeHighlights) {

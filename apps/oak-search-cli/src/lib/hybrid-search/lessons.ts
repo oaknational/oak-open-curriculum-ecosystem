@@ -25,7 +25,7 @@ export interface RunLessonsSearchOptions {
  *
  * Post-RRF normalisation ensures documents without transcripts are not penalised.
  *
- * @param q - Structured query with text and optional filters
+ * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return
  * @param from - Offset for pagination
  * @param doHighlight - Whether to include transcript highlights
@@ -52,7 +52,7 @@ export async function runLessonsSearch(
       return raw;
     });
   const request = buildLessonRrfRequest({
-    text: q.text,
+    query: q.query,
     size,
     subject: q.subject,
     keyStage: q.keyStage,

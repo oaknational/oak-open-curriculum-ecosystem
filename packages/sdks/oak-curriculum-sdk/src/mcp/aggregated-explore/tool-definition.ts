@@ -43,11 +43,11 @@ Do NOT use for:
 - Understanding the curriculum structure (use '${PRIMARY_ORIENTATION_TOOL_NAME}')
 
 NATURAL LANGUAGE MAPPING EXAMPLES:
-- "What does Oak have about volcanos?" → { text: 'volcanos' }
-- "Explore fractions across the curriculum" → { text: 'fractions', subject: 'maths' }
-- "Explore maths topics" → { text: 'topics', subject: 'maths' }
-- "I want to teach about electricity in KS3" → { text: 'electricity', keyStage: 'ks3' }
-- "What can you tell me about the Romans?" → { text: 'the Romans' }
+- "What does Oak have about volcanos?" → { query: 'volcanos' }
+- "Explore fractions across the curriculum" → { query: 'fractions', subject: 'maths' }
+- "Explore maths topics" → { query: 'topics', subject: 'maths' }
+- "I want to teach about electricity in KS3" → { query: 'electricity', keyStage: 'ks3' }
+- "What can you tell me about the Romans?" → { query: 'the Romans' }
 
 NEXT STEPS AFTER EXPLORE:
 - Use search(scope: 'lessons') for more lesson results
@@ -74,14 +74,14 @@ NEXT STEPS AFTER EXPLORE:
 /**
  * JSON Schema for the explore-topic tool inputs.
  *
- * Required: text. Optional: subject, keyStage (applied to all scopes).
+ * Required: query. Optional: subject, keyStage (applied to all scopes).
  */
 export const EXPLORE_INPUT_SCHEMA = {
   type: 'object',
-  required: ['text'],
+  required: ['query'],
   additionalProperties: false,
   properties: {
-    text: {
+    query: {
       type: 'string',
       description:
         'The topic to explore. Use descriptive terms like "photosynthesis", "the Romans", "fractions".',

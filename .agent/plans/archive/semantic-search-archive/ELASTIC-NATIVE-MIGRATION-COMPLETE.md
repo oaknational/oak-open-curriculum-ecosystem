@@ -176,7 +176,7 @@ pnpm markdownlint:root --fix
 
 ### ✅ Fully Aligned With
 
-1. **`.agent/directives/rules.md`**
+1. **`.agent/directives/principles.md`**
    - TDD at all levels
    - No type shortcuts
    - Quality gates must pass

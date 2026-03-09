@@ -41,7 +41,7 @@ interface EventFilters {
 interface DashboardEvent {
   timestamp: number;
   scope: 'lessons' | 'units' | 'sequences';
-  text: string;
+  query: string;
   filters: EventFilters;
   indexVersion: string;
 }
@@ -85,7 +85,7 @@ function isDashboardEvent(value: unknown): value is DashboardEvent {
   return (
     isNumber(value.timestamp) &&
     isScope(value.scope) &&
-    typeof value.text === 'string' &&
+    typeof value.query === 'string' &&
     typeof value.indexVersion === 'string' &&
     isStringMap(value.filters)
   );
@@ -156,7 +156,7 @@ describe('zero-hit API handlers', () => {
   it('returns summary data when authorised', async () => {
     recordZeroHitEvent({
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       filters: { subject: 'maths' },
       indexVersion: 'v1',
       timestamp: 100,
@@ -185,7 +185,7 @@ describe('zero-hit API handlers', () => {
         {
           timestamp: 123,
           scope: 'units' as const,
-          text: 'angles',
+          query: 'angles',
           filters: { keyStage: 'ks3' },
           indexVersion: 'v9',
         },
@@ -215,7 +215,7 @@ describe('zero-hit API handlers', () => {
         'POST',
         {
           scope: 'units',
-          text: 'angles',
+          query: 'angles',
           indexVersion: 'v2',
           filters: { keyStage: 'ks3' },
           timestamp: 200,
@@ -229,7 +229,7 @@ describe('zero-hit API handlers', () => {
     expect(persistenceMocks.persistZeroHitEvent).toHaveBeenCalledWith(
       expect.objectContaining({
         scope: 'units',
-        text: 'angles',
+        query: 'angles',
         indexVersion: 'v2',
       }),
       TEST_CONFIG,
@@ -238,7 +238,7 @@ describe('zero-hit API handlers', () => {
 
   it('rejects invalid webhook payloads', async () => {
     const response = await handleZeroHitWebhook(
-      makeRequest('POST', { text: 'invalid' }, { 'x-search-api-key': 'test-key' }),
+      makeRequest('POST', { query: 'invalid' }, { 'x-search-api-key': 'test-key' }),
       TEST_CONFIG,
     );
     expect(response.status).toBe(400);

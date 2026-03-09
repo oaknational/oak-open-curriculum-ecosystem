@@ -12,6 +12,7 @@ Before starting any non-trivial task, answer these questions to identify which s
 4. Does this change types, generics, or schema flow? -> `type-reviewer`
 5. Does this change tooling configs or quality gates? -> `config-reviewer`
 6. Does this change onboarding flows (human or AI), start-right entrypoints, or ADR discoverability? -> `onboarding-reviewer` (situational)
+7. Does this touch Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, or Elastic Serverless capabilities? -> `elasticsearch-reviewer` (situational)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -59,6 +60,7 @@ Specialist on-demand (not standard roster -- situational trigger only):
 - `ground-truth-designer` for semantic-search ground-truth design/review work
 - `subagent-architect` for sub-agent definition design/migration work
 - `onboarding-reviewer` for onboarding-path audits (accuracy, efficacy, readability, consistency, stale info, and gap detection)
+- `elasticsearch-reviewer` for Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, evaluation, or Elastic Serverless capability assessments
 
 ## Worked Examples
 
@@ -73,6 +75,8 @@ Specialist on-demand (not standard roster -- situational trigger only):
 **Onboarding docs/path update**: Invoke `code-reviewer` + `docs-adr-reviewer` immediately. Add `onboarding-reviewer` when the change affects onboarding journeys (human and/or AI), `start-right` discoverability, or ADR progressive disclosure.
 
 **Release go/no-go**: Invoke `release-readiness-reviewer` (on-demand, situational trigger).
+
+**Elasticsearch/search change**: Invoke `code-reviewer` + `elasticsearch-reviewer` immediately. Add `type-reviewer` if schema or mapping types are affected.
 
 ## Invocation
 

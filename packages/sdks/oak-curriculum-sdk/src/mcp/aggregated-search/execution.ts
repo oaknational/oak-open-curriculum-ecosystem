@@ -26,7 +26,7 @@ import { formatSearchResults } from './formatting.js';
  */
 function buildLessonsParams(args: SearchSdkArgs): SearchLessonsParams {
   return {
-    text: args.text,
+    query: args.query,
     subject: args.subject,
     keyStage: args.keyStage,
     size: args.size,
@@ -45,7 +45,7 @@ function buildLessonsParams(args: SearchSdkArgs): SearchLessonsParams {
  */
 function buildUnitsParams(args: SearchSdkArgs): SearchUnitsParams {
   return {
-    text: args.text,
+    query: args.query,
     subject: args.subject,
     keyStage: args.keyStage,
     size: args.size,
@@ -60,7 +60,7 @@ function buildUnitsParams(args: SearchSdkArgs): SearchUnitsParams {
  */
 function buildThreadsParams(args: SearchSdkArgs): SearchParamsBase {
   return {
-    text: args.text,
+    query: args.query,
     subject: args.subject,
     keyStage: args.keyStage,
     size: args.size,
@@ -73,7 +73,7 @@ function buildThreadsParams(args: SearchSdkArgs): SearchParamsBase {
  */
 function buildSequencesParams(args: SearchSdkArgs): SearchSequencesParams {
   return {
-    text: args.text,
+    query: args.query,
     subject: args.subject,
     keyStage: args.keyStage,
     size: args.size,
@@ -85,11 +85,11 @@ function buildSequencesParams(args: SearchSdkArgs): SearchSequencesParams {
 
 /**
  * Builds SuggestParams from validated SearchSdkArgs.
- * Maps `text` to `prefix` and defaults scope to 'lessons'.
+ * Maps `query` to `prefix` and defaults scope to 'lessons'.
  */
 function buildSuggestParams(args: SearchSdkArgs): SuggestParams {
   return {
-    prefix: args.text,
+    prefix: args.query,
     scope: 'lessons',
     subject: args.subject,
     keyStage: args.keyStage,
@@ -165,5 +165,5 @@ export async function runSearchSdkTool(
     return formatError(formatRetrievalError(result.error));
   }
 
-  return formatSearchResults(result.value, args.text);
+  return formatSearchResults(result.value, args.query);
 }

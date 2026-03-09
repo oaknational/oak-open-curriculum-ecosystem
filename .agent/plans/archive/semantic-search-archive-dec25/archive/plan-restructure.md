@@ -12,7 +12,7 @@
 
 Before starting this work, read and commit to:
 
-1. [rules.md](../../directives/rules.md) — TDD, quality gates, no type shortcuts
+1. [principles.md](../../directives/principles.md) — TDD, quality gates, no type shortcuts
 2. [testing-strategy.md](../../directives/testing-strategy.md) — Test types and approach
 3. [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator-first architecture
 

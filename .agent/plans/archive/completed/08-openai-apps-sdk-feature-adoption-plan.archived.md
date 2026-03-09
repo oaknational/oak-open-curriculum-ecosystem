@@ -71,7 +71,7 @@ Based on codebase inspection:
 
 All work MUST align with:
 
-- [`.agent/directives/rules.md`](../../directives/rules.md) - Cardinal Rule, TDD, type safety
+- [`.agent/directives/principles.md`](../../directives/principles.md) - Cardinal Rule, TDD, type safety
 - [`.agent/directives/schema-first-execution.md`](../../directives/schema-first-execution.md) - Generator-first architecture
 - [`.agent/directives/testing-strategy.md`](../../directives/testing-strategy.md) - TDD at all levels
 
@@ -1389,7 +1389,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 ### Internal Documentation
 
-- [Rules](../../directives/rules.md)
+- [Rules](../../directives/principles.md)
 - [Schema-First Execution](../../directives/schema-first-execution.md)
 - [Testing Strategy](../../directives/testing-strategy.md)
 - [Plan 01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)

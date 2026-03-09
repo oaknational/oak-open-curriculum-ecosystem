@@ -6,7 +6,7 @@ We have an MCP HTTP server that currently implements **HTTP-level authorization*
 
 ## Your Task
 
-Implement tool-level OAuth authentication following the plan in @.agent/plans/auth-observability-and-completion.md, strictly adhering to the rules in @.agent/directives/rules.md and @.agent/directives/testing-strategy.md.
+Implement tool-level OAuth authentication following the plan in @.agent/plans/auth-observability-and-completion.md, strictly adhering to the rules in @.agent/directives/principles.md and @.agent/directives/testing-strategy.md.
 
 ## Critical Requirements
 
@@ -37,7 +37,7 @@ Implement tool-level OAuth authentication following the plan in @.agent/plans/au
 
 ### Core Rules
 
-- @.agent/directives/rules.md - Architectural principles, TDD, refactoring rules
+- @.agent/directives/principles.md - Architectural principles, TDD, refactoring rules
 - @.agent/directives/testing-strategy.md - TDD at all levels, test types
 
 ### Auth Specifications
@@ -268,7 +268,7 @@ curl -X POST http://localhost:3333/mcp \
 ## Getting Started
 
 1. **Read the plan**: @.agent/plans/auth-observability-and-completion.md (Phase 1 in detail)
-2. **Read the rules**: @.agent/directives/rules.md (TDD, refactoring)
+2. **Read the rules**: @.agent/directives/principles.md (TDD, refactoring)
 3. **Read auth spec**: @.agent/reference-docs/openai-apps-auth.md (lines 175-266)
 4. **Start with Sub-Phase 1.1**: Update E2E tests FIRST
 5. **Follow TDD strictly**: Red → Green → Refactor at each level

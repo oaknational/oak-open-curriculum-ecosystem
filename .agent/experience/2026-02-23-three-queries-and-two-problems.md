@@ -44,6 +44,6 @@ memory of this session.
 ## Technical content
 
 Investigation findings documented in
-[search-results-quality.md](../.agent/plans/semantic-search/active/search-results-quality.md).
+[search-results-quality.md](../plans/semantic-search/archive/completed/search-results-quality.md).
 No patterns extracted to `distilled.md` yet — the remediation
 hasn't been applied. Will distil after the fix is validated.

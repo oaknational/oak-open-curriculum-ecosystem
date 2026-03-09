@@ -5,6 +5,13 @@ Next status: public alpha
 
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
+> **Canonical MCP server workspace**. Active Oak MCP server evolution now
+> belongs in `apps/oak-curriculum-mcp-streamable-http`. The standalone stdio
+> workspace, `apps/oak-curriculum-mcp-stdio`, is legacy and is no longer being
+> actively maintained. The intended direction is to generalise this workspace so
+> it can later provide a separate stdio entry point as well. See
+> [ADR-128](../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+
 **Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm sdk-codegen` updates the SDK, and this server automatically has access to new/changed tools.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth.
@@ -21,7 +28,7 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 
 This server exposes Oak's curriculum through the three MCP primitive types, each with a distinct control model defined by the [MCP specification](https://modelcontextprotocol.io/).
 
-**Tools** (model-controlled) — 30 curriculum tools: 23 generated from the OpenAPI schema plus 7 aggregated tools (search, browse, fetch, explore, and orientation via `get-curriculum-model`). The AI model decides when to call them. Generated tool definitions are updated automatically when the upstream API changes via `pnpm sdk-codegen`.
+**Tools** (model-controlled) — 31 curriculum tools: 23 generated from the OpenAPI schema plus 8 aggregated tools (search, browse, fetch, explore, graph/orientation tools, and `download-asset`). The AI model decides when to call them. Generated tool definitions are updated automatically when the upstream API changes via `pnpm sdk-codegen`.
 
 **Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prerequisite-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
 
@@ -94,9 +101,10 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
-## Cursor (local STDIO) configuration
+## Cursor (legacy local stdio) configuration
 
-- The local STDIO server is configured via `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:
+- Today, local stdio setups still point at the legacy stdio workspace via
+  `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:
 
 ```json
 {
@@ -105,7 +113,12 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 }
 ```
 
-If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for diagnostics.
+If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log`
+for diagnostics.
+
+This is a transitional arrangement. The long-term plan is for this HTTP
+workspace to provide its own stdio entry point so local stdio clients no longer
+depend on the separate legacy workspace.
 
 ## Authentication
 
@@ -208,7 +221,7 @@ are publicly reachable and require rate limiting to prevent abuse. See
 [ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
 for details.
 
-**Documentation Status**: Last verified 2026-02-26 against `src/application.ts`, `src/auth-routes.ts`, and deployed infrastructure.
+**Documentation Status**: Last verified 2026-03-07 against `src/application.ts`, `src/auth-routes.ts`, and the current workspace-level transport documentation.
 
 **Related Documentation**:
 

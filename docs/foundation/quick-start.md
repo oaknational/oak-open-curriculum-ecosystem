@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-03-07  
 **Status**: Active quick-reference guide
 
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
@@ -40,7 +40,7 @@ TypeScript SDK      MCP Tools             Search Type Generators
  Zod schemas)      input/output shapes)    search constants)
     ↓                    ↓                           ↓
 Runtime Apps        MCP Servers            Semantic Search
-(admin, CLI)      (stdio, HTTP)           (4-way RRF hybrid)
+(admin, CLI)      (HTTP, legacy stdio)    (4-way RRF hybrid)
 ```
 
 **Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm sdk-codegen` updates everything automatically.
@@ -105,9 +105,13 @@ cp .env.example .env
 pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
 pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
 
-# 3. Start an MCP dev server (choose one)
-pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
+# 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
+
+# Legacy transition only: the standalone stdio workspace still exists, but
+# development is halted there and future stdio support should move into the
+# HTTP workspace as a separate entry point.
+# pnpm -C apps/oak-curriculum-mcp-stdio dev
 
 # Search workflows are command-driven (no long-running `dev` script).
 # See apps/oak-search-cli/README.md for search setup and CLI commands.
@@ -330,8 +334,8 @@ oak-open-curriculum-ecosystem/
 │   ├── core/                          # Shared low-level code (result, env schemas, type-helpers, ESLint plugin)
 │   └── libs/                          # Shared libraries (logger, env-resolution)
 ├── apps/
-│   ├── oak-curriculum-mcp-stdio/      # MCP server for Claude Desktop, Cursor
-│   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web (Vercel)
+│   ├── oak-curriculum-mcp-stdio/      # Legacy standalone stdio MCP workspace
+│   ├── oak-curriculum-mcp-streamable-http/  # Canonical MCP server workspace
 │   └── oak-search-cli/               # Semantic search CLI
 └── docs/
     ├── architecture/                 # Architecture decisions and ADRs

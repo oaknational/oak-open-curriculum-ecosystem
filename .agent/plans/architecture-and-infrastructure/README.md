@@ -7,6 +7,14 @@ Cross-cutting architecture, system quality, and observability plans.
 
 ---
 
+## Queued Work (Current)
+
+See [current/README.md](current/README.md) for the next-up queue.
+
+| Priority | Plan | Milestone | Status |
+|----------|------|-----------|--------|
+| P0 | [sentry-otel-integration.execution.plan.md](current/sentry-otel-integration.execution.plan.md) | **M3 blocker** | Queued |
+
 ## Documents
 
 | File | Milestone | Description |
@@ -23,7 +31,7 @@ Cross-cutting architecture, system quality, and observability plans.
 - **Milestone 2** (open public alpha): server alignment,
   config standardisation, and public-alpha hardening dependencies
 - **Post-M2**: SDK codegen workspace decomposition
-- **Milestone 3** (pre-beta): observability and quality metrics
+- **Milestone 3** (pre-beta): observability and quality metrics, **Sentry integration (blocker)**
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

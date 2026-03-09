@@ -15,7 +15,7 @@ export interface RunSequencesSearchOptions {
 /**
  * Runs hybrid search for sequences using two-way RRF (BM25 + ELSER).
  *
- * @param q - Structured query with text and optional filters
+ * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return
  * @param from - Offset for pagination
  * @param options - Optional dependencies for testing
@@ -31,7 +31,7 @@ export async function runSequencesSearch(
 ): Promise<HybridSearchResult> {
   const search = options.search ?? esSearch;
   const request = buildSequenceRrfRequest({
-    text: q.text,
+    query: q.query,
     size,
     subject: q.subject,
     phaseSlug: q.phaseSlug,

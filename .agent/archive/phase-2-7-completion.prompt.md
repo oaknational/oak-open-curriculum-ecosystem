@@ -4,7 +4,7 @@
 
 **Foundation Documents** (Re-read before starting):
 
-1. `.agent/directives/rules.md` - TDD, quality gates, type safety
+1. `.agent/directives/principles.md` - TDD, quality gates, type safety
 2. `.agent/directives/testing-strategy.md` - Test types, TDD at all levels
 3. `.agent/directives/schema-first-execution.md` - Generator/runtime contract
 4. `.agent/plans/schema-first-security-implementation.md` (lines 2314-2480) - Sub-Phase 2.7 details
@@ -261,7 +261,7 @@ pnpm build
 - [ ] No disabled checks or skipped tests
 - [ ] Tests prove behavior, not implementation
 
-**Re-read**: `rules.md` (TDD section), `testing-strategy.md` (test types)
+**Re-read**: `principles.md` (TDD section), `testing-strategy.md` (test types)
 
 ---
 

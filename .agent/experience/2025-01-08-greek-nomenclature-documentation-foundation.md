@@ -8,7 +8,7 @@ Today I completed Phase 3 Sub-Phase 1 - establishing the documentation foundatio
 
 ## The Revelation
 
-The user caught something I missed - the rules.md file was still using old terminology. This moment crystallized an important insight: **consistency in language shapes consistency in thought**. One outdated document could undermine the entire conceptual transformation.
+The user caught something I missed - the principles.md file was still using old terminology. This moment crystallized an important insight: **consistency in language shapes consistency in thought**. One outdated document could undermine the entire conceptual transformation.
 
 ## Greek Terms as Cognitive Tools
 

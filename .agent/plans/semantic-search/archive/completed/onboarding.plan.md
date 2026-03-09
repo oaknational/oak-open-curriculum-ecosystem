@@ -135,7 +135,7 @@ path — this closes that gap.
   - Action: Refine "use `unknown` at boundaries" to: "Data entering the system
     is `unknown` — immediately validate it using the generated Zod schemas from
     the SDK. After validation, you have exact types; never widen them back."
-    Add `as const` exception explicitly to `rules.md` type assertions rule.
+    Add `as const` exception explicitly to `principles.md` type assertions rule.
 
 ### A3. Workflow and Review Contract
 

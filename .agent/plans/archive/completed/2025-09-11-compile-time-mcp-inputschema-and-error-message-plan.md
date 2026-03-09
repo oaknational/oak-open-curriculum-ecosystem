@@ -6,7 +6,7 @@ Owner: Engineering (MCP/Oak SDK)
 ## Core References
 
 - GO.md (root)
-- .agent/directives/rules.md
+- .agent/directives/principles.md
 - docs/agent-guidance/typescript-practice.md
 - .agent/directives/testing-strategy.md
 - docs/agent-guidance/development-practice.md
@@ -38,12 +38,12 @@ Root causes were confirmed in code review:
 
 ## Constraints and Principles (aligned with references)
 
-- TDD always (Rules.md, Testing Strategy). Unit tests first, then implementation, then refactor.
+- TDD always (principles.md, Testing Strategy). Unit tests first, then implementation, then refactor.
 - TypeScript best practice: no `any`, no `as`, prefer type guards and literal-preserving `as const` (TypeScript Practice).
-- Single source of truth for types (Rules.md, TypeScript Practice). Schema and enums flow from OpenAPI to generated constants.
+- Single source of truth for types (principles.md, TypeScript Practice). Schema and enums flow from OpenAPI to generated constants.
 - Fail fast with clear errors (Development Practice). Preserve cause chains, no silent failures.
-- Quality gates order: type-gen → format → type-check → lint → test → build (Development Practice, Rules.md).
-- No compatibility layers; replace the old server-side mapping with SDK-provided schema (Rules.md).
+- Quality gates order: type-gen → format → type-check → lint → test → build (Development Practice, principles.md).
+- No compatibility layers; replace the old server-side mapping with SDK-provided schema (principles.md).
 
 ## High-level Approach
 
@@ -196,4 +196,4 @@ Naming conventions per Rules:
 
 - Architecture review checkpoint after inputSchema emission lands.
 - Code review checklist enforces: TDD evidence, no assertions, literal types preserved, no compatibility layers.
-- Final review against Rules.md, TypeScript Practice, Testing Strategy, Development Practice.
+- Final review against principles.md, TypeScript Practice, Testing Strategy, Development Practice.

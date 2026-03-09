@@ -1,8 +1,8 @@
 ---
-name: test-reviewer
-description: Expert test auditor for test quality, structure, and compliance. Use proactively when writing tests, modifying test files, or auditing test suites. Invoke immediately after test changes to verify TDD compliance, mock simplicity, and test value.
-model: auto
 tools: Read, Glob, Grep, LS, Shell, ReadLints
+name: test-reviewer
+model: default
+description: Expert test auditor for test quality, structure, and compliance. Use proactively when writing tests, modifying test files, or auditing test suites. Invoke immediately after test changes to verify TDD compliance, mock simplicity, and test value.
 readonly: true
 ---
 

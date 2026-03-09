@@ -1,55 +1,61 @@
-import type { BulkOperations } from './indexing/bulk-operation-types';
+/**
+ * CLI-specific index target helpers.
+ *
+ * Foundation types and constants are re-exported from the SDK
+ * (single source of truth per ADR-030). This file adds CLI-only
+ * concerns: config resolution, CLI flag coercion, and index
+ * resolver factory.
+ */
 
-export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
-export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
+// ---------------------------------------------------------------------------
+// Re-exports from SDK — single source of truth (ADR-030)
+// ---------------------------------------------------------------------------
 
-export const ZERO_HIT_INDEX_BASE = 'oak_zero_hit_events';
+export {
+  SEARCH_INDEX_TARGETS,
+  SEARCH_INDEX_KINDS,
+  ZERO_HIT_INDEX_BASE,
+  BASE_INDEX_NAMES,
+  resolveSearchIndexName,
+  resolveZeroHitIndexName,
+} from '@oaknational/oak-search-sdk';
 
-export const SEARCH_INDEX_KINDS = [
-  'lessons',
-  'unit_rollup',
-  'units',
-  'sequences',
-  'sequence_facets',
-  'threads',
-] as const;
-export type SearchIndexKind = (typeof SEARCH_INDEX_KINDS)[number];
+export type {
+  SearchIndexTarget,
+  SearchIndexKind,
+  IndexResolverFn,
+} from '@oaknational/oak-search-sdk';
 
-const BASE_INDEX_NAMES: Record<SearchIndexKind, string> = {
-  lessons: 'oak_lessons',
-  unit_rollup: 'oak_unit_rollup',
-  units: 'oak_units',
-  sequences: 'oak_sequences',
-  sequence_facets: 'oak_sequence_facets',
-  threads: 'oak_threads',
-};
+// ---------------------------------------------------------------------------
+// CLI-only helpers
+// ---------------------------------------------------------------------------
 
-const BASE_INDEX_TO_KIND = new Map<string, SearchIndexKind>([
-  ['oak_lessons', 'lessons'],
-  ['oak_unit_rollup', 'unit_rollup'],
-  ['oak_units', 'units'],
-  ['oak_sequences', 'sequences'],
-  ['oak_sequence_facets', 'sequence_facets'],
-  ['oak_threads', 'threads'],
-]);
+import { resolveSearchIndexName as resolveIndexName } from '@oaknational/oak-search-sdk';
 
-/** Resolve the Elasticsearch index name for the supplied kind/target pair. */
-export function resolveSearchIndexName(kind: SearchIndexKind, target: SearchIndexTarget): string {
-  const baseName = BASE_INDEX_NAMES[kind];
-  if (!baseName) {
-    throw new Error(`Unknown search index kind: ${kind}`);
-  }
-  return target === 'primary' ? baseName : `${baseName}_sandbox`;
+import type {
+  SearchIndexTarget as Target,
+  SearchIndexKind as Kind,
+  IndexResolverFn,
+} from '@oaknational/oak-search-sdk';
+
+/**
+ * Create an index resolver function bound to a specific target.
+ *
+ * @param target - The index target to bind (`'primary'` or `'sandbox'`)
+ * @returns A function that resolves index names for the bound target
+ */
+export function createIndexResolver(target: Target): IndexResolverFn {
+  return (kind: Kind) => resolveIndexName(kind, target);
 }
 
 /** Resolve the canonical index name for the primary (production) target. */
-export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
-  return resolveSearchIndexName(kind, 'primary');
+export function resolvePrimarySearchIndexName(kind: Kind): string {
+  return resolveIndexName(kind, 'primary');
 }
 
 /** Config shape for resolving search index target. */
 export interface SearchIndexTargetConfig {
-  readonly SEARCH_INDEX_TARGET?: SearchIndexTarget;
+  readonly SEARCH_INDEX_TARGET?: Target;
 }
 
 /**
@@ -59,8 +65,8 @@ export interface SearchIndexTargetConfig {
  * Callers must provide one or the other — no env fallback.
  */
 export function currentSearchIndexTarget(
-  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfig,
-): SearchIndexTarget {
+  targetOrConfig?: Target | SearchIndexTargetConfig,
+): Target {
   if (targetOrConfig === 'primary' || targetOrConfig === 'sandbox') {
     return targetOrConfig;
   }
@@ -72,94 +78,19 @@ export function currentSearchIndexTarget(
 
 /** Resolve the index name for the given target or config. */
 export function resolveCurrentSearchIndexName(
-  kind: SearchIndexKind,
-  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfig,
+  kind: Kind,
+  targetOrConfig?: Target | SearchIndexTargetConfig,
 ): string {
-  return resolveSearchIndexName(kind, currentSearchIndexTarget(targetOrConfig));
-}
-
-/** Resolve the zero-hit telemetry index name for the given target. */
-export function resolveZeroHitIndexName(target: SearchIndexTarget): string {
-  return target === 'primary' ? ZERO_HIT_INDEX_BASE : `${ZERO_HIT_INDEX_BASE}_sandbox`;
+  return resolveIndexName(kind, currentSearchIndexTarget(targetOrConfig));
 }
 
 /**
  * Coerce an arbitrary string (e.g. CLI flag value) into a known search index target.
  * Returns `null` when the value is not recognised.
  */
-export function coerceSearchIndexTarget(value: string | undefined): SearchIndexTarget | null {
+export function coerceSearchIndexTarget(value: string | undefined): Target | null {
   if (!value) {
     return null;
   }
   return value === 'primary' || value === 'sandbox' ? value : null;
-}
-
-/** Rewrite bulk operations so `_index` entries align with the selected target. */
-export function rewriteBulkOperations(
-  operations: BulkOperations,
-  target: SearchIndexTarget,
-): BulkOperations {
-  if (target === 'primary') {
-    // Primary target already matches canonical index names; return original operations.
-    return [...operations];
-  }
-
-  return operations.map((entry) => {
-    if (!isIndexAction(entry)) {
-      return entry;
-    }
-    const currentIndex = entry.index._index;
-    const kind = BASE_INDEX_TO_KIND.get(currentIndex);
-    if (!kind) {
-      return entry;
-    }
-    const nextIndex = resolveSearchIndexName(kind, target);
-    if (nextIndex === currentIndex) {
-      return entry;
-    }
-    const nextAction: IndexAction = {
-      index: {
-        ...entry.index,
-        _index: nextIndex,
-      },
-    };
-    return nextAction;
-  });
-}
-
-/**
- * Shape of an ES bulk index action's metadata.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexMetadata {
-  readonly _index: string;
-}
-
-/**
- * Shape of an ES bulk index action used in bulk operations.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexAction {
-  readonly index: IndexMetadata;
-}
-
-/**
- * Type guard to check if a value is a bulk index action.
- * Narrows directly to IndexAction without intermediate generic types.
- */
-function isIndexAction(value: unknown): value is IndexAction {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('index' in value)) {
-    return false;
-  }
-  const indexProp = value.index;
-  if (typeof indexProp !== 'object' || indexProp === null) {
-    return false;
-  }
-  if (!('_index' in indexProp)) {
-    return false;
-  }
-  return typeof indexProp._index === 'string' && indexProp._index.length > 0;
 }

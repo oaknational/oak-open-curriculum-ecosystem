@@ -16,11 +16,13 @@ Oak-specific variant of the upstream `add-app-to-server` skill from `modelcontex
 
 - Confirm Domain C critical items are complete and the reframing ADR is accepted.
 - See `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` (Domain D prerequisites).
-- Read `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`.
+- Read `.agent/directives/principles.md` and `.agent/directives/testing-strategy.md`.
 
 ## SDK (already installed)
 
-`@modelcontextprotocol/ext-apps/server` v1.1.2:
+Installable package: `@modelcontextprotocol/ext-apps` `^1.2.0`
+
+Server helpers imported from `@modelcontextprotocol/ext-apps/server`:
 
 - `registerAppTool` — links tool to `_meta.ui.resourceUri`.
 - `registerAppResource` — registers the HTML resource with `text/html;profile=mcp-app` MIME automatically.
@@ -29,13 +31,13 @@ Oak-specific variant of the upstream `add-app-to-server` skill from `modelcontex
 
 ## Workflow
 
-1. Read the upstream skill at https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/add-app-to-server for the generic step-by-step guide.
+1. Read the upstream skill at [modelcontextprotocol/ext-apps add-app-to-server](https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/add-app-to-server) for the generic step-by-step guide.
 2. Read `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts` for existing resource registration patterns.
 3. Identify the existing tool to enrich and its current response shape — the tool result becomes the data payload delivered to the widget via `app.ontoolresult`.
 4. Follow the upstream six-step guide, substituting Oak's SDK surface:
    - Use `registerAppResource` instead of manual resource registration.
    - Use `registerAppTool` to link the tool to its resource URI.
    - Check `getUiCapability`; register a text-only fallback tool for clients without MCP Apps support.
-5. Widget data MUST flow through the MCP bridge. Never use `window.openai.*`.
+5. Prefer widget data to flow through the MCP bridge. Direct cross-origin `fetch()` from the iframe is acceptable only when explicitly justified and declared via `_meta.ui.csp` and, if needed, `_meta.ui.domain`. Never use `window.openai.*`.
 6. `connect()` is async — widget render MUST NOT run before `connect()` resolves.
 7. Run `pnpm jc-gates` before declaring the task complete.

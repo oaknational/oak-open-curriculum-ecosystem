@@ -16,7 +16,7 @@
 1. **Agent efficiency** — Future agents face a sprawling structure where the same concept is explained in 3-5 places
 2. **Information preservation** — Critical discoveries (e.g., synonym strategy inversion) are buried in plan addenda, not permanent locations
 3. **Maintenance burden** — Completed work is mixed with pending tasks, causing staleness and drift
-4. **Foundation alignment** — This work embodies the "Could it be simpler?" principle from `rules.md`
+4. **Foundation alignment** — This work embodies the "Could it be simpler?" principle from `principles.md`
 
 **Key Transformation**:
 
@@ -66,7 +66,7 @@ This enables full cross-referencing to prove no information has been lost.
 
 Before proceeding, re-read and commit to:
 
-1. **[`.agent/directives/rules.md`](../../directives/rules.md)** — First Question: "Could it be simpler?"
+1. **[`.agent/directives/principles.md`](../../directives/principles.md)** — First Question: "Could it be simpler?"
 2. **[`.agent/directives/testing-strategy.md`](../../directives/testing-strategy.md)** — Test pyramid, TDD
 3. **[`.agent/directives/schema-first-execution.md`](../../directives/schema-first-execution.md)** — Generator is source of truth
 4. **[`.agent/directives/AGENT.md`](../../directives/AGENT.md)** — Agent-specific directives

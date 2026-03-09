@@ -47,7 +47,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 ## **RULES**
 
-Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
+Read [the rules](./principles.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
 ## Use Sub-agents
 
@@ -65,13 +65,17 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 #### Specialist On-Demand
 
-`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
+### Agent Tools
+
+CLI tools for managing agent workflows live in [`.agent/tools/`](../tools/README.md). Currently includes `claude-agent-ops` for monitoring background agents and their worktree-isolated changes.
+
 ### Agent Artefact Architecture (ADR-125)
 
-All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
+All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
 
 ## Essential Links
 

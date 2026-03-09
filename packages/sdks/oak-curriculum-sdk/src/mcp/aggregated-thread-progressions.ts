@@ -18,7 +18,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
-import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
+import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
@@ -55,7 +55,7 @@ Use this to answer questions like:
 - "What comes after this unit in the thread?"
 - "Which threads cover algebra?"
 
-${ONTOLOGY_RECOMMENDED_FIRST_STEP}
+${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-curriculum-model (which includes the schema-level property graph) with actual progression data.`,
 

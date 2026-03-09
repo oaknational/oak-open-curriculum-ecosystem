@@ -11,7 +11,7 @@
 
 This plan captures quick wins from the Aila domain extraction research that can be implemented immediately to enhance the current **read-only curriculum browsing** SDK. All items are compatible with:
 
-- **rules.md**: TDD, pure functions, schema-first, no type shortcuts
+- **principles.md**: TDD, pure functions, schema-first, no type shortcuts
 - **schema-first-execution.md**: Generated artefacts from OpenAPI schema
 - **testing-strategy.md**: Unit tests first, behaviour over implementation
 

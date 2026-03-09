@@ -23,11 +23,11 @@ exceptions only if required.
 
 ## Quick Reference by Contribution Level
 
-| Contribution Level                                         | Required Variables                          | Optional Variables                 | Setup Time    |
-| ---------------------------------------------------------- | ------------------------------------------- | ---------------------------------- | ------------- |
-| **Level 1**: Unit tests, type-checking, linting            | None                                        | None                               | 0 minutes     |
-| **Level 2**: Local dev servers, integration tests          | `OAK_API_KEY`                               | `LOG_LEVEL`                        | 10-15 minutes |
-| **Level 3**: Full E2E, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*` | `OPENAI_API_KEY`, `SEARCH_API_KEY` | 1-2 hours     |
+| Contribution Level                                         | Required Variables                                          | Optional Variables | Setup Time    |
+| ---------------------------------------------------------- | ----------------------------------------------------------- | ------------------ | ------------- |
+| **Level 1**: Unit tests, type-checking, linting            | None                                                        | None               | 0 minutes     |
+| **Level 2**: Local dev servers, integration tests          | `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY` | `LOG_LEVEL`        | 10-15 minutes |
+| **Level 3**: Full E2E, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*`                 | `SEARCH_API_KEY`   | 1-2 hours     |
 
 ## Monorepo-Wide Variables
 
@@ -92,6 +92,8 @@ The search app requires its own `.env.local` file with additional variables for 
 
 ```bash
 OAK_API_KEY=your_oak_api_key_here
+ELASTICSEARCH_URL=https://your-es-endpoint
+ELASTICSEARCH_API_KEY=your_es_api_key
 ```
 
 **Production configuration** (with OAuth):
@@ -111,7 +113,7 @@ DANGEROUSLY_DISABLE_AUTH=true  # NEVER use in production!
 
 **Complete reference**: See `apps/oak-curriculum-mcp-streamable-http/README.md` and [`apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`](../../apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md).
 
-### Stdio MCP Server (via root `.env`)
+### Legacy stdio MCP workspace (via root `.env`)
 
 **Minimal configuration**:
 
@@ -126,7 +128,12 @@ LOG_LEVEL=debug  # For debugging
 MCP_LOGGER_FILE_PATH=.logs/custom-path.log  # Custom log file location
 ```
 
-**Complete reference**: See `apps/oak-curriculum-mcp-stdio/README.md`.
+This workspace is now a legacy surface: development is halted and it is not the
+long-term maintained Oak MCP server. Future stdio support is intended to come
+from a separate stdio entry point generalised from the HTTP workspace. See
+`apps/oak-curriculum-mcp-stdio/README.md`,
+`apps/oak-curriculum-mcp-streamable-http/README.md`, and
+`docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md`.
 
 ## Getting API Keys
 
@@ -160,13 +167,6 @@ Keys do not expire and are available to anyone. No approval process is required.
 2. Create a free Serverless project
 3. Run `pnpm -C apps/oak-search-cli es:setup` to configure indices
 4. Use provided credentials
-
-### OpenAI (Natural Language Search)
-
-1. Sign up at [https://platform.openai.com/](https://platform.openai.com/)
-2. Navigate to API Keys
-3. Create new key → `OPENAI_API_KEY`
-4. Note: This requires billing to be enabled
 
 ## Development Without API Keys
 
@@ -242,7 +242,10 @@ DANGEROUSLY_DISABLE_AUTH=true
 
 ### "Elasticsearch connection failed"
 
-**Solution**: Only needed for search app development. SDK and MCP servers don't require Elasticsearch.
+**Solution**: Required for search app development and for MCP server startup
+when using the current server workspaces. Unit tests, builds, and many SDK-only
+tasks do not require Elasticsearch. For local MCP development without a live
+cluster, use stub mode where supported.
 
 ### Tests fail with "Cannot read environment variable"
 

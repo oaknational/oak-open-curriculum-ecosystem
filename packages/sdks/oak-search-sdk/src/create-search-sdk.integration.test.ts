@@ -221,7 +221,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'expanding brackets',
+        query: 'expanding brackets',
         subject: 'maths',
         keyStage: 'ks3',
       });
@@ -240,7 +240,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'fractions',
+        query: 'fractions',
         size: 5,
         from: 10,
       });
@@ -255,7 +255,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchLessons({
-        text: 'organic chemistry',
+        query: 'organic chemistry',
         subject: 'science',
         keyStage: 'ks4',
         tier: 'higher',
@@ -271,7 +271,7 @@ describe('RetrievalService', () => {
     it('excludes scoring-only fields from _source to reduce payload size', async () => {
       const deps = createTestDeps();
       const sdk = createSearchSdk({ deps, config: createTestConfig() });
-      await sdk.retrieval.searchLessons({ text: 'photosynthesis' });
+      await sdk.retrieval.searchLessons({ query: 'photosynthesis' });
 
       const excludes = extractSourceExcludes(deps.esClient);
       expect(excludes).toContain('lesson_content');
@@ -286,7 +286,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchUnits({
-        text: 'fractions',
+        query: 'fractions',
         subject: 'maths',
         keyStage: 'ks2',
       });
@@ -305,7 +305,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchSequences({
-        text: 'secondary maths',
+        query: 'secondary maths',
         phaseSlug: 'secondary',
       });
 
@@ -321,7 +321,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchSequences({
-        text: 'science',
+        query: 'science',
         includeFacets: true,
       });
 
@@ -337,7 +337,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchThreads({
-        text: 'algebra equations progression',
+        query: 'algebra equations progression',
         subject: 'maths',
       });
 
@@ -355,7 +355,7 @@ describe('RetrievalService', () => {
       const { retrieval } = createSdk();
 
       const result = await retrieval.searchThreads({
-        text: 'geometry shapes',
+        query: 'geometry shapes',
       });
 
       expect(result.ok).toBe(true);
@@ -487,23 +487,6 @@ describe('AdminService', () => {
     });
   });
 
-  describe('ingest', () => {
-    it('returns ok with an IngestResult containing document counts', async () => {
-      const { admin } = createSdk();
-
-      const result = await admin.ingest({
-        bulkDir: '/tmp/test-bulk-data',
-      });
-
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        expect(typeof result.value.lessonsIndexed).toBe('number');
-        expect(typeof result.value.unitsIndexed).toBe('number');
-        expect(typeof result.value.sequencesIndexed).toBe('number');
-      }
-    });
-  });
-
   describe('getIndexMeta', () => {
     it('returns ok with IndexMetaDoc or null', async () => {
       const { admin } = createSdk();
@@ -530,6 +513,29 @@ describe('AdminService', () => {
       expect(result.ok).toBe(true);
     });
   });
+
+  describe('verifyDocCounts', () => {
+    it('returns a result when called through the admin service', async () => {
+      const { admin } = createSdk();
+
+      const result = await admin.verifyDocCounts({
+        lessons: 1,
+        unit_rollup: 1,
+        units: 1,
+        sequences: 1,
+        sequence_facets: 1,
+        threads: 1,
+      });
+
+      // The mock client returns empty cat.indices, so all counts are 0
+      // and all expectations of 1 should fail
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('validation_error');
+        expect(result.error.message).toContain('6 of 6');
+      }
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -554,7 +560,7 @@ describe('ObservabilityService', () => {
 
       const result = await observability.recordZeroHit({
         scope: 'lessons',
-        text: 'quantum computing ks2',
+        query: 'quantum computing ks2',
         filters: { subject: 'science', keyStage: 'ks2' },
         indexVersion: 'v-test',
       });
@@ -594,7 +600,7 @@ describe('ObservabilityService', () => {
       const result = await observability.persistZeroHitEvent({
         timestamp: Date.now(),
         scope: 'lessons',
-        text: 'test query',
+        query: 'test query',
         filters: { subject: 'maths' },
         indexVersion: 'v-test',
       });

@@ -26,7 +26,7 @@ todos:
 
 # Cross-Agent Standardisation
 
-> **SUPERSEDED**: All tasks from this plan have been absorbed into the [Agent Artefact Portability plan](../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan is archived for historical reference only.
+> **SUPERSEDED**: All tasks from this plan have been absorbed into [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md). This plan is archived for historical reference only.
 
 ## 1. Intent
 
@@ -47,7 +47,7 @@ Based on requirements and analysis in:
 This is a strategic source plan (intent, committed-vs-conditional split, and
 trigger policy). The authoritative execution tasks for this stream live in:
 
-- [phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)
+- ~~phase-4-cross-agent-standardisation-execution.md~~ (archived, superseded by ADR-125)
 
 ## 2a. Committed Work
 

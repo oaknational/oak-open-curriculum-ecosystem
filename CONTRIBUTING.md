@@ -138,19 +138,23 @@ pnpm build          # SDK and libraries build without env vars
 
 #### Level 2: Integration Development (10-15 minutes setup)
 
-**Requires: `OAK_API_KEY`** (core curriculum tools). Search functionality additionally requires `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY`.
+**Requires**: `OAK_API_KEY`, `ELASTICSEARCH_URL`, and
+`ELASTICSEARCH_API_KEY` for the canonical HTTP MCP server workspace.
 
 With an API key, you can:
 
-- Run MCP servers locally (core curriculum tools work with `OAK_API_KEY` alone; search tools require Elasticsearch credentials)
+- Run the canonical HTTP MCP server locally
 - Test SDK integrations
 - Run most integration tests
 - Work on application features
 
 ```bash
 cp .env.example .env
-# Add: OAK_API_KEY=your_key_here
-pnpm -C apps/oak-curriculum-mcp-stdio dev
+# Add:
+# OAK_API_KEY=your_key_here
+# ELASTICSEARCH_URL=https://your-es-endpoint
+# ELASTICSEARCH_API_KEY=your_es_api_key
+pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
 Get your Oak API key from the public form:
@@ -368,7 +372,7 @@ pnpm test:e2e
 
 ```bash
 pnpm build
-pnpm -C apps/oak-curriculum-mcp-stdio dev
+pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 # In another terminal, add the MCP server to Claude Desktop
 ```
 

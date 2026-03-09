@@ -48,7 +48,6 @@ describe('createCliSdk', () => {
     expect(typeof sdk.admin.verifyConnection).toBe('function');
     expect(typeof sdk.admin.listIndexes).toBe('function');
     expect(typeof sdk.admin.updateSynonyms).toBe('function');
-    expect(typeof sdk.admin.ingest).toBe('function');
     expect(typeof sdk.admin.getIndexMeta).toBe('function');
     expect(typeof sdk.admin.setIndexMeta).toBe('function');
   });

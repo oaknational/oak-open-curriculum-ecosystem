@@ -14,7 +14,7 @@
 
 ```bash
 # Open in editor
-code .agent/directives/rules.md
+code .agent/directives/principles.md
 code .agent/directives/schema-first-execution.md
 code .agent/directives/testing-strategy.md
 ```

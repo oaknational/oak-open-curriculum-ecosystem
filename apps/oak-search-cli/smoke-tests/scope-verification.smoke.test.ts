@@ -29,7 +29,7 @@ import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc } from '../src/types/oa
  */
 async function searchLessons(query: string, unitSlug?: string) {
   const request = buildLessonRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',
@@ -53,7 +53,7 @@ async function searchLessons(query: string, unitSlug?: string) {
  */
 async function searchUnits(query: string) {
   const request = buildUnitRrfRequest({
-    text: query,
+    query,
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',

@@ -294,6 +294,7 @@ export const IndexMetaDocSchema = z
     key_stages: z.array(z.string().min(1)),
     duration_ms: z.number().int().nonnegative(),
     doc_counts: z.record(z.string(), z.unknown()),
+    previous_version: z.string().min(1).optional(),
   })
   .strict();
 export type IndexMetaDoc = z.infer<typeof IndexMetaDocSchema>;

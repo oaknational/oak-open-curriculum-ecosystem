@@ -333,4 +333,4 @@ If bootstrap logic extraction requires integration testing:
 - Test files: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`
 - Production code: `apps/oak-curriculum-mcp-streamable-http/src/`
 - Testing strategy: `.agent/directives/testing-strategy.md`
-- Rules: `.agent/directives/rules.md`
+- Rules: `.agent/directives/principles.md`

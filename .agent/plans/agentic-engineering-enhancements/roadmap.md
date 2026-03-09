@@ -1,8 +1,8 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; Phase 1 ready to start
-**Last Updated**: 2026-03-04
-**Session Entry**: [start-right.prompt.md](../../prompts/start-right.prompt.md)
+**Status**: ✅ Phase 0 complete; Phase 1 ready to start; Elasticsearch specialist capability active in `active/`
+**Last Updated**: 2026-03-07
+**Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
 
@@ -17,12 +17,16 @@ are authoritative for execution tasks.
 
 Authoritative active execution sources:
 
-1. [phase-0-templates-and-components-foundation.md](active/phase-0-templates-and-components-foundation.md)
+1. ~~phase-0-templates-and-components-foundation.md~~ (archived)
 2. [phase-1-hallucination-guarding-execution.md](active/phase-1-hallucination-guarding-execution.md)
 3. [phase-2-evidence-based-claims-execution.md](active/phase-2-evidence-based-claims-execution.md)
 4. [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
-5. ~~[phase-4-cross-agent-standardisation-execution.md](active/phase-4-cross-agent-standardisation-execution.md)~~ **Superseded** by Agent Artefact Portability plan (ADR-125)
+5. ~~phase-4-cross-agent-standardisation-execution.md~~ **Superseded** by Agent Artefact Portability plan (ADR-125) (archived)
 6. [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
+
+Active adjacent execution sources:
+
+1. [elasticsearch-specialist-capability.execution.plan.md](active/elasticsearch-specialist-capability.execution.plan.md)
 
 ---
 
@@ -62,6 +66,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
+- **Adjacent capability work**: Elasticsearch specialist reviewer/skill/rule rollout
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -84,8 +89,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 ### Phase 0 — Planning System and Template Hardening
 
-- Active plan:
-  [phase-0-templates-and-components-foundation.md](active/phase-0-templates-and-components-foundation.md)
+- Active plan: ~~phase-0-templates-and-components-foundation.md~~ (archived)
 - Status: ✅ Complete (2026-02-24)
 - Done when:
   - templates/components inventory is intentionally structured and documented
@@ -126,10 +130,10 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Source strategy:
   [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md)
 - Convergence update (2026-03-04):
-  - ESLint convergence tasks (`no-console`, boundary/separation lint alignment, split-guidance updates) are executed in
+  - Strictness-specific ESLint convergence tasks (`no-console`, shared-config promotion work) are executed in
     [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
-  - `max-files-per-dir` rollout is explicitly deferred in the current window
-  - depcruise/knip/qg integration remains owned by this phase
+  - Directory-complexity supporting constraints, depcruise/knip/qg integration, and staged `max-files-per-dir` activation are executed in
+    [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - Done when:
   - enforcement phases 0-5 are delivered with deterministic validation
   - evidence-backed claims exist for enforcement outcomes
@@ -140,7 +144,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 ### Phase 4 — Cross-Agent Standardisation Execution
 
-> **SUPERSEDED**: All cross-agent standardisation work has been absorbed into the [Agent Artefact Portability plan](../../../.cursor/plans/agent_artefact_portability_2c71274b.plan.md) and implemented under [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+> **SUPERSEDED**: All cross-agent standardisation work has been absorbed into [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ### Phase 5 — Mutation Testing Execution
 
@@ -160,6 +164,21 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Dependencies:
   - Phase 2 evidence workflow available
   - Phase 3 enforcement baseline stable
+
+### Active Adjacent Work — Elasticsearch Specialist Capability
+
+- Active plan:
+  [active/elasticsearch-specialist-capability.execution.plan.md](active/elasticsearch-specialist-capability.execution.plan.md)
+- Source strategy:
+  [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md)
+- Goal:
+  - add a canonical Elasticsearch reviewer, skill, and situational rule
+  - require live consultation of official Elastic documentation as primary authority
+  - treat Elastic Serverless as the default deployment context
+- Status: 🔄 Active
+- Notes:
+  - this is intentionally outside the numbered phase sequence
+  - it is collection-owned because it extends the agent capability model rather than the product runtime directly
 
 ---
 

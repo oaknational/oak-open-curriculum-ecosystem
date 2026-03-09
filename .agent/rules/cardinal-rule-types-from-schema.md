@@ -4,4 +4,4 @@ ALL types, type guards, Zod schemas, and validators MUST flow from the Open Curr
 
 Running `pnpm sdk-codegen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment with any upstream schema change.
 
-See `.agent/directives/rules.md` §Cardinal Rule and `.agent/directives/schema-first-execution.md` for the full policy.
+See `.agent/directives/principles.md` §Cardinal Rule and `.agent/directives/schema-first-execution.md` for the full policy.

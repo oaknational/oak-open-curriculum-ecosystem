@@ -18,7 +18,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
-import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
+import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
@@ -59,7 +59,7 @@ Use this to answer questions like:
 - "What's the learning path to algebra?"
 - "Which units depend on fractions?"
 
-${ONTOLOGY_RECOMMENDED_FIRST_STEP}
+${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-thread-progressions (learning paths) with prerequisite detail.`,
 

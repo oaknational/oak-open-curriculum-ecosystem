@@ -18,7 +18,7 @@ This plan implements flat parameter schema generation at compile time, eliminati
 
 - ✅ Schema-First Execution: "Update templates and rerun `pnpm type-gen`"
 - ✅ Cardinal Rule: "ALL types generated at compile time ONLY"
-- ✅ Rules.md: "NEVER create compatibility layers"
+- ✅ principles.md: "NEVER create compatibility layers"
 - ✅ First Question: "Could it be simpler?" - YES! 20 LOC vs 300 LOC
 
 ---
@@ -115,7 +115,7 @@ Both generated from the same source data (OpenAPI schema), no runtime transforma
 
 > "When behaviour needs to change, update the templates under `type-gen/typegen/mcp-tools/**/*` and rerun `pnpm type-gen`."
 
-**From Rules.md**:
+**From principles.md**:
 
 > "NEVER create compatibility layers, no backwards compatibility - replace old approaches with new approaches"
 
@@ -845,7 +845,7 @@ Per `@testing-strategy.md`:
 - ✅ NOT introducing fallbacks that cope with missing data
 - ✅ NOT re-validating in runtime (validation via generated schema)
 
-### Core Rules (@rules.md)
+### Core Rules (@principles.md)
 
 | Rule                                                   | How We Align                                   |
 | ------------------------------------------------------ | ---------------------------------------------- |
@@ -1037,7 +1037,7 @@ These improvements build on the flat schema foundation but are separate tasks:
 **Project Directives**:
 
 - `.agent/directives/schema-first-execution.md`
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 
 **Research Documents**:

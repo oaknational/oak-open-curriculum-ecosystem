@@ -23,7 +23,7 @@ import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js'
  */
 const SearchSdkObjectSchema = z
   .object({
-    text: z.string().trim().optional().default(''),
+    query: z.string().trim().optional().default(''),
     scope: z.string({ error: 'scope is required' }),
     subject: z.string().optional(),
     keyStage: z.string().optional(),
@@ -43,7 +43,7 @@ const SearchSdkObjectSchema = z
   .strict()
   .refine(
     (data) => {
-      if (data.text.length > 0) {
+      if (data.query.length > 0) {
         return true;
       }
       return (
@@ -52,8 +52,8 @@ const SearchSdkObjectSchema = z
     },
     {
       message:
-        'search requires a non-empty text field (threads scope can omit text when subject or keyStage filter is provided)',
-      path: ['text'],
+        'search requires a non-empty query (threads scope can omit query when subject or keyStage filter is provided)',
+      path: ['query'],
     },
   );
 
@@ -127,7 +127,7 @@ function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
 /**
  * Validates and normalises raw MCP input to strongly-typed SearchSdkArgs.
  *
- * Accepts an object with `text`, `scope`, and optional filter fields.
+ * Accepts an object with `query`, `scope`, and optional filter fields.
  * Validates structural shape with Zod, then narrows enums using generated
  * type guards.
  *
@@ -137,7 +137,7 @@ function narrowEnums(parsed: z.infer<typeof SearchSdkObjectSchema>):
  * @example
  * ```typescript
  * const result = validateSearchSdkArgs({
- *   text: 'photosynthesis',
+ *   query: 'photosynthesis',
  *   scope: 'lessons',
  *   keyStage: 'ks3',
  *   subject: 'science',
@@ -151,7 +151,7 @@ export function validateSearchSdkArgs(
   input: unknown,
 ): { ok: true; value: SearchSdkArgs } | { ok: false; message: string } {
   if (typeof input !== 'object' || input === null) {
-    return { ok: false, message: 'search expects an object input with text and scope fields' };
+    return { ok: false, message: 'search expects an object input with query and scope fields' };
   }
 
   const parsed = SearchSdkObjectSchema.safeParse(input);

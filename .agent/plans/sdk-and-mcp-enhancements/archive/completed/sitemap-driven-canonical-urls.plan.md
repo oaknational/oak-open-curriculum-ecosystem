@@ -177,7 +177,7 @@ pnpm test
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives/rules.md` — Cardinal Rule: types flow from the schema
+1. **Re-read** `.agent/directives/principles.md` — Cardinal Rule: types flow from the schema
 2. **Re-read** `.agent/directives/testing-strategy.md` — TDD at all levels
 3. **Re-read** `.agent/directives/schema-first-execution.md` — generator-first flow
 4. **Ask**: "Could it be simpler without compromising quality?"
@@ -189,7 +189,7 @@ Before beginning work and at the start of each phase:
 
 ### Phase 0: Verify Foundation Assumptions (~30 min)
 
-**Foundation Check-In**: Re-read `rules.md` sections on Cardinal Rule and Fail Fast.
+**Foundation Check-In**: Re-read `principles.md` sections on Cardinal Rule and Fail Fast.
 
 #### Task 0.1: Run the existing sitemap scanner and audit its output
 
@@ -352,7 +352,7 @@ pnpm test --filter @oaknational/curriculum-sdk
 
 ### Phase 3: Fix Search-CLI Generators (~1 hour)
 
-**Foundation Check-In**: Re-read `rules.md` — no duplication, single source of truth.
+**Foundation Check-In**: Re-read `principles.md` — no duplication, single source of truth.
 
 #### Task 3.1: Fix `canonical-url-generator.ts` in search-cli
 
@@ -409,10 +409,10 @@ The search-cli has its own `canonical-url-generator.ts` that duplicates logic fr
 
 #### Task 4.2: Foundation document compliance checklist
 
-- [ ] **rules.md — Cardinal Rule**: Types flow from generation (URL helpers are generated, not ad-hoc)
-- [ ] **rules.md — No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>` added
-- [ ] **rules.md — Fail Fast**: Invalid URL patterns fail at codegen time, not at runtime
-- [ ] **rules.md — Quality Gates**: All gates pass across all workspaces
+- [ ] **principles.md — Cardinal Rule**: Types flow from generation (URL helpers are generated, not ad-hoc)
+- [ ] **principles.md — No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>` added
+- [ ] **principles.md — Fail Fast**: Invalid URL patterns fail at codegen time, not at runtime
+- [ ] **principles.md — Quality Gates**: All gates pass across all workspaces
 - [ ] **testing-strategy.md — TDD**: Tests written/updated before implementation
 - [ ] **testing-strategy.md — Test Behavior**: Tests validate URL output, not implementation details
 - [ ] **schema-first-execution.md — Generator First**: URL patterns derived from sitemap data at generation time
@@ -580,6 +580,6 @@ This plan was created after a thorough investigation in [Security and URL audit 
 - OWA source: `https://github.com/oaknational/Oak-Web-Application` (`src/pages/teachers/`)
 - OWA sitemap: `https://www.thenational.academy/sitemap.xml`
 - Foundation documents:
-  - `.agent/directives/rules.md`
+  - `.agent/directives/principles.md`
   - `.agent/directives/testing-strategy.md`
   - `.agent/directives/schema-first-execution.md`

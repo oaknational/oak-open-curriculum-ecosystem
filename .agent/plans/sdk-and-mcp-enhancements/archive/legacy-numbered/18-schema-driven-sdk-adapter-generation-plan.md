@@ -289,5 +289,5 @@ Option A provides cleaner separation and explicit opt-in for the Result pattern.
 
 - [ADR-088: Result Pattern for Explicit Error Handling](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)
 - [ADR-030: SDK as Single Source of Truth](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
-- [Cardinal Rule](../../directives/rules.md#cardinal-rule-of-this-repository)
+- [Cardinal Rule](../../directives/principles.md#cardinal-rule-of-this-repository)
 

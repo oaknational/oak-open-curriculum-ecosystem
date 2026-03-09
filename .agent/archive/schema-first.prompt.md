@@ -2,7 +2,7 @@ Cardinal Alignment Workflow
 
 Stage 0 – Anchor
 
-Re-read .agent/directives/rules.md and .agent/directives/schema-first-execution.md.
+Re-read .agent/directives/principles.md and .agent/directives/schema-first-execution.md.
 Log a short grounding note in .agent/plans/semantic-search/context.md confirming current repo state and the cardinal-rule goalposts.
 
 Stage 1 – Diagnose

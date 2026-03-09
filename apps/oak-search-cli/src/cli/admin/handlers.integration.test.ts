@@ -51,19 +51,14 @@ function createMockAdmin(): AdminService {
         count: 42,
       }),
     ),
-    ingest: vi.fn().mockResolvedValue(
-      ok({
-        filesProcessed: 1,
-        lessonsIndexed: 100,
-        unitsIndexed: 10,
-        rollupsIndexed: 10,
-        threadsIndexed: 5,
-        sequencesIndexed: 2,
-        sequenceFacetsIndexed: 2,
-      }),
-    ),
     getIndexMeta: vi.fn().mockResolvedValue(ok(null)),
     setIndexMeta: vi.fn().mockResolvedValue(ok(undefined)),
+    verifyDocCounts: vi.fn().mockResolvedValue(
+      ok({
+        allPassed: true,
+        results: [],
+      }),
+    ),
   };
 }
 

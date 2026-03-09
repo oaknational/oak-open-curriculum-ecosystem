@@ -215,5 +215,5 @@ Store status in `transcript:{slug}:status` and data in `transcript:{slug}:data`.
 
 - [ADR-091: Video Availability Detection Strategy](./091-video-availability-detection-strategy.md)
 - [ADR-066: SDK Response Caching](./066-sdk-response-caching.md)
-- [Efficient API Traversal Plan](../../../.agent/plans/semantic-search/active/efficient-api-traversal.md)
+- [Efficient API Traversal Plan](../../../.agent/plans/semantic-search/archive/completed/efficient-api-traversal.md)
 - [API Wishlist: Empty Transcript Issue](../../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md)

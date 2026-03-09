@@ -187,7 +187,7 @@ Environment validation in `src/lib/env.ts` must enforce mutual exclusivity betwe
 
 ## Development Workflow Expectations
 
-- **Planning & reviews**: Follow `GO.md` — every `ACTION:` is immediately followed by a self-review entry. Reference `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md` when defining tasks.
+- **Planning & reviews**: Follow `GO.md` — every `ACTION:` is immediately followed by a self-review entry. Reference `.agent/directives/principles.md` and `.agent/directives/testing-strategy.md` when defining tasks.
 - **TDD**: Write failing tests first (Vitest for queries/transforms, integration harnesses for ES interactions). Avoid `any`, unsafe casts, or bypassing quality gates.
 - **Quality gates**: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-search-cli doc-gen`. Capture outcomes in the Review Log.
 - **Documentation**: Keep `apps/oak-search-cli/docs/*.md` and README in sync with code changes; regenerate OpenAPI + TypeDoc after schema updates.

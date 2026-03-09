@@ -34,7 +34,7 @@ export const ZeroHitEventSchema = z
   .object({
     timestamp: z.number().int().nonnegative(),
     scope: ZeroHitScopeSchema,
-    text: z.string().min(1),
+    query: z.string().min(1),
     filters: z.record(z.string(), z.string()),
     indexVersion: z.string().min(1),
     tookMs: z.number().int().nonnegative().optional(),
@@ -75,7 +75,7 @@ export function createZeroHitEvent(overrides: Partial<ZeroHitEvent> = {}): ZeroH
   const base: ZeroHitEvent = {
     timestamp: DEFAULT_TIMESTAMP,
     scope: 'lessons',
-    text: 'No results for key stage 2 fractions',
+    query: 'No results for key stage 2 fractions',
     filters: { subject: 'maths', keyStage: 'ks2' },
     indexVersion: DEFAULT_INDEX_VERSION,
     timedOut: false,
@@ -119,13 +119,13 @@ function createDefaultEvents(): ZeroHitEvent[] {
     createZeroHitEvent(),
     createZeroHitEvent({
       scope: 'units',
-      text: 'No units found for ks3 geology',
+      query: 'No units found for ks3 geology',
       filters: { subject: 'science', keyStage: 'ks3' },
       timestamp: DEFAULT_TIMESTAMP - 60_000,
     }),
     createZeroHitEvent({
       scope: 'sequences',
-      text: 'No programmes returned for ks4 statistics',
+      query: 'No programmes returned for ks4 statistics',
       filters: { subject: 'maths', keyStage: 'ks4' },
       timestamp: DEFAULT_TIMESTAMP - 120_000,
     }),

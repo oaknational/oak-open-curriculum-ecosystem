@@ -171,6 +171,9 @@ export interface IngestResult {
  *     case 'validation_error':
  *       console.error(`Validation: ${result.error.message}`);
  *       break;
+ *     case 'data_source_error':
+ *       console.error(`Data source: ${result.error.message}`);
+ *       break;
  *     case 'unknown':
  *       console.error(`Unexpected: ${result.error.message}`);
  *       break;
@@ -208,6 +211,12 @@ export type AdminError =
       readonly message: string;
       /** Detailed information about the validation failure, when available. */
       readonly details?: string;
+    }
+  | {
+      /** A data source or API failure during data acquisition (e.g. KS4 supplementation). */
+      readonly type: 'data_source_error';
+      /** Human-readable description of the data source failure. */
+      readonly message: string;
     }
   | {
       /** An error that does not fit the other categories. */

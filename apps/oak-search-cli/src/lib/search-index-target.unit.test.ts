@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { BulkOperations, BulkIndexAction } from './indexing/bulk-operation-types';
-import type { SearchLessonsIndexDoc } from '../types/oak';
 import {
   resolveSearchIndexName,
   currentSearchIndexTarget,
   coerceSearchIndexTarget,
-  rewriteBulkOperations,
+  createIndexResolver,
 } from './search-index-target';
 
 describe('search index target helpers', () => {
@@ -29,50 +27,25 @@ describe('search index target helpers', () => {
     expect(coerceSearchIndexTarget(undefined)).toBeNull();
   });
 
-  it('rewrites bulk operations for sandbox target', () => {
-    const lessonDoc: SearchLessonsIndexDoc = {
-      lesson_id: 'lesson-1',
-      lesson_slug: 'lesson-one',
-      lesson_title: 'Test Lesson',
-      subject_slug: 'maths',
-      subject_parent: 'maths',
-      key_stage: 'ks3',
-      unit_ids: ['unit-1'],
-      unit_titles: ['Test Unit'],
-      has_transcript: true,
-      lesson_content: 'Test content',
-      lesson_url: 'https://example.com/lesson-one',
-      unit_urls: ['https://example.com/unit-1'],
-      doc_type: 'lesson',
-    };
-
-    const oakLessonAction: BulkIndexAction = {
-      index: { _index: 'oak_lessons', _id: 'lesson-1' },
-    };
-    const oakRollupAction: BulkIndexAction = {
-      index: { _index: 'oak_unit_rollup', _id: 'unit-1' },
-    };
-    const nonOakAction: BulkIndexAction = {
-      index: { _index: 'other_index', _id: '123' },
-    };
-
-    const operations: BulkOperations = [oakLessonAction, lessonDoc, oakRollupAction, nonOakAction];
-
-    const rewritten = rewriteBulkOperations(operations, 'sandbox');
-
-    expect(rewritten[0]).toEqual({
-      index: {
-        _index: 'oak_lessons_sandbox',
-        _id: 'lesson-1',
-      },
+  describe('createIndexResolver', () => {
+    it('returns a function that resolves primary index names', () => {
+      const resolve = createIndexResolver('primary');
+      expect(resolve('lessons')).toBe('oak_lessons');
+      expect(resolve('units')).toBe('oak_units');
+      expect(resolve('unit_rollup')).toBe('oak_unit_rollup');
+      expect(resolve('sequences')).toBe('oak_sequences');
+      expect(resolve('sequence_facets')).toBe('oak_sequence_facets');
+      expect(resolve('threads')).toBe('oak_threads');
     });
-    expect(rewritten[1]).toBe(lessonDoc);
-    expect(rewritten[2]).toEqual({
-      index: {
-        _index: 'oak_unit_rollup_sandbox',
-        _id: 'unit-1',
-      },
+
+    it('returns a function that resolves sandbox index names', () => {
+      const resolve = createIndexResolver('sandbox');
+      expect(resolve('lessons')).toBe('oak_lessons_sandbox');
+      expect(resolve('units')).toBe('oak_units_sandbox');
+      expect(resolve('unit_rollup')).toBe('oak_unit_rollup_sandbox');
+      expect(resolve('sequences')).toBe('oak_sequences_sandbox');
+      expect(resolve('sequence_facets')).toBe('oak_sequence_facets_sandbox');
+      expect(resolve('threads')).toBe('oak_threads_sandbox');
     });
-    expect(rewritten[3]).toBe(nonOakAction);
   });
 });

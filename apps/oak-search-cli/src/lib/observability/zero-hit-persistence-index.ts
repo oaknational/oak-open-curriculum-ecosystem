@@ -90,7 +90,7 @@ export function createZeroHitDocument(event: ZeroHitEvent): ZeroHitDoc {
   const doc: ZeroHitDoc = {
     '@timestamp': new Date(event.timestamp).toISOString(),
     search_scope: event.scope,
-    query: event.text,
+    query: event.query,
     filters: event.filters,
     index_version: event.indexVersion,
   };

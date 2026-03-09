@@ -29,7 +29,7 @@ const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
 /**
  * Build four-way RRF retriever (BM25+ELSER on content+structure).
  *
- * @param text - The search query text
+ * @param query - The search query
  * @param filters - Optional filter clauses
  * @param phrases - Curriculum phrases for phrase boosting
  * @param scope - Whether to use lesson or unit field mappings
@@ -41,7 +41,7 @@ const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
  * ```
  */
 export function buildFourWayRetriever(
-  text: string,
+  query: string,
   filters: QueryContainer[],
   phrases: readonly string[],
   scope: 'lesson' | 'unit',
@@ -70,17 +70,17 @@ export function buildFourWayRetriever(
   return {
     rrf: {
       retrievers: [
-        buildBm25Retriever(text, contentFields, filterClause, phrases, bm25Config),
+        buildBm25Retriever(query, contentFields, filterClause, phrases, bm25Config),
         {
           standard: {
-            query: { semantic: { field: contentSemantic, query: text } },
+            query: { semantic: { field: contentSemantic, query } },
             filter: filterClause,
           },
         },
-        buildBm25Retriever(text, structureFields, filterClause, phrases, bm25Config),
+        buildBm25Retriever(query, structureFields, filterClause, phrases, bm25Config),
         {
           standard: {
-            query: { semantic: { field: structureSemantic, query: text } },
+            query: { semantic: { field: structureSemantic, query } },
             filter: filterClause,
           },
         },
@@ -94,7 +94,7 @@ export function buildFourWayRetriever(
 /**
  * Build a BM25 retriever with optional phrase boosting.
  *
- * @param text - The search query text
+ * @param query - The search query
  * @param fields - ES field names (with optional boost suffix)
  * @param filter - Optional filter clause
  * @param phrases - Curriculum phrases for match_phrase boosting
@@ -102,7 +102,7 @@ export function buildFourWayRetriever(
  * @returns ES retriever container
  */
 function buildBm25Retriever(
-  text: string,
+  query: string,
   fields: readonly string[],
   filter: QueryContainer | undefined,
   phrases: readonly string[],
@@ -114,7 +114,7 @@ function buildBm25Retriever(
   },
 ): estypes.RetrieverContainer {
   const multiMatch: estypes.QueryDslMultiMatchQuery = {
-    query: text,
+    query,
     type: 'best_fields',
     tie_breaker: 0.2,
     fuzziness: config.fuzziness,

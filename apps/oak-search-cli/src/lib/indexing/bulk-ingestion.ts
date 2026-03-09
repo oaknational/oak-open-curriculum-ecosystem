@@ -12,14 +12,10 @@ import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { BulkOperationEntry } from './bulk-operation-types';
-import type { SearchIndexKind } from '../search-index-target';
+import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
-import {
-  collectPhaseResults,
-  buildIngestionStats,
-  type BulkIngestionStats,
-  type BulkProcessingAccumulator,
-} from './bulk-ingestion-phases.js';
+import { collectPhaseResults, type BulkProcessingAccumulator } from './bulk-ingestion-phases.js';
+import { buildIngestionStats, type BulkIngestionStats } from './bulk-ingestion-stats.js';
 
 export type { BulkIngestionStats, BulkProcessingAccumulator };
 
@@ -29,12 +25,20 @@ export interface BulkIngestionResult {
   readonly stats: BulkIngestionStats;
 }
 
-/** Options for bulk ingestion. */
+/**
+ * Options for bulk ingestion.
+ *
+ * @param resolveIndex - Optional index name resolver. When omitted, primary
+ *   (non-versioned) index names are used. Pass a versioned resolver to target
+ *   blue/green lifecycle indexes.
+ */
 export interface BulkIngestionOptions {
   readonly bulkDir: string;
   readonly client: OakClient;
   readonly subjectFilter?: readonly string[];
   readonly indexes?: readonly SearchIndexKind[];
+
+  readonly resolveIndex?: IndexResolverFn;
 }
 
 /** Filters bulk file results by subject if filter is provided. */
@@ -65,7 +69,7 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
 export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
 ): Promise<BulkIngestionResult> {
-  const { bulkDir, client, subjectFilter, indexes = [] } = options;
+  const { bulkDir, client, subjectFilter, indexes = [], resolveIndex } = options;
   ingestLogger.info('Starting bulk ingestion preparation', {
     bulkDir,
     indexes: indexes.length > 0 ? indexes : 'all',
@@ -76,7 +80,13 @@ export async function prepareBulkIngestion(
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
-  const phases = await collectPhaseResults(filteredFiles, bulkDownloadFiles, client, indexes);
+  const phases = await collectPhaseResults(
+    filteredFiles,
+    bulkDownloadFiles,
+    client,
+    indexes,
+    resolveIndex,
+  );
 
   const stats = buildIngestionStats(
     filteredFiles.length,

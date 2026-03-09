@@ -10,7 +10,7 @@ import type { ZeroHitEvent } from './zero-hit-store';
 export interface ZeroHitPayload {
   total: number;
   scope: SearchScope;
-  text: string;
+  query: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
   phaseSlug?: string;
@@ -38,7 +38,7 @@ export async function logZeroHit(payload: ZeroHitPayload): Promise<void> {
   const timestamp = Date.now();
   const logContext = {
     scope: payload.scope,
-    text: payload.text,
+    query: payload.query,
     filters,
     indexVersion: payload.indexVersion,
   };
@@ -74,7 +74,7 @@ function buildZeroHitEvent(
 ): ZeroHitEvent {
   return {
     scope: payload.scope,
-    text: payload.text,
+    query: payload.query,
     filters,
     indexVersion: payload.indexVersion,
     tookMs: payload.took,
@@ -108,7 +108,7 @@ async function dispatchZeroHitWebhook(
   const body = {
     event: 'semantic-search.zero-hit',
     scope: payload.scope,
-    text: payload.text,
+    query: payload.query,
     filters,
     indexVersion: payload.indexVersion,
     tookMs: payload.took,

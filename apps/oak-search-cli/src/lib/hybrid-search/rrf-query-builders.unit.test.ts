@@ -61,53 +61,53 @@ function getBm25Query(
 
 describe('buildLessonRrfRequest (four-way)', () => {
   it('builds request with correct index and size', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     expect(request.index).toBe('oak_lessons');
     expect(request.size).toBe(10);
   });
 
   it('includes RRF retriever with four sub-retrievers', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     expect(request.retriever?.rrf?.retrievers).toHaveLength(4);
   });
 
   it('uses BM25 content retriever as first retriever with min_should_match', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     const bm25Query = getBm25Query(request, 0);
     expect(bm25Query).toBeDefined();
   });
 
   it('uses ELSER content retriever as second retriever', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     expect(getStandardRetriever(request, 1)?.query).toHaveProperty('semantic');
   });
 
   it('uses BM25 structure retriever as third retriever', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     const bm25Query = getBm25Query(request, 2);
     expect(bm25Query).toBeDefined();
   });
 
   it('uses ELSER structure retriever as fourth retriever', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     expect(getStandardRetriever(request, 3)?.query).toHaveProperty('semantic');
   });
 
   it('lesson BM25 includes fuzziness for typo tolerance', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagorus', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagorus', size: 10 });
     const bm25Query = getBm25Query(request, 0);
     expect(bm25Query?.fuzziness).toBeDefined();
   });
 
   it('configures RRF fusion parameters', () => {
-    const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
+    const request = buildLessonRrfRequest({ query: 'pythagoras theorem', size: 10 });
     expect(request.retriever?.rrf?.rank_window_size).toBeDefined();
     expect(request.retriever?.rrf?.rank_constant).toBeDefined();
   });
 
   it('includes filters when subject and keyStage provided', () => {
     const request = buildLessonRrfRequest({
-      text: 'test',
+      query: 'test',
       size: 10,
       subject: 'maths',
       keyStage: 'ks4',
@@ -118,18 +118,18 @@ describe('buildLessonRrfRequest (four-way)', () => {
 
 describe('buildUnitRrfRequest (four-way)', () => {
   it('builds request with correct index and size', () => {
-    const request = buildUnitRrfRequest({ text: 'algebra', size: 10 });
+    const request = buildUnitRrfRequest({ query: 'algebra', size: 10 });
     expect(request.index).toBe('oak_unit_rollup');
     expect(request.size).toBe(10);
   });
 
   it('includes RRF retriever with four sub-retrievers', () => {
-    const request = buildUnitRrfRequest({ text: 'algebra', size: 10 });
+    const request = buildUnitRrfRequest({ query: 'algebra', size: 10 });
     expect(request.retriever?.rrf?.retrievers).toHaveLength(4);
   });
 
   it('unit BM25 uses fuzzy matching (recall > precision)', () => {
-    const request = buildUnitRrfRequest({ text: 'trigonometree', size: 10 });
+    const request = buildUnitRrfRequest({ query: 'trigonometree', size: 10 });
     const bm25Query = getBm25Query(request, 0);
     // Units prioritize recall over precision - fuzziness enabled, no minimum_should_match
     expect(bm25Query?.fuzziness).toBeDefined();
@@ -137,13 +137,13 @@ describe('buildUnitRrfRequest (four-way)', () => {
   });
 
   it('uses ELSER for semantic matching', () => {
-    const request = buildUnitRrfRequest({ text: 'algebra', size: 10 });
+    const request = buildUnitRrfRequest({ query: 'algebra', size: 10 });
     expect(getStandardRetriever(request, 1)?.query).toHaveProperty('semantic');
   });
 
   it('includes filters when subject and keyStage provided', () => {
     const request = buildUnitRrfRequest({
-      text: 'test',
+      query: 'test',
       size: 10,
       subject: 'maths',
       keyStage: 'ks4',

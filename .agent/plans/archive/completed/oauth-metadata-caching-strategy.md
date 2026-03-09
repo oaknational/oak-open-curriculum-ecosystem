@@ -18,7 +18,7 @@
 - ✅ Architectural integrity restored (decouple from Clerk availability)
 - ✅ Performance improved (reduce unnecessary network calls)
 - ✅ Developer experience improved (honest documentation, clear decisions)
-- ✅ Testing strategy aligned (@rules.md compliance)
+- ✅ Testing strategy aligned (@principles.md compliance)
 
 **Principle Applied:**
 
@@ -375,7 +375,7 @@ Create `apps/oak-curriculum-mcp-streamable-http/e2e-tests/oauth-metadata-caching
  * E2E tests for OAuth metadata caching behavior.
  *
  * These tests prove whether caching OAuth metadata is safe or breaks OAuth flow.
- * Per @rules.md: "Test real behaviour, not implementation details"
+ * Per @principles.md: "Test real behaviour, not implementation details"
  *
  * TEST BOUNDARIES: These are E2E tests that:
  * - Start actual HTTP server
@@ -1193,7 +1193,7 @@ pnpm markdownlint
 - ✅ Integration tests verify policy application
 - ✅ No skipped tests
 
-### Architecture Requirements (Per @rules.md)
+### Architecture Requirements (Per @principles.md)
 
 - ✅ Evidence-based decisions (not assumptions)
 - ✅ TDD followed (tests first, then implementation)
@@ -1379,7 +1379,7 @@ If validation fails:
 
 ### Rules & Standards
 
-- **@rules.md**: TDD, evidence-based decisions, testing strategy
+- **@principles.md**: TDD, evidence-based decisions, testing strategy
 - **@testing-strategy.md**: Test behavior not implementation, E2E test boundaries
 - **RFC 9728**: OAuth 2.0 Protected Resource Metadata (no caching requirements)
 - **RFC 8414**: OAuth 2.0 Authorization Server Metadata

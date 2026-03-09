@@ -82,13 +82,13 @@ describe('runHybridSearch', () => {
   it('executes scope-specific searches with normalised pagination', async () => {
     const result = await runHybridSearch({
       scope: 'units',
-      text: 'fractions',
+      query: 'fractions',
       size: 150,
       from: -5,
     });
 
     expect(runUnitsSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ scope: 'units', text: 'fractions' }),
+      expect.objectContaining({ scope: 'units', query: 'fractions' }),
       100,
       0,
       true,
@@ -100,12 +100,12 @@ describe('runHybridSearch', () => {
   it('returns base result when facets are not requested', async () => {
     const result = await runHybridSearch({
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       includeFacets: false,
     });
 
     expect(runLessonsSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ scope: 'lessons', text: 'fractions' }),
+      expect.objectContaining({ scope: 'lessons', query: 'fractions' }),
       25,
       0,
       true,
@@ -119,7 +119,7 @@ describe('runHybridSearch', () => {
 
     const result = await runHybridSearch({
       scope: 'lessons',
-      text: 'fractions',
+      query: 'fractions',
       subject: 'maths',
       keyStage: 'ks2',
       includeFacets: true,

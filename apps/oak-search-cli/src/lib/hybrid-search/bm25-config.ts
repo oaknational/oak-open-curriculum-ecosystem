@@ -90,12 +90,12 @@ export const BM25_CONFIG_NAMES: readonly Bm25ConfigName[] = [
 
 /** Build primary multi_match query with config options. */
 function buildPrimaryMatch(
-  text: string,
+  query: string,
   fields: string[],
   config: Bm25Config,
 ): estypes.QueryDslMultiMatchQuery {
   const q: estypes.QueryDslMultiMatchQuery = {
-    query: text,
+    query,
     type: 'best_fields',
     tie_breaker: 0.2,
     fuzziness: config.fuzziness,
@@ -114,18 +114,18 @@ function buildPrimaryMatch(
 }
 
 /** Build phrase prefix match for bool.should. */
-function buildPhrasePrefix(text: string, fields: string[], boost: number): QueryContainer {
-  return { multi_match: { query: text, type: 'phrase_prefix', fields, boost } };
+function buildPhrasePrefix(query: string, fields: string[], boost: number): QueryContainer {
+  return { multi_match: { query, type: 'phrase_prefix', fields, boost } };
 }
 
 /** Creates a configurable BM25 retriever for ablation testing. */
 export function createConfigurableBm25Retriever(
-  text: string,
+  query: string,
   fields: string[],
   filter: QueryContainer | undefined,
   config: Bm25Config,
 ): estypes.RetrieverContainer {
-  const primary = buildPrimaryMatch(text, fields, config);
+  const primary = buildPrimaryMatch(query, fields, config);
   if (!config.enablePhrasePrefix) {
     return { standard: { query: { multi_match: primary }, filter } };
   }
@@ -135,7 +135,7 @@ export function createConfigurableBm25Retriever(
         bool: {
           should: [
             { multi_match: primary },
-            buildPhrasePrefix(text, fields, config.phrasePrefixBoost),
+            buildPhrasePrefix(query, fields, config.phrasePrefixBoost),
           ],
           minimum_should_match: 1,
         },

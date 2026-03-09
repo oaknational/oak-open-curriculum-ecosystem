@@ -17,7 +17,7 @@ import {
 
 describe('buildLessonRerankingRrfRequest', () => {
   const defaultParams: LessonRerankingParams = {
-    text: 'quadratic equations',
+    query: 'quadratic equations',
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',
@@ -45,10 +45,10 @@ describe('buildLessonRerankingRrfRequest', () => {
     expect(reranker?.inference_id).toBe('.rerank-v1-elasticsearch');
   });
 
-  it('sets inference_text to the query text', () => {
+  it('sets inference_text to the query', () => {
     const request = buildLessonRerankingRrfRequest({
       ...defaultParams,
-      text: 'that sohcahtoa stuff for triangles',
+      query: 'that sohcahtoa stuff for triangles',
     });
 
     const reranker = request.retriever?.text_similarity_reranker;
@@ -90,7 +90,7 @@ describe('buildLessonRerankingRrfRequest', () => {
 
 describe('buildUnitRerankingRrfRequest', () => {
   const defaultParams: UnitRerankingParams = {
-    text: 'algebra and graphs',
+    query: 'algebra and graphs',
     size: 10,
     subject: 'maths',
     keyStage: 'ks4',

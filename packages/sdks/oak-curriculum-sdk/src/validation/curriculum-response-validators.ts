@@ -17,7 +17,6 @@ import {
   type JsonBody200,
   type OperationId,
 } from '@oaknational/sdk-codegen/api-schema';
-import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
 import type { CurriculumSchemaDefinition } from '@oaknational/sdk-codegen/zod';
 
 /**
@@ -76,6 +75,12 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
 
 /**
  * Validates response data for an API operation
+ *
+ * This function validates against the SDK response schema, including generated
+ * decorations such as the optional `canonicalUrl` field. It does not derive or
+ * augment `canonicalUrl`; that decoration happens at the client
+ * response-augmentation middleware boundary, where a concrete request URL is
+ * available.
  * @param path - The API path template (e.g., '/lessons/\{lesson\}/transcript')
  * @param method - The HTTP method
  * @param statusCode - The HTTP response status code
@@ -213,10 +218,6 @@ function finalizeOk200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   value: unknown,
 ): ValidationResult<JsonBody200<P, M>> {
   if (isResponseJsonBody200(path, method, value)) {
-    // Augment with canonical URL for GET requests (single objects; arrays handled higher up)
-    if (method === 'get' && !Array.isArray(value)) {
-      return { ok: true, value: augmentResponseWithCanonicalUrl(value, path, method) };
-    }
     return { ok: true, value };
   }
   const unexpectedShape: ValidationFailure = {

@@ -8,7 +8,6 @@ This collection tracks developer-experience planning work under ADR-117 lifecycl
 - `current/` — executable plans queued next
 - `future/` — strategic backlog for later promotion
 - `archive/` — completed and superseded history
-- `governance/` — governance-specific review artefacts
 
 ## Manual Re-triage Record (2026-03-03)
 
@@ -36,7 +35,16 @@ On 2026-03-03 the collection was manually migrated into lifecycle lanes, and the
   - `archive/superseded/eslint-override-removal.plan.md`
 - Cross-collection folded/delegated sources (2026-03-04):
   - `../architecture-and-infrastructure/no-console-enforcement.plan.md` (superseded and folded here)
-  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md` (boundary/separation + split-guidance subset delegated here; `max-files-per-dir` deferred)
+  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md` (strictness-adjacent architectural work now references the canonical directory-complexity plan below)
+
+## Canonical Directory-Complexity Plan
+
+- Current canonical plan: `current/directory-complexity-enablement.execution.plan.md`
+- Purpose: define the supporting enforcement bundle and staged rollout gates required before Oak enables `max-files-per-dir`
+- Folded/delegated sources:
+  - `active/devx-strictness-convergence.plan.md` (directory-complexity subset extracted)
+  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  - `../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 
 ## Indexes
 

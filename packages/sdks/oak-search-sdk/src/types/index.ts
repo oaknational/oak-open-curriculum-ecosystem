@@ -46,7 +46,26 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
+  DocCountExpectations,
+  DocCountVerification,
+  IndexDocCountStatus,
 } from './admin.js';
+
+// Index lifecycle service types (ADR-130)
+export type {
+  AliasSwap,
+  AliasTargetInfo,
+  AliasTargetMap,
+  IndexLifecycleDeps,
+  IndexLifecycleService,
+  VersionedIngestOptions,
+  VersionedIngestResult,
+  StageResult,
+  PromoteResult,
+  RollbackResult,
+  AliasValidationResult,
+  AliasHealthEntry,
+} from './index-lifecycle-types.js';
 
 // Observability service interface and types
 export type {

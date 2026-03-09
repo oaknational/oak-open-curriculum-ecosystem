@@ -133,7 +133,7 @@ describe('add404ResponsesWhereExpected', () => {
 
   describe('strictness enforcement', () => {
     it('default descriptors do not use additionalProperties: true alongside explicit properties', () => {
-      // additionalProperties: true is equivalent to z.any() - violates rules.md "No type shortcuts"
+      // additionalProperties: true is equivalent to z.any() - violates principles.md "No type shortcuts"
       // When we have explicit properties defined, we should NOT allow arbitrary additional keys
       const schemaJson = JSON.stringify(ENDPOINTS_WITH_LEGITIMATE_404S);
       expect(schemaJson).not.toContain('"additionalProperties":true');

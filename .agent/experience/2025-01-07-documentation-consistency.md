@@ -52,7 +52,7 @@ Combining `architecture.md` and `experimental-architecture-quick-reference.md` i
 
 ### 4. Rules Need Multiple Scales
 
-The discovery that `rules.md` only covered psychon-level architecture highlighted the need for workspace-level guidance. Adding Moria/Histoi/Psycha import rules clarified boundaries.
+The discovery that `principles.md` only covered psychon-level architecture highlighted the need for workspace-level guidance. Adding Moria/Histoi/Psycha import rules clarified boundaries.
 
 ## Technical Achievements
 
@@ -101,7 +101,7 @@ Continue documenting significant learnings and decisions as experience documents
 Key documentation files updated:
 
 - `.agent/directives/AGENT.md`
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `docs/ARCHITECTURE_MAP.md`
 - `docs/agent-guidance/architecture.md`
 - `.agent/directives/testing-strategy.md`

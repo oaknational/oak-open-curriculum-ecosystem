@@ -69,7 +69,7 @@ order before editing anything:
    - `.agent/plans/semantic-search/active/subagent-ecosystem-gap-analysis-and-remediation-2026-02-21.plan.md`
 2. Core directives:
    - `.agent/directives/AGENT.md`
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 3. Sub-agent composition architecture:
@@ -339,7 +339,7 @@ Tasks:
 
 - Candidate baseline:
   - `.agent/directives/AGENT.md`
-  - `.agent/directives/rules.md`
+  - `.agent/directives/principles.md`
   - domain-specific directive(s)
   - DRY/YAGNI component
 - Files to align (minimum):
@@ -364,7 +364,7 @@ Tasks:
 - Action:
   - Ensure both templates include `## Reading Requirements (MANDATORY)`.
   - Ensure `.agent/directives/testing-strategy.md` appears before
-    `.agent/directives/rules.md` and `.agent/directives/AGENT.md`.
+    `.agent/directives/principles.md` and `.agent/directives/AGENT.md`.
   - Ensure code reviewer guidance includes explicit TDD enforcement and
     evidence-based analysis expectations.
 - Acceptance criteria:

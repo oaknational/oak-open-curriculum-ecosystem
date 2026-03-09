@@ -75,6 +75,6 @@ fixtures were the last remaining place that broke this principle.
 
 ## References
 
-- Cardinal rule: `.agent/directives/rules.md`
+- Cardinal rule: `.agent/directives/principles.md`
 - Architecture updates: `apps/oak-search-cli/docs/ARCHITECTURE.md`
 - Indexing + Query docs describing fixture workflow

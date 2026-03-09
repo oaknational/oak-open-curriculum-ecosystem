@@ -13,6 +13,7 @@ Before archival, mine completed outcomes into permanent documentation
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| MCP Result Pattern Unification | 2026-03-08 | Converged MCP tool execution on `Result<T, E>` across curriculum SDK and MCP consumers. `executeToolCall` returns `Result<ToolExecutionSuccess, McpToolError \| McpParameterError>`, `extractExecutionData` removed, stdio + streamable-http consumers migrated. | [archived plan](semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md) |
 | SDK Workspace Separation | 2026-02-25 | Split curriculum-sdk into generation (`@oaknational/sdk-codegen`) and runtime workspaces. Phases 0-7 complete. Two pipelines (API + bulk), 11 subpath exports, boundary rules, 4 package/repo renames. 12-gate quality chain, 8 specialist reviews. | [archived plan](semantic-search/archive/completed/sdk-workspace-separation.md) |
 | Phase 7 Merge Readiness | 2026-02-25 | Consolidation, full quality gate chain, determinism verification, specialist reviews. F16 drift check implemented then removed (redundant with pnpm check). | [archived plan](semantic-search/archive/completed/phase_7_and_merge_readiness.plan.md) |
 | MCP Tool Snagging | 2026-02-23 | 5 SDK tool bugs (response augmentation, suggest, schema validation) fixed with TDD, smoke-tested end-to-end across 32 tools. Logger architectural bug also fixed with DI. | [archived plan](semantic-search/archive/completed/search-snagging.md) |
@@ -35,6 +36,7 @@ Before archival, mine completed outcomes into permanent documentation
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
 | Merge Readiness | 2026-03-02 | `feat/semantic_search_deployment` merged to `main`. MCP prompts investigated (ADR-123), onboarding review complete, quality gates green, secrets sweep done. | [archived plan](sdk-and-mcp-enhancements/archive/completed/merge-readiness.plan.md) |
+| Search `text` → `query` Rename | 2026-03-07 | Renamed the primary search/explore-topic MCP parameter from `text` to `query` across SDK, MCP, CLI, codegen, tests, prompts, and docs. Full specialist-review remediation completed and the governance follow-through that closed the wrapper/rules gap was recorded. | [archived plan](sdk-and-mcp-enhancements/archive/completed/search-tool-text-to-query-rename.plan.md) |
 | Folder Modernisation Meta Plan | 2026-02-22 | Legacy numbered plans archived under collection archive classes, disposition ledger established, governance docs normalised, and ADR-071 collision resolved by retaining widget URI ADR as 071 and renumbering dense-vector ADR to 118. | [archived plan](sdk-and-mcp-enhancements/archive/completed/folder-modernisation-meta-plan.md) |
 
 ---

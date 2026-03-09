@@ -134,7 +134,7 @@ Tests should NOT validate Zod schema structure - that's what type-check does. Te
 
 Before each phase:
 
-1. **Re-read** `rules.md` - Cardinal rule, no type shortcuts
+1. **Re-read** `principles.md` - Cardinal rule, no type shortcuts
 2. **Re-read** `testing-strategy.md` - TDD proves behavior, not types
 3. **Re-read** `schema-first-execution.md` - Generator is single source of truth
 4. **Ask**: "Is this generated, not hand-written?"
@@ -623,9 +623,9 @@ pnpm build && pnpm type-check && pnpm lint && pnpm test && pnpm test:e2e
 
 Verify compliance with foundation documents:
 
-- [ ] **rules.md - Cardinal Rule**: Prompts generated at type-gen time, flow from SDK
-- [ ] **rules.md - No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>`
-- [ ] **rules.md - No Zod v3 outside openapi-zod-client-adapter workspace**: All other workspaces must use Zod v4 only
+- [ ] **principles.md - Cardinal Rule**: Prompts generated at type-gen time, flow from SDK
+- [ ] **principles.md - No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>`
+- [ ] **principles.md - No Zod v3 outside openapi-zod-client-adapter workspace**: All other workspaces must use Zod v4 only
 - [ ] **testing-strategy.md - TDD**: E2E tests specified behavior; implementation made them pass
 - [ ] **testing-strategy.md - Tests prove behavior**: Tests don't validate Zod schema structure
 - [ ] **schema-first-execution.md**: Generator is source of truth
@@ -731,7 +731,7 @@ Lint validates:
 
 ### Foundation Documents
 
-- `rules.md` - Cardinal rule, no type shortcuts
+- `principles.md` - Cardinal rule, no type shortcuts
 - `testing-strategy.md` - TDD proves behavior
 - `schema-first-execution.md` - Generator is source of truth
 

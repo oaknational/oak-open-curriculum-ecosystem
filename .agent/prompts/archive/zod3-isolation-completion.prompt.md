@@ -89,5 +89,5 @@ Read: `.agent/plans/sdk-and-mcp-enhancements/05-zod-v4-export-implementation-pla
 
 Read before starting:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`

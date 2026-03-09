@@ -36,7 +36,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 
 ## How Patterns Differ from Rules
 
-**Rules** (in `.agent/directives/rules.md`) are principles: "never use `as`". **Patterns** are "how to implement the principle": replace the `as` cast with a const map lookup. Rules say what; patterns say how.
+**Rules** (in `.agent/directives/principles.md`) are principles: "never use `as`". **Patterns** are "how to implement the principle": replace the `as` cast with a const map lookup. Rules say what; patterns say how.
 
 ## How Patterns Differ from Source Code
 

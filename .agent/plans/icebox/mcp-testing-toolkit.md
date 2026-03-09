@@ -10,7 +10,7 @@
 
 ## Why This Is In The Icebox
 
-Per @rules.md:
+Per @principles.md:
 
 > **YAGNI** - You Aren't Gonna Need It
 
@@ -67,7 +67,7 @@ Per @rules.md:
 
 ## Design Principles (When We Build This)
 
-### Follow @rules.md and @testing-strategy.md
+### Follow @principles.md and @testing-strategy.md
 
 **Pure Functions First:**
 
@@ -366,7 +366,7 @@ describe('executeInspectorCommand', () => {
 
 ### Project Standards
 
-- `.agent/directives/rules.md` - TDD, pure functions, YAGNI
+- `.agent/directives/principles.md` - TDD, pure functions, YAGNI
 - `.agent/directives/testing-strategy.md` - Test types and boundaries
 
 ### Tools

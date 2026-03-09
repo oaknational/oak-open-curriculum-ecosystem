@@ -71,6 +71,15 @@ Do not mark a phase complete without an entry.
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
 
+## Elasticsearch Specialist Capability (Adjacent Work)
+
+- Status: in-progress (2026-03-07)
+- ADR-119 update or rationale: No-change — ADR-119 covers specialist reviewers generically ("Agents — specialist reviewers, their three-layer prompt architecture (ADR-114)") and does not enumerate individual specialists. Adding the Elasticsearch reviewer does not change the practice's conceptual boundary.
+- practice.md update or rationale: Updated provenance metadata — specialist reviewer count incremented from 13 to 14.
+- Other ADR/docs/README updates: ADR-129 References section updated (template count 12 → 13). Artefact inventory updated (skills 16 → 18, rules 16 → 21). AGENT.md specialist roster updated. invoke-code-reviewers.md triage/examples updated. Collection indexes (README, roadmap, current, active) updated to reflect plan promotion.
+- Consolidation review (`jc-consolidate-docs`): pending
+- Notes: Phases 0–3 of the execution plan are complete. Phase 4 (review + doc sync) is in progress.
+
 ## Phase 5 — Mutation Testing
 
 - Status: pending

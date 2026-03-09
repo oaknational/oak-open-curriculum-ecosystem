@@ -45,7 +45,7 @@ export type SearchRetrievalError =
 
 /** Common parameters shared across all search scopes. */
 export interface SearchParamsBase {
-  readonly text: string;
+  readonly query: string;
   readonly subject?: Subject;
   readonly keyStage?: KeyStage;
   readonly size?: number;

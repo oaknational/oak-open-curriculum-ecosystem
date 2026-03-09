@@ -33,7 +33,7 @@ function createSuggestionsModule(): string {
     `  .object({\n` +
     `    label: z.string().min(1),\n` +
     `    scope: z.enum(${SCOPE_TUPLE}),\n` +
-    `    url: z.string().min(1),\n` +
+    `    url: z.string().optional().default(''),\n` +
     `    subject: z.enum(${SUBJECT_TUPLE}).optional(),\n` +
     `    keyStage: z.enum(${KEY_STAGE_TUPLE}).optional(),\n` +
     `    contexts: SearchSuggestionContextSchema,\n` +

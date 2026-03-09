@@ -27,7 +27,7 @@ Search quality work follows a **sequential progression** (from [ADR-082](../../.
 
 Plans are **sequential** — complete one level before starting the next:
 
-```
+```text
 Level 2: Document Relationships
          ↓
 Level 3: Modern ES Features (includes definition-retrieval; aligned with query policy boundary)
@@ -57,6 +57,21 @@ Supporting plans can run in parallel:
 | Plan | Description | Status |
 |------|-------------|--------|
 | [mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md) | Fix MFL search (0.19-0.29 MRR) | 📋 Pending |
+
+---
+
+## Research Companions
+
+| Research | Purpose |
+|----------|---------|
+| [thread-sequence-derived-surfaces.research.md](thread-sequence-derived-surfaces.research.md) | Maps derived thread/sequence signals, richer summaries, and suggestion surfaces |
+| [learning-graph-surfaces.research.md](learning-graph-surfaces.research.md) | Maps graph-adjacent curriculum surfaces and reusable relationship assets |
+
+## Promoted To Current
+
+| Execution Plan | Purpose |
+|----------------|---------|
+| [../../current/thread-sequence-semantic-surfaces.execution.plan.md](../../current/thread-sequence-semantic-surfaces.execution.plan.md) | Current queued enrichment of thin thread/sequence search targets |
 
 ## Cross-Boundary Dependencies
 

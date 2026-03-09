@@ -4,8 +4,6 @@
  * Creates short-lived, scoped signatures that authenticate download requests
  * without exposing the Oak API key. The signature covers the lesson slug,
  * asset type, and expiry timestamp — any tampering invalidates it.
- *
- * @module
  */
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
@@ -32,19 +30,6 @@ export function createDownloadSignature(
 }
 
 /**
- * Validates an HMAC-SHA256 signature and checks expiry.
- *
- * Uses `timingSafeEqual` to prevent timing attacks on the signature comparison.
- *
- * @param lesson - Lesson slug from the request
- * @param type - Asset type from the request
- * @param signature - Hex-encoded signature from the request
- * @param expiresAt - Expiry timestamp from the request
- * @param secret - Signing secret (must match the one used to create the signature)
- * @param nowMs - Current time in milliseconds (injected for testability)
- * @returns Validation result with `valid: true` or `valid: false` with reason
- */
-/**
  * Derives a signing secret from the Oak API key using HMAC-SHA256 key separation.
  *
  * This ensures the API key is never used directly as an HMAC key. If upstream API
@@ -57,6 +42,19 @@ export function deriveSigningSecret(oakApiKey: string): string {
   return createHmac('sha256', oakApiKey).update('asset-download-signing').digest('hex');
 }
 
+/**
+ * Validates an HMAC-SHA256 signature and checks expiry.
+ *
+ * Uses `timingSafeEqual` to prevent timing attacks on the signature comparison.
+ *
+ * @param lesson - Lesson slug from the request
+ * @param type - Asset type from the request
+ * @param signature - Hex-encoded signature from the request
+ * @param expiresAt - Expiry timestamp from the request
+ * @param secret - Signing secret (must match the one used to create the signature)
+ * @param nowMs - Current time in milliseconds (injected for testability)
+ * @returns Validation result with `valid: true` or `valid: false` with reason
+ */
 export function validateDownloadSignature(
   lesson: string,
   type: string,

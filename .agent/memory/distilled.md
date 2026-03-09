@@ -15,7 +15,8 @@ changing behaviour.
 2026-02-28), and `archive/napkin-2026-03-02.md` (sessions
 2026-02-28 to 2026-03-02), and
 `archive/napkin-2026-03-05.md` (sessions 2026-03-02 to
-2026-03-05).
+2026-03-05), and `archive/napkin-2026-03-07.md` (sessions
+2026-03-05 to 2026-03-07).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -47,14 +48,6 @@ enough for permanent documentation.
   their motivations ("anxious about looking foolish",
   "sceptical by default"), not by focus areas
 
-## Agent Artefact Architecture
-
-See ADR-125 for the full model. Key operational gotcha:
-Claude Code path-scoped rules (`.claude/rules/*.md` with `paths`) load only when
-matching files open. Create them ONLY for glob-scoped triggers — never duplicate
-always-on triggers (already in `CLAUDE.md` → `AGENT.md` → `rules.md` chain).
-Validation: `pnpm portability:check`.
-
 ## Repo-Specific Rules
 
 - ADR index is the source of truth for ADR count; keep
@@ -71,9 +64,8 @@ Validation: `pnpm portability:check`.
   `undefined` at runtime for `instanceof` checks
 - Generated vocab files at `src/generated/vocab/` need
   `pnpm vocab-gen`, not `pnpm sdk-codegen`
-- 23 MCP tools are generated from OpenAPI; 7 are aggregated
-  (hand-authored). Always distinguish — "generated" has
-  precise meaning (ADR-029/030)
+- MCP tool counts: see ADR-123 for the canonical figure.
+  Always distinguish generated vs aggregated (ADR-029/030)
 
 ## TypeScript (Domain-Specific)
 
@@ -93,8 +85,6 @@ Validation: `pnpm portability:check`.
 - ES client v9: `document` not `body` for `client.index()`
 - ES client v9: spread readonly arrays before passing to
   mutable params (`[...synonymSet.synonyms_set]`)
-- Thread subject filter uses `subject_slugs` (plural array
-  field); sequences use `subject_slug` (singular)
 - `extractStatusCode` centralises ES error code extraction
   without assertions
 - Classify network errors by `error.name` (e.g.
@@ -127,17 +117,23 @@ Validation: `pnpm portability:check`.
 - `process.env.X = value` with trailing space in backticks
   triggers MD038
 - Blank line between two blockquotes triggers MD028
-- After moving/archiving plan files, run a repo-wide
-  reference sweep (`rg`) immediately to remove stale links
 
 ## MCP Apps (Domain-Specific)
 
-- `@modelcontextprotocol/ext-apps/server` v1.1.2 is the canonical
+- `@modelcontextprotocol/ext-apps` `^1.2.0` with server helpers
+  from `@modelcontextprotocol/ext-apps/server` is the canonical
   migration vehicle for C4/C5/C6. See
-  `.agent/research/mcp-apps-support.research.md` for host-specific
-  behaviour (ChatGPT, Claude sandbox domains, `_meta.ui.domain`).
+  `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`
+  for host-specific behaviour (ChatGPT, Claude sandbox domains,
+  `_meta.ui.domain`).
 - `_meta.ui.domain` only needed for direct cross-origin `fetch()`
   from the iframe; omit if data flows through MCP bridge.
+- **Four MCP guidance surfaces must agree** when a
+  multi-tool workflow changes: tool `description`, workflow
+  data (flows to `get-curriculum-model` + resources), doc
+  resources, and prompt messages. Tool descriptions are
+  highest leverage — per MCP spec, tools are model-controlled
+  via `description`.
 
 ## Architecture (Domain-Specific)
 
@@ -184,3 +180,5 @@ Validation: `pnpm portability:check`.
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
+| Commitlint rejects commit with uppercase acronym in subject | `subject-case` rule rejects e.g. `ADR-130`. Use lowercase: "complete blue/green lifecycle" not "ADR-130 Phases 3-8d" |
+| Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |

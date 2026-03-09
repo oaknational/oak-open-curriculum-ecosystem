@@ -174,7 +174,7 @@ According to the cardinal rule, ALL of the following must be generated:
 
 ### Cardinal Rule Compliance
 
-From `.agent/directives/rules.md`:
+From `.agent/directives/principles.md`:
 
 > ALL static data structures, types, type guards, Zod schemas, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run. If the upstream OpenAPI schema changes, then running `pnpm type-gen` MUST be sufficient to bring all workspaces into alignment with the new schema.
 
@@ -1492,7 +1492,7 @@ pnpm e2e:thread-search
    - Provides: Entity definitions, relationships, official Oak API alignment
 
 2. **Cardinal rule architecture**
-   - Location: `.agent/directives/rules.md`
+   - Location: `.agent/directives/principles.md`
    - Status: ✅ COMPLETE
    - Defines: Type-gen requirement, schema-first mandate
 
@@ -2050,7 +2050,7 @@ describe('API error tracking', () => {
 
 - [Testing Strategy](../../../.agent/directives/testing-strategy.md)
 - [Schema-First Execution](../../../directives/schema-first-execution.md)
-- [Cardinal Rule](../../../directives/rules.md)
+- [Cardinal Rule](../../../directives/principles.md)
 
 ### Application
 

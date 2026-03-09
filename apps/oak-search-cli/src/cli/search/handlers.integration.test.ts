@@ -67,18 +67,18 @@ function createMockRetrieval(): RetrievalService {
 }
 
 describe('handleSearchLessons', () => {
-  it('passes text and optional filters to the retrieval service', async () => {
+  it('passes query and optional filters to the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
     await handleSearchLessons(retrieval, {
-      text: 'expanding brackets',
+      query: 'expanding brackets',
       subject: 'maths',
       keyStage: 'ks3',
       size: 10,
     });
 
     expect(retrieval.searchLessons).toHaveBeenCalledWith({
-      text: 'expanding brackets',
+      query: 'expanding brackets',
       subject: 'maths',
       keyStage: 'ks3',
       size: 10,
@@ -88,7 +88,7 @@ describe('handleSearchLessons', () => {
   it('returns ok with the search result from the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
-    const result = await handleSearchLessons(retrieval, { text: 'fractions' });
+    const result = await handleSearchLessons(retrieval, { query: 'fractions' });
 
     expect(result.ok).toBe(true);
     if (result.ok) {
@@ -104,17 +104,17 @@ describe('handleSearchLessons', () => {
 });
 
 describe('handleSearchUnits', () => {
-  it('passes text and optional filters to the retrieval service', async () => {
+  it('passes query and optional filters to the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
     await handleSearchUnits(retrieval, {
-      text: 'algebra',
+      query: 'algebra',
       subject: 'maths',
       keyStage: 'ks4',
     });
 
     expect(retrieval.searchUnits).toHaveBeenCalledWith({
-      text: 'algebra',
+      query: 'algebra',
       subject: 'maths',
       keyStage: 'ks4',
     });
@@ -122,32 +122,32 @@ describe('handleSearchUnits', () => {
 });
 
 describe('handleSearchSequences', () => {
-  it('passes text and optional filters to the retrieval service', async () => {
+  it('passes query and optional filters to the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
     await handleSearchSequences(retrieval, {
-      text: 'secondary science',
+      query: 'secondary science',
       size: 5,
     });
 
     expect(retrieval.searchSequences).toHaveBeenCalledWith({
-      text: 'secondary science',
+      query: 'secondary science',
       size: 5,
     });
   });
 });
 
 describe('handleSearchThreads', () => {
-  it('passes text and optional filters to the retrieval service', async () => {
+  it('passes query and optional filters to the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
     await handleSearchThreads(retrieval, {
-      text: 'algebra equations progression',
+      query: 'algebra equations progression',
       subject: 'maths',
     });
 
     expect(retrieval.searchThreads).toHaveBeenCalledWith({
-      text: 'algebra equations progression',
+      query: 'algebra equations progression',
       subject: 'maths',
     });
   });

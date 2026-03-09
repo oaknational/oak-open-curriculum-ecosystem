@@ -26,7 +26,7 @@ import type {
  *
  * @example
  * ```typescript
- * const result = await sdk.retrieval.searchLessons({ text: 'fractions' });
+ * const result = await sdk.retrieval.searchLessons({ query: 'fractions' });
  * if (!result.ok) {
  *   switch (result.error.type) {
  *     case 'es_error':

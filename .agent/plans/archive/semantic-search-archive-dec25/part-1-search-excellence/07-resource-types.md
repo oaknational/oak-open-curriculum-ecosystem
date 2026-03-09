@@ -101,6 +101,6 @@ With faceting by resource type.
 ## Related Documents
 
 - [phase-11-plus-future.md](../phase-11-plus-future.md) - Original detailed plan (Phase 14)
-- [Cardinal Rule](../../../directives/rules.md) - All types from schema at compile time
+- [Cardinal Rule](../../../directives/principles.md) - All types from schema at compile time
 
 

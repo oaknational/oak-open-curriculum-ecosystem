@@ -22,10 +22,10 @@ This ADR fills that gap: it documents which curriculum capabilities are exposed 
 
 ### Tools (model-controlled)
 
-30 curriculum tools: 23 generated from the OpenAPI schema plus 7 aggregated tools (search, browse, fetch, explore, and orientation). The model decides when to call them based on the user's question.
+31 curriculum tools: 23 generated from the OpenAPI schema plus 8 aggregated tools (search, browse, fetch, explore, graph/orientation tools, and `download-asset`). The model decides when to call them based on the user's question.
 
 - **Generated tools** (23) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
-- **Aggregated tools** (7) are hand-authored compositions that orchestrate API calls, search, and reference data. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph`, and `get-curriculum-model` (domain ontology and tool usage guidance).
+- **Aggregated tools** (8) are hand-authored compositions that orchestrate API calls, search, and reference data. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), and `download-asset`.
 
 **Intent**: Let AI assistants search, browse, and fetch curriculum data autonomously.
 

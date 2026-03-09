@@ -1,0 +1,744 @@
+#!/usr/bin/env bash
+# claude-agent-ops — CLI for monitoring and managing Claude Code background agents
+#
+# Claude-specific tooling for the Oak MCP Ecosystem. This tool monitors
+# background agents spawned by Claude Code's Agent tool, tracks their
+# progress via JSONL output files, and helps manage worktree-isolated
+# agent changes that need committing.
+#
+# This is NOT a general-purpose agent framework. It is tightly coupled to
+# Claude Code's background agent model (task output files, git worktrees,
+# sandbox restrictions). Generalisation is future work.
+#
+# Usage:
+#   claude-agent-ops status               Unified dashboard: agents, phases, worktrees
+#   claude-agent-ops status --watch       Auto-refresh dashboard every 5s
+#   claude-agent-ops worktrees            List active agent worktrees with change summary
+#   claude-agent-ops log <agent-id>       Show recent tool calls and text for an agent
+#   claude-agent-ops diff [agent-id]      Show uncommitted changes (all or specific worktree)
+#   claude-agent-ops commit-ready         List agents with uncommitted changes ready to commit
+#   claude-agent-ops preflight            Run pre-flight checks before launching parallel agents
+#   claude-agent-ops cleanup              Remove completed worktrees and orphaned branches
+#
+# Environment:
+#   AGENT_TASKS_DIR     Override Claude tasks output directory (auto-detected)
+#   AGENT_SUBAGENTS_DIR Override subagents JSONL directory (auto-detected)
+#   REPO_ROOT           Override repo root (auto-detected)
+
+set -euo pipefail
+
+# --- Configuration -----------------------------------------------------------
+
+REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+WORKTREE_DIR="${REPO_ROOT}/.claude/worktrees"
+CLAUDE_PROJECTS_DIR="${HOME}/.claude/projects"
+
+# Auto-detect the tasks output directory from Claude's tmp structure
+detect_tasks_dir() {
+  local escaped_repo
+  escaped_repo=$(echo "${REPO_ROOT}" | sed 's|/|-|g')
+  local candidates=(
+    "/private/tmp/claude-502/${escaped_repo}/tasks"
+    "/private/tmp/claude-501/${escaped_repo}/tasks"
+    "/tmp/claude-502/${escaped_repo}/tasks"
+    "/tmp/claude-501/${escaped_repo}/tasks"
+  )
+  for dir in "${candidates[@]}"; do
+    if [[ -d "$dir" ]]; then
+      echo "$dir"
+      return 0
+    fi
+  done
+  find /private/tmp /tmp -maxdepth 4 -type d -name "tasks" -path "*/claude-*/${escaped_repo}/*" 2>/dev/null | head -1
+}
+
+# Auto-detect the subagents directory (JSONL files for worktree agents)
+# Finds the most recently modified session's subagents directory.
+detect_subagents_dir() {
+  local escaped_repo
+  escaped_repo=$(echo "${REPO_ROOT}" | sed 's|/|-|g')
+  local projects_dir="${CLAUDE_PROJECTS_DIR}/${escaped_repo}"
+  if [[ ! -d "$projects_dir" ]]; then
+    return 1
+  fi
+  # Find the session with the most recently modified subagent JSONL
+  find "$projects_dir" -maxdepth 3 -name "agent-*.jsonl" -path "*/subagents/*" 2>/dev/null \
+    | xargs ls -t 2>/dev/null \
+    | head -1 \
+    | xargs dirname 2>/dev/null
+}
+
+AGENT_TASKS_DIR="${AGENT_TASKS_DIR:-$(detect_tasks_dir)}"
+AGENT_SUBAGENTS_DIR="${AGENT_SUBAGENTS_DIR:-$(detect_subagents_dir 2>/dev/null || true)}"
+
+# --- Helpers ------------------------------------------------------------------
+
+# Colour support: only emit ANSI codes when stdout is a real terminal.
+# VSCode tool output viewers and piped output get plain text.
+if [[ -t 1 && "${NO_COLOR:-}" == "" ]]; then
+  bold()  { printf '\033[1m%s\033[0m' "$1"; }
+  green() { printf '\033[32m%s\033[0m' "$1"; }
+  red()   { printf '\033[31m%s\033[0m' "$1"; }
+  yellow(){ printf '\033[33m%s\033[0m' "$1"; }
+  cyan()  { printf '\033[36m%s\033[0m' "$1"; }
+  dim()   { printf '\033[2m%s\033[0m' "$1"; }
+else
+  bold()  { printf '%s' "$1"; }
+  green() { printf '%s' "$1"; }
+  red()   { printf '%s' "$1"; }
+  yellow(){ printf '%s' "$1"; }
+  cyan()  { printf '%s' "$1"; }
+  dim()   { printf '%s' "$1"; }
+fi
+
+# Find the JSONL file for a given agent short ID (8-char prefix from worktree name).
+# Searches both the tasks dir (symlinks) and the subagents dir (direct JSONL).
+find_agent_jsonl() {
+  local short_id="$1"
+
+  # 1. Check subagents dir for matching JSONL (primary source for worktree agents)
+  if [[ -n "${AGENT_SUBAGENTS_DIR:-}" && -d "$AGENT_SUBAGENTS_DIR" ]]; then
+    for f in "${AGENT_SUBAGENTS_DIR}"/agent-${short_id}*.jsonl; do
+      if [[ -f "$f" ]]; then
+        echo "$f"
+        return 0
+      fi
+    done
+  fi
+
+  # 2. Check tasks dir for .output files (symlinks or regular files)
+  if [[ -n "${AGENT_TASKS_DIR:-}" && -d "$AGENT_TASKS_DIR" ]]; then
+    for f in "${AGENT_TASKS_DIR}"/${short_id}*.output; do
+      if [[ -f "$f" ]]; then
+        echo "$f"
+        return 0
+      fi
+    done
+  fi
+
+  return 1
+}
+
+# Extract all agent JSONL file paths (deduplicated by short ID).
+# Returns lines of: short_id|jsonl_path
+list_all_agents() {
+  local -A seen=()
+
+  # Source 1: worktree agents (always interesting — actively doing work)
+  for wt_dir in "${WORKTREE_DIR}"/agent-*; do
+    [[ -d "$wt_dir" ]] || continue
+    local wt_name short_id jsonl
+    wt_name=$(basename "$wt_dir")
+    short_id="${wt_name#agent-}"
+    jsonl=$(find_agent_jsonl "$short_id" 2>/dev/null || true)
+    seen["$short_id"]=1
+    echo "${short_id}|${jsonl}"
+  done
+
+  # Source 2: subagents dir (catches agents without worktrees)
+  if [[ -n "${AGENT_SUBAGENTS_DIR:-}" && -d "$AGENT_SUBAGENTS_DIR" ]]; then
+    for f in "${AGENT_SUBAGENTS_DIR}"/agent-*.jsonl; do
+      [[ -f "$f" ]] || continue
+      local fname short_id
+      fname=$(basename "$f" .jsonl)
+      fname="${fname#agent-}"
+      # Skip compact files
+      [[ "$fname" == compact-* ]] && continue
+      short_id="${fname:0:8}"
+      if [[ -z "${seen[$short_id]+x}" ]]; then
+        # Only include if it has meaningful content (>2 assistant messages)
+        local turns
+        turns=$(grep -c '"role":"assistant"' "$f" 2>/dev/null || echo 0)
+        if [[ "$turns" -ge 2 ]]; then
+          seen["$short_id"]=1
+          echo "${short_id}|${f}"
+        fi
+      fi
+    done
+  fi
+}
+
+# Detect the current phase of an agent by analysing tool call patterns.
+# Phases: researching → implementing → testing → committing → PR → done
+detect_phase() {
+  local jsonl="$1"
+  [[ -f "$jsonl" ]] || { echo "unknown"; return; }
+
+  # Extract tool names in order from the file
+  local tool_seq
+  tool_seq=$(grep -o '"type":"tool_use","id":"[^"]*","name":"[^"]*"' "$jsonl" 2>/dev/null \
+    | sed 's/.*"name":"//;s/"//' || true)
+
+  # Check for completion signals (most specific first)
+  local last_stop
+  last_stop=$(grep -o '"stop_reason":"[^"]*"' "$jsonl" 2>/dev/null | tail -1 | sed 's/"stop_reason":"//;s/"//')
+  if [[ "$last_stop" == "end_turn" ]]; then
+    # Check if it created a PR
+    if echo "$tool_seq" | grep -q "Bash" && grep -q '"gh pr create"' "$jsonl" 2>/dev/null; then
+      echo "done (PR)"
+      return
+    fi
+    echo "done"
+    return
+  fi
+
+  # Check for PR creation phase
+  if grep -q '"gh pr create\|"git push"' "$jsonl" 2>/dev/null; then
+    echo "creating PR"
+    return
+  fi
+
+  # Check for committing phase
+  if grep -q '"git commit"' "$jsonl" 2>/dev/null; then
+    echo "committing"
+    return
+  fi
+
+  # Check for testing/quality gate phase (look at recent tool calls)
+  local recent_tools
+  recent_tools=$(echo "$tool_seq" | tail -10)
+  if echo "$recent_tools" | grep -q "Bash"; then
+    # Check recent bash commands for quality gate patterns
+    local recent_bash
+    recent_bash=$(grep -o '"command":"[^"]*"' "$jsonl" 2>/dev/null | tail -5 | sed 's/"command":"//;s/"//')
+    if echo "$recent_bash" | grep -qE "pnpm (test|build|type-check|lint|format|markdownlint)"; then
+      echo "testing"
+      return
+    fi
+  fi
+
+  # Check for implementation phase (Write/Edit tools present)
+  if echo "$tool_seq" | grep -qE "^(Write|Edit)$"; then
+    # If recent tools are still Write/Edit, actively implementing
+    if echo "$recent_tools" | grep -qE "^(Write|Edit)$"; then
+      echo "implementing"
+      return
+    fi
+    # Wrote code earlier, now doing something else
+    echo "implementing"
+    return
+  fi
+
+  # Default: researching (Read/Grep/Glob only)
+  echo "researching"
+}
+
+# Get elapsed time since the agent started (from first JSONL timestamp).
+elapsed_time() {
+  local jsonl="$1"
+  [[ -f "$jsonl" ]] || { echo "—"; return; }
+
+  local first_ts
+  first_ts=$(head -1 "$jsonl" 2>/dev/null | grep -o '"timestamp":"[^"]*"' | sed 's/"timestamp":"//;s/"//' || true)
+  if [[ -z "$first_ts" ]]; then
+    echo "—"
+    return
+  fi
+
+  local start_epoch now_epoch
+  # Handle ISO 8601 timestamps
+  start_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${first_ts%%.*}" "+%s" 2>/dev/null || true)
+  if [[ -z "$start_epoch" ]]; then
+    echo "—"
+    return
+  fi
+  now_epoch=$(date "+%s")
+  local diff=$((now_epoch - start_epoch))
+  local mins=$((diff / 60))
+  local secs=$((diff % 60))
+  if [[ $mins -ge 60 ]]; then
+    local hrs=$((mins / 60))
+    mins=$((mins % 60))
+    printf "%dh%02dm" "$hrs" "$mins"
+  elif [[ $mins -gt 0 ]]; then
+    printf "%dm%02ds" "$mins" "$secs"
+  else
+    printf "%ds" "$secs"
+  fi
+}
+
+# Count tool calls in a JSONL file.
+count_tools() {
+  local jsonl="$1"
+  [[ -f "$jsonl" ]] || { echo 0; return; }
+  grep -c '"type":"tool_use"' "$jsonl" 2>/dev/null || echo 0
+}
+
+# Get the last N tool names from a JSONL file.
+last_tools() {
+  local jsonl="$1" count="${2:-5}"
+  [[ -f "$jsonl" ]] || return
+  grep -o '"type":"tool_use","id":"[^"]*","name":"[^"]*"' "$jsonl" 2>/dev/null \
+    | tail -"$count" \
+    | sed 's/.*"name":"//;s/"//'
+}
+
+# Check if a worktree exists for an agent ID
+worktree_for_agent() {
+  local agent_id="$1"
+  local dir="${WORKTREE_DIR}/agent-${agent_id}"
+  if [[ -d "$dir" ]]; then
+    echo "$dir"
+  fi
+}
+
+# --- Commands -----------------------------------------------------------------
+
+cmd_status() {
+  local watch_mode=false
+  if [[ "${1:-}" == "--watch" || "${1:-}" == "-w" ]]; then
+    watch_mode=true
+  fi
+
+  if [[ "$watch_mode" == true ]]; then
+    while true; do
+      clear
+      _render_status
+      dim "Refreshing every 5s. Ctrl-C to stop."
+      printf "\n"
+      sleep 5
+    done
+  else
+    _render_status
+  fi
+}
+
+_render_status() {
+  printf "\n"
+  bold "Agent Dashboard"
+  printf "  "
+  dim "$(date '+%H:%M:%S')"
+  printf "\n\n"
+
+  # Header
+  printf "  %-10s %-14s %6s %7s  %-14s  %s\n" \
+    "AGENT" "PHASE" "TOOLS" "ELAPSED" "WORKTREE" "RECENT TOOLS"
+  printf "  %-10s %-14s %6s %7s  %-14s  %s\n" \
+    "────────" "───────────" "─────" "───────" "───────────" "──────────────"
+
+  local count=0
+  while IFS='|' read -r short_id jsonl; do
+    [[ -z "$short_id" ]] && continue
+    count=$((count + 1))
+
+    # Phase detection
+    local phase="unknown"
+    local tools_count="—"
+    local elapsed="—"
+    local recent=""
+
+    if [[ -n "$jsonl" && -f "$jsonl" ]]; then
+      phase=$(detect_phase "$jsonl")
+      tools_count=$(count_tools "$jsonl")
+      elapsed=$(elapsed_time "$jsonl")
+      recent=$(last_tools "$jsonl" 5 | tr '\n' ' ')
+    fi
+
+    # Coloured phase
+    local phase_display
+    case "$phase" in
+      researching)   phase_display=$(dim "$phase");;
+      implementing)  phase_display=$(cyan "$phase");;
+      testing)       phase_display=$(yellow "$phase");;
+      committing)    phase_display=$(yellow "$phase");;
+      "creating PR") phase_display=$(green "$phase");;
+      "done (PR)")   phase_display=$(green "$phase");;
+      done)          phase_display=$(green "$phase");;
+      *)             phase_display=$(dim "$phase");;
+    esac
+
+    # Worktree info
+    local wt_dir wt_info=""
+    wt_dir=$(worktree_for_agent "$short_id")
+    if [[ -n "$wt_dir" ]]; then
+      local wt_changes
+      wt_changes=$(git -C "$wt_dir" status --short 2>/dev/null | wc -l | tr -d ' ')
+      local wt_commits
+      wt_commits=$(git -C "$wt_dir" log --oneline "HEAD...ff746ac2" 2>/dev/null | wc -l | tr -d ' ')
+      if [[ "$wt_commits" -gt 0 ]]; then
+        wt_info="${wt_commits}c/${wt_changes}f"
+      else
+        wt_info="${wt_changes}f"
+      fi
+    fi
+
+    printf "  %-10s %-14s %6s %7s  %-14s  %s\n" \
+      "$short_id" \
+      "$phase_display" \
+      "$tools_count" \
+      "$elapsed" \
+      "$wt_info" \
+      "$recent"
+  done < <(list_all_agents)
+
+  if [[ $count -eq 0 ]]; then
+    echo "  No agents found."
+    printf "\n"
+    dim "  Searched:"
+    printf "\n"
+    [[ -n "${AGENT_SUBAGENTS_DIR:-}" ]] && { dim "    subagents: ${AGENT_SUBAGENTS_DIR}"; printf "\n"; }
+    [[ -n "${AGENT_TASKS_DIR:-}" ]] && { dim "    tasks:     ${AGENT_TASKS_DIR}"; printf "\n"; }
+    dim "    worktrees: ${WORKTREE_DIR}"
+    printf "\n"
+  fi
+  printf "\n"
+}
+
+cmd_worktrees() {
+  printf "\n"
+  bold "Agent Worktrees"
+  printf "\n\n"
+
+  if [[ ! -d "$WORKTREE_DIR" ]]; then
+    echo "No worktree directory at ${WORKTREE_DIR}"
+    exit 0
+  fi
+
+  local count=0
+  for wt_dir in "${WORKTREE_DIR}"/agent-*; do
+    [[ -d "$wt_dir" ]] || continue
+    local wt_name branch changes
+    wt_name=$(basename "$wt_dir")
+    branch=$(git -C "$wt_dir" branch --show-current 2>/dev/null || echo "detached")
+    changes=$(git -C "$wt_dir" status --short 2>/dev/null | wc -l | tr -d ' ')
+
+    printf "  %s\n" "$(bold "$wt_name")"
+    printf "    Branch:  %s\n" "$branch"
+    printf "    Changes: %s files\n" "$changes"
+
+    if [[ "$changes" -gt 0 ]]; then
+      git -C "$wt_dir" status --short 2>/dev/null | head -10 | sed 's/^/    /'
+    fi
+    printf "\n"
+    count=$((count + 1))
+  done
+
+  if [[ $count -eq 0 ]]; then
+    echo "  No active worktrees."
+  fi
+}
+
+cmd_log() {
+  local agent_id="${1:-}"
+  if [[ -z "$agent_id" ]]; then
+    echo "Usage: claude-agent-ops log <agent-id>"
+    echo "  Use 'claude-agent-ops status' to see agent IDs"
+    exit 1
+  fi
+
+  # Find the JSONL file (support partial ID match)
+  local jsonl
+  jsonl=$(find_agent_jsonl "$agent_id" 2>/dev/null || true)
+
+  if [[ -z "$jsonl" || ! -f "$jsonl" ]]; then
+    echo "No output file found for agent: ${agent_id}"
+    echo "  Searched subagents dir and tasks dir."
+    exit 1
+  fi
+
+  printf "\n"
+  bold "Agent Log: ${agent_id}"
+  printf "\n"
+  dim "File: ${jsonl}"
+  printf "\n\n"
+
+  # Show last N tool calls with their names and a snippet of text output
+  printf "  %s\n" "$(bold "Recent tool calls:")"
+  grep -o '"type":"tool_use","id":"[^"]*","name":"[^"]*"' "$jsonl" 2>/dev/null \
+    | tail -15 \
+    | sed 's/.*"name":"//;s/"//' \
+    | while IFS= read -r tool_name; do
+        printf "    %s %s\n" "$(dim "·")" "$tool_name"
+      done
+
+  printf "\n"
+
+  # Show last 10 assistant text messages
+  printf "  %s\n" "$(bold "Recent messages:")"
+  python3 -c "
+import json, sys
+texts = []
+with open('${jsonl}') as f:
+    for line in f:
+        try:
+            d = json.loads(line)
+            msg = d.get('message', {})
+            if msg.get('role') != 'assistant':
+                continue
+            content = msg.get('content', '')
+            if isinstance(content, list):
+                for block in content:
+                    if block.get('type') == 'text' and block.get('text', '').strip():
+                        texts.append(block['text'][:200])
+            elif isinstance(content, str) and content.strip():
+                texts.append(content[:200])
+        except: pass
+for t in texts[-10:]:
+    first_line = t.split(chr(10))[0]
+    print(f'    {first_line}')
+" 2>/dev/null
+
+  printf "\n"
+
+  # Summary stats
+  local tools_count elapsed phase
+  tools_count=$(count_tools "$jsonl")
+  elapsed=$(elapsed_time "$jsonl")
+  phase=$(detect_phase "$jsonl")
+
+  dim "  Phase: ${phase} | Tools: ${tools_count} | Elapsed: ${elapsed}"
+  printf "\n"
+}
+
+cmd_diff() {
+  local agent_id="${1:-}"
+
+  if [[ -n "$agent_id" ]]; then
+    local wt
+    wt=$(worktree_for_agent "$agent_id")
+    if [[ -z "$wt" ]]; then
+      echo "No worktree found for agent: ${agent_id}"
+      exit 1
+    fi
+    git -C "$wt" diff --stat
+    echo
+    git -C "$wt" diff
+  else
+    printf "\n"
+    bold "Uncommitted changes in main working tree"
+    printf "\n\n"
+    git diff --stat
+    echo
+    git diff --name-only -- ':(exclude).claude/worktrees'
+  fi
+}
+
+cmd_commit_ready() {
+  printf "\n"
+  bold "Agents with uncommitted changes"
+  printf "\n\n"
+
+  # Check main working tree
+  local main_changes
+  main_changes=$(git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$main_changes" -gt 0 ]]; then
+    printf "  %s — %s files changed\n" "$(bold "main working tree")" "$main_changes"
+    git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | head -15 | sed 's/^/    /'
+    printf "\n"
+  fi
+
+  # Check worktrees
+  for wt_dir in "${WORKTREE_DIR}"/agent-*; do
+    [[ -d "$wt_dir" ]] || continue
+    local changes
+    changes=$(git -C "$wt_dir" status --short 2>/dev/null | wc -l | tr -d ' ')
+    if [[ "$changes" -gt 0 ]]; then
+      local wt_name branch
+      wt_name=$(basename "$wt_dir")
+      branch=$(git -C "$wt_dir" branch --show-current 2>/dev/null || echo "?")
+      printf "  %s (%s) — %s files changed\n" "$(bold "$wt_name")" "$branch" "$changes"
+      git -C "$wt_dir" status --short 2>/dev/null | head -10 | sed 's/^/    /'
+      printf "\n"
+    fi
+  done
+}
+
+cmd_preflight() {
+  printf "\n"
+  bold "Pre-flight Check for Parallel Agent Work"
+  printf "\n\n"
+
+  local all_ok=true
+
+  # 1. Working tree clean?
+  local changes
+  changes=$(git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$changes" -gt 0 ]]; then
+    red "FAIL"
+    printf " Working tree has %s uncommitted changes\n" "$changes"
+    git status --short -- ':(exclude).claude/worktrees' 2>/dev/null | head -5 | sed 's/^/       /'
+    all_ok=false
+  else
+    green "PASS"
+    printf " Working tree is clean\n"
+  fi
+
+  # 2. Existing worktrees?
+  local wt_count
+  wt_count=$(find "$WORKTREE_DIR" -maxdepth 1 -type d -name "agent-*" 2>/dev/null | wc -l | tr -d ' ')
+  if [[ "$wt_count" -gt 0 ]]; then
+    red "FAIL"
+    printf " %s leftover agent worktrees found (run 'claude-agent-ops cleanup')\n" "$wt_count"
+    all_ok=false
+  else
+    green "PASS"
+    printf " No leftover agent worktrees\n"
+  fi
+
+  # 3. Worktree branches?
+  local wt_branches
+  wt_branches=$(git branch 2>/dev/null | grep -c "worktree-agent-" || true)
+  if [[ "$wt_branches" -gt 0 ]]; then
+    yellow "WARN"
+    printf " %s orphaned worktree branches found (run 'claude-agent-ops cleanup')\n" "$wt_branches"
+    all_ok=false
+  else
+    green "PASS"
+    printf " No orphaned worktree branches\n"
+  fi
+
+  # 4. Quality gates?
+  printf "  ..."
+  printf "\r"
+  if pnpm build > /dev/null 2>&1 && pnpm type-check > /dev/null 2>&1; then
+    green "PASS"
+    printf " Build and type-check succeed\n"
+  else
+    red "FAIL"
+    printf " Build or type-check failed — fix before launching agents\n"
+    all_ok=false
+  fi
+
+  if pnpm test > /dev/null 2>&1; then
+    green "PASS"
+    printf " Tests pass\n"
+  else
+    red "FAIL"
+    printf " Tests failing — fix before launching agents\n"
+    all_ok=false
+  fi
+
+  printf "\n"
+  if [[ "$all_ok" == true ]]; then
+    green "ALL CHECKS PASSED"
+    printf " — safe to launch parallel agents\n"
+  else
+    red "PRE-FLIGHT FAILED"
+    printf " — resolve issues before launching agents\n"
+  fi
+  printf "\n"
+}
+
+cmd_cleanup() {
+  printf "\n"
+  bold "Cleaning Up Agent Worktrees"
+  printf "\n\n"
+
+  local cleaned=0
+
+  # Remove agent worktrees
+  for wt_dir in "${WORKTREE_DIR}"/agent-*; do
+    [[ -d "$wt_dir" ]] || continue
+    local wt_name
+    wt_name=$(basename "$wt_dir")
+    local changes
+    changes=$(git -C "$wt_dir" status --short 2>/dev/null | wc -l | tr -d ' ')
+
+    if [[ "$changes" -gt 0 ]]; then
+      yellow "SKIP"
+      printf " %s — has %s uncommitted changes\n" "$wt_name" "$changes"
+      printf "       Use 'claude-agent-ops diff %s' to inspect, then 'git worktree remove --force %s'\n" \
+        "${wt_name#agent-}" "$wt_dir"
+    else
+      git worktree remove "$wt_dir" --force 2>/dev/null
+      printf "  Removed worktree: %s\n" "$wt_name"
+      cleaned=$((cleaned + 1))
+    fi
+  done
+
+  # Remove worktrees tracked in git index
+  local cached
+  cached=$(git ls-files --cached .claude/worktrees/ 2>/dev/null)
+  if [[ -n "$cached" ]]; then
+    git rm --cached -r .claude/worktrees/ > /dev/null 2>&1
+    printf "  Removed .claude/worktrees/ from git index\n"
+    cleaned=$((cleaned + 1))
+  fi
+
+  # Prune dead worktree references
+  git worktree prune 2>/dev/null
+  printf "  Pruned stale worktree references\n"
+
+  # Delete orphaned worktree branches
+  local branch_count=0
+  while IFS= read -r branch; do
+    branch=$(echo "$branch" | tr -d ' *')
+    [[ -z "$branch" ]] && continue
+    git branch -D "$branch" 2>/dev/null
+    printf "  Deleted branch: %s\n" "$branch"
+    branch_count=$((branch_count + 1))
+  done < <(git branch 2>/dev/null | grep "worktree-agent-")
+
+  printf "\n"
+  if [[ $cleaned -eq 0 && $branch_count -eq 0 ]]; then
+    dim "Nothing to clean up."
+  else
+    green "Cleaned"
+    printf " %s worktrees, %s branches\n" "$cleaned" "$branch_count"
+  fi
+  printf "\n"
+}
+
+cmd_help() {
+  cat <<'HELP'
+claude-agent-ops — CLI for monitoring and managing Claude background agents
+
+Commands:
+  status              Unified dashboard: agents, phases, worktrees, elapsed time
+  status --watch      Auto-refresh dashboard every 5s
+  worktrees           List active agent worktrees with change summary
+  log <id>            Show recent tool calls and text for an agent (partial ID match)
+  diff [id]           Show uncommitted changes (main tree if no ID, or specific worktree)
+  commit-ready        List all locations with uncommitted agent changes
+  preflight           Run pre-flight checks before launching parallel agents
+  cleanup             Remove completed worktrees, prune dead references, delete orphan branches
+  help                Show this help message
+
+Phase Detection:
+  The status dashboard infers each agent's current phase from tool call patterns:
+    researching    Read/Grep/Glob only — exploring the codebase
+    implementing   Write/Edit tools used — actively writing code
+    testing        pnpm test/build/lint detected — running quality gates
+    committing     git commit detected — preparing to commit
+    creating PR    gh pr create detected — pushing and creating PR
+    done           Agent finished (stop_reason: end_turn)
+
+Examples:
+  claude-agent-ops status                    # See all agents with phases
+  claude-agent-ops status --watch            # Auto-refresh every 5s
+  claude-agent-ops log a4fbb406              # Recent activity for agent a4fbb406
+  claude-agent-ops diff a4fbb406             # See uncommitted changes
+  claude-agent-ops worktrees                 # Worktree file-change detail
+  claude-agent-ops cleanup                   # Remove finished worktrees and branches
+
+Environment Variables:
+  AGENT_TASKS_DIR       Override auto-detected tasks output directory
+  AGENT_SUBAGENTS_DIR   Override auto-detected subagents JSONL directory
+  REPO_ROOT             Override auto-detected repository root
+HELP
+}
+
+# --- Main ---------------------------------------------------------------------
+
+main() {
+  local cmd="${1:-status}"
+  shift || true
+
+  case "$cmd" in
+    status)       cmd_status "$@";;
+    worktrees)    cmd_worktrees "$@";;
+    log)          cmd_log "$@";;
+    diff)         cmd_diff "$@";;
+    commit-ready) cmd_commit_ready "$@";;
+    preflight)    cmd_preflight "$@";;
+    cleanup)      cmd_cleanup "$@";;
+    help|--help|-h) cmd_help;;
+    *)
+      echo "Unknown command: $cmd"
+      echo "Run 'claude-agent-ops help' for usage."
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

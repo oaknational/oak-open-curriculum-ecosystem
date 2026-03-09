@@ -27,7 +27,7 @@ Add `annotations` to all tools at generation time (schema-first) and ensure aggr
 
 Read and follow:
 
-- `.agent/directives/rules.md` - TDD, no type shortcuts, fail fast
+- `.agent/directives/principles.md` - TDD, no type shortcuts, fail fast
 - `.agent/directives/testing-strategy.md` - TDD at ALL levels
 - `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 
@@ -111,7 +111,7 @@ annotations: {
 
 ### Phase 0 – Grounding and Scope Confirmation
 
-1. **ACTION**: Re-read `rules.md`, `testing-strategy.md`, and `schema-first-execution.md`.
+1. **ACTION**: Re-read `principles.md`, `testing-strategy.md`, and `schema-first-execution.md`.
 2. **REVIEW**: Confirm understanding: all annotation changes for generated tools happen in type-gen templates; runtime code is thin facade.
 3. **GROUNDING**: Read GO.md and follow all instructions.
 4. **QUALITY-GATE**: Run from repo root: `pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm lint -- --fix && pnpm format && pnpm test && pnpm test:e2e`
@@ -228,7 +228,7 @@ annotations: {
 
 40. **ACTION**: Verify all acceptance criteria (below) are met.
 41. **ACTION**: Update inline JSDoc comments in modified files explaining the annotations.
-42. **REVIEW**: Self-review against `rules.md` and `schema-first-execution.md`.
+42. **REVIEW**: Self-review against `principles.md` and `schema-first-execution.md`.
 43. **QUALITY-GATE**: Run full quality gate sequence from repo root: `pnpm type-gen && pnpm build && pnpm type-check && pnpm lint -- --fix && pnpm format && pnpm test && pnpm test:e2e`.
 
 ---

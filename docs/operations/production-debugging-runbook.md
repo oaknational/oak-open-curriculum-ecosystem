@@ -2,8 +2,8 @@
 
 This runbook provides step-by-step debugging workflows for the Oak Open Curriculum Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
 
-**Last Updated**: 2025-11-08  
-**Applies To**: HTTP Server (Vercel), Stdio Server (local/Claude Desktop)
+**Last Updated**: 2026-03-07  
+**Applies To**: HTTP Server (Vercel), Legacy Stdio Server (local/Claude Desktop)
 
 ## Overview of Observability Features
 
@@ -1045,6 +1045,6 @@ For tracking diagnostic improvements, see:
 ## Further Reading
 
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP-specific instrumentation details
-- [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Stdio-specific instrumentation details
+- [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Legacy stdio-specific instrumentation details
 - [Logger Package README](../../packages/libs/logger/README.md) - Logger API documentation
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - Testing logging code

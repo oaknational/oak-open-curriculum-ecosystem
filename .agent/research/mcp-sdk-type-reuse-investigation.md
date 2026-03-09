@@ -8,7 +8,7 @@
 
 ## EXECUTIVE SUMMARY
 
-This investigation examines whether `@oaknational/curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly wherever possible" from `rules.md`.
+This investigation examines whether `@oaknational/curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly wherever possible" from `principles.md`.
 
 **Key Finding**: We ARE already using some MCP SDK types (`Tool`, `CallToolResult`, `TextContent`, etc.), but there are opportunities to use more upstream types, particularly around input schemas and tool list responses. However, some duplication is justified by our schema-first architecture and the MCP SDK's limited type exports.
 
@@ -247,7 +247,7 @@ export interface ToolDescriptor<...> extends Tool {
 
 **Benefits**:
 
-- ✅ Aligns with rules.md "use library types"
+- ✅ Aligns with principles.md "use library types"
 - ✅ Single source of truth from MCP SDK
 - ✅ Automatic updates when MCP SDK changes
 - ✅ Better type compatibility with MCP ecosystem
@@ -389,7 +389,7 @@ export interface ToolDescriptor<...> extends Tool {
 
 ## 5. ALIGNMENT WITH PROJECT RULES
 
-### 5.1 Rules.md Compliance
+### 5.1 principles.md Compliance
 
 **Rule**: "Use library types directly where possible"
 
@@ -533,7 +533,7 @@ inputSchema: z.ZodObject<{
 
 - ✅ Better protocol compliance
 - ✅ Less maintenance burden
-- ✅ Aligns with rules.md
+- ✅ Aligns with principles.md
 - ⚠️ Accept dependency coupling (it's our protocol!)
 
 **For types NOT in MCP SDK**:
@@ -630,7 +630,7 @@ Implementation:
 **Why This Is Better**:
 
 - ✅ Simpler (answered First Question - removed branded type complexity)
-- ✅ Fully compliant with @rules.md (no type assertions, no `Object.*` methods)
+- ✅ Fully compliant with @principles.md (no type assertions, no `Object.*` methods)
 - ✅ Uses standard TypeScript mechanisms (type predicates)
 - ✅ Spread operator preserves types exactly
 
@@ -674,7 +674,7 @@ Implementation:
 
 **Benefits**:
 
-- Better alignment with rules.md
+- Better alignment with principles.md
 - Reduced maintenance burden
 - Improved protocol compliance
 - Single source of truth
@@ -693,7 +693,7 @@ Implementation:
 
 **Project Rules**:
 
-- `.agent/directives/rules.md` - "Use library types directly where possible"
+- `.agent/directives/principles.md` - "Use library types directly where possible"
 - `.agent/directives/schema-first-execution.md` - Schema-first architecture
 
 **MCP Documentation**:

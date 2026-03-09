@@ -18,7 +18,7 @@ Provide the extra logic (e.g., the search aggregator) as small, well-defined hel
 Keep all of that logic in one module so the difference is minimised and documented. 3. Stage plan (each with full quality gates)
 Stage 0 – Re-ground
 
-Re-read rules.md and schema-first-execution.md.
+Re-read principles.md and schema-first-execution.md.
 Log the grounding (cardinal rule, schema-first DAG) in the context log.
 Validation: pnpm type-gen, pnpm build --filter @oaknational/oak-curriculum-sdk, pnpm type-check --filter @oaknational/oak-curriculum-sdk, pnpm lint --filter @oaknational/oak-curriculum-sdk – confirming current breakage before we touch anything.
 

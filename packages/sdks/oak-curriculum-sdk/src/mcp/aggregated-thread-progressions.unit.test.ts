@@ -31,6 +31,15 @@ describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
     expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('learning path');
   });
 
+  it('references get-curriculum-model as the prerequisite, not itself', () => {
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain(
+      'You MUST call `get-curriculum-model` first',
+    );
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).not.toContain(
+      'You MUST call this tool before using other curriculum tools',
+    );
+  });
+
   it('has annotations marking it as read-only and idempotent', () => {
     expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.annotations).toEqual({
       readOnlyHint: true,

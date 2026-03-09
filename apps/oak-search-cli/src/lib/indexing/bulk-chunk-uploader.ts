@@ -25,9 +25,16 @@ import {
   uploadChunkWithRetry,
   type EsTransport,
 } from './retry';
+import {
+  accumulateIndexCounts,
+  freezeIndexCounts,
+  type IndexOperationCounts,
+  type MutableIndexCounts,
+} from './bulk-index-counts';
 
 // Re-export for consumers
 export type { EsTransport, ChunkUploadResult } from './retry';
+export type { IndexOperationCounts } from './bulk-index-counts';
 
 /**
  * Result of a bulk upload operation.
@@ -36,6 +43,7 @@ export type { EsTransport, ChunkUploadResult } from './retry';
  * Preserves information about both successes and failures so callers can:
  * 1. Report accurate success counts
  * 2. Access failed documents for targeted retry or reporting
+ * 3. Inspect per-index breakdowns via `indexCounts`
  *
  * The `permanentlyFailed` field contains the raw bulk operations that failed
  * after all retry attempts. Use `extractDocumentIds` to get human-readable IDs.
@@ -45,6 +53,8 @@ export interface BulkUploadResult {
   readonly successCount: number;
   /** Operations that permanently failed after all retries */
   readonly permanentlyFailed: BulkOperations;
+  /** Per-index document counts (indexed vs failed) */
+  readonly indexCounts: IndexOperationCounts;
 }
 
 /**
@@ -116,16 +126,21 @@ function resolveConfig(config: BulkUploadConfig): ResolvedConfig {
   };
 }
 
-/** Upload initial chunks and collect failed operations. */
+/** Upload initial chunks and collect failed operations and per-index counts. */
 async function uploadInitialChunks(
   es: EsTransport,
   chunks: BulkOperations[],
   logger: Logger,
   docCount: number,
   config: ResolvedConfig,
-): Promise<{ totalUploaded: number; allFailedOperations: BulkOperations }> {
+): Promise<{
+  totalUploaded: number;
+  allFailedOperations: BulkOperations;
+  counts: MutableIndexCounts;
+}> {
   let totalUploaded = 0;
   let allFailedOperations: BulkOperations = [];
+  const counts: MutableIndexCounts = {};
 
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -135,6 +150,7 @@ async function uploadInitialChunks(
 
     const result = await uploadChunkWithRetry(es, chunk, i, chunks.length, logger, config);
     totalUploaded += result.successCount;
+    accumulateIndexCounts(counts, result.response);
 
     if (result.failedOperations.length > 0) {
       allFailedOperations = [...allFailedOperations, ...result.failedOperations];
@@ -152,72 +168,29 @@ async function uploadInitialChunks(
     }
   }
 
-  return { totalUploaded, allFailedOperations };
+  return { totalUploaded, allFailedOperations, counts };
 }
 
-/**
- * Upload all chunks sequentially to Elasticsearch with rate limiting and retry.
- *
- * @remarks
- * Implements a two-tier retry strategy:
- *
- * **Tier 1 (HTTP-level)**: Each chunk upload retries on transport errors
- * (network issues, timeouts) with exponential backoff.
- *
- * **Tier 2 (document-level)**: After ALL chunks are processed, any documents
- * that failed with retryable errors (HTTP 429 from ELSER queue overflow,
- * 502, 503, 504) are collected and re-uploaded in batches.
- *
- * @param es - Elasticsearch transport
- * @param chunks - Array of operation chunks
- * @param logger - Logger instance
- * @param docCount - Total document count for progress logging
- * @param config - Upload configuration (delays, retries)
- * @returns Result containing success count and any permanently failed operations
- *
- * @example
- * ```typescript
- * const result = await uploadAllChunks(es, chunks, logger, 1000, {
- *   chunkDelayMs: 2000,
- *   documentRetryEnabled: true,
- *   documentMaxRetries: 3,
- * });
- * console.log(`Uploaded: ${result.successCount}`);
- * if (result.permanentlyFailed.length > 0) {
- *   // Handle or report failures
- * }
- * ```
- *
- * @see uploadChunkWithRetry for Tier 1 retry
- * @see executeDocumentRetry for Tier 2 retry
- * @see ADR-070 SDK Rate Limiting and Retry
- */
-export async function uploadAllChunks(
+/** Execute document-level retry for transient failures, returning the final result. */
+async function retryFailedDocuments(
   es: EsTransport,
-  chunks: BulkOperations[],
+  totalUploaded: number,
+  allFailedOperations: BulkOperations,
+  counts: MutableIndexCounts,
   logger: Logger,
-  docCount: number,
-  config: BulkUploadConfig = {},
+  resolved: ResolvedConfig,
 ): Promise<BulkUploadResult> {
-  const resolved = resolveConfig(config);
-
-  // Phase 1: Upload initial chunks with HTTP-level retry
-  const { totalUploaded, allFailedOperations } = await uploadInitialChunks(
-    es,
-    chunks,
-    logger,
-    docCount,
-    resolved,
-  );
-
-  // Phase 2: Document-level retry for transient failures
   if (!resolved.documentRetryEnabled || allFailedOperations.length === 0) {
     if (allFailedOperations.length > 0) {
       logger.warn('Document-level retry disabled, some documents not indexed', {
         failedDocuments: Math.floor(allFailedOperations.length / 2),
       });
     }
-    return { successCount: totalUploaded, permanentlyFailed: allFailedOperations };
+    return {
+      successCount: totalUploaded,
+      permanentlyFailed: allFailedOperations,
+      indexCounts: freezeIndexCounts(counts),
+    };
   }
 
   const retryResult = await executeDocumentRetry(
@@ -235,5 +208,36 @@ export async function uploadAllChunks(
   return {
     successCount: totalUploaded + retryResult.successCount,
     permanentlyFailed: retryResult.permanentlyFailed,
+    indexCounts: freezeIndexCounts(counts),
   };
+}
+
+/**
+ * Upload all chunks sequentially to Elasticsearch with rate limiting and retry.
+ *
+ * @remarks
+ * Implements a two-tier retry strategy (ADR-070):
+ * - **Tier 1** (HTTP-level): Retries entire chunk on transport errors.
+ * - **Tier 2** (document-level): After all chunks, retries documents with
+ *   transient errors (HTTP 429, 502, 503, 504).
+ *
+ * @see uploadChunkWithRetry for Tier 1 retry
+ * @see executeDocumentRetry for Tier 2 retry
+ */
+export async function uploadAllChunks(
+  es: EsTransport,
+  chunks: BulkOperations[],
+  logger: Logger,
+  docCount: number,
+  config: BulkUploadConfig = {},
+): Promise<BulkUploadResult> {
+  const resolved = resolveConfig(config);
+  const { totalUploaded, allFailedOperations, counts } = await uploadInitialChunks(
+    es,
+    chunks,
+    logger,
+    docCount,
+    resolved,
+  );
+  return retryFailedDocuments(es, totalUploaded, allFailedOperations, counts, logger, resolved);
 }

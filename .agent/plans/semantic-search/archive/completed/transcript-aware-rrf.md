@@ -192,7 +192,7 @@ Document the decision in ADR-099.
 
 **Re-read before implementation:**
 
-1. [rules.md](../../../directives/rules.md) — TDD, no type shortcuts, fail fast
+1. [principles.md](../../../directives/principles.md) — TDD, no type shortcuts, fail fast
 2. [testing-strategy.md](../../../directives/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../../directives/schema-first-execution.md) — Generator is source of truth
 

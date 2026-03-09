@@ -1768,7 +1768,7 @@ pnpm markdownlint-check:root
 
 ## References
 
-- `.agent/directives/rules.md` – repository rules (must follow at all times)
+- `.agent/directives/principles.md` – repository rules (must follow at all times)
 - `.agent/directives/testing-strategy.md` – TDD guidance
 - `packages/libs/logger/README.md` – authoritative logger documentation
 - `apps/oak-curriculum-mcp-streamable-http/README.md` – HTTP logging configuration

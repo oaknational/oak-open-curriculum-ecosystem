@@ -5,7 +5,7 @@
  * Uses branded string types instead of massive unions (which crash TypeScript).
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-02-28T19:15:37.434Z
+ * Generated at: 2026-03-07T16:56:28.902Z
  */
 
 /* eslint-disable max-lines, max-statements, complexity */

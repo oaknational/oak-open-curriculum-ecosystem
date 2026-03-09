@@ -16,7 +16,7 @@ type ZeroHitScope = SearchScope;
  */
 const WebhookPayloadSchema = z.object({
   scope: z.enum(['lessons', 'units', 'sequences']),
-  text: z.string().min(1),
+  query: z.string().min(1),
   indexVersion: z.string().min(1),
   filters: z.record(z.string(), z.string()).optional(),
   timestamp: z.number().nonnegative().optional(),
@@ -70,7 +70,7 @@ export async function handleZeroHitWebhook(
 
   const event = {
     scope: parsed.scope,
-    text: parsed.text,
+    query: parsed.query,
     filters: parsed.filters ?? {},
     indexVersion: parsed.indexVersion,
     timestamp: parsed.timestamp ?? Date.now(),

@@ -14,13 +14,13 @@ describe('buildBenchmarkRequestParams', () => {
   describe('when no queryKeyStage is provided', () => {
     it('uses phase filter for primary phase', () => {
       const result = buildBenchmarkRequestParams({
-        text: 'fractions',
+        query: 'fractions',
         subject: 'maths',
         phase: 'primary',
       });
 
       expect(result).toEqual({
-        text: 'fractions',
+        query: 'fractions',
         size: 10,
         subject: 'maths',
         phase: 'primary',
@@ -30,13 +30,13 @@ describe('buildBenchmarkRequestParams', () => {
 
     it('uses phase filter for secondary phase', () => {
       const result = buildBenchmarkRequestParams({
-        text: 'quadratic equations',
+        query: 'quadratic equations',
         subject: 'maths',
         phase: 'secondary',
       });
 
       expect(result).toEqual({
-        text: 'quadratic equations',
+        query: 'quadratic equations',
         size: 10,
         subject: 'maths',
         phase: 'secondary',
@@ -48,14 +48,14 @@ describe('buildBenchmarkRequestParams', () => {
   describe('when queryKeyStage is provided', () => {
     it('uses keyStage filter instead of phase for ks4', () => {
       const result = buildBenchmarkRequestParams({
-        text: 'completing the square higher',
+        query: 'completing the square higher',
         subject: 'maths',
         phase: 'secondary',
         queryKeyStage: 'ks4',
       });
 
       expect(result).toEqual({
-        text: 'completing the square higher',
+        query: 'completing the square higher',
         size: 10,
         subject: 'maths',
         keyStage: 'ks4',
@@ -65,14 +65,14 @@ describe('buildBenchmarkRequestParams', () => {
 
     it('uses keyStage filter instead of phase for ks1', () => {
       const result = buildBenchmarkRequestParams({
-        text: 'counting to 10',
+        query: 'counting to 10',
         subject: 'maths',
         phase: 'primary',
         queryKeyStage: 'ks1',
       });
 
       expect(result).toEqual({
-        text: 'counting to 10',
+        query: 'counting to 10',
         size: 10,
         subject: 'maths',
         keyStage: 'ks1',
@@ -82,14 +82,14 @@ describe('buildBenchmarkRequestParams', () => {
   });
 
   describe('edge cases', () => {
-    it('handles empty query text', () => {
+    it('handles empty query', () => {
       const result = buildBenchmarkRequestParams({
-        text: '',
+        query: '',
         subject: 'science',
         phase: 'primary',
       });
 
-      expect(result.text).toBe('');
+      expect(result.query).toBe('');
       // Type guard to verify phase-based result
       expect('phase' in result).toBe(true);
       if ('phase' in result) {
@@ -99,7 +99,7 @@ describe('buildBenchmarkRequestParams', () => {
 
     it('preserves subject exactly as provided', () => {
       const result = buildBenchmarkRequestParams({
-        text: 'test',
+        query: 'test',
         subject: 'religious-education',
         phase: 'secondary',
       });

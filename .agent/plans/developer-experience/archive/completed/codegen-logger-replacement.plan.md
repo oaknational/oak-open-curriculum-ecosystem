@@ -316,7 +316,7 @@ pnpm vocab-gen         →  run-vocab-gen.ts (15)             [all calls local]
 
 ## Solution Architecture
 
-### Principle (from rules.md)
+### Principle (from principles.md)
 
 > "Never disable any quality gates."
 > "Fix the root cause. Never work around it."
@@ -418,7 +418,7 @@ merge with `no-console` errors.
 application code use structured logging with full quality standards. Prevents
 future console calls from being added without review.
 
-### Alignment with rules.md
+### Alignment with principles.md
 
 > "Never disable any quality gates."
 > "All quality gate issues are always blocking."

@@ -29,7 +29,7 @@ Reference research: `.agent/research/elasticsearch/semantic-search-sdk-and-cli-e
 
 Before starting, and again at each checkpoint below, re-read and explicitly re-commit to:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 

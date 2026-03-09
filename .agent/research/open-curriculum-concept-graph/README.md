@@ -158,7 +158,7 @@ Agents don't need this — they already know about endpoints. The graph should c
 When implementing `get-knowledge-graph`:
 
 1. **Re-read foundation documents** (per project rules):
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 

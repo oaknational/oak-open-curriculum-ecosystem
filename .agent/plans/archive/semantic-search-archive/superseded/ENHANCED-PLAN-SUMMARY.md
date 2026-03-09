@@ -416,7 +416,7 @@ pnpm test:e2e:built # Built E2E validation
 
 ### Foundation Documents (Re-read Regularly)
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/directives/testing-strategy.md`
 

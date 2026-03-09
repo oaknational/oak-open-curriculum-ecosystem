@@ -70,7 +70,7 @@ These are intentionally deferred and noted in Section 8 only.
 
 At the start of each phase, re-read:
 
-1. `.agent/directives/rules.md`
+1. `.agent/directives/principles.md`
 2. `.agent/directives/testing-strategy.md`
 3. `.agent/directives/schema-first-execution.md`
 

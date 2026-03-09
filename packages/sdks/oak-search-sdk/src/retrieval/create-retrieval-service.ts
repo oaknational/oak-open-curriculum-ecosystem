@@ -55,7 +55,7 @@ import { LESSON_SOURCE_EXCLUDES, UNIT_SOURCE_EXCLUDES } from './source-excludes.
  * @example
  * ```typescript
  * const sdk = createSearchSdk({ client, indexTarget: 'primary' });
- * const result = await sdk.retrieval.searchLessons({ text: 'photosynthesis' });
+ * const result = await sdk.retrieval.searchLessons({ query: 'photosynthesis' });
  * ```
  */
 export function createRetrievalService(
@@ -94,7 +94,7 @@ async function searchLessons(
   try {
     const size = clampSize(params.size);
     const from = clampFrom(params.from);
-    const cleanedText = removeNoisePhrases(params.text);
+    const cleanedText = removeNoisePhrases(params.query);
     const phrases = detectCurriculumPhrases(cleanedText);
     const filters = buildLessonFilters(params);
 
@@ -107,7 +107,7 @@ async function searchLessons(
       _source: LESSON_SOURCE_EXCLUDES,
     };
 
-    logger?.debug('searchLessons', { text: params.text, size, from });
+    logger?.debug('searchLessons', { query: params.query, size, from });
     const res = await search<SearchLessonsIndexDoc>(request);
     const normalisedHits = normaliseTranscriptScores(res.hits.hits);
     const filteredHits = filterByMinScore(normalisedHits, DEFAULT_MIN_SCORE);
@@ -148,7 +148,7 @@ async function searchUnits(
   try {
     const size = clampSize(params.size);
     const from = clampFrom(params.from);
-    const cleanedText = removeNoisePhrases(params.text);
+    const cleanedText = removeNoisePhrases(params.query);
     const phrases = detectCurriculumPhrases(cleanedText);
     const filters = buildUnitFilters(params);
 
@@ -161,7 +161,7 @@ async function searchUnits(
       _source: UNIT_SOURCE_EXCLUDES,
     };
 
-    logger?.debug('searchUnits', { text: params.text, size, from });
+    logger?.debug('searchUnits', { query: params.query, size, from });
     const res = await search<SearchUnitRollupDoc>(request);
     const scored = res.hits.hits.map((h) => ({ _score: h._score ?? 0, _hit: h }));
     const kept = filterByMinScore(scored, DEFAULT_MIN_SCORE);

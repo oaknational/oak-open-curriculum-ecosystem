@@ -91,7 +91,7 @@ describe('runSearchSdkTool', () => {
     it('returns a result for lessons scope', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'photosynthesis', scope: 'lessons' };
+      const args: SearchSdkArgs = { query: 'photosynthesis', scope: 'lessons' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -103,7 +103,7 @@ describe('runSearchSdkTool', () => {
     it('returns a result for units scope', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'fractions', scope: 'units' };
+      const args: SearchSdkArgs = { query: 'fractions', scope: 'units' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -114,7 +114,7 @@ describe('runSearchSdkTool', () => {
     it('returns a result for threads scope', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'algebra', scope: 'threads' };
+      const args: SearchSdkArgs = { query: 'algebra', scope: 'threads' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -125,7 +125,7 @@ describe('runSearchSdkTool', () => {
     it('returns a result for sequences scope', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'science', scope: 'sequences' };
+      const args: SearchSdkArgs = { query: 'science', scope: 'sequences' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -136,7 +136,7 @@ describe('runSearchSdkTool', () => {
     it('returns a result for suggest scope', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'photo', scope: 'suggest' };
+      const args: SearchSdkArgs = { query: 'photo', scope: 'suggest' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -149,7 +149,7 @@ describe('runSearchSdkTool', () => {
     it('includes human-readable summary in content', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'photosynthesis', scope: 'lessons' };
+      const args: SearchSdkArgs = { query: 'photosynthesis', scope: 'lessons' };
 
       const result = await runSearchSdkTool(args, deps);
 
@@ -162,7 +162,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'photosynthesis',
+        query: 'photosynthesis',
         scope: 'lessons',
         subject: 'science',
         keyStage: 'ks3',
@@ -175,7 +175,7 @@ describe('runSearchSdkTool', () => {
     it('includes _meta for widget routing', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'test', scope: 'lessons' };
+      const args: SearchSdkArgs = { query: 'test', scope: 'lessons' };
 
       const result = await runSearchSdkTool(args, deps);
       expect(result._meta).toBeDefined();
@@ -187,7 +187,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'fractions',
+        query: 'fractions',
         scope: 'lessons',
         subject: 'maths',
         keyStage: 'ks2',
@@ -199,7 +199,7 @@ describe('runSearchSdkTool', () => {
 
       expect(retrieval.searchLessons).toHaveBeenCalledWith(
         expect.objectContaining({
-          text: 'fractions',
+          query: 'fractions',
           subject: 'maths',
           keyStage: 'ks2',
           size: 10,
@@ -212,7 +212,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'trigonometry',
+        query: 'trigonometry',
         scope: 'lessons',
         unitSlug: 'trig-unit',
         tier: 'higher',
@@ -240,7 +240,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'fractions',
+        query: 'fractions',
         scope: 'units',
         minLessons: 5,
         highlight: true,
@@ -260,7 +260,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'science',
+        query: 'science',
         scope: 'sequences',
         phaseSlug: 'secondary',
         category: 'science',
@@ -280,7 +280,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'photo',
+        query: 'photo',
         scope: 'suggest',
         limit: 10,
       };
@@ -299,7 +299,7 @@ describe('runSearchSdkTool', () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);
       const args: SearchSdkArgs = {
-        text: 'photo',
+        query: 'photo',
         scope: 'suggest',
         subject: 'science',
         keyStage: 'ks3',
@@ -328,7 +328,7 @@ describe('runSearchSdkTool', () => {
           ),
       });
       const deps = createDeps(retrieval);
-      const args: SearchSdkArgs = { text: 'test', scope: 'lessons' };
+      const args: SearchSdkArgs = { query: 'test', scope: 'lessons' };
 
       const result = await runSearchSdkTool(args, deps);
 

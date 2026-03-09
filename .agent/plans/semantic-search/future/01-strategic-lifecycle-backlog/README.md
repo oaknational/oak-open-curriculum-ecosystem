@@ -24,7 +24,7 @@ LATER (deferred): milestone 2 search quality/ecosystem boundaries
 
 Most recently promoted from this hub:
 
-1. `../06-mcp-consumer-integration/mcp-result-pattern-unification.md` -> `../../active/mcp-result-pattern-unification.execution.plan.md`
+1. `../06-mcp-consumer-integration/mcp-result-pattern-unification.md` -> `../../archive/completed/mcp-result-pattern-unification.execution.plan.md` (✅ complete)
 
 ---
 

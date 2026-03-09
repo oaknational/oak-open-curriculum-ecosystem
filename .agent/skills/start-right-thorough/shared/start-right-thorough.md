@@ -15,7 +15,7 @@ Ground yourself rigorously before beginning significant work.
 Read and internalise these documents:
 
 1. @.agent/directives/AGENT.md — Entry point and documentation index
-2. @.agent/directives/rules.md — **THE AUTHORITATIVE RULES**
+2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
 3. @.agent/directives/testing-strategy.md — TDD at all levels
 4. @.agent/directives/schema-first-execution.md — Types flow from schema
 

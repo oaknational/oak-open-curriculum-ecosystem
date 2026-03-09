@@ -2,7 +2,7 @@
 
 **Status**: 📋 Phase 0 ready to start
 **Last Updated**: 2026-02-24
-**Session Entry**: [start-right.prompt.md](../../prompts/start-right.prompt.md)
+**Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
 

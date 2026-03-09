@@ -172,7 +172,7 @@ vscode.languages.registerCodeLensProvider(selector, {
 │  │  │   System Prompt:                                 │ │ │
 │  │  │   "You are a senior engineer doing pair          │ │ │
 │  │  │    programming. The developer just wrote [X].    │ │ │
-│  │  │    Project rules: [rules.md]. Suggest            │ │ │
+│  │  │    Project rules: [principles.md]. Suggest            │ │ │
 │  │  │    improvements. Be concise and actionable."     │ │ │
 │  │  │                                                  │ │ │
 │  │  │   Model: Claude Haiku (fast, cheap)             │ │ │
@@ -256,7 +256,7 @@ Developer can review/apply/dismiss
    - Don't block main UI thread
 
 6. **Caching**:
-   - Cache project rules (rules.md) in memory
+   - Cache project rules (principles.md) in memory
    - Cache recent AI responses
    - Invalidate on file changes
 
@@ -284,7 +284,7 @@ Developer can review/apply/dismiss
 
 **Suggestions**:
 
-- "New function detected. Add a test? TDD from @rules.md"
+- "New function detected. Add a test? TDD from @principles.md"
 - Generate test template
 - Link to testing strategy docs
 
@@ -306,7 +306,7 @@ Developer can review/apply/dismiss
 **Triggers**:
 
 - ESLint error detected
-- Pattern violates @rules.md (e.g., unused variable prefix `_`)
+- Pattern violates @principles.md (e.g., unused variable prefix `_`)
 
 **Suggestions**:
 
@@ -496,7 +496,7 @@ function createUser(data: unknown) {
 
 **Session 1: Context Gathering**
 
-1. Read project rules from `.agent/directives/rules.md`
+1. Read project rules from `.agent/directives/principles.md`
 2. Cache rules in memory
 3. Extract relevant file context (±10 lines around issue)
 4. Gather diagnostics (linter errors)
@@ -557,7 +557,7 @@ function createUser(data: unknown) {
 
 **Session 3: Rules Detection**
 
-1. Parse @rules.md into structured rules
+1. Parse @principles.md into structured rules
 2. Map ESLint rules to project rules
 3. Detect violations in real-time
 4. Link suggestions to specific rule sections
@@ -713,7 +713,7 @@ function createUser(data: unknown) {
 
 **Automatic Detection**:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/typescript-practice.md`
 - `.cursorrules` (Cursor-specific)
 - `.eslintrc` (ESLint rules)
@@ -817,9 +817,9 @@ function createUser(data: unknown) {
 ## Related Plans
 
 - `icebox/agent-lifecycle-automation.md` - Automated quality gates (complementary)
-- `icebox/logger-sentry-otel-integration.md` - Observability patterns to detect (iceboxed)
+- `architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md` - Observability patterns to detect (promoted from icebox)
 - `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` - MCP tools that could benefit from real-time coaching
-- `.agent/directives/rules.md` - Rules the coach enforces
+- `.agent/directives/principles.md` - Rules the coach enforces
 - `.agent/directives/typescript-practice.md` - Type safety patterns to detect
 
 ## References

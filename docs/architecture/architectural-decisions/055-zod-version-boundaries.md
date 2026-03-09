@@ -163,7 +163,7 @@ The `openapi-zod-client` generator, which creates Zod schemas from the OpenAPI s
 
 ### Why This Is Not a Compatibility Layer
 
-From `rules.md`:
+From `principles.md`:
 
 > "NEVER create compatibility layers - replace old approaches with new approaches"
 

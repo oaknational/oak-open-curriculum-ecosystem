@@ -22,7 +22,7 @@ This specification serves as:
 
 Before any implementation work, re-read and recommit to:
 
-1. **[rules.md](../../../directives/rules.md)** — First Question: "Could it be simpler?"
+1. **[principles.md](../../../directives/principles.md)** — First Question: "Could it be simpler?"
 2. **[testing-strategy.md](../../../directives/testing-strategy.md)** — TDD at all levels
 3. **[schema-first-execution.md](../../../directives/schema-first-execution.md)** — Generator is source of truth
 

@@ -171,6 +171,6 @@ post-merge follow-up clean-up plan.
 
 Before starting work, re-read:
 
-1. [rules.md](../../../../directives/rules.md)
+1. [principles.md](../../../../directives/principles.md)
 2. [testing-strategy.md](../../../../directives/testing-strategy.md)
 3. [schema-first-execution.md](../../../../directives/schema-first-execution.md)

@@ -6,7 +6,7 @@
 **Status**: 📋 Pending  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-17  
-**Research**: [data-and-domain-vocabulary.md](../../../../research/elasticsearch/oak-data/data-and-domain-vocabulary.md)
+**Research**: [data-and-domain-vocabulary.md](../../../../research/elasticsearch/oak-data/data-and-domain-vocabulary.md), [../03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md](../03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md)
 
 ---
 
@@ -167,6 +167,16 @@ For terms not defined in lesson data:
   "provenance": "curated"
 }
 ```
+
+---
+
+## Research Companions
+
+This plan should now be read alongside:
+
+- [../03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md](../03-vocabulary-and-semantic-assets/bulk-metadata-opportunities.research.md)
+- [../03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md](../03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md)
+- [learning-graph-surfaces.research.md](learning-graph-surfaces.research.md)
 
 ---
 

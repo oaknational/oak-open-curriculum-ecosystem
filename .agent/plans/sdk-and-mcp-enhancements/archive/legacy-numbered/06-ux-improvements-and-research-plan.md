@@ -22,7 +22,7 @@ This plan captures immediate UX improvements and coordinates research activities
 
 Before beginning any task, re-read and recommit to:
 
-- `.agent/directives/rules.md`
+- `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 
@@ -294,7 +294,7 @@ This plan provides:
 
 ### Foundational Documents (Re-read before each session)
 
-- `.agent/directives/rules.md` - Development rules
+- `.agent/directives/principles.md` - Development rules
 - `.agent/directives/testing-strategy.md` - TDD approach
 - `.agent/directives/schema-first-execution.md` - Type generation mandate
 

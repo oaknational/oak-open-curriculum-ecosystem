@@ -1296,4 +1296,4 @@ However, several targets were not met:
 | [ES search_as_you_type Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html) | Official typeahead docs |
 | [testing-strategy.md](../../directives/testing-strategy.md) | TDD requirements |
 | [schema-first-execution.md](../../directives/schema-first-execution.md) | Schema-first approach |
-| [rules.md](../../directives/rules.md) | Core development rules |
+| [principles.md](../../directives/principles.md) | Core development rules |

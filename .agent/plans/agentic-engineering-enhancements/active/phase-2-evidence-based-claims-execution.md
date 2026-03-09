@@ -36,7 +36,7 @@ todos:
 Before any non-planning edits:
 
 1. Re-read:
-   - `.agent/directives/rules.md`
+   - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
 2. Confirm evidence-bundle template exists:

@@ -3,7 +3,7 @@
  *
  * Bulk operations are heterogeneous arrays that alternate between action
  * metadata and document bodies. These types preserve type information
- * throughout the ingestion pipeline per rules.md.
+ * throughout the ingestion pipeline per principles.md.
  */
 
 import type {
