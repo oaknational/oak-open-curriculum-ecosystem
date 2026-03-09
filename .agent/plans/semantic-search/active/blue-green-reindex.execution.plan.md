@@ -22,20 +22,20 @@ todos:
     content: "Smoke-test remove_index on Elastic Serverless with throwaway index."
     status: completed
   - id: ingest-rewrite
-    content: "Rewrite stage command to use existing CLI bulk ingestion pipeline with versioned index resolver."
-    status: pending
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 1-2)."
+    status: completed
   - id: stage
-    content: "Stage versioned indexes (create, ingest, verify) without promoting."
-    status: blocked
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    status: completed
   - id: validate
-    content: "Inspect staged indexes before promoting."
-    status: blocked
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    status: completed
   - id: promote
-    content: "Promote staged version to live (atomic alias swap with migration)."
-    status: blocked
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    status: completed
   - id: verify
-    content: "Verify live service is healthy after promotion."
-    status: blocked
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    status: completed
 isProject: false
 ---
 
@@ -43,16 +43,14 @@ isProject: false
 
 ## Session Entry Point
 
-**Status: BLOCKED — ingest rewrite required before staging can proceed.**
+**Status: SUPERSEDED** — this plan has been replaced by
+[unified-versioned-ingestion.md](./unified-versioned-ingestion.md) (2026-03-09).
 
-A new session should:
-
-1. Run `/jc-start-right-quick` to ground
-2. Read this plan **fully**, especially [What Went Wrong](#what-went-wrong-2026-03-08)
-3. **Question and validate the assumptions** in [Assumptions](#assumptions)
-4. **Explore the potential solutions** in [Potential Solutions](#potential-solutions)
-5. **Explore the prevention measures** in [Prevention](#prevention)
-6. Begin implementation at [Ingest Rewrite](#ingest-rewrite)
+This document is retained as a historical record: the "What Went Wrong"
+analysis, root cause investigation, and completed prerequisites
+(migration fix, reviewer fixes, preflight, `remove_index` smoke test)
+are referenced by the successor plan. It will be archived when the
+unified plan completes (Phase 4, Task 4.3).
 
 ## What Went Wrong (2026-03-08)
 

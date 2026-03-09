@@ -1,3 +1,32 @@
+## Session 2026-03-09 — Unified Versioned Ingestion Plan
+
+### What Was Done
+
+- Created `unified-versioned-ingestion.md` — a new execution plan that
+  replaces the predecessor blue-green reindex plan. The new plan is grounded
+  in architectural excellence: one pipeline, correct layer boundaries, types
+  from schema, and full resilience coverage.
+- Invoked all 6 pre-implementation reviewers (4 architecture, code, docs-adr).
+  All 9 findings were incorporated as planned work — none deferred or dismissed.
+- Resilience findings (partial success detection, orphaned index cleanup,
+  all-failure reporting, Result pattern for data source errors) are addressed
+  in Phase 2 Tasks 2.4-2.7, not deferred as follow-ups.
+- Predecessor plan marked SUPERSEDED with reference to successor.
+- Active plans README updated with new priority table.
+
+### Patterns to Remember
+
+- Never classify reviewer findings as "non-blocking" on behalf of the owner.
+  Present all findings; let the human decide priority. "Risk acceptance is a
+  human decision" (already in distilled.md) applies to finding classification
+  too.
+- When creating a successor plan from a failed execution, the predecessor's
+  root cause analysis and completed prerequisites are valuable historical
+  records — reference them, don't duplicate them.
+- Root cause clarity matters for commit messages: "format mismatch" (SDK
+  assumed flat arrays, bulk files are BulkDownloadFile objects) is more
+  accurate than "unknown[] type issue".
+
 ## Session 2026-03-08 — Stage/Promote Split
 
 ### What Was Done
