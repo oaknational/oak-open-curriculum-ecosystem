@@ -16,7 +16,7 @@
 
 Active execution now includes:
 
-- [Unified Versioned Ingestion](active/unified-versioned-ingestion.md)
+- [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
@@ -108,7 +108,7 @@ prevent Boundary 03 bulk metadata work from progressing.
 For the full at-a-glance state including cross-collection sequencing, see
 [Current Work](#current-work-post-merge-execution) above.
 
-- [Unified Versioned Ingestion](active/unified-versioned-ingestion.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
+- [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
@@ -182,7 +182,7 @@ to the boundary structure.
 | [Search Dispatch Type Safety](archive/completed/search-dispatch-type-safety.md) | ✅ Complete — B1 type-safe dispatch + W1 rename |
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
 | [Result Pattern Unification](archive/completed/mcp-result-pattern-unification.execution.plan.md) | ✅ Complete — `Result<T, E>` migration across SDK + MCP consumers |
-| [Blue/Green Reindex](archive/completed/blue-green-reindex.execution.plan.md) | ✅ Superseded — archived; succeeded by [Unified Versioned Ingestion](active/unified-versioned-ingestion.md) |
+| [Blue/Green Reindex](archive/completed/blue-green-reindex.execution.plan.md) | ✅ Superseded — archived; succeeded by [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) |
 | [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

@@ -22,19 +22,19 @@ todos:
     content: "Smoke-test remove_index on Elastic Serverless with throwaway index."
     status: completed
   - id: ingest-rewrite
-    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 1-2)."
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.plan.md (Phase 1-2)."
     status: completed
   - id: stage
-    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.plan.md (Phase 3)."
     status: completed
   - id: validate
-    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.plan.md (Phase 3)."
     status: completed
   - id: promote
-    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.plan.md (Phase 3)."
     status: completed
   - id: verify
-    content: "SUPERSEDED — moved to unified-versioned-ingestion.md (Phase 3)."
+    content: "SUPERSEDED — moved to unified-versioned-ingestion.plan.md (Phase 3)."
     status: completed
 isProject: false
 ---
@@ -44,7 +44,7 @@ isProject: false
 ## Session Entry Point
 
 **Status: SUPERSEDED** — this plan has been replaced by
-[unified-versioned-ingestion.md](../../active/unified-versioned-ingestion.md) (2026-03-09).
+[unified-versioned-ingestion.plan.md](../../active/unified-versioned-ingestion.plan.md) (2026-03-09).
 
 This document is retained as a historical record: the "What Went Wrong"
 analysis, root cause investigation, and completed prerequisites
@@ -281,7 +281,7 @@ blue/green swaps. The bare-index-to-alias migration is a one-time operation.
 - [ADR-130](../../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green design
 - [INDEXING.md](../../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
 - [high-level plan](../../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
-- [API gaps inventory](../../active/api-gaps-for-bulk-downloads.md) — Data not in bulk downloads
+- [API gaps inventory](../../active/bulk-downloads-data-gaps.md) — Data not in bulk downloads
 
 ### Key Files
 

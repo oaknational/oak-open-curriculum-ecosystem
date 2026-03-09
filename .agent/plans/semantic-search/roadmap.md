@@ -298,7 +298,7 @@ closed.
 Current active and queued execution plans:
 
 - [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
-- [unified-versioned-ingestion.md](active/unified-versioned-ingestion.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
+- [unified-versioned-ingestion.plan.md](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md) — ✅ superseded (archived)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields

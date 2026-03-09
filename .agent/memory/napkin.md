@@ -2,7 +2,7 @@
 
 ### What Was Done
 
-- Created `unified-versioned-ingestion.md` — a new execution plan that
+- Created `unified-versioned-ingestion.plan.md` — a new execution plan that
   replaces the predecessor blue-green reindex plan. The new plan is grounded
   in architectural excellence: one pipeline, correct layer boundaries, types
   from schema, and full resilience coverage.

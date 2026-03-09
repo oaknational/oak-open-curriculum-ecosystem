@@ -1150,7 +1150,7 @@ This atomically swaps aliases back to the previous version (recorded in
 ### Related Plans and Documentation
 
 - [Predecessor plan](../archive/completed/blue-green-reindex.execution.plan.md) — What went wrong (2026-03-08)
-- [API gaps inventory](./api-gaps-for-bulk-downloads.md) — Data not in bulk downloads
+- [API gaps inventory](./bulk-downloads-data-gaps.md) — Data not in bulk downloads
 - [INDEXING.md](../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
 - [High-level plan](../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
 
