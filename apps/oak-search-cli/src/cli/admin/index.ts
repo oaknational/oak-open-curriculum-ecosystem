@@ -21,6 +21,7 @@
 
 import { Command } from 'commander';
 import type { CliSdkEnv } from '../shared/index.js';
+import type { OakClientEnv } from '../../adapters/oak-adapter.js';
 import {
   registerSetupCmd,
   registerStatusCmd,
@@ -28,13 +29,12 @@ import {
   registerMetaCmd,
 } from './admin-sdk-commands.js';
 import { registerOrchestrationCmds } from './admin-orchestration-commands.js';
+import { registerVersionedIngestCmd, registerStageCmd } from './admin-lifecycle-commands.js';
 import {
-  registerVersionedIngestCmd,
+  registerPromoteCmd,
   registerRollbackCmd,
   registerValidateAliasesCmd,
-  registerStageCmd,
-  registerPromoteCmd,
-} from './admin-lifecycle-commands.js';
+} from './admin-lifecycle-alias-commands.js';
 
 /**
  * Create the `admin` subcommand group.
@@ -43,15 +43,19 @@ import {
  * pass-through orchestration commands (ingest, verify, download, etc.)
  * into a single Commander command group.
  *
+ * Lifecycle commands that perform ingestion (versioned-ingest, stage)
+ * require the wider `CliSdkEnv & OakClientEnv` to access the Oak API.
+ *
+ * @param cliEnv - Validated CLI environment values including Oak API credentials
  * @returns A Commander `Command` with all admin subcommands registered
  *
  * @example
  * ```typescript
  * const program = new Command();
- * program.addCommand(adminCommand());
+ * program.addCommand(adminCommand(cliEnv));
  * ```
  */
-export function adminCommand(cliEnv: CliSdkEnv): Command {
+export function adminCommand(cliEnv: CliSdkEnv & OakClientEnv): Command {
   const cmd = new Command('admin').description(
     'Elasticsearch setup, ingestion, and index management',
   );

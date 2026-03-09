@@ -1,12 +1,10 @@
 /**
- * Admin service interface — Elasticsearch setup, ingestion, and index management.
+ * Admin service interface — Elasticsearch setup and index management.
  *
  * Covers the write-path operations: creating indexes, updating synonyms,
- * ingesting curriculum data, and managing index metadata.
- *
- * The Oak Curriculum SDK client is not part of the core {@link SearchSdkDeps}
- * because many SDK consumers (e.g. MCP servers) never ingest data. Instead,
- * the `ingest()` method accepts the Oak client as a parameter.
+ * and managing index metadata. Ingestion has moved to the lifecycle
+ * service layer (`IndexLifecycleService.stage` / `.versionedIngest`),
+ * backed by the CLI bulk ingestion pipeline.
  *
  * Types are in `admin-types.ts`.
  */
@@ -20,8 +18,6 @@ import type {
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
-  IngestOptions,
-  IngestResult,
 } from './admin-types.js';
 import type { DocCountExpectations, DocCountVerification } from '../admin/verify-doc-counts.js';
 
@@ -63,11 +59,6 @@ export type {
  *
  * // Full setup: synonyms + all indexes
  * const setupResult = await admin.setup({ verbose: true });
- *
- * // Ingest curriculum data
- * const ingestResult = await admin.ingest({
- *   bulkDir: '/path/to/bulk-data',
- * });
  * ```
  */
 export interface AdminService {
@@ -118,18 +109,6 @@ export interface AdminService {
    * @returns `ok` with the synonym count, or `err` with an `AdminError`
    */
   updateSynonyms(): Promise<Result<SynonymsResult, AdminError>>;
-
-  /**
-   * Run ingestion from bulk data.
-   *
-   * Processes curriculum bulk download files and indexes documents
-   * into Elasticsearch. Supports resilient batching with exponential
-   * backoff.
-   *
-   * @param options - Ingestion options including bulk data path
-   * @returns `ok` with ingestion summary statistics, or `err` with an `AdminError`
-   */
-  ingest(options: IngestOptions): Promise<Result<IngestResult, AdminError>>;
 
   /**
    * Read current index metadata from Elasticsearch.

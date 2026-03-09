@@ -20,12 +20,27 @@ platforms is future work.
 | Command | Description |
 |---------|-------------|
 | `preflight` | Run pre-flight checks (clean tree, no stale worktrees, gates green) before launching parallel agents |
-| `status` | Dashboard showing all background agents with turn count, status, last tool used, and latest activity |
+| `status` | Unified dashboard: agent ID, phase, tool count, elapsed time, worktree state, recent tools |
+| `status --watch` | Auto-refresh the dashboard every 5 seconds |
 | `worktrees` | List active agent worktrees with branch name and change count |
-| `log <id>` | Show recent activity log for a specific agent (supports partial ID match) |
+| `log <id>` | Show recent tool calls and text messages for a specific agent (partial ID match) |
 | `diff [id]` | Show uncommitted changes in the main working tree or a specific agent worktree |
 | `commit-ready` | List all locations (main tree + worktrees) with uncommitted agent changes |
 | `cleanup` | Remove completed worktrees, prune dead references, delete orphaned worktree branches |
+
+### Phase Detection
+
+The `status` command infers each agent's current lifecycle phase from tool call
+patterns in its JSONL output:
+
+| Phase | Detection Signal |
+|-------|-----------------|
+| `researching` | Only Read/Grep/Glob tool calls observed |
+| `implementing` | Write or Edit tools used |
+| `testing` | Bash calls containing `pnpm test`, `pnpm build`, `pnpm lint`, etc. |
+| `committing` | `git commit` command detected |
+| `creating PR` | `gh pr create` or `git push` detected |
+| `done` | `stop_reason: end_turn` in final JSONL entry |
 
 ### Usage
 
@@ -33,10 +48,16 @@ platforms is future work.
 # Before launching parallel agents
 .agent/tools/claude-agent-ops preflight
 
-# During parallel work
+# During parallel work — unified view
 .agent/tools/claude-agent-ops status
+.agent/tools/claude-agent-ops status --watch    # auto-refresh
+
+# Drill into a specific agent
+.agent/tools/claude-agent-ops log a4fbb406
+.agent/tools/claude-agent-ops diff a4fbb406
+
+# Worktree detail
 .agent/tools/claude-agent-ops worktrees
-.agent/tools/claude-agent-ops log ae5ee7b
 .agent/tools/claude-agent-ops commit-ready
 
 # After parallel work
@@ -48,14 +69,21 @@ platforms is future work.
 | Variable | Description |
 |----------|-------------|
 | `AGENT_TASKS_DIR` | Override auto-detected Claude tasks output directory |
+| `AGENT_SUBAGENTS_DIR` | Override auto-detected subagents JSONL directory |
 | `REPO_ROOT` | Override auto-detected repository root |
 
 ### How It Works
 
-1. **Task detection**: Scans `/private/tmp/claude-{uid}/{escaped-repo-path}/tasks/` for `.output` JSONL files
-2. **Agent identification**: Filters by agent ID length (≥15 chars) and minimum turn count (≥2) to exclude non-agent output files
-3. **Status inference**: Parses `stop_reason` from JSONL — `end_turn` = completed, `tool_use` = running
-4. **Worktree tracking**: Scans `.claude/worktrees/agent-*` directories for git status
+1. **Dual-source agent detection**: Discovers agents from both the tasks
+   output directory (`/private/tmp/claude-*/`) and the subagents JSONL
+   directory (`~/.claude/projects/*/subagents/`). Worktree agents are always
+   included; non-worktree agents need ≥2 assistant messages to appear.
+2. **Worktree correlation**: Maps agent short IDs (8-char prefix from worktree
+   directory names) to full JSONL files in the subagents directory.
+3. **Phase inference**: Analyses tool call sequences in the JSONL to detect
+   the agent's current lifecycle phase (research → implement → test → commit → PR).
+4. **Elapsed time**: Computes running time from the first JSONL timestamp.
+5. **Worktree state**: Shows commit count and uncommitted file count per worktree.
 
 ## Future Improvements
 

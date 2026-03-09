@@ -487,23 +487,6 @@ describe('AdminService', () => {
     });
   });
 
-  describe('ingest', () => {
-    it('returns ok with an IngestResult containing document counts', async () => {
-      const { admin } = createSdk();
-
-      const result = await admin.ingest({
-        bulkDir: '/tmp/test-bulk-data',
-      });
-
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        expect(typeof result.value.lessonsIndexed).toBe('number');
-        expect(typeof result.value.unitsIndexed).toBe('number');
-        expect(typeof result.value.sequencesIndexed).toBe('number');
-      }
-    });
-  });
-
   describe('getIndexMeta', () => {
     it('returns ok with IndexMetaDoc or null', async () => {
       const { admin } = createSdk();

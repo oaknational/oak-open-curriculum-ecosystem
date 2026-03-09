@@ -41,7 +41,11 @@ export type { SearchRetrievalFactories, EsClientConfig } from './create-search-r
 // Index lifecycle service (ADR-130) — blue/green index management
 // ---------------------------------------------------------------------------
 
-export { createIndexLifecycleService, buildLifecycleDeps } from './admin/index.js';
+export {
+  createIndexLifecycleService,
+  buildLifecycleDeps,
+  createVersionedIndexResolver,
+} from './admin/index.js';
 
 // ---------------------------------------------------------------------------
 // Index resolution — constants and pure functions for Elasticsearch index naming

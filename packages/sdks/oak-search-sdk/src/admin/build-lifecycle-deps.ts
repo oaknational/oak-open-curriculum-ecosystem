@@ -1,9 +1,12 @@
 /**
  * Factory for building {@link IndexLifecycleDeps} from an Elasticsearch
- * client, target, and optional logger.
+ * client, target, injected ingest function, and optional logger.
  *
  * Each dependency delegates to existing admin building blocks, keeping
  * the lifecycle service decoupled from the ES client (ADR-078).
+ * The `runVersionedIngest` function is injected by the caller (typically
+ * the CLI layer) rather than built internally — see Phase 2 of the
+ * unified versioned ingestion plan.
  */
 
 import type { Client } from '@elastic/elasticsearch';
@@ -11,7 +14,7 @@ import { ok, err, type Result } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
 
 import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
-import type { AdminError, IngestOptions, IngestResult } from '../types/admin-types.js';
+import type { AdminError } from '../types/admin-types.js';
 import type { SearchIndexTarget } from '../internal/index.js';
 import { SEARCH_INDEX_KINDS } from '../internal/index.js';
 import { createVersionedIndexResolver } from './versioned-index-resolver.js';
@@ -22,7 +25,6 @@ import {
   deleteVersionedIndex,
 } from './alias-operations.js';
 import { createAllIndexes } from './admin-index-operations.js';
-import { runIngest } from './ingest.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
 
 // ---------------------------------------------------------------------------
@@ -78,26 +80,6 @@ async function buildCreateVersionedIndexes(
 }
 
 /**
- * Run ingest into versioned indexes, wrapped in try/catch returning Result.
- */
-async function buildRunVersionedIngest(
-  client: Client,
-  target: SearchIndexTarget,
-  logger: Logger | undefined,
-  version: string,
-  options: IngestOptions,
-): Promise<Result<IngestResult, AdminError>> {
-  try {
-    const resolver = createVersionedIndexResolver(version, target);
-    const result = await runIngest(client, resolver, logger, options);
-    return ok(result);
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message: `Versioned ingest failed: ${message}` });
-  }
-}
-
-/**
  * Verify that all 6 curriculum indexes for a version meet the minimum
  * document count threshold.
  */
@@ -133,14 +115,16 @@ async function buildVerifyDocCounts(
 // ---------------------------------------------------------------------------
 
 /**
- * Build {@link IndexLifecycleDeps} from an Elasticsearch client and target.
+ * Build {@link IndexLifecycleDeps} from an Elasticsearch client, target,
+ * and an injected `runVersionedIngest` implementation.
  *
- * Each dependency delegates to the existing admin building blocks. This
- * factory is the bridge between the raw ES client and the lifecycle
- * service's dependency-injected interface.
+ * The caller supplies `runVersionedIngest` — typically the CLI-layer
+ * closure from `createRunVersionedIngest` which uses the proven bulk
+ * pipeline. This removes the SDK's dependency on the broken `ingest.ts`.
  *
  * @param client - Elasticsearch client instance
  * @param target - Which index alias set to target (`'primary'` or `'sandbox'`)
+ * @param runVersionedIngest - Injected ingest function matching {@link IndexLifecycleDeps.runVersionedIngest}
  * @param logger - Optional logger for diagnostic output
  * @returns A fully wired {@link IndexLifecycleDeps} object
  *
@@ -150,20 +134,21 @@ async function buildVerifyDocCounts(
  * import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oak-search-sdk';
  *
  * const client = new Client({ node: 'http://localhost:9200' });
- * const deps = buildLifecycleDeps(client, 'primary');
+ * const runIngest = createRunVersionedIngest({ oakClient, esTransport: client, target: 'primary' });
+ * const deps = buildLifecycleDeps(client, 'primary', runIngest);
  * const service = createIndexLifecycleService(deps);
  * ```
  */
 export function buildLifecycleDeps(
   client: Client,
   target: SearchIndexTarget,
+  runVersionedIngest: IndexLifecycleDeps['runVersionedIngest'],
   logger?: Logger,
 ): IndexLifecycleDeps {
   return {
     createVersionedIndexes: (version) =>
       buildCreateVersionedIndexes(client, target, logger, version),
-    runVersionedIngest: (version, options) =>
-      buildRunVersionedIngest(client, target, logger, version, options),
+    runVersionedIngest,
     resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target),
     atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps),
     readIndexMeta: () => readIndexMeta(client),

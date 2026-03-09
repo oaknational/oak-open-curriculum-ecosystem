@@ -1,8 +1,12 @@
 /**
- * CLI commands for the index lifecycle service (ADR-130).
+ * CLI commands for lifecycle ingestion operations (ADR-130).
  *
- * Provides versioned-ingest, stage, promote, rollback, and validate-aliases
- * commands that delegate to the SDK lifecycle service.
+ * Provides versioned-ingest and stage commands that delegate to the
+ * SDK lifecycle service. These commands require Oak API credentials
+ * for data acquisition.
+ *
+ * Alias-only commands (promote, rollback, validate-aliases) live in
+ * `admin-lifecycle-alias-commands.ts`.
  */
 
 import type { Command } from 'commander';
@@ -16,19 +20,36 @@ import {
   printSuccess,
   printError,
   printJson,
-  printHeader,
   type CliSdkEnv,
 } from '../shared/index.js';
+import type { OakClientEnv } from '../../adapters/oak-adapter.js';
+import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-client-factory.js';
+import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
 
 /**
- * Build a lifecycle service from CLI environment configuration.
+ * Extended environment for lifecycle commands that perform ingestion.
  *
- * @param cliEnv - Validated CLI environment values
+ * Includes Oak API credentials on top of the base CLI SDK environment.
+ */
+export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv;
+
+/**
+ * Build a lifecycle service wired with the real ingest closure.
+ *
+ * @param cliEnv - Validated CLI environment values including Oak API credentials
  * @returns A wired {@link IndexLifecycleService}
  */
-function buildLifecycleService(cliEnv: CliSdkEnv): IndexLifecycleService {
-  const client = createEsClient(cliEnv);
-  const deps = buildLifecycleDeps(client, cliEnv.SEARCH_INDEX_TARGET);
+async function buildLifecycleServiceForIngest(
+  cliEnv: LifecycleIngestEnv,
+): Promise<IndexLifecycleService> {
+  const esClient = createEsClient(cliEnv);
+  const oakClient = await createIngestionClient({ env: cliEnv });
+  const runVersionedIngest = createRunVersionedIngest({
+    oakClient,
+    esTransport: esClient,
+    target: cliEnv.SEARCH_INDEX_TARGET,
+  });
+  const deps = buildLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, runVersionedIngest);
   return createIndexLifecycleService(deps);
 }
 
@@ -39,9 +60,9 @@ function buildLifecycleService(cliEnv: CliSdkEnv): IndexLifecycleService {
  * ingest data, verify counts, swap aliases, and clean up.
  *
  * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
+ * @param cliEnv - Validated CLI environment values including Oak API credentials
  */
-export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
   parent
     .command('versioned-ingest')
     .description('Run a versioned blue/green ingest cycle (ADR-130)')
@@ -57,7 +78,7 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): 
         verbose?: boolean;
       }) => {
         try {
-          const service = buildLifecycleService(cliEnv);
+          const service = await buildLifecycleServiceForIngest(cliEnv);
           const result = await service.versionedIngest({
             bulkDir: opts.bulkDir,
             subjectFilter: opts.subjectFilter,
@@ -86,9 +107,9 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: CliSdkEnv): 
  * The returned version can later be promoted via `admin promote`.
  *
  * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
+ * @param cliEnv - Validated CLI environment values including Oak API credentials
  */
-export function registerStageCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
   parent
     .command('stage')
     .description('Stage versioned indexes without promoting (create, ingest, verify)')
@@ -104,7 +125,7 @@ export function registerStageCmd(parent: Command, cliEnv: CliSdkEnv): void {
         verbose?: boolean;
       }) => {
         try {
-          const service = buildLifecycleService(cliEnv);
+          const service = await buildLifecycleServiceForIngest(cliEnv);
           const result = await service.stage({
             bulkDir: opts.bulkDir,
             subjectFilter: opts.subjectFilter,
@@ -127,105 +148,4 @@ export function registerStageCmd(parent: Command, cliEnv: CliSdkEnv): void {
         }
       },
     );
-}
-
-/**
- * Register the `admin promote` subcommand.
- *
- * Promotes a previously staged version by swapping aliases,
- * writing metadata, and cleaning up old index generations.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
- */
-export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
-  parent
-    .command('promote')
-    .description('Promote a staged version by swapping aliases to it')
-    .requiredOption('--version <version>', 'Version string to promote (from stage output)')
-    .action(async (opts: { version: string }) => {
-      try {
-        const service = buildLifecycleService(cliEnv);
-        const result = await service.promote(opts.version);
-        if (!result.ok) {
-          printError(`${result.error.type}: ${result.error.message}`);
-          process.exitCode = 1;
-          return;
-        }
-        printSuccess(`Promoted version ${result.value.version}`);
-        printJson(result.value);
-      } catch (error) {
-        printError(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-      }
-    });
-}
-
-/**
- * Register the `admin rollback` subcommand.
- *
- * Rolls back to the previous index version recorded in metadata.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
- */
-export function registerRollbackCmd(parent: Command, cliEnv: CliSdkEnv): void {
-  parent
-    .command('rollback')
-    .description('Roll back to the previous index version')
-    .action(async () => {
-      try {
-        const service = buildLifecycleService(cliEnv);
-        const result = await service.rollback();
-        if (!result.ok) {
-          printError(`${result.error.type}: ${result.error.message}`);
-          process.exitCode = 1;
-          return;
-        }
-        printSuccess(
-          `Rolled back from ${result.value.rolledBackFromVersion} ` +
-            `to ${result.value.rolledBackToVersion}`,
-        );
-        printJson(result.value);
-      } catch (error) {
-        printError(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-      }
-    });
-}
-
-/**
- * Register the `admin validate-aliases` subcommand.
- *
- * Checks health of all curriculum aliases and prints results.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values
- */
-export function registerValidateAliasesCmd(parent: Command, cliEnv: CliSdkEnv): void {
-  parent
-    .command('validate-aliases')
-    .description('Validate health of all curriculum aliases')
-    .action(async () => {
-      try {
-        const service = buildLifecycleService(cliEnv);
-        const result = await service.validateAliases();
-        if (!result.ok) {
-          printError(`${result.error.type}: ${result.error.message}`);
-          process.exitCode = 1;
-          return;
-        }
-        printHeader('Alias Health');
-        printJson(result.value.entries);
-        if (result.value.allHealthy) {
-          printSuccess('All aliases are healthy.');
-        } else {
-          printError('Some aliases are unhealthy.');
-          process.exitCode = 1;
-        }
-      } catch (error) {
-        printError(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-      }
-    });
 }

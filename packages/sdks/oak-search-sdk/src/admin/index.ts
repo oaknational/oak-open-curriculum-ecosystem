@@ -10,3 +10,4 @@ export { createAdminService } from './create-admin-service.js';
 export type { AliasSwap, AliasTargetInfo } from '../types/index-lifecycle-types.js';
 export { createIndexLifecycleService } from './index-lifecycle-service.js';
 export { buildLifecycleDeps } from './build-lifecycle-deps.js';
+export { createVersionedIndexResolver } from './versioned-index-resolver.js';
