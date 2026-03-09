@@ -1,0 +1,6 @@
+---
+description: Sub-agents must not modify .agent/directives/, .agent/rules/, .claude/rules/, or .cursor/rules/.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/subagent-practice-core-protection.md`.

@@ -44,13 +44,12 @@ isProject: false
 ## Session Entry Point
 
 **Status: SUPERSEDED** — this plan has been replaced by
-[unified-versioned-ingestion.md](./unified-versioned-ingestion.md) (2026-03-09).
+[unified-versioned-ingestion.md](../../active/unified-versioned-ingestion.md) (2026-03-09).
 
 This document is retained as a historical record: the "What Went Wrong"
 analysis, root cause investigation, and completed prerequisites
 (migration fix, reviewer fixes, preflight, `remove_index` smoke test)
-are referenced by the successor plan. It will be archived when the
-unified plan completes (Phase 4, Task 4.3).
+are referenced by the successor plan.
 
 ## What Went Wrong (2026-03-08)
 
@@ -251,7 +250,7 @@ How to avoid this class of error in future:
    reviewer would have questioned whether raw JSON could produce valid ES
    documents. **Reviewers must be invoked on approach (before code) and on
    implementation (after code).** See the
-   [invoke-code-reviewers directive](../../../directives/invoke-code-reviewers.md)
+   [invoke-code-reviewers directive](../../../../directives/invoke-code-reviewers.md)
    for the full invocation matrix.
 
 7. **Review intentions, not just code** — Per AGENT.md: "Reviewers can
@@ -279,10 +278,10 @@ blue/green swaps. The bare-index-to-alias migration is a one-time operation.
 
 ### Key References
 
-- [ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green design
-- [INDEXING.md](../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
-- [high-level plan](../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
-- [API gaps inventory](./api-gaps-for-bulk-downloads.md) — Data not in bulk downloads
+- [ADR-130](../../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green design
+- [INDEXING.md](../../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
+- [high-level plan](../../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
+- [API gaps inventory](../../active/api-gaps-for-bulk-downloads.md) — Data not in bulk downloads
 
 ### Key Files
 

@@ -29,7 +29,7 @@ isProject: false
 **Last Updated**: 2026-03-09
 **Status**: NOT STARTED
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
-**Predecessor**: [blue-green-reindex.execution.plan.md](./blue-green-reindex.execution.plan.md) — what went wrong and why
+**Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 
 ---
 
@@ -66,7 +66,7 @@ The lifecycle orchestration code is **sound and tested** (172 tests pass).
 Alias operations, swap builders, promote, rollback, cleanup, and index
 creation all work correctly. The problem is **only** the ingest integration.
 
-See the [predecessor plan](./blue-green-reindex.execution.plan.md) for the
+See the [predecessor plan](../archive/completed/blue-green-reindex.execution.plan.md) for the
 full timeline, root cause analysis, and completed prerequisites (migration
 fix, reviewer fixes, preflight, `remove_index` smoke test).
 
@@ -968,12 +968,12 @@ Every item below is a required deliverable, not a conditional check.
 2. TSDoc present on every function listed above
 3. No "if", "consider", "may" in documentation about changes that happened
 
-#### Task 4.3: Archive Predecessor Plan
+#### Task 4.3: Archive Predecessor Plan — DONE
 
-Move `blue-green-reindex.execution.plan.md` to
+`blue-green-reindex.execution.plan.md` has been moved to
 `.agent/plans/semantic-search/archive/completed/`. Its completed
-prerequisites and "what went wrong" documentation are valuable
-historical records.
+prerequisites and "what went wrong" documentation are retained as
+historical records. All cross-references updated.
 
 ---
 
@@ -1078,7 +1078,7 @@ This atomically swaps aliases back to the previous version (recorded in
 
 ### Related Plans and Documentation
 
-- [Predecessor plan](./blue-green-reindex.execution.plan.md) — What went wrong (2026-03-08)
+- [Predecessor plan](../archive/completed/blue-green-reindex.execution.plan.md) — What went wrong (2026-03-08)
 - [API gaps inventory](./api-gaps-for-bulk-downloads.md) — Data not in bulk downloads
 - [INDEXING.md](../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
 - [High-level plan](../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
