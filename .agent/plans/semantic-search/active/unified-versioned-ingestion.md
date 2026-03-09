@@ -278,6 +278,9 @@ below. All blocking findings must be addressed during implementation.
 | `architecture-reviewer-wilma` | CRITICAL ISSUES — failure modes and hidden coupling identified |
 | `code-reviewer` | APPROVED WITH SUGGESTIONS |
 | `docs-adr-reviewer` | GAPS FOUND |
+| `architecture-reviewer-barney` (background) | APPROACH SOUND — hidden consumers and competing patterns found |
+| `architecture-reviewer-betty` (background) | ISSUES FOUND — confirmed approach, flagged constant duplication |
+| `architecture-reviewer-wilma` (background) | CRITICAL ISSUES — post-swap validation gap identified |
 
 ### Blocking Findings
 
@@ -355,9 +358,25 @@ upfront `IndexResolverFn`, two competing patterns exist for index name
 resolution: post-hoc rewriting (non-versioned) and upfront resolution
 (versioned). **Addressed**: Task 2.8 — unify both paths to use the resolver.
 
+**12. Hardcoded constants duplicate `BASE_INDEX_NAMES`** (Betty, background
+review) — The 6 constants in `bulk-ingestion-phases.ts` (`LESSONS_INDEX`,
+`UNITS_INDEX`, etc.) duplicate `BASE_INDEX_NAMES` from the SDK's
+`index-resolver.ts`. After the resolver is threaded through, these
+constants should be replaced with lookups from `BASE_INDEX_NAMES` to
+eliminate silent duplication. **Addressed**: Task 1.1 REFACTOR step —
+when deleting the 6 constants, derive defaults from `BASE_INDEX_NAMES`
+rather than maintaining parallel strings.
+
+**13. No post-swap alias validation before metadata commit** (Wilma,
+background review) — After `atomicAliasSwap()`, the promote flow writes
+metadata assuming all 6 aliases swapped. If the swap partially fails
+(e.g. ES timeout on one alias while others succeed), metadata records
+incorrect state. No `resolveCurrentAliasTargets()` validation runs between
+swap and commit. **Addressed**: Task 2.9 — add post-swap alias validation.
+
 ### Process Refinements (Addressed in Phase 4)
 
-**12. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
+**14. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
 **format mismatch** (SDK expects flat `{doc_type}` arrays, bulk files
 are `BulkDownloadFile` objects), not merely an `unknown[]` type issue.
 **Addressed**: Task 4.2 item 5 — commit messages and documentation must
@@ -506,7 +525,9 @@ compatible). When provided, all 6 index references use the resolver.
    Assert the bulk operations contain the versioned names. Run test → FAILS.
 2. **GREEN**: Add `IndexResolverFn` parameter with default. Replace
    6 constants with resolver calls. Run test → PASSES.
-3. **REFACTOR**: Remove the 6 constants (now dead code). Clean up.
+3. **REFACTOR**: Delete the 6 hardcoded constants. The default resolver
+   should derive from `BASE_INDEX_NAMES` (SDK's `index-resolver.ts`),
+   not maintain a parallel copy of the same strings (Finding 12, Betty).
 
 **Acceptance Criteria**:
 
@@ -763,6 +784,35 @@ relegated to a compatibility path with a clear deprecation note.
 2. `rewriteBulkOperations` deleted or explicitly deprecated
 3. `admin ingest` behaviour unchanged (existing tests pass)
 
+#### Task 2.9: Post-Swap Alias Validation Before Metadata Commit (Resilience)
+
+**Problem**: After `atomicAliasSwap()`, the promote flow immediately
+writes metadata assuming all 6 aliases swapped successfully. If the
+swap partially fails (some aliases swapped, others not), metadata
+records incorrect state. No validation runs between swap and commit.
+
+**Target**: After `atomicAliasSwap()` returns, call
+`resolveCurrentAliasTargets()` to verify all 6 aliases point to the
+expected versioned index. Only proceed to metadata write if all
+aliases are confirmed. If any alias is wrong, return an error with
+a detailed per-alias report.
+
+**TDD Sequence**:
+
+1. **RED**: Write test — `promote` with a partially-failed swap
+   (mock `resolveCurrentAliasTargets` returning mismatched aliases)
+   returns an error before writing metadata. Run → FAILS.
+2. **GREEN**: Add post-swap validation in the promote flow between
+   `atomicAliasSwap()` and `writeIndexMeta()`. Run → PASSES.
+3. **REFACTOR**: Ensure the error includes which aliases failed and
+   what they point to.
+
+**Acceptance Criteria**:
+
+1. Post-swap validation confirms all 6 aliases before metadata write
+2. Partial swap failure is reported with per-alias details
+3. No metadata is written for a partially-swapped state
+
 **Phase 2 Quality Gates**:
 
 ```bash
@@ -901,6 +951,7 @@ are valuable historical records.
 - `dispatchBulk` returns per-index counts — proves count verification
 - `verifyDocCounts` with multiple failures — proves all-failure accumulation
 - `createHybridDataSource` with failing API — proves Result error wrapping
+- `promote` with partially-failed swap — proves post-swap validation rejects
 
 ### Integration Tests
 
@@ -954,18 +1005,19 @@ This atomically swaps aliases back to the previous version (recorded in
 11. Failed `stage` cleans up orphaned versioned indexes
 12. `AdminService.ingest()` either removed or uses injected implementation
 13. One index-name resolution pattern across all ingestion paths (`rewriteBulkOperations` eliminated)
+14. Post-swap alias validation confirms all 6 aliases before metadata write
 
 ### Documentation
 
-14. ADR-130 documents `remove_index` alias action
-15. ADR-093 notes versioned ingestion support via `IndexResolverFn`
-16. INDEXING.md describes versioned vs bare ingestion flow
-17. TSDoc present on all changed function signatures
+15. ADR-130 documents `remove_index` alias action
+16. ADR-093 notes versioned ingestion support via `IndexResolverFn`
+17. INDEXING.md describes versioned vs bare ingestion flow
+18. TSDoc present on all changed function signatures
 
 ### Quality
 
-18. All quality gates pass across all workspaces
-19. All mandatory reviewers have been invoked and findings addressed
+19. All quality gates pass across all workspaces
+20. All mandatory reviewers have been invoked and findings addressed
 
 ---
 
