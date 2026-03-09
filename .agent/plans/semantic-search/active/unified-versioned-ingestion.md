@@ -8,13 +8,13 @@ overview: >
 todos:
   - id: phase-0-validate
     content: "Phase 0: Validate assumptions against live code."
-    status: pending
+    status: completed
   - id: phase-1-parameterise
     content: "Phase 1: Parameterise pipeline on index names (TDD)."
     status: pending
   - id: phase-2-wire
     content: "Phase 2: Wire lifecycle deps, delete broken SDK ingest, strengthen resilience (TDD)."
-    status: pending
+    status: in_progress
   - id: phase-3-operational
     content: "Phase 3: Stage, validate, promote, verify (live operation)."
     status: pending
@@ -27,7 +27,7 @@ isProject: false
 # Unified Versioned Ingestion Pipeline
 
 **Last Updated**: 2026-03-09
-**Status**: NOT STARTED
+**Status**: IN PROGRESS — Phase 0 complete, Phase 2 resilience tasks complete, Phase 1 core next
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
 **Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 
@@ -403,14 +403,70 @@ describe the root cause accurately as a format mismatch.
 
 ---
 
+## Progress Log
+
+### 2026-03-09: Wave 1 Complete (Phase 0 + Resilience Tasks)
+
+**Session**: Batch parallel execution — 6 background agents in worktree isolation.
+
+**Phase 0 — All 7 assumptions validated:**
+
+| Task | Result |
+|------|--------|
+| 0.1 Adapter parameterisation | CONFIRMED — all 3 adapters accept index names as parameters |
+| 0.2 Pipeline produces correct ES documents | CONFIRMED — output types match SDK-generated mappings |
+| 0.3 `buildLifecycleDeps` single call site | CONFIRMED — only `admin-lifecycle-commands.ts` |
+| 0.4 6 index kinds exhaustive | CONFIRMED — `SEARCH_INDEX_KINDS` matches `collectPhaseResults` |
+| 0.5 `dispatchBulk` behaviour | CONFIRMED — pass-through (no index rewriting) + batched at 8MB chunks with 8s inter-chunk delay (ADR-087 compliant) |
+| 0.6 Versioned path avoids `inferKindFromIndex` | CONFIRMED — neither current nor planned path touches it |
+| 0.7 Consumers of `runIngest` | CONFIRMED — exactly 2: `build-lifecycle-deps.ts` and `create-admin-service.ts` (via `runIngestWrapped`) |
+
+**Minor finding**: `buildSequenceBulkOperations` has a 4th optional `categoryMap?` parameter not in the plan. Does not affect parameterisation.
+
+**No corrections needed to the plan.**
+
+**Phase 2 resilience tasks completed (out of order — independent of core spine):**
+
+| Task | Commit | Summary |
+|------|--------|---------|
+| 2.4 Per-index count verification | `2d01e1a1` | `dispatchBulk` returns typed `IndexOperationCounts` from ES bulk response |
+| 2.5 Cleanup-on-failure | `2d01e1a1` | Stage flow deletes orphaned versioned indexes on ingest failure; cleanup errors logged as warnings |
+| 2.6 `verifyDocCounts` all-failure reporting | `196a3580` | Accumulates all per-index failures instead of early exit. New `verify-doc-counts.ts` module with 7 unit tests |
+| 2.7 `createHybridDataSource` Result pattern | `e54d6554` | Returns `Result<HybridDataSource, AdminError>` with `data_source_error` kind. All callers updated |
+| 2.9 Post-swap alias validation | `c4f84f39` | `validatePostSwapAliases()` between `atomicAliasSwap()` and `writeIndexMeta()`. Per-alias mismatch reporting |
+
+**Also completed:**
+
+| Item | Commit | Summary |
+|------|--------|---------|
+| Task 4.3 Archive predecessor plan | `31d90821` | `blue-green-reindex.execution.plan.md` archived to `completed/`, all cross-references updated |
+| Practice Core protection rule | `31d90821` | New rule: sub-agents must not modify `.agent/directives/`, `.agent/rules/`, or platform adapters |
+| `claude-agent-ops` CLI tool | `31d90821` | Agent monitoring CLI: `status`, `worktrees`, `log`, `diff`, `commit-ready` commands |
+
+**Remaining work (critical path):**
+
+1. **Phase 1**: Parameterise `collectPhaseResults` with `IndexResolverFn` (Task 1.1), thread through `prepareBulkIngestion` (Task 1.2)
+2. **Phase 2 core**: Create CLI `runVersionedIngest` closure (2.1), wire into `buildLifecycleService` (2.2), delete SDK `ingest.ts` (2.3)
+3. **Phase 2.8**: Unify `rewriteBulkOperations` with `IndexResolverFn`
+4. **Phase 3**: Live stage → validate → promote → verify
+5. **Phase 4**: Adversarial reviews + documentation propagation (except Task 4.3 which is done)
+
+**Process observations for next session:**
+
+- Worktree agents cannot `git push` due to pre-existing e2e test (`bulk-retry-cli.e2e.test.ts`) that requires local bulk download data. Cherry-pick from worktree branches was the workaround.
+- Some agent file changes leaked from worktrees into the main working tree. The `claude-agent-ops` CLI was built to help track this.
+- Sub-agents attempted to modify plan files — a new rule (`subagent-practice-core-protection`) now prevents this.
+
+---
+
 ## Tasks
 
-### Phase 0: Validate Assumptions
+### Phase 0: Validate Assumptions — COMPLETE
 
 **Foundation Check-In**: Re-read `principles.md` (fail fast, DRY, types from schema).
 
-Validate each assumption before writing any code. If any assumption is
-wrong, update this plan before proceeding.
+All 7 assumptions validated on 2026-03-09. No corrections needed. See
+[Progress Log](#progress-log) for detailed results.
 
 #### Task 0.1: Confirm Adapter Parameterisation
 
@@ -707,7 +763,7 @@ parameter (preferred — makes the dependency explicit).
 5. `AdminService.ingest()` either removed or uses injected implementation
 6. All quality gates pass
 
-#### Task 2.4: Per-Index Count Verification in Dispatch (Resilience)
+#### Task 2.4: Per-Index Count Verification in Dispatch (Resilience) — DONE
 
 **Problem**: `dispatchBulk()` does not return per-index document counts.
 `verifyDocCounts()` cannot distinguish partial from full ingest success.
@@ -732,7 +788,7 @@ totals from `BulkIngestionStats` before reporting success.
 2. `runVersionedIngest` validates expected vs actual counts
 3. Partial ingest failures are detectable and logged
 
-#### Task 2.5: Cleanup-on-Failure for Orphaned Versioned Indexes (Resilience)
+#### Task 2.5: Cleanup-on-Failure for Orphaned Versioned Indexes (Resilience) — DONE
 
 **Problem**: If ingest throws after `createVersionedIndexes()`, partial
 versioned indexes are left behind. This happened on 2026-03-08.
@@ -754,7 +810,7 @@ indexes if ingest fails. The user sees a clear error and clean state.
 2. Original error is preserved and reported to the user
 3. Cleanup failure is logged as a warning, not thrown
 
-#### Task 2.6: `verifyDocCounts` Reports All Failures (Resilience)
+#### Task 2.6: `verifyDocCounts` Reports All Failures (Resilience) — DONE
 
 **Problem**: `verifyDocCounts()` exits on the first failing index. The
 operator sees one problem, fixes it, re-runs, and discovers another.
@@ -776,7 +832,7 @@ returns a comprehensive report.
 2. Return type includes per-index status (pass/fail with counts)
 3. Existing passing tests still pass (backwards compatible)
 
-#### Task 2.7: `createHybridDataSource` Result Pattern (Resilience)
+#### Task 2.7: `createHybridDataSource` Result Pattern (Resilience) — DONE
 
 **Problem**: `createHybridDataSource()` can throw an unhandled exception
 during KS4 API supplementation. The lifecycle service catches it but
@@ -828,7 +884,7 @@ relegated to a compatibility path with a clear deprecation note.
 2. `rewriteBulkOperations` deleted or explicitly deprecated
 3. `admin ingest` behaviour unchanged (existing tests pass)
 
-#### Task 2.9: Post-Swap Alias Validation Before Metadata Commit (Resilience)
+#### Task 2.9: Post-Swap Alias Validation Before Metadata Commit (Resilience) — DONE
 
 **Problem**: After `atomicAliasSwap()`, the promote flow immediately
 writes metadata assuming all 6 aliases swapped successfully. If the
@@ -1044,13 +1100,13 @@ This atomically swaps aliases back to the previous version (recorded in
 
 6. SDK `ingest.ts` is deleted — no `unknown[]` processing exists
 7. `buildLifecycleDeps()` requires explicit `runVersionedIngest` injection
-8. `dispatchBulk()` returns per-index operation counts (not void)
-9. `verifyDocCounts()` reports all failures, not just the first
-10. `createHybridDataSource()` returns `Result`, does not throw
-11. Failed `stage` cleans up orphaned versioned indexes
+8. ~~`dispatchBulk()` returns per-index operation counts (not void)~~ — DONE (`2d01e1a1`)
+9. ~~`verifyDocCounts()` reports all failures, not just the first~~ — DONE (`196a3580`)
+10. ~~`createHybridDataSource()` returns `Result`, does not throw~~ — DONE (`e54d6554`)
+11. ~~Failed `stage` cleans up orphaned versioned indexes~~ — DONE (`2d01e1a1`)
 12. `AdminService.ingest()` either removed or uses injected implementation
 13. One index-name resolution pattern across all ingestion paths (`rewriteBulkOperations` eliminated)
-14. Post-swap alias validation confirms all 6 aliases before metadata write
+14. ~~Post-swap alias validation confirms all 6 aliases before metadata write~~ — DONE (`c4f84f39`)
 
 ### Documentation
 

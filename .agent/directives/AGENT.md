@@ -69,6 +69,10 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
+### Agent Tools
+
+CLI tools for managing agent workflows live in [`.agent/tools/`](../tools/README.md). Currently includes `claude-agent-ops` for monitoring background agents and their worktree-isolated changes.
+
 ### Agent Artefact Architecture (ADR-125)
 
 All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
