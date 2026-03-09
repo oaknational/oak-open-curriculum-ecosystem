@@ -374,9 +374,18 @@ metadata assuming all 6 aliases swapped. If the swap partially fails
 incorrect state. No `resolveCurrentAliasTargets()` validation runs between
 swap and commit. **Addressed**: Task 2.9 — add post-swap alias validation.
 
+**14. `IngestOptions.dryRun` semantic mismatch** (code-reviewer, background
+review) — `IndexLifecycleDeps.runVersionedIngest` accepts `IngestOptions`,
+which includes `dryRun`. In the lifecycle context, a dry-run ingest
+silently produces zero documents with no error — the lifecycle service
+interprets this as success and proceeds to verify/promote an empty index.
+**Addressed**: Task 2.1 — use a narrower type (without `dryRun`) for the
+lifecycle dep slot, or explicitly reject `dryRun: true` with a fail-fast
+error.
+
 ### Process Refinements (Addressed in Phase 4)
 
-**14. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
+**15. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
 **format mismatch** (SDK expects flat `{doc_type}` arrays, bulk files
 are `BulkDownloadFile` objects), not merely an `unknown[]` type issue.
 **Addressed**: Task 4.2 item 5 — commit messages and documentation must
@@ -582,7 +591,13 @@ clear boundaries, fail fast with helpful errors), `schema-first-execution.md`
 
 #### Task 2.1: Create CLI-Layer `runVersionedIngest` Implementation
 
-The CLI provides a `runVersionedIngest` function that:
+The CLI provides a `runVersionedIngest` **closure** that captures the
+`OakClient` (needed for KS4 supplementation via `HybridDataSource`)
+and other CLI-layer dependencies. `buildLifecycleDeps` does NOT gain
+an `OakClient` parameter — the CLI provides the complete ingest
+function as a closure (Finding 14, code-reviewer).
+
+The closure:
 
 1. Creates a versioned `IndexResolverFn` from the version string
 2. Calls `prepareBulkIngestion` with the versioned resolver
@@ -590,6 +605,12 @@ The CLI provides a `runVersionedIngest` function that:
 4. Returns `IngestResult` with document counts
 5. Includes `logger.debug()` calls at entry, decision points, and exit
    (the predecessor's silent failure was partly caused by zero debug logging)
+
+**Type narrowing**: The dep slot should NOT accept `IngestOptions` with
+`dryRun` — a lifecycle ingest is always live. Either define a narrower
+`VersionedIngestOptions` (omitting `dryRun`), or reject `dryRun: true`
+at the function boundary with a fail-fast error (Finding 14,
+code-reviewer).
 
 **TDD Sequence**:
 
