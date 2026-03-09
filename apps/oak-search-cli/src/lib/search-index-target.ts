@@ -1,5 +1,3 @@
-import type { BulkOperations } from './indexing/bulk-operation-types';
-
 export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
 export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
 
@@ -24,14 +22,24 @@ const BASE_INDEX_NAMES: Record<SearchIndexKind, string> = {
   threads: 'oak_threads',
 };
 
-const BASE_INDEX_TO_KIND = new Map<string, SearchIndexKind>([
-  ['oak_lessons', 'lessons'],
-  ['oak_unit_rollup', 'unit_rollup'],
-  ['oak_units', 'units'],
-  ['oak_sequences', 'sequences'],
-  ['oak_sequence_facets', 'sequence_facets'],
-  ['oak_threads', 'threads'],
-]);
+/**
+ * Function that resolves a search index kind to a concrete Elasticsearch index name.
+ *
+ * Created from the target at factory time and passed through the ingestion pipeline,
+ * ensuring index names are correct from the point of generation rather than requiring
+ * post-hoc rewriting.
+ */
+export type IndexResolverFn = (kind: SearchIndexKind) => string;
+
+/**
+ * Create an index resolver function bound to a specific target.
+ *
+ * @param target - The index target to bind (`'primary'` or `'sandbox'`)
+ * @returns A function that resolves index names for the bound target
+ */
+export function createIndexResolver(target: SearchIndexTarget): IndexResolverFn {
+  return (kind: SearchIndexKind) => resolveSearchIndexName(kind, target);
+}
 
 /** Resolve the Elasticsearch index name for the supplied kind/target pair. */
 export function resolveSearchIndexName(kind: SearchIndexKind, target: SearchIndexTarget): string {
@@ -92,74 +100,4 @@ export function coerceSearchIndexTarget(value: string | undefined): SearchIndexT
     return null;
   }
   return value === 'primary' || value === 'sandbox' ? value : null;
-}
-
-/** Rewrite bulk operations so `_index` entries align with the selected target. */
-export function rewriteBulkOperations(
-  operations: BulkOperations,
-  target: SearchIndexTarget,
-): BulkOperations {
-  if (target === 'primary') {
-    // Primary target already matches canonical index names; return original operations.
-    return [...operations];
-  }
-
-  return operations.map((entry) => {
-    if (!isIndexAction(entry)) {
-      return entry;
-    }
-    const currentIndex = entry.index._index;
-    const kind = BASE_INDEX_TO_KIND.get(currentIndex);
-    if (!kind) {
-      return entry;
-    }
-    const nextIndex = resolveSearchIndexName(kind, target);
-    if (nextIndex === currentIndex) {
-      return entry;
-    }
-    const nextAction: IndexAction = {
-      index: {
-        ...entry.index,
-        _index: nextIndex,
-      },
-    };
-    return nextAction;
-  });
-}
-
-/**
- * Shape of an ES bulk index action's metadata.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexMetadata {
-  readonly _index: string;
-}
-
-/**
- * Shape of an ES bulk index action used in bulk operations.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexAction {
-  readonly index: IndexMetadata;
-}
-
-/**
- * Type guard to check if a value is a bulk index action.
- * Narrows directly to IndexAction without intermediate generic types.
- */
-function isIndexAction(value: unknown): value is IndexAction {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('index' in value)) {
-    return false;
-  }
-  const indexProp = value.index;
-  if (typeof indexProp !== 'object' || indexProp === null) {
-    return false;
-  }
-  if (!('_index' in indexProp)) {
-    return false;
-  }
-  return typeof indexProp._index === 'string' && indexProp._index.length > 0;
 }

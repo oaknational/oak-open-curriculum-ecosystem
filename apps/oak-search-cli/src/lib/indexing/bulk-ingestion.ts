@@ -12,7 +12,7 @@ import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { BulkOperationEntry } from './bulk-operation-types';
-import type { SearchIndexKind } from '../search-index-target';
+import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {
   collectPhaseResults,
@@ -35,6 +35,8 @@ export interface BulkIngestionOptions {
   readonly client: OakClient;
   readonly subjectFilter?: readonly string[];
   readonly indexes?: readonly SearchIndexKind[];
+  /** Resolves index kind to concrete Elasticsearch index name. Defaults to primary. */
+  readonly resolveIndex?: IndexResolverFn;
 }
 
 /** Filters bulk file results by subject if filter is provided. */
@@ -65,7 +67,7 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
 export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
 ): Promise<BulkIngestionResult> {
-  const { bulkDir, client, subjectFilter, indexes = [] } = options;
+  const { bulkDir, client, subjectFilter, indexes = [], resolveIndex } = options;
   ingestLogger.info('Starting bulk ingestion preparation', {
     bulkDir,
     indexes: indexes.length > 0 ? indexes : 'all',
@@ -76,7 +78,13 @@ export async function prepareBulkIngestion(
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
-  const phases = await collectPhaseResults(filteredFiles, bulkDownloadFiles, client, indexes);
+  const phases = await collectPhaseResults(
+    filteredFiles,
+    bulkDownloadFiles,
+    client,
+    indexes,
+    resolveIndex,
+  );
 
   const stats = buildIngestionStats(
     filteredFiles.length,

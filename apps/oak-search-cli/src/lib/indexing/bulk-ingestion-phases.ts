@@ -22,15 +22,12 @@ import {
 } from '../../adapters/bulk-thread-transformer';
 import { buildSequenceBulkOperations } from '../../adapters/bulk-sequence-transformer';
 import type { BulkOperationEntry } from './bulk-operation-types';
-import type { SearchIndexKind } from '../search-index-target';
+import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
+import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ingestLogger } from '../logger';
 
-const LESSONS_INDEX = 'oak_lessons';
-const UNITS_INDEX = 'oak_units';
-const UNIT_ROLLUP_INDEX = 'oak_unit_rollup';
-const THREADS_INDEX = 'oak_threads';
-const SEQUENCES_INDEX = 'oak_sequences';
-const SEQUENCE_FACETS_INDEX = 'oak_sequence_facets';
+/** Default resolver producing primary index names. Used when no resolver is supplied. */
+const DEFAULT_RESOLVER: IndexResolverFn = resolvePrimarySearchIndexName;
 
 /** Curriculum index kinds that require processing bulk files through HybridDataSource. */
 const CURRICULUM_INDEX_KINDS: readonly SearchIndexKind[] = ['lessons', 'units', 'unit_rollup'];
@@ -40,21 +37,15 @@ const SEQUENCE_INDEX_KINDS: readonly SearchIndexKind[] = ['sequences', 'sequence
 
 /** Check whether any of the requested indexes overlap with the given set. */
 function needsIndexKinds(
-  requestedIndexes: readonly SearchIndexKind[],
-  targetKinds: readonly SearchIndexKind[],
+  requested: readonly SearchIndexKind[],
+  kinds: readonly SearchIndexKind[],
 ): boolean {
-  if (requestedIndexes.length === 0) {
-    return true;
-  }
-  return requestedIndexes.some((idx) => targetKinds.includes(idx));
+  return requested.length === 0 || requested.some((idx) => kinds.includes(idx));
 }
 
 /** Check whether threads index is needed. */
-function needsThreads(requestedIndexes: readonly SearchIndexKind[]): boolean {
-  if (requestedIndexes.length === 0) {
-    return true;
-  }
-  return requestedIndexes.includes('threads');
+function needsThreads(requested: readonly SearchIndexKind[]): boolean {
+  return requested.length === 0 || requested.includes('threads');
 }
 
 /** Intermediate result from processing curriculum bulk files. */
@@ -82,12 +73,13 @@ interface SequenceExtractionResult {
 async function processSingleBulkFile(
   fileResult: BulkFileResult,
   client: OakClient,
+  resolveIndex: IndexResolverFn,
 ): Promise<BulkProcessingAccumulator> {
   const hybridSource = await createHybridDataSource(fileResult.data, client);
   const fileOperations = hybridSource.toBulkOperations(
-    LESSONS_INDEX,
-    UNITS_INDEX,
-    UNIT_ROLLUP_INDEX,
+    resolveIndex('lessons'),
+    resolveIndex('units'),
+    resolveIndex('unit_rollup'),
   );
   const stats = hybridSource.getStats();
   return {
@@ -102,13 +94,14 @@ async function processSingleBulkFile(
 async function processAllBulkFiles(
   files: readonly BulkFileResult[],
   client: OakClient,
+  resolveIndex: IndexResolverFn,
 ): Promise<BulkProcessingAccumulator> {
   const allOperations: BulkOperationEntry[] = [];
   let totalLessons = 0,
     totalUnits = 0,
     totalRollups = 0;
   for (const fileResult of files) {
-    const result = await processSingleBulkFile(fileResult, client);
+    const result = await processSingleBulkFile(fileResult, client, resolveIndex);
     allOperations.push(...result.operations);
     totalLessons += result.totalLessons;
     totalUnits += result.totalUnits;
@@ -120,9 +113,10 @@ async function processAllBulkFiles(
 /** Extracts threads from bulk files and builds bulk operations. */
 function extractAndBuildThreadOperations(
   files: readonly BulkDownloadFile[],
+  resolveIndex: IndexResolverFn,
 ): ThreadExtractionResult {
   const threads = extractThreadsFromBulkFiles(files);
-  const operations = buildThreadBulkOperations(threads, THREADS_INDEX);
+  const operations = buildThreadBulkOperations(threads, resolveIndex('threads'));
   ingestLogger.debug('Threads extracted', {
     uniqueThreads: threads.length,
     threadOperations: operations.length,
@@ -133,8 +127,13 @@ function extractAndBuildThreadOperations(
 /** Extracts sequences from bulk files and builds bulk operations. */
 function extractAndBuildSequenceOperations(
   files: readonly BulkDownloadFile[],
+  resolveIndex: IndexResolverFn,
 ): SequenceExtractionResult {
-  const operations = buildSequenceBulkOperations(files, SEQUENCES_INDEX, SEQUENCE_FACETS_INDEX);
+  const operations = buildSequenceBulkOperations(
+    files,
+    resolveIndex('sequences'),
+    resolveIndex('sequence_facets'),
+  );
   const sequenceCount = files.length;
   const sequenceOps = sequenceCount * 2;
   const facetCount = (operations.length - sequenceOps) / 2;
@@ -198,8 +197,7 @@ export interface PhaseResults {
 /**
  * Conditionally execute ingestion phases based on the requested index filter.
  *
- * @remarks
- * Applies the "skip early" pattern: each phase is only executed when the requested indexes
+ * Applies the "skip early" pattern: each phase runs only when the requested indexes
  * overlap with that phase's output kinds. When no indexes are specified, all phases run.
  */
 export async function collectPhaseResults(
@@ -207,6 +205,7 @@ export async function collectPhaseResults(
   bulkDownloadFiles: readonly BulkDownloadFile[],
   client: OakClient,
   indexes: readonly SearchIndexKind[],
+  resolveIndex: IndexResolverFn = DEFAULT_RESOLVER,
 ): Promise<PhaseResults> {
   const doCurriculum = needsIndexKinds(indexes, CURRICULUM_INDEX_KINDS);
   const doThreads = needsThreads(indexes);
@@ -219,15 +218,15 @@ export async function collectPhaseResults(
   });
 
   const processingResult: BulkProcessingAccumulator = doCurriculum
-    ? await processAllBulkFiles(filteredFiles, client)
+    ? await processAllBulkFiles(filteredFiles, client, resolveIndex)
     : { operations: [], totalLessons: 0, totalUnits: 0, totalRollups: 0 };
 
   const threadResult: ThreadExtractionResult = doThreads
-    ? extractAndBuildThreadOperations(bulkDownloadFiles)
+    ? extractAndBuildThreadOperations(bulkDownloadFiles, resolveIndex)
     : { operations: [], count: 0 };
 
   const sequenceResult: SequenceExtractionResult = doSequences
-    ? extractAndBuildSequenceOperations(bulkDownloadFiles)
+    ? extractAndBuildSequenceOperations(bulkDownloadFiles, resolveIndex)
     : { operations: [], sequenceCount: 0, facetCount: 0 };
 
   const operations = [

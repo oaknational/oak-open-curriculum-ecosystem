@@ -8,17 +8,14 @@ import type { Logger } from '@oaknational/logger';
 import type { BulkOperations } from './bulk-operation-types';
 import type { DataIntegrityReport } from './data-integrity-report';
 import { createDataIntegrityCollector } from './data-integrity-report';
-import {
-  rewriteBulkOperations,
-  type SearchIndexTarget,
-  type SearchIndexKind,
-} from '../search-index-target';
+import type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { filterOperationsByIndex } from './ingest-harness-filtering';
 import {
   dispatchBulk,
   logDataIntegrityIssues,
   logPreview,
   logSummary,
+  resolveOperationIndexes,
   summariseOperations,
   type EsTransport,
 } from './ingest-harness-ops';
@@ -45,6 +42,8 @@ export interface BatchIngestionContext {
   readonly subjects: readonly SearchSubjectSlug[];
   readonly indexes: readonly SearchIndexKind[];
   readonly target: SearchIndexTarget;
+  /** Resolves index kind to concrete Elasticsearch index name for the target. */
+  readonly resolveIndex: IndexResolverFn;
   readonly es: EsTransport;
   readonly logger: Logger;
   readonly granularity: BatchGranularity;
@@ -118,7 +117,7 @@ export async function processSingleBatch(
   dryRun: boolean,
 ): Promise<void> {
   state.batchCount++;
-  const targetedOps = rewriteBulkOperations(batch.operations, context.target);
+  const targetedOps = resolveOperationIndexes(batch.operations, context.resolveIndex);
   const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
   state.allOps.push(...filteredOps);
 

@@ -8,9 +8,11 @@ import type { BulkOperations } from './bulk-operation-types';
 import {
   dispatchBulk,
   summariseOperations,
+  resolveOperationIndexes,
   createNdjson,
   type EsTransport,
 } from './ingest-harness-ops.js';
+import { createIndexResolver } from '../search-index-target';
 
 /**
  * Create a mock EsTransport for testing.
@@ -179,6 +181,53 @@ describe('summariseOperations', () => {
     expect(summary.totalDocs).toBe(0);
     expect(summary.counts.lessons).toBe(0);
     expect(summary.counts.units).toBe(0);
+  });
+});
+
+describe('resolveOperationIndexes', () => {
+  it('rewrites primary index names to sandbox when given a sandbox resolver', () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: 'lesson-1' } },
+      { data: 'lesson1' },
+      { index: { _index: 'oak_unit_rollup', _id: 'unit-1' } },
+      { data: 'rollup1' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('sandbox');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'oak_lessons_sandbox', _id: 'lesson-1' } });
+    expect(resolved[1]).toEqual({ data: 'lesson1' });
+    expect(resolved[2]).toEqual({
+      index: { _index: 'oak_unit_rollup_sandbox', _id: 'unit-1' },
+    });
+    expect(resolved[3]).toEqual({ data: 'rollup1' });
+  });
+
+  it('passes operations through unchanged when given a primary resolver', () => {
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: 'lesson-1' } },
+      { data: 'lesson1' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('primary');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'oak_lessons', _id: 'lesson-1' } });
+    expect(resolved[1]).toEqual({ data: 'lesson1' });
+  });
+
+  it('leaves unrecognised index names unchanged', () => {
+    const operations = [
+      { index: { _index: 'other_index', _id: '123' } },
+      { data: 'doc' },
+    ] as BulkOperations;
+
+    const resolve = createIndexResolver('sandbox');
+    const resolved = resolveOperationIndexes(operations, resolve);
+
+    expect(resolved[0]).toEqual({ index: { _index: 'other_index', _id: '123' } });
+    expect(resolved[1]).toEqual({ data: 'doc' });
   });
 });
 
