@@ -328,9 +328,10 @@ async function setupSubjectFilterMocks(
     await import('../../adapters/bulk-thread-transformer');
   const { buildSequenceBulkOperations } = await import('../../adapters/bulk-sequence-transformer');
   vi.mocked(readAllBulkFiles).mockResolvedValue([mathsFileResult, englishFileResult]);
-  vi.mocked(createHybridDataSource).mockResolvedValue(
-    createMockHybridDataSource(mathsFile, 1, 1, 2),
-  );
+  vi.mocked(createHybridDataSource).mockResolvedValue({
+    ok: true,
+    value: createMockHybridDataSource(mathsFile, 1, 1, 2),
+  });
   vi.mocked(createVocabularyMiningAdapter).mockReturnValue(createMockVocabularyAdapter(5, 2, 1));
   vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
   vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
@@ -350,9 +351,10 @@ async function setupMocksWithThreads(): Promise<MockSetupResult> {
   const { buildSequenceBulkOperations } = await import('../../adapters/bulk-sequence-transformer');
 
   vi.mocked(readAllBulkFiles).mockResolvedValue([mockBulkFileResult]);
-  vi.mocked(createHybridDataSource).mockResolvedValue(
-    createMockHybridDataSource(mockBulkFile, 2, 1, 6),
-  );
+  vi.mocked(createHybridDataSource).mockResolvedValue({
+    ok: true,
+    value: createMockHybridDataSource(mockBulkFile, 2, 1, 6),
+  });
   vi.mocked(createVocabularyMiningAdapter).mockReturnValue(createMockVocabularyAdapter(10, 5, 3));
 
   const mockThreads = [

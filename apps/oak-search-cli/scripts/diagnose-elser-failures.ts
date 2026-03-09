@@ -91,7 +91,12 @@ async function prepareBulkOperations(
   const oakClient = await createOakClient({ env: config });
   const ops: BulkOperationEntry[] = [];
   for (const fileResult of files) {
-    const source = await createHybridDataSource(fileResult.data, oakClient);
+    const sourceResult = await createHybridDataSource(fileResult.data, oakClient);
+    if (!sourceResult.ok) {
+      console.error(`Skipping ${fileResult.data.sequenceSlug}: ${sourceResult.error.message}`);
+      continue;
+    }
+    const source = sourceResult.value;
     ops.push(...source.toBulkOperations(LESSONS_INDEX, UNITS_INDEX, UNIT_ROLLUP_INDEX));
     if (limit && ops.length / 2 >= limit) {
       return { ops: ops.slice(0, limit * 2), oakClient };

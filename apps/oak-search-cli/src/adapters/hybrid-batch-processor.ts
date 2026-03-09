@@ -15,6 +15,8 @@ import {
   type HybridDataSourceConfig,
   type HybridDataSourceStats,
 } from './hybrid-data-source';
+import { ok, type Result } from '@oaknational/result';
+import type { AdminError } from '@oaknational/oak-search-sdk';
 
 /** Bulk operation entry type */
 type BulkOperationEntry =
@@ -33,16 +35,28 @@ export interface BatchProcessingResult {
   readonly sources: readonly HybridDataSource[];
 }
 
+/** Aggregate stats from multiple sources. */
+function aggregateStats(sources: readonly HybridDataSource[]): HybridDataSourceStats {
+  let lessonCount = 0;
+  let unitCount = 0;
+  let rollupCount = 0;
+  let ks4LessonsEnriched = 0;
+  let ks4UnitsEnriched = 0;
+  for (const source of sources) {
+    const s = source.getStats();
+    lessonCount += s.lessonCount;
+    unitCount += s.unitCount;
+    rollupCount += s.rollupCount;
+    ks4LessonsEnriched += s.ks4LessonsEnriched;
+    ks4UnitsEnriched += s.ks4UnitsEnriched;
+  }
+  return { lessonCount, unitCount, rollupCount, ks4LessonsEnriched, ks4UnitsEnriched };
+}
+
 /**
  * Process multiple bulk files into a single batch of operations.
  *
- * @param bulkFiles - Bulk download files to process
- * @param client - Oak API client for supplementation
- * @param lessonsIndex - Target index for lessons
- * @param unitsIndex - Target index for units
- * @param rollupIndex - Target index for unit rollups
- * @param config - Configuration options
- * @returns Batch processing result
+ * @returns `ok` with batch result, or `err` with a `data_source_error`
  */
 export async function processBulkFileBatch(
   bulkFiles: readonly BulkDownloadFile[],
@@ -51,40 +65,19 @@ export async function processBulkFileBatch(
   unitsIndex: string,
   rollupIndex: string,
   config: Partial<HybridDataSourceConfig> = {},
-): Promise<BatchProcessingResult> {
+): Promise<Result<BatchProcessingResult, AdminError>> {
   const sources: HybridDataSource[] = [];
   const allOps: BulkOperationEntry[] = [];
 
-  let totalLessons = 0;
-  let totalUnits = 0;
-  let totalRollups = 0;
-  let totalKs4Lessons = 0;
-  let totalKs4Units = 0;
-
   for (const bulkFile of bulkFiles) {
-    const source = await createHybridDataSource(bulkFile, client, config);
+    const sourceResult = await createHybridDataSource(bulkFile, client, config);
+    if (!sourceResult.ok) {
+      return sourceResult;
+    }
+    const source = sourceResult.value;
     sources.push(source);
-
-    const ops = source.toBulkOperations(lessonsIndex, unitsIndex, rollupIndex);
-    allOps.push(...ops);
-
-    const stats = source.getStats();
-    totalLessons += stats.lessonCount;
-    totalUnits += stats.unitCount;
-    totalRollups += stats.rollupCount;
-    totalKs4Lessons += stats.ks4LessonsEnriched;
-    totalKs4Units += stats.ks4UnitsEnriched;
+    allOps.push(...source.toBulkOperations(lessonsIndex, unitsIndex, rollupIndex));
   }
 
-  return {
-    operations: allOps,
-    stats: {
-      lessonCount: totalLessons,
-      unitCount: totalUnits,
-      rollupCount: totalRollups,
-      ks4LessonsEnriched: totalKs4Lessons,
-      ks4UnitsEnriched: totalKs4Units,
-    },
-    sources,
-  };
+  return ok({ operations: allOps, stats: aggregateStats(sources), sources });
 }

@@ -1,16 +1,4 @@
-/**
- * HybridDataSource - Composes bulk download data with API supplementation.
- *
- * @remarks
- * This data source implements the bulk-first ingestion strategy:
- * 1. Primary data comes from bulk downloads (fast, complete)
- * 2. API supplements missing data (KS4 tiers, categories)
- * 3. Generates rollup documents for unit search
- *
- * @see ADR-080 KS4 Metadata Denormalisation Strategy
- * @see ADR-093 Bulk-First Ingestion Strategy
- */
-
+/** HybridDataSource - Composes bulk download data with API supplementation. */
 import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/sdk-codegen/bulk';
 import type {
   SearchLessonsIndexDoc,
@@ -32,10 +20,8 @@ import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import { isSubject } from './sdk-guards';
 import { buildRollupDocs } from './bulk-rollup-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
-
-// ============================================================================
-// Types
-// ============================================================================
+import { ok, err, type Result } from '@oaknational/result';
+import type { AdminError } from '@oaknational/oak-search-sdk';
 
 /** Configuration for hybrid data source */
 export interface HybridDataSourceConfig {
@@ -76,17 +62,9 @@ export interface HybridDataSource {
   getStats(): HybridDataSourceStats;
 }
 
-// ============================================================================
-// Default Configuration
-// ============================================================================
-
 const DEFAULT_CONFIG: HybridDataSourceConfig = {
   enableKs4Supplementation: true,
 };
-
-// ============================================================================
-// Helpers
-// ============================================================================
 
 function deriveSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
   const candidate = deriveSubjectSlugFromSequence(sequenceSlug);
@@ -107,10 +85,6 @@ async function buildKs4Context(
   }
   return buildKs4SupplementationContext(client, subjectSlug);
 }
-
-// ============================================================================
-// Enrichment Functions
-// ============================================================================
 
 /** Track enrichment stats */
 interface EnrichmentTracker {
@@ -187,20 +161,31 @@ function buildBulkOps(
   return ops;
 }
 
-/** Create a hybrid data source from bulk file data. */
-export async function createHybridDataSource(
-  bulkFile: BulkDownloadFile,
+/** Try to build KS4 context, returning a data_source_error on failure. */
+async function buildKs4ContextSafe(
   client: OakClient | null,
-  config: Partial<HybridDataSourceConfig> = {},
-): Promise<HybridDataSource> {
-  const fullConfig = { ...DEFAULT_CONFIG, ...config };
-  const bulkAdapter = createBulkDataAdapter(bulkFile);
-  const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
-  const ks4Context = await buildKs4Context(
-    client,
-    subjectSlug,
-    fullConfig.enableKs4Supplementation,
-  );
+  subjectSlug: SearchSubjectSlug,
+  enabled: boolean,
+  sequenceSlug: string,
+): Promise<Result<Ks4SupplementationContext | null, AdminError>> {
+  try {
+    return ok(await buildKs4Context(client, subjectSlug, enabled));
+  } catch (caught: unknown) {
+    const reason = caught instanceof Error ? caught.message : String(caught);
+    return err({
+      type: 'data_source_error',
+      message: `KS4 API supplementation failed for sequence '${sequenceSlug}': ${reason}`,
+    });
+  }
+}
+
+/** Assemble a HybridDataSource from its constituent parts. */
+function assembleHybridDataSource(
+  bulkFile: BulkDownloadFile,
+  bulkAdapter: ReturnType<typeof createBulkDataAdapter>,
+  subjectSlug: SearchSubjectSlug,
+  ks4Context: Ks4SupplementationContext | null,
+): HybridDataSource {
   const tracker = createEnrichmentTracker();
   const unitContextMap = ks4Context?.unitContextMap ?? createEmptyUnitContextMap();
   const transformLessons = () =>
@@ -215,7 +200,6 @@ export async function createHybridDataSource(
       bulkFile.sequenceSlug,
       unitContextMap,
     );
-
   return {
     sequenceSlug: bulkFile.sequenceSlug,
     subjectSlug,
@@ -235,4 +219,30 @@ export async function createHybridDataSource(
       ks4UnitsEnriched: tracker.unitsEnriched,
     }),
   };
+}
+
+/**
+ * Create a hybrid data source from bulk file data.
+ *
+ * @returns `ok` with the data source on success, or `err` with a
+ *   `data_source_error` when API supplementation (e.g. KS4) fails.
+ */
+export async function createHybridDataSource(
+  bulkFile: BulkDownloadFile,
+  client: OakClient | null,
+  config: Partial<HybridDataSourceConfig> = {},
+): Promise<Result<HybridDataSource, AdminError>> {
+  const fullConfig = { ...DEFAULT_CONFIG, ...config };
+  const bulkAdapter = createBulkDataAdapter(bulkFile);
+  const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
+  const ks4Result = await buildKs4ContextSafe(
+    client,
+    subjectSlug,
+    fullConfig.enableKs4Supplementation,
+    bulkFile.sequenceSlug,
+  );
+  if (!ks4Result.ok) {
+    return ks4Result;
+  }
+  return ok(assembleHybridDataSource(bulkFile, bulkAdapter, subjectSlug, ks4Result.value));
 }

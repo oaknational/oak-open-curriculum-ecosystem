@@ -3,10 +3,22 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { createHybridDataSource } from './hybrid-data-source.js';
+import { createHybridDataSource, type HybridDataSource } from './hybrid-data-source.js';
 import { processBulkFileBatch } from './hybrid-batch-processor.js';
 import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/sdk-codegen/bulk';
 import type { OakClient } from './oak-adapter';
+import type { AdminError } from '@oaknational/oak-search-sdk';
+import { unwrap } from '@oaknational/result';
+
+/** Unwrap a Result from createHybridDataSource, failing the test on error. */
+async function createSourceOrFail(
+  bulkFile: BulkDownloadFile,
+  client: OakClient | null,
+  config?: Parameters<typeof createHybridDataSource>[2],
+): Promise<HybridDataSource> {
+  const result = await createHybridDataSource(bulkFile, client, config);
+  return unwrap(result);
+}
 
 // ============================================================================
 // Mock Fixtures
@@ -90,7 +102,7 @@ const createMockClient = (): OakClient => ({
 describe('createHybridDataSource', () => {
   it('creates a hybrid data source from bulk file', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     expect(source.sequenceSlug).toBe('maths-primary');
     expect(source.subjectSlug).toBe('maths');
@@ -99,7 +111,7 @@ describe('createHybridDataSource', () => {
 
   it('provides access to raw units and lessons', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     expect(source.getUnits()).toHaveLength(1);
     expect(source.getLessons()).toHaveLength(1);
@@ -107,7 +119,7 @@ describe('createHybridDataSource', () => {
 
   it('transforms lessons to ES documents', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     const docs = source.transformLessonsToES();
 
@@ -118,7 +130,7 @@ describe('createHybridDataSource', () => {
 
   it('transforms units to ES documents', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     const docs = source.transformUnitsToES();
 
@@ -129,7 +141,7 @@ describe('createHybridDataSource', () => {
 
   it('generates bulk operations including rollups', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     const ops = source.toBulkOperations('oak_lessons', 'oak_units', 'oak_unit_rollup');
 
@@ -139,7 +151,7 @@ describe('createHybridDataSource', () => {
 
   it('provides processing stats including rollup count', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     const stats = source.getStats();
 
@@ -152,7 +164,7 @@ describe('createHybridDataSource', () => {
 
   it('works without API client', async () => {
     const bulkFile = createMockBulkFile();
-    const source = await createHybridDataSource(bulkFile, null);
+    const source = await createSourceOrFail(bulkFile, null);
 
     expect(source.transformLessonsToES()).toHaveLength(1);
   });
@@ -211,7 +223,7 @@ describe('HybridDataSource KS4 enrichment', () => {
       ],
     });
 
-    const source = await createHybridDataSource(bulkFile, client);
+    const source = await createSourceOrFail(bulkFile, client);
     const docs = source.transformLessonsToES();
 
     expect(docs[0].tiers).toEqual(['higher']);
@@ -228,7 +240,7 @@ describe('HybridDataSource KS4 enrichment', () => {
     });
 
     const client = createMockClient();
-    const source = await createHybridDataSource(bulkFile, client, {
+    const source = await createSourceOrFail(bulkFile, client, {
       enableKs4Supplementation: false,
     });
 
@@ -246,11 +258,61 @@ describe('HybridDataSource KS4 enrichment', () => {
     });
 
     const client = createMockClient();
-    const source = await createHybridDataSource(bulkFile, client);
+    const source = await createSourceOrFail(bulkFile, client);
 
     const docs = source.transformLessonsToES();
 
     expect(docs[0].tiers).toBeUndefined();
+  });
+});
+
+// ============================================================================
+// Tests: data_source_error on API failure
+// ============================================================================
+
+describe('createHybridDataSource error handling', () => {
+  it('returns data_source_error when KS4 API supplementation throws', async () => {
+    const ks4Lesson = createMockLesson({
+      keyStageSlug: 'ks4',
+      unitSlug: 'algebra-higher',
+    });
+    const ks4Unit = createMockUnit({
+      unitSlug: 'algebra-higher',
+      keyStageSlug: 'ks4',
+    });
+    const bulkFile = createMockBulkFile({
+      sequenceSlug: 'maths-secondary',
+      sequence: [ks4Unit],
+      lessons: [ks4Lesson],
+    });
+
+    const client = createMockClient();
+    // Simulate a network error during KS4 supplementation
+    vi.mocked(client.getSubjectSequences).mockRejectedValue(
+      new Error('Network timeout: ECONNREFUSED'),
+    );
+
+    const result = await createHybridDataSource(bulkFile, client);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      const error: AdminError = result.error;
+      expect(error.type).toBe('data_source_error');
+      expect(error.message).toContain('maths-secondary');
+      expect(error.message).toContain('Network timeout');
+    }
+  });
+
+  it('returns ok result on successful creation', async () => {
+    const bulkFile = createMockBulkFile();
+
+    const result = await createHybridDataSource(bulkFile, null);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.sequenceSlug).toBe('maths-primary');
+      expect(result.value.subjectSlug).toBe('maths');
+    }
   });
 });
 
@@ -270,13 +332,14 @@ describe('processBulkFileBatch', () => {
       lessons: [createMockLesson({ lessonSlug: 'lesson-2', subjectSlug: 'english' })],
     });
 
-    const result = await processBulkFileBatch(
+    const batchResult = await processBulkFileBatch(
       [file1, file2],
       null,
       'oak_lessons',
       'oak_units',
       'oak_unit_rollup',
     );
+    const result = unwrap(batchResult);
 
     expect(result.sources).toHaveLength(2);
     expect(result.stats.lessonCount).toBe(2);
@@ -295,13 +358,14 @@ describe('processBulkFileBatch', () => {
       sequence: [createMockUnit({ unitSlug: 'u2' }), createMockUnit({ unitSlug: 'u3' })],
     });
 
-    const result = await processBulkFileBatch(
+    const batchResult = await processBulkFileBatch(
       [file1, file2],
       null,
       'oak_lessons',
       'oak_units',
       'oak_unit_rollup',
     );
+    const result = unwrap(batchResult);
 
     expect(result.stats.lessonCount).toBe(3);
     expect(result.stats.unitCount).toBe(3);

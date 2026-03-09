@@ -31,30 +31,20 @@ const UNIT_ROLLUP_INDEX = 'oak_unit_rollup';
 const THREADS_INDEX = 'oak_threads';
 const SEQUENCES_INDEX = 'oak_sequences';
 const SEQUENCE_FACETS_INDEX = 'oak_sequence_facets';
-
-/** Curriculum index kinds that require processing bulk files through HybridDataSource. */
 const CURRICULUM_INDEX_KINDS: readonly SearchIndexKind[] = ['lessons', 'units', 'unit_rollup'];
-
-/** Sequence index kinds. */
 const SEQUENCE_INDEX_KINDS: readonly SearchIndexKind[] = ['sequences', 'sequence_facets'];
 
 /** Check whether any of the requested indexes overlap with the given set. */
 function needsIndexKinds(
-  requestedIndexes: readonly SearchIndexKind[],
-  targetKinds: readonly SearchIndexKind[],
+  requested: readonly SearchIndexKind[],
+  target: readonly SearchIndexKind[],
 ): boolean {
-  if (requestedIndexes.length === 0) {
-    return true;
-  }
-  return requestedIndexes.some((idx) => targetKinds.includes(idx));
+  return requested.length === 0 || requested.some((idx) => target.includes(idx));
 }
 
 /** Check whether threads index is needed. */
-function needsThreads(requestedIndexes: readonly SearchIndexKind[]): boolean {
-  if (requestedIndexes.length === 0) {
-    return true;
-  }
-  return requestedIndexes.includes('threads');
+function needsThreads(requested: readonly SearchIndexKind[]): boolean {
+  return requested.length === 0 || requested.includes('threads');
 }
 
 /** Intermediate result from processing curriculum bulk files. */
@@ -83,7 +73,16 @@ async function processSingleBulkFile(
   fileResult: BulkFileResult,
   client: OakClient,
 ): Promise<BulkProcessingAccumulator> {
-  const hybridSource = await createHybridDataSource(fileResult.data, client);
+  const sourceResult = await createHybridDataSource(fileResult.data, client);
+  if (!sourceResult.ok) {
+    ingestLogger.error('Data source creation failed', {
+      sequence: fileResult.data.sequenceSlug,
+      error: sourceResult.error.message,
+      errorType: sourceResult.error.type,
+    });
+    throw new Error(sourceResult.error.message);
+  }
+  const hybridSource = sourceResult.value;
   const fileOperations = hybridSource.toBulkOperations(
     LESSONS_INDEX,
     UNITS_INDEX,
