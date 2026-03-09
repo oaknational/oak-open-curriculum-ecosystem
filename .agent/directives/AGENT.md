@@ -75,7 +75,7 @@ CLI tools for managing agent workflows live in [`.agent/tools/`](../tools/README
 
 ### Agent Artefact Architecture (ADR-125)
 
-All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
+All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
 
 ## Essential Links
 

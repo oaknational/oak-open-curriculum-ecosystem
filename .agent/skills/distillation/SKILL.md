@@ -4,7 +4,7 @@ classification: passive
 description: >-
   Extract high-signal patterns from the napkin into a curated
   distilled.md rulebook. Triggered when the napkin exceeds
-  ~800 lines. Handles archival, deduplication, and rotation.
+  ~500 lines. Handles archival, deduplication, and rotation.
 ---
 
 # Distillation
@@ -13,7 +13,7 @@ Extract actionable rules, patterns, and troubleshooting from
 the session napkin into a compact, curated reference. This
 skill complements the [napkin skill](../napkin/SKILL.md).
 
-**Trigger**: When `.agent/memory/napkin.md` exceeds ~800
+**Trigger**: When `.agent/memory/napkin.md` exceeds ~500
 lines, or when the user requests distillation.
 
 ## File Layout
@@ -135,7 +135,7 @@ A good `distilled.md` overall is:
 
 - Do not distil mid-session — the napkin is a working
   document during active work
-- Do not distil if the napkin is under 600 lines — there
+- Do not distil if the napkin is under 400 lines — there
   is not enough content to justify the overhead
 - Do not distil "What Was Done" sections — those are
   session history, not learnings

@@ -1,3 +1,40 @@
+## Session 2026-03-09 — Practice-Core Integration (new-cv round-trip)
+
+### What Was Done
+
+- Full integration of practice-core incoming from `new-cv` repo (provenance
+  indices 3–5, 2026-03-05 to 2026-03-09). All six practice-core files updated.
+- Appended provenance index 6 to all three trinity files.
+- Created CHANGELOG.md (was missing locally — sixth practice-core file).
+- Added `.codex/` to platform adapter lists throughout practice.md and
+  practice-bootstrap.md.
+- Adopted value traceability as plan workflow point 5.
+- Replaced templates as required infrastructure with optional supporting
+  artefacts.
+- Lowered napkin distillation threshold from ~800 to ~500 lines across
+  practice-core, consolidate-docs command, distillation skill, and napkin skill.
+- Removed repo-specific ADR references from portable files (routed via
+  practice-index).
+- Adopted expanded learned principles in practice-lineage.md.
+- Added Adaptation Levels, Restructuring path, Validation scripts sections.
+- Adopted practice-context adjunct pattern references.
+- Updated practice-index.md: added `.agents/` and `.codex/` directories,
+  updated ADR-124 description from five-file to six-file.
+- Cleared practice box and practice-context incoming.
+- Also read practice-context/incoming/ support material (evolution-rationale,
+  false-starts-and-corrections, codex-adoption-report, local-adaptations).
+
+### Patterns to Remember
+
+- When integrating a practice-core round-trip, read every line — not all
+  changes are macroscopic. Naming changes (rules.md vs principles.md), threshold
+  changes (800→500), and micro-formatting changes (italic style) all matter.
+- The practice-core portable files use generic names (rules.md, invoke-reviewers)
+  — the practice-index.md bridges to local names (principles.md,
+  invoke-code-reviewers.md). This is by design.
+- practice-context/incoming/ provides high-signal rationale that the changelog
+  alone cannot convey. Read it before integrating, clear it after.
+
 ## Session 2026-03-09 — Unified Versioned Ingestion Plan
 
 ### What Was Done

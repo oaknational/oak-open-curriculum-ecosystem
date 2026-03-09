@@ -36,7 +36,7 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | [ADR-114](../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) | Layered sub-agent prompt composition architecture |
 | [ADR-117](../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) | Plan templates and components |
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) | Agentic engineering practice — naming and conceptual boundary |
-| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md) | Practice propagation — five-file package, self-containment, practice-index bridge |
+| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md) | Practice propagation — six-file package, self-containment, practice-index bridge |
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md) | Agent artefact portability — three-layer model for skills, commands, and rules |
 
 ## Tools and Workflows
@@ -56,7 +56,7 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | Location | What lives there |
 |---|---|
 | [`.agent/directives/`](directives/) | Principles, rules, and operational directives |
-| [`.agent/plans/`](plans/) | Work planning — active, archived, and templates |
+| [`.agent/plans/`](plans/) | Work planning — active, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/) | Institutional memory — napkin, distilled learnings, and code patterns |
 | [`.agent/experience/`](experience/) | Experiential records across sessions |
 | [`.agent/prompts/`](prompts/) | Reusable prompt playbooks |
@@ -68,4 +68,6 @@ ADRs referenced by the practice-core files. The full index is at `docs/architect
 | [`.cursor/`](../.cursor/) | Cursor platform adapters (thin wrappers) |
 | [`.claude/`](../.claude/) | Claude Code platform adapters (thin wrappers) |
 | [`.gemini/`](../.gemini/) | Gemini CLI platform adapters (thin wrappers) |
+| [`.agents/`](../.agents/) | Codex skill and command adapters (thin wrappers) |
+| [`.codex/`](../.codex/) | Codex project-agent configuration (reviewer sub-agents) |
 | [`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/) | Permanent architectural decision records |
