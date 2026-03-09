@@ -14,6 +14,8 @@ import {
   STUB_INGEST_RESULT,
   DEFAULT_ALIAS_TARGETS,
   BARE_INDEX_TARGETS,
+  buildPostSwapAliasTargets,
+  createFakeLogger,
   createFakeDeps,
 } from './lifecycle-test-helpers.js';
 
@@ -72,6 +74,81 @@ describe('IndexLifecycleService — stage and promote', () => {
 
       expect(result.ok).toBe(false);
       expect(deps.runVersionedIngest).not.toHaveBeenCalled();
+    });
+
+    it('cleans up versioned indexes when ingest fails', async () => {
+      const ingestError: AdminError = { type: 'es_error', message: 'ingest failed' };
+      const deleteVersionedIndex = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        runVersionedIngest: vi.fn().mockResolvedValue(err(ingestError)),
+        deleteVersionedIndex,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.stage({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toBe('ingest failed');
+      }
+      // All 6 versioned indexes should be cleaned up
+      expect(deleteVersionedIndex).toHaveBeenCalledTimes(6);
+    });
+
+    it('cleans up versioned indexes when verification fails', async () => {
+      const verifyError: AdminError = {
+        type: 'validation_error',
+        message: 'Doc count below threshold',
+      };
+      const deleteVersionedIndex = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        verifyDocCounts: vi.fn().mockResolvedValue(err(verifyError)),
+        deleteVersionedIndex,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.stage({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      expect(deleteVersionedIndex).toHaveBeenCalledTimes(6);
+    });
+
+    it('preserves the original error when cleanup also fails', async () => {
+      const ingestError: AdminError = { type: 'es_error', message: 'ingest failed' };
+      const cleanupError: AdminError = { type: 'es_error', message: 'cleanup failed' };
+      const logger = createFakeLogger();
+      const deps = createFakeDeps({
+        runVersionedIngest: vi.fn().mockResolvedValue(err(ingestError)),
+        deleteVersionedIndex: vi.fn().mockResolvedValue(err(cleanupError)),
+        logger,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.stage({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        // Original error is preserved, not masked by cleanup failure
+        expect(result.error.message).toBe('ingest failed');
+      }
+      // Cleanup failures logged as warnings
+      expect(logger.warn).toHaveBeenCalled();
+    });
+
+    it('does not clean up indexes when creation fails (nothing to clean)', async () => {
+      const createError: AdminError = { type: 'es_error', message: 'cluster full' };
+      const deleteVersionedIndex = vi.fn().mockResolvedValue(ok(undefined));
+      const deps = createFakeDeps({
+        createVersionedIndexes: vi.fn().mockResolvedValue(err(createError)),
+        deleteVersionedIndex,
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.stage({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      // No cleanup when creation itself failed — indexes were never created
+      expect(deleteVersionedIndex).not.toHaveBeenCalled();
     });
 
     it('returns err if verification fails', async () => {
@@ -166,14 +243,19 @@ describe('IndexLifecycleService — stage and promote', () => {
     });
 
     it('rolls back aliases if metadata write fails after swap', async () => {
+      const version = 'v2026-03-07-143022';
+      const postSwapTargets = buildPostSwapAliasTargets(version, 'primary');
       const writeError: AdminError = { type: 'es_error', message: 'write failed' };
       const deps = createFakeDeps({
         writeIndexMeta: vi.fn().mockResolvedValue(err(writeError)),
-        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(DEFAULT_ALIAS_TARGETS)),
+        resolveCurrentAliasTargets: vi
+          .fn()
+          .mockResolvedValueOnce(ok(DEFAULT_ALIAS_TARGETS))
+          .mockResolvedValue(ok(postSwapTargets)),
       });
       const service = createIndexLifecycleService(deps);
 
-      const result = await service.promote('v2026-03-07-143022');
+      const result = await service.promote(version);
 
       expect(result.ok).toBe(false);
       expect(deps.atomicAliasSwap).toHaveBeenCalledTimes(2);
@@ -204,8 +286,12 @@ describe('IndexLifecycleService — stage and promote', () => {
 
     it('passes bareIndexToRemove when promoting with bare indexes', async () => {
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
+      const postSwapTargets = buildPostSwapAliasTargets('v2026-03-08-100000', 'primary');
       const deps = createFakeDeps({
-        resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(BARE_INDEX_TARGETS)),
+        resolveCurrentAliasTargets: vi
+          .fn()
+          .mockResolvedValueOnce(ok(BARE_INDEX_TARGETS))
+          .mockResolvedValue(ok(postSwapTargets)),
         atomicAliasSwap,
       });
 

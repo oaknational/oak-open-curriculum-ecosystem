@@ -10,6 +10,8 @@ import { ok } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
 import type { AliasTargetMap, IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
 import type { IngestResult } from '../types/admin-types.js';
+import type { SearchIndexTarget, SEARCH_INDEX_KINDS } from '../internal/index.js';
+import { BASE_INDEX_NAMES, resolveVersionedIndexName } from '../internal/index.js';
 
 /** Minimal ingest result for test stubs. */
 export const STUB_INGEST_RESULT: IngestResult = {
@@ -64,6 +66,32 @@ export const BARE_INDEX_TARGETS = {
   threads: { isAlias: false, targetIndex: null, isBareIndex: true },
 } satisfies AliasTargetMap;
 
+/**
+ * Build alias targets representing the expected post-swap state for a given version and target.
+ *
+ * Each alias points to the correctly versioned physical index name.
+ */
+export function buildPostSwapAliasTargets(
+  version: string,
+  target: SearchIndexTarget,
+): AliasTargetMap {
+  const versionedName = (kind: (typeof SEARCH_INDEX_KINDS)[number]): string =>
+    resolveVersionedIndexName(BASE_INDEX_NAMES[kind], target, version);
+
+  return {
+    lessons: { isAlias: true, targetIndex: versionedName('lessons'), isBareIndex: false },
+    units: { isAlias: true, targetIndex: versionedName('units'), isBareIndex: false },
+    unit_rollup: { isAlias: true, targetIndex: versionedName('unit_rollup'), isBareIndex: false },
+    sequences: { isAlias: true, targetIndex: versionedName('sequences'), isBareIndex: false },
+    sequence_facets: {
+      isAlias: true,
+      targetIndex: versionedName('sequence_facets'),
+      isBareIndex: false,
+    },
+    threads: { isAlias: true, targetIndex: versionedName('threads'), isBareIndex: false },
+  } satisfies AliasTargetMap;
+}
+
 /** Fake logger for tests that need to assert on log calls. */
 export function createFakeLogger(): Logger {
   return {
@@ -76,19 +104,32 @@ export function createFakeLogger(): Logger {
   };
 }
 
-/** Build a complete set of default fakes that all return success. */
+/** Default version used in test fakes. */
+const DEFAULT_VERSION = 'v2026-03-07-143022';
+
+/**
+ * Build a complete set of default fakes that all return success.
+ *
+ * The `resolveCurrentAliasTargets` fake returns pre-swap targets on the first
+ * call and post-swap targets on the second call, matching the promote flow
+ * which calls it once before the swap and once after for validation.
+ */
 function buildDefaultFakes(): IndexLifecycleDeps {
+  const postSwapTargets = buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary');
   return {
     createVersionedIndexes: vi.fn().mockResolvedValue(ok(undefined)),
     runVersionedIngest: vi.fn().mockResolvedValue(ok(STUB_INGEST_RESULT)),
-    resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(DEFAULT_ALIAS_TARGETS)),
+    resolveCurrentAliasTargets: vi
+      .fn()
+      .mockResolvedValueOnce(ok(DEFAULT_ALIAS_TARGETS))
+      .mockResolvedValue(ok(postSwapTargets)),
     atomicAliasSwap: vi.fn().mockResolvedValue(ok(undefined)),
     readIndexMeta: vi.fn().mockResolvedValue(ok(null)),
     writeIndexMeta: vi.fn().mockResolvedValue(ok(undefined)),
     listVersionedIndexes: vi.fn().mockResolvedValue(ok([])),
     deleteVersionedIndex: vi.fn().mockResolvedValue(ok(undefined)),
     verifyDocCounts: vi.fn().mockResolvedValue(ok(undefined)),
-    generateVersion: vi.fn().mockReturnValue('v2026-03-07-143022'),
+    generateVersion: vi.fn().mockReturnValue(DEFAULT_VERSION),
     target: 'primary',
     logger: undefined,
   };
