@@ -64,6 +64,12 @@ function createMockAdmin(): AdminService {
     ),
     getIndexMeta: vi.fn().mockResolvedValue(ok(null)),
     setIndexMeta: vi.fn().mockResolvedValue(ok(undefined)),
+    verifyDocCounts: vi.fn().mockResolvedValue(
+      ok({
+        allPassed: true,
+        results: [],
+      }),
+    ),
   };
 }
 

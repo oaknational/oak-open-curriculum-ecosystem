@@ -24,6 +24,7 @@ import { createIndexResolver } from '../internal/index-resolver.js';
 import { runIngest } from './ingest.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
 import { createAllIndexes, deleteAllIndexes } from './admin-index-operations.js';
+import { verifyDocCounts } from './verify-doc-counts.js';
 
 /**
  * Convert an unknown caught error into an `AdminError`.
@@ -45,7 +46,7 @@ const SYNONYM_SET_ID = 'oak-syns';
  * @param esClient - Elasticsearch client for all admin operations
  * @param config - SDK configuration (index target, version, etc.)
  * @param logger - Optional structured logger for debug/info output
- * @returns AdminService with setup, reset, verifyConnection, listIndexes, updateSynonyms, ingest, getIndexMeta, setIndexMeta
+ * @returns AdminService with setup, reset, verifyConnection, listIndexes, updateSynonyms, ingest, getIndexMeta, setIndexMeta, verifyDocCounts
  *
  * @example
  * ```typescript
@@ -69,6 +70,7 @@ export function createAdminService(
     ingest: (options) => runIngestWrapped(esClient, resolveIndex, logger, options),
     getIndexMeta: () => readIndexMeta(esClient),
     setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
+    verifyDocCounts: (expectations) => verifyDocCounts(esClient, resolveIndex, expectations),
   };
 }
 

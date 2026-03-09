@@ -23,6 +23,7 @@ import type {
   IngestOptions,
   IngestResult,
 } from './admin-types.js';
+import type { DocCountExpectations, DocCountVerification } from '../admin/verify-doc-counts.js';
 
 // Re-export admin types for convenience
 export type {
@@ -36,6 +37,13 @@ export type {
   IngestOptions,
   IngestResult,
 } from './admin-types.js';
+
+// Re-export doc count verification types
+export type {
+  DocCountExpectations,
+  DocCountVerification,
+  IndexDocCountStatus,
+} from '../admin/verify-doc-counts.js';
 
 /**
  * Admin service — Elasticsearch setup, ingestion, and index management.
@@ -137,4 +145,20 @@ export interface AdminService {
    * @returns `ok` on success, or `err` with an `AdminError`
    */
   setIndexMeta(meta: IndexMetaDoc): Promise<Result<void, AdminError>>;
+
+  /**
+   * Verify document counts across all search indexes.
+   *
+   * Iterates ALL index kinds and accumulates per-index pass/fail
+   * results. When multiple indexes fail their minimum doc count
+   * threshold, all failures are reported in a single invocation
+   * rather than early-exiting on the first failure.
+   *
+   * @param expectations - Minimum expected doc count per index kind
+   * @returns `ok` with comprehensive verification when all pass,
+   *   or `err` with a `validation_error` listing all failures
+   */
+  verifyDocCounts(
+    expectations: DocCountExpectations,
+  ): Promise<Result<DocCountVerification, AdminError>>;
 }

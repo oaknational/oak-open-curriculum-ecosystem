@@ -46,6 +46,9 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
+  DocCountExpectations,
+  DocCountVerification,
+  IndexDocCountStatus,
 } from './admin.js';
 
 // Index lifecycle service types (ADR-130)

@@ -530,6 +530,29 @@ describe('AdminService', () => {
       expect(result.ok).toBe(true);
     });
   });
+
+  describe('verifyDocCounts', () => {
+    it('returns a result when called through the admin service', async () => {
+      const { admin } = createSdk();
+
+      const result = await admin.verifyDocCounts({
+        lessons: 1,
+        unit_rollup: 1,
+        units: 1,
+        sequences: 1,
+        sequence_facets: 1,
+        threads: 1,
+      });
+
+      // The mock client returns empty cat.indices, so all counts are 0
+      // and all expectations of 1 should fail
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('validation_error');
+        expect(result.error.message).toContain('6 of 6');
+      }
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
