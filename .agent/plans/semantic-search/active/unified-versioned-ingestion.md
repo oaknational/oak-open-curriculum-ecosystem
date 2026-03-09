@@ -281,6 +281,8 @@ below. All blocking findings must be addressed during implementation.
 | `architecture-reviewer-barney` (background) | APPROACH SOUND — hidden consumers and competing patterns found |
 | `architecture-reviewer-betty` (background) | ISSUES FOUND — confirmed approach, flagged constant duplication |
 | `architecture-reviewer-wilma` (background) | CRITICAL ISSUES — post-swap validation gap identified |
+| `architecture-reviewer-fred` (background) | COMPLIANT — all ADRs respected, batch dispatch clarification needed |
+| `code-reviewer` (background) | APPROVED WITH SUGGESTIONS — dryRun mismatch, OakClient closure pattern |
 
 ### Blocking Findings
 
@@ -374,7 +376,14 @@ metadata assuming all 6 aliases swapped. If the swap partially fails
 incorrect state. No `resolveCurrentAliasTargets()` validation runs between
 swap and commit. **Addressed**: Task 2.9 — add post-swap alias validation.
 
-**14. `IngestOptions.dryRun` semantic mismatch** (code-reviewer, background
+**14. Batch dispatch must comply with ADR-087** (Fred, background review)
+— The plan references `dispatchBulk` for ES dispatch but does not verify
+whether it batches operations or sends them as a single `/_bulk` request.
+With ~200k documents across 6 indexes, a monolithic request would violate
+ADR-087's batch-atomic guarantee and cause memory pressure. **Addressed**:
+Task 0.5 expanded to verify batching behaviour.
+
+**15. `IngestOptions.dryRun` semantic mismatch** (code-reviewer, background
 review) — `IndexLifecycleDeps.runVersionedIngest` accepts `IngestOptions`,
 which includes `dryRun`. In the lifecycle context, a dry-run ingest
 silently produces zero documents with no error — the lifecycle service
@@ -385,7 +394,7 @@ error.
 
 ### Process Refinements (Addressed in Phase 4)
 
-**15. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
+**16. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
 **format mismatch** (SDK expects flat `{doc_type}` arrays, bulk files
 are `BulkDownloadFile` objects), not merely an `unknown[]` type issue.
 **Addressed**: Task 4.2 item 5 — commit messages and documentation must
@@ -452,13 +461,26 @@ complete set. No new kinds are pending.
 **Validation**: Check `SEARCH_INDEX_KINDS` in the SDK and confirm
 it matches the 6 kinds used by `collectPhaseResults`.
 
-#### Task 0.5: Confirm `dispatchBulk` Can Target Any Index
+#### Task 0.5: Confirm `dispatchBulk` Behaviour
 
-**Assumption**: The ES dispatch layer sends whatever `_index` is embedded
+**Assumption 1**: The ES dispatch layer sends whatever `_index` is embedded
 in the bulk operations — it does not override or rewrite index names.
 
-**Validation**: Read `dispatchBulk()` and confirm it passes operations
-through without index name manipulation.
+**Assumption 2** (ADR-087): `dispatchBulk` sends operations in batches,
+not as a single monolithic `/_bulk` request. With ~200k documents across
+6 indexes, a single request would violate ADR-087's batch-atomic guarantee
+and cause memory pressure on the ES cluster.
+
+**Validation**:
+
+1. Read `dispatchBulk()` and confirm it passes operations through without
+   index name manipulation
+2. Confirm it batches operations (check for chunking logic, batch size
+   parameter, or iteration over operation subsets)
+3. Document the batch size used
+
+**If dispatch is not batched**: Add batching before proceeding to Phase 1.
+This is a prerequisite for safely dispatching to versioned indexes.
 
 #### Task 0.6: Confirm Versioned Path Avoids `inferKindFromIndex`
 
