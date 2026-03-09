@@ -12,7 +12,7 @@ Executable plans currently in progress.
 
 `unified-versioned-ingestion.md` is the standalone-ready session entry for
 the blue/green lifecycle integration. It supersedes the predecessor plan
-and incorporates all 9 reviewer findings as planned work.
+and incorporates all 16 reviewer findings as planned work.
 
 `bulk-metadata-quick-wins.execution.plan.md` is the standalone-ready session
 entry for the current Boundary 03 workstream.
