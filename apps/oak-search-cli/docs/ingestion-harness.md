@@ -1,6 +1,6 @@
 # Elasticsearch Ingestion Harness
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-03-09
 
 ## Purpose
 
@@ -34,11 +34,12 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 
 - Module `src/lib/search-index-target.ts` exposes:
   - `type SearchIndexTarget = 'primary' | 'sandbox'`.
+  - `type IndexResolverFn = (kind: SearchIndexKind) => string` — a function bound to a target that resolves index names upfront.
+  - `createIndexResolver(target)` — factory that creates an `IndexResolverFn` for the given target.
   - `resolveSearchIndexName(kind, target)` returning the correct index (`oak_lessons` or `oak_lessons_sandbox`).
-  - `coerceSearchIndexTarget({ envValue, flag })` to derive the desired target from the `SEARCH_INDEX_TARGET` env var or CLI flag.
-  - `rewriteBulkOperations(ops, target)` to rewrite `_index` values inside bulk action objects.
-- All ingestion/search modules will import this helper instead of hard-coding index names. For read paths (search, suggestions) the helper returns the correct index at request-build time.
-- `env.ts` will gain an optional `SEARCH_INDEX_TARGET` field defaulting to `primary`, validated with Zod.
+  - `coerceSearchIndexTarget(value)` to coerce an arbitrary string into a known `SearchIndexTarget`.
+- All ingestion paths use `IndexResolverFn` to generate correct index names at the point of operation creation. The resolver is created once from the target and threaded through the pipeline — no post-hoc rewriting is needed.
+- For read paths (search, suggestions) `resolveSearchIndexName` returns the correct index at request-build time.
 
 ### Harness orchestrator
 
@@ -48,8 +49,8 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
   - `target` – defaults to the current environment target but overridable per invocation.
   - `granularity` – batch granularity (`subject-keystage` or `subject`) for incremental commits.
 - API surface:
-  - `prepareBulkOperations()` – builds primary bulk operations, rewrites `_index` values via `rewriteBulkOperations`, and returns `{ operations, summary }` (with per-index counts and total docs).
-  - `ingest({ dryRun, verbose })` – processes batches incrementally, dispatching to Elasticsearch after each batch for atomic commits, and returns `{ operations, summary, metrics, dataIntegrityReport }`.
+  - `prepareBulkOperations()` – builds bulk operations with index names resolved via `IndexResolverFn` for the configured target, and returns `{ operations, summary }` (with per-index counts and total docs).
+  - `ingest({ dryRun, verbose })` – processes batches incrementally, resolving index names per batch via `IndexResolverFn`, dispatching to Elasticsearch after each batch for atomic commits, and returns `{ operations, summary, metrics, dataIntegrityReport }`.
 - `createFixtureOakClient` loads the JSON fixtures, satisfies the `OakClient` interface, and returns the key stage + subject lists required by the ingestion.
 
 ### CLI entry points
@@ -86,7 +87,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 ## Testing Strategy
 
 - **Unit tests** (`ingest-harness.unit.test.ts`):
-  - Exercise the harness against the bundled fixtures to validate per-index counts and `_sandbox` rewrites.
+  - Exercise the harness against the bundled fixtures to validate per-index counts and `IndexResolverFn`-based index targeting.
   - Stub the Elasticsearch transport to verify NDJSON dispatch on real runs and absence of calls during dry-run execution.
 - Additional CLI integration coverage can be layered if future work requires end-to-end invocation checks.
 

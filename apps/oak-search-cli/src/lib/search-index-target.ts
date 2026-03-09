@@ -3,11 +3,9 @@
  *
  * Foundation types and constants are re-exported from the SDK
  * (single source of truth per ADR-030). This file adds CLI-only
- * concerns: config resolution, CLI flag coercion, and bulk
- * operation rewriting.
+ * concerns: config resolution, CLI flag coercion, and index
+ * resolver factory.
  */
-
-import type { BulkOperations } from './indexing/bulk-operation-types';
 
 // ---------------------------------------------------------------------------
 // Re-exports from SDK — single source of truth (ADR-030)
@@ -29,25 +27,26 @@ export type {
 } from '@oaknational/oak-search-sdk';
 
 // ---------------------------------------------------------------------------
-// CLI-only: reverse map for bulk operation rewriting
+// CLI-only helpers
 // ---------------------------------------------------------------------------
 
-import {
-  BASE_INDEX_NAMES as baseNames,
-  SEARCH_INDEX_KINDS as kinds,
-  resolveSearchIndexName as resolveIndexName,
-} from '@oaknational/oak-search-sdk';
+import { resolveSearchIndexName as resolveIndexName } from '@oaknational/oak-search-sdk';
 
 import type {
   SearchIndexTarget as Target,
   SearchIndexKind as Kind,
+  IndexResolverFn,
 } from '@oaknational/oak-search-sdk';
 
-const BASE_INDEX_TO_KIND = new Map<string, Kind>(kinds.map((kind) => [baseNames[kind], kind]));
-
-// ---------------------------------------------------------------------------
-// CLI-only helpers
-// ---------------------------------------------------------------------------
+/**
+ * Create an index resolver function bound to a specific target.
+ *
+ * @param target - The index target to bind (`'primary'` or `'sandbox'`)
+ * @returns A function that resolves index names for the bound target
+ */
+export function createIndexResolver(target: Target): IndexResolverFn {
+  return (kind: Kind) => resolveIndexName(kind, target);
+}
 
 /** Resolve the canonical index name for the primary (production) target. */
 export function resolvePrimarySearchIndexName(kind: Kind): string {
@@ -94,70 +93,4 @@ export function coerceSearchIndexTarget(value: string | undefined): Target | nul
     return null;
   }
   return value === 'primary' || value === 'sandbox' ? value : null;
-}
-
-/** Rewrite bulk operations so `_index` entries align with the selected target. */
-export function rewriteBulkOperations(operations: BulkOperations, target: Target): BulkOperations {
-  if (target === 'primary') {
-    return [...operations];
-  }
-
-  return operations.map((entry) => {
-    if (!isIndexAction(entry)) {
-      return entry;
-    }
-    const currentIndex = entry.index._index;
-    const kind = BASE_INDEX_TO_KIND.get(currentIndex);
-    if (!kind) {
-      return entry;
-    }
-    const nextIndex = resolveIndexName(kind, target);
-    if (nextIndex === currentIndex) {
-      return entry;
-    }
-    const nextAction: IndexAction = {
-      index: {
-        ...entry.index,
-        _index: nextIndex,
-      },
-    };
-    return nextAction;
-  });
-}
-
-/**
- * Shape of an ES bulk index action's metadata.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexMetadata {
-  readonly _index: string;
-}
-
-/**
- * Shape of an ES bulk index action used in bulk operations.
- * Used only for bulk operation rewriting - not a general-purpose type.
- */
-interface IndexAction {
-  readonly index: IndexMetadata;
-}
-
-/**
- * Type guard to check if a value is a bulk index action.
- * Narrows directly to IndexAction without intermediate generic types.
- */
-function isIndexAction(value: unknown): value is IndexAction {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('index' in value)) {
-    return false;
-  }
-  const indexProp = value.index;
-  if (typeof indexProp !== 'object' || indexProp === null) {
-    return false;
-  }
-  if (!('_index' in indexProp)) {
-    return false;
-  }
-  return typeof indexProp._index === 'string' && indexProp._index.length > 0;
 }

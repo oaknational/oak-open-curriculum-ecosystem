@@ -11,7 +11,8 @@
 
 import type { CliArgs } from './ingest-cli-args.js';
 import type { OakClient } from '../../../adapters/oak-adapter.js';
-import type { SearchIndexKind } from '../../search-index-target.js';
+import type { SearchIndexKind, SearchIndexTarget } from '../../search-index-target.js';
+import { createIndexResolver } from '../../search-index-target.js';
 import type { IngestionResult } from './ingest-output.js';
 import { prepareBulkIngestion, type BulkIngestionStats } from '../../indexing/bulk-ingestion.js';
 import { filterOperationsByIndex } from '../../indexing/ingest-harness-filtering.js';
@@ -61,10 +62,12 @@ async function prepareBulkOperations(
   bulkDir: string,
   client: OakClient,
   indexes: readonly SearchIndexKind[],
+  target: SearchIndexTarget = 'primary',
 ): Promise<{
   operations: ReturnType<typeof prepareBulkIngestion> extends Promise<infer U> ? U : never;
 }> {
-  const result = await prepareBulkIngestion({ bulkDir, client, indexes });
+  const resolveIndex = createIndexResolver(target);
+  const result = await prepareBulkIngestion({ bulkDir, client, indexes, resolveIndex });
   return { operations: result };
 }
 
@@ -99,8 +102,9 @@ function logIngestionStart(args: CliArgs): void {
 /** Convert bulk stats to IngestionResult format. */
 function createIngestionResult(
   operations: Awaited<ReturnType<typeof prepareBulkIngestion>>['operations'],
+  target: SearchIndexTarget,
 ): IngestionResult {
-  const summary = summariseOperations(operations, 'primary');
+  const summary = summariseOperations(operations, target);
   return {
     summary: {
       totalDocs: summary.totalDocs,
@@ -141,11 +145,13 @@ function createUploadConfig(args: CliArgs): BulkUploadConfig {
  *
  * @param args - CLI arguments
  * @param client - Oak client for API supplementation
+ * @param target - Search index target; defaults to `'primary'`
  * @returns Bulk ingestion result with stats and duration
  */
 export async function executeBulkIngestion(
   args: CliArgs,
   client: OakClient,
+  target: SearchIndexTarget = 'primary',
 ): Promise<BulkIngestionExecutionResult> {
   logIngestionStart(args);
   const startTime = Date.now();
@@ -154,12 +160,13 @@ export async function executeBulkIngestion(
     args.bulkDir,
     client,
     args.indexes,
+    target,
   );
   const { operations: rawOperations, stats } = prepResult;
   const operations = filterOperationsByIndex(rawOperations, args.indexes);
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
-  const summary = summariseOperations(operations, 'primary');
+  const summary = summariseOperations(operations, target);
   ingestLogger.debug('Bulk operations prepared', {
     totalOperations: operations.length,
     totalDocs: summary.totalDocs,
@@ -170,7 +177,7 @@ export async function executeBulkIngestion(
     printBulkSummary(stats, duration);
     printDryRunNotice();
     printCacheStats(client);
-    return { stats, duration, result: createIngestionResult(operations) };
+    return { stats, duration, result: createIngestionResult(operations, target) };
   }
 
   const uploadResult = await dispatchOperations(operations, createUploadConfig(args));
@@ -178,5 +185,5 @@ export async function executeBulkIngestion(
   printCacheStats(client);
   handleUploadComplete(uploadResult, args.bulkDir);
 
-  return { stats, duration, result: createIngestionResult(operations) };
+  return { stats, duration, result: createIngestionResult(operations, target) };
 }

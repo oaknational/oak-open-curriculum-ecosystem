@@ -37,6 +37,7 @@ export interface BulkIngestionOptions {
   readonly client: OakClient;
   readonly subjectFilter?: readonly string[];
   readonly indexes?: readonly SearchIndexKind[];
+
   readonly resolveIndex?: IndexResolverFn;
 }
 

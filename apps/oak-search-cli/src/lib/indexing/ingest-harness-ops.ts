@@ -1,12 +1,12 @@
 import type { Logger } from '@oaknational/logger';
-import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
+import type { SearchIndexKind, SearchIndexTarget, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {
   hasDataIntegrityIssues,
   getDataIntegritySummary,
   type DataIntegrityReport,
 } from './data-integrity-report';
-import type { BulkOperations } from './bulk-operation-types';
+import type { BulkOperations, BulkOperationEntry } from './bulk-operation-types';
 import { isBulkIndexAction } from './bulk-operation-types';
 import { chunkOperations, MAX_CHUNK_SIZE_BYTES } from './bulk-chunk-utils';
 import {
@@ -50,6 +50,42 @@ export function inferKindFromIndex(indexName: string): SearchIndexKind | null {
     return KIND_BY_INDEX.get(indexName) ?? null;
   }
   return SANDBOX_KIND_BY_INDEX[indexName] ?? null;
+}
+
+/**
+ * Applies an {@link IndexResolverFn} to every bulk index action in the operations array.
+ *
+ * Each action whose `_index` can be mapped to a known {@link SearchIndexKind} is rewritten
+ * with the resolved index name. Actions with unrecognised indexes and document entries
+ * are passed through unchanged.
+ *
+ * @param operations - Bulk operations to process
+ * @param resolveIndex - Resolver that maps index kind to concrete Elasticsearch index name
+ * @returns New operations array with resolved index names
+ */
+export function resolveOperationIndexes(
+  operations: BulkOperations,
+  resolveIndex: IndexResolverFn,
+): BulkOperations {
+  const result: BulkOperationEntry[] = [];
+  for (const entry of operations) {
+    if (!isBulkIndexAction(entry)) {
+      result.push(entry);
+      continue;
+    }
+    const kind = inferKindFromIndex(entry.index._index);
+    if (!kind) {
+      result.push(entry);
+      continue;
+    }
+    const resolvedName = resolveIndex(kind);
+    if (resolvedName === entry.index._index) {
+      result.push(entry);
+      continue;
+    }
+    result.push({ index: { ...entry.index, _index: resolvedName } });
+  }
+  return result;
 }
 
 /**

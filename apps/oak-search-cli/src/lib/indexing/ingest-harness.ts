@@ -11,14 +11,18 @@ import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter';
 import {
   currentSearchIndexTarget,
-  rewriteBulkOperations,
+  createIndexResolver,
   type SearchIndexKind,
   type SearchIndexTarget,
 } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
-import { summariseOperations, type EsTransport } from './ingest-harness-ops';
+import {
+  summariseOperations,
+  resolveOperationIndexes,
+  type EsTransport,
+} from './ingest-harness-ops';
 import { createDataIntegrityCollector, type DataIntegrityReport } from './data-integrity-report';
 import { filterOperationsByIndex } from './ingest-harness-filtering';
 import {
@@ -86,6 +90,7 @@ export interface IngestHarness {
 /** Builds an ingestion harness configured for the desired search index target. */
 export async function createIngestHarness(options: IngestHarnessOptions): Promise<IngestHarness> {
   const target = options.target ?? currentSearchIndexTarget();
+  const resolveIndex = createIndexResolver(target);
   const logger = options.logger ?? ingestLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
   const indexes = options.indexes ?? [];
@@ -98,6 +103,7 @@ export async function createIngestHarness(options: IngestHarnessOptions): Promis
     subjects,
     indexes,
     target,
+    resolveIndex,
     es,
     logger,
     granularity,
@@ -202,7 +208,7 @@ async function prepareOperations(context: BatchIngestionContext): Promise<Ingest
     }
   }
 
-  const targetedOps = rewriteBulkOperations(allOps, context.target);
+  const targetedOps = resolveOperationIndexes(allOps, context.resolveIndex);
   const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
   const summary = summariseOperations(filteredOps, context.target);
 

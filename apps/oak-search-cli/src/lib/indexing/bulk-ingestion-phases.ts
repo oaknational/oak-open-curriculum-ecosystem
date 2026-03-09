@@ -38,9 +38,9 @@ const SEQUENCE_INDEX_KINDS: readonly SearchIndexKind[] = ['sequences', 'sequence
 /** Check whether any of the requested indexes overlap with the given set. */
 function needsIndexKinds(
   requested: readonly SearchIndexKind[],
-  target: readonly SearchIndexKind[],
+  kinds: readonly SearchIndexKind[],
 ): boolean {
-  return requested.length === 0 || requested.some((idx) => target.includes(idx));
+  return requested.length === 0 || requested.some((idx) => kinds.includes(idx));
 }
 
 /** Check whether threads index is needed. */
@@ -166,8 +166,7 @@ export interface PhaseResults {
 /**
  * Conditionally execute ingestion phases based on the requested index filter.
  *
- * @remarks
- * Applies the "skip early" pattern: each phase is only executed when the requested indexes
+ * Applies the "skip early" pattern: each phase runs only when the requested indexes
  * overlap with that phase's output kinds. When no indexes are specified, all phases run.
  *
  * @param resolveIndex - Optional index name resolver. Defaults to primary (non-versioned)
