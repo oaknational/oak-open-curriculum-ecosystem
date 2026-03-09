@@ -117,6 +117,7 @@ bulk-downloads/*.json (BulkDownloadFile objects)
 | Type safety | Zero `unknown` types, zero type assertions in the ingestion path |
 | Operational readiness | 6 curriculum aliases point to versioned indexes, `validate-aliases` reports healthy |
 | Code deletion | SDK `ingest.ts` deleted, `buildLifecycleDeps` no longer provides default ingest |
+| Documentation current | ADR-130, ADR-093, INDEXING.md, and TSDoc reflect the unified pipeline |
 
 ---
 
@@ -969,9 +970,10 @@ Every item below is a required deliverable, not a conditional check.
 
 #### Task 4.3: Archive Predecessor Plan
 
-Move `blue-green-reindex.execution.plan.md` to the appropriate archive
-location. Its completed prerequisites and "what went wrong" documentation
-are valuable historical records.
+Move `blue-green-reindex.execution.plan.md` to
+`.agent/plans/semantic-search/archive/completed/`. Its completed
+prerequisites and "what went wrong" documentation are valuable
+historical records.
 
 ---
 
