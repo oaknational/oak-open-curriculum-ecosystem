@@ -11,7 +11,7 @@ todos:
     status: completed
   - id: phase-1-parameterise
     content: "Phase 1: Parameterise pipeline on index names (TDD)."
-    status: pending
+    status: completed
   - id: phase-2-wire
     content: "Phase 2: Wire lifecycle deps, delete broken SDK ingest, strengthen resilience (TDD)."
     status: in_progress
@@ -27,7 +27,7 @@ isProject: false
 # Unified Versioned Ingestion Pipeline
 
 **Last Updated**: 2026-03-09
-**Status**: IN PROGRESS — Phase 0 complete, Phase 2 resilience tasks complete, Phase 1 core next
+**Status**: IN PROGRESS — Phase 0 complete, Phase 1 complete (ready to commit), Phase 2 resilience tasks complete, Phase 2 wiring next
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
 **Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 
@@ -599,10 +599,9 @@ corrections to the plan.
 
 ---
 
-### Phase 1: Parameterise Pipeline on Index Names (TDD)
+### Phase 1: Parameterise Pipeline on Index Names (TDD) — COMPLETE
 
-**Foundation Check-In**: Re-read `testing-strategy.md` (TDD at all levels,
-test behaviour not implementation).
+**Status**: All tasks complete, all reviewer findings addressed, quality gates pass. Ready to commit.
 
 #### Task 1.1: Add `IndexResolverFn` Parameter to `collectPhaseResults`
 

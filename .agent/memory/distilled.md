@@ -59,17 +59,13 @@ enough for permanent documentation.
   files — both must be updated in parallel until resolved.
   Post-merge plan: decompose `sdk-codegen` into two workspaces
   (see `.agent/plans/architecture-and-infrastructure/codegen/`)
-- After moving functions or types between packages, rebuild the
-  source package before downstream tests rely on its `dist/`
-  exports
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks
 - Generated vocab files at `src/generated/vocab/` need
   `pnpm vocab-gen`, not `pnpm sdk-codegen`
-- 23 MCP tools are generated from OpenAPI; 8 are aggregated
-  (hand-authored). Always distinguish — "generated" has
-  precise meaning (ADR-029/030)
+- MCP tool counts: see ADR-123 for the canonical figure.
+  Always distinguish generated vs aggregated (ADR-029/030)
 
 ## TypeScript (Domain-Specific)
 
@@ -89,8 +85,6 @@ enough for permanent documentation.
 - ES client v9: `document` not `body` for `client.index()`
 - ES client v9: spread readonly arrays before passing to
   mutable params (`[...synonymSet.synonyms_set]`)
-- Thread subject filter uses `subject_slugs` (plural array
-  field); sequences use `subject_slug` (singular)
 - `extractStatusCode` centralises ES error code extraction
   without assertions
 - Classify network errors by `error.name` (e.g.

@@ -22,15 +22,16 @@ import {
 } from '../../adapters/bulk-thread-transformer';
 import { buildSequenceBulkOperations } from '../../adapters/bulk-sequence-transformer';
 import type { BulkOperationEntry } from './bulk-operation-types';
-import type { SearchIndexKind } from '../search-index-target';
+import {
+  BASE_INDEX_NAMES,
+  type IndexResolverFn,
+  type SearchIndexKind,
+} from '../search-index-target';
 import { ingestLogger } from '../logger';
 
-const LESSONS_INDEX = 'oak_lessons';
-const UNITS_INDEX = 'oak_units';
-const UNIT_ROLLUP_INDEX = 'oak_unit_rollup';
-const THREADS_INDEX = 'oak_threads';
-const SEQUENCES_INDEX = 'oak_sequences';
-const SEQUENCE_FACETS_INDEX = 'oak_sequence_facets';
+/** Default resolver returning primary (non-versioned) index names from {@link BASE_INDEX_NAMES}. */
+const defaultResolveIndex: IndexResolverFn = (kind) => BASE_INDEX_NAMES[kind];
+
 const CURRICULUM_INDEX_KINDS: readonly SearchIndexKind[] = ['lessons', 'units', 'unit_rollup'];
 const SEQUENCE_INDEX_KINDS: readonly SearchIndexKind[] = ['sequences', 'sequence_facets'];
 
@@ -62,7 +63,7 @@ interface ThreadExtractionResult {
 }
 
 /** Sequence extraction result with operations and counts. */
-interface SequenceExtractionResult {
+export interface SequenceExtractionResult {
   readonly operations: BulkOperationEntry[];
   readonly sequenceCount: number;
   readonly facetCount: number;
@@ -72,6 +73,7 @@ interface SequenceExtractionResult {
 async function processSingleBulkFile(
   fileResult: BulkFileResult,
   client: OakClient,
+  resolveIndex: IndexResolverFn,
 ): Promise<BulkProcessingAccumulator> {
   const sourceResult = await createHybridDataSource(fileResult.data, client);
   if (!sourceResult.ok) {
@@ -84,9 +86,9 @@ async function processSingleBulkFile(
   }
   const hybridSource = sourceResult.value;
   const fileOperations = hybridSource.toBulkOperations(
-    LESSONS_INDEX,
-    UNITS_INDEX,
-    UNIT_ROLLUP_INDEX,
+    resolveIndex('lessons'),
+    resolveIndex('units'),
+    resolveIndex('unit_rollup'),
   );
   const stats = hybridSource.getStats();
   return {
@@ -101,13 +103,14 @@ async function processSingleBulkFile(
 async function processAllBulkFiles(
   files: readonly BulkFileResult[],
   client: OakClient,
+  resolveIndex: IndexResolverFn,
 ): Promise<BulkProcessingAccumulator> {
   const allOperations: BulkOperationEntry[] = [];
   let totalLessons = 0,
     totalUnits = 0,
     totalRollups = 0;
   for (const fileResult of files) {
-    const result = await processSingleBulkFile(fileResult, client);
+    const result = await processSingleBulkFile(fileResult, client, resolveIndex);
     allOperations.push(...result.operations);
     totalLessons += result.totalLessons;
     totalUnits += result.totalUnits;
@@ -119,9 +122,10 @@ async function processAllBulkFiles(
 /** Extracts threads from bulk files and builds bulk operations. */
 function extractAndBuildThreadOperations(
   files: readonly BulkDownloadFile[],
+  resolveIndex: IndexResolverFn,
 ): ThreadExtractionResult {
   const threads = extractThreadsFromBulkFiles(files);
-  const operations = buildThreadBulkOperations(threads, THREADS_INDEX);
+  const operations = buildThreadBulkOperations(threads, resolveIndex('threads'));
   ingestLogger.debug('Threads extracted', {
     uniqueThreads: threads.length,
     threadOperations: operations.length,
@@ -132,8 +136,13 @@ function extractAndBuildThreadOperations(
 /** Extracts sequences from bulk files and builds bulk operations. */
 function extractAndBuildSequenceOperations(
   files: readonly BulkDownloadFile[],
+  resolveIndex: IndexResolverFn,
 ): SequenceExtractionResult {
-  const operations = buildSequenceBulkOperations(files, SEQUENCES_INDEX, SEQUENCE_FACETS_INDEX);
+  const operations = buildSequenceBulkOperations(
+    files,
+    resolveIndex('sequences'),
+    resolveIndex('sequence_facets'),
+  );
   const sequenceCount = files.length;
   const sequenceOps = sequenceCount * 2;
   const facetCount = (operations.length - sequenceOps) / 2;
@@ -143,46 +152,6 @@ function extractAndBuildSequenceOperations(
 /** Extracts vocabulary statistics from bulk files. */
 function extractVocabularyStats(files: readonly BulkDownloadFile[]): VocabularyMiningStats {
   return createVocabularyMiningAdapter(files).getStats();
-}
-
-/** Builds final ingestion stats from phase results. */
-export function buildIngestionStats(
-  filesProcessed: number,
-  processingResult: BulkProcessingAccumulator,
-  threadsCount: number,
-  sequenceResult: SequenceExtractionResult,
-  vocabStats: VocabularyMiningStats,
-): BulkIngestionStats {
-  return {
-    filesProcessed,
-    lessonsIndexed: processingResult.totalLessons,
-    unitsIndexed: processingResult.totalUnits,
-    rollupsIndexed: processingResult.totalRollups,
-    threadsIndexed: threadsCount,
-    sequencesIndexed: sequenceResult.sequenceCount,
-    sequenceFacetsIndexed: sequenceResult.facetCount,
-    vocabularyStats: {
-      uniqueKeywords: vocabStats.uniqueKeywords,
-      totalMisconceptions: vocabStats.totalMisconceptions,
-      synonymsExtracted: vocabStats.synonymsExtracted,
-    },
-  };
-}
-
-/** Stats shape used by {@link buildIngestionStats}. Re-exported for consumer convenience. */
-export interface BulkIngestionStats {
-  readonly filesProcessed: number;
-  readonly lessonsIndexed: number;
-  readonly unitsIndexed: number;
-  readonly rollupsIndexed: number;
-  readonly threadsIndexed: number;
-  readonly sequencesIndexed: number;
-  readonly sequenceFacetsIndexed: number;
-  readonly vocabularyStats: {
-    readonly uniqueKeywords: number;
-    readonly totalMisconceptions: number;
-    readonly synonymsExtracted: number;
-  };
 }
 
 /** Collected results from all ingestion phases. */
@@ -200,12 +169,17 @@ export interface PhaseResults {
  * @remarks
  * Applies the "skip early" pattern: each phase is only executed when the requested indexes
  * overlap with that phase's output kinds. When no indexes are specified, all phases run.
+ *
+ * @param resolveIndex - Optional index name resolver. Defaults to primary (non-versioned)
+ *   names from {@link BASE_INDEX_NAMES}. Pass a versioned resolver (e.g. from
+ *   `createVersionedIndexResolver`) to target versioned indexes for blue/green lifecycle.
  */
 export async function collectPhaseResults(
   filteredFiles: readonly BulkFileResult[],
   bulkDownloadFiles: readonly BulkDownloadFile[],
   client: OakClient,
   indexes: readonly SearchIndexKind[],
+  resolveIndex: IndexResolverFn = defaultResolveIndex,
 ): Promise<PhaseResults> {
   const doCurriculum = needsIndexKinds(indexes, CURRICULUM_INDEX_KINDS);
   const doThreads = needsThreads(indexes);
@@ -218,15 +192,15 @@ export async function collectPhaseResults(
   });
 
   const processingResult: BulkProcessingAccumulator = doCurriculum
-    ? await processAllBulkFiles(filteredFiles, client)
+    ? await processAllBulkFiles(filteredFiles, client, resolveIndex)
     : { operations: [], totalLessons: 0, totalUnits: 0, totalRollups: 0 };
 
   const threadResult: ThreadExtractionResult = doThreads
-    ? extractAndBuildThreadOperations(bulkDownloadFiles)
+    ? extractAndBuildThreadOperations(bulkDownloadFiles, resolveIndex)
     : { operations: [], count: 0 };
 
   const sequenceResult: SequenceExtractionResult = doSequences
-    ? extractAndBuildSequenceOperations(bulkDownloadFiles)
+    ? extractAndBuildSequenceOperations(bulkDownloadFiles, resolveIndex)
     : { operations: [], sequenceCount: 0, facetCount: 0 };
 
   const operations = [

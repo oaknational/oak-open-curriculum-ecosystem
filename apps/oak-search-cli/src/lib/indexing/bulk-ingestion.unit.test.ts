@@ -8,6 +8,7 @@ import type { OakClient } from '../../adapters/oak-adapter';
 import type { HybridDataSource } from '../../adapters/hybrid-data-source';
 import type { VocabularyMiningAdapter } from '../../adapters/vocabulary-mining-adapter';
 import type { BulkIngestionOptions, BulkIngestionStats } from './bulk-ingestion';
+import type { IndexResolverFn } from '../search-index-target';
 
 // Mock the dependencies
 vi.mock('@oaknational/sdk-codegen/bulk', () => ({
@@ -127,6 +128,168 @@ describe('bulk-ingestion', () => {
       expect(result.stats.sequencesIndexed).toBe(0);
       expect(result.stats.sequenceFacetsIndexed).toBe(0);
       expect(result.operations.length).toBe(0);
+    });
+  });
+
+  describe('collectPhaseResults with IndexResolverFn', () => {
+    it('passes resolved index names to adapters when a custom resolver is provided', async () => {
+      const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
+      const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
+
+      const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+      const { createVocabularyMiningAdapter } =
+        await import('../../adapters/vocabulary-mining-adapter');
+      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+        await import('../../adapters/bulk-thread-transformer');
+      const { buildSequenceBulkOperations } =
+        await import('../../adapters/bulk-sequence-transformer');
+
+      const mockToBulkOperations = vi
+        .fn()
+        .mockReturnValue(
+          Array.from({ length: 6 }, (_, i) => ({ index: { _index: 'test', _id: `op-${i}` } })),
+        );
+      vi.mocked(createHybridDataSource).mockResolvedValue({
+        ok: true,
+        value: {
+          ...createMockHybridDataSource(mockBulkFile, 2, 1, 6),
+          toBulkOperations: mockToBulkOperations,
+        },
+      });
+      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
+        createMockVocabularyAdapter(10, 5, 3),
+      );
+      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([
+        { slug: 'number', title: 'Number', unitCount: 2, subjectSlugs: ['maths'] },
+      ]);
+      vi.mocked(buildThreadBulkOperations).mockReturnValue([
+        { index: { _index: 'oak_threads_vtest', _id: 'number' } },
+        { thread_slug: 'number', thread_title: 'Number', unit_count: 2 },
+      ]);
+      vi.mocked(buildSequenceBulkOperations).mockReturnValue([
+        { index: { _index: 'oak_sequences_vtest', _id: 'maths-primary' } },
+        { index: { _index: 'oak_sequences_vtest', _id: 'seq-doc' } },
+      ]);
+
+      const mockClient = createMockClient();
+      const versionedResolver: IndexResolverFn = (kind) => `oak_${kind}_vtest`;
+
+      const { collectPhaseResults } = await import('./bulk-ingestion-phases');
+      const result = await collectPhaseResults(
+        [mockBulkFileResult],
+        [mockBulkFile],
+        mockClient,
+        [],
+        versionedResolver,
+      );
+
+      // Curriculum adapter received resolved index names
+      expect(mockToBulkOperations).toHaveBeenCalledWith(
+        'oak_lessons_vtest',
+        'oak_units_vtest',
+        'oak_unit_rollup_vtest',
+      );
+      // Thread adapter received resolved index name
+      expect(vi.mocked(buildThreadBulkOperations)).toHaveBeenCalledWith(
+        expect.arrayContaining([expect.objectContaining({ slug: 'number' })]),
+        'oak_threads_vtest',
+      );
+      // Sequence adapter received resolved index names
+      expect(vi.mocked(buildSequenceBulkOperations)).toHaveBeenCalledWith(
+        [mockBulkFile],
+        'oak_sequences_vtest',
+        'oak_sequence_facets_vtest',
+      );
+      // 6 curriculum + 2 thread + 2 sequence = 10
+      expect(result.operations.length).toBe(10);
+    });
+
+    it('defaults to primary index names when no resolver is provided', async () => {
+      const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
+      const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
+
+      const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+      const { createVocabularyMiningAdapter } =
+        await import('../../adapters/vocabulary-mining-adapter');
+      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+        await import('../../adapters/bulk-thread-transformer');
+      const { buildSequenceBulkOperations } =
+        await import('../../adapters/bulk-sequence-transformer');
+
+      vi.mocked(createHybridDataSource).mockResolvedValue({
+        ok: true,
+        value: createMockHybridDataSource(mockBulkFile, 2, 1, 6),
+      });
+      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
+        createMockVocabularyAdapter(10, 5, 3),
+      );
+      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
+      vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+      vi.mocked(buildSequenceBulkOperations).mockReturnValue([]);
+
+      const mockClient = createMockClient();
+
+      const { collectPhaseResults } = await import('./bulk-ingestion-phases');
+      const result = await collectPhaseResults(
+        [mockBulkFileResult],
+        [mockBulkFile],
+        mockClient,
+        [],
+      );
+
+      expect(result.operations.length).toBe(6);
+      // Default resolver passes primary index names to adapters
+      expect(vi.mocked(buildThreadBulkOperations)).toHaveBeenCalledWith(
+        expect.anything(),
+        'oak_threads',
+      );
+      expect(vi.mocked(buildSequenceBulkOperations)).toHaveBeenCalledWith(
+        expect.anything(),
+        'oak_sequences',
+        'oak_sequence_facets',
+      );
+    });
+  });
+
+  describe('prepareBulkIngestion with IndexResolverFn', () => {
+    it('threads a custom resolver through to collectPhaseResults', async () => {
+      const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
+      const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
+
+      const { readAllBulkFiles } = await import('@oaknational/sdk-codegen/bulk');
+      const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+      const { createVocabularyMiningAdapter } =
+        await import('../../adapters/vocabulary-mining-adapter');
+      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+        await import('../../adapters/bulk-thread-transformer');
+      const { buildSequenceBulkOperations } =
+        await import('../../adapters/bulk-sequence-transformer');
+
+      vi.mocked(readAllBulkFiles).mockResolvedValue([mockBulkFileResult]);
+      vi.mocked(createHybridDataSource).mockResolvedValue({
+        ok: true,
+        value: createMockHybridDataSource(mockBulkFile, 2, 1, 6),
+      });
+      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
+        createMockVocabularyAdapter(10, 5, 3),
+      );
+      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
+      vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+      vi.mocked(buildSequenceBulkOperations).mockReturnValue([]);
+
+      const mockClient = createMockClient();
+      const versionedResolver: IndexResolverFn = (kind) => `oak_${kind}_vtest`;
+
+      const { prepareBulkIngestion } = await import('./bulk-ingestion');
+      const result = await prepareBulkIngestion({
+        bulkDir: '/path/to/bulk',
+        client: mockClient,
+        resolveIndex: versionedResolver,
+      });
+
+      expect(result.stats.filesProcessed).toBe(1);
+      expect(result.stats.lessonsIndexed).toBe(2);
+      expect(result.operations.length).toBe(6);
     });
   });
 });

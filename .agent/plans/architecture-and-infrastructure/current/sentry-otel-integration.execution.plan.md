@@ -29,20 +29,26 @@ todos:
   - id: env-config
     content: "Add Sentry environment variables to env schemas and runtime config"
     status: pending
+  - id: mcp-server-wrapping
+    content: "Wrap MCP server instances with Sentry.wrapMcpServerWithSentry() and define recordInputs/recordOutputs PII policy"
+    status: pending
   - id: workspace-integration-http
-    content: "Wire Sentry into oak-curriculum-mcp-streamable-http"
+    content: "Wire Sentry init + MCP server wrapping into oak-curriculum-mcp-streamable-http"
     status: pending
   - id: workspace-integration-search
     content: "Wire Sentry into oak-search-cli"
     status: pending
   - id: workspace-integration-stdio
-    content: "Evaluate Sentry for oak-curriculum-mcp-stdio (file-only logging context)"
+    content: "Evaluate Sentry for oak-curriculum-mcp-stdio (file-only logging context) including MCP wrapping"
     status: pending
   - id: vercel-deployment
     content: "Configure Sentry project, DSN, and source map uploads for Vercel deployment"
     status: pending
   - id: alerting-baseline
     content: "Define initial alerting thresholds (error rate, latency) in Sentry"
+    status: pending
+  - id: mcp-insights-verification
+    content: "Verify MCP Insights dashboard populates with tool call metrics, latency, and error rates"
     status: pending
 ---
 
@@ -62,7 +68,8 @@ For public alpha (M2), Vercel logs provide sufficient visibility.
   following the OpenTelemetry Logs Data Model specification
 - Logger uses a **sink-based architecture** (stdout sink, file sink) with
   dependency injection — adding a Sentry sink requires no architectural changes
-- **No Sentry SDK** is installed in any workspace
+- **No Sentry SDK** is installed in any workspace — requires `@sentry/node`
+  >= 9.46.0 for MCP Insights support
 - **No `@opentelemetry/*` runtime packages** are installed (only transitive
   via vitest)
 - Correlation IDs are converted to W3C TraceId format for future trace
@@ -103,6 +110,13 @@ Key transferable patterns:
 4. **Level routing**: DEBUG/TRACE stay local. INFO/WARN forward to Sentry
    Logs API. ERROR/FATAL forward and create Sentry issues.
 
+5. **MCP server wrapping** (Sentry MCP Insights): `@sentry/node` >= 9.46.0
+   provides `Sentry.wrapMcpServerWithSentry()` which auto-instruments MCP
+   servers with OTel spans for tool calls, resource reads, and prompt
+   retrievals. This populates the Sentry Insights > AI > MCP dashboard with
+   traffic, latency, error rates, client identification, and transport
+   distribution. No separate package required — built into `@sentry/node`.
+
 ### Patterns That Do NOT Transfer
 
 - Client/edge Sentry configs (`sentry.client.config.ts`, `sentry.edge.config.ts`)
@@ -123,13 +137,22 @@ Key transferable patterns:
 4. Implement `SENTRY_MODE: "fixture" | "sentry"` toggle
 5. Add Sentry env vars to env schemas (`SENTRY_DSN`, `SENTRY_MODE`,
    `SENTRY_ENVIRONMENT`, `SENTRY_TRACES_SAMPLE_RATE`)
+6. Define `recordInputs`/`recordOutputs` PII policy for MCP wrapping —
+   curriculum queries may contain student-related context; align with
+   `docs/governance/safety-and-security.md`
 
 ### Phase 2: Workspace Integration
 
+Each workspace integration includes both `Sentry.init()` and
+`Sentry.wrapMcpServerWithSentry()` for MCP apps. `Sentry.init()` **must**
+run before MCP server creation. `tracesSampleRate` must be > 0.
+
 1. Wire Sentry into `oak-curriculum-mcp-streamable-http` (primary deployment)
+   — wrap the `McpServer` inside `McpServerFactory` (`application.ts:185`)
 2. Wire Sentry into `oak-search-cli`
 3. Evaluate Sentry for `oak-curriculum-mcp-stdio` (stdout is reserved for MCP
-   protocol; file sink + Sentry sink may be the right combination)
+   protocol; file sink + Sentry sink may be the right combination) — wrap
+   the `McpServer` in `server.ts:62`
 
 ### Phase 3: Deployment and Alerting
 
@@ -137,6 +160,8 @@ Key transferable patterns:
 2. Configure DSN and source map uploads for Vercel
 3. Define initial alerting thresholds
 4. Verify end-to-end: error in app → Sentry issue with trace context
+5. Verify MCP Insights dashboard (`Insights > AI > MCP`) populates with tool
+   call metrics, latency percentiles, error rates, and client identification
 
 ## Dependencies
 
@@ -153,3 +178,6 @@ Key transferable patterns:
 - ADR-051: OpenTelemetry-compliant logging format
 - ADR-078: Dependency injection for testability
 - [high-level-plan.md](../../high-level-plan.md) — Milestone 3, stream 3
+- [Sentry MCP Monitoring docs](https://docs.sentry.io/ai/monitoring/mcp/)
+- [Sentry Node.js MCP instrumentation](https://docs.sentry.io/platforms/javascript/guides/node/tracing/instrumentation/mcp-module/)
+- Sentry MCP Insights dashboard: `oak-national-academy.sentry.io/insights/mcp/`

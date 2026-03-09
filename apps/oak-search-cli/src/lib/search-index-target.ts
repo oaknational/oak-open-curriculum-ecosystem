@@ -22,7 +22,11 @@ export {
   resolveZeroHitIndexName,
 } from '@oaknational/oak-search-sdk';
 
-export type { SearchIndexTarget, SearchIndexKind } from '@oaknational/oak-search-sdk';
+export type {
+  SearchIndexTarget,
+  SearchIndexKind,
+  IndexResolverFn,
+} from '@oaknational/oak-search-sdk';
 
 // ---------------------------------------------------------------------------
 // CLI-only: reverse map for bulk operation rewriting
