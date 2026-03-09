@@ -14,7 +14,7 @@ todos:
     status: completed
   - id: phase-2-wire
     content: "Phase 2: Wire lifecycle deps, delete broken SDK ingest, strengthen resilience (TDD)."
-    status: in_progress
+    status: completed
   - id: phase-3-operational
     content: "Phase 3: Stage, validate, promote, verify (live operation)."
     status: pending
@@ -27,7 +27,7 @@ isProject: false
 # Unified Versioned Ingestion Pipeline
 
 **Last Updated**: 2026-03-09
-**Status**: IN PROGRESS — Phase 0 complete, Phase 1 complete (ready to commit), Phase 2 resilience tasks complete, Phase 2 wiring next
+**Status**: IN PROGRESS — Phases 0–2 complete (all committed on `feat/search_qol_fixes`), Phase 3 (live operation) next
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
 **Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 
@@ -445,11 +445,49 @@ describe the root cause accurately as a format mismatch.
 
 **Remaining work (critical path):**
 
-1. **Phase 1**: Parameterise `collectPhaseResults` with `IndexResolverFn` (Task 1.1), thread through `prepareBulkIngestion` (Task 1.2)
-2. **Phase 2 core**: Create CLI `runVersionedIngest` closure (2.1), wire into `buildLifecycleService` (2.2), delete SDK `ingest.ts` (2.3)
-3. **Phase 2.8**: Unify `rewriteBulkOperations` with `IndexResolverFn`
+1. ~~**Phase 1**: Parameterise pipeline~~ — DONE (`ff746ac2`)
+2. ~~**Phase 2 core**: Create closure, wire lifecycle, delete ingest.ts~~ — DONE (`1e159d32`)
+3. ~~**Phase 2.8**: Unify `rewriteBulkOperations`~~ — DONE (`7a51148a`)
 4. **Phase 3**: Live stage → validate → promote → verify
 5. **Phase 4**: Adversarial reviews + documentation propagation (except Task 4.3 which is done)
+
+### 2026-03-09: Phase 1 + Phase 2 Complete
+
+**Branch**: `feat/search_qol_fixes` — 4 commits, 980 tests passing.
+
+Phase 1 (commit `ff746ac2`):
+
+- Parameterised `collectPhaseResults` and `prepareBulkIngestion` on `IndexResolverFn`
+- Deleted 6 hardcoded `oak_*` constants, derived defaults from `BASE_INDEX_NAMES`
+- Extracted `bulk-ingestion-stats.ts` (SRP)
+- Exported `IndexResolverFn`, `BASE_INDEX_NAMES`, `SEARCH_INDEX_KINDS` from SDK
+
+Phase 2 core (commit `1e159d32`):
+
+- Created `run-versioned-ingest.ts` closure factory + 6 unit tests (TDD)
+- Wired into `admin-lifecycle-commands.ts` with widened `CliSdkEnv & OakClientEnv`
+- `buildLifecycleDeps` now requires 3rd param `runVersionedIngest` (explicit DI)
+- Deleted broken SDK `ingest.ts` (235 lines), removed `AdminService.ingest()`
+- Extracted `admin-lifecycle-alias-commands.ts` (promote/rollback/validate-aliases)
+- Exported `createVersionedIndexResolver` from SDK
+
+Specialist reviews (commit `502cd410`):
+
+- code-reviewer, type-reviewer, test-reviewer, docs-adr-reviewer all invoked
+- Eliminated `as unknown as OakClient` double-cast with structural fake pattern
+- Replaced `as BulkOperationEntry[]` with `satisfies BulkOperationEntry[]`
+- Fixed stale TSDoc and README (removed references to deleted `AdminService.ingest()`)
+- Deleted duplicate test
+
+Phase 2.8 — Unify index resolution (commit `7a51148a`):
+
+- Integrated PR #66 (cherry-picked + conflict-resolved)
+- Deleted `rewriteBulkOperations` + ~65 lines supporting code
+- Added `createIndexResolver` factory and `resolveOperationIndexes`
+- Threaded `IndexResolverFn` through harness, batch, and `ingest-bulk.ts`
+- PR #66 closed
+
+**Done When progress**: 14 of 20 criteria met. Remaining: 1–5 (Phase 3 operational), 15–18 (Phase 4 documentation)
 
 **Process observations for next session:**
 
@@ -676,13 +714,13 @@ pnpm test
 
 ---
 
-### Phase 2: Wire Lifecycle Deps, Delete Broken Code, Strengthen Resilience (TDD)
+### Phase 2: Wire Lifecycle Deps, Delete Broken Code, Strengthen Resilience (TDD) — COMPLETE
 
 **Foundation Check-In**: Re-read `principles.md` (no compatibility layers,
 clear boundaries, fail fast with helpful errors), `schema-first-execution.md`
 (types from schema).
 
-#### Task 2.1: Create CLI-Layer `runVersionedIngest` Implementation
+#### Task 2.1: Create CLI-Layer `runVersionedIngest` Implementation — DONE
 
 The CLI provides a `runVersionedIngest` **closure** that captures the
 `OakClient` (needed for KS4 supplementation via `HybridDataSource`)
@@ -722,7 +760,7 @@ code-reviewer).
 4. Returns `Result<IngestResult, AdminError>` matching the lifecycle dep contract
 5. Types flow from `BulkDownloadFile` through to ES dispatch — no `unknown`
 
-#### Task 2.2: Wire Into `buildLifecycleService`
+#### Task 2.2: Wire Into `buildLifecycleService` — DONE
 
 Update `admin-lifecycle-commands.ts` to provide the CLI's
 `runVersionedIngest` when building lifecycle deps.
@@ -744,7 +782,7 @@ parameter (preferred — makes the dependency explicit).
 2. `admin versioned-ingest` command does the same (stage + promote)
 3. No code path calls the old SDK `runIngest`
 
-#### Task 2.3: Delete SDK `ingest.ts` and Handle All Consumers
+#### Task 2.3: Delete SDK `ingest.ts` and Handle All Consumers — DONE
 
 **Consumers to address** (from Phase 0, Task 0.7):
 
@@ -870,7 +908,7 @@ that distinguishes them from Elasticsearch errors.
 2. Error kind is `data_source_error`, not `es_error`
 3. Callers handle the Result (no unhandled exceptions in the pipeline)
 
-#### Task 2.8: Unify Index Name Resolution (Eliminate Competing Patterns)
+#### Task 2.8: Unify Index Name Resolution (Eliminate Competing Patterns) — DONE
 
 **Problem**: The non-versioned pipeline (`admin ingest`) uses
 `rewriteBulkOperations` in `search-index-target.ts` to post-hoc
@@ -1112,14 +1150,14 @@ This atomically swaps aliases back to the previous version (recorded in
 
 ### Architectural
 
-6. SDK `ingest.ts` is deleted — no `unknown[]` processing exists
-7. `buildLifecycleDeps()` requires explicit `runVersionedIngest` injection
+6. ~~SDK `ingest.ts` is deleted — no `unknown[]` processing exists~~ — DONE (`1e159d32`)
+7. ~~`buildLifecycleDeps()` requires explicit `runVersionedIngest` injection~~ — DONE (`1e159d32`)
 8. ~~`dispatchBulk()` returns per-index operation counts (not void)~~ — DONE (`2d01e1a1`)
 9. ~~`verifyDocCounts()` reports all failures, not just the first~~ — DONE (`196a3580`)
 10. ~~`createHybridDataSource()` returns `Result`, does not throw~~ — DONE (`e54d6554`)
 11. ~~Failed `stage` cleans up orphaned versioned indexes~~ — DONE (`2d01e1a1`)
-12. `AdminService.ingest()` either removed or uses injected implementation
-13. One index-name resolution pattern across all ingestion paths (`rewriteBulkOperations` eliminated)
+12. ~~`AdminService.ingest()` either removed or uses injected implementation~~ — DONE, removed (`1e159d32`)
+13. ~~One index-name resolution pattern across all ingestion paths (`rewriteBulkOperations` eliminated)~~ — DONE (`7a51148a`)
 14. ~~Post-swap alias validation confirms all 6 aliases before metadata write~~ — DONE (`c4f84f39`)
 
 ### Documentation
