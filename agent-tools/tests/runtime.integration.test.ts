@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { discoverSessionsWithFs } from '../src/core/runtime';
+import { discoverSessionsWithFs, formatTimestamp } from '../src/core/runtime';
 
 describe('runtime integration', () => {
+  it('formats timestamps without milliseconds for any valid ISO value', () => {
+    const timestampMs = Date.UTC(2026, 2, 10, 19, 10, 49, 123);
+    expect(formatTimestamp(timestampMs)).toBe('2026-03-10 19:10:49 UTC');
+  });
+
   it('returns no sessions when projects path is absent', () => {
     const sessions = discoverSessionsWithFs('/tmp/does-not-exist', '/repo', {
       existsSync: () => false,
