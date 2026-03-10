@@ -39,11 +39,29 @@ describe('agent ops', () => {
     expect(phase).toBe('creating PR');
   });
 
+  it('keeps creating PR phase when push command is older than recent window', () => {
+    const phase = detectPhaseFromEvents({
+      stopReason: '',
+      toolNames: ['Bash'],
+      bashCommands: ['git push origin branch', 'echo 1', 'echo 2', 'echo 3', 'echo 4', 'echo 5'],
+    });
+    expect(phase).toBe('creating PR');
+  });
+
   it('detects committing phase from recent commit', () => {
     const phase = detectPhaseFromEvents({
       stopReason: '',
       toolNames: ['Bash'],
       bashCommands: ['git commit -m "msg"'],
+    });
+    expect(phase).toBe('committing');
+  });
+
+  it('keeps committing phase when commit command is older than recent window', () => {
+    const phase = detectPhaseFromEvents({
+      stopReason: '',
+      toolNames: ['Bash'],
+      bashCommands: ['git commit -m "msg"', 'echo 1', 'echo 2', 'echo 3', 'echo 4', 'echo 5'],
     });
     expect(phase).toBe('committing');
   });

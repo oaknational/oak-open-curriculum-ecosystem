@@ -17,19 +17,19 @@ export function detectPhaseFromEvents(input: PhaseDetectionInput): string {
   const recentBashCommands = input.bashCommands.slice(-recentBashWindow);
   const recentToolNames = input.toolNames.slice(-recentToolWindow);
   if (input.stopReason === 'end_turn') {
-    if (recentBashCommands.some((command) => command.includes('gh pr create'))) {
+    if (input.bashCommands.some((command) => command.includes('gh pr create'))) {
       return 'done (PR)';
     }
     return 'done';
   }
   if (
-    recentBashCommands.some(
+    input.bashCommands.some(
       (command) => command.includes('gh pr create') || command.includes('git push'),
     )
   ) {
     return 'creating PR';
   }
-  if (recentBashCommands.some((command) => command.includes('git commit'))) {
+  if (input.bashCommands.some((command) => command.includes('git commit'))) {
     return 'committing';
   }
   if (

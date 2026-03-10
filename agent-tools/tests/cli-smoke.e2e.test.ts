@@ -1,4 +1,7 @@
 import { execSync, spawnSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 import { describe, expect, it } from 'vitest';
 
@@ -36,5 +39,41 @@ describe('CLI smoke', () => {
 
     expect(result.status).toBe(1);
     expect(combinedOutput).toContain('No worktree found for agent: ../bad');
+  });
+
+  it('inspects a valid session ID outside the find time window', () => {
+    const root = execSync('git rev-parse --show-toplevel', {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+      .trim()
+      .replaceAll('\\', '/');
+    const escapedRoot = root.replaceAll('/', '-');
+    const sessionId = 'ba250735-a6e1-48db-9a5a-fa7bdb2daa06';
+    const tenHoursAgoMs = Date.now() - 10 * 60 * 60 * 1000;
+    const tempDir = mkdtempSync(join(tmpdir(), 'cursor-session-smoke-'));
+    const historyPath = join(tempDir, 'history.jsonl');
+    const projectsRoot = join(tempDir, 'projects');
+    writeFileSync(
+      historyPath,
+      `${JSON.stringify({
+        sessionId,
+        timestamp: tenHoursAgoMs,
+        display: 'old explicit session',
+        project: root,
+      })}\n`,
+      'utf8',
+    );
+    const output = execSync(
+      `pnpm tsx src/bin/cursor-session-from-claude-session.ts inspect ${sessionId.slice(0, 8)} --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
+    expect(output).toContain(`session: ${sessionId}`);
+    expect(output).toContain(`path: ${join(projectsRoot, escapedRoot, sessionId)}`);
   });
 });

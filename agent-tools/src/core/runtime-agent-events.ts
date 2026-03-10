@@ -55,16 +55,20 @@ export function readAgentEventsWithFs(
   } catch {
     return emptyEvents();
   }
-  const events = emptyEvents();
-  const lines = fileSystem
-    .readFileSync(jsonlPath, 'utf8')
-    .split('\n')
-    .filter((line) => line.trim().length > 0);
-  for (const line of lines) {
-    const payload = parseJsonLine(line);
-    appendPayloadEvents(events, payload);
+  try {
+    const events = emptyEvents();
+    const lines = fileSystem
+      .readFileSync(jsonlPath, 'utf8')
+      .split('\n')
+      .filter((line) => line.trim().length > 0);
+    for (const line of lines) {
+      const payload = parseJsonLine(line);
+      appendPayloadEvents(events, payload);
+    }
+    return events;
+  } catch {
+    return emptyEvents();
   }
-  return events;
 }
 
 function appendPayloadEvents(events: AgentEvents, payload: unknown): void {

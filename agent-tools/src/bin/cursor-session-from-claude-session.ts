@@ -37,16 +37,16 @@ interface CliArgs {
 function run(): void {
   const args = parseCliArgs(process.argv.slice(2));
   const root = repoRoot();
-  const sessions = mergeSessionsById(
+  const allSessions = mergeSessionsById(
     readHistory(args.historyPath),
     discoverSessions(args.projectsRoot, root),
   );
-  const inWindow = filterByWindow(sessions, args.lastHours, Date.now());
+  const inWindow = filterByWindow(allSessions, args.lastHours, Date.now());
   if (args.command === 'find') {
     runFind(args, root, inWindow);
     return;
   }
-  const selected = findSessionByPrefix(args.sessionId, inWindow);
+  const selected = findSessionByPrefix(args.sessionId, allSessions);
   if (!selected) {
     exitWithError(`No session starts with '${args.sessionId}'`);
   }
