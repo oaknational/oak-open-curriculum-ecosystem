@@ -130,7 +130,7 @@ async function executeVersionedIngest(
   options: IngestOptions,
 ): Promise<Result<IngestResult, AdminError>> {
   const { oakClient, esTransport, target, logger, prepare, dispatch } = deps;
-  logger?.debug('Starting versioned ingest', { version, bulkDir: options.bulkDir });
+  logger?.info('Versioned ingest: starting', { version, target, bulkDir: options.bulkDir });
 
   if (options.dryRun) {
     return err({
@@ -154,7 +154,11 @@ async function executeVersionedIngest(
   }
 
   const prepared = prepareResult.value;
-  logger?.debug('Bulk ingestion prepared', { version, operationCount: prepared.operations.length });
+  logger?.info('Versioned ingest: preparation complete', {
+    version,
+    documents: Math.floor(prepared.operations.length / 2),
+    ...prepared.stats,
+  });
 
   const dispatchResult = await dispatchOperations(
     dispatch,
@@ -167,7 +171,7 @@ async function executeVersionedIngest(
   }
 
   const ingestResult = toIngestResult(prepared.stats);
-  logger?.debug('Versioned ingest complete', { version, ingestResult });
+  logger?.info('Versioned ingest: complete', { version, ...ingestResult });
   return ok(ingestResult);
 }
 

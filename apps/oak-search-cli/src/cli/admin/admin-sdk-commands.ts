@@ -39,14 +39,12 @@ export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .command('setup')
     .description('Create synonyms and all search indexes (idempotent)')
     .option('--reset', 'Delete and recreate all indexes (destructive)')
-    .option('-v, --verbose', 'Enable verbose output')
-    .action(async (opts: { reset?: boolean; verbose?: boolean }) => {
+    .action(async (opts: { reset?: boolean }) => {
       try {
         const sdk = createCliSdk(cliEnv);
-        const options = opts.verbose ? { verbose: true } : undefined;
 
         if (opts.reset) {
-          const result = await handleReset(sdk.admin, options);
+          const result = await handleReset(sdk.admin);
           if (!result.ok) {
             printError(`${result.error.type}: ${result.error.message}`);
             process.exitCode = 1;
@@ -57,7 +55,7 @@ export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
           );
           printJson(result.value);
         } else {
-          const result = await handleSetup(sdk.admin, options);
+          const result = await handleSetup(sdk.admin);
           if (!result.ok) {
             printError(`${result.error.type}: ${result.error.message}`);
             process.exitCode = 1;

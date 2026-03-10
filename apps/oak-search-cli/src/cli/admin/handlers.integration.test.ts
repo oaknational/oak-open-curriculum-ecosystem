@@ -63,12 +63,12 @@ function createMockAdmin(): AdminService {
 }
 
 describe('handleSetup', () => {
-  it('calls admin.setup with options', async () => {
+  it('calls admin.setup', async () => {
     const admin = createMockAdmin();
 
-    await handleSetup(admin, { verbose: true });
+    await handleSetup(admin);
 
-    expect(admin.setup).toHaveBeenCalledWith({ verbose: true });
+    expect(admin.setup).toHaveBeenCalledOnce();
   });
 
   it('returns ok with the setup result', async () => {
@@ -84,12 +84,12 @@ describe('handleSetup', () => {
 });
 
 describe('handleReset', () => {
-  it('calls admin.reset with options', async () => {
+  it('calls admin.reset', async () => {
     const admin = createMockAdmin();
 
-    await handleReset(admin, { verbose: true });
+    await handleReset(admin);
 
-    expect(admin.reset).toHaveBeenCalledWith({ verbose: true });
+    expect(admin.reset).toHaveBeenCalledOnce();
   });
 });
 

@@ -25,6 +25,7 @@ import {
 import type { OakClientEnv } from '../../adapters/oak-adapter.js';
 import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-client-factory.js';
 import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
+import { ingestLogger } from '../../lib/logger.js';
 
 /**
  * Extended environment for lifecycle commands that perform ingestion.
@@ -48,8 +49,14 @@ async function buildLifecycleServiceForIngest(
     oakClient,
     esTransport: esClient,
     target: cliEnv.SEARCH_INDEX_TARGET,
+    logger: ingestLogger,
   });
-  const deps = buildLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, runVersionedIngest);
+  const deps = buildLifecycleDeps(
+    esClient,
+    cliEnv.SEARCH_INDEX_TARGET,
+    runVersionedIngest,
+    ingestLogger,
+  );
   return createIndexLifecycleService(deps);
 }
 

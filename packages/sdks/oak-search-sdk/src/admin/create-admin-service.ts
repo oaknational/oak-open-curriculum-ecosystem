@@ -11,7 +11,6 @@ import type { AdminService } from '../types/admin.js';
 import type {
   AdminError,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
@@ -48,7 +47,7 @@ const SYNONYM_SET_ID = 'oak-syns';
  * @example
  * ```typescript
  * const admin = createAdminService(esClient, config, logger);
- * const result = await admin.setup({ verbose: true });
+ * const result = await admin.setup();
  * ```
  */
 export function createAdminService(
@@ -59,8 +58,8 @@ export function createAdminService(
   const resolveIndex = createIndexResolver(config.indexTarget);
 
   return {
-    setup: (options) => runSetup(esClient, resolveIndex, logger, options),
-    reset: (options) => runReset(esClient, resolveIndex, logger, options),
+    setup: () => runSetup(esClient, resolveIndex, logger),
+    reset: () => runReset(esClient, resolveIndex, logger),
     verifyConnection: () => verifyConnection(esClient),
     listIndexes: () => listIndexes(esClient),
     updateSynonyms: () => upsertSynonyms(esClient, logger),
@@ -76,21 +75,19 @@ export function createAdminService(
  * @param client - Elasticsearch client
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
- * @param options - Setup options (e.g. verbose)
  * @returns Result with synonyms count and index results
  */
 async function runSetup(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
-  options?: SetupOptions,
 ): Promise<Result<SetupResult, AdminError>> {
   try {
     const synonymResult = await upsertSynonyms(client, logger);
     if (!synonymResult.ok) {
       return synonymResult;
     }
-    const indexResults = await createAllIndexes(client, resolveIndex, logger, options);
+    const indexResults = await createAllIndexes(client, resolveIndex, logger);
     return ok({
       synonymsCreated: true,
       synonymCount: synonymResult.value.count,
@@ -107,21 +104,19 @@ async function runSetup(
  * @param client - Elasticsearch client
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
- * @param options - Setup options (e.g. verbose)
  * @returns Result with synonyms count and index results
  */
 async function runReset(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
-  options?: SetupOptions,
 ): Promise<Result<SetupResult, AdminError>> {
   try {
     const deleteResult = await deleteAllIndexes(client, resolveIndex, logger);
     if (!deleteResult.ok) {
       return deleteResult;
     }
-    return runSetup(client, resolveIndex, logger, options);
+    return runSetup(client, resolveIndex, logger);
   } catch (error: unknown) {
     return err(toAdminError(error));
   }

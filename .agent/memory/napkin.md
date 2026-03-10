@@ -1,3 +1,97 @@
+## Session 2026-03-10 — Canonical URL Validation Layer (WS1-WS5)
+
+### What Was Done
+
+- Implemented the canonical URL validation layer per the integration plan
+  (WS1-WS5). TDD throughout: RED tests first, GREEN implementation, REFACTOR.
+- Core module: `validate-canonical-urls.ts` with binary search against sorted
+  `teacherPaths`, batch validation, reference file loading with Result pattern.
+- Typed discriminated union `SitemapRefError` with four error kinds:
+  `file_not_found`, `invalid_json`, `schema_mismatch`, `unsorted_paths`.
+- Comprehensive type guard `isSitemapScanOutput` checking all five consumed
+  fields at the external data boundary (ADR-034).
+- Sortedness invariant check on `teacherPaths` after loading — prevents binary
+  search from returning silent incorrect results on unsorted input.
+- Wired into `codegen.ts` as a post-generation step: warn-only on
+  `file_not_found`, throw on all other error kinds.
+- 25 tests (12 unit pure-function, 13 integration with fail-fast).
+- All four specialist reviewers invoked (test-reviewer, fred, code-reviewer,
+  wilma). All findings addressed: fail-fast throws, comprehensive type guard,
+  direct string comparison (not localeCompare), sortedness validation.
+- ADR-132 already existed. Plan updated to WS1-WS5 COMPLETE.
+
+### Patterns to Remember
+
+- `localeCompare` uses locale-sensitive collation that may not match
+  `Array.prototype.sort()` default unicode order. For binary search against
+  `sort()`-ordered data, use `===`/`<`/`>` operators directly.
+- When loading external sorted data for binary search, always verify the
+  sortedness invariant — an unsorted array causes silent wrong results, not
+  crashes.
+- Integration tests that depend on reference files should fail fast (throw at
+  describe-block level) rather than silently skip — silent skips are prohibited
+  skip equivalents.
+
+---
+
+## Session 2026-03-10 — Phase 3 Preparation (Dry Run, Logging, Count Tool)
+
+### What Was Done
+
+- Validated dry run end-to-end (Task 3.0 complete).
+- Investigated document count discrepancy: `_cat/indices` reports 193k lesson docs
+  vs 12,746 true parent docs. The 15x inflation is expected — ELSER `semantic_text`
+  field chunking creates nested Lucene documents for each text chunk.
+- Upgraded progress visibility: SDK index creation logging from `debug` to `info`,
+  per-chunk upload progress with percentage, injected `ingestLogger` into lifecycle deps.
+- Created `admin count` CLI command using ES `_count` API — reports true parent
+  document counts excluding ELSER chunk inflation.
+- Removed `SetupOptions` verbose flag infrastructure — logger DI handles this concern.
+- Diagnosed stage hang: `createAllIndexes` with `semantic_text` fields triggers ELSER
+  model loading (5+ minutes, no feedback). Fixed with per-index creation logging.
+- All quality gates pass (excluding pre-existing `agent-tools` uv dependency).
+
+### Patterns to Remember
+
+- `_cat/indices` doc counts include ELSER `semantic_text` nested chunk documents —
+  always use `_count` API for true parent document counts.
+- ELSER model loading on first index creation with `semantic_text` fields can take 5+
+  minutes. Always log before/after index creation so operators can distinguish "hanging"
+  from "loading ML model".
+- When a CLI process needs visibility and kill capability, give the command to the user
+  to run in their terminal — don't execute via background agents.
+
+---
+
+## Session 2026-03-09 — PR #61 Merge, oak-preview MCP Smoke Test, Plan Update
+
+### What Was Done
+
+- Exercised all 37 tools on the `oak-preview` MCP server end-to-end: discovery,
+  browsing, fetching, progression, search (all 5 scopes), download-asset. All
+  returned 200. Large graph endpoints (thread-progressions 183K, prerequisite-graph
+  1.5M) correctly spilled to disk.
+- Updated PR #61 description to cover all 36 commits (was stale, only covered
+  first 5). Organised by area: search rename, blue/green lifecycle, versioned
+  ingestion, agent infrastructure.
+- PR #61 merged to `main`.
+- Updated the unified versioned ingestion plan: status line, new progress log
+  entry, new Task 3.0 (dry run), remaining work list, Done When progress.
+  Next session starts with `pnpm oaksearch admin ingest --dry-run --verbose`.
+- Updated platform memory (versioned-ingestion-progress.md, MEMORY.md) to reflect
+  the merge.
+
+### Patterns to Remember
+
+- When a PR description goes stale, organise commits by area (table format) rather
+  than listing chronologically — readers need to understand the shape of the change,
+  not the order it happened.
+- MCP server smoke tests should exercise every tool, not just the common paths.
+  The two large graph endpoints were the most interesting — they proved the
+  spill-to-disk behaviour works correctly.
+
+---
+
 ## Session 2026-03-09 — Consolidation + Castr Practice-Core Integration
 
 ### What Was Done

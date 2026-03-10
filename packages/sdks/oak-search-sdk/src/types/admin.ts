@@ -14,7 +14,6 @@ import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import type {
   AdminError,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
@@ -26,7 +25,6 @@ export type {
   AdminError,
   IndexSetupResult,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
@@ -58,7 +56,7 @@ export type {
  * }
  *
  * // Full setup: synonyms + all indexes
- * const setupResult = await admin.setup({ verbose: true });
+ * const setupResult = await admin.setup();
  * ```
  */
 export interface AdminService {
@@ -70,10 +68,9 @@ export interface AdminService {
    * Per-index outcomes are encoded in the `SetupResult` data; the
    * `Result` wrapper captures catastrophic failures.
    *
-   * @param options - Optional verbose flag
    * @returns `ok` with per-index results and synonym count, or `err` with an `AdminError`
    */
-  setup(options?: SetupOptions): Promise<Result<SetupResult, AdminError>>;
+  setup(): Promise<Result<SetupResult, AdminError>>;
 
   /**
    * Delete and recreate all indexes with fresh mappings.
@@ -81,10 +78,9 @@ export interface AdminService {
    * **Destructive operation**: removes all existing data. Use for
    * development and testing, not production.
    *
-   * @param options - Optional verbose flag
    * @returns `ok` with per-index results and synonym count, or `err` with an `AdminError`
    */
-  reset(options?: SetupOptions): Promise<Result<SetupResult, AdminError>>;
+  reset(): Promise<Result<SetupResult, AdminError>>;
 
   /**
    * Verify Elasticsearch connectivity.

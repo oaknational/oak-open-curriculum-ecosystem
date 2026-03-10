@@ -22,7 +22,7 @@ for the first ontology/search graph-enablement workstream.
 
 ## Reference Documents
 
-- [bulk-downloads-data-gaps.md](./bulk-downloads-data-gaps.md) — bulk download enhancement requests for the API team
+- [bulk_data_for_semantic_search.feature_request.md](./bulk_data_for_semantic_search.feature_request.md) — bulk download enhancement requests for the API team
 
 ## Archived
 

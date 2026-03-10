@@ -84,7 +84,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts"
+    "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts",
+    "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.2.0",
@@ -97,6 +98,7 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/logger": "workspace:^",
+    "@oaknational/result": "workspace:*",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
     "@types/node": "^25.3.5",
     "dotenv": "^17.3.1",

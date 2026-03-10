@@ -281,7 +281,7 @@ blue/green swaps. The bare-index-to-alias migration is a one-time operation.
 - [ADR-130](../../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green design
 - [INDEXING.md](../../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
 - [high-level plan](../../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
-- [API gaps inventory](../../active/bulk-downloads-data-gaps.md) — Data not in bulk downloads
+- [API gaps inventory](../../active/bulk_data_for_semantic_search.feature_request.md) — Data not in bulk downloads
 
 ### Key Files
 

@@ -15,7 +15,6 @@ import type {
   AdminService,
   AdminError,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
@@ -38,28 +37,20 @@ export interface StatusResult {
  * Run Elasticsearch setup (synonyms + index mappings).
  *
  * @param admin - The SDK admin service
- * @param options - Optional setup options (verbose flag)
  * @returns `ok` with setup result, or `err` with an `AdminError`
  */
-export async function handleSetup(
-  admin: AdminService,
-  options?: SetupOptions,
-): Promise<Result<SetupResult, AdminError>> {
-  return admin.setup(options);
+export async function handleSetup(admin: AdminService): Promise<Result<SetupResult, AdminError>> {
+  return admin.setup();
 }
 
 /**
  * Delete and recreate all indexes with fresh mappings.
  *
  * @param admin - The SDK admin service
- * @param options - Optional setup options (verbose flag)
  * @returns `ok` with setup result, or `err` with an `AdminError`
  */
-export async function handleReset(
-  admin: AdminService,
-  options?: SetupOptions,
-): Promise<Result<SetupResult, AdminError>> {
-  return admin.reset(options);
+export async function handleReset(admin: AdminService): Promise<Result<SetupResult, AdminError>> {
+  return admin.reset();
 }
 
 /**

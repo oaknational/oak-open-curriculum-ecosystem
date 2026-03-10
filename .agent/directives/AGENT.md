@@ -71,7 +71,12 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 ### Agent Tools
 
-CLI tools for managing agent workflows live in [`.agent/tools/`](../tools/README.md). Currently includes `claude-agent-ops` for monitoring background agents and their worktree-isolated changes.
+CLI tools for managing agent workflows live in [`agent-tools/`](../../agent-tools/README.md). Use the root scripts (for example `pnpm agent-tools:claude-agent-ops status`) to run them.
+
+Canonical commands:
+
+- `pnpm agent-tools:claude-agent-ops <status|worktrees|log|diff|commit-ready|preflight|cleanup>`
+- `pnpm agent-tools:cursor-session-from-claude-session <find|inspect|takeover>`
 
 ### Agent Artefact Architecture (ADR-125)
 
@@ -143,6 +148,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ### Structure
 
 - `apps/` – runnable apps that provide services to users
+- `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
 - `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`)

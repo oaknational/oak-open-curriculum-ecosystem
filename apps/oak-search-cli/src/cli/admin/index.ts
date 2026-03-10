@@ -35,6 +35,7 @@ import {
   registerRollbackCmd,
   registerValidateAliasesCmd,
 } from './admin-lifecycle-alias-commands.js';
+import { registerCountCmd } from './admin-count-command.js';
 
 /**
  * Create the `admin` subcommand group.
@@ -70,6 +71,7 @@ export function adminCommand(cliEnv: CliSdkEnv & OakClientEnv): Command {
   registerPromoteCmd(cmd, cliEnv);
   registerRollbackCmd(cmd, cliEnv);
   registerValidateAliasesCmd(cmd, cliEnv);
+  registerCountCmd(cmd, cliEnv);
 
   return cmd;
 }

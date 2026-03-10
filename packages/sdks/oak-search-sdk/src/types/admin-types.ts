@@ -33,12 +33,6 @@ export interface SetupResult {
   readonly indexResults: readonly IndexSetupResult[];
 }
 
-/** Options for setup and reset operations. */
-export interface SetupOptions {
-  /** Whether to emit verbose progress output. */
-  readonly verbose?: boolean;
-}
-
 // ---------------------------------------------------------------------------
 // Connection and index listing types
 // ---------------------------------------------------------------------------

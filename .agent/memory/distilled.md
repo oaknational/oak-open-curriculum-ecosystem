@@ -79,6 +79,9 @@ enough for permanent documentation.
 - `isSubject()` then fallback for `AllSubjectSlug` to
   `SearchSubjectSlug` mapping (KS4 variants)
 - Zod `.passthrough()` deprecated in Zod v4 — use `.loose()`
+- `localeCompare` uses locale-sensitive collation that may
+  diverge from `Array.sort()` unicode order. For binary
+  search against `sort()`-ordered data, use `===`/`<`/`>`
 
 ## Elasticsearch
 
@@ -95,6 +98,9 @@ enough for permanent documentation.
 - EsCurric MCP API key needs `feature_actions.read` Kibana
   privilege (in addition to `feature_agentBuilder.read`) for
   the `platform_core_search` tool to work
+- `_cat/indices` doc counts include ELSER `semantic_text`
+  nested chunks (15x inflation for lessons). Use `_count`
+  API or `admin count` for true parent document counts
 
 ## Testing (Domain-Specific)
 

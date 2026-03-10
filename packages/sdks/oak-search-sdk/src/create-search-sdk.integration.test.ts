@@ -438,7 +438,7 @@ describe('AdminService', () => {
     it('returns ok with a SetupResult', async () => {
       const { admin } = createSdk();
 
-      const result = await admin.reset({ verbose: true });
+      const result = await admin.reset();
 
       expect(result.ok).toBe(true);
       if (result.ok) {

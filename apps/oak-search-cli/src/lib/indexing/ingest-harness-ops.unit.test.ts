@@ -76,7 +76,7 @@ describe('dispatchBulk', () => {
 
     await dispatchBulk(mockEs, operations, mockLogger);
 
-    expect(mockLogger.info).toHaveBeenCalledTimes(3);
+    expect(mockLogger.info).toHaveBeenCalledTimes(4);
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       1,
       'Starting bulk upload to Elasticsearch',
@@ -94,6 +94,16 @@ describe('dispatchBulk', () => {
     );
     expect(mockLogger.info).toHaveBeenNthCalledWith(
       3,
+      'Chunk uploaded',
+      expect.objectContaining({
+        chunk: 1,
+        totalChunks: 1,
+        totalUploaded: 2,
+        of: 2,
+      }),
+    );
+    expect(mockLogger.info).toHaveBeenNthCalledWith(
+      4,
       'Bulk upload completed successfully',
       expect.objectContaining({
         documents: 2,

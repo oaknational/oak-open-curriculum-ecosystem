@@ -21,7 +21,7 @@ import {
   OAK_META_MAPPING,
 } from '@oaknational/sdk-codegen/search';
 
-import type { AdminError, IndexSetupResult, SetupOptions } from '../types/admin-types.js';
+import type { AdminError, IndexSetupResult } from '../types/admin-types.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
 import { INDEX_META_INDEX } from '../internal/index-resolver.js';
 import { isResourceExistsError, isNotFoundError } from './es-error-guards.js';
@@ -62,25 +62,19 @@ function toAdminError(error: unknown): AdminError {
  *
  * @param client - Elasticsearch client
  * @param resolveIndex - Resolves index kind to concrete index name
- * @param logger - Optional logger for debug output
- * @param options - Setup options (e.g. verbose logging)
+ * @param logger - Optional logger for diagnostic output
  * @returns Array of results, one per index, with status of created/exists/error
  */
 export async function createAllIndexes(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
-  options?: SetupOptions,
 ): Promise<IndexSetupResult[]> {
   const results: IndexSetupResult[] = [];
   for (const def of INDEX_DEFINITIONS) {
-    results.push(
-      await createIndex(client, resolveIndex(def.kind), def.mapping, logger, options?.verbose),
-    );
+    results.push(await createIndex(client, resolveIndex(def.kind), def.mapping, logger));
   }
-  results.push(
-    await createIndex(client, INDEX_META_INDEX, OAK_META_MAPPING, logger, options?.verbose),
-  );
+  results.push(await createIndex(client, INDEX_META_INDEX, OAK_META_MAPPING, logger));
   return results;
 }
 
@@ -149,8 +143,7 @@ async function safeDeleteIndex(
  * @param client - Elasticsearch client
  * @param indexName - Concrete index name to create
  * @param mapping - Curriculum mapping object (settings + mappings)
- * @param logger - Optional logger for verbose output
- * @param verbose - Whether to log creation events
+ * @param logger - Optional logger for diagnostic output
  * @returns IndexSetupResult with created/exists/error status
  */
 async function createIndex(
@@ -158,14 +151,12 @@ async function createIndex(
   indexName: string,
   mapping: unknown,
   logger: Logger | undefined,
-  verbose?: boolean,
 ): Promise<IndexSetupResult> {
   try {
     const params = extractMappingParams(mapping);
+    logger?.info('Creating index', { index: indexName });
     await client.indices.create({ index: indexName, ...params });
-    if (verbose) {
-      logger?.info('Created index', { index: indexName });
-    }
+    logger?.info('Index created', { index: indexName });
     return { indexName, status: 'created' };
   } catch (error: unknown) {
     if (isResourceExistsError(error)) {

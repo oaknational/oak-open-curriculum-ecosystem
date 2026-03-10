@@ -40,7 +40,6 @@ export type {
   AdminError,
   IndexSetupResult,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,

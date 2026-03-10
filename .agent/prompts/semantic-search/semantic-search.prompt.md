@@ -3,17 +3,18 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-07
+last_updated: 2026-03-10
 ---
 
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-03-07 (active graph alignment-audit lane and cross-collection sequencing refreshed)
+**Last Updated**: 2026-03-10 (Phase 3 preparation complete — dry run done, logging improved, `admin count` tool added)
 
-**Recent session (7 Mar 2026)**: Graph-enablement planning was promoted from
-strategy into a queued parent quick-win plan and then into the active
-`kg-alignment-audit` slice. The semantic-search navigation surfaces now reflect
-that active/queued hierarchy explicitly.
+**Recent session (10 Mar 2026)**: Unified versioned ingestion Phase 3 preparation
+complete. Dry run validated, progress visibility added (SDK + CLI logging),
+`admin count` command created for true parent doc counts (excludes ELSER chunk
+inflation). Task 3.1 (stage) ready for manual execution with visible output and
+kill capability.
 
 ---
 
@@ -96,10 +97,11 @@ Run this checklist at the start of the next session:
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 5. Read the active execution plan you are working from — it should be self-sufficient:
    - [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active Boundary 03 execution plan
-   - [blue-green-reindex.execution.plan.md](../../plans/semantic-search/active/blue-green-reindex.execution.plan.md) — first live reindex with alias migration (ADR-130)
+   - [unified-versioned-ingestion.plan.md](../../plans/semantic-search/active/unified-versioned-ingestion.plan.md) — versioned ingestion pipeline (Phase 3: dry run then live reindex)
    - [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
    - [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active graph-enablement execution plan
 6. Treat these as complete/archive references only:
+   - [blue-green-reindex.execution.plan.md](../../plans/semantic-search/archive/completed/blue-green-reindex.execution.plan.md) — superseded by unified-versioned-ingestion; retained for root cause analysis
    - [mcp-result-pattern-unification.execution.plan.md](../../plans/semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md) — `Result<T, E>` migration (complete)
    - [architecture-review-remediation.md](../../plans/semantic-search/archive/completed/architecture-review-remediation.md) — N1-N6 findings from four-reviewer sweep (all completed)
    - [sdk-separation-pre-phase1-decisions.md](../../plans/semantic-search/archive/completed/sdk-separation-pre-phase1-decisions.md) — D1-D5 decision rationale (archived)
@@ -117,7 +119,7 @@ Run this checklist at the start of the next session:
 
 Active now:
 
-1. [blue-green-reindex.execution.plan.md](../../plans/semantic-search/active/blue-green-reindex.execution.plan.md) — first live reindex with bare-index-to-alias migration (ADR-130)
+1. [unified-versioned-ingestion.plan.md](../../plans/semantic-search/active/unified-versioned-ingestion.plan.md) — Phase 3: dry run done, stage/validate/promote/verify next
 2. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
 3. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
 4. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane

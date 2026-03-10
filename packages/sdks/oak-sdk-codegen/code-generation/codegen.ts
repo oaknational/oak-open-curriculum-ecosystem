@@ -21,6 +21,7 @@ import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache
 import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separation-core.js';
 import { validateOpenApiDocument } from './schema-validator.js';
 import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
+import { runSitemapValidation } from './typegen/routing/validate-canonical-urls.js';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
@@ -171,6 +172,51 @@ generateWidgetConstants(logger);
 
 logger.info('Generating subject hierarchy...');
 generateSubjectHierarchy(logger);
+
+// Post-generation: validate canonical URL patterns against sitemap reference.
+// Invalid URLs emit warnings (not errors) — this is intentionally a soft phase
+// while we build confidence in the validation layer. See the integration plan
+// WS2.2 for the decision to start warn-only before making it a hard gate.
+const sitemapRefPath = path.resolve(rootDirectory, 'reference/canonical-url-map.json');
+const validation = runSitemapValidation(sitemapRefPath);
+if (!validation.ok) {
+  const refError = validation.error;
+  if (refError.kind === 'file_not_found') {
+    logger.warn('Sitemap validation skipped — reference file not found', {
+      path: refError.path,
+    });
+  } else {
+    // Corrupt or malformed reference file — fail fast
+    let detail: string;
+    if (refError.kind === 'invalid_json') {
+      detail = `Invalid JSON: ${refError.cause}`;
+    } else if (refError.kind === 'unsorted_paths') {
+      detail = 'teacherPaths array is not sorted — binary search requires sorted input';
+    } else {
+      detail = 'Schema mismatch: missing required fields';
+    }
+    throw new Error(`Sitemap reference file is broken: ${detail} (${refError.path})`);
+  }
+} else {
+  const { sequenceValidation, programmeValidation, generatedAt } = validation.value;
+  logger.info('Sitemap URL validation complete', {
+    referenceAge: generatedAt,
+    sequences: `${String(sequenceValidation.validCount)}/${String(sequenceValidation.total)} valid`,
+    programmes: `${String(programmeValidation.validCount)}/${String(programmeValidation.total)} valid`,
+  });
+  if (sequenceValidation.invalidCount > 0) {
+    logger.warn('Invalid sequence URLs detected', {
+      count: sequenceValidation.invalidCount,
+      urls: sequenceValidation.invalidUrls.slice(0, 10),
+    });
+  }
+  if (programmeValidation.invalidCount > 0) {
+    logger.warn('Invalid programme URLs detected', {
+      count: programmeValidation.invalidCount,
+      urls: programmeValidation.invalidUrls.slice(0, 10),
+    });
+  }
+}
 
 logger.info('Type generation complete!');
 logger.info('MCP tools generated from schema!');
