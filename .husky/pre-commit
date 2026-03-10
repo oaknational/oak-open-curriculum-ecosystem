@@ -3,6 +3,9 @@
 # Disable turbo TUI
 export TURBO_UI=0
 
+# Limit concurrency to reduce resource contention and flaky worker exits
+export TURBO_CONCURRENCY=4
+
 echo "🔍 Running pre-commit checks..."
 
 echo "📝 Checking formatting..."
