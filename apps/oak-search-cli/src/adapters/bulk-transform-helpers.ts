@@ -8,7 +8,7 @@
  * for backwards compatibility.
  *
  * @see canonical-url-generator.ts - Shared URL generation (single source of truth)
- * @see @oaknational/curriculum-sdk sequence-slug-derivation.ts - Shared slug derivation
+ * @see curriculum-sdk sequence-slug-derivation.ts - Shared slug derivation
  */
 
 import type { Lesson, Unit } from '@oaknational/sdk-codegen/bulk';

@@ -10,20 +10,17 @@ todos:
   - id: phase-0-audit
     content: "Phase 0: Audit and catalogue every affected command and resource."
     status: pending
-  - id: phase-1-teardown
-    content: "Phase 1: Introduce teardown pattern and resource scoping (TDD)."
+  - id: phase-1-teardown-and-logging
+    content: "Phase 1: Process exit guarantee, teardown pattern, resource scoping, and structured error logging (TDD)."
     status: pending
-  - id: phase-2-error-logging
-    content: "Phase 2: Route CLI errors through the structured logger (TDD)."
+  - id: phase-2-preconditions
+    content: "Phase 2: Fail-fast precondition checks before resource creation (TDD)."
     status: pending
-  - id: phase-3-preconditions
-    content: "Phase 3: Fail-fast precondition checks before resource creation (TDD)."
+  - id: phase-3-e2e-validation
+    content: "Phase 3: E2E validation of no-hang behaviour and edge cases (TDD)."
     status: pending
-  - id: phase-4-process-exit
-    content: "Phase 4: Guarantee process exit and graceful shutdown (TDD)."
-    status: pending
-  - id: phase-5-review
-    content: "Phase 5: Reviewer gates and documentation."
+  - id: phase-4-review
+    content: "Phase 4: Reviewer gates, documentation, and ADR."
     status: pending
 isProject: false
 ---
@@ -31,7 +28,7 @@ isProject: false
 # CLI Robustness: Error Handling, Process Lifecycle, and Dev-Ex
 
 **Last Updated**: 2026-03-10
-**Status**: PLANNED — awaiting reviewer approval
+**Status**: PLANNED — v4 (post-review, all 7 reviewers addressed)
 **Scope**: All CLI command handlers in `apps/oak-search-cli/src/cli/`
 **Trigger**: `admin stage` hung indefinitely after ENOENT error (2026-03-10)
 
@@ -83,11 +80,7 @@ The oak-search-cli has systematic issues across **all command handlers**:
    `createIngestionClient` throws; `readAllBulkFiles` throws. These
    should return `Result` types that callers handle explicitly.
 
-7. **No graceful shutdown** — No `SIGINT`/`SIGTERM` handlers exist.
-   Ctrl+C during a long-running ingest may leave partial state in
-   Elasticsearch with no cleanup.
-
-8. **Module-level OakClient singleton** — `oak-adapter.ts` has a
+7. **Module-level OakClient singleton** — `oak-adapter.ts` has a
    `clientSingleton` at module scope. If `disconnect()` is called on it,
    subsequent callers get the disconnected singleton. Fragile ownership.
 
@@ -133,22 +126,20 @@ But the pattern is broken everywhere.
    process exits within a bounded time after the handler returns
 2. **Every error is logged structurally** — errors go through the
    structured logger with type, message, and context, not raw stderr
-3. **Resources are always cleaned up** — ES clients and OakClients are
-   closed in `finally` blocks, regardless of success or failure
+3. **Resources are always cleaned up** — ES clients are closed in
+   `finally` blocks; OakClients are closed locally by the 2 ingest
+   commands that create them
 4. **Cheap checks happen first** — path existence, env validation, and
    other preconditions are validated before creating expensive connections
-5. **Path resolution is robust** — `--bulk-dir` resolves relative to the
-   app directory when no absolute path is given, with a clear error
-   message showing resolved path, CWD, and a hint when the path is wrong
-6. **All errors use `Result<T, E>`** — No `throw`/`catch` in the error
-   handling path. Functions that can fail return `Result`. Callers handle
-   both cases explicitly. This is a principles mandate: "Handle All Cases
-   Explicitly — Don't throw, use the result pattern `Result<T, E>`"
-7. **Graceful shutdown on signals** — SIGINT/SIGTERM close resources and
-   exit with appropriate codes
-8. **The pattern is simple and copyable** — future commands get the
+5. **Path resolution is robust** — `--bulk-dir` resolves relative to
+   `APP_ROOT` when a relative path is given, with a clear error message
+   showing the resolved path and a hint when the path is wrong
+6. **New error-handling functions use `Result<T, E>`** — `resolveBulkDir`
+   and `validateIngestEnv` return `Result`, never throw. Remaining
+   throw-sites in legacy validators are tracked for follow-up.
+7. **The pattern is simple and copyable** — future commands get the
    right behaviour by following the established pattern
-9. **High-quality tests prove every behaviour** — TDD at all levels.
+8. **High-quality tests prove every behaviour** — TDD at all levels.
    Unit tests for pure functions (path resolution, precondition
    validation), integration tests for the resource wrapper pattern,
    E2E tests proving the process exits cleanly
@@ -156,11 +147,23 @@ But the pattern is broken everywhere.
 ## Non-Goals (YAGNI)
 
 - Refactoring the OakClient singleton pattern (separate concern,
-  documented for follow-up)
+  documented for follow-up; note: calling `disconnect()` on the
+  singleton poisons it for any subsequent use in the same process —
+  safe in CLI single-command-then-exit, but a latent DI violation)
 - Adding retry logic or reconnection handling
 - Changing the Commander.js framework
 - Refactoring the SDK lifecycle service interface
 - Adding OTel/tracing (separate concern)
+- Signal handlers for SIGINT/SIGTERM — `process.exit()` after
+  `parseAsync()` is sufficient; Node.js terminates on SIGINT by default
+  and the OS cleans up TCP sockets on process exit. If graceful
+  mid-operation cancellation is needed later, design with
+  `AbortController`, not signal handlers.
+- Converting all existing throw-sites to Result (tracked follow-up:
+  `validators.ts` has 3 throws, `admin-sdk-commands.ts:182` has 1,
+  `createIngestionClient` throws `CacheRequiredError`,
+  `requireOakApiKey` throws). These are caught by `withEsClient`'s
+  catch block and do not cause hangs.
 
 ---
 
@@ -177,56 +180,171 @@ Before beginning work and at the start of each phase:
 
 ## Strategic Approach
 
-### Key Insight: Composition Root Owns Resources
+### Key Insight: Composition Root + Explicit Resource Ownership
 
-The entry point (`bin/oaksearch.ts`) is the composition root (ADR-078).
-Resource lifecycle should be managed here or in a thin wrapper that
-command handlers use. The pattern is:
+The entry point (`bin/oaksearch.ts`) is the composition root — where
+`process.env` is read and threaded as configuration (per ADR-078). The
+critical change is migrating from `program.parse()` (synchronous) to
+`await program.parseAsync()` followed by `process.exit()`. This single
+change guarantees termination for all commands.
+
+Resource cleanup is the second concern: a thin `withEsClient` wrapper
+ensures the ES client is closed in a `finally` block. The 2 ingest
+commands manage their OakClient cleanup locally.
+
+### Design Decision: `withEsClient` Concrete Wrapper
+
+A concrete (non-generic) wrapper that:
+
+1. Accepts a pre-created ES client (caller owns creation, wrapper owns cleanup)
+2. Executes the handler
+3. Catches unexpected throws — logs structurally (full error object in
+   metadata for stack trace preservation) + prints humanly
+4. Closes the ES client in a `finally` block (error-isolated)
+
+The caller (command handler action) creates the ES client via
+`createEsClient(cliEnv)` and passes it in. This satisfies ADR-078:
+the wrapper accepts all dependencies as parameters, making it testable
+with simple fakes — no `vi.mock` needed.
+
+`disableFileSink()` is called at the composition root (`bin/oaksearch.ts`)
+after `parseAsync()` completes, before `process.exit()`. It does not
+belong in `withEsClient` — the wrapper's responsibility is ES client
+lifecycle, not log-file lifecycle.
+
+This replaces the earlier `withCliResources<R>` generic design. The
+generic was speculative: only 2 of ~15 commands need OakClient, and
+those 2 manage it locally. A concrete wrapper is simpler, has no type
+parameter, no `CleanupFn` type, and no factory indirection.
+
+**Note on `process.exitCode`**: `withEsClient` does NOT set
+`process.exitCode` directly. Instead, `deps` includes a `setExitCode`
+callback. The composition root passes
+`(code) => { process.exitCode = code; }`. This keeps global state
+mutation at the composition root and eliminates `afterEach` cleanup
+in tests (ADR-078).
 
 ```typescript
-// What we want: resource-scoped command execution
-const { resources, cleanup } = await createCommandResources(cliEnv);
-try {
-  await command.execute(resources);
-} finally {
-  await cleanup();
+/**
+ * Execute a CLI command handler with a managed ES client lifecycle.
+ *
+ * Runs the handler, catches unexpected throws, and closes the client
+ * in a finally block regardless of outcome. The caller creates the
+ * client; the wrapper guarantees cleanup.
+ *
+ * @param esClient - Pre-created Elasticsearch client
+ * @param handler - The command handler to execute (must be inline —
+ *   all resource creation must happen inside this closure so that
+ *   withEsClient's finally block can clean up on any throw)
+ * @param deps - Injected dependencies (logger, error printer, exit code setter)
+ */
+async function withEsClient(
+  esClient: Client,
+  handler: () => Promise<void>,
+  deps: {
+    logger: Logger;
+    printError: (msg: string) => void;
+    setExitCode: (code: number) => void;
+  },
+): Promise<void> {
+  try {
+    await handler();
+  } catch (error) {
+    deps.logger.error('Command failed', { error });
+    deps.printError(
+      error instanceof Error ? error.message : String(error),
+    );
+    deps.setExitCode(1);
+  } finally {
+    try {
+      await esClient.close();
+    } catch (closeErr) {
+      deps.logger.warn('ES client close failed', { error: closeErr });
+    }
+  }
 }
 ```
 
-### Design Decision: `withCliResources` Higher-Order Pattern
+### Ingest Commands: Local OakClient Management
 
-Rather than modifying every handler individually, introduce a
-`withCliResources` wrapper that:
+The 2 ingest commands (`stage`, `versioned-ingest`) create an OakClient
+inside the `withEsClient` handler and manage its cleanup in a local
+`finally` block. Each resource has its own error-isolated try/catch.
 
-1. Creates resources (ES client, optionally OakClient)
-2. Executes the handler with those resources
-3. Closes all resources in a `finally` block
-4. Calls `process.exit(process.exitCode ?? 0)` after cleanup
+**Cleanup order invariant**: OakClient disconnect runs in the inner
+`finally` (local to handler), ES client close runs in the outer `finally`
+(`withEsClient`). Inner resources are cleaned up first. If both throw,
+both errors are logged as warnings; `setExitCode(1)` is called once
+in `withEsClient`'s catch block if the handler itself threw.
 
-This is the simplest approach that fixes all commands uniformly.
+```typescript
+// Inside stage handler — preconditions first, then resources
+const dirResult = resolveBulkDir(opts.bulkDir, APP_ROOT, fs.existsSync, hasJsonFiles);
+if (!dirResult.ok) { /* fail fast, no resources created */ return; }
 
-### Two Resource Tiers
+const esClient = createEsClient(cliEnv);
+await withEsClient(esClient, async () => {
+  const oakClient = await createIngestionClient({ env: cliEnv });
+  try {
+    const runIngest = createRunVersionedIngest({ oakClient, esTransport: esClient, ... });
+    const service = buildLifecycleService(
+      esClient, cliEnv.SEARCH_INDEX_TARGET, runIngest, ingestLogger,
+    );
+    const result = await service.stage({ bulkDir: dirResult.value, ... });
+    if (!result.ok) {
+      ingestLogger.error('Stage failed', { ...result.error });
+      printError(`${result.error.type}: ${result.error.message}`);
+      deps.setExitCode(1);
+      return;
+    }
+    printSuccess(`Staged version ${result.value.version}`);
+    printJson(result.value);
+  } finally {
+    try {
+      await oakClient.disconnect();
+    } catch (disconnectErr) {
+      ingestLogger.warn('OakClient disconnect failed', {
+        error: disconnectErr,
+      });
+    }
+  }
+}, { logger: ingestLogger, printError, setExitCode: (c) => { process.exitCode = c; } });
+```
 
-Not all commands need the same resources:
-
-- **Tier 1 (ES only)**: `setup`, `reset`, `status`, `synonyms`, `meta`,
-  `count`, `promote`, `rollback`, `validate-aliases`, all `search`,
-  `observe` — need only an ES client
-- **Tier 2 (ES + OakClient)**: `stage`, `versioned-ingest` — need ES
-  client and OakClient (with optional Redis)
-
-The wrapper should support both tiers without over-engineering.
+If OakClient creation itself fails (throws), the error propagates to
+`withEsClient`'s catch block, which logs and sets exitCode. The ES
+client is still closed in `withEsClient`'s finally — no resource leak.
 
 ### Error Logging: Dual Output
 
-When a command fails, the error should be:
+When a command fails, the error is:
 
-1. **Logged structurally** via the logger (JSON, with type + context)
-2. **Printed humanly** via `printError` (chalk, for the user's terminal)
+1. **Logged structurally** via the injected logger (JSON, with full
+   error object in metadata for stack trace preservation)
+2. **Printed humanly** via the injected `printError` (chalk, for the
+   terminal)
 
-This preserves the human-readable terminal output while adding
-structured observability. The logger call happens *inside* the wrapper;
-individual handlers don't need to change their `printError` calls.
+Both happen inside `withEsClient`'s catch block for unexpected throws.
+For Result errors, the handler itself does both (this preserves the
+existing handler pattern).
+
+### SDK Admin Commands: Explicit ES Client Ownership
+
+`createCliSdk` currently creates an ES client internally and wires
+`ZERO_HIT_*` configuration. To enable cleanup, the handler creates the
+ES client via `createEsClient(cliEnv)` and passes it to
+`createSearchSdk` directly. The `ZERO_HIT_*` normalisation logic
+(webhook URL `'none'` → `undefined`, persistence config) moves to a
+shared `buildSearchSdkConfig(cliEnv)` helper that returns the config
+object without creating any resources.
+
+**Note on evaluation scripts**: `createCliSdk` is also imported by 8
+benchmark scripts in `evaluation/analysis/`. These are outside the CLI
+command path and do not suffer from the hang problem. `createCliSdk`
+will be retained for evaluation use and marked with a TSDoc note
+explaining that CLI commands must use `createEsClient` + `withEsClient`
+instead. If evaluation scripts later need cleanup, they can migrate
+independently.
 
 ---
 
@@ -234,11 +352,12 @@ individual handlers don't need to change their `printError` calls.
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| ES client `close()` throws | Low | Low | Wrap in try/catch in cleanup, log warning |
-| OakClient `disconnect()` throws | Low | Low | Same — wrap, log, continue |
-| `process.exit()` prevents pending writes | Medium | Medium | Flush logger before exit; `process.exit` is called *after* cleanup |
+| ES client `close()` throws | Low | Low | Error-isolated try/catch in cleanup, logged as warning |
+| OakClient `disconnect()` throws | Low | Low | Same — error-isolated try/catch, logged as warning |
+| `process.exit()` prevents pending writes | Medium | Medium | `disableFileSink()` called before `process.exit()` |
 | Existing tests break from new exit behaviour | Medium | Medium | New pattern is additive — existing handler logic unchanged |
-| Commander async action + process.exit interaction | Low | Medium | Test explicitly; Commander 12+ handles async actions |
+| Commander 14 `parseAsync` behaviour | Low | Medium | Test explicitly; Commander 14 awaits async actions correctly |
+| OakClient singleton poisoning after disconnect | Low | Low | Single-command-then-exit CLI pattern; tracked for follow-up |
 
 ---
 
@@ -257,7 +376,7 @@ resources it creates, and whether it cleans them up.
 
 1. Search all `createEsClient`, `createCliSdk`,
    `buildLifecycleServiceForIngest`, `buildLifecycleServiceBasic` call
-   sites in `src/cli/`
+   sites in `src/cli/` and `evaluation/`
 2. For each, check whether a `close()`/`disconnect()` call exists
 3. Document the inventory
 
@@ -265,6 +384,7 @@ resources it creates, and whether it cleans them up.
 
 1. Complete table of all commands with resource creation and cleanup status
 2. No command is missed
+3. Evaluation script callers of `createCliSdk` documented
 
 #### Task 0.2: Catalogue All `printError` Call Sites
 
@@ -280,179 +400,269 @@ that lack a corresponding logger call.
 
 ---
 
-### Phase 1: Introduce Teardown Pattern and Resource Scoping (TDD)
+### Phase 1: Process Exit Guarantee, Teardown Pattern, Resource Scoping, and Structured Error Logging (TDD)
 
 **Foundation Check-In**: Re-read `principles.md` (DRY, fail fast),
 `testing-strategy.md` (TDD).
 
-#### Task 1.1: Create `CliResources` Type and `withCliResources` Wrapper
+#### Task 1.0: Migrate `parse()` to `parseAsync()` + `process.exit()`
 
-**Design**: A higher-order function that wraps command handler execution
-with resource lifecycle management.
+**This is the single most important change in the plan.** It fixes the
+hang problem for every command, independent of the cleanup pattern.
+All subsequent tasks depend on this — `withEsClient` cleanup only
+works if the composition root awaits async actions before exiting.
 
-```typescript
-/** Resources available to CLI command handlers. */
-interface CliResources {
-  readonly esClient: Client;
-}
+**Current**: `program.parse()` at `bin/oaksearch.ts:54` is the
+synchronous variant. Async action handlers may not have completed when
+`parse()` returns, and there is no `process.exit()` after it — the
+process relies on event loop drainage, which fails when open sockets
+exist.
 
-/** Extended resources for commands that need Oak API access. */
-interface IngestCliResources extends CliResources {
-  readonly oakClient: OakClient;
-}
-
-/** Cleanup function returned by resource factories. */
-type CleanupFn = () => Promise<void>;
-
-/**
- * Execute a command handler with managed resource lifecycle.
- *
- * Creates resources, runs the handler, closes resources in finally,
- * and ensures process exit.
- */
-async function withCliResources<R extends CliResources>(
-  createResources: () => Promise<{ resources: R; cleanup: CleanupFn }>,
-  handler: (resources: R) => Promise<void>,
-): Promise<void> {
-  let cleanup: CleanupFn = () => Promise.resolve();
-  try {
-    const created = await createResources();
-    cleanup = created.cleanup;
-    await handler(created.resources);
-  } catch (error) {
-    ingestLogger.error('Command failed', {
-      error: error instanceof Error ? error.message : String(error),
-    });
-    printError(error instanceof Error ? error.message : String(error));
-    process.exitCode = 1;
-  } finally {
-    await cleanup();
-  }
-}
-```
-
-**TDD Sequence**:
-
-1. **RED**: Write unit test — `withCliResources` calls cleanup on
-   success. Run → FAILS (function does not exist).
-2. **RED**: Write unit test — `withCliResources` calls cleanup on error
-   and sets exitCode. Run → FAILS.
-3. **RED**: Write unit test — `withCliResources` calls cleanup even when
-   handler throws. Run → FAILS.
-4. **GREEN**: Implement `withCliResources`. Run → all PASS.
-5. **REFACTOR**: Extract if needed.
-
-**Acceptance Criteria**:
-
-1. `withCliResources` exists in `src/cli/shared/`
-2. Cleanup is called on success, on Result error, and on thrown error
-3. Logger is called on error paths
-4. No `unknown` types, no type assertions
-5. Unit tests prove all three paths
-
-#### Task 1.2: Create Resource Factory Functions
-
-**Design**: Two factory functions matching the two resource tiers.
+**Target**: In `bin/oaksearch.ts`:
 
 ```typescript
-function createBasicResources(cliEnv: CliSdkEnv): Promise<{
-  resources: CliResources;
-  cleanup: CleanupFn;
-}>;
-
-function createIngestResources(cliEnv: LifecycleIngestEnv): Promise<{
-  resources: IngestCliResources;
-  cleanup: CleanupFn;
-}>;
+await program.parseAsync();
+// Commander 14 parseAsync resolves after async actions complete.
+// At this point, all withEsClient finally blocks have run.
+disableFileSink(); // flush and close log file sink before exit
+process.exit(process.exitCode ?? 0);
 ```
 
-**TDD Sequence**:
-
-1. **RED**: Write test — `createBasicResources` returns resources and a
-   cleanup that calls `esClient.close()`. Run → FAILS.
-2. **RED**: Write test — `createIngestResources` returns resources and a
-   cleanup that calls both `esClient.close()` and
-   `oakClient.disconnect()`. Run → FAILS.
-3. **GREEN**: Implement both. Run → PASS.
-4. **REFACTOR**: Ensure cleanup errors are caught and logged, not thrown.
-
-**Acceptance Criteria**:
-
-1. Both factories return `{ resources, cleanup }`
-2. Cleanup closes all created connections
-3. Cleanup errors are logged as warnings, not thrown
-4. Tests prove cleanup is called for each resource
-
-#### Task 1.3: Migrate Lifecycle Ingest Commands
-
-**Target**: `registerStageCmd` and `registerVersionedIngestCmd`.
-
-Refactor `buildLifecycleServiceForIngest` to return
-`{ service, cleanup }` and wrap both handlers in `withCliResources`.
+**Sub-task 1.0a: Add error isolation to `disableFileSink()`.**
+The current implementation (`logger.ts` lines 183–190) calls
+`activeFileSink.end()` without a try/catch. If `end()` throws,
+`process.exit()` never executes — reintroducing the hang. Wrap the
+`end()` call in try/catch so a failing file-sink close never prevents
+`process.exit()`.
 
 **TDD Sequence**:
 
-1. **RED**: Write integration test — after `stage` returns an error
-   Result, the cleanup function is called. Run → FAILS.
-2. **GREEN**: Refactor `registerStageCmd` to use `withCliResources`.
+1. **BASELINE**: Write E2E test — run `oaksearch --help` and assert the
+   process exits within 5 seconds with exit code 0. Place in
+   `apps/oak-search-cli/e2e-tests/cli-exit.e2e.test.ts`. Run →
+   PASSES (confirms baseline works before changes).
+2. **RED**: Write E2E test — run `oaksearch admin stage --bulk-dir
+   ./does-not-exist` and assert the process exits within 5 seconds with
+   exit code 1 and a helpful error message. Run → FAILS (currently
+   hangs).
+3. **GREEN**: Change `program.parse()` to `await program.parseAsync()`
+   and add `disableFileSink()` then `process.exit(process.exitCode ?? 0)`.
    Run → PASSES.
-3. **REFACTOR**: Apply same pattern to `registerVersionedIngestCmd`.
+
+**Note on E2E test environment**: E2E tests that invoke the CLI as a
+child process need minimal env vars (ELASTICSEARCH_URL,
+ELASTICSEARCH_API_KEY, SEARCH_INDEX_TARGET). Tests that validate
+error paths (like `./does-not-exist` bulk dir) do not need a real ES
+cluster — the precondition check fails before any connection is
+attempted. Use `--help` for the success-path baseline (no env needed).
 
 **Acceptance Criteria**:
 
-1. Both lifecycle ingest commands use `withCliResources`
-2. ES client and OakClient are closed on success and error
-3. Existing behaviour is preserved (same output, same exit codes)
+1. CLI always exits after command completes (success or failure)
+2. Exit code is preserved correctly
+3. E2E tests prove no-hang behaviour
+4. `bin/oaksearch.ts` uses `parseAsync()` not `parse()`
+5. `disableFileSink()` called after `parseAsync()`, before `process.exit()`
+6. `disableFileSink()` wraps `activeFileSink.end()` in try/catch
 
-#### Task 1.4: Migrate Lifecycle Alias Commands
+#### Task 1.1: Create `withEsClient` Wrapper
+
+**Design**: A concrete function that wraps command handler execution
+with ES client lifecycle management. Dependencies (logger, printError,
+setExitCode) are injected as parameters per ADR-078.
+
+**TDD Sequence** (interleaved RED-GREEN per test):
+
+1. **RED**: Write integration test — `withEsClient` calls
+   `esClient.close()` on success. Run → FAILS (function does not exist).
+2. **GREEN**: Implement minimal `withEsClient` with try/finally. Run → PASSES.
+3. **RED**: Write integration test — `withEsClient` calls
+   `esClient.close()` and logs structurally when handler throws.
+   Run → FAILS.
+4. **GREEN**: Add catch block with logger call. Run → PASSES.
+5. **RED**: Write integration test — `withEsClient` calls
+   `deps.setExitCode(1)` when handler throws. Run → FAILS (if not
+   already covered).
+6. **GREEN**: Add setExitCode call. Run → PASSES.
+7. **RED**: Write integration test — when `esClient.close()` throws,
+   the error is logged as a warning (not re-thrown). Run → FAILS.
+8. **GREEN**: Add try/catch around close. Run → PASSES.
+9. **REFACTOR**: Extract if needed. Run quality gates.
+
+**Note on testing**: `withEsClient` accepts
+`deps: { logger, printError, setExitCode }` as injected parameters.
+Tests pass simple fakes — no mocking framework needed for the logger.
+The ES client is a simple fake with a `vi.fn()` `close` method.
+`setExitCode` is a `vi.fn()` — no `process.exitCode` mutation, no
+`afterEach` cleanup needed.
+
+**Note on test classification**: `withEsClient` accepts a pre-created ES
+client as its first parameter. Tests inject a fake ES client, making
+these integration tests (simple mocks injected as arguments). Named
+`with-es-client.integration.test.ts`.
+
+**Note on `process.exitCode` in all tests**: Any test that exercises
+error paths through `withEsClient` or command handlers uses an injected
+`setExitCode` fake — never mutates `process.exitCode` directly. Tests
+for handler code that currently sets `process.exitCode` directly should
+migrate to the injected pattern as part of the handler migration.
+
+**Acceptance Criteria**:
+
+1. `withEsClient` exists in `src/cli/shared/with-es-client.ts`
+2. ES client is closed on success and on error (error-isolated)
+3. Injected logger is called on unexpected throw paths (full error
+   object in metadata, not just message string)
+4. Injected `printError` is called on unexpected throw paths
+5. Injected `setExitCode` is called (not `process.exitCode` directly)
+6. No `unknown` types, no type assertions
+7. Integration tests prove all paths
+
+#### Task 1.2: Migrate Lifecycle Ingest Commands
+
+**Target**: `registerStageCmd` and `registerVersionedIngestCmd` in
+`admin-lifecycle-commands.ts`.
+
+**DELETE `buildLifecycleServiceForIngest`** — this function buries
+resource handles (creates ES client and OakClient internally, returns
+only the service). Instead, inline resource creation in the handler so
+each resource has explicit ownership and cleanup. ADR-133 will codify
+the rule: "factories must not bury resource handles".
+
+**REPLACE existing `buildLifecycleServiceBasic`** in
+`admin-lifecycle-alias-commands.ts` (line 33) — this function also
+creates its own ES client internally (same anti-pattern). Create a
+new shared version in `src/cli/shared/build-lifecycle-service.ts` that
+accepts a pre-created ES client:
+
+```typescript
+function buildLifecycleService(
+  esClient: Client,
+  target: 'primary' | 'sandbox',
+  runVersionedIngest: RunVersionedIngestFn,
+  logger: Logger,
+): IndexLifecycleService;
+```
+
+For alias-only commands (Task 1.3) that don't need real ingestion,
+pass a no-op `runVersionedIngest` stub.
+
+**TDD Sequence**:
+
+1. **RED**: Write integration test — extract the `stage` action callback
+   and call it directly with fake deps. After an error Result,
+   `oakClient.disconnect()` is called. Run → FAILS.
+2. **GREEN**: Refactor `registerStageCmd` to use `withEsClient` with
+   local OakClient cleanup. Run → PASSES.
+3. **RED**: Write integration test — when OakClient creation fails
+   (throws), ES client is still closed (verified via `withEsClient`'s
+   own tests — this test proves ES client is passed to `withEsClient`).
+   Run → FAILS.
+4. **GREEN**: Ensure OakClient creation is inside the handler (so
+   `withEsClient`'s finally still closes ES client). Run → PASSES.
+5. **REFACTOR**: Apply same pattern to `registerVersionedIngestCmd`.
+
+**Note on integration test strategy**: To test `registerStageCmd`
+without Commander indirection, extract the action callback into a
+named function and test it directly. Alternatively, invoke the
+Commander action by calling `.parseAsync(['node', 'test', 'stage',
+'--bulk-dir', './fake'])` on a test program instance. The former is
+simpler and preferred.
+
+**Note on integration test intent**: These tests prove observable
+behaviour: given a stage command with fake deps, OakClient cleanup
+occurs after failure. They do NOT re-prove `withEsClient` behaviour
+(e.g., `esClient.close()` is called) — that is proven by Task 1.1
+tests. Each proof happens once.
+
+**Acceptance Criteria**:
+
+1. Both lifecycle ingest commands use `withEsClient`
+2. ES client and OakClient are closed on success and error
+3. OakClient disconnect failure does not prevent ES client close
+4. ES client close failure does not prevent OakClient disconnect
+5. Existing behaviour is preserved (same output, same exit codes)
+6. `buildLifecycleServiceForIngest` deleted
+7. Old `buildLifecycleServiceBasic` in `admin-lifecycle-alias-commands.ts` deleted
+
+#### Task 1.3: Migrate Lifecycle Alias Commands
 
 **Target**: `registerPromoteCmd`, `registerRollbackCmd`,
-`registerValidateAliasesCmd`.
+`registerValidateAliasesCmd` in `admin-lifecycle-alias-commands.ts`.
 
-Refactor `buildLifecycleServiceBasic` to return `{ service, cleanup }`
-and wrap all three handlers.
+Uses the shared `buildLifecycleService` from Task 1.2 with a no-op
+`runVersionedIngest` stub. No OakClient — simpler than ingest commands.
 
 **Acceptance Criteria**:
 
-1. All three alias commands use `withCliResources`
+1. All three alias commands use `withEsClient`
 2. ES client is closed on success and error
+3. Old `buildLifecycleServiceBasic` (which buried the ES client) is deleted
 
-#### Task 1.5: Migrate SDK Admin Commands
+#### Task 1.4: Migrate SDK Admin Commands
 
 **Target**: `registerSetupCmd`, `registerStatusCmd`,
 `registerSynonymsCmd`, `registerMetaCmd`.
 
-These use `createCliSdk` which creates an ES client internally. Either:
+These use `createCliSdk` which creates an ES client internally. Migrate
+to explicit ES client ownership: the handler creates the ES client via
+`createEsClient(cliEnv)`, passes it to `withEsClient` for lifecycle
+management, and calls `createSearchSdk` directly with the
+externally-owned client.
 
-- (a) Modify `createCliSdk` to return `{ sdk, cleanup }`, or
-- (b) Have the wrapper create the ES client and pass it to `createSearchSdk`
+**`ZERO_HIT_*` configuration**: The normalisation logic in `createCliSdk`
+(webhook URL `'none'` → `undefined`, persistence/retention config)
+moves to a shared `buildSearchSdkConfig(cliEnv)` pure function that
+returns the config object without creating any resources. This function
+is tested with its own unit tests.
 
-Option (b) is preferred — it makes the resource ownership explicit.
+After CLI callers are migrated, **retain `createCliSdk` for evaluation
+scripts only** — the 8 benchmark scripts in `evaluation/analysis/` use
+it and do not suffer from the hang problem. Add a TSDoc deprecation
+note directing CLI commands to use `createEsClient` + `withEsClient`.
 
 **Acceptance Criteria**:
 
-1. All SDK admin commands use `withCliResources`
+1. All SDK admin commands use `withEsClient`
 2. ES client is closed on success and error
+3. All CLI callers use `createSearchSdk` with externally-owned client
+4. `ZERO_HIT_*` normalisation in `buildSearchSdkConfig()` with unit tests
+5. `createCliSdk` retained for evaluation scripts with deprecation TSDoc
 
-#### Task 1.6: Migrate Search and Observe Commands
+#### Task 1.5: Migrate Search and Observe Commands
 
 **Target**: All `search` subcommands and `observe summary`.
 
-Same pattern as Task 1.5.
+Same pattern as Task 1.4.
 
 **Acceptance Criteria**:
 
-1. All search and observe commands use `withCliResources`
+1. All search and observe commands use `withEsClient`
 2. ES client is closed on success and error
 
-#### Task 1.7: Migrate Count Command
+#### Task 1.6: Migrate Count Command
 
 **Target**: `registerCountCmd`.
 
 **Acceptance Criteria**:
 
-1. Count command uses `withCliResources`
+1. Count command uses `withEsClient`
 2. ES client is closed on success and error
+
+#### Task 1.7: Ensure All Error Paths Log Structurally
+
+For handlers using `withEsClient`, unexpected throws are automatically
+logged by the wrapper. For Result errors, add a structured logger call
+alongside each `printError` inside the handler body.
+
+For pass-through orchestration commands that don't use the wrapper,
+add structured logger calls alongside their `printError` calls.
+
+**Acceptance Criteria**:
+
+1. Every error path in every command logs via the structured logger
+2. Every error path also calls `printError` for human-readable output
+3. No error path exists that only writes to stderr
 
 **Phase 1 Quality Gates**:
 
@@ -466,56 +676,12 @@ pnpm format:root
 
 ---
 
-### Phase 2: Route CLI Errors Through the Structured Logger (TDD)
-
-**Foundation Check-In**: Re-read `principles.md` (fail fast with helpful
-errors).
-
-#### Task 2.1: Add Structured Error Logging to `withCliResources`
-
-The wrapper already catches errors. Ensure it logs them structurally:
-
-```typescript
-ingestLogger.error('Command failed', {
-  errorType: result.error.type,  // if Result error
-  message: result.error.message,
-  command: commandName,          // passed as context
-});
-```
-
-**TDD Sequence**:
-
-1. **RED**: Write test — when handler returns error Result, logger.error
-   is called with structured data. Run → FAILS.
-2. **GREEN**: Add logger call. Run → PASSES.
-
-**Acceptance Criteria**:
-
-1. Every error path in `withCliResources` logs via the structured logger
-2. Logger call includes error type, message, and command context
-3. `printError` is still called for human-readable terminal output
-4. Both outputs happen on every error
-
-#### Task 2.2: Add Structured Error Logging to Handlers That Don't Use the Wrapper
-
-Some handlers (e.g., pass-through orchestration) don't use the wrapper.
-Ensure they also log errors structurally.
-
-**Acceptance Criteria**:
-
-1. Every `printError` call site has a corresponding logger call
-2. No error path exists that only writes to stderr
-
-**Phase 2 Quality Gates**: Same as Phase 1.
-
----
-
-### Phase 3: Fail-Fast Precondition Checks and Path Resolution (TDD)
+### Phase 2: Fail-Fast Precondition Checks and Path Resolution (TDD)
 
 **Foundation Check-In**: Re-read `principles.md` (fail fast, validate at
 entry points, Result pattern).
 
-#### Task 3.1: Create `resolveBulkDir` Pure Function Returning `Result`
+#### Task 2.1: Create `resolveBulkDir` Pure Function Returning `Result`
 
 **Current problem**: `--bulk-dir ./bulk-downloads` resolves relative to
 CWD. The actual bulk data lives at `apps/oak-search-cli/bulk-downloads`.
@@ -524,14 +690,16 @@ Running from the repo root produces an ENOENT deep inside
 already open. The legacy path has `validateBulkDir` which throws (not
 Result), and the new lifecycle commands skip it entirely.
 
-**Target**: A pure function `resolveBulkDir` that:
+**Design**: A pure function `resolveBulkDir` with single-resolution
+strategy:
 
-1. Resolves the path relative to CWD (current behaviour for absolute paths)
-2. If the resolved path does not exist, tries resolving relative to the
-   app directory (e.g., `import.meta.dirname` or a passed `appRoot`)
-3. Returns `Result<string, BulkDirError>` — never throws
-4. On error, includes: the original path, the resolved path, CWD, the
-   app-relative attempt, and a hint
+- Absolute paths pass through as-is
+- Relative paths resolve against `APP_ROOT` (already exported from
+  `src/cli/shared/pass-through.ts`, line 22)
+- No CWD fallback — this removes the ambiguity of dual resolution
+- If the user wants CWD-relative, they pass an absolute path
+- Returns `Result<string, BulkDirError>` — never throws
+- Filesystem predicates are injected for testability (ADR-078)
 
 ```typescript
 interface BulkDirError {
@@ -539,55 +707,90 @@ interface BulkDirError {
   readonly message: string;
   readonly originalPath: string;
   readonly resolvedPath: string;
-  readonly cwd: string;
 }
 
 function resolveBulkDir(
   rawPath: string,
-  cwd: string,
   appRoot: string,
+  exists: (path: string) => boolean,
+  hasJsonFiles: (path: string) => boolean,
 ): Result<string, BulkDirError>;
 ```
 
-**TDD Sequence**:
+**Note on discriminant field**: `BulkDirError` uses `type` as the
+discriminant, matching the existing codebase convention. ADR-088
+examples use `kind`. This divergence is tracked as a follow-up to
+reconcile (see Tracked Follow-Ups).
 
-1. **RED**: Write unit test — `resolveBulkDir('./bulk-downloads', '/repo',
-   '/repo/apps/oak-search-cli')` where the CWD path does not exist but
-   the app-relative path does → returns `ok` with the app-relative path.
+**TDD Sequence** (interleaved RED-GREEN):
+
+1. **RED**: Write unit test — absolute path that exists → returns `ok`
+   with the path unchanged. Run → FAILS (function does not exist).
+2. **GREEN**: Implement minimal `resolveBulkDir`. Run → PASSES.
+3. **RED**: Write unit test — relative path resolved against `appRoot`
+   where the resolved path exists → returns `ok` with resolved path.
    Run → FAILS.
-2. **RED**: Write unit test — neither path exists → returns `err` with
-   helpful message including both attempted paths. Run → FAILS.
-3. **RED**: Write unit test — CWD path exists → returns `ok` with CWD
-   path (current behaviour preserved). Run → FAILS.
-4. **RED**: Write unit test — path exists but contains no JSON files →
-   returns `err` with `bulk_dir_empty`. Run → FAILS.
-5. **GREEN**: Implement `resolveBulkDir`. Run → all PASS.
-6. **REFACTOR**: Delete legacy `validateBulkDir` (it throws instead of
-   returning Result) and update its callers.
+4. **GREEN**: Add relative path resolution. Run → PASSES.
+5. **RED**: Write unit test — resolved path does not exist → returns
+   `err` with `bulk_dir_not_found`, helpful message including the
+   resolved path and a hint. Run → FAILS.
+6. **GREEN**: Add existence check and error path. Run → PASSES.
+7. **RED**: Write unit test — path exists but `hasJsonFiles` returns
+   false → returns `err` with `bulk_dir_empty`. Run → FAILS.
+8. **GREEN**: Add empty-dir check. Run → PASSES.
+9. **REFACTOR**: Clean up.
+
+**Note on purity**: `exists` and `hasJsonFiles` are injected as
+parameters. Tests pass simple inline fakes — no mocking framework, no
+real filesystem. The composition root passes `fs.existsSync` and a
+thin wrapper around `fs.readdirSync`.
+
+**Predicate contract**: `hasJsonFiles` must not throw — it returns
+`false` if the directory is unreadable. The composition root wrapper
+should catch `readdirSync` errors and return `false`.
 
 **Acceptance Criteria**:
 
-1. `resolveBulkDir` is a pure function returning `Result<string, BulkDirError>`
-2. Tries CWD-relative first, then app-relative as fallback
-3. Error includes original path, resolved path, CWD, and hint
-4. No `throw` — callers handle the Result explicitly
-5. Unit tests cover: CWD hit, app-relative fallback, both miss, empty dir
+1. `resolveBulkDir` is a pure function in `src/cli/shared/resolve-bulk-dir.ts`
+2. Returns `Result<string, BulkDirError>` — never throws
+3. Single resolution strategy: absolute pass-through, relative against `APP_ROOT`
+4. FS predicates injected as parameters (ADR-078)
+5. Error includes original path, resolved path, and hint
+6. Unit tests cover: absolute path, relative path, path not found, empty dir
 
-#### Task 3.2: Wire `resolveBulkDir` Into Lifecycle Commands
+#### Task 2.2: Wire `resolveBulkDir` Into Lifecycle Commands
 
-Call `resolveBulkDir` *before* `withCliResources` creates any connections.
+Call `resolveBulkDir` *before* `withEsClient` creates any connections.
+
+**Pattern contract**: All preconditions MUST be checked before resource
+creation. This ordering is enforced by integration tests (Task 2.2 TDD)
+and verified by grep during Phase 0 audit.
 
 ```typescript
-// In the action handler, BEFORE creating resources:
-const dirResult = resolveBulkDir(opts.bulkDir, process.cwd(), appRoot);
+// In the action handler, ALL preconditions BEFORE creating resources:
+// 1. Validate env (cheapest — pure string check)
+const envResult = validateIngestEnv({ oakApiKey: cliEnv.OAK_API_KEY });
+if (!envResult.ok) {
+  ingestLogger.error('Env validation failed', envResult.error);
+  printError(envResult.error.message);
+  deps.setExitCode(1);
+  return;
+}
+// 2. Resolve and validate bulk dir (cheap FS — existsSync + readdirSync)
+const dirResult = resolveBulkDir(
+  opts.bulkDir,
+  APP_ROOT,
+  fs.existsSync,
+  (p) => { try { return fs.readdirSync(p).some((f) => f.endsWith('.json')); } catch { return false; } },
+);
 if (!dirResult.ok) {
   ingestLogger.error('Bulk directory validation failed', dirResult.error);
   printError(dirResult.error.message);
-  process.exitCode = 1;
+  deps.setExitCode(1);
   return;
 }
 const resolvedBulkDir = dirResult.value;
-// NOW create resources and proceed
+// 3. NOW create resources and proceed (ES client, OakClient)
 ```
 
 **TDD Sequence**:
@@ -595,17 +798,18 @@ const resolvedBulkDir = dirResult.value;
 1. **RED**: Write integration test — `stage` with non-existent
    `--bulk-dir` fails immediately with helpful message and does NOT
    create an ES client. Run → FAILS.
-2. **GREEN**: Add precondition check before `withCliResources`.
+2. **GREEN**: Add precondition check before `withEsClient`.
    Run → PASSES.
 
 **Acceptance Criteria**:
 
 1. Missing `--bulk-dir` is detected before any connections are opened
-2. Error message includes both attempted paths and a hint
+2. Error message includes the resolved path and a hint
 3. No ES client or OakClient is created when the precondition fails
-4. Logger records the error structurally with full context
+4. Logger records the error structurally
+5. Verify with grep: no `createEsClient` call before `resolveBulkDir` in any ingest handler
 
-#### Task 3.3: Wire `resolveBulkDir` Into Legacy Ingest Path
+#### Task 2.3: Wire `resolveBulkDir` Into Legacy Ingest Path
 
 Replace `validateBulkDir` (which throws) with `resolveBulkDir` (which
 returns Result) in the legacy `admin ingest` orchestration path.
@@ -615,95 +819,91 @@ returns Result) in the legacy `admin ingest` orchestration path.
 1. Legacy `validateBulkDir` deleted
 2. Legacy ingest uses `resolveBulkDir` and handles the Result
 3. No `throw` in the bulk dir validation path
+4. Legacy `validateBulkDir` is not called anywhere (verify with grep)
 
-#### Task 3.4: Validate Environment Preconditions Early
+#### Task 2.4: Validate Environment Preconditions Early
 
 Check that `OAK_API_KEY` is present before creating connections in
 lifecycle ingest commands. Currently this throws inside
 `createIngestionClient` after the ES client is already open.
 
-**Target**: A `validateIngestEnv` function returning
-`Result<void, EnvError>` that checks all required env vars before any
-resource creation.
+**Design**: A `validateIngestEnv` function that accepts env as an
+explicit parameter (ADR-078 — no reading `process.env` directly):
+
+```typescript
+function validateIngestEnv(
+  env: { oakApiKey: string | undefined },
+): Result<void, EnvError>;
+```
+
+**Note on scope**: `validateIngestEnv` only checks ingest-specific env
+vars like `OAK_API_KEY` that are not in the base config schema. ES
+connection parameters (`ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`)
+are already validated by `loadRuntimeConfig` at the composition root
+(`bin/oaksearch.ts` lines 27–40) before any command handler runs.
 
 **TDD Sequence**:
 
-1. **RED**: Write unit test — `validateIngestEnv` without `OAK_API_KEY`
+1. **RED**: Write unit test — `validateIngestEnv({ oakApiKey: 'key' })`
+   returns `ok`. Run → FAILS (function does not exist).
+2. **GREEN**: Implement minimal function returning `ok`. Run → PASSES.
+3. **RED**: Write unit test — `validateIngestEnv({ oakApiKey: undefined })`
    returns `err` with clear message. Run → FAILS.
-2. **GREEN**: Implement. Run → PASSES.
+4. **GREEN**: Add validation check. Run → PASSES.
+
+**Note**: The underlying `requireOakApiKey` in `oak-adapter.ts` still
+throws. `validateIngestEnv` is a precondition check that runs before
+`createIngestionClient` is called, avoiding the throw path entirely.
+Converting `requireOakApiKey` itself is tracked as a follow-up.
 
 **Acceptance Criteria**:
 
 1. Missing `OAK_API_KEY` is detected before ES client creation
 2. Returns `Result`, does not throw
-3. Error message is clear and actionable
+3. Accepts env as an explicit parameter (not `process.env`)
+4. Error message is clear and actionable
 
-**Phase 3 Quality Gates**: Same as Phase 1.
+**Phase 2 Quality Gates**: Same as Phase 1.
 
 ---
 
-### Phase 4: Process Exit Guarantee and Graceful Shutdown (TDD)
+### Phase 3: E2E Validation and Edge Cases (TDD)
 
-**Foundation Check-In**: Re-read `principles.md` (fail fast).
+**Foundation Check-In**: Re-read `principles.md` (fail fast),
+`testing-strategy.md` (E2E tests specify system behaviour).
 
-#### Task 4.1: Ensure `process.exit()` After Cleanup
+**Note**: `parseAsync()` + `process.exit()` was applied in Phase 1
+(Task 1.0). This phase extends the E2E tests from Phase 1 with
+additional assertions proving the full system works end-to-end after
+all migrations.
 
-**Current**: `process.exitCode = 1` relies on event loop drainage, which
-fails when resources hold sockets open.
+#### Task 3.1: E2E Validation of Full Cleanup Chain
 
-**Target**: After Phase 1 cleanup closes all resources, add an explicit
-`process.exit()` at the composition root level to guarantee termination.
+**Context**: The E2E tests written in Task 1.0 prove the process exits.
+This task extends them with stronger assertions on error message
+content (resolved path shown, hint included) now that Phase 2
+preconditions are in place.
 
-**Design**: In `bin/oaksearch.ts`:
+**Steps**:
 
-```typescript
-const result = await program.parseAsync();
-// Commander 12+ parseAsync resolves after the action completes.
-// At this point, all withCliResources finally blocks have run.
-process.exit(process.exitCode ?? 0);
-```
+1. **EXTEND**: Update the error-path E2E test from Task 1.0 to assert
+   the error message includes the resolved path and a hint (Phase 2
+   precondition now provides this). Run → verify it PASSES.
+2. **VERIFY**: Confirm `--help` baseline test still passes after all
+   migrations.
 
-This is the simplest guarantee. If cleanup worked (Phase 1), it is
-redundant but harmless. If cleanup missed something, it prevents hangs.
-
-**TDD Sequence**:
-
-1. **RED**: Write E2E test — run `oaksearch admin stage --bulk-dir
-   /nonexistent` and assert the process exits within 5 seconds. Run →
-   FAILS (currently hangs).
-2. **GREEN**: Add `process.exit()` after `parseAsync()`. Run → PASSES.
-
-**Acceptance Criteria**:
-
-1. CLI always exits after command completes (success or failure)
-2. Exit code is preserved correctly
-3. E2E test proves no hang
-
-#### Task 4.2: Add SIGINT/SIGTERM Graceful Shutdown
-
-**Design**: Register signal handlers that:
-
-1. Log a shutdown message
-2. Set exit code (130 for SIGINT, 143 for SIGTERM)
-3. Call any registered cleanup functions
-4. Call `process.exit()`
-
-This is a safety net for long-running operations (e.g., bulk ingest)
-where the user presses Ctrl+C.
-
-**TDD Sequence**:
-
-1. **RED**: Write test — sending SIGINT to the process calls cleanup
-   and exits with code 130. Run → FAILS.
-2. **GREEN**: Add signal handlers. Run → PASSES.
+**Note**: `oaksearch admin status` requires a running ES cluster,
+making it unsuitable for CI E2E tests. Use `--help` for the
+success-path exit test — it exercises the full `parseAsync()` →
+`disableFileSink()` → `process.exit()` chain without external deps.
 
 **Acceptance Criteria**:
 
-1. SIGINT and SIGTERM are handled
-2. Cleanup runs before exit
-3. Exit codes follow convention (130, 143)
+1. E2E tests prove no-hang on both error and success paths
+2. Error path test validates helpful error message content
+3. Tests complete within 5-second timeout (no hangs)
 
-**Phase 4 Quality Gates**:
+**Phase 3 Quality Gates**:
 
 ```bash
 pnpm build
@@ -717,62 +917,115 @@ pnpm markdownlint:root
 
 ---
 
-### Phase 5: Reviewer Gates and Documentation
+### Phase 4: Reviewer Gates, Documentation, and ADR
 
-#### Task 5.1: Post-Implementation Reviews
+#### Task 4.1: Post-Implementation Reviews
 
 Invoke all mandatory reviewers:
 
 - `code-reviewer` — gateway review of the pattern and all migrations
-- `architecture-reviewer-barney` — boundary mapping: is `withCliResources`
+- `architecture-reviewer-barney` — boundary mapping: is `withEsClient`
   the right abstraction at the right layer?
 - `architecture-reviewer-wilma` — resilience: are all failure modes
-  covered? What if cleanup throws during signal handling?
+  covered? What if cleanup throws?
 - `test-reviewer` — TDD compliance, test quality
-- `type-reviewer` — type flow through `withCliResources` generics
+- `type-reviewer` — type flow through `withEsClient` and `resolveBulkDir`
 - `docs-adr-reviewer` — documentation completeness
 
-#### Task 5.2: Documentation
+#### Task 4.2: Create ADR-133: CLI Resource Lifecycle Management
 
-1. **TSDoc on all new functions**: `withCliResources`, resource factories,
-   `CliResources`, `IngestCliResources`, cleanup types
-2. **Update CLI README**: Document the resource management pattern so
-   future commands follow it
-3. **ADR consideration**: If the pattern is significant enough, document
-   as an ADR (resource lifecycle management in CLI tools)
+The `withEsClient` pattern is a cross-cutting architectural decision
+that all future CLI commands must follow. It changes how the process
+exits (explicit `process.exit()` instead of event loop drainage) and
+mandates resource cleanup via `finally` blocks.
+
+**Pre-check**: Verify ADR README index is up to date. ADR-132
+(`132-sitemap-scanner-for-canonical-url-validation.md`) exists on disk
+but may be missing from the README index — backfill if needed before
+adding ADR-133.
+
+**Contents**:
+
+- Status: Proposed (update to Accepted after implementation and review)
+- Context: TCP connections preventing process exit
+- Decision: `withEsClient` wrapper + `parseAsync()` + `process.exit()`;
+  `setExitCode` injected via deps (no direct `process.exitCode` mutation
+  in shared utilities)
+- Rule: factories must not bury resource handles — if a factory creates
+  a closeable resource, the caller must receive the handle for cleanup
+  (anti-pattern: `buildLifecycleServiceForIngest` created ES client and
+  OakClient but returned only the service; also: old
+  `buildLifecycleServiceBasic` in alias commands created ES client
+  internally — corrected during this work)
+- Consequences: all commands must use the wrapper; ingest commands
+  manage OakClient cleanup locally; `disableFileSink()` at composition
+  root, not in the wrapper
+- Known deferred violations: OakClient singleton in `oak-adapter.ts`
+  (tracked for follow-up)
+- Rejected alternatives: generic `withCliResources<R>` (YAGNI),
+  signal handlers (YAGNI), event loop drainage (broken)
+
+**Path**: `docs/architecture/architectural-decisions/133-cli-resource-lifecycle-management.md`
+
+#### Task 4.3: Documentation
+
+1. **TSDoc on all new functions**: `withEsClient`, `resolveBulkDir`,
+   `validateIngestEnv`, `buildLifecycleService`, `buildSearchSdkConfig`
+2. **Update CLI README**: specific sections to update:
+   - Directory overview: add `src/cli/shared/with-es-client.ts`,
+     `resolve-bulk-dir.ts`, `validate-ingest-env.ts`,
+     `build-lifecycle-service.ts`
+   - Technical highlights: add note on resource lifecycle and process
+     exit guarantee
+   - CLI Reference: update `--bulk-dir` flag description to explain
+     that relative paths resolve against the app directory, not CWD
+3. **Create ADR-133** (Task 4.2 above)
 
 ---
 
 ## Testing Strategy
 
-### Unit Tests (Pure Functions)
+### Unit Tests (Pure Functions — No IO, No Mocks)
 
-- `resolveBulkDir` — CWD path exists, app-relative fallback, both miss,
-  empty dir, absolute path passthrough. All return `Result`, never throw.
-  These are pure functions with injected FS checks (no real filesystem).
-- `withCliResources` — cleanup on success, cleanup on error Result,
-  cleanup on thrown error, logger called on error, exitCode set on error.
-  Uses injected fake resources with `vi.fn()` cleanup functions.
-- `validateIngestEnv` — missing OAK_API_KEY returns err, present returns ok.
-- Resource factories — correct resources created, cleanup closes all
-  resources, cleanup errors are caught and logged (not thrown).
+- `resolveBulkDir` — absolute path passthrough, relative path resolved
+  against appRoot, path not found, empty dir. FS predicates injected
+  as simple inline fakes. Named `resolve-bulk-dir.unit.test.ts`.
+- `validateIngestEnv` — missing `oakApiKey` returns err, present returns
+  ok. Env passed as explicit parameter. Named
+  `validate-ingest-env.unit.test.ts`.
+- `buildSearchSdkConfig` — `ZERO_HIT_WEBHOOK_URL` normalisation, config
+  assembly. Named `build-search-sdk-config.unit.test.ts`.
 
-### Integration Tests (Code Units Working Together)
+### Integration Tests (Code Units Working Together — Simple Injected Fakes)
 
-- `registerStageCmd` with fake ES client and fake OakClient — cleanup
-  called after error Result, cleanup called on success
-- `registerVersionedIngestCmd` — same
+- `withEsClient` — cleanup on success, cleanup on handler throw,
+  structured logging on throw (full error in metadata), setExitCode
+  called on throw, cleanup error isolated (close throws but is caught).
+  Uses `vi.fn()` for `esClient.close()`, `setExitCode`, and simple
+  logger fakes injected as deps.
+  Named `with-es-client.integration.test.ts`.
+- `registerStageCmd` with fake ES client and fake OakClient —
+  OakClient disconnected after error Result, OakClient disconnected on
+  success. Named in `admin-lifecycle-commands.integration.test.ts`.
 - `resolveBulkDir` wired into `stage` handler — precondition failure
-  prevents resource creation
-- Resource factories with injectable ES client mock
+  prevents resource creation.
 
-### E2E Tests (Running System)
+### E2E Tests (Running System — Separate Process)
 
-- `oaksearch admin stage --bulk-dir /nonexistent` exits within 5 seconds
-  with code 1 and helpful error message
-- `oaksearch admin stage --bulk-dir ./bulk-downloads` from repo root
-  resolves correctly via app-relative fallback (or fails fast with hint)
-- `oaksearch admin status` exits cleanly (no hang on success path either)
+- `oaksearch admin stage --bulk-dir ./does-not-exist` exits within
+  5 seconds with code 1 and helpful error message. Named
+  `cli-exit.e2e.test.ts` in `apps/oak-search-cli/e2e-tests/`.
+- `oaksearch --help` exits cleanly with code 0 (success path baseline).
+
+### Test Isolation Rules
+
+- **No `process.exitCode` mutation**: All tests use the injected
+  `setExitCode` fake. No `afterEach` cleanup for `process.exitCode`.
+- **No `vi.mock`, `vi.stubGlobal`, `process.env` mutation**: Per
+  ADR-078 and testing-strategy.md.
+- **Each proof once**: `withEsClient` tests prove ES cleanup.
+  Handler tests prove handler-specific behaviour (OakClient cleanup,
+  precondition ordering). No duplication.
 
 ---
 
@@ -782,35 +1035,57 @@ Invoke all mandatory reviewers:
 
 1. Every CLI command exits cleanly on success (no hang)
 2. Every CLI command exits cleanly on error (no hang)
-3. `admin stage --bulk-dir /nonexistent` fails fast with helpful message
-   showing resolved path, CWD, and hint
-4. `admin stage --bulk-dir ./bulk-downloads` from repo root resolves to
-   `apps/oak-search-cli/bulk-downloads` via app-relative fallback
-5. Ctrl+C during any command triggers graceful shutdown
+3. `admin stage --bulk-dir ./does-not-exist` fails fast with helpful
+   message showing resolved path and hint
+4. `admin stage --bulk-dir ./bulk-downloads` resolves to
+   `apps/oak-search-cli/bulk-downloads` via `APP_ROOT` resolution
 
 ### Structural
 
-6. `withCliResources` pattern used by all resource-creating commands
+5. `withEsClient` pattern used by all resource-creating commands
+6. Ingest commands manage OakClient cleanup locally in `finally` blocks
 7. Every error path logs through the structured logger AND `printError`
 8. Cheap preconditions checked before expensive resource creation
 9. No `finally`-less resource creation in any command handler
-10. SIGINT/SIGTERM handlers registered at the composition root
-11. All error-producing functions return `Result<T, E>` — no `throw` in
-    the error handling path (path validation, env validation, resource
-    creation)
-12. Legacy `validateBulkDir` (throws) replaced with `resolveBulkDir`
-    (returns Result)
+10. `withEsClient` accepts logger, printError, and setExitCode as
+    injected deps (ADR-078)
+11. `resolveBulkDir` returns `Result<string, BulkDirError>` — never throws
+12. `validateIngestEnv` accepts env as parameter, returns `Result` — never throws
+13. Legacy `validateBulkDir` (throws) replaced with `resolveBulkDir`
+14. `buildLifecycleServiceForIngest` deleted (buried resource handles)
+15. Old `buildLifecycleServiceBasic` in alias commands deleted (buried ES client)
+16. `createCliSdk` retained for evaluation scripts only, with deprecation TSDoc
+17. `bin/oaksearch.ts` uses `parseAsync()` + `disableFileSink()` + `process.exit()`
+18. Each resource cleanup is error-isolated (own try/catch)
+19. `disableFileSink()` called at composition root with error-isolated `end()`
+20. `ZERO_HIT_*` config normalisation in `buildSearchSdkConfig()` pure function
 
 ### Quality
 
-13. All quality gates pass
-14. All mandatory reviewers invoked and findings addressed
-15. TSDoc on all new public API surfaces
-16. Unit tests for `resolveBulkDir` (CWD hit, app-relative fallback,
-    both miss, empty dir)
-17. Unit tests for `withCliResources` (cleanup on success, error, throw)
-18. Integration tests for command handlers (cleanup called after error)
-19. E2E test proves no-hang behaviour (process exits within 5 seconds)
+21. All quality gates pass
+22. All mandatory reviewers invoked and findings addressed
+23. TSDoc on all new public API surfaces
+24. ADR-133 created for CLI resource lifecycle management
+25. CLI README updated (directory overview, technical highlights, `--bulk-dir`)
+26. Unit tests for `resolveBulkDir` (absolute, relative, not found, empty)
+27. Unit tests for `validateIngestEnv` (missing key, present key)
+28. Unit tests for `buildSearchSdkConfig` (ZERO_HIT normalisation)
+29. Integration tests for `withEsClient` (cleanup on success, throw, close error)
+30. Integration tests for command handlers (cleanup called after error)
+31. E2E tests prove no-hang behaviour (process exits within 5 seconds)
+
+### Tracked Follow-Ups (Outside Scope)
+
+- Convert `validators.ts` throw-sites to Result (3 functions)
+- Convert `admin-sdk-commands.ts:182` throw to Result
+- Convert `createIngestionClient` CacheRequiredError to Result
+- Convert `requireOakApiKey` throw to Result
+- Refactor OakClient singleton pattern (DI violation — also a known
+  violation of ADR-133's "factories must not bury resource handles" rule)
+- Reconcile ADR-088 discriminant field convention (`kind` in ADR
+  examples vs `type` in codebase)
+- Migrate evaluation benchmark scripts away from `createCliSdk` if they
+  need resource cleanup
 
 ---
 
@@ -818,20 +1093,24 @@ Invoke all mandatory reviewers:
 
 | File | Role |
 |------|------|
-| `apps/oak-search-cli/bin/oaksearch.ts` | Composition root — gains `parseAsync` + `process.exit` + signal handlers |
-| `apps/oak-search-cli/src/cli/shared/cli-resources.ts` | NEW — `withCliResources`, `CliResources`, resource factories |
+| `apps/oak-search-cli/bin/oaksearch.ts` | Composition root — gains `parseAsync` + `process.exit()` |
+| `apps/oak-search-cli/src/cli/shared/with-es-client.ts` | NEW — `withEsClient` wrapper |
+| `apps/oak-search-cli/src/cli/shared/build-lifecycle-service.ts` | NEW — shared `buildLifecycleService` (replaces both buried-handle factories) |
+| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts` | NEW — `buildSearchSdkConfig` pure function for ZERO_HIT config |
 | `apps/oak-search-cli/src/cli/shared/output.ts` | `printError` — unchanged but now always paired with logger |
-| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-alias-commands.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/admin/admin-sdk-commands.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/admin/admin-count-command.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/search/index.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/observe/index.ts` | Gains `withCliResources` wrapping |
-| `apps/oak-search-cli/src/cli/shared/create-cli-sdk.ts` | `createEsClient` unchanged; `createCliSdk` may gain cleanup return |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts` | Gains `withEsClient` wrapping + local OakClient cleanup; `buildLifecycleServiceForIngest` DELETED |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-alias-commands.ts` | Gains `withEsClient` wrapping; old `buildLifecycleServiceBasic` DELETED |
+| `apps/oak-search-cli/src/cli/admin/admin-sdk-commands.ts` | Gains `withEsClient` wrapping |
+| `apps/oak-search-cli/src/cli/admin/admin-count-command.ts` | Gains `withEsClient` wrapping |
+| `apps/oak-search-cli/src/cli/admin/admin-orchestration-commands.ts` | Gains structured logger calls alongside `printError` |
+| `apps/oak-search-cli/src/cli/search/index.ts` | Gains `withEsClient` wrapping |
+| `apps/oak-search-cli/src/cli/observe/index.ts` | Gains `withEsClient` wrapping |
+| `apps/oak-search-cli/src/cli/shared/create-cli-sdk.ts` | `createEsClient` unchanged; `createCliSdk` retained for evaluation only with deprecation TSDoc |
 | `apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts` | NEW — `resolveBulkDir` pure function returning `Result` |
 | `apps/oak-search-cli/src/cli/shared/validate-ingest-env.ts` | NEW — `validateIngestEnv` returning `Result` |
-| `apps/oak-search-cli/src/adapters/oak-adapter.ts` | OakClient `disconnect()` — called by cleanup |
-| `apps/oak-search-cli/src/lib/logger.ts` | `disableFileSink()` — called by cleanup |
+| `apps/oak-search-cli/src/cli/shared/pass-through.ts` | `APP_ROOT` — used by `resolveBulkDir` at the call site. **Verify**: relative depth (`../../..`) must be correct in compiled `dist/` output, not just source |
+| `apps/oak-search-cli/src/adapters/oak-adapter.ts` | OakClient `disconnect()` — called by ingest handler cleanup |
+| `apps/oak-search-cli/src/lib/logger.ts` | `disableFileSink()` — called at composition root; gains error-isolated `end()` call |
 | `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-cli-validators.ts` | `validateBulkDir` DELETED — replaced by `resolveBulkDir` |
 
 ---
@@ -840,14 +1119,15 @@ Invoke all mandatory reviewers:
 
 ### Foundation Documents
 
-- `.agent/directives/principles.md` — fail fast, DRY, KISS
+- `.agent/directives/principles.md` — fail fast, DRY, KISS, Result pattern
 - `.agent/directives/testing-strategy.md` — TDD at all levels
-- `.agent/directives/schema-first-execution.md` — types from schema
 
 ### ADRs
 
-- [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md) — Dependency injection
-- [ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green lifecycle
+- [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md) — Dependency injection for testability
+- [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Result pattern for explicit error handling
+- [ADR-093](../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) — Bulk-first ingestion strategy
+- [ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) — Blue/green index lifecycle
 
 ### Related Plans
 

@@ -143,6 +143,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-129: Domain Specialist Capability Pattern](129-domain-specialist-capability-pattern.md)
 - [ADR-130: Zero-Downtime Blue/Green Elasticsearch Index Swapping](130-blue-green-index-swapping.md)
 - [ADR-131: Self-Reinforcing Improvement Loop](131-self-reinforcing-improvement-loop.md)
+- [ADR-132: Sitemap Scanner for Canonical URL Validation](132-sitemap-scanner-for-canonical-url-validation.md)
+- [ADR-133: CLI Resource Lifecycle Management](133-cli-resource-lifecycle-management.md)
 
 ## Key Architectural Decisions
 

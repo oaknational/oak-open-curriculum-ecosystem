@@ -16,3 +16,11 @@ export {
 } from './output.js';
 export { validateSubject, validateKeyStage, validateScope } from './validators.js';
 export { APP_ROOT, registerPassThrough } from './pass-through.js';
+export { withEsClient } from './with-es-client.js';
+export type { CloseableEsClient, WithEsClientDeps } from './with-es-client.js';
+export { buildSearchSdkConfig } from './build-search-sdk-config.js';
+export { buildLifecycleService } from './build-lifecycle-service.js';
+export { resolveBulkDir } from './resolve-bulk-dir.js';
+export type { BulkDirError, FsPredicates } from './resolve-bulk-dir.js';
+export { validateIngestEnv } from './validate-ingest-env.js';
+export type { EnvError } from './validate-ingest-env.js';

@@ -21,7 +21,12 @@ import {
   buildLessonRrfRequest,
   buildUnitRrfRequest,
 } from '../src/lib/hybrid-search/rrf-query-builders.js';
-import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc } from '../src/types/oak.js';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  KeyStage,
+  AllSubjectSlug,
+} from '../src/types/oak.js';
 
 const TEST_TIMEOUT = 30000;
 
@@ -31,17 +36,19 @@ const TEST_TIMEOUT = 30000;
 async function searchLessons(
   query: string,
   options: {
-    subject?: string;
-    keyStage?: string;
+    subject?: AllSubjectSlug;
+    keyStage?: KeyStage;
     tier?: string;
     size?: number;
   } = {},
 ) {
+  const subject: AllSubjectSlug = options.subject ?? 'maths';
+  const keyStage: KeyStage = options.keyStage ?? 'ks4';
   const request = buildLessonRrfRequest({
     query,
     size: options.size ?? 20,
-    subject: (options.subject ?? 'maths') as 'maths',
-    keyStage: (options.keyStage ?? 'ks4') as 'ks4',
+    subject,
+    keyStage,
     tier: options.tier,
   });
 
@@ -60,17 +67,19 @@ async function searchLessons(
 async function searchUnits(
   query: string,
   options: {
-    subject?: string;
-    keyStage?: string;
+    subject?: AllSubjectSlug;
+    keyStage?: KeyStage;
     tier?: string;
     size?: number;
   } = {},
 ) {
+  const subject: AllSubjectSlug = options.subject ?? 'maths';
+  const keyStage: KeyStage = options.keyStage ?? 'ks4';
   const request = buildUnitRrfRequest({
     query,
     size: options.size ?? 10,
-    subject: (options.subject ?? 'maths') as 'maths',
-    keyStage: (options.keyStage ?? 'ks4') as 'ks4',
+    subject,
+    keyStage,
     tier: options.tier,
   });
 

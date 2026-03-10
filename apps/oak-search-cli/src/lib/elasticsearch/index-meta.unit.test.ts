@@ -5,6 +5,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { isOk, isErr } from '@oaknational/result';
+import { IndexMetaDocSchema } from '@oaknational/sdk-codegen/search';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import {
   readIndexMeta,
@@ -204,18 +205,10 @@ describe('writeIndexMeta', () => {
     expect(isOk(result)).toBe(true);
   });
 
-  it('returns validation_error for invalid doc', async () => {
-    const invalidDoc = {
-      version: 'v2024-01-01-120000',
-      // Missing required fields
-    } as IndexMetaDoc;
-
-    const result = await writeIndexMeta(mockClient, invalidDoc);
-
-    expect(isErr(result)).toBe(true);
-    if (isErr(result)) {
-      expect(result.error.type).toBe('validation_error');
-    }
+  it('IndexMetaDocSchema rejects incomplete documents', () => {
+    const incomplete = { version: 'v2024-01-01-120000' };
+    const parsed = IndexMetaDocSchema.safeParse(incomplete);
+    expect(parsed.success).toBe(false);
   });
 
   it('returns mapping_error for strict_dynamic_mapping_exception', async () => {

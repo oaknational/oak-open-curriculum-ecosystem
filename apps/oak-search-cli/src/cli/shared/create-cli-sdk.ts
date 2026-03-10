@@ -18,6 +18,7 @@
 import { Client } from '@elastic/elasticsearch';
 import { createSearchSdk } from '@oaknational/oak-search-sdk';
 import type { SearchSdk } from '@oaknational/oak-search-sdk';
+import { buildSearchSdkConfig } from './build-search-sdk-config.js';
 
 /**
  * Minimal environment shape required to create a CLI SDK instance.
@@ -75,24 +76,18 @@ export function createEsClient(cliEnv: CliSdkEnv): Client {
   });
 }
 
+/**
+ * Create a CLI SDK instance from environment configuration.
+ *
+ * @remarks Retained for evaluation scripts. Command handlers should
+ * use `createEsClient` + `withEsClient` + `buildSearchSdkConfig` directly.
+ * @param cliEnv - Validated environment values
+ * @returns A fully wired `SearchSdk` instance
+ */
 export function createCliSdk(cliEnv: CliSdkEnv): SearchSdk {
   const esClient = createEsClient(cliEnv);
-
-  const webhookUrl =
-    cliEnv.ZERO_HIT_WEBHOOK_URL && cliEnv.ZERO_HIT_WEBHOOK_URL !== 'none'
-      ? cliEnv.ZERO_HIT_WEBHOOK_URL
-      : undefined;
-
   return createSearchSdk({
     deps: { esClient },
-    config: {
-      indexTarget: cliEnv.SEARCH_INDEX_TARGET,
-      indexVersion: cliEnv.SEARCH_INDEX_VERSION,
-      zeroHit: {
-        webhookUrl,
-        persistenceEnabled: cliEnv.ZERO_HIT_PERSISTENCE_ENABLED,
-        retentionDays: cliEnv.ZERO_HIT_INDEX_RETENTION_DAYS,
-      },
-    },
+    config: buildSearchSdkConfig(cliEnv),
   });
 }

@@ -23,6 +23,7 @@ import { searchCommand } from '../src/cli/search/index.js';
 import { adminCommand } from '../src/cli/admin/index.js';
 import { evalCommand } from '../src/cli/eval/index.js';
 import { observeCommand } from '../src/cli/observe/index.js';
+import { disableFileSink } from '../src/lib/logger.js';
 
 const configResult = loadRuntimeConfig({
   processEnv: process.env,
@@ -51,4 +52,11 @@ program.addCommand(adminCommand(config.env));
 program.addCommand(evalCommand(config.env));
 program.addCommand(observeCommand(config.env));
 
-program.parse();
+await program.parseAsync();
+
+const sinkResult = disableFileSink();
+if (!sinkResult.ok) {
+  process.stderr.write(`Warning: ${sinkResult.error.message}\n`);
+}
+
+process.exit(process.exitCode ?? 0);

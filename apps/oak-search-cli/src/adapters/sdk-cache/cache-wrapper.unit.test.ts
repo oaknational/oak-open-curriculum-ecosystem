@@ -306,7 +306,10 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
     if (value === null || typeof value !== 'object') {
       return false;
     }
-    const obj = value as { status?: unknown; transcript?: unknown; vtt?: unknown };
+    if (!('status' in value)) {
+      return false;
+    }
+    const obj: { status: unknown; transcript?: unknown; vtt?: unknown } = value;
     if (obj.status === 'available') {
       return typeof obj.transcript === 'string' && typeof obj.vtt === 'string';
     }

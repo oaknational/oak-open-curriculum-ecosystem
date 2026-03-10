@@ -71,24 +71,28 @@ function createMockClient(options: {
     cause: new Error('Connection failed'),
   };
 
+  const transcriptNotFound: SdkNotFoundError = {
+    kind: 'not_found',
+    resource: 'test-lesson',
+    resourceType: 'transcript',
+  };
+
+  const summaryNotFound: SdkNotFoundError = {
+    kind: 'not_found',
+    resource: 'test-lesson',
+    resourceType: 'lesson',
+  };
+
   const transcriptResult =
     options.transcriptResponse === 'not_found'
-      ? err({
-          kind: 'not_found',
-          resource: 'test-lesson',
-          resourceType: 'transcript',
-        } as SdkNotFoundError)
+      ? err(transcriptNotFound)
       : options.transcriptResponse === 'network_error'
         ? err(networkError)
         : ok(options.transcriptResponse ?? { transcript: 'Test transcript', vtt: 'WEBVTT' });
 
   const summaryResult =
     options.summaryResponse === 'not_found'
-      ? err({
-          kind: 'not_found',
-          resource: 'test-lesson',
-          resourceType: 'lesson',
-        } as SdkNotFoundError)
+      ? err(summaryNotFound)
       : options.summaryResponse === 'network_error'
         ? err(summaryNetworkError)
         : ok(options.summaryResponse ?? createMockSummary());
