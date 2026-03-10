@@ -72,7 +72,7 @@ function createHandlers(args: CliArgs): Record<CliArgs['command'], () => void> {
   };
 }
 function printStatus(watch: boolean): void {
-  do {
+  while (true) {
     if (watch) {
       process.stdout.write('\x1Bc');
     }
@@ -95,7 +95,7 @@ function printStatus(watch: boolean): void {
     }
     writeLine('Refreshing in 5s. Ctrl-C to stop.');
     waitMs(5000);
-  } while (watch);
+  }
 }
 function printWorktrees(): void {
   const root = repoRoot();
@@ -187,7 +187,11 @@ function printCleanup(): void {
       continue;
     }
     runGit(root, ['worktree', 'remove', wtPath, '--force']);
-    cleaned += 1;
+    if (!existsSync(wtPath)) {
+      cleaned += 1;
+      continue;
+    }
+    writeLine(`FAIL ${name} (remove unsuccessful)`);
   }
   runGit(root, ['worktree', 'prune']);
   writeLine(`Cleaned ${cleaned} worktrees`);
@@ -214,8 +218,15 @@ function listWorktreeNames(root: string): string[] {
     : [];
 }
 function resolveWorktree(root: string, agentId: string): string | null {
+  if (!isValidAgentId(agentId)) {
+    return null;
+  }
   const direct = join(root, '.claude', 'worktrees', `agent-${agentId}`);
   return existsSync(direct) ? direct : null;
+}
+
+function isValidAgentId(agentId: string): boolean {
+  return /^[0-9a-z]{1,64}$/u.test(agentId);
 }
 function readEvents(root: string, agentId: string) {
   const jsonlPath = resolveAgentJsonlPath(root, agentId);

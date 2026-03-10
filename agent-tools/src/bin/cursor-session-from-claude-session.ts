@@ -7,6 +7,7 @@ import {
   discoverSessions,
   formatTimestamp,
   readHistory,
+  readDirectoryFiles,
   repoRoot,
   sessionDirectory,
   subagentSummaries,
@@ -14,7 +15,9 @@ import {
 } from '../core/runtime';
 import {
   buildTakeoverBundle,
+  findSessionByPrefix,
   filterByWindow,
+  mergeSessionsById,
   scoreSessionMatch,
   type SessionEntry,
 } from '../core/session-tools';
@@ -34,7 +37,7 @@ interface CliArgs {
 function run(): void {
   const args = parseCliArgs(process.argv.slice(2));
   const root = repoRoot();
-  const sessions = mergeSessions(
+  const sessions = mergeSessionsById(
     readHistory(args.historyPath),
     discoverSessions(args.projectsRoot, root),
   );
@@ -43,7 +46,7 @@ function run(): void {
     runFind(args, root, inWindow);
     return;
   }
-  const selected = findSession(args.sessionId, inWindow);
+  const selected = findSessionByPrefix(args.sessionId, inWindow);
   if (!selected) {
     exitWithError(`No session starts with '${args.sessionId}'`);
   }
@@ -138,7 +141,19 @@ function isValidLastHours(value: number): boolean {
 function runFind(args: CliArgs, root: string, sessions: SessionEntry[]): void {
   const needles = args.file ? targetNeedles(root, args.file) : [];
   const ranked = sessions
-    .map((entry) => ({ entry, match: scoreSessionMatch(emptyMatchInput(entry.display, needles)) }))
+    .map((entry) => ({
+      entry,
+      match:
+        needles.length === 0
+          ? { score: 1, source: 'time-window' }
+          : scoreSessionMatch(
+              buildMatchInput(
+                entry.display,
+                sessionDirectory(args.projectsRoot, root, entry.sessionId),
+                needles,
+              ),
+            ),
+    }))
     .filter((row) => needles.length === 0 || row.match.score > 1)
     .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs);
 
@@ -188,28 +203,20 @@ function runTakeover(args: CliArgs, root: string, session: SessionEntry): void {
   writeLine(content);
 }
 
-function mergeSessions(...batches: SessionEntry[][]): SessionEntry[] {
-  const map = new Map<string, SessionEntry>();
-  for (const batch of batches) {
-    for (const entry of batch) {
-      if (!map.has(entry.sessionId)) {
-        map.set(entry.sessionId, entry);
-      }
-    }
-  }
-  return [...map.values()].sort((left, right) => right.timestampMs - left.timestampMs);
-}
-
-function findSession(prefix: string, entries: SessionEntry[]): SessionEntry | null {
-  return entries.find((entry) => entry.sessionId.startsWith(prefix)) ?? null;
-}
-
-function emptyMatchInput(display: string, needles: string[]) {
+function buildMatchInput(display: string, sessionPath: string, needles: string[]) {
+  const subagentDirectory = join(sessionPath, 'subagents');
+  const subagentEntries = readDirectoryFiles(subagentDirectory, (name) => name.endsWith('.jsonl'));
+  const subagentFileNames = subagentEntries.map((entry) => entry.name);
+  const subagentFileContents = subagentEntries.map((entry) => entry.content);
+  const fileHistoryContents = readDirectoryFiles(
+    sessionPath,
+    (name) => name.endsWith('.jsonl') && !name.startsWith('agent-'),
+  ).map((entry) => entry.content);
   return {
     display,
-    subagentFileNames: [],
-    subagentFileContents: [],
-    fileHistoryContents: [],
+    subagentFileNames,
+    subagentFileContents,
+    fileHistoryContents,
     needles,
   };
 }

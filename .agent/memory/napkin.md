@@ -1,3 +1,70 @@
+## Session 2026-03-10 — Consolidate Docs Drift Sweep
+
+### What Was Done
+
+- Ran the `jc-consolidate-docs` sweep against semantic-search planning surfaces.
+- Updated `.agent/plans/semantic-search/README.md` and
+  `.agent/plans/semantic-search/roadmap.md` so they reflect the active
+  short-term PR #67 snagging lane and current active-plan count.
+- Removed stale deleted `.cursor/plans/...` references from
+  `.agent/prompts/archive/consolidation-continuation.prompt.md`, keeping the
+  canonical repo meta-plan as the authority.
+- Fixed markdownlint warnings in the archived continuation prompt introduced by
+  stale formatting blocks.
+
+### Patterns to Remember
+
+- Consolidation should always include stale-link sweeps for platform-plan paths
+  (`.cursor/plans/*.plan.md`) because these files are ephemeral and easy to
+  reference accidentally from durable docs.
+- When active-plan lanes change, update both collection navigation
+  (`README.md`) and strategic sequence docs (`roadmap.md`) in the same pass.
+
+## Session 2026-03-10 — PR #67 Snagging Plan Refinement
+
+### What Was Done
+
+- Refined `.agent/plans/semantic-search/active/short-term-pr-snagging.plan.md`
+  to enforce explicit decision boundaries (`FIX_NOW`, `FIX_LATER`, `DISAGREE`),
+  add per-item evidence requirements, and strengthen RED/GREEN/REFACTOR closure.
+- Tightened validation sequencing to one-gate-at-a-time local checks before
+  remote PR re-check and explicit PR thread closure protocol.
+- Updated prompt/plan discoverability chain:
+  `.agent/prompts/semantic-search/pr-67-snagging-triage.prompt.md` now points to
+  the active plan as execution authority; active README now includes standalone
+  prose for the snagging entry.
+- Ran read-only specialist reviews (`code-reviewer`, `docs-adr-reviewer`) and
+  incorporated non-blocking documentation hygiene fixes.
+
+### Patterns to Remember
+
+- For snagging workflows, keep one canonical definition for structured triage
+  fields (plan) and have prompts reference it to prevent drift.
+- If active README prose links across the `.agent/` tree, verify relative paths
+  from the current file location; depth mistakes are easy to make.
+
+## Session 2026-03-10 — Short-Term Snagging Plan Authoring
+
+### What Was Done
+
+- Created a new executable active plan:
+  `.agent/plans/semantic-search/active/short-term-pr-snagging.plan.md`.
+- Framed the plan as a strict short-term snagging lane for PR checks and
+  high-priority review findings, with RED/GREEN/REFACTOR phases, deterministic
+  validation commands, non-goals, and risk controls.
+- Updated active plan discoverability in
+  `.agent/plans/semantic-search/active/README.md` with an A5 entry.
+- Added a dedicated next-session prompt at
+  `.agent/prompts/semantic-search/pr-67-snagging-triage.prompt.md` for
+  item-by-item PR triage, including explicit evidence-based disagreement
+  guidance for Copilot findings.
+
+### Patterns to Remember
+
+- For snagging plans, keep scope aggressively narrow: blockers first, then
+  priority findings, then closure hygiene.
+- Always make new active plans discoverable immediately via the active index.
+
 ## Session 2026-03-10 — Canonical URL Validation Layer (WS1-WS5)
 
 ### What Was Done

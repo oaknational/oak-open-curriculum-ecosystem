@@ -9,8 +9,9 @@
  * @see ADR-132 for the sitemap scanner design and known coverage gaps
  */
 
-import path from 'node:path';
-import { writeFileSync, unlinkSync } from 'node:fs';
+import path, { join } from 'node:path';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
 import {
   loadSitemapReference,
@@ -31,7 +32,8 @@ describe('loadSitemapReference (IO)', () => {
   });
 
   it('returns invalid_json error for a file with invalid JSON', () => {
-    const filePath = '/tmp/bad-sitemap-ref.json';
+    const tempDir = mkdtempSync(join(tmpdir(), 'bad-sitemap-ref-'));
+    const filePath = join(tempDir, 'input.json');
     writeFileSync(filePath, 'not json {{');
     try {
       const result = loadSitemapReference(filePath);
@@ -40,12 +42,13 @@ describe('loadSitemapReference (IO)', () => {
         expect(result.error.kind).toBe('invalid_json');
       }
     } finally {
-      unlinkSync(filePath);
+      rmSync(tempDir, { recursive: true, force: true });
     }
   });
 
   it('returns schema_mismatch error when teacherPaths field is missing', () => {
-    const filePath = '/tmp/missing-field-sitemap.json';
+    const tempDir = mkdtempSync(join(tmpdir(), 'missing-field-sitemap-'));
+    const filePath = join(tempDir, 'input.json');
     writeFileSync(filePath, JSON.stringify({ generatedAt: '2026-01-01' }));
     try {
       const result = loadSitemapReference(filePath);
@@ -54,12 +57,13 @@ describe('loadSitemapReference (IO)', () => {
         expect(result.error.kind).toBe('schema_mismatch');
       }
     } finally {
-      unlinkSync(filePath);
+      rmSync(tempDir, { recursive: true, force: true });
     }
   });
 
   it('returns schema_mismatch when sequenceSlugs is missing', () => {
-    const filePath = '/tmp/partial-sitemap.json';
+    const tempDir = mkdtempSync(join(tmpdir(), 'partial-sitemap-'));
+    const filePath = join(tempDir, 'input.json');
     writeFileSync(
       filePath,
       JSON.stringify({
@@ -76,12 +80,37 @@ describe('loadSitemapReference (IO)', () => {
         expect(result.error.kind).toBe('schema_mismatch');
       }
     } finally {
-      unlinkSync(filePath);
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('returns schema_mismatch when array fields contain non-string values', () => {
+    const tempDir = mkdtempSync(join(tmpdir(), 'wrong-array-types-sitemap-'));
+    const filePath = join(tempDir, 'input.json');
+    writeFileSync(
+      filePath,
+      JSON.stringify({
+        teacherPaths: [123],
+        generatedAt: '2026-01-01T00:00:00Z',
+        lessonSlugs: ['foo'],
+        programmeSlugs: [],
+        sequenceSlugs: [],
+      }),
+    );
+    try {
+      const result = loadSitemapReference(filePath);
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.kind).toBe('schema_mismatch');
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
     }
   });
 
   it('returns unsorted_paths error when teacherPaths is not sorted', () => {
-    const filePath = '/tmp/unsorted-sitemap.json';
+    const tempDir = mkdtempSync(join(tmpdir(), 'unsorted-sitemap-'));
+    const filePath = join(tempDir, 'input.json');
     const data = {
       generatedAt: '2026-01-01T00:00:00Z',
       base: 'https://www.thenational.academy',
@@ -113,12 +142,13 @@ describe('loadSitemapReference (IO)', () => {
         expect(result.error.kind).toBe('unsorted_paths');
       }
     } finally {
-      unlinkSync(filePath);
+      rmSync(tempDir, { recursive: true, force: true });
     }
   });
 
   it('returns ok with SitemapScanOutput for a valid file', () => {
-    const filePath = '/tmp/valid-sitemap-ref.json';
+    const tempDir = mkdtempSync(join(tmpdir(), 'valid-sitemap-ref-'));
+    const filePath = join(tempDir, 'input.json');
     const data = {
       generatedAt: '2026-01-01T00:00:00Z',
       base: 'https://www.thenational.academy',
@@ -151,7 +181,7 @@ describe('loadSitemapReference (IO)', () => {
         expect(result.value.generatedAt).toBe('2026-01-01T00:00:00Z');
       }
     } finally {
-      unlinkSync(filePath);
+      rmSync(tempDir, { recursive: true, force: true });
     }
   });
 });

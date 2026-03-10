@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 
 import { describe, expect, it } from 'vitest';
 
@@ -24,5 +24,17 @@ describe('CLI smoke', () => {
     expect(
       output.includes('No matching Claude sessions found.') || output.includes('- session:'),
     ).toBe(true);
+  });
+
+  it('fails diff for an invalid agent id', () => {
+    const result = spawnSync('pnpm', ['tsx', 'src/bin/claude-agent-ops.ts', 'diff', '../bad'], {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    const combinedOutput = `${result.stdout}${result.stderr}`;
+
+    expect(result.status).toBe(1);
+    expect(combinedOutput).toContain('No worktree found for agent: ../bad');
   });
 });

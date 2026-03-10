@@ -19,6 +19,10 @@
       ],
       "passThroughEnv": ["OAK_API_KEY"]
     },
+    "@oaknational/agent-tools#sdk-codegen": {
+      "cache": false,
+      "outputs": []
+    },
     "doc-gen": {
       "dependsOn": ["^doc-gen", "^build", "sdk-codegen"],
       "cache": true,

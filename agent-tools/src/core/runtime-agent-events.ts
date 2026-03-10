@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, statSync } from 'node:fs';
 
 interface JsonCandidate {
   message?: unknown;
@@ -16,12 +16,48 @@ export interface AgentEvents {
   bashCommands: string[];
 }
 
+interface AgentEventsFileSystem {
+  existsSync(pathValue: string): boolean;
+  statSync(pathValue: string): { size: number; isFile(): boolean };
+  lstatSync(pathValue: string): { isSymbolicLink(): boolean };
+  readFileSync(pathValue: string, encoding: 'utf8'): string;
+}
+
+const nodeAgentEventsFileSystem: AgentEventsFileSystem = {
+  existsSync,
+  statSync,
+  lstatSync,
+  readFileSync,
+};
+
+const maxAgentEventsFileBytes = 5 * 1024 * 1024;
+
 export function readAgentEvents(jsonlPath: string): AgentEvents {
-  if (!existsSync(jsonlPath)) {
+  return readAgentEventsWithFs(jsonlPath, nodeAgentEventsFileSystem);
+}
+
+/** Read agent events using an injected filesystem for testability. */
+export function readAgentEventsWithFs(
+  jsonlPath: string,
+  fileSystem: AgentEventsFileSystem,
+): AgentEvents {
+  if (!fileSystem.existsSync(jsonlPath)) {
+    return emptyEvents();
+  }
+  try {
+    if (fileSystem.lstatSync(jsonlPath).isSymbolicLink()) {
+      return emptyEvents();
+    }
+    const fileStats = fileSystem.statSync(jsonlPath);
+    if (!fileStats.isFile() || fileStats.size > maxAgentEventsFileBytes) {
+      return emptyEvents();
+    }
+  } catch {
     return emptyEvents();
   }
   const events = emptyEvents();
-  const lines = readFileSync(jsonlPath, 'utf8')
+  const lines = fileSystem
+    .readFileSync(jsonlPath, 'utf8')
     .split('\n')
     .filter((line) => line.trim().length > 0);
   for (const line of lines) {

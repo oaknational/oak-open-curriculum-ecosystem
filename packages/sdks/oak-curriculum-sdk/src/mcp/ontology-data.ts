@@ -346,13 +346,13 @@ export const ontologyData = {
       {
         entity: 'Unit',
         types: ['simple', 'variant (tier-based)', 'optionality (teacher choice)'],
-        example: 'fractions-year-4',
+        example: 'comparing-fractions',
         contains: 'Lessons (typically 4-8 per unit)',
         schemaRef: 'UnitSummaryResponseSchema',
       },
       {
         entity: 'Lesson',
-        example: 'adding-fractions-with-same-denominator',
+        example: 'add-fractions-with-the-same-denominator',
         contains:
           'Up to 8 OPTIONAL components: curriculum info (always), slide deck, video, transcript, starter quiz, exit quiz, worksheet, additional materials',
         note: 'Not all lessons have all components - check availability before use',
@@ -471,7 +471,7 @@ export const ontologyData = {
       },
       {
         prefix: 'unit:',
-        example: 'unit:fractions-year-4',
+        example: 'unit:comparing-fractions',
         fetchesFrom: 'Unit summary endpoint',
       },
       {
@@ -521,7 +521,7 @@ export const ontologyData = {
         'https://www.thenational.academy/teachers/curriculum/{subject}-{phase}/units?threads={threadSlug}',
     },
     examples: [
-      'https://www.thenational.academy/teachers/lessons/adding-fractions-with-same-denominator',
+      'https://www.thenational.academy/teachers/lessons/add-fractions-with-the-same-denominator',
       'https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-foundation-aqa',
       'https://www.thenational.academy/teachers/curriculum/maths-primary/units?threads=geometry-and-measure',
     ],

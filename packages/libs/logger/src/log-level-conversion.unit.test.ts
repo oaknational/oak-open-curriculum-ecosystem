@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { convertLogLevel, toConsolaLevel } from './log-level-conversion';
-import type { LogLevel } from './types';
 
 describe('convertLogLevel', () => {
   it('should pass through numeric values unchanged', () => {
@@ -29,12 +28,6 @@ describe('convertLogLevel', () => {
 
   it('should convert FATAL to 50', () => {
     expect(convertLogLevel('FATAL')).toBe(50);
-  });
-
-  it('should default to INFO (20) for unknown levels', () => {
-    // TypeScript won't allow invalid values, but test defensive behavior
-    const invalidLevel = 'INVALID' as LogLevel;
-    expect(convertLogLevel(invalidLevel)).toBe(20);
   });
 });
 

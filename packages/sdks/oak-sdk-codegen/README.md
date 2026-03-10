@@ -79,6 +79,7 @@ pnpm sdk-codegen  # Regenerate types from OpenAPI schema (runs generate:clean fi
 pnpm type-check   # Type-check without emitting
 pnpm lint         # Lint with ESLint
 pnpm lint:fix     # Lint and auto-fix
+pnpm scan:sitemap # Refresh canonical URL sitemap reference data
 pnpm test         # Run tests
 ```
 

@@ -1,15 +1,9 @@
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
-
 import { describe, expect, it } from 'vitest';
 
-import { readAgentEvents } from '../src/core/runtime-agent-events';
+import { readAgentEventsWithFs } from '../src/core/runtime-agent-events';
 
 describe('runtime agent events', () => {
   it('extracts stop reason, tool names, and bash commands', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'agent-events-'));
-    const jsonl = join(dir, 'agent-a.jsonl');
     const first = {
       message: {
         stop_reason: '',
@@ -22,9 +16,13 @@ describe('runtime agent events', () => {
         content: [{ type: 'tool_use', name: 'Bash', input: { command: 'pnpm test' } }],
       },
     };
-    writeFileSync(jsonl, `${JSON.stringify(first)}\n${JSON.stringify(second)}\n`, 'utf8');
 
-    const result = readAgentEvents(jsonl);
+    const result = readAgentEventsWithFs('/virtual/agent-a.jsonl', {
+      existsSync: () => true,
+      statSync: () => ({ size: 100, isFile: () => true }),
+      lstatSync: () => ({ isSymbolicLink: () => false }),
+      readFileSync: () => `${JSON.stringify(first)}\n${JSON.stringify(second)}\n`,
+    });
 
     expect(result.stopReason).toBe('end_turn');
     expect(result.toolNames).toEqual(['ReadFile', 'Bash']);

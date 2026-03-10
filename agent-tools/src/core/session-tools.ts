@@ -1,3 +1,4 @@
+/** Session metadata discovered from Claude history and local project folders. */
 export interface SessionEntry {
   sessionId: string;
   timestampMs: number;
@@ -5,6 +6,7 @@ export interface SessionEntry {
   project: string;
 }
 
+/** Minimal summary of a subagent run associated with a session. */
 export interface SubagentSummary {
   agentId: string;
   agentType: string;
@@ -12,6 +14,7 @@ export interface SubagentSummary {
   lastMessage: string;
 }
 
+/** Inputs used to score whether a session matches a requested file target. */
 export interface SessionMatchInput {
   display: string;
   subagentFileNames: string[];
@@ -20,11 +23,13 @@ export interface SessionMatchInput {
   needles: string[];
 }
 
+/** Scoring result describing match confidence and the signal source. */
 export interface SessionMatchResult {
   score: number;
   source: string;
 }
 
+/** Inputs used to generate a handover bundle for Cursor takeover. */
 export interface TakeoverBundleInput {
   sessionId: string;
   timestampIso: string;
@@ -35,6 +40,7 @@ export interface TakeoverBundleInput {
 
 const hourMs = 60 * 60 * 1000;
 
+/** Filter sessions to entries occurring inside the supplied hour window. */
 export function filterByWindow(
   entries: readonly SessionEntry[],
   lastHours: number,
@@ -44,10 +50,39 @@ export function filterByWindow(
   return entries.filter((entry) => entry.timestampMs >= cutoff);
 }
 
+/** Merge session batches by id and return entries sorted by recency. */
+export function mergeSessionsById(...batches: SessionEntry[][]): SessionEntry[] {
+  const map = new Map<string, SessionEntry>();
+  for (const batch of batches) {
+    for (const entry of batch) {
+      if (!map.has(entry.sessionId)) {
+        map.set(entry.sessionId, entry);
+      }
+    }
+  }
+  return [...map.values()].sort((left, right) => right.timestampMs - left.timestampMs);
+}
+
+/** Find a session by id prefix. */
+export function findSessionByPrefix(
+  prefix: string,
+  entries: readonly SessionEntry[],
+): SessionEntry | null {
+  return entries.find((entry) => entry.sessionId.startsWith(prefix)) ?? null;
+}
+
+/** Identify compact helper agents that should not be listed in summaries. */
 export function shouldSkipCompactAgent(agentId: string): boolean {
   return agentId.includes('compact');
 }
 
+/**
+ * Score matching signals for a session.
+ *
+ * @remarks
+ * Match precedence is display text, then subagent content, then file-history
+ * content, then a default time-window fallback score.
+ */
 export function scoreSessionMatch(input: SessionMatchInput): SessionMatchResult {
   const hasDisplayMatch = input.needles.some((needle) => input.display.includes(needle));
   if (hasDisplayMatch) {
@@ -74,6 +109,7 @@ export function scoreSessionMatch(input: SessionMatchInput): SessionMatchResult 
   return { score: 1, source: 'time-window' };
 }
 
+/** Build markdown bundle content used when taking over a Claude session in Cursor. */
 export function buildTakeoverBundle(input: TakeoverBundleInput): string {
   const lines: string[] = [
     '# Claude Session Takeover Bundle',

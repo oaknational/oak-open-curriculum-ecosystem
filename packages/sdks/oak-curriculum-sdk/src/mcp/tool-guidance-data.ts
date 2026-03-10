@@ -147,12 +147,12 @@ export const toolGuidanceData = {
     formats: [
       {
         prefix: 'lesson:',
-        example: 'lesson:adding-fractions-with-same-denominator',
+        example: 'lesson:add-fractions-with-the-same-denominator',
         description: 'Fetches lesson summary with learning objectives, keywords, and metadata.',
       },
       {
         prefix: 'unit:',
-        example: 'unit:fractions-year-4',
+        example: 'unit:comparing-fractions',
         description: 'Fetches unit summary with lesson list and unit metadata.',
       },
       {

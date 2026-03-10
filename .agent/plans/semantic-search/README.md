@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-09
+**Last Updated**: 2026-03-10
 
 ---
 
@@ -20,6 +20,7 @@ Active execution now includes:
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
+- [Short-Term PR Snagging](active/short-term-pr-snagging.plan.md)
 
 Prepared next-up queue:
 
@@ -37,7 +38,9 @@ Cross-collection sequencing note:
 - Within this collection, `bulk-metadata-quick-wins` remains the active
   Boundary 03 execution lane and
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md)
-  is the active graph-enablement lane.
+  is the active graph-enablement lane. The short-lived
+  [short-term-pr-snagging.plan.md](active/short-term-pr-snagging.plan.md)
+  plan is the active blocker-first snagging lane for PR #67.
 - Keep
   [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
   as the parent queued plan for the remaining graph quick wins after the active
@@ -112,6 +115,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
+- [Short-Term PR Snagging](active/short-term-pr-snagging.plan.md) — immediate PR #67 snagging pass with evidence-first triage, blocker-first fixes, and explicit thread closure outcomes
 
 ---
 
@@ -119,7 +123,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit |
+| `active/` | In-progress plans | 🟢 unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + short-term PR snagging |
 | `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |

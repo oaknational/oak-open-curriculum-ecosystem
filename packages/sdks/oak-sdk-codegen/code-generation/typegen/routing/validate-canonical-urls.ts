@@ -129,17 +129,19 @@ function isSitemapScanOutput(value: unknown): value is SitemapScanOutput {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
+  const hasStringArray = (field: unknown): field is readonly string[] =>
+    Array.isArray(field) && field.every((item) => typeof item === 'string');
   return (
     'teacherPaths' in value &&
-    Array.isArray(value.teacherPaths) &&
+    hasStringArray(value.teacherPaths) &&
     'generatedAt' in value &&
     typeof value.generatedAt === 'string' &&
     'sequenceSlugs' in value &&
-    Array.isArray(value.sequenceSlugs) &&
+    hasStringArray(value.sequenceSlugs) &&
     'programmeSlugs' in value &&
-    Array.isArray(value.programmeSlugs) &&
+    hasStringArray(value.programmeSlugs) &&
     'lessonSlugs' in value &&
-    Array.isArray(value.lessonSlugs)
+    hasStringArray(value.lessonSlugs)
   );
 }
 
