@@ -28,30 +28,43 @@ Shared settings include the `oak_text` analyser (standard, lowercase, asciifoldi
 
 ## CLI Architecture (`oaksearch`)
 
-The workspace provides the `oaksearch` CLI, a thin wrapper over `@oaknational/oak-search-sdk`. All commands create an SDK instance via `createCliSdk()` (env → ES client → SDK), ensuring CLI, evaluation, and production consumers share the same code paths.
+The workspace provides the `oaksearch` CLI, a thin wrapper over `@oaknational/oak-search-sdk`. Command handlers create an ES client via `createEsClient()` and manage cleanup with `withEsClient()` (ADR-133). Evaluation scripts follow the same explicit resource-ownership pattern.
 
 ```text
 bin/oaksearch.ts                    # Entry point (commander)
 src/cli/
 ├── shared/
-│   ├── create-cli-sdk.ts           # Env → SDK factory
+│   ├── create-cli-sdk.ts           # Env → ES client/SDK wiring helpers
+│   ├── with-es-client.ts           # Guaranteed ES client cleanup wrapper
+│   ├── build-search-sdk-config.ts  # CliSdkEnv -> SearchSdkConfig mapping
+│   ├── build-lifecycle-service.ts  # Lifecycle service composition helper
+│   ├── resolve-bulk-dir.ts         # Precondition checks before resource creation
+│   ├── validate-ingest-env.ts      # CLI ingest option validation
+│   ├── search-deps.ts              # Shared deps for search command handlers
 │   ├── validators.ts               # Schema-derived type guards
 │   ├── pass-through.ts             # Script delegation helper
 │   └── output.ts                   # Terminal formatting
 ├── search/                         # oaksearch search {lessons|units|sequences|threads|suggest|facets}
 │   ├── index.ts                    # Command registration
-│   └── handlers.ts                 # SDK retrieval calls
-├── admin/                          # oaksearch admin {setup|status|synonyms|meta|ingest|...}
+│   ├── handlers.ts                 # SDK retrieval calls
+│   ├── register-facets-cmd.ts      # Facets command registration
+│   └── register-suggest-cmd.ts     # Suggest command registration
+├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|ingest|...}
 │   ├── index.ts                    # Command registration
-│   └── handlers.ts                 # SDK admin calls
+│   ├── handlers.ts                 # SDK admin calls
+│   ├── register-meta-cmd.ts        # Meta get/set command group
+│   ├── admin-count-command.ts      # True parent document counts
+│   └── handle-count.ts             # Count handler over AdminService
 ├── observe/                        # oaksearch observe {telemetry|summary|purge}
 │   ├── index.ts                    # Command registration
 │   └── handlers.ts                 # SDK observability calls
 └── eval/                           # oaksearch eval {benchmark|validate|codegen}
     └── index.ts                    # Pass-through to evaluation scripts
+evaluation/analysis/
+└── create-evaluation-search-sdk.ts # Shared ES client lifecycle wrapper for benchmarks
 ```
 
-**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta, observe telemetry/summary). **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).
+**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).
 
 ---
 

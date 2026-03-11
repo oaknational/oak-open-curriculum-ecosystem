@@ -1,23 +1,6 @@
-/**
- * CLI SDK factory — the single place where environment configuration
- * becomes an SDK instance.
- *
- * This module reads validated environment values and creates an
- * Elasticsearch client and Search SDK. All downstream CLI handlers
- * receive the SDK as an injected dependency.
- *
- * @example
- * ```typescript
- * import { createCliSdk } from './create-cli-sdk.js';
- *
- * const sdk = createCliSdk(config.env);
- * const results = await sdk.retrieval.searchLessons({ query: 'fractions' });
- * ```
- */
+/** Shared CLI helpers for building Elasticsearch clients from validated env. */
 
 import { Client } from '@elastic/elasticsearch';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
-import type { SearchSdk } from '@oaknational/oak-search-sdk';
 
 /**
  * Minimal environment shape required to create a CLI SDK instance.
@@ -50,49 +33,14 @@ export interface CliSdkEnv {
 }
 
 /**
- * Create a Search SDK instance from validated environment configuration.
+ * Create an Elasticsearch client from validated CLI environment configuration.
  *
- * This is the single place where environment values are translated into
- * SDK dependencies and configuration. All CLI handlers receive the
- * returned SDK as a parameter — they never read env directly.
- *
- * @param cliEnv - Validated environment values (from `loadRuntimeConfig()` or test fixture)
- * @returns A fully wired `SearchSdk` instance
- */
-/**
- * Create an Elasticsearch client from CLI environment configuration.
- *
- * Extracted so that both `createCliSdk` and the lifecycle service
- * use a single, consistent client construction path.
- *
- * @param cliEnv - Validated environment values with ES connection details
+ * @param cliEnv - Validated environment values with Elasticsearch connection details
  * @returns A configured Elasticsearch `Client` instance
  */
 export function createEsClient(cliEnv: CliSdkEnv): Client {
   return new Client({
     node: cliEnv.ELASTICSEARCH_URL,
     auth: { apiKey: cliEnv.ELASTICSEARCH_API_KEY },
-  });
-}
-
-export function createCliSdk(cliEnv: CliSdkEnv): SearchSdk {
-  const esClient = createEsClient(cliEnv);
-
-  const webhookUrl =
-    cliEnv.ZERO_HIT_WEBHOOK_URL && cliEnv.ZERO_HIT_WEBHOOK_URL !== 'none'
-      ? cliEnv.ZERO_HIT_WEBHOOK_URL
-      : undefined;
-
-  return createSearchSdk({
-    deps: { esClient },
-    config: {
-      indexTarget: cliEnv.SEARCH_INDEX_TARGET,
-      indexVersion: cliEnv.SEARCH_INDEX_VERSION,
-      zeroHit: {
-        webhookUrl,
-        persistenceEnabled: cliEnv.ZERO_HIT_PERSISTENCE_ENABLED,
-        retentionDays: cliEnv.ZERO_HIT_INDEX_RETENTION_DAYS,
-      },
-    },
   });
 }

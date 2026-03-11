@@ -40,7 +40,7 @@ Do NOT use for:
 - Finding content when you don't have the ID (use 'search')
 - Understanding ID formats (use '${PRIMARY_ORIENTATION_TOOL_NAME}' first)
 
-Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
+Use format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", "unit:comparing-fractions").`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
@@ -71,10 +71,10 @@ export const FETCH_INPUT_SCHEMA = {
     id: {
       type: 'string',
       description:
-        'Canonical identifier in format "type:slug" (e.g., "lesson:maths-lesson", "unit:fractions", "subject:science", "sequence:ks2-science", "thread:algebra")',
+        'Canonical identifier in format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", "unit:comparing-fractions", "subject:maths", "sequence:maths-primary", "thread:number-multiplication-and-division")',
       examples: [
         'lesson:adding-fractions-with-the-same-denominator',
-        'unit:fractions',
+        'unit:comparing-fractions',
         'subject:maths',
         'sequence:maths-primary',
         'thread:number-multiplication-and-division',

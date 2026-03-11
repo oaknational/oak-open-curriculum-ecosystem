@@ -3,7 +3,7 @@
 **Purpose**: Continue the plan consolidation work from a fresh chat with full context  
 **Created**: 2025-12-28  
 **Meta-Plan**: [`.agent/plans/semantic-search/meta-plan-consolidation.md`](../../plans/semantic-search/meta-plan-consolidation.md)  
-**Cursor Plan**: [`.cursor/plans/semantic_search_plan_consolidation_c8f5bd1c.plan.md`](../../../.cursor/plans/semantic_search_plan_consolidation_c8f5bd1c.plan.md)
+**Platform Plan Status**: Historical Cursor plan archived/deleted; use the canonical repo meta-plan above.
 
 ---
 
@@ -33,7 +33,7 @@
 
 **CRITICAL**: A backup copy of the original directory exists at:
 
-```
+```text
 .agent/plans/semantic-search-backup/
 ```
 
@@ -55,6 +55,7 @@ This enables full cross-referencing to prove no information has been lost.
 | `phase-8-verify` | Final verification and run all quality gates | pending |
 
 **Dependencies**:
+
 - ~~Phase 2, 3, 4 depend on Phase 1~~ ✅ All complete
 - Phase 5 depends on Phases 2, 3, 4 ← **READY TO START**
 - Phases 6, 7 depend on Phase 5
@@ -80,11 +81,10 @@ Before proceeding, re-read and commit to:
 | Document | Purpose |
 |----------|---------|
 | [`meta-plan-consolidation.md`](../../plans/semantic-search/meta-plan-consolidation.md) | Detailed execution plan (~690 lines) |
-| [`semantic_search_plan_consolidation_c8f5bd1c.plan.md`](../../../.cursor/plans/semantic_search_plan_consolidation_c8f5bd1c.plan.md) | Cursor plan with structured todos |
 
 ### Current Structure (after Phases 1-4)
 
-```
+```text
 .agent/plans/semantic-search/
 ├── README.md                               (381 lines - TO SIMPLIFY)
 ├── current-state.md                        (248 lines - TO SIMPLIFY)
@@ -123,7 +123,7 @@ Before proceeding, re-read and commit to:
 
 ### Target Structure
 
-```
+```text
 .agent/plans/semantic-search/
 ├── roadmap.md                              # NEW: Single authoritative roadmap
 ├── current-state.md                        # KEEP: Simplified metrics snapshot
@@ -219,8 +219,8 @@ These insights MUST NOT be lost during consolidation:
 **Phases 1-4 are complete.** Ready to begin Phase 5: Simplify navigation documents.
 
 Tasks:
+
 1. Simplify `README.md` (target: ~150 lines)
 2. Trim `current-state.md` (target: ~150 lines)
 3. Delete `part-1-search-excellence.md` (redirect file)
 4. Delete `part-1-search-excellence/README.md` (merged into roadmap)
-

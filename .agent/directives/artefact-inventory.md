@@ -20,6 +20,7 @@ For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/
 | `.agent/prompts/*.md` | Reusable prompt playbooks |
 | `.agent/memory/code-patterns/` | Known solutions to recurring design problems ([README](../memory/code-patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
+| `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`) |
 
 ## Platform Adapters (Layer 2)
 

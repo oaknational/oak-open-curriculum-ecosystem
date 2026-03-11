@@ -79,7 +79,7 @@ describe('createSequenceFacetDoc', () => {
 // ============================================================================
 
 function makeSequenceEntry(overrides: Partial<SubjectSequenceEntry> = {}): SubjectSequenceEntry {
-  return {
+  const defaults: SubjectSequenceEntry = {
     sequenceSlug: 'programme-1',
     years: [1, 2],
     keyStages: [
@@ -89,8 +89,8 @@ function makeSequenceEntry(overrides: Partial<SubjectSequenceEntry> = {}): Subje
     phaseSlug: 'primary',
     phaseTitle: 'Primary',
     ks4Options: null,
-    ...overrides,
-  } as SubjectSequenceEntry;
+  };
+  return { ...defaults, ...overrides };
 }
 
 function makeUnitSummary(slug: string, title: string, lessonIds: string[]): SearchUnitSummary {

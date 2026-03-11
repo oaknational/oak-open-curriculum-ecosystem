@@ -31,7 +31,7 @@ left off.
 | `skills/` | Specialised capabilities that encode domain knowledge |
 | `research/` | Research proposals and analysis |
 | `evaluations/` | Experiment results and guidance |
-| `tools/` | CLI tools for monitoring and managing agent workflows (`claude-agent-ops`) |
+| `../agent-tools/` | Repo-root TypeScript CLI workspace for monitoring and managing agent workflows (`claude-agent-ops`, `cursor-session-from-claude-session`) |
 | `reference-docs/` | Supporting reference material (some internal-only) |
 
 ## Entry point

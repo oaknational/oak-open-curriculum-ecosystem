@@ -156,10 +156,12 @@ async function uploadInitialChunks(
       allFailedOperations = [...allFailedOperations, ...result.failedOperations];
     }
 
-    logger.debug('Chunk uploaded', {
+    logger.info('Chunk uploaded', {
       chunk: i + 1,
+      totalChunks: chunks.length,
       totalUploaded,
       of: docCount,
+      percentComplete: ((totalUploaded / docCount) * 100).toFixed(1),
       failedInChunk: Math.floor(result.failedOperations.length / 2),
     });
 

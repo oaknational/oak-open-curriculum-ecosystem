@@ -37,12 +37,12 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 ## CLI Commands (`oaksearch`)
 
-| Command Group       | Subcommands                                                         | SDK Service            |
-| ------------------- | ------------------------------------------------------------------- | ---------------------- |
-| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                 | `RetrievalService`     |
-| `oaksearch admin`   | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService`         |
-| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen  | Pass-through           |
-| `oaksearch observe` | telemetry, summary, purge                                           | `ObservabilityService` |
+| Command Group       | Subcommands                                                                | SDK Service            |
+| ------------------- | -------------------------------------------------------------------------- | ---------------------- |
+| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                        | `RetrievalService`     |
+| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, ingest, verify, download, ... | `AdminService`         |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen         | Pass-through           |
+| `oaksearch observe` | telemetry, summary, purge                                                  | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
 
@@ -108,7 +108,7 @@ apps/oak-search-cli/
 ├─ bin/oaksearch.ts              # CLI entry point (commander)
 ├─ src/
 │  ├─ cli/                       # CLI subcommand groups
-│  │  ├─ shared/                 # SDK factory, validators, output, pass-through
+│  │  ├─ shared/                 # SDK factory, resource lifecycle, validators, output, pass-through
 │  │  ├─ search/                 # oaksearch search {lessons|units|sequences|suggest|facets}
 │  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|ingest|...}
 │  │  ├─ observe/                # oaksearch observe {telemetry|summary|purge}
@@ -123,6 +123,7 @@ apps/oak-search-cli/
 │  ├─ types/                    # Re-exports from SDK search entry point
 │  └─ adapters/                 # SDK guards, data source adapters, caching
 ├─ evaluation/                  # Benchmark infrastructure (455+ files)
+│  └─ analysis/create-evaluation-search-sdk.ts  # Shared benchmark SDK+ES lifecycle helper
 ├─ ground-truths/               # Ground truth data and generation
 ├─ smoke-tests/                 # Smoke tests (hit live Elasticsearch directly)
 ├─ e2e-tests/                   # CLI-focused E2E tests

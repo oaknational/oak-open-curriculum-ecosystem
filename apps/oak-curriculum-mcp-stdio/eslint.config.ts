@@ -65,6 +65,7 @@ const config = defineConfig(
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
       ...testRules,
+      '@typescript-eslint/consistent-type-assertions': 'error',
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-restricted-paths': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',

@@ -27,6 +27,7 @@ import {
   type Logger,
   type FileSinkInterface,
 } from '@oaknational/logger/node';
+import { ok, err, type Result } from '@oaknational/result';
 
 /** Valid log levels for the semantic search logger. */
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
@@ -41,13 +42,9 @@ let currentFilePath: string | null = null;
 let activeFileSink: FileSinkInterface | null = null;
 
 /** Cached logger instances. Recreated when level or file sink changes. */
-let loggerCache: {
-  base: UnifiedLogger;
-  search: Logger;
-  suggest: Logger;
-  ingest: Logger;
-  cache: Logger;
-} | null = null;
+type LoggerKey = 'search' | 'suggest' | 'ingest' | 'cache' | 'admin' | 'observe';
+type LoggerCache = { base: UnifiedLogger } & Record<LoggerKey, Logger>;
+let loggerCache: LoggerCache | null = null;
 
 /**
  * Creates a file sink for logging.
@@ -100,6 +97,8 @@ function getLoggers(): NonNullable<typeof loggerCache> {
     suggest: createChild('Suggestions'),
     ingest: createChild('IngestHarness'),
     cache: createChild('SdkCache'),
+    admin: createChild('Admin'),
+    observe: createChild('Observe'),
   };
 
   return loggerCache;
@@ -175,26 +174,39 @@ export function enableFileSink(filePath: string): string | null {
   return filePath;
 }
 
+/** Error from closing the file sink. */
+export interface FileSinkCloseError {
+  readonly type: 'file_sink_close_failed';
+  readonly message: string;
+}
+
 /**
  * Disables file logging and closes the file sink.
  *
- * Call this at the end of CLI operations to ensure logs are flushed.
+ * @returns `ok(undefined)` on success, or `err(FileSinkCloseError)` if `end()` throws
  */
-export function disableFileSink(): void {
+export function disableFileSink(): Result<void, FileSinkCloseError> {
+  let closeError: FileSinkCloseError | null = null;
   if (activeFileSink !== null) {
-    activeFileSink.end();
+    try {
+      activeFileSink.end();
+    } catch (error) {
+      closeError = {
+        type: 'file_sink_close_failed',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
     activeFileSink = null;
   }
   currentFilePath = null;
   loggerCache = null;
+  return closeError ? err(closeError) : ok(undefined);
 }
 
 /** Gets the current file sink path, or null if file logging is disabled. */
 export function getFileSinkPath(): string | null {
   return currentFilePath;
 }
-
-type LoggerKey = 'search' | 'suggest' | 'ingest' | 'cache';
 
 /** Creates a lazy-bound logger proxy for a given logger key. */
 function createLoggerProxy(key: LoggerKey): Logger {
@@ -224,11 +236,9 @@ function createLoggerProxy(key: LoggerKey): Logger {
   };
 }
 
-/** Primary logger for hybrid search orchestration and telemetry. */
 export const searchLogger: Logger = createLoggerProxy('search');
-/** Dedicated logger for suggestion/type-ahead flows. */
 export const suggestLogger: Logger = createLoggerProxy('suggest');
-/** Logger for ingestion harness operations. */
 export const ingestLogger: Logger = createLoggerProxy('ingest');
-/** Logger for SDK response caching operations. */
 export const cacheLogger: Logger = createLoggerProxy('cache');
+export const adminLogger: Logger = createLoggerProxy('admin');
+export const observeLogger: Logger = createLoggerProxy('observe');

@@ -6,30 +6,54 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { typeSafeGet } from '@oaknational/type-helpers';
 
 // Type for MCP content messages
-type McpContent = { type: string; text?: string }[];
+type McpContent = { type: 'text'; text: string }[];
+
+interface McpUnknownPayload {
+  readonly type?: unknown;
+  readonly text?: unknown;
+  readonly data?: unknown;
+}
+
+function isMcpUnknownPayload(value: unknown): value is McpUnknownPayload {
+  return typeof value === 'object' && value !== null;
+}
+
+function isTextContentEntry(value: unknown): value is { type: 'text'; text: string } {
+  if (!isMcpUnknownPayload(value)) {
+    return false;
+  }
+  return typeSafeGet(value, 'type') === 'text' && typeof typeSafeGet(value, 'text') === 'string';
+}
+
+function isMcpContent(value: unknown): value is McpContent {
+  return Array.isArray(value) && value.every((entry) => isTextContentEntry(entry));
+}
 
 function expectSuccessfulResult(result: Awaited<ReturnType<Client['callTool']>>) {
   expect(result).toBeDefined();
   expect(result.isError).not.toBe(true);
-  const contentList = result.content as McpContent | undefined;
-  if (!contentList || contentList.length === 0) {
+  if (!isMcpContent(result.content) || result.content.length === 0) {
     throw new Error('Tool response did not include content');
   }
-  const [content] = contentList;
+  const [content] = result.content;
   expect(content.type).toBe('text');
   if (typeof content.text !== 'string') {
     throw new Error('Tool response content was not textual');
   }
-  const parsed = JSON.parse(content.text) as unknown;
+  const parsed: unknown = JSON.parse(content.text);
   expect(parsed).toBeTruthy();
   return parsed;
 }
 
 function extractDataArray(payload: unknown): unknown[] {
-  if (Array.isArray((payload as { data?: unknown }).data)) {
-    return (payload as { data: unknown[] }).data;
+  if (isMcpUnknownPayload(payload)) {
+    const data = typeSafeGet(payload, 'data');
+    if (Array.isArray(data)) {
+      return data;
+    }
   }
   if (Array.isArray(payload)) {
     return payload;
@@ -156,11 +180,10 @@ describe('MCP Protocol E2E', () => {
       // MCP SDK returns isError: true instead of rejecting
       const result = await client.callTool({ name: 'non-existent-tool', arguments: {} });
       expect(result.isError).toBe(true);
-      const contentList = result.content as McpContent | undefined;
-      const content = contentList?.[0];
-      if (!content || !('text' in content)) {
+      if (!isMcpContent(result.content) || result.content.length === 0) {
         throw new TypeError('Test: Expected text content');
       }
+      const content = result.content[0];
       expect(content.text).toMatch(/Tool non-existent-tool not found/);
     });
 
@@ -168,11 +191,10 @@ describe('MCP Protocol E2E', () => {
       // MCP SDK returns isError: true instead of rejecting
       const result = await client.callTool({ name: 'get-lessons-quiz', arguments: {} });
       expect(result.isError).toBe(true);
-      const contentList = result.content as McpContent | undefined;
-      const content = contentList?.[0];
-      if (!content || !('text' in content)) {
+      if (!isMcpContent(result.content) || result.content.length === 0) {
         throw new TypeError('Test: Expected text content');
       }
+      const content = result.content[0];
       expect(content.text).toMatch(/Invalid arguments.*get-lessons-quiz/);
     });
 
@@ -186,11 +208,10 @@ describe('MCP Protocol E2E', () => {
         },
       });
       expect(result.isError).toBe(true);
-      const contentList = result.content as McpContent | undefined;
-      const content = contentList?.[0];
-      if (!content || !('text' in content)) {
+      if (!isMcpContent(result.content) || result.content.length === 0) {
         throw new TypeError('Test: Expected text content');
       }
+      const content = result.content[0];
       expect(content.text).toMatch(/Invalid arguments.*get-key-stages-subject-lessons/);
     });
   });

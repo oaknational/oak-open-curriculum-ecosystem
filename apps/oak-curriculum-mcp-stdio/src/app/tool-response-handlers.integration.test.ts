@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { typeSafeGet } from '@oaknational/type-helpers';
 
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 
@@ -14,14 +15,25 @@ interface SerialisedResult {
   readonly data: unknown;
 }
 
+function isUnknownRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function getOwn(value: Record<string, unknown>, key: string): unknown {
+  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    return undefined;
+  }
+  return typeSafeGet(value, key);
+}
+
 function isSerialisedResult(value: unknown): value is SerialisedResult {
-  if (typeof value !== 'object' || value === null) {
+  if (!isUnknownRecord(value)) {
     return false;
   }
-  const candidate = value as Record<string, unknown>;
+  const status = getOwn(value, 'status');
   return (
-    (typeof candidate.status === 'number' || typeof candidate.status === 'string') &&
-    Object.prototype.hasOwnProperty.call(candidate, 'data')
+    (typeof status === 'number' || typeof status === 'string') &&
+    getOwn(value, 'data') !== undefined
   );
 }
 

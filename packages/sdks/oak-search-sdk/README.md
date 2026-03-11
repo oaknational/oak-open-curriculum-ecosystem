@@ -104,10 +104,10 @@ Key properties:
 
 ## Consumers
 
-| Consumer       | Location                 | How it uses the SDK                                  |
-| -------------- | ------------------------ | ---------------------------------------------------- |
-| **Search CLI** | `apps/oak-search-cli/`   | `createCliSdk()` maps env → ES client → SDK instance |
-| **MCP Server** | (Checkpoint F — planned) | Will call SDK services from MCP tools                |
+| Consumer       | Location                 | How it uses the SDK                                            |
+| -------------- | ------------------------ | -------------------------------------------------------------- |
+| **Search CLI** | `apps/oak-search-cli/`   | Creates ES client from env, composes SDK with explicit cleanup |
+| **MCP Server** | (Checkpoint F — planned) | Will call SDK services from MCP tools                          |
 
 ## Development
 

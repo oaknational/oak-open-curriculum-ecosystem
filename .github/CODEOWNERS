@@ -1,0 +1,5 @@
+# Default ownership for the entire repository.
+* @jimCresswell
+
+# Explicitly protect repository governance files.
+/.github/CODEOWNERS @jimCresswell

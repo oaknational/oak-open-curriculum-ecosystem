@@ -108,6 +108,10 @@ function createTestEsClient(): Client {
 
   // Mock transport.request for bulk operations
   vi.spyOn(client.transport, 'request').mockResolvedValue({ errors: false, items: [] });
+  vi.spyOn(client, 'count').mockResolvedValue({
+    count: 0,
+    _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+  });
 
   return client;
 }
@@ -438,7 +442,7 @@ describe('AdminService', () => {
     it('returns ok with a SetupResult', async () => {
       const { admin } = createSdk();
 
-      const result = await admin.reset({ verbose: true });
+      const result = await admin.reset();
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -533,6 +537,42 @@ describe('AdminService', () => {
       if (!result.ok) {
         expect(result.error.type).toBe('validation_error');
         expect(result.error.message).toContain('6 of 6');
+      }
+    });
+  });
+
+  describe('countDocs', () => {
+    it('returns per-index parent document counts', async () => {
+      const { admin } = createSdk();
+
+      const result = await admin.countDocs();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toHaveLength(6);
+      }
+    });
+
+    it('returns an error result when an index is missing', async () => {
+      const deps = createTestDeps();
+      vi.spyOn(deps.esClient, 'count').mockImplementation(async (params) => {
+        const index = typeof params?.index === 'string' ? params.index : '';
+        if (index.includes('_unit_rollup')) {
+          throw new Error('index_not_found_exception: no such index');
+        }
+        return {
+          count: 12,
+          _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+        };
+      });
+      const sdk = createSearchSdk({ deps, config: createTestConfig() });
+
+      const result = await sdk.admin.countDocs();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('es_error');
+        expect(result.error.message).toContain('index_not_found_exception');
       }
     });
   });

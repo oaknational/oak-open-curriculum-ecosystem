@@ -78,9 +78,9 @@ describe('getGroundTruthEntry', () => {
     expect(result).toBeUndefined();
   });
 
-  it('returns undefined for an invalid subject', () => {
-    // Cast to bypass type checking for test purposes
-    const result = getGroundTruthEntry('nonexistent-subject' as 'art', 'secondary');
+  it('returns undefined for a subject with no ground truth at that phase', () => {
+    // rshe-pshe is a valid Subject but has no ground truth entries in the registry
+    const result = getGroundTruthEntry('rshe-pshe', 'secondary');
     expect(result).toBeUndefined();
   });
 });
@@ -96,8 +96,8 @@ describe('getEntriesForSubject', () => {
   });
 
   it('returns an empty array for a subject with no ground truths', () => {
-    // Cast to bypass type checking for test purposes
-    const entries = getEntriesForSubject('nonexistent-subject' as 'art');
+    // rshe-pshe is a valid Subject but has no ground truth entries in the registry
+    const entries = getEntriesForSubject('rshe-pshe');
     expect(entries).toEqual([]);
   });
 

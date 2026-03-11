@@ -11,21 +11,13 @@ import type { Mock } from 'vitest';
 import { UnifiedLogger } from './unified-logger';
 import type { ResourceAttributes } from './resource-attributes';
 import type { FileSinkInterface } from './file-sink';
-import type { OtelLogRecord } from './otel-format';
+import { parseOtelLogRecord } from './test-helpers/parse-otel-log-record';
 
 /**
  * Minimal stdout sink interface for testing
  */
 interface StdoutSink {
   write(line: string): void;
-}
-
-/**
- * Parse a log record line into a typed OtelLogRecord
- */
-function parseLogRecord(line: string): OtelLogRecord {
-  const parsed = JSON.parse(line) as OtelLogRecord;
-  return parsed;
 }
 
 describe('Logger DI Integration', () => {
@@ -98,7 +90,7 @@ describe('Logger DI Integration', () => {
       logger.info('test message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
 
       expect(record).toHaveProperty('Timestamp');
       expect(record).toHaveProperty('SeverityNumber', 9);
@@ -154,7 +146,7 @@ describe('Logger DI Integration', () => {
       logger.info('test message');
 
       const written = fileWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
 
       expect(record).toHaveProperty('Timestamp');
       expect(record).toHaveProperty('SeverityNumber', 9);
@@ -257,7 +249,7 @@ describe('Logger DI Integration', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
 
       expect(record.Attributes).toHaveProperty('parentKey', 'parentValue');
       expect(record.Attributes).toHaveProperty('childKey', 'childValue');
@@ -276,7 +268,7 @@ describe('Logger DI Integration', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
 
       expect(record.Resource).toHaveProperty('service.name', 'http-test');
       expect(record.Resource).toHaveProperty('service.version', '1.0.0');
@@ -322,7 +314,7 @@ describe('Logger DI Integration', () => {
 
       const records = stdoutWriteSpy.mock.calls.map((call) => {
         const line = call[0];
-        return parseLogRecord(line);
+        return parseOtelLogRecord(line);
       });
 
       records.forEach((record) => {
@@ -343,7 +335,7 @@ describe('Logger DI Integration', () => {
       child.info('test message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
 
       expect(record).toHaveProperty('TraceId');
       expect(record.TraceId).toMatch(/^[0-9a-f]{32}$/);
@@ -411,7 +403,7 @@ describe('Logger DI Integration', () => {
 
       const records = stdoutWriteSpy.mock.calls.map((call) => {
         const line = call[0];
-        return parseLogRecord(line);
+        return parseOtelLogRecord(line);
       });
 
       records.forEach((record) => {
@@ -435,8 +427,8 @@ describe('Logger DI Integration', () => {
       const stdoutLine = stdoutWriteSpy.mock.calls[0]?.[0];
       const fileLine = fileWriteSpy.mock.calls[0]?.[0];
 
-      const stdoutRecord = parseLogRecord(stdoutLine);
-      const fileRecord = parseLogRecord(fileLine);
+      const stdoutRecord = parseOtelLogRecord(stdoutLine);
+      const fileRecord = parseOtelLogRecord(fileLine);
 
       expect(stdoutRecord.Resource).toEqual(fileRecord.Resource);
     });

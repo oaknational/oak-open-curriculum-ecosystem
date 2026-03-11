@@ -646,6 +646,9 @@ importers:
       '@oaknational/openapi-zod-client-adapter':
         specifier: workspace:*
         version: link:../../core/openapi-zod-client-adapter
+      '@oaknational/result':
+        specifier: workspace:*
+        version: link:../../core/result
       '@types/node':
         specifier: ^25.3.5
         version: 25.3.5

@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { enrichError, type ErrorContext } from './error-context';
 import { startTimer } from './timing';
 
+function hasContextProperty(error: Error): error is Error & { context?: ErrorContext } {
+  return 'context' in error;
+}
+
 describe('enrichError', () => {
   it('preserves original error message and stack', () => {
     const originalError = new Error('Original message');
@@ -26,10 +30,11 @@ describe('enrichError', () => {
 
     const enriched = enrichError(error, context);
 
-    // Context should be attached as non-enumerable property
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context).toBeDefined();
-    expect(enrichedError.context?.correlationId).toBe('req_456_def');
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context).toBeDefined();
+      expect(enriched.context?.correlationId).toBe('req_456_def');
+    }
   });
 
   it('adds timing information to error metadata', () => {
@@ -44,10 +49,12 @@ describe('enrichError', () => {
 
     const enriched = enrichError(error, context);
 
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context?.duration).toBeDefined();
-    expect(enrichedError.context?.duration?.ms).toBe(duration.ms);
-    expect(enrichedError.context?.duration?.formatted).toBe(duration.formatted);
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context?.duration).toBeDefined();
+      expect(enriched.context?.duration?.ms).toBe(duration.ms);
+      expect(enriched.context?.duration?.formatted).toBe(duration.formatted);
+    }
   });
 
   it('adds request context (method and path)', () => {
@@ -60,9 +67,11 @@ describe('enrichError', () => {
 
     const enriched = enrichError(error, context);
 
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context?.requestMethod).toBe('POST');
-    expect(enrichedError.context?.requestPath).toBe('/api/tools');
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context?.requestMethod).toBe('POST');
+      expect(enriched.context?.requestPath).toBe('/api/tools');
+    }
   });
 
   it('adds tool name for stdio server context', () => {
@@ -74,8 +83,10 @@ describe('enrichError', () => {
 
     const enriched = enrichError(error, context);
 
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context?.toolName).toBe('searchLessons');
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context?.toolName).toBe('searchLessons');
+    }
   });
 
   it('handles errors without stack traces', () => {
@@ -89,8 +100,10 @@ describe('enrichError', () => {
     const enriched = enrichError(error, context);
 
     expect(enriched.message).toBe('No stack');
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context?.correlationId).toBe('req_555_666');
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context?.correlationId).toBe('req_555_666');
+    }
   });
 
   it('enriched error context is JSON-serializable', () => {
@@ -109,10 +122,10 @@ describe('enrichError', () => {
     const enriched = enrichError(error, context);
 
     // Context should be accessible but serialization should work
-    const enrichedError = enriched as Error & { context?: ErrorContext };
+    const contextValue = hasContextProperty(enriched) ? enriched.context : undefined;
     const serialized = JSON.stringify({
-      message: enrichedError.message,
-      context: enrichedError.context,
+      message: enriched.message,
+      context: contextValue,
     });
 
     expect(serialized).toContain('req_777_888');
@@ -128,8 +141,10 @@ describe('enrichError', () => {
     const enriched = enrichError(error, context);
 
     expect(enriched.message).toBe('Test error');
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context).toBeDefined();
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context).toBeDefined();
+    }
   });
 
   it('allows partial context with only correlation ID', () => {
@@ -140,10 +155,12 @@ describe('enrichError', () => {
 
     const enriched = enrichError(error, context);
 
-    const enrichedError = enriched as Error & { context?: ErrorContext };
-    expect(enrichedError.context?.correlationId).toBe('req_999_000');
-    expect(enrichedError.context?.duration).toBeUndefined();
-    expect(enrichedError.context?.requestMethod).toBeUndefined();
+    expect(hasContextProperty(enriched)).toBe(true);
+    if (hasContextProperty(enriched)) {
+      expect(enriched.context?.correlationId).toBe('req_999_000');
+      expect(enriched.context?.duration).toBeUndefined();
+      expect(enriched.context?.requestMethod).toBeUndefined();
+    }
   });
 
   it('preserves error prototype chain', () => {
@@ -166,7 +183,9 @@ describe('enrichError', () => {
 
     expect(enriched).toBeInstanceOf(CustomError);
     expect(enriched).toBeInstanceOf(Error);
-    expect((enriched as CustomError).code).toBe('ERR_CUSTOM');
+    if (enriched instanceof CustomError) {
+      expect(enriched.code).toBe('ERR_CUSTOM');
+    }
     expect(enriched.name).toBe('CustomError');
   });
 });

@@ -4,6 +4,11 @@
  * Provides commands for fetching telemetry, purging old events,
  * and viewing zero-hit summaries via the Search SDK.
  *
+ * Resource ownership pattern:
+ * - ES client: created by handler, cleaned up by `withEsClient`
+ *
+ * @see ADR-133 CLI Resource Lifecycle Management
+ *
  * @example
  * ```bash
  * oaksearch observe telemetry --limit 50
@@ -13,20 +18,34 @@
  */
 
 import { Command } from 'commander';
+import { createSearchSdk } from '@oaknational/oak-search-sdk';
 import {
-  createCliSdk,
+  createEsClient,
+  withEsClient,
   printJson,
   printError,
   registerPassThrough,
   type CliSdkEnv,
 } from '../shared/index.js';
+import { buildSearchSdkConfig } from '../shared/build-search-sdk-config.js';
+import type { WithEsClientDeps } from '../shared/with-es-client.js';
 import { handleTelemetry, handleSummary } from './handlers.js';
+import { observeLogger } from '../../lib/logger.js';
+
+/** Shared `withEsClient` deps for observe commands. */
+const observeDeps: WithEsClientDeps = {
+  logger: observeLogger,
+  printError,
+  setExitCode: (c) => {
+    process.exitCode = c;
+  },
+};
 
 /**
  * Register the `observe telemetry` subcommand (SDK-mapped).
  *
  * @param parent - The parent Commander command to register under
- * @returns void
+ * @param cliEnv - Validated CLI environment values
  */
 function registerTelemetryCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
@@ -34,21 +53,27 @@ function registerTelemetryCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .description('Fetch persisted zero-hit telemetry from Elasticsearch')
     .option('-l, --limit <n>', 'Maximum number of events to return', '50')
     .action(async (opts: { limit: string }) => {
-      try {
-        const sdk = createCliSdk(cliEnv);
-        const result = await handleTelemetry(sdk.observability, {
-          limit: parseInt(opts.limit, 10),
-        });
-        if (!result.ok) {
-          printError(`${result.error.type}: ${result.error.message}`);
-          process.exitCode = 1;
-          return;
-        }
-        printJson(result.value);
-      } catch (error) {
-        printError(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-      }
+      const esClient = createEsClient(cliEnv);
+      await withEsClient(
+        esClient,
+        async () => {
+          const sdk = createSearchSdk({
+            deps: { esClient },
+            config: buildSearchSdkConfig(cliEnv),
+          });
+          const result = await handleTelemetry(sdk.observability, {
+            limit: parseInt(opts.limit, 10),
+          });
+          if (!result.ok) {
+            observeLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+            printError(`${result.error.type}: ${result.error.message}`);
+            observeDeps.setExitCode(1);
+            return;
+          }
+          printJson(result.value);
+        },
+        observeDeps,
+      );
     });
 }
 
@@ -56,34 +81,35 @@ function registerTelemetryCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * Register the `observe summary` subcommand (SDK-mapped).
  *
  * @param parent - The parent Commander command to register under
- * @returns void
+ * @param cliEnv - Validated CLI environment values
  */
 function registerSummaryCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('summary')
     .description('Show aggregated zero-hit summary')
-    .action(() => {
-      try {
-        const sdk = createCliSdk(cliEnv);
-        const result = handleSummary(sdk.observability);
-        printJson(result);
-      } catch (error) {
-        printError(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-      }
+    .action(async () => {
+      const esClient = createEsClient(cliEnv);
+      await withEsClient(
+        esClient,
+        async () => {
+          const sdk = createSearchSdk({
+            deps: { esClient },
+            config: buildSearchSdkConfig(cliEnv),
+          });
+          // handleSummary is a sync in-memory operation — cannot fail, no Result wrapping needed
+          const result = handleSummary(sdk.observability);
+          printJson(result);
+        },
+        observeDeps,
+      );
     });
 }
 
 /**
  * Create the `observe` subcommand group.
  *
+ * @param cliEnv - Validated CLI environment values
  * @returns A Commander `Command` with observe subcommands registered
- *
- * @example
- * ```typescript
- * const program = new Command();
- * program.addCommand(observeCommand());
- * ```
  */
 export function observeCommand(cliEnv: CliSdkEnv): Command {
   const cmd = new Command('observe').description(

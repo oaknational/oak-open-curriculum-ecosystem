@@ -64,7 +64,7 @@ interface LessonDoc {
  * Fetch all units for maths KS4 from ES.
  */
 async function fetchAllUnits(): Promise<UnitDoc[]> {
-  const response = await client.search({
+  const response = await client.search<UnitDoc>({
     index: 'oak_units',
     query: {
       bool: {
@@ -83,14 +83,17 @@ async function fetchAllUnits(): Promise<UnitDoc[]> {
     ],
   });
 
-  return response.hits.hits.map((hit) => hit._source as UnitDoc);
+  return response.hits.hits.flatMap((hit) => {
+    const source: UnitDoc | undefined = hit._source;
+    return source ? [source] : [];
+  });
 }
 
 /**
  * Fetch all rollups for maths KS4 from ES.
  */
 async function fetchAllRollups(): Promise<RollupDoc[]> {
-  const response = await client.search({
+  const response = await client.search<RollupDoc>({
     index: 'oak_unit_rollup',
     query: {
       bool: {
@@ -101,14 +104,17 @@ async function fetchAllRollups(): Promise<RollupDoc[]> {
     _source: ['unit_id', 'lesson_count', 'lesson_ids'],
   });
 
-  return response.hits.hits.map((hit) => hit._source as RollupDoc);
+  return response.hits.hits.flatMap((hit) => {
+    const source: RollupDoc | undefined = hit._source;
+    return source ? [source] : [];
+  });
 }
 
 /**
  * Fetch all lessons for maths KS4 from ES.
  */
 async function fetchAllLessons(): Promise<LessonDoc[]> {
-  const response = await client.search({
+  const response = await client.search<LessonDoc>({
     index: 'oak_lessons',
     query: {
       bool: {
@@ -119,7 +125,10 @@ async function fetchAllLessons(): Promise<LessonDoc[]> {
     _source: ['lesson_id', 'unit_ids'],
   });
 
-  return response.hits.hits.map((hit) => hit._source as LessonDoc);
+  return response.hits.hits.flatMap((hit) => {
+    const source: LessonDoc | undefined = hit._source;
+    return source ? [source] : [];
+  });
 }
 
 describe('Ingestion Data Quality', () => {

@@ -1,14 +1,9 @@
-/**
- * Integration tests for the CLI SDK factory.
- *
- * Verifies that `createCliSdk` correctly wires environment configuration
- * into a fully-formed `SearchSdk` instance with all three services.
- */
+/** Integration tests for shared CLI client construction helpers. */
 
 import { describe, it, expect } from 'vitest';
-import { createCliSdk } from './create-cli-sdk.js';
+import { createEsClient } from './create-cli-sdk.js';
 
-describe('createCliSdk', () => {
+describe('createEsClient', () => {
   const validEnv = {
     ELASTICSEARCH_URL: 'https://test-es.example.com:9243',
     ELASTICSEARCH_API_KEY: 'REDACTED',
@@ -21,66 +16,28 @@ describe('createCliSdk', () => {
     ZERO_HIT_INDEX_RETENTION_DAYS: 30,
   };
 
-  it('returns an SDK with all three services', () => {
-    const sdk = createCliSdk(validEnv);
-
-    expect(sdk).toBeDefined();
-    expect(sdk.retrieval).toBeDefined();
-    expect(sdk.admin).toBeDefined();
-    expect(sdk.observability).toBeDefined();
-  });
-
-  it('returns an SDK with callable retrieval methods', () => {
-    const sdk = createCliSdk(validEnv);
-
-    expect(typeof sdk.retrieval.searchLessons).toBe('function');
-    expect(typeof sdk.retrieval.searchUnits).toBe('function');
-    expect(typeof sdk.retrieval.searchSequences).toBe('function');
-    expect(typeof sdk.retrieval.suggest).toBe('function');
-    expect(typeof sdk.retrieval.fetchSequenceFacets).toBe('function');
-  });
-
-  it('returns an SDK with callable admin methods', () => {
-    const sdk = createCliSdk(validEnv);
-
-    expect(typeof sdk.admin.setup).toBe('function');
-    expect(typeof sdk.admin.reset).toBe('function');
-    expect(typeof sdk.admin.verifyConnection).toBe('function');
-    expect(typeof sdk.admin.listIndexes).toBe('function');
-    expect(typeof sdk.admin.updateSynonyms).toBe('function');
-    expect(typeof sdk.admin.getIndexMeta).toBe('function');
-    expect(typeof sdk.admin.setIndexMeta).toBe('function');
-  });
-
-  it('returns an SDK with callable observability methods', () => {
-    const sdk = createCliSdk(validEnv);
-
-    expect(typeof sdk.observability.recordZeroHit).toBe('function');
-    expect(typeof sdk.observability.getRecentZeroHits).toBe('function');
-    expect(typeof sdk.observability.getZeroHitSummary).toBe('function');
-    expect(typeof sdk.observability.persistZeroHitEvent).toBe('function');
-    expect(typeof sdk.observability.fetchTelemetry).toBe('function');
+  it('creates an Elasticsearch client with valid environment values', () => {
+    const client = createEsClient(validEnv);
+    expect(client).toBeDefined();
   });
 
   it('accepts sandbox index target', () => {
-    const sdk = createCliSdk({
+    const client = createEsClient({
       ...validEnv,
       SEARCH_INDEX_TARGET: 'sandbox',
     });
 
-    expect(sdk).toBeDefined();
-    expect(sdk.retrieval).toBeDefined();
+    expect(client).toBeDefined();
   });
 
-  it('passes zero-hit configuration through to the SDK', () => {
-    const sdk = createCliSdk({
+  it('ignores optional zero-hit configuration for client construction', () => {
+    const client = createEsClient({
       ...validEnv,
       ZERO_HIT_PERSISTENCE_ENABLED: true,
       ZERO_HIT_WEBHOOK_URL: 'https://hooks.example.com/zero-hit',
       ZERO_HIT_INDEX_RETENTION_DAYS: 14,
     });
 
-    expect(sdk).toBeDefined();
-    expect(sdk.observability).toBeDefined();
+    expect(client).toBeDefined();
   });
 });

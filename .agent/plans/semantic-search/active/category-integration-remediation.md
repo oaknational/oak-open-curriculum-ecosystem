@@ -3,7 +3,7 @@
 **Status**: Not started
 **Priority**: Medium — enrichment feature, not a correctness fix
 **Prerequisite**: None (independent of unified-versioned-ingestion)
-**Related**: [bulk-downloads-data-gaps.md](bulk-downloads-data-gaps.md)
+**Related**: [bulk_data_for_semantic_search.feature_request.md](bulk_data_for_semantic_search.feature_request.md)
 
 ## Problem
 
@@ -79,7 +79,7 @@ fetches KS4 tier/exam board data.
 ### Option B: Bulk-download-based categories (pending API team)
 
 If the API team adds category data to the bulk downloads (see
-[bulk-downloads-data-gaps.md](bulk-downloads-data-gaps.md)), the
+[bulk_data_for_semantic_search.feature_request.md](bulk_data_for_semantic_search.feature_request.md)), the
 fix is simpler:
 
 1. Extract category data from the bulk download file during parsing

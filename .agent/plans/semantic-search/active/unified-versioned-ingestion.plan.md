@@ -26,8 +26,8 @@ isProject: false
 
 # Unified Versioned Ingestion Pipeline
 
-**Last Updated**: 2026-03-09
-**Status**: IN PROGRESS — Phases 0–2 complete (all committed on `feat/search_qol_fixes`), Phase 3 (live operation) next
+**Last Updated**: 2026-03-10
+**Status**: IN PROGRESS — Phases 0–2 merged to `main` (PR #61). Phase 3 in progress: Task 3.0 (dry run) complete, logging improvements done, `admin count` tool added. Task 3.1 (stage) ready for manual execution
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
 **Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 
@@ -405,6 +405,46 @@ describe the root cause accurately as a format mismatch.
 
 ## Progress Log
 
+### 2026-03-10: Phase 3 Preparation Complete
+
+**Session**: Dry run validated, progress visibility added, `admin count` tool created.
+
+| Item | Summary |
+|------|---------|
+| Task 3.0 dry run | Pipeline validated end-to-end — parses, transforms, builds operations correctly |
+| Logging improvements | Upgraded SDK index creation logging from `debug` to `info`; injected `ingestLogger` into lifecycle deps; per-chunk upload progress with percentage |
+| `admin count` command | New CLI tool using ES `_count` API — reports true parent doc counts (excludes ELSER chunk inflation). Live-tested: 16,339 total (12,746 lessons + 1,671 units + 1,671 rollups + 164 threads + 30 sequences + 57 facets) |
+| `SetupOptions` cleanup | Removed redundant `verbose` flag infrastructure — logger DI handles this concern |
+| Document count clarity | `_cat/indices` reports 193k docs (includes ELSER `semantic_text` chunks); `_count` reports 12,746 true parent lessons (15x inflation is expected) |
+
+**Task 3.2 expected counts updated**: The plan's expected doc counts for `_cat/indices` (193k lessons, 172k rollups) are correct for Lucene doc counts. True parent counts via `admin count` are: lessons 12,746, units 1,671, rollups 1,671, threads 164, sequences 30, facets 57.
+
+**Next**: User runs `admin stage --bulk-dir ./bulk-downloads` manually (with visible logging and Ctrl+C kill capability). Then Task 3.2 validate, Task 3.3 promote, Task 3.4 verify.
+
+### 2026-03-09: Phases 0–2 Merged to Main (PR #61)
+
+**Branch `feat/search_qol_fixes` merged to `main`** — all Phase 0, 1, 2 code
+and documentation is now on the default branch. 36 commits total on the PR
+(including governance, blue/green lifecycle, versioned ingestion, and
+agent infrastructure work).
+
+**Next session starts Phase 3 — live operation against Elasticsearch.**
+
+**Start with a dry run** to validate the pipeline end-to-end before writing
+to the live cluster:
+
+```bash
+cd apps/oak-search-cli
+pnpm oaksearch admin ingest --dry-run --verbose
+```
+
+Once the dry run confirms the pipeline parses, transforms, and would dispatch
+correctly, proceed to Task 3.1 (stage versioned indexes for real). See
+[Phase 3](#phase-3-stage-validate-promote-verify-live-operation) for the
+full sequence: stage → validate → promote → verify.
+
+---
+
 ### 2026-03-09: Wave 1 Complete (Phase 0 + Resilience Tasks)
 
 **Session**: Batch parallel execution — 6 background agents in worktree isolation.
@@ -448,12 +488,13 @@ describe the root cause accurately as a format mismatch.
 1. ~~**Phase 1**: Parameterise pipeline~~ — DONE (`ff746ac2`)
 2. ~~**Phase 2 core**: Create closure, wire lifecycle, delete ingest.ts~~ — DONE (`1e159d32`)
 3. ~~**Phase 2.8**: Unify `rewriteBulkOperations`~~ — DONE (`7a51148a`)
-4. **Phase 3**: Live stage → validate → promote → verify
-5. **Phase 4**: Adversarial reviews + documentation propagation (except Task 4.3 which is done)
+4. ~~**Merge to main**~~ — DONE (PR #61 merged 2026-03-09)
+5. **Phase 3**: ~~Dry run~~ DONE. Live stage → validate → promote → verify (Task 3.1 ready for manual execution)
+6. **Phase 4**: Adversarial reviews + documentation propagation (except Task 4.3 which is done)
 
 ### 2026-03-09: Phase 1 + Phase 2 Complete
 
-**Branch**: `feat/search_qol_fixes` — 4 commits, 980 tests passing.
+**Branch**: `feat/search_qol_fixes` (now merged to `main` via PR #61) — 4 commits, 980 tests passing.
 
 Phase 1 (commit `ff746ac2`):
 
@@ -487,14 +528,14 @@ Phase 2.8 — Unify index resolution (commit `7a51148a`):
 - Threaded `IndexResolverFn` through harness, batch, and `ingest-bulk.ts`
 - PR #66 closed
 
-**Done When progress**: 14 of 20 criteria met. Remaining: 1–5 (Phase 3 operational), 15–18 (Phase 4 documentation)
+**Done When progress**: 14 of 20 criteria met. All code merged to `main`. Remaining: 1–5 (Phase 3 operational — start with dry run), 15–18 (Phase 4 documentation)
 
 **Process observations for next session:**
 
-- **Pre-flight gates are mandatory.** Run `.agent/tools/claude-agent-ops preflight` before
+- **Pre-flight gates are mandatory.** Run `pnpm agent-tools:claude-agent-ops preflight` before
   launching parallel agents. Quality gates must pass BEFORE sub-agents are spawned —
   a failing gate in the base tree causes every worktree agent to fail at push time.
-- **Worktree cleanup is mandatory after parallel work.** Run `.agent/tools/claude-agent-ops cleanup`
+- **Worktree cleanup is mandatory after parallel work.** Run `pnpm agent-tools:claude-agent-ops cleanup`
   to remove finished worktrees, prune dead references, and delete orphaned branches.
   `.claude/worktrees/` is now gitignored to prevent index leakage.
 - **`bulk-retry-cli.e2e.test.ts` blocks all pushes** in environments without the local
@@ -984,6 +1025,27 @@ pnpm test:e2e
 This phase operates against the live Elasticsearch cluster. It is the
 first successful use of the blue/green lifecycle.
 
+#### Task 3.0: Dry Run (start here)
+
+Before touching the live cluster, validate the full pipeline end-to-end
+with a dry run:
+
+```bash
+cd apps/oak-search-cli
+pnpm oaksearch admin ingest --dry-run --verbose
+```
+
+**Expected**: The pipeline parses bulk download files, runs all
+transformers (lessons, units, rollups, threads, sequences, vocabulary),
+builds NDJSON bulk operations, and reports what it *would* dispatch —
+without writing anything to Elasticsearch.
+
+**If it fails**: Fix the issue before proceeding. A dry-run failure means
+the live stage will also fail. Check bulk-downloads data is present and
+transformer output matches the expected index document shapes.
+
+**Proceed to 3.1 only after the dry run succeeds.**
+
 #### Task 3.1: Stage Versioned Indexes
 
 ```bash
@@ -1004,14 +1066,26 @@ pnpm oaksearch admin status
 ```
 
 **Expected**: 6 versioned indexes visible alongside 6 bare indexes.
-Document counts should be comparable to the bare indexes:
 
-- `oak_lessons_v*` ≈ 193k docs
-- `oak_unit_rollup_v*` ≈ 172k docs
-- `oak_units_v*` ≈ 1.6k docs
-- `oak_threads_v*` ≈ 328 docs
-- `oak_sequence_facets_v*` ≈ 57 docs
-- `oak_sequences_v*` ≈ 30 docs
+Use `admin count` for true parent document counts (excludes ELSER
+`semantic_text` chunk inflation). Use `admin status` for Lucene doc
+counts (includes chunks — expected to be much higher for ELSER indexes).
+
+**True parent counts** (via `admin count` / ES `_count` API):
+
+- `oak_lessons_v*` ≈ 12,746 lessons
+- `oak_unit_rollup_v*` ≈ 1,671 rollups
+- `oak_units_v*` ≈ 1,671 units
+- `oak_threads_v*` ≈ 164 threads
+- `oak_sequence_facets_v*` ≈ 57 facets
+- `oak_sequences_v*` ≈ 30 sequences
+
+**Lucene doc counts** (via `admin status` / `_cat/indices`) will be
+higher for indexes with `semantic_text` fields due to ELSER chunking:
+
+- `oak_lessons_v*` ≈ 193k (15x inflation from ELSER chunks)
+- `oak_unit_rollup_v*` ≈ 172k (similar inflation)
+- Other indexes: comparable to parent counts (no `semantic_text` fields)
 
 #### Task 3.3: Promote
 
@@ -1187,7 +1261,7 @@ This atomically swaps aliases back to the previous version (recorded in
 ### Related Plans and Documentation
 
 - [Predecessor plan](../archive/completed/blue-green-reindex.execution.plan.md) — What went wrong (2026-03-08)
-- [API gaps inventory](./bulk-downloads-data-gaps.md) — Data not in bulk downloads
+- [API gaps inventory](./bulk_data_for_semantic_search.feature_request.md) — Data not in bulk downloads
 - [INDEXING.md](../../../../apps/oak-search-cli/docs/INDEXING.md) — Ingestion field expectations
 - [High-level plan](../../high-level-plan.md) — Strategic context (step 2 of immediate intentions)
 

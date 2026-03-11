@@ -2,7 +2,8 @@
  * Root ESLint Configuration
  *
  * This file is only used when running eslint from the root.
- * Each workspace has its own eslint.config.js that extends eslint.config.base.js
+ * Workspaces define their own eslint.config.ts and consume shared standards
+ * from @oaknational/eslint-plugin-standards.
  */
 
 import { defineConfig } from 'eslint/config';

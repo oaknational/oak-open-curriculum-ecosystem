@@ -13,8 +13,8 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
+import { withEvaluationSearchSdk } from './create-evaluation-search-sdk.js';
 import {
   runThreadQuery,
   type ThreadSearchFunction,
@@ -148,22 +148,23 @@ async function runBenchmark(): Promise<void> {
     console.error('Environment validation failed:', configResult.error.message);
     process.exit(1);
   }
-  const sdk = createCliSdk(configResult.value.env);
-  const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
+  await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
+    const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
 
-  console.log(`\nThread Benchmark (oak_threads index)`);
-  console.log(`${'='.repeat(60)}`);
-  console.log(`Running benchmark for ${entries.length} entries...\n`);
+    console.log(`\nThread Benchmark (oak_threads index)`);
+    console.log(`${'='.repeat(60)}`);
+    console.log(`Running benchmark for ${entries.length} entries...\n`);
 
-  const allResults: ThreadQueryResult[] = [];
+    const allResults: ThreadQueryResult[] = [];
 
-  for (const entry of entries) {
-    console.log(`Benchmarking ${entry.subject} (${entry.queries.length} queries)...`);
-    const entryResults = await runEntryQueries(entry, searchFn);
-    allResults.push(...entryResults);
-  }
+    for (const entry of entries) {
+      console.log(`Benchmarking ${entry.subject} (${entry.queries.length} queries)...`);
+      const entryResults = await runEntryQueries(entry, searchFn);
+      allResults.push(...entryResults);
+    }
 
-  printSummary(allResults);
+    printSummary(allResults);
+  });
 }
 
 runBenchmark().catch((error: unknown) => {

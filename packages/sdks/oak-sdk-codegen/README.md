@@ -79,8 +79,18 @@ pnpm sdk-codegen  # Regenerate types from OpenAPI schema (runs generate:clean fi
 pnpm type-check   # Type-check without emitting
 pnpm lint         # Lint with ESLint
 pnpm lint:fix     # Lint and auto-fix
+pnpm scan:sitemap # Refresh canonical URL sitemap reference data (network required)
 pnpm test         # Run tests
 ```
+
+`scan:sitemap` generates `reference/canonical-url-map.json` from the live OWA
+sitemap and is used by the canonical URL validation workflow (ADR-132). It is
+an operator/maintenance command, not part of CI.
+
+During `pnpm sdk-codegen`, the code-generation pipeline also runs a
+post-generation sitemap reference validation step (`runSitemapValidation`).
+This is currently warn-only: invalid or unavailable reference data produces
+warnings rather than failing code generation.
 
 ### `generate:clean` caveat
 

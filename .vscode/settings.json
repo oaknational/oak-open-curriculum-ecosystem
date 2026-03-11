@@ -23,6 +23,7 @@
     "fallbacks",
     "healthz",
     "hlta",
+    "isinstance",
     "keystage",
     "labelledby",
     "lexend",

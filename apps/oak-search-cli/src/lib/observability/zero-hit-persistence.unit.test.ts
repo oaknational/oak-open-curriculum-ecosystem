@@ -135,7 +135,7 @@ describe('zero-hit persistence', () => {
           error: { type: 'index_not_found_exception' },
         },
       },
-    } as unknown;
+    };
     transportStub.request.mockRejectedValueOnce(error);
 
     const telemetry = await fetchZeroHitTelemetry({ limit: 10 }, TEST_CONFIG);

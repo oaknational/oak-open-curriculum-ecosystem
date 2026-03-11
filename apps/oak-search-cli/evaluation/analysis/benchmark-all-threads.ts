@@ -7,8 +7,8 @@
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
+import { withEvaluationSearchSdk } from './create-evaluation-search-sdk.js';
 import { runThreadQuery } from './benchmark-query-runner-threads.js';
 import { getThreadGroundTruthEntries } from './benchmark-adapters.js';
 import type { IndexResult, BenchmarkMetrics } from './benchmark-all-types.js';
@@ -23,32 +23,33 @@ export async function benchmarkThreads(): Promise<IndexResult> {
   if (!configResult.ok) {
     throw new Error(`Environment validation failed: ${configResult.error.message}`);
   }
-  const sdk = createCliSdk(configResult.value.env);
-  const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
-  const entries = getThreadGroundTruthEntries();
-  const results: BenchmarkMetrics[] = [];
+  return withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
+    const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
+    const entries = getThreadGroundTruthEntries();
+    const results: BenchmarkMetrics[] = [];
 
-  for (const entry of entries) {
-    if (entry.subject === undefined) {
-      console.warn(`  \u26A0 Skipping cross-subject entry (threads require subject)`);
-      continue;
+    for (const entry of entries) {
+      if (entry.subject === undefined) {
+        console.warn(`  \u26A0 Skipping cross-subject entry (threads require subject)`);
+        continue;
+      }
+
+      for (const query of entry.queries) {
+        const result = await runThreadQuery(
+          {
+            query: query.query,
+            expectedRelevance: query.expectedRelevance,
+            subject: entry.subject,
+            category: query.category,
+          },
+          searchFn,
+        );
+        const status = result.mrr > 0 ? '\u2713' : '\u2717';
+        console.log(`    ${status} "${query.query}" - MRR: ${result.mrr.toFixed(3)}`);
+        results.push(result);
+      }
     }
 
-    for (const query of entry.queries) {
-      const result = await runThreadQuery(
-        {
-          query: query.query,
-          expectedRelevance: query.expectedRelevance,
-          subject: entry.subject,
-          category: query.category,
-        },
-        searchFn,
-      );
-      const status = result.mrr > 0 ? '\u2713' : '\u2717';
-      console.log(`    ${status} "${query.query}" - MRR: ${result.mrr.toFixed(3)}`);
-      results.push(result);
-    }
-  }
-
-  return { index: 'threads', queries: results.length, metrics: averageMetrics(results) };
+    return { index: 'threads', queries: results.length, metrics: averageMetrics(results) };
+  });
 }

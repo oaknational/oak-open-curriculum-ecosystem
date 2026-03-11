@@ -8,15 +8,7 @@ import { UnifiedLogger } from './unified-logger';
 import type { ResourceAttributes } from './resource-attributes';
 import type { StdoutSink } from './stdout-sink';
 import type { FileSinkInterface } from './file-sink';
-import type { OtelLogRecord } from './otel-format';
-
-/**
- * Parse a log record line into a typed OtelLogRecord
- */
-function parseLogRecord(line: string): OtelLogRecord {
-  const parsed = JSON.parse(line) as OtelLogRecord;
-  return parsed;
-}
+import { parseOtelLogRecord } from './test-helpers/parse-otel-log-record';
 
 describe('UnifiedLogger', () => {
   let stdoutSink: StdoutSink;
@@ -49,20 +41,6 @@ describe('UnifiedLogger', () => {
 
   afterEach(() => {
     vi.useRealTimers();
-  });
-
-  describe('constructor', () => {
-    it('creates logger with minimum severity', () => {
-      const logger = new UnifiedLogger({
-        minSeverity: 9, // INFO
-        resourceAttributes,
-        context: {},
-        stdoutSink,
-        fileSink: null,
-      });
-
-      expect(logger).toBeDefined();
-    });
   });
 
   describe('shouldLog', () => {
@@ -108,7 +86,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('TRACE');
       expect(record.SeverityNumber).toBe(1);
       expect(record.Body).toBe('trace message');
@@ -127,7 +105,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('DEBUG');
       expect(record.SeverityNumber).toBe(5);
     });
@@ -145,7 +123,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('INFO');
       expect(record.SeverityNumber).toBe(9);
     });
@@ -163,7 +141,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('WARN');
       expect(record.SeverityNumber).toBe(13);
     });
@@ -181,7 +159,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('ERROR');
       expect(record.SeverityNumber).toBe(17);
     });
@@ -199,7 +177,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('FATAL');
       expect(record.SeverityNumber).toBe(21);
     });
@@ -233,7 +211,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes['exception.type']).toBe('Error');
       expect(record.Attributes['exception.message']).toBe('test error');
     });
@@ -251,7 +229,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes.userId).toBe('123');
       expect(record.Attributes.action).toBe('login');
     });
@@ -334,7 +312,7 @@ describe('UnifiedLogger', () => {
       logger.info('test message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
   });
@@ -353,7 +331,7 @@ describe('UnifiedLogger', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes.parentKey).toBe('parentValue');
       expect(record.Attributes.childKey).toBe('childValue');
     });
@@ -387,7 +365,7 @@ describe('UnifiedLogger', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
 

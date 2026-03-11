@@ -45,7 +45,7 @@ describe('extractRequestMetadata', () => {
     const metadata = extractRequestMetadata(mockReq);
     // undefined should be converted to null or stripped
     expect(metadata.query).not.toHaveProperty('foo', undefined);
-    expect((metadata.query as { nested?: unknown }).nested).toEqual({ bar: 'baz' });
+    expect(metadata.query).toMatchObject({ nested: { bar: 'baz' } });
   });
 
   it('should handle missing optional fields', () => {

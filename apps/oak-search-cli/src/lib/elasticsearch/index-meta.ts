@@ -180,7 +180,7 @@ export async function readIndexMeta(
  */
 export async function writeIndexMeta(
   client: Client,
-  meta: IndexMetaDoc,
+  meta: unknown,
 ): Promise<Result<void, IndexMetaError>> {
   // Validate before writing
   const parseResult = IndexMetaDocSchema.safeParse(meta);

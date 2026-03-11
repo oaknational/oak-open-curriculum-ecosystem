@@ -1,4 +1,5 @@
 packages:
+  - agent-tools
   - apps/oak-curriculum-mcp-stdio
   - apps/oak-curriculum-mcp-streamable-http
   - apps/oak-search-cli

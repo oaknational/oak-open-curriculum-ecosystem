@@ -1,6 +1,7 @@
 /**
  * Admin service types — setup, connection, ingestion, and index metadata.
  */
+import type { SearchIndexKind } from '../internal/index.js';
 
 // ---------------------------------------------------------------------------
 // Setup types
@@ -31,12 +32,6 @@ export interface SetupResult {
 
   /** Per-index setup results. */
   readonly indexResults: readonly IndexSetupResult[];
-}
-
-/** Options for setup and reset operations. */
-export interface SetupOptions {
-  /** Whether to emit verbose progress output. */
-  readonly verbose?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -145,41 +140,68 @@ export interface IngestResult {
 }
 
 // ---------------------------------------------------------------------------
-// Admin error type
+// Doc count verification types
 // ---------------------------------------------------------------------------
 
+/** True parent document count for a single index kind. */
+export interface IndexDocCount {
+  /** The logical index kind (e.g. `'lessons'`, `'threads'`). */
+  readonly kind: SearchIndexKind;
+  /** The resolved Elasticsearch index name. */
+  readonly index: string;
+  /** Parent document count from the Elasticsearch `_count` API. */
+  readonly count: number;
+}
+
+/**
+ * Minimum expected document count per index kind.
+ *
+ * The caller provides a threshold for each search index kind.
+ * `verifyDocCounts` compares each index's actual count against
+ * its threshold.
+ */
+export type DocCountExpectations = Readonly<Record<SearchIndexKind, number>>;
+
+/**
+ * Per-index verification status.
+ *
+ * Reports whether a single index passed its minimum doc count
+ * threshold, along with the actual and expected counts.
+ */
+export interface IndexDocCountStatus {
+  /** The search index kind (e.g. `'lessons'`, `'units'`). */
+  readonly kind: SearchIndexKind;
+  /** The concrete Elasticsearch index name. */
+  readonly indexName: string;
+  /** Whether the actual count meets or exceeds the expected minimum. */
+  readonly passed: boolean;
+  /** The actual document count in Elasticsearch. */
+  readonly actual: number;
+  /** The minimum expected document count. */
+  readonly expected: number;
+}
+
+/**
+ * Comprehensive verification result for all index kinds.
+ *
+ * Contains per-index pass/fail status and a summary flag.
+ */
+export interface DocCountVerification {
+  /** True when every index meets its minimum doc count threshold. */
+  readonly allPassed: boolean;
+  /** Per-index verification status for each index kind. */
+  readonly results: readonly IndexDocCountStatus[];
+}
+
+// ---------------------------------------------------------------------------
+// Admin error type
+// ---------------------------------------------------------------------------
 /**
  * Error type for all admin service operations.
  *
  * Uses a discriminated union on the `type` field for exhaustive matching.
  * Consumers inspect `result.ok` and then narrow via `error.type`.
- *
- * @example
- * ```typescript
- * const result = await sdk.admin.setup();
- * if (!result.ok) {
- *   switch (result.error.type) {
- *     case 'es_error':
- *       console.error(`ES error (${result.error.statusCode}): ${result.error.message}`);
- *       break;
- *     case 'not_found':
- *       console.error(`Not found: ${result.error.message}`);
- *       break;
- *     case 'mapping_error':
- *       console.error(`Mapping: ${result.error.message}`);
- *       break;
- *     case 'validation_error':
- *       console.error(`Validation: ${result.error.message}`);
- *       break;
- *     case 'data_source_error':
- *       console.error(`Data source: ${result.error.message}`);
- *       break;
- *     case 'unknown':
- *       console.error(`Unexpected: ${result.error.message}`);
- *       break;
- *   }
- * }
- * ```
+ * @see ../../../../apps/oak-search-cli/src/cli/admin/handlers.ts for usage
  */
 export type AdminError =
   | {
@@ -189,6 +211,8 @@ export type AdminError =
       readonly message: string;
       /** HTTP status code from Elasticsearch, when available. */
       readonly statusCode?: number;
+      /** Additional diagnostic detail such as stack traces, when available. */
+      readonly details?: string;
     }
   | {
       /** The requested resource was not found in Elasticsearch. */

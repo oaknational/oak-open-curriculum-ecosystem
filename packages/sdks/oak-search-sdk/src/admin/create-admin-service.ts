@@ -11,14 +11,17 @@ import type { AdminService } from '../types/admin.js';
 import type {
   AdminError,
   SetupResult,
-  SetupOptions,
   ConnectionStatus,
   IndexInfo,
+  IndexDocCount,
   SynonymsResult,
 } from '../types/admin-types.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
-import type { IndexResolverFn } from '../internal/index-resolver.js';
-import { createIndexResolver } from '../internal/index-resolver.js';
+import {
+  createIndexResolver,
+  SEARCH_INDEX_KINDS,
+  type IndexResolverFn,
+} from '../internal/index-resolver.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
 import { createAllIndexes, deleteAllIndexes } from './admin-index-operations.js';
 import { verifyDocCounts } from './verify-doc-counts.js';
@@ -48,7 +51,7 @@ const SYNONYM_SET_ID = 'oak-syns';
  * @example
  * ```typescript
  * const admin = createAdminService(esClient, config, logger);
- * const result = await admin.setup({ verbose: true });
+ * const result = await admin.setup();
  * ```
  */
 export function createAdminService(
@@ -59,14 +62,15 @@ export function createAdminService(
   const resolveIndex = createIndexResolver(config.indexTarget);
 
   return {
-    setup: (options) => runSetup(esClient, resolveIndex, logger, options),
-    reset: (options) => runReset(esClient, resolveIndex, logger, options),
+    setup: () => runSetup(esClient, resolveIndex, logger),
+    reset: () => runReset(esClient, resolveIndex, logger),
     verifyConnection: () => verifyConnection(esClient),
     listIndexes: () => listIndexes(esClient),
     updateSynonyms: () => upsertSynonyms(esClient, logger),
     getIndexMeta: () => readIndexMeta(esClient),
     setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
     verifyDocCounts: (expectations) => verifyDocCounts(esClient, resolveIndex, expectations),
+    countDocs: () => countDocs(esClient, resolveIndex),
   };
 }
 
@@ -76,21 +80,19 @@ export function createAdminService(
  * @param client - Elasticsearch client
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
- * @param options - Setup options (e.g. verbose)
  * @returns Result with synonyms count and index results
  */
 async function runSetup(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
-  options?: SetupOptions,
 ): Promise<Result<SetupResult, AdminError>> {
   try {
     const synonymResult = await upsertSynonyms(client, logger);
     if (!synonymResult.ok) {
       return synonymResult;
     }
-    const indexResults = await createAllIndexes(client, resolveIndex, logger, options);
+    const indexResults = await createAllIndexes(client, resolveIndex, logger);
     return ok({
       synonymsCreated: true,
       synonymCount: synonymResult.value.count,
@@ -107,21 +109,19 @@ async function runSetup(
  * @param client - Elasticsearch client
  * @param resolveIndex - Index name resolver
  * @param logger - Optional logger
- * @param options - Setup options (e.g. verbose)
  * @returns Result with synonyms count and index results
  */
 async function runReset(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
-  options?: SetupOptions,
 ): Promise<Result<SetupResult, AdminError>> {
   try {
     const deleteResult = await deleteAllIndexes(client, resolveIndex, logger);
     if (!deleteResult.ok) {
       return deleteResult;
     }
-    return runSetup(client, resolveIndex, logger, options);
+    return runSetup(client, resolveIndex, logger);
   } catch (error: unknown) {
     return err(toAdminError(error));
   }
@@ -161,6 +161,34 @@ async function listIndexes(client: Client): Promise<Result<readonly IndexInfo[],
         docsCount: typeof entry['docs.count'] === 'string' ? parseInt(entry['docs.count'], 10) : 0,
       })),
     );
+  } catch (error: unknown) {
+    return err(toAdminError(error));
+  }
+}
+
+/**
+ * Fetch true parent document counts for all known search indexes.
+ *
+ * Uses Elasticsearch `_count` which excludes nested Lucene documents
+ * created by `semantic_text` field chunking.
+ *
+ * @param client - Elasticsearch client
+ * @param resolveIndex - Index name resolver
+ * @returns Per-index parent document counts
+ */
+async function countDocs(
+  client: Client,
+  resolveIndex: IndexResolverFn,
+): Promise<Result<readonly IndexDocCount[], AdminError>> {
+  try {
+    const counts = await Promise.all(
+      SEARCH_INDEX_KINDS.map(async (kind) => {
+        const index = resolveIndex(kind);
+        const response = await client.count({ index });
+        return { kind, index, count: response.count } satisfies IndexDocCount;
+      }),
+    );
+    return ok(counts);
   } catch (error: unknown) {
     return err(toAdminError(error));
   }

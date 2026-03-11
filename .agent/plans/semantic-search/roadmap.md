@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, four plans active in `active/`, Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
-**Last Updated**: 2026-03-07
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, six plans active in `active/` (including CLI robustness and PR snagging lanes), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Last Updated**: 2026-03-11
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -67,9 +67,10 @@ Cross-collection sequencing note:
   `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
   Elasticsearch reindex validation, then MCP Apps infrastructure migration,
   then graph follow-on work from the active alignment audit.
-- Semantic-search currently has four active plans in `active/`:
-  `unified-versioned-ingestion`, `search-sdk-args-extraction`,
-  `bulk-metadata-quick-wins`, and `kg-alignment-audit`.
+- Semantic-search currently has six active plans in `active/`:
+  `cli-robustness`, `unified-versioned-ingestion`, `search-sdk-args-extraction`,
+  `bulk-metadata-quick-wins`, `kg-alignment-audit`, and
+  `short-term-pr-snagging`.
 - The graph lane now has its first evidence-first slice promoted into
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md),
   though its phases remain pending, while
@@ -298,11 +299,13 @@ closed.
 Current active and queued execution plans:
 
 - [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
+- [cli-robustness.plan.md](active/cli-robustness.plan.md) — active CLI lifecycle robustness lane with dry-run re-validation focus
 - [unified-versioned-ingestion.plan.md](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md) — ✅ superseded (archived)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
 - [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win
+- [short-term-pr-snagging.plan.md](active/short-term-pr-snagging.plan.md) — active blocker-first PR #67 snagging lane for checks and review findings
 - [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
 - [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data
 - [kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) — parent queued graph quick-win plan for separate Neo4j provisioning, Elasticsearch projections, and bounded graph augmentation after the active audit
