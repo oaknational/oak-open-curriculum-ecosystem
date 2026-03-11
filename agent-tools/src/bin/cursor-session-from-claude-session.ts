@@ -54,22 +54,27 @@ function run(): void {
 
 function runFind(args: CliArgs, root: string, sessions: SessionEntry[]): void {
   const needles = args.file ? targetNeedles(root, args.file) : [];
-  const ranked = sessions
-    .map((entry) => ({
-      entry,
-      match:
-        needles.length === 0
-          ? { score: 1, source: 'time-window' }
-          : scoreSessionMatch(
+  const ranked =
+    needles.length === 0
+      ? sessions
+          .map((entry) => ({
+            entry,
+            match: { source: 'time-window' as const },
+          }))
+          .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs)
+      : sessions
+          .map((entry) => ({
+            entry,
+            match: scoreSessionMatch(
               buildMatchInput(
                 entry.display,
                 sessionDirectory(args.projectsRoot, root, entry.sessionId),
                 needles,
               ),
             ),
-    }))
-    .filter((row) => needles.length === 0 || row.match.score > 1)
-    .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs);
+          }))
+          .filter((row) => row.match.score > 1)
+          .sort((left, right) => right.entry.timestampMs - left.entry.timestampMs);
 
   if (ranked.length === 0) {
     writeLine('No matching Claude sessions found.');

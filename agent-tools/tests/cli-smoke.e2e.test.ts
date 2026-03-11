@@ -91,4 +91,59 @@ describe('CLI smoke', () => {
     expect(output).toContain(`session: ${sessionId}`);
     expect(output).toContain(`path: ${join(projectsRoot, escapedRoot, sessionId)}`);
   });
+
+  it('keeps find filtering tied to explicit needles only', () => {
+    const root = execSync('git rev-parse --show-toplevel', {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+      .trim()
+      .replaceAll('\\', '/');
+    const sessionId = '37f6d8f2-b79b-4f62-97ca-19fa4f7ba01b';
+    const nowMs = Date.now();
+    const tempDir = mkdtempSync(join(tmpdir(), 'cursor-session-find-'));
+    const historyPath = join(tempDir, 'history.jsonl');
+    const projectsRoot = join(tempDir, 'projects');
+    writeFileSync(
+      historyPath,
+      `${JSON.stringify({
+        sessionId,
+        timestamp: nowMs - 1_000,
+        display: 'edited README.md',
+        project: root,
+      })}\n`,
+      'utf8',
+    );
+
+    const noNeedleOutput = execSync(
+      `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
+    expect(noNeedleOutput).toContain(sessionId);
+
+    const withNeedleOutput = execSync(
+      `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --file "does/not/exist.ts" --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
+    expect(withNeedleOutput).toContain('No matching Claude sessions found.');
+
+    const matchingNeedleOutput = execSync(
+      `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --file "README.md" --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    );
+    expect(matchingNeedleOutput).toContain(sessionId);
+  });
 });

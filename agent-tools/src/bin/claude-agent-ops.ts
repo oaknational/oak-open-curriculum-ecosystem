@@ -40,28 +40,40 @@ function createHandlers(args: CliArgs): Record<CliCommand, CliHandler> {
 async function printStatus(watch: boolean): Promise<void> {
   const root = repoRoot();
   const homePath = resolveHomePath();
-  while (true) {
-    if (watch) {
-      process.stdout.write('\x1Bc');
+  if (!watch) {
+    printStatusSnapshot(root, homePath, watch);
+    return;
+  }
+  let keepRefreshing = true;
+  const stopRefreshing = () => {
+    keepRefreshing = false;
+  };
+  process.once('SIGINT', stopRefreshing);
+  try {
+    while (keepRefreshing) {
+      printStatusSnapshot(root, homePath, watch);
+      writeLine('Refreshing in 5s. Ctrl-C to stop.');
+      await waitMs(5000);
     }
-    const ids = listAgentShortIds(root, homePath);
-    writeLine('Agent Dashboard');
-    if (ids.length === 0) {
-      writeLine('No agents found.');
-    }
-    for (const id of ids) {
-      const events = readEvents(root, id);
-      const phase = detectPhaseFromEvents(events);
-      const worktree = resolveWorktree(root, id) ? 'yes' : 'no';
-      writeLine(
-        `- ${id} | phase=${phase} | tools=${events.toolNames.length} | worktree=${worktree}`,
-      );
-    }
-    if (!watch) {
-      return;
-    }
-    writeLine('Refreshing in 5s. Ctrl-C to stop.');
-    await waitMs(5000);
+  } finally {
+    process.removeListener('SIGINT', stopRefreshing);
+  }
+}
+
+function printStatusSnapshot(root: string, homePath: string, watch: boolean): void {
+  if (watch) {
+    process.stdout.write('\x1Bc');
+  }
+  const ids = listAgentShortIds(root, homePath);
+  writeLine('Agent Dashboard');
+  if (ids.length === 0) {
+    writeLine('No agents found.');
+  }
+  for (const id of ids) {
+    const events = readEvents(root, id);
+    const phase = detectPhaseFromEvents(events);
+    const worktree = resolveWorktree(root, id) ? 'yes' : 'no';
+    writeLine(`- ${id} | phase=${phase} | tools=${events.toolNames.length} | worktree=${worktree}`);
   }
 }
 function printWorktrees(): void {
