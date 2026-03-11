@@ -118,6 +118,8 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.5)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  agent-tools: {}
+
   apps/oak-curriculum-mcp-stdio:
     dependencies:
       '@elastic/elasticsearch':
