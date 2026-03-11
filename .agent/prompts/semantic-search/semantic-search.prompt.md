@@ -3,18 +3,16 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-10
+last_updated: 2026-03-11
 ---
 
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-03-10 (Phase 3 preparation complete — dry run done, logging improved, `admin count` tool added)
+**Last Updated**: 2026-03-11 (CLI robustness plan re-activated as current lane)
 
-**Recent session (10 Mar 2026)**: Unified versioned ingestion Phase 3 preparation
-complete. Dry run validated, progress visibility added (SDK + CLI logging),
-`admin count` command created for true parent doc counts (excludes ELSER chunk
-inflation). Task 3.1 (stage) ready for manual execution with visible output and
-kill capability.
+**Recent session (11 Mar 2026)**: `cli-robustness.plan.md` was promoted as the
+current active lane for re-entry validation. Immediate goal is to re-run dry run
+and confirm no-hang lifecycle guarantees remain intact on the current branch.
 
 ---
 
@@ -44,6 +42,7 @@ See [Widget Search Rendering](../../plans/semantic-search/archive/completed/widg
 **Plans** (in priority order):
 
 - [SDK workspace separation](../../plans/semantic-search/archive/completed/sdk-workspace-separation.md) — **COMPLETE** — archived
+- [CLI Robustness](../../plans/semantic-search/active/cli-robustness.plan.md) — **ACTIVE (current)** — re-entry lane for dry-run validation and no-hang guarantees
 - [MCP Tool Snagging](../../plans/semantic-search/archive/completed/search-snagging.md) — **IMPLEMENTED AND SMOKE-TESTED** — all 5 SDK tool bugs fixed with TDD, verified end-to-end (32 tools)
 - [Widget Search Rendering](../../plans/semantic-search/archive/completed/widget-search-rendering.md) — **COMPLETE** — all phases (0-5) done
 - [Roadmap](../../plans/semantic-search/roadmap.md) — overall milestone sequence through Milestone 3 / Public Beta
@@ -66,6 +65,29 @@ the graph follow-on decisions informed by the active alignment audit. Treat
 as the active graph lane and
 [kg-integration-quick-wins.plan.md](../../plans/semantic-search/current/kg-integration-quick-wins.plan.md)
 as the parent queued plan for the remaining ontology/Neo4j quick wins.
+
+---
+
+## Current Standalone Start Path
+
+Treat this prompt plus
+[cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md)
+as the standalone entrypoint for the next session.
+
+Run this first:
+
+```bash
+cd apps/oak-search-cli
+pnpm oaksearch admin ingest --dry-run --verbose
+```
+
+Then follow the plan re-entry branch:
+
+- If dry run fails or hangs: resume from Phase 3, then Phase 4 reviewer gates.
+- If dry run passes: continue residual validation and closure in Phase 4.
+
+Record outcome in the plan's **Re-entry Checkpoint (2026-03-11)** section before
+moving to any other semantic-search lane.
 
 ---
 
@@ -96,6 +118,7 @@ Run this checklist at the start of the next session:
    - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
    - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
 5. Read the active execution plan you are working from — it should be self-sufficient:
+   - [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) — current active lane; execute dry-run checkpoint first
    - [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active Boundary 03 execution plan
    - [unified-versioned-ingestion.plan.md](../../plans/semantic-search/active/unified-versioned-ingestion.plan.md) — versioned ingestion pipeline (Phase 3: dry run then live reindex)
    - [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
@@ -119,10 +142,11 @@ Run this checklist at the start of the next session:
 
 Active now:
 
-1. [unified-versioned-ingestion.plan.md](../../plans/semantic-search/active/unified-versioned-ingestion.plan.md) — Phase 3: dry run done, stage/validate/promote/verify next
-2. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
-3. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
-4. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane
+1. [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) — current active re-entry lane; run dry-run first
+2. [unified-versioned-ingestion.plan.md](../../plans/semantic-search/active/unified-versioned-ingestion.plan.md) — phase sequencing after CLI robustness checkpoint
+3. [bulk-metadata-quick-wins.execution.plan.md](../../plans/semantic-search/active/bulk-metadata-quick-wins.execution.plan.md) — active by user priority and standalone-ready
+4. [search-sdk-args-extraction.plan.md](../../plans/semantic-search/active/search-sdk-args-extraction.plan.md)
+5. [kg-alignment-audit.execution.plan.md](../../plans/semantic-search/active/kg-alignment-audit.execution.plan.md) — active evidence-first graph-enablement lane
 
 Queued:
 

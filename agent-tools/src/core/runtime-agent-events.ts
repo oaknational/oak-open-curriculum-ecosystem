@@ -1,4 +1,5 @@
 import { existsSync, lstatSync, readFileSync, statSync } from 'node:fs';
+import { writeErrorLine } from './terminal-output';
 
 interface JsonCandidate {
   message?: unknown;
@@ -41,33 +42,48 @@ export function readAgentEventsWithFs(
   jsonlPath: string,
   fileSystem: AgentEventsFileSystem,
 ): AgentEvents {
-  if (!fileSystem.existsSync(jsonlPath)) {
+  if (!isReadableEventsFile(jsonlPath, fileSystem)) {
     return emptyEvents();
   }
-  try {
-    if (fileSystem.lstatSync(jsonlPath).isSymbolicLink()) {
-      return emptyEvents();
-    }
-    const fileStats = fileSystem.statSync(jsonlPath);
-    if (!fileStats.isFile() || fileStats.size > maxAgentEventsFileBytes) {
-      return emptyEvents();
-    }
-  } catch {
+  const lines = readEventsLines(jsonlPath, fileSystem);
+  if (lines === null) {
     return emptyEvents();
   }
+  const events = emptyEvents();
+  for (const line of lines) {
+    const payload = parseJsonLine(line);
+    appendPayloadEvents(events, payload);
+  }
+  return events;
+}
+
+function isReadableEventsFile(pathValue: string, fileSystem: AgentEventsFileSystem): boolean {
+  if (!fileSystem.existsSync(pathValue)) {
+    return false;
+  }
   try {
-    const events = emptyEvents();
-    const lines = fileSystem
-      .readFileSync(jsonlPath, 'utf8')
+    if (fileSystem.lstatSync(pathValue).isSymbolicLink()) {
+      return false;
+    }
+    const fileStats = fileSystem.statSync(pathValue);
+    return fileStats.isFile() && fileStats.size <= maxAgentEventsFileBytes;
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    writeErrorLine(`Error: failed to inspect agent events file '${pathValue}': ${message}`);
+    return false;
+  }
+}
+
+function readEventsLines(pathValue: string, fileSystem: AgentEventsFileSystem): string[] | null {
+  try {
+    return fileSystem
+      .readFileSync(pathValue, 'utf8')
       .split('\n')
       .filter((line) => line.trim().length > 0);
-    for (const line of lines) {
-      const payload = parseJsonLine(line);
-      appendPayloadEvents(events, payload);
-    }
-    return events;
-  } catch {
-    return emptyEvents();
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    writeErrorLine(`Error: failed to read agent events file '${pathValue}': ${message}`);
+    return null;
   }
 }
 

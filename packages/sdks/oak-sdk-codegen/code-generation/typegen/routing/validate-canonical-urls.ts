@@ -1,5 +1,5 @@
 /**
- * Validate generated canonical URLs against the OWA sitemap reference map.
+ * Validate sitemap reference URL construction patterns against the OWA sitemap map.
  *
  * Uses binary search against the sorted `teacherPaths` array from the
  * reference map to determine whether a generated canonical URL points to
@@ -130,7 +130,7 @@ function isSitemapScanOutput(value: unknown): value is SitemapScanOutput {
     return false;
   }
   const hasStringArray = (field: unknown): field is readonly string[] =>
-    Array.isArray(field) && field.every((item) => typeof item === 'string');
+    Array.isArray(field) && Array.from(field).every((item) => typeof item === 'string');
   return (
     'teacherPaths' in value &&
     hasStringArray(value.teacherPaths) &&
@@ -156,14 +156,22 @@ export function loadSitemapReference(refPath: string): Result<SitemapScanOutput,
   try {
     raw = readFileSync(refPath, 'utf-8');
   } catch (e) {
-    return err({ kind: 'file_not_found', path: refPath, cause: String(e) });
+    return err({
+      kind: 'file_not_found',
+      path: refPath,
+      cause: e instanceof Error ? e.message : String(e),
+    });
   }
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch (e) {
-    return err({ kind: 'invalid_json', path: refPath, cause: String(e) });
+    return err({
+      kind: 'invalid_json',
+      path: refPath,
+      cause: e instanceof Error ? e.message : String(e),
+    });
   }
 
   if (!isSitemapScanOutput(parsed)) {
@@ -192,9 +200,9 @@ export interface SitemapValidationReport {
 }
 
 /**
- * Run end-to-end sitemap validation: load the reference map, construct
- * URLs from the slug data using the generator's URL patterns, and
- * validate them against `teacherPaths`.
+ * Run sitemap reference integrity validation: load the reference map,
+ * construct URLs from reference slugs using generator URL patterns, and
+ * validate those URLs against reference `teacherPaths`.
  *
  * @param refPath - Path to `canonical-url-map.json`
  * @returns Ok with a validation report, or Err if the reference file

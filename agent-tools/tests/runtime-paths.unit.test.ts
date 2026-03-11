@@ -4,9 +4,13 @@ import { escapedRepoPath, isSessionId } from '../src/core/runtime-paths';
 
 describe('runtime paths', () => {
   it('escapes repo path for claude projects folder', () => {
-    expect(escapedRepoPath('/Users/jim/code/oak/oak-mcp-ecosystem')).toBe(
-      '-Users-jim-code-oak-oak-mcp-ecosystem',
+    expect(escapedRepoPath('/home/user/code/oak/oak-mcp-ecosystem')).toBe(
+      '-home-user-code-oak-oak-mcp-ecosystem',
     );
+  });
+
+  it('escapes windows-style repo paths', () => {
+    expect(escapedRepoPath('C:\\Users\\dev\\repo')).toBe('C:-Users-dev-repo');
   });
 
   it('validates claude session id format', () => {

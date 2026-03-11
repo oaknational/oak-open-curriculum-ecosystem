@@ -148,14 +148,14 @@ async function runBenchmark(): Promise<void> {
     console.error('Environment validation failed:', configResult.error.message);
     process.exit(1);
   }
-  await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
+  const noEntries = await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
     const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
     const options = parseCliArgs();
     const entries = filterEntries(options);
 
     if (entries.length === 0) {
       console.log('No unit ground truths found. See: src/lib/search-quality/ground-truth/units/');
-      process.exit(0);
+      return true;
     }
 
     console.log(`\nUnit Benchmark (oak_unit_rollup index)`);
@@ -173,7 +173,11 @@ async function runBenchmark(): Promise<void> {
     }
 
     printSummary(allResults);
+    return false;
   });
+  if (noEntries) {
+    process.exit(0);
+  }
 }
 
 runBenchmark().catch((error: unknown) => {

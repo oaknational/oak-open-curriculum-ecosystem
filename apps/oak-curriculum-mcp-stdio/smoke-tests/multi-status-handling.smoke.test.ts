@@ -4,9 +4,6 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { typeSafeGet } from '@oaknational/type-helpers';
 
-// Smoke tests CAN make network calls - use real API
-process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'false';
-
 interface McpTextContent {
   readonly type: string;
   readonly text?: string;
@@ -114,6 +111,7 @@ describe('Multi-status transcript handling (Smoke)', () => {
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
+        OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'false',
         OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
         ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL ?? 'http://fake-es:9200',

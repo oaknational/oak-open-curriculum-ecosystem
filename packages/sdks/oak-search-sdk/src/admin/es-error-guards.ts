@@ -1,4 +1,19 @@
 /**
+ * Elasticsearch error guard helpers shared by admin operations.
+ */
+
+/**
+ * Return true when an error indicates a missing index target.
+ *
+ * @param error - Unknown caught error
+ */
+export function isMissingIndexError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+  return error.message.includes('index_not_found_exception');
+}
+/**
  * Type guards for Elasticsearch error shapes.
  */
 

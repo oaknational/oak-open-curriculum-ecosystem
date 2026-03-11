@@ -40,8 +40,6 @@
     "agent-tools:test": "pnpm --filter @oaknational/agent-tools test",
     "agent-tools:claude-agent-ops": "pnpm --filter @oaknational/agent-tools claude-agent-ops",
     "agent-tools:cursor-session-from-claude-session": "pnpm --filter @oaknational/agent-tools cursor-session-from-claude-session",
-    "claude-agent-ops": "pnpm agent-tools:claude-agent-ops",
-    "cursor-session-from-claude-session": "pnpm agent-tools:cursor-session-from-claude-session",
     "type-check": "turbo run --continue type-check",
     "format:root": "prettier --write --cache .",
     "format-check:root": "prettier --check .",

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import { parseCliArgs, type CliArgs } from './cursor-session-from-claude-session-args';
 import {
   discoverSessions,
   formatTimestamp,
@@ -23,17 +23,8 @@ import {
 } from '../core/session-tools';
 import { writeErrorLine, writeLine } from '../core/terminal-output';
 
-interface CliArgs {
-  command: 'find' | 'inspect' | 'takeover';
-  sessionId: string;
-  lastHours: number;
-  includeSubagents: boolean;
-  file: string;
-  output: string;
-  historyPath: string;
-  projectsRoot: string;
-}
-
+const HELP_TEXT =
+  'Usage: cursor-session-from-claude-session <find|inspect|takeover> [args] (see agent-tools/README.md for full examples)';
 function run(): void {
   const args = parseCliArgs(process.argv.slice(2));
   const root = repoRoot();
@@ -42,6 +33,10 @@ function run(): void {
     discoverSessions(args.projectsRoot, root),
   );
   const inWindow = filterByWindow(allSessions, args.lastHours, Date.now());
+  if (args.command === 'help') {
+    writeLine(HELP_TEXT);
+    return;
+  }
   if (args.command === 'find') {
     runFind(args, root, inWindow);
     return;
@@ -55,95 +50,6 @@ function run(): void {
     return;
   }
   runTakeover(args, root, selected);
-}
-
-function parseCliArgs(argv: string[]): CliArgs {
-  const command = parseCommand(argv[0]);
-  const defaults: CliArgs = {
-    command,
-    sessionId: '',
-    lastHours: 2,
-    includeSubagents: false,
-    file: '',
-    output: '',
-    historyPath: join(process.env.HOME ?? '', '.claude', 'history.jsonl'),
-    projectsRoot: join(process.env.HOME ?? '', '.claude', 'projects'),
-  };
-  const rest = argv.slice(1);
-  if (requiresSessionId(command) && hasPositionalSession(rest)) {
-    defaults.sessionId = rest.shift() ?? '';
-  }
-  parseFlags(rest, defaults);
-  validateParsedArgs(defaults);
-  return defaults;
-}
-
-function parseCommand(value: string | undefined): CliArgs['command'] {
-  if (value === 'find' || value === 'inspect' || value === 'takeover') {
-    return value;
-  }
-  return exitWithError('Missing or invalid command: find | inspect | takeover');
-}
-
-function parseFlags(rest: string[], defaults: CliArgs): void {
-  const handlers = new Map<string, (nextValue: () => string) => void>();
-  handlers.set('--include-subagents', () => {
-    defaults.includeSubagents = true;
-  });
-  handlers.set('--last-hours', (nextValue) => {
-    defaults.lastHours = Number(nextValue() || '2');
-  });
-  handlers.set('--file', (nextValue) => {
-    defaults.file = nextValue();
-  });
-  handlers.set('--output', (nextValue) => {
-    defaults.output = nextValue();
-  });
-  handlers.set('--history-path', (nextValue) => {
-    defaults.historyPath = nextValue() || defaults.historyPath;
-  });
-  handlers.set('--projects-root', (nextValue) => {
-    defaults.projectsRoot = nextValue() || defaults.projectsRoot;
-  });
-  while (rest.length > 0) {
-    const current = rest.shift() ?? '';
-    const nextValue = () => rest.shift() ?? '';
-    const handler = handlers.get(current);
-    if (!handler) {
-      if (!current.startsWith('--')) {
-        exitWithError(
-          `Unexpected positional argument '${current}'. Positional arguments are only supported for inspect/takeover <session-id>.`,
-        );
-      }
-      exitWithError(`Unknown argument '${current}'`);
-    }
-    handler(nextValue);
-  }
-}
-
-function validateParsedArgs(args: CliArgs): void {
-  if (!isValidLastHours(args.lastHours)) {
-    exitWithError('Invalid --last-hours value');
-  }
-  if (requiresSessionId(args.command) && !args.sessionId) {
-    exitWithError(`Command '${args.command}' requires <session-id>`);
-  }
-  if (args.command === 'find' && args.file !== '' && args.file.trim() === '') {
-    exitWithError('--file requires a non-empty path');
-  }
-}
-
-function requiresSessionId(command: CliArgs['command']): boolean {
-  return command === 'inspect' || command === 'takeover';
-}
-
-function hasPositionalSession(rest: string[]): boolean {
-  const first = rest[0];
-  return Boolean(first && !first.startsWith('--'));
-}
-
-function isValidLastHours(value: number): boolean {
-  return Number.isFinite(value) && value > 0;
 }
 
 function runFind(args: CliArgs, root: string, sessions: SessionEntry[]): void {
@@ -233,5 +139,4 @@ function exitWithError(message: string): never {
   writeErrorLine(`Error: ${message}`);
   process.exit(1);
 }
-
 run();

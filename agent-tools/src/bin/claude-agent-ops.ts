@@ -3,6 +3,13 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+import {
+  HELP_TEXT,
+  parseCliArgs,
+  type CliArgs,
+  type CliCommand,
+  type CliHandler,
+} from './claude-agent-ops-cli';
 import { detectPhaseFromEvents, resolveDiffCwd } from '../core/agent-ops';
 import {
   listAgentShortIds,
@@ -13,60 +20,10 @@ import {
   runGit,
 } from '../core/runtime';
 import { writeErrorLine, writeLine } from '../core/terminal-output';
-
-interface CliArgs {
-  command:
-    | 'status'
-    | 'worktrees'
-    | 'log'
-    | 'diff'
-    | 'commit-ready'
-    | 'preflight'
-    | 'cleanup'
-    | 'help';
-  agentId: string;
-  watch: boolean;
-}
-type CliHandler = () => void | Promise<void>;
-const CLI_COMMANDS = [
-  'status',
-  'worktrees',
-  'log',
-  'diff',
-  'commit-ready',
-  'preflight',
-  'cleanup',
-  'help',
-] as const;
-type CliCommand = (typeof CLI_COMMANDS)[number];
-const CLI_COMMAND_SET: ReadonlySet<string> = new Set(CLI_COMMANDS);
-const HELP_ALIASES = new Set(['help', '--help', '-h']);
-const HELP_TEXT =
-  'claude-agent-ops — CLI for monitoring and managing Claude background agents\n\nCommands:\n  status [--watch]\n  worktrees\n  log <id>\n  diff [id]\n  commit-ready\n  preflight\n  cleanup\n  help';
 async function run(): Promise<void> {
   const args = parseCliArgs(process.argv.slice(2));
   const handlers = createHandlers(args);
   await handlers[args.command]();
-}
-function parseCliArgs(argv: string[]): CliArgs {
-  const command = parseCommand(argv[0] ?? 'status');
-  return {
-    command,
-    agentId: argv[1] ?? '',
-    watch: argv.includes('--watch') || argv.includes('-w'),
-  };
-}
-function parseCommand(value: string): CliCommand {
-  if (HELP_ALIASES.has(value)) {
-    return 'help';
-  }
-  if (isCliCommand(value)) {
-    return value;
-  }
-  return exitWithError(`Unknown command '${value}'`);
-}
-function isCliCommand(value: string): value is CliCommand {
-  return CLI_COMMAND_SET.has(value);
 }
 function createHandlers(args: CliArgs): Record<CliCommand, CliHandler> {
   return {
@@ -82,11 +39,12 @@ function createHandlers(args: CliArgs): Record<CliCommand, CliHandler> {
 }
 async function printStatus(watch: boolean): Promise<void> {
   const root = repoRoot();
+  const homePath = resolveHomePath();
   while (true) {
     if (watch) {
       process.stdout.write('\x1Bc');
     }
-    const ids = listAgentShortIds(root);
+    const ids = listAgentShortIds(root, homePath);
     writeLine('Agent Dashboard');
     if (ids.length === 0) {
       writeLine('No agents found.');
@@ -181,9 +139,7 @@ function printPreflight(): void {
   writeLine(
     worktrees === 0 ? 'PASS No leftover agent worktrees' : 'FAIL Leftover agent worktrees found',
   );
-  for (const gate of ['build', 'type-check', 'test']) {
-    writeLine(runPnpmGate(gate, root) ? `PASS pnpm ${gate}` : `FAIL pnpm ${gate}`);
-  }
+  writeLine(runPnpmGate('qg', root) ? 'PASS pnpm qg' : 'FAIL pnpm qg');
 }
 function printCleanup(): void {
   const root = repoRoot();
@@ -223,15 +179,19 @@ function resolveWorktree(root: string, agentId: string): string | null {
   const direct = join(root, '.claude', 'worktrees', `agent-${agentId}`);
   return existsSync(direct) ? direct : null;
 }
-
 function isValidAgentId(agentId: string): boolean {
   return /^[0-9a-z]{1,64}$/u.test(agentId);
 }
 function readEvents(root: string, agentId: string) {
-  const jsonlPath = resolveAgentJsonlPath(root, agentId);
+  const jsonlPath = resolveAgentJsonlPath(root, agentId, resolveHomePath());
   return jsonlPath
     ? readAgentEvents(jsonlPath)
     : { stopReason: '', toolNames: [], bashCommands: [] };
+}
+function resolveHomePath(): string {
+  return process.env.HOME && process.env.HOME.length > 0
+    ? process.env.HOME
+    : exitWithError('Missing HOME environment variable');
 }
 function runPnpmGate(gate: string, root: string): boolean {
   return spawnSync('pnpm', [gate], { cwd: root, stdio: 'ignore' }).status === 0;

@@ -337,6 +337,7 @@ oak-open-curriculum-ecosystem/
 │   ├── oak-curriculum-mcp-stdio/      # Legacy standalone stdio MCP workspace
 │   ├── oak-curriculum-mcp-streamable-http/  # Canonical MCP server workspace
 │   └── oak-search-cli/               # Semantic search CLI
+├── agent-tools/                      # Agent workflow CLIs and runtime helpers
 └── docs/
     ├── architecture/                 # Architecture decisions and ADRs
     ├── domain/                       # Curriculum data guides

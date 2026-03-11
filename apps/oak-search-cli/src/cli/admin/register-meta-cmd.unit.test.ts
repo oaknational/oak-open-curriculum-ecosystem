@@ -14,16 +14,27 @@ describe('parseMetaJson', () => {
       }),
     );
 
-    expect(parsed.version).toBe('v-test');
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) {
+      expect(parsed.value.version).toBe('v-test');
+    }
   });
 
-  it('throws for invalid JSON', () => {
-    expect(() => parseMetaJson('{not-valid-json}')).toThrow(/Invalid metadata JSON/);
+  it('returns error for invalid JSON', () => {
+    const parsed = parseMetaJson('{not-valid-json}');
+    expect(parsed.ok).toBe(false);
+    if (!parsed.ok) {
+      expect(parsed.error.message).toMatch(/Invalid metadata JSON/);
+      expect(parsed.error.type).toBe('invalid_json');
+    }
   });
 
-  it('throws for schema-invalid JSON', () => {
-    expect(() => parseMetaJson(JSON.stringify({ version: 'only-version' }))).toThrow(
-      /IndexMetaDoc schema/,
-    );
+  it('returns error for schema-invalid JSON', () => {
+    const parsed = parseMetaJson(JSON.stringify({ version: 'only-version' }));
+    expect(parsed.ok).toBe(false);
+    if (!parsed.ok) {
+      expect(parsed.error.message).toMatch(/IndexMetaDoc schema/);
+      expect(parsed.error.type).toBe('schema_mismatch');
+    }
   });
 });

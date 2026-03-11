@@ -69,7 +69,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.ts",
-        "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
         "eslint.config.ts",
         "tsconfig.lint.json",
@@ -87,7 +86,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.ts",
-        "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
         "eslint.config.ts",
         "tsconfig.lint.json",

@@ -117,7 +117,7 @@ describe('session tools', () => {
     expect(content).toContain('_No sub-agent activity found for this session._');
   });
 
-  it('merges sessions by id and preserves recency order', () => {
+  it('merges sessions by id and prefers the newest duplicate', () => {
     const merged = mergeSessionsById(
       [
         { sessionId: 'a', timestampMs: 100, display: '', project: '/repo' },
@@ -129,7 +129,7 @@ describe('session tools', () => {
       ],
     );
 
-    expect(merged.map((entry) => entry.sessionId)).toEqual(['b', 'c', 'a']);
+    expect(merged.map((entry) => entry.sessionId)).toEqual(['a', 'b', 'c']);
   });
 
   it('finds sessions by id prefix', () => {

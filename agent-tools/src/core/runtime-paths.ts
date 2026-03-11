@@ -1,5 +1,5 @@
 export function escapedRepoPath(value: string): string {
-  return value.replaceAll('/', '-');
+  return value.replaceAll('\\', '-').replaceAll('/', '-');
 }
 
 export function isSessionId(value: string): boolean {

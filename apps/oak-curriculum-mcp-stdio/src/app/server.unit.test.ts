@@ -11,10 +11,6 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { typeSafeGet } from '@oaknational/type-helpers';
 
-vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
-  CallToolRequestSchema: {},
-  ListToolsRequestSchema: {},
-}));
 import { createToolResponseHandlers } from './tool-response-handlers';
 import { registerMcpTools } from './server';
 import {

@@ -33,6 +33,7 @@ const logger = createCodegenLogger('sitemap-scanner');
 
 const SITEMAP_INDEX_URL = 'https://www.thenational.academy/sitemap.xml';
 const BASE_URL = 'https://www.thenational.academy';
+const ALLOWED_SITEMAP_HOST = 'www.thenational.academy';
 const FETCH_TIMEOUT_MS = 15_000;
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -48,6 +49,9 @@ const outPath = path.resolve(referenceDirectory, 'canonical-url-map.json');
  * @returns Result containing response body text or an Error
  */
 async function fetchText(url: string, maxAttempts = 3): Promise<Result<string, Error>> {
+  if (!isAllowedSitemapUrl(url)) {
+    return err(new Error(`Rejected non-allowlisted sitemap URL: ${url}`));
+  }
   let lastError: Error | undefined;
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
@@ -67,6 +71,9 @@ async function fetchText(url: string, maxAttempts = 3): Promise<Result<string, E
         lastError = new Error(`HTTP ${String(response.status)} ${response.statusText}`);
         continue;
       }
+      if (!isAllowedSitemapUrl(response.url)) {
+        return err(new Error(`Rejected redirect to non-allowlisted sitemap URL: ${response.url}`));
+      }
 
       const contentType = response.headers.get('content-type') ?? '';
       const text = await response.text();
@@ -84,6 +91,15 @@ async function fetchText(url: string, maxAttempts = 3): Promise<Result<string, E
   return err(lastError ?? new Error('Fetch failed with no error details'));
 }
 
+function isAllowedSitemapUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' && parsed.hostname === ALLOWED_SITEMAP_HOST;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Discover teacher-facing sub-sitemaps from the sitemap index.
  *
@@ -97,7 +113,14 @@ async function discoverTeacherSitemaps(indexUrl: string): Promise<Result<string[
     return rootXmlResult;
   }
   const allLocs = extractLocs(rootXmlResult.value);
-  return ok(allLocs.filter((url) => url.includes('/teachers/')));
+  return ok(
+    allLocs.filter((url) => {
+      if (!isAllowedSitemapUrl(url)) {
+        return false;
+      }
+      return url.includes('/teachers/');
+    }),
+  );
 }
 
 /**
@@ -122,7 +145,7 @@ async function fetchTeacherPaths(
       continue;
     }
     for (const loc of extractLocs(result.value)) {
-      if (loc.includes('/teachers/')) {
+      if (isAllowedSitemapUrl(loc) && loc.includes('/teachers/')) {
         teacherUrls.add(loc);
       }
     }

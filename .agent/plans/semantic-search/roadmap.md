@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, five plans active in `active/` (including PR snagging lane), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
-**Last Updated**: 2026-03-10
+**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, six plans active in `active/` (including CLI robustness and PR snagging lanes), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Last Updated**: 2026-03-11
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -67,8 +67,8 @@ Cross-collection sequencing note:
   `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
   Elasticsearch reindex validation, then MCP Apps infrastructure migration,
   then graph follow-on work from the active alignment audit.
-- Semantic-search currently has five active plans in `active/`:
-  `unified-versioned-ingestion`, `search-sdk-args-extraction`,
+- Semantic-search currently has six active plans in `active/`:
+  `cli-robustness`, `unified-versioned-ingestion`, `search-sdk-args-extraction`,
   `bulk-metadata-quick-wins`, `kg-alignment-audit`, and
   `short-term-pr-snagging`.
 - The graph lane now has its first evidence-first slice promoted into
@@ -299,6 +299,7 @@ closed.
 Current active and queued execution plans:
 
 - [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
+- [cli-robustness.plan.md](active/cli-robustness.plan.md) — active CLI lifecycle robustness lane with dry-run re-validation focus
 - [unified-versioned-ingestion.plan.md](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md) — ✅ superseded (archived)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work

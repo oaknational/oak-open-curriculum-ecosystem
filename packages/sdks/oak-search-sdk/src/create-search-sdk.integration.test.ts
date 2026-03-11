@@ -552,6 +552,29 @@ describe('AdminService', () => {
         expect(result.value).toHaveLength(6);
       }
     });
+
+    it('returns an error result when an index is missing', async () => {
+      const deps = createTestDeps();
+      vi.spyOn(deps.esClient, 'count').mockImplementation(async (params) => {
+        const index = typeof params?.index === 'string' ? params.index : '';
+        if (index.includes('_unit_rollup')) {
+          throw new Error('index_not_found_exception: no such index');
+        }
+        return {
+          count: 12,
+          _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+        };
+      });
+      const sdk = createSearchSdk({ deps, config: createTestConfig() });
+
+      const result = await sdk.admin.countDocs();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe('es_error');
+        expect(result.error.message).toContain('index_not_found_exception');
+      }
+    });
   });
 });
 

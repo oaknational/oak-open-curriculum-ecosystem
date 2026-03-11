@@ -17,6 +17,7 @@ import type {
   IndexDocCountStatus,
 } from '../types/admin-types.js';
 import { SEARCH_INDEX_KINDS, type IndexResolverFn } from '../internal/index-resolver.js';
+import { isMissingIndexError } from './es-error-guards.js';
 
 export type { DocCountExpectations, DocCountVerification, IndexDocCountStatus };
 
@@ -73,8 +74,15 @@ export async function verifyDocCounts(
     const results: IndexDocCountStatus[] = await Promise.all(
       SEARCH_INDEX_KINDS.map(async (kind) => {
         const indexName = resolveIndex(kind);
-        const response = await client.count({ index: indexName });
-        const actual = response.count;
+        let actual = 0;
+        try {
+          const response = await client.count({ index: indexName, ignore_unavailable: true });
+          actual = response.count;
+        } catch (error: unknown) {
+          if (!isMissingIndexError(error)) {
+            throw error;
+          }
+        }
         const expected = expectations[kind];
         return { kind, indexName, passed: actual >= expected, actual, expected };
       }),
@@ -95,6 +103,10 @@ export async function verifyDocCounts(
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message });
+    return err({
+      type: 'es_error',
+      message,
+      details: error instanceof Error && error.stack ? error.stack : undefined,
+    });
   }
 }

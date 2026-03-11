@@ -60,6 +60,8 @@ src/cli/
 │   └── handlers.ts                 # SDK observability calls
 └── eval/                           # oaksearch eval {benchmark|validate|codegen}
     └── index.ts                    # Pass-through to evaluation scripts
+evaluation/analysis/
+└── create-evaluation-search-sdk.ts # Shared ES client lifecycle wrapper for benchmarks
 ```
 
 **SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).

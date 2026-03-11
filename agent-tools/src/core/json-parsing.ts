@@ -1,5 +1,6 @@
 import { closeSync, fstatSync, openSync, readFileSync } from 'node:fs';
 import { isSessionId } from './runtime-paths';
+import { writeErrorLine } from './terminal-output';
 
 interface HistoryRow {
   sessionId: string;
@@ -39,7 +40,9 @@ export function readJsonLines<T>(pathValue: string, guard: (value: unknown) => v
       .filter((line) => line.length > 0)
       .map((line) => parseJson(line))
       .filter((value): value is T => guard(value));
-  } catch {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    writeErrorLine(`Error: failed to read JSONL file '${pathValue}': ${message}`);
     return [];
   } finally {
     if (fileDescriptor !== null) {

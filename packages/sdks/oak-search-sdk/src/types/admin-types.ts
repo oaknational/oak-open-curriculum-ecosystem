@@ -196,12 +196,12 @@ export interface DocCountVerification {
 // ---------------------------------------------------------------------------
 // Admin error type
 // ---------------------------------------------------------------------------
-
 /**
  * Error type for all admin service operations.
  *
  * Uses a discriminated union on the `type` field for exhaustive matching.
  * Consumers inspect `result.ok` and then narrow via `error.type`.
+ * @see ../../../../apps/oak-search-cli/src/cli/admin/handlers.ts for usage
  */
 export type AdminError =
   | {
@@ -211,6 +211,8 @@ export type AdminError =
       readonly message: string;
       /** HTTP status code from Elasticsearch, when available. */
       readonly statusCode?: number;
+      /** Additional diagnostic detail such as stack traces, when available. */
+      readonly details?: string;
     }
   | {
       /** The requested resource was not found in Elasticsearch. */

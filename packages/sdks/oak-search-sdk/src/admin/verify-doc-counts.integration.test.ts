@@ -1,9 +1,8 @@
 /**
- * Unit tests for verifyDocCounts — all-failure reporting.
+ * Integration tests for verifyDocCounts — all-failure reporting.
  *
- * TDD RED phase: these tests define the contract for verifyDocCounts.
- * The function must iterate ALL index kinds and accumulate ALL failures
- * into a single report, rather than early-exiting on the first failure.
+ * These tests exercise multiple units together with a simple in-process
+ * fake of the Elasticsearch count API.
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -19,20 +18,11 @@ import type {
   IndexDocCountStatus,
 } from './verify-doc-counts.js';
 
-// ---------------------------------------------------------------------------
-// Test helpers
-// ---------------------------------------------------------------------------
-
-/** A single index name and doc count pair for building mock responses. */
 interface MockIndexEntry {
   readonly index: string;
   readonly count: number;
 }
 
-/**
- * Create a mock ES client whose `_count` API returns the provided
- * per-index doc counts. No real network calls are made.
- */
 function createMockClient(entries: readonly MockIndexEntry[]): Client {
   const client = new Client({ node: 'http://localhost:19200' });
   const countsByIndex = new Map(entries.map((entry) => [entry.index, entry.count]));
@@ -46,12 +36,10 @@ function createMockClient(entries: readonly MockIndexEntry[]): Client {
   return client;
 }
 
-/** Create a simple index resolver that maps kind to `oak_<kind>`. */
 function testResolver(kind: SearchIndexKind): string {
   return `oak_${kind}`;
 }
 
-/** All 6 index kinds with specified doc counts. */
 const ALL_INDEXES_MIXED: readonly MockIndexEntry[] = [
   { index: 'oak_lessons', count: 100 },
   { index: 'oak_unit_rollup', count: 5 },
@@ -61,7 +49,6 @@ const ALL_INDEXES_MIXED: readonly MockIndexEntry[] = [
   { index: 'oak_threads', count: 2 },
 ];
 
-/** All 6 index kinds with counts above 50. */
 const ALL_INDEXES_PASSING: readonly MockIndexEntry[] = [
   { index: 'oak_lessons', count: 100 },
   { index: 'oak_unit_rollup', count: 100 },
@@ -71,7 +58,6 @@ const ALL_INDEXES_PASSING: readonly MockIndexEntry[] = [
   { index: 'oak_threads', count: 80 },
 ];
 
-/** Standard expectations: 50 docs minimum for each index kind. */
 const EXPECT_50_EACH: DocCountExpectations = {
   lessons: 50,
   unit_rollup: 50,
@@ -80,10 +66,6 @@ const EXPECT_50_EACH: DocCountExpectations = {
   sequence_facets: 50,
   threads: 50,
 };
-
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('verifyDocCounts', () => {
   it('reports ALL 3 failing indexes when 3 of 6 have insufficient counts', async () => {
@@ -156,7 +138,6 @@ describe('verifyDocCounts', () => {
       { index: 'oak_sequences', count: 150 },
       { index: 'oak_sequence_facets', count: 50 },
       { index: 'oak_threads', count: 80 },
-      // oak_unit_rollup is missing
     ]);
 
     const result = await verifyDocCounts(client, testResolver, EXPECT_50_EACH);
@@ -164,6 +145,37 @@ describe('verifyDocCounts', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.message).toContain('unit_rollup');
+    }
+  });
+
+  it('queries counts with ignore_unavailable enabled', async () => {
+    const client = createMockClient(ALL_INDEXES_PASSING);
+    await verifyDocCounts(client, testResolver, EXPECT_50_EACH);
+    expect(vi.mocked(client.count).mock.calls[0]?.[0]).toMatchObject({
+      index: 'oak_lessons',
+      ignore_unavailable: true,
+    });
+  });
+
+  it('treats index_not_found_exception as zero-count failure for that index', async () => {
+    const client = new Client({ node: 'http://localhost:19200' });
+    vi.spyOn(client, 'count').mockImplementation(async (params) => {
+      const index = typeof params?.index === 'string' ? params.index : '';
+      if (index === 'oak_unit_rollup') {
+        throw new Error('index_not_found_exception: no such index [oak_unit_rollup]');
+      }
+      return {
+        count: 100,
+        _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+      };
+    });
+
+    const result = await verifyDocCounts(client, testResolver, EXPECT_50_EACH);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('validation_error');
+      expect(result.error.message).toContain('unit_rollup (0/50)');
     }
   });
 

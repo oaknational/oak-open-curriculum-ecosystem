@@ -123,6 +123,7 @@ apps/oak-search-cli/
 │  ├─ types/                    # Re-exports from SDK search entry point
 │  └─ adapters/                 # SDK guards, data source adapters, caching
 ├─ evaluation/                  # Benchmark infrastructure (455+ files)
+│  └─ analysis/create-evaluation-search-sdk.ts  # Shared benchmark SDK+ES lifecycle helper
 ├─ ground-truths/               # Ground truth data and generation
 ├─ smoke-tests/                 # Smoke tests (hit live Elasticsearch directly)
 ├─ e2e-tests/                   # CLI-focused E2E tests

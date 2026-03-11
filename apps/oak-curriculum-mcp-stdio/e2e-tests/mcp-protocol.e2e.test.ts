@@ -9,24 +9,23 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { typeSafeGet } from '@oaknational/type-helpers';
 
 // Type for MCP content messages
-type McpContent = { type: string; text?: string }[];
+type McpContent = { type: 'text'; text: string }[];
 
-function isUnknownRecord(value: unknown): value is Record<string, unknown> {
+interface McpUnknownPayload {
+  readonly type?: unknown;
+  readonly text?: unknown;
+  readonly data?: unknown;
+}
+
+function isMcpUnknownPayload(value: unknown): value is McpUnknownPayload {
   return typeof value === 'object' && value !== null;
 }
 
-function getOwn(value: Record<string, unknown>, key: string): unknown {
-  if (!Object.prototype.hasOwnProperty.call(value, key)) {
-    return undefined;
-  }
-  return typeSafeGet(value, key);
-}
-
-function isTextContentEntry(value: unknown): value is { type: string; text?: string } {
-  if (!isUnknownRecord(value)) {
+function isTextContentEntry(value: unknown): value is { type: 'text'; text: string } {
+  if (!isMcpUnknownPayload(value)) {
     return false;
   }
-  return getOwn(value, 'type') === 'text' && typeof getOwn(value, 'text') === 'string';
+  return typeSafeGet(value, 'type') === 'text' && typeof typeSafeGet(value, 'text') === 'string';
 }
 
 function isMcpContent(value: unknown): value is McpContent {
@@ -50,8 +49,8 @@ function expectSuccessfulResult(result: Awaited<ReturnType<Client['callTool']>>)
 }
 
 function extractDataArray(payload: unknown): unknown[] {
-  if (isUnknownRecord(payload)) {
-    const data = getOwn(payload, 'data');
+  if (isMcpUnknownPayload(payload)) {
+    const data = typeSafeGet(payload, 'data');
     if (Array.isArray(data)) {
       return data;
     }

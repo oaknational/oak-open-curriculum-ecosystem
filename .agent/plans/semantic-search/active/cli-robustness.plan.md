@@ -27,10 +27,28 @@ isProject: false
 
 # CLI Robustness: Error Handling, Process Lifecycle, and Dev-Ex
 
-**Last Updated**: 2026-03-10
-**Status**: PLANNED — v4 (post-review, all 7 reviewers addressed)
+**Last Updated**: 2026-03-11
+**Status**: ACTIVE — re-entry for dry-run validation
 **Scope**: All CLI command handlers in `apps/oak-search-cli/src/cli/`
 **Trigger**: `admin stage` hung indefinitely after ENOENT error (2026-03-10)
+
+---
+
+## Re-entry Checkpoint (2026-03-11)
+
+This plan is now the current active lane for CLI robustness re-validation.
+
+Immediate execution target is to re-run the dry-run path and confirm no-hang
+behaviour remains stable after recent branch changes:
+
+```bash
+cd apps/oak-search-cli
+pnpm oaksearch admin ingest --dry-run --verbose
+```
+
+If this command regresses, resume from Phase 3 and then Phase 4 reviewer gates.
+If it passes, continue with residual validation and documentation closure in
+Phase 4.
 
 ---
 

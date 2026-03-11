@@ -55,7 +55,8 @@ export function mergeSessionsById(...batches: SessionEntry[][]): SessionEntry[] 
   const map = new Map<string, SessionEntry>();
   for (const batch of batches) {
     for (const entry of batch) {
-      if (!map.has(entry.sessionId)) {
+      const existing = map.get(entry.sessionId);
+      if (existing === undefined || entry.timestampMs > existing.timestampMs) {
         map.set(entry.sessionId, entry);
       }
     }

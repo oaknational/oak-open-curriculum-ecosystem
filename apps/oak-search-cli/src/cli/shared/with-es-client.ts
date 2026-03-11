@@ -73,6 +73,7 @@ export async function withEsClient(
       await esClient.close();
     } catch (closeErr: unknown) {
       deps.logger.warn('ES client close failed', closeErr);
+      deps.setExitCode(1);
     }
   }
 }

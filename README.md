@@ -132,6 +132,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                   |
 | `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, type helpers, ESLint configs |
 | `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |
+| `agent-tools/`   | Agent workflow CLIs: `claude-agent-ops` and `cursor-session-from-claude-session`               |
 | `docs/`          | Developer documentation, guides, and 100+ ADRs                                                 |
 
 ### Workspace Summaries

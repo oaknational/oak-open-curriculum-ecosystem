@@ -5,20 +5,27 @@ import type { SessionEntry, SubagentSummary } from './session-tools';
 import { shouldSkipCompactAgent } from './session-tools';
 import { escapedRepoPath, isSessionId } from './runtime-paths';
 import { isHistoryRow, isMetaRow, readJsonLines } from './json-parsing';
+import { writeErrorLine } from './terminal-output';
 export { escapedRepoPath } from './runtime-paths';
 export { listAgentShortIds, resolveAgentJsonlPath } from './runtime-agent-index';
 export { readAgentEvents } from './runtime-agent-events';
 export type { AgentEvents } from './runtime-agent-events';
+/** File-system contract used by runtime helpers for dependency injection in tests. */
 interface RuntimeFileSystem {
+  /** Check whether the path exists. */
   existsSync(pathValue: string): boolean;
+  /** List entries directly under a directory. */
   readdirSync(pathValue: string): string[];
+  /** Read stat information for files or directories. */
   statSync(pathValue: string): {
     mtimeMs: number;
     size: number;
     isFile(): boolean;
     isDirectory(): boolean;
   };
+  /** Read symlink metadata without following links. */
   lstatSync(pathValue: string): { isSymbolicLink(): boolean };
+  /** Read UTF-8 file content. */
   readFileSync(pathValue: string, encoding: 'utf8'): string;
 }
 const nodeRuntimeFileSystem: RuntimeFileSystem = {
@@ -33,8 +40,11 @@ const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
     return execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim();
-  } catch {
-    return process.cwd();
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Unable to determine repository root from '${process.cwd()}': ${message}`, {
+      cause: error,
+    });
   }
 }
 export function readHistory(pathValue: string): SessionEntry[] {
@@ -75,7 +85,9 @@ export function discoverSessionsWithFs(
         display: '',
         project: root,
       });
-    } catch {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      writeErrorLine(`Error: unable to inspect session entry '${sessionPath}': ${message}`);
       continue;
     }
   }
@@ -154,25 +166,41 @@ export function readDirectoryFilesWithFs(
   const results: { name: string; content: string }[] = [];
   for (const name of fileSystem.readdirSync(directoryPath).filter(predicate)) {
     if (results.length >= maxDirectoryFilesRead) {
+      writeErrorLine(
+        `Error: directory read truncated at ${String(maxDirectoryFilesRead)} files: '${directoryPath}'`,
+      );
       break;
     }
-    const pathValue = join(directoryPath, name);
-    try {
-      const fileType = fileSystem.lstatSync(pathValue);
-      if (fileType.isSymbolicLink()) {
-        continue;
-      }
-      const fileStats = fileSystem.statSync(pathValue);
-      if (!fileStats.isFile() || fileStats.size > maxFileBytesRead) {
-        continue;
-      }
-      results.push({
-        name,
-        content: fileSystem.readFileSync(pathValue, 'utf8'),
-      });
-    } catch {
-      continue;
+    const fileResult = readSafeFile(directoryPath, name, fileSystem);
+    if (fileResult !== null) {
+      results.push(fileResult);
     }
   }
   return results;
+}
+
+function readSafeFile(
+  directoryPath: string,
+  name: string,
+  fileSystem: RuntimeFileSystem,
+): { name: string; content: string } | null {
+  const pathValue = join(directoryPath, name);
+  try {
+    const fileType = fileSystem.lstatSync(pathValue);
+    if (fileType.isSymbolicLink()) {
+      return null;
+    }
+    const fileStats = fileSystem.statSync(pathValue);
+    if (!fileStats.isFile() || fileStats.size > maxFileBytesRead) {
+      return null;
+    }
+    return {
+      name,
+      content: fileSystem.readFileSync(pathValue, 'utf8'),
+    };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    writeErrorLine(`Error: unable to read directory entry '${pathValue}': ${message}`);
+    return null;
+  }
 }

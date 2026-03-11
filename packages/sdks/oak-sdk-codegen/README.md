@@ -87,6 +87,11 @@ pnpm test         # Run tests
 sitemap and is used by the canonical URL validation workflow (ADR-132). It is
 an operator/maintenance command, not part of CI.
 
+During `pnpm sdk-codegen`, the code-generation pipeline also runs a
+post-generation sitemap reference validation step (`runSitemapValidation`).
+This is currently warn-only: invalid or unavailable reference data produces
+warnings rather than failing code generation.
+
 ### `generate:clean` caveat
 
 `generate:clean` removes `src/types/generated/` before regeneration. If

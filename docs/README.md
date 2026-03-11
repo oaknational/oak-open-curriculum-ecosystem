@@ -39,6 +39,7 @@ last_reviewed: 2026-02-25
 - [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers
 - [Troubleshooting](operations/troubleshooting.md) - Common issues and solutions
 - [Tooling](engineering/tooling.md) - Development tools and versions
+- [Agent Tools Workspace](../agent-tools/README.md) - Operator CLIs for agent monitoring and session takeover
 
 ### Curriculum Data
 

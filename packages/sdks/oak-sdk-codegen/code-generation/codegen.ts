@@ -173,7 +173,7 @@ generateWidgetConstants(logger);
 logger.info('Generating subject hierarchy...');
 generateSubjectHierarchy(logger);
 
-// Post-generation: validate canonical URL patterns against sitemap reference.
+// Post-generation: run sitemap reference integrity validation.
 // Invalid URLs emit warnings (not errors) — this is intentionally a soft phase
 // while we build confidence in the validation layer. See the integration plan
 // WS2.2 for the decision to start warn-only before making it a hard gate.
@@ -182,26 +182,26 @@ const validation = runSitemapValidation(sitemapRefPath);
 if (!validation.ok) {
   const refError = validation.error;
   if (refError.kind === 'invalid_json') {
-    logger.warn('Sitemap validation skipped — reference file has invalid JSON', {
+    logger.warn('Sitemap reference validation skipped — reference file has invalid JSON', {
       path: refError.path,
       cause: refError.cause,
     });
   } else if (refError.kind === 'unsorted_paths') {
-    logger.warn('Sitemap validation skipped — reference file has unsorted teacherPaths', {
+    logger.warn('Sitemap reference validation skipped — reference file has unsorted teacherPaths', {
       path: refError.path,
     });
   } else if (refError.kind === 'schema_mismatch') {
-    logger.warn('Sitemap validation skipped — reference file schema mismatch', {
+    logger.warn('Sitemap reference validation skipped — reference file schema mismatch', {
       path: refError.path,
     });
   } else {
-    logger.warn('Sitemap validation skipped — reference file not found', {
+    logger.warn('Sitemap reference validation skipped — reference file not found', {
       path: refError.path,
     });
   }
 } else {
   const { sequenceValidation, programmeValidation, generatedAt } = validation.value;
-  logger.info('Sitemap URL validation complete', {
+  logger.info('Sitemap reference URL validation complete', {
     referenceAge: generatedAt,
     sequences: `${String(sequenceValidation.validCount)}/${String(sequenceValidation.total)} valid`,
     programmes: `${String(programmeValidation.validCount)}/${String(programmeValidation.total)} valid`,

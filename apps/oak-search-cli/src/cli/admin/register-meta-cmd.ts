@@ -11,6 +11,7 @@
  */
 
 import type { Command } from 'commander';
+import { err, ok, type Result } from '@oaknational/result';
 import { createSearchSdk } from '@oaknational/oak-search-sdk';
 import { isIndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
@@ -39,20 +40,31 @@ const metaDeps = {
  * Parse and validate metadata JSON before any Elasticsearch resources are created.
  *
  * @param json - Raw JSON string from CLI argument
- * @returns Parsed metadata document
+ * @returns Result containing parsed metadata or a typed validation error
  */
-export function parseMetaJson(json: string): IndexMetaDoc {
+interface ParseMetaJsonError {
+  readonly type: 'invalid_json' | 'schema_mismatch';
+  readonly message: string;
+}
+
+export function parseMetaJson(json: string): Result<IndexMetaDoc, ParseMetaJsonError> {
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Invalid metadata JSON: ${message}`, { cause: error });
+    return err({
+      type: 'invalid_json',
+      message: `Invalid metadata JSON: ${message}`,
+    });
   }
   if (!isIndexMetaDoc(parsed)) {
-    throw new Error('Invalid metadata JSON: does not match IndexMetaDoc schema.');
+    return err({
+      type: 'schema_mismatch',
+      message: 'Invalid metadata JSON: does not match IndexMetaDoc schema.',
+    });
   }
-  return parsed;
+  return ok(parsed);
 }
 
 /**
@@ -102,13 +114,10 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .description('Write index metadata to Elasticsearch')
     .argument('<json>', 'JSON string of metadata to write')
     .action(async (json: string) => {
-      let parsed: IndexMetaDoc;
-      try {
-        parsed = parseMetaJson(json);
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : String(error);
-        adminLogger.error(message, { error });
-        printError(message);
+      const parsed = parseMetaJson(json);
+      if (!parsed.ok) {
+        adminLogger.error(parsed.error.message, parsed.error);
+        printError(parsed.error.message);
         process.exitCode = 1;
         return;
       }
@@ -120,7 +129,7 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
             deps: { esClient },
             config: buildSearchSdkConfig(cliEnv),
           });
-          const result = await handleSetMeta(sdk.admin, parsed);
+          const result = await handleSetMeta(sdk.admin, parsed.value);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);

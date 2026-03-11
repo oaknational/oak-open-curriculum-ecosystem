@@ -52,11 +52,12 @@ program.addCommand(adminCommand(config.env));
 program.addCommand(evalCommand(config.env));
 program.addCommand(observeCommand(config.env));
 
-await program.parseAsync();
-
-const sinkResult = disableFileSink();
-if (!sinkResult.ok) {
-  process.stderr.write(`Warning: ${sinkResult.error.message}\n`);
+try {
+  await program.parseAsync();
+} finally {
+  const sinkResult = disableFileSink();
+  if (!sinkResult.ok) {
+    process.stderr.write(`Warning: ${sinkResult.error.message}\n`);
+  }
+  process.exit(process.exitCode ?? 0);
 }
-
-process.exit(process.exitCode ?? 0);
