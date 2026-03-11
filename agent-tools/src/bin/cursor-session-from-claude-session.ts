@@ -110,6 +110,11 @@ function parseFlags(rest: string[], defaults: CliArgs): void {
     const nextValue = () => rest.shift() ?? '';
     const handler = handlers.get(current);
     if (!handler) {
+      if (!current.startsWith('--')) {
+        exitWithError(
+          `Unexpected positional argument '${current}'. Positional arguments are only supported for inspect/takeover <session-id>.`,
+        );
+      }
       exitWithError(`Unknown argument '${current}'`);
     }
     handler(nextValue);
@@ -122,6 +127,9 @@ function validateParsedArgs(args: CliArgs): void {
   }
   if (requiresSessionId(args.command) && !args.sessionId) {
     exitWithError(`Command '${args.command}' requires <session-id>`);
+  }
+  if (args.command === 'find' && args.file !== '' && args.file.trim() === '') {
+    exitWithError('--file requires a non-empty path');
   }
 }
 

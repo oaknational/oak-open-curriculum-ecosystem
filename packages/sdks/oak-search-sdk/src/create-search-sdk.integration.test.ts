@@ -108,6 +108,10 @@ function createTestEsClient(): Client {
 
   // Mock transport.request for bulk operations
   vi.spyOn(client.transport, 'request').mockResolvedValue({ errors: false, items: [] });
+  vi.spyOn(client, 'count').mockResolvedValue({
+    count: 0,
+    _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+  });
 
   return client;
 }
@@ -533,6 +537,19 @@ describe('AdminService', () => {
       if (!result.ok) {
         expect(result.error.type).toBe('validation_error');
         expect(result.error.message).toContain('6 of 6');
+      }
+    });
+  });
+
+  describe('countDocs', () => {
+    it('returns per-index parent document counts', async () => {
+      const { admin } = createSdk();
+
+      const result = await admin.countDocs();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toHaveLength(6);
       }
     });
   });

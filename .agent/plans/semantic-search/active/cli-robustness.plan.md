@@ -90,7 +90,8 @@ The oak-search-cli has systematic issues across **all command handlers**:
 
 ```typescript
 try {
-  const sdk = createCliSdk(cliEnv); // or buildLifecycleServiceForIngest
+  const esClient = createEsClient(cliEnv);
+  const sdk = createSearchSdk({ deps: { esClient }, config: buildSearchSdkConfig(cliEnv) });
   const result = await sdk.someOperation();
   if (!result.ok) {
     printError(`${result.error.type}: ${result.error.message}`);

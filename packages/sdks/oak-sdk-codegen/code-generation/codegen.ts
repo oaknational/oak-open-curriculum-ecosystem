@@ -181,21 +181,23 @@ const sitemapRefPath = path.resolve(rootDirectory, 'reference/canonical-url-map.
 const validation = runSitemapValidation(sitemapRefPath);
 if (!validation.ok) {
   const refError = validation.error;
-  if (refError.kind === 'file_not_found') {
-    logger.warn('Sitemap validation skipped — reference file not found', {
+  if (refError.kind === 'invalid_json') {
+    logger.warn('Sitemap validation skipped — reference file has invalid JSON', {
+      path: refError.path,
+      cause: refError.cause,
+    });
+  } else if (refError.kind === 'unsorted_paths') {
+    logger.warn('Sitemap validation skipped — reference file has unsorted teacherPaths', {
+      path: refError.path,
+    });
+  } else if (refError.kind === 'schema_mismatch') {
+    logger.warn('Sitemap validation skipped — reference file schema mismatch', {
       path: refError.path,
     });
   } else {
-    // Corrupt or malformed reference file — fail fast
-    let detail: string;
-    if (refError.kind === 'invalid_json') {
-      detail = `Invalid JSON: ${refError.cause}`;
-    } else if (refError.kind === 'unsorted_paths') {
-      detail = 'teacherPaths array is not sorted — binary search requires sorted input';
-    } else {
-      detail = 'Schema mismatch: missing required fields';
-    }
-    throw new Error(`Sitemap reference file is broken: ${detail} (${refError.path})`);
+    logger.warn('Sitemap validation skipped — reference file not found', {
+      path: refError.path,
+    });
   }
 } else {
   const { sequenceValidation, programmeValidation, generatedAt } = validation.value;

@@ -2,8 +2,8 @@
  * Pure factory for Search SDK configuration.
  *
  * Normalises CLI environment values into the `SearchSdkConfig` shape
- * expected by `createSearchSdk`. Extracted from `createCliSdk` so
- * that callers who own the ES client externally (via `withEsClient`)
+ * expected by `createSearchSdk`. Extracted so that callers who own
+ * the ES client externally (via `withEsClient`)
  * can still build a correctly configured SDK without duplicating the
  * webhook-URL normalisation logic.
  *

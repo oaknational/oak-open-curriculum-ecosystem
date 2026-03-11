@@ -3,29 +3,29 @@
  */
 
 import { describe, expect, it, vi } from 'vitest';
+import { ok, err } from '@oaknational/result';
 import { handleCount, type IndexDocCount } from './handle-count.js';
 
-/** Creates a fake ES client with a count method. */
-function createFakeClient(responses: Record<string, number>) {
+/** Creates a fake admin service with countDocs method. */
+function createFakeAdmin(counts: readonly IndexDocCount[]) {
   return {
-    count: vi.fn(({ index }: { index: string }) =>
-      Promise.resolve({ count: responses[index] ?? 0 }),
-    ),
+    countDocs: vi.fn(() => Promise.resolve(ok(counts))),
   };
 }
 
 describe('handleCount', () => {
   it('returns parent document counts for all known indexes', async () => {
-    const client = createFakeClient({
-      oak_lessons: 12864,
-      oak_units: 1664,
-      oak_unit_rollup: 1664,
-      oak_threads: 164,
-      oak_sequences: 30,
-      oak_sequence_facets: 57,
-    });
+    const counts: readonly IndexDocCount[] = [
+      { kind: 'lessons', index: 'oak_lessons', count: 12864 },
+      { kind: 'units', index: 'oak_units', count: 1664 },
+      { kind: 'unit_rollup', index: 'oak_unit_rollup', count: 1664 },
+      { kind: 'threads', index: 'oak_threads', count: 164 },
+      { kind: 'sequences', index: 'oak_sequences', count: 30 },
+      { kind: 'sequence_facets', index: 'oak_sequence_facets', count: 57 },
+    ];
+    const admin = createFakeAdmin(counts);
 
-    const result = await handleCount(client, 'primary');
+    const result = await handleCount(admin);
 
     expect(result.ok).toBe(true);
     if (!result.ok) {
@@ -33,37 +33,45 @@ describe('handleCount', () => {
     }
     expect(result.value).toHaveLength(6);
 
-    const lessons = result.value.find((r: IndexDocCount) => r.kind === 'lessons');
+    const lessons = result.value.find((r) => r.kind === 'lessons');
     expect(lessons).toEqual({ kind: 'lessons', index: 'oak_lessons', count: 12864 });
   });
 
-  it('resolves sandbox index names when target is sandbox', async () => {
-    const client = createFakeClient({
-      oak_lessons_sandbox: 100,
-      oak_units_sandbox: 10,
-      oak_unit_rollup_sandbox: 10,
-      oak_threads_sandbox: 5,
-      oak_sequences_sandbox: 2,
-      oak_sequence_facets_sandbox: 3,
-    });
+  it('returns whatever index names are provided by the admin service', async () => {
+    const counts: readonly IndexDocCount[] = [
+      { kind: 'lessons', index: 'oak_lessons_sandbox', count: 100 },
+      { kind: 'units', index: 'oak_units_sandbox', count: 10 },
+      { kind: 'unit_rollup', index: 'oak_unit_rollup_sandbox', count: 10 },
+      { kind: 'threads', index: 'oak_threads_sandbox', count: 5 },
+      { kind: 'sequences', index: 'oak_sequences_sandbox', count: 2 },
+      { kind: 'sequence_facets', index: 'oak_sequence_facets_sandbox', count: 3 },
+    ];
+    const admin = createFakeAdmin(counts);
 
-    const result = await handleCount(client, 'sandbox');
+    const result = await handleCount(admin);
 
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
     }
 
-    const lessons = result.value.find((r: IndexDocCount) => r.kind === 'lessons');
+    const lessons = result.value.find((r) => r.kind === 'lessons');
     expect(lessons).toEqual({ kind: 'lessons', index: 'oak_lessons_sandbox', count: 100 });
   });
 
-  it('returns es_error when a count request fails', async () => {
-    const client = {
-      count: vi.fn().mockRejectedValue(new Error('Connection refused')),
+  it('returns admin errors from the service', async () => {
+    const admin = {
+      countDocs: vi.fn(() =>
+        Promise.resolve(
+          err({
+            type: 'es_error' as const,
+            message: 'Connection refused',
+          }),
+        ),
+      ),
     };
 
-    const result = await handleCount(client, 'primary');
+    const result = await handleCount(admin);
 
     expect(result.ok).toBe(false);
     if (result.ok) {

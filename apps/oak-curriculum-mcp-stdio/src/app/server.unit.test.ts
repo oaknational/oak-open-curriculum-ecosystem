@@ -9,7 +9,7 @@ import {
   getToolFromToolName,
   type ToolDescriptorForName,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { typeSafeGet } from '@oaknational/type-helpers';
 
 vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
   CallToolRequestSchema: {},
@@ -32,6 +32,55 @@ import {
 type ToolLogger = Parameters<typeof createToolResponseHandlers>[0];
 type ToolContext = Parameters<typeof createToolResponseHandlers>[1];
 type ToolResponseHandlers = ReturnType<typeof createToolResponseHandlers>;
+
+function isUnknownRecord(value: unknown): value is Record<string, unknown> {
+  return (typeof value === 'object' || typeof value === 'function') && value !== null;
+}
+
+function getOwn(value: Record<string, unknown>, key: string): unknown {
+  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    return undefined;
+  }
+  return typeSafeGet(value, key);
+}
+
+function isUnknownArray(value: unknown): value is unknown[] {
+  return Array.isArray(value);
+}
+
+function getRegisteredToolDefinition(
+  fakeServer: ReturnType<typeof createFakeMcpServer>,
+  toolName: string,
+): Record<string, unknown> {
+  const registerToolFn: unknown = fakeServer.registerTool;
+  if (!isUnknownRecord(registerToolFn)) {
+    throw new Error('Expected registerTool to be a mocked function object');
+  }
+
+  const mockState = getOwn(registerToolFn, 'mock');
+  if (!isUnknownRecord(mockState)) {
+    throw new Error('Expected registerTool mock state');
+  }
+
+  const calls = getOwn(mockState, 'calls');
+  if (!isUnknownArray(calls)) {
+    throw new Error('Expected registerTool calls array');
+  }
+
+  const registrationCall = calls.find(
+    (entry): entry is unknown[] =>
+      isUnknownArray(entry) && entry.length >= 2 && entry[0] === toolName,
+  );
+  if (!registrationCall) {
+    throw new Error(`Expected registerTool to be called for ${toolName}`);
+  }
+
+  const registration = registrationCall[1];
+  if (!isUnknownRecord(registration)) {
+    throw new Error('Expected registerTool definition argument');
+  }
+  return registration;
+}
 
 function createLogger(): ToolLogger {
   return {
@@ -177,30 +226,7 @@ describe('registerMcpTools literals', () => {
 
 describe('registerMcpTools registration metadata', () => {
   it('uses descriptor.description for tool registration', () => {
-    const registered = new Map<
-      string,
-      { readonly title: string; readonly description?: string; readonly inputSchema: unknown }
-    >();
     const fakeServer = createFakeMcpServer();
-    vi.mocked(fakeServer.registerTool).mockImplementation(
-      (
-        name: string,
-        definition: {
-          readonly title: string;
-          readonly description?: string;
-          readonly inputSchema: unknown;
-        },
-        ...handler: unknown[]
-      ) => {
-        void handler;
-        registered.set(name, {
-          title: definition.title,
-          description: definition.description,
-          inputSchema: definition.inputSchema,
-        });
-        return undefined as unknown as ReturnType<McpServer['registerTool']>;
-      },
-    );
     const fakeClient = createFakeOakPathBasedClient();
     const fakeLogger = createFakeLogger();
 
@@ -208,8 +234,7 @@ describe('registerMcpTools registration metadata', () => {
 
     const targetName = 'get-changelog' as const;
     const descriptor: ToolDescriptorForName<typeof targetName> = getToolFromToolName(targetName);
-    const registration = registered.get(targetName);
-    expect(registration).toBeDefined();
-    expect(registration?.description).toBe(descriptor.description);
+    const registration = getRegisteredToolDefinition(fakeServer, targetName);
+    expect(getOwn(registration, 'description')).toBe(descriptor.description);
   });
 });

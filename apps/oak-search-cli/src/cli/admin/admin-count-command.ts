@@ -15,6 +15,7 @@
  */
 
 import type { Command } from 'commander';
+import { createSearchSdk } from '@oaknational/oak-search-sdk';
 import {
   createEsClient,
   withEsClient,
@@ -24,6 +25,7 @@ import {
   type CliSdkEnv,
 } from '../shared/index.js';
 import { handleCount } from './handle-count.js';
+import { buildSearchSdkConfig } from '../shared/build-search-sdk-config.js';
 import { adminLogger } from '../../lib/logger.js';
 
 /**
@@ -41,7 +43,11 @@ export function registerCountCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const result = await handleCount(esClient, cliEnv.SEARCH_INDEX_TARGET);
+          const sdk = createSearchSdk({
+            deps: { esClient },
+            config: buildSearchSdkConfig(cliEnv),
+          });
+          const result = await handleCount(sdk.admin);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);

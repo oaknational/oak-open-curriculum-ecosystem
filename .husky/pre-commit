@@ -16,7 +16,11 @@ if ! pnpm format-check:root; then
 fi
 
 echo "🔍 Running full markdownlint..."
-pnpm markdownlint-check:root
+if ! pnpm markdownlint-check:root; then
+  echo "❌ Markdownlint issues found!"
+  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then commit again"
+  exit 1
+fi
 
 echo "🔤 Running quality gate checks..."
 pnpm turbo run type-check lint test

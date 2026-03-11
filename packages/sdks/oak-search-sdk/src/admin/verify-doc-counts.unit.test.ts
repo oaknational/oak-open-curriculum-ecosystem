@@ -30,19 +30,19 @@ interface MockIndexEntry {
 }
 
 /**
- * Create a mock ES client whose cat.indices returns the provided
+ * Create a mock ES client whose `_count` API returns the provided
  * per-index doc counts. No real network calls are made.
  */
 function createMockClient(entries: readonly MockIndexEntry[]): Client {
   const client = new Client({ node: 'http://localhost:19200' });
-  vi.spyOn(client.cat, 'indices').mockResolvedValue(
-    entries.map((entry) => ({
-      index: entry.index,
-      health: 'green',
-      status: 'open',
-      'docs.count': String(entry.count),
-    })),
-  );
+  const countsByIndex = new Map(entries.map((entry) => [entry.index, entry.count]));
+  vi.spyOn(client, 'count').mockImplementation(async (params) => {
+    const index = typeof params?.index === 'string' ? params.index : '';
+    return {
+      count: countsByIndex.get(index) ?? 0,
+      _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+    };
+  });
   return client;
 }
 
@@ -169,7 +169,7 @@ describe('verifyDocCounts', () => {
 
   it('returns an ES error result when the client call fails', async () => {
     const client = new Client({ node: 'http://localhost:19200' });
-    vi.spyOn(client.cat, 'indices').mockRejectedValue(new Error('Connection refused'));
+    vi.spyOn(client, 'count').mockRejectedValue(new Error('Connection refused'));
 
     const expectations: DocCountExpectations = {
       lessons: 1,

@@ -13,11 +13,15 @@ import type {
   SetupResult,
   ConnectionStatus,
   IndexInfo,
+  IndexDocCount,
   SynonymsResult,
 } from '../types/admin-types.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
-import type { IndexResolverFn } from '../internal/index-resolver.js';
-import { createIndexResolver } from '../internal/index-resolver.js';
+import {
+  createIndexResolver,
+  SEARCH_INDEX_KINDS,
+  type IndexResolverFn,
+} from '../internal/index-resolver.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
 import { createAllIndexes, deleteAllIndexes } from './admin-index-operations.js';
 import { verifyDocCounts } from './verify-doc-counts.js';
@@ -66,6 +70,7 @@ export function createAdminService(
     getIndexMeta: () => readIndexMeta(esClient),
     setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
     verifyDocCounts: (expectations) => verifyDocCounts(esClient, resolveIndex, expectations),
+    countDocs: () => countDocs(esClient, resolveIndex),
   };
 }
 
@@ -156,6 +161,34 @@ async function listIndexes(client: Client): Promise<Result<readonly IndexInfo[],
         docsCount: typeof entry['docs.count'] === 'string' ? parseInt(entry['docs.count'], 10) : 0,
       })),
     );
+  } catch (error: unknown) {
+    return err(toAdminError(error));
+  }
+}
+
+/**
+ * Fetch true parent document counts for all known search indexes.
+ *
+ * Uses Elasticsearch `_count` which excludes nested Lucene documents
+ * created by `semantic_text` field chunking.
+ *
+ * @param client - Elasticsearch client
+ * @param resolveIndex - Index name resolver
+ * @returns Per-index parent document counts
+ */
+async function countDocs(
+  client: Client,
+  resolveIndex: IndexResolverFn,
+): Promise<Result<readonly IndexDocCount[], AdminError>> {
+  try {
+    const counts = await Promise.all(
+      SEARCH_INDEX_KINDS.map(async (kind) => {
+        const index = resolveIndex(kind);
+        const response = await client.count({ index });
+        return { kind, index, count: response.count } satisfies IndexDocCount;
+      }),
+    );
+    return ok(counts);
   } catch (error: unknown) {
     return err(toAdminError(error));
   }

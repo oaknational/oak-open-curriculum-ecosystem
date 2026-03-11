@@ -100,6 +100,7 @@ export type {
   SetupResult,
   ConnectionStatus,
   IndexInfo,
+  IndexDocCount,
   SynonymsResult,
   IngestOptions,
   IngestResult,

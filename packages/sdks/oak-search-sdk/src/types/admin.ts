@@ -16,9 +16,11 @@ import type {
   SetupResult,
   ConnectionStatus,
   IndexInfo,
+  IndexDocCount,
   SynonymsResult,
+  DocCountExpectations,
+  DocCountVerification,
 } from './admin-types.js';
-import type { DocCountExpectations, DocCountVerification } from '../admin/verify-doc-counts.js';
 
 // Re-export admin types for convenience
 export type {
@@ -27,6 +29,7 @@ export type {
   SetupResult,
   ConnectionStatus,
   IndexInfo,
+  IndexDocCount,
   SynonymsResult,
   IngestOptions,
   IngestResult,
@@ -37,7 +40,7 @@ export type {
   DocCountExpectations,
   DocCountVerification,
   IndexDocCountStatus,
-} from '../admin/verify-doc-counts.js';
+} from './admin-types.js';
 
 /**
  * Admin service — Elasticsearch setup and index management.
@@ -136,4 +139,12 @@ export interface AdminService {
   verifyDocCounts(
     expectations: DocCountExpectations,
   ): Promise<Result<DocCountVerification, AdminError>>;
+
+  /**
+   * Fetch true parent document counts for all known search indexes.
+   *
+   * Uses Elasticsearch `_count` per concrete index and returns logical
+   * index-kind keyed output.
+   */
+  countDocs(): Promise<Result<readonly IndexDocCount[], AdminError>>;
 }

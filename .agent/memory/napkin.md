@@ -575,3 +575,63 @@
 - Codegen-emitted Zod schemas must match what the runtime actually produces, not
   what the upstream ideally provides. The runtime emits `url: ''` for
   suggestions; the schema must allow it.
+
+## Session 2026-03-10 — Oak Preview MCP Server Smoke Pass
+
+### What Was Done
+
+- Ran a live black-box smoke test against the deployed `oak-preview` MCP server
+  (not local files), with schema-first invocation.
+- Verified prerequisite orientation call: `get-curriculum-model`.
+- Exercised discovery and browsing flows:
+  `browse-curriculum`, `search` (`lessons`, `threads`, `suggest`), and
+  `explore-topic`.
+- Exercised retrieval flows:
+  `fetch` (`unit:comparing-fractions`, `lesson:photosynthesis`),
+  `get-lessons-assets`, and `download-asset`.
+- Exercised large payload graph endpoints:
+  `get-thread-progressions` and `get-prerequisite-graph`, confirming successful
+  response and spill-to-file behaviour.
+- Verified failure surfaces are informative:
+  404 for unknown lesson slug and validation error for `suggest` without
+  `subject` or `keyStage`.
+
+### Patterns to Remember
+
+- For this MCP setup, always read tool descriptor JSON first, then invoke tools;
+  this avoids argument-shape mistakes and aligns with the MCP contract.
+- A strong smoke pass should include both happy paths and intentional bad-input
+  calls to validate fail-fast error messages.
+- Large graph tools should be explicitly exercised during smoke checks because
+  spill-to-file behaviour is an important runtime path, not an edge case.
+- `get-rate-limit` returning `limit: 0, remaining: 0, reset: 0` can be expected
+  when using the special no-limits key; do not misclassify that output as a
+  fault.
+
+## Session 2026-03-11 — Pre-merge Reviewer Tranches
+
+### What Was Done
+
+- Ran reviewer tranches in pairs across `main...HEAD`: `code-reviewer`, all four
+  architecture reviewers, `docs-adr-reviewer`, `type-reviewer`, and
+  `test-reviewer`.
+- Fixed CLI/SDK boundary drift by moving `admin count` through
+  `AdminService.countDocs()` and wiring the CLI via SDK (not raw ES client calls).
+- Standardised doc-count verification on Elasticsearch `_count` in
+  `verifyDocCounts` to avoid semantic-text inflated `_cat/indices` counts.
+- Added fail-fast input validation (`parseMetaJson` upfront, empty `--bulk-dir`,
+  empty `--file`) and strengthened tests for those branches.
+- Replaced blocking `Atomics.wait` polling in `agent-tools` with async sleep.
+- Updated docs/ADR drift (`ARCHITECTURE.md`, workspace READMEs, ADR-133 status),
+  and extracted duplicate OTel log-record
+  test parsing helpers.
+
+### Patterns to Remember
+
+- When an admin command talks to Elasticsearch directly, prefer moving the
+  operation into SDK admin service APIs to preserve ADR-030 boundaries.
+- If one command reports true parent counts with `_count`, any verification
+  path must use the same metric source or operators will get contradictory
+  numbers.
+- Reviewer tranches uncover cross-cutting drift (docs + tests + architecture);
+  apply fixes tranche-by-tranche and re-run targeted checks after each slice.

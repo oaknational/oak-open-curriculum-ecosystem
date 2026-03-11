@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Date
 
@@ -93,9 +93,7 @@ errors are captured in structured logs for observability.
 ### Negative
 
 - Each command handler has more boilerplate (explicit `createEsClient` +
-  `withEsClient` instead of `createCliSdk`)
-- `createCliSdk` is retained for backward compatibility with existing
-  evaluation scripts in `evaluation/` (marked with deprecation TSDoc)
+  `withEsClient` and explicit SDK composition)
 
 ### Neutral
 

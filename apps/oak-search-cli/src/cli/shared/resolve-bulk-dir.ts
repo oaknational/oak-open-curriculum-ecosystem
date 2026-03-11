@@ -11,7 +11,7 @@
  * @see ADR-133 CLI Resource Lifecycle Management
  */
 
-import { resolve, isAbsolute } from 'path';
+import { resolve, isAbsolute } from 'node:path';
 import { ok, err, type Result } from '@oaknational/result';
 
 /** Error from bulk directory resolution or validation. */
@@ -39,6 +39,12 @@ export function resolveBulkDir(
   appRoot: string,
   fs: FsPredicates,
 ): Result<string, BulkDirError> {
+  if (rawPath.trim() === '') {
+    return err({
+      type: 'bulk_dir_not_found',
+      message: '--bulk-dir cannot be empty. Specify a path to the bulk download directory.',
+    });
+  }
   const resolvedPath = isAbsolute(rawPath) ? rawPath : resolve(appRoot, rawPath);
 
   if (!fs.existsSync(resolvedPath)) {

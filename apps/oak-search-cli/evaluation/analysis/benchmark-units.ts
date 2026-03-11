@@ -12,8 +12,8 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
+import { withEvaluationSearchSdk } from './create-evaluation-search-sdk.js';
 import {
   runUnitQuery,
   type UnitSearchFunction,
@@ -148,31 +148,32 @@ async function runBenchmark(): Promise<void> {
     console.error('Environment validation failed:', configResult.error.message);
     process.exit(1);
   }
-  const sdk = createCliSdk(configResult.value.env);
-  const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
-  const options = parseCliArgs();
-  const entries = filterEntries(options);
+  await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
+    const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
+    const options = parseCliArgs();
+    const entries = filterEntries(options);
 
-  if (entries.length === 0) {
-    console.log('No unit ground truths found. See: src/lib/search-quality/ground-truth/units/');
-    process.exit(0);
-  }
+    if (entries.length === 0) {
+      console.log('No unit ground truths found. See: src/lib/search-quality/ground-truth/units/');
+      process.exit(0);
+    }
 
-  console.log(`\nUnit Benchmark (oak_unit_rollup index)`);
-  console.log(`${'='.repeat(60)}`);
-  console.log(`Running benchmark for ${entries.length} entries...\n`);
+    console.log(`\nUnit Benchmark (oak_unit_rollup index)`);
+    console.log(`${'='.repeat(60)}`);
+    console.log(`Running benchmark for ${entries.length} entries...\n`);
 
-  const allResults: UnitQueryResult[] = [];
+    const allResults: UnitQueryResult[] = [];
 
-  for (const entry of entries) {
-    console.log(
-      `Benchmarking ${entry.subject}/${entry.phase} (${entry.queries.length} queries)...`,
-    );
-    const entryResults = await runEntryQueries(entry, searchFn);
-    allResults.push(...entryResults);
-  }
+    for (const entry of entries) {
+      console.log(
+        `Benchmarking ${entry.subject}/${entry.phase} (${entry.queries.length} queries)...`,
+      );
+      const entryResults = await runEntryQueries(entry, searchFn);
+      allResults.push(...entryResults);
+    }
 
-  printSummary(allResults);
+    printSummary(allResults);
+  });
 }
 
 runBenchmark().catch((error: unknown) => {

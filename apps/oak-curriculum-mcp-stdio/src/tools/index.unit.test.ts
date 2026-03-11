@@ -3,11 +3,11 @@ import {
   createStubSearchRetrieval,
   type ToolName,
   type ToolExecutionResult,
-  type OakApiPathBasedClient,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import { createMcpToolsModule } from './index.js';
 import { err, ok } from '@oaknational/result';
+import { createFakeOakPathBasedClient } from '../test-helpers/fakes.js';
 
 const TEST_TOOL_NAME = 'get-key-stages-subject-lessons';
 
@@ -37,10 +37,6 @@ function parseJsonContent(result: CallToolResult): unknown {
   return parsed;
 }
 
-function createFakeClient(): OakApiPathBasedClient {
-  return {} as OakApiPathBasedClient;
-}
-
 describe('createMcpToolsModule', () => {
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
@@ -48,7 +44,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue(ok({ status: 200, data: { status: 'ok' } }));
 
     const module = createMcpToolsModule({
-      client: createFakeClient(),
+      client: createFakeOakPathBasedClient(),
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
     });
@@ -75,7 +71,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue(err(new Error('boom')));
 
     const module = createMcpToolsModule({
-      client: createFakeClient(),
+      client: createFakeOakPathBasedClient(),
       executeMcpTool,
       searchRetrieval: createStubSearchRetrieval(),
     });

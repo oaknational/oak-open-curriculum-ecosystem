@@ -29,6 +29,15 @@ const emptyFs: FsPredicates = {
 const appRoot = '/app';
 
 describe('resolveBulkDir', () => {
+  it('returns err when raw path is empty or whitespace', () => {
+    const result = resolveBulkDir('   ', appRoot, validFs);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('bulk_dir_not_found');
+      expect(result.error.message).toContain('cannot be empty');
+    }
+  });
+
   it('passes through an absolute path unchanged', () => {
     const result = resolveBulkDir('/absolute/bulk-downloads', appRoot, validFs);
     expect(result.ok).toBe(true);

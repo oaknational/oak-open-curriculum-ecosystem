@@ -1,10 +1,10 @@
 /**
- * Shared CLI infrastructure — SDK factory, output formatting,
+ * Shared CLI infrastructure — client construction, output formatting,
  * input validation, and pass-through command registration.
  *
- * Re-exports from create-cli-sdk, output, validators, and pass-through modules.
+ * Re-exports from shared helpers, output, validators, and pass-through modules.
  */
-export { createCliSdk, createEsClient } from './create-cli-sdk.js';
+export { createEsClient } from './create-cli-sdk.js';
 export type { CliSdkEnv } from './create-cli-sdk.js';
 export {
   printSuccess,

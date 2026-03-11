@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { typeSafeGet } from '@oaknational/type-helpers';
 
 // Smoke tests CAN make network calls - use real API
 process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'false';
@@ -16,23 +17,33 @@ interface ToolSuccessEnvelope {
   readonly data: unknown;
 }
 
+function isUnknownRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function getOwn(value: Record<string, unknown>, key: string): unknown {
+  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    return undefined;
+  }
+  return typeSafeGet(value, key);
+}
+
 function isToolSuccessEnvelope(value: unknown): value is ToolSuccessEnvelope {
-  if (typeof value !== 'object' || value === null) {
+  if (!isUnknownRecord(value)) {
     return false;
   }
-  const candidate = value as Record<string, unknown>;
+  const status = getOwn(value, 'status');
   return (
-    Object.prototype.hasOwnProperty.call(candidate, 'status') &&
-    Object.prototype.hasOwnProperty.call(candidate, 'data')
+    (typeof status === 'number' || typeof status === 'string') &&
+    getOwn(value, 'data') !== undefined
   );
 }
 
 function hasTranscript(value: unknown): value is { readonly transcript: string } {
-  if (typeof value !== 'object' || value === null) {
+  if (!isUnknownRecord(value)) {
     return false;
   }
-  const candidate = value as Record<string, unknown>;
-  return typeof candidate.transcript === 'string';
+  return typeof getOwn(value, 'transcript') === 'string';
 }
 
 function hasNotFoundEnvelope(value: unknown): value is {
@@ -40,19 +51,29 @@ function hasNotFoundEnvelope(value: unknown): value is {
   readonly code: string;
   readonly data?: Record<string, unknown>;
 } {
-  if (typeof value !== 'object' || value === null) {
+  if (!isUnknownRecord(value)) {
     return false;
   }
-  const candidate = value as Record<string, unknown>;
-  return typeof candidate.message === 'string' && typeof candidate.code === 'string';
+  return typeof getOwn(value, 'message') === 'string' && typeof getOwn(value, 'code') === 'string';
 }
 
 function isCallToolResult(value: unknown): value is CallToolResult {
-  if (typeof value !== 'object' || value === null) {
+  if (!isUnknownRecord(value)) {
     return false;
   }
-  const candidate = value as { readonly content?: unknown; readonly isError?: unknown };
-  return Array.isArray(candidate.content);
+  return Array.isArray(getOwn(value, 'content'));
+}
+
+function isMcpTextContentArray(value: unknown): value is readonly McpTextContent[] {
+  if (!Array.isArray(value)) {
+    return false;
+  }
+  return value.every((entry) => {
+    if (typeof entry !== 'object' || entry === null) {
+      return false;
+    }
+    return typeof getOwn(entry, 'type') === 'string';
+  });
 }
 
 function expectSuccess(result: Awaited<ReturnType<Client['callTool']>>): ToolSuccessEnvelope {
@@ -60,7 +81,10 @@ function expectSuccess(result: Awaited<ReturnType<Client['callTool']>>): ToolSuc
     throw new Error('Tool invocation did not return an MCP content payload');
   }
   expect(result.isError).not.toBe(true);
-  const content = result.content as readonly McpTextContent[];
+  if (!isMcpTextContentArray(result.content)) {
+    throw new Error('Tool response did not include textual content');
+  }
+  const content = result.content;
   if (content.length === 0) {
     throw new Error('Tool response did not include textual content');
   }

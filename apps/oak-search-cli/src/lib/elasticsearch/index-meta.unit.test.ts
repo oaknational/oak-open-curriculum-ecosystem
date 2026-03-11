@@ -205,10 +205,16 @@ describe('writeIndexMeta', () => {
     expect(isOk(result)).toBe(true);
   });
 
-  it('IndexMetaDocSchema rejects incomplete documents', () => {
+  it('returns validation_error for incomplete metadata documents', async () => {
     const incomplete = { version: 'v2024-01-01-120000' };
     const parsed = IndexMetaDocSchema.safeParse(incomplete);
     expect(parsed.success).toBe(false);
+
+    const result = await writeIndexMeta(mockClient, incomplete);
+    expect(isErr(result)).toBe(true);
+    if (isErr(result)) {
+      expect(result.error.type).toBe('validation_error');
+    }
   });
 
   it('returns mapping_error for strict_dynamic_mapping_exception', async () => {

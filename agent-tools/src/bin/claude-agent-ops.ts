@@ -13,6 +13,7 @@ import {
   runGit,
 } from '../core/runtime';
 import { writeErrorLine, writeLine } from '../core/terminal-output';
+
 interface CliArgs {
   command:
     | 'status'
@@ -26,11 +27,26 @@ interface CliArgs {
   agentId: string;
   watch: boolean;
 }
-
-function run(): void {
+type CliHandler = () => void | Promise<void>;
+const CLI_COMMANDS = [
+  'status',
+  'worktrees',
+  'log',
+  'diff',
+  'commit-ready',
+  'preflight',
+  'cleanup',
+  'help',
+] as const;
+type CliCommand = (typeof CLI_COMMANDS)[number];
+const CLI_COMMAND_SET: ReadonlySet<string> = new Set(CLI_COMMANDS);
+const HELP_ALIASES = new Set(['help', '--help', '-h']);
+const HELP_TEXT =
+  'claude-agent-ops — CLI for monitoring and managing Claude background agents\n\nCommands:\n  status [--watch]\n  worktrees\n  log <id>\n  diff [id]\n  commit-ready\n  preflight\n  cleanup\n  help';
+async function run(): Promise<void> {
   const args = parseCliArgs(process.argv.slice(2));
   const handlers = createHandlers(args);
-  handlers[args.command]();
+  await handlers[args.command]();
 }
 function parseCliArgs(argv: string[]): CliArgs {
   const command = parseCommand(argv[0] ?? 'status');
@@ -40,26 +56,19 @@ function parseCliArgs(argv: string[]): CliArgs {
     watch: argv.includes('--watch') || argv.includes('-w'),
   };
 }
-function parseCommand(value: string): CliArgs['command'] {
-  const commands: Record<string, CliArgs['command']> = {
-    status: 'status',
-    worktrees: 'worktrees',
-    log: 'log',
-    diff: 'diff',
-    'commit-ready': 'commit-ready',
-    preflight: 'preflight',
-    cleanup: 'cleanup',
-    help: 'help',
-    '--help': 'help',
-    '-h': 'help',
-  };
-  const command = commands[value];
-  if (command) {
-    return command;
+function parseCommand(value: string): CliCommand {
+  if (HELP_ALIASES.has(value)) {
+    return 'help';
+  }
+  if (isCliCommand(value)) {
+    return value;
   }
   return exitWithError(`Unknown command '${value}'`);
 }
-function createHandlers(args: CliArgs): Record<CliArgs['command'], () => void> {
+function isCliCommand(value: string): value is CliCommand {
+  return CLI_COMMAND_SET.has(value);
+}
+function createHandlers(args: CliArgs): Record<CliCommand, CliHandler> {
   return {
     help: () => printHelp(),
     status: () => printStatus(args.watch),
@@ -71,7 +80,7 @@ function createHandlers(args: CliArgs): Record<CliArgs['command'], () => void> {
     cleanup: () => printCleanup(),
   };
 }
-function printStatus(watch: boolean): void {
+async function printStatus(watch: boolean): Promise<void> {
   const root = repoRoot();
   while (true) {
     if (watch) {
@@ -94,7 +103,7 @@ function printStatus(watch: boolean): void {
       return;
     }
     writeLine('Refreshing in 5s. Ctrl-C to stop.');
-    waitMs(5000);
+    await waitMs(5000);
   }
 }
 function printWorktrees(): void {
@@ -197,17 +206,7 @@ function printCleanup(): void {
   writeLine(`Cleaned ${cleaned} worktrees`);
 }
 function printHelp(): void {
-  writeLine(`claude-agent-ops — CLI for monitoring and managing Claude background agents
-
-Commands:
-  status [--watch]
-  worktrees
-  log <id>
-  diff [id]
-  commit-ready
-  preflight
-  cleanup
-  help`);
+  writeLine(HELP_TEXT);
 }
 function listWorktreeNames(root: string): string[] {
   const worktreePath = join(root, '.claude', 'worktrees');
@@ -237,12 +236,14 @@ function readEvents(root: string, agentId: string) {
 function runPnpmGate(gate: string, root: string): boolean {
   return spawnSync('pnpm', [gate], { cwd: root, stdio: 'ignore' }).status === 0;
 }
-function waitMs(milliseconds: number): void {
-  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
+function waitMs(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 function exitWithError(message: string): never {
   writeErrorLine(`Error: ${message}`);
   process.exit(1);
 }
-
-run();
+run().catch((error: unknown) => {
+  writeErrorLine(`Error: ${error instanceof Error ? error.message : String(error)}`);
+  process.exit(1);
+});

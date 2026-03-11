@@ -59,6 +59,7 @@ function createMockAdmin(): AdminService {
         results: [],
       }),
     ),
+    countDocs: vi.fn().mockResolvedValue(ok([])),
   };
 }
 

@@ -13,6 +13,7 @@
 import type { Command } from 'commander';
 import { createSearchSdk } from '@oaknational/oak-search-sdk';
 import { isIndexMetaDoc } from '@oaknational/sdk-codegen/search';
+import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import {
   createEsClient,
   withEsClient,
@@ -33,6 +34,26 @@ const metaDeps = {
     process.exitCode = c;
   },
 };
+
+/**
+ * Parse and validate metadata JSON before any Elasticsearch resources are created.
+ *
+ * @param json - Raw JSON string from CLI argument
+ * @returns Parsed metadata document
+ */
+export function parseMetaJson(json: string): IndexMetaDoc {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(json);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Invalid metadata JSON: ${message}`, { cause: error });
+  }
+  if (!isIndexMetaDoc(parsed)) {
+    throw new Error('Invalid metadata JSON: does not match IndexMetaDoc schema.');
+  }
+  return parsed;
+}
 
 /**
  * Register the `meta get` subcommand.
@@ -81,6 +102,16 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .description('Write index metadata to Elasticsearch')
     .argument('<json>', 'JSON string of metadata to write')
     .action(async (json: string) => {
+      let parsed: IndexMetaDoc;
+      try {
+        parsed = parseMetaJson(json);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        adminLogger.error(message, { error });
+        printError(message);
+        process.exitCode = 1;
+        return;
+      }
       const esClient = createEsClient(cliEnv);
       await withEsClient(
         esClient,
@@ -89,10 +120,6 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
             deps: { esClient },
             config: buildSearchSdkConfig(cliEnv),
           });
-          const parsed: unknown = JSON.parse(json);
-          if (!isIndexMetaDoc(parsed)) {
-            throw new Error('Invalid metadata JSON: does not match IndexMetaDoc schema.');
-          }
           const result = await handleSetMeta(sdk.admin, parsed);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);

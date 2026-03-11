@@ -8,65 +8,7 @@ import { UnifiedLogger } from './unified-logger';
 import type { ResourceAttributes } from './resource-attributes';
 import type { StdoutSink } from './stdout-sink';
 import type { FileSinkInterface } from './file-sink';
-import type { OtelLogRecord } from './otel-format';
-
-/**
- * Parse a log record line into a typed OtelLogRecord
- */
-function parseLogRecord(line: string): OtelLogRecord {
-  const parsed: unknown = JSON.parse(line);
-  if (!isOtelLogRecord(parsed)) {
-    throw new Error('Invalid OTel log record payload');
-  }
-  return parsed;
-}
-
-interface OtelLogRecordCandidate {
-  Timestamp?: unknown;
-  ObservedTimestamp?: unknown;
-  SeverityNumber?: unknown;
-  SeverityText?: unknown;
-  Body?: unknown;
-  Attributes?: unknown;
-  Resource?: unknown;
-}
-
-function isOtelLogRecord(value: unknown): value is OtelLogRecord {
-  if (!isOtelLogRecordCandidate(value)) {
-    return false;
-  }
-  return (
-    hasRequiredStringFields(value) &&
-    hasRequiredNumberFields(value) &&
-    hasRequiredObjectFields(value)
-  );
-}
-
-function isOtelLogRecordCandidate(value: unknown): value is OtelLogRecordCandidate {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function hasRequiredStringFields(candidate: OtelLogRecordCandidate): boolean {
-  return (
-    typeof candidate.Timestamp === 'string' &&
-    typeof candidate.ObservedTimestamp === 'string' &&
-    typeof candidate.SeverityText === 'string' &&
-    typeof candidate.Body === 'string'
-  );
-}
-
-function hasRequiredNumberFields(candidate: OtelLogRecordCandidate): boolean {
-  return typeof candidate.SeverityNumber === 'number';
-}
-
-function hasRequiredObjectFields(candidate: OtelLogRecordCandidate): boolean {
-  return (
-    typeof candidate.Attributes === 'object' &&
-    candidate.Attributes !== null &&
-    typeof candidate.Resource === 'object' &&
-    candidate.Resource !== null
-  );
-}
+import { parseOtelLogRecord } from './test-helpers/parse-otel-log-record';
 
 describe('UnifiedLogger', () => {
   let stdoutSink: StdoutSink;
@@ -144,7 +86,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('TRACE');
       expect(record.SeverityNumber).toBe(1);
       expect(record.Body).toBe('trace message');
@@ -163,7 +105,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('DEBUG');
       expect(record.SeverityNumber).toBe(5);
     });
@@ -181,7 +123,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('INFO');
       expect(record.SeverityNumber).toBe(9);
     });
@@ -199,7 +141,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('WARN');
       expect(record.SeverityNumber).toBe(13);
     });
@@ -217,7 +159,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('ERROR');
       expect(record.SeverityNumber).toBe(17);
     });
@@ -235,7 +177,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.SeverityText).toBe('FATAL');
       expect(record.SeverityNumber).toBe(21);
     });
@@ -269,7 +211,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes['exception.type']).toBe('Error');
       expect(record.Attributes['exception.message']).toBe('test error');
     });
@@ -287,7 +229,7 @@ describe('UnifiedLogger', () => {
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes.userId).toBe('123');
       expect(record.Attributes.action).toBe('login');
     });
@@ -370,7 +312,7 @@ describe('UnifiedLogger', () => {
       logger.info('test message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
   });
@@ -389,7 +331,7 @@ describe('UnifiedLogger', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Attributes.parentKey).toBe('parentValue');
       expect(record.Attributes.childKey).toBe('childValue');
     });
@@ -423,7 +365,7 @@ describe('UnifiedLogger', () => {
       child.info('child message');
 
       const written = stdoutWriteSpy.mock.calls[0]?.[0];
-      const record = parseLogRecord(written);
+      const record = parseOtelLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
 
