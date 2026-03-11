@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,7 +13,6 @@ import {
   runGit,
 } from '../core/runtime';
 import { writeErrorLine, writeLine } from '../core/terminal-output';
-
 interface CliArgs {
   command:
     | 'status'
@@ -52,6 +50,8 @@ function parseCommand(value: string): CliArgs['command'] {
     preflight: 'preflight',
     cleanup: 'cleanup',
     help: 'help',
+    '--help': 'help',
+    '-h': 'help',
   };
   const command = commands[value];
   if (command) {
@@ -72,11 +72,11 @@ function createHandlers(args: CliArgs): Record<CliArgs['command'], () => void> {
   };
 }
 function printStatus(watch: boolean): void {
+  const root = repoRoot();
   while (true) {
     if (watch) {
       process.stdout.write('\x1Bc');
     }
-    const root = repoRoot();
     const ids = listAgentShortIds(root);
     writeLine('Agent Dashboard');
     if (ids.length === 0) {

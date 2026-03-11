@@ -15,6 +15,21 @@ describe('CLI smoke', () => {
     expect(output).toContain('claude-agent-ops');
   });
 
+  it('prints help for claude-agent-ops --help and -h aliases', () => {
+    const longHelpOutput = execSync('pnpm tsx src/bin/claude-agent-ops.ts --help', {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    const shortHelpOutput = execSync('pnpm tsx src/bin/claude-agent-ops.ts -h', {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    expect(longHelpOutput).toContain('claude-agent-ops');
+    expect(shortHelpOutput).toContain('claude-agent-ops');
+  });
+
   it('prints usage for cursor-session-from-claude-session', () => {
     const output = execSync(
       'pnpm tsx src/bin/cursor-session-from-claude-session.ts find --last-hours 1',
