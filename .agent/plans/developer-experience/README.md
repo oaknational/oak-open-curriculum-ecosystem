@@ -43,7 +43,7 @@ On 2026-03-03 the collection was manually migrated into lifecycle lanes, and the
 - Purpose: define the supporting enforcement bundle and staged rollout gates required before Oak enables `max-files-per-dir`
 - Folded/delegated sources:
   - `active/devx-strictness-convergence.plan.md` (directory-complexity subset extracted)
-  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
   - `../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 
 ## Indexes

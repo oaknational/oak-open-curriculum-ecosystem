@@ -11,10 +11,10 @@
  * @see https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text-reference
  */
 
-import type { AdminService, AdminError, IndexDocCount } from '@oaknational/oak-search-sdk';
+import type { AdminService, AdminError, IndexDocCount } from '@oaknational/oak-search-sdk/admin';
 import type { Result } from '@oaknational/result';
 
-export type { IndexDocCount } from '@oaknational/oak-search-sdk';
+export type { IndexDocCount } from '@oaknational/oak-search-sdk/admin';
 
 /**
  * Fetch true parent document counts for all known search indexes.

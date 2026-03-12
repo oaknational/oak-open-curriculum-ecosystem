@@ -148,8 +148,8 @@ async function runBenchmark(): Promise<void> {
     console.error('Environment validation failed:', configResult.error.message);
     process.exit(1);
   }
-  await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
+  await withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchThreads.bind(retrieval);
 
     console.log(`\nThread Benchmark (oak_threads index)`);
     console.log(`${'='.repeat(60)}`);

@@ -15,7 +15,7 @@
 - **Context**: ESLint `max-files-per-dir` rule already exists at
   `packages/core/oak-eslint/src/rules/max-files-per-dir.ts`. Wiring
   tracked in
-  `.agent/plans/agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  `.agent/plans/agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
   (Phase 1).
 - **Benefit**: Enforces modularity structurally, preventing "junk drawer" directories (for example, `utils/` with 50 files).
 

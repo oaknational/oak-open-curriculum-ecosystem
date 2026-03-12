@@ -10,11 +10,10 @@ Executable plans currently in progress.
 | A3 | [bulk-metadata-quick-wins.execution.plan.md](./bulk-metadata-quick-wins.execution.plan.md) | Boundary 03 — preserve and widen low-risk bulk lesson/unit metadata for later asset and retrieval work | 🟢 Active |
 | A4 | [kg-alignment-audit.execution.plan.md](./kg-alignment-audit.execution.plan.md) | Audit measured overlap between ontology graph entities and search-facing curriculum records before broader graph integration | 🟢 Active |
 | A5 | [category-integration-remediation.md](./category-integration-remediation.md) | Wire existing category supplementation infrastructure through the bulk ingestion orchestration layer | 🟡 Planning |
-| A6 | [search-cli-sdk-boundary-migration.execution.plan.md](./search-cli-sdk-boundary-migration.execution.plan.md) | Execute strict CLI/SDK capability boundary migration (read/admin), lint fitness enforcement, and duplication removal | 🟢 Active |
+| A6 | [search-cli-sdk-boundary-migration.execution.plan.md](./search-cli-sdk-boundary-migration.execution.plan.md) | Execute strict CLI/SDK capability boundary migration (read/admin), lint fitness enforcement, and duplication removal | ✅ Completed (retained as evidence) |
 
-`unified-versioned-ingestion.plan.md` is the standalone-ready session entry for
-the blue/green lifecycle integration. It supersedes the predecessor plan
-and incorporates all 16 reviewer findings as planned work.
+`semantic-search.prompt.md` is the standalone-ready session entry for the next
+session. Follow its incident-first ordering and operator-run ingest protocol.
 
 `bulk-metadata-quick-wins.execution.plan.md` is the standalone-ready session
 entry for the current Boundary 03 workstream.
@@ -26,9 +25,9 @@ for the first ontology/search graph-enablement workstream.
 checkpoint first (`admin validate-aliases`, then metadata schema/mapping
 remediation path) before any archive decision.
 
-`search-cli-sdk-boundary-migration.execution.plan.md` is the executable
-follow-on implementation plan produced from the diagnostic doctrine in
-`.cursor/plans/search_cli-sdk_boundary_diagnosis_833a74ec.plan.md`.
+`search-cli-sdk-boundary-migration.execution.plan.md` is retained as completed
+boundary evidence. Boundary doctrine is now anchored in
+[ADR-134](../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md).
 
 ## Reference Documents
 

@@ -12,7 +12,7 @@ import type {
   ObservabilityService,
   ObservabilityError,
   TelemetryFetchOptions,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 /**
  * Fetch persisted telemetry from Elasticsearch.

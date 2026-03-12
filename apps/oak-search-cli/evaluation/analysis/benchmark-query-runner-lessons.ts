@@ -25,7 +25,7 @@ import type {
   SearchLessonsParams,
   LessonsSearchResult,
   RetrievalError,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 /**
  * Search function type for dependency injection.

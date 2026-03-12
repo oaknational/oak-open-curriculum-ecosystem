@@ -1,14 +1,14 @@
 /**
- * Unit tests for benchmark query runner.
+ * Integration tests for benchmark query runner.
  *
  * Tests the query execution and metric calculation logic
- * using mock SDK retrieval service responses.
+ * using injected retrieval-service responses.
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { ok } from '@oaknational/result';
+import { err, ok } from '@oaknational/result';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
-import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
+import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk/read';
 import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 import { runQuery, type RunQueryInput } from './benchmark-query-runner-lessons.js';
 
@@ -57,19 +57,6 @@ describe('runQuery', () => {
   }
 
   describe('category field', () => {
-    it('should include category in RunQueryInput', () => {
-      // Type check: category should be accepted in input
-      const input: RunQueryInput = {
-        query: 'test query',
-        expectedRelevance: { 'test-slug': 3 },
-        subject: 'maths',
-        phase: 'primary',
-        category: 'precise-topic',
-      };
-
-      expect(input.category).toBe('precise-topic');
-    });
-
     it('should include category in QueryResult', async () => {
       const mockSearch = createMockSearch(['test-slug']);
 
@@ -129,50 +116,69 @@ describe('runQuery', () => {
       expect(mockSearch).toHaveBeenCalledWith(
         expect.objectContaining({ query: 'apple', size: 10 }),
       );
+      expect(mockSearch.mock.calls[0]?.[0]).not.toHaveProperty('subject');
     });
 
-    it('should calculate metrics correctly for cross-subject queries', async () => {
-      const mockSearch = createMockSearch(['relevant-slug', 'other-slug']);
+    it('should throw when SDK search returns an error result', async () => {
+      const mockSearch = vi.fn().mockResolvedValue(
+        err({
+          type: 'es_error',
+          message: 'Search unavailable',
+        }),
+      );
 
       const input: RunQueryInput = {
-        query: 'tree',
+        query: 'apple',
         expectedRelevance: { 'relevant-slug': 3 },
         subject: undefined,
         phase: undefined,
         category: 'basic',
       };
 
-      const result = await runQuery(input, mockSearch);
-
-      expect(result.mrr).toBe(1);
-      expect(result.hasHit).toBe(true);
+      await expect(runQuery(input, mockSearch)).rejects.toThrow(
+        'Benchmark search failed for query "apple": es_error: Search unavailable',
+      );
     });
   });
 
-  describe('metric calculation', () => {
-    it('should calculate MRR correctly when first result is relevant', async () => {
+  describe('result metrics and request construction', () => {
+    it('returns expected metrics and result shape for deterministic results', async () => {
       const mockSearch = createMockSearch(['relevant-slug', 'other-slug']);
-
+      const expectedRelevance = { 'relevant-slug': 3 };
       const input: RunQueryInput = {
-        query: 'test query',
-        expectedRelevance: { 'relevant-slug': 3 },
+        query: 'apple tree',
+        expectedRelevance,
         subject: 'maths',
-        phase: 'primary',
+        phase: 'secondary',
+        queryKeyStage: 'ks4',
         category: 'precise-topic',
       };
 
       const result = await runQuery(input, mockSearch);
 
-      expect(result.mrr).toBe(1); // First result is relevant
+      expect(result.mrr).toBe(1);
+      expect(result.ndcg10).toBe(1);
+      expect(result.precision3).toBeCloseTo(1 / 3);
+      expect(result.recall10).toBe(1);
       expect(result.hasHit).toBe(true);
+      expect(result.actualResults).toEqual(['relevant-slug', 'other-slug']);
+      expect(result.expectedRelevance).toEqual(expectedRelevance);
+      expect(result.latencyMs).toBeGreaterThanOrEqual(0);
+
+      expect(mockSearch).toHaveBeenCalledWith({
+        query: 'apple tree',
+        subject: 'maths',
+        keyStage: 'ks4',
+        size: 10,
+      });
     });
 
-    it('should calculate MRR correctly when second result is relevant', async () => {
-      const mockSearch = createMockSearch(['other-slug', 'relevant-slug']);
-
+    it('returns zeroed hit metrics for empty result sets', async () => {
+      const mockSearch = createMockSearch([]);
+      const expectedRelevance = { 'relevant-slug': 3 };
       const input: RunQueryInput = {
-        query: 'test query',
-        expectedRelevance: { 'relevant-slug': 3 },
+        query: 'empty query',
+        expectedRelevance,
         subject: 'maths',
         phase: 'primary',
         category: 'precise-topic',
@@ -180,25 +186,12 @@ describe('runQuery', () => {
 
       const result = await runQuery(input, mockSearch);
 
-      expect(result.mrr).toBe(0.5); // Second result is relevant
-      expect(result.hasHit).toBe(true);
-    });
-
-    it('should return zero MRR when no results are relevant', async () => {
-      const mockSearch = createMockSearch(['other-slug-1', 'other-slug-2']);
-
-      const input: RunQueryInput = {
-        query: 'test query',
-        expectedRelevance: { 'relevant-slug': 3 },
-        subject: 'maths',
-        phase: 'primary',
-        category: 'precise-topic',
-      };
-
-      const result = await runQuery(input, mockSearch);
-
-      expect(result.mrr).toBe(0);
+      expect(result.actualResults).toEqual([]);
       expect(result.hasHit).toBe(false);
+      expect(result.mrr).toBe(0);
+      expect(result.ndcg10).toBe(0);
+      expect(result.precision3).toBe(0);
+      expect(result.recall10).toBe(0);
     });
   });
 });

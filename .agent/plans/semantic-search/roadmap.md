@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — seven plans active in `active/` (`cli-robustness` remains an active incident), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Status**: ✅ Milestones 0 and 1 complete — six plans active in `active/` (`cli-robustness` remains an active incident), boundary migration lane completed and retained as evidence, Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
 **Last Updated**: 2026-03-11
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -68,12 +68,12 @@ Cross-collection sequencing note:
   and Elasticsearch reindex validation (🔄 in progress), then MCP Apps
   infrastructure migration, then graph follow-on work from the active
   alignment audit.
-- Semantic-search currently has seven active plans in `active/`:
+- Semantic-search currently has six active plans in `active/`:
   `cli-robustness` (🔴 active incident — metadata commit failure after alias
   swap), `unified-versioned-ingestion`, `search-sdk-args-extraction`,
   `bulk-metadata-quick-wins`, `kg-alignment-audit`,
-  `category-integration-remediation`, and
-  `search-cli-sdk-boundary-migration`.
+  and `category-integration-remediation`.
+  `search-cli-sdk-boundary-migration` is complete and retained as evidence.
   `short-term-pr-snagging` archived 2026-03-11.
 - The graph lane now has its first evidence-first slice promoted into
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md),
@@ -310,7 +310,7 @@ Current active and queued execution plans:
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
 - [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win
 - [category-integration-remediation.md](active/category-integration-remediation.md) — wire category supplementation through bulk ingestion orchestration
-- [search-cli-sdk-boundary-migration.execution.plan.md](active/search-cli-sdk-boundary-migration.execution.plan.md) — executable migration plan for strict CLI/SDK capability boundaries and lint fitness enforcement
+- [search-cli-sdk-boundary-migration.execution.plan.md](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed strict CLI/SDK capability-boundary migration lane retained as evidence
 - [short-term-pr-snagging.plan.md](archive/completed/short-term-pr-snagging.plan.md) — ✅ complete (archived 2026-03-11)
 - [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
 - [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data

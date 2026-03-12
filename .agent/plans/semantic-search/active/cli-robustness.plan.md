@@ -20,7 +20,7 @@ todos:
     status: pending
   - id: phase-5-boundary-guardrails
     content: "Phase 5 boundary guardrails: verify read/admin split and prevent boundary regression in incident closeout."
-    status: pending
+    status: completed
   - id: phase-4-closeout
     content: "Phase 4 closeout: reviewer gates, ADR/docs propagation, full quality gates, and final acceptance checks."
     status: in_progress
@@ -32,7 +32,7 @@ isProject: false
 
 # CLI Robustness: Metadata Contract Incident and Closeout
 
-**Last Updated**: 12 March 2026  
+**Last Updated**: 12 March 2026 (operator-run ingest protocol integrated)  
 **Status**: Active incident lane (Phase 5) with closeout in progress (Phase 4)  
 **Scope**: `apps/oak-search-cli` command lifecycle, metadata contract integrity, and final robustness closure
 
@@ -244,6 +244,12 @@ pnpm tsx bin/oaksearch.ts admin versioned-ingest
 pnpm tsx bin/oaksearch.ts admin validate-aliases
 ```
 
+Execution protocol:
+
+1. Agent may run non-ingest checks (for example `validate-aliases`) and prepare command context.
+2. Operator starts `admin versioned-ingest` independently for direct observation.
+3. Agent monitors output/evidence and drives remediation or closeout actions.
+
 **Acceptance criteria**:
 
 1. `versioned-ingest` exits with code `0`.
@@ -285,10 +291,9 @@ After GREEN passes:
    - `pnpm tsx bin/oaksearch.ts admin validate-aliases`
 3. No temporary investigative files or debug-only branches remain in this lane.
 
-#### Task 5.6: Boundary guardrail verification (Pending)
+#### Task 5.6: Boundary guardrail verification (Completed)
 
-Apply boundary checks required by CLI/SDK doctrine before incident closeout can
-be declared complete.
+Boundary checks required by CLI/SDK doctrine have been completed and validated.
 
 **Acceptance criteria**:
 
@@ -301,6 +306,17 @@ be declared complete.
    - non-admin CLI modules must not import `@oaknational/oak-search-sdk/admin`
    - app code must not import SDK internal/deep paths
    - boundary lint checks (from the boundary lane enforcement) are green
+
+**Progress snapshot (12 March 2026)**:
+
+- SDK capability surfaces split into explicit `@oaknational/oak-search-sdk/read` and
+  `@oaknational/oak-search-sdk/admin` subpaths.
+- CLI imports migrated to capability surfaces across `search`, `observe`, and `admin`
+  module families.
+- Search CLI lint rules now encode boundary blocking behaviour for read-only module
+  families plus deep/internal path restrictions.
+- Fixture-backed integration proofs validate positive/negative import policy cases.
+- Boundary lane closeout plan marks ADR-134 enforcement and docs/gates complete.
 
 ---
 
@@ -334,8 +350,8 @@ Run specialist reviews appropriate to this lane:
 - completed: `architecture-reviewer-fred`
 - completed: `architecture-reviewer-betty`
 - completed: `architecture-reviewer-wilma`
-- pending for this lane: `test-reviewer`, `type-reviewer`,
-  `docs-adr-reviewer`, `elasticsearch-reviewer`
+- pending for this lane after metadata remediation: incident-focused
+  `test-reviewer`, `type-reviewer`, `docs-adr-reviewer`, `elasticsearch-reviewer`
 
 #### Task 4.2: ADR and docs propagation
 
@@ -419,6 +435,8 @@ pnpm tsx bin/oaksearch.ts admin versioned-ingest
 pnpm tsx bin/oaksearch.ts admin validate-aliases
 ```
 
+   - Operator executes `admin versioned-ingest`; agent monitors and analyses output.
+
 4. If Phase 5 GREEN/REFACTOR acceptance criteria pass, continue directly to:
    - pending reviewer gates (`test-reviewer`, `type-reviewer`,
      `docs-adr-reviewer`, `elasticsearch-reviewer`)
@@ -468,4 +486,5 @@ This lane is complete only when all checks below are true:
 - [`../../../directives/schema-first-execution.md`](../../../directives/schema-first-execution.md)
 - [`../../high-level-plan.md`](../../high-level-plan.md)
 - [`./unified-versioned-ingestion.plan.md`](./unified-versioned-ingestion.plan.md)
-- Historical diagnostic context (platform-local, non-canonical reference): `.cursor/plans/search_cli-sdk_boundary_diagnosis_833a74ec.plan.md`
+- Historical diagnostic context has been consolidated into canonical semantic-search
+  active plans and ADR-134; no platform-local plan dependency remains.

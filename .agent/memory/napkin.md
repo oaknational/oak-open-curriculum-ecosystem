@@ -1,3 +1,54 @@
+## Session 2026-03-12 — Human-facing Practice engineering narrative
+
+### What Was Done
+
+- Created `docs/foundation/agentic-engineering-system.md` — a synthesis document
+  explaining the Practice as an integrated engineering system for human readers.
+- Added discoverable links from 5 entry points: root README, `.agent/HUMANS.md`,
+  `.agent/README.md`, `docs/foundation/quick-start.md`, `docs/README.md`.
+- Added Related links in ADR-119 and ADR-131.
+- Fixed two pre-existing drift issues: README "five→six" portable files, and
+  ADR-131 stale provenance claim (one round-trip → four repos, eight entries).
+- Ran 6 specialist reviewer passes (2 rounds × 3 reviewers: onboarding, docs-adr,
+  architecture-betty).
+
+### Patterns to Remember
+
+- Synthesis documents should link to authoritative sources, not re-explain. Use
+  orienting paragraphs that frame the destination, not duplicate it.
+- When adding a new human-facing document, update ALL discoverable entry points in
+  the same commit — partial discoverability is a P1 onboarding friction.
+- Hardcoded counts in documentation (e.g. "130+ ADRs", "16-agent roster") are
+  drift risks. Use soft descriptors or link to the authoritative source.
+- When multiple reviewers disagree on location (foundation/ vs engineering/ vs
+  "don't create it"), resolve by audience alignment — who is the primary reader and
+  what existing documents sit alongside?
+
+## Session 2026-03-12 — Consolidate-docs stale-link and fitness sweep
+
+### What Was Done
+
+- Ran `/oak-mcp-ecosystem/jc-consolidate-docs` checks across plans, prompts,
+  practice inbox, platform memory/plans, and fitness-ceiling documents.
+- Confirmed practice inbox remains empty (`.agent/practice-core/incoming/`).
+- Fixed stale cross-references after lifecycle moves (notably links that still
+  pointed to root-level plan paths instead of `current/` or
+  `archive/completed/`).
+- Reviewed platform memory/plan artefacts (`~/.claude/projects/.../memory/*`,
+  `~/.claude/plans/*`) and found no additional settled technical doctrine that
+  required extraction into canonical repo docs in this pass.
+
+### Patterns to Remember
+
+- After plan relocation commits, run a focused stale-link sweep for old
+  root-level plan paths; these are easy to miss in adjacent collections and
+  research/icebox docs.
+- Keep archive files immutable during stale-link cleanup unless explicitly
+  asked; prioritise active/current/future and canonical guidance surfaces.
+- Fitness ceilings are a reporting signal: record line-count status and
+  over-ceiling files, but do not force structural splits in the same pass unless
+  requested.
+
 ## Session 2026-03-12 — Commit format guardrails (commitlint)
 
 ### What Was Done

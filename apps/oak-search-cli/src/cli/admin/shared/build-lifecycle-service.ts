@@ -1,5 +1,5 @@
 /**
- * Shared factory for the index lifecycle service.
+ * Admin-only factory for the index lifecycle service.
  *
  * Accepts a pre-created ES client (caller owns creation; caller or
  * `withEsClient` owns cleanup) and wires it into the SDK's lifecycle
@@ -21,7 +21,7 @@ import {
   type IndexLifecycleService,
   type IndexLifecycleDeps,
   type SearchIndexTarget,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/admin';
 import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/logger/node';
 

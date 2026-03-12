@@ -15,6 +15,11 @@ import {
   appBoundaryRules,
   appArchitectureRules,
 } from '@oaknational/eslint-plugin-standards';
+import {
+  adminCliBoundaryRules,
+  mixedCliBoundaryRules,
+  readOnlyCliBoundaryRules,
+} from './eslint.boundary-rules';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
@@ -52,6 +57,30 @@ const eslintConfig = defineConfig(
     },
   },
 
+  // Enforce SDK capability boundaries (ADR-134)
+  {
+    files: ['src/**/*.ts'],
+    // Default policy for non-admin app code.
+    rules: {
+      ...readOnlyCliBoundaryRules,
+    },
+  },
+  {
+    files: ['src/cli/admin/**/*.ts', 'src/lib/indexing/**/*.ts', 'src/adapters/**/*.ts'],
+    // Privileged subtrees override default read-only policy.
+    rules: {
+      ...adminCliBoundaryRules,
+    },
+  },
+  {
+    files: ['evaluation/**/*.ts', 'operations/**/*.ts'],
+    // Evaluation/operations may orchestrate read and admin surfaces, but
+    // still must not use root or internal SDK imports.
+    rules: {
+      ...mixedCliBoundaryRules,
+    },
+  },
+
   // Test file rules
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/test-*.ts', '**/__tests__/**'],
@@ -70,6 +99,7 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
+      ...mixedCliBoundaryRules,
       // Inherit all source file rules
       complexity: ['error', { max: 8 }],
       'max-depth': ['error', 3],
@@ -94,6 +124,7 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
+      ...mixedCliBoundaryRules,
       // Inherit all source file rules
       complexity: ['error', { max: 8 }],
       'max-depth': ['error', 3],
@@ -116,6 +147,7 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
+      ...mixedCliBoundaryRules,
       // Same quality standards as src/
       complexity: ['error', { max: 8 }],
       'max-depth': ['error', 3],
@@ -136,6 +168,7 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
+      ...mixedCliBoundaryRules,
       // Simpler rules for utilities
       complexity: ['error', { max: 8 }],
       'max-lines-per-function': ['error', 50],

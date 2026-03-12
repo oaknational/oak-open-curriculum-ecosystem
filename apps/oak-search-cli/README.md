@@ -46,6 +46,22 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
 
+## SDK Capability Boundary (ADR-134)
+
+`@oaknational/oak-search-sdk` is consumed through explicit capability subpaths:
+
+- non-admin modules (`search`, `observe`, and shared read wiring) import from `@oaknational/oak-search-sdk/read`
+- admin modules import from `@oaknational/oak-search-sdk/admin`
+- `src/**/*.ts` defaults to non-admin policy; only explicitly privileged subtrees may import admin
+  (`src/cli/admin/**`, `src/lib/indexing/**`, `src/adapters/**`)
+- `evaluation/**` and `operations/**` are mixed-capability but cannot import SDK root/internal paths
+- app code must not import SDK internal/deep paths (`internal/**`, `dist/**`)
+- shared index resolver primitives are canonical on SDK `/read`; admin modules consume them via
+  SDK `/admin` re-exports (not direct `/read` imports), and never through transitive internal paths
+
+This policy is enforced by lint in `apps/oak-search-cli/eslint.config.ts` and
+fixture-backed integration tests in `apps/oak-search-cli/eslint-boundary.integration.test.ts`.
+
 ---
 
 ## Features and Possibilities
@@ -108,9 +124,10 @@ apps/oak-search-cli/
 ├─ bin/oaksearch.ts              # CLI entry point (commander)
 ├─ src/
 │  ├─ cli/                       # CLI subcommand groups
-│  │  ├─ shared/                 # SDK factory, resource lifecycle, validators, output, pass-through
+│  │  ├─ shared/                 # SDK factory, read-safe config, validators, output, pass-through
 │  │  ├─ search/                 # oaksearch search {lessons|units|sequences|suggest|facets}
 │  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|versioned-ingest|stage|...}
+│  │  │  └─ shared/              # Admin-only lifecycle service composition
 │  │  ├─ observe/                # oaksearch observe {telemetry|summary|purge}
 │  │  └─ eval/                   # oaksearch eval {benchmark|validate|codegen}
 │  ├─ lib/hybrid-search/        # RRF query builders, score normalisation, search orchestration

@@ -1,9 +1,9 @@
 /**
- * Unit tests for `createRunVersionedIngest` — the CLI-layer closure
+ * Integration tests for `createRunVersionedIngest` — the CLI-layer closure
  * that bridges the bulk ingestion pipeline to the lifecycle service.
  *
  * @remarks
- * Tests use simple fakes injected as arguments (ADR-078). No vi.mock.
+ * Tests use simple injected fakes (ADR-078). No global module mocking.
  */
 import { describe, it, expect, vi } from 'vitest';
 import type { OakClient } from '../../adapters/oak-adapter';
@@ -17,7 +17,7 @@ import { createRunVersionedIngest } from './run-versioned-ingest';
 // Fakes
 // ---------------------------------------------------------------------------
 
-/** Structural OakClient fake matching hybrid-data-source.unit.test.ts pattern. */
+/** Structural OakClient fake matching hybrid-data-source integration test pattern. */
 function fakeOakClient(): OakClient {
   return {
     getUnitsByKeyStageAndSubject: vi.fn(),

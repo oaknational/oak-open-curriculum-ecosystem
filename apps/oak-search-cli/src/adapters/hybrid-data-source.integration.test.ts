@@ -1,5 +1,5 @@
 /**
- * Unit tests for HybridDataSource.
+ * Integration tests for HybridDataSource.
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -7,7 +7,7 @@ import { createHybridDataSource, type HybridDataSource } from './hybrid-data-sou
 import { processBulkFileBatch } from './hybrid-batch-processor.js';
 import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/sdk-codegen/bulk';
 import type { OakClient } from './oak-adapter';
-import type { AdminError } from '@oaknational/oak-search-sdk';
+import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 import { unwrap } from '@oaknational/result';
 
 /** Unwrap a Result from createHybridDataSource, failing the test on error. */
@@ -147,6 +147,21 @@ describe('createHybridDataSource', () => {
 
     // 1 lesson + 1 unit + 1 rollup, each with index action + doc = 6 operations
     expect(ops.length).toBe(6);
+
+    const targetIndexes = ops.flatMap((entry): readonly string[] => {
+      if (typeof entry !== 'object' || entry === null || !('index' in entry)) {
+        return [];
+      }
+      const indexAction = entry.index;
+      if (typeof indexAction !== 'object' || indexAction === null || !('_index' in indexAction)) {
+        return [];
+      }
+      const indexName = indexAction._index;
+      return typeof indexName === 'string' ? [indexName] : [];
+    });
+
+    expect(targetIndexes).toHaveLength(3);
+    expect(targetIndexes).toEqual(['oak_lessons', 'oak_units', 'oak_unit_rollup']);
   });
 
   it('provides processing stats including rollup count', async () => {
@@ -370,5 +385,33 @@ describe('processBulkFileBatch', () => {
     expect(result.stats.lessonCount).toBe(3);
     expect(result.stats.unitCount).toBe(3);
     expect(result.stats.rollupCount).toBe(3);
+  });
+
+  it('returns data_source_error when one file fails during batch processing', async () => {
+    const safeFile = createMockBulkFile({
+      sequenceSlug: 'maths-primary',
+      lessons: [createMockLesson({ keyStageSlug: 'ks2' })],
+    });
+    const failingFile = createMockBulkFile({
+      sequenceSlug: 'maths-secondary',
+      sequence: [createMockUnit({ unitSlug: 'algebra-higher', keyStageSlug: 'ks4' })],
+      lessons: [createMockLesson({ keyStageSlug: 'ks4', unitSlug: 'algebra-higher' })],
+    });
+    const client = createMockClient();
+    vi.mocked(client.getSubjectSequences).mockRejectedValue(new Error('Injected batch failure'));
+
+    const result = await processBulkFileBatch(
+      [safeFile, failingFile],
+      client,
+      'oak_lessons',
+      'oak_units',
+      'oak_unit_rollup',
+    );
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('data_source_error');
+      expect(result.error.message).toContain('Injected batch failure');
+    }
   });
 });

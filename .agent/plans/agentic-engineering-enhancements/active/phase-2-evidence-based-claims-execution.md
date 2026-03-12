@@ -131,7 +131,7 @@ task execution:
    - Run: `rg -n "not merge-ready" .agent/plans/templates/components/evidence-and-claims.md`
    - Expected: at least 1 match (already present)
 2. **Ensure adoption plan also states the rule**
-   - Run: `rg -n "not merge-ready" .agent/plans/agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md`
+   - Run: `rg -n "not merge-ready" .agent/plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md`
    - Expected: at least 1 match; if missing, add it
 3. **Validate combined coverage**
    - Run: `rg -c "not merge-ready|No evidence for non-trivial claim" .agent/plans/agentic-engineering-enhancements .agent/plans/templates/components/evidence-and-claims.md`

@@ -113,6 +113,11 @@ Ephemeral directories like `tmp/` are gitignored and not listed.
 
 ## Entry point and reading order
 
+> **Human developers**: the Practice documented here is also explained
+> through an engineering lens in
+> [How the Agentic Engineering System Works](../docs/foundation/agentic-engineering-system.md)
+> — same system, written from a systems lens.
+
 Start with [directives/AGENT.md](directives/AGENT.md). The canonical
 grounding sequence is:
 

@@ -31,14 +31,17 @@ Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
   → Repo public, server live at curriculum-mcp-alpha.oaknational.dev, v1.0.0
 
 Milestone 2: Open Public Alpha                   🔄 NEXT
-  → Production Clerk, social providers, public sign-up
-  → Edge rate limiting on OAuth proxy endpoints
-  → Anyone can sign up and use Oak's curriculum tools
+  → ES re-index + search quality validation
+  → Replace OpenAI app with MCP Apps infrastructure
+  → Knowledge graph alignment audit
+  → Dev Clerk remains; search and graph are the gates
 
 Milestone 3: Public Beta                         📋 PLANNED
-  → Operational hardening, observability, extension surfaces
-  → Architectural enforcement, mutation testing, tech debt
-  → Monitoring, alerting, incident response
+  → Production Clerk integration (social providers, public sign-up)
+  → Production Sentry + full OTel logging
+  → KG alignment (if not completed in M2)
+  → Exemplar MCP App UI (user_search tool, React, design input)
+  → Operational hardening, extension surfaces, tech debt
 ```
 
 ### Milestone State Progression
@@ -48,8 +51,8 @@ Milestone 3: Public Beta                         📋 PLANNED
 | Closed private alpha | Private | Private alpha | Test Clerk | — |
 | Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
 | Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
-| Open public alpha (M2) | Public | **Open public alpha** | **Prod Clerk** | Clerk prod migration |
-| Public beta (M3) | Public | **Public beta** | Prod Clerk | Operational hardening |
+| Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment |
+| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Prod Clerk, Prod Sentry+OTel, KG alignment, exemplar UI |
 
 ---
 
@@ -142,7 +145,7 @@ real-world validation with a controlled user base before broader release.
 - Result pattern unification: ✅ COMPLETE —
   [mcp-result-pattern-unification.execution.plan.md](semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md)
 - STDIO/HTTP alignment:
-  [stdio-http-server-alignment.md](architecture-and-infrastructure/stdio-http-server-alignment.md)
+  [stdio-http-server-alignment.md](architecture-and-infrastructure/future/stdio-http-server-alignment.md)
 - no-console + strictness convergence (includes ESLint override removal and boundary/separation lint integration):
   [devx-strictness-convergence.plan.md](developer-experience/active/devx-strictness-convergence.plan.md)
 
@@ -150,29 +153,32 @@ real-world validation with a controlled user base before broader release.
 
 ## Milestone 2: Open Public Alpha
 
-**Goal**: Deploy the MCP server on a production Clerk instance with
-public sign-up. Anyone can access Oak's curriculum tools through their
-AI assistant.
+**Goal**: Deliver reliable search, unified MCP Apps infrastructure, and
+initial knowledge graph alignment. Dev Clerk remains; production auth
+is deferred to M3.
 
-**User impact**: Any educator or developer can sign up and use Oak's
-curriculum tools through ChatGPT, Claude, Gemini, or other MCP-capable
-AI assistants. Production-grade authentication with social providers.
+**User impact**: Invited users get accurate, up-to-date search results
+and a single MCP server serving all platforms (ChatGPT, Claude, Cursor).
+Graph-augmented curriculum navigation begins to surface.
 
 **Blocking work**:
 
-1. **Clerk production migration**
-   - Research complete:
-     [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
-   - Blocking decision: shared vs independent Clerk instance
-     (Section 0 of the research report)
-   - Social providers Phase 1: Google, Microsoft, GitHub
-   - `CLERK_AUTHORIZED_PARTIES` environment variable implementation
-   - Public sign-up with disposable email blocking
-2. **Edge rate limiting on OAuth proxy endpoints**
-   - `/oauth/register`, `/oauth/authorize`, `/oauth/token`
-   - Required before unauthenticated endpoints are exposed to the public
+1. **Elasticsearch re-index and search quality validation** (intention #2)
+   - Re-download bulk data, re-process, re-index the Elasticsearch instance
+   - Resolve `strict_dynamic_mapping_exception` on `previous_version`
+     (metadata schema/mapping remediation — active incident lane)
+   - Validate stale search/index issues have cleared
+2. **Replace OpenAI app with MCP Apps infrastructure** (intention #3)
    - Canonical execution plan:
-     [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+     [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
+   - **Must include basic branding** for the MCP App (logo, colours,
+     metadata visible in Claude Desktop / ChatGPT tool listings)
+3. **Knowledge graph alignment audit** (intention #4)
+   - First graph-enablement slice:
+     [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md)
+   - Outputs inform whether next graph promotion is separate Neo4j
+     provisioning, Elasticsearch projection work, or explanation-first
+     graph augmentation
 
 ---
 
@@ -187,7 +193,40 @@ improvements compound: architectural enforcement prevents regression,
 observability enables rapid diagnosis, and extension surfaces broaden
 platform reach.
 
-**Primary streams** (drawn from existing plans across collections):
+**Blocking work**:
+
+1. **Production Clerk integration**
+   - Research complete:
+     [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
+   - Blocking decision: shared vs independent Clerk instance
+     (Section 0 of the research report)
+   - Social providers Phase 1: Google, Microsoft, GitHub
+   - `CLERK_AUTHORIZED_PARTIES` environment variable implementation
+   - Public sign-up with disposable email blocking
+   - Edge rate limiting on OAuth proxy endpoints
+     (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) —
+     [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+2. **Production Sentry integration with full OTel logging**
+   - Full plan:
+     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md)
+   - Covers: Sentry configuration, structured logging, monitoring,
+     alerting, quality metrics dashboards
+   - Execution plan:
+     [sentry-otel-integration.execution.plan.md](architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
+     — reference implementation exists in `starter-app-spike`
+3. **Knowledge graph alignment** (if not completed in M2)
+   - [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md)
+4. **Exemplar MCP App UI experience (`user_search` tool)**
+   - New user-facing search tool (`user_search`/`userSearch`) with the same
+     capabilities as the existing `search` tool but designed for interactive
+     use within Claude Desktop, ChatGPT, and other MCP App hosts
+   - React components rendered via
+     [MCP Apps UI extensions](https://modelcontextprotocol.io/extensions/apps/overview)
+   - Requires design input for layout, interaction patterns, and branding
+   - Goal: demonstrate a polished, interactive curriculum search experience
+     as the reference MCP App UI
+
+**Additional streams** (drawn from existing plans across collections):
 
 1. **Operational hardening**
    - Monitoring and alerting (sign-up velocity, abuse patterns, Clerk
@@ -202,29 +241,21 @@ platform reach.
      [roadmap.md](sdk-and-mcp-enhancements/roadmap.md)
    - Supporting:
      [concept-preservation-and-supersession-map.md](sdk-and-mcp-enhancements/concept-preservation-and-supersession-map.md)
-3. **Observability and quality metrics**
+3. **Architectural enforcement adoption**
    - Full plan:
-     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
-   - Covers: Sentry configuration, structured logging, monitoring,
-     alerting, quality metrics dashboards
-   - **Sentry integration (M3 blocker)**: Execution plan queued at
-     [sentry-otel-integration.execution.plan.md](architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
-     — reference implementation exists in `starter-app-spike`
-4. **Architectural enforcement adoption**
-   - Full plan:
-     [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md)
+     [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md)
    - Covers: ESLint boundary rules, dependency-cruiser, knip dead
      code detection
 5. **Mutation testing**
    - Full plan:
-     [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/mutation-testing-implementation.plan.md)
+     [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md)
    - Covers: Stryker integration, `pnpm mutate`, workspace roll-out
 6. **Hallucination and evidence guard adoption**
    - Full plan:
-     [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/hallucination-and-evidence-guard-adoption.plan.md)
+     [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md)
 7. **Cross-agent standardisation**
    - Full plan:
-     [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/cross-agent-standardisation.plan.md)
+     [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md)
 8. **Security and privacy hardening**
    - Collection roadmap:
      [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)

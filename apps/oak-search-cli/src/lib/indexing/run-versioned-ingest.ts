@@ -11,13 +11,13 @@
 
 import { ok, err, type Result } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
-import { createVersionedIndexResolver } from '@oaknational/oak-search-sdk';
+import { createVersionedIndexResolver } from '@oaknational/oak-search-sdk/admin';
 import type {
   IngestOptions,
   IngestResult,
   AdminError,
   SearchIndexTarget,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/admin';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { EsTransport, BulkUploadResult } from './ingest-harness-ops';
 import {

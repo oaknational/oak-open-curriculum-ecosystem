@@ -131,7 +131,10 @@ async function buildVerifyDocCounts(
  * @example
  * ```typescript
  * import { Client } from '@elastic/elasticsearch';
- * import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oak-search-sdk';
+ * import {
+ *   buildLifecycleDeps,
+ *   createIndexLifecycleService,
+ * } from '@oaknational/oak-search-sdk/admin';
  *
  * const client = new Client({ node: 'http://localhost:9200' });
  * const runIngest = createRunVersionedIngest({ oakClient, esTransport: client, target: 'primary' });

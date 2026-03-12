@@ -18,7 +18,7 @@
  */
 
 import { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createObservabilityService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
@@ -57,11 +57,8 @@ function registerTelemetryCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleTelemetry(sdk.observability, {
+          const observability = createObservabilityService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleTelemetry(observability, {
             limit: parseInt(opts.limit, 10),
           });
           if (!result.ok) {
@@ -92,12 +89,9 @@ function registerSummaryCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
+          const observability = createObservabilityService(esClient, buildSearchSdkConfig(cliEnv));
           // handleSummary is a sync in-memory operation — cannot fail, no Result wrapping needed
-          const result = handleSummary(sdk.observability);
+          const result = handleSummary(observability);
           printJson(result);
         },
         observeDeps,

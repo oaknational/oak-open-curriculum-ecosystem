@@ -13,7 +13,7 @@
  */
 
 import type { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
@@ -43,11 +43,8 @@ export function registerThreadsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSearchThreads(sdk.retrieval, {
+          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSearchThreads(retrieval, {
             query,
             subject: validateSubject(opts.subject),
             size: parseInt(opts.size, 10),

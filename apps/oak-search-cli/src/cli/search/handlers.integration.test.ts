@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { RetrievalService } from '@oaknational/oak-search-sdk';
+import type { RetrievalService } from '@oaknational/oak-search-sdk/read';
 import { ok } from '@oaknational/result';
 import {
   handleSearchLessons,

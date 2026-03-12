@@ -47,7 +47,7 @@ Superseded source plans:
 
 Related architectural-enforcement sources:
 
-- `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 - `../current/directory-complexity-enablement.execution.plan.md`
 

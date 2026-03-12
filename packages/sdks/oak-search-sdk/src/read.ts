@@ -1,21 +1,24 @@
 /**
- * Default root export surface for `@oaknational/oak-search-sdk`.
+ * Non-admin capability surface for `@oaknational/oak-search-sdk`.
  *
- * The root surface is intentionally non-admin. Privileged capabilities
- * are exposed via explicit subpaths.
- *
- * Note: observability exports can persist events when configured; "non-admin"
- * here means "not lifecycle/index-management".
- *
- * Subpaths:
- * - `@oaknational/oak-search-sdk/read`
- * - `@oaknational/oak-search-sdk/admin`
+ * This surface excludes admin lifecycle/index-management exports.
+ * It may still include observability services that can persist events.
  */
 
 export { createSearchRetrieval } from './create-search-retrieval.js';
 export { createRetrievalService } from './retrieval/index.js';
 export { createObservabilityService } from './observability/index.js';
+export {
+  SEARCH_INDEX_TARGETS,
+  SEARCH_INDEX_KINDS,
+  ZERO_HIT_INDEX_BASE,
+  BASE_INDEX_NAMES,
+  resolveSearchIndexName,
+  resolveZeroHitIndexName,
+} from './internal/index.js';
 export type { SearchRetrievalFactories, EsClientConfig } from './create-search-retrieval.js';
+export type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from './internal/index.js';
+
 export type {
   SearchSdkConfig,
   SearchSdkZeroHitConfig,

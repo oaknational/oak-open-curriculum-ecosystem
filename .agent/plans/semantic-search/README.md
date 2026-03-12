@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-11
+**Last Updated**: 2026-03-12
 
 ---
 
@@ -22,7 +22,7 @@ Active execution now includes:
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
 - [Category Integration Remediation](active/category-integration-remediation.md)
-- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md)
+- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed, retained as evidence
 
 Prepared next-up queue:
 
@@ -120,7 +120,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
 - [Category Integration Remediation](active/category-integration-remediation.md) — planning lane for wiring category supplementation through bulk ingestion orchestration
-- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — executable migration for strict read/admin capability boundaries and lint fitness enforcement
+- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed capability-boundary lane retained as evidence and doctrine reference
 
 ---
 
@@ -128,7 +128,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 CLI robustness (active incident) + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + category integration remediation + search CLI-SDK boundary migration |
+| `active/` | In-progress plans | 🟢 CLI robustness (active incident) + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + category integration remediation |
 | `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |

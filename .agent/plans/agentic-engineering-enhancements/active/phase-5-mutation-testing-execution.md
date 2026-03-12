@@ -38,7 +38,7 @@ todos:
 - Output:
   - completed re-baseline checklist and updated current-state section
 - Deterministic validation:
-  - `rg -n "Re-baseline checklist|Prerequisite gate" .agent/plans/agentic-engineering-enhancements/mutation-testing-implementation.plan.md`
+  - `rg -n "Re-baseline checklist|Prerequisite gate" .agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`
   - `rg -n "\"mutate\"" turbo.json package.json`
 
 ### Task 5.1 (Source Phase 1): Pilot Workspaces
@@ -61,7 +61,7 @@ todos:
   - touched-files/incremental approach documented
   - explicit promotion decision for `pnpm qg` with threshold rationale
 - Deterministic validation:
-  - `rg -n "incremental|touched-files|promotion|pnpm qg" .agent/plans/agentic-engineering-enhancements/mutation-testing-implementation.plan.md`
+  - `rg -n "incremental|touched-files|promotion|pnpm qg" .agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`
 
 ### Task 5.4: Evidence Bundles per Phase
 

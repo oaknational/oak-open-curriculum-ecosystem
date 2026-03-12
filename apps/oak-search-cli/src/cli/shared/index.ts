@@ -19,7 +19,6 @@ export { APP_ROOT, registerPassThrough } from './pass-through.js';
 export { withEsClient } from './with-es-client.js';
 export type { CloseableEsClient, WithEsClientDeps } from './with-es-client.js';
 export { buildSearchSdkConfig } from './build-search-sdk-config.js';
-export { buildLifecycleService } from './build-lifecycle-service.js';
 export { resolveBulkDir, resolveBulkDirFromInputs } from './resolve-bulk-dir.js';
 export type { BulkDirError, FsPredicates, ResolveBulkDirFromInputs } from './resolve-bulk-dir.js';
 export { validateIngestEnv } from './validate-ingest-env.js';

@@ -28,5 +28,5 @@ tooling.
 ## References
 
 - ADRs 029, 030, 031, 048 (schema-first principles)
-- [Mutation testing plan](../agentic-engineering-enhancements/mutation-testing-implementation.plan.md)
+- [Mutation testing plan](../agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md)
   (complementary quality assurance)

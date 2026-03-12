@@ -23,8 +23,8 @@ export async function benchmarkLessons(): Promise<IndexResult> {
   if (!configResult.ok) {
     throw new Error(`Environment validation failed: ${configResult.error.message}`);
   }
-  return withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchLessons.bind(sdk.retrieval);
+  return withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchLessons.bind(retrieval);
     const entries = getLessonGroundTruthEntries();
     const results: BenchmarkMetrics[] = [];
 

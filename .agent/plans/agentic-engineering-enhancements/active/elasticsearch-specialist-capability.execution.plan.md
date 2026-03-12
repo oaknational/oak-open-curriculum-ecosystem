@@ -120,7 +120,7 @@ strategy plan — this task validates them before encoding into artefacts.
 
 ```bash
 rg -n "Elastic Documentation|elastic/elasticsearch-js|@elastic/elasticsearch|Serverless" \
-  .agent/plans/agentic-engineering-enhancements/elasticsearch-specialist-capability.plan.md \
+  .agent/plans/agentic-engineering-enhancements/current/elasticsearch-specialist-capability.plan.md \
   .agent/plans/agentic-engineering-enhancements/active/elasticsearch-specialist-capability.execution.plan.md
 test -f docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md
 ```

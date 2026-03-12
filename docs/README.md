@@ -50,8 +50,9 @@ last_reviewed: 2026-02-25
 
 ### Engineering Practice
 
+- [How the Agentic Engineering System Works](foundation/agentic-engineering-system.md) - The Practice explained as an integrated engineering system
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
-- [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system
+- [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system (agent-facing)
 
 ## Code Standards and Testing
 

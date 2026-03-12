@@ -55,6 +55,10 @@ the enforcement mechanism — not these files.
 
 If you want to understand how the practice works:
 
+- [How the Agentic Engineering System Works](../docs/foundation/agentic-engineering-system.md)
+  — the Practice explained as an integrated engineering system: how rules, quality gates, specialist reviewers,
+  learning loops, and propagation mechanisms form a coherent safety
+  and quality net (same system, different audience lens)
 - [Engineering Practice](../README.md#engineering-practice) in the root
   README — plain-language overview
 - [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)

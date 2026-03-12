@@ -209,7 +209,7 @@ and insights about consolidation all flow through the same cycle.
 
 The Practice also travels between repositories via a
 [plasmid exchange mechanism](docs/architecture/architectural-decisions/124-practice-propagation-model.md)
-— a package of five portable files that carry the improvement loop to new
+— a package of six portable files that carry the improvement loop to new
 contexts. Different repos stress-test the Practice against different work,
 surfacing learnings that travel back to the origin. If a repo already has
 a Practice, then the income Practice is analysed and the best parts are
@@ -226,7 +226,8 @@ over time rather than eroding.
 
 **Further reading:**
 
-- [The Practice](.agent/practice-core/README.md) — human-friendly introduction
+- [How the Agentic Engineering System Works](docs/foundation/agentic-engineering-system.md) — the Practice explained as an integrated engineering system
+- [The Practice](.agent/practice-core/README.md) — the same system, as an operational blueprint for AI agents
 - [ADR-119](docs/architecture/architectural-decisions/119-agentic-engineering-practice.md) — naming, boundary, and three-layer model
 - [ADR-131](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) — the improvement loop, interaction map, and self-referential property
 - [ADR-124](docs/architecture/architectural-decisions/124-practice-propagation-model.md) — how the Practice travels between repos

@@ -14,7 +14,7 @@
  */
 
 import type { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
@@ -57,11 +57,8 @@ export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await (opts.reset ? handleReset(sdk.admin) : handleSetup(sdk.admin));
+          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await (opts.reset ? handleReset(admin) : handleSetup(admin));
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -96,11 +93,8 @@ export function registerStatusCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleStatus(sdk.admin);
+          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleStatus(admin);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -134,11 +128,8 @@ export function registerSynonymsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSynonyms(sdk.admin);
+          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSynonyms(admin);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);

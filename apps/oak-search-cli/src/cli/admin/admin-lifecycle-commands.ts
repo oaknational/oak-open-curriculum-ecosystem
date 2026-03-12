@@ -14,12 +14,12 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
-import type { IndexLifecycleService } from '@oaknational/oak-search-sdk';
+import type { AdminError, IndexLifecycleService } from '@oaknational/oak-search-sdk/admin';
 import type { BulkDataEnv } from '@oaknational/env';
+import type { Result } from '@oaknational/result';
 import {
   createEsClient,
   withEsClient,
-  buildLifecycleService,
   resolveBulkDirFromInputs,
   validateIngestEnv,
   printSuccess,
@@ -28,11 +28,15 @@ import {
   APP_ROOT,
   type CliSdkEnv,
 } from '../shared/index.js';
+import { buildLifecycleService } from './shared/build-lifecycle-service.js';
+import {
+  parseLifecycleIngestOpts,
+  type ParsedLifecycleIngestOpts,
+} from './shared/parse-lifecycle-ingest-opts.js';
 import type { OakClientEnv } from '../../adapters/oak-adapter.js';
 import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-client-factory.js';
 import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
 import { ingestLogger } from '../../lib/logger.js';
-
 /**
  * Extended environment for lifecycle commands that perform ingestion.
  */
@@ -57,14 +61,6 @@ const ingestDeps = {
 
 /** Real filesystem predicates for `resolveBulkDir`. */
 const realFs = { existsSync, readdirSync: (p: string) => readdirSync(p) };
-
-/** Options shared by versioned-ingest and stage commands. */
-interface LifecycleIngestOpts {
-  readonly bulkDir?: string;
-  readonly subjectFilter?: string[];
-  readonly minDocCount?: number;
-  readonly verbose?: boolean;
-}
 
 /** Result of validating ingest preconditions. */
 interface IngestPreconditionResult {
@@ -109,7 +105,7 @@ async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): 
 /** Validate bulk-dir and ingest env requirements before creating resources. */
 function validateIngestPreconditions(
   cliEnv: LifecycleIngestEnv,
-  opts: LifecycleIngestOpts,
+  opts: ParsedLifecycleIngestOpts,
 ): IngestPreconditionResult {
   const bulkResult = resolveBulkDirFromInputs({
     bulkDirFlag: opts.bulkDir,
@@ -135,7 +131,7 @@ function validateIngestPreconditions(
 
 /** Handle lifecycle service error/success output consistently. */
 function handleLifecycleResult<T>(
-  result: { ok: true; value: T } | { ok: false; error: { type: string; message: string } },
+  result: Result<T, AdminError>,
   onSuccess: (value: T) => void,
 ): void {
   if (!result.ok) {
@@ -150,7 +146,7 @@ function handleLifecycleResult<T>(
 /** Execute `versioned-ingest` action body. */
 async function runVersionedIngestAction(
   cliEnv: LifecycleIngestEnv,
-  opts: LifecycleIngestOpts,
+  opts: ParsedLifecycleIngestOpts,
 ): Promise<void> {
   const preconditions = validateIngestPreconditions(cliEnv, opts);
   if (!preconditions.ok || !preconditions.bulkDir) {
@@ -179,7 +175,7 @@ async function runVersionedIngestAction(
 /** Execute `stage` action body. */
 async function runStageAction(
   cliEnv: LifecycleIngestEnv,
-  opts: LifecycleIngestOpts,
+  opts: ParsedLifecycleIngestOpts,
 ): Promise<void> {
   const preconditions = validateIngestPreconditions(cliEnv, opts);
   if (!preconditions.ok || !preconditions.bulkDir) {
@@ -224,7 +220,9 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIng
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (opts: LifecycleIngestOpts) => runVersionedIngestAction(cliEnv, opts));
+    .action(async (rawOpts: unknown) =>
+      runVersionedIngestAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
+    );
 }
 
 /**
@@ -246,5 +244,5 @@ export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): v
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (opts: LifecycleIngestOpts) => runStageAction(cliEnv, opts));
+    .action(async (rawOpts: unknown) => runStageAction(cliEnv, parseLifecycleIngestOpts(rawOpts)));
 }

@@ -15,7 +15,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { ok } from '@oaknational/result';
 import { runQuery, type SearchFunction } from './benchmark-query-runner-lessons';
-import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
+import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk/read';
 import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 /** Create a minimal lesson index doc stub. */

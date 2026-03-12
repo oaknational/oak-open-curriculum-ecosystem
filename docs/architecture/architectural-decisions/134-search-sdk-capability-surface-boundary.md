@@ -22,7 +22,7 @@ The Search CLI/SDK boundary diagnosis identified three structural problems:
 The owner constraints for this area are explicit:
 
 - Admin functions should be semi-separate from default consumer flows.
-- Most consumers should be read-only by default.
+- Most consumers should be non-admin by default.
 - Future experimentation should be supported without reintroducing parallel
   canonical implementations.
 
@@ -67,6 +67,19 @@ configuration and rule tests:
 - positive and negative fixtures prove each boundary class,
 - boundary drift blocks merges.
 
+Implementation evidence includes:
+
+- CLI boundary lint policy in `apps/oak-search-cli/eslint.config.ts`
+- fixture-backed integration proofs in `apps/oak-search-cli/eslint-boundary.integration.test.ts`
+- admin-only lifecycle composition helper in `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts`
+- default non-admin policy with explicit privileged subtree overrides in
+  `apps/oak-search-cli/eslint.config.ts` (`src/cli/admin/**`, `src/lib/indexing/**`, `src/adapters/**`)
+- mixed-capability safeguards for `evaluation/**` and `operations/**` in
+  `apps/oak-search-cli/eslint.config.ts` (root/internal SDK imports blocked)
+- shared index-resolver primitives exported by SDK read surface in
+  `packages/sdks/oak-search-sdk/src/read.ts` and consumed by admin surface in
+  `packages/sdks/oak-search-sdk/src/admin.ts`
+
 ## Consequences
 
 ### Positive
@@ -79,9 +92,9 @@ configuration and rule tests:
 
 ### Negative
 
-- Migration effort is required to move existing imports and tighten package exports.
-- Additional lint rule complexity and fixtures must be maintained.
-- Some utility modules may need refactoring to keep read/admin boundaries clean.
+- Migration effort was required to move existing imports and tighten package exports.
+- Additional lint rule complexity and fixtures were introduced and must be maintained.
+- Some utility modules were refactored to keep read/admin boundaries clean.
 
 ### Neutral
 

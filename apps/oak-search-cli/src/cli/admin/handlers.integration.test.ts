@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { AdminService } from '@oaknational/oak-search-sdk';
+import type { AdminService } from '@oaknational/oak-search-sdk/admin';
 import { ok } from '@oaknational/result';
 import {
   handleSetup,

@@ -12,7 +12,7 @@
 
 import type { Command } from 'commander';
 import { err, ok, type Result } from '@oaknational/result';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import { isIndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import {
@@ -82,11 +82,8 @@ function registerMetaGetCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleGetMeta(sdk.admin);
+          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleGetMeta(admin);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -125,11 +122,8 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSetMeta(sdk.admin, parsed.value);
+          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSetMeta(admin, parsed.value);
           if (!result.ok) {
             adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);

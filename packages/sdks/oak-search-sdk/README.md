@@ -5,49 +5,51 @@ TypeScript SDK for Oak semantic search — retrieval, admin, and observability s
 ## Usage
 
 ```typescript
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
+import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import { Client } from '@elastic/elasticsearch';
 
-const sdk = createSearchSdk({
-  deps: {
-    esClient: new Client({ node: esUrl, auth: { apiKey } }),
-  },
-  config: {
-    indexTarget: 'primary',
-    indexVersion: '1',
-  },
-});
+const esClient = new Client({ node: esUrl, auth: { apiKey } });
+const config = {
+  indexTarget: 'primary' as const,
+  indexVersion: '1',
+};
+const retrieval = createRetrievalService(esClient, config);
+const admin = createAdminService(esClient, config);
 
 // Search lessons (4-way RRF: BM25 + ELSER on Content and Structure)
-const results = await sdk.retrieval.searchLessons({
+const results = await retrieval.searchLessons({
   query: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
 });
 
 // Search threads (2-way RRF: BM25 on thread_title + ELSER on thread_semantic)
-const threads = await sdk.retrieval.searchThreads({
+const threads = await retrieval.searchThreads({
   query: 'algebra equations progression',
   subject: 'maths',
 });
 // threads.ok → { scope: 'threads', results: ThreadResult[], total, took, timedOut }
 
 // Admin operations
-await sdk.admin.setup();
-const status = await sdk.admin.verifyConnection();
-
-// Observability
-sdk.observability.recordZeroHit({ scope: 'lessons', query: 'xyz' });
+await admin.setup();
+const status = await admin.verifyConnection();
 ```
 
-## Architecture
+## Capability Surfaces (ADR-134)
 
-The SDK exposes three services via a single factory:
+The package exposes explicit subpath capability surfaces:
 
-```text
-createSearchSdk({ deps, config })
-  → { retrieval, admin, observability }
-```
+- `@oaknational/oak-search-sdk/read` - retrieval and observability-safe exports
+- `@oaknational/oak-search-sdk/admin` - privileged admin/lifecycle/write exports
+- `@oaknational/oak-search-sdk` (root) - read-safe default only
+
+Consumers should import from `read` or `admin` directly based on capability.
+App code must never import internal/deep implementation paths.
+Shared index resolver primitives (`SEARCH_INDEX_KINDS`, `resolveSearchIndexName`, related types) are
+part of the public `/read` surface and may be reused by admin consumers via public exports.
+
+The SDK service families are exposed via those capability surfaces:
 
 | Service                  | Purpose                                                                                                                                                                                                                                           |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -60,7 +62,7 @@ createSearchSdk({ deps, config })
 A separate `IndexLifecycleService` provides zero-downtime index management:
 
 ```typescript
-import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oak-search-sdk';
+import { buildLifecycleDeps, createIndexLifecycleService } from '@oaknational/oak-search-sdk/admin';
 import { Client } from '@elastic/elasticsearch';
 
 const client = new Client({ node: esUrl, auth: { apiKey } });

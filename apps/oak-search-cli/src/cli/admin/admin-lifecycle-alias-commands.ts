@@ -13,18 +13,19 @@
  */
 
 import type { Command } from 'commander';
+import { InvalidArgumentError } from 'commander';
 import { err } from '@oaknational/result';
-import type { IndexLifecycleDeps } from '@oaknational/oak-search-sdk';
+import type { IndexLifecycleDeps } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
-  buildLifecycleService,
   printSuccess,
   printError,
   printJson,
   printHeader,
   type CliSdkEnv,
 } from '../shared/index.js';
+import { buildLifecycleService } from './shared/build-lifecycle-service.js';
 import { ingestLogger } from '../../lib/logger.js';
 
 /**
@@ -42,6 +43,17 @@ const noOpIngest: IndexLifecycleDeps['runVersionedIngest'] = () =>
     }),
   );
 
+function parseVersionOption(rawOpts: unknown): string {
+  if (!rawOpts || typeof rawOpts !== 'object' || !('version' in rawOpts)) {
+    throw new InvalidArgumentError('Missing required --version option.');
+  }
+  const candidate = rawOpts.version;
+  if (typeof candidate !== 'string' || candidate.length === 0) {
+    throw new InvalidArgumentError('--version must be a non-empty string.');
+  }
+  return candidate;
+}
+
 /**
  * Register the `admin promote` subcommand.
  *
@@ -56,7 +68,8 @@ export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .command('promote')
     .description('Promote a staged version by swapping aliases to it')
     .requiredOption('--version <version>', 'Version string to promote (from stage output)')
-    .action(async (opts: { version: string }) => {
+    .action(async (rawOpts: unknown) => {
+      const version = parseVersionOption(rawOpts);
       const esClient = createEsClient(cliEnv);
       await withEsClient(
         esClient,
@@ -67,7 +80,7 @@ export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
             noOpIngest,
             ingestLogger,
           );
-          const result = await service.promote(opts.version);
+          const result = await service.promote(version);
           if (!result.ok) {
             ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -80,7 +93,7 @@ export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
         {
           logger: ingestLogger,
           printError,
-          setExitCode: (c) => {
+          setExitCode: (c: number) => {
             process.exitCode = c;
           },
         },
@@ -127,7 +140,7 @@ export function registerRollbackCmd(parent: Command, cliEnv: CliSdkEnv): void {
         {
           logger: ingestLogger,
           printError,
-          setExitCode: (c) => {
+          setExitCode: (c: number) => {
             process.exitCode = c;
           },
         },
@@ -177,7 +190,7 @@ export function registerValidateAliasesCmd(parent: Command, cliEnv: CliSdkEnv): 
         {
           logger: ingestLogger,
           printError,
-          setExitCode: (c) => {
+          setExitCode: (c: number) => {
             process.exitCode = c;
           },
         },

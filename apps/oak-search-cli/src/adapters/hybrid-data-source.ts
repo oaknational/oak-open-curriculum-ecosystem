@@ -21,7 +21,7 @@ import { isSubject } from './sdk-guards';
 import { buildRollupDocs } from './bulk-rollup-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
 import { ok, err, type Result } from '@oaknational/result';
-import type { AdminError } from '@oaknational/oak-search-sdk';
+import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 
 /** Configuration for hybrid data source */
 export interface HybridDataSourceConfig {
