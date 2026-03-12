@@ -1,3 +1,21 @@
+## Session 2026-03-12 — Commit format guardrails (commitlint)
+
+### What Was Done
+
+- Commit attempt failed because the commit message body exceeded the enforced
+  line length (`body-max-line-length`).
+- Rewrote the body into two concise lines under 100 characters and re-ran
+  commit successfully.
+
+### Patterns to Remember
+
+- Treat commit messages as a validated interface: check header and body shape
+  before running `git commit`, especially body line length and case rules.
+- Prefer short, two-line body paragraphs for commitlint-safe messages unless
+  extra detail is truly necessary.
+- **Follow-up**: promote this into an explicit agent skill/checklist so commit
+  format validation happens proactively before the first commit attempt.
+
 ## Session 2026-03-11 — Distillation and Consolidation Pass
 
 ### What Was Done
