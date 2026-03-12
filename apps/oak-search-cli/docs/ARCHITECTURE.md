@@ -49,7 +49,7 @@ src/cli/
 │   ├── handlers.ts                 # SDK retrieval calls
 │   ├── register-facets-cmd.ts      # Facets command registration
 │   └── register-suggest-cmd.ts     # Suggest command registration
-├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|ingest|...}
+├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|versioned-ingest|stage|...}
 │   ├── index.ts                    # Command registration
 │   ├── handlers.ts                 # SDK admin calls
 │   ├── register-meta-cmd.ts        # Meta get/set command group
@@ -64,7 +64,7 @@ evaluation/analysis/
 └── create-evaluation-search-sdk.ts # Shared ES client lifecycle wrapper for benchmarks
 ```
 
-**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).
+**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count/lifecycle, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for verification, diagnostics, and benchmarks.
 
 ---
 
@@ -73,7 +73,7 @@ evaluation/analysis/
 - **Structured hybrid search** — Search over lessons, units, sequences, or threads. Builds server-side RRF queries via the SDK, returns highlights, canonical URLs, facets, zero-hit metadata.
 - **Suggestion/type-ahead** — Backed by completion contexts and `search_as_you_type` fields.
 - **Zero-hit telemetry** — Records queries that return no results for quality improvement.
-- **CLI ingestion** — `oaksearch admin ingest` triggers resilient batching across lessons, units, sequences.
+- **CLI ingestion** — `oaksearch admin versioned-ingest` and `oaksearch admin stage` drive resilient lifecycle ingestion.
 - **Index management** — `oaksearch admin setup` manages mappings, synonyms, and index creation.
 
 ---

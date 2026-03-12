@@ -145,6 +145,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-131: Self-Reinforcing Improvement Loop](131-self-reinforcing-improvement-loop.md)
 - [ADR-132: Sitemap Scanner for Canonical URL Validation](132-sitemap-scanner-for-canonical-url-validation.md)
 - [ADR-133: CLI Resource Lifecycle Management](133-cli-resource-lifecycle-management.md)
+- [ADR-134: Search SDK Capability Surface Boundary](134-search-sdk-capability-surface-boundary.md)
+- [ADR-135: Agent Classification Taxonomy](135-agent-classification-taxonomy.md)
 
 ## Key Architectural Decisions
 
@@ -176,6 +178,7 @@ For understanding the agentic engineering practice:
 - **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
 - **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
+- **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 
 For understanding semantic search and Elastic-native AI/ML approach:
 
@@ -207,6 +210,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
 - **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
 - **[ADR-133](133-cli-resource-lifecycle-management.md)** - CLI resource lifecycle ownership and `withEsClient` cleanup pattern
+- **[ADR-134](134-search-sdk-capability-surface-boundary.md)** - Search SDK read/admin capability boundary, internal encapsulation, and lint-enforced import policy
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

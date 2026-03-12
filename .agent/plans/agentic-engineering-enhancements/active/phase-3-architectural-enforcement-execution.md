@@ -32,7 +32,7 @@ todos:
 
 ## Source Strategy
 
-- [architectural-enforcement-adoption.plan.md](../architectural-enforcement-adoption.plan.md)
+- [architectural-enforcement-adoption.plan.md](../current/architectural-enforcement-adoption.plan.md)
 
 ## Convergence Delegation (2026-03-04)
 

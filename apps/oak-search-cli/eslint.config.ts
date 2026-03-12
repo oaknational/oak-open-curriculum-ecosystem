@@ -7,7 +7,6 @@
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { defineConfig, globalIgnores } from 'eslint/config';
-import type { Linter } from 'eslint';
 import { parser as tseslintParser } from 'typescript-eslint';
 import {
   configs,
@@ -56,8 +55,7 @@ const eslintConfig = defineConfig(
   // Test file rules
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/test-*.ts', '**/__tests__/**'],
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- testRules types don't match defineConfig's strict expectations
-    rules: testRules as unknown as Linter.RulesRecord,
+    rules: { ...testRules },
   },
 
   // Evaluation scripts - same standards as src/ but allow console.log

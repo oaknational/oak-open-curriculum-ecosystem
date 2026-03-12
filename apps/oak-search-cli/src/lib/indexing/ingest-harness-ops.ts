@@ -1,4 +1,5 @@
 import type { Logger } from '@oaknational/logger';
+import { typeSafeValues } from '@oaknational/type-helpers';
 import type { SearchIndexKind, SearchIndexTarget, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {
@@ -115,8 +116,7 @@ export function summariseOperations(
     }
   }
 
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  const totalDocs = Object.values(counts).reduce((acc, value) => acc + value, 0);
+  const totalDocs = typeSafeValues(counts).reduce((acc, value) => acc + value, 0);
   return { target, totalDocs, counts };
 }
 

@@ -10,8 +10,9 @@
 export {
   OakApiKeyEnvSchema,
   ElasticsearchEnvSchema,
+  BulkDataEnvSchema,
   LoggingEnvSchema,
   LOG_LEVELS,
   NODE_ENVS,
 } from './schemas/index.js';
-export type { OakApiKeyEnv, ElasticsearchEnv, LoggingEnv } from './schemas/index.js';
+export type { OakApiKeyEnv, ElasticsearchEnv, BulkDataEnv, LoggingEnv } from './schemas/index.js';

@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 /**
  * CLI argument parsing for data ingestion using Commander.
  *
@@ -8,9 +8,10 @@
  * Subject and key stage values are derived from the OpenAPI schema via the SDK.
  */
 
+import { CommanderError } from 'commander';
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
-import { createProgram, DEFAULT_BULK_DIR } from './ingest-cli-program.js';
+import { createProgram } from './ingest-cli-program.js';
 import { ALL_KEY_STAGES, resolveSubjects } from './ingest-cli-validators.js';
 
 /** Parsed CLI arguments for ingestion. */
@@ -27,7 +28,7 @@ export interface CliArgs {
   readonly incremental: boolean;
   readonly ignoreCached404: boolean;
   readonly api: boolean;
-  readonly bulkDir: string;
+  readonly bulkDir: string | undefined;
   readonly maxRetries: number | undefined;
   readonly retryDelay: number | undefined;
   readonly noRetry: boolean;
@@ -69,7 +70,7 @@ function buildHelpArgs(): CliArgs {
     incremental: false,
     ignoreCached404: false,
     api: false,
-    bulkDir: DEFAULT_BULK_DIR,
+    bulkDir: undefined,
     maxRetries: undefined,
     retryDelay: undefined,
     noRetry: false,
@@ -96,8 +97,6 @@ function boolFlag(value: boolean | undefined): boolean {
 function buildCliArgs(opts: ParsedOptions): CliArgs {
   const apiMode = boolFlag(opts.api);
   const allFlag = boolFlag(opts.all);
-  const bulkDir = opts.bulkDir ?? DEFAULT_BULK_DIR;
-
   return {
     subjects: resolveSubjects(opts.subject, allFlag, apiMode),
     keyStages: resolveKeyStages(opts.keyStage),
@@ -111,7 +110,7 @@ function buildCliArgs(opts: ParsedOptions): CliArgs {
     incremental: boolFlag(opts.incremental),
     ignoreCached404: boolFlag(opts.ignoreCached404),
     api: apiMode,
-    bulkDir,
+    bulkDir: opts.bulkDir,
     maxRetries: opts.maxRetries,
     retryDelay: opts.retryDelay,
     noRetry: !opts.retry,
@@ -125,14 +124,16 @@ function buildCliArgs(opts: ParsedOptions): CliArgs {
  * @returns Parsed and validated CLI arguments
  */
 export function parseArgs(args: readonly string[]): CliArgs {
-  if (args.includes('--help') || args.includes('-h')) {
-    const program = createProgram();
-    program.parse([...args], { from: 'user' });
-    return buildHelpArgs();
-  }
-
   const program = createProgram();
-  program.parse([...args], { from: 'user' });
+  program.exitOverride();
+  try {
+    program.parse([...args], { from: 'user' });
+  } catch (error) {
+    if (error instanceof CommanderError && error.code === 'commander.helpDisplayed') {
+      return buildHelpArgs();
+    }
+    throw error;
+  }
 
   const opts = program.opts<ParsedOptions>();
   return buildCliArgs(opts);

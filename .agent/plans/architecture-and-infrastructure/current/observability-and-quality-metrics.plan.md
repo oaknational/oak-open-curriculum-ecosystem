@@ -26,13 +26,13 @@ Establish production-grade observability and systematic quality metrics tracking
 
 ## Milestone Position
 
-This plan is a **pre-beta gate** — observability and quality metrics must be operational before public beta. See the [high-level plan](../high-level-plan.md) Milestone 3.
+This plan is a **pre-beta gate** — observability and quality metrics must be operational before public beta. See the [high-level plan](../../high-level-plan.md) Milestone 3.
 
 ## Why This Matters
 
 AI-augmented development increases change volume. Without systematic metrics, the codebase can drift into "fast but fragile" without anyone noticing. Industry evidence supports tracking quality metrics alongside velocity metrics to detect this drift early.
 
-Research: [Augmented Engineering Practices](../agentic-engineering-enhancements/augmented-engineering-practices.research.md) — Part 13 (metrics and monitoring), Part 7 (quality gates).
+Research: [Augmented Engineering Practices](../../agentic-engineering-enhancements/augmented-engineering-practices.research.md) — Part 13 (metrics and monitoring), Part 7 (quality gates).
 
 ## Scope
 
@@ -47,7 +47,7 @@ Research: [Augmented Engineering Practices](../agentic-engineering-enhancements/
 | Metric | Why it matters | How to track |
 |---|---|---|
 | Test coverage (with caution) | Baseline signal, not sufficient alone | Vitest coverage reports in CI |
-| Mutation score | Measures test effectiveness | Stryker (see [mutation testing plan](../agentic-engineering-enhancements/mutation-testing-implementation.plan.md)) |
+| Mutation score | Measures test effectiveness | Stryker (see [mutation testing plan](../../agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md)) |
 | Duplication rate | AI repetition is a long-term maintainability tax | Knip / custom analysis |
 | Complexity trends | AI can accrete complexity quickly | ESLint complexity rules trending |
 | Change failure rate | Catches "fast but fragile" dynamics | CI failure rate tracking |

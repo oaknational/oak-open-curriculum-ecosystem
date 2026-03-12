@@ -14,7 +14,7 @@ export function printHelp(): void {
 Elasticsearch Setup CLI
 
 Usage:
-  npx tsx src/lib/elasticsearch/setup/cli.ts [command] [options]
+  pnpm exec tsx src/lib/elasticsearch/setup/cli.ts [command] [options]
 
 Commands:
   setup     Create synonyms and indexes (default)

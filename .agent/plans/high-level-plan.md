@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-03-07
+last_updated: 2026-03-11
 ---
 
 # High-Level Plan
@@ -57,12 +57,14 @@ Milestone 3: Public Beta                         📋 PLANNED
 
 The next execution sequence is currently:
 
-1. Implement
-   [oak-preview-mcp-snagging.execution.plan.md](sdk-and-mcp-enhancements/active/oak-preview-mcp-snagging.execution.plan.md)
-   and deploy the resulting fixes.
-2. After that deploy, re-download the bulk data, re-process it, re-index the
-   Elasticsearch instance, and validate that stale search/index issues have
-   cleared.
+1. ~~Implement oak-preview MCP snagging and deploy the resulting fixes.~~
+   ✅ COMPLETE — all phases done, branch deployed. Archived to
+   [oak-preview-mcp-snagging.execution.plan.md](sdk-and-mcp-enhancements/archive/completed/oak-preview-mcp-snagging.execution.plan.md).
+2. Re-download the bulk data, re-process it, re-index the Elasticsearch
+   instance, and validate that stale search/index issues have cleared.
+   🔄 IN PROGRESS — lifecycle ingest run completed upload but failed metadata
+   commit (`strict_dynamic_mapping_exception` on `previous_version`); metadata
+   schema/mapping remediation is now the active incident lane.
 3. Implement
    [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
    and deploy that migration work.

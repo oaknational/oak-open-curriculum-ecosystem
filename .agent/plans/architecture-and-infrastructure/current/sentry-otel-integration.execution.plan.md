@@ -172,7 +172,7 @@ run before MCP server creation. `tracesSampleRate` must be > 0.
 
 ## Cross-References
 
-- Parent plan: [observability-and-quality-metrics.plan.md](../observability-and-quality-metrics.plan.md)
+- Parent plan: [observability-and-quality-metrics.plan.md](observability-and-quality-metrics.plan.md)
 - Archived guidance: `docs/agent-guidance/archive/sentry-guidance.md`
 - Reference implementation: `~/code/personal/starter-app-spike/`
 - ADR-051: OpenTelemetry-compliant logging format

@@ -4,7 +4,7 @@ overview: >
   Comprehensive triage of Dependabot alerts (22 open), CodeQL code scanning
   alerts (52 open), and outdated dependencies (29 packages). Prioritised into
   safe immediate fixes (Batch 1) and major-version migrations (Batch 2).
-status: "active"
+status: "queued"
 created: 2026-03-05
 todos:
   - id: batch-1-overrides

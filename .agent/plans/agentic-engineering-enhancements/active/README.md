@@ -14,6 +14,7 @@ of truth.
 | 5 | [phase-5-mutation-testing-execution.md](phase-5-mutation-testing-execution.md) | Mutation testing phases 0-3 execution | 📋 Planned |
 | HC-0 | [phase-0-baseline-metrics.plan.md](phase-0-baseline-metrics.plan.md) | Harness concepts: baseline metrics capture | 📋 Planned |
 | ES | [elasticsearch-specialist-capability.execution.plan.md](elasticsearch-specialist-capability.execution.plan.md) | Elasticsearch reviewer + skill + rule triplet following ADR-129 | ✅ Complete |
+| PCS | [plan-collection-structural-consistency.plan.md](plan-collection-structural-consistency.plan.md) | Bring all plan collections to canonical lifecycle structure (ADR-117) | 🟡 Planned (audit complete, execution deferred) |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

@@ -539,8 +539,8 @@ This research now maps to the collection execution surfaces:
 
 Operational phase artefacts:
 
-5. `.agent/plans/security-and-privacy/phase-0-control-mapping.md`
-6. `.agent/plans/security-and-privacy/phase-1-security-claim-contract.md`
-7. `.agent/plans/security-and-privacy/phase-2-evidence-merge-readiness-rules.md`
-8. `.agent/plans/security-and-privacy/phase-3-baseline-control-cut-list.md`
+5. `.agent/plans/security-and-privacy/future/phase-0-control-mapping.md`
+6. `.agent/plans/security-and-privacy/future/phase-1-security-claim-contract.md`
+7. `.agent/plans/security-and-privacy/future/phase-2-evidence-merge-readiness-rules.md`
+8. `.agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md`
 9. `.agent/plans/security-and-privacy/deferred-controls-register.md`

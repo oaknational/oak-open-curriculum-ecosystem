@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — active post-merge execution running, six plans active in `active/` (including CLI robustness and PR snagging lanes), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Status**: ✅ Milestones 0 and 1 complete — seven plans active in `active/` (`cli-robustness` remains an active incident), Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
 **Last Updated**: 2026-03-11
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -64,13 +64,17 @@ See [high-level-plan.md](../high-level-plan.md) for full milestone definitions.
 Cross-collection sequencing note:
 
 - [high-level-plan.md](../high-level-plan.md) currently sequences:
-  `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
-  Elasticsearch reindex validation, then MCP Apps infrastructure migration,
-  then graph follow-on work from the active alignment audit.
-- Semantic-search currently has six active plans in `active/`:
-  `cli-robustness`, `unified-versioned-ingestion`, `search-sdk-args-extraction`,
-  `bulk-metadata-quick-wins`, `kg-alignment-audit`, and
-  `short-term-pr-snagging`.
+  oak-preview snagging (✅ complete), then post-deploy bulk-data re-download
+  and Elasticsearch reindex validation (🔄 in progress), then MCP Apps
+  infrastructure migration, then graph follow-on work from the active
+  alignment audit.
+- Semantic-search currently has seven active plans in `active/`:
+  `cli-robustness` (🔴 active incident — metadata commit failure after alias
+  swap), `unified-versioned-ingestion`, `search-sdk-args-extraction`,
+  `bulk-metadata-quick-wins`, `kg-alignment-audit`,
+  `category-integration-remediation`, and
+  `search-cli-sdk-boundary-migration`.
+  `short-term-pr-snagging` archived 2026-03-11.
 - The graph lane now has its first evidence-first slice promoted into
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md),
   though its phases remain pending, while
@@ -207,7 +211,7 @@ Progress (25 Feb 2026):
 - Phase 6 (25 Feb 2026): four renames executed — `@oaknational/sdk-codegen`
   (was `curriculum-sdk-generation`), `@oaknational/logger` (was
   `mcp-logger`), `@oaknational/env` (was `mcp-env`), repo internal refs
-  to `oak-open-curriculum-ecosystem` (was `oak-open-curriculum-ecosystem`). Plus Phase 5
+  to `oak-open-curriculum-ecosystem`. Plus Phase 5
   reviewer suggestions (S1–S3), provenance banners (F11), evaluation
   decisions (F12–F14), documentation alignment.
 - Phase 7 complete. Full quality gate chain, determinism verification,
@@ -273,7 +277,7 @@ Canonical next plan:
 
 ### 3c STDIO-HTTP Alignment
 
-- Plan: [stdio-http-server-alignment.md](../architecture-and-infrastructure/stdio-http-server-alignment.md)
+- Plan: [stdio-http-server-alignment.md](../architecture-and-infrastructure/future/stdio-http-server-alignment.md)
 
 ---
 
@@ -299,13 +303,15 @@ closed.
 Current active and queued execution plans:
 
 - [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
-- [cli-robustness.plan.md](active/cli-robustness.plan.md) — active CLI lifecycle robustness lane with dry-run re-validation focus
+- [cli-robustness.plan.md](active/cli-robustness.plan.md) — 🔴 active incident: metadata commit failure after versioned-ingest alias swap
 - [unified-versioned-ingestion.plan.md](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md) — ✅ superseded (archived)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
 - [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win
-- [short-term-pr-snagging.plan.md](active/short-term-pr-snagging.plan.md) — active blocker-first PR #67 snagging lane for checks and review findings
+- [category-integration-remediation.md](active/category-integration-remediation.md) — wire category supplementation through bulk ingestion orchestration
+- [search-cli-sdk-boundary-migration.execution.plan.md](active/search-cli-sdk-boundary-migration.execution.plan.md) — executable migration plan for strict CLI/SDK capability boundaries and lint fitness enforcement
+- [short-term-pr-snagging.plan.md](archive/completed/short-term-pr-snagging.plan.md) — ✅ complete (archived 2026-03-11)
 - [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
 - [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data
 - [kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) — parent queued graph quick-win plan for separate Neo4j provisioning, Elasticsearch projections, and bounded graph augmentation after the active audit
@@ -380,8 +386,8 @@ pnpm smoke:dev:stub
 6. [search-acceptance-criteria.md](search-acceptance-criteria.md)
 7. [auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md) — Milestone 2 blocker research
 8. [../sdk-and-mcp-enhancements/roadmap.md](../sdk-and-mcp-enhancements/roadmap.md) — Milestone 1-2 roadmap
-9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md) — Milestone 3 / Public Beta plan
-10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/cross-agent-standardisation.plan.md) — Milestone 3 / Public Beta plan
+9. [architectural-enforcement-adoption.plan.md](../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md) — Milestone 3 / Public Beta plan
+10. [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md) — ✅ Complete (archived)
 
 ---
 

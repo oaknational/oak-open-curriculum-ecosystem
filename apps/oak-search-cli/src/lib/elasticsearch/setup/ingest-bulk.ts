@@ -49,7 +49,7 @@ export function printBulkSummary(stats: BulkIngestionStats, duration: string): v
 }
 
 /** Log bulk ingestion header. */
-export function printBulkHeader(args: CliArgs): void {
+export function printBulkHeader(args: CliArgs & { readonly bulkDir: string }): void {
   ingestLogger.info('Bulk Ingestion', {
     bulkDir: args.bulkDir,
     dryRun: args.dryRun,
@@ -149,7 +149,7 @@ function createUploadConfig(args: CliArgs): BulkUploadConfig {
  * @returns Bulk ingestion result with stats and duration
  */
 export async function executeBulkIngestion(
-  args: CliArgs,
+  args: CliArgs & { readonly bulkDir: string },
   client: OakClient,
   target: SearchIndexTarget = 'primary',
 ): Promise<BulkIngestionExecutionResult> {

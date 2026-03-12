@@ -27,9 +27,9 @@ todos:
 ## Core References
 
 - [Testing Strategy](../../directives/testing-strategy.md)
-- [Augmented Engineering Practices (industry evidence)](augmented-engineering-practices.research.md) — mutation testing rationale (Parts 8.1, 8.2, Part G)
+- [Augmented Engineering Practices (industry evidence)](../augmented-engineering-practices.research.md) — mutation testing rationale (Parts 8.1, 8.2, Part G)
 - [Hallucination and Evidence Guard Adoption](hallucination-and-evidence-guard-adoption.plan.md)
-- [Evidence Bundle Template](evidence-bundle.template.md) — claim and evidence format for pilot and roll-out reporting
+- [Evidence Bundle Template](../evidence-bundle.template.md) — claim and evidence format for pilot and roll-out reporting
 - [StrykerJS documentation](https://stryker-mutator.io/docs/stryker-js/introduction/) — full docs available via `@StrykerJS` in Cursor
 
 ## Intent
@@ -41,11 +41,11 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 This is a strategic source plan (intent, milestones, and success criteria).
 The authoritative execution tasks for this stream live in:
 
-- [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
+- [phase-5-mutation-testing-execution.md](../active/phase-5-mutation-testing-execution.md)
 
 ## Milestone Position
 
-This plan is a **pre-beta gate** — mutation testing must be operational before the repository exits public alpha and enters public beta. See the [high-level plan](../high-level-plan.md) Milestone 3.
+This plan is a **pre-beta gate** — mutation testing must be operational before the repository exits public alpha and enters public beta. See the [high-level plan](../../high-level-plan.md) Milestone 3.
 
 ## Current State
 
@@ -97,7 +97,7 @@ See [Appendix: Historical Pilot](#appendix-historical-pilot) for findings from t
 
 - Mutation testing operational in one library (`packages/libs/logger/`) and one app (`apps/oak-curriculum-mcp-stdio/`), validating Node pathways
 - Capture performance metrics, mutant survival hotspots, and remediation guidance
-- Record pilot claims and verification evidence using [Evidence Bundle Template](evidence-bundle.template.md)
+- Record pilot claims and verification evidence using [Evidence Bundle Template](../evidence-bundle.template.md)
 
 ### Phase 2 — Monorepo Roll-out
 

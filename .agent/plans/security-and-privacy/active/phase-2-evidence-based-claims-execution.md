@@ -29,7 +29,7 @@ isProject: false
 - [roadmap.md](../roadmap.md)
 - [phase-1-hallucination-guarding-execution.md](phase-1-hallucination-guarding-execution.md)
 - [evidence-bundle.template.md](../evidence-bundle.template.md)
-- [phase-2-evidence-merge-readiness-rules.md](../phase-2-evidence-merge-readiness-rules.md)
+- [phase-2-evidence-merge-readiness-rules.md](../future/phase-2-evidence-merge-readiness-rules.md)
 - [phase-2-evidence-based-claims-execution.md](../../agentic-engineering-enhancements/active/phase-2-evidence-based-claims-execution.md)
 
 ## Preflight
@@ -54,8 +54,8 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
     requiring non-trivial security claims to include evidence references
 - Deterministic validation:
   - `rg -n "Claim Register|Merge-Readiness Check|non-trivial" .agent/plans/security-and-privacy/evidence-bundle.template.md .agent/plans/security-and-privacy/roadmap.md`
-  - `test -f .agent/plans/security-and-privacy/phase-2-evidence-merge-readiness-rules.md`
-  - `rg -n "Evidence Rules|Merge-Readiness Rules|Required Artefacts" .agent/plans/security-and-privacy/phase-2-evidence-merge-readiness-rules.md`
+  - `test -f .agent/plans/security-and-privacy/future/phase-2-evidence-merge-readiness-rules.md`
+  - `rg -n "Evidence Rules|Merge-Readiness Rules|Required Artefacts" .agent/plans/security-and-privacy/future/phase-2-evidence-merge-readiness-rules.md`
 
 ### Task 2.2: Workflow Integration
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { SUBJECTS } from '@oaknational/curriculum-sdk';
 import { parseArgs } from './ingest-cli-args.js';
 import {
@@ -6,37 +6,19 @@ import {
   validateKeyStage,
   validateIndex,
   resolveSubjects,
-  validateBulkDir,
 } from './ingest-cli-validators.js';
 
-/**
- * Tests for CLI argument parsing.
- *
- * Commander calls process.exit(1) on validation errors, so we mock it
- * for tests that need to verify error handling behavior.
- */
+/** Tests for CLI argument parsing. */
 describe('parseArgs', () => {
-  let mockExit: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit called');
-    });
-  });
-
-  afterEach(() => {
-    mockExit.mockRestore();
-  });
-
   describe('default mode is bulk', () => {
     it('defaults to bulk mode (api = false)', () => {
       const result = parseArgs([]);
       expect(result.api).toBe(false);
     });
 
-    it('defaults bulkDir to ./bulk-downloads', () => {
+    it('leaves bulkDir unset by default', () => {
       const result = parseArgs([]);
-      expect(result.bulkDir).toBe('./bulk-downloads');
+      expect(result.bulkDir).toBeUndefined();
     });
 
     it('does not require --subject or --all in bulk mode', () => {
@@ -269,22 +251,6 @@ describe('validators', () => {
 
     it('returns explicit subjects when provided in API mode', () => {
       expect(resolveSubjects(['maths', 'english'], false, true)).toEqual(['maths', 'english']);
-    });
-  });
-
-  describe('validateBulkDir', () => {
-    it('throws when directory does not exist', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow(
-        'Bulk download directory not found',
-      );
-    });
-
-    it('throws with actionable message mentioning bulk:download', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow('pnpm bulk:download');
-    });
-
-    it('throws with actionable message mentioning --api alternative', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow('--api');
     });
   });
 });

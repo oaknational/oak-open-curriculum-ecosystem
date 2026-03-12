@@ -173,10 +173,9 @@ Domain C: Refactoring backlog     ⏳ BLOCKED on A complete + ADR written
 Domain D: Feature backlog         ⏳ BLOCKED on C critical items
 ```
 
-Parallel deploy-readiness snagging is tracked separately at
-[active/oak-preview-mcp-snagging.execution.plan.md](active/oak-preview-mcp-snagging.execution.plan.md).
-That plan runs independently of the Domain A-D migration sequence and must not
-absorb the widget/App migration work owned by Domain C.
+Deploy-readiness snagging is complete and archived at
+[archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md).
+That plan ran independently of the Domain A-D migration sequence.
 
 Parallel MCP contract work is also tracked separately at
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md).
@@ -624,7 +623,7 @@ rg -n "securitySchemes" apps/oak-curriculum-mcp-streamable-http/src/tool-auth-ch
 - [mcp-apps-support.research.md](mcp-apps-support.research.md) — Domain A research artefact (ChatGPT/Claude/Gemini compatibility matrix, CSP model, SDK surfaces)
 - [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) — Active execution entry point for the OpenAI App to MCP Apps replacement work
 - [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) — Current MCP contract plan for truthful `outputSchema` exposure across generated and aggregated tools
-- [active/oak-preview-mcp-snagging.execution.plan.md](active/oak-preview-mcp-snagging.execution.plan.md) — Active deploy-safe snagging plan for current oak-preview MCP issues outside the separate widget/App migration
+- [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md) — ✅ Complete (archived 2026-03-11). Deploy-safe snagging plan for oak-preview MCP issues.
 - [archive/concept-preservation-and-supersession-map.md](archive/concept-preservation-and-supersession-map.md) — Legacy concept ingestion map
 - [archive/auth-safety-correction.plan.md](archive/auth-safety-correction.plan.md) — Archived auth safety plan (superseded by C8; retained for provenance)
 - [archive/mcp-extensions-research-and-planning.metaplan.md](archive/mcp-extensions-research-and-planning.metaplan.md) — Origin metaplan

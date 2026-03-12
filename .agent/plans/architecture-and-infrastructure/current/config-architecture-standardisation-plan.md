@@ -50,7 +50,7 @@ This plan prioritises:
 | `oak-curriculum-mcp-streamable-http`  | `env.ts` + `runtime-config.ts`      | ✅   | ✅ `readEnv(source)`           | **Canonical**     |
 | `oak-curriculum-mcp-stdio`            | `runtime-config.ts` only            | ❌   | ✅ `loadRuntimeConfig(source)` | **Good**          |
 | `oak-search-cli` | `env.ts` (private `readProcessEnv`) | ✅   | ❌ `env()` reads directly      | **Mixed**         |
-| ~~`oak-notion-mcp`~~                  | ~~Removed~~ | — | — | **Removed** (see Item #4 in [high-level-plan](../high-level-plan.md)) |
+| ~~`oak-notion-mcp`~~                  | ~~Removed~~ | — | — | **Removed** (see Item #4 in [high-level-plan](../../high-level-plan.md)) |
 
 ### Existing Shared Package: `@oaknational/mcp-env`
 
@@ -140,7 +140,7 @@ function env(): Env {
 
 ~~`oak-notion-mcp/environment.ts` evaluated at import time.~~
 The `oak-notion-mcp` workspace has been removed entirely
-(see Item #4 in [high-level-plan](../high-level-plan.md)).
+(see Item #4 in [high-level-plan](../../high-level-plan.md)).
 This problem no longer exists.
 
 **Impact**: Cannot test without mocking the module itself; test isolation impossible.
@@ -473,7 +473,7 @@ Update all 4 apps to use `@oaknational/mcp-config`, eliminating duplication and 
 
 The `oak-notion-mcp` workspace has been removed entirely.
 This task is no longer needed. See Item #4 in the
-[high-level plan](../high-level-plan.md).
+[high-level plan](../../high-level-plan.md).
 
 ~~**Original plan**: Complete refactoring from module-level
 constants to the canonical `env.ts` + `runtime-config.ts`

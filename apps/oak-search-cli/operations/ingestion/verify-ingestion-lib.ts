@@ -28,6 +28,36 @@ export interface BulkDownloadData {
 }
 
 /**
+ * Runtime type guard for bulk download payloads.
+ */
+export function isBulkDownloadData(data: unknown): data is BulkDownloadData {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+  if (!('lessons' in data)) {
+    return false;
+  }
+  const lessons = data.lessons;
+  if (!Array.isArray(lessons)) {
+    return false;
+  }
+  return lessons.every(isBulkDownloadLesson);
+}
+
+/**
+ * Runtime type guard for a single bulk lesson item.
+ */
+function isBulkDownloadLesson(lesson: unknown): lesson is BulkDownloadLesson {
+  if (typeof lesson !== 'object' || lesson === null) {
+    return false;
+  }
+  if (!('lessonSlug' in lesson) || !('keyStageSlug' in lesson)) {
+    return false;
+  }
+  return typeof lesson.lessonSlug === 'string' && typeof lesson.keyStageSlug === 'string';
+}
+
+/**
  * Parameters for generating a verification report.
  */
 export interface VerificationReportParams {
@@ -44,6 +74,33 @@ export interface VerificationReportParams {
 }
 
 /**
+ * Result of resolving the bulk download file path for verification.
+ */
+export type BulkDownloadPathResolution =
+  | {
+      readonly ok: true;
+      readonly value: string;
+    }
+  | {
+      readonly ok: false;
+      readonly error: string;
+    };
+
+/**
+ * Input required to resolve verification bulk download path.
+ */
+export interface VerificationBulkPathInput {
+  /** Raw `--bulk-download` flag value, if supplied. */
+  readonly bulkDownloadPathArg: string;
+  /** Optional `BULK_DOWNLOAD_DIR` from environment. */
+  readonly bulkDownloadDirFromEnv: string | undefined;
+  /** Subject being verified. */
+  readonly subject: string;
+  /** Key stage being verified. */
+  readonly keyStage: string;
+}
+
+/**
  * Extracts unique lesson slugs for a specific key stage from bulk download data.
  *
  * The bulk download may contain duplicate lesson entries (e.g., same lesson
@@ -53,13 +110,6 @@ export interface VerificationReportParams {
  * @param data - The bulk download data structure
  * @param keyStage - The key stage to filter by (e.g., 'ks4')
  * @returns Array of unique lesson slugs matching the key stage
- *
- * @example
- * ```typescript
- * const data = { lessons: [{ lessonSlug: 'lesson-1', keyStageSlug: 'ks4' }] };
- * const lessons = extractLessonsFromBulkDownload(data, 'ks4');
- * // ['lesson-1']
- * ```
  */
 export function extractLessonsFromBulkDownload(data: BulkDownloadData, keyStage: string): string[] {
   const slugs = data.lessons
@@ -75,12 +125,6 @@ export function extractLessonsFromBulkDownload(data: BulkDownloadData, keyStage:
  * @param expected - Array of expected lesson slugs (from bulk download)
  * @param indexed - Array of indexed lesson slugs (from Elasticsearch)
  * @returns Array of lesson slugs that are missing
- *
- * @example
- * ```typescript
- * const missing = findMissingLessons(['a', 'b', 'c'], ['a', 'c']);
- * // ['b']
- * ```
  */
 export function findMissingLessons(
   expected: readonly string[],
@@ -88,6 +132,55 @@ export function findMissingLessons(
 ): string[] {
   const indexedSet = new Set(indexed);
   return expected.filter((slug) => !indexedSet.has(slug));
+}
+
+/**
+ * Resolve the bulk download file path provided by CLI arguments.
+ *
+ * Verification must never silently fall back to an implicit fixture location.
+ * Callers must provide an explicit file path so the verification dataset is
+ * unambiguous and matches the ingest run under test.
+ *
+ * @param bulkDownloadPathArg - Raw `--bulk-download` argument value
+ * @returns Resolution result with either the provided path or an error
+ */
+function resolveBulkFileName(subject: string, keyStage: string): string {
+  if (subject === 'maths') {
+    return keyStage === 'ks4' ? 'maths-secondary.json' : 'maths-primary.json';
+  }
+  return `${subject}.json`;
+}
+
+/**
+ * Resolve the verification bulk download file path.
+ *
+ * Resolution precedence:
+ * 1. `--bulk-download` exact file path (respected verbatim)
+ * 2. `BULK_DOWNLOAD_DIR` + derived subject/key-stage file name
+ *
+ * There is intentionally no hidden hardcoded repository fallback.
+ */
+export function resolveBulkDownloadPath(
+  input: VerificationBulkPathInput,
+): BulkDownloadPathResolution {
+  if (input.bulkDownloadPathArg.length > 0) {
+    return {
+      ok: true,
+      value: input.bulkDownloadPathArg,
+    };
+  }
+  if (!input.bulkDownloadDirFromEnv || input.bulkDownloadDirFromEnv.length === 0) {
+    return {
+      ok: false,
+      error:
+        'Missing bulk download source. Provide --bulk-download <file> or set BULK_DOWNLOAD_DIR in env.',
+    };
+  }
+  const fileName = resolveBulkFileName(input.subject, input.keyStage);
+  return {
+    ok: true,
+    value: `${input.bulkDownloadDirFromEnv}/${fileName}`,
+  };
 }
 
 /**
@@ -100,22 +193,6 @@ const MAX_MISSING_TO_DISPLAY = 20;
  *
  * @param params - Report parameters
  * @returns Formatted multi-line report string
- *
- * @example
- * ```typescript
- * const report = generateVerificationReport({
- *   subject: 'maths',
- *   keyStage: 'ks4',
- *   expectedCount: 100,
- *   indexedCount: 98,
- *   missingLessons: ['lesson-1', 'lesson-2'],
- * });
- * console.log(report);
- * // Verification: FAILED
- * // Subject: maths, Key Stage: ks4
- * // Expected: 100, Indexed: 98, Missing: 2
- * // ...
- * ```
  */
 export function generateVerificationReport(params: VerificationReportParams): string {
   const { subject, keyStage, expectedCount, indexedCount, missingLessons } = params;

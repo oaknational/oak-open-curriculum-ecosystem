@@ -26,7 +26,7 @@
     "es:setup": "tsx bin/oaksearch.ts admin setup",
     "es:reset": "tsx bin/oaksearch.ts admin setup --reset",
     "es:status": "tsx bin/oaksearch.ts admin status",
-    "es:ingest": "tsx bin/oaksearch.ts admin ingest",
+    "es:ingest": "tsx bin/oaksearch.ts admin versioned-ingest",
     "diagnose:elser": "tsx bin/oaksearch.ts admin diagnose-elser",
     "analyze:elser": "tsx bin/oaksearch.ts admin analyze-elser",
     "ingest:verify": "tsx bin/oaksearch.ts admin verify",

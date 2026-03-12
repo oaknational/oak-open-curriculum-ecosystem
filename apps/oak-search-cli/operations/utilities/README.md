@@ -77,7 +77,7 @@ Utilities are simple, single-purpose scripts that:
 Keep it simple:
 
 ````typescript
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 /**
  * Brief description of what this utility does.
  *

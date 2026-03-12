@@ -43,7 +43,7 @@ Superseded source plans:
 
 - `../archive/superseded/e2e-vi-mock-clerk-removal.plan.md`
 - `../archive/superseded/eslint-override-removal.plan.md`
-- `../../architecture-and-infrastructure/no-console-enforcement.plan.md` (folded into this canonical plan on 2026-03-04)
+- `../../architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md` (folded into this canonical plan on 2026-03-04)
 
 Related architectural-enforcement sources:
 
@@ -697,7 +697,7 @@ Deterministic validation:
 
 ```bash
 ! rg --line-number "\\[[^]]*\\]\\([^)]*(e2e-vi-mock-clerk-removal|eslint-override-removal)\\.plan\\.md\\)" .agent/plans .agent/memory .agent/directives .cursor | rg --line-number -v "archive/superseded/(e2e-vi-mock-clerk-removal|eslint-override-removal)\\.plan\\.md"
-rg --line-number "devx-strictness-convergence\\.plan\\.md" .agent/plans/architecture-and-infrastructure/no-console-enforcement.plan.md .agent/plans/agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md .agent/plans/agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md
+rg --line-number "devx-strictness-convergence\\.plan\\.md" .agent/plans/architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md .agent/plans/agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md .agent/plans/agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md
 pnpm markdownlint-check:root
 ```
 
@@ -799,8 +799,8 @@ The 218-warning burn-down target requires nuanced handling:
 - `.cursor/rules/use-start-right-skills.mdc`
 - `../archive/superseded/e2e-vi-mock-clerk-removal.plan.md`
 - `../archive/superseded/eslint-override-removal.plan.md`
-- `../../architecture-and-infrastructure/no-console-enforcement.plan.md`
-- `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+- `../../architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md`
+- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 - `../documentation-sync-log.md`
 

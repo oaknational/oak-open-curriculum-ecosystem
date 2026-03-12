@@ -3,7 +3,7 @@
 **Status**: 📋 BACKLOG  
 **Priority**: Medium — should follow Phase 3a completion  
 **Created**: 2026-02-17  
-**Related**: [Config Architecture Standardisation](config-architecture-standardisation-plan.md), [Phase 3a MCP Search Integration](../semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
+**Related**: [Config Architecture Standardisation](../current/config-architecture-standardisation-plan.md), [Phase 3a MCP Search Integration](../../semantic-search/archive/completed/phase-3a-mcp-search-integration.md)
 
 ---
 

@@ -26,8 +26,8 @@ isProject: false
 
 # Unified Versioned Ingestion Pipeline
 
-**Last Updated**: 2026-03-10
-**Status**: IN PROGRESS — Phases 0–2 merged to `main` (PR #61). Phase 3 in progress: Task 3.0 (dry run) complete, logging improvements done, `admin count` tool added. Task 3.1 (stage) ready for manual execution
+**Last Updated**: 2026-03-11
+**Status**: IN PROGRESS — Phases 0–2 merged to `main` (PR #61). Phase 3 infrastructure complete (all commands wired: stage, promote, rollback, validate-aliases, count). Manual stage/promote/verify cycle underway (ingest run in progress). Phase 4 (adversarial review + documentation) not started.
 **Scope**: Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle
 **Predecessor**: [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — what went wrong and why
 

@@ -2,8 +2,8 @@
 prompt_id: pr-67-snagging-triage
 title: "PR #67 Snagging Triage Session"
 type: handover
-status: active
-last_updated: 2026-03-10
+status: completed
+last_updated: 2026-03-11
 ---
 
 # PR #67 Snagging Triage Session
@@ -16,7 +16,7 @@ Use this prompt to run a full, item-by-item triage pass for PR #67.
 - PR: `#67`
 - Objective: classify and action every open check/comment item
 - Constraint: short-term snagging only (merge blockers first)
-- Executable plan: `.agent/plans/semantic-search/active/short-term-pr-snagging.plan.md`
+- Executable plan: `.agent/plans/semantic-search/archive/completed/short-term-pr-snagging.plan.md` (archived)
 
 ## Non-Negotiables
 
@@ -61,7 +61,7 @@ For each item, decide one of:
 Required rationale fields per item:
 
 Use the `Triage Item Record (Required Fields)` section from the active plan:
-`.agent/plans/semantic-search/active/short-term-pr-snagging.plan.md`.
+`.agent/plans/semantic-search/archive/completed/short-term-pr-snagging.plan.md`.
 
 ## Step 3: Validate Decisions with Evidence
 

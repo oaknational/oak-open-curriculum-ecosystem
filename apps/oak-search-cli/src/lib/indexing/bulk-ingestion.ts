@@ -41,6 +41,17 @@ export interface BulkIngestionOptions {
   readonly resolveIndex?: IndexResolverFn;
 }
 
+/** Dependency surface for `prepareBulkIngestion` testability. */
+export interface BulkIngestionDeps {
+  readonly readAllBulkFiles: typeof readAllBulkFiles;
+  readonly collectPhaseResults: typeof collectPhaseResults;
+}
+
+const defaultBulkIngestionDeps: BulkIngestionDeps = {
+  readAllBulkFiles,
+  collectPhaseResults,
+};
+
 /** Filters bulk file results by subject if filter is provided. */
 function filterBySubject(
   files: readonly BulkFileResult[],
@@ -68,6 +79,7 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
 /** Prepares bulk operations from bulk download files using HybridDataSource. */
 export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
+  deps: BulkIngestionDeps = defaultBulkIngestionDeps,
 ): Promise<BulkIngestionResult> {
   const { bulkDir, client, subjectFilter, indexes = [], resolveIndex } = options;
   ingestLogger.info('Starting bulk ingestion preparation', {
@@ -75,12 +87,12 @@ export async function prepareBulkIngestion(
     indexes: indexes.length > 0 ? indexes : 'all',
   });
 
-  const allFiles = await readAllBulkFiles(bulkDir);
+  const allFiles = await deps.readAllBulkFiles(bulkDir);
   const filteredFiles = filterBySubject(allFiles, subjectFilter);
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
-  const phases = await collectPhaseResults(
+  const phases = await deps.collectPhaseResults(
     filteredFiles,
     bulkDownloadFiles,
     client,

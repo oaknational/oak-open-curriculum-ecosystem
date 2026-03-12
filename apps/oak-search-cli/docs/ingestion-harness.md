@@ -57,14 +57,13 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 
 #### Ingestion CLI
 
-- Script: `src/lib/elasticsearch/setup/ingest.ts`, wired via `pnpm es:ingest` (use `--api` for API mode).
-- Flags:
-  - `--subject <slug>` – specify subjects to ingest (repeatable).
-  - `--all` – ingest all 17 subjects from the OpenAPI schema.
-  - `--key-stage <slug>` – specify key stages (defaults to all 4).
-  - `--dry-run` – skip the Elasticsearch `_bulk` request while still producing summary logs.
-  - `--verbose` – enable debug logging.
-  - `--clear-cache` – clear Redis SDK response cache before ingestion.
+- Canonical command surface: `oaksearch admin versioned-ingest` and `oaksearch admin stage` (wired through `bin/oaksearch.ts`).
+- Convenience script: `pnpm es:ingest` delegates to `oaksearch admin versioned-ingest`.
+- Common flags:
+  - `--bulk-dir <path>` – override `BULK_DOWNLOAD_DIR`.
+  - `--subject-filter <subjects...>` – restrict ingest scope.
+  - `--min-doc-count <count>` – minimum docs per index validation.
+  - `--verbose` – enable detailed logging.
 - The CLI logs inputs and outcomes through `ingestLogger` and exits non-zero on failure.
 
 #### Fixture ingestion CLI

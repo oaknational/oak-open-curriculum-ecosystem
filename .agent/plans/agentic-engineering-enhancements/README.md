@@ -14,15 +14,15 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/README.md` | Current Index | Queued executable plans ready to start |
 | `active/README.md` | Active Index | Atomic executable plans mapped one-to-one to roadmap phases |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
-| `elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
-| `architectural-enforcement-adoption.plan.md` | Plan | Physical enforcement strategy; strictness-specific ESLint work is delegated to `developer-experience/active/devx-strictness-convergence.plan.md`, and directory-complexity execution now lives in `developer-experience/current/directory-complexity-enablement.execution.plan.md` |
-| `cross-agent-standardisation.plan.md` | Plan (Superseded) | Historical portability plan superseded by ADR-125 and archived execution work |
-| `mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
-| `hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
+| `current/elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
+| `current/architectural-enforcement-adoption.plan.md` | Plan | Physical enforcement strategy; strictness-specific ESLint work is delegated to `developer-experience/active/devx-strictness-convergence.plan.md`, and directory-complexity execution now lives in `developer-experience/current/directory-complexity-enablement.execution.plan.md` |
+| `current/mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
+| `current/hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
+| `current/harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
-| `documentation-accuracy-improvements.plan.md` | Plan | Fix documentation inaccuracies and structural issues (prerequisite for enforcement) — **COMPLETE** |
-| `harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
+| `archive/completed/cross-agent-standardisation.plan.md` | Plan (Superseded) | Historical portability plan superseded by ADR-125 and archived execution work |
+| `archive/completed/documentation-accuracy-improvements.plan.md` | Plan (Completed) | Fix documentation inaccuracies and structural issues (prerequisite for enforcement) — **COMPLETE** |
 | `2026-02-21-cross-agent-standardisation-landscape.research.md` | Research | Landscape of cross-agent standards (AGENTS.md, Skills, MCP, A2A) |
 | `augmented-engineering-practices.research.md` | Research | Industry evidence base for AI-augmented engineering |
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
@@ -63,11 +63,11 @@ before phase closure.
 
 ## Dependencies
 
-- `documentation-accuracy-improvements.plan.md` (**COMPLETE**) was a prerequisite for `architectural-enforcement-adoption.plan.md` (boundary definitions are now correct)
-- `augmented-engineering-safety.research.md` provides the evidence model for `hallucination-and-evidence-guard-adoption.plan.md`
+- `archive/completed/documentation-accuracy-improvements.plan.md` (**COMPLETE**) was a prerequisite for `current/architectural-enforcement-adoption.plan.md` (boundary definitions are now correct)
+- `augmented-engineering-safety.research.md` provides the evidence model for `current/hallucination-and-evidence-guard-adoption.plan.md`
 - `evidence-bundle.template.md` is the shared evidence artifact referenced by hallucination/evidence, enforcement, and mutation plans
 - `augmented-engineering-practices.research.md` provides evidence for both the enforcement and mutation testing plans
-- `2026-02-21-cross-agent-standardisation-landscape.research.md` provides the analysis behind `cross-agent-standardisation.plan.md`
+- `2026-02-21-cross-agent-standardisation-landscape.research.md` provides the analysis behind `archive/completed/cross-agent-standardisation.plan.md`
 
 ## Milestone Alignment
 

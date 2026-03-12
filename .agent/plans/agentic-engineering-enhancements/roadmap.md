@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; Phase 1 ready to start; Elasticsearch specialist capability active in `active/`
-**Last Updated**: 2026-03-07
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Phase 1 ready to start
+**Last Updated**: 2026-03-11
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -26,7 +26,9 @@ Authoritative active execution sources:
 
 Active adjacent execution sources:
 
-1. [elasticsearch-specialist-capability.execution.plan.md](active/elasticsearch-specialist-capability.execution.plan.md)
+1. ~~elasticsearch-specialist-capability.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
+2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
+3. [phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md) (HC-0: harness-concepts baseline)
 
 ---
 
@@ -81,6 +83,12 @@ Phase 2: Evidence-based claims rollout               📋 PLANNED
 Phase 3: Architectural enforcement execution         📋 PLANNED
 Phase 4: Cross-agent standardisation execution       ⛔ SUPERSEDED (ADR-125)
 Phase 5: Mutation testing execution                  📋 PLANNED
+
+Adjacent:
+  ES:   Elasticsearch specialist capability          ✅ COMPLETE
+  CX:   Codex platform parity                       ✅ COMPLETE
+  HC-0: Harness concepts baseline metrics            📋 PLANNED
+  ACT:  Agent classification taxonomy                📋 STRATEGIC
 ```
 
 ---
@@ -103,7 +111,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Active plan:
   [phase-1-hallucination-guarding-execution.md](active/phase-1-hallucination-guarding-execution.md)
 - Source strategy:
-  [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md)
+  [hallucination-and-evidence-guard-adoption.plan.md](current/hallucination-and-evidence-guard-adoption.plan.md)
 - Done when:
   - non-trivial claim classes and verification contract are implemented in
     prompts/review workflow
@@ -116,7 +124,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Active plan:
   [phase-2-evidence-based-claims-execution.md](active/phase-2-evidence-based-claims-execution.md)
 - Source strategy:
-  [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md)
+  [hallucination-and-evidence-guard-adoption.plan.md](current/hallucination-and-evidence-guard-adoption.plan.md)
 - Done when:
   - evidence bundle usage is standardised across target workflows
   - merge-readiness checks enforce evidence requirements
@@ -128,7 +136,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Active plan:
   [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
 - Source strategy:
-  [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md)
+  [architectural-enforcement-adoption.plan.md](current/architectural-enforcement-adoption.plan.md)
 - Convergence update (2026-03-04):
   - Strictness-specific ESLint convergence tasks (`no-console`, shared-config promotion work) are executed in
     [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
@@ -151,7 +159,7 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 - Active plan:
   [phase-5-mutation-testing-execution.md](active/phase-5-mutation-testing-execution.md)
 - Source strategy:
-  [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md)
+  [mutation-testing-implementation.plan.md](current/mutation-testing-implementation.plan.md)
 - **Milestone context**: Stryker is already a devDependency with a
   `pnpm mutate` turbo task and config inputs. It was briefly used and now
   needs proper integration. **Blocks public beta (M3), not public alpha
@@ -165,20 +173,65 @@ Phase 5: Mutation testing execution                  📋 PLANNED
   - Phase 2 evidence workflow available
   - Phase 3 enforcement baseline stable
 
-### Active Adjacent Work — Elasticsearch Specialist Capability
+### Adjacent — Elasticsearch Specialist Capability
 
 - Active plan:
   [active/elasticsearch-specialist-capability.execution.plan.md](active/elasticsearch-specialist-capability.execution.plan.md)
 - Source strategy:
-  [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md)
+  [elasticsearch-specialist-capability.plan.md](current/elasticsearch-specialist-capability.plan.md)
 - Goal:
   - add a canonical Elasticsearch reviewer, skill, and situational rule
   - require live consultation of official Elastic documentation as primary authority
   - treat Elastic Serverless as the default deployment context
-- Status: 🔄 Active
+- Status: ✅ Complete
 - Notes:
-  - this is intentionally outside the numbered phase sequence
-  - it is collection-owned because it extends the agent capability model rather than the product runtime directly
+  - intentionally outside the numbered phase sequence
+  - collection-owned because it extends the agent capability model rather than the product runtime directly
+
+### Adjacent — Codex Platform Parity
+
+- Active plan:
+  ~~active/codex-platform-parity.execution.plan.md~~ (archived)
+- Status: ✅ Complete
+- Done when:
+  - Codex agent configuration exists with appropriate tool access and constraints
+  - AGENTS.md is present and consistent with AGENT.md directives
+  - portability validation covers Codex artefacts
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - extends platform coverage to OpenAI Codex alongside Cursor and Claude Code
+
+### Adjacent — Agent Classification Taxonomy
+
+- Strategic plan:
+  [agent-classification-taxonomy.plan.md](future/agent-classification-taxonomy.plan.md)
+- ADR: [ADR-135](../../../docs/architecture/architectural-decisions/135-agent-classification-taxonomy.md)
+- Goal:
+  - introduce `classification` field (`domain_expert`, `process_executor`, `specialist`) to all agents
+  - add operational modes (`explore`, `advise`, `review`) as composable components
+  - full rename of all agents (drop `-reviewer` suffix)
+  - create Practice domain trio (`practice`, `practice-core`, `practice-applied`)
+  - update validation, documentation, and platform adapters across all four platforms
+- Status: 📋 Strategic (future/)
+- Notes:
+  - executes on a dedicated feature branch
+  - success criterion: zero stale references to old names anywhere in repo
+
+### Adjacent — Harness Concepts Baseline Metrics (HC-0)
+
+- Active plan:
+  [active/phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md)
+- Source strategy:
+  [harness-concepts-adoption.plan.md](current/harness-concepts-adoption.plan.md)
+- Goal:
+  - evaluate harness-engineering concepts (docs freshness, entropy cleanup, quality scoring)
+  - capture baseline metrics for adoption candidates
+- Status: 📋 Planned
+- Done when:
+  - baseline metrics captured for docs freshness, entropy, and quality scoring
+  - adoption/rejection decision recorded for each harness concept
+  - documentation sync log records updates/no-change rationale
+- Dependencies: Phase 0 complete
 
 ---
 

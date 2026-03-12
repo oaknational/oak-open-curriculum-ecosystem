@@ -32,7 +32,7 @@ isProject: false
 
 - [roadmap.md](../roadmap.md)
 - [developing-secure-mcp-servers.research.md](../developing-secure-mcp-servers.research.md)
-- [phase-1-security-claim-contract.md](../phase-1-security-claim-contract.md)
+- [phase-1-security-claim-contract.md](../future/phase-1-security-claim-contract.md)
 - [phase-1-hallucination-guarding-execution.md](../../agentic-engineering-enhancements/active/phase-1-hallucination-guarding-execution.md)
 
 ## Preflight
@@ -58,8 +58,8 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
   - explicit alignment statement to global guardrail policy
 - Deterministic validation:
   - `rg -n "security-control-enabled|policy-enforced|risk-reduced|verified|partially verified|unverified" .agent/plans/security-and-privacy`
-  - `test -f .agent/plans/security-and-privacy/phase-1-security-claim-contract.md`
-  - `rg -n "Alignment Rule|Claim Classes|Verification Statuses|Guard Rules" .agent/plans/security-and-privacy/phase-1-security-claim-contract.md`
+  - `test -f .agent/plans/security-and-privacy/future/phase-1-security-claim-contract.md`
+  - `rg -n "Alignment Rule|Claim Classes|Verification Statuses|Guard Rules" .agent/plans/security-and-privacy/future/phase-1-security-claim-contract.md`
 
 ### Task 1.2: Prompt and Reviewer Integration
 

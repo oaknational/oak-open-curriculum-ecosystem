@@ -13,9 +13,6 @@ import {
   validatePositiveInt,
 } from './ingest-cli-validators.js';
 
-/** Default bulk download directory (relative to search CLI workspace root). */
-export const DEFAULT_BULK_DIR = './bulk-downloads';
-
 /**
  * Add data source options to program.
  *
@@ -26,10 +23,7 @@ export const DEFAULT_BULK_DIR = './bulk-downloads';
 function addDataSourceOptions(program: Command): void {
   program
     .option('--api', 'Use live API instead of bulk download files')
-    .option(
-      '--bulk-dir <path>',
-      `Directory containing bulk JSON files (default: ${DEFAULT_BULK_DIR})`,
-    );
+    .option('--bulk-dir <path>', 'Directory containing bulk JSON files');
 }
 
 /**
@@ -106,7 +100,8 @@ export function createProgram(): Command {
       'after',
       `
 ${chalk.yellow('Data Source (default: bulk)')}
-  Reads from local bulk-download files by default (${DEFAULT_BULK_DIR}).
+  Reads from local bulk-download files by default.
+  Configure with --bulk-dir or BULK_DOWNLOAD_DIR.
   Run 'pnpm bulk:download' first to fetch the bulk data.
   Use --api to switch to live API fetching (slower, rate-limited).
 

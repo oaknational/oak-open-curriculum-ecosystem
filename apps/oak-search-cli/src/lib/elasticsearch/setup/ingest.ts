@@ -1,7 +1,9 @@
 /** Ingestion CLI — ingest curriculum data into Elasticsearch. */
-import { dirname } from 'node:path';
+import { existsSync, readdirSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadRuntimeConfig } from '../../../runtime-config.js';
+import type { SearchCliEnv } from '../../../env.js';
 import { initializeEsClient } from '../../es-client.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter.js';
 import { createIngestHarness } from '../../indexing/ingest-harness.js';
@@ -22,9 +24,11 @@ import {
 } from './ingest-output.js';
 import { withRateLimitMonitoring } from '../../rate-limit-logger.js';
 import { printBulkHeader, executeBulkIngestion } from './ingest-bulk.js';
-import { validateBulkDir } from './ingest-cli-validators.js';
+import { resolveBulkDirFromInputs } from '../../../cli/shared/resolve-bulk-dir.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
+const APP_ROOT = resolve(CURRENT_DIR, '../../../..');
+const realFs = { existsSync, readdirSync: (path: string) => readdirSync(path) };
 
 /** Handle cache clearing if requested. */
 async function handleCacheClearing(
@@ -74,10 +78,7 @@ async function executeIngestion(
  * @remarks
  * In dry-run mode, cache is bypassed to avoid Redis network IO.
  */
-async function runApiIngestion(
-  args: CliArgs,
-  env: Parameters<typeof createIngestionClient>[0]['env'],
-): Promise<void> {
+async function runApiIngestion(args: CliArgs, env: SearchCliEnv): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
   configureIngestionMode(args);
@@ -135,28 +136,26 @@ async function runApiIngestion(
  *
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
-async function runBulkIngestion(
-  args: CliArgs,
-  env: Parameters<typeof createIngestionClient>[0]['env'],
-): Promise<void> {
+async function runBulkIngestion(args: CliArgs, env: SearchCliEnv, bulkDir: string): Promise<void> {
+  const argsWithBulkDir: CliArgs & { readonly bulkDir: string } = { ...args, bulkDir };
   resetIngestionErrorCollector();
-  printBulkHeader(args);
-  configureIngestionMode(args);
-  await handleCacheClearing(args, env);
+  printBulkHeader(argsWithBulkDir);
+  configureIngestionMode(argsWithBulkDir);
+  await handleCacheClearing(argsWithBulkDir, env);
 
   // In dry-run mode, bypass cache to avoid Redis network IO
   const client = await createIngestionClient({
     env,
-    bypassCache: args.bypassCache || args.dryRun,
-    ignoreCached404: args.ignoreCached404,
+    bypassCache: argsWithBulkDir.bypassCache || argsWithBulkDir.dryRun,
+    ignoreCached404: argsWithBulkDir.ignoreCached404,
   });
 
   try {
-    const { result, duration } = await executeBulkIngestion(args, client);
-    if (!args.dryRun) {
+    const { result, duration } = await executeBulkIngestion(argsWithBulkDir, client);
+    if (!argsWithBulkDir.dryRun) {
       const errorCollector = getIngestionErrorCollector();
       errorCollector.logSummary(ingestLogger);
-      await handlePostIngestion(args, result, duration);
+      await handlePostIngestion(argsWithBulkDir, result, duration);
     }
   } finally {
     await client.disconnect();
@@ -164,15 +163,23 @@ async function runBulkIngestion(
 }
 
 /** Execute the main ingestion workflow (bulk by default, API with --api). */
-async function runIngestion(
-  args: CliArgs,
-  env: Parameters<typeof createIngestionClient>[0]['env'],
-): Promise<void> {
+async function runIngestion(args: CliArgs, env: SearchCliEnv): Promise<void> {
   if (args.api) {
     await runApiIngestion(args, env);
   } else {
-    validateBulkDir(args.bulkDir);
-    await runBulkIngestion(args, env);
+    const bulkDirResolution = resolveBulkDirFromInputs({
+      bulkDirFlag: args.bulkDir,
+      bulkDirFromEnv: env.BULK_DOWNLOAD_DIR,
+      appRoot: APP_ROOT,
+      fs: realFs,
+    });
+    if (!bulkDirResolution.ok) {
+      ingestLogger.error('Invalid bulk directory configuration', bulkDirResolution.error);
+      process.stderr.write(`${bulkDirResolution.error.message}\n`);
+      process.exitCode = 1;
+      return;
+    }
+    await runBulkIngestion(args, env, bulkDirResolution.value);
   }
 }
 

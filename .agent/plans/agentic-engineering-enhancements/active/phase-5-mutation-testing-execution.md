@@ -28,7 +28,7 @@ todos:
 
 ## Source Strategy
 
-- [mutation-testing-implementation.plan.md](../mutation-testing-implementation.plan.md)
+- [mutation-testing-implementation.plan.md](../current/mutation-testing-implementation.plan.md)
 - [evidence-bundle.template.md](../evidence-bundle.template.md)
 
 ## Atomic Tasks

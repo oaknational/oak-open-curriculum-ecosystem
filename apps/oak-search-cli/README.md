@@ -37,12 +37,12 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 ## CLI Commands (`oaksearch`)
 
-| Command Group       | Subcommands                                                                | SDK Service            |
-| ------------------- | -------------------------------------------------------------------------- | ---------------------- |
-| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                        | `RetrievalService`     |
-| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, ingest, verify, download, ... | `AdminService`         |
-| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen         | Pass-through           |
-| `oaksearch observe` | telemetry, summary, purge                                                  | `ObservabilityService` |
+| Command Group       | Subcommands                                                                                                                      | SDK Service            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                                                                              | `RetrievalService`     |
+| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, versioned-ingest, stage, promote, rollback, validate-aliases, verify, download, ... | `AdminService`         |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen                                                               | Pass-through           |
+| `oaksearch observe` | telemetry, summary, purge                                                                                                        | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
 
@@ -110,7 +110,7 @@ apps/oak-search-cli/
 │  ├─ cli/                       # CLI subcommand groups
 │  │  ├─ shared/                 # SDK factory, resource lifecycle, validators, output, pass-through
 │  │  ├─ search/                 # oaksearch search {lessons|units|sequences|suggest|facets}
-│  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|ingest|...}
+│  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|versioned-ingest|stage|...}
 │  │  ├─ observe/                # oaksearch observe {telemetry|summary|purge}
 │  │  └─ eval/                   # oaksearch eval {benchmark|validate|codegen}
 │  ├─ lib/hybrid-search/        # RRF query builders, score normalisation, search orchestration
@@ -169,7 +169,7 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    | `ZERO_HIT_PERSISTENCE_ENABLED` | ➖       | `true` to persist zero-hit events to Elasticsearch                             |
 
    Runtime behaviour:
-   - `pnpm es:ingest` reads required values from `process.env`.
+   - `pnpm es:ingest` (alias for `oaksearch admin versioned-ingest`) reads required values from `process.env`.
    - If `apps/oak-search-cli/.env.local` or `apps/oak-search-cli/.env` exists, it is loaded automatically and overrides existing process values.
    - `pnpm es:ingest -- --help` exits successfully without env validation.
 
@@ -192,11 +192,11 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    ```bash
    cd apps/oak-search-cli
 
-   # Ingest specific subject (API mode)
-   pnpm es:ingest -- --api --subject maths --key-stage ks4
-
-   # Ingest all subjects (bulk mode is default; use --api for API mode)
+   # Full lifecycle ingest (blue/green)
    pnpm es:ingest
+
+   # Stage only (no alias promotion)
+   pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads
    ```
 
 6. **Verify search quality**
@@ -236,33 +236,27 @@ pnpm es:setup --reset
 pnpm es:status
 ```
 
-### Bulk Ingestion
+### Bulk Ingestion (Lifecycle)
 
 ```bash
-# Preview (dry run)
-pnpm es:ingest -- --bulk-dir ./bulk-downloads --dry-run
-
-# Full ingestion (bulk mode is default; incremental - skips existing)
+# Full lifecycle ingest (create + ingest + alias management)
 pnpm es:ingest
 
-# Incremental ingestion (skip existing documents - for resuming)
-pnpm es:ingest -- --incremental
+# Stage only (create + ingest + verify, no promotion)
+pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads
+
+# Validate alias health before/after ingest
+pnpm tsx bin/oaksearch.ts admin validate-aliases
 ```
 
 ### Flags
 
-| Flag                 | Description                                                      |
-| -------------------- | ---------------------------------------------------------------- |
-| `--api`              | Use API mode (fetch from Oak API) instead of bulk files          |
-| `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)    |
-| `--dry-run`          | Preview operations without executing                             |
-| `--incremental`      | Use `create` action (skip existing) instead of default overwrite |
-| `--verbose`          | Detailed logging                                                 |
-| `--subject <slug>`   | Filter to specific subject(s)                                    |
-| `--key-stage <slug>` | Filter to specific key stage(s)                                  |
-| `--max-retries <n>`  | Maximum document-level retry attempts (default: 4)               |
-| `--retry-delay <ms>` | Base delay for exponential backoff (default: 5000)               |
-| `--no-retry`         | Disable document-level retry (fail fast)                         |
+| Flag                             | Description                                                     |
+| -------------------------------- | --------------------------------------------------------------- |
+| `--bulk-dir <path>`              | Path to bulk download directory (overrides `BULK_DOWNLOAD_DIR`) |
+| `--subject-filter <subjects...>` | Restrict ingestion to specific subjects                         |
+| `--min-doc-count <count>`        | Minimum expected docs per index during validation               |
+| `--verbose`                      | Detailed lifecycle logging                                      |
 
 ### Refresh Bulk Data
 
@@ -270,6 +264,20 @@ pnpm es:ingest -- --incremental
 # Download fresh bulk data from Oak API
 pnpm bulk:download
 ```
+
+### Bulk Directory Configuration
+
+Set `BULK_DOWNLOAD_DIR` once in `.env.local` for all ingestion/verification commands:
+
+```dotenv
+BULK_DOWNLOAD_DIR=./bulk-downloads
+```
+
+Resolution precedence is:
+
+1. explicit CLI flag (`--bulk-dir`, or `--bulk-download` for `admin verify`)
+2. `BULK_DOWNLOAD_DIR` from env
+3. fail fast with actionable error
 
 ### Evaluation Commands
 

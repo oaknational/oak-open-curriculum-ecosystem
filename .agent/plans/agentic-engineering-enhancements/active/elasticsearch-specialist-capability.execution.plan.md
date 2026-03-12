@@ -32,7 +32,7 @@ isProject: false
 
 ## Source Strategy
 
-- [../elasticsearch-specialist-capability.plan.md](../elasticsearch-specialist-capability.plan.md)
+- [../current/elasticsearch-specialist-capability.plan.md](../current/elasticsearch-specialist-capability.plan.md)
 
 > **Note**: This plan was promoted from `current/` to `active/` on 2026-03-07.
 

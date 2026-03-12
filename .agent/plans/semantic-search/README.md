@@ -16,12 +16,13 @@
 
 Active execution now includes:
 
-- [CLI Robustness](active/cli-robustness.plan.md)
+- [CLI Robustness](active/cli-robustness.plan.md) — active incident: metadata commit failure after versioned-ingest alias swap
 - [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
-- [Short-Term PR Snagging](active/short-term-pr-snagging.plan.md)
+- [Category Integration Remediation](active/category-integration-remediation.md)
+- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md)
 
 Prepared next-up queue:
 
@@ -33,17 +34,16 @@ Prepared next-up queue:
 Cross-collection sequencing note:
 
 - [high-level-plan.md](../high-level-plan.md) currently sequences:
-  `oak-preview` snagging/deploy, then post-deploy bulk-data re-download and
-  Elasticsearch reindex validation, then MCP Apps infrastructure migration,
-  then graph work from the active alignment-audit slice.
+  oak-preview snagging (✅ complete), then post-deploy bulk-data re-download
+  and Elasticsearch reindex validation (🔄 in progress), then MCP Apps
+  infrastructure migration, then graph work from the active alignment-audit
+  slice.
 - Within this collection, `bulk-metadata-quick-wins` remains the active
   Boundary 03 execution lane and
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md)
-  is the active graph-enablement lane. The short-lived
-  [short-term-pr-snagging.plan.md](active/short-term-pr-snagging.plan.md)
-  plan is the active blocker-first snagging lane for PR #67.
-- `cli-robustness.plan.md` is now the current active lane for CLI lifecycle
-  re-validation and dry-run re-checks.
+  is the active graph-enablement lane.
+- `cli-robustness.plan.md` is an active incident lane for metadata commit and
+  alias integrity remediation.
 - Keep
   [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
   as the parent queued plan for the remaining graph quick wins after the active
@@ -115,11 +115,12 @@ For the full at-a-glance state including cross-collection sequencing, see
 [Current Work](#current-work-post-merge-execution) above.
 
 - [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
-- [CLI Robustness](active/cli-robustness.plan.md) — enforce no-hang process lifecycle guarantees and re-validate dry-run execution
+- [CLI Robustness](active/cli-robustness.plan.md) — active incident: metadata commit failure after versioned-ingest alias swap
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
-- [Short-Term PR Snagging](active/short-term-pr-snagging.plan.md) — immediate PR #67 snagging pass with evidence-first triage, blocker-first fixes, and explicit thread closure outcomes
+- [Category Integration Remediation](active/category-integration-remediation.md) — planning lane for wiring category supplementation through bulk ingestion orchestration
+- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — executable migration for strict read/admin capability boundaries and lint fitness enforcement
 
 ---
 
@@ -127,7 +128,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 CLI robustness + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + short-term PR snagging |
+| `active/` | In-progress plans | 🟢 CLI robustness (active incident) + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + category integration remediation + search CLI-SDK boundary migration |
 | `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |

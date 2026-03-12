@@ -217,4 +217,4 @@ rg -n "mcp-extensions-expert|mcp-reviewer|mcp-migrate-oai|mcp-create-app|mcp-add
 2. [../mcp-apps-support.research.md](../mcp-apps-support.research.md)
 3. [../README.md](../README.md)
 4. [README.md](README.md)
-5. [oak-preview-mcp-snagging.execution.plan.md](oak-preview-mcp-snagging.execution.plan.md)
+5. [oak-preview-mcp-snagging.execution.plan.md](../archive/completed/oak-preview-mcp-snagging.execution.plan.md)

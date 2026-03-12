@@ -4,16 +4,16 @@ overview: "Classify and fix graph data integrity defects across bulk data handli
 todos:
   - id: phase-0-verify-taxonomy
     content: "Phase 0 (RED): Prove each issue and lock data vs extraction vs generation vs MCP taxonomy with deterministic evidence."
-    status: pending
+    status: completed
   - id: phase-1-fix-ordering-contract
     content: "Phase 1 (GREEN): Replace unreliable thread ordering with deterministic sequencing and establish a single canonical implementation surface."
-    status: pending
+    status: completed
   - id: phase-2-enforce-invariants
     content: "Phase 2 (GREEN): Enforce dedupe and self-loop prevention invariants across thread progression, prerequisite, and nc-coverage outputs."
-    status: pending
+    status: completed
   - id: phase-3-refactor-docs
     content: "Phase 3 (REFACTOR): Complete full quality gates and documentation propagation with explicit no-change rationales where applicable."
-    status: pending
+    status: completed
 ---
 
 # Graph Data Integrity Snagging Plan

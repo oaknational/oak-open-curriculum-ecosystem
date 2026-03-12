@@ -45,8 +45,8 @@ See also: [Architecture README](../../../docs/architecture/README.md) for the ca
 Based on requirements and analysis in:
 
 - [Architectural Enforcement Playbook](../../research/developer-experience/architectural-enforcement-playbook.md)
-- [Augmented Engineering Practices (industry evidence)](augmented-engineering-practices.research.md) (verification gaps, quality gates, mutation testing)
-- [Evidence Bundle Template](evidence-bundle.template.md) (for non-trivial enforcement claims and merge-readiness evidence)
+- [Augmented Engineering Practices (industry evidence)](../augmented-engineering-practices.research.md) (verification gaps, quality gates, mutation testing)
+- [Evidence Bundle Template](../evidence-bundle.template.md) (for non-trivial enforcement claims and merge-readiness evidence)
 
 **Related plans**:
 
@@ -58,7 +58,7 @@ Based on requirements and analysis in:
 This is a strategic source plan (intent, constraints, and phase design). The
 authoritative execution tasks for this stream live in:
 
-- [phase-3-architectural-enforcement-execution.md](active/phase-3-architectural-enforcement-execution.md)
+- [phase-3-architectural-enforcement-execution.md](../active/phase-3-architectural-enforcement-execution.md)
 
 ### Convergence Update (2026-03-04)
 
@@ -66,13 +66,13 @@ Directory-complexity-related enforcement work is now split by disruption profile
 
 1. **Integrated in canonical strictness plan**:
    - `no-console` convergence
-   - canonical execution: [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
+   - canonical execution: [devx-strictness-convergence.plan.md](../../developer-experience/active/devx-strictness-convergence.plan.md)
 2. **Canonicalised in the queued directory-complexity plan**:
    - remediation SOP for directory-complexity breaches
    - structural guardrails required before `max-files-per-dir`
    - depcruise, knip, and qg-level integration for this workstream
    - staged `max-files-per-dir` activation
-   - canonical execution: [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+   - canonical execution: [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 3. **Retained here as strategic intent only**:
    - rationale for physical constraints and success metrics
    - phase design context for the wider architectural-enforcement stream
@@ -94,18 +94,18 @@ Directory-complexity-related enforcement work is now split by disruption profile
 ### Phase 1: Physical Modularity (ESLint, deferred)
 
 - **Goal:** Break up "God Folders."
-- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - **Status:** queued there as the canonical execution source of truth.
 
 ### Phase 2: Boundary Definition (ESLint)
 
-- **Precursor:** The [SDK workspace separation](../semantic-search/archive/completed/sdk-workspace-separation.md) (archived)
+- **Precursor:** The [SDK workspace separation](../../semantic-search/archive/completed/sdk-workspace-separation.md) (archived)
   plan implements targeted SDK boundary rules (`createSdkBoundaryRules()` in
   `boundary.ts`) enforcing the sdks DAG constraint for the generation/runtime
   split. These should integrate with the broader layer enforcement when
   `eslint-plugin-boundaries` is adopted.
 - **Goal:** Define semantic layers and enforce unidirectional flow.
-- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - **Execution status:** implementation detail now lives in the canonical queued plan so the supporting-constraint bundle is described once.
 - **Follow-up (from canonical URL work):** Route search-CLI SDK imports through a curriculum-sdk facade instead of importing directly from `@oaknational/sdk-codegen/api-schema`. Currently `apps/oak-search-cli` imports `generateCanonicalUrlWithContext` from `sdk-codegen` directly, bypassing the curriculum-sdk domain layer. Betty flagged this as a boundary hygiene concern during the canonical URL architecture review.
 
@@ -119,20 +119,20 @@ Directory-complexity-related enforcement work is now split by disruption profile
 ### Phase 3: Physics Lockdown (Dependency-Cruiser)
 
 - **Goal:** Enforce barrel-file (index.ts) encapsulation.
-- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - **Rule intent:** Disallow importing internals of a sibling directory; all traffic must traverse `index.ts`.
 
 ### Phase 4: Hygiene and Dead Code (Knip)
 
 - **Goal:** Keep the "surface area" of the SDK and MCP servers minimal.
-- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 
 ### Phase 5: Agentic Grounding
 
 - **Goal:** Make the "First Question" mechanical for AI agents.
-- **Execution source:** [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
+- **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The qg path should include the selected structural checks as that plan lands them.
-- **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](evidence-bundle.template.md).
+- **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](../evidence-bundle.template.md).
 - **Execution status:** split-guidance/rules updates delegated to canonical strictness convergence; depcruise/knip/qg grounding remains in this stream.
 
 ## 3. Documentation Propagation Requirement
