@@ -1,0 +1,40 @@
+
+Document Counts (true parent documents)
+───────────────────────────────────────
+[
+  {
+    "kind": "lessons",
+    "index": "oak_lessons",
+    "count": 12391
+  },
+  {
+    "kind": "unit_rollup",
+    "index": "oak_unit_rollup",
+    "count": 1634
+  },
+  {
+    "kind": "units",
+    "index": "oak_units",
+    "count": 1634
+  },
+  {
+    "kind": "sequences",
+    "index": "oak_sequences",
+    "count": 30
+  },
+  {
+    "kind": "sequence_facets",
+    "index": "oak_sequence_facets",
+    "count": 57
+  },
+  {
+    "kind": "threads",
+    "index": "oak_threads",
+    "count": 164
+  },
+  {
+    "kind": "TOTAL",
+    "index": "—",
+    "count": 15910
+  }
+]

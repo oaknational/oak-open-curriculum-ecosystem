@@ -6,7 +6,7 @@
  * lifecycle service within the max-lines limit.
  */
 
-import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
+import type { AliasLifecycleDeps, IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
 import {
   BASE_INDEX_NAMES,
   SEARCH_INDEX_KINDS,
@@ -23,7 +23,7 @@ export interface CleanupResult {
 }
 
 /** Delete old versioned indexes exceeding the generation limit. */
-export async function cleanupOldGenerations(deps: IndexLifecycleDeps): Promise<CleanupResult> {
+export async function cleanupOldGenerations(deps: AliasLifecycleDeps): Promise<CleanupResult> {
   let deleted = 0;
   let failed = 0;
   for (const kind of SEARCH_INDEX_KINDS) {
@@ -36,7 +36,7 @@ export async function cleanupOldGenerations(deps: IndexLifecycleDeps): Promise<C
 
 /** Cleanup old generations for a single index kind. */
 async function cleanupKindGenerations(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   baseName: string,
 ): Promise<CleanupResult> {
   const listResult = await deps.listVersionedIndexes(baseName, deps.target);
@@ -72,7 +72,7 @@ async function cleanupKindGenerations(
  * failures are logged as warnings but never mask the original error.
  */
 export async function cleanupOrphanedIndexes(
-  deps: IndexLifecycleDeps,
+  deps: Pick<IndexLifecycleDeps, 'deleteVersionedIndex' | 'target' | 'logger'>,
   version: string,
 ): Promise<void> {
   for (const kind of SEARCH_INDEX_KINDS) {

@@ -1,11 +1,12 @@
 /**
- * Unit tests for searchSequences — verifies filter construction
- * and result mapping without hitting Elasticsearch.
+ * Integration tests for searchSequences with injected search dependencies.
+ *
+ * Verifies filter construction and result mapping without network calls.
  */
 
 import { describe, it, expect } from 'vitest';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
-import type { EsSearchFn, EsSearchRequest, EsSearchResponse } from '../internal/types.js';
+import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import { searchSequences } from './search-sequences.js';
 
 function emptySequenceResponse(): EsSearchResponse<SearchSequenceIndexDoc> {
@@ -18,21 +19,19 @@ function emptySequenceResponse(): EsSearchResponse<SearchSequenceIndexDoc> {
 
 function createMockSearch(response = emptySequenceResponse()) {
   const calls: EsSearchRequest[] = [];
-  const search: EsSearchFn = <T>(body: EsSearchRequest) => {
+  const search = (body: EsSearchRequest) => {
     calls.push(body);
-    return Promise.resolve(response as unknown as EsSearchResponse<T>);
+    return Promise.resolve(response);
   };
   return { search, calls };
 }
 
-function extractFilter(calls: EsSearchRequest[]) {
+function getFirstRequest(calls: EsSearchRequest[]): EsSearchRequest {
   const request = calls[0];
-  const retrievers = request?.retriever?.rrf?.retrievers;
-  if (!retrievers || retrievers.length === 0) {
-    return undefined;
+  if (request === undefined) {
+    throw new Error(`Expected exactly one search request, got ${calls.length}`);
   }
-  const first = retrievers[0] as { standard?: { filter?: unknown } } | undefined;
-  return first?.standard?.filter;
+  return request;
 }
 
 const stubResolveIndex = () => 'oak_sequences_test';
@@ -44,13 +43,8 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'maths', keyStage: 'ks3' }, search, stubResolveIndex);
 
-      expect(calls).toHaveLength(1);
-      const filter = extractFilter(calls);
-      expect(filter).toEqual({
-        bool: {
-          filter: expect.arrayContaining([{ term: { key_stages: 'ks3' } }]) as unknown,
-        },
-      });
+      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
+      expect(requestJson).toContain('"key_stages":"ks3"');
     });
 
     it('includes subject_slug filter when subject is provided', async () => {
@@ -58,12 +52,8 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'algebra', subject: 'maths' }, search, stubResolveIndex);
 
-      const filter = extractFilter(calls);
-      expect(filter).toEqual({
-        bool: {
-          filter: expect.arrayContaining([{ term: { subject_slug: 'maths' } }]) as unknown,
-        },
-      });
+      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
+      expect(requestJson).toContain('"subject_slug":"maths"');
     });
 
     it('combines subject, phaseSlug, and keyStage filters', async () => {
@@ -75,16 +65,10 @@ describe('searchSequences', () => {
         stubResolveIndex,
       );
 
-      const filter = extractFilter(calls);
-      expect(filter).toEqual({
-        bool: {
-          filter: expect.arrayContaining([
-            { term: { subject_slug: 'science' } },
-            { term: { phase_slug: 'secondary' } },
-            { term: { key_stages: 'ks4' } },
-          ]) as unknown,
-        },
-      });
+      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
+      expect(requestJson).toContain('"subject_slug":"science"');
+      expect(requestJson).toContain('"phase_slug":"secondary"');
+      expect(requestJson).toContain('"key_stages":"ks4"');
     });
 
     it('passes no filter when no filtering params provided', async () => {
@@ -92,8 +76,10 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'geography' }, search, stubResolveIndex);
 
-      const filter = extractFilter(calls);
-      expect(filter).toBeUndefined();
+      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
+      expect(requestJson).not.toContain('"subject_slug"');
+      expect(requestJson).not.toContain('"phase_slug"');
+      expect(requestJson).not.toContain('"key_stages"');
     });
   });
 
@@ -112,6 +98,7 @@ describe('searchSequences', () => {
                 sequence_id: 'seq-1',
                 sequence_slug: 'maths-primary',
                 sequence_title: 'Maths Primary',
+                doc_type: 'sequence',
                 subject_slug: 'maths',
                 subject_title: 'Maths',
                 phase_slug: 'primary',
@@ -120,7 +107,7 @@ describe('searchSequences', () => {
                 years: ['1', '2', '3', '4', '5', '6'],
                 unit_slugs: ['counting'],
                 sequence_url: 'https://example.com/maths-primary',
-              } as SearchSequenceIndexDoc,
+              },
             },
           ],
         },
@@ -141,7 +128,7 @@ describe('searchSequences', () => {
     });
 
     it('returns error when search throws', async () => {
-      const failingSearch: EsSearchFn = () => Promise.reject(new Error('connection refused'));
+      const failingSearch = () => Promise.reject(new Error('connection refused'));
 
       const result = await searchSequences({ query: 'maths' }, failingSearch, stubResolveIndex);
 

@@ -10,6 +10,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { createSearchSdk } from './create-search-sdk.js';
 import type { SearchSdk, SearchSdkDeps, SearchSdkConfig } from './types/index.js';
 import { Client, type estypes } from '@elastic/elasticsearch';
+import { OAK_META_MAPPING } from '@oaknational/sdk-codegen/search';
 
 // ---------------------------------------------------------------------------
 // Test helpers — simple fakes injected as arguments
@@ -98,6 +99,9 @@ function createTestEsClient(): Client {
     index: 'test',
   });
   vi.spyOn(client.indices, 'delete').mockResolvedValue({ acknowledged: true });
+  vi.spyOn(client.indices, 'getMapping').mockResolvedValue({
+    oak_meta: OAK_META_MAPPING,
+  });
   vi.spyOn(client.synonyms, 'putSynonym').mockResolvedValue({
     result: 'created',
     reload_analyzers_details: {

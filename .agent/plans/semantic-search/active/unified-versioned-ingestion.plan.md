@@ -435,7 +435,7 @@ to the live cluster:
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch admin ingest --dry-run --verbose
+pnpm tsx bin/oaksearch.ts admin ingest --dry-run --verbose
 ```
 
 Once the dry run confirms the pipeline parses, transforms, and would dispatch
@@ -1032,7 +1032,7 @@ with a dry run:
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch admin ingest --dry-run --verbose
+pnpm tsx bin/oaksearch.ts admin ingest --dry-run --verbose
 ```
 
 **Expected**: The pipeline parses bulk download files, runs all
@@ -1050,7 +1050,7 @@ transformer output matches the expected index document shapes.
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch admin stage --bulk-dir ./bulk-downloads --verbose
+pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads --verbose
 ```
 
 **Expected**: All 6 versioned indexes created and populated with non-zero
@@ -1062,14 +1062,14 @@ should make the failure visible. Do not proceed until staging succeeds.
 #### Task 3.2: Validate Staged Indexes
 
 ```bash
-pnpm oaksearch admin status
+pnpm tsx bin/oaksearch.ts admin count
 ```
 
 **Expected**: 6 versioned indexes visible alongside 6 bare indexes.
 
 Use `admin count` for true parent document counts (excludes ELSER
-`semantic_text` chunk inflation). Use `admin status` for Lucene doc
-counts (includes chunks — expected to be much higher for ELSER indexes).
+`semantic_text` chunk inflation). Use `_cat/indices` for Lucene doc counts
+(includes chunks — expected to be much higher for ELSER indexes).
 
 **True parent counts** (via `admin count` / ES `_count` API):
 
@@ -1080,7 +1080,7 @@ counts (includes chunks — expected to be much higher for ELSER indexes).
 - `oak_sequence_facets_v*` ≈ 57 facets
 - `oak_sequences_v*` ≈ 30 sequences
 
-**Lucene doc counts** (via `admin status` / `_cat/indices`) will be
+**Lucene doc counts** (via `_cat/indices`) will be
 higher for indexes with `semantic_text` fields due to ELSER chunking:
 
 - `oak_lessons_v*` ≈ 193k (15x inflation from ELSER chunks)
@@ -1090,7 +1090,7 @@ higher for indexes with `semantic_text` fields due to ELSER chunking:
 #### Task 3.3: Promote
 
 ```bash
-pnpm oaksearch admin promote --version <version-from-stage>
+pnpm tsx bin/oaksearch.ts admin promote --target-version <version-from-stage>
 ```
 
 **Expected**: Atomic alias swap succeeds. Bare indexes removed via
@@ -1099,8 +1099,8 @@ pnpm oaksearch admin promote --version <version-from-stage>
 #### Task 3.4: Verify
 
 ```bash
-pnpm oaksearch admin validate-aliases
-pnpm oaksearch search lessons "photosynthesis"
+pnpm tsx bin/oaksearch.ts admin validate-aliases
+pnpm tsx bin/oaksearch.ts search lessons "photosynthesis"
 ```
 
 **Expected**: All aliases healthy. Search returns current results.
@@ -1204,7 +1204,7 @@ At any point after promotion, if the service is degraded:
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch admin rollback
+pnpm tsx bin/oaksearch.ts admin rollback
 ```
 
 This atomically swaps aliases back to the previous version (recorded in

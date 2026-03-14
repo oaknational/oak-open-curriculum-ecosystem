@@ -16,8 +16,11 @@
  */
 
 import {
+  buildAliasLifecycleDeps,
   buildLifecycleDeps,
+  createAliasLifecycleService,
   createIndexLifecycleService,
+  type AliasLifecycleService,
   type IndexLifecycleService,
   type IndexLifecycleDeps,
   type SearchIndexTarget,
@@ -42,4 +45,16 @@ export function buildLifecycleService(
 ): IndexLifecycleService {
   const deps = buildLifecycleDeps(esClient, target, runVersionedIngest, logger);
   return createIndexLifecycleService(deps);
+}
+
+/**
+ * Build an alias/metadata-only lifecycle service from pre-created resources.
+ */
+export function buildAliasLifecycleService(
+  esClient: Client,
+  target: SearchIndexTarget,
+  logger: Logger,
+): AliasLifecycleService {
+  const deps = buildAliasLifecycleDeps(esClient, target, logger);
+  return createAliasLifecycleService(deps);
 }

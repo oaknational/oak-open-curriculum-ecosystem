@@ -15,7 +15,7 @@ import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 
 import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
 import type { SearchSequencesParams } from '../types/retrieval-params.js';
-import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
+import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import { clampSize, clampFrom } from './rrf-score-processing.js';
 import { buildSequenceRetriever } from './retrieval-search-helpers.js';
 import { toRetrievalError } from './retrieval-error.js';
@@ -35,7 +35,7 @@ import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
  */
 export async function searchSequences(
   params: SearchSequencesParams,
-  search: EsSearchFn,
+  search: (body: EsSearchRequest) => Promise<EsSearchResponse<SearchSequenceIndexDoc>>,
   resolveIndex: (kind: 'sequences') => string,
   logger?: Logger,
 ): Promise<Result<SequencesSearchResult, RetrievalError>> {
@@ -63,7 +63,7 @@ export async function searchSequences(
     };
 
     logger?.debug('searchSequences', { query: params.query, size, from });
-    const res = await search<SearchSequenceIndexDoc>(request);
+    const res = await search(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,
       rankScore: hit._score ?? 0,

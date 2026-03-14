@@ -1,6 +1,7 @@
 ---
-fitness_ceiling: 150
-split_strategy: 'This document is a synthesis, not a reference — if it grows, detail belongs in the authoritative sources it links to, not here'
+title: How the Agentic Engineering System Works
+status: active
+last_reviewed: 2026-03-12
 ---
 
 # How the Agentic Engineering System Works

@@ -181,3 +181,5 @@ run before MCP server creation. `tracesSampleRate` must be > 0.
 - [Sentry MCP Monitoring docs](https://docs.sentry.io/ai/monitoring/mcp/)
 - [Sentry Node.js MCP instrumentation](https://docs.sentry.io/platforms/javascript/guides/node/tracing/instrumentation/mcp-module/)
 - Sentry MCP Insights dashboard: `oak-national-academy.sentry.io/insights/mcp/`
+- Sentry specialist capability (ADR-129 triplet):
+  [sentry-specialist-capability.plan.md](../../agentic-engineering-enhancements/future/sentry-specialist-capability.plan.md)

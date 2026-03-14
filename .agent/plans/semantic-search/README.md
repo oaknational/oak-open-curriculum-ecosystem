@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-12
+**Last Updated**: 2026-03-13
 
 ---
 
@@ -16,13 +16,16 @@
 
 Active execution now includes:
 
-- [CLI Robustness](active/cli-robustness.plan.md) — active incident: metadata commit failure after versioned-ingest alias swap
+- [Recovery and Guardrails](active/semantic-search-recovery-and-guardrails.execution.plan.md) — primary active incident recovery and anti-recurrence lane
+- [Semantic Search Ingest Runbook](active/semantic-search-ingest-runbook.md) — active operator-run lifecycle ingest runbook with deterministic stop/go checkpoints
+- [CLI Robustness](active/cli-robustness.plan.md) — supporting incident evidence and residual closure context
+- [Semantic Search Scheduled Refresh](active/semantic-search-scheduled-refresh.operations.plan.md) — planning lane for incremental-first scheduled refresh with per-document fingerprinting and full re-ingest fallback
 - [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md)
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md)
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md)
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md)
 - [Category Integration Remediation](active/category-integration-remediation.md)
-- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed, retained as evidence
+- [Search CLI-SDK Boundary Migration](archive/completed/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed, retained as evidence
 
 Prepared next-up queue:
 
@@ -42,8 +45,11 @@ Cross-collection sequencing note:
   Boundary 03 execution lane and
   [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md)
   is the active graph-enablement lane.
-- `cli-robustness.plan.md` is an active incident lane for metadata commit and
-  alias integrity remediation.
+- `semantic-search-recovery-and-guardrails.execution.plan.md` is the primary
+  active incident lane for metadata-alias coherence recovery and anti-recurrence
+  guardrails.
+- `cli-robustness.plan.md` remains a supporting evidence lane for prior
+  metadata-commit and alias-integrity incident context.
 - Keep
   [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
   as the parent queued plan for the remaining graph quick wins after the active
@@ -115,12 +121,15 @@ For the full at-a-glance state including cross-collection sequencing, see
 [Current Work](#current-work-post-merge-execution) above.
 
 - [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
-- [CLI Robustness](active/cli-robustness.plan.md) — active incident: metadata commit failure after versioned-ingest alias swap
+- [Recovery and Guardrails](active/semantic-search-recovery-and-guardrails.execution.plan.md) — primary active incident recovery and anti-recurrence lane
+- [Semantic Search Ingest Runbook](active/semantic-search-ingest-runbook.md) — active operator-run lifecycle ingest runbook with deterministic stop/go checkpoints
+- [CLI Robustness](active/cli-robustness.plan.md) — supporting incident evidence and residual closure context
+- [Semantic Search Scheduled Refresh](active/semantic-search-scheduled-refresh.operations.plan.md) — planning lane for incremental-first scheduled refresh with per-document fingerprinting and full re-ingest fallback
 - [Extract search-args layer into Search SDK](active/search-sdk-args-extraction.plan.md) — move param builders, scope validation, error formatting from MCP layer/CLI into the search SDK
 - [Bulk Metadata Quick Wins](active/bulk-metadata-quick-wins.execution.plan.md) — widen bulk lesson/unit metadata and preserve structured fields for follow-on asset work
 - [KG Alignment Audit](active/kg-alignment-audit.execution.plan.md) — evidence-first ontology/search overlap audit to ground the next graph quick-win promotion
 - [Category Integration Remediation](active/category-integration-remediation.md) — planning lane for wiring category supplementation through bulk ingestion orchestration
-- [Search CLI-SDK Boundary Migration](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed capability-boundary lane retained as evidence and doctrine reference
+- [Search CLI-SDK Boundary Migration](archive/completed/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed capability-boundary lane retained as evidence and doctrine reference
 
 ---
 
@@ -128,7 +137,7 @@ For the full at-a-glance state including cross-collection sequencing, see
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | In-progress plans | 🟢 CLI robustness (active incident) + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + category integration remediation |
+| `active/` | In-progress plans | 🟢 Recovery and guardrails (primary incident lane) + unified versioned ingestion + search-args extraction + bulk metadata quick wins + KG alignment audit + category integration remediation |
 | `current/` | Next-up queued plans | 📋 Ready (P0 blocker + P1/P2 follow-ons + graph quick-win parent plan) |
 | `future/` | Deferred/later strategic backlog organised by true domain boundaries | 📋 Planned |
 | `archive/completed/` | Historical execution records (including SDK extraction completion) | ✅ Reference |
@@ -192,7 +201,7 @@ to the boundary structure.
 | [Widget Search Rendering](archive/completed/widget-search-rendering.md) | ✅ Complete — Phases 0-5, archived |
 | [Result Pattern Unification](archive/completed/mcp-result-pattern-unification.execution.plan.md) | ✅ Complete — `Result<T, E>` migration across SDK + MCP consumers |
 | [Blue/Green Reindex](archive/completed/blue-green-reindex.execution.plan.md) | ✅ Superseded — archived; succeeded by [Unified Versioned Ingestion](active/unified-versioned-ingestion.plan.md) |
-| [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for production Clerk + OAuth edge rate limiting |
+| [M2 Public Alpha Blockers](current/m2-public-alpha-auth-rate-limits.execution.plan.md) | 📋 Next-up execution for M3 production Clerk + OAuth edge rate limiting (historical filename retained) |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [Ground Truth Review Sessions 1-5 Log](archive/completed/ground-truth-review-sessions-1-5-log.md) | Historical session log retained for search-review provenance and lessons learned |

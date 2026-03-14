@@ -28,12 +28,22 @@ Plans and research for hardening the agentic engineering practice through physic
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
+| `future/sentry-specialist-capability.plan.md` | Plan (Future) | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
+| `future/mcp-specialist-upgrade.plan.md` | Plan (Future) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
+| `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
+| `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
+| `future/planning-specialist-capability.plan.md` | Plan (Future) | Planning specialist — plan architecture, lifecycle, discoverability, documentation sync |
+| `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
+| `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
+| `future/reviewer-gateway-upgrade.plan.md` | Plan (Future) | Upgrade code-reviewer gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
+| `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
+| `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
 
 ## Read Order
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Queued or active execution**: [current/README.md](current/README.md) then [active/README.md](active/README.md)
-3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist capability
+3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation
 4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
 
 ## Document Roles (DRY)

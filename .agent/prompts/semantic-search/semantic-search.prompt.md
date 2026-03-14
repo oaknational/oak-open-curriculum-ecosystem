@@ -3,12 +3,12 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-12
+last_updated: 2026-03-13
 ---
 
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-03-12 (standalone-next-session hardened + long-term boundary closeout)
+**Last Updated**: 2026-03-14 (recovery lane active; Phase 0/1 complete, Phase 2 remediation tranche + Phase 3/4 closeout pending)
 
 This prompt is intentionally short and operational. Long-lived architecture,
 history, and completed phase detail lives in ADRs, roadmap, and archived plans.
@@ -21,51 +21,135 @@ history, and completed phase detail lives in ADRs, roadmap, and archived plans.
 
 **Session entry state**:
 
+- Primary active lane is now recovery execution:
+  `semantic-search-recovery-and-guardrails.execution.plan.md`.
 - Boundary lane (`search-cli-sdk-boundary-migration`) is complete and retained as evidence.
-- Start with incident lane execution (`cli-robustness`) and keep boundary checks green.
+- Latest execution state: recovery work has already completed baseline and
+  salvage closure, and has landed runtime guardrail implementation updates
+  (including lease hardening and strict metadata-mapping contract checks).
+  Start the next session with a comprehensive review/fix/re-review cycle
+  before further implementation.
 
 Current priorities:
 
-1. [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) (active incident lane)
-2. [search-cli-sdk-boundary-migration.execution.plan.md](../../plans/semantic-search/active/search-cli-sdk-boundary-migration.execution.plan.md) (completed boundary lane, retained as evidence)
+1. [semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md) (primary active recovery + anti-recurrence guardrails lane)
+2. [semantic-search-ingest-runbook.md](../../plans/semantic-search/active/semantic-search-ingest-runbook.md) (operator-run lifecycle runbook lane)
+3. [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) (historical incident lane retained for prior failure evidence)
+4. [semantic-search-scheduled-refresh.operations.plan.md](../../plans/semantic-search/active/semantic-search-scheduled-refresh.operations.plan.md) (scheduled refresh operations lane: incremental-first with full re-ingest fallback; depends on recovery landing)
+5. [search-cli-sdk-boundary-migration.execution.plan.md](../../plans/semantic-search/archive/completed/search-cli-sdk-boundary-migration.execution.plan.md) (completed boundary lane, retained as evidence)
+
+Current phase snapshot:
+
+- Phase 0 (baseline evidence): complete
+- Phase 1 (salvage/closure): complete
+- Phase 2 (runtime guardrails + test/type remediation tranche): in progress
+- Phase 3 (docs + ADR sync): in progress
+- Phase 4 (reviewers + full gates): pending
+
+Reviewer findings traceability:
+
+- The authoritative findings register is in
+  `semantic-search-recovery-and-guardrails.execution.plan.md` under
+  **Reviewer Findings Register (round 1, 2026-03-14)**.
+- Findings are actionable by default. Reject only when incorrect and record
+  rationale/evidence in that register.
+- Current must-fix ID set: `R1` to `R9`.
 
 Boundary doctrine is now anchored in
 [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md).
 
 ---
 
-## Current Standalone Start Path
+## Session Start (authoritative — follow this sequence exactly)
 
-Treat this prompt plus
-[cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) and
-[search-cli-sdk-boundary-migration.execution.plan.md](../../plans/semantic-search/active/search-cli-sdk-boundary-migration.execution.plan.md)
-as the standalone entrypoint for the next session.
+### Step 1: Ground
 
-Run this first:
+Re-ground via:
+
+- [start-right-thorough.md](../../skills/start-right-thorough/shared/start-right-thorough.md)
+- [AGENT.md](../../directives/AGENT.md)
+- [principles.md](../../directives/principles.md)
+- [testing-strategy.md](../../directives/testing-strategy.md)
+- [schema-first-execution.md](../../directives/schema-first-execution.md)
+
+### Step 2: Verify state
 
 ```bash
+git status --short
+git branch --show-current
+ls -1 .agent/plans/semantic-search/active
 cd apps/oak-search-cli
 pnpm tsx bin/oaksearch.ts admin validate-aliases
+pnpm tsx bin/oaksearch.ts admin meta get
+pnpm tsx bin/oaksearch.ts admin count
+cd ../..
+set -a && source ".env" && set +a
+curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
+  "${ELASTICSEARCH_URL}/oak_meta/_mapping"
 ```
 
-This initial `validate-aliases` check is the one allowed pre-refactor exception to the
-later lifecycle-chain sequencing rule. It is a bootstrap health check, not a full
-`validate-aliases -> versioned-ingest -> validate-aliases` run.
+After these checks, skip straight to the appropriate recovery plan phase only
+if aliases are healthy, metadata lineage is coherent, and `oak_meta` mapping
+includes the required generated metadata contract fields (with
+`previous_version` as a sentinel).
 
-Then follow the plan re-entry branch:
+### Step 3: Start with full review/fix cycle
 
-- If initial `validate-aliases` fails, classify failure cause first
-  (connectivity/auth/cluster health vs metadata mapping contract). Execute
-  metadata schema/mapping remediation only for confirmed contract failures.
-- If `versioned-ingest` fails with metadata contract evidence
-  (`strict_dynamic_mapping_exception` path), execute the metadata
-  schema/mapping remediation checkpoint.
-- If post-ingest `validate-aliases` fails, treat this as active incident
-  remediation and re-run validation after fix before entering Phase 4.
-- If aliases are healthy and `versioned-ingest` passes, complete remaining
-  incident-lane Phase 5 REFACTOR and then enter formal Phase 4 closeout.
+Before any new implementation work in the lane:
 
-### Operator-Run Ingest Protocol (authoritative)
+1. Run the full reviewer roster from recovery plan Phase 4 Task 4.1 in readonly mode.
+2. Implement all findings by default; reject only when incorrect, with written rationale and evidence.
+   Use reviewer finding IDs (`R1` to `R9`) from the recovery plan register in
+   implementation notes and review responses.
+3. Re-run affected reviewers iteratively until no unresolved must-fix/high findings remain.
+4. Update ADRs/docs immediately for any accepted behavioural or architectural change.
+
+### Step 4: Read plans and ADRs
+
+- [semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md) — primary active lane
+- [semantic-search-ingest-runbook.md](../../plans/semantic-search/active/semantic-search-ingest-runbook.md) — operator-run lifecycle checklist
+- [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) — supporting incident evidence lane (read-only context)
+- [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md) — Search SDK read/admin boundary doctrine
+- [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture and boundary invariants
+
+### Step 5: Execute recovery plan phases in order
+
+1. **Phase 0 RED**: capture deterministic live baseline and prove missing
+   guardrails with failing tests.
+2. **Phase 1 GREEN**: read-only preflight, additive mapping reconciliation,
+   metadata-alias coherence repair, salvage promote, hard postchecks.
+3. **Phase 2 GREEN** (after incident closure): runtime invariants, alias swap
+   safety with `must_exist=true`, distributed Elasticsearch-backed lease, and
+   remediation of known test-doctrine/type-discipline findings.
+4. **Phase 3 REFACTOR**: docs/ADR propagation, CLI and SDK README updates.
+5. **Phase 4 closeout**: specialist reviews, full quality gates.
+
+Resume rule:
+
+- If a phase already meets closure criteria with evidence, do not re-run it.
+- Continue from the first incomplete phase and keep evidence additive.
+
+**Phase transition rules**:
+
+- Do not start Phase 1 until Phase 0 evidence pack is complete and internally consistent.
+- Do not start Phase 2 until incident closure is proven by healthy promote postchecks.
+- Do not start Phase 3 until invariant and lock guardrail tests are green.
+  The known test taxonomy/type-discipline remediation tranche in Phase 2 must
+  also be complete before Phase 3 starts.
+  Phase 2 closeout gates can complete after Phase 3 starts, but only when those
+  guardrail tests are already green.
+- Do not start Phase 4 until docs/ADR propagation is complete and lane docs agree.
+
+Use `cli-robustness.plan.md` only as supporting context when reconciling prior
+incident evidence.
+
+**Hard sequencing rule**: never promote, retry, or release lock after a
+post-mutation failure until immediate readback triage (`validate-aliases`,
+`meta get`, `count`) is complete.
+
+---
+
+## Operator-Run Ingest Protocol
 
 When the flow reaches `admin versioned-ingest` (or `admin stage`):
 
@@ -73,190 +157,92 @@ When the flow reaches `admin versioned-ingest` (or `admin stage`):
 2. The operator starts ingest independently.
 3. The agent monitors output, diagnoses failures, and continues remediation.
 
-The agent must not independently start ingest/stage commands in this lane unless
-the operator explicitly requests that override in the current session.
+The agent must not independently start ingest/stage commands unless the operator
+explicitly requests that override in the current session.
 
-Record outcome by appending a dated bullet under
-**Next Session Bootstrap (Standalone Entry Point)** in
-`cli-robustness.plan.md` before moving to any other semantic-search lane.
+Before any ingest/promote execution, run a read-only mapping gate and confirm
+live `oak_meta` mapping contains `previous_version`. If absent, stop and
+remediate mapping contract drift first.
+
+Record outcome in the recovery plan evidence trail as each phase closes; keep
+`semantic-search-ingest-runbook.md` aligned with any sequencing or stop/go
+updates.
 
 ---
 
-## Integrated Unified Runbook Contract
+## Goal and Source-of-truth Inputs
 
-This prompt is now self-contained for next-session execution.
+**Goal**: Recover live lifecycle integrity safely, salvage staged data when
+valid, and land permanent anti-recurrence guardrails with deterministic closure
+evidence.
 
-### Goal
+**Source-of-truth inputs**:
 
-Close the active `semantic-search` work by finishing refactoring and ADR-134
-boundary enforcement first, then running CLI lifecycle validation, and
-finishing with deterministic closure evidence.
+- This prompt (session entry)
+- `semantic-search-recovery-and-guardrails.execution.plan.md` (execution detail)
+- `semantic-search-ingest-runbook.md` (operator lifecycle checklist)
+- `cli-robustness.plan.md` (supporting incident evidence)
+- Foundations: `principles.md`, `testing-strategy.md`, `schema-first-execution.md`
 
-### Source-of-truth Inputs
+**Authority split**:
 
-- Session prompt: this file
-- Incident lane: `cli-robustness.plan.md`
-- Boundary lane: `search-cli-sdk-boundary-migration.execution.plan.md`
-- Doctrine: `docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md`
-- Foundations:
-  - `.agent/directives/principles.md`
-  - `.agent/directives/testing-strategy.md`
-  - `.agent/directives/schema-first-execution.md`
+- This prompt controls lane selection and start order.
+- The recovery plan controls task-level execution and phase closure criteria.
+- The ingest runbook controls operator stop/go sequencing and triage commands.
+- `cli-robustness.plan.md` is historical evidence only, not execution authority.
 
-### Execution Order (authoritative)
-
-1. Re-ground on foundations and confirm branch/worktree state.
-2. Complete incident-lane refactoring obligations first:
-   - `cli-robustness` Phase 5 GREEN/REFACTOR implementation tasks
-     (excluding ingest execution)
-   - verify ADR-134 boundary enforcement remains green; do not reopen the
-     completed boundary lane unless new regression evidence appears
-3. Only after Step 2 is complete, run incident lifecycle validation chain:
-   `validate-aliases` -> `versioned-ingest` -> `validate-aliases`.
-4. `versioned-ingest` is operator-run: the operator starts ingest; the agent
-   monitors and diagnoses.
-5. Perform docs/ADR propagation and full gates only after both lanes'
-   acceptance criteria pass.
-
-**Hard sequencing rule**: do not run the lifecycle ingest path until the
-incident-lane preflight checks are complete and boundary enforcement remains green.
-
-### Implementation Phases
-
-#### Phase 0 — Preflight and Baseline Capture
-
-- Re-read foundations and ADR-134.
-- Capture deterministic baseline (`git status --short`, `git branch --show-current`,
-  active plan inventory).
-- Capture current boundary signals with package-scoped lint/type checks.
-
-#### Phase 1 — Incident Lane Completion (`cli-robustness`)
-
-- Execute Task 5.1–5.5 to close `previous_version` strict mapping contract drift.
-- Confirm artefact coherence via `pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`.
-- Re-run lifecycle validation chain only after boundary refactor/enforcement
-  completion; prove alias health plus rollback-branch closure.
-- Complete Phase 5 REFACTOR cleanup and preserve fail-fast diagnostics.
-
-#### Phase 2 — Boundary Doctrine Verification (`search-cli-sdk-boundary-migration`)
-
-- Confirm completed ADR-134 lane remains green:
-  - lint fitness still enforces default non-admin policy for `src/**/*.ts`
-  - privileged imports remain explicitly scoped to `src/cli/admin/**`,
-    `src/lib/indexing/**`, and `src/adapters/**`
-  - evaluation/operations remain mixed-capability but blocked from SDK root/internal paths
-  - fixture proofs remain passing
-  - SDK read surface remains canonical source of shared index-resolver primitives
-    used by both read and admin consumers
-  - docs/ADR links remain current
-- Reopen boundary lane only if new evidence shows regression.
-
-#### Phase 3 — Unified Closeout
-
-- Complete specialist reviewer passes:
-  `test-reviewer`, `type-reviewer`, `docs-adr-reviewer`, `elasticsearch-reviewer`,
-  and re-check `code-reviewer` when needed.
-- Propagate docs/ADR updates to CLI and SDK READMEs plus ADR index consistency.
-- Run full one-gate-at-a-time quality sequence from repo root.
-
-### Cross-lane Dependency Map
+### Dependency Map
 
 ```mermaid
 flowchart TD
-  preflight[PreflightAndGrounding] --> incident[IncidentLanePhase5]
-  incident --> boundaryGuardrails[BoundaryGuardrailsTask56]
-  boundaryGuardrails --> boundaryPlan[ADR134BoundaryMigrationPhases]
-  boundaryPlan --> closeout[DocsReviewersQualityGates]
-  closeout --> doneState[LaneClosureWithEvidence]
+  preflight[PreflightAndGrounding] --> recoveryRed[RecoveryPhase0RED]
+  recoveryRed --> recoveryGreen[RecoveryPhase1GREEN]
+  recoveryGreen --> guardrails[RecoveryPhase2Guardrails]
+  guardrails --> docsAdr[RecoveryPhase3DocsADR]
+  docsAdr --> closeout[RecoveryPhase4ReviewersGates]
+  closeout --> doneState[RecoveredAndHardened]
 ```
 
-### Evidence and Exit Criteria
+---
 
-- Incident evidence: no strict mapping exception for `previous_version`,
+## Evidence and Exit Criteria
+
+- **Incident**: no strict mapping exception for `previous_version`,
   `versioned-ingest` exits 0, post-ingest alias targets healthy.
-- Boundary evidence: non-admin CLI cannot import
-  `@oaknational/oak-search-sdk/admin`; no app deep/internal imports; root
-  surface no admin/internal leakage; index-resolver constants/functions are
-  sourced from SDK `/read` surface (not transitive admin/internal paths).
-- Governance evidence: reviewer findings resolved or explicitly owner-triaged;
-  all quality gates pass without bypasses.
+- **CLI promote command surface**: use `admin promote --target-version <v>`.
+- **Salvage** (when applicable): staged version index family exists with
+  expected counts and can be promoted successfully once mapping drift is fixed.
+- **Boundary**: non-admin CLI cannot import `@oaknational/oak-search-sdk/admin`;
+  no app deep/internal imports; index-resolver sourced from SDK `/read` surface.
+- **Governance**: reviewer findings resolved or explicitly owner-triaged; all
+  quality gates pass without bypasses.
+  Owner-triaged means implemented, or explicitly rejected as incorrect with
+  written rationale and evidence (never silent deferral).
+  Required comprehensive review roster for closeout includes:
+  `code-reviewer`, `test-reviewer`, `type-reviewer`, `docs-adr-reviewer`,
+  `elasticsearch-reviewer`, `security-reviewer`, and the full architecture
+  quartet (`architecture-reviewer-barney`, `architecture-reviewer-betty`,
+  `architecture-reviewer-fred`, `architecture-reviewer-wilma`), with iterative
+  re-review until no unresolved must-fix/high findings remain.
 
-### Scope Controls (Non-goals)
+Next-session must-fix tranche is authored in the recovery plan
+(`semantic-search-recovery-and-guardrails.execution.plan.md`) Task 2.3.
+Treat that task as the single source of truth for remediation scope.
+
+---
+
+## Scope Controls (Non-goals)
 
 - No compatibility layers.
 - No fallback dynamic-mapping workarounds.
-- No reopening already-completed historical phases without new regression evidence.
-- No expansion into unrelated semantic-search roadmap items outside the two active lanes.
+- No reopening completed historical phases without new regression evidence.
+- No expansion into unrelated roadmap items outside the active recovery lane.
 
 ---
 
-## Immediate Next-session Actions
+## Lane Indexes
 
-If a new session starts from this prompt alone, do this exact sequence:
-
-1. Re-ground and capture baseline (`git status --short`, `git branch --show-current`,
-   `ls -1 .agent/plans/semantic-search/active`).
-2. Complete remaining incident refactor tasks first (no lifecycle ingest yet).
-3. Re-run lint/type/build checks for `@oaknational/oak-search-sdk` and
-   `@oaknational/search-cli`.
-4. When incident-lane acceptance criteria are met, run lifecycle
-   validation chain with operator-run ingest:
-   - agent runs pre/post alias validation
-   - operator runs `admin versioned-ingest`
-   - agent monitors and diagnoses
-5. Proceed to reviewer + docs + full-gate closeout.
-
----
-
-## Standalone Session Bootstrap
-
-Run this checklist at the start of the next session:
-
-1. Re-ground via:
-   - [start-right-thorough.md](../../skills/start-right-thorough/shared/start-right-thorough.md)
-   - [AGENT.md](../../directives/AGENT.md)
-   - [principles.md](../../directives/principles.md)
-   - [testing-strategy.md](../../directives/testing-strategy.md)
-   - [schema-first-execution.md](../../directives/schema-first-execution.md)
-2. Verify current state before planning or coding:
-
-   ```bash
-   git status --short
-   git branch --show-current
-   ls -1 .agent/plans/semantic-search/active
-   ```
-
-3. If the session touches historical SDK workspace separation concerns, use the
-   archived plan and baseline files directly rather than replaying the old split
-   verification by default.
-
-4. Read boundary-critical ADRs:
-   - [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md) — two-pipeline architecture, consumer model, boundary invariants, 4-workspace vision
-   - [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md) — Search SDK read/admin boundary doctrine
-   - [ADR-065](../../../docs/architecture/architectural-decisions/065-turbo-task-dependencies.md) — turbo task dependencies and caching
-   - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — vocab pipeline ownership
-5. Read the active execution plan you are working from:
-   - [cli-robustness.plan.md](../../plans/semantic-search/active/cli-robustness.plan.md) — current active lane; execute the metadata remediation checkpoint first
-   - [search-cli-sdk-boundary-migration.execution.plan.md](../../plans/semantic-search/active/search-cli-sdk-boundary-migration.execution.plan.md) — executable plan for strict CLI/SDK capability boundary migration and lint fitness enforcement
-6. Use lane indexes for everything else:
-   - [Active Plans](../../plans/semantic-search/active/README.md)
-   - [Current Queue](../../plans/semantic-search/current/README.md)
-   - [Roadmap](../../plans/semantic-search/roadmap.md)
-
----
-
-## Execution Ordering Note
-
-Run the `cli-robustness` re-entry checkpoint first; it is authoritative for
-incident-state capture and metadata remediation. Boundary migration is
-authoritative for ADR-134 capability-boundary changes and enforcement.
-
-If both lanes are active concurrently, use separate branches/worktrees and
-rebase boundary migration frequently on incident-lane changes to shared files.
-Formal incident-lane closeout remains blocked on Phase 5 REFACTOR plus
-lifecycle validation evidence.
-
-Queue and archive references live in:
-
+- [Active Plans](../../plans/semantic-search/active/README.md)
 - [Current Queue](../../plans/semantic-search/current/README.md)
-- [Archive Completed](../../plans/semantic-search/archive/completed/)
+- [Roadmap](../../plans/semantic-search/roadmap.md)
+- [Archive](../../plans/semantic-search/archive/completed/)

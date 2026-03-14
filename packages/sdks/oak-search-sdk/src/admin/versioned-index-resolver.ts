@@ -9,7 +9,7 @@
  * with {@link createIndexResolver}, so `createAllIndexes` and `runIngest`
  * accept it without modification.
  *
- * @see {@link ../internal/index-resolver.ts} for the read-path resolver
+ * @see {@link ../internal/index-resolver.ts#createIndexResolver | createIndexResolver} for the read-path resolver
  * @see {@link ../internal/index-resolver.ts#resolveVersionedIndexName} for the shared name formula
  */
 

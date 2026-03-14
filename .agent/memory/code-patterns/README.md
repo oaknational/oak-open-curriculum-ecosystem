@@ -36,7 +36,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 
 ## How Patterns Differ from Rules
 
-**Rules** (in `.agent/directives/principles.md`) are principles: "never use `as`". **Patterns** are "how to implement the principle": replace the `as` cast with a const map lookup. Rules say what; patterns say how.
+**Rules** (in [`principles.md`](../../directives/principles.md)) are principles: "never use type-erasing `as`". **Patterns** are "how to implement the principle": replace the `as` cast with a const map lookup. Rules say what; patterns say how.
 
 ## How Patterns Differ from Source Code
 
@@ -55,3 +55,4 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Explicit Missing Resource State** -- Use this when: a numeric or boolean value can mask a missing upstream resource and create fail-open behaviour. → [explicit-missing-resource-state.md](explicit-missing-resource-state.md)
 - **CLI Flag Over Env Precedence** -- Use this when: CLI commands support both flags and env defaults for the same value, and hidden defaults or command drift have caused ambiguity. → [cli-flag-env-precedence.md](cli-flag-env-precedence.md)
+- **Library Types Before Local Shapes** -- Use this when: An integration parses third-party SDK responses or errors and custom local `*Like` shapes are being considered. → [library-types-before-local-shapes.md](library-types-before-local-shapes.md)

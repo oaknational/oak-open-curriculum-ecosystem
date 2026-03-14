@@ -1,12 +1,5 @@
 import { InvalidArgumentError } from 'commander';
 
-interface LifecycleIngestOptsCandidate {
-  readonly bulkDir?: unknown;
-  readonly subjectFilter?: unknown;
-  readonly minDocCount?: unknown;
-  readonly verbose?: unknown;
-}
-
 /** Parsed and validated lifecycle ingest options. */
 export interface ParsedLifecycleIngestOpts {
   readonly bulkDir?: string;
@@ -15,8 +8,31 @@ export interface ParsedLifecycleIngestOpts {
   readonly verbose?: boolean;
 }
 
+interface LifecycleIngestOptsCandidate {
+  readonly bulkDir?: unknown;
+  readonly subjectFilter?: unknown;
+  readonly minDocCount?: unknown;
+  readonly verbose?: unknown;
+}
+
+function isAllowedOptionKey(key: string): boolean {
+  return key === 'bulkDir' || key === 'subjectFilter' || key === 'minDocCount' || key === 'verbose';
+}
+
+function hasOnlyAllowedKeys(value: LifecycleIngestOptsCandidate): boolean {
+  for (const key in value) {
+    if (!isAllowedOptionKey(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function isLifecycleIngestOptsCandidate(value: unknown): value is LifecycleIngestOptsCandidate {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  return hasOnlyAllowedKeys(value);
 }
 
 function parseBulkDir(value: unknown): string | undefined {

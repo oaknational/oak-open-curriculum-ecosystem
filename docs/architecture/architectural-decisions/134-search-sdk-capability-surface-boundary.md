@@ -80,6 +80,31 @@ Implementation evidence includes:
   `packages/sdks/oak-search-sdk/src/read.ts` and consumed by admin surface in
   `packages/sdks/oak-search-sdk/src/admin.ts`
 
+### 5. Ownership matrix
+
+| Module family                                                         | Owner             | Boundary status          |
+| --------------------------------------------------------------------- | ----------------- | ------------------------ |
+| `apps/oak-search-cli/src/cli/search/**`                               | CLI               | Read-only (`/read`)      |
+| `apps/oak-search-cli/src/cli/admin/**`                                | CLI               | Admin (`/admin`)         |
+| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts`       | CLI               | Read-safe config         |
+| `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts` | CLI admin lane    | Admin-only orchestration |
+| `apps/oak-search-cli/src/lib/indexing/**`                             | CLI admin-support | Admin (`/admin`)         |
+| `apps/oak-search-cli/src/adapters/**`                                 | CLI admin-support | Admin (`/admin`)         |
+| `packages/sdks/oak-search-sdk/src/retrieval/**`                       | SDK               | Canonical owner          |
+| `packages/sdks/oak-search-sdk/src/admin/**`                           | SDK               | Canonical owner          |
+| `packages/sdks/oak-search-sdk/src/internal/**`                        | SDK internal      | No root leakage          |
+
+### 6. Fitness functions
+
+The boundary is healthy only when all of the following are true and blocking:
+
+1. No duplicate canonical retrieval/preprocessing module families across CLI and SDK.
+2. No app imports from SDK `internal/*` or deep implementation paths.
+3. Non-admin CLI modules cannot import SDK admin surface.
+4. Default SDK root entrypoint does not expose admin/write or internal symbols.
+5. Any future experiment seam is introduced only with its own ADR and boundary tests.
+6. Boundary fitness failures break lint/type gates and block merges.
+
 ## Consequences
 
 ### Positive
@@ -98,8 +123,8 @@ Implementation evidence includes:
 
 ### Neutral
 
-- This ADR defines boundary policy; implementation sequencing remains in the
-  active semantic-search execution plans.
+- This ADR defines boundary policy. The implementation plan that delivered it
+  is archived at `.agent/plans/semantic-search/archive/completed/search-cli-sdk-boundary-migration.execution.plan.md`.
 
 ## Related
 

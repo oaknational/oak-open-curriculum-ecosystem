@@ -3,19 +3,19 @@ boundary: cross-boundary
 doc_role: index
 authority: docs-root-navigation
 status: active
-last_reviewed: 2026-02-25
+last_reviewed: 2026-03-12
 ---
 
 # Documentation for Oak Open Curriculum Ecosystem
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-03-12
 **Status**: Active index
 
 ## Getting Started
 
-- **New to this project? Not a developer?** → [VISION](foundation/VISION.md) for what this project delivers and why, then the [Curriculum Guide](domain/curriculum-guide.md) for a plain-language introduction to Oak's curriculum structure
+- **Evaluating the project?** → [Strategic Overview](foundation/strategic-overview.md) — vision, roadmap, engineering approach, and handoff readiness in one reading path
+- **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
-- **Vision and strategy?** → [foundation/VISION.md](foundation/VISION.md) — why this repository exists, what it delivers, and how we measure impact
 - **Working with AI?** → Start with [`start-right-quick` command](../.cursor/commands/jc-start-right-quick.md), shared workflow ([`start-right.md`](../.agent/skills/start-right-quick/shared/start-right.md)), or skill ([`start-right-quick/SKILL.md`](../.agent/skills/start-right-quick/SKILL.md)), then [AGENT.md](../.agent/directives/AGENT.md)
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 

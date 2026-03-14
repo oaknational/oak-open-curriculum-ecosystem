@@ -8,8 +8,15 @@ export { createSearchSdk } from './create-search-sdk.js';
 export { createAdminService } from './admin/index.js';
 export {
   createIndexLifecycleService,
+  createAliasLifecycleService,
   buildLifecycleDeps,
+  buildAliasLifecycleDeps,
   createVersionedIndexResolver,
+  withLifecycleLease,
+  validateLeaseTtl,
+  DEFAULT_LEASE_TTL_MS,
+  readIndexMeta,
+  writeIndexMeta,
 } from './admin/index.js';
 export {
   SEARCH_INDEX_TARGETS,
@@ -40,6 +47,8 @@ export type {
   AliasSwap,
   AliasTargetInfo,
   AliasTargetMap,
+  AliasLifecycleDeps,
+  AliasLifecycleService,
   IndexLifecycleDeps,
   IndexLifecycleService,
   VersionedIngestOptions,
@@ -50,3 +59,4 @@ export type {
   AliasValidationResult,
   AliasHealthEntry,
 } from './types/index.js';
+export type { LifecycleLease } from './admin/lifecycle-lease.js';

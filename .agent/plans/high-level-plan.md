@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-03-11
+last_updated: 2026-03-13
 ---
 
 # High-Level Plan
@@ -65,9 +65,10 @@ The next execution sequence is currently:
    [oak-preview-mcp-snagging.execution.plan.md](sdk-and-mcp-enhancements/archive/completed/oak-preview-mcp-snagging.execution.plan.md).
 2. Re-download the bulk data, re-process it, re-index the Elasticsearch
    instance, and validate that stale search/index issues have cleared.
-   🔄 IN PROGRESS — lifecycle ingest run completed upload but failed metadata
-   commit (`strict_dynamic_mapping_exception` on `previous_version`); metadata
-   schema/mapping remediation is now the active incident lane.
+   🔄 IN PROGRESS — recovery-and-guardrails is now the primary incident lane;
+   lifecycle ingest run completed upload but failed metadata commit
+   (`strict_dynamic_mapping_exception` on `previous_version`), with salvage-first
+   recovery and anti-recurrence guardrails now the active execution path.
 3. Implement
    [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
    and deploy that migration work.
@@ -166,7 +167,7 @@ Graph-augmented curriculum navigation begins to surface.
 1. **Elasticsearch re-index and search quality validation** (intention #2)
    - Re-download bulk data, re-process, re-index the Elasticsearch instance
    - Resolve `strict_dynamic_mapping_exception` on `previous_version`
-     (metadata schema/mapping remediation — active incident lane)
+     (recovery-and-guardrails primary lane + supporting incident evidence lane)
    - Validate stale search/index issues have cleared
 2. **Replace OpenAI app with MCP Apps infrastructure** (intention #3)
    - Canonical execution plan:
@@ -246,24 +247,24 @@ platform reach.
      [architectural-enforcement-adoption.plan.md](agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md)
    - Covers: ESLint boundary rules, dependency-cruiser, knip dead
      code detection
-5. **Mutation testing**
+4. **Mutation testing**
    - Full plan:
      [mutation-testing-implementation.plan.md](agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md)
    - Covers: Stryker integration, `pnpm mutate`, workspace roll-out
-6. **Hallucination and evidence guard adoption**
+5. **Hallucination and evidence guard adoption**
    - Full plan:
      [hallucination-and-evidence-guard-adoption.plan.md](agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md)
-7. **Cross-agent standardisation**
+6. **Cross-agent standardisation**
    - Full plan:
      [cross-agent-standardisation.plan.md](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md)
-8. **Security and privacy hardening**
+7. **Security and privacy hardening**
    - Collection roadmap:
      [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
-9. **Supply chain controls** (if npm publishing is imminent)
+8. **Supply chain controls** (if npm publishing is imminent)
    - Icebox stub:
      [supply-chain-controls.md](icebox/supply-chain-controls.md)
-10. **Search quality stream progression** via semantic-search roadmap
-11. **Developer experience** — TSDoc overhaul, SDK publishing,
+9. **Search quality stream progression** via semantic-search roadmap
+10. **Developer experience** — TSDoc overhaul, SDK publishing,
     strictness convergence (`vi.mock`/assertions/no-console/override removal) plus delegated boundary/separation lint hardening
 
 ---

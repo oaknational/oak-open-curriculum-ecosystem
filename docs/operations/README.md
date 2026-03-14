@@ -3,7 +3,7 @@ boundary: B4-Engineering-Operations
 doc_role: index
 authority: operations-navigation
 status: active
-last_reviewed: 2026-02-25
+last_reviewed: 2026-03-12
 ---
 
 # Operations Documentation
@@ -19,6 +19,8 @@ debugging the system.
   Production diagnostics and incident response workflow
 - [Troubleshooting](./troubleshooting.md) - Common failure modes and practical
   fixes
+- [Elasticsearch Ingest Lifecycle](./elasticsearch-ingest-lifecycle.md) -
+  Blue/green index lifecycle validation and ingest procedure
 
 ## Relationship to Engineering Docs
 

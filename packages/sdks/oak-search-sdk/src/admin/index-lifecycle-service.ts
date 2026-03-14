@@ -1,18 +1,10 @@
-/**
- * Index lifecycle service for blue/green index management (ADR-130).
- *
- * Orchestrates versioned index creation, alias swapping, and cleanup.
- * IO operations are injected via `IndexLifecycleDeps` (ADR-078).
- *
- * @see {@link ./lifecycle-promote.ts} for promote
- * @see {@link ./lifecycle-rollback.ts} for rollback and alias validation
- */
-
 import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
 import type { AdminError, IngestResult } from '../types/admin-types.js';
 import type {
   AliasTargetMap,
+  AliasLifecycleDeps,
+  AliasLifecycleService,
   IndexLifecycleDeps,
   IndexLifecycleService,
   StageResult,
@@ -27,10 +19,10 @@ import {
 import { cleanupOldGenerations, cleanupOrphanedIndexes } from './lifecycle-cleanup.js';
 import { rollback, validateAliases } from './lifecycle-rollback.js';
 import { promote } from './lifecycle-promote.js';
+import { enforceMetadataAliasCoherence } from './lifecycle-meta-alias-coherence.js';
 
 const DEFAULT_MIN_DOC_COUNT = 1;
 
-/** Create an index lifecycle service with injected dependencies. */
 export function createIndexLifecycleService(deps: IndexLifecycleDeps): IndexLifecycleService {
   return {
     versionedIngest: (options) => versionedIngest(deps, options),
@@ -41,7 +33,13 @@ export function createIndexLifecycleService(deps: IndexLifecycleDeps): IndexLife
   };
 }
 
-/** Prepare phase: read metadata, create indexes, ingest, verify. */
+export function createAliasLifecycleService(deps: AliasLifecycleDeps): AliasLifecycleService {
+  return {
+    promote: (version) => promote(deps, version),
+    rollback: () => rollback(deps),
+    validateAliases: () => validateAliases(deps),
+  };
+}
 async function prepareVersionedIndexes(
   deps: IndexLifecycleDeps,
   options: VersionedIngestOptions,
@@ -70,8 +68,6 @@ async function prepareVersionedIndexes(
   }
   return ok({ version, previousVersion, ingestResult: ingestResult.value });
 }
-
-/** Run bulk ingest and verify doc counts meet threshold. */
 async function runIngestAndVerify(
   deps: IndexLifecycleDeps,
   version: string,
@@ -92,14 +88,6 @@ async function runIngestAndVerify(
   }
   return ok(ingestResult.value);
 }
-
-/**
- * Stage versioned indexes without promoting: create, ingest, verify.
- *
- * When ingest or verification fails after index creation succeeds,
- * the orphaned versioned indexes are cleaned up. Cleanup failures
- * are logged as warnings but the original error is always preserved.
- */
 async function stage(
   deps: IndexLifecycleDeps,
   options: VersionedIngestOptions,
@@ -130,8 +118,6 @@ async function stage(
     previousVersion,
   });
 }
-
-/** Swap phase: resolve aliases, swap, write metadata. Rolls back on metadata failure. */
 async function swapAndCommit(
   deps: IndexLifecycleDeps,
   version: string,
@@ -142,6 +128,14 @@ async function swapAndCommit(
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return aliasResult;
+  }
+  const coherenceResult = enforceMetadataAliasCoherence(
+    previousVersion,
+    aliasResult.value,
+    'versioned-ingest',
+  );
+  if (!coherenceResult.ok) {
+    return coherenceResult;
   }
 
   const swaps = buildSwapActions(aliasResult.value, version, deps.target);
@@ -167,8 +161,6 @@ async function swapAndCommit(
   }
   return ok(undefined);
 }
-
-/** Attempt to roll back aliases after a metadata write failure. */
 async function attemptMetaFailureRollback(
   deps: IndexLifecycleDeps,
   originalTargets: AliasTargetMap,
@@ -204,8 +196,6 @@ async function attemptMetaFailureRollback(
   }
   return ok(undefined);
 }
-
-/** Full versioned ingest: prepare, swap, cleanup. */
 async function versionedIngest(
   deps: IndexLifecycleDeps,
   options: VersionedIngestOptions,

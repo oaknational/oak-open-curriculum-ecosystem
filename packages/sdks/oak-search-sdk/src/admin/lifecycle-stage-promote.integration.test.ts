@@ -13,6 +13,7 @@ import type { AdminError } from '../types/admin-types.js';
 import {
   STUB_INGEST_RESULT,
   DEFAULT_ALIAS_TARGETS,
+  DEFAULT_PREVIOUS_VERSION,
   BARE_INDEX_TARGETS,
   buildPostSwapAliasTargets,
   createFakeLogger,
@@ -31,7 +32,7 @@ describe('IndexLifecycleService — stage and promote', () => {
       if (result.ok) {
         expect(result.value.version).toBe('v2026-03-07-143022');
         expect(result.value.ingestResult).toEqual(STUB_INGEST_RESULT);
-        expect(result.value.previousVersion).toBeNull();
+        expect(result.value.previousVersion).toBe(DEFAULT_PREVIOUS_VERSION);
       }
       expect(deps.createVersionedIndexes).toHaveBeenCalledOnce();
       expect(deps.runVersionedIngest).toHaveBeenCalledOnce();
@@ -178,7 +179,7 @@ describe('IndexLifecycleService — stage and promote', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(result.value.version).toBe('v2026-03-07-143022');
-        expect(result.value.previousVersion).toBeNull();
+        expect(result.value.previousVersion).toBe(DEFAULT_PREVIOUS_VERSION);
         expect(result.value.indexesCleanedUp).toBe(0);
         expect(result.value.cleanupFailures).toBe(0);
       }
@@ -225,6 +226,30 @@ describe('IndexLifecycleService — stage and promote', () => {
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.error.message).toContain('do not exist');
+      }
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
+    });
+
+    it('fails fast when metadata and live aliases are incoherent', async () => {
+      const deps = createFakeDeps({
+        readIndexMeta: vi.fn().mockResolvedValue(
+          ok({
+            version: 'v2026-03-09-090000',
+            ingested_at: '2026-03-09T09:00:00Z',
+            subjects: [],
+            key_stages: [],
+            duration_ms: 0,
+            doc_counts: {},
+          }),
+        ),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.promote('v2026-03-07-143022');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('coherence precondition failed');
       }
       expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
     });

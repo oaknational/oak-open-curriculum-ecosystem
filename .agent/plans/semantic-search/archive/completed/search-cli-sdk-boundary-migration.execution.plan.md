@@ -86,7 +86,7 @@ finishing with deterministic closure evidence.
 
 - Session prompt: `.agent/prompts/semantic-search/semantic-search.prompt.md`
 - Incident lane: `.agent/plans/semantic-search/active/cli-robustness.plan.md`
-- Boundary lane (this file): `.agent/plans/semantic-search/active/search-cli-sdk-boundary-migration.execution.plan.md`
+- Boundary lane (this file): `.agent/plans/semantic-search/archive/completed/search-cli-sdk-boundary-migration.execution.plan.md`
 - Doctrine: `docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md`
 - Foundations:
   - `.agent/directives/principles.md`

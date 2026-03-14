@@ -13,7 +13,7 @@ import type { Client } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
 import type { Logger } from '@oaknational/logger';
 
-import type { IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
+import type { AliasLifecycleDeps, IndexLifecycleDeps } from '../types/index-lifecycle-types.js';
 import type { AdminError } from '../types/admin-types.js';
 import type { SearchIndexTarget } from '../internal/index.js';
 import { SEARCH_INDEX_KINDS } from '../internal/index.js';
@@ -161,6 +161,31 @@ export function buildLifecycleDeps(
     verifyDocCounts: (version, minDocCount) =>
       buildVerifyDocCounts(client, target, version, minDocCount),
     generateVersion: generateTimestampVersion,
+    target,
+    logger,
+  };
+}
+
+/**
+ * Build alias/metadata-only lifecycle deps from an Elasticsearch client.
+ *
+ * This surface is used by callers that only need promote/rollback/validate
+ * semantics and must not provide ingest shims.
+ */
+export function buildAliasLifecycleDeps(
+  client: Client,
+  target: SearchIndexTarget,
+  logger?: Logger,
+): AliasLifecycleDeps {
+  return {
+    resolveCurrentAliasTargets: () => resolveCurrentAliasTargets(client, target),
+    atomicAliasSwap: (swaps) => atomicAliasSwap(client, swaps),
+    readIndexMeta: () => readIndexMeta(client),
+    writeIndexMeta: (meta) => writeIndexMeta(client, meta),
+    listVersionedIndexes: (baseName, t) => listVersionedIndexes(client, baseName, t),
+    deleteVersionedIndex: (name) => deleteVersionedIndex(client, name),
+    verifyDocCounts: (version, minDocCount) =>
+      buildVerifyDocCounts(client, target, version, minDocCount),
     target,
     logger,
   };

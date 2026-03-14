@@ -29,6 +29,7 @@ Active adjacent execution sources:
 1. ~~elasticsearch-specialist-capability.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
 2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
 3. [phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md) (HC-0: harness-concepts baseline)
+4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
 
 ---
 
@@ -68,7 +69,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist reviewer/skill/rule rollout
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (📋), MCP upgrade (📋), Express specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -86,9 +87,20 @@ Phase 5: Mutation testing execution                  📋 PLANNED
 
 Adjacent:
   ES:   Elasticsearch specialist capability          ✅ COMPLETE
+  CLK:  Clerk specialist capability                  ✅ COMPLETE
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
+  SNT:  Sentry specialist capability                 📋 PLANNED
+  MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
+  EXP:  Express specialist capability                📋 PLANNED
+  OOCE: Oak Open Curriculum Ecosystem specialist     📋 PLANNED
+  PLN:  Planning specialist capability               📋 PLANNED
+  TDD:  TDD specialist capability                    📋 PLANNED
+  DVX:  Developer experience specialist              📋 PLANNED
+  GW:   Reviewer gateway upgrade                     📋 PLANNED
+  AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
+  OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
 ```
 
 ---
@@ -201,6 +213,196 @@ Adjacent:
   - intentionally outside the numbered phase sequence
   - extends platform coverage to OpenAI Codex alongside Cursor and Claude Code
 
+### Adjacent — Sentry Specialist Capability
+
+- Strategic plan:
+  [sentry-specialist-capability.plan.md](future/sentry-specialist-capability.plan.md)
+- Goal:
+  - add a canonical Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet)
+  - require live consultation of official Sentry and OpenTelemetry documentation as primary authority
+  - scope includes Sentry SDK integration, OpenTelemetry instrumentation, distributed tracing, error tracking, MCP Insights, alerting, and performance monitoring
+  - treat Vercel (Node.js) + `@sentry/node` as the default deployment context
+- Status: 📋 Planned (future/)
+- Notes:
+  - third instantiation of the domain specialist triplet pattern (ADR-129)
+  - intentionally outside the numbered phase sequence
+  - collection-owned because it extends the agent capability model
+  - must be created before or as the very first step of the Sentry integration
+    ([sentry-otel-integration.execution.plan.md](../architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md))
+    — so agents can review Sentry SDK usage as it's being written
+
+### Adjacent — MCP Specialist Upgrade (MCP+)
+
+- Strategic plan:
+  [mcp-specialist-upgrade.plan.md](future/mcp-specialist-upgrade.plan.md)
+- Goal:
+  - upgrade existing `mcp-reviewer` from a general reviewer to a full ADR-129
+    triplet (add skill, situational rule, live-spec-first doctrine)
+  - include `@modelcontextprotocol/ext-apps` coverage (App Extensions, widget
+    preview, iframe/CSP, host-specific behaviour)
+  - require live consultation of the MCP specification and ext-apps docs
+  - the MCP spec evolves rapidly — agents need current guidance, not cached knowledge
+- Status: 📋 Planned (future/)
+- Notes:
+  - unlike ES/Clerk/Sentry, this upgrades an existing reviewer rather than creating
+    from scratch
+  - ext-apps scope may warrant a sub-specialist or a dedicated section within the
+    MCP skill, depending on surface area at implementation time
+  - intentionally outside the numbered phase sequence
+
+### Adjacent — Express Specialist Capability
+
+- Strategic plan:
+  [express-specialist-capability.plan.md](future/express-specialist-capability.plan.md)
+- Goal:
+  - add a canonical Express reviewer, skill, and situational rule (ADR-129 triplet)
+  - require live consultation of official Express 5.x documentation
+  - Express 5 has breaking changes from v4 — agents frequently apply v4 patterns
+  - scope includes middleware patterns, error handling, routing, req/res typing,
+    and Vercel deployment specifics
+  - treat Express 5.x on Vercel as the default deployment context
+- Status: 📋 Planned (future/)
+- Notes:
+  - fourth instantiation of the domain specialist triplet pattern (ADR-129)
+  - intentionally outside the numbered phase sequence
+  - Vercel deployment context may warrant Vercel-specific subsections in the
+    review checklist
+
+### Adjacent — Oak Open Curriculum Ecosystem Specialist Capability (OOCE)
+
+- Strategic plan:
+  [ooce-specialist-capability.plan.md](future/ooce-specialist-capability.plan.md)
+- Goal:
+  - add a canonical Oak Open Curriculum Ecosystem reviewer, skill, and
+    situational rule (ADR-129 triplet) — the avatar of the repo itself
+  - specialist in the repo's own internal library contracts, composition
+    patterns, and how the workspaces fit together
+  - scope includes: `@oaknational/result` (Result<T, E>), `@oaknational/logger`
+    (sink architecture, OTel format), `@oaknational/env` and `env-resolution`
+    (env contracts), `@oaknational/type-helpers`, `@oaknational/sdk-codegen`
+    (generated types, vocab generation), `@oaknational/curriculum-sdk` and
+    `@oaknational/oak-search-sdk` (public API surface), and
+    `@oaknational/eslint-plugin-standards` (custom lint rules)
+  - enforce correct usage patterns: "use Result, not try/catch"; "inject Logger,
+    don't construct"; "env contracts resolve at startup, not at call site"
+  - authority source is the README and source of each internal package, not
+    external documentation
+- Status: 📋 Planned (future/)
+- Notes:
+  - the repo's own avatar — knows every internal package, every pattern,
+    every gotcha, and how they compose
+  - different from architecture reviewers (who care about boundaries and
+    dependency direction) — this specialist cares about correct usage of
+    internal APIs and patterns
+  - intentionally outside the numbered phase sequence
+  - the must-read tier will reference each internal package's README
+  - scope boundary: "Are you using our libraries correctly?" vs
+    architecture reviewers: "Is the dependency direction correct?"
+
+### Adjacent — Planning Specialist Capability
+
+- Strategic plan:
+  [planning-specialist-capability.plan.md](future/planning-specialist-capability.plan.md)
+- Goal:
+  - add a canonical planning reviewer, skill, and situational rule (ADR-129 triplet)
+  - specialist in plan architecture, lifecycle, discoverability, and documentation
+    sync requirements
+  - enforce: correct template usage, required sections, phase gates, cross-reference
+    maintenance, plan-vs-docs separation
+  - authority source is plan templates, collection READMEs, and practice-core docs
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - complements docs-adr-reviewer (which owns ADR content) — this specialist
+    owns plan structure and lifecycle
+
+### Adjacent — TDD Specialist Capability
+
+- Strategic plan:
+  [tdd-specialist-capability.plan.md](future/tdd-specialist-capability.plan.md)
+- Goal:
+  - add a canonical TDD reviewer, skill, and situational rule (ADR-129 triplet)
+  - multi-level TDD guidance scaled to task size: unit → integration → E2E →
+    UI → smoke → contract
+  - refined test level definitions aligned with industry terminology while
+    keeping the "if it runs in CI, no IO" rule
+  - the skill guides the testing approach at the START of work; the existing
+    test-reviewer audits the result AFTER
+  - covers the Red-Green-Refactor sequence at every level, anti-patterns
+    (vi.mock, vi.stubGlobal, skipped tests), and test-level selection
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - refines and operationalises `.agent/directives/testing-strategy.md`
+  - relationship to test-reviewer: TDD specialist guides approach,
+    test-reviewer audits compliance
+  - includes a **mutation testing sub-specialist** (Stryker JS) — focused on
+    surviving mutant triage and remediation through better architecture and
+    better tests, NOT through mutation-specific test hacks
+  - prerequisite: terminology standardisation audit and remediation must
+    complete before the triplet is created
+
+### Adjacent — Developer Experience Specialist Capability (DVX)
+
+- Strategic plan:
+  [devx-specialist-capability.plan.md](future/devx-specialist-capability.plan.md)
+- Goal:
+  - add a canonical developer experience reviewer, skill, and situational rule
+    (ADR-129 triplet)
+  - four broad areas: working with the code (readability, error messages, naming),
+    working with the repo (onboarding friction, script consistency, config
+    ergonomics), working with the SDKs (API design, type ergonomics, progressive
+    disclosure), working with the CLIs (flags, help text, progress, error output)
+  - distinct lens from OOCE: OOCE asks "is it correct?", DevX asks "does it
+    feel good to use?"
+  - AI agent DX is a first-class concern (clear errors, structured output,
+    deterministic behaviour)
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - complements OOCE (correctness) and onboarding-reviewer (first-time
+    journey) with an ongoing daily friction lens
+  - the repo's users include both humans and AI agents — DX applies to both
+
+### Adjacent — Reviewer Gateway Upgrade (GW)
+
+- Strategic plan:
+  [reviewer-gateway-upgrade.plan.md](future/reviewer-gateway-upgrade.plan.md)
+- Goal:
+  - upgrade `code-reviewer` from a code quality reviewer that also triages
+    to a Reviewer Gateway that also does baseline code quality
+  - redesign the triage model from a flat checklist to a layered model
+    (change category → domain signal → cross-cutting concerns) that scales
+    to 20+ specialists
+  - integrate review depth selection (deep vs focused per specialist)
+  - add review coverage tracking across a session
+  - rename directive, rule, and adapters (coordinated with taxonomy plan)
+- Status: 📋 Planned (future/)
+- Notes:
+  - the gateway's role has outgrown its `code-reviewer` name
+  - execution shares rename mechanics with the Agent Classification Taxonomy
+    plan — should be coordinated
+  - triage model redesign can be drafted independently of the rename
+
+### Adjacent — Manifest-Driven Adapter Generation (AGN)
+
+- Strategic plan:
+  [adapter-generation.plan.md](future/adapter-generation.plan.md)
+- Goal:
+  - replace manual platform adapter maintenance with a manifest-driven
+    generation script
+  - single `specialist-manifest.yaml` defines each agent's platform-specific
+    properties; `pnpm generate:adapters` produces all wrapper files
+  - eliminates drift between canonical templates and platform adapters
+  - reduces new specialist creation from 4–6 files to 1 manifest entry
+  - makes the taxonomy rename (WS3) trivial — update manifest, regenerate
+- Status: 📋 Planned (future/)
+- Notes:
+  - prerequisite optimisation for the taxonomy rename
+  - at 25 specialists × 4 platforms = 100+ adapter files, manual maintenance
+    is unsustainable
+  - `portability:check` evolves from existence check to freshness check
+
 ### Adjacent — Agent Classification Taxonomy
 
 - Strategic plan:
@@ -212,10 +414,38 @@ Adjacent:
   - full rename of all agents (drop `-reviewer` suffix)
   - create Practice domain trio (`practice`, `practice-core`, `practice-applied`)
   - update validation, documentation, and platform adapters across all four platforms
+  - define review depth dimension (deep/Opus vs focused/Haiku-Sonnet) with explicit selection criteria
+  - integrate all specialist improvements into Practice Core documentation
 - Status: 📋 Strategic (future/)
 - Notes:
   - executes on a dedicated feature branch
   - success criterion: zero stale references to old names anywhere in repo
+  - WS6 (review depth) and WS7 (Practice Core integration) added 2026-03-13
+
+### Adjacent — Clerk Specialist Capability
+
+- Status: ✅ Complete (2026-03-13)
+- Goal:
+  - add a canonical Clerk reviewer, skill, and situational rule (ADR-129 triplet)
+  - require live consultation of official Clerk documentation as primary authority
+  - treat Vercel (Express) + shared Clerk instance as the default deployment context
+- Notes:
+  - second instantiation of the domain specialist triplet pattern (ADR-129)
+  - intentionally outside the numbered phase sequence
+  - collection-owned because it extends the agent capability model
+
+### Adjacent — Specialist Operational Tooling Layer
+
+- ADR: [ADR-137](../../../docs/architecture/architectural-decisions/137-specialist-operational-tooling-layer.md)
+- Goal:
+  - extend domain specialist triplets with an optional fourth layer: agent-accessible CLI/MCP tools for live system interaction
+  - Elasticsearch: extend search CLI with inspect/suggest commands
+  - Clerk: adopt official `clerk/cli` or build custom CLI on `@clerk/backend`
+- Status: 📋 Strategic (ADR accepted, no execution plan yet)
+- Notes:
+  - applies to any domain specialist with a live external system
+  - design principles: structured JSON output, read-safe by default, reviewer-compatible findings
+  - execution plans will be created per-domain when work is scheduled
 
 ### Adjacent — Harness Concepts Baseline Metrics (HC-0)
 
@@ -232,6 +462,65 @@ Adjacent:
   - adoption/rejection decision recorded for each harness concept
   - documentation sync log records updates/no-change rationale
 - Dependencies: Phase 0 complete
+
+---
+
+## Gap Analysis — Tech Stack vs Specialist Coverage (2026-03-14)
+
+Full tech-stack inventory cross-referenced against the specialist roster.
+Routing decisions are locked in — concerns are assigned to existing or planned
+specialists, not deferred.
+
+### Routed to existing/planned specialists
+
+| Concern | Routed To | Rationale |
+|---------|-----------|-----------|
+| Zod 4.x patterns (env, OpenAPI, SDK, CLI) | OOCE | Internal validation pattern, not external service |
+| Codegen pipeline (OpenAPI → types → Zod → SDK → vocab → MCP) | OOCE | Internal composition pattern |
+| TypeDoc API doc generation | OOCE | Generated files concern |
+| CI/CD config (GitHub Actions, semantic-release) | config-reviewer | CI config is tooling config |
+| Vercel deployment specifics | Express specialist | Already in Express scope |
+| Secrets lifecycle/rotation | security-reviewer | Security concern |
+| Commander CLI framework | DevX specialist | CLI ergonomics (area 4) |
+
+### No specialist needed
+
+| Concern | Rationale |
+|---------|-----------|
+| Redis/ioredis caching | Surface area too small (few files in one CLI) |
+| Hono framework | Pinned override, not actively used. Monitor. |
+| Feature flags | Not used, not planned |
+| Database migrations | No persistent DB |
+| Message queues | Not used |
+| Rate limiting | Not implemented; Express specialist when added |
+| Analytics/telemetry | Not in repo scope |
+| IaC/Terraform | Managed externally |
+| Load/performance testing | No tooling exists yet; assess when introduced |
+
+### Full specialist roster (target state)
+
+**Always-on (invoked for every non-trivial change):**
+
+- Reviewer Gateway (upgraded from code-reviewer)
+
+**Standard roster (invoked when change profile matches):**
+
+- type-reviewer, test-reviewer, docs-adr-reviewer, config-reviewer,
+  security-reviewer, architecture reviewers (fred/barney/betty/wilma)
+
+**Domain specialists (ADR-129 triplets, invoked on domain signal):**
+
+- elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 📋,
+  mcp specialist 📋, express specialist 📋, ooce specialist 📋
+
+**Practice/process specialists (invoked on methodology signal):**
+
+- planning specialist 📋, tdd specialist 📋, devx specialist 📋
+
+**Situational (on-demand, not tied to change profile):**
+
+- release-readiness-reviewer, ground-truth-designer, subagent-architect,
+  onboarding-reviewer, mcp-reviewer (current, pre-upgrade)
 
 ---
 

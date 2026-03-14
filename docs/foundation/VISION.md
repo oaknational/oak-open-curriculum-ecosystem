@@ -1,6 +1,16 @@
+---
+title: Vision
+status: active
+last_reviewed: 2026-03-12
+---
+
 # Vision
 
-> **Last updated**: 23 February 2026
+> **Last updated**: 12 March 2026
+>
+> **Reading context**: This document is part of a reading path. For the
+> strategic overview and reading guide, start with
+> [Strategic Overview](strategic-overview.md).
 
 [Oak National Academy](https://www.thenational.academy/about-us/who-we-are) is an
 independent UK public body whose mission is to _"improve pupil outcomes and close
@@ -88,7 +98,7 @@ repository as the implementation baseline.
 
 Alongside product infrastructure, this repository also develops the operating
 system for delivery itself: Oak's
-[agentic engineering practice](../../.agent/practice-core/practice.md) and associated
+[agentic engineering practice](agentic-engineering-system.md) and associated
 guardrails, including architectural enforcement and human-AI collaboration
 improvements ([ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md)).
 
@@ -99,17 +109,19 @@ For the delivery roadmap with milestones and user-impact summaries, see the
 summaries of each milestone (audience, value, progression gates), see
 [milestones](../../.agent/milestones/).
 
-| Capability                                      | Status  | What this means for users                                                                                                                                                         | Evidence                                                                                                                                  |
-| ----------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Curriculum SDK (schema-first)                   | Current | Developers get typed, validated access to Oak's curriculum data without writing type definitions by hand. Build on Oak's curriculum in TypeScript with full type safety.          | SDK generation pipeline operational; all types, validators, and MCP tool metadata generated from OpenAPI schema                           |
-| MCP servers (desktop and web)                   | Current | AI assistants like Claude, ChatGPT, and Cursor can access Oak's curriculum directly — teachers can ask questions about lessons and get structured, accurate answers.              | Stdio and HTTP servers deployed; OAuth-compliant authentication                                                                           |
-| Semantic search pipeline                        | Current | When a teacher searches for a lesson, the system finds the right one with high accuracy across 7 different curriculum structures (lessons, units, threads, sequences).            | MRR (Mean Reciprocal Rank) 0.983 on lessons (finds the right lesson in the top result 98% of the time); 41 ground truths across 4 indices |
-| Agentic engineering practice                    | Current | A self-reinforcing system of quality gates, AI reviewers, and architectural constraints that maintains code quality as the team and codebase grow.                                | Over 100 ADRs; 10+ specialist sub-agent reviewers; comprehensive quality gate suite                                                       |
-| MCP Apps extension interaction model            | Next    | Public alpha will make curriculum interaction native inside platforms like ChatGPT, Claude, and Gemini — teachers can discover and use Oak content without leaving their AI tool. | Pre-public-release                                                                                                                        |
-| Knowledge graph + concept framework integration | Later   | Planned: richer understanding of how curriculum concepts connect, enabling smarter lesson composition and cross-subject pathways.                                                 | Pre-development                                                                                                                           |
-| Pedagogical rigour assessment APIs              | Later   | Planned: AI-assisted quality checks to ensure generated or adapted resources meet high pedagogical standards.                                                                     | Pre-development                                                                                                                           |
+| Capability                                   | Status | What this means for users                                                                                                                                                         | Evidence                                                                                                                                  |
+| -------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Curriculum SDK (schema-first)                | Live   | Developers get typed, validated access to Oak's curriculum data without writing type definitions by hand. Build on Oak's curriculum in TypeScript with full type safety.          | SDK generation pipeline operational; all types, validators, and MCP tool metadata generated from OpenAPI schema. v1.0.0 released.         |
+| MCP servers (desktop and web)                | Live   | AI assistants like Claude, ChatGPT, and Cursor can access Oak's curriculum directly — teachers can ask questions about lessons and get structured, accurate answers.              | HTTP server deployed at `curriculum-mcp-alpha.oaknational.dev`; OAuth-compliant authentication; 31 tools, resources, and prompts          |
+| Semantic search pipeline                     | Live   | When a teacher searches for a lesson, the system finds the right one with high accuracy across 7 different curriculum structures (lessons, units, threads, sequences).            | MRR (Mean Reciprocal Rank) 0.983 on lessons (finds the right lesson in the top result 98% of the time); 41 ground truths across 4 indices |
+| Agentic engineering practice                 | Live   | A self-reinforcing system of quality gates, AI reviewers, and architectural constraints that maintains code quality as the team and codebase grow.                                | 130+ ADRs; 21 specialist sub-agent reviewers; 11 blocking quality gates; self-improving learning loop                                     |
+| MCP Apps infrastructure + branding           | M2     | Public alpha will make curriculum interaction native inside platforms like ChatGPT, Claude, and Gemini — teachers can discover and use Oak content without leaving their AI tool. | Execution plan in place; M2 blocker                                                                                                       |
+| Knowledge graph alignment                    | M2     | Initial graph-enablement: richer understanding of how curriculum concepts connect, informing the integration path for smarter lesson composition and cross-subject pathways.      | KG alignment audit promoted to active plan; M2 blocker                                                                                    |
+| Exemplar interactive UI (`user_search` tool) | M3     | A polished, interactive curriculum search experience rendered via React components inside Claude Desktop, ChatGPT, and other MCP App hosts.                                       | Requires design input; M3 blocker                                                                                                         |
+| Production auth + observability              | M3     | Public sign-up via production Clerk with social providers; full Sentry + OTel observability for production operation.                                                             | Research complete (Clerk); execution plan exists (Sentry/OTel); M3 blockers                                                               |
+| Pedagogical rigour assessment APIs           | Later  | Planned: AI-assisted quality checks to ensure generated or adapted resources meet high pedagogical standards.                                                                     | Pre-development                                                                                                                           |
 
-## What Changes At Public Alpha
+## What Changes At Public Alpha (M2)
 
 When the MCP Apps extension work reaches public alpha, this repository moves
 beyond "developer infrastructure only". It becomes a direct interaction surface
@@ -118,7 +130,9 @@ Gemini.
 
 That shift matters: the same underlying curriculum can be discovered, explored,
 and reused through the interfaces where many educators and developers already
-work.
+work. The [high-level plan](../../.agent/plans/high-level-plan.md) defines M2's
+blocking work: reliable search (ES re-index), unified MCP Apps infrastructure
+with branding, and initial knowledge graph alignment.
 
 ## Strategic Integrations Ahead
 
@@ -193,7 +207,7 @@ leading and outcome indicators.
 - speed of integrating new Oak curriculum capabilities into shared SDK/MCP
   surfaces
 
-**Current baselines** (pre-public-release, February 2026):
+**Current baselines** (March 2026, invite-only alpha live):
 
 | Metric               | Current value | Context                                                                                                     |
 | -------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -201,12 +215,13 @@ leading and outcome indicators.
 | Search MRR (units)   | 1.000         | 2 ground truths — mechanism check                                                                           |
 | Search MRR (threads) | 0.938         | 8 ground truths across curriculum threads                                                                   |
 | Ground truths        | 41            | Across 4 search indices                                                                                     |
-| ADRs                 | 100+          | Architectural decisions documenting every significant design choice                                         |
+| ADRs                 | 130+          | Architectural decisions documenting every significant design choice                                         |
 | Quality gate suite   | 11 gates      | sdk-codegen, build, type-check, lint, format, markdownlint, test, test:ui, test:e2e, smoke, subagents:check |
 
-These baselines will evolve as external adoption begins and the MCP Apps
-extension reaches public alpha. External adoption metrics (downloads, active
-integrations) are aspirational until the first public release.
+These baselines will evolve as external adoption begins. External adoption
+metrics (downloads, active integrations) become meaningful at M2 (open public
+alpha). For the full delivery roadmap, see the
+[high-level plan](../../.agent/plans/high-level-plan.md).
 
 ### Outcome Indicators (Medium-Term)
 

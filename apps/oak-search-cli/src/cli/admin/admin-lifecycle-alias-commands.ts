@@ -14,8 +14,7 @@
 
 import type { Command } from 'commander';
 import { InvalidArgumentError } from 'commander';
-import { err } from '@oaknational/result';
-import type { IndexLifecycleDeps } from '@oaknational/oak-search-sdk/admin';
+import { withLifecycleLease } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
@@ -25,31 +24,16 @@ import {
   printHeader,
   type CliSdkEnv,
 } from '../shared/index.js';
-import { buildLifecycleService } from './shared/build-lifecycle-service.js';
+import { buildAliasLifecycleService } from './shared/build-lifecycle-service.js';
 import { ingestLogger } from '../../lib/logger.js';
 
-/**
- * No-op ingestion stub for alias-only commands.
- *
- * Alias commands never invoke ingest. `validation_error` is semantically
- * correct — calling ingest here IS invalid input to the lifecycle service
- * from this command context.
- */
-const noOpIngest: IndexLifecycleDeps['runVersionedIngest'] = () =>
-  Promise.resolve(
-    err({
-      type: 'validation_error' as const,
-      message: 'Ingestion is not available in this command context',
-    }),
-  );
-
 function parseVersionOption(rawOpts: unknown): string {
-  if (!rawOpts || typeof rawOpts !== 'object' || !('version' in rawOpts)) {
-    throw new InvalidArgumentError('Missing required --version option.');
+  if (!rawOpts || typeof rawOpts !== 'object' || !('targetVersion' in rawOpts)) {
+    throw new InvalidArgumentError('Missing required --target-version option.');
   }
-  const candidate = rawOpts.version;
+  const candidate = rawOpts.targetVersion;
   if (typeof candidate !== 'string' || candidate.length === 0) {
-    throw new InvalidArgumentError('--version must be a non-empty string.');
+    throw new InvalidArgumentError('--target-version must be a non-empty string.');
   }
   return candidate;
 }
@@ -67,20 +51,21 @@ export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
   parent
     .command('promote')
     .description('Promote a staged version by swapping aliases to it')
-    .requiredOption('--version <version>', 'Version string to promote (from stage output)')
+    .requiredOption('--target-version <version>', 'Version string to promote (from stage output)')
     .action(async (rawOpts: unknown) => {
       const version = parseVersionOption(rawOpts);
       const esClient = createEsClient(cliEnv);
       await withEsClient(
         esClient,
         async () => {
-          const service = buildLifecycleService(
+          const service = buildAliasLifecycleService(
             esClient,
             cliEnv.SEARCH_INDEX_TARGET,
-            noOpIngest,
             ingestLogger,
           );
-          const result = await service.promote(version);
+          const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+            service.promote(version),
+          );
           if (!result.ok) {
             ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -118,13 +103,14 @@ export function registerRollbackCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const service = buildLifecycleService(
+          const service = buildAliasLifecycleService(
             esClient,
             cliEnv.SEARCH_INDEX_TARGET,
-            noOpIngest,
             ingestLogger,
           );
-          const result = await service.rollback();
+          const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+            service.rollback(),
+          );
           if (!result.ok) {
             ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
             printError(`${result.error.type}: ${result.error.message}`);
@@ -165,10 +151,9 @@ export function registerValidateAliasesCmd(parent: Command, cliEnv: CliSdkEnv): 
       await withEsClient(
         esClient,
         async () => {
-          const service = buildLifecycleService(
+          const service = buildAliasLifecycleService(
             esClient,
             cliEnv.SEARCH_INDEX_TARGET,
-            noOpIngest,
             ingestLogger,
           );
           const result = await service.validateAliases();

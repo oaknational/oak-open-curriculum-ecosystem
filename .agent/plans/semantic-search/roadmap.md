@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete — six plans active in `active/` (`cli-robustness` remains an active incident), boundary migration lane completed and retained as evidence, Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
-**Last Updated**: 2026-03-11
+**Status**: ✅ Milestones 0 and 1 complete — nine plans active in `active/` (recovery-and-guardrails is the primary incident lane), boundary migration lane completed and retained as evidence, Milestone 2 blockers queued in `current/`, with semantic-search and graph follow-ons queued behind the active streams
+**Last Updated**: 2026-03-13
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Metrics authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -48,11 +48,16 @@ Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
   → Invite-only alpha baseline complete and released
 
 Milestone 2: Open Public Alpha                   🔄 NEXT
-  → Production Clerk, social providers, public sign-up
-  → Edge rate limiting on OAuth proxy endpoints
+  → ES re-index + search quality validation
+  → MCP Apps infrastructure migration
+  → Knowledge graph alignment audit
+  → Dev Clerk remains; production auth deferred to M3
 
 Milestone 3: Public Beta                         📋 PLANNED
-  → Search quality Phase 4, architectural enforcement, observability
+  → Production Clerk integration + social providers + public sign-up
+  → Edge rate limiting on OAuth proxy endpoints
+  → Production Sentry + full OTel logging
+  → Exemplar MCP App UI + operational hardening/extension streams
 ```
 
 See [high-level-plan.md](../high-level-plan.md) for full milestone definitions.
@@ -68,9 +73,13 @@ Cross-collection sequencing note:
   and Elasticsearch reindex validation (🔄 in progress), then MCP Apps
   infrastructure migration, then graph follow-on work from the active
   alignment audit.
-- Semantic-search currently has six active plans in `active/`:
-  `cli-robustness` (🔴 active incident — metadata commit failure after alias
-  swap), `unified-versioned-ingestion`, `search-sdk-args-extraction`,
+- Semantic-search currently has nine active plans in `active/`:
+  `semantic-search-recovery-and-guardrails` (🟢 primary incident lane),
+  `semantic-search-ingest-runbook`,
+  `cli-robustness` (🟡 supporting incident evidence lane),
+  `semantic-search-scheduled-refresh`,
+  `unified-versioned-ingestion`,
+  `search-sdk-args-extraction`,
   `bulk-metadata-quick-wins`, `kg-alignment-audit`,
   and `category-integration-remediation`.
   `search-cli-sdk-boundary-migration` is complete and retained as evidence.
@@ -139,9 +148,9 @@ Completed merge gates:
 
 These are no longer merge-blocking and remain in the execution backlog:
 
-- 3b Result pattern unification
+- 3b Result pattern unification (✅ complete)
 - 3c STDIO-HTTP alignment
-- Milestone 2 auth/rate-limit blockers: [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
+- M3 auth/rate-limit blocker plan (queued): [m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 - Independent semantic-search stream already active:
   [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md)
 - Remaining follow-on queue: see [Phase 4 Streams](#phase-4-streams-independent-search-quality-streams-alongside-milestone-2).
@@ -169,19 +178,20 @@ Phase 3: MCP Integration + Merge Preparation        ✅ COMPLETE (historical)
   3e. SDK workspace separation                      ✅ COMPLETE (archived)
   ── Secrets/PII sweep ──                           ✅ COMPLETE
   ── Merge + make repo public ──                    ✅ COMPLETE (Milestone 0 exit)
-  3b. Result pattern unification                    🟢 ACTIVE
+  3b. Result pattern unification                    ✅ COMPLETE
   3c. STDIO-HTTP alignment                          📋 POST-MERGE
         ↓
 Milestone 1: Invite-Only Alpha                      ✅ COMPLETE
   Baseline delivered and in production
         ↓
 Milestone 2: Open Public Alpha                      🔄 NEXT
-  Clerk production migration + edge rate limiting
-  Canonical blocker plan: current/m2-public-alpha-auth-rate-limits.execution.plan.md
+  ES re-index + search quality validation
+  MCP Apps migration + KG alignment audit
+  Dev Clerk remains; production auth deferred to M3
         ↓
 Milestone 3: Public Beta                            📋 PLANNED
-  Phase 4: Search Quality + Ecosystem
-  Phase 5: Extensions
+  Production Clerk + edge rate limiting + prod observability
+  Exemplar UI + operational hardening and extension streams
 ```
 
 ---
@@ -303,14 +313,17 @@ closed.
 Current active and queued execution plans:
 
 - [mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md) — ✅ complete
-- [cli-robustness.plan.md](active/cli-robustness.plan.md) — 🔴 active incident: metadata commit failure after versioned-ingest alias swap
+- [cli-robustness.plan.md](active/cli-robustness.plan.md) — 🟡 supporting incident evidence and residual closure context
+- [semantic-search-ingest-runbook.md](active/semantic-search-ingest-runbook.md) — 🔴 active operator-run lifecycle ingest runbook with deterministic stop/go gates
+- [semantic-search-recovery-and-guardrails.execution.plan.md](active/semantic-search-recovery-and-guardrails.execution.plan.md) — 🟢 primary recovery execution lane: repair live metadata-alias coherence and add anti-recurrence lifecycle guardrails
+- [semantic-search-scheduled-refresh.operations.plan.md](active/semantic-search-scheduled-refresh.operations.plan.md) — 🟡 operations lane: incremental-first scheduled refresh with per-document fingerprinting and full re-ingest fallback
 - [unified-versioned-ingestion.plan.md](active/unified-versioned-ingestion.plan.md) — unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130)
 - [blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md) — ✅ superseded (archived)
 - [search-sdk-args-extraction.plan.md](active/search-sdk-args-extraction.plan.md) — cross-cutting active Search SDK extraction work
 - [bulk-metadata-quick-wins.execution.plan.md](active/bulk-metadata-quick-wins.execution.plan.md) — Boundary 03 — active widening of schema-aligned bulk outputs using existing extractors and structured fields
 - [kg-alignment-audit.execution.plan.md](active/kg-alignment-audit.execution.plan.md) — graph-enablement — active overlap audit to drive the next ontology-backed quick win
 - [category-integration-remediation.md](active/category-integration-remediation.md) — wire category supplementation through bulk ingestion orchestration
-- [search-cli-sdk-boundary-migration.execution.plan.md](active/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed strict CLI/SDK capability-boundary migration lane retained as evidence
+- [search-cli-sdk-boundary-migration.execution.plan.md](archive/completed/search-cli-sdk-boundary-migration.execution.plan.md) — ✅ completed strict CLI/SDK capability-boundary migration lane retained as evidence
 - [short-term-pr-snagging.plan.md](archive/completed/short-term-pr-snagging.plan.md) — ✅ complete (archived 2026-03-11)
 - [keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md) — Boundary 03 — promote lesson keyword definitions into reusable curriculum assets
 - [thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md) — Boundary 04 — enrich thread/sequence search targets from existing lesson and unit data
@@ -360,13 +373,16 @@ in response augmentation.
 Run from repo root, in order:
 
 ```bash
+pnpm secrets:scan:all
 pnpm clean
 pnpm sdk-codegen
 pnpm build
 pnpm type-check
+pnpm doc-gen
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
+pnpm portability:check
 pnpm lint:fix
 pnpm test
 pnpm test:ui

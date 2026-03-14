@@ -41,6 +41,13 @@ describe('parseLifecycleIngestOpts', () => {
     expectInvalidOption(123, 'Invalid command options: expected an option object.');
   });
 
+  it('rejects unknown option keys', () => {
+    expectInvalidOption(
+      { bulkDir: './bulk-downloads', unsupported: true },
+      'Invalid command options: expected an option object.',
+    );
+  });
+
   it('rejects non-string bulkDir values', () => {
     expectInvalidOption({ bulkDir: 123 }, '--bulk-dir must be a string path.');
   });
@@ -48,6 +55,13 @@ describe('parseLifecycleIngestOpts', () => {
   it('rejects subjectFilter arrays with non-string entries', () => {
     expectInvalidOption(
       { subjectFilter: ['maths', 1] },
+      '--subject-filter expects one or more subject strings.',
+    );
+  });
+
+  it('rejects subjectFilter when not an array', () => {
+    expectInvalidOption(
+      { subjectFilter: 'maths' },
       '--subject-filter expects one or more subject strings.',
     );
   });

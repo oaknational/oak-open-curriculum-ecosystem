@@ -60,11 +60,15 @@ A single atomic `POST /_aliases` request handles all six curriculum indexes simu
 
 - **Metadata write is the commit point**: If metadata write fails after alias swap, aliases are immediately rolled back
 - **2-generation retention**: With `MAX_GENERATIONS=2` and cleanup running after the swap, the retained indexes are always the current version (n) and previous version (n-1). The rollback target is naturally protected without consulting metadata.
+- **Coherence precondition before mutation**: Promote/versioned-ingest/rollback fail fast unless `oak_meta.version` matches the current live alias version (bootstrap null/null is allowed).
 
-#### Future Safety Enhancements (not yet implemented)
+#### Safety Enhancements
 
-- **Concurrency guard**: A lock document in `oak_meta` with TTL to prevent concurrent `versioned-ingest` runs
-- **Pre-flight storage check**: Orchestrator verifies sufficient storage before creating new indexes
+- **Implemented**: distributed lifecycle lease with TTL/renewal semantics to
+  prevent overlapping lifecycle operations.
+- **Implemented**: mutating lifecycle failures retain lease ownership until TTL expiry so operators can triage readbacks before concurrent mutation resumes.
+- **Planned**: pre-flight storage check so orchestration verifies sufficient
+  storage before creating new indexes.
 
 ### Indexes excluded from versioning
 
@@ -114,6 +118,8 @@ The curriculum indexes contain `semantic_text` fields with ELSER inference pipel
 - `alias-swap.sh` has been deleted and replaced by TypeScript `atomicAliasSwap` (no compatibility layers per principles)
 - Single-level rollback only (deliberate constraint — further rollback requires a new ingest cycle)
 - Sandbox indexes follow the same alias pattern for consistency
+- Alias remove actions use `must_exist=true` so missing expected alias bindings
+  fail fast instead of silently allowing partial lifecycle drift.
 
 ## Implementation
 
@@ -128,6 +134,9 @@ The curriculum indexes contain `semantic_text` fields with ELSER inference pipel
 | `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts`        | Generation cleanup                                                          |
 | `packages/sdks/oak-search-sdk/src/admin/lifecycle-promote.ts`        | Promote orchestration (stage→live swap)                                     |
 | `packages/sdks/oak-search-sdk/src/admin/lifecycle-rollback.ts`       | Rollback and alias validation operations                                    |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease.ts`          | Lease orchestration wrapper for mutating lifecycle commands                  |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease-infra.ts`    | Lease acquire/renew/release infrastructure                                   |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-meta-alias-coherence.ts` | Metadata/alias coherence enforcement preconditions                      |
 | `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts`    | Service types and alias types                                               |
 | `packages/sdks/oak-search-sdk/src/internal/index-resolver.ts`        | Shared name resolution helpers                                              |
 | `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts`     | DI factory for lifecycle deps                                               |
@@ -140,7 +149,7 @@ Registered in `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`:
 ```bash
 oak-search admin versioned-ingest --bulk-dir <path> [options]  # Full blue/green cycle
 oak-search admin stage --bulk-dir <path> [options]              # Stage without promoting
-oak-search admin promote --version <version>                    # Promote a staged version
+oak-search admin promote --target-version <version>             # Promote a staged version
 oak-search admin rollback                                       # Swap back to previous_version
 oak-search admin validate-aliases                                # Check alias health
 ```

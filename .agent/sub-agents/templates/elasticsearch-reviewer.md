@@ -63,6 +63,8 @@ These are the primary standards. Always consult the live documentation — the p
 
 Use WebFetch or WebSearch to consult the live documentation above. The URLs are starting points — follow links within them for specific areas.
 
+When available, the `elastic-docs` MCP server (`plugin-elastic-docs-elastic-docs`) provides `search_docs`, `get_document_by_url`, and `find_related_docs` tools for searching and retrieving official Elastic documentation. Use these alongside direct WebFetch/WebSearch when they are accessible.
+
 ## Reading Requirements (MANDATORY)
 
 Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
@@ -82,7 +84,7 @@ Before reviewing any changes, you MUST read and internalise these documents. The
 
 ### Consult-If-Relevant (loaded when the review touches that area)
 
-Load these when the review touches retrieval methods, evaluation, ingest, search tuning, or specific sub-topics:
+Load only documents whose "Load when" condition matches the current review. Do not load the full set on every invocation.
 
 | Document | Load when |
 |----------|-----------|
@@ -96,6 +98,9 @@ Load these when the review touches retrieval methods, evaluation, ingest, search
 | `docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md` | Ground truth validation |
 | `docs/architecture/architectural-decisions/089-index-everything-principle.md` | Index-everything principle |
 | `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md` | Bulk retry strategy |
+| `docs/architecture/architectural-decisions/130-blue-green-index-swapping.md` | Blue/green alias swap lifecycle |
+| `docs/architecture/architectural-decisions/136-incremental-refresh-bulk-api-partial-update-doctrine.md` | Incremental refresh or partial update semantics |
+| `docs/operations/elasticsearch-ingest-lifecycle.md` | Operational ingest procedure |
 | `docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md` | Transcript-aware RRF normalisation |
 | `docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md` | Known-answer-first methodology |
 | `docs/architecture/architectural-decisions/110-thread-search-architecture.md` | Thread search architecture |
@@ -110,6 +115,8 @@ Load these when the review touches retrieval methods, evaluation, ingest, search
 **Serverless check**: For every recommendation, verify — does this work on Elastic Serverless? If not, flag it.
 
 **Review stance**: Assess against current official best practice, not against what we happen to have built. If our implementation works but could be better aligned with current guidance, say so.
+
+**Settled doctrine**: ADR-136 establishes that Bulk API partial updates preserve ELSER embeddings when `semantic_text` fields are omitted, while the Update API does not. This is a hard invariant. Any code path that updates documents containing `semantic_text` fields must be verified against this doctrine.
 
 ## When Invoked
 
@@ -128,7 +135,7 @@ Load these when the review touches retrieval methods, evaluation, ingest, search
 
 ### Step 3: Assess Against Best Practice
 
-For each concern, assess against (in priority order):
+For each concern, first apply The First Question: could the Elasticsearch implementation be simpler without compromising search quality? Then assess against (in priority order):
 
 1. **Current official Elastic documentation** — the latest guidance from Elastic
 2. **Elastic Serverless compatibility** — does this work on the default deployment target?
@@ -172,13 +179,28 @@ For each finding, provide:
 - [ ] Bulk operations follow current retry and error-handling guidance
 - [ ] Observability approach uses current Elastic-native capabilities
 
-### Data Pipeline
+### Data Pipeline and Update Semantics
 
-Bulk curriculum data changes over time as Oak updates its curriculum. The full pipeline is: **redownload → reprocess → reindex**. Reviews touching indexing or data processing should consider:
+Reviews touching indexing or data processing should load ADR-136, ADR-130,
+and `docs/operations/elasticsearch-ingest-lifecycle.md`, then verify:
 
-- [ ] Pipeline handles full reindex from fresh bulk data (not incremental patches on stale data)
+- [ ] Pipeline handles full reindex from fresh bulk data
 - [ ] Mapping or analyser changes are validated against a fresh reindex cycle
 - [ ] Processing steps are idempotent and repeatable from a clean download
+- [ ] ADR-136 hard invariants enforced (Bulk API `update` only, no Update API, no scripted updates, `require_alias=true` for incremental writes)
+- [ ] Partial update payloads omit **all** `semantic_text` fields when only metadata changed
+- [ ] Post-update validation accounts for refresh visibility (explicit `_refresh` before count checks)
+
+### Index Lifecycle and Alias Management
+
+Reviews touching aliases, index lifecycle, or rollback mechanisms should consider:
+
+- [ ] Alias swap operations use `must_exist=true` to prevent silent partial success
+- [ ] Alias swap API responses are checked for `errors: true` or non-200 action results
+- [ ] Previous-version indexes are retained for rollback until next successful full re-ingest
+- [ ] Incremental writes target aliases with `require_alias=true` to prevent writes to wrong concrete indexes
+- [ ] Metadata version in `oak_meta` is consistent with live alias target version before any mutation
+- [ ] Lock mechanism prevents concurrent lifecycle operations
 
 ## Boundaries
 
@@ -251,6 +273,18 @@ Structure your review as:
 | Search documentation or ADR drift | `docs-adr-reviewer` |
 | MCP tool definition for search endpoints | `mcp-reviewer` |
 | Security concerns in search API exposure | `security-reviewer` |
+
+## Success Metrics
+
+A successful Elasticsearch review:
+
+- [ ] Implementation assessed against current official Elastic documentation (not just repo patterns)
+- [ ] Serverless compatibility verified for all recommendations
+- [ ] Authoritative source URLs cited for each finding
+- [ ] Must-read documents loaded; consult-if-relevant documents loaded where applicable
+- [ ] Findings categorised by severity with concrete recommendations
+- [ ] ADR-136 invariants checked where indexing or update paths are in scope (Bulk-only, no Update API, no scripted updates, `require_alias=true`)
+- [ ] Appropriate delegations to related specialists flagged
 
 ## Key Principles
 

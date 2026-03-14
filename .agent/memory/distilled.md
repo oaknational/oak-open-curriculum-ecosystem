@@ -88,19 +88,14 @@ enough for permanent documentation.
 - ES client v9: `document` not `body` for `client.index()`
 - ES client v9: spread readonly arrays before passing to
   mutable params (`[...synonymSet.synonyms_set]`)
-- `extractStatusCode` centralises ES error code extraction
-  without assertions
 - Classify network errors by `error.name` (e.g.
   `'AbortError'`, `'TypeError'`), not `error.message` —
   `message.includes('abort')` is too broad
-- `isPlainObject` type guard satisfies both
-  `IndicesIndexSettings` and `MappingTypeMapping`
 - EsCurric MCP API key needs `feature_actions.read` Kibana
   privilege (in addition to `feature_agentBuilder.read`) for
   the `platform_core_search` tool to work
-- `_cat/indices` doc counts include ELSER `semantic_text`
-  nested chunks (15x inflation for lessons). Use `_count`
-  API or `admin count` for true parent document counts
+- `_cat/indices` doc counts are inflated by ELSER chunking.
+  See `docs/operations/elasticsearch-ingest-lifecycle.md`
 
 ## Testing (Domain-Specific)
 

@@ -14,7 +14,11 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
-import type { AdminError, IndexLifecycleService } from '@oaknational/oak-search-sdk/admin';
+import {
+  withLifecycleLease,
+  type AdminError,
+  type IndexLifecycleService,
+} from '@oaknational/oak-search-sdk/admin';
 import type { BulkDataEnv } from '@oaknational/env';
 import type { Result } from '@oaknational/result';
 import {
@@ -41,7 +45,6 @@ import { ingestLogger } from '../../lib/logger.js';
  * Extended environment for lifecycle commands that perform ingestion.
  */
 export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv & BulkDataEnv;
-
 function validateMinDocCount(rawCount: string): number {
   const parsed = Number.parseInt(rawCount, 10);
   if (!Number.isFinite(parsed) || parsed < 0) {
@@ -54,9 +57,7 @@ function validateMinDocCount(rawCount: string): number {
 const ingestDeps = {
   logger: ingestLogger,
   printError,
-  setExitCode: (c: number) => {
-    process.exitCode = c;
-  },
+  setExitCode: (c: number) => (process.exitCode = c),
 };
 
 /** Real filesystem predicates for `resolveBulkDir`. */
@@ -159,7 +160,9 @@ async function runVersionedIngestAction(
     async () => {
       const { service, oakClient } = await buildIngestService(esClient, cliEnv);
       try {
-        const result = await service.versionedIngest({ ...opts, bulkDir });
+        const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+          service.versionedIngest({ ...opts, bulkDir }),
+        );
         handleLifecycleResult(result, (value) => {
           printSuccess(`Versioned ingest complete: version ${value.version}`);
           printJson(value);
@@ -188,10 +191,12 @@ async function runStageAction(
     async () => {
       const { service, oakClient } = await buildIngestService(esClient, cliEnv);
       try {
-        const result = await service.stage({ ...opts, bulkDir });
+        const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+          service.stage({ ...opts, bulkDir }),
+        );
         handleLifecycleResult(result, (value) => {
           printSuccess(
-            `Staged version ${value.version}. Promote with: admin promote --version ${value.version}`,
+            `Staged version ${value.version}. Promote with: admin promote --target-version ${value.version}`,
           );
           printJson(value);
         });
@@ -225,14 +230,6 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIng
     );
 }
 
-/**
- * Register the `admin stage` subcommand.
- *
- * Creates and populates versioned indexes without swapping aliases.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values including Oak API credentials
- */
 export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
   parent
     .command('stage')

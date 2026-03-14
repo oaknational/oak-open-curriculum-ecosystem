@@ -147,6 +147,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-133: CLI Resource Lifecycle Management](133-cli-resource-lifecycle-management.md)
 - [ADR-134: Search SDK Capability Surface Boundary](134-search-sdk-capability-surface-boundary.md)
 - [ADR-135: Agent Classification Taxonomy](135-agent-classification-taxonomy.md)
+- [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md)
+- [ADR-137: Specialist Operational Tooling Layer](137-specialist-operational-tooling-layer.md)
 
 ## Key Architectural Decisions
 
@@ -177,6 +179,7 @@ For understanding the agentic engineering practice:
 - **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
 - **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
 - **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
+- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 
@@ -209,6 +212,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
 - **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
+- **[ADR-136](136-incremental-refresh-bulk-api-partial-update-doctrine.md)** - Incremental refresh doctrine: Bulk API partial updates preserve ELSER embeddings; per-document fingerprinting; full re-ingest fallback
 - **[ADR-133](133-cli-resource-lifecycle-management.md)** - CLI resource lifecycle ownership and `withEsClient` cleanup pattern
 - **[ADR-134](134-search-sdk-capability-surface-boundary.md)** - Search SDK read/admin capability boundary, internal encapsulation, and lint-enforced import policy
 
