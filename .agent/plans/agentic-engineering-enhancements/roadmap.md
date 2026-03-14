@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
 **Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-03-11
+**Last Updated**: 2026-03-14
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -69,7 +69,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (📋), MCP upgrade (📋), Express specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (📋), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -93,6 +93,10 @@ Adjacent:
   SNT:  Sentry specialist capability                 📋 PLANNED
   MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
   EXP:  Express specialist capability                📋 PLANNED
+  CYB:  Cyber security specialist capability         📋 PLANNED
+  WAS:  Web/API security specialist capability       📋 PLANNED
+  PRV:  Privacy specialist capability                📋 PLANNED
+  WGD:  Web/API GDPR specialist capability           📋 PLANNED
   OOCE: Oak Open Curriculum Ecosystem specialist     📋 PLANNED
   PLN:  Planning specialist capability               📋 PLANNED
   TDD:  TDD specialist capability                    📋 PLANNED
@@ -267,6 +271,82 @@ Adjacent:
   - intentionally outside the numbered phase sequence
   - Vercel deployment context may warrant Vercel-specific subsections in the
     review checklist
+
+### Adjacent — Cyber Security Specialist Capability
+
+- Strategic plan:
+  [cyber-security-specialist-capability.plan.md](future/cyber-security-specialist-capability.plan.md)
+- Goal:
+  - add a canonical cyber security reviewer, skill, and situational rule
+    (ADR-129 triplet)
+  - broad-remit security capability for threat models, defence in depth,
+    supply-chain posture, secret lifecycle, and cross-system security trade-offs
+  - explicitly complements rather than replaces the existing
+    `security-reviewer`, which remains the practical default security specialist
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - broad-remit vs narrow-remit is a scope distinction, not a review-depth
+    distinction
+  - complements `security-reviewer` by taking the deeper doctrine and posture
+    lens rather than the default exploitability-first pass
+
+### Adjacent — Web/API Security Specialist Capability
+
+- Strategic plan:
+  [web-api-security-specialist-capability.plan.md](future/web-api-security-specialist-capability.plan.md)
+- Goal:
+  - add a canonical web/API security reviewer, skill, and situational rule
+    (ADR-129 triplet)
+  - narrow-remit security capability for HTTP trust boundaries, endpoint
+    security, callbacks, sessions, CORS/CSRF, and API attack surfaces
+  - explicitly complements the broad cyber security specialist, the practical
+    `security-reviewer`, and framework specialists such as Express, Clerk, and
+    MCP
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - narrow-remit does not imply shallow review; this specialist may still need
+    deep reasoning and live-docs consultation
+  - forms the security-boundary half of the planned security/privacy cluster
+
+### Adjacent — Privacy Specialist Capability
+
+- Strategic plan:
+  [privacy-specialist-capability.plan.md](future/privacy-specialist-capability.plan.md)
+- Goal:
+  - add a canonical privacy reviewer, skill, and situational rule
+    (ADR-129 triplet)
+  - broad-remit privacy capability for privacy by design, minimisation,
+    retention, redaction, and trust posture
+  - establish a privacy lens that is distinct from exploitability-focused
+    security review
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - broad-remit vs narrow-remit is a scope distinction, not a review-depth
+    distinction
+  - complements `security-reviewer` by taking privacy-governance correctness as
+    the primary lens
+
+### Adjacent — Web/API GDPR Specialist Capability
+
+- Strategic plan:
+  [web-api-gdpr-specialist-capability.plan.md](future/web-api-gdpr-specialist-capability.plan.md)
+- Goal:
+  - add a canonical web/API GDPR reviewer, skill, and situational rule
+    (ADR-129 triplet)
+  - narrow-remit capability for personal-data obligations at web/API boundaries:
+    consent/preference semantics, deletion/export flows, retention signalling,
+    and data-rights surfaces
+  - complement both the broad privacy specialist and the narrow web/API
+    security specialist
+- Status: 📋 Planned (future/)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - narrow-remit does not imply shallow review; this specialist may still need
+    deep reasoning and live-docs consultation
+  - forms the privacy-boundary half of the planned security/privacy cluster
 
 ### Adjacent — Oak Open Curriculum Ecosystem Specialist Capability (OOCE)
 
@@ -480,6 +560,10 @@ specialists, not deferred.
 | TypeDoc API doc generation | OOCE | Generated files concern |
 | CI/CD config (GitHub Actions, semantic-release) | config-reviewer | CI config is tooling config |
 | Vercel deployment specifics | Express specialist | Already in Express scope |
+| Broad security posture and threat modelling | Cyber security specialist | Distinct from exploitability-first security review |
+| HTTP/API boundary hardening | Web/API security specialist | Narrow trust-boundary and attack-surface expertise |
+| Broad privacy-by-design posture | Privacy specialist | Distinct from exploitability-focused security review |
+| Personal-data obligations at API boundaries | Web/API GDPR specialist | Narrow data-rights and retention-semantics expertise |
 | Secrets lifecycle/rotation | security-reviewer | Security concern |
 | Commander CLI framework | DevX specialist | CLI ergonomics (area 4) |
 
@@ -499,6 +583,15 @@ specialists, not deferred.
 
 ### Full specialist roster (target state)
 
+**Important modelling note (2026-03-14)**:
+
+- **Remit breadth** (`broad-remit` vs `narrow-remit`) is a different dimension
+  from **engagement depth** (`deep` vs `focused`)
+- agents are **not** synonymous with reviewers — the future taxonomy also
+  supports advisory, research, and process-enabling roles
+- the four new security/privacy additions are best understood as additive
+  future specialist capabilities, not replacements for `security-reviewer`
+
 **Always-on (invoked for every non-trivial change):**
 
 - Reviewer Gateway (upgraded from code-reviewer)
@@ -511,7 +604,9 @@ specialists, not deferred.
 **Domain specialists (ADR-129 triplets, invoked on domain signal):**
 
 - elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 📋,
-  mcp specialist 📋, express specialist 📋, ooce specialist 📋
+  mcp specialist 📋, express specialist 📋, cyber security specialist 📋,
+  web/API security specialist 📋, privacy specialist 📋,
+  web/API GDPR specialist 📋, ooce specialist 📋
 
 **Practice/process specialists (invoked on methodology signal):**
 

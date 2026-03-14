@@ -7,7 +7,22 @@
 
 ## Problem and Intent
 
-The agent roster lacks classification metadata, uses `-reviewer` naming that constrains agents to a single operational mode, and has no support for specialists (fast, narrow, agent-to-agent tasks) or process executors (workflow-driving agents). ADR-135 defines the taxonomy; this plan executes it.
+The agent roster lacks classification metadata, uses `-reviewer` naming that
+constrains agents to a single operational mode, and has no support for
+specialists (fast, narrow-scope agent-to-agent tasks) or process executors
+(workflow-driving agents). ADR-135 defines the taxonomy; this plan executes it.
+
+This plan already separates several dimensions:
+
+- agent classification
+- operational modes (`explore`, `advise`, `review`)
+- operational tier (gateway / fast / deep specialist)
+- review depth (deep / focused)
+
+But one important dimension still remains mostly implicit in surrounding docs:
+**remit breadth** (`broad-remit` vs `narrow-remit`). That breadth must not be
+conflated with review depth. A narrow-remit specialist may still need a deep
+review.
 
 ## Platform Sub-Agent Invocation Capabilities
 
@@ -75,7 +90,7 @@ tier by default.
 
 | Deep Specialist Type | Purpose | Examples |
 |---------------------|---------|----------|
-| **Domain expert** | Reason about correct usage against live official docs | Clerk, ES, Sentry, MCP, Express |
+| **Domain expert** | Reason about correct usage against live official docs | Clerk, ES, Sentry, MCP, Express, cyber security, web/API security, privacy, web/API GDPR |
 | **Architecture assessor** | Reason about structural trade-offs | fred, barney, betty, wilma |
 | **Security analyst** | Assess exploitability and threat models | security-reviewer |
 | **Ecosystem expert** | Reason about internal contract correctness | OOCE |
@@ -104,6 +119,31 @@ Some agents operate at either tier depending on what they're asked:
 
 For dual-tier agents, the gateway selects the tier based on WS6 depth
 selection guidance.
+
+### Remit Breadth Is a Separate Axis
+
+The taxonomy already models agent type, mode, tier, and review depth. It
+should also remain compatible with a separate remit-breadth axis:
+
+| Breadth | Meaning | Example |
+|--------|---------|---------|
+| **Broad-remit** | Covers a wide domain and its internal trade-offs | cyber security, privacy |
+| **Narrow-remit** | Covers a constrained boundary or sub-domain exhaustively | web/API security, web/API GDPR |
+
+This breadth axis is distinct from review depth:
+
+- a **broad-remit** agent may run a focused review
+- a **narrow-remit** agent may run a deep review
+
+It is also distinct from mode:
+
+- the same agent family may review, advise, or explore depending on invocation
+
+It is also distinct from ADR-135's use of **broad** and **deep** as
+domain-expert sub-types. In ADR-135, that pair describes **knowledge
+coverage/concentration**. In this plan, **deep vs focused** describes
+**engagement depth / reasoning tier**. Those are different dimensions and
+should not be conflated.
 
 ## Domain Boundaries
 
