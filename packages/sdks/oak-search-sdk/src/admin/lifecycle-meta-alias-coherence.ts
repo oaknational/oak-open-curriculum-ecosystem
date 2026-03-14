@@ -65,7 +65,9 @@ export function enforceMetadataAliasCoherence(
   return compareMetaAliasVersions(metaVersion, aliasVersionResult.value, operation);
 }
 
-function handleAliasVersionResolutionError(aliasVersionError: AdminError): Result<void, AdminError> {
+function handleAliasVersionResolutionError(
+  aliasVersionError: AdminError,
+): Result<void, AdminError> {
   return err(aliasVersionError);
 }
 
@@ -74,10 +76,7 @@ function compareMetaAliasVersions(
   aliasVersion: string | null,
   operation: 'promote' | 'versioned-ingest' | 'rollback',
 ): Result<void, AdminError> {
-  if (
-    aliasVersion === null &&
-    (operation === 'promote' || operation === 'versioned-ingest')
-  ) {
+  if (aliasVersion === null && (operation === 'promote' || operation === 'versioned-ingest')) {
     return ok(undefined);
   }
   if (metaVersion === aliasVersion) {

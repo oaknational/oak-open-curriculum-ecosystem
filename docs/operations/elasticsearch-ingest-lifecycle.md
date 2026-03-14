@@ -113,14 +113,14 @@ Success criteria:
 
 ## Failure Classification
 
-| Failure point                                           | Classification                    | Action                                                                                                                         |
-| ------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Alias validation fails before ingest                    | Ops precondition                  | Fix connectivity/auth/cluster health first                                                                                     |
-| Ingest fails on metadata contract                       | Schema-first contract drift       | Trace generator → mapping → runtime write path; run `pnpm sdk-codegen && pnpm build && pnpm type-check`                        |
-| Lease acquisition fails (held by another run)           | Active lease contention           | Stop and wait for lease holder to finish or TTL expiry; then run readback triage (`validate-aliases`, `meta get`, `count`) before retry |
+| Failure point                                                 | Classification                              | Action                                                                                                                                                                           |
+| ------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alias validation fails before ingest                          | Ops precondition                            | Fix connectivity/auth/cluster health first                                                                                                                                       |
+| Ingest fails on metadata contract                             | Schema-first contract drift                 | Trace generator → mapping → runtime write path; run `pnpm sdk-codegen && pnpm build && pnpm type-check`                                                                          |
+| Lease acquisition fails (held by another run)                 | Active lease contention                     | Stop and wait for lease holder to finish or TTL expiry; then run readback triage (`validate-aliases`, `meta get`, `count`) before retry                                          |
 | Promote/rollback/versioned-ingest fails after mutation starts | Ambiguous lifecycle state with active lease | Stop immediately; run mandatory readback (`validate-aliases`, `meta get`, `count`) before retry or rollback. Do not run parallel lifecycle mutation while triage is in progress. |
-| Alias action partial failures surfaced (`errors: true`) | Alias swap partial success hazard | Treat as incident immediately; run readback triage and do not accept top-level acknowledgement alone                           |
-| Post-ingest alias health fails                          | Active incident                   | Repair alias targets before any docs/reviewer/gate closeout                                                                    |
+| Alias action partial failures surfaced (`errors: true`)       | Alias swap partial success hazard           | Treat as incident immediately; run readback triage and do not accept top-level acknowledgement alone                                                                             |
+| Post-ingest alias health fails                                | Active incident                             | Repair alias targets before any docs/reviewer/gate closeout                                                                                                                      |
 
 ## Salvage Promotion Preconditions
 

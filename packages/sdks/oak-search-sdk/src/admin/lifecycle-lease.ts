@@ -47,18 +47,15 @@ function startRenewalLoop(
 } {
   let activeLease = initialLease;
   let failure: AdminError | null = null;
-  const interval = setInterval(
-    () => {
-      void renewLease(client, activeLease).then((result) => {
-        if (!result.ok) {
-          failure = result.error;
-          return;
-        }
-        activeLease = result.value;
-      });
-    },
-    renewalEveryMs,
-  );
+  const interval = setInterval(() => {
+    void renewLease(client, activeLease).then((result) => {
+      if (!result.ok) {
+        failure = result.error;
+        return;
+      }
+      activeLease = result.value;
+    });
+  }, renewalEveryMs);
   return {
     currentLease: () => activeLease,
     renewalFailure: () => failure,

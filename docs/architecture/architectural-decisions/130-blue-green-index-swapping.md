@@ -125,22 +125,22 @@ The curriculum indexes contain `semantic_text` fields with ELSER inference pipel
 
 ### Key Files
 
-| File                                                                 | Purpose                                                                     |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `packages/sdks/oak-search-sdk/src/admin/versioned-index-resolver.ts` | Versioned resolver factory (admin-layer only)                               |
-| `packages/sdks/oak-search-sdk/src/admin/alias-operations.ts`         | TypeScript wrappers over ES `/_aliases` API                                 |
-| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts`  | Blue/green orchestrator                                                     |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-swap-builders.ts`  | Pure swap-building helpers                                                  |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts`        | Generation cleanup                                                          |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-promote.ts`        | Promote orchestration (stage→live swap)                                     |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-rollback.ts`       | Rollback and alias validation operations                                    |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease.ts`          | Lease orchestration wrapper for mutating lifecycle commands                  |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease-infra.ts`    | Lease acquire/renew/release infrastructure                                   |
-| `packages/sdks/oak-search-sdk/src/admin/lifecycle-meta-alias-coherence.ts` | Metadata/alias coherence enforcement preconditions                      |
-| `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts`    | Service types and alias types                                               |
-| `packages/sdks/oak-search-sdk/src/internal/index-resolver.ts`        | Shared name resolution helpers                                              |
-| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts`     | DI factory for lifecycle deps                                               |
-| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`      | CLI commands (versioned-ingest, stage, promote, rollback, validate-aliases) |
+| File                                                                       | Purpose                                                                     |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `packages/sdks/oak-search-sdk/src/admin/versioned-index-resolver.ts`       | Versioned resolver factory (admin-layer only)                               |
+| `packages/sdks/oak-search-sdk/src/admin/alias-operations.ts`               | TypeScript wrappers over ES `/_aliases` API                                 |
+| `packages/sdks/oak-search-sdk/src/admin/index-lifecycle-service.ts`        | Blue/green orchestrator                                                     |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-swap-builders.ts`        | Pure swap-building helpers                                                  |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-cleanup.ts`              | Generation cleanup                                                          |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-promote.ts`              | Promote orchestration (stage→live swap)                                     |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-rollback.ts`             | Rollback and alias validation operations                                    |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease.ts`                | Lease orchestration wrapper for mutating lifecycle commands                 |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-lease-infra.ts`          | Lease acquire/renew/release infrastructure                                  |
+| `packages/sdks/oak-search-sdk/src/admin/lifecycle-meta-alias-coherence.ts` | Metadata/alias coherence enforcement preconditions                          |
+| `packages/sdks/oak-search-sdk/src/types/index-lifecycle-types.ts`          | Service types and alias types                                               |
+| `packages/sdks/oak-search-sdk/src/internal/index-resolver.ts`              | Shared name resolution helpers                                              |
+| `packages/sdks/oak-search-sdk/src/admin/build-lifecycle-deps.ts`           | DI factory for lifecycle deps                                               |
+| `apps/oak-search-cli/src/cli/admin/admin-lifecycle-commands.ts`            | CLI commands (versioned-ingest, stage, promote, rollback, validate-aliases) |
 
 ### CLI Commands
 
