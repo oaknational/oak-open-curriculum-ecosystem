@@ -19,7 +19,7 @@ import { createObservabilityService } from './observability/index.js';
  *
  * @example
  * ```typescript
- * import { createSearchSdk } from '@oaknational/oak-search-sdk';
+ * import { createSearchSdk } from '@oaknational/oak-search-sdk/admin';
  * import { Client } from '@elastic/elasticsearch';
  *
  * const sdk = createSearchSdk({

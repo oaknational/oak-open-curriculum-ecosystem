@@ -1,0 +1,8 @@
+---
+description: Invoke clerk-reviewer when changes touch Clerk middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, or Clerk SDK usage.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-clerk-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and `subagent_type: clerk-reviewer`.

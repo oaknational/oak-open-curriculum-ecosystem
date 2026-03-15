@@ -7,10 +7,10 @@
  * Multi-alias-atomic TypeScript implementation — all six curriculum
  * aliases are swapped in a single `POST /_aliases` request.
  *
- * @see {@link ../types/admin-types.ts} for `AdminError` definition
+ * @see {@link ../types/admin-types.ts#AdminError | AdminError} definition
  */
 
-import type { Client } from '@elastic/elasticsearch';
+import type { Client, estypes } from '@elastic/elasticsearch';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import type { AliasSwap, AliasTargetInfo, AliasTargetMap } from '../types/index-lifecycle-types.js';
@@ -18,10 +18,6 @@ import type { SearchIndexKind, SearchIndexTarget } from '../internal/index.js';
 import { BASE_INDEX_NAMES, TARGET_SUFFIXES, resolveAliasName } from '../internal/index.js';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { isNotFoundError } from './es-error-guards.js';
-
-// ---------------------------------------------------------------------------
-// Alias swap
-// ---------------------------------------------------------------------------
 
 /**
  * Atomically swap aliases for one or more indexes in a single ES request.
@@ -47,7 +43,7 @@ export async function atomicAliasSwap(
   swaps: readonly AliasSwap[],
 ): Promise<Result<void, AdminError>> {
   const actions: (
-    | { remove: { index: string; alias: string } }
+    | { remove: { index: string; alias: string; must_exist: true } }
     | { add: { index: string; alias: string } }
     | { remove_index: { index: string } }
   )[] = [];
@@ -57,23 +53,29 @@ export async function atomicAliasSwap(
       actions.push({ remove_index: { index: bareIndexToRemove } });
     }
     if (fromIndex !== null) {
-      actions.push({ remove: { index: fromIndex, alias } });
+      actions.push({ remove: { index: fromIndex, alias, must_exist: true } });
     }
     actions.push({ add: { index: toIndex, alias } });
   }
 
   try {
-    await client.indices.updateAliases({ actions });
+    const response: estypes.AcknowledgedResponseBase = await client.indices.updateAliases({
+      actions,
+    });
+    if ('errors' in response && response.errors === true) {
+      return err({
+        type: 'validation_error',
+        message:
+          'Alias swap returned partial failures (errors=true). ' +
+          'Treating alias state as provisional; run immediate readback triage.',
+      });
+    }
     return ok(undefined);
-  } catch (error) {
+  } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     return err({ type: 'es_error', message: `Alias swap failed: ${message}` });
   }
 }
-
-// ---------------------------------------------------------------------------
-// Alias target resolution
-// ---------------------------------------------------------------------------
 
 /**
  * For each curriculum index kind, determine whether its alias exists in
@@ -94,7 +96,7 @@ export async function resolveCurrentAliasTargets(
   try {
     const entries = await resolveAllAliases(client, target);
     return ok(entries);
-  } catch (error) {
+  } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     return err({ type: 'es_error', message: `Failed to resolve alias targets: ${message}` });
   }
@@ -152,20 +154,38 @@ async function resolveOneAlias(client: Client, aliasName: string): Promise<Alias
       return { isAlias: true, targetIndex: keys[0], isBareIndex: false };
     }
     // Empty response (CR-1) — fall through to bare-index check
-  } catch (error) {
+  } catch (error: unknown) {
     if (!isNotFoundError(error)) {
       throw error;
     }
     // 404 — fall through to bare-index check
   }
-  // Both empty-response and 404 paths converge here
-  const isBareIndex = await client.indices.exists({ index: aliasName });
+  // Both empty-response and 404 paths converge here.
+  // Use resolveIndex so aliases/data streams are not misclassified as concrete indexes.
+  const isBareIndex = await resolvesToConcreteIndex(client, aliasName);
   return { isAlias: false, targetIndex: null, isBareIndex };
 }
 
-// ---------------------------------------------------------------------------
-// Versioned index listing
-// ---------------------------------------------------------------------------
+/**
+ * Resolve a resource name and return true only for a concrete index.
+ *
+ * Uses `indices.resolveIndex` so aliases and data streams are not
+ * misclassified as physical indexes. A 404 is treated as "not a concrete index".
+ */
+async function resolvesToConcreteIndex(client: Client, name: string): Promise<boolean> {
+  try {
+    const resolved = await client.indices.resolveIndex({ name });
+    const hasAlias = resolved.aliases.some((entry) => entry.name === name);
+    const hasDataStream = resolved.data_streams.some((entry) => entry.name === name);
+    const hasIndex = resolved.indices.some((entry) => entry.name === name);
+    return hasIndex && !hasAlias && !hasDataStream;
+  } catch (error: unknown) {
+    if (isNotFoundError(error)) {
+      return false;
+    }
+    throw error;
+  }
+}
 
 /**
  * List all versioned indexes matching a base name and target.
@@ -197,7 +217,7 @@ export async function listVersionedIndexes(
   try {
     const response = await client.indices.get({ index: `${prefix}*` });
     return ok(typeSafeKeys(response).sort());
-  } catch (error) {
+  } catch (error: unknown) {
     if (isNotFoundError(error)) {
       return ok([]);
     }
@@ -205,10 +225,6 @@ export async function listVersionedIndexes(
     return err({ type: 'es_error', message: `Failed to list versioned indexes: ${message}` });
   }
 }
-
-// ---------------------------------------------------------------------------
-// Versioned index deletion
-// ---------------------------------------------------------------------------
 
 /**
  * Delete a single versioned index. Treats 404 as success (index already gone).
@@ -224,7 +240,7 @@ export async function deleteVersionedIndex(
   try {
     await client.indices.delete({ index: indexName });
     return ok(undefined);
-  } catch (error) {
+  } catch (error: unknown) {
     if (isNotFoundError(error)) {
       return ok(undefined);
     }

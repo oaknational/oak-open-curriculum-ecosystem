@@ -29,7 +29,6 @@ export interface BulkIndexAction {
 /**
  * Elasticsearch bulk create action metadata.
  * Uses 'create' which only creates (fails if document exists).
- * This is the safer option for incremental ingestion.
  */
 export interface BulkCreateAction {
   readonly create: {

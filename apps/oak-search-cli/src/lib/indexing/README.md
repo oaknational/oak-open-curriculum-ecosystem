@@ -185,7 +185,7 @@ pnpm es:ingest -- --no-retry
 **Solution**:
 
 1. Check the mapping schema matches document structure
-2. For 409 conflicts, default mode overwrites (remove `--incremental` if set)
+2. For 409 conflicts, inspect document identity and payload before retrying
 3. Review document content for invalid field values
 
 ## Architecture

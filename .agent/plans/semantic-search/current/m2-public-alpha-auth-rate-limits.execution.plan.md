@@ -24,9 +24,14 @@ todos:
 
 # Milestone 2 Public Alpha Blockers
 
-**Last Updated**: 2026-03-03
+**Last Updated**: 2026-03-11
 **Status**: 📋 READY (current)
 **Scope**: Canonical execution tracker for Milestone 2 blocker work only: production Clerk migration and OAuth proxy edge rate limiting.
+
+> **Freshness note (2026-03-11)**: PR #54 shipped milestone restructuring and
+> release workflow (invite-only alpha), not the production Clerk/rate-limit
+> hardening described here. This plan remains the canonical tracker for the
+> outstanding auth/rate-limit work required before open public alpha.
 
 ---
 

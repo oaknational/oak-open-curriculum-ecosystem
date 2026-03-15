@@ -423,8 +423,8 @@ Blocked on ingest rewrite. Once the rewrite is complete, follow the
 original operational plan:
 
 1. `pnpm oaksearch admin stage --bulk-dir ./bulk-downloads --verbose`
-2. `pnpm oaksearch admin status` — eyeball doc counts
-3. `pnpm oaksearch admin promote --version <version>`
+2. `pnpm oaksearch admin count` — eyeball parent doc counts
+3. `pnpm oaksearch admin promote --target-version <version>`
 4. `pnpm oaksearch admin validate-aliases`
 5. Smoke test: `pnpm oaksearch search lessons "photosynthesis"`
 

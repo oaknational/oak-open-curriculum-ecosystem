@@ -32,8 +32,8 @@ isProject: false
 **Status**: IMPLEMENTED AND SMOKE-TESTED — all five fixes verified
 end-to-end against running HTTP MCP server. Snag 1 additionally
 received an input validation guard (subject/keyStage required for
-suggest scope). Implementation details in
-[cursor plan](../../../.cursor/plans/search_snagging_deep_analysis_d6103b35.plan.md).
+suggest scope). Implementation details were captured in the session plan and are
+now consolidated in this archived canonical plan.
 **Milestone**: Post-merge, pre-Milestone-1 (public alpha). These were
 pre-existing bugs, not regressions.
 
@@ -1167,6 +1167,7 @@ real API response fixtures.
 
 During implementation, two logger instances in the SDK were found
 to deviate from the established `@oaknational/mcp-logger` pattern:
+
 - `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts`
 - `packages/sdks/oak-curriculum-sdk/src/client/middleware/response-augmentation.ts`
 
@@ -1183,7 +1184,7 @@ for proper OTEL attributes. The middleware factory now accepts an
 optional `Logger` for DI. Integration tests added (4 tests covering
 injection, fallback, and error containment). The broader `no-console`
 enforcement across the codebase is tracked separately in
-[no-console-enforcement.plan.md](../../../architecture-and-infrastructure/no-console-enforcement.plan.md).
+[no-console-enforcement.plan.md](../../../architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md).
 
 ---
 

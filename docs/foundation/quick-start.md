@@ -400,5 +400,6 @@ test('MCP server lists all generated tools', async () => {
 3. **Read the contribution guide**: See [CONTRIBUTING.md](../../CONTRIBUTING.md)
 4. **Pick your task source**: Oak team members should use active plans and roadmap docs in `.agent/plans/`; external readers can explore architecture docs and published packages.
 5. **Start coding**: Follow the TDD workflow above (for internal contributors)
+6. **Understand the engineering practice**: The Practice that governs this repository is explained through an engineering lens in [How the Agentic Engineering System Works](agentic-engineering-system.md) — how rules, quality gates, learning loops, and specialist reviewers form an integrated safety and quality system
 
 Ready? Let's build type-safe, schema-driven APIs.

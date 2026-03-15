@@ -16,7 +16,7 @@ import {
   type HybridDataSourceStats,
 } from './hybrid-data-source';
 import { ok, type Result } from '@oaknational/result';
-import type { AdminError } from '@oaknational/oak-search-sdk';
+import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 
 /** Bulk operation entry type */
 type BulkOperationEntry =

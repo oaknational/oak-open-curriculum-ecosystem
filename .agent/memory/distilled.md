@@ -88,19 +88,14 @@ enough for permanent documentation.
 - ES client v9: `document` not `body` for `client.index()`
 - ES client v9: spread readonly arrays before passing to
   mutable params (`[...synonymSet.synonyms_set]`)
-- `extractStatusCode` centralises ES error code extraction
-  without assertions
 - Classify network errors by `error.name` (e.g.
   `'AbortError'`, `'TypeError'`), not `error.message` —
   `message.includes('abort')` is too broad
-- `isPlainObject` type guard satisfies both
-  `IndicesIndexSettings` and `MappingTypeMapping`
 - EsCurric MCP API key needs `feature_actions.read` Kibana
   privilege (in addition to `feature_agentBuilder.read`) for
   the `platform_core_search` tool to work
-- `_cat/indices` doc counts include ELSER `semantic_text`
-  nested chunks (15x inflation for lessons). Use `_count`
-  API or `admin count` for true parent document counts
+- `_cat/indices` doc counts are inflated by ELSER chunking.
+  See `docs/operations/elasticsearch-ingest-lifecycle.md`
 
 ## Testing (Domain-Specific)
 
@@ -187,4 +182,5 @@ enough for permanent documentation.
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
 | Commitlint rejects commit with uppercase acronym in subject | `subject-case` rule rejects e.g. `ADR-130`. Use lowercase: "complete blue/green lifecycle" not "ADR-130 Phases 3-8d" |
+| Commitlint rejects commit with long body line | `body-max-line-length` enforced. Keep body lines under 100 chars; prefer 2-line paragraphs |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |

@@ -23,10 +23,10 @@ Authoritative active execution sources:
 
 Authoritative phase artefacts:
 
-1. [phase-0-control-mapping.md](phase-0-control-mapping.md)
-2. [phase-1-security-claim-contract.md](phase-1-security-claim-contract.md)
-3. [phase-2-evidence-merge-readiness-rules.md](phase-2-evidence-merge-readiness-rules.md)
-4. [phase-3-baseline-control-cut-list.md](phase-3-baseline-control-cut-list.md)
+1. [phase-0-control-mapping.md](future/phase-0-control-mapping.md)
+2. [phase-1-security-claim-contract.md](future/phase-1-security-claim-contract.md)
+3. [phase-2-evidence-merge-readiness-rules.md](future/phase-2-evidence-merge-readiness-rules.md)
+4. [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
 5. [deferred-controls-register.md](deferred-controls-register.md)
 
 ---
@@ -104,7 +104,7 @@ Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
   [phase-0-foundation-and-baseline.md](active/phase-0-foundation-and-baseline.md)
 - Done when:
   - baseline control inventory is mapped from research to executable tasks
-  - [phase-0-control-mapping.md](phase-0-control-mapping.md) is complete
+  - [phase-0-control-mapping.md](future/phase-0-control-mapping.md) is complete
   - [deferred-controls-register.md](deferred-controls-register.md) is initialised
   - phase priority contract is explicit and agreed in the collection docs
   - documentation sync log records updates/no-change rationale for Phase 0
@@ -116,7 +116,7 @@ Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
   [phase-1-hallucination-guarding-execution.md](active/phase-1-hallucination-guarding-execution.md)
 - Done when:
   - non-trivial security claim classes and verification states are explicit
-  - [phase-1-security-claim-contract.md](phase-1-security-claim-contract.md)
+  - [phase-1-security-claim-contract.md](future/phase-1-security-claim-contract.md)
     is complete and aligned with global guardrails
   - security-relevant prompts/reviewer surfaces require support for such claims
   - pilot baseline evidence exists and calibration is recorded
@@ -128,7 +128,7 @@ Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
   [phase-2-evidence-based-claims-execution.md](active/phase-2-evidence-based-claims-execution.md)
 - Done when:
   - evidence bundle usage is standardised for security hardening claims
-  - [phase-2-evidence-merge-readiness-rules.md](phase-2-evidence-merge-readiness-rules.md)
+  - [phase-2-evidence-merge-readiness-rules.md](future/phase-2-evidence-merge-readiness-rules.md)
     is complete
   - merge-readiness checks reject unsupported non-trivial claims
   - documentation sync log records updates/no-change rationale for Phase 2
@@ -140,7 +140,7 @@ Phase 3: Protocol/auth/tool-governance baseline     📋 PLANNED
   [phase-3-protocol-auth-and-tool-governance-baseline.md](active/phase-3-protocol-auth-and-tool-governance-baseline.md)
 - Done when:
   - executable baseline for protocol/auth/tool-governance controls is defined
-  - [phase-3-baseline-control-cut-list.md](phase-3-baseline-control-cut-list.md)
+  - [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
     is complete
   - deterministic validation commands are mapped per control class
   - implementation cut list is ready for non-planning execution work

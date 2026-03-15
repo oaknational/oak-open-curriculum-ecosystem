@@ -14,37 +14,76 @@ import {
   deleteVersionedIndex,
 } from './alias-operations.js';
 import type { AliasSwap } from '../types/index-lifecycle-types.js';
-import type { Client } from '@elastic/elasticsearch';
+import { Client } from '@elastic/elasticsearch';
+
+class EsClientLikeError extends Error {
+  readonly statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = 'EsClientLikeError';
+    this.statusCode = statusCode;
+  }
+}
 
 /**
  * Create a 404 error matching the ES client pattern.
  * Used for alias-not-found and index-not-found cases (E1/E3).
  */
 function create404Error(message = 'index_not_found_exception'): Error {
-  const error = new Error(message);
-  Object.assign(error, { statusCode: 404 });
-  return error;
+  return new EsClientLikeError(message, 404);
 }
 
 /** Create a minimal fake ES client with the methods alias-operations uses. */
 function createFakeClient(
   overrides: {
-    updateAliases?: ReturnType<typeof vi.fn>;
-    getAlias?: ReturnType<typeof vi.fn>;
-    get?: ReturnType<typeof vi.fn>;
-    deleteIndex?: ReturnType<typeof vi.fn>;
-    exists?: ReturnType<typeof vi.fn>;
+    updateAliases?: (
+      ...args: Parameters<Client['indices']['updateAliases']>
+    ) => ReturnType<Client['indices']['updateAliases']>;
+    getAlias?: (
+      ...args: Parameters<Client['indices']['getAlias']>
+    ) => ReturnType<Client['indices']['getAlias']>;
+    get?: (...args: Parameters<Client['indices']['get']>) => ReturnType<Client['indices']['get']>;
+    deleteIndex?: (
+      ...args: Parameters<Client['indices']['delete']>
+    ) => ReturnType<Client['indices']['delete']>;
+    resolveIndex?: (
+      ...args: Parameters<Client['indices']['resolveIndex']>
+    ) => ReturnType<Client['indices']['resolveIndex']>;
   } = {},
-) {
-  return {
-    indices: {
-      updateAliases: overrides.updateAliases ?? vi.fn().mockResolvedValue({ acknowledged: true }),
-      getAlias: overrides.getAlias ?? vi.fn().mockRejectedValue(create404Error()),
-      get: overrides.get ?? vi.fn().mockRejectedValue(create404Error()),
-      delete: overrides.deleteIndex ?? vi.fn().mockResolvedValue({ acknowledged: true }),
-      exists: overrides.exists ?? vi.fn().mockResolvedValue(false),
-    },
-  } as unknown as Client;
+): Client {
+  const client = new Client({ node: 'http://localhost:9200' });
+  vi.spyOn(client.indices, 'updateAliases').mockImplementation(async (...args) => {
+    if (overrides.updateAliases !== undefined) {
+      return overrides.updateAliases(...args);
+    }
+    return { acknowledged: true };
+  });
+  vi.spyOn(client.indices, 'getAlias').mockImplementation(async (...args) => {
+    if (overrides.getAlias !== undefined) {
+      return overrides.getAlias(...args);
+    }
+    throw create404Error();
+  });
+  vi.spyOn(client.indices, 'get').mockImplementation(async (...args) => {
+    if (overrides.get !== undefined) {
+      return overrides.get(...args);
+    }
+    throw create404Error();
+  });
+  vi.spyOn(client.indices, 'delete').mockImplementation(async (...args) => {
+    if (overrides.deleteIndex !== undefined) {
+      return overrides.deleteIndex(...args);
+    }
+    return { acknowledged: true };
+  });
+  vi.spyOn(client.indices, 'resolveIndex').mockImplementation(async (...args) => {
+    if (overrides.resolveIndex !== undefined) {
+      return overrides.resolveIndex(...args);
+    }
+    throw create404Error();
+  });
+  return client;
 }
 
 describe('atomicAliasSwap', () => {
@@ -64,9 +103,9 @@ describe('atomicAliasSwap', () => {
 
     expect(updateAliases).toHaveBeenCalledWith({
       actions: [
-        { remove: { index: 'oak_lessons_v1', alias: 'oak_lessons' } },
+        { remove: { index: 'oak_lessons_v1', alias: 'oak_lessons', must_exist: true } },
         { add: { index: 'oak_lessons_v2', alias: 'oak_lessons' } },
-        { remove: { index: 'oak_units_v1', alias: 'oak_units' } },
+        { remove: { index: 'oak_units_v1', alias: 'oak_units', must_exist: true } },
         { add: { index: 'oak_units_v2', alias: 'oak_units' } },
       ],
     });
@@ -149,10 +188,29 @@ describe('atomicAliasSwap', () => {
       actions: [
         { remove_index: { index: 'oak_lessons' } },
         { add: { index: 'oak_lessons_v1', alias: 'oak_lessons' } },
-        { remove: { index: 'oak_units_v1', alias: 'oak_units' } },
+        { remove: { index: 'oak_units_v1', alias: 'oak_units', must_exist: true } },
         { add: { index: 'oak_units_v2', alias: 'oak_units' } },
       ],
     });
+  });
+
+  it('returns validation_error when ES alias API reports partial action failures', async () => {
+    const updateAliases = vi.fn().mockResolvedValue({
+      acknowledged: true,
+      errors: true,
+    });
+    const client = createFakeClient({ updateAliases });
+    const swaps: readonly AliasSwap[] = [
+      { fromIndex: 'oak_lessons_v1', toIndex: 'oak_lessons_v2', alias: 'oak_lessons' },
+    ];
+
+    const result = await atomicAliasSwap(client, swaps);
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('validation_error');
+      expect(result.error.message).toContain('partial failures');
+    }
   });
 });
 
@@ -207,8 +265,8 @@ describe('resolveCurrentAliasTargets', () => {
 
   it('returns isAlias false when getAlias returns empty object (CR-1)', async () => {
     const getAlias = vi.fn().mockResolvedValue({});
-    const exists = vi.fn().mockResolvedValue(false);
-    const client = createFakeClient({ getAlias, exists });
+    const resolveIndex = vi.fn().mockRejectedValue(create404Error());
+    const client = createFakeClient({ getAlias, resolveIndex });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -218,7 +276,7 @@ describe('resolveCurrentAliasTargets', () => {
       expect(result.value.lessons.targetIndex).toBeNull();
       expect(result.value.lessons.isBareIndex).toBe(false);
     }
-    expect(exists).toHaveBeenCalled();
+    expect(resolveIndex).toHaveBeenCalled();
   });
 
   it('returns err when ES throws non-404 error', async () => {
@@ -235,8 +293,12 @@ describe('resolveCurrentAliasTargets', () => {
 
   it('sets isBareIndex true when concrete index exists but no alias', async () => {
     const getAlias = vi.fn().mockRejectedValue(create404Error());
-    const exists = vi.fn().mockResolvedValue(true);
-    const client = createFakeClient({ getAlias, exists });
+    const resolveIndex = vi.fn().mockResolvedValue({
+      indices: [{ name: 'oak_lessons', attributes: [] }],
+      aliases: [],
+      data_streams: [],
+    });
+    const client = createFakeClient({ getAlias, resolveIndex });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -250,8 +312,8 @@ describe('resolveCurrentAliasTargets', () => {
 
   it('sets isBareIndex false when name does not exist at all', async () => {
     const getAlias = vi.fn().mockRejectedValue(create404Error());
-    const exists = vi.fn().mockResolvedValue(false);
-    const client = createFakeClient({ getAlias, exists });
+    const resolveIndex = vi.fn().mockRejectedValue(create404Error());
+    const client = createFakeClient({ getAlias, resolveIndex });
 
     const result = await resolveCurrentAliasTargets(client, 'primary');
 
@@ -344,6 +406,9 @@ describe('listVersionedIndexes', () => {
     const result = await listVersionedIndexes(client, 'oak_lessons', 'primary');
 
     expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('es_error');
+    }
   });
 });
 
@@ -368,8 +433,7 @@ describe('deleteVersionedIndex', () => {
   });
 
   it('returns err for non-404 errors', async () => {
-    const error = new Error('permission denied');
-    Object.assign(error, { statusCode: 403 });
+    const error = new EsClientLikeError('permission denied', 403);
     const deleteIndex = vi.fn().mockRejectedValue(error);
     const client = createFakeClient({ deleteIndex });
 

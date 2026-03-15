@@ -26,13 +26,17 @@ describe('parseEnv', () => {
         SEARCH_INDEX_TARGET: undefined,
       }),
     );
-    expect(result.SEARCH_INDEX_VERSION).toBe(REQUIRED_ENV.SEARCH_INDEX_VERSION);
-    expect(result.ZERO_HIT_WEBHOOK_URL).toBe('none');
-    expect(result.LOG_LEVEL).toBe('info');
-    expect(result.SEARCH_INDEX_TARGET).toBe('primary');
-    expect(result.ZERO_HIT_PERSISTENCE_ENABLED).toBe(false);
-    expect(result.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(30);
-    expect(result.OAK_EFFECTIVE_KEY).toBe(REQUIRED_ENV.OAK_API_KEY);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SEARCH_INDEX_VERSION).toBe(REQUIRED_ENV.SEARCH_INDEX_VERSION);
+    expect(result.value.ZERO_HIT_WEBHOOK_URL).toBe('none');
+    expect(result.value.LOG_LEVEL).toBe('info');
+    expect(result.value.SEARCH_INDEX_TARGET).toBe('primary');
+    expect(result.value.ZERO_HIT_PERSISTENCE_ENABLED).toBe(false);
+    expect(result.value.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(30);
+    expect(result.value.OAK_EFFECTIVE_KEY).toBe(REQUIRED_ENV.OAK_API_KEY);
   });
 
   it('parses zero-hit persistence overrides', () => {
@@ -42,25 +46,36 @@ describe('parseEnv', () => {
         ZERO_HIT_INDEX_RETENTION_DAYS: '45',
       }),
     );
-    expect(result.ZERO_HIT_PERSISTENCE_ENABLED).toBe(true);
-    expect(result.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(45);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.ZERO_HIT_PERSISTENCE_ENABLED).toBe(true);
+    expect(result.value.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(45);
   });
 
   it('accepts sandbox search index targets', () => {
     const result = parseEnv(withBaseEnv({ SEARCH_INDEX_TARGET: 'sandbox' }));
-    expect(result.SEARCH_INDEX_TARGET).toBe('sandbox');
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SEARCH_INDEX_TARGET).toBe('sandbox');
   });
 
   it('rejects invalid search index targets', () => {
-    expect(() => parseEnv(withBaseEnv({ SEARCH_INDEX_TARGET: 'staging' }))).toThrow();
+    const result = parseEnv(withBaseEnv({ SEARCH_INDEX_TARGET: 'staging' }));
+    expect(result.ok).toBe(false);
   });
 
-  it('throws when a required key is missing', () => {
-    expect(() => parseEnv(withBaseEnv({ ELASTICSEARCH_URL: undefined }))).toThrow();
+  it('returns error when a required key is missing', () => {
+    const result = parseEnv(withBaseEnv({ ELASTICSEARCH_URL: undefined }));
+    expect(result.ok).toBe(false);
   });
 
-  it('throws when OAK_API_KEY is absent', () => {
-    expect(() => parseEnv(withBaseEnv({ OAK_API_KEY: undefined }))).toThrow();
+  it('returns error when OAK_API_KEY is absent', () => {
+    const result = parseEnv(withBaseEnv({ OAK_API_KEY: undefined }));
+    expect(result.ok).toBe(false);
   });
 
   it('SDK cache defaults to disabled with 14-day TTL', () => {
@@ -71,9 +86,13 @@ describe('parseEnv', () => {
         SDK_CACHE_TTL_DAYS: undefined,
       }),
     );
-    expect(result.SDK_CACHE_ENABLED).toBe(false);
-    expect(result.SDK_CACHE_REDIS_URL).toBe('redis://localhost:6379');
-    expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SDK_CACHE_ENABLED).toBe(false);
+    expect(result.value.SDK_CACHE_REDIS_URL).toBe('redis://localhost:6379');
+    expect(result.value.SDK_CACHE_TTL_DAYS).toBe(14);
   });
 
   it('SDK cache can be enabled with custom settings', () => {
@@ -84,8 +103,12 @@ describe('parseEnv', () => {
         SDK_CACHE_TTL_DAYS: '14',
       }),
     );
-    expect(result.SDK_CACHE_ENABLED).toBe(true);
-    expect(result.SDK_CACHE_REDIS_URL).toBe('redis://custom:6380');
-    expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SDK_CACHE_ENABLED).toBe(true);
+    expect(result.value.SDK_CACHE_REDIS_URL).toBe('redis://custom:6380');
+    expect(result.value.SDK_CACHE_TTL_DAYS).toBe(14);
   });
 });

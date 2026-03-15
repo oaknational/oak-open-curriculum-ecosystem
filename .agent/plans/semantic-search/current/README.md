@@ -8,20 +8,23 @@ When work starts, promote the selected plan into `../active/`.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| P0 | [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md) | Canonical blocker execution for production Clerk migration + OAuth proxy edge rate limits | 📋 Ready |
-| P1 | [keyword-definition-assets.execution.plan.md](./keyword-definition-assets.execution.plan.md) | Boundary 03 — promote lesson keyword definitions into first-class, provenance-aware curriculum assets | 📋 Ready after active bulk metadata quick wins |
-| P2 | [thread-sequence-semantic-surfaces.execution.plan.md](./thread-sequence-semantic-surfaces.execution.plan.md) | Boundary 04 — enrich thin thread/sequence documents with derived semantic and suggestion surfaces | 📋 Ready after P1 |
-| P3 | [kg-integration-quick-wins.plan.md](./kg-integration-quick-wins.plan.md) | Provision an isolated ontology-backed Neo4j lane and deliver the remaining bounded Neo4j + Elasticsearch quick wins after the active alignment audit | 📋 Parent plan, partially promoted |
+| P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Complete remaining operational cycle and closeout evidence from unified versioned ingestion lane | 📋 Partially complete, pending final phases |
+| P1 | [semantic-search-scheduled-refresh.operations.plan.md](./semantic-search-scheduled-refresh.operations.plan.md) | Deferred incremental/scheduled-refresh planning lane (explicitly out of migration-complete scope) | ⏸️ Deferred |
+| P2 | [bulk-metadata-quick-wins.execution.plan.md](./bulk-metadata-quick-wins.execution.plan.md) | Boundary 03 — preserve and widen low-risk bulk lesson/unit metadata for downstream retrieval work | 📋 Not started |
+| P3 | [kg-alignment-audit.execution.plan.md](./kg-alignment-audit.execution.plan.md) | Evidence-first ontology/search overlap audit before broader graph integration | 📋 Not started |
+| P4 | [search-sdk-args-extraction.plan.md](./search-sdk-args-extraction.plan.md) | Move search param builders/validation/error formatting into SDK canonical surface | 📋 Not started |
+| P5 | [category-integration-remediation.md](./category-integration-remediation.md) | Wire category supplementation through bulk ingestion orchestration | 📋 Not started |
+| P6 | [bulk_data_for_semantic_search.feature_request.md](./bulk_data_for_semantic_search.feature_request.md) | Bulk data enhancement requests and API-team dependency tracker | 📋 Supporting request |
+| P7 | [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md) | Canonical blocker execution for production Clerk migration + OAuth proxy edge rate limits | 📋 Ready |
+| P8 | [keyword-definition-assets.execution.plan.md](./keyword-definition-assets.execution.plan.md) | Boundary 03 follow-on for keyword definition assets | 📋 Ready after bulk metadata quick wins |
+| P9 | [thread-sequence-semantic-surfaces.execution.plan.md](./thread-sequence-semantic-surfaces.execution.plan.md) | Boundary 04 follow-on for thread/sequence semantic enrichment | 📋 Ready after P8 |
+| P10 | [kg-integration-quick-wins.plan.md](./kg-integration-quick-wins.plan.md) | Parent plan for remaining bounded Neo4j + Elasticsearch quick wins | 📋 Parent plan |
 
-Milestone boundary:
-`P0` is the remaining Milestone 2 blocker. The bulk metadata quick-win plan has
-already been promoted to `active/` as an independent semantic-search stream.
-`P1`-`P2` are the remaining roadmap Phase 4 / Milestone 3 follow-on items and
-depend on that active bulk-metadata work completing first.
+Reclassification note:
 
-This means public-release readiness does **not** gate the active bulk metadata
-workstream. `P0` remains important, but it is a separate release-readiness
-track rather than a prerequisite for Boundary 03 execution.
+- Pending/not-started plans were moved from `active/` to this queue.
+- Recovery and operator-run runbook authorities are now archived as completed.
+- Active execution is currently narrowed to the production validation findings register.
 
 Strategic source backlog: [future/README.md](../future/README.md)  
 In-progress execution: [active/README.md](../active/README.md)

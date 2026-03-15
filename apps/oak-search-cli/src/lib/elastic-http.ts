@@ -1,5 +1,6 @@
 import { esClient } from './es-client';
 import type { estypes } from '@elastic/elasticsearch';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 // use types from estypes only
 
 /**
@@ -210,8 +211,7 @@ function toHighlightMap(value: unknown): HighlightMap | undefined {
   }
 
   const highlight: HighlightMap = {};
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [field, entry] of Object.entries(value)) {
+  for (const [field, entry] of typeSafeEntries(value)) {
     if (!isStringArray(entry)) {
       return undefined;
     }

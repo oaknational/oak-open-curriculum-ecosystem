@@ -20,7 +20,7 @@ import {
   type SearchFunction,
   type GroundTruthEntry,
 } from './benchmark-entry-runner.js';
-import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
+import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk/read';
 import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 
 /** Create a minimal lesson index doc stub. */

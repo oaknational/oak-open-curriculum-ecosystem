@@ -1,6 +1,6 @@
 # Architecture
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-03-12
 
 ## Overview
 
@@ -37,7 +37,6 @@ src/cli/
 │   ├── create-cli-sdk.ts           # Env → ES client/SDK wiring helpers
 │   ├── with-es-client.ts           # Guaranteed ES client cleanup wrapper
 │   ├── build-search-sdk-config.ts  # CliSdkEnv -> SearchSdkConfig mapping
-│   ├── build-lifecycle-service.ts  # Lifecycle service composition helper
 │   ├── resolve-bulk-dir.ts         # Precondition checks before resource creation
 │   ├── validate-ingest-env.ts      # CLI ingest option validation
 │   ├── search-deps.ts              # Shared deps for search command handlers
@@ -49,9 +48,10 @@ src/cli/
 │   ├── handlers.ts                 # SDK retrieval calls
 │   ├── register-facets-cmd.ts      # Facets command registration
 │   └── register-suggest-cmd.ts     # Suggest command registration
-├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|ingest|...}
+├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|versioned-ingest|stage|...}
 │   ├── index.ts                    # Command registration
 │   ├── handlers.ts                 # SDK admin calls
+│   ├── shared/build-lifecycle-service.ts # Admin-only lifecycle service composition helper
 │   ├── register-meta-cmd.ts        # Meta get/set command group
 │   ├── admin-count-command.ts      # True parent document counts
 │   └── handle-count.ts             # Count handler over AdminService
@@ -64,7 +64,7 @@ evaluation/analysis/
 └── create-evaluation-search-sdk.ts # Shared ES client lifecycle wrapper for benchmarks
 ```
 
-**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).
+**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count/lifecycle, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for verification, diagnostics, and benchmarks.
 
 ---
 
@@ -73,7 +73,7 @@ evaluation/analysis/
 - **Structured hybrid search** — Search over lessons, units, sequences, or threads. Builds server-side RRF queries via the SDK, returns highlights, canonical URLs, facets, zero-hit metadata.
 - **Suggestion/type-ahead** — Backed by completion contexts and `search_as_you_type` fields.
 - **Zero-hit telemetry** — Records queries that return no results for quality improvement.
-- **CLI ingestion** — `oaksearch admin ingest` triggers resilient batching across lessons, units, sequences.
+- **CLI ingestion** — `oaksearch admin versioned-ingest` and `oaksearch admin stage` drive resilient lifecycle ingestion.
 - **Index management** — `oaksearch admin setup` manages mappings, synonyms, and index creation.
 
 ---
@@ -128,7 +128,26 @@ Synonym expansion is handled at the Elasticsearch analyser level via the `oak-sy
 
 Threads and sequences use 2-way RRF because they have a single text surface (title only — no transcripts, lesson-planning data, or rollup text). See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
 
-**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; CLI legacy builders in `src/lib/hybrid-search/rrf-query-builders.ts`
+**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; active CLI command handlers consume SDK read/admin capability surfaces per ADR-134.
+
+## SDK Surface Boundary
+
+Per [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md), CLI modules are capability-tiered:
+
+- non-admin modules import `@oaknational/oak-search-sdk/read`
+- default policy is non-admin for `src/**/*.ts`
+- privileged modules import `@oaknational/oak-search-sdk/admin` only from explicit subtrees:
+  - `src/cli/admin/**`
+  - `src/lib/indexing/**`
+  - `src/adapters/**`
+- mixed-capability support modules (`evaluation/**`, `operations/**`) may use read/admin
+  but still cannot import root/internal SDK paths
+- app code cannot import SDK `internal/**` or deep implementation paths
+- shared index resolver primitives are canonical on SDK `/read`; admin consumes them via
+  SDK `/admin` re-exports, avoiding both direct `/read` imports in admin modules and transitive internal imports
+
+Boundary policy is encoded in `apps/oak-search-cli/eslint.config.ts` and verified by
+`apps/oak-search-cli/eslint-boundary.integration.test.ts`.
 
 ### 4. Transcript-Aware Score Normalisation (Lessons Only)
 
@@ -204,3 +223,6 @@ CLI → SDK consumers
 | [ADR-106](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Known-Answer-First Ground Truth Methodology |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)        | Deterministic SDK / NL-in-MCP Boundary      |
 | [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)                  | Thread Search Architecture (2-way RRF)      |
+| [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)                   | Blue/Green Lifecycle Swapping               |
+| [ADR-133](../../../docs/architecture/architectural-decisions/133-cli-resource-lifecycle-management.md)           | CLI Resource Lifecycle Ownership            |
+| [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md)      | Search SDK Capability Surface Boundary      |

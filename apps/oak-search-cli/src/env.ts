@@ -10,7 +10,12 @@
  */
 
 import { z } from 'zod';
-import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/env';
+import {
+  OakApiKeyEnvSchema,
+  ElasticsearchEnvSchema,
+  LoggingEnvSchema,
+  BulkDataEnvSchema,
+} from '@oaknational/env';
 
 const CLI_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error'] as const;
 
@@ -20,6 +25,7 @@ const CLI_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error'] as const;
  * Composed from shared schemas with CLI-specific overrides and extensions.
  */
 export const SearchCliBaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
+  .extend(BulkDataEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
   .extend({
     ELASTICSEARCH_URL: z.url(),

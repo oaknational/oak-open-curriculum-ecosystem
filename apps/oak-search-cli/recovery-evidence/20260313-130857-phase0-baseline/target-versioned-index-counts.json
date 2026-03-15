@@ -1,0 +1,146 @@
+[
+  {
+    "index": "oak_threads_v2026-03-10-114104",
+    "docs.count": "328"
+  },
+  {
+    "index": "oak_units_v2026-03-10-085350",
+    "docs.count": "1634"
+  },
+  {
+    "index": "oak_sequences_v2026-03-10-114104",
+    "docs.count": "30"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-12-121506",
+    "docs.count": "165626"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-12-175109",
+    "docs.count": "57"
+  },
+  {
+    "index": "oak_lessons_v2026-03-12-123752",
+    "docs.count": "3954"
+  },
+  {
+    "index": "oak_lessons_v2026-03-11-185549",
+    "docs.count": "186613"
+  },
+  {
+    "index": "oak_lessons_v2026-03-10-085350",
+    "docs.count": "186613"
+  },
+  {
+    "index": "oak_threads_v2026-03-12-175109",
+    "docs.count": "328"
+  },
+  {
+    "index": "oak_units_v2026-03-10-114104",
+    "docs.count": "1634"
+  },
+  {
+    "index": "oak_sequences_v2026-03-12-123752",
+    "docs.count": "0"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-10-114104",
+    "docs.count": "57"
+  },
+  {
+    "index": "oak_sequences_v2026-03-12-175109",
+    "docs.count": "30"
+  },
+  {
+    "index": "oak_threads_v2026-03-12-121506",
+    "docs.count": "328"
+  },
+  {
+    "index": "oak_sequences_v2026-03-10-085350",
+    "docs.count": "30"
+  },
+  {
+    "index": "oak_sequences_v2026-03-11-185549",
+    "docs.count": "30"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-10-085350",
+    "docs.count": "57"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-11-185549",
+    "docs.count": "57"
+  },
+  {
+    "index": "oak_units_v2026-03-11-185549",
+    "docs.count": "1634"
+  },
+  {
+    "index": "oak_units_v2026-03-12-123752",
+    "docs.count": "42"
+  },
+  {
+    "index": "oak_lessons_v2026-03-12-121506",
+    "docs.count": "186613"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-10-114104",
+    "docs.count": "165626"
+  },
+  {
+    "index": "oak_units_v2026-03-12-175109",
+    "docs.count": "1634"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-12-123752",
+    "docs.count": "0"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-11-185549",
+    "docs.count": "165626"
+  },
+  {
+    "index": "oak_units_v2026-03-12-121506",
+    "docs.count": "1634"
+  },
+  {
+    "index": "oak_sequences_v2026-03-12-121506",
+    "docs.count": "30"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-10-085350",
+    "docs.count": "165626"
+  },
+  {
+    "index": "oak_threads_v2026-03-12-123752",
+    "docs.count": "0"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-12-175109",
+    "docs.count": "165626"
+  },
+  {
+    "index": "oak_sequence_facets_v2026-03-12-121506",
+    "docs.count": "57"
+  },
+  {
+    "index": "oak_threads_v2026-03-10-085350",
+    "docs.count": "328"
+  },
+  {
+    "index": "oak_unit_rollup_v2026-03-12-123752",
+    "docs.count": "2649"
+  },
+  {
+    "index": "oak_lessons_v2026-03-12-175109",
+    "docs.count": "186613"
+  },
+  {
+    "index": "oak_lessons_v2026-03-10-114104",
+    "docs.count": "186613"
+  },
+  {
+    "index": "oak_threads_v2026-03-11-185549",
+    "docs.count": "328"
+  }
+]

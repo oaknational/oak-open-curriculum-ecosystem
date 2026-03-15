@@ -7,7 +7,11 @@
 import type { estypes } from '@elastic/elasticsearch';
 import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/sdk-codegen/search';
 
-import type { SearchLessonsParams, SearchUnitsParams } from '../types/retrieval-params.js';
+import type {
+  SearchLessonsParams,
+  SearchSequencesParams,
+  SearchUnitsParams,
+} from '../types/retrieval-params.js';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
@@ -29,7 +33,7 @@ export function buildLessonFilters(params: SearchLessonsParams): QueryContainer[
   addTermsFilter(filters, 'exam_subjects', params.examSubject);
   addTermsFilter(filters, 'ks4_options', params.ks4Option);
   addTermsFilter(filters, 'years', params.year);
-  addTermsFilter(filters, 'thread_slugs', params.threadSlug);
+  addTermFilter(filters, 'thread_slugs', params.threadSlug);
   return filters;
 }
 
@@ -45,6 +49,23 @@ export function buildUnitFilters(params: SearchUnitsParams): QueryContainer[] {
   addKeyStageFilter(filters, params.keyStage);
   if (typeof params.minLessons === 'number') {
     filters.push({ range: { lesson_count: { gte: params.minLessons } } });
+  }
+  return filters;
+}
+
+/**
+ * Build sequence filters from search params.
+ *
+ * @param params - Search sequence parameters
+ * @returns Array of ES query filter clauses
+ */
+export function buildSequenceFilters(params: SearchSequencesParams): QueryContainer[] {
+  const filters: QueryContainer[] = [];
+  addTermFilter(filters, 'subject_slug', params.subject);
+  addTermFilter(filters, 'phase_slug', params.phaseSlug);
+  addTermFilter(filters, 'key_stages', params.keyStage);
+  if (params.category) {
+    filters.push({ match_phrase: { category_titles: params.category } });
   }
   return filters;
 }

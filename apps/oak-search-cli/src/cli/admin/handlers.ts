@@ -18,7 +18,7 @@ import type {
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/admin';
 
 /**
  * Combined status result for the `admin status` command.

@@ -105,7 +105,8 @@ export function createFakeLogger(): Logger {
 }
 
 /** Default version used in test fakes. */
-const DEFAULT_VERSION = 'v2026-03-07-143022';
+export const DEFAULT_VERSION = 'v2026-03-07-143022';
+export const DEFAULT_PREVIOUS_VERSION = 'v2026-03-01-120000';
 
 /**
  * Build a complete set of default fakes that all return success.
@@ -124,7 +125,16 @@ function buildDefaultFakes(): IndexLifecycleDeps {
       .mockResolvedValueOnce(ok(DEFAULT_ALIAS_TARGETS))
       .mockResolvedValue(ok(postSwapTargets)),
     atomicAliasSwap: vi.fn().mockResolvedValue(ok(undefined)),
-    readIndexMeta: vi.fn().mockResolvedValue(ok(null)),
+    readIndexMeta: vi.fn().mockResolvedValue(
+      ok({
+        version: DEFAULT_PREVIOUS_VERSION,
+        ingested_at: '2026-03-01T12:00:00Z',
+        subjects: [],
+        key_stages: [],
+        duration_ms: 0,
+        doc_counts: {},
+      }),
+    ),
     writeIndexMeta: vi.fn().mockResolvedValue(ok(undefined)),
     listVersionedIndexes: vi.fn().mockResolvedValue(ok([])),
     deleteVersionedIndex: vi.fn().mockResolvedValue(ok(undefined)),

@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { resolveBulkDir, type FsPredicates } from './resolve-bulk-dir.js';
+import { resolveBulkDir, resolveBulkDirFromInputs, type FsPredicates } from './resolve-bulk-dir.js';
 
 /** FS predicates that report a valid directory with JSON files. */
 const validFs: FsPredicates = {
@@ -85,6 +85,60 @@ describe('resolveBulkDir', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.message).toContain('bulk:download');
+    }
+  });
+});
+
+describe('resolveBulkDirFromInputs', () => {
+  it('prefers --bulk-dir over BULK_DOWNLOAD_DIR', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: './from-flag',
+      bulkDirFromEnv: './from-env',
+      appRoot,
+      fs: validFs,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('/app/from-flag');
+    }
+  });
+
+  it('uses BULK_DOWNLOAD_DIR when flag is missing', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: undefined,
+      bulkDirFromEnv: './from-env',
+      appRoot,
+      fs: validFs,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('/app/from-env');
+    }
+  });
+
+  it('fails when both sources are missing', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: undefined,
+      bulkDirFromEnv: undefined,
+      appRoot,
+      fs: validFs,
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.message).toContain('Provide --bulk-dir');
+    }
+  });
+
+  it('fails when env source is empty string', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: undefined,
+      bulkDirFromEnv: '   ',
+      appRoot,
+      fs: validFs,
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('bulk_dir_not_found');
     }
   });
 });

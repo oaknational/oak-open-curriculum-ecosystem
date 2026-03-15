@@ -13,6 +13,7 @@ Before starting any non-trivial task, answer these questions to identify which s
 5. Does this change tooling configs or quality gates? -> `config-reviewer`
 6. Does this change onboarding flows (human or AI), start-right entrypoints, or ADR discoverability? -> `onboarding-reviewer` (situational)
 7. Does this touch Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, or Elastic Serverless capabilities? -> `elasticsearch-reviewer` (situational)
+8. Does this touch Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage? -> `clerk-reviewer` (situational)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -34,6 +35,7 @@ Minor changes (single typo/comment-only edits with no behaviour impact) may use 
 | Tier | When | What to invoke |
 |---|---|---|
 | Immediately after change | After each non-trivial code change | `code-reviewer` plus all specialists matching the change profile |
+| Design-pressure checkpoint | Before implementing high-risk type/boundary changes | Relevant specialist(s) to review intended approach (for example `type-reviewer` before touching external-signal parsing) |
 | Before merge | Before the branch merges | Any applicable specialists not yet invoked during implementation |
 | Situational trigger | When the specific context arises | On-demand agents (see below) -- not tied to every change |
 
@@ -60,7 +62,9 @@ Specialist on-demand (not standard roster -- situational trigger only):
 - `ground-truth-designer` for semantic-search ground-truth design/review work
 - `subagent-architect` for sub-agent definition design/migration work
 - `onboarding-reviewer` for onboarding-path audits (accuracy, efficacy, readability, consistency, stale info, and gap detection)
+- `mcp-reviewer` for MCP protocol compliance, tool/resource/prompt definition validation, or transport/session pattern checks
 - `elasticsearch-reviewer` for Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, evaluation, or Elastic Serverless capability assessments
+- `clerk-reviewer` for Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage assessments
 
 ## Worked Examples
 
@@ -78,6 +82,8 @@ Specialist on-demand (not standard roster -- situational trigger only):
 
 **Elasticsearch/search change**: Invoke `code-reviewer` + `elasticsearch-reviewer` immediately. Add `type-reviewer` if schema or mapping types are affected.
 
+**Clerk/OAuth change**: Invoke `code-reviewer` + `clerk-reviewer` immediately. Add `security-reviewer` if the change has exploitability implications. Add `mcp-reviewer` if MCP auth spec compliance is in question.
+
 ## Invocation
 
 Invoke each specialist as a read-only sub-agent, giving it specific context about what changed and what to focus on.
@@ -87,3 +93,5 @@ Invoke each specialist as a read-only sub-agent, giving it specific context abou
 - Report which required specialists were invoked.
 - For any not invoked, explicitly state `N/A` with justification.
 - Do not claim "comprehensive review" if required specialists were skipped without rationale.
+- Reviewer findings are implementation work by default: implement all findings unless explicitly rejected as incorrect, with rationale recorded in the session output.
+- Do not mark the change complete or proceed to merge until every finding is either implemented or explicitly rejected as incorrect with written rationale; triage is not deferral (`owner-triaged` means resolved or explicitly rejected with rationale, never backlog-only deferral).

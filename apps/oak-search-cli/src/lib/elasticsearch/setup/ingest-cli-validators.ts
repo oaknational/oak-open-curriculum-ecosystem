@@ -4,7 +4,6 @@
  * Pure validation functions for CLI argument values.
  */
 
-import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError } from 'commander';
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
@@ -114,28 +113,4 @@ export function resolveSubjects(
     throw new Error('No subjects specified. In API mode, use --subject <slug> or --all');
   }
   return [...explicitSubjects];
-}
-
-/**
- * Validate that the bulk download directory exists and contains JSON files.
- *
- * @throws Error with actionable message if the directory is missing or empty
- */
-export function validateBulkDir(bulkDir: string): void {
-  if (!existsSync(bulkDir)) {
-    throw new Error(
-      `Bulk download directory not found: ${bulkDir}\n` +
-        'Run "pnpm bulk:download" first to fetch the bulk data, ' +
-        'or use "--api" to ingest from the live API instead.',
-    );
-  }
-
-  const files = readdirSync(bulkDir).filter((f) => f.endsWith('.json'));
-  if (files.length === 0) {
-    throw new Error(
-      `Bulk download directory is empty (no JSON files): ${bulkDir}\n` +
-        'Run "pnpm bulk:download" first to fetch the bulk data, ' +
-        'or use "--api" to ingest from the live API instead.',
-    );
-  }
 }

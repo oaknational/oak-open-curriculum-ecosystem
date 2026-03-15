@@ -8,16 +8,16 @@
  * the max-lines limit. Follows the same pattern as `search-threads.ts`.
  */
 
-import type { estypes } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 
 import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
 import type { SearchSequencesParams } from '../types/retrieval-params.js';
-import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
+import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import { clampSize, clampFrom } from './rrf-score-processing.js';
 import { buildSequenceRetriever } from './retrieval-search-helpers.js';
+import { buildSequenceFilters } from './rrf-query-helpers.js';
 import { toRetrievalError } from './retrieval-error.js';
 import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
 
@@ -35,24 +35,14 @@ import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
  */
 export async function searchSequences(
   params: SearchSequencesParams,
-  search: EsSearchFn,
+  search: (body: EsSearchRequest) => Promise<EsSearchResponse<SearchSequenceIndexDoc>>,
   resolveIndex: (kind: 'sequences') => string,
   logger?: Logger,
 ): Promise<Result<SequencesSearchResult, RetrievalError>> {
   try {
     const size = clampSize(params.size);
     const from = clampFrom(params.from);
-    const filters: estypes.QueryDslQueryContainer[] = [];
-    if (params.subject) {
-      filters.push({ term: { subject_slug: params.subject } });
-    }
-    if (params.phaseSlug) {
-      filters.push({ term: { phase_slug: params.phaseSlug } });
-    }
-    if (params.keyStage) {
-      filters.push({ term: { key_stages: params.keyStage } });
-    }
-
+    const filters = buildSequenceFilters(params);
     const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
     const request: EsSearchRequest = {
       index: resolveIndex('sequences'),
@@ -63,7 +53,7 @@ export async function searchSequences(
     };
 
     logger?.debug('searchSequences', { query: params.query, size, from });
-    const res = await search<SearchSequenceIndexDoc>(request);
+    const res = await search(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,
       rankScore: hit._score ?? 0,

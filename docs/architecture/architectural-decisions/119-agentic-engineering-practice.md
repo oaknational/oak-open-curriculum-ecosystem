@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-02-22
-**Related**: [Vision](../../VISION.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-117 (Plan Templates and Components)](117-plan-templates-and-components.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md)
+**Related**: [Vision](../../VISION.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-117 (Plan Templates and Components)](117-plan-templates-and-components.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [How the Agentic Engineering System Works](../../foundation/agentic-engineering-system.md) (human-readable engineering narrative)
 
 ## Context
 

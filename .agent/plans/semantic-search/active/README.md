@@ -1,41 +1,31 @@
 # Semantic Search — Active
 
-Executable plans currently in progress.
+Executable items currently in progress.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| A0 | [cli-robustness.plan.md](./cli-robustness.plan.md) | Fix CLI error handling, teardown guarantees, and process lifecycle robustness; re-run dry-run validation | 🟢 Active (current) |
-| A1 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130) | 🟢 Active |
-| A2 | [search-sdk-args-extraction.plan.md](./search-sdk-args-extraction.plan.md) | Move param builders, scope validation, and error formatting into Search SDK | 🟡 Planning |
-| A3 | [bulk-metadata-quick-wins.execution.plan.md](./bulk-metadata-quick-wins.execution.plan.md) | Boundary 03 — preserve and widen low-risk bulk lesson/unit metadata for later asset and retrieval work | 🟢 Active |
-| A4 | [kg-alignment-audit.execution.plan.md](./kg-alignment-audit.execution.plan.md) | Audit measured overlap between ontology graph entities and search-facing curriculum records before broader graph integration | 🟢 Active |
-| A5 | [category-integration-remediation.md](./category-integration-remediation.md) | Wire existing category supplementation infrastructure through the bulk ingestion orchestration layer | 🟡 Planning |
-| A6 | [short-term-pr-snagging.plan.md](./short-term-pr-snagging.plan.md) | Immediate PR snagging pass with evidence-first item triage, blocker-first fixes, and explicit thread closure outcomes | 🟡 Planning |
+| A0 | [search-tool-prod-validation-findings-2026-03-15.md](./search-tool-prod-validation-findings-2026-03-15.md) | Production search-tool validation findings register covering scope/filter parity checks after blue/green cutover | 🟡 Active (open findings) |
+| A1 | [comprehensive-field-integrity-integration-tests.execution.plan.md](./comprehensive-field-integrity-integration-tests.execution.plan.md) | Comprehensive integration-test workstream to prove all search index fields are handled correctly at each stage and end-to-end across stages | 🟡 Planning |
 
-`unified-versioned-ingestion.plan.md` is the standalone-ready session entry for
-the blue/green lifecycle integration. It supersedes the predecessor plan
-and incorporates all 16 reviewer findings as planned work.
+Completed incident-recovery authorities have been archived:
 
-`bulk-metadata-quick-wins.execution.plan.md` is the standalone-ready session
-entry for the current Boundary 03 workstream.
+- [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
+- [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md)
 
-`kg-alignment-audit.execution.plan.md` is the standalone-ready session entry
-for the first ontology/search graph-enablement workstream.
+Role split:
 
-`short-term-pr-snagging.plan.md` is the standalone-ready session entry for the
-PR #67 snagging pass, with companion handover prompt
-`../../../prompts/semantic-search/pr-67-snagging-triage.prompt.md`.
+- Prompt (`semantic-search.prompt.md`): session bootstrap and lane order.
+- Active findings register: production validation evidence and dispositions.
+- Archived recovery/runbook plans: closed migration-recovery execution record.
 
-`cli-robustness.plan.md` is the current active re-entry lane to re-validate the
-dry-run execution path and confirm no-hang lifecycle guarantees.
+Other semantic-search plans were consolidated out of `active/`:
 
-## Reference Documents
+- Pending/not-started plans moved to `../current/`.
+- Completed/superseded incident evidence moved to `../archive/completed/`.
 
-- [bulk_data_for_semantic_search.feature_request.md](./bulk_data_for_semantic_search.feature_request.md) — bulk download enhancement requests for the API team
-
-## Archived
-
-- [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — superseded by `unified-versioned-ingestion.plan.md`; retained for root cause analysis and completed prerequisites
+The boundary migration plan is archived. Boundary doctrine is anchored in
+[ADR-134](../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md).
+Archive index: [archive/completed/README.md](../archive/completed/README.md)
 
 Next queue: [current/README.md](../current/README.md)
 Strategic backlog: [future/README.md](../future/README.md)

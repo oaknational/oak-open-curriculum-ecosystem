@@ -1,0 +1,23 @@
+{
+  "_index": "oak_meta",
+  "_id": "index_version",
+  "_version": 7,
+  "_seq_no": 6,
+  "_primary_term": 1,
+  "found": true,
+  "_source": {
+    "version": "v2026-03-12-175109",
+    "previous_version": "v2026-03-11-185549",
+    "ingested_at": "2026-03-13T13:13:08.000Z",
+    "subjects": [],
+    "key_stages": ["ks1", "ks2", "ks3", "ks4"],
+    "duration_ms": 5900,
+    "doc_counts": {
+      "lessons": 12391,
+      "units": 1634,
+      "unit_rollup": 1634,
+      "sequences": 30,
+      "sequence_facets": 57
+    }
+  }
+}

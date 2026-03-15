@@ -1,5 +1,5 @@
 /**
- * Async generator for yielding ingestion batches incrementally.
+ * Async generator for yielding ingestion batches sequentially.
  *
  * This module provides a streaming approach to bulk operation generation,
  * where each (subject, keyStage) pair is yielded as an independent batch
@@ -40,7 +40,7 @@ const CURRICULUM_INDEX_KINDS: readonly SearchIndexKind[] = [
 ];
 
 /**
- * Async generator that yields ingestion batches incrementally.
+ * Async generator that yields ingestion batches sequentially.
  *
  * Each yielded batch can be independently dispatched to Elasticsearch,
  * enabling batch-atomic commits and observable progress.

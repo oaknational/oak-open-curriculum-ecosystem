@@ -5,8 +5,8 @@
  * the max-lines limit. These functions handle rollback to a previous
  * version and alias health validation.
  *
- * @see {@link ./index-lifecycle-service.ts} for the ingest orchestrator
- * @see {@link ./lifecycle-swap-builders.ts} for pure swap-building helpers
+ * @see {@link ./index-lifecycle-service.ts#createIndexLifecycleService | createIndexLifecycleService}
+ * @see {@link ./lifecycle-swap-builders.ts#buildVersionSwapActions | buildVersionSwapActions} and related swap helpers
  */
 
 import type { Result } from '@oaknational/result';
@@ -16,7 +16,7 @@ import type { AdminError } from '../types/admin-types.js';
 import type {
   AliasTargetMap,
   AliasValidationResult,
-  IndexLifecycleDeps,
+  AliasLifecycleDeps,
   RollbackResult,
 } from '../types/index-lifecycle-types.js';
 import { SEARCH_INDEX_KINDS, BASE_INDEX_NAMES, resolveAliasName } from '../internal/index.js';
@@ -25,11 +25,42 @@ import {
   assessAliasHealth,
   validateRollbackMeta,
 } from './lifecycle-swap-builders.js';
+import { enforceMetadataAliasCoherence } from './lifecycle-meta-alias-coherence.js';
+
+interface RollbackContext {
+  readonly meta: IndexMetaDoc;
+  readonly currentVersion: string;
+  readonly previousVersion: string;
+  readonly aliasTargets: AliasTargetMap;
+}
 
 /** Roll back to the previous version recorded in index metadata. */
 export async function rollback(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
 ): Promise<Result<RollbackResult, AdminError>> {
+  const contextResult = await resolveRollbackContext(deps);
+  if (!contextResult.ok) {
+    return contextResult;
+  }
+  const { meta, currentVersion, previousVersion, aliasTargets } = contextResult.value;
+  deps.logger?.info('Starting rollback', { from: currentVersion, to: previousVersion });
+
+  const swapResult = await executeRollbackSwap(deps, previousVersion, aliasTargets);
+  if (!swapResult.ok) {
+    return swapResult;
+  }
+
+  const metaWriteResult = await writeRollbackMeta(deps, meta, currentVersion, previousVersion);
+  if (!metaWriteResult.ok) {
+    return attemptRollbackReversal(deps, currentVersion, metaWriteResult.error.message);
+  }
+  deps.logger?.info('Rollback complete', { from: currentVersion, to: previousVersion });
+  return ok({ rolledBackToVersion: previousVersion, rolledBackFromVersion: currentVersion });
+}
+
+async function resolveRollbackContext(
+  deps: AliasLifecycleDeps,
+): Promise<Result<RollbackContext, AdminError>> {
   const metaResult = await deps.readIndexMeta();
   if (!metaResult.ok) {
     return metaResult;
@@ -44,25 +75,32 @@ export async function rollback(
     return validatedMeta;
   }
   const { currentVersion, previousVersion } = validatedMeta.value;
-  deps.logger?.info('Starting rollback', { from: currentVersion, to: previousVersion });
 
-  const swapResult = await executeRollbackSwap(deps, previousVersion);
-  if (!swapResult.ok) {
-    return swapResult;
+  const aliasResult = await deps.resolveCurrentAliasTargets();
+  if (!aliasResult.ok) {
+    return aliasResult;
   }
-
-  const metaWriteResult = await writeRollbackMeta(deps, meta, currentVersion, previousVersion);
-  if (!metaWriteResult.ok) {
-    return attemptRollbackReversal(deps, currentVersion, metaWriteResult.error.message);
+  const coherenceResult = enforceMetadataAliasCoherence(
+    meta.version,
+    aliasResult.value,
+    'rollback',
+  );
+  if (!coherenceResult.ok) {
+    return coherenceResult;
   }
-  deps.logger?.info('Rollback complete', { from: currentVersion, to: previousVersion });
-  return ok({ rolledBackToVersion: previousVersion, rolledBackFromVersion: currentVersion });
+  return ok({
+    meta,
+    currentVersion,
+    previousVersion,
+    aliasTargets: aliasResult.value,
+  });
 }
 
 /** Execute the alias swap portion of a rollback, verifying the target version exists first. */
 async function executeRollbackSwap(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   toVersion: string,
+  aliasTargets: AliasTargetMap,
 ): Promise<Result<void, AdminError>> {
   const existsResult = await deps.verifyDocCounts(toVersion, 1);
   if (!existsResult.ok) {
@@ -73,21 +111,17 @@ async function executeRollbackSwap(
         `indexes do not exist or are empty. ${existsResult.error.message}`,
     });
   }
-  const aliasResult = await deps.resolveCurrentAliasTargets();
-  if (!aliasResult.ok) {
-    return aliasResult;
-  }
-  const validationError = validateAliasState(aliasResult.value);
+  const validationError = validateAliasState(aliasTargets);
   if (!validationError.ok) {
     return validationError;
   }
-  const swaps = buildVersionSwapActions(aliasResult.value, toVersion, deps.target);
+  const swaps = buildVersionSwapActions(aliasTargets, toVersion, deps.target);
   return deps.atomicAliasSwap(swaps);
 }
 
 /** Write updated metadata after a successful rollback. */
 async function writeRollbackMeta(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   originalMeta: IndexMetaDoc,
   currentVersion: string,
   previousVersion: string,
@@ -102,7 +136,7 @@ async function writeRollbackMeta(
 
 /** Check health of all curriculum aliases. */
 export async function validateAliases(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
 ): Promise<Result<AliasValidationResult, AdminError>> {
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
@@ -152,7 +186,7 @@ function validateAliasState(targets: AliasTargetMap): Result<void, AdminError> {
  * If the reversal also fails, returns a CRITICAL error.
  */
 async function attemptRollbackReversal(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   currentVersion: string,
   metaErrorMessage: string,
 ): Promise<Result<RollbackResult, AdminError>> {

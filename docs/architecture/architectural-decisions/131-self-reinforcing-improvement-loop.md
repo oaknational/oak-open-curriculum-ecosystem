@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-03-08
-**Related**: [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md)
+**Related**: [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [How the Agentic Engineering System Works](../../foundation/agentic-engineering-system.md) (human-readable engineering narrative)
 
 ## Context
 
@@ -116,10 +116,10 @@ mechanism that produces rules, not just the rules themselves.
 
 ### Negative
 
-- The inter-repo loop has been exercised in only one round-trip
-  (oak-mcp-ecosystem → cloudinary-icon-ingest-poc →
-  oak-mcp-ecosystem); the pattern is validated but not yet
-  battle-tested at scale
+- The inter-repo loop has been exercised across four repos
+  (oak-mcp-ecosystem, cloudinary-icon-ingest-poc, new-cv, castr)
+  with eight provenance entries; the pattern is validated but
+  adoption beyond the originating developer is not yet proven
 
 ### Neutral
 

@@ -28,7 +28,7 @@ isProject: false
 
 - [roadmap.md](../roadmap.md)
 - [developing-secure-mcp-servers.research.md](../developing-secure-mcp-servers.research.md)
-- [phase-0-control-mapping.md](../phase-0-control-mapping.md)
+- [phase-0-control-mapping.md](../future/phase-0-control-mapping.md)
 - [deferred-controls-register.md](../deferred-controls-register.md)
 
 ## Preflight
@@ -64,8 +64,8 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
     in `phase-0-control-mapping.md`
 - Deterministic validation:
   - `rg -n "5\.2|6\.1|6\.2|6\.3|6\.4|6\.5|6\.6|6\.7" .agent/plans/security-and-privacy/developing-secure-mcp-servers.research.md`
-  - `test -f .agent/plans/security-and-privacy/phase-0-control-mapping.md`
-  - `rg -n "Control Class Mapping|Handoffs|Validation Checklist" .agent/plans/security-and-privacy/phase-0-control-mapping.md`
+  - `test -f .agent/plans/security-and-privacy/future/phase-0-control-mapping.md`
+  - `rg -n "Control Class Mapping|Handoffs|Validation Checklist" .agent/plans/security-and-privacy/future/phase-0-control-mapping.md`
 
 ### Task 0.2: Priority Contract Encoding
 

@@ -3,6 +3,7 @@
  */
 
 export { createEsSearchFn } from './es-search.js';
+export { extractStatusCode } from './es-error-guards.js';
 
 export {
   resolveSearchIndexName,

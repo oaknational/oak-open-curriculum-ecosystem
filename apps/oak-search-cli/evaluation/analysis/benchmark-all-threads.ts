@@ -23,8 +23,8 @@ export async function benchmarkThreads(): Promise<IndexResult> {
   if (!configResult.ok) {
     throw new Error(`Environment validation failed: ${configResult.error.message}`);
   }
-  return withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
+  return withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchThreads.bind(retrieval);
     const entries = getThreadGroundTruthEntries();
     const results: BenchmarkMetrics[] = [];
 

@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { ObservabilityService } from '@oaknational/oak-search-sdk';
+import type { ObservabilityService } from '@oaknational/oak-search-sdk/read';
 import { ok } from '@oaknational/result';
 import { handleTelemetry, handleSummary } from './handlers.js';
 

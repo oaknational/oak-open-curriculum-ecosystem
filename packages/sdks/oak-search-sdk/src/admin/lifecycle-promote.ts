@@ -1,19 +1,9 @@
-/**
- * Promote operation for blue/green index lifecycle (ADR-130).
- *
- * Promotes a previously staged set of versioned indexes by swapping
- * aliases to them, writing metadata, and cleaning up old generations.
- *
- * @see {@link ./index-lifecycle-service.ts} for the ingest orchestrator
- * @see {@link ./lifecycle-swap-builders.ts} for pure swap-building helpers
- */
-
 import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import type {
   AliasTargetMap,
-  IndexLifecycleDeps,
+  AliasLifecycleDeps,
   PromoteResult,
 } from '../types/index-lifecycle-types.js';
 import type { SearchIndexKind, SearchIndexTarget } from '../internal/index.js';
@@ -28,12 +18,12 @@ import {
   buildPromoteMeta,
 } from './lifecycle-swap-builders.js';
 import { cleanupOldGenerations } from './lifecycle-cleanup.js';
-
+import { enforceMetadataAliasCoherence } from './lifecycle-meta-alias-coherence.js';
 const PROMOTE_MIN_DOC_COUNT = 1;
 
 /** Verify staged indexes exist and resolve the previous version from metadata. */
 async function verifyAndResolvePrevious(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   version: string,
 ): Promise<Result<{ previousVersion: string | null; targets: AliasTargetMap }, AdminError>> {
   const existsResult = await deps.verifyDocCounts(version, PROMOTE_MIN_DOC_COUNT);
@@ -51,17 +41,35 @@ async function verifyAndResolvePrevious(
     return metaResult;
   }
   const previousVersion = metaResult.value?.version ?? null;
+  const targetsResult = await resolvePromoteTargets(deps, previousVersion);
+  if (!targetsResult.ok) {
+    return targetsResult;
+  }
+  return ok({ previousVersion, targets: targetsResult.value });
+}
 
+async function resolvePromoteTargets(
+  deps: AliasLifecycleDeps,
+  previousVersion: string | null,
+): Promise<Result<AliasTargetMap, AdminError>> {
   const aliasResult = await deps.resolveCurrentAliasTargets();
   if (!aliasResult.ok) {
     return aliasResult;
   }
-  return ok({ previousVersion, targets: aliasResult.value });
+  const coherenceResult = enforceMetadataAliasCoherence(
+    previousVersion,
+    aliasResult.value,
+    'promote',
+  );
+  if (!coherenceResult.ok) {
+    return coherenceResult;
+  }
+  return ok(aliasResult.value);
 }
 
 /** Run cleanup and log the outcome. */
 async function cleanupAndLog(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   version: string,
   previousVersion: string | null,
 ): Promise<{ deleted: number; failed: number }> {
@@ -82,7 +90,7 @@ async function cleanupAndLog(
 
 /** Promote a staged version: verify existence, swap aliases, write metadata, cleanup. */
 export async function promote(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   version: string,
 ): Promise<Result<PromoteResult, AdminError>> {
   const verified = await verifyAndResolvePrevious(deps, version);
@@ -105,15 +113,8 @@ export async function promote(
   });
 }
 
-/**
- * Verify all aliases point to the expected versioned indexes after a swap.
- *
- * Calls `resolveCurrentAliasTargets` and compares each alias target against
- * the expected versioned index name. Returns `err` with a per-alias mismatch
- * report if any alias is wrong.
- */
 async function validatePostSwapAliases(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   version: string,
 ): Promise<Result<void, AdminError>> {
   const postSwapResult = await deps.resolveCurrentAliasTargets();
@@ -161,7 +162,7 @@ function collectAliasMismatches(
 
 /** Swap aliases, validate, and write metadata. Rolls back on metadata write failure. */
 async function promoteSwapAndCommit(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   currentTargets: AliasTargetMap,
   version: string,
   previousVersion: string | null,
@@ -174,13 +175,36 @@ async function promoteSwapAndCommit(
 
   const validationResult = await validatePostSwapAliases(deps, version);
   if (!validationResult.ok) {
+    const rollbackResult = await attemptPromoteRollback(
+      deps,
+      currentTargets,
+      version,
+      validationResult.error.message,
+      'post-swap alias validation',
+    );
+    if (!rollbackResult.ok) {
+      return rollbackResult;
+    }
     return validationResult;
   }
 
   const newMeta = buildPromoteMeta(version, previousVersion);
   const writeResult = await deps.writeIndexMeta(newMeta);
   if (!writeResult.ok) {
-    return attemptPromoteRollback(deps, currentTargets, version, writeResult.error.message);
+    const rollbackResult = await attemptPromoteRollback(
+      deps,
+      currentTargets,
+      version,
+      writeResult.error.message,
+      'metadata write',
+    );
+    if (!rollbackResult.ok) {
+      return rollbackResult;
+    }
+    return err({
+      type: 'es_error',
+      message: `Promote metadata write failed. Aliases rolled back. Original error: ${writeResult.error.message}`,
+    });
   }
   return ok(undefined);
 }
@@ -192,20 +216,24 @@ async function promoteSwapAndCommit(
  * or a CRITICAL compound error if rollback also fails.
  */
 async function attemptPromoteRollback(
-  deps: IndexLifecycleDeps,
+  deps: AliasLifecycleDeps,
   originalTargets: AliasTargetMap,
   version: string,
-  metaErrorMessage: string,
+  failureMessage: string,
+  failurePhase: 'metadata write' | 'post-swap alias validation',
 ): Promise<Result<void, AdminError>> {
-  deps.logger?.error('Promote metadata write failed, rolling back aliases', { version });
+  deps.logger?.error('Promote phase failed, rolling back aliases', {
+    version,
+    failurePhase,
+  });
   const swapsResult = buildRollbackSwaps(originalTargets, version, deps.target);
   if (!swapsResult.ok) {
     return err({
       type: 'validation_error',
       message:
-        `CRITICAL: Promote metadata write failed and rollback swaps cannot be built. ` +
+        `CRITICAL: Promote ${failurePhase} failed and rollback swaps cannot be built. ` +
         `Aliases are pointing to version ${version}. Manual intervention required. ` +
-        `Meta error: ${metaErrorMessage}. Build error: ${swapsResult.error.message}`,
+        `Failure: ${failureMessage}. Build error: ${swapsResult.error.message}`,
     });
   }
   const rollbackSwapResult = await deps.atomicAliasSwap(swapsResult.value);
@@ -213,13 +241,10 @@ async function attemptPromoteRollback(
     return err({
       type: 'validation_error',
       message:
-        `CRITICAL: Promote metadata write failed and alias rollback also failed. ` +
+        `CRITICAL: Promote ${failurePhase} failed and alias rollback also failed. ` +
         `Aliases are pointing to version ${version}. Manual intervention required. ` +
-        `Meta error: ${metaErrorMessage}. Rollback error: ${rollbackSwapResult.error.message}`,
+        `Failure: ${failureMessage}. Rollback error: ${rollbackSwapResult.error.message}`,
     });
   }
-  return err({
-    type: 'es_error',
-    message: `Promote metadata write failed. Aliases rolled back. Original error: ${metaErrorMessage}`,
-  });
+  return ok(undefined);
 }

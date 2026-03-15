@@ -1,0 +1,36 @@
+
+Alias Health
+────────────
+[
+  {
+    "alias": "oak_lessons",
+    "healthy": true,
+    "targetIndex": "oak_lessons_v2026-03-12-175109"
+  },
+  {
+    "alias": "oak_unit_rollup",
+    "healthy": true,
+    "targetIndex": "oak_unit_rollup_v2026-03-12-175109"
+  },
+  {
+    "alias": "oak_units",
+    "healthy": true,
+    "targetIndex": "oak_units_v2026-03-12-175109"
+  },
+  {
+    "alias": "oak_sequences",
+    "healthy": true,
+    "targetIndex": "oak_sequences_v2026-03-12-175109"
+  },
+  {
+    "alias": "oak_sequence_facets",
+    "healthy": true,
+    "targetIndex": "oak_sequence_facets_v2026-03-12-175109"
+  },
+  {
+    "alias": "oak_threads",
+    "healthy": true,
+    "targetIndex": "oak_threads_v2026-03-12-175109"
+  }
+]
+✓ All aliases are healthy.

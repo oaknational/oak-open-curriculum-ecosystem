@@ -24,7 +24,7 @@ import type {
   SearchUnitsParams,
   UnitsSearchResult,
   RetrievalError,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 /**
  * Unit search function type for dependency injection.

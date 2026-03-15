@@ -1,0 +1,2 @@
+0.0.0
+PROMOTE_EXIT=0

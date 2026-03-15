@@ -1,26 +1,23 @@
-import { createSearchSdk, type SearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService, type RetrievalService } from '@oaknational/oak-search-sdk/read';
 import type { CliSdkEnv } from '../../src/cli/shared/create-cli-sdk.js';
 import { createEsClient } from '../../src/cli/shared/create-cli-sdk.js';
 import { buildSearchSdkConfig } from '../../src/cli/shared/build-search-sdk-config.js';
 
 /**
- * Create a Search SDK for evaluation scripts with explicit ES client cleanup.
+ * Create a retrieval service for evaluation scripts with explicit ES client cleanup.
  *
  * @param env - Validated CLI environment
- * @param run - Callback executed with the created SDK
+ * @param run - Callback executed with the created retrieval service
  * @returns Callback result
  */
 export async function withEvaluationSearchSdk<TResult>(
   env: CliSdkEnv,
-  run: (sdk: SearchSdk) => Promise<TResult>,
+  run: (retrieval: RetrievalService) => Promise<TResult>,
 ): Promise<TResult> {
   const esClient = createEsClient(env);
-  const sdk = createSearchSdk({
-    deps: { esClient },
-    config: buildSearchSdkConfig(env),
-  });
+  const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(env));
   try {
-    return await run(sdk);
+    return await run(retrieval);
   } finally {
     await esClient.close();
   }

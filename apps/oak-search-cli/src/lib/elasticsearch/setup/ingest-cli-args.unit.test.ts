@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { SUBJECTS } from '@oaknational/curriculum-sdk';
 import { parseArgs } from './ingest-cli-args.js';
 import {
@@ -6,37 +6,19 @@ import {
   validateKeyStage,
   validateIndex,
   resolveSubjects,
-  validateBulkDir,
 } from './ingest-cli-validators.js';
 
-/**
- * Tests for CLI argument parsing.
- *
- * Commander calls process.exit(1) on validation errors, so we mock it
- * for tests that need to verify error handling behavior.
- */
+/** Tests for CLI argument parsing. */
 describe('parseArgs', () => {
-  let mockExit: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit called');
-    });
-  });
-
-  afterEach(() => {
-    mockExit.mockRestore();
-  });
-
   describe('default mode is bulk', () => {
     it('defaults to bulk mode (api = false)', () => {
       const result = parseArgs([]);
       expect(result.api).toBe(false);
     });
 
-    it('defaults bulkDir to ./bulk-downloads', () => {
+    it('leaves bulkDir unset by default', () => {
       const result = parseArgs([]);
-      expect(result.bulkDir).toBe('./bulk-downloads');
+      expect(result.bulkDir).toBeUndefined();
     });
 
     it('does not require --subject or --all in bulk mode', () => {
@@ -131,26 +113,13 @@ describe('parseArgs', () => {
     });
   });
 
-  describe('--incremental flag', () => {
-    it('defaults to false (overwrite mode)', () => {
-      const result = parseArgs([]);
-      expect(result.incremental).toBe(false);
+  describe('legacy incremental flags', () => {
+    it('rejects --incremental', () => {
+      expect(() => parseArgs(['--incremental'])).toThrow("unknown option '--incremental'");
     });
 
-    it('sets incremental to true when --incremental is specified', () => {
-      const result = parseArgs(['--incremental']);
-      expect(result.incremental).toBe(true);
-    });
-
-    it('sets incremental to true when -i is specified', () => {
-      const result = parseArgs(['-i']);
-      expect(result.incremental).toBe(true);
-    });
-
-    it('works with other flags', () => {
-      const result = parseArgs(['--incremental', '--dry-run']);
-      expect(result.incremental).toBe(true);
-      expect(result.dryRun).toBe(true);
+    it('rejects -i', () => {
+      expect(() => parseArgs(['-i'])).toThrow("unknown option '-i'");
     });
   });
 
@@ -187,22 +156,19 @@ describe('parseArgs', () => {
         'maths',
         '--key-stage',
         'ks4',
-        '--incremental',
         '--bypass-cache',
         '--verbose',
         '--dry-run',
       ]);
       expect(result.subjects).toEqual(['maths']);
       expect(result.keyStages).toEqual(['ks4']);
-      expect(result.incremental).toBe(true);
       expect(result.bypassCache).toBe(true);
       expect(result.verbose).toBe(true);
       expect(result.dryRun).toBe(true);
     });
 
     it('short flags work together', () => {
-      const result = parseArgs(['-i', '-v']);
-      expect(result.incremental).toBe(true);
+      const result = parseArgs(['-v']);
       expect(result.verbose).toBe(true);
     });
   });
@@ -269,22 +235,6 @@ describe('validators', () => {
 
     it('returns explicit subjects when provided in API mode', () => {
       expect(resolveSubjects(['maths', 'english'], false, true)).toEqual(['maths', 'english']);
-    });
-  });
-
-  describe('validateBulkDir', () => {
-    it('throws when directory does not exist', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow(
-        'Bulk download directory not found',
-      );
-    });
-
-    it('throws with actionable message mentioning bulk:download', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow('pnpm bulk:download');
-    });
-
-    it('throws with actionable message mentioning --api alternative', () => {
-      expect(() => validateBulkDir('/nonexistent/path')).toThrow('--api');
     });
   });
 });

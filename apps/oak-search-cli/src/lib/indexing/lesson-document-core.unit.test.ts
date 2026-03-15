@@ -50,7 +50,7 @@ function createMinimalParams(overrides?: Partial<CreateLessonDocParams>): Create
   };
 }
 
-describe('lesson-document-builder', () => {
+describe('lesson-document-core', () => {
   describe('buildLessonDocument', () => {
     it('builds a lesson document with all required fields', () => {
       const params = createMinimalParams();
@@ -67,20 +67,12 @@ describe('lesson-document-builder', () => {
       expect(doc.doc_type).toBe('lesson');
     });
 
-    it('derives phase_slug as "primary" for KS1 lessons', () => {
-      const params = createMinimalParams({ keyStage: 'ks1' });
+    it('derives phase_slug as "primary" for KS1 and KS2 lessons', () => {
+      const ks1Doc = buildLessonDocument(createMinimalParams({ keyStage: 'ks1' }));
+      const ks2Doc = buildLessonDocument(createMinimalParams({ keyStage: 'ks2' }));
 
-      const doc = buildLessonDocument(params);
-
-      expect(doc.phase_slug).toBe('primary');
-    });
-
-    it('derives phase_slug as "primary" for KS2 lessons', () => {
-      const params = createMinimalParams({ keyStage: 'ks2' });
-
-      const doc = buildLessonDocument(params);
-
-      expect(doc.phase_slug).toBe('primary');
+      expect(ks1Doc.phase_slug).toBe('primary');
+      expect(ks2Doc.phase_slug).toBe('primary');
     });
 
     it('derives phase_slug as "secondary" for KS3 lessons', () => {
@@ -112,6 +104,18 @@ describe('lesson-document-builder', () => {
       expect(doc.unit_titles).toEqual(['Unit 1', 'Unit 2']);
       expect(doc.unit_urls).toEqual(['https://example.com/unit-1', 'https://example.com/unit-2']);
       expect(doc.unit_count).toBe(2);
+    });
+
+    it('includes thread slugs and titles when provided', () => {
+      const params = createMinimalParams({
+        threadSlugs: ['number-fractions', 'number-multiplication'],
+        threadTitles: ['Number: Fractions', 'Number: Multiplication'],
+      });
+
+      const doc = buildLessonDocument(params);
+
+      expect(doc.thread_slugs).toEqual(['number-fractions', 'number-multiplication']);
+      expect(doc.thread_titles).toEqual(['Number: Fractions', 'Number: Multiplication']);
     });
 
     it('includes pedagogical fields when provided', () => {

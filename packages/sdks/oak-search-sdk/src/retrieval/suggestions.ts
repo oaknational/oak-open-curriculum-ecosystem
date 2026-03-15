@@ -14,12 +14,12 @@ import type { SuggestParams } from '../types/retrieval-params.js';
 import type { SuggestionResponse, RetrievalError } from '../types/retrieval-results.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
-import { extractStatusCode } from '../admin/es-error-guards.js';
 
 import type { BoolPrefixSearchFn, IndexKind } from './suggest-bool-prefix.js';
 import { runBoolPrefix, mergeAndDedup } from './suggest-bool-prefix.js';
 import type { SuggestClient } from './suggest-completion.js';
 import { buildCompletionClause, extractSuggestionItems } from './suggest-completion.js';
+import { toRetrievalError } from './retrieval-error.js';
 
 export type { SuggestRawResponse, SuggestClient } from './suggest-completion.js';
 
@@ -75,8 +75,7 @@ export async function suggest(
       cache: { version: config.indexVersion ?? 'unknown', ttlSeconds: SUGGESTION_TTL_SECONDS },
     });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message, statusCode: extractStatusCode(error) });
+    return err(toRetrievalError(error));
   }
 }
 

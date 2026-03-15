@@ -22,7 +22,7 @@ import type {
   SearchSequencesParams,
   SequencesSearchResult,
   RetrievalError,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 import type { SearchSubjectSlug } from '@oaknational/sdk-codegen/search';
 
 /**

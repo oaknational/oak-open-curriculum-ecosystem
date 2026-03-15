@@ -6,7 +6,7 @@ source_research:
   - "../oak-ontology-graph-opportunities.strategy.md"
   - "https://github.com/oaknational/oak-curriculum-ontology"
 depends_on:
-  - "../active/kg-alignment-audit.execution.plan.md"
+  - "../current/kg-alignment-audit.execution.plan.md"
 todos:
   - id: phase-0-decision-lock
     content: "Phase 0: Lock the first integration contract: separate Neo4j instance, ontology release pinning, initial join keys, and first user-visible quick wins."
@@ -15,7 +15,7 @@ todos:
     content: "Phase 1: Provision a separate Neo4j instance and make ontology export/import repeatable, versioned, and observable."
     status: pending
   - id: phase-2-alignment-audit
-    content: "Phase 2: Alignment audit promoted to `../active/kg-alignment-audit.execution.plan.md`; use its measured overlap outputs to narrow the remaining quick wins in this parent plan."
+    content: "Phase 2: Alignment audit queued at `../current/kg-alignment-audit.execution.plan.md`; use its measured overlap outputs to narrow the remaining quick wins in this parent plan."
     status: completed
   - id: phase-3-es-projections
     content: "Phase 3: Create the first Elasticsearch ontology projection surfaces and graph-derived features for stable, high-value slices."
@@ -42,7 +42,7 @@ repo structures overlap perfectly.
 ## Promotion note
 
 The alignment-audit slice of this parent plan has been promoted into
-[../active/kg-alignment-audit.execution.plan.md](../active/kg-alignment-audit.execution.plan.md).
+[../current/kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md).
 The remaining quick wins in this plan should now be narrowed using the audit
 outputs rather than assumption-led overlap estimates.
 
@@ -300,7 +300,7 @@ Minimum acceptance:
 ### Phase 2: Alignment Audit (promoted)
 
 This slice is now owned by
-[../active/kg-alignment-audit.execution.plan.md](../active/kg-alignment-audit.execution.plan.md).
+[../current/kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md).
 
 This parent plan now consumes the audit outputs rather than re-describing the
 audit work as if it were still queued here.
@@ -414,5 +414,5 @@ Promotion candidates:
 | [../elasticsearch-neo4j-oak-ontology-synthesis.research.md](../elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Canonical graph and platform synthesis with real links |
 | [../oak-ontology-graph-opportunities.strategy.md](../oak-ontology-graph-opportunities.strategy.md) | Strategic direction that this quick-win plan operationalises |
 | [../../high-level-plan.md](../../high-level-plan.md) | Cross-collection sequencing that names this work as the next graph promotion candidate |
-| [../active/bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md) | Existing active semantic-search work that may later consume graph-derived enrichments |
+| [../current/bulk-metadata-quick-wins.execution.plan.md](../current/bulk-metadata-quick-wins.execution.plan.md) | Existing queued semantic-search work that may later consume graph-derived enrichments |
 | [https://github.com/oaknational/oak-curriculum-ontology](https://github.com/oaknational/oak-curriculum-ontology) | Source ontology, RDF distributions, and Neo4j export implementation |
