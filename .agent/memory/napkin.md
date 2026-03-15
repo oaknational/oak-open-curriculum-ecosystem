@@ -101,3 +101,25 @@
 - For this lane, plan quality depends on expressing "all fields" as generated
   inventory + stage-contract matrix, not ad hoc lists, to keep coverage
   deterministic and drift-resistant.
+
+## Session 2026-03-15 — Plan/prompt hardening review cycle
+
+### What Was Done
+
+- Ran deep read across active semantic-search prompt, active field-integrity
+  execution plan, retrieval/indexing code paths, and live ES state via EsCurric
+  MCP.
+- Updated plan/prompt to enforce pre-ingest no-blindness gates:
+  field-level readbacks, mapping-aligned filter semantics, CI-vs-operator split,
+  and explicit TDD/testing constraints.
+- Completed iterative reviewer closure with `docs-adr-reviewer`,
+  `test-reviewer`, and `elasticsearch-reviewer` until no actionable findings
+  remained.
+
+### Lessons
+
+- Reviewer cycles on planning docs can surface concrete execution hazards
+  (broken relative links, non-existent script references, CI determinism gaps)
+  before implementation starts.
+- For ES-heavy plans, include refresh-visibility handling in readback evidence
+  criteria; otherwise post-ingest population checks can produce false negatives.
