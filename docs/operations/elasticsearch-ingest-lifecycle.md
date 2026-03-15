@@ -13,10 +13,11 @@ for the architectural decision behind this approach.
 ## Document Authority
 
 - `semantic-search.prompt.md` controls session bootstrap and lane selection.
-- `semantic-search-recovery-and-guardrails.execution.plan.md` controls phase
-  closure, reviewer roster, and quality-gate closure.
-- `semantic-search-ingest-runbook.md` controls active incident stop/go and
-  failure-branch sequencing.
+- Archived incident authorities:
+  - `.agent/plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md`
+  - `.agent/plans/semantic-search/archive/completed/semantic-search-ingest-runbook.md`
+- These archived plans capture phase closure, reviewer roster, quality-gate
+  closure, and incident stop/go sequencing.
 - This document is the evergreen operational reference for lifecycle ingest.
 
 ## Prerequisites
@@ -24,7 +25,9 @@ for the architectural decision behind this approach.
 - Elasticsearch Serverless credentials configured (see
   [environment variables](./environment-variables.md))
 - Bulk data downloaded to `apps/oak-search-cli/bulk-downloads/`
-- Working directory: `apps/oak-search-cli`
+- Working directories:
+  - repo root for workspace-wide validation commands (`pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`)
+  - `apps/oak-search-cli` for `oaksearch` admin commands
 
 ## Operator-Agent Command Contract
 
@@ -35,6 +38,59 @@ When running ingest in an agentic workflow:
 3. The agent monitors output, classifies failures, and drives remediation.
 
 ## Validation and Ingest Sequence
+
+### Step 0.5 — Capture immutable baseline evidence pack
+
+Run from `apps/oak-search-cli`:
+
+```bash
+RUN_TS="$(date +%Y%m%d-%H%M%S)"
+INDEX_TARGET="${INDEX_TARGET:-primary}" # set to sandbox for sandbox recovery
+EVIDENCE_DIR="recovery-evidence/${RUN_TS}-phase0-baseline"
+mkdir -p "${EVIDENCE_DIR}"
+pnpm tsx bin/oaksearch.ts admin validate-aliases > "${EVIDENCE_DIR}/validate-aliases.txt"
+pnpm tsx bin/oaksearch.ts admin meta get > "${EVIDENCE_DIR}/meta-get.txt"
+pnpm tsx bin/oaksearch.ts admin count > "${EVIDENCE_DIR}/count.txt"
+cat <<'EOF' > "${EVIDENCE_DIR}/baseline-summary.md"
+staged_version: <replace-after-count-analysis>
+live_alias_version: <replace-after-validate-aliases-analysis>
+previous_version_in_mapping: <replace-after-mapping-check>
+mapping_contract_match: <replace-after-generated-vs-live-contract-check>
+EOF
+```
+
+Run from repo root:
+
+```bash
+# Run in the same shell as the first Step 0.5 block.
+: "${EVIDENCE_DIR:?Set EVIDENCE_DIR from Step 0.5 first block}"
+set -a && source ".env" && set +a
+curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
+  "${ELASTICSEARCH_URL}/oak_meta/_mapping" \
+  > "apps/oak-search-cli/${EVIDENCE_DIR}/oak-meta-mapping.json"
+curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
+  "${ELASTICSEARCH_URL}/_cat/indices/oak_*_v*?h=index,docs.count&format=json" \
+  > "apps/oak-search-cli/${EVIDENCE_DIR}/versioned-index-counts.json"
+jq --arg target "${INDEX_TARGET}" '
+  map(
+    select(
+      ($target == "sandbox" and (.index | test("_sandbox_v")))
+      or
+      ($target == "primary" and ((.index | test("_sandbox_v")) | not))
+    )
+  )
+' "apps/oak-search-cli/${EVIDENCE_DIR}/versioned-index-counts.json" \
+  > "apps/oak-search-cli/${EVIDENCE_DIR}/target-versioned-index-counts.json"
+```
+
+Go conditions:
+
+- Baseline evidence includes alias state, metadata document, metadata mapping,
+  and six-family counts in one timestamped evidence directory.
+- `baseline-summary.md` records `staged_version`, `live_alias_version`,
+  `previous_version_in_mapping`, and `mapping_contract_match`.
+- `staged_version` is derived from `target-versioned-index-counts.json`, not
+  from `admin count` output (which reflects live alias targets).
 
 ### Step 1 — Pre-ingest alias health check
 
@@ -128,16 +184,51 @@ When upload completes but metadata commit fails, salvage promote is allowed only
 after these checks:
 
 0. Phase 0 evidence pack exists (timestamped directory with baseline summary
-   and versioned index inventory). Use the incident runbook for the capture
-   sequence and staged-version selection procedure.
-1. Version inventory is filtered to the active target (primary vs sandbox) to
+   and versioned index inventory).
+1. Candidate staged version selection is deterministic and evidenced by this rule:
+   - candidate appears in all six index families in the phase-0 evidence pack
+   - candidate is newer than current live alias version
+   - if multiple candidates qualify, choose the lexicographically greatest
+2. Version inventory is filtered to the active target (primary vs sandbox) to
    avoid cross-target candidate selection.
-2. Alias health is confirmed.
-3. `oak_meta` mapping is reconciled to the generated metadata contract and the
+3. Alias health is confirmed.
+4. `oak_meta` mapping is reconciled to the generated metadata contract and the
    evidence summary records `mapping_contract_match: true`.
-4. Metadata/alias coherence is repaired and read back (`oak_meta.version`
+5. Metadata/alias coherence is repaired and read back (`oak_meta.version`
    equals live alias target version).
-5. Candidate staged version selection is deterministic and evidenced.
+
+### Incident-only salvage promote procedure
+
+Use this procedure only after a metadata commit failure where upload reached the
+versioned indexes successfully.
+
+```bash
+# 1) Run from repo root: rebuild and validate generated contract
+pnpm sdk-codegen
+pnpm build
+pnpm type-check
+
+# 2) Run from apps/oak-search-cli with EVIDENCE_DIR already set from Step 0.5
+cd apps/oak-search-cli
+: "${EVIDENCE_DIR:?Set EVIDENCE_DIR from Step 0.5 first block}"
+STAGED_VERSION="$(awk -F': ' '/staged_version/ {print $2}' "${EVIDENCE_DIR}/baseline-summary.md")"
+set -a && source "../../.env" && set +a
+
+# 3) Verify staged index family counts for the candidate version
+for INDEX in $(jq -r --arg version "${STAGED_VERSION}" '.[] | .index | select(test("_" + $version + "$"))' "${EVIDENCE_DIR}/target-versioned-index-counts.json"); do
+  curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
+    "${ELASTICSEARCH_URL}/${INDEX}/_count"
+done
+
+# 4) Promote and perform mandatory readbacks
+pnpm tsx bin/oaksearch.ts admin promote --target-version "${STAGED_VERSION}"
+pnpm tsx bin/oaksearch.ts admin validate-aliases
+pnpm tsx bin/oaksearch.ts admin meta get
+for _ in 1 2 3 4 5 6; do
+  pnpm tsx bin/oaksearch.ts admin count && break
+  sleep 5
+done
+```
 
 ## Document Count Reference
 

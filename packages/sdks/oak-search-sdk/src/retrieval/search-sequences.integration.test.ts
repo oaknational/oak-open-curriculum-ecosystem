@@ -34,6 +34,21 @@ function getFirstRequest(calls: EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
+function getFilterClause(calls: EsSearchRequest[]) {
+  const request = getFirstRequest(calls);
+  const retriever = request.retriever;
+  if (!retriever || !('rrf' in retriever) || !retriever.rrf) {
+    throw new Error('Expected rrf retriever on search request');
+  }
+  // Sequence retrieval keeps BM25 as the first retriever; filter clauses are
+  // attached to every retriever, so asserting on the first one is sufficient.
+  const firstRetriever = retriever.rrf.retrievers?.[0];
+  if (!firstRetriever || !('standard' in firstRetriever) || !firstRetriever.standard) {
+    throw new Error('Expected first standard retriever');
+  }
+  return firstRetriever.standard.filter;
+}
+
 const stubResolveIndex = () => 'oak_sequences_test';
 
 describe('searchSequences', () => {
@@ -43,8 +58,10 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'maths', keyStage: 'ks3' }, search, stubResolveIndex);
 
-      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
-      expect(requestJson).toContain('"key_stages":"ks3"');
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toEqual({
+        bool: { filter: [{ term: { key_stages: 'ks3' } }] },
+      });
     });
 
     it('includes subject_slug filter when subject is provided', async () => {
@@ -52,8 +69,10 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'algebra', subject: 'maths' }, search, stubResolveIndex);
 
-      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
-      expect(requestJson).toContain('"subject_slug":"maths"');
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toEqual({
+        bool: { filter: [{ term: { subject_slug: 'maths' } }] },
+      });
     });
 
     it('combines subject, phaseSlug, and keyStage filters', async () => {
@@ -65,10 +84,62 @@ describe('searchSequences', () => {
         stubResolveIndex,
       );
 
-      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
-      expect(requestJson).toContain('"subject_slug":"science"');
-      expect(requestJson).toContain('"phase_slug":"secondary"');
-      expect(requestJson).toContain('"key_stages":"ks4"');
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toEqual({
+        bool: {
+          filter: [
+            { term: { subject_slug: 'science' } },
+            { term: { phase_slug: 'secondary' } },
+            { term: { key_stages: 'ks4' } },
+          ],
+        },
+      });
+    });
+
+    it('includes category_titles filter when category is provided', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences(
+        {
+          query: 'maths',
+          category: 'algebra',
+        },
+        search,
+        stubResolveIndex,
+      );
+
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toEqual({
+        bool: { filter: [{ match_phrase: { category_titles: 'algebra' } }] },
+      });
+    });
+
+    it('combines category with other filters', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences(
+        {
+          query: 'science',
+          subject: 'science',
+          phaseSlug: 'secondary',
+          keyStage: 'ks4',
+          category: 'physics',
+        },
+        search,
+        stubResolveIndex,
+      );
+
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toEqual({
+        bool: {
+          filter: [
+            { term: { subject_slug: 'science' } },
+            { term: { phase_slug: 'secondary' } },
+            { term: { key_stages: 'ks4' } },
+            { match_phrase: { category_titles: 'physics' } },
+          ],
+        },
+      });
     });
 
     it('passes no filter when no filtering params provided', async () => {
@@ -76,10 +147,8 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'geography' }, search, stubResolveIndex);
 
-      const requestJson = JSON.stringify(getFirstRequest(calls).retriever);
-      expect(requestJson).not.toContain('"subject_slug"');
-      expect(requestJson).not.toContain('"phase_slug"');
-      expect(requestJson).not.toContain('"key_stages"');
+      const filterClause = getFilterClause(calls);
+      expect(filterClause).toBeUndefined();
     });
   });
 

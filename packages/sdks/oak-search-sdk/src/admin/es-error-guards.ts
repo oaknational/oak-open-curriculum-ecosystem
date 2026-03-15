@@ -2,6 +2,8 @@
  * Elasticsearch error guard helpers shared by admin operations.
  */
 
+import { extractStatusCode } from '../internal/index.js';
+
 /**
  * Return true when an error indicates a missing index target.
  *
@@ -13,10 +15,6 @@ export function isMissingIndexError(error: unknown): boolean {
   }
   return error.message.includes('index_not_found_exception');
 }
-/**
- * Type guards for Elasticsearch error shapes.
- */
-
 /**
  * Check if an ES error indicates the resource already exists.
  *
@@ -49,39 +47,4 @@ export function isMappingError(error: unknown): boolean {
     return false;
   }
   return error.message.includes('strict_dynamic_mapping_exception');
-}
-
-/**
- * Extract the HTTP status code from an ES error.
- *
- * The ES client may put it directly on the error (`statusCode`) or
- * nested in a `meta` property.
- *
- * @param error - The error thrown by the Elasticsearch client
- * @returns The HTTP status code, or `undefined` if not available
- */
-export function extractStatusCode(error: unknown): number | undefined {
-  if (typeof error !== 'object' || error === null) {
-    return undefined;
-  }
-  if ('statusCode' in error && typeof error.statusCode === 'number') {
-    return error.statusCode;
-  }
-  if ('meta' in error && isMetaWithStatusCode(error.meta)) {
-    return error.meta.statusCode;
-  }
-  return undefined;
-}
-
-/**
- * Type guard: value has a numeric statusCode property.
- *
- * @param value - Value to check
- * @returns True if value is object with numeric statusCode
- */
-function isMetaWithStatusCode(value: unknown): value is { statusCode: number } {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  return 'statusCode' in value && typeof value.statusCode === 'number';
 }

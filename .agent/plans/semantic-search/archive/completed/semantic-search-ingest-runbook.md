@@ -1,18 +1,23 @@
 ---
 name: Semantic Search Ingest Runbook (Operator-Run)
 last_updated: 2026-03-15
-status: active
+status: completed
+archived_on: 2026-03-15
 ---
 
 # Semantic Search Ingest Runbook (Operator-Run)
 
-This runbook is the operational execution guide for proving first successful
-alias lifecycle ingest in the active semantic-search incident lane.
+This runbook is the archived operational execution guide for alias lifecycle
+ingest operations used during the semantic-search incident lane.
 
 **Proof window gate**: treat this runbook as blocked until
 `semantic-search-recovery-and-guardrails.execution.plan.md` Phase 2
 guardrail tests are green at unit+integration levels and Task 2.3 remediation
 scope is complete.
+
+Current lane note (2026-03-15): one production blue/green cutover has already
+been executed and validated. The gate above remains mandatory for any new
+ingest attempt in this lane.
 
 Reviewer finding traceability for this lane:
 
@@ -33,16 +38,16 @@ Finding-to-runbook trace map:
 
 - `semantic-search.prompt.md` is the session bootstrap and lane-ordering authority.
 - `semantic-search-recovery-and-guardrails.execution.plan.md` is the execution authority for recovery tasks and phase closure.
-- This runbook is the operator checklist for stop/go sequencing and failure triage while the recovery lane is active.
+- This runbook was the operator checklist for stop/go sequencing and failure triage while the recovery lane was active.
 - `cli-robustness.plan.md` is supporting historical incident evidence only.
 
 ## Authoritative Inputs
 
 - `./semantic-search-recovery-and-guardrails.execution.plan.md`
-- `../../../prompts/semantic-search/semantic-search.prompt.md`
-- `../archive/completed/cli-robustness.plan.md` (supporting evidence only)
-- `../archive/completed/search-cli-sdk-boundary-migration.execution.plan.md` (completed lane evidence)
-- `../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md`
+- `../../../../prompts/semantic-search/semantic-search.prompt.md`
+- `./cli-robustness.plan.md` (supporting evidence only)
+- `./search-cli-sdk-boundary-migration.execution.plan.md` (completed lane evidence)
+- `../../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md`
 
 ## Operator-Agent Command Contract
 
@@ -67,7 +72,7 @@ ls -1 .agent/plans/semantic-search/active
 
 Go condition:
 
-- Active incident lane is `semantic-search-recovery-and-guardrails.execution.plan.md`.
+- Completed incident lane authority is `semantic-search-recovery-and-guardrails.execution.plan.md`.
 - `cli-robustness.plan.md` remains supporting evidence only.
 - Boundary evidence lane remains completed.
 
@@ -358,6 +363,8 @@ Required evidence set:
 6. Confirmation alias targets are concrete and healthy after ingest.
 7. Blue/green deploy success evidence: environment, commit SHA, cutover result,
    and post-deploy health/smoke checks.
+8. Search filter validation evidence for active F-series findings (`F1`/`F2`)
+   in `search-tool-prod-validation-findings-2026-03-15.md`.
 
 Migration is not complete until all evidence above is attached to the recovery
 plan.

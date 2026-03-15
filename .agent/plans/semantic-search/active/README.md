@@ -1,17 +1,22 @@
 # Semantic Search — Active
 
-Executable plans currently in progress.
+Executable items currently in progress.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| A0 | [semantic-search-recovery-and-guardrails.execution.plan.md](./semantic-search-recovery-and-guardrails.execution.plan.md) | Incident recovery execution plan covering metadata-alias coherence repair, salvage promotion, lifecycle invariant enforcement, test-doctrine/type-discipline remediation, and anti-recurrence guardrails | 🟢 In progress |
-| A0.1 | [semantic-search-ingest-runbook.md](./semantic-search-ingest-runbook.md) | Operator-run lifecycle ingest runbook with deterministic stop/go checkpoints and failure branches | 🟡 Active (gated) |
+| A0 | [search-tool-prod-validation-findings-2026-03-15.md](./search-tool-prod-validation-findings-2026-03-15.md) | Production search-tool validation findings register covering scope/filter parity checks after blue/green cutover | 🟡 Active (open findings) |
+| A1 | [comprehensive-field-integrity-integration-tests.execution.plan.md](./comprehensive-field-integrity-integration-tests.execution.plan.md) | Comprehensive integration-test workstream to prove all search index fields are handled correctly at each stage and end-to-end across stages | 🟡 Planning |
+
+Completed incident-recovery authorities have been archived:
+
+- [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
+- [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md)
 
 Role split:
 
 - Prompt (`semantic-search.prompt.md`): session bootstrap and lane order.
-- Recovery plan: task execution, findings register, and evidence trail.
-- Ingest runbook: operator stop/go sequence and failure branches.
+- Active findings register: production validation evidence and dispositions.
+- Archived recovery/runbook plans: closed migration-recovery execution record.
 
 Other semantic-search plans were consolidated out of `active/`:
 
@@ -20,13 +25,7 @@ Other semantic-search plans were consolidated out of `active/`:
 
 The boundary migration plan is archived. Boundary doctrine is anchored in
 [ADR-134](../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md).
-
-## Archived
-
-- [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — superseded by `unified-versioned-ingestion.plan.md`; retained for root cause analysis and completed prerequisites
-- [short-term-pr-snagging.plan.md](../archive/completed/short-term-pr-snagging.plan.md) — complete. Archived 2026-03-11.
-- [search-cli-sdk-boundary-migration.execution.plan.md](../archive/completed/search-cli-sdk-boundary-migration.execution.plan.md) — strict CLI/SDK capability boundary migration completed and archived.
-- [cli-robustness.plan.md](../archive/completed/cli-robustness.plan.md) — superseded by recovery lane; retained as incident evidence.
+Archive index: [archive/completed/README.md](../archive/completed/README.md)
 
 Next queue: [current/README.md](../current/README.md)
 Strategic backlog: [future/README.md](../future/README.md)

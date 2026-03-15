@@ -1,0 +1,13 @@
+{
+  "oak_meta": {
+    "settings": {
+      "index": {
+        "analysis": {
+          "normalizer": {
+            "oak_lower": { "filter": ["lowercase", "asciifolding"], "type": "custom" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -50,4 +50,4 @@ diagnostics, and made tests align with real client contracts.
 
 Further reading:
 
-- [.agent/plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md)
+- [.agent/plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)

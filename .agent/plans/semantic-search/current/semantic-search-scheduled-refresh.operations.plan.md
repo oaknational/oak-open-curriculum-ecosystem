@@ -28,7 +28,7 @@ todos:
 
 # Semantic Search Scheduled Refresh Operations
 
-**Last Updated**: 2026-03-13
+**Last Updated**: 2026-03-15
 **Status**: PLANNING
 **Scope**: Deliver a deterministic scheduled refresh service using incremental
 updates as the primary path, with full re-ingest as a mandatory fallback for
@@ -40,8 +40,8 @@ mapping changes and recovery.
 ## Document Authority
 
 - `semantic-search.prompt.md` is the session bootstrap and lane-ordering authority.
-- `semantic-search-recovery-and-guardrails.execution.plan.md` owns recovery
-  lifecycle invariants and the lock contract this plan consumes.
+- `.agent/plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md`
+  owns recovery lifecycle invariants and the lock contract this plan consumes.
 - This plan is the execution authority for scheduled-refresh design and delivery.
 - ADR-136 remains doctrine authority for incremental-refresh behaviour.
 
@@ -570,4 +570,4 @@ pnpm smoke:dev:stub
 - `docs/architecture/architectural-decisions/130-blue-green-index-swapping.md`
 - `docs/architecture/architectural-decisions/136-incremental-refresh-bulk-api-partial-update-doctrine.md`
 - `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md`
-- `.agent/plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md`
+- `.agent/plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md`

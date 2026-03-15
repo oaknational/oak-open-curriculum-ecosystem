@@ -9,9 +9,9 @@ import { isKeyStage } from '@oaknational/sdk-codegen';
 
 import type { FacetParams } from '../types/retrieval-params.js';
 import type { RetrievalError } from '../types/retrieval-results.js';
-import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
+import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
-import { extractStatusCode } from '../admin/es-error-guards.js';
+import { toRetrievalError } from './retrieval-error.js';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
@@ -32,7 +32,7 @@ type QueryContainer = estypes.QueryDslQueryContainer;
  */
 export async function fetchSequenceFacets(
   params: FacetParams | undefined,
-  search: EsSearchFn,
+  search: (body: EsSearchRequest) => Promise<EsSearchResponse<SearchSequenceFacetsIndexDoc>>,
   resolveIndex: IndexResolverFn,
 ): Promise<Result<SearchFacets, RetrievalError>> {
   try {
@@ -51,15 +51,14 @@ export async function fetchSequenceFacets(
       sort: [{ unit_count: { order: 'desc' } }],
     };
 
-    const res = await search<SearchSequenceFacetsIndexDoc>(request);
+    const res = await search(request);
     const facetResult = toSequenceFacets(res.hits.hits);
     if (!facetResult.ok) {
       return facetResult;
     }
     return ok({ sequences: facetResult.value });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message, statusCode: extractStatusCode(error) });
+    return err(toRetrievalError(error));
   }
 }
 
@@ -92,11 +91,31 @@ function toSequenceFacets(
 function toSequenceFacet(
   doc: SearchSequenceFacetsIndexDoc,
 ): Result<SearchFacets['sequences'][number], RetrievalError> {
+  if (!Array.isArray(doc.key_stages) || doc.key_stages.length === 0) {
+    return err({
+      type: 'validation_error',
+      message: 'Invalid key stage array in sequence facets document',
+    });
+  }
+  if (!Array.isArray(doc.unit_slugs) || !Array.isArray(doc.unit_titles)) {
+    return err({
+      type: 'validation_error',
+      message: 'Invalid unit arrays in sequence facets document',
+    });
+  }
   const keyStageCandidate = doc.key_stages[0];
   if (!keyStageCandidate || !isKeyStage(keyStageCandidate)) {
     return err({
       type: 'validation_error',
       message: `Invalid key stage in sequence facets document: ${String(keyStageCandidate)}`,
+    });
+  }
+  if (doc.unit_titles.length !== doc.unit_slugs.length) {
+    return err({
+      type: 'validation_error',
+      message:
+        `Invalid sequence facets document: unit_titles length (${doc.unit_titles.length}) ` +
+        `does not match unit_slugs length (${doc.unit_slugs.length})`,
     });
   }
   const units = doc.unit_slugs.map((unitSlug: string, index: number) => ({

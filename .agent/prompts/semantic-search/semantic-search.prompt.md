@@ -16,22 +16,46 @@ This is a working handover document. Keep it concise and operational.
 
 ## Active Scope and Authority
 
-- Primary execution authority:
-  [semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/active/semantic-search-recovery-and-guardrails.execution.plan.md)
-- Operator stop/go authority:
-  [semantic-search-ingest-runbook.md](../../plans/semantic-search/active/semantic-search-ingest-runbook.md)
+- Active execution authority:
+  [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
+- Active execution plan:
+  [comprehensive-field-integrity-integration-tests.execution.plan.md](../../plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - Session bootstrap and lane-order authority: this prompt
 
-Supporting evidence only (not execution authority):
+Completed migration-recovery authority (archived evidence):
+
+- [semantic-search-recovery-and-guardrails.execution.plan.md](../../plans/semantic-search/archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
+- [semantic-search-ingest-runbook.md](../../plans/semantic-search/archive/completed/semantic-search-ingest-runbook.md)
+
+Supporting evidence only:
 
 - [search-cli-sdk-boundary-migration.execution.plan.md](../../plans/semantic-search/archive/completed/search-cli-sdk-boundary-migration.execution.plan.md)
 - [cli-robustness.plan.md](../../plans/semantic-search/archive/completed/cli-robustness.plan.md)
 
+Current lane execution focus (post-archive, 2026-03-15):
+
+- Keep execution anchored in the active production findings register (`F1`/`F2`)
+  until each finding is closed with evidence or explicitly owner-triaged with
+  rationale.
+- Fresh reingest completed successfully (`v2026-03-15-134856`) and required
+  readbacks have been captured (`validate-aliases`, `meta get`, `count`,
+  `verify`, and live `oak_meta` mapping contract check).
+- Production retest evidence confirms both `F1` and `F2` still reproduce after
+  reingest, so keep both findings open and prioritised for data/query-semantics
+  remediation.
+- Treat production validation of `F1`/`F2` as mandatory closeout evidence for
+  this lane; code-only fixes are not sufficient for migration completion.
+- Keep recovery evidence additive; do not overwrite prior evidence packs.
+- **Next session objective**: refine and harden
+  `comprehensive-field-integrity-integration-tests.execution.plan.md` before
+  starting implementation; do not begin plan execution until refinement
+  criteria are explicitly closed.
+
 Findings register:
 
-- Source: recovery plan, **Reviewer Findings Register (round 1, 2026-03-14)**
-- Policy: findings are actionable by default; reject only with explicit rationale/evidence
-- Active IDs: `R1` to `R9`
+- Source: `search-tool-prod-validation-findings-2026-03-15.md`
+- Policy: findings are actionable by default; reject only with explicit rationale/evidence.
+- Active IDs: `F1` to `F2`
 
 Migration completion gate:
 
@@ -62,21 +86,37 @@ Run `validate-aliases`, `meta get`, `count`, and `oak_meta` mapping check before
 any mutation. Do not proceed unless alias health and metadata coherence are
 confirmed.
 
-### Step 3: Start with full review/fix cycle
+If a lifecycle command is already running from the prior session, monitor it to
+completion first, then capture readbacks (`validate-aliases`, `meta get`,
+`count`) before continuing with findings validation.
 
-Follow `semantic-search-recovery-and-guardrails.execution.plan.md` section
-`Cross-Phase Mandatory Review Loop` exactly before new implementation work.
+### Step 3: Plan refinement (next session priority)
 
-### Step 4: Execute recovery phases in order
+Refine and de-risk
+`comprehensive-field-integrity-integration-tests.execution.plan.md`:
 
-Continue using the recovery plan phase-entry criteria as the sequencing source
-of truth; keep evidence additive; do not replay completed phases without new
-regression evidence. For current lane state, respect the explicit
-`Phase 2 -> Phase 3` entry rule rather than closeout-gate completeness alone.
+1. verify all-field inventory strategy and stage-contract matrix coverage;
+2. verify deterministic validation commands and quality-gate sequencing;
+3. resolve reviewer feedback on plan clarity/scope.
 
-**Hard sequencing rule**: never promote, retry, or release lock after a
-post-mutation failure until immediate readback triage (`validate-aliases`,
-`meta get`, `count`) is complete.
+Do not start implementation in this step.
+
+### Step 4: Run review/fix cycle for active findings
+
+After plan refinement is accepted, run the specialist review/fix loop against
+code and docs touched while closing `F1`/`F2`. Keep findings/status updates in
+the active findings register.
+
+### Step 5: Deep-update discipline for prompt/findings register
+
+When execution state changes materially (new findings, status flips, reviewer
+closure rounds, evidence additions), update both:
+
+1. `semantic-search.prompt.md` (lane-ordering and current focus), and
+2. `search-tool-prod-validation-findings-2026-03-15.md` (finding status,
+   evidence links, disposition rationale)
+
+in the same session before declaring completion.
 
 ---
 
@@ -96,9 +136,8 @@ live `oak_meta` mapping matches the full generated metadata contract (with
 `previous_version` as a sentinel, not the only check). If drift exists, stop
 and remediate mapping contract drift first.
 
-Record outcome in the recovery plan evidence trail as each phase closes; keep
-`semantic-search-ingest-runbook.md` aligned with any sequencing or stop/go
-updates.
+Record outcome in the active findings register, and treat the archived recovery
+plan/runbook as historical evidence references.
 
 ---
 
@@ -118,6 +157,9 @@ updates.
 - **Boundary**: non-admin CLI cannot import `@oaknational/oak-search-sdk/admin`.
 - **Governance**: reviewer findings resolved or explicitly owner-triaged; all
   quality gates pass without bypasses.
+- **Search validation**: open findings in
+  `search-tool-prod-validation-findings-2026-03-15.md` are resolved or
+  explicitly owner-triaged with evidence.
 - **Migration completion gate**: migration is complete only when a successful
   blue/green deploy is evidenced in the recovery plan, including deploy target,
   commit SHA, cutover success, and post-deploy health/smoke checks.
@@ -138,4 +180,4 @@ updates.
 - [Active Plans](../../plans/semantic-search/active/README.md)
 - [Current Queue](../../plans/semantic-search/current/README.md)
 - [Roadmap](../../plans/semantic-search/roadmap.md)
-- [Archive](../../plans/semantic-search/archive/completed/)
+- [Archive](../../plans/semantic-search/archive/completed/README.md)

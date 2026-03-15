@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ Milestones 0 and 1 complete. Active execution is intentionally narrowed to recovery authority (`recovery-and-guardrails` + ingest runbook). Pending follow-ons are queued in `current/`.
+**Status**: ✅ Milestones 0 and 1 complete. Recovery lane plans are archived; active execution is now narrowed to open production validation findings while pending follow-ons are queued in `current/`.
 **Last Updated**: 2026-03-15
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Metrics Authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
@@ -41,8 +41,11 @@ For full milestone definitions: [high-level-plan.md](../high-level-plan.md).
 ## Current State (Compact)
 
 - Active authority is narrowed to:
-  - [semantic-search-recovery-and-guardrails.execution.plan.md](active/semantic-search-recovery-and-guardrails.execution.plan.md)
-  - [semantic-search-ingest-runbook.md](active/semantic-search-ingest-runbook.md)
+  - [search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md)
+  - [comprehensive-field-integrity-integration-tests.execution.plan.md](active/comprehensive-field-integrity-integration-tests.execution.plan.md)
+- Completed migration-recovery authorities are archived:
+  - [semantic-search-recovery-and-guardrails.execution.plan.md](archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
+  - [semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)
 - Pending/not-started semantic-search lanes are queued in
   [current/README.md](current/README.md), including:
   `unified-versioned-ingestion`, `scheduled-refresh` (deferred),

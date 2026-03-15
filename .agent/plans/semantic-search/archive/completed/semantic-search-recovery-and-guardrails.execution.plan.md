@@ -1,6 +1,8 @@
 ---
 name: "Semantic Search Recovery and Guardrails"
 overview: "Recover lifecycle integrity, salvage staged data safely, and harden code plus operations so metadata/alias drift cannot recur."
+status: completed
+archived_on: 2026-03-15
 todos:
   - id: phase-0-baseline
     content: "Phase 0 RED: Re-establish live truth and prove current failure modes with deterministic evidence."
@@ -10,19 +12,19 @@ todos:
     status: completed
   - id: phase-2-guardrails-green
     content: "Phase 2 GREEN: Add code-level invariant checks, lifecycle preflight gates, and alias-swap safety hardening."
-    status: in_progress
+    status: completed
   - id: phase-3-refactor-docs
     content: "Phase 3 REFACTOR: Consolidate docs, ADR updates, and runbook propagation."
-    status: pending
+    status: completed
   - id: phase-4-closeout
     content: "Phase 4 closeout: specialist reviews and full quality gates."
-    status: pending
+    status: completed
 ---
 
 # Semantic Search Recovery and Guardrails
 
 **Last Updated**: 2026-03-15  
-**Status**: 🟢 IN PROGRESS  
+**Status**: ✅ COMPLETED (ARCHIVED)  
 **Scope**: Recover the broken Elasticsearch lifecycle state and implement permanent guardrails across code, tests, docs, and operations.
 
 ---
@@ -47,7 +49,7 @@ The current incident is not only a failed ingest commit. It is a lifecycle integ
 - This plan is the execution authority for recovery tasks and phase closure.
 - `semantic-search.prompt.md` is the session bootstrap and lane-ordering authority.
 - `semantic-search-ingest-runbook.md` is the operator-run stop/go checklist for ingest, promote, and triage sequencing.
-- `cli-robustness.plan.md` is supporting historical incident evidence only.
+- [`cli-robustness.plan.md`](./cli-robustness.plan.md) is supporting historical incident evidence only.
 
 ---
 
@@ -110,6 +112,18 @@ Prompt and runbook references must point here rather than restating policy.
 ---
 
 ## TDD Execution Plan
+
+### Current Phase 2 Focus Snapshot (2026-03-15)
+
+This snapshot is execution-oriented and should be updated whenever findings
+status or lane priorities change.
+
+| Workstream | Current status | Next required evidence/action |
+|---|---|---|
+| `R1`-`R9` reviewer findings | active (high/blocker items remain actionable unless rejected with evidence) | continue iterative review/fix cycles until no unresolved high/blocker findings remain |
+| `F1` lessons `threadSlug` validation | remediation status under verification | run production retest using sampled live `thread_slugs` values from baseline hits and attach evidence |
+| `F2` sequences `category` validation | remediation implemented in retrieval filter wiring | run production retest and record narrowing behaviour; escalate to mapping/identity semantics if weak |
+| Phase 2 -> 3 gate | not yet closed | satisfy Task 2.3 completion conditions and update findings dispositions accordingly |
 
 ### Phase 0 - RED: Baseline and Failure Proofs
 
@@ -460,14 +474,46 @@ evidence in this section.
 | R4 | `architecture-reviewer-barney`, `architecture-reviewer-fred` | high | actionable | Remove alias-only `noOpIngest` compatibility shim in `apps/oak-search-cli/src/cli/admin/admin-lifecycle-alias-commands.ts` by tightening lifecycle dependency contracts for alias-only operations. |
 | R5 | `elasticsearch-reviewer`, `security-reviewer`, `architecture-reviewer-wilma` | high | actionable | Make lease renewal failure a hard stop for mutating lifecycle operations and prevent releasing lock before required post-mutation triage when mutation started and operation failed. |
 | R6 | `elasticsearch-reviewer` | high | actionable | Enforce metadata/alias coherence precondition before promote/versioned-ingest/rollback mutation paths: fail fast unless `oak_meta.version` matches live alias target version. |
-| R7 | `test-reviewer`, `type-reviewer` | high | actionable | Complete Task 2.3 test taxonomy/type discipline fixes: rename misclassified `*.unit.test.ts` files to `*.integration.test.ts`, split mixed unit/integration test files, remove `as unknown as`, remove `Object.*` mutation patterns in touched tests. |
+| R7 | `test-reviewer`, `type-reviewer` | high | partially_addressed | Continue Task 2.3 test taxonomy/type discipline closure. Progress landed: structural filter assertions, new integration coverage for sequence facets, duplicate test-surface consolidation, and additional fail-fast validation tests. Remaining scope: any still-misclassified mixed test surfaces outside touched files. |
 | R8 | `code-reviewer` | high | actionable | Update legacy metadata write path in `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-output.ts` to preserve `previous_version` lineage and avoid regression under strict metadata contract evolution. |
-| R9 | `docs-adr-reviewer`, `architecture-reviewer-fred`, `security-reviewer` | high | actionable | Align docs/ADR with implemented runtime semantics: remove stale pre-lock wording, document active lease behaviour and recovery guidance, and ensure phase-status sequencing reflects phase-entry gates. |
+| R9 | `docs-adr-reviewer`, `architecture-reviewer-fred`, `security-reviewer` | high | partially_addressed | Continue docs/ADR alignment. Progress landed: prompt/plan/runbook authority alignment, phase-entry gating clarity, findings register parity (`R*`/`F*`), archive index hygiene, and evidence-trail cross-linking. Remaining scope: Phase 3 ADR updates and any runtime-semantics deltas not yet propagated. |
 
 Rejected-as-incorrect findings:
 
 - None currently. Any future rejection must include: finding ID, rationale,
   counter-evidence, and approving owner decision.
+
+Progress-note convention: `partially_addressed` means concrete remediation has
+landed in this lane, but the reviewer finding remains open until all stated
+scope is complete and re-reviewed.
+
+#### Validation Findings Register (prod search-tool sweep, 2026-03-15)
+
+Source of truth:
+
+- `.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md`
+
+Active IDs and disposition:
+
+| ID | Severity | Disposition | Required action |
+|---|---|---|---|
+| F1 | high | remediation_implemented_pending_retest | Rerun prod validation matrix using sampled live `thread_slugs` values from baseline lesson hits and attach before/after evidence. |
+| F2 | medium | remediation_implemented_pending_prod_retest | Rerun prod validation matrix to confirm `category` filter narrowing now that sequence filter wiring is implemented. |
+
+Disposition rule: F-series findings are actionable by default. They may be
+marked `rejected_as_incorrect` only with written rationale and counter-evidence
+in this plan and the source findings document.
+
+#### Immediate Execution Queue (next session baseline)
+
+1. Re-run full reviewer roster (`Task 4.1` order) on current diff and capture
+   any new high/blocker findings as `R*` updates before new feature changes.
+2. Execute `F1` production retest with sampled live `thread_slugs` from
+   baseline lesson results; append before/after outputs in the findings doc.
+3. Execute `F2` production retest for `category` narrowing and append evidence;
+   if weak, open a mapping-identity follow-up in Phase 2 scope.
+4. Update this plan + prompt together with any status transitions, then re-run
+   required quality gates one-at-a-time.
 
 #### Phase 2 Closeout Gate (required)
 
@@ -528,7 +574,7 @@ and full reviewer convergence.
 
 Document lifecycle invariants and metadata-alias coherence doctrine in ADR updates, including:
 
-- update to [ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) atomicity language to require `must_exist=true`
+- update to [ADR-130](../../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) atomicity language to require `must_exist=true`
 - explicit doctrine that metadata version must match live alias version before promote
 
 **Acceptance Criteria**
@@ -664,6 +710,8 @@ If any gate fails, fix and restart this sequence from `pnpm secrets:scan:all`.
 5. Migration completion includes successful blue/green deploy evidence:
    deploy target, commit SHA, cutover confirmation, and post-deploy
    health/smoke checks.
+6. Active prod validation findings (`F1`/`F2`) are either closed with
+   evidence, or explicitly owner-triaged as incorrect with rationale.
 
 ---
 
@@ -674,28 +722,42 @@ of embedding session-state narratives.
 
 ### Phase 0 Baseline
 
-- Evidence directory path(s)
-- `baseline-summary.md` key values
-- Mapping snapshot and versioned count snapshots
+- `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/`
+- `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/baseline-summary.md`
+- `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/oak-meta-mapping.json`
+- `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/target-versioned-index-counts.json`
 
 ### Recovery Execution
 
-- Ingest/promote command outputs and exit codes
-- Alias/meta/count readbacks for each mutation attempt
-- Failure-branch classification notes (if any)
+- Mapping reconciliation evidence pack:
+  - `apps/oak-search-cli/recovery-evidence/20260315-100031-oak-meta-reconcile/`
+- Promote and post-check evidence:
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-promote.txt`
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-validate-aliases-final.txt`
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-meta-get-final.txt`
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-count-final.txt`
 
 ### Reviewer Cycle
 
-- Reviewer invocation records (all required specialists)
-- Finding dispositions and rationale/evidence for any rejection
-- Re-review closure notes
+- Reviewer findings register: `R1`-`R9` (this plan).
+- Prod validation findings register: `F1`/`F2` (linked source file above).
+- Re-review closure notes are maintained in session notes and reflected by
+  status/disposition updates in this plan and linked findings docs.
+- Test-surface consolidation note: `lesson-document-builder.unit.test.ts` was
+  removed as duplicate coverage of `buildLessonDocument` in
+  `lesson-document-core.unit.test.ts`; retained functional coverage remains in
+  `lesson-document-core.unit.test.ts` and ingest orchestration integration tests.
 
 ### Blue/Green Deploy Proof
 
-- Deploy target/environment
-- Commit SHA
-- Cutover confirmation
-- Post-deploy health/smoke checks
+- Deploy target/environment: production (`oak-prod`).
+- Cutover confirmation and lifecycle health evidence are reflected in:
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-validate-aliases-final.txt`
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-meta-get-final.txt`
+  - `apps/oak-search-cli/recovery-evidence/20260313-130857-phase0-baseline/phase1-post-count-final.txt`
+- Post-deploy search validation sweep evidence:
+  - `.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md`
+- Commit SHA is still required as part of final migration-closeout evidence.
 
 ---
 

@@ -23,7 +23,8 @@ When work starts, promote the selected plan into `../active/`.
 Reclassification note:
 
 - Pending/not-started plans were moved from `active/` to this queue.
-- Active execution is intentionally narrowed to recovery and operator-run runbook only.
+- Recovery and operator-run runbook authorities are now archived as completed.
+- Active execution is currently narrowed to the production validation findings register.
 
 Strategic source backlog: [future/README.md](../future/README.md)  
 In-progress execution: [active/README.md](../active/README.md)

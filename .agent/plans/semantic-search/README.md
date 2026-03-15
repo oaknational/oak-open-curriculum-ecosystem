@@ -10,10 +10,9 @@
 
 ## Active Authority (Only)
 
-- [active/semantic-search-recovery-and-guardrails.execution.plan.md](active/semantic-search-recovery-and-guardrails.execution.plan.md)
-- [active/semantic-search-ingest-runbook.md](active/semantic-search-ingest-runbook.md)
+- [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md)
 
-`active/` is intentionally narrowed to the migration-recovery authority pair.
+`active/` is intentionally narrowed to unresolved production validation findings.
 
 ## Current Queue
 
@@ -34,6 +33,8 @@
 - [archive/completed/search-cli-sdk-boundary-migration.execution.plan.md](archive/completed/search-cli-sdk-boundary-migration.execution.plan.md)
 - [archive/completed/cli-robustness.plan.md](archive/completed/cli-robustness.plan.md)
 - [archive/completed/blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md)
+- [archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md](archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
+- [archive/completed/semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)
 - [archive/completed/mcp-result-pattern-unification.execution.plan.md](archive/completed/mcp-result-pattern-unification.execution.plan.md)
 - [archive/completed/sdk-workspace-separation.md](archive/completed/sdk-workspace-separation.md)
 - [archive/completed/search-dispatch-type-safety.md](archive/completed/search-dispatch-type-safety.md)
