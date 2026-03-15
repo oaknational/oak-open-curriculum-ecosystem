@@ -215,6 +215,27 @@ describe('createRunVersionedIngest', () => {
     }
   });
 
+  it('returns es_error when dispatchBulk reports permanently failed operations', async () => {
+    const failedOps = [
+      { delete: { _index: 'oak_lessons_v1', _id: 'lesson-1' } },
+    ] satisfies BulkOperationEntry[];
+    const run = createRunVersionedIngest({
+      oakClient: fakeOakClient(),
+      esTransport: fakeEsTransport(),
+      target: 'primary',
+      prepareBulkIngestion: stubPrepare(makeBulkIngestionResult()),
+      dispatchBulk: stubDispatch(makeBulkUploadResult({ permanentlyFailed: failedOps })),
+    });
+
+    const result = await run('v1', { bulkDir: '/tmp/bulk' });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe('es_error');
+      expect(result.error.message).toContain('permanently failed');
+    }
+  });
+
   it('returns data_source_error when prepareBulkIngestion throws', async () => {
     const run = createRunVersionedIngest({
       oakClient: fakeOakClient(),

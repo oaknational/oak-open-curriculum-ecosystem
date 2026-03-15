@@ -59,7 +59,6 @@ function addFilterOptions(program: Command): void {
 function addGeneralOptions(program: Command): void {
   program
     .option('--dry-run', 'Preview without writing to ES')
-    .option('-i, --incremental', 'Skip existing documents (default: overwrite)')
     .option('--clear-cache', 'Clear SDK response cache before ingestion')
     .option('--bypass-cache', 'Continue without Redis cache')
     .option('--ignore-cached-404', 'Ignore cached 404 responses')
@@ -118,7 +117,6 @@ ${chalk.yellow('Examples:')}
   $ ingest                                            # Full ingestion (bulk)
   $ ingest --api --subject history --key-stage ks2    # Single subject (API)
   $ ingest --api --all                                # Full ingestion (API)
-  $ ingest --api --all --incremental                  # Resume failed run (API)
 `,
     );
 

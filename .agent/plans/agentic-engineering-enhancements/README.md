@@ -31,6 +31,10 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/sentry-specialist-capability.plan.md` | Plan (Future) | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
 | `future/mcp-specialist-upgrade.plan.md` | Plan (Future) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
+| `future/cyber-security-specialist-capability.plan.md` | Plan (Future) | Broad-remit cyber security capability — posture, threat models, defence in depth, and security-architecture doctrine |
+| `future/web-api-security-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API security capability — HTTP trust boundaries, endpoint security, sessions, callbacks, and API attack surfaces |
+| `future/privacy-specialist-capability.plan.md` | Plan (Future) | Broad-remit privacy capability — privacy by design, minimisation, retention, redaction, and trust posture |
+| `future/web-api-gdpr-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API GDPR capability — personal-data obligations, consent, deletion/export, and retention semantics at API boundaries |
 | `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
 | `future/planning-specialist-capability.plan.md` | Plan (Future) | Planning specialist — plan architecture, lifecycle, discoverability, documentation sync |
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
@@ -43,7 +47,7 @@ Plans and research for hardening the agentic engineering practice through physic
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Queued or active execution**: [current/README.md](current/README.md) then [active/README.md](active/README.md)
-3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation
+3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation -> Agent Classification Taxonomy
 4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
 
 ## Document Roles (DRY)

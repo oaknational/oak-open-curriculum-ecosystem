@@ -8,7 +8,7 @@ source_research:
   - "../future/04-retrieval-quality-engine/learning-graph-surfaces.research.md"
   - "../future/04-retrieval-quality-engine/document-relationships.md"
 depends_on:
-  - "../active/bulk-metadata-quick-wins.execution.plan.md"
+  - "../current/bulk-metadata-quick-wins.execution.plan.md"
 todos:
   - id: phase-0-scope-lock
     content: "Phase 0: Lock the exact derived fields and summary surfaces for threads and sequences, keeping small-index constraints explicit."
@@ -70,7 +70,7 @@ At the end of this plan:
 
 ## Prerequisites
 
-- [bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md)
+- [bulk-metadata-quick-wins.execution.plan.md](../current/bulk-metadata-quick-wins.execution.plan.md)
 
 This queue item follows the active bulk-metadata stream and the queued
 keyword-definition asset plan. The separate
@@ -202,5 +202,5 @@ materially.
 | [../future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md](../future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md) | Primary evidence for this plan |
 | [../future/04-retrieval-quality-engine/learning-graph-surfaces.research.md](../future/04-retrieval-quality-engine/learning-graph-surfaces.research.md) | Cross-cutting relationship surfaces that may later consume these enrichments |
 | [../future/04-retrieval-quality-engine/document-relationships.md](../future/04-retrieval-quality-engine/document-relationships.md) | Follow-on retrieval plan using richer relationship context |
-| [../active/bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md) | Upstream asset-widening plan that supports later enrichments |
+| [../current/bulk-metadata-quick-wins.execution.plan.md](../current/bulk-metadata-quick-wins.execution.plan.md) | Upstream asset-widening plan that supports later enrichments |
 | [keyword-definition-assets.execution.plan.md](keyword-definition-assets.execution.plan.md) | Sequenced prior plan that may provide canonical term assets for enrichment inputs |

@@ -1,6 +1,6 @@
 ---
 name: Semantic Search Ingest Runbook (Operator-Run)
-last_updated: 2026-03-14
+last_updated: 2026-03-15
 status: active
 ---
 
@@ -11,7 +11,8 @@ alias lifecycle ingest in the active semantic-search incident lane.
 
 **Proof window gate**: treat this runbook as blocked until
 `semantic-search-recovery-and-guardrails.execution.plan.md` Phase 2
-guardrail tests and Task 2.3 remediation tranche are complete.
+guardrail tests are green at unit+integration levels and Task 2.3 remediation
+scope is complete.
 
 Reviewer finding traceability for this lane:
 
@@ -20,6 +21,13 @@ Reviewer finding traceability for this lane:
 - Findings are actionable by default; reject only when incorrect with explicit
   rationale/evidence in that register.
 - Active must-fix IDs referenced by this runbook: `R1`, `R5`, `R6`, `R9`.
+
+Finding-to-runbook trace map:
+
+- `R1` -> Branch D readback triage and retry/rollback sequencing.
+- `R5` -> Hard sequencing rule and Branch D stop-before-retry discipline.
+- `R6` -> Step 3 pre-ingest coherence gate and Step 5 post-ingest coherence checks.
+- `R9` -> Step 3.5 metadata mapping gate and Branch B mapping reconciliation flow.
 
 ## Document Authority
 
@@ -32,7 +40,7 @@ Reviewer finding traceability for this lane:
 
 - `./semantic-search-recovery-and-guardrails.execution.plan.md`
 - `../../../prompts/semantic-search/semantic-search.prompt.md`
-- `./cli-robustness.plan.md` (supporting evidence only)
+- `../archive/completed/cli-robustness.plan.md` (supporting evidence only)
 - `../archive/completed/search-cli-sdk-boundary-migration.execution.plan.md` (completed lane evidence)
 - `../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md`
 
@@ -62,8 +70,6 @@ Go condition:
 - Active incident lane is `semantic-search-recovery-and-guardrails.execution.plan.md`.
 - `cli-robustness.plan.md` remains supporting evidence only.
 - Boundary evidence lane remains completed.
-- Pre-lock period acknowledged: before lease guardrails are active, one and only
-  one operator-run lifecycle command sequence may execute at a time.
 
 ### Step 0.5 - Capture immutable Phase 0 evidence pack
 
@@ -133,7 +139,7 @@ Go condition:
 
 - No blocking boundary regressions in lint output.
 
-### Step 2 - Bootstrap Alias Health Check (Allowed Exception)
+### Step 2 - Bootstrap Alias Health Check
 
 Run from `apps/oak-search-cli`:
 
@@ -155,6 +161,10 @@ Run from `apps/oak-search-cli`:
 pnpm tsx bin/oaksearch.ts admin validate-aliases
 pnpm tsx bin/oaksearch.ts admin meta get
 ```
+
+This re-check is intentional: Step 2 establishes baseline health, while Step 3
+re-validates immediately before ingest and adds explicit metadata/alias
+coherence gating.
 
 Go condition:
 
@@ -251,7 +261,8 @@ another full ingest:
 1. Validate aliases remain healthy on prior targets.
 2. Verify candidate staged version indexes exist and have expected `_count`
    values for all six curriculum index families.
-3. Confirm `oak_meta` mapping contains `previous_version`.
+3. Confirm `oak_meta` mapping matches the full generated metadata contract,
+   with `previous_version` present as a sentinel field.
 4. Repair metadata/alias coherence before any promote:
    - run `admin validate-aliases` and `admin meta get`
    - reconcile `oak_meta.version` to current live alias target version
@@ -309,7 +320,8 @@ pnpm tsx bin/oaksearch.ts admin count
 
 ## Post-Success Closeout Order (Do Not Reorder)
 
-1. Recovery plan Phase 2 guardrails (tests first, then implementation).
+1. Confirm recovery plan Phase 2 closure criteria are already green before
+   closeout progression.
 2. Recovery plan Phase 3 docs/ADR propagation.
 3. Recovery plan Phase 4 specialist reviewers:
    - `architecture-reviewer-barney`
@@ -344,27 +356,13 @@ Required evidence set:
 4. Confirmation that `previous_version` strict mapping failure path is absent.
 5. Phase 0 evidence directory path plus `baseline-summary.md`.
 6. Confirmation alias targets are concrete and healthy after ingest.
+7. Blue/green deploy success evidence: environment, commit SHA, cutover result,
+   and post-deploy health/smoke checks.
 
-## Current Execution Snapshot (13 March 2026)
+Migration is not complete until all evidence above is attached to the recovery
+plan.
 
-Observed in this session:
+## Current Execution Snapshot
 
-1. Baseline captured on branch `feat/es_index_update`.
-2. Boundary guardrail lint checks pass (no blocking errors).
-3. Bootstrap alias validation passes; all aliases healthy.
-4. Operator ingest run for `v2026-03-12-175109` reached 100% upload and logged
-   `Bulk upload completed successfully`, then failed on metadata commit with:
-   `strict_dynamic_mapping_exception` for dynamic introduction of
-   `previous_version` in strict `oak_meta`.
-5. Read-only mapping check confirmed live `oak_meta` mapping does not yet
-   include `previous_version`.
-6. Alias validation remains healthy and still points to prior targets.
-7. Candidate staged version indexes for `v2026-03-12-175109` exist with
-   expected true parent `_count` values across all six index families.
-
-Immediate next action:
-
-- Continue the recovery lane from Phase 2 guardrails using the rebuilt
-  lifecycle lease and strict mapping-contract checks, then complete
-  docs/ADR closeout and full-gate verification before the next full
-  operator-run lifecycle proof.
+Session-state evidence is maintained in the recovery plan under
+`Evidence Trail`. Keep this runbook procedural only.

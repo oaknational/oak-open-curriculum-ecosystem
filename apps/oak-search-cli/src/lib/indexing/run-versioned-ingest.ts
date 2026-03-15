@@ -75,6 +75,31 @@ function toIngestResult(stats: BulkIngestionStats): IngestResult {
   };
 }
 
+/** Calculate expected indexed document count from bulk ingestion stats. */
+function expectedDocumentCount(stats: BulkIngestionStats): number {
+  return (
+    stats.lessonsIndexed +
+    stats.unitsIndexed +
+    stats.rollupsIndexed +
+    stats.threadsIndexed +
+    stats.sequencesIndexed +
+    stats.sequenceFacetsIndexed
+  );
+}
+
+/** Log preparation summary before dispatching versioned ingest operations. */
+function logPreparationComplete(
+  logger: Logger | undefined,
+  version: string,
+  prepared: BulkIngestionResult,
+): void {
+  logger?.info('Versioned ingest: preparation complete', {
+    version,
+    documents: Math.floor(prepared.operations.length / 2),
+    ...prepared.stats,
+  });
+}
+
 /** Extract error message from an unknown thrown value. */
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -100,10 +125,27 @@ async function dispatchOperations(
   dispatch: DispatchBulkFn,
   esTransport: EsTransport,
   operations: BulkOperations,
+  expectedDocumentCount: number,
   logger: Logger | undefined,
 ): Promise<Result<void, AdminError>> {
   try {
-    await dispatch(esTransport, operations, logger);
+    const uploadResult = await dispatch(esTransport, operations, logger);
+    if (uploadResult.successCount !== expectedDocumentCount) {
+      return err({
+        type: 'es_error',
+        message:
+          'Versioned ingest dispatch failed: expected to index ' +
+          `${expectedDocumentCount} document(s), but indexed ${uploadResult.successCount}.`,
+      });
+    }
+    if (uploadResult.permanentlyFailed.length > 0) {
+      return err({
+        type: 'es_error',
+        message:
+          'Versioned ingest dispatch failed: ' +
+          `${uploadResult.permanentlyFailed.length} bulk operation entries permanently failed after retries.`,
+      });
+    }
     return ok(undefined);
   } catch (error: unknown) {
     return err({
@@ -154,16 +196,13 @@ async function executeVersionedIngest(
   }
 
   const prepared = prepareResult.value;
-  logger?.info('Versioned ingest: preparation complete', {
-    version,
-    documents: Math.floor(prepared.operations.length / 2),
-    ...prepared.stats,
-  });
+  logPreparationComplete(logger, version, prepared);
 
   const dispatchResult = await dispatchOperations(
     dispatch,
     esTransport,
     prepared.operations,
+    expectedDocumentCount(prepared.stats),
     logger,
   );
   if (!dispatchResult.ok) {

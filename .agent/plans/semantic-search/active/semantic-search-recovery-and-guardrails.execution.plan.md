@@ -13,7 +13,7 @@ todos:
     status: in_progress
   - id: phase-3-refactor-docs
     content: "Phase 3 REFACTOR: Consolidate docs, ADR updates, and runbook propagation."
-    status: in_progress
+    status: pending
   - id: phase-4-closeout
     content: "Phase 4 closeout: specialist reviews and full quality gates."
     status: pending
@@ -21,7 +21,7 @@ todos:
 
 # Semantic Search Recovery and Guardrails
 
-**Last Updated**: 2026-03-14  
+**Last Updated**: 2026-03-15  
 **Status**: 🟢 IN PROGRESS  
 **Scope**: Recover the broken Elasticsearch lifecycle state and implement permanent guardrails across code, tests, docs, and operations.
 
@@ -93,6 +93,22 @@ Entry criteria between phases:
 
 ---
 
+## Cross-Phase Mandatory Review Loop
+
+This review loop is mandatory before new implementation work, independent of
+phase ordering:
+
+1. Run the full reviewer roster defined in Phase 4 Task 4.1 in read-only mode.
+2. Implement findings by default; reject only as incorrect with written
+   rationale and evidence.
+3. Re-run affected reviewers iteratively until no unresolved must-fix/high
+   findings remain.
+
+This section is the canonical owner of the "next-session start" review loop.
+Prompt and runbook references must point here rather than restating policy.
+
+---
+
 ## TDD Execution Plan
 
 ### Phase 0 - RED: Baseline and Failure Proofs
@@ -109,44 +125,7 @@ Entry criteria between phases:
 
 **Deterministic Validation**
 
-```bash
-cd apps/oak-search-cli
-RUN_TS="$(date +%Y%m%d-%H%M%S)"
-INDEX_TARGET="${INDEX_TARGET:-primary}" # set to sandbox for sandbox recovery
-EVIDENCE_DIR="recovery-evidence/${RUN_TS}-phase0-baseline"
-mkdir -p "${EVIDENCE_DIR}"
-pnpm tsx bin/oaksearch.ts admin validate-aliases > "${EVIDENCE_DIR}/validate-aliases.txt"
-pnpm tsx bin/oaksearch.ts admin meta get > "${EVIDENCE_DIR}/meta-get.txt"
-pnpm tsx bin/oaksearch.ts admin count > "${EVIDENCE_DIR}/count.txt"
-cat <<'EOF' > "${EVIDENCE_DIR}/baseline-summary.md"
-staged_version: <replace-after-count-analysis>
-live_alias_version: <replace-after-validate-aliases-analysis>
-previous_version_in_mapping: <replace-after-mapping-check>
-mapping_contract_match: <replace-after-generated-vs-live-contract-check>
-EOF
-```
-
-```bash
-cd ../..
-: "${EVIDENCE_DIR:?Set EVIDENCE_DIR from the previous block in the same shell}"
-set -a && source ".env" && set +a
-curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
-  "${ELASTICSEARCH_URL}/oak_meta/_mapping" \
-  > "apps/oak-search-cli/${EVIDENCE_DIR}/oak-meta-mapping.json"
-curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
-  "${ELASTICSEARCH_URL}/_cat/indices/oak_*_v*?h=index,docs.count&format=json" \
-  > "apps/oak-search-cli/${EVIDENCE_DIR}/versioned-index-counts.json"
-jq --arg target "${INDEX_TARGET}" '
-  map(
-    select(
-      ($target == "sandbox" and (.index | test("_sandbox_v")))
-      or
-      ($target == "primary" and ((.index | test("_sandbox_v")) | not))
-    )
-  )
-' "apps/oak-search-cli/${EVIDENCE_DIR}/versioned-index-counts.json" \
-  > "apps/oak-search-cli/${EVIDENCE_DIR}/target-versioned-index-counts.json"
-```
+Execute `semantic-search-ingest-runbook.md` Step 0.5 exactly as written.
 
 **Task Complete When**
 
@@ -189,14 +168,14 @@ pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
 pnpm portability:check
+pnpm lint:fix
 pnpm test # expected non-zero for new RED guardrail tests; capture failure output
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -249,25 +228,8 @@ Select exactly one candidate version using this rule, in order:
 
 **Deterministic Validation**
 
-```bash
-cd apps/oak-search-cli
-EVIDENCE_DIR="<phase0-evidence-dir>"
-STAGED_VERSION="$(awk -F': ' '/staged_version/ {print $2}' "${EVIDENCE_DIR}/baseline-summary.md")"
-pnpm tsx bin/oaksearch.ts admin validate-aliases
-pnpm tsx bin/oaksearch.ts admin meta get
-set -a && source "../../.env" && set +a
-for INDEX in $(jq -r --arg version "${STAGED_VERSION}" '.[] | .index | select(test("_" + $version + "$"))' "${EVIDENCE_DIR}/target-versioned-index-counts.json"); do
-  curl -sS -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
-    "${ELASTICSEARCH_URL}/${INDEX}/_count";
-done
-pnpm tsx bin/oaksearch.ts admin promote --target-version "${STAGED_VERSION}"
-pnpm tsx bin/oaksearch.ts admin validate-aliases
-pnpm tsx bin/oaksearch.ts admin meta get
-for _ in 1 2 3 4 5 6; do
-  pnpm tsx bin/oaksearch.ts admin count && break
-  sleep 5
-done
-```
+Execute `semantic-search-ingest-runbook.md` Branch B salvage sequence exactly
+as written.
 
 **Task Complete When**
 
@@ -324,14 +286,14 @@ pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
 pnpm portability:check
+pnpm lint:fix
 pnpm test
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -425,14 +387,12 @@ pnpm --filter @oaknational/search-cli test
 Apply the currently-known correctness findings to the lifecycle/admin/retrieval
 test surfaces before further feature work in this lane.
 
-**Next-session start rule**
+**Mandatory review-loop reference**
 
-- The first executable action in the next session is a full review/fix/re-review
-  cycle using the required Phase 4 reviewer roster.
-- Do not start new implementation in this lane until that iterative cycle has no
-  unresolved must-fix/high findings.
+Apply `Cross-Phase Mandatory Review Loop` before new implementation work in this
+task scope.
 
-**Scope (must be addressed in next session)**
+**Remaining scope required for Phase 2 -> Phase 3 entry**
 
 1. Reclassify misnamed tests so unit tests remain pure/no-mock:
    - move IO/mocked cases out of `*.unit.test.ts` into
@@ -518,14 +478,14 @@ pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
 pnpm portability:check
+pnpm lint:fix
 pnpm test
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -555,6 +515,10 @@ Required surfaces:
 pnpm markdownlint:root
 ```
 
+Task-level deterministic validation is markdownlint; semantic consistency and
+cross-doc doctrine alignment are validated in Phase 4 via `docs-adr-reviewer`
+and full reviewer convergence.
+
 **Task Complete When**
 
 - The listed docs are updated and mutually consistent with phase ordering,
@@ -564,7 +528,7 @@ pnpm markdownlint:root
 
 Document lifecycle invariants and metadata-alias coherence doctrine in ADR updates, including:
 
-- update to ADR-130 atomicity language to require `must_exist=true`
+- update to [ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md) atomicity language to require `must_exist=true`
 - explicit doctrine that metadata version must match live alias version before promote
 
 **Acceptance Criteria**
@@ -578,12 +542,20 @@ Document lifecycle invariants and metadata-alias coherence doctrine in ADR updat
 pnpm markdownlint:root
 ```
 
+Task-level deterministic validation is markdownlint; semantic consistency and
+cross-doc doctrine alignment are validated in Phase 4 via `docs-adr-reviewer`
+and full reviewer convergence.
+
 **Task Complete When**
 
 - ADR updates are linked from the ADR index and contain explicit doctrine for
   alias/metadata coherence and `must_exist=true` swap semantics.
 
 #### Phase 3 Closeout Gate (required)
+
+Gate sequence duplication note: this command sequence is intentionally repeated
+per phase for self-contained execution. If it changes, update each phase
+closeout gate copy.
 
 ```bash
 pnpm secrets:scan:all
@@ -592,14 +564,14 @@ pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
 pnpm portability:check
+pnpm lint:fix
 pnpm test
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -670,14 +642,14 @@ pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
 pnpm subagents:check
 pnpm portability:check
+pnpm lint:fix
 pnpm test
-pnpm test:ui
 pnpm test:e2e
+pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -689,6 +661,41 @@ If any gate fails, fix and restart this sequence from `pnpm secrets:scan:all`.
 2. New invariants prevent recurrence of the same drift class.
 3. All quality gates pass.
 4. Documentation and ADR surfaces are consistent and discoverable.
+5. Migration completion includes successful blue/green deploy evidence:
+   deploy target, commit SHA, cutover confirmation, and post-deploy
+   health/smoke checks.
+
+---
+
+## Evidence Trail
+
+Canonical evidence location for this lane. Other docs should link here instead
+of embedding session-state narratives.
+
+### Phase 0 Baseline
+
+- Evidence directory path(s)
+- `baseline-summary.md` key values
+- Mapping snapshot and versioned count snapshots
+
+### Recovery Execution
+
+- Ingest/promote command outputs and exit codes
+- Alias/meta/count readbacks for each mutation attempt
+- Failure-branch classification notes (if any)
+
+### Reviewer Cycle
+
+- Reviewer invocation records (all required specialists)
+- Finding dispositions and rationale/evidence for any rejection
+- Re-review closure notes
+
+### Blue/Green Deploy Proof
+
+- Deploy target/environment
+- Commit SHA
+- Cutover confirmation
+- Post-deploy health/smoke checks
 
 ---
 
@@ -709,5 +716,4 @@ If any gate fails, fix and restart this sequence from `pnpm secrets:scan:all`.
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
 - `docs/operations/elasticsearch-ingest-lifecycle.md`
-- `.agent/plans/semantic-search/active/cli-robustness.plan.md`
-- `.agent/plans/semantic-search/active/semantic-search-scheduled-refresh.operations.plan.md`
+- `.agent/plans/semantic-search/archive/completed/cli-robustness.plan.md`

@@ -1,10 +1,16 @@
 # ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine
 
-**Status**: Accepted (not yet implemented)
+**Status**: Deferred (out of active migration scope)
 
 **Deciders**: Development Team
 
 **Date**: 2026-03-13
+
+**Scope Note (2026-03-14)**:
+This ADR remains documented research and doctrine context only. It is not part
+of the active migration completion lane. Active migration completion requires
+blue/green lifecycle success and deploy evidence under ADR-130 and the recovery
+execution plan.
 
 **Related ADRs**:
 

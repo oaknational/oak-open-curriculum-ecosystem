@@ -14,7 +14,6 @@ import {
 import { ingestLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
 import { parseArgs, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient, CacheRequiredError } from './ingest-client-factory.js';
-import { setIngestionMode } from '../../indexing/bulk-action-factory.js';
 import type { IngestionResult } from './ingest-output.js';
 import {
   printHeader,
@@ -40,18 +39,6 @@ async function handleCacheClearing(
     const deleted = await clearSdkCache(env);
     ingestLogger.debug('Cache cleared', { deletedEntries: deleted });
   }
-}
-
-/** Configure ingestion mode based on --incremental flag. */
-function configureIngestionMode(args: CliArgs): void {
-  const ingestionMode = args.incremental ? 'incremental' : 'force';
-  setIngestionMode(ingestionMode);
-  ingestLogger.info('Ingestion mode configured', {
-    mode: ingestionMode,
-    behavior: args.incremental
-      ? 'skip existing documents (resumable)'
-      : 'overwrite existing documents',
-  });
 }
 
 /** Execute ingestion and return result with duration. */
@@ -81,7 +68,6 @@ async function executeIngestion(
 async function runApiIngestion(args: CliArgs, env: SearchCliEnv): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
-  configureIngestionMode(args);
   await handleCacheClearing(args, env);
 
   // In dry-run mode, bypass cache to avoid Redis network IO
@@ -140,7 +126,6 @@ async function runBulkIngestion(args: CliArgs, env: SearchCliEnv, bulkDir: strin
   const argsWithBulkDir: CliArgs & { readonly bulkDir: string } = { ...args, bulkDir };
   resetIngestionErrorCollector();
   printBulkHeader(argsWithBulkDir);
-  configureIngestionMode(argsWithBulkDir);
   await handleCacheClearing(argsWithBulkDir, env);
 
   // In dry-run mode, bypass cache to avoid Redis network IO

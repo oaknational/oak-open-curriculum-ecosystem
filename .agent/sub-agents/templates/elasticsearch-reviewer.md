@@ -99,7 +99,7 @@ Load only documents whose "Load when" condition matches the current review. Do n
 | `docs/architecture/architectural-decisions/089-index-everything-principle.md` | Index-everything principle |
 | `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md` | Bulk retry strategy |
 | `docs/architecture/architectural-decisions/130-blue-green-index-swapping.md` | Blue/green alias swap lifecycle |
-| `docs/architecture/architectural-decisions/136-incremental-refresh-bulk-api-partial-update-doctrine.md` | Incremental refresh or partial update semantics |
+| `docs/architecture/architectural-decisions/136-incremental-refresh-bulk-api-partial-update-doctrine.md` | Incremental refresh or partial update semantics (load only when that lane is explicitly in scope) |
 | `docs/operations/elasticsearch-ingest-lifecycle.md` | Operational ingest procedure |
 | `docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md` | Transcript-aware RRF normalisation |
 | `docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md` | Known-answer-first methodology |
@@ -116,7 +116,7 @@ Load only documents whose "Load when" condition matches the current review. Do n
 
 **Review stance**: Assess against current official best practice, not against what we happen to have built. If our implementation works but could be better aligned with current guidance, say so.
 
-**Settled doctrine**: ADR-136 establishes that Bulk API partial updates preserve ELSER embeddings when `semantic_text` fields are omitted, while the Update API does not. This is a hard invariant. Any code path that updates documents containing `semantic_text` fields must be verified against this doctrine.
+**Deferred doctrine note**: ADR-136 is currently deferred from the active migration lane. Apply ADR-136 checks only when reviewing explicit incremental-refresh work.
 
 ## When Invoked
 
@@ -187,8 +187,8 @@ and `docs/operations/elasticsearch-ingest-lifecycle.md`, then verify:
 - [ ] Pipeline handles full reindex from fresh bulk data
 - [ ] Mapping or analyser changes are validated against a fresh reindex cycle
 - [ ] Processing steps are idempotent and repeatable from a clean download
-- [ ] ADR-136 hard invariants enforced (Bulk API `update` only, no Update API, no scripted updates, `require_alias=true` for incremental writes)
-- [ ] Partial update payloads omit **all** `semantic_text` fields when only metadata changed
+- [ ] If incremental-refresh work is in scope: ADR-136 hard invariants enforced (Bulk API `update` only, no Update API, no scripted updates, `require_alias=true` for incremental writes)
+- [ ] If incremental-refresh work is in scope: partial update payloads omit **all** `semantic_text` fields when only metadata changed
 - [ ] Post-update validation accounts for refresh visibility (explicit `_refresh` before count checks)
 
 ### Index Lifecycle and Alias Management
@@ -198,7 +198,7 @@ Reviews touching aliases, index lifecycle, or rollback mechanisms should conside
 - [ ] Alias swap operations use `must_exist=true` to prevent silent partial success
 - [ ] Alias swap API responses are checked for `errors: true` or non-200 action results
 - [ ] Previous-version indexes are retained for rollback until next successful full re-ingest
-- [ ] Incremental writes target aliases with `require_alias=true` to prevent writes to wrong concrete indexes
+- [ ] If incremental-refresh work is in scope: incremental writes target aliases with `require_alias=true` to prevent writes to wrong concrete indexes
 - [ ] Metadata version in `oak_meta` is consistent with live alias target version before any mutation
 - [ ] Lock mechanism prevents concurrent lifecycle operations
 
@@ -283,7 +283,7 @@ A successful Elasticsearch review:
 - [ ] Authoritative source URLs cited for each finding
 - [ ] Must-read documents loaded; consult-if-relevant documents loaded where applicable
 - [ ] Findings categorised by severity with concrete recommendations
-- [ ] ADR-136 invariants checked where indexing or update paths are in scope (Bulk-only, no Update API, no scripted updates, `require_alias=true`)
+- [ ] ADR-136 invariants checked only when incremental-refresh work is in scope (Bulk-only, no Update API, no scripted updates, `require_alias=true`)
 - [ ] Appropriate delegations to related specialists flagged
 
 ## Key Principles

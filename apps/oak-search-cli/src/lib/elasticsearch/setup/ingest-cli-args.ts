@@ -25,7 +25,6 @@ export interface CliArgs {
   readonly clearCache: boolean;
   readonly all: boolean;
   readonly bypassCache: boolean;
-  readonly incremental: boolean;
   readonly ignoreCached404: boolean;
   readonly api: boolean;
   readonly bulkDir: string | undefined;
@@ -43,7 +42,6 @@ interface ParsedOptions {
   readonly keyStage: KeyStage[];
   readonly index: SearchIndexKind[];
   readonly dryRun?: boolean;
-  readonly incremental?: boolean;
   readonly clearCache?: boolean;
   readonly bypassCache?: boolean;
   readonly ignoreCached404?: boolean;
@@ -67,7 +65,6 @@ function buildHelpArgs(): CliArgs {
     clearCache: false,
     all: false,
     bypassCache: false,
-    incremental: false,
     ignoreCached404: false,
     api: false,
     bulkDir: undefined,
@@ -107,7 +104,6 @@ function buildCliArgs(opts: ParsedOptions): CliArgs {
     clearCache: boolFlag(opts.clearCache),
     all: allFlag,
     bypassCache: boolFlag(opts.bypassCache),
-    incremental: boolFlag(opts.incremental),
     ignoreCached404: boolFlag(opts.ignoreCached404),
     api: apiMode,
     bulkDir: opts.bulkDir,

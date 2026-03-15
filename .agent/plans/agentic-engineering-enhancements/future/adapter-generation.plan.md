@@ -10,7 +10,8 @@ Platform adapters (`.claude/agents/`, `.cursor/agents/`, `.claude/rules/`,
 around canonical artefacts in `.agent/`. They are boilerplate — 5–15 lines each,
 differing only in platform-specific frontmatter fields (tools, model, readonly).
 
-With the planned specialist roster reaching ~25 agents across 4 platforms, the
+With the planned specialist roster reaching **dozens of agents** across 4
+platforms, the
 adapter count will reach ~100+ files. Manual maintenance at this scale:
 
 - Creates drift between canonical templates and platform adapters
@@ -90,7 +91,7 @@ fresh?" — comparing the manifest + templates against the generated output.
 |---|---|
 | New specialist = write 4–6 adapter files | New specialist = add 1 manifest entry + `pnpm generate:adapters` |
 | Rename = find-and-replace across 100 files | Rename = change manifest + regenerate |
-| Taxonomy WS3 = manually create 100 files | Taxonomy WS3 = update manifest + regenerate |
+| Taxonomy WS3 = manually create many wrapper files | Taxonomy WS3 = update manifest + regenerate |
 | Drift between canonical and adapter | Impossible — adapters are derived |
 | `portability:check` detects missing files | `portability:check` detects stale generation |
 
@@ -128,5 +129,5 @@ fresh?" — comparing the manifest + templates against the generated output.
 This plan promotes to `current/` when:
 
 1. The specialist count reaches a point where manual adapter maintenance is
-   demonstrably unsustainable (arguably already the case at 17 specialists)
+   demonstrably unsustainable (arguably already the case now)
 2. OR: the taxonomy rename is about to begin (this plan should execute first)

@@ -113,26 +113,13 @@ describe('parseArgs', () => {
     });
   });
 
-  describe('--incremental flag', () => {
-    it('defaults to false (overwrite mode)', () => {
-      const result = parseArgs([]);
-      expect(result.incremental).toBe(false);
+  describe('legacy incremental flags', () => {
+    it('rejects --incremental', () => {
+      expect(() => parseArgs(['--incremental'])).toThrow("unknown option '--incremental'");
     });
 
-    it('sets incremental to true when --incremental is specified', () => {
-      const result = parseArgs(['--incremental']);
-      expect(result.incremental).toBe(true);
-    });
-
-    it('sets incremental to true when -i is specified', () => {
-      const result = parseArgs(['-i']);
-      expect(result.incremental).toBe(true);
-    });
-
-    it('works with other flags', () => {
-      const result = parseArgs(['--incremental', '--dry-run']);
-      expect(result.incremental).toBe(true);
-      expect(result.dryRun).toBe(true);
+    it('rejects -i', () => {
+      expect(() => parseArgs(['-i'])).toThrow("unknown option '-i'");
     });
   });
 
@@ -169,22 +156,19 @@ describe('parseArgs', () => {
         'maths',
         '--key-stage',
         'ks4',
-        '--incremental',
         '--bypass-cache',
         '--verbose',
         '--dry-run',
       ]);
       expect(result.subjects).toEqual(['maths']);
       expect(result.keyStages).toEqual(['ks4']);
-      expect(result.incremental).toBe(true);
       expect(result.bypassCache).toBe(true);
       expect(result.verbose).toBe(true);
       expect(result.dryRun).toBe(true);
     });
 
     it('short flags work together', () => {
-      const result = parseArgs(['-i', '-v']);
-      expect(result.incremental).toBe(true);
+      const result = parseArgs(['-v']);
       expect(result.verbose).toBe(true);
     });
   });

@@ -147,7 +147,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-133: CLI Resource Lifecycle Management](133-cli-resource-lifecycle-management.md)
 - [ADR-134: Search SDK Capability Surface Boundary](134-search-sdk-capability-surface-boundary.md)
 - [ADR-135: Agent Classification Taxonomy](135-agent-classification-taxonomy.md)
-- [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md)
+- [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md) ← **Deferred** (out of active migration scope)
 - [ADR-137: Specialist Operational Tooling Layer](137-specialist-operational-tooling-layer.md)
 
 ## Key Architectural Decisions
@@ -212,7 +212,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
 - **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
-- **[ADR-136](136-incremental-refresh-bulk-api-partial-update-doctrine.md)** - Incremental refresh doctrine: Bulk API partial updates preserve ELSER embeddings; per-document fingerprinting; full re-ingest fallback
+- **[ADR-136](136-incremental-refresh-bulk-api-partial-update-doctrine.md)** - Deferred doctrine reference (not part of active migration completion scope)
 - **[ADR-133](133-cli-resource-lifecycle-management.md)** - CLI resource lifecycle ownership and `withEsClient` cleanup pattern
 - **[ADR-134](134-search-sdk-capability-surface-boundary.md)** - Search SDK read/admin capability boundary, internal encapsulation, and lint-enforced import policy
 

@@ -53,7 +53,7 @@ export function printBulkHeader(args: CliArgs & { readonly bulkDir: string }): v
   ingestLogger.info('Bulk Ingestion', {
     bulkDir: args.bulkDir,
     dryRun: args.dryRun,
-    incremental: args.incremental,
+    mode: 'overwrite',
   });
 }
 
@@ -183,7 +183,10 @@ export async function executeBulkIngestion(
   const uploadResult = await dispatchOperations(operations, createUploadConfig(args));
   printBulkSummary(stats, duration);
   printCacheStats(client);
-  handleUploadComplete(uploadResult, args.bulkDir);
+  const uploadCompleteResult = handleUploadComplete(uploadResult, args.bulkDir, summary.totalDocs);
+  if (!uploadCompleteResult.ok) {
+    throw uploadCompleteResult.error;
+  }
 
   return { stats, duration, result: createIngestionResult(operations, target) };
 }

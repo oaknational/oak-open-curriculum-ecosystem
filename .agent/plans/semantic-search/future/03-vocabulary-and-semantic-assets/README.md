@@ -45,7 +45,7 @@ Active and queued work promoted from this boundary is listed in
 
 | Execution Plan | Purpose |
 |----------------|---------|
-| [../../active/bulk-metadata-quick-wins.execution.plan.md](../../active/bulk-metadata-quick-wins.execution.plan.md) | Active widening of the bulk metadata surface and standalone session entry for this boundary |
+| [../../current/bulk-metadata-quick-wins.execution.plan.md](../../current/bulk-metadata-quick-wins.execution.plan.md) | Queued widening of the bulk metadata surface and standalone session entry for this boundary |
 | [../../current/keyword-definition-assets.execution.plan.md](../../current/keyword-definition-assets.execution.plan.md) | Follow-on queued promotion of keyword definitions into canonical assets |
 
 ---

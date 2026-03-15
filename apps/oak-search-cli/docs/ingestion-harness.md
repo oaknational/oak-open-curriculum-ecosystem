@@ -10,7 +10,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 - Run entirely via the official `@elastic/elasticsearch` client with structured logging and a dry-run mode for inspections.
 - Rely on the existing ingestion helpers for bulk operations so behaviour mirrors production code paths.
 - Provide automated coverage by stubbing the Oak SDK client and Elasticsearch transport, plus a manual drill for end-to-end verification against a real deployment.
-- Support batch-atomic commits by subject/keystage for reliable incremental ingestion.
+- Support batch-atomic commits by subject/keystage for reliable ingestion runs.
 
 ## Components
 
@@ -47,7 +47,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
   - `fixtureRoot` – defaults to the bundled fixture directory.
   - Optional overrides for `client`, `keyStages`, `subjects`, `es` transport, and `logger` (defaults to `ingestLogger`).
   - `target` – defaults to the current environment target but overridable per invocation.
-  - `granularity` – batch granularity (`subject-keystage` or `subject`) for incremental commits.
+  - `granularity` – batch granularity (`subject-keystage` or `subject`) for batch-atomic commits.
 - API surface:
   - `prepareBulkOperations()` – builds bulk operations with index names resolved via `IndexResolverFn` for the configured target, and returns `{ operations, summary }` (with per-index counts and total docs).
   - `ingest({ dryRun, verbose })` – processes batches incrementally, resolving index names per batch via `IndexResolverFn`, dispatching to Elasticsearch after each batch for atomic commits, and returns `{ operations, summary, metrics, dataIntegrityReport }`.
