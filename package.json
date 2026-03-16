@@ -27,6 +27,7 @@
     "lint:fix": "turbo run --continue lint:fix",
     "lint:clean": "rm -rf **/.eslintcache",
     "test": "turbo run --continue test",
+    "test:field-integrity": "node scripts/run-field-integrity-tests.mjs",
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",
     "test:ui": "turbo run --continue test:ui",

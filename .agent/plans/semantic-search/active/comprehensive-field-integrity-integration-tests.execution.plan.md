@@ -4,25 +4,66 @@ overview: "Design and implement comprehensive integration tests proving all sear
 todos:
   - id: phase-0-foundation
     content: "Phase 0: Build canonical all-field inventory and stage-contract matrix from generated schemas and mappings."
-    status: in_progress
+    status: completed
   - id: phase-1-stage-tests
     content: "Phase 1: Implement stage-level integration suites proving per-field handling at extraction, document-build, and bulk-operation assembly stages."
-    status: pending
+    status: completed
   - id: phase-2-end-to-end-tests
     content: "Phase 2: Implement cross-stage integration suites proving end-to-end field integrity from source payloads to indexed documents."
-    status: pending
+    status: completed
   - id: phase-3-hardening
     content: "Phase 3: Run full quality gates, specialist reviews, and documentation propagation with deterministic evidence."
-    status: pending
+    status: in_progress
 ---
 
 # Comprehensive Field Integrity Integration Tests
 
-**Status**: 🟡 PLANNING  
+**Status**: 🟡 IMPLEMENTATION IN PROGRESS (handover refresh)  
 **Scope**: Prove, via comprehensive integration tests, that all fields for all semantic-search index families are correctly handled at each pipeline stage and across the pipeline end-to-end.
-**Execution mode for this authority**: planning and review only until explicit implementation go/no-go is recorded.
+**Execution mode for this authority**: implementation and hardening are active; final closure requires refreshed reviewer round + findings register sync.
 **Primary intent**: produce deterministic proof that the search data pipeline is
 built and wired correctly before any further ingest attempt.
+
+## Progress Audit (2026-03-15)
+
+### What Has Been Done
+
+- `packages/libs/search-contracts` created and registered, with canonical field inventory + ingest/retrieval stage matrices derived from generated search artefacts.
+- Machine-readable ledger and manifest created:
+  - `.agent/plans/semantic-search/active/field-gap-ledger.json`
+  - `.agent/plans/semantic-search/active/field-integrity-test-manifest.json`
+- Field-integrity suites implemented across planned stages:
+  - extraction, builder, bulk ops, cross-stage, retrieval integration/unit, readback integration, ledger/manifest contract checks.
+- Readback audit operation implemented with split responsibilities:
+  - CLI parsing, ledger validation, retry policy, ES dependency adapter, and core audit orchestration.
+- Documentation and architecture propagation implemented:
+  - `@oaknational/search-contracts` in architecture/docs indexes,
+  - ADR-138 added for shared field-contract surface,
+  - CLI + contracts README updates.
+
+### What Is Good
+
+- Contract surface is shared and boundary-safe (`libs` package consumed by CLI and SDK).
+- Manifest-driven `test:field-integrity` is explicit-path and fail-fast (no glob ambiguity).
+- Retry/readback logic now has dedicated unit + integration coverage, including transient status handling and zero-count retry behaviour.
+- Full gates currently pass (`pnpm type-check`, `pnpm test:field-integrity`, `pnpm check`).
+
+### What Needs Revisiting
+
+- Re-run the mandatory specialist reviewer cycle on the **latest** final diff and record disposition in the active findings register with explicit rationale links.
+- Ensure operator evidence for Task 2.3 is refreshed and stored at
+  `.agent/plans/semantic-search/active/evidence/task-2.3.evidence.json` using the current audit command/output.
+- Sync final `F1`/`F2` dispositions in
+  `.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md`
+  so plan/prompt/findings state is fully coherent before declaring completion.
+
+### Fresh-Session Restart Checklist
+
+1. Re-ground (`start-right-thorough` + foundation directives).
+2. Re-run reviewer quartet (`architecture-reviewer-barney`, `docs-adr-reviewer`, `test-reviewer`, `elasticsearch-reviewer`) against current worktree.
+3. Apply/finalise any residual findings and re-run `pnpm check`.
+4. Refresh operator evidence JSON for readback audit.
+5. Update findings register and then mark Phase 3 complete.
 
 ---
 
@@ -103,7 +144,7 @@ intermediate state or implementation internals.
 - ❌ Re-architecting the ingestion pipeline in this plan.
 - ❌ Adding compatibility layers or fallback dynamic-mapping behaviours.
 - ❌ Expanding scope beyond semantic-search index families used by Oak search.
-- ❌ Starting implementation in this planning cycle.
+- ❌ Introducing new scope unrelated to field-integrity closure for `F1`/`F2`.
 
 ---
 

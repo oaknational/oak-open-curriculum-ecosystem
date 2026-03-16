@@ -27,6 +27,22 @@ Current lane objective:
 - Keep work anchored to active findings `F1`/`F2` and update dispositions with
   deterministic evidence.
 
+Current handover state (fresh-session anchor):
+
+- Phase 0/1/2 implementation work is complete in the current worktree:
+  - shared `search-contracts` package,
+  - manifest-driven field-integrity suite,
+  - stage and cross-stage integrity tests,
+  - retrieval integrity tests,
+  - ledger-driven readback audit operation.
+- Hardening is partially complete:
+  - documentation + ADR propagation has been applied,
+  - current gates pass (`pnpm type-check`, `pnpm test:field-integrity`, `pnpm check`).
+- Remaining closure work is evidence/disposition coherence:
+  - rerun final specialist review round on latest diff,
+  - refresh operator Task 2.3 evidence JSON,
+  - synchronise final `F1`/`F2` dispositions in active findings register.
+
 ---
 
 ## Session Start Sequence
@@ -63,17 +79,17 @@ Policy:
 - If a short admin check runs longer than 10 minutes, stop and escalate to the
   operator before any further mutation commands.
 
-### Step 3: Plan refinement (next session priority)
+### Step 3: Closure refinement (next session priority)
 
 Use the active execution plan as the source of truth. In this order:
 
-1. confirm operational readiness checklist status;
-2. confirm pre-ingest readiness gate status;
-3. close any remaining ambiguity in acceptance criteria/evidence requirements.
+1. confirm the remaining "needs revisiting" items in the execution plan;
+2. confirm pre-ingest readiness gate status with current evidence;
+3. close any remaining ambiguity in `F1`/`F2` disposition wording/evidence links.
 
-Implementation starts only after explicit go/no-go closure is recorded.
+Implementation is already active in this lane; no new scope starts until closure items above are complete.
 
-### Step 4: Planning review/fix cycle (mandatory before implementation)
+### Step 4: Final reviewer closure cycle (mandatory before completion)
 
 Run reviewer cycle against the updated plan and this prompt:
 
@@ -88,13 +104,13 @@ Policy:
 - Fix all reviewer issues and suggestions unless explicitly rejected as
   incorrect with written rationale.
 - Re-run affected reviewers after each fix round until closure.
-- `test-reviewer` in this step validates plan/prompt alignment with testing
-  strategy; once implementation begins, run it again on concrete test files.
+- `test-reviewer` validates both plan/prompt alignment and the concrete test
+  surfaces now present in the worktree.
 
-### Step 5: Run review/fix cycle for active findings implementation
+### Step 5: Run review/fix cycle for active findings closure
 
-After plan go/no-go closure, run specialist review/fix loops on code/docs touched
-while closing `F1`/`F2`.
+Run specialist review/fix loops on code/docs touched while finalising `F1`/`F2`
+status and evidence coherence.
 
 ### Step 6: Deep-update discipline for prompt/findings register
 

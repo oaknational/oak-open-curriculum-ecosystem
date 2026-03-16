@@ -127,6 +127,7 @@ pnpm markdownlint:root    # Markdown lint
 pnpm subagents:check    # Validate sub-agent standards
 pnpm lint:fix       # Lint
 pnpm test           # Unit and integration tests
+pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
 pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
@@ -149,7 +150,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 - `apps/` – runnable apps that provide services to users
 - `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
-- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`)
+- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`)
 

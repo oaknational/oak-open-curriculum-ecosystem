@@ -104,6 +104,8 @@ function createLessonTransformer(
         unitSlug: lesson.unitSlug,
         unitTitle: lesson.unitTitle,
         canonicalUrl: generateUnitUrlFromSequence(lesson.unitSlug, sequenceSlug),
+        threadSlugs: unit?.threads.map((thread) => thread.slug) ?? [],
+        threadTitles: unit?.threads.map((thread) => thread.title) ?? [],
       };
       return transformBulkLessonToESDoc({ lesson, unitInfo, years });
     });

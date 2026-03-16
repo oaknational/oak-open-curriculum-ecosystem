@@ -149,6 +149,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-135: Agent Classification Taxonomy](135-agent-classification-taxonomy.md)
 - [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md) ← **Deferred** (out of active migration scope)
 - [ADR-137: Specialist Operational Tooling Layer](137-specialist-operational-tooling-layer.md)
+- [ADR-138: Shared Search Field Contract Surface](138-shared-search-field-contract-surface.md)
 
 ## Key Architectural Decisions
 
@@ -188,6 +189,7 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-074](074-elastic-native-first-philosophy.md)** - Elastic-Native-First Philosophy for AI/ML features
 - **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-118, 072, 073)
 - **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
+- **[ADR-138](138-shared-search-field-contract-surface.md)** - Shared field-inventory and stage-matrix contract surface for cross-workspace field-integrity checks
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
 - **[ADR-080](080-curriculum-data-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal

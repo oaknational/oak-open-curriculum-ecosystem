@@ -10,6 +10,7 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 - [ADR-063](../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) - Synonyms source-of-truth and deployment flow
 - [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) - Elastic-native-first strategy
 - [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER embedding strategy
+- [ADR-138](../../docs/architecture/architectural-decisions/138-shared-search-field-contract-surface.md) - Shared field-inventory and stage-matrix contract surface
 - [ADR-048](../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ## What It Does
@@ -45,6 +46,11 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 | `oaksearch observe` | telemetry, summary, purge                                                                                                        | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
+
+Field-integrity tooling:
+
+- Root-level `pnpm test:field-integrity` runs the explicit manifest-based field-integrity suites.
+- Workspace-scoped `pnpm --filter @oaknational/search-cli ingest:field-readback-audit` runs the ledger-driven readback audit operation and can emit JSON evidence (`--emit-json`).
 
 ## SDK Capability Boundary (ADR-134)
 

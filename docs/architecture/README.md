@@ -32,7 +32,7 @@ ADRs define how the system should work and are the architectural source of truth
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
   - `packages/core/` – foundational shared code (result/env/eslint/openapi adapter)
-  - `packages/libs/` – shared runtime libraries (logger, env-resolution)
+  - `packages/libs/` – shared runtime libraries (logger, env-resolution, search-contracts)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools

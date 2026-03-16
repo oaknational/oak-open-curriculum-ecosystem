@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "description": "Field integrity gap ledger for semantic-search index families.",
+  "statuses": [
+    "unknown",
+    "expected_empty_with_precondition",
+    "must_be_populated",
+    "verified"
+  ],
+  "fields": [
+    {
+      "indexFamily": "lessons",
+      "fieldName": "thread_slugs",
+      "stage": "source_extraction",
+      "status": "must_be_populated",
+      "findingRefs": ["F1"]
+    },
+    {
+      "indexFamily": "lessons",
+      "fieldName": "thread_slugs",
+      "stage": "ingest_dispatch_readback",
+      "status": "unknown",
+      "findingRefs": ["F1"]
+    },
+    {
+      "indexFamily": "sequences",
+      "fieldName": "category_titles",
+      "stage": "source_extraction",
+      "status": "must_be_populated",
+      "findingRefs": ["F2"]
+    },
+    {
+      "indexFamily": "sequences",
+      "fieldName": "category_titles",
+      "stage": "ingest_dispatch_readback",
+      "status": "unknown",
+      "findingRefs": ["F2"]
+    },
+    {
+      "indexFamily": "units",
+      "fieldName": "thread_slugs",
+      "stage": "ingest_dispatch_readback",
+      "status": "verified",
+      "findingRefs": []
+    },
+    {
+      "indexFamily": "sequence_facets",
+      "fieldName": "sequence_slug",
+      "stage": "ingest_dispatch_readback",
+      "status": "verified",
+      "findingRefs": []
+    }
+  ]
+}

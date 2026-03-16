@@ -39,6 +39,7 @@
   "dependencies": {
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
+    "@oaknational/search-contracts": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/type-helpers": "workspace:*"
   },

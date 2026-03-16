@@ -37,6 +37,10 @@ export interface LessonUnitInfo {
   readonly unitTitle: string;
   /** Unit canonical URL */
   readonly canonicalUrl: string;
+  /** Optional thread slugs carried through unit relationships. */
+  readonly threadSlugs?: readonly string[];
+  /** Optional thread titles carried through unit relationships. */
+  readonly threadTitles?: readonly string[];
 }
 
 /**
