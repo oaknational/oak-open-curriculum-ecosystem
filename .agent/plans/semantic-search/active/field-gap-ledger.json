@@ -12,8 +12,9 @@
       "indexFamily": "lessons",
       "fieldName": "thread_slugs",
       "stage": "source_extraction",
-      "status": "must_be_populated",
-      "findingRefs": ["F1"]
+      "status": "verified",
+      "findingRefs": ["F1"],
+      "notes": "Confirmed 2026-03-19: source data fully populated (maths-primary 1072/1072 lessons), adapter correctly maps unit.threads to threadSlugs"
     },
     {
       "indexFamily": "lessons",

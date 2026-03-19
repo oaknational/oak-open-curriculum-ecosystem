@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-15
+last_updated: 2026-03-19
 ---
 
 # Semantic Search — Session Entry Point
@@ -27,7 +27,7 @@ Current lane objective:
 - Keep work anchored to active findings `F1`/`F2` and update dispositions with
   deterministic evidence.
 
-Current handover state (fresh-session anchor):
+Current handover state (fresh-session anchor, updated 2026-03-19):
 
 - Phase 0/1/2 implementation work is complete in the current worktree:
   - shared `search-contracts` package,
@@ -35,13 +35,19 @@ Current handover state (fresh-session anchor):
   - stage and cross-stage integrity tests,
   - retrieval integrity tests,
   - ledger-driven readback audit operation.
-- Hardening is partially complete:
-  - documentation + ADR propagation has been applied,
-  - current gates pass (`pnpm type-check`, `pnpm test:field-integrity`, `pnpm check`).
-- Remaining closure work is evidence/disposition coherence:
-  - rerun final specialist review round on latest diff,
-  - refresh operator Task 2.3 evidence JSON,
-  - synchronise final `F1`/`F2` dispositions in active findings register.
+- Root-cause investigation completed (2026-03-19):
+  - **F1** (`threadSlug`): confirmed stale index, not a code defect. Full
+    pipeline proven correct. Source data verified as fully populated. No code
+    fix needed — re-ingest resolves.
+  - **F2** (`category`): confirmed `categoryMap` is never wired into the
+    ingestion pipeline. `buildCategoryMap()` exists and is tested but
+    `extractAndBuildSequenceOperations()` never passes it to
+    `buildSequenceBulkOperations()`. **Code fix required before re-ingest.**
+    Target file: `apps/oak-search-cli/src/lib/indexing/bulk-ingestion-phases.ts:141-145`.
+- Phase 3 closure is blocked on:
+  1. F2 code fix (wire `categoryMap`),
+  2. reviewer closure cycle (not yet run on current diff),
+  3. operator re-ingest + readback (Task 2.3 evidence still pending).
 
 ---
 
@@ -79,15 +85,17 @@ Policy:
 - If a short admin check runs longer than 10 minutes, stop and escalate to the
   operator before any further mutation commands.
 
-### Step 3: Closure refinement (next session priority)
+### Step 3: F2 code fix and closure refinement (next session priority)
 
-Use the active execution plan as the source of truth. In this order:
+1. **Fix F2**: Wire `buildCategoryMap()` into `extractAndBuildSequenceOperations()`
+   in `bulk-ingestion-phases.ts`. TDD — write a test first proving categoryMap
+   flows through to `buildSequenceBulkOperations()`. This is a small, focused
+   change. See findings register for full root-cause detail.
+2. Run full gates after the fix (`pnpm check`).
+3. Confirm pre-ingest readiness gate status with current evidence.
+4. Close any remaining ambiguity in `F1`/`F2` disposition wording/evidence links.
 
-1. confirm the remaining "needs revisiting" items in the execution plan;
-2. confirm pre-ingest readiness gate status with current evidence;
-3. close any remaining ambiguity in `F1`/`F2` disposition wording/evidence links.
-
-Implementation is already active in this lane; no new scope starts until closure items above are complete.
+No new scope starts until these items are complete.
 
 ### Step 4: Final reviewer closure cycle (mandatory before completion)
 

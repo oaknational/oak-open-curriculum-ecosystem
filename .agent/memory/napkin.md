@@ -1,3 +1,50 @@
+## Session 2026-03-19 — Semantic search investigation findings
+
+### F1: `threadSlug` filter returns zero results
+
+**Root cause: stale index, NOT a code defect.**
+
+- Source data is fully populated (maths-primary: 1072/1072 lessons
+  match units, all 125 units have threads, 2868 total thread associations)
+- Adapter correctly maps `unit.threads` → `threadSlugs`
+- Document builder maps `threadSlugs` → `thread_slugs` (keyword field)
+- Cross-stage integrity tests prove the full pipeline
+- The current production index `v2026-03-15-134856` shows
+  `has_thread_slugs = 0` — meaning it was **ingested before the wiring
+  was fixed** or a bug was present at ingest time
+- **Resolution: re-ingest will fix this. No code changes needed.**
+- The gap ledger still has `ingest_dispatch_readback: unknown` for
+  `lessons/thread_slugs` — this can only be resolved by an operator
+  readback after re-ingest
+
+### F2: `category` filter on sequences is a no-op
+
+**Root cause: `categoryMap` is never passed to the sequence builder.**
+
+- `buildSequenceBulkOperations()` accepts optional `categoryMap?` param
+- `extractAndBuildSequenceOperations()` in `bulk-ingestion-phases.ts`
+  calls it with only 3 args (files, sequencesIndex, facetsIndex) —
+  **categoryMap is never passed**
+- `collectCategoryTitles()` returns `[]` when `categoryMap` is undefined
+- `buildCategoryMap()` exists and is tested but **never called** during
+  ingestion
+- The infrastructure is 100% built: category supplementation module,
+  category map builder, `collectCategoryTitles()` all work correctly
+- **Resolution: wire `buildCategoryMap()` into the ingestion pipeline
+  and pass the result to `buildSequenceBulkOperations()`.** Then re-ingest.
+- This requires a code change + re-ingest. Both are needed.
+
+### Pre-ingest readiness assessment
+
+- F1: code is correct, re-ingest alone will fix
+- F2: code change needed (wire categoryMap), then re-ingest
+- Task 2.3 evidence is still `pending-operator-run`
+- Gap ledger has 2 `unknown` statuses (lessons/thread_slugs readback,
+  sequences/category_titles readback) — cannot resolve without operator run
+- The reviewer closure cycle has not been run on the current diff
+
+---
+
 ## Session 2026-03-19 — Practice context integration and fitness upgrade
 
 ### What Was Done — Phase 1: Incoming integration

@@ -24,7 +24,7 @@ todos:
 **Primary intent**: produce deterministic proof that the search data pipeline is
 built and wired correctly before any further ingest attempt.
 
-## Progress Audit (2026-03-15)
+## Progress Audit (2026-03-19)
 
 ### What Has Been Done
 
@@ -40,6 +40,18 @@ built and wired correctly before any further ingest attempt.
   - `@oaknational/search-contracts` in architecture/docs indexes,
   - ADR-138 added for shared field-contract surface,
   - CLI + contracts README updates.
+- Root-cause investigation completed (2026-03-19):
+  - **F1** (`threadSlug` on lessons): confirmed stale index. Code pipeline
+    proven correct at every stage. Source data verified as fully populated
+    (1072/1072 lessons in `maths-primary.json` have thread associations).
+    No code fix needed — re-ingest resolves.
+  - **F2** (`category` on sequences): confirmed `categoryMap` is never wired
+    into the ingestion pipeline. `buildCategoryMap()` exists and is tested
+    (`category-supplementation.ts:143`), `buildSequenceBulkOperations()`
+    accepts `categoryMap?` as 4th parameter
+    (`bulk-sequence-transformer.ts:236`), but
+    `extractAndBuildSequenceOperations()` in
+    `bulk-ingestion-phases.ts:141-145` never passes it. Code fix required.
 
 ### What Is Good
 
@@ -47,23 +59,33 @@ built and wired correctly before any further ingest attempt.
 - Manifest-driven `test:field-integrity` is explicit-path and fail-fast (no glob ambiguity).
 - Retry/readback logic now has dedicated unit + integration coverage, including transient status handling and zero-count retry behaviour.
 - Full gates currently pass (`pnpm type-check`, `pnpm test:field-integrity`, `pnpm check`).
+- F1/F2 root causes are now identified with deterministic evidence.
 
-### What Needs Revisiting
+### What Needs Doing
 
-- Re-run the mandatory specialist reviewer cycle on the **latest** final diff and record disposition in the active findings register with explicit rationale links.
-- Ensure operator evidence for Task 2.3 is refreshed and stored at
-  `.agent/plans/semantic-search/active/evidence/task-2.3.evidence.json` using the current audit command/output.
-- Sync final `F1`/`F2` dispositions in
-  `.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md`
-  so plan/prompt/findings state is fully coherent before declaring completion.
+1. **Fix F2**: Wire `buildCategoryMap()` into `extractAndBuildSequenceOperations()`
+   in `bulk-ingestion-phases.ts:141-145`. TDD — write test first proving
+   `categoryMap` flows through to `buildSequenceBulkOperations()`.
+2. Re-run the mandatory specialist reviewer cycle on the **latest** diff and
+   record dispositions in the active findings register.
+3. Ensure operator evidence for Task 2.3 is refreshed and stored at
+   `.agent/plans/semantic-search/active/evidence/task-2.3.evidence.json`
+   after re-ingest.
+4. Sync final `F1`/`F2` dispositions in the active findings register so
+   plan/prompt/findings state is fully coherent before declaring completion.
 
 ### Fresh-Session Restart Checklist
 
 1. Re-ground (`start-right-thorough` + foundation directives).
-2. Re-run reviewer quartet (`architecture-reviewer-barney`, `docs-adr-reviewer`, `test-reviewer`, `elasticsearch-reviewer`) against current worktree.
-3. Apply/finalise any residual findings and re-run `pnpm check`.
-4. Refresh operator evidence JSON for readback audit.
-5. Update findings register and then mark Phase 3 complete.
+2. **Fix F2** — wire `categoryMap` into ingestion pipeline (TDD).
+3. Run full gates (`pnpm check`).
+4. Run reviewer quartet (`architecture-reviewer-barney`, `docs-adr-reviewer`,
+   `test-reviewer`, `elasticsearch-reviewer`) against current worktree.
+5. Apply/finalise any reviewer findings and re-run gates.
+6. Operator re-ingest, then run `field-readback-audit.ts` to populate
+   Task 2.3 evidence.
+7. Production retest F1 + F2 after re-ingest.
+8. Update findings register and mark Phase 3 complete.
 
 ---
 

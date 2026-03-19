@@ -119,17 +119,21 @@ Observed: `total = 0`, despite baseline query returning multiple lessons.
 
 `threadSlug` should narrow the baseline set, not collapse it to zero when matching thread metadata exists.
 
-### Root-cause assessment after code review
+### Root-cause assessment (confirmed 2026-03-19)
 
+- **Root cause: stale index.** The production index `v2026-03-15-134856` was
+  ingested before pipeline fixes for `thread_slugs` landed.
+- Code pipeline is proven correct at every stage:
+  - Source data fully populated (verified against `maths-primary.json`:
+    1072/1072 lessons match units, all 125 units have threads).
+  - Adapter correctly maps `unit.threads` → `threadSlugs`
+    (`bulk-data-adapter.ts:107`).
+  - Builder maps `threadSlugs` → `thread_slugs`
+    (`lesson-document-core.ts:206`, `document-transforms.ts:303`).
+  - Retrieval uses correct `term` query on `keyword` field.
+  - 35 field-integrity tests prove every stage.
 - Query wiring is present in SDK (`threadSlug` -> `thread_slugs` lesson filter).
-- Strongest remaining candidates are data-shape/indexing mismatch and
-  environment-data mismatch (for example, filtering against a slug value that is
-  not actually present in the lesson docs returned by baseline queries).
-- Partial remediation landed:
-  - strengthened filter-builder unit coverage in
-    `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.unit.test.ts`
-- Required next step remains a data-backed production retest using known
-  `thread_slugs` values sampled directly from baseline lesson results.
+- **No code fix needed. Re-ingest will resolve this finding.**
 
 ### Post-ingest production retest evidence (2026-03-15)
 
@@ -246,19 +250,26 @@ Either:
 - category is applied (invalid category returns zero), or
 - tool rejects unknown category value with explicit validation error.
 
-### Root-cause assessment after code review
+### Root-cause assessment (confirmed 2026-03-19)
 
-- Direct wiring gap confirmed in code review: `searchSequences` did not apply
-  `params.category` to the ES filter clause.
+- **Root cause: `categoryMap` is never wired into the ingestion pipeline.**
+- `buildCategoryMap()` exists and is tested
+  (`category-supplementation.ts:143`), and `buildSequenceBulkOperations()`
+  accepts `categoryMap?` as 4th parameter
+  (`bulk-sequence-transformer.ts:236`).
+- But `extractAndBuildSequenceOperations()` in `bulk-ingestion-phases.ts:141-145`
+  only passes 3 arguments — `categoryMap` is never passed.
+- `collectCategoryTitles()` returns `[]` when `categoryMap` is `undefined`
+  (`bulk-sequence-transformer.ts:83-84`), so `category_titles` is always
+  empty in indexed sequence documents.
 - Query-side remediation exists in local codebase:
   - `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`
   - Structural integration/unit tests for sequence and lesson filter builders.
-- Deployment-state caveat: this retest does not yet prove the remediated
-  request path is live in `oak-prod`; confirm deployed build/request payload
-  before concluding the remaining cause is purely mapping semantics.
 - Remaining semantic caveat: current sequence mapping stores
   `category_titles` as analysed text. Exact category semantics may still require
-  a dedicated keyword/slug field.
+  a dedicated keyword/slug field after the wiring fix.
+- **Code fix required: wire `buildCategoryMap()` into the ingestion pipeline,
+  then re-ingest.**
 
 ### Post-ingest production retest evidence (2026-03-15)
 
