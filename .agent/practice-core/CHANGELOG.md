@@ -4,6 +4,20 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-03-19
+
+- Integrated pine-scripts incoming practice-context material (8 files reviewed)
+- Restructured `practice.md` §Philosophy to establish metacognitive primacy — metacognition is now the generative heart, not a peer element
+- Added §Practice Maturity to `practice-lineage.md` — four-level diagnostic framework (Structural → Operational → Self-Correcting → Evolving)
+- Added hydration vs preservation as distinct transfer modes in §Plasmid Exchange
+- Added 4 learned principles: metacognition as activation mechanism, practice files as executable infrastructure, "not even wrong" failure mode, empty stubs are harmful
+- Added activation depth checks (item 13) to `practice-bootstrap.md` §Bootstrap Checklist
+- Added maturity model cross-reference to `practice.md` §Self-Teaching Property
+- Added named promotion states (received → promoted → rejected) to §Integration Flow
+- Tightened `practice-lineage.md` from 351 to 314 lines (ceiling 320): moved validation scripts to outgoing practice-context, compressed verbose §Growing steps and §Integration Flow step 8 to reference §Validation, tightened consolidate-docs description
+- Upgraded fitness functions to three-dimension metric: line count + character count + max prose line width (100 chars). Reflowed all three trinity files to 100-char prose lines. Added `fitness_ceiling_chars` and `fitness_max_prose_line` to frontmatter. Updated §Fitness Functions with new thresholds table and `pnpm practice:fitness` validation script.
+- Fixed underscore emphasis style in `practice-lineage.md` (markdownlint MD049)
+
 ## [castr] 2026-03-09
 
 - Integrated portable Practice Core into a mature local repo Practice rather than a blank-slate hydration

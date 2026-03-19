@@ -49,6 +49,7 @@
     "shellcheck": "shellcheck scripts/*.sh apps/*/scripts/*.sh apps/*/smoke-tests/*.sh",
     "subagents:check": "node scripts/validate-subagents.mjs",
     "portability:check": "node scripts/validate-portability.mjs",
+    "practice:fitness": "node scripts/validate-practice-fitness.mjs",
     "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
     "make": "pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && turbo run type-check lint test test:ui test:e2e smoke:dev:stub",

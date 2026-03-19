@@ -6,7 +6,6 @@ automated validation that the two stay in sync across every AI platform you use.
 
 **Origin repo**: `oak-mcp-ecosystem` (TypeScript/Node.js monorepo)
 **Platforms proven**: Claude Code, Cursor, Gemini CLI, OpenAI Codex
-**Platforms planned but not yet investigated**: Anthropic Antigravity
 
 ---
 
@@ -308,6 +307,7 @@ discipline and cross-checking against ADRs.
 | `onboarding-reviewer` | Human and AI onboarding path quality | opus |
 | `mcp-reviewer` | MCP protocol specification expert | opus |
 | `elasticsearch-reviewer` | ES mappings, queries, bulk ops | opus |
+| `clerk-reviewer` | Clerk middleware, token verification, OAuth proxy | opus |
 
 ### The Four-Persona Architecture Team
 
@@ -603,6 +603,25 @@ into overlapping scope. Every template needs a Boundaries section.
 The code-reviewer should run on every change. It identifies which
 specialists are needed. Without the gateway, specialist coverage
 becomes ad-hoc and gaps appear.
+
+### 7. Empty stub components
+
+Components must contain real content or not exist. An empty stub
+teaches agents that the composition system is ceremonial — the agent
+believes it has loaded a capability but nothing was actually loaded.
+Absence prompts creation; a stub prompts acceptance. This is the
+"not even wrong" failure mode applied to agent infrastructure.
+
+### 8. Structural completeness without activation depth
+
+Following the implementation guide produces structurally correct
+files. But structure alone is not enough — a seeded reviewer system
+can look right while silently failing. After setup, verify:
+
+- Components carry genuine operational content (not placeholders)
+- Templates include reasoning alongside rules (not just imperatives)
+- Platform adapters are genuinely thin (no duplicated content)
+- The code-reviewer gateway is actually being invoked on changes
 
 ---
 

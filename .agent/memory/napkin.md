@@ -1,3 +1,66 @@
+## Session 2026-03-19 — Practice context integration and fitness upgrade
+
+### What Was Done — Phase 1: Incoming integration
+
+- Reviewed all 8 incoming practice-context files from pine-scripts cross-repo
+  propagation
+- Adopted material from 4 files into Practice Core:
+  - `metacognitive-primacy.md` → restructured Philosophy layer, metacognition
+    framing in lineage, learned principle
+  - `practice-maturity-model.md` → new §Practice Maturity section in lineage
+  - `pine-scripts-integration-field-report.md` → 2 learned principles
+    (infrastructure, "not even wrong")
+  - `practice-seeding-protocol-suggestions.md` → hydration/preservation
+    distinction, activation checks in bootstrap
+- Informed by 3 files (no artefact changes needed):
+  - `pine-scripts-mcp-relevant-conclusions.md` — summary of other files
+  - `cross-repo-preservation-lessons.md` — operational migration lessons
+  - `plan-lifecycle-refinement.md` — oak already has richer lifecycle
+- Adopted 1 learned principle from `sub-agent-component-model-proposal.md`
+  (empty stubs are harmful)
+- Updated CHANGELOG.md with integration record
+- Cleared incoming files after integration
+
+### What Was Done — Phase 2: Outgoing context and fitness upgrade
+
+- Created 3 new outgoing practice-context files:
+  - `cross-repo-transfer-operations.md` — operational migration lessons
+  - `plan-lifecycle-four-stage.md` — simpler lifecycle for less mature repos
+  - `seeding-protocol-guidance.md` — source-side transfer protocol
+- Created then deleted `sub-agent-component-architecture.md` — redundant
+  with existing `reviewer-system-guide.md`
+- Refined 2 pre-existing outgoing files:
+  - `reviewer-system-guide.md` — added clerk-reviewer, empty stubs pitfall,
+    activation depth pitfall, removed speculative Antigravity references
+  - `platform-adapter-reference.md` — removed Antigravity row
+- Added named promotion states (received/promoted/rejected) to Integration
+  Flow in `practice-lineage.md`
+- Tightened `practice-lineage.md` under ceiling: moved validation scripts
+  to outgoing context, compressed verbose sections via §-references
+- Upgraded fitness functions to three-dimension metric:
+  - Line count + character count + max prose line width (100 chars)
+  - Reflowed all three trinity files to 100-char prose lines
+  - New `scripts/validate-practice-fitness.mjs` script
+  - `pnpm practice:fitness` command added
+  - Updated frontmatter, §Fitness Functions, §Other fields, learned principle
+
+### Lessons
+
+- The prior session's dismissal was a metacognitive failure — applying a
+  mechanical "already covered" filter instead of asking "would this make what
+  we have better?" The distinction between "present" and "primary" matters.
+- Incoming context files have different value profiles: some carry unique
+  frameworks (maturity model), some carry unique framing (hydration vs
+  preservation), some are summaries of richer material. Engage with each on
+  its own terms.
+- Line-count-only fitness ceilings create a perverse incentive: "tightening"
+  can mean making lines longer. Character count is the honest constraint;
+  prose line width prevents the gaming mechanism; line count remains the
+  intuitive "feel" check. All three are needed.
+- Outgoing practice-context files should be refined distillations, not copies
+  of incoming material. The existing reviewer-system-guide was already a good
+  document — creating a redundant new file was waste. Check for overlap first.
+
 ## Session 2026-03-14 — Distillation rotation
 
 ### What Was Done
