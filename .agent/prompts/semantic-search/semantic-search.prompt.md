@@ -100,19 +100,13 @@ Policy:
 - If a short admin check runs longer than 10 minutes, stop and escalate to the
   operator before any further mutation commands.
 
-### Step 3: Resolve Cardinal Rule breach (next session priority)
+### Step 3: Confirm Cardinal Rule is restored (prerequisite gate)
 
-The upstream OpenAPI schema now documents error responses (400, 401, 404).
-`pnpm sdk-codegen` fails at response-map cross-validation. This MUST be fixed
-before any other closure work can proceed.
+The codegen schema adaptation is handled in a **separate session** using
+`.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`.
 
-See: `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`
-
-1. Execute the codegen adaptation plan (TDD).
-2. Confirm `pnpm sdk-codegen && pnpm build` passes cleanly.
-3. Confirm `pnpm check` passes end-to-end.
-
-No other work until the Cardinal Rule is restored.
+Before resuming search work, confirm `pnpm sdk-codegen && pnpm build && pnpm check`
+passes. If it does not, the codegen session must complete first.
 
 ### Step 4: Apply Barney reviewer findings (3 blocking items)
 

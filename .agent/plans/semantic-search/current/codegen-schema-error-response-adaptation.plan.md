@@ -25,6 +25,8 @@ todos:
 **Status**: Not started
 **Priority**: Critical — Cardinal Rule breach, blocks all quality gates
 **Branch**: `feat/es_index_update`
+**Session**: Separate from semantic-search closure — this is a codegen concern,
+not a search concern. The search session gates on this completing first.
 
 ## Problem
 
