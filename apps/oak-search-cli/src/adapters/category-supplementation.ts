@@ -193,3 +193,54 @@ export function extractCategoryTitles(
   }
   return categories.map((c) => c.title);
 }
+
+/**
+ * Dependency surface for category fetching, enabling testability via injection.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ */
+export interface CategoryFetchDeps {
+  readonly getSequenceUnits: (slug: string) => Promise<{ ok: boolean; value?: unknown; error?: unknown }>;
+}
+
+/**
+ * Fetches category data from the API for all sequences and merges into a
+ * single CategoryMap.
+ *
+ * @remarks
+ * Fails fast if any sequence fetch fails — categories are required for correct
+ * search filtering, not optional enrichment.
+ *
+ * @param deps - Dependency surface with `getSequenceUnits` method
+ * @param sequenceSlugs - Sequence slugs to fetch categories for
+ * @returns Merged CategoryMap covering all sequences
+ * @throws When any API call fails
+ *
+ * @example
+ * ```typescript
+ * const client = await createOakClient();
+ * const categoryMap = await fetchCategoryMapForSequences(client, ['maths-primary', 'english-primary']);
+ * ```
+ */
+export async function fetchCategoryMapForSequences(
+  deps: CategoryFetchDeps,
+  sequenceSlugs: readonly string[],
+): Promise<CategoryMap> {
+  const merged = new Map<string, readonly CategoryInfo[]>();
+
+  for (const slug of sequenceSlugs) {
+    const result = await deps.getSequenceUnits(slug);
+    if (!result.ok) {
+      throw new Error(
+        `Category fetch failed for sequence '${slug}': ${String(result.error)}`,
+      );
+    }
+    const sequenceData = Array.isArray(result.value) ? result.value : [];
+    const sequenceMap = buildCategoryMap(sequenceData);
+    for (const [unitSlug, categories] of sequenceMap) {
+      merged.set(unitSlug, categories);
+    }
+  }
+
+  return merged;
+}

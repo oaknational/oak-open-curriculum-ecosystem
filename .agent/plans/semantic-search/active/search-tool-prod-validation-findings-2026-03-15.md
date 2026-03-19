@@ -213,7 +213,7 @@ Observed with filter: `total = 0`.
 ## F2 - `category` filter on `sequences` appears non-functional
 
 - Severity: medium
-- Status: open_confirmed_post_reingest
+- Status: code_fix_complete_pending_reingest
 - Area: `search` filter semantics (`sequences` scope)
 
 ### Reproduction
@@ -268,8 +268,31 @@ Either:
 - Remaining semantic caveat: current sequence mapping stores
   `category_titles` as analysed text. Exact category semantics may still require
   a dedicated keyword/slug field after the wiring fix.
-- **Code fix required: wire `buildCategoryMap()` into the ingestion pipeline,
-  then re-ingest.**
+- **Code fix implemented (2026-03-19 session 2).** `categoryMap` wired through
+  full pipeline (both sequence and unit paths). `fetchCategoryMapForSequences()`
+  added. TDD evidence: `category-wiring.integration.test.ts`,
+  `fetch-category-map.integration.test.ts`. **Re-ingest required to populate
+  `category_titles` in indexed documents.**
+
+### Code fix evidence (2026-03-19)
+
+Files changed:
+
+- `apps/oak-search-cli/src/adapters/category-supplementation.ts` — added
+  `fetchCategoryMapForSequences()`, `CategoryFetchDeps` interface
+- `apps/oak-search-cli/src/lib/indexing/bulk-ingestion-phases.ts` — wired
+  `categoryMap` through `collectPhaseResults`, `extractAndBuildSequenceOperations`,
+  `processAllBulkFiles`, `processSingleBulkFile`
+- `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts` — builds categoryMap
+  before phase dispatch
+- `apps/oak-search-cli/src/adapters/hybrid-data-source.ts` — wired `categoryMap`
+  through `createHybridDataSource`
+- `apps/oak-search-cli/src/adapters/bulk-data-adapter.ts` — wired `categoryMap`
+  through `createBulkDataAdapter`, `createUnitTransformer`
+
+Test evidence: all 1033 search-cli tests pass. Integration tests prove
+`category_titles` populated in sequence docs and `unit_topics` populated in unit
+docs when categoryMap is provided.
 
 ### Post-ingest production retest evidence (2026-03-15)
 
@@ -298,7 +321,10 @@ Observed: `total = 2` (`maths-primary`, `maths-secondary`).
 
 Observed: `total = 2` (unchanged from baseline).
 
-Disposition: finding remains open. Production behaviour is still ineffective for invalid category values; first confirm remediated query path is live, then continue mapping/identity remediation if behaviour remains unchanged.
+Disposition: code fix complete. Production behaviour will remain unchanged until
+re-ingest populates `category_titles` in indexed documents. Re-ingest blocked on
+Cardinal Rule breach (codegen schema adaptation). Post-reingest retest required
+for final closure.
 
 ---
 

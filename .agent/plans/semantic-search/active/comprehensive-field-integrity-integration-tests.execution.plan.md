@@ -45,33 +45,45 @@ built and wired correctly before any further ingest attempt.
     proven correct at every stage. Source data verified as fully populated
     (1072/1072 lessons in `maths-primary.json` have thread associations).
     No code fix needed — re-ingest resolves.
-  - **F2** (`category` on sequences): confirmed `categoryMap` is never wired
-    into the ingestion pipeline. `buildCategoryMap()` exists and is tested
-    (`category-supplementation.ts:143`), `buildSequenceBulkOperations()`
-    accepts `categoryMap?` as 4th parameter
-    (`bulk-sequence-transformer.ts:236`), but
-    `extractAndBuildSequenceOperations()` in
-    `bulk-ingestion-phases.ts:141-145` never passes it. Code fix required.
+  - **F2** (`category` on sequences): **FIXED (2026-03-19 session 2).**
+    `categoryMap` wired through full pipeline — both the sequence path
+    (`collectPhaseResults` → `extractAndBuildSequenceOperations` →
+    `buildSequenceBulkOperations`) and the unit path (`processSingleBulkFile`
+    → `createHybridDataSource` → `createBulkDataAdapter` →
+    `createUnitTransformer`). `fetchCategoryMapForSequences()` added.
+    Fails fast on API errors. TDD evidence:
+    `category-wiring.integration.test.ts`,
+    `fetch-category-map.integration.test.ts`. All 1033 search-cli tests pass.
+- 404 decorator removed for transcript endpoint (upstream schema now native).
+  Infrastructure retained for future use.
+- **Cardinal Rule breach discovered (2026-03-19 session 2):** upstream OpenAPI
+  schema now documents error responses (400, 401, 404). `pnpm sdk-codegen`
+  fails at response-map cross-validation. Blocks `pnpm check`. Separate plan
+  created: `codegen-schema-error-response-adaptation.plan.md`.
 
 ### What Is Good
 
 - Contract surface is shared and boundary-safe (`libs` package consumed by CLI and SDK).
 - Manifest-driven `test:field-integrity` is explicit-path and fail-fast (no glob ambiguity).
 - Retry/readback logic now has dedicated unit + integration coverage, including transient status handling and zero-count retry behaviour.
-- Full gates currently pass (`pnpm type-check`, `pnpm test:field-integrity`, `pnpm check`).
-- F1/F2 root causes are now identified with deterministic evidence.
+- F1/F2 root causes identified with deterministic evidence. F2 code fix complete.
+- The 404 decorator's self-healing guard (`assertResponseStatusSlotAvailable`)
+  worked exactly as designed — it failed fast when the upstream schema caught up.
 
 ### What Needs Doing
 
-1. **Fix F2**: Wire `buildCategoryMap()` into `extractAndBuildSequenceOperations()`
-   in `bulk-ingestion-phases.ts:141-145`. TDD — write test first proving
-   `categoryMap` flows through to `buildSequenceBulkOperations()`.
-2. Re-run the mandatory specialist reviewer cycle on the **latest** diff and
-   record dispositions in the active findings register.
-3. Ensure operator evidence for Task 2.3 is refreshed and stored at
+1. ~~**Fix F2**~~ — **DONE** (2026-03-19 session 2).
+2. **Resolve Cardinal Rule breach**: codegen schema adaptation for upstream
+   error responses. See `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`.
+3. **Apply Barney reviewer findings** (3 blocking items):
+   - Add `fetchCategoryMapForSequences` to `BulkIngestionDeps`
+   - Tighten `CategoryFetchDeps` return type to discriminated union
+   - Remove stale `@see ADR-xxx` placeholder
+4. Complete reviewer closure cycle (docs-adr, test, elasticsearch).
+5. Ensure operator evidence for Task 2.3 is refreshed and stored at
    `.agent/plans/semantic-search/active/evidence/task-2.3.evidence.json`
    after re-ingest.
-4. Sync final `F1`/`F2` dispositions in the active findings register so
+6. Sync final `F1`/`F2` dispositions in the active findings register so
    plan/prompt/findings state is fully coherent before declaring completion.
 
 ### Fresh-Session Restart Checklist

@@ -27,7 +27,7 @@ Current lane objective:
 - Keep work anchored to active findings `F1`/`F2` and update dispositions with
   deterministic evidence.
 
-Current handover state (fresh-session anchor, updated 2026-03-19):
+Current handover state (fresh-session anchor, updated 2026-03-19 session 2):
 
 - Phase 0/1/2 implementation work is complete in the current worktree:
   - shared `search-contracts` package,
@@ -39,15 +39,30 @@ Current handover state (fresh-session anchor, updated 2026-03-19):
   - **F1** (`threadSlug`): confirmed stale index, not a code defect. Full
     pipeline proven correct. Source data verified as fully populated. No code
     fix needed — re-ingest resolves.
-  - **F2** (`category`): confirmed `categoryMap` is never wired into the
-    ingestion pipeline. `buildCategoryMap()` exists and is tested but
-    `extractAndBuildSequenceOperations()` never passes it to
-    `buildSequenceBulkOperations()`. **Code fix required before re-ingest.**
-    Target file: `apps/oak-search-cli/src/lib/indexing/bulk-ingestion-phases.ts:141-145`.
+  - **F2** (`category`): **Code fix implemented (2026-03-19 session 2).**
+    `categoryMap` now wired through both the sequence path
+    (`collectPhaseResults` → `extractAndBuildSequenceOperations` →
+    `buildSequenceBulkOperations`) and the unit path (`processSingleBulkFile`
+    → `createHybridDataSource` → `createBulkDataAdapter` →
+    `createUnitTransformer`). `fetchCategoryMapForSequences()` added to
+    `category-supplementation.ts`. Fails fast on API errors. All 1033
+    search-cli tests pass. TDD evidence:
+    `category-wiring.integration.test.ts`,
+    `fetch-category-map.integration.test.ts`.
+- **Blocking issue: Cardinal Rule breach.** The upstream OpenAPI schema now
+  documents error responses (400, 401, 404) across endpoints. `pnpm sdk-codegen`
+  fails at the response-map cross-validation step (`Extra (3): *:400, *:401,
+  *:404`). This blocks `pnpm check` and therefore blocks all closure activities.
+  See: `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`.
+- The 404 decorator for transcript (`schema-enhancement-404.ts`) has been
+  removed — the upstream schema now documents this response natively. The
+  decorator infrastructure remains for future use.
 - Phase 3 closure is blocked on:
-  1. F2 code fix (wire `categoryMap`),
-  2. reviewer closure cycle (not yet run on current diff),
-  3. operator re-ingest + readback (Task 2.3 evidence still pending).
+  1. ~~F2 code fix (wire `categoryMap`)~~ — **DONE**,
+  2. **codegen schema adaptation** (Cardinal Rule breach, see plan),
+  3. Barney reviewer findings (3 items, all blocking — see below),
+  4. remaining reviewer closure cycle (docs-adr, test, elasticsearch),
+  5. operator re-ingest + readback (Task 2.3 evidence still pending).
 
 ---
 
@@ -85,23 +100,39 @@ Policy:
 - If a short admin check runs longer than 10 minutes, stop and escalate to the
   operator before any further mutation commands.
 
-### Step 3: F2 code fix and closure refinement (next session priority)
+### Step 3: Resolve Cardinal Rule breach (next session priority)
 
-1. **Fix F2**: Wire `buildCategoryMap()` into `extractAndBuildSequenceOperations()`
-   in `bulk-ingestion-phases.ts`. TDD — write a test first proving categoryMap
-   flows through to `buildSequenceBulkOperations()`. This is a small, focused
-   change. See findings register for full root-cause detail.
-2. Run full gates after the fix (`pnpm check`).
-3. Confirm pre-ingest readiness gate status with current evidence.
-4. Close any remaining ambiguity in `F1`/`F2` disposition wording/evidence links.
+The upstream OpenAPI schema now documents error responses (400, 401, 404).
+`pnpm sdk-codegen` fails at response-map cross-validation. This MUST be fixed
+before any other closure work can proceed.
 
-No new scope starts until these items are complete.
+See: `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`
 
-### Step 4: Final reviewer closure cycle (mandatory before completion)
+1. Execute the codegen adaptation plan (TDD).
+2. Confirm `pnpm sdk-codegen && pnpm build` passes cleanly.
+3. Confirm `pnpm check` passes end-to-end.
+
+No other work until the Cardinal Rule is restored.
+
+### Step 4: Apply Barney reviewer findings (3 blocking items)
+
+`architecture-reviewer-barney` reviewed the F2 fix (2026-03-19 session 2).
+Three findings, all blocking:
+
+1. **Add `fetchCategoryMapForSequences` to `BulkIngestionDeps`** — the function
+   is called directly in `bulk-ingestion.ts` instead of through the DI surface.
+   One-line addition to interface + default deps.
+2. **Tighten `CategoryFetchDeps` return type** — currently `{ ok: boolean;
+   value?: unknown; error?: unknown }`, should use discriminated union
+   `Result<unknown, unknown>` from `@oaknational/result`.
+3. **Remove stale `@see ADR-xxx` placeholder** in `category-supplementation.ts`
+   TSDoc (line 25).
+
+### Step 5: Final reviewer closure cycle (mandatory before completion)
 
 Run reviewer cycle against the updated plan and this prompt:
 
-1. `architecture-reviewer-barney`
+1. ~~`architecture-reviewer-barney`~~ — **completed**, findings in Step 4
 2. `docs-adr-reviewer`
 3. `test-reviewer`
 4. `elasticsearch-reviewer`
@@ -115,7 +146,7 @@ Policy:
 - `test-reviewer` validates both plan/prompt alignment and the concrete test
   surfaces now present in the worktree.
 
-### Step 5: Run review/fix cycle for active findings closure
+### Step 6: Run review/fix cycle for active findings closure
 
 Run specialist review/fix loops on code/docs touched while finalising `F1`/`F2`
 status and evidence coherence.

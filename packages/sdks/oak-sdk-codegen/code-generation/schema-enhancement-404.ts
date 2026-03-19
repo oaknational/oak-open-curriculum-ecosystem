@@ -97,9 +97,17 @@ const transcript404Descriptor: Legitimate404Descriptor = {
  * upstream tracking issue so we can remove the temporary decorator as soon as the schema
  * is updated.
  */
-export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] = [
-  transcript404Descriptor,
-] as const;
+/**
+ * Central list of endpoints where the API currently returns a legitimate 404 but the
+ * upstream OpenAPI schema has not yet documented it. Each entry MUST reference an
+ * upstream tracking issue so we can remove the temporary decorator as soon as the schema
+ * is updated.
+ *
+ * @remarks
+ * As of 2026-03-19 the upstream schema documents 404 for GET /lessons/{lesson}/transcript,
+ * so the transcript decorator has been removed. The infrastructure remains for future use.
+ */
+export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] = [] as const;
 
 /**
  * Adds temporary 404 response documentation for known endpoints where the API legitimately

@@ -11,6 +11,7 @@
 import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/bulk';
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
+import { fetchCategoryMapForSequences } from '../../adapters/category-supplementation';
 import type { BulkOperationEntry } from './bulk-operation-types';
 import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
@@ -92,12 +93,22 @@ export async function prepareBulkIngestion(
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
+  const sequenceSlugs = bulkDownloadFiles.map((f) => f.sequenceSlug);
+  ingestLogger.info('Fetching category data for sequences', {
+    sequenceCount: sequenceSlugs.length,
+  });
+  const categoryMap = await fetchCategoryMapForSequences(client, sequenceSlugs);
+  ingestLogger.info('Category data fetched', {
+    categoryMapSize: categoryMap.size,
+  });
+
   const phases = await deps.collectPhaseResults(
     filteredFiles,
     bulkDownloadFiles,
     client,
     indexes,
     resolveIndex,
+    categoryMap,
   );
 
   const stats = buildIngestionStats(
