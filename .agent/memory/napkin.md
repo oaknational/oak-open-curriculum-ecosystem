@@ -1,3 +1,33 @@
+## Session 2026-03-19 (session 2) — F2 fix and Cardinal Rule breach
+
+### What Was Done
+
+- F2 code fix: wired `categoryMap` through full ingestion pipeline (sequences
+  + units). `fetchCategoryMapForSequences()` added. TDD with 5 new tests.
+- Removed transcript 404 decorator (upstream schema now native). Self-healing
+  guard worked as designed.
+- Discovered Cardinal Rule breach: upstream schema now documents error responses
+  (400, 401, 404). `pnpm sdk-codegen` fails at response-map cross-validation.
+- Created codegen adaptation plan. Committed all work.
+- Barney review completed: 3 findings (DI surface, return type, stale TSDoc).
+
+### Lessons
+
+- Self-healing guards are high-value infrastructure: the `assertResponseStatusSlotAvailable`
+  guard caught the upstream schema change immediately and told us exactly what
+  to do. Build more of these.
+- When a plan contradicts principles (category-integration-remediation said
+  "graceful degradation", principles say "fail fast"), principles always win.
+  Plans are execution instructions; principles are the authority.
+- "Pre-existing" is not an excuse. If `pnpm check` fails, the Cardinal Rule is
+  breached, and it blocks everything. The scope of the current task is irrelevant.
+- A wiring bug can be invisible to every unit test and even stage-level tests.
+  Only pipeline-level integration tests (calling `collectPhaseResults` end-to-end)
+  caught that `categoryMap` was never passed. This is why the field-integrity
+  framework's cross-stage tests exist.
+
+---
+
 ## Session 2026-03-19 — Semantic search investigation
 
 ### Lessons

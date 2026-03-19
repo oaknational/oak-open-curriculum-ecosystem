@@ -1,7 +1,7 @@
 # Category Integration Remediation
 
-**Status**: Not started
-**Priority**: Medium — enrichment feature, not a correctness fix
+**Status**: Superseded by F2 fix (2026-03-19 session 2, commit 4ccfbba0)
+**Priority**: N/A — the core wiring (Option A steps 2-4) is complete
 **Prerequisite**: None (independent of unified-versioned-ingestion)
 **Related**: [bulk_data_for_semantic_search.feature_request.md](bulk_data_for_semantic_search.feature_request.md)
 
