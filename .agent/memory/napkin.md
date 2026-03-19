@@ -123,3 +123,25 @@
   before implementation starts.
 - For ES-heavy plans, include refresh-visibility handling in readback evidence
   criteria; otherwise post-ingest population checks can produce false negatives.
+
+## Session 2026-03-18 — Pine-Scripts Process Readback
+
+### What Was Done
+
+- Added incoming analysis note
+  `practice-context/incoming/pine-scripts-mcp-relevant-conclusions.md`
+  to preserve the oak-relevant conclusions from the `pine-scripts`
+  integration process
+- Captured the cross-repo pattern that oak is still the richer source
+  substrate, but `pine-scripts` is now an active adaptation lab rather than a
+  passive receiver
+
+### Lessons
+
+- The most dangerous Practice integration failure is inert installation:
+  structurally correct files with insufficient activation depth, especially in
+  metacognition
+- `metacognitive-primacy.md` is supported by field evidence from
+  `pine-scripts`, not just by intuition
+- Incoming context can hold real analytical value before canonicalisation;
+  transient does not mean disposable
