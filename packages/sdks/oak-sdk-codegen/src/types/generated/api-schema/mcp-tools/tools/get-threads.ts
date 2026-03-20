@@ -42,9 +42,9 @@ export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatIn
   return { params: {} };
 }
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
-const documentedStatuses = ['200'] as const;
+const documentedStatuses = ['200', '400', '401', '404'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
-const STATUS_DISCRIMINANTS = { '200': 200 } as const;
+const STATUS_DISCRIMINANTS = { '200': 200, '400': 400, '401': 401, '404': 404 } as const;
 type DocumentedStatusDiscriminant = typeof STATUS_DISCRIMINANTS[DocumentedStatus];
 const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];
 if (!primaryResponseDescriptor) {
@@ -135,7 +135,7 @@ export const getThreads = {
       attemptedStatuses.push({ status: STATUS_DISCRIMINANTS[statusKey], issues: result.error.issues });
     }
     return {
-      ok: false, message: 'Response does not match any documented schema for statuses: 200' ,
+      ok: false, message: 'Response does not match any documented schema for statuses: 200, 400, 401, 404' ,
       issues: attemptedStatuses.flatMap((entry) => entry.issues),
       attemptedStatuses,
     };

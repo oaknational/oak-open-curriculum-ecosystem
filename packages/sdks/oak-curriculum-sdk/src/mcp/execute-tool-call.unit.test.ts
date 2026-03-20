@@ -115,7 +115,7 @@ describe('executeToolCall', () => {
     };
     const { client } = createRateLimitClient(() => ({
       error: upstreamBody,
-      response: { status: 400 },
+      response: { status: 418 },
     }));
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
@@ -163,7 +163,7 @@ describe('executeToolCall', () => {
     expect(result.error.message).toContain('418');
   });
 
-  it('classifies content-blocked 400 as CONTENT_NOT_AVAILABLE', async () => {
+  it('classifies content-blocked undocumented response as CONTENT_NOT_AVAILABLE', async () => {
     const contentBlockedBody = {
       message: 'Lesson not available: "volcanoes-and-their-features"',
       data: {
@@ -174,7 +174,7 @@ describe('executeToolCall', () => {
     };
     const { client } = createRateLimitClient(() => ({
       error: contentBlockedBody,
-      response: { status: 400 },
+      response: { status: 418 },
     }));
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);

@@ -200,7 +200,9 @@ export function extractCategoryTitles(
  * @see ADR-078 Dependency Injection for Testability
  */
 export interface CategoryFetchDeps {
-  readonly getSequenceUnits: (slug: string) => Promise<{ ok: boolean; value?: unknown; error?: unknown }>;
+  readonly getSequenceUnits: (
+    slug: string,
+  ) => Promise<{ ok: boolean; value?: unknown; error?: unknown }>;
 }
 
 /**
@@ -231,9 +233,7 @@ export async function fetchCategoryMapForSequences(
   for (const slug of sequenceSlugs) {
     const result = await deps.getSequenceUnits(slug);
     if (!result.ok) {
-      throw new Error(
-        `Category fetch failed for sequence '${slug}': ${String(result.error)}`,
-      );
+      throw new Error(`Category fetch failed for sequence '${slug}': ${String(result.error)}`);
     }
     const sequenceData = Array.isArray(result.value) ? result.value : [];
     const sequenceMap = buildCategoryMap(sequenceData);

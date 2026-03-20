@@ -151,7 +151,12 @@ export function createBulkDataAdapter(
   const subjectParent = SUBJECT_TO_PARENT[subjectSlug];
 
   const transformLessonsToES = createLessonTransformer(bulkFile, unitMap, bulkFile.sequenceSlug);
-  const transformUnitsToES = createUnitTransformer(bulkFile, subjectSlug, subjectParent, categoryMap);
+  const transformUnitsToES = createUnitTransformer(
+    bulkFile,
+    subjectSlug,
+    subjectParent,
+    categoryMap,
+  );
 
   return {
     sequenceSlug: bulkFile.sequenceSlug,

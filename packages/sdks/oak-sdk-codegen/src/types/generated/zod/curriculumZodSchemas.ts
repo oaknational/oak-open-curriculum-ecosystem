@@ -427,6 +427,27 @@ const SequenceUnitsResponseSchema = z.array(
       .strict(),
   ])
 );
+const error_BAD_REQUEST = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
+const error_UNAUTHORIZED = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
+const error_NOT_FOUND = z
+  .object({
+    message: z.string(),
+    code: z.string(),
+    issues: z.array(z.object({ message: z.string() }).strict()).optional(),
+  })
+  .strict();
 const TranscriptResponseSchema = z
   .object({
     transcript: z.string(),
@@ -1556,6 +1577,9 @@ const renameInlineSchema = (original: string) => {
 
 export const rawCurriculumSchemas = {
   SequenceUnitsResponseSchema,
+  error_BAD_REQUEST,
+  error_UNAUTHORIZED,
+  error_NOT_FOUND,
   TranscriptResponseSchema,
   SearchTranscriptResponseSchema,
   SequenceAssetsResponseSchema,
@@ -1632,6 +1656,23 @@ export const endpoints: readonly Endpoint[] = ([
         })
         .strict()
     ),
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1645,6 +1686,23 @@ export const endpoints: readonly Endpoint[] = ([
         changes: z.array(z.string()),
       })
       .strict(),
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1652,6 +1710,23 @@ export const endpoints: readonly Endpoint[] = ([
     description: `This endpoint returns all the key stages (titles and slugs) that are currently available on Oak`,
     requestFormat: "json",
     response: KeyStageResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1711,6 +1786,23 @@ export const endpoints: readonly Endpoint[] = ([
       },
     ],
     response: SubjectAssetsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1763,6 +1855,23 @@ export const endpoints: readonly Endpoint[] = ([
       },
     ],
     response: KeyStageSubjectLessonsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1810,6 +1919,23 @@ export const endpoints: readonly Endpoint[] = ([
       },
     ],
     response: QuestionsForKeyStageAndSubjectResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1847,6 +1973,23 @@ export const endpoints: readonly Endpoint[] = ([
       },
     ],
     response: AllKeyStageAndSubjectUnitsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1880,6 +2023,23 @@ export const endpoints: readonly Endpoint[] = ([
       },
     ],
     response: LessonAssetsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1910,6 +2070,23 @@ There is no response returned for this endpoint as it returns a content attachme
       },
     ],
     response: z.unknown(),
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1924,6 +2101,23 @@ There is no response returned for this endpoint as it returns a content attachme
       },
     ],
     response: QuestionForLessonsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1938,6 +2132,23 @@ There is no response returned for this endpoint as it returns a content attachme
       },
     ],
     response: LessonSummaryResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -1954,26 +2165,19 @@ There is no response returned for this endpoint as it returns a content attachme
     response: TranscriptResponseSchema,
     errors: [
       {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
         status: 404,
-        description: `Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
-
-Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish &quot;no transcript available&quot; from invalid lesson slugs.
-
-Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4`,
-        schema: z
-          .object({
-            message: z.string(),
-            code: z.string(),
-            data: z
-              .object({
-                code: z.string(),
-                httpStatus: z.number().int(),
-                path: z.string(),
-                zodError: z.null().optional(),
-              })
-              .strict(),
-          })
-          .strict(),
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
       },
     ],
   },
@@ -1985,6 +2189,23 @@ Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4`,
 This specific endpoint does not cost any requests.`,
     requestFormat: "json",
     response: RateLimitResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2034,6 +2255,23 @@ This specific endpoint does not cost any requests.`,
       },
     ],
     response: LessonSearchResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2048,6 +2286,23 @@ This specific endpoint does not cost any requests.`,
       },
     ],
     response: SearchTranscriptResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2085,6 +2340,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SequenceAssetsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2114,6 +2386,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: QuestionsForSequenceResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2148,6 +2437,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SequenceUnitsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2155,6 +2461,23 @@ This endpoint contains licence information for any third-party content contained
     description: `This endpoint returns an array of all available subjects and their associated sequences, key stages and years.`,
     requestFormat: "json",
     response: AllSubjectsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2169,6 +2492,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SubjectResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2183,6 +2523,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SubjectKeyStagesResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2197,6 +2554,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: SubjectSequenceResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2211,6 +2585,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: z.array(z.number()),
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2218,6 +2609,23 @@ This endpoint contains licence information for any third-party content contained
     description: `This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.`,
     requestFormat: "json",
     response: AllThreadsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2232,6 +2640,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: ThreadUnitsResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
   {
     method: "get",
@@ -2246,6 +2671,23 @@ This endpoint contains licence information for any third-party content contained
       },
     ],
     response: UnitSummaryResponseSchema,
+    errors: [
+      {
+        status: 400,
+        description: `Bad request - e.g. &quot;Content is blocked for copyright reasons&quot;`,
+        schema: error_BAD_REQUEST,
+      },
+      {
+        status: 401,
+        description: `API token not provided or invalid`,
+        schema: error_UNAUTHORIZED,
+      },
+      {
+        status: 404,
+        description: `Detail of the request causing the 404, e.g. &quot;Lesson not found&quot;`,
+        schema: error_NOT_FOUND,
+      },
+    ],
   },
 ]);
 

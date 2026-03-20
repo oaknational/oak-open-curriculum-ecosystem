@@ -1,5 +1,17 @@
-import type { OpenAPIObject, OperationObject } from 'openapi3-ts/oas31';
+import type {
+  OpenAPIObject,
+  OperationObject,
+  PathItemObject,
+  ResponseObject,
+  SchemaObject,
+  ReferenceObject,
+} from 'openapi3-ts/oas31';
 import type { ResponseMapEntry } from '../response-map/build-response-map.js';
+import {
+  isResponseObject,
+  isReferenceObject,
+  extractComponentNameFromRef,
+} from '../response-map/shared.js';
 
 const ALLOWED_METHODS = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
 
@@ -30,10 +42,11 @@ function isAllowedMethodKey(k: string): boolean {
   return false;
 }
 
-function validatePathMethods(p: string, pathItem: unknown): void {
-  if (!isPathItemObject(pathItem)) {
-    return;
-  }
+/**
+ * Validates that a path item only contains recognised HTTP method keys
+ * and standard OpenAPI path-item properties.
+ */
+function validatePathMethods(p: string, pathItem: PathItemObject): void {
   for (const key of Object.keys(pathItem)) {
     if (isAllowedMethodKey(key)) {
       continue;
@@ -57,8 +70,7 @@ export function crossValidateResponseMap(
   schema: OpenAPIObject,
   entries: readonly ResponseMapEntry[],
 ): void {
-  const validated = schema;
-  const expected = collectExpectedResponseKeys(validated);
+  const expected = collectExpectedResponseKeys(schema);
   const actual = new Set<string>(entries.map((e) => `${e.operationId}:${e.status}`));
   reportDiffIfAny(expected, actual);
 }
@@ -71,23 +83,28 @@ export function runAllCrossValidations(
   crossValidateResponseMap(schema, responseEntries);
 }
 
-// getOwnValue imported
-
+/**
+ * Walks the schema and collects `{operationId}:{status}` keys for every
+ * operation response that has a JSON schema. Also detects shared-component
+ * wildcards to mirror the response-map builder's consolidation logic.
+ */
 function collectExpectedResponseKeys(schema: OpenAPIObject): Set<string> {
   const out = new Set<string>();
+  const componentsByStatus = new Map<string, Set<string>>();
   const paths = schema.paths ?? {};
+  const componentSchemas: Record<string, SchemaObject | ReferenceObject | undefined> =
+    schema.components?.schemas ?? {};
   for (const [, pathItem] of Object.entries(paths)) {
-    if (!isPathItemObject(pathItem)) {
-      continue;
-    }
     for (const method of ALLOWED_METHODS) {
-      const candidate = pathItem[method];
-      if (!isOperationObject(candidate)) {
+      const operation = pathItem[method];
+      if (!operation) {
         continue;
       }
-      addExpectedFromOperation(candidate, out);
+      addExpectedFromOperation(operation, out);
+      collectComponentRefsByStatus(operation, componentsByStatus);
     }
   }
+  addWildcardKeysForSharedComponents(componentsByStatus, componentSchemas, out);
   return out;
 }
 
@@ -127,53 +144,95 @@ function reportDiffIfAny(expected: Set<string>, actual: Set<string>): void {
   throw new Error(lines.join('\n'));
 }
 
+/**
+ * Adds `{operationId}:{status}` to the expected set for every response
+ * with a JSON schema. The `Object.entries` on `ResponsesObject` can yield
+ * `unknown` values due to `IExtensionType`, so we guard once with
+ * `isResponseObject` at this boundary.
+ */
 function addExpectedFromOperation(op: OperationObject, out: Set<string>): void {
   if (!op.operationId) {
     return;
   }
   const responses = op.responses ?? {};
   for (const [status, resp] of Object.entries(responses)) {
-    if (hasJsonSchema(resp)) {
+    if (isResponseObject(resp) && responseHasJsonSchema(resp)) {
       out.add(`${op.operationId}:${status}`);
     }
   }
 }
 
-function hasJsonSchema(value: unknown): boolean {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return false;
-  }
-  const content = 'content' in value ? value.content : undefined;
-  if (typeof content !== 'object' || content === null || Array.isArray(content)) {
-    return false;
-  }
-  const json = 'application/json' in content ? content['application/json'] : undefined;
-  if (typeof json !== 'object' || json === null || Array.isArray(json)) {
-    return false;
-  }
-  if (!('schema' in json)) {
+/**
+ * Checks whether a validated `ResponseObject` contains a JSON schema.
+ * Works with narrow types — no defensive narrowing from `unknown`.
+ */
+function responseHasJsonSchema(resp: ResponseObject): boolean {
+  const json = resp.content?.['application/json'];
+  if (!json) {
     return false;
   }
   const schema = json.schema;
-  if (typeof schema !== 'object' || schema === null || Array.isArray(schema)) {
-    return false;
-  }
-  return true;
+  return schema !== undefined && schema !== null;
 }
 
-function isPathItemObject(value: unknown): value is Record<PropertyKey, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+/**
+ * Extracts the `$ref` component name from a response's JSON schema, if it
+ * uses a `$ref`. Works with narrow types from the OpenAPI type system.
+ */
+function extractResponseComponentRef(resp: ResponseObject): string | undefined {
+  const json = resp.content?.['application/json'];
+  if (!json) {
+    return undefined;
+  }
+  const schema = json.schema;
+  if (!schema || !isReferenceObject(schema)) {
+    return undefined;
+  }
+  return extractComponentNameFromRef(schema.$ref);
 }
 
-function isOperationObject(value: unknown): value is OperationObject {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return false;
+/**
+ * For each operation, collects the `$ref` component name by status code.
+ * This mirrors the response-map builder's wildcard detection: if every
+ * component-sourced entry for a status shares one component name, a wildcard
+ * is expected.
+ */
+function collectComponentRefsByStatus(
+  op: OperationObject,
+  componentsByStatus: Map<string, Set<string>>,
+): void {
+  const responses = op.responses ?? {};
+  for (const [status, resp] of Object.entries(responses)) {
+    if (!isResponseObject(resp)) {
+      continue;
+    }
+    const refName = extractResponseComponentRef(resp);
+    if (refName) {
+      const set = componentsByStatus.get(status) ?? new Set<string>();
+      set.add(refName);
+      componentsByStatus.set(status, set);
+    }
   }
-  if ('operationId' in value && typeof value.operationId !== 'string') {
-    return false;
+}
+
+/**
+ * Adds `*:{status}` wildcard keys to the expected set for status codes
+ * where all operations reference the same single component schema that
+ * exists in `components/schemas`. This mirrors the response-map builder's
+ * wildcard consolidation logic.
+ */
+function addWildcardKeysForSharedComponents(
+  componentsByStatus: Map<string, Set<string>>,
+  componentSchemas: Record<string, SchemaObject | ReferenceObject | undefined>,
+  out: Set<string>,
+): void {
+  for (const [status, componentSet] of componentsByStatus) {
+    if (componentSet.size !== 1) {
+      continue;
+    }
+    const [componentName] = componentSet;
+    if (componentName && Object.prototype.hasOwnProperty.call(componentSchemas, componentName)) {
+      out.add(`*:${status}`);
+    }
   }
-  if ('parameters' in value && !Array.isArray(value.parameters)) {
-    return false;
-  }
-  return 'responses' in value && typeof value.responses === 'object' && value.responses !== null;
 }

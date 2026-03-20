@@ -81,29 +81,29 @@ describe('fetchCategoryMapForSequences', () => {
       },
     });
 
-    const categoryMap = await fetchCategoryMapForSequences(
-      client,
-      ['maths-primary', 'english-primary'],
-    );
+    const categoryMap = await fetchCategoryMapForSequences(client, [
+      'maths-primary',
+      'english-primary',
+    ]);
 
-    expect(categoryMap.get('fractions-year-3')).toEqual([
-      { title: 'Number', slug: 'number' },
-    ]);
-    expect(categoryMap.get('grammar-year-3')).toEqual([
-      { title: 'Grammar', slug: 'grammar' },
-    ]);
+    expect(categoryMap.get('fractions-year-3')).toEqual([{ title: 'Number', slug: 'number' }]);
+    expect(categoryMap.get('grammar-year-3')).toEqual([{ title: 'Grammar', slug: 'grammar' }]);
   });
 
   it('fails fast when API call returns an error', async () => {
     const client = createMockClient({});
     vi.mocked(client.getSequenceUnits).mockResolvedValue({
       ok: false,
-      error: { kind: 'network_error', resource: 'maths-primary', cause: new Error('Connection refused') },
+      error: {
+        kind: 'network_error',
+        resource: 'maths-primary',
+        cause: new Error('Connection refused'),
+      },
     });
 
-    await expect(
-      fetchCategoryMapForSequences(client, ['maths-primary']),
-    ).rejects.toThrow('maths-primary');
+    await expect(fetchCategoryMapForSequences(client, ['maths-primary'])).rejects.toThrow(
+      'maths-primary',
+    );
   });
 
   it('returns empty map when no sequences are provided', async () => {

@@ -12,61 +12,73 @@ last_updated: 2026-03-19
 
 1. `.agent/directives/AGENT.md`
 2. `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`
+   — **this is the source of truth**; the plan contains full investigation
+   findings, root-cause analysis, and the phased TDD execution sequence.
 
 ## Context
 
-The upstream OpenAPI schema now documents error responses (400, 401, 404)
-across endpoints. `pnpm sdk-codegen` fails at the response-map
+The upstream OpenAPI schema (version `0.6.0-e9319ab...`) now documents error
+responses (400, 401, 404) across all 26 endpoints using `$ref` to
+`components/schemas` (`error.BAD_REQUEST`, `error.UNAUTHORIZED`,
+`error.NOT_FOUND`). `pnpm sdk-codegen` fails at the response-map
 cross-validation step. This is a Cardinal Rule breach — it blocks all
 quality gates across the entire repository.
 
-The 404 transcript decorator conflict has already been resolved (transcript
-entry removed from `ENDPOINTS_WITH_LEGITIMATE_404S` in a prior session).
-The remaining issue is the response-map cross-validation rejecting wildcard
-`*:400`, `*:401`, `*:404` entries.
-
 Branch: `feat/es_index_update`.
+
+## Investigation Complete — Two Bugs Identified
+
+Investigation was completed on 2026-03-19. Two distinct bugs were found:
+
+**Bug 1 — Cross-validator does not expect wildcard entries.** The response-map
+builder intentionally consolidates shared error responses into wildcard entries
+(`*:400`, `*:401`, `*:404`). The emitter and descriptor helpers already handle
+these. Only the cross-validator's `collectExpectedResponseKeys` was not updated
+to generate matching `*:` expected keys.
+
+**Bug 2 — Dotted component names break the emitter.** The upstream uses
+`error.BAD_REQUEST` etc. as component schema names (dots in names). The `$ref`
+extractor passes these through raw, so the emitter would generate
+`curriculumSchemas.error.BAD_REQUEST` (invalid property access) instead of
+`curriculumSchemas.error_BAD_REQUEST` (the sanitised key the Zod registry
+uses). The `sanitizeIdentifier` function exists in `shared.ts` but is only
+applied to inline schemas, not component schemas.
+
+**Downstream type errors** (`SearchScopeWithAll`, `rrf-query-helpers`) are
+stale-type cascades — they will resolve after successful regeneration. No
+targeted downstream fixes expected.
 
 ## Required work sequence
 
-1. **Investigate** (read-only, no mutations):
-   - Read the cached upstream schema
-     (`packages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json`)
-     to understand the shape of the new error responses. Are they on
-     individual operations, shared via `components/responses`, or both?
-   - Read the response-map builder
-     (`packages/sdks/oak-sdk-codegen/code-generation/typegen/response-map/build-response-map.ts`)
-     to understand how and why it generates the `*:` wildcard prefix.
-   - Read the cross-validator
-     (`packages/sdks/oak-sdk-codegen/code-generation/typegen/validation/cross-validate.ts`)
-     to understand how `collectExpectedResponseKeys` builds its set and why
-     the wildcard entries don't match.
-   - Present findings and proposed fix approach before writing code.
+Bug 2 must be fixed **first** — Bug 1's wildcard detection depends on
+correct (sanitised) component names for its "same component" check.
 
-2. **Fix the codegen** (TDD):
-   - Write RED tests proving the desired cross-validation behaviour when
-     error responses are present in the schema.
-   - Implement the fix. The plan lists three options — choose based on
-     investigation findings.
-   - The fix must be general: if the upstream adds more error status codes
-     in future, `pnpm sdk-codegen` must handle them without manual changes.
+1. **Phase 1 — Bug 2: Component name sanitisation** (TDD):
+   - RED: Unit test with dotted `$ref` names, assert sanitised `componentName`
+   - GREEN: Apply `sanitizeIdentifier` to component names in the builder
+   - Verify existing response-map tests pass
 
-3. **Regenerate and fix downstream**:
-   - Run `pnpm sdk-codegen` — confirm generation succeeds.
-   - Run `pnpm build` — fix any downstream type errors from regenerated types.
-   - The `curriculum-sdk` had a `SearchScopeWithAll` indexing error and the
-     `oak-search-sdk` had a type predicate issue. These may resolve once
-     codegen regenerates, or may need targeted fixes.
+2. **Phase 2 — Bug 1: Cross-validator wildcard awareness** (TDD):
+   - RED: Unit test with shared error responses + wildcard entries, assert no throw
+   - RED: Inverse test — different components per status, assert throw on wildcards
+   - GREEN: Implement wildcard-aware expected-key collection
+   - Verify existing cross-validator tests pass
 
-4. **Run full gates**:
-   - `pnpm check` must pass end-to-end.
-   - The Cardinal Rule acceptance criterion: `pnpm sdk-codegen && pnpm build`
-     succeeds cleanly.
+3. **Phase 3 — Regenerate and verify**:
+   - `pnpm sdk-codegen` — confirm generation succeeds (live schema)
+   - `pnpm build` — confirm downstream compilation
+   - `pnpm check` — full gate passage
 
-5. **Update authority docs**:
-   - Mark the codegen adaptation plan as complete.
-   - Update the semantic-search prompt's Step 3 gate to reflect that the
-     prerequisite is now met.
+4. **Phase 4 — Update authority docs**:
+   - Mark the codegen adaptation plan as complete
+   - Update the semantic-search prompt's prerequisite gate
+
+## Decoupling
+
+`SDK_CODEGEN_MODE=ci pnpm sdk-codegen` uses the cached schema (no error
+responses) and passes today. Both fixes can be developed and tested entirely
+with synthetic schemas in unit tests, then validated against the live schema
+in Phase 3.
 
 ## Constraints
 

@@ -75,9 +75,7 @@ function createBulkFileResult(): BulkFileResult {
 }
 
 function createCategoryMap(): CategoryMap {
-  return new Map([
-    ['fractions-year-3', [{ title: 'Number', slug: 'number' }]],
-  ]);
+  return new Map([['fractions-year-3', [{ title: 'Number', slug: 'number' }]]]);
 }
 
 function createMockClient(): OakClient {
@@ -129,18 +127,11 @@ describe('categoryMap pipeline wiring (F2 fix)', () => {
     );
 
     const sequenceDoc = result.operations.find(
-      (entry) =>
-        typeof entry === 'object' &&
-        entry !== null &&
-        'category_titles' in entry,
+      (entry) => typeof entry === 'object' && entry !== null && 'category_titles' in entry,
     );
 
     expect(sequenceDoc).toBeDefined();
-    if (
-      sequenceDoc &&
-      typeof sequenceDoc === 'object' &&
-      'category_titles' in sequenceDoc
-    ) {
+    if (sequenceDoc && typeof sequenceDoc === 'object' && 'category_titles' in sequenceDoc) {
       expect(sequenceDoc.category_titles).toEqual(['Number']);
     }
   });
@@ -168,11 +159,7 @@ describe('categoryMap pipeline wiring (F2 fix)', () => {
     );
 
     expect(unitDoc).toBeDefined();
-    if (
-      unitDoc &&
-      typeof unitDoc === 'object' &&
-      'unit_topics' in unitDoc
-    ) {
+    if (unitDoc && typeof unitDoc === 'object' && 'unit_topics' in unitDoc) {
       expect(unitDoc.unit_topics).toEqual(['Number']);
     }
   });

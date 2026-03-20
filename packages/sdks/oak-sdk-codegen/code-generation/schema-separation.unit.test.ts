@@ -4,17 +4,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type {
-  MediaTypeObject,
-  OpenAPIObject,
-  ResponseObject,
-  SchemaObject,
-} from 'openapi3-ts/oas31';
+import type { OpenAPIObject, SchemaObject } from 'openapi3-ts/oas31';
 
-import {
-  add404ResponsesWhereExpected,
-  ENDPOINTS_WITH_LEGITIMATE_404S,
-} from './schema-enhancement-404.js';
 import { createOpenCurriculumSchema } from './schema-separation-core.js';
 import { schemaWithNestedResponses } from './test-fixtures.js';
 
@@ -45,17 +36,6 @@ function buildTranscriptSchema(): OpenAPIObject {
       },
     },
   };
-}
-
-function isResponseObject(value: unknown): value is ResponseObject {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  return !('$ref' in value);
-}
-
-function isMediaTypeObject(value: unknown): value is MediaTypeObject {
-  return typeof value === 'object' && value !== null;
 }
 
 function isSchemaObject(value: unknown): value is SchemaObject {
@@ -168,134 +148,5 @@ describe('schema separation', () => {
       }
       expect(summarySchema.anyOf).toHaveLength(2);
     });
-
-    it('adds configured legitimate 404 responses to the SDK schema only', () => {
-      const validatedSchema = buildTranscriptSchema();
-
-      const { original, sdk } = createOpenCurriculumSchema(validatedSchema);
-
-      const originalResponses =
-        original.paths?.['/lessons/{lesson}/transcript']?.get?.responses ?? {};
-      expect(originalResponses).not.toHaveProperty('404');
-
-      const sdkResponses = sdk.paths?.['/lessons/{lesson}/transcript']?.get?.responses;
-      if (!sdkResponses || !Object.hasOwn(sdkResponses, '404')) {
-        throw new Error('Expected 404 response to be present');
-      }
-
-      const rawResponse: unknown = sdkResponses['404'];
-      if (!isResponseObject(rawResponse)) {
-        throw new Error('Expected inline 404 response object');
-      }
-
-      expect(rawResponse.description).toContain('Temporary');
-      expect(rawResponse.description).toContain(
-        'Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4',
-      );
-
-      const jsonMedia = rawResponse.content?.['application/json'];
-      if (!isMediaTypeObject(jsonMedia)) {
-        throw new Error('Expected JSON media type definition');
-      }
-
-      expect(jsonMedia.example).toEqual({
-        message: 'Transcript not available for this query',
-        code: 'NOT_FOUND',
-        data: {
-          code: 'NOT_FOUND',
-          httpStatus: 404,
-          path: 'getLessonTranscript.getLessonTranscript',
-          zodError: null,
-        },
-      });
-
-      const schema = jsonMedia.schema;
-      if (!isSchemaObject(schema)) {
-        throw new Error('Expected schema object describing the 404 payload');
-      }
-
-      // Strict schema: no additionalProperties: true - fail fast on unknown keys
-      expect(schema).toStrictEqual({
-        type: 'object',
-        description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
-        required: ['message', 'code', 'data'],
-        properties: {
-          message: {
-            type: 'string',
-            example: 'Transcript not available for this query',
-            description: 'Human-readable message describing why the resource is unavailable.',
-          },
-          code: {
-            type: 'string',
-            example: 'NOT_FOUND',
-            description: 'API error code describing the failure classification.',
-          },
-          data: {
-            type: 'object',
-            description:
-              'Additional metadata describing the failure as emitted by the Oak API gateway.',
-            required: ['code', 'httpStatus', 'path'],
-            properties: {
-              code: {
-                type: 'string',
-                example: 'NOT_FOUND',
-                description: 'Reiterated error code for downstream tools.',
-              },
-              httpStatus: {
-                type: 'integer',
-                example: 404,
-                description: 'HTTP status code returned by the upstream API.',
-              },
-              path: {
-                type: 'string',
-                example: 'getLessonTranscript.getLessonTranscript',
-                description: 'Identifier of the upstream operation emitting the error.',
-              },
-              zodError: {
-                description:
-                  'Optional validation payload describing schema mismatches. Always null for 404 responses.',
-                type: 'null',
-                example: null,
-              },
-            },
-          },
-        },
-      });
-    });
-
-    it('fails fast when upstream schema already documents configured 404 responses', () => {
-      const validatedSchema = buildTranscriptSchema();
-      const operation =
-        validatedSchema.paths?.['/lessons/{lesson}/transcript']?.get ??
-        (() => {
-          throw new Error('Transcript GET operation not present');
-        })();
-
-      if (!operation.responses) {
-        throw new Error('Transcript GET operation has no responses object');
-      }
-
-      operation.responses['404'] = {
-        description: 'Already documented upstream',
-      };
-
-      expect(() => createOpenCurriculumSchema(validatedSchema)).toThrowError(
-        /Cannot add HTTP 404 response via add404ResponsesWhereExpected for GET \/lessons\/\{lesson\}\/transcript/i,
-      );
-    });
-  });
-});
-
-describe('add404ResponsesWhereExpected', () => {
-  it('fails fast when configuration attempts to add the same status twice', () => {
-    const validatedSchema = buildTranscriptSchema();
-    const duplicateOverrides = [
-      ...ENDPOINTS_WITH_LEGITIMATE_404S,
-      ...ENDPOINTS_WITH_LEGITIMATE_404S,
-    ] as const;
-
-    expect(() => add404ResponsesWhereExpected(validatedSchema, duplicateOverrides)).toThrowError(
-      /Cannot add HTTP 404 response via add404ResponsesWhereExpected/,
-    );
   });
 });

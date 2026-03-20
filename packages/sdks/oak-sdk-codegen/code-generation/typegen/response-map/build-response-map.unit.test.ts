@@ -50,6 +50,177 @@ describe('buildResponseMapData', () => {
     );
   });
 
+  it('sanitises dotted component names from $ref to match Zod registry keys', () => {
+    const schema: OpenAPIObject = {
+      openapi: '3.0.0',
+      info: { title: 't', version: '1' },
+      paths: {
+        '/things/{id}': {
+          get: {
+            operationId: 'getThings-getThing',
+            responses: {
+              200: {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/ThingResponse' },
+                  },
+                },
+              },
+              400: {
+                description: 'bad request',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/error.BAD_REQUEST' },
+                  },
+                },
+              },
+              401: {
+                description: 'unauthorised',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/error.UNAUTHORIZED' },
+                  },
+                },
+              },
+              404: {
+                description: 'not found',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/error.NOT_FOUND' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          ThingResponse: { type: 'object', properties: { id: { type: 'string' } } },
+          'error.BAD_REQUEST': {
+            type: 'object',
+            properties: { message: { type: 'string' }, code: { type: 'string' } },
+          },
+          'error.UNAUTHORIZED': {
+            type: 'object',
+            properties: { message: { type: 'string' }, code: { type: 'string' } },
+          },
+          'error.NOT_FOUND': {
+            type: 'object',
+            properties: { message: { type: 'string' }, code: { type: 'string' } },
+          },
+        },
+      },
+    };
+
+    const entries = buildResponseMapData(schema);
+
+    const errorEntries = entries.filter(
+      (e) => e.operationId === 'getThings-getThing' && e.status !== '200',
+    );
+
+    expect(errorEntries).toHaveLength(3);
+    expect(errorEntries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          status: '400',
+          componentName: 'error_BAD_REQUEST',
+          source: 'component',
+        }),
+        expect.objectContaining({
+          status: '401',
+          componentName: 'error_UNAUTHORIZED',
+          source: 'component',
+        }),
+        expect.objectContaining({
+          status: '404',
+          componentName: 'error_NOT_FOUND',
+          source: 'component',
+        }),
+      ]),
+    );
+  });
+
+  it('emits wildcard entries with sanitised component names for shared error schemas', () => {
+    const schema: OpenAPIObject = {
+      openapi: '3.0.0',
+      info: { title: 't', version: '1' },
+      paths: {
+        '/alpha': {
+          get: {
+            operationId: 'getAlpha',
+            responses: {
+              200: {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/AlphaResponse' },
+                  },
+                },
+              },
+              404: {
+                description: 'not found',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/error.NOT_FOUND' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        '/beta': {
+          get: {
+            operationId: 'getBeta',
+            responses: {
+              200: {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/BetaResponse' },
+                  },
+                },
+              },
+              404: {
+                description: 'not found',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/error.NOT_FOUND' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          AlphaResponse: { type: 'object', properties: { a: { type: 'string' } } },
+          BetaResponse: { type: 'object', properties: { b: { type: 'string' } } },
+          'error.NOT_FOUND': {
+            type: 'object',
+            properties: { message: { type: 'string' }, code: { type: 'string' } },
+          },
+        },
+      },
+    };
+
+    const entries = buildResponseMapData(schema);
+
+    const wildcardEntries = entries.filter((e) => e.operationId === '*');
+    expect(wildcardEntries).toHaveLength(1);
+    expect(wildcardEntries[0]).toEqual(
+      expect.objectContaining({
+        operationId: '*',
+        status: '404',
+        componentName: 'error_NOT_FOUND',
+        source: 'component',
+        method: '*',
+      }),
+    );
+  });
+
   it('includes non-200 $ref responses (e.g., 404, 500)', () => {
     const schema: OpenAPIObject = {
       openapi: '3.0.0',

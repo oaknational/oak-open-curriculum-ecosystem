@@ -1,3 +1,33 @@
+## Session 2026-03-19 (session 3) — Codegen error response investigation
+
+### What Was Done
+
+- Deep read-only investigation of the codegen pipeline to understand the
+  Cardinal Rule breach from upstream error response additions.
+- Discovered **two bugs**, not one: (1) cross-validator doesn't expect wildcards,
+  (2) dotted component names (`error.BAD_REQUEST`) break the emitter because
+  `$ref` names are passed through unsanitised.
+- Updated plan with full investigation findings, root-cause analysis, phased
+  TDD execution sequence, risk assessment, and decoupling strategy.
+- Updated session prompt and project memory to reflect both bugs.
+- Created focused implementation entry prompt for the next session.
+
+### Lessons
+
+- Going slow in architecturally delicate areas pays off: the second bug (dotted
+  names) would have been a nasty surprise mid-implementation if we'd jumped
+  straight to fixing Bug 1. The execution order matters — Bug 2 must be fixed
+  first because Bug 1's wildcard detection depends on sanitised names.
+- The codegen's wildcard design (builder → emitter → descriptor helpers) is
+  coherent and well-thought-out. The cross-validator being out of sync is a
+  gap, not a design flaw. Recognising this prevents over-engineering the fix.
+- The cached schema provides a natural decoupling mechanism: `--ci` mode reads
+  from cache, so all fixes can be developed against synthetic test schemas
+  before touching the live schema. This was already built into the codebase
+  but not documented as a development strategy.
+
+---
+
 ## Session 2026-03-19 (session 2) — F2 fix and Cardinal Rule breach
 
 ### What Was Done

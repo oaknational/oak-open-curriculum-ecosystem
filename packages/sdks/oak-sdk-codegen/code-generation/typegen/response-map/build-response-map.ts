@@ -115,7 +115,7 @@ function collectResponses(
     }
     const info = getJsonResponseInfo(response, opId, status, resolveComponent);
     if (info) {
-      let componentName = info.name;
+      let componentName = info.source === 'component' ? sanitizeIdentifier(info.name) : info.name;
       let zodIdentifier: string | undefined;
       if (info.source === 'inline') {
         const baseName = sanitizeIdentifier(`${opId}_${status}`);

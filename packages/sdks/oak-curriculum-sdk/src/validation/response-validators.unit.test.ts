@@ -224,7 +224,6 @@ describe('validateCurriculumResponse', () => {
         const issuePaths = result.issues.map((issue) => issue.path.join('.'));
         expect(issuePaths).toContain('message');
         expect(issuePaths).toContain('code');
-        expect(issuePaths).toContain('data');
       } else {
         throw new Error('Expected validation to fail for incomplete 404 payload');
       }
