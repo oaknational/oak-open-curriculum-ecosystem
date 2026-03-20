@@ -2,8 +2,8 @@
 prompt_id: codegen-error-response-implementation
 title: "Codegen Error Response — Implementation Session"
 type: execution
-status: active
-last_updated: 2026-03-19
+status: complete
+last_updated: 2026-03-20
 ---
 
 # Codegen Error Response — Implementation Session

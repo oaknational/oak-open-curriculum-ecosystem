@@ -2,8 +2,8 @@
 prompt_id: codegen-error-response-adaptation
 title: "Codegen Error Response Adaptation"
 type: execution
-status: active
-last_updated: 2026-03-19
+status: complete
+last_updated: 2026-03-20
 ---
 
 # Codegen Error Response Adaptation

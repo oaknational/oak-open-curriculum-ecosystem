@@ -1,3 +1,45 @@
+## Session 2026-03-20 — Codegen error response implementation
+
+### What Was Done
+
+- Fixed two codegen bugs: component name sanitisation (Bug 2) and
+  cross-validator wildcard awareness (Bug 1). TDD at unit and
+  integration scale.
+- Refactored cross-validate.ts to use narrow openapi3-ts types instead
+  of defensive `unknown` narrowing.
+- Fixed 8 downstream test failures across 3 packages (sdk-codegen,
+  curriculum-sdk, mcp-stdio) caused by the regenerated types now
+  including documented error responses.
+- Deleted stale 404 decorator tests and unused dead code.
+- Created comprehensive error-response-classification plan for next
+  session. Documented critical path to P0 in README.
+
+### Lessons
+
+- **Guard once at the trust boundary, then work with narrow types.**
+  The cross-validator was defensively narrowing from `unknown` at every
+  step, as if the data were untrusted. But the schema is validated at
+  fetch time — everything downstream should use the types openapi3-ts
+  provides. The `IExtensionType` index signature is the ONE boundary
+  where `Object.entries` widens values; guard there with
+  `isResponseObject`, then work with `ResponseObject` throughout.
+- **Identical error schemas create a first-match-wins ambiguity.** When
+  multiple documented statuses share the same Zod schema, the validator
+  picks the first match in iteration order. A 404 body validates as 400.
+  The HTTP status must be part of the discriminant, not just the body.
+- **Tests that constrain implementation source are entropy.** Three
+  schema-separation tests failed because they assumed the 404 schema
+  came from the decorator (now empty), not from the upstream. The same
+  behaviours were already proven at a lower level. Delete tests that
+  test "where the definition came from" rather than "what the behaviour
+  is."
+- **When documentation is the deliverable, stop coding.** The user
+  correctly identified that capturing decisions and context for the next
+  session was more valuable than implementing the full error
+  classification in this session.
+
+---
+
 ## Session 2026-03-19 (session 3) — Codegen error response investigation
 
 ### What Was Done
