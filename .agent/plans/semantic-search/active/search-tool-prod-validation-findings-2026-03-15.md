@@ -17,19 +17,68 @@ This document captures end-to-end validation findings for the `search` MCP tool 
 
 ## Summary
 
-The search infrastructure is mostly healthy across scopes and major filters. However, two filters remain unresolved in production after reingest and retest:
+The search infrastructure is mostly healthy across scopes and major filters.
+**Root causes are documented** for the two production filter findings (F1/F2),
+and **code fixes are complete** for F2; F1 is explained as **stale index data**
+for `thread_slugs`, not a retrieval defect. **Production verification** that
+filters behave as expected in live indexes is **still pending**: it requires the
+versioned re-ingest, promote, and Phase 3 retest captured in the active
+execution plan — until then, we do not have **closed** evidence for “all search
+filters verified in production”.
 
-1. **F1**: `threadSlug` filter on `lessons` likely broken (returns zero in scenarios where baseline query returns multiple hits).
-2. **F2**: `category` filter on `sequences` remains ignored/no-op in the production runtime under test; remediation deployment state still needs explicit verification.
+See per-finding status lines and **Current execution state** below.
 
-These findings should be treated as release blockers for "all search features working properly".
+### Current execution state (2026-03-21)
 
-### Current execution state (2026-03-15)
+- Previous ingest (`v2026-03-15-134856`) predates pipeline fixes — stale data.
+- Phase 1 code follow-ups complete (2026-03-21): all fixes committed, all
+  quality gates green, six specialist reviewer passes.
+- Phase 2 re-ingest operator runbook documented in execution plan (Task 2.1).
+- **Next**: operator runs `admin stage` to create new versioned indexes with
+  corrected data, then validate, promote, and retest F1/F2.
 
-- Fresh versioned ingest completed successfully: `v2026-03-15-134856`.
-- Post-ingest readbacks are healthy (`validate-aliases`, `meta get`, `count`).
-- Live `oak_meta` mapping contract check passed (`ensureIndexMetaMappingContract`).
-- `F1`/`F2` production retests were re-run and both findings still reproduce.
+### Code trace and regression tests (2026-03-21)
+
+**MCP is not dropping `threadSlug` or `category`.** The curriculum SDK maps
+MCP args into Search SDK params (`packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/execution.ts`);
+`execution.integration.test.ts` asserts `searchLessons` receives `threadSlug` and
+`searchSequences` receives `category`.
+
+**Search SDK builds the expected ES filters and attaches them to every RRF
+sub-retriever** (lessons: four-way `buildFourWayRetriever` in
+`rrf-query-builders.ts`; sequences: two-way `buildSequenceRetriever` in
+`retrieval-search-helpers.ts`). Lesson filters use `term` on `thread_slugs`;
+sequence category uses `match_phrase` on `category_titles`
+(`rrf-query-helpers.ts`).
+
+**Regression tests (pin wiring, not prod index quality):**
+
+- `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.unit.test.ts` —
+  all four lesson RRF retrievers share the same `filter` when
+  `buildLessonFilters` includes `threadSlug` (and other filters).
+- `packages/sdks/oak-search-sdk/src/retrieval/search-sequences.integration.test.ts` —
+  both sequence RRF `standard` retrievers share the same `filter` when
+  `category` is set.
+
+**Planned (post-P0):** a lessons field-integrity test that pins `threadSlug` to
+`SEARCH_FIELD_INVENTORY` (`thread_slugs`), mirroring the sequence category test;
+plus a documented optional prod smoke procedure outside default CI — see
+[search-contract-followup.plan.md](../current/search-contract-followup.plan.md).
+
+**Prod MCP spot-check (2026-03-21):** For lessons, baseline vs
+`threadSlug: "number-fractions"` returned the same hit **count** (10); returned
+lessons included that thread in `thread_slugs`, so this matrix does not prove
+the filter ineffective — use a baseline that includes lessons **without** the
+target thread, or diff result IDs. For sequences, responses showed
+`category_titles: []` while invalid `category` still returned the same two maths
+sequences — consistent with **empty / missing index data** for
+`category_titles` until `categoryMap` is wired through ingest and indexes are
+rebuilt (see F2 root-cause), not with MCP parameter stripping.
+
+**Response `total` caveat:** `searchLessons` / `searchSequences` currently set
+`total` to the length of the returned result set (post score filter), not
+Elasticsearch `hits.total`. Treat `total` as **page cardinality**, not “matches
+in the index”, when comparing prod runs.
 
 ---
 
@@ -51,7 +100,7 @@ Validated scope and option coverage:
 ## F1 - `threadSlug` filter on `lessons` returns empty unexpectedly
 
 - Severity: high
-- Status: open_confirmed_post_reingest
+- Status: stale_index_confirmed_pending_reingest
 - Area: `search` filter semantics (`lessons` scope)
 
 ### Reproduction

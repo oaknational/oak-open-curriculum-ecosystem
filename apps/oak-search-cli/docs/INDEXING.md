@@ -1,6 +1,6 @@
 # Indexing Playbook
 
-**Last Updated**: 2026-03-08
+**Last Updated**: 2026-03-21
 
 Use this guide when populating Elasticsearch Serverless with Oak Curriculum data.
 
@@ -79,6 +79,16 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 - **Idempotence**: carry progress markers (key stage + subject + offset) so reruns continue from the last successful chunk.
 - **Logging**: emit structured logs per batch with doc counts, duration, and error summaries; correlate with zero-hit thresholds in dashboards.
 - **Alias strategy**: index to versioned write indices (`oak_lessons_v2026-03-07-143022`) using the blue/green lifecycle service. Use `oak-search admin versioned-ingest` to orchestrate the full cycle (create, ingest, verify, swap, clean up). See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
+
+### Operational CLI: `validate-aliases` vs `admin count`
+
+These commands answer different questions. Do not treat green alias health as proof that live data matches the latest bulk snapshot.
+
+**`oaksearch admin validate-aliases`** (SDK `validateAliases`) checks **structural** alias health only: for each curriculum index kind, the name must exist in Elasticsearch as an **alias** (not a bare index) and must point at a **non-null** physical index. It does **not** verify document counts, field population, freshness relative to `bulk-downloads/manifest.json`, or agreement with `oak_meta`. See ADR-130 for rollback and promote-time coherence checks.
+
+**`oaksearch admin count`** issues the Elasticsearch **`_count`** API against each **read alias** (e.g. `oak_lessons`). That returns **true parent document** counts and excludes internal nested documents created by `semantic_text` / ELSER chunking (unlike `_cat/indices`, which can inflate counts). The CLI prints a **TOTAL** row that is the **sum** of the six index kinds.
+
+**Interpreting counts**: Live counts follow whatever **versioned physical index** the aliases currently reference (visible as `targetIndex` in `validate-aliases` output, e.g. `oak_lessons_v2026-03-15-134856`). If the bulk manifest’s `downloadedAt` is **newer** than that version stamp, **pre-stage** `admin count` can legitimately sit **below** the counts you expect **after** `admin stage` from the current bulk — until you stage, validate, and promote. Compare like with like: same bulk directory, same stage output, or same promoted version.
 
 Example helper (simplified):
 

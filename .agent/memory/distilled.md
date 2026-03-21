@@ -9,14 +9,9 @@ Hard-won rules extracted from napkin sessions. Read this
 before every session. Every entry earned its place by
 changing behaviour.
 
-**Source**: Distilled from `archive/napkin-2026-02-24.md`
-(sessions 2026-02-10 to 2026-02-24),
-`archive/napkin-2026-02-28.md` (sessions 2026-02-26 to
-2026-02-28), and `archive/napkin-2026-03-02.md` (sessions
-2026-02-28 to 2026-03-02), and
-`archive/napkin-2026-03-05.md` (sessions 2026-03-02 to
-2026-03-05), and `archive/napkin-2026-03-07.md` (sessions
-2026-03-05 to 2026-03-07).
+**Source**: Distilled from archived napkins
+`napkin-2026-02-24.md` through `napkin-2026-03-21.md`
+(sessions 2026-02-10 to 2026-03-21).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -50,6 +45,10 @@ enough for permanent documentation.
 
 ## Repo-Specific Rules
 
+- Elasticsearch: `oaksearch admin validate-aliases` proves alias **topology**
+  only; `admin count` reports true parent docs. Do not equate green alias
+  health with bulk freshness — see
+  `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
 - ADR index is the source of truth for ADR count; keep
   README in sync
 - From `packages/sdks/oak-curriculum-sdk/`, repo root is
@@ -113,6 +112,9 @@ enough for permanent documentation.
 
 ## Documentation (Agent Operational)
 
+- Moving plan artefacts is cross-cutting: always grep for
+  old paths in `*.ts`, `*.mjs`, `*.json`, not just `*.md`
+  (test configs and CLI defaults hardcode plan paths)
 - Session prompts in `.agent/prompts/` should be updated
   at end of each session, not just napkin
 - `process.env.X = value` with trailing space in backticks

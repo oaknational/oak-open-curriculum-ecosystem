@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-03-07T16:56:28.907Z
+ * Generated at: 2026-03-21T17:42:45.472Z
  */
 
 /* eslint-disable no-restricted-properties */

@@ -40,13 +40,28 @@ function getFilterClause(calls: EsSearchRequest[]) {
   if (!retriever || !('rrf' in retriever) || !retriever.rrf) {
     throw new Error('Expected rrf retriever on search request');
   }
-  // Sequence retrieval keeps BM25 as the first retriever; filter clauses are
-  // attached to every retriever, so asserting on the first one is sufficient.
+  // Sequence RRF uses two `standard` retrievers (BM25 + semantic); filter is on
+  // the first. Category tests also assert both retrievers share the same filter.
   const firstRetriever = retriever.rrf.retrievers?.[0];
   if (!firstRetriever || !('standard' in firstRetriever) || !firstRetriever.standard) {
     throw new Error('Expected first standard retriever');
   }
   return firstRetriever.standard.filter;
+}
+
+/** Both RRF standard retrievers must receive the same filter (BM25 + semantic). */
+function getAllStandardRetrieverFilters(calls: EsSearchRequest[]): unknown[] {
+  const request = getFirstRequest(calls);
+  const retriever = request.retriever;
+  if (!retriever || !('rrf' in retriever) || !retriever.rrf?.retrievers) {
+    throw new Error('Expected rrf retriever on search request');
+  }
+  return retriever.rrf.retrievers.map((r) => {
+    if (r && 'standard' in r && r.standard) {
+      return r.standard.filter;
+    }
+    throw new Error('Expected standard retriever');
+  });
 }
 
 const stubResolveIndex = () => 'oak_sequences_test';
@@ -112,6 +127,10 @@ describe('searchSequences', () => {
       expect(filterClause).toEqual({
         bool: { filter: [{ match_phrase: { category_titles: 'algebra' } }] },
       });
+
+      const filters = getAllStandardRetrieverFilters(calls);
+      expect(filters).toHaveLength(2);
+      expect(filters[0]).toEqual(filters[1]);
     });
 
     it('combines category with other filters', async () => {
@@ -140,6 +159,10 @@ describe('searchSequences', () => {
           ],
         },
       });
+
+      const filters = getAllStandardRetrieverFilters(calls);
+      expect(filters).toHaveLength(2);
+      expect(filters[0]).toEqual(filters[1]);
     });
 
     it('passes no filter when no filtering params provided', async () => {

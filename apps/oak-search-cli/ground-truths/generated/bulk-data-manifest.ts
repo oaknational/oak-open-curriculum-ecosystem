@@ -2,7 +2,7 @@
  * Bulk data manifest with generation metadata.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-03-07T16:56:28.907Z
+ * Generated at: 2026-03-21T17:42:45.472Z
  */
 
 /**
@@ -208,4 +208,4 @@ export const TOTAL_LESSON_COUNT = 12391 as const;
 export const SUBJECT_PHASE_COUNT = 30 as const;
 
 /** Generation timestamp */
-export const GENERATED_AT = '2026-03-07T16:56:28.907Z' as const;
+export const GENERATED_AT = '2026-03-21T17:42:45.473Z' as const;

@@ -272,6 +272,8 @@ pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads
 pnpm tsx bin/oaksearch.ts admin validate-aliases
 ```
 
+Structural alias health (see [docs/INDEXING.md](./docs/INDEXING.md) — `validate-aliases` vs `admin count`) is not the same as data freshness relative to your bulk snapshot.
+
 ### Flags
 
 | Flag                             | Description                                                     |

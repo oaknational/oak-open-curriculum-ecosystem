@@ -16,7 +16,7 @@ todos:
     status: done
   - id: prepare-reingest-command
     content: "Prepare re-ingest operator command with pre-checks and expected output."
-    status: pending
+    status: done
   - id: operator-reingest
     content: "Operator executes admin stage, agent validates output."
     status: pending
@@ -32,11 +32,14 @@ todos:
   - id: close-findings-and-archive
     content: "Close findings register, archive this plan, update all authority docs."
     status: pending
+  - id: post-p0-search-contract-followup
+    content: "After P0 closure: lessons threadSlug field-integrity test + optional prod smoke doc (see ../current/search-contract-followup.plan.md)."
+    status: pending
 ---
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 ✅ COMPLETE — Phase 2 next: re-ingest)
+**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2: Task 2.1 ✅, operator stage next)
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`
@@ -71,128 +74,100 @@ This plan consolidates the remaining work from three sources:
   [unified-versioned-ingestion.plan.md](../current/unified-versioned-ingestion.plan.md)
 - Field-integrity tests (archived, complete):
   [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
+- Post-P0 contract + smoke (queued — does not block re-ingest):
+  [search-contract-followup.plan.md](../current/search-contract-followup.plan.md)
 
 ---
 
-## Phase 1: F2 Code Follow-ups
+## Phase 1: F2 Code Follow-ups — ✅ COMPLETE (2026-03-21)
 
-### Task 1.1: Extract shared `createMockClient` test helper — ✅ DONE
+All code follow-ups done. 1038 tests, full-suite gates green, six specialist
+reviewer passes. Phase 1 readiness gate **CLOSED**.
 
-**Commit**: `dfb48b90` (2026-03-21)
+| Task | Summary | Commit |
+|---|---|---|
+| 1.1 | Shared `createMockClient` helper, test split | `dfb48b90` |
+| 1.2 | `fetchCategoryMapForSequences` → `Result<CategoryMap, Error>` | (same session) |
+| 1.2b | `GetSequenceUnitsFn` → `Result<SequenceUnitsResponse, SdkFetchError>`, hand-rolled types replaced with schema-derived | `3ec1dbc6` |
 
-Extracted duplicated OakClient mock factory from 5 test files into
-`apps/oak-search-cli/src/test-helpers/mock-oak-client.ts` with
-`overrides: Partial<OakClient>` pattern. All 5 consumers updated.
-
-Additional reviewer findings addressed in same commit:
-
-- Deleted self-referential mock factory test (tests mocks, not product
-  behaviour — violates "If a test is only testing the test or mocks, delete it")
-- Split `api-supplementation.unit.test.ts`: pure functions remain in
-  `*.unit.test.ts`, `buildKs4SupplementationContext` (uses injected mocks)
-  moved to new `api-supplementation.integration.test.ts`
-
-**Reviewers**: code-reviewer, test-reviewer, architecture-reviewer-barney.
-All findings addressed. 1038 tests, all quality gates green.
-
-### Task 1.2: Migrate `fetchCategoryMapForSequences` to Result — ✅ DONE
-
-**Result migration** (2026-03-21): Return type changed from `Promise<CategoryMap>`
-to `Promise<Result<CategoryMap, Error>>`. TDD Red→Green→Refactor followed.
-
-Code changes complete:
-
-- `fetchCategoryMapForSequences` returns `Result` via `ok()`/`err()`
-- `@throws` removed, TSDoc updated
-- `prepareBulkIngestion` unwraps via extracted `fetchCategories` helper
-  (also fixes `max-lines-per-function` lint)
-- `BulkIngestionDeps` auto-updated via `typeof`
-- Tests: `unwrap()` for success, `.ok === false` for error, `ok(fakeCategoryMap)`
-  for mock. All assertions unconditional (no `if` guards).
-
-**Reviewers** (2026-03-21): code-reviewer (APPROVED), test-reviewer (findings
-fixed), type-reviewer (AT-RISK finding resolved in Task 1.2b).
-
-### Task 1.2b: Fix blocking `unknown` type violation — ✅ DONE
-
-**Completed** (2026-03-21). Six reviewer passes (code-reviewer, type-reviewer,
-test-reviewer — each run twice: initial + post-fix).
-
-Changes:
-
-- `GetSequenceUnitsFn` return tightened from `Result<unknown, SdkFetchError>` to
-  `Result<SequenceUnitsResponse, SdkFetchError>` (schema-derived type)
-- `makeGetSequenceUnits` now validates with `isSequenceUnitsResponse` at boundary,
-  matching the pattern from `makeGetSubjectSequences`
-- `CategoryFetchDeps` tightened to `Result<SequenceUnitsResponse, SdkFetchError>`
-- `Array.isArray` coercion removed from `fetchCategoryMapForSequences`
-- `buildCategoryMap` accepts `SequenceUnitsResponse`, uses `'units' in yearData`
-  to narrow the discriminated union
-- Hand-rolled `ApiUnit`/`ApiCategory`/`ApiYearData`/`SequenceUnitsData` replaced
-  with schema-derived types via `Extract` and indexed access (`YearEntryWithUnits`,
-  `SequenceUnit`, `SequenceUnitCategory`)
-- `addUnitCategories` uses `'unitSlug' in unit` / `'unitOptions' in unit` for
-  proper discriminated union narrowing (was truthiness check)
-- `sdk-api-methods.unit.test.ts` renamed to `sdk-api-methods.integration.test.ts`
-  (uses injected mock dependencies — integration pattern per ADR-078)
-- All test mocks updated to use typed `SequenceUnitsResponse` data with
-  `createMockSequenceUnits()` factory
-- `sandbox-fixture.ts`: removed `unknown` type erasure
-
-**Evidence**: type-check clean, lint 0 errors, 1038/1038 tests, all reviewer
-findings addressed. No `unknown` remains in the type chain.
-
-### Phase 1 Completion Gates — ✅ ALL GREEN (2026-03-21)
-
-Full-suite gates run after Phase 1 completion:
-
-| Gate | Result |
-|---|---|
-| `sdk-codegen` | ✅ |
-| `build` | ✅ (17/17) |
-| `type-check` | ✅ (28/28) |
-| `doc-gen` | ✅ |
-| `lint:fix` | ✅ (0 errors) |
-| `format:root` | ✅ |
-| `markdownlint:root` | ✅ |
-| `test` | ✅ (1038/1038) |
-| `test:e2e` | ✅ (search-cli 15/15, streamable-http 176/176) |
-| `test:ui` | ✅ (20/20 Playwright) |
-| `smoke:dev:stub` | ✅ |
-
-Phase 1 readiness gate: **CLOSED**. All code follow-ups complete, all quality
-gates green, all reviewer findings addressed. Ready for Phase 2 (re-ingest).
+Phase 1 gate evidence: sdk-codegen ✅, build 17/17 ✅, type-check 28/28 ✅,
+doc-gen ✅, lint 0 errors ✅, format ✅, markdownlint ✅, test 1038/1038 ✅,
+test:e2e (search-cli 15/15, streamable-http 176/176) ✅, test:ui 20/20 ✅,
+smoke:dev:stub ✅.
 
 ---
 
 ## Phase 2: Re-Ingest (Operator)
 
-### Task 2.1: Prepare re-ingest command
+### Task 2.1: Prepare re-ingest command — ✅ DONE (2026-03-21)
 
-Document the exact command, pre-checks, and expected output for the operator.
+Operator runbook prepared. All commands run from **repo root**. The CLI
+entry point is `bin/oaksearch.ts` (not `src/bin/`).
 
-Pre-checks:
+#### Step 1 — Pre-checks (read-only, safe)
 
-```bash
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts admin validate-aliases
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts admin count
-```
-
-Stage command:
+Run these first to capture baseline state before staging:
 
 ```bash
-cd apps/oak-search-cli
-pnpm tsx src/bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads -v
+# Verify current alias health — all 6 aliases should resolve
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin validate-aliases
+
+# True parent doc counts (excludes ELSER chunk inflation)
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin count
 ```
 
-Expected: 6 versioned indexes created and populated. True parent counts:
-~12,746 lessons, ~1,671 units, ~1,671 rollups, ~164 threads, ~30 sequences,
-~57 facets.
+**Expected baseline**: Counts should show the existing (stale) index data.
+If `validate-aliases` reports missing or broken aliases, investigate before
+proceeding — staging will create new indexes but promotion swaps aliases.
+
+**Interpreting results**: `validate-aliases` only proves **structural** health
+(alias → physical index). It does **not** prove that document counts match the
+current `bulk-downloads/` snapshot. Compare the version embedded in each
+`targetIndex` (e.g. `*_v2026-03-15-…`) to `bulk-downloads/manifest.json`
+`downloadedAt` when explaining gaps between `admin count` and the expected
+**post-stage** table below. Permanent documentation:
+[`apps/oak-search-cli/docs/INDEXING.md`](../../../../apps/oak-search-cli/docs/INDEXING.md)
+(*Operational CLI: `validate-aliases` vs `admin count`*).
+
+#### Step 2 — Stage (creates new versioned indexes, does NOT promote)
+
+```bash
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin stage \
+  --bulk-dir ./bulk-downloads -v
+```
+
+This reads all 33 bulk JSON files from `apps/oak-search-cli/bulk-downloads/`
+(including `manifest.json`) and populates 6 new versioned indexes. The `-v`
+flag enables verbose progress logging.
+
+**Expected stage output** — 6 versioned indexes, true parent counts:
+
+| Index kind | Expected count |
+|---|---|
+| lessons | ~12,746 |
+| units | ~1,671 |
+| rollups | ~1,671 |
+| threads | ~164 |
+| sequences | ~30 |
+| facets | ~57 |
+| **TOTAL** | **~16,339** |
+
+The stage command will print the version string (e.g. `v-20260321-143022`)
+needed for promotion in Task 2.3.
+
+**If stage fails**: The staged indexes are disposable. Diagnose the error,
+fix if needed, and re-run `admin stage` — it replaces any previous staged
+indexes for the same version.
+
+#### Step 3 — Record stage output
+
+Save the version string and per-index counts from stage output. These are
+needed for Task 2.2 validation and Task 2.3 promotion.
 
 ### Task 2.2: Validate staged indexes
 
 ```bash
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts admin count
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin count
 ```
 
 Then run field-readback-audit for Task 2.3 evidence:
@@ -215,9 +190,9 @@ Phase 1 gates, then re-stage). The staged indexes are disposable — a fresh
 ### Task 2.3: Promote and verify
 
 ```bash
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts admin promote --target-version <version>
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts admin validate-aliases
-pnpm tsx apps/oak-search-cli/src/bin/oaksearch.ts search lessons "photosynthesis"
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin promote --target-version <version>
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin validate-aliases
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts search lessons "photosynthesis"
 ```
 
 **Done when**: All aliases healthy, search returns current results.
@@ -267,6 +242,18 @@ production and record before/after evidence:
 3. Update `current/README.md` — mark P0 complete.
 4. Archive this plan to `archive/completed/`.
 5. Update `active/README.md` — clear active items.
+
+### Task 3.3: Post-P0 — contract test symmetry and optional prod smoke (deferred)
+
+Not blocking Phase 2–3 or operator promote. After findings are closed, execute
+[search-contract-followup.plan.md](../current/search-contract-followup.plan.md):
+
+- **Lessons field-integrity**: add a `threadSlug` ↔ `thread_slugs` ↔
+  `SEARCH_FIELD_INVENTORY` test mirroring the existing sequence `category`
+  field-integrity test (`search-field-integrity.integration.test.ts`).
+- **Optional prod smoke**: document a repeatable prod query matrix (MCP JSON or
+  CLI path) and an **optional** package script; keep it **out of** default CI
+  (`pnpm test` / required GitHub jobs).
 
 ---
 

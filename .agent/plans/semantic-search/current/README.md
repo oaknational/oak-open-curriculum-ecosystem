@@ -19,7 +19,7 @@ lane closed out:
 2. F2 closure + P0 ingestion              🟡 ACTIVE (2026-03-21)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
    Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
-   Phase 2: Re-ingest (operator: stage, validate, promote, verify) — 🔴 NEXT
+   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 🔴 NEXT (operator)
    Phase 3: Production verification (F1/F2 retest, closure)
 ```
 
@@ -31,6 +31,7 @@ at that point.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
+| P1 (post-P0) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | 📋 Queued — starts after F2/P0 closure |
 | — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
 | — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |
 | P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Complete remaining operational cycle and closeout evidence from unified versioned ingestion lane | 📋 Partially complete, pending final phases |
