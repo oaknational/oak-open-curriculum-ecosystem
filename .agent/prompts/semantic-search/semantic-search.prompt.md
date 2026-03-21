@@ -71,50 +71,27 @@ Current handover state (updated 2026-03-21):
 - Check memory for `project_f2-fix-and-schema-blocker.md` for detailed
   follow-up descriptions
 
-### Step 2: Address F2 immediate follow-ups
+### Step 2: Execute the active plan
 
-Three items, in order:
+The active plan contains all execution detail — phases, tasks, commands,
+expected outputs, and quality/reviewer gates:
 
-1. **Extract shared `createMockClient` test helper** — duplicated OakClient
-   mock factory exists in `bulk-ingestion.integration.test.ts`,
-   `category-wiring.integration.test.ts`, `hybrid-data-source.integration.test.ts`,
-   `api-supplementation.unit.test.ts`, and possibly others. Extract to a shared
-   `test-helpers/mock-oak-client.ts` and update all consumers. Run full gates.
+[f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
 
-2. **Migrate `fetchCategoryMapForSequences` to Result** — currently throws on
-   fetch failure. Change return type to `Promise<Result<CategoryMap, Error>>`,
-   update `BulkIngestionDeps` type, update call site in `prepareBulkIngestion`
-   to unwrap. The fail-fast throw should happen only at the CLI entry point,
-   not inside a function called through a `deps` surface.
+Summary of phases:
 
-3. **Prepare re-ingest operator command** — the exact CLI command, pre-checks,
-   and expected output for the operator to run the re-ingest. See versioned
-   ingestion progress tracker in memory for Phase 3 Task 3.1 details.
+1. **Phase 1**: F2 code follow-ups (shared mock helper, Result migration)
+2. **Phase 2**: Re-ingest (operator: stage, validate, promote, verify)
+3. **Phase 3**: Production verification (F1/F2 retest, closure)
 
-### Step 3: Run reviewer cycle on follow-up changes
+### Step 3: Keep authority documents in sync
 
-Invoke `code-reviewer` + relevant specialists after completing each follow-up.
-Address all findings before proceeding.
+When execution state changes materially, update:
 
-### Step 4: Update authority documents
-
-When execution state changes, update both:
-
-1. `semantic-search.prompt.md` (this file — lane ordering and current focus)
-2. `search-tool-prod-validation-findings-2026-03-15.md` (finding status,
-   evidence, dispositions)
-3. `current/README.md` (critical path status)
-
-### Step 5: Prepare for P0 Phase 3
-
-Once F2 follow-ups are complete, the re-ingest can proceed:
-
-```bash
-cd apps/oak-search-cli
-pnpm tsx src/bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads -v
-```
-
-Then: validate → promote → verify.
+- This prompt (lane ordering and current focus)
+- The active plan (task status and evidence)
+- The findings register (F1/F2 dispositions)
+- `current/README.md` (critical path status)
 
 ---
 
