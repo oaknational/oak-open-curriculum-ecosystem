@@ -16,12 +16,13 @@ lane closed out:
    Scope: Generator fix (InvokeResult), error classification at SDK layer
    Completed: Upstream experimentation, generator changes, TDD classification
 
-2. F2 categoryMap wiring closure
-   Scope: 3 blocking Barney findings, remaining reviewers
-          (docs-adr, test-reviewer, elasticsearch-reviewer),
-          prepare re-ingest operator command
-   Prerequisite: pipeline green (done), error classification (for
-                 confidence in error handling during re-ingest validation)
+2. F2 categoryMap wiring closure          🟡 NEARLY COMPLETE (2026-03-21)
+   Architecture findings: ✅ resolved (commit 2c6e6b51)
+   Reviewer passes: ✅ all five complete
+   Remaining before re-ingest:
+     a. Extract shared createMockClient test helper (DRY debt)
+     b. Migrate fetchCategoryMapForSequences to Result (ADR-088)
+     c. Prepare re-ingest operator command
 
 3. P0: Unified versioned ingestion — final operational phases
    Plan: unified-versioned-ingestion.plan.md
