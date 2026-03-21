@@ -1,3 +1,37 @@
+## Session 2026-03-21 — Task 1.1: Shared mock helper extraction
+
+### What Was Done
+
+- Extracted duplicated `createMockClient` OakClient mock factory from 5 test
+  files into shared `test-helpers/mock-oak-client.ts` with `Partial<OakClient>`
+  overrides pattern. `lesson-materials.unit.test.ts` uses a local
+  `createLessonMaterialsMockClient` that composes on the shared base.
+- Three reviewer passes (code-reviewer, test-reviewer,
+  architecture-reviewer-barney) surfaced two additional improvements:
+  - Deleted self-referential mock factory test (tests mocks, not product)
+  - Split `api-supplementation.unit.test.ts` into unit (pure functions) and
+    integration (`buildKs4SupplementationContext`) files
+- Deep-updated all authority documents (session prompt, execution plan, active
+  README, current README, memory) so a fresh session can pick up Task 1.2
+  without any context gaps.
+- Commit `dfb48b90` (code), commit `9438ec6e` (docs).
+
+### Lessons
+
+- **"Do not assume you know the initial step"** — the thorough start-right
+  directive says to discuss with the user first. Jumping into implementation
+  without asking is a recurring pattern to watch for.
+- **Reviewer findings are the best investment in test refactoring sessions.**
+  The test-reviewer identified that the mock factory test was self-referential
+  (tests the mock, not product behaviour), and the file-naming misclassification.
+  Neither issue was visible from the code alone — the tests all passed.
+- **Deep document updates are not optional.** When a session leaves authority
+  documents stale, the next session wastes time re-discovering state. The
+  cost of updating 6 documents now is lower than the cost of one confused
+  grounding sequence later.
+
+---
+
 ## Session 2026-03-20 — Codegen error response implementation
 
 ### What Was Done
