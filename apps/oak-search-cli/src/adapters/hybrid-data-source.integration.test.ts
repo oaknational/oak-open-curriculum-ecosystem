@@ -9,6 +9,7 @@ import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/sdk-codegen/bu
 import type { OakClient } from './oak-adapter';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 import { unwrap } from '@oaknational/result';
+import { createMockClient } from '../test-helpers/mock-oak-client';
 
 /** Unwrap a Result from createHybridDataSource, failing the test on error. */
 async function createSourceOrFail(
@@ -64,35 +65,6 @@ const createMockBulkFile = (overrides: Partial<BulkDownloadFile> = {}): BulkDown
   sequence: [createMockUnit()],
   lessons: [createMockLesson()],
   ...overrides,
-});
-
-const createMockClient = (): OakClient => ({
-  getUnitsByKeyStageAndSubject: vi.fn(),
-  getLessonTranscript: vi.fn(),
-  getLessonSummary: vi.fn(),
-  getUnitSummary: vi.fn(),
-  getSubjectSequences: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-  getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-  getAllThreads: vi.fn(),
-  getThreadUnits: vi.fn(),
-  getLessonsByKeyStageAndSubject: vi.fn(),
-  getSubjectAssets: vi.fn(),
-  rateLimitTracker: {
-    getStatus: vi.fn().mockReturnValue({ remaining: 1000, total: 1000 }),
-    getRequestCount: vi.fn().mockReturnValue(0),
-    getRequestRate: vi.fn().mockReturnValue(0),
-    reset: vi.fn(),
-  },
-  getCacheStats: vi.fn().mockReturnValue({
-    hits: 0,
-    misses: 0,
-    sets: 0,
-    size: 0,
-    hitRate: 0,
-    cacheEnabled: true,
-    adapters: {},
-  }),
-  disconnect: vi.fn().mockResolvedValue(undefined),
 });
 
 // ============================================================================

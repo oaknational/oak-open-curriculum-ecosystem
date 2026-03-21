@@ -7,7 +7,7 @@ overview: >
 todos:
   - id: f2-shared-mock-helper
     content: "Extract shared createMockClient test helper (DRY debt across 4+ files)."
-    status: pending
+    status: done
   - id: f2-result-migration
     content: "Migrate fetchCategoryMapForSequences to return Result<CategoryMap, Error> (ADR-088)."
     status: pending
@@ -97,15 +97,21 @@ Change return type from `Promise<CategoryMap>` (throws on failure) to
 `Promise<Result<CategoryMap, Error>>` per ADR-088.
 
 - Update `CategoryFetchDeps` and `BulkIngestionDeps` types
-- Update call site in `prepareBulkIngestion` to unwrap
-- Update tests
-- Run full gates + code-reviewer pass
+  (`BulkIngestionDeps` uses `typeof fetchCategoryMapForSequences`, so the type
+  updates automatically when the function signature changes)
+- Update call site in `prepareBulkIngestion` to unwrap the Result
+  (unwrap at the orchestrator level, not the CLI entry point — `prepareBulkIngestion`
+  is the natural error boundary for ingestion operations)
+- Update tests: `fetch-category-map.integration.test.ts` `rejects.toThrow` becomes
+  `resolves` with `Result.err` check (Red phase anchor);
+  `bulk-ingestion.integration.test.ts` mock must return `ok(fakeCategoryMap)`
+- Run full gates + code-reviewer pass + test-reviewer + type-reviewer
 
 **Why**: ADR-088 violation at public function boundary. Calling code cannot
 handle partial failure programmatically.
 
 **Done when**: No `@throws` on public function boundary, Result unwrapped at
-CLI entry point only, all tests pass.
+`prepareBulkIngestion` orchestrator level, all tests pass.
 
 ---
 
@@ -149,6 +155,12 @@ pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \
 
 **Done when**: All 6 indexes show expected counts; `thread_slugs` and
 `category_titles` are populated (non-zero exists counts).
+
+**If validation fails**: Do NOT promote. Investigate the staging output for
+errors, check field-readback-audit results, and identify whether the issue is
+data-level (re-stage with corrected bulk data) or code-level (fix code, re-run
+Phase 1 gates, then re-stage). The staged indexes are disposable — a fresh
+`admin stage` replaces them.
 
 ### Task 2.3: Promote and verify
 

@@ -1,42 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { BulkDownloadFile, BulkFileResult } from '@oaknational/sdk-codegen/bulk';
-import type { OakClient } from '../../adapters/oak-adapter';
 import type { CategoryMap } from '../../adapters/category-supplementation';
 import type { SearchIndexKind } from '../search-index-target';
+import { createMockClient } from '../../test-helpers/mock-oak-client';
 import { prepareBulkIngestion, type BulkIngestionDeps } from './bulk-ingestion';
-
-function createMockClient(): OakClient {
-  return {
-    getSubjectSequences: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getUnitsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getLessonTranscript: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getLessonsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getLessonSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getUnitSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getAllThreads: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getThreadUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getSubjectAssets: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    rateLimitTracker: {
-      getStatus: () => ({
-        limit: 1000,
-        remaining: 1000,
-        reset: Date.now(),
-        resetDate: new Date(),
-        lastChecked: new Date(),
-      }),
-      getRequestCount: () => 0,
-      getRequestRate: () => 0,
-      reset: vi.fn(),
-    },
-    getCacheStats: vi.fn().mockReturnValue({
-      hits: 0,
-      misses: 0,
-      connected: false,
-    }),
-    disconnect: vi.fn().mockResolvedValue(undefined),
-  };
-}
 
 function createBulkFileResult(sequenceSlug: string, subjectTitle: string): BulkFileResult {
   const bulkFile: BulkDownloadFile = {

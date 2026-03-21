@@ -8,10 +8,10 @@
  *
  * @see F2 finding in search-tool-prod-validation-findings-2026-03-15.md
  */
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import type { BulkDownloadFile, BulkFileResult } from '@oaknational/sdk-codegen/bulk';
-import type { OakClient } from '../../adapters/oak-adapter';
 import type { CategoryMap } from '../../adapters/category-supplementation';
+import { createMockClient } from '../../test-helpers/mock-oak-client';
 import { collectPhaseResults } from './bulk-ingestion-phases';
 
 function createUnitWithSlug(unitSlug: string) {
@@ -76,39 +76,6 @@ function createBulkFileResult(): BulkFileResult {
 
 function createCategoryMap(): CategoryMap {
   return new Map([['fractions-year-3', [{ title: 'Number', slug: 'number' }]]]);
-}
-
-function createMockClient(): OakClient {
-  return {
-    getSubjectSequences: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getUnitsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getLessonTranscript: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getLessonsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getLessonSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getUnitSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
-    getAllThreads: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getThreadUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    getSubjectAssets: vi.fn().mockResolvedValue({ ok: true, value: [] }),
-    rateLimitTracker: {
-      getStatus: () => ({
-        limit: 1000,
-        remaining: 1000,
-        reset: Date.now(),
-        resetDate: new Date(),
-        lastChecked: new Date(),
-      }),
-      getRequestCount: () => 0,
-      getRequestRate: () => 0,
-      reset: vi.fn(),
-    },
-    getCacheStats: vi.fn().mockReturnValue({
-      hits: 0,
-      misses: 0,
-      connected: false,
-    }),
-    disconnect: vi.fn().mockResolvedValue(undefined),
-  };
 }
 
 describe('categoryMap pipeline wiring (F2 fix)', () => {
