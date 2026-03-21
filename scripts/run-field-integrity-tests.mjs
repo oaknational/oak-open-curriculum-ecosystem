@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 
 const manifestPath = resolve(
   process.cwd(),
-  '.agent/plans/semantic-search/active/field-integrity-test-manifest.json',
+  '.agent/plans/semantic-search/archive/completed/field-integrity-test-manifest.json',
 );
 
 if (!existsSync(manifestPath)) {

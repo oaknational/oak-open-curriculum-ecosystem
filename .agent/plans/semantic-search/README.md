@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-15
+**Last Updated**: 2026-03-21
 
 ## Start Here
 
@@ -8,11 +8,10 @@
 - Strategic sequence: [roadmap.md](roadmap.md)
 - Research index: [research-index.md](research-index.md)
 
-## Active Authority (Only)
+## Active
 
-- [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md)
-
-`active/` is intentionally narrowed to unresolved production validation findings.
+- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure
+- Supporting: [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md) — findings register
 
 ## Current Queue
 
@@ -30,6 +29,7 @@
 
 ## Key Completed Evidence
 
+- [archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md](archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - [archive/completed/search-cli-sdk-boundary-migration.execution.plan.md](archive/completed/search-cli-sdk-boundary-migration.execution.plan.md)
 - [archive/completed/cli-robustness.plan.md](archive/completed/cli-robustness.plan.md)
 - [archive/completed/blue-green-reindex.execution.plan.md](archive/completed/blue-green-reindex.execution.plan.md)

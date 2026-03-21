@@ -14,10 +14,10 @@ This is a working handover document. Keep it concise and operational.
 
 ## Active Authority
 
-- Active findings authority:
+- Active execution plan:
+  [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
+- Active findings register:
   [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
-- Active execution authority:
-  [comprehensive-field-integrity-integration-tests.execution.plan.md](../../plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - Critical path and queue:
   [current/README.md](../../plans/semantic-search/current/README.md)
 - Session bootstrap and lane-order authority: this prompt

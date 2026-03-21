@@ -1,31 +1,20 @@
 # Semantic Search — Active
 
-Executable items currently in progress.
+The single plan currently being executed.
 
-| Priority | Plan | Scope | Status |
-|---|---|---|---|
-| A0 | [search-tool-prod-validation-findings-2026-03-15.md](./search-tool-prod-validation-findings-2026-03-15.md) | Production search-tool validation findings register covering scope/filter parity checks after blue/green cutover | 🟡 Active (open findings) |
-| A1 | [comprehensive-field-integrity-integration-tests.execution.plan.md](./comprehensive-field-integrity-integration-tests.execution.plan.md) | Comprehensive integration-test workstream to prove all search index fields are handled correctly at each stage and end-to-end across stages | 🟡 Planning |
+| Plan | Scope | Status |
+|---|---|---|
+| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 📋 Pending |
 
-Completed incident-recovery authorities have been archived:
+Supporting document (open findings, updated alongside the plan):
 
-- [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
-- [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md)
+- [search-tool-prod-validation-findings-2026-03-15.md](./search-tool-prod-validation-findings-2026-03-15.md) — F1/F2 findings register with reproduction queries and evidence
 
-Role split:
+Archived plans:
 
-- Prompt (`semantic-search.prompt.md`): session bootstrap and lane order.
-- Active findings register: production validation evidence and dispositions.
-- Archived recovery/runbook plans: closed migration-recovery execution record.
-
-Other semantic-search plans were consolidated out of `active/`:
-
-- Pending/not-started plans moved to `../current/`.
-- Completed/superseded incident evidence moved to `../archive/completed/`.
-
-The boundary migration plan is archived. Boundary doctrine is anchored in
-[ADR-134](../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md).
-Archive index: [archive/completed/README.md](../archive/completed/README.md)
+- [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md) — field-integrity test infrastructure (complete)
+- [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md) — migration recovery (complete)
+- [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md) — ingest runbook (complete)
 
 Next queue: [current/README.md](../current/README.md)
 Strategic backlog: [future/README.md](../future/README.md)

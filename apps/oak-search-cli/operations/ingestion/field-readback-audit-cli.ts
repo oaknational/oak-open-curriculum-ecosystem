@@ -34,7 +34,7 @@ function parseIntervalArg(args: readonly string[], index: number): number {
 }
 
 export function parseCliArgs(args: readonly string[]): FieldReadbackCliArgs {
-  let ledgerPath = '.agent/plans/semantic-search/active/field-gap-ledger.json';
+  let ledgerPath = '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json';
   let attempts = 6;
   let intervalMs = 5000;
 

@@ -40,10 +40,10 @@ For full milestone definitions: [high-level-plan.md](../high-level-plan.md).
 
 ## Current State (Compact)
 
-- Active authority is narrowed to:
-  - [search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md)
-  - [comprehensive-field-integrity-integration-tests.execution.plan.md](active/comprehensive-field-integrity-integration-tests.execution.plan.md)
-- Completed migration-recovery authorities are archived:
+- Active plan:
+  - [f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md)
+  - Supporting: [search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md)
+- Completed authorities archived:
   - [semantic-search-recovery-and-guardrails.execution.plan.md](archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
   - [semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)
 - Pending/not-started semantic-search lanes are queued in

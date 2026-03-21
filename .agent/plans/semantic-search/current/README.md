@@ -16,19 +16,11 @@ lane closed out:
    Scope: Generator fix (InvokeResult), error classification at SDK layer
    Completed: Upstream experimentation, generator changes, TDD classification
 
-2. F2 categoryMap wiring closure          🟡 NEARLY COMPLETE (2026-03-21)
-   Architecture findings: ✅ resolved (commit 2c6e6b51)
-   Reviewer passes: ✅ all five complete
-   Remaining before re-ingest:
-     a. Extract shared createMockClient test helper (DRY debt)
-     b. Migrate fetchCategoryMapForSequences to Result (ADR-088)
-     c. Prepare re-ingest operator command
-
-3. P0: Unified versioned ingestion — final operational phases
-   Plan: unified-versioned-ingestion.plan.md
-   Scope: manual admin stage, validate, promote, verify
-   Prerequisite: F2 closure (category data must flow correctly in the
-                 re-indexed data)
+2. F2 closure + P0 ingestion              🟡 ACTIVE (2026-03-21)
+   Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
+   Phase 1: F2 follow-ups (shared mock helper, Result migration)
+   Phase 2: Re-ingest (operator: stage, validate, promote, verify)
+   Phase 3: Production verification (F1/F2 retest, closure)
 ```
 
 Once P0 is complete the search functionality is fully validated and the

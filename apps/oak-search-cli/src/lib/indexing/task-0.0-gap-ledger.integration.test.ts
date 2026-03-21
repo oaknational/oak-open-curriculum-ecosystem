@@ -21,7 +21,7 @@ const gapLedgerSchema = z
 
 function loadGapLedger() {
   const ledgerUrl = new URL(
-    '.agent/plans/semantic-search/active/field-gap-ledger.json',
+    '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json',
     new URL('../../../../../', import.meta.url),
   );
   const parsedLedger: unknown = JSON.parse(readFileSync(ledgerUrl, 'utf8'));

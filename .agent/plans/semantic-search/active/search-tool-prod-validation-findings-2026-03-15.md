@@ -213,7 +213,7 @@ Observed with filter: `total = 0`.
 ## F2 - `category` filter on `sequences` appears non-functional
 
 - Severity: medium
-- Status: code_fix_complete_pending_reingest
+- Status: code_fix_complete_and_hardened_pending_reingest
 - Area: `search` filter semantics (`sequences` scope)
 
 ### Reproduction
@@ -290,9 +290,9 @@ Files changed:
 - `apps/oak-search-cli/src/adapters/bulk-data-adapter.ts` — wired `categoryMap`
   through `createBulkDataAdapter`, `createUnitTransformer`
 
-Test evidence: all 1033 search-cli tests pass. Integration tests prove
-`category_titles` populated in sequence docs and `unit_topics` populated in unit
-docs when categoryMap is provided.
+Test evidence: all 1038 search-cli tests pass (as of 2026-03-21). Integration
+tests prove `category_titles` populated in sequence docs and `unit_topics`
+populated in unit docs when categoryMap is provided.
 
 ### Post-ingest production retest evidence (2026-03-15)
 
@@ -321,10 +321,12 @@ Observed: `total = 2` (`maths-primary`, `maths-secondary`).
 
 Observed: `total = 2` (unchanged from baseline).
 
-Disposition: code fix complete. Production behaviour will remain unchanged until
-re-ingest populates `category_titles` in indexed documents. Re-ingest blocked on
-Cardinal Rule breach (codegen schema adaptation). Post-reingest retest required
-for final closure.
+Disposition: code fix complete and hardened (2026-03-21, commit `2c6e6b51`).
+All architecture findings resolved, five specialist reviewer passes complete,
+`unit_topics.keyword` sub-field added for terms aggregation. Cardinal Rule
+breach resolved (commit `2ea997d6`). Production behaviour will remain unchanged
+until re-ingest populates `category_titles` and `unit_topics` in indexed
+documents. Post-reingest retest required for final closure.
 
 ---
 
@@ -343,16 +345,16 @@ for final closure.
 
 ## Suggested Next Actions
 
-1. For `F1`, sample `thread_slugs` directly from baseline lesson hits (live
-   documents), then verify filter application against those exact values at the
-   query-builder and indexed-document levels.
-2. For `F2`, first prove the remediated request path is deployed in
-   `oak-prod` (build/request evidence), then move to explicit category identity
-   semantics (keyword/slug-backed field) and reject ambiguous analysed-text
-   matching.
-3. Re-run the production validation matrix for `F1` and `F2` after remediation,
+1. ~~For `F1`, sample `thread_slugs` directly from baseline lesson hits~~ —
+   **DONE** (2026-03-19). Code pipeline proven correct at every stage. 35
+   field-integrity tests prove all stages. No code fix needed — re-ingest
+   resolves.
+2. ~~For `F2`, prove remediated request path~~ — **DONE** (2026-03-21). Code
+   fix hardened with DI consistency, Result type tightening, `unit_topics.keyword`
+   sub-field for facet aggregation, five specialist reviewer passes complete.
+3. Re-run the production validation matrix for `F1` and `F2` **after re-ingest**,
    appending before/after evidence and final disposition here.
-4. Keep this file linked from prompt + recovery-plan closeout until `F1` and
+4. Keep this file linked from prompt + active plan closeout until `F1` and
    `F2` are either closed with evidence or explicitly owner-triaged.
 5. Do not close `F1` or `F2` on code-only evidence; closure requires production
    retest evidence in this register or explicit owner triage rationale.
