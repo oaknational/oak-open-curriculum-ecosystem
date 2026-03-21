@@ -8,6 +8,7 @@ import { describe, it, expect } from 'vitest';
 import {
   buildCategoryMap,
   getCategoriesForUnit,
+  extractCategoryTitles,
   type CategoryInfo,
   type SequenceUnitsData,
 } from './category-supplementation';
@@ -181,6 +182,48 @@ describe('category-supplementation', () => {
       const result = getCategoriesForUnit(categoryMap, 'unknown-unit');
 
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('extractCategoryTitles', () => {
+    it('extracts titles from categories', () => {
+      const categories: readonly CategoryInfo[] = [
+        { title: 'Grammar', slug: 'grammar' },
+        { title: 'Spelling', slug: 'spelling' },
+      ];
+
+      expect(extractCategoryTitles(categories)).toEqual(['Grammar', 'Spelling']);
+    });
+
+    it('returns undefined for undefined input', () => {
+      expect(extractCategoryTitles(undefined)).toBeUndefined();
+    });
+
+    it('returns undefined for empty array', () => {
+      expect(extractCategoryTitles([])).toBeUndefined();
+    });
+  });
+
+  describe('buildCategoryMap — slug derivation', () => {
+    it('derives slug from title when categorySlug is absent', () => {
+      const sequenceData: SequenceUnitsData = [
+        {
+          year: 5,
+          units: [
+            {
+              unitSlug: 'some-unit',
+              unitTitle: 'Some Unit',
+              categories: [{ categoryTitle: 'Number and Place Value' }],
+            },
+          ],
+        },
+      ];
+
+      const map = buildCategoryMap(sequenceData);
+
+      expect(map.get('some-unit')).toEqual([
+        { title: 'Number and Place Value', slug: 'number-and-place-value' },
+      ]);
     });
   });
 });

@@ -2,7 +2,8 @@
 
 **Status**: Accepted (Revised)  
 **Date**: 2025-12-30  
-**Revised**: 2026-02-28 — CLI interface updated: bulk mode is now the default, per-index filtering added  
+**Revised**: 2026-02-28 — CLI interface updated: bulk mode is now the default, per-index filtering added
+**Revised**: 2026-03-21 — Category supplementation added as a third API supplementation path
 **Related**: ADR-083 (Complete Lesson Enumeration), ADR-087 (Batch-Atomic Ingestion), ADR-091 (Video Availability Detection), ADR-092 (Transcript Cache Categorization)
 
 ## Context
@@ -63,8 +64,10 @@ However, it lacks:
 │  2. SUPPLEMENT FROM API                                          │
 │     ├── Tier info for Maths KS4                                  │
 │     │   └── Via `/sequences/maths-secondary/units`               │
-│     └── Unit options for Geography/English/History KS4           │
-│         └── Via `/sequences/{seq}/units` with `unitOptions`      │
+│     ├── Unit options for Geography/English/History KS4           │
+│     │   └── Via `/sequences/{seq}/units` with `unitOptions`      │
+│     └── Categories (unit topics) for all sequences               │
+│         └── Via `/sequences/{seq}/units` → `categories` field    │
 │                                                                  │
 │  3. MERGE AND INDEX                                              │
 │     ├── Join lesson → unit → year                                │
@@ -209,6 +212,7 @@ Create `src/lib/indexing/api-supplementation.ts`:
 
 - Fetch tier info for maths KS4 via sequences endpoint
 - Fetch unit options for geography/english KS4
+- Fetch categories (unit topics) for all sequences via `/sequences/{seq}/units`
 - RSHE-PSHE full API fallback (no bulk file exists)
 - Cache results for subsequent ingestion runs
 
@@ -318,5 +322,5 @@ wasting 30+ minutes of API calls that would be discarded.
 ---
 
 **Decision Made By**: Development Team  
-**Date**: 2025-12-30 (original), 2026-02-28 (CLI revision)  
+**Date**: 2025-12-30 (original), 2026-02-28 (CLI revision), 2026-03-21 (category supplementation)
 **Review Date**: 2026-03-30 (or when Oak API reaches full coverage)

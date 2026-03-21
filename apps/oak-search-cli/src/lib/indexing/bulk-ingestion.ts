@@ -42,15 +42,21 @@ export interface BulkIngestionOptions {
   readonly resolveIndex?: IndexResolverFn;
 }
 
-/** Dependency surface for `prepareBulkIngestion` testability. */
+/**
+ * Dependency surface for `prepareBulkIngestion` testability.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ */
 export interface BulkIngestionDeps {
   readonly readAllBulkFiles: typeof readAllBulkFiles;
   readonly collectPhaseResults: typeof collectPhaseResults;
+  readonly fetchCategoryMapForSequences: typeof fetchCategoryMapForSequences;
 }
 
 const defaultBulkIngestionDeps: BulkIngestionDeps = {
   readAllBulkFiles,
   collectPhaseResults,
+  fetchCategoryMapForSequences,
 };
 
 /** Filters bulk file results by subject if filter is provided. */
@@ -97,7 +103,7 @@ export async function prepareBulkIngestion(
   ingestLogger.info('Fetching category data for sequences', {
     sequenceCount: sequenceSlugs.length,
   });
-  const categoryMap = await fetchCategoryMapForSequences(client, sequenceSlugs);
+  const categoryMap = await deps.fetchCategoryMapForSequences(client, sequenceSlugs);
   ingestLogger.info('Category data fetched', {
     categoryMapSize: categoryMap.size,
   });

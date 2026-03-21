@@ -21,8 +21,9 @@
  * // => [{ title: 'Grammar', slug: 'grammar' }]
  * ```
  *
- * @see ADR-xxx Context Enrichment Architecture
  */
+
+import type { Result } from '@oaknational/result';
 
 /**
  * Category information for a unit.
@@ -198,11 +199,10 @@ export function extractCategoryTitles(
  * Dependency surface for category fetching, enabling testability via injection.
  *
  * @see ADR-078 Dependency Injection for Testability
+ * @see ADR-088 Result Pattern for Error Handling
  */
 export interface CategoryFetchDeps {
-  readonly getSequenceUnits: (
-    slug: string,
-  ) => Promise<{ ok: boolean; value?: unknown; error?: unknown }>;
+  readonly getSequenceUnits: (slug: string) => Promise<Result<unknown, unknown>>;
 }
 
 /**

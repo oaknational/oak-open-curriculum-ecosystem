@@ -14,8 +14,8 @@ This directory contains adapters for curriculum data ingestion into Elasticsearc
 │  │    (Primary Source)         │    │    (Supplementation)            │    │
 │  │                             │    │                                 │    │
 │  │  30 JSON files (~757 MB)    │    │  /sequences/{seq}/units         │    │
-│  │  16/17 subjects             │    │  (Maths KS4 tier info)          │    │
-│  │  81% transcript coverage    │    │                                 │    │
+│  │  16/17 subjects             │    │  • Maths KS4 tier info          │    │
+│  │  81% transcript coverage    │    │  • Categories for all sequences │    │
 │  └──────────────┬──────────────┘    └───────────────┬─────────────────┘    │
 │                 │                                   │                      │
 │                 ▼                                   ▼                      │
@@ -36,6 +36,7 @@ This directory contains adapters for curriculum data ingestion into Elasticsearc
 │  │                                                                      │  │
 │  │  • Iterates all lessons from bulk                                   │  │
 │  │  • Enriches Maths KS4 lessons with tier info from API               │  │
+  │  • Enriches units with category data (unit_topics) from API        │  │
 │  │  • Produces: lessons, units, threads for indexing                   │  │
 │  └──────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │
@@ -196,16 +197,18 @@ for (const lesson of adapter.getLessons()) {
 Composes bulk data with API enrichment:
 
 ```typescript
-const source = new HybridDataSource({
-  bulkAdapter,
-  apiClient: oakClient,
-});
+import { createHybridDataSource } from './hybrid-data-source';
 
-// Iterates lessons with tier enrichment
-for await (const lesson of source.getLessonsWithMaterials()) {
-  // Maths KS4 lessons have tier info from API
-  // All other lessons pass through unchanged
+const result = await createHybridDataSource(bulkFile, client, config, categoryMap);
+if (!result.ok) {
+  // Handle AdminError
 }
+const source = result.value;
+
+// Access enriched data
+const lessons = source.getLessonsWithMaterials();
+// Maths KS4 lessons have tier info from API
+// Units have category data (unit_topics) from categoryMap
 ```
 
 ---

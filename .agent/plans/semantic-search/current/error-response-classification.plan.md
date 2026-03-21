@@ -25,7 +25,7 @@ todos:
 
 # Error Response Classification Architecture
 
-**Status**: Investigation needed — upstream API experimentation required
+**Status**: Complete (2026-03-20)
 **Priority**: High — user-facing behaviour quality
 **Branch**: `feat/es_index_update` (continues from codegen fix)
 **Prerequisite**: Codegen error response adaptation (complete as of 2026-03-20)

@@ -163,7 +163,7 @@ export function createUnitFacets(): Record<string, estypes.AggregationsAggregati
     key_stages: { terms: { field: 'key_stage', size: 10 } },
     subjects: { terms: { field: 'subject_slug', size: 20 } },
     tiers: { terms: { field: 'tier', size: 5 } },
-    topics: { terms: { field: 'unit_topics', size: 30 } },
+    topics: { terms: { field: 'unit_topics.keyword', size: 30 } },
   };
 }
 
