@@ -16,4 +16,10 @@ export { buildLifecycleDeps, buildAliasLifecycleDeps } from './build-lifecycle-d
 export { createVersionedIndexResolver } from './versioned-index-resolver.js';
 export { withLifecycleLease, validateLeaseTtl, DEFAULT_LEASE_TTL_MS } from './lifecycle-lease.js';
 export { readIndexMeta, writeIndexMeta } from './index-meta.js';
+export {
+  BASE_INDEX_NAMES,
+  SEARCH_INDEX_TARGETS,
+  resolveAliasName,
+  resolveVersionedIndexName,
+} from '../internal/index.js';
 export type { LifecycleLease } from './lifecycle-lease.js';

@@ -13,7 +13,9 @@ export {
   SEARCH_INDEX_KINDS,
   ZERO_HIT_INDEX_BASE,
   BASE_INDEX_NAMES,
+  resolveAliasName,
   resolveSearchIndexName,
+  resolveVersionedIndexName,
   resolveZeroHitIndexName,
 } from './internal/index.js';
 export type { SearchRetrievalFactories, EsClientConfig } from './create-search-retrieval.js';

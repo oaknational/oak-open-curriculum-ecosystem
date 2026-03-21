@@ -1,5 +1,5 @@
 /**
- * Sequence search implementation — two-way RRF (BM25 + ELSER).
+ * Sequence search implementation — lexical RRF.
  *
  * Sequences are API data structures for curriculum retrieval, not
  * user-facing programmes. One sequence generates many programme views.
@@ -22,7 +22,7 @@ import { toRetrievalError } from './retrieval-error.js';
 import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
 
 /**
- * Execute sequence search with two-way RRF (BM25 + semantic).
+ * Execute sequence search with lexical retrieval.
  *
  * Sequences are API data structures for curriculum retrieval, not
  * user-facing programmes. One sequence generates many programme views.

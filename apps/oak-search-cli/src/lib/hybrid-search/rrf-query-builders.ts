@@ -138,11 +138,18 @@ export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
 }
 
 /**
- * Builds a two-way RRF request for sequences (BM25 + ELSER).
+ * Builds the current sequence search request.
  *
- * **Note**: Unlike lessons and units, sequence search does not currently include
- * faceted filtering or aggregations. This is intentional as sequences use a
- * different navigation pattern via the `oak_sequence_facets` index for browsing.
+ * Sequence retrieval is lexical-only while `sequence_semantic` remains
+ * unpopulated in the ingestion pipeline. The legacy CLI-internal path still
+ * uses the retriever envelope today for harness compatibility, but the locked
+ * follow-up is to keep `sequence_semantic`, populate it deterministically from
+ * ordered unit-level source content, and then restore semantic retrieval
+ * against that real field.
+ *
+ * Unlike lessons and units, sequence search does not currently include faceted
+ * filtering or aggregations. This is intentional as sequences use a different
+ * navigation pattern via the `oak_sequence_facets` index for browsing.
  *
  * @remarks
  * When faceted sequence search is needed, add `includeFacets` parameter
@@ -166,9 +173,10 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
  * They are programme-agnostic -- a thread like "Algebra" spans Reception
  * to Year 11 across multiple programmes and key stages.
  *
- * Like sequences, thread search uses a simpler two-way RRF approach
- * (BM25 + ELSER) rather than the four-way architecture used for lessons and units.
- * This is appropriate given the small index size and simple document structure.
+ * Threads use a simpler two-way RRF approach (BM25 + ELSER) than the four-way
+ * architecture used for lessons and units. Unlike sequences, threads still have
+ * a real semantic field in production, so the second retriever remains
+ * meaningful for the current small-index contract.
  */
 export function buildThreadRrfRequest(params: ThreadRrfParams): EsSearchRequest {
   const { query, size, subjectSlug } = params;
@@ -239,9 +247,10 @@ const SEQUENCE_BM25_FIELDS = [
 ];
 
 /**
- * Creates a two-way RRF retriever for sequences.
+ * Creates the sequence retriever.
  *
- * Includes `fuzziness: 'AUTO'` for typo tolerance.
+ * Includes `fuzziness: 'AUTO'` for typo tolerance. Sequence retrieval
+ * stays lexical until `sequence_semantic` is populated during ingest.
  */
 function createSequenceRetriever(
   query: string,
@@ -261,12 +270,6 @@ function createSequenceRetriever(
                 fields: SEQUENCE_BM25_FIELDS,
               },
             },
-            filter: filterClause,
-          },
-        },
-        {
-          standard: {
-            query: { semantic: { field: 'sequence_semantic', query } },
             filter: filterClause,
           },
         },

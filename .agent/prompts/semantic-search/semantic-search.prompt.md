@@ -35,6 +35,8 @@ test-backed correctness in code and transforms.
   [current/README.md](../../plans/semantic-search/current/README.md)
 - Post-P0 follow-up (queued — does not block re-ingest):
   [search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md)
+- Post-P0 structural follow-up (queued — does not block re-ingest):
+  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md)
 - Session bootstrap and lane-order authority: this prompt
 
 ---
@@ -54,7 +56,9 @@ six specialist reviewer passes. Commits: `dfb48b90`, `3ec1dbc6`.
    fix; ship the fix; confirm the full suite passes.
 2. **Data-layer proof:** When a fix requires fresh Elasticsearch documents,
    run the operator stage / validate / promote path in the execution plan
-   (Tasks 2.1–2.3), then record prod evidence (Task 3.1).
+   (Tasks 2.1–2.3). For staged validation, use stage output plus
+   `field-readback-audit --target-version <version>`, then record prod evidence
+   (Task 3.1).
 3. **Closure:** Update findings, archive the plan, sync authority docs (Task 3.2)
    once tests and any required ingest evidence are in place.
 
@@ -71,10 +75,20 @@ Commands and expected outputs for Phase 2–3 remain in the execution plan.
   in Phase 3 prod checks; see findings register *Response `total` caveat*.
 - **`validate-aliases` vs freshness**: Green alias health means each read alias
   exists and points at a physical index — **not** that live docs match the
-  latest bulk. Use `admin count` for true parent counts; compare bulk vintage
-  to alias `targetIndex` when diagnosing gaps. Permanent reference:
+  latest bulk. Use `admin count` only for live alias counts; for staged
+  validation use the `admin stage` output plus
+  `field-readback-audit --target-version <version>`. Compare bulk vintage to
+  alias `targetIndex` when diagnosing live gaps. Permanent reference:
   [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md)
   (section *Operational CLI: `validate-aliases` vs `admin count`*).
+- **Sequence retrieval**: Sequences are currently lexical-only because
+  `sequence_semantic` is mapped but unpopulated. The deferred structural cleanup
+  is strict and schema-first: `sequence_semantic` is staying and must be
+  populated for every sequence by iterating ordered unit sub-content,
+  extracting unit summaries, and concatenating/normalising them into a
+  non-empty semantic surface. No dormant optional field is acceptable, and
+  missing/empty source content must fail fast. That work is queued in
+  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md).
 - **CLI entry point**: `apps/oak-search-cli/bin/oaksearch.ts` (not `src/bin/`).
 - **Bulk data**: 33 files in `apps/oak-search-cli/bulk-downloads/` ready.
 - **Upstream API bug**: PE lessons without video trigger 500 on transcript
@@ -113,8 +127,9 @@ When execution state changes materially, update:
 - The active plan (task status and evidence)
 - The findings register (F1/F2 dispositions)
 - `current/README.md` (critical path status)
-- Post-P0 follow-up plan when those tasks start or complete
-  ([search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md))
+- Post-P0 follow-up plans when those tasks start or complete
+  ([search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md),
+  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md))
 
 ---
 

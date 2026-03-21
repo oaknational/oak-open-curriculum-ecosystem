@@ -50,7 +50,7 @@ See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detail
 Field-integrity tooling:
 
 - Root-level `pnpm test:field-integrity` runs the explicit manifest-based field-integrity suites.
-- Workspace-scoped `pnpm --filter @oaknational/search-cli ingest:field-readback-audit` runs the ledger-driven readback audit operation and can emit JSON evidence (`--emit-json`).
+- Workspace-scoped `pnpm --filter @oaknational/search-cli ingest:field-readback-audit` runs the ledger-driven readback audit operation, can emit JSON evidence (`--emit-json`), and accepts `--target-version <version>` to audit staged indexes before promotion.
 
 ## SDK Capability Boundary (ADR-134)
 
@@ -72,7 +72,7 @@ fixture-backed integration tests in `apps/oak-search-cli/eslint-boundary.integra
 
 ## Features and Possibilities
 
-**Hybrid Search with Reciprocal Rank Fusion** — Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads and sequences use 2-way RRF.
+**Hybrid Search with Reciprocal Rank Fusion** — Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads use 2-way RRF; sequence retrieval is currently lexical-only while `sequence_semantic` remains unpopulated.
 
 **Curriculum-Aware Vocabulary** — Every lesson includes expert-curated keyword definitions, which are used to improve the relevance of the search results.
 

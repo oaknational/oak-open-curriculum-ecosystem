@@ -101,3 +101,46 @@
 
 - Consolidate-docs is mostly “verify and report” when authority docs were updated
   in-session already.
+
+---
+
+## Session 2026-03-21 — jc-consolidate-docs follow-up extraction
+
+### What Was Done
+
+- Extracted the newly settled sequence semantic-field design from queued
+  semantic-search plan/prompt text into permanent workspace docs:
+  `apps/oak-search-cli/docs/INDEXING.md` and `apps/oak-search-cli/docs/ARCHITECTURE.md`.
+- Updated the external Claude memory note
+  `versioned-ingestion-progress.md` to point at the current canonical F2/P0
+  plan instead of the stale `active/unified-versioned-ingestion` path.
+- Rechecked fitness ceilings and practice-box status during the sweep.
+
+### Lessons
+
+- When a user locks a future architectural direction ("this field stays and must
+  be populated"), that decision should not live only in a queued plan or prompt;
+  extract it into permanent technical docs immediately, even if implementation is
+  deferred.
+- Platform-specific memory can accumulate stale canonical-plan paths after plan
+  promotion or lane changes; consolidate-docs should check those external notes,
+  not just repo markdown.
+
+---
+
+## Session 2026-03-21 — Search CLI lint fix
+
+### What Was Done
+
+- Refactored `parseCliArgs` in
+  `apps/oak-search-cli/operations/ingestion/field-readback-audit-cli.ts` by
+  extracting per-argument parsing so the new `--target-version` support stays
+  intact while `max-statements` passes.
+- Verified `pnpm lint` exits 0 at repo root; package-local lint and the focused
+  `field-readback-audit-cli.unit.test.ts` also pass.
+
+### Lessons
+
+- When `git status` shows a modified file but `git diff` appears empty, check
+  `git diff --cached` before editing — staged-only changes can hide in-flight
+  work that still needs preserving.

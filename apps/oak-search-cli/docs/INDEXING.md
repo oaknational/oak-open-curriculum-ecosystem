@@ -69,7 +69,7 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 ### Sequences (`oak_sequences`)
 
 - Core fields: `sequence_id`, `sequence_slug`, `sequence_title`, `category_titles`, `phase_slug`, `key_stages`, `years`, canonical URL, unit slugs.
-- Semantic (optional): `sequence_semantic` (`semantic_text`) derived from curated descriptions.
+- Semantic: `sequence_semantic` (`semantic_text`) remains part of the strict sequence document contract, but the current builder path does not yet populate it, so sequence retrieval is lexical-only today. The locked producer design is deterministic: iterate the units in sequence order, extract their summaries, concatenate/normalise that ordered sub-content into a non-empty semantic surface, and fail fast if required source content is missing or empty.
 - Suggestions: completion payloads for sequence discovery.
 
 ## Resilient bulk indexing
@@ -89,6 +89,8 @@ These commands answer different questions. Do not treat green alias health as pr
 **`oaksearch admin count`** issues the Elasticsearch **`_count`** API against each **read alias** (e.g. `oak_lessons`). That returns **true parent document** counts and excludes internal nested documents created by `semantic_text` / ELSER chunking (unlike `_cat/indices`, which can inflate counts). The CLI prints a **TOTAL** row that is the **sum** of the six index kinds.
 
 **Interpreting counts**: Live counts follow whatever **versioned physical index** the aliases currently reference (visible as `targetIndex` in `validate-aliases` output, e.g. `oak_lessons_v2026-03-15-134856`). If the bulk manifest’s `downloadedAt` is **newer** than that version stamp, **pre-stage** `admin count` can legitimately sit **below** the counts you expect **after** `admin stage` from the current bulk — until you stage, validate, and promote. Compare like with like: same bulk directory, same stage output, or same promoted version.
+
+**Staged validation**: Do not use `admin count` to validate a newly staged version before promotion; it only reads the live aliases. Use the version returned by `oaksearch admin stage`, treat the stage output as the authoritative staged count evidence, then run `pnpm --filter @oaknational/search-cli ingest:field-readback-audit -- --target-version <version> --emit-json` to audit field population against that concrete staged index set.
 
 Example helper (simplified):
 

@@ -1,14 +1,19 @@
 /**
- * Unit tests for four-way RRF query builders.
+ * Unit tests for RRF query builders.
  *
- * Tests verify BM25 + ELSER hybrid search on content + structure fields.
- * Lessons use conditional min_should_match; units prioritize recall with fuzzy matching.
+ * Lessons and units use four-way hybrid retrieval. Sequences are currently
+ * lexical-only until `sequence_semantic` is populated during ingestion.
  */
 
 import type { estypes } from '@elastic/elasticsearch';
 import { describe, expect, it } from 'vitest';
+import type { EsSearchRequest } from '../elastic-http';
 
-import { buildLessonRrfRequest, buildUnitRrfRequest } from './rrf-query-builders';
+import {
+  buildLessonRrfRequest,
+  buildSequenceRrfRequest,
+  buildUnitRrfRequest,
+} from './rrf-query-builders';
 
 /**
  * Extracts multi_match from direct query or bool.must[0].
@@ -36,7 +41,7 @@ function extractMultiMatch(
  * narrowing past the RetrieverContainer | RRFRetrieverComponent union.
  */
 function getStandardRetriever(
-  request: ReturnType<typeof buildLessonRrfRequest>,
+  request: EsSearchRequest,
   retrieverIndex: number,
 ): estypes.StandardRetriever | undefined {
   const entry = request.retriever?.rrf?.retrievers?.[retrieverIndex];
@@ -52,7 +57,7 @@ function getStandardRetriever(
  * where the multi_match is wrapped in a bool.must structure.
  */
 function getBm25Query(
-  request: ReturnType<typeof buildLessonRrfRequest>,
+  request: EsSearchRequest,
   retrieverIndex: number,
 ): estypes.QueryDslMultiMatchQuery | undefined {
   const standard = getStandardRetriever(request, retrieverIndex);
@@ -148,6 +153,36 @@ describe('buildUnitRrfRequest (four-way)', () => {
       subject: 'maths',
       keyStage: 'ks4',
     });
+    expect(getStandardRetriever(request, 0)?.filter).toBeDefined();
+  });
+});
+
+describe('buildSequenceRrfRequest (lexical-only)', () => {
+  it('builds request with correct index and size', () => {
+    const request = buildSequenceRrfRequest({ query: 'algebra', size: 10 });
+    expect(request.index).toBe('oak_sequences');
+    expect(request.size).toBe(10);
+  });
+
+  it('uses a single lexical retriever inside the legacy RRF envelope', () => {
+    const request = buildSequenceRrfRequest({ query: 'algebra', size: 10 });
+    expect(request.retriever?.rrf?.retrievers).toHaveLength(1);
+    expect(getBm25Query(request, 0)).toMatchObject({
+      query: 'algebra',
+      fuzziness: 'AUTO',
+      fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
+    });
+    expect(getStandardRetriever(request, 1)).toBeUndefined();
+  });
+
+  it('includes filters on the lexical retriever when provided', () => {
+    const request = buildSequenceRrfRequest({
+      query: 'science',
+      size: 10,
+      subject: 'science',
+      keyStage: 'ks4',
+    });
+
     expect(getStandardRetriever(request, 0)?.filter).toBeDefined();
   });
 });

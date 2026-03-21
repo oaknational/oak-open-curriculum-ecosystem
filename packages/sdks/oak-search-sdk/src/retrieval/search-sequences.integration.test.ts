@@ -34,40 +34,45 @@ function getFirstRequest(calls: EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
-function getFilterClause(calls: EsSearchRequest[]) {
+function getSequenceStandardRetriever(calls: EsSearchRequest[]) {
   const request = getFirstRequest(calls);
   const retriever = request.retriever;
-  if (!retriever || !('rrf' in retriever) || !retriever.rrf) {
-    throw new Error('Expected rrf retriever on search request');
+  if (!retriever || !('standard' in retriever) || !retriever.standard) {
+    throw new Error('Expected standard retriever on search request');
   }
-  // Sequence RRF uses two `standard` retrievers (BM25 + semantic); filter is on
-  // the first. Category tests also assert both retrievers share the same filter.
-  const firstRetriever = retriever.rrf.retrievers?.[0];
-  if (!firstRetriever || !('standard' in firstRetriever) || !firstRetriever.standard) {
-    throw new Error('Expected first standard retriever');
-  }
-  return firstRetriever.standard.filter;
+  return retriever.standard;
 }
 
-/** Both RRF standard retrievers must receive the same filter (BM25 + semantic). */
-function getAllStandardRetrieverFilters(calls: EsSearchRequest[]): unknown[] {
-  const request = getFirstRequest(calls);
-  const retriever = request.retriever;
-  if (!retriever || !('rrf' in retriever) || !retriever.rrf?.retrievers) {
-    throw new Error('Expected rrf retriever on search request');
+function getSequenceMultiMatch(calls: EsSearchRequest[]) {
+  const standard = getSequenceStandardRetriever(calls);
+  const multiMatch = standard.query?.multi_match;
+  if (!multiMatch) {
+    throw new Error('Expected multi_match query on sequence retriever');
   }
-  return retriever.rrf.retrievers.map((r) => {
-    if (r && 'standard' in r && r.standard) {
-      return r.standard.filter;
-    }
-    throw new Error('Expected standard retriever');
-  });
+  return multiMatch;
+}
+
+function getFilterClause(calls: EsSearchRequest[]) {
+  return getSequenceStandardRetriever(calls).filter;
 }
 
 const stubResolveIndex = () => 'oak_sequences_test';
 
 describe('searchSequences', () => {
   describe('filter construction', () => {
+    it('uses a plain lexical retriever for sequences', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences({ query: 'algebra' }, search, stubResolveIndex);
+
+      expect(getFirstRequest(calls).retriever).not.toHaveProperty('rrf');
+      expect(getSequenceMultiMatch(calls)).toMatchObject({
+        query: 'algebra',
+        fuzziness: 'AUTO',
+        fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
+      });
+    });
+
     it('includes key_stages filter when keyStage is provided', async () => {
       const { search, calls } = createMockSearch();
 
@@ -127,10 +132,6 @@ describe('searchSequences', () => {
       expect(filterClause).toEqual({
         bool: { filter: [{ match_phrase: { category_titles: 'algebra' } }] },
       });
-
-      const filters = getAllStandardRetrieverFilters(calls);
-      expect(filters).toHaveLength(2);
-      expect(filters[0]).toEqual(filters[1]);
     });
 
     it('combines category with other filters', async () => {
@@ -159,10 +160,6 @@ describe('searchSequences', () => {
           ],
         },
       });
-
-      const filters = getAllStandardRetrieverFilters(calls);
-      expect(filters).toHaveLength(2);
-      expect(filters[0]).toEqual(filters[1]);
     });
 
     it('passes no filter when no filtering params provided', async () => {

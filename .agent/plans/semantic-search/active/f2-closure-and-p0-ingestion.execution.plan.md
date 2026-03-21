@@ -21,7 +21,7 @@ todos:
     content: "Operator executes admin stage, agent validates output."
     status: pending
   - id: validate-staged-indexes
-    content: "Validate staged indexes: admin count, field-readback-audit (Task 2.3 evidence)."
+    content: "Validate staged indexes from stage output plus field-readback-audit --target-version (Task 2.3 evidence)."
     status: pending
   - id: promote-and-verify
     content: "Promote versioned indexes, verify aliases, run search smoke tests."
@@ -34,6 +34,9 @@ todos:
     status: pending
   - id: post-p0-search-contract-followup
     content: "After P0 closure: lessons threadSlug field-integrity test + optional prod smoke doc (see ../current/search-contract-followup.plan.md)."
+    status: pending
+  - id: post-p0-sequence-retrieval-architecture
+    content: "After P0 closure: resolve the strict sequence semantic contract via ../current/sequence-retrieval-architecture-followup.plan.md — `sequence_semantic` stays, must be populated for every sequence by iterating ordered unit sub-content, and must fail fast on missing/empty semantic output."
     status: pending
 ---
 
@@ -76,6 +79,8 @@ This plan consolidates the remaining work from three sources:
   [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - Post-P0 contract + smoke (queued — does not block re-ingest):
   [search-contract-followup.plan.md](../current/search-contract-followup.plan.md)
+- Post-P0 sequence retrieval architecture follow-up (queued — does not block re-ingest):
+  [sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md)
 
 ---
 
@@ -152,7 +157,7 @@ flag enables verbose progress logging.
 | facets | ~57 |
 | **TOTAL** | **~16,339** |
 
-The stage command will print the version string (e.g. `v-20260321-143022`)
+The stage command will print the version string (e.g. `v2026-03-21-143022`)
 needed for promotion in Task 2.3.
 
 **If stage fails**: The staged indexes are disposable. Diagnose the error,
@@ -166,20 +171,24 @@ needed for Task 2.2 validation and Task 2.3 promotion.
 
 ### Task 2.2: Validate staged indexes
 
-```bash
-pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin count
-```
+Do **not** use `admin count` here; it only reads the live aliases and cannot
+prove a newly staged version.
 
-Then run field-readback-audit for Task 2.3 evidence:
+Use the version string recorded from `admin stage` as the staged count authority,
+then run field-readback-audit against that concrete version:
 
 ```bash
 pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \
   --ledger .agent/plans/semantic-search/archive/completed/field-gap-ledger.json \
-  --attempts 6 --interval-ms 5000 --emit-json
+  --attempts 6 --interval-ms 5000 \
+  --target-version <version> \
+  --emit-json
 ```
 
-**Done when**: All 6 indexes show expected counts; `thread_slugs` and
-`category_titles` are populated (non-zero exists counts).
+**Done when**: The stage output counts match the expected staged totals; the
+readback audit against `<version>` shows `thread_slugs` and `category_titles`
+populated (non-zero exists counts); no validation evidence depends on live alias
+counts before promotion.
 
 **If validation fails**: Do NOT promote. Investigate the staging output for
 errors, check field-readback-audit results, and identify whether the issue is
@@ -254,6 +263,20 @@ Not blocking Phase 2–3 or operator promote. After findings are closed, execute
 - **Optional prod smoke**: document a repeatable prod query matrix (MCP JSON or
   CLI path) and an **optional** package script; keep it **out of** default CI
   (`pnpm test` / required GitHub jobs).
+
+### Task 3.4: Post-P0 — sequence retrieval architecture consistency (deferred)
+
+Not blocking Phase 2–3 or operator promote. After findings are closed, execute
+[sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md):
+
+- resolve the strict contract drift by populating `sequence_semantic` for every
+  sequence in the same change
+- construct it deterministically by iterating the units in sequence order and
+  concatenating/normalising their summaries into a non-empty semantic surface
+- fail fast on missing or empty required semantic source content; no dormant or
+  best-effort field
+- keep SDK retrieval helpers as the canonical owner of sequence retrieval
+  semantics and collapse duplicate CLI/SDK logic accordingly
 
 ---
 

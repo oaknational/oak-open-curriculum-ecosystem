@@ -28,7 +28,7 @@ async function main(): Promise<void> {
       ledger,
       args.attempts,
       args.intervalMs,
-      createElasticsearchDeps(client),
+      createElasticsearchDeps(client, args.targetVersion),
     );
     if (args.emitJson) {
       process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

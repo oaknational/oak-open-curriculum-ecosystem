@@ -23,7 +23,9 @@ export {
   SEARCH_INDEX_KINDS,
   ZERO_HIT_INDEX_BASE,
   BASE_INDEX_NAMES,
+  resolveAliasName,
   resolveSearchIndexName,
+  resolveVersionedIndexName,
   resolveZeroHitIndexName,
 } from './read.js';
 export type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from './read.js';

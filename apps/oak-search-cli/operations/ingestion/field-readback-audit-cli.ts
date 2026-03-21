@@ -2,6 +2,7 @@ export interface FieldReadbackCliArgs {
   readonly ledgerPath: string;
   readonly attempts: number;
   readonly intervalMs: number;
+  readonly targetVersion?: string;
   readonly emitJson: boolean;
 }
 
@@ -33,30 +34,79 @@ function parseIntervalArg(args: readonly string[], index: number): number {
   return parsePositiveInteger(parseOptionValue(args, index, '--interval-ms'), '--interval-ms');
 }
 
+function parseTargetVersionArg(args: readonly string[], index: number): string {
+  const targetVersion = args[index + 1];
+  if (targetVersion === undefined) {
+    throw new Error('Missing value for --target-version');
+  }
+  if (targetVersion.length === 0) {
+    throw new Error('--target-version must be a non-empty string');
+  }
+  return targetVersion;
+}
+
+interface FieldReadbackCliParseState {
+  readonly ledgerPath: string;
+  readonly attempts: number;
+  readonly intervalMs: number;
+  readonly targetVersion?: string;
+}
+
+interface FieldReadbackCliParseResult {
+  readonly lastConsumedIndex: number;
+  readonly parseState: FieldReadbackCliParseState;
+}
+
+function createDefaultCliParseState(): FieldReadbackCliParseState {
+  return {
+    ledgerPath: '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json',
+    attempts: 6,
+    intervalMs: 5000,
+  };
+}
+
+function parseCliArg(
+  args: readonly string[],
+  index: number,
+  parseState: FieldReadbackCliParseState,
+): FieldReadbackCliParseResult {
+  const arg = args[index];
+  if (arg === '--ledger') {
+    return {
+      lastConsumedIndex: index + 1,
+      parseState: { ...parseState, ledgerPath: parseLedgerArg(args, index) },
+    };
+  }
+  if (arg === '--attempts') {
+    return {
+      lastConsumedIndex: index + 1,
+      parseState: { ...parseState, attempts: parseAttemptsArg(args, index) },
+    };
+  }
+  if (arg === '--interval-ms') {
+    return {
+      lastConsumedIndex: index + 1,
+      parseState: { ...parseState, intervalMs: parseIntervalArg(args, index) },
+    };
+  }
+  if (arg === '--target-version') {
+    return {
+      lastConsumedIndex: index + 1,
+      parseState: { ...parseState, targetVersion: parseTargetVersionArg(args, index) },
+    };
+  }
+  return { lastConsumedIndex: index, parseState };
+}
+
 export function parseCliArgs(args: readonly string[]): FieldReadbackCliArgs {
-  let ledgerPath = '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json';
-  let attempts = 6;
-  let intervalMs = 5000;
+  let parseState = createDefaultCliParseState();
 
   for (let index = 0; index < args.length; index += 1) {
-    const arg = args[index];
-    if (arg === '--ledger') {
-      ledgerPath = parseLedgerArg(args, index);
-      index += 1;
-      continue;
-    }
-    if (arg === '--attempts') {
-      attempts = parseAttemptsArg(args, index);
-      index += 1;
-      continue;
-    }
-    if (arg === '--interval-ms') {
-      intervalMs = parseIntervalArg(args, index);
-      index += 1;
-      continue;
-    }
+    const parseResult = parseCliArg(args, index, parseState);
+    index = parseResult.lastConsumedIndex;
+    parseState = parseResult.parseState;
   }
 
   const emitJson = args.includes('--emit-json');
-  return { ledgerPath, attempts, intervalMs, emitJson };
+  return { ...parseState, emitJson };
 }

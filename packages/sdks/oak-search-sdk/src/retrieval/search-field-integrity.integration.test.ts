@@ -29,26 +29,17 @@ function getFirstRequest(calls: readonly EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
-function getRrfRetriever(request: EsSearchRequest) {
+function getSequenceStandardRetriever(request: EsSearchRequest) {
   const retriever = request.retriever;
-  if (!retriever || !('rrf' in retriever) || !retriever.rrf) {
-    throw new Error('Expected RRF retriever in sequence search request');
-  }
-  return retriever.rrf;
-}
-
-function getFirstStandardRetriever(request: EsSearchRequest) {
-  const retriever = getRrfRetriever(request);
-  const firstRetriever = retriever.retrievers?.[0];
-  if (!firstRetriever || !('standard' in firstRetriever) || !firstRetriever.standard) {
+  if (!retriever || !('standard' in retriever) || !retriever.standard) {
     throw new Error('Expected standard retriever in sequence search request');
   }
-  return firstRetriever.standard;
+  return retriever.standard;
 }
 
 function getFirstFilter(calls: readonly EsSearchRequest[]) {
   const request = getFirstRequest(calls);
-  const standardRetriever = getFirstStandardRetriever(request);
+  const standardRetriever = getSequenceStandardRetriever(request);
   return standardRetriever.filter;
 }
 

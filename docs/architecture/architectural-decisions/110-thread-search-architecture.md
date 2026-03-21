@@ -109,8 +109,11 @@ array field handles multi-subject threads transparently.
 1. **Upgrade path** — If thread documents gain richer content (e.g.,
    progression descriptions, unit summaries), the architecture can
    evolve to 3-way or 4-way RRF without changing the consumer API
-2. **Sequence parity** — Sequences also use 2-way RRF with identical
-   parameters, maintaining consistency across small-corpus indexes
+2. **Sequence parity (historical)** — At ADR time sequences also used
+   2-way RRF with identical parameters. Update 2026-03-21: sequence
+   retrieval is currently lexical-only because `sequence_semantic` is
+   mapped but not populated; the structural follow-up is tracked in the
+   semantic-search plan lane.
 
 ## Implementation
 

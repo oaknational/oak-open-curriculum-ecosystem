@@ -31,6 +31,7 @@ at that point.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
+| P1 (post-P0) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Resolve the interim sequence lexical-only state: plain lexical retriever, duplicate CLI/SDK builders, and the strict `sequence_semantic` construction contract | 📋 Queued — next structural follow-up after F2/P0 closure |
 | P1 (post-P0) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | 📋 Queued — starts after F2/P0 closure |
 | — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
 | — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |

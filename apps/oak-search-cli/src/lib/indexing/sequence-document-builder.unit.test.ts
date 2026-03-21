@@ -94,4 +94,10 @@ describe('createSequenceDocument', () => {
       phase: ['secondary'],
     });
   });
+
+  it('does not set sequence_semantic in the current builder path', () => {
+    const doc = createSequenceDocument(baseParams);
+
+    expect(doc.sequence_semantic).toBeUndefined();
+  });
 });

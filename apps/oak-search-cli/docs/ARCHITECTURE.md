@@ -1,6 +1,6 @@
 # Architecture
 
-**Last Updated**: 2026-03-12
+**Last Updated**: 2026-03-21
 
 ## Overview
 
@@ -18,7 +18,7 @@ The semantic search workspace provides a CLI/SDK-first service that ingests Oak 
 | `oak_unit_rollup`     | Unit search and highlight surface                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`)                                                                                      |
 | `oak_units`           | Lightweight unit metadata for analytics and facets | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations                                                                                                                                                                                                                           |
 | `oak_threads`         | Conceptual progression strands across units/years  | `thread_slug`, `thread_title`, `unit_count`, `subject_slugs` (array — a thread can span multiple subjects), `thread_semantic` (`semantic_text`), `thread_url`, completion `title_suggest`. Programme-agnostic; show how ideas build over time. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md).        |
-| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, optional `sequence_semantic`, completion payloads. One sequence generates many programme views.                                                                                                                                        |
+| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, `sequence_semantic` contract (currently unpopulated; follow-up will synthesise it deterministically from ordered unit summaries), completion payloads. One sequence generates many programme views.                                    |
 | `oak_sequence_facets` | Sequence facet metadata                            | Facet identifiers, sequence relationships, filtering metadata                                                                                                                                                                                                                                                                                              |
 | `oak_meta`            | Index metadata and versioning                      | Index version, ingestion timestamps, schema version                                                                                                                                                                                                                                                                                                        |
 
@@ -122,13 +122,13 @@ Each search scope uses Elasticsearch's retriever API to blend lexical and semant
 | **Lessons**   | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
 | **Units**     | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
 | **Threads**   | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
-| **Sequences** | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
+| **Sequences** | 1-way: BM25 only (lexical-only; temporary one-child RRF wrapper)    | `rank_constant: 40`, `rank_window_size: 40` |
 
 Synonym expansion is handled at the Elasticsearch analyser level via the `oak-syns` synonym set, not at the application level.
 
-Threads and sequences use 2-way RRF because they have a single text surface (title only — no transcripts, lesson-planning data, or rollup text). See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
+Threads use 2-way RRF because they have a single text surface but still carry a meaningful `thread_semantic` field. Sequences are currently lexical-only because `sequence_semantic` is mapped but not populated during ingestion. The locked follow-up is to populate that field for every sequence by iterating units in sequence order, extracting unit summaries, and concatenating/normalising them into a non-empty semantic surface with fail-fast behaviour on missing or empty required source content. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
 
-**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; active CLI command handlers consume SDK read/admin capability surfaces per ADR-134.
+**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; threads remain two-signal retrieval, while sequences are currently lexical-only. Active CLI command handlers consume SDK read/admin capability surfaces per ADR-134. A legacy CLI-internal sequence builder still exists for harness and experiment paths; consolidation to the SDK-owned canonical path remains pending.
 
 ## SDK Surface Boundary
 

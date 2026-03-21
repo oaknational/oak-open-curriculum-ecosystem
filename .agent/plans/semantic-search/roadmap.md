@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: ✅ Milestones 0 and 1 complete. Recovery lane plans are archived; active execution is now narrowed to open production validation findings while pending follow-ons are queued in `current/`.
-**Last Updated**: 2026-03-15
+**Last Updated**: 2026-03-21
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Metrics Authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
@@ -48,9 +48,10 @@ For full milestone definitions: [high-level-plan.md](../high-level-plan.md).
   - [semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)
 - Pending/not-started semantic-search lanes are queued in
   [current/README.md](current/README.md), including:
-  `unified-versioned-ingestion`, `scheduled-refresh` (deferred),
-  `search-sdk-args-extraction`, `bulk-metadata-quick-wins`,
-  `kg-alignment-audit`, and `category-integration-remediation`.
+  `unified-versioned-ingestion`, `sequence-retrieval-architecture-followup`,
+  `scheduled-refresh` (deferred), `search-sdk-args-extraction`,
+  `bulk-metadata-quick-wins`, `kg-alignment-audit`, and
+  `category-integration-remediation`.
 - Supporting incident history is archived in
   [archive/completed/cli-robustness.plan.md](archive/completed/cli-robustness.plan.md).
 - Migration boundary doctrine evidence remains in
@@ -100,6 +101,7 @@ Cross-stream queued references:
 - [current/bulk-metadata-quick-wins.execution.plan.md](current/bulk-metadata-quick-wins.execution.plan.md)
 - [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md)
 - [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+- [current/sequence-retrieval-architecture-followup.plan.md](current/sequence-retrieval-architecture-followup.plan.md)
 
 ---
 

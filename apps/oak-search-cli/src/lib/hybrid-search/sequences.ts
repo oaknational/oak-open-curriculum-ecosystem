@@ -13,7 +13,12 @@ export interface RunSequencesSearchOptions {
 }
 
 /**
- * Runs hybrid search for sequences using two-way RRF (BM25 + ELSER).
+ * Runs lexical sequence search.
+ *
+ * Sequences are currently searched with a lexical retriever because
+ * `sequence_semantic` is not yet populated during ingestion. The deferred
+ * follow-up keeps the field and will populate it deterministically from ordered
+ * unit-level source content before sequence semantic retrieval returns.
  *
  * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return

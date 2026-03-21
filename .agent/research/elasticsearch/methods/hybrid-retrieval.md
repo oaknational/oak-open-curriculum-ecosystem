@@ -67,7 +67,7 @@ POST my-index/_search
 }
 ```
 
-Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields) and two retrievers for sequences.
+Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields), two retrievers for threads, and lexical-only sequence retrieval because `sequence_semantic` is not yet populated.
 
 ## 4. Weighted Fusion vs RRF
 
@@ -100,7 +100,8 @@ Routing lets you avoid "one size fits all" fusion that dilutes the strongest sig
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 
 - Lessons and units use four-way RRF (BM25 + ELSER on content and structure fields) via `src/lib/hybrid-search/rrf-query-builders.ts`.
-- Sequences use two-way RRF (BM25 + ELSER) with a smaller rank window in the same module.
+- Threads use two-way RRF.
+- Sequences are currently lexical-only in the same module because `sequence_semantic` is mapped but not populated; if semantic retrieval returns, prefer current Elastic guidance for `semantic_text` rather than blindly restoring the earlier query shape.
 - Query preprocessing removes noise phrases and boosts curriculum phrases from the SDK synonym vocabulary (`src/lib/query-processing/*`).
 - Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters (`src/lib/hybrid-search/rrf-query-helpers.ts`).
 - Index targeting is environment-driven (primary vs sandbox) via `src/lib/search-index-target.ts`.
@@ -161,10 +162,10 @@ For "similar lesson" recommendations, use `more_like_this` on short, high-signal
 
 ## References
 
-- RRF retriever: https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rrf-retriever
-- Semantic text field: https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text
-- ELSER overview: https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-elser
-- Dense vector field: https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/dense-vector
-- kNN search: https://www.elastic.co/docs/solutions/search/vector/knn
-- Text similarity reranker: https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/text-similarity-reranker-retriever
-- Synonyms: https://www.elastic.co/guide/en/elasticsearch/reference/current/search-with-synonyms.html
+- RRF retriever: [Elastic docs](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rrf-retriever)
+- Semantic text field: [Elastic docs](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
+- ELSER overview: [Elastic docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-elser)
+- Dense vector field: [Elastic docs](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/dense-vector)
+- kNN search: [Elastic docs](https://www.elastic.co/docs/solutions/search/vector/knn)
+- Text similarity reranker: [Elastic docs](https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/text-similarity-reranker-retriever)
+- Synonyms: [Elastic docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-with-synonyms.html)
