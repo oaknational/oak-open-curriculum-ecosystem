@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-19
+last_updated: 2026-03-21
 ---
 
 # Semantic Search — Session Entry Point
@@ -18,51 +18,45 @@ This is a working handover document. Keep it concise and operational.
   [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
 - Active execution authority:
   [comprehensive-field-integrity-integration-tests.execution.plan.md](../../plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md)
+- Critical path and queue:
+  [current/README.md](../../plans/semantic-search/current/README.md)
 - Session bootstrap and lane-order authority: this prompt
 
 Current lane objective:
 
-- Build and execute a comprehensive proof framework for search pipeline
-  correctness (`all fields`, `all stages`) before any further ingest attempt.
-- Keep work anchored to active findings `F1`/`F2` and update dispositions with
-  deterministic evidence.
+- **Close F2 follow-ups**, then prepare the re-ingest operator command for
+  P0 Phase 3 (unified versioned ingestion final phases).
 
-Current handover state (fresh-session anchor, updated 2026-03-19 session 2):
+Current handover state (updated 2026-03-21):
 
-- Phase 0/1/2 implementation work is complete in the current worktree:
-  - shared `search-contracts` package,
-  - manifest-driven field-integrity suite,
-  - stage and cross-stage integrity tests,
-  - retrieval integrity tests,
-  - ledger-driven readback audit operation.
-- Root-cause investigation completed (2026-03-19):
-  - **F1** (`threadSlug`): confirmed stale index, not a code defect. Full
-    pipeline proven correct. Source data verified as fully populated. No code
-    fix needed — re-ingest resolves.
-  - **F2** (`category`): **Code fix implemented (2026-03-19 session 2).**
-    `categoryMap` now wired through both the sequence path
-    (`collectPhaseResults` → `extractAndBuildSequenceOperations` →
-    `buildSequenceBulkOperations`) and the unit path (`processSingleBulkFile`
-    → `createHybridDataSource` → `createBulkDataAdapter` →
-    `createUnitTransformer`). `fetchCategoryMapForSequences()` added to
-    `category-supplementation.ts`. Fails fast on API errors. All 1033
-    search-cli tests pass. TDD evidence:
-    `category-wiring.integration.test.ts`,
-    `fetch-category-map.integration.test.ts`.
-- **Blocking issue: Cardinal Rule breach.** The upstream OpenAPI schema now
-  documents error responses (400, 401, 404) across endpoints. `pnpm sdk-codegen`
-  fails at the response-map cross-validation step (`Extra (3): *:400, *:401,
-  *:404`). This blocks `pnpm check` and therefore blocks all closure activities.
-  See: `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`.
-- The 404 decorator for transcript (`schema-enhancement-404.ts`) has been
-  removed — the upstream schema now documents this response natively. The
-  decorator infrastructure remains for future use.
-- Phase 3 closure is blocked on:
-  1. ~~F2 code fix (wire `categoryMap`)~~ — **DONE**,
-  2. **codegen schema adaptation** (Cardinal Rule breach, see plan),
-  3. Barney reviewer findings (3 items, all blocking — see below),
-  4. remaining reviewer closure cycle (docs-adr, test, elasticsearch),
-  5. operator re-ingest + readback (Task 2.3 evidence still pending).
+- **Error response classification**: COMPLETE (commit `f86b841a`).
+  Generated invoke method preserves HTTP status via `InvokeResult`.
+  Domain-aware classification: 401→AUTHENTICATION_REQUIRED,
+  404→RESOURCE_NOT_FOUND, 400+blocked→CONTENT_NOT_AVAILABLE (informational),
+  other 4xx→UPSTREAM_API_ERROR.
+- **Codegen schema adaptation**: COMPLETE (commit `2ea997d6`).
+  Cardinal Rule restored — `pnpm sdk-codegen && pnpm build && pnpm check`
+  passes. Dotted component name sanitisation + cross-validator wildcard
+  awareness fixed.
+- **F2 categoryMap wiring**: Architecture findings COMPLETE (commit `2c6e6b51`).
+  All five reviewer passes done (code-reviewer, architecture-reviewer-barney,
+  test-reviewer, docs-adr-reviewer, elasticsearch-reviewer). All findings
+  addressed. 1038 tests passing.
+  - DI consistency: `fetchCategoryMapForSequences` added to `BulkIngestionDeps`
+  - Type tightening: `CategoryFetchDeps` uses canonical `Result<unknown, unknown>`
+  - ES mapping: `unit_topics.keyword` sub-field added to rollup overrides,
+    facet query targets `.keyword` (prevents runtime failure on re-ingest)
+  - Documentation: ADR-093 revised, adapters README updated, plan status fixed
+- **F2 immediate follow-ups** (must complete before re-ingest):
+  1. Extract shared `createMockClient` test helper (DRY debt across 4+ files)
+  2. Migrate `fetchCategoryMapForSequences` to return `Result<CategoryMap, Error>`
+     (ADR-088 compliance at public function boundary)
+  3. Prepare re-ingest operator command
+- **F1** (`threadSlug`): Confirmed stale index, not a code defect. Re-ingest
+  resolves.
+- **Upstream API bug**: PE lessons without video trigger 500 on transcript
+  endpoint. Documented at `.agent/plans/external/ooc-issues/upstream-500-errors.md`.
+  Oak API team concern, not something to work around downstream.
 
 ---
 
@@ -70,93 +64,57 @@ Current handover state (fresh-session anchor, updated 2026-03-19 session 2):
 
 ### Step 1: Ground
 
-- [start-right-thorough.md](../../skills/start-right-thorough/shared/start-right-thorough.md)
+- [start-right-quick](../../skills/start-right-quick/shared/start-right.md)
+  (or thorough for complex work)
 - [AGENT.md](../../directives/AGENT.md)
 - [principles.md](../../directives/principles.md)
-- [testing-strategy.md](../../directives/testing-strategy.md)
-- [schema-first-execution.md](../../directives/schema-first-execution.md)
+- Check memory for `project_f2-fix-and-schema-blocker.md` for detailed
+  follow-up descriptions
 
-### Step 2: Verify live state
+### Step 2: Address F2 immediate follow-ups
 
-Before any mutation, run admin readbacks:
+Three items, in order:
 
-- `validate-aliases`
-- `meta get`
-- `count`
-- `oak_meta` mapping contract check
+1. **Extract shared `createMockClient` test helper** — duplicated OakClient
+   mock factory exists in `bulk-ingestion.integration.test.ts`,
+   `category-wiring.integration.test.ts`, `hybrid-data-source.integration.test.ts`,
+   `api-supplementation.unit.test.ts`, and possibly others. Extract to a shared
+   `test-helpers/mock-oak-client.ts` and update all consumers. Run full gates.
 
-From repo root, use:
-`pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin <subcommand>`.
+2. **Migrate `fetchCategoryMapForSequences` to Result** — currently throws on
+   fetch failure. Change return type to `Promise<Result<CategoryMap, Error>>`,
+   update `BulkIngestionDeps` type, update call site in `prepareBulkIngestion`
+   to unwrap. The fail-fast throw should happen only at the CLI entry point,
+   not inside a function called through a `deps` surface.
 
-Then run field-level readbacks for active blind fields (`thread_slugs`,
-`category_titles`) and keep evidence in the active findings register.
+3. **Prepare re-ingest operator command** — the exact CLI command, pre-checks,
+   and expected output for the operator to run the re-ingest. See versioned
+   ingestion progress tracker in memory for Phase 3 Task 3.1 details.
 
-Policy:
+### Step 3: Run reviewer cycle on follow-up changes
 
-- Use search CLI/admin commands and dedicated operations scripts only.
-- No ad-hoc shell text scanning for validation decisions.
-- If refresh-visibility is a factor, use the bounded retry discipline defined in
-  the active execution plan.
-- If a short admin check runs longer than 10 minutes, stop and escalate to the
-  operator before any further mutation commands.
+Invoke `code-reviewer` + relevant specialists after completing each follow-up.
+Address all findings before proceeding.
 
-### Step 3: Confirm Cardinal Rule is restored (prerequisite gate)
+### Step 4: Update authority documents
 
-The codegen schema adaptation is handled in a **separate session** using
-`.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`.
+When execution state changes, update both:
 
-Before resuming search work, confirm `pnpm sdk-codegen && pnpm build && pnpm check`
-passes. If it does not, the codegen session must complete first.
-
-### Step 4: Apply Barney reviewer findings (3 blocking items)
-
-`architecture-reviewer-barney` reviewed the F2 fix (2026-03-19 session 2).
-Three findings, all blocking:
-
-1. **Add `fetchCategoryMapForSequences` to `BulkIngestionDeps`** — the function
-   is called directly in `bulk-ingestion.ts` instead of through the DI surface.
-   One-line addition to interface + default deps.
-2. **Tighten `CategoryFetchDeps` return type** — currently `{ ok: boolean;
-   value?: unknown; error?: unknown }`, should use discriminated union
-   `Result<unknown, unknown>` from `@oaknational/result`.
-3. **Remove stale `@see ADR-xxx` placeholder** in `category-supplementation.ts`
-   TSDoc (line 25).
-
-### Step 5: Final reviewer closure cycle (mandatory before completion)
-
-Run reviewer cycle against the updated plan and this prompt:
-
-1. ~~`architecture-reviewer-barney`~~ — **completed**, findings in Step 4
-2. `docs-adr-reviewer`
-3. `test-reviewer`
-4. `elasticsearch-reviewer`
-
-Policy:
-
-- Findings and suggestions are actionable by default.
-- Fix all reviewer issues and suggestions unless explicitly rejected as
-  incorrect with written rationale.
-- Re-run affected reviewers after each fix round until closure.
-- `test-reviewer` validates both plan/prompt alignment and the concrete test
-  surfaces now present in the worktree.
-
-### Step 6: Run review/fix cycle for active findings closure
-
-Run specialist review/fix loops on code/docs touched while finalising `F1`/`F2`
-status and evidence coherence.
-
-### Step 6: Deep-update discipline for prompt/findings register
-
-When execution state changes materially (new findings, status flips, reviewer
-closure rounds, evidence additions), update both:
-
-1. `semantic-search.prompt.md` (lane-ordering and current focus), and
+1. `semantic-search.prompt.md` (this file — lane ordering and current focus)
 2. `search-tool-prod-validation-findings-2026-03-15.md` (finding status,
-   evidence links, disposition rationale)
+   evidence, dispositions)
+3. `current/README.md` (critical path status)
 
-in the same session before declaring completion.
-If readiness-gate wording changes in either document, update the other in the
-same session to keep authority surfaces consistent.
+### Step 5: Prepare for P0 Phase 3
+
+Once F2 follow-ups are complete, the re-ingest can proceed:
+
+```bash
+cd apps/oak-search-cli
+pnpm tsx src/bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads -v
+```
+
+Then: validate → promote → verify.
 
 ---
 
