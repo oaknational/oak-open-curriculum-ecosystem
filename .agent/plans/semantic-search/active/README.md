@@ -4,7 +4,7 @@ The single plan currently being executed.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 📋 Pending |
+| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Task 1.1 ✅, Task 1.2 next |
 
 Supporting document (open findings, updated alongside the plan):
 

@@ -24,34 +24,33 @@ This is a working handover document. Keep it concise and operational.
 
 Current lane objective:
 
-- **Close F2 follow-ups**, then prepare the re-ingest operator command for
-  P0 Phase 3 (unified versioned ingestion final phases).
+- **Complete Task 1.2** (Result migration for `fetchCategoryMapForSequences`),
+  then prepare the re-ingest operator command for P0 Phase 2.
 
 Current handover state (updated 2026-03-21):
 
 - **Error response classification**: COMPLETE (commit `f86b841a`).
-  Generated invoke method preserves HTTP status via `InvokeResult`.
-  Domain-aware classification: 401→AUTHENTICATION_REQUIRED,
-  404→RESOURCE_NOT_FOUND, 400+blocked→CONTENT_NOT_AVAILABLE (informational),
-  other 4xx→UPSTREAM_API_ERROR.
 - **Codegen schema adaptation**: COMPLETE (commit `2ea997d6`).
-  Cardinal Rule restored — `pnpm sdk-codegen && pnpm build && pnpm check`
-  passes. Dotted component name sanitisation + cross-validator wildcard
-  awareness fixed.
-- **F2 categoryMap wiring**: Architecture findings COMPLETE (commit `2c6e6b51`).
-  All five reviewer passes done (code-reviewer, architecture-reviewer-barney,
-  test-reviewer, docs-adr-reviewer, elasticsearch-reviewer). All findings
-  addressed. 1038 tests passing.
-  - DI consistency: `fetchCategoryMapForSequences` added to `BulkIngestionDeps`
-  - Type tightening: `CategoryFetchDeps` uses canonical `Result<unknown, unknown>`
-  - ES mapping: `unit_topics.keyword` sub-field added to rollup overrides,
-    facet query targets `.keyword` (prevents runtime failure on re-ingest)
-  - Documentation: ADR-093 revised, adapters README updated, plan status fixed
-- **F2 immediate follow-ups** (must complete before re-ingest):
-  1. Extract shared `createMockClient` test helper (DRY debt across 4+ files)
-  2. Migrate `fetchCategoryMapForSequences` to return `Result<CategoryMap, Error>`
-     (ADR-088 compliance at public function boundary)
-  3. Prepare re-ingest operator command
+- **F2 categoryMap wiring**: COMPLETE (commit `2c6e6b51`). Five reviewer passes.
+- **Task 1.1 — shared `createMockClient`**: ✅ COMPLETE (commit `dfb48b90`).
+  Extracted to `apps/oak-search-cli/src/test-helpers/mock-oak-client.ts` with
+  `Partial<OakClient>` overrides pattern. 5 consumer files updated. Reviewer
+  findings also addressed: deleted self-referential mock factory test (tests
+  mocks not product), split `api-supplementation.unit.test.ts` into unit
+  (pure functions) and integration (`buildKs4SupplementationContext`) files.
+  1038 tests passing, all quality gates green.
+- **Task 1.2 — Result migration**: 🔴 NEXT. Migrate
+  `fetchCategoryMapForSequences` to return `Result<CategoryMap, Error>` per
+  ADR-088. TDD Red phase anchors identified by code-reviewer:
+  - `fetch-category-map.integration.test.ts` ~line 89: change
+    `rejects.toThrow` → `resolves` with `Result.err` check
+  - `bulk-ingestion.integration.test.ts` ~line 36: mock must return
+    `ok(fakeCategoryMap)` instead of raw `CategoryMap`
+  - Unwrap at `prepareBulkIngestion` orchestrator level (not CLI entry point)
+  - `BulkIngestionDeps` uses `typeof fetchCategoryMapForSequences` so type
+    updates automatically
+  - After completion: run full gates + code-reviewer + test-reviewer +
+    type-reviewer
 - **F1** (`threadSlug`): Confirmed stale index, not a code defect. Re-ingest
   resolves.
 - **Upstream API bug**: PE lessons without video trigger 500 on transcript
@@ -80,7 +79,7 @@ expected outputs, and quality/reviewer gates:
 
 Summary of phases:
 
-1. **Phase 1**: F2 code follow-ups (shared mock helper, Result migration)
+1. **Phase 1**: F2 code follow-ups — Task 1.1 ✅ DONE, Task 1.2 🔴 NEXT
 2. **Phase 2**: Re-ingest (operator: stage, validate, promote, verify)
 3. **Phase 3**: Production verification (F1/F2 retest, closure)
 

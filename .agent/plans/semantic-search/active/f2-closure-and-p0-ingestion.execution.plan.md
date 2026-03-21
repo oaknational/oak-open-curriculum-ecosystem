@@ -33,7 +33,7 @@ todos:
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 📋 PENDING
+**Status**: 🟡 IN PROGRESS (Phase 1 — Task 1.2 next)
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`
@@ -73,23 +73,24 @@ This plan consolidates the remaining work from three sources:
 
 ## Phase 1: F2 Code Follow-ups
 
-### Task 1.1: Extract shared `createMockClient` test helper
+### Task 1.1: Extract shared `createMockClient` test helper — ✅ DONE
 
-The full `OakClient` mock factory is duplicated across 4+ test files. Extract
-to a shared test helper and update all consumers.
+**Commit**: `dfb48b90` (2026-03-21)
 
-Files to consolidate:
+Extracted duplicated OakClient mock factory from 5 test files into
+`apps/oak-search-cli/src/test-helpers/mock-oak-client.ts` with
+`overrides: Partial<OakClient>` pattern. All 5 consumers updated.
 
-- `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.integration.test.ts`
-- `apps/oak-search-cli/src/lib/indexing/category-wiring.integration.test.ts`
-- `apps/oak-search-cli/src/adapters/hybrid-data-source.integration.test.ts`
-- `apps/oak-search-cli/src/adapters/api-supplementation.unit.test.ts`
-- Any others found during extraction
+Additional reviewer findings addressed in same commit:
 
-**Why**: DRY violation; when `OakClient` gains new methods, all copies must be
-updated independently. Pre-existing debt now load-bearing after F2 changes.
+- Deleted self-referential mock factory test (tests mocks, not product
+  behaviour — violates "If a test is only testing the test or mocks, delete it")
+- Split `api-supplementation.unit.test.ts`: pure functions remain in
+  `*.unit.test.ts`, `buildKs4SupplementationContext` (uses injected mocks)
+  moved to new `api-supplementation.integration.test.ts`
 
-**Done when**: Single shared helper, all consumers updated, full gates pass.
+**Reviewers**: code-reviewer, test-reviewer, architecture-reviewer-barney.
+All findings addressed. 1038 tests, all quality gates green.
 
 ### Task 1.2: Migrate `fetchCategoryMapForSequences` to Result
 
