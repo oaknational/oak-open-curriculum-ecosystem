@@ -327,6 +327,39 @@
 - Incoming context can hold real analytical value before canonicalisation;
   transient does not mean disposable
 
+## Session 2026-03-21 — F2 Architecture Closure and Plan Consolidation
+
+### What Was Done
+
+- Resolved three blocking architecture-reviewer-barney findings on F2
+  categoryMap wiring: DI consistency, Result type tightening, stale ADR
+  placeholder.
+- Addressed findings from five specialist reviewer passes (code-reviewer,
+  architecture-reviewer-barney, test-reviewer, docs-adr-reviewer,
+  elasticsearch-reviewer). 14 findings total, all addressed.
+- ES mapping fix: added `unit_topics.keyword` sub-field to rollup overrides
+  for terms aggregation (would have caused runtime failure on re-ingest).
+- Test improvements: 1033→1038 tests. Renamed misclassified unit test to
+  integration, added categoryMap forwarding assertion, rewrote
+  fetch-category-map test with narrow `CategoryFetchDeps`, added
+  extractCategoryTitles and slug-derivation tests.
+- Documentation: ADR-093 revised, adapters README updated, plan status fixed.
+- Plan consolidation: archived completed A1 field-integrity plan, created
+  single active plan (f2-closure-and-p0-ingestion), updated all cross-refs
+  including three code files with hardcoded artefact paths.
+
+### Lessons
+
+- Moving plan artefacts is a cross-cutting operation — it touches not just
+  markdown links but test code, CLI defaults, and test runner scripts.
+  Always grep for old paths in `*.ts`, `*.mjs`, and `*.json`, not just `*.md`.
+- When a reviewer says "approved with suggestions", the suggestions are
+  blocking in this repo. The distinction between "important improvement" and
+  "suggestion" collapses under the "all findings are blocking" directive.
+- Plan directories should contain exactly one active plan. Index READMEs are
+  fine; multiple concurrent plans in `active/` are not — they obscure what's
+  actually being executed.
+
 ## Session 2026-03-21 — Error Response Classification
 
 ### What Was Done
