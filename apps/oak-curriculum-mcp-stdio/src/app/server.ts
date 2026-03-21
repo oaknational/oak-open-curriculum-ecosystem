@@ -21,6 +21,7 @@ import { startTimer, type Logger, type ErrorContext } from '@oaknational/logger/
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
+import { isInformationalError } from './informational-errors.js';
 import { generateCorrelationId } from '../correlation/index.js';
 import { createChildLogger } from '../logging/index.js';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -126,6 +127,9 @@ function handleToolResult(
   errorContext?: ErrorContext,
 ): ReturnType<ReturnType<typeof createToolResponseHandlers>['handleSuccess']> {
   if (!execResult.ok) {
+    if (isInformationalError(execResult.error)) {
+      return handlers.handleInformational(execResult.error.message, errorContext);
+    }
     return handlers.handleExecutionError(params, execResult.error, errorContext);
   }
   const validation = validateOutput(descriptor, execResult.value);

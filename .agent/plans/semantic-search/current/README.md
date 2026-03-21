@@ -11,11 +11,10 @@ functionality to be fully validated and the unified versioned ingestion
 lane closed out:
 
 ```text
-1. Error response classification          ← NEXT SESSION
+1. Error response classification          ✅ COMPLETE (2026-03-20)
    Plan: error-response-classification.plan.md
-   Scope: Upstream API experimentation, domain-aware error classification
-          at SDK + MCP layers, validator-ordering fix
-   Prerequisite: codegen error response adaptation (complete 2026-03-20)
+   Scope: Generator fix (InvokeResult), error classification at SDK layer
+   Completed: Upstream experimentation, generator changes, TDD classification
 
 2. F2 categoryMap wiring closure
    Scope: 3 blocking Barney findings, remaining reviewers
@@ -40,7 +39,7 @@ at that point.
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
 | — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
-| — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | 🔬 Investigation needed |
+| — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |
 | P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Complete remaining operational cycle and closeout evidence from unified versioned ingestion lane | 📋 Partially complete, pending final phases |
 | P1+ | Future work — to be re-evaluated after P0 closure | | |
 

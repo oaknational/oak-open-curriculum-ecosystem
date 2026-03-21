@@ -120,6 +120,23 @@ describe('createToolResponseHandlers (integration)', () => {
     });
   });
 
+  it('returns informational responses without isError flag', () => {
+    const handlers = createToolResponseHandlers(logger, context);
+
+    const response = handlers.handleInformational(
+      'This content is restricted by third-party copyright.',
+    );
+
+    expect(response.isError).toBeUndefined();
+    const textEntry = response.content.find(
+      (entry): entry is { type: 'text'; text: string } => entry.type === 'text',
+    );
+    expect(textEntry).toBeDefined();
+    expect(textEntry?.text).toBe('This content is restricted by third-party copyright.');
+    expect(logger.info).toHaveBeenCalled();
+    expect(logger.error).not.toHaveBeenCalled();
+  });
+
   it('only marks validation failures as errors', () => {
     const handlers = createToolResponseHandlers(logger, context);
     const transcript404: ToolResult<'get-lessons-transcript'> = {

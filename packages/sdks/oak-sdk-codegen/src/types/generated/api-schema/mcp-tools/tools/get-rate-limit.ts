@@ -88,7 +88,7 @@ export const getRateLimit = {
       throw new UndocumentedResponseError(status, 'getRateLimit-getRateLimit', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return payload;
+    return { httpStatus: status, payload };
   },
   toolZodSchema,
   toolInputJsonSchema,

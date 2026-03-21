@@ -52,4 +52,28 @@ describe('generateToolDescriptorFile', () => {
     expect(securitySchemesPos).toBeGreaterThan(documentedStatusesPos);
     expect(validateOutputPos).toBeGreaterThan(securitySchemesPos);
   });
+
+  it('exports InvokeResult interface with httpStatus and payload', () => {
+    const generated = generateToolDescriptorFile();
+
+    expect(generated).toContain('export interface InvokeResult');
+    expect(generated).toContain('readonly httpStatus: number');
+    expect(generated).toContain('readonly payload: unknown');
+  });
+
+  it('exports DOCUMENTED_ERROR_PREFIX constant', () => {
+    const generated = generateToolDescriptorFile();
+
+    expect(generated).toContain(
+      "export const DOCUMENTED_ERROR_PREFIX = 'Documented error response: '",
+    );
+  });
+
+  it('uses InvokeResult as invoke return type', () => {
+    const generated = generateToolDescriptorFile();
+
+    expect(generated).toContain(
+      'readonly invoke: (client: TClient, args: TArgs) => InvokeResult | Promise<InvokeResult>',
+    );
+  });
 });

@@ -7,7 +7,7 @@
 
 export { MCP_TOOL_DESCRIPTORS, toolNames, getToolEntryFromToolName, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isToolOperationId, type ToolDescriptorMap, type ToolMap, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolEntry, type ToolEntryForName, type ToolOperationId, type ToolOperationIdForName, type ToolName, type ToolNameForOperationId } from "./definitions.js";
 
-export { type ToolDescriptor } from "./contract/tool-descriptor.contract.js";
+export { type ToolDescriptor, type InvokeResult, DOCUMENTED_ERROR_PREFIX } from "./contract/tool-descriptor.contract.js";
 
 export { UndocumentedResponseError } from "./contract/undocumented-response-error.js";
 

@@ -118,7 +118,7 @@ export const getSequencesQuestions = {
       throw new UndocumentedResponseError(status, 'getQuestions-getQuestionsForSequence', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return payload;
+    return { httpStatus: status, payload };
   },
   toolZodSchema,
   toolInputJsonSchema,

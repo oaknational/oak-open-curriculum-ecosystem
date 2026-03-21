@@ -118,7 +118,7 @@ export const getKeyStagesSubjectQuestions = {
       throw new UndocumentedResponseError(status, 'getQuestions-getQuestionsForKeyStageAndSubject', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return payload;
+    return { httpStatus: status, payload };
   },
   toolZodSchema,
   toolInputJsonSchema,

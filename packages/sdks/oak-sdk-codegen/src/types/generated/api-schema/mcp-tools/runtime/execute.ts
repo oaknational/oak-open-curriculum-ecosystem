@@ -11,6 +11,7 @@
 import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
 import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../definitions.js';
 import type { ToolArgsForName, ToolClientForName, ToolResultForName } from '../aliases/types.js';
+import { DOCUMENTED_ERROR_PREFIX } from '../contract/tool-descriptor.contract.js';
 
 export function listAllToolDescriptors(): readonly ToolDescriptorForName<ToolName>[] {
   return toolNames.map((name) => getToolFromToolName(name));
@@ -31,11 +32,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -49,11 +55,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -67,11 +78,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -85,11 +101,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -103,11 +124,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -121,11 +147,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -139,11 +170,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -157,11 +193,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -175,11 +216,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -193,11 +239,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -211,11 +262,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -229,11 +285,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -247,11 +308,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -265,11 +331,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -283,11 +354,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -301,11 +377,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -319,11 +400,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -337,11 +423,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -355,11 +446,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -373,11 +469,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -391,11 +492,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -409,11 +515,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };
@@ -427,11 +538,16 @@ async function invokeToolByName<TName extends ToolName>(
       }
       const flatArgs = parsed.data;
       const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-      const output = await descriptor.invoke(client, nestedArgs);
-      const validation = descriptor.validateOutput(output);
+      const invokeResult = await descriptor.invoke(client, nestedArgs);
+      if (invokeResult.httpStatus >= 400) {
+        throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
+          cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
+        });
+      }
+      const validation = descriptor.validateOutput(invokeResult.payload);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
-          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
+          cause: { raw: invokeResult.payload, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },
         });
       }
       return { status: validation.status, data: validation.data };

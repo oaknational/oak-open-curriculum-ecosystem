@@ -104,7 +104,7 @@ export const getKeyStagesSubjectUnits = {
       throw new UndocumentedResponseError(status, 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return payload;
+    return { httpStatus: status, payload };
   },
   toolZodSchema,
   toolInputJsonSchema,

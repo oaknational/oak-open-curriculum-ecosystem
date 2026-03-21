@@ -101,7 +101,7 @@ export const getSubjectsSequences = {
       throw new UndocumentedResponseError(status, 'getSubjects-getSubjectSequence', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return payload;
+    return { httpStatus: status, payload };
   },
   toolZodSchema,
   toolInputJsonSchema,

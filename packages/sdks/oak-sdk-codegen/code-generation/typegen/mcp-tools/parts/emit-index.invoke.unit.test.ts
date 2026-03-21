@@ -87,7 +87,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
     expect(code).toContain("const STATUS_DISCRIMINANTS = { '200': 200 } as const;");
   });
 
-  it('does not emit any type assertions in invoke (payload returned as unknown)', () => {
+  it('does not emit any type assertions in invoke', () => {
     const operation: OperationObject = {
       responses: { '200': { description: 'ok' } },
     };
@@ -95,8 +95,16 @@ describe('emitIndex (invoke wrapper emission)', () => {
 
     const invokeBody = code.slice(code.indexOf('invoke:'), code.indexOf('toolZodSchema,'));
     expect(invokeBody).not.toMatch(/\bas\b(?!\s+const)/);
-    expect(code).toContain('return payload;');
-    expect(code).not.toContain('return payload as');
+  });
+
+  it('invoke returns InvokeResult with httpStatus and payload', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-subjects', '/subjects', 'GET', 'op-invoke-result', operation);
+
+    expect(code).toContain('return { httpStatus: status, payload };');
+    expect(code).not.toContain('return payload;');
   });
 
   it('emits zero non-const type assertions anywhere in output', () => {

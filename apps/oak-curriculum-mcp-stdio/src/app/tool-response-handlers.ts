@@ -27,6 +27,7 @@ export interface ToolResponseHandlers {
     errorContext?: ErrorContext,
   ): ToolResponse;
   handleSuccess<TName extends ToolName>(result: ToolResult<TName>): ToolResponse;
+  handleInformational(message: string, errorContext?: ErrorContext): ToolResponse;
 }
 
 type LoggerForToolHandlers = Pick<Logger, 'info' | 'error'>;
@@ -146,6 +147,19 @@ export function createToolResponseHandlers(
     },
     handleSuccess(result: ToolExecutionSuccessEnvelope): ToolResponse {
       return createSuccessResponse(logger, result);
+    },
+    handleInformational(message: string, errorContext?: ErrorContext): ToolResponse {
+      if (errorContext) {
+        logger.info('Tool returned informational content', {
+          message,
+          correlationId: errorContext.correlationId,
+          duration: errorContext.duration?.formatted,
+          toolName: errorContext.toolName,
+        });
+      } else {
+        logger.info(`Tool returned informational content: ${message}`);
+      }
+      return { content: [{ type: 'text', text: message }] };
     },
   };
 }
