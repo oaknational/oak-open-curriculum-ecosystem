@@ -326,3 +326,31 @@
   `pine-scripts`, not just by intuition
 - Incoming context can hold real analytical value before canonicalisation;
   transient does not mean disposable
+
+## Session 2026-03-21 — Error Response Classification
+
+### What Was Done
+
+- Implemented domain-aware error classification for documented 4xx responses
+  (400/401/404) across the SDK and MCP layers. Three-layer fix: generator
+  (InvokeResult preserves HTTP status), SDK classification (pure functions),
+  MCP presentation (informational handling for content-blocked).
+- Upstream API experimentation revealed two distinct error body shapes: clean
+  `{ message, code }` and gated-endpoint `{ message, code, data: { cause } }`.
+  Generator fix addresses both because `httpStatus >= 400` check precedes
+  schema validation.
+- Content-blocked responses now return `isError: false` (informational).
+- Discovered upstream 500 bug: PE lessons without video trigger null pointer
+  on transcript endpoint. Documented for Oak API team.
+
+### Lessons
+
+- When a generator drops information (HTTP status), the fix belongs in the
+  generator, not in downstream workarounds. The Cardinal Rule applies to
+  information flow, not just type flow.
+- Upstream API experimentation before classification design prevented
+  speculative architecture — the actual response shapes (two distinct
+  formats, a 500 for absent content) were not predictable.
+- The `httpStatus >= 400` check before `validateOutput` in generated code
+  solved both the validator-ordering problem AND the strict-schema-rejection
+  problem — an elegant case where one fix addressed two bugs.
