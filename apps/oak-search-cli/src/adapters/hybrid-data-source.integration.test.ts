@@ -203,7 +203,7 @@ describe('HybridDataSource KS4 enrichment', () => {
             {
               tierSlug: 'higher',
               tierTitle: 'Higher',
-              units: [{ unitSlug: 'algebra-higher' }],
+              units: [{ unitSlug: 'algebra-higher', unitTitle: 'Algebra Higher', unitOrder: 1 }],
             },
           ],
         },

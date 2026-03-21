@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { BulkDownloadFile, BulkFileResult } from '@oaknational/sdk-codegen/bulk';
+import { ok } from '@oaknational/result';
 import type { CategoryMap } from '../../adapters/category-supplementation';
 import type { SearchIndexKind } from '../search-index-target';
 import { createMockClient } from '../../test-helpers/mock-oak-client';
@@ -33,7 +34,7 @@ function createDeps(
 ): BulkIngestionDeps {
   return {
     readAllBulkFiles: vi.fn().mockResolvedValue(files),
-    fetchCategoryMapForSequences: vi.fn().mockResolvedValue(fakeCategoryMap),
+    fetchCategoryMapForSequences: vi.fn().mockResolvedValue(ok(fakeCategoryMap)),
     collectPhaseResults: vi
       .fn<BulkIngestionDeps['collectPhaseResults']>()
       .mockImplementation(

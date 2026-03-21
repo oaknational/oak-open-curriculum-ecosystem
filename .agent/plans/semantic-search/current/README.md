@@ -18,8 +18,8 @@ lane closed out:
 
 2. F2 closure + P0 ingestion              🟡 ACTIVE (2026-03-21)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
-   Phase 1: F2 follow-ups — Task 1.1 ✅ DONE (dfb48b90), Task 1.2 🔴 NEXT
-   Phase 2: Re-ingest (operator: stage, validate, promote, verify)
+   Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
+   Phase 2: Re-ingest (operator: stage, validate, promote, verify) — 🔴 NEXT
    Phase 3: Production verification (F1/F2 retest, closure)
 ```
 

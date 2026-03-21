@@ -9,14 +9,17 @@
  * `OakClient`, keeping mocks minimal per ADR-078.
  */
 import { describe, expect, it } from 'vitest';
+import { unwrap, ok, type Ok } from '@oaknational/result';
+import type { SequenceUnitsResponse } from '../types/oak';
 import { fetchCategoryMapForSequences, type CategoryFetchDeps } from './category-supplementation';
 
 /**
- * Creates a minimal `CategoryFetchDeps` from a map of slug → response.
+ * Creates a minimal success-only `CategoryFetchDeps` from a map of slug → response.
  * Only stubs the `getSequenceUnits` method that the function actually calls.
+ * Error-path tests construct `CategoryFetchDeps` directly to inject error responses.
  */
 function createCategoryFetchDeps(
-  responses: Record<string, { readonly ok: true; readonly value: unknown }>,
+  responses: Record<string, Ok<SequenceUnitsResponse>>,
 ): CategoryFetchDeps {
   return {
     getSequenceUnits: (slug: string) => {
@@ -24,7 +27,8 @@ function createCategoryFetchDeps(
       if (response) {
         return Promise.resolve(response);
       }
-      return Promise.resolve({ ok: true as const, value: [] });
+      const empty: SequenceUnitsResponse = [];
+      return Promise.resolve(ok(empty));
     },
   };
 }
@@ -32,48 +36,42 @@ function createCategoryFetchDeps(
 describe('fetchCategoryMapForSequences', () => {
   it('builds merged CategoryMap from multiple sequences', async () => {
     const deps = createCategoryFetchDeps({
-      'maths-primary': {
-        ok: true,
-        value: [
-          {
-            year: 3,
-            units: [
-              {
-                unitSlug: 'fractions-year-3',
-                unitTitle: 'Fractions Year 3',
-                categories: [{ categoryTitle: 'Number', categorySlug: 'number' }],
-              },
-            ],
-          },
-        ],
-      },
-      'english-primary': {
-        ok: true,
-        value: [
-          {
-            year: 3,
-            units: [
-              {
-                unitSlug: 'grammar-year-3',
-                unitTitle: 'Grammar Year 3',
-                categories: [{ categoryTitle: 'Grammar', categorySlug: 'grammar' }],
-              },
-            ],
-          },
-        ],
-      },
+      'maths-primary': ok([
+        {
+          year: 3,
+          units: [
+            {
+              unitSlug: 'fractions-year-3',
+              unitTitle: 'Fractions Year 3',
+              unitOrder: 1,
+              categories: [{ categoryTitle: 'Number', categorySlug: 'number' }],
+            },
+          ],
+        },
+      ]),
+      'english-primary': ok([
+        {
+          year: 3,
+          units: [
+            {
+              unitSlug: 'grammar-year-3',
+              unitTitle: 'Grammar Year 3',
+              unitOrder: 1,
+              categories: [{ categoryTitle: 'Grammar', categorySlug: 'grammar' }],
+            },
+          ],
+        },
+      ]),
     });
 
-    const categoryMap = await fetchCategoryMapForSequences(deps, [
-      'maths-primary',
-      'english-primary',
-    ]);
+    const result = await fetchCategoryMapForSequences(deps, ['maths-primary', 'english-primary']);
+    const categoryMap = unwrap(result);
 
     expect(categoryMap.get('fractions-year-3')).toEqual([{ title: 'Number', slug: 'number' }]);
     expect(categoryMap.get('grammar-year-3')).toEqual([{ title: 'Grammar', slug: 'grammar' }]);
   });
 
-  it('fails fast when API call returns an error', async () => {
+  it('returns Result.err when API call returns an error', async () => {
     const deps: CategoryFetchDeps = {
       getSequenceUnits: () =>
         Promise.resolve({
@@ -86,15 +84,17 @@ describe('fetchCategoryMapForSequences', () => {
         }),
     };
 
-    await expect(fetchCategoryMapForSequences(deps, ['maths-primary'])).rejects.toThrow(
-      'maths-primary',
-    );
+    const result = await fetchCategoryMapForSequences(deps, ['maths-primary']);
+
+    expect(result.ok).toBe(false);
+    expect(!result.ok && result.error.message).toContain('maths-primary');
   });
 
   it('returns empty map when no sequences are provided', async () => {
     const deps = createCategoryFetchDeps({});
 
-    const categoryMap = await fetchCategoryMapForSequences(deps, []);
+    const result = await fetchCategoryMapForSequences(deps, []);
+    const categoryMap = unwrap(result);
 
     expect(categoryMap.size).toBe(0);
   });

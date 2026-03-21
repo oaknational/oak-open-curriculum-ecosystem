@@ -5,7 +5,7 @@
 import type { OakApiClient } from '@oaknational/curriculum-sdk';
 import { classifyHttpError, validationError } from '@oaknational/curriculum-sdk';
 import { ok, err } from '@oaknational/result';
-import { isSubjectSequences } from '../../types/oak';
+import { isSubjectSequences, isSequenceUnitsResponse } from '../../types/oak';
 import type { GetSubjectSequencesFn, GetSequenceUnitsFn } from '../oak-adapter-types';
 import { safeGet } from '../sdk-safe-get';
 
@@ -55,6 +55,10 @@ export function makeGetSequenceUnits(client: Pick<OakApiClient, 'GET'>): GetSequ
         classifyHttpError(res.response.status, sequenceSlug, 'other', res.response.statusText),
       );
     }
-    return ok(res.data ?? []);
+    const data = res.data ?? [];
+    if (isSequenceUnitsResponse(data)) {
+      return ok(data);
+    }
+    return err(validationError(sequenceSlug, 'SequenceUnitsResponse', data));
   };
 }

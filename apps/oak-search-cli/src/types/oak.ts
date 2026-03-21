@@ -90,10 +90,12 @@ export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
+  isSequenceUnitsResponse,
 } from '@oaknational/curriculum-sdk/public/search.js';
 
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
+  SequenceUnitsResponse,
 } from '@oaknational/curriculum-sdk/public/search.js';

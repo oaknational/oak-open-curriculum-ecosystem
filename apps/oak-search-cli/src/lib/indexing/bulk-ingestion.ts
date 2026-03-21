@@ -11,7 +11,10 @@
 import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/bulk';
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
-import { fetchCategoryMapForSequences } from '../../adapters/category-supplementation';
+import {
+  fetchCategoryMapForSequences,
+  type CategoryMap,
+} from '../../adapters/category-supplementation';
 import type { BulkOperationEntry } from './bulk-operation-types';
 import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
@@ -83,6 +86,32 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
   });
 }
 
+/**
+ * Fetches and unwraps category data at the orchestrator boundary.
+ *
+ * @remarks
+ * Converts `Result.err` to a thrown error intentionally — callers of
+ * `prepareBulkIngestion` receive an exception, not a Result, because
+ * category fetch failure is unrecoverable for the ingestion run.
+ */
+async function fetchCategories(
+  deps: BulkIngestionDeps,
+  client: OakClient,
+  sequenceSlugs: readonly string[],
+): Promise<CategoryMap> {
+  ingestLogger.info('Fetching category data for sequences', {
+    sequenceCount: sequenceSlugs.length,
+  });
+  const categoryMapResult = await deps.fetchCategoryMapForSequences(client, sequenceSlugs);
+  if (!categoryMapResult.ok) {
+    throw categoryMapResult.error;
+  }
+  ingestLogger.info('Category data fetched', {
+    categoryMapSize: categoryMapResult.value.size,
+  });
+  return categoryMapResult.value;
+}
+
 /** Prepares bulk operations from bulk download files using HybridDataSource. */
 export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
@@ -100,13 +129,7 @@ export async function prepareBulkIngestion(
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
   const sequenceSlugs = bulkDownloadFiles.map((f) => f.sequenceSlug);
-  ingestLogger.info('Fetching category data for sequences', {
-    sequenceCount: sequenceSlugs.length,
-  });
-  const categoryMap = await deps.fetchCategoryMapForSequences(client, sequenceSlugs);
-  ingestLogger.info('Category data fetched', {
-    categoryMapSize: categoryMap.size,
-  });
+  const categoryMap = await fetchCategories(deps, client, sequenceSlugs);
 
   const phases = await deps.collectPhaseResults(
     filteredFiles,

@@ -10,7 +10,10 @@ todos:
     status: done
   - id: f2-result-migration
     content: "Migrate fetchCategoryMapForSequences to return Result<CategoryMap, Error> (ADR-088)."
-    status: pending
+    status: done
+  - id: f2-type-violation-fix
+    content: "Fix blocking unknown type violation: tighten GetSequenceUnitsFn to generated SDK type, remove Array.isArray coercion."
+    status: done
   - id: prepare-reingest-command
     content: "Prepare re-ingest operator command with pre-checks and expected output."
     status: pending
@@ -33,7 +36,7 @@ todos:
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 — Task 1.2 next)
+**Status**: 🟡 IN PROGRESS (Phase 1 ✅ COMPLETE — Phase 2 next: re-ingest)
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`
@@ -92,27 +95,73 @@ Additional reviewer findings addressed in same commit:
 **Reviewers**: code-reviewer, test-reviewer, architecture-reviewer-barney.
 All findings addressed. 1038 tests, all quality gates green.
 
-### Task 1.2: Migrate `fetchCategoryMapForSequences` to Result
+### Task 1.2: Migrate `fetchCategoryMapForSequences` to Result — ✅ DONE
 
-Change return type from `Promise<CategoryMap>` (throws on failure) to
-`Promise<Result<CategoryMap, Error>>` per ADR-088.
+**Result migration** (2026-03-21): Return type changed from `Promise<CategoryMap>`
+to `Promise<Result<CategoryMap, Error>>`. TDD Red→Green→Refactor followed.
 
-- Update `CategoryFetchDeps` and `BulkIngestionDeps` types
-  (`BulkIngestionDeps` uses `typeof fetchCategoryMapForSequences`, so the type
-  updates automatically when the function signature changes)
-- Update call site in `prepareBulkIngestion` to unwrap the Result
-  (unwrap at the orchestrator level, not the CLI entry point — `prepareBulkIngestion`
-  is the natural error boundary for ingestion operations)
-- Update tests: `fetch-category-map.integration.test.ts` `rejects.toThrow` becomes
-  `resolves` with `Result.err` check (Red phase anchor);
-  `bulk-ingestion.integration.test.ts` mock must return `ok(fakeCategoryMap)`
-- Run full gates + code-reviewer pass + test-reviewer + type-reviewer
+Code changes complete:
 
-**Why**: ADR-088 violation at public function boundary. Calling code cannot
-handle partial failure programmatically.
+- `fetchCategoryMapForSequences` returns `Result` via `ok()`/`err()`
+- `@throws` removed, TSDoc updated
+- `prepareBulkIngestion` unwraps via extracted `fetchCategories` helper
+  (also fixes `max-lines-per-function` lint)
+- `BulkIngestionDeps` auto-updated via `typeof`
+- Tests: `unwrap()` for success, `.ok === false` for error, `ok(fakeCategoryMap)`
+  for mock. All assertions unconditional (no `if` guards).
 
-**Done when**: No `@throws` on public function boundary, Result unwrapped at
-`prepareBulkIngestion` orchestrator level, all tests pass.
+**Reviewers** (2026-03-21): code-reviewer (APPROVED), test-reviewer (findings
+fixed), type-reviewer (AT-RISK finding resolved in Task 1.2b).
+
+### Task 1.2b: Fix blocking `unknown` type violation — ✅ DONE
+
+**Completed** (2026-03-21). Six reviewer passes (code-reviewer, type-reviewer,
+test-reviewer — each run twice: initial + post-fix).
+
+Changes:
+
+- `GetSequenceUnitsFn` return tightened from `Result<unknown, SdkFetchError>` to
+  `Result<SequenceUnitsResponse, SdkFetchError>` (schema-derived type)
+- `makeGetSequenceUnits` now validates with `isSequenceUnitsResponse` at boundary,
+  matching the pattern from `makeGetSubjectSequences`
+- `CategoryFetchDeps` tightened to `Result<SequenceUnitsResponse, SdkFetchError>`
+- `Array.isArray` coercion removed from `fetchCategoryMapForSequences`
+- `buildCategoryMap` accepts `SequenceUnitsResponse`, uses `'units' in yearData`
+  to narrow the discriminated union
+- Hand-rolled `ApiUnit`/`ApiCategory`/`ApiYearData`/`SequenceUnitsData` replaced
+  with schema-derived types via `Extract` and indexed access (`YearEntryWithUnits`,
+  `SequenceUnit`, `SequenceUnitCategory`)
+- `addUnitCategories` uses `'unitSlug' in unit` / `'unitOptions' in unit` for
+  proper discriminated union narrowing (was truthiness check)
+- `sdk-api-methods.unit.test.ts` renamed to `sdk-api-methods.integration.test.ts`
+  (uses injected mock dependencies — integration pattern per ADR-078)
+- All test mocks updated to use typed `SequenceUnitsResponse` data with
+  `createMockSequenceUnits()` factory
+- `sandbox-fixture.ts`: removed `unknown` type erasure
+
+**Evidence**: type-check clean, lint 0 errors, 1038/1038 tests, all reviewer
+findings addressed. No `unknown` remains in the type chain.
+
+### Phase 1 Completion Gates — ✅ ALL GREEN (2026-03-21)
+
+Full-suite gates run after Phase 1 completion:
+
+| Gate | Result |
+|---|---|
+| `sdk-codegen` | ✅ |
+| `build` | ✅ (17/17) |
+| `type-check` | ✅ (28/28) |
+| `doc-gen` | ✅ |
+| `lint:fix` | ✅ (0 errors) |
+| `format:root` | ✅ |
+| `markdownlint:root` | ✅ |
+| `test` | ✅ (1038/1038) |
+| `test:e2e` | ✅ (search-cli 15/15, streamable-http 176/176) |
+| `test:ui` | ✅ (20/20 Playwright) |
+| `smoke:dev:stub` | ✅ |
+
+Phase 1 readiness gate: **CLOSED**. All code follow-ups complete, all quality
+gates green, all reviewer findings addressed. Ready for Phase 2 (re-ingest).
 
 ---
 

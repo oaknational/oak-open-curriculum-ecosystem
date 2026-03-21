@@ -24,8 +24,8 @@ This is a working handover document. Keep it concise and operational.
 
 Current lane objective:
 
-- **Complete Task 1.2** (Result migration for `fetchCategoryMapForSequences`),
-  then prepare the re-ingest operator command for P0 Phase 2.
+- **Prepare and execute the re-ingest operator command (P0 Phase 2)**, then
+  verify F1/F2 findings with production evidence (Phase 3).
 
 Current handover state (updated 2026-03-21):
 
@@ -33,24 +33,18 @@ Current handover state (updated 2026-03-21):
 - **Codegen schema adaptation**: COMPLETE (commit `2ea997d6`).
 - **F2 categoryMap wiring**: COMPLETE (commit `2c6e6b51`). Five reviewer passes.
 - **Task 1.1 — shared `createMockClient`**: ✅ COMPLETE (commit `dfb48b90`).
-  Extracted to `apps/oak-search-cli/src/test-helpers/mock-oak-client.ts` with
-  `Partial<OakClient>` overrides pattern. 5 consumer files updated. Reviewer
-  findings also addressed: deleted self-referential mock factory test (tests
-  mocks not product), split `api-supplementation.unit.test.ts` into unit
-  (pure functions) and integration (`buildKs4SupplementationContext`) files.
+- **Task 1.2 — Result migration**: ✅ COMPLETE (2026-03-21).
+  `fetchCategoryMapForSequences` returns `Result<CategoryMap, Error>`.
+- **Task 1.2b — `unknown` type violation fix**: ✅ COMPLETE (2026-03-21).
+  `GetSequenceUnitsFn` tightened to `Result<SequenceUnitsResponse, SdkFetchError>`.
+  Hand-rolled types replaced with schema-derived types via indexed access.
+  `Array.isArray` coercion removed. `isSequenceUnitsResponse` validates at
+  boundary. Six reviewer passes (code-reviewer, type-reviewer, test-reviewer).
   1038 tests passing, all quality gates green.
-- **Task 1.2 — Result migration**: 🔴 NEXT. Migrate
-  `fetchCategoryMapForSequences` to return `Result<CategoryMap, Error>` per
-  ADR-088. TDD Red phase anchors identified by code-reviewer:
-  - `fetch-category-map.integration.test.ts` ~line 89: change
-    `rejects.toThrow` → `resolves` with `Result.err` check
-  - `bulk-ingestion.integration.test.ts` ~line 36: mock must return
-    `ok(fakeCategoryMap)` instead of raw `CategoryMap`
-  - Unwrap at `prepareBulkIngestion` orchestrator level (not CLI entry point)
-  - `BulkIngestionDeps` uses `typeof fetchCategoryMapForSequences` so type
-    updates automatically
-  - After completion: run full gates + code-reviewer + test-reviewer +
-    type-reviewer
+- **Phase 1 COMPLETE** — all code follow-ups done, all reviewer findings
+  addressed. Full-suite gates passed (sdk-codegen, build, type-check, doc-gen,
+  lint, format, markdownlint, test 1038/1038, test:e2e, test:ui 20/20,
+  smoke:dev:stub). Phase 1 readiness gate CLOSED.
 - **F1** (`threadSlug`): Confirmed stale index, not a code defect. Re-ingest
   resolves.
 - **Upstream API bug**: PE lessons without video trigger 500 on transcript
@@ -67,8 +61,6 @@ Current handover state (updated 2026-03-21):
   (or thorough for complex work)
 - [AGENT.md](../../directives/AGENT.md)
 - [principles.md](../../directives/principles.md)
-- Check memory for `project_f2-fix-and-schema-blocker.md` for detailed
-  follow-up descriptions
 
 ### Step 2: Execute the active plan
 
@@ -79,8 +71,8 @@ expected outputs, and quality/reviewer gates:
 
 Summary of phases:
 
-1. **Phase 1**: F2 code follow-ups — Task 1.1 ✅ DONE, Task 1.2 🔴 NEXT
-2. **Phase 2**: Re-ingest (operator: stage, validate, promote, verify)
+1. **Phase 1**: F2 code follow-ups — ✅ COMPLETE (Tasks 1.1, 1.2, 1.2b all done)
+2. **Phase 2**: Re-ingest (operator: stage, validate, promote, verify) — 🔴 NEXT
 3. **Phase 3**: Production verification (F1/F2 retest, closure)
 
 ### Step 3: Keep authority documents in sync

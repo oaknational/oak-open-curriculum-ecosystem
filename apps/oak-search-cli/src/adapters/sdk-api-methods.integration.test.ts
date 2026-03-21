@@ -12,6 +12,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import type { OakApiClient } from '@oaknational/curriculum-sdk';
+import type { SequenceUnitsResponse } from '../types/oak';
 import {
   makeGetLessonTranscript,
   makeGetLessonSummary,
@@ -140,6 +141,18 @@ function createMockLessonGroups() {
         { lessonSlug: 'lesson-1', lessonTitle: 'Lesson One' },
         { lessonSlug: 'lesson-2', lessonTitle: 'Lesson Two' },
       ],
+    },
+  ];
+}
+
+/**
+ * Create minimal valid SequenceUnits data matching SequenceUnitsResponseSchema.
+ */
+function createMockSequenceUnits(): SequenceUnitsResponse {
+  return [
+    {
+      year: 5,
+      units: [{ unitSlug: 'unit-1', unitTitle: 'Unit One', unitOrder: 1 }],
     },
   ];
 }
@@ -324,7 +337,7 @@ describe('SDK API Methods - Network Exception Handling', () => {
     });
 
     it('should return Ok with sequence units on successful response', async () => {
-      const mockData = [{ unitSlug: 'unit-1', unitTitle: 'Unit One', order: 1 }];
+      const mockData = createMockSequenceUnits();
       const client = createSuccessClient(mockData);
       const getSequenceUnits = makeGetSequenceUnits(client);
 
@@ -332,8 +345,8 @@ describe('SDK API Methods - Network Exception Handling', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(Array.isArray(result.value)).toBe(true);
         expect(result.value).toHaveLength(1);
+        expect(result.value[0]).toHaveProperty('year', 5);
       }
     });
   });
