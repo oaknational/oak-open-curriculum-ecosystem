@@ -1,6 +1,6 @@
 # Architecture
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-03-22
 
 ## Overview
 
@@ -12,17 +12,21 @@ The semantic search workspace provides a CLI/SDK-first service that ingests Oak 
 
 ## Indices (Elasticsearch Serverless)
 
-| Index                 | Purpose                                            | Key Fields                                                                                                                                                                                                                                                                                                                                                 |
-| --------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `oak_lessons`         | Primary lesson retrieval surface                   | `lesson_id`, `lesson_slug`, `lesson_title`, lesson-planning data (`lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`), `transcript_text` with `term_vector`, `lesson_semantic` (`semantic_text`), canonical URL, unit metadata, completion `title_suggest` with contexts, audit timestamps |
-| `oak_unit_rollup`     | Unit search and highlight surface                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`)                                                                                      |
-| `oak_units`           | Lightweight unit metadata for analytics and facets | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations                                                                                                                                                                                                                           |
-| `oak_threads`         | Conceptual progression strands across units/years  | `thread_slug`, `thread_title`, `unit_count`, `subject_slugs` (array — a thread can span multiple subjects), `thread_semantic` (`semantic_text`), `thread_url`, completion `title_suggest`. Programme-agnostic; show how ideas build over time. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md).        |
-| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, optional `sequence_semantic`, completion payloads. One sequence generates many programme views.                                                                                                                                        |
-| `oak_sequence_facets` | Sequence facet metadata                            | Facet identifiers, sequence relationships, filtering metadata                                                                                                                                                                                                                                                                                              |
-| `oak_meta`            | Index metadata and versioning                      | Index version, ingestion timestamps, schema version                                                                                                                                                                                                                                                                                                        |
+| Index                 | Purpose                                            | Key Fields                                                                                                                                                                                                                                                                                                                                                                                         |
+| --------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `oak_lessons`         | Primary lesson retrieval surface                   | `lesson_id`, `lesson_slug`, `lesson_title`, lesson-planning data (`lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`), `transcript_text` with `term_vector`, `lesson_semantic` (`semantic_text`), canonical URL, unit metadata, completion `title_suggest` with contexts, audit timestamps                                         |
+| `oak_unit_rollup`     | Unit search and highlight surface                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`)                                                                                                                              |
+| `oak_units`           | Lightweight unit metadata for analytics and facets | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations                                                                                                                                                                                                                                                                   |
+| `oak_threads`         | Conceptual progression strands across units/years  | `thread_slug`, `thread_title`, `unit_count`, `subject_slugs` (array — a thread can span multiple subjects), `thread_semantic` (`semantic_text`), `thread_url`, completion `title_suggest`. Programme-agnostic; show how ideas build over time. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md).                                                |
+| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, `sequence_semantic` (`semantic_text` derived deterministically from ordered unit content per [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)), completion payloads. One sequence generates many programme views. |
+| `oak_sequence_facets` | Sequence facet metadata                            | Facet identifiers, sequence relationships, filtering metadata                                                                                                                                                                                                                                                                                                                                      |
+| `oak_meta`            | Index metadata and versioning                      | Index version, ingestion timestamps, schema version                                                                                                                                                                                                                                                                                                                                                |
 
 Shared settings include the `oak_text` analyser (standard, lowercase, asciifolding, `synonym_graph` using `oak-syns`), the `oak_lower` normaliser for keyword filters, and `highlight.max_analyzed_offset` increased to accommodate long transcripts and rollups.
+
+Operator note: `oaksearch admin count` reports the six searchable/faceted index
+kinds and excludes `oak_meta`, which remains part of the seven-index
+architecture table above.
 
 ---
 
@@ -37,7 +41,6 @@ src/cli/
 │   ├── create-cli-sdk.ts           # Env → ES client/SDK wiring helpers
 │   ├── with-es-client.ts           # Guaranteed ES client cleanup wrapper
 │   ├── build-search-sdk-config.ts  # CliSdkEnv -> SearchSdkConfig mapping
-│   ├── build-lifecycle-service.ts  # Lifecycle service composition helper
 │   ├── resolve-bulk-dir.ts         # Precondition checks before resource creation
 │   ├── validate-ingest-env.ts      # CLI ingest option validation
 │   ├── search-deps.ts              # Shared deps for search command handlers
@@ -49,9 +52,10 @@ src/cli/
 │   ├── handlers.ts                 # SDK retrieval calls
 │   ├── register-facets-cmd.ts      # Facets command registration
 │   └── register-suggest-cmd.ts     # Suggest command registration
-├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|ingest|...}
+├── admin/                          # oaksearch admin {setup|status|synonyms|meta|count|versioned-ingest|stage|...}
 │   ├── index.ts                    # Command registration
 │   ├── handlers.ts                 # SDK admin calls
+│   ├── shared/build-lifecycle-service.ts # Admin-only lifecycle service composition helper
 │   ├── register-meta-cmd.ts        # Meta get/set command group
 │   ├── admin-count-command.ts      # True parent document counts
 │   └── handle-count.ts             # Count handler over AdminService
@@ -64,7 +68,7 @@ evaluation/analysis/
 └── create-evaluation-search-sdk.ts # Shared ES client lifecycle wrapper for benchmarks
 ```
 
-**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for complex orchestration (ingest, verify, diagnostics, benchmarks).
+**SDK-mapped commands** call the SDK directly (search, admin setup/status/synonyms/meta/count/lifecycle, observe telemetry/summary) through modular `register-*-cmd.ts` registration units. **Pass-through commands** delegate to existing scripts via `execFileSync` for verification, diagnostics, and benchmarks.
 
 ---
 
@@ -73,7 +77,7 @@ evaluation/analysis/
 - **Structured hybrid search** — Search over lessons, units, sequences, or threads. Builds server-side RRF queries via the SDK, returns highlights, canonical URLs, facets, zero-hit metadata.
 - **Suggestion/type-ahead** — Backed by completion contexts and `search_as_you_type` fields.
 - **Zero-hit telemetry** — Records queries that return no results for quality improvement.
-- **CLI ingestion** — `oaksearch admin ingest` triggers resilient batching across lessons, units, sequences.
+- **CLI ingestion** — `oaksearch admin versioned-ingest` and `oaksearch admin stage` drive resilient lifecycle ingestion.
 - **Index management** — `oaksearch admin setup` manages mappings, synonyms, and index creation.
 
 ---
@@ -104,13 +108,19 @@ When a search request arrives, the query passes through several stages before re
 
 Filler phrases are stripped from the user's query text before query building. Examples: "that X stuff", "how do I", "lesson on", "help with". This prevents irrelevant terms from diluting BM25 matching.
 
-**Implementation**: `src/lib/query-processing/remove-noise-phrases.ts`
+**Implementation**: canonical SDK path
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`;
+the CLI also retains a legacy/harness copy under
+`apps/oak-search-cli/src/lib/query-processing/remove-noise-phrases.ts`.
 
 ### 2. Curriculum Phrase Detection
 
 Multi-word curriculum terms (e.g. "completing the square", "key learning points") are detected using longest-match-first against a vocabulary built from the SDK (`buildPhraseVocabulary()`). Detected phrases are used to create `match_phrase` boosters (boost 2.0) that are injected into BM25 retrievers.
 
-**Implementation**: `src/lib/query-processing/detect-curriculum-phrases.ts`, `src/lib/hybrid-search/rrf-query-helpers.ts`  
+**Implementation**: canonical SDK paths
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts`
+and `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`; the CLI
+retains legacy/harness copies under `apps/oak-search-cli/src/lib/`.
 **ADR**: [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
 
 ### 3. Reciprocal Rank Fusion (RRF)
@@ -126,15 +136,46 @@ Each search scope uses Elasticsearch's retriever API to blend lexical and semant
 
 Synonym expansion is handled at the Elasticsearch analyser level via the `oak-syns` synonym set, not at the application level.
 
-Threads and sequences use 2-way RRF because they have a single text surface (title only — no transcripts, lesson-planning data, or rollup text). See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
+Threads and sequences use 2-way RRF because they have a single text surface
+(title-derived content, no transcripts, lesson-planning data, or rollup text).
+Sequences use SDK-owned 2-way RRF (BM25 + ELSER semantic on
+`sequence_semantic`), matching the thread retrieval pattern.
+See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)
+for the thread-specific rationale and
+[ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+for the sequence semantic contract.
+Threads filter on `subject_slugs` (plural array field) because a single thread
+can span multiple subjects.
 
-**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; CLI legacy builders in `src/lib/hybrid-search/rrf-query-builders.ts`
+**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in
+`packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`.
+Active CLI command handlers consume SDK read/admin capability surfaces per
+ADR-134.
+
+## SDK Surface Boundary
+
+Per [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md), CLI modules are capability-tiered:
+
+- non-admin modules import `@oaknational/oak-search-sdk/read`
+- default policy is non-admin for `src/**/*.ts`
+- privileged modules import `@oaknational/oak-search-sdk/admin` only from explicit subtrees:
+  - `src/cli/admin/**`
+  - `src/lib/indexing/**`
+  - `src/adapters/**`
+- mixed-capability support modules (`evaluation/**`, `operations/**`) may use read/admin
+  but still cannot import root/internal SDK paths
+- app code cannot import SDK `internal/**` or deep implementation paths
+- shared index resolver primitives are canonical on SDK `/read`; admin consumes them via
+  SDK `/admin` re-exports, avoiding both direct `/read` imports in admin modules and transitive internal imports
+
+Boundary policy is encoded in `apps/oak-search-cli/eslint.config.ts` and verified by
+`apps/oak-search-cli/eslint-boundary.integration.test.ts`.
 
 ### 4. Transcript-Aware Score Normalisation (Lessons Only)
 
 Lessons without transcripts can only appear in the two Structure retrievers (not the two Content retrievers). Without normalisation, these lessons would be systematically ranked lower. Post-RRF normalisation scales scores so that structure-only lessons compete fairly with transcript-bearing lessons.
 
-**Implementation**: `src/lib/hybrid-search/rrf-score-normaliser.ts`  
+**Implementation**: `src/lib/hybrid-search/rrf-score-normaliser.ts`
 **ADR**: [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
 
 ---
@@ -204,3 +245,7 @@ CLI → SDK consumers
 | [ADR-106](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Known-Answer-First Ground Truth Methodology |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)        | Deterministic SDK / NL-in-MCP Boundary      |
 | [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)                  | Thread Search Architecture (2-way RRF)      |
+| [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)                   | Blue/Green Lifecycle Swapping               |
+| [ADR-133](../../../docs/architecture/architectural-decisions/133-cli-resource-lifecycle-management.md)           | CLI Resource Lifecycle Ownership            |
+| [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md)      | Search SDK Capability Surface Boundary      |
+| [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)    | Sequence Semantic Contract and Ownership    |
