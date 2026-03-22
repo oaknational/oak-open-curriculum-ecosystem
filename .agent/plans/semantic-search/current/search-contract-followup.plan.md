@@ -15,8 +15,8 @@ todos:
 
 # Search contract follow-up
 
-**Status**: 📋 Queued (starts after P0 / F2 closure — does not block operator re-ingest)
-**Depends on**: [f2-closure-and-p0-ingestion.execution.plan.md](../active/f2-closure-and-p0-ingestion.execution.plan.md) Phase 3 evidence optional but recommended before investing here
+**Status**: 🔴 EXECUTING via [pre-reingest-remediation.execution.plan.md](../active/pre-reingest-remediation.execution.plan.md) (promoted to pre-reingest blocking 2026-03-22)
+**Depends on**: Work items consolidated into the active remediation plan; this document serves as the source specification for S4/S5
 
 ## Why this exists
 
@@ -33,7 +33,7 @@ Ingest and retrieval already validate many contracts via `@oaknational/search-co
 - Asserts the filter includes `{ term: { thread_slugs: '<slug>' } }` (or the bool-wrapped form consistent with `buildFourWayRetriever`).
 - Asserts `SEARCH_FIELD_INVENTORY` has the `lessons` / `thread_slugs` entry and that `mappingType` matches expectations (`keyword`).
 
-**Implementation note**: `searchLessons` lives in `create-retrieval-service.ts`; either extract a testable helper or assert on captured `EsSearchRequest` from a thin wrapper — mirror whatever pattern sequence field-integrity uses so the contract stays one hop from retrieval.
+**Implementation note**: `searchLessons` lives in `create-retrieval-service.ts`; either extract a testable helper or assert on captured `EsSearchRequest` from a thin wrapper — mirror the existing field-integrity test style (not the exact ES query/mapping semantics, since lessons use `term` on `keyword` while sequences use `match_phrase` on `text`).
 
 **Quality gates**: Normal package gates (`pnpm test` in `oak-search-sdk`); **is** part of standard CI once merged.
 
@@ -43,9 +43,10 @@ Ingest and retrieval already validate many contracts via `@oaknational/search-co
 
 ### Deliverables
 
-1. **Documentation** (pick one canonical home, cross-link from the other):
-   - `apps/oak-search-cli/docs/` — add a short section *Optional production search smoke*, **or**
-   - `.agent/prompts/semantic-search/semantic-search.prompt.md` — add an *Optional prod smoke* subsection with the same matrix.
+1. **Documentation** — canonical home is
+   [`apps/oak-search-cli/docs/INDEXING.md`](../../../../apps/oak-search-cli/docs/INDEXING.md)
+   (add a short *Optional production search smoke* section). Session prompts and
+   plans may link to it but must not duplicate the procedure.
 
    The doc must include:
    - **Prerequisites** (e.g. prod MCP enabled, or `ELASTICSEARCH_*` / Oak API as applicable — follow whatever the repo already documents for prod operators).

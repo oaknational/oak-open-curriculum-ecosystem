@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-21
+**Last Updated**: 2026-03-22
 
 ## Start Here
 
@@ -10,17 +10,20 @@
 
 ## Active
 
-- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure
+- [active/pre-reingest-remediation.execution.plan.md](active/pre-reingest-remediation.execution.plan.md) — fix S1–S5 before re-indexing (BLOCKS re-ingest)
+- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure (Phase 2 blocked by remediation)
 - Supporting: [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md) — findings register
 
 ## Current Queue
 
 - [current/unified-versioned-ingestion.plan.md](current/unified-versioned-ingestion.plan.md)
+- [current/sequence-retrieval-architecture-followup.plan.md](current/sequence-retrieval-architecture-followup.plan.md) (locked recipe; executing via remediation plan)
+- [current/search-contract-followup.plan.md](current/search-contract-followup.plan.md) (S4/S5 source; executing via remediation plan)
 - [current/semantic-search-scheduled-refresh.operations.plan.md](current/semantic-search-scheduled-refresh.operations.plan.md) (deferred; out of migration-complete scope)
 - [current/bulk-metadata-quick-wins.execution.plan.md](current/bulk-metadata-quick-wins.execution.plan.md)
 - [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md)
 - [current/search-sdk-args-extraction.plan.md](current/search-sdk-args-extraction.plan.md)
-- [current/category-integration-remediation.md](current/category-integration-remediation.md)
+- [current/category-integration-remediation.md](current/category-integration-remediation.md) (superseded by the F2 fix; retained for traceability)
 - [current/bulk_data_for_semantic_search.feature_request.md](current/bulk_data_for_semantic_search.feature_request.md)
 - [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 - [current/keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md)

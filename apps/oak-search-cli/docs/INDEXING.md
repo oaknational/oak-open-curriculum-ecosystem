@@ -69,7 +69,7 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 ### Sequences (`oak_sequences`)
 
 - Core fields: `sequence_id`, `sequence_slug`, `sequence_title`, `category_titles`, `phase_slug`, `key_stages`, `years`, canonical URL, unit slugs.
-- Semantic: `sequence_semantic` (`semantic_text`) remains part of the strict sequence document contract, but the current builder path does not yet populate it, so sequence retrieval is lexical-only today. The locked producer design is deterministic: iterate the units in sequence order, extract their summaries, concatenate/normalise that ordered sub-content into a non-empty semantic surface, and fail fast if required source content is missing or empty.
+- Semantic: `sequence_semantic` (`semantic_text`) remains in the schema/mapping and is the locked end-state for the sequence document contract, but the current builder path does not yet populate it, so sequence retrieval is lexical-only today. The locked producer design is deterministic: rework sequence indexing so `sequence_semantic` is built from ordered concrete unit content and shared unit-summary data, then fail fast on zero units, missing required summaries, or empty normalised output. [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) is the permanent contract; the queued follow-up plan carries execution detail until the implementation lands.
 - Suggestions: completion payloads for sequence discovery.
 
 ## Resilient bulk indexing
@@ -78,7 +78,7 @@ import { OAK_LESSONS_MAPPING } from '@oaknational/curriculum-sdk/elasticsearch.j
 - **Retry strategy**: exponential backoff (e.g., 1s, 2s, 4s, 8s) with jitter; abort after configurable max attempts and log failure.
 - **Idempotence**: carry progress markers (key stage + subject + offset) so reruns continue from the last successful chunk.
 - **Logging**: emit structured logs per batch with doc counts, duration, and error summaries; correlate with zero-hit thresholds in dashboards.
-- **Alias strategy**: index to versioned write indices (`oak_lessons_v2026-03-07-143022`) using the blue/green lifecycle service. Use `oak-search admin versioned-ingest` to orchestrate the full cycle (create, ingest, verify, swap, clean up). See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
+- **Alias strategy**: index to versioned write indices (`oak_lessons_v2026-03-07-143022`) using the blue/green lifecycle service. Use `oaksearch admin versioned-ingest` to orchestrate the full cycle (create, ingest, verify, swap, clean up). See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
 
 ### Operational CLI: `validate-aliases` vs `admin count`
 
@@ -90,7 +90,17 @@ These commands answer different questions. Do not treat green alias health as pr
 
 **Interpreting counts**: Live counts follow whatever **versioned physical index** the aliases currently reference (visible as `targetIndex` in `validate-aliases` output, e.g. `oak_lessons_v2026-03-15-134856`). If the bulk manifest’s `downloadedAt` is **newer** than that version stamp, **pre-stage** `admin count` can legitimately sit **below** the counts you expect **after** `admin stage` from the current bulk — until you stage, validate, and promote. Compare like with like: same bulk directory, same stage output, or same promoted version.
 
-**Staged validation**: Do not use `admin count` to validate a newly staged version before promotion; it only reads the live aliases. Use the version returned by `oaksearch admin stage`, treat the stage output as the authoritative staged count evidence, then run `pnpm --filter @oaknational/search-cli ingest:field-readback-audit -- --target-version <version> --emit-json` to audit field population against that concrete staged index set.
+**Staged validation**: Do not use `admin count` to validate a newly staged version before promotion; it only reads the live aliases. Use the version returned by `oaksearch admin stage`, treat the stage output as the authoritative staged count evidence, then run the field-readback audit from the **repo root** with an explicit ledger path:
+
+```bash
+pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \
+  --ledger .agent/plans/semantic-search/archive/completed/field-gap-ledger.json \
+  --target-version <version> \
+  --attempts 6 --interval-ms 5000 \
+  --emit-json
+```
+
+The audit resolves each ledger field against the concrete staged indexes, reports `existsCount` / `missingCount` per field, and exits non-zero if any `must_be_populated` field has zero documents or any mapping is missing. The `--emit-json` flag writes the full `ReadbackAuditResult` to stdout for evidence capture.
 
 Example helper (simplified):
 
@@ -111,7 +121,10 @@ async function indexDocuments({
       const body = chunk.flatMap((doc) => [{ index: { _index: index, _id: doc.id } }, doc.body]);
       const res = await client.bulk({ refresh: false, body });
       if (res.errors) {
-        const failures = res.items.filter((item) => (item as any).index?.error);
+        const failures = res.items.filter(
+          (item): item is { index: { error: unknown } } =>
+            'index' in item && item.index !== undefined && item.index.error !== undefined,
+        );
         throw new BulkError(failures);
       }
     });
@@ -136,7 +149,7 @@ async function indexDocuments({
 
 ## Post-ingestion steps
 
-1. Swap aliases via `oak-search admin versioned-ingest` (or manually via `oak-search admin validate-aliases` then the SDK lifecycle service) so read aliases point at the fresh versioned indices. See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
+1. Swap aliases via `oaksearch admin versioned-ingest` (or manually via `oaksearch admin validate-aliases` then the SDK lifecycle service) so read aliases point at the fresh versioned indices. See [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md).
 2. Increment and persist `SEARCH_INDEX_VERSION` (environment variable or config store) – the app will not mutate this automatically.
 3. Call `revalidateTag` for the new version to flush cached search/suggestion results.
 4. Trigger rollup rebuild (`GET /api/rebuild-rollup`) if not already part of the ingest run.
@@ -153,11 +166,12 @@ async function indexDocuments({
 
 ## Related ADRs
 
-| ADR                                                                                                       | Topic                                    |
-| --------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| [ADR-064](../../../docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)   | Elasticsearch Index Mapping Organization |
-| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md) | SDK Generated Elasticsearch Mappings     |
-| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion                   |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy            |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy                   |
-| [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)            | Blue/Green Index Swapping                |
+| ADR                                                                                                           | Topic                                    |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [ADR-064](../../../docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)       | Elasticsearch Index Mapping Organization |
+| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md)     | SDK Generated Elasticsearch Mappings     |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)                   | Batch-Atomic Ingestion                   |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)            | Bulk-First Ingestion Strategy            |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)                   | ES Bulk Retry Strategy                   |
+| [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)                | Blue/Green Index Swapping                |
+| [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) | Sequence Semantic Contract and Ownership |

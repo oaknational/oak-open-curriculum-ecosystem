@@ -60,10 +60,12 @@ sequence category uses `match_phrase` on `category_titles`
   both sequence RRF `standard` retrievers share the same `filter` when
   `category` is set.
 
-**Planned (post-P0):** a lessons field-integrity test that pins `threadSlug` to
-`SEARCH_FIELD_INVENTORY` (`thread_slugs`), mirroring the sequence category test;
-plus a documented optional prod smoke procedure outside default CI — see
-[search-contract-followup.plan.md](../current/search-contract-followup.plan.md).
+**Active (pre-reingest remediation S4/S5):** a lessons field-integrity test that
+pins `threadSlug` to `SEARCH_FIELD_INVENTORY` (`thread_slugs`), mirroring the
+sequence category test; plus a documented optional prod smoke procedure outside
+default CI — see
+[pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md)
+(Tasks 1.3, 3.2).
 
 **Prod MCP spot-check (2026-03-21):** For lessons, baseline vs
 `threadSlug: "number-fractions"` returned the same hit **count** (10); returned
@@ -184,7 +186,10 @@ Observed: `total = 0`, despite baseline query returning multiple lessons.
 - Query wiring is present in SDK (`threadSlug` -> `thread_slugs` lesson filter).
 - **No code fix needed. Re-ingest will resolve this finding.**
 
-### Post-ingest production retest evidence (2026-03-15)
+### Historical stale-version evidence (pre-fix ingest v2026-03-15-134856)
+
+Evidence below was captured against the stale production index, before pipeline
+fixes landed. It demonstrates the bug, not closure.
 
 - Baseline:
 
@@ -343,7 +348,10 @@ Test evidence: all 1038 search-cli tests pass (as of 2026-03-21). Integration
 tests prove `category_titles` populated in sequence docs and `unit_topics`
 populated in unit docs when categoryMap is provided.
 
-### Post-ingest production retest evidence (2026-03-15)
+### Historical stale-version evidence (pre-fix ingest v2026-03-15-134856)
+
+Evidence below was captured against the stale production index, before
+`categoryMap` was wired through the pipeline. It demonstrates the bug, not closure.
 
 - Baseline:
 
@@ -376,6 +384,12 @@ All architecture findings resolved, five specialist reviewer passes complete,
 breach resolved (commit `2ea997d6`). Production behaviour will remain unchanged
 until re-ingest populates `category_titles` and `unit_topics` in indexed
 documents. Post-reingest retest required for final closure.
+
+**F2 closure evidence requirement**: `total = 0` **and** an empty hits array
+for the `category: "nonexistentzzz"` query. Both conditions are required — a
+non-empty hits array with `total = 0` would be a separate bug. This closes
+the no-op regression only; full category-filter semantic correctness (analysed
+text behaviour, positive controls) is follow-up scope.
 
 ---
 

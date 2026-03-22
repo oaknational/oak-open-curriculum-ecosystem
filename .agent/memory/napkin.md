@@ -1,3 +1,38 @@
+## Session 2026-03-22 — Pre-reingest remediation plan + doc consolidation
+
+### What Was Done
+
+- User explicitly re-scoped priorities: ALL known bugs must be fixed before
+  re-indexing, not just F1/F2 data fixes. Previously-deferred post-P0 items
+  (sequence_semantic, 2-way RRF, CLI collapse, threadSlug test, prod smoke)
+  are now blocking.
+- Deep codebase investigation confirmed 5 outstanding issues (S1–S5):
+  S1 (`sequence_semantic` unpopulated), S2 (lexical-only retrieval),
+  S3 (CLI duplicate retriever), S4 (missing threadSlug field-integrity test),
+  S5 (no documented prod smoke procedure).
+- Created `pre-reingest-remediation.execution.plan.md` in `active/` with
+  TDD phase model (RED/GREEN/REFACTOR/GATES) consolidating work items from
+  `sequence-retrieval-architecture-followup.plan.md` and
+  `search-contract-followup.plan.md`.
+- Updated all cross-references: session prompt, active/README, current/README,
+  F2 closure plan, both queued plans. All now correctly reflect the remediation
+  plan as the immediate blocking action before re-ingest.
+
+### Lessons
+
+- When a user changes priority (from "deferred post-P0" to "active blocking"),
+  the cross-reference update scope is wide: session prompt, active README,
+  current README, the parent plan, and every referenced queued plan all carry
+  stale "does not block re-ingest" / "queued" / "post-P0" language. Check all
+  authority docs, not just the new plan.
+- Creating a consolidation plan from two existing reference plans requires
+  careful authority delineation: the remediation plan executes, the reference
+  plans document the locked recipe. Both must link to each other.
+- Ingestion always uses bulk data. Do not write speculative "if a future
+  API-based ingestion path..." hedges — the bulk pipeline is the pipeline.
+
+---
+
 ## Session 2026-03-21 — Consolidation and Phase 2 preparation
 
 ### What Was Done

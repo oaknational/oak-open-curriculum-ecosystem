@@ -5,7 +5,11 @@
 Accepted (partially superseded by [ADR-110](./110-thread-search-architecture.md)
 for thread searchability — `thread_semantic` is now populated and
 `searchThreads` is a full SDK retrieval method. The context enrichment
-model for threads enriching unit results remains valid.)
+model for threads enriching unit results remains valid. Update 2026-03-21:
+the `sequence_semantic` "Skip" decision below is also no longer a durable
+target state; the locked replacement contract now lives in
+[ADR-139](./139-sequence-semantic-contract-and-ownership.md) and is summarised
+in `apps/oak-search-cli/docs/INDEXING.md`.)
 
 ## Context
 
@@ -25,14 +29,20 @@ We needed to determine:
 
 ### Sequences and Threads Are Structural Metadata, Not Search Targets
 
+> **Historical classification**: The table below reflects the original design
+> analysis. Thread searchability has since been elevated to full SDK retrieval
+> (ADR-110), and the sequence "Navigation, not search" classification is
+> superseded by ADR-139, which locks a real retrieval contract for sequences
+> (deterministic `sequence_semantic` production with SDK-owned 2-way RRF).
+
 We determined that sequences (curriculum programmes) and threads (learning progressions) are fundamentally different from lessons and units:
 
-| Content Type | Primary Purpose                                    | Search Role            |
-| ------------ | -------------------------------------------------- | ---------------------- |
-| Lessons      | Educational content (videos, transcripts, quizzes) | Primary search target  |
-| Units        | Grouped lessons with pedagogical context           | Primary search target  |
-| Sequences    | Curriculum structure (subject + phase)             | Navigation, not search |
-| Threads      | Learning progression across years                  | Context enrichment     |
+| Content Type | Primary Purpose                                    | Search Role                                                         |
+| ------------ | -------------------------------------------------- | ------------------------------------------------------------------- |
+| Lessons      | Educational content (videos, transcripts, quizzes) | Primary search target                                               |
+| Units        | Grouped lessons with pedagogical context           | Primary search target                                               |
+| Sequences    | Curriculum structure (subject + phase)             | Historical: navigation only; now has retrieval contract per ADR-139 |
+| Threads      | Learning progression across years                  | Full retrieval (ADR-110)                                            |
 
 **Decision**: Sequences and threads are NOT primary search targets. Their value is:
 
@@ -60,10 +70,10 @@ We implement a **context enrichment model** where:
 
 ### Fields NOT Populated
 
-| Field               | Index           | Decision | Rationale                       |
-| ------------------- | --------------- | -------- | ------------------------------- |
-| `sequence_semantic` | `oak_sequences` | **Skip** | Sequences aren't search targets |
-| `thread_semantic`   | `oak_threads`   | **Skip** | Threads aren't search targets   |
+| Field               | Index           | Decision                                     | Rationale                       |
+| ------------------- | --------------- | -------------------------------------------- | ------------------------------- |
+| `sequence_semantic` | `oak_sequences` | **Skip** (historical; superseded by ADR-139) | Sequences aren't search targets |
+| `thread_semantic`   | `oak_threads`   | **Skip** (historical; superseded by ADR-110) | Threads aren't search targets   |
 
 ### API Supplementation Strategy
 

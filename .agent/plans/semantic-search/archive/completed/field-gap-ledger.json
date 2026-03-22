@@ -20,8 +20,9 @@
       "indexFamily": "lessons",
       "fieldName": "thread_slugs",
       "stage": "ingest_dispatch_readback",
-      "status": "unknown",
-      "findingRefs": ["F1"]
+      "status": "must_be_populated",
+      "findingRefs": ["F1"],
+      "notes": "Resolved 2026-03-22: code pipeline verified (source_extraction verified 2026-03-19); re-ingest must populate thread_slugs in indexed documents"
     },
     {
       "indexFamily": "sequences",
@@ -34,8 +35,9 @@
       "indexFamily": "sequences",
       "fieldName": "category_titles",
       "stage": "ingest_dispatch_readback",
-      "status": "unknown",
-      "findingRefs": ["F2"]
+      "status": "must_be_populated",
+      "findingRefs": ["F2"],
+      "notes": "Resolved 2026-03-22: categoryMap wired through pipeline (commit 2c6e6b51); re-ingest must populate category_titles in indexed documents"
     },
     {
       "indexFamily": "units",

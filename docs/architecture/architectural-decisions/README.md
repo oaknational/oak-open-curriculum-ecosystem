@@ -150,6 +150,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md) ← **Deferred** (out of active migration scope)
 - [ADR-137: Specialist Operational Tooling Layer](137-specialist-operational-tooling-layer.md)
 - [ADR-138: Shared Search Field Contract Surface](138-shared-search-field-contract-surface.md)
+- [ADR-139: Sequence Semantic Contract and Ownership](139-sequence-semantic-contract-and-ownership.md)
 
 ## Key Architectural Decisions
 
@@ -217,6 +218,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-136](136-incremental-refresh-bulk-api-partial-update-doctrine.md)** - Deferred doctrine reference (not part of active migration completion scope)
 - **[ADR-133](133-cli-resource-lifecycle-management.md)** - CLI resource lifecycle ownership and `withEsClient` cleanup pattern
 - **[ADR-134](134-search-sdk-capability-surface-boundary.md)** - Search SDK read/admin capability boundary, internal encapsulation, and lint-enforced import policy
+- **[ADR-139](139-sequence-semantic-contract-and-ownership.md)** - Sequence semantic contract: deterministic construction, ownership split, fail-fast validation, and locked retrieval shape
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

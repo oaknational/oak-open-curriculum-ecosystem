@@ -99,11 +99,11 @@ Routing lets you avoid "one size fits all" fusion that dilutes the strongest sig
 
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 
-- Lessons and units use four-way RRF (BM25 + ELSER on content and structure fields) via `src/lib/hybrid-search/rrf-query-builders.ts`.
-- Threads use two-way RRF.
-- Sequences are currently lexical-only in the same module because `sequence_semantic` is mapped but not populated; if semantic retrieval returns, prefer current Elastic guidance for `semantic_text` rather than blindly restoring the earlier query shape.
-- Query preprocessing removes noise phrases and boosts curriculum phrases from the SDK synonym vocabulary (`src/lib/query-processing/*`).
-- Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters (`src/lib/hybrid-search/rrf-query-helpers.ts`).
+- Lessons and units use four-way RRF (BM25 + ELSER on content and structure fields) via the canonical SDK paths `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts` and `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`; the CLI keeps legacy/harness copies under `apps/oak-search-cli/src/lib/hybrid-search/`.
+- Threads use two-way RRF with the canonical retrieval contract in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`.
+- SDK sequence retrieval is currently lexical-only in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`. A legacy CLI-internal builder wraps the single lexical query in a one-child RRF container; this is a **harness-only artifact** (not a canonical Elasticsearch pattern) and should not be treated as a supported retrieval architecture. ADR-139 locks the return path: app indexing owns deterministic `sequence_semantic` production, while SDK retrieval owns the return to 2-way RRF. Prefer current Elastic guidance for `semantic_text` rather than blindly restoring the earlier query shape.
+- Query preprocessing removes noise phrases and boosts curriculum phrases from the canonical SDK query-processing paths under `packages/sdks/oak-search-sdk/src/retrieval/query-processing/`; the CLI keeps legacy/harness copies under `apps/oak-search-cli/src/lib/query-processing/`.
+- Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters via the canonical SDK helper `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`.
 - Index targeting is environment-driven (primary vs sandbox) via `src/lib/search-index-target.ts`.
 - Ablation notes: `min_should_match: 75%` improved lesson hard-query MRR (0.250 -> 0.367), while `fuzziness: AUTO:3,6` helped units but not lessons; stemming and stop-word filters regressed hard queries.
 
@@ -159,6 +159,24 @@ To incorporate graph signals without a graph database:
 ## 10. Related Content (More Like This)
 
 For "similar lesson" recommendations, use `more_like_this` on short, high-signal fields (title, summary, keywords). Avoid using full transcripts, which add noise and cost.
+
+## 11. `semantic` Query vs `match` on `semantic_text` Fields
+
+As of 2026-03, Elastic documents `match` as the preferred query type for
+`semantic_text` fields in new projects. The `semantic` query type remains GA
+and valid on Elastic Serverless, but is documented as a legacy form.
+
+Oak uses `semantic: { field, query }` for thread and (planned) sequence
+retrieval. This is an intentional consistency choice: the existing thread
+retriever uses this shape, and aligning sequence retrieval with the same
+pattern avoids unnecessary churn. A future migration to `match` on
+`semantic_text` fields would affect all retriever builders uniformly and
+should be treated as a separate, deliberate change.
+
+Sources:
+
+- [Semantic query reference](https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-semantic-query)
+- [Semantic text search and retrieval](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text-search-retrieval)
 
 ## References
 

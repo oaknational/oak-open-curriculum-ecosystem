@@ -21,7 +21,7 @@ todos:
     content: "Operator executes admin stage, agent validates output."
     status: pending
   - id: validate-staged-indexes
-    content: "Validate staged indexes from stage output plus field-readback-audit --target-version (Task 2.3 evidence)."
+    content: "Validate staged indexes from stage output plus field-readback-audit --target-version (Task 2.2 evidence)."
     status: pending
   - id: promote-and-verify
     content: "Promote versioned indexes, verify aliases, run search smoke tests."
@@ -32,17 +32,17 @@ todos:
   - id: close-findings-and-archive
     content: "Close findings register, archive this plan, update all authority docs."
     status: pending
-  - id: post-p0-search-contract-followup
-    content: "After P0 closure: lessons threadSlug field-integrity test + optional prod smoke doc (see ../current/search-contract-followup.plan.md)."
-    status: pending
   - id: post-p0-sequence-retrieval-architecture
-    content: "After P0 closure: resolve the strict sequence semantic contract via ../current/sequence-retrieval-architecture-followup.plan.md — `sequence_semantic` stays, must be populated for every sequence by iterating ordered unit sub-content, and must fail fast on missing/empty semantic output."
-    status: pending
+    content: "SUPERSEDED: consolidated into pre-reingest-remediation.execution.plan.md (S1–S3). Must complete before Phase 2 re-ingest."
+    status: cancelled
+  - id: post-p0-search-contract-followup
+    content: "SUPERSEDED: consolidated into pre-reingest-remediation.execution.plan.md (S4–S5). Must complete before Phase 2 re-ingest."
+    status: cancelled
 ---
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2: Task 2.1 ✅, operator stage next)
+**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 BLOCKED by [pre-reingest remediation](./pre-reingest-remediation.execution.plan.md))
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`
@@ -65,7 +65,7 @@ This plan consolidates the remaining work from three sources:
 - Error response classification: ✅ (commit `f86b841a`)
 - Codegen schema adaptation: ✅ (commit `2ea997d6`)
 - F2 categoryMap wiring + architecture findings: ✅ (commit `2c6e6b51`)
-- Five specialist reviewer passes: ✅ (2026-03-21)
+- Specialist reviewer passes: ✅ (2026-03-21)
 - ES mapping: `unit_topics.keyword` sub-field added: ✅ (commit `2c6e6b51`)
 - All quality gates green, 1038 tests passing
 
@@ -77,17 +77,21 @@ This plan consolidates the remaining work from three sources:
   [unified-versioned-ingestion.plan.md](../current/unified-versioned-ingestion.plan.md)
 - Field-integrity tests (archived, complete):
   [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
-- Post-P0 contract + smoke (queued — does not block re-ingest):
-  [search-contract-followup.plan.md](../current/search-contract-followup.plan.md)
-- Post-P0 sequence retrieval architecture follow-up (queued — does not block re-ingest):
+- Permanent sequence semantic contract (architecture authority):
+  [ADR-139](../../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+- Pre-reingest remediation (BLOCKS re-ingest — must complete before Phase 2):
+  [pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md)
+- Sequence retrieval architecture (locked recipe, executing via remediation):
   [sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md)
+- Contract test + prod smoke (executing via remediation):
+  [search-contract-followup.plan.md](../current/search-contract-followup.plan.md)
 
 ---
 
 ## Phase 1: F2 Code Follow-ups — ✅ COMPLETE (2026-03-21)
 
-All code follow-ups done. 1038 tests, full-suite gates green, six specialist
-reviewer passes. Phase 1 readiness gate **CLOSED**.
+All code follow-ups done. 1038 tests, full-suite gates green, specialist
+reviewer passes complete. Phase 1 readiness gate **CLOSED**.
 
 | Task | Summary | Commit |
 |---|---|---|
@@ -96,9 +100,11 @@ reviewer passes. Phase 1 readiness gate **CLOSED**.
 | 1.2b | `GetSequenceUnitsFn` → `Result<SequenceUnitsResponse, SdkFetchError>`, hand-rolled types replaced with schema-derived | `3ec1dbc6` |
 
 Phase 1 gate evidence: sdk-codegen ✅, build 17/17 ✅, type-check 28/28 ✅,
-doc-gen ✅, lint 0 errors ✅, format ✅, markdownlint ✅, test 1038/1038 ✅,
+doc-gen ✅, lint 0 errors ✅, format ✅, markdownlint ✅, full test suite ✅,
 test:e2e (search-cli 15/15, streamable-http 176/176) ✅, test:ui 20/20 ✅,
-smoke:dev:stub ✅.
+smoke:dev:stub ✅. Latest lane-alignment commit after the gate:
+`3630405b` (staged readback targeting, lexical-only sequence contract sync,
+handover docs sync).
 
 ---
 
@@ -145,6 +151,10 @@ This reads all 33 bulk JSON files from `apps/oak-search-cli/bulk-downloads/`
 (including `manifest.json`) and populates 6 new versioned indexes. The `-v`
 flag enables verbose progress logging.
 
+The `--bulk-dir ./bulk-downloads` flag is intentional: the CLI resolves
+relative bulk-dir values against the app root, so this still targets
+`apps/oak-search-cli/bulk-downloads/` when run from repo root.
+
 **Expected stage output** — 6 versioned indexes, true parent counts:
 
 | Index kind | Expected count |
@@ -156,6 +166,11 @@ flag enables verbose progress logging.
 | sequences | ~30 |
 | facets | ~57 |
 | **TOTAL** | **~16,339** |
+
+Counts are approximate — they reflect the bulk manifest at the time of
+preparation and may shift slightly between bulk downloads. Reconcile actual
+stage output counts against the bulk manifest (`bulk-downloads/manifest.json`)
+rather than treating these numbers as exact thresholds.
 
 The stage command will print the version string (e.g. `v2026-03-21-143022`)
 needed for promotion in Task 2.3.
@@ -186,9 +201,10 @@ pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \
 ```
 
 **Done when**: The stage output counts match the expected staged totals; the
-readback audit against `<version>` shows `thread_slugs` and `category_titles`
-populated (non-zero exists counts); no validation evidence depends on live alias
-counts before promotion.
+readback audit against `<version>` exits zero (`ReadbackAuditResult.ok === true`),
+meaning every `must_be_populated` ledger field has `existsCount > 0` and no
+mapping failures are reported; the emitted JSON is saved as staged-validation
+evidence. No validation evidence depends on live alias counts before promotion.
 
 **If validation fails**: Do NOT promote. Investigate the staging output for
 errors, check field-readback-audit results, and identify whether the issue is
@@ -201,10 +217,14 @@ Phase 1 gates, then re-stage). The staged indexes are disposable — a fresh
 ```bash
 pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin promote --target-version <version>
 pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin validate-aliases
+pnpm tsx apps/oak-search-cli/bin/oaksearch.ts admin meta get
 pnpm tsx apps/oak-search-cli/bin/oaksearch.ts search lessons "photosynthesis"
 ```
 
-**Done when**: All aliases healthy, search returns current results.
+**Done when**: (1) `validate-aliases` shows all aliases healthy and every
+`targetIndex` value contains the promoted `<version>` string; (2) `admin meta get`
+reports `version` matching `<version>`; (3) a smoke search returns current
+results. All three evidence types must be captured.
 
 ---
 
@@ -228,7 +248,9 @@ production and record before/after evidence:
 }
 ```
 
-**Expected**: `total > 0` (was `0` before re-ingest).
+**Expected**: `total > 0` (was `0` before re-ingest). Note: `total` reflects
+page cardinality (result array length), not `hits.total`. A non-empty result
+array with `total > 0` is sufficient closure evidence for F1.
 
 **F2 (category)**:
 
@@ -241,7 +263,17 @@ production and record before/after evidence:
 }
 ```
 
-**Expected**: `total = 0` (was `2` before, category filter was no-op).
+**Expected**: `total = 0` **and** an empty hits array (was `2` with two results
+before, category filter was no-op). Both conditions are required — a non-empty
+hits array with `total = 0` would be a separate bug. This closes the no-op
+regression; full category-filter semantic correctness (analysed text behaviour,
+positive controls with known categories) is follow-up scope per
+[search-contract-followup.plan.md](../current/search-contract-followup.plan.md).
+
+**If Phase 3 retests fail after promotion**: Use `oaksearch admin rollback` to
+revert aliases to the previous version (see
+[ADR-130](../../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)).
+Investigate whether the issue is data-level or code-level before re-staging.
 
 ### Task 3.2: Close findings and archive
 
@@ -252,31 +284,17 @@ production and record before/after evidence:
 4. Archive this plan to `archive/completed/`.
 5. Update `active/README.md` — clear active items.
 
-### Task 3.3: Post-P0 — contract test symmetry and optional prod smoke (deferred)
+### Task 3.3: Sequence retrieval + contract tests (consolidated into remediation)
 
-Not blocking Phase 2–3 or operator promote. After findings are closed, execute
-[search-contract-followup.plan.md](../current/search-contract-followup.plan.md):
+These work items are now executing via the
+[pre-reingest remediation plan](./pre-reingest-remediation.execution.plan.md)
+(issues S1–S5). They must complete **before** Phase 2 re-ingest, not after.
 
-- **Lessons field-integrity**: add a `threadSlug` ↔ `thread_slugs` ↔
-  `SEARCH_FIELD_INVENTORY` test mirroring the existing sequence `category`
-  field-integrity test (`search-field-integrity.integration.test.ts`).
-- **Optional prod smoke**: document a repeatable prod query matrix (MCP JSON or
-  CLI path) and an **optional** package script; keep it **out of** default CI
-  (`pnpm test` / required GitHub jobs).
-
-### Task 3.4: Post-P0 — sequence retrieval architecture consistency (deferred)
-
-Not blocking Phase 2–3 or operator promote. After findings are closed, execute
-[sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md):
-
-- resolve the strict contract drift by populating `sequence_semantic` for every
-  sequence in the same change
-- construct it deterministically by iterating the units in sequence order and
-  concatenating/normalising their summaries into a non-empty semantic surface
-- fail fast on missing or empty required semantic source content; no dormant or
-  best-effort field
-- keep SDK retrieval helpers as the canonical owner of sequence retrieval
-  semantics and collapse duplicate CLI/SDK logic accordingly
+See the remediation plan for the full TDD phase model and completion criteria.
+The locked execution recipe remains in
+[sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md);
+contract test and prod smoke details remain in
+[search-contract-followup.plan.md](../current/search-contract-followup.plan.md).
 
 ---
 

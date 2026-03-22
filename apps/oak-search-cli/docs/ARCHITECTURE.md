@@ -18,11 +18,15 @@ The semantic search workspace provides a CLI/SDK-first service that ingests Oak 
 | `oak_unit_rollup`     | Unit search and highlight surface                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`)                                                                                      |
 | `oak_units`           | Lightweight unit metadata for analytics and facets | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations                                                                                                                                                                                                                           |
 | `oak_threads`         | Conceptual progression strands across units/years  | `thread_slug`, `thread_title`, `unit_count`, `subject_slugs` (array — a thread can span multiple subjects), `thread_semantic` (`semantic_text`), `thread_url`, completion `title_suggest`. Programme-agnostic; show how ideas build over time. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md).        |
-| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, `sequence_semantic` contract (currently unpopulated; follow-up will synthesise it deterministically from ordered unit summaries), completion payloads. One sequence generates many programme views.                                    |
+| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, `sequence_semantic` contract (currently unpopulated; locked follow-up derives it from ordered concrete unit slugs via shared unit semantic summaries), completion payloads. One sequence generates many programme views.               |
 | `oak_sequence_facets` | Sequence facet metadata                            | Facet identifiers, sequence relationships, filtering metadata                                                                                                                                                                                                                                                                                              |
 | `oak_meta`            | Index metadata and versioning                      | Index version, ingestion timestamps, schema version                                                                                                                                                                                                                                                                                                        |
 
 Shared settings include the `oak_text` analyser (standard, lowercase, asciifolding, `synonym_graph` using `oak-syns`), the `oak_lower` normaliser for keyword filters, and `highlight.max_analyzed_offset` increased to accommodate long transcripts and rollups.
+
+Operator note: `oaksearch admin count` reports the six searchable/faceted index
+kinds and excludes `oak_meta`, which remains part of the seven-index
+architecture table above.
 
 ---
 
@@ -104,31 +108,58 @@ When a search request arrives, the query passes through several stages before re
 
 Filler phrases are stripped from the user's query text before query building. Examples: "that X stuff", "how do I", "lesson on", "help with". This prevents irrelevant terms from diluting BM25 matching.
 
-**Implementation**: `src/lib/query-processing/remove-noise-phrases.ts`
+**Implementation**: canonical SDK path
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/remove-noise-phrases.ts`;
+the CLI also retains a legacy/harness copy under
+`apps/oak-search-cli/src/lib/query-processing/remove-noise-phrases.ts`.
 
 ### 2. Curriculum Phrase Detection
 
 Multi-word curriculum terms (e.g. "completing the square", "key learning points") are detected using longest-match-first against a vocabulary built from the SDK (`buildPhraseVocabulary()`). Detected phrases are used to create `match_phrase` boosters (boost 2.0) that are injected into BM25 retrievers.
 
-**Implementation**: `src/lib/query-processing/detect-curriculum-phrases.ts`, `src/lib/hybrid-search/rrf-query-helpers.ts`  
+**Implementation**: canonical SDK paths
+`packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts`
+and `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`; the CLI
+retains legacy/harness copies under `apps/oak-search-cli/src/lib/`.  
 **ADR**: [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
 
 ### 3. Reciprocal Rank Fusion (RRF)
 
 Each search scope uses Elasticsearch's retriever API to blend lexical and semantic results:
 
-| Scope         | Retrievers                                                          | RRF Parameters                              |
-| ------------- | ------------------------------------------------------------------- | ------------------------------------------- |
-| **Lessons**   | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
-| **Units**     | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
-| **Threads**   | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
-| **Sequences** | 1-way: BM25 only (lexical-only; temporary one-child RRF wrapper)    | `rank_constant: 40`, `rank_window_size: 40` |
+| Scope       | Retrievers                                                          | RRF Parameters                              |
+| ----------- | ------------------------------------------------------------------- | ------------------------------------------- |
+| **Lessons** | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
+| **Units**   | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
+| **Threads** | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
+
+**Sequences** are currently lexical-only (SDK `buildSequenceRetriever` issues a
+direct `standard` retriever, no RRF). A legacy CLI-internal builder wraps the
+single lexical query in a one-child RRF container; this is a **harness-only
+artifact** (not a canonical retrieval pattern) and will be removed when the
+ADR-139 follow-up restores SDK-owned 2-way RRF for sequences.
 
 Synonym expansion is handled at the Elasticsearch analyser level via the `oak-syns` synonym set, not at the application level.
 
-Threads use 2-way RRF because they have a single text surface but still carry a meaningful `thread_semantic` field. Sequences are currently lexical-only because `sequence_semantic` is mapped but not populated during ingestion. The locked follow-up is to populate that field for every sequence by iterating units in sequence order, extracting unit summaries, and concatenating/normalising them into a non-empty semantic surface with fail-fast behaviour on missing or empty required source content. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
+Threads use 2-way RRF because they have a single text surface but still carry a
+meaningful `thread_semantic` field. Sequences are currently lexical-only
+because `sequence_semantic` is mapped but not populated during ingestion.
+[ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+locks the replacement contract: app indexing owns deterministic
+`sequence_semantic` production with fail-fast validation, while the SDK owns
+the return to 2-way RRF retrieval semantics. Threads filter on `subject_slugs`
+(plural array field) because a single thread can span multiple subjects.
 
-**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; threads remain two-signal retrieval, while sequences are currently lexical-only. Active CLI command handlers consume SDK read/admin capability surfaces per ADR-134. A legacy CLI-internal sequence builder still exists for harness and experiment paths; consolidation to the SDK-owned canonical path remains pending.
+**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in
+`packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`;
+threads remain two-signal retrieval, while SDK sequence retrieval is currently
+lexical-only via a direct `standard` retriever. Active CLI command handlers
+consume SDK read/admin capability surfaces per ADR-134. A legacy CLI-internal
+sequence builder in
+`apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts` still exists
+for legacy/test harness coverage and uses the temporary one-child RRF wrapper;
+runtime CLI search already goes through the SDK-owned path, and the legacy
+builder may be removed or reduced to a thin adapter when the follow-up lands.
 
 ## SDK Surface Boundary
 
@@ -226,3 +257,4 @@ CLI → SDK consumers
 | [ADR-130](../../../docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)                   | Blue/Green Lifecycle Swapping               |
 | [ADR-133](../../../docs/architecture/architectural-decisions/133-cli-resource-lifecycle-management.md)           | CLI Resource Lifecycle Ownership            |
 | [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md)      | Search SDK Capability Surface Boundary      |
+| [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)    | Sequence Semantic Contract and Ownership    |

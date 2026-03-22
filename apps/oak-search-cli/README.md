@@ -50,7 +50,7 @@ See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detail
 Field-integrity tooling:
 
 - Root-level `pnpm test:field-integrity` runs the explicit manifest-based field-integrity suites.
-- Workspace-scoped `pnpm --filter @oaknational/search-cli ingest:field-readback-audit` runs the ledger-driven readback audit operation, can emit JSON evidence (`--emit-json`), and accepts `--target-version <version>` to audit staged indexes before promotion.
+- The field-readback audit must be run from the **repo root** with an explicit ledger path (the default ledger path is repo-root-relative and fails when invoked via `pnpm --filter`): `pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts --ledger .agent/plans/semantic-search/archive/completed/field-gap-ledger.json --target-version <version> --attempts 6 --interval-ms 5000 --emit-json`. See [`INDEXING.md`](docs/INDEXING.md) for full staged-validation guidance.
 
 ## SDK Capability Boundary (ADR-134)
 

@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-21
+last_updated: 2026-03-22
 ---
 
 # Semantic Search — Session Entry Point
@@ -27,42 +27,62 @@ test-backed correctness in code and transforms.
 
 ## Active Authority
 
-- Active execution plan:
+- **Immediate execution plan (BLOCKS re-ingest)**:
+  [pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
+- Active P0 lane (blocked until remediation completes):
   [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
+- Active parallel plan (not on remediation critical path; starts after F2 promote):
+  [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../../plans/semantic-search/active/bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
 - Active findings register:
   [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
 - Critical path and queue:
   [current/README.md](../../plans/semantic-search/current/README.md)
-- Post-P0 follow-up (queued — does not block re-ingest):
-  [search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md)
-- Post-P0 structural follow-up (queued — does not block re-ingest):
+- Permanent sequence semantic contract:
+  [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+- Locked execution recipe (referenced by remediation plan):
   [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md)
+- Contract test + prod smoke source (referenced by remediation plan):
+  [search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md)
 - Session bootstrap and lane-order authority: this prompt
 
 ---
 
-## Where We Are (2026-03-21)
+## Where We Are (2026-03-22)
 
 **Branch**: `feat/es_index_update`
-**Phase 1** (code follow-ups): ✅ COMPLETE — all gates green, 1038 tests,
-six specialist reviewer passes. Commits: `dfb48b90`, `3ec1dbc6`.
+
+### F2/P0 lane (paused — blocked by remediation)
+
+**Phase 1** (code follow-ups): ✅ COMPLETE — readiness gate closed, code fixes
+landed, and the latest lane-alignment commit is `3630405b`. Core commits:
+`dfb48b90`, `3ec1dbc6`, `3630405b`.
 **Phase 2** (re-ingest): Task 2.1 ✅ (operator runbook documented) —
-**operator stage/validate/promote is the next action**.
+**BLOCKED until pre-reingest remediation completes**.
 **Phase 3** (production verification): Not started — depends on Phase 2.
+
+### Pre-reingest remediation (ACTIVE — immediate next action)
+
+All known code issues must be resolved before re-indexing. Five issues are
+outstanding (S1–S5); see the
+[remediation plan](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
+for the full inventory, TDD phase model, and completion criteria.
 
 ### What the next session needs to do
 
-1. **Bugs first:** Pin F1/F2 (and any follow-on) with tests that fail before the
-   fix; ship the fix; confirm the full suite passes.
-2. **Data-layer proof:** When a fix requires fresh Elasticsearch documents,
-   run the operator stage / validate / promote path in the execution plan
-   (Tasks 2.1–2.3). For staged validation, use stage output plus
-   `field-readback-audit --target-version <version>`, then record prod evidence
-   (Task 3.1).
-3. **Closure:** Update findings, archive the plan, sync authority docs (Task 3.2)
-   once tests and any required ingest evidence are in place.
+Follow the **pre-reingest remediation plan** for step-by-step instructions.
+In summary:
 
-Commands and expected outputs for Phase 2–3 remain in the execution plan.
+1. **Phase 1 (RED):** Write failing tests for `sequence_semantic` construction,
+   SDK 2-way RRF retrieval shape, and lessons `threadSlug` field-integrity.
+2. **Phase 2 (GREEN):** Implement `generateSequenceSemanticSummary`, wire through
+   builder/transformer/pipeline, upgrade `buildSequenceRetriever` to 2-way RRF.
+3. **Phase 3 (REFACTOR):** Collapse CLI duplicate sequence retriever, update
+   docs, add `sequence_semantic` to field-gap ledger, document optional prod
+   smoke in `INDEXING.md`.
+4. **Phase 4 (GATES/REVIEWS):** Full quality gates + all required reviewer
+   passes (architecture, Elasticsearch, test, code, docs-ADR).
+5. **Then resume F2/P0:** Operator stage / validate / promote (Phase 2 of
+   the F2 closure plan), followed by production verification (Phase 3).
 
 ### Key facts for context
 
@@ -82,13 +102,14 @@ Commands and expected outputs for Phase 2–3 remain in the execution plan.
   [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md)
   (section *Operational CLI: `validate-aliases` vs `admin count`*).
 - **Sequence retrieval**: Sequences are currently lexical-only because
-  `sequence_semantic` is mapped but unpopulated. The deferred structural cleanup
-  is strict and schema-first: `sequence_semantic` is staying and must be
-  populated for every sequence by iterating ordered unit sub-content,
-  extracting unit summaries, and concatenating/normalising them into a
-  non-empty semantic surface. No dormant optional field is acceptable, and
-  missing/empty source content must fail fast. That work is queued in
-  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md).
+  `sequence_semantic` is mapped but unpopulated. This is now **actively being
+  remediated** — see the
+  [pre-reingest remediation plan](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
+  for the full issue inventory (S1–S5) and TDD execution recipe.
+  [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+  is the permanent contract;
+  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md)
+  carries the locked execution recipe referenced by the remediation plan.
 - **CLI entry point**: `apps/oak-search-cli/bin/oaksearch.ts` (not `src/bin/`).
 - **Bulk data**: 33 files in `apps/oak-search-cli/bulk-downloads/` ready.
 - **Upstream API bug**: PE lessons without video trigger 500 on transcript
@@ -108,16 +129,21 @@ Commands and expected outputs for Phase 2–3 remain in the execution plan.
 
 ### Step 2: Execute the active plan
 
-The active plan contains all execution detail — phases, tasks, commands,
-expected outputs, and quality/reviewer gates:
+**Immediate**: The pre-reingest remediation plan contains all execution detail
+for the five outstanding code/doc issues that block re-indexing:
+
+[pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
+
+Summary of remediation phases:
+
+1. **Phase 1 (RED)**: Failing tests for S1–S4 🔴 NEXT
+2. **Phase 2 (GREEN)**: Implementation (sequence_semantic, 2-way RRF)
+3. **Phase 3 (REFACTOR)**: CLI collapse, docs, field-gap ledger, prod smoke
+4. **Phase 4 (GATES/REVIEWS)**: Full gates + all required reviewer passes
+
+**After remediation**: Resume the F2/P0 lane (operator stage/validate/promote):
 
 [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
-
-Summary of phases:
-
-1. **Phase 1**: F2 code follow-ups — ✅ COMPLETE
-2. **Phase 2**: Re-ingest — Task 2.1 ✅, operator stage/validate/promote 🔴 NEXT
-3. **Phase 3**: Production verification (F1/F2 retest, closure)
 
 ### Step 3: Keep authority documents in sync
 
@@ -127,7 +153,7 @@ When execution state changes materially, update:
 - The active plan (task status and evidence)
 - The findings register (F1/F2 dispositions)
 - `current/README.md` (critical path status)
-- Post-P0 follow-up plans when those tasks start or complete
+- Reference plans when their work items complete via the remediation plan
   ([search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md),
   [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md))
 

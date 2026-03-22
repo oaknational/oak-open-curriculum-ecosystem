@@ -16,26 +16,34 @@ lane closed out:
    Scope: Generator fix (InvokeResult), error classification at SDK layer
    Completed: Upstream experimentation, generator changes, TDD classification
 
-2. F2 closure + P0 ingestion              🟡 ACTIVE (2026-03-21)
+2. Pre-reingest remediation                🔴 ACTIVE (2026-03-22)
+   Plan: ../active/pre-reingest-remediation.execution.plan.md
+   Scope: Fix S1–S5 (sequence_semantic, 2-way RRF, CLI collapse,
+          threadSlug test, prod smoke) — blocks re-indexing
+   Phase 1 (RED): 🔴 NEXT
+
+3. F2 closure + P0 ingestion              🟡 BLOCKED by remediation (2026-03-22)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
    Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
-   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 🔴 NEXT (operator)
+   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 BLOCKED
    Phase 3: Production verification (F1/F2 retest, closure)
 ```
 
-Once P0 is complete the search functionality is fully validated and the
-versioned ingestion lane is closed. Work beyond P0 will be re-evaluated
-at that point.
+The pre-reingest remediation plan consolidates work items from the two
+previously-queued follow-up plans (sequence retrieval architecture, contract
+tests) into an active plan that must complete before re-indexing. Architecture
+decisions are locked (ADR-139); the follow-up plans serve as reference
+documents for the remediation plan's execution recipe.
 
 ## Queue
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| P1 (post-P0) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Resolve the interim sequence lexical-only state: plain lexical retriever, duplicate CLI/SDK builders, and the strict `sequence_semantic` construction contract | 📋 Queued — next structural follow-up after F2/P0 closure |
-| P1 (post-P0) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | 📋 Queued — starts after F2/P0 closure |
+| P0 (active) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Restore SDK-owned 2-way RRF for sequences by populating `sequence_semantic` from ordered unit summaries via the shared unit semantic generator, with fail-fast ingest rules | 🔴 Work items executing via [pre-reingest-remediation](../active/pre-reingest-remediation.execution.plan.md) |
+| P0 (active) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | 🔴 Work items executing via [pre-reingest-remediation](../active/pre-reingest-remediation.execution.plan.md) |
 | — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
 | — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |
-| P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Complete remaining operational cycle and closeout evidence from unified versioned ingestion lane | 📋 Partially complete, pending final phases |
+| P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Reference lane for the underlying versioned-ingestion architecture; the active F2 closure plan is the operator source of truth for the remaining stage/validate/promote steps | 📋 Partially complete; final operator steps now run through the active F2 closure plan |
 | P1+ | Future work — to be re-evaluated after P0 closure | | |
 
 ### Parked (re-evaluate after P0)
