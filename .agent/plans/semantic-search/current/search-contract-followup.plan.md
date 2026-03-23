@@ -15,7 +15,7 @@ todos:
 
 # Search contract follow-up
 
-**Status**: 🔴 EXECUTING via [pre-reingest-remediation.execution.plan.md](../active/pre-reingest-remediation.execution.plan.md) (promoted to pre-reingest blocking 2026-03-22)
+**Status**: 🔴 EXECUTING via [pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md) (promoted to pre-reingest blocking 2026-03-22)
 **Depends on**: Work items consolidated into the active remediation plan; this document serves as the source specification for S4/S5
 
 ## Why this exists

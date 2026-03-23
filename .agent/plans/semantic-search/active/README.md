@@ -4,8 +4,7 @@ Executable plans currently in flight.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md) | Fix all 5 known code/doc issues (S1–S5) + CLI-SDK boundary enforcement | ✅ COMPLETE (2026-03-23) — ready for commit |
-| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 UNBLOCKED after commit |
+| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 UNBLOCKED (operator re-ingest next) |
 | [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md) | Canonical bulk policy, TDD merge for duplicate lesson ids, bulk-vs-API field matrix, thread/sequence naming, MCP+CLI validation after F2 promote | 🟡 Planning — execution starts after F2 promote (or merge work can begin in branch in parallel) |
 
 Supporting documents (updated alongside the plans):
@@ -16,6 +15,7 @@ Supporting documents (updated alongside the plans):
 
 Archived plans:
 
+- [pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md) — S1-S5 remediation + CLI-SDK boundary enforcement (complete 2026-03-23)
 - [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md) — field-integrity test infrastructure (complete)
 - [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md) — migration recovery (complete)
 - [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md) — ingest runbook (complete)

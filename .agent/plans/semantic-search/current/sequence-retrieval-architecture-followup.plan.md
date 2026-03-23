@@ -7,7 +7,7 @@ source_research:
   - "../../../research/elasticsearch/methods/hybrid-retrieval.md"
   - "../../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md"
 depends_on:
-  - "../active/pre-reingest-remediation.execution.plan.md"
+  - "../archive/completed/pre-reingest-remediation.execution.plan.md"
 todos:
   - id: phase-0-lock-end-state
     content: "Phase 0: Lock the deterministic construction recipe for required `sequence_semantic`, built from ordered unit sub-content with explicit fail-fast rules."
@@ -29,7 +29,7 @@ todos:
 # Sequence Retrieval Architecture Follow-up
 
 **Last Updated**: 2026-03-22  
-**Status**: 🔴 EXECUTING via [pre-reingest-remediation.execution.plan.md](../active/pre-reingest-remediation.execution.plan.md) (decisions locked 2026-03-21, promoted to pre-reingest blocking 2026-03-22)  
+**Status**: 🔴 EXECUTING via [pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md) (decisions locked 2026-03-21, promoted to pre-reingest blocking 2026-03-22)  
 **Scope**: Resolve the current sequence-search interim state. Work items
 consolidated into the active remediation plan; this document serves as the
 locked execution recipe reference.
@@ -261,7 +261,7 @@ Run the canonical quality gate chain from
 
 | Document | Purpose |
 |----------|---------|
-| [../active/pre-reingest-remediation.execution.plan.md](../active/pre-reingest-remediation.execution.plan.md) | Active remediation plan executing this recipe's work items |
+| [../archive/completed/pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md) | Active remediation plan executing this recipe's work items |
 | [../active/f2-closure-and-p0-ingestion.execution.plan.md](../active/f2-closure-and-p0-ingestion.execution.plan.md) | P0 lane — Phase 2 blocked until remediation completes |
 | [search-contract-followup.plan.md](search-contract-followup.plan.md) | S4/S5 source — also executing via remediation plan |
 | [thread-sequence-semantic-surfaces.execution.plan.md](thread-sequence-semantic-surfaces.execution.plan.md) | Broader enrichment plan for richer derived thread/sequence surfaces |
