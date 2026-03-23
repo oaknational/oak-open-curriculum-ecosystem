@@ -60,28 +60,24 @@ landed, and the latest lane-alignment commit is `3630405b`. Core commits:
 **BLOCKED until pre-reingest remediation completes**.
 **Phase 3** (production verification): Not started — depends on Phase 2.
 
-### Pre-reingest remediation (ACTIVE — immediate next action)
+### Pre-reingest remediation + CLI-SDK boundary enforcement (COMPLETE)
 
-All known code issues must be resolved before re-indexing. Five issues are
-outstanding (S1–S5); see the
-[remediation plan](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
-for the full inventory, TDD phase model, and completion criteria.
+All five code/doc issues (S1–S5) resolved. Architecture reviewers then
+identified CLI-SDK boundary confusion (7 duplicated capability families with
+fuzziness drift). Full boundary separation, clarification, and enforcement
+completed 2026-03-23:
+
+- All retriever shapes delegated to SDK across all 4 scopes
+- ~500 lines of duplicated CLI code deleted (12 files removed)
+- Experiment/ablation builders migrated to SDK building blocks
+- ADR-134 amended with capability family matrix
+- "Layer Role Topology" principle added to Practice Core
+- Quality gates green (997 tests, 0 lint errors)
 
 ### What the next session needs to do
 
-Follow the **pre-reingest remediation plan** for step-by-step instructions.
-In summary:
-
-1. **Phase 1 (RED):** Write failing tests for `sequence_semantic` construction,
-   SDK 2-way RRF retrieval shape, and lessons `threadSlug` field-integrity.
-2. **Phase 2 (GREEN):** Implement `generateSequenceSemanticSummary`, wire through
-   builder/transformer/pipeline, upgrade `buildSequenceRetriever` to 2-way RRF.
-3. **Phase 3 (REFACTOR):** Collapse CLI duplicate sequence retriever, update
-   docs, add `sequence_semantic` to field-gap ledger, document optional prod
-   smoke in `INDEXING.md`.
-4. **Phase 4 (GATES/REVIEWS):** Full quality gates + all required reviewer
-   passes (architecture, Elasticsearch, test, code, docs-ADR).
-5. **Then resume F2/P0:** Operator stage / validate / promote (Phase 2 of
+1. **Commit** the combined S1–S5 + boundary enforcement changes.
+2. **Resume F2/P0:** Operator stage / validate / promote (Phase 2 of
    the F2 closure plan), followed by production verification (Phase 3).
 
 ### Key facts for context
@@ -101,15 +97,12 @@ In summary:
   alias `targetIndex` when diagnosing live gaps. Permanent reference:
   [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md)
   (section *Operational CLI: `validate-aliases` vs `admin count`*).
-- **Sequence retrieval**: Sequences are currently lexical-only because
-  `sequence_semantic` is mapped but unpopulated. This is now **actively being
-  remediated** — see the
-  [pre-reingest remediation plan](../../plans/semantic-search/active/pre-reingest-remediation.execution.plan.md)
-  for the full issue inventory (S1–S5) and TDD execution recipe.
+- **Sequence retrieval**: Code now uses SDK-owned 2-way RRF (BM25 + ELSER
+  semantic on `sequence_semantic`). `sequence_semantic` is populated during
+  bulk ingestion via `generateSequenceSemanticSummary`. Live data will reflect
+  this after the next re-ingest (Phase 2 of F2 closure).
   [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
-  is the permanent contract;
-  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md)
-  carries the locked execution recipe referenced by the remediation plan.
+  is the permanent contract.
 - **CLI entry point**: `apps/oak-search-cli/bin/oaksearch.ts` (not `src/bin/`).
 - **Bulk data**: 33 files in `apps/oak-search-cli/bulk-downloads/` ready.
 - **Upstream API bug**: PE lessons without video trigger 500 on transcript
@@ -136,10 +129,10 @@ for the five outstanding code/doc issues that block re-indexing:
 
 Summary of remediation phases:
 
-1. **Phase 1 (RED)**: Failing tests for S1–S4 🔴 NEXT
-2. **Phase 2 (GREEN)**: Implementation (sequence_semantic, 2-way RRF)
-3. **Phase 3 (REFACTOR)**: CLI collapse, docs, field-gap ledger, prod smoke
-4. **Phase 4 (GATES/REVIEWS)**: Full gates + all required reviewer passes
+1. **Phase 1 (RED)**: ✅ COMPLETE — tests for S1–S4
+2. **Phase 2 (GREEN)**: ✅ COMPLETE — sequence_semantic, 2-way RRF
+3. **Phase 3 (REFACTOR)**: ✅ COMPLETE — CLI collapse, docs, field-gap ledger, prod smoke
+4. **Phase 4 (GATES/REVIEWS)**: 🔴 NEXT — specialist reviewer passes
 
 **After remediation**: Resume the F2/P0 lane (operator stage/validate/promote):
 

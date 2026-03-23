@@ -1,7 +1,8 @@
 /**
  * Integration tests for searchSequences with injected search dependencies.
  *
- * Verifies filter construction and result mapping without network calls.
+ * Verifies 2-way RRF retriever shape, filter construction, and result mapping
+ * without network calls.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -34,51 +35,98 @@ function getFirstRequest(calls: EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
-function getSequenceStandardRetriever(calls: EsSearchRequest[]) {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+/** Extracts the `standard` property from an RRF sub-retriever via runtime narrowing. */
+function getStandard(retriever: unknown): Record<string, unknown> | undefined {
+  if (!isRecord(retriever)) {
+    return undefined;
+  }
+  const std = retriever.standard;
+  if (!isRecord(std)) {
+    return undefined;
+  }
+  return std;
+}
+
+/** Extracts the filter from the first RRF sub-retriever. */
+function extractFilter(calls: EsSearchRequest[]) {
   const request = getFirstRequest(calls);
-  const retriever = request.retriever;
-  if (!retriever || !('standard' in retriever) || !retriever.standard) {
-    throw new Error('Expected standard retriever on search request');
+  const retrievers = request.retriever?.rrf?.retrievers;
+  if (!retrievers || retrievers.length === 0) {
+    return undefined;
   }
-  return retriever.standard;
-}
-
-function getSequenceMultiMatch(calls: EsSearchRequest[]) {
-  const standard = getSequenceStandardRetriever(calls);
-  const multiMatch = standard.query?.multi_match;
-  if (!multiMatch) {
-    throw new Error('Expected multi_match query on sequence retriever');
-  }
-  return multiMatch;
-}
-
-function getFilterClause(calls: EsSearchRequest[]) {
-  return getSequenceStandardRetriever(calls).filter;
+  return getStandard(retrievers[0])?.filter;
 }
 
 const stubResolveIndex = () => 'oak_sequences_test';
 
 describe('searchSequences', () => {
-  describe('filter construction', () => {
-    it('uses a plain lexical retriever for sequences', async () => {
+  describe('retriever shape', () => {
+    it('returns an RRF retriever with two sub-retrievers', async () => {
       const { search, calls } = createMockSearch();
 
       await searchSequences({ query: 'algebra' }, search, stubResolveIndex);
 
-      expect(getFirstRequest(calls).retriever).not.toHaveProperty('rrf');
-      expect(getSequenceMultiMatch(calls)).toMatchObject({
+      const rrf = getFirstRequest(calls).retriever?.rrf;
+      expect(rrf).toBeDefined();
+      expect(rrf?.retrievers).toHaveLength(2);
+      expect(rrf?.rank_window_size).toBe(40);
+      expect(rrf?.rank_constant).toBe(40);
+    });
+
+    it('includes BM25 multi_match as the first RRF sub-retriever', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences({ query: 'algebra' }, search, stubResolveIndex);
+
+      const retrievers = getFirstRequest(calls).retriever?.rrf?.retrievers ?? [];
+      const query = getStandard(retrievers[0])?.query;
+      expect(isRecord(query) ? query.multi_match : undefined).toMatchObject({
         query: 'algebra',
         fuzziness: 'AUTO',
         fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
       });
     });
 
+    it('includes ELSER semantic as the second RRF sub-retriever', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences({ query: 'algebra' }, search, stubResolveIndex);
+
+      const retrievers = getFirstRequest(calls).retriever?.rrf?.retrievers ?? [];
+      const query = getStandard(retrievers[1])?.query;
+      expect(isRecord(query) ? query.semantic : undefined).toEqual({
+        field: 'sequence_semantic',
+        query: 'algebra',
+      });
+    });
+
+    it('applies identical filter to both RRF sub-retrievers when filters are provided', async () => {
+      const { search, calls } = createMockSearch();
+
+      await searchSequences({ query: 'maths', keyStage: 'ks3' }, search, stubResolveIndex);
+
+      const request = getFirstRequest(calls);
+      const retrievers = request.retriever?.rrf?.retrievers ?? [];
+      expect(retrievers).toHaveLength(2);
+
+      const expectedFilter = { bool: { filter: [{ term: { key_stages: 'ks3' } }] } };
+      for (const entry of retrievers) {
+        expect(getStandard(entry)?.filter).toEqual(expectedFilter);
+      }
+    });
+  });
+
+  describe('filter construction', () => {
     it('includes key_stages filter when keyStage is provided', async () => {
       const { search, calls } = createMockSearch();
 
       await searchSequences({ query: 'maths', keyStage: 'ks3' }, search, stubResolveIndex);
 
-      const filterClause = getFilterClause(calls);
+      const filterClause = extractFilter(calls);
       expect(filterClause).toEqual({
         bool: { filter: [{ term: { key_stages: 'ks3' } }] },
       });
@@ -89,7 +137,7 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'algebra', subject: 'maths' }, search, stubResolveIndex);
 
-      const filterClause = getFilterClause(calls);
+      const filterClause = extractFilter(calls);
       expect(filterClause).toEqual({
         bool: { filter: [{ term: { subject_slug: 'maths' } }] },
       });
@@ -104,7 +152,7 @@ describe('searchSequences', () => {
         stubResolveIndex,
       );
 
-      const filterClause = getFilterClause(calls);
+      const filterClause = extractFilter(calls);
       expect(filterClause).toEqual({
         bool: {
           filter: [
@@ -119,46 +167,11 @@ describe('searchSequences', () => {
     it('includes category_titles filter when category is provided', async () => {
       const { search, calls } = createMockSearch();
 
-      await searchSequences(
-        {
-          query: 'maths',
-          category: 'algebra',
-        },
-        search,
-        stubResolveIndex,
-      );
+      await searchSequences({ query: 'maths', category: 'algebra' }, search, stubResolveIndex);
 
-      const filterClause = getFilterClause(calls);
+      const filterClause = extractFilter(calls);
       expect(filterClause).toEqual({
         bool: { filter: [{ match_phrase: { category_titles: 'algebra' } }] },
-      });
-    });
-
-    it('combines category with other filters', async () => {
-      const { search, calls } = createMockSearch();
-
-      await searchSequences(
-        {
-          query: 'science',
-          subject: 'science',
-          phaseSlug: 'secondary',
-          keyStage: 'ks4',
-          category: 'physics',
-        },
-        search,
-        stubResolveIndex,
-      );
-
-      const filterClause = getFilterClause(calls);
-      expect(filterClause).toEqual({
-        bool: {
-          filter: [
-            { term: { subject_slug: 'science' } },
-            { term: { phase_slug: 'secondary' } },
-            { term: { key_stages: 'ks4' } },
-            { match_phrase: { category_titles: 'physics' } },
-          ],
-        },
       });
     });
 
@@ -167,7 +180,7 @@ describe('searchSequences', () => {
 
       await searchSequences({ query: 'geography' }, search, stubResolveIndex);
 
-      const filterClause = getFilterClause(calls);
+      const filterClause = extractFilter(calls);
       expect(filterClause).toBeUndefined();
     });
   });

@@ -11,6 +11,10 @@ All of these principles MUST be followed at all times.
 
 Always apply the first question; **Ask: could it be simpler _without compromising quality_?**. The answer will often be no, that is fine, but bring real critically thinking to the question each time.
 
+## Architectural Excellence Over Expediency
+
+Always choose long-term architectural clarity over short-term convenience. If a shortcut creates duplication across architectural layers, it is not a shortcut — it is a debt that compounds silently. Copying a function "because it's faster" creates two implementations that drift apart. The cost of the drift is invisible until it manifests as a real bug (wrong search results, inconsistent behaviour, stale configuration). The correct response is always to fix the boundary, not to duplicate across it.
+
 ## Core Rules
 
 ### Cardinal Rule of This Repository
@@ -138,3 +142,15 @@ Use conventional monorepo structure in active code and docs:
 - `packages/libs/` – shared libraries (logger, env-resolution)
 
 See [AGENT.md](./AGENT.md#structure) for the full package listing. Architectural boundaries are enforced by custom ESLint rules.
+
+### Layer Role Topology
+
+Apps are **thin user interfaces**. SDKs and libraries own **all domain-specific logic and mechanisms**. Apps compose SDK capabilities through their public API surfaces; apps NEVER reimplement domain logic that an SDK already provides.
+
+Concretely:
+
+- **SDKs own**: query shapes (retrievers, filters, highlights), query processing (noise removal, phrase detection), score processing (normalisation, filtering), field inventories, data contracts, and type definitions. If two consumers would need the same logic, it belongs in an SDK.
+- **Apps own**: CLI commands, request assembly (combining SDK-built retrievers with app-specific index resolution and pagination), operational tooling (ingestion, admin commands), and user-facing presentation. These are integration concerns, not domain logic.
+- **The test**: "Could another app need this?" If yes, it belongs in a package, not an app. If an app contains domain logic that duplicates an SDK, that is a boundary violation — collapse it by importing from the SDK.
+
+This is not aspirational; it is a structural constraint. Violations cause silent drift: the SDK gets tuned but the app's copy does not, producing different behaviour for the same input.

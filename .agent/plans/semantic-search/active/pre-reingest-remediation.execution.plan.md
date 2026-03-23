@@ -8,33 +8,33 @@ overview: >
 todos:
   - id: phase-1-red-seq-semantic
     content: "Write failing tests for deterministic sequence_semantic construction, fail-fast validation, and builder contract."
-    status: pending
+    status: done
   - id: phase-1-red-retrieval
     content: "Write failing test for SDK 2-way RRF sequence retrieval shape (BM25 + semantic on sequence_semantic)."
-    status: pending
+    status: done
   - id: phase-1-red-threadslug
     content: "Write failing lessons threadSlug field-integrity test mirroring sequence category contract."
-    status: pending
+    status: done
   - id: phase-2-green-seq-semantic
     content: "Implement generateSequenceSemanticSummary and wire through builder, transformer, and ingestion pipeline."
-    status: pending
+    status: done
   - id: phase-2-green-retrieval
     content: "Upgrade buildSequenceRetriever to 2-way RRF and update search-sequences.ts."
-    status: pending
+    status: done
   - id: phase-3-refactor
     content: "Collapse CLI duplicate sequence retriever to SDK adapter, update docs and architecture."
-    status: pending
+    status: done
   - id: prod-smoke-doc
     content: "Add optional prod smoke procedure to INDEXING.md (canonical home), wire optional package script."
-    status: pending
+    status: done
   - id: phase-4-gates-reviews
     content: "Full quality gates + architecture reviewers (barney/betty/fred/wilma) + elasticsearch reviewer + test reviewer + code reviewer."
-    status: pending
+    status: done
 ---
 
 # Pre-Reingest Remediation
 
-**Status**: ACTIVE
+**Status**: COMPLETE (2026-03-23) — all phases done, CLI-SDK boundary enforced, ready for commit
 **Scope**: Resolve all known code and documentation issues before re-indexing.
 **Branch**: `feat/es_index_update`
 

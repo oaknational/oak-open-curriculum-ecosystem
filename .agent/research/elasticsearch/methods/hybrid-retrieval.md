@@ -67,7 +67,7 @@ POST my-index/_search
 }
 ```
 
-Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields), two retrievers for threads, and lexical-only sequence retrieval because `sequence_semantic` is not yet populated.
+Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields) and two retrievers for threads and sequences (BM25 + ELSER on title/semantic fields).
 
 ## 4. Weighted Fusion vs RRF
 
@@ -100,8 +100,8 @@ Routing lets you avoid "one size fits all" fusion that dilutes the strongest sig
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 
 - Lessons and units use four-way RRF (BM25 + ELSER on content and structure fields) via the canonical SDK paths `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts` and `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`; the CLI keeps legacy/harness copies under `apps/oak-search-cli/src/lib/hybrid-search/`.
-- Threads use two-way RRF with the canonical retrieval contract in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`.
-- SDK sequence retrieval is currently lexical-only in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`. A legacy CLI-internal builder wraps the single lexical query in a one-child RRF container; this is a **harness-only artifact** (not a canonical Elasticsearch pattern) and should not be treated as a supported retrieval architecture. ADR-139 locks the return path: app indexing owns deterministic `sequence_semantic` production, while SDK retrieval owns the return to 2-way RRF. Prefer current Elastic guidance for `semantic_text` rather than blindly restoring the earlier query shape.
+- Threads use two-way RRF (BM25 + ELSER semantic on `thread_semantic`) with the canonical retrieval contract in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`.
+- Sequences use SDK-owned two-way RRF (BM25 + ELSER semantic on `sequence_semantic`) with `rank_constant: 40`, `rank_window_size: 40`, matching the thread retrieval pattern. The canonical retriever is `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`. [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) defines the permanent contract: app indexing owns deterministic `sequence_semantic` production, while SDK retrieval owns the 2-way RRF query semantics.
 - Query preprocessing removes noise phrases and boosts curriculum phrases from the canonical SDK query-processing paths under `packages/sdks/oak-search-sdk/src/retrieval/query-processing/`; the CLI keeps legacy/harness copies under `apps/oak-search-cli/src/lib/query-processing/`.
 - Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters via the canonical SDK helper `packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts`.
 - Index targeting is environment-driven (primary vs sandbox) via `src/lib/search-index-target.ts`.
@@ -166,12 +166,12 @@ As of 2026-03, Elastic documents `match` as the preferred query type for
 `semantic_text` fields in new projects. The `semantic` query type remains GA
 and valid on Elastic Serverless, but is documented as a legacy form.
 
-Oak uses `semantic: { field, query }` for thread and (planned) sequence
-retrieval. This is an intentional consistency choice: the existing thread
-retriever uses this shape, and aligning sequence retrieval with the same
-pattern avoids unnecessary churn. A future migration to `match` on
-`semantic_text` fields would affect all retriever builders uniformly and
-should be treated as a separate, deliberate change.
+Oak uses `semantic: { field, query }` for thread and sequence retrieval. This
+is an intentional consistency choice: the existing thread retriever uses this
+shape, and aligning sequence retrieval with the same pattern avoids unnecessary
+churn. A future migration to `match` on `semantic_text` fields would affect all
+retriever builders uniformly and should be treated as a separate, deliberate
+change.
 
 Sources:
 

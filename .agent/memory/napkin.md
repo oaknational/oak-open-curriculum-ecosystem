@@ -1,4 +1,132 @@
-## Session 2026-03-22 — Pre-reingest remediation plan + doc consolidation
+## Session 2026-03-23 — Boundary separation, clarification, and enforcement
+
+### What Was Done (continued from reviewer findings)
+
+- Completed full CLI-SDK boundary enforcement:
+  - Exported all capability families from SDK `/read`: retriever builders,
+    BM25 field constants + configs, semantic field names, query processing,
+    score processing, highlights.
+  - CLI's `rrf-query-builders.ts` now delegates ALL retriever shapes to SDK.
+  - Migrated all 4 experiment builders (experiment, ablation, reranking,
+    configurable) to import SDK building blocks — same change, per Betty.
+  - Stripped `rrf-query-helpers.ts` from 412 lines to ~120 (filters + facets only).
+  - Deleted 12 files: dead orchestrator, dead search modules, score normaliser,
+    duplicate query processing directory (5 files).
+  - Amended ADR-134 with capability family matrix documenting SDK ownership.
+  - Added "Architectural Excellence Over Expediency" + "Layer Role Topology"
+    principles to `principles.md` and Practice Core `practice-lineage.md`.
+  - Created `apps-are-thin-interfaces` canonical rule + platform adapters.
+  - Created `sdk-owned-retriever-delegation` code pattern.
+  - Updated Practice Core provenance (index 8) and CHANGELOG.
+- All quality gates green: 997 tests, 0 lint errors, type-check clean.
+
+### Lessons
+
+- "Boundary collapse" is the wrong framing. This was boundary SEPARATION,
+  CLARIFICATION, and ENFORCEMENT. The boundary was always supposed to exist
+  (ADR-134 defined it). The CLI grew code on the wrong side.
+- Four architecture reviewers independently converging on the same finding
+  is the strongest signal. When all four agree, act decisively.
+- Betty's insistence that experiment builders be migrated in the same change
+  was critical. The "I'll fix it later" pattern is how the drift happened.
+- The fuzziness drift (CLI `AUTO` vs SDK `AUTO:6,9`) proved the violation
+  was causing real search quality differences, not just aesthetic duplication.
+
+---
+
+## Session 2026-03-23a — Architecture reviewer findings + CLI-SDK boundary audit
+
+### What Was Done
+
+- Ran all 4 architecture reviewers (Barney, Betty, Fred, Wilma) on S1–S5 changes.
+- Fixed Wilma critical #1: `buildOrderedUnitSummaries` now fails fast on invalid
+  key stages (was silently truncating, violating ADR-139 §4).
+- Fixed Wilma #3: Added `sequence_semantic` field-integrity assertion in builder test.
+- Fixed Wilma #7: Added fail-fast contract TSDoc to `extractAndBuildSequenceOperations`.
+- Collapsed thread retriever to SDK delegation (Barney W1, Betty F1, Fred F3):
+  removed `createThreadRetriever` + `THREAD_BM25_FIELDS` from CLI, imports
+  `buildThreadRetriever` from `@oaknational/oak-search-sdk/read`.
+- Fixed stale "lexical-only" docstring in `sequences.ts` (Fred F2).
+- Fixed TSDoc `@example` missing `sequenceSemantic` param (Barney W3).
+- Replaced all `as` type assertions in test helpers with `isRecord`-based runtime
+  narrowing (Barney W4).
+- Created code pattern: `sdk-owned-retriever-delegation.md` — abstract pattern for
+  collapsing app-local retriever builders to SDK delegation.
+- All quality gates green: 1058 tests, 0 lint errors, type-check clean.
+
+### Key Architectural Finding: CLI-SDK Retriever Boundary
+
+**The full retriever duplication landscape** (discovered via reviewer convergence):
+
+| Scope | SDK retriever | CLI retriever | Status |
+|-------|--------------|---------------|--------|
+| Sequences | `buildSequenceRetriever` | ~~`createSequenceRetriever`~~ | Collapsed this session |
+| Threads | `buildThreadRetriever` | ~~`createThreadRetriever`~~ | Collapsed this session |
+| Lessons | `buildFourWayRetriever(..., 'lesson')` | `createLessonRetriever` | **Still duplicated** |
+| Units | `buildFourWayRetriever(..., 'unit')` | `createUnitRetriever` | **Still duplicated** |
+
+The CLI's `createLessonRetriever` and `createUnitRetriever` duplicate the SDK's
+`buildFourWayRetriever`. All four architecture reviewers independently flagged
+the sequence/thread duplication; the lesson/unit duplication is the same pattern.
+
+**Principle**: The SDK is the capability layer; the CLI is the operational interface.
+Retriever shape construction is a capability (domain contract), not an operation.
+CLI should import retriever builders from SDK `/read`, keeping only filter
+construction (app-specific) and request assembly (CLI-specific).
+
+### Lessons
+
+- Four parallel architecture reviewers converge on the same structural finding
+  from different perspectives (DRY, coupling, ADR compliance, drift risk). This
+  is strong signal — structural patterns found by 3+ reviewers are real.
+- `isValidKeyStage` guard was silently skipping units before Wilma caught it.
+  Defensive guards that skip instead of throwing are silent data loss in
+  fail-fast pipelines.
+- Code pattern documentation (`sdk-owned-retriever-delegation.md`) crystallises
+  the mechanical fix so future sessions don't re-discover it.
+
+---
+
+## Session 2026-03-22b — Pre-reingest remediation execution (Phases 1-3)
+
+### What Was Done
+
+- Executed Phases 1-3 of the pre-reingest remediation plan using **parallel
+  worktree agents** (4 work units, all independent file sets, zero merge
+  conflicts).
+- WU-1 (S1): Implemented `generateSequenceSemanticSummary`, wired through
+  `sequence-document-builder` and `bulk-sequence-transformer`. 4 new tests,
+  fail-fast validation on empty units/empty semantic.
+- WU-2 (S2+S3): Upgraded SDK `buildSequenceRetriever` to 2-way RRF (BM25 +
+  ELSER semantic on `sequence_semantic`). Collapsed CLI duplicate retriever
+  to SDK delegation. 17 new tests across SDK and CLI.
+- WU-3 (S4): Added lessons `threadSlug` field-integrity test pinning
+  `thread_slugs` → `term` filter against `SEARCH_FIELD_INVENTORY`.
+- WU-4 (S5+docs): Added prod smoke section to INDEXING.md, updated RRF table
+  in ARCHITECTURE.md, updated hybrid-retrieval research doc, added
+  `sequence_semantic` to field-gap ledger.
+- Integration required: fixing `builder-field-integrity.integration.test.ts`
+  and `sequence-bulk-helpers.ts` (callers of `createSequenceDocument` needed
+  the new `sequenceSemantic` param), updating `search-sequences.integration.test.ts`
+  from standard-retriever to RRF-aware helpers, exporting `buildSequenceRetriever`
+  from SDK `/read` subpath, and adjusting eslint overrides.
+- All quality gates green: 1057 tests, 0 lint errors, type-check clean.
+
+### Lessons
+
+- Worktree agents branch from `main`, not the feature branch. When `main` and
+  the feature branch have diverged (e.g., SDK retriever already RRF on main
+  but standard on feature), patches don't apply cleanly. Manual file copy +
+  reconciliation is needed.
+- Making a params interface field required (adding `sequenceSemantic: string`)
+  is a breaking change to every caller. Run `pnpm type-check` early to find
+  all call sites — there are always more than you expect.
+- The `/read` subpath in SDK package.json exports is separate from the root
+  export. New functions must be explicitly added to `src/read.ts`.
+
+---
+
+## Session 2026-03-22a — Pre-reingest remediation plan + doc consolidation
 
 ### What Was Done
 

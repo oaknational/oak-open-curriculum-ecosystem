@@ -32,6 +32,10 @@ provenance:
     repo: castr
     date: 2026-03-09
     purpose: 'IR-based schema transformation library: integrated portable Practice Core into a mature local doctrine via clean-break principles naming, canonical-first restructuring, knowledge-flow installation, and paused-workstream lifecycle'
+  - index: 8
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-03-23
+    purpose: 'Production SDK ecosystem: added architectural-excellence-over-expediency principle and layer-role-topology rule (apps are thin, SDKs own domain logic) — proven by CLI-SDK retriever drift incident'
 fitness_ceiling: 530
 fitness_ceiling_chars: 32000
 fitness_max_prose_line: 100
@@ -117,6 +121,13 @@ The universal rules:
 - **Never disable checks.** No disabling lints, type checks, formatting, tests, or git hooks. Fix
   the root cause.
 - **Validate at boundaries.** External data is unknown until parsed and validated.
+- **Architectural excellence over expediency.** Always choose long-term architectural clarity over
+  short-term convenience. If a shortcut creates duplication across architectural layers, it is not a
+  shortcut — it is debt that compounds silently through drift.
+- **Apps are thin; libraries own domain logic.** In a multi-package architecture, apps are user
+  interfaces that compose library/SDK capabilities. Apps never reimplement domain logic that a
+  library already provides. The test: "could another consumer need this?" If yes, it belongs in a
+  shared package. Violations cause silent drift — the library gets tuned but the app's copy does not.
 
 ### Metacognition
 
@@ -205,6 +216,8 @@ adapter formats:
 - Result pattern for errors
 - No global state in tests
 - Where the reviewer layer is installed, invoke code reviewers after non-trivial changes
+- Apps are thin interfaces; never duplicate domain logic from libraries/SDKs
+- Architectural excellence over expediency — no cross-layer shortcuts
 
 ### The Knowledge Flow
 

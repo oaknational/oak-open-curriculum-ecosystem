@@ -82,17 +82,40 @@ Implementation evidence includes:
 
 ### 5. Ownership matrix
 
-| Module family                                                         | Owner             | Boundary status          |
-| --------------------------------------------------------------------- | ----------------- | ------------------------ |
-| `apps/oak-search-cli/src/cli/search/**`                               | CLI               | Read-only (`/read`)      |
-| `apps/oak-search-cli/src/cli/admin/**`                                | CLI               | Admin (`/admin`)         |
-| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts`       | CLI               | Read-safe config         |
-| `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts` | CLI admin lane    | Admin-only orchestration |
-| `apps/oak-search-cli/src/lib/indexing/**`                             | CLI admin-support | Admin (`/admin`)         |
-| `apps/oak-search-cli/src/adapters/**`                                 | CLI admin-support | Admin (`/admin`)         |
-| `packages/sdks/oak-search-sdk/src/retrieval/**`                       | SDK               | Canonical owner          |
-| `packages/sdks/oak-search-sdk/src/admin/**`                           | SDK               | Canonical owner          |
-| `packages/sdks/oak-search-sdk/src/internal/**`                        | SDK internal      | No root leakage          |
+| Module family                                                         | Owner             | Boundary status                                          |
+| --------------------------------------------------------------------- | ----------------- | -------------------------------------------------------- |
+| `apps/oak-search-cli/src/cli/search/**`                               | CLI               | Read-only (`/read`)                                      |
+| `apps/oak-search-cli/src/cli/admin/**`                                | CLI               | Admin (`/admin`)                                         |
+| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts`       | CLI               | Read-safe config                                         |
+| `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts` | CLI admin lane    | Admin-only orchestration                                 |
+| `apps/oak-search-cli/src/lib/indexing/**`                             | CLI admin-support | Admin (`/admin`)                                         |
+| `apps/oak-search-cli/src/adapters/**`                                 | CLI admin-support | Admin (`/admin`)                                         |
+| `apps/oak-search-cli/src/lib/hybrid-search/**`                        | CLI               | Request assembly only; delegates retriever shapes to SDK |
+| `packages/sdks/oak-search-sdk/src/retrieval/**`                       | SDK               | Canonical owner                                          |
+| `packages/sdks/oak-search-sdk/src/admin/**`                           | SDK               | Canonical owner                                          |
+| `packages/sdks/oak-search-sdk/src/internal/**`                        | SDK internal      | No root leakage                                          |
+
+#### SDK-owned capability families
+
+The following capability families are owned by the SDK and exported on
+`@oaknational/oak-search-sdk/read`. The CLI must import these rather than
+maintaining local copies. This was enforced in the 2026-03-23 boundary
+clarification after fuzziness drift was detected between CLI and SDK
+retriever implementations.
+
+| Family                 | SDK module                                             | `/read` exports                                                                                                                               | CLI may NOT reimplement                                        |
+| ---------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Retriever shapes       | `rrf-query-builders.ts`, `retrieval-search-helpers.ts` | `buildLessonRetriever`, `buildUnitRetriever`, `buildSequenceRetriever`, `buildThreadRetriever`, `buildFourWayRetriever`, `buildBm25Retriever` | Any function returning `RetrieverContainer` for a search scope |
+| BM25 field inventories | `rrf-query-builders.ts`                                | `LESSON_BM25_CONTENT`, `LESSON_BM25_STRUCTURE`, `UNIT_BM25_CONTENT`, `UNIT_BM25_STRUCTURE`, `LESSON_BM25_CONFIG`, `UNIT_BM25_CONFIG`          | BM25 field lists or tuning parameters                          |
+| Semantic field names   | `rrf-query-builders.ts`                                | `LESSON_CONTENT_SEMANTIC`, `LESSON_STRUCTURE_SEMANTIC`, `UNIT_CONTENT_SEMANTIC`, `UNIT_STRUCTURE_SEMANTIC`                                    | ELSER field name constants                                     |
+| Query processing       | `query-processing/`                                    | `removeNoisePhrases`, `detectCurriculumPhrases`                                                                                               | Noise phrase removal or curriculum phrase detection            |
+| Score processing       | `rrf-score-processing.ts`                              | `normaliseTranscriptScores`, `filterByMinScore`, `DEFAULT_MIN_SCORE`, `clampSize`, `clampFrom`                                                | Score normalisation or filtering                               |
+| Highlight configs      | `rrf-query-helpers.ts`                                 | `buildLessonHighlight`, `buildUnitHighlight`                                                                                                  | Highlight shape construction                                   |
+
+The CLI retains ownership of **filter construction** (`createLessonFilters`,
+`createUnitFilters` with phase expansion), **facet aggregations**, and
+**request assembly** (combining SDK-built retrievers with CLI-specific index
+resolution and pagination). These are operational concerns, not domain logic.
 
 ### 6. Fitness functions
 
@@ -126,6 +149,23 @@ The boundary is healthy only when all of the following are true and blocking:
 - This ADR defines boundary policy. The implementation plan that delivered it
   is archived at `.agent/plans/semantic-search/archive/completed/search-cli-sdk-boundary-migration.execution.plan.md`.
 
+### Amendment (2026-03-23): Capability family matrix
+
+Boundary enforcement audit discovered that the CLI's `lib/hybrid-search/`
+layer duplicated 7 SDK capability families with active configuration drift
+(BM25 fuzziness `AUTO` in CLI vs ADR-120 tuned `AUTO:6,9` in SDK). Four
+architecture reviewers independently identified the violation. Resolution:
+
+- Added capability family matrix to §5 listing all SDK-owned families.
+- Exported all capability families on `/read` surface.
+- CLI retriever builders (`buildLessonRrfRequest`, `buildUnitRrfRequest`,
+  `buildSequenceRrfRequest`, `buildThreadRrfRequest`) now delegate all
+  retriever shape construction to the SDK.
+- Deleted ~500 lines of CLI-local duplicated code (sub-retrievers, BM25
+  constants, query processing, score normalisation, highlights).
+- Migrated experiment/ablation builders to import SDK building blocks.
+- Added "Layer Role Topology" principle to `principles.md` and Practice Core.
+
 ## Related
 
 - ADR-030: SDK as Single Source of Truth
@@ -134,3 +174,4 @@ The boundary is healthy only when all of the following are true and blocking:
 - ADR-108: SDK Workspace Decomposition
 - ADR-130: Zero-Downtime Blue/Green Elasticsearch Index Swapping
 - ADR-133: CLI Resource Lifecycle Management
+- ADR-139: Sequence Semantic Contract and Ownership

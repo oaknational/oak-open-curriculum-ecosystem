@@ -69,6 +69,14 @@ export function buildSequenceOps(params: BuildSequenceOpsParams): BulkOperations
     // For now, leave empty - can be enriched later if needed
     const categoryTitles: string[] = [];
 
+    // Minimal semantic from metadata — the bulk-first pipeline
+    // (bulk-sequence-transformer.ts) produces the full rich semantic
+    // with per-unit summaries via generateSequenceSemanticSummary.
+    const sequenceTitle = `${subjectTitle} ${seq.phaseTitle}`;
+    const sequenceSemantic =
+      `${sequenceTitle} is a ${subjectTitle} ${seq.phaseTitle} curriculum sequence` +
+      ` covering ${keyStages.join(', ')} (${years.join(', ')}).`;
+
     const doc = createSequenceDocument({
       sequenceSlug: seq.sequenceSlug,
       subjectSlug: subject,
@@ -79,6 +87,7 @@ export function buildSequenceOps(params: BuildSequenceOpsParams): BulkOperations
       years,
       unitSlugs,
       categoryTitles,
+      sequenceSemantic,
     });
 
     ops.push(createBulkAction(resolvePrimarySearchIndexName('sequences'), seq.sequenceSlug), doc);

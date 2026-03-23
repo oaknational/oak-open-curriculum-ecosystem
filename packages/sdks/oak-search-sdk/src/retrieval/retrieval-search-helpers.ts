@@ -1,11 +1,10 @@
 /**
- * Retriever builders for sequences and threads.
+ * Two-way RRF retriever builders for sequences and threads.
  *
  * Sequences are API data structures for curriculum retrieval, not
  * user-facing programmes. Threads are conceptual progression strands
- * that connect units across years. Sequence retrieval is currently
- * plain lexical because `sequence_semantic` is not populated during
- * ingestion; thread retrieval remains two-way RRF (BM25+ELSER).
+ * that connect units across years. Both use two-way RRF (BM25+ELSER)
+ * with `fuzziness: 'AUTO'` and no post-RRF score filtering.
  *
  * @see rrf-query-builders.ts for four-way RRF (lessons/units)
  * @see unit-doc-mapper.ts for unit result shaping (separate concern)
@@ -16,36 +15,46 @@ import type { estypes } from '@elastic/elasticsearch';
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /**
- * Build the sequence retriever for sequence search.
+ * Build a two-way RRF retriever for sequence search.
  *
- * Uses a BM25 `multi_match` retriever (boosting sequence title) with
- * the shared optional filter for subject narrowing.
+ * Combines a BM25 `multi_match` retriever (boosting sequence title)
+ * with a semantic retriever on the `sequence_semantic` field. Both
+ * retrievers share the same optional filter for subject narrowing.
  *
  * Uses `fuzziness: 'AUTO'` (not `AUTO:6,9` like lessons/units) because
  * the sequence index has only ~30 documents with structured titles, so
- * fuzzy-match pollution is not a practical concern. This stays lexical
- * until ingestion populates `sequence_semantic`; querying an empty
- * semantic field only adds cost and false confidence.
+ * fuzzy-match pollution is not a practical concern. No post-RRF score
+ * filtering is applied — 2-way RRF max score ≈ 0.049 means any
+ * meaningful threshold would eliminate legitimate results.
  *
  * @param query - User search query
  * @param filter - Optional Elasticsearch filter (e.g. subject constraint)
- * @returns Direct lexical retriever container for the Elasticsearch search API
+ * @returns RRF retriever container for the Elasticsearch search API
  */
 export function buildSequenceRetriever(
   query: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
   return {
-    standard: {
-      query: {
-        multi_match: {
-          query,
-          type: 'best_fields',
-          fuzziness: 'AUTO',
-          fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
+    rrf: {
+      retrievers: [
+        {
+          standard: {
+            query: {
+              multi_match: {
+                query,
+                type: 'best_fields',
+                fuzziness: 'AUTO',
+                fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
+              },
+            },
+            filter,
+          },
         },
-      },
-      filter,
+        { standard: { query: { semantic: { field: 'sequence_semantic', query } }, filter } },
+      ],
+      rank_window_size: 40,
+      rank_constant: 40,
     },
   };
 }

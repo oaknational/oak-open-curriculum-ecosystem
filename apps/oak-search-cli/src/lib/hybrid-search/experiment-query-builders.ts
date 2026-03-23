@@ -4,26 +4,31 @@
  * These builders are used to compare BM25-only and ELSER-only retrieval
  * against hybrid search in Phase 3.0 experiments.
  *
- * For ablation testing (structure retrievers and two-way hybrids),
- * see ablation-query-builders.ts
+ * All retriever building blocks imported from SDK (ADR-134).
  *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
  */
 
+import {
+  buildBm25Retriever,
+  buildLessonHighlight,
+  buildUnitHighlight,
+  LESSON_BM25_CONTENT,
+  LESSON_BM25_CONFIG,
+  LESSON_CONTENT_SEMANTIC,
+  UNIT_BM25_CONTENT,
+  UNIT_BM25_CONFIG,
+  UNIT_CONTENT_SEMANTIC,
+} from '@oaknational/oak-search-sdk/read';
+import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import {
   createLessonFilters,
-  createLessonHighlight,
   createLessonFacets,
-  createLessonBm25ContentRetriever,
-  createLessonElserContentRetriever,
   createUnitFilters,
-  createUnitHighlight,
   createUnitFacets,
-  createUnitBm25ContentRetriever,
-  createUnitElserContentRetriever,
 } from './rrf-query-helpers';
 
 // Re-export ablation builders for backwards compatibility
@@ -49,14 +54,7 @@ export interface LessonSearchParams {
   includeFacets?: boolean;
 }
 
-/**
- * Builds a BM25-only request for lessons (no semantic search).
- *
- * Used for hybrid superiority experiments to compare BM25-only vs hybrid.
- * Uses the same BM25 query structure as the hybrid search.
- *
- * @see Phase 3.0 hybrid superiority experiment
- */
+/** Builds a BM25-only request for lessons (no semantic search). */
 export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearchRequest {
   const {
     query,
@@ -72,27 +70,19 @@ export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearch
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonBm25ContentRetriever(query, filterClause),
+    retriever: buildBm25Retriever(query, LESSON_BM25_CONTENT, filterClause, [], LESSON_BM25_CONFIG),
   };
 
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
   if (includeFacets) {
     request.aggs = createLessonFacets();
   }
-
   return request;
 }
 
-/**
- * Builds an ELSER-only request for lessons (no BM25 lexical search).
- *
- * Used for hybrid superiority experiments to compare ELSER-only vs hybrid.
- * Uses the same ELSER query structure as the hybrid search.
- *
- * @see Phase 3.0 hybrid superiority experiment
- */
+/** Builds an ELSER-only request for lessons (no BM25 lexical search). */
 export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearchRequest {
   const {
     query,
@@ -105,19 +95,24 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
   } = params;
   const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  const retriever: estypes.RetrieverContainer = {
+    standard: {
+      query: { semantic: { field: LESSON_CONTENT_SEMANTIC, query } },
+      filter: filterClause,
+    },
+  };
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonElserContentRetriever(query, filterClause),
+    retriever,
   };
 
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
   if (includeFacets) {
     request.aggs = createLessonFacets();
   }
-
   return request;
 }
 
@@ -132,14 +127,7 @@ export interface UnitSearchParams {
   includeFacets?: boolean;
 }
 
-/**
- * Builds a BM25-only request for units (no semantic search).
- *
- * Used for hybrid superiority experiments to compare BM25-only vs hybrid.
- * Uses the same BM25 query structure as the hybrid search.
- *
- * @see Phase 3.0 hybrid superiority experiment
- */
+/** Builds a BM25-only request for units (no semantic search). */
 export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequest {
   const {
     query,
@@ -155,27 +143,19 @@ export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequ
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitBm25ContentRetriever(query, filterClause),
+    retriever: buildBm25Retriever(query, UNIT_BM25_CONTENT, filterClause, [], UNIT_BM25_CONFIG),
   };
 
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
   if (includeFacets) {
     request.aggs = createUnitFacets();
   }
-
   return request;
 }
 
-/**
- * Builds an ELSER-only request for units (no BM25 lexical search).
- *
- * Used for hybrid superiority experiments to compare ELSER-only vs hybrid.
- * Uses the same ELSER query structure as the hybrid search.
- *
- * @see Phase 3.0 hybrid superiority experiment
- */
+/** Builds an ELSER-only request for units (no BM25 lexical search). */
 export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchRequest {
   const {
     query,
@@ -188,18 +168,23 @@ export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchReq
   } = params;
   const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  const retriever: estypes.RetrieverContainer = {
+    standard: {
+      query: { semantic: { field: UNIT_CONTENT_SEMANTIC, query } },
+      filter: filterClause,
+    },
+  };
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitElserContentRetriever(query, filterClause),
+    retriever,
   };
 
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
   if (includeFacets) {
     request.aggs = createUnitFacets();
   }
-
   return request;
 }

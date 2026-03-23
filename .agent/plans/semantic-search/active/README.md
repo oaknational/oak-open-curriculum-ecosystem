@@ -4,8 +4,8 @@ Executable plans currently in flight.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md) | Fix all 5 known code/doc issues (S1–S5) before re-indexing: sequence_semantic, 2-way RRF, CLI collapse, threadSlug test, prod smoke | 🔴 ACTIVE — blocks re-ingest; TDD Phase 1 (RED) next |
-| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 BLOCKED by remediation |
+| [pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md) | Fix all 5 known code/doc issues (S1–S5) + CLI-SDK boundary enforcement | ✅ COMPLETE (2026-03-23) — ready for commit |
+| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 UNBLOCKED after commit |
 | [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md) | Canonical bulk policy, TDD merge for duplicate lesson ids, bulk-vs-API field matrix, thread/sequence naming, MCP+CLI validation after F2 promote | 🟡 Planning — execution starts after F2 promote (or merge work can begin in branch in parallel) |
 
 Supporting documents (updated alongside the plans):

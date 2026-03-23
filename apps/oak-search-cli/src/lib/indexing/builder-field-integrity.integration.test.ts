@@ -52,6 +52,7 @@ function createSequenceParams(): CreateSequenceDocumentParams {
     years: ['1', '2', '3', '4', '5', '6'],
     unitSlugs: ['fractions-year-3'],
     categoryTitles: ['Number'],
+    sequenceSemantic: 'Mathematics Primary is a Mathematics Primary curriculum sequence.',
   };
 }
 
@@ -77,5 +78,17 @@ describe('builder field integrity', () => {
     expect(sequenceCategoryField).toBeDefined();
     expect(sequenceCategoryField?.mappingType).toBe('text');
     expect(sequenceDoc.category_titles).toEqual(['Number']);
+  });
+
+  it('populates sequence_semantic per ADR-139 contract', () => {
+    const sequenceDoc = createSequenceDocument(createSequenceParams());
+    const semanticField = SEARCH_FIELD_INVENTORY.find(
+      (entry) => entry.indexFamily === 'sequences' && entry.fieldName === 'sequence_semantic',
+    );
+
+    expect(semanticField).toBeDefined();
+    expect(semanticField?.mappingType).toBe('semantic_text');
+    expect(sequenceDoc.sequence_semantic).toBeDefined();
+    expect(sequenceDoc.sequence_semantic?.trim().length).toBeGreaterThan(0);
   });
 });

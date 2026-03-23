@@ -4,6 +4,19 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-03-23
+
+- Added two universal principles to `practice-lineage.md` §Principles:
+  **architectural excellence over expediency** (never take cross-layer shortcuts
+  that create silent drift) and **apps are thin; libraries own domain logic**
+  (in multi-package architectures, apps compose library capabilities, never
+  reimplement them). Both added to §Always-Applied Rules as well.
+- Proven by: CLI-SDK retriever drift incident where duplicate retriever builders
+  in the CLI carried stale fuzziness config (`AUTO` vs SDK's tuned `AUTO:6,9`),
+  producing different search results for the same query. Four architecture
+  reviewers independently identified the boundary violation.
+- Provenance chain: index 8 appended.
+
 ## [oak-open-curriculum-ecosystem] 2026-03-19
 
 - Integrated pine-scripts incoming practice-context material (8 files reviewed)

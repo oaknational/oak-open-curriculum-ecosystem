@@ -16,13 +16,12 @@ lane closed out:
    Scope: Generator fix (InvokeResult), error classification at SDK layer
    Completed: Upstream experimentation, generator changes, TDD classification
 
-2. Pre-reingest remediation                🔴 ACTIVE (2026-03-22)
+2. Pre-reingest remediation                ✅ COMPLETE (2026-03-23)
    Plan: ../active/pre-reingest-remediation.execution.plan.md
-   Scope: Fix S1–S5 (sequence_semantic, 2-way RRF, CLI collapse,
-          threadSlug test, prod smoke) — blocks re-indexing
-   Phase 1 (RED): 🔴 NEXT
+   Scope: Fix S1–S5 + CLI-SDK boundary enforcement
+   All phases complete. Ready for commit.
 
-3. F2 closure + P0 ingestion              🟡 BLOCKED by remediation (2026-03-22)
+3. F2 closure + P0 ingestion              🟡 UNBLOCKED — commit then operator re-ingest (2026-03-23)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
    Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
    Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 BLOCKED

@@ -52,6 +52,14 @@
       "stage": "ingest_dispatch_readback",
       "status": "verified",
       "findingRefs": []
+    },
+    {
+      "indexFamily": "sequences",
+      "fieldName": "sequence_semantic",
+      "stage": "ingest_dispatch_readback",
+      "status": "must_be_populated",
+      "findingRefs": ["S1"],
+      "notes": "ADR-139: sequence_semantic required in produced documents"
     }
   ]
 }

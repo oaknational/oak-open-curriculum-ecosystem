@@ -119,3 +119,76 @@ export function generateUnitSemanticSummary(
   const structuralParts = extractUnitStructuralContent(summary);
   return [contextLine, ...descriptiveParts, ...structuralParts].join('\n\n');
 }
+
+/**
+ * Parameters for generating a sequence-level semantic summary.
+ *
+ * @see ADR-139 Sequence Semantic Contract and Ownership
+ */
+export interface GenerateSequenceSemanticParams {
+  /** The sequence title (e.g., 'Mathematics Primary'). */
+  readonly sequenceTitle: string;
+  /** The subject title (e.g., 'Mathematics'). */
+  readonly subjectTitle: string;
+  /** The phase title (e.g., 'Primary', 'Secondary'). */
+  readonly phaseTitle: string;
+  /** Years covered by this sequence, in display order. */
+  readonly years: readonly string[];
+  /** Key stages covered by this sequence, in display order. */
+  readonly keyStages: readonly string[];
+  /** Ordered unit summaries with their key stage and subject context. */
+  readonly orderedUnitSummaries: readonly {
+    readonly summary: SearchUnitSummary;
+    readonly keyStageTitle: string;
+    readonly subjectTitle: string;
+  }[];
+}
+
+/**
+ * Generates a deterministic sequence-level semantic summary from ordered unit sub-content.
+ *
+ * Constructs a context line followed by per-unit semantic summaries (reusing
+ * {@link generateUnitSemanticSummary}), joined with double newlines.
+ *
+ * @param params - Sequence metadata and ordered unit summaries
+ * @returns A non-empty deterministic semantic summary for ELSER embeddings
+ * @throws If orderedUnitSummaries is empty, or any unit semantic trims to empty
+ * @see ADR-139 Sequence Semantic Contract and Ownership
+ */
+export function generateSequenceSemanticSummary(params: GenerateSequenceSemanticParams): string {
+  if (params.orderedUnitSummaries.length === 0) {
+    throw new Error(
+      'generateSequenceSemanticSummary: orderedUnitSummaries must not be empty — ' +
+        `sequence "${params.sequenceTitle}" has no units to summarise.`,
+    );
+  }
+
+  const contextLine =
+    `${params.sequenceTitle} is a ${params.subjectTitle} ${params.phaseTitle} ` +
+    `curriculum sequence covering ${params.keyStages.join(', ')} (${params.years.join(', ')}).`;
+
+  const unitSemantics = params.orderedUnitSummaries.map((entry) => {
+    const unitSemantic = generateUnitSemanticSummary(
+      entry.summary,
+      entry.keyStageTitle,
+      entry.subjectTitle,
+    );
+    if (unitSemantic.trim().length === 0) {
+      throw new Error(
+        'generateSequenceSemanticSummary: unit semantic summary is empty after trimming — ' +
+          `unit "${entry.summary.unitSlug}" in sequence "${params.sequenceTitle}".`,
+      );
+    }
+    return unitSemantic;
+  });
+
+  const result = [contextLine, ...unitSemantics].join('\n\n');
+  if (result.trim().length === 0) {
+    throw new Error(
+      'generateSequenceSemanticSummary: final sequence semantic is empty after trimming — ' +
+        `sequence "${params.sequenceTitle}".`,
+    );
+  }
+
+  return result;
+}

@@ -1,3 +1,4 @@
+/* eslint max-lines: [error, 310] -- Semantic generation wiring + ADR-139 fail-fast validation */
 /**
  * Bulk sequence transformer for Elasticsearch.
  * @remarks Extracts sequence data from bulk download files and transforms them
@@ -20,8 +21,10 @@ import {
   deriveSubjectSlugFromSequence,
 } from './bulk-transform-helpers';
 import { isSubject } from './sdk-guards';
-import type { KeyStage, SearchSubjectSlug } from '../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import { getCategoriesForUnit, type CategoryMap } from './category-supplementation';
+import { transformBulkUnitToSummary } from './bulk-rollup-builder';
+import { generateSequenceSemanticSummary } from '../lib/indexing/semantic-summary-generator';
 
 /** Accumulated unit data grouped by key stage. */
 interface KeyStageUnitAccumulator {
@@ -97,6 +100,44 @@ function collectCategoryTitles(
 }
 
 /**
+ * Builds ordered unit summaries from bulk sequence data for semantic generation.
+ *
+ * @throws If any unit has an invalid key stage slug — per ADR-139 §4, missing
+ *   source material must fail fast rather than silently truncate the semantic.
+ */
+function buildOrderedUnitSummaries(
+  bulkFile: BulkDownloadFile,
+  subjectSlug: SearchSubjectSlug,
+): readonly {
+  readonly summary: SearchUnitSummary;
+  readonly keyStageTitle: string;
+  readonly subjectTitle: string;
+}[] {
+  const summaries: {
+    readonly summary: SearchUnitSummary;
+    readonly keyStageTitle: string;
+    readonly subjectTitle: string;
+  }[] = [];
+  for (const unit of bulkFile.sequence) {
+    if (!isValidKeyStage(unit.keyStageSlug)) {
+      throw new Error(
+        `buildOrderedUnitSummaries: unit "${unit.unitSlug}" in sequence "${bulkFile.sequenceSlug}" ` +
+          `has invalid key stage slug "${unit.keyStageSlug}" — expected ks1, ks2, ks3, or ks4.`,
+      );
+    }
+    const summary = transformBulkUnitToSummary(
+      unit,
+      subjectSlug,
+      unit.keyStageSlug,
+      bulkFile.sequenceSlug,
+    );
+    const keyStageTitle = findKeyStageTitle(unit.keyStageSlug, bulkFile.lessons);
+    summaries.push({ summary, keyStageTitle, subjectTitle: bulkFile.subjectTitle });
+  }
+  return summaries;
+}
+
+/**
  * Extracts sequence document params from a bulk file.
  *
  * @param bulkFile - The bulk download file
@@ -113,22 +154,39 @@ export function extractSequenceParamsFromBulkFile(
   const keyStagesSet = new Set<string>();
   const yearsSet = new Set<string>();
   const unitSlugs: string[] = [];
+
   for (const unit of bulkFile.sequence) {
     keyStagesSet.add(unit.keyStageSlug);
     yearsSet.add(getYearString(unit));
     unitSlugs.push(unit.unitSlug);
   }
+
   const categoryTitles = collectCategoryTitles(bulkFile.sequence, categoryMap);
+  const keyStages = Array.from(keyStagesSet).sort();
+  const years = Array.from(yearsSet).sort();
+  const sequenceTitle = `${bulkFile.subjectTitle} ${phaseTitle}`;
+  const orderedUnitSummaries = buildOrderedUnitSummaries(bulkFile, subjectSlug);
+
+  const sequenceSemantic = generateSequenceSemanticSummary({
+    sequenceTitle,
+    subjectTitle: bulkFile.subjectTitle,
+    phaseTitle,
+    years,
+    keyStages,
+    orderedUnitSummaries,
+  });
+
   return {
     sequenceSlug: bulkFile.sequenceSlug,
     subjectSlug,
     subjectTitle: bulkFile.subjectTitle,
     phaseSlug,
     phaseTitle,
-    keyStages: Array.from(keyStagesSet).sort(),
-    years: Array.from(yearsSet).sort(),
+    keyStages,
+    years,
     unitSlugs,
     categoryTitles,
+    sequenceSemantic,
   };
 }
 

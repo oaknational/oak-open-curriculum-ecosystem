@@ -13,12 +13,12 @@ export interface RunSequencesSearchOptions {
 }
 
 /**
- * Runs lexical sequence search.
+ * Runs hybrid sequence search using SDK-owned two-way RRF (BM25 + ELSER
+ * semantic on `sequence_semantic`).
  *
- * Sequences are currently searched with a lexical retriever because
- * `sequence_semantic` is not yet populated during ingestion. The deferred
- * follow-up keeps the field and will populate it deterministically from ordered
- * unit-level source content before sequence semantic retrieval returns.
+ * Delegates retriever construction to the SDK's `buildSequenceRetriever`
+ * via `buildSequenceRrfRequest`. The `sequence_semantic` field is populated
+ * deterministically during bulk ingestion from ordered unit summaries.
  *
  * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return
@@ -26,6 +26,7 @@ export interface RunSequencesSearchOptions {
  * @param options - Optional dependencies for testing
  * @returns Search results with sequences, scores, and metadata
  *
+ * @see ADR-139 Sequence Semantic Contract and Ownership
  * @see ADR-078 Dependency Injection for Testability
  */
 export async function runSequencesSearch(

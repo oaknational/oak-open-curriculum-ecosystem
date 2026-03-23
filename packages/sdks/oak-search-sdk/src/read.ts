@@ -9,6 +9,41 @@ export { createSearchRetrieval } from './create-search-retrieval.js';
 export { createRetrievalService } from './retrieval/index.js';
 export { createObservabilityService } from './observability/index.js';
 export {
+  buildSequenceRetriever,
+  buildThreadRetriever,
+} from './retrieval/retrieval-search-helpers.js';
+export {
+  buildFourWayRetriever,
+  buildLessonRetriever,
+  buildUnitRetriever,
+  buildBm25Retriever,
+  LESSON_BM25_CONTENT,
+  LESSON_BM25_STRUCTURE,
+  UNIT_BM25_CONTENT,
+  UNIT_BM25_STRUCTURE,
+  LESSON_CONTENT_SEMANTIC,
+  LESSON_STRUCTURE_SEMANTIC,
+  UNIT_CONTENT_SEMANTIC,
+  UNIT_STRUCTURE_SEMANTIC,
+  LESSON_BM25_CONFIG,
+  UNIT_BM25_CONFIG,
+} from './retrieval/rrf-query-builders.js';
+export { removeNoisePhrases, detectCurriculumPhrases } from './retrieval/query-processing/index.js';
+export {
+  normaliseTranscriptScores,
+  filterByMinScore,
+  DEFAULT_MIN_SCORE,
+  clampSize,
+  clampFrom,
+} from './retrieval/rrf-score-processing.js';
+export {
+  buildLessonFilters,
+  buildUnitFilters,
+  buildSequenceFilters,
+  buildLessonHighlight,
+  buildUnitHighlight,
+} from './retrieval/rrf-query-helpers.js';
+export {
   SEARCH_INDEX_TARGETS,
   SEARCH_INDEX_KINDS,
   ZERO_HIT_INDEX_BASE,

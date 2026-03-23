@@ -136,7 +136,14 @@ function extractAndBuildThreadOperations(
   return { operations, count: threads.length };
 }
 
-/** Extracts sequences from bulk files and builds bulk operations. */
+/**
+ * Extracts sequences from bulk files and builds bulk operations.
+ *
+ * **Fail-fast contract (ADR-139)**: If any bulk file fails semantic generation
+ * (e.g., invalid key stages, zero units, empty semantic output), throws
+ * immediately. Entire ingest halts — no partial-success mode. Use pre-ingest
+ * validation to catch issues early.
+ */
 function extractAndBuildSequenceOperations(
   files: readonly BulkDownloadFile[],
   resolveIndex: IndexResolverFn,

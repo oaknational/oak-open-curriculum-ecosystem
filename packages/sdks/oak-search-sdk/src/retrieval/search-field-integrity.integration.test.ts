@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 import { SEARCH_FIELD_INVENTORY } from '@oaknational/search-contracts';
 import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
+import { buildLessonFilters } from './rrf-query-helpers.js';
 import { searchSequences } from './search-sequences.js';
 
 function emptySequenceResponse(): EsSearchResponse<SearchSequenceIndexDoc> {
@@ -29,18 +30,22 @@ function getFirstRequest(calls: readonly EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
-function getSequenceStandardRetriever(request: EsSearchRequest) {
-  const retriever = request.retriever;
-  if (!retriever || !('standard' in retriever) || !retriever.standard) {
-    throw new Error('Expected standard retriever in sequence search request');
-  }
-  return retriever.standard;
-}
-
+/** Extracts the filter from the first RRF sub-retriever via runtime narrowing. */
 function getFirstFilter(calls: readonly EsSearchRequest[]) {
   const request = getFirstRequest(calls);
-  const standardRetriever = getSequenceStandardRetriever(request);
-  return standardRetriever.filter;
+  const retrievers = request.retriever?.rrf?.retrievers;
+  if (!retrievers || retrievers.length === 0) {
+    throw new Error('Expected RRF retriever with sub-retrievers');
+  }
+  const first = retrievers[0];
+  if (!isRecord(first)) {
+    return undefined;
+  }
+  const standard = first.standard;
+  if (!isRecord(standard)) {
+    return undefined;
+  }
+  return standard.filter;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -112,5 +117,18 @@ describe('search field integrity integration contracts', () => {
     expect(categoryInventoryField).toBeDefined();
     expect(categoryInventoryField?.mappingType).toBe('text');
     expect(categoryClause).toEqual({ match_phrase: { category_titles: 'physics' } });
+  });
+
+  it('aligns lessons threadSlug filter semantics with shared inventory contracts', () => {
+    const filters = buildLessonFilters({ query: 'fractions', threadSlug: 'number-fractions' });
+
+    expect(filters).toContainEqual({ term: { thread_slugs: 'number-fractions' } });
+
+    const threadSlugsField = SEARCH_FIELD_INVENTORY.find(
+      (entry) => entry.indexFamily === 'lessons' && entry.fieldName === 'thread_slugs',
+    );
+
+    expect(threadSlugsField).toBeDefined();
+    expect(threadSlugsField?.mappingType).toBe('keyword');
   });
 });
