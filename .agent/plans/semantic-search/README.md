@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-22
+**Last Updated**: 2026-03-23
 
 ## Start Here
 
@@ -10,8 +10,8 @@
 
 ## Active
 
-- [archive/completed/pre-reingest-remediation.execution.plan.md](archive/completed/pre-reingest-remediation.execution.plan.md) — fix S1–S5 before re-indexing (BLOCKS re-ingest)
-- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure (Phase 2 blocked by remediation)
+- [archive/completed/pre-reingest-remediation.execution.plan.md](archive/completed/pre-reingest-remediation.execution.plan.md) — S1–S5 remediation + CLI-SDK boundary enforcement (✅ COMPLETE 2026-03-23)
+- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure (Phase 2 UNBLOCKED, operator re-ingest next)
 - Supporting: [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md) — findings register
 
 ## Current Queue

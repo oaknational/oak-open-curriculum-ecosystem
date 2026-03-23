@@ -24,7 +24,7 @@ lane closed out:
 3. F2 closure + P0 ingestion              🟡 UNBLOCKED — commit then operator re-ingest (2026-03-23)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
    Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
-   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 BLOCKED
+   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 UNBLOCKED
    Phase 3: Production verification (F1/F2 retest, closure)
 ```
 
@@ -38,8 +38,8 @@ documents for the remediation plan's execution recipe.
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| P0 (active) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Restore SDK-owned 2-way RRF for sequences by populating `sequence_semantic` from ordered unit summaries via the shared unit semantic generator, with fail-fast ingest rules | 🔴 Work items executing via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
-| P0 (active) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | 🔴 Work items executing via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
+| P0 (done) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Restore SDK-owned 2-way RRF for sequences by populating `sequence_semantic` from ordered unit summaries via the shared unit semantic generator, with fail-fast ingest rules | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
+| P0 (done) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
 | — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
 | — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |
 | P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Reference lane for the underlying versioned-ingestion architecture; the active F2 closure plan is the operator source of truth for the remaining stage/validate/promote steps | 📋 Partially complete; final operator steps now run through the active F2 closure plan |

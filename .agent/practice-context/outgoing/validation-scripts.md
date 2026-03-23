@@ -61,3 +61,10 @@ A proper implementation would integrate these checks into the quality gate
 sequence (e.g., as a `pnpm validate:practice` script). The oak-mcp-ecosystem
 repo uses `scripts/validate-portability.mjs` for portability validation, which
 covers a subset of these checks.
+
+## See Also
+
+- `three-dimension-fitness-functions.md` — the three-dimension fitness
+  function innovation (lines + chars + prose width) with adoption guide
+- `validate-practice-fitness.ts` — TypeScript validation script for
+  the three-dimension fitness check (run with `tsx`)

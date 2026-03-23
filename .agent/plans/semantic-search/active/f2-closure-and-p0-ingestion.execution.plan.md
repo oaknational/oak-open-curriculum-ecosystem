@@ -42,7 +42,7 @@ todos:
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 BLOCKED by [pre-reingest remediation](./pre-reingest-remediation.execution.plan.md))
+**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 UNBLOCKED, operator re-ingest next; [pre-reingest remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) ✅ COMPLETE 2026-03-23)
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`
@@ -79,8 +79,8 @@ This plan consolidates the remaining work from three sources:
   [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - Permanent sequence semantic contract (architecture authority):
   [ADR-139](../../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
-- Pre-reingest remediation (BLOCKS re-ingest — must complete before Phase 2):
-  [pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md)
+- Pre-reingest remediation (✅ COMPLETE 2026-03-23):
+  [pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md)
 - Sequence retrieval architecture (locked recipe, executing via remediation):
   [sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md)
 - Contract test + prod smoke (executing via remediation):

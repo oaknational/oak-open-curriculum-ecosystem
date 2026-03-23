@@ -186,3 +186,4 @@ enough for permanent documentation.
 | Commitlint rejects commit with uppercase acronym in subject | `subject-case` rule rejects e.g. `ADR-130`. Use lowercase: "complete blue/green lifecycle" not "ADR-130 Phases 3-8d" |
 | Commitlint rejects commit with long body line | `body-max-line-length` enforced. Keep body lines under 100 chars; prefer 2-line paragraphs |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
+| Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |

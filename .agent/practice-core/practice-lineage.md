@@ -127,7 +127,8 @@ The universal rules:
 - **Apps are thin; libraries own domain logic.** In a multi-package architecture, apps are user
   interfaces that compose library/SDK capabilities. Apps never reimplement domain logic that a
   library already provides. The test: "could another consumer need this?" If yes, it belongs in a
-  shared package. Violations cause silent drift — the library gets tuned but the app's copy does not.
+  shared package. Violations cause silent drift — the library gets tuned but the app's copy does
+  not.
 
 ### Metacognition
 

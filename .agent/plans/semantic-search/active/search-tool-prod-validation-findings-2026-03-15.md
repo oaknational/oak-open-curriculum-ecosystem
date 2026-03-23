@@ -64,7 +64,7 @@ sequence category uses `match_phrase` on `category_titles`
 pins `threadSlug` to `SEARCH_FIELD_INVENTORY` (`thread_slugs`), mirroring the
 sequence category test; plus a documented optional prod smoke procedure outside
 default CI — see
-[pre-reingest-remediation.execution.plan.md](./pre-reingest-remediation.execution.plan.md)
+[pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md)
 (Tasks 1.3, 3.2).
 
 **Prod MCP spot-check (2026-03-21):** For lessons, baseline vs

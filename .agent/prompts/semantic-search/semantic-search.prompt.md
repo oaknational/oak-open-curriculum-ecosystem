@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-22
+last_updated: 2026-03-23
 ---
 
 # Semantic Search — Session Entry Point
@@ -44,17 +44,17 @@ test-backed correctness in code and transforms.
 
 ---
 
-## Where We Are (2026-03-22)
+## Where We Are (2026-03-23)
 
 **Branch**: `feat/es_index_update`
 
-### F2/P0 lane (paused — blocked by remediation)
+### F2/P0 lane (UNBLOCKED — operator re-ingest next)
 
 **Phase 1** (code follow-ups): ✅ COMPLETE — readiness gate closed, code fixes
 landed, and the latest lane-alignment commit is `3630405b`. Core commits:
 `dfb48b90`, `3ec1dbc6`, `3630405b`.
 **Phase 2** (re-ingest): Task 2.1 ✅ (operator runbook documented) —
-**BLOCKED until pre-reingest remediation completes**.
+**UNBLOCKED** (pre-reingest remediation complete 2026-03-23).
 **Phase 3** (production verification): Not started — depends on Phase 2.
 
 ### Pre-reingest remediation + CLI-SDK boundary enforcement (COMPLETE)
@@ -73,9 +73,18 @@ completed 2026-03-23:
 
 ### What the next session needs to do
 
-1. **Commit** the combined S1–S5 + boundary enforcement changes.
-2. **Resume F2/P0:** Operator stage / validate / promote (Phase 2 of
-   the F2 closure plan), followed by production verification (Phase 3).
+All code work is committed (`6adafaff`, `745719a6`). The next session is
+operational, not coding:
+
+1. **Operator re-ingest (Phase 2 of F2 closure):** Run `admin stage` with
+   the corrected pipeline. Validate staged indexes with
+   `field-readback-audit --target-version <version>`. Promote when clean.
+   See the [F2 closure plan](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
+   for exact commands and pre-checks.
+2. **Production verification (Phase 3):** Retest F1 (threadSlug) and F2
+   (category) with the queries in the findings register. Both must pass.
+3. **Close out:** Update findings register dispositions. Archive F2 plan.
+   Consolidate docs.
 
 ### Key facts for context
 
@@ -119,21 +128,14 @@ completed 2026-03-23:
 
 ### Step 2: Execute the active plan
 
-**Immediate**: The pre-reingest remediation plan contains all execution detail
-for the five outstanding code/doc issues that block re-indexing:
-
-[pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md)
-
-Summary of remediation phases:
-
-1. **Phase 1 (RED)**: ✅ COMPLETE — tests for S1–S4
-2. **Phase 2 (GREEN)**: ✅ COMPLETE — sequence_semantic, 2-way RRF
-3. **Phase 3 (REFACTOR)**: ✅ COMPLETE — CLI collapse, docs, field-gap ledger, prod smoke
-4. **Phase 4 (GATES/REVIEWS)**: 🔴 NEXT — specialist reviewer passes
-
-**After remediation**: Resume the F2/P0 lane (operator stage/validate/promote):
+**Immediate**: Resume the F2/P0 lane — operator stage/validate/promote/verify.
+All code is committed. Active plan:
 
 [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
+
+The pre-reingest remediation is ✅ COMPLETE (all 4 phases done, 2026-03-23).
+Archived reference:
+[pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md)
 
 ### Step 3: Keep authority documents in sync
 
