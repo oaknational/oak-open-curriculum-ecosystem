@@ -1,3 +1,8 @@
+import { isAbsolute, join } from 'node:path';
+
+/**
+ * Parsed CLI arguments for the field readback audit command.
+ */
 export interface FieldReadbackCliArgs {
   readonly ledgerPath: string;
   readonly attempts: number;
@@ -5,6 +10,12 @@ export interface FieldReadbackCliArgs {
   readonly targetVersion?: string;
   readonly emitJson: boolean;
 }
+
+/**
+ * Default field-gap ledger path, interpreted relative to the repo root.
+ */
+export const DEFAULT_FIELD_READBACK_LEDGER_PATH =
+  '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json';
 
 function parsePositiveInteger(value: string, argName: string): number {
   const parsedNumber = Number(value);
@@ -59,10 +70,33 @@ interface FieldReadbackCliParseResult {
 
 function createDefaultCliParseState(): FieldReadbackCliParseState {
   return {
-    ledgerPath: '.agent/plans/semantic-search/archive/completed/field-gap-ledger.json',
+    ledgerPath: DEFAULT_FIELD_READBACK_LEDGER_PATH,
     attempts: 6,
     intervalMs: 5000,
   };
+}
+
+/**
+ * Resolve a field-readback ledger path relative to the repo root.
+ *
+ * Absolute paths are preserved. Relative paths are treated as repo-root-relative
+ * so operator commands behave consistently regardless of caller cwd.
+ *
+ * @param ledgerPath - Raw CLI ledger path value
+ * @param repoRoot - Resolved repo root, if available
+ * @returns Absolute ledger path, either passed through or resolved from repo root
+ */
+export function resolveLedgerPath(ledgerPath: string, repoRoot: string | undefined): string {
+  if (isAbsolute(ledgerPath)) {
+    return ledgerPath;
+  }
+  if (repoRoot === undefined) {
+    throw new Error(
+      `Cannot resolve relative ledger path without a repo root: ${ledgerPath}. ` +
+        'Provide an absolute --ledger path.',
+    );
+  }
+  return join(repoRoot, ledgerPath);
 }
 
 function parseCliArg(

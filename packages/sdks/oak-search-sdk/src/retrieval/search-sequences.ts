@@ -52,7 +52,17 @@ export async function searchSequences(
       _source: SEQUENCE_SOURCE_EXCLUDES,
     };
 
-    logger?.debug('searchSequences', { query: params.query, size, from });
+    logger?.debug('searchSequences', {
+      query: params.query,
+      size: request.size,
+      from: request.from,
+      subject: params.subject,
+      keyStage: params.keyStage,
+      phaseSlug: params.phaseSlug,
+      category: params.category,
+      hasFilter: filterClause !== undefined,
+      filterClause,
+    });
     const res = await search(request);
     const results = res.hits.hits.map((hit) => ({
       id: hit._id,

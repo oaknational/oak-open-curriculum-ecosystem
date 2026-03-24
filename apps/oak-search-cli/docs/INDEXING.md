@@ -90,7 +90,7 @@ These commands answer different questions. Do not treat green alias health as pr
 
 **Interpreting counts**: Live counts follow whatever **versioned physical index** the aliases currently reference (visible as `targetIndex` in `validate-aliases` output, e.g. `oak_lessons_v2026-03-15-134856`). If the bulk manifest's `downloadedAt` is **newer** than that version stamp, **pre-stage** `admin count` can legitimately sit **below** the counts you expect **after** `admin stage` from the current bulk -- until you stage, validate, and promote. Compare like with like: same bulk directory, same stage output, or same promoted version.
 
-**Staged validation**: Do not use `admin count` to validate a newly staged version before promotion; it only reads the live aliases. Use the version returned by `oaksearch admin stage`, treat the stage output as the authoritative staged count evidence, then run the field-readback audit from the **repo root** with an explicit ledger path:
+**Staged validation**: Do not use `admin count` to validate a newly staged version before promotion; it only reads the live aliases. Use the version returned by `oaksearch admin stage`, treat the stage output as the authoritative staged count evidence, then run the field-readback audit with an explicit ledger path. Relative `--ledger` paths are resolved from the repo root and absolute paths are used as-is. The example below still shows a repo-root invocation because the script path itself is repo-root-relative:
 
 ```bash
 pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \

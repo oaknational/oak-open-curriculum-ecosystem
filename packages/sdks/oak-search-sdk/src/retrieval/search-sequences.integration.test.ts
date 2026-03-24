@@ -5,7 +5,8 @@
  * without network calls.
  */
 
-import { describe, it, expect } from 'vitest';
+import type { Logger } from '@oaknational/logger';
+import { describe, it, expect, vi } from 'vitest';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
 import { searchSequences } from './search-sequences.js';
@@ -182,6 +183,74 @@ describe('searchSequences', () => {
 
       const filterClause = extractFilter(calls);
       expect(filterClause).toBeUndefined();
+    });
+
+    it('logs resolved sequence filters for debugging', async () => {
+      const { search } = createMockSearch();
+      const logger = { debug: vi.fn() } as unknown as Logger;
+
+      await searchSequences(
+        {
+          query: 'science',
+          subject: 'science',
+          keyStage: 'ks4',
+          phaseSlug: 'secondary',
+          category: 'Biology',
+          size: 10,
+        },
+        search,
+        stubResolveIndex,
+        logger,
+      );
+
+      expect(logger.debug).toHaveBeenCalledTimes(1);
+      expect(logger.debug).toHaveBeenCalledWith(
+        'searchSequences',
+        expect.objectContaining({
+          query: 'science',
+          size: 10,
+          from: undefined,
+          subject: 'science',
+          keyStage: 'ks4',
+          phaseSlug: 'secondary',
+          category: 'Biology',
+          hasFilter: true,
+        }),
+      );
+
+      const callPayload = vi.mocked(logger.debug).mock.calls[0]?.[1] as {
+        filterClause: { bool: { filter: unknown[] } };
+      };
+      expect(callPayload.filterClause.bool.filter).toHaveLength(4);
+      expect(callPayload.filterClause.bool.filter).toContainEqual({
+        term: { subject_slug: 'science' },
+      });
+      expect(callPayload.filterClause.bool.filter).toContainEqual({
+        term: { phase_slug: 'secondary' },
+      });
+      expect(callPayload.filterClause.bool.filter).toContainEqual({ term: { key_stages: 'ks4' } });
+      expect(callPayload.filterClause.bool.filter).toContainEqual({
+        match_phrase: { category_titles: 'Biology' },
+      });
+    });
+
+    it('logs the empty-filter branch for debugging', async () => {
+      const { search } = createMockSearch();
+      const logger = { debug: vi.fn() } as unknown as Logger;
+
+      await searchSequences({ query: 'geography' }, search, stubResolveIndex, logger);
+
+      expect(logger.debug).toHaveBeenCalledTimes(1);
+      expect(logger.debug).toHaveBeenCalledWith(
+        'searchSequences',
+        expect.objectContaining({
+          query: 'geography',
+          size: 25,
+          from: undefined,
+          hasFilter: false,
+          filterClause: undefined,
+        }),
+      );
     });
   });
 

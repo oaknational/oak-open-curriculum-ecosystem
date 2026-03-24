@@ -171,6 +171,16 @@ pnpm tsx apps/oak-search-cli/bin/oaksearch.ts search lessons "photosynthesis"
 
 Align MCP outcomes with `admin count` and alias targets from F2.
 
+**CLI search gap (2026-03-24):** `oaksearch search sequences` currently only
+exposes `--subject` and `--size`. The SDK's `SearchSequencesParams` also supports
+`category`, `keyStage`, and `phaseSlug`, but the CLI command in
+`apps/oak-search-cli/src/cli/search/index.ts` (`registerSequencesCmd`) does not
+wire these as Commander options. This means the CLI cannot be used to verify F2
+category-filter behaviour or to cross-check MCP results for sequence filtering.
+Similarly, `oaksearch search threads` lacks `--subject` in its help output.
+These gaps should be addressed in a follow-up to bring CLI parity with the SDK
+and MCP tool surface.
+
 ---
 
 ## Risk assessment

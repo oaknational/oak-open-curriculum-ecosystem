@@ -424,3 +424,71 @@ construction (app-specific) and request assembly (CLI-specific).
 - Consolidate-docs for plan work must also update the semantic-search prompt and
   active index surfaces, otherwise the new canonical plan remains hard to
   discover.
+
+---
+
+## Session 2026-03-24 — Field readback audit cwd hardening
+
+### What Was Done
+
+- Fixed `apps/oak-search-cli/operations/ingestion/field-readback-audit.ts` so it
+  no longer depends on caller cwd for env or repo-relative ledger paths.
+- Added regression coverage for both helper-level env resolution and full
+  command execution with the default repo-root-relative ledger path.
+- Updated `apps/oak-search-cli/README.md` and
+  `apps/oak-search-cli/docs/INDEXING.md` to describe the new path behaviour.
+
+### Lessons
+
+- Composition roots must anchor both env loading and repo-relative file inputs
+  from stable locations. Fixing only `.env.local` discovery still leaves the
+  command brittle if a default relative data path is interpreted from cwd.
+- For operator CLIs, relative support-file paths should default to repo-root
+  semantics and absolute paths should pass through untouched. Do not make users
+  reverse-engineer which directory a script must be launched from.
+- Integration tests for composition roots must stay entirely in-process: inject
+  env loading, repo-root lookup, ledger parsing, stdout, exit-code handling,
+  and client/resource creation so the suite can run against trivial fakes with
+  zero filesystem IO.
+- For ESM CLI entry guards, compare `import.meta.url` against
+  `pathToFileURL(process.argv[1]).href` rather than string-building a
+  `file://` URL by hand; it is more portable across path formats.
+
+---
+
+## Session 2026-03-24 — F2 root cause and oak-local/oak-prod differential
+
+### What Was Done
+
+- Confirmed F2 (category filter) root cause: stale production deployment
+  (`efbda8d`, 2026-03-11) predates the fix (`ba330e64`, 2026-03-15+). The
+  deployed `rrf-query-helpers.ts` never reads `params.category`, so the filter
+  is silently dropped. Fix is on `feat/es_index_update` only, not merged to
+  `main`.
+- Ran full differential proof via MCP tools:
+  - `oak-local` with current code: category filter works (0 results for nonsense
+    category, 2 results for "Biology" positive control).
+  - `oak-prod` with stale deploy: category filter is a no-op (5 results for
+    nonsense category, same as unfiltered).
+- Hardened debug logging in `searchSequences` to include all filter params and
+  the generated `filterClause`, with new integration tests covering both
+  rich-filter and empty-filter branches.
+- Documented CLI search gap: `oaksearch search sequences` lacks `--category`,
+  `--key-stage`, `--phase-slug` Commander options despite the SDK supporting
+  them. This prevented CLI-based F2 verification and should be addressed in a
+  follow-up.
+
+### Lessons
+
+- Always verify which commit is deployed before concluding a code fix is
+  ineffective. The oak-prod MCP server was running code from 13 days before the
+  fix landed.
+- Debug logging that only emits query text without filter params is useless for
+  diagnosing filter-related bugs. Log the full resolved filter clause alongside
+  search parameters.
+- CLI surface should track SDK parameter surface. When a CLI subcommand omits
+  SDK-level filter options, you lose the ability to cross-check MCP behaviour
+  with a direct command, which is exactly when you need it most.
+- The pattern of running the same query against oak-local (current code) and
+  oak-prod (deployed code) is a reliable way to distinguish code-level from
+  data-level issues.

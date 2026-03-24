@@ -200,6 +200,10 @@ pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts \
   --emit-json
 ```
 
+Relative `--ledger` paths are resolved from the repo root and absolute ledger
+paths are also supported. This example still uses the repo-root script path
+shown above.
+
 **Done when**: The stage output counts match the expected staged totals; the
 readback audit against `<version>` exits zero (`ReadbackAuditResult.ok === true`),
 meaning every `must_be_populated` ledger field has `existsCount > 0` and no
@@ -231,6 +235,24 @@ results. All three evidence types must be captured.
 ## Phase 3: Production Verification and Closure
 
 ### Task 3.1: Production retest F1 and F2
+
+**Root cause (2026-03-24):** Production deployment `dpl_8drkfh34SfqHYz9WQgkkswqp9eWd`
+(`curriculum-mcp-alpha.oaknational.dev`) is built from commit `efbda8d` (2026-03-11),
+which predates the `category` filter fix in `ba330e64` (2026-03-15). The deployed
+`searchSequences()` inlines its own filter array and **never reads `params.category`**,
+so the category filter is silently dropped. The fix commit is only on
+`feat/es_index_update` (remote: `origin/feat/es_index_update`), not yet merged to `main`.
+
+**Proof (2026-03-24):**
+- `oak-local` (current code): `{query: "science", category: "nonexistentzzz"}` → `total: 0` (filter active)
+- `oak-local` (current code): `{query: "science", category: "Biology"}` → `total: 2` (positive control)
+- `oak-prod` (stale deploy): `{query: "science", category: "nonexistentzzz"}` → `total: 5` (filter no-op)
+- `oak-prod` (stale deploy): `{query: "maths", category: "nonexistentzzz"}` → `total: 5` (filter no-op)
+- Direct Elasticsearch via current code: `{query: "science", category: "nonexistentzzz"}` → `total: 0` (correct)
+- Direct Elasticsearch via current code: `{query: "maths", category: "nonexistentzzz"}` → `total: 0` (correct)
+
+**Fix path:** Gates green on `feat/es_index_update` → push → PR → CI green → merge to
+`main` → automatic Vercel production deployment picks up the fix.
 
 Re-run the exact reproduction queries from the findings register against
 production and record before/after evidence:
