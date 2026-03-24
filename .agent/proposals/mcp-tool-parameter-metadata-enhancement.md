@@ -32,7 +32,7 @@ This proposal presents two options for fixing this, with a recommendation.
 
 ### 1.1 MCP Protocol Requirements
 
-Per the MCP specification ([`.agent/reference-docs/mcp-docs-for-agents.md`](../reference-docs/mcp-docs-for-agents.md), lines 12293-12398):
+Per the MCP specification ([`.agent/reference/mcp-docs-for-agents.md`](../reference/mcp-docs-for-agents.md), lines 12293-12398):
 
 > Tools are defined by:
 >
@@ -60,7 +60,7 @@ The `inputSchema` field uses **JSON Schema** format, which supports per-property
 
 ### 1.2 MCP TypeScript SDK Approach
 
-The MCP TypeScript SDK ([`.agent/reference-docs/mcp-typescript-sdk-readme.md`](../reference-docs/mcp-typescript-sdk-readme.md), lines 84-99) uses **Zod schemas** for tool registration:
+The MCP TypeScript SDK ([`.agent/reference/mcp-typescript-sdk-readme.md`](../reference/mcp-typescript-sdk-readme.md), lines 84-99) uses **Zod schemas** for tool registration:
 
 ```typescript
 server.registerTool(
@@ -84,7 +84,7 @@ text: z.string().describe('Text to summarize'),  // .describe() adds description
 
 ### 1.3 OpenAI Apps Requirements
 
-Per OpenAI Apps developer guidelines ([`.agent/reference-docs/openai-apps-sdk-guidance.md`](../reference-docs/openai-apps-sdk-guidance.md), lines 34-39):
+Per OpenAI Apps developer guidelines ([`.agent/reference/openai-apps-sdk-guidance.md`](../reference/openai-apps-sdk-guidance.md), lines 34-39):
 
 > **Metadata**: App names and descriptions should be clear, accurate, and easy to understand. Tool titles and annotations should make it obvious what each tool does.
 
@@ -477,20 +477,20 @@ Option B requires working against the SDK's design and doesn't fix Zod validatio
 
 ### 8.1 MCP Specification
 
-- [`.agent/reference-docs/mcp-docs-for-agents.md`](../reference-docs/mcp-docs-for-agents.md)
+- [`.agent/reference/mcp-docs-for-agents.md`](../reference/mcp-docs-for-agents.md)
   - Lines 12293-12402: Tool definition structure
   - Lines 6265-6290: inputSchema examples with descriptions
 
 ### 8.2 MCP TypeScript SDK
 
-- [`.agent/reference-docs/mcp-typescript-sdk-readme.md`](../reference-docs/mcp-typescript-sdk-readme.md)
+- [`.agent/reference/mcp-typescript-sdk-readme.md`](../reference/mcp-typescript-sdk-readme.md)
   - Lines 84-99: registerTool with Zod inputSchema
   - Lines 508-512: `.describe()` pattern for parameter descriptions
   - Lines 1136-1198: Low-level Server API
 
 ### 8.3 OpenAI Apps Guidelines
 
-- [`.agent/reference-docs/openai-apps-sdk-guidance.md`](../reference-docs/openai-apps-sdk-guidance.md)
+- [`.agent/reference/openai-apps-sdk-guidance.md`](../reference/openai-apps-sdk-guidance.md)
   - Lines 34-39: Metadata and transparency requirements
   - Lines 64-68: Data minimization and clear inputs
 

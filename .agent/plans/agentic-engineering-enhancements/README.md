@@ -3,16 +3,17 @@
 Plans and research for hardening the agentic engineering practice through physical constraints, cross-platform portability, and quality assurance tooling.
 
 **Collection Roadmap**: [roadmap.md](roadmap.md)
-**Queued Execution Plans**: [current/README.md](current/README.md)
-**Atomic Execution Plans**: [active/README.md](active/README.md)
+**Active Execution Index**: [active/README.md](active/README.md)
+**Queued / Source Plans**: [current/README.md](current/README.md)
 
 ## Documents
 
 | File | Type | Description |
 |------|------|-------------|
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies for this collection |
-| `current/README.md` | Current Index | Queued executable plans ready to start |
-| `active/README.md` | Active Index | Atomic executable plans mapped one-to-one to roadmap phases |
+| `current/README.md` | Current Index | Strategic source plans and queued adjacent work |
+| `active/README.md` | Active Index | Atomic executable plans for roadmap phases plus adjacent active closeout work |
+| ~~`active/practice-convergence.plan.md`~~ | Plan (Completed) | Convergence closeout for Practice Core, local surfaces, and outgoing Context — **COMPLETE** (deleted) |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `current/elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
 | `current/architectural-enforcement-adoption.plan.md` | Plan | Physical enforcement strategy; strictness-specific ESLint work is delegated to `developer-experience/active/devx-strictness-convergence.plan.md`, and directory-complexity execution now lives in `developer-experience/current/directory-complexity-enablement.execution.plan.md` |
@@ -46,7 +47,9 @@ Plans and research for hardening the agentic engineering practice through physic
 ## Read Order
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
-2. **Queued or active execution**: [current/README.md](current/README.md) then [active/README.md](active/README.md)
+2. **Active execution first**: [active/README.md](active/README.md), then
+   [current/README.md](current/README.md) for strategic source plans and
+   queued adjacent work
 3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation -> Agent Classification Taxonomy
 4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
 

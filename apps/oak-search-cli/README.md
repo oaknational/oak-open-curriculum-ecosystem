@@ -199,8 +199,8 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
 3. **Run the standard quality gates**
 
    ```bash
-   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → markdownlint:root → format:root
-   pnpm qg     # format-check:root → markdownlint-check:root → type-check → lint → unit/int/ui tests → smoke
+   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
+   pnpm qg     # format-check:root → markdownlint-check:root → subagents:check → portability:check → test:root-scripts → type-check → lint → unit/int/ui tests → smoke
    ```
 
 4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**

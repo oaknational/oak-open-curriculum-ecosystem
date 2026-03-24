@@ -14,7 +14,13 @@ export {
 } from './index-lifecycle-service.js';
 export { buildLifecycleDeps, buildAliasLifecycleDeps } from './build-lifecycle-deps.js';
 export { createVersionedIndexResolver } from './versioned-index-resolver.js';
-export { withLifecycleLease, validateLeaseTtl, DEFAULT_LEASE_TTL_MS } from './lifecycle-lease.js';
+export {
+  withLifecycleLease,
+  validateLeaseTtl,
+  DEFAULT_LEASE_TTL_MS,
+  forceReleaseLease,
+  inspectLease,
+} from './lifecycle-lease.js';
 export { readIndexMeta, writeIndexMeta } from './index-meta.js';
 export {
   BASE_INDEX_NAMES,

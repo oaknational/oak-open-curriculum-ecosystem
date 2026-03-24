@@ -1,3 +1,107 @@
+## Session 2026-03-24 — Lifecycle incidents and re-ingest completion
+
+### What Was Done
+
+- Re-ingest attempt: discovered three generations of indexes (v2026-03-15,
+  v2026-03-21 live, v2026-03-23 partial orphans from interrupted stage).
+- Deleted 6 orphaned v2026-03-23 indexes via temporary `tsx` script.
+- Created `index-lifecycle-management.execution.plan.md` (5 gaps, 8 phases).
+- **Incident 1**: `admin stage` failed with "Lifecycle lease is already held" —
+  stale lease from crashed previous session. Manually deleted lease doc.
+  Phase 6 of lifecycle plan addresses this (committed `acquireLease` with
+  `supersedeExpiredLease`, `inspect-lease`/`release-lease` CLI commands).
+- **Incident 2**: `admin stage` completed successfully (all docs uploaded)
+  but reported failure — `startRenewalLoop` latched a transient 503 renewal
+  error and `withLifecycleLease` discarded the successful execution result.
+  Applied uncommitted fixes: `renewalInFlight` guard, cleared failure on
+  success, preserved execution result. Updated integration tests. Phase 6a.
+- Successfully promoted v2026-03-24-091112, validated aliases and counts
+  (15,910 parent docs across 5 index types).
+
+### Lessons
+
+- A successful long-running operation can be reported as failed when the
+  wrapper cares about renewal state after execution completes. The wrapper
+  should return the execution result if execution succeeded, regardless of
+  renewal state — the lease is defence-in-depth, not a correctness gate.
+- Elasticsearch Serverless shifts `_primary_term` during normal operation.
+  Any OCC-based update (lease renewal) must retry after fetching fresh
+  `_seq_no`/`_primary_term`, not just fail on 409.
+- Temporary `tsx` scripts for one-off operational tasks (deleting orphaned
+  indexes, clearing stale leases) need `dotenv` loading carefully — the
+  broader env validation may reject scripts that only need ES credentials.
+  Use targeted `dotenv.config()` with explicit path.
+
+---
+
+## Session 2026-03-23 — Consolidate-docs after Practice convergence
+
+### What Was Done
+
+- Ran consolidate-docs sweep (steps 1–10).
+- Fixed 8 stale `reference-docs` references missed during prior session's rename:
+  `understanding-agent-references.md` (4 occurrences), `safety-and-security.md`,
+  ADR-046, ADR-016, `vitest.config.ts`, `tsconfig.json`, `tsconfig.lint.json`,
+  `oak-logo-svg.ts`.
+- Added practice-convergence plan to active README index.
+
+### Lessons
+
+- When renaming a directory, grep for the old name in `*.ts`, `*.json`, `*.toml`
+  AND `*.md` — config files (tsconfig, vitest, eslint) and TSDoc source comments
+  are easily missed. This is already in distilled.md ("Moving plan artefacts is
+  cross-cutting") but the prior session still missed these.
+
+---
+
+## Session 2026-03-23 — Deep Practice Core Integration (algo-experiments round-trip)
+
+### What Was Done
+
+- Integrated 8 evolution rounds from pine-scripts and algo-experiments into
+  the local Practice Core (provenance indexes 8–15 absorbed, index 16 appended)
+- Adopted provenance.yml as 7th Practice Core file (extracted from trinity
+  frontmatter to manage chain growth)
+- Renamed fitness keys: `fitness_ceiling` → `fitness_line_count`,
+  `fitness_ceiling_chars` → `fitness_char_count`,
+  `fitness_max_prose_line` → `fitness_line_length` across 11+ files and the
+  validation script
+- Adopted "strict and complete" as explicit universal principle in both
+  practice-lineage.md §Principles and local principles.md
+- Adopted Learned Principles tiering (axioms vs active) — local principles
+  (architectural excellence, layer role topology) placed as Active since only
+  validated in 1 repo so far
+- Adopted session priority ordering (bugs → unfinished → new) in
+  start-right-quick skill
+- Adopted code-pattern exchange mechanism and Code Pattern Exchange section
+- Adopted plan readiness levels (decision-complete vs session-entry-ready)
+- Added 3 new code patterns (agentic-surface-separation, readme-as-index,
+  current-plan-promotion) and enriched drift-detection-test with repo-audit
+  perspective
+- Preserved local additions: `.agent/prompts/` for handover prompts, Practice
+  Maturity diagnostic framework, metacognition activation-mechanism framing
+
+### Patterns to Remember
+
+- When merging Practice Core, start from the incoming files (they carry
+  cumulative evolution) and merge local additions back in — not the reverse
+- The provenance.yml extraction prevents frontmatter bloat as chains grow
+  past 15+ entries per file
+- practice-lineage.md character budget is tight (31964/32000 after
+  tightening) — future additions need to compress existing content first
+- Handover prompts (`.agent/prompts/`) are a valid local adaptation distinct
+  from the generic session-entry skills the incoming Practice migrated away
+  from the prompts category
+
+### Deferred (noted, not adopted)
+
+- 3 code patterns deferred: operational-support-matrix (2 platforms, not yet
+  needed), capability-ladder-roadmap (plan structure differs),
+  shared-capability-versus-lane-split (single primary workstream)
+- Hook canonical-first pattern deferred (current Claude hooks work)
+- Local surface matrix deferred (expand when we add platforms)
+- GO.md migration from prompts to skills deferred (works where it is)
+
 ## Session 2026-03-23 — Boundary separation, clarification, and enforcement
 
 ### What Was Done (continued from reviewer findings)

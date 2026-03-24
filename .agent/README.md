@@ -104,7 +104,7 @@ docs, READMEs) via the consolidation workflow.
 
 | Directory | Purpose |
 | --- | --- |
-| `reference-docs/` | Supporting reference material (some internal-only) |
+| `reference/` | Supporting reference material (some internal-only) |
 | `archive/` | Historical prompts and context snapshots |
 
 Agent tooling CLIs also live at [`../agent-tools/`](../agent-tools/README.md)

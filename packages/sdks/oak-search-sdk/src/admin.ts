@@ -15,6 +15,8 @@ export {
   withLifecycleLease,
   validateLeaseTtl,
   DEFAULT_LEASE_TTL_MS,
+  forceReleaseLease,
+  inspectLease,
   readIndexMeta,
   writeIndexMeta,
 } from './admin/index.js';
@@ -61,4 +63,4 @@ export type {
   AliasValidationResult,
   AliasHealthEntry,
 } from './types/index.js';
-export type { LifecycleLease } from './admin/lifecycle-lease.js';
+export type { LifecycleLease, LeaseStatus } from './admin/lifecycle-lease.js';

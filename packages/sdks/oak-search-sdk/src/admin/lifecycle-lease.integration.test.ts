@@ -69,9 +69,24 @@ describe('withLifecycleLease', () => {
     expect(client.delete).not.toHaveBeenCalled();
   });
 
-  it('returns acquisition error when lease is already held', async () => {
+  it('returns acquisition error when lease is already held and not expired', async () => {
     const client = setupClient();
     vi.spyOn(client, 'index').mockRejectedValue(createResponseError(409, 'version conflict'));
+    vi.spyOn(client, 'get').mockResolvedValue({
+      _index: 'oak_lifecycle_leases',
+      _id: 'lifecycle_lease_primary',
+      found: true,
+      _version: 1,
+      _seq_no: 5,
+      _primary_term: 3,
+      _source: {
+        run_id: 'other-holder-999',
+        holder: 'other-holder',
+        target: 'primary',
+        acquired_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 60_000).toISOString(),
+      },
+    });
 
     const result = await withLifecycleLease(client, 'primary', async () => ok('done'), {
       ttlMs: 60_000,
@@ -81,6 +96,7 @@ describe('withLifecycleLease', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.type).toBe('validation_error');
+      expect(result.error.message).toContain('other-holder');
     }
     expect(client.delete).not.toHaveBeenCalled();
   });
@@ -148,7 +164,7 @@ describe('withLifecycleLease', () => {
     }
   });
 
-  it('returns renewal failure and skips release when renewal fails', async () => {
+  it('returns execution result when execution succeeds but renewal fails persistently', async () => {
     const client = setupClient();
     vi.spyOn(client, 'index')
       .mockResolvedValueOnce({
@@ -160,7 +176,7 @@ describe('withLifecycleLease', () => {
         _primary_term: 3,
         result: 'created',
       })
-      .mockRejectedValueOnce(createResponseError(503, 'renew failed'));
+      .mockRejectedValue(createResponseError(503, 'renew failed'));
 
     const result = await withLifecycleLease(
       client,
@@ -169,14 +185,88 @@ describe('withLifecycleLease', () => {
         new Promise<Result<string, AdminError>>((resolve) => {
           setTimeout(() => resolve(ok('done')), 20);
         }),
-      { ttlMs: 10_000, holder: 'test-holder', renewalEveryMs: 1 },
+      { ttlMs: 10_000, holder: 'test-holder', renewalEveryMs: 5 },
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('done');
+    }
+    expect(client.delete).not.toHaveBeenCalled();
+  });
+
+  it('returns renewal error when both execution and renewal fail', async () => {
+    const client = setupClient();
+    vi.spyOn(client, 'index')
+      .mockResolvedValueOnce({
+        _index: 'oak_lifecycle_leases',
+        _id: 'lifecycle_lease_primary',
+        _version: 1,
+        _shards: { total: 1, successful: 1, failed: 0 },
+        _seq_no: 7,
+        _primary_term: 3,
+        result: 'created',
+      })
+      .mockRejectedValue(createResponseError(503, 'renew failed'));
+
+    const executionError: AdminError = {
+      type: 'validation_error',
+      message: 'execution also failed',
+    };
+    const result = await withLifecycleLease(
+      client,
+      'primary',
+      async () =>
+        new Promise<Result<string, AdminError>>((resolve) => {
+          setTimeout(() => resolve(err(executionError)), 20);
+        }),
+      { ttlMs: 10_000, holder: 'test-holder', renewalEveryMs: 5 },
     );
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error.type).toBe('es_error');
       expect(result.error.message).toContain('renewal failed');
     }
     expect(client.delete).not.toHaveBeenCalled();
+  });
+
+  it('recovers from transient renewal failure when next renewal succeeds', async () => {
+    const client = setupClient();
+    vi.spyOn(client, 'index')
+      .mockResolvedValueOnce({
+        _index: 'oak_lifecycle_leases',
+        _id: 'lifecycle_lease_primary',
+        _version: 1,
+        _shards: { total: 1, successful: 1, failed: 0 },
+        _seq_no: 7,
+        _primary_term: 3,
+        result: 'created',
+      })
+      .mockRejectedValueOnce(createResponseError(503, 'transient failure'))
+      .mockResolvedValue({
+        _index: 'oak_lifecycle_leases',
+        _id: 'lifecycle_lease_primary',
+        _version: 3,
+        _shards: { total: 1, successful: 1, failed: 0 },
+        _seq_no: 9,
+        _primary_term: 3,
+        result: 'updated',
+      });
+
+    const result = await withLifecycleLease(
+      client,
+      'primary',
+      async () =>
+        new Promise<Result<string, AdminError>>((resolve) => {
+          setTimeout(() => resolve(ok('done')), 40);
+        }),
+      { ttlMs: 10_000, holder: 'test-holder', renewalEveryMs: 5 },
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('done');
+    }
+    expect(client.delete).toHaveBeenCalledOnce();
   });
 });

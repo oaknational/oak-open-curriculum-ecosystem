@@ -46,7 +46,7 @@ const config = defineConfig(
         '**/*.js',
         'temp-secrets/**',
         'smoke-tests/auth/**',
-        '../../.agent/reference-docs/**',
+        '../../.agent/reference/**',
       ],
     },
     ...configs.strict,

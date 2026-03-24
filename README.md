@@ -108,8 +108,8 @@ pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 **Full verification:**
 
 ```bash
-pnpm make           # Full pipeline: install, build, type-check, doc-gen, lint, format
-pnpm qg             # Quality gates: all checks + all test suites (UI, E2E, smoke)
+pnpm make           # Full pipeline: install, build, type-check, doc-gen, lint, portability, informational fitness, format
+pnpm qg             # Quality gates: format-check, markdownlint-check, subagents, portability, root script tests, workspace tests, UI, E2E, smoke
 pnpm fix            # Auto-fix: format + markdownlint + lint
 pnpm clean          # Remove build artefacts (dist/, .turbo)
 ```
@@ -210,7 +210,7 @@ and insights about consolidation all flow through the same cycle.
 
 The Practice also travels between repositories via a
 [plasmid exchange mechanism](docs/architecture/architectural-decisions/124-practice-propagation-model.md)
-— a package of six portable files that carry the improvement loop to new
+— a package of seven portable files that carry the improvement loop to new
 contexts. Different repos stress-test the Practice against different work,
 surfacing learnings that travel back to the origin. If a repo already has
 a Practice, then the income Practice is analysed and the best parts are

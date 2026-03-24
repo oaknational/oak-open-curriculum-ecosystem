@@ -66,5 +66,5 @@ covers a subset of these checks.
 
 - `three-dimension-fitness-functions.md` — the three-dimension fitness
   function innovation (lines + chars + prose width) with adoption guide
-- `validate-practice-fitness.ts` — TypeScript validation script for
-  the three-dimension fitness check (run with `tsx`)
+- `validate-practice-fitness.ts` — TypeScript mirror of the live
+  zero-dependency validator (`scripts/validate-practice-fitness.mjs`)

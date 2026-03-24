@@ -1,0 +1,225 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+  CLAUDE_HOOK_COMMAND,
+  CLAUDE_SETTINGS_PATH,
+  getClaudeHookPortabilityIssues,
+  HOOK_POLICY_PATH,
+  isClaudeHookWired,
+  isClaudeHookWiredInText,
+  SURFACE_MATRIX_PATH,
+  surfaceMatrixDescribesClaudeHook,
+} from './validate-portability-helpers.mjs';
+
+const supportedHookPolicy = {
+  platform_support: {
+    claude_code: {
+      status: 'supported',
+    },
+  },
+};
+
+const documentedSurfaceMatrix = `# Cross-Platform Agent Surface Matrix
+
+| Surface | Cursor | Claude Code | Gemini CLI | GitHub Copilot | Codex | \`.agents/\` |
+| ------- | ------ | ----------- | ---------- | -------------- | ----- | ---------- |
+| **Hooks** | unsupported | \`.claude/settings.json\` (machine-local, gitignored \`PreToolUse\`) | unsupported | unsupported | unsupported | unsupported |
+
+Claude Code currently has native \`PreToolUse\` activation for Bash
+commands via the machine-local gitignored \`.claude/settings.json\`,
+backed by the canonical policy in \`.agent/hooks/policy.json\` and the
+repo-local runtime script \`scripts/check-blocked-patterns.mjs\`.
+`;
+
+describe('isClaudeHookWired', () => {
+  it('matches Bash PreToolUse command hooks', () => {
+    expect(
+      isClaudeHookWired({
+        hooks: {
+          PreToolUse: [
+            {
+              matcher: 'Bash',
+              hooks: [
+                {
+                  type: 'command',
+                  command: 'node scripts/check-blocked-patterns.mjs',
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    ).toBe(true);
+  });
+});
+
+describe('isClaudeHookWiredInText', () => {
+  it('finds the Bash PreToolUse command in machine-local settings text', () => {
+    const claudeSettingsText = `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-blocked-patterns.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}`;
+
+    expect(isClaudeHookWiredInText(claudeSettingsText)).toBe(true);
+  });
+
+  it('accepts equivalent hook text when object keys appear in a different order', () => {
+    const reorderedClaudeSettingsText = `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "node scripts/check-blocked-patterns.mjs",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ]
+  }
+}`;
+
+    expect(isClaudeHookWiredInText(reorderedClaudeSettingsText)).toBe(true);
+  });
+});
+
+describe('surfaceMatrixDescribesClaudeHook', () => {
+  it('requires the machine-local gitignored contract to be documented', () => {
+    expect(surfaceMatrixDescribesClaudeHook(documentedSurfaceMatrix)).toBe(true);
+
+    expect(
+      surfaceMatrixDescribesClaudeHook(
+        documentedSurfaceMatrix.replace(
+          '(machine-local, gitignored `PreToolUse`)',
+          '(`PreToolUse`)',
+        ),
+      ),
+    ).toBe(false);
+  });
+});
+
+describe('getClaudeHookPortabilityIssues', () => {
+  it('allows clean clones to omit the machine-local Claude settings file', () => {
+    expect(
+      getClaudeHookPortabilityIssues({
+        hookPolicy: supportedHookPolicy,
+        claudeSettings: null,
+        claudeSettingsExists: false,
+        surfaceMatrix: documentedSurfaceMatrix,
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('allows a present machine-local Claude settings file when the text wiring is correct', () => {
+    expect(
+      getClaudeHookPortabilityIssues({
+        hookPolicy: supportedHookPolicy,
+        claudeSettingsText: `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-blocked-patterns.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}`,
+        claudeSettingsExists: true,
+        surfaceMatrix: documentedSurfaceMatrix,
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('fails when the machine-local Claude settings text exists but does not wire the hook', () => {
+    expect(
+      getClaudeHookPortabilityIssues({
+        hookPolicy: supportedHookPolicy,
+        claudeSettingsText: `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/some-other-hook.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}`,
+        claudeSettingsExists: true,
+        surfaceMatrix: documentedSurfaceMatrix,
+      }),
+    ).toContain(
+      '.agent/hooks/policy.json: Claude Code is marked supported but .claude/settings.json does not wire Bash PreToolUse to node scripts/check-blocked-patterns.mjs',
+    );
+  });
+
+  it('fails when the policy does not mark Claude Code supported but the local file wires the hook', () => {
+    expect(
+      getClaudeHookPortabilityIssues({
+        hookPolicy: {
+          platform_support: {
+            claude_code: {
+              status: 'unsupported',
+            },
+          },
+        },
+        claudeSettingsText: `{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_HOOK_COMMAND}"
+          }
+        ]
+      }
+    ]
+  }
+}`,
+        claudeSettingsExists: true,
+        surfaceMatrix: documentedSurfaceMatrix,
+      }),
+    ).toContain(
+      `${CLAUDE_SETTINGS_PATH}: Claude Code wires ${CLAUDE_HOOK_COMMAND} but ${HOOK_POLICY_PATH} does not mark claude_code as supported`,
+    );
+  });
+
+  it('fails when Claude support is declared but the surface matrix does not describe the native activation', () => {
+    expect(
+      getClaudeHookPortabilityIssues({
+        hookPolicy: supportedHookPolicy,
+        claudeSettingsExists: false,
+        claudeSettings: null,
+        surfaceMatrix: documentedSurfaceMatrix.replace(
+          '`scripts/check-blocked-patterns.mjs`',
+          '`scripts/other-hook.mjs`',
+        ),
+      }),
+    ).toContain(
+      `${SURFACE_MATRIX_PATH}: Claude Code hook support is marked supported in ${HOOK_POLICY_PATH} but the surface matrix does not describe the native activation`,
+    );
+  });
+});

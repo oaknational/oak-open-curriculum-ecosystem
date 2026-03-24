@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 100
+fitness_line_count: 100
 split_strategy: "This is a focused directive; if it grows, extract implementation details to the SDK README"
 ---
 

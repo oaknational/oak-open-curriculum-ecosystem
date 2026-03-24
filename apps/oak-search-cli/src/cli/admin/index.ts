@@ -34,6 +34,10 @@ import {
   registerRollbackCmd,
   registerValidateAliasesCmd,
 } from './admin-lifecycle-alias-commands.js';
+import {
+  registerInspectLeaseCmd,
+  registerReleaseLeaseCmd,
+} from './admin-lifecycle-lease-commands.js';
 import { registerCountCmd } from './admin-count-command.js';
 
 /**
@@ -70,6 +74,8 @@ export function adminCommand(cliEnv: SearchCliEnv): Command {
   registerPromoteCmd(cmd, cliEnv);
   registerRollbackCmd(cmd, cliEnv);
   registerValidateAliasesCmd(cmd, cliEnv);
+  registerInspectLeaseCmd(cmd, cliEnv);
+  registerReleaseLeaseCmd(cmd, cliEnv);
   registerCountCmd(cmd, cliEnv);
 
   return cmd;

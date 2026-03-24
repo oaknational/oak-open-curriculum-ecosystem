@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-23
+**Last Updated**: 2026-03-24
 
 ## Start Here
 
@@ -11,7 +11,8 @@
 ## Active
 
 - [archive/completed/pre-reingest-remediation.execution.plan.md](archive/completed/pre-reingest-remediation.execution.plan.md) — S1–S5 remediation + CLI-SDK boundary enforcement (✅ COMPLETE 2026-03-23)
-- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure (Phase 2 UNBLOCKED, operator re-ingest next)
+- [active/f2-closure-and-p0-ingestion.execution.plan.md](active/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, F1/F2 closure (Phase 2 ✅, production verification next)
+- [active/index-lifecycle-management.execution.plan.md](active/index-lifecycle-management.execution.plan.md) — lifecycle CLI commands, lease resilience, orphan management (Phase 6 ✅, Phase 6a uncommitted)
 - Supporting: [active/search-tool-prod-validation-findings-2026-03-15.md](active/search-tool-prod-validation-findings-2026-03-15.md) — findings register
 
 ## Current Queue

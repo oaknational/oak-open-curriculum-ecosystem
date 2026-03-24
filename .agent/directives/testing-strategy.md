@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 400
+fitness_line_count: 400
 split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
 ---
 

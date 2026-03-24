@@ -2,6 +2,14 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import {
+  CLAUDE_SETTINGS_PATH,
+  getClaudeHookPortabilityIssues,
+  HOOK_POLICY_PATH,
+  SURFACE_MATRIX_PATH,
+} from './validate-portability-helpers.mjs';
 
 const repoRoot = process.cwd();
 
@@ -11,6 +19,10 @@ async function readText(relPath) {
   return fs.readFile(path.join(repoRoot, relPath), 'utf8');
 }
 
+async function readJson(relPath) {
+  return JSON.parse(await readText(relPath));
+}
+
 async function exists(relPath) {
   try {
     await fs.access(path.join(repoRoot, relPath));
@@ -18,6 +30,14 @@ async function exists(relPath) {
   } catch {
     return false;
   }
+}
+
+async function readOptionalText(relPath) {
+  if (!(await exists(relPath))) {
+    return { isPresent: false, value: null };
+  }
+
+  return { isPresent: true, value: await readText(relPath) };
 }
 
 function extractFrontmatter(content) {
@@ -304,17 +324,29 @@ for (const ruleFile of cursorRules) {
   }
 }
 
-// --- Results ---
+// --- Check 9: Hook portability parity ---
 
-if (issues.length > 0) {
-  console.error(
-    `Portability validation failed (${issues.length} issue${issues.length === 1 ? '' : 's'}):`,
-  );
-  for (const issue of issues) {
-    console.error(`  - ${issue}`);
+if (await exists(HOOK_POLICY_PATH)) {
+  try {
+    const hookPolicy = await readJson(HOOK_POLICY_PATH);
+    const claudeSettingsState = await readOptionalText(CLAUDE_SETTINGS_PATH);
+    const surfaceMatrix = await readText(SURFACE_MATRIX_PATH);
+
+    for (const issue of getClaudeHookPortabilityIssues({
+      hookPolicy,
+      claudeSettingsText: claudeSettingsState.value,
+      claudeSettingsExists: claudeSettingsState.isPresent,
+      surfaceMatrix,
+    })) {
+      addIssue(issue);
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown hook portability failure.';
+    addIssue(`Hook portability validation failed: ${message}`);
   }
-  process.exit(1);
 }
+
+// --- Results ---
 
 const stats = [
   `${canonicalCommands.length} canonical commands`,
@@ -325,4 +357,26 @@ const stats = [
   `${Object.values(adapterCountsByPlatform).reduce((a, b) => a + b, 0)} command adapters across ${platformCounts.length} platforms`,
 ];
 
-console.log(`Portability validation passed: ${stats.join(', ')}.`);
+export function reportPortabilityValidation(validationIssues = issues) {
+  if (validationIssues.length > 0) {
+    console.error(
+      `Portability validation failed (${validationIssues.length} issue${validationIssues.length === 1 ? '' : 's'}):`,
+    );
+    for (const issue of validationIssues) {
+      console.error(`  - ${issue}`);
+    }
+    return 1;
+  }
+
+  console.log(`Portability validation passed: ${stats.join(', ')}.`);
+  return 0;
+}
+
+const currentFilePath = fileURLToPath(import.meta.url);
+
+if (process.argv[1] === currentFilePath) {
+  const exitCode = reportPortabilityValidation();
+  if (exitCode !== 0) {
+    process.exit(exitCode);
+  }
+}

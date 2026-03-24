@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-23
+last_updated: 2026-03-24
 ---
 
 # Semantic Search — Session Entry Point
@@ -27,7 +27,7 @@ test-backed correctness in code and transforms.
 
 ## Active Authority
 
-- **Active P0 lane (operator re-ingest next)**:
+- **Active P0 lane (production verification next)**:
   [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
 - Active parallel plan (starts after F2 promote):
   [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../../plans/semantic-search/active/bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
@@ -44,18 +44,20 @@ test-backed correctness in code and transforms.
 
 ---
 
-## Where We Are (2026-03-23)
+## Where We Are (2026-03-24)
 
 **Branch**: `feat/es_index_update`
 
-### F2/P0 lane (UNBLOCKED — operator re-ingest next)
+### F2/P0 lane (Phase 2 ✅ — production verification next)
 
 **Phase 1** (code follow-ups): ✅ COMPLETE — readiness gate closed, code fixes
 landed, and the latest lane-alignment commit is `3630405b`. Core commits:
 `dfb48b90`, `3ec1dbc6`, `3630405b`.
-**Phase 2** (re-ingest): Task 2.1 ✅ (operator runbook documented) —
-**UNBLOCKED** (pre-reingest remediation complete 2026-03-23).
-**Phase 3** (production verification): Not started — depends on Phase 2.
+**Phase 2** (re-ingest): ✅ COMPLETE — `admin stage` succeeded
+(v2026-03-24-091112), `admin promote` completed, aliases verified, 15,910
+parent docs across 5 index types. Two lifecycle incidents resolved during
+this phase (see [index-lifecycle-management plan](../../plans/semantic-search/active/index-lifecycle-management.execution.plan.md)).
+**Phase 3** (production verification): **NEXT** — retest F1/F2 findings.
 
 ### Pre-reingest remediation + CLI-SDK boundary enforcement (COMPLETE)
 
@@ -73,18 +75,16 @@ completed 2026-03-23:
 
 ### What the next session needs to do
 
-All code work is committed (`6adafaff`, `745719a6`). The next session is
-operational, not coding:
+Re-ingest is complete (v2026-03-24-091112 promoted). The next session is
+verification and closure:
 
-1. **Operator re-ingest (Phase 2 of F2 closure):** Run `admin stage` with
-   the corrected pipeline. Validate staged indexes with
-   `field-readback-audit --target-version <version>`. Promote when clean.
-   See the [F2 closure plan](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
-   for exact commands and pre-checks.
-2. **Production verification (Phase 3):** Retest F1 (threadSlug) and F2
+1. **Production verification (Phase 3):** Retest F1 (threadSlug) and F2
    (category) with the queries in the findings register. Both must pass.
-3. **Close out:** Update findings register dispositions. Archive F2 plan.
+2. **Close out:** Update findings register dispositions. Archive F2 plan.
    Consolidate docs.
+3. **Lifecycle reliability:** Commit the uncommitted lease resilience fixes
+   in `lifecycle-lease.ts` and `lifecycle-lease.integration.test.ts`
+   (Phase 6a of [index-lifecycle-management plan](../../plans/semantic-search/active/index-lifecycle-management.execution.plan.md)).
 
 ### Key facts for context
 
@@ -128,8 +128,8 @@ operational, not coding:
 
 ### Step 2: Execute the active plan
 
-**Immediate**: Resume the F2/P0 lane — operator stage/validate/promote/verify.
-All code is committed. Active plan:
+**Immediate**: Resume the F2/P0 lane — production verification (Phase 3).
+Re-ingest is complete (v2026-03-24-091112). Active plan:
 
 [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
 

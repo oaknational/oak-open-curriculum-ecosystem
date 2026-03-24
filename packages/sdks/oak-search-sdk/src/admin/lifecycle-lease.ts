@@ -7,11 +7,14 @@ import {
   renewLease,
   validateLeaseTtl,
   DEFAULT_LEASE_TTL_MS,
+  forceReleaseLease,
+  inspectLease,
   type LifecycleLease,
+  type LeaseStatus,
 } from './lifecycle-lease-infra.js';
 
-export { validateLeaseTtl, DEFAULT_LEASE_TTL_MS };
-export type { LifecycleLease };
+export { validateLeaseTtl, DEFAULT_LEASE_TTL_MS, forceReleaseLease, inspectLease };
+export type { LifecycleLease, LeaseStatus };
 
 function toExecutionError(error: unknown): AdminError {
   return {
@@ -47,19 +50,33 @@ function startRenewalLoop(
 } {
   let activeLease = initialLease;
   let failure: AdminError | null = null;
+  let stopped = false;
+  let renewalInFlight = false;
   const interval = setInterval(() => {
+    if (stopped || renewalInFlight) {
+      return;
+    }
+    renewalInFlight = true;
     void renewLease(client, activeLease).then((result) => {
+      renewalInFlight = false;
+      if (stopped) {
+        return;
+      }
       if (!result.ok) {
         failure = result.error;
         return;
       }
       activeLease = result.value;
+      failure = null;
     });
   }, renewalEveryMs);
   return {
     currentLease: () => activeLease,
     renewalFailure: () => failure,
-    stop: () => clearInterval(interval),
+    stop: () => {
+      stopped = true;
+      clearInterval(interval);
+    },
   };
 }
 
@@ -71,6 +88,20 @@ async function runWithExecutionCapture<T>(
   } catch (error: unknown) {
     return err(toExecutionError(error));
   }
+}
+
+function resolveRenewalInterval(renewalEveryMs: number | undefined, ttlMs: number): number {
+  return renewalEveryMs ?? Math.floor(ttlMs / 2);
+}
+
+function resolvePostExecution<T>(
+  executionResult: Result<T, AdminError>,
+  renewalError: AdminError | null,
+): Result<T, AdminError> | null {
+  if (renewalError !== null) {
+    return executionResult.ok ? executionResult : err(renewalError);
+  }
+  return executionResult.ok ? null : executionResult;
 }
 
 export async function withLifecycleLease<T>(
@@ -97,17 +128,14 @@ export async function withLifecycleLease<T>(
   const renewal = startRenewalLoop(
     client,
     acquired.value,
-    options?.renewalEveryMs ?? Math.floor(acquired.value.ttlMs / 2),
+    resolveRenewalInterval(options?.renewalEveryMs, acquired.value.ttlMs),
   );
   const executionResult = await runWithExecutionCapture(execute);
   renewal.stop();
 
-  const renewalFailure = renewal.renewalFailure();
-  if (renewalFailure !== null) {
-    return err(renewalFailure);
-  }
-  if (!executionResult.ok) {
-    return executionResult;
+  const earlyReturn = resolvePostExecution(executionResult, renewal.renewalFailure());
+  if (earlyReturn !== null) {
+    return earlyReturn;
   }
 
   const released = await releaseLease(client, renewal.currentLease());

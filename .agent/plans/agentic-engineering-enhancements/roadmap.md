@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-03-14
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Last Updated**: 2026-03-23
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -26,10 +26,11 @@ Authoritative active execution sources:
 
 Active adjacent execution sources:
 
-1. ~~elasticsearch-specialist-capability.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
-2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (archived in active/ for reference)
+1. ~~elasticsearch-specialist-capability.execution.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
+2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (deleted)
 3. [phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md) (HC-0: harness-concepts baseline)
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
+5. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
 
 ---
 
@@ -90,6 +91,7 @@ Adjacent:
   CLK:  Clerk specialist capability                  ✅ COMPLETE
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
+  PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 📋 PLANNED
   MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
   EXP:  Express specialist capability                📋 PLANNED
@@ -192,7 +194,7 @@ Adjacent:
 ### Adjacent — Elasticsearch Specialist Capability
 
 - Active plan:
-  [active/elasticsearch-specialist-capability.execution.plan.md](active/elasticsearch-specialist-capability.execution.plan.md)
+  [archive/completed/elasticsearch-specialist-capability.execution.plan.md](archive/completed/elasticsearch-specialist-capability.execution.plan.md)
 - Source strategy:
   [elasticsearch-specialist-capability.plan.md](current/elasticsearch-specialist-capability.plan.md)
 - Goal:
@@ -207,7 +209,7 @@ Adjacent:
 ### Adjacent — Codex Platform Parity
 
 - Active plan:
-  ~~active/codex-platform-parity.execution.plan.md~~ (archived)
+  ~~codex-platform-parity.execution.plan.md~~ (deleted)
 - Status: ✅ Complete
 - Done when:
   - Codex agent configuration exists with appropriate tool access and constraints

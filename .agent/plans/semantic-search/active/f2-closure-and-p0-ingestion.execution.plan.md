@@ -19,13 +19,13 @@ todos:
     status: done
   - id: operator-reingest
     content: "Operator executes admin stage, agent validates output."
-    status: pending
+    status: done
   - id: validate-staged-indexes
     content: "Validate staged indexes from stage output plus field-readback-audit --target-version (Task 2.2 evidence)."
     status: pending
   - id: promote-and-verify
     content: "Promote versioned indexes, verify aliases, run search smoke tests."
-    status: pending
+    status: done
   - id: production-retest-f1-f2
     content: "Production retest F1 (threadSlug) and F2 (category) with before/after evidence."
     status: pending
@@ -42,7 +42,7 @@ todos:
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 UNBLOCKED, operator re-ingest next; [pre-reingest remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) ✅ COMPLETE 2026-03-23)
+**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 stage + promote ✅ (v2026-03-24-091112, 15,910 docs) — Phase 3 production verification next; [pre-reingest remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) ✅ COMPLETE 2026-03-23)
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`

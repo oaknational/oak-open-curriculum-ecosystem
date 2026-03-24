@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 300
+fitness_line_count: 300
 split_strategy: 'Extract workspace-specific troubleshooting to workspace READMEs'
 ---
 

@@ -21,11 +21,11 @@ lane closed out:
    Scope: Fix S1–S5 + CLI-SDK boundary enforcement
    All phases complete. Ready for commit.
 
-3. F2 closure + P0 ingestion              🟡 UNBLOCKED — commit then operator re-ingest (2026-03-23)
+3. F2 closure + P0 ingestion              🟡 Phase 2 ✅ — production verification next (2026-03-24)
    Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
    Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
-   Phase 2: Re-ingest — Task 2.1 ✅ (runbook documented), Tasks 2.2–2.3 UNBLOCKED
-   Phase 3: Production verification (F1/F2 retest, closure)
+   Phase 2: Re-ingest — ✅ COMPLETE (v2026-03-24-091112 staged + promoted, 15,910 docs)
+   Phase 3: Production verification (F1/F2 retest, closure) — NEXT
 ```
 
 The pre-reingest remediation plan consolidates work items from the two

@@ -102,8 +102,8 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
-pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
+pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root)
+pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + portability:check + test:root-scripts + workspace/UI/E2E/smoke suites)
 
 # 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server

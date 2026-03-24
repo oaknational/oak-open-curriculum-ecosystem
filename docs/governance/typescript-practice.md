@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 150
+fitness_line_count: 150
 split_strategy: 'Extract detailed gotcha collections to a companion gotchas file; keep principles and patterns here'
 ---
 

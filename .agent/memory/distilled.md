@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 200
+fitness_line_count: 200
 split_strategy: "Extract settled entries to permanent docs (ADRs, governance, READMEs); this is the specialist refinement layer"
 ---
 
@@ -95,6 +95,12 @@ enough for permanent documentation.
   the `platform_core_search` tool to work
 - `_cat/indices` doc counts are inflated by ELSER chunking.
   See `docs/operations/elasticsearch-ingest-lifecycle.md`
+- ES Serverless shifts `_primary_term` during normal
+  operation; OCC-based updates (lease renewal) must retry
+  after fetching fresh `_seq_no`/`_primary_term` on 409
+- Lifecycle wrappers (`withLifecycleLease`) must return the
+  execution result when execution succeeds, even if the
+  side-channel (renewal) failed — leases are defence-in-depth
 
 ## Testing (Domain-Specific)
 

@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 150
+fitness_line_count: 150
 split_strategy: 'Extract growing sections to dedicated governance docs by responsibility'
 ---
 

@@ -23,6 +23,14 @@ Read and internalise these documents:
 
 Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs` (step 8).
 
+## Session Priority
+
+Apply session priority ordering:
+
+1. **Bugs first** — fix known defects before anything else
+2. **Unfinished planned work second** — complete in-progress items
+3. **New work last** — only start new items when the above are clear
+
 ## Guiding Questions
 
 Before diving in, pause and ask:
@@ -64,8 +72,13 @@ pnpm lint:fix           # Makes changes
 pnpm format:root        # Makes changes
 pnpm markdownlint:root  # Makes changes
 pnpm subagents:check    # After sub-agent definition changes
+pnpm portability:check  # After platform surface or hook changes
+pnpm test:root-scripts  # Repo-level script tests
 pnpm test
 pnpm test:e2e
 pnpm test:ui
 pnpm smoke:dev:stub
+
+# Informational practice health
+pnpm practice:fitness:informational  # Soft-ceiling report; not a blocking gate
 ```

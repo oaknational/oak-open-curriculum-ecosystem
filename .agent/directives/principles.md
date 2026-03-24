@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 200
+fitness_line_count: 200
 split_strategy: "Extract elaborated guidance to governance docs; this file is authoritative principles"
 ---
 
@@ -10,6 +10,10 @@ All of these principles MUST be followed at all times.
 ## First Question
 
 Always apply the first question; **Ask: could it be simpler _without compromising quality_?**. The answer will often be no, that is fine, but bring real critically thinking to the question each time.
+
+## Strict and Complete
+
+**Strict and complete, everywhere, all the time.** Prefer explicit, total, fully checked systems over permissive, partial, or hand-wavy ones. Do not invent optionality, fallback options, or implied enforcement. Type precision is one of the clearest concrete expressions of this tenet.
 
 ## Architectural Excellence Over Expediency
 

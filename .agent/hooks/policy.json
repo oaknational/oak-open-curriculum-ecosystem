@@ -1,0 +1,54 @@
+{
+  "description": "Canonical agent-hook policy for oak-mcp-ecosystem. Guardrail-only: grounding reminder, quality-gate reminder, and blocking dangerous git/history-bypass commands.",
+  "version": "1.0.0",
+  "hooks": {
+    "preToolUse": {
+      "blocked_patterns": [
+        "git push --force",
+        "git push -f",
+        "git reset --hard",
+        "git rebase -i",
+        "git --no-verify",
+        "git --no-gpg-sign",
+        "git clean -fd"
+      ],
+      "description": "Block shell commands that bypass safety guardrails or destroy history."
+    },
+    "sessionStart": {
+      "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/distilled.md before starting work.",
+      "practice_box_check": "Check .agent/practice-core/incoming/ for new Practice Core files.",
+      "description": "Remind the agent to ground itself at session start."
+    },
+    "preCommit": {
+      "quality_gate_reminder": "Run quality gates (pnpm qg) before committing.",
+      "description": "Remind the agent to run quality gates before committing."
+    }
+  },
+  "platform_support": {
+    "claude_code": {
+      "status": "supported",
+      "native_surface": ".claude/settings.json hooks.PreToolUse",
+      "notes": "Bash PreToolUse is natively activated for blocked-pattern enforcement. sessionStart and preCommit remain documented-only because grounding and quality-gate reminders already live in rules, skills, and onboarding flows."
+    },
+    "cursor": {
+      "status": "unsupported",
+      "native_surface": null,
+      "notes": "No native agent hook surface at time of writing."
+    },
+    "gemini_cli": {
+      "status": "unsupported",
+      "native_surface": null,
+      "notes": "No native agent hook surface at time of writing."
+    },
+    "github_copilot": {
+      "status": "unsupported",
+      "native_surface": null,
+      "notes": "No native agent hook surface at time of writing."
+    },
+    "codex": {
+      "status": "unsupported",
+      "native_surface": null,
+      "notes": "No native agent hook surface at time of writing."
+    }
+  }
+}

@@ -248,8 +248,8 @@ Separating the Authorization Server from the MCP server:
 - [RFC 9728: Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728)
 - Research: `research/mcp-demo-auth-approach.md`
 - Research: `research/clerk-unified-auth-mcp-nextjs.md`
-- Reference: `.agent/reference-docs/mcp-understanding-auth-in-mcp.md`
-- Reference: `.agent/reference-docs/mcp-auth-spec.md`
+- Reference: `.agent/reference/mcp-understanding-auth-in-mcp.md`
+- Reference: `.agent/reference/mcp-auth-spec.md`
 
 ## Timeline
 

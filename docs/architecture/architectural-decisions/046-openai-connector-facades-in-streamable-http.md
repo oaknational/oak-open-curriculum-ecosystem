@@ -65,5 +65,5 @@ Originally we hosted these tools on a separate `/openai_connector` transport. Th
 ## Links
 
 - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md`
-- OpenAI connector standards: `.agent/reference-docs/openai-connector-standards.md`
+- OpenAI connector standards: `.agent/reference/openai-connector-standards.md`
 - Current Streamable HTTP app: `apps/oak-curriculum-mcp-streamable-http/`

@@ -4,11 +4,11 @@ minVersion = "8.30.0"
 [extend]
 useDefault = true
 
-# `.agent/reference-docs/**` is third-party reference material. It can contain
+# `.agent/reference/**` is third-party reference material. It can contain
 # example tokens/keys that look like secrets; we intentionally ignore it.
 [[allowlists]]
-description = "Ignore third-party reference docs (.agent/reference-docs/**)"
-paths = ['''^\.agent/reference-docs/''']
+description = "Ignore third-party reference docs (.agent/reference/**)"
+paths = ['''^\.agent/reference/''']
 
 # Clerk publishable keys (`pk_test_...`, `pk_live_...`) are designed to be
 # public — they are embedded in client-side code per Clerk's security model.

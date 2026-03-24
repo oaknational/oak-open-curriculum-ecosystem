@@ -17,7 +17,7 @@ A useful guardrail is to run:
 pnpm secrets:scan:all
 ```
 
-Reference-document examples under `.agent/reference-docs/` are intentionally
+Reference-document examples under `.agent/reference/` are intentionally
 allowed to contain token-like examples; other files must use targeted line-level
 exceptions only if required.
 

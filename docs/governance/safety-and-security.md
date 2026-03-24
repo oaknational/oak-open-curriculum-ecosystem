@@ -32,7 +32,7 @@ line-specific allowlist comment:
 OAK_API_KEY=oak_example_token # gitleaks:allow
 ```
 
-Use path-level allowlisting only for `.agent/reference-docs/**`, which contains
+Use path-level allowlisting only for `.agent/reference/**`, which contains
 third-party examples.
 
 Escalation path:

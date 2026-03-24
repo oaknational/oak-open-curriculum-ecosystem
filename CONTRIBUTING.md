@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 400
+fitness_line_count: 400
 split_strategy: 'Extract detailed sections to docs/engineering/ or governance docs; keep contributor workflow here'
 ---
 
