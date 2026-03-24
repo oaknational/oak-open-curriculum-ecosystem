@@ -31,13 +31,16 @@ test-backed correctness in code and transforms.
   [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
 - Active parallel plan (starts after F2 promote):
   [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../../plans/semantic-search/active/bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
+- Active architecture extraction plan (not on the P0 critical path):
+  [search-ingestion-sdk-extraction.execution.plan.md](../../plans/semantic-search/active/search-ingestion-sdk-extraction.execution.plan.md)
 - Active findings register:
   [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
 - Critical path and queue:
   [current/README.md](../../plans/semantic-search/current/README.md)
 - Permanent contracts:
   [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md) (CLI-SDK boundary),
-  [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) (sequence semantic)
+  [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) (sequence semantic),
+  [ADR-140](../../../docs/architecture/architectural-decisions/140-search-ingestion-sdk-boundary.md) (ingestion SDK boundary)
 - Completed remediation (archived):
   [pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md)
 - Session bootstrap and lane-order authority: this prompt
@@ -85,6 +88,10 @@ verification and closure:
 3. **Lifecycle reliability:** Commit the uncommitted lease resilience fixes
    in `lifecycle-lease.ts` and `lifecycle-lease.integration.test.ts`
    (Phase 6a of [index-lifecycle-management plan](../../plans/semantic-search/active/index-lifecycle-management.execution.plan.md)).
+4. **Next architecture lane after P0 closure:** Start Phase 0 of
+   [search-ingestion-sdk-extraction.execution.plan.md](../../plans/semantic-search/active/search-ingestion-sdk-extraction.execution.plan.md),
+   using [ADR-140](../../../docs/architecture/architectural-decisions/140-search-ingestion-sdk-boundary.md)
+   as the permanent contract.
 
 ### Key facts for context
 

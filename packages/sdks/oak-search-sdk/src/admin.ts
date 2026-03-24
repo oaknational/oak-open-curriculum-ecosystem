@@ -19,6 +19,12 @@ export {
   inspectLease,
   readIndexMeta,
   writeIndexMeta,
+  cleanupOrphanedIndexes,
+  extractVersionFromIndexName,
+  identifyOrphanedVersions,
+  extractLiveVersions,
+  validateVersionDeletion,
+  resolveOrphanedVersions,
 } from './admin/index.js';
 export {
   SEARCH_INDEX_TARGETS,
@@ -64,3 +70,4 @@ export type {
   AliasHealthEntry,
 } from './types/index.js';
 export type { LifecycleLease, LeaseStatus } from './admin/lifecycle-lease.js';
+export type { OrphanedVersion, DeletionValidation, OrphanResolution } from './admin/index.js';

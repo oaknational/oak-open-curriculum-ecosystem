@@ -9,36 +9,36 @@ overview: >
 todos:
   - id: lease-renewal-resilience
     content: "Commit uncommitted fixes: startRenewalLoop transient recovery, withLifecycleLease execution-result preservation, renewalInFlight guard."
-    status: pending
+    status: complete
   - id: cli-delete-version
     content: "Add `admin delete-version <version>` CLI command exposing cleanupOrphanedIndexes."
-    status: pending
+    status: complete
   - id: cli-list-orphans
     content: "Add `admin list-orphans` CLI command that identifies indexes not pointed to by any alias and not the metadata previous_version."
-    status: pending
+    status: complete
   - id: cli-cleanup-orphans
     content: "Add `admin cleanup-orphans` CLI command that lists then deletes orphaned indexes (with --dry-run default)."
-    status: pending
+    status: complete
   - id: alias-aware-cleanup
     content: "Make cleanupOldGenerations alias-aware: skip deletion of the metadata previous_version."
-    status: pending
+    status: complete
   - id: stage-interruption-safety
     content: "Add pre-stage orphan check: before creating new indexes, detect and warn about existing staged-but-unpromoted versions."
-    status: pending
+    status: complete
   - id: lease-ttl-enforcement
     content: "Make acquireLease check expires_at before failing with 409; add admin release-lease CLI command."
     status: complete
   - id: tests
     content: "TDD for all new SDK functions and CLI commands."
-    status: pending
+    status: complete
   - id: docs-and-adr
     content: "Update ADR-130, INDEXING.md, and CLI README with new commands and lifecycle semantics."
-    status: pending
+    status: complete
 ---
 
 # Index Lifecycle Management
 
-**Status**: In Progress (Phase 6 complete, Phase 6a uncommitted)
+**Status**: Complete (all phases implemented and tested)
 **Scope**: CLI commands and SDK fixes for cohesive index lifecycle management
 **Branch**: `feat/es_index_update`
 **Priority**: P0 for Phase 6a (blocks reliable ingest), P1 for remaining phases

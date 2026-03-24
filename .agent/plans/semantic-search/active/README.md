@@ -7,6 +7,7 @@ Executable plans currently in flight.
 | [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 staged + promoted (v2026-03-24-091112); Phase 3 verification next |
 | [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md) | Canonical bulk policy, TDD merge for duplicate lesson ids, bulk-vs-API field matrix, thread/sequence naming, MCP+CLI validation after F2 promote | 🟡 Planning — execution starts after F2 promote (or merge work can begin in branch in parallel) |
 | [index-lifecycle-management.execution.plan.md](./index-lifecycle-management.execution.plan.md) | CLI commands for orphan detection/deletion, alias-aware generation cleanup, lease resilience, pre-stage orphan warning | 🟡 In progress — Phase 6 ✅, Phase 6a uncommitted, Phases 1-5 pending |
+| [search-ingestion-sdk-extraction.execution.plan.md](./search-ingestion-sdk-extraction.execution.plan.md) | Extract Oak-specific ingestion runtime into `@oaknational/oak-search-ingestion-sdk`, keep CLI thin, and document the internal-consumer adoption path | 🟡 Planning — boundary locked in ADR-140; execution starts after overlap audit and lane sequencing |
 
 Supporting documents (updated alongside the plans):
 

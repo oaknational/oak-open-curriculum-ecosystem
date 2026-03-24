@@ -47,6 +47,12 @@ symbols.
 
 These constraints are enforced by package surface design and lint fitness rules.
 
+Amendment (2026-03-24): [ADR-140](140-search-ingestion-sdk-boundary.md)
+moves Oak-specific ingestion runtime out of the CLI long term. This ADR still
+governs Search SDK capability separation and thin CLI ownership; any remaining
+CLI-local ownership for `src/lib/indexing/**` or `src/adapters/**` is
+transitional until the extraction completes.
+
 ### 3. Experiments policy
 
 Experiments are supported as a deliberate extension path, but no speculative
@@ -82,18 +88,18 @@ Implementation evidence includes:
 
 ### 5. Ownership matrix
 
-| Module family                                                         | Owner             | Boundary status                                          |
-| --------------------------------------------------------------------- | ----------------- | -------------------------------------------------------- |
-| `apps/oak-search-cli/src/cli/search/**`                               | CLI               | Read-only (`/read`)                                      |
-| `apps/oak-search-cli/src/cli/admin/**`                                | CLI               | Admin (`/admin`)                                         |
-| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts`       | CLI               | Read-safe config                                         |
-| `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts` | CLI admin lane    | Admin-only orchestration                                 |
-| `apps/oak-search-cli/src/lib/indexing/**`                             | CLI admin-support | Admin (`/admin`)                                         |
-| `apps/oak-search-cli/src/adapters/**`                                 | CLI admin-support | Admin (`/admin`)                                         |
-| `apps/oak-search-cli/src/lib/hybrid-search/**`                        | CLI               | Request assembly only; delegates retriever shapes to SDK |
-| `packages/sdks/oak-search-sdk/src/retrieval/**`                       | SDK               | Canonical owner                                          |
-| `packages/sdks/oak-search-sdk/src/admin/**`                           | SDK               | Canonical owner                                          |
-| `packages/sdks/oak-search-sdk/src/internal/**`                        | SDK internal      | No root leakage                                          |
+| Module family                                                         | Owner                          | Boundary status                                            |
+| --------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------- |
+| `apps/oak-search-cli/src/cli/search/**`                               | CLI                            | Read-only (`/read`)                                        |
+| `apps/oak-search-cli/src/cli/admin/**`                                | CLI                            | Admin (`/admin`)                                           |
+| `apps/oak-search-cli/src/cli/shared/build-search-sdk-config.ts`       | CLI                            | Read-safe config                                           |
+| `apps/oak-search-cli/src/cli/admin/shared/build-lifecycle-service.ts` | CLI admin lane                 | Admin-only orchestration                                   |
+| `apps/oak-search-cli/src/lib/indexing/**`                             | Transitional CLI admin-support | Admin (`/admin`) today; moves to ingestion SDK per ADR-140 |
+| `apps/oak-search-cli/src/adapters/**`                                 | Transitional CLI admin-support | Admin (`/admin`) today; moves to ingestion SDK per ADR-140 |
+| `apps/oak-search-cli/src/lib/hybrid-search/**`                        | CLI                            | Request assembly only; delegates retriever shapes to SDK   |
+| `packages/sdks/oak-search-sdk/src/retrieval/**`                       | SDK                            | Canonical owner                                            |
+| `packages/sdks/oak-search-sdk/src/admin/**`                           | SDK                            | Canonical owner                                            |
+| `packages/sdks/oak-search-sdk/src/internal/**`                        | SDK internal                   | No root leakage                                            |
 
 #### SDK-owned capability families
 

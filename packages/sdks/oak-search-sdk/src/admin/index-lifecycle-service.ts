@@ -1,8 +1,7 @@
 import type { Result } from '@oaknational/result';
-import { ok, err } from '@oaknational/result';
+import { ok } from '@oaknational/result';
 import type { AdminError, IngestResult } from '../types/admin-types.js';
 import type {
-  AliasTargetMap,
   AliasLifecycleDeps,
   AliasLifecycleService,
   IndexLifecycleDeps,
@@ -11,15 +10,11 @@ import type {
   VersionedIngestOptions,
   VersionedIngestResult,
 } from '../types/index-lifecycle-types.js';
-import {
-  buildSwapActions,
-  buildRollbackSwaps,
-  buildIngestMeta,
-} from './lifecycle-swap-builders.js';
 import { cleanupOldGenerations, cleanupOrphanedIndexes } from './lifecycle-cleanup.js';
+import { resolveOrphanedVersions } from './lifecycle-orphan-detection.js';
+import { swapAndCommit } from './lifecycle-ingest-swap.js';
 import { rollback, validateAliases } from './lifecycle-rollback.js';
 import { promote } from './lifecycle-promote.js';
-import { enforceMetadataAliasCoherence } from './lifecycle-meta-alias-coherence.js';
 
 const DEFAULT_MIN_DOC_COUNT = 1;
 
@@ -98,8 +93,17 @@ async function stage(
   }
   const previousVersion = metaResult.value?.version ?? null;
   const version = deps.generateVersion();
+  await warnIfOrphansExist(deps);
   deps.logger?.info('Starting staged ingest', { version, previousVersion });
 
+  return stageCreateAndIngest(deps, version, previousVersion, options);
+}
+async function stageCreateAndIngest(
+  deps: IndexLifecycleDeps,
+  version: string,
+  previousVersion: string | null,
+  options: VersionedIngestOptions,
+): Promise<Result<StageResult, AdminError>> {
   const createResult = await deps.createVersionedIndexes(version);
   if (!createResult.ok) {
     return createResult;
@@ -112,89 +116,19 @@ async function stage(
   }
 
   deps.logger?.info('Stage complete — indexes ready for promotion', { version });
-  return ok({
-    version,
-    ingestResult: ingestResult.value,
-    previousVersion,
+  return ok({ version, ingestResult: ingestResult.value, previousVersion });
+}
+/** Warn if orphaned versions exist before starting a new stage. */
+async function warnIfOrphansExist(deps: IndexLifecycleDeps): Promise<void> {
+  const result = await resolveOrphanedVersions(deps);
+  if (!result.ok || result.orphans.length === 0) {
+    return;
+  }
+  const orphanVersions = result.orphans.map((o) => o.version);
+  deps.logger?.warn('Orphaned versions detected — consider running cleanup-orphans', {
+    orphanCount: orphanVersions.length,
+    orphanVersions,
   });
-}
-async function swapAndCommit(
-  deps: IndexLifecycleDeps,
-  version: string,
-  previousVersion: string | null,
-  subjectFilter: readonly string[] | undefined,
-  startTime: number,
-): Promise<Result<void, AdminError>> {
-  const aliasResult = await deps.resolveCurrentAliasTargets();
-  if (!aliasResult.ok) {
-    return aliasResult;
-  }
-  const coherenceResult = enforceMetadataAliasCoherence(
-    previousVersion,
-    aliasResult.value,
-    'versioned-ingest',
-  );
-  if (!coherenceResult.ok) {
-    return coherenceResult;
-  }
-
-  const swaps = buildSwapActions(aliasResult.value, version, deps.target);
-  const swapResult = await deps.atomicAliasSwap(swaps);
-  if (!swapResult.ok) {
-    return swapResult;
-  }
-
-  const durationMs = Date.now() - startTime;
-  const newMeta = buildIngestMeta(version, previousVersion, subjectFilter, durationMs);
-  const writeResult = await deps.writeIndexMeta(newMeta);
-  if (!writeResult.ok) {
-    const rollbackResult = await attemptMetaFailureRollback(
-      deps,
-      aliasResult.value,
-      version,
-      writeResult.error.message,
-    );
-    if (!rollbackResult.ok) {
-      return rollbackResult;
-    }
-    return writeResult;
-  }
-  return ok(undefined);
-}
-async function attemptMetaFailureRollback(
-  deps: IndexLifecycleDeps,
-  originalTargets: AliasTargetMap,
-  version: string,
-  metaErrorMessage: string,
-): Promise<Result<void, AdminError>> {
-  deps.logger?.error('Metadata write failed, rolling back aliases', { version });
-  const swapsResult = buildRollbackSwaps(originalTargets, version, deps.target);
-  if (!swapsResult.ok) {
-    deps.logger?.error('Cannot build rollback swaps', { error: swapsResult.error.message });
-    return err({
-      type: 'validation_error',
-      message:
-        `CRITICAL: Metadata write failed and rollback swaps cannot be built. ` +
-        `Aliases are pointing to version ${version}. Manual intervention required. ` +
-        `Meta error: ${metaErrorMessage}. Build error: ${swapsResult.error.message}`,
-    });
-  }
-  const rollbackSwapResult = await deps.atomicAliasSwap(swapsResult.value);
-  if (!rollbackSwapResult.ok) {
-    deps.logger?.error('Metadata write failed and rollback swap also failed', {
-      version,
-      metaError: metaErrorMessage,
-      rollbackError: rollbackSwapResult.error.message,
-    });
-    return err({
-      type: 'validation_error',
-      message:
-        `CRITICAL: Metadata write failed and alias rollback also failed. ` +
-        `Aliases are pointing to version ${version}. Manual intervention required. ` +
-        `Meta error: ${metaErrorMessage}. Rollback error: ${rollbackSwapResult.error.message}`,
-    });
-  }
-  return ok(undefined);
 }
 async function versionedIngest(
   deps: IndexLifecycleDeps,
@@ -218,7 +152,8 @@ async function versionedIngest(
     return committed;
   }
 
-  const cleanupResult = await cleanupOldGenerations(deps);
+  const protectedVersions = previousVersion ? new Set([previousVersion]) : undefined;
+  const cleanupResult = await cleanupOldGenerations(deps, protectedVersions);
   if (cleanupResult.failed > 0) {
     deps.logger?.warn('Some old indexes failed to delete during cleanup', {
       deleted: cleanupResult.deleted,

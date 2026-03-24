@@ -1,7 +1,5 @@
 /**
  * Lease renewal, release, inspection, and force-release operations.
- *
- * @module
  */
 
 import type { Client } from '@elastic/elasticsearch';

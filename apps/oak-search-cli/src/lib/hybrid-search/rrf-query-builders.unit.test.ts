@@ -221,13 +221,13 @@ describe('buildSequenceRrfRequest (two-way RRF, SDK-delegated)', () => {
     const semanticFilter = getStandardRetriever(request, 1)?.filter;
 
     expect(bm25Filter).toEqual(semanticFilter);
-    expect(bm25Filter).toEqual({
-      bool: {
-        filter: expect.arrayContaining([
-          { term: { subject_slug: 'science' } },
-          { term: { key_stages: 'ks3' } },
-        ]) as unknown,
-      },
-    });
+    const filterClauses = !Array.isArray(bm25Filter) ? bm25Filter?.bool?.filter : undefined;
+    expect(filterClauses).toBeDefined();
+    expect(filterClauses).toEqual(
+      expect.arrayContaining([
+        { term: { subject_slug: 'science' } },
+        { term: { key_stages: 'ks3' } },
+      ]),
+    );
   });
 });

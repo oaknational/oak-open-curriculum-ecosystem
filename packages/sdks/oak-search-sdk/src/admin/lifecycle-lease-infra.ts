@@ -5,8 +5,6 @@
  * - `lifecycle-lease-infra-shared` — types, constants, pure helpers
  * - `lifecycle-lease-infra-acquire` — index bootstrapping and acquisition
  * - `lifecycle-lease-infra-renew-release` — renewal, release, inspection
- *
- * @module
  */
 
 export {

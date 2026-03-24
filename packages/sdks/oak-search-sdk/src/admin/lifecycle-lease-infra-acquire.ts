@@ -1,8 +1,6 @@
 /**
  * Lease acquisition: index bootstrapping, expired-lease supersession,
  * and the public {@link acquireLease} entry point.
- *
- * @module
  */
 
 import type { Client } from '@elastic/elasticsearch';

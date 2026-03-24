@@ -411,3 +411,16 @@ construction (app-specific) and request assembly (CLI-specific).
 - When `git status` shows a modified file but `git diff` appears empty, check
   `git diff --cached` before editing — staged-only changes can hide in-flight
   work that still needs preserving.
+
+---
+
+## Session 2026-03-24 — Consolidate docs for ingestion SDK boundary
+
+### Lessons
+
+- If an active plan locks a new architecture boundary, extract the settled
+  doctrine into an ADR immediately; do not leave the plan as the only
+  authoritative source.
+- Consolidate-docs for plan work must also update the semantic-search prompt and
+  active index surfaces, otherwise the new canonical plan remains hard to
+  discover.

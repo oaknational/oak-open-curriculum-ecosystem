@@ -35,8 +35,10 @@ sequence documents must populate it as a required, non-empty field.
 
 ### 2. Ownership split is explicit
 
-- `apps/oak-search-cli` ingestion/indexing owns production and validation of
+- `@oaknational/oak-search-ingestion-sdk` owns production and validation of
   `sequence_semantic` in indexed documents.
+- Until that extraction lands, any CLI-local implementation is transitional
+  technical debt under [ADR-140](140-search-ingestion-sdk-boundary.md).
 - `@oaknational/oak-search-sdk/read` owns sequence retrieval shape, filters, and
   query semantics.
 - CLI runtime search must consume SDK retrieval helpers. Any remaining

@@ -3,8 +3,6 @@
  * infrastructure. Sibling modules (`-acquire`, `-renew-release`)
  * import from here; the barrel (`lifecycle-lease-infra.ts`) re-exports
  * the public surface.
- *
- * @module
  */
 
 import { ok, err, type Result } from '@oaknational/result';

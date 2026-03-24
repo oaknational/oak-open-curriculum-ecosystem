@@ -23,6 +23,18 @@ export {
 } from './lifecycle-lease.js';
 export { readIndexMeta, writeIndexMeta } from './index-meta.js';
 export {
+  cleanupOrphanedIndexes,
+  extractVersionFromIndexName,
+  identifyOrphanedVersions,
+} from './lifecycle-cleanup.js';
+export type { OrphanedVersion } from './lifecycle-cleanup.js';
+export {
+  extractLiveVersions,
+  validateVersionDeletion,
+  resolveOrphanedVersions,
+} from './lifecycle-orphan-detection.js';
+export type { DeletionValidation, OrphanResolution } from './lifecycle-orphan-detection.js';
+export {
   BASE_INDEX_NAMES,
   SEARCH_INDEX_TARGETS,
   resolveAliasName,

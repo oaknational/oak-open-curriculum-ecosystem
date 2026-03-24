@@ -39,6 +39,11 @@ import {
   registerReleaseLeaseCmd,
 } from './admin-lifecycle-lease-commands.js';
 import { registerCountCmd } from './admin-count-command.js';
+import { registerDeleteVersionCmd } from './admin-lifecycle-cleanup-commands.js';
+import {
+  registerListOrphansCmd,
+  registerCleanupOrphansCmd,
+} from './admin-lifecycle-orphan-commands.js';
 
 /**
  * Create the `admin` subcommand group.
@@ -77,6 +82,9 @@ export function adminCommand(cliEnv: SearchCliEnv): Command {
   registerInspectLeaseCmd(cmd, cliEnv);
   registerReleaseLeaseCmd(cmd, cliEnv);
   registerCountCmd(cmd, cliEnv);
+  registerDeleteVersionCmd(cmd, cliEnv);
+  registerListOrphansCmd(cmd, cliEnv);
+  registerCleanupOrphansCmd(cmd, cliEnv);
 
   return cmd;
 }

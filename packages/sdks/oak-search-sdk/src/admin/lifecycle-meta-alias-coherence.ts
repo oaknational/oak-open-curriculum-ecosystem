@@ -2,17 +2,18 @@ import { ok, err, type Result } from '@oaknational/result';
 import { typeSafeValues } from '@oaknational/type-helpers';
 import type { AdminError } from '../types/admin-types.js';
 import type { AliasTargetMap } from '../types/index-lifecycle-types.js';
+import { extractVersionFromIndexName } from './lifecycle-version-identity.js';
 
-function extractVersionFromIndexName(indexName: string): Result<string, AdminError> {
-  const marker = '_v';
-  const markerIndex = indexName.lastIndexOf(marker);
-  if (markerIndex < 0 || markerIndex + marker.length >= indexName.length) {
+/** Extract the version, returning a Result error if not parseable. */
+function extractVersionOrError(indexName: string): Result<string, AdminError> {
+  const version = extractVersionFromIndexName(indexName);
+  if (version === null) {
     return err({
       type: 'validation_error',
       message: `Alias target "${indexName}" is not a versioned index name`,
     });
   }
-  return ok(indexName.slice(markerIndex + 1));
+  return ok(version);
 }
 
 function resolveAliasVersion(targets: AliasTargetMap): Result<string | null, AdminError> {
@@ -25,7 +26,7 @@ function resolveAliasVersion(targets: AliasTargetMap): Result<string | null, Adm
       continue;
     }
 
-    const versionResult = extractVersionFromIndexName(targetInfo.targetIndex);
+    const versionResult = extractVersionOrError(targetInfo.targetIndex);
     if (!versionResult.ok) {
       return versionResult;
     }

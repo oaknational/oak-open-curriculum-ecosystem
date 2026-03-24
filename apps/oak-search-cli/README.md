@@ -38,12 +38,12 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 ## CLI Commands (`oaksearch`)
 
-| Command Group       | Subcommands                                                                                                                      | SDK Service            |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                                                                              | `RetrievalService`     |
-| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, versioned-ingest, stage, promote, rollback, validate-aliases, verify, download, ... | `AdminService`         |
-| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen                                                               | Pass-through           |
-| `oaksearch observe` | telemetry, summary, purge                                                                                                        | `ObservabilityService` |
+| Command Group       | Subcommands                                                                                                                                                                                              | SDK Service            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                                                                                                                                                      | `RetrievalService`     |
+| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, versioned-ingest, stage, promote, rollback, validate-aliases, inspect-lease, release-lease, delete-version, list-orphans, cleanup-orphans, verify, download | `AdminService`         |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen                                                                                                                                       | Pass-through           |
+| `oaksearch observe` | telemetry, summary, purge                                                                                                                                                                                | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
 
