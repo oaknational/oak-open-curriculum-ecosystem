@@ -59,7 +59,7 @@ landed, and the latest lane-alignment commit is `3630405b`. Core commits:
 **Phase 2** (re-ingest): ✅ COMPLETE — `admin stage` succeeded
 (v2026-03-24-091112), `admin promote` completed, aliases verified, 15,910
 parent docs across 5 index types. Two lifecycle incidents resolved during
-this phase (see [index-lifecycle-management plan](../../plans/semantic-search/active/index-lifecycle-management.execution.plan.md)).
+this phase (see [index-lifecycle-management plan](../../plans/semantic-search/archive/completed/index-lifecycle-management.execution.plan.md)).
 **Phase 3** (production verification): **NEXT** — retest F1/F2 findings.
 
 ### Pre-reingest remediation + CLI-SDK boundary enforcement (COMPLETE)
@@ -87,7 +87,7 @@ verification and closure:
    Consolidate docs.
 3. **Lifecycle reliability:** Commit the uncommitted lease resilience fixes
    in `lifecycle-lease.ts` and `lifecycle-lease.integration.test.ts`
-   (Phase 6a of [index-lifecycle-management plan](../../plans/semantic-search/active/index-lifecycle-management.execution.plan.md)).
+   (Phase 6a of [index-lifecycle-management plan](../../plans/semantic-search/archive/completed/index-lifecycle-management.execution.plan.md)).
 4. **Next architecture lane after P0 closure:** Start Phase 0 of
    [search-ingestion-sdk-extraction.execution.plan.md](../../plans/semantic-search/active/search-ingestion-sdk-extraction.execution.plan.md),
    using [ADR-140](../../../docs/architecture/architectural-decisions/140-search-ingestion-sdk-boundary.md)
