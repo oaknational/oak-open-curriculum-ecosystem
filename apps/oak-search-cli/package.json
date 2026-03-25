@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "test": "NODE_OPTIONS='--max-old-space-size=6144' vitest run",
+    "test": "vitest run",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:watch": "vitest",

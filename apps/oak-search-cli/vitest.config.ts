@@ -17,6 +17,11 @@ export default defineConfig({
     // See: test-isolation-architecture-fix.md
     isolate: true,
     pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: process.env['CI'] ? 2 : undefined,
+      },
+    },
     exclude: [
       '**/*.e2e.test.ts',
       'node_modules',

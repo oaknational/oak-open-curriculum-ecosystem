@@ -112,7 +112,7 @@ jobs:
           # --reporter=verbose: prints each test file as it starts/finishes
           # --logHeapUsage: shows heap usage per test file
           # --testTimeout=30000: prevent individual tests from hanging forever
-          NODE_OPTIONS='--max-old-space-size=6144' npx vitest run \
+          npx vitest run \
             --reporter=verbose \
             --logHeapUsage \
             --testTimeout=30000 \
