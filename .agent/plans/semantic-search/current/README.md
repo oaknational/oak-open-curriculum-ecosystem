@@ -21,8 +21,8 @@ When work starts, promote the selected plan into `../active/`.
 |---|---|---|---|
 | P0 (done) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Restore SDK-owned 2-way RRF for sequences by populating `sequence_semantic` from ordered unit summaries via the shared unit semantic generator, with fail-fast ingest rules | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
 | P0 (done) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
-| — | [codegen-schema-error-response-adaptation.plan.md](./codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Complete (2026-03-20) |
-| — | [error-response-classification.plan.md](./error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Complete (2026-03-20) |
+| — | [codegen-schema-error-response-adaptation.plan.md](../archive/completed/codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Archived (2026-03-20) |
+| — | [error-response-classification.plan.md](../archive/completed/error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Archived (2026-03-20) |
 | P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Reference lane for the underlying versioned-ingestion architecture; the active F2 closure plan is the operator source of truth for the remaining stage/validate/promote steps | 📋 Partially complete; final operator steps now run through the active F2 closure plan |
 | P1+ | Future work — to be re-evaluated after P0 closure | | |
 

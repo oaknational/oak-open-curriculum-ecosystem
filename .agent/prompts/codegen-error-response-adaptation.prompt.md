@@ -11,7 +11,7 @@ last_updated: 2026-03-20
 ## Entry documents (read in order)
 
 1. `.agent/directives/AGENT.md`
-2. `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`
+2. `.agent/plans/semantic-search/archive/completed/codegen-schema-error-response-adaptation.plan.md`
    — **this is the source of truth**; the plan contains full investigation
    findings, root-cause analysis, and the phased TDD execution sequence.
 

@@ -391,5 +391,5 @@ Must update when work lands:
 
 1. `../../../developer-experience/future/sdk-publishing-and-versioning-plan.md`
    — future promotion path to formal package publishing
-2. `../../../semantic-search/active/search-sdk-args-extraction.plan.md` —
+2. `../../../semantic-search/current/search-sdk-args-extraction.plan.md` —
    nearby search-SDK surface work that may influence final export ergonomics

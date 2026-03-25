@@ -11,7 +11,7 @@ last_updated: 2026-03-20
 ## Ground yourself
 
 1. `.agent/directives/AGENT.md`
-2. `.agent/plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md`
+2. `.agent/plans/semantic-search/archive/completed/codegen-schema-error-response-adaptation.plan.md`
    — **read the full plan**. It contains complete investigation findings,
    root-cause analysis for both bugs, and the phased TDD execution sequence.
    Do not re-investigate — go straight to implementation.

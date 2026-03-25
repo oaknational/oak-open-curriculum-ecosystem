@@ -50,7 +50,7 @@ isProject: false
 - [Indexing Module README](../../../../apps/oak-search-cli/src/lib/indexing/README.md)
 - [index-lifecycle-management.execution.plan.md](./index-lifecycle-management.execution.plan.md)
 - [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
-- [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md)
+- [f2-closure-and-p0-ingestion.execution.plan.md](../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md)
 - [sdk-workspace-separation.md](../archive/completed/sdk-workspace-separation.md)
 
 ## First Question
@@ -249,7 +249,7 @@ This plan overlaps with active work in:
 
 - [index-lifecycle-management.execution.plan.md](./index-lifecycle-management.execution.plan.md)
 - [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
-- [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md)
+- [f2-closure-and-p0-ingestion.execution.plan.md](../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md)
 
 The extraction work must begin with an explicit overlap audit so that:
 

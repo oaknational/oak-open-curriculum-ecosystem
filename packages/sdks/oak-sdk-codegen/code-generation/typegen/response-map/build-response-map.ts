@@ -1,3 +1,37 @@
+/**
+ * Response-map builder for the codegen pipeline.
+ *
+ * Walks the OpenAPI schema and produces a flat array of {@link ResponseMapEntry}
+ * records — one per operation/status combination plus wildcard entries for
+ * shared error schemas. Downstream consumers:
+ *
+ * - **Emitter** (`emit-response-validators.ts`): generates Zod-based
+ *   response validators from the entries. Uses `getWildcardRecord()` for
+ *   shared error schemas.
+ * - **Descriptor helpers** (`build-response-descriptor-helpers.ts`): merges
+ *   wildcard entries as a base layer under each operation descriptor.
+ * - **Cross-validator** (`cross-validate.ts`): validates that the response
+ *   map is consistent with the schema — mirrors the wildcard consolidation
+ *   logic to produce matching expected keys.
+ *
+ * ### Wildcard consolidation
+ *
+ * When every operation references the same single `$ref` component for a
+ * given status code (e.g. all 26 endpoints share `error.BAD_REQUEST` for
+ * 400), the builder emits an additional wildcard entry (`operationId: '*'`).
+ * This avoids N duplicate entries in the generated validator map. The
+ * emitter and descriptor helpers already handle wildcards; the
+ * cross-validator was updated to mirror this logic (see ADR-065 item 6).
+ *
+ * ### Component name sanitisation
+ *
+ * Component names from `$ref` (e.g. `error.BAD_REQUEST`) are sanitised via
+ * {@link sanitizeIdentifier} to match the keys in the generated Zod schema
+ * registry (e.g. `error_BAD_REQUEST`). Sanitisation happens at the entry
+ * point in {@link collectResponses} to ensure all downstream consumers
+ * receive consistent identifiers.
+ */
+
 import type {
   OpenAPIObject,
   OperationObject,

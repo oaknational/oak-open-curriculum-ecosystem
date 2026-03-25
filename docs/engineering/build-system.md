@@ -253,7 +253,7 @@ This was caused by a race condition where tests ran before SDK build completed. 
 This indicates core packages weren't built before type-check ran. Ensure:
 
 1. `oak-eslint` has a `build` script (not `build-linting`)
-2. `turbo.json` `type-check` depends on `["^build", "sdk-codegen"]`
+2. The generic `type-check` task in `turbo.json` depends on `["^build"]`. Only `@oaknational/sdk-codegen` has a package-specific override adding `sdk-codegen` (see ADR-065 items 6–7)
 3. Run `pnpm clean && pnpm build`
 
 ### Slow repeated runs

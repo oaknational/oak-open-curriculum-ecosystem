@@ -73,7 +73,7 @@ The next execution sequence is currently:
    [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
    and deploy that migration work.
 4. The first graph-enablement slice has now been promoted into
-   [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md).
+   [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md).
    Use its outputs to decide whether the next graph promotion is separate Neo4j
    provisioning, Elasticsearch projection work, or explanation-first graph
    augmentation.
@@ -176,7 +176,7 @@ Graph-augmented curriculum navigation begins to surface.
      metadata visible in Claude Desktop / ChatGPT tool listings)
 3. **Knowledge graph alignment audit** (intention #4)
    - First graph-enablement slice:
-     [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md)
+     [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md)
    - Outputs inform whether next graph promotion is separate Neo4j
      provisioning, Elasticsearch projection work, or explanation-first
      graph augmentation
@@ -216,7 +216,7 @@ platform reach.
      [sentry-otel-integration.execution.plan.md](architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
      — reference implementation exists in `starter-app-spike`
 3. **Knowledge graph alignment** (if not completed in M2)
-   - [kg-alignment-audit.execution.plan.md](semantic-search/active/kg-alignment-audit.execution.plan.md)
+   - [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md)
 4. **Exemplar MCP App UI experience (`user_search` tool)**
    - New user-facing search tool (`user_search`/`userSearch`) with the same
      capabilities as the existing `search` tool but designed for interactive

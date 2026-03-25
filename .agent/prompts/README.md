@@ -21,8 +21,8 @@ handover records for specific completed remediations.
 
 | Prompt | Status | Purpose | Primary plan/reference |
 |---|---|---|---|
-| [codegen-error-response-adaptation.prompt.md](codegen-error-response-adaptation.prompt.md) | complete | Investigation and phased TDD execution brief for codegen error-response adaptation | [codegen-schema-error-response-adaptation.plan.md](../plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md) |
-| [codegen-error-response-implementation.prompt.md](codegen-error-response-implementation.prompt.md) | complete | Implementation-session companion for the same codegen remediation, with explicit bug order and verification steps | [codegen-schema-error-response-adaptation.plan.md](../plans/semantic-search/current/codegen-schema-error-response-adaptation.plan.md) |
+| [codegen-error-response-adaptation.prompt.md](codegen-error-response-adaptation.prompt.md) | complete | Investigation and phased TDD execution brief for codegen error-response adaptation | [codegen-schema-error-response-adaptation.plan.md](../plans/semantic-search/archive/completed/codegen-schema-error-response-adaptation.plan.md) |
+| [codegen-error-response-implementation.prompt.md](codegen-error-response-implementation.prompt.md) | complete | Implementation-session companion for the same codegen remediation, with explicit bug order and verification steps | [codegen-schema-error-response-adaptation.plan.md](../plans/semantic-search/archive/completed/codegen-schema-error-response-adaptation.plan.md) |
 | [semantic-search/pr-67-snagging-triage.prompt.md](semantic-search/pr-67-snagging-triage.prompt.md) | completed | Item-by-item PR snagging and triage workflow for semantic-search PR `#67` | [short-term-pr-snagging.plan.md](../plans/semantic-search/archive/completed/short-term-pr-snagging.plan.md) |
 
 ## Archives

@@ -59,10 +59,7 @@ enough for permanent documentation.
   **Decomposition**: strategic plan at
   `.agent/plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`
   (M1 prerequisite satisfied, awaiting promotion).
-  **Turbo overrides** (`#build`, `#test`, `#type-check`, `#lint`,
-  `#lint:fix`) are temporary — see turbo boundary fix plan at
-  `.agent/plans/semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md`.
-  B2 pure-function extractions done; B1 tests deferred to decomposition.
+  Turbo overrides are temporary — see ADR-065.
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks
@@ -151,11 +148,8 @@ enough for permanent documentation.
 
 ## Build System (Domain-Specific)
 
-- Turbo `--concurrency=N` masks dependency bugs, does not
-  fix them — fix the dependency graph instead
-- Within-workspace build deps need turbo overrides;
-  across-workspace, `^build` handles them. The workspace
-  boundary IS the dependency declaration
+- Turbo dependency model: see ADR-065 (items 6–7) for
+  overrides, phantom tasks, and `^build` ordering
 
 ## Architecture (Domain-Specific)
 
