@@ -302,6 +302,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/keywords": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Keywords
+         * This endpoint returns a list of keywords for a given key stage and subject, based on the keywords associated with the lessons that are available for that key stage and subject. The keywords are returned in order of frequency, with the most common keywords appearing first.
+         */
+        get: operations["getKeywords-getKeywords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/lessons/{lesson}/quiz": {
         parameters: {
             query?: never;
@@ -3688,6 +3708,60 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+        };
+    };
+    "getKeywords-getKeywords": {
+        parameters: {
+            query?: {
+                subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
+                phase?: "primary" | "secondary";
+                unit?: string;
+                lesson?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** Successful response */
+            200: {
+                headers?: never;
+                content: {
+                    "application/json": {
+                        /**
+                         * The keyword text
+                         * @example non-finite clause
+                         */
+                        keyword: string;
+                        /**
+                         * A description of the keyword
+                         * @example a type of subordinate clause that can start with a verb in the progressive tense
+                         */
+                        description: string;
+                        /**
+                         * The key stage slug associated with this keyword
+                         * @example ks2
+                         */
+                        keyStageSlug: string;
+                        /**
+                         * The subject slug associated with this keyword
+                         * @example science
+                         */
+                        subjectSlug: string;
+                        /**
+                         * The different lesson slugs where this keyword is used
+                         * @example [
+                         *       "a-new-sentence-structure-the-non-finite-complex-sentence",
+                         *       "using-the-comma-rules-in-non-finite-complex-sentences",
+                         *       "a-new-subordinate-clause-the-non-finite-ing-clause"
+                         *     ]
+                         */
+                        lessonSlugs: string[];
+                    }[];
                 };
             };
         };

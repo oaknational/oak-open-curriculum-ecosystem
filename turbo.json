@@ -82,11 +82,7 @@
         "$TURBO_ROOT$/tsconfig.base.json",
         "eslint.config.ts",
         "tsconfig.lint.json",
-        "src/**/*.ts",
-        "tests/**/*.ts",
-        "smoke-tests/**/*.ts",
-        "**/*.test.ts",
-        "**/*.spec.ts"
+        "**/*.ts"
       ]
     },
     "lint:fix": {
@@ -99,11 +95,7 @@
         "$TURBO_ROOT$/tsconfig.base.json",
         "eslint.config.ts",
         "tsconfig.lint.json",
-        "src/**/*.ts",
-        "tests/**/*.ts",
-        "smoke-tests/**/*.ts",
-        "**/*.test.ts",
-        "**/*.spec.ts"
+        "**/*.ts"
       ]
     },
     "test": {
@@ -112,10 +104,7 @@
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "src/types/generated/**/*.ts",
-        "src/types/generated/**/*.d.ts",
-        "tests/**/*.ts",
+        "**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.base.ts"
@@ -127,8 +116,7 @@
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "tests/**/*.ts",
+        "**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.base.ts",
@@ -147,14 +135,7 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "src/types/generated/**/*.ts",
-        "src/types/generated/**/*.d.ts",
-        "tests/**/*.ts",
-        "playwright.config.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
     },
     "type-check": {
       "dependsOn": ["^build"],
@@ -166,11 +147,7 @@
         "tsconfig.json",
         "tsconfig.build.json",
         "tsconfig.lint.json",
-        "src/**/*.ts",
-        "smoke-tests/**/*.ts",
-        "**/*.d.ts",
-        "src/types/generated/**/*.ts",
-        "src/types/generated/**/*.d.ts"
+        "**/*.ts"
       ]
     },
     "smoke:dev:stub": {

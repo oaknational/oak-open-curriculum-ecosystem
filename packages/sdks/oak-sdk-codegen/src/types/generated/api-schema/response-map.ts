@@ -676,6 +676,17 @@ const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
     zodIdentifier: undefined,
     jsonSchema: {"type":"object","properties":{"message":{"type":"string","description":"The error message","example":"Detail of the request causing the 404, e.g. \"Lesson not found\""},"code":{"type":"string","description":"The error code","example":"NOT_FOUND"},"issues":{"description":"An array of issues that were responsible for the error","example":[],"type":"array","items":{"type":"object","properties":{"message":{"type":"string"}},"required":["message"],"additionalProperties":false}}},"required":["message","code"],"additionalProperties":false,"title":"Detail of the request causing the 404, e.g. \"Lesson not found\" error (404)","description":"The error information","example":{"code":"NOT_FOUND","message":"Detail of the request causing the 404, e.g. \"Lesson not found\"","issues":[]}},
   },
+  'getKeywords-getKeywords:200': {
+    schema: curriculumSchemas.getKeywords_getKeywords_200,
+    operationId: 'getKeywords-getKeywords',
+    status: '200',
+    path: '/keywords',
+    colonPath: '/keywords',
+    method: 'get',
+    source: 'inline',
+    zodIdentifier: 'getKeywords_getKeywords_200',
+    jsonSchema: {"type":"array","items":{"type":"object","properties":{"keyword":{"type":"string","example":"non-finite clause","description":"The keyword text"},"description":{"type":"string","example":"a type of subordinate clause that can start with a verb in the progressive tense","description":"A description of the keyword"},"keyStageSlug":{"type":"string","example":"ks2","description":"The key stage slug associated with this keyword"},"subjectSlug":{"type":"string","example":"science","description":"The subject slug associated with this keyword"},"lessonSlugs":{"type":"array","items":{"type":"string"},"example":["a-new-sentence-structure-the-non-finite-complex-sentence","using-the-comma-rules-in-non-finite-complex-sentences","a-new-subordinate-clause-the-non-finite-ing-clause"],"description":"The different lesson slugs where this keyword is used"}},"required":["keyword","description","keyStageSlug","subjectSlug","lessonSlugs"],"additionalProperties":false},"ref":"KeyStageSubjectKeywordsResponseSchema","example":[{"keyword":"animate","description":"to make something move or change its appearance","keyStageSlug":"ks2","subjectSlug":"computing","lessonSlugs":["animating-text"]},{"keyword":"animation","description":"a way of making pictures or objects look as if they are moving by showing them quickly one after another","keyStageSlug":"ks2","subjectSlug":"computing","lessonSlugs":["introduction-to-animation","programming-using-command-blocks"]}],"title":"getKeywords-getKeywords 200 response"},
+  },
   'getQuestions-getQuestionsForLessons:200': {
     schema: curriculumSchemas.QuestionForLessonsResponseSchema,
     operationId: 'getQuestions-getQuestionsForLessons',
@@ -1256,6 +1267,7 @@ const ALLOWED_IDS = [
   'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:400',
   'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:401',
   'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:404',
+  'getKeywords-getKeywords:200',
   'getQuestions-getQuestionsForLessons:200',
   'getQuestions-getQuestionsForLessons:400',
   'getQuestions-getQuestionsForLessons:401',
@@ -1557,6 +1569,24 @@ const RESPONSE_DESCRIPTORS_BY_OPERATION_ID = Object.freeze({
     404: Object.freeze({
       zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStageSubjectLessons-getKeyStageSubjectLessons:404'].schema,
       json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStageSubjectLessons-getKeyStageSubjectLessons:404'].jsonSchema,
+    }),
+  }),
+  'getKeywords-getKeywords': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeywords-getKeywords:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeywords-getKeywords:200'].jsonSchema,
+    }),
+    400: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:400'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:400'].jsonSchema,
+    }),
+    401: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:401'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:401'].jsonSchema,
+    }),
+    404: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:404'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['*:404'].jsonSchema,
     }),
   }),
   'getLessons-getLesson': Object.freeze({

@@ -27,6 +27,7 @@ const OPERATION_ID_BY_METHOD_AND_PATH = {
   "get /key-stages": "getKeyStages-getKeyStages",
   "get /key-stages/:keyStage/subject/:subject/lessons": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
   "get /key-stages/:keyStage/subject/:subject/units": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
+  "get /keywords": "getKeywords-getKeywords",
   "get /lessons/:lesson/quiz": "getQuestions-getQuestionsForLessons",
   "get /sequences/:sequence/questions": "getQuestions-getQuestionsForSequence",
   "get /key-stages/:keyStage/subject/:subject/questions": "getQuestions-getQuestionsForKeyStageAndSubject",
@@ -55,6 +56,7 @@ const PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID = {
   "getKeyStages-getKeyStages": "200",
   "getKeyStageSubjectLessons-getKeyStageSubjectLessons": "200",
   "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": "200",
+  "getKeywords-getKeywords": "200",
   "getQuestions-getQuestionsForLessons": "200",
   "getQuestions-getQuestionsForSequence": "200",
   "getQuestions-getQuestionsForKeyStageAndSubject": "200",
@@ -1990,6 +1992,70 @@ export const endpoints: readonly Endpoint[] = ([
         schema: error_NOT_FOUND,
       },
     ],
+  },
+  {
+    method: "get",
+    path: "/keywords",
+    description: `This endpoint returns a list of keywords for a given key stage and subject, based on the keywords associated with the lessons that are available for that key stage and subject. The keywords are returned in order of frequency, with the most common keywords appearing first.`,
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "subject",
+        type: "Query",
+        schema: z
+          .enum([
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish",
+          ])
+          .optional(),
+      },
+      {
+        name: "keyStage",
+        type: "Query",
+        schema: z.enum(["ks1", "ks2", "ks3", "ks4"]).optional(),
+      },
+      {
+        name: "phase",
+        type: "Query",
+        schema: z.enum(["primary", "secondary"]).optional(),
+      },
+      {
+        name: "unit",
+        type: "Query",
+        schema: z.string().optional(),
+      },
+      {
+        name: "lesson",
+        type: "Query",
+        schema: z.string().optional(),
+      },
+    ],
+    response: z.array(
+      z
+        .object({
+          keyword: z.string(),
+          description: z.string(),
+          keyStageSlug: z.string(),
+          subjectSlug: z.string(),
+          lessonSlugs: z.array(z.string()),
+        })
+        .strict()
+    ),
   },
   {
     method: "get",

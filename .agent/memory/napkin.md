@@ -1,13 +1,35 @@
 ## Session 2026-03-25 — CI hang blocker + docs consolidation
 
-### CI hang blocker
+### CI hang blocker — root cause identified
 
 - **GitHub CI hanging** on `feat/es_index_update` branch — job never
   completes. Previous turbo daemon / concurrency fixes reverted as they
-  were symptom-level. Root cause unknown.
-- Active plan and prompt updated with blocker status and CI run link.
-- Next step: add logging/timing to CI steps to identify the hanging
-  process.
+  were symptom-level.
+- **Root cause identified**: `@oaknational/search-cli:test` is the
+  single workspace that never completes. From cancelled CI run logs
+  (23537232656): 14 of 15 workspace test suites complete successfully,
+  `search-cli:test` never even produces its turbo group header.
+  Turbo buffers output for running tasks, so the absence of output
+  means the vitest process started but never finished.
+- **Key evidence**:
+  - search-cli: 101 test files, `pool: 'forks'`, `isolate: true`,
+    `NODE_OPTIONS='--max-old-space-size=6144'` (6GB heap per process)
+  - CI runner: 7GB RAM, 2 CPUs
+  - Already has 1 test excluded for OOM (`ingest-harness.unit.test.ts`)
+  - Orphan processes at cleanup: turbo, esbuild, 5x MainThread, 2x sh
+- **Hypotheses** (ranked):
+  - H1: OOM kill of vitest fork worker → vitest hangs waiting for dead child
+  - H2: esbuild service process leak after abnormal fork exit
+  - H3: Import-time side effect blocking in CI
+  - H4: NODE_OPTIONS inheritance causing fork startup failure
+- **Instrumentation added**:
+  - CI workflow: split search-cli tests into isolated step with
+    verbose reporter, memory monitoring (10s interval), OOM kill
+    detection (dmesg), 5-minute timeout
+  - test.setup.ts: process-level diagnostics on CI (heap/RSS on load,
+    exit, SIGTERM, SIGINT, memory warnings)
+- **Next step**: push to CI, read diagnostic output, confirm/reject
+  hypotheses.
 
 ### CONTRIBUTING.md improvement
 
