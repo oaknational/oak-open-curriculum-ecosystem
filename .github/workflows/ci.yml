@@ -67,5 +67,63 @@ jobs:
       - name: Run type checking
         run: pnpm type-check
 
-      - name: Run tests
-        run: pnpm test
+      - name: Run tests (all workspaces except search-cli)
+        run: turbo run --continue test --filter='!@oaknational/search-cli'
+
+      - name: Diagnose search-cli test environment
+        run: |
+          echo "=== CI runner memory ==="
+          free -h
+          echo ""
+          echo "=== CI runner CPUs ==="
+          nproc
+          echo ""
+          echo "=== Node memory defaults ==="
+          node -e "const v8 = require('v8'); console.log(JSON.stringify(v8.getHeapStatistics(), null, 2))"
+          echo ""
+          echo "=== search-cli test file count ==="
+          find apps/oak-search-cli -type f \( -name '*.unit.test.ts' -o -name '*.integration.test.ts' \) ! -path '*/node_modules/*' ! -path '*/dist/*' | wc -l
+          echo ""
+          echo "=== search-cli vitest config ==="
+          cat apps/oak-search-cli/vitest.config.ts
+
+      - name: Run search-cli tests (isolated with diagnostics)
+        timeout-minutes: 5
+        working-directory: apps/oak-search-cli
+        run: |
+          echo "=== Starting search-cli tests at $(date -u +%H:%M:%S) ==="
+          echo "=== Memory before tests ==="
+          free -h
+
+          # Monitor memory in background, logging every 10s
+          (while true; do
+            echo "[mem $(date -u +%H:%M:%S)] $(free -h | grep Mem | awk '{print "used=" $3 " free=" $4 " available=" $7}')"
+            sleep 10
+          done) &
+          MEM_MONITOR_PID=$!
+
+          # Monitor for OOM kills in background
+          (dmesg -w 2>/dev/null | grep -i -E 'oom|kill|memory' || true) &
+          DMESG_PID=$!
+
+          # Run vitest with verbose reporter and heap usage logging
+          # --reporter=verbose: prints each test file as it starts/finishes
+          # --logHeapUsage: shows heap usage per test file
+          # --testTimeout=30000: prevent individual tests from hanging forever
+          NODE_OPTIONS='--max-old-space-size=6144' npx vitest run \
+            --reporter=verbose \
+            --logHeapUsage \
+            --testTimeout=30000 \
+            --no-color \
+            2>&1; VITEST_EXIT=$?
+
+          # Stop monitors
+          kill $MEM_MONITOR_PID 2>/dev/null || true
+          kill $DMESG_PID 2>/dev/null || true
+
+          echo ""
+          echo "=== search-cli tests finished at $(date -u +%H:%M:%S) with exit code $VITEST_EXIT ==="
+          echo "=== Memory after tests ==="
+          free -h
+
+          exit $VITEST_EXIT
