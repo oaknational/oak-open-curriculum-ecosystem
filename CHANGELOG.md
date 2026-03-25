@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.1.0...v1.1.1) (2026-03-11)
+
+
+### Bug Fixes
+
+* harden blue-green re-indexing infrastructure for Elasticsearch ([#67](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/67)) ([7ca5089](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7ca50899cc1353b156b349f02df6402778d565ea))
+
 # [1.1.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.0.1...v1.1.0) (2026-03-06)
 
 
