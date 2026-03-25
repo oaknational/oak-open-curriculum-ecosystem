@@ -61,6 +61,13 @@ export const REQUEST_PARAMETER_SCHEMAS = {
     "keyStage": z.enum(["ks1", "ks2", "ks3", "ks4"]),
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
   }),
+  "GET:/keywords": z.object({
+    "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]).optional(),
+    "keyStage": z.enum(["ks1", "ks2", "ks3", "ks4"]).optional(),
+    "phase": z.enum(["primary", "secondary"]).optional(),
+    "unit": z.string().optional(),
+    "lesson": z.string().optional(),
+  }),
   "GET:/lessons/:lesson/quiz": z.object({
     "lesson": z.string(),
   }),

@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 200
+fitness_line_count: 200
 split_strategy: "Extract elaborated guidance to governance docs; this file is authoritative principles"
 ---
 
@@ -10,6 +10,14 @@ All of these principles MUST be followed at all times.
 ## First Question
 
 Always apply the first question; **Ask: could it be simpler _without compromising quality_?**. The answer will often be no, that is fine, but bring real critically thinking to the question each time.
+
+## Strict and Complete
+
+**Strict and complete, everywhere, all the time.** Prefer explicit, total, fully checked systems over permissive, partial, or hand-wavy ones. Do not invent optionality, fallback options, or implied enforcement. Type precision is one of the clearest concrete expressions of this tenet.
+
+## Architectural Excellence Over Expediency
+
+Always choose long-term architectural clarity over short-term convenience. If a shortcut creates duplication across architectural layers, it is not a shortcut — it is a debt that compounds silently. Copying a function "because it's faster" creates two implementations that drift apart. The cost of the drift is invisible until it manifests as a real bug (wrong search results, inconsistent behaviour, stale configuration). The correct response is always to fix the boundary, not to duplicate across it.
 
 ## Core Rules
 
@@ -61,6 +69,8 @@ Use the right tool for the job:
 - **Typedoc** for documentation generation
 - **Sentry** for observability (guidance archived to `docs/agent-guidance/archive/sentry-guidance.md`)
 
+All workspace tooling configuration MUST follow the canonical patterns defined in the base configs at the repo root. Workspace configs extend base configs — they do not replace them. This applies to `vitest.config.ts`, `tsconfig.json`, `eslint.config.ts`, and all other tooling. Deviations cause silent quality-gate leaks (e.g. E2E tests running under `pnpm test`, disabled lint rules, weakened type-checking). See [Testing Strategy: Canonical Vitest Configuration](testing-strategy.md#canonical-vitest-configuration) for vitest-specific patterns. E2E vitest configs may be workspace-specific when base defaults (include paths, setup files) don't apply.
+
 ### Code Quality
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
@@ -73,13 +83,15 @@ Use the right tool for the job:
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }`, or `Object.*` methods, or `Reflect.*` methods, or `isObject` type predicates or similar - they ALL disable the type system, they are all sources of entropy. The goal is to preserve type information as much as possible, not to work around this rule. Exceptions: `as const` and `satisfies` are permitted — both are compile-time constraints that validate or narrow types without overriding the inferred type. `as const` narrows values to their literal types; `satisfies` verifies an expression matches a type without changing what TypeScript infers.
+- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }`, or `Object.*` methods, or `Reflect.*` methods, or `isObject` type predicates, or any user-defined type guard whose runtime checks don't prove the asserted return type (e.g. checking `typeof === 'object'` but claiming `value is SomeSpecificType` — the predicate proves object-ness, not the specific type, so the narrowing is a lie) - they ALL disable the type system, they are all sources of entropy. The goal is to preserve type information as much as possible, not to work around this rule. Exceptions: `as const` and `satisfies` are permitted — both are compile-time constraints that validate or narrow types without overriding the inferred type. `as const` narrows values to their literal types; `satisfies` verifies an expression matches a type without changing what TypeScript infers.
 - **Preserve type information** - NEVER widen types by assigning to broader types like `string` or `number`. If you have a literal type `'/api/path'`, keep it as that literal, don't accept it as `string`. Type information flows from data structures with `as const` through to usage. Every `: string` or `: number` parameter destroys type information irreversibly
 - **Single source of truth for types** - Define types ONCE, and import them consistently
 - **Use library types directly where possible** - don't make up a type when you can use a library type
+- **Prefer library-native error and response types** - when parsing third-party SDK outputs (e.g. Elasticsearch), use official exported types/classes first; only introduce local shapes when the library does not expose what is needed
 - **Validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation, use Zod where appropriate
 - **Type imports must be labelled with `type`** - e.g. `import type { Type } from 'package'` or `import { type Type } from 'package'`
 - **Don't use type aliases, use good naming** Don't use type aliases, use good naming. Type aliases are a source of entropy.
+- **Reviewer findings are action items by default** - implement all reviewer findings unless explicitly rejected as incorrect with a written rationale
 
 ### Testing
 
@@ -118,6 +130,7 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it
+- **No process spawning in in-process tests** - Test code MUST NOT spawn child processes, create test-authored workers, or instantiate tools that internally spawn processes (e.g. programmatic ESLint with TypeScript project service). Use the right tool: ESLint for boundary enforcement, Playwright for browser testing, vitest for runtime logic.
 
 ### Developer Experience
 
@@ -136,3 +149,15 @@ Use conventional monorepo structure in active code and docs:
 - `packages/libs/` – shared libraries (logger, env-resolution)
 
 See [AGENT.md](./AGENT.md#structure) for the full package listing. Architectural boundaries are enforced by custom ESLint rules.
+
+### Layer Role Topology
+
+Apps are **thin user interfaces**. SDKs and libraries own **all domain-specific logic and mechanisms**. Apps compose SDK capabilities through their public API surfaces; apps NEVER reimplement domain logic that an SDK already provides.
+
+Concretely:
+
+- **SDKs own**: query shapes (retrievers, filters, highlights), query processing (noise removal, phrase detection), score processing (normalisation, filtering), field inventories, data contracts, and type definitions. If two consumers would need the same logic, it belongs in an SDK.
+- **Apps own**: CLI commands, request assembly (combining SDK-built retrievers with app-specific index resolution and pagination), operational tooling (ingestion, admin commands), and user-facing presentation. These are integration concerns, not domain logic.
+- **The test**: "Could another app need this?" If yes, it belongs in a package, not an app. If an app contains domain logic that duplicates an SDK, that is a boundary violation — collapse it by importing from the SDK.
+
+This is not aspirational; it is a structural constraint. Violations cause silent drift: the SDK gets tuned but the app's copy does not, producing different behaviour for the same input.

@@ -17,10 +17,10 @@ Last Updated: 2025-11-20
 
 **Internal Documentation:**
 
-- `.agent/reference-docs/openai-apps-auth.md` - OpenAI ChatGPT Apps SDK Authentication Guide
-- `.agent/reference-docs/mcp-auth-spec.md` - MCP Authorization Specification (2025-06-18)
-- `.agent/reference-docs/clerk-build-mcp-server.md` - Clerk MCP Server Integration Guide
-- `.agent/reference-docs/clerk-express-sdk.md` - Clerk Express SDK Reference
+- `.agent/reference/openai-apps-auth.md` - OpenAI ChatGPT Apps SDK Authentication Guide
+- `.agent/reference/mcp-auth-spec.md` - MCP Authorization Specification (2025-06-18)
+- `.agent/reference/clerk-build-mcp-server.md` - Clerk MCP Server Integration Guide
+- `.agent/reference/clerk-express-sdk.md` - Clerk Express SDK Reference
 
 **External Specifications:**
 
@@ -104,7 +104,7 @@ Our implementation uses Clerk as the authorization server and fully implements t
 
 ### Model 1: MCP Authorization Specification (Transport-Level)
 
-**Source**: [MCP Auth Spec](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization) (`.agent/reference-docs/mcp-auth-spec.md`)
+**Source**: [MCP Auth Spec](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization) (`.agent/reference/mcp-auth-spec.md`)
 
 **Key characteristics:**
 
@@ -128,7 +128,7 @@ Our implementation uses Clerk as the authorization server and fully implements t
 
 ### Model 2: OpenAI ChatGPT Apps SDK (Application-Level)
 
-**Source**: [OpenAI Apps Auth](https://openai.com) (`.agent/reference-docs/openai-apps-auth.md`)
+**Source**: [OpenAI Apps Auth](https://openai.com) (`.agent/reference/openai-apps-auth.md`)
 
 **Key characteristics:**
 
@@ -681,7 +681,7 @@ We do not filter by IP address or implement client identification.
 
 4. **Should we use Clerk's `@clerk/mcp-tools` package or keep custom integration?**
    - **Current**: Custom integration using `@clerk/express` directly
-   - **Clerk recommends**: Using `@clerk/mcp-tools` (see `.agent/reference-docs/clerk-build-mcp-server.md`)
+   - **Clerk recommends**: Using `@clerk/mcp-tools` (see `.agent/reference/clerk-build-mcp-server.md`)
    - Comparison needed:
      - What does `@clerk/mcp-tools` provide that we don't have?
      - Does it handle per-tool `securitySchemes`?
@@ -799,7 +799,7 @@ We do not filter by IP address or implement client identification.
 
 ## References
 
-- OpenAI Apps SDK Auth Docs: `.agent/reference-docs/openai-apps-auth.md`
+- OpenAI Apps SDK Auth Docs: `.agent/reference/openai-apps-auth.md`
 - MCP Authorization Spec: <https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization>
 - RFC 9728 (OAuth Protected Resource Metadata): <https://datatracker.ietf.org/doc/html/rfc9728>
 - RFC 8414 (OAuth Authorization Server Metadata): <https://datatracker.ietf.org/doc/html/rfc8414>

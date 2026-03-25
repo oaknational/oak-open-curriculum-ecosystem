@@ -36,19 +36,37 @@ function createBaseSchema(): OpenAPIObject & {
 }
 
 describe('add404ResponsesWhereExpected', () => {
-  it('decorates configured endpoints with the standard 404 response', () => {
+  it('decorates configured endpoints with the supplied 404 response', () => {
     const schema = createBaseSchema();
+    const descriptor: Parameters<typeof add404ResponsesWhereExpected>[1] = [
+      {
+        method: 'get',
+        path: '/lessons/{lesson}/transcript',
+        reason: 'Test reason for decoration',
+        upstreamReference: 'TEST-REF',
+        media: {
+          schema: {
+            type: 'object',
+            required: ['message', 'code', 'data'],
+            properties: {
+              message: { type: 'string' },
+              code: { type: 'string' },
+              data: { type: 'object' },
+            },
+          },
+          example: { message: 'Not found', code: 'NOT_FOUND', data: {} },
+        },
+      },
+    ];
 
-    const result = add404ResponsesWhereExpected(schema);
+    const result = add404ResponsesWhereExpected(schema, descriptor);
 
     const decoratedJson = JSON.stringify(result);
-    expect(decoratedJson).toContain('"message"');
-    expect(decoratedJson).toContain('"code"');
-    expect(decoratedJson).toContain('"data"');
-    expect(decoratedJson).toContain('Temporary: Documented locally');
+    expect(decoratedJson).toContain('Test reason for decoration');
+    expect(decoratedJson).toContain('TEST-REF');
 
     const originalJson = JSON.stringify(schema);
-    expect(originalJson).not.toContain('Temporary: Documented locally');
+    expect(originalJson).not.toContain('Test reason for decoration');
   });
 
   it('accepts override descriptors so the decorator is not tied to the default list', () => {
@@ -98,7 +116,7 @@ describe('add404ResponsesWhereExpected', () => {
     expect(decoratedJson).toContain(JSON.stringify(example));
   });
 
-  it('throws when the upstream schema already documents the response', () => {
+  it('throws when a supplied descriptor targets a response already in the schema', () => {
     const schema = createBaseSchema();
     const transcriptPath = schema.paths['/lessons/{lesson}/transcript'];
     const transcriptGet = transcriptPath.get;
@@ -107,9 +125,20 @@ describe('add404ResponsesWhereExpected', () => {
       description: 'Already present',
     };
 
-    expect(() => add404ResponsesWhereExpected(schema)).toThrowError(
-      /Cannot add HTTP 404 response via add404ResponsesWhereExpected/,
-    );
+    expect(() =>
+      add404ResponsesWhereExpected(schema, [
+        {
+          method: 'get',
+          path: '/lessons/{lesson}/transcript',
+          reason: 'Conflict test',
+          upstreamReference: 'CONFLICT-TEST',
+          media: {
+            schema: { type: 'object' },
+            example: { message: 'Conflict' },
+          },
+        },
+      ]),
+    ).toThrowError(/Cannot add HTTP 404 response via add404ResponsesWhereExpected/);
   });
 
   it('throws when a configured path is missing from the schema', () => {
@@ -131,6 +160,20 @@ describe('add404ResponsesWhereExpected', () => {
     ).toThrowError(/was not found in the schema/);
   });
 
+  it('passes through a schema with upstream 404 responses using the default list', () => {
+    const schema = createBaseSchema();
+    const transcriptPath = schema.paths['/lessons/{lesson}/transcript'];
+    transcriptPath.get.responses = {
+      ...transcriptPath.get.responses,
+      '404': { description: 'Upstream 404 response from API' },
+    };
+
+    const result = add404ResponsesWhereExpected(schema);
+
+    expect(result).toBeDefined();
+    expect(result.paths).toBeDefined();
+  });
+
   describe('strictness enforcement', () => {
     it('default descriptors do not use additionalProperties: true alongside explicit properties', () => {
       // additionalProperties: true is equivalent to z.any() - violates principles.md "No type shortcuts"
@@ -139,12 +182,26 @@ describe('add404ResponsesWhereExpected', () => {
       expect(schemaJson).not.toContain('"additionalProperties":true');
     });
 
-    it('generated 404 response schema uses strict validation', () => {
+    it('decorated 404 response schema uses strict validation', () => {
       const schema = createBaseSchema();
-      const result = add404ResponsesWhereExpected(schema);
+      const result = add404ResponsesWhereExpected(schema, [
+        {
+          method: 'get',
+          path: '/lessons/{lesson}/transcript',
+          reason: 'Strictness test',
+          upstreamReference: 'STRICT-TEST',
+          media: {
+            schema: {
+              type: 'object',
+              required: ['message'],
+              properties: { message: { type: 'string' } },
+            },
+            example: { message: 'Test' },
+          },
+        },
+      ]);
       const resultJson = JSON.stringify(result);
 
-      // Should NOT contain additionalProperties: true anywhere
       expect(resultJson).not.toContain('"additionalProperties":true');
     });
   });

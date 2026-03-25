@@ -18,6 +18,7 @@ import {
   validateOutput,
   type ToolExecutionSuccessEnvelope,
 } from './validation.js';
+import { isInformationalError } from './informational-errors.js';
 import {
   createFakeToolExecutionSuccessEnvelope,
   createFakeMcpServer,
@@ -206,6 +207,28 @@ describe('validation helpers', () => {
       throw new Error('Expected validation to report unsupported status');
     }
     expect(result.message).toContain('Undocumented response status 599');
+  });
+});
+
+describe('isInformationalError', () => {
+  it('returns true for CONTENT_NOT_AVAILABLE', () => {
+    expect(isInformationalError({ code: 'CONTENT_NOT_AVAILABLE' })).toBe(true);
+  });
+
+  it('returns false for RESOURCE_NOT_FOUND', () => {
+    expect(isInformationalError({ code: 'RESOURCE_NOT_FOUND' })).toBe(false);
+  });
+
+  it('returns false for UPSTREAM_API_ERROR', () => {
+    expect(isInformationalError({ code: 'UPSTREAM_API_ERROR' })).toBe(false);
+  });
+
+  it('returns false for AUTHENTICATION_REQUIRED', () => {
+    expect(isInformationalError({ code: 'AUTHENTICATION_REQUIRED' })).toBe(false);
+  });
+
+  it('returns false when code is undefined', () => {
+    expect(isInformationalError({})).toBe(false);
   });
 });
 

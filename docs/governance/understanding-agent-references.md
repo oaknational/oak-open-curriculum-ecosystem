@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `.agent/reference-docs/` directory contains curated documentation specifically formatted for AI agents. This guide explains how these materials support both human developers and AI assistants.
+The `.agent/reference/` directory contains curated documentation specifically formatted for AI agents. This guide explains how these materials support both human developers and AI assistants.
 
 ## Why Agent-Specific References?
 
@@ -24,7 +24,7 @@ Our reference documents provide:
 ## Reference Structure
 
 ```text
-.agent/reference-docs/
+.agent/reference/
 ├── README.md                           # Index with links to sources
 ├── mcp-docs-for-agents.md             # MCP overview for AI agents
 ├── mcp-typescript-sdk-readme.md       # MCP TypeScript SDK reference
@@ -41,7 +41,7 @@ Our reference documents provide:
 
 ### For Human Developers
 
-1. **Start with `.agent/reference-docs/README.md`** — contains all source links
+1. **Start with `.agent/reference/README.md`** — contains all source links
 2. **Use agent docs for quick reference** — cleaner than web pages
 3. **Visit source links for deep dives** — when you need full context
 4. **Cross-reference during development** — keep both open
@@ -95,7 +95,7 @@ When working with Claude or other AI assistants:
 
 ### How to Update
 
-1. **Visit the source URL** (listed in `.agent/reference-docs/README.md`)
+1. **Visit the source URL** (listed in `.agent/reference/README.md`)
 2. **Extract relevant content** — focus on what we use
 3. **Clean formatting** — remove web navigation, ads
 4. **Preserve code examples** — these are crucial

@@ -538,7 +538,8 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
 **Specialist reviewers invoked**: `code-reviewer`, `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-wilma`, `security-reviewer`. Findings partially addressed; remaining issues captured in §R below.
 
-**Reference**: Execution details in [Phase 1 Cursor plan](.cursor/plans/m1_release_fixes_phase_1_dbc6c9b8.plan.md) and [session transcript](../../.cursor/projects/Users-jim-code-oak-oak-open-curriculum-ecosystem/agent-transcripts/a7a67403-0cc4-4567-a320-2782d16aca7e.txt).
+**Reference**: Execution details were captured in platform-local session plans
+and transcripts; this archived plan is the canonical retained record.
 
 ### §R: Phase 1 Remediation (TOP PRIORITY)
 

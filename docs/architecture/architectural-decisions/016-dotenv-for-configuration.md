@@ -62,7 +62,7 @@ Real credentials are expected only in untracked local environment files:
 - Workspace `.env.local` files
 
 Tracked files, including `.env.example`, must contain placeholders only.
-Exceptions for secret-like examples are limited to `.agent/reference-docs/**`
+Exceptions for secret-like examples are limited to `.agent/reference/**`
 via tooling allowlist, with line-specific allowlisting used elsewhere only when
 strictly necessary.
 

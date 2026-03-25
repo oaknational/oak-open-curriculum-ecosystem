@@ -16,6 +16,7 @@ import { ok, err } from '@oaknational/result';
 import { fetchLessonMaterials, type FetchContext } from './lesson-materials';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
+import { createMockClient } from '../../test-helpers/mock-oak-client';
 
 // =============================================================================
 // Test Helpers
@@ -53,12 +54,11 @@ function createMockSummary() {
   };
 }
 
-/** Create a mock OakClient with customizable responses. */
-function createMockClient(options: {
+/** Create a mock OakClient with customisable transcript/summary responses. */
+function createLessonMaterialsMockClient(options: {
   transcriptResponse?: { transcript: string; vtt: string } | 'not_found' | 'network_error';
   summaryResponse?: ReturnType<typeof createMockSummary> | 'not_found' | 'network_error';
 }): OakClient {
-  // Network error needs to match the SDK type with 'cause.message' field
   const networkError = {
     kind: 'network_error' as const,
     resource: 'test-lesson',
@@ -97,32 +97,10 @@ function createMockClient(options: {
         ? err(summaryNetworkError)
         : ok(options.summaryResponse ?? createMockSummary());
 
-  return {
-    getUnitsByKeyStageAndSubject: vi.fn(),
+  return createMockClient({
     getLessonTranscript: vi.fn().mockResolvedValue(transcriptResult),
     getLessonSummary: vi.fn().mockResolvedValue(summaryResult),
-    getUnitSummary: vi.fn(),
-    getSubjectSequences: vi.fn(),
-    getSequenceUnits: vi.fn(),
-    getAllThreads: vi.fn(),
-    getThreadUnits: vi.fn(),
-    getLessonsByKeyStageAndSubject: vi.fn(),
-    getSubjectAssets: vi.fn(),
-    getCacheStats: vi.fn(),
-    disconnect: vi.fn(),
-    rateLimitTracker: {
-      getStatus: vi.fn().mockReturnValue({
-        remaining: 1000,
-        limit: 1000,
-        reset: null,
-        resetDate: null,
-        lastChecked: new Date(),
-      }),
-      getRequestCount: vi.fn().mockReturnValue(0),
-      getRequestRate: vi.fn().mockReturnValue(0),
-      reset: vi.fn(),
-    },
-  };
+  });
 }
 
 // =============================================================================
@@ -136,7 +114,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('normal fetch', () => {
     it('should return transcript and summary on successful fetch', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Hello world', vtt: 'WEBVTT' },
         summaryResponse: createMockSummary(),
       });
@@ -153,7 +131,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('hasVideo === false (no_video case)', () => {
     it('should skip transcript fetch when hasVideo is false', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         summaryResponse: createMockSummary(),
       });
       const context: FetchContext = {
@@ -174,7 +152,7 @@ describe('fetchLessonMaterials', () => {
     });
 
     it('should fetch transcript when hasVideo is undefined (backwards compatible)', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Transcript content', vtt: 'WEBVTT' },
         summaryResponse: createMockSummary(),
       });
@@ -191,7 +169,7 @@ describe('fetchLessonMaterials', () => {
     });
 
     it('should fetch transcript when hasVideo is true', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Video transcript', vtt: 'WEBVTT' },
         summaryResponse: createMockSummary(),
       });
@@ -210,7 +188,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('404 handling (not_found case)', () => {
     it('should return empty transcript when transcript returns 404', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: 'not_found',
         summaryResponse: createMockSummary(),
       });
@@ -222,7 +200,7 @@ describe('fetchLessonMaterials', () => {
     });
 
     it('should return null when summary returns 404', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Test', vtt: 'WEBVTT' },
         summaryResponse: 'not_found',
       });
@@ -235,7 +213,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('network error handling', () => {
     it('should return empty transcript on network error (recoverable)', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: 'network_error',
         summaryResponse: createMockSummary(),
       });
@@ -248,7 +226,7 @@ describe('fetchLessonMaterials', () => {
     });
 
     it('should return null when summary has network error (skip lesson)', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Test', vtt: 'WEBVTT' },
         summaryResponse: 'network_error',
       });
@@ -262,7 +240,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('empty transcript handling', () => {
     it('should handle empty transcript response as valid', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: '', vtt: '' },
         summaryResponse: createMockSummary(),
       });
@@ -277,7 +255,7 @@ describe('fetchLessonMaterials', () => {
 
   describe('context propagation', () => {
     it('should include context in error collection', async () => {
-      const client = createMockClient({
+      const client = createLessonMaterialsMockClient({
         transcriptResponse: { transcript: 'Test', vtt: 'WEBVTT' },
         summaryResponse: 'not_found',
       });

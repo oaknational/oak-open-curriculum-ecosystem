@@ -145,6 +145,13 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-131: Self-Reinforcing Improvement Loop](131-self-reinforcing-improvement-loop.md)
 - [ADR-132: Sitemap Scanner for Canonical URL Validation](132-sitemap-scanner-for-canonical-url-validation.md)
 - [ADR-133: CLI Resource Lifecycle Management](133-cli-resource-lifecycle-management.md)
+- [ADR-134: Search SDK Capability Surface Boundary](134-search-sdk-capability-surface-boundary.md)
+- [ADR-135: Agent Classification Taxonomy](135-agent-classification-taxonomy.md)
+- [ADR-136: Incremental Refresh and Bulk API Partial-Update Doctrine](136-incremental-refresh-bulk-api-partial-update-doctrine.md) ← **Deferred** (out of active migration scope)
+- [ADR-137: Specialist Operational Tooling Layer](137-specialist-operational-tooling-layer.md)
+- [ADR-138: Shared Search Field Contract Surface](138-shared-search-field-contract-surface.md)
+- [ADR-139: Sequence Semantic Contract and Ownership](139-sequence-semantic-contract-and-ownership.md)
+- [ADR-140: Search Ingestion SDK Boundary](140-search-ingestion-sdk-boundary.md)
 
 ## Key Architectural Decisions
 
@@ -175,13 +182,16 @@ For understanding the agentic engineering practice:
 - **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
 - **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
 - **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
+- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
+- **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 
 For understanding semantic search and Elastic-native AI/ML approach:
 
 - **[ADR-074](074-elastic-native-first-philosophy.md)** - Elastic-Native-First Philosophy for AI/ML features
 - **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-118, 072, 073)
 - **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
+- **[ADR-138](138-shared-search-field-contract-surface.md)** - Shared field-inventory and stage-matrix contract surface for cross-workspace field-integrity checks
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
 - **[ADR-080](080-curriculum-data-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
@@ -206,7 +216,11 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 - **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
 - **[ADR-130](130-blue-green-index-swapping.md)** - Zero-downtime blue/green index swapping via Elasticsearch aliases
+- **[ADR-136](136-incremental-refresh-bulk-api-partial-update-doctrine.md)** - Deferred doctrine reference (not part of active migration completion scope)
 - **[ADR-133](133-cli-resource-lifecycle-management.md)** - CLI resource lifecycle ownership and `withEsClient` cleanup pattern
+- **[ADR-134](134-search-sdk-capability-surface-boundary.md)** - Search SDK read/admin capability boundary, internal encapsulation, and lint-enforced import policy
+- **[ADR-139](139-sequence-semantic-contract-and-ownership.md)** - Sequence semantic contract: deterministic construction, ownership split, fail-fast validation, and locked retrieval shape
+- **[ADR-140](140-search-ingestion-sdk-boundary.md)** - Dedicated Oak-specific ingestion SDK boundary, thin CLI ownership, and private-first/future-public-ready distribution
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

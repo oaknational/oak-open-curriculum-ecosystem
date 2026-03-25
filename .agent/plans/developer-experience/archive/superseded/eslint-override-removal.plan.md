@@ -10,19 +10,19 @@ todos:
     status: completed
   - id: phase-1-code-generation-authored
     content: "Phase 1: Remove structural overrides for code-generation/ authored code (6 rules)."
-    status: pending
+    status: cancelled
   - id: phase-1b-vocab-gen
     content: "Phase 1b: Remove structural overrides for vocab-gen/ (3 rules, 6 files)."
-    status: pending
+    status: cancelled
   - id: phase-2-generated-output
     content: "Phase 2: Remove overrides for src/types/generated/ machine output (13 rules)."
-    status: pending
+    status: cancelled
   - id: phase-3-config-files
     content: "Phase 3: Remove overrides for config files (3 rules)."
-    status: pending
+    status: cancelled
   - id: phase-4-other-workspaces
     content: "Phase 4: Remove overrides in streamable-http, search-cli, and other workspaces."
-    status: pending
+    status: cancelled
 ---
 
 > Superseded on 2026-03-03. Use the canonical plan:

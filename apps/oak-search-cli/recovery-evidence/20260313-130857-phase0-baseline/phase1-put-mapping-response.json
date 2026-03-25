@@ -1,0 +1,17 @@
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "mapper_parsing_exception",
+        "reason": "normalizer [oak_lower] not found for field [previous_version]"
+      }
+    ],
+    "type": "mapper_parsing_exception",
+    "reason": "Failed to parse mapping: normalizer [oak_lower] not found for field [previous_version]",
+    "caused_by": {
+      "type": "mapper_parsing_exception",
+      "reason": "normalizer [oak_lower] not found for field [previous_version]"
+    }
+  },
+  "status": 400
+}

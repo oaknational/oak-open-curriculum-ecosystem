@@ -33,6 +33,8 @@ Before reviewing any type-related changes, you MUST also read and internalise th
 
 | Document | Purpose |
 |----------|---------|
+| `.agent/directives/AGENT.md` | Agent behaviour and governance |
+| `.agent/directives/principles.md` | Compiler-time types, no type shortcuts, cardinal rule |
 | `.agent/directives/schema-first-execution.md` | Schema-first MCP execution |
 | `docs/governance/typescript-practice.md` | Type safety guidance |
 | `docs/architecture/architectural-decisions/038-compilation-time-revolution.md` | ADR-038 |
@@ -61,6 +63,7 @@ For each type-related change, trace the flow:
 - Where does the type originate? (Should be from the OpenAPI schema via `pnpm sdk-codegen`)
 - How does it flow through the system? (Through SDK, into apps)
 - Where is type information lost? (Widening, assertions, `any`)
+- Which library-native types/errors already exist and should be used directly?
 
 ### Step 3: Check Against Commandments and Checklist
 
@@ -73,6 +76,7 @@ Evaluate each change against:
 ### Step 4: Report Findings with Resolution Strategies
 
 Produce the structured output below. For each violation, provide a specific resolution strategy (move to generation time, generate specific code, or use two-phase type narrowing).
+Classify each finding as `must-fix`, `optional`, or `incorrect`.
 
 ## The Cardinal Rule
 
@@ -202,6 +206,7 @@ When type safety issues stem from architectural decisions, this agent flags the 
 - [ ] Literal types not widened to primitives
 - [ ] Object shapes preserved, not `Record<string, unknown>`
 - [ ] Type information flows from source of truth (schema)
+- [ ] Library-native types/classes used where available
 
 ### Compilation-Time Embedding
 
@@ -239,25 +244,29 @@ Structure your review as:
 - Flow: [How types flow through system]
 - Losses: [Where type information is lost]
 
-### Violations Found
+### Findings
 
-#### Critical (must fix)
+#### Critical (must-fix)
 
 1. **[File:Line]** - [Violation type]
    - Problem: [What's wrong]
    - Impact: [Why it matters]
    - Fix: [How to resolve]
 
-#### Warnings (should fix)
+#### Warnings (optional)
 
 1. **[File:Line]** - [Issue]
    - [Explanation and recommendation]
 
+### Incorrect Recommendations
+
+- [List suggestions that must NOT be implemented: (1) prior reviewer suggestions that are incorrect, and (2) findings from this run classified as `incorrect`, each with rationale]
+
 ### Resolution Strategy
 
-1. [Move X to generation time]
-2. [Generate type guards for Y]
-3. [Implement two-executor pattern for Z]
+1. For Finding 1 (`file:line`): [Move X to generation time]
+2. For Finding 2 (`file:line`): [Generate type guards for Y]
+3. For Finding 3 (`file:line`): [Implement two-executor pattern for Z]
 ```
 
 ## When to Recommend Other Reviews
@@ -279,6 +288,7 @@ A successful type review:
 - [ ] Compilation-time embedding opportunities identified
 - [ ] Resolution strategies provided for each violation
 - [ ] Appropriate delegations to related specialists flagged
+- [ ] Findings classified as `must-fix`, `optional`, or `incorrect`
 
 ## Resolution Strategies
 

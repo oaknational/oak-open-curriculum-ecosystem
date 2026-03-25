@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 300
+fitness_line_count: 300
 split_strategy: 'Extract workspace-specific troubleshooting to workspace READMEs'
 ---
 
@@ -249,6 +249,10 @@ When migrating facade imports, check for second-level barrels (e.g. `oak.ts` re-
 ### TS2209 rootDir Ambiguity
 
 When `tsconfig.build.json` narrows `include` from a wide base, add explicit `rootDir: "./src"` for export map resolution.
+
+### Vitest v4 Test Filtering
+
+`--testPathPattern` fails in vitest v4. Use file paths as positional args instead: `pnpm vitest run path/to/test.ts`.
 
 ## TSDoc Issues
 

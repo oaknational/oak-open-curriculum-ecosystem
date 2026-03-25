@@ -12,6 +12,10 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 |------|------|-------------|
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies for this collection |
 | `active/README.md` | Active index | Atomic executable plans mapped one-to-one to roadmap phases |
+| `future/phase-0-control-mapping.md` | Future artefact | Phase 0 control inventory and mapping target |
+| `future/phase-1-security-claim-contract.md` | Future artefact | Phase 1 security claim contract target |
+| `future/phase-2-evidence-merge-readiness-rules.md` | Future artefact | Phase 2 evidence merge-readiness rules target |
+| `future/phase-3-baseline-control-cut-list.md` | Future artefact | Phase 3 baseline control cut list target |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `developing-secure-mcp-servers.research.md` | Research | Hardening evidence base and control backlog |
 | `evidence-bundle.template.md` | Template | Claim/evidence artefact format for non-trivial security claims |
@@ -21,7 +25,8 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Atomic execution plans**: [active/README.md](active/README.md)
-3. **Research evidence base**: [developing-secure-mcp-servers.research.md](developing-secure-mcp-servers.research.md)
+3. **Phase artefact targets**: [future/](future/) (control mapping, claim contracts, merge-readiness rules, control cut list)
+4. **Research evidence base**: [developing-secure-mcp-servers.research.md](developing-secure-mcp-servers.research.md)
 
 ## Prioritisation Contract
 

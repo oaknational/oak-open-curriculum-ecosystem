@@ -4,6 +4,7 @@ import { lessonSummarySchema } from '@oaknational/curriculum-sdk/public/search.j
 import {
   generateLessonSemanticSummary,
   generateUnitSemanticSummary,
+  generateSequenceSemanticSummary,
 } from './semantic-summary-generator';
 
 /** Builds a lesson summary fixture with all required fields. */
@@ -148,5 +149,119 @@ describe('generateUnitSemanticSummary', () => {
     expect(result).not.toContain('Prior knowledge:');
     expect(result).not.toContain('National curriculum:');
     expect(result).not.toContain('Lessons:');
+  });
+});
+
+describe('generateSequenceSemanticSummary', () => {
+  /** Builds a minimal unit summary fixture. */
+  function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
+    return {
+      unitSlug: 'fractions-unit',
+      unitTitle: 'Understanding Fractions',
+      yearSlug: 'year-4',
+      year: '4',
+      phaseSlug: 'primary',
+      subjectSlug: 'maths',
+      keyStageSlug: 'ks2',
+      priorKnowledgeRequirements: ['Understanding of whole numbers'],
+      nationalCurriculumContent: ['Recognise and show fractions'],
+      unitLessons: [
+        { lessonSlug: 'lesson-1', lessonTitle: 'What is a fraction?', state: 'published' },
+      ],
+      ...overrides,
+    };
+  }
+
+  it('constructs deterministic summary from sequence metadata and ordered unit summaries', () => {
+    const unitSummary1 = buildUnitSummary({
+      unitSlug: 'fractions-y4',
+      unitTitle: 'Fractions Year 4',
+    });
+    const unitSummary2 = buildUnitSummary({
+      unitSlug: 'decimals-y5',
+      unitTitle: 'Decimals Year 5',
+    });
+
+    const result = generateSequenceSemanticSummary({
+      sequenceTitle: 'Mathematics Primary',
+      subjectTitle: 'Mathematics',
+      phaseTitle: 'Primary',
+      years: ['4', '5'],
+      keyStages: ['ks2'],
+      orderedUnitSummaries: [
+        { summary: unitSummary1, keyStageTitle: 'Key Stage 2', subjectTitle: 'Mathematics' },
+        { summary: unitSummary2, keyStageTitle: 'Key Stage 2', subjectTitle: 'Mathematics' },
+      ],
+    });
+
+    // Context line
+    expect(result).toMatch(
+      /^Mathematics Primary is a Mathematics Primary curriculum sequence covering ks2 \(4, 5\)\./,
+    );
+    // Per-unit summaries follow
+    expect(result).toContain('Fractions Year 4 is a Key Stage 2 Mathematics unit');
+    expect(result).toContain('Decimals Year 5 is a Key Stage 2 Mathematics unit');
+  });
+
+  it('reuses generateUnitSemanticSummary for per-unit text', () => {
+    const unitSummary = buildUnitSummary({
+      unitSlug: 'fractions-y4',
+      unitTitle: 'Fractions Year 4',
+    });
+
+    const sequenceResult = generateSequenceSemanticSummary({
+      sequenceTitle: 'Mathematics Primary',
+      subjectTitle: 'Mathematics',
+      phaseTitle: 'Primary',
+      years: ['4'],
+      keyStages: ['ks2'],
+      orderedUnitSummaries: [
+        { summary: unitSummary, keyStageTitle: 'Key Stage 2', subjectTitle: 'Mathematics' },
+      ],
+    });
+
+    const directUnitResult = generateUnitSemanticSummary(unitSummary, 'Key Stage 2', 'Mathematics');
+
+    // The sequence semantic must contain the exact unit semantic summary text
+    expect(sequenceResult).toContain(directUnitResult);
+  });
+
+  it('preserves unit ordering in output', () => {
+    const unitA = buildUnitSummary({ unitSlug: 'unit-a', unitTitle: 'Unit Alpha' });
+    const unitB = buildUnitSummary({ unitSlug: 'unit-b', unitTitle: 'Unit Beta' });
+    const unitC = buildUnitSummary({ unitSlug: 'unit-c', unitTitle: 'Unit Gamma' });
+
+    const result = generateSequenceSemanticSummary({
+      sequenceTitle: 'Maths Primary',
+      subjectTitle: 'Mathematics',
+      phaseTitle: 'Primary',
+      years: ['1', '2', '3'],
+      keyStages: ['ks1', 'ks2'],
+      orderedUnitSummaries: [
+        { summary: unitA, keyStageTitle: 'Key Stage 1', subjectTitle: 'Mathematics' },
+        { summary: unitB, keyStageTitle: 'Key Stage 1', subjectTitle: 'Mathematics' },
+        { summary: unitC, keyStageTitle: 'Key Stage 2', subjectTitle: 'Mathematics' },
+      ],
+    });
+
+    const indexA = result.indexOf('Unit Alpha');
+    const indexB = result.indexOf('Unit Beta');
+    const indexC = result.indexOf('Unit Gamma');
+
+    expect(indexA).toBeLessThan(indexB);
+    expect(indexB).toBeLessThan(indexC);
+  });
+
+  it('fails fast when orderedUnitSummaries is empty', () => {
+    expect(() =>
+      generateSequenceSemanticSummary({
+        sequenceTitle: 'Maths Primary',
+        subjectTitle: 'Mathematics',
+        phaseTitle: 'Primary',
+        years: ['4'],
+        keyStages: ['ks2'],
+        orderedUnitSummaries: [],
+      }),
+    ).toThrow(/orderedUnitSummaries/i);
   });
 });

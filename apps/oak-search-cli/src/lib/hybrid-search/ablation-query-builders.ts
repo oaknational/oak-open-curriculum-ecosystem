@@ -1,40 +1,46 @@
 /**
  * Ablation query builders for four-retriever testing.
  *
- * These builders support the ablation study comparing individual retrievers
- * and hybrid configurations to prove the value of the four-retriever architecture.
- *
- * Configurations:
- * - Structure-only retrievers (BM25 and ELSER on structure field)
- * - Two-way hybrids (content-only and structure-only via RRF)
+ * Configurations: structure-only retrievers, two-way hybrids.
+ * All retriever building blocks imported from SDK (ADR-134).
  *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
  */
 
 import type { estypes } from '@elastic/elasticsearch';
+import {
+  buildBm25Retriever,
+  buildLessonHighlight,
+  buildUnitHighlight,
+  LESSON_BM25_CONTENT,
+  LESSON_BM25_STRUCTURE,
+  LESSON_BM25_CONFIG,
+  LESSON_CONTENT_SEMANTIC,
+  LESSON_STRUCTURE_SEMANTIC,
+  UNIT_BM25_CONTENT,
+  UNIT_BM25_STRUCTURE,
+  UNIT_BM25_CONFIG,
+  UNIT_CONTENT_SEMANTIC,
+  UNIT_STRUCTURE_SEMANTIC,
+} from '@oaknational/oak-search-sdk/read';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { LessonSearchParams, UnitSearchParams } from './experiment-query-builders';
-import {
-  createLessonFilters,
-  createLessonHighlight,
-  createLessonBm25ContentRetriever,
-  createLessonBm25StructureRetriever,
-  createLessonElserContentRetriever,
-  createLessonElserStructureRetriever,
-  createUnitFilters,
-  createUnitHighlight,
-  createUnitBm25ContentRetriever,
-  createUnitBm25StructureRetriever,
-  createUnitElserContentRetriever,
-  createUnitElserStructureRetriever,
-} from './rrf-query-helpers';
+import { createLessonFilters, createUnitFilters } from './rrf-query-helpers';
 
-/** RRF parameters for two-way hybrid combinations */
-const TWO_WAY_RRF_PARAMS = {
-  rank_window_size: 80,
-  rank_constant: 60,
-} as const;
+type QueryContainer = estypes.QueryDslQueryContainer;
+
+/** RRF parameters for two-way hybrid combinations. */
+const TWO_WAY_RRF_PARAMS = { rank_window_size: 80, rank_constant: 60 } as const;
+
+/** Builds an ELSER semantic retriever for a given field. */
+function buildElserRetriever(
+  semanticField: string,
+  query: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return { standard: { query: { semantic: { field: semanticField, query } }, filter } };
+}
 
 // ============================================================================
 // STRUCTURE-ONLY RETRIEVERS
@@ -48,13 +54,17 @@ export function buildLessonBm25StructureOnlyRequest(params: LessonSearchParams):
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonBm25StructureRetriever(query, filterClause),
+    retriever: buildBm25Retriever(
+      query,
+      LESSON_BM25_STRUCTURE,
+      filterClause,
+      [],
+      LESSON_BM25_CONFIG,
+    ),
   };
-
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
-
   return request;
 }
 
@@ -66,13 +76,11 @@ export function buildLessonElserStructureOnlyRequest(params: LessonSearchParams)
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonElserStructureRetriever(query, filterClause),
+    retriever: buildElserRetriever(LESSON_STRUCTURE_SEMANTIC, query, filterClause),
   };
-
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
-
   return request;
 }
 
@@ -84,13 +92,11 @@ export function buildUnitBm25StructureOnlyRequest(params: UnitSearchParams): EsS
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitBm25StructureRetriever(query, filterClause),
+    retriever: buildBm25Retriever(query, UNIT_BM25_STRUCTURE, filterClause, [], UNIT_BM25_CONFIG),
   };
-
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
-
   return request;
 }
 
@@ -102,13 +108,11 @@ export function buildUnitElserStructureOnlyRequest(params: UnitSearchParams): Es
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitElserStructureRetriever(query, filterClause),
+    retriever: buildElserRetriever(UNIT_STRUCTURE_SEMANTIC, query, filterClause),
   };
-
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
-
   return request;
 }
 
@@ -121,27 +125,23 @@ export function buildLessonContentHybridRequest(params: LessonSearchParams): EsS
   const { query, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
   const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-
   const retriever: estypes.RetrieverContainer = {
     rrf: {
       retrievers: [
-        createLessonBm25ContentRetriever(query, filterClause),
-        createLessonElserContentRetriever(query, filterClause),
+        buildBm25Retriever(query, LESSON_BM25_CONTENT, filterClause, [], LESSON_BM25_CONFIG),
+        buildElserRetriever(LESSON_CONTENT_SEMANTIC, query, filterClause),
       ],
       ...TWO_WAY_RRF_PARAMS,
     },
   };
-
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
     retriever,
   };
-
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
-
   return request;
 }
 
@@ -150,27 +150,23 @@ export function buildLessonStructureHybridRequest(params: LessonSearchParams): E
   const { query, size, subject, keyStage, unitSlug, includeHighlights = true } = params;
   const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-
   const retriever: estypes.RetrieverContainer = {
     rrf: {
       retrievers: [
-        createLessonBm25StructureRetriever(query, filterClause),
-        createLessonElserStructureRetriever(query, filterClause),
+        buildBm25Retriever(query, LESSON_BM25_STRUCTURE, filterClause, [], LESSON_BM25_CONFIG),
+        buildElserRetriever(LESSON_STRUCTURE_SEMANTIC, query, filterClause),
       ],
       ...TWO_WAY_RRF_PARAMS,
     },
   };
-
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
     retriever,
   };
-
   if (includeHighlights) {
-    request.highlight = createLessonHighlight();
+    request.highlight = buildLessonHighlight();
   }
-
   return request;
 }
 
@@ -179,27 +175,23 @@ export function buildUnitContentHybridRequest(params: UnitSearchParams): EsSearc
   const { query, size, subject, keyStage, minLessons, includeHighlights = true } = params;
   const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-
   const retriever: estypes.RetrieverContainer = {
     rrf: {
       retrievers: [
-        createUnitBm25ContentRetriever(query, filterClause),
-        createUnitElserContentRetriever(query, filterClause),
+        buildBm25Retriever(query, UNIT_BM25_CONTENT, filterClause, [], UNIT_BM25_CONFIG),
+        buildElserRetriever(UNIT_CONTENT_SEMANTIC, query, filterClause),
       ],
       ...TWO_WAY_RRF_PARAMS,
     },
   };
-
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
     retriever,
   };
-
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
-
   return request;
 }
 
@@ -208,26 +200,22 @@ export function buildUnitStructureHybridRequest(params: UnitSearchParams): EsSea
   const { query, size, subject, keyStage, minLessons, includeHighlights = true } = params;
   const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-
   const retriever: estypes.RetrieverContainer = {
     rrf: {
       retrievers: [
-        createUnitBm25StructureRetriever(query, filterClause),
-        createUnitElserStructureRetriever(query, filterClause),
+        buildBm25Retriever(query, UNIT_BM25_STRUCTURE, filterClause, [], UNIT_BM25_CONFIG),
+        buildElserRetriever(UNIT_STRUCTURE_SEMANTIC, query, filterClause),
       ],
       ...TWO_WAY_RRF_PARAMS,
     },
   };
-
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
     retriever,
   };
-
   if (includeHighlights) {
-    request.highlight = createUnitHighlight();
+    request.highlight = buildUnitHighlight();
   }
-
   return request;
 }

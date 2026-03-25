@@ -29,7 +29,7 @@ isProject: false
 
 - [roadmap.md](../roadmap.md)
 - [developing-secure-mcp-servers.research.md](../developing-secure-mcp-servers.research.md)
-- [phase-3-baseline-control-cut-list.md](../phase-3-baseline-control-cut-list.md)
+- [phase-3-baseline-control-cut-list.md](../future/phase-3-baseline-control-cut-list.md)
 - [deferred-controls-register.md](../deferred-controls-register.md)
 
 ## Scope Boundary
@@ -54,8 +54,8 @@ Low-priority items remain deferred and are tracked only as notes:
     in `phase-3-baseline-control-cut-list.md`
 - Deterministic validation:
   - `rg -n "6\.1 Protocol|6\.2 Authentication|6\.3 Tool governance" .agent/plans/security-and-privacy/developing-secure-mcp-servers.research.md`
-  - `test -f .agent/plans/security-and-privacy/phase-3-baseline-control-cut-list.md`
-  - `rg -n "Implementation Tranche 1|Deterministic Validation Map" .agent/plans/security-and-privacy/phase-3-baseline-control-cut-list.md`
+  - `test -f .agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md`
+  - `rg -n "Implementation Tranche 1|Deterministic Validation Map" .agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md`
 
 ### Task 3.2: Deterministic Validation Map
 

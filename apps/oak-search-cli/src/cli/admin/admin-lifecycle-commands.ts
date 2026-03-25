@@ -1,9 +1,8 @@
 /**
  * CLI commands for lifecycle ingestion operations (ADR-130).
  *
- * Provides versioned-ingest and stage commands that delegate to the
- * SDK lifecycle service. These commands require Oak API credentials
- * for data acquisition.
+ * Provides versioned-ingest and stage commands that delegate to the SDK lifecycle
+ * service. These commands require Oak API credentials for data acquisition.
  *
  * Resource ownership pattern:
  * - ES client: created by handler, cleaned up by `withEsClient`
@@ -13,14 +12,19 @@
  */
 
 import { existsSync, readdirSync } from 'node:fs';
-import type { Command } from 'commander';
+import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
-import type { IndexLifecycleService } from '@oaknational/oak-search-sdk';
+import {
+  withLifecycleLease,
+  type AdminError,
+  type IndexLifecycleService,
+} from '@oaknational/oak-search-sdk/admin';
+import type { BulkDataEnv } from '@oaknational/env';
+import type { Result } from '@oaknational/result';
 import {
   createEsClient,
   withEsClient,
-  buildLifecycleService,
-  resolveBulkDir,
+  resolveBulkDirFromInputs,
   validateIngestEnv,
   printSuccess,
   printError,
@@ -28,34 +32,41 @@ import {
   APP_ROOT,
   type CliSdkEnv,
 } from '../shared/index.js';
+import { buildLifecycleService } from './shared/build-lifecycle-service.js';
+import {
+  parseLifecycleIngestOpts,
+  type ParsedLifecycleIngestOpts,
+} from './shared/parse-lifecycle-ingest-opts.js';
 import type { OakClientEnv } from '../../adapters/oak-adapter.js';
 import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-client-factory.js';
 import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
 import { ingestLogger } from '../../lib/logger.js';
-
 /**
  * Extended environment for lifecycle commands that perform ingestion.
  */
-export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv;
+export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv & BulkDataEnv;
+function validateMinDocCount(rawCount: string): number {
+  const parsed = Number.parseInt(rawCount, 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new InvalidArgumentError('--min-doc-count must be a non-negative integer.');
+  }
+  return parsed;
+}
 
 /** Shared `withEsClient` deps for lifecycle ingest commands. */
 const ingestDeps = {
   logger: ingestLogger,
   printError,
-  setExitCode: (c: number) => {
-    process.exitCode = c;
-  },
+  setExitCode: (c: number) => (process.exitCode = c),
 };
 
 /** Real filesystem predicates for `resolveBulkDir`. */
 const realFs = { existsSync, readdirSync: (p: string) => readdirSync(p) };
 
-/** Options shared by versioned-ingest and stage commands. */
-interface LifecycleIngestOpts {
-  readonly bulkDir: string;
-  readonly subjectFilter?: string[];
-  readonly minDocCount?: number;
-  readonly verbose?: boolean;
+/** Result of validating ingest preconditions. */
+interface IngestPreconditionResult {
+  readonly ok: boolean;
+  readonly bulkDir?: string;
 }
 
 /**
@@ -92,6 +103,111 @@ async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): 
   }
 }
 
+/** Validate bulk-dir and ingest env requirements before creating resources. */
+function validateIngestPreconditions(
+  cliEnv: LifecycleIngestEnv,
+  opts: ParsedLifecycleIngestOpts,
+): IngestPreconditionResult {
+  const bulkResult = resolveBulkDirFromInputs({
+    bulkDirFlag: opts.bulkDir,
+    bulkDirFromEnv: cliEnv.BULK_DOWNLOAD_DIR,
+    appRoot: APP_ROOT,
+    fs: realFs,
+  });
+  if (!bulkResult.ok) {
+    ingestLogger.error(bulkResult.error.message, bulkResult.error);
+    printError(bulkResult.error.message);
+    process.exitCode = 1;
+    return { ok: false };
+  }
+  const envResult = validateIngestEnv({ oakApiKey: cliEnv.OAK_API_KEY });
+  if (!envResult.ok) {
+    ingestLogger.error(envResult.error.message, envResult.error);
+    printError(envResult.error.message);
+    process.exitCode = 1;
+    return { ok: false };
+  }
+  return { ok: true, bulkDir: bulkResult.value };
+}
+
+/** Handle lifecycle service error/success output consistently. */
+function handleLifecycleResult<T>(
+  result: Result<T, AdminError>,
+  onSuccess: (value: T) => void,
+): void {
+  if (!result.ok) {
+    ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+    printError(`${result.error.type}: ${result.error.message}`);
+    process.exitCode = 1;
+    return;
+  }
+  onSuccess(result.value);
+}
+
+/** Execute `versioned-ingest` action body. */
+async function runVersionedIngestAction(
+  cliEnv: LifecycleIngestEnv,
+  opts: ParsedLifecycleIngestOpts,
+): Promise<void> {
+  const preconditions = validateIngestPreconditions(cliEnv, opts);
+  if (!preconditions.ok || !preconditions.bulkDir) {
+    return;
+  }
+  const bulkDir = preconditions.bulkDir;
+  const esClient = createEsClient(cliEnv);
+  await withEsClient(
+    esClient,
+    async () => {
+      const { service, oakClient } = await buildIngestService(esClient, cliEnv);
+      try {
+        const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+          service.versionedIngest({ ...opts, bulkDir }),
+        );
+        handleLifecycleResult(result, (value) => {
+          printSuccess(`Versioned ingest complete: version ${value.version}`);
+          printJson(value);
+        });
+      } finally {
+        await disconnectOakClient(oakClient);
+      }
+    },
+    ingestDeps,
+  );
+}
+
+/** Execute `stage` action body. */
+async function runStageAction(
+  cliEnv: LifecycleIngestEnv,
+  opts: ParsedLifecycleIngestOpts,
+): Promise<void> {
+  const preconditions = validateIngestPreconditions(cliEnv, opts);
+  if (!preconditions.ok || !preconditions.bulkDir) {
+    return;
+  }
+  const bulkDir = preconditions.bulkDir;
+  const esClient = createEsClient(cliEnv);
+  await withEsClient(
+    esClient,
+    async () => {
+      const { service, oakClient } = await buildIngestService(esClient, cliEnv);
+      try {
+        const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+          service.stage({ ...opts, bulkDir }),
+        );
+        handleLifecycleResult(result, (value) => {
+          printSuccess(
+            `Staged version ${value.version}. Promote with: admin promote --target-version ${value.version}`,
+          );
+          printJson(value);
+        });
+      } finally {
+        await disconnectOakClient(oakClient);
+      }
+    },
+    ingestDeps,
+  );
+}
+
 /**
  * Register the `admin versioned-ingest` subcommand.
  *
@@ -102,106 +218,28 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIng
   parent
     .command('versioned-ingest')
     .description('Run a versioned blue/green ingest cycle (ADR-130)')
-    .requiredOption('--bulk-dir <path>', 'Path to bulk download data directory')
+    .option(
+      '--bulk-dir <path>',
+      'Path to bulk download data directory (overrides BULK_DOWNLOAD_DIR)',
+    )
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
-    .option('--min-doc-count <count>', 'Minimum docs per index', parseInt)
+    .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (opts: LifecycleIngestOpts) => {
-      const bulkResult = resolveBulkDir(opts.bulkDir, APP_ROOT, realFs);
-      if (!bulkResult.ok) {
-        ingestLogger.error(bulkResult.error.message, bulkResult.error);
-        printError(bulkResult.error.message);
-        process.exitCode = 1;
-        return;
-      }
-      const envResult = validateIngestEnv({ oakApiKey: cliEnv.OAK_API_KEY });
-      if (!envResult.ok) {
-        ingestLogger.error(envResult.error.message, envResult.error);
-        printError(envResult.error.message);
-        process.exitCode = 1;
-        return;
-      }
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const { service, oakClient } = await buildIngestService(esClient, cliEnv);
-          try {
-            const result = await service.versionedIngest({
-              ...opts,
-              bulkDir: bulkResult.value,
-            });
-            if (!result.ok) {
-              ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-              printError(`${result.error.type}: ${result.error.message}`);
-              process.exitCode = 1;
-              return;
-            }
-            printSuccess(`Versioned ingest complete: version ${result.value.version}`);
-            printJson(result.value);
-          } finally {
-            await disconnectOakClient(oakClient);
-          }
-        },
-        ingestDeps,
-      );
-    });
+    .action(async (rawOpts: unknown) =>
+      runVersionedIngestAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
+    );
 }
 
-/**
- * Register the `admin stage` subcommand.
- *
- * Creates and populates versioned indexes without swapping aliases.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values including Oak API credentials
- */
 export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
   parent
     .command('stage')
     .description('Stage versioned indexes without promoting (create, ingest, verify)')
-    .requiredOption('--bulk-dir <path>', 'Path to bulk download data directory')
+    .option(
+      '--bulk-dir <path>',
+      'Path to bulk download data directory (overrides BULK_DOWNLOAD_DIR)',
+    )
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
-    .option('--min-doc-count <count>', 'Minimum docs per index', parseInt)
+    .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (opts: LifecycleIngestOpts) => {
-      const bulkResult = resolveBulkDir(opts.bulkDir, APP_ROOT, realFs);
-      if (!bulkResult.ok) {
-        ingestLogger.error(bulkResult.error.message, bulkResult.error);
-        printError(bulkResult.error.message);
-        process.exitCode = 1;
-        return;
-      }
-      const envResult = validateIngestEnv({ oakApiKey: cliEnv.OAK_API_KEY });
-      if (!envResult.ok) {
-        ingestLogger.error(envResult.error.message, envResult.error);
-        printError(envResult.error.message);
-        process.exitCode = 1;
-        return;
-      }
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const { service, oakClient } = await buildIngestService(esClient, cliEnv);
-          try {
-            const result = await service.stage({ ...opts, bulkDir: bulkResult.value });
-            if (!result.ok) {
-              ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-              printError(`${result.error.type}: ${result.error.message}`);
-              process.exitCode = 1;
-              return;
-            }
-            printSuccess(
-              `Staged version ${result.value.version}. ` +
-                `Promote with: admin promote --version ${result.value.version}`,
-            );
-            printJson(result.value);
-          } finally {
-            await disconnectOakClient(oakClient);
-          }
-        },
-        ingestDeps,
-      );
-    });
+    .action(async (rawOpts: unknown) => runStageAction(cliEnv, parseLifecycleIngestOpts(rawOpts)));
 }

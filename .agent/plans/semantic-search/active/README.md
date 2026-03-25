@@ -1,41 +1,21 @@
 # Semantic Search — Active
 
-Executable plans currently in progress.
+Single active plan. All prior active plans archived or moved to future/.
 
-| Priority | Plan | Scope | Status |
-|---|---|---|---|
-| A0 | [cli-robustness.plan.md](./cli-robustness.plan.md) | Fix CLI error handling, teardown guarantees, and process lifecycle robustness; re-run dry-run validation | 🟢 Active (current) |
-| A1 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Unify bulk ingestion, fix layer boundaries, enable blue/green lifecycle (ADR-130) | 🟢 Active |
-| A2 | [search-sdk-args-extraction.plan.md](./search-sdk-args-extraction.plan.md) | Move param builders, scope validation, and error formatting into Search SDK | 🟡 Planning |
-| A3 | [bulk-metadata-quick-wins.execution.plan.md](./bulk-metadata-quick-wins.execution.plan.md) | Boundary 03 — preserve and widen low-risk bulk lesson/unit metadata for later asset and retrieval work | 🟢 Active |
-| A4 | [kg-alignment-audit.execution.plan.md](./kg-alignment-audit.execution.plan.md) | Audit measured overlap between ontology graph entities and search-facing curriculum records before broader graph integration | 🟢 Active |
-| A5 | [category-integration-remediation.md](./category-integration-remediation.md) | Wire existing category supplementation infrastructure through the bulk ingestion orchestration layer | 🟡 Planning |
-| A6 | [short-term-pr-snagging.plan.md](./short-term-pr-snagging.plan.md) | Immediate PR snagging pass with evidence-first item triage, blocker-first fixes, and explicit thread closure outcomes | 🟡 Planning |
+| Plan | Scope | Status |
+|---|---|---|
+| [prod-search-assessment.execution.plan.md](./prod-search-assessment.execution.plan.md) | Verify F1/F2 fixes and search quality via prod MCP server after PR merge | Nearly unblocked — CI build/lint/type-check pass, agent-tools test timeout remains |
 
-`unified-versioned-ingestion.plan.md` is the standalone-ready session entry for
-the blue/green lifecycle integration. It supersedes the predecessor plan
-and incorporates all 16 reviewer findings as planned work.
+Recently archived:
 
-`bulk-metadata-quick-wins.execution.plan.md` is the standalone-ready session
-entry for the current Boundary 03 workstream.
+- [f2-closure-and-p0-ingestion.execution.plan.md](../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, Phases 1–2 complete (2026-03-24)
+- [turbo-and-codegen-boundary-fix.plan.md](../archive/completed/turbo-and-codegen-boundary-fix.plan.md) — turbo fixes + B2 extraction complete; B1 deferred to [workspace decomposition](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md) (2026-03-24)
+- [search-tool-prod-validation-findings-2026-03-15.md](../archive/completed/search-tool-prod-validation-findings-2026-03-15.md) — F1/F2 findings register (referenced by active plan)
 
-`kg-alignment-audit.execution.plan.md` is the standalone-ready session entry
-for the first ontology/search graph-enablement workstream.
+Moved to future/:
 
-`short-term-pr-snagging.plan.md` is the standalone-ready session entry for the
-PR #67 snagging pass, with companion handover prompt
-`../../../prompts/semantic-search/pr-67-snagging-triage.prompt.md`.
-
-`cli-robustness.plan.md` is the current active re-entry lane to re-validate the
-dry-run execution path and confirm no-hang lifecycle guarantees.
-
-## Reference Documents
-
-- [bulk_data_for_semantic_search.feature_request.md](./bulk_data_for_semantic_search.feature_request.md) — bulk download enhancement requests for the API team
-
-## Archived
-
-- [blue-green-reindex.execution.plan.md](../archive/completed/blue-green-reindex.execution.plan.md) — superseded by `unified-versioned-ingestion.plan.md`; retained for root cause analysis and completed prerequisites
+- [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md) — canonical bulk policy, merge, API parity
+- [search-ingestion-sdk-extraction.execution.plan.md](../future/search-ingestion-sdk-extraction.execution.plan.md) — ingestion SDK extraction (ADR-140)
 
 Next queue: [current/README.md](../current/README.md)
 Strategic backlog: [future/README.md](../future/README.md)

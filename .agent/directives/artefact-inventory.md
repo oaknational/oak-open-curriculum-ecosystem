@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 80
+fitness_line_count: 80
 split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 ---
 

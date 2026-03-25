@@ -29,7 +29,11 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
     type: 'completion',
     contexts: createCompletionContexts(UNIT_ROLLUP_COMPLETION_CONTEXTS),
   },
-  unit_topics: textFieldWithAnalyzers(),
+  unit_topics: textFieldWithAnalyzers({
+    fields: {
+      keyword: KEYWORD_SUBFIELD,
+    },
+  }),
   // BM25 content field (Phase 3 nomenclature: unit_content)
   unit_content: textFieldWithAnalyzers({
     term_vector: 'with_positions_offsets',

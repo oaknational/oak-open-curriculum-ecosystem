@@ -118,7 +118,11 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@25.3.5)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.3.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  agent-tools: {}
+  agent-tools:
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../packages/core/oak-eslint
 
   apps/oak-curriculum-mcp-stdio:
     dependencies:
@@ -304,6 +308,9 @@ importers:
       '@oaknational/sdk-codegen':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-sdk-codegen
+      '@oaknational/search-contracts':
+        specifier: workspace:*
+        version: link:../../packages/libs/search-contracts
       '@oaknational/type-helpers':
         specifier: workspace:*
         version: link:../../packages/core/type-helpers
@@ -560,6 +567,25 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/libs/search-contracts:
+    dependencies:
+      '@oaknational/sdk-codegen':
+        specifier: workspace:*
+        version: link:../../sdks/oak-sdk-codegen
+      '@oaknational/type-helpers':
+        specifier: workspace:*
+        version: link:../../core/type-helpers
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@oaknational/eslint-plugin-standards':
+        specifier: workspace:*
+        version: link:../../core/oak-eslint
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/sdks/oak-curriculum-sdk:
     dependencies:
       '@oaknational/logger':
@@ -687,6 +713,9 @@ importers:
       '@oaknational/sdk-codegen':
         specifier: workspace:*
         version: link:../oak-sdk-codegen
+      '@oaknational/search-contracts':
+        specifier: workspace:*
+        version: link:../../libs/search-contracts
       '@oaknational/type-helpers':
         specifier: workspace:*
         version: link:../../core/type-helpers

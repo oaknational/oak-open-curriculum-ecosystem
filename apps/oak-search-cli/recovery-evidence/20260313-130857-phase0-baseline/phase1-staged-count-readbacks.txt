@@ -1,0 +1,12 @@
+## oak_sequence_facets_v2026-03-12-175109
+{"count":57,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}
+## oak_threads_v2026-03-12-175109
+{"count":164,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}
+## oak_sequences_v2026-03-12-175109
+{"count":30,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}
+## oak_units_v2026-03-12-175109
+{"count":1634,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}
+## oak_unit_rollup_v2026-03-12-175109
+{"count":1634,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}
+## oak_lessons_v2026-03-12-175109
+{"count":12391,"_shards":{"total":6,"successful":6,"skipped":0,"failed":0}}

@@ -25,7 +25,7 @@ Introduce secrets scanning as a mandatory quality gate across local workflow and
 - Add secrets scan to CI using checked-out full history.
 - Add a pre-push Husky check to block pushes with detected secret-like values.
 - Keep allowlisting strict:
-  - Scoped path allowlist for `.agent/reference-docs/**`.
+  - Scoped path allowlist for `.agent/reference/**`.
   - No broad allowlists.
   - Line-level allowlisting only where required and reviewed.
 

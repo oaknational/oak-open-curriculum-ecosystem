@@ -13,6 +13,7 @@ Before archival, mine completed outcomes into permanent documentation
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| Short-Term PR Snagging | 2026-03-11 | PR snagging pass complete. Checks and review findings resolved. | [archived plan](semantic-search/archive/completed/short-term-pr-snagging.plan.md) |
 | MCP Result Pattern Unification | 2026-03-08 | Converged MCP tool execution on `Result<T, E>` across curriculum SDK and MCP consumers. `executeToolCall` returns `Result<ToolExecutionSuccess, McpToolError \| McpParameterError>`, `extractExecutionData` removed, stdio + streamable-http consumers migrated. | [archived plan](semantic-search/archive/completed/mcp-result-pattern-unification.execution.plan.md) |
 | SDK Workspace Separation | 2026-02-25 | Split curriculum-sdk into generation (`@oaknational/sdk-codegen`) and runtime workspaces. Phases 0-7 complete. Two pipelines (API + bulk), 11 subpath exports, boundary rules, 4 package/repo renames. 12-gate quality chain, 8 specialist reviews. | [archived plan](semantic-search/archive/completed/sdk-workspace-separation.md) |
 | Phase 7 Merge Readiness | 2026-02-25 | Consolidation, full quality gate chain, determinism verification, specialist reviews. F16 drift check implemented then removed (redundant with pnpm check). | [archived plan](semantic-search/archive/completed/phase_7_and_merge_readiness.plan.md) |
@@ -35,6 +36,8 @@ Before archival, mine completed outcomes into permanent documentation
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| Graph Data Integrity Snagging | 2026-03-11 | Graph integrity defects classified and resolved: bulk data dedup, thread ordering contract, generation invariant enforcement (self-loops, duplicate edges, node payload arrays), MCP pass-through boundary preserved. | [archived plan](sdk-and-mcp-enhancements/archive/completed/graph-data-integrity-snagging.execution.plan.md) |
+| Oak Preview MCP Snagging | 2026-03-11 | All 4 phases complete: canonical URL fix, reindex boundary documented, MCP guidance tightened, reviewer gates passed. Plus sequence keyStage filter fix and suggestion URL schema fix. Post-deploy reindex is operational only. | [archived plan](sdk-and-mcp-enhancements/archive/completed/oak-preview-mcp-snagging.execution.plan.md) |
 | Merge Readiness | 2026-03-02 | `feat/semantic_search_deployment` merged to `main`. MCP prompts investigated (ADR-123), onboarding review complete, quality gates green, secrets sweep done. | [archived plan](sdk-and-mcp-enhancements/archive/completed/merge-readiness.plan.md) |
 | Search `text` → `query` Rename | 2026-03-07 | Renamed the primary search/explore-topic MCP parameter from `text` to `query` across SDK, MCP, CLI, codegen, tests, prompts, and docs. Full specialist-review remediation completed and the governance follow-through that closed the wrapper/rules gap was recorded. | [archived plan](sdk-and-mcp-enhancements/archive/completed/search-tool-text-to-query-rename.plan.md) |
 | Folder Modernisation Meta Plan | 2026-02-22 | Legacy numbered plans archived under collection archive classes, disposition ledger established, governance docs normalised, and ADR-071 collision resolved by retaining widget URI ADR as 071 and renumbering dense-vector ADR to 118. | [archived plan](sdk-and-mcp-enhancements/archive/completed/folder-modernisation-meta-plan.md) |
@@ -58,6 +61,23 @@ Before archival, mine completed outcomes into permanent documentation
 | Ingestion Data Quality Fix | 2025-12-22 | Upstream API pagination bug workaround (unit-by-unit fetching), 436/436 lessons indexed. | [archived plan](archive/completed/COMPLETION-REPORT-2025-12-22.md) |
 | matchMedia DI Refactoring | 2025-12-22 | MediaQueryContext provider, DI pattern for browser APIs. Work later superseded when oak-search-cli UI layer was removed. | [archived plan](archive/completed/matchmedia-di-refactoring-plan.md) |
 | Global State Elimination | 2025-12-22 | vi.stubGlobal and vi.doMock eliminated, matchMedia DI completed. Remaining phases (config DI, testing discipline) tracked separately. UI-specific work superseded when oak-search-cli UI layer was removed. | [archived plan](archive/completed/global-state-elimination-and-testing-discipline-plan.md) |
+
+---
+
+## Agentic Engineering Enhancements
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| Documentation Accuracy Improvements | 2026-02 | Documentation inaccuracies and structural issues fixed as prerequisite for enforcement work. | [archived plan](agentic-engineering-enhancements/archive/completed/documentation-accuracy-improvements.plan.md) |
+| Cross-Agent Standardisation | 2026-03 | Superseded — absorbed into ADR-125 (Agent Artefact Portability). | [archived plan](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md) |
+
+---
+
+## Architecture and Infrastructure
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| No-Console Enforcement | 2026-03-04 | Superseded — folded into `developer-experience/active/devx-strictness-convergence.plan.md`. | [archived plan](architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md) |
 
 ---
 

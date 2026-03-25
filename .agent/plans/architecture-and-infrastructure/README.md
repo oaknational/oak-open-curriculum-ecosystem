@@ -19,12 +19,12 @@ See [current/README.md](current/README.md) for the next-up queue.
 
 | File | Milestone | Description |
 |------|-----------|-------------|
-| `codegen/` | Post-M1 | SDK codegen workspace decomposition (strategic plan + research) |
-| `stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
-| `config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
-| `no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
-| `observability-and-quality-metrics.plan.md` | M3 | Structured logging, monitoring, alerting, quality dashboards |
-| `security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
+| [`codegen/`](codegen/README.md) | Post-M1 | SDK codegen workspace decomposition — [strategic plan](codegen/future/sdk-codegen-workspace-decomposition.md) + [research](codegen/sdk-codegen-architecture-analysis.md). Temporary turbo overrides applied by [turbo boundary fix](../semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md) until decomposition completes. |
+| `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
+| `current/observability-and-quality-metrics.plan.md` | M3 | Structured logging, monitoring, alerting, quality dashboards |
+| `current/security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
+| `future/stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
+| `archive/completed/no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
 
 ## Milestone Alignment
 

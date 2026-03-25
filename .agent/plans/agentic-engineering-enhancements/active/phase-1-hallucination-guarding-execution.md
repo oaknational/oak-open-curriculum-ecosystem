@@ -31,7 +31,7 @@ todos:
 
 ## Source Strategy
 
-- [hallucination-and-evidence-guard-adoption.plan.md](../hallucination-and-evidence-guard-adoption.plan.md)
+- [hallucination-and-evidence-guard-adoption.plan.md](../current/hallucination-and-evidence-guard-adoption.plan.md)
 
 ## Kickoff Package (Prepared 2026-02-24)
 

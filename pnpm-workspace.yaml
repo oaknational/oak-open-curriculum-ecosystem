@@ -10,6 +10,7 @@ packages:
   - packages/core/type-helpers
   - packages/libs/env-resolution
   - packages/libs/logger
+  - packages/libs/search-contracts
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk

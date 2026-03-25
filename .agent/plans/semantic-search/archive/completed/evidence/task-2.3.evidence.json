@@ -1,0 +1,8 @@
+{
+  "status": "pending-operator-run",
+  "command": "pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts --ledger .agent/plans/semantic-search/archive/completed/field-gap-ledger.json --attempts 6 --interval-ms 5000 --emit-json",
+  "notes": [
+    "This evidence file is populated after operator-run readback against live aliases.",
+    "CI integration tests cover in-process audit logic only."
+  ]
+}

@@ -22,7 +22,7 @@ import type {
   SequencesSearchResult,
   ThreadsSearchResult,
   SuggestionResponse,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 import type { SearchFacets } from '@oaknational/sdk-codegen/search';
 
 /**

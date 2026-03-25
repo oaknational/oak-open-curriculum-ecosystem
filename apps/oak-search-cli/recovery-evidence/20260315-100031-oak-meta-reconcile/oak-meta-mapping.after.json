@@ -1,0 +1,16 @@
+{
+  "oak_meta": {
+    "mappings": {
+      "dynamic": "strict",
+      "properties": {
+        "doc_counts": { "type": "object", "enabled": false },
+        "duration_ms": { "type": "integer" },
+        "ingested_at": { "type": "date" },
+        "key_stages": { "type": "keyword" },
+        "previous_version": { "type": "keyword", "normalizer": "oak_lower" },
+        "subjects": { "type": "keyword" },
+        "version": { "type": "keyword" }
+      }
+    }
+  }
+}

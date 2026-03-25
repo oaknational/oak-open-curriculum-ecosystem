@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 /**
  * Generates Elasticsearch synonym set from SDK ontology data.
  *
@@ -7,7 +7,7 @@
  *
  * @example
  * ```bash
- * npx tsx scripts/generate-synonyms.ts > /tmp/synonyms.json
+ * pnpm exec tsx scripts/generate-synonyms.ts > /tmp/synonyms.json
  * ```
  */
 

@@ -22,6 +22,7 @@ describe('createSequenceDocument', () => {
     years: ['7', '8', '9', '10', '11'],
     unitSlugs: ['algebra-1', 'geometry-1', 'number-1'],
     categoryTitles: ['Algebra', 'Geometry', 'Number'],
+    sequenceSemantic: 'Mathematics Secondary is a Mathematics Secondary curriculum sequence.',
   };
 
   it('should create a sequence document with all required fields', () => {
@@ -93,5 +94,19 @@ describe('createSequenceDocument', () => {
       subject: ['maths'],
       phase: ['secondary'],
     });
+  });
+
+  it('should populate sequence_semantic from params', () => {
+    const doc = createSequenceDocument(baseParams);
+
+    expect(doc.sequence_semantic).toBe(
+      'Mathematics Secondary is a Mathematics Secondary curriculum sequence.',
+    );
+  });
+
+  it('should fail fast when sequenceSemantic is empty or whitespace', () => {
+    expect(() => createSequenceDocument({ ...baseParams, sequenceSemantic: '   ' })).toThrow(
+      /sequenceSemantic/i,
+    );
   });
 });

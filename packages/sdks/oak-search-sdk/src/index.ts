@@ -63,6 +63,44 @@ export {
 export type { SearchIndexTarget, SearchIndexKind, IndexResolverFn } from './internal/index.js';
 
 // ---------------------------------------------------------------------------
+// Retriever builders — canonical shapes for all search scopes
+// ---------------------------------------------------------------------------
+
+export {
+  buildSequenceRetriever,
+  buildThreadRetriever,
+} from './retrieval/retrieval-search-helpers.js';
+
+export {
+  buildFourWayRetriever,
+  buildLessonRetriever,
+  buildUnitRetriever,
+  buildBm25Retriever,
+  LESSON_BM25_CONTENT,
+  LESSON_BM25_STRUCTURE,
+  UNIT_BM25_CONTENT,
+  UNIT_BM25_STRUCTURE,
+} from './retrieval/rrf-query-builders.js';
+
+export { removeNoisePhrases, detectCurriculumPhrases } from './retrieval/query-processing/index.js';
+
+export {
+  normaliseTranscriptScores,
+  filterByMinScore,
+  DEFAULT_MIN_SCORE,
+  clampSize,
+  clampFrom,
+} from './retrieval/rrf-score-processing.js';
+
+export {
+  buildLessonFilters,
+  buildUnitFilters,
+  buildSequenceFilters,
+  buildLessonHighlight,
+  buildUnitHighlight,
+} from './retrieval/rrf-query-helpers.js';
+
+// ---------------------------------------------------------------------------
 // All public types
 // ---------------------------------------------------------------------------
 

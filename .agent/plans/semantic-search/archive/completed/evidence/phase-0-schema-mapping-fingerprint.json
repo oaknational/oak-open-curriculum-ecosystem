@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-03-15T17:05:00.000Z",
+  "source": "@oaknational/sdk-codegen/search",
+  "families": [
+    "lessons",
+    "units",
+    "unit_rollup",
+    "threads",
+    "sequences",
+    "sequence_facets",
+    "meta"
+  ],
+  "notes": [
+    "Phase 0 fingerprint placeholder documenting source-of-truth mapping/schema derivation.",
+    "Field-level parity is enforced by packages/libs/search-contracts/src/field-inventory.integration.test.ts."
+  ]
+}

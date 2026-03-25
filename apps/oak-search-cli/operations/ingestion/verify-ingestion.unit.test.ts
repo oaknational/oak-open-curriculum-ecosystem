@@ -10,6 +10,8 @@ import {
   extractLessonsFromBulkDownload,
   findMissingLessons,
   generateVerificationReport,
+  isBulkDownloadData,
+  resolveBulkDownloadPath,
   type BulkDownloadData,
 } from './verify-ingestion-lib';
 
@@ -126,5 +128,123 @@ describe('generateVerificationReport', () => {
     expect(report).toContain('lesson-20');
     expect(report).toContain('... and 5 more');
     expect(report).not.toContain('lesson-25');
+  });
+});
+
+describe('resolveBulkDownloadPath: explicit input', () => {
+  it('returns the exact path provided by caller', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: './bulk-downloads/maths-secondary.json',
+      bulkDownloadDirFromEnv: './ignored-env-dir',
+      subject: 'maths',
+      keyStage: 'ks4',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: './bulk-downloads/maths-secondary.json',
+    });
+  });
+});
+
+describe('resolveBulkDownloadPath: BULK_DOWNLOAD_DIR resolution', () => {
+  it('resolves from BULK_DOWNLOAD_DIR for maths ks4', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: '',
+      bulkDownloadDirFromEnv: './bulk-downloads',
+      subject: 'maths',
+      keyStage: 'ks4',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: './bulk-downloads/maths-secondary.json',
+    });
+  });
+
+  it('resolves from BULK_DOWNLOAD_DIR for maths ks3', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: '',
+      bulkDownloadDirFromEnv: './bulk-downloads',
+      subject: 'maths',
+      keyStage: 'ks3',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: './bulk-downloads/maths-primary.json',
+    });
+  });
+
+  it('resolves from BULK_DOWNLOAD_DIR for non-maths subjects', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: '',
+      bulkDownloadDirFromEnv: './bulk-downloads',
+      subject: 'science',
+      keyStage: 'ks4',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: './bulk-downloads/science.json',
+    });
+  });
+});
+
+describe('resolveBulkDownloadPath: missing source', () => {
+  it('fails when neither flag nor env bulk dir is provided', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: '',
+      bulkDownloadDirFromEnv: undefined,
+      subject: 'maths',
+      keyStage: 'ks4',
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      error:
+        'Missing bulk download source. Provide --bulk-download <file> or set BULK_DOWNLOAD_DIR in env.',
+    });
+  });
+
+  it('fails when BULK_DOWNLOAD_DIR is an empty string', () => {
+    const result = resolveBulkDownloadPath({
+      bulkDownloadPathArg: '',
+      bulkDownloadDirFromEnv: '',
+      subject: 'maths',
+      keyStage: 'ks4',
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      error:
+        'Missing bulk download source. Provide --bulk-download <file> or set BULK_DOWNLOAD_DIR in env.',
+    });
+  });
+});
+
+describe('isBulkDownloadData', () => {
+  it('accepts valid lesson payload structure', () => {
+    const payload = {
+      lessons: [{ lessonSlug: 'algebra-1', keyStageSlug: 'ks4' }],
+    };
+
+    expect(isBulkDownloadData(payload)).toBe(true);
+  });
+
+  it('rejects lessons with non-string lessonSlug', () => {
+    const payload = {
+      lessons: [{ lessonSlug: 123, keyStageSlug: 'ks4' }],
+    };
+
+    expect(isBulkDownloadData(payload)).toBe(false);
+  });
+
+  it('rejects lessons with non-string keyStageSlug', () => {
+    const payload = {
+      lessons: [{ lessonSlug: 'algebra-1', keyStageSlug: null }],
+    };
+
+    expect(isBulkDownloadData(payload)).toBe(false);
   });
 });

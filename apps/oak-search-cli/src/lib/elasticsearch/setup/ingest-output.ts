@@ -9,11 +9,8 @@ import { isErr } from '@oaknational/result';
 import type { CliArgs } from './ingest-cli-args.js';
 import type { OakClient } from '../../../adapters/oak-adapter.js';
 import { esClient } from '../../es-client.js';
-import {
-  writeIndexMeta,
-  generateVersionFromTimestamp,
-  type IndexMetaError,
-} from '../index-meta.js';
+import { readIndexMeta, writeIndexMeta } from '../index-meta.js';
+import type { IndexMetaError } from '../index-meta-types.js';
 import { ingestLogger } from '../../logger';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 
@@ -29,6 +26,13 @@ export interface IngestionResult {
       readonly sequence_facets: number;
     };
   };
+}
+
+function generateVersionFromTimestamp(): string {
+  const now = new Date();
+  const date = now.toISOString().slice(0, 10);
+  const time = now.toISOString().slice(11, 19).replace(/:/g, '');
+  return `v${date}-${time}`;
 }
 
 /** Log header with ingestion configuration. */
@@ -74,6 +78,11 @@ export async function writeMetadata(
   ingestLogger.debug('Writing index metadata', { version });
 
   const client = esClient();
+  const currentMetaResult = await readIndexMeta(client);
+  if (isErr(currentMetaResult)) {
+    return currentMetaResult;
+  }
+
   const meta: IndexMetaDoc = {
     version,
     ingested_at: new Date().toISOString(),
@@ -81,6 +90,7 @@ export async function writeMetadata(
     duration_ms: Math.round(parseFloat(duration) * 1000),
     subjects: args.subjects,
     key_stages: args.keyStages,
+    previous_version: currentMetaResult.value?.version,
   };
 
   const writeResult = await writeIndexMeta(client, meta);

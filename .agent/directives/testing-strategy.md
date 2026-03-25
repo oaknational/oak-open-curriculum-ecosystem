@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 400
+fitness_line_count: 400
 split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
 ---
 
@@ -40,6 +40,7 @@ split_strategy: "Extract examples to a companion examples file; split by test le
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it. NEVER use `it.skip`, `describe.skip`, `it.skipIf`, or any other skipping mechanism. Skipped tests are silent failures waiting to happen. If a test cannot run (e.g., missing API key), the test MUST fail fast with a helpful error message explaining what is needed. Validation scripts that require external resources should be standalone scripts, not tests.
 - **No global state manipulation** - Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`, use `vi.mock`, or use `vi.doMock`. If a function needs configuration, refactor it to accept config as a parameter. See [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
+- **No process spawning in in-process tests** - Test code MUST NOT spawn child processes, create test-authored workers, or instantiate tools that internally spawn processes (e.g. programmatic ESLint with TypeScript project service). This excludes vitest's own configured pool — the restriction is on what *test code* does, not the runner. Process spawning creates handles that prevent clean worker exit, causes CI hangs, and violates the principle of using the right tool for the job. Use the right tool: ESLint for boundary enforcement, Playwright for browser testing, vitest for runtime logic.
 
 ## Definitions
 
@@ -62,7 +63,7 @@ In-process tests are tests that validate **code imported into the test process**
 
 Out-of-process tests are tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
-- **E2E test**: A test that verifies the behaviour of a running system. E2E tests CAN trigger File System and STDIO IO but NOT network IO, DO have side effects, and contain minimal mocks, largely around network IO. These constrains are to allow the E2E tests to be safely run in CI/CD.
+- **E2E test**: A test that verifies the behaviour of a running system. E2E tests CAN trigger STDIO IO but NOT filesystem or network IO, CAN have side effects, and contain minimal mocks, largely around network IO. These constrains are to allow the E2E tests to be safely run in CI/CD.
 
 - **Smoke test**: A test that verifies the behaviour of a running system, locally or deployed. Smoke tests CAN trigger all IO types, DO have side effects, and DO NOT contain mocks.
 
@@ -372,6 +373,15 @@ This ensures tests remain specifications, not just regression checks.
 For refactoring that does not change public API (runtime behaviour unchanged), the RED phase is compiler errors from signature changes, not runtime test failures. Update test call sites first. Existing tests ARE the safety net — run them before and after the split, no new tests needed for internal restructuring.
 
 For type-derivation fixes, use `satisfies` as a compile-time anchor: `{ flat: 'value' } satisfies MyType` fails type-check if the derivation is wrong, serving as the RED phase alongside generator string-output tests.
+
+## Canonical Vitest Configuration
+
+Every workspace `vitest.config.ts` MUST follow one of two patterns. Deviations cause silent test-category leaks (E2E tests running under `pnpm test`, CI timeouts that don't reproduce locally).
+
+- **Pattern 1 (preferred)**: Import and re-export `baseTestConfig` from `vitest.config.base.ts` at the repo root. Adjust the relative path per workspace depth.
+- **Pattern 2 (custom)**: Define a workspace-specific config. Non-negotiable: `exclude` MUST contain `'**/*.e2e.test.ts'`. `include` SHOULD use explicit conventions (`*.unit.test.ts`, `*.integration.test.ts`) not broad `*.test.ts` globs.
+
+Workspaces with `*.e2e.test.ts` files MUST also have `vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or workspace-specific) and a `test:e2e` script in `package.json`.
 
 ## Test Configuration Gotchas
 

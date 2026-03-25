@@ -7,6 +7,7 @@ import type {
   SearchSubjectSlug,
 } from '../types/oak';
 import type { OakClient } from './oak-adapter';
+import type { CategoryMap } from './category-supplementation';
 import { createBulkDataAdapter, type BulkIndexAction } from './bulk-data-adapter';
 import {
   buildKs4SupplementationContext,
@@ -21,7 +22,7 @@ import { isSubject } from './sdk-guards';
 import { buildRollupDocs } from './bulk-rollup-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
 import { ok, err, type Result } from '@oaknational/result';
-import type { AdminError } from '@oaknational/oak-search-sdk';
+import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 
 /** Configuration for hybrid data source */
 export interface HybridDataSourceConfig {
@@ -231,9 +232,10 @@ export async function createHybridDataSource(
   bulkFile: BulkDownloadFile,
   client: OakClient | null,
   config: Partial<HybridDataSourceConfig> = {},
+  categoryMap?: CategoryMap,
 ): Promise<Result<HybridDataSource, AdminError>> {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
-  const bulkAdapter = createBulkDataAdapter(bulkFile);
+  const bulkAdapter = createBulkDataAdapter(bulkFile, categoryMap);
   const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
   const ks4Result = await buildKs4ContextSafe(
     client,

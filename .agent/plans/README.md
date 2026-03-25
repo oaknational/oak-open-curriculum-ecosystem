@@ -16,7 +16,7 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [semantic-search/](semantic-search/) | Elasticsearch search implementation | 🔄 Post-merge execution active; Milestone 2 blocker queued alongside independent search-quality streams |
 | [sdk-and-mcp-enhancements/](sdk-and-mcp-enhancements/) | MCP extensions, SDK pipeline evolution, concept preservation | 🔄 Active |
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
-| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, cross-agent standardisation, mutation testing | 🔄 Active + queued execution |
+| [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, agent artefact portability (ADR-125), mutation testing, and practice-convergence closeout | 🔄 Active + queued execution |
 | [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
@@ -28,15 +28,20 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 
 ## Plan Collection Structure
 
-Each plan collection follows a consistent pattern:
+Each plan collection follows a lifecycle-oriented pattern, even when some
+directories are omitted because the collection does not need them yet:
 
 ```text
 .agent/plans/{collection-name}/
-├── README.md           # Navigation hub with current status
-├── requirements.md     # Success criteria, business context (optional)
-├── {plan-documents}    # Individual plan files
-├── reference-docs/     # Supporting reference material (optional)
-└── archive/            # Completed/superseded plans (optional)
+├── README.md             # Collection hub and read order
+├── roadmap.md            # Strategic phase sequence and adjacent work (optional)
+├── active/README.md      # Active execution index
+├── current/README.md     # Strategic source / queued-work index
+├── future/               # Planned adjacent capability work (optional)
+├── archive/              # Completed/superseded plans
+├── templates/            # Reusable plan scaffolds (optional)
+├── reference/            # Supporting reference material (optional)
+└── {plan-documents}      # Collection-owned plans outside lifecycle subdirs
 ```
 
 ---
@@ -69,9 +74,12 @@ Each plan collection follows a consistent pattern:
 |--------|---------|
 | 📋 Planned | Not started |
 | 🔬 In Progress | Actively being worked on |
+| 🔄 Active | Active collection or mixed active surface |
 | ⏸ Blocked/Deferred | Waiting on dependency or deprioritised |
 | ✅ Complete | Done |
 | ❌ Abandoned | Won't implement |
+| 📚 Reference | Reference-only material or navigation surface |
+| ⛔ Superseded | Replaced by a newer canonical artefact |
 
 ---
 

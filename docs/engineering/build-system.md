@@ -44,7 +44,9 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
 ### Why This Works
 
 - **`^build`** means "run `build` in dependency packages first"
-- **`sdk-codegen`** (no `^`) means "run `sdk-codegen` in this package first"
+- **`sdk-codegen`** in the `@oaknational/sdk-codegen#build` override means
+  "run `sdk-codegen` in this package first" — scoped to the one package that
+  generates types. Other packages build from committed generated code.
 
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 
@@ -126,7 +128,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub --concurrency=2 && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites
@@ -152,29 +154,25 @@ See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/0
 ### Key relationships
 
 ```text
-sdk-codegen → build → test
-                 ↘ test:e2e → smoke:dev:stub
-                 ↘ type-check
-                 ↘ lint / lint:fix
+sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
+              ▼
+         build → test, type-check, lint / lint:fix, doc-gen  (via ^build)
+              ↘ test:e2e, test:ui  (via same-package build)
+              ↘ smoke:dev:stub    (via same-package build + test:e2e)
 ```
 
-All task dependencies use `^build`:
-
-| Task                | Depends On              | Why                                                   |
-| ------------------- | ----------------------- | ----------------------------------------------------- |
-| `sdk-codegen`       | `^build`                | Core adapter must be built before SDK type generation |
-| `build`             | `^build`, `sdk-codegen` | Dependencies build first, then local type generation  |
-| `type-check`        | `^build`, `sdk-codegen` | Declaration files must exist for type checking        |
-| `lint` / `lint:fix` | `^build`, `sdk-codegen` | ESLint plugin must be built before linting            |
-| `test`              | `^build`                | SDK must be built before tests run                    |
-| `doc-gen`           | `^build`                | Source must be built before doc generation            |
-
-### Independent tasks
-
-These run in parallel with no build dependency:
-
-- `test:e2e`
-- `test:ui`
+| Task                | Depends On            | Why                                                   |
+| ------------------- | --------------------- | ----------------------------------------------------- |
+| `sdk-codegen`       | `^build`              | Core adapter must be built before SDK type generation |
+| `build` (generic)   | `^build`              | Dependencies build first; generated code is committed |
+| `sdk-codegen#build` | `^build`, sdk-codegen | Only this package regenerates types before building   |
+| `type-check`        | `^build`              | Upstream `.d.ts` files must exist for type checking   |
+| `lint` / `lint:fix` | `^build`              | ESLint plugin must be built before linting            |
+| `test`              | `^build`              | SDK must be built before tests run                    |
+| `doc-gen`           | `^build`              | Source must be built before doc generation            |
+| `test:e2e`          | `build`               | Same-package build needed for built-server tests      |
+| `test:ui`           | `build`               | Same-package build needed for Playwright tests        |
+| `smoke:dev:stub`    | `build`, `test:e2e`   | Needs built app and passing E2E tests                 |
 
 ## Caching
 
@@ -255,7 +253,7 @@ This was caused by a race condition where tests ran before SDK build completed. 
 This indicates core packages weren't built before type-check ran. Ensure:
 
 1. `oak-eslint` has a `build` script (not `build-linting`)
-2. `turbo.json` `type-check` depends on `["^build", "sdk-codegen"]`
+2. The generic `type-check` task in `turbo.json` depends on `["^build"]`. Only `@oaknational/sdk-codegen` has a package-specific override adding `sdk-codegen` (see ADR-065 items 6–7)
 3. Run `pnpm clean && pnpm build`
 
 ### Slow repeated runs

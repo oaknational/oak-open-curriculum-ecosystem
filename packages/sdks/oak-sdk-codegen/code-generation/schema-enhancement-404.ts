@@ -25,81 +25,17 @@ interface Legitimate404Descriptor {
   readonly media: MediaTypeObject;
 }
 
-const transcript404Descriptor: Legitimate404Descriptor = {
-  method: 'get',
-  path: '/lessons/{lesson}/transcript',
-  reason:
-    'Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish "no transcript available" from invalid lesson slugs.',
-  upstreamReference: '.agent/plans/upstream-api-metadata-wishlist.md item #4',
-  media: {
-    schema: {
-      type: 'object',
-      description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
-      required: ['message', 'code', 'data'],
-      properties: {
-        message: {
-          type: 'string',
-          example: 'Transcript not available for this query',
-          description: 'Human-readable message describing why the resource is unavailable.',
-        },
-        code: {
-          type: 'string',
-          example: 'NOT_FOUND',
-          description: 'API error code describing the failure classification.',
-        },
-        data: {
-          type: 'object',
-          description:
-            'Additional metadata describing the failure as emitted by the Oak API gateway.',
-          required: ['code', 'httpStatus', 'path'],
-          properties: {
-            code: {
-              type: 'string',
-              example: 'NOT_FOUND',
-              description: 'Reiterated error code for downstream tools.',
-            },
-            httpStatus: {
-              type: 'integer',
-              example: 404,
-              description: 'HTTP status code returned by the upstream API.',
-            },
-            path: {
-              type: 'string',
-              example: 'getLessonTranscript.getLessonTranscript',
-              description: 'Identifier of the upstream operation emitting the error.',
-            },
-            zodError: {
-              description:
-                'Optional validation payload describing schema mismatches. Always null for 404 responses.',
-              type: 'null',
-              example: null,
-            },
-          },
-        },
-      },
-    },
-    example: {
-      message: 'Transcript not available for this query',
-      code: 'NOT_FOUND',
-      data: {
-        code: 'NOT_FOUND',
-        httpStatus: 404,
-        path: 'getLessonTranscript.getLessonTranscript',
-        zodError: null,
-      },
-    },
-  },
-};
-
 /**
  * Central list of endpoints where the API currently returns a legitimate 404 but the
  * upstream OpenAPI schema has not yet documented it. Each entry MUST reference an
  * upstream tracking issue so we can remove the temporary decorator as soon as the schema
  * is updated.
+ *
+ * @remarks
+ * As of 2026-03-19 the upstream schema documents 404 for GET /lessons/{lesson}/transcript,
+ * so the transcript decorator has been removed. The infrastructure remains for future use.
  */
-export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] = [
-  transcript404Descriptor,
-] as const;
+export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] = [] as const;
 
 /**
  * Adds temporary 404 response documentation for known endpoints where the API legitimately

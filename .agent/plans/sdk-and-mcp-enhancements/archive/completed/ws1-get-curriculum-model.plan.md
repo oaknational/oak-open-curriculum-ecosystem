@@ -240,7 +240,6 @@ intermediate states and to satisfy the 2.4 deterministic validation
 > **Workspace prefix convention**: `sdk:` = `packages/sdks/oak-curriculum-sdk/`,
 > `app:` = `apps/oak-curriculum-mcp-streamable-http/`,
 > `codegen:` = `packages/sdks/oak-sdk-codegen/`.
-
 > **Atomic commit strategy**: WS2.1 MUST be a single commit. If
 > `type-check` fails, revert the full changeset and re-apply atomically.
 > Do not split across commits — the type union change makes any partial
@@ -757,7 +756,7 @@ Live assessment of all 30 oak-local MCP tools via `CallMcpTool`.
    codes: `UPSTREAM_SERVER_ERROR` (5xx), `CONTENT_NOT_AVAILABLE` (400 + "blocked" in cause),
    `UPSTREAM_API_ERROR` (all other undocumented). Copyright-blocked content gets a clear message:
    "Resource unavailable due to copyright restrictions. The original may be viewed at
-   www.thenational.academy".
+   <https://www.thenational.academy>".
    (c) App-layer logging via `logUpstreamErrorIfPresent` in `validation-logger.ts`, called from
    `tool-handler-with-auth.ts`. Structured WARN log with `toolName`, `status`, `operationId`,
    `classified`, `upstreamMessage`. `no-console: 'warn'` added to shared ESLint config.
@@ -767,9 +766,9 @@ Live assessment of all 30 oak-local MCP tools via `CallMcpTool`.
    Live verified against dev server: 4 scenarios (blocked transcript, blocked assets, nonexistent
    lesson, non-blocked quiz) all classified correctly.
 
-2. **Resource pattern for large datasets** — IN PROGRESS. Two new resources implemented (`curriculum://prerequisite-graph`, `curriculum://thread-progressions`) following the `curriculum://model` pattern. All resource registrations fixed to use spread metadata (no cherry-picking). Lint errors remain in quality gates — tests need architectural fix (direct source comparison instead of JSON re-parsing). See [MCP Resource Pattern plan](../../../../.cursor/plans/mcp_resource_pattern_2cd3f134.plan.md) for execution details.
+2. **Resource pattern for large datasets** — IN PROGRESS. Two new resources implemented (`curriculum://prerequisite-graph`, `curriculum://thread-progressions`) following the `curriculum://model` pattern. All resource registrations fixed to use spread metadata (no cherry-picking). Lint errors remain in quality gates — tests need architectural fix (direct source comparison instead of JSON re-parsing). Execution notes were session-local and are now represented by the canonical roadmap and follow-on plans in this collection.
 
-3. **Investigate MCP prompts** — NOT STARTED. Three prompts (`find-lessons`, `lesson-planning`, `progression-map`) may overlap with agent-facing resources. Need to assess whether they should be resources, removed, or redesigned. Consider adding a genuinely user-facing prompt (e.g. "adapt a lesson"). See [MCP Resource Pattern plan §Prompt Investigation](../../../../.cursor/plans/mcp_resource_pattern_2cd3f134.plan.md).
+3. **Investigate MCP prompts** — NOT STARTED. Three prompts (`find-lessons`, `lesson-planning`, `progression-map`) may overlap with agent-facing resources. Need to assess whether they should be resources, removed, or redesigned. Consider adding a genuinely user-facing prompt (e.g. "adapt a lesson"). Track in canonical collection plans rather than ephemeral platform plan files.
 
 ---
 

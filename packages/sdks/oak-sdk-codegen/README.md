@@ -16,8 +16,13 @@ that run during `pnpm sdk-codegen`:
 
 - **API pipeline** (`code-generation/`, `schema-cache/`,
   `src/types/generated/`): OpenAPI spec to TypeScript types, Zod
-  schemas, and MCP tool descriptors. Consumed by the curriculum
-  SDK runtime and MCP server apps.
+  schemas, MCP tool descriptors, and response validators. The
+  **response-map** subsystem (`code-generation/typegen/response-map/`)
+  builds a flat map of operation/status entries, consolidates
+  shared error schemas into wildcards, and emits Zod-based
+  response validators. Component names from `$ref` are sanitised
+  to match Zod registry keys. Consumed by the curriculum SDK
+  runtime and MCP server apps.
 
 - **Bulk pipeline** (`vocab-gen/`, `src/bulk/`,
   `src/generated/vocab/`): bulk download JSON files to types,

@@ -7,24 +7,16 @@
  * All functions use `Result<T, E>` pattern for explicit error handling.
  */
 
-import type { Client } from '@elastic/elasticsearch';
+import { errors, type Client } from '@elastic/elasticsearch';
 import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import { IndexMetaDocSchema } from '@oaknational/sdk-codegen/search';
+import { ensureIndexMetaMappingContract } from './index-meta-mapping-contract.js';
+import type { IndexMetaError } from './index-meta-types.js';
 
 export const INDEX_META_INDEX = 'oak_meta';
 export const INDEX_VERSION_DOC_ID = 'index_version';
-
-/**
- * Errors that can occur during index metadata operations.
- */
-export type IndexMetaError =
-  | { readonly type: 'not_found' }
-  | { readonly type: 'network_error'; readonly message: string }
-  | { readonly type: 'mapping_error'; readonly field: string; readonly message: string }
-  | { readonly type: 'validation_error'; readonly message: string; readonly details: string }
-  | { readonly type: 'unknown'; readonly message: string };
 
 /**
  * Generates a version string from current timestamp.
@@ -38,28 +30,13 @@ export function generateVersionFromTimestamp(): string {
 }
 
 /**
- * ES error structure extracted from exception.
- */
-interface EsErrorLike {
-  message?: string;
-  meta?: { statusCode?: number; body?: { error?: { type?: string } } };
-}
-
-/**
- * Check if error is an ES object error.
- */
-function isEsError(error: unknown): error is EsErrorLike {
-  return typeof error === 'object' && error !== null;
-}
-
-/**
  * Check if error is a mapping exception.
  */
-function isMappingException(err: EsErrorLike): boolean {
-  return (
-    err.message?.includes('strict_dynamic_mapping_exception') === true ||
-    err.meta?.body?.error?.type === 'strict_dynamic_mapping_exception'
-  );
+function isMappingException(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+  return error.message.includes('strict_dynamic_mapping_exception');
 }
 
 /**
@@ -73,29 +50,36 @@ function extractFieldFromMappingError(message: string | undefined): string {
 /**
  * Create mapping error from ES exception.
  */
-function createMappingError(err: EsErrorLike): IndexMetaError {
-  const field = extractFieldFromMappingError(err.message);
+function createMappingError(error: unknown): IndexMetaError {
+  const message = error instanceof Error ? error.message : String(error);
+  const field = extractFieldFromMappingError(message);
   return {
     type: 'mapping_error',
     field,
-    message: `Field '${field}' not in ES mapping. IndexMetaDoc must match OAK_META_MAPPING. ${err.message ?? ''}`,
+    message: `Field '${field}' not in ES mapping. IndexMetaDoc must match OAK_META_MAPPING. ${message}`,
   };
 }
 
 /**
  * Check if error is a network error (5xx status).
  */
-function isNetworkError(err: EsErrorLike): boolean {
-  return err.meta?.statusCode !== undefined && err.meta.statusCode >= 500;
+function isNetworkError(error: unknown): boolean {
+  return (
+    error instanceof errors.ResponseError &&
+    error.statusCode !== undefined &&
+    error.statusCode >= 500
+  );
 }
 
 /**
  * Create network error from ES exception.
  */
-function createNetworkError(err: EsErrorLike): IndexMetaError {
+function createNetworkError(error: unknown): IndexMetaError {
+  const statusCode = error instanceof errors.ResponseError ? error.statusCode : undefined;
+  const message = error instanceof Error ? error.message : String(error);
   return {
     type: 'network_error',
-    message: `Elasticsearch network error (${err.meta?.statusCode ?? 'unknown'}): ${err.message ?? 'Unknown error'}`,
+    message: `Elasticsearch network error (${statusCode ?? 'unknown'}): ${message}`,
   };
 }
 
@@ -104,13 +88,6 @@ function createNetworkError(err: EsErrorLike): IndexMetaError {
  * Provides detailed error messages for common failure modes.
  */
 export function createErrorFromException(error: unknown): IndexMetaError {
-  if (!isEsError(error)) {
-    return {
-      type: 'unknown',
-      message: String(error),
-    };
-  }
-
   if (isMappingException(error)) {
     return createMappingError(error);
   }
@@ -121,7 +98,7 @@ export function createErrorFromException(error: unknown): IndexMetaError {
 
   return {
     type: 'unknown',
-    message: error.message ?? String(error),
+    message: error instanceof Error ? error.message : String(error),
   };
 }
 
@@ -129,10 +106,7 @@ export function createErrorFromException(error: unknown): IndexMetaError {
  * Type guard for Elasticsearch not-found errors.
  */
 function isNotFoundError(error: unknown): boolean {
-  if (!isEsError(error)) {
-    return false;
-  }
-  return error.meta?.statusCode === 404;
+  return error instanceof errors.ResponseError && error.statusCode === 404;
 }
 
 /**
@@ -192,6 +166,11 @@ export async function writeIndexMeta(
     });
   }
 
+  const mappingContractResult = await ensureIndexMetaMappingContract(client, INDEX_META_INDEX);
+  if (!mappingContractResult.ok) {
+    return mappingContractResult;
+  }
+
   try {
     await client.index({
       index: INDEX_META_INDEX,
@@ -215,9 +194,7 @@ export async function writeIndexMeta(
 export async function getIndexVersion(client: Client): Promise<string> {
   const result = await readIndexMeta(client);
   if (!result.ok) {
-    const errorMsg =
-      result.error.type === 'not_found' ? 'Index metadata not found' : result.error.message;
-    throw new Error(`Failed to read index version: ${errorMsg}`);
+    throw new Error(`Failed to read index version: ${result.error.message}`);
   }
   if (result.value) {
     return result.value.version;

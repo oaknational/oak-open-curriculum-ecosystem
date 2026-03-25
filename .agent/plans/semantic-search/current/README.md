@@ -4,24 +4,42 @@ Queued work that is next to execute in post-merge sequencing.
 
 When work starts, promote the selected plan into `../active/`.
 
+## Critical Path to P0 Completion
+
+```text
+1. Error response classification          ✅ COMPLETE (2026-03-20)
+2. Pre-reingest remediation                ✅ COMPLETE (2026-03-23)
+3. F2 closure + P0 ingestion              ✅ Code + re-ingest COMPLETE (2026-03-24)
+   Archived: ../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md
+   Remaining: production verification after PR merge — see
+   ../active/prod-search-assessment.execution.plan.md
+```
+
 ## Queue
 
 | Priority | Plan | Scope | Status |
 |---|---|---|---|
-| P0 | [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md) | Canonical blocker execution for production Clerk migration + OAuth proxy edge rate limits | 📋 Ready |
-| P1 | [keyword-definition-assets.execution.plan.md](./keyword-definition-assets.execution.plan.md) | Boundary 03 — promote lesson keyword definitions into first-class, provenance-aware curriculum assets | 📋 Ready after active bulk metadata quick wins |
-| P2 | [thread-sequence-semantic-surfaces.execution.plan.md](./thread-sequence-semantic-surfaces.execution.plan.md) | Boundary 04 — enrich thin thread/sequence documents with derived semantic and suggestion surfaces | 📋 Ready after P1 |
-| P3 | [kg-integration-quick-wins.plan.md](./kg-integration-quick-wins.plan.md) | Provision an isolated ontology-backed Neo4j lane and deliver the remaining bounded Neo4j + Elasticsearch quick wins after the active alignment audit | 📋 Parent plan, partially promoted |
+| P0 (done) | [sequence-retrieval-architecture-followup.plan.md](./sequence-retrieval-architecture-followup.plan.md) | Restore SDK-owned 2-way RRF for sequences by populating `sequence_semantic` from ordered unit summaries via the shared unit semantic generator, with fail-fast ingest rules | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
+| P0 (done) | [search-contract-followup.plan.md](./search-contract-followup.plan.md) | Lessons `threadSlug` field-integrity test; optional documented prod search smoke (not default CI) | ✅ Work items complete via [pre-reingest-remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) |
+| — | [codegen-schema-error-response-adaptation.plan.md](../archive/completed/codegen-schema-error-response-adaptation.plan.md) | Adapt sdk-codegen to handle upstream error responses | ✅ Archived (2026-03-20) |
+| — | [error-response-classification.plan.md](../archive/completed/error-response-classification.plan.md) | Domain-aware error classification for documented 400/401/404 responses | ✅ Archived (2026-03-20) |
+| P0 | [unified-versioned-ingestion.plan.md](./unified-versioned-ingestion.plan.md) | Reference lane for the underlying versioned-ingestion architecture; the active F2 closure plan is the operator source of truth for the remaining stage/validate/promote steps | 📋 Partially complete; final operator steps now run through the active F2 closure plan |
+| P1+ | Future work — to be re-evaluated after P0 closure | | |
 
-Milestone boundary:
-`P0` is the remaining Milestone 2 blocker. The bulk metadata quick-win plan has
-already been promoted to `active/` as an independent semantic-search stream.
-`P1`-`P2` are the remaining roadmap Phase 4 / Milestone 3 follow-on items and
-depend on that active bulk-metadata work completing first.
+### Parked (re-evaluate after P0)
 
-This means public-release readiness does **not** gate the active bulk metadata
-workstream. `P0` remains important, but it is a separate release-readiness
-track rather than a prerequisite for Boundary 03 execution.
+| Plan | Scope | Notes |
+|---|---|---|
+| [semantic-search-scheduled-refresh.operations.plan.md](./semantic-search-scheduled-refresh.operations.plan.md) | Deferred incremental/scheduled-refresh planning | ⏸️ Explicitly out of migration-complete scope |
+| [bulk-metadata-quick-wins.execution.plan.md](./bulk-metadata-quick-wins.execution.plan.md) | Boundary 03 — bulk lesson/unit metadata for retrieval | 📋 Not started |
+| [kg-alignment-audit.execution.plan.md](./kg-alignment-audit.execution.plan.md) | Evidence-first ontology/search overlap audit | 📋 Not started |
+| [search-sdk-args-extraction.plan.md](./search-sdk-args-extraction.plan.md) | Search param builders/validation into SDK surface | 📋 Not started |
+| [category-integration-remediation.md](./category-integration-remediation.md) | Category supplementation wiring | ✅ Superseded by F2 fix |
+| [bulk_data_for_semantic_search.feature_request.md](./bulk_data_for_semantic_search.feature_request.md) | Bulk data enhancement requests | 📋 Supporting request |
+| [m2-public-alpha-auth-rate-limits.execution.plan.md](./m2-public-alpha-auth-rate-limits.execution.plan.md) | Clerk migration + OAuth proxy rate limits | 📋 Ready |
+| [keyword-definition-assets.execution.plan.md](./keyword-definition-assets.execution.plan.md) | Boundary 03 follow-on for keyword assets | 📋 Ready after bulk metadata |
+| [thread-sequence-semantic-surfaces.execution.plan.md](./thread-sequence-semantic-surfaces.execution.plan.md) | Thread/sequence semantic enrichment | 📋 Ready after keyword assets |
+| [kg-integration-quick-wins.plan.md](./kg-integration-quick-wins.plan.md) | Bounded Neo4j + Elasticsearch quick wins | 📋 Parent plan |
 
-Strategic source backlog: [future/README.md](../future/README.md)  
-In-progress execution: [active/README.md](../active/README.md)
+Strategic source backlog: [future/README.md](../future/README.md)
+Active plan: [active/README.md](../active/README.md)

@@ -18,25 +18,25 @@ export {
   BASE_INDEX_NAMES,
   resolveSearchIndexName,
   resolveZeroHitIndexName,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 export type {
   SearchIndexTarget,
   SearchIndexKind,
   IndexResolverFn,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 // ---------------------------------------------------------------------------
 // CLI-only helpers
 // ---------------------------------------------------------------------------
 
-import { resolveSearchIndexName as resolveIndexName } from '@oaknational/oak-search-sdk';
+import { resolveSearchIndexName as resolveIndexName } from '@oaknational/oak-search-sdk/read';
 
 import type {
-  SearchIndexTarget as Target,
-  SearchIndexKind as Kind,
+  SearchIndexTarget,
+  SearchIndexKind,
   IndexResolverFn,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 /**
  * Create an index resolver function bound to a specific target.
@@ -44,18 +44,22 @@ import type {
  * @param target - The index target to bind (`'primary'` or `'sandbox'`)
  * @returns A function that resolves index names for the bound target
  */
-export function createIndexResolver(target: Target): IndexResolverFn {
-  return (kind: Kind) => resolveIndexName(kind, target);
+export function createIndexResolver(target: SearchIndexTarget): IndexResolverFn {
+  return (kind: SearchIndexKind) => resolveIndexName(kind, target);
 }
 
 /** Resolve the canonical index name for the primary (production) target. */
-export function resolvePrimarySearchIndexName(kind: Kind): string {
+export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
   return resolveIndexName(kind, 'primary');
 }
 
 /** Config shape for resolving search index target. */
 export interface SearchIndexTargetConfig {
-  readonly SEARCH_INDEX_TARGET?: Target;
+  readonly SEARCH_INDEX_TARGET?: SearchIndexTarget;
+}
+
+interface SearchIndexTargetConfigCandidate {
+  readonly SEARCH_INDEX_TARGET?: unknown;
 }
 
 /**
@@ -65,21 +69,24 @@ export interface SearchIndexTargetConfig {
  * Callers must provide one or the other — no env fallback.
  */
 export function currentSearchIndexTarget(
-  targetOrConfig?: Target | SearchIndexTargetConfig,
-): Target {
+  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfigCandidate,
+): SearchIndexTarget {
   if (targetOrConfig === 'primary' || targetOrConfig === 'sandbox') {
     return targetOrConfig;
   }
-  if (targetOrConfig && typeof targetOrConfig === 'object' && targetOrConfig.SEARCH_INDEX_TARGET) {
-    return targetOrConfig.SEARCH_INDEX_TARGET;
+  if (targetOrConfig && typeof targetOrConfig === 'object') {
+    const configuredTarget = coerceSearchIndexTarget(targetOrConfig.SEARCH_INDEX_TARGET);
+    if (configuredTarget !== null) {
+      return configuredTarget;
+    }
   }
   return 'primary';
 }
 
 /** Resolve the index name for the given target or config. */
 export function resolveCurrentSearchIndexName(
-  kind: Kind,
-  targetOrConfig?: Target | SearchIndexTargetConfig,
+  kind: SearchIndexKind,
+  targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfigCandidate,
 ): string {
   return resolveIndexName(kind, currentSearchIndexTarget(targetOrConfig));
 }
@@ -88,8 +95,8 @@ export function resolveCurrentSearchIndexName(
  * Coerce an arbitrary string (e.g. CLI flag value) into a known search index target.
  * Returns `null` when the value is not recognised.
  */
-export function coerceSearchIndexTarget(value: string | undefined): Target | null {
-  if (!value) {
+export function coerceSearchIndexTarget(value: unknown): SearchIndexTarget | null {
+  if (typeof value !== 'string' || value.length === 0) {
     return null;
   }
   return value === 'primary' || value === 'sandbox' ? value : null;

@@ -34,8 +34,8 @@ On 2026-03-03 the collection was manually migrated into lifecycle lanes, and the
   - `archive/superseded/e2e-vi-mock-clerk-removal.plan.md`
   - `archive/superseded/eslint-override-removal.plan.md`
 - Cross-collection folded/delegated sources (2026-03-04):
-  - `../architecture-and-infrastructure/no-console-enforcement.plan.md` (superseded and folded here)
-  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md` (strictness-adjacent architectural work now references the canonical directory-complexity plan below)
+  - `../architecture-and-infrastructure/archive/completed/no-console-enforcement.plan.md` (superseded and folded here)
+  - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md` (strictness-adjacent architectural work now references the canonical directory-complexity plan below)
 
 ## Canonical Directory-Complexity Plan
 
@@ -43,7 +43,7 @@ On 2026-03-03 the collection was manually migrated into lifecycle lanes, and the
 - Purpose: define the supporting enforcement bundle and staged rollout gates required before Oak enables `max-files-per-dir`
 - Folded/delegated sources:
   - `active/devx-strictness-convergence.plan.md` (directory-complexity subset extracted)
-  - `../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+  - `../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
   - `../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 
 ## Indexes

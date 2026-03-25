@@ -10,7 +10,7 @@ import type { estypes } from '@elastic/elasticsearch';
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /** BM25 content fields for lesson search (four-retriever architecture). */
-const LESSON_BM25_CONTENT = [
+export const LESSON_BM25_CONTENT = [
   'lesson_title^3',
   'lesson_keywords^2',
   'key_learning_points^2',
@@ -20,11 +20,35 @@ const LESSON_BM25_CONTENT = [
   'lesson_content',
 ];
 /** BM25 structure fields for lesson search (four-retriever architecture). */
-const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
+export const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
 /** BM25 content fields for unit search (four-retriever architecture). */
-const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
+export const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
 /** BM25 structure fields for unit search (four-retriever architecture). */
-const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
+export const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
+
+/** ELSER semantic field for lesson content. */
+export const LESSON_CONTENT_SEMANTIC = 'lesson_content_semantic';
+/** ELSER semantic field for lesson structure. */
+export const LESSON_STRUCTURE_SEMANTIC = 'lesson_structure_semantic';
+/** ELSER semantic field for unit content. */
+export const UNIT_CONTENT_SEMANTIC = 'unit_content_semantic';
+/** ELSER semantic field for unit structure. */
+export const UNIT_STRUCTURE_SEMANTIC = 'unit_structure_semantic';
+
+/** BM25 config for lesson search (ADR-120 tuned values). */
+export const LESSON_BM25_CONFIG = {
+  fuzziness: 'AUTO:6,9' as const,
+  prefix_length: 1,
+  fuzzy_transpositions: true,
+  minimum_should_match: '2<65%',
+} as const;
+
+/** BM25 config for unit search (ADR-120 tuned values). */
+export const UNIT_BM25_CONFIG = {
+  fuzziness: 'AUTO:6,9' as const,
+  prefix_length: 1,
+  fuzzy_transpositions: true,
+} as const;
 
 /**
  * Build four-way RRF retriever (BM25+ELSER on content+structure).
@@ -49,23 +73,10 @@ export function buildFourWayRetriever(
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   const contentFields = scope === 'lesson' ? LESSON_BM25_CONTENT : UNIT_BM25_CONTENT;
   const structureFields = scope === 'lesson' ? LESSON_BM25_STRUCTURE : UNIT_BM25_STRUCTURE;
-  const contentSemantic = scope === 'lesson' ? 'lesson_content_semantic' : 'unit_content_semantic';
+  const contentSemantic = scope === 'lesson' ? LESSON_CONTENT_SEMANTIC : UNIT_CONTENT_SEMANTIC;
   const structureSemantic =
-    scope === 'lesson' ? 'lesson_structure_semantic' : 'unit_structure_semantic';
-
-  const bm25Config =
-    scope === 'lesson'
-      ? {
-          fuzziness: 'AUTO:6,9' as const,
-          prefix_length: 1,
-          fuzzy_transpositions: true,
-          minimum_should_match: '2<65%',
-        }
-      : {
-          fuzziness: 'AUTO:6,9' as const,
-          prefix_length: 1,
-          fuzzy_transpositions: true,
-        };
+    scope === 'lesson' ? LESSON_STRUCTURE_SEMANTIC : UNIT_STRUCTURE_SEMANTIC;
+  const bm25Config = scope === 'lesson' ? LESSON_BM25_CONFIG : UNIT_BM25_CONFIG;
 
   return {
     rrf: {
@@ -101,7 +112,59 @@ export function buildFourWayRetriever(
  * @param config - BM25 config (fuzziness, minimum_should_match, etc.)
  * @returns ES retriever container
  */
-function buildBm25Retriever(
+/**
+ * Build a four-way RRF retriever for lesson search.
+ *
+ * Convenience wrapper around {@link buildFourWayRetriever} with `scope: 'lesson'`.
+ * Uses ADR-120 tuned BM25 config (`AUTO:6,9`, `prefix_length: 1`).
+ *
+ * @param query - The search query
+ * @param filters - Optional filter clauses
+ * @param phrases - Curriculum phrases for phrase boosting
+ * @returns ES retriever container for hybrid RRF lesson search
+ */
+export function buildLessonRetriever(
+  query: string,
+  filters: estypes.QueryDslQueryContainer[],
+  phrases: readonly string[],
+): estypes.RetrieverContainer {
+  return buildFourWayRetriever(query, filters, phrases, 'lesson');
+}
+
+/**
+ * Build a four-way RRF retriever for unit search.
+ *
+ * Convenience wrapper around {@link buildFourWayRetriever} with `scope: 'unit'`.
+ * Uses ADR-120 tuned BM25 config (`AUTO:6,9`, `prefix_length: 1`).
+ *
+ * @param query - The search query
+ * @param filters - Optional filter clauses
+ * @param phrases - Curriculum phrases for phrase boosting
+ * @returns ES retriever container for hybrid RRF unit search
+ */
+export function buildUnitRetriever(
+  query: string,
+  filters: estypes.QueryDslQueryContainer[],
+  phrases: readonly string[],
+): estypes.RetrieverContainer {
+  return buildFourWayRetriever(query, filters, phrases, 'unit');
+}
+
+/**
+ * Build a BM25 retriever with optional phrase boosting.
+ *
+ * Exported as a composable building block for experiment and ablation
+ * configurations that need individual sub-retrievers rather than the
+ * full four-way RRF composition.
+ *
+ * @param query - The search query
+ * @param fields - ES field names (with optional boost suffix)
+ * @param filter - Optional filter clause
+ * @param phrases - Curriculum phrases for match_phrase boosting
+ * @param config - BM25 config (fuzziness, minimum_should_match, etc.)
+ * @returns ES retriever container
+ */
+export function buildBm25Retriever(
   query: string,
   fields: readonly string[],
   filter: QueryContainer | undefined,

@@ -17,7 +17,7 @@
  */
 
 import { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
@@ -63,11 +63,8 @@ function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSearchLessons(sdk.retrieval, {
+          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSearchLessons(retrieval, {
             query,
             subject: validateSubject(opts.subject),
             keyStage: validateKeyStage(opts.keyStage),
@@ -105,11 +102,8 @@ function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSearchUnits(sdk.retrieval, {
+          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSearchUnits(retrieval, {
             query,
             subject: validateSubject(opts.subject),
             keyStage: validateKeyStage(opts.keyStage),
@@ -146,11 +140,8 @@ function registerSequencesCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleSearchSequences(sdk.retrieval, {
+          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleSearchSequences(retrieval, {
             query,
             subject: validateSubject(opts.subject),
             size: parseInt(opts.size, 10),

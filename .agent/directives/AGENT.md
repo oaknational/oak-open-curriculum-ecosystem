@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 200
+fitness_line_count: 200
 split_strategy: "Extract detail to referenced docs; this file is an index/entry point"
 ---
 
@@ -19,7 +19,7 @@ Read the [metacognitive prompt](./metacognition.md) and follow all instructions,
 
 ## The Practice
 
-This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For orientation, see [practice-core/index.md](../practice-core/index.md). For the full map, see [practice.md](../practice-core/practice.md). For cross-repo propagation and the plasmid exchange mechanism, see [practice-lineage.md](../practice-core/practice-lineage.md).
+This file is the operational entry point to the **agentic engineering practice** — the self-reinforcing system of principles, structures, specialist reviewers, and tooling that governs how work happens in this repository. The practice teaches itself through use: follow the links from here and the system reveals itself. For orientation, see [practice-core/index.md](../practice-core/index.md). For the local bridge from the portable Practice Core into this repo's live surfaces, see [practice-index.md](../practice-index.md). For the full map, see [practice.md](../practice-core/practice.md). For cross-repo propagation and the plasmid exchange mechanism, see [practice-lineage.md](../practice-core/practice-lineage.md).
 
 Agent onboarding starts with the `start-right-quick` workflow:
 
@@ -65,7 +65,7 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 #### Specialist On-Demand
 
-`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`, `clerk-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
@@ -125,20 +125,25 @@ pnpm type-check     # Type check
 pnpm format:root    # Format code
 pnpm markdownlint:root    # Markdown lint
 pnpm subagents:check    # Validate sub-agent standards
+pnpm portability:check    # Validate canonical/adaptor and hook parity
 pnpm lint:fix       # Lint
+pnpm test:root-scripts    # Repo-level script tests
 pnpm test           # Unit and integration tests
+pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
 pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
+pnpm practice:fitness    # Strict fitness validation for live docs with frontmatter
+pnpm practice:fitness:informational    # Non-blocking soft-ceiling report
 
 # Convenience commands
-pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, markdownlint, format
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, type-check, lint, test, test:ui, test:e2e, smoke:dev:stub
+pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, portability:check, practice:fitness:informational, markdownlint, format
+pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:ui, test:e2e, smoke:dev:stub
 pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # secrets:scan:all, clean, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, markdownlint:root, format:root
+pnpm check          # secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding
@@ -149,7 +154,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 - `apps/` – runnable apps that provide services to users
 - `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
-- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`)
+- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`)
 

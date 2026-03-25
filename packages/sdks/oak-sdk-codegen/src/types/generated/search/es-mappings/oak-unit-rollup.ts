@@ -106,6 +106,13 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         type: 'text',
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
+        fields: {
+          keyword: {
+            type: 'keyword',
+            normalizer: 'oak_lower',
+            ignore_above: 256,
+          },
+        },
       },
       unit_content: {
         type: 'text',

@@ -49,7 +49,6 @@ Use the npm scripts defined in `package.json`:
 ```bash
 # Ingestion
 pnpm es:ingest -- --api --all     # Ingest all subjects/keystages (API mode)
-pnpm es:ingest -- --api --all -i  # Resume (skip existing documents)
 pnpm ingest:verify               # Validate ingested data
 pnpm es:status                   # Check index counts
 

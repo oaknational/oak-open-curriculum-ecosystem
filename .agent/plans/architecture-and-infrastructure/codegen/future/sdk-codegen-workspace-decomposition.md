@@ -193,8 +193,7 @@ Option 1 is simpler and aligns with the cardinal rule.
 
 ## Dependencies and Sequencing Assumptions
 
-1. **Prerequisite**: M1 merge must be complete (the M1 ESLint fix is a
-   pragmatic stopgap; this plan is the proper resolution)
+1. **Prerequisite**: M1 merge must be complete (**SATISFIED** — M1 merged)
 2. **Prerequisite**: The 8-phase plan from the release plan (naming changes,
    generator consolidation) can be folded into this decomposition
 3. **Assumption**: `pnpm-workspace.yaml` supports the new paths via
@@ -212,6 +211,22 @@ What would justify promotion to `current/`:
 2. All quality gates pass on `main`
 3. Team capacity available for a structural refactoring sprint
 4. No higher-priority work (features, bugs) blocking
+
+## Acceptance Criteria (for completion)
+
+These must be true when the decomposition is complete:
+
+1. `pnpm clean && pnpm check` passes without any
+   `@oaknational/sdk-codegen#*` turbo overrides
+2. B1 tests from the turbo boundary fix plan are resolved:
+   - `classify-http-error.unit.test.ts` — with generated api-schema types
+   - `generate-subject-hierarchy.unit.test.ts` — with generated search types
+   - `mcp-security-policy.unit.test.ts` — with generated mcp-tools types
+   - `bulk-schemas.unit.test.ts` — with generated bulk schemas
+3. All `@oaknational/sdk-codegen#*` turbo overrides removed from
+   `turbo.json` (`#build`, `#test`, `#type-check`, `#lint`, `#lint:fix`)
+4. No workspace's tests depend on a generation step within that same
+   workspace
 
 ---
 
@@ -232,9 +247,17 @@ What would justify promotion to `current/`:
 
 Promote to `current/` when:
 
-1. M1 has merged to `main`
+1. M1 has merged to `main` (**SATISFIED**)
 2. CI is green on `main`
 3. Owner approves the workspace split direction (this plan)
+
+Note: Turbo overrides (`@oaknational/sdk-codegen#build`, `#test`,
+`#type-check`, `#lint`, `#lint:fix`) are temporary fixes applied by the
+[turbo boundary fix plan](../../semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md).
+They accurately declare within-workspace dependencies that exist because
+generators, generated output, and runtime code share a workspace. This
+decomposition eliminates the need for overrides by separating concerns
+into distinct workspaces.
 
 Execution decisions (exact sequencing, phasing, atomic commits) are
 finalised during promotion.

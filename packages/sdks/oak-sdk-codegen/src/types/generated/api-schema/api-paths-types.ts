@@ -302,6 +302,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/keywords": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Keywords
+         * This endpoint returns a list of keywords for a given key stage and subject, based on the keywords associated with the lessons that are available for that key stage and subject. The keywords are returned in order of frequency, with the most common keywords appearing first.
+         */
+        get: operations["getKeywords-getKeywords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/lessons/{lesson}/quiz": {
         parameters: {
             query?: never;
@@ -779,6 +799,90 @@ export interface components {
              */
             canonicalUrl?: string;
         })[];
+        /**
+         * Bad request - e.g. "Content is blocked for copyright reasons" error (400)
+         * The error information
+         * @example \{
+         *       "code": "BAD_REQUEST",
+         *       "message": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+         *       "issues": []
+         *     \}
+         */
+        "error.BAD_REQUEST": {
+            /**
+             * The error message
+             * @example Bad request - e.g. "Content is blocked for copyright reasons"
+             */
+            message: string;
+            /**
+             * The error code
+             * @example BAD_REQUEST
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /**
+         * API token not provided or invalid error (401)
+         * The error information
+         * @example \{
+         *       "code": "UNAUTHORIZED",
+         *       "message": "API token not provided or invalid",
+         *       "issues": []
+         *     \}
+         */
+        "error.UNAUTHORIZED": {
+            /**
+             * The error message
+             * @example API token not provided or invalid
+             */
+            message: string;
+            /**
+             * The error code
+             * @example UNAUTHORIZED
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
+        /**
+         * Detail of the request causing the 404, e.g. "Lesson not found" error (404)
+         * The error information
+         * @example \{
+         *       "code": "NOT_FOUND",
+         *       "message": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+         *       "issues": []
+         *     \}
+         */
+        "error.NOT_FOUND": {
+            /**
+             * The error message
+             * @example Detail of the request causing the 404, e.g. "Lesson not found"
+             */
+            message: string;
+            /**
+             * The error code
+             * @example NOT_FOUND
+             */
+            code: string;
+            /**
+             * An array of issues that were responsible for the error
+             * @example []
+             */
+            issues?: {
+                message: string;
+            }[];
+        };
         /**
          * @example \{
          *       "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
@@ -2983,6 +3087,27 @@ export interface operations {
                     "application/json": components["schemas"]["SequenceUnitsResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getLessonTranscript-getLessonTranscript": {
@@ -3004,63 +3129,25 @@ export interface operations {
                     "application/json": components["schemas"]["TranscriptResponseSchema"];
                 };
             };
-            /**
-             * Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
-             *
-             *     Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish "no transcript available" from invalid lesson slugs.
-             *
-             *     Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4
-             */
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    /**
-                     * @example \{
-                     *       "message": "Transcript not available for this query",
-                     *       "code": "NOT_FOUND",
-                     *       "data": \{
-                     *         "code": "NOT_FOUND",
-                     *         "httpStatus": 404,
-                     *         "path": "getLessonTranscript.getLessonTranscript",
-                     *         "zodError": null
-                     *       \}
-                     *     \}
-                     */
-                    "application/json": {
-                        /**
-                         * Human-readable message describing why the resource is unavailable.
-                         * @example Transcript not available for this query
-                         */
-                        message: string;
-                        /**
-                         * API error code describing the failure classification.
-                         * @example NOT_FOUND
-                         */
-                        code: string;
-                        /** Additional metadata describing the failure as emitted by the Oak API gateway. */
-                        data: {
-                            /**
-                             * Reiterated error code for downstream tools.
-                             * @example NOT_FOUND
-                             */
-                            code: string;
-                            /**
-                             * HTTP status code returned by the upstream API.
-                             * @example 404
-                             */
-                            httpStatus: number;
-                            /**
-                             * Identifier of the upstream operation emitting the error.
-                             * @example getLessonTranscript.getLessonTranscript
-                             */
-                            path: string;
-                            /**
-                             * Optional validation payload describing schema mismatches. Always null for 404 responses.
-                             * @example null
-                             */
-                            zodError?: null;
-                        };
-                    };
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3082,6 +3169,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["SearchTranscriptResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3106,6 +3214,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["SequenceAssetsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3134,6 +3263,27 @@ export interface operations {
                     "application/json": components["schemas"]["SubjectAssetsResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getAssets-getLessonAssets": {
@@ -3155,6 +3305,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonAssetsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3180,6 +3351,27 @@ export interface operations {
                     "application/json": components["schemas"]["LessonAssetResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getSubjects-getAllSubjects": {
@@ -3196,6 +3388,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["AllSubjectsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3219,6 +3432,27 @@ export interface operations {
                     "application/json": components["schemas"]["SubjectResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getSubjects-getSubjectSequence": {
@@ -3238,6 +3472,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectSequenceResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3261,6 +3516,27 @@ export interface operations {
                     "application/json": components["schemas"]["SubjectKeyStagesResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getSubjects-getSubjectYears": {
@@ -3282,6 +3558,27 @@ export interface operations {
                     "application/json": components["schemas"]["SubjectYearsResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getKeyStages-getKeyStages": {
@@ -3298,6 +3595,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["KeyStageResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3327,6 +3645,27 @@ export interface operations {
                     "application/json": components["schemas"]["KeyStageSubjectLessonsResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": {
@@ -3350,6 +3689,81 @@ export interface operations {
                     "application/json": components["schemas"]["AllKeyStageAndSubjectUnitsResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
+        };
+    };
+    "getKeywords-getKeywords": {
+        parameters: {
+            query?: {
+                subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
+                phase?: "primary" | "secondary";
+                unit?: string;
+                lesson?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** Successful response */
+            200: {
+                headers?: never;
+                content: {
+                    "application/json": {
+                        /**
+                         * The keyword text
+                         * @example non-finite clause
+                         */
+                        keyword: string;
+                        /**
+                         * A description of the keyword
+                         * @example a type of subordinate clause that can start with a verb in the progressive tense
+                         */
+                        description: string;
+                        /**
+                         * The key stage slug associated with this keyword
+                         * @example ks2
+                         */
+                        keyStageSlug: string;
+                        /**
+                         * The subject slug associated with this keyword
+                         * @example science
+                         */
+                        subjectSlug: string;
+                        /**
+                         * The different lesson slugs where this keyword is used
+                         * @example [
+                         *       "a-new-sentence-structure-the-non-finite-complex-sentence",
+                         *       "using-the-comma-rules-in-non-finite-complex-sentences",
+                         *       "a-new-subordinate-clause-the-non-finite-ing-clause"
+                         *     ]
+                         */
+                        lessonSlugs: string[];
+                    }[];
+                };
+            };
         };
     };
     "getQuestions-getQuestionsForLessons": {
@@ -3369,6 +3783,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["QuestionForLessonsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3394,6 +3829,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["QuestionsForSequenceResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3422,6 +3878,27 @@ export interface operations {
                     "application/json": components["schemas"]["QuestionsForKeyStageAndSubjectResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getLessons-getLesson": {
@@ -3441,6 +3918,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonSummaryResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3467,6 +3965,27 @@ export interface operations {
                     "application/json": components["schemas"]["LessonSearchResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getUnits-getUnit": {
@@ -3488,6 +4007,27 @@ export interface operations {
                     "application/json": components["schemas"]["UnitSummaryResponseSchema"];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getThreads-getAllThreads": {
@@ -3504,6 +4044,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["AllThreadsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3524,6 +4085,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["ThreadUnitsResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -3548,6 +4130,27 @@ export interface operations {
                     }[];
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "changelog-latest": {
@@ -3570,6 +4173,27 @@ export interface operations {
                     };
                 };
             };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                };
+            };
         };
     };
     "getRateLimit-getRateLimit": {
@@ -3586,6 +4210,27 @@ export interface operations {
                 headers?: never;
                 content: {
                     "application/json": components["schemas"]["RateLimitResponseSchema"];
+                };
+            };
+            /** Bad request - e.g. "Content is blocked for copyright reasons" */
+            400: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                };
+            };
+            /** API token not provided or invalid */
+            401: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                };
+            };
+            /** Detail of the request causing the 404, e.g. "Lesson not found" */
+            404: {
+                headers?: never;
+                content: {
+                    "application/json": components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };

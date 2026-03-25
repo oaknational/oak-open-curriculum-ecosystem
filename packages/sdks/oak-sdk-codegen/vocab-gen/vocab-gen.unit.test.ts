@@ -7,7 +7,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { createPipelineConfig, formatPipelineResult, type PipelineResult } from './vocab-gen.js';
+import { createPipelineConfig, type PipelineResult } from './vocab-gen-config.js';
+import { formatPipelineResult } from './vocab-gen-format.js';
 
 describe('createPipelineConfig', () => {
   it('creates config with default values', () => {

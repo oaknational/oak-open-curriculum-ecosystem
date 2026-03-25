@@ -1,36 +1,13 @@
 /**
  * Unit tests for bulk response handling.
  *
- * Tests parsing and categorization of Elasticsearch bulk API responses,
- * including handling of version conflict errors in incremental mode.
+ * Tests parsing and categorization of Elasticsearch bulk API responses.
  *
  * @see sandbox-bulk-response.ts
  */
 
-import { describe, it, expect, vi } from 'vitest';
-import type { Logger } from '@oaknational/logger';
-import {
-  BulkResponseSchema,
-  isVersionConflictError,
-  hasRealErrors,
-  logBulkErrors,
-  VERSION_CONFLICT_ERROR,
-  type BulkResponse,
-} from './sandbox-bulk-response';
-
-/** Create a minimal fake logger for testing. Implements Logger so no type assertion is needed. */
-function createMockLogger(): Logger {
-  const logger: Logger = {
-    trace: vi.fn(),
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    fatal: vi.fn(),
-    child: () => logger,
-  };
-  return logger;
-}
+import { describe, it, expect } from 'vitest';
+import { BulkResponseSchema, hasRealErrors, type BulkResponse } from './sandbox-bulk-response';
 
 describe('sandbox-bulk-response', () => {
   describe('BulkResponseSchema', () => {
@@ -67,7 +44,7 @@ describe('sandbox-bulk-response', () => {
       }
     });
 
-    it('parses a response with errors including version conflicts', () => {
+    it('parses a response with errors', () => {
       const response = {
         errors: true,
         items: [
@@ -77,7 +54,7 @@ describe('sandbox-bulk-response', () => {
               _index: 'oak_lessons',
               status: 409,
               error: {
-                type: 'version_conflict_engine_exception',
+                type: 'mapper_parsing_exception',
                 reason: 'document already exists',
               },
             },
@@ -106,69 +83,6 @@ describe('sandbox-bulk-response', () => {
     });
   });
 
-  describe('isVersionConflictError', () => {
-    it('returns true for version conflict error on create action', () => {
-      const item = {
-        create: {
-          _index: 'oak_lessons',
-          status: 409,
-          error: {
-            type: VERSION_CONFLICT_ERROR,
-            reason: 'document already exists',
-          },
-        },
-      };
-
-      expect(isVersionConflictError(item)).toBe(true);
-    });
-
-    it('returns true for version conflict error on index action', () => {
-      const item = {
-        index: {
-          _index: 'oak_lessons',
-          status: 409,
-          error: {
-            type: VERSION_CONFLICT_ERROR,
-            reason: 'version conflict',
-          },
-        },
-      };
-
-      expect(isVersionConflictError(item)).toBe(true);
-    });
-
-    it('returns false for successful action', () => {
-      const item = {
-        create: {
-          _index: 'oak_lessons',
-          status: 201,
-        },
-      };
-
-      expect(isVersionConflictError(item)).toBe(false);
-    });
-
-    it('returns false for other error types', () => {
-      const item = {
-        create: {
-          _index: 'oak_lessons',
-          status: 400,
-          error: {
-            type: 'mapper_parsing_exception',
-            reason: 'failed to parse field',
-          },
-        },
-      };
-
-      expect(isVersionConflictError(item)).toBe(false);
-    });
-
-    it('returns false for empty item', () => {
-      const item = {};
-      expect(isVersionConflictError(item)).toBe(false);
-    });
-  });
-
   describe('hasRealErrors', () => {
     it('returns false for successful response', () => {
       const response: BulkResponse = {
@@ -182,7 +96,7 @@ describe('sandbox-bulk-response', () => {
       expect(hasRealErrors(response)).toBe(false);
     });
 
-    it('returns false when all errors are version conflicts', () => {
+    it('returns true when there are any failed items', () => {
       const response: BulkResponse = {
         errors: true,
         items: [
@@ -191,20 +105,20 @@ describe('sandbox-bulk-response', () => {
             create: {
               _index: 'oak_lessons',
               status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
+              error: { type: 'version_conflict_engine_exception', reason: 'exists' },
             },
           },
           {
             create: {
               _index: 'oak_units',
               status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
+              error: { type: 'version_conflict_engine_exception', reason: 'exists' },
             },
           },
         ],
       };
 
-      expect(hasRealErrors(response)).toBe(false);
+      expect(hasRealErrors(response)).toBe(true);
     });
 
     it('returns true when there are real errors (not version conflicts)', () => {
@@ -225,7 +139,7 @@ describe('sandbox-bulk-response', () => {
       expect(hasRealErrors(response)).toBe(true);
     });
 
-    it('returns true when mixed version conflicts and real errors', () => {
+    it('returns true when mixed conflicts and other errors', () => {
       const response: BulkResponse = {
         errors: true,
         items: [
@@ -233,7 +147,7 @@ describe('sandbox-bulk-response', () => {
             create: {
               _index: 'oak_lessons',
               status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
+              error: { type: 'version_conflict_engine_exception', reason: 'exists' },
             },
           },
           {
@@ -247,114 +161,6 @@ describe('sandbox-bulk-response', () => {
       };
 
       expect(hasRealErrors(response)).toBe(true);
-    });
-  });
-
-  describe('logBulkErrors', () => {
-    it('logs skipped count for version conflicts as info', () => {
-      const logger = createMockLogger();
-      const response: BulkResponse = {
-        errors: true,
-        items: [
-          {
-            create: {
-              _index: 'oak_lessons',
-              status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
-            },
-          },
-          {
-            create: {
-              _index: 'oak_units',
-              status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
-            },
-          },
-        ],
-      };
-
-      logBulkErrors(response, logger);
-
-      expect(logger.info).toHaveBeenCalledWith(
-        'Documents already exist (skipped in incremental mode)',
-        { skippedCount: 2 },
-      );
-      expect(logger.error).not.toHaveBeenCalled();
-    });
-
-    it('logs real errors as error', () => {
-      const logger = createMockLogger();
-      const response: BulkResponse = {
-        errors: true,
-        items: [
-          {
-            create: {
-              _index: 'oak_lessons',
-              status: 400,
-              error: { type: 'mapper_parsing_exception', reason: 'bad field' },
-            },
-          },
-        ],
-      };
-
-      logBulkErrors(response, logger);
-
-      expect(logger.error).toHaveBeenCalledWith(
-        'Bulk indexing errors',
-        undefined,
-        expect.objectContaining({
-          failureCount: 1,
-          errorTypes: { mapper_parsing_exception: 1 },
-        }),
-      );
-    });
-
-    it('logs both skipped and errors when mixed', () => {
-      const logger = createMockLogger();
-      const response: BulkResponse = {
-        errors: true,
-        items: [
-          {
-            create: {
-              _index: 'oak_lessons',
-              status: 409,
-              error: { type: VERSION_CONFLICT_ERROR, reason: 'exists' },
-            },
-          },
-          {
-            create: {
-              _index: 'oak_lessons',
-              status: 400,
-              error: { type: 'mapper_parsing_exception', reason: 'bad field' },
-            },
-          },
-        ],
-      };
-
-      logBulkErrors(response, logger);
-
-      expect(logger.info).toHaveBeenCalledWith(
-        'Documents already exist (skipped in incremental mode)',
-        { skippedCount: 1 },
-      );
-      expect(logger.error).toHaveBeenCalledWith(
-        'Bulk indexing errors',
-        undefined,
-        expect.objectContaining({ failureCount: 1 }),
-      );
-    });
-
-    it('does not log anything for successful response', () => {
-      const logger = createMockLogger();
-      const response: BulkResponse = {
-        errors: false,
-        items: [{ create: { _index: 'oak_lessons', status: 201 } }],
-      };
-
-      logBulkErrors(response, logger);
-
-      expect(logger.info).not.toHaveBeenCalled();
-      expect(logger.error).not.toHaveBeenCalled();
     });
   });
 });

@@ -148,8 +148,8 @@ async function runBenchmark(): Promise<void> {
     console.error('Environment validation failed:', configResult.error.message);
     process.exit(1);
   }
-  const noEntries = await withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
+  const noEntries = await withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchUnits.bind(retrieval);
     const options = parseCliArgs();
     const entries = filterEntries(options);
 

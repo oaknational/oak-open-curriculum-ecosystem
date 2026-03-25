@@ -39,6 +39,8 @@ export interface CreateSequenceDocumentParams {
   readonly unitSlugs: readonly string[];
   /** Category/topic titles aggregated from units */
   readonly categoryTitles: readonly string[];
+  /** Deterministic semantic summary for ELSER embeddings. Must be non-empty. */
+  readonly sequenceSemantic: string;
 }
 
 /**
@@ -59,6 +61,7 @@ export interface CreateSequenceDocumentParams {
  *  years: ['7', '8', '9', '10', '11'],
  *  unitSlugs: ['unit-1', 'unit-2'],
  *  categoryTitles: ['Algebra', 'Geometry'],
+ *  sequenceSemantic: 'Mathematics Secondary is a Mathematics Secondary curriculum sequence...',
  * });
  * ```
  *
@@ -78,7 +81,15 @@ export function createSequenceDocument(
     years,
     unitSlugs,
     categoryTitles,
+    sequenceSemantic,
   } = params;
+
+  if (sequenceSemantic.trim().length === 0) {
+    throw new Error(
+      `createSequenceDocument: sequenceSemantic must not be empty or whitespace — ` +
+        `sequence "${sequenceSlug}".`,
+    );
+  }
 
   const sequenceTitle = `${subjectTitle} ${phaseTitle}`;
   const sequenceUrl = generateSequenceCanonicalUrl(sequenceSlug);
@@ -95,6 +106,7 @@ export function createSequenceDocument(
     years: [...years],
     unit_slugs: [...unitSlugs],
     category_titles: [...categoryTitles],
+    sequence_semantic: sequenceSemantic,
     sequence_url: sequenceUrl,
     title_suggest: {
       input: [sequenceTitle],

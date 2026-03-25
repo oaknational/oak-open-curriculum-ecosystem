@@ -2,6 +2,119 @@ import { describe, it, expect } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { crossValidateResponseMap, crossValidatePaths } from './cross-validate.js';
 
+/**
+ * Creates a schema where all operations share the same `$ref` error component
+ * for each error status code (400, 401, 404). This mirrors the upstream Oak
+ * API pattern and should produce valid wildcard entries.
+ */
+function createSchemaWithSharedErrors(): OpenAPIObject {
+  const errorRef = (name: string) => ({
+    description: name,
+    content: {
+      'application/json': {
+        schema: { $ref: `#/components/schemas/${name}` },
+      },
+    },
+  });
+
+  return {
+    openapi: '3.0.0',
+    info: { title: 'Shared errors API', version: '1' },
+    paths: {
+      '/alpha': {
+        get: {
+          operationId: 'getAlpha',
+          responses: {
+            200: {
+              description: 'ok',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Alpha' } } },
+            },
+            404: errorRef('NotFound'),
+          },
+        },
+      },
+      '/beta': {
+        get: {
+          operationId: 'getBeta',
+          responses: {
+            200: {
+              description: 'ok',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Beta' } } },
+            },
+            404: errorRef('NotFound'),
+          },
+        },
+      },
+    },
+    components: {
+      schemas: {
+        Alpha: { type: 'object', properties: { a: { type: 'string' } } },
+        Beta: { type: 'object', properties: { b: { type: 'string' } } },
+        NotFound: { type: 'object', properties: { message: { type: 'string' } } },
+      },
+    },
+  } satisfies OpenAPIObject;
+}
+
+/**
+ * Creates a schema where operations use DIFFERENT error components for
+ * the same status code. Wildcards should NOT be expected in this case.
+ */
+function createSchemaWithDifferentErrors(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: { title: 'Different errors API', version: '1' },
+    paths: {
+      '/alpha': {
+        get: {
+          operationId: 'getAlpha',
+          responses: {
+            200: {
+              description: 'ok',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Alpha' } } },
+            },
+            404: {
+              description: 'not found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/AlphaNotFound' },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/beta': {
+        get: {
+          operationId: 'getBeta',
+          responses: {
+            200: {
+              description: 'ok',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Beta' } } },
+            },
+            404: {
+              description: 'not found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/BetaNotFound' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    components: {
+      schemas: {
+        Alpha: { type: 'object', properties: { a: { type: 'string' } } },
+        Beta: { type: 'object', properties: { b: { type: 'string' } } },
+        AlphaNotFound: { type: 'object', properties: { message: { type: 'string' } } },
+        BetaNotFound: { type: 'object', properties: { message: { type: 'string' } } },
+      },
+    },
+  } satisfies OpenAPIObject;
+}
+
 describe('cross-validate', () => {
   const base: OpenAPIObject = {
     openapi: '3.0.0',
@@ -101,5 +214,117 @@ describe('cross-validate', () => {
         expect(msg2.includes('Missing')).toBe(true);
       }
     }
+  });
+
+  it('accepts wildcard entries when all operations share the same component for a status', () => {
+    const schema = createSchemaWithSharedErrors();
+
+    const entries = [
+      {
+        operationId: 'getAlpha',
+        status: '200',
+        componentName: 'Alpha',
+        path: '/alpha',
+        colonPath: '/alpha',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getAlpha',
+        status: '404',
+        componentName: 'NotFound',
+        path: '/alpha',
+        colonPath: '/alpha',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getBeta',
+        status: '200',
+        componentName: 'Beta',
+        path: '/beta',
+        colonPath: '/beta',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getBeta',
+        status: '404',
+        componentName: 'NotFound',
+        path: '/beta',
+        colonPath: '/beta',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: '*',
+        status: '404',
+        componentName: 'NotFound',
+        path: '*',
+        colonPath: '*',
+        method: '*',
+        source: 'component',
+      },
+    ] as const;
+
+    expect(() => {
+      crossValidateResponseMap(schema, entries);
+    }).not.toThrow();
+  });
+
+  it('rejects wildcard entries when operations use different components for a status', () => {
+    const schema = createSchemaWithDifferentErrors();
+
+    const entries = [
+      {
+        operationId: 'getAlpha',
+        status: '200',
+        componentName: 'Alpha',
+        path: '/alpha',
+        colonPath: '/alpha',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getAlpha',
+        status: '404',
+        componentName: 'AlphaNotFound',
+        path: '/alpha',
+        colonPath: '/alpha',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getBeta',
+        status: '200',
+        componentName: 'Beta',
+        path: '/beta',
+        colonPath: '/beta',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: 'getBeta',
+        status: '404',
+        componentName: 'BetaNotFound',
+        path: '/beta',
+        colonPath: '/beta',
+        method: 'get',
+        source: 'component',
+      },
+      {
+        operationId: '*',
+        status: '404',
+        componentName: 'NotFound',
+        path: '*',
+        colonPath: '*',
+        method: '*',
+        source: 'component',
+      },
+    ] as const;
+
+    expect(() => {
+      crossValidateResponseMap(schema, entries);
+    }).toThrow(/Extra/);
   });
 });

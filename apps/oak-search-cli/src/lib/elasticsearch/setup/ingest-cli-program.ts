@@ -13,9 +13,6 @@ import {
   validatePositiveInt,
 } from './ingest-cli-validators.js';
 
-/** Default bulk download directory (relative to search CLI workspace root). */
-export const DEFAULT_BULK_DIR = './bulk-downloads';
-
 /**
  * Add data source options to program.
  *
@@ -26,10 +23,7 @@ export const DEFAULT_BULK_DIR = './bulk-downloads';
 function addDataSourceOptions(program: Command): void {
   program
     .option('--api', 'Use live API instead of bulk download files')
-    .option(
-      '--bulk-dir <path>',
-      `Directory containing bulk JSON files (default: ${DEFAULT_BULK_DIR})`,
-    );
+    .option('--bulk-dir <path>', 'Directory containing bulk JSON files');
 }
 
 /**
@@ -65,7 +59,6 @@ function addFilterOptions(program: Command): void {
 function addGeneralOptions(program: Command): void {
   program
     .option('--dry-run', 'Preview without writing to ES')
-    .option('-i, --incremental', 'Skip existing documents (default: overwrite)')
     .option('--clear-cache', 'Clear SDK response cache before ingestion')
     .option('--bypass-cache', 'Continue without Redis cache')
     .option('--ignore-cached-404', 'Ignore cached 404 responses')
@@ -106,7 +99,8 @@ export function createProgram(): Command {
       'after',
       `
 ${chalk.yellow('Data Source (default: bulk)')}
-  Reads from local bulk-download files by default (${DEFAULT_BULK_DIR}).
+  Reads from local bulk-download files by default.
+  Configure with --bulk-dir or BULK_DOWNLOAD_DIR.
   Run 'pnpm bulk:download' first to fetch the bulk data.
   Use --api to switch to live API fetching (slower, rate-limited).
 
@@ -123,7 +117,6 @@ ${chalk.yellow('Examples:')}
   $ ingest                                            # Full ingestion (bulk)
   $ ingest --api --subject history --key-stage ks2    # Single subject (API)
   $ ingest --api --all                                # Full ingestion (API)
-  $ ingest --api --all --incremental                  # Resume failed run (API)
 `,
     );
 

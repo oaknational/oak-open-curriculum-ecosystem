@@ -29,10 +29,6 @@
       "type": "http",
       "url": "https://mcp.vercel.com",
       "headers": {}
-    },
-    "Clerk": {
-      "url": "https://mcp.clerk.com/mcp",
-      "headers": {}
     }
   }
 }

@@ -6,19 +6,19 @@ overview: >
 todos:
   - id: p4-committed-frontmatter
     content: "Committed task: normalise SKILL.md frontmatter to specification."
-    status: pending
+    status: cancelled
   - id: p4-committed-openai-cleanup
     content: "Committed task: remove untested openai.yaml stub and document reintroduction criteria."
-    status: pending
+    status: cancelled
   - id: p4-conditional-trigger-register
     content: "Create and maintain trigger register for conditional tasks."
-    status: pending
+    status: cancelled
   - id: p4-conditional-follow-up-mechanism
     content: "Define follow-up plan creation mechanism when triggers fire."
-    status: pending
+    status: cancelled
   - id: p4-doc-sync
     content: "Update documentation sync log with ADR/directive/reference-doc/README impact for Phase 4."
-    status: pending
+    status: cancelled
 ---
 
 # Phase 4 - Cross-Agent Standardisation Execution

@@ -4,9 +4,9 @@ A complete guide for adding AI-agent quality gates to any repository. This
 system gives you portable canonical rules, specialist reviewer agents, and
 automated validation that the two stay in sync across every AI platform you use.
 
-**Origin repo**: `oak-mcp-ecosystem` (TypeScript/Node.js monorepo)
+**Origin repo**: `oaknational/oak-open-curriculum-ecosystem`
+(`oak-mcp-ecosystem` local working-directory alias; TypeScript/Node.js monorepo)
 **Platforms proven**: Claude Code, Cursor, Gemini CLI, OpenAI Codex
-**Platforms planned but not yet investigated**: Anthropic Antigravity
 
 ---
 
@@ -47,6 +47,7 @@ The system has two parallel three-layer stacks — one for **rules** and one for
 └──────────────────────────────────────────────────────────────┘
           │
           └── scripts/validate-portability.mjs
+              + scripts/validate-portability-helpers.mjs
               (enforces sync between layers)
 ```
 
@@ -308,6 +309,7 @@ discipline and cross-checking against ADRs.
 | `onboarding-reviewer` | Human and AI onboarding path quality | opus |
 | `mcp-reviewer` | MCP protocol specification expert | opus |
 | `elasticsearch-reviewer` | ES mappings, queries, bulk ops | opus |
+| `clerk-reviewer` | Clerk middleware, token verification, OAuth proxy | opus |
 
 ### The Four-Persona Architecture Team
 
@@ -350,7 +352,7 @@ See the companion document: [platform-adapter-reference.md](platform-adapter-ref
 
 An automated script enforces that the three layers stay in sync.
 
-### What It Checks (8 checks)
+### What It Checks (9 checks)
 
 | # | Check | What fails |
 |---|-------|------------|
@@ -362,6 +364,7 @@ An automated script enforces that the three layers stay in sync.
 | 6 | Orphan detection (commands/skills) | Canonical item with no platform adapters |
 | 7 | Rule orphan detection | Canonical rule missing Claude `.md` AND/OR Cursor `.mdc` |
 | 8 | Trigger content contract | Cursor trigger has >10 content lines (excl. frontmatter) |
+| 9 | Hook portability parity | `.agent/hooks/policy.json`, optional machine-local `.claude/settings.json`, and the surface matrix disagree about Claude hook activation |
 
 ### Running It
 
@@ -373,8 +376,9 @@ node scripts/validate-portability.mjs
 
 ### Adding It to Your Repo
 
-The script is self-contained (~330 lines of vanilla Node.js, no
-dependencies). Copy `scripts/validate-portability.mjs` and add:
+The current oak implementation uses a zero-dependency entry script plus a small
+helper module. Copy `scripts/validate-portability.mjs` and
+`scripts/validate-portability-helpers.mjs`, then add:
 
 ```json
 {
@@ -385,6 +389,9 @@ dependencies). Copy `scripts/validate-portability.mjs` and add:
 ```
 
 Then add it to your quality gates / CI pipeline.
+
+Check 9 only fires when the machine-local `.claude/settings.json` exists, so
+clean clones and CI do not fail solely because that ignored file is absent.
 
 ---
 
@@ -467,9 +474,10 @@ For each reviewer:
 
 ### Phase 4: Validation (10 minutes)
 
-1. Copy `scripts/validate-portability.mjs`
+1. Copy `scripts/validate-portability.mjs` and
+   `scripts/validate-portability-helpers.mjs`
 2. Add `pnpm portability:check` to your quality gates
-3. Run it — fix any orphans or missing adapters
+3. Run it — fix any orphans, missing adapters, or hook-parity drift
 
 ### Phase 5: Domain Specialists (as needed)
 
@@ -603,6 +611,25 @@ into overlapping scope. Every template needs a Boundaries section.
 The code-reviewer should run on every change. It identifies which
 specialists are needed. Without the gateway, specialist coverage
 becomes ad-hoc and gaps appear.
+
+### 7. Empty stub components
+
+Components must contain real content or not exist. An empty stub
+teaches agents that the composition system is ceremonial — the agent
+believes it has loaded a capability but nothing was actually loaded.
+Absence prompts creation; a stub prompts acceptance. This is the
+"not even wrong" failure mode applied to agent infrastructure.
+
+### 8. Structural completeness without activation depth
+
+Following the implementation guide produces structurally correct
+files. But structure alone is not enough — a seeded reviewer system
+can look right while silently failing. After setup, verify:
+
+- Components carry genuine operational content (not placeholders)
+- Templates include reasoning alongside rules (not just imperatives)
+- Platform adapters are genuinely thin (no duplicated content)
+- The code-reviewer gateway is actually being invoked on changes
 
 ---
 

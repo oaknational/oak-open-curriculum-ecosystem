@@ -20,6 +20,11 @@ import type {
   ParentSubjectSlug,
 } from '../../types/oak';
 import type { Ks4DocumentFields } from './document-transform-helpers';
+import {
+  copyArrayOrUndefined,
+  derivePhaseFromKeyStage,
+  extractUnitArrays,
+} from './lesson-document-core.helpers';
 
 /**
  * Unit information for lesson documents.
@@ -32,6 +37,10 @@ export interface LessonUnitInfo {
   readonly unitTitle: string;
   /** Unit canonical URL */
   readonly canonicalUrl: string;
+  /** Optional thread slugs carried through unit relationships. */
+  readonly threadSlugs?: readonly string[];
+  /** Optional thread titles carried through unit relationships. */
+  readonly threadTitles?: readonly string[];
 }
 
 /**
@@ -101,6 +110,12 @@ export interface CreateLessonDocParams {
   /** Total unit count for display */
   readonly unitCount: number;
 
+  // === Thread relationships ===
+  /** Curriculum thread slugs associated with the lesson. */
+  readonly threadSlugs?: readonly string[];
+  /** Curriculum thread titles associated with the lesson. */
+  readonly threadTitles?: readonly string[];
+
   // === Pedagogical fields ===
   /** Extracted keyword strings */
   readonly lessonKeywords: readonly string[] | undefined;
@@ -147,41 +162,6 @@ export interface CreateLessonDocParams {
   readonly ks4?: Ks4DocumentFields;
 }
 
-/** Extracts unit arrays from unit info list */
-function extractUnitArrays(units: readonly LessonUnitInfo[]) {
-  return {
-    unitIds: units.map((u) => u.unitSlug),
-    unitTitles: units.map((u) => u.unitTitle),
-    unitUrls: units.map((u) => u.canonicalUrl),
-  };
-}
-
-/**
- * Derives phase slug from key stage.
- *
- * Phases are the fundamental curriculum division:
- * - `primary`: Years 1-6 (KS1 + KS2)
- * - `secondary`: Years 7-11 (KS3 + KS4)
- *
- * @param keyStage - The key stage slug
- * @returns The corresponding phase slug
- * @example
- * ```typescript
- * derivePhaseFromKeyStage('ks1') // => 'primary'
- * derivePhaseFromKeyStage('ks2') // => 'primary'
- * derivePhaseFromKeyStage('ks3') // => 'secondary'
- * derivePhaseFromKeyStage('ks4') // => 'secondary'
- * ```
- */
-function derivePhaseFromKeyStage(keyStage: KeyStage): 'primary' | 'secondary' {
-  return keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
-}
-
-/** Copy array if defined, else undefined */
-function copyArrayOrUndefined<T>(arr: readonly T[] | undefined): T[] | undefined {
-  return arr ? [...arr] : undefined;
-}
-
 /**
  * Creates an Elasticsearch document for the oak_lessons index.
  *
@@ -223,6 +203,8 @@ export function buildLessonDocument(params: CreateLessonDocParams): SearchLesson
     unit_titles: unitTitles,
     unit_count: params.unitCount,
     unit_urls: unitUrls,
+    thread_slugs: copyArrayOrUndefined(params.threadSlugs),
+    thread_titles: copyArrayOrUndefined(params.threadTitles),
     lesson_keywords: copyArrayOrUndefined(params.lessonKeywords),
     key_learning_points: copyArrayOrUndefined(params.keyLearningPoints),
     misconceptions_and_common_mistakes: copyArrayOrUndefined(params.misconceptions),

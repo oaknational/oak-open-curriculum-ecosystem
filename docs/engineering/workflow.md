@@ -53,13 +53,13 @@ pnpm fix   # format:root → markdownlint:root → lint:fix
 **Full pipeline** (before committing):
 
 ```bash
-pnpm make  # install → build/sdk-codegen → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root
+pnpm make  # install → build → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
 ```
 
 **Full verification** (before pushing):
 
 ```bash
-pnpm qg    # format-check:root → markdownlint-check:root → subagents:check → type-check → lint → test → test:ui → test:e2e → smoke:dev:stub
+pnpm qg    # format-check:root → markdownlint-check:root → subagents:check → portability:check → test:root-scripts → type-check → lint → test → test:ui → test:e2e → smoke:dev:stub
 ```
 
 See [Build System](./build-system.md) for the single source of truth on all command definitions.

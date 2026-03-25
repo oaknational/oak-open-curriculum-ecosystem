@@ -152,9 +152,6 @@ pnpm es:ingest -- --api --subject maths --subject science --subject english
 # Ingest everything (API mode; takes hours)
 pnpm es:ingest -- --api --all
 
-# Resume after interruption (skip already-indexed documents)
-pnpm es:ingest -- --api --all --incremental
-
 # Verify ingestion completeness
 pnpm ingest:verify
 ```
@@ -222,7 +219,6 @@ pnpm es:ingest -- --all [options]
 
 Options:
   --all              Ingest all subjects
-  -i, --incremental  Skip existing documents (for resuming)
   --dry-run          Preview without writing to ES
   --bypass-cache     Continue without Redis cache
   --max-retries <n>  Max retry attempts
@@ -233,7 +229,6 @@ Options:
 
 Examples:
   pnpm es:ingest -- --api --all                  # Full fresh ingestion (API mode)
-  pnpm es:ingest -- --api --all --incremental    # Resume interrupted run (API mode)
   pnpm es:ingest -- --api --all --dry-run        # Preview what would be ingested (API mode)
 ```
 

@@ -12,7 +12,7 @@
  */
 
 import type { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
@@ -42,11 +42,8 @@ export function registerFacetsCmd(parent: Command, cliEnv: CliSdkEnv): void {
       await withEsClient(
         esClient,
         async () => {
-          const sdk = createSearchSdk({
-            deps: { esClient },
-            config: buildSearchSdkConfig(cliEnv),
-          });
-          const result = await handleFetchFacets(sdk.retrieval, {
+          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+          const result = await handleFetchFacets(retrieval, {
             subject: validateSubject(opts.subject),
             keyStage: validateKeyStage(opts.keyStage),
           });

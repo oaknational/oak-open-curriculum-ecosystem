@@ -30,6 +30,7 @@ import {
   type BulkToESLessonParams,
 } from './bulk-lesson-transformer.js';
 import { transformBulkUnitToESDoc, type BulkToESUnitParams } from './bulk-unit-transformer.js';
+import type { CategoryMap } from './category-supplementation';
 
 // Re-export transform functions and types for external use
 export { transformBulkLessonToESDoc, type BulkToESLessonParams, type LessonUnitInfo };
@@ -104,6 +105,8 @@ function createLessonTransformer(
         unitSlug: lesson.unitSlug,
         unitTitle: lesson.unitTitle,
         canonicalUrl: generateUnitUrlFromSequence(lesson.unitSlug, sequenceSlug),
+        threadSlugs: unit?.threads.map((thread) => thread.slug) ?? [],
+        threadTitles: unit?.threads.map((thread) => thread.title) ?? [],
       };
       return transformBulkLessonToESDoc({ lesson, unitInfo, years });
     });
@@ -114,6 +117,7 @@ function createUnitTransformer(
   bulkFile: BulkDownloadFile,
   subjectSlug: AllSubjectSlug,
   subjectParent: ParentSubjectSlug,
+  categoryMap?: CategoryMap,
 ) {
   return (): readonly SearchUnitsIndexDoc[] => {
     const firstUnit = bulkFile.sequence[0];
@@ -128,6 +132,7 @@ function createUnitTransformer(
         subjectTitle: bulkFile.subjectTitle,
         subjectProgrammesUrl,
         sequenceSlug: bulkFile.sequenceSlug,
+        categoryMap,
       }),
     );
   };
@@ -136,14 +141,22 @@ function createUnitTransformer(
 /**
  * Create a BulkDataAdapter from parsed bulk file data.
  */
-export function createBulkDataAdapter(bulkFile: BulkDownloadFile): BulkDataAdapter {
+export function createBulkDataAdapter(
+  bulkFile: BulkDownloadFile,
+  categoryMap?: CategoryMap,
+): BulkDataAdapter {
   const lessonsByUnitMap = buildLessonsByUnitMap(bulkFile.lessons);
   const unitMap = new Map(bulkFile.sequence.map((u) => [u.unitSlug, u]));
   const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
   const subjectParent = SUBJECT_TO_PARENT[subjectSlug];
 
   const transformLessonsToES = createLessonTransformer(bulkFile, unitMap, bulkFile.sequenceSlug);
-  const transformUnitsToES = createUnitTransformer(bulkFile, subjectSlug, subjectParent);
+  const transformUnitsToES = createUnitTransformer(
+    bulkFile,
+    subjectSlug,
+    subjectParent,
+    categoryMap,
+  );
 
   return {
     sequenceSlug: bulkFile.sequenceSlug,

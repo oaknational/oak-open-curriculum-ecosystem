@@ -12,7 +12,7 @@
  */
 
 import type { Command } from 'commander';
-import { createSearchSdk } from '@oaknational/oak-search-sdk';
+import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
@@ -46,11 +46,8 @@ export function registerSuggestCmd(parent: Command, cliEnv: CliSdkEnv): void {
         await withEsClient(
           esClient,
           async () => {
-            const sdk = createSearchSdk({
-              deps: { esClient },
-              config: buildSearchSdkConfig(cliEnv),
-            });
-            const result = await handleSuggest(sdk.retrieval, {
+            const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+            const result = await handleSuggest(retrieval, {
               prefix,
               scope: validateScope(opts.scope),
               subject: validateSubject(opts.subject),

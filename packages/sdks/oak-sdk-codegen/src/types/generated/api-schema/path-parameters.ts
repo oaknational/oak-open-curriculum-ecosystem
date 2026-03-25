@@ -30,6 +30,7 @@ export const PATHS = {
   '/key-stages/{keyStage}/subject/{subject}/lessons': '/key-stages/{keyStage}/subject/{subject}/lessons',
   '/key-stages/{keyStage}/subject/{subject}/questions': '/key-stages/{keyStage}/subject/{subject}/questions',
   '/key-stages/{keyStage}/subject/{subject}/units': '/key-stages/{keyStage}/subject/{subject}/units',
+  '/keywords': '/keywords',
   '/lessons/{lesson}/assets': '/lessons/{lesson}/assets',
   '/lessons/{lesson}/assets/{type}': '/lessons/{lesson}/assets/{type}',
   '/lessons/{lesson}/quiz': '/lessons/{lesson}/quiz',
@@ -334,6 +335,10 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
         "path": "/key-stages",
         "paramsKey": "NO_PARAMS"
     },
+    "/keywords": {
+        "path": "/keywords",
+        "paramsKey": "NO_PARAMS"
+    },
     "/rate-limit": {
         "path": "/rate-limit",
         "paramsKey": "NO_PARAMS"
@@ -467,6 +472,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -500,71 +535,32 @@ export const PATH_OPERATIONS = [
           }
         }
       },
-      "404": {
-        "description": "Temporary: Documented locally until the upstream schema captures this legitimate 404 response.\n\nLessons without accompanying video content legitimately return HTTP 404 so callers can distinguish \"no transcript available\" from invalid lesson slugs.\n\nTracking: .agent/plans/upstream-api-metadata-wishlist.md item #4",
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "description": "Standard Oak API error envelope emitted for legitimate 404 responses.",
-              "required": [
-                "message",
-                "code",
-                "data"
-              ],
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Transcript not available for this query",
-                  "description": "Human-readable message describing why the resource is unavailable."
-                },
-                "code": {
-                  "type": "string",
-                  "example": "NOT_FOUND",
-                  "description": "API error code describing the failure classification."
-                },
-                "data": {
-                  "type": "object",
-                  "description": "Additional metadata describing the failure as emitted by the Oak API gateway.",
-                  "required": [
-                    "code",
-                    "httpStatus",
-                    "path"
-                  ],
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "NOT_FOUND",
-                      "description": "Reiterated error code for downstream tools."
-                    },
-                    "httpStatus": {
-                      "type": "integer",
-                      "example": 404,
-                      "description": "HTTP status code returned by the upstream API."
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "getLessonTranscript.getLessonTranscript",
-                      "description": "Identifier of the upstream operation emitting the error."
-                    },
-                    "zodError": {
-                      "description": "Optional validation payload describing schema mismatches. Always null for 404 responses.",
-                      "type": "null",
-                      "example": null
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "message": "Transcript not available for this query",
-              "code": "NOT_FOUND",
-              "data": {
-                "code": "NOT_FOUND",
-                "httpStatus": 404,
-                "path": "getLessonTranscript.getLessonTranscript",
-                "zodError": null
-              }
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -597,6 +593,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/SearchTranscriptResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -658,6 +684,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/SequenceAssetsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -758,6 +814,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -807,6 +893,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/LessonAssetsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -864,6 +980,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -881,6 +1027,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/AllSubjectsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -916,6 +1092,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -945,6 +1151,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -980,6 +1216,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1012,6 +1278,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1029,6 +1325,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/KeyStageResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1130,6 +1456,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1198,6 +1554,188 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "path": "/keywords",
+    "method": "get",
+    "operationId": "getKeywords-getKeywords",
+    "summary": "Keywords",
+    "description": "This endpoint returns a list of keywords for a given key stage and subject, based on the keywords associated with the lessons that are available for that key stage and subject. The keywords are returned in order of frequency, with the most common keywords appearing first.",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "subject",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "keyStage",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "phase",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "unit",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "lesson",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyword": {
+                    "type": "string",
+                    "example": "non-finite clause",
+                    "description": "The keyword text"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "a type of subordinate clause that can start with a verb in the progressive tense",
+                    "description": "A description of the keyword"
+                  },
+                  "keyStageSlug": {
+                    "type": "string",
+                    "example": "ks2",
+                    "description": "The key stage slug associated with this keyword"
+                  },
+                  "subjectSlug": {
+                    "type": "string",
+                    "example": "science",
+                    "description": "The subject slug associated with this keyword"
+                  },
+                  "lessonSlugs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "a-new-sentence-structure-the-non-finite-complex-sentence",
+                      "using-the-comma-rules-in-non-finite-complex-sentences",
+                      "a-new-subordinate-clause-the-non-finite-ing-clause"
+                    ],
+                    "description": "The different lesson slugs where this keyword is used"
+                  }
+                },
+                "required": [
+                  "keyword",
+                  "description",
+                  "keyStageSlug",
+                  "subjectSlug",
+                  "lessonSlugs"
+                ],
+                "additionalProperties": false
+              },
+              "ref": "KeyStageSubjectKeywordsResponseSchema",
+              "example": [
+                {
+                  "keyword": "animate",
+                  "description": "to make something move or change its appearance",
+                  "keyStageSlug": "ks2",
+                  "subjectSlug": "computing",
+                  "lessonSlugs": [
+                    "animating-text"
+                  ]
+                },
+                {
+                  "keyword": "animation",
+                  "description": "a way of making pictures or objects look as if they are moving by showing them quickly one after another",
+                  "keyStageSlug": "ks2",
+                  "subjectSlug": "computing",
+                  "lessonSlugs": [
+                    "introduction-to-animation",
+                    "programming-using-command-blocks"
+                  ]
+                }
+              ]
+            }
+          }
+        }
       }
     }
   },
@@ -1227,6 +1765,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/QuestionForLessonsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1289,6 +1857,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/QuestionsForSequenceResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1381,6 +1979,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1410,6 +2038,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/LessonSummaryResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1497,6 +2155,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1529,6 +2217,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1546,6 +2264,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/AllThreadsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1576,6 +2324,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/ThreadUnitsResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1639,6 +2417,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1685,6 +2493,36 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
+            }
+          }
+        }
       }
     }
   },
@@ -1701,6 +2539,36 @@ export const PATH_OPERATIONS = [
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/RateLimitResponseSchema"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.BAD_REQUEST"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "API token not provided or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error.NOT_FOUND"
             }
           }
         }
@@ -1732,17 +2600,18 @@ export const OPERATIONS_BY_ID = {
   "getKeyStages-getKeyStages": PATH_OPERATIONS[12],
   "getKeyStageSubjectLessons-getKeyStageSubjectLessons": PATH_OPERATIONS[13],
   "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": PATH_OPERATIONS[14],
-  "getQuestions-getQuestionsForLessons": PATH_OPERATIONS[15],
-  "getQuestions-getQuestionsForSequence": PATH_OPERATIONS[16],
-  "getQuestions-getQuestionsForKeyStageAndSubject": PATH_OPERATIONS[17],
-  "getLessons-getLesson": PATH_OPERATIONS[18],
-  "getLessons-searchByTextSimilarity": PATH_OPERATIONS[19],
-  "getUnits-getUnit": PATH_OPERATIONS[20],
-  "getThreads-getAllThreads": PATH_OPERATIONS[21],
-  "getThreads-getThreadUnits": PATH_OPERATIONS[22],
-  "changelog-changelog": PATH_OPERATIONS[23],
-  "changelog-latest": PATH_OPERATIONS[24],
-  "getRateLimit-getRateLimit": PATH_OPERATIONS[25]
+  "getKeywords-getKeywords": PATH_OPERATIONS[15],
+  "getQuestions-getQuestionsForLessons": PATH_OPERATIONS[16],
+  "getQuestions-getQuestionsForSequence": PATH_OPERATIONS[17],
+  "getQuestions-getQuestionsForKeyStageAndSubject": PATH_OPERATIONS[18],
+  "getLessons-getLesson": PATH_OPERATIONS[19],
+  "getLessons-searchByTextSimilarity": PATH_OPERATIONS[20],
+  "getUnits-getUnit": PATH_OPERATIONS[21],
+  "getThreads-getAllThreads": PATH_OPERATIONS[22],
+  "getThreads-getThreadUnits": PATH_OPERATIONS[23],
+  "changelog-changelog": PATH_OPERATIONS[24],
+  "changelog-latest": PATH_OPERATIONS[25],
+  "getRateLimit-getRateLimit": PATH_OPERATIONS[26]
 } as const;
 
 export type OperationIdToOperationMap = typeof OPERATIONS_BY_ID;
@@ -1829,6 +2698,8 @@ export type PossibleResponseCode = typeof RESPONSE_CODES;
 
 export const VALID_RESPONSE_CODES = [
   "200",
+  "400",
+  "401",
   "404"
 ] as const;
 export type ValidResponseCode = typeof VALID_RESPONSE_CODES[number];

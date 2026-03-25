@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 400
+fitness_line_count: 400
 split_strategy: 'Extract detailed sections to docs/engineering/ or governance docs; keep contributor workflow here'
 ---
 
@@ -200,7 +200,14 @@ git checkout -b fix/bug-description
 
 ### 3. Run Quality Gates
 
-Before committing, run all quality checks:
+Before committing, run the comprehensive quality gate:
+
+```bash
+pnpm check    # Full suite: clean, codegen, build, type-check, lint, test, e2e, smoke, format
+```
+
+This single command runs every quality gate in the correct order. If it
+fails and you need to isolate the issue, run the individual steps:
 
 ```bash
 pnpm build             # Build all workspaces
@@ -279,78 +286,22 @@ Include:
 
 ## Code Standards
 
-### Language and Style
+- **British English** — Use British spelling, grammar, and date formats
+  throughout documentation, comments, commit messages, and PR descriptions.
+- **Commit messages** — Commitlint enforces conventional commit format:
+  - `subject-case`: subject line must start with a lowercase type prefix
+    (e.g. `fix(scope): description`). Uppercase acronyms like `ADR-130`
+    are rejected — use descriptive lowercase instead.
+  - `body-max-line-length`: body lines must stay under 100 characters.
 
-- **British English** — Use British spelling, grammar, and date formats throughout: documentation, comments, commit messages, and PR descriptions (e.g., "behaviour" not "behavior", "colour" not "color", `DD/MM/YYYY` date format). Where that is not possible due to external APIs or keywords, stiff upper lip and plough on.
+For full TypeScript, ESM, testing, and error handling standards, see:
 
-### TypeScript
-
-- **No `any` types** — Data entering the system is genuinely `unknown`; validate immediately with generated Zod schemas so it has a specific type from that point on
-- **No type assertions** — No `as` casting (except `as const`)
-- **Use type guards** — Functions with `is` keyword for type narrowing
-- **Validate at boundaries** — Use the generated Zod schemas via the shared helpers in
-  `@oaknational/curriculum-sdk` (see `parseSchema` and friends)
-
-### ESM Module System
-
-The monorepo is ESM-only (`"type": "module"` in all `package.json` files).
-
-- **File extensions mandatory**: `import { x } from './helper.js'` — use `.js`
-  even for `.ts` source files; TypeScript does not rewrite import specifiers
-- **No CommonJS**: no `require()`, no `module.exports`
-- **No `__dirname` / `__filename`**: use `import.meta.dirname` instead
-- **JSON imports**: `import data from './data.json' with { type: 'json' }`
-- **Vitest mock paths**: `vi.mock('./module.js')` — `.js` extension required
-- **Barrel exports**: `export * from` is banned by `no-restricted-syntax`;
-  always use named re-exports
-- **Common error "Cannot find module"**: check for missing `.js` extension.
-  Applies to ALL relative imports including barrel re-exports. `pnpm build` +
-  `pnpm type-check` do NOT catch this — only E2E tests against built `dist/`
-  surface the error. Run `pnpm test:e2e` before pushing.
-
-### Workspace and Turbo
-
-- `pnpm-workspace.yaml` must list only existing package directories — a missing directory causes confusing turbo scope errors.
-- `workspace:*` not `workspace:^` — all workspaces use `workspace:*`. For private packages that will never be published to a registry, the runtime difference is zero, but consistency matters.
-- Turbo cache can mask latent failures for a long time — package renames force cache misses that surface them.
-- Turbo stops at first failure by default — use `--continue` to see all errors across workspaces.
-- Semantic-release managed packages use `"version": "0.0.0-development"`.
-- Never commit `.turbo/` cache files.
-- E2E tests need explicit env in `turbo.json`: `"env": ["OAK_API_KEY"]`.
-- E2E config files use prefix convention (`vitest.e2e.config.ts`) not suffix (`vitest.config.e2e.ts`) — prefix is matched by `*.config.ts` globs in tsconfig and ESLint.
-
-### Self-Referencing Imports
-
-Self-referencing imports within a package (e.g. `import from '@oaknational/sdk-codegen/bulk'` inside sdk-codegen itself) are a trap: TypeScript and tsup do not catch them, only runtime does. External consumers use subpath exports; internal files use relative imports.
-
-### Commit Messages
-
-Commitlint enforces conventional commit `subject-case`: the subject line must start with a lowercase type prefix (e.g. `fix(scope): description`). Uppercase item references like "F7 — description" are rejected.
-
-### Functions
-
-- **Prefer pure functions** — No side effects
-- **Single responsibility** — One function, one job
-- **Descriptive names** — Self-documenting code
-- **Early returns** — Reduce nesting
-
-### Testing
-
-- **Test behaviour, not implementation**
-- **No complex mocks** — Simple fakes only
-- **100% coverage for pure functions**
-- **Use existing test patterns**
-
-E2E tests use mocks and dependency injection; they do not require real API
-keys. Only smoke tests (`pnpm smoke:dev:stub`, `pnpm smoke:dev:live`)
-require real credentials.
-
-### Error Handling
-
-- Use the `Result<T, E>` type from `@oaknational/result` for explicit error
-  handling without exceptions
-- Fail fast with helpful error messages — never silently
-- No sensitive data in error messages
+- [TypeScript Practice](docs/governance/typescript-practice.md) — type safety,
+  no `any`, no assertions, validation at boundaries
+- [Development Practice](docs/governance/development-practice.md) — functions,
+  testing, error handling, ESM conventions
+- [Testing Strategy](.agent/directives/testing-strategy.md) — TDD approach at
+  all levels
 
 ## Testing Your Changes
 
@@ -378,31 +329,19 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 
 ## Common Issues
 
-### Build Fails
+See the [Troubleshooting Guide](docs/operations/troubleshooting.md) for
+detailed solutions. Quick fixes:
 
-- Check Node.js version (24.x required)
-- Clear node_modules: `rm -rf node_modules && pnpm install`
-
-### Type Errors
-
-- Never use `any` or `as`
-- Use generated SDK types, not manual definitions
-- Check for missing properties in test fakes
-
-### Test Failures
-
-- Ensure test fakes match SDK types exactly
-- Check for race conditions in async tests
-- Verify environment setup
+- **Build fails** — check Node.js version (24.x required); clear with
+  `rm -rf node_modules && pnpm install`
+- **Type errors** — use generated SDK types, not manual definitions; no `any`
+  or `as`
+- **Test failures** — ensure test fakes match SDK types exactly
 
 ## Release Process
 
-We use semantic-release for automated releases:
-
-1. PRs merged to `main` trigger release
-2. Version bumped based on commit types
-3. GitHub release created automatically
-4. npm package published for public packages
+Semantic-release handles automated releases: PRs merged to `main` trigger
+version bumps, GitHub releases, and npm publishing based on commit types.
 
 ## Security
 

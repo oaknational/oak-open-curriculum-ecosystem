@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 /**
  * Elasticsearch setup CLI.
  *

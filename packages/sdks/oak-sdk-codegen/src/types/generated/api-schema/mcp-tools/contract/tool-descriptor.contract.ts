@@ -61,6 +61,28 @@ export type SecurityScheme = NoAuthScheme | OAuth2Scheme;
 
 export type StatusDiscriminant<T extends string> = T extends `${infer N extends number}` ? N : T;
 
+/**
+ * Return shape of the generated invoke method.
+ *
+ * Preserves the HTTP status alongside the response payload so that
+ * consumers can distinguish error statuses (400/401/404) even when
+ * the response body validates against multiple documented schemas.
+ */
+export interface InvokeResult {
+  readonly httpStatus: number;
+  readonly payload: unknown;
+}
+
+/**
+ * Shared prefix for the TypeError thrown by generated executors when the
+ * upstream API returns a documented error HTTP status (>= 400).
+ *
+ * Both the generated `invokeToolByName` (producer) and the authored
+ * `mapErrorToResult` (consumer) reference this constant to maintain
+ * a single source of truth for the cross-layer contract.
+ */
+export const DOCUMENTED_ERROR_PREFIX = 'Documented error response: ';
+
 export interface ToolDescriptor<
   TName extends string,
   TClient,
@@ -156,5 +178,5 @@ export interface ToolDescriptor<
           readonly issues: readonly core.$ZodIssue[];
         }[];
       };
-  readonly invoke: (client: TClient, args: TArgs) => unknown | Promise<unknown>;
+  readonly invoke: (client: TClient, args: TArgs) => InvokeResult | Promise<InvokeResult>;
 }

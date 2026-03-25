@@ -24,7 +24,7 @@ import type {
   SearchParamsBase,
   ThreadsSearchResult,
   RetrievalError,
-} from '@oaknational/oak-search-sdk';
+} from '@oaknational/oak-search-sdk/read';
 
 /**
  * Thread search function type for dependency injection.

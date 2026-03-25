@@ -102,7 +102,7 @@ The remaining non-UX blockers for public alpha are:
 Primary tracking references:
 
 - [../../research/auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md)
-- [../architecture-and-infrastructure/observability-and-quality-metrics.plan.md](../architecture-and-infrastructure/observability-and-quality-metrics.plan.md)
+- [../architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md](../architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md)
 
 ---
 

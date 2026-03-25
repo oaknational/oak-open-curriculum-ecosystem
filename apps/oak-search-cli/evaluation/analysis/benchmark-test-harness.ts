@@ -11,7 +11,7 @@
 
 import { ok } from '@oaknational/result';
 import type { SearchFunction } from './benchmark-query-runner-lessons.js';
-import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
+import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk/read';
 import type { SearchLessonsIndexDoc } from '@oaknational/sdk-codegen/search';
 import { runBenchmark } from './benchmark-main.js';
 

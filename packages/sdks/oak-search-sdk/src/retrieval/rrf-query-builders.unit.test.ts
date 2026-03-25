@@ -7,6 +7,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { buildFourWayRetriever } from './rrf-query-builders.js';
+import { buildLessonFilters } from './rrf-query-helpers.js';
 
 /**
  * Narrows a RetrieverContainer past the ExactlyOne union's undefined member.
@@ -83,6 +84,25 @@ describe('buildFourWayRetriever', () => {
       const retriever = requireRetriever(buildFourWayRetriever('test', [], [], 'lesson'));
       expect(retriever.rrf?.rank_window_size).toBe(80);
       expect(retriever.rrf?.rank_constant).toBe(60);
+    });
+
+    it('applies identical filter to all four RRF retrievers when lesson filters are provided', () => {
+      const filters = buildLessonFilters({
+        query: 'fraction',
+        subject: 'maths',
+        keyStage: 'ks2',
+        threadSlug: 'number-fractions',
+      });
+      const retriever = requireRetriever(buildFourWayRetriever('fraction', filters, [], 'lesson'));
+      const expectedFilter = { bool: { filter: filters } };
+      const rrf = retriever.rrf?.retrievers ?? [];
+      expect(rrf).toHaveLength(4);
+      for (const entry of rrf) {
+        if (!entry || !('standard' in entry) || !entry.standard) {
+          throw new Error('expected standard retriever');
+        }
+        expect(entry.standard.filter).toEqual(expectedFilter);
+      }
     });
   });
 });

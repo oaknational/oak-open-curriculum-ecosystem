@@ -526,5 +526,5 @@ From the SDK documentation:
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` - Existing ontology implementation
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-ontology.ts` - Tool definition pattern
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts` - Output formatting
-- `.agent/reference-docs/openai-apps/openai-apps-sdk-build-mcp-server.md` - SDK documentation
+- `.agent/reference/openai-apps/openai-apps-sdk-build-mcp-server.md` - SDK documentation
 - `.agent/directives/principles.md` - Project rules

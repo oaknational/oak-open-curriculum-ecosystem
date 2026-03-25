@@ -8,6 +8,12 @@
     },
     "continual-learning": {
       "enabled": true
+    },
+    "elastic-docs": {
+      "enabled": true
+    },
+    "clerk": {
+      "enabled": true
     }
   }
 }

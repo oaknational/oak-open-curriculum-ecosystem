@@ -8,25 +8,28 @@ import { describe, it, expect } from 'vitest';
 import {
   buildCategoryMap,
   getCategoriesForUnit,
+  extractCategoryTitles,
   type CategoryInfo,
-  type SequenceUnitsData,
 } from './category-supplementation';
+import type { SequenceUnitsResponse } from '../types/oak';
 
 describe('category-supplementation', () => {
   describe('buildCategoryMap', () => {
     it('builds a map of unit slugs to categories', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 5,
           units: [
             {
               unitSlug: 'five-sentence-types',
               unitTitle: 'Five sentence types',
+              unitOrder: 1,
               categories: [{ categoryTitle: 'Grammar', categorySlug: 'grammar' }],
             },
             {
               unitSlug: 'verb-adjective-noun-suffixes',
               unitTitle: 'Verb, adjective and noun suffixes',
+              unitOrder: 2,
               categories: [{ categoryTitle: 'Spelling', categorySlug: 'spelling' }],
             },
           ],
@@ -42,13 +45,14 @@ describe('category-supplementation', () => {
     });
 
     it('handles units with multiple categories', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 5,
           units: [
             {
               unitSlug: 'multi-category-unit',
               unitTitle: 'Multi Category Unit',
+              unitOrder: 1,
               categories: [
                 { categoryTitle: 'Reading', categorySlug: 'reading' },
                 { categoryTitle: 'Writing', categorySlug: 'writing' },
@@ -67,14 +71,14 @@ describe('category-supplementation', () => {
     });
 
     it('handles units without categories', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 5,
           units: [
             {
               unitSlug: 'no-category-unit',
               unitTitle: 'No Category Unit',
-              // No categories property
+              unitOrder: 1,
             },
           ],
         },
@@ -86,13 +90,14 @@ describe('category-supplementation', () => {
     });
 
     it('handles empty categories array', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 5,
           units: [
             {
               unitSlug: 'empty-category-unit',
               unitTitle: 'Empty Category Unit',
+              unitOrder: 1,
               categories: [],
             },
           ],
@@ -105,13 +110,14 @@ describe('category-supplementation', () => {
     });
 
     it('handles multiple years', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 4,
           units: [
             {
               unitSlug: 'year-4-unit',
               unitTitle: 'Year 4 Unit',
+              unitOrder: 1,
               categories: [{ categoryTitle: 'Grammar', categorySlug: 'grammar' }],
             },
           ],
@@ -122,6 +128,7 @@ describe('category-supplementation', () => {
             {
               unitSlug: 'year-5-unit',
               unitTitle: 'Year 5 Unit',
+              unitOrder: 1,
               categories: [{ categoryTitle: 'Spelling', categorySlug: 'spelling' }],
             },
           ],
@@ -141,13 +148,13 @@ describe('category-supplementation', () => {
     });
 
     it('handles unit options (alternative units)', () => {
-      const sequenceData: SequenceUnitsData = [
+      const sequenceData: SequenceUnitsResponse = [
         {
           year: 5,
           units: [
             {
-              unitSlug: undefined, // Parent has no slug
               unitTitle: 'Parent Unit',
+              unitOrder: 1,
               unitOptions: [
                 { unitSlug: 'option-a', unitTitle: 'Option A' },
                 { unitSlug: 'option-b', unitTitle: 'Option B' },
@@ -181,6 +188,49 @@ describe('category-supplementation', () => {
       const result = getCategoriesForUnit(categoryMap, 'unknown-unit');
 
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('extractCategoryTitles', () => {
+    it('extracts titles from categories', () => {
+      const categories: readonly CategoryInfo[] = [
+        { title: 'Grammar', slug: 'grammar' },
+        { title: 'Spelling', slug: 'spelling' },
+      ];
+
+      expect(extractCategoryTitles(categories)).toEqual(['Grammar', 'Spelling']);
+    });
+
+    it('returns undefined for undefined input', () => {
+      expect(extractCategoryTitles(undefined)).toBeUndefined();
+    });
+
+    it('returns undefined for empty array', () => {
+      expect(extractCategoryTitles([])).toBeUndefined();
+    });
+  });
+
+  describe('buildCategoryMap — slug derivation', () => {
+    it('derives slug from title when categorySlug is absent', () => {
+      const sequenceData: SequenceUnitsResponse = [
+        {
+          year: 5,
+          units: [
+            {
+              unitSlug: 'some-unit',
+              unitTitle: 'Some Unit',
+              unitOrder: 1,
+              categories: [{ categoryTitle: 'Number and Place Value' }],
+            },
+          ],
+        },
+      ];
+
+      const map = buildCategoryMap(sequenceData);
+
+      expect(map.get('some-unit')).toEqual([
+        { title: 'Number and Place Value', slug: 'number-and-place-value' },
+      ]);
     });
   });
 });

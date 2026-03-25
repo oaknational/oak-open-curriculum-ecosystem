@@ -10,7 +10,7 @@
  * @see ADR-133 CLI Resource Lifecycle Management
  */
 
-import type { SearchSdkConfig } from '@oaknational/oak-search-sdk';
+import type { SearchSdkConfig } from '@oaknational/oak-search-sdk/read';
 import type { CliSdkEnv } from './create-cli-sdk.js';
 
 /**

@@ -19,7 +19,7 @@ and `sdk-and-mcp-enhancements/` directories.
 | [active/README.md](active/README.md) | Active index | In-progress executable plans |
 | [current/README.md](current/README.md) | Current index | Executable plans queued or resumable |
 | [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) | Current plan | Add truthful `outputSchema` metadata to every MCP tool while keeping generated upstream-response validation aligned with the actual MCP `structuredContent` envelope |
-| [active/oak-preview-mcp-snagging.execution.plan.md](active/oak-preview-mcp-snagging.execution.plan.md) | Active plan | Active standalone execution entry point for the deploy-safe oak-preview MCP snagging workstream |
+| [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md) | Completed | All phases complete; post-deploy reindex is operational only. Archived 2026-03-11. |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 | [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | MCP Apps standard evidence base: ChatGPT support, SEP-1865, capability matrix |
 | [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) | Active plan | Plainly named execution entry point for replacing legacy OpenAI App surfaces with MCP Apps infrastructure |
@@ -29,7 +29,7 @@ and `sdk-and-mcp-enhancements/` directories.
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Now (in progress)**: [active/README.md](active/README.md)
 3. **Active MCP Apps migration entry point**: [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
-4. **Active oak-preview snagging entry point**: [active/oak-preview-mcp-snagging.execution.plan.md](active/oak-preview-mcp-snagging.execution.plan.md)
+4. **Archived oak-preview snagging**: [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md)
 5. **Current queue index**: [current/README.md](current/README.md)
 6. **Current output-schema work**: [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
 7. **Later (deferred)**: [future/README.md](future/README.md)

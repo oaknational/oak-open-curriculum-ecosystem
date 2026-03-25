@@ -24,8 +24,8 @@ export async function benchmarkSequences(): Promise<IndexResult> {
   if (!configResult.ok) {
     throw new Error(`Environment validation failed: ${configResult.error.message}`);
   }
-  return withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchSequences.bind(sdk.retrieval);
+  return withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchSequences.bind(retrieval);
     const entries = getSequenceGroundTruthEntries();
     const results: BenchmarkMetrics[] = [];
 

@@ -6,6 +6,10 @@
 
 The bulk data is the source of truth for the semantic search system. It is the data that is indexed into the Elasticsearch database. It is downloaded, you can't see it because it is gitignored, use the shell.
 
+## Index operations and CLI checks
+
+When validating Elasticsearch state, distinguish **alias topology** from **document counts**. The `oaksearch admin validate-aliases` command proves that read aliases exist and point at versioned physical indexes; it does not prove that indexed data matches the latest bulk snapshot. True parent counts come from `oaksearch admin count`. See [`apps/oak-search-cli/docs/INDEXING.md`](../../apps/oak-search-cli/docs/INDEXING.md) (_Operational CLI: `validate-aliases` vs `admin count`_) and [ADR-130](../architecture/architectural-decisions/130-blue-green-index-swapping.md).
+
 ## Protocol
 
 If you can't follow proper protocol while tuning search, STOP, and explain why, DO NOT work around the protocol.

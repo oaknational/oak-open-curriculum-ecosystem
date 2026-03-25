@@ -8,7 +8,7 @@
  */
 
 import type { RetrievalError } from '../types/retrieval-results.js';
-import { extractStatusCode } from '../admin/es-error-guards.js';
+import { extractStatusCode } from '../internal/index.js';
 
 /**
  * Detects whether a caught error represents a timeout condition.

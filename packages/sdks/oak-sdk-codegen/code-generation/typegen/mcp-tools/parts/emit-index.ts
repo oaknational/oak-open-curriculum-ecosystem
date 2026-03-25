@@ -117,7 +117,7 @@ function buildExports({
   );
   lines.push('    }');
   lines.push('    const payload = status >= 200 && status < 300 ? response.data : response.error;');
-  lines.push('    return payload;');
+  lines.push('    return { httpStatus: status, payload };');
   lines.push('  },');
   lines.push('  toolZodSchema,');
   lines.push('  toolInputJsonSchema,');

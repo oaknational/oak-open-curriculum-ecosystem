@@ -13,10 +13,10 @@ Strategic context: [roadmap.md](../roadmap.md)
 
 Phase artefact targets:
 
-- [phase-0-control-mapping.md](../phase-0-control-mapping.md)
-- [phase-1-security-claim-contract.md](../phase-1-security-claim-contract.md)
-- [phase-2-evidence-merge-readiness-rules.md](../phase-2-evidence-merge-readiness-rules.md)
-- [phase-3-baseline-control-cut-list.md](../phase-3-baseline-control-cut-list.md)
+- [phase-0-control-mapping.md](../future/phase-0-control-mapping.md)
+- [phase-1-security-claim-contract.md](../future/phase-1-security-claim-contract.md)
+- [phase-2-evidence-merge-readiness-rules.md](../future/phase-2-evidence-merge-readiness-rules.md)
+- [phase-3-baseline-control-cut-list.md](../future/phase-3-baseline-control-cut-list.md)
 - [deferred-controls-register.md](../deferred-controls-register.md)
 
 Documentation tracking for all phases:

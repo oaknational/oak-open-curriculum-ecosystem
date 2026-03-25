@@ -10,13 +10,16 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { ok, err } from '@oaknational/result';
-import type { AliasSwap } from '../types/index-lifecycle-types.js';
+import { SEARCH_INDEX_KINDS } from '../internal/index.js';
 import { createIndexLifecycleService } from './index-lifecycle-service.js';
 import type { AdminError } from '../types/admin-types.js';
 import {
   STUB_INGEST_RESULT,
   DEFAULT_ALIAS_TARGETS,
+  DEFAULT_PREVIOUS_VERSION,
+  DEFAULT_VERSION,
   NO_ALIAS_TARGETS,
+  buildPostSwapAliasTargets,
   createFakeLogger,
   createFakeDeps,
 } from './lifecycle-test-helpers.js';
@@ -31,9 +34,9 @@ describe('IndexLifecycleService', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.version).toBe('v2026-03-07-143022');
+        expect(result.value.version).toBe(DEFAULT_VERSION);
         expect(result.value.ingestResult).toEqual(STUB_INGEST_RESULT);
-        expect(result.value.previousVersion).toBeNull();
+        expect(result.value.previousVersion).toBe(DEFAULT_PREVIOUS_VERSION);
         expect(result.value.cleanupFailures).toBe(0);
       }
     });
@@ -42,7 +45,7 @@ describe('IndexLifecycleService', () => {
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-01-120000',
+            version: DEFAULT_PREVIOUS_VERSION,
             ingested_at: '2026-03-01T12:00:00Z',
             subjects: [],
             key_stages: [],
@@ -57,7 +60,7 @@ describe('IndexLifecycleService', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.previousVersion).toBe('v2026-03-01-120000');
+        expect(result.value.previousVersion).toBe(DEFAULT_PREVIOUS_VERSION);
       }
     });
 
@@ -76,6 +79,30 @@ describe('IndexLifecycleService', () => {
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.error.type).toBe('validation_error');
+      }
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
+    });
+
+    it('fails fast when metadata and aliases are incoherent before mutation', async () => {
+      const deps = createFakeDeps({
+        readIndexMeta: vi.fn().mockResolvedValue(
+          ok({
+            version: 'v2026-03-09-090000',
+            ingested_at: '2026-03-09T09:00:00Z',
+            subjects: [],
+            key_stages: [],
+            duration_ms: 0,
+            doc_counts: {},
+          }),
+        ),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.versionedIngest({ bulkDir: '/tmp/bulk' });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('coherence precondition failed');
       }
       expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
     });
@@ -109,8 +136,7 @@ describe('IndexLifecycleService', () => {
       expect(atomicAliasSwap).toHaveBeenCalledWith(
         expect.arrayContaining([expect.objectContaining({ fromIndex: null })]),
       );
-      const swapArg = atomicAliasSwap.mock.calls[0][0] as readonly AliasSwap[];
-      expect(swapArg).toHaveLength(6);
+      expect(atomicAliasSwap.mock.calls[0]?.[0]).toHaveLength(SEARCH_INDEX_KINDS.length);
     });
 
     it('returns err if index creation fails', async () => {
@@ -165,11 +191,15 @@ describe('IndexLifecycleService', () => {
       await service.versionedIngest({ bulkDir: '/tmp/bulk' });
 
       expect(atomicAliasSwap).toHaveBeenCalledTimes(2);
-      const rollbackSwaps = atomicAliasSwap.mock.calls[1][0] as readonly AliasSwap[];
-      for (const swap of rollbackSwaps) {
-        expect(swap.toIndex).toContain('v2026-03-01-120000');
-        expect(swap.fromIndex).toContain('v2026-03-07-143022');
-      }
+      expect(atomicAliasSwap).toHaveBeenNthCalledWith(
+        2,
+        expect.arrayContaining([
+          expect.objectContaining({
+            toIndex: `oak_lessons_${DEFAULT_PREVIOUS_VERSION}`,
+            fromIndex: `oak_lessons_${DEFAULT_VERSION}`,
+          }),
+        ]),
+      );
     });
 
     it('returns critical error when both metadata write and rollback swap fail', async () => {
@@ -231,7 +261,7 @@ describe('IndexLifecycleService', () => {
             ok([
               'oak_lessons_v2026-01-01-000000',
               'oak_lessons_v2026-02-01-000000',
-              'oak_lessons_v2026-03-07-143022',
+              `oak_lessons_${DEFAULT_VERSION}`,
             ]),
           ),
         deleteVersionedIndex: vi.fn().mockResolvedValue(err(deleteError)),
@@ -250,44 +280,17 @@ describe('IndexLifecycleService', () => {
   describe('rollback', () => {
     it('swaps aliases back to previous version from metadata', async () => {
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
-      const currentTargets = {
-        lessons: {
-          isAlias: true,
-          targetIndex: 'oak_lessons_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
-        unit_rollup: {
-          isAlias: true,
-          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequences: {
-          isAlias: true,
-          targetIndex: 'oak_sequences_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequence_facets: {
-          isAlias: true,
-          targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        threads: {
-          isAlias: true,
-          targetIndex: 'oak_threads_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-      };
+      const currentTargets = buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary');
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(currentTargets)),
@@ -299,8 +302,8 @@ describe('IndexLifecycleService', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.rolledBackToVersion).toBe('v2026-03-01-120000');
-        expect(result.value.rolledBackFromVersion).toBe('v2026-03-07-143022');
+        expect(result.value.rolledBackToVersion).toBe(DEFAULT_PREVIOUS_VERSION);
+        expect(result.value.rolledBackFromVersion).toBe(DEFAULT_VERSION);
       }
       expect(atomicAliasSwap).toHaveBeenCalledOnce();
     });
@@ -327,15 +330,18 @@ describe('IndexLifecycleService', () => {
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
+        resolveCurrentAliasTargets: vi
+          .fn()
+          .mockResolvedValue(ok(buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary'))),
         verifyDocCounts: vi.fn().mockResolvedValue(err(verifyError)),
       });
       const service = createIndexLifecycleService(deps);
@@ -352,45 +358,18 @@ describe('IndexLifecycleService', () => {
 
     it('attempts alias reversal when writeIndexMeta fails during rollback', async () => {
       const writeError: AdminError = { type: 'es_error', message: 'meta write failed' };
-      const currentTargets = {
-        lessons: {
-          isAlias: true,
-          targetIndex: 'oak_lessons_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
-        unit_rollup: {
-          isAlias: true,
-          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequences: {
-          isAlias: true,
-          targetIndex: 'oak_sequences_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequence_facets: {
-          isAlias: true,
-          targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        threads: {
-          isAlias: true,
-          targetIndex: 'oak_threads_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-      };
+      const currentTargets = buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary');
       const atomicAliasSwap = vi.fn().mockResolvedValue(ok(undefined));
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(currentTargets)),
@@ -411,34 +390,7 @@ describe('IndexLifecycleService', () => {
     it('returns critical error when both rollback meta write and reversal swap fail', async () => {
       const writeError: AdminError = { type: 'es_error', message: 'meta write failed' };
       const reversalError: AdminError = { type: 'es_error', message: 'reversal swap failed' };
-      const currentTargets = {
-        lessons: {
-          isAlias: true,
-          targetIndex: 'oak_lessons_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        units: { isAlias: true, targetIndex: 'oak_units_v2026-03-07-143022', isBareIndex: false },
-        unit_rollup: {
-          isAlias: true,
-          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequences: {
-          isAlias: true,
-          targetIndex: 'oak_sequences_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequence_facets: {
-          isAlias: true,
-          targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        threads: {
-          isAlias: true,
-          targetIndex: 'oak_threads_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-      };
+      const currentTargets = buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary');
       const atomicAliasSwap = vi
         .fn()
         .mockResolvedValueOnce(ok(undefined))
@@ -446,13 +398,13 @@ describe('IndexLifecycleService', () => {
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(currentTargets)),
@@ -474,43 +426,19 @@ describe('IndexLifecycleService', () => {
 
     it('returns err when an alias has no target during rollback', async () => {
       const missingAliasTargets = {
-        lessons: {
-          isAlias: true,
-          targetIndex: 'oak_lessons_v2026-03-07-143022',
-          isBareIndex: false,
-        },
+        ...buildPostSwapAliasTargets(DEFAULT_VERSION, 'primary'),
         units: { isAlias: false, targetIndex: null, isBareIndex: false },
-        unit_rollup: {
-          isAlias: true,
-          targetIndex: 'oak_unit_rollup_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequences: {
-          isAlias: true,
-          targetIndex: 'oak_sequences_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        sequence_facets: {
-          isAlias: true,
-          targetIndex: 'oak_sequence_facets_v2026-03-07-143022',
-          isBareIndex: false,
-        },
-        threads: {
-          isAlias: true,
-          targetIndex: 'oak_threads_v2026-03-07-143022',
-          isBareIndex: false,
-        },
       };
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(ok(missingAliasTargets)),
@@ -521,8 +449,7 @@ describe('IndexLifecycleService', () => {
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
-        expect(result.error.message).toContain('units');
-        expect(result.error.message).toContain('bare index');
+        expect(result.error.message).toContain('Alias targets are incoherent');
       }
       expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
     });
@@ -531,7 +458,7 @@ describe('IndexLifecycleService', () => {
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
@@ -550,18 +477,43 @@ describe('IndexLifecycleService', () => {
       }
     });
 
+    it('fails fast when metadata and aliases are incoherent before rollback', async () => {
+      const deps = createFakeDeps({
+        readIndexMeta: vi.fn().mockResolvedValue(
+          ok({
+            version: 'v2026-03-09-090000',
+            ingested_at: '2026-03-09T09:00:00Z',
+            subjects: [],
+            key_stages: [],
+            duration_ms: 0,
+            doc_counts: {},
+            previous_version: DEFAULT_PREVIOUS_VERSION,
+          }),
+        ),
+      });
+      const service = createIndexLifecycleService(deps);
+
+      const result = await service.rollback();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('coherence precondition failed');
+      }
+      expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
+    });
+
     it('returns err when alias resolution fails during rollback', async () => {
       const aliasError: AdminError = { type: 'es_error', message: 'alias resolution failed' };
       const deps = createFakeDeps({
         readIndexMeta: vi.fn().mockResolvedValue(
           ok({
-            version: 'v2026-03-07-143022',
+            version: DEFAULT_VERSION,
             ingested_at: '2026-03-07T14:30:22Z',
             subjects: [],
             key_stages: [],
             duration_ms: 0,
             doc_counts: {},
-            previous_version: 'v2026-03-01-120000',
+            previous_version: DEFAULT_PREVIOUS_VERSION,
           }),
         ),
         resolveCurrentAliasTargets: vi.fn().mockResolvedValue(err(aliasError)),

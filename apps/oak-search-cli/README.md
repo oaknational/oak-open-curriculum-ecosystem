@@ -10,6 +10,7 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 - [ADR-063](../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) - Synonyms source-of-truth and deployment flow
 - [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) - Elastic-native-first strategy
 - [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - ELSER embedding strategy
+- [ADR-138](../../docs/architecture/architectural-decisions/138-shared-search-field-contract-surface.md) - Shared field-inventory and stage-matrix contract surface
 - [ADR-048](../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Shared parsing helper pattern
 
 ## What It Does
@@ -37,20 +38,41 @@ The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semant
 
 ## CLI Commands (`oaksearch`)
 
-| Command Group       | Subcommands                                                                | SDK Service            |
-| ------------------- | -------------------------------------------------------------------------- | ---------------------- |
-| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                        | `RetrievalService`     |
-| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, ingest, verify, download, ... | `AdminService`         |
-| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen         | Pass-through           |
-| `oaksearch observe` | telemetry, summary, purge                                                  | `ObservabilityService` |
+| Command Group       | Subcommands                                                                                                                                                                                              | SDK Service            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `oaksearch search`  | lessons, units, sequences, threads, suggest, facets                                                                                                                                                      | `RetrievalService`     |
+| `oaksearch admin`   | setup, reset, status, synonyms, meta, count, versioned-ingest, stage, promote, rollback, validate-aliases, inspect-lease, release-lease, delete-version, list-orphans, cleanup-orphans, verify, download | `AdminService`         |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, codegen                                                                                                                                       | Pass-through           |
+| `oaksearch observe` | telemetry, summary, purge                                                                                                                                                                                | `ObservabilityService` |
 
 See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
+
+Field-integrity tooling:
+
+- Root-level `pnpm test:field-integrity` runs the explicit manifest-based field-integrity suites.
+- The field-readback audit no longer depends on cwd for env loading or relative `--ledger` resolution. Relative `--ledger` paths are repo-root-relative and absolute paths are used as-is. The example below is still a repo-root invocation because the script path itself is repo-root-relative: `pnpm tsx apps/oak-search-cli/operations/ingestion/field-readback-audit.ts --ledger .agent/plans/semantic-search/archive/completed/field-gap-ledger.json --target-version <version> --attempts 6 --interval-ms 5000 --emit-json`. See [`INDEXING.md`](docs/INDEXING.md) for full staged-validation guidance.
+
+## SDK Capability Boundary (ADR-134)
+
+`@oaknational/oak-search-sdk` is consumed through explicit capability subpaths:
+
+- non-admin modules (`search`, `observe`, and shared read wiring) import from `@oaknational/oak-search-sdk/read`
+- admin modules import from `@oaknational/oak-search-sdk/admin`
+- `src/**/*.ts` defaults to non-admin policy; only explicitly privileged subtrees may import admin
+  (`src/cli/admin/**`, `src/lib/indexing/**`, `src/adapters/**`)
+- `evaluation/**` and `operations/**` are mixed-capability but cannot import SDK root/internal paths
+- app code must not import SDK internal/deep paths (`internal/**`, `dist/**`)
+- shared index resolver primitives are canonical on SDK `/read`; admin modules consume them via
+  SDK `/admin` re-exports (not direct `/read` imports), and never through transitive internal paths
+
+This policy is enforced by lint in `apps/oak-search-cli/eslint.config.ts` and
+fixture-backed integration tests in `apps/oak-search-cli/eslint-boundary.integration.test.ts`.
 
 ---
 
 ## Features and Possibilities
 
-**Hybrid Search with Reciprocal Rank Fusion** — Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads and sequences use 2-way RRF.
+**Hybrid Search with Reciprocal Rank Fusion** — Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads use 2-way RRF; sequence retrieval is currently lexical-only while `sequence_semantic` remains unpopulated.
 
 **Curriculum-Aware Vocabulary** — Every lesson includes expert-curated keyword definitions, which are used to improve the relevance of the search results.
 
@@ -108,9 +130,10 @@ apps/oak-search-cli/
 ├─ bin/oaksearch.ts              # CLI entry point (commander)
 ├─ src/
 │  ├─ cli/                       # CLI subcommand groups
-│  │  ├─ shared/                 # SDK factory, resource lifecycle, validators, output, pass-through
+│  │  ├─ shared/                 # SDK factory, read-safe config, validators, output, pass-through
 │  │  ├─ search/                 # oaksearch search {lessons|units|sequences|suggest|facets}
-│  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|ingest|...}
+│  │  ├─ admin/                  # oaksearch admin {setup|status|synonyms|meta|versioned-ingest|stage|...}
+│  │  │  └─ shared/              # Admin-only lifecycle service composition
 │  │  ├─ observe/                # oaksearch observe {telemetry|summary|purge}
 │  │  └─ eval/                   # oaksearch eval {benchmark|validate|codegen}
 │  ├─ lib/hybrid-search/        # RRF query builders, score normalisation, search orchestration
@@ -169,15 +192,15 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    | `ZERO_HIT_PERSISTENCE_ENABLED` | ➖       | `true` to persist zero-hit events to Elasticsearch                             |
 
    Runtime behaviour:
-   - `pnpm es:ingest` reads required values from `process.env`.
+   - `pnpm es:ingest` (alias for `oaksearch admin versioned-ingest`) reads required values from `process.env`.
    - If `apps/oak-search-cli/.env.local` or `apps/oak-search-cli/.env` exists, it is loaded automatically and overrides existing process values.
    - `pnpm es:ingest -- --help` exits successfully without env validation.
 
 3. **Run the standard quality gates**
 
    ```bash
-   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → markdownlint:root → format:root
-   pnpm qg     # format-check:root → markdownlint-check:root → type-check → lint → unit/int/ui tests → smoke
+   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
+   pnpm qg     # format-check:root → markdownlint-check:root → subagents:check → portability:check → test:root-scripts → type-check → lint → unit/int/ui tests → smoke
    ```
 
 4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**
@@ -192,11 +215,11 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    ```bash
    cd apps/oak-search-cli
 
-   # Ingest specific subject (API mode)
-   pnpm es:ingest -- --api --subject maths --key-stage ks4
-
-   # Ingest all subjects (bulk mode is default; use --api for API mode)
+   # Full lifecycle ingest (blue/green)
    pnpm es:ingest
+
+   # Stage only (no alias promotion)
+   pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads
    ```
 
 6. **Verify search quality**
@@ -236,33 +259,29 @@ pnpm es:setup --reset
 pnpm es:status
 ```
 
-### Bulk Ingestion
+### Bulk Ingestion (Lifecycle)
 
 ```bash
-# Preview (dry run)
-pnpm es:ingest -- --bulk-dir ./bulk-downloads --dry-run
-
-# Full ingestion (bulk mode is default; incremental - skips existing)
+# Full lifecycle ingest (create + ingest + alias management)
 pnpm es:ingest
 
-# Incremental ingestion (skip existing documents - for resuming)
-pnpm es:ingest -- --incremental
+# Stage only (create + ingest + verify, no promotion)
+pnpm tsx bin/oaksearch.ts admin stage --bulk-dir ./bulk-downloads
+
+# Validate alias health before/after ingest
+pnpm tsx bin/oaksearch.ts admin validate-aliases
 ```
+
+Structural alias health (see [docs/INDEXING.md](./docs/INDEXING.md) — `validate-aliases` vs `admin count`) is not the same as data freshness relative to your bulk snapshot.
 
 ### Flags
 
-| Flag                 | Description                                                      |
-| -------------------- | ---------------------------------------------------------------- |
-| `--api`              | Use API mode (fetch from Oak API) instead of bulk files          |
-| `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)    |
-| `--dry-run`          | Preview operations without executing                             |
-| `--incremental`      | Use `create` action (skip existing) instead of default overwrite |
-| `--verbose`          | Detailed logging                                                 |
-| `--subject <slug>`   | Filter to specific subject(s)                                    |
-| `--key-stage <slug>` | Filter to specific key stage(s)                                  |
-| `--max-retries <n>`  | Maximum document-level retry attempts (default: 4)               |
-| `--retry-delay <ms>` | Base delay for exponential backoff (default: 5000)               |
-| `--no-retry`         | Disable document-level retry (fail fast)                         |
+| Flag                             | Description                                                     |
+| -------------------------------- | --------------------------------------------------------------- |
+| `--bulk-dir <path>`              | Path to bulk download directory (overrides `BULK_DOWNLOAD_DIR`) |
+| `--subject-filter <subjects...>` | Restrict ingestion to specific subjects                         |
+| `--min-doc-count <count>`        | Minimum expected docs per index during validation               |
+| `--verbose`                      | Detailed lifecycle logging                                      |
 
 ### Refresh Bulk Data
 
@@ -270,6 +289,20 @@ pnpm es:ingest -- --incremental
 # Download fresh bulk data from Oak API
 pnpm bulk:download
 ```
+
+### Bulk Directory Configuration
+
+Set `BULK_DOWNLOAD_DIR` once in `.env.local` for all ingestion/verification commands:
+
+```dotenv
+BULK_DOWNLOAD_DIR=./bulk-downloads
+```
+
+Resolution precedence is:
+
+1. explicit CLI flag (`--bulk-dir`, or `--bulk-download` for `admin verify`)
+2. `BULK_DOWNLOAD_DIR` from env
+3. fail fast with actionable error
 
 ### Evaluation Commands
 

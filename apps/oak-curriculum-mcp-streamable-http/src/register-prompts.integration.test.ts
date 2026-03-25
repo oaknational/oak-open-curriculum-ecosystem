@@ -9,7 +9,7 @@
  *
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 import type { IncomingMessage } from 'http';
@@ -83,18 +83,22 @@ function parseSseEnvelope(raw: string): { result?: unknown; error?: unknown } {
  * 2. Arguments are passed directly to the callback
  * 3. No type assertions are needed
  */
-async function createTestServerWithPrompt(): Promise<express.Express> {
+interface TestServer {
+  app: express.Express;
+  mcpServer: McpServer;
+  transport: StreamableHTTPServerTransport;
+}
+
+async function createTestServerWithPrompt(): Promise<TestServer> {
   const app = express();
   app.use(express.json());
 
-  const server = new McpServer({
+  const mcpServer = new McpServer({
     name: 'test-server',
     version: '1.0.0',
   });
 
-  // Register a test prompt with argsSchema using Zod v4
-  // This is the pattern we want to use in production
-  server.registerPrompt(
+  mcpServer.registerPrompt(
     'test-prompt',
     {
       description: 'A test prompt to validate argsSchema works',
@@ -104,7 +108,6 @@ async function createTestServerWithPrompt(): Promise<express.Express> {
       },
     },
     (args) => {
-      // Args should be directly available, typed by the schema
       const topic: string = args.topic;
       const category: string = args.category ?? 'none';
       return {
@@ -121,22 +124,31 @@ async function createTestServerWithPrompt(): Promise<express.Express> {
     },
   );
 
-  // Create transport once, connect once - like production code
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  await server.connect(transport);
+  await mcpServer.connect(transport);
 
   app.post('/mcp', async (req, res) => {
     const mcpRequest = createMcpTestRequest(req);
     await transport.handleRequest(mcpRequest, res, req.body);
   });
 
-  return app;
+  return { app, mcpServer, transport };
 }
 
 describe('MCP registerPrompt with argsSchema (Integration)', () => {
+  let testServer: TestServer | undefined;
+
+  afterEach(async () => {
+    if (testServer) {
+      await testServer.mcpServer.close();
+      testServer = undefined;
+    }
+  });
+
   describe('POC: Validate MCP SDK handles Zod v4 argsSchema correctly', () => {
     it('passes arguments directly to callback when using argsSchema', async () => {
-      const app = await createTestServerWithPrompt();
+      testServer = await createTestServerWithPrompt();
+      const { app } = testServer;
 
       const response = await request(app)
         .post('/mcp')
@@ -168,7 +180,8 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
     });
 
     it('handles optional arguments correctly', async () => {
-      const app = await createTestServerWithPrompt();
+      testServer = await createTestServerWithPrompt();
+      const { app } = testServer;
 
       const response = await request(app)
         .post('/mcp')
@@ -197,7 +210,8 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
     });
 
     it('prompt appears in prompts/list with argument metadata', async () => {
-      const app = await createTestServerWithPrompt();
+      testServer = await createTestServerWithPrompt();
+      const { app } = testServer;
 
       const response = await request(app)
         .post('/mcp')

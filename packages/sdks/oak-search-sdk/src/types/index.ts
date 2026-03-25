@@ -56,6 +56,8 @@ export type {
   AliasSwap,
   AliasTargetInfo,
   AliasTargetMap,
+  AliasLifecycleDeps,
+  AliasLifecycleService,
   IndexLifecycleDeps,
   IndexLifecycleService,
   VersionedIngestOptions,

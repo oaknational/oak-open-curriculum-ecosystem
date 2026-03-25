@@ -11,6 +11,10 @@
 import { readAllBulkFiles, type BulkFileResult } from '@oaknational/sdk-codegen/bulk';
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import type { OakClient } from '../../adapters/oak-adapter';
+import {
+  fetchCategoryMapForSequences,
+  type CategoryMap,
+} from '../../adapters/category-supplementation';
 import type { BulkOperationEntry } from './bulk-operation-types';
 import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
@@ -41,6 +45,23 @@ export interface BulkIngestionOptions {
   readonly resolveIndex?: IndexResolverFn;
 }
 
+/**
+ * Dependency surface for `prepareBulkIngestion` testability.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ */
+export interface BulkIngestionDeps {
+  readonly readAllBulkFiles: typeof readAllBulkFiles;
+  readonly collectPhaseResults: typeof collectPhaseResults;
+  readonly fetchCategoryMapForSequences: typeof fetchCategoryMapForSequences;
+}
+
+const defaultBulkIngestionDeps: BulkIngestionDeps = {
+  readAllBulkFiles,
+  collectPhaseResults,
+  fetchCategoryMapForSequences,
+};
+
 /** Filters bulk file results by subject if filter is provided. */
 function filterBySubject(
   files: readonly BulkFileResult[],
@@ -65,9 +86,36 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
   });
 }
 
+/**
+ * Fetches and unwraps category data at the orchestrator boundary.
+ *
+ * @remarks
+ * Converts `Result.err` to a thrown error intentionally — callers of
+ * `prepareBulkIngestion` receive an exception, not a Result, because
+ * category fetch failure is unrecoverable for the ingestion run.
+ */
+async function fetchCategories(
+  deps: BulkIngestionDeps,
+  client: OakClient,
+  sequenceSlugs: readonly string[],
+): Promise<CategoryMap> {
+  ingestLogger.info('Fetching category data for sequences', {
+    sequenceCount: sequenceSlugs.length,
+  });
+  const categoryMapResult = await deps.fetchCategoryMapForSequences(client, sequenceSlugs);
+  if (!categoryMapResult.ok) {
+    throw categoryMapResult.error;
+  }
+  ingestLogger.info('Category data fetched', {
+    categoryMapSize: categoryMapResult.value.size,
+  });
+  return categoryMapResult.value;
+}
+
 /** Prepares bulk operations from bulk download files using HybridDataSource. */
 export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
+  deps: BulkIngestionDeps = defaultBulkIngestionDeps,
 ): Promise<BulkIngestionResult> {
   const { bulkDir, client, subjectFilter, indexes = [], resolveIndex } = options;
   ingestLogger.info('Starting bulk ingestion preparation', {
@@ -75,17 +123,21 @@ export async function prepareBulkIngestion(
     indexes: indexes.length > 0 ? indexes : 'all',
   });
 
-  const allFiles = await readAllBulkFiles(bulkDir);
+  const allFiles = await deps.readAllBulkFiles(bulkDir);
   const filteredFiles = filterBySubject(allFiles, subjectFilter);
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
   const bulkDownloadFiles = filteredFiles.map((f) => f.data);
-  const phases = await collectPhaseResults(
+  const sequenceSlugs = bulkDownloadFiles.map((f) => f.sequenceSlug);
+  const categoryMap = await fetchCategories(deps, client, sequenceSlugs);
+
+  const phases = await deps.collectPhaseResults(
     filteredFiles,
     bulkDownloadFiles,
     client,
     indexes,
     resolveIndex,
+    categoryMap,
   );
 
   const stats = buildIngestionStats(

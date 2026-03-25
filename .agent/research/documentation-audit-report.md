@@ -148,7 +148,7 @@ directories, generated API docs
 | `development-practice.md` | Quality gates and design principles | Partially stale | Update -- fix `pnpm format`, add markdownlint, fix typo |
 | `safety-and-security.md` | Security, API keys, PII | Current (minor) | Optional update -- generalise Notion examples |
 | `typescript-practice.md` | TypeScript rules | Current | Keep as-is |
-| `understanding-agent-references.md` | How to use agent reference materials | Stale | **Rewrite** -- wrong path (`.agent/reference/` should be `.agent/reference-docs/`), heavy Notion focus |
+| `understanding-agent-references.md` | How to use agent reference materials | Stale | **Rewrite** -- wrong path (path was updated from `.agent/reference-docs/` to `.agent/reference/` during the 2026-03-23 rename), heavy Notion focus |
 | `logging-guidance.md` | When and how to log | Partially stale | Update -- replace deprecated `createAdaptiveLogger` with `UnifiedLogger` |
 | `sentry-guidance.md` | Sentry integration | Partially stale | Update -- verify Sentry API and usage, or archive |
 
@@ -372,7 +372,7 @@ material. Issues found:
 
 ---
 
-## 17. .agent/reference-docs/
+## 17. .agent/reference/
 
 **~35 files audited.** Nearly all are current external reference
 material. Issues found:

@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: elasticsearch-reviewer
-model: gpt-5.4-xhigh
+model: gpt-5.4-medium
 description: Elasticsearch specialist reviewer grounded in current official Elastic documentation with Elastic Serverless as the default deployment context. Use for mapping, analyser, query, retriever, ELSER, RRF, reranking, ingest, evaluation, and Elastic Serverless capability reviews.
 readonly: true
 ---

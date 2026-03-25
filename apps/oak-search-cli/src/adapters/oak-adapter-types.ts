@@ -14,6 +14,7 @@ import type {
   SearchSubjectSlug,
   SearchSubjectSequences,
   SearchUnitSummary,
+  SequenceUnitsResponse,
 } from '../types/oak';
 import type { Result } from '@oaknational/result';
 import type { SdkFetchError } from '@oaknational/curriculum-sdk';
@@ -96,7 +97,9 @@ export type GetSubjectSequencesFn = (
 ) => Promise<Result<SearchSubjectSequences, SdkFetchError>>;
 
 /** Fetches units in a sequence. Returns Result per ADR-088. */
-export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<Result<unknown, SdkFetchError>>;
+export type GetSequenceUnitsFn = (
+  sequenceSlug: string,
+) => Promise<Result<SequenceUnitsResponse, SdkFetchError>>;
 
 /** Fetches lessons by key stage and subject with pagination. Returns Result per ADR-088. */
 export type GetLessonsByKeyStageAndSubjectFn = (

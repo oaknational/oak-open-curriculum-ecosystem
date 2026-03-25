@@ -1,7 +1,7 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 /** Ingestion verification CLI — compares bulk download vs Elasticsearch. */
 import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
@@ -11,6 +11,8 @@ import {
   extractLessonsFromBulkDownload,
   findMissingLessons,
   generateVerificationReport,
+  isBulkDownloadData,
+  resolveBulkDownloadPath,
   type BulkDownloadData,
 } from './verify-ingestion-lib';
 
@@ -21,9 +23,6 @@ interface CliArgs {
   esUrlOverride: string;
   help: boolean;
 }
-
-const DEFAULT_BULK_DOWNLOAD_PATH =
-  '../../../reference/bulk_download_data/' + 'oak-bulk-download-2025-12-07T09_37_04.693Z';
 
 // eslint-disable-next-line complexity -- CLI arg parsing
 function parseArgs(args: string[]): CliArgs {
@@ -79,37 +78,13 @@ function printHelp(): void {
     'Usage: pnpm ingest:verify [options]\n' +
       '  --subject <slug>       (default: maths)\n' +
       '  --key-stage <ks>       (default: ks4)\n' +
-      '  --bulk-download <path>\n' +
+      '  --bulk-download <path> (optional when BULK_DOWNLOAD_DIR is set)\n' +
       '  --es-url <url>\n' +
       '  --help, -h\n',
   );
 }
 
-function isBulkDownloadData(data: unknown): data is BulkDownloadData {
-  if (typeof data !== 'object' || data === null) {
-    return false;
-  }
-  if (!('lessons' in data)) {
-    return false;
-  }
-  const lessons = data.lessons;
-  if (!Array.isArray(lessons)) {
-    return false;
-  }
-  return lessons.every(
-    (l): l is { lessonSlug: string; keyStageSlug: string } =>
-      typeof l === 'object' && l !== null && 'lessonSlug' in l && 'keyStageSlug' in l,
-  );
-}
-
-async function loadBulkDownload(args: CliArgs): Promise<BulkDownloadData> {
-  const filePath =
-    args.bulkDownload ||
-    join(
-      CURRENT_DIR,
-      DEFAULT_BULK_DOWNLOAD_PATH,
-      args.subject === 'maths' ? 'maths-secondary.json' : `${args.subject}.json`,
-    );
+async function loadBulkDownload(filePath: string): Promise<BulkDownloadData> {
   process.stdout.write(`Loading bulk download from: ${filePath}\n`);
   const parsed: unknown = JSON.parse(await readFile(filePath, 'utf8'));
   if (!isBulkDownloadData(parsed)) {
@@ -118,17 +93,8 @@ async function loadBulkDownload(args: CliArgs): Promise<BulkDownloadData> {
   return parsed;
 }
 
-async function getIndexedLessons(
-  esUrl: string,
-  apiKey: string,
-  keystage: string,
-): Promise<string[]> {
-  const client = new Client({
-    node: esUrl,
-    auth: { apiKey },
-  });
-
-  process.stdout.write(`Querying Elasticsearch at: ${esUrl}\n`);
+async function getIndexedLessons(client: Client, keystage: string): Promise<string[]> {
+  process.stdout.write('Querying Elasticsearch...\n');
   const response = await client.search({
     index: 'oak_lessons',
     size: 10000, // Get all lessons
@@ -153,12 +119,16 @@ async function getIndexedLessons(
 }
 
 /** Run the verification comparison and print results. */
-async function runVerification(args: CliArgs, esUrl: string, apiKey: string): Promise<boolean> {
-  const bulkData = await loadBulkDownload(args);
+async function runVerification(
+  args: CliArgs,
+  client: Client,
+  bulkDownloadPath: string,
+): Promise<boolean> {
+  const bulkData = await loadBulkDownload(bulkDownloadPath);
   const expected = extractLessonsFromBulkDownload(bulkData, args.keystage);
   process.stdout.write(`Found ${expected.length} lessons in bulk download for ${args.keystage}\n`);
 
-  const indexed = await getIndexedLessons(esUrl, apiKey, args.keystage);
+  const indexed = await getIndexedLessons(client, args.keystage);
   process.stdout.write(`Found ${indexed.length} lessons in Elasticsearch for ${args.keystage}\n`);
 
   const missing = findMissingLessons(expected, indexed);
@@ -173,13 +143,14 @@ async function runVerification(args: CliArgs, esUrl: string, apiKey: string): Pr
   return missing.length === 0;
 }
 
-async function main(): Promise<void> {
-  const args = parseArgs(process.argv.slice(2));
-  if (args.help) {
-    printHelp();
-    return;
-  }
-
+/**
+ * Resolve runtime inputs needed to execute verification.
+ */
+function resolveRuntimeInputs(args: CliArgs): {
+  esUrl: string;
+  apiKey: string;
+  bulkDownloadPath: string;
+} {
   const configResult = loadRuntimeConfig({
     processEnv: process.env,
     startDir: CURRENT_DIR,
@@ -188,13 +159,44 @@ async function main(): Promise<void> {
     process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
     process.exit(1);
   }
+
   const config = configResult.value.env;
-  const esUrl = args.esUrlOverride || config.ELASTICSEARCH_URL;
+  const pathResolution = resolveBulkDownloadPath({
+    bulkDownloadPathArg: args.bulkDownload,
+    bulkDownloadDirFromEnv: config.BULK_DOWNLOAD_DIR,
+    subject: args.subject,
+    keyStage: args.keystage,
+  });
+  if (!pathResolution.ok) {
+    process.stderr.write(`${pathResolution.error}\n`);
+    process.exit(1);
+  }
+
+  return {
+    esUrl: args.esUrlOverride || config.ELASTICSEARCH_URL,
+    apiKey: config.ELASTICSEARCH_API_KEY,
+    bulkDownloadPath: pathResolution.value,
+  };
+}
+
+async function main(): Promise<void> {
+  const args = parseArgs(process.argv.slice(2));
+  if (args.help) {
+    printHelp();
+    return;
+  }
+
+  const runtimeInputs = resolveRuntimeInputs(args);
 
   process.stdout.write(`\nVerifying ingestion for ${args.subject} ${args.keystage}...\n\n`);
 
+  const client = new Client({
+    node: runtimeInputs.esUrl,
+    auth: { apiKey: runtimeInputs.apiKey },
+  });
+
   try {
-    const ok = await runVerification(args, esUrl, config.ELASTICSEARCH_API_KEY);
+    const ok = await runVerification(args, client, runtimeInputs.bulkDownloadPath);
     if (!ok) {
       process.exitCode = 1;
     }
@@ -202,6 +204,8 @@ async function main(): Promise<void> {
     const message = error instanceof Error ? error.message : String(error);
     process.stderr.write(`\nVerification failed: ${message}\n`);
     process.exitCode = 1;
+  } finally {
+    await client.close();
   }
 }
 

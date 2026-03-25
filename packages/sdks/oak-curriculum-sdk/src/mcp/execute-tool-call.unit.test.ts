@@ -115,7 +115,7 @@ describe('executeToolCall', () => {
     };
     const { client } = createRateLimitClient(() => ({
       error: upstreamBody,
-      response: { status: 400 },
+      response: { status: 418 },
     }));
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
@@ -163,12 +163,89 @@ describe('executeToolCall', () => {
     expect(result.error.message).toContain('418');
   });
 
-  it('classifies content-blocked 400 as CONTENT_NOT_AVAILABLE', async () => {
+  it('classifies content-blocked undocumented response as CONTENT_NOT_AVAILABLE', async () => {
     const contentBlockedBody = {
       message: 'Lesson not available: "volcanoes-and-their-features"',
       data: {
         cause:
           'Error: Lesson (volcanoes-and-their-features) not available, and subject (geography) and unit (mountains-and-volcanoes-what-where-and-why) are blocked for assets',
+      },
+      code: 'BAD_REQUEST',
+    };
+    const { client } = createRateLimitClient(() => ({
+      error: contentBlockedBody,
+      response: { status: 418 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected content not available error');
+    }
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error.code).toBe('CONTENT_NOT_AVAILABLE');
+  });
+
+  it('classifies documented 404 as RESOURCE_NOT_FOUND', async () => {
+    const errorBody = { message: 'Lesson not found', code: 'NOT_FOUND' };
+    const { client } = createRateLimitClient(() => ({
+      error: errorBody,
+      response: { status: 404 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected resource not found error');
+    }
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error.code).toBe('RESOURCE_NOT_FOUND');
+    expect(result.error.message).toContain('Lesson not found');
+  });
+
+  it('classifies documented 401 as AUTHENTICATION_REQUIRED', async () => {
+    const errorBody = { message: 'API token not provided or invalid', code: 'UNAUTHORIZED' };
+    const { client } = createRateLimitClient(() => ({
+      error: errorBody,
+      response: { status: 401 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected authentication required error');
+    }
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error.code).toBe('AUTHENTICATION_REQUIRED');
+    expect(result.error.message).toContain('API token not provided or invalid');
+  });
+
+  it('classifies documented 400 as UPSTREAM_API_ERROR', async () => {
+    const errorBody = { message: 'Invalid request', code: 'BAD_REQUEST' };
+    const { client } = createRateLimitClient(() => ({
+      error: errorBody,
+      response: { status: 400 },
+    }));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected upstream API error');
+    }
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error.code).toBe('UPSTREAM_API_ERROR');
+  });
+
+  it('classifies documented 400 with content-blocked body as CONTENT_NOT_AVAILABLE', async () => {
+    const contentBlockedBody = {
+      message: 'Lesson not available: "volcanoes-and-their-features"',
+      data: {
+        cause:
+          'Error: Lesson (volcanoes-and-their-features) is restricted and not available, and subject (geography) and unit (mountains-and-volcanoes-what-where-and-why) are blocked for assets',
       },
       code: 'BAD_REQUEST',
     };

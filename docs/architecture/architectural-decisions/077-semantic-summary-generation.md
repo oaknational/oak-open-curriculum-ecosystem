@@ -26,11 +26,22 @@ How do we create high-quality semantic summaries for ELSER embeddings without:
 
 ## Decision
 
-**Generate semantic summaries locally at ingest time using template-based composition, with Redis caching.**
+**Generate semantic summaries locally at ingest time using deterministic template-based composition.**
 
-### Phase 3 Scope: Lessons and Units Only
+Update 2026-03-21: the enduring part of this ADR is local deterministic summary
+generation. The current bulk-first implementation routes that through
+`semantic-summary-generator.ts` and document transforms; it does not depend on
+a standalone Redis semantic-summary cache. Threads now have their own semantic
+retrieval path (see ADR-110). Sequences remain lexical-only today but the
+replacement contract is now permanent in ADR-139 and summarised in
+`apps/oak-search-cli/docs/INDEXING.md`.
 
-For Phase 3, we focus on lessons and units only. Other resource types (programmes, threads, sequences) are deferred.
+### Original Phase 3 Scope: Lessons and Units Only
+
+For the original Phase 3 implementation, we focused on lessons and units only.
+Update 2026-03-21: threads are no longer deferred (ADR-110). Sequences are
+still deferred from semantic retrieval until the locked `sequence_semantic`
+follow-up lands.
 
 ### Generation Strategy
 
@@ -85,9 +96,15 @@ const llmSummary = await generateLLMSummary({
 
 This adds compute cost but produces more natural, information-dense summaries.
 
-### Caching Strategy
+### Caching Strategy (historical design note)
 
-Semantic summary generation is cached in Redis (same instance used for curriculum API caching per ADR-066):
+The Redis-backed approach below reflects the original design exploration. The
+current bulk-first implementation does not rely on a standalone semantic-summary
+cache, so treat this section as historical context unless caching is
+reintroduced deliberately.
+
+Semantic summary generation was originally planned to be cached in Redis (same
+instance used for curriculum API caching per ADR-066):
 
 ```typescript
 // Cache key pattern
@@ -104,7 +121,12 @@ const cacheKey = `semantic_summary:unit:${unitSlug}:v1`;
 - Enable incremental ingestion
 - Version cache keys to invalidate on template changes
 
-### Dual ELSER Fields
+### Dual ELSER Fields (historical design exploration)
+
+> The `lesson_summary_semantic` field described below was part of the original
+> three-way retrieval design. The current implementation uses four-way retrieval
+> for lessons (BM25 + ELSER on content and structure fields) without a separate
+> summary semantic field. Treat the tables below as historical context.
 
 For lessons, we maintain both:
 
@@ -124,14 +146,12 @@ The `rollup_text` field is retained for side-by-side performance comparison.
 
 ## Architecture
 
-### Ingestion Flow
+### Ingestion Flow (historical sketch)
 
 ```text
 1. Fetch lesson/unit from API
-2. Check Redis cache for existing summary
-3. If not cached:
-   a. Compose summary from template
-   b. Cache in Redis
+2. Compose summary from template
+3. Optionally cache the summary
 4. Index document with:
    - Original ELSER field (transcript/rollup)
    - New semantic summary field
@@ -154,7 +174,13 @@ unit_semantic: {
 // Keep rollup_text for BM25 and comparison
 ```
 
-### Search Query Enhancement
+### Search Query Enhancement (historical design exploration)
+
+> The three-retriever layout below reflects the original ADR-077 proposal.
+> The current implementation uses **four-way** retrieval for lessons and units
+> (BM25 Content + ELSER Content + BM25 Structure + ELSER Structure). See
+> `ARCHITECTURE.md` for the current RRF table. The examples are retained as
+> historical context.
 
 With semantic summaries, lesson search uses **three retrievers within the same `oak_lessons` index**:
 
@@ -191,14 +217,16 @@ With semantic summaries, lesson search uses **three retrievers within the same `
 1. **Higher quality embeddings**: Information-dense summaries improve semantic matching
 2. **No API dependency**: Generate locally until upstream provides `semantic_summary`
 3. **Fast iteration**: Template changes don't require API team coordination
-4. **Cacheable**: Redis caching avoids repeated generation
+4. **Cacheable if needed**: Deterministic summaries can be cached if a future
+   implementation reintroduces that optimisation
 5. **Upgradeable**: Can swap template for LLM generation later
 6. **Measurable**: Can A/B test summary-based vs transcript-based search
 
 ### Negative
 
 1. **Maintenance burden**: Template logic must be maintained
-2. **Cache management**: Redis storage for summaries
+2. **Cache management if reintroduced**: A cache layer would add storage and
+   invalidation complexity
 3. **Not authoritative**: Generated summaries may differ from future API summaries
 4. **Ingestion complexity**: Additional processing step
 
@@ -222,17 +250,20 @@ This decision is successful when:
 
 ```text
 apps/oak-search-cli/src/lib/indexing/
-├── semantic-summary-generation.ts     # NEW: Template-based summary generation
-├── semantic-summary-generation.unit.test.ts
-├── document-transforms.ts             # UPDATE: Add summary fields
-└── document-transform-helpers.ts      # UPDATE: Summary composition helpers
+├── semantic-summary-generator.ts      # Template-based summary generation
+├── semantic-summary-generator.unit.test.ts
+├── document-transforms.ts             # Summary fields wired into indexed docs
+└── document-transform-helpers.ts      # Summary composition helpers
 ```
 
 ## Related Documents
 
 - [ADR-066](066-sdk-response-caching.md) - Redis caching strategy
 - [ADR-076](076-elser-only-embedding-strategy.md) - ELSER-only embedding strategy
-- [Upstream API Wishlist](../../.agent/plans/external/upstream-api-metadata-wishlist.md) - Request for native `semantic_summary`
+- [ADR-110](110-thread-search-architecture.md) - Thread semantic retrieval
+- [ADR-139](139-sequence-semantic-contract-and-ownership.md) - Sequence semantic contract and ownership
+- [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md) - Current indexing contract summary
+- [Upstream API Wishlist](../../../.agent/plans/external/ooc-api-wishlist/archive/upstream-api-metadata-wishlist.md) - Request for native `semantic_summary`
 
 ## References
 
@@ -249,4 +280,6 @@ This is an **interim solution**. The long-term goal is for the upstream Oak API 
 - Optimised for embedding creation
 - Available for all resource types
 
-See: `.agent/plans/external/upstream-api-metadata-wishlist.md` for the full request.
+See:
+`../../../.agent/plans/external/ooc-api-wishlist/archive/upstream-api-metadata-wishlist.md`
+for the full request.

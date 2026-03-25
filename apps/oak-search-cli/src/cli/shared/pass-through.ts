@@ -7,6 +7,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Command } from 'commander';
@@ -20,12 +21,18 @@ import { printError } from './output.js';
  * Absolute path to the oak-search-cli workspace root (parent of `src/`).
  */
 export const APP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const PASS_THROUGH_TIMEOUT_MS = 60 * 60 * 1000;
 
 /**
- * Serialize CliSdkEnv (or compatible env object) to process.env format.
+ * Serializable environment shape for child process forwarding.
+ */
+type SerializableCliEnv = CliSdkEnv;
+
+/**
+ * Serialize validated CLI env to process.env format.
  * All values are stringified for Node.js process.env compatibility.
  */
-function envToProcessEnv(env: CliSdkEnv): Record<string, string> {
+function envToProcessEnv(env: SerializableCliEnv): Record<string, string> {
   const result: Record<string, string> = {};
   for (const [key, value] of typeSafeEntries(env)) {
     if (value !== undefined && value !== null) {
@@ -35,10 +42,31 @@ function envToProcessEnv(env: CliSdkEnv): Record<string, string> {
   return result;
 }
 
+function executePassThroughScript(
+  scriptPath: string,
+  args: readonly string[],
+  cliEnv: SerializableCliEnv | undefined,
+): void {
+  const script = resolve(APP_ROOT, scriptPath);
+  if (!existsSync(script)) {
+    printError(`Script not found: ${script}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const execOptions = {
+    stdio: 'inherit' as const,
+    cwd: APP_ROOT,
+    timeout: PASS_THROUGH_TIMEOUT_MS,
+    ...(cliEnv && { env: { ...process.env, ...envToProcessEnv(cliEnv) } }),
+  };
+  execFileSync('pnpm', ['exec', 'tsx', script, ...args], execOptions);
+}
+
 /**
  * Register a pass-through command that delegates to an existing script.
  *
- * The command forwards all arguments to the script via `npx tsx`,
+ * The command forwards all arguments to the script via `pnpm exec tsx`,
  * inheriting stdio for interactive output. The script handles its
  * own argument parsing and env loading.
  *
@@ -65,7 +93,7 @@ export function registerPassThrough(
   name: string,
   description: string,
   scriptPath: string,
-  options?: { cliEnv?: CliSdkEnv },
+  options?: { cliEnv?: SerializableCliEnv },
 ): void {
   const cliEnv = options?.cliEnv;
   parent
@@ -75,13 +103,7 @@ export function registerPassThrough(
     .allowExcessArguments()
     .action(function passThroughAction(this: Command) {
       try {
-        const script = resolve(APP_ROOT, scriptPath);
-        const execOptions = {
-          stdio: 'inherit' as const,
-          cwd: APP_ROOT,
-          ...(cliEnv && { env: { ...process.env, ...envToProcessEnv(cliEnv) } }),
-        };
-        execFileSync('npx', ['tsx', script, ...this.args], execOptions);
+        executePassThroughScript(scriptPath, this.args, cliEnv);
       } catch (error) {
         if (
           error &&

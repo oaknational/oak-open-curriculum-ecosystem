@@ -26,6 +26,18 @@ export interface FsPredicates {
   readonly readdirSync: (path: string) => string[];
 }
 
+/** Inputs for resolving bulk dir from CLI/env precedence. */
+export interface ResolveBulkDirFromInputs {
+  /** Optional `--bulk-dir` CLI flag value. */
+  readonly bulkDirFlag: string | undefined;
+  /** Optional `BULK_DOWNLOAD_DIR` env value. */
+  readonly bulkDirFromEnv: string | undefined;
+  /** App root used to resolve relative paths. */
+  readonly appRoot: string;
+  /** Injected filesystem predicates. */
+  readonly fs: FsPredicates;
+}
+
 /**
  * Resolve and validate a bulk download directory path.
  *
@@ -56,7 +68,18 @@ export function resolveBulkDir(
     });
   }
 
-  const jsonFiles = fs.readdirSync(resolvedPath).filter((f) => f.endsWith('.json'));
+  let entries: string[];
+  try {
+    entries = fs.readdirSync(resolvedPath);
+  } catch {
+    return err({
+      type: 'bulk_dir_not_found',
+      message:
+        `Bulk download directory is not readable: ${resolvedPath}\n` +
+        'Check path permissions and run "pnpm bulk:download" if the directory is missing.',
+    });
+  }
+  const jsonFiles = entries.filter((f) => f.endsWith('.json'));
   if (jsonFiles.length === 0) {
     return err({
       type: 'bulk_dir_empty',
@@ -67,4 +90,30 @@ export function resolveBulkDir(
   }
 
   return ok(resolvedPath);
+}
+
+/**
+ * Resolve bulk directory using CLI-over-env precedence and validate it.
+ *
+ * Precedence:
+ * 1. `--bulk-dir`
+ * 2. `BULK_DOWNLOAD_DIR`
+ */
+export function resolveBulkDirFromInputs(
+  input: ResolveBulkDirFromInputs,
+): Result<string, BulkDirError> {
+  const fromFlag = input.bulkDirFlag?.trim();
+  if (fromFlag && fromFlag.length > 0) {
+    return resolveBulkDir(fromFlag, input.appRoot, input.fs);
+  }
+
+  const fromEnv = input.bulkDirFromEnv?.trim();
+  if (fromEnv && fromEnv.length > 0) {
+    return resolveBulkDir(fromEnv, input.appRoot, input.fs);
+  }
+
+  return err({
+    type: 'bulk_dir_not_found',
+    message: 'Missing bulk directory. Provide --bulk-dir <path> or set BULK_DOWNLOAD_DIR in env.',
+  });
 }

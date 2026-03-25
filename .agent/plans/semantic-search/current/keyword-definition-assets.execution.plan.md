@@ -7,7 +7,7 @@ source_research:
   - "../future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md"
   - "../future/04-retrieval-quality-engine/definition-retrieval.md"
 depends_on:
-  - "../active/bulk-metadata-quick-wins.execution.plan.md"
+  - "../current/bulk-metadata-quick-wins.execution.plan.md"
 todos:
   - id: phase-0-decision-lock
     content: "Phase 0: Lock the initial asset shape, provenance model, and first consumer boundary."
@@ -73,7 +73,7 @@ At the end of this plan:
 
 ## Prerequisites
 
-- [bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md)
+- [bulk-metadata-quick-wins.execution.plan.md](../current/bulk-metadata-quick-wins.execution.plan.md)
 
 This queue item depends on the active bulk-metadata widening work, not on the
 separate
@@ -180,5 +180,5 @@ Add focused test runs for affected workspaces as needed.
 |----------|---------|
 | [../future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md](../future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | Primary evidence for first-class keyword-definition assets |
 | [../future/04-retrieval-quality-engine/definition-retrieval.md](../future/04-retrieval-quality-engine/definition-retrieval.md) | Downstream retrieval plan that should consume the asset |
-| [../active/bulk-metadata-quick-wins.execution.plan.md](../active/bulk-metadata-quick-wins.execution.plan.md) | Upstream quick-win widening of the bulk metadata surface |
+| [../current/bulk-metadata-quick-wins.execution.plan.md](../current/bulk-metadata-quick-wins.execution.plan.md) | Upstream quick-win widening of the bulk metadata surface |
 | [thread-sequence-semantic-surfaces.execution.plan.md](thread-sequence-semantic-surfaces.execution.plan.md) | Parallel queued plan for thinner retrieval targets |

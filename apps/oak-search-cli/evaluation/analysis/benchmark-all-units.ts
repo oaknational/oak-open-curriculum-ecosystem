@@ -23,8 +23,8 @@ export async function benchmarkUnits(): Promise<IndexResult> {
   if (!configResult.ok) {
     throw new Error(`Environment validation failed: ${configResult.error.message}`);
   }
-  return withEvaluationSearchSdk(configResult.value.env, async (sdk) => {
-    const searchFn = sdk.retrieval.searchUnits.bind(sdk.retrieval);
+  return withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    const searchFn = retrieval.searchUnits.bind(retrieval);
     const entries = getUnitGroundTruthEntries();
     const results: BenchmarkMetrics[] = [];
 

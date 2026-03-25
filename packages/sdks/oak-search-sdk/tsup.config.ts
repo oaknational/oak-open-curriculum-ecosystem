@@ -4,6 +4,8 @@ export default defineConfig({
   entry: [
     // Public barrel and factories
     'src/index.ts',
+    'src/read.ts',
+    'src/admin.ts',
     'src/create-search-sdk.ts',
     'src/create-search-retrieval.ts',
 

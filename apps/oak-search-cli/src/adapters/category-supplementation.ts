@@ -21,8 +21,11 @@
  * // => [{ title: 'Grammar', slug: 'grammar' }]
  * ```
  *
- * @see ADR-xxx Context Enrichment Architecture
  */
+
+import { ok, err, type Result } from '@oaknational/result';
+import type { SdkFetchError } from '@oaknational/curriculum-sdk';
+import type { SequenceUnitsResponse } from '../types/oak';
 
 /**
  * Category information for a unit.
@@ -34,36 +37,18 @@ export interface CategoryInfo {
   readonly slug: string;
 }
 
-/**
- * Category data from API response.
- */
-interface ApiCategory {
-  readonly categoryTitle: string;
-  readonly categorySlug?: string;
-}
+// ============================================================================
+// Schema-derived types (Cardinal Rule: types flow from the OpenAPI schema)
+// ============================================================================
 
-/**
- * Unit data from sequences/units API response.
- */
-interface ApiUnit {
-  readonly unitSlug?: string;
-  readonly unitTitle: string;
-  readonly categories?: readonly ApiCategory[];
-  readonly unitOptions?: readonly { unitSlug: string; unitTitle: string }[];
-}
+/** Year entry variant from SequenceUnitsResponse that contains direct units. */
+type YearEntryWithUnits = Extract<SequenceUnitsResponse[number], { units: unknown }>;
 
-/**
- * Year group data from sequences/units API response.
- */
-interface ApiYearData {
-  readonly year: number | string;
-  readonly units: readonly ApiUnit[];
-}
+/** Schema-derived unit type — discriminated union: either has unitSlug or unitOptions, never both. */
+type SequenceUnit = YearEntryWithUnits['units'][number];
 
-/**
- * Sequence units data type for API response.
- */
-export type SequenceUnitsData = readonly ApiYearData[];
+/** Schema-derived category type from the unit's categories array. */
+type SequenceUnitCategory = NonNullable<SequenceUnit['categories']>[number];
 
 /**
  * Map of unit slugs to their categories.
@@ -71,19 +56,19 @@ export type SequenceUnitsData = readonly ApiYearData[];
 export type CategoryMap = ReadonlyMap<string, readonly CategoryInfo[]>;
 
 /**
- * Transforms API category to CategoryInfo.
+ * Transforms a schema-derived category to CategoryInfo.
  */
-function toCategory(apiCategory: ApiCategory): CategoryInfo {
+function toCategory(category: SequenceUnitCategory): CategoryInfo {
   return {
-    title: apiCategory.categoryTitle,
-    slug: apiCategory.categorySlug ?? apiCategory.categoryTitle.toLowerCase().replace(/\s+/g, '-'),
+    title: category.categoryTitle,
+    slug: category.categorySlug ?? category.categoryTitle.toLowerCase().replace(/\s+/g, '-'),
   };
 }
 
 /**
  * Extracts categories from a unit, returning undefined if none.
  */
-function extractCategories(unit: ApiUnit): readonly CategoryInfo[] | undefined {
+function extractCategories(unit: SequenceUnit): readonly CategoryInfo[] | undefined {
   if (!unit.categories || unit.categories.length === 0) {
     return undefined;
   }
@@ -92,19 +77,18 @@ function extractCategories(unit: ApiUnit): readonly CategoryInfo[] | undefined {
 
 /**
  * Adds a unit and its options to the category map.
+ * Uses `'unitSlug' in unit` to discriminate the schema union variants.
  */
 function addUnitCategories(
   map: Map<string, readonly CategoryInfo[]>,
-  unit: ApiUnit,
+  unit: SequenceUnit,
   categories: readonly CategoryInfo[],
 ): void {
-  // Direct unit slug
-  if (unit.unitSlug) {
+  if ('unitSlug' in unit) {
     map.set(unit.unitSlug, categories);
   }
 
-  // Unit options (alternative units inherit parent's categories)
-  if (unit.unitOptions) {
+  if ('unitOptions' in unit) {
     for (const option of unit.unitOptions) {
       map.set(option.unitSlug, categories);
     }
@@ -112,10 +96,13 @@ function addUnitCategories(
 }
 
 /**
- * Processes a single year's units and adds categories to the map.
+ * Processes a list of units and adds their categories to the map.
  */
-function processYearUnits(map: Map<string, readonly CategoryInfo[]>, yearData: ApiYearData): void {
-  for (const unit of yearData.units) {
+function processYearUnits(
+  map: Map<string, readonly CategoryInfo[]>,
+  units: readonly SequenceUnit[],
+): void {
+  for (const unit of units) {
     const categories = extractCategories(unit);
     if (categories) {
       addUnitCategories(map, unit, categories);
@@ -140,11 +127,13 @@ function processYearUnits(map: Map<string, readonly CategoryInfo[]>, yearData: A
  * // => [{ title: 'Grammar', slug: 'grammar' }]
  * ```
  */
-export function buildCategoryMap(sequenceData: SequenceUnitsData): CategoryMap {
+export function buildCategoryMap(sequenceData: SequenceUnitsResponse): CategoryMap {
   const map = new Map<string, readonly CategoryInfo[]>();
 
   for (const yearData of sequenceData) {
-    processYearUnits(map, yearData);
+    if ('units' in yearData) {
+      processYearUnits(map, yearData.units);
+    }
   }
 
   return map;
@@ -192,4 +181,49 @@ export function extractCategoryTitles(
     return undefined;
   }
   return categories.map((c) => c.title);
+}
+
+/**
+ * Dependency surface for category fetching, enabling testability via injection.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ * @see ADR-088 Result Pattern for Error Handling
+ */
+export interface CategoryFetchDeps {
+  readonly getSequenceUnits: (
+    slug: string,
+  ) => Promise<Result<SequenceUnitsResponse, SdkFetchError>>;
+}
+
+/**
+ * Fetches category data from the API for all sequences and merges into a
+ * single CategoryMap. Fails fast on the first error — categories are required
+ * for correct search filtering, not optional enrichment. Uses plain `Error`
+ * (sole caller treats all failures identically; introduce a typed union if
+ * callers later need to distinguish failure modes).
+ *
+ * @param deps - Dependency surface with `getSequenceUnits` method
+ * @param sequenceSlugs - Sequence slugs to fetch categories for
+ * @returns `Result.ok` with merged CategoryMap, or `Result.err` on first failure
+ */
+export async function fetchCategoryMapForSequences(
+  deps: CategoryFetchDeps,
+  sequenceSlugs: readonly string[],
+): Promise<Result<CategoryMap, Error>> {
+  const merged = new Map<string, readonly CategoryInfo[]>();
+
+  for (const slug of sequenceSlugs) {
+    const result = await deps.getSequenceUnits(slug);
+    if (!result.ok) {
+      return err(
+        new Error(`Category fetch failed for sequence '${slug}': ${String(result.error)}`),
+      );
+    }
+    const sequenceMap = buildCategoryMap(result.value);
+    for (const [unitSlug, categories] of sequenceMap) {
+      merged.set(unitSlug, categories);
+    }
+  }
+
+  return ok(merged);
 }

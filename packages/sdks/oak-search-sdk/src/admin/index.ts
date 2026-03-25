@@ -8,6 +8,36 @@
 
 export { createAdminService } from './create-admin-service.js';
 export type { AliasSwap, AliasTargetInfo } from '../types/index-lifecycle-types.js';
-export { createIndexLifecycleService } from './index-lifecycle-service.js';
-export { buildLifecycleDeps } from './build-lifecycle-deps.js';
+export {
+  createIndexLifecycleService,
+  createAliasLifecycleService,
+} from './index-lifecycle-service.js';
+export { buildLifecycleDeps, buildAliasLifecycleDeps } from './build-lifecycle-deps.js';
 export { createVersionedIndexResolver } from './versioned-index-resolver.js';
+export {
+  withLifecycleLease,
+  validateLeaseTtl,
+  DEFAULT_LEASE_TTL_MS,
+  forceReleaseLease,
+  inspectLease,
+} from './lifecycle-lease.js';
+export { readIndexMeta, writeIndexMeta } from './index-meta.js';
+export {
+  cleanupOrphanedIndexes,
+  extractVersionFromIndexName,
+  identifyOrphanedVersions,
+} from './lifecycle-cleanup.js';
+export type { OrphanedVersion } from './lifecycle-cleanup.js';
+export {
+  extractLiveVersions,
+  validateVersionDeletion,
+  resolveOrphanedVersions,
+} from './lifecycle-orphan-detection.js';
+export type { DeletionValidation, OrphanResolution } from './lifecycle-orphan-detection.js';
+export {
+  BASE_INDEX_NAMES,
+  SEARCH_INDEX_TARGETS,
+  resolveAliasName,
+  resolveVersionedIndexName,
+} from '../internal/index.js';
+export type { LifecycleLease } from './lifecycle-lease.js';

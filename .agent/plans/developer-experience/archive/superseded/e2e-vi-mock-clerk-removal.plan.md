@@ -28,25 +28,25 @@ todos:
     status: done
   - id: promote-type-assertions-error
     content: "Promote consistent-type-assertions from 'warn' to 'error' in testRules by fixing all ~218 type assertion warnings across 6 workspaces."
-    status: pending
+    status: cancelled
   - id: promote-restricted-types
     content: "Promote no-restricted-types from 'off' to 'warn' then 'error' in testRules."
-    status: pending
+    status: cancelled
   - id: add-vi-mock-ban
     content: "Add vi.mock/doMock/stubGlobal ESLint ban (no-restricted-syntax) and fix all 21 violations across 3 workspaces."
-    status: pending
+    status: cancelled
   - id: add-object-assign-ban
     content: "Add Object.assign ESLint restriction and fix all ~8 violations across 4 workspaces."
-    status: pending
+    status: cancelled
   - id: fix-global-req-auth-type
     content: "Fix global Request.auth type declaration in types.ts — currently MachineAuthObject but Clerk sets it as a callable function."
-    status: pending
+    status: cancelled
   - id: fix-inline-override
     content: "Remove /* eslint max-lines-per-function */ inline override from server.e2e.test.ts."
-    status: pending
+    status: cancelled
   - id: verify-all-gates
     content: "All quality gates green with zero warnings across the full monorepo."
-    status: pending
+    status: cancelled
 ---
 
 > Superseded on 2026-03-03. Use the canonical plan:

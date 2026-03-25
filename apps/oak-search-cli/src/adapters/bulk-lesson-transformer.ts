@@ -164,6 +164,8 @@ export function extractLessonParamsFromBulk(params: BulkToESLessonParams): Creat
     years: years.length > 0 ? years : undefined,
     units: [unitInfo],
     unitCount: 1,
+    threadSlugs: unitInfo.threadSlugs,
+    threadTitles: unitInfo.threadTitles,
     lessonKeywords: extractKeywordStrings(lesson.lessonKeywords),
     keyLearningPoints: extractLearningPointStrings(lesson.keyLearningPoints),
     misconceptions: extractMisconceptionStrings(lesson.misconceptionsAndCommonMistakes),

@@ -44,7 +44,7 @@ Overlapping plans must reference this file rather than duplicate execution detai
 Delegated/folded sources:
 
 - `../active/devx-strictness-convergence.plan.md`
-- `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
 
 ---
@@ -415,9 +415,9 @@ Do not mark a phase complete until required reviewer findings are either fixed o
 - `../README.md`
 - `../roadmap.md`
 - `./README.md`
-- `../../agentic-engineering-enhancements/architectural-enforcement-adoption.plan.md`
+- `../../agentic-engineering-enhancements/current/architectural-enforcement-adoption.plan.md`
 - `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md`
-- `../../../reference-docs/architecture/boundary-enforcement-with-eslint.md`
+- `../../../reference/architecture/boundary-enforcement-with-eslint.md`
 - `../../../research/developer-experience/architectural-enforcement-playbook.md`
 
 ---

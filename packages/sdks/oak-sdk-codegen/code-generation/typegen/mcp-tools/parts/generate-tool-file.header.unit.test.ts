@@ -1,24 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { existsSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { OperationObject } from 'openapi3-ts/oas31';
 import { generateToolFile, type ParamMetadata } from './generate-tool-file.js';
-
-const thisDir = dirname(fileURLToPath(import.meta.url));
 
 function op(): OperationObject {
   return { responses: {} } as OperationObject;
 }
 
 describe('buildImports path resolution', () => {
-  it('client-types.ts import path resolves to an existing file', () => {
-    const generatedToolDir = resolve(
-      thisDir,
-      '../../../../src/types/generated/api-schema/mcp-tools/tools',
-    );
-    const clientTypesPath = resolve(generatedToolDir, '../../client-types.ts');
-    expect(existsSync(clientTypesPath)).toBe(true);
+  it('emits client-types import from the expected relative path', () => {
+    const code = generateToolFile('test-tool', '/test', 'GET', 'op-id', op(), {}, {});
+    expect(code).toContain("import type { OakApiPathBasedClient } from '../../client-types.js';");
   });
 });
 

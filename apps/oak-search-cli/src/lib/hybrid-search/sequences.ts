@@ -13,7 +13,12 @@ export interface RunSequencesSearchOptions {
 }
 
 /**
- * Runs hybrid search for sequences using two-way RRF (BM25 + ELSER).
+ * Runs hybrid sequence search using SDK-owned two-way RRF (BM25 + ELSER
+ * semantic on `sequence_semantic`).
+ *
+ * Delegates retriever construction to the SDK's `buildSequenceRetriever`
+ * via `buildSequenceRrfRequest`. The `sequence_semantic` field is populated
+ * deterministically during bulk ingestion from ordered unit summaries.
  *
  * @param q - Structured query with query string and optional filters
  * @param size - Maximum number of results to return
@@ -21,6 +26,7 @@ export interface RunSequencesSearchOptions {
  * @param options - Optional dependencies for testing
  * @returns Search results with sequences, scores, and metadata
  *
+ * @see ADR-139 Sequence Semantic Contract and Ownership
  * @see ADR-078 Dependency Injection for Testability
  */
 export async function runSequencesSearch(

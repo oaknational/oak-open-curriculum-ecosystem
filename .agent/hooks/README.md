@@ -1,0 +1,49 @@
+# Agent Hook Policy
+
+This directory contains the canonical agent-hook policy for this
+repository. Hooks follow the same canonical-first pattern as rules and
+skills: policy lives here, shared runtime lives in a repo-local script,
+and thin native activation lives in platform config.
+
+## Current Status
+
+**Guardrail-only**: the hook layer is intentionally narrow.
+
+- `preToolUse` — natively enforced for Claude Code Bash calls via
+  `scripts/check-blocked-patterns.mjs`; blocks shell commands that bypass
+  safety guardrails or destroy history (force-push, hard reset,
+  `--no-verify`)
+- `sessionStart` — documented policy only; grounding is already enforced
+  through the entry-point chain and start-right skills
+- `preCommit` — documented policy only; quality-gate reminders already
+  live in the workflow and review surfaces
+
+## Platform Support
+
+Claude Code currently has thin native activation wired for
+`PreToolUse` only via the machine-local gitignored file
+`.claude/settings.json`. Clean clones and CI may omit that local file.
+Additional Claude overrides can stay in `.claude/settings.local.json`,
+which is also gitignored.
+
+See `.agent/reference/cross-platform-agent-surface-matrix.md` for the
+full platform support status.
+
+Cursor, Gemini CLI, GitHub Copilot, and Codex remain unsupported.
+
+## Policy File
+
+`policy.json` is the canonical hook policy. Platform-specific activation
+translates this policy into native config. The policy file is the source
+of truth; native config files and repo-local scripts are derived from it.
+
+## Porting to Native Activation
+
+When wiring hooks for a platform:
+
+1. Read `policy.json` for the canonical policy
+2. Create thin native activation in the platform config directory
+3. Reuse or add a repo-local runtime script only when native config
+   cannot read `policy.json` directly
+4. Update the surface matrix to record the supported state
+5. Add drift checks to the portability validation script

@@ -1,5 +1,5 @@
 ---
-fitness_ceiling: 200
+fitness_line_count: 200
 split_strategy: "Extract settled entries to permanent docs (ADRs, governance, READMEs); this is the specialist refinement layer"
 ---
 
@@ -9,14 +9,9 @@ Hard-won rules extracted from napkin sessions. Read this
 before every session. Every entry earned its place by
 changing behaviour.
 
-**Source**: Distilled from `archive/napkin-2026-02-24.md`
-(sessions 2026-02-10 to 2026-02-24),
-`archive/napkin-2026-02-28.md` (sessions 2026-02-26 to
-2026-02-28), and `archive/napkin-2026-03-02.md` (sessions
-2026-02-28 to 2026-03-02), and
-`archive/napkin-2026-03-05.md` (sessions 2026-03-02 to
-2026-03-05), and `archive/napkin-2026-03-07.md` (sessions
-2026-03-05 to 2026-03-07).
+**Source**: Distilled from archived napkins
+`napkin-2026-02-24.md` through `napkin-2026-03-21.md`
+(sessions 2026-02-10 to 2026-03-21).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -50,6 +45,10 @@ enough for permanent documentation.
 
 ## Repo-Specific Rules
 
+- Elasticsearch: `oaksearch admin validate-aliases` proves alias **topology**
+  only; `admin count` reports true parent docs. Do not equate green alias
+  health with bulk freshness — see
+  `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
 - ADR index is the source of truth for ADR count; keep
   README in sync
 - From `packages/sdks/oak-curriculum-sdk/`, repo root is
@@ -57,8 +56,10 @@ enough for permanent documentation.
 - `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved.
-  Post-merge plan: decompose `sdk-codegen` into two workspaces
-  (see `.agent/plans/architecture-and-infrastructure/codegen/`)
+  **Decomposition**: strategic plan at
+  `.agent/plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`
+  (M1 prerequisite satisfied, awaiting promotion).
+  Turbo overrides are temporary — see ADR-065.
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks
@@ -88,19 +89,20 @@ enough for permanent documentation.
 - ES client v9: `document` not `body` for `client.index()`
 - ES client v9: spread readonly arrays before passing to
   mutable params (`[...synonymSet.synonyms_set]`)
-- `extractStatusCode` centralises ES error code extraction
-  without assertions
 - Classify network errors by `error.name` (e.g.
   `'AbortError'`, `'TypeError'`), not `error.message` —
   `message.includes('abort')` is too broad
-- `isPlainObject` type guard satisfies both
-  `IndicesIndexSettings` and `MappingTypeMapping`
 - EsCurric MCP API key needs `feature_actions.read` Kibana
   privilege (in addition to `feature_agentBuilder.read`) for
   the `platform_core_search` tool to work
-- `_cat/indices` doc counts include ELSER `semantic_text`
-  nested chunks (15x inflation for lessons). Use `_count`
-  API or `admin count` for true parent document counts
+- `_cat/indices` doc counts are inflated by ELSER chunking.
+  See `docs/operations/elasticsearch-ingest-lifecycle.md`
+- ES Serverless shifts `_primary_term` during normal
+  operation; OCC-based updates (lease renewal) must retry
+  after fetching fresh `_seq_no`/`_primary_term` on 409
+- Lifecycle wrappers (`withLifecycleLease`) must return the
+  execution result when execution succeeds, even if the
+  side-channel (renewal) failed — leases are defence-in-depth
 
 ## Testing (Domain-Specific)
 
@@ -118,6 +120,9 @@ enough for permanent documentation.
 
 ## Documentation (Agent Operational)
 
+- Moving plan artefacts is cross-cutting: always grep for
+  old paths in `*.ts`, `*.mjs`, `*.json`, not just `*.md`
+  (test configs and CLI defaults hardcode plan paths)
 - Session prompts in `.agent/prompts/` should be updated
   at end of each session, not just napkin
 - `process.env.X = value` with trailing space in backticks
@@ -141,14 +146,16 @@ enough for permanent documentation.
   highest leverage — per MCP spec, tools are model-controlled
   via `description`.
 
+## Build System (Domain-Specific)
+
+- Turbo dependency model: see ADR-065 (items 6–7) for
+  overrides, phantom tasks, and `^build` ordering
+
 ## Architecture (Domain-Specific)
 
-- **Response augmentation is best-effort**: canonical URL
-  decoration must NEVER fail the API call. Wrap `augmentBody()`
-  in try-catch. Middleware factory requires `Logger` (DI);
-  `BaseApiClient` provides `createNoopLogger()`. Pure
-  augmentation functions throw or return errors; the
-  middleware boundary logs.
+- **Response augmentation is best-effort**: wrap
+  `augmentBody()` in try-catch so decoration never fails the
+  API call. Pure functions throw; middleware boundary logs.
 - When a directive review reveals significant work, update
   the plan BEFORE coding
 - When a pre-existing eslint override exists in a file you
@@ -181,10 +188,11 @@ enough for permanent documentation.
 | Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
 | Reviewer reports G1 failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output |
-| `--testPathPattern` fails in vitest v4 | Use file paths as positional args: `pnpm vitest run path/to/test.ts` |
 | Reviewer flags repo name mismatch | False positive — confirmed three times. Always verify against user's disposition |
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
-| Commitlint rejects commit with uppercase acronym in subject | `subject-case` rule rejects e.g. `ADR-130`. Use lowercase: "complete blue/green lifecycle" not "ADR-130 Phases 3-8d" |
+| CI lint/test fails but passes locally with `--force` | Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration |
+| Commitlint rejects commit | See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
+| Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |

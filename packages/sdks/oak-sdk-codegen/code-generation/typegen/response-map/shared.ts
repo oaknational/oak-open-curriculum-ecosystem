@@ -22,6 +22,11 @@ export function toColonPath(path: string): string {
 }
 
 export interface ResponseInfo {
+  /**
+   * The raw name extracted from the schema. For component sources, this is the
+   * unsanitised `$ref` segment (e.g., `error.BAD_REQUEST`). Callers that need
+   * a valid JS/TS identifier must apply `sanitizeIdentifier` themselves.
+   */
   readonly name: string;
   readonly source: 'component' | 'inline';
   readonly schema: SchemaObject;

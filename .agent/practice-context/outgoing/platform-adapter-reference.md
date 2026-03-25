@@ -13,7 +13,6 @@ This is a companion to [reviewer-system-guide.md](reviewer-system-guide.md).
 | Cursor | `.cursor/rules/*.mdc` | `.cursor/agents/*.md` | `.cursor/commands/*.md` | Proven, production use |
 | Gemini CLI | (via commands) | (via commands) | `.gemini/commands/*.toml` | Proven, production use |
 | OpenAI Codex | (via entry-point chain) | `.codex/` project-agent config | `.agents/skills/*/SKILL.md` | Proven, production use |
-| Anthropic Antigravity | TBD | TBD | TBD | Not yet investigated |
 
 ---
 

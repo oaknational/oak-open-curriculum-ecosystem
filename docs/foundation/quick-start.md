@@ -102,8 +102,8 @@ cp .env.example .env
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
 # 2. Run full quality gates
-pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → markdownlint:root → format:root)
-pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + UI/E2E/smoke suites)
+pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root)
+pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + portability:check + test:root-scripts + workspace/UI/E2E/smoke suites)
 
 # 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
@@ -400,5 +400,6 @@ test('MCP server lists all generated tools', async () => {
 3. **Read the contribution guide**: See [CONTRIBUTING.md](../../CONTRIBUTING.md)
 4. **Pick your task source**: Oak team members should use active plans and roadmap docs in `.agent/plans/`; external readers can explore architecture docs and published packages.
 5. **Start coding**: Follow the TDD workflow above (for internal contributors)
+6. **Understand the engineering practice**: The Practice that governs this repository is explained through an engineering lens in [How the Agentic Engineering System Works](agentic-engineering-system.md) — how rules, quality gates, learning loops, and specialist reviewers form an integrated safety and quality system
 
 Ready? Let's build type-safe, schema-driven APIs.

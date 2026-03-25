@@ -1,7 +1,7 @@
 /**
  * Batch processing logic for ingestion harness.
  *
- * Handles batch-by-batch ingestion with incremental dispatch to Elasticsearch.
+ * Handles batch-by-batch ingestion with immediate dispatch to Elasticsearch.
  */
 
 import type { Logger } from '@oaknational/logger';

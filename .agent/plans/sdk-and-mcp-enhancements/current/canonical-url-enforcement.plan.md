@@ -317,7 +317,7 @@ Recommended reviewers:
 
 **Related Plans**:
 
-- `canonical-url-validation-integration.plan.md` (predecessor, WS1-WS5 complete)
+- ~~`canonical-url-validation-integration.plan.md`~~ (predecessor, complete and deleted; outcomes live in ADR-047 and sdk-codegen README)
   — the observation layer this plan promotes to enforcement
 - Unified versioned ingestion plan — ingestion pipeline where URL validation
   will be integrated

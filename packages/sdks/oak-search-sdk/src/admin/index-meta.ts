@@ -10,6 +10,7 @@ import { IndexMetaDocSchema } from '@oaknational/sdk-codegen/search';
 import type { AdminError } from '../types/admin-types.js';
 import { INDEX_META_INDEX, INDEX_VERSION_DOC_ID } from '../internal/index-resolver.js';
 import { isNotFoundError, isMappingError } from './es-error-guards.js';
+import { ensureIndexMetaMappingContract } from './index-meta-mapping-contract.js';
 
 /** Build a validation_error AdminError. */
 function toValidationError(message: string, details?: string): AdminError {
@@ -81,6 +82,11 @@ export async function writeIndexMeta(
   client: Client,
   meta: IndexMetaDoc,
 ): Promise<Result<void, AdminError>> {
+  const mappingResult = await ensureIndexMetaMappingContract(client, INDEX_META_INDEX);
+  if (!mappingResult.ok) {
+    return mappingResult;
+  }
+
   try {
     await client.index({
       index: INDEX_META_INDEX,

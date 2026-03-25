@@ -42,7 +42,7 @@ todos:
     status: done
   - id: phase-8-gates-review
     content: "Phase 8b: Full quality gates + final reviewer pass"
-    status: pending
+    status: done
 isProject: false
 ---
 
