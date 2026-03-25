@@ -1,6 +1,35 @@
-## Session 2026-03-25 — Documentation consolidation
+## Session 2026-03-25 — CI hang blocker + docs consolidation
 
-### Consolidate-docs pass
+### CI hang blocker
+
+- **GitHub CI hanging** on `feat/es_index_update` branch — job never
+  completes. Previous turbo daemon / concurrency fixes reverted as they
+  were symptom-level. Root cause unknown.
+- Active plan and prompt updated with blocker status and CI run link.
+- Next step: add logging/timing to CI steps to identify the hanging
+  process.
+
+### CONTRIBUTING.md improvement
+
+- Added `pnpm check` as the canonical all-in-one quality gate command
+  in the "Run Quality Gates" section. Individual commands reframed as
+  fallback for isolating failures.
+
+### Second consolidate-docs pass
+
+- **2 stale cross-refs fixed**:
+  - `.cursor/plans/field-integrity-framework-plan`: 6 `active/` paths
+    updated to `archive/completed/` (comprehensive-field-integrity,
+    field-gap-ledger, evidence files).
+  - ADR-138: `active/field-integrity-test-manifest.json` →
+    `archive/completed/`.
+- **Active README status** updated to "Blocked — CI hanging".
+- **Prompt** `last_updated` and date header updated to 2026-03-25.
+- **Fitness check**: all 13 tracked files pass.
+- **Practice box**: empty.
+- **No new code patterns, experience extractions, or distillation needed.**
+
+### First consolidate-docs pass (earlier this session)
 
 - **build-system.md drift fixed**: troubleshooting section implied
   generic `type-check` depends on `sdk-codegen`; corrected to clarify

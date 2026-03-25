@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-24
+last_updated: 2026-03-25
 ---
 
 # Semantic Search — Session Entry Point
@@ -12,12 +12,20 @@ This is a working handover document. Keep it concise and operational.
 
 ---
 
-## Current State (2026-03-24)
+## Current State (2026-03-25)
 
 **Branch**: `feat/es_index_update`
 
-All code fixes and re-ingest are complete. The branch is ready for PR/merge.
-One action remains: verify production search after deployment.
+All code fixes and re-ingest are complete, but **GitHub CI is hanging
+indefinitely** and must be diagnosed before the PR can merge.
+
+### Blocker: CI hang (2026-03-25)
+
+The CI job hangs and never completes
+([run](https://github.com/oaknational/oak-open-curriculum-ecosystem/actions/runs/23537232656/job/68515429186?pr=68)).
+Previous attempts (`TURBO_DAEMON=false`, `--concurrency=1`) were reverted
+as they addressed symptoms not root cause. We need more logging/timing in
+CI steps to identify which step or child process is not exiting.
 
 ### What's done
 
@@ -35,10 +43,11 @@ One action remains: verify production search after deployment.
 
 ### What's next
 
-**After PR merge and Vercel production deployment:**
+1. **Diagnose CI hang** — add logging to CI steps to find what is not exiting.
+2. **After PR merge and Vercel production deployment** — assess production
+   search via the prod MCP server (`project-0-oak-mcp-ecosystem-oak-prod`).
 
-Assess production search via the prod MCP server
-(`project-0-oak-mcp-ecosystem-oak-prod`). Active plan:
+Active plan:
 
 [prod-search-assessment.execution.plan.md](../../plans/semantic-search/active/prod-search-assessment.execution.plan.md)
 

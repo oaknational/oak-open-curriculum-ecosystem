@@ -3,9 +3,12 @@ name: "Production Search Assessment"
 overview: >
   Verify F1/F2 filter fixes and overall search quality in production
   via the prod MCP server after the current PR is merged and deployed.
-status: "Pending — blocked on PR merge and production deployment"
+status: "Blocked — CI hanging, needs diagnosis before merge"
 branch: "feat/es_index_update"
 todos:
+  - id: ci-hang-diagnosis
+    content: "Diagnose GitHub CI hang: add logging to identify which step/process is not exiting, then fix."
+    status: pending
   - id: prod-assessment
     content: "Assess production search via the prod MCP server (project-0-oak-mcp-ecosystem-oak-prod) after PR merge and deployment."
     status: pending
@@ -15,7 +18,20 @@ todos:
 
 ## Status
 
-**Pending** — blocked on PR merge and Vercel production deployment.
+**Blocked** — GitHub CI is hanging indefinitely. Must diagnose and fix
+before the PR can merge.
+
+### CI hang (2026-03-25)
+
+The CI job at
+<https://github.com/oaknational/oak-open-curriculum-ecosystem/actions/runs/23537232656/job/68515429186?pr=68>
+hangs and never completes. Previous attempts to fix this (`TURBO_DAEMON=false`,
+`--concurrency=1`) were reverted because they addressed symptoms rather than
+root cause. The actual cause is unknown.
+
+**Next step**: add logging/timing to the CI workflow steps to identify which
+step or child process is not exiting. Without this observability we are
+guessing.
 
 ## Context
 
@@ -26,8 +42,9 @@ and F2 (`category`) findings, plus a versioned re-ingest
 commit that predates these fixes. Once the PR is merged and deployed, the
 production MCP server will serve from the corrected code and re-ingested data.
 
-## Prerequisite
+## Prerequisites
 
+- CI hang diagnosed and fixed
 - PR merged to `main`
 - Vercel production deployment complete (automatic on merge)
 

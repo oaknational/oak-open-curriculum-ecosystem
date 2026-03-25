@@ -50,4 +50,4 @@ Field data remains derived from `@oaknational/sdk-codegen/search` so source-of-t
 
 - `packages/libs/search-contracts/README.md`
 - `packages/libs/search-contracts/src/field-inventory.integration.test.ts`
-- `.agent/plans/semantic-search/active/field-integrity-test-manifest.json`
+- `.agent/plans/semantic-search/archive/completed/field-integrity-test-manifest.json`

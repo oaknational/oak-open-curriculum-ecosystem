@@ -35,7 +35,7 @@ Deliver a deterministic, test-enforced framework that proves semantic-search fie
 ## Authoritative Inputs
 
 - Session entry and lane policy: [.agent/prompts/semantic-search/semantic-search.prompt.md](.agent/prompts/semantic-search/semantic-search.prompt.md)
-- Existing execution authority to refine and operationalise: [.agent/plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md](.agent/plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md)
+- Existing execution authority to refine and operationalise: [.agent/plans/semantic-search/archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md](.agent/plans/semantic-search/archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
 - Foundation directives: [.agent/directives/principles.md](.agent/directives/principles.md), [.agent/directives/testing-strategy.md](.agent/directives/testing-strategy.md), [.agent/directives/schema-first-execution.md](.agent/directives/schema-first-execution.md)
 
 ## Key Design Decisions
@@ -74,14 +74,14 @@ n   - ingest matrix
 - gap-ledger schema helpers
 
 1. Implement inventory generation/parity tests first (`RED`) to enforce generated type-vs-mapping alignment.
-2. Add stage matrix tests and machine-readable gap ledger at [.agent/plans/semantic-search/active/field-gap-ledger.json](.agent/plans/semantic-search/active/field-gap-ledger.json).
+2. Add stage matrix tests and machine-readable gap ledger at [.agent/plans/semantic-search/archive/completed/field-gap-ledger.json](.agent/plans/semantic-search/archive/completed/field-gap-ledger.json).
 3. Add root manifest-driven `test:field-integrity` command (explicit file list, no globs, fail on missing paths/empty manifest).
 
 Primary files:
 
 - `packages/libs/search-contracts/src/*`
 - `package.json`
-- `.agent/plans/semantic-search/active/field-gap-ledger.json`
+- `.agent/plans/semantic-search/archive/completed/field-gap-ledger.json`
 
 ### Phase 1 - Stage-Level Integrity Suites
 
@@ -104,7 +104,7 @@ Primary files:
 
 - `[apps/oak-search-cli/src/lib/indexing](apps/oak-search-cli/src/lib/indexing)`
 - `[packages/sdks/oak-search-sdk/src/retrieval](packages/sdks/oak-search-sdk/src/retrieval)`
-- `.agent/plans/semantic-search/active/evidence/task-2.2-retrieval-semantics.md`
+- `.agent/plans/semantic-search/archive/completed/evidence/task-2.2-retrieval-semantics.md`
 
 ### Phase 3 - Readback Audit and Operational Proof
 
@@ -117,7 +117,7 @@ Primary files:
 
 - `apps/oak-search-cli/operations/ingestion/field-readback-audit.ts`
 - `apps/oak-search-cli/src/lib/indexing/readback-field-audit.integration.test.ts`
-- `.agent/plans/semantic-search/active/evidence/task-2.3.evidence.json`
+- `.agent/plans/semantic-search/archive/completed/evidence/task-2.3.evidence.json`
 
 ### Phase 4 - Hardening and Plan/Prompt Coherence
 
