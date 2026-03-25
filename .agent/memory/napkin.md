@@ -1,3 +1,74 @@
+## Session 2026-03-25 (cont.) — Canonical vitest config enforcement
+
+### Vitest config adulteration — root cause and fix
+
+- **Symptom**: `agent-tools` CLI smoke E2E tests timing out at
+  5000ms in CI under `pnpm test`, but passing locally.
+- **Root cause**: `agent-tools/vitest.config.ts` had
+  `include: ['tests/**/*.test.ts']` with NO `**/*.e2e.test.ts`
+  exclusion. The base config (`vitest.config.base.ts`) excludes
+  E2E tests, but agent-tools didn't extend it. The broad glob
+  captured `cli-smoke.e2e.test.ts` into the unit/integration
+  pipeline. In CI (2 CPUs, 7GB RAM), `pnpm tsx` child process
+  spawning exceeded the 5s default timeout.
+- **Fix**:
+  - `agent-tools/vitest.config.ts` now extends `baseTestConfig`
+  - New `agent-tools/vitest.e2e.config.ts` with 60s timeout for
+    CLI smoke tests, plus `test:e2e` script in package.json
+  - `packages/core/oak-eslint/vitest.config.ts` also migrated
+    from minimal custom config to `baseTestConfig`
+- **Prevention**:
+  - Added "Canonical Vitest Configuration" section to
+    `testing-strategy.md` defining two patterns (extend base
+    preferred, custom with mandatory E2E exclusion)
+  - Added "Canonical Configuration" mandate to `principles.md`
+  - Updated `config-reviewer.md` with reading requirements for
+    base vitest configs, canonical pattern enforcement, and
+    E2E config checklist items
+- **Key learning**: workspace vitest configs that don't extend
+  the base config and use broad `*.test.ts` globs without
+  `**/*.e2e.test.ts` exclusion silently leak E2E tests into
+  the unit/integration pipeline. This only manifests in CI
+  where resource constraints cause timeouts.
+
+---
+
+## Session 2026-03-25 (cont.) — CI lint cache poisoning + turbo inputs fix
+
+### Turbo cache poisoning — root cause and fix
+
+- **Symptom**: CI lint step failed with 1091 `import-x/no-unresolved`
+  errors for `@oaknational/search-cli`, but lint passed locally with
+  `--force`. Same commit (`0abc01b4`).
+- **Root cause**: ALL 27 lint tasks in CI were **remote cache hits**.
+  The errors were replayed from a stale remote cache entry, not from
+  a fresh lint run. The cache was poisoned by a previous CI run where
+  `@oaknational/sdk-codegen` subpath exports (`/search`, `/zod`)
+  weren't available at lint time.
+- **Why it persisted**: `turbo.json` lint inputs enumerated specific
+  directories (`src/`, `tests/`, `smoke-tests/`) — so changes to
+  `evaluation/`, `operations/`, and root-level `.ts` files didn't
+  invalidate the cache. The poisoned entry kept being replayed.
+- **Fix**: replaced directory-specific patterns with `**/*.ts` for
+  lint, lint:fix, test, mutate, test:ui, and type-check tasks.
+  Turbo respects `.gitignore` so `dist/` and `node_modules/` are
+  automatically excluded. This invalidated all stale cache entries.
+- **Graph comparison** (`pnpm check` vs CI): dependency ordering is
+  identical — Turbo correctly pulls `sdk-codegen` as transitive dep
+  of `build`. The issue was cache, not graph structure.
+- **Key learning**: when Turbo remote cache produces different results
+  from local, check cache hit/miss status first (`--dry=json` or
+  CI logs for "cache hit, replaying logs"). ALL hits = stale cache.
+  Incomplete `inputs` patterns are a common cause.
+
+### Agent-tools test timeout (remaining CI failure)
+
+- `@oaknational/agent-tools#test`: 4 tests timing out at 5000ms in CI.
+- Unrelated to search work or turbo config changes.
+- Needs investigation as a separate issue.
+
+---
+
 ## Session 2026-03-25 — CI hang blocker + docs consolidation
 
 ### CI hang blocker — root cause identified

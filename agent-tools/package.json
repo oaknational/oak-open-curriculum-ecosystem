@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "type-check": "tsc -p tsconfig.json",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts"

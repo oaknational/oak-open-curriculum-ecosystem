@@ -3,7 +3,7 @@ prompt_id: semantic-search
 title: "Semantic Search Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-25
+last_updated: 2026-03-25-evening
 ---
 
 # Semantic Search — Session Entry Point
@@ -12,20 +12,29 @@ This is a working handover document. Keep it concise and operational.
 
 ---
 
-## Current State (2026-03-25)
+## Current State (2026-03-25, evening)
 
 **Branch**: `feat/es_index_update`
 
-All code fixes and re-ingest are complete, but **GitHub CI is hanging
-indefinitely** and must be diagnosed before the PR can merge.
+All code fixes, re-ingest, and CI blockers are resolved. CI build, lint,
+and type-check pass. One remaining failure: `@oaknational/agent-tools#test`
+(4 tests timing out at 5000ms in CI) — unrelated to search work.
 
-### Blocker: CI hang (2026-03-25)
+### CI blockers resolved (2026-03-25)
 
-The CI job hangs and never completes
-([run](https://github.com/oaknational/oak-open-curriculum-ecosystem/actions/runs/23537232656/job/68515429186?pr=68)).
-Previous attempts (`TURBO_DAEMON=false`, `--concurrency=1`) were reverted
-as they addressed symptoms not root cause. We need more logging/timing in
-CI steps to identify which step or child process is not exiting.
+Two CI blockers were diagnosed and fixed in this session:
+
+1. **Test hang**: `eslint-boundary.integration.test.ts` used programmatic
+   ESLint with TypeScript `projectService`, creating open handles that
+   prevented vitest workers from exiting in CI (`CI=true` -> graceful exit
+   mode). Deleted the test (redundant with `pnpm lint`). Added
+   "no process spawning in in-process tests" rule to `principles.md`
+   and `testing-strategy.md`.
+2. **Lint cache poisoning**: `turbo.json` inputs for lint/test/type-check
+   enumerated specific directories but missed `evaluation/`, `operations/`,
+   etc. A previous CI run cached a failing lint result (1091
+   `import-x/no-unresolved` errors). Fixed by switching all relevant turbo
+   task inputs to `**/*.ts`, invalidating stale cache entries.
 
 ### What's done
 
@@ -33,19 +42,24 @@ CI steps to identify which step or child process is not exiting.
   (v2026-03-24-091112) resolved.
 - **F2** (`category`): code fix complete (commit `2c6e6b51`). Re-ingest
   populates corrected data.
-- **Pre-reingest remediation**: all 5 issues (S1–S5) resolved, CLI-SDK
+- **Pre-reingest remediation**: all 5 issues (S1-S5) resolved, CLI-SDK
   boundary enforcement complete (2026-03-23).
 - **Re-ingest**: v2026-03-24-091112 staged + promoted, 15,910 parent docs
   across 5 index types.
 - **Turbo pipeline fixes**: phantom tasks eliminated, cache keys fixed,
   B2 pure-function extractions done. B1 deferred to workspace decomposition.
-- **Quality gates**: all green (997 tests, 0 lint errors).
+- **CI test hang**: root-caused and fixed (eslint-boundary test deleted).
+- **CI lint cache**: turbo.json inputs fixed (`**/*.ts`), stale cache busted.
+- **Quality gates**: build, lint, type-check pass in CI. Tests pass except
+  agent-tools timeout (pre-existing, unrelated).
 
 ### What's next
 
-1. **Diagnose CI hang** — add logging to CI steps to find what is not exiting.
-2. **After PR merge and Vercel production deployment** — assess production
-   search via the prod MCP server (`project-0-oak-mcp-ecosystem-oak-prod`).
+1. **Resolve or triage agent-tools test timeout** -- 4 tests timing out at
+   5000ms in CI. Likely pre-existing/flaky, unrelated to search work.
+2. **Merge PR** once CI is green.
+3. **Assess production search** via the prod MCP server
+   (`project-0-oak-mcp-ecosystem-oak-prod`) after Vercel deployment.
 
 Active plan:
 

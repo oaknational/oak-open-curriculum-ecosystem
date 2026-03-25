@@ -69,6 +69,8 @@ Use the right tool for the job:
 - **Typedoc** for documentation generation
 - **Sentry** for observability (guidance archived to `docs/agent-guidance/archive/sentry-guidance.md`)
 
+All workspace tooling configuration MUST follow the canonical patterns defined in the base configs at the repo root. Workspace configs extend base configs — they do not replace them. This applies to `vitest.config.ts`, `tsconfig.json`, `eslint.config.ts`, and all other tooling. Deviations cause silent quality-gate leaks (e.g. E2E tests running under `pnpm test`, disabled lint rules, weakened type-checking). See [Testing Strategy: Canonical Vitest Configuration](testing-strategy.md#canonical-vitest-configuration) for vitest-specific patterns. E2E vitest configs may be workspace-specific when base defaults (include paths, setup files) don't apply.
+
 ### Code Quality
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)

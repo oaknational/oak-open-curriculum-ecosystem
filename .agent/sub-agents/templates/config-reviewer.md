@@ -38,6 +38,9 @@ Before reviewing any configuration changes, you MUST also read and internalise t
 |----------|---------|
 | `tsconfig.base.json` | Base TypeScript configuration |
 | `eslint.config.ts` | Root ESLint configuration |
+| `vitest.config.base.ts` | Base Vitest configuration (canonical unit/integration pattern) |
+| `vitest.e2e.config.base.ts` | Base Vitest E2E configuration (canonical E2E pattern) |
+| `.agent/directives/testing-strategy.md` | Canonical Vitest Configuration section — authoritative patterns |
 | `.prettierrc.json` | Prettier configuration |
 | `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
 
@@ -124,7 +127,17 @@ export default [
 
 ### Vitest (`vitest.config.ts`)
 
-Test configuration should be consistent:
+Vitest configuration follows two canonical patterns defined in `testing-strategy.md`. Every workspace MUST use one of them. Deviations cause silent test-category leaks (E2E tests running under `pnpm test`, CI timeouts).
+
+**Pattern 1 — Extend base config (preferred):**
+
+```typescript
+import { baseTestConfig } from '../../../vitest.config.base';
+
+export default baseTestConfig;
+```
+
+**Pattern 2 — Custom config with mandatory exclusions:**
 
 ```typescript
 import { defineConfig } from 'vitest/config';
@@ -133,16 +146,33 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['**/*.{unit,integration}.test.ts'],
+    include: ['src/**/*.unit.test.ts', 'src/**/*.integration.test.ts'],
+    exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
   },
 });
 ```
 
-**Common issues:**
+**Non-negotiable requirements for Pattern 2:**
 
-- Incorrect test file patterns
-- Missing or wrong environment
-- Skipping tests via config
+- `exclude` MUST contain `'**/*.e2e.test.ts'`
+- `include` SHOULD use explicit naming conventions (`*.unit.test.ts`, `*.integration.test.ts`) not broad `*.test.ts` globs
+- If broad `*.test.ts` globs are used, the `**/*.e2e.test.ts` exclusion is the safety net
+
+**E2E config**: Workspaces with E2E tests MUST also have `vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or workspace-specific when base `include`/`setupFiles` don't apply) and a `test:e2e` script.
+
+**Review checklist for vitest configs:**
+
+- [ ] Extends `vitest.config.base.ts` OR explicitly excludes `**/*.e2e.test.ts`
+- [ ] Does NOT use broad `*.test.ts` include without `**/*.e2e.test.ts` exclude
+- [ ] Has `test:e2e` script if workspace contains `*.e2e.test.ts` files
+- [ ] `passWithNoTests` is not hiding stale include patterns after file moves
+
+**Common issues (critical):**
+
+- Missing `**/*.e2e.test.ts` exclusion — E2E tests leak into `pnpm test`
+- Not extending base config AND omitting exclusions — silent quality-gate bypass
+- Broad `tests/**/*.test.ts` include without exclusion — captures E2E files by name
+- No `test:e2e` script when E2E test files exist — tests have no execution path
 
 ### Prettier (`.prettierrc.json`)
 
@@ -189,6 +219,8 @@ When configuration issues affect code quality, architecture, or type safety, thi
 
 - [ ] TypeScript configs extend `tsconfig.base.json`
 - [ ] ESLint configs extend root configuration
+- [ ] Vitest configs extend `vitest.config.base.ts` OR explicitly exclude `**/*.e2e.test.ts`
+- [ ] Vitest E2E configs extend `vitest.e2e.config.base.ts` or define workspace-specific E2E config where E2E tests exist
 - [ ] No workspace-specific Prettier overrides (unless justified)
 - [ ] Consistent patterns across all workspaces
 
@@ -198,6 +230,7 @@ When configuration issues affect code quality, architecture, or type safety, thi
 - [ ] No `@ts-ignore` or `@ts-expect-error` in config files
 - [ ] No skipped tests via configuration
 - [ ] No bypassed git hooks
+- [ ] No broad test include patterns without E2E exclusion
 
 ### Quality Gate Alignment
 

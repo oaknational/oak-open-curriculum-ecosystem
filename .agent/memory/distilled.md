@@ -192,6 +192,7 @@ enough for permanent documentation.
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
+| CI lint/test fails but passes locally with `--force` | Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration |
 | Commitlint rejects commit | See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
 | Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |

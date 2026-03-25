@@ -374,6 +374,15 @@ For refactoring that does not change public API (runtime behaviour unchanged), t
 
 For type-derivation fixes, use `satisfies` as a compile-time anchor: `{ flat: 'value' } satisfies MyType` fails type-check if the derivation is wrong, serving as the RED phase alongside generator string-output tests.
 
+## Canonical Vitest Configuration
+
+Every workspace `vitest.config.ts` MUST follow one of two patterns. Deviations cause silent test-category leaks (E2E tests running under `pnpm test`, CI timeouts that don't reproduce locally).
+
+- **Pattern 1 (preferred)**: Import and re-export `baseTestConfig` from `vitest.config.base.ts` at the repo root. Adjust the relative path per workspace depth.
+- **Pattern 2 (custom)**: Define a workspace-specific config. Non-negotiable: `exclude` MUST contain `'**/*.e2e.test.ts'`. `include` SHOULD use explicit conventions (`*.unit.test.ts`, `*.integration.test.ts`) not broad `*.test.ts` globs.
+
+Workspaces with `*.e2e.test.ts` files MUST also have `vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or workspace-specific) and a `test:e2e` script in `package.json`.
+
 ## Test Configuration Gotchas
 
 - `tsconfig.json` `include` patterns `**/*.test.ts` and `**/*.spec.ts` do NOT match test utility files (harness, fixture builder). Add `tests/**/*.ts` to the include array when creating non-test utilities in test directories.

@@ -4,7 +4,7 @@ Single active plan. All prior active plans archived or moved to future/.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [prod-search-assessment.execution.plan.md](./prod-search-assessment.execution.plan.md) | Verify F1/F2 fixes and search quality via prod MCP server after PR merge | 🚫 Blocked — CI hanging, needs diagnosis before merge |
+| [prod-search-assessment.execution.plan.md](./prod-search-assessment.execution.plan.md) | Verify F1/F2 fixes and search quality via prod MCP server after PR merge | Nearly unblocked — CI build/lint/type-check pass, agent-tools test timeout remains |
 
 Recently archived:
 

@@ -3,11 +3,17 @@ name: "Production Search Assessment"
 overview: >
   Verify F1/F2 filter fixes and overall search quality in production
   via the prod MCP server after the current PR is merged and deployed.
-status: "Blocked — CI hanging, needs diagnosis before merge"
+status: "Nearly unblocked — CI lint/type-check/build pass, agent-tools test timeout remains"
 branch: "feat/es_index_update"
 todos:
   - id: ci-hang-diagnosis
     content: "Diagnose GitHub CI hang: add logging to identify which step/process is not exiting, then fix."
+    status: done
+  - id: ci-lint-fix
+    content: "Fix stale remote Turbo cache causing lint failures in CI."
+    status: done
+  - id: agent-tools-timeout
+    content: "Investigate agent-tools test timeout in CI (4 tests timing out at 5000ms)."
     status: pending
   - id: prod-assessment
     content: "Assess production search via the prod MCP server (project-0-oak-mcp-ecosystem-oak-prod) after PR merge and deployment."
@@ -18,20 +24,36 @@ todos:
 
 ## Status
 
-**Blocked** — GitHub CI is hanging indefinitely. Must diagnose and fix
-before the PR can merge.
+**Nearly unblocked** — CI build, lint, and type-check all pass. One
+remaining failure: `@oaknational/agent-tools#test` has 4 tests timing
+out at 5000ms. This is unrelated to the search work.
 
-### CI hang (2026-03-25)
+### CI history (2026-03-25)
 
-The CI job at
-<https://github.com/oaknational/oak-open-curriculum-ecosystem/actions/runs/23537232656/job/68515429186?pr=68>
-hangs and never completes. Previous attempts to fix this (`TURBO_DAEMON=false`,
-`--concurrency=1`) were reverted because they addressed symptoms rather than
-root cause. The actual cause is unknown.
+Two CI blockers were diagnosed and resolved in this session:
 
-**Next step**: add logging/timing to the CI workflow steps to identify which
-step or child process is not exiting. Without this observability we are
-guessing.
+**1. Test hang (resolved)**: `eslint-boundary.integration.test.ts` in
+`search-cli` used `new ESLint()` with TypeScript's `projectService`,
+creating open handles that prevented vitest fork workers from exiting
+in CI (where `CI=true` causes vitest to wait for graceful exit instead
+of force-killing). Fix: deleted the test (redundant — `pnpm lint`
+already enforces the same boundary rules via `eslint.config.ts`).
+Added "no process spawning in in-process tests" rule to `principles.md`
+and `testing-strategy.md`.
+
+**2. Lint cache poisoning (resolved)**: `turbo.json` lint/test/type-check
+inputs enumerated specific directories (`src/`, `tests/`, `smoke-tests/`)
+but missed `evaluation/`, `operations/`, and root-level files. A previous
+CI run cached a failing lint result (1091 `import-x/no-unresolved` errors
+from a run where `sdk-codegen` subpath exports weren't available at lint
+time). The stale cache was replayed on every subsequent run with matching
+input hash. Fix: replaced directory-specific patterns with `**/*.ts` in
+turbo.json for lint, lint:fix, test, mutate, test:ui, and type-check
+tasks, invalidating all stale cache entries.
+
+**3. Agent-tools test timeout (remaining)**: 4 tests in
+`@oaknational/agent-tools` time out at 5000ms in CI. Unrelated to
+search work. Needs investigation.
 
 ## Context
 
@@ -44,7 +66,9 @@ production MCP server will serve from the corrected code and re-ingested data.
 
 ## Prerequisites
 
-- CI hang diagnosed and fixed
+- ~~CI hang diagnosed and fixed~~ done
+- ~~CI lint cache poisoning fixed~~ done
+- Agent-tools test timeout resolved or confirmed pre-existing/flaky
 - PR merged to `main`
 - Vercel production deployment complete (automatic on merge)
 
