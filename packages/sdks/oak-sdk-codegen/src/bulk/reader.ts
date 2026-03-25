@@ -5,6 +5,9 @@
  * Provides pure functions for discovering and parsing bulk download files.
  * All file system operations use Node.js fs/promises for async I/O.
  *
+ * Pure filename-parsing utilities live in {@link reader-utils} to avoid
+ * coupling callers that only need string parsing to generated types.
+ *
  * @example
  * ```ts
  * const files = await discoverBulkFiles('bulk-downloads/');
@@ -19,46 +22,9 @@ import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
 import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
+import { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
 
-/**
- * Subject and phase extracted from a bulk download filename.
- */
-export interface SubjectPhase {
-  /** Subject slug (e.g., 'maths', 'design-technology') */
-  readonly subject: string;
-  /** Phase (primary or secondary) */
-  readonly phase: 'primary' | 'secondary';
-}
-
-/**
- * Extracts subject and phase from a bulk download filename.
- *
- * @param filename - The filename (e.g., 'maths-primary.json')
- * @returns Subject and phase, or undefined if filename doesn't match pattern
- *
- * @example
- * ```ts
- * extractSubjectPhase('maths-primary.json')
- * // Returns: { subject: 'maths', phase: 'primary' }
- *
- * extractSubjectPhase('design-technology-secondary.json')
- * // Returns: { subject: 'design-technology', phase: 'secondary' }
- * ```
- */
-export function extractSubjectPhase(filename: string): SubjectPhase | undefined {
-  // Pattern: {subject}-{phase}.json where subject can contain hyphens
-  // Phase is always the last segment before .json
-  const match = /^(.+)-(primary|secondary)\.json$/.exec(filename);
-  if (!match) {
-    return undefined;
-  }
-  const subject = match[1];
-  const phase = match[2];
-  if (phase !== 'primary' && phase !== 'secondary') {
-    return undefined;
-  }
-  return { subject, phase };
-}
+export { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
 
 /**
  * Discovers all bulk download JSON files in a directory.

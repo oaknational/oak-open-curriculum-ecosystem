@@ -65,7 +65,7 @@ Ingest and retrieval already validate many contracts via `@oaknational/search-co
 
 ## Relationship to other artefacts
 
-- **Findings register**: [search-tool-prod-validation-findings-2026-03-15.md](../active/search-tool-prod-validation-findings-2026-03-15.md) — optional smoke should reference the same JSON shapes for continuity.
+- **Findings register**: [search-tool-prod-validation-findings-2026-03-15.md](../archive/completed/search-tool-prod-validation-findings-2026-03-15.md) — optional smoke should reference the same JSON shapes for continuity.
 - **Field inventory**: `packages/libs/search-contracts` — source of truth for inventory assertions in Task 1.
 
 ## Completion

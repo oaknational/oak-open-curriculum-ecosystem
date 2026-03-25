@@ -41,7 +41,7 @@ cat .agent/directives/schema-first-execution.md
 
 ```bash
 cd ai_experiments/oak-notion-mcp
-pnpm check:turbo  # Must pass (uses --concurrency=2)
+pnpm check
 ```
 
 **Current workaround in place**: Test configs have `isolate: true` + `pool: 'forks'` to prevent race conditions from global state mutations. Task 2 eliminates the need for this.
@@ -371,7 +371,7 @@ pnpm smoke:dev:stub
 Or use the combined command (slower but comprehensive):
 
 ```bash
-pnpm check:turbo  # Runs all gates with --concurrency=2
+pnpm check  # Runs all gates
 ```
 
 **ALL gates must pass before proceeding.**

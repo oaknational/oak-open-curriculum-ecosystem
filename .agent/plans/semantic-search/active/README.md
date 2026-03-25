@@ -1,26 +1,21 @@
 # Semantic Search — Active
 
-Executable plans currently in flight.
+Single active plan. All prior active plans archived or moved to future/.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [f2-closure-and-p0-ingestion.execution.plan.md](./f2-closure-and-p0-ingestion.execution.plan.md) | F2 code follow-ups, versioned re-ingest, F1/F2 production verification, P0 closure | 🟡 In progress — Phase 1 ✅; Phase 2 staged + promoted (v2026-03-24-091112); Phase 3 verification next |
-| [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](./bulk-canonical-merge-api-parity-and-validation.execution.plan.md) | Canonical bulk policy, TDD merge for duplicate lesson ids, bulk-vs-API field matrix, thread/sequence naming, MCP+CLI validation after F2 promote | 🟡 Planning — execution starts after F2 promote (or merge work can begin in branch in parallel) |
-| [index-lifecycle-management.execution.plan.md](./index-lifecycle-management.execution.plan.md) | CLI commands for orphan detection/deletion, alias-aware generation cleanup, lease resilience, pre-stage orphan warning | 🟡 In progress — Phase 6 ✅, Phase 6a uncommitted, Phases 1-5 pending |
-| [search-ingestion-sdk-extraction.execution.plan.md](./search-ingestion-sdk-extraction.execution.plan.md) | Extract Oak-specific ingestion runtime into `@oaknational/oak-search-ingestion-sdk`, keep CLI thin, and document the internal-consumer adoption path | 🟡 Planning — boundary locked in ADR-140; execution starts after overlap audit and lane sequencing |
+| [prod-search-assessment.execution.plan.md](./prod-search-assessment.execution.plan.md) | Verify F1/F2 fixes and search quality via prod MCP server after PR merge | ⏳ Pending — blocked on PR merge and production deployment |
 
-Supporting documents (updated alongside the plans):
+Recently archived:
 
-- [search-tool-prod-validation-findings-2026-03-15.md](./search-tool-prod-validation-findings-2026-03-15.md) — F1/F2 findings register with reproduction queries and evidence
-- [sequence-retrieval-architecture-followup.plan.md](../current/sequence-retrieval-architecture-followup.plan.md) — locked execution recipe for sequence semantic producer + SDK-owned two-way RRF (work items executing via remediation plan)
-- [search-contract-followup.plan.md](../current/search-contract-followup.plan.md) — lessons `threadSlug` inventory test + optional prod smoke source (work items executing via remediation plan)
+- [f2-closure-and-p0-ingestion.execution.plan.md](../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md) — F2 follow-ups, re-ingest, Phases 1–2 complete (2026-03-24)
+- [turbo-and-codegen-boundary-fix.plan.md](../archive/completed/turbo-and-codegen-boundary-fix.plan.md) — turbo fixes + B2 extraction complete; B1 deferred to [workspace decomposition](../../architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md) (2026-03-24)
+- [search-tool-prod-validation-findings-2026-03-15.md](../archive/completed/search-tool-prod-validation-findings-2026-03-15.md) — F1/F2 findings register (referenced by active plan)
 
-Archived plans:
+Moved to future/:
 
-- [pre-reingest-remediation.execution.plan.md](../archive/completed/pre-reingest-remediation.execution.plan.md) — S1-S5 remediation + CLI-SDK boundary enforcement (complete 2026-03-23)
-- [comprehensive-field-integrity-integration-tests.execution.plan.md](../archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md) — field-integrity test infrastructure (complete)
-- [semantic-search-recovery-and-guardrails.execution.plan.md](../archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md) — migration recovery (complete)
-- [semantic-search-ingest-runbook.md](../archive/completed/semantic-search-ingest-runbook.md) — ingest runbook (complete)
+- [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md) — canonical bulk policy, merge, API parity
+- [search-ingestion-sdk-extraction.execution.plan.md](../future/search-ingestion-sdk-extraction.execution.plan.md) — ingestion SDK extraction (ADR-140)
 
 Next queue: [current/README.md](../current/README.md)
 Strategic backlog: [future/README.md](../future/README.md)

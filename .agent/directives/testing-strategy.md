@@ -62,7 +62,7 @@ In-process tests are tests that validate **code imported into the test process**
 
 Out-of-process tests are tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
-- **E2E test**: A test that verifies the behaviour of a running system. E2E tests CAN trigger File System and STDIO IO but NOT network IO, DO have side effects, and contain minimal mocks, largely around network IO. These constrains are to allow the E2E tests to be safely run in CI/CD.
+- **E2E test**: A test that verifies the behaviour of a running system. E2E tests CAN trigger STDIO IO but NOT filesystem or network IO, CAN have side effects, and contain minimal mocks, largely around network IO. These constrains are to allow the E2E tests to be safely run in CI/CD.
 
 - **Smoke test**: A test that verifies the behaviour of a running system, locally or deployed. Smoke tests CAN trigger all IO types, DO have side effects, and DO NOT contain mocks.
 

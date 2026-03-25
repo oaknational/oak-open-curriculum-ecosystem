@@ -231,7 +231,7 @@ Expected: `total > 0`, hits array non-empty.
 
 #### F1 reproduction: `threadSlug` filter on lessons
 
-This reproduces [finding F1](../../../.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md#f1---threadslug-filter-on-lessons-returns-empty-unexpectedly) -- verify that `threadSlug` narrows baseline results rather than collapsing to zero:
+This reproduces [finding F1](../../../.agent/plans/semantic-search/archive/completed/search-tool-prod-validation-findings-2026-03-15.md#f1---threadslug-filter-on-lessons-returns-empty-unexpectedly) -- verify that `threadSlug` narrows baseline results rather than collapsing to zero:
 
 ```json
 {
@@ -251,7 +251,7 @@ stale data predating the `thread_slugs` pipeline fix -- compare the alias
 
 #### F2 reproduction: `category` filter on sequences
 
-This reproduces [finding F2](../../../.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md#f2---category-filter-on-sequences-appears-non-functional) -- verify that an invalid category returns zero results:
+This reproduces [finding F2](../../../.agent/plans/semantic-search/archive/completed/search-tool-prod-validation-findings-2026-03-15.md#f2---category-filter-on-sequences-appears-non-functional) -- verify that an invalid category returns zero results:
 
 ```json
 {

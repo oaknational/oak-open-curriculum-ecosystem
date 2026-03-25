@@ -27,7 +27,6 @@
 
 **Phase 0: Pre-Push Reliability**
 
-- ✅ Added `export TURBO_CONCURRENCY=4` to `.husky/pre-push`
 - ✅ Added `--only` flag to `test:e2e` and `test:e2e:built` to skip dependency re-runs
 - ✅ Increased `testTimeout` to 60000ms in `vitest.e2e.config.base.ts`
 - ✅ Validated with 3 consecutive successful pre-push runs
@@ -105,17 +104,20 @@ lint:fix:                        ⏳  5 errors in index-oak-helpers.ts
 
 ✅ Created `MediaQueryContext.tsx` with provider, hook, and SSR-safe fallback  
 ✅ Refactored product code:
+
 - `SearchSecondary.tsx` - now uses `useMediaQuery()` hook
 - `theme-utils.ts` - functions accept `matchMedia` parameter with SSR fallback
 - `ThemeContext.tsx` - injects `matchMedia` from context
 - `Providers.tsx` - wraps app with `MediaQueryProvider`
 
 ✅ Refactored tests:
+
 - `SearchPageClient.test-helpers.tsx` - uses `mediaMatches` option to inject mock
 - `ThemeSystemPreference.integration.test.tsx` - uses local `MediaQueryAPI` mock
 - All tests inject mocks via Context, no global mutations
 
 ✅ Deleted obsolete files:
+
 - `mock-match-media.ts`
 - `mock-match-media-registries.ts`
 - `SearchPageClient.test-helpers.unit.test.tsx`
@@ -158,15 +160,19 @@ apps/oak-search-cli/app/lib/media-query/MediaQueryContext.unit.test.tsx
 ## Critical Notes and Decisions
 
 ### SSR Theme Handling
+
 **Decision**: For SSR, either we know what the theme cookie is, or we don't.
+
 - **If no cookie**: Render light theme with no-preference
 - **If cookie exists**: Render the correct theme specified in cookie
 - **Rationale**: Prevents hydration mismatches, provides consistent experience
 
 ### Type Safety Enforcement Limitation
+
 **Issue**: Banned types (`unknown[]`, `Record<string, unknown>`, etc.) need to be banned BOTH as type declarations AND as inline type annotations.
 
 **Current State**: ESLint rule `@typescript-eslint/no-restricted-types` only catches type alias declarations:
+
 ```typescript
 // ✅ Caught by ESLint
 type Foo = unknown[];
@@ -180,6 +186,7 @@ const x: unknown[] = [];
 **Tracking**: Added to ESLint enhancement backlog
 
 ### Test ESLint Rules Allow Banned Types
+
 **Issue**: The `testRules` configuration in `packages/core/oak-eslint/src/index.ts` (lines 90-104) **disables** critical type safety rules for test files:
 
 ```typescript
@@ -191,12 +198,14 @@ export const testRules = {
 };
 ```
 
-**Impact**: 
+**Impact**:
+
 - 141 instances of `as unknown` in test files are not caught by linting
 - 75 instances of `: unknown[]` inline annotations are not caught
 - Tests can use type-unsafe patterns freely
 
 **Requirement**: After completing DI refactoring (Phase 10), re-enable these rules for test files:
+
 ```typescript
 '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
 '@typescript-eslint/no-restricted-types': ['error', { /* same as strict config */ }],
@@ -205,6 +214,7 @@ export const testRules = {
 **Tracking**: Part of Phase 10 (DI refactoring), cannot be done until tests use proper DI instead of type assertions for mocks
 
 ### Generated Files Using Banned Types
+
 **Issue**: 26+ generated MCP tool files in `packages/sdks/oak-curriculum-sdk/src/types/generated/` contain `: unknown[]` inline type annotations.
 
 **Source of Truth**: Generator templates in `type-gen/typegen/mcp-tools/`

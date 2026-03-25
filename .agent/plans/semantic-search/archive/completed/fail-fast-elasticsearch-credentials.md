@@ -9,67 +9,67 @@ overview: >
 todos:
   - id: red-env-validation
     content: "RED: Write integration tests specifying that readEnv (HTTP) throws when ES credentials are missing, and loadRuntimeConfig (STDIO) throws when ES credentials are missing. Run tests — they MUST fail."
-    status: pending
+    status: done
   - id: red-http-factory
     content: "RED: Update search-retrieval-factory.integration.test.ts — delete the 'when credentials are missing' describe block entirely (5 tests). Change factory call signatures to use required env fields. Run tests — they MUST fail (type errors, factory still has old signature)."
-    status: pending
+    status: done
   - id: red-sdk-not-configured
     content: "RED: Delete 'returns error when searchRetrieval is not configured' tests from all three SDK tool integration tests (search-sdk, browse, explore). Change createDeps() to require SearchRetrievalService (no undefined). Run tests — they MUST fail (type errors, searchRetrieval still optional)."
-    status: pending
+    status: done
   - id: green-sdk-stub-search
     content: "GREEN: Create search-retrieval-stub.ts in the SDK with createStubSearchRetrieval(). Export from public/mcp-tools.ts. Uses ok() from @oaknational/result to return empty result sets."
-    status: pending
+    status: done
   - id: green-sdk-types
     content: "GREEN: Make searchRetrieval required in UniversalToolExecutorDependencies (universal-tool-shared.ts). Remove the ? and update TSDoc."
-    status: pending
+    status: done
   - id: green-sdk-execution
     content: "GREEN: Remove NOT_CONFIGURED_MESSAGE constant and the if (deps.searchRetrieval === undefined) guard from all three execution files (aggregated-search-sdk, aggregated-browse, aggregated-explore). These branches are now unreachable — delete them, trust the types."
-    status: pending
+    status: done
   - id: green-http-env
     content: "GREEN: In env.ts, change ElasticsearchEnvSchema.partial().shape to ElasticsearchEnvSchema.shape. ES credentials are now required at env validation time. Update TSDoc."
-    status: pending
+    status: done
   - id: green-http-factory
     content: "GREEN: In search-retrieval-factory.ts, make env parameter fields required. Change return type to SearchRetrievalService. Remove the if-missing branch entirely (unreachable after env validation). Remove the logging branch for not-configured."
-    status: pending
+    status: done
   - id: green-http-handlers
     content: "GREEN: In handlers.ts, change searchRetrieval from optional (?) to required in ToolHandlerDependencies, RegisterHandlersOptions, and buildToolHandlerDependencies parameter."
-    status: pending
+    status: done
   - id: green-http-stub-wiring
     content: "GREEN: In application.ts initializeCoreEndpoints, use createStubSearchRetrieval() in stub mode instead of creating a real ES client with dummy credentials."
-    status: pending
+    status: done
   - id: green-stdio-config
     content: "GREEN: In runtime-config.ts (STDIO), make ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY required in StdioEnv. Add fail-fast validation in loadRuntimeConfig that throws with helpful error when credentials are missing."
-    status: pending
+    status: done
   - id: green-stdio-wiring
     content: "GREEN: In wiring.ts (STDIO), simplify createSearchRetrieval (remove unreachable if-missing branch). Use createStubSearchRetrieval() in stub mode, real factory otherwise."
-    status: pending
+    status: done
   - id: green-stdio-tools
     content: "GREEN: In tools/index.ts (STDIO), change searchRetrieval from optional (?) to required in UniversalToolExecutors."
-    status: pending
+    status: done
   - id: green-test-helpers
     content: "GREEN: Add and export createFakeSearchRetrieval() from HTTP server test-helpers/fakes.ts (move from search-retrieval-factory.integration.test.ts)."
-    status: pending
+    status: done
   - id: green-e2e-http
     content: "GREEN: Add dummy ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY to create-stubbed-http-app.ts testEnv and createMockRuntimeConfig() in test-config.ts."
-    status: pending
+    status: done
   - id: green-e2e-stdio
     content: "GREEN: Add dummy ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY to all STDIO E2E test env blocks."
-    status: pending
+    status: done
   - id: green-smoke
     content: "GREEN: Add dummy ES credentials to smoke local-stub.ts env setup."
-    status: pending
+    status: done
   - id: green-tests-pass
     content: "GREEN: All tests pass — run pnpm test and pnpm test:e2e."
-    status: pending
+    status: done
   - id: refactor-tsdoc
     content: "REFACTOR: Remove 'When absent, search tools return not configured errors' from all TSDoc. Remove 'optional' language from server READMEs. Update ElasticsearchEnvSchema TSDoc in shared env package."
-    status: pending
+    status: done
   - id: refactor-docs
     content: "REFACTOR: Update session prompt, Phase 3a plan, and roadmap to reflect that searchRetrieval is now required."
-    status: pending
+    status: done
   - id: quality-gates
     content: "REFACTOR: Full quality gate chain (type-gen, build, type-check, lint:fix, format:root, markdownlint:root, test, test:e2e, test:ui, smoke:dev:stub). All must pass."
-    status: pending
+    status: done
 isProject: false
 ---
 

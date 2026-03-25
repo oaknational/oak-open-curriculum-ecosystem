@@ -4,13 +4,13 @@ overview: "Resolve immediate PR snagging items for the active semantic-search de
 todos:
   - id: phase-0-triage
     content: "Phase 0 (RED): capture failing checks and classify review comments into actionable tasks."
-    status: pending
+    status: done
   - id: phase-1-fixes
     content: "Phase 1 (GREEN): implement minimal fixes for failing checks and high-priority review findings."
-    status: pending
+    status: done
   - id: phase-2-hardening
     content: "Phase 2 (REFACTOR): rerun full gates, close comment threads, and document residual follow-ups."
-    status: pending
+    status: done
 ---
 
 # Short-Term PR Snagging

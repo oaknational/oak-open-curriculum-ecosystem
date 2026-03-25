@@ -56,8 +56,13 @@ enough for permanent documentation.
 - `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved.
-  Post-merge plan: decompose `sdk-codegen` into two workspaces
-  (see `.agent/plans/architecture-and-infrastructure/codegen/`)
+  **Decomposition**: strategic plan at
+  `.agent/plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`
+  (M1 prerequisite satisfied, awaiting promotion).
+  **Turbo overrides** (`#build`, `#test`, `#type-check`, `#lint`,
+  `#lint:fix`) are temporary — see turbo boundary fix plan at
+  `.agent/plans/semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md`.
+  B2 pure-function extractions done; B1 tests deferred to decomposition.
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks
@@ -144,14 +149,19 @@ enough for permanent documentation.
   highest leverage — per MCP spec, tools are model-controlled
   via `description`.
 
+## Build System (Domain-Specific)
+
+- Turbo `--concurrency=N` masks dependency bugs, does not
+  fix them — fix the dependency graph instead
+- Within-workspace build deps need turbo overrides;
+  across-workspace, `^build` handles them. The workspace
+  boundary IS the dependency declaration
+
 ## Architecture (Domain-Specific)
 
-- **Response augmentation is best-effort**: canonical URL
-  decoration must NEVER fail the API call. Wrap `augmentBody()`
-  in try-catch. Middleware factory requires `Logger` (DI);
-  `BaseApiClient` provides `createNoopLogger()`. Pure
-  augmentation functions throw or return errors; the
-  middleware boundary logs.
+- **Response augmentation is best-effort**: wrap
+  `augmentBody()` in try-catch so decoration never fails the
+  API call. Pure functions throw; middleware boundary logs.
 - When a directive review reveals significant work, update
   the plan BEFORE coding
 - When a pre-existing eslint override exists in a file you
@@ -184,12 +194,10 @@ enough for permanent documentation.
 | Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
 | Reviewer reports G1 failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output |
-| `--testPathPattern` fails in vitest v4 | Use file paths as positional args: `pnpm vitest run path/to/test.ts` |
 | Reviewer flags repo name mismatch | False positive — confirmed three times. Always verify against user's disposition |
 | Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
-| Commitlint rejects commit with uppercase acronym in subject | `subject-case` rule rejects e.g. `ADR-130`. Use lowercase: "complete blue/green lifecycle" not "ADR-130 Phases 3-8d" |
-| Commitlint rejects commit with long body line | `body-max-line-length` enforced. Keep body lines under 100 chars; prefer 2-line paragraphs |
+| Commitlint rejects commit | See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
 | Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |

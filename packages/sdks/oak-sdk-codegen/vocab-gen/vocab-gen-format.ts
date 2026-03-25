@@ -2,7 +2,7 @@
  * Formatting utilities for vocabulary mining pipeline output.
 
  */
-import type { PipelineResult } from './vocab-gen.js';
+import type { PipelineResult } from './vocab-gen-config.js';
 
 /**
  * Formats source data statistics.

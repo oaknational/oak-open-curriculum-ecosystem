@@ -22,7 +22,6 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_DAEMON: 'false'
 
     steps:
       - name: Generate release token

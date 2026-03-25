@@ -132,8 +132,8 @@ Primary files:
 1. Propagate evidence/status consistency across:
 
 - [.agent/prompts/semantic-search/semantic-search.prompt.md](.agent/prompts/semantic-search/semantic-search.prompt.md)
-- [.agent/plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md](.agent/plans/semantic-search/active/comprehensive-field-integrity-integration-tests.execution.plan.md)
-- `.agent/plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md`
+- [.agent/plans/semantic-search/archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md](.agent/plans/semantic-search/archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)
+- `.agent/plans/semantic-search/archive/completed/search-tool-prod-validation-findings-2026-03-15.md`
 
 ## Deterministic Validation Strategy
 

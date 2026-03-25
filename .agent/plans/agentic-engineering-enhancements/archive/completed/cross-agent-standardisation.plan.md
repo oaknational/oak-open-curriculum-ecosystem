@@ -8,20 +8,20 @@ todos:
   # Committed work (do now)
   - id: skill-frontmatter
     content: "Normalise SKILL.md frontmatter to use metadata: block for non-standard fields."
-    status: pending
+    status: cancelled
   - id: openai-yaml-cleanup
     content: "Delete untested openai.yaml stub; recreate validated adapter when Codex is actively used."
-    status: pending
+    status: cancelled
   # Conditional work (do when trigger fires)
   - id: command-portability
     content: "CONDITIONAL: Extract canonical instruction content into agent-agnostic .agent/commands/*.md templates. Trigger: when command sets grow further or a third platform is added."
-    status: pending
+    status: cancelled
   - id: workspace-context
     content: "CONDITIONAL: Add nested AGENTS.md files for high-complexity workspaces. Trigger: when onboarding external contributors or when agent interactions regularly require repeated context."
-    status: pending
+    status: cancelled
   - id: subagent-wrappers
     content: "CONDITIONAL: Evaluate creating thin sub-agent wrappers for Claude Code and GitHub/VS Code. Trigger: when Claude Code or GitHub Copilot becomes an active development platform."
-    status: pending
+    status: cancelled
 ---
 
 # Cross-Agent Standardisation

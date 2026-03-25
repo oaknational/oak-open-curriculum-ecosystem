@@ -22,16 +22,16 @@ todos:
     status: done
   - id: validate-staged-indexes
     content: "Validate staged indexes from stage output plus field-readback-audit --target-version (Task 2.2 evidence)."
-    status: pending
+    status: done
   - id: promote-and-verify
     content: "Promote versioned indexes, verify aliases, run search smoke tests."
     status: done
   - id: production-retest-f1-f2
-    content: "Production retest F1 (threadSlug) and F2 (category) with before/after evidence."
-    status: pending
+    content: "SUPERSEDED: moved to active/prod-search-assessment.execution.plan.md (2026-03-24)."
+    status: cancelled
   - id: close-findings-and-archive
-    content: "Close findings register, archive this plan, update all authority docs."
-    status: pending
+    content: "SUPERSEDED: moved to active/prod-search-assessment.execution.plan.md (2026-03-24)."
+    status: cancelled
   - id: post-p0-sequence-retrieval-architecture
     content: "SUPERSEDED: consolidated into pre-reingest-remediation.execution.plan.md (S1–S3). Must complete before Phase 2 re-ingest."
     status: cancelled
@@ -42,7 +42,7 @@ todos:
 
 # F2 Closure and P0 Ingestion
 
-**Status**: 🟡 IN PROGRESS (Phase 1 ✅ — Phase 2 stage + promote ✅ (v2026-03-24-091112, 15,910 docs) — Phase 3 production verification next; [pre-reingest remediation](../archive/completed/pre-reingest-remediation.execution.plan.md) ✅ COMPLETE 2026-03-23)
+**Status**: ✅ ARCHIVED — Phases 1–2 complete. Phase 3 (production verification) moved to [prod-search-assessment.execution.plan.md](../active/prod-search-assessment.execution.plan.md) (2026-03-24). Pre-reingest remediation ✅ COMPLETE 2026-03-23.
 **Scope**: Complete F2 code follow-ups, execute versioned re-ingest (P0 Phase 3),
 verify F1/F2 with production evidence, close the semantic search P0 lane.
 **Branch**: `feat/es_index_update`

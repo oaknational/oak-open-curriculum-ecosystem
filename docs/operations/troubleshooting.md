@@ -250,6 +250,10 @@ When migrating facade imports, check for second-level barrels (e.g. `oak.ts` re-
 
 When `tsconfig.build.json` narrows `include` from a wide base, add explicit `rootDir: "./src"` for export map resolution.
 
+### Vitest v4 Test Filtering
+
+`--testPathPattern` fails in vitest v4. Use file paths as positional args instead: `pnpm vitest run path/to/test.ts`.
+
 ## TSDoc Issues
 
 - `{@link ./path}` is NOT valid TSDoc — use backtick references for module paths.

@@ -12,115 +12,64 @@ This is a working handover document. Keep it concise and operational.
 
 ---
 
-## Absolute priority
+## Current State (2026-03-24)
 
-**Fix the bugs.** That is the only top priority. For each defect you work in a tight
-loop: **identify** it from evidence (findings register, failing behaviour, code
-trace), **write automated tests** that fail until the bug is fixed, **apply the
-smallest fix** that makes those tests pass, and **stop only when the tests are
-green** — that is how you know you are finished. Documentation updates, plan
-hygiene, and operator re-ingest are **secondary**; they support or **prove**
-fixes (for example when the bug is missing index data), but they do not replace
-test-backed correctness in code and transforms.
+**Branch**: `feat/es_index_update`
+
+All code fixes and re-ingest are complete. The branch is ready for PR/merge.
+One action remains: verify production search after deployment.
+
+### What's done
+
+- **F1** (`threadSlug`): stale index, not a code defect. Re-ingest
+  (v2026-03-24-091112) resolved.
+- **F2** (`category`): code fix complete (commit `2c6e6b51`). Re-ingest
+  populates corrected data.
+- **Pre-reingest remediation**: all 5 issues (S1–S5) resolved, CLI-SDK
+  boundary enforcement complete (2026-03-23).
+- **Re-ingest**: v2026-03-24-091112 staged + promoted, 15,910 parent docs
+  across 5 index types.
+- **Turbo pipeline fixes**: phantom tasks eliminated, cache keys fixed,
+  B2 pure-function extractions done. B1 deferred to workspace decomposition.
+- **Quality gates**: all green (997 tests, 0 lint errors).
+
+### What's next
+
+**After PR merge and Vercel production deployment:**
+
+Assess production search via the prod MCP server
+(`project-0-oak-mcp-ecosystem-oak-prod`). Active plan:
+
+[prod-search-assessment.execution.plan.md](../../plans/semantic-search/active/prod-search-assessment.execution.plan.md)
 
 ---
 
 ## Active Authority
 
-- **Active P0 lane (production verification next)**:
-  [f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
-- Active parallel plan (starts after F2 promote):
-  [bulk-canonical-merge-api-parity-and-validation.execution.plan.md](../../plans/semantic-search/active/bulk-canonical-merge-api-parity-and-validation.execution.plan.md)
-- Active architecture extraction plan (not on the P0 critical path):
-  [search-ingestion-sdk-extraction.execution.plan.md](../../plans/semantic-search/active/search-ingestion-sdk-extraction.execution.plan.md)
-- Active findings register:
-  [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/active/search-tool-prod-validation-findings-2026-03-15.md)
-- Critical path and queue:
-  [current/README.md](../../plans/semantic-search/current/README.md)
+- **Single active plan**:
+  [prod-search-assessment.execution.plan.md](../../plans/semantic-search/active/prod-search-assessment.execution.plan.md)
+- Findings register (archived, referenced by active plan):
+  [search-tool-prod-validation-findings-2026-03-15.md](../../plans/semantic-search/archive/completed/search-tool-prod-validation-findings-2026-03-15.md)
 - Permanent contracts:
   [ADR-134](../../../docs/architecture/architectural-decisions/134-search-sdk-capability-surface-boundary.md) (CLI-SDK boundary),
   [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md) (sequence semantic),
   [ADR-140](../../../docs/architecture/architectural-decisions/140-search-ingestion-sdk-boundary.md) (ingestion SDK boundary)
-- Completed remediation (archived):
-  [pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md)
-- Session bootstrap and lane-order authority: this prompt
+- Session bootstrap: this prompt
 
 ---
 
-## Where We Are (2026-03-24)
+## Key Facts
 
-**Branch**: `feat/es_index_update`
-
-### F2/P0 lane (Phase 2 ✅ — production verification next)
-
-**Phase 1** (code follow-ups): ✅ COMPLETE — readiness gate closed, code fixes
-landed, and the latest lane-alignment commit is `3630405b`. Core commits:
-`dfb48b90`, `3ec1dbc6`, `3630405b`.
-**Phase 2** (re-ingest): ✅ COMPLETE — `admin stage` succeeded
-(v2026-03-24-091112), `admin promote` completed, aliases verified, 15,910
-parent docs across 5 index types. Two lifecycle incidents resolved during
-this phase (see [index-lifecycle-management plan](../../plans/semantic-search/archive/completed/index-lifecycle-management.execution.plan.md)).
-**Phase 3** (production verification): **NEXT** — retest F1/F2 findings.
-
-### Pre-reingest remediation + CLI-SDK boundary enforcement (COMPLETE)
-
-All five code/doc issues (S1–S5) resolved. Architecture reviewers then
-identified CLI-SDK boundary confusion (7 duplicated capability families with
-fuzziness drift). Full boundary separation, clarification, and enforcement
-completed 2026-03-23:
-
-- All retriever shapes delegated to SDK across all 4 scopes
-- ~500 lines of duplicated CLI code deleted (12 files removed)
-- Experiment/ablation builders migrated to SDK building blocks
-- ADR-134 amended with capability family matrix
-- "Layer Role Topology" principle added to Practice Core
-- Quality gates green (997 tests, 0 lint errors)
-
-### What the next session needs to do
-
-Re-ingest is complete (v2026-03-24-091112 promoted). The next session is
-verification and closure:
-
-1. **Production verification (Phase 3):** Retest F1 (threadSlug) and F2
-   (category) with the queries in the findings register. Both must pass.
-2. **Close out:** Update findings register dispositions. Archive F2 plan.
-   Consolidate docs.
-3. **Lifecycle reliability:** Commit the uncommitted lease resilience fixes
-   in `lifecycle-lease.ts` and `lifecycle-lease.integration.test.ts`
-   (Phase 6a of [index-lifecycle-management plan](../../plans/semantic-search/archive/completed/index-lifecycle-management.execution.plan.md)).
-4. **Next architecture lane after P0 closure:** Start Phase 0 of
-   [search-ingestion-sdk-extraction.execution.plan.md](../../plans/semantic-search/active/search-ingestion-sdk-extraction.execution.plan.md),
-   using [ADR-140](../../../docs/architecture/architectural-decisions/140-search-ingestion-sdk-boundary.md)
-   as the permanent contract.
-
-### Key facts for context
-
-- **F1** (`threadSlug`): Stale index, not a code defect. Re-ingest resolves.
-- **F2** (`category`): Code fix complete (commit `2c6e6b51`). Re-ingest
-  populates the corrected data.
-- **SDK `total` in search responses**: For lessons/sequences, `total` reflects
-  the returned page length (post scoring filters), not Elasticsearch
-  `hits.total` — do not use it alone to compare “how many matched in the index”
-  in Phase 3 prod checks; see findings register *Response `total` caveat*.
-- **`validate-aliases` vs freshness**: Green alias health means each read alias
-  exists and points at a physical index — **not** that live docs match the
-  latest bulk. Use `admin count` only for live alias counts; for staged
-  validation use the `admin stage` output plus
-  `field-readback-audit --target-version <version>`. Compare bulk vintage to
-  alias `targetIndex` when diagnosing live gaps. Permanent reference:
-  [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md)
-  (section *Operational CLI: `validate-aliases` vs `admin count`*).
-- **Sequence retrieval**: Code now uses SDK-owned 2-way RRF (BM25 + ELSER
-  semantic on `sequence_semantic`). `sequence_semantic` is populated during
-  bulk ingestion via `generateSequenceSemanticSummary`. Live data will reflect
-  this after the next re-ingest (Phase 2 of F2 closure).
-  [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
+- **`total` in search responses**: reflects page cardinality (result array
+  length), not ES `hits.total`.
+- **`validate-aliases` vs freshness**: green alias health means alias
+  topology is correct, not that data matches the latest bulk. See
+  [`apps/oak-search-cli/docs/INDEXING.md`](../../../apps/oak-search-cli/docs/INDEXING.md).
+- **Sequence retrieval**: SDK-owned 2-way RRF (BM25 + ELSER on
+  `sequence_semantic`). [ADR-139](../../../docs/architecture/architectural-decisions/139-sequence-semantic-contract-and-ownership.md)
   is the permanent contract.
-- **CLI entry point**: `apps/oak-search-cli/bin/oaksearch.ts` (not `src/bin/`).
-- **Bulk data**: 33 files in `apps/oak-search-cli/bulk-downloads/` ready.
-- **Upstream API bug**: PE lessons without video trigger 500 on transcript
-  endpoint. Documented at `.agent/plans/external/ooc-issues/upstream-500-errors.md`.
-  Oak API team concern, not ours.
+- **CLI entry point**: `apps/oak-search-cli/bin/oaksearch.ts`.
+- **MCP server**: `project-0-oak-mcp-ecosystem-oak-prod`
 
 ---
 
@@ -135,26 +84,14 @@ verification and closure:
 
 ### Step 2: Execute the active plan
 
-**Immediate**: Resume the F2/P0 lane — production verification (Phase 3).
-Re-ingest is complete (v2026-03-24-091112). Active plan:
-
-[f2-closure-and-p0-ingestion.execution.plan.md](../../plans/semantic-search/active/f2-closure-and-p0-ingestion.execution.plan.md)
-
-The pre-reingest remediation is ✅ COMPLETE (all 4 phases done, 2026-03-23).
-Archived reference:
-[pre-reingest-remediation.execution.plan.md](../../plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md)
+Resume the single active plan — production search assessment after PR merge.
 
 ### Step 3: Keep authority documents in sync
 
 When execution state changes materially, update:
 
-- This prompt (lane ordering and current focus)
+- This prompt (current state)
 - The active plan (task status and evidence)
-- The findings register (F1/F2 dispositions)
-- `current/README.md` (critical path status)
-- Reference plans when their work items complete via the remediation plan
-  ([search-contract-followup.plan.md](../../plans/semantic-search/current/search-contract-followup.plan.md),
-  [sequence-retrieval-architecture-followup.plan.md](../../plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md))
 
 ---
 

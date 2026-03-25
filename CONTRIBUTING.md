@@ -281,9 +281,11 @@ Include:
 
 - **British English** — Use British spelling, grammar, and date formats
   throughout documentation, comments, commit messages, and PR descriptions.
-- **Commit messages** — Commitlint enforces conventional commit `subject-case`:
-  the subject line must start with a lowercase type prefix (e.g.
-  `fix(scope): description`).
+- **Commit messages** — Commitlint enforces conventional commit format:
+  - `subject-case`: subject line must start with a lowercase type prefix
+    (e.g. `fix(scope): description`). Uppercase acronyms like `ADR-130`
+    are rejected — use descriptive lowercase instead.
+  - `body-max-line-length`: body lines must stay under 100 characters.
 
 For full TypeScript, ESM, testing, and error handling standards, see:
 

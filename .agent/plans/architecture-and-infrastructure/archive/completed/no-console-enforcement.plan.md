@@ -11,22 +11,22 @@ superseded_by: "../developer-experience/active/devx-strictness-convergence.plan.
 todos:
   - id: add-rule
     content: "Add `no-console: 'error'` to recommended config in oak-eslint"
-    status: pending
+    status: cancelled
   - id: triage-violations
     content: "Run lint, triage all violations into categories: replace-with-logger, legitimate-cli-output, build-script, smoke-test"
-    status: pending
+    status: cancelled
   - id: fix-sdk-violations
     content: "Fix violations in packages/sdks/ — replace console.* with UnifiedLogger"
-    status: pending
+    status: cancelled
   - id: fix-app-violations
     content: "Fix violations in apps/ — replace console.* with UnifiedLogger or add scoped overrides for legitimate CLI output"
-    status: pending
+    status: cancelled
   - id: fix-core-violations
     content: "Fix violations in packages/core/ and packages/libs/"
-    status: pending
+    status: cancelled
   - id: quality-gates
     content: "Run full quality gate chain — all must pass with no-console enforced"
-    status: pending
+    status: cancelled
 isProject: false
 ---
 

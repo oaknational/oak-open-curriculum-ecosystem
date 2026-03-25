@@ -76,8 +76,9 @@ todos:
       additional requirements beyond AS metadata, (d) token verification
       fails for Cursor-obtained tokens. Use MCP Inspector UI to compare
       behaviour. Check dev server logs for any new requests from Cursor
-      after the AS metadata fix.
-    status: pending
+      after the AS metadata fix. CANCELLED: external Cursor client behaviour,
+      not actionable in our code. Spec compliance proven by smoke tests.
+    status: cancelled
   - id: quality-gates
     content: >
       DONE: Full quality gate chain passes — type-gen, build,

@@ -1,7 +1,7 @@
 ---
 name: Search Tool Prod Validation Findings
 date: 2026-03-15
-status: active
+status: archived
 owner: ai-agent
 ---
 
@@ -20,22 +20,22 @@ This document captures end-to-end validation findings for the `search` MCP tool 
 The search infrastructure is mostly healthy across scopes and major filters.
 **Root causes are documented** for the two production filter findings (F1/F2),
 and **code fixes are complete** for F2; F1 is explained as **stale index data**
-for `thread_slugs`, not a retrieval defect. **Production verification** that
-filters behave as expected in live indexes is **still pending**: it requires the
-versioned re-ingest, promote, and Phase 3 retest captured in the active
-execution plan — until then, we do not have **closed** evidence for “all search
+for `thread_slugs`, not a retrieval defect. Re-ingest complete
+(v2026-03-24-091112, 15,910 docs). **Production verification** after PR merge
+and deployment is tracked in
+[prod-search-assessment.execution.plan.md](../active/prod-search-assessment.execution.plan.md) — until then, we do not have **closed** evidence for “all search
 filters verified in production”.
 
 See per-finding status lines and **Current execution state** below.
 
-### Current execution state (2026-03-21)
+### Execution state (2026-03-24)
 
-- Previous ingest (`v2026-03-15-134856`) predates pipeline fixes — stale data.
+- Re-ingest complete: v2026-03-24-091112 staged + promoted, 15,910 parent docs.
 - Phase 1 code follow-ups complete (2026-03-21): all fixes committed, all
   quality gates green, six specialist reviewer passes.
-- Phase 2 re-ingest operator runbook documented in execution plan (Task 2.1).
-- **Next**: operator runs `admin stage` to create new versioned indexes with
-  corrected data, then validate, promote, and retest F1/F2.
+- Phase 2 re-ingest complete (2026-03-24).
+- **Remaining**: production verification after PR merge — tracked in
+  [active plan](../active/prod-search-assessment.execution.plan.md).
 
 ### Code trace and regression tests (2026-03-21)
 
@@ -102,7 +102,7 @@ Validated scope and option coverage:
 ## F1 - `threadSlug` filter on `lessons` returns empty unexpectedly
 
 - Severity: high
-- Status: stale_index_confirmed_pending_reingest
+- Status: reingested_v2026-03-24-091112_prod_verification_pending_deployment
 - Area: `search` filter semantics (`lessons` scope)
 
 ### Reproduction
@@ -267,7 +267,7 @@ Observed with filter: `total = 0`.
 ## F2 - `category` filter on `sequences` appears non-functional
 
 - Severity: medium
-- Status: code_fix_complete_and_hardened_pending_reingest
+- Status: code_fix_complete_reingested_prod_verification_pending_deployment
 - Area: `search` filter semantics (`sequences` scope)
 
 ### Reproduction
@@ -415,12 +415,13 @@ text behaviour, positive controls) is follow-up scope.
 2. ~~For `F2`, prove remediated request path~~ — **DONE** (2026-03-21). Code
    fix hardened with DI consistency, Result type tightening, `unit_topics.keyword`
    sub-field for facet aggregation, five specialist reviewer passes complete.
-3. Re-run the production validation matrix for `F1` and `F2` **after re-ingest**,
-   appending before/after evidence and final disposition here.
-4. Keep this file linked from prompt + active plan closeout until `F1` and
-   `F2` are either closed with evidence or explicitly owner-triaged.
+3. Re-run the production validation matrix for `F1` and `F2` after PR merge
+   and deployment — tracked in
+   [prod-search-assessment.execution.plan.md](../active/prod-search-assessment.execution.plan.md).
+4. ~~Keep this file linked from prompt + active plan closeout~~ — archived;
+   active plan references this register.
 5. Do not close `F1` or `F2` on code-only evidence; closure requires production
-   retest evidence in this register or explicit owner triage rationale.
+   retest evidence or explicit owner triage rationale.
 
 ---
 

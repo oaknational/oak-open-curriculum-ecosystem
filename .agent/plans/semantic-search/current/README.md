@@ -6,33 +6,14 @@ When work starts, promote the selected plan into `../active/`.
 
 ## Critical Path to P0 Completion
 
-The following sequence must complete in order for the semantic search
-functionality to be fully validated and the unified versioned ingestion
-lane closed out:
-
 ```text
 1. Error response classification          ✅ COMPLETE (2026-03-20)
-   Plan: error-response-classification.plan.md
-   Scope: Generator fix (InvokeResult), error classification at SDK layer
-   Completed: Upstream experimentation, generator changes, TDD classification
-
 2. Pre-reingest remediation                ✅ COMPLETE (2026-03-23)
-   Plan: ../archive/completed/pre-reingest-remediation.execution.plan.md
-   Scope: Fix S1–S5 + CLI-SDK boundary enforcement
-   All phases complete. Ready for commit.
-
-3. F2 closure + P0 ingestion              🟡 Phase 2 ✅ — production verification next (2026-03-24)
-   Plan: ../active/f2-closure-and-p0-ingestion.execution.plan.md
-   Phase 1: F2 follow-ups — ✅ COMPLETE (all gates green, readiness gate closed)
-   Phase 2: Re-ingest — ✅ COMPLETE (v2026-03-24-091112 staged + promoted, 15,910 docs)
-   Phase 3: Production verification (F1/F2 retest, closure) — NEXT
+3. F2 closure + P0 ingestion              ✅ Code + re-ingest COMPLETE (2026-03-24)
+   Archived: ../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md
+   Remaining: production verification after PR merge — see
+   ../active/prod-search-assessment.execution.plan.md
 ```
-
-The pre-reingest remediation plan consolidates work items from the two
-previously-queued follow-up plans (sequence retrieval architecture, contract
-tests) into an active plan that must complete before re-indexing. Architecture
-decisions are locked (ADR-139); the follow-up plans serve as reference
-documents for the remediation plan's execution recipe.
 
 ## Queue
 
@@ -61,4 +42,4 @@ documents for the remediation plan's execution recipe.
 | [kg-integration-quick-wins.plan.md](./kg-integration-quick-wins.plan.md) | Bounded Neo4j + Elasticsearch quick wins | 📋 Parent plan |
 
 Strategic source backlog: [future/README.md](../future/README.md)
-In-progress execution: [active/README.md](../active/README.md)
+Active plan: [active/README.md](../active/README.md)

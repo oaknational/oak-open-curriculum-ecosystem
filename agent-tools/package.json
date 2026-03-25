@@ -4,7 +4,6 @@
   "private": true,
   "description": "TypeScript tooling workspace for agent operational CLIs",
   "scripts": {
-    "sdk-codegen": "echo \"agent-tools: no sdk code generation\"",
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -12,5 +11,8 @@
     "type-check": "tsc -p tsconfig.json",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*"
   }
 }

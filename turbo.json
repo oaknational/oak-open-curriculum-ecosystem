@@ -7,7 +7,7 @@
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
     "sdk-codegen": {
-      "dependsOn": ["^sdk-codegen", "^build"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": ["**/generated/**"],
       "inputs": [
@@ -19,12 +19,8 @@
       ],
       "passThroughEnv": ["OAK_API_KEY"]
     },
-    "@oaknational/agent-tools#sdk-codegen": {
-      "cache": false,
-      "outputs": []
-    },
     "doc-gen": {
-      "dependsOn": ["^doc-gen", "^build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
@@ -39,7 +35,7 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": ["dist/**", ".tsup/**"],
       "inputs": [
@@ -51,8 +47,22 @@
         "src/**/*.ts",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
-      ],
-      "passThroughEnv": ["OAK_API_KEY"]
+      ]
+    },
+    "@oaknational/sdk-codegen#build": {
+      "dependsOn": ["^build", "sdk-codegen"]
+    },
+    "@oaknational/sdk-codegen#test": {
+      "dependsOn": ["^build", "sdk-codegen"]
+    },
+    "@oaknational/sdk-codegen#type-check": {
+      "dependsOn": ["^build", "sdk-codegen"]
+    },
+    "@oaknational/sdk-codegen#lint": {
+      "dependsOn": ["^build", "sdk-codegen"]
+    },
+    "@oaknational/sdk-codegen#lint:fix": {
+      "dependsOn": ["^build", "sdk-codegen"]
     },
     "clean": {
       "cache": false
@@ -63,7 +73,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build", "build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -80,7 +90,7 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^build", "build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -97,7 +107,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -112,7 +122,7 @@
       ]
     },
     "mutate": {
-      "dependsOn": ["^build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -134,7 +144,7 @@
       "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:ui": {
-      "dependsOn": ["^build", "build", "sdk-codegen"],
+      "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
       "inputs": [
@@ -147,7 +157,7 @@
       ]
     },
     "type-check": {
-      "dependsOn": ["^build", "sdk-codegen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -164,7 +174,7 @@
       ]
     },
     "smoke:dev:stub": {
-      "dependsOn": ["^smoke:dev:stub", "^build", "test:e2e"],
+      "dependsOn": ["build", "test:e2e"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -175,7 +185,7 @@
       "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
-      "dependsOn": ["^smoke:dev:live", "^build", "build"],
+      "dependsOn": ["build"],
       "cache": false,
       "outputs": [],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -186,7 +196,7 @@
       ]
     },
     "smoke:dev:live:auth": {
-      "dependsOn": ["^smoke:dev:live:auth", "^build", "build"],
+      "dependsOn": ["build"],
       "cache": false,
       "outputs": [],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -197,7 +207,7 @@
       ]
     },
     "smoke:remote": {
-      "dependsOn": ["^smoke:remote", "^build", "build"],
+      "dependsOn": ["build"],
       "cache": false,
       "outputs": [],
       "inputs": [
