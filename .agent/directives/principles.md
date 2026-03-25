@@ -128,7 +128,7 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it
-- **No process spawning in in-process tests** - Unit and integration tests MUST NOT spawn child processes, create workers, or instantiate tools that internally spawn processes. Use the right tool: ESLint for boundary enforcement, Playwright for browser testing, vitest for runtime logic.
+- **No process spawning in in-process tests** - Test code MUST NOT spawn child processes, create test-authored workers, or instantiate tools that internally spawn processes (e.g. programmatic ESLint with TypeScript project service). Use the right tool: ESLint for boundary enforcement, Playwright for browser testing, vitest for runtime logic.
 
 ### Developer Experience
 
