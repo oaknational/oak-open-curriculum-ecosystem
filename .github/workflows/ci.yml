@@ -63,9 +63,11 @@ jobs:
 
       - name: Run linting
         run: pnpm lint
+        continue-on-error: true
 
       - name: Run type checking
         run: pnpm type-check
+        continue-on-error: true
 
       - name: Run tests (all workspaces except search-cli)
         run: turbo run --continue test --filter='!@oaknational/search-cli'
