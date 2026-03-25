@@ -40,10 +40,10 @@ For full milestone definitions: [high-level-plan.md](../high-level-plan.md).
 
 ## Current State (Compact)
 
-- Active plan:
-  - [prod-search-assessment.execution.plan.md](active/prod-search-assessment.execution.plan.md)
-  - F2 closure (archived): [f2-closure-and-p0-ingestion.execution.plan.md](archive/completed/f2-closure-and-p0-ingestion.execution.plan.md)
-  - Findings register (archived): [search-tool-prod-validation-findings-2026-03-15.md](archive/completed/search-tool-prod-validation-findings-2026-03-15.md)
+- No active plans. All archived:
+  - [prod-search-assessment.execution.plan.md](archive/completed/prod-search-assessment.execution.plan.md) — verified in production (2026-03-25)
+  - [f2-closure-and-p0-ingestion.execution.plan.md](archive/completed/f2-closure-and-p0-ingestion.execution.plan.md) — code + re-ingest complete (2026-03-24)
+  - [search-tool-prod-validation-findings-2026-03-15.md](archive/completed/search-tool-prod-validation-findings-2026-03-15.md) — findings register (closed 2026-03-25)
 - Completed authorities archived:
   - [semantic-search-recovery-and-guardrails.execution.plan.md](archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
   - [semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)

@@ -32,7 +32,7 @@ describe('appendToLogFile', () => {
       throw writeError;
     });
 
-    expect(() => appendToLogFile('/tmp/logs/app.log', 'hello', deps)).toThrowError(
+    expect(() => appendToLogFile('/tmp/logs/app.log', 'hello', deps)).toThrow(
       expect.objectContaining({
         message: 'Failed to write to log file',
         cause: writeError,

@@ -43,7 +43,7 @@ describe('measureAuthSetupStep', () => {
       measureAuthSetupStep(logger, 'registerPublicOAuthMetadata', () => {
         throw new Error('boom');
       }),
-    ).toThrowError(new Error('boom'));
+    ).toThrow(new Error('boom'));
 
     const errorEntry = entries.find(
       (entry) =>

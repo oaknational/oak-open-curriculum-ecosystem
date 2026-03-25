@@ -1,3 +1,22 @@
+## Session 2026-03-25 (cont.) — Prod search assessment complete
+
+### Production MCP server verified
+
+- **Deployment**: `dpl_EqsgwygzHhZjGbNwQXVBA4JMDEva` on Vercel,
+  commit `0ecbb901` (merge of PR #68), state READY.
+- **F1 (threadSlug)**: PASS — 10 lessons returned for
+  `fraction`+`number-fractions`, all with correct thread_slugs.
+- **F2 (category) negative**: PASS — `nonexistentzzz` returns
+  `total: 0`, empty array. Filter correctly active.
+- **F2 (category) positive**: PASS — `Biology` returns 2 sequences
+  (Primary + Secondary) with matching category_titles.
+- **Spot-checks**: all 5 passed (lessons with highlight, units,
+  threads queryless, sequences with phaseSlug, suggest with subject).
+- **All CI checks green**: test (5m57s), CodeQL, Bugbot, Vercel.
+- **Release workflow**: completed successfully.
+
+---
+
 ## Session 2026-03-25 (cont.) — Canonical vitest config enforcement
 
 ### Vitest config adulteration — root cause and fix

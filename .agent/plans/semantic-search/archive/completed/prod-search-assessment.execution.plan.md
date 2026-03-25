@@ -3,7 +3,7 @@ name: "Production Search Assessment"
 overview: >
   Verify F1/F2 filter fixes and overall search quality in production
   via the prod MCP server after the current PR is merged and deployed.
-status: "Nearly unblocked — CI lint/type-check/build pass, agent-tools test timeout remains"
+status: "done"
 branch: "feat/es_index_update"
 todos:
   - id: ci-hang-diagnosis
@@ -14,19 +14,18 @@ todos:
     status: done
   - id: agent-tools-timeout
     content: "Investigate agent-tools test timeout in CI (4 tests timing out at 5000ms)."
-    status: pending
+    status: done
   - id: prod-assessment
     content: "Assess production search via the prod MCP server (project-0-oak-mcp-ecosystem-oak-prod) after PR merge and deployment."
-    status: pending
+    status: done
 ---
 
 # Production Search Assessment
 
 ## Status
 
-**Nearly unblocked** — CI build, lint, and type-check all pass. One
-remaining failure: `@oaknational/agent-tools#test` has 4 tests timing
-out at 5000ms. This is unrelated to the search work.
+**Done** — All CI checks pass, PR merged, production deployed, search
+assessment complete. All findings verified resolved.
 
 ### CI history (2026-03-25)
 

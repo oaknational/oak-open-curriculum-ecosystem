@@ -88,8 +88,8 @@
     "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "^1.2.0",
-    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@modelcontextprotocol/ext-apps": "^1.3.1",
+    "@modelcontextprotocol/sdk": "^1.28.0",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.17.0",
@@ -98,16 +98,16 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/logger": "workspace:^",
-    "@oaknational/result": "workspace:*",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
-    "@types/node": "^25.3.5",
+    "@oaknational/result": "workspace:*",
+    "@types/node": "^25.5.0",
     "dotenv": "^17.3.1",
     "openapi-typescript": "^7.13.0",
     "openapi3-ts": "^4.5.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "typescript": "^5",
+    "vitest": "^4.1.1"
   },
   "repository": {
     "type": "git",

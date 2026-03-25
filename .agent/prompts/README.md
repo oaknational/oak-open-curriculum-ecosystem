@@ -11,7 +11,7 @@ when the session needs a focused operational brief.
 |---|---|---|---|
 | [GO.md](GO.md) | workflow | Complementary execution cadence for plan-driven work: structure TODOs, interleave review/grounding, and keep reviewer checkpoints frequent | Current plan collection `README.md` plus its `current/README.md` or `active/README.md` |
 | [gt-review.md](gt-review.md) | handover | Ground-truth evaluation session prompt for exhaustive review against both MCP tools and bulk data | [ground-truth-review-checklist.md](../plans/semantic-search/archive/completed/ground-truth-review-checklist.md), [ground-truth-session-template.md](../plans/semantic-search/templates/ground-truth-session-template.md) |
-| [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — single active plan: prod search assessment after PR merge | [prod-search-assessment.execution.plan.md](../plans/semantic-search/active/prod-search-assessment.execution.plan.md) |
+| [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
 
 ## Retained Completed Prompts

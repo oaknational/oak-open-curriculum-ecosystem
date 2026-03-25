@@ -11,8 +11,8 @@ When work starts, promote the selected plan into `../active/`.
 2. Pre-reingest remediation                ✅ COMPLETE (2026-03-23)
 3. F2 closure + P0 ingestion              ✅ Code + re-ingest COMPLETE (2026-03-24)
    Archived: ../archive/completed/f2-closure-and-p0-ingestion.execution.plan.md
-   Remaining: production verification after PR merge — see
-   ../active/prod-search-assessment.execution.plan.md
+   Production verified 2026-03-25. Plan archived:
+   ../archive/completed/prod-search-assessment.execution.plan.md
 ```
 
 ## Queue

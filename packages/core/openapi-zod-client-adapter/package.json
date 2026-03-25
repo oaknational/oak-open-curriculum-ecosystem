@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "openapi-zod-client": "^1.18.3",
-    "zod": "^3.25.76"
+    "zod": "3.25.76"
   },
   "peerDependencies": {
     "openapi3-ts": "^4.5.0"
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "openapi3-ts": "^4.5.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5"
   },
   "engines": {
     "node": "24.x"

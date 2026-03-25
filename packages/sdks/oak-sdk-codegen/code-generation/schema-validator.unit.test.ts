@@ -16,7 +16,7 @@ describe('validateOpenApiDocument', () => {
       paths: {},
     };
 
-    expect(() => validateOpenApiDocument(schemaWithoutVersion)).toThrowError(TypeError);
+    expect(() => validateOpenApiDocument(schemaWithoutVersion)).toThrow(TypeError);
   });
 
   it('rejects input without info metadata', () => {
@@ -25,7 +25,7 @@ describe('validateOpenApiDocument', () => {
       paths: {},
     };
 
-    expect(() => validateOpenApiDocument(schemaWithoutInfo)).toThrowError(TypeError);
+    expect(() => validateOpenApiDocument(schemaWithoutInfo)).toThrow(TypeError);
   });
 
   it('rejects schemas whose paths include invalid keys', () => {
@@ -37,7 +37,7 @@ describe('validateOpenApiDocument', () => {
       },
     };
 
-    expect(() => validateOpenApiDocument(schemaWithInvalidPathKey)).toThrowError(TypeError);
+    expect(() => validateOpenApiDocument(schemaWithInvalidPathKey)).toThrow(TypeError);
   });
 
   it('rejects schemas with invalid operation structures', () => {
@@ -53,7 +53,7 @@ describe('validateOpenApiDocument', () => {
       },
     };
 
-    expect(() => validateOpenApiDocument(schemaWithInvalidOperation)).toThrowError(TypeError);
+    expect(() => validateOpenApiDocument(schemaWithInvalidOperation)).toThrow(TypeError);
   });
 
   it('rejects schemas with malformed path parameters', () => {
@@ -77,6 +77,6 @@ describe('validateOpenApiDocument', () => {
       },
     };
 
-    expect(() => validateOpenApiDocument(schemaWithInvalidParameter)).toThrowError(TypeError);
+    expect(() => validateOpenApiDocument(schemaWithInvalidParameter)).toThrow(TypeError);
   });
 });

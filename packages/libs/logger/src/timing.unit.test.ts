@@ -168,6 +168,6 @@ describe('createPhasedTimer', () => {
 
     expect(() => {
       phase.end();
-    }).toThrowError(new Error('Phase "setup" has already ended'));
+    }).toThrow(new Error('Phase "setup" has already ended'));
   });
 });
