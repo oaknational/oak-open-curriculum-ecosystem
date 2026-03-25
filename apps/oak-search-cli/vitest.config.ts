@@ -17,11 +17,6 @@ export default defineConfig({
     // See: test-isolation-architecture-fix.md
     isolate: true,
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        maxForks: process.env['CI'] ? 2 : undefined,
-      },
-    },
     exclude: [
       '**/*.e2e.test.ts',
       'node_modules',
@@ -30,6 +25,10 @@ export default defineConfig({
       // Skipped as this workspace is being extracted into SDK+CLI.
       // See: .agent/plans/semantic-search/active/search-sdk-cli.plan.md
       'src/lib/indexing/ingest-harness.unit.test.ts',
+      // ESLint boundary rules are enforced by `pnpm lint` via eslint.config.ts.
+      // Running ESLint programmatically inside vitest creates TypeScript project
+      // service handles that prevent worker exit in CI (vitest #4471).
+      'eslint-boundary.integration.test.ts',
     ],
     coverage: {
       provider: 'v8',
