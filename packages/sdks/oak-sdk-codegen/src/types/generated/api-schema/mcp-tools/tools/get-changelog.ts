@@ -114,11 +114,7 @@ export const getChangelog = {
     title: "Get Changelog",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Changelog…",
-    'openai/toolInvocation/invoked': "Get Changelog loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'noauth' }],
   },
   validateOutput: (data: unknown) => {

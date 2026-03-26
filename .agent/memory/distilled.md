@@ -131,7 +131,7 @@ enough for permanent documentation.
 
 ## MCP Apps (Domain-Specific)
 
-- `@modelcontextprotocol/ext-apps` `^1.2.0` with server helpers
+- `@modelcontextprotocol/ext-apps` `^1.3.1` with server helpers
   from `@modelcontextprotocol/ext-apps/server` is the canonical
   migration vehicle for C4/C5/C6. See
   `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`

@@ -4,7 +4,7 @@
  * Tests the complete HTML generation pipeline:
  * 1. Widget HTML generation (aggregated-tool-widget.ts)
  * 2. Script escaping (widget-script-escaping.ts)
- * 3. Emulation wrapper (chatgpt-emulation-wrapper.ts)
+ * 3. Embedded widget script/runtime
  *
  */
 

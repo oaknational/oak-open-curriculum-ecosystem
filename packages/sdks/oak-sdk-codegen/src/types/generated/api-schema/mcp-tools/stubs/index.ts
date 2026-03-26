@@ -18,7 +18,7 @@ function isStructuredContent(value: unknown): value is StructuredContent {
  * Creates a stub tool executor that returns pre-defined responses.
  *
  * Returns both `content` (JSON text for MCP clients/model) and `structuredContent`
- * (object for OpenAI Apps SDK widgets to receive via `window.openai.toolOutput`).
+ * (object for MCP Apps-compliant hosts to deliver to widgets as structured content).
  */
 export function createStubToolExecutor(): (name: string) => Promise<CallToolResult> {
   return (name: string) => {

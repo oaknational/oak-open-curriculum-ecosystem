@@ -127,11 +127,7 @@ export const getUnitsSummary = {
     title: "Get Units Summary",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Units Summary…",
-    'openai/toolInvocation/invoked': "Get Units Summary loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

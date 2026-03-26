@@ -42,7 +42,7 @@ C7, C8, C9 can run independently but must complete before Domain D.
 
 ## SDK (already installed)
 
-Installable package: `@modelcontextprotocol/ext-apps` `^1.2.0`
+Installable package: `@modelcontextprotocol/ext-apps` `^1.3.1`
 
 Server helpers imported from `@modelcontextprotocol/ext-apps/server` are the
 migration vehicle for C4/C5/C6:

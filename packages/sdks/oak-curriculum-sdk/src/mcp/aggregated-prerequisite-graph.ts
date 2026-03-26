@@ -76,11 +76,7 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
   },
 
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Loading prerequisite graph…',
-    'openai/toolInvocation/invoked': 'Prerequisite graph loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

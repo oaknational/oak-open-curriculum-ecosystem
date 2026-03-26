@@ -4,6 +4,7 @@ name: type-reviewer
 model: default
 description: TypeScript type system specialist for complex type challenges and type safety. Use proactively when type errors appear unsolvable, generics become complex, assertions seem necessary, external data requires validation, or type narrowing is non-trivial. Invoke immediately when facing compilation-time type embedding decisions.
 readonly: true
+is_background: true
 ---
 
 # Type Reviewer

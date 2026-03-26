@@ -27,7 +27,7 @@ import { extractZodShape } from './zod-utils.js';
  * conversion. Aggregated tools don't have this (they use JSON Schema directly).
  *
  * @returns Array of tool entries with name, description, schema, security,
- *          annotations, and OpenAI Apps SDK metadata
+ *          annotations, and MCP Apps standard metadata
  *
  * @example
  * ```typescript

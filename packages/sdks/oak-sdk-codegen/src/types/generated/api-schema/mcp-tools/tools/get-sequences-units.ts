@@ -138,11 +138,7 @@ export const getSequencesUnits = {
     title: "Get Sequences Units",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Sequences Units…",
-    'openai/toolInvocation/invoked': "Get Sequences Units loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

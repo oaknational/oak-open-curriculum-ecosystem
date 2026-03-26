@@ -60,7 +60,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-043: Codegen in Build and CI](043-codegen-in-build-and-ci.md)
 - [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
 - [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
-- [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md)
+- [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
 - [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md)
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
 - [ADR-049: SDK-Generated Deterministic Fixtures](049-sdk-generated-fixtures.md)
@@ -152,6 +152,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-138: Shared Search Field Contract Surface](138-shared-search-field-contract-surface.md)
 - [ADR-139: Sequence Semantic Contract and Ownership](139-sequence-semantic-contract-and-ownership.md)
 - [ADR-140: Search Ingestion SDK Boundary](140-search-ingestion-sdk-boundary.md)
+- [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 
 ## Key Architectural Decisions
 
@@ -159,6 +160,7 @@ For understanding our API integration approach:
 
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
+- **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms

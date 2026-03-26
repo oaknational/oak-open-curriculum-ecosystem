@@ -127,11 +127,7 @@ export const getSubjectsKeyStages = {
     title: "Get Subjects Key Stages",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Subjects Key Stages…",
-    'openai/toolInvocation/invoked': "Get Subjects Key Stages loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

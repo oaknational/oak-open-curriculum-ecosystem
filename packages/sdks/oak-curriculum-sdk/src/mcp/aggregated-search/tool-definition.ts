@@ -79,11 +79,7 @@ CROSS-TOOL WORKFLOWS:
     title: 'Search Curriculum',
   },
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Searching curriculum…',
-    'openai/toolInvocation/invoked': 'Search complete',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

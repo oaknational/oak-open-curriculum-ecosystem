@@ -72,11 +72,7 @@ Complements get-curriculum-model (which includes the schema-level property graph
   },
 
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Loading thread progressions…',
-    'openai/toolInvocation/invoked': 'Thread progressions loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

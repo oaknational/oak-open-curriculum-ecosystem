@@ -35,7 +35,7 @@ export function resolveAllowedHosts(
  * CORS is unconditionally permissive — all origins are allowed. This is the
  * correct posture for an OAuth-protected MCP server: security is enforced by
  * Bearer token authentication, not by origin restrictions. Browser-based MCP
- * clients (e.g. ChatGPT web) and future MCP Apps need cross-origin access.
+ * clients and MCP Apps hosts need cross-origin access.
  *
  * @param config - Runtime configuration with env vars and Vercel hostnames
  * @returns Security configuration with allowed hosts and transport mode

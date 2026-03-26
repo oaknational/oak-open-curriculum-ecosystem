@@ -63,11 +63,7 @@ NEXT STEPS AFTER EXPLORE:
     title: 'Explore Topic',
   },
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Exploring topic…',
-    'openai/toolInvocation/invoked': 'Exploration complete',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

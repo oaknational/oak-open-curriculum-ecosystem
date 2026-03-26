@@ -24,9 +24,9 @@ todos:
 
 # Replace OpenAI App with MCP App Infrastructure
 
-**Last Updated**: 2026-03-07
-**Status**: 🟢 ACTIVE
-**Scope**: Documentation-only activation of the MCP Apps migration series. No product-code changes are made under this plan.
+**Last Updated**: 2026-03-25
+**Status**: ARCHIVED — Superseded by [mcp-app-extension-migration.plan.md](../../active/mcp-app-extension-migration.plan.md) on 2026-03-25. This plan achieved its documentation-only goals (Phases 0, 1, 2, 4). Phase 3 (Domain C split) was superseded by the 4 work streams (WS1–WS4) in the new plan, which provide a cleaner deliverable-boundary decomposition.
+**Original Scope**: Documentation-only activation of the MCP Apps migration series. No product-code changes were made under this plan.
 
 ---
 

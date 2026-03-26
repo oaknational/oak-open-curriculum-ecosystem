@@ -88,7 +88,7 @@ When the task concerns the OpenAI App to MCP Apps migration, also read:
 | Document | Purpose |
 |----------|---------|
 | `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` | Migration sequencing, Domain C ordering, and non-goals |
-| `.agent/plans/sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md` | Current execution entry point and reviewer/skill chain |
+| `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` | Primary session-anchor plan for MCP Apps migration (WS1–WS4) |
 | `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` | MCP Apps standards evidence and host compatibility findings |
 | `.agent/skills/mcp-migrate-oai/SKILL.md` | Primary Oak migration workflow |
 | `.agent/skills/mcp-create-app/SKILL.md` | Post-migration additive app creation path |
@@ -102,6 +102,19 @@ When the task concerns the OpenAI App to MCP Apps migration, also read:
 **The First Question**: Always ask — could the MCP integration be simpler without violating the spec?
 
 **Review stance**: Assess against the best possible MCP practice, not against what we happen to have built. If our implementation works but could be better aligned with the spec or current best practice, say so.
+
+## Live-Spec-First Doctrine
+
+**MANDATORY**: Before issuing any finding, you MUST consult the live MCP documentation using WebFetch or WebSearch. Do not rely on cached knowledge of the MCP specification — the spec evolves and your training data may be outdated.
+
+**Doctrine hierarchy** (highest authority first):
+
+1. **Current MCP specification** — fetched live from modelcontextprotocol.io
+2. **Official MCP SDK source** — `@modelcontextprotocol/sdk`, `@modelcontextprotocol/ext-apps` on GitHub
+3. **Repository ADRs and research** — local architectural decisions and investigation findings
+4. **Existing implementation** — evidence of what was built, not authority on what should be built
+
+When the live spec contradicts your cached knowledge, the live spec wins. When the live spec contradicts a repo ADR, flag the discrepancy — the ADR may need updating or may document a deliberate deviation.
 
 ## When Invoked
 
@@ -166,7 +179,7 @@ This repo's decisions (ADR-035, ADR-050):
 
 ### MCP Apps Extension
 
-This repo currently declares `@modelcontextprotocol/ext-apps` `^1.2.0` in the
+This repo currently declares `@modelcontextprotocol/ext-apps` `^1.3.1` in the
 relevant workspaces:
 
 - `registerAppTool` — links tool to `_meta.ui.resourceUri`

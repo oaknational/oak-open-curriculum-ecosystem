@@ -148,17 +148,13 @@ function buildExports({
   lines.push('    openWorldHint: false,');
   lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
   lines.push('  },');
-  // OpenAI Apps SDK _meta fields for widget integration
+  // MCP Apps standard _meta fields (ADR-141).
+  // All generated curriculum tools share the Oak JSON viewer widget, so
+  // ui.resourceUri is emitted unconditionally. Non-widget tools (e.g.
+  // download-asset) are handwritten aggregated definitions and do not
+  // pass through this emitter.
   lines.push('  _meta: {');
-  lines.push(`    'openai/outputTemplate': ${JSON.stringify(BASE_WIDGET_URI)},`);
-  lines.push(
-    `    'openai/toolInvocation/invoking': ${JSON.stringify(`Fetching ${humanReadableTitle}…`)},`,
-  );
-  lines.push(
-    `    'openai/toolInvocation/invoked': ${JSON.stringify(`${humanReadableTitle} loaded`)},`,
-  );
-  lines.push(`    'openai/widgetAccessible': true,`);
-  lines.push(`    'openai/visibility': 'public',`);
+  lines.push(`    ui: { resourceUri: ${JSON.stringify(BASE_WIDGET_URI)} },`);
   lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
   lines.push('  },');
   lines.push('  validateOutput: (data: unknown) => {');

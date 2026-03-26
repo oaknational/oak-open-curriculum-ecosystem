@@ -31,8 +31,8 @@ export const GET_CURRICULUM_MODEL_INPUT_SCHEMA = {
 /**
  * Get-curriculum-model tool definition with full MCP metadata.
  *
- * Includes MCP annotations for behaviour hints and OpenAI Apps SDK
- * _meta fields for invocation status display.
+ * Includes MCP annotations for behaviour hints and MCP Apps standard
+ * _meta fields for widget URI routing (ADR-141).
  */
 export const GET_CURRICULUM_MODEL_TOOL_DEF = {
   description: `Returns the complete Oak Curriculum orientation: domain model (key stages, subjects, entity hierarchy, property graph) AND tool usage guidance (categories, workflows, tips). Use this for a comprehensive understanding of Oak in a single call.
@@ -60,10 +60,6 @@ Optionally provide a tool_name to also include specific help for that tool.`,
     title: 'Get Curriculum Model',
   },
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Loading curriculum model…',
-    'openai/toolInvocation/invoked': 'Curriculum model loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;

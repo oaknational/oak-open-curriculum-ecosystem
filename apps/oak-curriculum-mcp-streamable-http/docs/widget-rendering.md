@@ -4,7 +4,7 @@ Widget rendering documentation for the Oak Curriculum MCP HTTP server.
 
 ## Widget Cache-Busting
 
-The Oak JSON viewer widget uses a **hash-based URI strategy** to ensure ChatGPT always loads the latest widget version. This approach eliminates URI mismatches and aligns with OpenAI's best practice: "give the template a new URI" when widget content changes.
+The Oak JSON viewer widget uses a **hash-based URI strategy** to ensure MCP Apps hosts always load the latest widget version. This approach eliminates URI mismatches without adding runtime cache-busting logic.
 
 ### How It Works
 
@@ -12,9 +12,9 @@ Widget cache-busting happens at **sdk-codegen time** (not runtime):
 
 1. During `pnpm sdk-codegen`, a SHA-256 hash is generated from the current timestamp
 2. The hash is embedded in the widget filename: `ui://widget/oak-json-viewer-<hash>.html`
-3. All generated tool descriptors reference this hashed URI in `_meta['openai/outputTemplate']`
+3. All generated tool descriptors reference this hashed URI in `_meta.ui.resourceUri`
 4. The widget resource is registered at the same hashed URI
-5. ChatGPT sees a new URI → fetches fresh widget content (no stale cache)
+5. Hosts see a new URI and fetch fresh widget content (no stale cache)
 
 **Example URIs:**
 
@@ -27,7 +27,7 @@ Widget cache-busting happens at **sdk-codegen time** (not runtime):
 
 - Tool descriptors: `ui://widget/oak-json-viewer.html`
 - Runtime registration: `ui://widget/oak-json-viewer.html?v=abc12345`
-- **Problem**: URI mismatch caused ChatGPT to fail loading widgets (MCP error `-32602: Resource not found`)
+- **Problem**: URI mismatch caused hosts to fail loading widgets (MCP error `-32602: Resource not found`)
 
 **Current approach (hashed filename):**
 
@@ -39,14 +39,14 @@ Widget cache-busting happens at **sdk-codegen time** (not runtime):
 
 - **Eliminates URI mismatch**: Tools and resource use identical URI
 - **Simpler architecture**: No runtime cache-busting logic
-- **Aligns with OpenAI guidance**: New URI for new widget versions
+- **Cache-safe by construction**: New URI for new widget versions
 - **Works identically** in local dev and production
 - **Schema-first compliant**: No runtime modification of generated artifacts
 
 ### Trade-offs
 
 - Every `pnpm sdk-codegen` produces a new widget URI (even if widget content unchanged)
-- This is an acceptable simplicity trade-off; ChatGPT handles URI changes gracefully
+- This is an acceptable simplicity trade-off; MCP Apps hosts handle URI changes gracefully
 
 ### Implementation Details
 
@@ -65,15 +65,13 @@ export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriH
 **Runtime usage** (zero transformation):
 
 ```typescript
-export function getToolWidgetUri(): string {
-  return WIDGET_URI; // Direct passthrough from SDK
-}
+registerAppResource(server, 'oak-json-viewer', WIDGET_URI, { description }, readWidget);
 ```
 
 ### Related Documentation
 
 - [ADR-071: Widget URI Cache-Busting Simplification](../../../docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md)
-- [OpenAI Apps SDK: Build MCP Server](https://developers.openai.com/apps-sdk/build/mcp-server)
+- [MCP Apps Extension Overview](https://modelcontextprotocol.io/extensions/apps/overview)
 
 ## Widget Branding
 
@@ -85,7 +83,7 @@ The header is only shown on major tools (`search`, `browse-curriculum`, `explore
 
 ## Widget Rendering Architecture
 
-The widget renders MCP tool output inside a ChatGPT sandbox as pure JavaScript string templates concatenated into a single bundle. There is no server-side visibility into widget errors — a single syntax error in any renderer breaks ALL tools.
+The current widget runtime renders MCP tool output inside a `window.openai`-style sandbox as pure JavaScript string templates concatenated into a single bundle. There is no server-side visibility into widget errors — a single syntax error in any renderer breaks ALL tools.
 
 ### Dispatch Pattern
 
@@ -117,7 +115,7 @@ Adding a new renderer requires coordinated edits in four files:
 3. `src/widget-renderer-registry.ts` — `TOOL_RENDERER_MAP` and `RENDERER_IDS` entries
 4. `src/widget-script.ts` — `RENDERERS` object entry
 
-Missing any one causes `ReferenceError` in the ChatGPT sandbox, breaking ALL tools. Four-way sync tests in `widget-renderer-registry.unit.test.ts` verify the full chain: every `TOOL_RENDERER_MAP` value maps to a `RENDERER_IDS` entry, every `RENDERER_IDS` entry has a function in the `RENDERERS` object, and every ID has a corresponding `render{Id}` function in the concatenated JS string.
+Missing any one causes `ReferenceError` in the widget sandbox, breaking ALL tools. Four-way sync tests in `widget-renderer-registry.unit.test.ts` verify the full chain: every `TOOL_RENDERER_MAP` value maps to a `RENDERER_IDS` entry, every `RENDERER_IDS` entry has a function in the `RENDERERS` object, and every ID has a corresponding `render{Id}` function in the concatenated JS string.
 
 ### Shared Helpers (`helpers.ts`)
 
@@ -151,7 +149,7 @@ Key gotchas:
 
 ### Sandbox Dependencies
 
-The widget depends on these ChatGPT sandbox APIs. Changes break the widget with no server-side visibility:
+The current widget runtime depends on these `window.openai` APIs. Changes break the widget with no server-side visibility:
 
 - `window.openai.toolOutput` — tool JSON output
 - `window.openai.toolResponseMetadata` — `_meta` fields
@@ -176,7 +174,7 @@ The widget depends on these ChatGPT sandbox APIs. Changes break the widget with 
 
 ### Contract Tests
 
-Integration contract tests validate renderer output against SDK Zod schemas (`SearchLessonsIndexDocSchema`, `SearchUnitsIndexDocSchema`, `SearchThreadIndexDocSchema`, `SearchSequenceIndexDocSchema`). Fixtures use `Pick<SDKType, fields>` to couple test data to SDK type evolution. The renderer test harness (`tests/widget/renderer-test-harness.ts`) evaluates concatenated JS in a `new Function()` sandbox, mirroring the ChatGPT execution environment.
+Integration contract tests validate renderer output against SDK Zod schemas (`SearchLessonsIndexDocSchema`, `SearchUnitsIndexDocSchema`, `SearchThreadIndexDocSchema`, `SearchSequenceIndexDocSchema`). Fixtures use `Pick<SDKType, fields>` to couple test data to SDK type evolution. The renderer test harness (`tests/widget/renderer-test-harness.ts`) evaluates concatenated JS in a `new Function()` sandbox, mirroring the current widget execution environment.
 
 ### Resilience Hardening (Phase 5)
 

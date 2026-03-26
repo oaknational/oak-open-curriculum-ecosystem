@@ -4,7 +4,7 @@
  * These tests verify that the widget resource:
  * - Appears in resources/list with correct URI and MIME type
  * - Returns HTML content with Oak branding when read
- * - Includes required elements for ChatGPT widget integration
+ * - Includes required elements for the current widget runtime
  *
  * The tests exercise the full MCP protocol path from HTTP request to response.
  */
@@ -44,8 +44,39 @@ const ResourcesReadResultSchema = z.object({
       uri: z.string(),
       mimeType: z.string().optional(),
       text: z.string().optional(),
+      _meta: z
+        .object({
+          ui: z
+            .object({
+              prefersBorder: z.boolean().optional(),
+              domain: z.string().optional(),
+              csp: z
+                .object({
+                  connectDomains: z.array(z.string()).optional(),
+                  resourceDomains: z.array(z.string()).optional(),
+                  frameDomains: z.array(z.string()).optional(),
+                })
+                .optional(),
+            })
+            .optional(),
+        })
+        .optional(),
     }),
   ),
+});
+
+const WidgetUiMetadataSchema = z.object({
+  _meta: z.object({
+    ui: z.object({
+      prefersBorder: z.boolean().optional(),
+      domain: z.string().optional(),
+      csp: z.object({
+        connectDomains: z.array(z.string()).optional(),
+        resourceDomains: z.array(z.string()).optional(),
+        frameDomains: z.array(z.string()).optional(),
+      }),
+    }),
+  }),
 });
 
 /**
@@ -62,12 +93,14 @@ function getWidgetUri(listEnvelope: ReturnType<typeof parseSseEnvelope>): string
 }
 
 /**
- * Helper to retrieve widget HTML from the MCP server.
+ * Reads the widget resource from the MCP server.
  *
  * Sends resources/list then resources/read to the same app instance.
  * Per-request transport creates a fresh McpServer + transport per request.
  */
-async function getWidgetHtml(): Promise<string> {
+async function readWidgetResource(): Promise<
+  z.infer<typeof ResourcesReadResultSchema>['contents'][number] | undefined
+> {
   const { app } = await createStubbedHttpApp();
 
   // Get widget URI from resources/list
@@ -97,7 +130,24 @@ async function getWidgetHtml(): Promise<string> {
 
   const envelope = parseSseEnvelope(response.text);
   const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-  return parsed.data?.contents[0]?.text ?? '';
+  return parsed.data?.contents[0];
+}
+
+/**
+ * Helper to retrieve widget HTML from the MCP server.
+ */
+async function getWidgetHtml(): Promise<string> {
+  const content = await readWidgetResource();
+  return content?.text ?? '';
+}
+
+function parseWidgetUiMetadata(content: unknown) {
+  const parsed = WidgetUiMetadataSchema.safeParse(content);
+  if (!parsed.success) {
+    throw new Error('Expected widget resource to include MCP Apps ui metadata');
+  }
+
+  return parsed.data._meta.ui;
 }
 
 describe('oak-json-viewer widget resource E2E', () => {
@@ -129,53 +179,31 @@ describe('oak-json-viewer widget resource E2E', () => {
       );
 
       expect(widgetResource).toBeDefined();
-      expect(widgetResource?.mimeType).toBe('text/html+skybridge');
+      expect(widgetResource?.mimeType).toBe('text/html;profile=mcp-app');
     });
   });
 
   describe('resources/read', () => {
-    it('returns HTML content with text/html+skybridge MIME type', async () => {
-      const { app } = await createStubbedHttpApp();
+    it('returns HTML content with MCP Apps MIME type', async () => {
+      const content = await readWidgetResource();
+      expect(content).toBeDefined();
+      expect(content?.mimeType).toBe('text/html;profile=mcp-app');
+    });
 
-      // Get widget URI from resources/list
-      const listResponse = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: 'list1',
-          method: 'resources/list',
-        });
-      const listEnvelope = parseSseEnvelope(listResponse.text);
-      const widgetUri = getWidgetUri(listEnvelope);
+    it('returns the hashed widget resource URI', async () => {
+      const content = await readWidgetResource();
+      expect(content).toBeDefined();
+      expect(content?.uri).toMatch(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/);
+    });
 
-      // Read the widget resource (same app, per-request transport)
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: widgetUri },
-        });
-
-      expect(response.status).toBe(200);
-
-      const envelope = parseSseEnvelope(response.text);
-      // Parse envelope.result directly for resource responses
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      expect(parsed.success).toBe(true);
-
-      const contents = parsed.data?.contents ?? [];
-      expect(contents).toHaveLength(1);
-      expect(contents[0]?.mimeType).toBe('text/html+skybridge');
-      // Verify URI matches local dev or production hashed format
-      expect(contents[0]?.uri).toMatch(
-        /^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/,
-      );
+    it('includes MCP Apps ui._meta fields on resources/read', async () => {
+      const content = await readWidgetResource();
+      const ui = parseWidgetUiMetadata(content);
+      expect(ui.prefersBorder).toBe(true);
+      expect(ui.domain).toBeUndefined();
+      expect(ui.csp.connectDomains).toBeUndefined();
+      expect(ui.csp.resourceDomains).toContain('https://fonts.googleapis.com');
+      expect(ui.csp.resourceDomains).toContain('https://fonts.gstatic.com');
     });
 
     it('widget HTML includes Lexend font', async () => {
@@ -185,15 +213,12 @@ describe('oak-json-viewer widget resource E2E', () => {
       expect(html).toContain('fonts.googleapis.com');
     });
 
-    it('widget HTML includes Oak brand colors', async () => {
+    it('widget HTML includes light and dark theme support', async () => {
       const html = await getWidgetHtml();
 
-      // Light mode: soft green background
-      expect(html).toContain('#bef2bd');
-      // Dark mode: dark forest background
-      expect(html).toContain('#1b3d1c');
-      // Dark mode: off-white text
-      expect(html).toContain('#f0f7f0');
+      expect(html).toContain('color-scheme: light dark');
+      expect(html).toContain('prefers-color-scheme: dark');
+      expect(html).toContain('--bg:');
     });
 
     it('widget HTML includes window.openai integration', async () => {

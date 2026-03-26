@@ -5,10 +5,11 @@ import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 
 /**
- * Integration tests verifying universal tools have proper MCP annotations.
+ * Integration tests verifying universal tools have proper MCP annotations
+ * and MCP Apps standard _meta fields (ADR-141).
  *
  * These tests verify that both generated and aggregated tools expose
- * the correct annotations for MCP clients to understand tool behavior.
+ * the correct annotations and _meta.ui metadata for MCP clients.
  */
 describe('listUniversalTools annotations', () => {
   it('returns tools with annotations property', () => {
@@ -103,74 +104,32 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.title).toBeDefined();
   });
 
-  it('get-curriculum-model tool has OpenAI _meta fields', () => {
+  it('get-curriculum-model tool has MCP Apps _meta fields', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const modelTool = tools.find(findToolByName('get-curriculum-model'));
 
     expect(modelTool).toBeDefined();
     expect(modelTool?._meta).toBeDefined();
-    expect(modelTool?._meta?.['openai/outputTemplate']).toBeDefined();
-    expect(modelTool?._meta?.['openai/widgetAccessible']).toBe(true);
+    expect(modelTool?._meta?.ui?.resourceUri).toBeDefined();
   });
 });
 
-/** Non-widget tools have _meta for visibility/invocation but no outputTemplate. */
+/** Non-widget tools have _meta for securitySchemes but no ui.resourceUri. */
 const NON_WIDGET_TOOLS = new Set(['download-asset']);
 
 /**
- * Integration tests for OpenAI Apps SDK _meta fields.
+ * Integration tests for MCP Apps standard _meta fields (ADR-141).
  *
  * Verifies that listUniversalTools() exposes _meta fields for BOTH
  * generated tools (from sdk-codegen) and aggregated tools.
  */
 describe('listUniversalTools _meta integration', () => {
-  it('ALL tools have _meta defined', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta).toBeDefined();
-    }
-  });
-
-  it('ALL tools have openai/visibility set to public', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta?.['openai/visibility']).toBe('public');
-    }
-  });
-
-  it('ALL tools have openai/toolInvocation/invoking status text', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta?.['openai/toolInvocation/invoking']).toBeDefined();
-    }
-  });
-
-  it('ALL tools have openai/toolInvocation/invoked status text', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      expect(tool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
-    }
-  });
-
-  it('widget tools have openai/outputTemplate pointing to widget', () => {
+  it('widget tools have _meta.ui.resourceUri pointing to widget', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
 
     for (const tool of widgetTools) {
-      expect(tool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-    }
-  });
-
-  it('widget tools have openai/widgetAccessible set to true', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
-
-    for (const tool of widgetTools) {
-      expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
+      expect(tool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
     }
   });
 });
@@ -193,31 +152,14 @@ describe('generated tools _meta integration', () => {
     }
   });
 
-  it('at least one generated tool has complete _meta with all fields', () => {
+  it('at least one generated tool has _meta.ui.resourceUri and securitySchemes', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const generatedTools = tools.filter((t) => !aggregatedNameSet.has(t.name));
     const sampleTool = generatedTools[0];
 
     expect(sampleTool).toBeDefined();
-    expect(sampleTool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-    expect(sampleTool._meta?.['openai/widgetAccessible']).toBe(true);
-    expect(sampleTool._meta?.['openai/visibility']).toBe('public');
-    expect(sampleTool._meta?.['openai/toolInvocation/invoking']).toBeDefined();
-    expect(sampleTool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
-  });
-});
-
-describe('replaced tools are absent from tool list', () => {
-  it('get-ontology is not listed (replaced by get-curriculum-model)', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const names = tools.map((t) => t.name);
-    expect(names).not.toContain('get-ontology');
-  });
-
-  it('get-help is not listed (replaced by get-curriculum-model)', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const names = tools.map((t) => t.name);
-    expect(names).not.toContain('get-help');
+    expect(sampleTool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+    expect(sampleTool._meta?.securitySchemes).toBeDefined();
   });
 });
 

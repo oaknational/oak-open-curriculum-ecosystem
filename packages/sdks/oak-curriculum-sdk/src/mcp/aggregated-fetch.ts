@@ -22,8 +22,8 @@ import { SCOPES_SUPPORTED } from './scopes-supported.js';
 /**
  * Fetch tool definition with full MCP metadata.
  *
- * Includes MCP annotations for behavior hints and OpenAI Apps SDK
- * _meta fields for invocation status display.
+ * Includes MCP annotations for behaviour hints and MCP Apps standard
+ * _meta fields for widget URI routing (ADR-141).
  */
 export const FETCH_TOOL_DEF = {
   description: `Fetch curriculum resource by canonical identifier.
@@ -50,11 +50,7 @@ Use format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", 
     title: 'Fetch Curriculum Resource',
   },
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Fetching resource…',
-    'openai/toolInvocation/invoked': 'Resource loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

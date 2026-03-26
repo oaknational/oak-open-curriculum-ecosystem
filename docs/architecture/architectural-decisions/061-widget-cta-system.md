@@ -6,8 +6,8 @@ Superseded
 
 > **Superseded (23 February 2026)**: The CTA system has been removed from the
 > widget. CTA HTML, CSS, and JavaScript are no longer embedded in the widget
-> output. The CTA source code in `src/widget-cta/` has been retained as dead
-> code pending cleanup.
+> output. The former `src/widget-cta/` source has since been deleted as part of
+> the MCP Apps runtime migration cleanup.
 >
 > The original problem (context grounding) is now addressed through MCP's native
 > resource primitive rather than widget buttons. Context loading is handled by

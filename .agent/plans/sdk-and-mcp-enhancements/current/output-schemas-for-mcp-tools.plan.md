@@ -160,6 +160,14 @@ exposes the same top-level fields. A helper may be used where truthful, but the
 plan must not force a fake universal `status?: string` contract across tools
 that do not actually emit that field.
 
+### 5. Land on the canonical descriptor surface, not today's app seam
+
+`outputSchema` must be threaded through the canonical transport-neutral SDK tool
+descriptor surface, not directly through whatever temporary app-owned exposure
+path exists at the time. If the boundary-simplification plan replaces a mixed or
+app-owned exposure surface, this plan must consume the new canonical descriptor
+rather than extending the superseded seam.
+
 ## Scope
 
 In scope:
@@ -221,6 +229,14 @@ The plan must stay explicit about the current split:
 Every emitted `outputSchema` must remain object-shaped at the root. This still
 allows truthful object unions such as `oneOf` over different
 `{ status, data }` pairings where needed.
+
+### 5. Boundary sequencing
+
+Phases 0-2 of this plan can proceed while the runtime-boundary follow-up is
+queued or in progress. However, Phase 3 must consume the canonical descriptor
+groundwork from `mcp-runtime-boundary-simplification.plan.md` rather than
+extending the current app-owned `listUniversalTools()` / `tools/list` exposure
+seam directly.
 
 ## Output Shape Strategy
 
@@ -331,18 +347,19 @@ Required outcome:
 3. the authored schemas remain small, readable, and colocated with the tool
    definition
 
-### Phase 3 — Expose the Schemas Through MCP Surfaces
+### Phase 3 — Expose the Schemas Through Canonical MCP Surfaces
 
 Goal: make the declared schemas visible to clients without creating a false
 contract on any transport.
 
 Tasks:
 
-1. thread `outputSchema` through the universal tool listing types
-2. expose it from `listUniversalTools()`
-3. include it in the streamable HTTP `tools/list` override
-4. include it in transport registration where the SDK surface supports it
-5. align any transport response-shaping path that would otherwise declare an
+1. add `outputSchema` to the canonical transport-neutral SDK tool descriptor
+   surface
+2. expose it through the SDK-owned protocol projection used for `tools/list`
+3. expose it through the registration path each transport uses, staying
+   helper-compatible for app-rendering tools
+4. align any transport response-shaping path that would otherwise declare an
    `outputSchema` but fail to return matching `structuredContent`
 
 Important boundary:
@@ -357,6 +374,12 @@ Transport-specific expectation:
    declared contracts are available
 2. stdio currently exposes only the 23 generated tools and should only expose
    `outputSchema` after its success path returns matching `structuredContent`
+
+Phase gate:
+
+Do not start this phase until Phase 3 of
+`mcp-runtime-boundary-simplification.plan.md` has completed and the canonical
+descriptor / projection surface is available.
 
 ### Phase 4 — Prove the Contract
 
@@ -380,6 +403,17 @@ Minimum reviewers:
 2. `code-reviewer`
 3. `docs-adr-reviewer`
 4. `test-reviewer` if test files change materially
+
+## Dependencies and Sequencing
+
+1. Phases 0-2 can begin immediately.
+2. Phase 3 is blocked on Phase 3 of
+   `mcp-runtime-boundary-simplification.plan.md`.
+3. If the canonical descriptor surface lands first in the same branch, this plan
+   must consume it instead of extending `listUniversalTools()` or an app-owned
+   `tools/list` override directly.
+4. Do not land transport-exposure work for `outputSchema` against the
+   pre-simplification app-owned exposure path.
 
 ## Quality Gates
 
@@ -427,5 +461,6 @@ This plan is complete when all of the following are true:
 - [ADR-030: SDK Single Source of Truth](../../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction](../../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
 - [Schema-First Execution Directive](../../../directives/schema-first-execution.md)
+- [MCP Runtime Boundary Simplification](mcp-runtime-boundary-simplification.plan.md)
 - MCP spec: [Tools — Output Schema](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#output-schema)
 - OpenAI Apps SDK: [Tool Results Reference](https://developers.openai.com/apps-sdk/reference#tool-results) (useful as a comparison point for `structuredContent` expectations, not as separate migration scope)

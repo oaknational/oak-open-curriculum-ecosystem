@@ -53,11 +53,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
     title: 'Browse Curriculum',
   },
   _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Browsing curriculum…',
-    'openai/toolInvocation/invoked': 'Browse complete',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
+    ui: { resourceUri: WIDGET_URI },
   },
 } as const;
 

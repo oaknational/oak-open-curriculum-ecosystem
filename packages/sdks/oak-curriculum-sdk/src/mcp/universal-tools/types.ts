@@ -2,8 +2,8 @@
  * Type definitions for universal MCP tools.
  *
  * This module defines the core type interfaces for MCP tool metadata,
- * including annotations for behavior hints and OpenAI Apps SDK metadata
- * for invocation status display.
+ * including annotations for behaviour hints and MCP Apps standard metadata
+ * for UI integration (ADR-141).
  *
  * @remarks These types are used throughout the universal tools system
  * to ensure consistent structure for tool listings and registration.
@@ -100,9 +100,9 @@ type ContractDescriptor = ToolDescriptor<string, never, never, never, never, str
 export type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>;
 
 /**
- * OpenAI Apps SDK metadata — derived from the generated ToolDescriptor contract.
+ * MCP Apps standard metadata — derived from the generated ToolDescriptor contract (ADR-141).
  *
- * @see https://developers.openai.com/apps-sdk/reference
+ * @see https://modelcontextprotocol.io/extensions/apps/overview
  */
 export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
 
@@ -138,6 +138,6 @@ export interface UniversalToolListEntry {
   readonly securitySchemes?: readonly SecurityScheme[];
   /** MCP annotations providing behavior hints */
   readonly annotations?: ToolAnnotations;
-  /** OpenAI Apps SDK metadata for invocation status display */
+  /** MCP Apps standard metadata for UI integration (ADR-141) */
   readonly _meta?: ToolMeta;
 }
