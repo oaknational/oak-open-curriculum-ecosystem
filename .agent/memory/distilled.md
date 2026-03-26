@@ -49,8 +49,6 @@ enough for permanent documentation.
   only; `admin count` reports true parent docs. Do not equate green alias
   health with bulk freshness — see
   `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
-- ADR index is the source of truth for ADR count; keep
-  README in sync
 - From `packages/sdks/oak-curriculum-sdk/`, repo root is
   `../../../` not `../../`
 - `@oaknational` is confirmed npm org scope (no token yet)
@@ -95,8 +93,6 @@ enough for permanent documentation.
 - EsCurric MCP API key needs `feature_actions.read` Kibana
   privilege (in addition to `feature_agentBuilder.read`) for
   the `platform_core_search` tool to work
-- `_cat/indices` doc counts are inflated by ELSER chunking.
-  See `docs/operations/elasticsearch-ingest-lifecycle.md`
 - ES Serverless shifts `_primary_term` during normal
   operation; OCC-based updates (lease renewal) must retry
   after fetching fresh `_seq_no`/`_primary_term` on 409

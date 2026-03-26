@@ -153,6 +153,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-139: Sequence Semantic Contract and Ownership](139-sequence-semantic-contract-and-ownership.md)
 - [ADR-140: Search Ingestion SDK Boundary](140-search-ingestion-sdk-boundary.md)
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
+- [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 
 ## Key Architectural Decisions
 

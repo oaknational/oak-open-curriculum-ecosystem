@@ -73,7 +73,7 @@
     "@types/unzipper": "^0.10.11",
     "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.57.2",
-    "@vitest/ui": "^4.1.1",
+    "@vitest/ui": "^4.1.2",
     "eslint": "^10.1.0",
     "prettier": "^3.8.1",
     "tsup": "^8.5.1",
@@ -82,7 +82,7 @@
     "typescript": "^5",
     "unzipper": "^0.12.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.1"
+    "vitest": "^4.1.2"
   },
   "repository": {
     "type": "git",

@@ -190,13 +190,15 @@ one explicit auth boundary. Default sequencing: run it immediately after WS2 and
 complete it before promoting WS3. Any deferral must be recorded explicitly
 before WS3 implementation begins.
 
-**Important (2026-03-26 review finding)**: The simplification plan now includes
-a **Phase 0** investigating adoption of `@clerk/mcp-tools/express` official
-utilities (`mcpAuthClerk`, `streamableHttpHandler`, etc.) before building any
-custom ingress boundary. The principle: use off-the-shelf wherever possible;
-innovate in Oak's domain, not in plumbing. Phase 0 must complete before
-Phases 4-5 scope is finalised — the investigation outcome may dramatically
-simplify or reshape the ingress work.
+**Simplification plan progress (2026-03-26)**:
+
+- **Phase 0** (complete): `@clerk/mcp-tools/express` utilities evaluated. All
+  five Express utilities SKIP'd per ADR-142. Only `verifyClerkToken` adopted.
+- **Phase 1** (complete): Seam inventory mapped, 3 specialist reviewers passed.
+  Key decisions: `tool-auth-context.ts` is dead code (delete in Phase 6);
+  `tools/list` override stays (MCP SDK cannot preserve examples); canonical
+  ingress is `getAuth()` once → `verifyClerkToken()` → forward `AuthInfo`.
+- **Phase 2** (next): RED tests for canonical SDK descriptor surface.
 
 ---
 
@@ -281,10 +283,12 @@ WS1: ADR + Codegen Contract ─────────────────�
                                                     ▼
 WS2: App Runtime Migration ────────────────────────┐  ✓ done
                                                     ▼
-Runtime Boundary Simplification (Phase 0-6) ───────┐  ← next
-  Phase 0: evaluate @clerk/mcp-tools/express       │
-  Phases 1-3: SDK tool-surface projection          │
-  Phases 4-5: ingress boundary (scope from Ph 0)   │
+Runtime Boundary Simplification ───────────────────┐  ← active
+  Phase 0: evaluate @clerk/mcp-tools/express       │  ✓ done
+  Phase 1: foundation + seam audit                 │  ✓ done
+  Phase 2: RED — SDK descriptor tests              │  ← next
+  Phase 3: GREEN — canonicalise SDK surface        │
+  Phases 4-5: ingress boundary                     │
   Phase 6: cleanup + review                        │
                                                     ▼
 WS3: Widget Client + Branding ─────────────────────┐

@@ -12,7 +12,7 @@ import type { RuntimeConfig } from './runtime-config.js';
 import { getAuth } from '@clerk/express';
 import { getRequestContext } from './request-context.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
-import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
+import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { validateResourceParameter } from './resource-parameter-validator.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
 
@@ -78,7 +78,16 @@ export function checkMcpClientAuth(
   // Explicitly verify bearer token with Clerk
   const clerkAuth = getAuth(req, { acceptsToken: 'oauth_token' });
 
-  const verified = verifyClerkToken(clerkAuth, token);
+  let verified;
+  try {
+    verified = verifyClerkToken(clerkAuth, token);
+  } catch (error) {
+    logger.warn('Unexpected error during token verification', {
+      toolName,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return createAuthErrorResponse('invalid_token', 'Token verification failed', resourceUrl);
+  }
   if (!verified) {
     logger.warn('MCP client token verification failed', { toolName });
     return createAuthErrorResponse('invalid_token', 'Token verification failed', resourceUrl);

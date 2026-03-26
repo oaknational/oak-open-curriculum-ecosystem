@@ -9,10 +9,10 @@ specialist_reviewer: "mcp-reviewer"
 todos:
   - id: phase-0-clerk-mcp-tools-spike
     content: "Phase 0: Evaluate @clerk/mcp-tools/express adoption — spike against live docs, map replaceable surface, write ADR documenting adopt-or-explain decision."
-    status: pending
+    status: done
   - id: phase-1-foundation-and-seam-audit
     content: "Phase 1: Re-ground in the foundation directives and audit the exact app-owned MCP seams so the work starts from the real boundaries rather than the temporary WS2 stop-gaps."
-    status: pending
+    status: done
   - id: phase-2-red-tool-surface
     content: "Phase 2 (RED): Add failing SDK and HTTP tests that prove tool registration projection and tools/list projection must come from one canonical SDK-owned surface while preserving generated examples."
     status: pending
@@ -34,7 +34,7 @@ isProject: false
 # MCP Runtime Boundary Simplification
 
 **Last Updated**: 2026-03-26
-**Status**: Current — queued, not started
+**Status**: Current — Phases 0-1 complete, Phase 2 next
 **Scope**: Remove the two remaining app-owned MCP seams after WS2: the
 Express/Clerk ingress bridge and the hand-authored MCP tool exposure path.
 
@@ -162,6 +162,8 @@ pnpm smoke:dev:stub
 
 ## Phase 0 — Evaluate `@clerk/mcp-tools/express` Adoption
 
+**Status**: Done (2026-03-26)
+
 **Principle**: Use off-the-shelf wherever possible. Be idiomatic and canonical.
 Innovate in Oak's domain (curriculum), not in plumbing.
 
@@ -188,14 +190,14 @@ Fetch the current `@clerk/mcp-tools/express` documentation and source:
 
 ### Mapping: Custom Code vs Official Utilities
 
-| Custom File | Official Replacement | Question |
-|-------------|---------------------|----------|
-| `src/auth/mcp-auth/mcp-auth-clerk.ts` | `mcpAuthClerk` | Direct replacement? |
-| `src/auth/mcp-auth/verify-clerk-token.ts` | Internal to `mcpAuthClerk` | Subsumed? |
-| `src/auth/mcp-auth/auth-response-helpers.ts` | Internal to `mcpAuthClerk` | Subsumed? |
-| `src/handlers.ts` `createMcpRequest()` | `streamableHttpHandler` | Eliminates Proxy? |
-| `src/request-context.ts` | `streamableHttpHandler` | Eliminates AsyncLocalStorage? |
-| PRM/AS metadata in `src/auth-routes.ts` | `protectedResourceHandlerClerk` / `authServerMetadataHandlerClerk` | URL rewriting? |
+| Custom File | Official Replacement | Outcome |
+|-------------|---------------------|---------|
+| `src/auth/mcp-auth/mcp-auth-clerk.ts` | `mcpAuthClerk` | SKIP — no RFC 8707 |
+| ~~`src/auth/mcp-auth/verify-clerk-token.ts`~~ | `verifyClerkToken` from `@clerk/mcp-tools/server` | ADOPT — file deleted, import adopted |
+| `src/auth/mcp-auth/auth-response-helpers.ts` | Internal to `mcpAuthClerk` | SKIP |
+| `src/handlers.ts` `createMcpRequest()` | `streamableHttpHandler` | SKIP — no per-request server |
+| `src/request-context.ts` | `streamableHttpHandler` | SKIP |
+| PRM/AS metadata in `src/auth-routes.ts` | `protectedResourceHandlerClerk` / `authServerMetadataHandlerClerk` | SKIP — no URL rewriting |
 
 ### Oak-Specific Code That Must Remain (Regardless of Adoption)
 
@@ -233,13 +235,20 @@ Fetch the current `@clerk/mcp-tools/express` documentation and source:
 
 ## Phase 1 — Foundation and Seam Audit
 
-Re-read:
+**Status**: Done (2026-03-26)
 
-1. `.agent/directives/principles.md`
-2. `.agent/directives/testing-strategy.md`
-3. `.agent/directives/schema-first-execution.md`
+Foundation directives re-read and recommitted:
 
-Then audit the exact starting seam inventory across:
+1. `.agent/directives/principles.md` — generator-first, no compatibility layers,
+   TDD at all levels, apps are thin interfaces
+2. `.agent/directives/testing-strategy.md` — DI for testability (ADR-078),
+   no `vi.mock`, behaviour not implementation
+3. `.agent/directives/schema-first-execution.md` — runtime files are thin
+   façades, generator is single source of truth
+
+### Seam Inventory
+
+Audited files:
 
 1. `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
 2. `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts`
@@ -248,6 +257,116 @@ Then audit the exact starting seam inventory across:
 5. `apps/oak-curriculum-mcp-streamable-http/src/auth/tool-auth-context.ts`
 6. `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts`
 7. `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+
+#### Seam 1: Tool Surface Duplication
+
+Two consumption paths from `listUniversalTools(generatedToolRegistry)`:
+
+| Component | File | Line | Owner | End-State |
+|-----------|------|------|-------|-----------|
+| Tool registration loop | `handlers.ts` | 98 | App | Consume SDK canonical descriptor via `registerAppTool()` |
+| `tools/list` override | `tools-list-override.ts` | 43 | App | Delete or delegate to SDK protocol projection |
+| `listUniversalTools()` | `list-tools.ts` | 44 | SDK | Becomes canonical source |
+| `UniversalToolListEntry` | `types.ts` | — | SDK | Collapse or promote to canonical descriptor |
+
+**Why the override exists**: MCP SDK Zod→JSON Schema conversion drops
+`inputSchema.examples`. The override preserves them using pre-generated JSON
+Schema from the SDK directly.
+
+**SDK already provides both shapes**: Each `UniversalToolListEntry` carries
+`inputSchema` (JSON Schema with examples) and `flatZodSchema` (Zod shape for
+registration). The app should consume SDK-derived projections, not hand-map.
+
+**`registerAppTool()` gap**: Currently uses raw `server.registerTool()`. The
+SDK must emit data compatible with `registerAppTool()` (MCP Apps helper).
+
+#### Seam 2: Ingress/Auth Bridge
+
+| Component | File | Line | Owner | End-State |
+|-----------|------|------|-------|-----------|
+| `createMcpRequest()` proxy | `handlers.ts` | 159 | App | Delete — ingress adapter replaces |
+| `setRequestContext()` | `request-context.ts` | 19 | App | Delete entirely |
+| `getRequestContext()` | `request-context.ts` | 29 | App | Delete entirely |
+| `AsyncLocalStorage<Request>` | `request-context.ts` | 9 | App | Delete entirely |
+| `checkMcpClientAuth()` | `check-mcp-client-auth.ts` | 38 | App | Retain, refactor to DI |
+| `getAuth()` direct call | `check-mcp-client-auth.ts` | 79 | App | Move to ingress edge |
+| `getAuth()` in middleware | `mcp-auth-clerk.ts` | 43 | App | Already at edge — no change |
+| `verifyClerkToken()` | `@clerk/mcp-tools/server` | — | Library | Stays at ingress edge |
+| `extractAuthContext()` | `tool-auth-context.ts` | 105 | App (**DEAD**) | Promote or delete |
+| `ToolAuthContext` interface | `tool-auth-context.ts` | 34 | App (**DEAD**) | Promote or delete |
+| `RequestWithAuthContext` | `tool-auth-context.ts` | 23 | App (test-only) | Follows disposition |
+
+**Dual auth paths**: `getAuth(req, ...)` in `check-mcp-client-auth.ts:79` vs
+`req.auth` in `tool-auth-context.ts:105`. Phase 4/5 must converge to one.
+
+**Dead code**: `extractAuthContext()`, `ToolAuthContext`, `RequestWithAuthContext`
+have zero production callers. `ToolAuthContext` shape (`userId`) resembles the
+intended explicit auth context.
+
+**ADR-078 violation**: `check-mcp-client-auth.unit.test.ts` uses 5 `vi.mock()`
+calls. Phase 4/5 must refactor to DI.
+
+#### Data Flow
+
+```text
+Express Request (HTTP)
+         │
+    [1] clerkMiddleware (sets req.auth)
+         │
+    [2] createMcpRouter → mcpAuth/mcpAuthClerk (HTTP 401 gate)
+         │                   └─ getAuth() + verifyClerkToken()  ← at edge
+         │
+    [3] createMcpHandler
+         ├─ createMcpRequest(req)   ← Proxy, omits auth         [SEAM 2]
+         └─ setRequestContext(req)  ← AsyncLocalStorage          [SEAM 2]
+              │
+    [4] registerHandlers loop       ← listUniversalTools()       [SEAM 1]
+         │
+    [5] handleToolWithAuthInterception
+         ├─ checkMcpClientAuth      ← getRequestContext + getAuth [SEAM 2]
+         ├─ executeToolCall         ← SDK tool execution
+         └─ auth error interception
+         │
+    [6] overrideToolsListHandler    ← listUniversalTools()       [SEAM 1]
+```
+
+### Reviewer Questions
+
+#### `mcp-reviewer`
+
+1. Does the end-state (SDK owns canonical descriptor, app via `registerAppTool()`)
+   align with the MCP Apps helper boundary? Can the SDK emit data that
+   `registerAppTool()` consumes without re-projection?
+2. The `tools/list` override exists because Zod→JSON Schema drops examples.
+   Is there a known upstream fix that would eliminate the override?
+3. Is `_meta.ui.resourceUri` auto-populated by `registerAppTool()` so the
+   canonical descriptor need not emit it explicitly?
+
+#### `architecture-reviewer-barney`
+
+1. `extractAuthContext()` / `ToolAuthContext` have zero production callers.
+   Delete in Phase 6 or promote in Phase 4/5 as the explicit auth contract?
+2. Does the ingress end-state (Clerk at edge, explicit typed auth forward, no
+   `AsyncLocalStorage` in tool path) satisfy apps-are-thin-interfaces?
+3. `RequestWithAuthContext` imported only in `test-helpers/fakes.ts` — does this
+   test-only dependency change the dead-code assessment?
+
+#### `clerk-reviewer`
+
+1. ADR-142 skipped Express utilities. Is Oak-owned ingress with `verifyClerkToken`
+   as the only adopted utility the correct Clerk integration shape?
+2. Do `getAuth(req, { acceptsToken: 'oauth_token' })` and `req.auth` produce
+   equivalent auth data, or can they diverge?
+3. Should the ingress edge call `getAuth()` once and forward the result, or
+   call `verifyClerkToken()` directly bypassing `getAuth()`?
+
+### Intended End-State (Reviewer Sign-Off Required)
+
+1. **One canonical SDK descriptor surface** — SDK owns all tool protocol fields
+2. **App registration via `registerAppTool()`** — not raw `registerTool()`
+3. **One explicit auth boundary at ingress** — verify once, typed context forward
+4. **No compatibility layers** — old paths deleted, not shimmed
+5. **`tool-auth-context.ts` disposition** — promote or delete, not limbo
 
 Required reviewer checkpoint before GREEN work begins:
 
@@ -264,13 +383,13 @@ Required reviewer checkpoint before GREEN work begins:
 3. Reviewer feedback on the intended end-state is collected before product code
    changes begin.
 
-**Deterministic validation**:
+**Deterministic validation** (confirmed 2026-03-26):
 
 ```bash
 rg -n "createMcpRequest|setRequestContext|getRequestContext|getAuth\\(|overrideToolsListHandler|listUniversalTools" \
   apps/oak-curriculum-mcp-streamable-http/src \
   packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools
-# Expected: identifies the current seam inventory and nothing is edited yet
+# Confirmed: identifies the seam inventory, no source files edited
 ```
 
 ## Phase 2 — RED: Canonical SDK Descriptor and Exposure Boundary
@@ -378,11 +497,11 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
 ## Phase 4 — RED: One Explicit Auth Boundary
 
-**Note**: Phase 0 findings may reshape this phase significantly. If
-`@clerk/mcp-tools/express` utilities (`mcpAuthClerk`, `streamableHttpHandler`)
-can replace the custom ingress code, this phase becomes "write RED tests that
-prove the official utilities satisfy Oak's auth contract" rather than "build a
-new Oak-owned ingress context." Update scope after Phase 0 ADR is written.
+**Phase 0 outcome (2026-03-26)**: All Express utilities SKIP per ADR-142. Only
+`verifyClerkToken` adopted from `@clerk/mcp-tools/server` (identical
+implementation). Phases 4-5 proceed as originally scoped: build Oak-owned
+explicit ingress context. The library lacks RFC 8707 audience validation, DNS
+rebinding protection, and per-request server support.
 
 Write tests first for the desired ingress boundary:
 
@@ -390,6 +509,14 @@ Write tests first for the desired ingress boundary:
    Oak-owned, per Phase 0 outcome)
 2. downstream code no longer depends on `AsyncLocalStorage<Request>`
 3. `handlers.ts` no longer owns the proxy-based `createMcpRequest()` bridge
+
+**DI refactoring of `checkMcpClientAuth` (Phase 0 review finding 2026-03-26)**:
+`check-mcp-client-auth.ts` hard-imports five dependencies from module scope
+(`verifyClerkToken`, `getAuth`, `getRequestContext`, `toolRequiresAuth`,
+`validateResourceParameter`) rather than receiving them as injected parameters.
+This violates ADR-078 and forces `vi.mock` usage in the test file. Phase 4/5
+must refactor this function to accept dependencies as parameters, eliminating
+all `vi.mock` calls. See ADR-142 "Pre-existing ADR-078 gap" section.
 
 **Dual auth paths (review finding 2026-03-26)**: Two independent auth
 extraction paths currently exist and both must be addressed:
@@ -574,7 +701,8 @@ exposure path.
 
 ## Review Findings Log (2026-03-26)
 
-12 specialist review passes across 4 waves. Key findings affecting this plan:
+15 specialist review passes across 5 waves (12 pre-plan + 3 Phase 1). Key
+findings affecting this plan:
 
 ### Incorporated into Phase 0 (new)
 
@@ -614,3 +742,70 @@ exposure path.
   not this plan. (mcp-reviewer, Wave 1+4)
 - **`registerAppTool` auto-populates deprecated `_meta["ui/resourceUri"]`** —
   no need to emit manually. (mcp-reviewer live-spec, Wave 4)
+
+### Phase 1 Seam Audit Findings (2026-03-26)
+
+3 specialist review passes: `mcp-reviewer`, `architecture-reviewer-barney`,
+`clerk-reviewer`.
+
+#### Decisions (incorporated into plan scope)
+
+- **`tool-auth-context.ts`: DELETE, do not promote.** Dead code confirmed
+  (zero production callers). `ToolAuthContext` shadows Clerk's
+  `MachineAuthObject<'oauth_token'>` — promoting it creates a local interface
+  that must be reconciled with what Clerk already provides. YAGNI applies.
+  `extractAuthContext()` also has a correctness bug: calls `req.auth()` without
+  `{ acceptsToken: 'oauth_token' }`, returning session-typed auth for OAuth
+  requests. Delete in Phase 6: file, unit test, `createFakeRequest` from
+  `fakes.ts`. (barney, clerk-reviewer)
+
+- **`tools/list` override cannot be eliminated by MCP SDK upgrade.** Zod→JSON
+  Schema structurally cannot preserve `examples` (no `.examples()` on Zod, SDK
+  issue #685 closed as "requires protocol-level changes"). Phase 3 must build
+  an SDK-owned protocol projection function; the app wires it to
+  `server.server.setRequestHandler()`. The "disappears entirely" path is
+  blocked. (mcp-reviewer)
+
+- **`_meta.ui.resourceUri` is NOT auto-generated by `registerAppTool()`.** It
+  only normalises legacy key compat. The canonical descriptor must carry
+  `_meta.ui.resourceUri` explicitly. Current `listUniversalTools` already does
+  this correctly. (mcp-reviewer)
+
+- **Canonical ingress pattern**: `getAuth(req, { acceptsToken: 'oauth_token' })`
+  once at edge → `verifyClerkToken(authData, token)` → forward `AuthInfo` as
+  typed context. `getAuth()` calls `req.auth()` internally; they are not
+  independent. Cannot bypass `getAuth()` because `verifyClerkToken` requires
+  `MachineAuthObject<'oauth_token'>` as input. (clerk-reviewer)
+
+#### Scope adjustments for later phases
+
+- **Phase 3**: SDK must emit both `flatZodSchema` (for `registerAppTool()`
+  registration) and `inputSchema` (JSON Schema for protocol projection).
+  Registration loop should pass `flatZodSchema` as `registerAppTool()`'s
+  `inputSchema` parameter. Tools with `_meta.ui` → `registerAppTool()`, tools
+  without → base `registerTool()`. (mcp-reviewer)
+
+- **Phase 4/5**: Auth orchestration in `check-mcp-client-auth.ts` (bearer
+  parsing, Clerk `getAuth` config, `verifyClerkToken`, RFC 8707 validation)
+  is reusable MCP auth domain logic. Consider extracting to a shared library
+  so the app's ingress becomes a single function call. Without extraction,
+  the app remains too thick. (barney)
+
+- **Phase 4/5**: Forward `AuthInfo` (the output of `verifyClerkToken`), not
+  `MachineAuthObject`. `AuthInfo` has `{ token, scopes, clientId,
+  extra: { userId } }` — this is the typed context the tool layer receives.
+  (clerk-reviewer)
+
+- **Phase 6**: Delete `tool-auth-context.ts`, its unit test, and
+  `createFakeRequest` from `fakes.ts`. `createFakeExpressRequest` already
+  exists for tests needing Express `Request` shape. (barney)
+
+#### Specialist follow-ups recommended
+
+- **Wilma**: Pressure-test `createMcpRequest` Proxy removal safety once
+  `AsyncLocalStorage` is eliminated. (barney)
+- **Test reviewer**: Audit `check-mcp-client-auth.unit.test.ts` for `vi.mock`
+  violations and recommend DI-based alternative. (barney)
+- **Verify at implementation time**: `flatZodSchema` (`z.ZodRawShape`) is
+  assignable to `registerAppTool()`'s `ZodRawShapeCompat | AnySchema`
+  parameter type. (mcp-reviewer)

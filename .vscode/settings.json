@@ -9,6 +9,7 @@
     "codegen",
     "codemods",
     "commitlint",
+    "depcruise",
     "deployability",
     "edexcel",
     "edexcelb",

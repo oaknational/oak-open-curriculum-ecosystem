@@ -78,8 +78,16 @@ All workspace tooling configuration MUST follow the canonical patterns defined i
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript. ALWAYS fix the root cause, never work around it.
 - **Fix things** - All quality gates are blocking at all times, regardless of location, cause, or context.
 - **Never prefix variables with an underscore** - This is a hack, AND IT DOES NOT WORK. Figure out why the variable is unused and fix the root cause. Either use the variable, or delete it.
-- **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
-- **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
+- **Quality gates** - Run ALL gates after changes. The gate taxonomy has complementary layers, each catching a different class of defect:
+  1. **Formatting** (`format`, `markdownlint`) — consistent style, no merge noise
+  2. **Type correctness** (`type-check`) — compile-time type safety
+  3. **Linting** (`lint`) — code patterns, import boundaries, architectural rules. Custom lint rules (`@oaknational/eslint-plugin-standards`) encode architectural decisions as enforceable checks — workspace boundary rules, layer-direction constraints, file-count limits per directory, and prohibited import patterns. These turn ADRs into automated enforcement.
+  4. **Static analysis** (`knip`, `depcruise`) — unused code/exports/dependencies, circular dependencies, layer violations. These catch dead code and structural drift that linting and type-checking cannot see. Linting enforces _what you should do_; static analysis detects _what you forgot to clean up_.
+  5. **Testing** (`test`, `test:e2e`, `test:ui`, `smoke`) — behavioural correctness at all levels
+  6. **Mutation testing** (`mutate`) — test suite effectiveness. Proves tests actually detect real faults, not just exercise code paths.
+  7. **Build** (`build`) — production artefacts compile and bundle correctly
+  8. **Specialist review** (sub-agents) — architectural compliance, security, documentation
+- **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code. Static analysis tools (knip, dependency-cruiser) enforce this at scale.
 
 ### Compiler Time Types and Runtime Validation
 

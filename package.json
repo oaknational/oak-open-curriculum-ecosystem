@@ -47,6 +47,10 @@
     "format-check:root": "prettier --check .",
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "depcruise": "depcruise apps packages agent-tools",
+    "depcruise:report": "depcruise apps packages agent-tools --output-type dot > dependency-graph.dot",
     "shellcheck": "shellcheck scripts/*.sh apps/*/scripts/*.sh apps/*/smoke-tests/*.sh",
     "subagents:check": "node scripts/validate-subagents.mjs",
     "portability:check": "node scripts/validate-portability.mjs",
@@ -101,14 +105,17 @@
       }
     },
     "overrides": {
-      "axios": "^1.13.5",
-      "sucrase": ">=3.35.1",
-      "js-yaml": ">=4.1.1",
-      "csstype": "^3.2.3",
-      "rollup": ">=4.59.0",
-      "qs": ">=6.14.2",
+      "axios": ">=1.13.5",
+      "brace-expansion": ">=5.0.5",
+      "csstype": ">=3.2.3",
+      "file-type": ">=21.3.2",
       "hono": ">=4.12.4",
-      "@hono/node-server": ">=1.19.10"
+      "@hono/node-server": ">=1.19.10",
+      "js-yaml": ">=4.1.1",
+      "picomatch": ">=4.0.4",
+      "qs": ">=6.14.2",
+      "rollup": ">=4.59.0",
+      "sucrase": ">=3.35.1"
     },
     "onlyBuiltDependencies": [
       "@clerk/shared",
@@ -132,14 +139,16 @@
     "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.57.2",
-    "@vitest/coverage-v8": "^4.1.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "cloc": "2.6.0-cloc",
+    "dependency-cruiser": "^17.3.9",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
+    "knip": "^6.0.6",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",
@@ -151,6 +160,6 @@
     "turbo": "^2.8.20",
     "typescript": "^5",
     "typescript-eslint": "^8.57.2",
-    "vitest": "^4.1.1"
+    "vitest": "^4.1.2"
   }
 }

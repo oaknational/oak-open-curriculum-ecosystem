@@ -16,14 +16,14 @@ import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 // Mock dependencies
 vi.mock('./request-context.js');
 vi.mock('./tool-auth-checker.js');
-vi.mock('./auth/mcp-auth/verify-clerk-token.js');
+vi.mock('@clerk/mcp-tools/server');
 vi.mock('./resource-parameter-validator.js');
 vi.mock('@clerk/express');
 
 import type { MachineAuthObject } from '@clerk/backend';
 import { getRequestContext } from './request-context.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
-import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
+import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { validateResourceParameter } from './resource-parameter-validator.js';
 import { getAuth } from '@clerk/express';
 import { createFakeMachineAuthObject, createFakeExpressRequest } from './test-helpers/fakes.js';

@@ -10,7 +10,7 @@ import type { RequestHandler, Request } from 'express';
 import type { Logger } from '@oaknational/logger';
 import { getAuth } from '@clerk/express';
 import { mcpAuth } from './mcp-auth.js';
-import { verifyClerkToken } from './verify-clerk-token.js';
+import { verifyClerkToken } from '@clerk/mcp-tools/server';
 
 /**
  * Creates Express middleware that enforces Clerk OAuth authentication for MCP requests.

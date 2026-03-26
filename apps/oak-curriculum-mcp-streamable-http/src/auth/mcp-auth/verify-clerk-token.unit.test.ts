@@ -1,19 +1,36 @@
 /**
- * Unit tests for verifyClerkToken function.
+ * Conformance tests for `verifyClerkToken` from `@clerk/mcp-tools/server`.
  *
- * These tests verify that Clerk OAuth token verification works correctly,
- * returning AuthInfo for valid tokens and undefined for invalid ones.
+ * These tests guard the library function contract for the **entire app**, not
+ * just the `mcp-auth/` module. Both `mcp-auth-clerk.ts` (inside this module)
+ * and `check-mcp-client-auth.ts` (outside this module) depend on the same
+ * library function. Any behavioural drift caught here protects both call sites.
  *
- * This is a pure function with no side effects, making it ideal for unit testing.
+ * Originally written for the hand-rolled implementation, now retained as
+ * conformance tests per ADR-142 to detect library behaviour changes.
+ *
+ * **Version bump reminder**: When upgrading `@clerk/mcp-tools`, re-run these
+ * tests and verify the `console.error` spy assertion still holds. See ADR-142
+ * for the full re-evaluation checklist.
  *
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MachineAuthObject } from '@clerk/backend';
-import { verifyClerkToken } from './verify-clerk-token.js';
+import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
 
 describe('verifyClerkToken', () => {
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   it('should return undefined when auth is not authenticated', () => {
     const auth = createFakeMachineAuthObject({
       isAuthenticated: false,
@@ -131,5 +148,18 @@ describe('verifyClerkToken', () => {
     expect(result?.scopes).toEqual(['custom:scope', 'another:scope']);
     expect(result?.clientId).toBe('test-client');
     expect(result?.extra?.userId).toBe('test-user');
+  });
+
+  it('should not produce unexpected console.error output on the happy path', () => {
+    const auth = createFakeMachineAuthObject({
+      isAuthenticated: true,
+      userId: 'user-456',
+      clientId: 'client-123',
+      scopes: ['mcp:invoke'],
+    });
+
+    verifyClerkToken(auth, 'valid-token');
+
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 });

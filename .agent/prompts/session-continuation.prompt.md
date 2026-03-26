@@ -46,37 +46,41 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 ```
 
 - **Many hits in apps/ only** → WS2 (runtime migration) is current (WS1 complete as of 2026-03-26)
-- **Few hits (widget-script + preview files only), no simplification branch** → Runtime boundary simplification plan is next (see `current/mcp-runtime-boundary-simplification.plan.md`). Start with Phase 0 (`@clerk/mcp-tools/express` evaluation)
-- **Few hits (widget-script only), simplification complete** → WS3 (widget client migration) is current
+- **Few hits (widget-script + preview files only)** → Runtime boundary simplification plan is active. Check the plan's `todos` frontmatter for the current phase: `current/mcp-runtime-boundary-simplification.plan.md`. Note: `packages/sdks/` hits in `universal-tool-shared.ts` are expected (MCP Apps `structuredContent` format) and do not indicate WS1 incompleteness.
+- **Few hits (widget-script only), simplification plan all phases done** → WS3 (widget client migration) is current
 - **Zero hits** → WS3 complete; WS4 (search UI) is next
 - **Search UI exists** → WS4 is in progress or complete
 
 ## What To Do Next
 
 **The immediate next work is the runtime boundary simplification plan, starting
-with Phase 0.**
+with Phase 2 (RED).**
 
 Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
 
-**Phase 0** is an investigation spike — evaluate whether `@clerk/mcp-tools/express`
-official utilities (`mcpAuthClerk`, `streamableHttpHandler`,
-`protectedResourceHandlerClerk`, `authServerMetadataHandlerClerk`) can replace
-the hand-rolled MCP auth plumbing. The package is already a dependency at
-`^0.3.1` but its Express utilities are unused. Principle: use off-the-shelf
-wherever possible; innovate in Oak's domain, not in plumbing.
+**Phases 0-1** are **complete** (2026-03-26).
 
-Phase 0 deliverables: spike document, ADR documenting the adopt-or-explain
-decision, updated Phase 4/5 scope. Required reviewers: `clerk-reviewer`,
-`mcp-reviewer`, `security-reviewer`.
+- Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
+  All five Express utilities SKIP'd.
+- Phase 1: Seam inventory mapped, 3 reviewers passed (`mcp-reviewer`,
+  `architecture-reviewer-barney`, `clerk-reviewer`). Key decisions:
+  - `tool-auth-context.ts` is dead code — **delete** in Phase 6 (not promote)
+  - `tools/list` override cannot be eliminated by MCP SDK upgrade — Phase 3
+    must build SDK-owned protocol projection function
+  - Canonical ingress: `getAuth()` once → `verifyClerkToken()` → forward
+    `AuthInfo` as typed context
+  - Auth orchestration in `check-mcp-client-auth.ts` may be too thick for app
+    layer — consider extracting to shared library
 
-**Do not skip Phase 0 and jump to Phases 1-3 (tool-surface projection).** The
-Phase 0 outcome may reshape Phases 4-5 significantly.
+**Phase 2** (RED): Write failing SDK and HTTP tests proving tool registration
+and `tools/list` projection must come from one canonical SDK-owned surface.
+Baseline requirement: confirm existing tests pass before writing RED tests.
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **next** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Start with Phase 0.
+- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-1 complete, Phase 2 (RED) next.
 - **WS3** (widget client + branding): **blocked by** simplification plan completion
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3

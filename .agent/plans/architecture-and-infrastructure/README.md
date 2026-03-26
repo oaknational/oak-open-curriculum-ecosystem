@@ -15,6 +15,12 @@ See [current/README.md](current/README.md) for the next-up queue.
 |----------|------|-----------|--------|
 | P0 | [sentry-otel-integration.execution.plan.md](current/sentry-otel-integration.execution.plan.md) | **M3 blocker** | Queued |
 
+## Active Plans
+
+| Plan | Status | Description |
+|------|--------|-------------|
+| [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | Pending | Triage knip + dependency-cruiser findings, then promote to blocking QG |
+
 ## Documents
 
 | File | Milestone | Description |

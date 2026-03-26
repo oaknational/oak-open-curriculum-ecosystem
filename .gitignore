@@ -7,6 +7,10 @@ lint-profile.json
 dist
 **/dist
 
+# Generated analysis output
+dependency-graph.dot
+dependency-graph.svg
+
 # Agent Interactions
 collaboration.txt
 
