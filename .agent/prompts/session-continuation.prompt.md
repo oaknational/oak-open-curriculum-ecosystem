@@ -84,6 +84,27 @@ app to consume them. Make all Phase 2 RED tests pass.
 
 **Invoke `mcp-reviewer` before implementation decisions.**
 
+**MCP-reviewer findings from Phase 2 (incorporate during GREEN)**:
+
+- `toProtocolEntry` should include top-level `title` (MCP spec 2025-11-25
+  distinguishes `title` from `annotations.title`)
+- Assert `outputSchema` absence explicitly (`undefined` for current tools) so
+  the contract is visible when it's eventually added
+- Non-widget `_meta` assertion should test `_meta.ui` undefined, not `_meta`
+  entirely (allows future non-UI `_meta` uses)
+- `toRegistrationConfig` should own the `title` derivation
+  (`tool.annotations?.title ?? tool.name`) — currently hand-assembled in
+  `handlers.ts:103`
+
+**Architecture-reviewer-fred findings from Phase 2 (incorporate during GREEN)**:
+
+- Replace `vi.spyOn(server, 'registerTool')` with a fake server capturing
+  calls in a plain array (ADR-078 simple-fakes)
+- Consider injecting a controlled registry into the integration test instead
+  of using real `generatedToolRegistry` for assertions
+- Phase 3 must fully delete the config hand-assembly in `handlers.ts:102-108`
+  — no partial adoption
+
 **SDK work** — create `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts`:
 
 1. `toRegistrationConfig(tool: UniversalToolListEntry)` — produces a config
