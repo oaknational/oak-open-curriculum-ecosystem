@@ -231,3 +231,22 @@
   in `package.json`. If a workspace imports another workspace's
   package at ESLint config load time but doesn't declare the dep,
   turbo won't order them correctly.
+
+## Session 2026-03-26 — Practice scaffolding gap
+
+### Observation: The Practice does not yet support scaffolding a new repo
+
+The Practice is designed to make existing repos excellent — principles,
+reviewers, quality gates, memory, experience. But it has no mechanism
+for creating a new repo from scratch. This is reasonable: the Practice
+is about *how*, not *what*. However, a scaffolding framework could
+combine: **mission statement** (what the repo exists to do) + **the
+Practice** (how it should be done). That pairing might be sufficient to
+generate a well-structured repo from first principles.
+
+Potential shape: a `practice-scaffold` command that takes a mission
+description, selects relevant practice-core rules, generates the
+directory structure and initial configurations, and wires up the
+quality gates. The Practice's plasmid exchange mechanism already handles
+*importing* into an existing repo — scaffolding would be the *genesis*
+equivalent.
