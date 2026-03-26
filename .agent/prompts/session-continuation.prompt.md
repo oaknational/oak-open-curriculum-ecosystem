@@ -54,12 +54,12 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 ## What To Do Next
 
 **The immediate next work is the runtime boundary simplification plan, starting
-with Phase 2 (RED).** Skip live spec research for simplification plan phases —
-Phase 2 is pure SDK + test work with no MCP Apps API surface decisions.
+with Phase 3 (GREEN).** Skip live spec research for simplification plan phases —
+Phase 3 is pure SDK + app simplification work.
 
 Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
 
-**Phases 0-1** are **complete** (2026-03-26).
+**Phases 0-2** are **complete** (2026-03-26).
 
 - Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
   All five Express utilities SKIP'd.
@@ -72,47 +72,74 @@ Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simpli
     `AuthInfo` as typed context
   - Auth orchestration in `check-mcp-client-auth.ts` may be too thick for app
     layer — consider extracting to shared library
+- Phase 2: RED tests written and verified. Two projection functions
+  (`toRegistrationConfig`, `toProtocolEntry`) are asserted but do not exist.
+  `pnpm type-check` fails on missing imports; `pnpm test` fails on missing
+  behaviour. All 1,372 existing tests remain green.
 
-### Phase 2 (RED) — What to Do
+### Phase 3 (GREEN) — What to Do
 
-Write failing tests that prove the canonical SDK descriptor surface. TDD: tests
-first, then implementation in Phase 3.
+Implement the canonical descriptor projections in the SDK and simplify the HTTP
+app to consume them. Make all Phase 2 RED tests pass.
 
-**Before writing any RED tests**, confirm the baseline:
+**Invoke `mcp-reviewer` before implementation decisions.**
 
-```bash
-pnpm --filter @oaknational/curriculum-sdk test
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
-# Both must exit 0
-```
+**SDK work** — create `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts`:
 
-**Target tests** (must fail until Phase 3 makes them green):
+1. `toRegistrationConfig(tool: UniversalToolListEntry)` — produces a config
+   object that `registerAppTool()` (widget tools) or `registerTool()`
+   (non-widget tools) can consume directly. Must include:
+   - `title`, `description`, `inputSchema` (Zod shape via `flatZodSchema` or
+     JSON Schema fallback), `annotations`, `securitySchemes`
+   - `_meta.ui.resourceUri` for widget tools (from `tool._meta`)
+   - No `_meta` for non-widget tools (e.g. `download-asset`)
 
-1. **SDK-level**: At least one test proving the canonical descriptor or its
-   derived projections do not yet exist or expose the required shape.
-2. **HTTP-level**: At least one test proving the app still hand-maps tool
-   metadata rather than consuming an SDK projection.
-3. **E2E**: `tool-examples-metadata.e2e.test.ts` — `inputSchema.examples`
-   must survive `tools/list` via the canonical path.
+2. `toProtocolEntry(tool: UniversalToolListEntry)` — produces a `tools/list`
+   protocol entry using JSON Schema `inputSchema` (preserving examples). Must
+   include: `name`, `description`, `inputSchema`, `annotations`, `_meta` (when
+   present).
 
-**Key constraint from Phase 1 reviewers**: The `tools/list` override cannot be
-eliminated by MCP SDK upgrade (Zod→JSON Schema structurally drops examples).
-Phase 3 must build an SDK-owned protocol projection function. RED tests should
-specify the behaviour (SDK provides the projection), not the implementation.
+3. Export both from `public/mcp-tools.ts` barrel.
 
-**Critical files to read first**:
+**App work** — simplify `handlers.ts` and `tools-list-override.ts`:
 
+1. `handlers.ts:registerHandlers()` — replace hand-assembled config with
+   `toRegistrationConfig(tool)`. Use `registerAppTool()` for widget tools,
+   `registerTool()` for non-widget tools.
+2. `tools-list-override.ts:overrideToolsListHandler()` — replace `tools.map()`
+   hand-mapping with `toProtocolEntry(tool)`.
+3. Both files should have zero `tool.(name|description|inputSchema|annotations|_meta)`
+   field access after GREEN.
+
+**Critical files**:
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/canonical-descriptor.unit.test.ts` — RED tests to make green
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts` — RED tests to make green
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts` — current SDK surface
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` — `UniversalToolListEntry`
-- `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` — the app hand-mapping to replace
-- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — registration loop using raw `registerTool()`
-- Plan Phase 2 section — full acceptance criteria and deterministic validation
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — registration loop
+- `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` — protocol projection
+
+**Deterministic validation** (from plan Phase 3):
+
+```bash
+# Check for hand-mapping of tool fields (should be zero after GREEN)
+rg -n "tool\.(name|description|inputSchema|annotations|_meta)" \
+  apps/oak-curriculum-mcp-streamable-http/src/handlers.ts \
+  apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts
+# Expected: zero matches
+
+pnpm type-check   # Must pass (no more missing imports)
+pnpm --filter @oaknational/curriculum-sdk test          # Must pass
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test  # Must pass
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e  # Must pass
+```
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-1 complete, Phase 2 (RED) next.
+- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-2 complete, Phase 3 (GREEN) next.
 - **WS3** (widget client + branding): **blocked by** simplification plan completion
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3

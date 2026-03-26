@@ -15,7 +15,7 @@ todos:
     status: done
   - id: phase-2-red-tool-surface
     content: "Phase 2 (RED): Add failing SDK and HTTP tests that prove tool registration projection and tools/list projection must come from one canonical SDK-owned surface while preserving generated examples."
-    status: pending
+    status: done
   - id: phase-3-green-tool-surface
     content: "Phase 3 (GREEN): Move tool-surface projection into the curriculum SDK, then simplify the HTTP app so it consumes the SDK projection instead of serialising tool metadata itself."
     status: pending
@@ -34,7 +34,7 @@ isProject: false
 # MCP Runtime Boundary Simplification
 
 **Last Updated**: 2026-03-26
-**Status**: Current — Phases 0-1 complete, Phase 2 next
+**Status**: Current — Phases 0-2 complete, Phase 3 next
 **Scope**: Remove the two remaining app-owned MCP seams after WS2: the
 Express/Clerk ingress bridge and the hand-authored MCP tool exposure path.
 
@@ -394,59 +394,64 @@ rg -n "createMcpRequest|setRequestContext|getRequestContext|getAuth\\(|overrideT
 
 ## Phase 2 — RED: Canonical SDK Descriptor and Exposure Boundary
 
+**Status**: Done (2026-03-26)
+
 Write tests first to prove that one canonical transport-neutral SDK descriptor
 surface exists and that both app registration and `tools/list` exposure derive
 from it.
 
-Target tests:
+### Check Driven Development Approach
 
-1. SDK tests around the canonical descriptor and derived projections
-2. HTTP integration tests covering registration consumption
-3. `apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-examples-metadata.e2e.test.ts`
+Phase 2 uses the appropriate tool for each assertion:
 
-The RED phase must prove all of the following:
+- **`pnpm type-check`** fails on missing imports (the primary RED signal)
+- **`pnpm test`** fails on behavioural assertions (secondary RED signal)
+- **`pnpm lint`** passes (eslint-disable comments document RED-phase cascades)
 
-1. generated `inputSchema.examples` survive `tools/list`
-2. the app no longer needs to hand-curate fields like `name`, `description`,
-   `annotations`, `_meta`, `_meta.ui.visibility`, and future `outputSchema`
-3. app-rendering registration remains compatible with `registerAppTool()`, not
-   a raw `registerTool()`-specific Oak projection
-4. both registration and `tools/list` derive from the same canonical SDK
-   descriptor, not two app-local mappings
+This follows the Check Driven Development principle: TDD is not limited to
+test files — type-check, lint, grep, knip, depcruise, or any other quality gate
+can serve as the assertion mechanism. Pick the tool that proves the gap most
+directly.
 
-**Baseline requirement (review finding 2026-03-26)**: Before writing any RED
-tests, run existing test suites and confirm they pass (exit 0). This
-establishes a known-good baseline so RED failures can be attributed to the new
-tests, not pre-existing breakage.
+### RED Test Files
 
-**Acceptance criteria**:
+1. **SDK**: `packages/sdks/oak-curriculum-sdk/src/mcp/canonical-descriptor.unit.test.ts`
+   (new file, 7 tests across 3 describe blocks)
+   - Imports `toRegistrationConfig`, `toProtocolEntry` from
+     `./universal-tools/projections.js` — module does not exist yet
+   - `pnpm type-check` fails: `TS2307: Cannot find module`
+   - Tests registration projection (widget/non-widget), protocol projection
+     (JSON Schema with examples), and canonical source consistency
 
-1. Existing tests pass before any new RED tests are written (known-good
-   baseline).
-2. At least one SDK-level test fails because the canonical descriptor or its
-   derived projections do not exist or do not yet expose the required shape.
-3. At least one HTTP-level test fails because the app still hand-maps tool
-   metadata.
-4. The RED tests make it impossible to keep `registerTool()` as the canonical
-   long-term registration target for app-rendering tools.
-5. The RED tests describe behaviour, not the internal implementation shape.
+2. **HTTP**: `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts`
+   (modified, 2 new tests in `tool registration via SDK projection` block)
+   - Imports `toRegistrationConfig` from SDK — export does not exist yet
+   - `pnpm type-check` fails: `TS2305: has no exported member`
+   - Test 2a: widget tools must include `_meta.ui.resourceUri` in registration
+     config (currently omitted by `handlers.ts:102-108`)
+   - Test 2b: registration config must match SDK projection (currently
+     hand-assembled)
 
-**Deterministic validation**:
+### RED State (confirmed 2026-03-26)
 
-```bash
-# Baseline: confirm existing tests pass BEFORE writing RED tests
-pnpm --filter @oaknational/curriculum-sdk test
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
-# Expected: exit 0
+| Gate | Status | Signal |
+| ---- | ------ | ------ |
+| `pnpm type-check` | RED | `TS2307` (missing module) + `TS2305` (missing export) |
+| `pnpm lint` | RED | `import-x/no-unresolved` + `no-unsafe-assignment` cascade |
+| SDK tests | RED | 1 file fails, 48 pass (698 existing tests green) |
+| HTTP tests | RED | 2 tests fail, 674 pass (all existing tests green) |
+| `pnpm format` | GREEN | formatting passes |
+| `pnpm markdownlint` | GREEN | markdown passes |
 
-# After RED tests written:
-pnpm --filter @oaknational/curriculum-sdk test
-# Expected during RED: non-zero because the new SDK projection tests fail
+### Acceptance Criteria (all met)
 
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
-# Expected during RED: non-zero because the new HTTP/E2E projection tests fail
-```
+1. Existing tests pass before RED tests (baseline confirmed: 698 + 674 green).
+2. SDK-level type-check fails on missing `projections.js` module.
+3. HTTP-level tests fail: `_meta` omitted from config + `toRegistrationConfig`
+   not a function.
+4. Test 1b asserts `_meta.ui.resourceUri` in registration config — makes raw
+   `registerTool()` insufficient for widget tools.
+5. Tests describe behaviour ("produces config with X shape") not implementation.
 
 ## Phase 3 — GREEN: Canonicalise the SDK Descriptor Surface
 
@@ -479,6 +484,8 @@ Required outcomes:
    build protocol output.
 5. No new registry, compatibility layer, or host-specific projection is
    introduced.
+6. Phase 2 RED tests contain zero `eslint-disable` comments (lint failing on
+   the missing module is part of the RED signal per Check Driven Development).
 
 **Deterministic validation**:
 

@@ -198,7 +198,10 @@ before WS3 implementation begins.
   Key decisions: `tool-auth-context.ts` is dead code (delete in Phase 6);
   `tools/list` override stays (MCP SDK cannot preserve examples); canonical
   ingress is `getAuth()` once → `verifyClerkToken()` → forward `AuthInfo`.
-- **Phase 2** (next): RED tests for canonical SDK descriptor surface.
+- **Phase 2** (complete): RED tests for canonical SDK descriptor surface.
+  `toRegistrationConfig` and `toProtocolEntry` asserted but non-existent.
+  type-check, lint, and test all RED. All 1,372 existing tests green.
+- **Phase 3** (next): GREEN — implement SDK projections, simplify app.
 
 ---
 
@@ -286,8 +289,8 @@ WS2: App Runtime Migration ─────────────────�
 Runtime Boundary Simplification ───────────────────┐  ← active
   Phase 0: evaluate @clerk/mcp-tools/express       │  ✓ done
   Phase 1: foundation + seam audit                 │  ✓ done
-  Phase 2: RED — SDK descriptor tests              │  ← next
-  Phase 3: GREEN — canonicalise SDK surface        │
+  Phase 2: RED — SDK descriptor tests              │  ✓ done
+  Phase 3: GREEN — canonicalise SDK surface        │  ← next
   Phases 4-5: ingress boundary                     │
   Phase 6: cleanup + review                        │
                                                     ▼
