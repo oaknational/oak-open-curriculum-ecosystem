@@ -405,8 +405,10 @@ from it.
 Phase 2 uses the appropriate tool for each assertion:
 
 - **`pnpm type-check`** fails on missing imports (the primary RED signal)
-- **`pnpm test`** fails on behavioural assertions (secondary RED signal)
-- **`pnpm lint`** passes (eslint-disable comments document RED-phase cascades)
+- **`pnpm lint`** fails on unresolved import and unsafe-assignment cascade
+- **`pnpm test`** fails on behavioural assertions
+
+Zero `eslint-disable` comments — lint failing IS a valid RED signal.
 
 This follows the Check Driven Development principle: TDD is not limited to
 test files — type-check, lint, grep, knip, depcruise, or any other quality gate
