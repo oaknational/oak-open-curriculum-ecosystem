@@ -54,7 +54,8 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 ## What To Do Next
 
 **The immediate next work is the runtime boundary simplification plan, starting
-with Phase 2 (RED).**
+with Phase 2 (RED).** Skip live spec research for simplification plan phases —
+Phase 2 is pure SDK + test work with no MCP Apps API surface decisions.
 
 Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
 
@@ -72,9 +73,40 @@ Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simpli
   - Auth orchestration in `check-mcp-client-auth.ts` may be too thick for app
     layer — consider extracting to shared library
 
-**Phase 2** (RED): Write failing SDK and HTTP tests proving tool registration
-and `tools/list` projection must come from one canonical SDK-owned surface.
-Baseline requirement: confirm existing tests pass before writing RED tests.
+### Phase 2 (RED) — What to Do
+
+Write failing tests that prove the canonical SDK descriptor surface. TDD: tests
+first, then implementation in Phase 3.
+
+**Before writing any RED tests**, confirm the baseline:
+
+```bash
+pnpm --filter @oaknational/curriculum-sdk test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+# Both must exit 0
+```
+
+**Target tests** (must fail until Phase 3 makes them green):
+
+1. **SDK-level**: At least one test proving the canonical descriptor or its
+   derived projections do not yet exist or expose the required shape.
+2. **HTTP-level**: At least one test proving the app still hand-maps tool
+   metadata rather than consuming an SDK projection.
+3. **E2E**: `tool-examples-metadata.e2e.test.ts` — `inputSchema.examples`
+   must survive `tools/list` via the canonical path.
+
+**Key constraint from Phase 1 reviewers**: The `tools/list` override cannot be
+eliminated by MCP SDK upgrade (Zod→JSON Schema structurally drops examples).
+Phase 3 must build an SDK-owned protocol projection function. RED tests should
+specify the behaviour (SDK provides the projection), not the implementation.
+
+**Critical files to read first**:
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts` — current SDK surface
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` — `UniversalToolListEntry`
+- `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` — the app hand-mapping to replace
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — registration loop using raw `registerTool()`
+- Plan Phase 2 section — full acceptance criteria and deterministic validation
 
 ## Work Stream Status
 
