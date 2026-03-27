@@ -36,7 +36,7 @@
     "test:ui": "playwright test"
   },
   "dependencies": {
-    "@clerk/backend": "^3.0.1",
+    "@clerk/backend": "^3.2.3",
     "@clerk/express": "^2.0.1",
     "@clerk/mcp-tools": "^0.3.1",
     "@elastic/elasticsearch": "^9.3.4",
