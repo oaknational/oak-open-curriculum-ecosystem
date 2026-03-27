@@ -1,0 +1,8 @@
+---
+description: Invoke sentry-reviewer when changes touch Sentry SDK configuration, OpenTelemetry observability integration, trace correlation, telemetry redaction, or MCP Insights wrapping.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-sentry-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and `subagent_type: sentry-reviewer`.

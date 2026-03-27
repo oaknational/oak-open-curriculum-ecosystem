@@ -310,6 +310,7 @@ discipline and cross-checking against ADRs.
 | `mcp-reviewer` | MCP protocol specification expert | opus |
 | `elasticsearch-reviewer` | ES mappings, queries, bulk ops | opus |
 | `clerk-reviewer` | Clerk middleware, token verification, OAuth proxy | opus |
+| `sentry-reviewer` | Sentry SDK, OTel correlation, MCP Insights, redaction | opus |
 
 ### The Four-Persona Architecture Team
 
@@ -483,6 +484,7 @@ For each reviewer:
 
 Add domain-specific reviewers as your project needs them:
 - `elasticsearch-reviewer` for ES-heavy projects
+- `sentry-reviewer` for Sentry, OpenTelemetry, and observability-foundation work
 - `mcp-reviewer` for MCP protocol work
 - `security-reviewer` when auth/PII is involved
 - Custom specialists for your domain (e.g., `api-reviewer`, `database-reviewer`)

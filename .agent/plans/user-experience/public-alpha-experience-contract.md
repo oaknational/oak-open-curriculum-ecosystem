@@ -1,7 +1,7 @@
 # Public Alpha Experience Contract
 
 **Status**: Draft for immediate adoption  
-**Applies To**: Milestone 1 public-alpha readiness
+**Applies To**: Milestone 2 open-public-alpha readiness
 
 ---
 
@@ -63,7 +63,7 @@ experience outcome contract must hold across supported clients.
 
 ---
 
-## Milestone 1 UI-Surface Decision Gate (Option X / Option Y)
+## Milestone 2 UI-Surface Decision Gate (Option X / Option Y)
 
 This collection owns the user-outcome decision criteria; technical collections
 own implementation detail.
@@ -88,21 +88,21 @@ Required evidence for decision:
 Decision output requirement:
 
 - One explicit selected option with rationale, expected user impact, and
-  rollback posture captured before Milestone 1 execution starts.
+  rollback posture captured before Milestone 2 execution starts.
 
 ---
 
 ## Remaining Non-UX Blockers
 
-The remaining non-UX blockers for public alpha are:
+The remaining non-UX blocker for open public alpha is:
 
-1. Switch Clerk to a production instance.
-2. Verify that basic logging is working in Sentry.
+1. Deliver and verify the Sentry + OpenTelemetry foundation for the HTTP MCP
+   server and Search CLI.
 
 Primary tracking references:
 
-- [../../research/auth/clerk-production-migration.md](../../research/auth/clerk-production-migration.md)
-- [../architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md](../architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md)
+- [../architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md](../architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
+- [../architecture-and-infrastructure/README.md](../architecture-and-infrastructure/README.md)
 
 ---
 
@@ -117,8 +117,7 @@ Do not represent alpha as ready if any of the following are true:
 5. SDK/MCP integration contracts drift across transports or surfaces.
 6. Supported clients cannot provide either rich rendering or a documented usable
    fallback for core journeys.
-7. Clerk production migration is incomplete.
-8. Basic Sentry logging is not working.
+7. The Sentry + OpenTelemetry foundation is not working or cannot be evidenced.
 
 ---
 

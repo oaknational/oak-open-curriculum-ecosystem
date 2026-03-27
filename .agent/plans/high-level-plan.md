@@ -34,11 +34,12 @@ Milestone 2: Open Public Alpha                   🔄 NEXT
   → ES re-index + search quality validation
   → Replace OpenAI app with MCP Apps infrastructure
   → Knowledge graph alignment audit
+  → Sentry + OTel foundation for HTTP + Search CLI
   → Dev Clerk remains; search and graph are the gates
 
 Milestone 3: Public Beta                         📋 PLANNED
   → Production Clerk integration (social providers, public sign-up)
-  → Production Sentry + full OTel logging
+  → Operational hardening on top of the observability foundation
   → KG alignment (if not completed in M2)
   → Exemplar MCP App UI (user_search tool, React, design input)
   → Operational hardening, extension surfaces, tech debt
@@ -51,8 +52,8 @@ Milestone 3: Public Beta                         📋 PLANNED
 | Closed private alpha | Private | Private alpha | Test Clerk | — |
 | Open private alpha (M0) | **Public** | Private alpha | Test Clerk | ✅ Complete |
 | Invite-only alpha (M1) | Public | **Invite-only alpha** | Dev Clerk + allowlist | ✅ Complete |
-| Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment |
-| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Prod Clerk, Prod Sentry+OTel, KG alignment, exemplar UI |
+| Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment, Sentry+OTel foundation |
+| Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Prod Clerk, alerting/ops hardening, KG alignment, exemplar UI |
 
 ---
 
@@ -180,6 +181,14 @@ Graph-augmented curriculum navigation begins to surface.
    - Outputs inform whether next graph promotion is separate Neo4j
      provisioning, Elasticsearch projection work, or explanation-first
      graph augmentation
+4. **Sentry + OpenTelemetry foundation**
+   - Collection entry point:
+     [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
+   - Strategic umbrella:
+     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
+   - Scope: HTTP MCP server + Search CLI, shared logger foundation, Sentry
+     runtime integration, telemetry redaction, release/source-map evidence
+   - Note: deprecated standalone stdio MCP workspace is not an adoption target
 
 ---
 
@@ -207,14 +216,14 @@ platform reach.
    - Edge rate limiting on OAuth proxy endpoints
      (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) —
      [m2-public-alpha-auth-rate-limits.execution.plan.md](semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md)
-2. **Production Sentry integration with full OTel logging**
-   - Full plan:
-     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/current/observability-and-quality-metrics.plan.md)
-   - Covers: Sentry configuration, structured logging, monitoring,
-     alerting, quality metrics dashboards
-   - Execution plan:
-     [sentry-otel-integration.execution.plan.md](architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
-     — reference implementation exists in `starter-app-spike`
+2. **Operational hardening on top of the observability foundation**
+   - Strategic umbrella:
+     [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
+   - Covers: alerting, quality metrics dashboards, operational verification,
+     and the sustained use of the already-landed Sentry + OTel foundation
+   - Collection entry point:
+     [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
+   - Reference implementation patterns exist in `starter-app-spike`
 3. **Knowledge graph alignment** (if not completed in M2)
    - [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md)
 4. **Exemplar MCP App UI experience (`user_search` tool)**

@@ -212,3 +212,77 @@
   in `package.json`. If a workspace imports another workspace's
   package at ESLint config load time but doesn't declare the dep,
   turbo won't order them correctly.
+
+## Session 2026-03-27 — Sentry/OTel plan location
+
+### What Was Done
+
+- Located the authoritative execution plan for bringing the
+  `starter-app-spike` observability patterns into this repo and then
+  promoted it into the correct `active/` lane:
+  `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+- Created the dedicated handover prompt:
+  `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
+- Updated the architecture collection indexes so the active plan, current
+  queue, and prompt discovery all point at the live execution source.
+- Confirmed the older
+  `observability/logger-sentry-otel-integration-plan.md` name survives
+  only in archived historical docs; the file does not exist in the
+  current plans tree.
+
+### Patterns to Remember
+
+- For Sentry/OTel work, distinguish between two things:
+  ADR-051 covers the already-complete OpenTelemetry-compliant JSON log
+  format in `@oaknational/logger`; the current migration plan is about
+  porting the runtime Sentry sink, error tracking adapter, fixture mode,
+  MCP wrapping, and deployment wiring from `starter-app-spike`.
+- The user made one crucial scope correction: update the HTTP MCP server
+  and the Search CLI, but do not adopt this foundation in the deprecated
+  standalone STDIO MCP server.
+- Authority split for this work must be explicit:
+  1. the active execution plan owns implementation facts and acceptance criteria
+  2. the review checkpoint owns handover-review state
+  3. the prompt is a thin restart surface only
+  4. this napkin entry records learnings and caveats, not duplicate facts
+
+### Current Execution Snapshot
+
+- Governance work already landed:
+  ADR-141, Sentry reviewer capability surfaces, workflow/reviewer docs,
+  milestone/public-alpha/strategy alignment.
+- Verified codebase findings already recorded on disk:
+  logger still uses `stdoutSink` + `fileSink`;
+  env lacks `SentryEnvSchema`;
+  HTTP MCP server has per-request `mcpFactory` but no MCP monitoring
+  wrapper yet;
+  Search CLI still relies on mutable logger globals;
+
+### Review-state note (2026-03-27)
+
+- Historical reviewer findings were received during the bundle rewrite, but the
+  authoritative handover-review state now lives in:
+  `.agent/plans/architecture-and-infrastructure/active/sentry-otel-foundation.review-checkpoint-2026-03-27.md`
+- The refreshed reviewer matrix later cleared the rewritten bundle; consult the
+  checkpoint for the authoritative verdict rather than this napkin entry.
+- Local documentation validation after the rewrite:
+  `pnpm practice:fitness` passes;
+  `pnpm markdownlint:root` is currently not runnable in this workspace because
+  the `markdownlint` CLI dependency is unavailable locally.
+- Immediate next execution order remains:
+  create shared observability packages, rewrite the logger around
+  `LogSink[]`, add shared Sentry env/config handling, then adopt the
+  foundation in the HTTP server and Search CLI.
+- `@sentry/node` and direct `@opentelemetry/api` declarations are still runtime
+  implementation work; they are not yet in workspace manifests.
+
+### Config re-review note (2026-03-27)
+
+- The refreshed active plan now records deterministic environment resolution
+  (`SENTRY_ENVIRONMENT -> VERCEL_ENV -> NODE_ENV -> development`), total release
+  resolution (`SENTRY_RELEASE -> VERCEL_GIT_COMMIT_SHA -> GITHUB_SHA ->
+  COMMIT_SHA -> SOURCE_VERSION -> npm_package_version -> development-local`),
+  and an error union that no longer lets missing release env vars block
+  `SENTRY_MODE=off`.
+- The authoritative review outcome still belongs in the checkpoint file, not in
+  this napkin entry.

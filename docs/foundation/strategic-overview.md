@@ -49,8 +49,8 @@ Two milestones are complete. Two remain.
 | ---------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | M0: Open Private Alpha | Complete | Repository public on GitHub; SDK, MCP servers, and search infrastructure available to external developers                                  |
 | M1: Invite-Only Alpha  | Complete | Live server at `curriculum-mcp-alpha.oaknational.dev`; v1.0.0 released; Oak staff and invited users accessing curriculum via AI assistants |
-| M2: Open Public Alpha  | **Next** | Reliable search (ES re-index), unified MCP Apps infrastructure with branding, knowledge graph alignment                                    |
-| M3: Public Beta        | Planned  | Production authentication (Clerk), production observability (Sentry + OTel), exemplar interactive UI, operational hardening                |
+| M2: Open Public Alpha  | **Next** | Reliable search (ES re-index), unified MCP Apps infrastructure with branding, knowledge graph alignment, Sentry + OTel foundation          |
+| M3: Public Beta        | Planned  | Production authentication (Clerk), exemplar interactive UI, alerting and operational hardening                                              |
 
 M0 and M1 were delivered by a single developer using agentic engineering
 practices — from first commit to live, authenticated, publicly accessible
@@ -150,10 +150,11 @@ team rather than a single engineer.
 
 ### Operational maturity
 
-- **Production observability**: Sentry + OTel integration is an M3 blocker.
-  Once in place, the team has structured logging, error tracking, and
-  performance monitoring from day one. The execution plan exists:
-  [sentry-otel-integration.execution.plan.md](../../.agent/plans/architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md).
+- **Production observability foundation**: Sentry + OTel integration is now an
+  M2 blocker for the canonical runtimes. Once in place, the team has shared
+  structured logging, error tracking, trace correlation, and MCP Insights
+  instrumentation from day one. The collection entry point is:
+  [architecture-and-infrastructure/README.md](../../.agent/plans/architecture-and-infrastructure/README.md).
 - **Monitoring and alerting**: sign-up velocity, API quota consumption, abuse
   pattern detection, and search quality regression alerts. These build on the
   Sentry/OTel foundation.

@@ -129,6 +129,7 @@ During development, the AI agent working on the code invokes specialist sub-agen
 | `config-reviewer`         | Tooling config consistency, quality gate alignment        |
 | `security-reviewer`       | Auth, secrets, PII, injection risks                       |
 | `docs-adr-reviewer`       | Documentation completeness, ADR accuracy                  |
+| `sentry-reviewer`         | Sentry SDK usage, OTel observability, MCP Insights        |
 
 ### When they run
 

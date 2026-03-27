@@ -59,6 +59,7 @@ NEVER disable any quality gates or Git hooks.
 
 ### Architecture Level
 
+- **Long-term architectural excellence over expediency** - Prefer the strongest long-term foundation, but still ask the first question and reject speculative complexity
 - **SOLID principles** (loosely) - Focus on single responsibility and dependency inversion
 - **Clean Architecture** (loosely) - Separate concerns into layers
 - **Strict boundaries** - Clear interfaces between modules, no leaky abstractions

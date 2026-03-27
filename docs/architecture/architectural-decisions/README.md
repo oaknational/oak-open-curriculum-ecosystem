@@ -152,6 +152,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-138: Shared Search Field Contract Surface](138-shared-search-field-contract-surface.md)
 - [ADR-139: Sequence Semantic Contract and Ownership](139-sequence-semantic-contract-and-ownership.md)
 - [ADR-140: Search Ingestion SDK Boundary](140-search-ingestion-sdk-boundary.md)
+- [ADR-141: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](141-coherent-structured-fan-out-for-observability.md)
 
 ## Key Architectural Decisions
 
@@ -173,6 +174,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
+- **[ADR-141](141-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out logger foundation for Sentry and OpenTelemetry integration
 
 For understanding the agentic engineering practice:
 
