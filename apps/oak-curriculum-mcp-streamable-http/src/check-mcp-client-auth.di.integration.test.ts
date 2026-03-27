@@ -1,15 +1,9 @@
 /**
- * RED Phase 4 — DI-based unit tests for checkMcpClientAuth.
+ * DI-based integration tests for checkMcpClientAuth.
  *
- * These tests specify the desired contract: checkMcpClientAuth receives
- * explicit AuthInfo and injected dependencies instead of reaching into
- * AsyncLocalStorage and hard-importing modules.
- *
- * RED mechanism: `CheckMcpClientAuthDeps` does not exist yet (TS2724),
- * and the function only accepts 4 parameters, not 6 (TS2554).
- * These are compiler errors — the RED phase for signature refactors.
- *
- * @see Phase 4 of mcp-runtime-boundary-simplification.plan.md
+ * checkMcpClientAuth receives explicit AuthInfo and injected dependencies
+ * (CheckMcpClientAuthDeps) instead of reaching into ambient state. Zero
+ * vi.mock calls — all dependencies are injected directly.
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -17,11 +11,7 @@ import type { Logger } from '@oaknational/logger';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { ResourceValidationResult } from './resource-parameter-validator.js';
-import {
-  checkMcpClientAuth,
-  // RED: CheckMcpClientAuthDeps does not exist yet — TS2724
-  type CheckMcpClientAuthDeps,
-} from './check-mcp-client-auth.js';
+import { checkMcpClientAuth, type CheckMcpClientAuthDeps } from './check-mcp-client-auth.js';
 import { createFakeAuthInfo, createFakeLogger } from './test-helpers/fakes.js';
 import type { AuthDisabledRuntimeConfig } from './runtime-config.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
@@ -38,7 +28,7 @@ function createFakeDeps(overrides?: Partial<CheckMcpClientAuthDeps>): CheckMcpCl
   };
 }
 
-describe('checkMcpClientAuth (DI contract — Phase 4 RED)', () => {
+describe('checkMcpClientAuth (DI contract)', () => {
   const toolName: UniversalToolName = 'get-key-stages';
   const resourceUrl = 'https://example.com/mcp';
 
@@ -59,7 +49,6 @@ describe('checkMcpClientAuth (DI contract — Phase 4 RED)', () => {
           } satisfies AuthDisabledRuntimeConfig)
         : createMockRuntimeConfig();
 
-    // RED: current signature accepts 4 params, this passes 6 — TS2554
     return checkMcpClientAuth(toolName, resourceUrl, logger, runtimeConfig, authInfo, deps);
   }
 

@@ -52,7 +52,7 @@ const checkAuthDeps: CheckMcpClientAuthDeps = {
  *
  * Per ADR-054, this function intercepts auth errors at the tool execution result
  * level (the last layer where structured error objects are accessible) and
- * returns MCP-compliant responses with _meta field for ChatGPT OAuth linking.
+ * returns MCP-compliant responses with _meta field for OAuth re-authentication.
  *
  * @param options - Tool execution options
  * @returns Tool execution result or auth error response with _meta

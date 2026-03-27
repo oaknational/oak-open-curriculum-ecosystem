@@ -2,7 +2,7 @@
  * Integration tests for createMcpHandler and registerHandlers.
  *
  * Tests that the MCP handler correctly:
- * 1. Extracts AuthInfo at ingress and sets req.auth for MCP SDK
+ * 1. Reads AuthInfo from res.locals.authInfo and sets req.auth for MCP SDK
  * 2. Extracts correlation ID for logging
  * 3. Passes body to transport.handleRequest
  * 4. Creates server+transport per request via factory
@@ -31,6 +31,7 @@ import {
   createFakeExpressRequest,
   createFakeSearchRetrieval,
   createFakeLogger,
+  createFakeAuthInfo,
 } from './test-helpers/fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
@@ -63,7 +64,7 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedBody).toEqual(testBody);
     });
 
-    it('sets req.auth to undefined when no Bearer token present', async () => {
+    it('sets req.auth to undefined when res.locals.authInfo is absent', async () => {
       let receivedRequest: unknown;
 
       const { factory } = createFakeMcpServerFactory(
@@ -81,10 +82,34 @@ describe('createMcpHandler (Integration)', () => {
 
       await handler(mockReq, mockRes);
 
-      // Without a Bearer token, extractAuthInfoAtIngress returns undefined
-      // and req.auth is set to undefined for the MCP SDK transport.
+      // Without auth middleware setting res.locals.authInfo, req.auth is undefined.
       expect(receivedRequest).toBeDefined();
       expect(receivedRequest).toHaveProperty('auth', undefined);
+    });
+
+    it('reads authInfo from res.locals.authInfo set by middleware', async () => {
+      let receivedRequest: unknown;
+
+      const { factory } = createFakeMcpServerFactory(
+        vi.fn(async (req: unknown) => {
+          receivedRequest = req;
+        }),
+      );
+
+      const handler = createMcpHandler(factory);
+      const mockReq = createFakeExpressRequest({
+        body: { method: 'tools/list' },
+        headers: {},
+      });
+      const fakeAuthInfo = createFakeAuthInfo();
+      const mockRes = createFakeResponse({ locals: { authInfo: fakeAuthInfo } });
+
+      await handler(mockReq, mockRes);
+
+      // Handler reads AuthInfo from res.locals.authInfo (set by mcpAuth middleware)
+      // and propagates it as req.auth for the MCP SDK transport.
+      expect(receivedRequest).toBeDefined();
+      expect(receivedRequest).toHaveProperty('auth', fakeAuthInfo);
     });
   });
 
@@ -180,20 +205,15 @@ describe('tool registration via SDK projection (Phase 2 RED)', () => {
 });
 
 /**
- * Phase 4 (RED) tests for explicit auth context propagation.
+ * Tests for explicit auth context propagation.
  *
- * These tests prove that HandleToolOptions accepts an `authInfo` parameter
- * so auth context flows from the ingress edge through to checkMcpClientAuth.
- *
- * RED mechanism: HandleToolOptions has no `authInfo` field — TS2353.
- *
- * @see Phase 4 of mcp-runtime-boundary-simplification.plan.md
+ * HandleToolOptions accepts an `authInfo` parameter so auth context flows
+ * from the ingress edge through to checkMcpClientAuth without ambient state.
  */
-describe('explicit auth context propagation (Phase 4 RED)', () => {
+describe('explicit auth context propagation', () => {
   it('HandleToolOptions accepts authInfo parameter', async () => {
     const runtimeConfig = createMockRuntimeConfig();
 
-    // RED: HandleToolOptions does not have an authInfo field — TS2353
     const result = await handleToolWithAuthInterception({
       tool: { name: 'get-key-stages' },
       params: {},

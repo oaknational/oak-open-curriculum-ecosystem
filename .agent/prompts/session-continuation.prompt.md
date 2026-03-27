@@ -53,13 +53,13 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 
 ## What To Do Next
 
-**The immediate next work is the runtime boundary simplification plan, starting
-with Phase 6 (REFACTOR).** Skip live spec research for simplification plan
-phases — Phase 6 is cleanup, documentation, and quality gate work.
+**The runtime boundary simplification plan is complete (all 6 phases).** The
+immediate next work is **WS3** (widget client migration). Resume the live spec
+research step above before starting WS3 implementation.
 
-Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
+Read: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
-**Phases 0-5** are **complete** (2026-03-27).
+**All simplification phases (0-6)** are **complete** (2026-03-27).
 
 - Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
   All five Express utilities SKIP'd.
@@ -118,25 +118,26 @@ Explicit ingress boundary implemented. Key changes:
   no critical), mcp (COMPLIANT)
 - 669 tests, 22 E2E, zero type errors, zero lint errors
 
-### Phase 6 (REFACTOR) — Next
+### Phase 6 (REFACTOR) — Complete (2026-03-27)
 
-Delete superseded bridge code, propagate documentation. See plan Phase 6 section
-and the "Phase 6 cleanup items" list from Phase 5 reviewer passes. Key items:
+Deleted dead code, eliminated double auth verification, cleaned stale labels,
+propagated documentation. Key changes:
 
-1. Delete `request-context.ts` + its unit tests (zero production callers)
-2. Delete `tool-auth-context.ts` (dead code from Phase 1)
-3. Update stale Proxy references in `register-prompts.integration.test.ts`
-4. Eliminate double verification — `mcpAuth` middleware stores `AuthInfo` directly
-5. Delete `ToolRegistrationServer` type alias
-6. Clean up Phase 4 RED labels in test describe blocks
-7. Full quality gate chain + documentation propagation (ADRs, READMEs)
+1. Deleted `request-context.ts` + unit tests (zero production callers)
+2. Deleted `tool-auth-context.ts` + unit tests + `createFakeRequest` (dead code)
+3. Replaced stale Proxy in `register-prompts.integration.test.ts` with direct cast
+4. `mcpAuth` middleware stores `AuthInfo` on `res.locals.authInfo` — eliminated
+   double `getAuth`/`verifyClerkToken`. `handlers.ts` has zero Clerk imports.
+5. Deleted `ToolRegistrationServer` type alias, replaced with `McpServer` directly
+6. Cleaned Phase 4 RED labels — tests describe settled behaviour
+7. Full quality gate chain + 6 specialist reviewer passes
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-5 complete, Phase 6 (REFACTOR) next.
-- **WS3** (widget client + branding): **blocked by** simplification plan completion
+- **Runtime boundary simplification**: **complete** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. All 6 phases done (2026-03-27).
+- **WS3** (widget client + branding): **next** — simplification plan complete, WS3 unblocked
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3
 

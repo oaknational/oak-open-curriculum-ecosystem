@@ -7,7 +7,6 @@ import { vi } from 'vitest';
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { RequestWithAuthContext } from '../auth/tool-auth-context.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { MachineAuthObject } from '@clerk/backend';
@@ -46,19 +45,6 @@ export function createFakeLogger(): Logger {
     child: () => logger,
   };
   return logger;
-}
-
-/**
- * Creates a minimal request-like object for auth context extraction tests.
- * Satisfies RequestWithAuthContext so no type assertion is needed.
- */
-export function createFakeRequest(
-  overrides: Partial<RequestWithAuthContext> = {},
-): RequestWithAuthContext {
-  return {
-    headers: overrides.headers ?? {},
-    auth: overrides.auth,
-  };
 }
 
 /**

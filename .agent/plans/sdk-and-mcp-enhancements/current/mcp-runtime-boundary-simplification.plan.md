@@ -27,14 +27,14 @@ todos:
     status: done
   - id: phase-6-refactor-gates-review
     content: "Phase 6 (REFACTOR): Delete superseded bridge code, propagate documentation, run the full quality gate chain, and complete the required reviewer passes."
-    status: pending
+    status: done
 isProject: false
 ---
 
 # MCP Runtime Boundary Simplification
 
 **Last Updated**: 2026-03-27
-**Status**: Current — Phases 0-5 complete, Phase 6 (REFACTOR) next
+**Status**: Complete — All 6 phases done
 **Scope**: Remove the two remaining app-owned MCP seams after WS2: the
 Express/Clerk ingress bridge and the hand-authored MCP tool exposure path.
 
@@ -686,38 +686,33 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 6. `extractAuthInfoAtIngress` → middleware `req.auth` storage — eliminate double
    verification by having `mcpAuth` middleware store `AuthInfo` (clerk-reviewer)
 
-## Phase 6 — REFACTOR, Documentation, Gates, Review
+## Phase 6 — REFACTOR, Documentation, Gates, Review — Complete (2026-03-27)
 
-Delete superseded bridge code and comments, then propagate the settled outcome.
+**What was done:**
 
-See "Phase 6 cleanup items recorded from reviewer passes" at the end of the
-Phase 5 section above for the specific 6-item task list. Additionally, update
-`session-continuation.prompt.md` to reflect simplification plan completion and
-advance "What To Do Next" to WS3 once Phase 6 is complete.
+1. **Dead code deletion**: `request-context.ts` + unit test (AsyncLocalStorage
+   wrapper, zero callers), `tool-auth-context.ts` + unit test (dead auth context,
+   known bugs), `createFakeRequest` from `fakes.ts`, `ToolRegistrationServer` type
+   alias from `handlers.ts` (replaced with `McpServer` in consumers).
+2. **Double auth verification eliminated**: `mcpAuth` middleware now stores verified
+   `AuthInfo` on `res.locals.authInfo`. `createMcpHandler` reads it instead of
+   re-calling `getAuth` + `verifyClerkToken`. `extractAuthInfoAtIngress` deleted.
+   `handlers.ts` has zero Clerk imports — pure composition.
+3. **Stale references cleaned**: `register-prompts.integration.test.ts` Proxy
+   pattern replaced with direct cast (matching production pattern). Phase 4 RED
+   labels removed from test describe blocks and TSDoc.
+4. **Documentation propagated**: `auth-error-response.ts` ChatGPT references
+   reframed to MCP-standard. `session-continuation.prompt.md` updated to reflect
+   completion and advance to WS3. ADR-046/141 reviewed — no changes needed.
+5. **Quality gates**: Full chain passed (see Task 7).
+6. **Reviewer passes**: 6 specialists completed (see Task 8).
 
-Documentation surfaces to review:
+**Acceptance criteria (all met):**
 
-1. `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md`
-2. `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md`
-3. any impacted workspace README or auth guidance
-
-Required reviewer set before completion:
-
-1. `mcp-reviewer`
-2. `clerk-reviewer`
-3. `architecture-reviewer-barney`
-4. `type-reviewer`
-5. `code-reviewer`
-6. `docs-adr-reviewer`
-
-**Acceptance criteria**:
-
-1. Superseded bridge code and stale commentary are deleted, not left behind as
-   historical ballast.
-2. The docs record the new ownership boundary clearly.
-3. The full quality gate chain passes from repo root.
-4. Reviewer findings are either implemented or explicitly rejected with written
-   rationale.
+1. Superseded bridge code and stale commentary deleted ✓
+2. Docs record new ownership boundary ✓
+3. Full quality gate chain passes ✓
+4. Reviewer findings implemented or explicitly rejected ✓
 
 ## Success Criteria
 

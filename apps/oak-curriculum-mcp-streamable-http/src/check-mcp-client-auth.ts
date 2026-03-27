@@ -1,7 +1,7 @@
 /**
  * MCP Client Authentication Checking
  *
- * Preventive authentication for MCP clients (e.g., ChatGPT) before SDK execution.
+ * Preventive authentication for MCP clients before SDK execution.
  * This is separate from upstream API auth (ADR-054).
  *
  * This module is a pure function with dependency injection — all external

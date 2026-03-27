@@ -141,11 +141,8 @@ function handleAuthError(
  * 4. Returns 401 if token verification fails
  * 5. Validates JWT audience claim matches resource URL (RFC 8707)
  * 6. Returns 401 if audience validation fails
- * 7. Calls next() if all checks pass (Clerk already set req.auth)
- *
- * **Note**: This middleware does NOT set `req.auth`. Clerk's `clerkMiddleware()`
- * sets `req.auth` to the Clerk auth object. This middleware only gates access
- * by verifying the token is valid.
+ * 7. Stores verified `AuthInfo` on `res.locals.authInfo` for the handler
+ * 8. Calls next() if all checks pass
  *
  * **RFC 8707 Compliance**: This middleware validates that the JWT's `aud`
  * (audience) claim matches the expected resource URL to prevent token misuse
@@ -198,14 +195,15 @@ export function mcpAuth(
       // RFC 8707: Validate resource parameter (JWT audience claim)
       const validation = checkResourceParameter(token, req, logger, allowedHosts);
       if (!validation.valid) {
-        const reason = validation.reason ?? 'Unknown validation error';
-        sendInvalidResourceResponse(res, prmUrl, reason);
+        sendInvalidResourceResponse(res, prmUrl, validation.reason ?? 'Unknown validation error');
         return;
       }
 
-      // Token verified - proceed to next middleware
-      // Note: We don't set req.auth here. Clerk's clerkMiddleware() already
-      // sets req.auth to the Clerk auth object which downstream code expects.
+      // Store verified AuthInfo on res.locals for the MCP handler to read.
+      // This eliminates double verification — the handler reads res.locals.authInfo
+      // instead of re-calling getAuth + verifyClerkToken.
+      res.locals.authInfo = authData;
+
       next();
     } catch (error) {
       // Error is logged by handleAuthError

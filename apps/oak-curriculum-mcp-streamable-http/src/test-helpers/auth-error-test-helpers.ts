@@ -7,7 +7,8 @@
 import { vi } from 'vitest';
 import type { Logger } from '@oaknational/logger';
 import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
-import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
+import type { ToolHandlerDependencies } from '../handlers.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   McpToolError,
   type ToolExecutionResult,
@@ -50,17 +51,17 @@ interface Params {
  * - We bridge this gap by:
  *   1. Creating a generic implementation that accepts any handler signature
  *   2. Internally wrapping to our test Params type
- *   3. Type assertion to satisfy ToolRegistrationServer (library type from MCP SDK)
+ *   3. Type assertion to satisfy McpServer (library type from MCP SDK)
  *
  * This is test infrastructure code that enables DI-based integration testing per principles.md.
  * Alternative approaches (replicating MCP SDK's entire type system) are disproportionate effort.
  *
  * @param capturedHandlers - Map to store handlers by tool name
- * @returns Mock server satisfying ToolRegistrationServer interface
+ * @returns Mock server satisfying McpServer interface
  */
 export function createMockServer(
   capturedHandlers: Map<string, (params: Params) => Promise<unknown>>,
-): ToolRegistrationServer {
+): McpServer {
   // Create a generic mock function matching MCP SDK's signature
 
   function mockRegisterToolImpl<TInput = unknown>(
@@ -88,12 +89,12 @@ export function createMockServer(
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Test double with minimal implementation for testing
   const mockServer = {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerTool: mockRegisterTool as ToolRegistrationServer['registerTool'],
+    registerTool: mockRegisterTool as McpServer['registerTool'],
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerResource: mockRegisterResource as ToolRegistrationServer['registerResource'],
+    registerResource: mockRegisterResource as McpServer['registerResource'],
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerPrompt: mockRegisterPrompt as ToolRegistrationServer['registerPrompt'],
-  } as unknown as ToolRegistrationServer;
+    registerPrompt: mockRegisterPrompt as McpServer['registerPrompt'],
+  } as unknown as McpServer;
   return mockServer;
 }
 

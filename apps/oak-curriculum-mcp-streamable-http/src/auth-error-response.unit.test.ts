@@ -2,9 +2,7 @@
  * Unit Tests for Auth Error Response Builder
  *
  * Tests the pure function that creates MCP-compliant auth error responses
- * with `_meta["mcp/www_authenticate"]` to trigger ChatGPT OAuth linking UI.
- *
- * Part of Phase 2, Sub-Phase 2.7, Task 2.7.1 (RED Phase)
+ * with `_meta["mcp/www_authenticate"]` to trigger MCP client OAuth re-authentication.
  */
 
 import { describe, it, expect } from 'vitest';

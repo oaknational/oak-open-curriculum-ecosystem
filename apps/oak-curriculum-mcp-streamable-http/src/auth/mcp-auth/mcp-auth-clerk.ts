@@ -18,7 +18,7 @@ import { verifyClerkToken } from '@clerk/mcp-tools/server';
  * This middleware:
  * 1. Uses `@clerk/express` to get authentication context
  * 2. Verifies the OAuth token using Clerk
- * 3. Attaches AuthInfo to req.auth if valid
+ * 3. Stores verified AuthInfo on res.locals.authInfo
  * 4. Returns 401 with proper WWW-Authenticate header if invalid
  *
  * **Key Behavior**: Runs BEFORE the MCP SDK, enabling HTTP 401 responses
