@@ -24,6 +24,7 @@ import path from 'node:path';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
+import { normalizeError } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import { createCodegenLogger } from './create-codegen-logger.js';
 import { extractLocs, categoriseTeacherPaths, validateScanResult } from './sitemap-scanner-core.js';
@@ -209,6 +210,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  logger.error('Sitemap scan failed', error);
+  logger.error('Sitemap scan failed', normalizeError(error));
   process.exit(1);
 });

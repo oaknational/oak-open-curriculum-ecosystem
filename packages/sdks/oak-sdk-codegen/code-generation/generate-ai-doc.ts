@@ -1,5 +1,3 @@
-/* eslint-disable max-lines -- disabling because this is a long, doc generating script, not prod code  */
-
 /*
  * AI Doc Generator for Oak Curriculum SDK
  *
@@ -11,9 +9,11 @@
 import { promises as fs } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError } from '@oaknational/logger';
 
 import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
+import { renderEndpointCatalog, renderToolCatalog } from './generate-ai-doc-catalog.js';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
 import { ZodError } from 'zod';
 import { createCodegenLogger } from './create-codegen-logger.js';
@@ -22,44 +22,9 @@ const logger = createCodegenLogger('ai-doc');
 
 /** Type for Zod validation issues (derived from ZodError to avoid deprecated ZodIssue import) */
 type ZodIssueType = ZodError['issues'][number];
-function isPlainObject(value: unknown): value is object {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function getDescriptor(value: unknown, key: PropertyKey): PropertyDescriptor | undefined {
-  if (!isPlainObject(value)) {
-    return undefined;
-  }
-  return Object.getOwnPropertyDescriptor(value, key);
-}
-
-function getOwnString(value: unknown, key: PropertyKey): string | undefined {
-  const descriptor = getDescriptor(value, key);
-  return typeof descriptor?.value === 'string' ? descriptor.value : undefined;
-}
-
-function getOwnBoolean(value: unknown, key: PropertyKey): boolean | undefined {
-  const descriptor = getDescriptor(value, key);
-  return typeof descriptor?.value === 'boolean' ? descriptor.value : undefined;
-}
-
-function getOwnArrayLength(value: unknown, key: PropertyKey): number | undefined {
-  const descriptor = getDescriptor(value, key);
-  return Array.isArray(descriptor?.value) ? descriptor.value.length : undefined;
-}
-
-function getOwnValue(value: unknown, key: PropertyKey): unknown {
-  const descriptor = getDescriptor(value, key);
-  return descriptor?.value;
-}
 
 function formatZodIssues(issues: ZodIssueType[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
-}
-
-// Pure helpers
-function isArrayOfObjects(value: unknown): value is object[] {
-  return Array.isArray(value) && value.every((v) => isPlainObject(v));
 }
 
 function makeQuickstartSection(): string {
@@ -183,119 +148,6 @@ function buildConventionsSection(): string {
   ].join('\n');
 }
 
-// Tool map helpers derived at use sites via typeSafeEntries
-// TODO: update documentation once helper utilities are removed completely
-
-interface RenderableParamInfo {
-  loc: string;
-  name: string;
-  typeName: string;
-  required: boolean;
-  enumCount?: number;
-}
-
-function extractParamInfo(p: unknown): RenderableParamInfo {
-  const loc = getOwnString(p, 'in') ?? 'query';
-  const name = getOwnString(p, 'name') ?? '?';
-  const required = getOwnBoolean(p, 'required') === true;
-  const schema = getOwnValue(p, 'schema');
-  const typeName = schema ? (getOwnString(schema, 'type') ?? 'string') : 'string';
-  const enumCount = schema ? getOwnArrayLength(schema, 'enum') : undefined;
-  return { loc, name, typeName, required, enumCount };
-}
-
-function renderParamLine(info: RenderableParamInfo): string {
-  const enumText = typeof info.enumCount === 'number' ? ` enum:${String(info.enumCount)}` : '';
-  return `- ${info.loc} ${info.name} (${info.typeName}${enumText})${info.required ? ' — required' : ''}`;
-}
-
-function renderParamSummary(params: unknown): string {
-  if (!isArrayOfObjects(params) || params.length === 0) {
-    return '_No parameters_';
-  }
-  const items = params.map(extractParamInfo).map(renderParamLine);
-  return items.join('\n');
-}
-
-function sortPathOps(ops: unknown[]): unknown[] {
-  return [...ops].sort((a, b) => {
-    const aPath = getOwnString(a, 'path') ?? '';
-    const aMethod = getOwnString(a, 'method') ?? '';
-    const bPath = getOwnString(b, 'path') ?? '';
-    const bMethod = getOwnString(b, 'method') ?? '';
-    return (aPath + aMethod).localeCompare(bPath + bMethod);
-  });
-}
-
-function renderEndpointCatalog(ops: unknown): string {
-  const lines: string[] = [];
-  lines.push('## Endpoint Catalog');
-  const sorted = normalizeAndSortOps(ops);
-  for (const op of sorted) {
-    renderSingleEndpoint(lines, op);
-  }
-  return lines.join('\n');
-}
-
-function normalizeAndSortOps(ops: unknown): unknown[] {
-  const list: unknown[] = Array.isArray(ops) ? ops : [];
-  return sortPathOps(list);
-}
-
-function renderSingleEndpoint(lines: string[], op: unknown): void {
-  const method = getOwnString(op, 'method') ?? '';
-  const path = getOwnString(op, 'path') ?? '';
-  lines.push(`### ${method.toUpperCase()} ${path}`);
-  maybePush(lines, 'operationId', getOwnString(op, 'operationId'));
-  maybePush(lines, 'summary', getOwnString(op, 'summary'));
-  maybePush(lines, 'description', getOwnString(op, 'description'));
-  lines.push('Parameters:');
-  const params = getOwnValue(op, 'parameters');
-  lines.push(renderParamSummary(params));
-  lines.push('');
-}
-
-function maybePush(lines: string[], label: string, value: string | undefined): void {
-  if (value) {
-    lines.push(`- ${label}: ${value}`);
-  }
-}
-
-function listParamObjectKeys(obj: unknown): string {
-  if (!isPlainObject(obj)) {
-    return '_None_';
-  }
-  const keys = Object.keys(obj);
-  return keys.length === 0 ? '_None_' : keys.join(', ');
-}
-
-function renderToolCatalog<T extends string>(
-  names: readonly T[],
-  lookupTool: (name: T) => unknown,
-): string {
-  const lines: string[] = [];
-  lines.push('## MCP Tool Catalog');
-  const entries = [...names].sort((a, b) => a.localeCompare(b));
-  for (const name of entries) {
-    const descriptor: unknown = lookupTool(name);
-    const opId = getOwnString(descriptor, 'operationId') ?? '';
-    const path = getOwnString(descriptor, 'path') ?? '';
-    const method = getOwnString(descriptor, 'method') ?? '';
-    lines.push(`### ${name}`);
-    lines.push(`- path: ${path}`);
-    lines.push(`- method: ${method}`);
-    if (opId) {
-      lines.push(`- operationId: ${opId}`);
-    }
-    const pathParams = getOwnValue(descriptor, 'pathParams');
-    const queryParams = getOwnValue(descriptor, 'queryParams');
-    lines.push(`- path params: ${listParamObjectKeys(pathParams)}`);
-    lines.push(`- query params: ${listParamObjectKeys(queryParams)}`);
-    lines.push('');
-  }
-  return lines.join('\n');
-}
-
 async function main(): Promise<void> {
   const { docsDir, typedocJsonPath, outPath } = resolvePaths();
 
@@ -350,6 +202,6 @@ async function main(): Promise<void> {
 
 main().catch((err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
-  logger.error(message, err);
+  logger.error(message, normalizeError(err));
   process.exitCode = 1;
 });

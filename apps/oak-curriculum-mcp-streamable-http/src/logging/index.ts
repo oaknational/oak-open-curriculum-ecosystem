@@ -8,6 +8,7 @@ import {
   type ErrorContext,
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import type { Request, Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -36,20 +37,14 @@ export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOpti
   const minSeverity = logLevelToSeverityNumber(level);
 
   const serviceName = options?.name ?? 'streamable-http';
-  /* eslint-disable no-restricted-syntax -- buildResourceAttributes needs full env for OTEL resource attributes */
-  const resourceAttributes = buildResourceAttributes(
-    process.env, // App wiring owns env access
-    serviceName,
-    config.version,
-  );
-  /* eslint-enable no-restricted-syntax */
+  const resourceAttributes = buildResourceAttributes(config.env, serviceName, config.version);
 
   return new UnifiedLogger({
     minSeverity,
     resourceAttributes,
     context: {},
-    stdoutSink: createNodeStdoutSink(),
-    fileSink: null,
+    sinks: [createNodeStdoutSink()],
+    getActiveSpanContext: getActiveSpanContextSnapshot,
   });
 }
 

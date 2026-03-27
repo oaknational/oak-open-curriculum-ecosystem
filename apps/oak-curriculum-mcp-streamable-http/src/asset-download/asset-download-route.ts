@@ -6,6 +6,7 @@
  * No Clerk auth required — the HMAC signature IS the authentication.
  */
 import type { Express, RequestHandler, Request, Response } from 'express';
+import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
 import { Readable } from 'node:stream';
 import {
@@ -135,17 +136,16 @@ async function proxyUpstreamAsset(
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
   if (upstream.body) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions -- Node ReadableStream ↔ web ReadableStream type gap; runtime-safe
-    const readable = Readable.fromWeb(upstream.body as any);
+    const readable = Readable.fromWeb(upstream.body);
     readable.on('error', (error) => {
-      deps.logger.error('asset-download.stream.error', { error });
+      deps.logger.error('asset-download.stream.error', normalizeError(error));
       if (!res.headersSent) {
         res.status(502).json({ error: 'Download stream error' });
       }
       res.destroy();
     });
     res.on('error', (error) => {
-      deps.logger.error('asset-download.response.error', { error });
+      deps.logger.error('asset-download.response.error', normalizeError(error));
     });
     readable.pipe(res);
   } else {
@@ -181,7 +181,7 @@ export function createAssetDownloadRoute(deps: AssetDownloadRouteDeps): RequestH
     try {
       await proxyUpstreamAsset(validated, deps, res);
     } catch (error: unknown) {
-      deps.logger.error('asset-download.proxy.error', { error });
+      deps.logger.error('asset-download.proxy.error', normalizeError(error));
       if (!res.headersSent) {
         res.status(502).json({ error: 'Proxy error' });
       }

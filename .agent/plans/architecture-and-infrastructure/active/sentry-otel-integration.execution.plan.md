@@ -29,9 +29,12 @@ todos:
     status: completed
   - id: logger-foundation
     content: "Rewrite @oaknational/logger around a single LogSink[] model with explicit error overloads and active-span correlation"
-    status: pending
+    status: completed
   - id: shared-observability-packages
     content: "Add shared observability, Sentry Node, and Sentry MCP packages with Result-based init/config surfaces"
+    status: completed
+  - id: phase-1-blocker-remediation
+    content: "Resolve the 2026-03-27 blocker bundle before any runtime adoption or further Phase 1 expansion"
     status: pending
   - id: redaction-policy
     content: "Generalise header redaction into a shared telemetry redaction policy used by the logger and Sentry hooks"
@@ -67,30 +70,84 @@ The paired operational prompt is intentionally thin and only points back here:
 - Branch in use: `feat/full-sentry-otel-support`
 - Governance, ADR, capability, and document-alignment work is complete.
 - The handover bundle hardening and refreshed reviewer pass are complete.
-- Runtime/package implementation has not yet started; the next code work is the
-  shared package and logger rewrite.
+- The initial local implementation pass for `@oaknational/logger`,
+  `@oaknational/env`, `@oaknational/observability`, `@oaknational/sentry-node`,
+  and `@oaknational/sentry-mcp` is on disk.
+- Focused `test` and `type-check` are green across that Phase 1 surface.
+- Focused `lint` is red because the shared ESLint package export map is
+  currently broken.
+- Phase 1 is **not** complete. The 2026-03-27 config/architecture/code-review
+  pass found blocker defects that must be fixed before any HTTP or Search CLI
+  adoption work starts.
+
+### Phase 1 blocker bundle (2026-03-27 reviewer pass)
+
+These are front-and-centre for the next session. Do not start new adoption
+work until they are cleared.
+
+Blocking defects:
+
+1. Restore workspace linting by fixing the `@oaknational/eslint-plugin-standards`
+   export map in `packages/core/oak-eslint/package.json`.
+2. Remove all explicit logger compatibility layers and aliases:
+   `pure-functions.ts`, legacy re-exports, `StdoutSink`, and README guidance
+   that still teaches the removed API.
+3. Make `SENTRY_MODE=off` and `SENTRY_MODE=fixture` true kill switches even
+   when live-only env vars such as `SENTRY_DSN` or
+   `SENTRY_TRACES_SAMPLE_RATE` are present.
+4. Make invalid boolean env values fail closed with `Err`, never silently
+   default back to enabled logging.
+5. Apply the chosen long-term architectural resolution for the current
+   `libs -> libs` contradiction:
+   - move `@oaknational/observability` from `packages/libs/observability` to
+     `packages/core/observability`
+   - restore `@oaknational/logger` to depending on `core` only
+   - codify an explicit layered library topology in the architecture docs and
+     ESLint boundary rules so adapter libs such as `@oaknational/sentry-node`
+     depend on foundation libs such as `@oaknational/logger` by rule, not by
+     bespoke allow-lists
+   - remove the current per-workspace sibling-lib allow-lists once that rule is
+     in place
+
+Follow-on issues to clear in the same slice once blockers are addressed:
+
+1. Remove `vi.mock(...)` usage from the new in-process tests.
+2. Extend shared redaction to scrub URL username/password credentials.
+3. Replace `@sentry/node` `"*"` with an explicit manifest range.
+4. Tighten `@oaknational/sentry-node` so its public init/capture surfaces model
+   native Sentry types directly instead of `Record<string, unknown>` plus casts.
 
 ### Next session first actions
 
 Start here, in this order:
 
-1. `logger-foundation`
-   - establish the RED harness in `@oaknational/logger`
-   - rewrite `UnifiedLogger` around `readonly LogSink[]`
-   - tighten `error` / `fatal` overloads and `normalizeError()` boundaries
-   - add active-span correlation and shared redaction at the logger boundary
-2. `shared-observability-packages`
-   - add `@oaknational/observability`, `@oaknational/sentry-node`, and
-     `@oaknational/sentry-mcp`
-   - add discriminated `SENTRY_MODE` parsing and shared config building
-   - keep `@oaknational/sentry-mcp` transport-agnostic
+1. Fix the lint blocker in `packages/core/oak-eslint/package.json` and prove
+   `lint` is runnable again for `@oaknational/logger`, `@oaknational/env`,
+   `@oaknational/observability`, `@oaknational/sentry-node`, and
+   `@oaknational/sentry-mcp`.
+2. Remove the remaining clean-break violations in `@oaknational/logger`:
+   delete the compatibility shim and alias surfaces, then update the README so
+   it only documents the new contract.
+3. Correct `@oaknational/sentry-node` config semantics:
+   - `off` and `fixture` must ignore live-only inputs rather than erroring
+   - invalid boolean flags must return `Err`
+4. Apply the architectural resolution, not a local exception:
+   - move `@oaknational/observability` into `packages/core/`
+   - update the architecture docs and ESLint boundary model to encode explicit
+     foundation-lib vs adapter-lib layering
+   - delete the current sibling-lib allow-lists after the layered rule exists
+5. Remove `vi.mock(...)` from the new test harness and close the URL-credential
+   redaction gap.
+6. Rerun the focused gates for the Phase 1 surface.
+7. Only after the blocker bundle is green should the work continue into
+   downstream app adoption.
 
 Preconditions already satisfied:
 
 1. The handover bundle is cleared for restart in the review checkpoint.
 2. The active plan remains the implementation authority.
 3. No further plan-layer review is required before beginning
-   `logger-foundation`.
+   blocker remediation.
 
 ### Authority and review state
 
@@ -141,35 +198,37 @@ Preconditions already satisfied:
    - `.agent/plans/agentic-engineering-enhancements/current/README.md`
    - `.agent/plans/agentic-engineering-enhancements/roadmap.md`
 
-### Verified codebase findings
+### Implementation reality after the initial Phase 1 pass
 
 1. `packages/libs/logger`
-   - `UnifiedLogger` still uses `stdoutSink` and `fileSink` instead of a
-     coherent `LogSink[]` model.
-   - `Logger.error` and `Logger.fatal` still accept ambiguous second-argument
-     shapes.
-   - `otel-format.ts` hashes `correlationId` into `TraceId` but does not yet
-     read active span context.
+   - `UnifiedLogger` has been rewritten around `readonly LogSink[]`.
+   - explicit `NormalizedError` overloads and active-span correlation now exist.
+   - the remaining problems are the deliberate compatibility shim/alias
+     surfaces and test harness use of `vi.mock(...)`.
 2. `packages/core/env`
-   - `LoggingEnvSchema` exists but there is no shared `SentryEnvSchema`.
-3. `apps/oak-curriculum-mcp-streamable-http`
-   - runtime config is `Result`-based already and is a good foundation.
-   - logger wiring is stdout-only and does not yet initialise Sentry at cold
-     start.
-   - `mcpFactory` creates a fresh per-request server/transport pair but does
-     not yet wrap tool/resource/prompt handlers for MCP monitoring.
-4. `apps/oak-search-cli`
-   - runtime config is `Result`-based already.
-   - logging still relies on mutable module-global state via `setLogLevel`,
-     `enableFileSink`, and `disableFileSink`.
-   - ingest is the first command path that needs explicit root/phase spans.
-5. Dependencies
-   - `@sentry/node` is not yet declared in workspace manifests.
-   - `@opentelemetry/api` exists only transitively in the lockfile and is not
-     yet declared where the new foundation needs it directly.
-6. Scope confirmation
-   - `apps/oak-curriculum-mcp-stdio` is deprecated per ADR-128 and is not an
-     adoption target.
+   - `SentryEnvSchema` and its unit tests now exist.
+3. `packages/libs/observability`
+   - the workspace exists and provides shared redaction plus active-span
+     helpers.
+   - the current known gap is URL username/password redaction.
+4. `packages/libs/sentry-node`
+   - the workspace exists with discriminated config building, fixture runtime,
+     sink helpers, and bounded flush helpers.
+   - the current known gaps are kill-switch semantics for `off`/`fixture`,
+     invalid-boolean fail-open behaviour, wildcard `@sentry/node`, and an
+     over-erased SDK type boundary.
+5. `packages/libs/sentry-mcp`
+   - the workspace exists and remains transport-agnostic.
+   - the current known gap is `vi.mock(...)` in the test harness.
+6. Focused validation
+   - `test` and `type-check` are green for `@oaknational/logger`,
+     `@oaknational/env`, `@oaknational/observability`,
+     `@oaknational/sentry-node`, and `@oaknational/sentry-mcp`.
+   - `lint` is red for the same surface until the shared ESLint export-map
+     defect is fixed.
+7. Adoption scope confirmation
+   - `apps/oak-curriculum-mcp-stdio` remains deprecated per ADR-128 and is not
+     an adoption target.
 
 ### `starter-app-spike` inputs already reviewed
 
@@ -248,7 +307,7 @@ have:
 5. MCP Insights wrapping and capture policy,
 6. deployment-grade observability evidence.
 
-The current logger shape (`stdoutSink` + `fileSink`) is too narrow for the next
+The previous logger shape (`stdoutSink` + `fileSink`) was too narrow for this
 phase, and the Search CLI still relies on mutable logger-global configuration.
 
 ## Chosen Architecture
@@ -262,10 +321,12 @@ the foundation is:
 3. `sinks: readonly LogSink[]` as the final logger model
 4. explicit `Logger.error` / `Logger.fatal` overloads:
    - `(message, context?)`
-   - `(message, error: Error, context?)`
+   - `(message, error: NormalizedError, context?)`
 5. active OpenTelemetry span context for `TraceId` / `SpanId` when present,
    falling back to correlation-id hashing only when no active span exists
 6. one logger-level redaction barrier before any sink sees data
+7. no compatibility layers, aliases, or fallback exports survive the accepted
+   Phase 1 exit state
 
 ## Execution Phases
 
@@ -290,31 +351,48 @@ Exit criteria:
 
 Next phase:
 
-1. Begin Phase 1 with `logger-foundation`.
+1. Continue Phase 1 with blocker remediation, then resume runtime adoption.
 
 ### Phase 1: RED shared contracts and regression harness
 
-Required failing proofs before implementation work starts in earnest:
+Status: code and harness landed locally, but acceptance is blocked by the
+Phase 1 blocker bundle above.
+
+Proofs now on disk:
 
 1. Golden tests that lock current `@oaknational/logger` JSON output semantics.
 2. Negative type tests for `logger.error` / `logger.fatal` misuse and
    `normalizeError()` boundaries.
-3. Failing config tests for `SENTRY_MODE=off|fixture|sentry`, including
+3. Config tests for `SENTRY_MODE=off|fixture|sentry`, including
    fail-closed `Err` behaviour for invalid live config.
-4. Failing redaction tests covering nested JSON, URLs, query strings, request
+4. Redaction tests covering nested JSON, URLs, query strings, request
    bodies, CLI args, env-derived config, breadcrumb extras, span attributes,
    and log payloads.
-5. Failing MCP capture-policy tests proving deny-by-default metadata-only
+5. MCP capture-policy tests proving deny-by-default metadata-only
    capture.
+
+Blocking exit criteria before this phase can be treated as complete:
+
+1. The config booleans fail closed instead of silently defaulting.
+2. `off` and `fixture` behave as real kill switches even when live-only env
+   inputs are present.
+3. The in-process test harness no longer uses `vi.mock(...)`.
+4. The remaining compatibility shim/alias surfaces are deleted.
 
 Deterministic validation commands:
 
 1. `pnpm --filter @oaknational/logger test`
 2. `pnpm --filter @oaknational/logger type-check`
-3. `pnpm --filter @oaknational/env test`
-4. `pnpm --filter @oaknational/env type-check`
+3. `pnpm --filter @oaknational/logger lint`
+4. `pnpm --filter @oaknational/env test`
+5. `pnpm --filter @oaknational/env type-check`
+6. `pnpm --filter @oaknational/env lint`
 
 ### Phase 2: GREEN shared foundation
+
+Status: initial package creation is complete, but this phase is still open
+until the blocker bundle is resolved and the focused lint/test/type-check
+surface is green together.
 
 Implement the shared packages and logger rewrite:
 
@@ -329,14 +407,19 @@ Deterministic validation commands:
 
 1. `pnpm --filter @oaknational/logger test`
 2. `pnpm --filter @oaknational/logger type-check`
-3. `pnpm --filter @oaknational/observability test`
-4. `pnpm --filter @oaknational/observability type-check`
-5. `pnpm --filter @oaknational/sentry-node test`
-6. `pnpm --filter @oaknational/sentry-node type-check`
-7. `pnpm --filter @oaknational/sentry-mcp test`
-8. `pnpm --filter @oaknational/sentry-mcp type-check`
-9. `pnpm --filter @oaknational/env test`
-10. `pnpm --filter @oaknational/env type-check`
+3. `pnpm --filter @oaknational/logger lint`
+4. `pnpm --filter @oaknational/observability test`
+5. `pnpm --filter @oaknational/observability type-check`
+6. `pnpm --filter @oaknational/observability lint`
+7. `pnpm --filter @oaknational/sentry-node test`
+8. `pnpm --filter @oaknational/sentry-node type-check`
+9. `pnpm --filter @oaknational/sentry-node lint`
+10. `pnpm --filter @oaknational/sentry-mcp test`
+11. `pnpm --filter @oaknational/sentry-mcp type-check`
+12. `pnpm --filter @oaknational/sentry-mcp lint`
+13. `pnpm --filter @oaknational/env test`
+14. `pnpm --filter @oaknational/env type-check`
+15. `pnpm --filter @oaknational/env lint`
 
 ### Phase 3: GREEN runtime adoption
 
@@ -442,7 +525,7 @@ Required invariants:
 Only these public call shapes are allowed:
 
 1. `(message, context?)`
-2. `(message, error: Error, context?)`
+2. `(message, error: NormalizedError, context?)`
 
 Required enforcement:
 
@@ -508,8 +591,8 @@ Mode-specific rules are owned by a single shared config builder in
 
 | Mode | Required input | Forbidden input | Defaults / behaviour |
 |---|---|---|---|
-| `off` | none | `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` | `environment` and `release` resolved by the shared builder, `enableLogs=false`, `sendDefaultPii=false`, `debug=false`, no Sentry init, no Sentry sink, no outbound delivery |
-| `fixture` | none | `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` | `environment` and `release` resolved by the shared builder, `enableLogs=true` unless explicitly disabled, `sendDefaultPii=false`, `debug=false`, local fixture capture only, no network, no requirement to run the live Sentry SDK transport or sampler |
+| `off` | none | none | `environment` and `release` resolved by the shared builder, `enableLogs=false`, `sendDefaultPii=false`, `debug=false`, no Sentry init, no Sentry sink, no outbound delivery; any live-only DSN/sample-rate inputs are ignored rather than treated as fatal |
+| `fixture` | none | none | `environment` and `release` resolved by the shared builder, `enableLogs=true` unless explicitly disabled, `sendDefaultPii=false`, `debug=false`, local fixture capture only, no network, no requirement to run the live Sentry SDK transport or sampler; any live-only DSN/sample-rate inputs are ignored rather than treated as fatal |
 | `sentry` | valid `SENTRY_DSN`, valid `SENTRY_TRACES_SAMPLE_RATE` | none beyond v1 forbiddance of `SENTRY_SEND_DEFAULT_PII=true` | `environment` and `release` resolved by the shared builder, `enableLogs=true` unless explicitly disabled, `sendDefaultPii=false`, `debug=false`, live Sentry init permitted |
 
 Required `Result` discipline:
@@ -532,11 +615,16 @@ type ObservabilityConfigError =
    a future security-reviewed ADR explicitly changes that rule.
 4. `SENTRY_MODE=off` must prove that no Sentry init, outbound delivery, or sink
    registration occurs in either in-scope runtime.
-5. `SENTRY_MODE=fixture` is a no-network local fallback path, not a disguised
+5. `SENTRY_MODE=off` and `SENTRY_MODE=fixture` must never fail merely because
+   live-only inputs are present; those values are ignored when the mode is not
+   `sentry`.
+6. Boolean flags are exact: any non-empty value other than literal
+   `true|false` must return `Err`, not silently default.
+7. `SENTRY_MODE=fixture` is a no-network local fallback path, not a disguised
    live-Sentry mode. It exercises Oak's observability adapters, redaction, MCP
    metadata policy, and correlation flow without requiring a real DSN or live
    Sentry tracing sampler.
-5. `environment` and `release` are resolved only by the shared builder, never
+8. `environment` and `release` are resolved only by the shared builder, never
    by app-local fallback logic.
 
 ### Environment Resolution Contract
@@ -666,16 +754,25 @@ Required invariants:
 
 ### Package Boundaries
 
-- `@oaknational/observability`
+- **Chosen layered resolution for long-term architecture**
+  - `@oaknational/observability` is a provider-neutral primitive and belongs in
+    `packages/core/observability`, not `packages/libs/`
+  - `@oaknational/logger` is the foundation runtime library layer and should
+    depend only on `core`
+  - `@oaknational/sentry-node` is an adapter library above `logger`, so the
+    architecture and ESLint rules must encode that relationship explicitly
+    instead of relying on per-package allow-lists
+  - `@oaknational/sentry-mcp` should depend only on `core` observability
+    primitives and MCP abstractions
+- `@oaknational/observability` (target end state: `packages/core/observability`)
   - provider-neutral helpers
   - shared telemetry redaction
-  - `Result`-based config/init types
   - span helpers built only on `@opentelemetry/api`
 - `@oaknational/sentry-node`
   - Sentry init/flush helpers
   - Sentry sinks
   - handled-error capture adapters
-  - fixture-mode console fallbacks
+  - fixture-mode no-network capture helpers
   - release resolution and config builder
 - `@oaknational/sentry-mcp`
   - MCP wrapping helpers
@@ -720,6 +817,9 @@ Required invariants:
    union.
 4. Add deterministic release resolution with the explicit precedence contract.
 5. Enforce deny-by-default trace propagation and MCP metadata capture.
+6. Finish the structural move of provider-neutral observability into `core`
+   and encode the resulting library tiers in the architecture docs and ESLint
+   boundary rules.
 
 ### WS4: HTTP MCP Server Adoption
 

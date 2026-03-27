@@ -1,4 +1,4 @@
-import { startTimer } from '@oaknational/logger';
+import { normalizeError, startTimer } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
 
 export type AuthSetupStep =
@@ -36,7 +36,7 @@ export function measureAuthSetupStep<T>(log: Logger, step: AuthSetupStep, operat
       error instanceof Error
         ? error
         : new Error(`Auth setup step "${step}" threw non-error value: ${String(error)}`);
-    log.error('auth.bootstrap.step.error', errorAsError, {
+    log.error('auth.bootstrap.step.error', normalizeError(errorAsError), {
       step,
       duration: duration.formatted,
       durationMs: duration.ms,

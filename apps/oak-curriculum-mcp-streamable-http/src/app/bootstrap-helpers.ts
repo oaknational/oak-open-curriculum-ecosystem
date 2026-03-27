@@ -4,7 +4,10 @@ import {
   createRequestLogger,
   logLevelToSeverityNumber,
   createPhasedTimer,
+  normalizeError,
+  sanitiseForJson,
   type Logger,
+  type LogContextInput,
   type PhasedTimer,
 } from '@oaknational/logger';
 
@@ -25,7 +28,7 @@ export type BootstrapPhaseName =
   | 'initializeCoreEndpoints'
   | 'setupAuthRoutes';
 
-export interface BootstrapPhaseContext {
+export interface BootstrapPhaseContext extends LogContextInput {
   readonly appId: number;
   readonly phase: BootstrapPhaseName;
 }
@@ -66,7 +69,7 @@ export function runBootstrapPhase<T>(
       error instanceof Error
         ? error
         : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', errorAsError, {
+    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
       ...context,
       duration: durationResult.duration.formatted,
       durationMs: durationResult.duration.ms,
@@ -106,7 +109,7 @@ export async function runAsyncBootstrapPhase<T>(
       error instanceof Error
         ? error
         : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', errorAsError, {
+    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
       ...context,
       duration: durationResult.duration.formatted,
       durationMs: durationResult.duration.ms,
@@ -174,7 +177,7 @@ export function createMcpReadinessMiddleware(ready: Promise<void>, log: Logger):
       ]);
       next();
     } catch (error: unknown) {
-      log.error('MCP connection failed', { error });
+      log.error('MCP connection failed', normalizeError(error));
       _res.status(503).json({
         error: 'MCP server not ready',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -214,7 +217,10 @@ export function logBootstrapComplete(
  * @param routes - Array of route objects from express-list-routes
  */
 export function logRegisteredRoutes(log: Logger, appId: number, routes: unknown[]): void {
-  log.debug('bootstrap.routes.registered', { appId, routes });
+  log.debug('bootstrap.routes.registered', {
+    appId,
+    routes: sanitiseForJson(routes),
+  });
 }
 
 /**

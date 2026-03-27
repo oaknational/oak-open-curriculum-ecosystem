@@ -6,6 +6,7 @@ import type { Request, Response, NextFunction, RequestHandler, ErrorRequestHandl
 import type { IncomingHttpHeaders } from 'node:http';
 import type { Logger, JsonObject, JsonValue } from './types.js';
 import { sanitiseForJson } from './json-sanitisation.js';
+import { normalizeError } from './error-normalisation.js';
 
 /**
  * Type guard to check if a JsonValue is a JsonObject
@@ -27,6 +28,32 @@ export interface RequestLoggerOptions {
 }
 
 /**
+ * Minimal request shape required to extract structured HTTP metadata.
+ */
+export interface RequestMetadataSource {
+  readonly method: string;
+  readonly url: string;
+  readonly path?: string;
+  readonly headers: IncomingHttpHeaders;
+  readonly query?: Request['query'];
+  readonly params?: Request['params'];
+  readonly ip?: string;
+}
+
+/**
+ * Request shape required by the logger before Express response objects enter
+ * the picture.
+ */
+export interface RequestLoggingSource extends RequestMetadataSource {
+  readonly body?: unknown;
+}
+
+/**
+ * Minimal next-function shape used by the logger handlers.
+ */
+export type LoggingNext = (error?: unknown) => void;
+
+/**
  * Safely extracts JSON-safe metadata from an Express Request
  * Handles undefined values and ParsedQs types from query parameters
  * @param req - Express Request object
@@ -40,7 +67,7 @@ export interface RequestLoggerOptions {
  * ```
  */
 export function extractRequestMetadata(
-  req: Request,
+  req: RequestMetadataSource,
   options?: { redactHeaders?: (headers: IncomingHttpHeaders) => Record<string, string> },
 ): JsonObject {
   const headers = options?.redactHeaders ? options.redactHeaders(req.headers) : req.headers;
@@ -67,6 +94,55 @@ export function extractRequestMetadata(
 }
 
 /**
+ * Logs an incoming request using transport-agnostic inputs.
+ *
+ * @param logger - Logger instance to use
+ * @param request - Request data required for structured logging
+ * @param next - Continuation callback
+ * @param options - Request logging configuration
+ */
+export function logIncomingRequest(
+  logger: Logger,
+  request: RequestLoggingSource,
+  next: LoggingNext,
+  options: RequestLoggerOptions = {},
+): void {
+  const level = options.level ?? 'debug';
+  let metadata = extractRequestMetadata(request, {
+    redactHeaders: options.redactHeaders,
+  });
+
+  if (options.includeBody && request.body) {
+    metadata = {
+      ...metadata,
+      body: sanitiseForJson(request.body),
+    };
+  }
+
+  logger[level]('Incoming HTTP request', metadata);
+  next();
+}
+
+/**
+ * Logs an error with request context using transport-agnostic inputs.
+ *
+ * @param logger - Logger instance to use
+ * @param error - Error to log
+ * @param request - Request data required for structured logging
+ * @param next - Continuation callback
+ */
+export function logRequestError(
+  logger: Logger,
+  error: Error,
+  request: RequestMetadataSource,
+  next: LoggingNext,
+): void {
+  const metadata = extractRequestMetadata(request);
+  logger.error('HTTP request error', normalizeError(error), metadata);
+  next(error);
+}
+
+/**
  * Creates Express middleware that logs incoming HTTP requests
  * @param logger - Logger instance to use
  * @param options - Configuration options
@@ -84,23 +160,8 @@ export function createRequestLogger(
   logger: Logger,
   options: RequestLoggerOptions = {},
 ): RequestHandler {
-  const level = options.level ?? 'debug';
-
   return (req: Request, _res: Response, next: NextFunction): void => {
-    let metadata = extractRequestMetadata(req, {
-      redactHeaders: options.redactHeaders,
-    });
-
-    if (options.includeBody && req.body) {
-      // JsonObject has readonly index signature, so create new object
-      metadata = {
-        ...metadata,
-        body: sanitiseForJson(req.body),
-      };
-    }
-
-    logger[level]('Incoming HTTP request', metadata);
-    next();
+    logIncomingRequest(logger, req, next, options);
   };
 }
 
@@ -121,8 +182,6 @@ export function createRequestLogger(
  */
 export function createErrorLogger(logger: Logger): ErrorRequestHandler {
   return (err: Error, req: Request, _res: Response, next: NextFunction): void => {
-    const metadata = extractRequestMetadata(req);
-    logger.error('HTTP request error', err, metadata);
-    next(err); // Must pass error to next middleware
+    logRequestError(logger, err, req, next);
   };
 }

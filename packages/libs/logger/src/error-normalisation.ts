@@ -1,126 +1,106 @@
 /**
- * Error normalisation utilities
+ * Error normalisation utilities.
  *
- * These functions convert arbitrary thrown values into proper Error objects.
- * The `object` type is used because JavaScript allows throwing any value,
- * including arbitrary objects that don't extend Error.
+ * These helpers convert arbitrary thrown values into package-owned
+ * `NormalizedError` objects so the logger contract stays explicit and
+ * unambiguous.
  */
 
-/**
- * Attempts to serialise an object to JSON string.
- * The `object` type accepts any reference type that could be thrown.
- */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
-function trySerialiseObject(value: object): string | null {
-  try {
-    const serialised = JSON.stringify(value);
-    if (serialised && serialised !== '{}') {
-      return serialised;
-    }
-  } catch {
-    // ignore JSON serialisation failure and fall back to other strategies
-  }
-  return null;
+import {
+  createNativeErrorFields,
+  createThrownObjectFields,
+  type ErrorNormalisationFields,
+} from './error-normalisation-fields.js';
+import { NORMALIZED_ERROR_MARKER, type LogContext, type NormalizedError } from './types.js';
+
+interface NormalizedErrorInit {
+  readonly name: string;
+  readonly message: string;
+  readonly stack?: string;
+  readonly cause?: NormalizedError;
+  readonly metadata?: LogContext;
 }
 
-function isToStringFunction(fn: unknown): fn is (...args: never[]) => string {
-  return typeof fn === 'function' && fn !== Object.prototype.toString;
-}
+class OakNormalizedError implements NormalizedError {
+  declare readonly __oakNormalizedError: typeof NORMALIZED_ERROR_MARKER;
+  readonly name: string;
+  readonly message: string;
+  readonly stack?: string;
+  readonly cause?: NormalizedError;
+  readonly metadata?: LogContext;
 
-/**
- * Gets a custom toString method from an object, checking both own and inherited properties.
- * Uses Reflect.get to safely access inherited toString on the prototype chain.
- */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
-function getCustomToString(value: object): (() => string) | null {
-  const ownDescriptor = Object.getOwnPropertyDescriptor(value, 'toString');
-  if (ownDescriptor) {
-    const descriptorValue: unknown = ownDescriptor.value;
-    if (isToStringFunction(descriptorValue)) {
-      return () => descriptorValue.call(value);
-    }
-    return null;
-  }
+  constructor(init: NormalizedErrorInit) {
+    this.name = init.name;
+    this.message = init.message;
+    this.stack = init.stack;
+    this.cause = init.cause;
+    this.metadata = init.metadata;
 
-  const prototype: unknown = Object.getPrototypeOf(value);
-  if (!prototype || typeof prototype !== 'object') {
-    return null;
-  }
-
-  const protoDescriptor = Object.getOwnPropertyDescriptor(prototype, 'toString');
-  if (!protoDescriptor) {
-    return null;
-  }
-  const inherited: unknown = protoDescriptor.value;
-  if (isToStringFunction(inherited)) {
-    return () => inherited.call(value);
-  }
-
-  return null;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
-function trySerialiseViaToString(value: object): string | null {
-  const customToString = getCustomToString(value);
-  if (!customToString) {
-    return null;
-  }
-
-  const stringValue = customToString();
-  if (!stringValue || stringValue === '[object Object]') {
-    return null;
-  }
-
-  return JSON.stringify(stringValue);
-}
-
-/**
- * Converts an arbitrary thrown object into an Error with a meaningful message.
- */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Accepts any thrown object for error normalisation
-function normaliseObjectError(value: object): Error {
-  const serialised = trySerialiseObject(value);
-  if (serialised) {
-    return new Error(serialised);
-  }
-
-  const viaToString = trySerialiseViaToString(value);
-  if (viaToString) {
-    return new Error(viaToString);
-  }
-
-  return new Error('[object Object]');
-}
-
-function normaliseSymbol(error: symbol): Error {
-  if (error.description) {
-    return new Error(error.description);
-  }
-  return new Error('Symbol');
-}
-
-function normalisePrimitive(error: string | number | boolean | bigint): Error {
-  switch (typeof error) {
-    case 'string':
-      return new Error(error);
-    case 'number':
-      return new Error(error.toString());
-    case 'boolean':
-      return new Error(error ? 'true' : 'false');
-    case 'bigint':
-      return new Error(error.toString());
-    default:
-      return new Error('Unknown error');
+    Object.defineProperty(this, '__oakNormalizedError', {
+      value: NORMALIZED_ERROR_MARKER,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
   }
 }
 
-function isPrimitive(error: unknown): error is string | number | boolean | bigint {
-  const t = typeof error;
-  return t === 'string' || t === 'number' || t === 'boolean' || t === 'bigint';
+function createNormalizedError(init: NormalizedErrorInit): NormalizedError {
+  return new OakNormalizedError(init);
 }
 
-function normaliseByType(error: unknown): Error {
-  if (isPrimitive(error)) {
+function normalizeCause(cause: unknown): NormalizedError | undefined {
+  return cause === undefined ? undefined : normalizeError(cause);
+}
+
+function createNormalizedFromFields(fields: ErrorNormalisationFields): NormalizedError {
+  return createNormalizedError({
+    name: fields.name,
+    message: fields.message,
+    stack: fields.stack,
+    cause: normalizeCause(fields.cause),
+    metadata: fields.metadata,
+  });
+}
+
+function createUnknownNormalizedError(): NormalizedError {
+  return createNormalizedError({
+    name: 'Error',
+    message: 'Unknown error',
+  });
+}
+
+function normaliseSymbol(error: symbol): NormalizedError {
+  return createNormalizedError({
+    name: 'SymbolError',
+    message: error.description ?? 'Symbol',
+  });
+}
+
+function normalisePrimitive(error: string | number | boolean | bigint): NormalizedError {
+  return createNormalizedError({
+    name: 'Error',
+    message:
+      typeof error === 'boolean'
+        ? error
+          ? 'true'
+          : 'false'
+        : typeof error === 'bigint'
+          ? error.toString()
+          : String(error),
+  });
+}
+
+function normalizeNullishError(error: unknown): NormalizedError | undefined {
+  return error === null || error === undefined ? createUnknownNormalizedError() : undefined;
+}
+
+function normalizePrimitiveError(error: unknown): NormalizedError | undefined {
+  if (typeof error === 'string' || typeof error === 'number' || typeof error === 'boolean') {
+    return normalisePrimitive(error);
+  }
+
+  if (typeof error === 'bigint') {
     return normalisePrimitive(error);
   }
 
@@ -128,31 +108,88 @@ function normaliseByType(error: unknown): Error {
     return normaliseSymbol(error);
   }
 
-  if (typeof error === 'function') {
-    return new Error('[function]');
+  return undefined;
+}
+
+function normalizeFunctionError(error: unknown): NormalizedError | undefined {
+  if (typeof error !== 'function') {
+    return undefined;
   }
 
-  if (typeof error === 'object') {
-    return error ? normaliseObjectError(error) : new Error('Unknown error');
+  return createNormalizedError({
+    name: 'FunctionError',
+    message: '[function]',
+  });
+}
+
+function normalizeSimpleError(error: unknown): NormalizedError | undefined {
+  return (
+    normalizeNullishError(error) ?? normalizePrimitiveError(error) ?? normalizeFunctionError(error)
+  );
+}
+
+function readRequiredStringProperty(value: unknown, key: string): string | undefined {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return undefined;
   }
 
-  return new Error('Unknown error');
+  const descriptorValue: unknown = Object.getOwnPropertyDescriptor(value, key)?.value;
+  return typeof descriptorValue === 'string' ? descriptorValue : undefined;
 }
 
 /**
- * Normalizes various error types to Error objects
- * @param error - Error value (can be Error, string, number, object, null, undefined)
- * @returns Error object
+ * Type guard for package-owned `NormalizedError` values.
+ *
+ * @param error - Candidate value
+ * @returns `true` when the value carries the logger error brand
  */
+export function isNormalizedError(error: unknown): error is NormalizedError {
+  if (typeof error !== 'object' || error === null || Array.isArray(error)) {
+    return false;
+  }
 
-export function normalizeError(error: unknown): Error {
-  if (error instanceof Error) {
+  return (
+    Object.getOwnPropertyDescriptor(error, '__oakNormalizedError')?.value ===
+      NORMALIZED_ERROR_MARKER &&
+    readRequiredStringProperty(error, 'name') !== undefined &&
+    readRequiredStringProperty(error, 'message') !== undefined
+  );
+}
+
+/**
+ * Builds a branded `NormalizedError`.
+ *
+ * @param init - Structured error fields
+ * @returns Package-owned `NormalizedError`
+ */
+export function buildNormalizedError(init: NormalizedErrorInit): NormalizedError {
+  return createNormalizedError(init);
+}
+
+/**
+ * Converts an arbitrary value into a package-owned `NormalizedError`.
+ *
+ * @param error - Thrown or logged error value
+ * @returns Branded `NormalizedError`
+ */
+export function normalizeError(error: unknown): NormalizedError {
+  if (isNormalizedError(error)) {
     return error;
   }
 
-  if (error === null || error === undefined) {
-    return new Error('Unknown error');
+  if (error instanceof Error) {
+    return createNormalizedFromFields(createNativeErrorFields(error));
   }
 
-  return normaliseByType(error);
+  const simpleNormalized = normalizeSimpleError(error);
+  if (simpleNormalized) {
+    return simpleNormalized;
+  }
+
+  const objectFields = createThrownObjectFields(error);
+  if (objectFields) {
+    return createNormalizedFromFields(objectFields);
+  }
+
+  return createUnknownNormalizedError();
 }

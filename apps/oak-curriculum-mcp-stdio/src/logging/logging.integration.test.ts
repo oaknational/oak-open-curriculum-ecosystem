@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { UnifiedLogger } from '@oaknational/logger';
+import { UnifiedLogger, normalizeError } from '@oaknational/logger';
 import { createStdioLogger, createChildLogger } from './index.js';
 import type { LOG_LEVELS } from '@oaknational/env';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -44,7 +44,7 @@ describe('createStdioLogger', () => {
     const testContext = { key: 'value' };
 
     expect(() => {
-      logger.error('test message', testError, testContext);
+      logger.error('test message', normalizeError(testError), testContext);
     }).not.toThrow();
   });
 });

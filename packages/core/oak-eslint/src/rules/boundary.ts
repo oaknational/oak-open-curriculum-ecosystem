@@ -332,7 +332,14 @@ export function createSdkBoundaryRules(
  * List of all libraries for reference
  * Update this list when adding new libraries
  */
-export const LIB_PACKAGES = ['logger', 'env-resolution', 'search-contracts'] as const;
+export const LIB_PACKAGES = [
+  'logger',
+  'env-resolution',
+  'observability',
+  'sentry-node',
+  'sentry-mcp',
+  'search-contracts',
+] as const;
 
 /**
  * Get all other libraries (excluding the current one)

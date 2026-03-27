@@ -11,6 +11,7 @@
  */
 
 import type { Command } from 'commander';
+import { sanitiseForJson } from '@oaknational/logger';
 import { err, ok, type Result } from '@oaknational/result';
 import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import { isIndexMetaDoc } from '@oaknational/sdk-codegen/search';
@@ -85,7 +86,9 @@ function registerMetaGetCmd(parent: Command, cliEnv: CliSdkEnv): void {
           const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
           const result = await handleGetMeta(admin);
           if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+            adminLogger.error(`${result.error.type}: ${result.error.message}`, {
+              error: sanitiseForJson(result.error),
+            });
             printError(`${result.error.type}: ${result.error.message}`);
             process.exitCode = 1;
             return;
@@ -113,7 +116,9 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .action(async (json: string) => {
       const parsed = parseMetaJson(json);
       if (!parsed.ok) {
-        adminLogger.error(parsed.error.message, parsed.error);
+        adminLogger.error(parsed.error.message, {
+          error: sanitiseForJson(parsed.error),
+        });
         printError(parsed.error.message);
         process.exitCode = 1;
         return;
@@ -125,7 +130,9 @@ function registerMetaSetCmd(parent: Command, cliEnv: CliSdkEnv): void {
           const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
           const result = await handleSetMeta(admin, parsed.value);
           if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+            adminLogger.error(`${result.error.type}: ${result.error.message}`, {
+              error: sanitiseForJson(result.error),
+            });
             printError(`${result.error.type}: ${result.error.message}`);
             process.exitCode = 1;
             return;

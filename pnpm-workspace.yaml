@@ -10,6 +10,9 @@ packages:
   - packages/core/type-helpers
   - packages/libs/env-resolution
   - packages/libs/logger
+  - packages/libs/observability
+  - packages/libs/sentry-node
+  - packages/libs/sentry-mcp
   - packages/libs/search-contracts
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen

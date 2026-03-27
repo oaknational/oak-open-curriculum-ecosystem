@@ -4,14 +4,14 @@
  */
 
 import type { Request, Response } from 'express';
-import type { Logger } from '@oaknational/logger';
+import type { Logger, LogContextInput } from '@oaknational/logger';
 import type { AuthInfo } from './types.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 
 /**
  * Base logging context for authentication events.
  */
-export interface AuthLogContext {
+export interface AuthLogContext extends LogContextInput {
   readonly method: string;
   readonly path: string;
   readonly correlationId?: string;

@@ -27,6 +27,18 @@ those findings have now been folded back into the rewritten bundle. The
 refreshed reviewer matrix has re-checked the rewritten documents and found no
 remaining blocker findings.
 
+Execution-state addendum, same date:
+
+- The active plan and thin prompt have now been refreshed again to foreground
+  the Phase 1 code-review blocker bundle.
+- This does not revoke handover-bundle restart clearance; it changes the next
+  execution step from "start Phase 1 implementation" to "fix the blocker
+  bundle first".
+- The remaining architectural branch has now been removed from the handover:
+  the chosen resolution is to move provider-neutral observability into `core`
+  and replace bespoke sibling-lib allow-lists with an explicit layered-library
+  rule.
+
 ## Findings Being Closed by the Current Rewrite
 
 1. ADR-117 authority drift between plan, prompt, checkpoint, and napkin
@@ -82,3 +94,5 @@ Satisfied:
    once shared packages and app adoption code exist.
 2. The Sentry-specific review at code time must still check current official
    Sentry documentation, not just these local documents.
+3. The blocker bundle now recorded in the active plan must be cleared before
+   any HTTP or Search CLI adoption work resumes.

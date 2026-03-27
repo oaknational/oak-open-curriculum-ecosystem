@@ -32,7 +32,13 @@ describe('bootstrapApp', () => {
       }),
     ).rejects.toThrow(startupError);
 
-    expect(logger.error).toHaveBeenCalledWith('Application startup failed', startupError);
+    expect(logger.error).toHaveBeenCalledWith(
+      'Application startup failed',
+      expect.objectContaining({
+        name: 'Error',
+        message: 'OAuth metadata fetch failed',
+      }),
+    );
     expect(exit).toHaveBeenCalledWith(1);
   });
 

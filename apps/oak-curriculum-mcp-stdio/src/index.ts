@@ -6,6 +6,7 @@
  */
 
 import { createServer } from './app/server.js';
+import { normalizeError } from '@oaknational/logger';
 import { createStdioLogger } from './logging/index.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 
@@ -37,7 +38,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   }).catch((error: unknown) => {
     const startupError =
       error instanceof Error ? error : new Error(String(error), { cause: error });
-    logger.error('Failed to start server', startupError);
+    logger.error('Failed to start server', normalizeError(startupError));
     process.exit(1);
   });
 }

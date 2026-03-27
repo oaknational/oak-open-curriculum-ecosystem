@@ -12,6 +12,10 @@ This is the operational handover for the active observability foundation work.
 Keep it thin. The active plan owns the facts; this prompt only tells a fresh
 session where to start.
 
+Stop here first: Phase 1 code already exists locally. The next session must
+begin with the blocker bundle recorded in the active plan, not by re-starting
+`logger-foundation` from scratch.
+
 ---
 
 ## Read First
@@ -28,14 +32,15 @@ session where to start.
 
 Primary code surfaces:
 
-- `packages/libs/logger/src/unified-logger.ts`
-- `packages/libs/logger/src/types.ts`
-- `packages/libs/logger/src/otel-format.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/application.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts`
-- `apps/oak-search-cli/src/runtime-config.ts`
-- `apps/oak-search-cli/src/lib/logger.ts`
-- `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest.ts`
+- `packages/core/oak-eslint/package.json`
+- `packages/libs/logger/src/pure-functions.ts`
+- `packages/libs/logger/src/index.ts`
+- `packages/libs/logger/src/stdout-sink.ts`
+- `packages/libs/sentry-node/src/config.ts`
+- `packages/libs/observability/src/redaction.ts`
+- `packages/libs/logger/src/unified-logger.unit.test.ts`
+- `packages/libs/logger/src/otel-format.unit.test.ts`
+- `packages/libs/sentry-mcp/src/wrappers.unit.test.ts`
 
 ---
 
@@ -45,17 +50,31 @@ Primary code surfaces:
    restart.
 2. Re-read the active plan sections:
    - `Current Execution Snapshot`
+   - `Phase 1 blocker bundle (2026-03-27 reviewer pass)`
+   - `Implementation reality after the initial Phase 1 pass`
    - `Execution Phases`
    - `Shared Contracts`
    - `Runtime Acceptance Matrix`
    - `Success Measures`
    - `Restart Bundle`
-3. Begin with `logger-foundation`.
-4. Move next to `shared-observability-packages`.
-5. Keep the deprecated standalone stdio MCP workspace out of scope except for
+3. Start with the lint/export-map blocker in
+   `packages/core/oak-eslint/package.json`.
+4. Remove the remaining clean-break violations in `@oaknational/logger`.
+5. Fix `@oaknational/sentry-node` config semantics so `off`/`fixture` are real
+   kill switches and invalid booleans fail closed.
+6. Apply the chosen architectural resolution before touching adoption work:
+   move `@oaknational/observability` into `packages/core/`, restore
+   `@oaknational/logger` to depending only on `core`, and replace the current
+   sibling-lib allow-lists with an explicit foundation-lib vs adapter-lib rule.
+7. Remove `vi.mock(...)` from the new test harnesses and close the
+   URL-credential redaction gap.
+8. Only after the blocker bundle is green should work move into HTTP and Search
+   CLI adoption.
+9. Keep the deprecated standalone stdio MCP workspace out of scope except for
    unavoidable compile-preserving compatibility edits.
-6. If the active plan or this prompt changed materially after the checkpoint
-   was written, rerun the full reviewer matrix and update the checkpoint.
+10. If the active plan, this prompt, or the restart sequence changes materially
+    again after this refresh, rerun the full reviewer matrix and update the
+    checkpoint.
 
 ---
 

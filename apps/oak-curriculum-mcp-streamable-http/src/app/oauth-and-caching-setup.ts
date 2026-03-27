@@ -47,6 +47,12 @@ export type FetchFn = (
   init?: { signal?: AbortSignal },
 ) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
 
+type ProxyLogger = Pick<Logger, 'debug' | 'error' | 'info' | 'warn'>;
+
+function toProxyLogger(logger: Logger): ProxyLogger {
+  return logger;
+}
+
 class TransientFetchError extends Error {
   constructor(message: string) {
     super(message);
@@ -224,7 +230,7 @@ export async function setupOAuthAndCaching(
 
     runBootstrapPhase(log, bootstrapTimer, 'registerOAuthProxy', appCounter, () => {
       log.info('OAuth proxy enabled', { upstreamBaseUrl });
-      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log }));
+      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: toProxyLogger(log) }));
     });
   }
 

@@ -1,6 +1,29 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createFileSink, type SimpleWriteStream } from './file-sink';
 import type { FileSinkConfig } from './sink-config';
+import type { LogEvent } from './types';
+
+function createEvent(line: string): LogEvent {
+  return {
+    level: 'INFO',
+    message: 'test',
+    context: { key: 'value' },
+    otelRecord: {
+      Timestamp: '2025-11-08T12:00:00.000Z',
+      ObservedTimestamp: '2025-11-08T12:00:00.000Z',
+      SeverityNumber: 9,
+      SeverityText: 'INFO',
+      Body: 'test',
+      Attributes: { key: 'value' },
+      Resource: {
+        'service.name': 'test-service',
+        'service.version': '1.0.0',
+        'deployment.environment': 'test',
+      },
+    },
+    line,
+  };
+}
 
 describe('createFileSink', () => {
   const mockWrite = vi.fn();
@@ -53,7 +76,7 @@ describe('createFileSink', () => {
     const sink = createFileSink({ path: '/tmp/test.log' }, mockFs);
     expect(sink).not.toBeNull();
     const preFormattedLine = '{"level":"INFO","message":"test","context":{"key":"value"}}\n';
-    sink?.write(preFormattedLine);
+    sink?.write(createEvent(preFormattedLine));
     expect(mockWrite).toHaveBeenCalledWith(preFormattedLine, 'utf8', expect.any(Function));
   });
 
@@ -68,7 +91,7 @@ describe('createFileSink', () => {
       },
     );
     const sink = createFileSink(baseConfig, mockFs);
-    sink?.write('{"level":"ERROR","message":"test error"}\n');
+    sink?.write(createEvent('{"level":"ERROR","message":"test error"}\n'));
     expect(consoleError).toHaveBeenCalledWith('Failed to write log line to file', {
       path: '/tmp/test.log',
       error: 'write error',
@@ -84,7 +107,7 @@ describe('createFileSink', () => {
       throw new Error('write throw');
     });
     const sink = createFileSink(baseConfig, mockFs);
-    sink?.write('{"level":"ERROR","message":"test error"}\n');
+    sink?.write(createEvent('{"level":"ERROR","message":"test error"}\n'));
     expect(consoleError).toHaveBeenCalledWith('Failed to write log line to file', {
       path: '/tmp/test.log',
       error: 'write throw',

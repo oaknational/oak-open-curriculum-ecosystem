@@ -4,6 +4,8 @@
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 
+import type { LogContextInput } from '@oaknational/logger';
+
 /**
  * Known exam boards that can be parsed from sequence slugs.
  * Extracted from the slug pattern: `{subject}-secondary-{examBoard}`
@@ -101,7 +103,7 @@ export interface Ks4Logger {
 }
 
 /** Log data for KS4 context operations. */
-export interface Ks4LogData {
+export interface Ks4LogData extends LogContextInput {
   sequenceSlug?: string;
   examBoard?: string | null;
   ks4Option?: string | null;

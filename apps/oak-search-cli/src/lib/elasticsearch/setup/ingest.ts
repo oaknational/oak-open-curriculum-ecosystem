@@ -2,6 +2,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError, sanitiseForJson } from '@oaknational/logger';
 import { loadRuntimeConfig } from '../../../runtime-config.js';
 import type { SearchCliEnv } from '../../../env.js';
 import { initializeEsClient } from '../../es-client.js';
@@ -159,7 +160,9 @@ async function runIngestion(args: CliArgs, env: SearchCliEnv): Promise<void> {
       fs: realFs,
     });
     if (!bulkDirResolution.ok) {
-      ingestLogger.error('Invalid bulk directory configuration', bulkDirResolution.error);
+      ingestLogger.error('Invalid bulk directory configuration', {
+        error: sanitiseForJson(bulkDirResolution.error),
+      });
       process.stderr.write(`${bulkDirResolution.error.message}\n`);
       process.exitCode = 1;
       return;
@@ -214,7 +217,7 @@ async function main(): Promise<void> {
 
 main().catch((error: unknown) => {
   if (error instanceof CacheRequiredError) {
-    ingestLogger.error('CACHE REQUIRED - Ingestion cannot proceed', error, {
+    ingestLogger.error('CACHE REQUIRED - Ingestion cannot proceed', normalizeError(error), {
       hint: 'Start Redis with: docker compose up -d, or use --bypass-cache',
     });
     process.exitCode = 1;
@@ -222,6 +225,8 @@ main().catch((error: unknown) => {
   }
 
   const fatalError = error instanceof Error ? error : new Error(String(error), { cause: error });
-  ingestLogger.error('FATAL ERROR - Ingestion terminated', fatalError, { phase: 'main' });
+  ingestLogger.error('FATAL ERROR - Ingestion terminated', normalizeError(fatalError), {
+    phase: 'main',
+  });
   process.exitCode = 1;
 });

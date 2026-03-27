@@ -86,7 +86,7 @@ export function logBulkErrors(response: BulkResponse, logger: Logger): void {
   if (failedItems.length > 0) {
     const firstActionResult = getActionResult(failedItems[0]);
     const firstError = firstActionResult?.error;
-    logger.error('Bulk indexing errors', undefined, {
+    logger.error('Bulk indexing errors', {
       failureCount: failedItems.length,
       errorTypes: countErrorsByType(failedItems),
       firstError: firstError ? { type: firstError.type, reason: firstError.reason } : undefined,

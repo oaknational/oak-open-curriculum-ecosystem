@@ -2,10 +2,17 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {
+  getCodexAdapterValidation,
+  getCodexRegistrationValidation,
+  parseCodexRegistrations,
+} from './validate-subagents-helpers.mjs';
 
 const repoRoot = process.cwd();
 
-const WRAPPER_DIR = '.cursor/agents';
+const CURSOR_WRAPPER_DIR = '.cursor/agents';
+const CODEX_ADAPTER_DIR = '.codex/agents';
+const CODEX_CONFIG_PATH = '.codex/config.toml';
 const TEMPLATE_DIR = '.agent/sub-agents/templates';
 const IDENTITY_COMPONENT_PATH = '.agent/sub-agents/components/behaviours/subagent-identity.md';
 
@@ -56,10 +63,18 @@ function getFrontmatterValue(frontmatter, key) {
  * @param {string} relDir
  */
 async function listMarkdownFiles(relDir) {
+  return listFiles(relDir, '.md');
+}
+
+/**
+ * @param {string} relDir
+ * @param {string} extension
+ */
+async function listFiles(relDir, extension) {
   const absDir = path.join(repoRoot, relDir);
   const entries = await fs.readdir(absDir, { withFileTypes: true });
   return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
     .map((entry) => `${relDir}/${entry.name}`)
     .sort();
 }
@@ -77,9 +92,12 @@ if (!(await exists(IDENTITY_COMPONENT_PATH))) {
   addIssue(`Missing required shared component: ${IDENTITY_COMPONENT_PATH}`);
 }
 
-const wrapperFiles = await listMarkdownFiles(WRAPPER_DIR);
+const wrapperFiles = await listMarkdownFiles(CURSOR_WRAPPER_DIR);
+const codexAdapterFiles = await listFiles(CODEX_ADAPTER_DIR, '.toml');
 const templateFiles = await listMarkdownFiles(TEMPLATE_DIR);
-const referencedTemplates = new Set();
+const cursorReferencedTemplates = new Set();
+const codexReferencedTemplates = new Set();
+const codexRegistrationsByName = new Map();
 
 for (const wrapperFile of wrapperFiles) {
   const content = await readText(wrapperFile);
@@ -114,7 +132,7 @@ for (const wrapperFile of wrapperFiles) {
   }
 
   const templatePath = templateLoadMatch[1];
-  referencedTemplates.add(templatePath);
+  cursorReferencedTemplates.add(templatePath);
 
   if (!templatePath.startsWith(`${TEMPLATE_DIR}/`)) {
     addIssue(
@@ -125,6 +143,51 @@ for (const wrapperFile of wrapperFiles) {
 
   if (!(await exists(templatePath))) {
     addIssue(`${wrapperFile}: referenced template does not exist (${templatePath})`);
+  }
+}
+
+if (!(await exists(CODEX_CONFIG_PATH))) {
+  addIssue(`Missing Codex project-agent registry: ${CODEX_CONFIG_PATH}`);
+} else {
+  const codexRegistrations = parseCodexRegistrations(await readText(CODEX_CONFIG_PATH));
+  const { issues: registrationIssues, registrationsByName: resolvedRegistrationsByName } =
+    getCodexRegistrationValidation({
+      registrations: codexRegistrations,
+      configPath: CODEX_CONFIG_PATH,
+      fileExists: (relPath) => codexAdapterFiles.includes(relPath),
+    });
+  for (const issue of registrationIssues) {
+    addIssue(issue);
+  }
+  for (const [agentName, configFile] of resolvedRegistrationsByName.entries()) {
+    codexRegistrationsByName.set(agentName, configFile);
+  }
+}
+
+for (const codexAdapterFile of codexAdapterFiles) {
+  const content = await readText(codexAdapterFile);
+  const adapterBasename = path.basename(codexAdapterFile, '.toml');
+  const registeredAgent = codexRegistrationsByName.get(adapterBasename);
+  const {
+    issues: codexAdapterIssues,
+    templatePaths,
+    canonicalPaths,
+  } = getCodexAdapterValidation({
+    codexAdapterFile,
+    content,
+    registeredAgent,
+    templateDir: TEMPLATE_DIR,
+  });
+  for (const issue of codexAdapterIssues) {
+    addIssue(issue);
+  }
+  for (const canonicalPath of canonicalPaths) {
+    if (!(await exists(canonicalPath))) {
+      addIssue(`${codexAdapterFile}: referenced canonical file does not exist (${canonicalPath})`);
+    }
+  }
+  for (const templatePath of templatePaths) {
+    codexReferencedTemplates.add(templatePath);
   }
 }
 
@@ -145,8 +208,16 @@ for (const templateFile of templateFiles) {
     );
   }
 
-  if (!referencedTemplates.has(templateFile)) {
-    addIssue(`${templateFile}: no wrapper in ${WRAPPER_DIR} currently references this template`);
+  if (!cursorReferencedTemplates.has(templateFile)) {
+    addIssue(
+      `${templateFile}: no wrapper in ${CURSOR_WRAPPER_DIR} currently references this template`,
+    );
+  }
+
+  if (!codexReferencedTemplates.has(templateFile)) {
+    addIssue(
+      `${templateFile}: no adapter in ${CODEX_ADAPTER_DIR} currently references this template`,
+    );
   }
 }
 
@@ -161,5 +232,5 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `Sub-agent standards validation passed: ${wrapperFiles.length} wrapper files and ${templateFiles.length} template files are compliant.`,
+  `Sub-agent standards validation passed: ${wrapperFiles.length} Cursor wrappers, ${codexAdapterFiles.length} Codex adapters, and ${templateFiles.length} template files are compliant.`,
 );

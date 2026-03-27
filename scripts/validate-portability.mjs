@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
+  getReviewerAdapterParityIssues,
   HOOK_POLICY_PATH,
   SURFACE_MATRIX_PATH,
 } from './validate-portability-helpers.mjs';
@@ -277,7 +278,28 @@ for (const skillDir of canonicalSkillDirs) {
   }
 }
 
-// --- Check 7: Rule orphan detection — canonical rule with no platform adapters ---
+// --- Check 7: Cross-platform reviewer adapter parity ---
+
+const cursorAgentFiles = await listFiles('.cursor/agents', '.md');
+const claudeAgentFiles = await listFiles('.claude/agents', '.md');
+const codexAgentFiles = await listFiles('.codex/agents', '.toml');
+const canonicalAgentNames = [
+  ...new Set([
+    ...cursorAgentFiles.map((file) => path.basename(file, '.md')),
+    ...claudeAgentFiles.map((file) => path.basename(file, '.md')),
+    ...codexAgentFiles.map((file) => path.basename(file, '.toml')),
+  ]),
+].sort();
+
+for (const issue of getReviewerAdapterParityIssues({
+  cursorAgentFiles,
+  claudeAgentFiles,
+  codexAgentFiles,
+})) {
+  addIssue(issue);
+}
+
+// --- Check 8: Rule orphan detection — canonical rule with no platform adapters ---
 
 const canonicalRules = await listFiles('.agent/rules', '.md');
 for (const ruleFile of canonicalRules) {
@@ -296,7 +318,7 @@ for (const ruleFile of canonicalRules) {
   }
 }
 
-// --- Check 8: Trigger content contract (≤10 content lines) ---
+// --- Check 9: Trigger content contract (≤10 content lines) ---
 
 for (const ruleFile of cursorRules) {
   const content = await readText(ruleFile);
@@ -324,7 +346,7 @@ for (const ruleFile of cursorRules) {
   }
 }
 
-// --- Check 9: Hook portability parity ---
+// --- Check 10: Hook portability parity ---
 
 if (await exists(HOOK_POLICY_PATH)) {
   try {
@@ -352,6 +374,7 @@ const stats = [
   `${canonicalCommands.length} canonical commands`,
   `${canonicalSkillDirs.length} canonical skills`,
   `${canonicalRules.length} canonical rules`,
+  `${canonicalAgentNames.length} reviewer adapters`,
   `${cursorRules.length} Cursor triggers`,
   `${claudeRules.length} Claude rules`,
   `${Object.values(adapterCountsByPlatform).reduce((a, b) => a + b, 0)} command adapters across ${platformCounts.length} platforms`,

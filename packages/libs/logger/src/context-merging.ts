@@ -2,14 +2,14 @@
  * Context merging utilities for logger metadata
  */
 
-import type { JsonObject } from './types.js';
+import type { LogContext, LogContextInputValue } from './types.js';
 import { sanitiseObject, sanitiseForJson } from './json-sanitisation.js';
 
 /**
  * Merges base context with additional context
  * Strips undefined values and sanitises all values to ensure JSON-safe output
  * @param base - Base context object
- * @param context - Additional context to merge (can be any value)
+ * @param context - Additional context to merge
  * @returns Merged JSON-safe context object
  *
  * @example
@@ -21,7 +21,7 @@ import { sanitiseObject, sanitiseForJson } from './json-sanitisation.js';
  * // Returns: { app: 'test', timestamp: '2025-01-01T00:00:00.000Z' }
  * ```
  */
-export function mergeLogContext(base: JsonObject, context?: unknown): JsonObject {
+export function mergeLogContext(base: LogContext, context?: LogContextInputValue): LogContext {
   if (context === undefined) {
     return base;
   }

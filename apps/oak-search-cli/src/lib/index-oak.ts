@@ -10,7 +10,7 @@
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
-import { isKeyStage, isSubject } from '@oaknational/curriculum-sdk';
+import { formatSdkError, isKeyStage, isSubject } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
@@ -145,7 +145,10 @@ async function buildOpsForSubject(
   const sequencesResult = await client.getSubjectSequences(subject);
   if (!sequencesResult.ok) {
     // Sequence fetching failure is non-recoverable for this subject
-    ingestLogger.error('Failed to fetch sequences', { subject, error: sequencesResult.error });
+    ingestLogger.error('Failed to fetch sequences', {
+      subject,
+      error: formatSdkError(sequencesResult.error),
+    });
     return [];
   }
   const subjectSequences = sequencesResult.value;

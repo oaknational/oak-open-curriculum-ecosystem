@@ -1,7 +1,9 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
+import { typeSafeGet, typeSafeHas } from '@oaknational/type-helpers';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
@@ -160,32 +162,24 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
  * @returns Proxy behaving as IncomingMessage without Clerk auth property
  */
 function createMcpRequest(req: express.Request): IncomingMessage {
-  // Proxy delegates to Express Request (which extends IncomingMessage) but omits 'auth'
-  const proxy = new Proxy(req, {
-    get(target, prop) {
+  const incomingRequest: IncomingMessage = req;
+  return new Proxy(incomingRequest, {
+    get(target, prop): unknown {
       if (prop === 'auth') {
-        return undefined; // Omit Clerk's auth to avoid type conflict
+        return undefined;
       }
-      // Type guard: ensure prop exists on target before access
-      if (typeof prop === 'string' && prop in target) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/consistent-type-assertions -- Proxy get handler for architectural bridge (see function documentation)
-        return target[prop as keyof express.Request];
+      if (typeof prop === 'string' && typeSafeHas(target, prop)) {
+        return typeSafeGet(target, prop);
       }
       return undefined;
     },
     has(target, prop) {
       if (prop === 'auth') {
-        return false; // Report auth as not present
+        return false;
       }
       return prop in target;
     },
   });
-
-  // Type assertion: Proxy<Request> → IncomingMessage
-  // Safe at runtime because Express Request extends IncomingMessage
-  // and we only omit the conflicting auth property
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Architectural bridge between Clerk and MCP SDK types (see function documentation)
-  return proxy as unknown as IncomingMessage;
 }
 
 /**
@@ -236,7 +230,7 @@ export function createMcpHandler(
         .then(() => transport.close())
         .then(() => server.close())
         .catch((err: unknown) => {
-          logger?.error('MCP per-request cleanup failed', { error: err });
+          logger?.error('MCP per-request cleanup failed', normalizeError(err));
         });
     });
 

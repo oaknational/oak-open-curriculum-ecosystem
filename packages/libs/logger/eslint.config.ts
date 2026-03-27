@@ -49,7 +49,10 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules('logger', getOtherLibs('logger')),
+    rules: createLibBoundaryRules(
+      'logger',
+      getOtherLibs('logger').filter((lib) => lib !== 'observability'),
+    ),
   },
   {
     files: ['src/file-sink.ts'],

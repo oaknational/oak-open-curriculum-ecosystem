@@ -15,6 +15,7 @@ import express from 'express';
 import type { IncomingMessage } from 'http';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { typeSafeGet, typeSafeHas } from '@oaknational/type-helpers';
 import { z } from 'zod';
 
 /**
@@ -32,30 +33,24 @@ import { z } from 'zod';
  * @returns Proxy behaving as IncomingMessage without Clerk auth property
  */
 function createMcpTestRequest(req: express.Request): IncomingMessage {
-  // Proxy delegates to Express Request (which extends IncomingMessage) but omits 'auth'
-  const proxy = new Proxy(req, {
-    get(target, prop) {
+  const incomingRequest: IncomingMessage = req;
+  return new Proxy(incomingRequest, {
+    get(target, prop): unknown {
       if (prop === 'auth') {
-        return undefined; // Omit Clerk's auth to avoid type conflict
+        return undefined;
       }
-      // Type guard: ensure prop exists on target before access
-      if (typeof prop === 'string' && prop in target) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Proxy get handler for architectural bridge (see function documentation)
-        return target[prop as keyof express.Request];
+      if (typeof prop === 'string' && typeSafeHas(target, prop)) {
+        return typeSafeGet(target, prop);
       }
       return undefined;
     },
     has(target, prop) {
       if (prop === 'auth') {
-        return false; // Report auth as not present
+        return false;
       }
       return prop in target;
     },
   });
-
-  // Type assertion: Proxy<Request> → IncomingMessage (architectural bridge; mirrors handlers.ts createMcpRequest)
-
-  return proxy as unknown as IncomingMessage;
 }
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';

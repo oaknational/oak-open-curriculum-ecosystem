@@ -14,6 +14,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
+import { sanitiseForJson } from '@oaknational/logger';
 import {
   withLifecycleLease,
   type AdminError,
@@ -59,16 +60,13 @@ const ingestDeps = {
   printError,
   setExitCode: (c: number) => (process.exitCode = c),
 };
-
 /** Real filesystem predicates for `resolveBulkDir`. */
 const realFs = { existsSync, readdirSync: (p: string) => readdirSync(p) };
-
 /** Result of validating ingest preconditions. */
 interface IngestPreconditionResult {
   readonly ok: boolean;
   readonly bulkDir?: string;
 }
-
 /**
  * Wire up ingestion resources and return the lifecycle service.
  *
@@ -93,13 +91,14 @@ async function buildIngestService(
   );
   return { service, oakClient };
 }
-
 /** Safely disconnect the OakClient, logging warnings on failure. */
 async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): Promise<void> {
   try {
     await oakClient.disconnect();
   } catch (disconnectErr: unknown) {
-    ingestLogger.warn('OakClient disconnect failed', disconnectErr);
+    ingestLogger.warn('OakClient disconnect failed', {
+      error: sanitiseForJson(disconnectErr),
+    });
   }
 }
 
@@ -115,14 +114,18 @@ function validateIngestPreconditions(
     fs: realFs,
   });
   if (!bulkResult.ok) {
-    ingestLogger.error(bulkResult.error.message, bulkResult.error);
+    ingestLogger.error(bulkResult.error.message, {
+      error: sanitiseForJson(bulkResult.error),
+    });
     printError(bulkResult.error.message);
     process.exitCode = 1;
     return { ok: false };
   }
   const envResult = validateIngestEnv({ oakApiKey: cliEnv.OAK_API_KEY });
   if (!envResult.ok) {
-    ingestLogger.error(envResult.error.message, envResult.error);
+    ingestLogger.error(envResult.error.message, {
+      error: sanitiseForJson(envResult.error),
+    });
     printError(envResult.error.message);
     process.exitCode = 1;
     return { ok: false };
@@ -136,7 +139,9 @@ function handleLifecycleResult<T>(
   onSuccess: (value: T) => void,
 ): void {
   if (!result.ok) {
-    ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+    ingestLogger.error(`${result.error.type}: ${result.error.message}`, {
+      error: sanitiseForJson(result.error),
+    });
     printError(`${result.error.type}: ${result.error.message}`);
     process.exitCode = 1;
     return;

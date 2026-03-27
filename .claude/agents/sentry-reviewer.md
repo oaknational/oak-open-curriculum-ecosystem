@@ -1,6 +1,6 @@
 ---
 name: sentry-reviewer
-description: 'Sentry and OpenTelemetry specialist reviewer grounded in current official Sentry and OpenTelemetry documentation for Oak''s Vercel Node.js runtime, HTTP MCP server, and Search CLI observability foundation.'
+description: "Sentry and OpenTelemetry specialist reviewer grounded in current official Sentry and OpenTelemetry documentation for Oak's Vercel Node.js runtime, HTTP MCP server, and Search CLI observability foundation."
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 disallowedTools: Write, Edit, NotebookEdit
 model: opus

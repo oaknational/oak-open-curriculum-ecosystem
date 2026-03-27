@@ -20,18 +20,14 @@
 
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { Router, text } from 'express';
+import { normalizeError, type Logger } from '@oaknational/logger';
 
 import { type Result, ok, err } from '@oaknational/result';
 
 import { buildAuthorizeRedirectUrl, formatProxyErrorResponse } from './oauth-proxy-upstream.js';
 
 /** Minimal structured logger interface for the proxy. */
-interface ProxyLogger {
-  readonly info: (message: string, context?: unknown) => void;
-  readonly warn: (message: string, context?: unknown) => void;
-  readonly error: (message: string, context?: unknown) => void;
-  readonly debug: (message: string, context?: unknown) => void;
-}
+type ProxyLogger = Pick<Logger, 'debug' | 'error' | 'info' | 'warn'>;
 
 /** Configuration for the OAuth proxy route handlers. */
 export interface OAuthProxyConfig {
@@ -207,7 +203,9 @@ export function createOAuthProxyRoutes(config: OAuthProxyConfig): Router {
   ): (req: ExpressRequest, res: ExpressResponse) => void {
     return (req, res) => {
       handler(req, res).catch((err: unknown) => {
-        config.logger.error('oauth-proxy.unhandled-error', { err, path: req.path });
+        config.logger.error('oauth-proxy.unhandled-error', normalizeError(err), {
+          path: req.path,
+        });
         if (!res.headersSent) {
           res.status(500).json(formatProxyErrorResponse('server_error', 'Internal proxy error'));
         }

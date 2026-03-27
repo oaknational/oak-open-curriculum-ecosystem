@@ -2,6 +2,7 @@
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError } from '@oaknational/logger';
 
 import { generateZodSchemas } from './zodgen-core.js';
 import fs from 'node:fs';
@@ -33,6 +34,6 @@ void (async () => {
   logger.info('All Zod schema generation complete!');
 })().catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);
-  logger.error(`Zod schema generation failed: ${message}`, error);
+  logger.error(`Zod schema generation failed: ${message}`, normalizeError(error));
   process.exit(1);
 });

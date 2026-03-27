@@ -11,7 +11,7 @@ Current queued work for this collection.
 
 Active execution:
 
-- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md)
+- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — currently in Phase 1 blocker remediation before HTTP and Search CLI adoption resumes
 
 Related strategic umbrella:
 

@@ -5,7 +5,7 @@ progress and is the immediate blocker for Open Public Alpha readiness.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation for `@oaknational/logger`, the HTTP MCP server, and the Search CLI | Review-cleared handover complete; next session starts with `logger-foundation`, then `shared-observability-packages` |
+| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation for `@oaknational/logger`, the HTTP MCP server, and the Search CLI | Initial Phase 1 implementation landed locally; next session starts with blocker remediation (lint export map, clean-break removal, Sentry config fixes, explicit `observability -> core` move plus library-tier rule), then resumes adoption |
 
 Prompt entry point:
 

@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/logger';
+import { sanitiseForJson, type Logger } from '@oaknational/logger';
 import { typeSafeValues } from '@oaknational/type-helpers';
 import type { SearchIndexKind, SearchIndexTarget, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
@@ -188,7 +188,7 @@ export function logSummary(
     totalDocs: summary.totalDocs,
     counts: summary.counts,
     dryRun,
-    metrics,
+    metrics: sanitiseForJson(metrics),
   });
 }
 
@@ -223,7 +223,7 @@ export function logDataIntegrityIssues(
     totalSkippedLessons: summary.totalSkippedLessons,
     affectedSubjects: Array.from(summary.affectedSubjects),
     affectedKeyStages: Array.from(summary.affectedKeyStages),
-    skippedUnits: report.skippedUnits,
-    skippedLessonGroups: report.skippedLessonGroups,
+    skippedUnits: sanitiseForJson(report.skippedUnits),
+    skippedLessonGroups: sanitiseForJson(report.skippedLessonGroups),
   });
 }

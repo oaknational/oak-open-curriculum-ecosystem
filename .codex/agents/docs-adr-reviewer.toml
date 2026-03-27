@@ -1,3 +1,5 @@
+name = "docs-adr-reviewer"
+description = "Documentation and ADR quality reviewer."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

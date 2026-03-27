@@ -335,9 +335,11 @@ description: >-
 Read and follow `.agent/commands/commit.md`.
 ```
 
-**Note**: Codex does not currently have a subagent system equivalent
-to Claude's Agent tool. Reviewers can be invoked as commands that load
-templates, similar to the Gemini pattern.
+**Note**: Codex reviewer roles live in repo-local project-agent config
+under `.codex/`. In environments where the runtime does not automatically
+bind those project agents by name, resolve the intended reviewer first with
+`pnpm agent-tools:codex-reviewer-resolve <name>` and then load the reported
+canonical files before invoking the review.
 
 ---
 

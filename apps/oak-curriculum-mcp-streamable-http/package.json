@@ -49,6 +49,7 @@
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
     "commander": "^14.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",

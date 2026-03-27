@@ -258,6 +258,75 @@
   wrapper yet;
   Search CLI still relies on mutable logger globals;
 
+## Session 2026-03-27 — Sentry/OTel Phase 1 blocker refresh
+
+### What changed
+
+- The active execution plan and thin prompt were refreshed after the specialist
+  config/architecture/code review so the next restart no longer says "begin
+  Phase 1". It now says "Phase 1 code exists locally; clear the blocker bundle
+  first".
+- Active README and review checkpoint were updated in the same pass so the
+  normal discovery surfaces agree.
+
+### Blockers now front and centre
+
+- `@oaknational/eslint-plugin-standards` export map currently breaks focused
+  `lint` for `logger`, `env`, `observability`, `sentry-node`, and
+  `sentry-mcp`.
+- `@oaknational/logger` still carries explicit compatibility surfaces
+  (`pure-functions.ts`, legacy re-exports, `StdoutSink`) and README drift.
+- `@oaknational/sentry-node` still treats `off` / `fixture` as invalid when
+  live-only env vars are present, so `SENTRY_MODE=off` is not yet a true kill
+  switch.
+- Invalid boolean env values currently fail open instead of returning `Err`.
+- The new `libs -> libs` allow-lists contradict the current library-boundary
+  rule and need an explicit architectural resolution before adoption work
+  continues.
+
+### Useful state to remember
+
+- Focused `test` and `type-check` are green for `logger`, `env`,
+  `observability`, `sentry-node`, and `sentry-mcp`.
+- Focused `lint` is red until the shared ESLint export-map defect is fixed.
+- Secondary follow-ups for the same slice: remove `vi.mock(...)` from the new
+  in-process tests, redact URL username/password credentials, replace the
+  `@sentry/node` wildcard manifest entry, and tighten the public Sentry SDK
+  typing boundary.
+
+### Docs-consolidation follow-through
+
+- Updated the broader discovery surfaces as well, not just the thin prompt:
+  `.agent/prompts/README.md`,
+  `.agent/plans/architecture-and-infrastructure/README.md`, and
+  `.agent/plans/architecture-and-infrastructure/current/README.md` now all
+  say the next session starts with Phase 1 blocker remediation.
+- `pnpm practice:fitness` passes after the refresh.
+- `.agent/practice-core/incoming/` is empty.
+- `napkin.md` is 404 lines and `distilled.md` is 198 lines, so no napkin
+  distillation was required but `distilled.md` remains close to its ceiling.
+- No new code-pattern extraction was warranted from this docs-only refresh.
+
+### Codex custom-agent config nuance
+
+- Official Codex docs support both a central role registry in
+  `.codex/config.toml` via `agents.<name>.config_file` and standalone
+  custom-agent files under `.codex/agents/`.
+- Important distinction: the config reference describes
+  `config_file` targets as TOML config layers, while the subagents guide
+  says every standalone custom-agent file should define `name`,
+  `description`, and `developer_instructions`.
+- Practical implication for this repo: our current split registry is
+  plausibly valid, but thin adapter files without local `name` and
+  `description` are weaker alignment with the standalone custom-agent
+  schema than the official examples show.
+- Follow-up implementation now landed: every `.codex/agents/*.toml` file
+  declares `name`, `description`, execution settings, and
+  `developer_instructions`, while the validator and resolver both enforce
+  parity against the central `.codex/config.toml` registry. This keeps
+  the registry for discoverability and the adapter files valid as
+  self-describing custom agents.
+
 ### Review-state note (2026-03-27)
 
 - Historical reviewer findings were received during the bundle rewrite, but the
@@ -286,3 +355,63 @@
   `SENTRY_MODE=off`.
 - The authoritative review outcome still belongs in the checkpoint file, not in
   this napkin entry.
+
+## Session 2026-03-27 — Codex reviewer hardening
+
+### What Was Done
+
+- Added a repo-local Codex reviewer resolver CLI in `agent-tools/`:
+  `pnpm agent-tools:codex-reviewer-resolve <agent-name> [--json]`
+- Added the missing `.codex/agents/clerk-reviewer.toml` adapter and registered
+  it in `.codex/config.toml`, bringing Codex reviewer parity up to 18
+  project-agent adapters.
+- Hardened the Codex review workflow docs so `jc-review` and
+  `.agent/commands/review.md` now require resolving the reviewer first and
+  grounding the review in the reported `.codex` adapter plus canonical `.agent`
+  files.
+- Extended `validate-subagents.mjs` to check Codex adapter integrity
+  (registry entry, required settings, canonical file references) and
+  `validate-portability.mjs` to enforce cross-platform reviewer parity.
+
+### Patterns to Remember
+
+- The presence of `.codex/config.toml` alone is not enough; the runtime path
+  used in a session may still bypass repo-local reviewer adapters unless the
+  reviewer is explicitly resolved and grounded first.
+- `clerk-reviewer` had drifted out of the Codex platform layer even though it
+  existed in the shared template and the other platform adapters. Cross-platform
+  parity checks need to cover reviewer adapters, not just commands and skills.
+- `tsx` in this environment may need escalation because it opens a local IPC
+  pipe under `/var/folders/...`; `pnpm agent-tools:codex-reviewer-resolve ...`
+  can fail inside the sandbox with `listen EPERM` even when dependencies are
+  installed.
+- Specialist reviewer threads in this runtime can bleed into unrelated local
+  diffs if the repo has multiple concurrent workstreams. Treat reviewer outputs
+  as untrusted until they reference files that are actually in the scoped diff,
+  and reject off-scope findings explicitly rather than silently accepting them.
+- The test reviewer’s relevant feedback on this hardening pass was:
+  1. temp-filesystem `agent-tools` tests should not be labelled `*.unit.test.ts`
+  2. new validator branches should gain direct root-scripts coverage
+  Both were fixed by reclassifying the tests as integration tests and by
+  extracting script helpers for direct unit coverage.
+
+## Session 2026-03-27 — Sentry/OTel Phase 1 implementation
+
+### What Was Done
+
+- Hydrated the workspace with `pnpm install` so the logger and env packages
+  could run tests locally.
+- Added the new `@oaknational/observability` workspace with shared telemetry
+  redaction helpers and OpenTelemetry span-context utilities.
+- Unblocked local package `type-check` by restoring the standard
+  `development` export pattern on `@oaknational/eslint-plugin-standards`.
+
+### Patterns to Remember
+
+- In this environment, `pnpm install` inside the default sandbox can fail on
+  npm registry resolution (`ENOTFOUND`). Re-run it with escalation rather than
+  assuming the lockfile or package graph is broken.
+- Workspace packages that are consumed directly from source during
+  `type-check` need the repo-standard `exports` shape with `types` and
+  `development` entries. A dist-only export on an unbuilt workspace package
+  causes false-negative local `tsc` failures even after install.

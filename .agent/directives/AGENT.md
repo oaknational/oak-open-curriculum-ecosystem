@@ -77,6 +77,7 @@ Canonical commands:
 
 - `pnpm agent-tools:claude-agent-ops <status|worktrees|log|diff|commit-ready|preflight|cleanup>`
 - `pnpm agent-tools:cursor-session-from-claude-session <find|inspect|takeover>`
+- `pnpm agent-tools:codex-reviewer-resolve <agent-name> [--json]`
 
 ### Agent Artefact Architecture (ADR-125)
 

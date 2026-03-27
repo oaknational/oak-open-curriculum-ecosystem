@@ -3,6 +3,7 @@ import process from 'node:process';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
+import { normalizeError, sanitiseForJson } from '@oaknational/logger';
 import { loadConfigOrExit } from '../../src/runtime-config.js';
 import { initializeEsClient, esClient } from '../../src/lib/es-client.js';
 import {
@@ -84,7 +85,7 @@ function isForceConfirmed(force: boolean | undefined): boolean {
   if (force) {
     return true;
   }
-  searchLogger.error('zero-hit.purge.aborted', new Error('Confirmation missing'), {
+  searchLogger.error('zero-hit.purge.aborted', normalizeError(new Error('Confirmation missing')), {
     message: 'Pass --force when you are certain you want to delete persisted zero-hit events.',
   });
   process.exitCode = 1;
@@ -143,10 +144,10 @@ async function executePurge(
       target,
       indexName,
       olderThanDays,
-      response,
+      response: sanitiseForJson(response),
     });
   } catch (error: unknown) {
-    searchLogger.error('zero-hit.purge.failed', error, {
+    searchLogger.error('zero-hit.purge.failed', normalizeError(error), {
       target,
       indexName,
       olderThanDays,
@@ -174,6 +175,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  searchLogger.error('zero-hit.purge.unhandled', error);
+  searchLogger.error('zero-hit.purge.unhandled', normalizeError(error));
   process.exitCode = 1;
 });

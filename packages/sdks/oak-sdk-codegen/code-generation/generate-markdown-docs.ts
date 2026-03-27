@@ -9,6 +9,7 @@
 import { promises as fs } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError } from '@oaknational/logger';
 import { ZodError } from 'zod';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
@@ -143,6 +144,6 @@ async function main(): Promise<void> {
 
 main().catch((err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
-  logger.error(message, err);
+  logger.error(message, normalizeError(err));
   process.exitCode = 1;
 });

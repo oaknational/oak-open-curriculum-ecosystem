@@ -1,4 +1,9 @@
-import type { Logger } from '@oaknational/logger';
+import {
+  isNormalizedError,
+  type Logger,
+  type LogContextInput,
+  type NormalizedError,
+} from '@oaknational/logger';
 
 type TestLogLevelName = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
@@ -23,17 +28,16 @@ export function createTestLogger(): { readonly logger: Logger; readonly entries:
       entries.push({ level, message, context });
     };
 
+  const error = createErrorRecorder('error', entries);
+  const fatal = createErrorRecorder('fatal', entries);
+
   const logger: Logger = {
     trace: logWithLevel('trace'),
     debug: logWithLevel('debug'),
     info: logWithLevel('info'),
     warn: logWithLevel('warn'),
-    error: (message, error, context) => {
-      entries.push({ level: 'error', message, error, context });
-    },
-    fatal: (message, error, context) => {
-      entries.push({ level: 'fatal', message, error, context });
-    },
+    error,
+    fatal,
     isLevelEnabled: () => true,
     child: () => createTestLoggerWithEntries(entries),
   };
@@ -48,18 +52,39 @@ function createTestLoggerWithEntries(entries: LoggedEntry[]): Logger {
       entries.push({ level, message, context });
     };
 
+  const error = createErrorRecorder('error', entries);
+  const fatal = createErrorRecorder('fatal', entries);
+
   return {
     trace: logWithLevel('trace'),
     debug: logWithLevel('debug'),
     info: logWithLevel('info'),
     warn: logWithLevel('warn'),
-    error: (message, error, context) => {
-      entries.push({ level: 'error', message, error, context });
-    },
-    fatal: (message, error, context) => {
-      entries.push({ level: 'fatal', message, error, context });
-    },
+    error,
+    fatal,
     isLevelEnabled: () => true,
     child: () => createTestLoggerWithEntries(entries),
   };
+}
+
+function createErrorRecorder(
+  level: Extract<TestLogLevelName, 'error' | 'fatal'>,
+  entries: LoggedEntry[],
+): Logger['error'] {
+  function record(message: string, context?: LogContextInput): void;
+  function record(message: string, error: NormalizedError, context?: LogContextInput): void;
+  function record(
+    message: string,
+    errorOrContext?: LogContextInput | NormalizedError,
+    context?: LogContextInput,
+  ): void {
+    if (errorOrContext !== undefined && isNormalizedError(errorOrContext)) {
+      entries.push({ level, message, error: errorOrContext, context });
+      return;
+    }
+
+    entries.push({ level, message, context: errorOrContext });
+  }
+
+  return record;
 }

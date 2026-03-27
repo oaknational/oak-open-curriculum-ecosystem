@@ -12,6 +12,8 @@
  * Production callers pass real implementations; integration tests
  * pass simple fakes (per ADR-078).
  */
+import { normalizeError } from '@oaknational/logger';
+
 export interface BootstrapAppDeps<T> {
   /** Async factory that creates and configures the application. */
   readonly startApp: () => Promise<T>;
@@ -42,7 +44,7 @@ export async function bootstrapApp<T>(deps: BootstrapAppDeps<T>): Promise<T> {
   try {
     return await deps.startApp();
   } catch (startupError: unknown) {
-    deps.logger.error('Application startup failed', startupError);
+    deps.logger.error('Application startup failed', normalizeError(startupError));
     deps.exit(1);
     throw startupError;
   }

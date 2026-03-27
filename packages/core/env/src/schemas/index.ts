@@ -9,3 +9,6 @@ export type { BulkDataEnv } from './bulk-data';
 
 export { LoggingEnvSchema, LOG_LEVELS, NODE_ENVS } from './logging';
 export type { LoggingEnv } from './logging';
+
+export { SentryEnvSchema, SENTRY_MODES } from './sentry';
+export type { SentryEnv } from './sentry';

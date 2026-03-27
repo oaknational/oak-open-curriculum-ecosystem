@@ -9,6 +9,7 @@ import {
   type Logger,
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { createEnrichedErrorLogger } from './logging/index';
 import { createCorrelationMiddleware } from './correlation/middleware';
 
@@ -23,8 +24,8 @@ describe('HTTP Error Handling Integration', () => {
       minSeverity: logLevelToSeverityNumber('DEBUG'),
       resourceAttributes: buildResourceAttributes({}, 'test-logger', '1.0.0'),
       context: {},
-      stdoutSink: createNodeStdoutSink(),
-      fileSink: null,
+      sinks: [createNodeStdoutSink()],
+      getActiveSpanContext: getActiveSpanContextSnapshot,
     });
     logSpy = vi.spyOn(logger, 'error');
 

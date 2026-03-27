@@ -1,3 +1,5 @@
+name = "sentry-reviewer"
+description = "Sentry and OpenTelemetry specialist reviewer for SDK init, logging, tracing, MCP Insights, and telemetry redaction."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

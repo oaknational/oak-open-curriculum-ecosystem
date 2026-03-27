@@ -98,6 +98,7 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/logger": "workspace:^",
+    "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
     "@types/node": "^25.3.5",
