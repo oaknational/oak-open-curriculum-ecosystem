@@ -72,6 +72,8 @@ export {
   isAggregatedToolName,
   createUniversalToolExecutor,
   generatedToolRegistry,
+  toRegistrationConfig,
+  toProtocolEntry,
   AGGREGATED_TOOL_DEFS,
   type GeneratedToolRegistry,
   type UniversalToolName,

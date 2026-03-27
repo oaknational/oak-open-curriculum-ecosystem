@@ -32,6 +32,7 @@ import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import {
   listUniversalTools,
   generatedToolRegistry,
+  toProtocolEntry,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 /**
@@ -44,14 +45,7 @@ export function overrideToolsListHandler(server: McpServer): void {
   server.server.setRequestHandler(ListToolsRequestSchema, () => {
     const tools = listUniversalTools(generatedToolRegistry);
     return Promise.resolve({
-      tools: tools.map((tool) => ({
-        name: tool.name,
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-        annotations: tool.annotations,
-        // Include _meta for OpenAI Apps SDK invocation status (when present)
-        ...(tool._meta ? { _meta: tool._meta } : {}),
-      })),
+      tools: tools.map(toProtocolEntry),
     });
   });
 }

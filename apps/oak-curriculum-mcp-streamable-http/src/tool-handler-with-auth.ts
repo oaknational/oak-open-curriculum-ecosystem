@@ -17,7 +17,10 @@ import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-e
 import { createAuthErrorResponse } from './auth-error-response.js';
 import type { ToolHandlerDependencies } from './handlers.js';
 import { logValidationFailureIfPresent, logUpstreamErrorIfPresent } from './validation-logger.js';
-import { checkMcpClientAuth } from './check-mcp-client-auth.js';
+import { checkMcpClientAuth, type CheckMcpClientAuthDeps } from './check-mcp-client-auth.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import { toolRequiresAuth } from './tool-auth-checker.js';
+import { validateResourceParameter } from './resource-parameter-validator.js';
 
 /**
  * Options for {@link handleToolWithAuthInterception}.
@@ -34,7 +37,15 @@ export interface HandleToolOptions {
   readonly apiKey: string;
   readonly runtimeConfig: RuntimeConfig;
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
+  /** Verified auth context from the ingress edge, or undefined if unauthenticated. */
+  readonly authInfo?: AuthInfo;
 }
+
+/** Injected dependencies for checkMcpClientAuth — stable module-level wiring. */
+const checkAuthDeps: CheckMcpClientAuthDeps = {
+  toolRequiresAuth,
+  validateResourceParameter,
+};
 
 /**
  * Handles tool execution with authentication error interception.
@@ -60,12 +71,57 @@ export async function handleToolWithAuthInterception(
     apiKey,
     runtimeConfig,
     createAssetDownloadUrl,
+    authInfo,
   } = options;
-  const authError = checkMcpClientAuth(tool.name, deps.getResourceUrl(), logger, runtimeConfig);
+
+  const authError = checkMcpClientAuth(
+    tool.name,
+    deps.getResourceUrl(),
+    logger,
+    runtimeConfig,
+    authInfo,
+    checkAuthDeps,
+  );
   if (authError) {
     return authError;
   }
 
+  const { result, capturedAuthError } = await executeWithAuthCapture(
+    tool.name,
+    params,
+    deps,
+    stubExecutor,
+    apiKey,
+    createAssetDownloadUrl,
+    logger,
+  );
+
+  if (capturedAuthError !== undefined) {
+    const resourceUrl = deps.getResourceUrl();
+    const errorType = getAuthErrorType(capturedAuthError);
+    const description = getAuthErrorDescription(capturedAuthError);
+    logger.warn('Tool execution auth error', { toolName: tool.name, errorType, description });
+    return createAuthErrorResponse(errorType, description, resourceUrl);
+  }
+
+  return result;
+}
+
+/**
+ * Executes a tool call, capturing any upstream auth errors (ADR-054).
+ *
+ * Separated from {@link handleToolWithAuthInterception} to keep function
+ * complexity within lint limits while preserving the auth error capture flow.
+ */
+async function executeWithAuthCapture(
+  toolName: UniversalToolName,
+  params: unknown,
+  deps: ToolHandlerDependencies,
+  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
+  apiKey: string,
+  createAssetDownloadUrl: ((lesson: string, type: string) => string) | undefined,
+  logger: Logger,
+): Promise<{ result: CallToolResult; capturedAuthError: unknown }> {
   const client = deps.createClient(apiKey);
   let capturedAuthError: unknown = undefined;
 
@@ -90,15 +146,6 @@ export async function handleToolWithAuthInterception(
     createAssetDownloadUrl,
   });
 
-  const result = await executor(tool.name, params ?? {});
-
-  if (capturedAuthError !== undefined) {
-    const resourceUrl = deps.getResourceUrl();
-    const errorType = getAuthErrorType(capturedAuthError);
-    const description = getAuthErrorDescription(capturedAuthError);
-    logger.warn('Tool execution auth error', { toolName: tool.name, errorType, description });
-    return createAuthErrorResponse(errorType, description, resourceUrl);
-  }
-
-  return result;
+  const result = await executor(toolName, params ?? {});
+  return { result, capturedAuthError };
 }

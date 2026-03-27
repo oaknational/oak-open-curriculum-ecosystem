@@ -1,20 +1,22 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { Logger } from '@oaknational/logger';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
-import { setRequestContext } from './request-context.js';
+import { getAuth } from '@clerk/express';
+import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import {
   createOakPathBasedClient,
   executeToolCall,
-  zodRawShapeFromToolInputJsonSchema,
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
   generatedToolRegistry,
+  toRegistrationConfig,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
@@ -96,17 +98,8 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     : undefined;
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    // Use generated Zod schema directly when available (includes .describe() for MCP clients).
-    // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
-    const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    const config = {
-      title: tool.annotations?.title ?? tool.name,
-      description: tool.description ?? tool.name,
-      inputSchema: input,
-      securitySchemes: tool.securitySchemes,
-      annotations: tool.annotations,
-    };
-    server.registerTool(tool.name, config, async (params: unknown) => {
+    const config = toRegistrationConfig(tool);
+    server.registerTool(tool.name, config, async (params: unknown, extra) => {
       return handleToolWithAuthInterception({
         tool,
         params,
@@ -116,6 +109,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
         apiKey: options.runtimeConfig.env.OAK_API_KEY,
         runtimeConfig: options.runtimeConfig,
         createAssetDownloadUrl: options.createAssetDownloadUrl,
+        authInfo: extra.authInfo,
       });
     });
   }
@@ -125,64 +119,52 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
 }
 
 /**
- * Adapts Express Request for MCP SDK transport by omitting Clerk's auth property.
+ * Extracts verified AuthInfo at the ingress edge.
  *
- * ## Type System Conflict
+ * Calls Clerk's `getAuth` + `verifyClerkToken` to produce the MCP SDK's
+ * `AuthInfo` object. Returns `undefined` if the request has no Bearer token
+ * or if verification fails.
  *
- * We're bridging two incompatible library type systems:
- * - Clerk middleware adds callable `auth(options?)` to Express Request (globally)
- * - MCP SDK transport expects `IncomingMessage & { auth?: AuthInfo }`
+ * ## Security Design Note
  *
- * These `auth` property types are incompatible and neither library is under our control.
+ * This function returns `undefined` in two semantically different cases:
  *
- * ## Why This Approach
+ * 1. **No Bearer token** — expected for unauthenticated requests
+ * 2. **Token present but Clerk verification threw** — internal inconsistency,
+ *    because the `mcpAuth` HTTP middleware has already verified the token
+ *    and returned 401 on failure before this code runs
  *
- * 1. Express Request extends IncomingMessage (structurally compatible)
- * 2. We use AsyncLocalStorage for our auth flow, so MCP SDK doesn't need the auth property
- * 3. Omitting the auth property via Proxy avoids the type conflict
- * 4. At runtime, the Proxy delegates all IncomingMessage properties correctly
+ * Case 2 is logged at `warn` level to surface inconsistencies. The security
+ * boundary holds regardless: `checkMcpClientAuth` rejects `authInfo: undefined`
+ * for any tool that requires auth, so no protected tool executes without a
+ * verified token. The client receives a tool-level auth error rather than
+ * HTTP 401, which may prevent MCP clients from triggering their OAuth
+ * re-authentication flow — this is an acceptable degraded posture since the
+ * upstream middleware already handled the canonical 401 path.
  *
- * ## Type Assertion Justification
- *
- * The final type assertion is necessary because:
- * - Proxy<T> is not assignable to T in TypeScript's type system
- * - We cannot construct a real IncomingMessage (it's a Node.js class)
- * - We cannot change Clerk or MCP SDK types
- * - Runtime behavior is safe: Proxy delegates to Express Request which IS an IncomingMessage
- *
- * This is a documented architectural bridge between incompatible library types,
- * not a shortcut to hide type errors in our code.
- *
- * @param req - Express request with Clerk auth
- * @returns Proxy behaving as IncomingMessage without Clerk auth property
+ * This is the single point where Clerk interaction happens in the MCP tool
+ * path — downstream code receives the typed `AuthInfo` without needing
+ * Clerk imports.
  */
-function createMcpRequest(req: express.Request): IncomingMessage {
-  // Proxy delegates to Express Request (which extends IncomingMessage) but omits 'auth'
-  const proxy = new Proxy(req, {
-    get(target, prop) {
-      if (prop === 'auth') {
-        return undefined; // Omit Clerk's auth to avoid type conflict
-      }
-      // Type guard: ensure prop exists on target before access
-      if (typeof prop === 'string' && prop in target) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/consistent-type-assertions -- Proxy get handler for architectural bridge (see function documentation)
-        return target[prop as keyof express.Request];
-      }
-      return undefined;
-    },
-    has(target, prop) {
-      if (prop === 'auth') {
-        return false; // Report auth as not present
-      }
-      return prop in target;
-    },
-  });
+function extractAuthInfoAtIngress(req: express.Request, logger?: Logger): AuthInfo | undefined {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) {
+    return undefined;
+  }
+  const token = authHeader.substring('Bearer '.length);
 
-  // Type assertion: Proxy<Request> → IncomingMessage
-  // Safe at runtime because Express Request extends IncomingMessage
-  // and we only omit the conflicting auth property
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Architectural bridge between Clerk and MCP SDK types (see function documentation)
-  return proxy as unknown as IncomingMessage;
+  try {
+    const clerkAuth = getAuth(req, { acceptsToken: 'oauth_token' });
+    return verifyClerkToken(clerkAuth, token);
+  } catch (error) {
+    // Token IS present but verification threw — this should not happen because
+    // mcpAuth middleware already verified the token at the HTTP layer. Log at
+    // warn to surface the inconsistency.
+    logger?.warn('Auth extraction at ingress failed (token present but verification threw)', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return undefined;
+  }
 }
 
 /**
@@ -206,6 +188,11 @@ function extractMcpMethod(body: unknown): string | undefined {
 /**
  * Express handler using per-request MCP server + transport (stateless pattern).
  *
+ * Extracts `AuthInfo` at the ingress edge and sets it on `req.auth` so the
+ * MCP SDK's `StreamableHTTPServerTransport.handleRequest()` reads it and
+ * propagates it as `extra.authInfo` to tool callbacks. This replaces the
+ * previous `Proxy` + `AsyncLocalStorage` bridge with one explicit auth flow.
+ *
  * @see ADR-112, MCP SDK simpleStatelessStreamableHttp.ts
  */
 export function createMcpHandler(
@@ -221,11 +208,26 @@ export function createMcpHandler(
     // Create fresh server + transport for this request (stateless mode)
     const { server, transport } = mcpFactory();
     await server.connect(transport);
-    const mcpRequest = createMcpRequest(req);
 
-    await setRequestContext(req, async () => {
-      await transport.handleRequest(mcpRequest, res, req.body);
-    });
+    // Extract AuthInfo at the ingress edge and set it on the request so the
+    // MCP SDK's StreamableHTTPServerTransport reads it via req.auth and
+    // propagates it as extra.authInfo to tool callbacks.
+    const authInfo = extractAuthInfoAtIngress(req, log);
+    // Bridge Clerk → MCP SDK: overwrite Clerk's callable req.auth with the
+    // MCP SDK's AuthInfo object so transport.handleRequest reads it correctly.
+    // After this point, no code should call getAuth(req) — the tool path uses
+    // the explicit AuthInfo parameter via extra.authInfo.
+    //
+    // Type assertion justification: Express Request extends IncomingMessage
+    // (structurally compatible). Clerk's global augmentation of `auth` is a
+    // callable, but we replace it at runtime with AuthInfo before passing to
+    // the SDK. This is the documented ingress boundary between two incompatible
+    // library type systems (Clerk and MCP SDK).
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridging Clerk (callable auth) → MCP SDK (AuthInfo object) at the ingress boundary
+    const mcpRequest = req as unknown as IncomingMessage & { auth?: AuthInfo };
+    mcpRequest.auth = authInfo;
+
+    await transport.handleRequest(mcpRequest, res, req.body);
 
     // Clean up per-request resources after the response completes
     res.on('close', () => {

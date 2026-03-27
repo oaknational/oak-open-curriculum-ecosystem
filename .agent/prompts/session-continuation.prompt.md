@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "MCP App Extension Migration — Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-03-26
+last_updated: 2026-03-27
 ---
 
 # MCP App Extension Migration — Session Continuation
@@ -54,12 +54,12 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 ## What To Do Next
 
 **The immediate next work is the runtime boundary simplification plan, starting
-with Phase 3 (GREEN).** Skip live spec research for simplification plan phases —
-Phase 3 is pure SDK + app simplification work.
+with Phase 6 (REFACTOR).** Skip live spec research for simplification plan
+phases — Phase 6 is cleanup, documentation, and quality gate work.
 
 Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
 
-**Phases 0-2** are **complete** (2026-03-26).
+**Phases 0-5** are **complete** (2026-03-27).
 
 - Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
   All five Express utilities SKIP'd.
@@ -73,94 +73,69 @@ Read: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simpli
   - Auth orchestration in `check-mcp-client-auth.ts` may be too thick for app
     layer — consider extracting to shared library
 - Phase 2: RED tests written and verified. Two projection functions
-  (`toRegistrationConfig`, `toProtocolEntry`) are asserted but do not exist.
-  `pnpm type-check` fails on missing imports; `pnpm test` fails on missing
-  behaviour. All 1,372 existing tests remain green.
+  (`toRegistrationConfig`, `toProtocolEntry`) asserted but did not exist.
+  `pnpm type-check` failed on missing imports. All 1,372 existing tests green.
+- Phase 3: GREEN — `projections.ts` created with `toRegistrationConfig` and
+  `toProtocolEntry`. `handlers.ts` and `tools-list-override.ts` simplified to
+  single SDK projection calls. WeakMap Zod cache for referential stability.
+  706 SDK tests, 676 HTTP tests, 165 E2E tests all pass. MCP-reviewer
+  (COMPLIANT) and code-reviewer (APPROVED) findings all addressed.
 
-### Phase 3 (GREEN) — What to Do
+### Phase 3 (GREEN) — Complete (2026-03-27)
 
-Implement the canonical descriptor projections in the SDK and simplify the HTTP
-app to consume them. Make all Phase 2 RED tests pass.
+SDK canonical descriptor projections implemented and HTTP app simplified.
+All Phase 2 RED tests now GREEN. See plan for full Phase 3 completion summary.
 
-**Invoke `mcp-reviewer` before implementation decisions.**
+### Phase 4 (RED) — Complete (2026-03-27)
 
-**MCP-reviewer findings from Phase 2 (incorporate during GREEN)**:
+RED tests written for explicit MCP ingress/auth context:
 
-- `toProtocolEntry` should include top-level `title` (MCP spec 2025-11-25
-  distinguishes `title` from `annotations.title`)
-- Assert `outputSchema` absence explicitly (`undefined` for current tools) so
-  the contract is visible when it's eventually added
-- Non-widget `_meta` assertion should test `_meta.ui` undefined, not `_meta`
-  entirely (allows future non-UI `_meta` uses)
-- `toRegistrationConfig` should own the `title` derivation
-  (`tool.annotations?.title ?? tool.name`) — currently hand-assembled in
-  `handlers.ts:103`
+- `check-mcp-client-auth.di.integration.test.ts` (was `.di.unit.test.ts` during
+  Phase 4, renamed in Phase 5) — 6 DI-based tests
+- `handlers.integration.test.ts` — Phase 4 RED test for `HandleToolOptions.authInfo`
+- `createFakeAuthInfo` helper added to `test-helpers/fakes.ts`
+- Type errors: TS2724 (`CheckMcpClientAuthDeps`), TS2554 (6 args vs 4),
+  TS2353 (`authInfo` on `HandleToolOptions`)
+- Code-reviewer: APPROVED. Type-reviewer: findings addressed.
+- Plan updated: convergence test superseded (dead code), `AuthInfo` from MCP SDK
+  adopted as explicit auth contract, `extra: Record<string, unknown>` access
+  obligation recorded for Phase 5.
 
-**Architecture-reviewer-fred findings from Phase 2 (incorporate during GREEN)**:
+### Phase 5 (GREEN) — Complete (2026-03-27)
 
-- Replace `vi.spyOn(server, 'registerTool')` with a fake server capturing
-  calls in a plain array (ADR-078 simple-fakes)
-- Consider injecting a controlled registry into the integration test instead
-  of using real `generatedToolRegistry` for assertions
-- Phase 3 must fully delete the config hand-assembly in `handlers.ts:102-108`
-  — no partial adoption
+Explicit ingress boundary implemented. Key changes:
 
-**SDK work** — create `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts`:
+- `check-mcp-client-auth.ts` — 6-param DI, exports `CheckMcpClientAuthDeps`,
+  removes 5 hard imports, Zod `.loose()` for `AuthInfo.extra.userId`
+- `handlers.ts` — deleted `createMcpRequest()` Proxy, `extractAuthInfoAtIngress`
+  at Express edge, `req.auth = authInfo` for MCP SDK native channel, `registerTool`
+  callback reads `extra.authInfo`
+- `tool-handler-with-auth.ts` — `HandleToolOptions.authInfo`, module-level
+  `checkAuthDeps`, `executeWithAuthCapture` extraction
+- Old `vi.mock` test deleted, DI test renamed to `.di.integration.test.ts`
+- 5 specialist reviewers completed: security (RISKS FOUND — documented),
+  clerk (ISSUES FOUND — Phase 6 opportunity), code (APPROVED), type (AT-RISK —
+  no critical), mcp (COMPLIANT)
+- 669 tests, 22 E2E, zero type errors, zero lint errors
 
-1. `toRegistrationConfig(tool: UniversalToolListEntry)` — produces a config
-   object that `registerAppTool()` (widget tools) or `registerTool()`
-   (non-widget tools) can consume directly. Must include:
-   - `title`, `description`, `inputSchema` (Zod shape via `flatZodSchema` or
-     JSON Schema fallback), `annotations`, `securitySchemes`
-   - `_meta.ui.resourceUri` for widget tools (from `tool._meta`)
-   - No `_meta` for non-widget tools (e.g. `download-asset`)
+### Phase 6 (REFACTOR) — Next
 
-2. `toProtocolEntry(tool: UniversalToolListEntry)` — produces a `tools/list`
-   protocol entry using JSON Schema `inputSchema` (preserving examples). Must
-   include: `name`, `description`, `inputSchema`, `annotations`, `_meta` (when
-   present).
+Delete superseded bridge code, propagate documentation. See plan Phase 6 section
+and the "Phase 6 cleanup items" list from Phase 5 reviewer passes. Key items:
 
-3. Export both from `public/mcp-tools.ts` barrel.
-
-**App work** — simplify `handlers.ts` and `tools-list-override.ts`:
-
-1. `handlers.ts:registerHandlers()` — replace hand-assembled config with
-   `toRegistrationConfig(tool)`. Use `registerAppTool()` for widget tools,
-   `registerTool()` for non-widget tools.
-2. `tools-list-override.ts:overrideToolsListHandler()` — replace `tools.map()`
-   hand-mapping with `toProtocolEntry(tool)`.
-3. Both files should have zero `tool.(name|description|inputSchema|annotations|_meta)`
-   field access after GREEN.
-
-**Critical files**:
-
-- `packages/sdks/oak-curriculum-sdk/src/mcp/canonical-descriptor.unit.test.ts` — RED tests to make green
-- `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts` — RED tests to make green
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts` — current SDK surface
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` — `UniversalToolListEntry`
-- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — registration loop
-- `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` — protocol projection
-
-**Deterministic validation** (from plan Phase 3):
-
-```bash
-# Check for hand-mapping of tool fields (should be zero after GREEN)
-rg -n "tool\.(name|description|inputSchema|annotations|_meta)" \
-  apps/oak-curriculum-mcp-streamable-http/src/handlers.ts \
-  apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts
-# Expected: zero matches
-
-pnpm type-check   # Must pass (no more missing imports)
-pnpm --filter @oaknational/curriculum-sdk test          # Must pass
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test  # Must pass
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e  # Must pass
-```
+1. Delete `request-context.ts` + its unit tests (zero production callers)
+2. Delete `tool-auth-context.ts` (dead code from Phase 1)
+3. Update stale Proxy references in `register-prompts.integration.test.ts`
+4. Eliminate double verification — `mcpAuth` middleware stores `AuthInfo` directly
+5. Delete `ToolRegistrationServer` type alias
+6. Clean up Phase 4 RED labels in test describe blocks
+7. Full quality gate chain + documentation propagation (ADRs, READMEs)
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-2 complete, Phase 3 (GREEN) next.
+- **Runtime boundary simplification**: **active** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-5 complete, Phase 6 (REFACTOR) next.
 - **WS3** (widget client + branding): **blocked by** simplification plan completion
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3

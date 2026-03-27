@@ -1,33 +1,27 @@
 /**
- * Phase 2 (RED) tests for the canonical SDK descriptor surface.
+ * Unit tests for the canonical SDK descriptor projection functions.
  *
- * These tests prove that the SDK must own two derived projections from
- * the canonical tool descriptor:
+ * These tests prove that `toRegistrationConfig` and `toProtocolEntry`
+ * correctly transform `UniversalToolListEntry` into the two shapes
+ * MCP consumers need:
  *
  * 1. A **registration projection** that `registerAppTool()` / `registerTool()`
  *    can consume directly — so the app never hand-maps tool fields.
  * 2. A **protocol projection** for `tools/list` that preserves JSON Schema
  *    `inputSchema` with examples — so the app never re-serialises tool metadata.
  *
- * Both projections are imported from `./universal-tools/projections.js`, which
- * does not yet exist. `pnpm type-check` failing on the missing module IS the
- * RED signal.
- *
- * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 2
+ * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 3
  */
 
 import { describe, it, expect } from 'vitest';
 import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
-import { listUniversalTools } from './universal-tools/list-tools.js';
-import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './universal-tools/types.js';
-
-// RED: These imports do not exist yet — type-check and lint fail here.
-// Phase 3 (GREEN) will create this module and make all checks pass.
-import { toRegistrationConfig, toProtocolEntry } from './universal-tools/projections.js';
+import { listUniversalTools } from './list-tools.js';
+import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './types.js';
+import { toRegistrationConfig, toProtocolEntry } from './projections.js';
 
 /** Tools that have no widget _meta.ui fields (no resourceUri). */
-const NON_WIDGET_TOOLS = ['download-asset'] as const satisfies readonly string[];
+const NON_WIDGET_TOOL_NAMES = new Set<string>(['download-asset']);
 
 const sampleMcpToolName = 'get-key-stages-subject-lessons' as const satisfies ToolName;
 
@@ -75,7 +69,7 @@ function createFakeRegistry(): GeneratedToolRegistry {
 
 const registry = createFakeRegistry();
 
-describe('canonical descriptor projections (Phase 2 RED)', () => {
+describe('canonical descriptor projections', () => {
   describe('toRegistrationConfig — registration projection', () => {
     it('produces a registration config for each tool', () => {
       const tools = listUniversalTools(registry);
@@ -104,7 +98,6 @@ describe('canonical descriptor projections (Phase 2 RED)', () => {
       if (!downloadAsset) {
         throw new Error('download-asset not found');
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Phase 2 RED: projections module does not exist yet
       const config = toRegistrationConfig(downloadAsset);
       expect(config._meta).toBeUndefined();
     });
@@ -134,7 +127,7 @@ describe('canonical descriptor projections (Phase 2 RED)', () => {
 
     it('non-widget tool protocol entry omits _meta', () => {
       const tools = listUniversalTools(registry);
-      const nonWidgetTools = tools.filter((t) => NON_WIDGET_TOOLS.includes(t.name));
+      const nonWidgetTools = tools.filter((t) => NON_WIDGET_TOOL_NAMES.has(t.name));
       expect(nonWidgetTools.length).toBeGreaterThan(0);
       for (const tool of nonWidgetTools) {
         const entry = toProtocolEntry(tool);
@@ -152,6 +145,31 @@ describe('canonical descriptor projections (Phase 2 RED)', () => {
         expect(regConfig.description).toBe(protoEntry.description);
         expect(regConfig.annotations).toEqual(protoEntry.annotations);
       }
+    });
+
+    it('description falls back to tool name when undefined', () => {
+      const noDescDescriptor: ToolRegistryDescriptor = {
+        ...sampleDescriptor,
+        description: undefined,
+      };
+      const noDescRegistry: GeneratedToolRegistry = {
+        toolNames: [sampleMcpToolName],
+        getToolFromToolName: () => noDescDescriptor,
+        isToolName: (value: unknown): value is ToolName =>
+          typeof value === 'string' && value === sampleMcpToolName,
+      };
+      const tools = listUniversalTools(noDescRegistry);
+      const generatedTool = tools.find((t) => t.name === sampleMcpToolName);
+      expect(generatedTool).toBeDefined();
+      if (!generatedTool) {
+        throw new Error(`${sampleMcpToolName} not found in tool list`);
+      }
+      expect(generatedTool.description).toBeUndefined();
+      const regConfig = toRegistrationConfig(generatedTool);
+      const protoEntry = toProtocolEntry(generatedTool);
+      expect(regConfig.description).toBe(sampleMcpToolName);
+      expect(protoEntry.description).toBe(sampleMcpToolName);
+      expect(regConfig.description).toBe(protoEntry.description);
     });
   });
 });

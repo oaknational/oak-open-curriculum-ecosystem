@@ -190,7 +190,7 @@ one explicit auth boundary. Default sequencing: run it immediately after WS2 and
 complete it before promoting WS3. Any deferral must be recorded explicitly
 before WS3 implementation begins.
 
-**Simplification plan progress (2026-03-26)**:
+**Simplification plan progress (2026-03-27)**:
 
 - **Phase 0** (complete): `@clerk/mcp-tools/express` utilities evaluated. All
   five Express utilities SKIP'd per ADR-142. Only `verifyClerkToken` adopted.
@@ -201,7 +201,13 @@ before WS3 implementation begins.
 - **Phase 2** (complete): RED tests for canonical SDK descriptor surface.
   `toRegistrationConfig` and `toProtocolEntry` asserted but non-existent.
   type-check, lint, and test all RED. All 1,372 existing tests green.
-- **Phase 3** (next): GREEN — implement SDK projections, simplify app.
+- **Phase 3** (complete, 2026-03-27): GREEN — `projections.ts` created with
+  `toRegistrationConfig` + `toProtocolEntry`. App simplified to single SDK
+  calls. 706 SDK + 676 HTTP + 165 E2E tests pass. MCP-reviewer COMPLIANT.
+- **Phase 4** (complete, 2026-03-27): RED — 6 DI-based unit tests, `AuthInfo`
+  from MCP SDK adopted as explicit auth contract, convergence test superseded
+  (dead code). Code-reviewer APPROVED, type-reviewer findings addressed.
+- **Phase 5** (next): GREEN — implement explicit ingress boundary.
 
 ---
 
@@ -290,8 +296,9 @@ Runtime Boundary Simplification ────────────────
   Phase 0: evaluate @clerk/mcp-tools/express       │  ✓ done
   Phase 1: foundation + seam audit                 │  ✓ done
   Phase 2: RED — SDK descriptor tests              │  ✓ done
-  Phase 3: GREEN — canonicalise SDK surface        │  ← next
-  Phases 4-5: ingress boundary                     │
+  Phase 3: GREEN — canonicalise SDK surface        │  ✓ done
+  Phase 4: RED — ingress auth tests                 │  ✓ done
+  Phase 5: GREEN — explicit ingress boundary        │  ← next
   Phase 6: cleanup + review                        │
                                                     ▼
 WS3: Widget Client + Branding ─────────────────────┐

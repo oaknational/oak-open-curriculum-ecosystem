@@ -11,6 +11,7 @@ import type { RequestWithAuthContext } from '../auth/tool-auth-context.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { MachineAuthObject } from '@clerk/backend';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { McpServerFactory, McpRequestContext } from '../mcp-request-context.js';
 
 /**
@@ -194,7 +195,30 @@ export function createFakeMachineAuthObject(
 }
 
 /**
- * Minimal Express Request fake for getRequestContext / checkMcpClientAuth tests.
+ * Creates an AuthInfo fake for MCP SDK auth context tests.
+ * AuthInfo represents the typed auth context extracted at the ingress edge
+ * and passed forward to tool handlers as an explicit parameter.
+ *
+ * Note: uses spread (not per-field `??`) because AuthInfo has 6 fields and
+ * per-field merging exceeds the complexity lint limit. The spread-widening
+ * risk (a caller passing `{ token: undefined }`) is negligible in test code
+ * since all callers pass real override values.
+ */
+export function createFakeAuthInfo(overrides?: Partial<AuthInfo>): AuthInfo {
+  const defaults: AuthInfo = {
+    token: 'fake-bearer-token',
+    clientId: 'client_123',
+    scopes: ['mcp:invoke'],
+    extra: { userId: 'user_123' },
+  };
+  if (!overrides) {
+    return defaults;
+  }
+  return { ...defaults, ...overrides };
+}
+
+/**
+ * Minimal Express Request fake for handler and auth integration tests.
  * Express Request has many required members.
  */
 export function createFakeExpressRequest(

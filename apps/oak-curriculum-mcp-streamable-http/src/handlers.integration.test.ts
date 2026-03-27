@@ -2,14 +2,14 @@
  * Integration tests for createMcpHandler and registerHandlers.
  *
  * Tests that the MCP handler correctly:
- * 1. Wraps transport.handleRequest in setRequestContext
+ * 1. Extracts AuthInfo at ingress and sets req.auth for MCP SDK
  * 2. Extracts correlation ID for logging
- * 3. Adapts Express request for MCP SDK
+ * 3. Passes body to transport.handleRequest
  * 4. Creates server+transport per request via factory
  * 5. Connects server to transport before handling
  * 6. Cleans up server+transport on response close
  *
- * Phase 2 (RED) tests also assert:
+ * Phase 2 (GREEN) tests also assert:
  * 7. Widget tools must be registered with _meta.ui for registerAppTool() compatibility
  * 8. Registration config must come from SDK canonical projection, not hand-assembly
  *
@@ -22,9 +22,9 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   listUniversalTools,
   generatedToolRegistry,
+  toRegistrationConfig,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { createMcpHandler, registerHandlers } from './handlers.js';
-import { getRequestContext } from './request-context.js';
 import {
   createFakeResponse,
   createFakeMcpServerFactory,
@@ -33,10 +33,7 @@ import {
   createFakeLogger,
 } from './test-helpers/fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
-
-// RED: This import does not exist yet — type-check fails here.
-// Phase 3 (GREEN) will create this module and make the tests pass.
-import { toRegistrationConfig } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 
 /**
  * Create a minimal mock Express request for testing.
@@ -46,43 +43,6 @@ function createMockRequest(body: unknown): Request {
 }
 
 describe('createMcpHandler (Integration)', () => {
-  describe('request context propagation', () => {
-    it('wraps transport.handleRequest with setRequestContext', async () => {
-      let capturedContext: Request | undefined;
-
-      const { factory, transport } = createFakeMcpServerFactory(
-        vi.fn(async () => {
-          capturedContext = getRequestContext();
-        }),
-      );
-
-      const handler = createMcpHandler(factory);
-      const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createFakeResponse();
-
-      await handler(mockReq, mockRes);
-
-      // Verify transport was called
-      expect(transport.handleRequest).toHaveBeenCalled();
-
-      // Verify context was available inside handleRequest
-      expect(capturedContext).toBe(mockReq);
-    });
-
-    it('context is unavailable outside handler execution', async () => {
-      const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
-
-      const handler = createMcpHandler(factory);
-      const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createFakeResponse();
-
-      await handler(mockReq, mockRes);
-
-      // After handler completes, context should be undefined
-      expect(getRequestContext()).toBeUndefined();
-    });
-  });
-
   describe('request adaptation', () => {
     it('passes body to transport.handleRequest', async () => {
       const testBody = { jsonrpc: '2.0', method: 'tools/list', id: '123' };
@@ -103,7 +63,7 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedBody).toEqual(testBody);
     });
 
-    it('omits auth property from adapted request', async () => {
+    it('sets req.auth to undefined when no Bearer token present', async () => {
       let receivedRequest: unknown;
 
       const { factory } = createFakeMcpServerFactory(
@@ -116,17 +76,15 @@ describe('createMcpHandler (Integration)', () => {
       const mockReq = createFakeExpressRequest({
         body: { method: 'tools/list' },
         headers: {},
-        auth: { userId: 'test-user' },
       });
       const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
-      // The adapted request should not expose the auth property
-      // (to avoid type conflicts with MCP SDK's AuthInfo type)
+      // Without a Bearer token, extractAuthInfoAtIngress returns undefined
+      // and req.auth is set to undefined for the MCP SDK transport.
       expect(receivedRequest).toBeDefined();
-      const adapted = receivedRequest as { auth?: unknown };
-      expect(adapted.auth).toBeUndefined();
+      expect(receivedRequest).toHaveProperty('auth', undefined);
     });
   });
 
@@ -158,14 +116,26 @@ describe('createMcpHandler (Integration)', () => {
  */
 describe('tool registration via SDK projection (Phase 2 RED)', () => {
   /**
+   * Find the config (second argument) passed to registerTool for a given tool name.
+   *
+   * Accepts `ReadonlyArray<readonly unknown[]>` so that the generic spy's
+   * `mock.calls` (typed as `never[][]`) is assignable without type assertions
+   * — `never extends unknown` in TypeScript.
+   */
+  function findRegisteredConfig(calls: readonly (readonly unknown[])[], toolName: string): unknown {
+    const call = calls.find((c) => c[0] === toolName);
+    if (!call) {
+      throw new Error(`registerTool was not called for tool ${toolName}`);
+    }
+    return call[1];
+  }
+
+  /**
    * Register tools on a real McpServer and observe registerTool calls.
    *
    * Uses vi.spyOn (observation) on an injected dependency — not vi.mock
    * (module replacement). The McpServer is passed as an argument to
    * registerHandlers(), making this DI-compliant per ADR-078.
-   *
-   * Phase 3 (GREEN) should consider replacing this with a protocol-level
-   * test against tools/list response, once the SDK projections exist.
    */
   function registerAndCapture() {
     const server = new McpServer({ name: 'test-server', version: '0.0.0' });
@@ -190,19 +160,9 @@ describe('tool registration via SDK projection (Phase 2 RED)', () => {
     expect(widgetToolNames.length).toBeGreaterThan(0);
 
     for (const widgetName of widgetToolNames) {
-      const call = registerToolSpy.mock.calls.find(([name]) => name === widgetName);
-      if (!call) {
-        throw new Error(`registerTool was not called for widget tool ${widgetName}`);
-      }
-
-      // The config (second argument) must include _meta.ui.resourceUri
-      // so that registerAppTool() can normalise UI metadata.
-      // Currently FAILS: handlers.ts omits _meta from the config object.
-      //
-      // The config (second argument) must include _meta.ui.resourceUri
-      // so that registerAppTool() can normalise UI metadata.
-      // Currently FAILS: handlers.ts omits _meta from the config object.
-      const config = call[1];
+      // The config must include _meta.ui.resourceUri so that
+      // registerAppTool() can normalise UI metadata.
+      const config = findRegisteredConfig(registerToolSpy.mock.calls, widgetName);
       expect(config, `config for ${widgetName}`).toHaveProperty('_meta.ui.resourceUri');
     }
   });
@@ -212,16 +172,45 @@ describe('tool registration via SDK projection (Phase 2 RED)', () => {
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
-      const call = registerToolSpy.mock.calls.find(([name]) => name === tool.name);
-      if (!call) {
-        throw new Error(`registerTool was not called for tool ${tool.name}`);
-      }
-
-      // The config should match the SDK canonical projection exactly.
-      // RED: toRegistrationConfig does not exist yet — type-check and lint fail.
+      const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
       const expectedConfig = toRegistrationConfig(tool);
-      const actualConfig = call[1];
       expect(actualConfig).toEqual(expectedConfig);
     }
+  });
+});
+
+/**
+ * Phase 4 (RED) tests for explicit auth context propagation.
+ *
+ * These tests prove that HandleToolOptions accepts an `authInfo` parameter
+ * so auth context flows from the ingress edge through to checkMcpClientAuth.
+ *
+ * RED mechanism: HandleToolOptions has no `authInfo` field — TS2353.
+ *
+ * @see Phase 4 of mcp-runtime-boundary-simplification.plan.md
+ */
+describe('explicit auth context propagation (Phase 4 RED)', () => {
+  it('HandleToolOptions accepts authInfo parameter', async () => {
+    const runtimeConfig = createMockRuntimeConfig();
+
+    // RED: HandleToolOptions does not have an authInfo field — TS2353
+    const result = await handleToolWithAuthInterception({
+      tool: { name: 'get-key-stages' },
+      params: {},
+      deps: {
+        createClient: vi.fn(),
+        executeMcpTool: vi.fn(),
+        createExecutor: vi.fn(() => vi.fn()),
+        getResourceUrl: () => 'https://test.example.com/mcp',
+        searchRetrieval: createFakeSearchRetrieval(),
+      },
+      logger: createFakeLogger(),
+      apiKey: 'test-key',
+      runtimeConfig,
+      authInfo: undefined,
+    });
+
+    // When authInfo is undefined for a protected tool, expect an auth error
+    expect(result.isError).toBe(true);
   });
 });
