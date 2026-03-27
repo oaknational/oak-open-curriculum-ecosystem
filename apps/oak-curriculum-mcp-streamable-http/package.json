@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^3.0.1",
-    "@clerk/express": "^2.0.1",
+    "@clerk/express": "^2.0.7",
     "@clerk/mcp-tools": "^0.3.1",
     "@elastic/elasticsearch": "^9.3.4",
     "@modelcontextprotocol/ext-apps": "^1.2.0",
