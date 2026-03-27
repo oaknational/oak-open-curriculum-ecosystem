@@ -1,8 +1,8 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { Logger } from '@oaknational/logger';
+import { z } from 'zod';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
@@ -53,6 +53,30 @@ function mergeOverrides(
     searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
   };
 }
+
+/**
+ * Zod schema for the MCP SDK's AuthInfo type.
+ *
+ * Validates auth data read from `res.locals.authInfo` at the Express/MCP
+ * boundary. Replaces a bare type assertion with runtime validation so that
+ * malformed auth data is caught immediately rather than propagated silently.
+ *
+ * Uses `.loose()` to avoid stripping fields that future SDK versions might
+ * add. The `resource` field validates `URL` instances per the SDK interface.
+ * Verified: `@clerk/mcp-tools@0.3.1` `verifyClerkToken` never sets
+ * `resource` (returns only token, clientId, scopes, extra). The field is
+ * included for completeness and forward compatibility.
+ */
+const authInfoSchema = z
+  .object({
+    token: z.string(),
+    clientId: z.string(),
+    scopes: z.array(z.string()),
+    expiresAt: z.number().optional(),
+    resource: z.instanceof(URL).optional(),
+    extra: z.record(z.string(), z.unknown()).optional(),
+  })
+  .loose();
 
 function buildToolHandlerDependencies(
   resourceUrl: string,
@@ -156,18 +180,19 @@ export function createMcpHandler(
     // Read verified AuthInfo from res.locals (set by mcpAuth middleware).
     // When auth is disabled (DANGEROUSLY_DISABLE_AUTH), middleware is skipped
     // and res.locals.authInfo is undefined — tools requiring auth will reject.
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express res.locals is Record<string, any> (library constraint); AuthInfo set by mcpAuth middleware
-    const authInfo = res.locals.authInfo as AuthInfo | undefined;
-    // Bridge Express → MCP SDK: set req.auth to the verified AuthInfo so
-    // transport.handleRequest reads it and propagates as extra.authInfo.
-    //
-    // Type assertion justification: Express Request extends IncomingMessage
-    // (structurally compatible). Clerk's global augmentation of `auth` is a
-    // callable, but we replace it at runtime with AuthInfo before passing to
-    // the SDK. This is the ingress boundary between incompatible library types.
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridging Express (Clerk callable auth) → MCP SDK (AuthInfo object) at the ingress boundary
-    const mcpRequest = req as unknown as IncomingMessage & { auth?: AuthInfo };
-    mcpRequest.auth = authInfo;
+    // Zod validates the boundary: malformed auth data throws immediately rather
+    // than propagating silently through the MCP SDK.
+    const authInfo =
+      res.locals.authInfo == null ? undefined : authInfoSchema.parse(res.locals.authInfo);
+
+    // Bridge Express → MCP SDK: the SDK's handleRequest expects
+    // IncomingMessage & { auth?: AuthInfo }. Express.Request extends
+    // IncomingMessage; Object.assign sets auth without type assertions.
+    // NOTE: This mutates req in place (Object.assign returns the same object).
+    // This is intentional and safe in the per-request stateless architecture
+    // — no downstream handler reads this mutation.
+    const baseReq: IncomingMessage = req;
+    const mcpRequest = Object.assign(baseReq, { auth: authInfo });
 
     await transport.handleRequest(mcpRequest, res, req.body);
 

@@ -53,9 +53,12 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 
 ## What To Do Next
 
-**The runtime boundary simplification plan is complete (all 6 phases).** The
-immediate next work is **WS3** (widget client migration). Resume the live spec
-research step above before starting WS3 implementation.
+**The runtime boundary simplification plan is complete (all 6 phases).**
+**Auth boundary type safety is complete** (2026-03-27) — zero type assertions
+in `handlers.ts`, Zod validation at `res.locals.authInfo` boundary.
+The immediate next work is **WS3** (widget client migration to React + MCP
+Apps SDK). Resume the live spec research step above before starting WS3
+implementation.
 
 Read: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 

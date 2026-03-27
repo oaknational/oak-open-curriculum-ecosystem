@@ -7,13 +7,13 @@ specialist_reviewer: "type-reviewer"
 todos:
   - id: task-1-remove-global-augmentation
     content: "Task 1: Remove the global Express.Request augmentation for req.auth and fix all consumers."
-    status: pending
+    status: done
   - id: task-2-zod-validation-at-locals
     content: "Task 2: Add Zod validation at the res.locals.authInfo read site to replace the type assertion."
-    status: pending
+    status: done
   - id: task-3-eslint-record-unknown
     content: "Task 3: Add ESLint rule to ban Record<string, unknown> in eslint-plugin-standards."
-    status: pending
+    status: done
 isProject: false
 ---
 

@@ -18,6 +18,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import type { Request } from 'express';
+import { ZodError } from 'zod';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   listUniversalTools,
@@ -110,6 +111,22 @@ describe('createMcpHandler (Integration)', () => {
       // and propagates it as req.auth for the MCP SDK transport.
       expect(receivedRequest).toBeDefined();
       expect(receivedRequest).toHaveProperty('auth', fakeAuthInfo);
+    });
+
+    it('rejects malformed res.locals.authInfo with a Zod validation error', async () => {
+      const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
+
+      const handler = createMcpHandler(factory);
+      const mockReq = createFakeExpressRequest({
+        body: { method: 'tools/list' },
+        headers: {},
+      });
+      // Malformed authInfo: token should be string, not number
+      const mockRes = createFakeResponse({
+        locals: { authInfo: { token: 123, clientId: 'c', scopes: 'not-array' } },
+      });
+
+      await expect(handler(mockReq, mockRes)).rejects.toThrow(ZodError);
     });
   });
 

@@ -181,6 +181,4 @@ export function handleAuthSuccess(
       userId: typeof extraUserId === 'string' ? extraUserId : undefined,
     }),
   );
-  // NOTE: We no longer set req.auth here - Clerk's middleware handles that
-  // This function is part of the old HTTP-level auth middleware that will be removed
 }
