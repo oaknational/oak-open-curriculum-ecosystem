@@ -1,12 +1,10 @@
 /**
  * Shared test fakes for the MCP streamable HTTP app.
  *
- * Handler tests use narrow interfaces (`McpHandlerRequest`, `McpHandlerResponse`)
- * that plain objects satisfy structurally — no type assertions.
- *
- * Express middleware tests use `node-mocks-http` which creates properly typed
- * Express Request/Response objects — no type assertions. This follows the
- * "off-the-shelf libraries, not custom plumbing" principle.
+ * **Naming convention**: `createFake*` functions return plain objects
+ * satisfying narrow interfaces (no library dependency, ADR-078).
+ * `createMock*` functions use `node-mocks-http` to produce full
+ * Express-typed objects for middleware integration tests.
  *
  * MCP server/transport fakes: {@link ./fakes-mcp-server.ts}
  * Clerk auth fakes: {@link ./fakes-clerk.ts}

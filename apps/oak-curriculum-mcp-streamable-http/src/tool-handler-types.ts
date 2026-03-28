@@ -8,22 +8,22 @@
  * @module
  */
 
-import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type {
   ToolExecutorFactoryConfig,
   UniversalToolExecutorFn,
 } from './tool-executor-factory.js';
 
 /**
- * Dependencies for tool handler execution (3 members).
+ * Dependencies for tool handler execution (2 members).
  *
- * `createRequestExecutor` replaces the previous 5 factory members. In tests,
- * it can be a simple `vi.fn(() => vi.fn())` — no factory-chain re-implementation.
+ * `createRequestExecutor` composes SDK functions into a per-request executor.
+ * `searchRetrieval` is closed over at construction time in `buildToolHandlerDependencies`
+ * — the handler never accesses it directly.
+ * In tests, `createRequestExecutor` can be a simple `vi.fn(() => vi.fn())`.
  */
 export interface ToolHandlerDependencies {
   readonly createRequestExecutor: (config: ToolExecutorFactoryConfig) => UniversalToolExecutorFn;
   readonly getResourceUrl: () => string;
-  readonly searchRetrieval: SearchRetrievalService;
 }
 
 export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;

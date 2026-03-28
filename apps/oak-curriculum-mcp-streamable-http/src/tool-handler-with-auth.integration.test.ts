@@ -12,7 +12,7 @@ import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-t
 import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
-import { createFakeLogger, createFakeSearchRetrieval } from './test-helpers/fakes.js';
+import { createFakeLogger } from './test-helpers/fakes.js';
 
 /**
  * Creates simplified mock dependencies for testing.
@@ -30,7 +30,6 @@ function createMockDependencies(
       })),
     ),
     getResourceUrl: vi.fn(() => 'http://localhost:3333/mcp'),
-    searchRetrieval: createFakeSearchRetrieval(),
     ...overrides,
   };
 }

@@ -24,6 +24,9 @@ import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 // export), but `server/auth/types.js` is a pure-type leaf file — less likely
 // to move than the middleware module. If the SDK promotes `AuthInfo` to a
 // named export, update this import path to match.
+// REMOVAL CONDITION: if @modelcontextprotocol/sdk re-exports bearerAuth's
+// augmentation of Request.auth as part of its public API, remove this local
+// declaration to avoid merge duplication.
 declare module 'express-serve-static-core' {
   interface Request {
     auth?: AuthInfo;

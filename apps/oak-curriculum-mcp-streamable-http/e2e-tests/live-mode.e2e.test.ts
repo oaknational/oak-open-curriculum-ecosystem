@@ -16,8 +16,31 @@ import {
   McpToolError,
   createUniversalToolExecutor,
   generatedToolRegistry,
+  type SearchRetrievalService,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+
+/** Stub search retrieval — E2E tests exercise API tools, not search. */
+const stubSearchRetrieval: SearchRetrievalService = {
+  searchLessons: () => {
+    throw new Error('not implemented');
+  },
+  searchUnits: () => {
+    throw new Error('not implemented');
+  },
+  searchSequences: () => {
+    throw new Error('not implemented');
+  },
+  searchThreads: () => {
+    throw new Error('not implemented');
+  },
+  suggest: () => {
+    throw new Error('not implemented');
+  },
+  fetchSequenceFacets: () => {
+    throw new Error('not implemented');
+  },
+};
 import { err, ok } from '@oaknational/result';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -50,7 +73,7 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
             config.onToolExecution?.(name, result);
             return Promise.resolve(result);
           },
-          searchRetrieval: config.searchRetrieval,
+          searchRetrieval: stubSearchRetrieval,
           generatedTools: generatedToolRegistry,
           createAssetDownloadUrl: config.createAssetDownloadUrl,
         });
@@ -72,7 +95,7 @@ function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
             config.onToolExecution?.(name, result);
             return Promise.resolve(result);
           },
-          searchRetrieval: config.searchRetrieval,
+          searchRetrieval: stubSearchRetrieval,
           generatedTools: generatedToolRegistry,
           createAssetDownloadUrl: config.createAssetDownloadUrl,
         });

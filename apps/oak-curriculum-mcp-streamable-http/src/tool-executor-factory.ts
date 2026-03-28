@@ -59,10 +59,9 @@ export interface RequestExecutorConfig<TClient> {
   readonly onToolExecution?: (name: unknown, result: ToolExecutionResult) => void;
 }
 
-/** Per-request config for creating a tool executor (simplified DI surface). */
+/** Per-request config passed by the tool handler. */
 export interface ToolExecutorFactoryConfig {
   readonly apiKey: string;
-  readonly searchRetrieval: SearchRetrievalService;
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
   /** Optional callback invoked after each tool execution (ADR-054 auth capture). */
   readonly onToolExecution?: (name: unknown, result: ToolExecutionResult) => void;
@@ -115,9 +114,14 @@ export function createDefaultRequestExecutor<TClient>(
   return executor;
 }
 
+/** Internal factory config including searchRetrieval (closed over at build time). */
+interface InternalFactoryConfig extends ToolExecutorFactoryConfig {
+  readonly searchRetrieval: SearchRetrievalService;
+}
+
 /** Stub-mode configuration for {@link createStubRequestExecutor}. */
 export interface StubRequestExecutorConfig {
-  readonly factoryConfig: ToolExecutorFactoryConfig;
+  readonly factoryConfig: InternalFactoryConfig;
   /** Stub adapter from `createStubToolExecutionAdapter()`. */
   readonly stubExecutor: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
   /** The SDK's `createUniversalToolExecutor` function. */

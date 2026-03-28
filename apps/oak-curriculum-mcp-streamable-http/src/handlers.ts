@@ -53,16 +53,18 @@ function buildToolHandlerDependencies(
   searchRetrieval: SearchRetrievalService,
   stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
 ): ToolHandlerDependencies {
+  // searchRetrieval is closed over here — the handler never sees it directly.
   const createRequestExecutor: ToolHandlerDependencies['createRequestExecutor'] = stubExecutor
     ? (config) =>
         createStubRequestExecutor({
-          factoryConfig: config,
+          factoryConfig: { ...config, searchRetrieval },
           stubExecutor,
           createExecutor: createUniversalToolExecutor,
         })
     : (config) =>
         createDefaultRequestExecutor({
           ...config,
+          searchRetrieval,
           createClient: createOakPathBasedClient,
           executeToolCall,
           createExecutor: createUniversalToolExecutor,
@@ -71,7 +73,6 @@ function buildToolHandlerDependencies(
   const defaults: ToolHandlerDependencies = {
     createRequestExecutor,
     getResourceUrl: () => resourceUrl,
-    searchRetrieval,
   };
   if (!overrides) {
     return defaults;
@@ -79,7 +80,6 @@ function buildToolHandlerDependencies(
   return {
     createRequestExecutor: overrides.createRequestExecutor ?? defaults.createRequestExecutor,
     getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
-    searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
   };
 }
 
