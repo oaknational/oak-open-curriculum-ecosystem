@@ -63,18 +63,17 @@ Items 1-5 all resolved:
 - **Item 5 (logger fakes)**: Consolidated 6 implementations → 2 canonical fakes
   in `src/test-helpers/fakes.ts`. Removed all `as Logger` assertions.
 
-### Low Priority (not yet addressed)
+### Low Priority — RESOLVED (2026-03-28)
 
-6. **`verify-clerk-token.unit.test.ts`** — conformance tests for external library
-   (per ADR-142). `vi.spyOn(console, 'error')` is global state manipulation.
-   Assess whether these tests justify maintenance cost.
-
-7. **`setTimeout` in `bootstrap-helpers.unit.test.ts`** — time-dependent assertion
-   with `-10ms` tolerance. Fragile in CI. Consider clock injection.
-
-8. **SDK module path fragility** — `import type {} from bearerAuth.js` depends on
-   internal SDK path. Documented with version pin in `mcp-auth.ts`. If SDK moves
-   it, type-check fails immediately.
+- **Item 6**: Deleted the `console.error` spy test — tested library side effects
+  via global spy (both prohibited). 8 conformance tests remain, covering the full
+  `verifyClerkToken` contract.
+- **Item 7**: Deleted the timing-dependent test — required `vi.useFakeTimers()`
+  (global state). Root cause: `createPhasedTimer` has no injectable clock. 5
+  tests remain, covering all other bootstrap phase behaviour.
+- **Item 8**: Replaced fragile `import type {} from '.../bearerAuth.js'` with a
+  local `declare module 'express-serve-static-core'` augmentation. Imports
+  `AuthInfo` from the SDK's types module (pure-type leaf, less fragile).
 
 ## Work Stream Status
 
