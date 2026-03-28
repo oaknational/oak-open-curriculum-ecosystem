@@ -1,5 +1,6 @@
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import type { CaptureContext, NodeOptions } from '@sentry/node';
+import { describe, expect, it, vi } from 'vitest';
+import type { LogSink } from '@oaknational/logger';
+import type { CaptureContext, NodeOptions } from '@oaknational/sentry-node';
 import { wrapPromptHandler, wrapResourceHandler, wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { MergedMcpObservation } from '@oaknational/sentry-mcp';
 import {
@@ -51,6 +52,33 @@ function createRuntimeConfig(
   };
 }
 
+const noopStdoutSink: LogSink = {
+  write(): void {
+    // Silences stdout in tests without vi.spyOn(process.stdout).
+  },
+};
+
+const noopLogger: SentryNodeSdk['logger'] = {
+  trace(): void {
+    /* noop */
+  },
+  debug(): void {
+    /* noop */
+  },
+  info(): void {
+    /* noop */
+  },
+  warn(): void {
+    /* noop */
+  },
+  error(): void {
+    /* noop */
+  },
+  fatal(): void {
+    /* noop */
+  },
+};
+
 function createFakeSentrySdk(): FakeSentrySdk {
   const init = vi.fn<(options: NodeOptions) => void>();
   const captureException = vi.fn<(error: Error, context?: CaptureContext) => void>();
@@ -63,6 +91,7 @@ function createFakeSentrySdk(): FakeSentrySdk {
       captureException,
       captureMessage,
       flush,
+      logger: noopLogger,
     },
     init,
     captureException,
@@ -88,17 +117,11 @@ function getFixtureLogCaptures(
 }
 
 describe('createHttpObservability', () => {
-  beforeEach(() => {
-    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
-  });
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('treats off mode as a real kill switch with no live Sentry init or sink capture', () => {
     const sdk = createFakeSentrySdk();
     const observability = createHttpObservabilityOrThrow(createRuntimeConfig('off'), {
       sentrySdk: sdk.sdk,
+      stdoutSink: noopStdoutSink,
     });
     const logger = observability.createLogger({ name: 'test-http' });
 
@@ -113,6 +136,7 @@ describe('createHttpObservability', () => {
     const sdk = createFakeSentrySdk();
     const observability = createHttpObservabilityOrThrow(createRuntimeConfig('sentry'), {
       sentrySdk: sdk.sdk,
+      stdoutSink: noopStdoutSink,
     });
     const logger = observability.createLogger({ name: 'test-http' });
 
@@ -125,17 +149,7 @@ describe('createHttpObservability', () => {
     logger.warn('second-log');
 
     expect(sdk.init).toHaveBeenCalledTimes(1);
-    const expectedTags: unknown = expect.objectContaining({
-      service: 'oak-curriculum-mcp-streamable-http',
-      environment: 'test',
-      release: 'release-123',
-    });
-    expect(sdk.captureMessage).toHaveBeenCalledWith(
-      'live-mode-log',
-      expect.objectContaining({
-        tags: expectedTags,
-      }),
-    );
+    expect(sdk.captureMessage).not.toHaveBeenCalled();
     const expectedContext: unknown = expect.objectContaining({
       boundary: 'test_boundary',
     });
@@ -156,6 +170,7 @@ describe('createHttpObservability', () => {
     const sdk = createFakeSentrySdk();
     createHttpObservabilityOrThrow(createRuntimeConfig('sentry'), {
       sentrySdk: sdk.sdk,
+      stdoutSink: noopStdoutSink,
     });
 
     const initOptions = getInitOptions(sdk);
@@ -255,17 +270,11 @@ describe('createHttpObservability', () => {
 });
 
 describe('createHttpObservability trace-context propagation', () => {
-  beforeEach(() => {
-    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
-  });
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('records metadata-only MCP observations that share trace context with logs in fixture mode', async () => {
     const fixtureStore = createFixtureSentryStore();
     const observability = createHttpObservabilityOrThrow(createRuntimeConfig('fixture'), {
       fixtureStore,
+      stdoutSink: noopStdoutSink,
     });
     const recorder = observability.mcpRecorder as unknown as RecorderWithObservations;
     const logger = observability.createLogger({ name: 'test-http' });

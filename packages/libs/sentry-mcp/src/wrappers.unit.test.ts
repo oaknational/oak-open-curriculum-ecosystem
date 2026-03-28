@@ -91,6 +91,48 @@ describe('MCP observation wrappers', () => {
     });
   });
 
+  it('still returns the handler result when the recorder throws on success', async () => {
+    const throwingRecorder = {
+      record: () => {
+        throw new Error('recorder boom');
+      },
+      observations: [],
+    };
+    const handler = wrapToolHandler('find-lessons', async () => ({ result: 'ok' }), {
+      service: 'oak-http',
+      environment: 'test',
+      release: 'v1',
+      recorder: throwingRecorder,
+      runtime,
+    });
+
+    await expect(handler()).resolves.toEqual({ result: 'ok' });
+  });
+
+  it('still rethrows the original error when the recorder throws on failure', async () => {
+    const throwingRecorder = {
+      record: () => {
+        throw new Error('recorder boom');
+      },
+      observations: [],
+    };
+    const handler = wrapToolHandler(
+      'find-lessons',
+      async () => {
+        throw new Error('handler boom');
+      },
+      {
+        service: 'oak-http',
+        environment: 'test',
+        release: 'v1',
+        recorder: throwingRecorder,
+        runtime,
+      },
+    );
+
+    await expect(handler()).rejects.toThrow('handler boom');
+  });
+
   it('records prompt metadata with trace correlation when a span is active', async () => {
     const recorder = createInMemoryMcpObservationRecorder();
     getActiveSpanContextSnapshotMock.mockReturnValue({

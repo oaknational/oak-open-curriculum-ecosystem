@@ -1,4 +1,11 @@
-import { captureException, captureMessage, flush, init, type NodeOptions } from '@sentry/node';
+import {
+  captureException,
+  captureMessage,
+  flush,
+  init,
+  logger,
+  type NodeOptions,
+} from '@sentry/node';
 import type { SentryLiveConfig, SentryNodeSdk, SentryPostRedactionHooks } from './types.js';
 import {
   redactSentryBreadcrumb,
@@ -82,4 +89,5 @@ export const defaultSentryNodeSdk: SentryNodeSdk = {
   flush(timeoutMs): Promise<boolean> {
     return flush(timeoutMs);
   },
+  logger,
 };

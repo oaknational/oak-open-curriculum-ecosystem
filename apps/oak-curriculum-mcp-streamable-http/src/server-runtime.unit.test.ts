@@ -237,6 +237,33 @@ describe('startConfiguredHttpServer', () => {
     expect(exitCodes).toEqual([1]);
   });
 
+  it('ignores duplicate shutdown signals and only flushes once', async () => {
+    const exitCodes: number[] = [];
+    const harness = createServerHarness();
+
+    await harness.createServerRuntime((code) => {
+      exitCodes.push(code);
+    });
+
+    const sigintHandler = harness.signalHandlers.get('SIGINT');
+    const sigtermHandler = harness.signalHandlers.get('SIGTERM');
+
+    if (!sigintHandler || !sigtermHandler) {
+      throw new Error('Expected both signal handlers to be registered');
+    }
+
+    sigintHandler();
+    sigtermHandler();
+    await flushMicrotasks();
+
+    expect(harness.flushCalls).toBe(1);
+    expect(exitCodes).toEqual([0]);
+    expect(harness.logger.infoCalls).toContainEqual({
+      message: 'shutdown.signal.duplicate',
+      context: { signal: 'SIGTERM' },
+    });
+  });
+
   it('flushes observability on shutdown signals before exiting cleanly', async () => {
     const exitCodes: number[] = [];
     const harness = createServerHarness();

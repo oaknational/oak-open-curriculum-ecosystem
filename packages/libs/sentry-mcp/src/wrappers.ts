@@ -6,6 +6,17 @@ function buildSpanName(kind: MergedMcpObservationKind, name: string): string {
   return `oak.mcp.${kind}.${name}`;
 }
 
+function safeRecord(
+  options: McpObservationOptions,
+  observation: Parameters<McpObservationOptions['recorder']['record']>[0],
+): void {
+  try {
+    options.recorder.record(observation);
+  } catch {
+    // Recorder failures must never mask handler errors or turn successes into throws.
+  }
+}
+
 async function observeMcpOperation<T>(
   kind: MergedMcpObservationKind,
   name: string,
@@ -18,39 +29,25 @@ async function observeMcpOperation<T>(
   return await options.runtime.withActiveSpan({
     tracer: options.tracer,
     name: buildSpanName(kind, name),
-    attributes: {
-      'oak.mcp.kind': kind,
-      'oak.mcp.name': name,
-    },
+    attributes: { 'oak.mcp.kind': kind, 'oak.mcp.name': name },
     run: async () => {
       const snapshot = options.runtime.getActiveSpanContext();
+      const base = {
+        kind,
+        name,
+        service: options.service,
+        environment: options.environment,
+        release: options.release,
+        traceId: snapshot?.traceId,
+        spanId: snapshot?.spanId,
+      };
 
       try {
         const result = await run();
-        options.recorder.record({
-          kind,
-          name,
-          status: 'success',
-          durationMs: now() - start,
-          service: options.service,
-          environment: options.environment,
-          release: options.release,
-          traceId: snapshot?.traceId,
-          spanId: snapshot?.spanId,
-        });
+        safeRecord(options, { ...base, status: 'success', durationMs: now() - start });
         return result;
       } catch (error) {
-        options.recorder.record({
-          kind,
-          name,
-          status: 'error',
-          durationMs: now() - start,
-          service: options.service,
-          environment: options.environment,
-          release: options.release,
-          traceId: snapshot?.traceId,
-          spanId: snapshot?.spanId,
-        });
+        safeRecord(options, { ...base, status: 'error', durationMs: now() - start });
         throw error;
       }
     },

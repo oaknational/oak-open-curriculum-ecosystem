@@ -138,11 +138,23 @@ export interface FixtureSentryStore {
   push(capture: FixtureSentryCapture): void;
 }
 
+export type SentryLogAttributes = Readonly<Record<string, string | number | boolean | undefined>>;
+
+export interface SentryLoggerSdk {
+  trace(message: string, attributes?: SentryLogAttributes): void;
+  debug(message: string, attributes?: SentryLogAttributes): void;
+  info(message: string, attributes?: SentryLogAttributes): void;
+  warn(message: string, attributes?: SentryLogAttributes): void;
+  error(message: string, attributes?: SentryLogAttributes): void;
+  fatal(message: string, attributes?: SentryLogAttributes): void;
+}
+
 export interface SentryNodeSdk {
   init(options: NodeOptions): void;
   captureException(error: Error, context?: CaptureContext): void;
   captureMessage(message: string, context?: CaptureContext): void;
   flush(timeoutMs?: number): Promise<boolean>;
+  readonly logger: SentryLoggerSdk;
 }
 
 export interface SentryPostRedactionHooks {

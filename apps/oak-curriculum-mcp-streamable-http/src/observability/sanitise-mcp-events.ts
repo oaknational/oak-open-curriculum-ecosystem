@@ -1,4 +1,4 @@
-import type { NodeOptions } from '@sentry/node';
+import type { NodeOptions } from '@oaknational/sentry-node';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];

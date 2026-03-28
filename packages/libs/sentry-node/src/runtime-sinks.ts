@@ -2,6 +2,7 @@ import type { LogEvent, LogSink } from '@oaknational/logger';
 import type {
   FixtureSentryStore,
   ParsedSentryConfig,
+  SentryLogAttributes,
   SentryLiveConfig,
   SentryNodeSdk,
 } from './types.js';
@@ -16,17 +17,18 @@ function getTraceContextFromEvent(event: LogEvent): {
   };
 }
 
-function toSentrySeverityLevel(
-  level: LogEvent['level'],
-): 'debug' | 'error' | 'fatal' | 'info' | 'warning' {
+type SentryLoggerLevel = 'debug' | 'error' | 'fatal' | 'info' | 'trace' | 'warn';
+
+function toSentryLoggerLevel(level: LogEvent['level']): SentryLoggerLevel {
   switch (level) {
     case 'TRACE':
+      return 'trace';
     case 'DEBUG':
       return 'debug';
     case 'INFO':
       return 'info';
     case 'WARN':
-      return 'warning';
+      return 'warn';
     case 'ERROR':
       return 'error';
     case 'FATAL':
@@ -106,12 +108,15 @@ export function createLiveLogSink(
   return {
     write(event): void {
       const traceContext = getTraceContextFromEvent(event);
+      const level = toSentryLoggerLevel(event.level);
+      const tags = createSentryTags(config, serviceName, traceContext);
+      const extra = createSentryLogExtra(event);
+      const attributes: SentryLogAttributes = {
+        ...tags,
+        line: extra.line,
+      };
 
-      sdk.captureMessage(event.message, {
-        level: toSentrySeverityLevel(event.level),
-        tags: createSentryTags(config, serviceName, traceContext),
-        extra: createSentryLogExtra(event),
-      });
+      sdk.logger[level](event.message, attributes);
     },
   };
 }

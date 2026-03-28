@@ -7,6 +7,7 @@ export {
   DEFAULT_TRACE_PROPAGATION_TARGETS,
 } from './runtime-sdk.js';
 export { createSentryLogSink, flushSentry, initialiseSentry } from './runtime.js';
+export type { CaptureContext, NodeOptions } from '@sentry/node';
 export type {
   FixtureSentryCapture,
   FixtureSentryExceptionCapture,
@@ -23,6 +24,8 @@ export type {
   SentryFixtureConfig,
   SentryFlushError,
   SentryLiveConfig,
+  SentryLogAttributes,
+  SentryLoggerSdk,
   SentryMode,
   SentryNodeRuntime,
   SentryNodeSdk,

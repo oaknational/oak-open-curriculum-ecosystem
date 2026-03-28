@@ -22,6 +22,7 @@ export interface HttpLoggerOptions {
   readonly context?: LogContextInput;
   readonly additionalSinks?: readonly LogSink[];
   readonly getActiveSpanContext?: () => ActiveSpanContextSnapshot | undefined;
+  readonly stdoutSink?: LogSink;
 }
 
 export interface ErrorLoggerObservability {
@@ -47,14 +48,16 @@ function resolveLoggerOptions(options?: HttpLoggerOptions): {
   readonly context: LogContextInput;
   readonly additionalSinks: readonly LogSink[];
   readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
+  readonly stdoutSink: LogSink | undefined;
 } {
   const {
     name = 'streamable-http',
     context = {},
     additionalSinks = [],
     getActiveSpanContext = getActiveSpanContextSnapshot,
+    stdoutSink,
   } = options ?? {};
-  return { name, context, additionalSinks, getActiveSpanContext };
+  return { name, context, additionalSinks, getActiveSpanContext, stdoutSink };
 }
 
 export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOptions): Logger {
@@ -66,7 +69,7 @@ export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOpti
     minSeverity: logLevelToSeverityNumber(level),
     resourceAttributes,
     context: resolved.context,
-    sinks: [createNodeStdoutSink(), ...resolved.additionalSinks],
+    sinks: [resolved.stdoutSink ?? createNodeStdoutSink(), ...resolved.additionalSinks],
     getActiveSpanContext: resolved.getActiveSpanContext,
   });
 }

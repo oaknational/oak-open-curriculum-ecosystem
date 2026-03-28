@@ -28,6 +28,14 @@ interface FakeCaptureMessageCall {
   readonly context?: CaptureContext;
 }
 
+function createNoopLoggerSdk(): SentryNodeSdk['logger'] {
+  const noop = (): void => {
+    /* noop */
+  };
+  return { trace: noop, debug: noop, info: noop, warn: noop, error: noop, fatal: noop };
+}
+const noopLoggerSdk = createNoopLoggerSdk();
+
 interface FakeSdk {
   readonly sdk: SentryNodeSdk;
   readonly init: ReturnType<typeof vi.fn<SentryNodeSdk['init']>>;
@@ -37,9 +45,10 @@ interface FakeSdk {
   readonly initCalls: readonly NodeOptions[];
   readonly exceptionCalls: readonly FakeCaptureExceptionCall[];
   readonly messageCalls: readonly FakeCaptureMessageCall[];
+  readonly loggerSdk: SentryNodeSdk['logger'];
 }
 
-function createFakeSdk(): FakeSdk {
+function createFakeSdk(loggerOverride?: SentryNodeSdk['logger']): FakeSdk {
   const initCalls: NodeOptions[] = [];
   const exceptionCalls: FakeCaptureExceptionCall[] = [];
   const messageCalls: FakeCaptureMessageCall[] = [];
@@ -53,14 +62,10 @@ function createFakeSdk(): FakeSdk {
     messageCalls.push({ message, context });
   });
   const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
+  const loggerSdk = loggerOverride ?? noopLoggerSdk;
 
   return {
-    sdk: {
-      init,
-      captureException,
-      captureMessage,
-      flush,
-    },
+    sdk: { init, captureException, captureMessage, flush, logger: loggerSdk },
     init,
     captureException,
     captureMessage,
@@ -68,6 +73,7 @@ function createFakeSdk(): FakeSdk {
     initCalls,
     exceptionCalls,
     messageCalls,
+    loggerSdk,
   };
 }
 
@@ -590,8 +596,9 @@ describe('initialiseSentry', () => {
     });
   });
 
-  it('forwards live log sink events to captureMessage', () => {
-    const sdk = createFakeSdk();
+  it('forwards live log sink events to Sentry logger API', () => {
+    const errorFn = vi.fn<SentryNodeSdk['logger']['error']>();
+    const sdk = createFakeSdk({ ...noopLoggerSdk, error: errorFn });
     const runtime = initialiseRuntime(
       createLiveConfig({ SENTRY_ENVIRONMENT: 'production' }),
       sdk.sdk,
@@ -600,31 +607,19 @@ describe('initialiseSentry', () => {
 
     sink.write(createLogEvent());
 
-    expect(sdk.captureMessage).toHaveBeenCalledOnce();
-    expect(getOnlyCall(sdk.messageCalls, 'Expected captureMessage call')).toEqual({
-      message: 'request failed',
-      context: {
-        level: 'error',
-        tags: {
-          service: 'oak-http',
-          environment: 'production',
-          release: 'release-123',
-          traceId: '0123456789abcdef0123456789abcdef',
-          spanId: '0123456789abcdef',
-        },
-        extra: {
-          attributes: {
-            requestId: 'req-123',
-          },
-          resource: {
-            'service.name': 'oak-http',
-            'service.version': '1.0.0',
-            'deployment.environment': 'test',
-          },
-          line: '{"Body":"request failed"}',
-        },
-      },
-    });
+    expect(errorFn).toHaveBeenCalledOnce();
+    expect(errorFn).toHaveBeenCalledWith(
+      'request failed',
+      expect.objectContaining({
+        service: 'oak-http',
+        environment: 'production',
+        release: 'release-123',
+        traceId: '0123456789abcdef0123456789abcdef',
+        spanId: '0123456789abcdef',
+        line: '{"Body":"request failed"}',
+      }),
+    );
+    expect(sdk.captureMessage).not.toHaveBeenCalled();
   });
 
   it('returns Result-based flush errors for timeouts and thrown failures', async () => {

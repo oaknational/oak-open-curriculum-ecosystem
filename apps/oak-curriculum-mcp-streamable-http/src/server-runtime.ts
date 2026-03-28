@@ -75,20 +75,24 @@ function createServerErrorHandler(
   };
 }
 
-function registerShutdownSignal(
-  signal: ShutdownSignal,
+function createShutdownHandler(
   bootstrapLog: Logger,
   flushObservability: (exitReason: string) => Promise<void>,
-  onSignal: StartConfiguredHttpServerDeps['onSignal'],
   exit: StartConfiguredHttpServerDeps['exit'],
-): void {
-  onSignal(signal, () => {
+): (signal: ShutdownSignal) => void {
+  let shuttingDown = false;
+  return (signal: ShutdownSignal): void => {
+    if (shuttingDown) {
+      bootstrapLog.info('shutdown.signal.duplicate', { signal });
+      return;
+    }
+    shuttingDown = true;
     void (async () => {
       bootstrapLog.info('shutdown.signal.received', { signal });
       await flushObservability(signal);
       exit(0);
     })();
-  });
+  };
 }
 
 function logServerReady(runtimeConfig: RuntimeConfig, bootstrapLog: Logger, port: number): void {
@@ -131,8 +135,9 @@ export async function startConfiguredHttpServer(
     createServerErrorHandler(port, bootstrapLog, deps.observability, flushObservability, deps.exit),
   );
 
-  registerShutdownSignal('SIGINT', bootstrapLog, flushObservability, deps.onSignal, deps.exit);
-  registerShutdownSignal('SIGTERM', bootstrapLog, flushObservability, deps.onSignal, deps.exit);
+  const handleShutdown = createShutdownHandler(bootstrapLog, flushObservability, deps.exit);
+  deps.onSignal('SIGINT', () => handleShutdown('SIGINT'));
+  deps.onSignal('SIGTERM', () => handleShutdown('SIGTERM'));
 
   server.listen(port, () => {
     logServerReady(deps.runtimeConfig, bootstrapLog, port);

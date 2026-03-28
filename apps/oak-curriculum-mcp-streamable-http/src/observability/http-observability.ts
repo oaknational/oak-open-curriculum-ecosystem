@@ -3,6 +3,7 @@ import {
   sanitiseObject,
   type LogContextInput,
   type Logger,
+  type LogSink,
 } from '@oaknational/logger';
 import { err, type Result } from '@oaknational/result';
 import {
@@ -42,6 +43,7 @@ export interface CreateHttpObservabilityOptions {
   readonly serviceName?: string;
   readonly sentrySdk?: SentryNodeSdk;
   readonly fixtureStore?: FixtureSentryStore;
+  readonly stdoutSink?: LogSink;
 }
 
 export interface HttpObservability extends McpObservationRuntime {
@@ -76,6 +78,7 @@ function createLoggerFactory(
   runtimeConfig: RuntimeConfig,
   sentryRuntime: SentryNodeRuntime,
   getActiveSpanContext: SpanFunctions['getActiveSpanContext'],
+  stdoutSink?: LogSink,
 ): HttpObservability['createLogger'] {
   const sentrySink = createSentryLogSink(sentryRuntime);
 
@@ -86,6 +89,7 @@ function createLoggerFactory(
         ? [sentrySink, ...(loggerOptions?.additionalSinks ?? [])]
         : loggerOptions?.additionalSinks,
       getActiveSpanContext,
+      stdoutSink,
     });
 }
 
@@ -97,20 +101,19 @@ interface BuildObservabilityParams {
   readonly release: string;
   readonly tracer: Tracer | undefined;
   readonly mcpRecorder: McpObservationRecorder;
+  readonly stdoutSink?: LogSink;
 }
 
-function buildObservabilityObject(params: BuildObservabilityParams): HttpObservability {
-  const { runtimeConfig, sentryRuntime, serviceName, environment, release, tracer, mcpRecorder } =
-    params;
-  const spanFunctions = createSpanFunctions(tracer);
+function buildObservabilityObject(p: BuildObservabilityParams): HttpObservability {
+  const spanFunctions = createSpanFunctions(p.tracer);
 
   const observability: HttpObservability = {
-    service: serviceName,
-    environment,
-    release,
-    tracer,
-    mcpRecorder,
-    fixtureStore: sentryRuntime.fixtureStore,
+    service: p.serviceName,
+    environment: p.environment,
+    release: p.release,
+    tracer: p.tracer,
+    mcpRecorder: p.mcpRecorder,
+    fixtureStore: p.sentryRuntime.fixtureStore,
     getActiveSpanContext: spanFunctions.getActiveSpanContext,
     async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
       return await spanFunctions.withSpan({
@@ -120,30 +123,31 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
       });
     },
     createLogger: createLoggerFactory(
-      runtimeConfig,
-      sentryRuntime,
+      p.runtimeConfig,
+      p.sentryRuntime,
       spanFunctions.getActiveSpanContext,
+      p.stdoutSink,
     ),
     createMcpObservationOptions() {
       return {
-        service: serviceName,
-        environment,
-        release,
-        recorder: mcpRecorder,
+        service: p.serviceName,
+        environment: p.environment,
+        release: p.release,
+        recorder: p.mcpRecorder,
         runtime: observability,
-        tracer,
+        tracer: p.tracer,
       };
     },
     withSpan: spanFunctions.withSpan,
     withSpanSync: spanFunctions.withSpanSync,
     captureHandledError(error, captureContext): void {
-      sentryRuntime.captureHandledError(
+      p.sentryRuntime.captureHandledError(
         normalizeError(error),
         sanitiseObject(captureContext) ?? undefined,
       );
     },
     async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
-      return await flushSentry(sentryRuntime, timeoutMs);
+      return await flushSentry(p.sentryRuntime, timeoutMs);
     },
   };
 
@@ -189,6 +193,7 @@ export function createHttpObservability(
       release: sentryConfig.release,
       tracer,
       mcpRecorder: createMcpRecorder(sentryRuntimeResult.value.config.mode),
+      stdoutSink: options?.stdoutSink,
     }),
   };
 }

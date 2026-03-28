@@ -86,6 +86,14 @@ function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
 
+function safeSpanOp(op: () => void): void {
+  try {
+    op();
+  } catch {
+    // Span lifecycle failures must never propagate to business logic.
+  }
+}
+
 function createLiveSpanHandle(span: Span): HttpSpanHandle {
   return {
     setAttribute(name, value): void {
@@ -132,18 +140,17 @@ function runWithLiveSpanSync<T>(tracer: Tracer, options: HttpSyncSpanOptions<T>)
 
     try {
       const result = options.run(spanHandle);
-      span.setStatus({ code: SpanStatusCode.OK });
+      safeSpanOp(() => span.setStatus({ code: SpanStatusCode.OK }));
       return result;
     } catch (error) {
       const errorAsError = toError(error);
-      span.recordException(errorAsError);
-      span.setStatus({
-        code: SpanStatusCode.ERROR,
-        message: errorAsError.message,
-      });
+      safeSpanOp(() => span.recordException(errorAsError));
+      safeSpanOp(() =>
+        span.setStatus({ code: SpanStatusCode.ERROR, message: errorAsError.message }),
+      );
       throw error;
     } finally {
-      span.end();
+      safeSpanOp(() => span.end());
     }
   });
 }
@@ -155,18 +162,17 @@ async function runWithLiveSpan<T>(tracer: Tracer, options: HttpSpanOptions<T>): 
 
     try {
       const result = await options.run(spanHandle);
-      span.setStatus({ code: SpanStatusCode.OK });
+      safeSpanOp(() => span.setStatus({ code: SpanStatusCode.OK }));
       return result;
     } catch (error) {
       const errorAsError = toError(error);
-      span.recordException(errorAsError);
-      span.setStatus({
-        code: SpanStatusCode.ERROR,
-        message: errorAsError.message,
-      });
+      safeSpanOp(() => span.recordException(errorAsError));
+      safeSpanOp(() =>
+        span.setStatus({ code: SpanStatusCode.ERROR, message: errorAsError.message }),
+      );
       throw error;
     } finally {
-      span.end();
+      safeSpanOp(() => span.end());
     }
   });
 }
