@@ -44,10 +44,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
-    "directory": "packages/libs/observability"
+    "directory": "packages/core/observability"
   },
   "bugs": {
     "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/observability#readme"
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/observability#readme"
 }

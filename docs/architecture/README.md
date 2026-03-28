@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-02-25
+last_reviewed: 2026-03-28
 ---
 
 # Architecture
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-03-28
 **Status**: Active architectural index
 
 ## Start Here
@@ -31,8 +31,8 @@ ADRs define how the system should work and are the architectural source of truth
 - Standard structure:
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
-  - `packages/core/` – foundational shared code (result/env/eslint/openapi adapter)
-  - `packages/libs/` – shared runtime libraries (logger, env-resolution, search-contracts)
+  - `packages/core/` – foundational shared code and provider-neutral primitives (result/env/observability/eslint/openapi adapter)
+  - `packages/libs/` – shared runtime libraries (foundation libs: logger/env-resolution/search-contracts; adapter libs: sentry-node/sentry-mcp)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools
@@ -43,9 +43,11 @@ ADRs define how the system should work and are the architectural source of truth
 
 #### Rules & Relationships
 
-- Inter‑workspace imports use `@oaknational/*` package specifiers only.
+- Inter‑workspace imports in production source use `@oaknational/*` package
+  specifiers only. Explicit test/config lint carve-outs remain allowed where
+  repo-root tooling or fixtures require them.
 - Intra‑package relative imports are allowed; avoid private/internal subpaths.
-- Dependencies flow: `core` has no dependencies outside `core` (intra-core dependencies are permitted); `libs` depend on `core` (e.g. `env-resolution` depends on `result`); `sdks` depend on `core`/`libs`/other `sdks` (no circular dependencies); `apps` depend on `sdks`/`libs`/`core`.
+- Dependencies flow: `core` has no monorepo dependencies outside `core` (intra-core dependencies are permitted, and external dependencies must remain minimal and provider-neutral); foundation `libs` depend on `core`, with `search-contracts` as the documented exception that may consume approved `@oaknational/sdk-codegen` subpath exports; adapter `libs` may depend on foundation `libs` plus `core`; `sdks` depend on `core`/`libs` and approved generated SDK surfaces (for example runtime/search consume `@oaknational/sdk-codegen` exports per ADR-108, not direct `oak-search-sdk` → `curriculum-sdk` imports); `apps` depend on `sdks`/`libs`/`core`.
 
 ### Implementation Guides
 

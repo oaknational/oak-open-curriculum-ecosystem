@@ -1,7 +1,6 @@
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  appBoundaryRules,
   appArchitectureRules,
   commonSettings,
   ignores as globalIgnores,
@@ -12,28 +11,18 @@ import { dirname } from 'node:path';
 import globals from 'globals';
 import eslint from '@eslint/js';
 import { importX } from 'eslint-plugin-import-x';
+import tseslint from 'typescript-eslint';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
+const javaScriptRuleOverrides = Object.fromEntries(
+  configs.strict
+    .flatMap((config) => Object.keys(config.rules ?? {}))
+    .filter((ruleName) => ruleName.startsWith('@typescript-eslint/'))
+    .map((ruleName) => [ruleName, 'off']),
+);
 // const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config = defineConfig(
-  // JavaScript files configuration - separate from TypeScript config
-  {
-    files: ['**/*.js', '**/*.mjs'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.node,
-        ...globals.es2021,
-      },
-    },
-    rules: {
-      ...eslint.configs.recommended.rules,
-      ...importX.flatConfigs.recommended.rules,
-    },
-  },
-  // TypeScript configuration - exclude JS files
   ...defineConfig(
     {
       ignores: [
@@ -42,14 +31,34 @@ const config = defineConfig(
         '*.log',
         '.turbo/**',
         '.logs/**',
-        'vitest.config.ts',
-        '**/*.js',
         'temp-secrets/**',
         'smoke-tests/auth/**',
         '../../.agent/reference/**',
       ],
     },
     ...configs.strict,
+    {
+      files: ['**/*.js', '**/*.mjs'],
+      languageOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        globals: {
+          ...globals.node,
+          ...globals.es2021,
+        },
+        parserOptions: {
+          program: null,
+          project: false,
+          projectService: false,
+        },
+      },
+      rules: {
+        ...javaScriptRuleOverrides,
+        ...tseslint.configs.disableTypeChecked.rules,
+        ...eslint.configs.recommended.rules,
+        ...importX.flatConfigs.recommended.rules,
+      },
+    },
     // no special ignores for vitest.e2e.config.ts; treat as config file below
     {
       files: ['**/*.ts'],
@@ -75,7 +84,6 @@ const config = defineConfig(
       },
       rules: {
         'import-x/no-relative-parent-imports': 'off',
-        ...appBoundaryRules,
         ...appArchitectureRules,
         'max-lines-per-function': ['error', { max: 50, skipComments: true, skipBlankLines: true }],
       },
@@ -113,6 +121,16 @@ const config = defineConfig(
       },
     },
     {
+      files: ['scripts/**/*.js', 'scripts/**/*.mjs'],
+      rules: {
+        complexity: 'off',
+        'max-lines': 'off',
+        'max-lines-per-function': 'off',
+        'max-statements': 'off',
+        'no-console': 'off',
+      },
+    },
+    {
       files: [
         '**/*.config.ts',
         'eslint.config.ts',
@@ -131,8 +149,13 @@ const config = defineConfig(
         '@typescript-eslint/await-thenable': 'off',
         '@typescript-eslint/no-array-delete': 'off',
         '@typescript-eslint/no-restricted-imports': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        'import-x/no-relative-packages': 'off',
         'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-named-as-default-member': 'off',
         'max-lines-per-function': ['error', { max: 200, skipComments: true, skipBlankLines: true }],
+        'max-lines': 'off',
+        'no-restricted-properties': 'off',
       },
     },
   ),

@@ -5,8 +5,8 @@
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  createLibBoundaryRules,
-  getOtherLibs,
+  coreBoundaryRules,
+  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -25,7 +25,7 @@ const config = defineConfig(
   },
   ...configs.strict,
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -47,11 +47,33 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules('observability', getOtherLibs('observability')),
+    rules: coreBoundaryRules,
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        projectService: false,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
+      },
+    },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: wsTsProject,
+        },
+      },
+    },
     rules: {
+      ...coreTestConfigRules,
       ...testRules,
     },
   },
@@ -62,6 +84,10 @@ const config = defineConfig(
         project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

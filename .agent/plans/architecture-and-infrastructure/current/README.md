@@ -11,7 +11,7 @@ Current queued work for this collection.
 
 Active execution:
 
-- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — currently in Phase 1 blocker remediation before HTTP and Search CLI adoption resumes
+- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — blocker-clearance and follow-up doc fixes are landed locally on `feat/full-sentry-otel-support` above `ffff1867`; HTTP and Search CLI adoption stay paused until the clean handover confirmation rerun is recorded in the checkpoint
 
 Related strategic umbrella:
 

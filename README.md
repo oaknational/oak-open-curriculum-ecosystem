@@ -59,7 +59,7 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 
 ### Prerequisites
 
-- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` to activate the version in `.nvmrc`
+- **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` or `fnm use` to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 
 ### Install and verify
@@ -68,7 +68,7 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git
 cd oak-open-curriculum-ecosystem
 pnpm install
-pnpm test && pnpm type-check && pnpm lint:fix
+pnpm test && pnpm type-check && pnpm lint
 ```
 
 If these pass, your toolchain is working. No API keys are required for unit tests, type-checking, linting, or building.
@@ -100,7 +100,7 @@ The full [Quick Start Guide](docs/foundation/quick-start.md) covers architecture
 ```bash
 pnpm test           # Unit + integration tests
 pnpm type-check     # Type-check all workspaces
-pnpm lint:fix       # Lint and auto-fix
+pnpm lint           # Read-only lint verification
 pnpm build          # Build all workspaces
 pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 ```
@@ -108,8 +108,8 @@ pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 **Full verification:**
 
 ```bash
-pnpm make           # Full pipeline: install, build, type-check, doc-gen, lint, portability, informational fitness, format
-pnpm qg             # Quality gates: format-check, markdownlint-check, subagents, portability, root script tests, workspace tests, UI, E2E, smoke
+pnpm make           # Full convenience pipeline with auto-fix steps; review file changes afterwards
+pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents, portability, root script tests, workspace tests, UI, E2E, smoke
 pnpm fix            # Auto-fix: format + markdownlint + lint
 pnpm clean          # Remove build artefacts (dist/, .turbo)
 ```
@@ -127,14 +127,14 @@ Everything flows from the OpenAPI schema:
 
 Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-| Directory        | Purpose                                                                                        |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI     |
-| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                   |
-| `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, type helpers, ESLint configs |
-| `packages/libs/` | Shared libraries: env-resolution pipeline, structured logger                                   |
-| `agent-tools/`   | Agent workflow CLIs: `claude-agent-ops` and `cursor-session-from-claude-session`               |
-| `docs/`          | Developer documentation, guides, and 130+ ADRs                                                 |
+| Directory        | Purpose                                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
+| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
+| `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
+| `packages/libs/` | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
+| `agent-tools/`   | Agent workflow CLIs: `claude-agent-ops` and `cursor-session-from-claude-session`                                         |
+| `docs/`          | Developer documentation, guides, and 130+ ADRs                                                                           |
 
 ### Workspace Summaries
 
@@ -158,19 +158,23 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 **Core packages:**
 
-| Workspace                                              | Purpose                                                               |
-| ------------------------------------------------------ | --------------------------------------------------------------------- |
-| [`result`](packages/core/result/README.md)             | `Result<T, E>` type for explicit error handling without exceptions    |
-| [`env`](packages/core/env/README.md)                   | Env schema contracts — Zod-based validation for environment variables |
-| [`type-helpers`](packages/core/type-helpers/README.md) | Shared type-level utilities                                           |
-| [`oak-eslint`](packages/core/oak-eslint/README.md)     | Custom ESLint rules enforcing architectural boundaries                |
+| Workspace                                                | Purpose                                                               |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`result`](packages/core/result/README.md)               | `Result<T, E>` type for explicit error handling without exceptions    |
+| [`env`](packages/core/env/README.md)                     | Env schema contracts — Zod-based validation for environment variables |
+| [`observability`](packages/core/observability/README.md) | Provider-neutral redaction and active-span helpers                    |
+| [`type-helpers`](packages/core/type-helpers/README.md)   | Shared type-level utilities                                           |
+| [`oak-eslint`](packages/core/oak-eslint/README.md)       | Custom ESLint rules enforcing architectural boundaries                |
 
 **Libraries:**
 
-| Workspace                                                               | Purpose                                                                       |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [`@oaknational/logger`](packages/libs/logger/README.md)                 | Structured logger with Pino backend                                           |
-| [`@oaknational/env-resolution`](packages/libs/env-resolution/README.md) | Environment resolution pipeline — `.env` discovery, validation, and injection |
+| Workspace                                                                   | Purpose                                                                       |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`@oaknational/logger`](packages/libs/logger/README.md)                     | Structured logger with sink fan-out, redaction, and trace correlation         |
+| [`@oaknational/env-resolution`](packages/libs/env-resolution/README.md)     | Environment resolution pipeline — `.env` discovery, validation, and injection |
+| [`@oaknational/search-contracts`](packages/libs/search-contracts/README.md) | Canonical semantic-search field and stage contracts                           |
+| [`@oaknational/sentry-node`](packages/libs/sentry-node/README.md)           | Shared Sentry Node config, sinks, fixture runtime, and flush helpers          |
+| [`@oaknational/sentry-mcp`](packages/libs/sentry-mcp/README.md)             | Metadata-only MCP observation wrappers                                        |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 

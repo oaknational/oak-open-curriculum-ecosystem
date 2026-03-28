@@ -2,7 +2,7 @@
   "name": "@oaknational/logger",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Adaptive logging library for multi-runtime MCP applications",
+  "description": "Structured logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -60,7 +60,7 @@
   "keywords": [
     "mcp",
     "logging",
-    "adaptive",
+    "structured",
     "multi-runtime"
   ],
   "author": {

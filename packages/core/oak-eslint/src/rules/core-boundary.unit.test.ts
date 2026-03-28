@@ -1,5 +1,19 @@
 import { describe, it, expect } from 'vitest';
-import { coreBoundaryRules } from './boundary.js';
+import { coreBoundaryRules, coreTestConfigRules } from './boundary.js';
+
+function getRuleSeverity(
+  rules: typeof coreBoundaryRules,
+  ruleName: keyof typeof coreBoundaryRules,
+): string {
+  const rule = rules[ruleName];
+  if (typeof rule === 'string') {
+    return rule;
+  }
+  if (Array.isArray(rule)) {
+    return String(rule[0]);
+  }
+  throw new Error(`Expected '${String(ruleName)}' to be configured`);
+}
 
 /**
  * Extracts the zones from the `import-x/no-restricted-paths` rule declaration.
@@ -64,9 +78,39 @@ describe('coreBoundaryRules', () => {
     expect(sdkZone?.message).toContain('Core cannot import from SDKs');
   });
 
+  it('blocks imports from tooling workspaces', () => {
+    const zones = getRestrictedPathZones(coreBoundaryRules);
+    const toolingZone = zones.find((z) => z.from.includes('agent-tools'));
+    expect(toolingZone).toBeDefined();
+  });
+
+  it('blocks relative imports that cross package boundaries', () => {
+    expect(getRuleSeverity(coreBoundaryRules, 'import-x/no-relative-packages')).toBe('error');
+  });
+
   it('restricts @workspace/* alias imports', () => {
     const patterns = getRestrictedImportPatterns(coreBoundaryRules);
     const groups = patterns.flatMap((p) => p.group);
     expect(groups).toContain('@workspace/*');
+    expect(groups).toContain('@workspace/**');
+  });
+
+  it('blocks @oaknational package specifiers for libraries, SDKs, apps, and tooling', () => {
+    const patterns = getRestrictedImportPatterns(coreBoundaryRules);
+    const groups = patterns.flatMap((p) => p.group);
+
+    expect(groups).toContain('@oaknational/logger');
+    expect(groups).toContain('@oaknational/curriculum-sdk');
+    expect(groups).toContain('@oaknational/oak-curriculum-mcp-streamable-http');
+    expect(groups).toContain('@oaknational/agent-tools');
+  });
+});
+
+describe('coreTestConfigRules', () => {
+  it('relaxes dev-dependency and internal-module rules only', () => {
+    expect(coreTestConfigRules['import-x/no-extraneous-dependencies']).toBe('off');
+    expect(coreTestConfigRules['import-x/no-internal-modules']).toBe('off');
+    expect(coreTestConfigRules['import-x/no-restricted-paths']).toBeUndefined();
+    expect(coreTestConfigRules['@typescript-eslint/no-restricted-imports']).toBeUndefined();
   });
 });

@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-03-27
+**Last Updated**: 2026-03-28
 
 ---
 
@@ -13,11 +13,11 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Active — Phase 1 blocker remediation before runtime adoption |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Active — pushed through `ffff1867`; local blocker-clearance and doc-coherence fixes are landed, and the clean owner-requested handover confirmation rerun is the remaining gate before runtime adoption resumes |
 
 Prompt entry:
 
-- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md) — restart from the blocker bundle, not from fresh Phase 1 implementation
+- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md) — restart from the current local blocker-clearance state, record the clean handover confirmation rerun, then resume runtime adoption only after the checkpoint returns to restart-cleared
 
 ## Queued Work (Current)
 

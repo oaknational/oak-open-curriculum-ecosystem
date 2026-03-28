@@ -81,14 +81,21 @@ implementation, evidence, and deployment verification are actually complete.
 - duplication and quality-regression signals
 - quality and support dashboards
 
-## Current State (verified 2026-03-27)
+## Current State (verified 2026-03-28)
 
 - Structured OpenTelemetry JSON logging exists via `@oaknational/logger`
   (ADR-051)
-- The logger foundation now requires a deeper rewrite than the previous
-  `stdoutSink` / `fileSink` model can support cleanly
+- The logger foundation rewrite is complete in the active child plan; the
+  previous `stdoutSink` / `fileSink` model has been replaced by the coherent
+  `readonly LogSink[]` fan-out contract
+- The active child plan now reflects the pushed Phase 1 foundation state on
+  `feat/full-sentry-otel-support` through `ffff1867` plus the current local
+  blocker-clearance and doc-coherence follow-up slice. Runtime adoption is the
+  next intended execution step once the clean handover confirmation rerun is
+  recorded in the checkpoint
 - No shared Sentry runtime integration is yet complete
-- Header redaction exists, but shared telemetry redaction does not
+- Shared telemetry redaction now exists in `@oaknational/observability`; live
+  runtime adoption and evidence collection remain the unfinished steps
 - Quality metrics dashboards are not yet implemented
 - The active Sentry + OTel foundation workstream now has a dedicated prompt and
   active execution lane to survive session compression cleanly

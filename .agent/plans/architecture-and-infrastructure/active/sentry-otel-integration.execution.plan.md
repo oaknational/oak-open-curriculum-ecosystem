@@ -26,7 +26,7 @@ todos:
     status: completed
   - id: reviewer-plan-pass
     content: "Run the full reviewer pass over the refreshed plan and prompt before trusting them as the restart source of truth"
-    status: completed
+    status: in_progress
   - id: logger-foundation
     content: "Rewrite @oaknational/logger around a single LogSink[] model with explicit error overloads and active-span correlation"
     status: completed
@@ -34,11 +34,11 @@ todos:
     content: "Add shared observability, Sentry Node, and Sentry MCP packages with Result-based init/config surfaces"
     status: completed
   - id: phase-1-blocker-remediation
-    content: "Resolve the 2026-03-27 blocker bundle before any runtime adoption or further Phase 1 expansion"
-    status: pending
+    content: "Resolve the current Phase 1 blocker bundle before any runtime adoption or further Phase 1 expansion"
+    status: completed
   - id: redaction-policy
     content: "Generalise header redaction into a shared telemetry redaction policy used by the logger and Sentry hooks"
-    status: pending
+    status: completed
   - id: http-adoption
     content: "Adopt the foundation in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, and targeted manual spans"
     status: pending
@@ -61,93 +61,140 @@ execution order, and restart guidance belong here.
 The paired operational prompt is intentionally thin and only points back here:
 [sentry-otel-foundation.prompt.md](../../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 
-## Current Execution Snapshot (2026-03-27)
+## Current Execution Snapshot (2026-03-28)
 
 ### Lane and state
 
 - This plan has been promoted to the `active/` lane because implementation has
   started.
 - Branch in use: `feat/full-sentry-otel-support`
+- Latest pushed checkpoint:
+  `ffff1867f96aef0aedbcd80a74e57b7cbd0e8da7`
+  (`fix(search-cli): defer env validation until command execution`)
+- Local worktree state on top of that checkpoint contains the blocker-clearance
+  slice plus the follow-up doc-coherence refresh that landed after the first
+  owner-requested rerun findings.
+  - this is local descendant state, not yet guaranteed branch state from a
+    fresh clone of `origin/feat/full-sentry-otel-support`
 - Governance, ADR, capability, and document-alignment work is complete.
-- The handover bundle hardening and refreshed reviewer pass are complete.
-- The initial local implementation pass for `@oaknational/logger`,
+- The handover bundle hardening and known rerun-remediation fixes are complete
+  in the local worktree, but the clean owner-requested reviewer confirmation is
+  still pending capture in the checkpoint.
+- The Phase 1 implementation pass for `@oaknational/logger`,
   `@oaknational/env`, `@oaknational/observability`, `@oaknational/sentry-node`,
-  and `@oaknational/sentry-mcp` is on disk.
-- Focused `test` and `type-check` are green across that Phase 1 surface.
-- Focused `lint` is red because the shared ESLint package export map is
-  currently broken.
-- Phase 1 is **not** complete. The 2026-03-27 config/architecture/code-review
-  pass found blocker defects that must be fixed before any HTTP or Search CLI
-  adoption work starts.
+  and `@oaknational/sentry-mcp` remains the foundation for the next phase.
+- The blocker-clearance slice remains the active local focus:
+  - stale logger compatibility docs/examples were removed
+  - `@oaknational/observability` now lives in `packages/core/observability`
+  - layered library boundary rules replaced the sibling-lib allow-lists
+  - the previously reviewed ESLint export-map, Sentry kill-switch,
+    invalid-boolean, `vi.mock(...)`, and URL-credential redaction defects stay
+    closed
+- Focused `lint`, `test`, and `type-check` are green again across that Phase 1
+  surface after the current boundary/doc follow-up edits and doc-consolidation
+  refresh.
+- Post-move canary `type-check` is green again for `@oaknational/sdk-codegen`,
+  `@oaknational/oak-curriculum-mcp-streamable-http`, and
+  `@oaknational/search-cli`.
+- App lint canaries are also green for
+  `@oaknational/oak-curriculum-mcp-streamable-http`,
+  `@oaknational/search-cli`, and the legacy stdio workspace after the
+  app-boundary rule switched from an over-broad relative-path zone to the
+  package-aware `import-x/no-relative-packages` guard with config-file
+  carve-outs.
+- The workspace install and lockfile have been refreshed so
+  `@oaknational/observability` resolves from its new `packages/core/`
+  location.
+- A follow-up branch-stability fix in `apps/oak-search-cli` now defers env
+  validation until command execution, restoring `--help`, unknown-command
+  handling, and the Search CLI E2E path; that commit still counts as branch
+  hygiene rather than observability adoption evidence.
+- Runtime adoption remains the intended next phase, but it stays paused until
+  the clean owner-requested handover confirmation rerun is recorded in the
+  checkpoint.
 
-### Phase 1 blocker bundle (2026-03-27 reviewer pass)
+### Phase 1 blocker bundle status (2026-03-28)
 
-These are front-and-centre for the next session. Do not start new adoption
-work until they are cleared.
+The blocker bundle found in the 2026-03-27 reviewer pass is green again in the
+local worktree after the follow-up boundary/doc-coherence fixes from the first
+owner-requested handover rerun. Restart clearance still waits on recording a
+clean owner-requested reviewer rerun. The following items remain closed
+together unless later changes reopen them:
 
-Blocking defects:
+1. Workspace linting is restored via the corrected
+   `@oaknational/eslint-plugin-standards` export map plus rebuilt local dist.
+   When that package changes again, rebuild it before rerunning downstream lint
+   gates because consumer configs resolve its built output.
+2. Logger compatibility teaching has been removed from the active README,
+   middleware JSDoc, and live logging guidance; the public contract now teaches
+   `sinks: readonly LogSink[]` only.
+3. `SENTRY_MODE=off` and `SENTRY_MODE=fixture` behave as true kill switches.
+4. Invalid boolean env values fail closed with `Err`.
+5. Provider-neutral observability now lives in `packages/core/observability`.
+6. The architecture and ESLint rules now encode an explicit layered-library
+   model:
+   - foundation libs: `env-resolution`, `logger`, `search-contracts`
+   - adapter libs: `sentry-node`, `sentry-mcp`
+   - `search-contracts` remains the documented generated-contract exception and
+     may consume approved `@oaknational/sdk-codegen` subpath exports only
+7. The new in-process tests no longer use `vi.mock(...)`.
+8. Shared telemetry redaction now scrubs URL username/password credentials.
 
-1. Restore workspace linting by fixing the `@oaknational/eslint-plugin-standards`
-   export map in `packages/core/oak-eslint/package.json`.
-2. Remove all explicit logger compatibility layers and aliases:
-   `pure-functions.ts`, legacy re-exports, `StdoutSink`, and README guidance
-   that still teaches the removed API.
-3. Make `SENTRY_MODE=off` and `SENTRY_MODE=fixture` true kill switches even
-   when live-only env vars such as `SENTRY_DSN` or
-   `SENTRY_TRACES_SAMPLE_RATE` are present.
-4. Make invalid boolean env values fail closed with `Err`, never silently
-   default back to enabled logging.
-5. Apply the chosen long-term architectural resolution for the current
-   `libs -> libs` contradiction:
-   - move `@oaknational/observability` from `packages/libs/observability` to
-     `packages/core/observability`
-   - restore `@oaknational/logger` to depending on `core` only
-   - codify an explicit layered library topology in the architecture docs and
-     ESLint boundary rules so adapter libs such as `@oaknational/sentry-node`
-     depend on foundation libs such as `@oaknational/logger` by rule, not by
-     bespoke allow-lists
-   - remove the current per-workspace sibling-lib allow-lists once that rule is
-     in place
+Additional same-slice hardening that also remains closed:
 
-Follow-on issues to clear in the same slice once blockers are addressed:
-
-1. Remove `vi.mock(...)` usage from the new in-process tests.
-2. Extend shared redaction to scrub URL username/password credentials.
-3. Replace `@sentry/node` `"*"` with an explicit manifest range.
-4. Tighten `@oaknational/sentry-node` so its public init/capture surfaces model
-   native Sentry types directly instead of `Record<string, unknown>` plus casts.
+1. `@sentry/node` uses an explicit manifest version, not `"*"`.
+2. `@oaknational/sentry-node` no longer relies on erased
+   `Record<string, unknown>` init/capture surfaces.
 
 ### Next session first actions
 
-Start here, in this order:
+Resume from the current `feat/full-sentry-otel-support` worktree. The latest
+pushed ancestor remains `ffff1867f96aef0aedbcd80a74e57b7cbd0e8da7`, and the
+local descendant state contains the blocker-clearance slice plus the
+follow-up doc-coherence refresh. Treat that as local worktree state, not
+branch state from a fresh clone. Then work in this order:
 
-1. Fix the lint blocker in `packages/core/oak-eslint/package.json` and prove
-   `lint` is runnable again for `@oaknational/logger`, `@oaknational/env`,
-   `@oaknational/observability`, `@oaknational/sentry-node`, and
-   `@oaknational/sentry-mcp`.
-2. Remove the remaining clean-break violations in `@oaknational/logger`:
-   delete the compatibility shim and alias surfaces, then update the README so
-   it only documents the new contract.
-3. Correct `@oaknational/sentry-node` config semantics:
-   - `off` and `fixture` must ignore live-only inputs rather than erroring
-   - invalid boolean flags must return `Err`
-4. Apply the architectural resolution, not a local exception:
-   - move `@oaknational/observability` into `packages/core/`
-   - update the architecture docs and ESLint boundary model to encode explicit
-     foundation-lib vs adapter-lib layering
-   - delete the current sibling-lib allow-lists after the layered rule exists
-5. Remove `vi.mock(...)` from the new test harness and close the URL-credential
-   redaction gap.
-6. Rerun the focused gates for the Phase 1 surface.
-7. Only after the blocker bundle is green should the work continue into
-   downstream app adoption.
+1. Run and record the clean owner-requested handover confirmation rerun from
+   the current doc-consolidated worktree.
+   - prioritise the still-pending confirmations for
+     `docs-adr-reviewer`, `onboarding-reviewer`, and
+     `architecture-reviewer-barney`
+   - refresh the other architecture lenses too if you need a single
+     same-worktree reviewer stamp after this documentation refresh
+   - add any specialist lenses reopened by new findings, not by the already
+     fixed first-rerun issues
+2. Reconfirm the refreshed checkpoint and reviewer status before trusting the
+   restart bundle.
+3. Treat the Phase 1 blocker bundle as closed unless a new change reopens a
+   focused gate.
+4. Only once the checkpoint returns to restart-cleared status, start Phase 3
+   adoption in
+   `apps/oak-curriculum-mcp-streamable-http`:
+   - wire the shared logger and Sentry foundation at cold start
+   - keep stdout JSON as the canonical local log surface
+   - add the MCP wrapping and the targeted manual spans defined below
+5. Continue with `apps/oak-search-cli` adoption once the HTTP adoption slice is
+   ready or the execution order is deliberately revised.
+6. If any shared-package edit reopens the focused Phase 1 gates, stop and
+   re-green them before continuing.
+   - if the edit touched `packages/core/oak-eslint`, rebuild
+     `@oaknational/eslint-plugin-standards` before rerunning consumer lint
+     commands
+7. Keep the deprecated standalone stdio MCP workspace out of scope except for
+   unavoidable compile-preserving compatibility edits.
 
-Preconditions already satisfied:
+Preconditions not yet fully satisfied:
 
-1. The handover bundle is cleared for restart in the review checkpoint.
+1. The handover bundle is not yet cleared for restart in the review checkpoint.
 2. The active plan remains the implementation authority.
-3. No further plan-layer review is required before beginning
-   blocker remediation.
+3. The blocker bundle and affected validations are green locally, but the
+   clean owner-requested reviewer pass still needs to be recorded before
+   restart clearance.
+4. The `oak-search-cli` env-loading fix in `ffff1867` keeps the branch
+   pushable and testable; it is not itself observability adoption evidence.
+5. A same-day reviewer rerun attempt after the latest documentation refresh did
+   not return substantive outputs before the sessions shut down; do not count
+   that attempt as clean confirmation.
 
 ### Authority and review state
 
@@ -203,29 +250,28 @@ Preconditions already satisfied:
 1. `packages/libs/logger`
    - `UnifiedLogger` has been rewritten around `readonly LogSink[]`.
    - explicit `NormalizedError` overloads and active-span correlation now exist.
-   - the remaining problems are the deliberate compatibility shim/alias
-     surfaces and test harness use of `vi.mock(...)`.
+   - active docs, examples, and middleware JSDoc now teach the clean-break
+     contract only.
 2. `packages/core/env`
    - `SentryEnvSchema` and its unit tests now exist.
-3. `packages/libs/observability`
-   - the workspace exists and provides shared redaction plus active-span
-     helpers.
-   - the current known gap is URL username/password redaction.
+3. `packages/core/observability`
+   - the workspace now lives in `core` and provides shared redaction plus
+     active-span helpers.
+   - URL username/password redaction is covered.
 4. `packages/libs/sentry-node`
    - the workspace exists with discriminated config building, fixture runtime,
      sink helpers, and bounded flush helpers.
-   - the current known gaps are kill-switch semantics for `off`/`fixture`,
-     invalid-boolean fail-open behaviour, wildcard `@sentry/node`, and an
-     over-erased SDK type boundary.
+   - the reviewed Phase 1 config and type gaps are closed.
 5. `packages/libs/sentry-mcp`
    - the workspace exists and remains transport-agnostic.
-   - the current known gap is `vi.mock(...)` in the test harness.
+   - the reviewed `vi.mock(...)` gap is closed.
 6. Focused validation
-   - `test` and `type-check` are green for `@oaknational/logger`,
+   - `lint`, `test`, and `type-check` are green for `@oaknational/logger`,
      `@oaknational/env`, `@oaknational/observability`,
      `@oaknational/sentry-node`, and `@oaknational/sentry-mcp`.
-   - `lint` is red for the same surface until the shared ESLint export-map
-     defect is fixed.
+   - canary `type-check` is green for `@oaknational/sdk-codegen`,
+     `@oaknational/oak-curriculum-mcp-streamable-http`, and
+     `@oaknational/search-cli`.
 7. Adoption scope confirmation
    - `apps/oak-curriculum-mcp-stdio` remains deprecated per ADR-128 and is not
      an adoption target.
@@ -263,7 +309,7 @@ sibling `starter-app-spike` repo:
 Implementation targets:
 
 1. `packages/libs/logger`
-2. `packages/libs/observability`
+2. `packages/core/observability`
 3. `packages/libs/sentry-node`
 4. `packages/libs/sentry-mcp`
 5. `packages/core/env`
@@ -313,7 +359,7 @@ phase, and the Search CLI still relies on mutable logger-global configuration.
 ## Chosen Architecture
 
 Per
-[ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md),
+[ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md),
 the foundation is:
 
 1. **Coherent structured fan-out**, not a speculative async transport rewrite
@@ -351,12 +397,12 @@ Exit criteria:
 
 Next phase:
 
-1. Continue Phase 1 with blocker remediation, then resume runtime adoption.
+1. Close the owner-requested handover rerun and record restart clearance.
+2. Then proceed to Phase 3 runtime adoption.
 
 ### Phase 1: RED shared contracts and regression harness
 
-Status: code and harness landed locally, but acceptance is blocked by the
-Phase 1 blocker bundle above.
+Status: complete in the current local worktree on top of `ffff1867`.
 
 Proofs now on disk:
 
@@ -365,19 +411,19 @@ Proofs now on disk:
    `normalizeError()` boundaries.
 3. Config tests for `SENTRY_MODE=off|fixture|sentry`, including
    fail-closed `Err` behaviour for invalid live config.
-4. Redaction tests covering nested JSON, URLs, query strings, request
-   bodies, CLI args, env-derived config, breadcrumb extras, span attributes,
-   and log payloads.
+4. Redaction tests covering nested JSON, URLs, query strings, header records,
+   logger payloads, and Sentry before-send / before-send-log sanitisation.
 5. MCP capture-policy tests proving deny-by-default metadata-only
    capture.
 
-Blocking exit criteria before this phase can be treated as complete:
+Exit criteria now satisfied:
 
 1. The config booleans fail closed instead of silently defaulting.
 2. `off` and `fixture` behave as real kill switches even when live-only env
    inputs are present.
 3. The in-process test harness no longer uses `vi.mock(...)`.
 4. The remaining compatibility shim/alias surfaces are deleted.
+5. URL username/password credentials are redacted.
 
 Deterministic validation commands:
 
@@ -390,9 +436,7 @@ Deterministic validation commands:
 
 ### Phase 2: GREEN shared foundation
 
-Status: initial package creation is complete, but this phase is still open
-until the blocker bundle is resolved and the focused lint/test/type-check
-surface is green together.
+Status: complete in the current local worktree.
 
 Implement the shared packages and logger rewrite:
 
@@ -402,6 +446,9 @@ Implement the shared packages and logger rewrite:
 3. Add discriminated-union Sentry env parsing and shared config building.
 4. Centralise telemetry redaction, active-span correlation, and release
    resolution.
+5. Keep provider-neutral observability in `packages/core/observability`.
+6. Replace sibling-lib allow-lists with explicit foundation-lib vs adapter-lib
+   boundary rules.
 
 Deterministic validation commands:
 
@@ -422,6 +469,8 @@ Deterministic validation commands:
 15. `pnpm --filter @oaknational/env lint`
 
 ### Phase 3: GREEN runtime adoption
+
+Status: ready to start.
 
 Adopt the shared foundation in the in-scope runtimes only:
 
@@ -764,7 +813,7 @@ Required invariants:
     instead of relying on per-package allow-lists
   - `@oaknational/sentry-mcp` should depend only on `core` observability
     primitives and MCP abstractions
-- `@oaknational/observability` (target end state: `packages/core/observability`)
+- `@oaknational/observability` (`packages/core/observability`)
   - provider-neutral helpers
   - shared telemetry redaction
   - span helpers built only on `@opentelemetry/api`
@@ -817,9 +866,8 @@ Required invariants:
    union.
 4. Add deterministic release resolution with the explicit precedence contract.
 5. Enforce deny-by-default trace propagation and MCP metadata capture.
-6. Finish the structural move of provider-neutral observability into `core`
-   and encode the resulting library tiers in the architecture docs and ESLint
-   boundary rules.
+6. Preserve the `core` placement of provider-neutral observability and the
+   resulting library tiers in the architecture docs and ESLint boundary rules.
 
 ### WS4: HTTP MCP Server Adoption
 
@@ -927,7 +975,7 @@ If session context compresses again, re-ground from these files in order:
 2. [sentry-otel-foundation.prompt.md](../../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 3. [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 4. [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md)
-5. [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+5. [ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
 6. [testing-strategy.md](../../../directives/testing-strategy.md)
 7. [schema-first-execution.md](../../../directives/schema-first-execution.md)
 8. `packages/libs/logger/src/unified-logger.ts`
@@ -941,28 +989,28 @@ If session context compresses again, re-ground from these files in order:
 
 ## Review Requirement
 
-Before trusting this plan/prompt pair as the execution baseline, run the full
-reviewer pass requested by the project owner after any material bundle refresh,
-including:
+Before trusting this plan/prompt pair as the execution baseline, run the
+handover reviewer pass requested by the project owner after any material bundle
+refresh. For the 2026-03-28 blocker-clearance refresh that set is:
 
 1. code-reviewer
-2. all four architecture reviewers
-3. test-reviewer
-4. type-reviewer
-5. config-reviewer
-6. security-reviewer
-7. docs-adr-reviewer
-8. mcp-reviewer
-9. sentry-reviewer
+2. docs-adr-reviewer
+3. onboarding-reviewer
+4. all four architecture reviewers
+
+If a later bundle refresh directly touches tests, types, config quality gates,
+security/privacy, MCP protocol behaviour, or Sentry/Otel implementation
+details, expand the reviewer set with the corresponding specialists before
+recording restart clearance.
 
 Review-state authority is recorded in:
 [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 
 ## Reference Inputs
 
-- [ADR-051](../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md)
-- [ADR-078](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
-- [ADR-128](../../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)
-- [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+- [ADR-051](../../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md)
+- [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
+- [ADR-128](../../../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)
+- [ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
 - [Sentry specialist capability](../../agentic-engineering-enhancements/current/sentry-specialist-capability.plan.md)
 - Sibling `starter-app-spike` reference implementation (pattern source only)

@@ -22,6 +22,8 @@ export {
   createRequestLogger,
   createErrorLogger,
   extractRequestMetadata,
+  type ErrorLoggerOptions,
+  type HeaderRedactor,
   type RequestLoggerOptions,
 } from './express-middleware.js';
 

@@ -2,15 +2,68 @@
  * Centralized ESLint Boundary Rules for the standard architecture
  *
  * These rules enforce neutral, intent-revealing boundaries:
- * - Core: Pure abstractions with zero dependencies
- * - Libs: Reusable libraries that are independent of each other
+ * - Core: Foundational packages with no monorepo dependencies outside `core`
+ *   and only minimal provider-neutral external dependencies
+ * - Libs: Reusable libraries split into foundation and adapter tiers
  * - Apps: Application packages that compose core and libs
  */
 
 import type { Linter } from 'eslint';
 
+export const LIB_PACKAGE_IMPORTS = [
+  '@oaknational/env-resolution',
+  '@oaknational/logger',
+  '@oaknational/search-contracts',
+  '@oaknational/sentry-node',
+  '@oaknational/sentry-mcp',
+] as const;
+
+export const SDK_PACKAGE_IMPORTS = [
+  '@oaknational/curriculum-sdk',
+  '@oaknational/sdk-codegen',
+  '@oaknational/oak-search-sdk',
+] as const;
+
+export const APP_PACKAGE_IMPORTS = [
+  '@oaknational/oak-curriculum-mcp-stdio',
+  '@oaknational/oak-curriculum-mcp-streamable-http',
+  '@oaknational/search-cli',
+] as const;
+
+export const TOOLING_PACKAGE_IMPORTS = ['@oaknational/agent-tools'] as const;
+
+const APP_BOUNDARY_MESSAGE = 'Apps cannot import from other apps. Each app is independent.';
+const TOOLING_BOUNDARY_MESSAGE =
+  'Runtime workspaces cannot import from tooling packages. Tooling stays in development and operations layers, not shipped runtime code.';
+
+const WORKSPACE_ALIAS_IMPORT_PATTERN = {
+  group: ['@workspace/*', '@workspace/**'],
+  message:
+    'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+} as const;
+
+function createPackageSpecifierPatterns(
+  packageNames: readonly string[],
+  message: string,
+): { readonly group: readonly [string, string, string]; readonly message: string }[] {
+  return packageNames.map((packageName) => ({
+    group: [packageName, `${packageName}/*`, `${packageName}/**`],
+    message,
+  }));
+}
+
+function createDeepSubpathSpecifierPatterns(
+  packageNames: readonly string[],
+  message: string,
+): { readonly group: readonly [string, string]; readonly message: string }[] {
+  return packageNames.map((packageName) => ({
+    group: [`${packageName}/*/*`, `${packageName}/*/*/**`],
+    message,
+  }));
+}
+
 /**
- * Core boundary rules - Zero external dependencies
+ * Core boundary rules
  * Apply these to all core packages (src files only)
  */
 export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
@@ -23,27 +76,36 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
           target: './src/**',
           from: '../../../packages/libs/**',
           message:
-            'Core cannot import from libraries. Core must remain pure with zero dependencies.',
+            'Core cannot import from libraries. Core packages may depend only on other core packages and explicitly declared provider-neutral external primitives.',
         },
         {
           target: './src/**',
           from: '../../../apps/**',
-          message: 'Core cannot import from apps. Core must remain pure with zero dependencies.',
+          message:
+            'Core cannot import from apps. Core packages may depend only on other core packages and explicitly declared provider-neutral external primitives.',
         },
         {
           target: './src/**',
           from: '../../../packages/sdks/**',
-          message: 'Core cannot import from SDKs. Core must remain domain-agnostic.',
+          message:
+            'Core cannot import from SDKs. Core packages must remain domain-agnostic and free of cross-workspace dependencies.',
+        },
+        {
+          target: './src/**',
+          from: '../../../agent-tools/**',
+          message:
+            'Core cannot import from tooling workspaces. Core packages must remain reusable runtime primitives.',
         },
       ],
     },
   ],
 
-  // Block any non-relative imports (package imports)
+  // Allow package specifier imports; the restricted-import patterns below define
+  // which workspace package specifiers are legal in core.
   'import-x/no-internal-modules': 'off', // Allow internal module imports
-  'import-x/no-relative-packages': 'off', // Allow relative imports
+  'import-x/no-relative-packages': 'error', // Disallow cross-package relative imports
 
-  // Ensure no external dependencies in production code
+  // Ensure production code uses only declared dependencies
   'import-x/no-extraneous-dependencies': [
     'error',
     {
@@ -60,10 +122,24 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
     {
       patterns: [
         {
-          group: ['@workspace/*'],
-          message:
-            'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+          ...WORKSPACE_ALIAS_IMPORT_PATTERN,
         },
+        ...createPackageSpecifierPatterns(
+          LIB_PACKAGE_IMPORTS,
+          'Core cannot import from libraries. Core packages may depend only on other core packages and explicitly declared provider-neutral external primitives.',
+        ),
+        ...createPackageSpecifierPatterns(
+          SDK_PACKAGE_IMPORTS,
+          'Core cannot import from SDKs. Core packages must remain domain-agnostic and free of cross-workspace dependencies.',
+        ),
+        ...createPackageSpecifierPatterns(
+          APP_PACKAGE_IMPORTS,
+          'Core cannot import from apps. Core packages may depend only on other core packages and explicitly declared provider-neutral external primitives.',
+        ),
+        ...createPackageSpecifierPatterns(
+          TOOLING_PACKAGE_IMPORTS,
+          'Core cannot import from tooling workspaces. Core packages must remain reusable runtime primitives.',
+        ),
       ],
     },
   ],
@@ -71,56 +147,135 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
 
 /**
  * Core test and config file rules
- * Allows dev dependencies in test and config files
+ * Allows dev dependencies and internal modules in test/config files while
+ * keeping the cross-workspace boundary rules active.
  */
 export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
-  // Turn off all import restrictions for test and config files
   'import-x/no-extraneous-dependencies': 'off',
-  'import-x/no-restricted-paths': 'off',
-  '@typescript-eslint/no-restricted-imports': 'off',
   'import-x/no-internal-modules': 'off',
 };
 
 /**
- * Generate library boundary rules for a specific library
- * Each library must be independent of other libraries
- *
- * @param libName - The name of the current library (e.g., 'logger')
- * @param otherLibs - Array of other library names to prevent imports from
+ * Foundation libraries may not depend on any other libraries.
  */
-export function createLibBoundaryRules(
-  libName: string,
-  otherLibs: string[],
-): Partial<Linter.RulesRecord> {
+export const FOUNDATION_LIB_PACKAGES = ['env-resolution', 'logger', 'search-contracts'] as const;
+
+/**
+ * Adapter libraries may depend on foundation libraries only.
+ */
+export const ADAPTER_LIB_PACKAGES = ['sentry-node', 'sentry-mcp'] as const;
+
+/**
+ * List of all libraries for reference.
+ * Update this list when adding or re-tiering libraries.
+ */
+export const LIB_PACKAGES = [...FOUNDATION_LIB_PACKAGES, ...ADAPTER_LIB_PACKAGES] as const;
+
+export type LibPackage = (typeof LIB_PACKAGES)[number];
+const SEARCH_CONTRACTS_LIB = 'search-contracts' as const;
+const LIB_SDK_BOUNDARY_MESSAGE =
+  'Libraries cannot depend on SDKs unless ADR-041 documents an approved generated-surface exception.';
+const SEARCH_CONTRACTS_SDK_EXCEPTION_MESSAGE =
+  'Foundation library search-contracts may consume approved @oaknational/sdk-codegen subpath exports only; it must not depend on other SDK packages, the root sdk-codegen package, or deep internal SDK paths.';
+
+function isLibPackage(libName: string): libName is LibPackage {
+  return LIB_PACKAGES.some((knownLibName) => knownLibName === libName);
+}
+
+function isFoundationLibPackage(libName: LibPackage): boolean {
+  return FOUNDATION_LIB_PACKAGES.some((foundationLibName) => foundationLibName === libName);
+}
+
+/**
+ * Generate library boundary rules for a specific library.
+ *
+ * Foundation libraries must remain independent of all other libraries.
+ * Adapter libraries may depend on foundation libraries only.
+ *
+ * @param libName - The name of the current library (e.g. `logger`)
+ */
+export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.RulesRecord> {
+  if (!isLibPackage(libName)) {
+    throw new Error(`Unknown library package '${libName}'. Update LIB_PACKAGES in boundary.ts.`);
+  }
+
+  const foundationLib = isFoundationLibPackage(libName);
+  const restrictedLibs = foundationLib
+    ? LIB_PACKAGES.filter((otherLib) => otherLib !== libName)
+    : ADAPTER_LIB_PACKAGES.filter((otherLib) => otherLib !== libName);
+  const searchContractsSdkException = libName === SEARCH_CONTRACTS_LIB;
+  const createRestrictionMessage = (otherLib: LibPackage): string =>
+    foundationLib
+      ? `Foundation library '${libName}' cannot depend on '${otherLib}'. Foundation libraries must remain independently reusable.`
+      : `Adapter library '${libName}' cannot depend on adapter library '${otherLib}'. Adapter libraries may depend on foundation libraries only.`;
+
   const zones = [
-    // Cannot import from other libraries
-    ...otherLibs.map((otherLib) => ({
+    ...restrictedLibs.map((otherLib) => ({
       target: './src/**' as const,
       from: `../${otherLib}/**` as const,
-      message: `Library '${libName}' cannot depend on '${otherLib}'. Each library must be independently reusable.`,
+      message: createRestrictionMessage(otherLib),
     })),
-    // Cannot import from apps
     {
       target: './src/**' as const,
       from: '../../../apps/**' as const,
       message:
         'Libraries cannot depend on apps. Libraries must remain reusable across applications.',
     },
+    {
+      target: './src/**' as const,
+      from: '../../../agent-tools/**' as const,
+      message: TOOLING_BOUNDARY_MESSAGE,
+    },
   ];
+  const restrictedImportPatterns = restrictedLibs.map((otherLib) => ({
+    group: [
+      `@oaknational/${otherLib}`,
+      `@oaknational/${otherLib}/*`,
+      `@oaknational/${otherLib}/**`,
+    ],
+    message: createRestrictionMessage(otherLib),
+  }));
+  const restrictedSdkImportPatterns = searchContractsSdkException
+    ? [
+        ...createDeepSubpathSpecifierPatterns(
+          ['@oaknational/sdk-codegen'],
+          SEARCH_CONTRACTS_SDK_EXCEPTION_MESSAGE,
+        ),
+        ...createPackageSpecifierPatterns(
+          ['@oaknational/curriculum-sdk', '@oaknational/oak-search-sdk'],
+          SEARCH_CONTRACTS_SDK_EXCEPTION_MESSAGE,
+        ),
+      ]
+    : createPackageSpecifierPatterns(SDK_PACKAGE_IMPORTS, LIB_SDK_BOUNDARY_MESSAGE);
+  const restrictedSdkImportPaths = searchContractsSdkException
+    ? [
+        {
+          name: '@oaknational/sdk-codegen',
+          message: SEARCH_CONTRACTS_SDK_EXCEPTION_MESSAGE,
+        },
+      ]
+    : [];
 
   return {
     // Libraries must be independent and reusable
     'import-x/no-restricted-paths': ['error', { zones }],
+    'import-x/no-relative-packages': 'error',
     // Disallow @workspace/* imports in library source
     '@typescript-eslint/no-restricted-imports': [
       'error',
       {
+        paths: restrictedSdkImportPaths,
         patterns: [
           {
-            group: ['@workspace/*'],
-            message:
-              'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           },
+          ...restrictedImportPatterns,
+          ...restrictedSdkImportPatterns,
+          ...createPackageSpecifierPatterns(
+            APP_PACKAGE_IMPORTS,
+            'Libraries cannot depend on apps. Libraries must remain reusable across applications.',
+          ),
+          ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
         ],
       },
     ],
@@ -152,15 +307,18 @@ export function createLibBoundaryRules(
  * Apps cannot import from other apps but can use core and libs
  */
 export const appBoundaryRules: Partial<Linter.RulesRecord> = {
-  // Apps cannot import from other apps
-  'import-x/no-restricted-paths': [
+  // Relative imports must stay within the current app package.
+  'import-x/no-relative-packages': 'error',
+  '@typescript-eslint/no-restricted-imports': [
     'error',
     {
-      zones: [
+      patterns: [
+        ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
+        ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
         {
-          target: './src/**',
-          from: '../*/**',
-          message: 'Apps cannot import from other apps. Each app is independent.',
+          ...WORKSPACE_ALIAS_IMPORT_PATTERN,
+          message:
+            'Do not import from @workspace/* in apps. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
         },
       ],
     },
@@ -172,6 +330,7 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
  * Enforces internal module boundaries within an app
  */
 export const appArchitectureRules: Partial<Linter.RulesRecord> = {
+  'import-x/no-relative-packages': 'error',
   'import-x/no-restricted-paths': [
     'error',
     {
@@ -198,8 +357,10 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
     'error',
     {
       patterns: [
+        ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
+        ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
         {
-          group: ['@workspace/*'],
+          ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           message:
             'Do not import from @workspace/* in apps. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
         },
@@ -220,11 +381,14 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
  *
  * - **generation** workspace has no knowledge of runtime concerns.
  *   It cannot import from `@oaknational/curriculum-sdk`.
- * - **runtime** workspace imports generation artefacts through barrel
- *   exports only (`@oaknational/sdk-codegen`), never via
+ * - **runtime** workspace imports generation artefacts through
+ *   `@oaknational/sdk-codegen` package surfaces only, never via
  *   deep paths into generation internals.
+ * - **search** workspace consumes generated search surfaces from
+ *   `@oaknational/sdk-codegen` package surfaces and must not depend directly on
+ *   `@oaknational/curriculum-sdk`.
  *
- * @param role - Whether the calling workspace is the generation or runtime SDK
+ * @param role - Whether the calling workspace is the generation, runtime, or search SDK
  *
  * @example
  * ```typescript
@@ -238,22 +402,67 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
 export function createSdkBoundaryRules(
   role: 'generation' | 'runtime' | 'search',
 ): Partial<Linter.RulesRecord> {
+  const searchSdkImportPatterns = createPackageSpecifierPatterns(
+    ['@oaknational/oak-search-sdk'],
+    'Runtime and generation SDK workspaces must not import from @oaknational/oak-search-sdk directly. Shared domain artefacts flow through @oaknational/sdk-codegen and the SDKs meet at the application layer (ADR-108).',
+  );
+  const appSpecifierPatterns = createPackageSpecifierPatterns(
+    APP_PACKAGE_IMPORTS,
+    'SDKs cannot import from apps. SDKs must remain reusable across applications.',
+  );
+  const toolingSpecifierPatterns = createPackageSpecifierPatterns(
+    TOOLING_PACKAGE_IMPORTS,
+    TOOLING_BOUNDARY_MESSAGE,
+  );
+  const appPathZone = {
+    target: './src/**' as const,
+    from: '../../../apps/**' as const,
+    message: 'SDKs cannot import from apps. SDKs must remain reusable across applications.',
+  };
+  const toolingPathZone = {
+    target: './src/**' as const,
+    from: '../../../agent-tools/**' as const,
+    message: TOOLING_BOUNDARY_MESSAGE,
+  };
+
   if (role === 'generation') {
     return {
+      'import-x/no-relative-packages': 'error',
       '@typescript-eslint/no-restricted-imports': [
         'error',
         {
           patterns: [
+            ...createPackageSpecifierPatterns(
+              ['@oaknational/curriculum-sdk'],
+              'Generation cannot import from runtime SDK. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
+            ),
+            ...searchSdkImportPatterns,
+            ...appSpecifierPatterns,
+            ...toolingSpecifierPatterns,
             {
-              group: ['@oaknational/curriculum-sdk', '@oaknational/curriculum-sdk/**'],
+              ...WORKSPACE_ALIAS_IMPORT_PATTERN,
+            },
+          ],
+        },
+      ],
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            {
+              target: './src/**',
+              from: '../oak-curriculum-sdk/**',
               message:
-                'Generation cannot import from runtime SDK. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
+                'Generation cannot import from runtime SDK via relative paths. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
             },
             {
-              group: ['@workspace/*'],
+              target: './src/**',
+              from: '../oak-search-sdk/**',
               message:
-                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+                'Generation must not import from oak-search-sdk via relative paths. Shared SDK coupling flows through @oaknational/sdk-codegen and the application layer (ADR-108).',
             },
+            appPathZone,
+            toolingPathZone,
           ],
         },
       ],
@@ -262,6 +471,7 @@ export function createSdkBoundaryRules(
 
   if (role === 'search') {
     return {
+      'import-x/no-relative-packages': 'error',
       '@typescript-eslint/no-restricted-imports': [
         'error',
         {
@@ -278,15 +488,14 @@ export function createSdkBoundaryRules(
               message:
                 'Search SDK must not import from @oaknational/curriculum-sdk (any subpath). Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
             },
+            ...createDeepSubpathSpecifierPatterns(
+              ['@oaknational/sdk-codegen'],
+              'Search SDK must import from @oaknational/sdk-codegen subpath exports only (e.g. /search, /observability), not deep internal paths (ADR-108).',
+            ),
+            ...appSpecifierPatterns,
+            ...toolingSpecifierPatterns,
             {
-              group: ['@oaknational/sdk-codegen/*/**'],
-              message:
-                'Search SDK must import from @oaknational/sdk-codegen subpath exports only (e.g. /search, /observability), not deep internal paths (ADR-108).',
-            },
-            {
-              group: ['@workspace/*'],
-              message:
-                'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+              ...WORKSPACE_ALIAS_IMPORT_PATTERN,
             },
           ],
         },
@@ -297,10 +506,15 @@ export function createSdkBoundaryRules(
           zones: [
             {
               target: './src/**',
-              from: '../../../apps/**',
+              from: '../oak-curriculum-sdk/**',
               message:
-                'SDKs cannot import from apps. SDKs must remain reusable across applications.',
+                'Search SDK must not import from curriculum-sdk via relative paths. Use @oaknational/sdk-codegen subpath exports instead (ADR-108).',
             },
+            // no-restricted-paths resolves package specifiers to workspace files,
+            // so oak-sdk-codegen public surfaces are enforced via package patterns
+            // plus no-relative-packages rather than a path zone here.
+            appPathZone,
+            toolingPathZone,
           ],
         },
       ],
@@ -308,43 +522,41 @@ export function createSdkBoundaryRules(
   }
 
   return {
+    'import-x/no-relative-packages': 'error',
     '@typescript-eslint/no-restricted-imports': [
       'error',
       {
         patterns: [
+          ...searchSdkImportPatterns,
+          ...createDeepSubpathSpecifierPatterns(
+            ['@oaknational/sdk-codegen'],
+            'Runtime must import from @oaknational/sdk-codegen subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
+          ),
+          ...appSpecifierPatterns,
+          ...toolingSpecifierPatterns,
           {
-            group: ['@oaknational/sdk-codegen/*/**'],
-            message:
-              'Runtime must import from @oaknational/sdk-codegen subpath exports only (e.g. /api-schema, /mcp-tools, /search), not deep internal paths (ADR-108).',
-          },
-          {
-            group: ['@workspace/*'],
-            message:
-              'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+            ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           },
         ],
       },
     ],
+    'import-x/no-restricted-paths': [
+      'error',
+      {
+        zones: [
+          // no-restricted-paths resolves package specifiers to workspace files,
+          // so oak-sdk-codegen public surfaces are enforced via package patterns
+          // plus no-relative-packages rather than a path zone here.
+          {
+            target: './src/**',
+            from: '../oak-search-sdk/**',
+            message:
+              'Runtime must not import from oak-search-sdk via relative paths. Shared SDK coupling flows through @oaknational/sdk-codegen and the application layer (ADR-108).',
+          },
+          appPathZone,
+          toolingPathZone,
+        ],
+      },
+    ],
   };
-}
-
-/**
- * List of all libraries for reference
- * Update this list when adding new libraries
- */
-export const LIB_PACKAGES = [
-  'logger',
-  'env-resolution',
-  'observability',
-  'sentry-node',
-  'sentry-mcp',
-  'search-contracts',
-] as const;
-
-/**
- * Get all other libraries (excluding the current one)
- * Used to prevent cross-library imports
- */
-export function getOtherLibs(currentLib: string): string[] {
-  return LIB_PACKAGES.filter((lib) => lib !== currentLib);
 }

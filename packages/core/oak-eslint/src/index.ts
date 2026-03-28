@@ -15,8 +15,6 @@ export {
   createSdkBoundaryRules,
   appBoundaryRules,
   appArchitectureRules,
-  LIB_PACKAGES,
-  getOtherLibs,
 } from './rules/boundary.js';
 
 export const rules = {

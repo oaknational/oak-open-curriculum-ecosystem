@@ -3,7 +3,6 @@ import {
   commonSettings,
   configs,
   createLibBoundaryRules,
-  getOtherLibs,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -42,10 +41,7 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules(
-      'sentry-mcp',
-      getOtherLibs('sentry-mcp').filter((lib) => lib !== 'observability'),
-    ),
+    rules: createLibBoundaryRules('sentry-mcp'),
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
@@ -60,6 +56,10 @@ const config = defineConfig(
         project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

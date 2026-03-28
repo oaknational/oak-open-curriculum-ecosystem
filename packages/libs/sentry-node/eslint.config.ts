@@ -3,7 +3,6 @@ import {
   commonSettings,
   configs,
   createLibBoundaryRules,
-  getOtherLibs,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -13,8 +12,6 @@ import { fileURLToPath } from 'node:url';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
-
-const allowedLibs = new Set(['logger', 'observability']);
 
 const config = defineConfig(
   {
@@ -44,10 +41,7 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules(
-      'sentry-node',
-      getOtherLibs('sentry-node').filter((lib) => !allowedLibs.has(lib)),
-    ),
+    rules: createLibBoundaryRules('sentry-node'),
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
@@ -62,6 +56,10 @@ const config = defineConfig(
         project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

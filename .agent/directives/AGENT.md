@@ -47,7 +47,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 ## **RULES**
 
-Read [the rules](./principles.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
+Read [the rules](./principles.md); reflect on them, _apply_ them, they MUST be followed at ALL times.
 
 ## Use Sub-agents
 
@@ -124,10 +124,10 @@ pnpm sdk-codegen    # Type generation
 pnpm build          # Build
 pnpm type-check     # Type check
 pnpm format:root    # Format code
-pnpm markdownlint:root    # Markdown lint
+pnpm markdownlint:root    # Markdown lint (auto-fix)
 pnpm subagents:check    # Validate sub-agent standards
 pnpm portability:check    # Validate canonical/adaptor and hook parity
-pnpm lint:fix       # Lint
+pnpm lint:fix       # Lint (auto-fix)
 pnpm test:root-scripts    # Repo-level script tests
 pnpm test           # Unit and integration tests
 pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
@@ -155,9 +155,9 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 - `apps/` – runnable apps that provide services to users
 - `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
-- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`)
+- `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`, `@oaknational/sentry-node`, `@oaknational/sentry-mcp`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
-- `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`)
+- `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`, `@oaknational/observability`)
 
 ## Remember
 

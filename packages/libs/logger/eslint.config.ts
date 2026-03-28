@@ -8,7 +8,6 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   createLibBoundaryRules,
-  getOtherLibs,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -49,10 +48,7 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules(
-      'logger',
-      getOtherLibs('logger').filter((lib) => lib !== 'observability'),
-    ),
+    rules: createLibBoundaryRules('logger'),
   },
   {
     files: ['src/file-sink.ts'],
@@ -74,6 +70,10 @@ const config = defineConfig(
         project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

@@ -1,7 +1,31 @@
+import { REDACTED_VALUE } from '@oaknational/observability';
 import { describe, it, expect } from 'vitest';
-import { extractRequestMetadata, logIncomingRequest, logRequestError } from './express-middleware';
+import {
+  createErrorLogger,
+  createRequestLogger,
+  extractRequestMetadata,
+  logIncomingRequest,
+  logRequestError,
+} from './express-middleware';
 import { isNormalizedError } from './error-normalisation';
 import type { Logger } from './types';
+
+function invokeRequestMiddleware(
+  middleware: ReturnType<typeof createRequestLogger>,
+  request: Parameters<typeof logIncomingRequest>[1],
+  next: Parameters<typeof logIncomingRequest>[2],
+): void {
+  Reflect.apply(middleware, undefined, [request, {}, next]);
+}
+
+function invokeErrorMiddleware(
+  middleware: ReturnType<typeof createErrorLogger>,
+  error: Error,
+  request: Parameters<typeof logRequestError>[2],
+  next: Parameters<typeof logRequestError>[3],
+): void {
+  Reflect.apply(middleware, undefined, [error, request, {}, next]);
+}
 
 describe('extractRequestMetadata', () => {
   it('should extract and sanitise basic request metadata', () => {
@@ -20,6 +44,7 @@ describe('extractRequestMetadata', () => {
     expect(metadata.path).toBe('/api/test/123');
     expect(metadata.query).toEqual({ foo: 'bar' });
     expect(metadata.params).toEqual({ id: '123' });
+    expect(metadata.ip).toBe(REDACTED_VALUE);
   });
 
   it('should handle nested ParsedQs types safely', () => {
@@ -47,6 +72,37 @@ describe('extractRequestMetadata', () => {
 
     expect(metadata.method).toBe('POST');
     expect(metadata.url).toBe('/test');
+  });
+
+  it('should redact sensitive headers by default', () => {
+    const metadata = extractRequestMetadata({
+      method: 'GET',
+      url: '/test?code=secret-code&safe=value',
+      path: '/test',
+      headers: {
+        authorization: 'Bearer super-secret',
+        cookie: 'session=secret',
+        accept: 'application/json',
+      },
+      query: {
+        token: 'secret-token',
+        safe: 'value',
+      },
+      params: {},
+      ip: '127.0.0.1',
+    });
+
+    expect(metadata.headers).toMatchObject({
+      authorization: REDACTED_VALUE,
+      cookie: REDACTED_VALUE,
+      accept: 'application/json',
+    });
+    expect(metadata.url).toBe('/test?code=%5BREDACTED%5D&safe=value');
+    expect(metadata.query).toMatchObject({
+      token: REDACTED_VALUE,
+      safe: 'value',
+    });
+    expect(metadata.ip).toBe(REDACTED_VALUE);
   });
 });
 
@@ -94,6 +150,7 @@ describe('createRequestLogger', () => {
       url: '/test?mode=check',
       path: '/test',
       query: { mode: 'check' },
+      ip: REDACTED_VALUE,
     });
     expect(nextCalls).toBe(1);
   });
@@ -200,15 +257,114 @@ describe('createRequestLogger', () => {
         headers: {},
         query: {},
         params: {},
-        body: { userId: '123' },
+        body: { userId: '123', token: 'secret-token' },
       },
       () => undefined,
       { includeBody: true },
     );
 
     expect(loggedMessages[0].context).toMatchObject({
-      body: { userId: '123' },
+      body: { userId: '123', token: '[REDACTED]' },
     });
+  });
+
+  it('should forward wrapper options into request logging', () => {
+    const loggedMessages: { level: string; context?: unknown }[] = [];
+    let nextCalls = 0;
+    const mockLogger: Logger = {
+      trace: () => {
+        // Mock implementation
+      },
+      debug: (_msg: string, ctx?: unknown) => loggedMessages.push({ level: 'debug', context: ctx }),
+      info: (_msg: string, ctx?: unknown) => loggedMessages.push({ level: 'info', context: ctx }),
+      warn: () => {
+        // Mock implementation
+      },
+      error: () => {
+        // Mock implementation
+      },
+      fatal: () => {
+        // Mock implementation
+      },
+    };
+
+    const middleware = createRequestLogger(mockLogger, {
+      level: 'info',
+      includeBody: true,
+    });
+
+    invokeRequestMiddleware(
+      middleware,
+      {
+        method: 'POST',
+        url: '/test',
+        path: '/test',
+        headers: {
+          authorization: 'Bearer super-secret',
+        },
+        query: {},
+        params: {},
+        body: { userId: '123' },
+      },
+      () => {
+        nextCalls += 1;
+      },
+    );
+
+    expect(loggedMessages).toHaveLength(1);
+    expect(loggedMessages[0]).toMatchObject({
+      level: 'info',
+      context: {
+        body: { userId: '123' },
+        headers: {
+          authorization: REDACTED_VALUE,
+        },
+      },
+    });
+    expect(nextCalls).toBe(1);
+  });
+
+  it('should continue the request pipeline if request logging throws', () => {
+    let nextCalls = 0;
+    const mockLogger: Logger = {
+      trace: () => {
+        // Mock implementation
+      },
+      debug: () => {
+        throw new Error('sink failure');
+      },
+      info: () => {
+        // Mock implementation
+      },
+      warn: () => {
+        // Mock implementation
+      },
+      error: () => {
+        // Mock implementation
+      },
+      fatal: () => {
+        // Mock implementation
+      },
+    };
+
+    expect(() =>
+      logIncomingRequest(
+        mockLogger,
+        {
+          method: 'GET',
+          url: '/test',
+          path: '/test',
+          headers: {},
+          query: {},
+          params: {},
+        },
+        () => {
+          nextCalls += 1;
+        },
+      ),
+    ).not.toThrow();
+
+    expect(nextCalls).toBe(1);
   });
 });
 
@@ -244,7 +400,9 @@ describe('createErrorLogger', () => {
         method: 'GET',
         url: '/test',
         path: '/test',
-        headers: {},
+        headers: {
+          authorization: 'Bearer super-secret',
+        },
         query: {},
         params: {},
         ip: '127.0.0.1',
@@ -260,7 +418,163 @@ describe('createErrorLogger', () => {
     expect(loggedErrors[0].context).toMatchObject({
       method: 'GET',
       url: '/test',
+      headers: {
+        authorization: REDACTED_VALUE,
+      },
+      ip: REDACTED_VALUE,
     });
+    expect(forwardedErrors).toEqual([error]);
+  });
+
+  it('should allow custom header redaction for error logs', () => {
+    const loggedErrors: { context?: unknown }[] = [];
+    const mockLogger: Logger = {
+      trace: () => {
+        // Mock implementation
+      },
+      debug: () => {
+        // Mock implementation
+      },
+      info: () => {
+        // Mock implementation
+      },
+      warn: () => {
+        // Mock implementation
+      },
+      error: (_msg: string, _err?: unknown, ctx?: unknown) => loggedErrors.push({ context: ctx }),
+      fatal: () => {
+        // Mock implementation
+      },
+    };
+
+    logRequestError(
+      mockLogger,
+      new Error('Test error'),
+      {
+        method: 'GET',
+        url: '/test',
+        path: '/test',
+        headers: {
+          authorization: 'Bearer super-secret',
+          accept: 'application/json',
+        },
+        query: {},
+        params: {},
+      },
+      () => undefined,
+      {
+        redactHeaders: (headers) => ({
+          authorization: `custom:${String(headers.authorization)}`,
+          accept: String(headers.accept),
+        }),
+      },
+    );
+
+    expect(loggedErrors[0].context).toMatchObject({
+      headers: {
+        authorization: '[REDACTED]',
+        accept: 'application/json',
+      },
+    });
+  });
+
+  it('should forward wrapper options into error logging', () => {
+    const loggedErrors: { context?: unknown }[] = [];
+    const forwardedErrors: unknown[] = [];
+    const mockLogger: Logger = {
+      trace: () => {
+        // Mock implementation
+      },
+      debug: () => {
+        // Mock implementation
+      },
+      info: () => {
+        // Mock implementation
+      },
+      warn: () => {
+        // Mock implementation
+      },
+      error: (_msg: string, _err?: unknown, ctx?: unknown) => loggedErrors.push({ context: ctx }),
+      fatal: () => {
+        // Mock implementation
+      },
+    };
+
+    const middleware = createErrorLogger(mockLogger, {
+      redactHeaders: (headers) => ({
+        authorization: `custom:${String(headers.authorization)}`,
+      }),
+    });
+    const error = new Error('Test error');
+
+    invokeErrorMiddleware(
+      middleware,
+      error,
+      {
+        method: 'GET',
+        url: '/test',
+        path: '/test',
+        headers: {
+          authorization: 'Bearer super-secret',
+        },
+        query: {},
+        params: {},
+      },
+      (forwardedError) => {
+        forwardedErrors.push(forwardedError);
+      },
+    );
+
+    expect(loggedErrors[0].context).toMatchObject({
+      headers: {
+        authorization: '[REDACTED]',
+      },
+    });
+    expect(forwardedErrors).toEqual([error]);
+  });
+
+  it('should continue the error pipeline if error logging throws', () => {
+    const forwardedErrors: unknown[] = [];
+    const mockLogger: Logger = {
+      trace: () => {
+        // Mock implementation
+      },
+      debug: () => {
+        // Mock implementation
+      },
+      info: () => {
+        // Mock implementation
+      },
+      warn: () => {
+        // Mock implementation
+      },
+      error: () => {
+        throw new Error('sink failure');
+      },
+      fatal: () => {
+        // Mock implementation
+      },
+    };
+    const error = new Error('Test error');
+
+    expect(() =>
+      logRequestError(
+        mockLogger,
+        error,
+        {
+          method: 'GET',
+          url: '/test',
+          path: '/test',
+          headers: {},
+          query: {},
+          params: {},
+        },
+        (forwardedError) => {
+          forwardedErrors.push(forwardedError);
+        },
+      ),
+    ).not.toThrow();
+
     expect(forwardedErrors).toEqual([error]);
   });
 });

@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-**Last Updated**: 2026-03-07  
+**Last Updated**: 2026-03-28
 **Status**: Active quick-reference guide
 
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
@@ -66,12 +66,13 @@ Oak team contributors can start immediately without any API keys:
 ```bash
 # Clone and install
 git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git && cd oak-open-curriculum-ecosystem
+nvm use || fnm use
 pnpm install
 
 # Run tests and quality checks (no env vars required)
 pnpm test           # All unit tests
 pnpm type-check     # Type checking
-pnpm lint:fix       # Linting (with auto-fix)
+pnpm lint           # Linting (read-only)
 pnpm build          # Build SDK and libraries
 ```
 
@@ -101,9 +102,9 @@ cp .env.example .env
 # Local `.env` and `.env.local` files are ignored by git.
 # Keep secrets in local files only, and keep `.env.example` placeholder-only.
 
-# 2. Run full quality gates
-pnpm make    # Full pipeline (install → build → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root)
-pnpm qg      # Full verification (format-check:root + markdownlint-check:root + subagents:check + portability:check + test:root-scripts + workspace/UI/E2E/smoke suites)
+# 2. Run setup and verification commands
+pnpm make    # Full convenience pipeline; mutates files via lint/doc/format fix steps
+pnpm qg      # Read-only verification (format-check:root + markdownlint-check:root + subagents:check + portability:check + test:root-scripts + workspace/UI/E2E/smoke suites)
 
 # 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
@@ -128,7 +129,7 @@ See [environment variables guide](../operations/environment-variables.md) for co
 
 - [ ] `pnpm test` passes with no failures
 - [ ] `pnpm type-check` reports no errors
-- [ ] `pnpm lint:fix` reports no remaining issues
+- [ ] `pnpm lint` reports no remaining issues
 - [ ] `gitleaks version` runs (required for push — install via `brew install gitleaks`)
 - [ ] You have read the three foundational ADRs (029, 030, 031)
 - [ ] You know which area you are working on (SDK, MCP server, search, or docs)
@@ -241,7 +242,9 @@ pnpm sdk-codegen
 # 4. Run quality gates
 pnpm test          # Does it pass?
 pnpm type-check    # Any type errors?
-pnpm lint:fix      # Follows code style?
+pnpm lint          # Follows code style?
+# If lint reports auto-fixable issues, you can use `pnpm lint:fix`
+# as a recovery step and review the edits before committing.
 
 # 5. Commit with conventional format
 git commit -m "feat: add amazing feature"
@@ -287,8 +290,8 @@ pnpm test
 ### Run All Quality Gates
 
 ```bash
-pnpm make    # Build everything from scratch
-pnpm qg      # Run all quality checks (including UI/E2E/smoke suites)
+pnpm make    # Full convenience pipeline with auto-fix steps; review file changes afterwards
+pnpm qg      # Read-only quality checks (including UI/E2E/smoke suites)
 pnpm clean   # Remove build artefacts (dist/, .turbo) — for a full reset also rm -rf node_modules
 ```
 
@@ -386,7 +389,9 @@ test('MCP server lists all generated tools', async () => {
 - **Build fails**: Run `pnpm sdk-codegen` to ensure types are current
 - **Type errors**: Generated types changed? Update your imports
 - **Tests fail**: Check if integration tests need `OAK_API_KEY`
-- **Linting errors**: Run `pnpm lint:fix` to auto-fix
+- **Linting errors**: Run `pnpm lint` first to inspect the issue; if you need
+  the auto-fixer, use `pnpm lint:fix` as a recovery step and review the edits
+  before committing
 
 ### Community
 

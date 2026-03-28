@@ -286,13 +286,12 @@
 
 ### Useful state to remember
 
-- Focused `test` and `type-check` are green for `logger`, `env`,
+- Focused `lint`, `test`, and `type-check` are green for `logger`, `env`,
   `observability`, `sentry-node`, and `sentry-mcp`.
-- Focused `lint` is red until the shared ESLint export-map defect is fixed.
-- Secondary follow-ups for the same slice: remove `vi.mock(...)` from the new
-  in-process tests, redact URL username/password credentials, replace the
-  `@sentry/node` wildcard manifest entry, and tighten the public Sentry SDK
-  typing boundary.
+- Post-move canary `type-check` is green for `sdk-codegen`,
+  `oak-curriculum-mcp-streamable-http`, and `search-cli`.
+- The Phase 1 blocker bundle is green locally on top of `ffff1867`, but
+  restart clearance still depends on recording the owner-requested clean rerun.
 
 ### Docs-consolidation follow-through
 
@@ -300,12 +299,61 @@
   `.agent/prompts/README.md`,
   `.agent/plans/architecture-and-infrastructure/README.md`, and
   `.agent/plans/architecture-and-infrastructure/current/README.md` now all
-  say the next session starts with Phase 1 blocker remediation.
+  say the next session resumes the owner-requested handover rerun from the
+  blocker-cleared local worktree state; runtime adoption follows only after
+  that rerun is recorded.
 - `pnpm practice:fitness` passes after the refresh.
 - `.agent/practice-core/incoming/` is empty.
 - `napkin.md` is 404 lines and `distilled.md` is 198 lines, so no napkin
   distillation was required but `distilled.md` remains close to its ceiling.
 - No new code-pattern extraction was warranted from this docs-only refresh.
+
+## Session 2026-03-28 — Sentry/OTel blocker clearance and handover refresh
+
+### What changed
+
+- Moved `@oaknational/observability` from `packages/libs/observability` to
+  `packages/core/observability` and refreshed the workspace install/lockfile so
+  local links resolve to the new location.
+- Replaced the per-package sibling-lib allow-lists with a tiered library
+  boundary model in `@oaknational/eslint-plugin-standards`:
+  foundation libs (`env-resolution`, `logger`, `search-contracts`) may not
+  depend on libs, while adapter libs (`sentry-node`, `sentry-mcp`) may depend
+  only on foundation libs.
+- Added direct `oak-eslint` unit coverage for the new tier model and rebuilt
+  the package so downstream lint configs consume the updated rules.
+- Removed stale logger compatibility teaching from the active logger README,
+  middleware JSDoc, governance guidance, and active SDK logging docs so the
+  contract consistently teaches `sinks: readonly LogSink[]`.
+- Refreshed the active plan, thin prompt, and collection indexes so restart
+  surfaces point at the blocker-cleared local descendant above `ffff1867`
+  while still requiring the final owner-requested handover rerun before
+  runtime adoption resumes.
+
+### Verified state
+
+- `pnpm --filter @oaknational/eslint-plugin-standards lint`
+- `pnpm --filter @oaknational/eslint-plugin-standards test`
+- `pnpm --filter @oaknational/eslint-plugin-standards type-check`
+- `pnpm --filter @oaknational/logger lint`
+- `pnpm --filter @oaknational/logger test`
+- `pnpm --filter @oaknational/logger type-check`
+- `pnpm --filter @oaknational/env lint`
+- `pnpm --filter @oaknational/env test`
+- `pnpm --filter @oaknational/env type-check`
+- `pnpm --filter @oaknational/observability lint`
+- `pnpm --filter @oaknational/observability test`
+- `pnpm --filter @oaknational/observability type-check`
+- `pnpm --filter @oaknational/sentry-node lint`
+- `pnpm --filter @oaknational/sentry-node test`
+- `pnpm --filter @oaknational/sentry-node type-check`
+- `pnpm --filter @oaknational/sentry-mcp lint`
+- `pnpm --filter @oaknational/sentry-mcp test`
+- `pnpm --filter @oaknational/sentry-mcp type-check`
+- `pnpm --filter @oaknational/sdk-codegen type-check`
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check`
+- `pnpm --filter @oaknational/search-cli type-check`
+- `git diff --check`
 
 ### Codex custom-agent config nuance
 
@@ -415,3 +463,91 @@
   `type-check` need the repo-standard `exports` shape with `types` and
   `development` entries. A dist-only export on an unbuilt workspace package
   causes false-negative local `tsc` failures even after install.
+
+## Session 2026-03-28 — Sentry/OTel restart-surface consolidation
+
+### What changed
+
+- Refreshed the active plan, thin prompt, active/current/index READMEs, the
+  umbrella observability plan, and the handover checkpoint so they all point at
+  the pushed branch state on `feat/full-sentry-otel-support` through
+  `ffff1867`, not the earlier "Phase 1 exists locally" snapshot.
+- Made the follow-up `oak-search-cli` env-loading fix explicit in the restart
+  surfaces: it keeps the branch healthy and pushable, but it does not change
+  the blocker-remediation order or count as observability adoption progress.
+
+### Consolidation outcomes
+
+- The restart path is now consistent from the active plan, thin prompt, plan
+  indexes, and checkpoint.
+- `pnpm practice:fitness` passes after the refresh.
+- `git diff --check` passes after the refresh.
+- `.agent/practice-core/incoming/` is empty.
+- No new code-pattern extraction was warranted from this pass; the refresh was
+  state alignment rather than a newly proven reusable implementation pattern.
+- `napkin.md` is still below the distillation threshold; `distilled.md` remains
+  close to its 200-line ceiling, so avoid casual additions there.
+
+## Session 2026-03-28 — Sentry/OTel blocker clearance
+
+### What changed
+
+- Moved `@oaknational/observability` from `packages/libs/observability` to
+  `packages/core/observability` without changing the package name.
+- Replaced bespoke sibling-lib allow-lists with a tiered library boundary
+  model in `packages/core/oak-eslint`: foundation libs
+  (`env-resolution`, `logger`, `search-contracts`) may not import other libs;
+  adapter libs (`sentry-node`, `sentry-mcp`) may import foundation libs only.
+- Rebuilt the local `@oaknational/eslint-plugin-standards` dist and refreshed
+  the pnpm workspace install/lockfile so the moved observability package
+  relinks correctly in `node_modules`.
+- Removed stale logger compatibility teaching from the logger README,
+  middleware JSDoc, governance logging guidance, and active SDK logging docs.
+- Refreshed the active plan/prompt/checkpoint/index docs so restart surfaces
+  point at the current local worktree above `ffff1867`, but still require the
+  final owner-requested handover rerun before runtime adoption resumes.
+
+### Patterns to remember
+
+- Moving a workspace inside this repo is not just a file move: `pnpm-workspace.yaml`,
+  `pnpm-lock.yaml`, and the live workspace symlinks all need to agree or lint
+  can fail with false `no-unresolved` and cascading unsafe-type errors.
+- The `@oaknational/eslint-plugin-standards` package is consumed through its
+  built export during lint, so source changes there need a local `pnpm --filter @oaknational/eslint-plugin-standards build`
+  before downstream lint reflects them.
+- When a restart surface refers to local unpushed work, say so explicitly.
+  Otherwise prompts and plans can accidentally imply that the latest pushed
+  checkpoint already contains the new state.
+- After the workspace refresh in this repo, `pnpm markdownlint:root` became
+  runnable again; use it when doc-heavy work changes restart surfaces.
+- The requested reviewer refresh for this slice covered `code-reviewer`,
+  `docs-adr-reviewer`, `onboarding-reviewer`, and all four architecture
+  reviewers. Follow-up findings have been fixed locally, but clean
+  confirmation still needs to be recorded for `docs-adr-reviewer`,
+  `onboarding-reviewer`, and `architecture-reviewer-barney`.
+
+## Session 2026-03-28 (cont.) — Sentry/OTel docs consolidation refresh
+
+### What changed
+
+- Refreshed the active execution plan, thin prompt, architecture plan indexes,
+  prompt index, and strategic umbrella so they all describe the same restart
+  state: blocker-clearance and doc-coherence fixes are landed locally, while
+  clean owner-requested handover confirmation is still the next gate before
+  runtime adoption.
+- Updated the review checkpoint to reflect the latest doc-consolidation pass:
+  the status is now "clean owner-requested handover confirmation rerun
+  pending", and it explicitly records that a same-day follow-up reviewer
+  attempt shut down without substantive output.
+
+### Verified state
+
+- `pnpm markdownlint:root`
+- `pnpm practice:fitness`
+- `git diff --check`
+
+### Pattern to remember
+
+- When a rerun attempt fails to return substantive reviewer output, update the
+  checkpoint and restart surfaces to say exactly that. "Attempted but not
+  recorded" is a different state from both "clean" and "still being fixed".

@@ -130,6 +130,11 @@ export function createNodeFileSink(config: FileSinkConfig): FileSinkInterface | 
 }
 
 export type {
+  ErrorLoggerOptions,
+  HeaderRedactor,
+  RequestLoggerOptions,
+} from './express-middleware.js';
+export type {
   JsonObject,
   JsonValue,
   LogContext,
@@ -141,7 +146,6 @@ export type {
   LoggerOptions,
   NormalizedError,
 } from './types.js';
-export type { RequestLoggerOptions } from './express-middleware.js';
 export type { FileSinkConfig, LoggerSinkConfig, LoggerSinkEnvironment } from './sink-config.js';
 export type { LogLevel, BaseLoggingEnvironment } from './log-levels.js';
 export type { FileSinkInterface, FileSystem, SimpleWriteStream } from './file-sink.js';

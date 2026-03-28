@@ -23,6 +23,7 @@ const FULLY_REDACTED_KEYS = new Set([
   'client_secret',
   'cookie',
   'id_token',
+  'ip',
   'password',
   'proxy-authorization',
   'refresh_token',
