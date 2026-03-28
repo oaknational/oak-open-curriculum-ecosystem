@@ -53,9 +53,11 @@ Items 1-5 all resolved:
   JWT audience validation is defence-in-depth for non-Clerk tokens only.
   Switching to JWT would introduce risk (issuer mismatch per ADR-115) for
   no security benefit. See spike findings in session plan.
-- **Item 2 (DI simplification)**: `ToolHandlerDependencies` reduced from 5 to 3
-  members. New `tool-executor-factory.ts` composes SDK functions. Test mock
-  creation: 31 lines → 8 lines. E2E tests updated.
+- **Item 2 (DI simplification)**: `ToolHandlerDependencies` reduced from 5 to 2
+  members. New `tool-executor-factory.ts` composes SDK functions.
+  `searchRetrieval` closed over at build time (not on the DI interface).
+  Test mock creation: 31 → 5 lines. Circular dependency broken via
+  `tool-handler-types.ts`. E2E test boundary fixed (no internal imports).
 - **Item 3 (CallToolResult)**: Removed `as CallToolResult` assertion (replaced
   with `as const` on literal). Product code imports are architecturally correct.
 - **Item 4 (authLogContextSchema)**: Moved to `src/auth-log-context.ts` product
@@ -74,6 +76,19 @@ Items 1-5 all resolved:
 - **Item 8**: Replaced fragile `import type {} from '.../bearerAuth.js'` with a
   local `declare module 'express-serve-static-core'` augmentation. Imports
   `AuthInfo` from the SDK's types module (pure-type leaf, less fragile).
+
+### OPEN — CI lint/local lint parity
+
+CI lint fails on `feat/mcp_app` (PR #70) but lint passes locally. Root
+cause is environmental — likely turbo cache parity or ESLint config
+resolution differences between CI and local. The errors CI reports
+(`no-unsafe-assignment`, `no-unresolved`) are not reproducible locally.
+Previous CI runs passed because turbo replayed cached lint success from
+older commits.
+
+This is an infrastructure problem, not a code problem. The next session
+should investigate the CI workflow's lint step and turbo cache behaviour
+to establish parity between local and CI lint results.
 
 ## Work Stream Status
 
