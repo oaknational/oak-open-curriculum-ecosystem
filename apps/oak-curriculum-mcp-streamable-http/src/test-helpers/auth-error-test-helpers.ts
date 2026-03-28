@@ -5,10 +5,11 @@
  */
 
 import { vi, expect } from 'vitest';
-import { z } from 'zod';
 import type { Logger } from '@oaknational/logger';
 import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
+import { authLogContextSchema } from '../auth-log-context.js';
 import type { ToolHandlerDependencies } from '../handlers.js';
+import { createFakeLogger } from './fakes.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type {
   CallToolResult,
@@ -21,22 +22,38 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { err } from '@oaknational/result';
 
-/** Creates mock dependencies for tool handler testing. */
+/**
+ * Creates mock dependencies for auth error testing.
+ *
+ * Wraps the provided `executeMcpTool` function into a `createRequestExecutor`
+ * factory that invokes the `onToolExecution` callback (for auth error capture).
+ */
 export function createMockDeps(
   executeMcpTool: (name: unknown, args: unknown, client: unknown) => Promise<ToolExecutionResult>,
 ): Partial<ToolHandlerDependencies> {
   return {
-    executeMcpTool,
+    createRequestExecutor: vi.fn((config) => {
+      return vi.fn(async (name, args) => {
+        const execution = await executeMcpTool(name, args, {});
+        config.onToolExecution?.(name, execution);
+        if (execution.ok) {
+          return { content: [{ type: 'text' as const, text: JSON.stringify(execution.value) }] };
+        }
+        return {
+          content: [{ type: 'text' as const, text: execution.error.message }],
+          isError: true,
+        };
+      });
+    }),
     getResourceUrl: () => 'https://test.example.com/mcp',
   };
 }
 
 interface Params {
-  [key: string]: unknown;
-  signal: AbortSignal;
-  requestId: string;
-  sendNotification: (notification: Notification) => Promise<void>;
-  sendRequest: (request: ServerRequest) => Promise<unknown>;
+  readonly signal: AbortSignal;
+  readonly requestId: string;
+  readonly sendNotification: (notification: Notification) => Promise<void>;
+  readonly sendRequest: (request: ServerRequest) => Promise<unknown>;
 }
 
 /**
@@ -76,19 +93,9 @@ export function createMockServer(
   return server;
 }
 
-/** Creates a mock logger for testing. */
-export function createMockLogger(): Pick<
-  Logger,
-  'warn' | 'error' | 'info' | 'debug' | 'trace' | 'fatal'
-> {
-  return {
-    warn: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-    debug: vi.fn(),
-    trace: vi.fn(),
-    fatal: vi.fn(),
-  };
+/** Creates a mock logger for testing. Delegates to the canonical fake. */
+export function createMockLogger(): Logger {
+  return createFakeLogger();
 }
 
 /** Creates a mock runtime config for testing. */
@@ -191,13 +198,6 @@ export function assertAuthErrorResponse(
   expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
   expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(expectedErrorPattern);
 }
-
-/** Zod schema for validating auth error log context. */
-const authLogContextSchema = z.object({
-  toolName: z.string(),
-  errorType: z.string(),
-  description: z.string(),
-});
 
 /**
  * Assert logger was called with auth error context.

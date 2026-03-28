@@ -1,35 +1,33 @@
 import { describe, it, expect } from 'vitest';
-import { createPhasedTimer, type Logger } from '@oaknational/logger';
+import { createPhasedTimer } from '@oaknational/logger';
 import { runAsyncBootstrapPhase, type BootstrapPhaseName } from './bootstrap-helpers.js';
+import { createRecordingLogger } from '../test-helpers/fakes.js';
 
 const TEST_PHASE: BootstrapPhaseName = 'fetchUpstreamMetadata';
 const TEST_APP_ID = 1;
 
-interface LogEntry {
-  readonly message: string;
-  readonly context: unknown;
+function hasDurationMs(context: unknown): context is { readonly durationMs: number } {
+  return (
+    typeof context === 'object' &&
+    context !== null &&
+    'durationMs' in context &&
+    typeof context.durationMs === 'number'
+  );
 }
 
-function createRecordingLogger(): { log: Logger; entries: LogEntry[] } {
-  const entries: LogEntry[] = [];
-  const record = (message: string, context?: unknown) => {
-    entries.push({ message, context });
-  };
-  const log = {
-    debug: record,
-    info: record,
-    warn: record,
-    error: record,
-  } as Logger;
-  return { log, entries };
+function extractDurationMs(context: unknown): number {
+  if (!hasDurationMs(context)) {
+    throw new Error('Expected context to contain a numeric durationMs field');
+  }
+  return context.durationMs;
 }
 
 describe('runAsyncBootstrapPhase', () => {
   it('returns the resolved value of an async operation', async () => {
-    const { log } = createRecordingLogger();
+    const { logger } = createRecordingLogger();
     const timer = createPhasedTimer();
 
-    const result = await runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () =>
+    const result = await runAsyncBootstrapPhase(logger, timer, TEST_PHASE, TEST_APP_ID, () =>
       Promise.resolve('metadata-value'),
     );
 
@@ -37,22 +35,24 @@ describe('runAsyncBootstrapPhase', () => {
   });
 
   it('re-throws when the async operation rejects', async () => {
-    const { log } = createRecordingLogger();
+    const { logger } = createRecordingLogger();
     const timer = createPhasedTimer();
     const expectedError = new Error('upstream fetch failed');
 
     await expect(
-      runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () =>
+      runAsyncBootstrapPhase(logger, timer, TEST_PHASE, TEST_APP_ID, () =>
         Promise.reject(expectedError),
       ),
     ).rejects.toThrow('upstream fetch failed');
   });
 
   it('logs phase start and finish on success', async () => {
-    const { log, entries } = createRecordingLogger();
+    const { logger, entries } = createRecordingLogger();
     const timer = createPhasedTimer();
 
-    await runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () => Promise.resolve('ok'));
+    await runAsyncBootstrapPhase(logger, timer, TEST_PHASE, TEST_APP_ID, () =>
+      Promise.resolve('ok'),
+    );
 
     const messages = entries.map((e) => e.message);
     expect(messages).toContain('bootstrap.phase.start');
@@ -60,10 +60,10 @@ describe('runAsyncBootstrapPhase', () => {
   });
 
   it('logs phase start and error on failure', async () => {
-    const { log, entries } = createRecordingLogger();
+    const { logger, entries } = createRecordingLogger();
     const timer = createPhasedTimer();
 
-    await runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () =>
+    await runAsyncBootstrapPhase(logger, timer, TEST_PHASE, TEST_APP_ID, () =>
       Promise.reject(new Error('boom')),
     ).catch(() => {
       /* expected rejection */
@@ -76,26 +76,25 @@ describe('runAsyncBootstrapPhase', () => {
   });
 
   it('includes duration in the finish log', async () => {
-    const { log, entries } = createRecordingLogger();
+    const { logger, entries } = createRecordingLogger();
     const timer = createPhasedTimer();
 
-    await runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () =>
+    await runAsyncBootstrapPhase(logger, timer, TEST_PHASE, TEST_APP_ID, () =>
       Promise.resolve('done'),
     );
 
     const finishEntry = entries.find((e) => e.message === 'bootstrap.phase.finish');
     expect(finishEntry).toBeDefined();
-    const context = finishEntry?.context as { durationMs?: number };
-    expect(typeof context.durationMs).toBe('number');
+    expect(hasDurationMs(finishEntry?.context)).toBe(true);
   });
 
   it('measures duration that includes async resolution time', async () => {
-    const { log, entries } = createRecordingLogger();
+    const { logger, entries } = createRecordingLogger();
     const timer = createPhasedTimer();
     const delayMs = 50;
 
     await runAsyncBootstrapPhase(
-      log,
+      logger,
       timer,
       TEST_PHASE,
       TEST_APP_ID,
@@ -106,7 +105,7 @@ describe('runAsyncBootstrapPhase', () => {
     );
 
     const finishEntry = entries.find((e) => e.message === 'bootstrap.phase.finish');
-    const context = finishEntry?.context as { durationMs?: number };
-    expect(context.durationMs).toBeGreaterThanOrEqual(delayMs - 10);
+    const durationMs = extractDurationMs(finishEntry?.context);
+    expect(durationMs).toBeGreaterThanOrEqual(delayMs - 10);
   });
 });

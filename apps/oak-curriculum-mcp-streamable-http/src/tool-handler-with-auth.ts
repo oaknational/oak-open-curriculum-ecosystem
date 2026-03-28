@@ -7,11 +7,7 @@
 
 import type { Logger } from '@oaknational/logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type {
-  UniversalToolName,
-  createStubToolExecutionAdapter,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { generatedToolRegistry } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
@@ -32,7 +28,6 @@ export interface HandleToolOptions {
   readonly tool: { readonly name: UniversalToolName };
   readonly params: unknown;
   readonly deps: ToolHandlerDependencies;
-  readonly stubExecutor?: ReturnType<typeof createStubToolExecutionAdapter>;
   readonly logger: Logger;
   readonly apiKey: string;
   readonly runtimeConfig: RuntimeConfig;
@@ -72,7 +67,6 @@ export async function handleToolWithAuthInterception(
     tool,
     params,
     deps,
-    stubExecutor,
     logger,
     apiKey,
     runtimeConfig,
@@ -97,7 +91,6 @@ export async function handleToolWithAuthInterception(
     tool.name,
     params,
     deps,
-    stubExecutor,
     apiKey,
     createAssetDownloadUrl,
     logger,
@@ -117,40 +110,35 @@ export async function handleToolWithAuthInterception(
 /**
  * Executes a tool call, capturing any upstream auth errors (ADR-054).
  *
- * Separated from {@link handleToolWithAuthInterception} to keep function
- * complexity within lint limits while preserving the auth error capture flow.
+ * Uses the simplified `createRequestExecutor` factory from the DI
+ * interface. The `onToolExecution` callback intercepts each tool
+ * execution result to capture auth errors before they're lost in
+ * the MCP response formatting.
  */
 async function executeWithAuthCapture(
   toolName: UniversalToolName,
   params: unknown,
   deps: ToolHandlerDependencies,
-  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
   apiKey: string,
   createAssetDownloadUrl: ((lesson: string, type: string) => string) | undefined,
   logger: Logger,
 ): Promise<{ result: CallToolResult; capturedAuthError: unknown }> {
-  const client = deps.createClient(apiKey);
   let capturedAuthError: unknown = undefined;
 
-  const executor = deps.createExecutor({
-    executeMcpTool: async (name, args) => {
-      const execution = await (stubExecutor
-        ? stubExecutor(name, args ?? {})
-        : deps.executeMcpTool(name, args, client));
-      // ADR-054 interception: capture structured auth errors before they're lost
+  const executor = deps.createRequestExecutor({
+    apiKey,
+    searchRetrieval: deps.searchRetrieval,
+    createAssetDownloadUrl,
+    onToolExecution: (name: unknown, execution) => {
       if (!execution.ok) {
         const target = execution.error.cause ?? execution.error;
         if (isAuthError(target)) {
           capturedAuthError = target;
         }
       }
-      logValidationFailureIfPresent(name, execution, logger);
-      logUpstreamErrorIfPresent(name, execution, logger);
-      return execution;
+      logValidationFailureIfPresent(String(name), execution, logger);
+      logUpstreamErrorIfPresent(String(name), execution, logger);
     },
-    searchRetrieval: deps.searchRetrieval,
-    generatedTools: generatedToolRegistry,
-    createAssetDownloadUrl,
   });
 
   const result = await executor(toolName, params ?? {});

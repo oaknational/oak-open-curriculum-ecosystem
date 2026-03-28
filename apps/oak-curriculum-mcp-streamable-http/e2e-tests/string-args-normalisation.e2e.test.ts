@@ -3,7 +3,6 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
-import { ok } from '@oaknational/result';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -103,11 +102,11 @@ describe('HTTP boundary argument validation', () => {
 
   it('accepts structured arguments that match the tool schema', async () => {
     const overrides: ToolHandlerOverrides = {
-      executeMcpTool: () =>
-        Promise.resolve(
-          ok({
-            status: 200,
-            data: [
+      createRequestExecutor: () => async () => ({
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify([
               {
                 lessonSlug: 'stub-lesson',
                 lessonTitle: 'Stub Lesson',
@@ -123,9 +122,10 @@ describe('HTTP boundary argument validation', () => {
                 ],
                 canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
               },
-            ],
-          }),
-        ),
+            ]),
+          },
+        ],
+      }),
     };
     const app = await createApp({
       toolHandlerOverrides: overrides,

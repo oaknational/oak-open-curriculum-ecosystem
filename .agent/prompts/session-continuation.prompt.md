@@ -42,36 +42,39 @@ Phase 8 landed in 4 commits on `feat/mcp_app` (2026-03-28):
 
 ## Follow-Up Work Items (from Phase 8 reviews)
 
-These are independent of WS3 and can be addressed in parallel or sequentially:
+### COMPLETED (2026-03-28 session)
 
-### High Priority
+Items 2-5 resolved in a single session:
 
-1. **Opaque token RFC 8707 bypass** — `verifyClerkToken` performs ZERO audience
-   validation. Clerk's `token_introspection_endpoint` is exposed in PRM metadata
-   but never called. Tokens CAN be replayed across servers sharing a Clerk app.
-   Needs separate plan: make `validateResourceParameter` async, call Clerk
-   introspection for opaque tokens. See ADR-142 "accepted residual risk" section.
+- **Item 2 (DI simplification)**: `ToolHandlerDependencies` reduced from 5 to 3
+  members. New `tool-executor-factory.ts` composes SDK functions. Test mock
+  creation: 31 lines → 8 lines. E2E tests updated.
+- **Item 3 (CallToolResult)**: Removed `as CallToolResult` assertion (replaced
+  with `as const` on literal). Product code imports are architecturally correct.
+- **Item 4 (authLogContextSchema)**: Moved to `src/auth-log-context.ts` product
+  code. Test helpers import from there.
+- **Item 5 (logger fakes)**: Consolidated 6 implementations → 2 canonical fakes
+  in `src/test-helpers/fakes.ts`. Removed all `as Logger` assertions.
 
-2. **Test complexity in `tool-handler-with-auth.integration.test.ts`** —
-   `createMockDependencies` re-implements the executor factory chain (30+ lines).
-   Root cause: `ToolHandlerDependencies` exposes factories-of-factories. Simplify
-   the DI interface so mocks are trivial fakes, not re-implementations.
+### BLOCKED — Opaque Token RFC 8707 Bypass
 
-### Medium Priority
+1. **Opaque token RFC 8707 bypass** — Spike completed (2026-03-28). Async
+   introspection is NOT viable (Clerk endpoint lacks `aud`). Correct direction:
+   reject opaque tokens (fail-closed) + configure Clerk for JWT format. BLOCKED
+   by two empirical verification tasks:
 
-3. **CallToolResult coupling** — test helpers import `CallToolResult` type from
-   SDK. Replace with `unknown` + `CallToolResultSchema` Zod validation at test
-   boundaries. Consistent with the `authLogContextSchema` pattern.
+   **B1**: JWT `aud` claim format unknown — must decode a real Clerk JWT from
+   staging to verify whether `aud` contains the resource URL or Client ID.
 
-4. **`authLogContextSchema` in test helper** — Zod schema for log context shape
-   belongs in product code adjacent to the logging call, not in test helpers.
-   Move it, then test helpers import from product code.
+   **B2**: ADR-115 issuer mismatch — OAuth proxy rewrites `issuer` to self-origin
+   but Clerk JWTs have `iss` pointing to Clerk FAPI URL. Must verify whether
+   `getAuth()` validates `iss` against the proxy's rewritten issuer.
 
-5. **Three duplicate logger fakes** — `createFakeLogger` (fakes.ts),
-   `createTestLogger` (app/test-helpers/), `createRecordingLogger` (inline in
-   bootstrap-helpers.unit.test.ts). Consolidate to one.
+   See plan: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
+   and session plan at `~/.claude/plans/drifting-dreaming-puzzle.md` for full
+   security-reviewer and clerk-reviewer findings.
 
-### Low Priority
+### Low Priority (not yet addressed)
 
 6. **`verify-clerk-token.unit.test.ts`** — conformance tests for external library
    (per ADR-142). `vi.spyOn(console, 'error')` is global state manipulation.

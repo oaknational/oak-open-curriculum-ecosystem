@@ -28,11 +28,21 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
+import {
+  createDefaultRequestExecutor,
+  createStubRequestExecutor,
+  type ToolExecutorFactoryConfig,
+  type UniversalToolExecutorFn,
+} from './tool-executor-factory.js';
 
+/**
+ * Dependencies for tool handler execution (3 members).
+ *
+ * `createRequestExecutor` replaces the previous 3 factory members. In tests,
+ * it can be a simple `vi.fn(() => vi.fn())` — no factory-chain re-implementation.
+ */
 export interface ToolHandlerDependencies {
-  readonly createClient: typeof createOakPathBasedClient;
-  readonly executeMcpTool: typeof executeToolCall;
-  readonly createExecutor: typeof createUniversalToolExecutor;
+  readonly createRequestExecutor: (config: ToolExecutorFactoryConfig) => UniversalToolExecutorFn;
   readonly getResourceUrl: () => string;
   readonly searchRetrieval: SearchRetrievalService;
 }
@@ -50,32 +60,40 @@ export interface RegisterHandlersOptions {
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
 }
 
-function mergeOverrides(
-  defaults: ToolHandlerDependencies,
-  overrides: ToolHandlerOverrides,
-): ToolHandlerDependencies {
-  return {
-    createClient: overrides.createClient ?? defaults.createClient,
-    executeMcpTool: overrides.executeMcpTool ?? defaults.executeMcpTool,
-    createExecutor: overrides.createExecutor ?? defaults.createExecutor,
-    getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
-    searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
-  };
-}
-
 function buildToolHandlerDependencies(
   resourceUrl: string,
   overrides: ToolHandlerOverrides | undefined,
   searchRetrieval: SearchRetrievalService,
+  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
 ): ToolHandlerDependencies {
+  const createRequestExecutor: ToolHandlerDependencies['createRequestExecutor'] = stubExecutor
+    ? (config) =>
+        createStubRequestExecutor({
+          factoryConfig: config,
+          stubExecutor,
+          createExecutor: createUniversalToolExecutor,
+        })
+    : (config) =>
+        createDefaultRequestExecutor({
+          ...config,
+          createClient: createOakPathBasedClient,
+          executeToolCall,
+          createExecutor: createUniversalToolExecutor,
+        });
+
   const defaults: ToolHandlerDependencies = {
-    createClient: createOakPathBasedClient,
-    executeMcpTool: executeToolCall,
-    createExecutor: createUniversalToolExecutor,
+    createRequestExecutor,
     getResourceUrl: () => resourceUrl,
     searchRetrieval,
   };
-  return overrides ? mergeOverrides(defaults, overrides) : defaults;
+  if (!overrides) {
+    return defaults;
+  }
+  return {
+    createRequestExecutor: overrides.createRequestExecutor ?? defaults.createRequestExecutor,
+    getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
+    searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
+  };
 }
 
 /**
@@ -89,14 +107,15 @@ function buildToolHandlerDependencies(
  */
 export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
+  const stubExecutor = options.runtimeConfig.useStubTools
+    ? createStubToolExecutionAdapter()
+    : undefined;
   const deps = buildToolHandlerDependencies(
     resourceUrl,
     options.overrides,
     options.searchRetrieval,
+    stubExecutor,
   );
-  const stubExecutor = options.runtimeConfig.useStubTools
-    ? createStubToolExecutionAdapter()
-    : undefined;
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
     const config = toRegistrationConfig(tool);
@@ -105,7 +124,6 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
         tool,
         params,
         deps,
-        stubExecutor,
         logger: options.logger,
         apiKey: options.runtimeConfig.env.OAK_API_KEY,
         runtimeConfig: options.runtimeConfig,

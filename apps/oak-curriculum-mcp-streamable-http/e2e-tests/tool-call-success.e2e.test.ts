@@ -1,9 +1,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
-import type { ToolExecutionResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { ok } from '@oaknational/result';
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
@@ -22,8 +20,7 @@ interface CapturedCall {
 
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
-    executeMcpTool: (name, args, client) => {
-      void client;
+    createRequestExecutor: () => async (name: unknown, args: unknown) => {
       captured.push({ tool: name, args });
       const data = [
         {
@@ -37,8 +34,9 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
           canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
         },
       ];
-      const result: ToolExecutionResult = ok({ status: 200, data });
-      return Promise.resolve(result);
+      return {
+        content: [{ type: 'text' as const, text: JSON.stringify(data) }],
+      };
     },
   };
 }

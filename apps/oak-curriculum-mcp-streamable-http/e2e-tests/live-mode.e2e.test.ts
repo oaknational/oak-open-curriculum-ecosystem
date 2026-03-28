@@ -12,11 +12,6 @@ import {
   getContentArray,
   readFirstTextContent,
 } from './helpers/sse.js';
-import {
-  McpToolError,
-  type ToolExecutionResult,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { err, ok } from '@oaknational/result';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -28,9 +23,8 @@ interface CapturedCall {
 function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      executeMcpTool: (name, args, client) => {
+      createRequestExecutor: () => async (name: unknown, args: unknown) => {
         captured.push({ tool: name, args });
-        void client;
         const data = [
           {
             slug: 'ks1',
@@ -43,8 +37,9 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
             canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
           },
         ];
-        const result: ToolExecutionResult = ok({ status: 200, data });
-        return Promise.resolve(result);
+        return {
+          content: [{ type: 'text' as const, text: JSON.stringify(data) }],
+        };
       },
     },
   };
@@ -53,13 +48,10 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
 function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      executeMcpTool: (name, args, client) => {
-        void args;
-        void client;
-        return Promise.resolve(
-          err(new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' })),
-        );
-      },
+      createRequestExecutor: () => async () => ({
+        content: [{ type: 'text' as const, text: message }],
+        isError: true,
+      }),
     },
   };
 }

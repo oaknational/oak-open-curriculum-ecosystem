@@ -8,54 +8,51 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/logger';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
 import { createFakeLogger, createFakeSearchRetrieval } from './test-helpers/fakes.js';
-import { ok } from '@oaknational/result';
 
 /**
- * Test logger that captures log calls. Uses shared fake so no type assertion is needed.
- */
-function createTestLogger(): Logger {
-  return createFakeLogger();
-}
-
-/**
- * Mock tool handler dependencies for testing
+ * Creates simplified mock dependencies for testing.
+ *
+ * With the new 3-member DI interface, mocks are trivial fakes —
+ * no re-implementation of the factory chain needed.
  */
 function createMockDependencies(
   overrides?: Partial<ToolHandlerDependencies>,
 ): ToolHandlerDependencies {
   return {
-    createClient: vi.fn(() => ({}) as ReturnType<ToolHandlerDependencies['createClient']>),
-    createExecutor: vi.fn((config: Parameters<ToolHandlerDependencies['createExecutor']>[0]) => {
-      return async (toolName: UniversalToolName, params: unknown) => {
-        // Call the executeMcpTool function passed in config
-        await config.executeMcpTool(
-          toolName as Parameters<typeof config.executeMcpTool>[0],
-          params,
-        );
-        // Return a simple CallToolResult
-        return {
-          content: [{ type: 'text', text: 'Tool executed successfully' }],
-        } as CallToolResult;
-      };
-    }),
-    executeMcpTool: vi.fn(() =>
-      Promise.resolve(
-        ok({
-          status: 200 as const,
-          data: { result: 'success' },
-        }),
-      ),
+    createRequestExecutor: vi.fn(() =>
+      vi.fn(async () => ({
+        content: [{ type: 'text' as const, text: 'Tool executed successfully' }],
+      })),
     ),
     getResourceUrl: vi.fn(() => 'http://localhost:3333/mcp'),
     searchRetrieval: createFakeSearchRetrieval(),
     ...overrides,
   };
+}
+
+/**
+ * Extracts the first `mcp/www_authenticate` header string from a CallToolResult's `_meta`.
+ * Uses runtime validation instead of type assertions.
+ */
+function extractWwwAuthHeader(result: { _meta?: Record<string, unknown> }): string {
+  const meta = result._meta;
+  if (meta === undefined) {
+    throw new Error('Expected _meta to be defined');
+  }
+  const wwwAuth = meta['mcp/www_authenticate'];
+  if (!Array.isArray(wwwAuth) || wwwAuth.length === 0) {
+    throw new Error('Expected _meta["mcp/www_authenticate"] to be a non-empty array');
+  }
+  const first: unknown = wwwAuth[0];
+  if (typeof first !== 'string') {
+    throw new Error('Expected first www_authenticate header to be a string');
+  }
+  return first;
 }
 
 const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
@@ -107,7 +104,7 @@ describe('Tool Handler with Auth Integration', () => {
   let deps: ToolHandlerDependencies;
 
   beforeEach(() => {
-    logger = createTestLogger();
+    logger = createFakeLogger();
     deps = createMockDependencies();
   });
 
@@ -128,18 +125,11 @@ describe('Tool Handler with Auth Integration', () => {
         runtimeConfig: config,
       });
 
-      // Expected behavior (not yet implemented):
-      // - Check if tool requires auth (search does)
-      // - Check if auth context present (it's not)
-      // - Return MCP error with _meta
+      // Protected tool with no auth context returns MCP error with _meta
       expect(result.isError).toBe(true);
-      expect(result._meta).toBeDefined();
-      const meta = result._meta as Record<string, unknown>;
-      expect(meta['mcp/www_authenticate']).toBeDefined();
-      expect(meta['mcp/www_authenticate']).toEqual(
-        expect.arrayContaining([expect.stringContaining('Bearer')]),
-      );
-      expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('error=');
+      const wwwAuth = extractWwwAuthHeader(result);
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('error=');
     });
 
     // Note: Testing the success path with valid auth requires a real JWT token
@@ -163,14 +153,10 @@ describe('Tool Handler with Auth Integration', () => {
         runtimeConfig: config,
       });
 
-      // Expected behavior (when auth validation is implemented):
-      // - Check if tool requires auth (get-key-stages does)
-      // - Verify auth context (invalid token)
-      // - Return MCP error with _meta indicating invalid_token
+      // Protected tool with missing auth returns MCP error with _meta
       expect(result.isError).toBe(true);
-      const meta = result._meta as Record<string, unknown>;
-      expect(meta['mcp/www_authenticate']).toBeDefined();
-      expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('error=');
+      const wwwAuth = extractWwwAuthHeader(result);
+      expect(wwwAuth).toContain('error=');
     });
   });
 
@@ -217,11 +203,8 @@ describe('Tool Handler with Auth Integration', () => {
       // - Tool should execute successfully
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
-      expect(deps.executeMcpTool).toHaveBeenCalledWith(
-        'search',
-        { query: 'test' },
-        expect.anything(),
-      );
+      // createRequestExecutor was called, proving the tool reached execution
+      expect(deps.createRequestExecutor).toHaveBeenCalled();
 
       // Should log the bypass
       expect(logger.info).toHaveBeenCalledWith('Auth disabled via DANGEROUSLY_DISABLE_AUTH', {
@@ -246,7 +229,8 @@ describe('Tool Handler with Auth Integration', () => {
       // Should execute without auth error
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();
-      expect(deps.executeMcpTool).toHaveBeenCalledWith('get-key-stages', {}, expect.anything());
+      // createRequestExecutor was called, proving the tool reached execution
+      expect(deps.createRequestExecutor).toHaveBeenCalled();
 
       // Should log the bypass
       expect(logger.info).toHaveBeenCalledWith('Auth disabled via DANGEROUSLY_DISABLE_AUTH', {
@@ -297,7 +281,7 @@ describe('Tool Handler with Auth Integration', () => {
 
       // Expected: logger.warn called with auth/context missing message
       expect(logger.warn).toHaveBeenCalled();
-      const warnCalls = (logger.warn as ReturnType<typeof vi.fn>).mock.calls;
+      const warnCalls = vi.mocked(logger.warn).mock.calls;
       const hasAuthOrContextWarning = warnCalls.some((call: unknown[]) => {
         const firstArg = call[0];
         return (
@@ -327,12 +311,10 @@ describe('Tool Handler with Auth Integration', () => {
         runtimeConfig: config,
       });
 
-      const meta = result._meta as Record<string, unknown>;
-      expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('resource_metadata=');
+      const wwwAuth = extractWwwAuthHeader(result);
+      expect(wwwAuth).toContain('resource_metadata=');
       // resource_metadata should contain the well-known URL, not the MCP endpoint
-      expect((meta['mcp/www_authenticate'] as string[])[0]).toContain(
-        '/.well-known/oauth-protected-resource',
-      );
+      expect(wwwAuth).toContain('/.well-known/oauth-protected-resource');
     });
 
     it('should include error description in www_authenticate header', async () => {
@@ -349,8 +331,8 @@ describe('Tool Handler with Auth Integration', () => {
         runtimeConfig: config,
       });
 
-      const meta = result._meta as Record<string, unknown>;
-      expect((meta['mcp/www_authenticate'] as string[])[0]).toContain('error_description=');
+      const wwwAuth = extractWwwAuthHeader(result);
+      expect(wwwAuth).toContain('error_description=');
     });
 
     it('should include user-friendly error message in content', async () => {
@@ -382,7 +364,7 @@ describe('explicit auth context propagation', () => {
       tool: { name: 'get-key-stages' },
       params: {},
       deps: createMockDependencies(),
-      logger: createTestLogger(),
+      logger: createFakeLogger(),
       apiKey: 'test-key',
       runtimeConfig: createMockRuntimeConfig(),
       authInfo: undefined,

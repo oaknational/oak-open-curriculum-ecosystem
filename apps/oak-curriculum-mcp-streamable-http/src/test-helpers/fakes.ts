@@ -46,7 +46,10 @@ export function createFakeSearchRetrieval(): SearchRetrievalService {
 }
 
 /**
- * Creates a full Logger fake (all required methods + child returning self).
+ * Creates a full Logger fake with `vi.fn()` spies on every method.
+ *
+ * Use for tests that assert on logger calls via `toHaveBeenCalledWith`.
+ * For tests that query log entries by content, use {@link createRecordingLogger}.
  */
 export function createFakeLogger(): Logger {
   const logger: Logger = {
@@ -56,9 +59,56 @@ export function createFakeLogger(): Logger {
     warn: vi.fn(),
     error: vi.fn(),
     fatal: vi.fn(),
+    isLevelEnabled: vi.fn(() => true),
     child: () => logger,
   };
   return logger;
+}
+
+/** A single recorded log entry captured by {@link createRecordingLogger}. */
+export interface RecordedLogEntry {
+  readonly level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+  readonly message: string;
+  readonly context?: unknown;
+  readonly error?: unknown;
+}
+
+/**
+ * Creates a recording Logger that stores all log entries in-memory.
+ *
+ * Use for tests that query log content (e.g. "find the entry where
+ * `message === 'bootstrap.phase.finish'`"). For tests that assert on
+ * call counts or arguments via `vi.fn()`, use {@link createFakeLogger}.
+ */
+export function createRecordingLogger(): {
+  readonly logger: Logger;
+  readonly entries: RecordedLogEntry[];
+} {
+  const entries: RecordedLogEntry[] = [];
+  return { logger: buildRecordingLogger(entries), entries };
+}
+
+function buildRecordingLogger(entries: RecordedLogEntry[]): Logger {
+  const logWithLevel =
+    (level: RecordedLogEntry['level']) =>
+    (message: string, context?: unknown): void => {
+      entries.push({ level, message, context });
+    };
+
+  return {
+    trace: logWithLevel('trace'),
+    debug: logWithLevel('debug'),
+    info: logWithLevel('info'),
+    warn: logWithLevel('warn'),
+    error: (message: string, error?: unknown, context?: unknown) => {
+      entries.push({ level: 'error', message, error, context });
+    },
+    fatal: (message: string, error?: unknown, context?: unknown) => {
+      entries.push({ level: 'fatal', message, error, context });
+    },
+    isLevelEnabled: () => true,
+    child: () => buildRecordingLogger(entries),
+  };
 }
 
 /**
