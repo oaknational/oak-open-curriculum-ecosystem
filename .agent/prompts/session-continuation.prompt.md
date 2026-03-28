@@ -8,230 +8,120 @@ last_updated: 2026-03-28
 
 # MCP App Extension Migration — Session Continuation
 
-Use this prompt to pick up work on the MCP App Extension migration across sessions.
-
 ## First Action: Live Spec Research
 
-Before any implementation, deeply research the latest MCP App Extension features. Do not rely on cached knowledge or the local research document alone — the spec and SDK evolve.
+Before any implementation, deeply research the latest MCP App Extension features.
 
 1. **Fetch the live spec and SDK docs** using WebFetch/WebSearch:
-   - <https://apps.extensions.modelcontextprotocol.io/api/sitemap.xml> — **START HERE**: complete sitemap of all 147 API doc pages. Use this to find exact URLs instead of guessing.
+   - <https://apps.extensions.modelcontextprotocol.io/api/sitemap.xml> — START HERE
    - <https://modelcontextprotocol.io/extensions/apps/overview> — spec overview
    - <https://modelcontextprotocol.io/extensions/apps/build> — build guide
-   - <https://apps.extensions.modelcontextprotocol.io/api/> — API docs index
-   - <https://apps.extensions.modelcontextprotocol.io/api/documents/migrate-openai-app.html> — official migration guide (OpenAI → MCP Apps field mappings)
-   - <https://apps.extensions.modelcontextprotocol.io/api/documents/csp-and-cors.html> — CSP and CORS patterns
-   - <https://apps.extensions.modelcontextprotocol.io/api/documents/patterns.html> — patterns
-   - <https://apps.extensions.modelcontextprotocol.io/api/modules/server-helpers.html> — server module (registerAppTool, registerAppResource, RESOURCE_MIME_TYPE)
-   - <https://github.com/modelcontextprotocol/ext-apps> — SDK source, examples, changelog
-2. **Compare against the plan's "Research Findings" section** — flag any new features, API changes, deprecations, or patterns since 2026-03-25.
-3. **Update the plan** if new features change the optimal approach. The goal is the most canonical, idiomatic MCP Apps implementation — not just one that works.
-4. **Invoke `mcp-reviewer`** with findings before proceeding to implementation.
-
-Only after this research step is complete should you proceed to implementation work. Then read and execute the active child plan (see "Work Stream Status" below).
+   - <https://github.com/modelcontextprotocol/ext-apps> — SDK source
+2. **Compare against the plan's "Research Findings" section**
+3. **Update the plan** if new features change the optimal approach
+4. **Invoke `mcp-reviewer`** with findings before proceeding
 
 ## Quick Ground
 
 1. Read `.agent/directives/AGENT.md` and `.agent/directives/principles.md`
 2. Read the broad plan: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
-3. Read the active child plan for the current work stream (see "Work Stream Status" below)
+3. Read the active child plan for the current work stream (see below)
 
 ## Where Are We?
 
-Run the coupling regression check to see current state:
+**Runtime boundary simplification plan: ALL PHASES COMPLETE (0-8).**
 
-```bash
-rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|openai/visibility|text/html\+skybridge|window\.openai|openai/widget" \
-  packages/sdks/ apps/oak-curriculum-mcp-streamable-http/src/
-```
+Phase 8 landed in 4 commits on `feat/mcp_app` (2026-03-28):
 
-- **Many hits in apps/ only** → WS2 (runtime migration) is current (WS1 complete as of 2026-03-26)
-- **Few hits (widget-script + preview files only)** → Runtime boundary simplification plan is active. Check the plan's `todos` frontmatter for the current phase: `current/mcp-runtime-boundary-simplification.plan.md`. Note: `packages/sdks/` hits in `universal-tool-shared.ts` are expected (MCP Apps `structuredContent` format) and do not indicate WS1 incompleteness.
-- **Few hits (widget-script only), simplification plan all phases done** → WS3 (widget client migration) is current
-- **Zero hits** → WS3 complete; WS4 (search UI) is next
-- **Search UI exists** → WS4 is in progress or complete
+- `6992e656` — Core: type-safe auth boundary, file splits, security hardening
+- `03bf000c` — Code-reviewer fixes: silent assertion paths, handlers.ts TSDoc
+- `76dfb730` — Test-reviewer fixes: underscore params, duplicated tests
+- `ea6bc42b` — Eliminate ALL eslint-disable from test helpers: narrow interfaces + node-mocks-http
 
-## What To Do Next
+**WS3 (widget client migration) is now unblocked.**
 
-**Phase 8 is partially implemented — uncommitted. Fix lint errors, then commit.**
+## Follow-Up Work Items (from Phase 8 reviews)
 
-Read the Phase 8 status section in the plan:
-`.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
+These are independent of WS3 and can be addressed in parallel or sequentially:
 
-### Phase 8 Current State (2026-03-28)
+### High Priority
 
-The core production changes are done and tests pass (674 tests, 65 files,
-0 type errors). Changes are **uncommitted** because lint errors block the
-pre-commit hook:
+1. **Opaque token RFC 8707 bypass** — `verifyClerkToken` performs ZERO audience
+   validation. Clerk's `token_introspection_endpoint` is exposed in PRM metadata
+   but never called. Tokens CAN be replayed across servers sharing a Clerk app.
+   Needs separate plan: make `validateResourceParameter` async, call Clerk
+   introspection for opaque tokens. See ADR-142 "accepted residual risk" section.
 
-1. `auth-error-test-helpers.ts` line 206: `as` cast on `context` from
-   `vi.mocked` — must restructure so the function doesn't need the cast
-2. `auth-error-test-helpers.ts`: 251 lines (limit 250) — split by
-   responsibility (assertion helpers vs factory helpers)
-3. `error-handling.integration.test.ts`: 275 lines (limit 250) — split by
-   responsibility (pre-existing, not caused by Phase 8)
+2. **Test complexity in `tool-handler-with-auth.integration.test.ts`** —
+   `createMockDependencies` re-implements the executor factory chain (30+ lines).
+   Root cause: `ToolHandlerDependencies` exposes factories-of-factories. Simplify
+   the DI interface so mocks are trivial fakes, not re-implementations.
 
-**What went wrong in the previous session**: Attempted to fix `max-lines` by
-condensing TSDoc and adding `eslint-disable` comments. Both are forbidden.
-The correct approach per principles.md: split long files by responsibility
-using TDD. Type assertions are utterly forbidden — fix the underlying type
-architecture.
+### Medium Priority
 
-### What to do
+3. **CallToolResult coupling** — test helpers import `CallToolResult` type from
+   SDK. Replace with `unknown` + `CallToolResultSchema` Zod validation at test
+   boundaries. Consistent with the `authLogContextSchema` pattern.
 
-1. `/jc-start-right-quick`
-2. Fix the three lint errors above (split files, eliminate `as` cast)
-3. Run ALL quality gates — confirm 0 errors
-4. Commit
-5. Update this prompt and the plan status
+4. **`authLogContextSchema` in test helper** — Zod schema for log context shape
+   belongs in product code adjacent to the logging call, not in test helpers.
+   Move it, then test helpers import from product code.
 
-### Phase 8 Production Changes (done, uncommitted)
+5. **Three duplicate logger fakes** — `createFakeLogger` (fakes.ts),
+   `createTestLogger` (app/test-helpers/), `createRecordingLogger` (inline in
+   bootstrap-helpers.unit.test.ts). Consolidate to one.
 
-- `mcp-auth.ts:205`: `Object.assign(req, { auth: authData })` replaces
-  `res.locals.authInfo`
-- `mcp-auth-clerk.ts`: DI deps parameter (ADR-078) + Zod `.strict()`
-  validation of `verifyClerkToken` result
-- `handlers.ts`: deleted 17-line auth bridge, handler is pure composition
-- `auth-info-schema.ts`: relocated to `auth/mcp-auth/` (co-located with
-  its only consumer `mcp-auth-clerk.ts`)
-- `fakes.ts`: `createFakeAuthMiddlewareRequest` + `auth` field on
-  `createFakeExpressRequest`
+### Low Priority
 
-4 specialist reviews completed (code-reviewer x3, type-reviewer). All
-production findings addressed. The remaining issues are in test helper
-infrastructure only.
+6. **`verify-clerk-token.unit.test.ts`** — conformance tests for external library
+   (per ADR-142). `vi.spyOn(console, 'error')` is global state manipulation.
+   Assess whether these tests justify maintenance cost.
 
-### After Phase 8
+7. **`setTimeout` in `bootstrap-helpers.unit.test.ts`** — time-dependent assertion
+   with `-10ms` tolerance. Fragile in CI. Consider clock injection.
 
-Once committed, WS3 (widget client migration) is unblocked. Resume the
-live spec research step (top of this file) before starting WS3.
-
-**Simplification phases 0-7** are **complete** (2026-03-28). Phase 8
-partially implemented (2026-03-28).
-
-- Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
-  All five Express utilities SKIP'd.
-- Phase 1: Seam inventory mapped, 3 reviewers passed (`mcp-reviewer`,
-  `architecture-reviewer-barney`, `clerk-reviewer`). Key decisions:
-  - `tool-auth-context.ts` is dead code — **delete** in Phase 6 (not promote)
-  - `tools/list` override cannot be eliminated by MCP SDK upgrade — Phase 3
-    must build SDK-owned protocol projection function
-  - Canonical ingress: `getAuth()` once → `verifyClerkToken()` → forward
-    `AuthInfo` as typed context
-  - Auth orchestration in `check-mcp-client-auth.ts` may be too thick for app
-    layer — consider extracting to shared library
-- Phase 2: RED tests written and verified. Two projection functions
-  (`toRegistrationConfig`, `toProtocolEntry`) asserted but did not exist.
-  `pnpm type-check` failed on missing imports. All 1,372 existing tests green.
-- Phase 3: GREEN — `projections.ts` created with `toRegistrationConfig` and
-  `toProtocolEntry`. `handlers.ts` and `tools-list-override.ts` simplified to
-  single SDK projection calls. WeakMap Zod cache for referential stability.
-  706 SDK tests, 676 HTTP tests, 165 E2E tests all pass. MCP-reviewer
-  (COMPLIANT) and code-reviewer (APPROVED) findings all addressed.
-
-### Phase 3 (GREEN) — Complete (2026-03-27)
-
-SDK canonical descriptor projections implemented and HTTP app simplified.
-All Phase 2 RED tests now GREEN. See plan for full Phase 3 completion summary.
-
-### Phase 4 (RED) — Complete (2026-03-27)
-
-RED tests written for explicit MCP ingress/auth context:
-
-- `check-mcp-client-auth.di.integration.test.ts` (was `.di.unit.test.ts` during
-  Phase 4, renamed in Phase 5) — 6 DI-based tests
-- `handlers.integration.test.ts` — Phase 4 RED test for `HandleToolOptions.authInfo`
-- `createFakeAuthInfo` helper added to `test-helpers/fakes.ts`
-- Type errors: TS2724 (`CheckMcpClientAuthDeps`), TS2554 (6 args vs 4),
-  TS2353 (`authInfo` on `HandleToolOptions`)
-- Code-reviewer: APPROVED. Type-reviewer: findings addressed.
-- Plan updated: convergence test superseded (dead code), `AuthInfo` from MCP SDK
-  adopted as explicit auth contract, `extra: Record<string, unknown>` access
-  obligation recorded for Phase 5.
-
-### Phase 5 (GREEN) — Complete (2026-03-27)
-
-Explicit ingress boundary implemented. Key changes:
-
-- `check-mcp-client-auth.ts` — 6-param DI, exports `CheckMcpClientAuthDeps`,
-  removes 5 hard imports, Zod `.loose()` for `AuthInfo.extra.userId`
-- `handlers.ts` — deleted `createMcpRequest()` Proxy, `extractAuthInfoAtIngress`
-  at Express edge, `req.auth = authInfo` for MCP SDK native channel, `registerTool`
-  callback reads `extra.authInfo`
-- `tool-handler-with-auth.ts` — `HandleToolOptions.authInfo`, module-level
-  `checkAuthDeps`, `executeWithAuthCapture` extraction
-- Old `vi.mock` test deleted, DI test renamed to `.di.integration.test.ts`
-- 5 specialist reviewers completed: security (RISKS FOUND — documented),
-  clerk (ISSUES FOUND — Phase 6 opportunity), code (APPROVED), type (AT-RISK —
-  no critical), mcp (COMPLIANT)
-- 669 tests, 22 E2E, zero type errors, zero lint errors
-
-### Phase 6 (REFACTOR) — Complete (2026-03-27)
-
-Deleted dead code, eliminated double auth verification, cleaned stale labels,
-propagated documentation. Key changes:
-
-1. Deleted `request-context.ts` + unit tests (zero production callers)
-2. Deleted `tool-auth-context.ts` + unit tests + `createFakeRequest` (dead code)
-3. Replaced stale Proxy in `register-prompts.integration.test.ts` with direct cast
-4. `mcpAuth` middleware stores `AuthInfo` on `res.locals.authInfo` — eliminated
-   double `getAuth`/`verifyClerkToken`. `handlers.ts` has zero Clerk imports.
-5. Deleted `ToolRegistrationServer` type alias, replaced with `McpServer` directly
-6. Cleaned Phase 4 RED labels — tests describe settled behaviour
-7. Full quality gate chain + 6 specialist reviewer passes
+8. **SDK module path fragility** — `import type {} from bearerAuth.js` depends on
+   internal SDK path. Documented with version pin in `mcp-auth.ts`. If SDK moves
+   it, type-check fails immediately.
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
-- **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **Phase 8 partially implemented, uncommitted** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-7 done (2026-03-28). Phase 8 production code done, lint errors in test helpers block commit (3 issues: `as` cast, two `max-lines` violations).
-- **WS3** (widget client + branding): **next** — unblocked once Phase 8 lands
+- **WS2** (app runtime migration): **complete** (2026-03-26)
+- **Runtime boundary simplification**: **ALL PHASES COMPLETE** (2026-03-28)
+- **WS3** (widget client + branding): **next** — NOW UNBLOCKED
 - **WS4** (search UI for humans): **blocked by** WS3
-- **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3
-
-Child plans for WS3 and WS4 will be created when those streams become active.
+- **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`
 
 ## Key Decisions (Settled)
 
-- **Hard cutover, no compatibility layers** — every change actively removes old coupling and replaces with MCP Apps standard. No dual-emit, no deprecated flat keys, no backward-compatible shims, no fallback wrappers. Principles: "NEVER create compatibility layers."
-- **No type aliases** — use SDK types directly, no local aliases. Principles: "Don't use type aliases, use good naming."
-- **React for all UI** — use `@modelcontextprotocol/ext-apps/react` hooks (`useApp`, `useHostStyles`, `useHostFonts`, `useDocumentTheme`). No plain HTML/JS/CSS. Keep it basic.
-- **ext-apps SDK v1.3.2** — `^1.3.2` in package.json. No breaking changes since 2026-01-26.
-- **WS1 complete** (2026-03-26) — zero `openai/` in `packages/sdks/`. ADR-141 governs.
-- **WS2 complete** (2026-03-26) — child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md`. 10 specialist reviews completed across two rounds. All findings incorporated. Production code confirmed matching target state by 12-pass review (2026-03-26).
-
-### WS2 Key Findings (from 10 specialist reviews)
-
-- **No `getUiCapability()` in WS2** — wrong lifecycle layer (`registerHandlers()` runs before `connect()`). Non-capable hosts ignore `_meta.ui` per spec. Defer to WS3 if active gating needed.
-- **Drop `domain` entirely** — no direct cross-origin fetch from widget.
-- **Delete `getToolWidgetUri()` passthrough** — import `WIDGET_URI` directly from SDK.
-- **Delete `ResourceRegistrar` type alias** — use `Pick<McpServer, 'registerResource'>` directly.
-- **Plain-object fakes in tests** — no `vi.fn()`, handler call signature `handler(new URL(uri), {})`.
-- **Broader coupling grep** — `rg -i "openai|chatgpt|skybridge"` across app src.
+- **Hard cutover, no compatibility layers**
+- **No type aliases** — use SDK types directly
+- **React for all UI** — `@modelcontextprotocol/ext-apps/react` hooks
+- **ext-apps SDK v1.3.2**
+- **eslint-disable is BANNED** — eliminated all 9 from test helpers via:
+  - Narrow product interfaces (ADR-078): `McpRequestServer`, `McpRequestTransport`,
+    `McpHandlerRequest`, `McpHandlerResponse`
+  - Off-the-shelf library: `node-mocks-http` for Express middleware tests
+  - 2 targeted `as` assertions managed via eslint config override (not eslint-disable)
 
 ## Rules
 
 - TDD at all levels — write tests FIRST
 - Schema-first — types flow from OpenAPI via `pnpm sdk-codegen`
 - No compatibility layers — delete the old, do not wrap it
-- No `as`, `any`, `!`, `Record<string, unknown>` — validate to exact shapes at boundaries
-- All reviewer findings are blocking
+- No `as`, `any`, `!`, `Record<string, unknown>` — validate at boundaries
+- ALL reviewer findings are blocking — no exceptions
+- NEVER disable any checks — EVER, for ANY reason
 - Use `mcp-reviewer` before implementation decisions
-
-## Specialist and Skills
-
-- **Reviewer**: `mcp-reviewer` (invoke for MCP Apps standards, CSP, capability negotiation, widget lifecycle)
-- **Skills**: `mcp-migrate-oai` (WS1–WS3), `mcp-create-app` + `mcp-add-ui` (WS4)
+- Use off-the-shelf libraries, not custom plumbing
 
 ## Key References
 
-- **ADR-141**: `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md` — the governing architectural decision
+- **ADR-141**: `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md`
+- **ADR-142**: `docs/architecture/architectural-decisions/142-clerk-mcp-tools-adopt-or-explain.md`
 - Research: `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`
-- Roadmap: `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
 - MCP Apps spec: <https://modelcontextprotocol.io/extensions/apps/overview>
-- ext-apps SDK: <https://github.com/modelcontextprotocol/ext-apps>
-- MCP Apps Patterns: <https://apps.extensions.modelcontextprotocol.io/api/documents/Patterns.html>
-- ext-apps React hooks: <https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html>
 
 ## Quality Gates
 
