@@ -8,7 +8,6 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/logger';
-import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
@@ -106,7 +105,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('Protected tools (OAuth required)', () => {
     it('should return MCP error with _meta when auth context missing', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
@@ -134,7 +133,7 @@ describe('Tool Handler with Auth Integration', () => {
     // error paths which don't require complex JWT mocking.
 
     it('should return MCP error with _meta for invalid auth token', async () => {
-      const tool = { name: 'get-key-stages' as UniversalToolName };
+      const tool = { name: 'get-key-stages' } as const;
       const params = {};
       const config = createMockRuntimeConfig();
 
@@ -158,7 +157,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('Public tools (noauth)', () => {
     it('should execute public tool without auth check', async () => {
-      const tool = { name: 'get-changelog' as UniversalToolName };
+      const tool = { name: 'get-changelog' } as const;
       const params = {};
       const config = createMockRuntimeConfig();
 
@@ -181,7 +180,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('DANGEROUSLY_DISABLE_AUTH bypass', () => {
     it('should bypass auth and execute protected tool when flag is true', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
 
@@ -209,7 +208,7 @@ describe('Tool Handler with Auth Integration', () => {
     });
 
     it('should bypass auth for all protected tools when flag is true', async () => {
-      const tool = { name: 'get-key-stages' as UniversalToolName };
+      const tool = { name: 'get-key-stages' } as const;
       const params = {};
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
 
@@ -235,7 +234,7 @@ describe('Tool Handler with Auth Integration', () => {
     });
 
     it('should enforce auth when flag is false', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig({ dangerouslyDisableAuth: false });
 
@@ -262,7 +261,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('Error logging', () => {
     it('should log auth required but missing with correlation ID', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
@@ -294,7 +293,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('MCP error format', () => {
     it('should include resource_metadata in www_authenticate header', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
@@ -314,7 +313,7 @@ describe('Tool Handler with Auth Integration', () => {
     });
 
     it('should include error description in www_authenticate header', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
@@ -332,7 +331,7 @@ describe('Tool Handler with Auth Integration', () => {
     });
 
     it('should include user-friendly error message in content', async () => {
-      const tool = { name: 'search' as UniversalToolName };
+      const tool = { name: 'search' } as const;
       const params = { query: 'test' };
       const config = createMockRuntimeConfig();
 
