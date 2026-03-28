@@ -18,11 +18,13 @@ import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   printJson,
   printError,
   printSuccess,
   printHeader,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { buildSearchSdkConfig } from '../shared/build-search-sdk-config.js';
 import { handleSetup, handleReset, handleStatus, handleSynonyms } from './handlers.js';
@@ -47,33 +49,35 @@ const adminDeps = {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerSetupCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('setup')
     .description('Create synonyms and all search indexes (idempotent)')
     .option('--reset', 'Delete and recreate all indexes (destructive)')
-    .action(async (opts: { reset?: boolean }) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await (opts.reset ? handleReset(admin) : handleSetup(admin));
-          if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          const verb = opts.reset ? 'Reset' : 'Setup';
-          printSuccess(
-            `${verb} complete. ${result.value.synonymCount} synonyms, ${result.value.indexResults.length} indexes.`,
-          );
-          printJson(result.value);
-        },
-        adminDeps,
-      );
-    });
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv, opts: { reset?: boolean }) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+            const result = await (opts.reset ? handleReset(admin) : handleSetup(admin));
+            if (!result.ok) {
+              adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            const verb = opts.reset ? 'Reset' : 'Setup';
+            printSuccess(
+              `${verb} complete. ${result.value.synonymCount} synonyms, ${result.value.indexResults.length} indexes.`,
+            );
+            printJson(result.value);
+          },
+          adminDeps,
+        );
+      }),
+    );
 }
 
 /**
@@ -84,31 +88,33 @@ export function registerSetupCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerStatusCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerStatusCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('status')
     .description('Show Elasticsearch connection status and index listing')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleStatus(admin);
-          if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printHeader('Connection');
-          printJson(result.value.connection);
-          printHeader('Indexes');
-          printJson(result.value.indexes);
-        },
-        adminDeps,
-      );
-    });
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+            const result = await handleStatus(admin);
+            if (!result.ok) {
+              adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printHeader('Connection');
+            printJson(result.value.connection);
+            printHeader('Indexes');
+            printJson(result.value.indexes);
+          },
+          adminDeps,
+        );
+      }),
+    );
 }
 
 /**
@@ -119,27 +125,29 @@ export function registerStatusCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerSynonymsCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerSynonymsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('synonyms')
     .description('Update the synonym set in Elasticsearch')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleSynonyms(admin);
-          if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printSuccess(`Synonyms updated: ${result.value.count} synonyms.`);
-          printJson(result.value);
-        },
-        adminDeps,
-      );
-    });
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+            const result = await handleSynonyms(admin);
+            if (!result.ok) {
+              adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printSuccess(`Synonyms updated: ${result.value.count} synonyms.`);
+            printJson(result.value);
+          },
+          adminDeps,
+        );
+      }),
+    );
 }

@@ -18,39 +18,27 @@
  */
 
 import { Command } from 'commander';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { createSearchCliEnvLoader } from '../src/runtime-config.js';
 import { searchCommand } from '../src/cli/search/index.js';
 import { adminCommand } from '../src/cli/admin/index.js';
 import { evalCommand } from '../src/cli/eval/index.js';
 import { observeCommand } from '../src/cli/observe/index.js';
 import { disableFileSink } from '../src/lib/logger.js';
 
-const configResult = loadRuntimeConfig({
+const cliEnvLoader = createSearchCliEnvLoader({
   processEnv: process.env,
   startDir: import.meta.dirname,
 });
 
-if (!configResult.ok) {
-  process.stderr.write(`Environment validation failed: ${configResult.error.message}\n`);
-  for (const d of configResult.error.diagnostics) {
-    if (!d.present) {
-      process.stderr.write(`  ${d.key}: MISSING\n`);
-    }
-  }
-  process.exit(1);
-}
-
-const config = configResult.value;
-
 const program = new Command()
   .name('oaksearch')
   .description('Oak National Academy — curriculum semantic search CLI')
-  .version(config.version);
+  .version(process.env.npm_package_version ?? '0.0.0');
 
-program.addCommand(searchCommand(config.env));
-program.addCommand(adminCommand(config.env));
-program.addCommand(evalCommand(config.env));
-program.addCommand(observeCommand(config.env));
+program.addCommand(searchCommand(cliEnvLoader));
+program.addCommand(adminCommand(cliEnvLoader));
+program.addCommand(evalCommand(cliEnvLoader));
+program.addCommand(observeCommand(cliEnvLoader));
 
 try {
   await program.parseAsync();

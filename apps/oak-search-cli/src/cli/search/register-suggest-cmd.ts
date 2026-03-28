@@ -16,7 +16,9 @@ import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
   printJson,
   validateSubject,
   validateKeyStage,
@@ -32,7 +34,7 @@ import { searchDeps } from './search-deps.js';
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerSuggestCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerSuggestCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('suggest')
     .description('Get type-ahead suggestions')
@@ -41,31 +43,38 @@ export function registerSuggestCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .option('-s, --subject <subject>', 'Filter by subject slug')
     .option('-k, --key-stage <keyStage>', 'Filter by key stage')
     .action(
-      async (prefix: string, opts: { scope: string; subject?: string; keyStage?: string }) => {
-        const esClient = createEsClient(cliEnv);
-        await withEsClient(
-          esClient,
-          async () => {
-            const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
-            const result = await handleSuggest(retrieval, {
-              prefix,
-              scope: validateScope(opts.scope),
-              subject: validateSubject(opts.subject),
-              keyStage: validateKeyStage(opts.keyStage),
-            });
-            if (!result.ok) {
-              searchDeps.logger.error(
-                `${result.error.type}: ${result.error.message}`,
-                result.error,
-              );
-              searchDeps.printError(`${result.error.type}: ${result.error.message}`);
-              searchDeps.setExitCode(1);
-              return;
-            }
-            printJson(result.value);
-          },
-          searchDeps,
-        );
-      },
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (
+          cliEnv: CliSdkEnv,
+          prefix: string,
+          opts: { scope: string; subject?: string; keyStage?: string },
+        ) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleSuggest(retrieval, {
+                prefix,
+                scope: validateScope(opts.scope),
+                subject: validateSubject(opts.subject),
+                keyStage: validateKeyStage(opts.keyStage),
+              });
+              if (!result.ok) {
+                searchDeps.logger.error(
+                  `${result.error.type}: ${result.error.message}`,
+                  result.error,
+                );
+                searchDeps.printError(`${result.error.type}: ${result.error.message}`);
+                searchDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            searchDeps,
+          );
+        },
+      ),
     );
 }

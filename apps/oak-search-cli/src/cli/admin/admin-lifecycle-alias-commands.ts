@@ -18,11 +18,13 @@ import { withLifecycleLease } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   printSuccess,
   printError,
   printJson,
   printHeader,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { buildAliasLifecycleService } from './shared/build-lifecycle-service.js';
 import { ingestLogger } from '../../lib/logger.js';
@@ -47,43 +49,45 @@ function parseVersionOption(rawOpts: unknown): string {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerPromoteCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('promote')
     .description('Promote a staged version by swapping aliases to it')
     .requiredOption('--target-version <version>', 'Version string to promote (from stage output)')
-    .action(async (rawOpts: unknown) => {
-      const version = parseVersionOption(rawOpts);
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const service = buildAliasLifecycleService(
-            esClient,
-            cliEnv.SEARCH_INDEX_TARGET,
-            ingestLogger,
-          );
-          const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
-            service.promote(version),
-          );
-          if (!result.ok) {
-            ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printSuccess(`Promoted version ${result.value.version}`);
-          printJson(result.value);
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv, rawOpts: unknown) => {
+        const version = parseVersionOption(rawOpts);
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const service = buildAliasLifecycleService(
+              esClient,
+              cliEnv.SEARCH_INDEX_TARGET,
+              ingestLogger,
+            );
+            const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+              service.promote(version),
+            );
+            if (!result.ok) {
+              ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printSuccess(`Promoted version ${result.value.version}`);
+            printJson(result.value);
           },
-        },
-      );
-    });
+          {
+            logger: ingestLogger,
+            printError,
+            setExitCode: (c: number) => {
+              process.exitCode = c;
+            },
+          },
+        );
+      }),
+    );
 }
 
 /**
@@ -94,44 +98,46 @@ export function registerPromoteCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerRollbackCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerRollbackCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('rollback')
     .description('Roll back to the previous index version')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const service = buildAliasLifecycleService(
-            esClient,
-            cliEnv.SEARCH_INDEX_TARGET,
-            ingestLogger,
-          );
-          const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
-            service.rollback(),
-          );
-          if (!result.ok) {
-            ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printSuccess(
-            `Rolled back from ${result.value.rolledBackFromVersion} ` +
-              `to ${result.value.rolledBackToVersion}`,
-          );
-          printJson(result.value);
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const service = buildAliasLifecycleService(
+              esClient,
+              cliEnv.SEARCH_INDEX_TARGET,
+              ingestLogger,
+            );
+            const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, () =>
+              service.rollback(),
+            );
+            if (!result.ok) {
+              ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printSuccess(
+              `Rolled back from ${result.value.rolledBackFromVersion} ` +
+                `to ${result.value.rolledBackToVersion}`,
+            );
+            printJson(result.value);
           },
-        },
-      );
-    });
+          {
+            logger: ingestLogger,
+            printError,
+            setExitCode: (c: number) => {
+              process.exitCode = c;
+            },
+          },
+        );
+      }),
+    );
 }
 
 /**
@@ -142,43 +148,48 @@ export function registerRollbackCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerValidateAliasesCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerValidateAliasesCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+): void {
   parent
     .command('validate-aliases')
     .description('Validate health of all curriculum aliases')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const service = buildAliasLifecycleService(
-            esClient,
-            cliEnv.SEARCH_INDEX_TARGET,
-            ingestLogger,
-          );
-          const result = await service.validateAliases();
-          if (!result.ok) {
-            ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printHeader('Alias Health');
-          printJson(result.value.entries);
-          if (result.value.allHealthy) {
-            printSuccess('All aliases are healthy.');
-          } else {
-            printError('Some aliases are unhealthy.');
-            process.exitCode = 1;
-          }
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const service = buildAliasLifecycleService(
+              esClient,
+              cliEnv.SEARCH_INDEX_TARGET,
+              ingestLogger,
+            );
+            const result = await service.validateAliases();
+            if (!result.ok) {
+              ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printHeader('Alias Health');
+            printJson(result.value.entries);
+            if (result.value.allHealthy) {
+              printSuccess('All aliases are healthy.');
+            } else {
+              printError('Some aliases are unhealthy.');
+              process.exitCode = 1;
+            }
           },
-        },
-      );
-    });
+          {
+            logger: ingestLogger,
+            printError,
+            setExitCode: (c: number) => {
+              process.exitCode = c;
+            },
+          },
+        );
+      }),
+    );
 }

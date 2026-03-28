@@ -17,7 +17,9 @@ import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
   printJson,
   validateSubject,
 } from '../shared/index.js';
@@ -31,33 +33,41 @@ import { searchDeps } from './search-deps.js';
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated environment configuration
  */
-export function registerThreadsCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerThreadsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('threads')
     .description('Search threads (conceptual progression strands)')
     .argument('<query>', 'Search query text')
     .option('-s, --subject <subject>', 'Filter by subject slug')
     .option('--size <n>', 'Maximum results to return', '25')
-    .action(async (query: string, opts: { subject?: string; size: string }) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleSearchThreads(retrieval, {
-            query,
-            subject: validateSubject(opts.subject),
-            size: parseInt(opts.size, 10),
-          });
-          if (!result.ok) {
-            searchDeps.logger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            searchDeps.printError(`${result.error.type}: ${result.error.message}`);
-            searchDeps.setExitCode(1);
-            return;
-          }
-          printJson(result.value);
+    .action(
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, query: string, opts: { subject?: string; size: string }) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleSearchThreads(retrieval, {
+                query,
+                subject: validateSubject(opts.subject),
+                size: parseInt(opts.size, 10),
+              });
+              if (!result.ok) {
+                searchDeps.logger.error(
+                  `${result.error.type}: ${result.error.message}`,
+                  result.error,
+                );
+                searchDeps.printError(`${result.error.type}: ${result.error.message}`);
+                searchDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            searchDeps,
+          );
         },
-        searchDeps,
-      );
-    });
+      ),
+    );
 }

@@ -75,7 +75,9 @@ function createLoggerMock() {
   } satisfies Logger;
 }
 
-function extractLoggedFilterEntries(logger: ReturnType<typeof createLoggerMock>): readonly unknown[] {
+function extractLoggedFilterEntries(
+  logger: ReturnType<typeof createLoggerMock>,
+): readonly unknown[] {
   const callPayload: unknown = logger.debug.mock.calls[0]?.[1];
   if (!isJsonObject(callPayload)) {
     throw new Error('Expected logger payload to be an object');
@@ -127,7 +129,9 @@ describe('searchSequences', () => {
 
       const retrievers = getFirstRequest(calls).retriever?.rrf?.retrievers ?? [];
       const query = getStandard(retrievers[0])?.query;
-      expect(getNestedJsonObject(isJsonObject(query) ? query : undefined, 'multi_match')).toMatchObject({
+      expect(
+        getNestedJsonObject(isJsonObject(query) ? query : undefined, 'multi_match'),
+      ).toMatchObject({
         query: 'algebra',
         fuzziness: 'AUTO',
         fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],

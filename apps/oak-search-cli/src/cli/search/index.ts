@@ -21,7 +21,9 @@ import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
   printJson,
   printError,
   validateSubject,
@@ -50,7 +52,7 @@ interface SubjectKeyStageOpts {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
+function registerLessonsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('lessons')
     .description('Search lessons using hybrid BM25 + ELSER retrieval')
@@ -58,29 +60,34 @@ function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .option('-s, --subject <subject>', 'Filter by subject slug')
     .option('-k, --key-stage <keyStage>', 'Filter by key stage (ks1-ks4)')
     .option('--size <n>', 'Maximum results to return', '25')
-    .action(async (query: string, opts: SubjectKeyStageOpts) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleSearchLessons(retrieval, {
-            query,
-            subject: validateSubject(opts.subject),
-            keyStage: validateKeyStage(opts.keyStage),
-            size: parseInt(opts.size, 10),
-          });
-          if (!result.ok) {
-            searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            searchDeps.setExitCode(1);
-            return;
-          }
-          printJson(result.value);
+    .action(
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, query: string, opts: SubjectKeyStageOpts) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleSearchLessons(retrieval, {
+                query,
+                subject: validateSubject(opts.subject),
+                keyStage: validateKeyStage(opts.keyStage),
+                size: parseInt(opts.size, 10),
+              });
+              if (!result.ok) {
+                searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+                printError(`${result.error.type}: ${result.error.message}`);
+                searchDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            searchDeps,
+          );
         },
-        searchDeps,
-      );
-    });
+      ),
+    );
 }
 
 /**
@@ -89,7 +96,7 @@ function registerLessonsCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
+function registerUnitsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('units')
     .description('Search units using hybrid BM25 + ELSER retrieval')
@@ -97,29 +104,34 @@ function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
     .option('-s, --subject <subject>', 'Filter by subject slug')
     .option('-k, --key-stage <keyStage>', 'Filter by key stage (ks1-ks4)')
     .option('--size <n>', 'Maximum results to return', '25')
-    .action(async (query: string, opts: SubjectKeyStageOpts) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleSearchUnits(retrieval, {
-            query,
-            subject: validateSubject(opts.subject),
-            keyStage: validateKeyStage(opts.keyStage),
-            size: parseInt(opts.size, 10),
-          });
-          if (!result.ok) {
-            searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            searchDeps.setExitCode(1);
-            return;
-          }
-          printJson(result.value);
+    .action(
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, query: string, opts: SubjectKeyStageOpts) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleSearchUnits(retrieval, {
+                query,
+                subject: validateSubject(opts.subject),
+                keyStage: validateKeyStage(opts.keyStage),
+                size: parseInt(opts.size, 10),
+              });
+              if (!result.ok) {
+                searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+                printError(`${result.error.type}: ${result.error.message}`);
+                searchDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            searchDeps,
+          );
         },
-        searchDeps,
-      );
-    });
+      ),
+    );
 }
 
 /**
@@ -128,35 +140,40 @@ function registerUnitsCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerSequencesCmd(parent: Command, cliEnv: CliSdkEnv): void {
+function registerSequencesCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('sequences')
     .description('Search sequences (subject-phase programmes)')
     .argument('<query>', 'Search query text')
     .option('-s, --subject <subject>', 'Filter by subject slug')
     .option('--size <n>', 'Maximum results to return', '25')
-    .action(async (query: string, opts: { subject?: string; size: string }) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleSearchSequences(retrieval, {
-            query,
-            subject: validateSubject(opts.subject),
-            size: parseInt(opts.size, 10),
-          });
-          if (!result.ok) {
-            searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            searchDeps.setExitCode(1);
-            return;
-          }
-          printJson(result.value);
+    .action(
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, query: string, opts: { subject?: string; size: string }) => {
+          const esClient = createEsClient(cliEnv);
+          await withEsClient(
+            esClient,
+            async () => {
+              const retrieval = createRetrievalService(esClient, buildSearchSdkConfig(cliEnv));
+              const result = await handleSearchSequences(retrieval, {
+                query,
+                subject: validateSubject(opts.subject),
+                size: parseInt(opts.size, 10),
+              });
+              if (!result.ok) {
+                searchLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+                printError(`${result.error.type}: ${result.error.message}`);
+                searchDeps.setExitCode(1);
+                return;
+              }
+              printJson(result.value);
+            },
+            searchDeps,
+          );
         },
-        searchDeps,
-      );
-    });
+      ),
+    );
 }
 
 /**
@@ -165,17 +182,17 @@ function registerSequencesCmd(parent: Command, cliEnv: CliSdkEnv): void {
  * @param cliEnv - Validated CLI environment values
  * @returns A Commander `Command` with search subcommands registered
  */
-export function searchCommand(cliEnv: CliSdkEnv): Command {
+export function searchCommand(cliEnvLoader: SearchCliEnvLoader): Command {
   const cmd = new Command('search').description(
     'Query lessons, units, sequences, threads, and suggestions',
   );
 
-  registerLessonsCmd(cmd, cliEnv);
-  registerUnitsCmd(cmd, cliEnv);
-  registerSequencesCmd(cmd, cliEnv);
-  registerThreadsCmd(cmd, cliEnv);
-  registerSuggestCmd(cmd, cliEnv);
-  registerFacetsCmd(cmd, cliEnv);
+  registerLessonsCmd(cmd, cliEnvLoader);
+  registerUnitsCmd(cmd, cliEnvLoader);
+  registerSequencesCmd(cmd, cliEnvLoader);
+  registerThreadsCmd(cmd, cliEnvLoader);
+  registerSuggestCmd(cmd, cliEnvLoader);
+  registerFacetsCmd(cmd, cliEnvLoader);
 
   return cmd;
 }

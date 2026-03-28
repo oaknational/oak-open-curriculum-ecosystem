@@ -1,16 +1,4 @@
-/**
- * CLI commands for lifecycle ingestion operations (ADR-130).
- *
- * Provides versioned-ingest and stage commands that delegate to the SDK lifecycle
- * service. These commands require Oak API credentials for data acquisition.
- *
- * Resource ownership pattern:
- * - ES client: created by handler, cleaned up by `withEsClient`
- * - OakClient: created inside handler, cleaned up in local `finally`
- *
- * @see ADR-133 CLI Resource Lifecycle Management
- */
-
+/** CLI commands for lifecycle ingestion operations (ADR-130). */
 import { existsSync, readdirSync } from 'node:fs';
 import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
@@ -25,6 +13,7 @@ import type { Result } from '@oaknational/result';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   resolveBulkDirFromInputs,
   validateIngestEnv,
   printSuccess,
@@ -32,6 +21,7 @@ import {
   printJson,
   APP_ROOT,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { buildLifecycleService } from './shared/build-lifecycle-service.js';
 import {
@@ -42,10 +32,9 @@ import type { OakClientEnv } from '../../adapters/oak-adapter.js';
 import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-client-factory.js';
 import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
 import { ingestLogger } from '../../lib/logger.js';
-/**
- * Extended environment for lifecycle commands that perform ingestion.
- */
+
 export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv & BulkDataEnv;
+
 function validateMinDocCount(rawCount: string): number {
   const parsed = Number.parseInt(rawCount, 10);
   if (!Number.isFinite(parsed) || parsed < 0) {
@@ -54,24 +43,17 @@ function validateMinDocCount(rawCount: string): number {
   return parsed;
 }
 
-/** Shared `withEsClient` deps for lifecycle ingest commands. */
 const ingestDeps = {
   logger: ingestLogger,
   printError,
   setExitCode: (c: number) => (process.exitCode = c),
 };
-/** Real filesystem predicates for `resolveBulkDir`. */
 const realFs = { existsSync, readdirSync: (p: string) => readdirSync(p) };
-/** Result of validating ingest preconditions. */
 interface IngestPreconditionResult {
   readonly ok: boolean;
   readonly bulkDir?: string;
 }
-/**
- * Wire up ingestion resources and return the lifecycle service.
- *
- * OakClient cleanup is the caller's responsibility (via `finally`).
- */
+
 async function buildIngestService(
   esClient: Client,
   cliEnv: LifecycleIngestEnv,
@@ -91,7 +73,7 @@ async function buildIngestService(
   );
   return { service, oakClient };
 }
-/** Safely disconnect the OakClient, logging warnings on failure. */
+
 async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): Promise<void> {
   try {
     await oakClient.disconnect();
@@ -102,7 +84,6 @@ async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): 
   }
 }
 
-/** Validate bulk-dir and ingest env requirements before creating resources. */
 function validateIngestPreconditions(
   cliEnv: LifecycleIngestEnv,
   opts: ParsedLifecycleIngestOpts,
@@ -133,7 +114,6 @@ function validateIngestPreconditions(
   return { ok: true, bulkDir: bulkResult.value };
 }
 
-/** Handle lifecycle service error/success output consistently. */
 function handleLifecycleResult<T>(
   result: Result<T, AdminError>,
   onSuccess: (value: T) => void,
@@ -149,7 +129,6 @@ function handleLifecycleResult<T>(
   onSuccess(result.value);
 }
 
-/** Execute `versioned-ingest` action body. */
 async function runVersionedIngestAction(
   cliEnv: LifecycleIngestEnv,
   opts: ParsedLifecycleIngestOpts,
@@ -180,7 +159,6 @@ async function runVersionedIngestAction(
   );
 }
 
-/** Execute `stage` action body. */
 async function runStageAction(
   cliEnv: LifecycleIngestEnv,
   opts: ParsedLifecycleIngestOpts,
@@ -213,13 +191,10 @@ async function runStageAction(
   );
 }
 
-/**
- * Register the `admin versioned-ingest` subcommand.
- *
- * @param parent - The parent Commander command to register under
- * @param cliEnv - Validated CLI environment values including Oak API credentials
- */
-export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
+export function registerVersionedIngestCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+): void {
   parent
     .command('versioned-ingest')
     .description('Run a versioned blue/green ingest cycle (ADR-130)')
@@ -230,12 +205,14 @@ export function registerVersionedIngestCmd(parent: Command, cliEnv: LifecycleIng
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (rawOpts: unknown) =>
-      runVersionedIngestAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: LifecycleIngestEnv, rawOpts: unknown) =>
+        runVersionedIngestAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
+      ),
     );
 }
 
-export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): void {
+export function registerStageCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('stage')
     .description('Stage versioned indexes without promoting (create, ingest, verify)')
@@ -246,5 +223,9 @@ export function registerStageCmd(parent: Command, cliEnv: LifecycleIngestEnv): v
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
-    .action(async (rawOpts: unknown) => runStageAction(cliEnv, parseLifecycleIngestOpts(rawOpts)));
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: LifecycleIngestEnv, rawOpts: unknown) =>
+        runStageAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
+      ),
+    );
 }

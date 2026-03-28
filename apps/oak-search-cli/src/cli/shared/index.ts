@@ -17,9 +17,11 @@ export {
 export { validateSubject, validateKeyStage, validateScope } from './validators.js';
 export { APP_ROOT, registerPassThrough } from './pass-through.js';
 export { withEsClient } from './with-es-client.js';
+export { withLoadedCliEnv } from './with-loaded-cli-env.js';
 export type { CloseableEsClient, WithEsClientDeps } from './with-es-client.js';
 export { buildSearchSdkConfig } from './build-search-sdk-config.js';
 export { resolveBulkDir, resolveBulkDirFromInputs } from './resolve-bulk-dir.js';
 export type { BulkDirError, FsPredicates, ResolveBulkDirFromInputs } from './resolve-bulk-dir.js';
 export { validateIngestEnv } from './validate-ingest-env.js';
 export type { EnvError } from './validate-ingest-env.js';
+export type { SearchCliEnvLoader } from '../../runtime-config.js';

@@ -17,7 +17,12 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import { normalizeError, startTimer, type Logger, type ErrorContext } from '@oaknational/logger/node';
+import {
+  normalizeError,
+  startTimer,
+  type Logger,
+  type ErrorContext,
+} from '@oaknational/logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';

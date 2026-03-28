@@ -20,14 +20,58 @@ import {
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   printSuccess,
   printError,
   printInfo,
   printJson,
   printHeader,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { ingestLogger } from '../../lib/logger.js';
+
+async function runCleanupOrphansCommand(
+  cliEnv: CliSdkEnv,
+  opts: { confirm: boolean },
+): Promise<void> {
+  const esClient = createEsClient(cliEnv);
+  await withEsClient(
+    esClient,
+    async () => {
+      const deps = buildAliasLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, ingestLogger);
+
+      if (!opts.confirm) {
+        await listOrphansDryRun(deps);
+        return;
+      }
+
+      const leaseResult = await withLifecycleLease(
+        esClient,
+        cliEnv.SEARCH_INDEX_TARGET,
+        async () => {
+          await deleteOrphans(deps);
+          return ok(undefined);
+        },
+      );
+      if (!leaseResult.ok) {
+        ingestLogger.error(
+          `${leaseResult.error.type}: ${leaseResult.error.message}`,
+          leaseResult.error,
+        );
+        printError(`${leaseResult.error.type}: ${leaseResult.error.message}`);
+        process.exitCode = 1;
+      }
+    },
+    {
+      logger: ingestLogger,
+      printError,
+      setExitCode: (c: number) => {
+        process.exitCode = c;
+      },
+    },
+  );
+}
 
 /**
  * Register the `admin list-orphans` subcommand.
@@ -39,40 +83,46 @@ import { ingestLogger } from '../../lib/logger.js';
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerListOrphansCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerListOrphansCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('list-orphans')
     .description('List orphaned versioned index versions')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const deps = buildAliasLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, ingestLogger);
-          const result = await resolveOrphanedVersions(deps);
-          if (!result.ok) {
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const deps = buildAliasLifecycleDeps(
+              esClient,
+              cliEnv.SEARCH_INDEX_TARGET,
+              ingestLogger,
+            );
+            const result = await resolveOrphanedVersions(deps);
+            if (!result.ok) {
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
 
-          if (result.orphans.length === 0) {
-            printSuccess('No orphaned versions found.');
-            return;
-          }
+            if (result.orphans.length === 0) {
+              printSuccess('No orphaned versions found.');
+              return;
+            }
 
-          printHeader(`Orphaned versions (${result.orphans.length})`);
-          printJson(result.orphans);
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
+            printHeader(`Orphaned versions (${result.orphans.length})`);
+            printJson(result.orphans);
           },
-        },
-      );
-    });
+          {
+            logger: ingestLogger,
+            printError,
+            setExitCode: (c: number) => {
+              process.exitCode = c;
+            },
+          },
+        );
+      }),
+    );
 }
 
 /**
@@ -86,49 +136,16 @@ export function registerListOrphansCmd(parent: Command, cliEnv: CliSdkEnv): void
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerCleanupOrphansCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerCleanupOrphansCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('cleanup-orphans')
     .description('Find and delete orphaned versioned index versions (dry-run by default)')
     .option('--confirm', 'Actually delete orphaned indexes (default is dry-run)', false)
-    .action(async (opts: { confirm: boolean }) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const deps = buildAliasLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, ingestLogger);
-
-          if (!opts.confirm) {
-            await listOrphansDryRun(deps);
-            return;
-          }
-
-          const leaseResult = await withLifecycleLease(
-            esClient,
-            cliEnv.SEARCH_INDEX_TARGET,
-            async () => {
-              await deleteOrphans(deps);
-              return ok(undefined);
-            },
-          );
-          if (!leaseResult.ok) {
-            ingestLogger.error(
-              `${leaseResult.error.type}: ${leaseResult.error.message}`,
-              leaseResult.error,
-            );
-            printError(`${leaseResult.error.type}: ${leaseResult.error.message}`);
-            process.exitCode = 1;
-          }
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
-          },
-        },
-      );
-    });
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv, opts: { confirm: boolean }) =>
+        runCleanupOrphansCommand(cliEnv, opts),
+      ),
+    );
 }
 
 /** Dry-run: resolve and display orphans without deletion. */
