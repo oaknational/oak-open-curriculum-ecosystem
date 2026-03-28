@@ -12,6 +12,13 @@ import {
   getContentArray,
   readFirstTextContent,
 } from './helpers/sse.js';
+import {
+  McpToolError,
+  createUniversalToolExecutor,
+  type ToolExecutionResult,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { err, ok } from '@oaknational/result';
+import { createDefaultRequestExecutor } from '../src/tool-executor-factory.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -23,24 +30,28 @@ interface CapturedCall {
 function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      createRequestExecutor: () => async (name: unknown, args: unknown) => {
-        captured.push({ tool: name, args });
-        const data = [
-          {
-            slug: 'ks1',
-            title: 'Key Stage 1',
-            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+      createRequestExecutor: (config) =>
+        createDefaultRequestExecutor({
+          ...config,
+          createClient: () => undefined,
+          executeToolCall: (name: unknown, args: unknown): Promise<ToolExecutionResult> => {
+            captured.push({ tool: name, args });
+            const data = [
+              {
+                slug: 'ks1',
+                title: 'Key Stage 1',
+                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+              },
+              {
+                slug: 'ks2',
+                title: 'Key Stage 2',
+                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+              },
+            ];
+            return Promise.resolve(ok({ status: 200 as const, data }));
           },
-          {
-            slug: 'ks2',
-            title: 'Key Stage 2',
-            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
-          },
-        ];
-        return {
-          content: [{ type: 'text' as const, text: JSON.stringify(data) }],
-        };
-      },
+          createExecutor: createUniversalToolExecutor,
+        }),
     },
   };
 }
@@ -48,10 +59,16 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
 function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      createRequestExecutor: () => async () => ({
-        content: [{ type: 'text' as const, text: message }],
-        isError: true,
-      }),
+      createRequestExecutor: (config) =>
+        createDefaultRequestExecutor({
+          ...config,
+          createClient: () => undefined,
+          executeToolCall: (name: unknown): Promise<ToolExecutionResult> =>
+            Promise.resolve(
+              err(new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' })),
+            ),
+          createExecutor: createUniversalToolExecutor,
+        }),
     },
   };
 }

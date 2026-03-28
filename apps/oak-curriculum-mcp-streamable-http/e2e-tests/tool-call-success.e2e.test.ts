@@ -3,6 +3,11 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import {
+  createUniversalToolExecutor,
+  type ToolExecutionResult,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { ok } from '@oaknational/result';
+import {
   parseSseEnvelope,
   parseJsonRpcResult,
   getContentArray,
@@ -10,6 +15,7 @@ import {
   parseToolSuccessPayload,
 } from './helpers/sse.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createDefaultRequestExecutor } from '../src/tool-executor-factory.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -20,24 +26,28 @@ interface CapturedCall {
 
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
-    createRequestExecutor: () => async (name: unknown, args: unknown) => {
-      captured.push({ tool: name, args });
-      const data = [
-        {
-          slug: 'ks1',
-          title: 'Key Stage 1',
-          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+    createRequestExecutor: (config) =>
+      createDefaultRequestExecutor({
+        ...config,
+        createClient: () => undefined,
+        executeToolCall: (name: unknown, args: unknown): Promise<ToolExecutionResult> => {
+          captured.push({ tool: name, args });
+          const data = [
+            {
+              slug: 'ks1',
+              title: 'Key Stage 1',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+            },
+            {
+              slug: 'ks2',
+              title: 'Key Stage 2',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+            },
+          ];
+          return Promise.resolve(ok({ status: 200 as const, data }));
         },
-        {
-          slug: 'ks2',
-          title: 'Key Stage 2',
-          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
-        },
-      ];
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify(data) }],
-      };
-    },
+        createExecutor: createUniversalToolExecutor,
+      }),
   };
 }
 
