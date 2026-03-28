@@ -80,15 +80,31 @@ bumps will trigger re-evaluation. The version range is pinned to `~0.3.1`
 breaking changes. Any version bump PR must re-read this ADR and assess whether
 the SKIP conditions have changed.
 
-### Accepted residual risk: opaque token bypass
+### Designed behaviour: opaque token audience validation
 
-When Clerk issues opaque tokens (prefixed `oat_`), the RFC 8707 audience
-validation in `resource-parameter-validator.ts` returns `{ valid: true }` without
-checking the audience claim, because opaque tokens cannot be decoded client-side.
-If Clerk shifts to opaque tokens for OAuth flows, audience binding is silently
-bypassed. This is a pre-existing condition, not introduced by this ADR. It
-should be re-evaluated if Clerk's OAuth token verification API begins returning
-resource binding information for opaque tokens.
+Clerk issues opaque tokens (prefixed `oat_...`) by default for OAuth
+applications. The RFC 8707 audience validation in
+`resource-parameter-validator.ts` returns `{ valid: true }` for opaque tokens
+because they have no `aud` claim to inspect locally.
+
+This is **designed behaviour, not a bypass**. Clerk verifies opaque tokens
+server-side via `getAuth()` — they "phone home" on every request. This is
+the real security check. JWT audience validation is defence-in-depth for
+hypothetical non-Clerk tokens only.
+
+Spike (2026-03-28) confirmed:
+
+- Clerk's introspection endpoint (`/oauth/token_info`) returns
+  `{ active, client_id, iat, scope, sub }` — no `aud` field.
+- `@clerk/mcp-tools`'s `verifyClerkToken` does no introspection — it maps
+  `MachineAuthObject` fields to MCP `AuthInfo`.
+- Switching to JWT would introduce risk (ADR-115 issuer mismatch, unknown
+  `aud` format) for no security benefit.
+- The token replay risk is theoretical — it requires a second MCP server
+  that shares the Clerk app AND accepts tokens without calling `getAuth()`.
+
+Re-evaluate only if: (a) a second OAuth provider is added, or (b) Clerk's
+introspection API begins returning `aud` for opaque tokens.
 
 ### Accepted residual risk: npm availability
 

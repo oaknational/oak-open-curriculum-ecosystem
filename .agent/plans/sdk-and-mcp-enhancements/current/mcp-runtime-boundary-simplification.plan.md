@@ -1197,7 +1197,7 @@ Items 1-5 resolved in commit `4b47bd7a`. Item 2 closed with no code change.
    does not return `aud`, confirming async introspection is also not viable.
 
 3. **Test complexity in `tool-handler-with-auth.integration.test.ts`** —
-   RESOLVED. `ToolHandlerDependencies` reduced from 5 to 3 members via
+   RESOLVED. `ToolHandlerDependencies` reduced from 5 to 2 members via
    `tool-executor-factory.ts`. `createMockDependencies`: 31 lines → 8 lines.
 
 4. **`authLogContextSchema` in test helper** — RESOLVED. Moved to
